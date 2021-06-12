@@ -1,0 +1,68 @@
+---
+title: "Background Origin"
+description: "Utilities for controlling how an element's background is positioned relative to borders, padding, and content."
+featureVersion: 'v2.2+'
+---
+
+import plugin from 'tailwindcss/lib/plugins/backgroundOrigin'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = { plugin }
+
+## Usage
+
+Use `bg-origin-border`, `bg-origin-padding`, and `bg-origin-content` to control where an element's background is rendered.
+
+
+```html gray
+<template preview>
+  <div class="space-y-6 flex flex-col items-center justify-around sm:flex-row sm:space-y-0">
+    <div class="bg-origin-border grid place-items-center bg-cover h-32 w-32 p-4 border-4 border-white border-opacity-75 border-dashed rounded-xl shadow-xl bg-gray-300 bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=256&h=256&q=80')">
+      <span class="text-5xl text-white text-opacity-90 font-black">1</span>
+    </div>
+
+    <div class="bg-origin-padding grid place-items-center bg-cover h-32 w-32 p-4 border-4 border-white border-opacity-75 border-dashed rounded-xl shadow-xl bg-gray-300 bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=256&h=256&q=80')">
+      <span class="text-5xl text-white text-opacity-90 font-black">2</span>
+    </div>
+
+    <div class="bg-origin-content grid place-items-center bg-cover h-32 w-32 p-4 border-4 border-white border-opacity-75 border-dashed rounded-xl shadow-xl bg-gray-300 bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=256&h=256&q=80')">
+      <span class="text-5xl text-white text-opacity-90 font-black">3</span>
+    </div>
+  </div>
+</template>
+
+<div class="**bg-origin-border** p-4 border-4 border-dashed ..." style="background-image: url(...)">
+  1
+</div>
+
+<div class="**bg-origin-padding** p-4 border-4 border-dashed ..." style="background-image: url(...)">
+  2
+</div>
+
+<div class="**bg-origin-content** p-4 border-4 border-dashed ..." style="background-image: url(...)">
+  3
+</div>
+```
+
+## Responsive
+
+To control the background-origin property at a specific breakpoint, add a `{screen}:` prefix to any existing background-origin utility. For example, use `md:bg-origin-padding` to apply the `bg-origin-padding` utility at only medium screen sizes and above.
+
+```html
+<div class="bg-origin-border **md:bg-origin-padding** ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Variants
+
+<Variants plugin="backgroundOrigin" name="background-origin" />
+
+### Disabling
+
+<Disabling plugin="backgroundOrigin" name="background-origin" />
