@@ -165,6 +165,28 @@ It's also important to note that CSS classes cannot contain spaces, which means 
 <div class="grid-cols-[1fr,700px,2fr]">...</div>
 ```
 
+#### Ambiguous values
+
+If you are using a CSS variable as an arbitrary value, it can sometimes lead to class names that are ambiguous to the engine, for example:
+
+```html
+<!-- Is this a font size utility, or a text color utility? -->
+<div class="text-[var(--mystery-var)">
+```
+
+In these situations, you can provide a hint to the engine by prefixing the arbitrary value with the type name:
+
+```html
+<div class="text-[**color:**var(--mystery-var)">
+```
+
+The supported types are:
+
+- `length`
+- `color`
+- `angle`
+- `list`
+
 ### Built-in important modifier
 
 You can make any utility important by adding a `!` character to the beginning:
@@ -182,6 +204,8 @@ The `!` always goes at the beginning of the utility name, after any variants, bu
 ```
 
 This can be useful in rare situations where you need to increase specificity because you're at war with some styles you don't control.
+
+## Breaking changes
 
 ## Known limitations
 
@@ -228,4 +252,3 @@ Tools that are known to require this option currently include:
 
 - postcss-cli ([#383](https://github.com/postcss/postcss-cli/pull/383))
 - Vite ([#3716](https://github.com/vitejs/vite/issues/3716), [#3717](https://github.com/vitejs/vite/issues/3717))
-

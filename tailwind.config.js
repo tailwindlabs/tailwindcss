@@ -55,8 +55,8 @@ module.exports = {
           css: {
             maxWidth: 'none',
             color: theme('colors.gray.500'),
-            '> :first-child': { marginTop: '-' },
-            '> :last-child': { marginBottom: '-' },
+            '> :first-child': { marginTop: null },
+            '> :last-child': { marginBottom: null },
             '&:first-child > :first-child': {
               marginTop: '0',
             },
@@ -65,6 +65,9 @@ module.exports = {
             },
             'h1, h2': {
               letterSpacing: '-0.025em',
+            },
+            h4: {
+              fontSize: '1.125em',
             },
             'h2, h3': {
               'scroll-margin-top': `${(70 + 40) / 16}rem`,
@@ -109,7 +112,7 @@ module.exports = {
               // content: 'none',
             },
             pre: {
-              backgroundColor: '-',
+              backgroundColor: null,
               color: theme('colors.white'),
               borderRadius: 0,
               marginTop: 0,
