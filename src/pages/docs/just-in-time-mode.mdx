@@ -205,6 +205,16 @@ The `!` always goes at the beginning of the utility name, after any variants, bu
 
 This can be useful in rare situations where you need to increase specificity because you're at war with some styles you don't control.
 
+### Per-side border colors
+
+Requested since like 2017 but left out due to file-size considerations, the JIT engine finally adds support for setting the border color for each side of an element independently:
+
+```html
+<div class="border-2 border-t-blue-500 border-r-pink-500 border-b-green-500 border-l-yellow-500">
+  <!-- ... -->
+</div>
+```
+
 ## Breaking changes
 
 ## Known limitations
