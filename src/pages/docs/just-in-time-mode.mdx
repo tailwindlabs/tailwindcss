@@ -257,6 +257,31 @@ They even support stuff like the `attr `function, so you can reference a value s
 <div data-content="hello world" class="before:content-[attr(data-content)] before:block ...">
 ```
 
+### Exhaustive pseudo-class support
+
+On top of the existing stuff like `hover`, `focus`, and others, we've added support for every pseudo-class we thought made any sense at all, like `required`, `invalid`, `placeholder-shown`, and tons more.
+
+```html
+<input class="invalid:border-red-500 ...">
+```
+
+Here's the complete list of new pseudo-class variants:
+
+- `only` (for `only-child`)
+- `first-of-type`
+- `last-of-type`
+- `only-of-type`
+- `target`
+- `default`
+- `indeterminate`
+- `placeholder-shown`
+- `autofill`
+- `required`
+- `valid`
+- `invalid`
+- `in-range`
+- `out-of-range`
+
 ## Breaking changes
 
 ## Known limitations
