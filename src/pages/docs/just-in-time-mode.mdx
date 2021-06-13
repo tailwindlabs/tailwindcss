@@ -243,6 +243,20 @@ Or the `::marker` pseudo-element, which allows you to style list markers:
 </ul>
 ```
 
+### Content utilities
+
+We've added new `content-*` utilities for setting the `content` property — super useful alongside the new `before` and `after` variants:
+
+```html
+<div class="before:content-['hello'] before:block ...">
+```
+
+They even support stuff like the `attr `function, so you can reference a value stored in an attribute:
+
+```html
+<div data-content="hello world" class="before:content-[attr(data-content)] before:block ...">
+```
+
 ## Breaking changes
 
 ## Known limitations
