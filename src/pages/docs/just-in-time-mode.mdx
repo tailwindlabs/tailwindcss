@@ -215,6 +215,34 @@ Requested since like 2017 but left out due to file-size considerations, the JIT 
 </div>
 ```
 
+### Pseudo-element variants
+
+The JIT engine adds support for styling pseudo-elements like `::before`, `::after`, `::first-letter`, `::first-line`, `::marker`, and `::selection`.
+
+```html
+<div class="before:block before:bg-blue-500 after:flex after:bg-pink-300">
+```
+
+When you add any `before` or `after` variant, the `content` property is automatically set to `""` to make sure the element is actually visible. To change the content property, use the new [content utilities](#content-utilities).
+
+As mentioned, we've also added support for other pseudo-elements like `::selection`, which allows you to style selected text:
+
+```html
+<p class="selection:bg-yellow-300 ...">
+  I'm yellow when you highlight me.
+</p>
+```
+
+Or the `::marker` pseudo-element, which allows you to style list markers:
+
+```html
+<ul class="marker:text-gray-500">
+  <li>Odio et sed.</li>
+  <li>Voluptatem perferendis optio est id.</li>
+  <li>Accusamus et aut odit.</li>
+</ul>
+```
+
 ## Breaking changes
 
 ## Known limitations
