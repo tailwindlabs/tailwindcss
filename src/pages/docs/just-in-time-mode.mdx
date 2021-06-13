@@ -74,43 +74,7 @@ Since JIT mode generates your CSS on-demand by scanning your template files, it'
 
 Now when you start your development server or build runner, Tailwind will generate your styles on-demand instead of generating everything in advance.
 
-## Watch mode and one-off builds
-
-Behind the scenes, the JIT engine uses its own file-watching system to watch your templates for changes as efficiently as possible.
-
-By default, Tailwind will start a long-running watch process if `NODE_ENV=development`, and it will run in one-off mode if `NODE_ENV=production`.
-
-```js
-// package.json
-{
-  // ...
-  scripts: {
-    // Will start a long-running watch process
-    "dev": "NODE_ENV=development postcss tailwind.css -o ./dist/tailwind.css -w"
-    // Will perform a one-off build
-    "build": "NODE_ENV=production postcss tailwind.css -o ./dist/tailwind.css"
-  },
-  // ...
-}
-```
-
-If it appears like your one-off build process is hanging, it's almost certainly because `NODE_ENV=development` in your build script. To fix this, you can either set `NODE_ENV=production`, or explicitly tell Tailwind not to start a watcher by setting `TAILWIND_MODE=build` as part of your script.
-
-```js
-// package.json
-{
-  // ...
-  scripts: {
-    // Will start a long-running watch process
-    "dev": "TAILWIND_MODE=watch NODE_ENV=development postcss tailwind.css -o ./dist/tailwind.css -w"
-    // Will perform a one-off development build
-    "build:dev": "TAILWIND_MODE=build NODE_ENV=development postcss tailwind.css -o ./dist/tailwind.css"
-    // Will perform a one-off production build
-    "build:prod": "TAILWIND_MODE=build NODE_ENV=production postcss tailwind.css -o ./dist/tailwind.css"
-  },
-  // ...
-}
-```
+Having issues? See the [troubleshooting section](#troubleshooting) to learn how to fix common problems.
 
 ## New features
 
@@ -231,3 +195,37 @@ There are a few items still on our todo list though that we are actively working
 We are also ironing out some compatibility issues with certain build tools like Parcel and Snowpack, which you can follow in our [issue tracker](https://github.com/tailwindlabs/tailwindcss/issues).
 
 If you run into any other issues or find any bugs, please [open an issue](https://github.com/tailwindlabs/tailwindcss/issues/new/choose) so we can fix it.
+
+## Troubleshooting
+
+### Styles not updating when saving content files
+
+As of Tailwind CSS v2.2+, the JIT engine depends on PostCSS's [directory dependency messages](https://github.com/postcss/postcss/blob/main/docs/guidelines/runner.md#3-dependencies) to register your content files as CSS build dependencies with your build tool. These are a fairly new addition to PostCSS (added in May 2021), and not all build tools have been updated to support them yet.
+
+If your CSS isn't rebuilding when you change your content files, try setting `TAILWIND_MODE=watch` as part of your watch script to tell Tailwind to use a legacy dependency tracking strategy instead, which works well with many build tools.
+
+For example, if you are using Vite, update your `dev` script to set `TAILWIND_MODE=watch` when it runs:
+
+```js
+// package.json
+{
+  // ...
+  scripts: {
+    // Set TAILWIND_MODE=watch when starting your dev server
+    "dev": "TAILWIND_MODE=watch vite",
+
+    // Do not set TAILWIND_MODE for one-off builds
+    "build": "vite build",
+    // ...
+  },
+  // ...
+}
+```
+
+Note that setting `TAILWIND_MODE=watch` will start a long-running watch process in the background, so if you set that environment variable when trying to do a one-off build, it will look like the build is hanging. You should only set `TAILWIND_MODE=watch` when you are actually running a dev server/watch process.
+
+Tools that are known to require this option currently include:
+
+- postcss-cli ([#383](https://github.com/postcss/postcss-cli/pull/383))
+- Vite ([#3716](https://github.com/vitejs/vite/issues/3716), [#3717](https://github.com/vitejs/vite/issues/3717))
+
