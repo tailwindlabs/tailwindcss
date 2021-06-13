@@ -292,6 +292,20 @@ You can now set the color of the cursor in form fields using the new `caret-{col
 
 These are customizable using the `caretColor` key in the `theme` section of your `tailwind.config.js` file.
 
+### Style based on sibling state with `peer-*` variants
+
+Similar to the `group-*` variants we've supported for years for styling an element based on the parent state, you can use the new `peer-*` variants to style an element based on the state of one of its previous siblings:
+
+```html
+<label>
+  <input type="checkbox" class="peer sr-only">
+  <span class="h-4 w-4 bg-gray-200 peer-checked:bg-blue-500">
+  <!-- ... -->
+</label>
+```
+
+Simply mark the previous sibling you're interested in with the `peer` class, then use variants like `peer-hover`, `peer-checked`, `peer-focus`, etc. to style your element based on the state of that sibling.
+
 ## Breaking changes
 
 ## Known limitations
