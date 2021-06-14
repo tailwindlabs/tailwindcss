@@ -260,6 +260,9 @@
 .stroke-\[\#da5b66\] {
   stroke: #da5b66;
 }
+.object-\[var\(--position\)\] {
+  object-position: var(--position);
+}
 .p-\[var\(--app-padding\)\] {
   padding: var(--app-padding);
 }
