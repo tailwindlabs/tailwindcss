@@ -34,15 +34,15 @@ function getUtilities(plugin) {
   plugin()({
     addUtilities,
     addBase() {},
-    matchUtilities: (matches, { values, variants, respectPrefix, respectImportant }) => {
+    matchUtilities: (matches, { values }) => {
       let modifierValues = Object.entries(values)
 
       let result = Object.entries(matches).flatMap(([name, utilityFunction]) => {
         return modifierValues
           .map(([modifier, value]) => {
             let declarations = utilityFunction(value, {
-              includeRules(rules, options) {
-                addUtilities(rules, options)
+              includeRules(rules) {
+                addUtilities(rules)
               },
             })
 
@@ -57,7 +57,23 @@ function getUtilities(plugin) {
           .filter(Boolean)
       })
 
-      addUtilities(result, { variants, respectPrefix, respectImportant })
+      for (let obj of result) {
+        for (let key in obj) {
+          let deleteKey = false
+          for (let subkey in obj[key]) {
+            if (subkey.includes('&')) {
+              result.push({
+                [subkey.replace(/&/g, key)]: obj[key][subkey],
+              })
+              deleteKey = true
+            }
+          }
+
+          if (deleteKey) delete obj[key]
+        }
+      }
+
+      addUtilities(result)
     },
     config: () => ({
       mode: 'aot',
