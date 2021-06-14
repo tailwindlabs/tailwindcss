@@ -37,34 +37,23 @@ if (process.argv.includes('--prepare')) {
   // 5. Remove peerDependencies
   delete packageJson.peerDependencies
 
-  // 6. Use new name
+  // 6. Cleanup devDependencies
+  for (let key in packageJson.devDependencies) {
+    if (key.includes('postcss')) delete packageJson.devDependencies[key]
+  }
+
+  // 7. Use new name
   packageJson.name = '@tailwindcss/postcss7-compat'
 
-  // 7. Make sure you can publish
+  // 8. Make sure you can publish
   packageJson.publishConfig = { access: 'public' }
 
-  // 8. Write package.json with the new contents
+  // 9. Write package.json with the new contents
   fs.writeFileSync(fromRootPath('package.json'), JSON.stringify(packageJson, null, 2), 'utf8')
 
-  // 9. Print some useful information to make publishing easy
+  // 10. Print some useful information to make publishing easy
   console.log()
   console.log('You can safely publish `tailwindcss` in PostCSS 7 compatibility mode:\n')
-  console.log(
-    [
-      // Not necessary, but a quick 'hash', basically the current date/time
-      `git checkout -b compat-${new Date()
-        .toJSON()
-        .replace(/[-:.TZ]/g, '') // Remove weird characters
-        .slice(0, -3)}`, // Remove milliseconds precision
-      'git add .',
-      'git commit -m "compat"',
-      'npm version',
-      'npm publish --tag compat',
-      'npm run compat:restore',
-    ]
-      .map((v) => `  ${v}`)
-      .join('\n')
-  )
   console.log()
 } else if (process.argv.includes('--restore')) {
   if (

@@ -54,7 +54,7 @@ function applyPrefix(matches, context) {
   for (let match of matches) {
     let [meta] = match
     if (meta.options.respectPrefix) {
-      let container = postcss.root({ nodes: [match[1]] })
+      let container = postcss.root({ nodes: [match[1].clone()] })
       container.walkRules((r) => {
         r.selector = prefixSelector(context.tailwindConfig.prefix, r.selector)
       })
@@ -72,7 +72,7 @@ function applyImportant(matches) {
   let result = []
 
   for (let [meta, rule] of matches) {
-    let container = postcss.root({ nodes: [rule] })
+    let container = postcss.root({ nodes: [rule.clone()] })
     container.walkRules((r) => {
       r.selector = updateAllClasses(r.selector, (className) => {
         return `!${className}`
@@ -109,8 +109,7 @@ function applyVariant(variant, matches, context) {
         continue
       }
 
-      let container = postcss.root()
-      container.append(rule.clone())
+      let container = postcss.root({ nodes: [rule.clone()] })
 
       for (let [variantSort, variantFunction] of variantFunctionTuples) {
         let clone = container.clone()
@@ -297,7 +296,7 @@ function generateRules(candidates, context) {
           }
         })
       } else if (typeof context.tailwindConfig.important === 'string') {
-        let container = postcss.root({ nodes: [rule] })
+        let container = postcss.root({ nodes: [rule.clone()] })
         container.walkRules((r) => {
           if (inKeyframes(r)) {
             return
