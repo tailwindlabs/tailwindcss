@@ -456,6 +456,16 @@ If you run into any other issues or find any bugs, please [open an issue](https:
 
 ## Troubleshooting
 
+### Styles aren't removed when classes are deleted
+
+When the JIT engine is running in watch mode, you might notice that when you add a class to your HTML then remove it, that the class is _still_ present in your CSS.
+
+This isn't a bug and is rather a deliberate performance optimization that drastically increases the speed of incremental rebuilds, especially in large projects.
+
+We recommend you always compile your CSS in a separate one-off build before deploying to production so that you can minify the output. For most modern tools (like Next.js for example), this sort of thing happens automatically because your compiled CSS is never committed to version control anyways.
+
+If you want Tailwind to rebuild the CSS completely from scratch while in watch mode, saving your `tailwind.config.js` file or your CSS input file will invalidate all of the caches and trigger a fresh rebuild.
+
 ### Styles don't update when saving content files
 
 As of Tailwind CSS v2.2+, the JIT engine depends on PostCSS's [directory dependency messages](https://github.com/postcss/postcss/blob/main/docs/guidelines/runner.md#3-dependencies) to register your content files as CSS build dependencies with your build tool. These are a fairly new addition to PostCSS (added in May 2021), and not all build tools have been updated to support them yet.
