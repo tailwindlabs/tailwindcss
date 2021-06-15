@@ -142,7 +142,7 @@ function getConfigDependencies(context) {
 
 let candidateFilesCache = new WeakMap()
 
-function getCandidateFiles(context, userConfigPath, tailwindConfig) {
+function getCandidateFiles(context, tailwindConfig) {
   if (candidateFilesCache.has(context)) {
     return candidateFilesCache.get(context)
   }
@@ -151,10 +151,9 @@ function getCandidateFiles(context, userConfigPath, tailwindConfig) {
     ? tailwindConfig.purge
     : tailwindConfig.purge.content
 
-  let basePath = userConfigPath === null ? process.cwd() : path.dirname(userConfigPath)
   let candidateFiles = purgeContent
     .filter((item) => typeof item === 'string')
-    .map((purgePath) => normalizePath(path.resolve(basePath, purgePath)))
+    .map((purgePath) => normalizePath(path.resolve(purgePath)))
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }
@@ -282,7 +281,7 @@ export default function setupWatchingContext(configOrPath) {
         contextDependencies
       )
 
-      let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
+      let candidateFiles = getCandidateFiles(context, tailwindConfig)
       let contextConfigDependencies = getConfigDependencies(context)
 
       for (let file of configDependencies) {
