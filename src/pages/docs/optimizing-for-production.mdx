@@ -142,6 +142,71 @@ module.exports = {
 
 We recommend only removing unused styles in production, as removing them in development means you need to recompile any time you change your templates and compiling with PurgeCSS enabled is much slower.
 
+### Safelisting specific classes
+
+If you need to safelist specific classes to make sure they are never accidentally removed from your CSS (perhaps because they are used in content that comes from a database or similar), you can use our top-level `safelist` option:
+
+```js
+// tailwind.config.js
+module.exports = {
+  purge: {
+    content: ['./src/**/*.html'],
+    safelist: [
+      'bg-blue-500',
+      'text-center',
+      'hover:opacity-100',
+      // ...
+      'lg:text-right',
+    ]
+  },
+  // ...
+}
+```
+
+### Transforming content
+
+Sometimes you are authoring content in a format that _compiles_ to HTML, and it would be better to compile that content to HTML _before_ looking for potential classes. A great example of this is working with markdown files.
+
+You can use the `transform` option to tell Tailwind to transform any file matching a specific extension before it looks for classes to guarantee the most accurate results:
+
+```js
+// tailwind.config.js
+let remark = require('remark')
+
+module.exports = {
+  purge: {
+    content: ['./src/**/*.{html,md}'],
+    transform: {
+      md: (content) => {
+        return remark().process(content)
+      }
+    }
+  },
+  // ...
+}
+```
+
+### Customizing extraction logic
+
+If you need to override the logic Tailwind uses to detect classes in the content of a specific file type, you can use the `extract` option to provide a function that will be used to detect potential classes in matching files:
+
+```js
+// tailwind.config.js
+module.exports = {
+  purge: {
+    content: ['./src/**/*.{html,md}'],
+    extract: {
+      md: (content) => {
+        return /[^<>"'`\s]*/.match(content)
+      }
+    }
+  },
+  // ...
+}
+```
+
+This is an advanced feature and most users won't need it. The default extraction logic in Tailwind works extremely well for almost all projects.
+
 ### Preserving HTML elements
 
 By default, Tailwind will preserve all basic HTML element styles in your CSS, like styles for the `html`, `body`, `p`, `h1`, etc. tags. This is to minimize accidentally over-purging in cases where you are using markdown source files for example (where there is no actual `h1` tag present), or using a framework that hides the document shell (containing the `html` and `body` tags) somewhere in a vendor directory (like Next.js does).
