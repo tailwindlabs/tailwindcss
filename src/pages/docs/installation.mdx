@@ -28,7 +28,7 @@ For most real-world projects, we recommend installing Tailwind as a PostCSS plug
 
 If you've never heard of PostCSS or are wondering how it's different from tools like Sass, read our guide on [using PostCSS as your preprocessor](/docs/using-with-preprocessors#using-post-css-as-your-preprocessor) for an introduction.
 
-If this is a bit over your head and you'd like to try Tailwind without configuring PostCSS, read our instructions on [using Tailwind without PostCSS](#using-tailwind-without-post-css) instead.
+If this is a bit over your head and you'd like to try Tailwind without configuring PostCSS, read our instructions on [using Tailwind CLI](#using-tailwind-cli) instead.
 
 ### Install Tailwind via npm
 
@@ -155,16 +155,16 @@ In this case, you should [switch to our PostCSS 7 compatibility build](#post-css
 
 ---
 
-## Using Tailwind without PostCSS
+## Using Tailwind CLI
 
 *Tailwind CSS requires Node.js 12.13.0 or higher.*
 
-For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to generate your CSS without configuring PostCSS or even installing Tailwind as a dependency if you don't want to.
+If you'd like to compile your CSS with Tailwind without integrating it directly into any sort of build tooling, you can use the Tailwind CLI tool to generate your CSS without configuring PostCSS or even installing Tailwind as a dependency if you don't want to.
 
 Use `npx` which is a tool that is automatically installed alongside `npm` to generate a fully compiled Tailwind CSS file:
 
 ```shell
-npx tailwindcss-cli@latest build -o tailwind.css
+npx tailwindcss -o tailwind.css
 ```
 
 This will create a file called `tailwind.css` generated based on Tailwind's [default configuration](https://unpkg.com/browse/tailwindcss@^2/stubs/defaultConfig.stub.js), and automatically add any necessary vendor prefixes using [autoprefixer](https://github.com/postcss/autoprefixer).
@@ -186,6 +186,14 @@ Now you can pull this file into your HTML just like any other stylesheet:
 </html>
 ```
 
+### Watching for changes
+
+You can use the `--watch` or `-w` flag to start a watch process and automatically rebuild your CSS any time you make any changes:
+
+```shell
+npx tailwindcss -o tailwind.css --watch
+```
+
 ### Using a custom CSS file
 
 If you'd like to process any custom CSS alongside the default styles Tailwind generates, create a CSS file wherever you normally would and use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles:
@@ -202,10 +210,10 @@ If you'd like to process any custom CSS alongside the default styles Tailwind ge
 @tailwind utilities;
 ```
 
-Then include the path to that file when building your CSS with `npx tailwindcss build`:
+Then include the path to that file when building your CSS:
 
 ```shell
-npx tailwindcss-cli@latest build ./src/tailwind.css -o ./dist/tailwind.css
+npx tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css
 ```
 
 Read about [adding base styles](/docs/adding-base-styles), [extracting components](/docs/extracting-components), and [adding new utilities](/docs/adding-new-utilities) to learn more about adding custom CSS on top of Tailwind.
@@ -216,7 +224,7 @@ Read about [adding base styles](/docs/adding-base-styles), [extracting component
 If you'd like to customize what Tailwind generates, create a `tailwind.config.js` file using the Tailwind CLI tool:
 
 ```shell
-npx tailwindcss-cli@latest init
+npx tailwindcss init
 ```
 
 This will create a minimal `tailwind.config.js` file at the root of your project:
@@ -237,13 +245,13 @@ module.exports = {
 This file will automatically be read when building your CSS with `npx tailwindcss build`:
 
 ```shell
-npx tailwindcss-cli@latest build ./src/tailwind.css -o ./dist/tailwind.css
+npx tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css
 ```
 
 If you'd like to keep your config file in a different location or give it a different name, pass the config file path using the `-c` option when building your CSS:
 
 ```shell
-npx tailwindcss-cli@latest build ./src/tailwind.css -c ./.config/tailwind.config.js -o ./dist/tailwind.css
+npx tailwindcss -i ./src/tailwind.css -c ./.config/tailwind.config.js -o ./dist/tailwind.css
 ```
 
 Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
@@ -253,7 +261,39 @@ Learn more about configuring Tailwind in the [configuration documentation](/docs
 By default, the Tailwind CLI tool will run your CSS through [Autoprefixer](https://github.com/postcss/autoprefixer) to add any necessary vendor prefixes. If you already have Autoprefixer set up in your build pipeline somewhere further down the chain, you can disable it in the Tailwind CLI tool using the `--no-autoprefixer` flag to avoid running it twice:
 
 ```shell
-npx tailwindcss-cli@latest build --no-autoprefixer -o tailwind.css
+npx tailwindcss --no-autoprefixer -o tailwind.css
+```
+
+### Using a custom PostCSS configuration
+
+If you'd like to use other PostCSS plugins alongside Tailwind, you can create a `postcss.config.js` file to add your extra plugins and Tailwind will include them when building your CSS:
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: [
+    require('postcss-100vh-fix'),
+  ]
+}
+```
+
+By default, plugins are run _after_ Tailwind. If you have plugins that need to run before Tailwind, just include `tailwindcss` in your plugin list and Tailwind CLI will detect it and respect your custom plugin order:
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: [
+    require('postcss-import'),
+    require('tailwindcss'),
+    require('postcss-100vh-fix'),
+  ]
+}
+```
+
+If you'd like to automatically generate a basic `postcss.config.js` file when creating your `tailwind.config.js` file, use the `--postcss` or `-p` flag when initializing your config file:
+
+```shell
+npx tailwindcss init --postcss
 ```
 
 ### Building for production
@@ -261,11 +301,16 @@ npx tailwindcss-cli@latest build --no-autoprefixer -o tailwind.css
 When building for production, set `NODE_ENV=production` on the command line when building your CSS:
 
 ```shell
-NODE_ENV=production npx tailwindcss-cli@latest build ./src/tailwind.css -o ./dist/tailwind.css
+NODE_ENV=production npx tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css
 ```
 
 This will make sure Tailwind removes any unused CSS for best performance. Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more.
 
+You can also use the `--minify` flag to compress your CSS with [cssnano](https://cssnano.co/):
+
+```shell
+NODE_ENV=production npx tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css --minify
+```
 
 ---
 
