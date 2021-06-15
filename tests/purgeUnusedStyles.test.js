@@ -105,7 +105,7 @@ test('purges unused classes', () => {
   )
 })
 
-test('purge patterns are resolved relative to the config file', () => {
+test('purge patterns are resolved relative to the current working directory', () => {
   return inProduction(
     suppressConsoleLogs(() => {
       const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)

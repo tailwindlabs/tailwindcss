@@ -48,12 +48,7 @@ function getTransformer(config, fileExtension) {
   return transformers[fileExtension] || transformers.DEFAULT || ((content) => content)
 }
 
-export default function purgeUnusedUtilities(
-  config,
-  configChanged,
-  resolvedConfigPath,
-  registerDependency
-) {
+export default function purgeUnusedUtilities(config, configChanged, registerDependency) {
   const purgeEnabled = _.get(
     config,
     'purge.enabled',
@@ -130,9 +125,7 @@ export default function purgeUnusedUtilities(
     Array.isArray(config.purge) ? config.purge : config.purge.content || purgeOptions.content || []
   ).map((item) => {
     if (typeof item === 'string') {
-      return normalizePath(
-        path.resolve(resolvedConfigPath ? path.dirname(resolvedConfigPath) : process.cwd(), item)
-      )
+      return normalizePath(path.resolve(item))
     }
     return item
   })
