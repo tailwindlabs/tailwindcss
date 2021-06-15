@@ -310,7 +310,133 @@ Similar to the `group-*` variants we've supported for years for styling an eleme
 
 Simply mark the previous sibling you're interested in with the `peer` class, then use variants like `peer-hover`, `peer-checked`, `peer-focus`, etc. to style your element based on the state of that sibling.
 
-## Breaking changes
+### Simplified transform, filter, and backdrop-filter composition
+
+The `transform`, `filter`, and `backdrop-filter` classes are no longer necessary to "enable" their respective set of composable utilities.
+
+```diff-html
+- <div class="transform scale-50 filter grayscale backdrop-filter backdrop-blur-sm">
++ <div class="scale-50 grayscale backdrop-blur-sm">
+```
+
+Now those features are automatically enabled any time you use any of the relevant sub-utilities.
+
+---
+
+## Changes
+
+We see the JIT engine as a preview of what we plan to ship as Tailwind CSS v3.0, so there are a few small breaking changes to consider when opting in. We really don't expect these to impact very many people but worth reading, especially if you notice any subtle differences in how your projects look.
+
+### Variants are rendered together
+
+In the classic engine, utility variants are grouped together in the generated CSS per utility like this:
+
+```css
+/* Classic engine */
+
+.bg-black { background-color: #000 }
+.hover\:bg-black:hover { background-color: #000 }
+.focus\:bg-black:focus { background-color: #000 }
+
+/* ... */
+
+.opacity-75 { opacity: 0.75 }
+.hover\:opacity-75:hover { opacity: 0.75 }
+.focus\:opacity-75:focus { opacity: 0.75 }
+
+/* ... */
+
+.translate-x-4 { --tw-translate-x: 1rem }
+.hover\:translate-x-4:hover { --tw-translate-x: 1rem }
+.focus\:translate-x-4:focus { --tw-translate-x: 1rem }
+```
+
+In the JIT engine, variants are grouped together _per variant_:
+
+```css
+/* JIT engine */
+
+.bg-black { background-color: #000 }
+.opacity-75 { opacity: 0.75 }
+.translate-x-4 { --tw-translate-x: 1rem }
+
+/* ... */
+
+.hover\:bg-black:hover { background-color: #000 }
+.hover\:opacity-75:hover { opacity: 0.75 }
+.hover\:translate-x-4:hover { --tw-translate-x: 1rem }
+
+/* ... */
+
+.focus\:bg-black:focus { background-color: #000 }
+.focus\:opacity-75:focus { opacity: 0.75 }
+.focus\:translate-x-4:focus { --tw-translate-x: 1rem }
+```
+
+This means that it's not possible to specify the variant order per core plugin anymore — the variants will always be in the same order for all utilities. This could be a problem for you if previously you needed `hover` to defeat `focus` for a specific utility for example and had ensured `hover` came after `focus` in the variant list.
+
+```diff-js
+  // tailwind.config.js
+  module.exports {
+    // Variant configuration (including order) is not respected by the JIT engine
+-   variants: {
+-     // ...
+-     backgroundColor: ['focus', 'hover']
+-   }
+  }
+```
+
+To handle these situations with the JIT engine, we recommend using stacked variants instead:
+
+```html
+<!-- This ensures the element is black on hover, even if it's also focused -->
+<div class="focus:bg-red-500 hover:bg-blue-500 **hover:focus:bg-blue-500**">
+```
+
+Stacked variants let you specify how something should be styled when multiple variants are active at the same time, so instead of trying to override `focus` styles with `hover` styles, you explicitly declare what an element should look like when both `hover` and `focus` are active simultaneously.
+
+### Variants are inserted at @tailwind variants
+
+In the classic engine, all utility variants are injected as part of the `@tailwind utilities` directive.
+
+In the JIT engine, variants are injected at the `@tailwind variants` directive, which has been renamed from `@tailwind screens`.
+
+**This directive is optional** _(just like `@tailwind screens` always has been)_ and is only useful if you want explicit control over where utility variants are injected. By default, they are always injected at the very end of your stylesheet.
+
+If you were using `@tailwind screens` before, you should update your code to use `@tailwind variants`:
+
+```diff-css
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+- @tailwind screens;
++ @tailwind variants;
+
+  /* Some custom CSS... */
+```
+
+The `@tailwind variants` feature is considered an advanced escape hatch and we recommend omitting it by default. You should only use it if your project won't work properly without it, which is only ever really true if you are introducing Tailwind to a legacy system with a very fragile existing CSS codebase that has styles that absolutely _need_ to be at the very end of the stylesheet for things to work.
+
+### Transforms and filters don't need to be explicitly enabled
+
+The `transform`, `filter`, and `backdrop-filter` classes aren't necessary for "enabling" those features when using the JIT engine:
+
+```diff-html
+- <div class="transform scale-50 filter grayscale backdrop-filter backdrop-blur-sm">
++ <div class="scale-50 grayscale backdrop-blur-sm">
+```
+
+This means you can no longer expect transforms and filters to be dormant by default, and conditionally activated by adding `transform`, `filter`, or `backdrop-filter`.
+
+Instead, you will want put any variants on the sub-utilities themselves:
+
+```diff-html
+- <div class="scale-105 -translate-y-1 hover:transform">
++ <div class="hover:scale-105 hover:-translate-y-1">
+```
+
+
+---
 
 ## Known limitations
 
@@ -324,6 +450,8 @@ There are a few items still on our todo list though that we are actively working
 We are also ironing out some compatibility issues with certain build tools like Parcel and Snowpack, which you can follow in our [issue tracker](https://github.com/tailwindlabs/tailwindcss/issues).
 
 If you run into any other issues or find any bugs, please [open an issue](https://github.com/tailwindlabs/tailwindcss/issues/new/choose) so we can fix it.
+
+---
 
 ## Troubleshooting
 
