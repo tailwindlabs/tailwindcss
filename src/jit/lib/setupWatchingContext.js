@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import crypto from 'crypto'
-import os from 'os'
 
+import tmp from 'tmp'
 import chokidar from 'chokidar'
 import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
@@ -14,25 +13,6 @@ import getModuleDependencies from '../../lib/getModuleDependencies'
 import resolveConfig from '../../../resolveConfig'
 import resolveConfigPath from '../../util/resolveConfigPath'
 import { getContext } from './setupContextUtils'
-import { env } from './sharedState'
-
-// Earmarks a directory for our touch files.
-// If the directory already exists we delete any existing touch files,
-// invalidating any caches associated with them.
-let touchDir =
-  env.TAILWIND_TOUCH_DIR || path.join(os.homedir() || os.tmpdir(), '.tailwindcss', 'touch')
-
-if (env.TAILWIND_MODE === 'watch') {
-  if (fs.existsSync(touchDir)) {
-    for (let file of fs.readdirSync(touchDir)) {
-      try {
-        fs.unlinkSync(path.join(touchDir, file))
-      } catch (_err) {}
-    }
-  } else {
-    fs.mkdirSync(touchDir, { recursive: true })
-  }
-}
 
 // This is used to trigger rebuilds. Just updating the timestamp
 // is significantly faster than actually writing to the file (10x).
@@ -89,7 +69,7 @@ function rebootWatcher(context, configPath, configDependencies, candidateFiles) 
   let touchFile = getTouchFile(context)
 
   if (touchFile === null) {
-    touchFile = generateTouchFileName()
+    touchFile = tmp.fileSync().name
     setTouchFile(context, touchFile)
     touch(touchFile)
   }
@@ -146,25 +126,6 @@ function rebootWatcher(context, configPath, configDependencies, candidateFiles) 
       }
     })
   })
-}
-
-function generateTouchFileName() {
-  let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-  let randomChars = ''
-  let randomCharsLength = 12
-  let bytes = null
-
-  try {
-    bytes = crypto.randomBytes(randomCharsLength)
-  } catch (_error) {
-    bytes = crypto.pseudoRandomBytes(randomCharsLength)
-  }
-
-  for (let i = 0; i < randomCharsLength; i++) {
-    randomChars += chars[bytes[i] % chars.length]
-  }
-
-  return path.join(touchDir, `touch-${process.pid}-${randomChars}`)
 }
 
 let configPathCache = new LRU({ maxSize: 100 })

@@ -96,7 +96,8 @@
     "pretty-hrtime": "^1.0.3",
     "quick-lru": "^5.1.1",
     "reduce-css-calc": "^2.1.8",
-    "resolve": "^1.20.0"
+    "resolve": "^1.20.0",
+    "tmp": "^0.2.1"
   },
   "browserslist": [
     "> 1%",

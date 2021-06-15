@@ -21,16 +21,10 @@ describe('Build command', () => {
     // `-i` is omitted, therefore the default `@tailwind base; @tailwind
     // components; @tailwind utilities` is used. However `preflight` is
     // disabled. I still want to verify that the `base` got included.
-    expect(contents).toIncludeCss(
-      css`
-        *,
-        ::before,
-        ::after {
-          --tw-border-opacity: 1;
-          border-color: rgba(229, 231, 235, var(--tw-border-opacity));
-        }
-      `
-    )
+    expect(contents).toContain('*')
+    expect(contents).toContain('::before')
+    expect(contents).toContain('::after')
+    expect(contents).toContain('--tw-shadow')
 
     // Verify `utilities` output is correct
     expect(contents).toIncludeCss(
