@@ -20,7 +20,7 @@ import { env } from './sharedState'
 // If the directory already exists we delete any existing touch files,
 // invalidating any caches associated with them.
 let touchDir =
-  env.TAILWIND_TOUCH_DIR || path.join(os.homedir() || os.tmpdir(), '.tailwindcss', 'touch')
+  env.TAILWIND_TOUCH_DIR || path.join(os.homedir() || os.tmpdir(), '.cache', 'tailwindcss', 'touch')
 
 if (env.TAILWIND_MODE === 'watch') {
   if (fs.existsSync(touchDir)) {
