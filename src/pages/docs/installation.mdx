@@ -202,12 +202,13 @@ If you'd like to process any custom CSS alongside the default styles Tailwind ge
 /* ./src/tailwind.css */
 @tailwind base;
 @tailwind components;
-
-.btn {
-  @apply px-4 py-2 bg-blue-600 text-white rounded;
-}
-
 @tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 bg-blue-600 text-white rounded;
+  }
+}
 ```
 
 Then include the path to that file when building your CSS:
@@ -242,7 +243,7 @@ module.exports = {
 }
 ```
 
-This file will automatically be read when building your CSS with `npx tailwindcss build`:
+This file will automatically be read when building your CSS with Tailwind CLI:
 
 ```shell
 npx tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css
@@ -266,7 +267,7 @@ npx tailwindcss --no-autoprefixer -o tailwind.css
 
 ### Using a custom PostCSS configuration
 
-If you'd like to use other PostCSS plugins alongside Tailwind, you can create a `postcss.config.js` file to add your extra plugins and Tailwind will include them when building your CSS:
+If you'd like to use other PostCSS plugins alongside Tailwind, you can create a `postcss.config.js` file in your project root to add your extra plugins and Tailwind will include them when building your CSS:
 
 ```js
 // postcss.config.js
@@ -277,7 +278,7 @@ module.exports = {
 }
 ```
 
-By default, plugins are run _after_ Tailwind. If you have plugins that need to run before Tailwind, just include `tailwindcss` in your plugin list and Tailwind CLI will detect it and respect your custom plugin order:
+By default, plugins are applied _after_ Tailwind generates your CSS. If you have plugins that need to run before Tailwind, just include `tailwindcss` in your plugin list and Tailwind CLI will detect it and respect your custom plugin order:
 
 ```js
 // postcss.config.js
