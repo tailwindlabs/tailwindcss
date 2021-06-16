@@ -11,11 +11,11 @@ function hasAlpha(color) {
 }
 
 function hasCssVar(color) {
-  return !!color.match(/(rgb|hsl)\s*\(\s*var\(/);
+  return !!color.match(/(rgb|hsl)\s*\(\s*var\(/)
 }
 
 function getCssVarValue(color) {
-  return color.replace(/(rgb|hsl)\(\s*(var\(.*?\))\s*\)/g, '$2');
+  return color.replace(/(rgb|hsl)\(\s*(var\(.*?\))\s*\)/g, '$2')
 }
 
 export function toRgba(color) {
