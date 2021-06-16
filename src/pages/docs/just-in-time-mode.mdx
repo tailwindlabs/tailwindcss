@@ -209,6 +209,27 @@ The `!` always goes at the beginning of the utility name, after any variants, bu
 
 This can be useful in rare situations where you need to increase specificity because you're at war with some styles you don't control.
 
+### Color opacity shorthand
+
+Instead of needing to use utilities like `bg-opacity-50`, `text-opacity-25`, or `placeholder-opacity-40`, the JIT engine lets you just tack the opacity right on to the end of the color:
+
+```diff-html
+- <div class="bg-red-500 bg-opacity-25">
++ <div class="bg-red-500/25">
+```
+
+This means you can now change the opacity of colors anywhere in Tailwind, even where we previously didn't have specific opacity utilities, like in gradients for example:
+
+```html
+<div class="bg-gradient-to-r from-red-500/50">
+```
+
+The opacity values are taken from your `opacity` scale, but you can also use arbitrary opacity values using square bracket notation:
+
+```html
+<div class="bg-red-500/[0.31]">
+```
+
 ### Per-side border colors
 
 Requested since like 2017 but left out due to file-size considerations, the JIT engine finally adds support for setting the border color for each side of an element independently:
