@@ -3,7 +3,7 @@ let postcssNested = require('postcss-nested')
 
 module.exports = (opts = postcssNested) => {
   return {
-    postcssPlugin: '@tailwindcss/nesting',
+    postcssPlugin: 'tailwindcss/nesting',
     Once(root, { result }) {
       root.walkAtRules('screen', (rule) => {
         rule.name = 'media'
@@ -28,7 +28,7 @@ module.exports = (opts = postcssNested) => {
           return postcssNested
         }
 
-        throw new Error('@tailwindcss/nesting should be loaded with a nesting plugin.')
+        throw new Error('tailwindcss/nesting should be loaded with a nesting plugin.')
       })()
 
       postcss([plugin]).process(root, result.opts).sync()
