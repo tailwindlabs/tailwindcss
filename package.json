@@ -38,6 +38,7 @@
     "peers/*",
     "scripts/*.js",
     "stubs/*.stub.js",
+    "nesting/*",
     "*.css",
     "*.js"
   ],
