@@ -22,7 +22,7 @@
     "babelify": "babel src --out-dir lib --copy-files",
     "postbabelify": "ncc build lib/cli-peer-dependencies.js -o peers",
     "rebuild-fixtures": "npm run babelify && babel-node scripts/rebuildFixtures.js",
-    "prepublishOnly": "npm run babelify && babel-node scripts/build.js",
+    "prepublishOnly": "npm install --force && npm run babelify && babel-node scripts/build.js && node scripts/build-plugins.js",
     "style": "eslint .",
     "test": "cross-env TAILWIND_MODE=build jest",
     "test:integrations": "npm run test --prefix ./integrations",
@@ -38,6 +38,7 @@
     "peers/*",
     "scripts/*.js",
     "stubs/*.stub.js",
+    "nesting/*",
     "*.css",
     "*.js"
   ],
