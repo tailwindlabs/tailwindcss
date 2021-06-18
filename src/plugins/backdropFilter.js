@@ -27,6 +27,7 @@ export default function () {
       })
       addUtilities(
         {
+          '.backdrop-filter': { 'backdrop-filter': 'var(--tw-backdrop-filter)' },
           '.backdrop-filter-none': { 'backdrop-filter': 'none' },
         },
         variants('backdropFilter')

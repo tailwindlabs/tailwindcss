@@ -27,6 +27,7 @@ export default function () {
       })
       addUtilities(
         {
+          '.filter': { filter: 'var(--tw-filter)' },
           '.filter-none': { filter: 'none' },
         },
         variants('filter')
