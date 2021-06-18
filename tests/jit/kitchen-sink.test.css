@@ -303,6 +303,9 @@ div {
   --tw-scale-y: 0.5;
   transform: var(--tw-transform);
 }
+.transform {
+  transform: var(--tw-transform);
+}
 .grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
   grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
 }

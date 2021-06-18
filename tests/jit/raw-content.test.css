@@ -218,6 +218,9 @@
   --tw-scale-y: 0.95;
   transform: var(--tw-transform);
 }
+.transform {
+  transform: var(--tw-transform);
+}
 .transform-gpu {
   --tw-transform: translate3d(var(--tw-translate-x), var(--tw-translate-y), 0)
     rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
@@ -664,6 +667,9 @@
   --tw-sepia: sepia(100%);
   filter: var(--tw-filter);
 }
+.filter {
+  filter: var(--tw-filter);
+}
 .filter-none {
   filter: none;
 }
@@ -701,6 +707,9 @@
 }
 .backdrop-sepia {
   --tw-backdrop-sepia: sepia(100%);
+  backdrop-filter: var(--tw-backdrop-filter);
+}
+.backdrop-filter {
   backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-filter-none {
