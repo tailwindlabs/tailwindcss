@@ -29,3 +29,21 @@ test('custom separator', () => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
+
+test('dash is not supported', () => {
+  let config = {
+    darkMode: 'class',
+    mode: 'jit',
+    purge: [{ raw: 'lg-hover-font-bold' }],
+    separator: '-',
+    corePlugins: {},
+    theme: {},
+    plugins: [],
+  }
+
+  let css = `@tailwind utilities`
+
+  return expect(run(css, config)).rejects.toThrowError(
+    "The '-' character cannot be used as a custom separator in JIT mode due to parsing ambiguity. Please use another character like '_' instead."
+  )
+})

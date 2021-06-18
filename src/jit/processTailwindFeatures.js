@@ -35,6 +35,12 @@ export default function processTailwindFeatures(setupContext) {
       },
     })(root, result)
 
+    if (context.tailwindConfig.separator === '-') {
+      throw new Error(
+        "The '-' character cannot be used as a custom separator in JIT mode due to parsing ambiguity. Please use another character like '_' instead."
+      )
+    }
+
     expandTailwindAtRules(context)(root, result)
     expandApplyAtRules(context)(root, result)
     evaluateTailwindFunctions(context)(root, result)
