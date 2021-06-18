@@ -705,6 +705,13 @@ async function build() {
             let end = process.hrtime.bigint()
             console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
           })
+          .catch((err) => {
+            if (err.name === 'CssSyntaxError') {
+              console.error(err.toString())
+            } else {
+              console.error(err)
+            }
+          })
       }
 
       let css = input
