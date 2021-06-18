@@ -53,7 +53,7 @@
     "babel-jest": "^27.0.2",
     "clean-css": "^5.1.2",
     "cross-env": "^7.0.3",
-    "cssnano": "^5.0.5",
+    "cssnano": "^5.0.6",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
