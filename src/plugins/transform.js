@@ -23,6 +23,9 @@ export default function () {
       })
       addUtilities(
         {
+          '.transform': {
+            transform: 'var(--tw-transform)',
+          },
           '.transform-cpu': {
             '--tw-transform': [
               'translateX(var(--tw-translate-x))',
