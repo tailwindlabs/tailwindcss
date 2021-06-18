@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet!
+### Fixed
+
+- Recover from errors gracefully in CLI watch mode ([#4693](https://github.com/tailwindlabs/tailwindcss/pull/4693))
+- Fix issue with media queries not being generated properly when using PostCSS 7 ([#4695](https://github.com/tailwindlabs/tailwindcss/pull/4695))
 
 ## [2.2.0] - 2021-06-17
 
