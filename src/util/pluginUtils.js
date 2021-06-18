@@ -82,7 +82,9 @@ export function transformAllSelectors(transformSelector, { wrap, withRule } = {}
 
     if (wrap) {
       let wrapper = wrap()
-      wrapper.append(container.nodes)
+      let nodes = container.nodes
+      container.removeAll()
+      wrapper.append(nodes)
       container.append(wrapper)
     }
   }
@@ -102,7 +104,9 @@ export function transformAllClasses(transformClass, { wrap, withRule } = {}) {
 
     if (wrap) {
       let wrapper = wrap()
-      wrapper.append(container.nodes)
+      let nodes = container.nodes
+      container.removeAll()
+      wrapper.append(nodes)
       container.append(wrapper)
     }
   }
@@ -122,7 +126,9 @@ export function transformLastClasses(transformClass, { wrap, withRule } = {}) {
 
     if (wrap) {
       let wrapper = wrap()
-      wrapper.append(container.nodes)
+      let nodes = container.nodes
+      container.removeAll()
+      wrapper.append(nodes)
       container.append(wrapper)
     }
   }
