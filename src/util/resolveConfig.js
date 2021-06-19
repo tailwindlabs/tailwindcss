@@ -13,8 +13,10 @@ import negateValue from './negateValue'
 import * as corePlugins from '../plugins'
 import configurePlugins from './configurePlugins'
 import defaultConfig from '../../stubs/defaultConfig.stub'
+import colors from '../../colors'
 
 const configUtils = {
+  colors,
   negative(scale) {
     return Object.keys(scale)
       .filter((key) => scale[key] !== '0')
