@@ -493,7 +493,7 @@ As of Tailwind CSS v2.2+, the JIT engine depends on PostCSS's [directory depende
 
 If your CSS isn't rebuilding when you change your content files, try setting `TAILWIND_MODE=watch` as part of your watch script to tell Tailwind to use a legacy dependency tracking strategy instead, which works well with many build tools.
 
-For example, if you are using Vite, update your `dev` script to set `TAILWIND_MODE=watch` when it runs:
+For example, if you are using `postcss-cli`, set `TAILWIND_MODE=watch` in your dev/watch script:
 
 ```js
 // package.json
@@ -501,10 +501,10 @@ For example, if you are using Vite, update your `dev` script to set `TAILWIND_MO
   // ...
   scripts: {
     // Set TAILWIND_MODE=watch when starting your dev server
-    "dev": "TAILWIND_MODE=watch vite",
+    "dev": "TAILWIND_MODE=watch postcss -i tailwind.css -o build.css --watch",
 
     // Do not set TAILWIND_MODE for one-off builds
-    "build": "vite build",
+    "build": "postcss -i tailwind.css -o build.css",
     // ...
   },
   // ...
@@ -512,11 +512,6 @@ For example, if you are using Vite, update your `dev` script to set `TAILWIND_MO
 ```
 
 Note that setting `TAILWIND_MODE=watch` will start a long-running watch process in the background, so if you set that environment variable when trying to do a one-off build, it will look like the build is hanging. You should only set `TAILWIND_MODE=watch` when you are actually running a dev server/watch process.
-
-Tools that are known to require this option currently include:
-
-- postcss-cli ([#383](https://github.com/postcss/postcss-cli/pull/383))
-- Vite ([#3716](https://github.com/vitejs/vite/issues/3716), [#3717](https://github.com/vitejs/vite/issues/3717))
 
 ### It just doesn't seem to work properly
 
@@ -532,12 +527,19 @@ You can use packages like `npm-run-all` or `concurrently` to compile your CSS al
   // ...
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
-    "dev:server": "vite",
+    "dev:parcel": "parcel serve ./src/index.html",
     "dev:css": "tailwindcss -o src/tailwind.css -w",
-    "build": "vite build",
-    "serve": "vite preview"
+    "build": "npm-run-all build:css build:parcel",
+    "build:parcel": "parcel build ./src/index.html",
+    "build:css": "tailwindcss -o src/tailwind.css",
   },
 }
 ```
 
 Either way, please be sure to [check for an existing issue](https://github.com/tailwindlabs/tailwindcss/issues) or [open a new one](https://github.com/tailwindlabs/tailwindcss/issues/new/choose) so we can figure out the problem and try to improve compatibility with whatever tool you are using.
+
+Tools with known compatibility issues currently include:
+
+- postcss-cli ([#383](https://github.com/postcss/postcss-cli/pull/383))
+- Parcel ([#6299](https://github.com/parcel-bundler/parcel/pull/6299))
+- Stencil ([#35](https://github.com/ionic-team/stencil-postcss/pull/35))
