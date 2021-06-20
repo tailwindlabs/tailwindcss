@@ -62,7 +62,7 @@
 }
 .marker\:text-lg *::marker {
   font-size: 1.125rem;
-  line-height: 1.75rem;
+  line-height: 1.625rem;
 }
 .marker\:text-red-500 *::marker {
   --tw-text-opacity: 1;
@@ -70,7 +70,7 @@
 }
 .marker\:text-lg::marker {
   font-size: 1.125rem;
-  line-height: 1.75rem;
+  line-height: 1.625rem;
 }
 .marker\:text-red-500::marker {
   --tw-text-opacity: 1;
