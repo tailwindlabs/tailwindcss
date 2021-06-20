@@ -23,6 +23,7 @@
     "postbabelify": "ncc build lib/cli-peer-dependencies.js -o peers",
     "rebuild-fixtures": "npm run babelify && babel-node scripts/rebuildFixtures.js",
     "prepublishOnly": "npm install --force && npm run babelify && babel-node scripts/build.js && node scripts/build-plugins.js",
+    "prepare": "babel-node scripts/create-plugin-list.js",
     "style": "eslint .",
     "test": "cross-env TAILWIND_MODE=build jest",
     "test:integrations": "npm run test --prefix ./integrations",

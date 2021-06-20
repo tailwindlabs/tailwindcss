@@ -10,7 +10,7 @@ import toPath from 'lodash/toPath'
 import head from 'lodash/head'
 import isPlainObject from 'lodash/isPlainObject'
 import negateValue from './negateValue'
-import * as corePlugins from '../plugins'
+import corePluginList from '../corePluginList'
 import configurePlugins from './configurePlugins'
 import defaultConfig from '../../stubs/defaultConfig.stub'
 import colors from '../../colors'
@@ -243,7 +243,7 @@ function resolveCorePlugins(corePluginConfigs) {
       return corePluginConfig({ corePlugins: resolved })
     }
     return configurePlugins(corePluginConfig, resolved)
-  }, Object.keys(corePlugins))
+  }, corePluginList)
 
   return result
 }
