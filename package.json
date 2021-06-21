@@ -44,7 +44,7 @@
   ],
   "devDependencies": {
     "@babel/cli": "^7.14.3",
-    "@babel/core": "^7.14.3",
+    "@babel/core": "^7.14.6",
     "@babel/node": "^7.12.13",
     "@babel/preset-env": "^7.13.8",
     "@tailwindcss/aspect-ratio": "^0.2.1",
