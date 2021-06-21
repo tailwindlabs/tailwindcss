@@ -158,7 +158,7 @@ It's also important to note that CSS classes cannot contain spaces, which means 
 <TipBad>Don't use spaces in arbitrary values</TipBad>
 
 ```html mt-4
-<div class="h-[calc(1000px - 4rem)">...</div>
+<div class="h-[calc(1000px - 4rem)]">...</div>
 <div class="grid-cols-[1fr 700px 2fr]">...</div>
 ```
 
@@ -175,13 +175,13 @@ If you are using a CSS variable as an arbitrary value, it can sometimes lead to 
 
 ```html
 <!-- Is this a font size utility, or a text color utility? -->
-<div class="text-[var(--mystery-var)">
+<div class="text-[var(--mystery-var)]">
 ```
 
 In these situations, you can provide a hint to the engine by prefixing the arbitrary value with the type name:
 
 ```html
-<div class="text-[**color:**var(--mystery-var)">
+<div class="text-[**color:**var(--mystery-var)]">
 ```
 
 The supported types are:
