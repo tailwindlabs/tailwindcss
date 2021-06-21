@@ -32,7 +32,6 @@ export { default as flexShrink } from './flexShrink'
 export { default as flexGrow } from './flexGrow'
 export { default as tableLayout } from './tableLayout'
 export { default as borderCollapse } from './borderCollapse'
-export { default as touchAction } from './touchAction'
 
 export { default as transformOrigin } from './transformOrigin'
 export { default as translate } from './translate'
@@ -44,6 +43,7 @@ export { default as transform } from './transform'
 export { default as animation } from './animation'
 
 export { default as cursor } from './cursor'
+export { default as touchAction } from './touchAction'
 export { default as userSelect } from './userSelect'
 export { default as resize } from './resize'
 

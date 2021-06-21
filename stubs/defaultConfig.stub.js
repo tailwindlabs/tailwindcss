@@ -693,18 +693,6 @@ module.exports = {
     },
     textColor: (theme) => theme('colors'),
     textOpacity: (theme) => theme('opacity'),
-    touchAction: {
-      'auto': 'auto',
-      'none': 'none',
-      'pan-x': 'pan-x',
-      'pan-left': 'pan-left',
-      'pan-right': 'pan-right',
-      'pan-y': 'pan-y',
-      'pan-up': 'pan-up',
-      'pan-down': 'pan-down',
-      'pinch-zoom': 'pinch-zoom',
-      'manipulation': 'manipulation',
-    },
     transformOrigin: {
       center: 'center',
       top: 'top',
