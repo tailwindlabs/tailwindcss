@@ -56,7 +56,7 @@
     "seedrandom": "^3.0.5",
     "simple-functional-loader": "^1.2.1",
     "stringify-object": "^3.3.0",
-    "tailwindcss": "^2.2.0",
+    "tailwindcss": "^2.2.2",
     "tinytime": "^0.2.6",
     "unist-util-visit": "^2.0.3"
   },
