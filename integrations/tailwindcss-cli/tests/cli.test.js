@@ -1,6 +1,6 @@
 let path = require('path')
 let $ = require('../../execute')
-let { css, html } = require('../../syntax')
+let { css, html, javascript } = require('../../syntax')
 let resolveToolRoot = require('../../resolve-tool-root')
 
 let { readOutputFile, writeInputFile, cleanupFile, fileExists, removeFile } = require('../../io')({
@@ -21,16 +21,10 @@ describe('Build command', () => {
     // `-i` is omitted, therefore the default `@tailwind base; @tailwind
     // components; @tailwind utilities` is used. However `preflight` is
     // disabled. I still want to verify that the `base` got included.
-    expect(contents).toIncludeCss(
-      css`
-        *,
-        ::before,
-        ::after {
-          --tw-border-opacity: 1;
-          border-color: rgba(229, 231, 235, var(--tw-border-opacity));
-        }
-      `
-    )
+    expect(contents).toContain('*')
+    expect(contents).toContain('::before')
+    expect(contents).toContain('::after')
+    expect(contents).toContain('--tw-shadow')
 
     // Verify `utilities` output is correct
     expect(contents).toIncludeCss(
@@ -157,6 +151,108 @@ describe('Build command', () => {
     )
   })
 
+  test('--postcss (postcss.config.js)', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = javascript`
+      let path = require('path')
+      let postcss = require('postcss')
+
+      module.exports = {
+        plugins: [
+          function before(root, result) {
+            // Inject a custom component with @apply rules to prove that we run
+            // this _before_ the actual tailwind plugin.
+            let btn = postcss.parse('.btn { @apply bg-red-500 px-2 py-1 }')
+            root.append(btn.nodes)
+          },
+          function tailwindcss() {
+            return require(path.resolve('..', '..'))
+          },
+          function after(root, result) {
+            // Add '-after' to all the selectors
+            root.walkRules(rule => {
+              if (!rule.selector.startsWith('.')) return
+              rule.selector = rule.selector + '-after'
+            })
+          },
+        ],
+      }
+    `
+
+    await writeInputFile('../postcss.config.js', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --postcss`)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold-after {
+          font-weight: 700;
+        }
+
+        .btn-after {
+          --tw-bg-opacity: 1;
+          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+      `
+    )
+  })
+
+  test('--postcss (custom.postcss.config.js)', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = javascript`
+      let path = require('path')
+      let postcss = require('postcss')
+
+      module.exports = {
+        plugins: [
+          function before(root, result) {
+            // Inject a custom component with @apply rules to prove that we run
+            // this _before_ the actual tailwind plugin.
+            let btn = postcss.parse('.btn { @apply bg-red-500 px-2 py-1 }')
+            root.append(btn.nodes)
+          },
+          function tailwindcss() {
+            return require(path.resolve('..', '..'))
+          },
+          function after(root, result) {
+            // Add '-after' to all the selectors
+            root.walkRules(rule => {
+              if (!rule.selector.startsWith('.')) return
+              rule.selector = rule.selector + '-after'
+            })
+          },
+        ],
+      }
+    `
+
+    await writeInputFile('../custom.postcss.config.js', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --postcss ./custom.postcss.config.js`)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold-after {
+          font-weight: 700;
+        }
+
+        .btn-after {
+          --tw-bg-opacity: 1;
+          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+      `
+    )
+  })
+
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} --help`)
 
@@ -172,7 +268,7 @@ describe('Build command', () => {
          -o, --output             Output file
          -w, --watch              Watch for changes and rebuild as needed
              --jit                Build using JIT mode
-             --files              Template files to scan for class names
+             --purge              Content paths to use for removing unused classes
              --postcss            Load custom PostCSS configuration
          -m, --minify             Minify the output
          -c, --config             Path to a custom config file

@@ -1,9 +1,12 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         'backdrop-blur': (value) => {
-          return { '--tw-backdrop-blur': `blur(${value})` }
+          return {
+            '--tw-backdrop-blur': `blur(${value})`,
+            ...(config('mode') === 'jit' ? { 'backdrop-filter': 'var(--tw-backdrop-filter)' } : {}),
+          }
         },
       },
       {

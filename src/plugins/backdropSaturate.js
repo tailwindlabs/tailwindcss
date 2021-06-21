@@ -1,9 +1,12 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         'backdrop-saturate': (value) => {
-          return { '--tw-backdrop-saturate': `saturate(${value})` }
+          return {
+            '--tw-backdrop-saturate': `saturate(${value})`,
+            ...(config('mode') === 'jit' ? { 'backdrop-filter': 'var(--tw-backdrop-filter)' } : {}),
+          }
         },
       },
       {

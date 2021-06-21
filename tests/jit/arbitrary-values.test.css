@@ -1,18 +1,3 @@
-*,
-::before,
-::after {
-  --tw-border-opacity: 1;
-  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
-}
-* {
-  --tw-shadow: 0 0 #0000;
-  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
-  --tw-ring-offset-width: 0px;
-  --tw-ring-offset-color: #fff;
-  --tw-ring-color: rgba(59, 130, 246, 0.5);
-  --tw-ring-offset-shadow: 0 0 #0000;
-  --tw-ring-shadow: 0 0 #0000;
-}
 .inset-\[11px\] {
   top: 11px;
   right: 11px;
@@ -137,21 +122,27 @@
 }
 .rotate-\[23deg\] {
   --tw-rotate: 23deg;
+  transform: var(--tw-transform);
 }
 .rotate-\[2\.3rad\] {
   --tw-rotate: 2.3rad;
+  transform: var(--tw-transform);
 }
 .rotate-\[401grad\] {
   --tw-rotate: 401grad;
+  transform: var(--tw-transform);
 }
 .rotate-\[1\.5turn\] {
   --tw-rotate: 1.5turn;
+  transform: var(--tw-transform);
 }
 .skew-x-\[3px\] {
   --tw-skew-x: 3px;
+  transform: var(--tw-transform);
 }
 .skew-y-\[3px\] {
   --tw-skew-y: 3px;
+  transform: var(--tw-transform);
 }
 .grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
   grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
@@ -269,6 +260,9 @@
 .stroke-\[\#da5b66\] {
   stroke: #da5b66;
 }
+.object-\[var\(--position\)\] {
+  object-position: var(--position);
+}
 .p-\[var\(--app-padding\)\] {
   padding: var(--app-padding);
 }
@@ -325,54 +319,71 @@
 }
 .blur-\[15px\] {
   --tw-blur: blur(15px);
+  filter: var(--tw-filter);
 }
 .brightness-\[300\%\] {
   --tw-brightness: brightness(300%);
+  filter: var(--tw-filter);
 }
 .contrast-\[2\.4\] {
   --tw-contrast: contrast(2.4);
+  filter: var(--tw-filter);
 }
 .grayscale-\[0\.55\] {
   --tw-grayscale: grayscale(0.55);
+  filter: var(--tw-filter);
 }
 .hue-rotate-\[0\.8turn\] {
   --tw-hue-rotate: hue-rotate(0.8turn);
+  filter: var(--tw-filter);
 }
 .invert-\[0\.75\] {
   --tw-invert: invert(0.75);
+  filter: var(--tw-filter);
 }
 .saturate-\[180\%\] {
   --tw-saturate: saturate(180%);
+  filter: var(--tw-filter);
 }
 .sepia-\[0\.2\] {
   --tw-sepia: sepia(0.2);
+  filter: var(--tw-filter);
 }
 .backdrop-blur-\[11px\] {
   --tw-backdrop-blur: blur(11px);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-brightness-\[1\.23\] {
   --tw-backdrop-brightness: brightness(1.23);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-contrast-\[0\.87\] {
   --tw-backdrop-contrast: contrast(0.87);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-grayscale-\[0\.42\] {
   --tw-backdrop-grayscale: grayscale(0.42);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-hue-rotate-\[1\.57rad\] {
   --tw-backdrop-hue-rotate: hue-rotate(1.57rad);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-invert-\[0\.66\] {
   --tw-backdrop-invert: invert(0.66);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-opacity-\[22\%\] {
   --tw-backdrop-opacity: opacity(22%);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-saturate-\[144\%\] {
   --tw-backdrop-saturate: saturate(144%);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-sepia-\[0\.38\] {
   --tw-backdrop-sepia: sepia(0.38);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .delay-\[var\(--delay\)\] {
   transition-delay: var(--delay);
@@ -382,6 +393,9 @@
 }
 .duration-\[var\(--app-duration\)\] {
   transition-duration: var(--app-duration);
+}
+.content-\[\'hello\'\] {
+  content: 'hello';
 }
 .content-\[attr\(content-before\)\] {
   content: attr(content-before);

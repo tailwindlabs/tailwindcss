@@ -1,9 +1,12 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         'backdrop-hue-rotate': (value) => {
-          return { '--tw-backdrop-hue-rotate': `hue-rotate(${value})` }
+          return {
+            '--tw-backdrop-hue-rotate': `hue-rotate(${value})`,
+            ...(config('mode') === 'jit' ? { 'backdrop-filter': 'var(--tw-backdrop-filter)' } : {}),
+          }
         },
       },
       {

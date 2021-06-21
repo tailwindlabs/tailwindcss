@@ -24,7 +24,7 @@ let previousConfig = null
 let processedPlugins = null
 let getProcessedPlugins = null
 
-export default function (getConfig, resolvedConfigPath) {
+export default function (getConfig) {
   return function (css, result) {
     const config = getConfig()
     const configChanged = hash(previousConfig) !== hash(config)
@@ -73,7 +73,7 @@ export default function (getConfig, resolvedConfigPath) {
       substituteScreenAtRules({ tailwindConfig: config }),
       substituteClassApplyAtRules(config, getProcessedPlugins, configChanged),
       applyImportantConfiguration(config),
-      purgeUnusedStyles(config, configChanged, resolvedConfigPath, registerDependency),
+      purgeUnusedStyles(config, configChanged, registerDependency),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
 }

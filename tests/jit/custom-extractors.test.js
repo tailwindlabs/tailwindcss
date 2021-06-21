@@ -16,8 +16,6 @@ function customExtractor(content) {
 }
 
 const css = `
-  @tailwind base;
-  @tailwind components;
   @tailwind utilities;
 `
 const expectedPath = path.resolve(__dirname, './custom-extractors.test.css')

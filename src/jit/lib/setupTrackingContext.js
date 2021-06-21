@@ -21,7 +21,7 @@ let configPathCache = new LRU({ maxSize: 100 })
 
 let candidateFilesCache = new WeakMap()
 
-function getCandidateFiles(context, userConfigPath, tailwindConfig) {
+function getCandidateFiles(context, tailwindConfig) {
   if (candidateFilesCache.has(context)) {
     return candidateFilesCache.get(context)
   }
@@ -30,10 +30,9 @@ function getCandidateFiles(context, userConfigPath, tailwindConfig) {
     ? tailwindConfig.purge
     : tailwindConfig.purge.content
 
-  let basePath = userConfigPath === null ? process.cwd() : path.dirname(userConfigPath)
   let candidateFiles = purgeContent
     .filter((item) => typeof item === 'string')
-    .map((purgePath) => normalizePath(path.resolve(basePath, purgePath)))
+    .map((purgePath) => normalizePath(path.resolve(purgePath)))
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }
@@ -88,6 +87,23 @@ function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
       : context.tailwindConfig.purge.content
   )
     .filter((item) => typeof item.raw === 'string')
+    .concat(
+      (context.tailwindConfig.purge?.safelist ?? []).map((content) => {
+        if (typeof content === 'string') {
+          return { raw: content, extension: 'html' }
+        }
+
+        if (content instanceof RegExp) {
+          throw new Error(
+            "Values inside 'purge.safelist' can only be of type 'string', found 'regex'."
+          )
+        }
+
+        throw new Error(
+          `Values inside 'purge.safelist' can only be of type 'string', found '${typeof content}'.`
+        )
+      })
+    )
     .map(({ raw, extension }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(candidateFiles, fileModifiedMap)) {
@@ -155,7 +171,7 @@ export default function setupTrackingContext(configOrPath) {
         contextDependencies
       )
 
-      let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
+      let candidateFiles = getCandidateFiles(context, tailwindConfig)
       let fileModifiedMap = getFileModifiedMap(context)
 
       // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies

@@ -1,9 +1,12 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         contrast: (value) => {
-          return { '--tw-contrast': `contrast(${value})` }
+          return {
+            '--tw-contrast': `contrast(${value})`,
+            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+          }
         },
       },
       { values: theme('contrast'), variants: variants('contrast'), type: 'any' }

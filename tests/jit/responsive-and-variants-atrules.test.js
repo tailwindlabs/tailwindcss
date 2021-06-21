@@ -19,7 +19,6 @@ test('responsive and variants atrules', () => {
   }
 
   let css = `
-    @tailwind base;
     @tailwind components;
     @tailwind utilities;
 

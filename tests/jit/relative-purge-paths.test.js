@@ -10,13 +10,21 @@ function run(input, config = {}) {
 }
 
 test('relative purge paths', () => {
+  let config = {
+    purge: ['./tests/jit/relative-purge-paths.test.html'],
+    mode: 'jit',
+    corePlugins: { preflight: false },
+    theme: {},
+    plugins: [],
+  }
+
   let css = `
     @tailwind base;
     @tailwind components;
     @tailwind utilities;
   `
 
-  return run(css, path.resolve(__dirname, './relative-purge-paths.config.js')).then((result) => {
+  return run(css, config).then((result) => {
     let expectedPath = path.resolve(__dirname, './relative-purge-paths.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 

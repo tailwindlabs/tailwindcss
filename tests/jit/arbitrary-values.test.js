@@ -17,8 +17,6 @@ test('arbitrary values', () => {
   }
 
   let css = `
-    @tailwind base;
-    @tailwind components;
     @tailwind utilities;
   `
 

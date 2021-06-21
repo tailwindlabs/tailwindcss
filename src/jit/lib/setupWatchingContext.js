@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import crypto from 'crypto'
-import os from 'os'
 
+import tmp from 'tmp'
 import chokidar from 'chokidar'
 import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
@@ -14,25 +13,6 @@ import getModuleDependencies from '../../lib/getModuleDependencies'
 import resolveConfig from '../../../resolveConfig'
 import resolveConfigPath from '../../util/resolveConfigPath'
 import { getContext, trackModified } from './setupContextUtils'
-import { env } from './sharedState'
-
-// Earmarks a directory for our touch files.
-// If the directory already exists we delete any existing touch files,
-// invalidating any caches associated with them.
-let touchDir =
-  env.TAILWIND_TOUCH_DIR || path.join(os.homedir() || os.tmpdir(), '.tailwindcss', 'touch')
-
-if (env.TAILWIND_MODE === 'watch') {
-  if (fs.existsSync(touchDir)) {
-    for (let file of fs.readdirSync(touchDir)) {
-      try {
-        fs.unlinkSync(path.join(touchDir, file))
-      } catch (_err) {}
-    }
-  } else {
-    fs.mkdirSync(touchDir, { recursive: true })
-  }
-}
 
 // This is used to trigger rebuilds. Just updating the timestamp
 // is significantly faster than actually writing to the file (10x).
@@ -89,7 +69,7 @@ function rebootWatcher(context, configPath, configDependencies, candidateFiles) 
   let touchFile = getTouchFile(context)
 
   if (touchFile === null) {
-    touchFile = generateTouchFileName()
+    touchFile = tmp.fileSync().name
     setTouchFile(context, touchFile)
     touch(touchFile)
   }
@@ -148,25 +128,6 @@ function rebootWatcher(context, configPath, configDependencies, candidateFiles) 
   })
 }
 
-function generateTouchFileName() {
-  let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-  let randomChars = ''
-  let randomCharsLength = 12
-  let bytes = null
-
-  try {
-    bytes = crypto.randomBytes(randomCharsLength)
-  } catch (_error) {
-    bytes = crypto.pseudoRandomBytes(randomCharsLength)
-  }
-
-  for (let i = 0; i < randomCharsLength; i++) {
-    randomChars += chars[bytes[i] % chars.length]
-  }
-
-  return path.join(touchDir, `touch-${process.pid}-${randomChars}`)
-}
-
 let configPathCache = new LRU({ maxSize: 100 })
 
 let configDependenciesCache = new WeakMap()
@@ -181,7 +142,7 @@ function getConfigDependencies(context) {
 
 let candidateFilesCache = new WeakMap()
 
-function getCandidateFiles(context, userConfigPath, tailwindConfig) {
+function getCandidateFiles(context, tailwindConfig) {
   if (candidateFilesCache.has(context)) {
     return candidateFilesCache.get(context)
   }
@@ -190,10 +151,9 @@ function getCandidateFiles(context, userConfigPath, tailwindConfig) {
     ? tailwindConfig.purge
     : tailwindConfig.purge.content
 
-  let basePath = userConfigPath === null ? process.cwd() : path.dirname(userConfigPath)
   let candidateFiles = purgeContent
     .filter((item) => typeof item === 'string')
-    .map((purgePath) => normalizePath(path.resolve(basePath, purgePath)))
+    .map((purgePath) => normalizePath(path.resolve(purgePath)))
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }
@@ -235,6 +195,23 @@ function resolvedChangedContent(context, candidateFiles) {
       : context.tailwindConfig.purge.content
   )
     .filter((item) => typeof item.raw === 'string')
+    .concat(
+      (context.tailwindConfig.purge?.safelist ?? []).map((content) => {
+        if (typeof content === 'string') {
+          return { raw: content, extension: 'html' }
+        }
+
+        if (content instanceof RegExp) {
+          throw new Error(
+            "Values inside 'purge.safelist' can only be of type 'string', found 'regex'."
+          )
+        }
+
+        throw new Error(
+          `Values inside 'purge.safelist' can only be of type 'string', found '${typeof content}'.`
+        )
+      })
+    )
     .map(({ raw, extension }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(context, candidateFiles)) {
@@ -304,7 +281,7 @@ export default function setupWatchingContext(configOrPath) {
         contextDependencies
       )
 
-      let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
+      let candidateFiles = getCandidateFiles(context, tailwindConfig)
       let contextConfigDependencies = getConfigDependencies(context)
 
       for (let file of configDependencies) {
