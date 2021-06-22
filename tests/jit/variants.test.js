@@ -32,3 +32,29 @@ test('variants', () => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
+
+test('stacked peer variants', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [{ raw: 'peer-disabled:peer-focus:peer-hover:border-blue-500' }],
+    corePlugins: { preflight: false },
+    theme: {},
+    plugins: [],
+  }
+
+  let css = `
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  let expected = `
+    .peer:disabled:focus:hover ~ .peer-disabled\\:peer-focus\\:peer-hover\\:border-blue-500 {
+      --tw-border-opacity: 1;
+      border-color: rgba(59, 130, 246, var(--tw-border-opacity));
+    }
+  `
+
+  let result = await run(css, config)
+  expect(result.css).toIncludeCss(expected)
+})

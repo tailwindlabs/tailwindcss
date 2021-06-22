@@ -201,11 +201,8 @@ export default {
             return null
           }
 
-          return applyPseudoToMarker(
-            variantSelector,
-            peerMarker,
-            state,
-            (marker, selector) => `${marker} ~ ${selector}`
+          return applyPseudoToMarker(variantSelector, peerMarker, state, (marker, selector) =>
+            selector.trim().startsWith('~') ? `${marker}${selector}` : `${marker} ~ ${selector}`
           )
         })
       )
