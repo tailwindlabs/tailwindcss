@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet!
 
+## [2.2.4] - 2021-06-23
+
+### Fixed
+
+- Remove `postinstall` script that was preventing people from installing the library ([1eacfb9](https://github.com/tailwindlabs/tailwindcss/commit/1eacfb98849c0d4737e0af3595ddec8c73addaac))
+
 ## [2.2.3] - 2021-06-23
 
 ### Added
@@ -1459,7 +1465,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.4...HEAD
+[2.2.4]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.3...v2.2.4
+[2.2.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.2...v2.2.3
 [2.2.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.1...v2.2.2
 [2.2.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.4...v2.2.0
