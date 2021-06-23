@@ -185,7 +185,7 @@ function getTailwindConfig(configOrPath) {
     configOrPath.config === undefined ? configOrPath : configOrPath.config
   )
 
-  return [newConfig, null, hash(newConfig), [userConfigPath]]
+  return [newConfig, null, hash(newConfig), []]
 }
 
 function resolvedChangedContent(context, candidateFiles) {
