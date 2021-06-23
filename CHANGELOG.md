@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Pass extended color palette to theme closures so it can be used without installing Tailwind when using `npx tailwindcss` ([359252c](https://github.com/tailwindlabs/tailwindcss/commit/359252c9b429e81217c28eb3ca7bab73d8f81e6d))
+
+### Fixed
+
+- JIT: Explicitly error when `-` is used as a custom separator ([#4704](https://github.com/tailwindlabs/tailwindcss/pull/4704))
+- JIT: Don't add multiple `~` when stacking `peer-*` variants ([#4757](https://github.com/tailwindlabs/tailwindcss/pull/4757))
 
 ## [2.2.2] - 2021-06-18
 
