@@ -52,7 +52,7 @@ export default function purgeUnusedUtilities(config, configChanged, registerDepe
   const purgeEnabled = _.get(
     config,
     'purge.enabled',
-    config.purge !== false && config.purge !== undefined && process.env.NODE_ENV === 'production'
+    config.purge !== false && config.purge !== undefined && (process.env.NODE_ENV === 'production' || process.env.TAILWIND_ENV === 'production')
   )
 
   if (!purgeEnabled) {
