@@ -1,7 +1,5 @@
-import * as corePlugins from '../src/plugins'
 import resolveConfig from '../src/util/resolveConfig'
-
-const corePluginList = Object.keys(corePlugins)
+import corePluginList from '../src/corePluginList'
 
 test('prefix key overrides default prefix', () => {
   const userConfig = {

@@ -15,3 +15,6 @@ yarn-error.log
 
 # Perf related files
 isolate*.log
+
+# Generated files
+/src/corePluginList.js

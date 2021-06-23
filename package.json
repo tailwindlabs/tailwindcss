@@ -18,7 +18,7 @@
     "David Hemphill <davidlee.hemphill@gmail.com>"
   ],
   "scripts": {
-    "prebabelify": "rimraf lib",
+    "prebabelify": "npm run generate:plugin-list && rimraf lib",
     "babelify": "babel src --out-dir lib --copy-files",
     "postbabelify": "ncc build lib/cli-peer-dependencies.js -o peers",
     "rebuild-fixtures": "npm run babelify && babel-node scripts/rebuildFixtures.js",
@@ -26,10 +26,12 @@
     "style": "eslint .",
     "test": "cross-env TAILWIND_MODE=build jest",
     "test:integrations": "npm run test --prefix ./integrations",
+    "postinstall": "npm run generate:plugin-list",
     "install:integrations": "node scripts/install-integrations.js",
     "posttest": "npm run style",
     "compat": "node scripts/compat.js --prepare",
-    "compat:restore": "node scripts/compat.js --restore"
+    "compat:restore": "node scripts/compat.js --restore",
+    "generate:plugin-list": "babel-node scripts/create-plugin-list.js"
   },
   "files": [
     "dist/*.css",
