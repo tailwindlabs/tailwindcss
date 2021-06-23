@@ -513,6 +513,52 @@ For example, if you are using `postcss-cli`, set `TAILWIND_MODE=watch` in your d
 
 Note that setting `TAILWIND_MODE=watch` will start a long-running watch process in the background, so if you set that environment variable when trying to do a one-off build, it will look like the build is hanging. You should only set `TAILWIND_MODE=watch` when you are actually running a dev server/watch process.
 
+### Styles rebuild in an infinite loop
+
+If your CSS seems to be rebuilding in an infinite loop, there's a good chance it's because your build tool doesn't support PostCSS's `glob` option when [registering dependencies](https://github.com/postcss/postcss/blob/main/docs/guidelines/runner.md#31-rebuild-when-dependencies-change).
+
+Many build tools (such as webpack) don't support this option, and as a result we can only tell them to watch specific files or _entire directories_. We can't tell webpack to only watch `*.html` files in a directory for example.
+
+That means that if building your CSS causes _any_ files in those directories to change, a rebuild will be triggered, even if the changed file doesn't match the extension in your glob.
+
+
+```js
+// tailwind.config.js
+module.exports = {
+  purge: [
+    // Your CSS will rebuild any time *any* file in `src` changes
+    './src/**/*.{html,js}',
+  ],
+  // ...
+}
+```
+
+So if you are watching `src/**/*.html` for changes, but you are writing your CSS output file to `src/css/styles.css`, you will get an infinite rebuild loop in some tools.
+
+Ideally we could warn you about this in the console, but many tools support it perfectly fine (including our own CLI tool), and we have no reliable way to detect what build tool you are using.
+
+You have a few options for solving this problem:
+
+1. **Use more specific paths in your `purge` config**. Make sure you only include directories that won't change when your CSS builds.
+
+    ```diff-js
+      // tailwind.config.js
+      module.exports = {
+        purge: [
+    -     './src/**/*.{html,js}',
+    +     './src/pages/**/*.{html,js}',
+    +     './src/components/**/*.{html,js}',
+    +     './src/layouts/**/*.{html,js}',
+    +     './src/index.html',
+        ],
+        // ...
+      }
+    ```
+
+    If necessary, adjust your actual project directory structure to make sure you can target your template files without accidentally catching your CSS file or other build artifacts like manifest files.
+
+2. **Use a build tool with PostCSS glob support**. If you absolutely can't change your purge config or directory structure, your best bet is to compile your CSS separately with a tool that has complete glob support. We recommend using [Tailwind CLI](/docs/installation#using-tailwind-cli), which is a fast, simple, purpose-built tool for compiling your CSS with Tailwind.
+
 ### It just doesn't seem to work properly
 
 If you are experiencing weird, hard to describe issues with the output, or things just don't seem like they are working at all, there's a good chance it's due to your build tool not supporting PostCSS dependency messages properly _(or at all)_. One known example of this currently is [Stencil](https://github.com/ionic-team/stencil-postcss/pull/35).
