@@ -34,10 +34,7 @@ expect.extend({
           )
         }
       : () => {
-          const actual = format(received)
-          const expected = format(argument)
-
-          const diffString = diff(expected, actual, {
+          const diffString = diff(argument, received, {
             expand: this.expand,
           })
 
@@ -46,8 +43,8 @@ expect.extend({
             '\n\n' +
             (diffString && diffString.includes('- Expect')
               ? `Difference:\n\n${diffString}`
-              : `Expected: ${this.utils.printExpected(expected)}\n` +
-                `Received: ${this.utils.printReceived(actual)}`)
+              : `Expected: ${this.utils.printExpected(argument)}\n` +
+                `Received: ${this.utils.printReceived(received)}`)
           )
         }
 
@@ -101,12 +98,6 @@ expect.extend({
   // Compare two CSS strings with all whitespace removed
   // This is probably naive but it's fast and works well enough.
   toMatchFormattedCss(received, argument) {
-    function format(input) {
-      return prettier.format(input, {
-        parser: 'css',
-        printWidth: 100,
-      })
-    }
     const options = {
       comment: 'stripped(received) === stripped(argument)',
       isNot: this.isNot,
