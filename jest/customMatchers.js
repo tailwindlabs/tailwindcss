@@ -29,8 +29,8 @@ expect.extend({
           return (
             this.utils.matcherHint('toMatchCss', undefined, undefined, options) +
             '\n\n' +
-            `Expected: not ${this.utils.printExpected(format(received))}\n` +
-            `Received: ${this.utils.printReceived(format(argument))}`
+            `Expected: not ${this.utils.printExpected(received)}\n` +
+            `Received: ${this.utils.printReceived(argument)}`
           )
         }
       : () => {
