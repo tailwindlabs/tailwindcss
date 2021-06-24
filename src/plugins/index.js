@@ -34,11 +34,11 @@ export { default as tableLayout } from './tableLayout'
 export { default as borderCollapse } from './borderCollapse'
 
 export { default as transformOrigin } from './transformOrigin'
+export { default as transform } from './transform'
 export { default as translate } from './translate'
 export { default as rotate } from './rotate'
 export { default as skew } from './skew'
 export { default as scale } from './scale'
-export { default as transform } from './transform'
 
 export { default as animation } from './animation'
 
@@ -136,6 +136,7 @@ export { default as ringOpacity } from './ringOpacity'
 export { default as ringOffsetWidth } from './ringOffsetWidth'
 export { default as ringOffsetColor } from './ringOffsetColor'
 
+export { default as filter } from './filter'
 export { default as blur } from './blur'
 export { default as brightness } from './brightness'
 export { default as contrast } from './contrast'
@@ -145,7 +146,6 @@ export { default as hueRotate } from './hueRotate'
 export { default as invert } from './invert'
 export { default as saturate } from './saturate'
 export { default as sepia } from './sepia'
-export { default as filter } from './filter'
 
 export { default as backdropBlur } from './backdropBlur'
 export { default as backdropBrightness } from './backdropBrightness'

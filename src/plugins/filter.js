@@ -1,8 +1,15 @@
-export default function () {
-  return function ({ config, addBase, addUtilities, variants }) {
-    if (config('mode') === 'jit') {
-      addBase({
-        '*, ::before, ::after': {
+import postcss from 'postcss'
+import parseObjectStyles from '../util/parseObjectStyles'
+
+let baseRulesKey = Symbol()
+
+export function addBaseSelector(memory, selector) {
+  let baseRoot = memory.get(baseRulesKey)
+
+  if (baseRoot.nodes.length === 0) {
+    baseRoot.append(
+      parseObjectStyles({
+        [selector]: {
           '--tw-blur': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
@@ -25,12 +32,36 @@ export default function () {
           ].join(' '),
         },
       })
-      addUtilities(
+    )
+  } else {
+    baseRoot.nodes[0].selectors = [...baseRoot.nodes[0].selectors, selector]
+  }
+}
+
+export default function () {
+  return function ({ config, matchUtilities, addBase, addUtilities, variants, memory }) {
+    if (config('mode') === 'jit') {
+      let baseRoot = postcss.root()
+      memory.set(baseRulesKey, baseRoot)
+      addBase(baseRoot)
+
+      matchUtilities(
         {
-          '.filter': { filter: 'var(--tw-filter)' },
-          '.filter-none': { filter: 'none' },
+          filter: (value, { selector }) => {
+            if (value !== 'none') {
+              addBaseSelector(memory, selector)
+            }
+
+            return {
+              filter: value,
+            }
+          },
         },
-        variants('filter')
+        {
+          values: { DEFAULT: 'var(--tw-filter)', none: 'none' },
+          variants: variants('filter'),
+          type: 'any',
+        }
       )
     } else {
       addUtilities(

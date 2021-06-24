@@ -8,6 +8,10 @@ export default function collapseAdjacentRules() {
   return (root) => {
     let currentRule = null
     root.each((node) => {
+      if (node.nodes && node.nodes.length === 0) {
+        node.remove()
+        return
+      }
       if (!types.has(node.type)) {
         currentRule = null
         return

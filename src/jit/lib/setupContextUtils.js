@@ -151,6 +151,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
   }
 
   return {
+    memory: context.memory,
     addVariant(variantName, variantFunctions, options = {}) {
       variantFunctions = [].concat(variantFunctions)
 
@@ -264,7 +265,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let rule = utilities[identifier]
 
-        function wrapped(modifier) {
+        function wrapped(modifier, { candidate }) {
           let { type = 'any' } = options
           type = [].concat(type)
           let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
@@ -277,6 +278,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           let ruleSets = []
             .concat(
               rule(value, {
+                selector: `.${escapeClassName(candidate)}`,
                 includeRules(rules) {
                   includedRules.push(...rules)
                 },
@@ -497,6 +499,7 @@ export function createContext(
     changedContent: changedContent,
     variantMap: new Map(),
     stylesheetCache: null,
+    memory: new Map(),
   }
 
   let resolvedPlugins = resolvePlugins(context, tailwindDirectives, root)

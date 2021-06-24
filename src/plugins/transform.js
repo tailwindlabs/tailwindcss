@@ -1,8 +1,15 @@
-export default function () {
-  return function ({ config, addBase, addUtilities, variants }) {
-    if (config('mode') === 'jit') {
-      addBase({
-        '*, ::before, ::after': {
+import postcss from 'postcss'
+import parseObjectStyles from '../util/parseObjectStyles'
+
+let baseRulesKey = Symbol()
+
+export function addBaseSelector(memory, selector) {
+  let baseRoot = memory.get(baseRulesKey)
+
+  if (baseRoot.nodes.length === 0) {
+    baseRoot.append(
+      parseObjectStyles({
+        [selector]: {
           '--tw-translate-x': '0',
           '--tw-translate-y': '0',
           '--tw-rotate': '0',
@@ -21,13 +28,35 @@ export default function () {
           ].join(' '),
         },
       })
-      addUtilities(
+    )
+  } else {
+    baseRoot.nodes[0].selectors = [...baseRoot.nodes[0].selectors, selector]
+  }
+}
+
+export default function () {
+  return function ({ config, matchUtilities, addBase, addUtilities, variants, memory }) {
+    if (config('mode') === 'jit') {
+      let baseRoot = postcss.root()
+      memory.set(baseRulesKey, baseRoot)
+      addBase(baseRoot)
+
+      matchUtilities(
         {
-          '.transform': {
-            transform: 'var(--tw-transform)',
+          transform: (value, { selector }) => {
+            if (value !== 'none') {
+              addBaseSelector(memory, selector)
+            }
+
+            return {
+              transform: value,
+            }
           },
-          '.transform-cpu': {
-            '--tw-transform': [
+        },
+        {
+          values: {
+            DEFAULT: 'var(--tw-transform)',
+            cpu: [
               'translateX(var(--tw-translate-x))',
               'translateY(var(--tw-translate-y))',
               'rotate(var(--tw-rotate))',
@@ -36,9 +65,7 @@ export default function () {
               'scaleX(var(--tw-scale-x))',
               'scaleY(var(--tw-scale-y))',
             ].join(' '),
-          },
-          '.transform-gpu': {
-            '--tw-transform': [
+            gpu: [
               'translate3d(var(--tw-translate-x), var(--tw-translate-y), 0)',
               'rotate(var(--tw-rotate))',
               'skewX(var(--tw-skew-x))',
@@ -46,10 +73,11 @@ export default function () {
               'scaleX(var(--tw-scale-x))',
               'scaleY(var(--tw-scale-y))',
             ].join(' '),
+            none: 'none',
           },
-          '.transform-none': { transform: 'none' },
-        },
-        variants('transform')
+          variants: variants('transform'),
+          type: 'any',
+        }
       )
     } else {
       addUtilities(

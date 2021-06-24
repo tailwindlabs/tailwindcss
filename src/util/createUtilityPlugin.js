@@ -13,7 +13,7 @@ let asMap = new Map([
 export default function createUtilityPlugin(
   themeKey,
   utilityVariations = [[themeKey, [themeKey]]],
-  { filterDefault = false, resolveArbitraryValue = asValue } = {}
+  { filterDefault = false, resolveArbitraryValue = asValue, lolback = () => {} } = {}
 ) {
   let transformValue = transformThemeValue(themeKey)
   return function ({ matchUtilities, variants, theme }) {
@@ -23,7 +23,10 @@ export default function createUtilityPlugin(
       matchUtilities(
         group.reduce((obj, [classPrefix, properties]) => {
           return Object.assign(obj, {
-            [classPrefix]: (value) => {
+            [classPrefix]: (value, helpers) => {
+              // Holy shit I can't believe this is real
+              lolback(value, helpers)
+
               return properties.reduce((obj, name) => {
                 if (Array.isArray(name)) {
                   return Object.assign(obj, { [name[0]]: name[1] })

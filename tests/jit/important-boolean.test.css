@@ -20,6 +20,9 @@
   --tw-ring-color: rgba(59, 130, 246, 0.5);
   --tw-ring-offset-shadow: 0 0 #0000;
   --tw-ring-shadow: 0 0 #0000;
+}
+.brightness-150,
+.contrast-50 {
   --tw-blur: var(--tw-empty, /*!*/ /*!*/);
   --tw-brightness: var(--tw-empty, /*!*/ /*!*/);
   --tw-contrast: var(--tw-empty, /*!*/ /*!*/);
@@ -31,6 +34,11 @@
   --tw-drop-shadow: var(--tw-empty, /*!*/ /*!*/);
   --tw-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale)
     var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+  filter: var(--tw-filter);
+}
+*,
+::before,
+::after {
   --tw-backdrop-blur: var(--tw-empty, /*!*/ /*!*/);
   --tw-backdrop-brightness: var(--tw-empty, /*!*/ /*!*/);
   --tw-backdrop-contrast: var(--tw-empty, /*!*/ /*!*/);
@@ -98,6 +106,12 @@
 }
 .font-bold {
   font-weight: 700 !important;
+}
+.brightness-150 {
+  --tw-brightness: brightness(1.5) !important;
+}
+.contrast-50 {
+  --tw-contrast: contrast(0.5) !important;
 }
 .custom-util {
   button: no;
