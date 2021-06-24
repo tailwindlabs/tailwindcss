@@ -2,7 +2,15 @@ const DIRECTIONS = new Set(['normal', 'reverse', 'alternate', 'alternate-reverse
 const PLAY_STATES = new Set(['running', 'paused'])
 const FILL_MODES = new Set(['none', 'forwards', 'backwards', 'both'])
 const ITERATION_COUNTS = new Set(['infinite'])
-const TIMINGS = new Set(['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'])
+const TIMINGS = new Set([
+  'linear',
+  'ease',
+  'ease-in',
+  'ease-out',
+  'ease-in-out',
+  'step-start',
+  'step-end',
+])
 const TIMING_FNS = ['cubic-bezier', 'steps']
 
 const COMMA = /\,(?![^(]*\))/g // Comma separator that is not located between brackets. E.g.: `cubiz-bezier(a, b, c)` these don't count.
