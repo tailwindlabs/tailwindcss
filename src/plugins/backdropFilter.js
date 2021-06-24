@@ -1,8 +1,15 @@
-export default function () {
-  return function ({ config, addBase, addUtilities, variants }) {
-    if (config('mode') === 'jit') {
-      addBase({
-        '*, ::before, ::after': {
+import postcss from 'postcss'
+import parseObjectStyles from '../util/parseObjectStyles'
+
+let baseRulesKey = Symbol()
+
+export function addBaseSelector(memory, selector) {
+  let baseRoot = memory.get(baseRulesKey)
+
+  if (baseRoot.nodes.length === 0) {
+    baseRoot.append(
+      parseObjectStyles({
+        [selector]: {
           '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
@@ -25,12 +32,35 @@ export default function () {
           ].join(' '),
         },
       })
-      addUtilities(
+    )
+  } else {
+    baseRoot.nodes[0].selectors = [...baseRoot.nodes[0].selectors, selector]
+  }
+}
+export default function () {
+  return function ({ config, matchUtilities, addBase, addUtilities, variants, memory }) {
+    if (config('mode') === 'jit') {
+      let baseRoot = postcss.root()
+      memory.set(baseRulesKey, baseRoot)
+      addBase(baseRoot)
+
+      matchUtilities(
         {
-          '.backdrop-filter': { 'backdrop-filter': 'var(--tw-backdrop-filter)' },
-          '.backdrop-filter-none': { 'backdrop-filter': 'none' },
+          'backdrop-filter': (value, { selector }) => {
+            if (value !== 'none') {
+              addBaseSelector(memory, selector)
+            }
+
+            return {
+              'backdrop-filter': value,
+            }
+          },
         },
-        variants('backdropFilter')
+        {
+          values: { DEFAULT: 'var(--tw-backdrop-filter)', none: 'none' },
+          variants: variants('backdropFilter'),
+          type: 'any',
+        }
       )
     } else {
       addUtilities(

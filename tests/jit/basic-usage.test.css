@@ -54,9 +54,16 @@
   --tw-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale)
     var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
-*,
-::before,
-::after {
+.backdrop-filter,
+.backdrop-blur-lg,
+.backdrop-brightness-50,
+.backdrop-contrast-0,
+.backdrop-grayscale,
+.backdrop-hue-rotate-90,
+.backdrop-invert,
+.backdrop-opacity-75,
+.backdrop-saturate-150,
+.backdrop-sepia {
   --tw-backdrop-blur: var(--tw-empty, /*!*/ /*!*/);
   --tw-backdrop-brightness: var(--tw-empty, /*!*/ /*!*/);
   --tw-backdrop-contrast: var(--tw-empty, /*!*/ /*!*/);
@@ -768,6 +775,12 @@
   --tw-sepia: sepia(100%);
   filter: var(--tw-filter);
 }
+.backdrop-filter {
+  backdrop-filter: var(--tw-backdrop-filter);
+}
+.backdrop-filter-none {
+  backdrop-filter: none;
+}
 .backdrop-blur-lg {
   --tw-backdrop-blur: blur(16px);
   backdrop-filter: var(--tw-backdrop-filter);
@@ -803,12 +816,6 @@
 .backdrop-sepia {
   --tw-backdrop-sepia: sepia(100%);
   backdrop-filter: var(--tw-backdrop-filter);
-}
-.backdrop-filter {
-  backdrop-filter: var(--tw-backdrop-filter);
-}
-.backdrop-filter-none {
-  backdrop-filter: none;
 }
 .transition {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow,
