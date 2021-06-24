@@ -13,10 +13,12 @@ test('defining animation and keyframes', () => {
         none: 'none',
         spin: 'spin 1s linear infinite',
         ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+        blink: 'blink 1s step-end infinite',
       },
       keyframes: {
         spin: { to: { transform: 'rotate(360deg)' } },
         ping: { '75%, 100%': { transform: 'scale(2)', opacity: '0' } },
+        blink: { '50%': { transform: 'scale(2)' } },
       },
     },
     variants: {
@@ -45,9 +47,18 @@ test('defining animation and keyframes', () => {
 
     @layer utilities {
       @variants {
+        @keyframes blink {
+          50% { transform: scale(2); }
+        }
+      }
+    }
+
+    @layer utilities {
+      @variants {
         .animate-none { animation: none; }
         .animate-spin { animation: spin 1s linear infinite; }
         .animate-ping { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
+        .animate-blink { animation: blink 1s step-end infinite; }
       }
     }
   `)
