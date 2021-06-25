@@ -3,15 +3,15 @@ export default function () {
     if (config('mode') === 'jit') {
       addBase({
         '*, ::before, ::after': {
-          '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-invert': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-opacity': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-backdrop-blur': ' ',
+          '--tw-backdrop-brightness': ' ',
+          '--tw-backdrop-contrast': ' ',
+          '--tw-backdrop-grayscale': ' ',
+          '--tw-backdrop-hue-rotate': ' ',
+          '--tw-backdrop-invert': ' ',
+          '--tw-backdrop-opacity': ' ',
+          '--tw-backdrop-saturate': ' ',
+          '--tw-backdrop-sepia': ' ',
           '--tw-backdrop-filter': [
             'var(--tw-backdrop-blur)',
             'var(--tw-backdrop-brightness)',
@@ -36,15 +36,15 @@ export default function () {
       addUtilities(
         {
           '.backdrop-filter': {
-            '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-invert': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-opacity': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
+            '--tw-backdrop-blur': ' ',
+            '--tw-backdrop-brightness': ' ',
+            '--tw-backdrop-contrast': ' ',
+            '--tw-backdrop-grayscale': ' ',
+            '--tw-backdrop-hue-rotate': ' ',
+            '--tw-backdrop-invert': ' ',
+            '--tw-backdrop-opacity': ' ',
+            '--tw-backdrop-saturate': ' ',
+            '--tw-backdrop-sepia': ' ',
             'backdrop-filter': [
               'var(--tw-backdrop-blur)',
               'var(--tw-backdrop-brightness)',

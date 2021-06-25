@@ -3,15 +3,15 @@ export default function () {
     if (config('mode') === 'jit') {
       addBase({
         '*, ::before, ::after': {
-          '--tw-blur': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-invert': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-drop-shadow': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-blur': ' ',
+          '--tw-brightness': ' ',
+          '--tw-contrast': ' ',
+          '--tw-grayscale': ' ',
+          '--tw-hue-rotate': ' ',
+          '--tw-invert': ' ',
+          '--tw-saturate': ' ',
+          '--tw-sepia': ' ',
+          '--tw-drop-shadow': ' ',
           '--tw-filter': [
             'var(--tw-blur)',
             'var(--tw-brightness)',
@@ -36,15 +36,15 @@ export default function () {
       addUtilities(
         {
           '.filter': {
-            '--tw-blur': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-invert': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-drop-shadow': 'var(--tw-empty,/*!*/ /*!*/)',
+            '--tw-blur': ' ',
+            '--tw-brightness': ' ',
+            '--tw-contrast': ' ',
+            '--tw-grayscale': ' ',
+            '--tw-hue-rotate': ' ',
+            '--tw-invert': ' ',
+            '--tw-saturate': ' ',
+            '--tw-sepia': ' ',
+            '--tw-drop-shadow': ' ',
             filter: [
               'var(--tw-blur)',
               'var(--tw-brightness)',
