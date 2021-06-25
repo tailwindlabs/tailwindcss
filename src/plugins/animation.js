@@ -1,5 +1,8 @@
 import parseAnimationValue from '../util/parseAnimationValue'
 
+const COMMA = /\,(?![^(]*\))/g
+const COMMA_PLAIN = ','
+
 export default function () {
   return function ({ matchUtilities, theme, variants, prefix }) {
     let prefixName = (name) => prefix(`.${name}`).slice(1)
@@ -20,18 +23,48 @@ export default function () {
     matchUtilities(
       {
         animate: (value, { includeRules }) => {
-          let { name: animationName } = parseAnimationValue(value)
+          let parsed = parseAnimationValue(value)
 
-          if (keyframes[animationName] !== undefined) {
-            includeRules(keyframes[animationName], { respectImportant: false })
-          }
+          if (Array.isArray(parsed)) {
+            let animationNames = parsed.map((animation) => animation.name)
+            let animations = value.split(COMMA)
 
-          if (animationName === undefined || keyframes[animationName] === undefined) {
-            return { animation: value }
-          }
+            animationNames.forEach((animationName) => {
+              if (keyframes[animationName] !== undefined) {
+                includeRules(keyframes[animationName], { respectImportant: false })
+              }
+            })
 
-          return {
-            animation: value.replace(animationName, prefixName(animationName)),
+            if (
+              animationNames.every(
+                (animationName) =>
+                  animationName === undefined || keyframes[animationName] === undefined
+              )
+            ) {
+              return { animation: value }
+            }
+
+            return {
+              animation: animations
+                .map((animation, i) =>
+                  animation.replace(animationNames[i], prefixName(animationNames[i]))
+                )
+                .join(COMMA_PLAIN),
+            }
+          } else {
+            let { name: animationName } = parsed
+
+            if (keyframes[animationName] !== undefined) {
+              includeRules(keyframes[animationName], { respectImportant: false })
+            }
+
+            if (animationName === undefined || keyframes[animationName] === undefined) {
+              return { animation: value }
+            }
+
+            return {
+              animation: value.replace(animationName, prefixName(animationName)),
+            }
           }
         },
       },

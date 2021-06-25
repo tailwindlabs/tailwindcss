@@ -1,6 +1,6 @@
 import postcss from 'postcss'
-import processPlugins from '../../src/util/processPlugins'
 import plugin from '../../src/plugins/animation'
+import processPlugins from '../../src/util/processPlugins'
 
 function css(nodes) {
   return postcss.root({ nodes }).toString()
@@ -59,6 +59,52 @@ test('defining animation and keyframes', () => {
         .animate-spin { animation: spin 1s linear infinite; }
         .animate-ping { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
         .animate-blink { animation: blink 1s step-end infinite; }
+      }
+    }
+  `)
+})
+
+test('defining animation sequence and keyframes', () => {
+  const config = {
+    theme: {
+      animation: {
+        none: 'none',
+        entry: 'zoom 1s linear forwards 1, blink 1s step-end 1s infinite',
+      },
+      keyframes: {
+        blink: { '50%': { transform: 'scale(2)' } },
+        zoom: { from: { transform: 'scale(0)' }, to: { transform: 'scale(1)' } },
+      },
+    },
+    variants: {
+      animation: [],
+    },
+  }
+
+  const { utilities } = processPlugins([plugin()], config)
+
+  expect(css(utilities)).toMatchCss(`
+    @layer utilities {
+      @variants {
+        @keyframes zoom {
+          from { transform: scale(0); }
+          to { transform: scale(1); }
+        }
+      }
+    }
+
+    @layer utilities {
+      @variants {
+        @keyframes blink {
+          50% { transform: scale(2); }
+        }
+      }
+    }
+
+    @layer utilities {
+      @variants {
+        .animate-none { animation: none; }
+        .animate-entry { animation:zoom 1s linear forwards 1, blink 1s step-end 1s infinite; }
       }
     }
   `)
