@@ -125,6 +125,20 @@ function withIdentifiers(styles) {
   })
 }
 
+function buildElementSelector(candidate, variants) {
+  let escaped = `.${escapeClassName(candidate)}`
+
+  if (variants.includes('before')) {
+    return escaped + '::before'
+  }
+
+  if (variants.includes('after')) {
+    return escaped + '::after'
+  }
+
+  return escaped
+}
+
 function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets }) {
   function getConfigValue(path, defaultValue) {
     return path ? dlv(tailwindConfig, path, defaultValue) : tailwindConfig
@@ -265,7 +279,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let rule = utilities[identifier]
 
-        function wrapped(modifier, { candidate }) {
+        function wrapped(modifier, { candidate, variants }) {
           let { type = 'any' } = options
           type = [].concat(type)
           let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
@@ -278,7 +292,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           let ruleSets = []
             .concat(
               rule(value, {
-                selector: `.${escapeClassName(candidate)}`,
+                selector: buildElementSelector(candidate, variants),
                 includeRules(rules) {
                   includedRules.push(...rules)
                 },

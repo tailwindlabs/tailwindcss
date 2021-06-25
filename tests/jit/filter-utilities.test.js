@@ -209,6 +209,62 @@ test('with variants', async () => {
   })
 })
 
+test('with pseudo-element variants', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: '<div class="before:brightness-100 after:brightness-100 lg:hover:after:brightness-100',
+      },
+    ],
+    corePlugins: ['filter', 'brightness', 'contrast'],
+    theme: {},
+    plugins: [],
+  }
+
+  let css = `
+    @tailwind base;
+    @tailwind utilities
+  `
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .before\\:brightness-100::before,
+      .after\\:brightness-100::after,
+      .lg\\:hover\\:after\\:brightness-100::after {
+        --tw-blur: var(--tw-empty, /*!*/ /*!*/);
+        --tw-brightness: var(--tw-empty, /*!*/ /*!*/);
+        --tw-contrast: var(--tw-empty, /*!*/ /*!*/);
+        --tw-grayscale: var(--tw-empty, /*!*/ /*!*/);
+        --tw-hue-rotate: var(--tw-empty, /*!*/ /*!*/);
+        --tw-invert: var(--tw-empty, /*!*/ /*!*/);
+        --tw-saturate: var(--tw-empty, /*!*/ /*!*/);
+        --tw-sepia: var(--tw-empty, /*!*/ /*!*/);
+        --tw-drop-shadow: var(--tw-empty, /*!*/ /*!*/);
+        --tw-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale)
+          var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+      }
+      .before\\:brightness-100::before {
+        content: "";
+        --tw-brightness: brightness(1);
+        filter: var(--tw-filter);
+      }
+      .after\\:brightness-100::after {
+        content: "";
+        --tw-brightness: brightness(1);
+        filter: var(--tw-filter);
+      }
+      @media (min-width: 1024px) {
+        .lg\\:hover\\:after\\:brightness-100:hover::after {
+          content: "";
+          --tw-brightness: brightness(1);
+          filter: var(--tw-filter);
+        }
+      }
+    `)
+  })
+})
+
 test('without any filter classes', async () => {
   let config = {
     mode: 'jit',
