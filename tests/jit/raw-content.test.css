@@ -185,6 +185,14 @@
 .origin-top-right {
   transform-origin: top right;
 }
+.transform {
+  transform: var(--tw-transform);
+}
+.transform-gpu {
+  transform: translate3d(var(--tw-translate-x), var(--tw-translate-y), 0) rotate(var(--tw-rotate))
+    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+    scaleY(var(--tw-scale-y));
+}
 .translate-x-5 {
   --tw-translate-x: 1.25rem;
   transform: var(--tw-transform);
@@ -217,14 +225,6 @@
   --tw-scale-x: 0.95;
   --tw-scale-y: 0.95;
   transform: var(--tw-transform);
-}
-.transform {
-  transform: var(--tw-transform);
-}
-.transform-gpu {
-  --tw-transform: translate3d(var(--tw-translate-x), var(--tw-translate-y), 0)
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .animate-none {
   animation: none;
@@ -638,31 +638,46 @@
 }
 .blur-md {
   --tw-blur: blur(12px);
+  filter: var(--tw-filter);
 }
 .brightness-150 {
   --tw-brightness: brightness(1.5);
+  filter: var(--tw-filter);
 }
 .contrast-50 {
   --tw-contrast: contrast(0.5);
+  filter: var(--tw-filter);
 }
 .drop-shadow-md {
   --tw-drop-shadow: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07))
     drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06));
+  filter: var(--tw-filter);
 }
 .grayscale {
   --tw-grayscale: grayscale(100%);
+  filter: var(--tw-filter);
 }
 .hue-rotate-60 {
   --tw-hue-rotate: hue-rotate(60deg);
+  filter: var(--tw-filter);
 }
 .invert {
   --tw-invert: invert(100%);
+  filter: var(--tw-filter);
 }
 .saturate-200 {
   --tw-saturate: saturate(2);
+  filter: var(--tw-filter);
 }
 .sepia {
   --tw-sepia: sepia(100%);
+  filter: var(--tw-filter);
+}
+.backdrop-filter {
+  backdrop-filter: var(--tw-backdrop-filter);
+}
+.backdrop-filter-none {
+  backdrop-filter: none;
 }
 .backdrop-blur-lg {
   --tw-backdrop-blur: blur(16px);
@@ -699,12 +714,6 @@
 .backdrop-sepia {
   --tw-backdrop-sepia: sepia(100%);
   backdrop-filter: var(--tw-backdrop-filter);
-}
-.backdrop-filter {
-  backdrop-filter: var(--tw-backdrop-filter);
-}
-.backdrop-filter-none {
-  backdrop-filter: none;
 }
 .transition {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow,
