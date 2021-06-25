@@ -267,7 +267,11 @@ npx tailwindcss --no-autoprefixer -o tailwind.css
 
 ### Using a custom PostCSS configuration
 
-If you'd like to use other PostCSS plugins alongside Tailwind, you can create a `postcss.config.js` file in your project root to add your extra plugins and Tailwind will include them when building your CSS:
+If you'd like to use other PostCSS plugins alongside Tailwind, you can create a `postcss.config.js` file in your project root to add your extra plugins and Tailwind will include them if you use the `--postcss` flag when building your CSS:
+
+```shell
+npx tailwindcss --postcss -o tailwind.css
+```
 
 ```js
 // postcss.config.js
