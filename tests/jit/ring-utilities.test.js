@@ -15,7 +15,7 @@ test('basic ring width', async () => {
     mode: 'jit',
     purge: [
       {
-        raw: '<div class="ring ring-2 ring-4 ring-blue-500 ring-offset-2 ring-offset-blue-100"></div>',
+        raw: '<div class="bad-variant:ring ring ring-2 ring-4 ring-blue-500 ring-offset-2 ring-offset-blue-100"></div>',
       },
     ],
     corePlugins: ['ringColor', 'ringOffsetColor', 'ringOffsetWidth', 'ringOpacity', 'ringWidth'],

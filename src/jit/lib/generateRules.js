@@ -201,6 +201,11 @@ function splitWithSeparator(input, separator) {
 function* resolveMatches(candidate, context) {
   let separator = context.tailwindConfig.separator
   let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
+
+  if (!variants.every((variant) => context.variantMap.has(variant))) {
+    return []
+  }
+
   let important = false
 
   if (classCandidate.startsWith('!')) {

@@ -156,7 +156,7 @@ test('with variants', async () => {
     mode: 'jit',
     purge: [
       {
-        raw: '<div class="scale-50 hover:scale-100 translate-x-4 lg:translate-x-6"></div>',
+        raw: '<div class="bad-variant:scale-50 scale-50 hover:scale-100 translate-x-4 lg:translate-x-6"></div>',
       },
     ],
     corePlugins: ['transform', 'scale', 'translate'],

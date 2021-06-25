@@ -15,7 +15,7 @@ test('basic ring width', async () => {
     mode: 'jit',
     purge: [
       {
-        raw: '<div class="shadow shadow-md shadow-lg"></div>',
+        raw: '<div class="bad-variant:shadow shadow shadow-md shadow-lg"></div>',
       },
     ],
     corePlugins: ['boxShadow'],

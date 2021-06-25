@@ -156,7 +156,7 @@ test('with variants', async () => {
     mode: 'jit',
     purge: [
       {
-        raw: '<div class="backdrop-brightness-100 hover:backdrop-brightness-150 backdrop-contrast-50 lg:backdrop-contrast-100"></div>',
+        raw: '<div class="bad-variant:backdrop-brightness-100 backdrop-brightness-100 hover:backdrop-brightness-150 backdrop-contrast-50 lg:backdrop-contrast-100"></div>',
       },
     ],
     corePlugins: ['backdropFilter', 'backdropBrightness', 'backdropContrast'],

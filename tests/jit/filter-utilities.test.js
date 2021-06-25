@@ -156,7 +156,7 @@ test('with variants', async () => {
     mode: 'jit',
     purge: [
       {
-        raw: '<div class="brightness-100 hover:brightness-150 contrast-50 lg:contrast-100"></div>',
+        raw: '<div class="bad-variant:brightness-100 brightness-100 hover:brightness-150 contrast-50 lg:contrast-100"></div>',
       },
     ],
     corePlugins: ['filter', 'brightness', 'contrast'],
