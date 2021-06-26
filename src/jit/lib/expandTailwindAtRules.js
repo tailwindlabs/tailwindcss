@@ -85,7 +85,7 @@ function getClassCandidates(content, extractor, contentMatchCache, candidates, s
         candidates.add(match)
       }
     } else {
-      let extractorMatches = extractor(line)
+      let extractorMatches = extractor(line).filter((s) => s !== '!*')
       let lineMatchesSet = new Set(extractorMatches)
 
       for (let match of lineMatchesSet) {
