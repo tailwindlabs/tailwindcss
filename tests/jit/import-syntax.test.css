@@ -1,9 +1,3 @@
-*,
-::before,
-::after {
-  --tw-border-opacity: 1;
-  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
-}
 h1 {
   font-size: 32px;
 }

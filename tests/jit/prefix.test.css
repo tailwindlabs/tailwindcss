@@ -1,9 +1,3 @@
-*,
-::before,
-::after {
-  --tw-border-opacity: 1;
-  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
-}
 .tw-brightness-150,
 .tw-contrast-50 {
   --tw-blur: var(--tw-empty, /*!*/ /*!*/);

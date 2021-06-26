@@ -15,9 +15,7 @@
     rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
     scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
-*,
-::before,
-::after {
+.border-\[2\.5px\] {
   --tw-border-opacity: 1;
   border-color: rgba(229, 231, 235, var(--tw-border-opacity));
 }
