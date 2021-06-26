@@ -807,3 +807,6 @@
 .content-none {
   content: none;
 }
+.touch-manipulation {
+  touch-action: manipulation;
+}
