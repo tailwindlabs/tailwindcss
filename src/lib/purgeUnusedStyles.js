@@ -205,6 +205,10 @@ export default function purgeUnusedUtilities(
         safelist: standardizeSafelist(purgeOptions.safelist),
       }
 
+      if (purgeCSS.options.variables) {
+        purgeCSS.variablesStructure.safelist = purgeCSS.options.safelist.variables || []
+      }
+
       const fileFormatContents = content.filter((o) => typeof o === 'string')
       const rawFormatContents = content.filter((o) => typeof o === 'object')
 
