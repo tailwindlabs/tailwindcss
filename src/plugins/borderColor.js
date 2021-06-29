@@ -3,21 +3,21 @@ import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function () {
   return function ({ config, addBase, matchUtilities, theme, variants, corePlugins }) {
-    if (!corePlugins('borderOpacity')) {
-      addBase({
-        '*, ::before, ::after': {
-          'border-color': theme('borderColor.DEFAULT', 'currentColor'),
-        },
-      })
-    } else {
-      addBase({
-        '*, ::before, ::after': withAlphaVariable({
-          color: theme('borderColor.DEFAULT', 'currentColor'),
-          property: 'border-color',
-          variable: '--tw-border-opacity',
-        }),
-      })
-    }
+    // if (!corePlugins('borderOpacity')) {
+    addBase({
+      '*, ::before, ::after': {
+        'border-color': theme('borderColor.DEFAULT', 'currentColor'),
+      },
+    })
+    // } else {
+    //   addBase({
+    //     '*, ::before, ::after': withAlphaVariable({
+    //       color: theme('borderColor.DEFAULT', 'currentColor'),
+    //       property: 'border-color',
+    //       variable: '--tw-border-opacity',
+    //     }),
+    //   })
+    // }
 
     matchUtilities(
       {

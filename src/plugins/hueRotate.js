@@ -1,3 +1,5 @@
+import { filterVars } from './filter'
+
 export default function () {
   return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
@@ -5,7 +7,7 @@ export default function () {
         'hue-rotate': (value) => {
           return {
             '--tw-hue-rotate': `hue-rotate(${value})`,
-            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+            ...(config('mode') === 'jit' ? { filter: filterVars } : {}),
           }
         },
       },

@@ -4,11 +4,11 @@ export default function () {
       {
         '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions':
           {
-            '--tw-ordinal': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-slashed-zero': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-numeric-figure': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-numeric-spacing': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-numeric-fraction': 'var(--tw-empty,/*!*/ /*!*/)',
+            '--tw-ordinal': ' ',
+            '--tw-slashed-zero': ' ',
+            '--tw-numeric-figure': ' ',
+            '--tw-numeric-spacing': ' ',
+            '--tw-numeric-fraction': ' ',
             'font-variant-numeric':
               'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)',
           },

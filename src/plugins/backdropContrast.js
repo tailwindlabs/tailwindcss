@@ -1,3 +1,5 @@
+import { filterVars } from './backdropFilter'
+
 export default function () {
   return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
@@ -5,7 +7,7 @@ export default function () {
         'backdrop-contrast': (value) => {
           return {
             '--tw-backdrop-contrast': `contrast(${value})`,
-            ...(config('mode') === 'jit' ? { 'backdrop-filter': 'var(--tw-backdrop-filter)' } : {}),
+            ...(config('mode') === 'jit' ? { 'backdrop-filter': filterVars } : {}),
           }
         },
       },

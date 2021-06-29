@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import nameClass from '../util/nameClass'
+import { filterVars } from './filter'
 
 export default function () {
   return function ({ config, addUtilities, theme, variants }) {
@@ -11,7 +12,7 @@ export default function () {
             '--tw-drop-shadow': Array.isArray(value)
               ? value.map((v) => `drop-shadow(${v})`).join(' ')
               : `drop-shadow(${value})`,
-            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+            ...(config('mode') === 'jit' ? { filter: filterVars } : {}),
           },
         ]
       })

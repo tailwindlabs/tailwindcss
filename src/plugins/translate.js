@@ -1,12 +1,13 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
+import { transformVars } from './transform'
 
 export default function () {
   return function ({ config, ...rest }) {
     if (config('mode') === 'jit') {
       return createUtilityPlugin('translate', [
         [
-          ['translate-x', ['--tw-translate-x', ['transform', 'var(--tw-transform)']]],
-          ['translate-y', ['--tw-translate-y', ['transform', 'var(--tw-transform)']]],
+          ['translate-x', ['--tw-translate-x', ['transform', transformVars]]],
+          ['translate-y', ['--tw-translate-y', ['transform', transformVars]]],
         ],
       ])({ config, ...rest })
     } else {

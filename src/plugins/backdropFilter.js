@@ -1,33 +1,34 @@
+export let filterVars = [
+  'var(--tw-backdrop-blur)',
+  'var(--tw-backdrop-brightness)',
+  'var(--tw-backdrop-contrast)',
+  'var(--tw-backdrop-grayscale)',
+  'var(--tw-backdrop-hue-rotate)',
+  'var(--tw-backdrop-invert)',
+  'var(--tw-backdrop-opacity)',
+  'var(--tw-backdrop-saturate)',
+  'var(--tw-backdrop-sepia)',
+].join(' ')
+
 export default function () {
   return function ({ config, addBase, addUtilities, variants }) {
     if (config('mode') === 'jit') {
       addBase({
         '*, ::before, ::after': {
-          '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-invert': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-opacity': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-backdrop-filter': [
-            'var(--tw-backdrop-blur)',
-            'var(--tw-backdrop-brightness)',
-            'var(--tw-backdrop-contrast)',
-            'var(--tw-backdrop-grayscale)',
-            'var(--tw-backdrop-hue-rotate)',
-            'var(--tw-backdrop-invert)',
-            'var(--tw-backdrop-opacity)',
-            'var(--tw-backdrop-saturate)',
-            'var(--tw-backdrop-sepia)',
-          ].join(' '),
+          '--tw-backdrop-blur': ' ',
+          '--tw-backdrop-brightness': ' ',
+          '--tw-backdrop-contrast': ' ',
+          '--tw-backdrop-grayscale': ' ',
+          '--tw-backdrop-hue-rotate': ' ',
+          '--tw-backdrop-invert': ' ',
+          '--tw-backdrop-opacity': ' ',
+          '--tw-backdrop-saturate': ' ',
+          '--tw-backdrop-sepia': ' ',
         },
       })
       addUtilities(
         {
-          '.backdrop-filter': { 'backdrop-filter': 'var(--tw-backdrop-filter)' },
+          '.backdrop-filter': { 'backdrop-filter': filterVars },
           '.backdrop-filter-none': { 'backdrop-filter': 'none' },
         },
         variants('backdropFilter')
@@ -36,26 +37,16 @@ export default function () {
       addUtilities(
         {
           '.backdrop-filter': {
-            '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-invert': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-opacity': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
-            '--tw-backdrop-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
-            'backdrop-filter': [
-              'var(--tw-backdrop-blur)',
-              'var(--tw-backdrop-brightness)',
-              'var(--tw-backdrop-contrast)',
-              'var(--tw-backdrop-grayscale)',
-              'var(--tw-backdrop-hue-rotate)',
-              'var(--tw-backdrop-invert)',
-              'var(--tw-backdrop-opacity)',
-              'var(--tw-backdrop-saturate)',
-              'var(--tw-backdrop-sepia)',
-            ].join(' '),
+            '--tw-backdrop-blur': ' ',
+            '--tw-backdrop-brightness': ' ',
+            '--tw-backdrop-contrast': ' ',
+            '--tw-backdrop-grayscale': ' ',
+            '--tw-backdrop-hue-rotate': ' ',
+            '--tw-backdrop-invert': ' ',
+            '--tw-backdrop-opacity': ' ',
+            '--tw-backdrop-saturate': ' ',
+            '--tw-backdrop-sepia': ' ',
+            'backdrop-filter': filterVars,
           },
           '.backdrop-filter-none': { 'backdrop-filter': 'none' },
         },

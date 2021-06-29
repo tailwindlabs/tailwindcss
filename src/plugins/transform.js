@@ -1,3 +1,13 @@
+export let transformVars = [
+  'translateX(var(--tw-translate-x))',
+  'translateY(var(--tw-translate-y))',
+  'rotate(var(--tw-rotate))',
+  'skewX(var(--tw-skew-x))',
+  'skewY(var(--tw-skew-y))',
+  'scaleX(var(--tw-scale-x))',
+  'scaleY(var(--tw-scale-y))',
+].join(' ')
+
 export default function () {
   return function ({ config, addBase, addUtilities, variants }) {
     if (config('mode') === 'jit') {
@@ -10,15 +20,6 @@ export default function () {
           '--tw-skew-y': '0',
           '--tw-scale-x': '1',
           '--tw-scale-y': '1',
-          '--tw-transform': [
-            'translateX(var(--tw-translate-x))',
-            'translateY(var(--tw-translate-y))',
-            'rotate(var(--tw-rotate))',
-            'skewX(var(--tw-skew-x))',
-            'skewY(var(--tw-skew-y))',
-            'scaleX(var(--tw-scale-x))',
-            'scaleY(var(--tw-scale-y))',
-          ].join(' '),
         },
       })
       addUtilities(
@@ -27,15 +28,7 @@ export default function () {
             transform: 'var(--tw-transform)',
           },
           '.transform-cpu': {
-            '--tw-transform': [
-              'translateX(var(--tw-translate-x))',
-              'translateY(var(--tw-translate-y))',
-              'rotate(var(--tw-rotate))',
-              'skewX(var(--tw-skew-x))',
-              'skewY(var(--tw-skew-y))',
-              'scaleX(var(--tw-scale-x))',
-              'scaleY(var(--tw-scale-y))',
-            ].join(' '),
+            '--tw-transform': transformVars,
           },
           '.transform-gpu': {
             '--tw-transform': [

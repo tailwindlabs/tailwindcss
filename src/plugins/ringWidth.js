@@ -11,7 +11,7 @@ export default function () {
 
     let ringReset = {
       '*, ::before, ::after': {
-        '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-ring-inset': ' ',
         '--tw-ring-offset-width': theme('ringOffsetWidth.DEFAULT', '0px'),
         '--tw-ring-offset-color': theme('ringOffsetColor.DEFAULT', '#fff'),
         '--tw-ring-color': ringColorDefault,
