@@ -83,9 +83,9 @@ test('with pseudo-class variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
+      .hover\\:scale-x-110,
       .focus\\:rotate-3,
-      .hover\\:focus\\:skew-y-6,
-      .hover\\:scale-x-110 {
+      .hover\\:focus\\:skew-y-6 {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -135,8 +135,8 @@ test('with pseudo-element variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .after\\:rotate-3::after,
-      .before\\:scale-x-110::before {
+      .before\\:scale-x-110::before,
+      .after\\:rotate-3::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -184,8 +184,8 @@ test('with multi-class variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .peer-focus\\:rotate-3,
-      .group-hover\\:scale-x-110 {
+      .group-hover\\:scale-x-110,
+      .peer-focus\\:rotate-3 {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -231,8 +231,8 @@ test('with multi-class pseudo-element variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .peer-focus\\:after\\:rotate-3::after,
-      .group-hover\\:before\\:scale-x-110::before {
+      .group-hover\\:before\\:scale-x-110::before,
+      .peer-focus\\:after\\:rotate-3::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -280,8 +280,8 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .peer-focus\\:focus\\:after\\:rotate-3::after,
-      .group-hover\\:hover\\:before\\:scale-x-110::before {
+      .group-hover\\:hover\\:before\\:scale-x-110::before,
+      .peer-focus\\:focus\\:after\\:rotate-3::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -373,16 +373,16 @@ test('with apply', async () => {
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
       .foo,
+      .bar::before,
       .baz::before,
+      span,
       .media-queries,
       .a,
       .b,
+      .c,
       .a::before,
       .b::after,
-      .recursive,
-      span,
-      .c,
-      .bar::before {
+      .recursive {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -481,6 +481,69 @@ test('with borders', async () => {
       @media (min-width: 768px) {
         .md\\:border-2 {
           border-width: 2px;
+        }
+      }
+    `)
+  })
+})
+
+test('with shadows', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: '<div class="shadow md:shadow-xl ring-1 ring-black/25 transform"></div>',
+      },
+    ],
+    theme: {},
+    plugins: [],
+    corePlugins: ['boxShadow', 'ringColor', 'ringWidth', 'transform'],
+  }
+
+  let css = `
+    @tailwind base;
+    /* --- */
+    @tailwind utilities;
+  `
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .ring-1 {
+        --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgba(59, 130, 246, 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+      }
+      .shadow,
+      .md\\:shadow-xl {
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+      }
+      /* --- */
+      .shadow {
+        --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+      .ring-1 {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+      .ring-black\\/25 {
+        --tw-ring-color: rgba(0, 0, 0, 0.25);
+      }
+      @media (min-width: 768px) {
+        .md\\:shadow-xl {
+          --tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+          box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+            var(--tw-shadow);
         }
       }
     `)

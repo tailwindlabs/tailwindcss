@@ -11,13 +11,14 @@ export default function () {
 
     if (config('mode') === 'jit') {
       addBase({
-        '*::tailwind': {
+        '@defaults --tw-ring-shadow': {
           '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-ring-offset-width': theme('ringOffsetWidth.DEFAULT', '0px'),
           '--tw-ring-offset-color': theme('ringOffsetColor.DEFAULT', '#fff'),
           '--tw-ring-color': ringColorDefault,
           '--tw-ring-offset-shadow': '0 0 #0000',
           '--tw-ring-shadow': '0 0 #0000',
+          '--tw-shadow': '0 0 #0000',
         },
       })
     } else {
@@ -40,6 +41,7 @@ export default function () {
       {
         ring: (value) => {
           return {
+            ...(config('mode') === 'jit' ? { '@defaults --tw-ring-shadow': {} } : {}),
             '--tw-ring-offset-shadow': `var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)`,
             '--tw-ring-shadow': `var(--tw-ring-inset) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color)`,
             'box-shadow': [
@@ -57,6 +59,14 @@ export default function () {
       }
     )
 
-    addUtilities({ '.ring-inset': { '--tw-ring-inset': 'inset' } }, variants('ringWidth'))
+    addUtilities(
+      {
+        '.ring-inset': {
+          ...(config('mode') === 'jit' ? { '@defaults --tw-ring-shadow': {} } : {}),
+          '--tw-ring-inset': 'inset',
+        },
+      },
+      variants('ringWidth')
+    )
   }
 }

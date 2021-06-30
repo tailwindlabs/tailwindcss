@@ -46,7 +46,9 @@ export default function processTailwindFeatures(setupContext) {
     expandApplyAtRules(context)(root, result)
     evaluateTailwindFunctions(context)(root, result)
     substituteScreenAtRules(context)(root, result)
+    console.time('Optimizer')
     optimizeUniversalRules(context)(root, result)
+    console.timeEnd('Optimizer')
     collapseAdjacentRules(context)(root, result)
   }
 }

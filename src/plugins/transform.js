@@ -2,7 +2,7 @@ export default function () {
   return function ({ config, addBase, addUtilities, variants }) {
     if (config('mode') === 'jit') {
       addBase({
-        '*::tailwind': {
+        '@defaults --tw-transform': {
           '--tw-translate-x': '0',
           '--tw-translate-y': '0',
           '--tw-rotate': '0',
@@ -24,6 +24,7 @@ export default function () {
       addUtilities(
         {
           '.transform': {
+            '@defaults --tw-transform': {},
             transform: 'var(--tw-transform)',
           },
           '.transform-cpu': {

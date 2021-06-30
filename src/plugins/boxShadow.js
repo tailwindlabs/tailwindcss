@@ -11,7 +11,9 @@ export default function () {
   return function ({ config, matchUtilities, addBase, addUtilities, theme, variants }) {
     if (config('mode') === 'jit') {
       addBase({
-        '*::tailwind': {
+        '@defaults --tw-shadow': {
+          '--tw-ring-offset-shadow': '0 0 #0000',
+          '--tw-ring-shadow': '0 0 #0000',
           '--tw-shadow': '0 0 #0000',
         },
       })
@@ -32,6 +34,7 @@ export default function () {
           value = transformValue(value)
 
           return {
+            ...(config('mode') === 'jit' ? { '@defaults --tw-shadow': {} } : {}),
             '--tw-shadow': value === 'none' ? '0 0 #0000' : value,
             'box-shadow': defaultBoxShadow,
           }

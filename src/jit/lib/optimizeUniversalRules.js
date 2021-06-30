@@ -1,3 +1,4 @@
+import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 
 let elementSelectorParser = selectorParser((selectors) => {
@@ -26,27 +27,25 @@ export default function collapseAdjacentRules() {
     let variableNodeMap = new Map()
     let universals = new Set()
 
-    root.walkDecls((decl) => {
-      if (!decl.prop.startsWith('--')) {
+    root.walkAtRules('defaults', (rule) => {
+      if (rule.nodes.length > 0) {
+        universals.add(rule)
         return
       }
 
-      if (decl.parent.selector === '*::tailwind') {
-        universals.add(decl.parent)
-        return
-      }
-
-      let variable = decl.prop
-
+      let variable = rule.params
       if (!variableNodeMap.has(variable)) {
         variableNodeMap.set(variable, new Set())
       }
 
-      variableNodeMap.get(variable).add(decl.parent)
+      variableNodeMap.get(variable).add(rule.parent)
+
+      rule.remove()
     })
 
     for (let universal of universals) {
       let selectors = new Set()
+      let rule = postcss.rule()
 
       universal.walkDecls((decl) => {
         let variable = decl.prop
@@ -58,7 +57,10 @@ export default function collapseAdjacentRules() {
         }
       })
 
-      universal.selectors = [...selectors]
+      rule.selectors = [...selectors]
+      rule.append(universal.clone().nodes)
+      universal.before(rule)
+      universal.remove()
     }
   }
 }

@@ -6,13 +6,13 @@ export default function () {
     if (config('mode') === 'jit') {
       if (!corePlugins('borderOpacity')) {
         addBase({
-          '*::tailwind': {
+          '@defaults --tw-border-opacity': {
             'border-color': theme('borderColor.DEFAULT', 'currentColor'),
           },
         })
       } else {
         addBase({
-          '*::tailwind': withAlphaVariable({
+          '@defaults --tw-border-opacity': withAlphaVariable({
             color: theme('borderColor.DEFAULT', 'currentColor'),
             property: 'border-color',
             variable: '--tw-border-opacity',
