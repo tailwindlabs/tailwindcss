@@ -102,7 +102,7 @@ expect.extend({
   // This is probably naive but it's fast and works well enough.
   toMatchFormattedCss(received, argument) {
     function format(input) {
-      return prettier.format(input, {
+      return prettier.format(input.replace(/\n/g, ''), {
         parser: 'css',
         printWidth: 100,
       })
