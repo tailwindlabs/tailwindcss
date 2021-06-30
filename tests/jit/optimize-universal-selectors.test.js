@@ -41,10 +41,9 @@ test('basic utilities', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x))
-          translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
-          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-          scaleY(var(--tw-scale-y));
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .rotate-3 {
@@ -94,10 +93,9 @@ test('with pseudo-class variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x))
-          translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
-          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-          scaleY(var(--tw-scale-y));
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .hover\\:scale-x-110:hover {
@@ -146,19 +144,18 @@ test('with pseudo-element variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x))
-          translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
-          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-          scaleY(var(--tw-scale-y));
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .before\\:scale-x-110::before {
-        content: "";
+        content: '';
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .after\\:rotate-3::after {
-        content: "";
+        content: '';
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -196,10 +193,9 @@ test('with multi-class variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x))
-          translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
-          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-          scaleY(var(--tw-scale-y));
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .group:hover .group-hover\\:scale-x-110 {
@@ -244,19 +240,18 @@ test('with multi-class pseudo-element variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x))
-          translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
-          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-          scaleY(var(--tw-scale-y));
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .group:hover .group-hover\\:before\\:scale-x-110::before {
-        content: "";
+        content: '';
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .peer:focus ~ .peer-focus\\:after\\:rotate-3::after {
-        content: "";
+        content: '';
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -294,19 +289,18 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x))
-          translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
-          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-          scaleY(var(--tw-scale-y));
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .group:hover .group-hover\\:hover\\:before\\:scale-x-110:hover::before {
-        content: "";
+        content: '';
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .peer:focus ~ .peer-focus\\:focus\\:after\\:rotate-3:focus::after {
-        content: "";
+        content: '';
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
