@@ -23,15 +23,6 @@ function extractElementSelector(selector) {
 
 export default function collapseAdjacentRules() {
   return (root) => {
-    // Walk all custom properties
-    //   Collect into a map, where key is the custom property name
-    //   Value is list of nodes
-    // Walk '*::tailwind' rules
-    //   Get list of selectors per custom property
-    //     Compute element selector (remove pseudo-classes, leading selectors, etc.)
-    //   Collect selectors into Set
-    //   Replace '*::tailwind' with selectors from Set
-
     let variableNodeMap = new Map()
     let universals = new Set()
 
