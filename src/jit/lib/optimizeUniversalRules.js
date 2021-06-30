@@ -1,19 +1,24 @@
 import selectorParser from 'postcss-selector-parser'
 
 let elementSelectorParser = selectorParser((selectors) => {
-  return selectors
-    .map((s) => {
-      return s
-        .split((n) => n.type === 'combinator')
-        .pop()
-        .filter((n) => n.type !== 'pseudo' || n.value.startsWith('::'))
-        .join('')
-    })
-    .join(', ')
+  return selectors.map((s) => {
+    return s
+      .split((n) => n.type === 'combinator')
+      .pop()
+      .filter((n) => n.type !== 'pseudo' || n.value.startsWith('::'))
+      .join('')
+      .trim()
+  })
 })
 
+let cache = new Map()
+
 function extractElementSelector(selector) {
-  return elementSelectorParser.transformSync(selector)
+  if (!cache.has(selector)) {
+    cache.set(selector, elementSelectorParser.transformSync(selector))
+  }
+
+  return cache.get(selector)
 }
 
 export default function collapseAdjacentRules() {
@@ -56,8 +61,9 @@ export default function collapseAdjacentRules() {
         let variable = decl.prop
 
         for (let node of variableNodeMap.get(variable) ?? []) {
-          let elementSelector = extractElementSelector(node.selector)
-          selectors.add(extractElementSelector(node.selector))
+          for (let selector of extractElementSelector(node.selector)) {
+            selectors.add(selector)
+          }
         }
       })
 
