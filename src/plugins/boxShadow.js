@@ -1,11 +1,6 @@
 import transformThemeValue from '../util/transformThemeValue'
 
 let transformValue = transformThemeValue('boxShadow')
-let shadowReset = {
-  '*, ::before, ::after': {
-    '--tw-shadow': '0 0 #0000',
-  },
-}
 let defaultBoxShadow = [
   `var(--tw-ring-offset-shadow, 0 0 #0000)`,
   `var(--tw-ring-shadow, 0 0 #0000)`,
@@ -15,9 +10,20 @@ let defaultBoxShadow = [
 export default function () {
   return function ({ config, matchUtilities, addBase, addUtilities, theme, variants }) {
     if (config('mode') === 'jit') {
-      addBase(shadowReset)
+      addBase({
+        '*::tailwind': {
+          '--tw-shadow': '0 0 #0000',
+        },
+      })
     } else {
-      addUtilities(shadowReset, { respectImportant: false })
+      addUtilities(
+        {
+          '*, ::before, ::after': {
+            '--tw-shadow': '0 0 #0000',
+          },
+        },
+        { respectImportant: false }
+      )
     }
 
     matchUtilities(
