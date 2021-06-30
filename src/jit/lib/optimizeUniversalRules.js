@@ -45,21 +45,19 @@ export default function collapseAdjacentRules() {
 
     for (let universal of universals) {
       let selectors = new Set()
-      let rule = postcss.rule()
+      let universalRule = postcss.rule()
 
-      universal.walkDecls((decl) => {
-        let variable = decl.prop
+      let rules = variableNodeMap.get(universal.params)
 
-        for (let node of variableNodeMap.get(variable) ?? []) {
-          for (let selector of extractElementSelector(node.selector)) {
-            selectors.add(selector)
-          }
+      for (let rule of rules) {
+        for (let selector of extractElementSelector(rule.selector)) {
+          selectors.add(selector)
         }
-      })
+      }
 
-      rule.selectors = [...selectors]
-      rule.append(universal.clone().nodes)
-      universal.before(rule)
+      universalRule.selectors = [...selectors]
+      universalRule.append(universal.nodes)
+      universal.before(universalRule)
       universal.remove()
     }
   }

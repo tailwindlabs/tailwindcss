@@ -492,12 +492,12 @@ test('with shadows', async () => {
     mode: 'jit',
     purge: [
       {
-        raw: '<div class="shadow md:shadow-xl ring-1 ring-black/25 transform"></div>',
+        raw: '<div class="shadow md:shadow-xl ring-1 ring-black/25"></div>',
       },
     ],
     theme: {},
     plugins: [],
-    corePlugins: ['boxShadow', 'ringColor', 'ringWidth', 'transform'],
+    corePlugins: ['boxShadow', 'ringColor', 'ringWidth'],
   }
 
   let css = `
@@ -508,17 +508,17 @@ test('with shadows', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
+      .shadow,
+      .md\\:shadow-xl {
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+      }
       .ring-1 {
         --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
         --tw-ring-offset-width: 0px;
         --tw-ring-offset-color: #fff;
         --tw-ring-color: rgba(59, 130, 246, 0.5);
-        --tw-ring-offset-shadow: 0 0 #0000;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-shadow: 0 0 #0000;
-      }
-      .shadow,
-      .md\\:shadow-xl {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
