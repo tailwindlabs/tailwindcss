@@ -307,3 +307,139 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
     `)
   })
 })
+
+test('with apply', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: '<div class="foo"></div>',
+      },
+    ],
+    theme: {},
+    plugins: [],
+    corePlugins: ['transform', 'scale', 'rotate', 'skew'],
+  }
+
+  let css = `
+    @tailwind base;
+    /* --- */
+    @tailwind utilities;
+
+    @layer utilities {
+      .foo {
+        @apply rotate-3;
+      }
+    }
+
+    .bar {
+      @apply before:scale-110;
+    }
+
+    .baz::before {
+      content: '';
+      @apply rotate-45;
+    }
+
+    .whats ~ .next > span:hover {
+      @apply skew-x-6;
+    }
+
+    .media-queries {
+      @apply md:rotate-45;
+    }
+
+    .a,
+    .b,
+    .c {
+      @apply skew-y-3;
+    }
+
+    .a,
+    .b {
+      @apply rotate-45;
+    }
+
+    .a::before,
+    .b::after {
+      @apply rotate-90;
+    }
+
+    .recursive {
+      @apply foo;
+    }
+  `
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .foo,
+      .baz::before,
+      .media-queries,
+      .a,
+      .b,
+      .a::before,
+      .b::after,
+      .recursive,
+      span,
+      .c,
+      .bar::before {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+      }
+      /* --- */
+      .foo {
+        --tw-rotate: 3deg;
+        transform: var(--tw-transform);
+      }
+      .bar::before {
+        content: '';
+        --tw-scale-x: 1.1;
+        --tw-scale-y: 1.1;
+        transform: var(--tw-transform);
+      }
+      .baz::before {
+        content: '';
+        --tw-rotate: 45deg;
+        transform: var(--tw-transform);
+      }
+      .whats ~ .next > span:hover {
+        --tw-skew-x: 6deg;
+        transform: var(--tw-transform);
+      }
+      @media (min-width: 768px) {
+        .media-queries {
+          --tw-rotate: 45deg;
+          transform: var(--tw-transform);
+        }
+      }
+      .a,
+      .b,
+      .c {
+        --tw-skew-y: 3deg;
+        transform: var(--tw-transform);
+      }
+      .a,
+      .b {
+        --tw-rotate: 45deg;
+        transform: var(--tw-transform);
+      }
+      .a::before,
+      .b::after {
+        --tw-rotate: 90deg;
+        transform: var(--tw-transform);
+      }
+      .recursive {
+        --tw-rotate: 3deg;
+        transform: var(--tw-transform);
+      }
+    `)
+  })
+})
