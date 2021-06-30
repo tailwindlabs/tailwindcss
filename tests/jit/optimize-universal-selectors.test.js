@@ -443,3 +443,46 @@ test('with apply', async () => {
     `)
   })
 })
+
+test('with borders', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: '<div class="border border-red-500 md:border-2"></div>',
+      },
+    ],
+    theme: {},
+    plugins: [],
+    corePlugins: ['borderWidth', 'borderColor', 'borderOpacity'],
+  }
+
+  let css = `
+    @tailwind base;
+    /* --- */
+    @tailwind utilities;
+  `
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .border,
+      .md\\:border-2 {
+        --tw-border-opacity: 1;
+        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+      }
+      /* --- */
+      .border {
+        border-width: 1px;
+      }
+      .border-red-500 {
+        --tw-border-opacity: 1;
+        border-color: rgba(239, 68, 68, var(--tw-border-opacity));
+      }
+      @media (min-width: 768px) {
+        .md\\:border-2 {
+          border-width: 2px;
+        }
+      }
+    `)
+  })
+})
