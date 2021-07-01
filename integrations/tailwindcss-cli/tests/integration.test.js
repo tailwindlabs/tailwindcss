@@ -132,6 +132,61 @@ describe('watcher', () => {
     return runningProcess.stop()
   })
 
+  test('@layers are replaced and cleaned when the html file changes', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        @layer base {
+          html {
+            scroll-behavior: smooth;
+          }
+        }
+      `
+    )
+
+    let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
+
+    await waitForOutputFileCreation('main.css')
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    await waitForOutputFileChange('main.css', async () => {
+      await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
+    })
+
+    expect(await readOutputFile('main.css')).not.toIncludeCss(css`
+      @layer base {
+        html {
+          scroll-behavior: smooth;
+        }
+      }
+    `)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
   test('classes are generated when the tailwind.config.js file changes', async () => {
     await writeInputFile('index.html', html`<div class="font-bold md:font-medium"></div>`)
 
