@@ -2,6 +2,7 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 
 let elementSelectorParser = selectorParser((selectors) => {
+  return selectors.map((s) => s.toString())
   return selectors.map((s) => {
     return s
       .split((n) => n.type === 'combinator')
@@ -60,7 +61,7 @@ export default function resolveDefaultsAtRules() {
       }
 
       let universalRule = postcss.rule()
-      universalRule.selectors = [...selectors]
+      universalRule.selector = `:where(${[...selectors].join(', ')})`
       universalRule.append(universal.nodes)
       universal.before(universalRule)
       universal.remove()

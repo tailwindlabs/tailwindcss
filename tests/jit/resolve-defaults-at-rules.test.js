@@ -368,6 +368,18 @@ test('with apply', async () => {
     .recursive {
       @apply foo;
     }
+
+    [data-attr="foo"] {
+      @apply rotate-45;
+    }
+
+    #app {
+      @apply rotate-45;
+    }
+
+    span#app {
+      @apply rotate-45;
+    }
   `
 
   return run(css, config).then((result) => {
@@ -382,7 +394,10 @@ test('with apply', async () => {
       .c,
       .a::before,
       .b::after,
-      .recursive {
+      .recursive,
+      [data-attr="foo"],
+      #app,
+      span#app {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -438,6 +453,18 @@ test('with apply', async () => {
       }
       .recursive {
         --tw-rotate: 3deg;
+        transform: var(--tw-transform);
+      }
+      [data-attr="foo"] {
+        --tw-rotate: 45deg;
+        transform: var(--tw-transform);
+      }
+      #app {
+        --tw-rotate: 45deg;
+        transform: var(--tw-transform);
+      }
+      span#app {
+        --tw-rotate: 45deg;
         transform: var(--tw-transform);
       }
     `)
