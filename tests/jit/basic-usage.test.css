@@ -15,7 +15,9 @@
     scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .border,
-.border-2 {
+.border-2,
+.border-t,
+.border-b-4 {
   --tw-border-opacity: 1;
   border-color: rgba(229, 231, 235, var(--tw-border-opacity));
 }
@@ -473,6 +475,12 @@
 }
 .border-2 {
   border-width: 2px;
+}
+.border-t {
+  border-top-width: 1px;
+}
+.border-b-4 {
+  border-bottom-width: 4px;
 }
 .border-solid {
   border-style: solid;
