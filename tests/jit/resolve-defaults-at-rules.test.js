@@ -605,3 +605,104 @@ test('when a utility uses defaults but they do not exist', async () => {
     `)
   })
 })
+
+test('selectors are reduced to the lowest possible specificity', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: '<div class="foo"></div>',
+      },
+    ],
+    theme: {},
+    plugins: [],
+    corePlugins: [],
+  }
+
+  let css = `
+    @defaults test {
+      --color: black;
+    }
+
+    /* --- */
+
+    .foo {
+      @defaults test;
+      background-color: var(--color);
+    }
+
+    #app {
+      @defaults test;
+      border-color: var(--color);
+    }
+
+    span#page {
+      @defaults test;
+      color: var(--color);
+    }
+
+    div[data-foo="bar"]#other {
+      @defaults test;
+      fill: var(--color);
+    }
+
+    div[data-bar="baz"] {
+      @defaults test;
+      stroke: var(--color);
+    }
+
+    article {
+      @defaults test;
+      --article: var(--color);
+    }
+
+    div[data-foo="bar"]#another::before {
+      @defaults test;
+      fill: var(--color);
+    }
+  `
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .foo,
+      [id="app"],
+      [id="page"],
+      [id="other"],
+      [data-bar="baz"],
+      article,
+      [id="another"]::before {
+        --color: black;
+      }
+
+      /* --- */
+
+      .foo {
+        background-color: var(--color);
+      }
+
+      #app {
+        border-color: var(--color);
+      }
+
+      span#page {
+        color: var(--color);
+      }
+
+      div[data-foo="bar"]#other {
+        fill: var(--color);
+      }
+
+      div[data-bar="baz"] {
+        stroke: var(--color);
+      }
+
+      article {
+        --article: var(--color);
+      }
+
+      div[data-foo="bar"]#another::before {
+        fill: var(--color);
+      }
+    `)
+  })
+})
