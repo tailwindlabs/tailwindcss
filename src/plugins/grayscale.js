@@ -5,7 +5,12 @@ export default function () {
         grayscale: (value) => {
           return {
             '--tw-grayscale': `grayscale(${value})`,
-            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+            ...(config('mode') === 'jit'
+              ? {
+                  '@defaults filter': {},
+                  filter: 'var(--tw-filter)',
+                }
+              : {}),
           }
         },
       },

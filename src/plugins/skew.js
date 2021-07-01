@@ -5,8 +5,14 @@ export default function () {
     if (config('mode') === 'jit') {
       return createUtilityPlugin('skew', [
         [
-          ['skew-x', ['--tw-skew-x', ['transform', 'var(--tw-transform)']]],
-          ['skew-y', ['--tw-skew-y', ['transform', 'var(--tw-transform)']]],
+          [
+            'skew-x',
+            [['@defaults transform', {}], '--tw-skew-x', ['transform', 'var(--tw-transform)']],
+          ],
+          [
+            'skew-y',
+            [['@defaults transform', {}], '--tw-skew-y', ['transform', 'var(--tw-transform)']],
+          ],
         ],
       ])({ config, ...rest })
     } else {
