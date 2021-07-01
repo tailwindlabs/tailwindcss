@@ -1,14 +1,43 @@
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 
+function minimumImpactSelector(nodes) {
+  let pseudos = nodes.filter((n) => n.type === 'pseudo')
+  let [bestNode] = nodes
+
+  for (let [type, getNode = (n) => n] of [
+    ['class'],
+    [
+      'id',
+      (n) =>
+        selectorParser.attribute({
+          attribute: 'id',
+          operator: '=',
+          value: n.value,
+          quoteMark: '"',
+        }),
+    ],
+    ['attribute'],
+  ]) {
+    let match = nodes.find((n) => n.type === type)
+
+    if (match) {
+      bestNode = getNode(match)
+      break
+    }
+  }
+
+  return [bestNode, ...pseudos].join('').trim()
+}
+
 let elementSelectorParser = selectorParser((selectors) => {
   return selectors.map((s) => {
-    return s
+    let nodes = s
       .split((n) => n.type === 'combinator')
       .pop()
       .filter((n) => n.type !== 'pseudo' || n.value.startsWith('::'))
-      .join('')
-      .trim()
+
+    return minimumImpactSelector(nodes)
   })
 })
 
@@ -28,7 +57,7 @@ export default function resolveDefaultsAtRules() {
     let universals = new Set()
 
     root.walkAtRules('defaults', (rule) => {
-      if (rule.nodes.length > 0) {
+      if (rule.nodes && rule.nodes.length > 0) {
         universals.add(rule)
         return
       }
