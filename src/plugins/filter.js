@@ -2,7 +2,7 @@ export default function () {
   return function ({ config, addBase, addUtilities, variants }) {
     if (config('mode') === 'jit') {
       addBase({
-        '@defaults --tw-filter': {
+        '@defaults filter': {
           '--tw-blur': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
@@ -27,7 +27,7 @@ export default function () {
       })
       addUtilities(
         {
-          '.filter': { '@defaults --tw-filter': {}, filter: 'var(--tw-filter)' },
+          '.filter': { '@defaults filter': {}, filter: 'var(--tw-filter)' },
           '.filter-none': { filter: 'none' },
         },
         variants('filter')

@@ -6,7 +6,7 @@ export default function () {
       return createUtilityPlugin('rotate', [
         [
           'rotate',
-          [['@defaults --tw-transform', {}], '--tw-rotate', ['transform', 'var(--tw-transform)']],
+          [['@defaults transform', {}], '--tw-rotate', ['transform', 'var(--tw-transform)']],
         ],
       ])({ config, ...rest })
     } else {

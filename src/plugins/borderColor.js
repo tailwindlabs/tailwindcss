@@ -6,13 +6,13 @@ export default function () {
     if (config('mode') === 'jit') {
       if (!corePlugins('borderOpacity')) {
         addBase({
-          '@defaults --tw-border-opacity': {
+          '@defaults border-width': {
             'border-color': theme('borderColor.DEFAULT', 'currentColor'),
           },
         })
       } else {
         addBase({
-          '@defaults --tw-border-opacity': withAlphaVariable({
+          '@defaults border-width': withAlphaVariable({
             color: theme('borderColor.DEFAULT', 'currentColor'),
             property: 'border-color',
             variable: '--tw-border-opacity',

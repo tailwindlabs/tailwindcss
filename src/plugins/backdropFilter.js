@@ -2,7 +2,7 @@ export default function () {
   return function ({ config, addBase, addUtilities, variants }) {
     if (config('mode') === 'jit') {
       addBase({
-        '*, ::before, ::after': {
+        '@defaults backdrop-filter': {
           '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
@@ -27,7 +27,10 @@ export default function () {
       })
       addUtilities(
         {
-          '.backdrop-filter': { 'backdrop-filter': 'var(--tw-backdrop-filter)' },
+          '.backdrop-filter': {
+            '@defaults backdrop-filter': {},
+            'backdrop-filter': 'var(--tw-backdrop-filter)',
+          },
           '.backdrop-filter-none': { 'backdrop-filter': 'none' },
         },
         variants('backdropFilter')

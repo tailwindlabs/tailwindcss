@@ -5,7 +5,12 @@ export default function () {
         contrast: (value) => {
           return {
             '--tw-contrast': `contrast(${value})`,
-            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+            ...(config('mode') === 'jit'
+              ? {
+                  '@defaults filter': {},
+                  filter: 'var(--tw-filter)',
+                }
+              : {}),
           }
         },
       },

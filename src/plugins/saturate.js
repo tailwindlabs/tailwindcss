@@ -5,7 +5,12 @@ export default function () {
         saturate: (value) => {
           return {
             '--tw-saturate': `saturate(${value})`,
-            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+            ...(config('mode') === 'jit'
+              ? {
+                  '@defaults filter': {},
+                  filter: 'var(--tw-filter)',
+                }
+              : {}),
           }
         },
       },

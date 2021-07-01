@@ -7,7 +7,7 @@ export default function () {
         [
           'scale',
           [
-            ['@defaults --tw-transform', {}],
+            ['@defaults transform', {}],
             '--tw-scale-x',
             '--tw-scale-y',
             ['transform', 'var(--tw-transform)'],
@@ -16,19 +16,11 @@ export default function () {
         [
           [
             'scale-x',
-            [
-              ['@defaults --tw-transform', {}],
-              '--tw-scale-x',
-              ['transform', 'var(--tw-transform)'],
-            ],
+            [['@defaults transform', {}], '--tw-scale-x', ['transform', 'var(--tw-transform)']],
           ],
           [
             'scale-y',
-            [
-              ['@defaults --tw-transform', {}],
-              '--tw-scale-y',
-              ['transform', 'var(--tw-transform)'],
-            ],
+            [['@defaults transform', {}], '--tw-scale-y', ['transform', 'var(--tw-transform)']],
           ],
         ],
       ])({ config, ...rest })

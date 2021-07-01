@@ -5,7 +5,7 @@ export default function () {
   return createUtilityPlugin(
     'borderWidth',
     [
-      ['border', ['border-width', ['@defaults --tw-border-opacity', {}]]],
+      ['border', ['border-width', ['@defaults border-width', {}]]],
       [
         ['border-t', ['border-top-width']],
         ['border-r', ['border-right-width']],

@@ -7,11 +7,11 @@ export default function () {
         [
           [
             'skew-x',
-            [['@defaults --tw-transform', {}], '--tw-skew-x', ['transform', 'var(--tw-transform)']],
+            [['@defaults transform', {}], '--tw-skew-x', ['transform', 'var(--tw-transform)']],
           ],
           [
             'skew-y',
-            [['@defaults --tw-transform', {}], '--tw-skew-y', ['transform', 'var(--tw-transform)']],
+            [['@defaults transform', {}], '--tw-skew-y', ['transform', 'var(--tw-transform)']],
           ],
         ],
       ])({ config, ...rest })
