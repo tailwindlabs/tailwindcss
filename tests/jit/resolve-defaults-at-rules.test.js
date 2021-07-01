@@ -549,3 +549,59 @@ test('with shadows', async () => {
     `)
   })
 })
+
+test('when no utilities that need the defaults are used', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: '<div class=""></div>',
+      },
+    ],
+    theme: {},
+    plugins: [],
+    corePlugins: ['transform', 'scale', 'rotate', 'skew'],
+  }
+
+  let css = `
+    @tailwind base;
+    /* --- */
+    @tailwind utilities;
+  `
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      /* --- */
+    `)
+  })
+})
+
+test('when a utility uses defaults but they do not exist', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: '<div class="rotate-3"></div>',
+      },
+    ],
+    theme: {},
+    plugins: [],
+    corePlugins: ['rotate'],
+  }
+
+  let css = `
+    @tailwind base;
+    /* --- */
+    @tailwind utilities;
+  `
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      /* --- */
+      .rotate-3 {
+        --tw-rotate: 3deg;
+        transform: var(--tw-transform);
+      }
+    `)
+  })
+})

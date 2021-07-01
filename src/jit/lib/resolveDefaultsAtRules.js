@@ -22,7 +22,7 @@ function extractElementSelector(selector) {
   return cache.get(selector)
 }
 
-export default function collapseAdjacentRules() {
+export default function resolveDefaultsAtRules() {
   return (root) => {
     let variableNodeMap = new Map()
     let universals = new Set()
@@ -45,9 +45,8 @@ export default function collapseAdjacentRules() {
 
     for (let universal of universals) {
       let selectors = new Set()
-      let universalRule = postcss.rule()
 
-      let rules = variableNodeMap.get(universal.params)
+      let rules = variableNodeMap.get(universal.params) ?? []
 
       for (let rule of rules) {
         for (let selector of extractElementSelector(rule.selector)) {
@@ -55,6 +54,12 @@ export default function collapseAdjacentRules() {
         }
       }
 
+      if (selectors.size === 0) {
+        universal.remove()
+        continue
+      }
+
+      let universalRule = postcss.rule()
       universalRule.selectors = [...selectors]
       universalRule.append(universal.nodes)
       universal.before(universalRule)
