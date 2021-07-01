@@ -238,5 +238,12 @@ export default function expandTailwindAtRules(context) {
 
     // Clear the cache for the changed files
     context.changedContent = []
+
+    // Cleanup any leftover @layer atrules
+    root.walkAtRules('layer', (rule) => {
+      if (Object.keys(layerNodes).includes(rule.params)) {
+        rule.remove()
+      }
+    })
   }
 }
