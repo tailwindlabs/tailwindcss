@@ -3,6 +3,7 @@ import expandTailwindAtRules from './lib/expandTailwindAtRules'
 import expandApplyAtRules from './lib/expandApplyAtRules'
 import evaluateTailwindFunctions from '../lib/evaluateTailwindFunctions'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
+import resolveDefaultsAtRules from './lib/resolveDefaultsAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
 import { createContext } from './lib/setupContextUtils'
 import log from '../util/log'
@@ -45,6 +46,7 @@ export default function processTailwindFeatures(setupContext) {
     expandApplyAtRules(context)(root, result)
     evaluateTailwindFunctions(context)(root, result)
     substituteScreenAtRules(context)(root, result)
+    resolveDefaultsAtRules(context)(root, result)
     collapseAdjacentRules(context)(root, result)
   }
 }

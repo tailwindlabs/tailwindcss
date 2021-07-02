@@ -7,7 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet!
+### Changed
+
+- JIT: Optimize universal selector usage by inlining only the relevant selectors ([#4850](https://github.com/tailwindlabs/tailwindcss/pull/4850)))
+
+  This provides a very significant performance boost on pages with a huge number of DOM nodes, but there's a chance it could be a breaking change in very rare edge cases we haven't thought of. Please open an issue if anything related to shadows, rings, transforms, filters, or backdrop-filters seems to be behaving differently after upgrading.
+
+### Fixed
+
+- Fix support for `step-start` and `step-end` in animation utilities ([#4795](https://github.com/tailwindlabs/tailwindcss/pull/4795)))
+- JIT: Prevent presence of `!*` in templates from ruining everything ([#4816](https://github.com/tailwindlabs/tailwindcss/pull/4816)))
+- JIT: Improve support for quotes in arbitrary values ([#4817](https://github.com/tailwindlabs/tailwindcss/pull/4817)))
+- Fix filter/backdrop-filter/transform utilities being inserted into the wrong position if not all core plugins are enabled ([#4852](https://github.com/tailwindlabs/tailwindcss/pull/4852)))
+- JIT: Fix `@layer` rules being mistakenly inserted during incremental rebuilds ([#4853](https://github.com/tailwindlabs/tailwindcss/pull/4853)))
+- Improve build performance for projects with many small non-Tailwind stylesheets ([#4644](https://github.com/tailwindlabs/tailwindcss/pull/4644))
 
 ## [2.2.4] - 2021-06-23
 

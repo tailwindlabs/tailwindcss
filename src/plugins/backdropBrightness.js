@@ -5,7 +5,12 @@ export default function () {
         'backdrop-brightness': (value) => {
           return {
             '--tw-backdrop-brightness': `brightness(${value})`,
-            ...(config('mode') === 'jit' ? { 'backdrop-filter': 'var(--tw-backdrop-filter)' } : {}),
+            ...(config('mode') === 'jit'
+              ? {
+                  '@defaults backdrop-filter': {},
+                  'backdrop-filter': 'var(--tw-backdrop-filter)',
+                }
+              : {}),
           }
         },
       },

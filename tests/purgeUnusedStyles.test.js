@@ -639,6 +639,67 @@ test(
   })
 )
 
+test('purges unused css variables in "all" mode', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      return postcss([
+        tailwind({
+          ...config,
+          purge: {
+            mode: 'all',
+            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+            options: {
+              variables: true,
+            },
+          },
+        }),
+      ])
+        .process(
+          `
+        :root {
+          --unused-var: 1;
+        }
+        `
+        )
+        .then((result) => {
+          expect(result.css).not.toContain('--unused-var')
+        })
+    })
+  )
+})
+
+test('respects safelist.variables in "all" mode', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      return postcss([
+        tailwind({
+          ...config,
+          purge: {
+            mode: 'all',
+            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+            options: {
+              variables: true,
+              safelist: {
+                variables: ['--unused-var'],
+              },
+            },
+          },
+        }),
+      ])
+        .process(
+          `
+        :root {
+          --unused-var: 1;
+        }
+        `
+        )
+        .then((result) => {
+          expect(result.css).toContain('--unused-var')
+        })
+    })
+  )
+})
+
 test('element selectors are preserved by default', () => {
   return inProduction(
     suppressConsoleLogs(() => {

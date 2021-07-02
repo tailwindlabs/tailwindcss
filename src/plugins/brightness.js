@@ -5,7 +5,12 @@ export default function () {
         brightness: (value) => {
           return {
             '--tw-brightness': `brightness(${value})`,
-            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+            ...(config('mode') === 'jit'
+              ? {
+                  '@defaults filter': {},
+                  filter: 'var(--tw-filter)',
+                }
+              : {}),
           }
         },
       },

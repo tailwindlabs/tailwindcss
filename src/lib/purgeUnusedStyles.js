@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import purgecss from '@fullhuman/postcss-purgecss'
+import PurgeCSS, { defaultOptions, standardizeSafelist, mergeExtractorSelectors } from 'purgecss'
 import log from '../util/log'
 import htmlTags from 'html-tags'
 import path from 'path'
@@ -134,10 +134,11 @@ export default function purgeUnusedUtilities(config, configChanged, registerDepe
     registerDependency(parseDependency(fileOrGlob))
   }
 
+  let hasLayers = false
+
+  const mode = _.get(config, 'purge.mode', 'layers')
   return postcss([
     function (css) {
-      const mode = _.get(config, 'purge.mode', 'layers')
-
       if (!['all', 'layers'].includes(mode)) {
         throw new Error('Purge `mode` must be one of `layers` or `all`.')
       }
@@ -164,6 +165,7 @@ export default function purgeUnusedUtilities(config, configChanged, registerDepe
           switch (comment.text.trim()) {
             case `tailwind start ${layer}`:
               comment.text = 'purgecss end ignore'
+              hasLayers = true
               break
             case `tailwind end ${layer}`:
               comment.text = 'purgecss start ignore'
@@ -178,14 +180,44 @@ export default function purgeUnusedUtilities(config, configChanged, registerDepe
       css.append(postcss.comment({ text: 'purgecss end ignore' }))
     },
     removeTailwindMarkers,
-    purgecss({
-      defaultExtractor: (content) => {
-        const transformer = getTransformer(config)
-        return defaultExtractor(transformer(content))
-      },
-      extractors: fileSpecificExtractors,
-      ...purgeOptions,
-      content,
-    }),
+
+    async function (css) {
+      if (mode === 'layers' && !hasLayers) {
+        return
+      }
+      const purgeCSS = new PurgeCSS()
+      purgeCSS.options = {
+        ...defaultOptions,
+
+        defaultExtractor: (content) => {
+          const transformer = getTransformer(config)
+          return defaultExtractor(transformer(content))
+        },
+        extractors: fileSpecificExtractors,
+        ...purgeOptions,
+        safelist: standardizeSafelist(purgeOptions.safelist),
+      }
+
+      if (purgeCSS.options.variables) {
+        purgeCSS.variablesStructure.safelist = purgeCSS.options.safelist.variables || []
+      }
+
+      const fileFormatContents = content.filter((o) => typeof o === 'string')
+      const rawFormatContents = content.filter((o) => typeof o === 'object')
+
+      const cssFileSelectors = await purgeCSS.extractSelectorsFromFiles(
+        fileFormatContents,
+        purgeCSS.options.extractors
+      )
+      const cssRawSelectors = await purgeCSS.extractSelectorsFromString(
+        rawFormatContents,
+        purgeCSS.options.extractors
+      )
+      const cssSelectors = mergeExtractorSelectors(cssFileSelectors, cssRawSelectors)
+      purgeCSS.walkThroughCSS(css, cssSelectors)
+      if (purgeCSS.options.fontFace) purgeCSS.removeUnusedFontFaces()
+      if (purgeCSS.options.keyframes) purgeCSS.removeUnusedKeyframes()
+      if (purgeCSS.options.variables) purgeCSS.removeUnusedCSSVariables()
+    },
   ])
 }

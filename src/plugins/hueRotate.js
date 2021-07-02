@@ -5,7 +5,12 @@ export default function () {
         'hue-rotate': (value) => {
           return {
             '--tw-hue-rotate': `hue-rotate(${value})`,
-            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+            ...(config('mode') === 'jit'
+              ? {
+                  '@defaults filter': {},
+                  filter: 'var(--tw-filter)',
+                }
+              : {}),
           }
         },
       },

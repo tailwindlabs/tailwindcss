@@ -5,7 +5,12 @@ export default function () {
         sepia: (value) => {
           return {
             '--tw-sepia': `sepia(${value})`,
-            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+            ...(config('mode') === 'jit'
+              ? {
+                  '@defaults filter': {},
+                  filter: 'var(--tw-filter)',
+                }
+              : {}),
           }
         },
       },

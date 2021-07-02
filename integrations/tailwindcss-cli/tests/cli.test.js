@@ -258,7 +258,7 @@ describe('Build command', () => {
 
     expect(combined).toMatchInlineSnapshot(`
       "
-      tailwindcss v2.1.2
+      tailwindcss v2.2.4
 
       Usage:
          tailwindcss build [options]
@@ -348,7 +348,7 @@ describe('Init command', () => {
 
     expect(combined).toMatchInlineSnapshot(`
       "
-      tailwindcss v2.1.2
+      tailwindcss v2.2.4
 
       Usage:
          tailwindcss init [options]

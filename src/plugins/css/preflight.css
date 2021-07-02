@@ -237,3 +237,11 @@ video {
   max-width: 100%;
   height: auto;
 }
+
+/**
+ * Ensure the default browser behavior of the `hidden` attribute.
+ */
+
+[hidden] {
+  display: none;
+}

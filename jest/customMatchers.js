@@ -8,7 +8,7 @@ function stripped(str) {
 }
 
 function format(input) {
-  return prettier.format(input, {
+  return prettier.format(input.replace(/\n/g, ''), {
     parser: 'css',
     printWidth: 100,
   })
