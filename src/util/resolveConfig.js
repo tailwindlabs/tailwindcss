@@ -215,7 +215,7 @@ function mergeVariants(variants) {
 
 function mergeVariantExtensions({ extend, ...variants }, variantOrder) {
   return mergeWith(variants, extend, (variantsValue, extensions) => {
-    const merged = uniq([...variantsValue, ...extensions].flat())
+    const merged = uniq([...(variantsValue || []), ...extensions].flat())
 
     if (extensions.flat().length === 0) {
       return merged
