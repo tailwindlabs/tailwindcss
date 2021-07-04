@@ -58825,6 +58825,66 @@ video {
     --tw-backdrop-invert: invert(100%);
   }
 
+  .sm\:backdrop-opacity-0 {
+    --tw-backdrop-opacity: opacity(0);
+  }
+
+  .sm\:backdrop-opacity-5 {
+    --tw-backdrop-opacity: opacity(0.05);
+  }
+
+  .sm\:backdrop-opacity-10 {
+    --tw-backdrop-opacity: opacity(0.1);
+  }
+
+  .sm\:backdrop-opacity-20 {
+    --tw-backdrop-opacity: opacity(0.2);
+  }
+
+  .sm\:backdrop-opacity-25 {
+    --tw-backdrop-opacity: opacity(0.25);
+  }
+
+  .sm\:backdrop-opacity-30 {
+    --tw-backdrop-opacity: opacity(0.3);
+  }
+
+  .sm\:backdrop-opacity-40 {
+    --tw-backdrop-opacity: opacity(0.4);
+  }
+
+  .sm\:backdrop-opacity-50 {
+    --tw-backdrop-opacity: opacity(0.5);
+  }
+
+  .sm\:backdrop-opacity-60 {
+    --tw-backdrop-opacity: opacity(0.6);
+  }
+
+  .sm\:backdrop-opacity-70 {
+    --tw-backdrop-opacity: opacity(0.7);
+  }
+
+  .sm\:backdrop-opacity-75 {
+    --tw-backdrop-opacity: opacity(0.75);
+  }
+
+  .sm\:backdrop-opacity-80 {
+    --tw-backdrop-opacity: opacity(0.8);
+  }
+
+  .sm\:backdrop-opacity-90 {
+    --tw-backdrop-opacity: opacity(0.9);
+  }
+
+  .sm\:backdrop-opacity-95 {
+    --tw-backdrop-opacity: opacity(0.95);
+  }
+
+  .sm\:backdrop-opacity-100 {
+    --tw-backdrop-opacity: opacity(1);
+  }
+
   .sm\:backdrop-saturate-0 {
     --tw-backdrop-saturate: saturate(0);
   }
@@ -87986,6 +88046,66 @@ video {
 
   .md\:backdrop-invert {
     --tw-backdrop-invert: invert(100%);
+  }
+
+  .md\:backdrop-opacity-0 {
+    --tw-backdrop-opacity: opacity(0);
+  }
+
+  .md\:backdrop-opacity-5 {
+    --tw-backdrop-opacity: opacity(0.05);
+  }
+
+  .md\:backdrop-opacity-10 {
+    --tw-backdrop-opacity: opacity(0.1);
+  }
+
+  .md\:backdrop-opacity-20 {
+    --tw-backdrop-opacity: opacity(0.2);
+  }
+
+  .md\:backdrop-opacity-25 {
+    --tw-backdrop-opacity: opacity(0.25);
+  }
+
+  .md\:backdrop-opacity-30 {
+    --tw-backdrop-opacity: opacity(0.3);
+  }
+
+  .md\:backdrop-opacity-40 {
+    --tw-backdrop-opacity: opacity(0.4);
+  }
+
+  .md\:backdrop-opacity-50 {
+    --tw-backdrop-opacity: opacity(0.5);
+  }
+
+  .md\:backdrop-opacity-60 {
+    --tw-backdrop-opacity: opacity(0.6);
+  }
+
+  .md\:backdrop-opacity-70 {
+    --tw-backdrop-opacity: opacity(0.7);
+  }
+
+  .md\:backdrop-opacity-75 {
+    --tw-backdrop-opacity: opacity(0.75);
+  }
+
+  .md\:backdrop-opacity-80 {
+    --tw-backdrop-opacity: opacity(0.8);
+  }
+
+  .md\:backdrop-opacity-90 {
+    --tw-backdrop-opacity: opacity(0.9);
+  }
+
+  .md\:backdrop-opacity-95 {
+    --tw-backdrop-opacity: opacity(0.95);
+  }
+
+  .md\:backdrop-opacity-100 {
+    --tw-backdrop-opacity: opacity(1);
   }
 
   .md\:backdrop-saturate-0 {
@@ -117151,6 +117271,66 @@ video {
     --tw-backdrop-invert: invert(100%);
   }
 
+  .lg\:backdrop-opacity-0 {
+    --tw-backdrop-opacity: opacity(0);
+  }
+
+  .lg\:backdrop-opacity-5 {
+    --tw-backdrop-opacity: opacity(0.05);
+  }
+
+  .lg\:backdrop-opacity-10 {
+    --tw-backdrop-opacity: opacity(0.1);
+  }
+
+  .lg\:backdrop-opacity-20 {
+    --tw-backdrop-opacity: opacity(0.2);
+  }
+
+  .lg\:backdrop-opacity-25 {
+    --tw-backdrop-opacity: opacity(0.25);
+  }
+
+  .lg\:backdrop-opacity-30 {
+    --tw-backdrop-opacity: opacity(0.3);
+  }
+
+  .lg\:backdrop-opacity-40 {
+    --tw-backdrop-opacity: opacity(0.4);
+  }
+
+  .lg\:backdrop-opacity-50 {
+    --tw-backdrop-opacity: opacity(0.5);
+  }
+
+  .lg\:backdrop-opacity-60 {
+    --tw-backdrop-opacity: opacity(0.6);
+  }
+
+  .lg\:backdrop-opacity-70 {
+    --tw-backdrop-opacity: opacity(0.7);
+  }
+
+  .lg\:backdrop-opacity-75 {
+    --tw-backdrop-opacity: opacity(0.75);
+  }
+
+  .lg\:backdrop-opacity-80 {
+    --tw-backdrop-opacity: opacity(0.8);
+  }
+
+  .lg\:backdrop-opacity-90 {
+    --tw-backdrop-opacity: opacity(0.9);
+  }
+
+  .lg\:backdrop-opacity-95 {
+    --tw-backdrop-opacity: opacity(0.95);
+  }
+
+  .lg\:backdrop-opacity-100 {
+    --tw-backdrop-opacity: opacity(1);
+  }
+
   .lg\:backdrop-saturate-0 {
     --tw-backdrop-saturate: saturate(0);
   }
@@ -146314,6 +146494,66 @@ video {
     --tw-backdrop-invert: invert(100%);
   }
 
+  .xl\:backdrop-opacity-0 {
+    --tw-backdrop-opacity: opacity(0);
+  }
+
+  .xl\:backdrop-opacity-5 {
+    --tw-backdrop-opacity: opacity(0.05);
+  }
+
+  .xl\:backdrop-opacity-10 {
+    --tw-backdrop-opacity: opacity(0.1);
+  }
+
+  .xl\:backdrop-opacity-20 {
+    --tw-backdrop-opacity: opacity(0.2);
+  }
+
+  .xl\:backdrop-opacity-25 {
+    --tw-backdrop-opacity: opacity(0.25);
+  }
+
+  .xl\:backdrop-opacity-30 {
+    --tw-backdrop-opacity: opacity(0.3);
+  }
+
+  .xl\:backdrop-opacity-40 {
+    --tw-backdrop-opacity: opacity(0.4);
+  }
+
+  .xl\:backdrop-opacity-50 {
+    --tw-backdrop-opacity: opacity(0.5);
+  }
+
+  .xl\:backdrop-opacity-60 {
+    --tw-backdrop-opacity: opacity(0.6);
+  }
+
+  .xl\:backdrop-opacity-70 {
+    --tw-backdrop-opacity: opacity(0.7);
+  }
+
+  .xl\:backdrop-opacity-75 {
+    --tw-backdrop-opacity: opacity(0.75);
+  }
+
+  .xl\:backdrop-opacity-80 {
+    --tw-backdrop-opacity: opacity(0.8);
+  }
+
+  .xl\:backdrop-opacity-90 {
+    --tw-backdrop-opacity: opacity(0.9);
+  }
+
+  .xl\:backdrop-opacity-95 {
+    --tw-backdrop-opacity: opacity(0.95);
+  }
+
+  .xl\:backdrop-opacity-100 {
+    --tw-backdrop-opacity: opacity(1);
+  }
+
   .xl\:backdrop-saturate-0 {
     --tw-backdrop-saturate: saturate(0);
   }
@@ -175475,6 +175715,66 @@ video {
 
   .\32xl\:backdrop-invert {
     --tw-backdrop-invert: invert(100%);
+  }
+
+  .\32xl\:backdrop-opacity-0 {
+    --tw-backdrop-opacity: opacity(0);
+  }
+
+  .\32xl\:backdrop-opacity-5 {
+    --tw-backdrop-opacity: opacity(0.05);
+  }
+
+  .\32xl\:backdrop-opacity-10 {
+    --tw-backdrop-opacity: opacity(0.1);
+  }
+
+  .\32xl\:backdrop-opacity-20 {
+    --tw-backdrop-opacity: opacity(0.2);
+  }
+
+  .\32xl\:backdrop-opacity-25 {
+    --tw-backdrop-opacity: opacity(0.25);
+  }
+
+  .\32xl\:backdrop-opacity-30 {
+    --tw-backdrop-opacity: opacity(0.3);
+  }
+
+  .\32xl\:backdrop-opacity-40 {
+    --tw-backdrop-opacity: opacity(0.4);
+  }
+
+  .\32xl\:backdrop-opacity-50 {
+    --tw-backdrop-opacity: opacity(0.5);
+  }
+
+  .\32xl\:backdrop-opacity-60 {
+    --tw-backdrop-opacity: opacity(0.6);
+  }
+
+  .\32xl\:backdrop-opacity-70 {
+    --tw-backdrop-opacity: opacity(0.7);
+  }
+
+  .\32xl\:backdrop-opacity-75 {
+    --tw-backdrop-opacity: opacity(0.75);
+  }
+
+  .\32xl\:backdrop-opacity-80 {
+    --tw-backdrop-opacity: opacity(0.8);
+  }
+
+  .\32xl\:backdrop-opacity-90 {
+    --tw-backdrop-opacity: opacity(0.9);
+  }
+
+  .\32xl\:backdrop-opacity-95 {
+    --tw-backdrop-opacity: opacity(0.95);
+  }
+
+  .\32xl\:backdrop-opacity-100 {
+    --tw-backdrop-opacity: opacity(1);
   }
 
   .\32xl\:backdrop-saturate-0 {
