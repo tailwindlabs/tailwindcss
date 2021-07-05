@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix filter/backdrop-filter/transform utilities being inserted into the wrong position if not all core plugins are enabled ([#4852](https://github.com/tailwindlabs/tailwindcss/pull/4852)))
 - JIT: Fix `@layer` rules being mistakenly inserted during incremental rebuilds ([#4853](https://github.com/tailwindlabs/tailwindcss/pull/4853)))
 - Improve build performance for projects with many small non-Tailwind stylesheets ([#4644](https://github.com/tailwindlabs/tailwindcss/pull/4644))
+- Ensure `[hidden]` works as expected on elements where we override the default `display` value in Preflight ([#4873](https://github.com/tailwindlabs/tailwindcss/pull/4873))
+- Fix variant configuration not being applied to `backdropOpacity` utilities ([#4892](https://github.com/tailwindlabs/tailwindcss/pull/4892))
 
 ## [2.2.4] - 2021-06-23
 
