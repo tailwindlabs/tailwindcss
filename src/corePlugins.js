@@ -73,6 +73,18 @@ export let pseudoElementVariants = ({ config, addVariant }) => {
   ])
 
   addVariant(
+    'file-selector-button',
+    transformAllSelectors((selector) => {
+      return updateAllClasses(selector, (className, { withPseudo }) => {
+        return withPseudo(
+          `file-selector-button${config('separator')}${className}`,
+          '::file-selector-button'
+        )
+      })
+    })
+  )
+
+  addVariant(
     'before',
     transformAllSelectors(
       (selector) => {
