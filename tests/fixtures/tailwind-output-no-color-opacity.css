@@ -12039,6 +12039,10 @@ video {
   align-self: stretch;
 }
 
+.self-baseline {
+  align-self: baseline;
+}
+
 .justify-self-auto {
   justify-self: auto;
 }
@@ -38718,6 +38722,10 @@ video {
     align-self: stretch;
   }
 
+  .sm\:self-baseline {
+    align-self: baseline;
+  }
+
   .sm\:justify-self-auto {
     justify-self: auto;
   }
@@ -65383,6 +65391,10 @@ video {
 
   .md\:self-stretch {
     align-self: stretch;
+  }
+
+  .md\:self-baseline {
+    align-self: baseline;
   }
 
   .md\:justify-self-auto {
@@ -92052,6 +92064,10 @@ video {
     align-self: stretch;
   }
 
+  .lg\:self-baseline {
+    align-self: baseline;
+  }
+
   .lg\:justify-self-auto {
     justify-self: auto;
   }
@@ -118719,6 +118735,10 @@ video {
     align-self: stretch;
   }
 
+  .xl\:self-baseline {
+    align-self: baseline;
+  }
+
   .xl\:justify-self-auto {
     justify-self: auto;
   }
@@ -145384,6 +145404,10 @@ video {
 
   .\32xl\:self-stretch {
     align-self: stretch;
+  }
+
+  .\32xl\:self-baseline {
+    align-self: baseline;
   }
 
   .\32xl\:justify-self-auto {
