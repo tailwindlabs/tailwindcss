@@ -17,6 +17,9 @@ export default function () {
         '.self-stretch': {
           'align-self': 'stretch',
         },
+        '.self-baseline': {
+          'align-self': 'baseline',
+        },
       },
       variants('alignSelf')
     )
