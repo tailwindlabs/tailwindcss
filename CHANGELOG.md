@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet.
 
+## [2.2.6] - 2021-07-21
+
+### Fixed
+
+- Fix issue where base styles not generated for translate transforms in JIT ([#5038](https://github.com/tailwindlabs/tailwindcss/pull/5038))
+
 ## [2.2.5] - 2021-07-21
 
 ### Added
@@ -1488,7 +1494,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.5...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.6...HEAD
+[2.2.6]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.5...v2.2.6
 [2.2.5]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.4...v2.2.5
 [2.2.4]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.3...v2.2.4
 [2.2.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.2...v2.2.3
