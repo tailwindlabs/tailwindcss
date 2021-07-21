@@ -5,8 +5,14 @@ export default function () {
     if (config('mode') === 'jit') {
       return createUtilityPlugin('translate', [
         [
-          ['translate-x', ['--tw-translate-x', ['transform', 'var(--tw-transform)']]],
-          ['translate-y', ['--tw-translate-y', ['transform', 'var(--tw-transform)']]],
+          [
+            'translate-x',
+            [['@defaults transform', {}], '--tw-translate-x', ['transform', 'var(--tw-transform)']],
+          ],
+          [
+            'translate-y',
+            [['@defaults transform', {}], '--tw-translate-y', ['transform', 'var(--tw-transform)']],
+          ],
         ],
       ])({ config, ...rest })
     } else {
