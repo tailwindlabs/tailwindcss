@@ -89,7 +89,11 @@ export default function resolveDefaultsAtRules() {
       }
 
       let universalRule = postcss.rule()
-      universalRule.selectors = [...selectors]
+
+      // TODO: Fix this, this is a hotfix
+      // universalRule.selectors = [...selectors]
+      universalRule.selectors = ['*', '::before', '::after']
+
       universalRule.append(universal.nodes)
       universal.before(universalRule)
       universal.remove()
