@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet.
 
+## [2.2.7] - 2021-07-23
+
+### Fixed
+
+- Temporarily revert runtime performance optimizations introduced in v2.2.5, use universal selector again ([#5060](https://github.com/tailwindlabs/tailwindcss/pull/5060))
+
 ## [2.2.6] - 2021-07-21
 
 ### Fixed
@@ -1494,7 +1500,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.6...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.7...HEAD
+[2.2.7]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.6...v2.2.7
 [2.2.6]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.5...v2.2.6
 [2.2.5]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.4...v2.2.5
 [2.2.4]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.3...v2.2.4
