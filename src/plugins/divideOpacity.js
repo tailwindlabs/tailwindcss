@@ -4,7 +4,7 @@ export default function () {
       {
         'divide-opacity': (value) => {
           return {
-            [`& > :not([hidden]) ~ :not([hidden])`]: {
+            [`& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"])`]: {
               '--tw-divide-opacity': value,
             },
           }

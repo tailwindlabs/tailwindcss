@@ -8,18 +8,19 @@ export default function () {
         divide: (value) => {
           if (!corePlugins('divideOpacity')) {
             return {
-              ['& > :not([hidden]) ~ :not([hidden])']: {
+              ['& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"])']: {
                 'border-color': value,
               },
             }
           }
 
           return {
-            ['& > :not([hidden]) ~ :not([hidden])']: withAlphaVariable({
-              color: value,
-              property: 'border-color',
-              variable: '--tw-divide-opacity',
-            }),
+            ['& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"])']:
+              withAlphaVariable({
+                color: value,
+                property: 'border-color',
+                variable: '--tw-divide-opacity',
+              }),
           }
         },
       },

@@ -6,7 +6,7 @@ export default function () {
           value = value === '0' ? '0px' : value
 
           return {
-            '& > :not([hidden]) ~ :not([hidden])': {
+            '& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"])': {
               '--tw-divide-x-reverse': '0',
               'border-right-width': `calc(${value} * var(--tw-divide-x-reverse))`,
               'border-left-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
@@ -34,12 +34,14 @@ export default function () {
 
     addUtilities(
       {
-        '.divide-y-reverse > :not([hidden]) ~ :not([hidden])': {
-          '--tw-divide-y-reverse': '1',
-        },
-        '.divide-x-reverse > :not([hidden]) ~ :not([hidden])': {
-          '--tw-divide-x-reverse': '1',
-        },
+        '.divide-y-reverse > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"])':
+          {
+            '--tw-divide-y-reverse': '1',
+          },
+        '.divide-x-reverse > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"])':
+          {
+            '--tw-divide-x-reverse': '1',
+          },
       },
       variants('divideWidth')
     )
