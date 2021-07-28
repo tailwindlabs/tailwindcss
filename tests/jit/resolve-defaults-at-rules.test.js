@@ -10,6 +10,10 @@ function run(input, config = {}) {
   })
 }
 
+function css(templates) {
+  return templates.join('')
+}
+
 test('basic utilities', async () => {
   let config = {
     mode: 'jit',
@@ -23,14 +27,14 @@ test('basic utilities', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -75,14 +79,14 @@ test('with pseudo-class variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -127,14 +131,14 @@ test('with pseudo-element variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -177,14 +181,14 @@ test('with multi-class variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -225,14 +229,14 @@ test('with multi-class pseudo-element variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -275,14 +279,14 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -325,7 +329,7 @@ test('with apply', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
@@ -374,8 +378,8 @@ test('with apply', async () => {
     }
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -453,14 +457,14 @@ test('with borders', async () => {
     corePlugins: ['borderWidth', 'borderColor', 'borderOpacity'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -497,14 +501,14 @@ test('with shadows', async () => {
     corePlugins: ['boxShadow', 'ringColor', 'ringWidth'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -559,14 +563,14 @@ test('when no utilities that need the defaults are used', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       /* --- */
     `)
   })
@@ -585,14 +589,14 @@ test('when a utility uses defaults but they do not exist', async () => {
     corePlugins: ['rotate'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       /* --- */
       .rotate-3 {
         --tw-rotate: 3deg;
@@ -615,7 +619,7 @@ test('selectors are reduced to the lowest possible specificity', async () => {
     corePlugins: [],
   }
 
-  let css = `
+  let input = css`
     @defaults test {
       --color: black;
     }
@@ -637,12 +641,12 @@ test('selectors are reduced to the lowest possible specificity', async () => {
       color: var(--color);
     }
 
-    div[data-foo="bar"]#other {
+    div[data-foo='bar']#other {
       @defaults test;
       fill: var(--color);
     }
 
-    div[data-bar="baz"] {
+    div[data-bar='baz'] {
       @defaults test;
       stroke: var(--color);
     }
@@ -652,14 +656,14 @@ test('selectors are reduced to the lowest possible specificity', async () => {
       --article: var(--color);
     }
 
-    div[data-foo="bar"]#another::before {
+    div[data-foo='bar']#another::before {
       @defaults test;
       fill: var(--color);
     }
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
       ::after {
@@ -680,11 +684,11 @@ test('selectors are reduced to the lowest possible specificity', async () => {
         color: var(--color);
       }
 
-      div[data-foo="bar"]#other {
+      div[data-foo='bar']#other {
         fill: var(--color);
       }
 
-      div[data-bar="baz"] {
+      div[data-bar='baz'] {
         stroke: var(--color);
       }
 
@@ -692,7 +696,7 @@ test('selectors are reduced to the lowest possible specificity', async () => {
         --article: var(--color);
       }
 
-      div[data-foo="bar"]#another::before {
+      div[data-foo='bar']#another::before {
         fill: var(--color);
       }
     `)
