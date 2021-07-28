@@ -31,9 +31,9 @@ test('basic utilities', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .rotate-3,
-      .skew-y-6,
-      .scale-x-110 {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -83,9 +83,9 @@ test('with pseudo-class variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .hover\\:scale-x-110,
-      .focus\\:rotate-3,
-      .hover\\:focus\\:skew-y-6 {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -135,8 +135,9 @@ test('with pseudo-element variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .before\\:scale-x-110::before,
-      .after\\:rotate-3::after {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -184,8 +185,9 @@ test('with multi-class variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .group-hover\\:scale-x-110,
-      .peer-focus\\:rotate-3 {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -231,8 +233,9 @@ test('with multi-class pseudo-element variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .group-hover\\:before\\:scale-x-110::before,
-      .peer-focus\\:after\\:rotate-3::after {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -280,8 +283,9 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .group-hover\\:hover\\:before\\:scale-x-110::before,
-      .peer-focus\\:focus\\:after\\:rotate-3::after {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -372,17 +376,9 @@ test('with apply', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .foo,
-      .bar::before,
-      .baz::before,
-      span,
-      .media-queries,
-      .a,
-      .b,
-      .c,
-      .a::before,
-      .b::after,
-      .recursive {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -465,8 +461,9 @@ test('with borders', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .border,
-      .md\\:border-2 {
+      *,
+      ::before,
+      ::after {
         --tw-border-opacity: 1;
         border-color: rgba(229, 231, 235, var(--tw-border-opacity));
       }
@@ -508,13 +505,12 @@ test('with shadows', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .shadow,
-      .md\\:shadow-xl {
+      *,
+      ::before,
+      ::after {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
-      }
-      .ring-1 {
         --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
         --tw-ring-offset-width: 0px;
         --tw-ring-offset-color: #fff;
@@ -664,13 +660,9 @@ test('selectors are reduced to the lowest possible specificity', async () => {
 
   return run(css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      .foo,
-      [id="app"],
-      [id="page"],
-      [id="other"],
-      [data-bar="baz"],
-      article,
-      [id="another"]::before {
+      *,
+      ::before,
+      ::after {
         --color: black;
       }
 
