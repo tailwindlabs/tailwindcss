@@ -10,6 +10,10 @@ function run(input, config = {}) {
   })
 }
 
+function css(templates) {
+  return templates.join('')
+}
+
 test('basic utilities', async () => {
   let config = {
     mode: 'jit',
@@ -23,17 +27,17 @@ test('basic utilities', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .rotate-3,
-      .skew-y-6,
-      .scale-x-110 {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -75,17 +79,17 @@ test('with pseudo-class variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .hover\\:scale-x-110,
-      .focus\\:rotate-3,
-      .hover\\:focus\\:skew-y-6 {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -127,16 +131,17 @@ test('with pseudo-element variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .before\\:scale-x-110::before,
-      .after\\:rotate-3::after {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -176,16 +181,17 @@ test('with multi-class variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .group-hover\\:scale-x-110,
-      .peer-focus\\:rotate-3 {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -223,16 +229,17 @@ test('with multi-class pseudo-element variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .group-hover\\:before\\:scale-x-110::before,
-      .peer-focus\\:after\\:rotate-3::after {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -272,16 +279,17 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .group-hover\\:hover\\:before\\:scale-x-110::before,
-      .peer-focus\\:focus\\:after\\:rotate-3::after {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -321,7 +329,7 @@ test('with apply', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
@@ -370,19 +378,11 @@ test('with apply', async () => {
     }
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .foo,
-      .bar::before,
-      .baz::before,
-      span,
-      .media-queries,
-      .a,
-      .b,
-      .c,
-      .a::before,
-      .b::after,
-      .recursive {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -457,16 +457,17 @@ test('with borders', async () => {
     corePlugins: ['borderWidth', 'borderColor', 'borderOpacity'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .border,
-      .md\\:border-2 {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-border-opacity: 1;
         border-color: rgba(229, 231, 235, var(--tw-border-opacity));
       }
@@ -500,21 +501,20 @@ test('with shadows', async () => {
     corePlugins: ['boxShadow', 'ringColor', 'ringWidth'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .shadow,
-      .md\\:shadow-xl {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
-      }
-      .ring-1 {
         --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
         --tw-ring-offset-width: 0px;
         --tw-ring-offset-color: #fff;
@@ -563,14 +563,14 @@ test('when no utilities that need the defaults are used', async () => {
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       /* --- */
     `)
   })
@@ -589,14 +589,14 @@ test('when a utility uses defaults but they do not exist', async () => {
     corePlugins: ['rotate'],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     /* --- */
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       /* --- */
       .rotate-3 {
         --tw-rotate: 3deg;
@@ -619,7 +619,7 @@ test('selectors are reduced to the lowest possible specificity', async () => {
     corePlugins: [],
   }
 
-  let css = `
+  let input = css`
     @defaults test {
       --color: black;
     }
@@ -641,12 +641,12 @@ test('selectors are reduced to the lowest possible specificity', async () => {
       color: var(--color);
     }
 
-    div[data-foo="bar"]#other {
+    div[data-foo='bar']#other {
       @defaults test;
       fill: var(--color);
     }
 
-    div[data-bar="baz"] {
+    div[data-bar='baz'] {
       @defaults test;
       stroke: var(--color);
     }
@@ -656,21 +656,17 @@ test('selectors are reduced to the lowest possible specificity', async () => {
       --article: var(--color);
     }
 
-    div[data-foo="bar"]#another::before {
+    div[data-foo='bar']#another::before {
       @defaults test;
       fill: var(--color);
     }
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .foo,
-      [id="app"],
-      [id="page"],
-      [id="other"],
-      [data-bar="baz"],
-      article,
-      [id="another"]::before {
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
         --color: black;
       }
 
@@ -688,11 +684,11 @@ test('selectors are reduced to the lowest possible specificity', async () => {
         color: var(--color);
       }
 
-      div[data-foo="bar"]#other {
+      div[data-foo='bar']#other {
         fill: var(--color);
       }
 
-      div[data-bar="baz"] {
+      div[data-bar='baz'] {
         stroke: var(--color);
       }
 
@@ -700,7 +696,7 @@ test('selectors are reduced to the lowest possible specificity', async () => {
         --article: var(--color);
       }
 
-      div[data-foo="bar"]#another::before {
+      div[data-foo='bar']#another::before {
         fill: var(--color);
       }
     `)

@@ -9,6 +9,10 @@ function run(input, config = {}) {
   })
 }
 
+function css(templates) {
+  return templates.join('')
+}
+
 test('it works', () => {
   let config = {
     darkMode: 'class',
@@ -71,100 +75,101 @@ test('it works', () => {
     ],
   }
 
-  let css = `
-  @layer utilities {
-    .custom-util {
-      background: #abcdef;
+  let input = css`
+    @layer utilities {
+      .custom-util {
+        background: #abcdef;
+      }
+      *,
+      ::before,
+      ::after {
+        margin: 10px;
+      }
     }
-    *,
-::before,
-::after {
-      margin: 10px;
+    @layer components {
+      .test-apply-font-variant {
+        @apply ordinal tabular-nums;
+      }
+      .custom-component {
+        background: #123456;
+      }
+      *,
+      ::before,
+      ::after {
+        padding: 5px;
+      }
+      .foo .bg-black {
+        appearance: none;
+      }
     }
-  }
-  @layer components {
-    .test-apply-font-variant {
-      @apply ordinal tabular-nums;
+    @layer base {
+      div {
+        background: #654321;
+      }
     }
-    .custom-component {
-      background: #123456;
+    .theme-test {
+      font-family: theme('fontFamily.sans');
+      color: theme('colors.blue.500');
     }
-    *,
-::before,
-::after {
-      padding: 5px;
+    @screen lg {
+      .screen-test {
+        color: purple;
+      }
     }
-    .foo .bg-black {
-      appearance: none;
+    .apply-1 {
+      @apply mt-6;
     }
-  }
-  @layer base {
-    div {
-      background: #654321;
+    .apply-2 {
+      @apply mt-6;
     }
-  }
-  .theme-test {
-    font-family: theme('fontFamily.sans');
-    color: theme('colors.blue.500');
-  }
-  @screen lg {
-    .screen-test {
-      color: purple;
+    .apply-test {
+      @apply mt-6 bg-pink-500 hover:font-bold focus:hover:font-bold sm:bg-green-500 sm:focus:even:bg-pink-200;
     }
-  }
-  .apply-1 {
-    @apply mt-6;
-  }
-  .apply-2 {
-    @apply mt-6;
-  }
-  .apply-test {
-    @apply mt-6 bg-pink-500 hover:font-bold focus:hover:font-bold sm:bg-green-500 sm:focus:even:bg-pink-200;
-  }
-  .apply-components {
-    @apply container mx-auto;
-  }
-  .drop-empty-rules {
-    @apply hover:font-bold;
-  }
-  .apply-group {
-    @apply group-hover:font-bold;
-  }
-  .apply-dark-mode {
-    @apply dark:font-bold;
-  }
-  .apply-with-existing:hover {
-    @apply font-normal sm:bg-green-500;
-  }
-  .multiple, .selectors {
-    @apply font-bold group-hover:font-normal;
-  }
-  .list {
-    @apply space-x-4;
-  }
-  .nested {
-    .example {
-      @apply font-bold hover:font-normal;
+    .apply-components {
+      @apply container mx-auto;
     }
-  }
-  .apply-order-a {
-    @apply m-5 mt-6;
-  }
-  .apply-order-b {
-    @apply mt-6 m-5;
-  }
-  .apply-dark-group-example-a {
-    @apply dark:group-hover:bg-green-500;
-  }
-  .crazy-example {
-    @apply sm:motion-safe:group-active:focus:opacity-10;
-  }
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-`
+    .drop-empty-rules {
+      @apply hover:font-bold;
+    }
+    .apply-group {
+      @apply group-hover:font-bold;
+    }
+    .apply-dark-mode {
+      @apply dark:font-bold;
+    }
+    .apply-with-existing:hover {
+      @apply font-normal sm:bg-green-500;
+    }
+    .multiple,
+    .selectors {
+      @apply font-bold group-hover:font-normal;
+    }
+    .list {
+      @apply space-x-4;
+    }
+    .nested {
+      .example {
+        @apply font-bold hover:font-normal;
+      }
+    }
+    .apply-order-a {
+      @apply m-5 mt-6;
+    }
+    .apply-order-b {
+      @apply mt-6 m-5;
+    }
+    .apply-dark-group-example-a {
+      @apply dark:group-hover:bg-green-500;
+    }
+    .crazy-example {
+      @apply sm:motion-safe:group-active:focus:opacity-10;
+    }
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
 
-  return run(css, config).then((result) => {
+  return run(input, config).then((result) => {
     let expectedPath = path.resolve(__dirname, './kitchen-sink.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 

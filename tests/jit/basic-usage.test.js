@@ -9,6 +9,10 @@ function run(input, config = {}) {
   })
 }
 
+function css(templates) {
+  return templates.join('')
+}
+
 test('basic usage', () => {
   let config = {
     mode: 'jit',
@@ -18,13 +22,13 @@ test('basic usage', () => {
     plugins: [],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     @tailwind components;
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
+  return run(input, config).then((result) => {
     let expectedPath = path.resolve(__dirname, './basic-usage.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 

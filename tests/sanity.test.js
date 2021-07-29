@@ -4,6 +4,16 @@ import postcss from 'postcss'
 import tailwind from '../src/index'
 import config from '../stubs/defaultConfig.stub.js'
 
+function dropTailwindHeader(css) {
+  let [header, ...lines] = css.split('\n')
+
+  expect(
+    /\/*! tailwindcss v\d*\.\d*\.\d* \| MIT License \| https:\/\/tailwindcss.com \*\//g.test(header)
+  ).toBe(true)
+
+  return lines.join('\n')
+}
+
 it('generates the right CSS using the default settings', () => {
   const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
   const input = fs.readFileSync(inputPath, 'utf8')
@@ -16,7 +26,7 @@ it('generates the right CSS using the default settings', () => {
         'utf8'
       )
 
-      expect(result.css).toBe(expected)
+      expect(dropTailwindHeader(result.css)).toBe(dropTailwindHeader(expected))
     })
 })
 
@@ -32,7 +42,7 @@ it('generates the right CSS when "important" is enabled', () => {
         'utf8'
       )
 
-      expect(result.css).toBe(expected)
+      expect(dropTailwindHeader(result.css)).toBe(dropTailwindHeader(expected))
     })
 })
 
@@ -48,7 +58,7 @@ it('generates the right CSS when using @import instead of @tailwind', () => {
         'utf8'
       )
 
-      expect(result.css).toBe(expected)
+      expect(dropTailwindHeader(result.css)).toBe(dropTailwindHeader(expected))
     })
 })
 
@@ -69,7 +79,7 @@ it('generates the right CSS when enabling flagged features', () => {
         'utf8'
       )
 
-      expect(result.css).toBe(expected)
+      expect(dropTailwindHeader(result.css)).toBe(dropTailwindHeader(expected))
     })
 })
 
@@ -97,7 +107,7 @@ it('generates the right CSS when color opacity plugins are disabled', () => {
         'utf8'
       )
 
-      expect(result.css).toBe(expected)
+      expect(dropTailwindHeader(result.css)).toBe(dropTailwindHeader(expected))
     })
 })
 
@@ -139,6 +149,6 @@ it('generates the right CSS when "important" is enabled', () => {
         'utf8'
       )
 
-      expect(result.css).toBe(expected)
+      expect(dropTailwindHeader(result.css)).toBe(dropTailwindHeader(expected))
     })
 })
