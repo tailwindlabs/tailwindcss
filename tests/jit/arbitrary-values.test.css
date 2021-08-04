@@ -7,12 +7,25 @@
 .col-\[7\] {
   grid-column: 7;
 }
+.col-\[span\2c 7\2c \/\2c span\2c 7\] {
+  grid-column: span 7 / span 7;
+}
+.col-\[span\2c calc\(9-2\)\2c \/\2c span\2c calc\(1\+6\)\] {
+  grid-column: span calc(9 - 2) / span calc(1 + 6);
+}
+.col-\[span\2c var\(--columns\)\2c \/\2c span\2c var\(--columns\)\] {
+  grid-column: span var(--columns) / span var(--columns);
+}
+.col-\[span\2c calc\(var\(--range-up\)-var\(--range-down\)\)\2c \/\2c span\2c 3\] {
+  grid-column: span calc(var(--range-up) - var(--range-down)) / span 3;
+}
 .col-start-\[7\] {
   grid-column-start: 7;
 }
 .col-end-\[7\] {
   grid-column-end: 7;
 }
+
 .row-\[7\] {
   grid-row: 7;
 }
