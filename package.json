@@ -92,7 +92,7 @@
     "object-hash": "^2.2.0",
     "postcss-js": "^3.0.3",
     "postcss-load-config": "^3.1.0",
-    "postcss-nested": "5.0.5",
+    "postcss-nested": "5.0.6",
     "postcss-selector-parser": "^6.0.6",
     "postcss-value-parser": "^4.1.0",
     "pretty-hrtime": "^1.0.3",
