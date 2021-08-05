@@ -1,6 +1,6 @@
 import selectorParser from 'postcss-selector-parser'
 import postcss from 'postcss'
-import createColor from 'color'
+import culori from 'culori'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
 import isKeyframeRule from './isKeyframeRule'
@@ -222,12 +222,7 @@ function splitAlpha(modifier) {
 }
 
 function isColor(value) {
-  try {
-    createColor(value)
-    return true
-  } catch (e) {
-    return false
-  }
+  return culori.parse(value) !== undefined
 }
 
 export function asColor(modifier, lookup = {}, tailwindConfig = {}) {

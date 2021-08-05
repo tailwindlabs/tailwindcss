@@ -1,25 +1,8 @@
-import createColor from 'color'
+import culori from 'culori'
 import _ from 'lodash'
 
-function hasAlpha(color) {
-  return (
-    color.startsWith('rgba(') ||
-    color.startsWith('hsla(') ||
-    (color.startsWith('#') && color.length === 9) ||
-    (color.startsWith('#') && color.length === 5)
-  )
-}
-
-export function toRgba(color) {
-  const [r, g, b, a] = createColor(color).rgb().array()
-
-  return [r, g, b, a === undefined && hasAlpha(color) ? 1 : a]
-}
-
-export function toHsla(color) {
-  const [h, s, l, a] = createColor(color).hsl().array()
-
-  return [h, `${s}%`, `${l}%`, a === undefined && hasAlpha(color) ? 1 : a]
+function isValidColor(color) {
+  return culori.parse(color) !== undefined
 }
 
 export function withAlphaValue(color, alphaValue, defaultValue) {
@@ -27,13 +10,22 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
     return color({ opacityValue: alphaValue })
   }
 
-  try {
-    const isHSL = color.startsWith('hsl')
-    const [i, j, k] = isHSL ? toHsla(color) : toRgba(color)
-    return `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, ${alphaValue})`
-  } catch {
-    return defaultValue
+  if (isValidColor(color)) {
+    // Parse color
+    const parsed = culori.parse(color)
+
+    // Apply alpha value
+    parsed.alpha = alphaValue
+
+    // Return formatted string
+    if (parsed.mode === 'hsl') {
+      return culori.formatHsl(parsed)
+    } else {
+      return culori.formatRgb(parsed)
+    }
   }
+
+  return defaultValue
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
@@ -44,24 +36,32 @@ export default function withAlphaVariable({ color, property, variable }) {
     }
   }
 
-  try {
-    const isHSL = color.startsWith('hsl')
+  if (isValidColor(color)) {
+    const { alpha = 1, mode } = culori.parse(color)
 
-    const [i, j, k, a] = isHSL ? toHsla(color) : toRgba(color)
-
-    if (a !== undefined) {
+    if (alpha !== 1) {
+      // Has an alpha value, return color as-is
       return {
         [property]: color,
       }
     }
 
+    let value
+    if (mode === 'hsl') {
+      const { h, s, l } = culori.hsl(color)
+      value = `hsla(${h}, ${s}, ${l}, var(${variable}))`
+    } else {
+      const { r, g, b } = culori.rgb(color)
+      value = `rgba(${r}, ${g}, ${b}, var(${variable}))`
+    }
+
     return {
       [variable]: '1',
-      [property]: `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, var(${variable}))`,
+      [property]: value,
     }
-  } catch (error) {
-    return {
-      [property]: color,
-    }
+  }
+
+  return {
+    [property]: color,
   }
 }
