@@ -7,6 +7,16 @@ test('it adds the right custom property', () => {
     '--tw-text-opacity': '1',
     color: 'rgba(255, 0, 0, var(--tw-text-opacity))',
   })
+  expect(
+    withAlphaVariable({
+      color: 'hsl(240 100% 50%)',
+      property: 'color',
+      variable: '--tw-text-opacity',
+    })
+  ).toEqual({
+    '--tw-text-opacity': '1',
+    color: 'hsla(240, 100%, 50%, var(--tw-text-opacity))',
+  })
 })
 
 test('it ignores colors that cannot be parsed', () => {
