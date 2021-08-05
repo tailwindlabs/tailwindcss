@@ -17,11 +17,22 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
     // Apply alpha value
     parsed.alpha = alphaValue
 
-    // Return formatted string
+    // Format string
+    let value
     if (parsed.mode === 'hsl') {
-      return culori.formatHsl(parsed)
+      value = culori.formatHsl(parsed)
     } else {
-      return culori.formatRgb(parsed)
+      value = culori.formatRgb(parsed)
+    }
+
+    // Correctly apply CSS variable alpha value
+    if (typeof alphaValue === 'string' && alphaValue.startsWith('var(') && value.endsWith('NaN)')) {
+      value = value.replace('NaN)', `${alphaValue})`)
+    }
+
+    // Color could not be formatted correctly
+    if (!value.includes('NaN')) {
+      return value
     }
   }
 
@@ -49,8 +60,8 @@ export default function withAlphaVariable({ color, property, variable }) {
     const formatFn = parsed.mode === 'hsl' ? 'formatHsl' : 'formatRgb'
     const value = culori[formatFn]({
       ...parsed,
-      alpha: 0.3,
-    }).replace('0.3)', `var(${variable}))`)
+      alpha: NaN, // intentionally set to `NaN` for replacing
+    }).replace('NaN)', `var(${variable}))`)
 
     return {
       [variable]: '1',
