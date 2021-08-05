@@ -1,4 +1,4 @@
-import culori from 'culori'
+import * as culori from 'culori'
 import _ from 'lodash'
 
 function isValidColor(color) {
