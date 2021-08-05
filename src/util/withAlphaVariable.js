@@ -37,23 +37,20 @@ export default function withAlphaVariable({ color, property, variable }) {
   }
 
   if (isValidColor(color)) {
-    const { alpha = 1, mode } = culori.parse(color)
+    const parsed = culori.parse(color)
 
-    if (alpha !== 1) {
+    if ('alpha' in parsed) {
       // Has an alpha value, return color as-is
       return {
         [property]: color,
       }
     }
 
-    let value
-    if (mode === 'hsl') {
-      const { h, s, l } = culori.hsl(color)
-      value = `hsla(${h}, ${s}, ${l}, var(${variable}))`
-    } else {
-      const { r, g, b } = culori.rgb(color)
-      value = `rgba(${r}, ${g}, ${b}, var(${variable}))`
-    }
+    const formatFn = parsed.mode === 'hsl' ? 'formatHsl' : 'formatRgb'
+    const value = culori[formatFn]({
+      ...parsed,
+      alpha: 0.3,
+    }).replace('0.3)', `var(${variable}))`)
 
     return {
       [variable]: '1',
