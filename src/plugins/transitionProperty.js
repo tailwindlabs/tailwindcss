@@ -2,12 +2,13 @@ export default function () {
   return function ({ matchUtilities, theme, variants }) {
     let defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
     let defaultDuration = theme('transitionDuration.DEFAULT')
+    let transitionPropertyTheme = theme('transitionProperty')
 
     matchUtilities(
       {
         transition: (value) => {
           return {
-            'transition-property': value,
+            'transition-property': transitionPropertyTheme[value] ?? value.replace(/,/g, ', '),
             ...(value === 'none'
               ? {}
               : {
@@ -20,7 +21,7 @@ export default function () {
       {
         values: theme('transitionProperty'),
         variants: variants('transitionProperty'),
-        type: 'lookup',
+        type: 'any',
       }
     )
   }
