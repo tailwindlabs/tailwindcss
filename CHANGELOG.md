@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet.
+### Fixed
+
+- Improve accessibility of default link focus styles in Firefox ([#5082](https://github.com/tailwindlabs/tailwindcss/pull/5082))
 
 ## [2.2.7] - 2021-07-23
 
