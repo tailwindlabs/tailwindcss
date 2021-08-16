@@ -10,6 +10,7 @@ import wrapWithVariants from '../util/wrapWithVariants'
 import cloneNodes from '../util/cloneNodes'
 import transformThemeValue from './transformThemeValue'
 import nameClass from '../util/nameClass'
+import isKeyframeRule from '../util/isKeyframeRule'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
@@ -26,10 +27,6 @@ function wrapWithLayer(rules, layer) {
       params: layer,
     })
     .append(cloneNodes(Array.isArray(rules) ? rules : [rules]))
-}
-
-function isKeyframeRule(rule) {
-  return rule.parent && rule.parent.type === 'atrule' && /keyframes$/.test(rule.parent.name)
 }
 
 export default function (plugins, config) {

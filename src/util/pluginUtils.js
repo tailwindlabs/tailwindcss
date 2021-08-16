@@ -3,6 +3,7 @@ import postcss from 'postcss'
 import createColor from 'color'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
+import isKeyframeRule from './isKeyframeRule'
 
 export function applyPseudoToMarker(selector, marker, state, join) {
   let states = [state]
@@ -72,6 +73,9 @@ export function updateLastClasses(selectors, updateClass) {
 export function transformAllSelectors(transformSelector, { wrap, withRule } = {}) {
   return ({ container }) => {
     container.walkRules((rule) => {
+      if (isKeyframeRule(rule)) {
+        return rule
+      }
       let transformed = rule.selector.split(',').map(transformSelector).join(',')
       rule.selector = transformed
       if (withRule) {

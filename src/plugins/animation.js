@@ -11,7 +11,6 @@ export default function () {
             {
               [`@keyframes ${prefixName(key)}`]: value,
             },
-            { respectVariants: false },
           ],
         ]
       })
