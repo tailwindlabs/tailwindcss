@@ -70,13 +70,28 @@ export function updateLastClasses(selectors, updateClass) {
   return result
 }
 
+function splitByNotEscapedCommas(str) {
+  let chunks = []
+  let currentChunk = ''
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === ',' && str[i - 1] !== '\\') {
+      chunks.push(currentChunk)
+      currentChunk = ''
+    } else {
+      currentChunk += str[i]
+    }
+  }
+  chunks.push(currentChunk)
+  return chunks
+}
+
 export function transformAllSelectors(transformSelector, { wrap, withRule } = {}) {
   return ({ container }) => {
     container.walkRules((rule) => {
       if (isKeyframeRule(rule)) {
         return rule
       }
-      let transformed = rule.selector.split(',').map(transformSelector).join(',')
+      let transformed = splitByNotEscapedCommas(rule.selector).map(transformSelector).join(',')
       rule.selector = transformed
       if (withRule) {
         withRule(rule)
