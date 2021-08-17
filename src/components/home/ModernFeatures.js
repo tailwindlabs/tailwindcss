@@ -57,7 +57,7 @@ const lines = {
 </div>
 `).lines,
   transforms: tokenizeWithLines.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4">
-  <div class="transform scale-110 -rotate-6">
+  <div class="[transform scale-110 -rotate-6]">
     1
   </div>
   <div class="col-start-3 [transform scale-75 rotate-6 translate-x-2 translate-y-15]">
