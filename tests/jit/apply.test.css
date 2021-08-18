@@ -323,10 +323,12 @@ h2 {
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
 .important-modifier-variant {
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
 .important-modifier-variant:hover {
   border-radius: 0.375rem !important;
 }
