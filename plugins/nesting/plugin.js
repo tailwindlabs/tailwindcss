@@ -9,7 +9,7 @@ module.exports = function nesting(opts = postcssNested) {
     })
 
     root.walkAtRules('apply', (rule) => {
-      rule.before(postcss.decl({ prop: '__apply', value: rule.params }))
+      rule.before(postcss.decl({ prop: '__apply', value: rule.params, source: rule.source }))
       rule.remove()
     })
 
@@ -32,7 +32,7 @@ module.exports = function nesting(opts = postcssNested) {
     postcss([plugin]).process(root, result.opts).sync()
 
     root.walkDecls('__apply', (decl) => {
-      decl.before(postcss.atRule({ name: 'apply', params: decl.value }))
+      decl.before(postcss.atRule({ name: 'apply', params: decl.value, source: decl.source }))
       decl.remove()
     })
 
