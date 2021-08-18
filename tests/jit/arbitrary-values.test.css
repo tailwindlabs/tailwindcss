@@ -260,6 +260,12 @@
 .stroke-\[\#da5b66\] {
   stroke: #da5b66;
 }
+.object-\[50\%\2c 50\%\] {
+  object-position: 50% 50%;
+}
+.object-\[top\2c right\] {
+  object-position: top right;
+}
 .object-\[var\(--position\)\] {
   object-position: var(--position);
 }
