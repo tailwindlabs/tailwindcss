@@ -22,18 +22,32 @@
 .col-start-\[7\] {
   grid-column-start: 7;
 }
+.col-start-\[span\2c 2\] {
+  grid-column-start: span 2;
+}
 .col-end-\[7\] {
   grid-column-end: 7;
 }
-
+.col-end-\[span\2c 2\] {
+  grid-column-end: span 2;
+}
 .row-\[7\] {
   grid-row: 7;
+}
+.row-\[span\2c 7\2c \/\2c span\2c 7\] {
+  grid-row: span 7 / span 7;
 }
 .row-start-\[7\] {
   grid-row-start: 7;
 }
+.row-start-\[span\2c 2\] {
+  grid-row-start: span 2;
+}
 .row-end-\[7\] {
   grid-row-end: 7;
+}
+.row-end-\[span\2c 2\] {
+  grid-row-end: span 2;
 }
 .m-\[7px\] {
   margin: 7px;
@@ -156,6 +170,18 @@
 .skew-y-\[3px\] {
   --tw-skew-y: 3px;
   transform: var(--tw-transform);
+}
+.auto-cols-\[auto\2c min-content\] {
+  grid-auto-columns: auto min-content;
+}
+.auto-cols-\[minmax\(100px\2c auto\)\2c minmax\(max-content\2c 2fr\)\] {
+  grid-auto-columns: minmax(100px, auto) minmax(max-content, 2fr);
+}
+.auto-rows-\[auto\2c min-content\] {
+  grid-auto-rows: auto min-content;
+}
+.auto-rows-\[minmax\(100px\2c auto\)\2c minmax\(max-content\2c 2fr\)\] {
+  grid-auto-rows: minmax(100px, auto) minmax(max-content, 2fr);
 }
 .grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
   grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
