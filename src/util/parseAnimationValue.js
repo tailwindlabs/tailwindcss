@@ -20,9 +20,10 @@ const DIGIT = /^(\d+)$/
 
 export default function parseAnimationValue(input) {
   let animations = input.split(COMMA)
-  let result = animations.map((animation) => {
-    let result = {}
-    let parts = animation.trim().split(SPACE)
+  return animations.map((animation) => {
+    let value = animation.trim()
+    let result = { value }
+    let parts = value.split(SPACE)
     let seen = new Set()
 
     for (let part of parts) {
@@ -58,6 +59,4 @@ export default function parseAnimationValue(input) {
 
     return result
   })
-
-  return animations.length > 1 ? result : result[0]
 }

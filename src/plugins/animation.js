@@ -19,18 +19,23 @@ export default function () {
     matchUtilities(
       {
         animate: (value, { includeRules }) => {
-          let { name: animationName } = parseAnimationValue(value)
+          let animations = parseAnimationValue(value)
 
-          if (keyframes[animationName] !== undefined) {
-            includeRules(keyframes[animationName], { respectImportant: false })
-          }
-
-          if (animationName === undefined || keyframes[animationName] === undefined) {
-            return { animation: value }
+          for (let { name } of animations) {
+            if (keyframes[name] !== undefined) {
+              includeRules(keyframes[name], { respectImportant: false })
+            }
           }
 
           return {
-            animation: value.replace(animationName, prefixName(animationName)),
+            animation: animations
+              .map(({ name, value }) => {
+                if (name === undefined || keyframes[name] === undefined) {
+                  return value
+                }
+                return value.replace(name, prefixName(name))
+              })
+              .join(', '),
           }
         },
       },
