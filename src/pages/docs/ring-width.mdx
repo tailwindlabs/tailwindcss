@@ -9,6 +9,9 @@ import { Disabling } from '@/components/Disabling'
 
 export const classes = {
   plugin,
+  filterRules: ([selector]) => {
+    return selector.startsWith('.')
+  },
   transformProperties: ({ selector, properties }) => {
     if (selector === '.ring-inset') {
       return {'--tw-ring-inset': 'inset'}
@@ -22,6 +25,15 @@ export const classes = {
     properties['box-shadow'] = properties['--tw-ring-shadow']
     delete properties['--tw-ring-shadow']
     return properties
+  },
+  sort: (classes) => {
+    return [...classes].sort((a, b) => {
+      a = a === '.ring' ? '.ring-3' : a
+      b = b === '.ring' ? '.ring-3' : b
+      if (a < b) return -1
+      if (b < a) return 1
+      return 0
+    })
   }
 }
 

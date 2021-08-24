@@ -112,6 +112,7 @@ function stringifyProperties(
 export const ClassTable = memo(
   ({
     plugin,
+    filterRules = () => true,
     filterProperties,
     preview,
     sort = (x) => x,
@@ -120,10 +121,11 @@ export const ClassTable = memo(
     transformValue,
     custom,
   }) => {
-    const utilities = {}
+    let utilities = {}
     castArray(plugin).forEach((p) => {
       Object.assign(utilities, getUtilities(p))
     })
+    utilities = Object.fromEntries(Object.entries(utilities).filter(filterRules))
 
     return (
       <div className="border-b border-gray-200 overflow-hidden relative">
