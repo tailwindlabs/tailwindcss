@@ -70,7 +70,7 @@
     "postcss": "^8.0.9"
   },
   "dependencies": {
-    "arg": "^5.0.0",
+    "arg": "^5.0.1",
     "bytes": "^3.0.0",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
