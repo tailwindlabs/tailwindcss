@@ -21,7 +21,6 @@
     <div class="w-[var(--width)]"></div>
     <div class="w-[var(--width,calc(100%+1rem))]"></div>
     <div class="w-[calc(100%/3-1rem*2)]"></div>
-    <div class="w-[do-not-generate-this]w-[it-is-invalid-syntax]"></div>
     <div class="min-w-[3.23rem]"></div>
     <div class="min-w-[calc(100%+1rem)]"></div>
     <div class="min-w-[var(--width)]"></div>
@@ -117,5 +116,33 @@
     <div class="delay-[var(--delay)]"></div>
     <div class="content-['hello']"></div>
     <div class="content-[attr(content-before)]"></div>
+
+    <!-- Balancing issues, this is not checking the validity of the actual value, but purely syntax-wise -->
+    <div class="w-[do-not-generate-this]w-[it-is-invalid-syntax]"></div><!-- INVALID -->
+    <div class="grid-cols-[[linename],1fr,auto]"></div><!-- VALID -->
+    <div class="w-[{}]"></div><!-- VALID -->
+    <div class="w-[{{}}]"></div><!-- VALID -->
+    <div class="w-[[]]"></div><!-- VALID -->
+    <div class="w-[[[]]]"></div><!-- VALID -->
+    <div class="w-[()]"></div><!-- VALID -->
+    <div class="w-[(())]"></div><!-- VALID -->
+    <div class="w-[][]"></div><!-- INVALID -->
+    <div class="w-[)(]"></div><!-- INVALID -->
+    <div class="w-[}{]"></div><!-- INVALID -->
+    <div class="w-[][]]"></div><!-- INVALID -->
+    <div class="w-[)()]"></div><!-- INVALID -->
+    <div class="w-[}{}]"></div><!-- INVALID -->
+    <div class="w-['][]']"></div><!-- VALID -->
+    <div class="w-[')()']"></div><!-- VALID -->
+    <div class="w-['}{}']"></div><!-- VALID -->
+    <div class="w-[[']']]"></div><!-- VALID -->
+    <div class="w-[(')')]"></div><!-- VALID -->
+    <div class="w-[{'}'}]"></div><!-- VALID -->
+    <div class="w-[{[}]]"></div><!-- INVALID -->
+    <div class="w-[[{]}]"></div><!-- INVALID -->
+    <div class="w-[{(})]"></div><!-- INVALID -->
+    <div class="w-[({)}]"></div><!-- INVALID -->
+    <div class="w-[([)]]"></div><!-- INVALID -->
+    <div class="w-[[(])]"></div><!-- INVALID -->
   </body>
 </html>
