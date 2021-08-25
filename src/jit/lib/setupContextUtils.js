@@ -125,6 +125,34 @@ function withIdentifiers(styles) {
   })
 }
 
+function isValidArbitraryValue(value) {
+  if (value === undefined) {
+    return true
+  }
+
+  // When an arbitrary value contans `[]` then it is probably invalid, unless
+  // it is properly escaped. Or it is content that exists between quotes.
+  // E.g.: w-[this-is]w-[weird-and-invalid]
+  // E.g.: w-[this-is\\]w-\\[weird-but-valid]
+  // E.g.: content-['this-is-also-valid]-weirdly-enough']
+  let inQuotes = false
+  for (let i = 0; i < value.length; i++) {
+    if (['"', "'", '`'].includes(value[i])) {
+      inQuotes = !inQuotes
+    }
+
+    if (inQuotes) continue
+
+    if (value[i] === '[' || value[i] === ']') {
+      if (value[i - 1] !== '\\') {
+        return false
+      }
+    }
+  }
+
+  return true
+}
+
 function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets }) {
   function getConfigValue(path, defaultValue) {
     return path ? dlv(tailwindConfig, path, defaultValue) : tailwindConfig
@@ -268,6 +296,10 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           let { type = 'any' } = options
           type = [].concat(type)
           let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
+
+          if (!isValidArbitraryValue(value)) {
+            return []
+          }
 
           if (!type.includes(coercedType) || value === undefined) {
             return []
