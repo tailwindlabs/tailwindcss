@@ -52,7 +52,7 @@
     "@vercel/ncc": "^0.29.2",
     "autoprefixer": "^10.3.1",
     "babel-jest": "^27.0.6",
-    "clean-css": "^5.1.4",
+    "clean-css": "^5.1.5",
     "cross-env": "^7.0.3",
     "cssnano": "^5.0.8",
     "eslint": "^7.32.0",
