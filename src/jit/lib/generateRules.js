@@ -17,6 +17,9 @@ function getClassNameFromSelector(selector) {
 // ['ring-offset-blue', '100']
 // ['ring-offset', 'blue-100']
 // ['ring', 'offset-blue-100']
+// Example with dynamic classes:
+// ['grid-cols', '[[linename],1fr,auto]']
+// ['grid', 'cols-[[linename],1fr,auto]']
 function* candidatePermutations(candidate, lastIndex = Infinity) {
   if (lastIndex < 0) {
     return
@@ -25,7 +28,7 @@ function* candidatePermutations(candidate, lastIndex = Infinity) {
   let dashIdx
 
   if (lastIndex === Infinity && candidate.endsWith(']')) {
-    let bracketIdx = candidate.lastIndexOf('[')
+    let bracketIdx = candidate.indexOf('[')
 
     // If character before `[` isn't a dash or a slash, this isn't a dynamic class
     // eg. string[]
