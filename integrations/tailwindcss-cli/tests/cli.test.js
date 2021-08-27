@@ -12,7 +12,7 @@ let EXECUTABLE = 'node ../../lib/cli.js'
 
 describe('Build command', () => {
   test('--output', async () => {
-    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await writeInputFile('index.html', html`<div class="font-bold shadow"></div>`)
 
     await $(`${EXECUTABLE} --output ./dist/main.css`)
 
