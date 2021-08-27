@@ -12,7 +12,7 @@ let EXECUTABLE = 'node ../../lib/cli.js'
 
 describe('Build command', () => {
   test('--output', async () => {
-    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await writeInputFile('index.html', html`<div class="font-bold shadow"></div>`)
 
     await $(`${EXECUTABLE} --output ./dist/main.css`)
 
@@ -258,7 +258,7 @@ describe('Build command', () => {
 
     expect(combined).toMatchInlineSnapshot(`
       "
-      tailwindcss v2.2.4
+      tailwindcss v2.2.8
 
       Usage:
          tailwindcss build [options]
@@ -348,7 +348,7 @@ describe('Init command', () => {
 
     expect(combined).toMatchInlineSnapshot(`
       "
-      tailwindcss v2.2.4
+      tailwindcss v2.2.8
 
       Usage:
          tailwindcss init [options]
