@@ -106,9 +106,9 @@ function applyVariant(variant, matches, context) {
     let variantFunctionTuples = context.variantMap.get(variant)
     let result = []
 
-    for (let [{ sort, layer, options }, rule] of matches) {
-      if (options.respectVariants === false) {
-        result.push([{ sort, layer, options }, rule])
+    for (let [meta, rule] of matches) {
+      if (meta.options.respectVariants === false) {
+        result.push([meta, rule])
         continue
       }
 
@@ -144,7 +144,7 @@ function applyVariant(variant, matches, context) {
           continue
         }
 
-        let withOffset = [{ sort: variantSort | sort, layer, options }, clone.nodes[0]]
+        let withOffset = [{ ...meta, sort: variantSort | meta.sort }, clone.nodes[0]]
         result.push(withOffset)
       }
     }
