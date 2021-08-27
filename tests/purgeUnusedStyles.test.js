@@ -20,6 +20,16 @@ function suppressConsoleLogs(cb, type = 'warn') {
   }
 }
 
+function dropTailwindHeader(css) {
+  let [header, ...lines] = css.split('\n')
+
+  expect(
+    /\/*! tailwindcss v\d*\.\d*\.\d* \| MIT License \| https:\/\/tailwindcss.com \*\//g.test(header)
+  ).toBe(true)
+
+  return lines.join('\n')
+}
+
 function extractRules(root) {
   let rules = []
 
@@ -450,7 +460,7 @@ test(
           'utf8'
         )
 
-        expect(result.css).toMatchCss(expected)
+        expect(dropTailwindHeader(result.css)).toMatchCss(dropTailwindHeader(expected))
       })
   })
 )
@@ -477,7 +487,7 @@ test('does not purge if the array is empty', () => {
             'utf8'
           )
 
-          expect(result.css).toMatchCss(expected)
+          expect(dropTailwindHeader(result.css)).toMatchCss(dropTailwindHeader(expected))
         })
     })
   )
@@ -502,7 +512,7 @@ test('does not purge if explicitly disabled', () => {
             'utf8'
           )
 
-          expect(result.css).toMatchCss(expected)
+          expect(dropTailwindHeader(result.css)).toMatchCss(dropTailwindHeader(expected))
         })
     })
   )
@@ -527,7 +537,7 @@ test('does not purge if purge is simply false', () => {
             'utf8'
           )
 
-          expect(result.css).toMatchCss(expected)
+          expect(dropTailwindHeader(result.css)).toMatchCss(dropTailwindHeader(expected))
         })
     })
   )
