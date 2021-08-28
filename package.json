@@ -75,7 +75,7 @@
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
     "color": "^4.0.1",
-    "cosmiconfig": "^7.0.0",
+    "cosmiconfig": "^7.0.1",
     "detective": "^5.2.0",
     "didyoumean": "^1.2.2",
     "dlv": "^1.1.3",
