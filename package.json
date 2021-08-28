@@ -50,7 +50,7 @@
     "@babel/preset-env": "^7.15.0",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "@vercel/ncc": "^0.29.2",
-    "autoprefixer": "^10.3.1",
+    "autoprefixer": "^10.3.3",
     "babel-jest": "^27.0.6",
     "clean-css": "^5.1.5",
     "cross-env": "^7.0.3",
