@@ -8,8 +8,17 @@ function run(input, config = {}) {
   })
 }
 
+function css(templates) {
+  return templates.join('')
+}
+
+function html(templates) {
+  return templates.join('')
+}
+
 test('font-size utilities can include a default line-height', () => {
   const config = {
+    purge: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
@@ -24,16 +33,25 @@ test('font-size utilities can include a default line-height', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(`
-     .text-sm { font-size: 12px }
-     .text-md { font-size: 16px; line-height: 24px }
-     .text-lg { font-size: 20px; line-height: 28px }
+    expect(result.css).toMatchCss(css`
+      .text-sm {
+        font-size: 12px;
+      }
+      .text-md {
+        font-size: 16px;
+        line-height: 24px;
+      }
+      .text-lg {
+        font-size: 20px;
+        line-height: 28px;
+      }
     `)
   })
 })
 
 test('font-size utilities can include a default letter-spacing', () => {
   const config = {
+    purge: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
@@ -48,16 +66,25 @@ test('font-size utilities can include a default letter-spacing', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(`
-     .text-sm { font-size: 12px }
-     .text-md { font-size: 16px; letter-spacing: -0.01em }
-     .text-lg { font-size: 20px; letter-spacing: -0.02em }
+    expect(result.css).toMatchCss(css`
+      .text-sm {
+        font-size: 12px;
+      }
+      .text-md {
+        font-size: 16px;
+        letter-spacing: -0.01em;
+      }
+      .text-lg {
+        font-size: 20px;
+        letter-spacing: -0.02em;
+      }
     `)
   })
 })
 
 test('font-size utilities can include a default line-height and letter-spacing', () => {
   const config = {
+    purge: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
@@ -72,10 +99,20 @@ test('font-size utilities can include a default line-height and letter-spacing',
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(`
-     .text-sm { font-size: 12px }
-     .text-md { font-size: 16px; line-height: 24px; letter-spacing: -0.01em }
-     .text-lg { font-size: 20px; line-height: 28px; letter-spacing: -0.02em }
+    expect(result.css).toMatchCss(css`
+      .text-sm {
+        font-size: 12px;
+      }
+      .text-md {
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: -0.01em;
+      }
+      .text-lg {
+        font-size: 20px;
+        line-height: 28px;
+        letter-spacing: -0.02em;
+      }
     `)
   })
 })

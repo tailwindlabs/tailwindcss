@@ -5,139 +5,124 @@ import tailwind from '../src/index'
 import { cjsConfigFile, defaultConfigFile } from '../src/constants'
 import inTempDirectory from '../jest/runInTempDirectory'
 
+// NOTE: If we ever want to abstract this logic, then we have to watch out
+// because in most tests we default to an empty object here. However, in this
+// tests we do want to check the difference between no config (undefined) and a
+// config (empty object or full object).
+function run(input, config /* Undefined is important in this case */) {
+  return postcss(tailwind(config)).process(input, {
+    from: path.resolve(__filename),
+  })
+}
+
+function css(templates) {
+  return templates.join('')
+}
+
+function html(templates) {
+  return templates.join('')
+}
+
+function javascript(templates) {
+  return templates.join('')
+}
+
 test('it uses the values from the custom config file', () => {
-  return postcss([tailwind(path.resolve(`${__dirname}/fixtures/custom-config.js`))])
-    .process(
-      `
-        @responsive {
-          .foo {
-            color: blue;
-          }
+  let config = require(path.resolve(`${__dirname}/fixtures/custom-config.js`))
+
+  let content = css`
+    @tailwind utilities;
+  `
+
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 400px) {
+        .mobile\\:font-bold {
+          font-weight: 700;
         }
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .foo {
-          color: blue;
-        }
-        @media (min-width: 400px) {
-          .mobile\\:foo {
-            color: blue;
-          }
-        }
-      `
-      expect(result.css).toMatchCss(expected)
-    })
+      }
+    `)
+  })
 })
 
 test('custom config can be passed as an object', () => {
-  return postcss([
-    tailwind({
+  let config = {
+    purge: [{ raw: html`<div class="mobile:font-bold"></div>` }],
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+  }
+
+  let content = css`
+    @tailwind utilities;
+  `
+
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 400px) {
+        .mobile\\:font-bold {
+          font-weight: 700;
+        }
+      }
+    `)
+  })
+})
+
+test('custom config path can be passed using `config` property in an object', () => {
+  let config = {
+    config: path.resolve(`${__dirname}/fixtures/custom-config.js`),
+  }
+
+  let content = css`
+    @tailwind utilities;
+  `
+
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 400px) {
+        .mobile\\:font-bold {
+          font-weight: 700;
+        }
+      }
+    `)
+  })
+})
+
+test('custom config can be passed under the `config` property', () => {
+  let config = {
+    config: {
+      purge: [{ raw: html`<div class="mobile:font-bold"></div>` }],
       theme: {
         screens: {
           mobile: '400px',
         },
       },
-    }),
-  ])
-    .process(
-      `
-        @responsive {
-          .foo {
-            color: blue;
-          }
-        }
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .foo {
-          color: blue;
-        }
-        @media (min-width: 400px) {
-          .mobile\\:foo {
-            color: blue;
-          }
-        }
-      `
+    },
+  }
 
-      expect(result.css).toMatchCss(expected)
-    })
-})
+  let content = css`
+    @tailwind utilities;
+  `
 
-test('custom config path can be passed using `config` property in an object', () => {
-  return postcss([tailwind({ config: path.resolve(`${__dirname}/fixtures/custom-config.js`) })])
-    .process(
-      `
-        @responsive {
-          .foo {
-            color: blue;
-          }
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 400px) {
+        .mobile\\:font-bold {
+          font-weight: 700;
         }
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .foo {
-          color: blue;
-        }
-        @media (min-width: 400px) {
-          .mobile\\:foo {
-            color: blue;
-          }
-        }
-      `
-      expect(result.css).toMatchCss(expected)
-    })
-})
-
-test('custom config can be passed under the `config` property', () => {
-  return postcss([
-    tailwind({
-      config: {
-        theme: {
-          screens: {
-            mobile: '400px',
-          },
-        },
-      },
-    }),
-  ])
-    .process(
-      `
-        @responsive {
-          .foo {
-            color: blue;
-          }
-        }
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .foo {
-          color: blue;
-        }
-        @media (min-width: 400px) {
-          .mobile\\:foo {
-            color: blue;
-          }
-        }
-      `
-
-      expect(result.css).toMatchCss(expected)
-    })
+      }
+    `)
+  })
 })
 
 test('tailwind.config.cjs is picked up by default', () => {
   return inTempDirectory(() => {
     fs.writeFileSync(
       path.resolve(cjsConfigFile),
-      `module.exports = {
+      javascript`module.exports = {
+        purge: [{ raw: '<div class="mobile:font-bold"></div>' }],
         theme: {
           screens: {
             mobile: '400px',
@@ -146,29 +131,19 @@ test('tailwind.config.cjs is picked up by default', () => {
       }`
     )
 
-    return postcss([tailwind])
-      .process(
-        `
-          @responsive {
-            .foo {
-              color: blue;
-            }
+    let content = css`
+      @tailwind utilities;
+    `
+
+    return run(content).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        @media (min-width: 400px) {
+          .mobile\\:font-bold {
+            font-weight: 700;
           }
-        `,
-        { from: undefined }
-      )
-      .then((result) => {
-        expect(result.css).toMatchCss(`
-          .foo {
-            color: blue;
-          }
-          @media (min-width: 400px) {
-            .mobile\\:foo {
-              color: blue;
-            }
-          }
-        `)
-      })
+        }
+      `)
+    })
   })
 })
 
@@ -176,7 +151,8 @@ test('tailwind.config.js is picked up by default', () => {
   return inTempDirectory(() => {
     fs.writeFileSync(
       path.resolve(defaultConfigFile),
-      `module.exports = {
+      javascript`module.exports = {
+        purge: [{ raw: '<div class="mobile:font-bold"></div>' }],
         theme: {
           screens: {
             mobile: '400px',
@@ -185,29 +161,19 @@ test('tailwind.config.js is picked up by default', () => {
       }`
     )
 
-    return postcss([tailwind])
-      .process(
-        `
-          @responsive {
-            .foo {
-              color: blue;
-            }
+    let content = css`
+      @tailwind utilities;
+    `
+
+    return run(content).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        @media (min-width: 400px) {
+          .mobile\\:font-bold {
+            font-weight: 700;
           }
-        `,
-        { from: undefined }
-      )
-      .then((result) => {
-        expect(result.css).toMatchCss(`
-          .foo {
-            color: blue;
-          }
-          @media (min-width: 400px) {
-            .mobile\\:foo {
-              color: blue;
-            }
-          }
-        `)
-      })
+        }
+      `)
+    })
   })
 })
 
@@ -215,7 +181,8 @@ test('tailwind.config.cjs is picked up by default when passing an empty object',
   return inTempDirectory(() => {
     fs.writeFileSync(
       path.resolve(cjsConfigFile),
-      `module.exports = {
+      javascript`module.exports = {
+        purge: [{ raw: '<div class="mobile:font-bold"></div>' }],
         theme: {
           screens: {
             mobile: '400px',
@@ -224,29 +191,19 @@ test('tailwind.config.cjs is picked up by default when passing an empty object',
       }`
     )
 
-    return postcss([tailwind({})])
-      .process(
-        `
-          @responsive {
-            .foo {
-              color: blue;
-            }
+    let content = css`
+      @tailwind utilities;
+    `
+
+    return run(content, {}).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        @media (min-width: 400px) {
+          .mobile\\:font-bold {
+            font-weight: 700;
           }
-        `,
-        { from: undefined }
-      )
-      .then((result) => {
-        expect(result.css).toMatchCss(`
-          .foo {
-            color: blue;
-          }
-          @media (min-width: 400px) {
-            .mobile\\:foo {
-              color: blue;
-            }
-          }
-        `)
-      })
+        }
+      `)
+    })
   })
 })
 
@@ -254,7 +211,8 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
   return inTempDirectory(() => {
     fs.writeFileSync(
       path.resolve(defaultConfigFile),
-      `module.exports = {
+      javascript`module.exports = {
+        purge: [{ raw: '<div class="mobile:font-bold"></div>' }],
         theme: {
           screens: {
             mobile: '400px',
@@ -263,300 +221,240 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
       }`
     )
 
-    return postcss([tailwind({})])
-      .process(
-        `
-          @responsive {
-            .foo {
-              color: blue;
-            }
+    let content = css`
+      @tailwind utilities;
+    `
+
+    return run(content, {}).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        @media (min-width: 400px) {
+          .mobile\\:font-bold {
+            font-weight: 700;
           }
-        `,
-        { from: undefined }
-      )
-      .then((result) => {
-        expect(result.css).toMatchCss(`
-          .foo {
-            color: blue;
-          }
-          @media (min-width: 400px) {
-            .mobile\\:foo {
-              color: blue;
-            }
-          }
-        `)
-      })
+        }
+      `)
+    })
   })
 })
 
 test('the default config can be overridden using the presets key', () => {
-  return postcss([
-    tailwind({
-      presets: [
-        {
-          theme: {
-            extend: {
-              minHeight: {
-                24: '24px',
-              },
-            },
-          },
-          corePlugins: ['minHeight'],
-          variants: { minHeight: [] },
+  let config = {
+    purge: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    presets: [
+      {
+        theme: {
+          extend: { minHeight: { secondary: '24px' } },
         },
-      ],
-      theme: {
-        extend: { minHeight: { 48: '48px' } },
       },
-    }),
-  ])
-    .process(
-      `
-        @tailwind utilities
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .min-h-0 {
-          min-height: 0px;
-        }
-        .min-h-24 {
-          min-height: 24px;
-        }
-        .min-h-48 {
-          min-height: 48px;
-        }
-        .min-h-full {
-          min-height: 100%;
-        }
-        .min-h-screen {
-          min-height: 100vh;
-        }
-      `
+    ],
+    theme: {
+      extend: { minHeight: { primary: '48px' } },
+    },
+  }
 
-      expect(result.css).toMatchCss(expected)
-    })
+  let content = css`
+    @tailwind utilities;
+  `
+
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .min-h-0 {
+        min-height: 0px;
+      }
+      .min-h-primary {
+        min-height: 48px;
+      }
+      .min-h-secondary {
+        min-height: 24px;
+      }
+    `)
+  })
 })
 
 test('presets can be functions', () => {
-  return postcss([
-    tailwind({
-      presets: [
-        () => ({
-          theme: {
-            extend: {
-              minHeight: {
-                24: '24px',
-              },
-            },
-          },
-          corePlugins: ['minHeight'],
-          variants: { minHeight: [] },
-        }),
-      ],
-      theme: {
-        extend: { minHeight: { 48: '48px' } },
-      },
-    }),
-  ])
-    .process(
-      `
-        @tailwind utilities
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .min-h-0 {
-          min-height: 0px;
-        }
-        .min-h-24 {
-          min-height: 24px;
-        }
-        .min-h-48 {
-          min-height: 48px;
-        }
-        .min-h-full {
-          min-height: 100%;
-        }
-        .min-h-screen {
-          min-height: 100vh;
-        }
-      `
+  let config = {
+    purge: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    presets: [
+      () => ({
+        theme: {
+          extend: { minHeight: { secondary: '24px' } },
+        },
+      }),
+    ],
+    theme: {
+      extend: { minHeight: { primary: '48px' } },
+    },
+  }
 
-      expect(result.css).toMatchCss(expected)
-    })
+  let content = css`
+    @tailwind utilities;
+  `
+
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .min-h-0 {
+        min-height: 0px;
+      }
+      .min-h-primary {
+        min-height: 48px;
+      }
+      .min-h-secondary {
+        min-height: 24px;
+      }
+    `)
+  })
 })
 
 test('the default config can be removed by using an empty presets key in a preset', () => {
-  return postcss([
-    tailwind({
-      presets: [
-        {
-          presets: [],
-          theme: {
-            extend: {
-              minHeight: {
-                24: '24px',
-              },
-            },
-          },
-          corePlugins: ['minHeight'],
-          variants: { minHeight: [] },
+  let config = {
+    purge: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    presets: [
+      {
+        presets: [],
+        theme: {
+          extend: { minHeight: { secondary: '24px' } },
         },
-      ],
-      theme: {
-        extend: { minHeight: { 48: '48px' } },
       },
-    }),
-  ])
-    .process(
-      `
-        @tailwind utilities
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .min-h-24 {
-          min-height: 24px;
-        }
-        .min-h-48 {
-          min-height: 48px;
-        }
-      `
+    ],
+    theme: {
+      extend: { minHeight: { primary: '48px' } },
+    },
+  }
 
-      expect(result.css).toMatchCss(expected)
-    })
+  let content = css`
+    @tailwind utilities;
+  `
+
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .min-h-primary {
+        min-height: 48px;
+      }
+      .min-h-secondary {
+        min-height: 24px;
+      }
+    `)
+  })
 })
 
 test('presets can have their own presets', () => {
-  return postcss([
-    tailwind({
-      presets: [
-        {
-          presets: [],
-          theme: {
-            colors: { red: '#dd0000' },
-          },
+  let config = {
+    purge: [{ raw: html`<div class="bg-transparent bg-black bg-white bg-red"></div>` }],
+    presets: [
+      {
+        presets: [],
+        theme: {
+          colors: { red: '#dd0000' },
         },
-        {
-          presets: [
-            {
-              presets: [],
-              theme: {
-                colors: {
-                  transparent: 'transparent',
-                  red: '#ff0000',
-                },
-              },
-            },
-          ],
-          theme: {
-            extend: {
-              colors: {
-                black: 'black',
-                red: '#ee0000',
-              },
-              backgroundColor: (theme) => theme('colors'),
-            },
-          },
-          corePlugins: ['backgroundColor'],
-        },
-      ],
-      theme: {
-        extend: { colors: { white: 'white' } },
       },
-    }),
-  ])
-    .process(
-      `
-        @tailwind utilities
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .bg-transparent {
-          background-color: transparent;
-        }
-        .bg-red {
-          background-color: #ee0000;
-        }
-        .bg-black {
-          background-color: black;
-        }
-        .bg-white {
-          background-color: white;
-        }
-      `
+      {
+        presets: [
+          {
+            presets: [],
+            theme: {
+              colors: {
+                transparent: 'transparent',
+                red: '#ff0000',
+              },
+            },
+          },
+        ],
+        theme: {
+          extend: {
+            colors: {
+              black: 'black',
+              red: '#ee0000',
+            },
+            backgroundColor: (theme) => theme('colors'),
+          },
+        },
+        corePlugins: ['backgroundColor'],
+      },
+    ],
+    theme: {
+      extend: { colors: { white: 'white' } },
+    },
+  }
 
-      expect(result.css).toMatchCss(expected)
-    })
+  let content = css`
+    @tailwind utilities;
+  `
+
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-transparent {
+        background-color: transparent;
+      }
+      .bg-black {
+        background-color: black;
+      }
+      .bg-white {
+        background-color: white;
+      }
+      .bg-red {
+        background-color: #ee0000;
+      }
+    `)
+  })
 })
 
 test('function presets can be mixed with object presets', () => {
-  return postcss([
-    tailwind({
-      presets: [
-        () => ({
-          presets: [],
-          theme: {
-            colors: { red: '#dd0000' },
-          },
-        }),
-        {
-          presets: [
-            () => ({
-              presets: [],
-              theme: {
-                colors: {
-                  transparent: 'transparent',
-                  red: '#ff0000',
-                },
-              },
-            }),
-          ],
-          theme: {
-            extend: {
-              colors: {
-                black: 'black',
-                red: '#ee0000',
-              },
-              backgroundColor: (theme) => theme('colors'),
-            },
-          },
-          corePlugins: ['backgroundColor'],
+  let config = {
+    purge: [{ raw: html`<div class="bg-transparent bg-black bg-white bg-red"></div>` }],
+    presets: [
+      () => ({
+        presets: [],
+        theme: {
+          colors: { red: '#dd0000' },
         },
-      ],
-      theme: {
-        extend: { colors: { white: 'white' } },
+      }),
+      {
+        presets: [
+          () => ({
+            presets: [],
+            theme: {
+              colors: {
+                transparent: 'transparent',
+                red: '#ff0000',
+              },
+            },
+          }),
+        ],
+        theme: {
+          extend: {
+            colors: {
+              black: 'black',
+              red: '#ee0000',
+            },
+            backgroundColor: (theme) => theme('colors'),
+          },
+        },
+        corePlugins: ['backgroundColor'],
       },
-    }),
-  ])
-    .process(
-      `
-        @tailwind utilities
-      `,
-      { from: undefined }
-    )
-    .then((result) => {
-      const expected = `
-        .bg-transparent {
-          background-color: transparent;
-        }
-        .bg-red {
-          background-color: #ee0000;
-        }
-        .bg-black {
-          background-color: black;
-        }
-        .bg-white {
-          background-color: white;
-        }
-      `
+    ],
+    theme: {
+      extend: { colors: { white: 'white' } },
+    },
+  }
 
-      expect(result.css).toMatchCss(expected)
-    })
+  let content = css`
+    @tailwind utilities;
+  `
+
+  return run(content, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-transparent {
+        background-color: transparent;
+      }
+      .bg-black {
+        background-color: black;
+      }
+      .bg-white {
+        background-color: white;
+      }
+      .bg-red {
+        background-color: #ee0000;
+      }
+    `)
+  })
 })
