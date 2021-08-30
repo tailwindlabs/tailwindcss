@@ -47,7 +47,16 @@ export function updateAllClasses(selectors, updateClass) {
 export function updateLastClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
     selectors.each((sel) => {
-      let lastClass = sel.filter(({ type }) => type === 'class').pop()
+      // Find the last class that is not part of a "combined" selector.
+      // E.g.:
+      // .a .b .c -> this should result in `.c`
+      // .a .b.c -> this should result in `.b`
+      let lastClass = sel
+        .filter(({ type }) => type === 'class')
+        .reverse()
+        .find(({ source }, idx, all) => {
+          return !all[idx + 1] || source.start.column - all[idx + 1].source.end.column > 1
+        })
 
       if (lastClass === undefined) {
         return

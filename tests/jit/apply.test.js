@@ -231,3 +231,56 @@ test('@apply error with nested @anyatrulehere', async () => {
     '@apply is not supported within nested at-rules like @genie'
   )
 })
+
+test('@apply with custom variant that contain an additional `.class` at the end', async () => {
+  let config = {
+    mode: 'jit',
+    darkMode: 'class',
+    purge: [{ raw: 'foo bar baz' }],
+    corePlugins: { preflight: false },
+    plugins: [
+      function ({ addVariant, e }) {
+        addVariant('class', ({ modifySelectors, separator }) => {
+          modifySelectors(({ className }) => {
+            return `.${e(`class${separator}${className}`)}.class`
+          })
+        })
+      },
+    ],
+  }
+
+  let content = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo {
+        @apply class:hidden;
+      }
+      .bar {
+        @apply sm:class:hidden;
+      }
+      .baz {
+        @apply dark:sm:class:hidden;
+      }
+    }
+  `
+
+  let expected = css`
+    .foo.class {
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .bar.class {
+        display: none;
+      }
+
+      .dark .baz.class {
+        display: none;
+      }
+    }
+  `
+
+  expect((await run(content, config)).css).toMatchFormattedCss(expected)
+})

@@ -16,8 +16,17 @@
 .foo .foo\:hover\:font-bold:hover {
   font-weight: 700;
 }
+.bar\:font-bold.bar-parent {
+  font-weight: 700;
+}
+.bar\:foo\:markdown.bar-parent {
+  margin-top: 12px;
+}
 @media (min-width: 640px) {
   .foo .sm\:foo\:font-bold {
+    font-weight: 700;
+  }
+  .sm\:bar\:font-bold.bar-parent {
     font-weight: 700;
   }
 }

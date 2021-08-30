@@ -4,6 +4,10 @@ import path from 'path'
 import tailwind from '../../src/jit/index.js'
 import selectorParser from 'postcss-selector-parser'
 
+function css(templates) {
+  return templates.join(' ')
+}
+
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
     from: path.resolve(__filename),
@@ -30,10 +34,18 @@ test('modify selectors', () => {
           })
         })
       },
+
+      function ({ addVariant, e }) {
+        addVariant('bar', ({ modifySelectors, separator }) => {
+          modifySelectors(({ className }) => {
+            return `.${e(`bar${separator}${className}`)}.bar-parent`
+          })
+        })
+      },
     ],
   }
 
-  let css = `
+  let content = css`
     @tailwind components;
     @tailwind utilities;
 
@@ -44,7 +56,7 @@ test('modify selectors', () => {
     }
   `
 
-  return run(css, config).then((result) => {
+  return run(content, config).then((result) => {
     let expectedPath = path.resolve(__dirname, './modify-selectors.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
