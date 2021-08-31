@@ -266,7 +266,6 @@ describe('Build command', () => {
          -i, --input              Input file
          -o, --output             Output file
          -w, --watch              Watch for changes and rebuild as needed
-             --jit                Build using JIT mode
              --purge              Content paths to use for removing unused classes
              --postcss            Load custom PostCSS configuration
          -m, --minify             Minify the output
@@ -297,34 +296,6 @@ describe('Init command', () => {
     expect((await readOutputFile('../full.config.js')).split('\n').length).toBeGreaterThan(50)
   })
 
-  test('--jit', async () => {
-    cleanupFile('with-jit.config.js')
-
-    let { combined } = await $(`${EXECUTABLE} init with-jit.config.js --jit`)
-
-    expect(combined).toMatchInlineSnapshot(`
-      "
-      Created Tailwind CSS config file: with-jit.config.js
-      "
-    `)
-
-    expect(await readOutputFile('../with-jit.config.js')).toContain("mode: 'jit'")
-  })
-
-  test('--full, --jit', async () => {
-    cleanupFile('full-with-jit.config.js')
-
-    let { combined } = await $(`${EXECUTABLE} init full-with-jit.config.js --jit --full`)
-
-    expect(combined).toMatchInlineSnapshot(`
-      "
-      Created Tailwind CSS config file: full-with-jit.config.js
-      "
-    `)
-
-    expect(await readOutputFile('../full-with-jit.config.js')).toContain("mode: 'jit'")
-  })
-
   test('--postcss', async () => {
     expect(await fileExists('postcss.config.js')).toBe(true)
     await removeFile('postcss.config.js')
@@ -353,7 +324,6 @@ describe('Init command', () => {
          tailwindcss init [options]
 
       Options:
-             --jit                Initialize for JIT mode
          -f, --full               Initialize a full \`tailwind.config.js\` file
          -p, --postcss            Initialize a \`postcss.config.js\` file
          -h, --help               Display usage information

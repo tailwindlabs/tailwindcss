@@ -126,7 +126,6 @@ let commands = {
   init: {
     run: init,
     args: {
-      '--jit': { type: Boolean, description: 'Initialize for JIT mode' },
       '--full': { type: Boolean, description: 'Initialize a full `tailwind.config.js` file' },
       '--postcss': { type: Boolean, description: 'Initialize a `postcss.config.js` file' },
       '-f': '--full',
@@ -139,7 +138,6 @@ let commands = {
       '--input': { type: String, description: 'Input file' },
       '--output': { type: String, description: 'Output file' },
       '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
-      '--jit': { type: Boolean, description: 'Build using JIT mode' },
       '--purge': { type: String, description: 'Content paths to use for removing unused classes' },
       '--postcss': {
         type: oneOf(String, Boolean),
@@ -306,15 +304,6 @@ function init() {
     // Change colors import
     stubFile = stubFile.replace('../colors', 'tailwindcss/colors')
 
-    // --jit mode
-    if (args['--jit']) {
-      // Add jit mode
-      stubFile = stubFile.replace('module.exports = {', "module.exports = {\n  mode: 'jit',")
-
-      // Deleting variants
-      stubFile = stubFile.replace(/variants: {(.*)},\n  /gs, '')
-    }
-
     fs.writeFileSync(tailwindConfigLocation, stubFile, 'utf8')
 
     messages.push(`Created Tailwind CSS config file: ${path.basename(tailwindConfigLocation)}`)
@@ -424,10 +413,6 @@ async function build() {
         enabled: true,
         content: args['--purge'].split(/(?<!{[^}]+),/),
       }
-    }
-
-    if (args['--jit']) {
-      resolvedConfig.mode = 'jit'
     }
 
     return resolvedConfig
