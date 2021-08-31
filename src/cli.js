@@ -9,8 +9,7 @@ import fs from 'fs'
 import postcssrc from 'postcss-load-config'
 import { cosmiconfig } from 'cosmiconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
-import tailwindJit from './jit/processTailwindFeatures'
-import tailwindAot from './processTailwindFeatures'
+import tailwind from './jit/processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
 import fastGlob from 'fast-glob'
 import getModuleDependencies from './lib/getModuleDependencies'
@@ -481,26 +480,18 @@ async function build() {
     let config = resolveConfig()
     let changedContent = getChangedContent(config)
 
-    let tailwindPlugin =
-      config.mode === 'jit'
-        ? () => {
-            return {
-              postcssPlugin: 'tailwindcss',
-              Once(root, { result }) {
-                tailwindJit(({ createContext }) => {
-                  return () => {
-                    return createContext(config, changedContent)
-                  }
-                })(root, result)
-              },
+    let tailwindPlugin = () => {
+      return {
+        postcssPlugin: 'tailwindcss',
+        Once(root, { result }) {
+          tailwind(({ createContext }) => {
+            return () => {
+              return createContext(config, changedContent)
             }
-          }
-        : () => {
-            return {
-              postcssPlugin: 'tailwindcss',
-              plugins: [tailwindAot(() => config, configPath)],
-            }
-          }
+          })(root, result)
+        },
+      }
+    }
 
     tailwindPlugin.postcss = true
 
@@ -622,39 +613,31 @@ async function build() {
     async function rebuild(config) {
       env.DEBUG && console.time('Finished in')
 
-      let tailwindPlugin =
-        config.mode === 'jit'
-          ? () => {
-              return {
-                postcssPlugin: 'tailwindcss',
-                Once(root, { result }) {
-                  env.DEBUG && console.time('Compiling CSS')
-                  tailwindJit(({ createContext }) => {
-                    console.error()
-                    console.error('Rebuilding...')
+      let tailwindPlugin = () => {
+        return {
+          postcssPlugin: 'tailwindcss',
+          Once(root, { result }) {
+            env.DEBUG && console.time('Compiling CSS')
+            tailwind(({ createContext }) => {
+              console.error()
+              console.error('Rebuilding...')
 
-                    return () => {
-                      if (context !== null) {
-                        context.changedContent = changedContent.splice(0)
-                        return context
-                      }
+              return () => {
+                if (context !== null) {
+                  context.changedContent = changedContent.splice(0)
+                  return context
+                }
 
-                      env.DEBUG && console.time('Creating context')
-                      context = createContext(config, changedContent.splice(0))
-                      env.DEBUG && console.timeEnd('Creating context')
-                      return context
-                    }
-                  })(root, result)
-                  env.DEBUG && console.timeEnd('Compiling CSS')
-                },
+                env.DEBUG && console.time('Creating context')
+                context = createContext(config, changedContent.splice(0))
+                env.DEBUG && console.timeEnd('Creating context')
+                return context
               }
-            }
-          : () => {
-              return {
-                postcssPlugin: 'tailwindcss',
-                plugins: [tailwindAot(() => config, configPath)],
-              }
-            }
+            })(root, result)
+            env.DEBUG && console.timeEnd('Compiling CSS')
+          },
+        }
+      }
 
       tailwindPlugin.postcss = true
 
