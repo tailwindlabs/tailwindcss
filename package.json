@@ -28,8 +28,6 @@
     "test:integrations": "npm run test --prefix ./integrations",
     "install:integrations": "node scripts/install-integrations.js",
     "posttest": "npm run style",
-    "compat": "node scripts/compat.js --prepare",
-    "compat:restore": "node scripts/compat.js --restore",
     "generate:plugin-list": "babel-node scripts/create-plugin-list.js"
   },
   "files": [
