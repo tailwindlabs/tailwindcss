@@ -105,7 +105,6 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
           module.exports = {
             purge: ['./src/index.html'],
             mode: 'jit',
-            darkMode: false, // or 'media' or 'class'
             theme: {
               extend: {
                 screens: {
@@ -239,7 +238,6 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
             safelist: ['bg-red-500','bg-red-600']
           },
           mode: 'jit',
-          darkMode: false, // or 'media' or 'class'
           theme: {
             extend: {
             },

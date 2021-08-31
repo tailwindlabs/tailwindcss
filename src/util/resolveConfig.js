@@ -260,7 +260,6 @@ export default function resolveConfig(configs) {
   const allConfigs = [
     ...extractPluginConfigs(configs),
     {
-      darkMode: false,
       prefix: '',
       important: false,
       separator: ':',

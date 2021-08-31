@@ -37,7 +37,6 @@ describe('static build', () => {
             safelist: ['bg-red-500','bg-red-600']
           },
           mode: 'jit',
-          darkMode: false, // or 'media' or 'class'
           theme: {
             extend: {
             },
@@ -214,7 +213,6 @@ describe('watcher', () => {
           module.exports = {
             purge: ['./src/index.html'],
             mode: 'jit',
-            darkMode: false, // or 'media' or 'class'
             theme: {
               extend: {
                 screens: {

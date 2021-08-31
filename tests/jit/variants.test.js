@@ -13,10 +13,6 @@ function css(templates) {
   return templates.join('')
 }
 
-function html(templates) {
-  return templates.join('')
-}
-
 test('variants', () => {
   let config = {
     darkMode: 'class',
@@ -38,58 +34,6 @@ test('variants', () => {
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
-  })
-})
-
-test('dark mode class variant', () => {
-  let config = {
-    darkMode: 'class',
-    mode: 'jit',
-    purge: [{ raw: html`<div class="dark:font-bold"></div>` }],
-    corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
-  }
-
-  let input = css`
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-  `
-
-  return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
-      .dark .dark\\:font-bold {
-        font-weight: 700;
-      }
-    `)
-  })
-})
-
-test('dark mode media variant', () => {
-  let config = {
-    darkMode: 'media',
-    mode: 'jit',
-    purge: [{ raw: html`<div class="dark:font-bold"></div>` }],
-    corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
-  }
-
-  let input = css`
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-  `
-
-  return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
-      @media (prefers-color-scheme: dark) {
-        .dark\\:font-bold {
-          font-weight: 700;
-        }
-      }
-    `)
   })
 })
 

@@ -10,6 +10,7 @@ import {
   transformAllClasses,
   transformLastClasses,
 } from '../util/pluginUtils'
+import log from '../util/log'
 
 export default {
   pseudoElementVariants: function ({ config, addVariant }) {
@@ -265,7 +266,16 @@ export default {
     )
   },
   darkVariants: function ({ config, addVariant }) {
-    if (config('darkMode') === 'class') {
+    let mode = config('darkMode', 'media')
+    if (mode === false) {
+      mode = 'media'
+      log.warn([
+        '`darkMode` is set to `false` in your config.',
+        'This will behave just like the `media` value.',
+      ])
+    }
+
+    if (mode === 'class') {
       addVariant(
         'dark',
         transformAllSelectors((selector) => {
@@ -282,7 +292,7 @@ export default {
           return `${darkSelector} ${variantSelector}`
         })
       )
-    } else if (config('darkMode') === 'media') {
+    } else if (mode === 'media') {
       addVariant(
         'dark',
         transformLastClasses(

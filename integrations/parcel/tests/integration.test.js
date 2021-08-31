@@ -129,7 +129,6 @@ describe.skip('watcher', () => {
           module.exports = {
             purge: ['./src/index.html'],
             mode: 'jit',
-            darkMode: false, // or 'media' or 'class'
             theme: {
               extend: {
                 screens: {
