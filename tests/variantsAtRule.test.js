@@ -11,9 +11,6 @@ function run(input, opts = config) {
   })
 }
 
-// TODO: Make sure to convert @hover to a @layer utilities, and warn in
-// the console.
-
 test('it can generate hover variants', () => {
   const input = `
     @variants hover {

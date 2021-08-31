@@ -1,3 +1,5 @@
+import log from '../../util/log'
+
 export default function normalizeTailwindDirectives(root) {
   let tailwindDirectives = new Set()
   let layerDirectives = new Set()
@@ -38,6 +40,11 @@ export default function normalizeTailwindDirectives(root) {
     }
 
     if (['layer', 'responsive', 'variants'].includes(atRule.name)) {
+      if (['responsive', 'variants'].includes(atRule.name)) {
+        log.warn([
+          `'@${atRule.name}' is deprecated, use '@layer utilities' or '@layer components' instead.`,
+        ])
+      }
       layerDirectives.add(atRule)
     }
   })

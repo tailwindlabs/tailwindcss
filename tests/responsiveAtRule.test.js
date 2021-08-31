@@ -6,9 +6,6 @@ function run(input, opts = config) {
   return postcss([plugin(opts)]).process(input, { from: undefined })
 }
 
-// TODO: Make sure to convert @responsive to a @layer utilities, and warn in
-// the console.
-
 test('it can generate responsive variants', () => {
   const input = `
     @responsive {
