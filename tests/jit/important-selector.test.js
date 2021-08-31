@@ -13,7 +13,6 @@ test('important selector', () => {
   let config = {
     important: '#app',
     darkMode: 'class',
-    mode: 'jit',
     purge: [path.resolve(__dirname, './important-selector.test.html')],
     corePlugins: { preflight: false },
     theme: {},

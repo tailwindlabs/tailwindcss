@@ -16,7 +16,6 @@ function css(templates) {
 test('variants', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
     purge: [path.resolve(__dirname, './variants.test.html')],
     corePlugins: { preflight: false },
     theme: {},
@@ -39,7 +38,6 @@ test('variants', () => {
 
 test('stacked peer variants', async () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: 'peer-disabled:peer-focus:peer-hover:border-blue-500' }],
     corePlugins: { preflight: false },
     theme: {},

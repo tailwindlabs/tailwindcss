@@ -16,7 +16,6 @@ test('raw content', () => {
   let tailwind = require('../../src/jit/index.js').default
 
   let config = {
-    mode: 'jit',
     purge: [{ raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8') }],
     corePlugins: { preflight: false },
     theme: {},
@@ -40,7 +39,6 @@ test('raw content with extension', () => {
   let tailwind = require('../../src/jit/index.js').default
 
   let config = {
-    mode: 'jit',
     purge: {
       content: [
         {

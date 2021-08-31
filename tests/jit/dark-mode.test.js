@@ -19,7 +19,6 @@ function html(templates) {
 it('should be possible to use the darkMode "class" mode', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
     purge: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
     theme: {},
@@ -44,7 +43,6 @@ it('should be possible to use the darkMode "class" mode', () => {
 it('should be possible to use the darkMode "media" mode', () => {
   let config = {
     darkMode: 'media',
-    mode: 'jit',
     purge: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
     theme: {},
@@ -70,7 +68,6 @@ it('should be possible to use the darkMode "media" mode', () => {
 
 it('should default to the `media` mode when no mode is provided', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
     theme: {},
@@ -96,7 +93,6 @@ it('should default to the `media` mode when no mode is provided', () => {
 
 it('should default to the `media` mode when mode is set to `false`', () => {
   let config = {
-    mode: 'jit',
     darkMode: false,
     purge: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },

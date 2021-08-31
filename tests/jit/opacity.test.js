@@ -9,7 +9,6 @@ function run(input, config = {}) {
 
 test('opacity', () => {
   let config = {
-    mode: 'jit',
     darkMode: 'class',
     purge: [path.resolve(__dirname, './opacity.test.html')],
     corePlugins: {

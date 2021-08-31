@@ -116,16 +116,12 @@ describe('Build command', () => {
     let customConfig = `module.exports = ${JSON.stringify(
       {
         purge: ['./src/index.html'],
-        mode: 'jit',
         theme: {
           extend: {
             fontWeight: {
               bold: 'BOLD',
             },
           },
-        },
-        variants: {
-          extend: {},
         },
         corePlugins: {
           preflight: false,

@@ -11,7 +11,6 @@ function run(input, config = {}) {
 
 test('collapse adjacent rules', () => {
   let config = {
-    mode: 'jit',
     purge: [path.resolve(__dirname, './collapse-adjacent-rules.test.html')],
     corePlugins: { preflight: false },
     theme: {},

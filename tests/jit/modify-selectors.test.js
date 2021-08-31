@@ -13,7 +13,6 @@ function run(input, config = {}) {
 test('modify selectors', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
     purge: [path.resolve(__dirname, './modify-selectors.test.html')],
     corePlugins: { preflight: false },
     theme: {},

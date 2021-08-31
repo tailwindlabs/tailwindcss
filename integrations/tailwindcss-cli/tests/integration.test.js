@@ -36,13 +36,9 @@ describe('static build', () => {
             content: ['./src/index.html'],
             safelist: ['bg-red-500','bg-red-600']
           },
-          mode: 'jit',
           theme: {
             extend: {
             },
-          },
-          variants: {
-            extend: {},
           },
           corePlugins: {
             preflight: false,
@@ -212,7 +208,6 @@ describe('watcher', () => {
         javascript`
           module.exports = {
             purge: ['./src/index.html'],
-            mode: 'jit',
             theme: {
               extend: {
                 screens: {
@@ -222,9 +217,6 @@ describe('watcher', () => {
                   bold: 'bold'
                 }
               },
-            },
-            variants: {
-              extend: {},
             },
             corePlugins: {
               preflight: false,

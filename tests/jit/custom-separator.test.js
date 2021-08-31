@@ -12,7 +12,6 @@ function run(input, config = {}) {
 test('custom separator', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
     purge: [path.resolve(__dirname, './custom-separator.test.html')],
     separator: '_',
     corePlugins: {},
@@ -33,7 +32,6 @@ test('custom separator', () => {
 test('dash is not supported', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
     purge: [{ raw: 'lg-hover-font-bold' }],
     separator: '-',
     corePlugins: {},

@@ -13,7 +13,6 @@ function run(input, config = {}) {
 
 test('basic parallel variants', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: '<div class="font-normal hover:test:font-black test:font-bold test:font-medium"></div>',

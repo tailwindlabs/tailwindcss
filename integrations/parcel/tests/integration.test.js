@@ -128,7 +128,6 @@ describe.skip('watcher', () => {
         javascript`
           module.exports = {
             purge: ['./src/index.html'],
-            mode: 'jit',
             theme: {
               extend: {
                 screens: {
@@ -138,9 +137,6 @@ describe.skip('watcher', () => {
                   bold: 'bold'
                 }
               },
-            },
-            variants: {
-              extend: {},
             },
             corePlugins: {
               preflight: false,

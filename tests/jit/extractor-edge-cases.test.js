@@ -12,7 +12,6 @@ function run(input, config = {}) {
 
 test('PHP arrays', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: `<h1 class="<?php echo wrap(['class' => "max-w-[16rem]"]); ?>">Hello world</h1>`,
@@ -35,7 +34,6 @@ test('PHP arrays', async () => {
 
 test('arbitrary values with quotes', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: `<div class="content-['hello]']"></div>`,

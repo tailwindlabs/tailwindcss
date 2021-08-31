@@ -14,7 +14,6 @@ function run(input, config = {}) {
 test('@apply', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
     purge: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     theme: {},

@@ -12,7 +12,6 @@ function run(input, config = {}) {
 test('basic usage', () => {
   let config = {
     purge: [path.resolve(__dirname, './svelte-syntax.test.svelte')],
-    mode: 'jit',
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

@@ -13,7 +13,6 @@ function run(input, config = {}) {
 test('using @layer without @tailwind', async () => {
   let config = {
     purge: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
-    mode: 'jit',
     theme: {},
     plugins: [],
   }
@@ -34,7 +33,6 @@ test('using @layer without @tailwind', async () => {
 test('using @responsive without @tailwind', async () => {
   let config = {
     purge: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
-    mode: 'jit',
     theme: {},
     plugins: [],
   }
@@ -55,7 +53,6 @@ test('using @responsive without @tailwind', async () => {
 test('using @variants without @tailwind', async () => {
   let config = {
     purge: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
-    mode: 'jit',
     theme: {},
     plugins: [],
   }
@@ -76,7 +73,6 @@ test('using @variants without @tailwind', async () => {
 test('non-Tailwind @layer rules are okay', async () => {
   let config = {
     purge: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
-    mode: 'jit',
     theme: {},
     plugins: [],
   }

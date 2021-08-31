@@ -19,7 +19,6 @@ function html(templates) {
 
 test('options are not required', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="container"></div>` }],
   }
 
@@ -63,7 +62,6 @@ test('options are not required', () => {
 
 test('screens can be passed explicitly', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
@@ -97,7 +95,6 @@ test('screens can be passed explicitly', () => {
 
 test('screens are ordered ascending by min-width', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
@@ -131,7 +128,6 @@ test('screens are ordered ascending by min-width', () => {
 
 test('screens are deduplicated by min-width', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
@@ -169,7 +165,6 @@ test('screens are deduplicated by min-width', () => {
 
 test('the container can be centered by default', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
@@ -220,7 +215,6 @@ test('the container can be centered by default', () => {
 
 test('horizontal padding can be included by default', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
@@ -271,7 +265,6 @@ test('horizontal padding can be included by default', () => {
 
 test('responsive horizontal padding can be included by default', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="container"></div>` }],
     theme: {
       screens: {
@@ -334,7 +327,6 @@ test('responsive horizontal padding can be included by default', () => {
 
 test('setting all options at once', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
@@ -374,7 +366,6 @@ test('setting all options at once', () => {
 
 test('container can use variants', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: html`<div class="lg:hover:container"></div>` }],
     theme: {
       container: {

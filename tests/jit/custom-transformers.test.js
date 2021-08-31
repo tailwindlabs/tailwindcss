@@ -19,7 +19,6 @@ const css = `
 
 test('transform function', () => {
   let config = {
-    mode: 'jit',
     purge: {
       content: [{ raw: '<div class="uppercase"></div>' }],
       transform: customTransformer,
@@ -39,7 +38,6 @@ test('transform function', () => {
 
 test('transform.DEFAULT', () => {
   let config = {
-    mode: 'jit',
     purge: {
       content: [{ raw: '<div class="uppercase"></div>' }],
       transform: {
@@ -61,7 +59,6 @@ test('transform.DEFAULT', () => {
 
 test('transform.{extension}', () => {
   let config = {
-    mode: 'jit',
     purge: {
       content: [
         { raw: '<div class="uppercase"></div>', extension: 'html' },

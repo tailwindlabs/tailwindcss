@@ -12,7 +12,6 @@ function run(input, config = {}) {
 test('using @import instead of @tailwind', () => {
   let config = {
     purge: [path.resolve(__dirname, './import-syntax.test.html')],
-    mode: 'jit',
     corePlugins: { preflight: false },
     theme: {},
     plugins: [

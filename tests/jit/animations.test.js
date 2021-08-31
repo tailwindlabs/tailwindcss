@@ -10,7 +10,6 @@ function run(input, config = {}) {
 
 test('basic', () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: `
@@ -64,7 +63,6 @@ test('basic', () => {
 
 test('custom', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: `<div class="animate-one"></div>` }],
     theme: {
       extend: {
@@ -96,7 +94,6 @@ test('custom', () => {
 
 test('custom prefixed', () => {
   let config = {
-    mode: 'jit',
     prefix: 'tw-',
     purge: [{ raw: `<div class="tw-animate-one"></div>` }],
     theme: {
@@ -129,7 +126,6 @@ test('custom prefixed', () => {
 
 test('multiple', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: `<div class="animate-multiple"></div>` }],
     theme: {
       extend: {
@@ -169,7 +165,6 @@ test('multiple', () => {
 
 test('multiple custom', () => {
   let config = {
-    mode: 'jit',
     purge: [{ raw: `<div class="animate-multiple"></div>` }],
     theme: {
       extend: {

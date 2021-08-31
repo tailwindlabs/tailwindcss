@@ -18,7 +18,6 @@ function html(templates) {
 
 test('custom user-land utilities', () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: html`<div

@@ -15,7 +15,6 @@ function css(templates) {
 
 test('basic usage', () => {
   let config = {
-    mode: 'jit',
     purge: [path.resolve(__dirname, './basic-usage.test.html')],
     corePlugins: { preflight: false },
     theme: {},

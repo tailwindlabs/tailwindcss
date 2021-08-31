@@ -12,7 +12,6 @@ function run(input, config = {}) {
 
 test('basic color opacity modifier', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: '<div class="bg-red-500/50"></div>',
@@ -35,7 +34,6 @@ test('basic color opacity modifier', async () => {
 
 test('colors with slashes are matched first', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: '<div class="bg-red-500/50"></div>',
@@ -65,7 +63,6 @@ test('colors with slashes are matched first', async () => {
 
 test('arbitrary color opacity modifier', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: 'bg-red-500/[var(--opacity)]',
@@ -88,7 +85,6 @@ test('arbitrary color opacity modifier', async () => {
 
 test('missing alpha generates nothing', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: '<div class="bg-red-500/"></div>',
@@ -107,7 +103,6 @@ test('missing alpha generates nothing', async () => {
 
 test('values not in the opacity config are ignored', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: '<div class="bg-red-500/29"></div>',
@@ -134,7 +129,6 @@ test('values not in the opacity config are ignored', async () => {
 
 test('function colors are supported', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: '<div class="bg-blue/50"></div>',
@@ -163,7 +157,6 @@ test('function colors are supported', async () => {
 
 test('utilities that support any type are supported', async () => {
   let config = {
-    mode: 'jit',
     purge: [
       {
         raw: `

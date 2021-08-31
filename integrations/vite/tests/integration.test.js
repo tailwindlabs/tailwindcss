@@ -133,7 +133,6 @@ describe('watcher', () => {
       javascript`
         module.exports = {
           purge: ['./index.html'],
-          mode: 'jit',
           theme: {
             extend: {
               screens: {
@@ -143,9 +142,6 @@ describe('watcher', () => {
                 bold: 'bold'
               }
             },
-          },
-          variants: {
-            extend: {},
           },
           corePlugins: {
             preflight: false,

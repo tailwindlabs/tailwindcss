@@ -13,7 +13,6 @@ test('important boolean', () => {
   let config = {
     important: true,
     darkMode: 'class',
-    mode: 'jit',
     purge: [path.resolve(__dirname, './important-boolean.test.html')],
     corePlugins: { preflight: false },
     theme: {},

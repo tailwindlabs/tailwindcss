@@ -15,7 +15,6 @@ function css(templates) {
 test('relative purge paths', () => {
   let config = {
     purge: ['./tests/jit/relative-purge-paths.test.html'],
-    mode: 'jit',
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

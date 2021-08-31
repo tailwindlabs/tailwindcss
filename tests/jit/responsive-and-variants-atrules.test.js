@@ -12,7 +12,6 @@ function run(input, config = {}) {
 test('responsive and variants atrules', () => {
   let config = {
     purge: [path.resolve(__dirname, './responsive-and-variants-atrules.test.html')],
-    mode: 'jit',
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
