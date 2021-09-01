@@ -48,6 +48,12 @@
 .mt-\[clamp\(30px\2c 100px\)\] {
   margin-top: clamp(30px, 100px);
 }
+.aspect-\[16\/9\] {
+  aspect-ratio: 16 / 9;
+}
+.aspect-\[var\(--aspect\)\] {
+  aspect-ratio: var(--aspect);
+}
 .h-\[3\.23rem\] {
   height: 3.23rem;
 }
