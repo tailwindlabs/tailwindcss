@@ -1,25 +1,8 @@
-import createColor from 'color'
+import * as culori from 'culori'
 import _ from 'lodash'
 
-function hasAlpha(color) {
-  return (
-    color.startsWith('rgba(') ||
-    color.startsWith('hsla(') ||
-    (color.startsWith('#') && color.length === 9) ||
-    (color.startsWith('#') && color.length === 5)
-  )
-}
-
-export function toRgba(color) {
-  const [r, g, b, a] = createColor(color).rgb().array()
-
-  return [r, g, b, a === undefined && hasAlpha(color) ? 1 : a]
-}
-
-export function toHsla(color) {
-  const [h, s, l, a] = createColor(color).hsl().array()
-
-  return [h, `${s}%`, `${l}%`, a === undefined && hasAlpha(color) ? 1 : a]
+function isValidColor(color) {
+  return culori.parse(color) !== undefined
 }
 
 export function withAlphaValue(color, alphaValue, defaultValue) {
@@ -27,13 +10,33 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
     return color({ opacityValue: alphaValue })
   }
 
-  try {
-    const isHSL = color.startsWith('hsl')
-    const [i, j, k] = isHSL ? toHsla(color) : toRgba(color)
-    return `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, ${alphaValue})`
-  } catch {
-    return defaultValue
+  if (isValidColor(color)) {
+    // Parse color
+    const parsed = culori.parse(color)
+
+    // Apply alpha value
+    parsed.alpha = alphaValue
+
+    // Format string
+    let value
+    if (parsed.mode === 'hsl') {
+      value = culori.formatHsl(parsed)
+    } else {
+      value = culori.formatRgb(parsed)
+    }
+
+    // Correctly apply CSS variable alpha value
+    if (typeof alphaValue === 'string' && alphaValue.startsWith('var(') && value.endsWith('NaN)')) {
+      value = value.replace('NaN)', `${alphaValue})`)
+    }
+
+    // Color could not be formatted correctly
+    if (!value.includes('NaN')) {
+      return value
+    }
   }
+
+  return defaultValue
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
@@ -44,24 +47,29 @@ export default function withAlphaVariable({ color, property, variable }) {
     }
   }
 
-  try {
-    const isHSL = color.startsWith('hsl')
+  if (isValidColor(color)) {
+    const parsed = culori.parse(color)
 
-    const [i, j, k, a] = isHSL ? toHsla(color) : toRgba(color)
-
-    if (a !== undefined) {
+    if ('alpha' in parsed) {
+      // Has an alpha value, return color as-is
       return {
         [property]: color,
       }
     }
 
+    const formatFn = parsed.mode === 'hsl' ? 'formatHsl' : 'formatRgb'
+    const value = culori[formatFn]({
+      ...parsed,
+      alpha: NaN, // intentionally set to `NaN` for replacing
+    }).replace('NaN)', `var(${variable}))`)
+
     return {
       [variable]: '1',
-      [property]: `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, var(${variable}))`,
+      [property]: value,
     }
-  } catch (error) {
-    return {
-      [property]: color,
-    }
+  }
+
+  return {
+    [property]: color,
   }
 }

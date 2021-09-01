@@ -7,6 +7,16 @@ test('it adds the right custom property', () => {
     '--tw-text-opacity': '1',
     color: 'rgba(255, 0, 0, var(--tw-text-opacity))',
   })
+  expect(
+    withAlphaVariable({
+      color: 'hsl(240 100% 50%)',
+      property: 'color',
+      variable: '--tw-text-opacity',
+    })
+  ).toEqual({
+    '--tw-text-opacity': '1',
+    color: 'hsla(240, 100%, 50%, var(--tw-text-opacity))',
+  })
 })
 
 test('it ignores colors that cannot be parsed', () => {
@@ -78,6 +88,15 @@ test('it ignores colors that already have an alpha channel', () => {
   })
   expect(
     withAlphaVariable({
+      color: 'rgba(255 255 255 / 0.5)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    'background-color': 'rgba(255 255 255 / 0.5)',
+  })
+  expect(
+    withAlphaVariable({
       color: 'hsla(240, 100%, 50%, 1)',
       property: 'background-color',
       variable: '--tw-bg-opacity',
@@ -93,6 +112,15 @@ test('it ignores colors that already have an alpha channel', () => {
     })
   ).toEqual({
     'background-color': 'hsla(240, 100%, 50%, 0.5)',
+  })
+  expect(
+    withAlphaVariable({
+      color: 'hsl(240 100% 50% / 0.5)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    'background-color': 'hsl(240 100% 50% / 0.5)',
   })
 })
 
@@ -132,7 +160,27 @@ test('it transforms rgb and hsl to rgba and hsla', () => {
   })
   expect(
     withAlphaVariable({
+      color: 'rgb(50 50 50)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'rgba(50, 50, 50, var(--tw-bg-opacity))',
+  })
+  expect(
+    withAlphaVariable({
       color: 'hsl(50, 50%, 50%)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'hsla(50, 50%, 50%, var(--tw-bg-opacity))',
+  })
+  expect(
+    withAlphaVariable({
+      color: 'hsl(50 50% 50%)',
       property: 'background-color',
       variable: '--tw-bg-opacity',
     })
