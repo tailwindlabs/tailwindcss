@@ -7,11 +7,11 @@ import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
 import normalizePath from 'normalize-path'
 
-import hash from '../../util/hashConfig'
-import log from '../../util/log'
-import getModuleDependencies from '../../lib/getModuleDependencies'
-import resolveConfig from '../../../resolveConfig'
-import resolveConfigPath from '../../util/resolveConfigPath'
+import hash from '../util/hashConfig'
+import log from '../util/log'
+import getModuleDependencies from '../lib/getModuleDependencies'
+import resolveConfig from '../../resolveConfig'
+import resolveConfigPath from '../util/resolveConfigPath'
 import { getContext } from './setupContextUtils'
 
 let warned = false

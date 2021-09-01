@@ -1,7 +1,7 @@
 import path from 'path'
 import postcss from 'postcss'
 
-import tailwind from '../src/jit'
+import tailwind from '../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {

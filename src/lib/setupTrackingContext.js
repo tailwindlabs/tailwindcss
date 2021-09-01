@@ -5,18 +5,18 @@ import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
 import normalizePath from 'normalize-path'
 
-import hash from '../../util/hashConfig'
-import getModuleDependencies from '../../lib/getModuleDependencies'
+import hash from '../util/hashConfig'
+import getModuleDependencies from '../lib/getModuleDependencies'
 
-import resolveConfig from '../../../resolveConfig'
+import resolveConfig from '../../resolveConfig'
 
-import resolveConfigPath from '../../util/resolveConfigPath'
+import resolveConfigPath from '../util/resolveConfigPath'
 
 import { env } from './sharedState'
 
 import { getContext, getFileModifiedMap } from './setupContextUtils'
-import parseDependency from '../../util/parseDependency'
-import log from '../../util/log'
+import parseDependency from '../util/parseDependency'
+import log from '../util/log'
 
 let warned = false
 function resolveContentPaths(config) {

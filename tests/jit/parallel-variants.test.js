@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 import { transformAllSelectors, updateAllClasses } from '../../src/util/pluginUtils.js'
 
 function run(input, config = {}) {

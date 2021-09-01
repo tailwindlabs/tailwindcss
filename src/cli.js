@@ -9,7 +9,7 @@ import fs from 'fs'
 import postcssrc from 'postcss-load-config'
 import { cosmiconfig } from 'cosmiconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
-import tailwind from './jit/processTailwindFeatures'
+import tailwind from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
 import fastGlob from 'fast-glob'
 import getModuleDependencies from './lib/getModuleDependencies'

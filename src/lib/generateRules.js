@@ -1,9 +1,9 @@
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
-import parseObjectStyles from '../../util/parseObjectStyles'
-import isPlainObject from '../../util/isPlainObject'
-import prefixSelector from '../../util/prefixSelector'
-import { updateAllClasses } from '../../util/pluginUtils'
+import parseObjectStyles from '../util/parseObjectStyles'
+import isPlainObject from '../util/isPlainObject'
+import prefixSelector from '../util/prefixSelector'
+import { updateAllClasses } from '../util/pluginUtils'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value

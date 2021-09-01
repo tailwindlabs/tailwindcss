@@ -1,7 +1,7 @@
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
-import bigSign from '../../util/bigSign'
-import cloneNodes from '../../util/cloneNodes'
+import bigSign from '../util/bigSign'
+import cloneNodes from '../util/cloneNodes'
 
 let env = sharedState.env
 let contentMatchCache = sharedState.contentMatchCache

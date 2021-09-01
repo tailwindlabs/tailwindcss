@@ -13,7 +13,7 @@ function run(tailwind, input, config = {}) {
 }
 
 test('raw content', () => {
-  let tailwind = require('../../src/jit/index.js').default
+  let tailwind = require('../../src')
 
   let config = {
     content: [{ raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8') }],
@@ -36,7 +36,7 @@ test('raw content', () => {
 })
 
 test('raw content with extension', () => {
-  let tailwind = require('../../src/jit/index.js').default
+  let tailwind = require('../../src')
 
   let config = {
     content: {

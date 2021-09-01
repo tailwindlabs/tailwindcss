@@ -1,7 +1,7 @@
 import postcss from 'postcss'
-import * as corePlugins from '../plugins'
-import buildMediaQuery from '../util/buildMediaQuery'
-import prefixSelector from '../util/prefixSelector'
+import * as corePlugins from './plugins'
+import buildMediaQuery from './util/buildMediaQuery'
+import prefixSelector from './util/prefixSelector'
 import {
   applyPseudoToMarker,
   updateLastClasses,
@@ -9,8 +9,8 @@ import {
   transformAllSelectors,
   transformAllClasses,
   transformLastClasses,
-} from '../util/pluginUtils'
-import log from '../util/log'
+} from './util/pluginUtils'
+import log from './util/log'
 
 export default {
   pseudoElementVariants: function ({ config, addVariant }) {

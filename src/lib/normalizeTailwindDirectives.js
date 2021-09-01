@@ -1,4 +1,4 @@
-import log from '../../util/log'
+import log from '../util/log'
 
 export default function normalizeTailwindDirectives(root) {
   let tailwindDirectives = new Set()
