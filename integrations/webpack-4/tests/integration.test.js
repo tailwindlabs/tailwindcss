@@ -103,7 +103,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            purge: ['./src/index.html'],
+            content: ['./src/index.html'],
             theme: {
               extend: {
                 screens: {

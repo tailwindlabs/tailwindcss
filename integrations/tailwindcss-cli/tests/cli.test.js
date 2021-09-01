@@ -115,7 +115,7 @@ describe('Build command', () => {
 
     let customConfig = `module.exports = ${JSON.stringify(
       {
-        purge: ['./src/index.html'],
+        content: ['./src/index.html'],
         theme: {
           extend: {
             fontWeight: {
@@ -262,7 +262,8 @@ describe('Build command', () => {
          -i, --input              Input file
          -o, --output             Output file
          -w, --watch              Watch for changes and rebuild as needed
-             --purge              Content paths to use for removing unused classes
+             --content            Content paths to use for removing unused classes
+             --purge              [DEPRECATED] Use \`--content\` instead
              --postcss            Load custom PostCSS configuration
          -m, --minify             Minify the output
          -c, --config             Path to a custom config file

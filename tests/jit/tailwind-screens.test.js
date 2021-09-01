@@ -12,7 +12,7 @@ function run(input, config = {}) {
 
 test('class variants are inserted at `@tailwind variants`', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: `font-bold hover:font-bold md:font-bold`,
       },
@@ -51,7 +51,7 @@ test('class variants are inserted at `@tailwind variants`', async () => {
 
 test('`@tailwind screens` works as an alias for `@tailwind variants`', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: `font-bold hover:font-bold md:font-bold`,
       },

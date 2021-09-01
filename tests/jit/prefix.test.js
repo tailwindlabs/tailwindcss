@@ -13,7 +13,7 @@ test('prefix', () => {
   let config = {
     prefix: 'tw-',
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './prefix.test.html')],
+    content: [path.resolve(__dirname, './prefix.test.html')],
     corePlugins: { preflight: false },
     theme: {
       animation: {

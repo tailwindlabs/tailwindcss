@@ -11,7 +11,7 @@ function run(input, config = {}) {
 
 test('collapse adjacent rules', () => {
   let config = {
-    purge: [path.resolve(__dirname, './collapse-adjacent-rules.test.html')],
+    content: [path.resolve(__dirname, './collapse-adjacent-rules.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

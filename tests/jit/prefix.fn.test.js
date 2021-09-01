@@ -18,7 +18,7 @@ test('prefix fn', () => {
 
       return ''
     },
-    purge: [path.resolve(__dirname, './prefix.fn.test.html')],
+    content: [path.resolve(__dirname, './prefix.fn.test.html')],
     corePlugins: { preflight: false },
     theme: {},
   }

@@ -16,7 +16,7 @@ function css(templates) {
 test('it works', () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './kitchen-sink.test.html')],
+    content: [path.resolve(__dirname, './kitchen-sink.test.html')],
     corePlugins: { preflight: false },
     theme: {
       extend: {

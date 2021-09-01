@@ -18,7 +18,7 @@ function html(templates) {
 
 test('custom user-land utilities', () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: html`<div
           class="uppercase focus:hover:align-chocolate align-banana hover:align-banana"

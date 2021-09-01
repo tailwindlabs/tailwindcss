@@ -25,7 +25,7 @@ function run(input, config = {}) {
 
 test.only('plugins mutating rules after tailwind doesnt break it', async () => {
   let config = {
-    purge: [path.resolve(__dirname, './mutable.test.html')],
+    content: [path.resolve(__dirname, './mutable.test.html')],
     theme: {
       backgroundImage: {
         foo: 'url("./foo.png")',

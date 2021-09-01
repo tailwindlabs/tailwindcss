@@ -18,7 +18,7 @@ function html(templates) {
 
 test('opacity variables are given to colors defined as closures', () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: html`<div
           class="text-primary text-secondary text-opacity-50 from-primary from-secondary via-primary via-secondary to-primary to-secondary"

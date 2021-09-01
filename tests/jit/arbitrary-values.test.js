@@ -9,7 +9,7 @@ function run(input, config = {}) {
 
 test('arbitrary values', () => {
   let config = {
-    purge: [path.resolve(__dirname, './arbitrary-values.test.html')],
+    content: [path.resolve(__dirname, './arbitrary-values.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

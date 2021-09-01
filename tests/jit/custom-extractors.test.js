@@ -23,7 +23,7 @@ const expected = fs.readFileSync(expectedPath, 'utf8')
 
 test('defaultExtractor', () => {
   let config = {
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       options: {
         defaultExtractor: customExtractor,
@@ -41,7 +41,7 @@ test('defaultExtractor', () => {
 
 test('extractors array', () => {
   let config = {
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       options: {
         extractors: [
@@ -64,7 +64,7 @@ test('extractors array', () => {
 
 test('extract function', () => {
   let config = {
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       extract: customExtractor,
     },
@@ -80,7 +80,7 @@ test('extract function', () => {
 
 test('extract.DEFAULT', () => {
   let config = {
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       extract: {
         DEFAULT: customExtractor,
@@ -98,7 +98,7 @@ test('extract.DEFAULT', () => {
 
 test('extract.{extension}', () => {
   let config = {
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       extract: {
         html: customExtractor,

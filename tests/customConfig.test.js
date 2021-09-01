@@ -47,7 +47,7 @@ test('it uses the values from the custom config file', () => {
 
 test('custom config can be passed as an object', () => {
   let config = {
-    purge: [{ raw: html`<div class="mobile:font-bold"></div>` }],
+    content: [{ raw: html`<div class="mobile:font-bold"></div>` }],
     theme: {
       screens: {
         mobile: '400px',
@@ -93,7 +93,7 @@ test('custom config path can be passed using `config` property in an object', ()
 test('custom config can be passed under the `config` property', () => {
   let config = {
     config: {
-      purge: [{ raw: html`<div class="mobile:font-bold"></div>` }],
+      content: [{ raw: html`<div class="mobile:font-bold"></div>` }],
       theme: {
         screens: {
           mobile: '400px',
@@ -122,7 +122,7 @@ test('tailwind.config.cjs is picked up by default', () => {
     fs.writeFileSync(
       path.resolve(cjsConfigFile),
       javascript`module.exports = {
-        purge: [{ raw: '<div class="mobile:font-bold"></div>' }],
+        content: [{ raw: '<div class="mobile:font-bold"></div>' }],
         theme: {
           screens: {
             mobile: '400px',
@@ -152,7 +152,7 @@ test('tailwind.config.js is picked up by default', () => {
     fs.writeFileSync(
       path.resolve(defaultConfigFile),
       javascript`module.exports = {
-        purge: [{ raw: '<div class="mobile:font-bold"></div>' }],
+        content: [{ raw: '<div class="mobile:font-bold"></div>' }],
         theme: {
           screens: {
             mobile: '400px',
@@ -182,7 +182,7 @@ test('tailwind.config.cjs is picked up by default when passing an empty object',
     fs.writeFileSync(
       path.resolve(cjsConfigFile),
       javascript`module.exports = {
-        purge: [{ raw: '<div class="mobile:font-bold"></div>' }],
+        content: [{ raw: '<div class="mobile:font-bold"></div>' }],
         theme: {
           screens: {
             mobile: '400px',
@@ -212,7 +212,7 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
     fs.writeFileSync(
       path.resolve(defaultConfigFile),
       javascript`module.exports = {
-        purge: [{ raw: '<div class="mobile:font-bold"></div>' }],
+        content: [{ raw: '<div class="mobile:font-bold"></div>' }],
         theme: {
           screens: {
             mobile: '400px',
@@ -239,7 +239,7 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
 
 test('the default config can be overridden using the presets key', () => {
   let config = {
-    purge: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    content: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
     presets: [
       {
         theme: {
@@ -273,7 +273,7 @@ test('the default config can be overridden using the presets key', () => {
 
 test('presets can be functions', () => {
   let config = {
-    purge: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    content: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
     presets: [
       () => ({
         theme: {
@@ -307,7 +307,7 @@ test('presets can be functions', () => {
 
 test('the default config can be removed by using an empty presets key in a preset', () => {
   let config = {
-    purge: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    content: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
     presets: [
       {
         presets: [],
@@ -339,7 +339,7 @@ test('the default config can be removed by using an empty presets key in a prese
 
 test('presets can have their own presets', () => {
   let config = {
-    purge: [{ raw: html`<div class="bg-transparent bg-black bg-white bg-red"></div>` }],
+    content: [{ raw: html`<div class="bg-transparent bg-black bg-white bg-red"></div>` }],
     presets: [
       {
         presets: [],
@@ -400,7 +400,7 @@ test('presets can have their own presets', () => {
 
 test('function presets can be mixed with object presets', () => {
   let config = {
-    purge: [{ raw: html`<div class="bg-transparent bg-black bg-white bg-red"></div>` }],
+    content: [{ raw: html`<div class="bg-transparent bg-black bg-white bg-red"></div>` }],
     presets: [
       () => ({
         presets: [],

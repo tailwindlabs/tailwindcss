@@ -1,7 +1,7 @@
 const colors = require('../colors')
 
 module.exports = {
-  purge: [],
+  content: [],
   presets: [],
   darkMode: 'media', // or 'class'
   theme: {

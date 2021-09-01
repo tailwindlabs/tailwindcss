@@ -13,7 +13,7 @@ test('important modifier', () => {
   let config = {
     important: false,
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './important-modifier.test.html')],
+    content: [path.resolve(__dirname, './important-modifier.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

@@ -18,7 +18,7 @@ function html(templates) {
 
 test('font-size utilities can include a default line-height', () => {
   const config = {
-    purge: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
+    content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
@@ -51,7 +51,7 @@ test('font-size utilities can include a default line-height', () => {
 
 test('font-size utilities can include a default letter-spacing', () => {
   const config = {
-    purge: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
+    content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
@@ -84,7 +84,7 @@ test('font-size utilities can include a default letter-spacing', () => {
 
 test('font-size utilities can include a default line-height and letter-spacing', () => {
   const config = {
-    purge: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
+    content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',

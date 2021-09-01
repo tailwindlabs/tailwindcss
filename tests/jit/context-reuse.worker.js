@@ -16,7 +16,7 @@ async function runTest() {
 
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './context-reuse.test.html')],
+    content: [path.resolve(__dirname, './context-reuse.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

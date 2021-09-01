@@ -14,7 +14,7 @@ test('important modifier with prefix', () => {
     important: false,
     prefix: 'tw-',
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './important-modifier-prefix.test.html')],
+    content: [path.resolve(__dirname, './important-modifier-prefix.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

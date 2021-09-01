@@ -30,19 +30,18 @@ const builtInTransformers = {
 }
 
 function getExtractor(tailwindConfig, fileExtension) {
-  let extractors = (tailwindConfig && tailwindConfig.purge && tailwindConfig.purge.extract) || {}
-  const purgeOptions =
-    (tailwindConfig && tailwindConfig.purge && tailwindConfig.purge.options) || {}
+  let extractors = tailwindConfig?.content?.extract || tailwindConfig?.purge?.extract || {}
+  let contentOptions = tailwindConfig?.content?.options || tailwindConfig?.purge?.options || {}
 
   if (typeof extractors === 'function') {
     extractors = {
       DEFAULT: extractors,
     }
   }
-  if (purgeOptions.defaultExtractor) {
-    extractors.DEFAULT = purgeOptions.defaultExtractor
+  if (contentOptions.defaultExtractor) {
+    extractors.DEFAULT = contentOptions.defaultExtractor
   }
-  for (let { extensions, extractor } of purgeOptions.extractors || []) {
+  for (let { extensions, extractor } of contentOptions.extractors || []) {
     for (let extension of extensions) {
       extractors[extension] = extractor
     }
@@ -57,8 +56,7 @@ function getExtractor(tailwindConfig, fileExtension) {
 }
 
 function getTransformer(tailwindConfig, fileExtension) {
-  let transformers =
-    (tailwindConfig && tailwindConfig.purge && tailwindConfig.purge.transform) || {}
+  let transformers = tailwindConfig?.content?.transform || tailwindConfig?.purge?.transform || {}
 
   if (typeof transformers === 'function') {
     transformers = {

@@ -109,7 +109,7 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            purge: ['./src/index.html'],
+            content: ['./src/index.html'],
             theme: {
               extend: {
                 screens: {

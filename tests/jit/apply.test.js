@@ -14,7 +14,7 @@ function run(input, config = {}) {
 test('@apply', () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './apply.test.html')],
+    content: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
@@ -153,7 +153,7 @@ test('@apply', () => {
 test('@apply error with unknown utility', async () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './apply.test.html')],
+    content: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     plugins: [],
   }
@@ -175,7 +175,7 @@ test('@apply error with unknown utility', async () => {
 test('@apply error with nested @screen', async () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './apply.test.html')],
+    content: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     plugins: [],
   }
@@ -201,7 +201,7 @@ test('@apply error with nested @screen', async () => {
 test('@apply error with nested @anyatrulehere', async () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './apply.test.html')],
+    content: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     plugins: [],
   }

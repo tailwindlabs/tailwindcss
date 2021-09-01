@@ -13,10 +13,77 @@ import tailwind from './jit/processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
 import fastGlob from 'fast-glob'
 import getModuleDependencies from './lib/getModuleDependencies'
+import log from './util/log'
 import packageJson from '../package.json'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined,
+}
+
+let warned = false
+function resolveContentPaths(config) {
+  if (config.hasOwnProperty('purge') && !warned) {
+    log.warn([
+      'The `purge` option in your tailwind.config.js file has been deprecated.',
+      'Please rename this to `content` instead.',
+    ])
+    warned = true
+  }
+
+  if (Array.isArray(config.content)) {
+    return config.content
+  }
+
+  if (Array.isArray(config.content?.content)) {
+    return config.content.content
+  }
+
+  // TODO: Drop this in a future version
+  if (Array.isArray(config.purge)) {
+    return config.purge
+  }
+
+  if (Array.isArray(config.purge?.content)) {
+    return config.purge.content
+  }
+
+  return []
+}
+
+function resolveSafelistPaths(config) {
+  if (config.hasOwnProperty('purge') && !warned) {
+    log.warn([
+      'The `purge` option in your tailwind.config.js file has been deprecated.',
+      'Please rename this to `content` instead.',
+    ])
+    warned = true
+  }
+
+  let [key, content] = (() => {
+    if (Array.isArray(config.content?.safelist)) {
+      return ['content.safelist', config.content.safelist]
+    }
+
+    if (Array.isArray(config.purge?.safelist)) {
+      return ['purge.safelist', config.purge.safelist]
+    }
+
+    return [null, []]
+  })()
+
+  return content.map((content) => {
+    if (typeof content === 'string') {
+      return { raw: content, extension: 'html' }
+    }
+
+    if (content instanceof RegExp) {
+      throw new Error(`Values inside '${key}' can only be of type 'string', found 'regex'.`)
+    }
+
+    throw new Error(
+      `Values inside '${key}' can only be of type 'string', found '${typeof content}'.`
+    )
+  })
 }
 
 // ---
@@ -137,7 +204,14 @@ let commands = {
       '--input': { type: String, description: 'Input file' },
       '--output': { type: String, description: 'Output file' },
       '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
-      '--purge': { type: String, description: 'Content paths to use for removing unused classes' },
+      '--content': {
+        type: String,
+        description: 'Content paths to use for removing unused classes',
+      },
+      '--purge': {
+        type: String,
+        description: '[DEPRECATED] Use `--content` instead',
+      },
       '--postcss': {
         type: oneOf(String, Boolean),
         description: 'Load custom PostCSS configuration',
@@ -408,35 +482,23 @@ async function build() {
     let resolvedConfig = resolveConfigInternal(config)
 
     if (args['--purge']) {
-      resolvedConfig.purge = {
-        enabled: true,
-        content: args['--purge'].split(/(?<!{[^}]+),/),
+      log.warn(['The `--purge` flag has been deprecated.', 'Please use `--content` instead.'])
+      if (!args['--content']) {
+        args['--content'] = ['--purge']
       }
+    }
+
+    if (args['--content']) {
+      resolvedConfig.content = args['--content'].split(/(?<!{[^}]+),/)
     }
 
     return resolvedConfig
   }
 
   function extractContent(config) {
-    let content = Array.isArray(config.purge) ? config.purge : config.purge.content
-
-    return content.concat(
-      (config.purge?.safelist ?? []).map((content) => {
-        if (typeof content === 'string') {
-          return { raw: content, extension: 'html' }
-        }
-
-        if (content instanceof RegExp) {
-          throw new Error(
-            "Values inside 'purge.safelist' can only be of type 'string', found 'regex'."
-          )
-        }
-
-        throw new Error(
-          `Values inside 'purge.safelist' can only be of type 'string', found '${typeof content}'.`
-        )
-      })
-    )
+    let result = resolveContentPaths(config).concat(resolveSafelistPaths(config))
+    console.log({ result })
+    return result
   }
 
   function extractFileGlobs(config) {
@@ -457,7 +519,7 @@ async function build() {
   function getChangedContent(config) {
     let changedContent = []
 
-    // Resolve globs from the purge config
+    // Resolve globs from the content config
     let globs = extractFileGlobs(config)
     let files = fastGlob.sync(globs)
 

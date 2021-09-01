@@ -10,7 +10,7 @@ function run(input, config = {}) {
 
 test('basic', () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: `
           <div class="animate-spin"></div>
@@ -63,7 +63,7 @@ test('basic', () => {
 
 test('custom', () => {
   let config = {
-    purge: [{ raw: `<div class="animate-one"></div>` }],
+    content: [{ raw: `<div class="animate-one"></div>` }],
     theme: {
       extend: {
         keyframes: {
@@ -95,7 +95,7 @@ test('custom', () => {
 test('custom prefixed', () => {
   let config = {
     prefix: 'tw-',
-    purge: [{ raw: `<div class="tw-animate-one"></div>` }],
+    content: [{ raw: `<div class="tw-animate-one"></div>` }],
     theme: {
       extend: {
         keyframes: {
@@ -126,7 +126,7 @@ test('custom prefixed', () => {
 
 test('multiple', () => {
   let config = {
-    purge: [{ raw: `<div class="animate-multiple"></div>` }],
+    content: [{ raw: `<div class="animate-multiple"></div>` }],
     theme: {
       extend: {
         animation: {
@@ -165,7 +165,7 @@ test('multiple', () => {
 
 test('multiple custom', () => {
   let config = {
-    purge: [{ raw: `<div class="animate-multiple"></div>` }],
+    content: [{ raw: `<div class="animate-multiple"></div>` }],
     theme: {
       extend: {
         keyframes: {

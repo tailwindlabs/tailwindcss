@@ -19,7 +19,7 @@ const css = `
 
 test('transform function', () => {
   let config = {
-    purge: {
+    content: {
       content: [{ raw: '<div class="uppercase"></div>' }],
       transform: customTransformer,
     },
@@ -38,7 +38,7 @@ test('transform function', () => {
 
 test('transform.DEFAULT', () => {
   let config = {
-    purge: {
+    content: {
       content: [{ raw: '<div class="uppercase"></div>' }],
       transform: {
         DEFAULT: customTransformer,
@@ -59,7 +59,7 @@ test('transform.DEFAULT', () => {
 
 test('transform.{extension}', () => {
   let config = {
-    purge: {
+    content: {
       content: [
         { raw: '<div class="uppercase"></div>', extension: 'html' },
         { raw: '<div class="uppercase"></div>', extension: 'php' },

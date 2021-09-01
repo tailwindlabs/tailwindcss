@@ -19,7 +19,7 @@ function html(templates) {
 
 test('options are not required', () => {
   let config = {
-    purge: [{ raw: html`<div class="container"></div>` }],
+    content: [{ raw: html`<div class="container"></div>` }],
   }
 
   let content = css`
@@ -62,7 +62,7 @@ test('options are not required', () => {
 
 test('screens can be passed explicitly', () => {
   let config = {
-    purge: [{ raw: html`<div class="container"></div>` }],
+    content: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
         screens: ['400px', '500px'],
@@ -95,7 +95,7 @@ test('screens can be passed explicitly', () => {
 
 test('screens are ordered ascending by min-width', () => {
   let config = {
-    purge: [{ raw: html`<div class="container"></div>` }],
+    content: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
         screens: ['500px', '400px'],
@@ -128,7 +128,7 @@ test('screens are ordered ascending by min-width', () => {
 
 test('screens are deduplicated by min-width', () => {
   let config = {
-    purge: [{ raw: html`<div class="container"></div>` }],
+    content: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
         screens: {
@@ -165,7 +165,7 @@ test('screens are deduplicated by min-width', () => {
 
 test('the container can be centered by default', () => {
   let config = {
-    purge: [{ raw: html`<div class="container"></div>` }],
+    content: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
         center: true,
@@ -215,7 +215,7 @@ test('the container can be centered by default', () => {
 
 test('horizontal padding can be included by default', () => {
   let config = {
-    purge: [{ raw: html`<div class="container"></div>` }],
+    content: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
         padding: '2rem',
@@ -265,7 +265,7 @@ test('horizontal padding can be included by default', () => {
 
 test('responsive horizontal padding can be included by default', () => {
   let config = {
-    purge: [{ raw: html`<div class="container"></div>` }],
+    content: [{ raw: html`<div class="container"></div>` }],
     theme: {
       screens: {
         sm: '576px',
@@ -327,7 +327,7 @@ test('responsive horizontal padding can be included by default', () => {
 
 test('setting all options at once', () => {
   let config = {
-    purge: [{ raw: html`<div class="container"></div>` }],
+    content: [{ raw: html`<div class="container"></div>` }],
     theme: {
       container: {
         screens: ['400px', '500px'],
@@ -366,7 +366,7 @@ test('setting all options at once', () => {
 
 test('container can use variants', () => {
   let config = {
-    purge: [{ raw: html`<div class="lg:hover:container"></div>` }],
+    content: [{ raw: html`<div class="lg:hover:container"></div>` }],
     theme: {
       container: {
         screens: ['400px', '500px'],

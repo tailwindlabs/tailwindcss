@@ -10,7 +10,7 @@ function run(input, config = {}) {
 test('opacity', () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './opacity.test.html')],
+    content: [path.resolve(__dirname, './opacity.test.html')],
     corePlugins: {
       backgroundOpacity: false,
       borderOpacity: false,

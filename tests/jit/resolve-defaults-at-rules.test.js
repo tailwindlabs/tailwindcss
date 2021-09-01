@@ -16,7 +16,7 @@ function css(templates) {
 
 test('basic utilities', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="scale-x-110 rotate-3 skew-y-6"></div>',
       },
@@ -67,7 +67,7 @@ test('basic utilities', async () => {
 
 test('with pseudo-class variants', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="hover:scale-x-110 focus:rotate-3 hover:focus:skew-y-6"></div>',
       },
@@ -118,7 +118,7 @@ test('with pseudo-class variants', async () => {
 
 test('with pseudo-element variants', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="before:scale-x-110 after:rotate-3"></div>',
       },
@@ -167,7 +167,7 @@ test('with pseudo-element variants', async () => {
 
 test('with multi-class variants', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="group-hover:scale-x-110 peer-focus:rotate-3"></div>',
       },
@@ -214,7 +214,7 @@ test('with multi-class variants', async () => {
 
 test('with multi-class pseudo-element variants', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="group-hover:before:scale-x-110 peer-focus:after:rotate-3"></div>',
       },
@@ -263,7 +263,7 @@ test('with multi-class pseudo-element variants', async () => {
 
 test('with multi-class pseudo-element and pseudo-class variants', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="group-hover:hover:before:scale-x-110 peer-focus:focus:after:rotate-3"></div>',
       },
@@ -312,7 +312,7 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
 
 test('with apply', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="foo"></div>',
       },
@@ -439,7 +439,7 @@ test('with apply', async () => {
 
 test('with borders', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="border border-red-500 md:border-2"></div>',
       },
@@ -482,7 +482,7 @@ test('with borders', async () => {
 
 test('with shadows', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="shadow md:shadow-xl ring-1 ring-black/25"></div>',
       },
@@ -543,7 +543,7 @@ test('with shadows', async () => {
 
 test('when no utilities that need the defaults are used', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class=""></div>',
       },
@@ -568,7 +568,7 @@ test('when no utilities that need the defaults are used', async () => {
 
 test('when a utility uses defaults but they do not exist', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="rotate-3"></div>',
       },
@@ -597,7 +597,7 @@ test('when a utility uses defaults but they do not exist', async () => {
 
 test('selectors are reduced to the lowest possible specificity', async () => {
   let config = {
-    purge: [
+    content: [
       {
         raw: '<div class="foo"></div>',
       },
