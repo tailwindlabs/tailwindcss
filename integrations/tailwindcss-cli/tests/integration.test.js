@@ -32,18 +32,13 @@ describe('static build', () => {
       '../tailwind.config.js',
       javascript`
         module.exports = {
-          purge: {
+          content: {
             content: ['./src/index.html'],
             safelist: ['bg-red-500','bg-red-600']
           },
-          mode: 'jit',
-          darkMode: false, // or 'media' or 'class'
           theme: {
             extend: {
             },
-          },
-          variants: {
-            extend: {},
           },
           corePlugins: {
             preflight: false,
@@ -212,9 +207,7 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            purge: ['./src/index.html'],
-            mode: 'jit',
-            darkMode: false, // or 'media' or 'class'
+            content: ['./src/index.html'],
             theme: {
               extend: {
                 screens: {
@@ -224,9 +217,6 @@ describe('watcher', () => {
                   bold: 'bold'
                 }
               },
-            },
-            variants: {
-              extend: {},
             },
             corePlugins: {
               preflight: false,

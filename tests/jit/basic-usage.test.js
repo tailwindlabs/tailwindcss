@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -15,8 +15,7 @@ function css(templates) {
 
 test('basic usage', () => {
   let config = {
-    mode: 'jit',
-    purge: [path.resolve(__dirname, './basic-usage.test.html')],
+    content: [path.resolve(__dirname, './basic-usage.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

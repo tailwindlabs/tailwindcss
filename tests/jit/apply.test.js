@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   const { currentTestName } = expect.getState()
@@ -14,8 +14,7 @@ function run(input, config = {}) {
 test('@apply', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
-    purge: [path.resolve(__dirname, './apply.test.html')],
+    content: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
@@ -154,7 +153,7 @@ test('@apply', () => {
 test('@apply error with unknown utility', async () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './apply.test.html')],
+    content: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     plugins: [],
   }
@@ -176,7 +175,7 @@ test('@apply error with unknown utility', async () => {
 test('@apply error with nested @screen', async () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './apply.test.html')],
+    content: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     plugins: [],
   }
@@ -202,7 +201,7 @@ test('@apply error with nested @screen', async () => {
 test('@apply error with nested @anyatrulehere', async () => {
   let config = {
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './apply.test.html')],
+    content: [path.resolve(__dirname, './apply.test.html')],
     corePlugins: { preflight: false },
     plugins: [],
   }

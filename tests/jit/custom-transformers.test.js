@@ -3,7 +3,7 @@ import path from 'path'
 
 function run(input, config = {}) {
   jest.resetModules()
-  const tailwind = require('../../src/jit/index.js').default
+  const tailwind = require('../../src')
   return postcss(tailwind(config)).process(input, {
     from: path.resolve(__filename),
   })
@@ -19,8 +19,7 @@ const css = `
 
 test('transform function', () => {
   let config = {
-    mode: 'jit',
-    purge: {
+    content: {
       content: [{ raw: '<div class="uppercase"></div>' }],
       transform: customTransformer,
     },
@@ -39,8 +38,7 @@ test('transform function', () => {
 
 test('transform.DEFAULT', () => {
   let config = {
-    mode: 'jit',
-    purge: {
+    content: {
       content: [{ raw: '<div class="uppercase"></div>' }],
       transform: {
         DEFAULT: customTransformer,
@@ -61,8 +59,7 @@ test('transform.DEFAULT', () => {
 
 test('transform.{extension}', () => {
   let config = {
-    mode: 'jit',
-    purge: {
+    content: {
       content: [
         { raw: '<div class="uppercase"></div>', extension: 'html' },
         { raw: '<div class="uppercase"></div>', extension: 'php' },

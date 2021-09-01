@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import { resolveMatches } from './generateRules'
-import bigSign from '../../util/bigSign'
-import escapeClassName from '../../util/escapeClassName'
+import bigSign from '../util/bigSign'
+import escapeClassName from '../util/escapeClassName'
 
 function buildApplyCache(applyCandidates, context) {
   for (let candidate of applyCandidates) {

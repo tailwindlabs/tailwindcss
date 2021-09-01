@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
@@ -9,9 +9,8 @@ function run(input, config = {}) {
 
 test('opacity', () => {
   let config = {
-    mode: 'jit',
     darkMode: 'class',
-    purge: [path.resolve(__dirname, './opacity.test.html')],
+    content: [path.resolve(__dirname, './opacity.test.html')],
     corePlugins: {
       backgroundOpacity: false,
       borderOpacity: false,

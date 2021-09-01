@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "rollup -c",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "jest": {
     "displayName": "rollup.js",

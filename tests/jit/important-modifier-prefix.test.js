@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -14,8 +14,7 @@ test('important modifier with prefix', () => {
     important: false,
     prefix: 'tw-',
     darkMode: 'class',
-    mode: 'jit',
-    purge: [path.resolve(__dirname, './important-modifier-prefix.test.html')],
+    content: [path.resolve(__dirname, './important-modifier-prefix.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

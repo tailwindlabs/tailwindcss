@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   const { currentTestName } = expect.getState()
@@ -12,8 +12,7 @@ function run(input, config = {}) {
 
 test('class variants are inserted at `@tailwind variants`', async () => {
   let config = {
-    mode: 'jit',
-    purge: [
+    content: [
       {
         raw: `font-bold hover:font-bold md:font-bold`,
       },
@@ -52,8 +51,7 @@ test('class variants are inserted at `@tailwind variants`', async () => {
 
 test('`@tailwind screens` works as an alias for `@tailwind variants`', async () => {
   let config = {
-    mode: 'jit',
-    purge: [
+    content: [
       {
         raw: `font-bold hover:font-bold md:font-bold`,
       },

@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -16,8 +16,7 @@ function css(templates) {
 test('variants', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
-    purge: [path.resolve(__dirname, './variants.test.html')],
+    content: [path.resolve(__dirname, './variants.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
@@ -39,8 +38,7 @@ test('variants', () => {
 
 test('stacked peer variants', async () => {
   let config = {
-    mode: 'jit',
-    purge: [{ raw: 'peer-disabled:peer-focus:peer-hover:border-blue-500' }],
+    content: [{ raw: 'peer-disabled:peer-focus:peer-hover:border-blue-500' }],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

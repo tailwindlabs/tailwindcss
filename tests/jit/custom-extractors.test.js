@@ -4,7 +4,7 @@ import path from 'path'
 
 function run(input, config = {}) {
   jest.resetModules()
-  const tailwind = require('../../src/jit/index.js').default
+  let tailwind = require('../../src')
   return postcss(tailwind(config)).process(input, {
     from: path.resolve(__filename),
   })
@@ -23,8 +23,7 @@ const expected = fs.readFileSync(expectedPath, 'utf8')
 
 test('defaultExtractor', () => {
   let config = {
-    mode: 'jit',
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       options: {
         defaultExtractor: customExtractor,
@@ -42,7 +41,7 @@ test('defaultExtractor', () => {
 
 test('extractors array', () => {
   let config = {
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       options: {
         extractors: [
@@ -53,7 +52,6 @@ test('extractors array', () => {
         ],
       },
     },
-    mode: 'jit',
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
@@ -66,8 +64,7 @@ test('extractors array', () => {
 
 test('extract function', () => {
   let config = {
-    mode: 'jit',
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       extract: customExtractor,
     },
@@ -83,8 +80,7 @@ test('extract function', () => {
 
 test('extract.DEFAULT', () => {
   let config = {
-    mode: 'jit',
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       extract: {
         DEFAULT: customExtractor,
@@ -102,13 +98,12 @@ test('extract.DEFAULT', () => {
 
 test('extract.{extension}', () => {
   let config = {
-    purge: {
+    content: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       extract: {
         html: customExtractor,
       },
     },
-    mode: 'jit',
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

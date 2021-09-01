@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 import { transformAllSelectors, updateAllClasses } from '../../src/util/pluginUtils.js'
 
 function run(input, config = {}) {
@@ -13,8 +13,7 @@ function run(input, config = {}) {
 
 test('basic parallel variants', async () => {
   let config = {
-    mode: 'jit',
-    purge: [
+    content: [
       {
         raw: '<div class="font-normal hover:test:font-black test:font-bold test:font-medium"></div>',
       },

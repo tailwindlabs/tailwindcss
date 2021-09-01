@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -14,8 +14,7 @@ function css(templates) {
 
 test('relative purge paths', () => {
   let config = {
-    purge: ['./tests/jit/relative-purge-paths.test.html'],
-    mode: 'jit',
+    content: ['./tests/jit/relative-purge-paths.test.html'],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

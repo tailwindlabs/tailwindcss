@@ -6,7 +6,7 @@
   "browser": "./src/index.js",
   "scripts": {
     "build": "vite build",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "jest": {
     "displayName": "vite",

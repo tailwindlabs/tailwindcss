@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
@@ -9,8 +9,7 @@ function run(input, config = {}) {
 
 test('arbitrary values', () => {
   let config = {
-    mode: 'jit',
-    purge: [path.resolve(__dirname, './arbitrary-values.test.html')],
+    content: [path.resolve(__dirname, './arbitrary-values.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -11,8 +11,7 @@ function run(input, config = {}) {
 
 test('collapse adjacent rules', () => {
   let config = {
-    mode: 'jit',
-    purge: [path.resolve(__dirname, './collapse-adjacent-rules.test.html')],
+    content: [path.resolve(__dirname, './collapse-adjacent-rules.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

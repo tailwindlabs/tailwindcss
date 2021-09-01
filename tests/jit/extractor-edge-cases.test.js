@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   const { currentTestName } = expect.getState()
@@ -12,8 +12,7 @@ function run(input, config = {}) {
 
 test('PHP arrays', async () => {
   let config = {
-    mode: 'jit',
-    purge: [
+    content: [
       {
         raw: `<h1 class="<?php echo wrap(['class' => "max-w-[16rem]"]); ?>">Hello world</h1>`,
       },
@@ -35,8 +34,7 @@ test('PHP arrays', async () => {
 
 test('arbitrary values with quotes', async () => {
   let config = {
-    mode: 'jit',
-    purge: [
+    content: [
       {
         raw: `<div class="content-['hello]']"></div>`,
       },

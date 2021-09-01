@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -13,8 +13,7 @@ test('important boolean', () => {
   let config = {
     important: true,
     darkMode: 'class',
-    mode: 'jit',
-    purge: [path.resolve(__dirname, './important-boolean.test.html')],
+    content: [path.resolve(__dirname, './important-boolean.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [

@@ -1,16 +1,12 @@
 export default function () {
-  return function ({ config, matchUtilities, theme, variants }) {
+  return function ({ matchUtilities, theme, variants }) {
     matchUtilities(
       {
         brightness: (value) => {
           return {
             '--tw-brightness': `brightness(${value})`,
-            ...(config('mode') === 'jit'
-              ? {
-                  '@defaults filter': {},
-                  filter: 'var(--tw-filter)',
-                }
-              : {}),
+            '@defaults filter': {},
+            filter: 'var(--tw-filter)',
           }
         },
       },

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "parcel build ./src/index.html --no-cache",
     "dev": "parcel watch ./src/index.html --no-cache",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "jest": {
     "displayName": "parcel",

@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -10,8 +10,7 @@ function run(input, config = {}) {
 
 test('basic', () => {
   let config = {
-    mode: 'jit',
-    purge: [
+    content: [
       {
         raw: `
           <div class="animate-spin"></div>
@@ -64,8 +63,7 @@ test('basic', () => {
 
 test('custom', () => {
   let config = {
-    mode: 'jit',
-    purge: [{ raw: `<div class="animate-one"></div>` }],
+    content: [{ raw: `<div class="animate-one"></div>` }],
     theme: {
       extend: {
         keyframes: {
@@ -96,9 +94,8 @@ test('custom', () => {
 
 test('custom prefixed', () => {
   let config = {
-    mode: 'jit',
     prefix: 'tw-',
-    purge: [{ raw: `<div class="tw-animate-one"></div>` }],
+    content: [{ raw: `<div class="tw-animate-one"></div>` }],
     theme: {
       extend: {
         keyframes: {
@@ -129,8 +126,7 @@ test('custom prefixed', () => {
 
 test('multiple', () => {
   let config = {
-    mode: 'jit',
-    purge: [{ raw: `<div class="animate-multiple"></div>` }],
+    content: [{ raw: `<div class="animate-multiple"></div>` }],
     theme: {
       extend: {
         animation: {
@@ -169,8 +165,7 @@ test('multiple', () => {
 
 test('multiple custom', () => {
   let config = {
-    mode: 'jit',
-    purge: [{ raw: `<div class="animate-multiple"></div>` }],
+    content: [{ raw: `<div class="animate-multiple"></div>` }],
     theme: {
       extend: {
         keyframes: {

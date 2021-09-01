@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 import selectorParser from 'postcss-selector-parser'
 
 function run(input, config = {}) {
@@ -13,8 +13,7 @@ function run(input, config = {}) {
 test('modify selectors', () => {
   let config = {
     darkMode: 'class',
-    mode: 'jit',
-    purge: [path.resolve(__dirname, './modify-selectors.test.html')],
+    content: [path.resolve(__dirname, './modify-selectors.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [

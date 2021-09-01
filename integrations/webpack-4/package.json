@@ -7,7 +7,7 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development --watch",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "jest": {
     "displayName": "webpack 4",

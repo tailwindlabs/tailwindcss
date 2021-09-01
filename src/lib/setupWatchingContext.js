@@ -7,11 +7,11 @@ import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
 import normalizePath from 'normalize-path'
 
-import hash from '../../util/hashConfig'
-import log from '../../util/log'
-import getModuleDependencies from '../../lib/getModuleDependencies'
-import resolveConfig from '../../../resolveConfig'
-import resolveConfigPath from '../../util/resolveConfigPath'
+import hash from '../util/hashConfig'
+import log from '../util/log'
+import getModuleDependencies from '../lib/getModuleDependencies'
+import resolveConfig from '../../resolveConfig'
+import resolveConfigPath from '../util/resolveConfigPath'
 import { getContext } from './setupContextUtils'
 
 // This is used to trigger rebuilds. Just updating the timestamp
@@ -147,13 +147,9 @@ function getCandidateFiles(context, tailwindConfig) {
     return candidateFilesCache.get(context)
   }
 
-  let purgeContent = Array.isArray(tailwindConfig.purge)
-    ? tailwindConfig.purge
-    : tailwindConfig.purge.content
-
-  let candidateFiles = purgeContent
+  let candidateFiles = tailwindConfig.content.content
     .filter((item) => typeof item === 'string')
-    .map((purgePath) => normalizePath(path.resolve(purgePath)))
+    .map((contentPath) => normalizePath(path.resolve(contentPath)))
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }
@@ -189,29 +185,9 @@ function getTailwindConfig(configOrPath) {
 }
 
 function resolvedChangedContent(context, candidateFiles) {
-  let changedContent = (
-    Array.isArray(context.tailwindConfig.purge)
-      ? context.tailwindConfig.purge
-      : context.tailwindConfig.purge.content
-  )
+  let changedContent = context.tailwindConfig.content.content
     .filter((item) => typeof item.raw === 'string')
-    .concat(
-      (context.tailwindConfig.purge?.safelist ?? []).map((content) => {
-        if (typeof content === 'string') {
-          return { raw: content, extension: 'html' }
-        }
-
-        if (content instanceof RegExp) {
-          throw new Error(
-            "Values inside 'purge.safelist' can only be of type 'string', found 'regex'."
-          )
-        }
-
-        throw new Error(
-          `Values inside 'purge.safelist' can only be of type 'string', found '${typeof content}'.`
-        )
-      })
-    )
+    .concat(context.tailwindConfig.content.safelist)
     .map(({ raw, extension }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(context, candidateFiles)) {

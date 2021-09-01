@@ -14,6 +14,7 @@ import corePluginList from '../corePluginList'
 import configurePlugins from './configurePlugins'
 import defaultConfig from '../../stubs/defaultConfig.stub'
 import colors from '../../colors'
+import log from './log'
 
 const configUtils = {
   colors,
@@ -257,30 +258,86 @@ function resolvePluginLists(pluginLists) {
 }
 
 export default function resolveConfig(configs) {
-  const allConfigs = [
+  let allConfigs = [
     ...extractPluginConfigs(configs),
     {
-      darkMode: false,
+      content: [],
       prefix: '',
       important: false,
       separator: ':',
       variantOrder: defaultConfig.variantOrder,
     },
   ]
-  const { variantOrder } = allConfigs.find((c) => c.variantOrder)
+  let { variantOrder } = allConfigs.find((c) => c.variantOrder)
 
-  return defaults(
-    {
-      theme: resolveFunctionKeys(
-        mergeExtensions(mergeThemes(map(allConfigs, (t) => get(t, 'theme', {}))))
-      ),
-      variants: resolveVariants(
-        allConfigs.map((c) => get(c, 'variants', {})),
-        variantOrder
-      ),
-      corePlugins: resolveCorePlugins(allConfigs.map((c) => c.corePlugins)),
-      plugins: resolvePluginLists(configs.map((c) => get(c, 'plugins', []))),
-    },
-    ...allConfigs
+  return normalizeConfig(
+    defaults(
+      {
+        theme: resolveFunctionKeys(
+          mergeExtensions(mergeThemes(map(allConfigs, (t) => get(t, 'theme', {}))))
+        ),
+        variants: resolveVariants(
+          allConfigs.map((c) => get(c, 'variants', {})),
+          variantOrder
+        ),
+        corePlugins: resolveCorePlugins(allConfigs.map((c) => c.corePlugins)),
+        plugins: resolvePluginLists(configs.map((c) => get(c, 'plugins', []))),
+      },
+      ...allConfigs
+    )
   )
+}
+
+let warnedAbout = new Set()
+function normalizeConfig(config) {
+  if (!warnedAbout.has('purge-deprecation') && config.hasOwnProperty('purge')) {
+    log.warn([
+      'The `purge` option in your tailwind.config.js file has been deprecated.',
+      'Please rename this to `content` instead.',
+    ])
+    warnedAbout.add('purge-deprecation')
+  }
+
+  config.content = {
+    content: (() => {
+      let { content, purge } = config
+
+      if (Array.isArray(content)) return content
+      if (Array.isArray(content?.content)) return content.content
+      if (Array.isArray(purge)) return purge
+      if (Array.isArray(purge?.content)) return purge.content
+
+      return []
+    })(),
+    safelist: (() => {
+      let { content, purge } = config
+
+      let [safelisKey, safelistPaths] = (() => {
+        if (Array.isArray(content?.safelist)) return ['content.safelist', content.safelist]
+        if (Array.isArray(purge?.safelist)) return ['purge.safelist', purge.safelist]
+        return [null, []]
+      })()
+
+      return safelistPaths.map((content) => {
+        if (typeof content === 'string') {
+          return { raw: content, extension: 'html' }
+        }
+
+        if (content instanceof RegExp) {
+          throw new Error(
+            `Values inside '${safelistKey}' can only be of type 'string', found 'regex'.`
+          )
+        }
+
+        throw new Error(
+          `Values inside '${safelisKey}' can only be of type 'string', found '${typeof content}'.`
+        )
+      })
+    })(),
+    extract: config.content?.extract || config.purge?.extract || {},
+    options: config.content?.options || config.purge?.options || {},
+    transform: config.content?.transform || config.purge?.transform || {},
+  }
+
+  return config
 }

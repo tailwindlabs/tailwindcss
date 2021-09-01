@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function pluginThatMutatesRules() {
   return (root) => {
@@ -25,8 +25,7 @@ function run(input, config = {}) {
 
 test.only('plugins mutating rules after tailwind doesnt break it', async () => {
   let config = {
-    purge: [path.resolve(__dirname, './mutable.test.html')],
-    mode: 'jit',
+    content: [path.resolve(__dirname, './mutable.test.html')],
     theme: {
       backgroundImage: {
         foo: 'url("./foo.png")',

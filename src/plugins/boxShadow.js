@@ -8,25 +8,14 @@ let defaultBoxShadow = [
 ].join(', ')
 
 export default function () {
-  return function ({ config, matchUtilities, addBase, addUtilities, theme, variants }) {
-    if (config('mode') === 'jit') {
-      addBase({
-        '@defaults box-shadow': {
-          '--tw-ring-offset-shadow': '0 0 #0000',
-          '--tw-ring-shadow': '0 0 #0000',
-          '--tw-shadow': '0 0 #0000',
-        },
-      })
-    } else {
-      addUtilities(
-        {
-          '*, ::before, ::after': {
-            '--tw-shadow': '0 0 #0000',
-          },
-        },
-        { respectImportant: false }
-      )
-    }
+  return function ({ matchUtilities, addBase, theme, variants }) {
+    addBase({
+      '@defaults box-shadow': {
+        '--tw-ring-offset-shadow': '0 0 #0000',
+        '--tw-ring-shadow': '0 0 #0000',
+        '--tw-shadow': '0 0 #0000',
+      },
+    })
 
     matchUtilities(
       {
@@ -34,7 +23,7 @@ export default function () {
           value = transformValue(value)
 
           return {
-            ...(config('mode') === 'jit' ? { '@defaults box-shadow': {} } : {}),
+            '@defaults box-shadow': {},
             '--tw-shadow': value === 'none' ? '0 0 #0000' : value,
             'box-shadow': defaultBoxShadow,
           }

@@ -115,18 +115,13 @@ describe('Build command', () => {
 
     let customConfig = `module.exports = ${JSON.stringify(
       {
-        purge: ['./src/index.html'],
-        mode: 'jit',
-        darkMode: false, // or 'media' or 'class'
+        content: ['./src/index.html'],
         theme: {
           extend: {
             fontWeight: {
               bold: 'BOLD',
             },
           },
-        },
-        variants: {
-          extend: {},
         },
         corePlugins: {
           preflight: false,
@@ -258,7 +253,7 @@ describe('Build command', () => {
 
     expect(combined).toMatchInlineSnapshot(`
       "
-      tailwindcss v2.2.8
+      tailwindcss v2.2.9
 
       Usage:
          tailwindcss build [options]
@@ -267,8 +262,7 @@ describe('Build command', () => {
          -i, --input              Input file
          -o, --output             Output file
          -w, --watch              Watch for changes and rebuild as needed
-             --jit                Build using JIT mode
-             --purge              Content paths to use for removing unused classes
+             --content            Content paths to use for removing unused classes
              --postcss            Load custom PostCSS configuration
          -m, --minify             Minify the output
          -c, --config             Path to a custom config file
@@ -298,34 +292,6 @@ describe('Init command', () => {
     expect((await readOutputFile('../full.config.js')).split('\n').length).toBeGreaterThan(50)
   })
 
-  test('--jit', async () => {
-    cleanupFile('with-jit.config.js')
-
-    let { combined } = await $(`${EXECUTABLE} init with-jit.config.js --jit`)
-
-    expect(combined).toMatchInlineSnapshot(`
-      "
-      Created Tailwind CSS config file: with-jit.config.js
-      "
-    `)
-
-    expect(await readOutputFile('../with-jit.config.js')).toContain("mode: 'jit'")
-  })
-
-  test('--full, --jit', async () => {
-    cleanupFile('full-with-jit.config.js')
-
-    let { combined } = await $(`${EXECUTABLE} init full-with-jit.config.js --jit --full`)
-
-    expect(combined).toMatchInlineSnapshot(`
-      "
-      Created Tailwind CSS config file: full-with-jit.config.js
-      "
-    `)
-
-    expect(await readOutputFile('../full-with-jit.config.js')).toContain("mode: 'jit'")
-  })
-
   test('--postcss', async () => {
     expect(await fileExists('postcss.config.js')).toBe(true)
     await removeFile('postcss.config.js')
@@ -348,13 +314,12 @@ describe('Init command', () => {
 
     expect(combined).toMatchInlineSnapshot(`
       "
-      tailwindcss v2.2.8
+      tailwindcss v2.2.9
 
       Usage:
          tailwindcss init [options]
 
       Options:
-             --jit                Initialize for JIT mode
          -f, --full               Initialize a full \`tailwind.config.js\` file
          -p, --postcss            Initialize a \`postcss.config.js\` file
          -h, --help               Display usage information

@@ -13,11 +13,10 @@ function run(tailwind, input, config = {}) {
 }
 
 test('raw content', () => {
-  let tailwind = require('../../src/jit/index.js').default
+  let tailwind = require('../../src')
 
   let config = {
-    mode: 'jit',
-    purge: [{ raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8') }],
+    content: [{ raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8') }],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
@@ -37,11 +36,10 @@ test('raw content', () => {
 })
 
 test('raw content with extension', () => {
-  let tailwind = require('../../src/jit/index.js').default
+  let tailwind = require('../../src')
 
   let config = {
-    mode: 'jit',
-    purge: {
+    content: {
       content: [
         {
           raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8'),

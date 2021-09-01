@@ -103,9 +103,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            purge: ['./src/index.html'],
-            mode: 'jit',
-            darkMode: false, // or 'media' or 'class'
+            content: ['./src/index.html'],
             theme: {
               extend: {
                 screens: {
@@ -115,9 +113,6 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
                   bold: 'bold'
                 }
               },
-            },
-            variants: {
-              extend: {},
             },
             corePlugins: {
               preflight: false,

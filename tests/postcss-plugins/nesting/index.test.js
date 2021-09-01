@@ -1,6 +1,6 @@
 let postcss = require('postcss')
 let postcssNested = require('postcss-nested')
-let plugin = require('.')
+let plugin = require('../../../nesting')
 
 it('should be possible to load a custom nesting plugin', async () => {
   let input = css`

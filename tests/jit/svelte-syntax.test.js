@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -11,8 +11,7 @@ function run(input, config = {}) {
 
 test('basic usage', () => {
   let config = {
-    purge: [path.resolve(__dirname, './svelte-syntax.test.svelte')],
-    mode: 'jit',
+    content: [path.resolve(__dirname, './svelte-syntax.test.svelte')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

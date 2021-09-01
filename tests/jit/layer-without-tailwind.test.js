@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import path from 'path'
-import tailwind from '../../src/jit/index.js'
+import tailwind from '../../src'
 
 function run(input, config = {}) {
   const { currentTestName } = expect.getState()
@@ -12,8 +12,7 @@ function run(input, config = {}) {
 
 test('using @layer without @tailwind', async () => {
   let config = {
-    purge: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
-    mode: 'jit',
+    content: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
     theme: {},
     plugins: [],
   }
@@ -33,8 +32,7 @@ test('using @layer without @tailwind', async () => {
 
 test('using @responsive without @tailwind', async () => {
   let config = {
-    purge: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
-    mode: 'jit',
+    content: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
     theme: {},
     plugins: [],
   }
@@ -54,8 +52,7 @@ test('using @responsive without @tailwind', async () => {
 
 test('using @variants without @tailwind', async () => {
   let config = {
-    purge: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
-    mode: 'jit',
+    content: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
     theme: {},
     plugins: [],
   }
@@ -75,8 +72,7 @@ test('using @variants without @tailwind', async () => {
 
 test('non-Tailwind @layer rules are okay', async () => {
   let config = {
-    purge: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
-    mode: 'jit',
+    content: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
     theme: {},
     plugins: [],
   }
