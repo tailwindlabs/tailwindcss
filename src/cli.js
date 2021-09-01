@@ -152,7 +152,9 @@ function help({ message, usage, commands, options }) {
 
     console.log()
     console.log('Options:')
-    for (let { flags, description } of Object.values(groupedOptions)) {
+    for (let { flags, description, deprecated } of Object.values(groupedOptions)) {
+      if (deprecated) continue
+
       if (flags.length === 1) {
         console.log(
           ' '.repeat(indent + 4 /* 4 = "-i, ".length */),
@@ -210,7 +212,7 @@ let commands = {
       },
       '--purge': {
         type: String,
-        description: '[DEPRECATED] Use `--content` instead',
+        deprecated: true,
       },
       '--postcss': {
         type: oneOf(String, Boolean),

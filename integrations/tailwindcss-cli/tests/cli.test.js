@@ -263,7 +263,6 @@ describe('Build command', () => {
          -o, --output             Output file
          -w, --watch              Watch for changes and rebuild as needed
              --content            Content paths to use for removing unused classes
-             --purge              [DEPRECATED] Use \`--content\` instead
              --postcss            Load custom PostCSS configuration
          -m, --minify             Minify the output
          -c, --config             Path to a custom config file
