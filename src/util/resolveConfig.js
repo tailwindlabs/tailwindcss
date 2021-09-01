@@ -312,9 +312,11 @@ function normalizeConfig(config) {
     safelist: (() => {
       let { content, purge } = config
 
-      let [safelisKey, safelistPaths] = (() => {
+      let [safelistKey, safelistPaths] = (() => {
         if (Array.isArray(content?.safelist)) return ['content.safelist', content.safelist]
         if (Array.isArray(purge?.safelist)) return ['purge.safelist', purge.safelist]
+        if (Array.isArray(purge?.options?.safelist))
+          return ['purge.options.safelist', purge.options.safelist]
         return [null, []]
       })()
 
@@ -330,7 +332,7 @@ function normalizeConfig(config) {
         }
 
         throw new Error(
-          `Values inside '${safelisKey}' can only be of type 'string', found '${typeof content}'.`
+          `Values inside '${safelistKey}' can only be of type 'string', found '${typeof content}'.`
         )
       })
     })(),
