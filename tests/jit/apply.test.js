@@ -11,6 +11,10 @@ function run(input, config = {}) {
   })
 }
 
+function css(templates) {
+  return templates.join('')
+}
+
 test('@apply', () => {
   let config = {
     darkMode: 'class',
@@ -207,19 +211,68 @@ test('@apply error with nested @anyatrulehere', async () => {
   }
 
   let css = `
-  @tailwind components;
-  @tailwind utilities;
+    @tailwind components;
+    @tailwind utilities;
 
-  @layer components {
-    .foo {
-      @genie {
-        @apply text-black;
+    @layer components {
+      .foo {
+        @genie {
+          @apply text-black;
+        }
       }
     }
-  }
-`
+  `
 
   await expect(run(css, config)).rejects.toThrowError(
     '@apply is not supported within nested at-rules like @genie'
+  )
+})
+
+test('@apply error when using .group utility', async () => {
+  let config = {
+    darkMode: 'class',
+    content: [{ raw: '<div class="foo"></div>' }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo {
+        @apply group;
+      }
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrowError(
+    `@apply should not be used with the 'group' utility`
+  )
+})
+
+test('@apply error when using a prefixed .group utility', async () => {
+  let config = {
+    prefix: 'tw-',
+    darkMode: 'class',
+    content: [{ raw: '<div class="foo"></div>' }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let css = `
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo {
+        @apply tw-group;
+      }
+    }
+  `
+
+  await expect(run(css, config)).rejects.toThrowError(
+    `@apply should not be used with the 'tw-group' utility`
   )
 })

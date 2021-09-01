@@ -261,7 +261,6 @@ export default function resolveConfig(configs) {
   let allConfigs = [
     ...extractPluginConfigs(configs),
     {
-      content: [],
       prefix: '',
       important: false,
       separator: ':',
@@ -302,10 +301,10 @@ function normalizeConfig(config) {
     content: (() => {
       let { content, purge } = config
 
-      if (Array.isArray(content)) return content
-      if (Array.isArray(content?.content)) return content.content
       if (Array.isArray(purge)) return purge
       if (Array.isArray(purge?.content)) return purge.content
+      if (Array.isArray(content)) return content
+      if (Array.isArray(content?.content)) return content.content
 
       return []
     })(),
