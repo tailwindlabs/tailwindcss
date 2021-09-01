@@ -10,9 +10,6 @@ index.html
 yarn.lock
 yarn-error.log
 
-# "External" plugins
-/nesting
-
 # Perf related files
 isolate*.log
 
