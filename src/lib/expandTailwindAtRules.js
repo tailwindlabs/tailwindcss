@@ -30,8 +30,8 @@ const builtInTransformers = {
 }
 
 function getExtractor(tailwindConfig, fileExtension) {
-  let extractors = tailwindConfig?.content?.extract || tailwindConfig?.purge?.extract || {}
-  let contentOptions = tailwindConfig?.content?.options || tailwindConfig?.purge?.options || {}
+  let extractors = tailwindConfig.content.extract
+  let contentOptions = tailwindConfig.content.options
 
   if (typeof extractors === 'function') {
     extractors = {
@@ -56,7 +56,7 @@ function getExtractor(tailwindConfig, fileExtension) {
 }
 
 function getTransformer(tailwindConfig, fileExtension) {
-  let transformers = tailwindConfig?.content?.transform || tailwindConfig?.purge?.transform || {}
+  let transformers = tailwindConfig.content.transform
 
   if (typeof transformers === 'function') {
     transformers = {

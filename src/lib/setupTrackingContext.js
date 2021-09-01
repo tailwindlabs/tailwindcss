@@ -16,73 +16,6 @@ import { env } from './sharedState'
 
 import { getContext, getFileModifiedMap } from './setupContextUtils'
 import parseDependency from '../util/parseDependency'
-import log from '../util/log'
-
-let warned = false
-function resolveContentPaths(config) {
-  if (config.hasOwnProperty('purge') && !warned) {
-    log.warn([
-      'The `purge` option in your tailwind.config.js file has been deprecated.',
-      'Please rename this to `content` instead.',
-    ])
-    warned = true
-  }
-
-  if (Array.isArray(config.content)) {
-    return config.content
-  }
-
-  if (Array.isArray(config.content?.content)) {
-    return config.content.content
-  }
-
-  // TODO: Drop this in a future version
-  if (Array.isArray(config.purge)) {
-    return config.purge
-  }
-
-  if (Array.isArray(config.purge?.content)) {
-    return config.purge.content
-  }
-
-  return []
-}
-
-function resolveSafelistPaths(config) {
-  if (config.hasOwnProperty('purge') && !warned) {
-    log.warn([
-      'The `purge` option in your tailwind.config.js file has been deprecated.',
-      'Please rename this to `content` instead.',
-    ])
-    warned = true
-  }
-
-  let [key, content] = (() => {
-    if (Array.isArray(config.content?.safelist)) {
-      return ['content.safelist', config.content.safelist]
-    }
-
-    if (Array.isArray(config.purge?.safelist)) {
-      return ['purge.safelist', config.purge.safelist]
-    }
-
-    return [null, []]
-  })()
-
-  return content.map((content) => {
-    if (typeof content === 'string') {
-      return { raw: content, extension: 'html' }
-    }
-
-    if (content instanceof RegExp) {
-      throw new Error(`Values inside '${key}' can only be of type 'string', found 'regex'.`)
-    }
-
-    throw new Error(
-      `Values inside '${key}' can only be of type 'string', found '${typeof content}'.`
-    )
-  })
-}
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -93,7 +26,7 @@ function getCandidateFiles(context, tailwindConfig) {
     return candidateFilesCache.get(context)
   }
 
-  let candidateFiles = resolveContentPaths(tailwindConfig)
+  let candidateFiles = tailwindConfig.content.content
     .filter((item) => typeof item === 'string')
     .map((contentPath) => normalizePath(path.resolve(contentPath)))
 
@@ -144,9 +77,9 @@ function getTailwindConfig(configOrPath) {
 }
 
 function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
-  let changedContent = resolveContentPaths(context.tailwindConfig)
+  let changedContent = context.tailwindConfig.content.content
     .filter((item) => typeof item.raw === 'string')
-    .concat(resolveSafelistPaths(context.tailwindConfig))
+    .concat(context.tailwindConfig.content.safelist)
     .map(({ raw, extension }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(candidateFiles, fileModifiedMap)) {

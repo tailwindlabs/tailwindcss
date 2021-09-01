@@ -20,72 +20,6 @@ let env = {
   DEBUG: process.env.DEBUG !== undefined,
 }
 
-let warned = false
-function resolveContentPaths(config) {
-  if (config.hasOwnProperty('purge') && !warned) {
-    log.warn([
-      'The `purge` option in your tailwind.config.js file has been deprecated.',
-      'Please rename this to `content` instead.',
-    ])
-    warned = true
-  }
-
-  if (Array.isArray(config.content)) {
-    return config.content
-  }
-
-  if (Array.isArray(config.content?.content)) {
-    return config.content.content
-  }
-
-  // TODO: Drop this in a future version
-  if (Array.isArray(config.purge)) {
-    return config.purge
-  }
-
-  if (Array.isArray(config.purge?.content)) {
-    return config.purge.content
-  }
-
-  return []
-}
-
-function resolveSafelistPaths(config) {
-  if (config.hasOwnProperty('purge') && !warned) {
-    log.warn([
-      'The `purge` option in your tailwind.config.js file has been deprecated.',
-      'Please rename this to `content` instead.',
-    ])
-    warned = true
-  }
-
-  let [key, content] = (() => {
-    if (Array.isArray(config.content?.safelist)) {
-      return ['content.safelist', config.content.safelist]
-    }
-
-    if (Array.isArray(config.purge?.safelist)) {
-      return ['purge.safelist', config.purge.safelist]
-    }
-
-    return [null, []]
-  })()
-
-  return content.map((content) => {
-    if (typeof content === 'string') {
-      return { raw: content, extension: 'html' }
-    }
-
-    if (content instanceof RegExp) {
-      throw new Error(`Values inside '${key}' can only be of type 'string', found 'regex'.`)
-    }
-
-    throw new Error(
-      `Values inside '${key}' can only be of type 'string', found '${typeof content}'.`
-    )
-  })
-}
-
 // ---
 
 function indentRecursive(node, indent = 0) {
@@ -498,9 +432,7 @@ async function build() {
   }
 
   function extractContent(config) {
-    let result = resolveContentPaths(config).concat(resolveSafelistPaths(config))
-    console.log({ result })
-    return result
+    return config.content.content.concat(config.content.safelist)
   }
 
   function extractFileGlobs(config) {
