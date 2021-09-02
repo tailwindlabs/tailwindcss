@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import escapeClassName from '../../src/util/escapeClassName'
+import escapeClassName from '../src/util/escapeClassName'
 
 export default function (plugin, config) {
   const addedUtilities = []
