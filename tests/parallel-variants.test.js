@@ -1,24 +1,16 @@
-import postcss from 'postcss'
-import path from 'path'
-import tailwind from '../src'
 import { transformAllSelectors, updateAllClasses } from '../src/util/pluginUtils.js'
 
-function run(input, config = {}) {
-  const { currentTestName } = expect.getState()
-
-  return postcss(tailwind(config)).process(input, {
-    from: `${path.resolve(__filename)}?test=${currentTestName}`,
-  })
-}
+import { run, html, css } from './util/run'
 
 test('basic parallel variants', async () => {
   let config = {
     content: [
       {
-        raw: '<div class="font-normal hover:test:font-black test:font-bold test:font-medium"></div>',
+        raw: html`<div
+          class="font-normal hover:test:font-black test:font-bold test:font-medium"
+        ></div>`,
       },
     ],
-    theme: {},
     plugins: [
       function test({ addVariant, config }) {
         addVariant('test', [
@@ -39,10 +31,8 @@ test('basic parallel variants', async () => {
     ],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .font-normal {
         font-weight: 400;
       }

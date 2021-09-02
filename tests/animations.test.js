@@ -1,18 +1,10 @@
-import postcss from 'postcss'
-import path from 'path'
-import tailwind from '../src'
-
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
+import { run, html, css } from './util/run'
 
 test('basic', () => {
   let config = {
     content: [
       {
-        raw: `
+        raw: html`
           <div class="animate-spin"></div>
           <div class="hover:animate-ping"></div>
           <div class="group-hover:animate-bounce"></div>
@@ -21,10 +13,8 @@ test('basic', () => {
     ],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       @keyframes spin {
         to {
           transform: rotate(360deg);
@@ -63,7 +53,7 @@ test('basic', () => {
 
 test('custom', () => {
   let config = {
-    content: [{ raw: `<div class="animate-one"></div>` }],
+    content: [{ raw: html`<div class="animate-one"></div>` }],
     theme: {
       extend: {
         keyframes: {
@@ -76,10 +66,8 @@ test('custom', () => {
     },
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       @keyframes one {
         to {
           transform: rotate(360deg);
@@ -108,10 +96,8 @@ test('custom prefixed', () => {
     },
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       @keyframes tw-one {
         to {
           transform: rotate(360deg);
@@ -126,7 +112,7 @@ test('custom prefixed', () => {
 
 test('multiple', () => {
   let config = {
-    content: [{ raw: `<div class="animate-multiple"></div>` }],
+    content: [{ raw: html`<div class="animate-multiple"></div>` }],
     theme: {
       extend: {
         animation: {
@@ -136,10 +122,8 @@ test('multiple', () => {
     },
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       @keyframes bounce {
         0%,
         100% {
@@ -165,7 +149,7 @@ test('multiple', () => {
 
 test('multiple custom', () => {
   let config = {
-    content: [{ raw: `<div class="animate-multiple"></div>` }],
+    content: [{ raw: html`<div class="animate-multiple"></div>` }],
     theme: {
       extend: {
         keyframes: {
@@ -179,10 +163,8 @@ test('multiple custom', () => {
     },
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       @keyframes one {
         to {
           transform: rotate(360deg);

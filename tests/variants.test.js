@@ -1,25 +1,13 @@
-import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../src'
 
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
-
-function css(templates) {
-  return templates.join('')
-}
+import { run, css } from './util/run'
 
 test('variants', () => {
   let config = {
     darkMode: 'class',
     content: [path.resolve(__dirname, './variants.test.html')],
     corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
   let input = css`
@@ -40,8 +28,6 @@ test('stacked peer variants', async () => {
   let config = {
     content: [{ raw: 'peer-disabled:peer-focus:peer-hover:border-blue-500' }],
     corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
   let input = css`

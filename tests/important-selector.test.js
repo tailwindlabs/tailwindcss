@@ -1,13 +1,7 @@
-import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../src'
 
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
+import { run, css } from './util/run'
 
 test('important selector', () => {
   let config = {
@@ -15,7 +9,6 @@ test('important selector', () => {
     darkMode: 'class',
     content: [path.resolve(__dirname, './important-selector.test.html')],
     corePlugins: { preflight: false },
-    theme: {},
     plugins: [
       function ({ addComponents, addUtilities }) {
         addComponents(
@@ -49,7 +42,7 @@ test('important selector', () => {
     ],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     @tailwind components;
     @layer components {
@@ -63,7 +56,7 @@ test('important selector', () => {
     @tailwind utilities;
   `
 
-  return run(css, config).then((result) => {
+  return run(input, config).then((result) => {
     let expectedPath = path.resolve(__dirname, './important-selector.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 

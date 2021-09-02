@@ -1,34 +1,19 @@
-import postcss from 'postcss'
-import path from 'path'
-
-function run(input, config = {}) {
-  jest.resetModules()
-  const tailwind = require('../src')
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
+import { run, html, css } from './util/run'
 
 function customTransformer(content) {
   return content.replace(/uppercase/g, 'lowercase')
 }
 
-const css = `
-  @tailwind utilities;
-`
-
 test('transform function', () => {
   let config = {
     content: {
-      content: [{ raw: '<div class="uppercase"></div>' }],
+      content: [{ raw: html`<div class="uppercase"></div>` }],
       transform: customTransformer,
     },
-    theme: {},
-    plugins: [],
   }
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .lowercase {
         text-transform: lowercase;
       }
@@ -39,17 +24,15 @@ test('transform function', () => {
 test('transform.DEFAULT', () => {
   let config = {
     content: {
-      content: [{ raw: '<div class="uppercase"></div>' }],
+      content: [{ raw: html`<div class="uppercase"></div>` }],
       transform: {
         DEFAULT: customTransformer,
       },
     },
-    theme: {},
-    plugins: [],
   }
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .lowercase {
         text-transform: lowercase;
       }
@@ -61,19 +44,17 @@ test('transform.{extension}', () => {
   let config = {
     content: {
       content: [
-        { raw: '<div class="uppercase"></div>', extension: 'html' },
-        { raw: '<div class="uppercase"></div>', extension: 'php' },
+        { raw: html`<div class="uppercase"></div>`, extension: 'html' },
+        { raw: html`<div class="uppercase"></div>`, extension: 'php' },
       ],
       transform: {
         html: customTransformer,
       },
     },
-    theme: {},
-    plugins: [],
   }
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .uppercase {
         text-transform: uppercase;
       }

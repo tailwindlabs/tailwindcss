@@ -1,7 +1,8 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../src'
+
+import { run } from './util/run'
 
 function pluginThatMutatesRules() {
   return (root) => {
@@ -17,12 +18,6 @@ function pluginThatMutatesRules() {
   }
 }
 
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
-
 test.only('plugins mutating rules after tailwind doesnt break it', async () => {
   let config = {
     content: [path.resolve(__dirname, './mutable.test.html')],
@@ -34,8 +29,6 @@ test.only('plugins mutating rules after tailwind doesnt break it', async () => {
     plugins: [],
   }
 
-  let css = `@tailwind utilities;`
-
   function checkResult(result) {
     let expectedPath = path.resolve(__dirname, './mutable.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
@@ -44,7 +37,7 @@ test.only('plugins mutating rules after tailwind doesnt break it', async () => {
   }
 
   // Verify the first run produces the expected result
-  let firstRun = await run(css, config)
+  let firstRun = await run('@tailwind utilities', config)
   checkResult(firstRun)
 
   // Outside of the context of tailwind jit more postcss plugins may operate on the AST:
@@ -54,6 +47,6 @@ test.only('plugins mutating rules after tailwind doesnt break it', async () => {
   })
 
   // Verify subsequent runs don't produce mutated rules
-  let secondRun = await run(css, config)
+  let secondRun = await run('@tailwind utilities', config)
   checkResult(secondRun)
 })

@@ -1,25 +1,15 @@
-import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
 
-function run(input, config = {}) {
-  jest.resetModules()
-  let tailwind = require('../src')
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
+import { run } from './util/run'
 
 function customExtractor(content) {
-  const matches = content.match(/class="([^"]+)"/)
+  let matches = content.match(/class="([^"]+)"/)
   return matches ? matches[1].split(/\s+/) : []
 }
 
-const css = `
-  @tailwind utilities;
-`
-const expectedPath = path.resolve(__dirname, './custom-extractors.test.css')
-const expected = fs.readFileSync(expectedPath, 'utf8')
+let expectedPath = path.resolve(__dirname, './custom-extractors.test.css')
+let expected = fs.readFileSync(expectedPath, 'utf8')
 
 test('defaultExtractor', () => {
   let config = {
@@ -29,12 +19,9 @@ test('defaultExtractor', () => {
         defaultExtractor: customExtractor,
       },
     },
-    corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
@@ -52,12 +39,9 @@ test('extractors array', () => {
         ],
       },
     },
-    corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
@@ -68,12 +52,9 @@ test('extract function', () => {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       extract: customExtractor,
     },
-    corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
@@ -86,12 +67,9 @@ test('extract.DEFAULT', () => {
         DEFAULT: customExtractor,
       },
     },
-    corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
@@ -104,12 +82,9 @@ test('extract.{extension}', () => {
         html: customExtractor,
       },
     },
-    corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })

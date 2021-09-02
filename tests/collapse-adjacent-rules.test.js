@@ -1,13 +1,7 @@
-import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../src'
 
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
+import { run, css } from './util/run'
 
 test('collapse adjacent rules', () => {
   let config = {
@@ -17,17 +11,15 @@ test('collapse adjacent rules', () => {
     plugins: [],
   }
 
-  let css = `
+  let input = css`
     @tailwind base;
     @font-face {
-      font-family: "Inter";
-      src: url("/fonts/Inter.woff2") format("woff2"),
-            url("/fonts/Inter.woff") format("woff");
+      font-family: 'Inter';
+      src: url('/fonts/Inter.woff2') format('woff2'), url('/fonts/Inter.woff') format('woff');
     }
     @font-face {
-      font-family: "Gilroy";
-      src: url("/fonts/Gilroy.woff2") format("woff2"),
-            url("/fonts/Gilroy.woff") format("woff");
+      font-family: 'Gilroy';
+      src: url('/fonts/Gilroy.woff2') format('woff2'), url('/fonts/Gilroy.woff') format('woff');
     }
     @page {
       margin: 1cm;
@@ -36,17 +28,17 @@ test('collapse adjacent rules', () => {
     @tailwind utilities;
     @layer base {
       @font-face {
-        font-family: "Poppins";
-        src: url("/fonts/Poppins.woff2") format("woff2"),
-              url("/fonts/Poppins.woff") format("woff");
+        font-family: 'Poppins';
+        src: url('/fonts/Poppins.woff2') format('woff2'), url('/fonts/Poppins.woff') format('woff');
       }
       @font-face {
-        font-family: "Proxima Nova";
-        src: url("/fonts/ProximaNova.woff2") format("woff2"),
-              url("/fonts/ProximaNova.woff") format("woff");
+        font-family: 'Proxima Nova';
+        src: url('/fonts/ProximaNova.woff2') format('woff2'),
+          url('/fonts/ProximaNova.woff') format('woff');
       }
     }
-    .foo, .bar {
+    .foo,
+    .bar {
       color: black;
     }
     .foo,
@@ -55,7 +47,7 @@ test('collapse adjacent rules', () => {
     }
   `
 
-  return run(css, config).then((result) => {
+  return run(input, config).then((result) => {
     let expectedPath = path.resolve(__dirname, './collapse-adjacent-rules.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 

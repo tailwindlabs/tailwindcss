@@ -1,27 +1,11 @@
-import postcss from 'postcss'
-import path from 'path'
-import tailwind from '../src'
-
-function run(input, config = {}) {
-  const { currentTestName } = expect.getState()
-
-  return postcss(tailwind(config)).process(input, {
-    from: `${path.resolve(__filename)}?test=${currentTestName}`,
-  })
-}
+import { run, html, css } from './util/run'
 
 test('class variants are inserted at `@tailwind variants`', async () => {
   let config = {
-    content: [
-      {
-        raw: `font-bold hover:font-bold md:font-bold`,
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="font-bold hover:font-bold md:font-bold"></div>` }],
   }
 
-  let css = `
+  let input = css`
     @tailwind utilities;
     @tailwind variants;
     .foo {
@@ -29,8 +13,8 @@ test('class variants are inserted at `@tailwind variants`', async () => {
     }
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .font-bold {
         font-weight: 700;
       }
@@ -51,16 +35,10 @@ test('class variants are inserted at `@tailwind variants`', async () => {
 
 test('`@tailwind screens` works as an alias for `@tailwind variants`', async () => {
   let config = {
-    content: [
-      {
-        raw: `font-bold hover:font-bold md:font-bold`,
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="font-bold hover:font-bold md:font-bold"></div>` }],
   }
 
-  let css = `
+  let input = css`
     @tailwind utilities;
     @tailwind screens;
     .foo {
@@ -68,8 +46,8 @@ test('`@tailwind screens` works as an alias for `@tailwind variants`', async () 
     }
   `
 
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .font-bold {
         font-weight: 700;
       }

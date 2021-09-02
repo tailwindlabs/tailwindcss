@@ -1,28 +1,10 @@
-import postcss from 'postcss'
-import path from 'path'
-import tailwind from '../src'
-
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
-
-function css(templates) {
-  return templates.join('')
-}
-
-function html(templates) {
-  return templates.join('')
-}
+import { run, html, css } from './util/run'
 
 it('should be possible to use the darkMode "class" mode', () => {
   let config = {
     darkMode: 'class',
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
   let input = css`
@@ -45,8 +27,6 @@ it('should be possible to use the darkMode "media" mode', () => {
     darkMode: 'media',
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
   let input = css`
@@ -70,8 +50,6 @@ it('should default to the `media` mode when no mode is provided', () => {
   let config = {
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
   let input = css`
@@ -96,8 +74,6 @@ it('should default to the `media` mode when mode is set to `false`', () => {
     darkMode: false,
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
   let input = css`

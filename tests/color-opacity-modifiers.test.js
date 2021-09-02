@@ -1,30 +1,12 @@
-import postcss from 'postcss'
-import path from 'path'
-import tailwind from '../src'
-
-function run(input, config = {}) {
-  const { currentTestName } = expect.getState()
-
-  return postcss(tailwind(config)).process(input, {
-    from: `${path.resolve(__filename)}?test=${currentTestName}`,
-  })
-}
+import { run, css, html } from './util/run'
 
 test('basic color opacity modifier', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="bg-red-500/50"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="bg-red-500/50"></div>` }],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .bg-red-500\\/50 {
         background-color: rgba(239, 68, 68, 0.5);
       }
@@ -34,11 +16,7 @@ test('basic color opacity modifier', async () => {
 
 test('colors with slashes are matched first', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="bg-red-500/50"></div>',
-      },
-    ],
+    content: [{ raw: html`<div class="bg-red-500/50"></div>` }],
     theme: {
       extend: {
         colors: {
@@ -46,13 +24,10 @@ test('colors with slashes are matched first', async () => {
         },
       },
     },
-    plugins: [],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .bg-red-500\\/50 {
         --tw-bg-opacity: 1;
         background-color: rgba(255, 0, 0, var(--tw-bg-opacity));
@@ -63,19 +38,11 @@ test('colors with slashes are matched first', async () => {
 
 test('arbitrary color opacity modifier', async () => {
   let config = {
-    content: [
-      {
-        raw: 'bg-red-500/[var(--opacity)]',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="bg-red-500/[var(--opacity)]"></div>` }],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .bg-red-500\\/\\[var\\(--opacity\\)\\] {
         background-color: rgba(239, 68, 68, var(--opacity));
       }
@@ -85,29 +52,17 @@ test('arbitrary color opacity modifier', async () => {
 
 test('missing alpha generates nothing', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="bg-red-500/"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="bg-red-500/"></div>` }],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(``)
   })
 })
 
 test('values not in the opacity config are ignored', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="bg-red-500/29"></div>',
-      },
-    ],
+    content: [{ raw: html`<div class="bg-red-500/29"></div>` }],
     theme: {
       opacity: {
         0: '0',
@@ -117,23 +72,16 @@ test('values not in the opacity config are ignored', async () => {
         100: '1',
       },
     },
-    plugins: [],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(``)
   })
 })
 
 test('function colors are supported', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="bg-blue/50"></div>',
-      },
-    ],
+    content: [{ raw: html`<div class="bg-blue/50"></div>` }],
     theme: {
       colors: {
         blue: ({ opacityValue }) => {
@@ -141,13 +89,10 @@ test('function colors are supported', async () => {
         },
       },
     },
-    plugins: [],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .bg-blue\\/50 {
         background-color: rgba(var(--colors-blue), 0.5);
       }
@@ -159,7 +104,7 @@ test('utilities that support any type are supported', async () => {
   let config = {
     content: [
       {
-        raw: `
+        raw: html`
           <div class="from-red-500/50"></div>
           <div class="fill-red-500/25"></div>
           <div class="placeholder-red-500/75"></div>
@@ -174,10 +119,8 @@ test('utilities that support any type are supported', async () => {
     plugins: [],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .from-red-500\\/50 {
         --tw-gradient-from: rgba(239, 68, 68, 0.5);
         --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(239, 68, 68, 0));

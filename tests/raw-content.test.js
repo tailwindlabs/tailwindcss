@@ -1,33 +1,23 @@
-import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
 
-beforeEach(() => {
-  jest.resetModules()
-})
+import { run, css } from './util/run'
 
-function run(tailwind, input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
+beforeEach(() => jest.resetModules())
 
 test('raw content', () => {
   let tailwind = require('../src')
-
   let config = {
     content: [{ raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8') }],
     corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
-  let css = `
+  let input = css`
     @tailwind components;
     @tailwind utilities;
   `
 
-  return run(tailwind, css, config).then((result) => {
+  return run(input, config, tailwind).then((result) => {
     let expectedPath = path.resolve(__dirname, './raw-content.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
@@ -37,7 +27,6 @@ test('raw content', () => {
 
 test('raw content with extension', () => {
   let tailwind = require('../src')
-
   let config = {
     content: {
       content: [
@@ -56,14 +45,10 @@ test('raw content with extension', () => {
       },
     },
     corePlugins: { preflight: false },
-    theme: {},
-    plugins: [],
   }
 
-  let css = `@tailwind utilities;`
-
-  return run(tailwind, css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config, tailwind).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .invisible {
         visibility: hidden;
       }

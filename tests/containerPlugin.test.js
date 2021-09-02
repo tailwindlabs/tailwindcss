@@ -1,32 +1,9 @@
-import path from 'path'
-import postcss from 'postcss'
-
-import tailwind from '../src'
-
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
-
-function css(templates) {
-  return templates.join('')
-}
-
-function html(templates) {
-  return templates.join('')
-}
+import { run, html, css } from './util/run'
 
 test('options are not required', () => {
-  let config = {
-    content: [{ raw: html`<div class="container"></div>` }],
-  }
+  let config = { content: [{ raw: html`<div class="container"></div>` }] }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .container {
         width: 100%;
@@ -70,11 +47,7 @@ test('screens can be passed explicitly', () => {
     },
   }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .container {
         width: 100%;
@@ -103,11 +76,7 @@ test('screens are ordered ascending by min-width', () => {
     },
   }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .container {
         width: 100%;
@@ -140,11 +109,7 @@ test('screens are deduplicated by min-width', () => {
     },
   }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .container {
         width: 100%;
@@ -173,11 +138,7 @@ test('the container can be centered by default', () => {
     },
   }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .container {
         width: 100%;
@@ -223,11 +184,7 @@ test('horizontal padding can be included by default', () => {
     },
   }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .container {
         width: 100%;
@@ -284,11 +241,7 @@ test('responsive horizontal padding can be included by default', () => {
     },
   }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .container {
         width: 100%;
@@ -337,11 +290,7 @@ test('setting all options at once', () => {
     },
   }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .container {
         width: 100%;
@@ -374,11 +323,7 @@ test('container can use variants', () => {
     },
   }
 
-  let content = css`
-    @tailwind components;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 1024px) {
         .lg\\:hover\\:container:hover {

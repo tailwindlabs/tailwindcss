@@ -1,30 +1,14 @@
-import postcss from 'postcss'
-import path from 'path'
-import tailwind from '../src'
-
-function run(input, config = {}) {
-  const { currentTestName } = expect.getState()
-
-  return postcss(tailwind(config)).process(input, {
-    from: `${path.resolve(__filename)}?test=${currentTestName}`,
-  })
-}
+import { run, html, css } from './util/run'
 
 test('PHP arrays', async () => {
   let config = {
     content: [
-      {
-        raw: `<h1 class="<?php echo wrap(['class' => "max-w-[16rem]"]); ?>">Hello world</h1>`,
-      },
+      { raw: html`<h1 class="<?php echo wrap(['class' => "max-w-[16rem]"]); ?>">Hello world</h1>` },
     ],
-    theme: {},
-    plugins: [],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .max-w-\\[16rem\\] {
         max-width: 16rem;
       }
@@ -33,20 +17,10 @@ test('PHP arrays', async () => {
 })
 
 test('arbitrary values with quotes', async () => {
-  let config = {
-    content: [
-      {
-        raw: `<div class="content-['hello]']"></div>`,
-      },
-    ],
-    theme: {},
-    plugins: [],
-  }
+  let config = { content: [{ raw: html`<div class="content-['hello]']"></div>` }] }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
       .content-\\[\\'hello\\]\\'\\] {
         content: 'hello]';
       }

@@ -1,27 +1,16 @@
-import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../src'
 
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
+import { run } from './util/run'
 
 test('custom separator', () => {
   let config = {
     darkMode: 'class',
     content: [path.resolve(__dirname, './custom-separator.test.html')],
     separator: '_',
-    corePlugins: {},
-    theme: {},
-    plugins: [],
   }
 
-  let css = `@tailwind utilities`
-
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     let expectedPath = path.resolve(__dirname, './custom-separator.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
@@ -34,14 +23,9 @@ test('dash is not supported', () => {
     darkMode: 'class',
     content: [{ raw: 'lg-hover-font-bold' }],
     separator: '-',
-    corePlugins: {},
-    theme: {},
-    plugins: [],
   }
 
-  let css = `@tailwind utilities`
-
-  return expect(run(css, config)).rejects.toThrowError(
+  return expect(run('@tailwind utilities', config)).rejects.toThrowError(
     "The '-' character cannot be used as a custom separator in JIT mode due to parsing ambiguity. Please use another character like '_' instead."
   )
 })

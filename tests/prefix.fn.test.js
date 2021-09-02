@@ -1,13 +1,7 @@
-import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../src'
 
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
+import { run } from './util/run'
 
 test('prefix fn', () => {
   let config = {
@@ -20,14 +14,9 @@ test('prefix fn', () => {
     },
     content: [path.resolve(__dirname, './prefix.fn.test.html')],
     corePlugins: { preflight: false },
-    theme: {},
   }
 
-  let css = `
-    @tailwind utilities;
-  `
-
-  return run(css, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     let expectedPath = path.resolve(__dirname, './prefix.fn.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 

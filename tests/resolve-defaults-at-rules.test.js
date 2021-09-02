@@ -1,28 +1,8 @@
-import postcss from 'postcss'
-import path from 'path'
-import tailwind from '../src'
-
-function run(input, config = {}) {
-  const { currentTestName } = expect.getState()
-
-  return postcss(tailwind(config)).process(input, {
-    from: `${path.resolve(__filename)}?test=${currentTestName}`,
-  })
-}
-
-function css(templates) {
-  return templates.join('')
-}
+import { run, html, css } from './util/run'
 
 test('basic utilities', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="scale-x-110 rotate-3 skew-y-6"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="scale-x-110 rotate-3 skew-y-6"></div>` }],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -68,12 +48,8 @@ test('basic utilities', async () => {
 test('with pseudo-class variants', async () => {
   let config = {
     content: [
-      {
-        raw: '<div class="hover:scale-x-110 focus:rotate-3 hover:focus:skew-y-6"></div>',
-      },
+      { raw: html`<div class="hover:scale-x-110 focus:rotate-3 hover:focus:skew-y-6"></div>` },
     ],
-    theme: {},
-    plugins: [],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -118,13 +94,7 @@ test('with pseudo-class variants', async () => {
 
 test('with pseudo-element variants', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="before:scale-x-110 after:rotate-3"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="before:scale-x-110 after:rotate-3"></div>` }],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -167,13 +137,7 @@ test('with pseudo-element variants', async () => {
 
 test('with multi-class variants', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="group-hover:scale-x-110 peer-focus:rotate-3"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="group-hover:scale-x-110 peer-focus:rotate-3"></div>` }],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -215,12 +179,8 @@ test('with multi-class variants', async () => {
 test('with multi-class pseudo-element variants', async () => {
   let config = {
     content: [
-      {
-        raw: '<div class="group-hover:before:scale-x-110 peer-focus:after:rotate-3"></div>',
-      },
+      { raw: html`<div class="group-hover:before:scale-x-110 peer-focus:after:rotate-3"></div>` },
     ],
-    theme: {},
-    plugins: [],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -265,11 +225,11 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
   let config = {
     content: [
       {
-        raw: '<div class="group-hover:hover:before:scale-x-110 peer-focus:focus:after:rotate-3"></div>',
+        raw: html`<div
+          class="group-hover:hover:before:scale-x-110 peer-focus:focus:after:rotate-3"
+        ></div>`,
       },
     ],
-    theme: {},
-    plugins: [],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -312,13 +272,7 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
 
 test('with apply', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="foo"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="foo"></div>` }],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -439,13 +393,7 @@ test('with apply', async () => {
 
 test('with borders', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="border border-red-500 md:border-2"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="border border-red-500 md:border-2"></div>` }],
     corePlugins: ['borderWidth', 'borderColor', 'borderOpacity'],
   }
 
@@ -482,13 +430,7 @@ test('with borders', async () => {
 
 test('with shadows', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="shadow md:shadow-xl ring-1 ring-black/25"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="shadow md:shadow-xl ring-1 ring-black/25"></div>` }],
     corePlugins: ['boxShadow', 'ringColor', 'ringWidth'],
   }
 
@@ -543,13 +485,7 @@ test('with shadows', async () => {
 
 test('when no utilities that need the defaults are used', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class=""></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class=""></div>` }],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -568,13 +504,7 @@ test('when no utilities that need the defaults are used', async () => {
 
 test('when a utility uses defaults but they do not exist', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="rotate-3"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="rotate-3"></div>` }],
     corePlugins: ['rotate'],
   }
 
@@ -597,13 +527,7 @@ test('when a utility uses defaults but they do not exist', async () => {
 
 test('selectors are reduced to the lowest possible specificity', async () => {
   let config = {
-    content: [
-      {
-        raw: '<div class="foo"></div>',
-      },
-    ],
-    theme: {},
-    plugins: [],
+    content: [{ raw: html`<div class="foo"></div>` }],
     corePlugins: [],
   }
 
