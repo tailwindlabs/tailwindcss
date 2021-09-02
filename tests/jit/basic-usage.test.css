@@ -193,6 +193,12 @@
 .hidden {
   display: none;
 }
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
 .h-16 {
   height: 4rem;
 }

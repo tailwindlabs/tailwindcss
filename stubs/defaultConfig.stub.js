@@ -71,6 +71,11 @@ module.exports = {
       pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       bounce: 'bounce 1s infinite',
     },
+    aspectRatio: {
+      'auto': 'auto',
+      'square': '1 / 1',
+      'video': '16 / 9',
+    },
     backdropBlur: (theme) => theme('blur'),
     backdropBrightness: (theme) => theme('brightness'),
     backdropContrast: (theme) => theme('contrast'),
