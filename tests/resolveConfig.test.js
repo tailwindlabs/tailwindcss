@@ -2215,3 +2215,62 @@ test('plugins are merged', () => {
     plugins: ['1', '2', '3'],
   })
 })
+
+test('all helpers can be destructured from the first function argument', () => {
+  const userConfig = {
+    theme: {
+      example: ({ theme, colors, negative, breakpoints }) => ({
+        weight: theme('fontWeight.bold'),
+        black: colors.black,
+        white: colors.white,
+        ...negative(theme('spacing')),
+        ...breakpoints(theme('screens')),
+      }),
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        sm: '640px',
+        md: '768px',
+      },
+      fontWeight: {
+        bold: 700,
+      },
+      spacing: {
+        0: '0px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
+      },
+    },
+    variants: {},
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      example: {
+        weight: 700,
+        black: '#000',
+        white: '#fff',
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
+        'screen-sm': '640px',
+        'screen-md': '768px',
+      },
+    },
+    variants: {},
+  })
+})
