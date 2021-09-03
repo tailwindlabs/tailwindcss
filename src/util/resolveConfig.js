@@ -123,6 +123,12 @@ function resolveFunctionKeys(object) {
     return val === undefined ? defaultValue : val
   }
 
+  resolvePath.theme = resolvePath
+
+  for (let key in configUtils) {
+    resolvePath[key] = configUtils[key]
+  }
+
   return Object.keys(object).reduce((resolved, key) => {
     return {
       ...resolved,
