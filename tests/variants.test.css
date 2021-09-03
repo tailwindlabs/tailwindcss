@@ -15,7 +15,7 @@
 }
 .first-line\:bg-yellow-300::first-line {
   --tw-bg-opacity: 1;
-  background-color: rgba(252, 211, 77, var(--tw-bg-opacity));
+  background-color: rgba(253, 224, 71, var(--tw-bg-opacity));
 }
 .first-line\:underline::first-line {
   text-decoration: underline;
