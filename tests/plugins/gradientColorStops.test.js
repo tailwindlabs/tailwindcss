@@ -1,20 +1,4 @@
-import path from 'path'
-import postcss from 'postcss'
-import tailwind from '../../src/index'
-
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
-
-function css(templates) {
-  return templates.join('')
-}
-
-function html(templates) {
-  return templates.join('')
-}
+import { run, html, css } from '../util/run'
 
 test('opacity variables are given to colors defined as closures', () => {
   let config = {
@@ -44,14 +28,9 @@ test('opacity variables are given to colors defined as closures', () => {
         50: '0.5',
       },
     },
-    plugins: [],
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .from-primary {
         --tw-gradient-from: rgb(31, 31, 31);

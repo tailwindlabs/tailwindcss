@@ -1,23 +1,7 @@
-import postcss from 'postcss'
-import path from 'path'
-import tailwind from '../../src/index.js'
-
-function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
-
-function css(templates) {
-  return templates.join('')
-}
-
-function html(templates) {
-  return templates.join('')
-}
+import { run, html, css } from '../util/run'
 
 test('font-size utilities can include a default line-height', () => {
-  const config = {
+  let config = {
     content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
@@ -25,10 +9,6 @@ test('font-size utilities can include a default line-height', () => {
         md: ['16px', '24px'],
         lg: ['20px', '28px'],
       },
-    },
-    corePlugins: ['fontSize'],
-    variants: {
-      fontSize: [],
     },
   }
 
@@ -50,7 +30,7 @@ test('font-size utilities can include a default line-height', () => {
 })
 
 test('font-size utilities can include a default letter-spacing', () => {
-  const config = {
+  let config = {
     content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
@@ -58,10 +38,6 @@ test('font-size utilities can include a default letter-spacing', () => {
         md: ['16px', { letterSpacing: '-0.01em' }],
         lg: ['20px', { letterSpacing: '-0.02em' }],
       },
-    },
-    corePlugins: ['fontSize'],
-    variants: {
-      fontSize: [],
     },
   }
 
@@ -83,7 +59,7 @@ test('font-size utilities can include a default letter-spacing', () => {
 })
 
 test('font-size utilities can include a default line-height and letter-spacing', () => {
-  const config = {
+  let config = {
     content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
     theme: {
       fontSize: {
@@ -91,10 +67,6 @@ test('font-size utilities can include a default line-height and letter-spacing',
         md: ['16px', { lineHeight: '24px', letterSpacing: '-0.01em' }],
         lg: ['20px', { lineHeight: '28px', letterSpacing: '-0.02em' }],
       },
-    },
-    corePlugins: ['fontSize'],
-    variants: {
-      fontSize: [],
     },
   }
 

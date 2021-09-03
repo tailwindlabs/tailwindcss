@@ -1,40 +1,14 @@
 import fs from 'fs'
 import path from 'path'
-import postcss from 'postcss'
-import tailwind from '../src/index'
 import { cjsConfigFile, defaultConfigFile } from '../src/constants'
 import inTempDirectory from '../jest/runInTempDirectory'
 
-// NOTE: If we ever want to abstract this logic, then we have to watch out
-// because in most tests we default to an empty object here. However, in this
-// tests we do want to check the difference between no config (undefined) and a
-// config (empty object or full object).
-function run(input, config /* Undefined is important in this case */) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
-}
-
-function css(templates) {
-  return templates.join('')
-}
-
-function html(templates) {
-  return templates.join('')
-}
-
-function javascript(templates) {
-  return templates.join('')
-}
+import { run, html, css, javascript } from './util/run'
 
 test('it uses the values from the custom config file', () => {
   let config = require(path.resolve(`${__dirname}/fixtures/custom-config.js`))
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 400px) {
         .mobile\\:font-bold {
@@ -55,11 +29,7 @@ test('custom config can be passed as an object', () => {
     },
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 400px) {
         .mobile\\:font-bold {
@@ -75,11 +45,7 @@ test('custom config path can be passed using `config` property in an object', ()
     config: path.resolve(`${__dirname}/fixtures/custom-config.js`),
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 400px) {
         .mobile\\:font-bold {
@@ -102,11 +68,7 @@ test('custom config can be passed under the `config` property', () => {
     },
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 400px) {
         .mobile\\:font-bold {
@@ -131,11 +93,7 @@ test('tailwind.config.cjs is picked up by default', () => {
       }`
     )
 
-    let content = css`
-      @tailwind utilities;
-    `
-
-    return run(content).then((result) => {
+    return run('@tailwind utilities').then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 400px) {
           .mobile\\:font-bold {
@@ -161,11 +119,7 @@ test('tailwind.config.js is picked up by default', () => {
       }`
     )
 
-    let content = css`
-      @tailwind utilities;
-    `
-
-    return run(content).then((result) => {
+    return run('@tailwind utilities').then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 400px) {
           .mobile\\:font-bold {
@@ -191,11 +145,7 @@ test('tailwind.config.cjs is picked up by default when passing an empty object',
       }`
     )
 
-    let content = css`
-      @tailwind utilities;
-    `
-
-    return run(content, {}).then((result) => {
+    return run('@tailwind utilities', {}).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 400px) {
           .mobile\\:font-bold {
@@ -221,11 +171,7 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
       }`
     )
 
-    let content = css`
-      @tailwind utilities;
-    `
-
-    return run(content, {}).then((result) => {
+    return run('@tailwind utilities', {}).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 400px) {
           .mobile\\:font-bold {
@@ -252,11 +198,7 @@ test('the default config can be overridden using the presets key', () => {
     },
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .min-h-0 {
         min-height: 0px;
@@ -286,11 +228,7 @@ test('presets can be functions', () => {
     },
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .min-h-0 {
         min-height: 0px;
@@ -321,11 +259,7 @@ test('the default config can be removed by using an empty presets key in a prese
     },
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .min-h-primary {
         min-height: 48px;
@@ -376,11 +310,7 @@ test('presets can have their own presets', () => {
     },
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-transparent {
         background-color: transparent;
@@ -437,11 +367,7 @@ test('function presets can be mixed with object presets', () => {
     },
   }
 
-  let content = css`
-    @tailwind utilities;
-  `
-
-  return run(content, config).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-transparent {
         background-color: transparent;
