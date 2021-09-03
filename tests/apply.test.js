@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run, css } from './util/run'
+import { run, html, css } from './util/run'
 
 test('@apply', () => {
   let config = {
@@ -236,7 +236,7 @@ test('@apply error when using a prefixed .group utility', async () => {
   let config = {
     prefix: 'tw-',
     darkMode: 'class',
-    content: [{ raw: '<div class="foo"></div>' }],
+    content: [{ raw: html`<div class="foo"></div>` }],
   }
 
   let input = css`
@@ -253,4 +253,73 @@ test('@apply error when using a prefixed .group utility', async () => {
   await expect(run(input, config)).rejects.toThrowError(
     `@apply should not be used with the 'tw-group' utility`
   )
+})
+
+test('@apply classes from outside a @layer', async () => {
+  let config = {
+    content: [{ raw: html`<div class="font-bold foo bar baz"></div>` }],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    .foo {
+      @apply font-bold;
+    }
+
+    .bar {
+      @apply foo text-red-500 hover:text-green-500;
+    }
+
+    .baz {
+      @apply bar underline;
+    }
+
+    .keep-me-even-though-I-am-not-used-in-content {
+      color: green;
+    }
+  `
+
+  await run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .font-bold {
+        font-weight: 700;
+      }
+
+      .foo {
+        font-weight: 700;
+      }
+
+      .bar {
+        font-weight: 700;
+        --tw-text-opacity: 1;
+        color: rgba(239, 68, 68, var(--tw-text-opacity));
+      }
+
+      .bar:hover {
+        --tw-text-opacity: 1;
+        color: rgba(16, 185, 129, var(--tw-text-opacity));
+      }
+
+      .baz {
+        font-weight: 700;
+        --tw-text-opacity: 1;
+        color: rgba(239, 68, 68, var(--tw-text-opacity));
+      }
+
+      .baz:hover {
+        --tw-text-opacity: 1;
+        color: rgba(16, 185, 129, var(--tw-text-opacity));
+      }
+
+      .baz {
+        text-decoration: underline;
+      }
+
+      .keep-me-even-though-I-am-not-used-in-content {
+        color: green;
+      }
+    `)
+  })
 })
