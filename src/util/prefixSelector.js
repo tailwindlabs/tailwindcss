@@ -1,5 +1,9 @@
 import parser from 'postcss-selector-parser'
-import tap from 'lodash/tap'
+
+function tap(value, cb) {
+  cb(value)
+  return value
+}
 
 export default function (prefix, selector) {
   const getPrefix =

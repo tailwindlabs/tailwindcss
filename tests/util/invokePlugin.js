@@ -1,16 +1,16 @@
-import _ from 'lodash'
+import dlv from 'dlv'
 import escapeClassName from '../src/util/escapeClassName'
 
 export default function (plugin, config) {
   const addedUtilities = []
 
-  const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
+  const getConfigValue = (path, defaultValue) => dlv(config, path, defaultValue)
   const pluginApi = {
     config: getConfigValue,
     e: escapeClassName,
     theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
     variants: (path, defaultValue) => {
-      if (_.isArray(config.variants)) {
+      if (Array.isArray(config.variants)) {
         return config.variants
       }
 
@@ -36,7 +36,7 @@ export default function (plugin, config) {
 
   return {
     utilities: addedUtilities.map(([utilities, variants]) => [
-      _.merge({}, ..._.castArray(utilities)),
+      Object.assign({}, ...(Array.isArray(utilities) ? utilities : [utilities])),
       variants,
     ]),
   }

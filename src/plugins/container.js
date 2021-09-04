@@ -1,9 +1,6 @@
-/* eslint-disable no-shadow */
-import _ from 'lodash'
-
 function extractMinWidths(breakpoints) {
-  return _.flatMap(breakpoints, (breakpoints) => {
-    if (_.isString(breakpoints)) {
+  return Object.values(breakpoints ?? {}).flatMap((breakpoints) => {
+    if (typeof breakpoints === 'string') {
       breakpoints = { min: breakpoints }
     }
 
@@ -11,14 +8,13 @@ function extractMinWidths(breakpoints) {
       breakpoints = [breakpoints]
     }
 
-    return _(breakpoints)
+    return breakpoints
       .filter((breakpoint) => {
-        return _.has(breakpoint, 'min') || _.has(breakpoint, 'min-width')
+        return breakpoint?.hasOwnProperty?.('min') || breakpoint?.hasOwnProperty('min-width')
       })
       .map((breakpoint) => {
-        return _.get(breakpoint, 'min-width', breakpoint.min)
+        return breakpoint['min-width'] ?? breakpoint.min
       })
-      .value()
   })
 }
 
@@ -27,7 +23,7 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
     return []
   }
 
-  if (!_.isObject(paddings)) {
+  if (!(typeof paddings === 'object' && paddings !== null)) {
     return [
       {
         screen: 'DEFAULT',
@@ -37,7 +33,7 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
     ]
   }
 
-  const mapping = []
+  let mapping = []
 
   if (paddings.DEFAULT) {
     mapping.push({
@@ -47,11 +43,10 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
     })
   }
 
-  _.each(minWidths, (minWidth) => {
-    Object.keys(screens).forEach((screen) => {
-      const screenMinWidth = _.isPlainObject(screens[screen])
-        ? screens[screen].min || screens[screen]['min-width']
-        : screens[screen]
+  for (let minWidth of minWidths) {
+    for (let [screen, value] of Object.entries(screens)) {
+      let screenMinWidth =
+        typeof value === 'object' && value !== null ? value.min || value['min-width'] : value
 
       if (`${screenMinWidth}` === `${minWidth}`) {
         mapping.push({
@@ -60,20 +55,20 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
           padding: paddings[screen],
         })
       }
-    })
-  })
+    }
+  }
 
   return mapping
 }
 
 module.exports = function () {
   return function ({ addComponents, theme, variants }) {
-    const screens = theme('container.screens', theme('screens'))
-    const minWidths = extractMinWidths(screens)
-    const paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
+    let screens = theme('container.screens', theme('screens'))
+    let minWidths = extractMinWidths(screens)
+    let paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
 
-    const generatePaddingFor = (minWidth) => {
-      const paddingConfig = _.find(paddings, (padding) => `${padding.minWidth}` === `${minWidth}`)
+    let generatePaddingFor = (minWidth) => {
+      let paddingConfig = paddings.find((padding) => `${padding.minWidth}` === `${minWidth}`)
 
       if (!paddingConfig) {
         return {}
@@ -85,20 +80,16 @@ module.exports = function () {
       }
     }
 
-    const atRules = _(minWidths)
-      .sortBy((minWidth) => parseInt(minWidth))
-      .sortedUniq()
-      .map((minWidth) => {
-        return {
-          [`@media (min-width: ${minWidth})`]: {
-            '.container': {
-              'max-width': minWidth,
-              ...generatePaddingFor(minWidth),
-            },
-          },
-        }
-      })
-      .value()
+    let atRules = Array.from(
+      new Set(minWidths.slice().sort((a, z) => parseInt(a) - parseInt(z)))
+    ).map((minWidth) => ({
+      [`@media (min-width: ${minWidth})`]: {
+        '.container': {
+          'max-width': minWidth,
+          ...generatePaddingFor(minWidth),
+        },
+      },
+    }))
 
     addComponents(
       [

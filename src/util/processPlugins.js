@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import dlv from 'dlv'
 import postcss from 'postcss'
 import Node from 'postcss/lib/node'
 import isFunction from 'lodash/isFunction'
@@ -17,7 +18,7 @@ function parseStyles(styles) {
     return parseStyles([styles])
   }
 
-  return _.flatMap(styles, (style) => (style instanceof Node ? style : parseObjectStyles(style)))
+  return styles.flatMap((style) => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
 function wrapWithLayer(rules, layer) {
@@ -70,14 +71,14 @@ export default function (plugins, config) {
     )
   }
 
-  const getConfigValue = (path, defaultValue) => (path ? _.get(config, path, defaultValue) : config)
+  const getConfigValue = (path, defaultValue) => (path ? dlv(config, path, defaultValue) : config)
 
   plugins.forEach((plugin) => {
     if (plugin.__isOptionsFunction) {
       plugin = plugin()
     }
 
-    const handler = isFunction(plugin) ? plugin : _.get(plugin, 'handler', () => {})
+    const handler = isFunction(plugin) ? plugin : plugin?.handler ?? (() => {})
 
     handler({
       postcss,

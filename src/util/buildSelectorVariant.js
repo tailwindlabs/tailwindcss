@@ -1,6 +1,10 @@
 import parser from 'postcss-selector-parser'
-import tap from 'lodash/tap'
 import { useMemo } from './useMemo'
+
+function tap(input, cb) {
+  cb(input)
+  return input
+}
 
 const buildSelectorVariant = useMemo(
   (selector, variantName, separator, onError = () => {}) => {

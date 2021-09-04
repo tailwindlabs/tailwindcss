@@ -1,12 +1,11 @@
 import * as culori from 'culori'
-import _ from 'lodash'
 
 function isValidColor(color) {
   return culori.parse(color) !== undefined
 }
 
 export function withAlphaValue(color, alphaValue, defaultValue) {
-  if (_.isFunction(color)) {
+  if (typeof color === 'function') {
     return color({ opacityValue: alphaValue })
   }
 
@@ -40,7 +39,7 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
-  if (_.isFunction(color)) {
+  if (typeof color === 'function') {
     return {
       [variable]: '1',
       [property]: color({ opacityVariable: variable, opacityValue: `var(${variable})` }),
