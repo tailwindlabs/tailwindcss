@@ -364,6 +364,9 @@
 .overscroll-contain {
   overscroll-behavior: contain;
 }
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
