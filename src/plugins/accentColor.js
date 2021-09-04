@@ -5,7 +5,7 @@ export default function () {
   return function ({ matchUtilities, theme, variants }) {
     matchUtilities(
       {
-        caret: (value) => {
+        accent: (value) => {
           return { 'accent-color': toColorValue(value) }
         },
       },
