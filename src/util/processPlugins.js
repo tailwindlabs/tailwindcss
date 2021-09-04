@@ -1,8 +1,6 @@
-import _ from 'lodash'
 import dlv from 'dlv'
 import postcss from 'postcss'
 import Node from 'postcss/lib/node'
-import isFunction from 'lodash/isFunction'
 import escapeClassName from '../util/escapeClassName'
 import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
@@ -12,6 +10,23 @@ import cloneNodes from '../util/cloneNodes'
 import transformThemeValue from './transformThemeValue'
 import nameClass from '../util/nameClass'
 import isKeyframeRule from '../util/isKeyframeRule'
+
+function defaults(target, ...sources) {
+  for (let source of sources) {
+    for (let k in source) {
+      if (!target?.hasOwnProperty?.(k)) {
+        target[k] = source[k]
+      }
+    }
+  }
+
+  return target
+}
+
+function toPath(path) {
+  if (Array.isArray(path)) return path
+  return path.split(/[\.\]\[]*/g)
+}
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
@@ -23,10 +38,7 @@ function parseStyles(styles) {
 
 function wrapWithLayer(rules, layer) {
   return postcss
-    .atRule({
-      name: 'layer',
-      params: layer,
-    })
+    .atRule({ name: 'layer', params: layer })
     .append(cloneNodes(Array.isArray(rules) ? rules : [rules]))
 }
 
@@ -49,7 +61,7 @@ export default function (plugins, config) {
 
     options = Array.isArray(options)
       ? Object.assign({}, defaultOptions, { variants: options })
-      : _.defaults(options, defaultOptions)
+      : defaults(options, defaultOptions)
 
     const styles = postcss.root({ nodes: parseStyles(utilities) })
 
@@ -78,14 +90,14 @@ export default function (plugins, config) {
       plugin = plugin()
     }
 
-    const handler = isFunction(plugin) ? plugin : plugin?.handler ?? (() => {})
+    const handler = typeof plugin === 'function' ? plugin : plugin?.handler ?? (() => {})
 
     handler({
       postcss,
       config: getConfigValue,
       theme: (path, defaultValue) => {
-        const [pathRoot, ...subPaths] = _.toPath(path)
-        const value = getConfigValue(['theme', pathRoot, ...subPaths], defaultValue)
+        let [pathRoot, ...subPaths] = toPath(path)
+        let value = getConfigValue(['theme', pathRoot, ...subPaths], defaultValue)
 
         return transformThemeValue(pathRoot)(value)
       },
@@ -136,7 +148,7 @@ export default function (plugins, config) {
 
         options = Array.isArray(options)
           ? Object.assign({}, defaultOptions, { variants: options })
-          : _.defaults(options, defaultOptions)
+          : defaults(options, defaultOptions)
 
         const styles = postcss.root({ nodes: parseStyles(components) })
 
