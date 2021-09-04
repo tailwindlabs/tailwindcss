@@ -125,6 +125,7 @@ export { default as fontSmoothing } from './fontSmoothing'
 export { default as placeholderColor } from './placeholderColor'
 export { default as placeholderOpacity } from './placeholderOpacity'
 export { default as caretColor } from './caretColor'
+export { default as accentColor } from './accentColor'
 
 export { default as opacity } from './opacity'
 export { default as backgroundBlendMode } from './backgroundBlendMode'

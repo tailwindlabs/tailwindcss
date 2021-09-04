@@ -172,6 +172,7 @@ module.exports = {
       none: 'none',
     },
     caretColor: (theme) => theme('colors'),
+    accentColor: (theme) => theme('colors'),
     contrast: {
       0: '0',
       50: '.5',

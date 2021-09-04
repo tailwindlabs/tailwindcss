@@ -649,6 +649,9 @@
 .caret-red-600 {
   caret-color: #dc2626;
 }
+.accent-red-600 {
+  accent-color: #dc2626;
+}
 .opacity-90 {
   opacity: 0.9;
 }
