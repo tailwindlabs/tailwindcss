@@ -323,3 +323,85 @@ test('@apply classes from outside a @layer', async () => {
     `)
   })
 })
+
+test('@applying classes from outside a @layer respects the source order', async () => {
+  let config = {
+    content: [{ raw: html`<div class="container font-bold foo bar baz"></div>` }],
+  }
+
+  let input = css`
+    .baz {
+      @apply bar underline;
+    }
+
+    @tailwind components;
+
+    .keep-me-even-though-I-am-not-used-in-content {
+      color: green;
+    }
+
+    @tailwind utilities;
+
+    .foo {
+      @apply font-bold;
+    }
+
+    .bar {
+      @apply no-underline;
+    }
+  `
+
+  await run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .baz {
+        text-decoration: underline;
+        text-decoration: none;
+      }
+
+      .container {
+        width: 100%;
+      }
+      @media (min-width: 640px) {
+        .container {
+          max-width: 640px;
+        }
+      }
+      @media (min-width: 768px) {
+        .container {
+          max-width: 768px;
+        }
+      }
+      @media (min-width: 1024px) {
+        .container {
+          max-width: 1024px;
+        }
+      }
+      @media (min-width: 1280px) {
+        .container {
+          max-width: 1280px;
+        }
+      }
+      @media (min-width: 1536px) {
+        .container {
+          max-width: 1536px;
+        }
+      }
+
+      .keep-me-even-though-I-am-not-used-in-content {
+        color: green;
+      }
+
+      .font-bold {
+        font-weight: 700;
+      }
+
+      .foo {
+        font-weight: 700;
+      }
+
+      .bar {
+        text-decoration: none;
+      }
+    `)
+  })
+})
