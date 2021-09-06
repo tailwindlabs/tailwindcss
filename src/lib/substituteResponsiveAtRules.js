@@ -1,8 +1,8 @@
-import _ from 'lodash'
 import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
 import buildSelectorVariant from '../util/buildSelectorVariant'
+import { tap } from '../util/tap'
 
 function isLayer(node) {
   if (Array.isArray(node)) {
@@ -20,9 +20,9 @@ export default function (config) {
     // Wrap any `responsive` rules with a copy of their parent `layer` to
     // ensure the layer isn't lost when copying to the `screens` location.
     css.walkAtRules('layer', (layerAtRule) => {
-      const layer = layerAtRule.params
+      let layer = layerAtRule.params
       layerAtRule.walkAtRules('responsive', (responsiveAtRule) => {
-        const nestedlayerAtRule = postcss.atRule({
+        let nestedlayerAtRule = postcss.atRule({
           name: 'layer',
           params: layer,
         })
@@ -32,15 +32,15 @@ export default function (config) {
       })
     })
 
-    const {
+    let {
       theme: { screens },
       separator,
     } = config
-    const responsiveRules = postcss.root()
-    const finalRules = []
+    let responsiveRules = postcss.root()
+    let finalRules = []
 
     css.walkAtRules('responsive', (atRule) => {
-      const nodes = atRule.nodes
+      let nodes = atRule.nodes
       responsiveRules.append(...cloneNodes(nodes))
 
       // If the parent is already a `layer` (this is true for anything coming from
@@ -55,16 +55,16 @@ export default function (config) {
       atRule.remove()
     })
 
-    _.keys(screens).forEach((screen) => {
-      const mediaQuery = postcss.atRule({
+    for (let [screen, value] of Object.entries(screens ?? {})) {
+      let mediaQuery = postcss.atRule({
         name: 'media',
-        params: buildMediaQuery(screens[screen]),
+        params: buildMediaQuery(value),
       })
 
       mediaQuery.append(
-        _.tap(responsiveRules.clone(), (clonedRoot) => {
+        tap(responsiveRules.clone(), (clonedRoot) => {
           clonedRoot.walkRules((rule) => {
-            rule.selectors = _.map(rule.selectors, (selector) =>
+            rule.selectors = rule.selectors.map((selector) =>
               buildSelectorVariant(selector, screen, separator, (message) => {
                 throw rule.error(message)
               })
@@ -74,9 +74,9 @@ export default function (config) {
       )
 
       finalRules.push(mediaQuery)
-    })
+    }
 
-    const hasScreenRules = finalRules.some((i) => i.nodes.length !== 0)
+    let hasScreenRules = finalRules.some((i) => i.nodes.length !== 0)
 
     css.walkAtRules('tailwind', (atRule) => {
       if (atRule.params !== 'screens') {

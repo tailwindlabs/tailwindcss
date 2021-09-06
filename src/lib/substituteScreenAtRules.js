@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import buildMediaQuery from '../util/buildMediaQuery'
 
 export default function ({ tailwindConfig: { theme } }) {
@@ -6,7 +5,7 @@ export default function ({ tailwindConfig: { theme } }) {
     css.walkAtRules('screen', (atRule) => {
       const screen = atRule.params
 
-      if (!_.has(theme.screens, screen)) {
+      if (!theme.screens?.hasOwnProperty?.(screen)) {
         throw atRule.error(`No \`${screen}\` screen found.`)
       }
 

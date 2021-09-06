@@ -1,13 +1,12 @@
-import _ from 'lodash'
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import { useMemo } from './useMemo'
 
-const classNameParser = selectorParser((selectors) => {
+let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
 })
 
-const getClassNameFromSelector = useMemo(
+let getClassNameFromSelector = useMemo(
   (selector) => classNameParser.transformSync(selector),
   (selector) => selector
 )
@@ -16,10 +15,10 @@ export default function generateVariantFunction(generator, options = {}) {
   return {
     options,
     handler: (container, config) => {
-      const cloned = postcss.root({ nodes: container.clone().nodes })
+      let cloned = postcss.root({ nodes: container.clone().nodes })
 
       container.before(
-        _.defaultTo(
+        (
           generator({
             container: cloned,
             separator: config.separator,
@@ -40,8 +39,7 @@ export default function generateVariantFunction(generator, options = {}) {
               })
               return cloned
             },
-          }),
-          cloned
+          }) ?? cloned
         ).nodes
       )
     },

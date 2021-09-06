@@ -1,20 +1,46 @@
-import some from 'lodash/some'
-import mergeWith from 'lodash/mergeWith'
-import isFunction from 'lodash/isFunction'
-import isUndefined from 'lodash/isUndefined'
-import defaults from 'lodash/defaults'
-import map from 'lodash/map'
-import get from 'lodash/get'
-import uniq from 'lodash/uniq'
-import toPath from 'lodash/toPath'
-import head from 'lodash/head'
-import isPlainObject from 'lodash/isPlainObject'
 import negateValue from './negateValue'
 import corePluginList from '../corePluginList'
 import configurePlugins from './configurePlugins'
 import defaultConfig from '../../stubs/defaultConfig.stub'
 import colors from '../../colors'
 import log from './log'
+import { defaults } from './defaults'
+import { toPath } from './toPath'
+import dlv from 'dlv'
+
+function isFunction(input) {
+  return typeof input === 'function'
+}
+
+function uniq(input) {
+  return Array.from(new Set(input))
+}
+
+function isObject(input) {
+  return typeof input === 'object' && input !== null
+}
+
+function mergeWith(target, ...sources) {
+  let customizer = sources.pop()
+
+  for (let source of sources) {
+    for (let k in source) {
+      let merged = customizer(target[k], source[k])
+
+      if (merged === undefined) {
+        if (isObject(target[k]) && isObject(source[k])) {
+          target[k] = mergeWith(target[k], source[k], customizer)
+        } else {
+          target[k] = source[k]
+        }
+      } else {
+        target[k] = merged
+      }
+    }
+  }
+
+  return target
+}
 
 const configUtils = {
   colors,
@@ -49,7 +75,7 @@ function value(valueToResolve, ...args) {
 function collectExtends(items) {
   return items.reduce((merged, { extend }) => {
     return mergeWith(merged, extend, (mergedValue, extendValue) => {
-      if (isUndefined(mergedValue)) {
+      if (mergedValue === undefined) {
         return [extendValue]
       }
 
@@ -74,12 +100,12 @@ function mergeThemes(themes) {
 
 function mergeExtensionCustomizer(merged, value) {
   // When we have an array of objects, we do want to merge it
-  if (Array.isArray(merged) && isPlainObject(head(merged))) {
+  if (Array.isArray(merged) && isObject(merged[0])) {
     return merged.concat(value)
   }
 
   // When the incoming value is an array, and the existing config is an object, prepend the existing object
-  if (Array.isArray(value) && isPlainObject(head(value)) && isPlainObject(merged)) {
+  if (Array.isArray(value) && isObject(value[0]) && isObject(merged)) {
     return [merged, ...value]
   }
 
@@ -95,7 +121,7 @@ function mergeExtensionCustomizer(merged, value) {
 function mergeExtensions({ extend, ...theme }) {
   return mergeWith(theme, extend, (themeValue, extensions) => {
     // The `extend` property is an array, so we need to check if it contains any functions
-    if (!isFunction(themeValue) && !some(extensions, isFunction)) {
+    if (!isFunction(themeValue) && !extensions.some(isFunction)) {
       return mergeWith({}, themeValue, ...extensions, mergeExtensionCustomizer)
     }
 
@@ -143,7 +169,7 @@ function extractPluginConfigs(configs) {
   configs.forEach((config) => {
     allConfigs = [...allConfigs, config]
 
-    const plugins = get(config, 'plugins', [])
+    const plugins = config?.plugins ?? []
 
     if (plugins.length === 0) {
       return
@@ -153,7 +179,7 @@ function extractPluginConfigs(configs) {
       if (plugin.__isOptionsFunction) {
         plugin = plugin()
       }
-      allConfigs = [...allConfigs, ...extractPluginConfigs([get(plugin, 'config', {})])]
+      allConfigs = [...allConfigs, ...extractPluginConfigs([plugin?.config ?? {}])]
     })
   })
 
@@ -166,9 +192,9 @@ function mergeVariants(variants) {
       if (isFunction(pluginVariants)) {
         resolved[plugin] = pluginVariants({
           variants(path) {
-            return get(resolved, path, [])
+            return dlv(resolved, path, [])
           },
-          before(toInsert, variant, existingPluginVariants = get(resolved, plugin, [])) {
+          before(toInsert, variant, existingPluginVariants = resolved?.[plugin] ?? []) {
             if (variant === undefined) {
               return [...toInsert, ...existingPluginVariants]
             }
@@ -185,7 +211,7 @@ function mergeVariants(variants) {
               ...existingPluginVariants.slice(index),
             ]
           },
-          after(toInsert, variant, existingPluginVariants = get(resolved, plugin, [])) {
+          after(toInsert, variant, existingPluginVariants = resolved?.[plugin] ?? []) {
             if (variant === undefined) {
               return [...existingPluginVariants, ...toInsert]
             }
@@ -202,7 +228,7 @@ function mergeVariants(variants) {
               ...existingPluginVariants.slice(index + 1),
             ]
           },
-          without(toRemove, existingPluginVariants = get(resolved, plugin, [])) {
+          without(toRemove, existingPluginVariants = resolved?.[plugin] ?? []) {
             return existingPluginVariants.filter((v) => !toRemove.includes(v))
           },
         })
@@ -279,14 +305,14 @@ export default function resolveConfig(configs) {
     defaults(
       {
         theme: resolveFunctionKeys(
-          mergeExtensions(mergeThemes(map(allConfigs, (t) => get(t, 'theme', {}))))
+          mergeExtensions(mergeThemes(allConfigs.map((t) => t?.theme ?? {})))
         ),
         variants: resolveVariants(
-          allConfigs.map((c) => get(c, 'variants', {})),
+          allConfigs.map((c) => c?.variants ?? {}),
           variantOrder
         ),
         corePlugins: resolveCorePlugins(allConfigs.map((c) => c.corePlugins)),
-        plugins: resolvePluginLists(configs.map((c) => get(c, 'plugins', []))),
+        plugins: resolvePluginLists(configs.map((c) => c?.plugins ?? [])),
       },
       ...allConfigs
     )
