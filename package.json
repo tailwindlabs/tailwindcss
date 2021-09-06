@@ -78,7 +78,6 @@
     "fast-glob": "^3.2.7",
     "glob-parent": "^6.0.1",
     "is-glob": "^4.0.1",
-    "lodash": "^4.17.21",
     "normalize-path": "^3.0.0",
     "object-hash": "^2.2.0",
     "postcss-js": "^3.0.3",
