@@ -1373,7 +1373,7 @@ test('custom properties are multiplied by -1 for negative values', () => {
         '-4': '-4px',
         '-foo': 'calc(var(--foo) * -1)',
         '-bar': 'calc(var(--bar, 500px) * -1)',
-        '-baz': 'calc(-50% - -10px)',
+        '-baz': 'calc(calc(50% - 10px) * -1)',
       },
     },
     variants: {},
