@@ -9,34 +9,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Remove AOT engine, make JIT the default [#5340](https://github.com/tailwindlabs/tailwindcss/pull/5340)
-- Throw when trying to `@apply` the `group` class [#4666](https://github.com/tailwindlabs/tailwindcss/pull/4666)
-- Remove dependency on `modern-normalize`, inline and consolidate with Preflight [#5358](https://github.com/tailwindlabs/tailwindcss/pull/5358)
-- Enable extended color palette by default with updated color names [#5384](https://github.com/tailwindlabs/tailwindcss/pull/5384)
+- Remove AOT engine, make JIT the default ([#5340](https://github.com/tailwindlabs/tailwindcss/pull/5340))
+- Throw when trying to `@apply` the `group` class ([#4666](https://github.com/tailwindlabs/tailwindcss/pull/4666))
+- Remove dependency on `modern-normalize`, inline and consolidate with Preflight ([#5358](https://github.com/tailwindlabs/tailwindcss/pull/5358))
+- Enable extended color palette by default with updated color names ([#5384](https://github.com/tailwindlabs/tailwindcss/pull/5384))
 
 ### Added
 
-- Add native `aspect-ratio` utilities [#5359](https://github.com/tailwindlabs/tailwindcss/pull/5359)
-- Unify config callback helpers into single object [#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382)
-- Preserve original color format when adding opacity whenever possible [#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154)
+- Add native `aspect-ratio` utilities ([#5359](https://github.com/tailwindlabs/tailwindcss/pull/5359))
+- Unify config callback helpers into single object ([#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382))
+- Preserve original color format when adding opacity whenever possible ([#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154))
 
 ## [2.2.10] - 2021-09-06
 
 ### Fixed
 
-- Fix build error when using `presets: []` in config file [#4903](https://github.com/tailwindlabs/tailwindcss/pull/4903)
+- Fix build error when using `presets: []` in config file ([#4903](https://github.com/tailwindlabs/tailwindcss/pull/4903))
 
 ### Added
 
-- Reintroduce universal selector optimizations under experimental `optimizeUniversalDefaults` flag [a9e160c](https://github.com/tailwindlabs/tailwindcss/commit/a9e160cf9acb75a2bbac34f8864568b12940f89a)
+- Reintroduce universal selector optimizations under experimental `optimizeUniversalDefaults` flag ([a9e160c](https://github.com/tailwindlabs/tailwindcss/commit/a9e160cf9acb75a2bbac34f8864568b12940f89a))
 
 ## [2.2.9] - 2021-08-30
 
 ### Fixed
 
-- JIT: Fix `@apply`ing utilities that contain variants + the important modifier [#4854](https://github.com/tailwindlabs/tailwindcss/pull/4854)
-- JIT: Don't strip "null" when parsing tracked file paths [#5008](https://github.com/tailwindlabs/tailwindcss/pull/5008)
-- Pin `clean-css` to v5.1.4 to fix empty CSS variables in CDN builds [#5338](https://github.com/tailwindlabs/tailwindcss/pull/5338)
+- JIT: Fix `@apply`ing utilities that contain variants + the important modifier ([#4854](https://github.com/tailwindlabs/tailwindcss/pull/4854))
+- JIT: Don't strip "null" when parsing tracked file paths ([#5008](https://github.com/tailwindlabs/tailwindcss/pull/5008))
+- Pin `clean-css` to v5.1.4 to fix empty CSS variables in CDN builds ([#5338](https://github.com/tailwindlabs/tailwindcss/pull/5338))
 
 ## [2.2.8] - 2021-08-27
 
