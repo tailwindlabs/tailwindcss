@@ -20,6 +20,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unify config callback helpers into single object [#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382)
 - Preserve original color format when adding opacity whenever possible [#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154)
 
+## [2.2.10] - 2021-09-06
+
+### Fixed
+
+- Fix build error when using `presets: []` in config file [#4903](https://github.com/tailwindlabs/tailwindcss/pull/4903)
+
+### Added
+
+- Reintroduce universal selector optimizations under experimental `optimizeUniversalDefaults` flag [a9e160c](https://github.com/tailwindlabs/tailwindcss/commit/a9e160cf9acb75a2bbac34f8864568b12940f89a)
+
 ## [2.2.9] - 2021-08-30
 
 ### Fixed
@@ -1532,7 +1542,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.9...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.10...HEAD
+[2.2.10]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.9...v2.2.10
 [2.2.9]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.8...v2.2.9
 [2.2.8]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.7...v2.2.8
 [2.2.7]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.6...v2.2.7
