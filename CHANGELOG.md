@@ -7,9 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Remove AOT engine, make JIT the default [#5340](https://github.com/tailwindlabs/tailwindcss/pull/5340)
+- Throw when trying to `@apply` the `group` class [#4666](https://github.com/tailwindlabs/tailwindcss/pull/4666)
+- Remove dependency on `modern-normalize`, inline and consolidate with Preflight [#5358](https://github.com/tailwindlabs/tailwindcss/pull/5358)
+- Enable extended color palette by default with updated color names [#5384](https://github.com/tailwindlabs/tailwindcss/pull/5384)
+
+### Added
+
+- Add native `aspect-ratio` utilities [#5359](https://github.com/tailwindlabs/tailwindcss/pull/5359)
+- Unify config callback helpers into single object [#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382)
+- Preserve original color format when adding opacity whenever possible [#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154)
+
+## [2.2.9] - 2021-08-30
+
+### Fixed
+
+- JIT: Fix `@apply`ing utilities that contain variants + the important modifier [#4854](https://github.com/tailwindlabs/tailwindcss/pull/4854)
+- JIT: Don't strip "null" when parsing tracked file paths [#5008](https://github.com/tailwindlabs/tailwindcss/pull/5008)
+- Pin `clean-css` to v5.1.4 to fix empty CSS variables in CDN builds [#5338](https://github.com/tailwindlabs/tailwindcss/pull/5338)
+
+## [2.2.8] - 2021-08-27
+
 ### Fixed
 
 - Improve accessibility of default link focus styles in Firefox ([#5082](https://github.com/tailwindlabs/tailwindcss/pull/5082))
+- JIT: Fix animation variants corrupting keyframes rules [#5223](https://github.com/tailwindlabs/tailwindcss/pull/5223)
+- JIT: Ignore escaped commas when splitting selectors to apply prefixes [#5239](https://github.com/tailwindlabs/tailwindcss/pull/5239/)
+- Nesting: Maintain PostCSS node sources when handling `@apply` [#5249](https://github.com/tailwindlabs/tailwindcss/pull/5249)
+- JIT: Fix support for animation lists [#5252](https://github.com/tailwindlabs/tailwindcss/pull/5252)
+- JIT: Fix arbitrary value support for `object-position` utilities [#5245](https://github.com/tailwindlabs/tailwindcss/pull/5245)
+- CLI: Abort watcher if stdin is closed to avoid zombie processes [#4997](https://github.com/tailwindlabs/tailwindcss/pull/4997)
+- JIT: Ignore arbitrary values with unbalanced brackets [#5293](https://github.com/tailwindlabs/tailwindcss/pull/5293)
 
 ## [2.2.7] - 2021-07-23
 
@@ -1502,7 +1532,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.7...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.9...HEAD
+[2.2.9]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.8...v2.2.9
+[2.2.8]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.7...v2.2.8
 [2.2.7]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.6...v2.2.7
 [2.2.6]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.5...v2.2.6
 [2.2.5]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.4...v2.2.5
