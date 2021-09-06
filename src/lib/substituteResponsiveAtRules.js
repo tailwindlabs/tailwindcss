@@ -2,11 +2,7 @@ import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
 import buildSelectorVariant from '../util/buildSelectorVariant'
-
-function tap(value, cb) {
-  cb(value)
-  return value
-}
+import { tap } from '../util/tap'
 
 function isLayer(node) {
   if (Array.isArray(node)) {

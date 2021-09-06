@@ -1,9 +1,5 @@
 import parser from 'postcss-selector-parser'
-
-function tap(value, cb) {
-  cb(value)
-  return value
-}
+import { tap } from './tap'
 
 export default function (prefix, selector) {
   const getPrefix =
