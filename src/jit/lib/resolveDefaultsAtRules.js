@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
-import { flagEnabled } from '../featureFlags'
+import { flagEnabled } from '../../featureFlags'
 
 function minimumImpactSelector(nodes) {
   let pseudos = nodes.filter((n) => n.type === 'pseudo')
