@@ -1,15 +1,16 @@
 import dlv from 'dlv'
 import postcss from 'postcss'
 import Node from 'postcss/lib/node'
-import escapeClassName from '../util/escapeClassName'
-import generateVariantFunction from '../util/generateVariantFunction'
-import parseObjectStyles from '../util/parseObjectStyles'
-import prefixSelector from '../util/prefixSelector'
-import wrapWithVariants from '../util/wrapWithVariants'
-import cloneNodes from '../util/cloneNodes'
+import escapeClassName from './escapeClassName'
+import generateVariantFunction from './generateVariantFunction'
+import parseObjectStyles from './parseObjectStyles'
+import prefixSelector from './prefixSelector'
+import wrapWithVariants from './wrapWithVariants'
+import cloneNodes from './cloneNodes'
 import transformThemeValue from './transformThemeValue'
-import nameClass from '../util/nameClass'
-import isKeyframeRule from '../util/isKeyframeRule'
+import nameClass from './nameClass'
+import isKeyframeRule from './isKeyframeRule'
+import { toPath } from './toPath'
 
 function defaults(target, ...sources) {
   for (let source of sources) {
@@ -21,11 +22,6 @@ function defaults(target, ...sources) {
   }
 
   return target
-}
-
-function toPath(path) {
-  if (Array.isArray(path)) return path
-  return path.split(/[\.\]\[]*/g)
 }
 
 function parseStyles(styles) {

@@ -15,44 +15,7 @@ import bigSign from '../util/bigSign'
 import corePlugins from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
-
-function toPath(value) {
-  if (Array.isArray(value)) {
-    return value
-  }
-
-  let inBrackets = false
-  let parts = []
-  let chunk = ''
-
-  for (let i = 0; i < value.length; i++) {
-    let char = value[i]
-    if (char === '[') {
-      inBrackets = true
-      parts.push(chunk)
-      chunk = ''
-      continue
-    }
-    if (char === ']' && inBrackets) {
-      inBrackets = false
-      parts.push(chunk)
-      chunk = ''
-      continue
-    }
-    if (char === '.' && !inBrackets && chunk.length > 0) {
-      parts.push(chunk)
-      chunk = ''
-      continue
-    }
-    chunk = chunk + char
-  }
-
-  if (chunk.length > 0) {
-    parts.push(chunk)
-  }
-
-  return parts
-}
+import { toPath } from '../util/toPath'
 
 function insertInto(list, value, { before = [] } = {}) {
   before = [].concat(before)
