@@ -1,5 +1,6 @@
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
+import { flagEnabled } from '../featureFlags'
 
 function minimumImpactSelector(nodes) {
   let pseudos = nodes.filter((n) => n.type === 'pseudo')
@@ -51,7 +52,7 @@ function extractElementSelector(selector) {
   return cache.get(selector)
 }
 
-export default function resolveDefaultsAtRules() {
+export default function resolveDefaultsAtRules({ tailwindConfig }) {
   return (root) => {
     let variableNodeMap = new Map()
     let universals = new Set()
@@ -90,9 +91,11 @@ export default function resolveDefaultsAtRules() {
 
       let universalRule = postcss.rule()
 
-      // TODO: Fix this, this is a hotfix
-      // universalRule.selectors = [...selectors]
-      universalRule.selectors = ['*', '::before', '::after']
+      if (flagEnabled(tailwindConfig, 'optimizeUniversalDefaults')) {
+        universalRule.selectors = [...selectors]
+      } else {
+        universalRule.selectors = ['*', '::before', '::after']
+      }
 
       universalRule.append(universal.nodes)
       universal.before(universalRule)

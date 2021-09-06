@@ -4,7 +4,7 @@ import log from './util/log'
 
 const featureFlags = {
   future: [],
-  experimental: [],
+  experimental: ['optimizeUniversalDefaults'],
 }
 
 export function flagEnabled(config, flag) {
