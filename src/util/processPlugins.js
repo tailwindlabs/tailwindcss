@@ -11,18 +11,7 @@ import transformThemeValue from './transformThemeValue'
 import nameClass from './nameClass'
 import isKeyframeRule from './isKeyframeRule'
 import { toPath } from './toPath'
-
-function defaults(target, ...sources) {
-  for (let source of sources) {
-    for (let k in source) {
-      if (!target?.hasOwnProperty?.(k)) {
-        target[k] = source[k]
-      }
-    }
-  }
-
-  return target
-}
+import { defaults } from './defaults'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
