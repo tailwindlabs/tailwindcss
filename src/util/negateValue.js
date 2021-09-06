@@ -1,4 +1,6 @@
 export default function (value) {
+  value = `${value}`
+
   // Flip sign of numbers
   if (
     /^[+-]?(\d+|\d*\.\d+)(e[+-]?\d+)?(%|cm|mm|Q|in|pc|pt|px|em|ex|ch|rem|lh|vw|vh|vmin|vmax)?$/.test(
