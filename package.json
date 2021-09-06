@@ -31,7 +31,7 @@
     "generate:plugin-list": "babel-node scripts/create-plugin-list.js"
   },
   "files": [
-    "dist/*.css",
+    "src/*",
     "cli/*",
     "lib/*",
     "peers/*",
