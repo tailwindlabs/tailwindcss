@@ -1,9 +1,14 @@
-import reduceCalc from 'reduce-css-calc'
-
 export default function (value) {
-  try {
-    return reduceCalc(`calc(${value} * -1)`)
-  } catch (e) {
-    return value
+  value = `${value}`
+
+  // Flip sign of numbers
+  if (/^[+-]?(\d+|\d*\.\d+)(e[+-]?\d+)?(%|\w+)?$/.test(value)) {
+    return value.replace(/^[+-]?/, (sign) => (sign === '-' ? '' : '-'))
   }
+
+  if (value.includes('var(') || value.includes('calc(')) {
+    return `calc(${value} * -1)`
+  }
+
+  return value
 }

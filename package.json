@@ -86,7 +86,6 @@
     "postcss-selector-parser": "^6.0.6",
     "postcss-value-parser": "^4.1.0",
     "quick-lru": "^5.1.1",
-    "reduce-css-calc": "^2.1.8",
     "resolve": "^1.20.0",
     "tmp": "^0.2.1"
   },

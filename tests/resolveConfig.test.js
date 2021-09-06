@@ -1320,13 +1320,16 @@ test('custom properties are multiplied by -1 for negative values', () => {
   const userConfig = {
     theme: {
       spacing: {
+        0: 0,
         1: '1px',
         2: '2px',
         3: '3px',
         4: '4px',
+        auto: 'auto',
         foo: 'var(--foo)',
         bar: 'var(--bar, 500px)',
         baz: 'calc(50% - 10px)',
+        qux: '10poops',
       },
       margin: (theme, { negative }) => ({
         ...theme('spacing'),
@@ -1345,38 +1348,39 @@ test('custom properties are multiplied by -1 for negative values', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toMatchObject({
-    prefix: '-',
-    important: false,
-    separator: ':',
-    theme: {
-      spacing: {
-        1: '1px',
-        2: '2px',
-        3: '3px',
-        4: '4px',
-        foo: 'var(--foo)',
-        bar: 'var(--bar, 500px)',
-        baz: 'calc(50% - 10px)',
-      },
-      margin: {
-        1: '1px',
-        2: '2px',
-        3: '3px',
-        4: '4px',
-        foo: 'var(--foo)',
-        bar: 'var(--bar, 500px)',
-        baz: 'calc(50% - 10px)',
-        '-1': '-1px',
-        '-2': '-2px',
-        '-3': '-3px',
-        '-4': '-4px',
-        '-foo': 'calc(var(--foo) * -1)',
-        '-bar': 'calc(var(--bar, 500px) * -1)',
-        '-baz': 'calc(-50% - -10px)',
-      },
-    },
-    variants: {},
+  expect(result.theme.spacing).toEqual({
+    0: 0,
+    1: '1px',
+    2: '2px',
+    3: '3px',
+    4: '4px',
+    auto: 'auto',
+    foo: 'var(--foo)',
+    bar: 'var(--bar, 500px)',
+    baz: 'calc(50% - 10px)',
+    qux: '10poops',
+  })
+  expect(result.theme.margin).toEqual({
+    0: 0,
+    1: '1px',
+    2: '2px',
+    3: '3px',
+    4: '4px',
+    auto: 'auto',
+    foo: 'var(--foo)',
+    bar: 'var(--bar, 500px)',
+    baz: 'calc(50% - 10px)',
+    qux: '10poops',
+    '-0': '-0',
+    '-1': '-1px',
+    '-2': '-2px',
+    '-3': '-3px',
+    '-4': '-4px',
+    '-auto': 'auto',
+    '-foo': 'calc(var(--foo) * -1)',
+    '-bar': 'calc(var(--bar, 500px) * -1)',
+    '-baz': 'calc(calc(50% - 10px) * -1)',
+    '-qux': '-10poops',
   })
 })
 
