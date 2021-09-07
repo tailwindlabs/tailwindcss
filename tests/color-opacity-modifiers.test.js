@@ -8,7 +8,7 @@ test('basic color opacity modifier', async () => {
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-red-500\\/50 {
-        background-color: rgba(239, 68, 68, 0.5);
+        background-color: rgb(239 68 68 / 0.5);
       }
     `)
   })
@@ -30,7 +30,7 @@ test('colors with slashes are matched first', async () => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-red-500\\/50 {
         --tw-bg-opacity: 1;
-        background-color: rgba(255, 0, 0, var(--tw-bg-opacity));
+        background-color: rgb(255 0 0 / var(--tw-bg-opacity));
       }
     `)
   })
@@ -44,7 +44,7 @@ test('arbitrary color opacity modifier', async () => {
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-red-500\\/\\[var\\(--opacity\\)\\] {
-        background-color: rgba(239, 68, 68, var(--opacity));
+        background-color: rgb(239 68 68 / var(--opacity));
       }
     `)
   })
@@ -122,14 +122,14 @@ test('utilities that support any type are supported', async () => {
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .from-red-500\\/50 {
-        --tw-gradient-from: rgba(239, 68, 68, 0.5);
-        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(239, 68, 68, 0));
+        --tw-gradient-from: rgb(239 68 68 / 0.5);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(239 68 68 / 0));
       }
       .fill-red-500\\/25 {
-        fill: rgba(239, 68, 68, 0.25);
+        fill: rgb(239 68 68 / 0.25);
       }
       .placeholder-red-500\\/75::placeholder {
-        color: rgba(239, 68, 68, 0.75);
+        color: rgb(239 68 68 / 0.75);
       }
     `)
   })

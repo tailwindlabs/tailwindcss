@@ -38,7 +38,7 @@ test('opacity variables are given to colors defined as closures', () => {
       }
       .from-secondary {
         --tw-gradient-from: hsl(10, 50%, 50%);
-        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, hsla(10, 50%, 50%, 0));
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, hsl(10 50% 50% / 0));
       }
       .via-primary {
         --tw-gradient-stops: var(--tw-gradient-from), rgb(31, 31, 31),
@@ -46,7 +46,7 @@ test('opacity variables are given to colors defined as closures', () => {
       }
       .via-secondary {
         --tw-gradient-stops: var(--tw-gradient-from), hsl(10, 50%, 50%),
-          var(--tw-gradient-to, hsla(10, 50%, 50%, 0));
+          var(--tw-gradient-to, hsl(10 50% 50% / 0));
       }
       .to-primary {
         --tw-gradient-to: rgb(31, 31, 31);
@@ -60,7 +60,7 @@ test('opacity variables are given to colors defined as closures', () => {
       }
       .text-secondary {
         --tw-text-opacity: 1;
-        color: hsla(10, 50%, 50%, var(--tw-text-opacity));
+        color: hsl(10 50% 50% / var(--tw-text-opacity));
       }
       .text-opacity-50 {
         --tw-text-opacity: 0.5;

@@ -39,7 +39,7 @@ test('stacked peer variants', async () => {
   let expected = css`
     .peer:disabled:focus:hover ~ .peer-disabled\\:peer-focus\\:peer-hover\\:border-blue-500 {
       --tw-border-opacity: 1;
-      border-color: rgba(59, 130, 246, var(--tw-border-opacity));
+      border-color: rgb(59 130 246 / var(--tw-border-opacity));
     }
   `
 

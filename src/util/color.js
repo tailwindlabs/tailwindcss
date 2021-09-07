@@ -50,5 +50,5 @@ export function parseColor(value) {
 
 export function formatColor({ mode, color, alpha }) {
   let hasAlpha = alpha !== undefined
-  return `${mode}${hasAlpha ? 'a' : ''}(${color.join(', ')}${hasAlpha ? `, ${alpha}` : ''})`
+  return `${mode}(${color.join(' ')}${hasAlpha ? ` / ${alpha}` : ''})`
 }
