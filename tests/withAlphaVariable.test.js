@@ -189,3 +189,16 @@ test('it transforms rgb and hsl to rgba and hsla', () => {
     'background-color': 'hsla(50, 50%, 50%, var(--tw-bg-opacity))',
   })
 })
+
+test('it transforms named colors to rgb', () => {
+  expect(
+    withAlphaVariable({
+      color: 'red',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'rgba(255, 0, 0, var(--tw-bg-opacity))',
+  })
+})

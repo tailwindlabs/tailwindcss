@@ -1,41 +1,17 @@
-import * as culori from 'culori'
-
-function isValidColor(color) {
-  return culori.parse(color) !== undefined
-}
+import { parseColor, formatColor } from './color'
 
 export function withAlphaValue(color, alphaValue, defaultValue) {
   if (typeof color === 'function') {
     return color({ opacityValue: alphaValue })
   }
 
-  if (isValidColor(color)) {
-    // Parse color
-    const parsed = culori.parse(color)
+  let parsed = parseColor(color)
 
-    // Apply alpha value
-    parsed.alpha = alphaValue
-
-    // Format string
-    let value
-    if (parsed.mode === 'hsl') {
-      value = culori.formatHsl(parsed)
-    } else {
-      value = culori.formatRgb(parsed)
-    }
-
-    // Correctly apply CSS variable alpha value
-    if (typeof alphaValue === 'string' && alphaValue.startsWith('var(') && value.endsWith('NaN)')) {
-      value = value.replace('NaN)', `${alphaValue})`)
-    }
-
-    // Color could not be formatted correctly
-    if (!value.includes('NaN')) {
-      return value
-    }
+  if (parsed === null) {
+    return defaultValue
   }
 
-  return defaultValue
+  return formatColor({ ...parsed, alpha: alphaValue })
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
@@ -46,29 +22,23 @@ export default function withAlphaVariable({ color, property, variable }) {
     }
   }
 
-  if (isValidColor(color)) {
-    const parsed = culori.parse(color)
+  const parsed = parseColor(color)
 
-    if ('alpha' in parsed) {
-      // Has an alpha value, return color as-is
-      return {
-        [property]: color,
-      }
-    }
-
-    const formatFn = parsed.mode === 'hsl' ? 'formatHsl' : 'formatRgb'
-    const value = culori[formatFn]({
-      ...parsed,
-      alpha: NaN, // intentionally set to `NaN` for replacing
-    }).replace('NaN)', `var(${variable}))`)
-
+  if (parsed === null) {
     return {
-      [variable]: '1',
-      [property]: value,
+      [property]: color,
+    }
+  }
+
+  if (parsed.alpha !== undefined) {
+    // Has an alpha value, return color as-is
+    return {
+      [property]: color,
     }
   }
 
   return {
-    [property]: color,
+    [variable]: '1',
+    [property]: formatColor({ ...parsed, alpha: `var(${variable})` }),
   }
 }
