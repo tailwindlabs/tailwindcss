@@ -1302,7 +1302,7 @@ export let backgroundImage = createUtilityPlugin(
 )
 export let gradientColorStops = (() => {
   function transparentTo(value) {
-    return withAlphaValue(value, 0, 'rgba(255, 255, 255, 0)')
+    return withAlphaValue(value, 0, 'rgb(255 255 255 / 0)')
   }
 
   return function ({ matchUtilities, theme }) {
@@ -1738,7 +1738,7 @@ export let ringWidth = ({ matchUtilities, addBase, addUtilities, theme }) => {
   let ringColorDefault = withAlphaValue(
     theme('ringColor.DEFAULT'),
     ringOpacityDefault,
-    `rgba(147, 197, 253, ${ringOpacityDefault})`
+    `rgb(147 197 253 / ${ringOpacityDefault})`
   )
 
   addBase({
