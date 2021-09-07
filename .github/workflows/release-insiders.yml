@@ -35,6 +35,9 @@ jobs:
         env:
           CI: true
 
+      - name: Build
+        run: npm run prepublishOnly
+
       - name: Test
         run: npm test
         env:
@@ -44,8 +47,8 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - name: "Version based on commit: 0.0.0-${{ steps.vars.outputs.sha_short }}"
-        run: npm version 0.0.0-${{ steps.vars.outputs.sha_short }}
+      - name: "Version based on commit: 0.0.0-insiders.${{ steps.vars.outputs.sha_short }}"
+        run: npm version 0.0.0-insiders.${{ steps.vars.outputs.sha_short }}
 
       - name: Publish
         run: npm publish --tag insiders

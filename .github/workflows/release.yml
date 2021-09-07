@@ -35,6 +35,9 @@ jobs:
         env:
           CI: true
 
+      - name: Build
+        run: npm run prepublishOnly
+
       - name: Test
         run: npm test
         env:
