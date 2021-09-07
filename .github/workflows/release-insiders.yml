@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Use cached node_modules
         id: cache
@@ -54,4 +55,4 @@ jobs:
         run: npm publish --tag insiders
         env:
           CI: true
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
