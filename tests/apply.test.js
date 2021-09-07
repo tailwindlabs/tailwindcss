@@ -292,29 +292,26 @@ test('@apply classes from outside a @layer', async () => {
       }
 
       .bar {
-        font-weight: 700;
         --tw-text-opacity: 1;
         color: rgba(239, 68, 68, var(--tw-text-opacity));
+        font-weight: 700;
       }
 
       .bar:hover {
         --tw-text-opacity: 1;
-        color: rgba(16, 185, 129, var(--tw-text-opacity));
-      }
-
-      .baz {
-        font-weight: 700;
-        --tw-text-opacity: 1;
-        color: rgba(239, 68, 68, var(--tw-text-opacity));
-      }
-
-      .baz:hover {
-        --tw-text-opacity: 1;
-        color: rgba(16, 185, 129, var(--tw-text-opacity));
+        color: rgba(34, 197, 94, var(--tw-text-opacity));
       }
 
       .baz {
         text-decoration: underline;
+        --tw-text-opacity: 1;
+        color: rgba(239, 68, 68, var(--tw-text-opacity));
+        font-weight: 700;
+      }
+
+      .baz:hover {
+        --tw-text-opacity: 1;
+        color: rgba(34, 197, 94, var(--tw-text-opacity));
       }
 
       .keep-me-even-though-I-am-not-used-in-content {
