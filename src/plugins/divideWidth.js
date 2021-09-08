@@ -1,5 +1,5 @@
 export default function () {
-  return function ({ matchUtilities, addUtilities, theme, variants }) {
+  return function ({ matchUtilities, addUtilities, theme, variants, config }) {
     matchUtilities(
       {
         'divide-x': (value) => {
@@ -7,7 +7,7 @@ export default function () {
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
-              '@defaults border-width': {},
+              ...(config('mode') === 'jit' ? { '@defaults border-width': {} } : {}),
               '--tw-divide-x-reverse': '0',
               'border-right-width': `calc(${value} * var(--tw-divide-x-reverse))`,
               'border-left-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
@@ -19,7 +19,7 @@ export default function () {
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
-              '@defaults border-width': {},
+              ...(config('mode') === 'jit' ? { '@defaults border-width': {} } : {}),
               '--tw-divide-y-reverse': '0',
               'border-top-width': `calc(${value} * calc(1 - var(--tw-divide-y-reverse)))`,
               'border-bottom-width': `calc(${value} * var(--tw-divide-y-reverse))`,
@@ -37,11 +37,11 @@ export default function () {
     addUtilities(
       {
         '.divide-y-reverse > :not([hidden]) ~ :not([hidden])': {
-          '@defaults border-width': {},
+          ...(config('mode') === 'jit' ? { '@defaults border-width': {} } : {}),
           '--tw-divide-y-reverse': '1',
         },
         '.divide-x-reverse > :not([hidden]) ~ :not([hidden])': {
-          '@defaults border-width': {},
+          ...(config('mode') === 'jit' ? { '@defaults border-width': {} } : {}),
           '--tw-divide-x-reverse': '1',
         },
       },
