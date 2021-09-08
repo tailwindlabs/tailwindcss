@@ -165,4 +165,6 @@ export { default as transitionDelay } from './transitionDelay'
 export { default as transitionDuration } from './transitionDuration'
 export { default as transitionTimingFunction } from './transitionTimingFunction'
 
+export { default as willChange } from './willChange'
+
 export { default as content } from './content'
