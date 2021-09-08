@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unify config callback helpers into single object [#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382)
 - Preserve original color format when adding opacity whenever possible [#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154)
 
+## [2.2.12] - 2021-09-08
+
+### Fixed
+
+- Ensure that divide utilities inject a default border color [#5438](https://github.com/tailwindlabs/tailwindcss/pull/5438)
+
 ## [2.2.10] - 2021-09-06
 
 ### Fixed
@@ -1542,7 +1548,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.10...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.12...HEAD
+[2.2.12]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.10...v2.2.12
 [2.2.10]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.9...v2.2.10
 [2.2.9]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.8...v2.2.9
 [2.2.8]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.7...v2.2.8
