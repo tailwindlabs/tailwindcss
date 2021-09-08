@@ -12,7 +12,7 @@ export default function () {
       {
         values: flattenColorPalette(theme('accentColor')),
         variants: variants('accentColor'),
-        type: 'color',
+        type: ['color', 'any'],
       }
     )
   }

@@ -333,6 +333,12 @@
 .placeholder-opacity-\[var\(--placeholder-opacity\)\]::placeholder {
   --tw-placeholder-opacity: var(--placeholder-opacity);
 }
+.accent-\[\#bada55\] {
+  accent-color: #bada55;
+}
+.accent-\[var\(--accent-color\)\] {
+  accent-color: var(--accent-color);
+}
 .opacity-\[var\(--opacity\)\] {
   opacity: var(--opacity);
 }
