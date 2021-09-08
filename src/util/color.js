@@ -3,7 +3,7 @@ import namedColors from 'color-name'
 let HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
 let SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
 let VALUE = `(?:\\d+|\\d*\\.\\d+)%?`
-let SEP = `(?:,\\s*|\\s+)`
+let SEP = `(?:\\s*,\\s*|\\s+)`
 let ALPHA_SEP = `\\s*[,/]\\s*`
 let RGB_HSL = new RegExp(
   `^(rgb|hsl)a?\\(\\s*(${VALUE})${SEP}(${VALUE})${SEP}(${VALUE})(?:${ALPHA_SEP}(${VALUE}))?\\s*\\)$`
