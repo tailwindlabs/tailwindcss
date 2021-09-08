@@ -312,6 +312,12 @@
 .p-\[var\(--app-padding\)\] {
   padding: var(--app-padding);
 }
+.indent-\[50\%\] {
+  text-indent: 50%;
+}
+.indent-\[var\(--indent\)\] {
+  text-indent: var(--indent);
+}
 .text-\[2\.23rem\] {
   font-size: 2.23rem;
 }

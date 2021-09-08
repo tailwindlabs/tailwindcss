@@ -109,6 +109,7 @@ export { default as objectPosition } from './objectPosition'
 export { default as padding } from './padding'
 
 export { default as textAlign } from './textAlign'
+export { default as textIndent } from './textIndent'
 export { default as verticalAlign } from './verticalAlign'
 export { default as fontFamily } from './fontFamily'
 export { default as fontSize } from './fontSize'
