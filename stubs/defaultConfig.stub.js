@@ -814,6 +814,12 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
     }),
+    willChange: {
+      'auto': 'auto',
+      'scroll': 'scroll-position',
+      'contents': 'contents',
+      'transform': 'transform',
+    },
     zIndex: {
       auto: 'auto',
       0: '0',

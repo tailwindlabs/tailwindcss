@@ -446,6 +446,12 @@
 .duration-\[var\(--app-duration\)\] {
   transition-duration: var(--app-duration);
 }
+.will-change-\[top\2c left\] {
+  will-change: top, left;
+}
+.will-change-\[var\(--will-change\)\] {
+  will-change: var(--will-change);
+}
 .content-\[\'hello\'\] {
   content: 'hello';
 }
