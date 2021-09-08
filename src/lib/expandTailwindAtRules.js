@@ -109,6 +109,16 @@ function buildStylesheet(rules, context) {
     components: new Set(),
     utilities: new Set(),
     variants: new Set(),
+
+    // All the CSS that is not Tailwind related can be put in this bucket. This
+    // will make it easier to later use this information when we want to
+    // `@apply` for example. The main reason we do this here is because we
+    // still need to make sure the order is correct. Last but not least, we
+    // will make sure to always re-inject this section into the css, even if
+    // certain rules were not used. This means that it will look like a no-op
+    // from the user's perspective, but we gathered all the useful information
+    // we need.
+    user: new Set(),
   }
 
   for (let [sort, rule] of sortedRules) {
@@ -129,6 +139,11 @@ function buildStylesheet(rules, context) {
 
     if (sort & context.layerOrder.utilities) {
       returnValue.utilities.add(rule)
+      continue
+    }
+
+    if (sort & context.layerOrder.user) {
+      returnValue.user.add(rule)
       continue
     }
   }

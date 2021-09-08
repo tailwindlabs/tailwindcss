@@ -97,6 +97,7 @@ function processApply(root, context) {
     for (let util of candidates) {
       applyCandidates.add(util)
     }
+
     applies.push(rule)
   })
 
@@ -210,7 +211,12 @@ function processApply(root, context) {
             })
           }
 
-          siblings.push([meta, root.nodes[0]])
+          // Insert it
+          siblings.push([
+            // Ensure that when we are sorting, that we take the layer order into account
+            { ...meta, sort: meta.sort | context.layerOrder[meta.layer] },
+            root.nodes[0],
+          ])
         }
       }
 
