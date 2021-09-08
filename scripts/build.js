@@ -2,7 +2,6 @@ import fs from 'fs'
 import postcss from 'postcss'
 import tailwind from '..'
 import CleanCSS from 'clean-css'
-import cssnano from 'cssnano'
 
 function buildDistFile(filename, config = {}, outFilename = filename) {
   return new Promise((resolve, reject) => {
@@ -21,13 +20,8 @@ function buildDistFile(filename, config = {}, outFilename = filename) {
           return result
         })
         .then((result) => {
-          return postcss([cssnano]).process(result.css, {
-            from: `./${filename}.css`,
-            to: `./dist/${outFilename}.min.css`,
-          })
-        })
-        .then((result) => {
-          fs.writeFileSync(`./dist/${outFilename}.min.css`, result.css)
+          const minified = new CleanCSS().minify(result.css)
+          fs.writeFileSync(`./dist/${outFilename}.min.css`, minified.styles)
         })
         .then(resolve)
         .catch((error) => {
