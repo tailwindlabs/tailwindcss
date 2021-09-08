@@ -712,6 +712,10 @@ module.exports = {
       2: '2',
     },
     textColor: (theme) => theme('colors'),
+    textIndent: (theme, { negative }) => ({
+      ...theme('spacing'),
+      ...negative(theme('spacing')),
+    }),
     textOpacity: (theme) => theme('opacity'),
     transformOrigin: {
       center: 'center',

@@ -570,6 +570,12 @@
 .text-center {
   text-align: center;
 }
+.indent-6 {
+  text-indent: 1.5rem;
+}
+.-indent-12 {
+  text-indent: -3rem;
+}
 .align-middle {
   vertical-align: middle;
 }
