@@ -175,7 +175,7 @@ export function asValue(
   }
 
   // add spaces around operators inside calc() that do not follow an operator or (
-  return transform(value).replace(
+  return transform(value.replaceAll('_', ' ')).replace(
     /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
     '$1 $2 '
   )
@@ -189,9 +189,6 @@ export function asUnit(modifier, units, lookup = {}) {
         new RegExp(`${unitsPattern}$`).test(value) ||
         new RegExp(`^calc\\(.+?${unitsPattern}`).test(value)
       )
-    },
-    transform: (value) => {
-      return value
     },
   })
 }

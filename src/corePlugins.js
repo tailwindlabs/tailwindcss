@@ -1714,7 +1714,7 @@ export let boxShadow = (() => {
           }
         },
       },
-      { values: theme('boxShadow'), type: 'lookup' }
+      { values: theme('boxShadow') }
     )
   }
 })()
