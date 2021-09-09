@@ -347,9 +347,7 @@ export default {
 
   // Actual plugins
   preflight({ addBase }) {
-    let preflightStyles = postcss.parse(
-      fs.readFileSync(`${__dirname}/plugins/css/preflight.css`, 'utf8')
-    )
+    let preflightStyles = postcss.parse(fs.readFileSync(`${__dirname}/css/preflight.css`, 'utf8'))
 
     addBase([
       postcss.comment({
