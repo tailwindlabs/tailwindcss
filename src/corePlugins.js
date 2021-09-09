@@ -813,6 +813,8 @@ export let appearance = ({ addUtilities }) => {
   })
 }
 
+export let columns = createUtilityPlugin('columns', [['columns', ['columns']]])
+
 export let gridAutoColumns = createUtilityPlugin('gridAutoColumns', [
   ['auto-cols', ['gridAutoColumns']],
 ])

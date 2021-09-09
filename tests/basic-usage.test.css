@@ -314,6 +314,12 @@
 .appearance-none {
   appearance: none;
 }
+.columns-1 {
+  columns: 1;
+}
+.columns-md {
+  columns: 28rem;
+}
 .auto-cols-min {
   grid-auto-columns: min-content;
 }
