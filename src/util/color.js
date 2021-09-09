@@ -15,12 +15,12 @@ export function parseColor(value) {
   }
 
   value = value.trim()
+  if (value === 'transparent') {
+    return { mode: 'rgb', color: ['0', '0', '0'], alpha: '0' }
+  }
 
   if (value in namedColors) {
-    return {
-      mode: 'rgb',
-      color: namedColors[value],
-    }
+    return { mode: 'rgb', color: namedColors[value].map((v) => v.toString()) }
   }
 
   let hex = value
@@ -30,8 +30,10 @@ export function parseColor(value) {
   if (hex !== null) {
     return {
       mode: 'rgb',
-      color: [parseInt(hex[1], 16), parseInt(hex[2], 16), parseInt(hex[3], 16)],
-      alpha: hex[4] ? parseInt(hex[4], 16) / 255 : undefined,
+      color: [parseInt(hex[1], 16), parseInt(hex[2], 16), parseInt(hex[3], 16)].map((v) =>
+        v.toString()
+      ),
+      alpha: hex[4] ? (parseInt(hex[4], 16) / 255).toString() : undefined,
     }
   }
 
@@ -40,8 +42,8 @@ export function parseColor(value) {
   if (match !== null) {
     return {
       mode: match[1],
-      color: [match[2], match[3], match[4]],
-      alpha: match[5],
+      color: [match[2], match[3], match[4]].map((v) => v.toString()),
+      alpha: match[5]?.toString?.(),
     }
   }
 
