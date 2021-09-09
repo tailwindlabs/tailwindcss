@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add native `aspect-ratio` utilities ([#5359](https://github.com/tailwindlabs/tailwindcss/pull/5359))
 - Unify config callback helpers into single object ([#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382))
 - Preserve original color format when adding opacity whenever possible ([#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154))
+- Support `@apply` for classes defined outside of a `@layer` ([#5378](https://github.com/tailwindlabs/tailwindcss/pull/5378))
+- Add `accent-*` utilities for `accent-color` ([#5387](https://github.com/tailwindlabs/tailwindcss/pull/5387))
 - Add `will-change` utilities ([#5448](https://github.com/tailwindlabs/tailwindcss/pull/5448))
 - Add `text-indent` utilities ([#5449](https://github.com/tailwindlabs/tailwindcss/pull/5449))
 
