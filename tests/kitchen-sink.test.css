@@ -18,7 +18,7 @@
 .apply-test {
   margin-top: 1.5rem;
   --tw-bg-opacity: 1;
-  background-color: rgba(236, 72, 153, var(--tw-bg-opacity));
+  background-color: rgb(236 72 153 / var(--tw-bg-opacity));
 }
 .apply-test:hover {
   font-weight: 700;
@@ -29,11 +29,11 @@
 @media (min-width: 640px) {
   .apply-test {
     --tw-bg-opacity: 1;
-    background-color: rgba(34, 197, 94, var(--tw-bg-opacity));
+    background-color: rgb(34 197 94 / var(--tw-bg-opacity));
   }
   .apply-test:focus:nth-child(even) {
     --tw-bg-opacity: 1;
-    background-color: rgba(251, 207, 232, var(--tw-bg-opacity));
+    background-color: rgb(251 207 232 / var(--tw-bg-opacity));
   }
 }
 .apply-components {
@@ -83,7 +83,7 @@
 @media (min-width: 640px) {
   .apply-with-existing:hover {
     --tw-bg-opacity: 1;
-    background-color: rgba(34, 197, 94, var(--tw-bg-opacity));
+    background-color: rgb(34 197 94 / var(--tw-bg-opacity));
   }
 }
 .multiple,
@@ -117,7 +117,7 @@
 }
 .dark .group:hover .apply-dark-group-example-a {
   --tw-bg-opacity: 1;
-  background-color: rgba(34, 197, 94, var(--tw-bg-opacity));
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
 }
 @media (min-width: 640px) {
   @media (prefers-reduced-motion: no-preference) {
@@ -145,7 +145,7 @@
   --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
-  --tw-ring-color: rgba(59, 130, 246, 0.5);
+  --tw-ring-color: rgb(59 130 246 / 0.5);
   --tw-ring-offset-shadow: 0 0 #0000;
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
@@ -288,11 +288,11 @@ div {
 }
 .bg-black {
   --tw-bg-opacity: 1;
-  background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 .bg-green-500 {
   --tw-bg-opacity: 1;
-  background-color: rgba(34, 197, 94, var(--tw-bg-opacity));
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
 }
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
@@ -305,7 +305,7 @@ div {
 }
 .from-foo {
   --tw-gradient-from: #bada55;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(186, 218, 85, 0));
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(186 218 85 / 0));
 }
 .text-center {
   text-align: center;
@@ -314,12 +314,12 @@ div {
   font-weight: 500;
 }
 .shadow-sm {
-  --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
 .shadow-md {
-  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
@@ -377,7 +377,7 @@ div {
   font-weight: 700;
 }
 .hover\:shadow-lg:hover {
-  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
@@ -396,7 +396,7 @@ div {
 }
 .focus\:ring-blue-500:focus {
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgba(59, 130, 246, var(--tw-ring-opacity));
+  --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
 }
 .focus\:hover\:font-light:focus:hover {
   font-weight: 300;
@@ -537,12 +537,12 @@ div {
     opacity: 0.5;
   }
   .md\:shadow-sm {
-    --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
       var(--tw-shadow);
   }
   .md\:hover\:border-r-blue-500\/30:hover {
-    border-right-color: rgba(59, 130, 246, 0.3);
+    border-right-color: rgb(59 130 246 / 0.3);
   }
   .md\:hover\:opacity-20:hover {
     opacity: 0.2;

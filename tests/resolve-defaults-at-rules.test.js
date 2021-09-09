@@ -409,7 +409,7 @@ test('with borders', async () => {
       ::before,
       ::after {
         --tw-border-opacity: 1;
-        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
       /* --- */
       .border {
@@ -417,7 +417,7 @@ test('with borders', async () => {
       }
       .border-red-500 {
         --tw-border-opacity: 1;
-        border-color: rgba(239, 68, 68, var(--tw-border-opacity));
+        border-color: rgb(239 68 68 / var(--tw-border-opacity));
       }
       @media (min-width: 768px) {
         .md\\:border-2 {
@@ -451,14 +451,14 @@ test('with shadows', async () => {
         --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
         --tw-ring-offset-width: 0px;
         --tw-ring-offset-color: #fff;
-        --tw-ring-color: rgba(59, 130, 246, 0.5);
+        --tw-ring-color: rgb(59 130 246 / 0.5);
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
       }
       /* --- */
       .shadow {
-        --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
       }
@@ -470,11 +470,11 @@ test('with shadows', async () => {
         box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
       }
       .ring-black\\/25 {
-        --tw-ring-color: rgba(0, 0, 0, 0.25);
+        --tw-ring-color: rgb(0 0 0 / 0.25);
       }
       @media (min-width: 768px) {
         .md\\:shadow-xl {
-          --tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+          --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
             var(--tw-shadow);
         }

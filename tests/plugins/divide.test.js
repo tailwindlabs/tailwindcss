@@ -12,7 +12,7 @@ it('should add the divide styles for divide-y and a default border color', () =>
       ::before,
       ::after {
         --tw-border-opacity: 1;
-        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
 
       .divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -36,7 +36,7 @@ it('should add the divide styles for divide-x and a default border color', () =>
       ::before,
       ::after {
         --tw-border-opacity: 1;
-        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
 
       .divide-x > :not([hidden]) ~ :not([hidden]) {
@@ -60,7 +60,7 @@ it('should add the divide styles for divide-y-reverse and a default border color
       ::before,
       ::after {
         --tw-border-opacity: 1;
-        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
 
       .divide-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -82,7 +82,7 @@ it('should add the divide styles for divide-x-reverse and a default border color
       ::before,
       ::after {
         --tw-border-opacity: 1;
-        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
 
       .divide-x-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -104,7 +104,7 @@ it('should only inject the base styles once if we use divide and border at the s
       ::before,
       ::after {
         --tw-border-opacity: 1;
-        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
 
       .divide-y > :not([hidden]) ~ :not([hidden]) {

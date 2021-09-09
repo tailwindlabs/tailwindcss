@@ -1,9 +1,9 @@
 import selectorParser from 'postcss-selector-parser'
 import postcss from 'postcss'
-import * as culori from 'culori'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
 import isKeyframeRule from './isKeyframeRule'
+import { parseColor } from './color'
 
 export function applyPseudoToMarker(selector, marker, state, join) {
   let states = [state]
@@ -221,10 +221,6 @@ function splitAlpha(modifier) {
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
 }
 
-function isColor(value) {
-  return culori.parse(value) !== undefined
-}
-
 export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
   if (lookup[modifier] !== undefined) {
     return lookup[modifier]
@@ -245,7 +241,7 @@ export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
   }
 
   return asValue(modifier, lookup, {
-    validate: isColor,
+    validate: (value) => parseColor(value) !== null,
   })
 }
 

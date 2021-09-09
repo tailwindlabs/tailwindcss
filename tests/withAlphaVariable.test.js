@@ -5,7 +5,7 @@ test('it adds the right custom property', () => {
     withAlphaVariable({ color: '#ff0000', property: 'color', variable: '--tw-text-opacity' })
   ).toEqual({
     '--tw-text-opacity': '1',
-    color: 'rgba(255, 0, 0, var(--tw-text-opacity))',
+    color: 'rgb(255 0 0 / var(--tw-text-opacity))',
   })
   expect(
     withAlphaVariable({
@@ -15,7 +15,7 @@ test('it adds the right custom property', () => {
     })
   ).toEqual({
     '--tw-text-opacity': '1',
-    color: 'hsla(240, 100%, 50%, var(--tw-text-opacity))',
+    color: 'hsl(240 100% 50% / var(--tw-text-opacity))',
   })
 })
 
@@ -28,6 +28,42 @@ test('it ignores colors that cannot be parsed', () => {
     })
   ).toEqual({
     'background-color': 'currentColor',
+  })
+  expect(
+    withAlphaVariable({
+      color: 'rgb(255, 0)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    'background-color': 'rgb(255, 0)',
+  })
+  expect(
+    withAlphaVariable({
+      color: 'rgb(255)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    'background-color': 'rgb(255)',
+  })
+  expect(
+    withAlphaVariable({
+      color: 'rgb(255, 0, 0, 255)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    'background-color': 'rgb(255, 0, 0, 255)',
+  })
+  expect(
+    withAlphaVariable({
+      color: 'rgb(var(--color))',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    'background-color': 'rgb(var(--color))',
   })
 })
 
@@ -147,7 +183,7 @@ test('it allows a closure to be passed', () => {
   })
 })
 
-test('it transforms rgb and hsl to rgba and hsla', () => {
+test('it transforms rgb and hsl to space-separated rgb and hsl', () => {
   expect(
     withAlphaVariable({
       color: 'rgb(50, 50, 50)',
@@ -156,7 +192,7 @@ test('it transforms rgb and hsl to rgba and hsla', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'rgba(50, 50, 50, var(--tw-bg-opacity))',
+    'background-color': 'rgb(50 50 50 / var(--tw-bg-opacity))',
   })
   expect(
     withAlphaVariable({
@@ -166,7 +202,7 @@ test('it transforms rgb and hsl to rgba and hsla', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'rgba(50, 50, 50, var(--tw-bg-opacity))',
+    'background-color': 'rgb(50 50 50 / var(--tw-bg-opacity))',
   })
   expect(
     withAlphaVariable({
@@ -176,7 +212,7 @@ test('it transforms rgb and hsl to rgba and hsla', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'hsla(50, 50%, 50%, var(--tw-bg-opacity))',
+    'background-color': 'hsl(50 50% 50% / var(--tw-bg-opacity))',
   })
   expect(
     withAlphaVariable({
@@ -186,6 +222,19 @@ test('it transforms rgb and hsl to rgba and hsla', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'hsla(50, 50%, 50%, var(--tw-bg-opacity))',
+    'background-color': 'hsl(50 50% 50% / var(--tw-bg-opacity))',
+  })
+})
+
+test('it transforms named colors to rgb', () => {
+  expect(
+    withAlphaVariable({
+      color: 'red',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'rgb(255 0 0 / var(--tw-bg-opacity))',
   })
 })

@@ -242,29 +242,29 @@
 }
 .border-\[\#f00\] {
   --tw-border-opacity: 1;
-  border-color: rgba(255, 0, 0, var(--tw-border-opacity));
+  border-color: rgb(255 0 0 / var(--tw-border-opacity));
 }
 .bg-\[\#0f0\] {
   --tw-bg-opacity: 1;
-  background-color: rgba(0, 255, 0, var(--tw-bg-opacity));
+  background-color: rgb(0 255 0 / var(--tw-bg-opacity));
 }
 .bg-\[\#ff0000\] {
   --tw-bg-opacity: 1;
-  background-color: rgba(255, 0, 0, var(--tw-bg-opacity));
+  background-color: rgb(255 0 0 / var(--tw-bg-opacity));
 }
 .bg-\[\#0000ffcc\] {
   background-color: #0000ffcc;
 }
 .bg-\[rgb\(123\2c 123\2c 123\)\] {
   --tw-bg-opacity: 1;
-  background-color: rgba(123, 123, 123, var(--tw-bg-opacity));
+  background-color: rgb(123 123 123 / var(--tw-bg-opacity));
 }
 .bg-\[rgba\(123\2c 123\2c 123\2c 0\.5\)\] {
   background-color: rgba(123, 123, 123, 0.5);
 }
 .bg-\[hsl\(0\2c 100\%\2c 50\%\)\] {
   --tw-bg-opacity: 1;
-  background-color: hsla(0, 100%, 50%, var(--tw-bg-opacity));
+  background-color: hsl(0 100% 50% / var(--tw-bg-opacity));
 }
 .bg-\[hsla\(0\2c 100\%\2c 50\%\2c 0\.3\)\] {
   background-color: hsla(0, 100%, 50%, 0.3);
@@ -277,19 +277,18 @@
 }
 .from-\[\#da5b66\] {
   --tw-gradient-from: #da5b66;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(218, 91, 102, 0));
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(218 91 102 / 0));
 }
 .from-\[var\(--color\)\] {
   --tw-gradient-from: var(--color);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(255 255 255 / 0));
 }
 .via-\[\#da5b66\] {
-  --tw-gradient-stops: var(--tw-gradient-from), #da5b66,
-    var(--tw-gradient-to, rgba(218, 91, 102, 0));
+  --tw-gradient-stops: var(--tw-gradient-from), #da5b66, var(--tw-gradient-to, rgb(218 91 102 / 0));
 }
 .via-\[var\(--color\)\] {
   --tw-gradient-stops: var(--tw-gradient-from), var(--color),
-    var(--tw-gradient-to, rgba(255, 255, 255, 0));
+    var(--tw-gradient-to, rgb(255 255 255 / 0));
 }
 .to-\[\#da5b66\] {
   --tw-gradient-to: #da5b66;
@@ -367,7 +366,7 @@
 }
 .ring-\[\#76ad65\] {
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgba(118, 173, 101, var(--tw-ring-opacity));
+  --tw-ring-color: rgb(118 173 101 / var(--tw-ring-opacity));
 }
 .ring-opacity-\[var\(--ring-opacity\)\] {
   --tw-ring-opacity: var(--ring-opacity);
