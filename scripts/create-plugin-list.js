@@ -1,4 +1,4 @@
-import corePlugins from '../src/corePlugins'
+import * as corePlugins from '../src/corePlugins'
 import fs from 'fs'
 import path from 'path'
 
