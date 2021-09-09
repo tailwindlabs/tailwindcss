@@ -9,7 +9,6 @@ import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
 import toColorValue from './util/toColorValue'
 import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
-import nameClass from './util/nameClass'
 import {
   applyPseudoToMarker,
   updateLastClasses,
@@ -17,7 +16,6 @@ import {
   transformAllSelectors,
   transformAllClasses,
   transformLastClasses,
-  asList,
   asLength,
   asLookupValue,
 } from './util/pluginUtils'
@@ -829,16 +827,12 @@ export let gridAutoFlow = ({ addUtilities }) => {
 }
 
 export let gridAutoRows = createUtilityPlugin('gridAutoRows', [['auto-rows', ['gridAutoRows']]])
-export let gridTemplateColumns = createUtilityPlugin(
-  'gridTemplateColumns',
-  [['grid-cols', ['gridTemplateColumns']]],
-  { resolveArbitraryValue: asList }
-)
-export let gridTemplateRows = createUtilityPlugin(
-  'gridTemplateRows',
-  [['grid-rows', ['gridTemplateRows']]],
-  { resolveArbitraryValue: asList }
-)
+export let gridTemplateColumns = createUtilityPlugin('gridTemplateColumns', [
+  ['grid-cols', ['gridTemplateColumns']],
+])
+export let gridTemplateRows = createUtilityPlugin('gridTemplateRows', [
+  ['grid-rows', ['gridTemplateRows']],
+])
 
 export let flexDirection = ({ addUtilities }) => {
   addUtilities({
@@ -1431,12 +1425,8 @@ export let objectFit = ({ addUtilities }) => {
     '.object-scale-down': { 'object-fit': 'scale-down' },
   })
 }
+export let objectPosition = createUtilityPlugin('objectPosition', [['object', ['object-position']]])
 
-export let objectPosition = createUtilityPlugin(
-  'objectPosition',
-  [['object', ['object-position']]],
-  { resolveArbitraryValue: asList }
-)
 export let padding = createUtilityPlugin('padding', [
   ['p', ['padding']],
   [
@@ -1715,7 +1705,7 @@ export let boxShadow = (() => {
           }
         },
       },
-      { values: theme('boxShadow'), type: 'lookup' }
+      { values: theme('boxShadow') }
     )
   }
 })()
@@ -1867,23 +1857,21 @@ export let contrast = ({ matchUtilities, theme }) => {
   )
 }
 
-export let dropShadow = ({ addUtilities, theme }) => {
-  let utilities = Object.fromEntries(
-    Object.entries(theme('dropShadow') ?? {}).map(([modifier, value]) => {
-      return [
-        nameClass('drop-shadow', modifier),
-        {
+export let dropShadow = ({ matchUtilities, theme }) => {
+  matchUtilities(
+    {
+      'drop-shadow': (value) => {
+        return {
           '--tw-drop-shadow': Array.isArray(value)
             ? value.map((v) => `drop-shadow(${v})`).join(' ')
             : `drop-shadow(${value})`,
           '@defaults filter': {},
           filter: 'var(--tw-filter)',
-        },
-      ]
-    })
+        }
+      },
+    },
+    { values: theme('dropShadow') }
   )
-
-  addUtilities(utilities)
 }
 
 export let grayscale = ({ matchUtilities, theme }) => {

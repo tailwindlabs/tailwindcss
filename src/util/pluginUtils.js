@@ -1,5 +1,4 @@
 import selectorParser from 'postcss-selector-parser'
-import postcss from 'postcss'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
 import isKeyframeRule from './isKeyframeRule'
@@ -153,11 +152,7 @@ export function transformLastClasses(transformClass, { wrap, withRule } = {}) {
   }
 }
 
-export function asValue(
-  modifier,
-  lookup = {},
-  { validate = () => true, transform = (v) => v } = {}
-) {
+export function asValue(modifier, lookup = {}, { validate = () => true } = {}) {
   let value = lookup[modifier]
 
   if (value !== undefined) {
@@ -174,8 +169,14 @@ export function asValue(
     return undefined
   }
 
+  // convert `_` to ` `, escept for escaped underscores `\_`
+  value = value
+    .replace(/([^\\])_/g, '$1 ')
+    .replace(/^_/g, ' ')
+    .replace(/\\_/g, '_')
+
   // add spaces around operators inside calc() that do not follow an operator or (
-  return transform(value).replace(
+  return value.replace(
     /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
     '$1 $2 '
   )
@@ -189,20 +190,6 @@ export function asUnit(modifier, units, lookup = {}) {
         new RegExp(`${unitsPattern}$`).test(value) ||
         new RegExp(`^calc\\(.+?${unitsPattern}`).test(value)
       )
-    },
-    transform: (value) => {
-      return value
-    },
-  })
-}
-
-export function asList(modifier, lookup = {}) {
-  return asValue(modifier, lookup, {
-    transform: (value) => {
-      return postcss.list
-        .comma(value)
-        .map((v) => v.replace(/,/g, ', '))
-        .join(' ')
     },
   })
 }
@@ -281,7 +268,6 @@ export function asLookupValue(modifier, lookup = {}) {
 
 let typeMap = {
   any: asValue,
-  list: asList,
   color: asColor,
   angle: asAngle,
   length: asLength,

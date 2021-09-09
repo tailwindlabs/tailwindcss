@@ -1,9 +1,8 @@
 import transformThemeValue from './transformThemeValue'
-import { asValue, asList, asColor, asAngle, asLength, asLookupValue } from '../util/pluginUtils'
+import { asValue, asColor, asAngle, asLength, asLookupValue } from '../util/pluginUtils'
 
 let asMap = new Map([
   [asValue, 'any'],
-  [asList, 'list'],
   [asColor, 'color'],
   [asAngle, 'angle'],
   [asLength, 'length'],
