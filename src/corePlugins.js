@@ -508,9 +508,7 @@ export let position = ({ addUtilities }) => {
     '.fixed': { position: 'fixed' },
     '.absolute': { position: 'absolute' },
     '.relative': { position: 'relative' },
-    '.sticky': {
-      position: 'sticky',
-    },
+    '.sticky': { position: 'sticky' },
   })
 }
 
@@ -521,40 +519,24 @@ export let inset = ({ matchUtilities, theme }) => {
   }
 
   matchUtilities(
+    { inset: (value) => ({ top: value, right: value, bottom: value, left: value }) },
+    options
+  )
+
+  matchUtilities(
     {
-      inset: (value) => {
-        return { top: value, right: value, bottom: value, left: value }
-      },
+      'inset-x': (value) => ({ left: value, right: value }),
+      'inset-y': (value) => ({ top: value, bottom: value }),
     },
     options
   )
 
   matchUtilities(
     {
-      'inset-x': (value) => {
-        return { left: value, right: value }
-      },
-      'inset-y': (value) => {
-        return { top: value, bottom: value }
-      },
-    },
-    options
-  )
-
-  matchUtilities(
-    {
-      top: (value) => {
-        return { top: value }
-      },
-      right: (value) => {
-        return { right: value }
-      },
-      bottom: (value) => {
-        return { bottom: value }
-      },
-      left: (value) => {
-        return { left: value }
-      },
+      top: (top) => ({ top }),
+      right: (right) => ({ right }),
+      bottom: (bottom) => ({ bottom }),
+      left: (left) => ({ left }),
     },
     options
   )
@@ -562,12 +544,8 @@ export let inset = ({ matchUtilities, theme }) => {
 
 export let isolation = ({ addUtilities }) => {
   addUtilities({
-    '.isolate': {
-      isolation: 'isolate',
-    },
-    '.isolation-auto': {
-      isolation: 'auto',
-    },
+    '.isolate': { isolation: 'isolate' },
+    '.isolation-auto': { isolation: 'auto' },
   })
 }
 
@@ -622,69 +600,27 @@ export let boxSizing = ({ addUtilities }) => {
 
 export let display = ({ addUtilities }) => {
   addUtilities({
-    '.block': {
-      display: 'block',
-    },
-    '.inline-block': {
-      display: 'inline-block',
-    },
-    '.inline': {
-      display: 'inline',
-    },
-    '.flex': {
-      display: 'flex',
-    },
-    '.inline-flex': {
-      display: 'inline-flex',
-    },
-    '.table': {
-      display: 'table',
-    },
-    '.inline-table': {
-      display: 'inline-table',
-    },
-    '.table-caption': {
-      display: 'table-caption',
-    },
-    '.table-cell': {
-      display: 'table-cell',
-    },
-    '.table-column': {
-      display: 'table-column',
-    },
-    '.table-column-group': {
-      display: 'table-column-group',
-    },
-    '.table-footer-group': {
-      display: 'table-footer-group',
-    },
-    '.table-header-group': {
-      display: 'table-header-group',
-    },
-    '.table-row-group': {
-      display: 'table-row-group',
-    },
-    '.table-row': {
-      display: 'table-row',
-    },
-    '.flow-root': {
-      display: 'flow-root',
-    },
-    '.grid': {
-      display: 'grid',
-    },
-    '.inline-grid': {
-      display: 'inline-grid',
-    },
-    '.contents': {
-      display: 'contents',
-    },
-    '.list-item': {
-      display: 'list-item',
-    },
-    '.hidden': {
-      display: 'none',
-    },
+    '.block': { display: 'block' },
+    '.inline-block': { display: 'inline-block' },
+    '.inline': { display: 'inline' },
+    '.flex': { display: 'flex' },
+    '.inline-flex': { display: 'inline-flex' },
+    '.table': { display: 'table' },
+    '.inline-table': { display: 'inline-table' },
+    '.table-caption': { display: 'table-caption' },
+    '.table-cell': { display: 'table-cell' },
+    '.table-column': { display: 'table-column' },
+    '.table-column-group': { display: 'table-column-group' },
+    '.table-footer-group': { display: 'table-footer-group' },
+    '.table-header-group': { display: 'table-header-group' },
+    '.table-row-group': { display: 'table-row-group' },
+    '.table-row': { display: 'table-row' },
+    '.flow-root': { display: 'flow-root' },
+    '.grid': { display: 'grid' },
+    '.inline-grid': { display: 'inline-grid' },
+    '.contents': { display: 'contents' },
+    '.list-item': { display: 'list-item' },
+    '.hidden': { display: 'none' },
   })
 }
 
@@ -781,10 +717,7 @@ export let transform = ({ addBase, addUtilities }) => {
     },
   })
   addUtilities({
-    '.transform': {
-      '@defaults transform': {},
-      transform: 'var(--tw-transform)',
-    },
+    '.transform': { '@defaults transform': {}, transform: 'var(--tw-transform)' },
     '.transform-cpu': {
       '--tw-transform': [
         'translateX(var(--tw-translate-x))',
@@ -814,14 +747,7 @@ export let animation = ({ matchUtilities, theme, prefix }) => {
   let prefixName = (name) => prefix(`.${name}`).slice(1)
   let keyframes = Object.fromEntries(
     Object.entries(theme('keyframes') ?? {}).map(([key, value]) => {
-      return [
-        key,
-        [
-          {
-            [`@keyframes ${prefixName(key)}`]: value,
-          },
-        ],
-      ]
+      return [key, [{ [`@keyframes ${prefixName(key)}`]: value }]]
     })
   )
 
@@ -904,172 +830,90 @@ export let gridAutoRows = createUtilityPlugin('gridAutoRows', [['auto-rows', ['g
 export let gridTemplateColumns = createUtilityPlugin(
   'gridTemplateColumns',
   [['grid-cols', ['gridTemplateColumns']]],
-  {
-    resolveArbitraryValue: asList,
-  }
+  { resolveArbitraryValue: asList }
 )
 export let gridTemplateRows = createUtilityPlugin(
   'gridTemplateRows',
   [['grid-rows', ['gridTemplateRows']]],
-  {
-    resolveArbitraryValue: asList,
-  }
+  { resolveArbitraryValue: asList }
 )
 
 export let flexDirection = ({ addUtilities }) => {
   addUtilities({
-    '.flex-row': {
-      'flex-direction': 'row',
-    },
-    '.flex-row-reverse': {
-      'flex-direction': 'row-reverse',
-    },
-    '.flex-col': {
-      'flex-direction': 'column',
-    },
-    '.flex-col-reverse': {
-      'flex-direction': 'column-reverse',
-    },
+    '.flex-row': { 'flex-direction': 'row' },
+    '.flex-row-reverse': { 'flex-direction': 'row-reverse' },
+    '.flex-col': { 'flex-direction': 'column' },
+    '.flex-col-reverse': { 'flex-direction': 'column-reverse' },
   })
 }
 
 export let flexWrap = ({ addUtilities }) => {
   addUtilities({
-    '.flex-wrap': {
-      'flex-wrap': 'wrap',
-    },
-    '.flex-wrap-reverse': {
-      'flex-wrap': 'wrap-reverse',
-    },
-    '.flex-nowrap': {
-      'flex-wrap': 'nowrap',
-    },
+    '.flex-wrap': { 'flex-wrap': 'wrap' },
+    '.flex-wrap-reverse': { 'flex-wrap': 'wrap-reverse' },
+    '.flex-nowrap': { 'flex-wrap': 'nowrap' },
   })
 }
 
 export let placeContent = ({ addUtilities }) => {
   addUtilities({
-    '.place-content-center': {
-      'place-content': 'center',
-    },
-    '.place-content-start': {
-      'place-content': 'start',
-    },
-    '.place-content-end': {
-      'place-content': 'end',
-    },
-    '.place-content-between': {
-      'place-content': 'space-between',
-    },
-    '.place-content-around': {
-      'place-content': 'space-around',
-    },
-    '.place-content-evenly': {
-      'place-content': 'space-evenly',
-    },
-    '.place-content-stretch': {
-      'place-content': 'stretch',
-    },
+    '.place-content-center': { 'place-content': 'center' },
+    '.place-content-start': { 'place-content': 'start' },
+    '.place-content-end': { 'place-content': 'end' },
+    '.place-content-between': { 'place-content': 'space-between' },
+    '.place-content-around': { 'place-content': 'space-around' },
+    '.place-content-evenly': { 'place-content': 'space-evenly' },
+    '.place-content-stretch': { 'place-content': 'stretch' },
   })
 }
 
 export let placeItems = ({ addUtilities }) => {
   addUtilities({
-    '.place-items-start': {
-      'place-items': 'start',
-    },
-    '.place-items-end': {
-      'place-items': 'end',
-    },
-    '.place-items-center': {
-      'place-items': 'center',
-    },
-    '.place-items-stretch': {
-      'place-items': 'stretch',
-    },
+    '.place-items-start': { 'place-items': 'start' },
+    '.place-items-end': { 'place-items': 'end' },
+    '.place-items-center': { 'place-items': 'center' },
+    '.place-items-stretch': { 'place-items': 'stretch' },
   })
 }
 
 export let alignContent = ({ addUtilities }) => {
   addUtilities({
-    '.content-center': {
-      'align-content': 'center',
-    },
-    '.content-start': {
-      'align-content': 'flex-start',
-    },
-    '.content-end': {
-      'align-content': 'flex-end',
-    },
-    '.content-between': {
-      'align-content': 'space-between',
-    },
-    '.content-around': {
-      'align-content': 'space-around',
-    },
-    '.content-evenly': {
-      'align-content': 'space-evenly',
-    },
+    '.content-center': { 'align-content': 'center' },
+    '.content-start': { 'align-content': 'flex-start' },
+    '.content-end': { 'align-content': 'flex-end' },
+    '.content-between': { 'align-content': 'space-between' },
+    '.content-around': { 'align-content': 'space-around' },
+    '.content-evenly': { 'align-content': 'space-evenly' },
   })
 }
 
 export let alignItems = ({ addUtilities }) => {
   addUtilities({
-    '.items-start': {
-      'align-items': 'flex-start',
-    },
-    '.items-end': {
-      'align-items': 'flex-end',
-    },
-    '.items-center': {
-      'align-items': 'center',
-    },
-    '.items-baseline': {
-      'align-items': 'baseline',
-    },
-    '.items-stretch': {
-      'align-items': 'stretch',
-    },
+    '.items-start': { 'align-items': 'flex-start' },
+    '.items-end': { 'align-items': 'flex-end' },
+    '.items-center': { 'align-items': 'center' },
+    '.items-baseline': { 'align-items': 'baseline' },
+    '.items-stretch': { 'align-items': 'stretch' },
   })
 }
 
 export let justifyContent = ({ addUtilities }) => {
   addUtilities({
-    '.justify-start': {
-      'justify-content': 'flex-start',
-    },
-    '.justify-end': {
-      'justify-content': 'flex-end',
-    },
-    '.justify-center': {
-      'justify-content': 'center',
-    },
-    '.justify-between': {
-      'justify-content': 'space-between',
-    },
-    '.justify-around': {
-      'justify-content': 'space-around',
-    },
-    '.justify-evenly': {
-      'justify-content': 'space-evenly',
-    },
+    '.justify-start': { 'justify-content': 'flex-start' },
+    '.justify-end': { 'justify-content': 'flex-end' },
+    '.justify-center': { 'justify-content': 'center' },
+    '.justify-between': { 'justify-content': 'space-between' },
+    '.justify-around': { 'justify-content': 'space-around' },
+    '.justify-evenly': { 'justify-content': 'space-evenly' },
   })
 }
 
 export let justifyItems = ({ addUtilities }) => {
   addUtilities({
-    '.justify-items-start': {
-      'justify-items': 'start',
-    },
-    '.justify-items-end': {
-      'justify-items': 'end',
-    },
-    '.justify-items-center': {
-      'justify-items': 'center',
-    },
-    '.justify-items-stretch': {
-      'justify-items': 'stretch',
-    },
+    '.justify-items-start': { 'justify-items': 'start' },
+    '.justify-items-end': { 'justify-items': 'end' },
+    '.justify-items-center': { 'justify-items': 'center' },
+    '.justify-items-stretch': { 'justify-items': 'stretch' },
   })
 }
 
@@ -1107,19 +951,12 @@ export let space = ({ matchUtilities, addUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('space'),
-      type: 'any',
-    }
+    { values: theme('space'), type: 'any' }
   )
 
   addUtilities({
-    '.space-y-reverse > :not([hidden]) ~ :not([hidden])': {
-      '--tw-space-y-reverse': '1',
-    },
-    '.space-x-reverse > :not([hidden]) ~ :not([hidden])': {
-      '--tw-space-x-reverse': '1',
-    },
+    '.space-y-reverse > :not([hidden]) ~ :not([hidden])': { '--tw-space-y-reverse': '1' },
+    '.space-x-reverse > :not([hidden]) ~ :not([hidden])': { '--tw-space-x-reverse': '1' },
   })
 }
 
@@ -1151,10 +988,7 @@ export let divideWidth = ({ matchUtilities, addUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('divideWidth'),
-      type: 'length',
-    }
+    { values: theme('divideWidth'), type: 'length' }
   )
 
   addUtilities({
@@ -1171,21 +1005,11 @@ export let divideWidth = ({ matchUtilities, addUtilities, theme }) => {
 
 export let divideStyle = ({ addUtilities }) => {
   addUtilities({
-    '.divide-solid > :not([hidden]) ~ :not([hidden])': {
-      'border-style': 'solid',
-    },
-    '.divide-dashed > :not([hidden]) ~ :not([hidden])': {
-      'border-style': 'dashed',
-    },
-    '.divide-dotted > :not([hidden]) ~ :not([hidden])': {
-      'border-style': 'dotted',
-    },
-    '.divide-double > :not([hidden]) ~ :not([hidden])': {
-      'border-style': 'double',
-    },
-    '.divide-none > :not([hidden]) ~ :not([hidden])': {
-      'border-style': 'none',
-    },
+    '.divide-solid > :not([hidden]) ~ :not([hidden])': { 'border-style': 'solid' },
+    '.divide-dashed > :not([hidden]) ~ :not([hidden])': { 'border-style': 'dashed' },
+    '.divide-dotted > :not([hidden]) ~ :not([hidden])': { 'border-style': 'dotted' },
+    '.divide-double > :not([hidden]) ~ :not([hidden])': { 'border-style': 'double' },
+    '.divide-none > :not([hidden]) ~ :not([hidden])': { 'border-style': 'none' },
   })
 }
 
@@ -1194,11 +1018,7 @@ export let divideColor = ({ matchUtilities, theme, corePlugins }) => {
     {
       divide: (value) => {
         if (!corePlugins('divideOpacity')) {
-          return {
-            ['& > :not([hidden]) ~ :not([hidden])']: {
-              'border-color': value,
-            },
-          }
+          return { ['& > :not([hidden]) ~ :not([hidden])']: { 'border-color': value } }
         }
 
         return {
@@ -1221,80 +1041,41 @@ export let divideOpacity = ({ matchUtilities, theme }) => {
   matchUtilities(
     {
       'divide-opacity': (value) => {
-        return {
-          [`& > :not([hidden]) ~ :not([hidden])`]: {
-            '--tw-divide-opacity': value,
-          },
-        }
+        return { [`& > :not([hidden]) ~ :not([hidden])`]: { '--tw-divide-opacity': value } }
       },
     },
-    {
-      values: theme('divideOpacity'),
-      type: 'any',
-    }
+    { values: theme('divideOpacity'), type: 'any' }
   )
 }
 
 export let placeSelf = ({ addUtilities }) => {
   addUtilities({
-    '.place-self-auto': {
-      'place-self': 'auto',
-    },
-    '.place-self-start': {
-      'place-self': 'start',
-    },
-    '.place-self-end': {
-      'place-self': 'end',
-    },
-    '.place-self-center': {
-      'place-self': 'center',
-    },
-    '.place-self-stretch': {
-      'place-self': 'stretch',
-    },
+    '.place-self-auto': { 'place-self': 'auto' },
+    '.place-self-start': { 'place-self': 'start' },
+    '.place-self-end': { 'place-self': 'end' },
+    '.place-self-center': { 'place-self': 'center' },
+    '.place-self-stretch': { 'place-self': 'stretch' },
   })
 }
 
 export let alignSelf = ({ addUtilities }) => {
   addUtilities({
-    '.self-auto': {
-      'align-self': 'auto',
-    },
-    '.self-start': {
-      'align-self': 'flex-start',
-    },
-    '.self-end': {
-      'align-self': 'flex-end',
-    },
-    '.self-center': {
-      'align-self': 'center',
-    },
-    '.self-stretch': {
-      'align-self': 'stretch',
-    },
-    '.self-baseline': {
-      'align-self': 'baseline',
-    },
+    '.self-auto': { 'align-self': 'auto' },
+    '.self-start': { 'align-self': 'flex-start' },
+    '.self-end': { 'align-self': 'flex-end' },
+    '.self-center': { 'align-self': 'center' },
+    '.self-stretch': { 'align-self': 'stretch' },
+    '.self-baseline': { 'align-self': 'baseline' },
   })
 }
 
 export let justifySelf = ({ addUtilities }) => {
   addUtilities({
-    '.justify-self-auto': {
-      'justify-self': 'auto',
-    },
-    '.justify-self-start': {
-      'justify-self': 'start',
-    },
-    '.justify-self-end': {
-      'justify-self': 'end',
-    },
-    '.justify-self-center': {
-      'justify-self': 'center',
-    },
-    '.justify-self-stretch': {
-      'justify-self': 'stretch',
-    },
+    '.justify-self-auto': { 'justify-self': 'auto' },
+    '.justify-self-start': { 'justify-self': 'start' },
+    '.justify-self-end': { 'justify-self': 'end' },
+    '.justify-self-center': { 'justify-self': 'center' },
+    '.justify-self-stretch': { 'justify-self': 'stretch' },
   })
 }
 
@@ -1331,11 +1112,7 @@ export let overscrollBehavior = ({ addUtilities }) => {
 
 export let textOverflow = ({ addUtilities }) => {
   addUtilities({
-    '.truncate': {
-      overflow: 'hidden',
-      'text-overflow': 'ellipsis',
-      'white-space': 'nowrap',
-    },
+    '.truncate': { overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' },
     '.overflow-ellipsis': { 'text-overflow': 'ellipsis' },
     '.overflow-clip': { 'text-overflow': 'clip' },
   })
@@ -1353,13 +1130,8 @@ export let whitespace = ({ addUtilities }) => {
 
 export let wordBreak = ({ addUtilities }) => {
   addUtilities({
-    '.break-normal': {
-      'overflow-wrap': 'normal',
-      'word-break': 'normal',
-    },
-    '.break-words': {
-      'overflow-wrap': 'break-word',
-    },
+    '.break-normal': { 'overflow-wrap': 'normal', 'word-break': 'normal' },
+    '.break-words': { 'overflow-wrap': 'break-word' },
     '.break-all': { 'word-break': 'break-all' },
   })
 }
@@ -1396,21 +1168,11 @@ export let borderWidth = createUtilityPlugin(
 
 export let borderStyle = ({ addUtilities }) => {
   addUtilities({
-    '.border-solid': {
-      'border-style': 'solid',
-    },
-    '.border-dashed': {
-      'border-style': 'dashed',
-    },
-    '.border-dotted': {
-      'border-style': 'dotted',
-    },
-    '.border-double': {
-      'border-style': 'double',
-    },
-    '.border-none': {
-      'border-style': 'none',
-    },
+    '.border-solid': { 'border-style': 'solid' },
+    '.border-dashed': { 'border-style': 'dashed' },
+    '.border-dotted': { 'border-style': 'dotted' },
+    '.border-double': { 'border-style': 'double' },
+    '.border-none': { 'border-style': 'none' },
   })
 }
 
@@ -1435,9 +1197,7 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
     {
       border: (value) => {
         if (!corePlugins('borderOpacity')) {
-          return {
-            'border-color': value,
-          }
+          return { 'border-color': value }
         }
 
         return withAlphaVariable({
@@ -1457,9 +1217,7 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
     {
       'border-t': (value) => {
         if (!corePlugins('borderOpacity')) {
-          return {
-            'border-top-color': value,
-          }
+          return { 'border-top-color': value }
         }
 
         return withAlphaVariable({
@@ -1470,9 +1228,7 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
       },
       'border-r': (value) => {
         if (!corePlugins('borderOpacity')) {
-          return {
-            'border-right-color': value,
-          }
+          return { 'border-right-color': value }
         }
 
         return withAlphaVariable({
@@ -1483,9 +1239,7 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
       },
       'border-b': (value) => {
         if (!corePlugins('borderOpacity')) {
-          return {
-            'border-bottom-color': value,
-          }
+          return { 'border-bottom-color': value }
         }
 
         return withAlphaVariable({
@@ -1496,9 +1250,7 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
       },
       'border-l': (value) => {
         if (!corePlugins('borderOpacity')) {
-          return {
-            'border-left-color': value,
-          }
+          return { 'border-left-color': value }
         }
 
         return withAlphaVariable({
@@ -1524,9 +1276,7 @@ export let backgroundColor = ({ matchUtilities, theme, corePlugins }) => {
     {
       bg: (value) => {
         if (!corePlugins('backgroundOpacity')) {
-          return {
-            'background-color': value,
-          }
+          return { 'background-color': value }
         }
 
         return withAlphaVariable({
@@ -1536,10 +1286,7 @@ export let backgroundColor = ({ matchUtilities, theme, corePlugins }) => {
         })
       },
     },
-    {
-      values: flattenColorPalette(theme('backgroundColor')),
-      type: 'color',
-    }
+    { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
   )
 }
 
@@ -1549,9 +1296,7 @@ export let backgroundOpacity = createUtilityPlugin('backgroundOpacity', [
 export let backgroundImage = createUtilityPlugin(
   'backgroundImage',
   [['bg', ['background-image']]],
-  {
-    resolveArbitraryValue: asLookupValue,
-  }
+  { resolveArbitraryValue: asLookupValue }
 )
 export let gradientColorStops = (() => {
   function transparentTo(value) {
@@ -1592,25 +1337,14 @@ export let gradientColorStops = (() => {
       },
       options
     )
-    matchUtilities(
-      {
-        to: (value) => {
-          return { '--tw-gradient-to': toColorValue(value, 'to') }
-        },
-      },
-      options
-    )
+    matchUtilities({ to: (value) => ({ '--tw-gradient-to': toColorValue(value, 'to') }) }, options)
   }
 })()
 
 export let boxDecorationBreak = ({ addUtilities }) => {
   addUtilities({
-    '.decoration-slice': {
-      'box-decoration-break': 'slice',
-    },
-    '.decoration-clone': {
-      'box-decoration-break': 'clone',
-    },
+    '.decoration-slice': { 'box-decoration-break': 'slice' },
+    '.decoration-clone': { 'box-decoration-break': 'clone' },
   })
 }
 
@@ -1638,9 +1372,7 @@ export let backgroundClip = ({ addUtilities }) => {
 export let backgroundPosition = createUtilityPlugin(
   'backgroundPosition',
   [['bg', ['background-position']]],
-  {
-    resolveArbitraryValue: asLookupValue,
-  }
+  { resolveArbitraryValue: asLookupValue }
 )
 
 export let backgroundRepeat = ({ addUtilities }) => {
@@ -1669,10 +1401,7 @@ export let fill = ({ matchUtilities, theme }) => {
         return { fill: toColorValue(value) }
       },
     },
-    {
-      values: flattenColorPalette(theme('fill')),
-      type: ['color', 'any'],
-    }
+    { values: flattenColorPalette(theme('fill')), type: ['color', 'any'] }
   )
 }
 
@@ -1680,15 +1409,10 @@ export let stroke = ({ matchUtilities, theme }) => {
   matchUtilities(
     {
       stroke: (value) => {
-        return {
-          stroke: toColorValue(value),
-        }
+        return { stroke: toColorValue(value) }
       },
     },
-    {
-      values: flattenColorPalette(theme('stroke')),
-      type: 'color',
-    }
+    { values: flattenColorPalette(theme('stroke')), type: 'color' }
   )
 }
 
@@ -1709,9 +1433,7 @@ export let objectFit = ({ addUtilities }) => {
 export let objectPosition = createUtilityPlugin(
   'objectPosition',
   [['object', ['object-position']]],
-  {
-    resolveArbitraryValue: asList,
-  }
+  { resolveArbitraryValue: asList }
 )
 export let padding = createUtilityPlugin('padding', [
   ['p', ['padding']],
@@ -1769,10 +1491,7 @@ export let fontSize = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('fontSize'),
-      type: 'length',
-    }
+    { values: theme('fontSize'), type: 'length' }
   )
 }
 
@@ -1808,33 +1527,15 @@ export let fontVariantNumeric = ({ addUtilities }) => {
         'font-variant-numeric':
           'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)',
       },
-    '.normal-nums': {
-      'font-variant-numeric': 'normal',
-    },
-    '.ordinal': {
-      '--tw-ordinal': 'ordinal',
-    },
-    '.slashed-zero': {
-      '--tw-slashed-zero': 'slashed-zero',
-    },
-    '.lining-nums': {
-      '--tw-numeric-figure': 'lining-nums',
-    },
-    '.oldstyle-nums': {
-      '--tw-numeric-figure': 'oldstyle-nums',
-    },
-    '.proportional-nums': {
-      '--tw-numeric-spacing': 'proportional-nums',
-    },
-    '.tabular-nums': {
-      '--tw-numeric-spacing': 'tabular-nums',
-    },
-    '.diagonal-fractions': {
-      '--tw-numeric-fraction': 'diagonal-fractions',
-    },
-    '.stacked-fractions': {
-      '--tw-numeric-fraction': 'stacked-fractions',
-    },
+    '.normal-nums': { 'font-variant-numeric': 'normal' },
+    '.ordinal': { '--tw-ordinal': 'ordinal' },
+    '.slashed-zero': { '--tw-slashed-zero': 'slashed-zero' },
+    '.lining-nums': { '--tw-numeric-figure': 'lining-nums' },
+    '.oldstyle-nums': { '--tw-numeric-figure': 'oldstyle-nums' },
+    '.proportional-nums': { '--tw-numeric-spacing': 'proportional-nums' },
+    '.tabular-nums': { '--tw-numeric-spacing': 'tabular-nums' },
+    '.diagonal-fractions': { '--tw-numeric-fraction': 'diagonal-fractions' },
+    '.stacked-fractions': { '--tw-numeric-fraction': 'stacked-fractions' },
   })
 }
 
@@ -1856,10 +1557,7 @@ export let textColor = ({ matchUtilities, theme, corePlugins }) => {
         })
       },
     },
-    {
-      values: flattenColorPalette(theme('textColor')),
-      type: 'color',
-    }
+    { values: flattenColorPalette(theme('textColor')), type: 'color' }
   )
 }
 
@@ -1893,11 +1591,7 @@ export let placeholderColor = ({ matchUtilities, theme, corePlugins }) => {
     {
       placeholder: (value) => {
         if (!corePlugins('placeholderOpacity')) {
-          return {
-            '&::placeholder': {
-              color: value,
-            },
-          }
+          return { '&::placeholder': { color: value } }
         }
 
         return {
@@ -1909,10 +1603,7 @@ export let placeholderColor = ({ matchUtilities, theme, corePlugins }) => {
         }
       },
     },
-    {
-      values: flattenColorPalette(theme('placeholderColor')),
-      type: ['color', 'any'],
-    }
+    { values: flattenColorPalette(theme('placeholderColor')), type: ['color', 'any'] }
   )
 }
 
@@ -1923,10 +1614,7 @@ export let placeholderOpacity = ({ matchUtilities, theme }) => {
         return { ['&::placeholder']: { '--tw-placeholder-opacity': value } }
       },
     },
-    {
-      values: theme('placeholderOpacity'),
-      type: 'any',
-    }
+    { values: theme('placeholderOpacity'), type: 'any' }
   )
 }
 
@@ -1937,10 +1625,7 @@ export let caretColor = ({ matchUtilities, theme }) => {
         return { 'caret-color': toColorValue(value) }
       },
     },
-    {
-      values: flattenColorPalette(theme('caretColor')),
-      type: ['color', 'any'],
-    }
+    { values: flattenColorPalette(theme('caretColor')), type: ['color', 'any'] }
   )
 }
 
@@ -1951,10 +1636,7 @@ export let accentColor = ({ matchUtilities, theme }) => {
         return { 'accent-color': toColorValue(value) }
       },
     },
-    {
-      values: flattenColorPalette(theme('accentColor')),
-      type: ['color', 'any'],
-    }
+    { values: flattenColorPalette(theme('accentColor')), type: ['color', 'any'] }
   )
 }
 
@@ -2031,10 +1713,7 @@ export let boxShadow = (() => {
           }
         },
       },
-      {
-        values: theme('boxShadow'),
-        type: 'lookup',
-      }
+      { values: theme('boxShadow'), type: 'lookup' }
     )
   }
 })()
@@ -2087,17 +1766,11 @@ export let ringWidth = ({ matchUtilities, addBase, addUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('ringWidth'),
-      type: 'length',
-    }
+    { values: theme('ringWidth'), type: 'length' }
   )
 
   addUtilities({
-    '.ring-inset': {
-      '@defaults ring-width': {},
-      '--tw-ring-inset': 'inset',
-    },
+    '.ring-inset': { '@defaults ring-width': {}, '--tw-ring-inset': 'inset' },
   })
 }
 
@@ -2126,16 +1799,12 @@ export let ringColor = ({ matchUtilities, theme }) => {
 export let ringOpacity = createUtilityPlugin(
   'ringOpacity',
   [['ring-opacity', ['--tw-ring-opacity']]],
-  {
-    filterDefault: true,
-  }
+  { filterDefault: true }
 )
 export let ringOffsetWidth = createUtilityPlugin(
   'ringOffsetWidth',
   [['ring-offset', ['--tw-ring-offset-width']]],
-  {
-    resolveArbitraryValue: asLength,
-  }
+  { resolveArbitraryValue: asLength }
 )
 
 export let ringOffsetColor = ({ matchUtilities, theme }) => {
@@ -2147,10 +1816,7 @@ export let ringOffsetColor = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: flattenColorPalette(theme('ringOffsetColor')),
-      type: 'color',
-    }
+    { values: flattenColorPalette(theme('ringOffsetColor')), type: 'color' }
   )
 }
 
@@ -2165,10 +1831,7 @@ export let blur = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('blur'),
-      type: 'any',
-    }
+    { values: theme('blur'), type: 'any' }
   )
 }
 
@@ -2183,10 +1846,7 @@ export let brightness = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('brightness'),
-      type: 'any',
-    }
+    { values: theme('brightness'), type: 'any' }
   )
 }
 
@@ -2235,10 +1895,7 @@ export let grayscale = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('grayscale'),
-      type: 'any',
-    }
+    { values: theme('grayscale'), type: 'any' }
   )
 }
 
@@ -2253,10 +1910,7 @@ export let hueRotate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('hueRotate'),
-      type: 'any',
-    }
+    { values: theme('hueRotate'), type: 'any' }
   )
 }
 
@@ -2271,10 +1925,7 @@ export let invert = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('invert'),
-      type: 'any',
-    }
+    { values: theme('invert'), type: 'any' }
   )
 }
 
@@ -2289,10 +1940,7 @@ export let saturate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('saturate'),
-      type: 'any',
-    }
+    { values: theme('saturate'), type: 'any' }
   )
 }
 
@@ -2353,10 +2001,7 @@ export let backdropBlur = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropBlur'),
-      type: 'any',
-    }
+    { values: theme('backdropBlur'), type: 'any' }
   )
 }
 
@@ -2371,10 +2016,7 @@ export let backdropBrightness = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropBrightness'),
-      type: 'any',
-    }
+    { values: theme('backdropBrightness'), type: 'any' }
   )
 }
 
@@ -2389,10 +2031,7 @@ export let backdropContrast = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropContrast'),
-      type: 'any',
-    }
+    { values: theme('backdropContrast'), type: 'any' }
   )
 }
 
@@ -2407,10 +2046,7 @@ export let backdropGrayscale = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropGrayscale'),
-      type: 'any',
-    }
+    { values: theme('backdropGrayscale'), type: 'any' }
   )
 }
 
@@ -2425,10 +2061,7 @@ export let backdropHueRotate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropHueRotate'),
-      type: 'any',
-    }
+    { values: theme('backdropHueRotate'), type: 'any' }
   )
 }
 
@@ -2443,10 +2076,7 @@ export let backdropInvert = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropInvert'),
-      type: 'any',
-    }
+    { values: theme('backdropInvert'), type: 'any' }
   )
 }
 
@@ -2461,10 +2091,7 @@ export let backdropOpacity = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropOpacity'),
-      type: 'any',
-    }
+    { values: theme('backdropOpacity'), type: 'any' }
   )
 }
 
@@ -2479,10 +2106,7 @@ export let backdropSaturate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropSaturate'),
-      type: 'any',
-    }
+    { values: theme('backdropSaturate'), type: 'any' }
   )
 }
 
@@ -2497,10 +2121,7 @@ export let backdropSepia = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('backdropSepia'),
-      type: 'any',
-    }
+    { values: theme('backdropSepia'), type: 'any' }
   )
 }
 
@@ -2556,10 +2177,7 @@ export let transitionProperty = ({ matchUtilities, theme }) => {
         }
       },
     },
-    {
-      values: theme('transitionProperty'),
-      type: 'lookup',
-    }
+    { values: theme('transitionProperty'), type: 'lookup' }
   )
 }
 
@@ -2569,16 +2187,12 @@ export let transitionDelay = createUtilityPlugin('transitionDelay', [
 export let transitionDuration = createUtilityPlugin(
   'transitionDuration',
   [['duration', ['transitionDuration']]],
-  {
-    filterDefault: true,
-  }
+  { filterDefault: true }
 )
 export let transitionTimingFunction = createUtilityPlugin(
   'transitionTimingFunction',
   [['ease', ['transitionTimingFunction']]],
-  {
-    filterDefault: true,
-  }
+  { filterDefault: true }
 )
 export let willChange = createUtilityPlugin('willChange', [['will-change', ['will-change']]])
 export let content = createUtilityPlugin('content')
