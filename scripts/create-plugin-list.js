@@ -1,8 +1,8 @@
-import * as corePlugins from '../src/plugins'
+import * as corePlugins from '../src/corePlugins'
 import fs from 'fs'
 import path from 'path'
 
-const corePluginList = Object.keys(corePlugins)
+let corePluginList = Object.keys(corePlugins).filter((plugin) => !plugin.includes('Variants'))
 
 fs.writeFileSync(
   path.join(process.cwd(), 'src', 'corePluginList.js'),
