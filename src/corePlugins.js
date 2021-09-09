@@ -16,7 +16,6 @@ import {
   transformAllSelectors,
   transformAllClasses,
   transformLastClasses,
-  asList,
   asLength,
   asLookupValue,
 } from './util/pluginUtils'
@@ -828,16 +827,12 @@ export let gridAutoFlow = ({ addUtilities }) => {
 }
 
 export let gridAutoRows = createUtilityPlugin('gridAutoRows', [['auto-rows', ['gridAutoRows']]])
-export let gridTemplateColumns = createUtilityPlugin(
-  'gridTemplateColumns',
-  [['grid-cols', ['gridTemplateColumns']]],
-  { resolveArbitraryValue: asList }
-)
-export let gridTemplateRows = createUtilityPlugin(
-  'gridTemplateRows',
-  [['grid-rows', ['gridTemplateRows']]],
-  { resolveArbitraryValue: asList }
-)
+export let gridTemplateColumns = createUtilityPlugin('gridTemplateColumns', [
+  ['grid-cols', ['gridTemplateColumns']],
+])
+export let gridTemplateRows = createUtilityPlugin('gridTemplateRows', [
+  ['grid-rows', ['gridTemplateRows']],
+])
 
 export let flexDirection = ({ addUtilities }) => {
   addUtilities({
@@ -1430,12 +1425,8 @@ export let objectFit = ({ addUtilities }) => {
     '.object-scale-down': { 'object-fit': 'scale-down' },
   })
 }
+export let objectPosition = createUtilityPlugin('objectPosition', [['object', ['object-position']]])
 
-export let objectPosition = createUtilityPlugin(
-  'objectPosition',
-  [['object', ['object-position']]],
-  { resolveArbitraryValue: asList }
-)
 export let padding = createUtilityPlugin('padding', [
   ['p', ['padding']],
   [
