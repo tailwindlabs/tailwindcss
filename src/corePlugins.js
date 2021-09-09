@@ -9,7 +9,6 @@ import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
 import toColorValue from './util/toColorValue'
 import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
-import nameClass from './util/nameClass'
 import {
   applyPseudoToMarker,
   updateLastClasses,
@@ -1867,23 +1866,21 @@ export let contrast = ({ matchUtilities, theme }) => {
   )
 }
 
-export let dropShadow = ({ addUtilities, theme }) => {
-  let utilities = Object.fromEntries(
-    Object.entries(theme('dropShadow') ?? {}).map(([modifier, value]) => {
-      return [
-        nameClass('drop-shadow', modifier),
-        {
+export let dropShadow = ({ matchUtilities, theme }) => {
+  matchUtilities(
+    {
+      'drop-shadow': (value) => {
+        return {
           '--tw-drop-shadow': Array.isArray(value)
             ? value.map((v) => `drop-shadow(${v})`).join(' ')
             : `drop-shadow(${value})`,
           '@defaults filter': {},
           filter: 'var(--tw-filter)',
-        },
-      ]
-    })
+        }
+      },
+    },
+    { values: theme('dropShadow') }
   )
-
-  addUtilities(utilities)
 }
 
 export let grayscale = ({ matchUtilities, theme }) => {
