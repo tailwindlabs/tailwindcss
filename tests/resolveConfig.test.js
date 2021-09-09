@@ -15,11 +15,6 @@ test('prefix key overrides default prefix', () => {
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -32,11 +27,6 @@ test('prefix key overrides default prefix', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -55,11 +45,6 @@ test('important key overrides default important', () => {
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -72,11 +57,6 @@ test('important key overrides default important', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -95,11 +75,6 @@ test('important (selector) key overrides default important', () => {
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -112,11 +87,6 @@ test('important (selector) key overrides default important', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -135,11 +105,6 @@ test('separator key overrides default separator', () => {
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -152,11 +117,6 @@ test('separator key overrides default separator', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -192,11 +152,6 @@ test('theme key is merged instead of replaced', () => {
         lg: '1000px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -220,11 +175,6 @@ test('theme key is merged instead of replaced', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -278,143 +228,6 @@ test('theme key is deeply merged instead of replaced', () => {
   })
 })
 
-test('variants key is merged instead of replaced', () => {
-  const userConfig = {
-    variants: {
-      backgroundAttachment: [],
-      borderColors: ['responsive', 'hover', 'focus', 'active'],
-    },
-  }
-
-  const defaultConfig = {
-    prefix: '-',
-    important: false,
-    separator: ':',
-    theme: {
-      colors: {
-        'grey-darker': '#606f7b',
-        'grey-dark': '#8795a1',
-        grey: '#b8c2cc',
-        'grey-light': '#dae1e7',
-        'grey-lighter': '#f1f5f8',
-      },
-      fonts: {
-        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
-        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
-      },
-      screens: {
-        sm: '500px',
-        md: '750px',
-        lg: '1000px',
-      },
-    },
-    variants: {
-      appearance: ['responsive'],
-      backgroundAttachment: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-      borderRadius: ['responsive'],
-    },
-  }
-
-  const result = resolveConfig([userConfig, defaultConfig])
-
-  expect(result).toMatchObject({
-    prefix: '-',
-    important: false,
-    separator: ':',
-    theme: {
-      colors: {
-        'grey-darker': '#606f7b',
-        'grey-dark': '#8795a1',
-        grey: '#b8c2cc',
-        'grey-light': '#dae1e7',
-        'grey-lighter': '#f1f5f8',
-      },
-      fonts: {
-        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
-        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
-      },
-      screens: {
-        sm: '500px',
-        md: '750px',
-        lg: '1000px',
-      },
-    },
-    variants: {
-      appearance: ['responsive'],
-      backgroundAttachment: [],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus', 'active'],
-      borderRadius: ['responsive'],
-    },
-  })
-})
-
-test('a global variants list replaces the default', () => {
-  const userConfig = {
-    variants: ['responsive', 'hover', 'focus', 'active'],
-  }
-
-  const defaultConfig = {
-    prefix: '-',
-    important: false,
-    separator: ':',
-    theme: {
-      colors: {
-        'grey-darker': '#606f7b',
-        'grey-dark': '#8795a1',
-        grey: '#b8c2cc',
-        'grey-light': '#dae1e7',
-        'grey-lighter': '#f1f5f8',
-      },
-      fonts: {
-        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
-        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
-      },
-      screens: {
-        sm: '500px',
-        md: '750px',
-        lg: '1000px',
-      },
-    },
-    variants: {
-      appearance: ['responsive'],
-      backgroundAttachment: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-      borderRadius: ['responsive'],
-    },
-  }
-
-  const result = resolveConfig([userConfig, defaultConfig])
-
-  expect(result).toMatchObject({
-    prefix: '-',
-    important: false,
-    separator: ':',
-    theme: {
-      colors: {
-        'grey-darker': '#606f7b',
-        'grey-dark': '#8795a1',
-        grey: '#b8c2cc',
-        'grey-light': '#dae1e7',
-        'grey-lighter': '#f1f5f8',
-      },
-      fonts: {
-        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
-        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
-      },
-      screens: {
-        sm: '500px',
-        md: '750px',
-        lg: '1000px',
-      },
-    },
-    variants: ['responsive', 'hover', 'focus', 'active'],
-  })
-})
-
 test('missing top level keys are pulled from the default config', () => {
   const userConfig = {}
 
@@ -428,11 +241,6 @@ test('missing top level keys are pulled from the default config', () => {
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -446,11 +254,6 @@ test('missing top level keys are pulled from the default config', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -479,10 +282,6 @@ test('functions in the default theme section are lazily evaluated', () => {
       backgroundColors: (theme) => theme('colors'),
       textColors: (theme) => theme('colors'),
     },
-    variants: {
-      backgroundColors: ['responsive', 'hover', 'focus'],
-      textColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -507,10 +306,6 @@ test('functions in the default theme section are lazily evaluated', () => {
         green: 'green',
         blue: 'blue',
       },
-    },
-    variants: {
-      backgroundColors: ['responsive', 'hover', 'focus'],
-      textColors: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -547,10 +342,6 @@ test('functions in the user theme section are lazily evaluated', () => {
       backgroundColors: ({ colors }) => colors,
       textColors: ({ colors }) => colors,
     },
-    variants: {
-      backgroundColors: ['responsive', 'hover', 'focus'],
-      textColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -577,10 +368,6 @@ test('functions in the user theme section are lazily evaluated', () => {
         blue: 'blue',
         customText: '#facade',
       },
-    },
-    variants: {
-      backgroundColors: ['responsive', 'hover', 'focus'],
-      textColors: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -617,10 +404,6 @@ test('theme values in the extend section extend the existing theme', () => {
       },
       backgroundColors: (theme) => theme('colors'),
     },
-    variants: {
-      backgroundColors: ['responsive', 'hover', 'focus'],
-      opacity: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -648,10 +431,6 @@ test('theme values in the extend section extend the existing theme', () => {
         yellow: 'yellow',
         customBackground: '#bada55',
       },
-    },
-    variants: {
-      backgroundColors: ['responsive', 'hover', 'focus'],
-      opacity: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -700,11 +479,6 @@ test('theme values in the extend section extend the user theme', () => {
         4: '1rem',
       },
     },
-    variants: {
-      opacity: ['responsive', 'hover', 'focus'],
-      height: ['responsive'],
-      width: ['responsive'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -738,11 +512,6 @@ test('theme values in the extend section extend the user theme', () => {
         4: '1rem',
       },
     },
-    variants: {
-      opacity: ['responsive', 'hover', 'focus'],
-      height: ['responsive'],
-      width: ['responsive'],
-    },
   })
 })
 
@@ -774,9 +543,6 @@ test('theme values in the extend section can extend values that are depended on 
       },
       backgroundColors: (theme) => theme('colors'),
     },
-    variants: {
-      backgroundColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -804,9 +570,6 @@ test('theme values in the extend section can extend values that are depended on 
         customBackground: '#bada55',
       },
     },
-    variants: {
-      backgroundColors: ['responsive', 'hover', 'focus'],
-    },
   })
 })
 
@@ -832,9 +595,6 @@ test('theme values in the extend section are not deeply merged when they are sim
         mono: ['Menlo', 'Courier New', 'monospace'],
       },
     },
-    variants: {
-      fonts: ['responsive'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -849,9 +609,6 @@ test('theme values in the extend section are not deeply merged when they are sim
         serif: ['Constantia', 'Georgia', 'serif'],
         mono: ['Menlo', 'Courier New', 'monospace'],
       },
-    },
-    variants: {
-      fonts: ['responsive'],
     },
   })
 })
@@ -892,7 +649,6 @@ test('theme values in the extend section are deeply merged, when they are arrays
         },
       },
     },
-    variants: {},
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -922,7 +678,6 @@ test('theme values in the extend section are deeply merged, when they are arrays
         },
       },
     },
-    variants: {},
   })
 })
 
@@ -952,9 +707,6 @@ test('the theme function can use a default value if the key is missing', () => {
         ...theme('colors'),
       }),
     },
-    variants: {
-      borderColor: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -975,9 +727,6 @@ test('the theme function can use a default value if the key is missing', () => {
         green: 'green',
         blue: 'blue',
       },
-    },
-    variants: {
-      borderColor: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -1007,10 +756,6 @@ test('the theme function can resolve function values', () => {
         green: 'green',
         blue: 'blue',
       },
-    },
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-      borderColor: ['responsive', 'hover', 'focus'],
     },
   }
 
@@ -1047,10 +792,6 @@ test('the theme function can resolve function values', () => {
         blue: 'blue',
       },
     },
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-      borderColor: ['responsive', 'hover', 'focus'],
-    },
   })
 })
 
@@ -1076,10 +817,6 @@ test('the theme function can resolve deep function values', () => {
         '1/3': '33.33333%',
       }),
     },
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-      borderColor: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1099,10 +836,6 @@ test('the theme function can resolve deep function values', () => {
       minWidth: {
         '1/3': '33.33333%',
       },
-    },
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-      borderColor: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -1142,9 +875,6 @@ test('theme values in the extend section are lazily evaluated', () => {
         ...theme('colors'),
       }),
     },
-    variants: {
-      borderColor: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1169,9 +899,6 @@ test('theme values in the extend section are lazily evaluated', () => {
         green: 'green',
         blue: 'blue',
       },
-    },
-    variants: {
-      borderColor: ['responsive', 'hover', 'focus'],
     },
   })
 })
@@ -1209,7 +936,6 @@ test('lazily evaluated values have access to the config utils', () => {
         ...negative(theme('spacing')),
       }),
     },
-    variants: {},
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1266,7 +992,6 @@ test('lazily evaluated values have access to the config utils', () => {
         4: '4px',
       },
     },
-    variants: {},
   })
 })
 
@@ -1278,9 +1003,6 @@ test('the original theme is not mutated', () => {
           orange: 'orange',
         },
       },
-    },
-    variants: {
-      borderColor: ['responsive', 'hover'],
     },
   }
 
@@ -1295,9 +1017,6 @@ test('the original theme is not mutated', () => {
         yellow: 'yellow',
       },
     },
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-    },
   }
 
   resolveConfig([userConfig, defaultConfig])
@@ -1309,9 +1028,6 @@ test('the original theme is not mutated', () => {
           orange: 'orange',
         },
       },
-    },
-    variants: {
-      borderColor: ['responsive', 'hover'],
     },
   })
 })
@@ -1343,7 +1059,6 @@ test('custom properties are multiplied by -1 for negative values', () => {
     important: false,
     separator: ':',
     theme: {},
-    variants: {},
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1460,9 +1175,6 @@ test('more than two config objects can be resolved', () => {
       },
       backgroundColor: (theme) => theme('colors'),
     },
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([firstConfig, secondConfig, thirdConfig, defaultConfig])
@@ -1503,9 +1215,6 @@ test('more than two config objects can be resolved', () => {
         lime: 'lime',
       },
     },
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-    },
   })
 })
 
@@ -1529,11 +1238,6 @@ test('plugin config modifications are applied', () => {
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1546,11 +1250,6 @@ test('plugin config modifications are applied', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
     plugins: userConfig.plugins,
   })
@@ -1577,11 +1276,6 @@ test('user config takes precedence over plugin config modifications', () => {
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1594,11 +1288,6 @@ test('user config takes precedence over plugin config modifications', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
     plugins: userConfig.plugins,
   })
@@ -1637,11 +1326,6 @@ test('plugin config can register plugins that also have config', () => {
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1654,11 +1338,6 @@ test('plugin config can register plugins that also have config', () => {
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
     plugins: userConfig.plugins,
   })
@@ -1692,11 +1371,6 @@ test('plugin configs take precedence over plugin configs registered by that plug
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1709,11 +1383,6 @@ test('plugin configs take precedence over plugin configs registered by that plug
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
     plugins: userConfig.plugins,
   })
@@ -1757,11 +1426,6 @@ test('plugin theme extensions are added even if user overrides top-level theme c
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1779,11 +1443,6 @@ test('plugin theme extensions are added even if user overrides top-level theme c
       screens: {
         mobile: '400px',
       },
-    },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
     },
     plugins: userConfig.plugins,
   })
@@ -1828,11 +1487,6 @@ test('user theme extensions take precedence over plugin theme extensions with th
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -1852,53 +1506,7 @@ test('user theme extensions take precedence over plugin theme extensions with th
         mobile: '400px',
       },
     },
-    variants: {
-      appearance: ['responsive'],
-      borderCollapse: [],
-      borderColors: ['responsive', 'hover', 'focus'],
-    },
     plugins: userConfig.plugins,
-  })
-})
-
-test('variants can be extended', () => {
-  const userConfig = {
-    variants: {
-      borderColor: ({ after }) => after(['group-focus'], 'hover'),
-      extend: {
-        backgroundColor: ['active', 'disabled', 'group-hover'],
-      },
-    },
-  }
-
-  const otherConfig = {
-    variants: {
-      extend: {
-        textColor: ['hover', 'focus-within'],
-      },
-    },
-  }
-
-  const defaultConfig = {
-    prefix: '',
-    important: false,
-    separator: ':',
-    theme: {},
-    variants: {
-      borderColor: ['hover', 'focus'],
-      backgroundColor: ['responsive', 'hover', 'focus'],
-      textColor: ['responsive', 'focus'],
-    },
-  }
-
-  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
-
-  expect(result).toMatchObject({
-    variants: {
-      borderColor: ['hover', 'group-focus', 'focus'],
-      backgroundColor: ['responsive', 'group-hover', 'hover', 'focus', 'active', 'disabled'],
-      textColor: ['responsive', 'focus-within', 'hover', 'focus'],
-    },
   })
 })
 
@@ -1966,153 +1574,6 @@ test('extensions are applied in the right order', () => {
   })
 })
 
-test('variant sort order can be customized', () => {
-  const userConfig = {
-    variantOrder: [
-      'disabled',
-      'focus',
-      'group-hover',
-      'focus-within',
-      'active',
-      'hover',
-      'responsive',
-    ],
-    variants: {
-      borderColor: ({ after }) => after(['group-focus'], 'hover'),
-      extend: {
-        backgroundColor: ['active', 'disabled', 'group-hover'],
-      },
-    },
-  }
-
-  const otherConfig = {
-    variants: {
-      extend: {
-        textColor: ['hover', 'focus-within'],
-      },
-    },
-  }
-
-  const defaultConfig = {
-    prefix: '',
-    important: false,
-    separator: ':',
-    theme: {},
-    variants: {
-      borderColor: ['hover', 'focus'],
-      backgroundColor: ['responsive', 'hover', 'focus'],
-      textColor: ['responsive', 'focus'],
-    },
-  }
-
-  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
-
-  expect(result).toMatchObject({
-    variants: {
-      borderColor: ['hover', 'group-focus', 'focus'],
-      backgroundColor: ['disabled', 'focus', 'group-hover', 'active', 'hover', 'responsive'],
-      textColor: ['focus', 'focus-within', 'hover', 'responsive'],
-    },
-  })
-})
-
-test('custom variants go to the beginning by default when sort is applied', () => {
-  const userConfig = {
-    variants: {
-      extend: {
-        backgroundColor: ['active', 'custom-variant-1', 'group-hover', 'custom-variant-2'],
-      },
-    },
-  }
-
-  const defaultConfig = {
-    prefix: '',
-    important: false,
-    separator: ':',
-    theme: {},
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-    },
-  }
-
-  const result = resolveConfig([userConfig, defaultConfig])
-
-  expect(result).toMatchObject({
-    variants: {
-      backgroundColor: [
-        'responsive',
-        'custom-variant-1',
-        'custom-variant-2',
-        'group-hover',
-        'hover',
-        'focus',
-        'active',
-      ],
-    },
-  })
-})
-
-test('variants can be defined as a function', () => {
-  const userConfig = {
-    variants: {
-      backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'disabled'],
-      padding: ({ before }) => before(['active']),
-      float: ({ before }) => before(['disabled'], 'focus'),
-      margin: ({ before }) => before(['hover'], 'focus'),
-      borderWidth: ({ after }) => after(['active']),
-      backgroundImage: ({ after }) => after(['disabled'], 'hover'),
-      opacity: ({ after }) => after(['hover'], 'focus'),
-      rotate: ({ without }) => without(['hover']),
-      cursor: ({ before, after, without }) =>
-        without(['responsive'], before(['checked'], 'hover', after(['hover'], 'focus'))),
-    },
-  }
-
-  const otherConfig = {
-    variants: {
-      backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'active'],
-    },
-  }
-
-  const defaultConfig = {
-    prefix: '',
-    important: false,
-    separator: ':',
-    theme: {},
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus'],
-      padding: ['responsive', 'focus'],
-      float: ['responsive', 'hover', 'focus'],
-      margin: ['responsive'],
-      borderWidth: ['responsive', 'focus'],
-      backgroundImage: ['responsive', 'hover', 'focus'],
-      opacity: ['responsive'],
-      rotate: ['responsive', 'hover', 'focus'],
-      cursor: ['responsive', 'focus'],
-    },
-  }
-
-  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
-
-  expect(result).toMatchObject({
-    prefix: '',
-    important: false,
-    separator: ':',
-    theme: {},
-    variants: {
-      backgroundColor: ['responsive', 'hover', 'focus', 'active', 'disabled'],
-      padding: ['active', 'responsive', 'focus'],
-      float: ['responsive', 'hover', 'disabled', 'focus'],
-      margin: ['responsive', 'hover'],
-      borderWidth: ['responsive', 'focus', 'active'],
-      backgroundImage: ['responsive', 'hover', 'disabled', 'focus'],
-      opacity: ['hover', 'responsive'],
-      rotate: ['responsive', 'focus'],
-      cursor: ['focus', 'checked', 'hover'],
-    },
-  })
-})
-
 test('core plugin configuration builds on the default list when starting with an empty object', () => {
   const userConfig = {
     corePlugins: { display: false },
@@ -2123,7 +1584,6 @@ test('core plugin configuration builds on the default list when starting with an
     important: false,
     separator: ':',
     theme: {},
-    variants: {},
     corePlugins: {},
   }
 
@@ -2134,7 +1594,6 @@ test('core plugin configuration builds on the default list when starting with an
     important: false,
     separator: ':',
     theme: {},
-    variants: {},
     corePlugins: corePluginList.filter((c) => c !== 'display'),
   })
 })
@@ -2150,7 +1609,6 @@ test('core plugins that are disabled by default can be enabled', () => {
     important: false,
     separator: ':',
     theme: {},
-    variants: {},
     corePlugins: { display: false },
   }
 
@@ -2174,7 +1632,6 @@ test('core plugin configurations stack', () => {
     important: false,
     separator: ':',
     theme: {},
-    variants: {},
     corePlugins: ['float', 'display', 'padding'],
   }
 
@@ -2185,7 +1642,6 @@ test('core plugin configurations stack', () => {
     important: false,
     separator: ':',
     theme: {},
-    variants: {},
     corePlugins: ['float', 'padding', 'margin'],
   })
 })
@@ -2205,7 +1661,6 @@ test('plugins are merged', () => {
     important: false,
     separator: ':',
     theme: {},
-    variants: {},
   }
 
   const result = resolveConfig([userConfig, otherConfig, defaultConfig])
@@ -2215,7 +1670,6 @@ test('plugins are merged', () => {
     important: false,
     separator: ':',
     theme: {},
-    variants: {},
     plugins: ['1', '2', '3'],
   })
 })
@@ -2253,7 +1707,6 @@ test('all helpers can be destructured from the first function argument', () => {
         4: '4px',
       },
     },
-    variants: {},
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
@@ -2275,6 +1728,5 @@ test('all helpers can be destructured from the first function argument', () => {
         'screen-md': '768px',
       },
     },
-    variants: {},
   })
 })

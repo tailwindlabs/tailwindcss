@@ -1217,15 +1217,14 @@ test('plugins can be created using the `createPlugin` function', () => {
     },
     plugins: [
       createPlugin(
-        function ({ addUtilities, theme, variants }) {
+        function ({ addUtilities, theme }) {
           addUtilities(
             Object.fromEntries(
               Object.entries(theme('testPlugin')).map(([k, v]) => [
                 `.test-${k}`,
                 { testProperty: v },
               ])
-            ),
-            variants('testPlugin')
+            )
           )
         },
         {
@@ -1403,9 +1402,6 @@ test('plugins created using `createPlugin.withOptions` do not need to be invoked
             md: '2rem',
             lg: '3rem',
           },
-        },
-        variants: {
-          testPlugin: ['responsive', 'hover'],
         },
       }
     }

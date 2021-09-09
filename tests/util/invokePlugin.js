@@ -9,13 +9,6 @@ export default function (plugin, config) {
     config: getConfigValue,
     e: escapeClassName,
     theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
-    variants: (path, defaultValue) => {
-      if (Array.isArray(config.variants)) {
-        return config.variants
-      }
-
-      return getConfigValue(`variants.${path}`, defaultValue)
-    },
     addUtilities(utilities, variants) {
       addedUtilities.push([utilities, variants])
     },

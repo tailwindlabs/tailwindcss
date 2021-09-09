@@ -16,6 +16,7 @@ import * as corePlugins from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
 import { toPath } from '../util/toPath'
+import log from '../util/log'
 
 function insertInto(list, value, { before = [] } = {}) {
   before = [].concat(before)
@@ -194,12 +195,9 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       return getConfigValue(['corePlugins', path], true)
     },
-    variants: (path, defaultValue) => {
-      if (Array.isArray(tailwindConfig.variants)) {
-        return tailwindConfig.variants
-      }
-
-      return getConfigValue(['variants', path], defaultValue)
+    variants: () => {
+      log.warn(['The `variants` function is not needed anymore.', 'You can safely delete this.'])
+      return []
     },
     addUserCss(userCss) {
       for (let [identifier, rule] of withIdentifiers(userCss)) {
