@@ -181,6 +181,12 @@
   --tw-skew-y: 3px;
   transform: var(--tw-transform);
 }
+.columns-\[20\] {
+  columns: 20;
+}
+.columns-\[var\(--columns\)\] {
+  columns: var(--columns);
+}
 .grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
   grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
 }
