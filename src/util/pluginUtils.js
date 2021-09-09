@@ -169,10 +169,17 @@ export function asValue(modifier, lookup = {}, { validate = () => true } = {}) {
     return undefined
   }
 
+  // convert `_` to ` `, escept for escaped underscores `\_`
+  value = value
+    .replace(/([^\\])_/g, '$1 ')
+    .replace(/^_/g, ' ')
+    .replace(/\\_/g, '_')
+
   // add spaces around operators inside calc() that do not follow an operator or (
-  return value
-    .replace(/_/g, ' ')
-    .replace(/(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g, '$1 $2 ')
+  return value.replace(
+    /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
+    '$1 $2 '
+  )
 }
 
 export function asUnit(modifier, units, lookup = {}) {

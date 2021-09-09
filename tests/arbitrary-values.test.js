@@ -32,6 +32,7 @@ it('should convert _ to spaces', () => {
           <div class="row-[span_3_/_span_8]"></div>
           <div class="auto-cols-[minmax(0,_1fr)]"></div>
           <div class="drop-shadow-[0px_1px_3px_black]"></div>
+          <div class="content-[_hello_world_]"></div>
         `,
       },
     ],
@@ -85,6 +86,24 @@ it('should convert _ to spaces', () => {
       .drop-shadow-\\[0px_1px_3px_black\\] {
         --tw-drop-shadow: drop-shadow(0px 1px 3px black);
         filter: var(--tw-filter);
+      }
+      .content-\\[_hello_world_\\] {
+        content: hello world;
+      }
+    `)
+  })
+})
+
+it('should not convert escaped underscores with spaces', () => {
+  let config = {
+    content: [{ raw: html` <div class="content-['snake\\_case']"></div> ` }],
+    corePlugins: { preflight: false },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .content-\\[\\'snake\\\\_case\\'\\] {
+        content: 'snake_case';
       }
     `)
   })
