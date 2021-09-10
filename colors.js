@@ -1,19 +1,13 @@
-const chalk = require('chalk')
+const log = require('./lib/util/log').default
 
 let warned = []
 
 function warn({ version, from, to }) {
   if (!warned.includes(from)) {
-    console.warn(
-      chalk.bold.yellow('warn'),
-      '-',
-      `As of Tailwind CSS ${version}, \`${from}\` has been renamed to \`${to}\`.`
-    )
-    console.warn(
-      chalk.bold.yellow('warn'),
-      '-',
-      'Please update your color palette to eliminate this warning.'
-    )
+    log.warn([
+      `As of Tailwind CSS ${version}, \`${from}\` has been renamed to \`${to}\`.`,
+      'Please update your color palette to eliminate this warning.',
+    ])
     warned.push(from)
   }
 }
