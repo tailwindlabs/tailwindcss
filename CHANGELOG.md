@@ -9,53 +9,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Remove AOT engine, make JIT the default [#5340](https://github.com/tailwindlabs/tailwindcss/pull/5340)
-- Throw when trying to `@apply` the `group` class [#4666](https://github.com/tailwindlabs/tailwindcss/pull/4666)
-- Remove dependency on `modern-normalize`, inline and consolidate with Preflight [#5358](https://github.com/tailwindlabs/tailwindcss/pull/5358)
-- Enable extended color palette by default with updated color names [#5384](https://github.com/tailwindlabs/tailwindcss/pull/5384)
+- Remove AOT engine, make JIT the default ([#5340](https://github.com/tailwindlabs/tailwindcss/pull/5340))
+- Throw when trying to `@apply` the `group` class ([#4666](https://github.com/tailwindlabs/tailwindcss/pull/4666))
+- Remove dependency on `modern-normalize`, inline and consolidate with Preflight ([#5358](https://github.com/tailwindlabs/tailwindcss/pull/5358))
+- Enable extended color palette by default with updated color names ([#5384](https://github.com/tailwindlabs/tailwindcss/pull/5384))
 
 ### Added
 
-- Add native `aspect-ratio` utilities [#5359](https://github.com/tailwindlabs/tailwindcss/pull/5359)
-- Unify config callback helpers into single object [#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382)
-- Preserve original color format when adding opacity whenever possible [#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154)
+- Add native `aspect-ratio` utilities ([#5359](https://github.com/tailwindlabs/tailwindcss/pull/5359))
+- Unify config callback helpers into single object ([#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382))
+- Preserve original color format when adding opacity whenever possible ([#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154))
+
+### Fixed
+
+- Fix defining colors as functions when color opacity plugins are disabled ([#5470](https://github.com/tailwindlabs/tailwindcss/pull/5470))
+
+## [2.2.15] - 2021-09-10
+
+### Fixed
+
+- Ensure using CLI without `-i` for input file continues to work even though deprecated ([#5464](https://github.com/tailwindlabs/tailwindcss/pull/5464))
+
+## [2.2.14] - 2021-09-08
+
+### Fixed
+
+- Only use `@defaults` in JIT, switch back to `clean-css` in case there's any meaningful differences in the output ([bf248cb](https://github.com/tailwindlabs/tailwindcss/commit/bf248cb0de889d48854fbdd26536f4a492556efd))
+
+## [2.2.13] - 2021-09-08
+
+### Fixed
+
+- Replace `clean-css` with `cssnano` for CDN builds to fix minified builds ([75cc3ca](https://github.com/tailwindlabs/tailwindcss/commit/75cc3ca305aedddc8a85f3df1a420fefad3fb5c4))
 
 ## [2.2.12] - 2021-09-08
 
 ### Fixed
 
-- Ensure that divide utilities inject a default border color [#5438](https://github.com/tailwindlabs/tailwindcss/pull/5438)
+- Ensure that divide utilities inject a default border color ([#5438](https://github.com/tailwindlabs/tailwindcss/pull/5438))
+
+## [2.2.11] - 2021-09-07
+
+### Fixed
+
+- Rebundle to fix missing CLI peer dependencies
 
 ## [2.2.10] - 2021-09-06
 
 ### Fixed
 
-- Fix build error when using `presets: []` in config file [#4903](https://github.com/tailwindlabs/tailwindcss/pull/4903)
+- Fix build error when using `presets: []` in config file ([#4903](https://github.com/tailwindlabs/tailwindcss/pull/4903))
 
 ### Added
 
-- Reintroduce universal selector optimizations under experimental `optimizeUniversalDefaults` flag [a9e160c](https://github.com/tailwindlabs/tailwindcss/commit/a9e160cf9acb75a2bbac34f8864568b12940f89a)
+- Reintroduce universal selector optimizations under experimental `optimizeUniversalDefaults` flag ([a9e160c](https://github.com/tailwindlabs/tailwindcss/commit/a9e160cf9acb75a2bbac34f8864568b12940f89a))
 
 ## [2.2.9] - 2021-08-30
 
 ### Fixed
 
-- JIT: Fix `@apply`ing utilities that contain variants + the important modifier [#4854](https://github.com/tailwindlabs/tailwindcss/pull/4854)
-- JIT: Don't strip "null" when parsing tracked file paths [#5008](https://github.com/tailwindlabs/tailwindcss/pull/5008)
-- Pin `clean-css` to v5.1.4 to fix empty CSS variables in CDN builds [#5338](https://github.com/tailwindlabs/tailwindcss/pull/5338)
+- JIT: Fix `@apply`ing utilities that contain variants + the important modifier ([#4854](https://github.com/tailwindlabs/tailwindcss/pull/4854))
+- JIT: Don't strip "null" when parsing tracked file paths ([#5008](https://github.com/tailwindlabs/tailwindcss/pull/5008))
+- Pin `clean-css` to v5.1.4 to fix empty CSS variables in CDN builds ([#5338](https://github.com/tailwindlabs/tailwindcss/pull/5338))
 
 ## [2.2.8] - 2021-08-27
 
 ### Fixed
 
 - Improve accessibility of default link focus styles in Firefox ([#5082](https://github.com/tailwindlabs/tailwindcss/pull/5082))
-- JIT: Fix animation variants corrupting keyframes rules [#5223](https://github.com/tailwindlabs/tailwindcss/pull/5223)
-- JIT: Ignore escaped commas when splitting selectors to apply prefixes [#5239](https://github.com/tailwindlabs/tailwindcss/pull/5239/)
-- Nesting: Maintain PostCSS node sources when handling `@apply` [#5249](https://github.com/tailwindlabs/tailwindcss/pull/5249)
-- JIT: Fix support for animation lists [#5252](https://github.com/tailwindlabs/tailwindcss/pull/5252)
-- JIT: Fix arbitrary value support for `object-position` utilities [#5245](https://github.com/tailwindlabs/tailwindcss/pull/5245)
-- CLI: Abort watcher if stdin is closed to avoid zombie processes [#4997](https://github.com/tailwindlabs/tailwindcss/pull/4997)
-- JIT: Ignore arbitrary values with unbalanced brackets [#5293](https://github.com/tailwindlabs/tailwindcss/pull/5293)
+- JIT: Fix animation variants corrupting keyframes rules ([#5223](https://github.com/tailwindlabs/tailwindcss/pull/5223))
+- JIT: Ignore escaped commas when splitting selectors to apply prefixes ([#5239](https://github.com/tailwindlabs/tailwindcss/pull/5239/))
+- Nesting: Maintain PostCSS node sources when handling `@apply` ([#5249](https://github.com/tailwindlabs/tailwindcss/pull/5249))
+- JIT: Fix support for animation lists ([#5252](https://github.com/tailwindlabs/tailwindcss/pull/5252))
+- JIT: Fix arbitrary value support for `object-position` utilities ([#5245](https://github.com/tailwindlabs/tailwindcss/pull/5245))
+- CLI: Abort watcher if stdin is closed to avoid zombie processes ([#4997](https://github.com/tailwindlabs/tailwindcss/pull/4997))
+- JIT: Ignore arbitrary values with unbalanced brackets ([#5293](https://github.com/tailwindlabs/tailwindcss/pull/5293))
 
 ## [2.2.7] - 2021-07-23
 
