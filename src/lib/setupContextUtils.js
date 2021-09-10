@@ -16,7 +16,6 @@ import * as corePlugins from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
 import { toPath } from '../util/toPath'
-import log from '../util/log'
 
 function insertInto(list, value, { before = [] } = {}) {
   before = [].concat(before)
@@ -196,7 +195,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       return getConfigValue(['corePlugins', path], true)
     },
     variants: () => {
-      log.warn(['The `variants` function is not needed anymore.', 'You can safely delete this.'])
+      // Preserved for backwards compatibility but not used in v3.0+
       return []
     },
     addUserCss(userCss) {
