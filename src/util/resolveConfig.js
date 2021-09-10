@@ -6,14 +6,9 @@ import colors from '../../colors'
 import log from './log'
 import { defaults } from './defaults'
 import { toPath } from './toPath'
-import dlv from 'dlv'
 
 function isFunction(input) {
   return typeof input === 'function'
-}
-
-function uniq(input) {
-  return Array.from(new Set(input))
 }
 
 function isObject(input) {
@@ -186,90 +181,6 @@ function extractPluginConfigs(configs) {
   return allConfigs
 }
 
-function mergeVariants(variants) {
-  const mergedVariants = variants.reduce((resolved, variants) => {
-    Object.entries(variants || {}).forEach(([plugin, pluginVariants]) => {
-      if (isFunction(pluginVariants)) {
-        resolved[plugin] = pluginVariants({
-          variants(path) {
-            return dlv(resolved, path, [])
-          },
-          before(toInsert, variant, existingPluginVariants = resolved?.[plugin] ?? []) {
-            if (variant === undefined) {
-              return [...toInsert, ...existingPluginVariants]
-            }
-
-            const index = existingPluginVariants.indexOf(variant)
-
-            if (index === -1) {
-              return [...existingPluginVariants, ...toInsert]
-            }
-
-            return [
-              ...existingPluginVariants.slice(0, index),
-              ...toInsert,
-              ...existingPluginVariants.slice(index),
-            ]
-          },
-          after(toInsert, variant, existingPluginVariants = resolved?.[plugin] ?? []) {
-            if (variant === undefined) {
-              return [...existingPluginVariants, ...toInsert]
-            }
-
-            const index = existingPluginVariants.indexOf(variant)
-
-            if (index === -1) {
-              return [...toInsert, ...existingPluginVariants]
-            }
-
-            return [
-              ...existingPluginVariants.slice(0, index + 1),
-              ...toInsert,
-              ...existingPluginVariants.slice(index + 1),
-            ]
-          },
-          without(toRemove, existingPluginVariants = resolved?.[plugin] ?? []) {
-            return existingPluginVariants.filter((v) => !toRemove.includes(v))
-          },
-        })
-      } else {
-        resolved[plugin] = pluginVariants
-      }
-    })
-
-    return resolved
-  }, {})
-
-  return {
-    ...mergedVariants,
-    extend: collectExtends(variants),
-  }
-}
-
-function mergeVariantExtensions({ extend, ...variants }, variantOrder) {
-  return mergeWith(variants, extend, (variantsValue, extensions) => {
-    const merged = uniq([...(variantsValue || []), ...extensions].flat())
-
-    if (extensions.flat().length === 0) {
-      return merged
-    }
-
-    return merged.sort((a, z) => variantOrder.indexOf(a) - variantOrder.indexOf(z))
-  })
-}
-
-function resolveVariants([firstConfig, ...variantConfigs], variantOrder) {
-  // Global variants configuration like `variants: ['hover', 'focus']`
-  if (Array.isArray(firstConfig)) {
-    return firstConfig
-  }
-
-  return mergeVariantExtensions(
-    mergeVariants([firstConfig, ...variantConfigs].reverse()),
-    variantOrder
-  )
-}
-
 function resolveCorePlugins(corePluginConfigs) {
   const result = [...corePluginConfigs].reduceRight((resolved, corePluginConfig) => {
     if (isFunction(corePluginConfig)) {
@@ -299,17 +210,12 @@ export default function resolveConfig(configs) {
       variantOrder: defaultConfig.variantOrder,
     },
   ]
-  let { variantOrder } = allConfigs.find((c) => c.variantOrder)
 
   return normalizeConfig(
     defaults(
       {
         theme: resolveFunctionKeys(
           mergeExtensions(mergeThemes(allConfigs.map((t) => t?.theme ?? {})))
-        ),
-        variants: resolveVariants(
-          allConfigs.map((c) => c?.variants ?? {}),
-          variantOrder
         ),
         corePlugins: resolveCorePlugins(allConfigs.map((c) => c.corePlugins)),
         plugins: resolvePluginLists(configs.map((c) => c?.plugins ?? [])),

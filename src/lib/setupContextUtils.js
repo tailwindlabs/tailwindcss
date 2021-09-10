@@ -194,12 +194,9 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       return getConfigValue(['corePlugins', path], true)
     },
-    variants: (path, defaultValue) => {
-      if (Array.isArray(tailwindConfig.variants)) {
-        return tailwindConfig.variants
-      }
-
-      return getConfigValue(['variants', path], defaultValue)
+    variants: () => {
+      // Preserved for backwards compatibility but not used in v3.0+
+      return []
     },
     addUserCss(userCss) {
       for (let [identifier, rule] of withIdentifiers(userCss)) {

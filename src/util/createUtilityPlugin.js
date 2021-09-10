@@ -15,7 +15,7 @@ export default function createUtilityPlugin(
   { filterDefault = false, resolveArbitraryValue = asValue } = {}
 ) {
   let transformValue = transformThemeValue(themeKey)
-  return function ({ matchUtilities, variants, theme }) {
+  return function ({ matchUtilities, theme }) {
     for (let utilityVariation of utilityVariations) {
       let group = Array.isArray(utilityVariation[0]) ? utilityVariation : [utilityVariation]
 
@@ -38,7 +38,6 @@ export default function createUtilityPlugin(
                 Object.entries(theme(themeKey) ?? {}).filter(([modifier]) => modifier !== 'DEFAULT')
               )
             : theme(themeKey),
-          variants: variants(themeKey),
           type: asMap.get(resolveArbitraryValue) ?? 'any',
         }
       )
