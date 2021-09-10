@@ -351,6 +351,7 @@ async function build() {
   // TODO: Deprecate this in future versions
   if (!input && args['_'][1]) {
     console.error('[deprecation] Running tailwindcss without -i, please provide an input file.')
+    input = args['--input'] = args['_'][1]
   }
 
   if (input && !fs.existsSync((input = path.resolve(input)))) {
