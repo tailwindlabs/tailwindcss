@@ -1014,7 +1014,11 @@ export let divideColor = ({ matchUtilities, theme, corePlugins }) => {
     {
       divide: (value) => {
         if (!corePlugins('divideOpacity')) {
-          return { ['& > :not([hidden]) ~ :not([hidden])']: { 'border-color': value } }
+          return {
+            ['& > :not([hidden]) ~ :not([hidden])']: {
+              'border-color': toColorValue(value),
+            },
+          }
         }
 
         return {
@@ -1174,9 +1178,10 @@ export let borderStyle = ({ addUtilities }) => {
 
 export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
   if (!corePlugins('borderOpacity')) {
+    let value = theme('borderColor.DEFAULT', 'currentColor')
     addBase({
       '@defaults border-width': {
-        'border-color': theme('borderColor.DEFAULT', 'currentColor'),
+        'border-color': toColorValue(value),
       },
     })
   } else {
@@ -1193,7 +1198,9 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
     {
       border: (value) => {
         if (!corePlugins('borderOpacity')) {
-          return { 'border-color': value }
+          return {
+            'border-color': toColorValue(value),
+          }
         }
 
         return withAlphaVariable({
@@ -1213,7 +1220,9 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
     {
       'border-t': (value) => {
         if (!corePlugins('borderOpacity')) {
-          return { 'border-top-color': value }
+          return {
+            'border-top-color': toColorValue(value),
+          }
         }
 
         return withAlphaVariable({
@@ -1224,7 +1233,9 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
       },
       'border-r': (value) => {
         if (!corePlugins('borderOpacity')) {
-          return { 'border-right-color': value }
+          return {
+            'border-right-color': toColorValue(value),
+          }
         }
 
         return withAlphaVariable({
@@ -1235,7 +1246,9 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
       },
       'border-b': (value) => {
         if (!corePlugins('borderOpacity')) {
-          return { 'border-bottom-color': value }
+          return {
+            'border-bottom-color': toColorValue(value),
+          }
         }
 
         return withAlphaVariable({
@@ -1246,7 +1259,9 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
       },
       'border-l': (value) => {
         if (!corePlugins('borderOpacity')) {
-          return { 'border-left-color': value }
+          return {
+            'border-left-color': toColorValue(value),
+          }
         }
 
         return withAlphaVariable({
@@ -1272,7 +1287,9 @@ export let backgroundColor = ({ matchUtilities, theme, corePlugins }) => {
     {
       bg: (value) => {
         if (!corePlugins('backgroundOpacity')) {
-          return { 'background-color': value }
+          return {
+            'background-color': toColorValue(value),
+          }
         }
 
         return withAlphaVariable({
@@ -1539,7 +1556,7 @@ export let textColor = ({ matchUtilities, theme, corePlugins }) => {
     {
       text: (value) => {
         if (!corePlugins('textOpacity')) {
-          return { color: value }
+          return { color: toColorValue(value) }
         }
 
         return withAlphaVariable({
@@ -1583,7 +1600,11 @@ export let placeholderColor = ({ matchUtilities, theme, corePlugins }) => {
     {
       placeholder: (value) => {
         if (!corePlugins('placeholderOpacity')) {
-          return { '&::placeholder': { color: value } }
+          return {
+            '&::placeholder': {
+              color: toColorValue(value),
+            },
+          }
         }
 
         return {
