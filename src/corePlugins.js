@@ -1110,6 +1110,13 @@ export let overscrollBehavior = ({ addUtilities }) => {
   })
 }
 
+export let scrollBehavior = ({ addUtilities }) => {
+  addUtilities({
+    '.scroll-auto': { 'scroll-behavior': 'auto' },
+    '.scroll-smooth': { 'scroll-behavior': 'smooth' },
+  })
+}
+
 export let textOverflow = ({ addUtilities }) => {
   addUtilities({
     '.truncate': { overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' },
