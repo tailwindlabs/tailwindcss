@@ -1485,6 +1485,8 @@ export let verticalAlign = ({ addUtilities }) => {
     '.align-bottom': { 'vertical-align': 'bottom' },
     '.align-text-top': { 'vertical-align': 'text-top' },
     '.align-text-bottom': { 'vertical-align': 'text-bottom' },
+    '.align-sub': { 'vertical-align': 'sub' },
+    '.align-super': { 'vertical-align': 'super' },
   })
 }
 
