@@ -448,6 +448,11 @@
   --tw-backdrop-sepia: sepia(0.38);
   backdrop-filter: var(--tw-backdrop-filter);
 }
+.transition-\[opacity\2c width\] {
+  transition-property: opacity, width;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
 .delay-\[var\(--delay\)\] {
   transition-delay: var(--delay);
 }
