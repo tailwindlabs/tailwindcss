@@ -323,6 +323,9 @@
 .indent-\[var\(--indent\)\] {
   text-indent: var(--indent);
 }
+.align-\[10em\] {
+  vertical-align: 10em;
+}
 .text-\[2\.23rem\] {
   font-size: 2.23rem;
 }

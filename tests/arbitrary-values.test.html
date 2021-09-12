@@ -56,6 +56,7 @@
     <div class="skew-x-[3px]"></div>
     <div class="skew-y-[3px]"></div>
     <div class="indent-[50%] indent-[var(--indent)]"></div>
+    <div class="align-[10em]"></div>
     <div class="text-[2.23rem]"></div>
     <div class="text-[length:var(--font-size)]"></div>
     <div class="text-[color:var(--color)]"></div>
@@ -72,10 +73,20 @@
     <div class="mt-[clamp(30px,100px)]"></div>
     <div class="rounded-[11px]"></div>
     <div
-      class="rounded-t-[var(--radius)] rounded-r-[var(--radius)] rounded-b-[var(--radius)] rounded-l-[var(--radius)]"
+      class="
+        rounded-t-[var(--radius)]
+        rounded-r-[var(--radius)]
+        rounded-b-[var(--radius)]
+        rounded-l-[var(--radius)]
+      "
     ></div>
     <div
-      class="rounded-tr-[var(--radius)] rounded-br-[var(--radius)] rounded-bl-[var(--radius)] rounded-tl-[var(--radius)]"
+      class="
+        rounded-tr-[var(--radius)]
+        rounded-br-[var(--radius)]
+        rounded-bl-[var(--radius)]
+        rounded-tl-[var(--radius)]
+      "
     ></div>
     <div class="duration-[var(--app-duration)]"></div>
     <div class="p-[var(--app-padding)]"></div>
@@ -125,28 +136,51 @@
     <div class="accent-[var(--accent-color)]"></div>
 
     <!-- Balancing issues, this is not checking the validity of the actual value, but purely syntax-wise -->
-    <div class="w-[do-not-generate-this]w-[it-is-invalid-syntax]"></div><!-- INVALID -->
-    <div class="grid-cols-[[linename],1fr,auto]"></div><!-- VALID -->
-    <div class="w-[{}]"></div><!-- VALID -->
-    <div class="w-[{{}}]"></div><!-- VALID -->
-    <div class="w-[[]]"></div><!-- VALID -->
-    <div class="w-[[[]]]"></div><!-- VALID -->
-    <div class="w-[()]"></div><!-- VALID -->
-    <div class="w-[(())]"></div><!-- VALID -->
-    <div class="w-[][]"></div><!-- INVALID -->
-    <div class="w-[)(]"></div><!-- INVALID -->
-    <div class="w-[}{]"></div><!-- INVALID -->
-    <div class="w-[][]]"></div><!-- INVALID -->
-    <div class="w-[)()]"></div><!-- INVALID -->
-    <div class="w-[}{}]"></div><!-- INVALID -->
-    <div class="w-['][]']"></div><!-- VALID -->
-    <div class="w-[')()']"></div><!-- VALID -->
-    <div class="w-['}{}']"></div><!-- VALID -->
-    <div class="w-[{[}]]"></div><!-- INVALID -->
-    <div class="w-[[{]}]"></div><!-- INVALID -->
-    <div class="w-[{(})]"></div><!-- INVALID -->
-    <div class="w-[({)}]"></div><!-- INVALID -->
-    <div class="w-[([)]]"></div><!-- INVALID -->
-    <div class="w-[[(])]"></div><!-- INVALID -->
+    <div class="w-[do-not-generate-this]w-[it-is-invalid-syntax]"></div>
+    <!-- INVALID -->
+    <div class="grid-cols-[[linename],1fr,auto]"></div>
+    <!-- VALID -->
+    <div class="w-[{}]"></div>
+    <!-- VALID -->
+    <div class="w-[{{}}]"></div>
+    <!-- VALID -->
+    <div class="w-[[]]"></div>
+    <!-- VALID -->
+    <div class="w-[[[]]]"></div>
+    <!-- VALID -->
+    <div class="w-[()]"></div>
+    <!-- VALID -->
+    <div class="w-[(())]"></div>
+    <!-- VALID -->
+    <div class="w-[][]"></div>
+    <!-- INVALID -->
+    <div class="w-[)(]"></div>
+    <!-- INVALID -->
+    <div class="w-[}{]"></div>
+    <!-- INVALID -->
+    <div class="w-[][]]"></div>
+    <!-- INVALID -->
+    <div class="w-[)()]"></div>
+    <!-- INVALID -->
+    <div class="w-[}{}]"></div>
+    <!-- INVALID -->
+    <div class="w-['][]']"></div>
+    <!-- VALID -->
+    <div class="w-[')()']"></div>
+    <!-- VALID -->
+    <div class="w-['}{}']"></div>
+    <!-- VALID -->
+    <div class="w-[{[}]]"></div>
+    <!-- INVALID -->
+    <div class="w-[[{]}]"></div>
+    <!-- INVALID -->
+    <div class="w-[{(})]"></div>
+    <!-- INVALID -->
+    <div class="w-[({)}]"></div>
+    <!-- INVALID -->
+    <div class="w-[([)]]"></div>
+    <!-- INVALID -->
+    <div class="w-[[(])]"></div>
+    <!-- INVALID -->
   </body>
 </html>

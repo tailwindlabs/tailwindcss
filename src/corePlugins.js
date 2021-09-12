@@ -1477,7 +1477,7 @@ export let textAlign = ({ addUtilities }) => {
 
 export let textIndent = createUtilityPlugin('textIndent', [['indent', ['text-indent']]])
 
-export let verticalAlign = ({ addUtilities }) => {
+export let verticalAlign = ({ addUtilities, matchUtilities }) => {
   addUtilities({
     '.align-baseline': { 'vertical-align': 'baseline' },
     '.align-top': { 'vertical-align': 'top' },
@@ -1488,6 +1488,15 @@ export let verticalAlign = ({ addUtilities }) => {
     '.align-sub': { 'vertical-align': 'sub' },
     '.align-super': { 'vertical-align': 'super' },
   })
+
+  matchUtilities(
+    {
+      align: (value) => ({
+        'vertical-align': value,
+      }),
+    },
+    { values: {}, type: 'any' }
+  )
 }
 
 export let fontFamily = createUtilityPlugin('fontFamily', [['font', ['fontFamily']]], {
