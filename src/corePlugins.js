@@ -2195,7 +2195,7 @@ export let transitionProperty = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('transitionProperty'), type: 'lookup' }
+    { values: theme('transitionProperty'), type: 'any' }
   )
 }
 
