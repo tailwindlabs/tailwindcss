@@ -24,16 +24,10 @@ npm run style -- --fix
 
 ## Running tests
 
-The tests require the files to be compiled, you must first run the babel transpilation:
-
-```sh
-npm run babelify
-```
-
 You can run the test suite using the following commands:
 
 ```sh
-npm test
+npm run babelify && npm test
 ```
 
 Please ensure that the tests are passing when submitting a pull request. If you're adding new features to Tailwind, please include tests.
