@@ -25,7 +25,7 @@ export default function createUtilityPlugin(
             [classPrefix]: (value) => {
               return properties.reduce((obj, name) => {
                 if (Array.isArray(name)) {
-                  return Object.assign(obj, { [name[0]]: name[1] })
+                  return Object.assign(obj, { [name[0]]: name[1] instanceof Function ? name[1](value) : name[1] })
                 }
                 return Object.assign(obj, { [name]: transformValue(value) })
               }, {})
