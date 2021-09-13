@@ -40,33 +40,8 @@ jobs:
       - name: Build Tailwind CSS
         run: npm run prepublishOnly
 
-      - name: Use cached node_modules for the shared integrations folder
-        id: integrations-cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}-integrations
-          restore-keys: |
-            nodeModules-
-
       - name: Install shared dependencies
-        if: steps.integrations-cache.outputs.cache-hit != 'true'
-        run: npm install --prefix ./integrations
-        env:
-          CI: true
-
-      - name: Use cached node_modules for ${{ matrix.integration }}
-        id: integration-cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}-${{ matrix.integration }}
-          restore-keys: |
-            nodeModules-
-
-      - name: Install dependencies for ${{ matrix.integration }}
-        if: steps.integration-cache.outputs.cache-hit != 'true'
-        run: npm install --prefix ./integrations/${{ matrix.integration }}
+        run: npm run install:integrations
         env:
           CI: true
 
