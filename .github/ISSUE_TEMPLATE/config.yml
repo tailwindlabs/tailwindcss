@@ -5,7 +5,7 @@ contact_links:
     about: 'Suggest any ideas you have using our discussion forums.'
   - name: Help
     url: https://github.com/tailwindlabs/tailwindcss/discussions/new?category=help
-    about: 'If you have a question or need help, ask a question on the discussion forums.'
+    about: 'If you have a question or need help, ask a question on the [discussion forums](https://github.com/tailwindlabs/tailwindcss/discussions/new?category=help).'
   - name: Documentation Issue
     url: https://github.com/tailwindlabs/tailwindcss.com
     about: 'For documentation issues, suggest changes on our documentation repository.'
