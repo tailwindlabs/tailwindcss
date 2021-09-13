@@ -8,7 +8,7 @@
     "test": "jest --runInBand --forceExit"
   },
   "jest": {
-    "testTimeout": 30000,
+    "testTimeout": 10000,
     "displayName": "parcel",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"
