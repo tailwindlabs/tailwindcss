@@ -116,7 +116,7 @@ export const ClassTable = memo(
     filterProperties,
     preview,
     sort = (x) => x,
-    transformSelector = (x) => (x.length === 1 ? x : x.slice(1).replace(/\\/g, '')),
+    transformSelector = (x) => x.replace(/^\./g, '').replace(/\\/g, ''),
     transformProperties = ({ properties }) => properties,
     transformValue,
     custom,
