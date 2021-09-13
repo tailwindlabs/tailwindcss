@@ -5,6 +5,7 @@ import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import resolveDefaultsAtRules from './lib/resolveDefaultsAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
+import detectNesting from './lib/detectNesting'
 import { createContext } from './lib/setupContextUtils'
 
 export default function processTailwindFeatures(setupContext) {
@@ -31,6 +32,7 @@ export default function processTailwindFeatures(setupContext) {
       )
     }
 
+    detectNesting(context)(root, result)
     expandTailwindAtRules(context)(root, result)
     expandApplyAtRules(context)(root, result)
     evaluateTailwindFunctions(context)(root, result)
