@@ -74,6 +74,12 @@ module.exports = function $(command, options = {}) {
       combined += data
     })
 
+    child.on('error', (err) => {
+      if (err.name !== 'AbortError') {
+        throw err
+      }
+    })
+
     child.on('close', (code, signal) => {
       ;(signal === 'SIGTERM' ? resolve : code === 0 ? resolve : reject)({
         code,
