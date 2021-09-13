@@ -48,11 +48,9 @@ describe('static build', () => {
       `
     )
 
-    $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+    await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
       env: { NODE_ENV: 'production' },
     })
-
-    await waitForOutputFileCreation('main.css')
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
