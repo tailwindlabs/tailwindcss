@@ -6,9 +6,10 @@
   "browser": "./src/index.js",
   "scripts": {
     "build": "vite build",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --forceExit"
   },
   "jest": {
+    "testTimeout": 10000,
     "displayName": "vite",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"

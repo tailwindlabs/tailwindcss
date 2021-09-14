@@ -187,7 +187,7 @@ describe('Build command', () => {
 
         .btn-after {
           --tw-bg-opacity: 1;
-          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
           padding-left: 0.5rem;
           padding-right: 0.5rem;
           padding-top: 0.25rem;
@@ -238,7 +238,7 @@ describe('Build command', () => {
 
         .btn-after {
           --tw-bg-opacity: 1;
-          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
           padding-left: 0.5rem;
           padding-right: 0.5rem;
           padding-top: 0.25rem;

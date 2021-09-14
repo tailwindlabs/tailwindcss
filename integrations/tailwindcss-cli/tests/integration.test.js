@@ -1,13 +1,14 @@
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
 
-let {
-  readOutputFile,
-  appendToInputFile,
-  writeInputFile,
-  waitForOutputFileCreation,
-  waitForOutputFileChange,
-} = require('../../io')({ output: 'dist', input: 'src' })
+let { readOutputFile, appendToInputFile, writeInputFile } = require('../../io')({
+  output: 'dist',
+  input: 'src',
+})
+
+function ready(message) {
+  return message.includes('Done in')
+}
 
 describe('static build', () => {
   it('should be possible to generate tailwind output', async () => {
@@ -48,22 +49,20 @@ describe('static build', () => {
       `
     )
 
-    $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+    await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
       env: { NODE_ENV: 'production' },
     })
-
-    await waitForOutputFileCreation('main.css')
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
         .bg-red-500 {
           --tw-bg-opacity: 1;
-          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
         }
 
         .bg-red-600 {
           --tw-bg-opacity: 1;
-          background-color: rgba(220, 38, 38, var(--tw-bg-opacity));
+          background-color: rgb(220 38 38 / var(--tw-bg-opacity));
         }
 
         .font-bold {
@@ -79,8 +78,7 @@ describe('watcher', () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
-
-    await waitForOutputFileCreation('main.css')
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -90,9 +88,8 @@ describe('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
-    })
+    await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -105,15 +102,14 @@ describe('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
-    })
+    await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
         .bg-red-500 {
           --tw-bg-opacity: 1;
-          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
         }
         .font-bold {
           font-weight: 700;
@@ -145,8 +141,7 @@ describe('watcher', () => {
     )
 
     let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
-
-    await waitForOutputFileCreation('main.css')
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -156,9 +151,8 @@ describe('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
-    })
+    await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).not.toIncludeCss(css`
       @layer base {
@@ -186,8 +180,7 @@ describe('watcher', () => {
     await writeInputFile('index.html', html`<div class="font-bold md:font-medium"></div>`)
 
     let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
-
-    await waitForOutputFileCreation('main.css')
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -202,10 +195,9 @@ describe('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await writeInputFile(
-        '../tailwind.config.js',
-        javascript`
+    await writeInputFile(
+      '../tailwind.config.js',
+      javascript`
           module.exports = {
             content: ['./src/index.html'],
             theme: {
@@ -224,8 +216,8 @@ describe('watcher', () => {
             plugins: [],
           }
       `
-      )
-    })
+    )
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -247,8 +239,7 @@ describe('watcher', () => {
     await writeInputFile('index.html', html`<div class="font-bold btn"></div>`)
 
     let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
-
-    await waitForOutputFileCreation('main.css')
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -258,22 +249,21 @@ describe('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await writeInputFile(
-        'index.css',
-        css`
-          @tailwind base;
-          @tailwind components;
-          @tailwind utilities;
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
 
-          @layer components {
-            .btn {
-              @apply px-2 py-1 rounded;
-            }
+        @layer components {
+          .btn {
+            @apply px-2 py-1 rounded;
           }
-        `
-      )
-    })
+        }
+      `
+    )
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -290,29 +280,28 @@ describe('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await writeInputFile(
-        'index.css',
-        css`
-          @tailwind base;
-          @tailwind components;
-          @tailwind utilities;
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
 
-          @layer components {
-            .btn {
-              @apply px-2 py-1 rounded bg-red-500;
-            }
+        @layer components {
+          .btn {
+            @apply px-2 py-1 rounded bg-red-500;
           }
-        `
-      )
-    })
+        }
+      `
+    )
+    await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
         .btn {
           border-radius: 0.25rem;
           --tw-bg-opacity: 1;
-          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
           padding-left: 0.5rem;
           padding-right: 0.5rem;
           padding-top: 0.25rem;

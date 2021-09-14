@@ -8,6 +8,15 @@ afterEach(() => {
   runningProcessess.splice(0).forEach((runningProcess) => runningProcess.stop())
 })
 
+function debounce(fn, ms) {
+  let state = { timer: undefined }
+
+  return (...args) => {
+    if (state.timer) clearTimeout(state.timer)
+    state.timer = setTimeout(() => fn(...args), ms)
+  }
+}
+
 module.exports = function $(command, options = {}) {
   let abortController = new AbortController()
   let cwd = resolveToolRoot()
@@ -37,13 +46,13 @@ module.exports = function $(command, options = {}) {
     }
   }
 
-  function notifyNextStdoutActor() {
+  let notifyNextStdoutActor = debounce(() => {
     return notifyNext(stdoutActors, stdoutMessages)
-  }
+  }, 200)
 
-  function notifyNextStderrActor() {
+  let notifyNextStderrActor = debounce(() => {
     return notifyNext(stderrActors, stderrMessages)
-  }
+  }, 200)
 
   let runningProcess = new Promise((resolve, reject) => {
     let child = spawn(command, args, {
@@ -72,6 +81,12 @@ module.exports = function $(command, options = {}) {
       notifyNextStderrActor()
       stderr += data
       combined += data
+    })
+
+    child.on('error', (err) => {
+      if (err.name !== 'AbortError') {
+        throw err
+      }
     })
 
     child.on('close', (code, signal) => {

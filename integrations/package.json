@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --forceExit"
   },
   "jest": {
     "testTimeout": 30000,
