@@ -22,17 +22,17 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Use cached node_modules
-        id: cache
+      - name: Use cached node_modules (tailwindcss)
+        id: cache-tailwindcss
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}-tailwindcss
           restore-keys: |
             nodeModules-
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache-tailwindcss.outputs.cache-hit != 'true'
         run: npm install
         env:
           CI: true
@@ -40,7 +40,17 @@ jobs:
       - name: Build Tailwind CSS
         run: npm run prepublishOnly
 
+      - name: Use cached node_modules (integrations)
+        id: cache-integrations
+        uses: actions/cache@v2
+        with:
+          path: ./integrations/**/node_modules
+          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}-${{ matrix.integration }}-integrations
+          restore-keys: |
+            nodeModules-
+
       - name: Install shared dependencies
+        if: steps.cache-integrations.outputs.cache-hit != 'true'
         run: npm run install:integrations
         env:
           CI: true
