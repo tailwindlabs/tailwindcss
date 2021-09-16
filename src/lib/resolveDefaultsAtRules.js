@@ -8,6 +8,9 @@ function minimumImpactSelector(nodes) {
     .filter((n) => n.type === 'pseudo' || n.type === 'combinator')
     // Remove leading pseudo's (:hover, :focus, ...)
     .filter((n, idx, all) => {
+      // Keep pseudo elements
+      if (n.type === 'pseudo' && n.value.startsWith('::')) return true
+
       if (idx === 0 && n.type === 'pseudo') return false
       if (idx > 0 && n.type === 'pseudo' && all[idx - 1].type === 'pseudo') return false
 
