@@ -4,7 +4,7 @@ import { flagEnabled } from '../featureFlags'
 
 function minimumImpactSelector(nodes) {
   let rest = nodes
-    // Keep all pseudo & combintor types (:not([hidden]) ~ :not([hidden]))
+    // Keep all pseudo & combinator types (:not([hidden]) ~ :not([hidden]))
     .filter((n) => n.type === 'pseudo' || n.type === 'combinator')
     // Remove leading pseudo's (:hover, :focus, ...)
     .filter((n, idx, all) => {
@@ -17,7 +17,31 @@ function minimumImpactSelector(nodes) {
       return true
     })
 
-  return [nodes[0], ...rest].join('').trim()
+  let [bestNode] = nodes
+
+  for (let [type, getNode = (n) => n] of [
+    ['class'],
+    [
+      'id',
+      (n) =>
+        selectorParser.attribute({
+          attribute: 'id',
+          operator: '=',
+          value: n.value,
+          quoteMark: '"',
+        }),
+    ],
+    ['attribute'],
+  ]) {
+    let match = nodes.find((n) => n.type === type)
+
+    if (match) {
+      bestNode = getNode(match)
+      break
+    }
+  }
+
+  return [bestNode, ...rest].join('').trim()
 }
 
 let elementSelectorParser = selectorParser((selectors) => {
