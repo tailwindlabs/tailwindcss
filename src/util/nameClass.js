@@ -6,17 +6,21 @@ function asClass(name) {
 }
 
 export default function nameClass(classPrefix, key) {
+  return asClass(formatClass(classPrefix, key))
+}
+
+export function formatClass(classPrefix, key) {
   if (key === 'DEFAULT') {
-    return asClass(classPrefix)
+    return classPrefix
   }
 
   if (key === '-') {
-    return asClass(`-${classPrefix}`)
+    return `-${classPrefix}`
   }
 
   if (key.startsWith('-')) {
-    return asClass(`-${classPrefix}${key}`)
+    return `-${classPrefix}${key}`
   }
 
-  return asClass(`${classPrefix}-${key}`)
+  return `${classPrefix}-${key}`
 }

@@ -9,13 +9,14 @@ import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import isPlainObject from '../util/isPlainObject'
 import escapeClassName from '../util/escapeClassName'
-import nameClass from '../util/nameClass'
+import nameClass, { formatClass } from '../util/nameClass'
 import { coerceValue } from '../util/pluginUtils'
 import bigSign from '../util/bigSign'
 import * as corePlugins from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
 import { toPath } from '../util/toPath'
+import log from '../util/log'
 
 function insertInto(list, value, { before = [] } = {}) {
   before = [].concat(before)
@@ -146,7 +147,7 @@ function isValidArbitraryValue(value) {
   return true
 }
 
-function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets }) {
+function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets, classList }) {
   function getConfigValue(path, defaultValue) {
     return path ? dlv(tailwindConfig, path, defaultValue) : tailwindConfig
   }
@@ -241,6 +242,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let offset = offsets.components++
 
+        classList.add(prefixedIdentifier)
+
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
         }
@@ -268,6 +271,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let offset = offsets.utilities++
 
+        classList.add(prefixedIdentifier)
+
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
         }
@@ -292,6 +297,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       for (let identifier in utilities) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let rule = utilities[identifier]
+
+        classList.add([prefixedIdentifier, options])
 
         function wrapped(modifier) {
           let { type = 'any' } = options
@@ -468,10 +475,13 @@ function registerPlugins(plugins, context) {
     user: 0n,
   }
 
+  let classList = new Set()
+
   let pluginApi = buildPluginApi(context.tailwindConfig, context, {
     variantList,
     variantMap,
     offsets,
+    classList,
   })
 
   for (let plugin of plugins) {
@@ -522,6 +532,83 @@ function registerPlugins(plugins, context) {
       variantName,
       variantFunctions.map((variantFunction, idx) => [sort << BigInt(idx), variantFunction])
     )
+  }
+
+  //
+  let warnedAbout = new Set([])
+  context.safelist = function () {
+    let safelist = (context.tailwindConfig.safelist ?? []).filter(Boolean)
+    if (safelist.length <= 0) return []
+
+    let output = []
+    let checks = []
+
+    for (let value of safelist) {
+      if (typeof value === 'string') {
+        output.push(value)
+        continue
+      }
+
+      if (value instanceof RegExp) {
+        if (!warnedAbout.has('root-regex')) {
+          log.warn([
+            // TODO: Improve this warning message
+            'RegExp in the safelist option is not supported.',
+            'Please use the object syntax instead: https://tailwindcss.com/docs/...',
+          ])
+          warnedAbout.add('root-regex')
+        }
+        continue
+      }
+
+      checks.push(value)
+    }
+
+    if (checks.length <= 0) return output.map((value) => ({ raw: value, extension: 'html' }))
+
+    let patternMatchingCount = new Map()
+
+    for (let util of classList) {
+      let utils = Array.isArray(util)
+        ? (() => {
+            let [utilName, options] = util
+            return Object.keys(options?.values ?? {}).map((value) => formatClass(utilName, value))
+          })()
+        : [util]
+
+      for (let util of utils) {
+        for (let { pattern, variants = [] } of checks) {
+          // RegExp with the /g flag are stateful, so let's reset the last
+          // index pointer to reset the state.
+          pattern.lastIndex = 0
+
+          if (!patternMatchingCount.has(pattern)) {
+            patternMatchingCount.set(pattern, 0)
+          }
+
+          if (!pattern.test(util)) continue
+
+          patternMatchingCount.set(pattern, patternMatchingCount.get(pattern) + 1)
+
+          output.push(util)
+          for (let variant of variants) {
+            output.push(variant + context.tailwindConfig.separator + util)
+          }
+        }
+      }
+    }
+
+    for (let [regex, count] of patternMatchingCount.entries()) {
+      if (count !== 0) continue
+
+      log.warn([
+        // TODO: Improve this warning message
+        `You have a regex pattern in your "safelist" config (${regex}) that doesn't match any utilities.`,
+        'For more info, visit https://tailwindcss.com/docs/...',
+      ])
+    }
+
+    return output.map((value) => ({ raw: value, extension: 'html' }))
   }
 }
 
