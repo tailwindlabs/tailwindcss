@@ -9,6 +9,7 @@ export default function (_context) {
         found = true
         nestedRule.warn(
           result,
+          // TODO: Improve this warning message
           'Nested CSS detected, checkout the docs on how to support nesting: https://tailwindcss.com/docs/using-with-preprocessors#nesting'
         )
 
