@@ -3,41 +3,23 @@ import selectorParser from 'postcss-selector-parser'
 import { flagEnabled } from '../featureFlags'
 
 function minimumImpactSelector(nodes) {
-  let pseudos = nodes.filter((n) => n.type === 'pseudo')
-  let [bestNode] = nodes
+  let rest = nodes
+    // Keep all pseudo & combintor types (:not([hidden]) ~ :not([hidden]))
+    .filter((n) => n.type === 'pseudo' || n.type === 'combinator')
+    // Remove leading pseudo's (:hover, :focus, ...)
+    .filter((n, idx, all) => {
+      if (idx === 0 && n.type === 'pseudo') return false
+      if (idx > 0 && n.type === 'pseudo' && all[idx - 1].type === 'pseudo') return false
 
-  for (let [type, getNode = (n) => n] of [
-    ['class'],
-    [
-      'id',
-      (n) =>
-        selectorParser.attribute({
-          attribute: 'id',
-          operator: '=',
-          value: n.value,
-          quoteMark: '"',
-        }),
-    ],
-    ['attribute'],
-  ]) {
-    let match = nodes.find((n) => n.type === type)
+      return true
+    })
 
-    if (match) {
-      bestNode = getNode(match)
-      break
-    }
-  }
-
-  return [bestNode, ...pseudos].join('').trim()
+  return [nodes[0], ...rest].join('').trim()
 }
 
 let elementSelectorParser = selectorParser((selectors) => {
   return selectors.map((s) => {
-    let nodes = s
-      .split((n) => n.type === 'combinator')
-      .pop()
-      .filter((n) => n.type !== 'pseudo' || n.value.startsWith('::'))
-
+    let nodes = s.split((n) => n.type === 'combinator' && n.value === ' ').pop()
     return minimumImpactSelector(nodes)
   })
 })
