@@ -9,7 +9,7 @@ import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import isPlainObject from '../util/isPlainObject'
 import escapeClassName from '../util/escapeClassName'
-import nameClass from '../util/nameClass'
+import nameClass, { formatClass } from '../util/nameClass'
 import { coerceValue } from '../util/pluginUtils'
 import bigSign from '../util/bigSign'
 import * as corePlugins from '../corePlugins'
@@ -146,7 +146,7 @@ function isValidArbitraryValue(value) {
   return true
 }
 
-function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets }) {
+function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets, classList }) {
   function getConfigValue(path, defaultValue) {
     return path ? dlv(tailwindConfig, path, defaultValue) : tailwindConfig
   }
@@ -241,6 +241,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let offset = offsets.components++
 
+        classList.add(prefixedIdentifier)
+
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
         }
@@ -268,6 +270,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let offset = offsets.utilities++
 
+        classList.add(prefixedIdentifier)
+
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
         }
@@ -292,6 +296,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       for (let identifier in utilities) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let rule = utilities[identifier]
+
+        classList.add([prefixedIdentifier, options])
 
         function wrapped(modifier) {
           let { type = 'any' } = options
@@ -468,10 +474,13 @@ function registerPlugins(plugins, context) {
     user: 0n,
   }
 
+  let classList = new Set()
+
   let pluginApi = buildPluginApi(context.tailwindConfig, context, {
     variantList,
     variantMap,
     offsets,
+    classList,
   })
 
   for (let plugin of plugins) {
