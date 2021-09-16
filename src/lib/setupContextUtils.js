@@ -16,6 +16,7 @@ import * as corePlugins from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
 import { toPath } from '../util/toPath'
+import log from '../util/log'
 
 function insertInto(list, value, { before = [] } = {}) {
   before = [].concat(before)
@@ -531,6 +532,83 @@ function registerPlugins(plugins, context) {
       variantName,
       variantFunctions.map((variantFunction, idx) => [sort << BigInt(idx), variantFunction])
     )
+  }
+
+  //
+  let warnedAbout = new Set([])
+  context.safelist = function () {
+    let safelist = (context.tailwindConfig.safelist ?? []).filter(Boolean)
+    if (safelist.length <= 0) return []
+
+    let output = []
+    let checks = []
+
+    for (let value of safelist) {
+      if (typeof value === 'string') {
+        output.push(value)
+        continue
+      }
+
+      if (value instanceof RegExp) {
+        if (!warnedAbout.has('root-regex')) {
+          log.warn([
+            // TODO: Improve this warning message
+            'RegExp in the safelist option is not supported.',
+            'Please use the object syntax instead: https://tailwindcss.com/docs/...',
+          ])
+          warnedAbout.add('root-regex')
+        }
+        continue
+      }
+
+      checks.push(value)
+    }
+
+    if (checks.length <= 0) return output.map((value) => ({ raw: value, extension: 'html' }))
+
+    let patternMatchingCount = new Map()
+
+    for (let util of classList) {
+      let utils = Array.isArray(util)
+        ? (() => {
+            let [utilName, options] = util
+            return Object.keys(options?.values ?? {}).map((value) => formatClass(utilName, value))
+          })()
+        : [util]
+
+      for (let util of utils) {
+        for (let { pattern, variants = [] } of checks) {
+          // RegExp with the /g flag are stateful, so let's reset the last
+          // index pointer to reset the state.
+          pattern.lastIndex = 0
+
+          if (!patternMatchingCount.has(pattern)) {
+            patternMatchingCount.set(pattern, 0)
+          }
+
+          if (!pattern.test(util)) continue
+
+          patternMatchingCount.set(pattern, patternMatchingCount.get(pattern) + 1)
+
+          output.push(util)
+          for (let variant of variants) {
+            output.push(variant + context.tailwindConfig.separator + util)
+          }
+        }
+      }
+    }
+
+    for (let [regex, count] of patternMatchingCount.entries()) {
+      if (count !== 0) continue
+
+      log.warn([
+        // TODO: Improve this warning message
+        `You have a regex pattern in your "safelist" config (${regex}) that doesn't match any utilities.`,
+        'For more info, visit https://tailwindcss.com/docs/...',
+      ])
+    }
+
+    return output.map((value) => ({ raw: value, extension: 'html' }))
   }
 }
 

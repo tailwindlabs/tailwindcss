@@ -188,6 +188,7 @@ function resolvedChangedContent(context, candidateFiles) {
   let changedContent = context.tailwindConfig.content.content
     .filter((item) => typeof item.raw === 'string')
     .concat(context.tailwindConfig.content.safelist)
+    .concat(context.safelist())
     .map(({ raw, extension }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(context, candidateFiles)) {
