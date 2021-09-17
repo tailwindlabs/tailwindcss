@@ -837,6 +837,21 @@ export let breakInside = ({ addUtilities }) => {
   })
 }
 
+export let breakAfter = ({ addUtilities }) => {
+  addUtilities({
+    '.break-after-auto': { 'break-after': 'auto' },
+    '.break-after-avoid': { 'break-after': 'avoid' },
+    '.break-after-always': { 'break-after': 'always' },
+    '.break-after-all': { 'break-after': 'all' },
+    '.break-after-avoid-page': { 'break-after': 'avoid-page' },
+    '.break-after-page': { 'break-after': 'page' },
+    '.break-after-left': { 'break-after': 'left' },
+    '.break-after-right': { 'break-after': 'right' },
+    '.break-after-avoid-col': { 'break-after': 'avoid-column' },
+    '.break-after-column': { 'break-after': 'column' },
+  })
+}
+
 export let gridAutoColumns = createUtilityPlugin('gridAutoColumns', [
   ['auto-cols', ['gridAutoColumns']],
 ])
