@@ -59,7 +59,7 @@
     "jest-diff": "^27.1.0",
     "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
-    "prettier": "^2.3.2",
+    "prettier": "^2.4.1",
     "rimraf": "^3.0.0"
   },
   "peerDependencies": {
