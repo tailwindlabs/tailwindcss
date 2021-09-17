@@ -813,6 +813,21 @@ export let appearance = ({ addUtilities }) => {
 
 export let columns = createUtilityPlugin('columns', [['columns', ['columns']]])
 
+export let breakBefore = ({ addUtilities }) => {
+  addUtilities({
+    '.break-before-auto': { 'break-before': 'auto' },
+    '.break-before-avoid': { 'break-before': 'avoid' },
+    '.break-before-always': { 'break-before': 'always' },
+    '.break-before-all': { 'break-before': 'all' },
+    '.break-before-avoid-page': { 'break-before': 'avoid-page' },
+    '.break-before-page': { 'break-before': 'page' },
+    '.break-before-left': { 'break-before': 'left' },
+    '.break-before-right': { 'break-before': 'right' },
+    '.break-before-avoid-col': { 'break-before': 'avoid-column' },
+    '.break-before-column': { 'break-before': 'column' },
+  })
+}
+
 export let gridAutoColumns = createUtilityPlugin('gridAutoColumns', [
   ['auto-cols', ['gridAutoColumns']],
 ])
