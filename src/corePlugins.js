@@ -828,6 +828,15 @@ export let breakBefore = ({ addUtilities }) => {
   })
 }
 
+export let breakInside = ({ addUtilities }) => {
+  addUtilities({
+    '.break-inside-auto': { 'break-inside': 'auto' },
+    '.break-inside-avoid': { 'break-inside': 'avoid' },
+    '.break-inside-avoid-page': { 'break-inside': 'avoid-page' },
+    '.break-inside-avoid-col': { 'break-inside': 'avoid-column' },
+  })
+}
+
 export let gridAutoColumns = createUtilityPlugin('gridAutoColumns', [
   ['auto-cols', ['gridAutoColumns']],
 ])
