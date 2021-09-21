@@ -5,6 +5,7 @@ import { run, html, css } from './util/run'
 
 test('arbitrary values', () => {
   let config = {
+    autoprefixer: false,
     content: [path.resolve(__dirname, './arbitrary-values.test.html')],
   }
 
@@ -18,6 +19,7 @@ test('arbitrary values', () => {
 
 it('should convert _ to spaces', () => {
   let config = {
+    autoprefixer: false,
     content: [
       {
         raw: html`
@@ -96,6 +98,7 @@ it('should convert _ to spaces', () => {
 
 it('should not convert escaped underscores with spaces', () => {
   let config = {
+    autoprefixer: false,
     content: [{ raw: html` <div class="content-['snake\\_case']"></div> ` }],
     corePlugins: { preflight: false },
   }

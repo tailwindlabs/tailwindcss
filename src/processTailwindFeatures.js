@@ -7,6 +7,9 @@ import resolveDefaultsAtRules from './lib/resolveDefaultsAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
 import detectNesting from './lib/detectNesting'
 import { createContext } from './lib/setupContextUtils'
+import postcss from 'postcss'
+import autoprefixer from 'autoprefixer'
+import dlv from 'dlv'
 
 export default function processTailwindFeatures(setupContext) {
   return function (root, result) {
@@ -32,12 +35,15 @@ export default function processTailwindFeatures(setupContext) {
       )
     }
 
-    detectNesting(context)(root, result)
-    expandTailwindAtRules(context)(root, result)
-    expandApplyAtRules(context)(root, result)
-    evaluateTailwindFunctions(context)(root, result)
-    substituteScreenAtRules(context)(root, result)
-    resolveDefaultsAtRules(context)(root, result)
-    collapseAdjacentRules(context)(root, result)
+    return postcss([
+      detectNesting(context, (rule, warning) => rule.warn(result, warning)),
+      expandTailwindAtRules(context),
+      expandApplyAtRules(context),
+      evaluateTailwindFunctions(context),
+      substituteScreenAtRules(context),
+      resolveDefaultsAtRules(context),
+      collapseAdjacentRules(context),
+      ...(context.tailwindConfig.autoprefixer ? [autoprefixer] : []),
+    ]).process(root, { from: dlv(root, 'source.input.file') })
   }
 }

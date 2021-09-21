@@ -8,6 +8,7 @@ beforeEach(() => jest.resetModules())
 test('raw content', () => {
   let tailwind = require('../src')
   let config = {
+    autoprefixer: false,
     content: [{ raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8') }],
     corePlugins: { preflight: false },
   }
@@ -28,6 +29,7 @@ test('raw content', () => {
 test('raw content with extension', () => {
   let tailwind = require('../src')
   let config = {
+    autoprefixer: false,
     content: {
       content: [
         {

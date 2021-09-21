@@ -19,7 +19,7 @@ module.exports = function tailwindcss(configOrPath) {
             ? setupWatchingContext(configOrPath)
             : setupTrackingContext(configOrPath)
 
-        processTailwindFeatures(setupContext)(root, result)
+        return processTailwindFeatures(setupContext)(root, result)
       },
       env.DEBUG &&
         function (root) {

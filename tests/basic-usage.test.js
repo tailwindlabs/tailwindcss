@@ -5,6 +5,7 @@ import { run, css } from './util/run'
 
 test('basic usage', () => {
   let config = {
+    autoprefixer: false,
     content: [path.resolve(__dirname, './basic-usage.test.html')],
     corePlugins: { preflight: false },
   }

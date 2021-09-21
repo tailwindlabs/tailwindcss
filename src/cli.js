@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { postcss, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
+import { postcss, lazyCssnano } from '../peers/index.js'
 
 import chokidar from 'chokidar'
 import path from 'path'
@@ -429,6 +429,10 @@ async function build() {
       resolvedConfig.content = args['--content'].split(/(?<!{[^}]+),/)
     }
 
+    if (args['--no-autoprefixer']) {
+      resolvedConfig.autoprefixer = false
+    }
+
     return resolvedConfig
   }
 
@@ -499,15 +503,6 @@ async function build() {
       tailwindPlugin,
       !args['--minify'] && formatNodes,
       ...afterPlugins,
-      !args['--no-autoprefixer'] &&
-        (() => {
-          // Try to load a local `autoprefixer` version first
-          try {
-            return require('autoprefixer')
-          } catch {}
-
-          return lazyAutoprefixer()
-        })(),
       args['--minify'] &&
         (() => {
           let options = { preset: ['default', { cssDeclarationSorter: false }] }
@@ -585,15 +580,6 @@ async function build() {
       '__TAILWIND_PLUGIN_POSITION__',
       !args['--minify'] && formatNodes,
       ...afterPlugins,
-      !args['--no-autoprefixer'] &&
-        (() => {
-          // Try to load a local `autoprefixer` version first
-          try {
-            return require('autoprefixer')
-          } catch {}
-
-          return lazyAutoprefixer()
-        })(),
       args['--minify'] &&
         (() => {
           let options = { preset: ['default', { cssDeclarationSorter: false }] }
