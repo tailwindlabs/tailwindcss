@@ -485,7 +485,7 @@ async function build() {
       return {
         postcssPlugin: 'tailwindcss',
         Once(root, { result }) {
-          tailwind(({ createContext }) => {
+          return tailwind(({ createContext }) => {
             return () => {
               return createContext(config, changedContent)
             }
@@ -601,7 +601,7 @@ async function build() {
           postcssPlugin: 'tailwindcss',
           Once(root, { result }) {
             env.DEBUG && console.time('Compiling CSS')
-            tailwind(({ createContext }) => {
+            let processed = tailwind(({ createContext }) => {
               console.error()
               console.error('Rebuilding...')
 
@@ -618,6 +618,7 @@ async function build() {
               }
             })(root, result)
             env.DEBUG && console.timeEnd('Compiling CSS')
+            return processed
           },
         }
       }
