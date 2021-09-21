@@ -6,7 +6,7 @@ let css = String.raw
 
 test('it detects svelte based on the file extension', () => {
   let config = {
-    content: [path.resolve(__dirname, './svelte-syntax.test.svelte')],
+    content: [path.resolve(__dirname, './syntax-svelte.test.svelte')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
