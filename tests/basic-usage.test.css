@@ -320,6 +320,15 @@
 .columns-md {
   columns: 28rem;
 }
+.break-before-page  {
+  break-before: page;
+}
+.break-inside-avoid-column  {
+  break-inside: avoid-column;
+}
+.break-after-auto {
+  break-after: auto;
+}
 .auto-cols-min {
   grid-auto-columns: min-content;
 }
