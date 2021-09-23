@@ -205,7 +205,7 @@ export default function resolveConfig(configs) {
     ...extractPluginConfigs(configs),
     {
       prefix: '',
-      autoprefixer: true,
+      autoprefixer: {},
       important: false,
       separator: ':',
       variantOrder: defaultConfig.variantOrder,

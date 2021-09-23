@@ -43,7 +43,9 @@ export default function processTailwindFeatures(setupContext) {
       substituteScreenAtRules(context),
       resolveDefaultsAtRules(context),
       collapseAdjacentRules(context),
-      ...(context.tailwindConfig.autoprefixer ? [autoprefixer] : []),
+      ...(context.tailwindConfig.autoprefixer !== false
+        ? [autoprefixer(context.tailwindConfig.autoprefixer)]
+        : []),
     ]).process(root, { from: dlv(root, 'source.input.file') })
   }
 }

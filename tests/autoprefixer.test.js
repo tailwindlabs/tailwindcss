@@ -62,3 +62,30 @@ test('autoprefixer can be disabled', () => {
     `)
   })
 })
+
+test('autoprefixer options can be provided', () => {
+  let config = {
+    autoprefixer: { remove: false },
+    content: [
+      {
+        raw: html` <div class="custom-class"></div> `,
+      },
+    ],
+  }
+
+  let input = css`
+    .custom-class {
+      -moz-transition: all 4s ease;
+      transition: all 4s ease;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .custom-class {
+        -moz-transition: all 4s ease;
+        transition: all 4s ease;
+      }
+    `)
+  })
+})
