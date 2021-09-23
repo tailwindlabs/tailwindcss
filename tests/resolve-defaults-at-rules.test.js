@@ -527,6 +527,7 @@ test('when a utility uses defaults but they do not exist', async () => {
 
 test('selectors are reduced to the lowest possible specificity', async () => {
   let config = {
+    experimental: 'all',
     content: [{ raw: html`<div class="foo"></div>` }],
     corePlugins: [],
   }
@@ -576,9 +577,13 @@ test('selectors are reduced to the lowest possible specificity', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      *,
-      ::before,
-      ::after {
+      .foo,
+      [id='app'],
+      [id='page'],
+      [id='other'],
+      [data-bar='baz'],
+      article,
+      [id='another']::before {
         --color: black;
       }
 
