@@ -48,7 +48,6 @@
     "@babel/preset-env": "^7.15.0",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "@vercel/ncc": "^0.29.2",
-    "autoprefixer": "^10.3.3",
     "babel-jest": "^27.1.0",
     "cross-env": "^7.0.3",
     "cssnano": "^5.0.8",
@@ -67,7 +66,7 @@
   },
   "dependencies": {
     "arg": "^5.0.1",
-    "autoprefixer": "^10.0.2",
+    "autoprefixer": "^10.3.5",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
     "color-name": "^1.1.4",
