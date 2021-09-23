@@ -817,13 +817,11 @@ export let breakBefore = ({ addUtilities }) => {
   addUtilities({
     '.break-before-auto': { 'break-before': 'auto' },
     '.break-before-avoid': { 'break-before': 'avoid' },
-    '.break-before-always': { 'break-before': 'always' },
     '.break-before-all': { 'break-before': 'all' },
     '.break-before-avoid-page': { 'break-before': 'avoid-page' },
     '.break-before-page': { 'break-before': 'page' },
     '.break-before-left': { 'break-before': 'left' },
     '.break-before-right': { 'break-before': 'right' },
-    '.break-before-avoid-col': { 'break-before': 'avoid-column' },
     '.break-before-column': { 'break-before': 'column' },
   })
 }
@@ -841,13 +839,11 @@ export let breakAfter = ({ addUtilities }) => {
   addUtilities({
     '.break-after-auto': { 'break-after': 'auto' },
     '.break-after-avoid': { 'break-after': 'avoid' },
-    '.break-after-always': { 'break-after': 'always' },
     '.break-after-all': { 'break-after': 'all' },
     '.break-after-avoid-page': { 'break-after': 'avoid-page' },
     '.break-after-page': { 'break-after': 'page' },
     '.break-after-left': { 'break-after': 'left' },
     '.break-after-right': { 'break-after': 'right' },
-    '.break-after-avoid-col': { 'break-after': 'avoid-column' },
     '.break-after-column': { 'break-after': 'column' },
   })
 }
