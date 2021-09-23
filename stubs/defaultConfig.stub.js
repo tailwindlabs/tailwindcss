@@ -549,6 +549,10 @@ module.exports = {
       9: '2.25rem',
       10: '2.5rem',
     },
+    listStylePosition: {
+      inside: 'inside',
+      outside: 'outside',
+    },
     listStyleType: {
       none: 'none',
       disc: 'disc',
