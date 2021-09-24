@@ -1,15 +1,20 @@
-import _ from 'lodash'
+import dlv from 'dlv'
 import didYouMean from 'didyoumean'
 import transformThemeValue from '../util/transformThemeValue'
 import parseValue from 'postcss-value-parser'
 import buildMediaQuery from '../util/buildMediaQuery'
+import { toPath } from '../util/toPath'
+
+function isObject(input) {
+  return typeof input === 'object' && input !== null
+}
 
 function findClosestExistingPath(theme, path) {
-  const parts = _.toPath(path)
+  let parts = toPath(path)
   do {
     parts.pop()
 
-    if (_.hasIn(theme, parts)) break
+    if (dlv(theme, parts) !== undefined) break
   } while (parts.length)
 
   return parts.length ? parts : undefined
@@ -32,20 +37,22 @@ function listKeys(obj) {
 }
 
 function validatePath(config, path, defaultValue) {
-  const pathString = Array.isArray(path) ? pathToString(path) : _.trim(path, `'"`)
-  const pathSegments = Array.isArray(path) ? path : _.toPath(pathString)
-  const value = _.get(config.theme, pathString, defaultValue)
+  const pathString = Array.isArray(path)
+    ? pathToString(path)
+    : path.replace(/^['"]+/g, '').replace(/['"]+$/g, '')
+  const pathSegments = Array.isArray(path) ? path : toPath(pathString)
+  const value = dlv(config.theme, pathString, defaultValue)
 
-  if (typeof value === 'undefined') {
+  if (value === undefined) {
     let error = `'${pathString}' does not exist in your theme config.`
     const parentSegments = pathSegments.slice(0, -1)
-    const parentValue = _.get(config.theme, parentSegments)
+    const parentValue = dlv(config.theme, parentSegments)
 
-    if (_.isObject(parentValue)) {
+    if (isObject(parentValue)) {
       const validKeys = Object.keys(parentValue).filter(
         (key) => validatePath(config, [...parentSegments, key]).isValid
       )
-      const suggestion = didYouMean(_.last(pathSegments), validKeys)
+      const suggestion = didYouMean(pathSegments[pathSegments.length - 1], validKeys)
       if (suggestion) {
         error += ` Did you mean '${pathToString([...parentSegments, suggestion])}'?`
       } else if (validKeys.length > 0) {
@@ -56,8 +63,8 @@ function validatePath(config, path, defaultValue) {
     } else {
       const closestPath = findClosestExistingPath(config.theme, pathString)
       if (closestPath) {
-        const closestValue = _.get(config.theme, closestPath)
-        if (_.isObject(closestValue)) {
+        const closestValue = dlv(config.theme, closestPath)
+        if (isObject(closestValue)) {
           error += ` '${pathToString(closestPath)}' has the following keys: ${listKeys(
             closestValue
           )}`
@@ -87,7 +94,7 @@ function validatePath(config, path, defaultValue) {
   ) {
     let error = `'${pathString}' was found but does not resolve to a string.`
 
-    if (_.isObject(value)) {
+    if (isObject(value)) {
       let validKeys = Object.keys(value).filter(
         (key) => validatePath(config, [...pathSegments, key]).isValid
       )
@@ -165,7 +172,7 @@ export default function ({ tailwindConfig: config }) {
       return value
     },
     screen: (node, screen) => {
-      screen = _.trim(screen, `'"`)
+      screen = screen.replace(/^['"]+/g, '').replace(/['"]+$/g, '')
 
       if (config.theme.screens[screen] === undefined) {
         throw node.error(`The '${screen}' screen does not exist in your theme.`)

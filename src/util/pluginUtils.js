@@ -1,8 +1,8 @@
 import selectorParser from 'postcss-selector-parser'
-import postcss from 'postcss'
-import createColor from 'color'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
+import isKeyframeRule from './isKeyframeRule'
+import { parseColor } from './color'
 
 export function applyPseudoToMarker(selector, marker, state, join) {
   let states = [state]
@@ -69,10 +69,28 @@ export function updateLastClasses(selectors, updateClass) {
   return result
 }
 
+function splitByNotEscapedCommas(str) {
+  let chunks = []
+  let currentChunk = ''
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === ',' && str[i - 1] !== '\\') {
+      chunks.push(currentChunk)
+      currentChunk = ''
+    } else {
+      currentChunk += str[i]
+    }
+  }
+  chunks.push(currentChunk)
+  return chunks
+}
+
 export function transformAllSelectors(transformSelector, { wrap, withRule } = {}) {
   return ({ container }) => {
     container.walkRules((rule) => {
-      let transformed = rule.selector.split(',').map(transformSelector).join(',')
+      if (isKeyframeRule(rule)) {
+        return rule
+      }
+      let transformed = splitByNotEscapedCommas(rule.selector).map(transformSelector).join(',')
       rule.selector = transformed
       if (withRule) {
         withRule(rule)
@@ -82,7 +100,9 @@ export function transformAllSelectors(transformSelector, { wrap, withRule } = {}
 
     if (wrap) {
       let wrapper = wrap()
-      wrapper.append(container.nodes)
+      let nodes = container.nodes
+      container.removeAll()
+      wrapper.append(nodes)
       container.append(wrapper)
     }
   }
@@ -102,7 +122,9 @@ export function transformAllClasses(transformClass, { wrap, withRule } = {}) {
 
     if (wrap) {
       let wrapper = wrap()
-      wrapper.append(container.nodes)
+      let nodes = container.nodes
+      container.removeAll()
+      wrapper.append(nodes)
       container.append(wrapper)
     }
   }
@@ -122,17 +144,15 @@ export function transformLastClasses(transformClass, { wrap, withRule } = {}) {
 
     if (wrap) {
       let wrapper = wrap()
-      wrapper.append(container.nodes)
+      let nodes = container.nodes
+      container.removeAll()
+      wrapper.append(nodes)
       container.append(wrapper)
     }
   }
 }
 
-export function asValue(
-  modifier,
-  lookup = {},
-  { validate = () => true, transform = (v) => v } = {}
-) {
+export function asValue(modifier, lookup = {}, { validate = () => true } = {}) {
   let value = lookup[modifier]
 
   if (value !== undefined) {
@@ -149,8 +169,14 @@ export function asValue(
     return undefined
   }
 
+  // convert `_` to ` `, escept for escaped underscores `\_`
+  value = value
+    .replace(/([^\\])_/g, '$1 ')
+    .replace(/^_/g, ' ')
+    .replace(/\\_/g, '_')
+
   // add spaces around operators inside calc() that do not follow an operator or (
-  return transform(value).replace(
+  return value.replace(
     /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
     '$1 $2 '
   )
@@ -164,20 +190,6 @@ export function asUnit(modifier, units, lookup = {}) {
         new RegExp(`${unitsPattern}$`).test(value) ||
         new RegExp(`^calc\\(.+?${unitsPattern}`).test(value)
       )
-    },
-    transform: (value) => {
-      return value
-    },
-  })
-}
-
-export function asList(modifier, lookup = {}) {
-  return asValue(modifier, lookup, {
-    transform: (value) => {
-      return postcss.list
-        .comma(value)
-        .map((v) => v.replace(/,/g, ', '))
-        .join(' ')
     },
   })
 }
@@ -194,15 +206,6 @@ function splitAlpha(modifier) {
   }
 
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
-}
-
-function isColor(value) {
-  try {
-    createColor(value)
-    return true
-  } catch (e) {
-    return false
-  }
 }
 
 export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
@@ -225,7 +228,7 @@ export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
   }
 
   return asValue(modifier, lookup, {
-    validate: isColor,
+    validate: (value) => parseColor(value) !== null,
   })
 }
 
@@ -265,7 +268,6 @@ export function asLookupValue(modifier, lookup = {}) {
 
 let typeMap = {
   any: asValue,
-  list: asList,
   color: asColor,
   angle: asAngle,
   length: asLength,

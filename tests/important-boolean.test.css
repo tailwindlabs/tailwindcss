@@ -1,0 +1,76 @@
+.container {
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+.btn {
+  button: yes !important;
+}
+@font-face {
+  font-family: Inter;
+}
+@page {
+  margin: 1cm;
+}
+.custom-component {
+  font-weight: 700;
+}
+.custom-important-component {
+  text-align: center !important;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite !important;
+}
+.font-bold {
+  font-weight: 700 !important;
+}
+.custom-util {
+  button: no;
+}
+.group:hover .group-hover\:focus-within\:text-left:focus-within {
+  text-align: left !important;
+}
+[dir='rtl'] .rtl\:active\:text-center:active {
+  text-align: center !important;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe\:hover\:text-center:hover {
+    text-align: center !important;
+  }
+}
+.dark .dark\:focus\:text-left:focus {
+  text-align: left !important;
+}
+@media (min-width: 768px) {
+  .md\:hover\:text-right:hover {
+    text-align: right !important;
+  }
+}

@@ -1,11 +1,6 @@
 module.exports = {
-  purge: ['./src/index.html'],
-  mode: 'jit',
-  darkMode: false, // or 'media' or 'class'
+  content: ['./src/index.html'],
   theme: {
-    extend: {},
-  },
-  variants: {
     extend: {},
   },
   corePlugins: {

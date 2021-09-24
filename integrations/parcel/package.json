@@ -5,9 +5,10 @@
   "scripts": {
     "build": "parcel build ./src/index.html --no-cache",
     "dev": "parcel watch ./src/index.html --no-cache",
-    "test": "jest"
+    "test": "jest --runInBand --forceExit"
   },
   "jest": {
+    "testTimeout": 10000,
     "displayName": "parcel",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"

@@ -1,7 +1,5 @@
-import _ from 'lodash'
-
 export default function buildMediaQuery(screens) {
-  if (_.isString(screens)) {
+  if (typeof screens === 'string') {
     screens = { min: screens }
   }
 
@@ -9,22 +7,15 @@ export default function buildMediaQuery(screens) {
     screens = [screens]
   }
 
-  return _(screens)
+  return screens
     .map((screen) => {
-      if (_.has(screen, 'raw')) {
+      if (screen?.hasOwnProperty?.('raw')) {
         return screen.raw
       }
 
-      return _(screen)
-        .map((value, feature) => {
-          feature = _.get(
-            {
-              min: 'min-width',
-              max: 'max-width',
-            },
-            feature,
-            feature
-          )
+      return Object.entries(screen)
+        .map(([feature, value]) => {
+          feature = { min: 'min-width', max: 'max-width' }[feature] ?? feature
           return `(${feature}: ${value})`
         })
         .join(' and ')

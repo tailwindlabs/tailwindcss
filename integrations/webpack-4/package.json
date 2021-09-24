@@ -7,9 +7,10 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development --watch",
-    "test": "jest"
+    "test": "jest --runInBand --forceExit"
   },
   "jest": {
+    "testTimeout": 10000,
     "displayName": "webpack 4",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"

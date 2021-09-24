@@ -4,3 +4,4 @@
 /peers
 /tests/fixtures/cli-utils.js
 /stubs/*
+/src/corePluginList.js

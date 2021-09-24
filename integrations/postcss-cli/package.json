@@ -3,10 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "build": "NODE_ENV=production postcss ./src/index.css -o ./dist/main.css",
-    "test": "jest"
+    "build": "NODE_ENV=production postcss ./src/index.css -o ./dist/main.css --verbose",
+    "test": "jest --runInBand --forceExit"
   },
   "jest": {
+    "testTimeout": 10000,
     "displayName": "PostCSS CLI",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"

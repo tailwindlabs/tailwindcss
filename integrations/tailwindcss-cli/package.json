@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "scripts": {
     "build": "NODE_ENV=production node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --forceExit"
   },
   "jest": {
+    "testTimeout": 10000,
     "displayName": "Tailwind CSS CLI",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"

@@ -1,87 +1,44 @@
-import createColor from 'color'
-import _ from 'lodash'
-
-function hasAlpha(color) {
-  return (
-    color.startsWith('rgba(') ||
-    color.startsWith('hsla(') ||
-    (color.startsWith('#') && color.length === 9) ||
-    (color.startsWith('#') && color.length === 5)
-  )
-}
-
-function hasCssVar(color) {
-  return !!color.match(/(rgb|hsl)\s*\(\s*var\(/)
-}
-
-function getCssVarValue(color) {
-  return color.replace(/(rgb|hsl)\(\s*(var\(.*?\))\s*\)/g, '$2')
-}
-
-export function toRgba(color) {
-  const [r, g, b, a] = createColor(color).rgb().array()
-
-  return [r, g, b, a === undefined && hasAlpha(color) ? 1 : a]
-}
-
-export function toHsla(color) {
-  const [h, s, l, a] = createColor(color).hsl().array()
-
-  return [h, `${s}%`, `${l}%`, a === undefined && hasAlpha(color) ? 1 : a]
-}
+import { parseColor, formatColor } from './color'
 
 export function withAlphaValue(color, alphaValue, defaultValue) {
-  if (_.isFunction(color)) {
+  if (typeof color === 'function') {
     return color({ opacityValue: alphaValue })
   }
 
-  try {
-    const isHSL = color.startsWith('hsl')
+  let parsed = parseColor(color)
 
-    if (hasCssVar(color)) {
-      return `${isHSL ? 'hsla' : 'rgba'}(${getCssVarValue(color)}, ${alphaValue}))`
-    }
-
-    const [i, j, k] = isHSL ? toHsla(color) : toRgba(color)
-    return `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, ${alphaValue})`
-  } catch {
+  if (parsed === null) {
     return defaultValue
   }
+
+  return formatColor({ ...parsed, alpha: alphaValue })
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
-  if (_.isFunction(color)) {
+  if (typeof color === 'function') {
     return {
       [variable]: '1',
       [property]: color({ opacityVariable: variable, opacityValue: `var(${variable})` }),
     }
   }
 
-  try {
-    const isHSL = color.startsWith('hsl')
+  const parsed = parseColor(color)
 
-    if (hasCssVar(color)) {
-      return {
-        [variable]: '1',
-        [property]: `${isHSL ? 'hsla' : 'rgba'}(${getCssVarValue(color)}, var(${variable}))`,
-      }
-    }
-
-    const [i, j, k, a] = isHSL ? toHsla(color) : toRgba(color)
-
-    if (a !== undefined) {
-      return {
-        [property]: color,
-      }
-    }
-
-    return {
-      [variable]: '1',
-      [property]: `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, var(${variable}))`,
-    }
-  } catch (error) {
+  if (parsed === null) {
     return {
       [property]: color,
     }
+  }
+
+  if (parsed.alpha !== undefined) {
+    // Has an alpha value, return color as-is
+    return {
+      [property]: color,
+    }
+  }
+
+  return {
+    [variable]: '1',
+    [property]: formatColor({ ...parsed, alpha: `var(${variable})` }),
   }
 }

@@ -64,7 +64,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
       css`
         .bg-red-500 {
           --tw-bg-opacity: 1;
-          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
         }
         .font-bold {
           font-weight: 700;
@@ -103,9 +103,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            purge: ['./src/index.html'],
-            mode: 'jit',
-            darkMode: false, // or 'media' or 'class'
+            content: ['./src/index.html'],
             theme: {
               extend: {
                 screens: {
@@ -115,9 +113,6 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
                   bold: 'bold'
                 }
               },
-            },
-            variants: {
-              extend: {},
             },
             corePlugins: {
               preflight: false,
@@ -213,7 +208,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
         .btn {
           border-radius: 0.25rem;
           --tw-bg-opacity: 1;
-          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
           padding-left: 0.5rem;
           padding-right: 0.5rem;
           padding-top: 0.25rem;
