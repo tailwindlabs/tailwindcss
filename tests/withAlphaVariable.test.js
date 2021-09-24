@@ -65,6 +65,15 @@ test('it ignores colors that cannot be parsed', () => {
   ).toEqual({
     'background-color': 'rgba(var(--color))',
   })
+  expect(
+    withAlphaVariable({
+      color: 'hsla(var(--color))',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    'background-color': 'hsla(var(--color))',
+  })
 })
 
 test('it ignores colors that already have an alpha channel', () => {
@@ -194,6 +203,16 @@ test('it allows css variables to be passed', () => {
     '--tw-bg-opacity': '1',
     'background-color': 'rgb(var(--test-var) / var(--tw-bg-opacity))',
   })
+  expect(
+    withAlphaVariable({
+      color: 'hsl(var(--test-var))',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'hsl(var(--test-var) / var(--tw-bg-opacity))',
+  })
 })
 
 test('it transforms rgb and hsl to space-separated rgb and hsl', () => {
@@ -249,28 +268,5 @@ test('it transforms named colors to rgb', () => {
   ).toEqual({
     '--tw-bg-opacity': '1',
     'background-color': 'rgb(255 0 0 / var(--tw-bg-opacity))',
-  })
-})
-
-test('it transforms rgb and hsl css varables to rgba and hsla with css variables', () => {
-  expect(
-    withAlphaVariable({
-      color: 'rgb(var(--test-var))',
-      property: 'background-color',
-      variable: '--tw-bg-opacity',
-    })
-  ).toEqual({
-    '--tw-bg-opacity': '1',
-    'background-color': 'rgba(var(--test-var), var(--tw-bg-opacity))',
-  })
-  expect(
-    withAlphaVariable({
-      color: 'hsl( var( --test-var ) )',
-      property: 'background-color',
-      variable: '--tw-bg-opacity',
-    })
-  ).toEqual({
-    '--tw-bg-opacity': '1',
-    'background-color': 'hsla(var( --test-var ), var(--tw-bg-opacity))',
   })
 })
