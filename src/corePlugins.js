@@ -1518,14 +1518,7 @@ export let verticalAlign = ({ addUtilities, matchUtilities }) => {
     '.align-super': { 'vertical-align': 'super' },
   })
 
-  matchUtilities(
-    {
-      align: (value) => ({
-        'vertical-align': value,
-      }),
-    },
-    { values: {}, type: 'any' }
-  )
+  matchUtilities({ align: (value) => ({ 'vertical-align': value }) })
 }
 
 export let fontFamily = createUtilityPlugin('fontFamily', [['font', ['fontFamily']]], {
