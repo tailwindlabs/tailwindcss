@@ -1,19 +1,9 @@
 import transformThemeValue from './transformThemeValue'
-import { asValue, asColor, asAngle, asLength, asURL, asLookupValue } from '../util/pluginUtils'
-
-let asMap = new Map([
-  [asValue, 'any'],
-  [asColor, 'color'],
-  [asAngle, 'angle'],
-  [asLength, 'length'],
-  [asURL, 'url'],
-  [asLookupValue, 'lookup'],
-])
 
 export default function createUtilityPlugin(
   themeKey,
   utilityVariations = [[themeKey, [themeKey]]],
-  { filterDefault = false, resolveArbitraryValue = asValue } = {}
+  { filterDefault = false, type = 'any' } = {}
 ) {
   let transformValue = transformThemeValue(themeKey)
   return function ({ matchUtilities, theme }) {
@@ -39,9 +29,7 @@ export default function createUtilityPlugin(
                 Object.entries(theme(themeKey) ?? {}).filter(([modifier]) => modifier !== 'DEFAULT')
               )
             : theme(themeKey),
-          type: Array.isArray(resolveArbitraryValue)
-            ? resolveArbitraryValue.map((typeResolver) => asMap.get(typeResolver) ?? 'any')
-            : asMap.get(resolveArbitraryValue) ?? 'any',
+          type,
         }
       )
     }

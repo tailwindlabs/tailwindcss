@@ -8,62 +8,35 @@
     <link rel="stylesheet" href="./tailwind.css" />
   </head>
   <body>
-    <div class="bg-[#0f0] bg-[#ff0000] bg-[#0000ffcc]"></div>
-    <div class="bg-[rgb(123,123,123)] bg-[rgba(123,123,123,0.5)]"></div>
-    <div class="bg-[hsl(0,100%,50%)] bg-[hsla(0,100%,50%,0.3)]"></div>
-    <div class="bg-[url('/path-to-image.png')] bg-[url:var(--url)]"></div>
-    <div class="bg-opacity-[0.11]"></div>
-    <div class="bg-opacity-[var(--value)]"></div>
-    <div class="border-[#f00]"></div>
-    <div class="border-[2.5px]"></div>
-    <div class="aspect-[16/9] aspect-[var(--aspect)]"></div>
-    <div class="w-[3.23rem]"></div>
-    <div class="w-[calc(100%+1rem)]"></div>
-    <div class="w-[calc(var(--10-10px,calc(-20px-(-30px--40px)))-50px)]"></div>
-    <div class="w-[var(--width)]"></div>
-    <div class="w-[var(--width,calc(100%+1rem))]"></div>
-    <div class="w-[calc(100%/3-1rem*2)]"></div>
-    <div class="min-w-[3.23rem]"></div>
-    <div class="min-w-[calc(100%+1rem)]"></div>
-    <div class="min-w-[var(--width)]"></div>
-    <div class="max-w-[3.23rem]"></div>
-    <div class="max-w-[calc(100%+1rem)]"></div>
-    <div class="max-w-[var(--width)]"></div>
-    <div class="h-[3.23rem]"></div>
-    <div class="h-[calc(100%+1rem)]"></div>
-    <div class="h-[var(--height)]"></div>
-    <div class="min-h-[3.23rem]"></div>
-    <div class="min-h-[calc(100%+1rem)]"></div>
-    <div class="min-h-[var(--height)]"></div>
-    <div class="max-h-[3.23rem]"></div>
-    <div class="max-h-[calc(100%+1rem)]"></div>
-    <div class="max-h-[var(--height)]"></div>
-    <div class="space-x-[20cm]"></div>
-    <div class="space-x-[calc(20%-1cm)]"></div>
-    <div class="columns-[20] columns-[var(--columns)]"></div>
-    <div class="grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
-    <div class="lg:grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
-    <div class="grid-rows-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
+    <div class="inset-[11px]"></div>
+    <div class="inset-[var(--value)]"></div>
+    <div class="inset-x-[11px]"></div>
+    <div class="inset-x-[var(--value)]"></div>
+    <div class="inset-y-[11px]"></div>
+    <div class="inset-y-[var(--value)]"></div>
+    <div class="top-[11px]"></div>
+    <div class="top-[var(--value)]"></div>
+    <div class="right-[11px]"></div>
+    <div class="right-[var(--value)]"></div>
+    <div class="bottom-[11px]"></div>
+    <div class="bottom-[var(--value)]"></div>
+    <div class="left-[11px]"></div>
+    <div class="left-[var(--value)]"></div>
+
+    <div class="z-[123]"></div>
+    <div class="z-[var(--value)]"></div>
+
+    <div class="order-[4]"></div>
+    <div class="order-[var(--value)]"></div>
+
     <div class="col-[7]"></div>
     <div class="col-end-[7]"></div>
     <div class="col-start-[7]"></div>
-    <div class="flex-[var(--flex)]"></div>
-    <div class="flex-grow-[var(--grow)]"></div>
-    <div class="flex-shrink-[var(--shrink)]"></div>
+
     <div class="row-[7]"></div>
     <div class="row-end-[7]"></div>
     <div class="row-start-[7]"></div>
-    <div class="rotate-[23deg] rotate-[2.3rad] rotate-[401grad] rotate-[1.5turn]"></div>
-    <div class="skew-x-[3px]"></div>
-    <div class="skew-y-[3px]"></div>
-    <div class="indent-[50%] indent-[var(--indent)]"></div>
-    <div class="align-[10em]"></div>
-    <div class="text-[2.23rem]"></div>
-    <div class="text-[length:var(--font-size)]"></div>
-    <div class="text-[color:var(--color)]"></div>
-    <div class="text-[angle:var(--angle)]"></div>
-    <div class="transition-[opacity,width]"></div>
-    <div class="duration-[2s]"></div>
+
     <div class="m-[7px]"></div>
     <div class="mx-[7px]"></div>
     <div class="my-[7px]"></div>
@@ -72,6 +45,105 @@
     <div class="mb-[7px]"></div>
     <div class="ml-[7px]"></div>
     <div class="mt-[clamp(30px,100px)]"></div>
+
+    <div class="aspect-[16/9] aspect-[var(--aspect)]"></div>
+
+    <div class="h-[3.23rem]"></div>
+    <div class="h-[calc(100%+1rem)]"></div>
+    <div class="h-[var(--height)]"></div>
+
+    <div class="max-h-[3.23rem]"></div>
+    <div class="max-h-[calc(100%+1rem)]"></div>
+    <div class="max-h-[var(--height)]"></div>
+
+    <div class="min-h-[3.23rem]"></div>
+    <div class="min-h-[calc(100%+1rem)]"></div>
+    <div class="min-h-[var(--height)]"></div>
+
+    <div class="w-[3.23rem]"></div>
+    <div class="w-[calc(100%+1rem)]"></div>
+    <div class="w-[calc(var(--10-10px,calc(-20px-(-30px--40px)))-50px)]"></div>
+    <div class="w-[var(--width)]"></div>
+    <div class="w-[var(--width,calc(100%+1rem))]"></div>
+    <div class="w-[calc(100%/3-1rem*2)]"></div>
+
+    <div class="min-w-[3.23rem]"></div>
+    <div class="min-w-[calc(100%+1rem)]"></div>
+    <div class="min-w-[var(--width)]"></div>
+
+    <div class="max-w-[3.23rem]"></div>
+    <div class="max-w-[calc(100%+1rem)]"></div>
+    <div class="max-w-[var(--width)]"></div>
+
+    <div class="flex-[var(--flex)]"></div>
+    <div class="flex-shrink-[var(--shrink)]"></div>
+    <div class="flex-grow-[var(--grow)]"></div>
+
+    <div class="origin-[50px_50px]"></div>
+
+    <div class="translate-x-[12%]"></div>
+    <div class="translate-x-[var(--value)]"></div>
+    <div class="translate-y-[12%]"></div>
+    <div class="translate-y-[var(--value)]"></div>
+
+    <div class="rotate-[23deg] rotate-[2.3rad] rotate-[401grad] rotate-[1.5turn]"></div>
+
+    <div class="skew-x-[3px]"></div>
+    <div class="skew-x-[var(--value)]"></div>
+    <div class="skew-y-[3px]"></div>
+    <div class="skew-y-[var(--value)]"></div>
+
+    <div class="scale-[0.7]"></div>
+    <div class="scale-[var(--value)]"></div>
+    <div class="scale-x-[0.7]"></div>
+    <div class="scale-x-[var(--value)]"></div>
+    <div class="scale-y-[0.7]"></div>
+    <div class="scale-y-[var(--value)]"></div>
+
+    <div class="animate-[pong_1s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+    <div class="animate-[var(--value)]"></div>
+
+    <div class="cursor-[pointer]"></div>
+    <div class="cursor-[url(hand.cur)_2_2,pointer]"></div>
+    <div class="cursor-[var(--value)]"></div>
+
+    <div class="list-['\1F44D']"></div>
+    <div class="list-[var(--value)]"></div>
+
+    <div class="columns-[20] columns-[var(--columns)]"></div>
+
+    <div class="auto-cols-[minmax(10px,auto)]"></div>
+
+    <div class="auto-rows-[minmax(10px,auto)]"></div>
+
+    <div class="grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
+    <div class="lg:grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
+
+    <div class="grid-rows-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
+
+    <div class="gap-[20px]"></div>
+    <div class="gap-[var(--value)]"></div>
+    <div class="gap-x-[20px]"></div>
+    <div class="gap-x-[var(--value)]"></div>
+    <div class="gap-y-[20px]"></div>
+    <div class="gap-y-[var(--value)]"></div>
+
+    <div class="space-x-[20cm]"></div>
+    <div class="space-x-[calc(20%-1cm)]"></div>
+    <div class="space-y-[20cm]"></div>
+    <div class="space-y-[calc(20%-1cm)]"></div>
+
+    <div class="divide-x-[20cm]"></div>
+    <div class="divide-x-[calc(20%-1cm)]"></div>
+    <div class="divide-y-[20cm]"></div>
+    <div class="divide-y-[calc(20%-1cm)]"></div>
+
+    <div class="divide-[black]"></div>
+    <div class="divide-[var(--value)]"></div>
+
+    <div class="divide-opacity-[0.8]"></div>
+    <div class="divide-opacity-[var(--value)]"></div>
+
     <div class="rounded-[11px]"></div>
     <div
       class="
@@ -89,12 +161,158 @@
         rounded-tl-[var(--radius)]
       "
     ></div>
-    <div class="duration-[var(--app-duration)]"></div>
-    <div class="p-[var(--app-padding)]"></div>
-    <div class="inset-[11px]"></div>
+
+    <div class="border-[#f00]"></div>
+    <div class="border-[red_black]"></div>
+    <div class="border-[2.5px]"></div>
+    <div class="border-[color:var(--value)]"></div>
+    <div class="border-[length:var(--value)]"></div>
+
+    <div class="border-t-[#f00]"></div>
+    <div class="border-t-[2.5px]"></div>
+    <div class="border-t-[color:var(--value)]"></div>
+    <div class="border-t-[length:var(--value)]"></div>
+    <div class="border-r-[#f00]"></div>
+    <div class="border-r-[2.5px]"></div>
+    <div class="border-r-[color:var(--value)]"></div>
+    <div class="border-r-[length:var(--value)]"></div>
+    <div class="border-b-[#f00]"></div>
+    <div class="border-b-[2.5px]"></div>
+    <div class="border-b-[color:var(--value)]"></div>
+    <div class="border-b-[length:var(--value)]"></div>
+    <div class="border-l-[#f00]"></div>
+    <div class="border-l-[2.5px]"></div>
+    <div class="border-l-[color:var(--value)]"></div>
+    <div class="border-l-[length:var(--value)]"></div>
+
+    <div class="border-opacity-[0.8]"></div>
+    <div class="border-opacity-[var(--value)]"></div>
+
+    <div class="bg-[#0f0] bg-[#ff0000] bg-[#0000ffcc]"></div>
+    <div class="bg-[rgb(123,123,123)] bg-[rgba(123,123,123,0.5)]"></div>
+    <div class="bg-[rgb(123,_456,_123)_black]"></div>
+    <div class="bg-[rgb(123_456_789)]"></div>
+    <div class="bg-[hsl(0,100%,50%)] bg-[hsla(0,100%,50%,0.3)]"></div>
+    <div class="bg-[#0f0_var(--value)]"></div>
+    <div class="bg-[var(--value1)_var(--value2)]"></div>
+    <div class="bg-[color:var(--value1)_var(--value2)]"></div>
+
+    <div class="bg-[url('/path-to-image.png')] bg-[url:var(--url)]"></div>
+    <div class="bg-[linear-gradient(#eee,#fff)]"></div>
+    <div class="bg-[linear-gradient(#eee,#fff),conic-gradient(red,orange,yellow,green,blue)]"></div>
+    <div class="bg-[image(),var(--value)]"></div>
+    <div class="bg-[var(--value),var(--value)]"></div>
+    <div class="bg-[image:var(--value),var(--value)]"></div>
+
+    <div class="bg-opacity-[0.11]"></div>
+    <div class="bg-opacity-[var(--value)]"></div>
+
+    <div class="from-[#da5b66] via-[#da5b66] to-[#da5b66]"></div>
+    <div class="from-[var(--color)] via-[var(--color)] to-[var(--color)]"></div>
+
+    <div class="bg-[length:200px_100px]"></div>
+    <div class="bg-[length:var(--value)]"></div>
+
+    <div class="bg-[position:200px_100px]"></div>
+    <div class="bg-[position:var(--value)]"></div>
+
+    <div class="fill-[#da5b66]"></div>
+    <div class="fill-[var(--value)]"></div>
+    <div class="fill-[url(#icon-gradient)]"></div>
+
+    <div class="stroke-[#da5b66]"></div>
+    <div class="stroke-[color:var(--value)]"></div>
+    <div class="stroke-[url(#icon-gradient)]"></div>
+
+    <div class="stroke-[20px]"></div>
+    <div class="stroke-[length:var(--value)]"></div>
+
+    <div class="object-[50%,50%]"></div>
+    <div class="object-[top,right]"></div>
+    <div class="object-[var(--position)]"></div>
+
+    <div class="p-[7px]"></div>
+    <div class="px-[7px]"></div>
+    <div class="py-[7px]"></div>
+    <div class="pt-[7px]"></div>
+    <div class="pr-[7px]"></div>
+    <div class="pb-[7px]"></div>
+    <div class="pl-[7px]"></div>
+    <div class="pt-[clamp(30px,100px)]"></div>
+
+    <div class="indent-[50%] indent-[var(--indent)]"></div>
+
+    <div class="align-[10em]"></div>
+
+    <div class="font-[Georgia,serif]"></div>
+    <div class="font-['Gill_Sans']"></div>
+    <div class="font-[sans-serif,serif]"></div>
+    <div class="font-[family-name:var(--value)]"></div>
+    <div class="font-[serif,var(--value)]"></div>
+    <div class="font-['Some_Font',sans-serif]"></div>
+    <div class="font-['Some_Font','Some_Other_Font']"></div>
+    <div class="font-['Some_Font',var(--other-font)]"></div>
+    <div class="font-[var(--font1),var(--font2)]"></div>
+    <div class="font-[invalid_font_because_spaces]"></div>
+
+    <div class="text-[2.23rem]"></div>
+    <div class="text-[length:var(--font-size)]"></div>
+    <div class="text-[angle:var(--angle)]"></div>
+
+    <div class="font-[300]"></div>
+    <div class="font-[number:lighter]"></div>
+    <div class="font-[number:var(--value)]"></div>
+
+    <div class="leading-[var(--leading)]"></div>
+
+    <div class="tracking-[var(--tracking)]"></div>
+
+    <div class="text-[black]"></div>
+    <div class="text-[rgb(123,123,123)]"></div>
+    <div class="text-[rgb(123,_123,_123)]"></div>
+    <div class="text-[rgb(123_123_123)]"></div>
+    <div class="text-[color:var(--color)]"></div>
+
+    <div class="text-opacity-[0.8]"></div>
+    <div class="text-opacity-[var(--value)]"></div>
+
+    <div class="placeholder-[var(--placeholder)]"></div>
+
+    <div class="placeholder-opacity-[var(--placeholder-opacity)]"></div>
+
+    <div class="caret-[black]"></div>
+    <div class="caret-[var(--value)]"></div>
+
+    <div class="accent-[#bada55]"></div>
+    <div class="accent-[var(--accent-color)]"></div>
+
+    <div class="opacity-[0.8]"></div>
+    <div class="opacity-[var(--opacity)]"></div>
+
+    <div class="shadow-[0px_1px_2px_black]"></div>
+    <div class="shadow-[var(--value)]"></div>
+
+    <div class="outline-[2px_solid_black]"></div>
+    <div class="outline-[2px_solid_black,2px]"></div>
+    <div class="outline-[var(--outline)]"></div>
+    <div class="outline-[var(--outline),3px]"></div>
+    <div class="outline-[2px_solid_black,var(--outline-offset)]"></div>
+
+    <div class="ring-[#76ad65]"></div>
+    <div class="ring-[color:var(--value)]"></div>
+    <div class="ring-offset-[#76ad65]"></div>
+    <div class="ring-[10px]"></div>
+    <div class="ring-[length:(var(--value))]"></div>
+    <div class="ring-offset-[#ad672f]"></div>
+    <div class="ring-offset-[color:var(--value)]"></div>
+    <div class="ring-offset-[19rem]"></div>
+    <div class="ring-offset-[length:var(--value)]"></div>
+    <div class="ring-opacity-[var(--ring-opacity)]"></div>
+
     <div class="blur-[15px]"></div>
     <div class="brightness-[300%]"></div>
     <div class="contrast-[2.4]"></div>
+    <div class="drop-shadow-[0px_1px_2px_black]"></div>
     <div class="grayscale-[0.55]"></div>
     <div class="hue-rotate-[0.8turn]"></div>
     <div class="invert-[0.75]"></div>
@@ -109,34 +327,19 @@
     <div class="backdrop-opacity-[22%]"></div>
     <div class="backdrop-saturate-[144%]"></div>
     <div class="backdrop-sepia-[0.38]"></div>
-    <div class="from-[#da5b66] via-[#da5b66] to-[#da5b66]"></div>
-    <div class="from-[var(--color)] via-[var(--color)] to-[var(--color)]"></div>
-    <div class="fill-[#da5b66]"></div>
-    <div class="fill-[var(--color)]"></div>
-    <div class="object-[50%,50%]"></div>
-    <div class="object-[top,right]"></div>
-    <div class="object-[var(--position)]"></div>
-    <div class="stroke-[#da5b66]"></div>
-    <div class="stroke-[url(#icon-gradient)]"></div>
-    <div class="leading-[var(--leading)]"></div>
-    <div class="tracking-[var(--tracking)]"></div>
-    <div class="placeholder-[var(--placeholder)]"></div>
-    <div class="placeholder-opacity-[var(--placeholder-opacity)]"></div>
-    <div class="opacity-[var(--opacity)]"></div>
-    <div class="outline-[var(--outline)]"></div>
-    <div class="ring-[#76ad65]"></div>
-    <div class="ring-offset-[#76ad65]"></div>
-    <div class="ring-[10px]"></div>
-    <div class="ring-offset-[#ad672f]"></div>
-    <div class="ring-offset-[19rem]"></div>
-    <div class="ring-opacity-[var(--ring-opacity)]"></div>
+
+    <div class="transition-[opacity,width]"></div>
+
     <div class="delay-[var(--delay)]"></div>
+
+    <div class="duration-[2s]"></div>
+    <div class="duration-[var(--app-duration)]"></div>
+
     <div class="will-change-[top,left] will-change-[var(--will-change)]"></div>
+
     <div class="content-['hello']"></div>
     <div class="content-[attr(content-before)]"></div>
     <div class="content-['>']"></div>
-    <div class="accent-[#bada55]"></div>
-    <div class="accent-[var(--accent-color)]"></div>
 
     <!-- Balancing issues, this is not checking the validity of the actual value, but purely syntax-wise -->
     <div class="w-[do-not-generate-this]w-[it-is-invalid-syntax]"></div>

@@ -16,9 +16,6 @@ import {
   transformAllSelectors,
   transformAllClasses,
   transformLastClasses,
-  asLength,
-  asURL,
-  asLookupValue,
 } from './util/pluginUtils'
 import packageJson from '../package.json'
 import log from './util/log'
@@ -520,35 +517,19 @@ export let position = ({ addUtilities }) => {
   })
 }
 
-export let inset = ({ matchUtilities, theme }) => {
-  let options = {
-    values: theme('inset'),
-    type: 'any',
-  }
-
-  matchUtilities(
-    { inset: (value) => ({ top: value, right: value, bottom: value, left: value }) },
-    options
-  )
-
-  matchUtilities(
-    {
-      'inset-x': (value) => ({ left: value, right: value }),
-      'inset-y': (value) => ({ top: value, bottom: value }),
-    },
-    options
-  )
-
-  matchUtilities(
-    {
-      top: (top) => ({ top }),
-      right: (right) => ({ right }),
-      bottom: (bottom) => ({ bottom }),
-      left: (left) => ({ left }),
-    },
-    options
-  )
-}
+export let inset = createUtilityPlugin('inset', [
+  ['inset', ['top', 'right', 'bottom', 'left']],
+  [
+    ['inset-x', ['left', 'right']],
+    ['inset-y', ['top', 'bottom']],
+  ],
+  [
+    ['top', ['top']],
+    ['right', ['right']],
+    ['bottom', ['bottom']],
+    ['left', ['left']],
+  ],
+])
 
 export let isolation = ({ addUtilities }) => {
   addUtilities({
@@ -633,12 +614,15 @@ export let display = ({ addUtilities }) => {
 }
 
 export let aspectRatio = createUtilityPlugin('aspectRatio', [['aspect', ['aspect-ratio']]])
+
 export let height = createUtilityPlugin('height', [['h', ['height']]])
 export let maxHeight = createUtilityPlugin('maxHeight', [['max-h', ['maxHeight']]])
 export let minHeight = createUtilityPlugin('minHeight', [['min-h', ['minHeight']]])
+
 export let width = createUtilityPlugin('width', [['w', ['width']]])
 export let minWidth = createUtilityPlugin('minWidth', [['min-w', ['minWidth']]])
 export let maxWidth = createUtilityPlugin('maxWidth', [['max-w', ['maxWidth']]])
+
 export let flex = createUtilityPlugin('flex')
 export let flexShrink = createUtilityPlugin('flexShrink', [['flex-shrink', ['flex-shrink']]])
 export let flexGrow = createUtilityPlugin('flexGrow', [['flex-grow', ['flex-grow']]])
@@ -992,7 +976,7 @@ export let space = ({ matchUtilities, addUtilities, theme }) => {
         }
       },
     },
-    { values: theme('space'), type: 'any' }
+    { values: theme('space') }
   )
 
   addUtilities({
@@ -1029,7 +1013,7 @@ export let divideWidth = ({ matchUtilities, addUtilities, theme }) => {
         }
       },
     },
-    { values: theme('divideWidth'), type: 'length' }
+    { values: theme('divideWidth'), type: ['line-width', 'length'] }
   )
 
   addUtilities({
@@ -1089,7 +1073,7 @@ export let divideOpacity = ({ matchUtilities, theme }) => {
         return { [`& > :not([hidden]) ~ :not([hidden])`]: { '--tw-divide-opacity': value } }
       },
     },
-    { values: theme('divideOpacity'), type: 'any' }
+    { values: theme('divideOpacity') }
   )
 }
 
@@ -1215,7 +1199,7 @@ export let borderWidth = createUtilityPlugin(
       ['border-l', [['@defaults border-width', {}], 'border-left-width']],
     ],
   ],
-  { resolveArbitraryValue: asLength }
+  { type: ['line-width', 'length'] }
 )
 
 export let borderStyle = ({ addUtilities }) => {
@@ -1265,7 +1249,7 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
     },
     {
       values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
-      type: 'color',
+      type: ['color'],
     }
   )
 
@@ -1362,7 +1346,7 @@ export let backgroundOpacity = createUtilityPlugin('backgroundOpacity', [
 export let backgroundImage = createUtilityPlugin(
   'backgroundImage',
   [['bg', ['background-image']]],
-  { resolveArbitraryValue: [asLookupValue, asURL] }
+  { type: ['lookup', 'image', 'url'] }
 )
 export let gradientColorStops = (() => {
   function transparentTo(value) {
@@ -1415,7 +1399,7 @@ export let boxDecorationBreak = ({ addUtilities }) => {
 }
 
 export let backgroundSize = createUtilityPlugin('backgroundSize', [['bg', ['background-size']]], {
-  resolveArbitraryValue: asLookupValue,
+  type: ['lookup', 'length', 'percentage'],
 })
 
 export let backgroundAttachment = ({ addUtilities }) => {
@@ -1438,7 +1422,7 @@ export let backgroundClip = ({ addUtilities }) => {
 export let backgroundPosition = createUtilityPlugin(
   'backgroundPosition',
   [['bg', ['background-position']]],
-  { resolveArbitraryValue: asLookupValue }
+  { type: ['lookup', 'position'] }
 )
 
 export let backgroundRepeat = ({ addUtilities }) => {
@@ -1478,12 +1462,12 @@ export let stroke = ({ matchUtilities, theme }) => {
         return { stroke: toColorValue(value) }
       },
     },
-    { values: flattenColorPalette(theme('stroke')), type: 'color' }
+    { values: flattenColorPalette(theme('stroke')), type: ['color', 'url'] }
   )
 }
 
 export let strokeWidth = createUtilityPlugin('strokeWidth', [['stroke', ['stroke-width']]], {
-  resolveArbitraryValue: [asLength, asURL],
+  type: ['length', 'number', 'percentage'],
 })
 
 export let objectFit = ({ addUtilities }) => {
@@ -1534,18 +1518,11 @@ export let verticalAlign = ({ addUtilities, matchUtilities }) => {
     '.align-super': { 'vertical-align': 'super' },
   })
 
-  matchUtilities(
-    {
-      align: (value) => ({
-        'vertical-align': value,
-      }),
-    },
-    { values: {}, type: 'any' }
-  )
+  matchUtilities({ align: (value) => ({ 'vertical-align': value }) })
 }
 
 export let fontFamily = createUtilityPlugin('fontFamily', [['font', ['fontFamily']]], {
-  resolveArbitraryValue: asLookupValue,
+  type: ['lookup', 'generic-name', 'family-name'],
 })
 
 export let fontSize = ({ matchUtilities, theme }) => {
@@ -1564,12 +1541,12 @@ export let fontSize = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('fontSize'), type: 'length' }
+    { values: theme('fontSize'), type: ['absolute-size', 'relative-size', 'length', 'percentage'] }
   )
 }
 
 export let fontWeight = createUtilityPlugin('fontWeight', [['font', ['fontWeight']]], {
-  resolveArbitraryValue: asLookupValue,
+  type: ['lookup', 'number'],
 })
 
 export let textTransform = ({ addUtilities }) => {
@@ -1691,7 +1668,7 @@ export let placeholderOpacity = ({ matchUtilities, theme }) => {
         return { ['&::placeholder']: { '--tw-placeholder-opacity': value } }
       },
     },
-    { values: theme('placeholderOpacity'), type: 'any' }
+    { values: theme('placeholderOpacity') }
   )
 }
 
@@ -1799,12 +1776,13 @@ export let outline = ({ matchUtilities, theme }) => {
   matchUtilities(
     {
       outline: (value) => {
+        value = Array.isArray(value) ? value : value.split(',')
         let [outline, outlineOffset = '0'] = Array.isArray(value) ? value : [value]
 
         return { outline, 'outline-offset': outlineOffset }
       },
     },
-    { values: theme('outline'), type: 'any' }
+    { values: theme('outline') }
   )
 }
 
@@ -1881,7 +1859,7 @@ export let ringOpacity = createUtilityPlugin(
 export let ringOffsetWidth = createUtilityPlugin(
   'ringOffsetWidth',
   [['ring-offset', ['--tw-ring-offset-width']]],
-  { resolveArbitraryValue: asLength }
+  { type: 'length' }
 )
 
 export let ringOffsetColor = ({ matchUtilities, theme }) => {
@@ -1908,7 +1886,7 @@ export let blur = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('blur'), type: 'any' }
+    { values: theme('blur') }
   )
 }
 
@@ -1923,7 +1901,7 @@ export let brightness = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('brightness'), type: 'any' }
+    { values: theme('brightness') }
   )
 }
 
@@ -1938,7 +1916,7 @@ export let contrast = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('contrast'), type: 'any' }
+    { values: theme('contrast') }
   )
 }
 
@@ -1970,7 +1948,7 @@ export let grayscale = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('grayscale'), type: 'any' }
+    { values: theme('grayscale') }
   )
 }
 
@@ -1985,7 +1963,7 @@ export let hueRotate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('hueRotate'), type: 'any' }
+    { values: theme('hueRotate') }
   )
 }
 
@@ -2000,7 +1978,7 @@ export let invert = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('invert'), type: 'any' }
+    { values: theme('invert') }
   )
 }
 
@@ -2015,7 +1993,7 @@ export let saturate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('saturate'), type: 'any' }
+    { values: theme('saturate') }
   )
 }
 
@@ -2030,7 +2008,7 @@ export let sepia = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('sepia'), type: 'any' }
+    { values: theme('sepia') }
   )
 }
 
@@ -2076,7 +2054,7 @@ export let backdropBlur = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropBlur'), type: 'any' }
+    { values: theme('backdropBlur') }
   )
 }
 
@@ -2091,7 +2069,7 @@ export let backdropBrightness = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropBrightness'), type: 'any' }
+    { values: theme('backdropBrightness') }
   )
 }
 
@@ -2106,7 +2084,7 @@ export let backdropContrast = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropContrast'), type: 'any' }
+    { values: theme('backdropContrast') }
   )
 }
 
@@ -2121,7 +2099,7 @@ export let backdropGrayscale = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropGrayscale'), type: 'any' }
+    { values: theme('backdropGrayscale') }
   )
 }
 
@@ -2136,7 +2114,7 @@ export let backdropHueRotate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropHueRotate'), type: 'any' }
+    { values: theme('backdropHueRotate') }
   )
 }
 
@@ -2151,7 +2129,7 @@ export let backdropInvert = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropInvert'), type: 'any' }
+    { values: theme('backdropInvert') }
   )
 }
 
@@ -2166,7 +2144,7 @@ export let backdropOpacity = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropOpacity'), type: 'any' }
+    { values: theme('backdropOpacity') }
   )
 }
 
@@ -2181,7 +2159,7 @@ export let backdropSaturate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropSaturate'), type: 'any' }
+    { values: theme('backdropSaturate') }
   )
 }
 
@@ -2196,7 +2174,7 @@ export let backdropSepia = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropSepia'), type: 'any' }
+    { values: theme('backdropSepia') }
   )
 }
 
@@ -2252,7 +2230,7 @@ export let transitionProperty = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('transitionProperty'), type: 'any' }
+    { values: theme('transitionProperty') }
   )
 }
 

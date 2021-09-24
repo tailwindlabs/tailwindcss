@@ -111,9 +111,9 @@ module.exports = {
       bounce: 'bounce 1s infinite',
     },
     aspectRatio: {
-      'auto': 'auto',
-      'square': '1 / 1',
-      'video': '16 / 9',
+      auto: 'auto',
+      square: '1 / 1',
+      video: '16 / 9',
     },
     backdropBlur: (theme) => theme('blur'),
     backdropBrightness: (theme) => theme('brightness'),
@@ -847,10 +847,10 @@ module.exports = {
       max: 'max-content',
     }),
     willChange: {
-      'auto': 'auto',
-      'scroll': 'scroll-position',
-      'contents': 'contents',
-      'transform': 'transform',
+      auto: 'auto',
+      scroll: 'scroll-position',
+      contents: 'contents',
+      transform: 'transform',
     },
     zIndex: {
       auto: 'auto',
