@@ -391,6 +391,81 @@ test('with apply', async () => {
   })
 })
 
+test('legacy pseudo-element syntax is supported', async () => {
+  let config = {
+    experimental: { optimizeUniversalDefaults: true },
+    content: [{ raw: html`<div class="foo"></div>` }],
+    corePlugins: ['transform', 'scale', 'rotate', 'skew'],
+  }
+
+  let input = css`
+    @tailwind base;
+    /* --- */
+    @tailwind utilities;
+
+    .a:before {
+      content: '';
+      @apply rotate-45;
+    }
+
+    .b:after {
+      content: '';
+      @apply rotate-3;
+    }
+
+    .c:first-line {
+      content: '';
+      @apply rotate-1;
+    }
+
+    .d:first-letter {
+      content: '';
+      @apply rotate-6;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .a:before,
+      .b:after,
+      .c:first-line,
+      .d:first-letter {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+      }
+      /* --- */
+      .a:before {
+        content: '';
+        --tw-rotate: 45deg;
+        transform: var(--tw-transform);
+      }
+      .b:after {
+        content: '';
+        --tw-rotate: 3deg;
+        transform: var(--tw-transform);
+      }
+      .c:first-line {
+        content: '';
+        --tw-rotate: 1deg;
+        transform: var(--tw-transform);
+      }
+      .d:first-letter {
+        content: '';
+        --tw-rotate: 6deg;
+        transform: var(--tw-transform);
+      }
+    `)
+  })
+})
+
 test('with borders', async () => {
   let config = {
     content: [{ raw: html`<div class="border border-red-500 md:border-2"></div>` }],
