@@ -1776,6 +1776,7 @@ export let outline = ({ matchUtilities, theme }) => {
   matchUtilities(
     {
       outline: (value) => {
+        value = Array.isArray(value) ? value : value.split(',')
         let [outline, outlineOffset = '0'] = Array.isArray(value) ? value : [value]
 
         return { outline, 'outline-offset': outlineOffset }
