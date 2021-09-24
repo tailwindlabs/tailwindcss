@@ -17,6 +17,7 @@ import {
   transformAllClasses,
   transformLastClasses,
   asLength,
+  asURL,
   asLookupValue,
 } from './util/pluginUtils'
 import packageJson from '../package.json'
@@ -1361,7 +1362,7 @@ export let backgroundOpacity = createUtilityPlugin('backgroundOpacity', [
 export let backgroundImage = createUtilityPlugin(
   'backgroundImage',
   [['bg', ['background-image']]],
-  { resolveArbitraryValue: asLookupValue }
+  { resolveArbitraryValue: [asLookupValue, asURL] }
 )
 export let gradientColorStops = (() => {
   function transparentTo(value) {
@@ -1482,7 +1483,7 @@ export let stroke = ({ matchUtilities, theme }) => {
 }
 
 export let strokeWidth = createUtilityPlugin('strokeWidth', [['stroke', ['stroke-width']]], {
-  resolveArbitraryValue: asLength,
+  resolveArbitraryValue: [asLength, asURL],
 })
 
 export let objectFit = ({ addUtilities }) => {

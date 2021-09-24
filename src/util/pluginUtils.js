@@ -175,6 +175,9 @@ export function asValue(modifier, lookup = {}, { validate = () => true } = {}) {
     .replace(/^_/g, ' ')
     .replace(/\\_/g, '_')
 
+  // Keep raw strings if it starts with `url(`
+  if (value.startsWith('url(')) return value
+
   // add spaces around operators inside calc() that do not follow an operator or (
   return value.replace(
     /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
@@ -236,6 +239,12 @@ export function asAngle(modifier, lookup = {}) {
   return asUnit(modifier, ['deg', 'grad', 'rad', 'turn'], lookup)
 }
 
+export function asURL(modifier, lookup = {}) {
+  return asValue(modifier, lookup, {
+    validate: (value) => value.startsWith('url('),
+  })
+}
+
 export function asLength(modifier, lookup = {}) {
   return asUnit(
     modifier,
@@ -271,6 +280,7 @@ let typeMap = {
   color: asColor,
   angle: asAngle,
   length: asLength,
+  url: asURL,
   lookup: asLookupValue,
 }
 

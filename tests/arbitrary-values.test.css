@@ -275,6 +275,12 @@
 .bg-opacity-\[var\(--value\)\] {
   --tw-bg-opacity: var(--value);
 }
+.bg-\[url\(\'\/path-to-image\.png\'\)\] {
+  background-image: url('/path-to-image.png');
+}
+.bg-\[url\:var\(--url\)\] {
+  background-image: var(--url);
+}
 .from-\[\#da5b66\] {
   --tw-gradient-from: #da5b66;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(218 91 102 / 0));
@@ -304,6 +310,9 @@
 }
 .stroke-\[\#da5b66\] {
   stroke: #da5b66;
+}
+.stroke-\[url\(\#icon-gradient\)\] {
+  stroke-width: url(#icon-gradient);
 }
 .object-\[50\%\2c 50\%\] {
   object-position: 50% 50%;
