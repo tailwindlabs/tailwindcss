@@ -292,9 +292,7 @@ function splitAtFirst(input, delim) {
   return [input.slice(0, idx), input.slice(idx + 1)]
 }
 
-export function coerceValue(type, modifier, values, tailwindConfig) {
-  let [scaleType, arbitraryType = scaleType] = [].concat(type)
-
+export function coerceValue(types, modifier, values, tailwindConfig) {
   if (isArbitraryValue(modifier)) {
     let [explicitType, value] = splitAtFirst(modifier.slice(1, -1), ':')
 
@@ -305,9 +303,13 @@ export function coerceValue(type, modifier, values, tailwindConfig) {
     if (value.length > 0 && supportedTypes.includes(explicitType)) {
       return [asValue(`[${value}]`, values, tailwindConfig), explicitType]
     }
-
-    return [typeMap[arbitraryType](modifier, values, tailwindConfig), arbitraryType]
   }
 
-  return [typeMap[scaleType](modifier, values, tailwindConfig), scaleType]
+  // Find first matching type
+  for (let type of [].concat(types)) {
+    let result = typeMap[type](modifier, values, tailwindConfig)
+    if (result) return [result, type]
+  }
+
+  return []
 }
