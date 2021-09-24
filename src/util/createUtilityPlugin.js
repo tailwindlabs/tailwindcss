@@ -39,7 +39,9 @@ export default function createUtilityPlugin(
                 Object.entries(theme(themeKey) ?? {}).filter(([modifier]) => modifier !== 'DEFAULT')
               )
             : theme(themeKey),
-          type: asMap.get(resolveArbitraryValue) ?? 'any',
+          type: Array.isArray(resolveArbitraryValue)
+            ? resolveArbitraryValue.map((typeResolver) => asMap.get(typeResolver) ?? 'any')
+            : asMap.get(resolveArbitraryValue) ?? 'any',
         }
       )
     }
