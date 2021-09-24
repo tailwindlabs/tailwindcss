@@ -976,7 +976,7 @@ export let space = ({ matchUtilities, addUtilities, theme }) => {
         }
       },
     },
-    { values: theme('space'), type: 'any' }
+    { values: theme('space') }
   )
 
   addUtilities({
@@ -1073,7 +1073,7 @@ export let divideOpacity = ({ matchUtilities, theme }) => {
         return { [`& > :not([hidden]) ~ :not([hidden])`]: { '--tw-divide-opacity': value } }
       },
     },
-    { values: theme('divideOpacity'), type: 'any' }
+    { values: theme('divideOpacity') }
   )
 }
 
@@ -1668,7 +1668,7 @@ export let placeholderOpacity = ({ matchUtilities, theme }) => {
         return { ['&::placeholder']: { '--tw-placeholder-opacity': value } }
       },
     },
-    { values: theme('placeholderOpacity'), type: 'any' }
+    { values: theme('placeholderOpacity') }
   )
 }
 
@@ -1782,7 +1782,7 @@ export let outline = ({ matchUtilities, theme }) => {
         return { outline, 'outline-offset': outlineOffset }
       },
     },
-    { values: theme('outline'), type: 'any' }
+    { values: theme('outline') }
   )
 }
 
@@ -1886,7 +1886,7 @@ export let blur = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('blur'), type: 'any' }
+    { values: theme('blur') }
   )
 }
 
@@ -1901,7 +1901,7 @@ export let brightness = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('brightness'), type: 'any' }
+    { values: theme('brightness') }
   )
 }
 
@@ -1916,7 +1916,7 @@ export let contrast = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('contrast'), type: 'any' }
+    { values: theme('contrast') }
   )
 }
 
@@ -1948,7 +1948,7 @@ export let grayscale = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('grayscale'), type: 'any' }
+    { values: theme('grayscale') }
   )
 }
 
@@ -1963,7 +1963,7 @@ export let hueRotate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('hueRotate'), type: 'any' }
+    { values: theme('hueRotate') }
   )
 }
 
@@ -1978,7 +1978,7 @@ export let invert = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('invert'), type: 'any' }
+    { values: theme('invert') }
   )
 }
 
@@ -1993,7 +1993,7 @@ export let saturate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('saturate'), type: 'any' }
+    { values: theme('saturate') }
   )
 }
 
@@ -2008,7 +2008,7 @@ export let sepia = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('sepia'), type: 'any' }
+    { values: theme('sepia') }
   )
 }
 
@@ -2054,7 +2054,7 @@ export let backdropBlur = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropBlur'), type: 'any' }
+    { values: theme('backdropBlur') }
   )
 }
 
@@ -2069,7 +2069,7 @@ export let backdropBrightness = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropBrightness'), type: 'any' }
+    { values: theme('backdropBrightness') }
   )
 }
 
@@ -2084,7 +2084,7 @@ export let backdropContrast = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropContrast'), type: 'any' }
+    { values: theme('backdropContrast') }
   )
 }
 
@@ -2099,7 +2099,7 @@ export let backdropGrayscale = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropGrayscale'), type: 'any' }
+    { values: theme('backdropGrayscale') }
   )
 }
 
@@ -2114,7 +2114,7 @@ export let backdropHueRotate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropHueRotate'), type: 'any' }
+    { values: theme('backdropHueRotate') }
   )
 }
 
@@ -2129,7 +2129,7 @@ export let backdropInvert = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropInvert'), type: 'any' }
+    { values: theme('backdropInvert') }
   )
 }
 
@@ -2144,7 +2144,7 @@ export let backdropOpacity = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropOpacity'), type: 'any' }
+    { values: theme('backdropOpacity') }
   )
 }
 
@@ -2159,7 +2159,7 @@ export let backdropSaturate = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropSaturate'), type: 'any' }
+    { values: theme('backdropSaturate') }
   )
 }
 
@@ -2174,7 +2174,7 @@ export let backdropSepia = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('backdropSepia'), type: 'any' }
+    { values: theme('backdropSepia') }
   )
 }
 
@@ -2230,7 +2230,7 @@ export let transitionProperty = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('transitionProperty'), type: 'any' }
+    { values: theme('transitionProperty') }
   )
 }
 
