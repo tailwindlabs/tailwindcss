@@ -2,6 +2,17 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import { flagEnabled } from '../featureFlags'
 
+function isPseudoElement(n) {
+  if (n.type !== 'pseudo') {
+    return false
+  }
+
+  return (
+    n.value.startsWith('::') ||
+    [':before', ':after', ':first-line', ':first-letter'].includes(n.value)
+  )
+}
+
 function minimumImpactSelector(nodes) {
   let rest = nodes
     // Keep all pseudo & combinator types (:not([hidden]) ~ :not([hidden]))
@@ -9,7 +20,7 @@ function minimumImpactSelector(nodes) {
     // Remove leading pseudo's (:hover, :focus, ...)
     .filter((n, idx, all) => {
       // Keep pseudo elements
-      if (n.type === 'pseudo' && n.value.startsWith('::')) return true
+      if (isPseudoElement(n)) return true
 
       if (idx === 0 && n.type === 'pseudo') return false
       if (idx > 0 && n.type === 'pseudo' && all[idx - 1].type === 'pseudo') return false
