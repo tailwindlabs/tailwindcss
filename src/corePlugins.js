@@ -16,9 +16,6 @@ import {
   transformAllSelectors,
   transformAllClasses,
   transformLastClasses,
-  asLength,
-  asURL,
-  asLookupValue,
 } from './util/pluginUtils'
 import packageJson from '../package.json'
 import log from './util/log'
@@ -617,12 +614,15 @@ export let display = ({ addUtilities }) => {
 }
 
 export let aspectRatio = createUtilityPlugin('aspectRatio', [['aspect', ['aspect-ratio']]])
+
 export let height = createUtilityPlugin('height', [['h', ['height']]])
 export let maxHeight = createUtilityPlugin('maxHeight', [['max-h', ['maxHeight']]])
 export let minHeight = createUtilityPlugin('minHeight', [['min-h', ['minHeight']]])
+
 export let width = createUtilityPlugin('width', [['w', ['width']]])
 export let minWidth = createUtilityPlugin('minWidth', [['min-w', ['minWidth']]])
 export let maxWidth = createUtilityPlugin('maxWidth', [['max-w', ['maxWidth']]])
+
 export let flex = createUtilityPlugin('flex')
 export let flexShrink = createUtilityPlugin('flexShrink', [['flex-shrink', ['flex-shrink']]])
 export let flexGrow = createUtilityPlugin('flexGrow', [['flex-grow', ['flex-grow']]])
@@ -1013,7 +1013,7 @@ export let divideWidth = ({ matchUtilities, addUtilities, theme }) => {
         }
       },
     },
-    { values: theme('divideWidth'), type: 'length' }
+    { values: theme('divideWidth'), type: ['line-width', 'length'] }
   )
 
   addUtilities({
@@ -1199,7 +1199,7 @@ export let borderWidth = createUtilityPlugin(
       ['border-l', [['@defaults border-width', {}], 'border-left-width']],
     ],
   ],
-  { resolveArbitraryValue: asLength }
+  { type: ['line-width', 'length'] }
 )
 
 export let borderStyle = ({ addUtilities }) => {
@@ -1249,7 +1249,7 @@ export let borderColor = ({ addBase, matchUtilities, theme, corePlugins }) => {
     },
     {
       values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
-      type: 'color',
+      type: ['color'],
     }
   )
 
@@ -1346,7 +1346,7 @@ export let backgroundOpacity = createUtilityPlugin('backgroundOpacity', [
 export let backgroundImage = createUtilityPlugin(
   'backgroundImage',
   [['bg', ['background-image']]],
-  { resolveArbitraryValue: [asLookupValue, asURL] }
+  { type: ['lookup', 'image', 'url'] }
 )
 export let gradientColorStops = (() => {
   function transparentTo(value) {
@@ -1399,7 +1399,7 @@ export let boxDecorationBreak = ({ addUtilities }) => {
 }
 
 export let backgroundSize = createUtilityPlugin('backgroundSize', [['bg', ['background-size']]], {
-  resolveArbitraryValue: asLookupValue,
+  type: ['lookup', 'length', 'percentage'],
 })
 
 export let backgroundAttachment = ({ addUtilities }) => {
@@ -1422,7 +1422,7 @@ export let backgroundClip = ({ addUtilities }) => {
 export let backgroundPosition = createUtilityPlugin(
   'backgroundPosition',
   [['bg', ['background-position']]],
-  { resolveArbitraryValue: asLookupValue }
+  { type: ['lookup', 'position'] }
 )
 
 export let backgroundRepeat = ({ addUtilities }) => {
@@ -1462,12 +1462,12 @@ export let stroke = ({ matchUtilities, theme }) => {
         return { stroke: toColorValue(value) }
       },
     },
-    { values: flattenColorPalette(theme('stroke')), type: 'color' }
+    { values: flattenColorPalette(theme('stroke')), type: ['color', 'url'] }
   )
 }
 
 export let strokeWidth = createUtilityPlugin('strokeWidth', [['stroke', ['stroke-width']]], {
-  resolveArbitraryValue: [asLength, asURL],
+  type: ['length', 'number', 'percentage'],
 })
 
 export let objectFit = ({ addUtilities }) => {
@@ -1522,7 +1522,7 @@ export let verticalAlign = ({ addUtilities, matchUtilities }) => {
 }
 
 export let fontFamily = createUtilityPlugin('fontFamily', [['font', ['fontFamily']]], {
-  resolveArbitraryValue: asLookupValue,
+  type: ['lookup', 'generic-name', 'family-name'],
 })
 
 export let fontSize = ({ matchUtilities, theme }) => {
@@ -1541,12 +1541,12 @@ export let fontSize = ({ matchUtilities, theme }) => {
         }
       },
     },
-    { values: theme('fontSize'), type: 'length' }
+    { values: theme('fontSize'), type: ['absolute-size', 'relative-size', 'length', 'percentage'] }
   )
 }
 
 export let fontWeight = createUtilityPlugin('fontWeight', [['font', ['fontWeight']]], {
-  resolveArbitraryValue: asLookupValue,
+  type: ['lookup', 'number'],
 })
 
 export let textTransform = ({ addUtilities }) => {
@@ -1859,7 +1859,7 @@ export let ringOpacity = createUtilityPlugin(
 export let ringOffsetWidth = createUtilityPlugin(
   'ringOffsetWidth',
   [['ring-offset', ['--tw-ring-offset-width']]],
-  { resolveArbitraryValue: asLength }
+  { type: 'length' }
 )
 
 export let ringOffsetColor = ({ matchUtilities, theme }) => {

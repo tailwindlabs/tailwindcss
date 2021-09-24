@@ -2,7 +2,21 @@ import selectorParser from 'postcss-selector-parser'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
 import isKeyframeRule from './isKeyframeRule'
-import { parseColor } from './color'
+import {
+  normalize,
+  length,
+  number,
+  percentage,
+  url,
+  color as validateColor,
+  genericName,
+  familyName,
+  image,
+  absoluteSize,
+  relativeSize,
+  position,
+  lineWidth,
+} from './dataTypes'
 
 export function applyPseudoToMarker(selector, marker, state, join) {
   let states = [state]
@@ -159,7 +173,7 @@ export function asValue(modifier, lookup = {}, { validate = () => true } = {}) {
     return value
   }
 
-  if (modifier[0] !== '[' || modifier[modifier.length - 1] !== ']') {
+  if (!isArbitraryValue(modifier)) {
     return undefined
   }
 
@@ -169,32 +183,7 @@ export function asValue(modifier, lookup = {}, { validate = () => true } = {}) {
     return undefined
   }
 
-  // convert `_` to ` `, escept for escaped underscores `\_`
-  value = value
-    .replace(/([^\\])_/g, '$1 ')
-    .replace(/^_/g, ' ')
-    .replace(/\\_/g, '_')
-
-  // Keep raw strings if it starts with `url(`
-  if (value.startsWith('url(')) return value
-
-  // add spaces around operators inside calc() that do not follow an operator or (
-  return value.replace(
-    /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
-    '$1 $2 '
-  )
-}
-
-export function asUnit(modifier, units, lookup = {}) {
-  return asValue(modifier, lookup, {
-    validate: (value) => {
-      let unitsPattern = `(?:${units.join('|')})`
-      return (
-        new RegExp(`${unitsPattern}$`).test(value) ||
-        new RegExp(`^calc\\(.+?${unitsPattern}`).test(value)
-      )
-    },
-  })
+  return normalize(value)
 }
 
 function isArbitraryValue(input) {
@@ -230,58 +219,34 @@ export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
     return withAlphaValue(lookup[color], tailwindConfig.theme.opacity[alpha])
   }
 
-  return asValue(modifier, lookup, {
-    validate: (value) => parseColor(value) !== null,
-  })
-}
-
-export function asAngle(modifier, lookup = {}) {
-  return asUnit(modifier, ['deg', 'grad', 'rad', 'turn'], lookup)
-}
-
-export function asURL(modifier, lookup = {}) {
-  return asValue(modifier, lookup, {
-    validate: (value) => value.startsWith('url('),
-  })
-}
-
-export function asLength(modifier, lookup = {}) {
-  return asUnit(
-    modifier,
-    [
-      'cm',
-      'mm',
-      'Q',
-      'in',
-      'pc',
-      'pt',
-      'px',
-      'em',
-      'ex',
-      'ch',
-      'rem',
-      'lh',
-      'vw',
-      'vh',
-      'vmin',
-      'vmax',
-      '%',
-    ],
-    lookup
-  )
+  return asValue(modifier, lookup, { validate: validateColor })
 }
 
 export function asLookupValue(modifier, lookup = {}) {
   return lookup[modifier]
 }
 
+function guess(validate) {
+  return (modifier, lookup) => {
+    return asValue(modifier, lookup, { validate })
+  }
+}
+
 let typeMap = {
   any: asValue,
   color: asColor,
-  angle: asAngle,
-  length: asLength,
-  url: asURL,
+  url: guess(url),
+  image: guess(image),
+  length: guess(length),
+  percentage: guess(percentage),
+  position: guess(position),
   lookup: asLookupValue,
+  'generic-name': guess(genericName),
+  'family-name': guess(familyName),
+  number: guess(number),
+  'line-width': guess(lineWidth),
+  'absolute-size': guess(absoluteSize),
+  'relative-size': guess(relativeSize),
 }
 
 let supportedTypes = Object.keys(typeMap)
