@@ -42,9 +42,9 @@
     "*.js"
   ],
   "devDependencies": {
-    "@swc/cli": "^0.1.46",
-    "@swc/core": "^1.2.66",
-    "@swc/jest": "^0.1.4",
+    "@swc/cli": "^0.1.50",
+    "@swc/core": "^1.2.90",
+    "@swc/jest": "^0.1.5",
     "@swc/register": "^0.1.7",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "@vercel/ncc": "^0.31.1",
