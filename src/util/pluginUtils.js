@@ -175,6 +175,9 @@ export function asValue(modifier, lookup = {}, { validate = () => true } = {}) {
     .replace(/^_/g, ' ')
     .replace(/\\_/g, '_')
 
+  // Keep raw strings if it starts with `url(`
+  if (value.startsWith('url(')) return value
+
   // add spaces around operators inside calc() that do not follow an operator or (
   return value.replace(
     /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
