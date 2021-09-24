@@ -236,6 +236,12 @@ export function asAngle(modifier, lookup = {}) {
   return asUnit(modifier, ['deg', 'grad', 'rad', 'turn'], lookup)
 }
 
+export function asURL(modifier, lookup = {}) {
+  return asValue(modifier, lookup, {
+    validate: (value) => value.startsWith('url('),
+  })
+}
+
 export function asLength(modifier, lookup = {}) {
   return asUnit(
     modifier,
@@ -271,6 +277,7 @@ let typeMap = {
   color: asColor,
   angle: asAngle,
   length: asLength,
+  url: asURL,
   lookup: asLookupValue,
 }
 

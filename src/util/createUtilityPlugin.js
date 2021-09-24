@@ -1,11 +1,12 @@
 import transformThemeValue from './transformThemeValue'
-import { asValue, asColor, asAngle, asLength, asLookupValue } from '../util/pluginUtils'
+import { asValue, asColor, asAngle, asLength, asURL, asLookupValue } from '../util/pluginUtils'
 
 let asMap = new Map([
   [asValue, 'any'],
   [asColor, 'color'],
   [asAngle, 'angle'],
   [asLength, 'length'],
+  [asURL, 'url'],
   [asLookupValue, 'lookup'],
 ])
 
