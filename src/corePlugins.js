@@ -520,35 +520,19 @@ export let position = ({ addUtilities }) => {
   })
 }
 
-export let inset = ({ matchUtilities, theme }) => {
-  let options = {
-    values: theme('inset'),
-    type: 'any',
-  }
-
-  matchUtilities(
-    { inset: (value) => ({ top: value, right: value, bottom: value, left: value }) },
-    options
-  )
-
-  matchUtilities(
-    {
-      'inset-x': (value) => ({ left: value, right: value }),
-      'inset-y': (value) => ({ top: value, bottom: value }),
-    },
-    options
-  )
-
-  matchUtilities(
-    {
-      top: (top) => ({ top }),
-      right: (right) => ({ right }),
-      bottom: (bottom) => ({ bottom }),
-      left: (left) => ({ left }),
-    },
-    options
-  )
-}
+export let inset = createUtilityPlugin('inset', [
+  ['inset', ['top', 'right', 'bottom', 'left']],
+  [
+    ['inset-x', ['left', 'right']],
+    ['inset-y', ['top', 'bottom']],
+  ],
+  [
+    ['top', ['top']],
+    ['right', ['right']],
+    ['bottom', ['bottom']],
+    ['left', ['left']],
+  ],
+])
 
 export let isolation = ({ addUtilities }) => {
   addUtilities({
