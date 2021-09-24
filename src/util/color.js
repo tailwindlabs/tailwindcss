@@ -8,6 +8,7 @@ let ALPHA_SEP = `\\s*[,/]\\s*`
 let RGB_HSL = new RegExp(
   `^(rgb|hsl)a?\\(\\s*(${VALUE})${SEP}(${VALUE})${SEP}(${VALUE})(?:${ALPHA_SEP}(${VALUE}))?\\s*\\)$`
 )
+let COLOR_VAR = /(rgb|hsl)\(\s*(var\(.*?\))\s*\)/
 
 export function parseColor(value) {
   if (typeof value !== 'string') {
@@ -37,6 +38,15 @@ export function parseColor(value) {
     }
   }
 
+  let colorVar = value.match(COLOR_VAR)
+
+  if (colorVar !== null) {
+    return {
+      mode: colorVar[1],
+      color: colorVar[2],
+    }
+  }
+
   let match = value.match(RGB_HSL)
 
   if (match !== null) {
@@ -52,5 +62,10 @@ export function parseColor(value) {
 
 export function formatColor({ mode, color, alpha }) {
   let hasAlpha = alpha !== undefined
+
+  if (typeof color === 'string') {
+    return `${mode}(${color}${hasAlpha ? ` / ${alpha}` : ''})`
+  }
+
   return `${mode}(${color.join(' ')}${hasAlpha ? ` / ${alpha}` : ''})`
 }

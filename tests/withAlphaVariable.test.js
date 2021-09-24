@@ -58,12 +58,12 @@ test('it ignores colors that cannot be parsed', () => {
   })
   expect(
     withAlphaVariable({
-      color: 'rgb(var(--color))',
+      color: 'rgba(var(--color))',
       property: 'background-color',
       variable: '--tw-bg-opacity',
     })
   ).toEqual({
-    'background-color': 'rgb(var(--color))',
+    'background-color': 'rgba(var(--color))',
   })
 })
 
@@ -180,6 +180,19 @@ test('it allows a closure to be passed', () => {
   ).toEqual({
     '--tw-bg-opacity': '1',
     'background-color': 'rgba(0, 0, 0, var(--tw-bg-opacity))',
+  })
+})
+
+test('it allows css variables to be passed', () => {
+  expect(
+    withAlphaVariable({
+      color: 'rgb(var(--test-var))',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'rgb(var(--test-var) / var(--tw-bg-opacity))',
   })
 })
 
