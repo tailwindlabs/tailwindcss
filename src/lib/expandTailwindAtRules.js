@@ -7,10 +7,10 @@ let env = sharedState.env
 let contentMatchCache = sharedState.contentMatchCache
 
 const PATTERNS = [
-  "([^<>\"'`\\s]*\\['[^<>\"'`\\s]*'\\])", // `content-['hello']` but not `content-['hello']']`
-  '([^<>"\'`\\s]*\\["[^<>"\'`\\s]*"\\])', // `content-["hello"]` but not `content-["hello"]"]`
-  '([^<>"\'`\\s]*\\[[^<>"\'`\\s]+\\])', // `fill-[#bada55]`
-  '([^<>"\'`\\s]*[^<>"\'`\\s:])', // `px-1.5`, `uppercase` but not `uppercase:`
+  /([^<>"'`\s]*\['[^"'`\s]*'\])/.source, // `content-['hello']` but not `content-['hello']']`
+  /([^<>"'`\s]*\["[^"'`\s]*"\])/.source, // `content-["hello"]` but not `content-["hello"]"]`
+  /([^<>"'`\s]*\[[^"'`\s]+\])/.source, // `fill-[#bada55]`
+  /([^<>"'`\s]*[^"'`\s:])/.source, //  `px-1.5`, `uppercase` but not `uppercase:`].join('|')
 ].join('|')
 const BROAD_MATCH_GLOBAL_REGEXP = new RegExp(PATTERNS, 'g')
 const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g
