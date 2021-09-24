@@ -300,13 +300,27 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         classList.add([prefixedIdentifier, options])
 
-        function wrapped(modifier) {
+        function wrapped(modifier, { isOnlyPlugin }) {
           let { type = 'any' } = options
           type = [].concat(type)
           let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
 
-          if (!type.includes(coercedType) || value === undefined) {
+          if (value === undefined) {
             return []
+          }
+
+          if (!type.includes(coercedType)) {
+            if (isOnlyPlugin) {
+              log.warn([
+                `Unnecessary typehint \`${coercedType}\` in \`${identifier}-${modifier}\`.`,
+                `You can safely update it to \`${identifier}-${modifier.replace(
+                  coercedType + ':',
+                  ''
+                )}\`.`,
+              ])
+            } else {
+              return []
+            }
           }
 
           if (!isValidArbitraryValue(value)) {
