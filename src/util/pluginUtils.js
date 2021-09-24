@@ -284,8 +284,12 @@ let typeMap = {
   lookup: asLookupValue,
 }
 
+let supportedTypes = Object.keys(typeMap)
+
 function splitAtFirst(input, delim) {
-  return (([first, ...rest]) => [first, rest.join(delim)])(input.split(delim))
+  let idx = input.indexOf(delim)
+  if (idx === -1) return [undefined, input]
+  return [input.slice(0, idx), input.slice(idx + 1)]
 }
 
 export function coerceValue(type, modifier, values, tailwindConfig) {
@@ -294,7 +298,11 @@ export function coerceValue(type, modifier, values, tailwindConfig) {
   if (isArbitraryValue(modifier)) {
     let [explicitType, value] = splitAtFirst(modifier.slice(1, -1), ':')
 
-    if (value.length > 0 && Object.keys(typeMap).includes(explicitType)) {
+    if (explicitType !== undefined && !supportedTypes.includes(explicitType)) {
+      return []
+    }
+
+    if (value.length > 0 && supportedTypes.includes(explicitType)) {
       return [asValue(`[${value}]`, values, tailwindConfig), explicitType]
     }
 
