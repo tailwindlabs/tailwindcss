@@ -16,6 +16,58 @@ test('arbitrary values', () => {
   })
 })
 
+it('should support arbitrary values for various background utilities', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <!-- Lookup -->
+          <div class="bg-gradient-to-r"></div>
+          <div class="bg-red-500"></div>
+
+          <!-- By implicit type -->
+          <div class="bg-[url('/image-1-0.png')]"></div>
+          <div class="bg-[#ff0000]"></div>
+
+          <!-- By explicit type -->
+          <div class="bg-[url:var(--image-url)]"></div>
+          <div class="bg-[color:var(--bg-color)]"></div>
+        `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .bg-red-500 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+      }
+
+      .bg-\\[\\#ff0000\\] {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+      }
+
+      .bg-\\[color\\:var\\(--bg-color\\)\\] {
+        background-color: var(--bg-color);
+      }
+
+      .bg-gradient-to-r {
+        background-image: linear-gradient(to right, var(--tw-gradient-stops));
+      }
+
+      .bg-\\[url\\(\\'\\/image-1-0\\.png\\'\\)\\] {
+        background-image: url('/image-1-0.png');
+      }
+
+      .bg-\\[url\\:var\\(--image-url\\)\\] {
+        background-image: var(--image-url);
+      }
+    `)
+  })
+})
+
 it('should not generate any css if an unknown typehint is used', () => {
   let config = {
     content: [
@@ -59,6 +111,8 @@ it('should convert _ to spaces', () => {
           <div class="auto-cols-[minmax(0,_1fr)]"></div>
           <div class="drop-shadow-[0px_1px_3px_black]"></div>
           <div class="content-[_hello_world_]"></div>
+          <div class="content-[___abc____]"></div>
+          <div class="content-['__hello__world__']"></div>
         `,
       },
     ],
@@ -113,8 +167,17 @@ it('should convert _ to spaces', () => {
         --tw-drop-shadow: drop-shadow(0px 1px 3px black);
         filter: var(--tw-filter);
       }
+
       .content-\\[_hello_world_\\] {
         content: hello world;
+      }
+
+      .content-\\[___abc____\\] {
+        content: abc;
+      }
+
+      .content-\\[\\'__hello__world__\\'\\] {
+        content: '  hello  world  ';
       }
     `)
   })
