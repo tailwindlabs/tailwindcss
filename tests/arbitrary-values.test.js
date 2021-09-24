@@ -30,6 +30,18 @@ it('should not generate any css if an unknown typehint is used', () => {
   })
 })
 
+it('should handle unknown typehints', () => {
+  let config = { content: [{ raw: html`<div class="w-[length:12px]"></div>` }] }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(`
+      .w-\\[length\\:12px\\] {
+        width: 12px;
+      }
+    `)
+  })
+})
+
 it('should convert _ to spaces', () => {
   let config = {
     content: [
