@@ -13,8 +13,9 @@ function warn({ version, from, to }) {
 }
 
 export default {
-  transparent: 'transparent',
+  inherit: 'inherit',
   current: 'currentColor',
+  transparent: 'transparent',
   black: '#000',
   white: '#fff',
   slate: {
