@@ -123,6 +123,8 @@ module.exports = {
 
 **This list should include *any* files in your project that reference any of your styles by name.** For example, if you have a JS file in your project that dynamically toggles some classes in your HTML, you should make sure to include that file in this list.
 
+When using `important` with the [selector strategy](/docs/configuration#selector-strategy), be sure that the template file that includes your root selector is included in your purge configuration, otherwise all of your CSS will be removed when building for production.
+
 Now whenever you compile your CSS with `NODE_ENV` set to `production`, Tailwind will automatically purge unused styles from your CSS.
 
 ### Enabling manually
