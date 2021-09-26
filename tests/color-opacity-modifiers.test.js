@@ -60,6 +60,71 @@ test('missing alpha generates nothing', async () => {
   })
 })
 
+test('arbitrary color with opacity from scale', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: 'bg-[wheat]/50',
+      },
+    ],
+    theme: {},
+    plugins: [],
+  }
+
+  let css = `@tailwind utilities`
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .bg-\\[wheat\\]\\/50 {
+        background-color: rgb(245 222 179 / 0.5);
+      }
+    `)
+  })
+})
+
+test('arbitrary color with arbitrary opacity', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: 'bg-[#bada55]/[0.2]',
+      },
+    ],
+    theme: {},
+    plugins: [],
+  }
+
+  let css = `@tailwind utilities`
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .bg-\\[\\#bada55\\]\\/\\[0\\.2\\] {
+        background-color: rgb(186 218 85 / 0.2);
+      }
+    `)
+  })
+})
+
+test('undefined theme color with opacity from scale', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: 'bg-garbage/50',
+      },
+    ],
+    theme: {},
+    plugins: [],
+  }
+
+  let css = `@tailwind utilities`
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(``)
+  })
+})
+
 test('values not in the opacity config are ignored', async () => {
   let config = {
     content: [{ raw: html`<div class="bg-red-500/29"></div>` }],
