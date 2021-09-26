@@ -10,7 +10,7 @@ import normalizePath from 'normalize-path'
 import hash from '../util/hashConfig'
 import log from '../util/log'
 import getModuleDependencies from '../lib/getModuleDependencies'
-import resolveConfig from '../../resolveConfig'
+import resolveConfig from '../public/resolve-config'
 import resolveConfigPath from '../util/resolveConfigPath'
 import { getContext } from './setupContextUtils'
 

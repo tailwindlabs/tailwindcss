@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}-tailwindcss
+          key: nodeModules-${{ hashFiles('./package-lock.json') }}-${{ matrix.node-version }}-tailwindcss
           restore-keys: |
             nodeModules-
 
@@ -45,7 +45,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./integrations/**/node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}-${{ matrix.integration }}-integrations
+          key: nodeModules-${{ hashFiles('./integrations/**/package-lock.json') }}-${{ matrix.node-version }}-${{ matrix.integration }}-integrations
           restore-keys: |
             nodeModules-
 

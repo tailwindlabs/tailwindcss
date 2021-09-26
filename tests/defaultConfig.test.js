@@ -1,4 +1,4 @@
-import config from '../defaultConfig.js'
+import config from '../src/public/default-config'
 import configStub from '../stubs/defaultConfig.stub.js'
 
 test('the default config matches the stub', () => {
