@@ -36,7 +36,8 @@ jobs:
         run: npm install
         env:
           CI: true
-      - run: npm run prepublishOnly
-      - run: npm test
+
+      - name: Test
+        run: npm test
         env:
           CI: true
