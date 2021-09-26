@@ -299,6 +299,12 @@
 .cursor-pointer {
   cursor: pointer;
 }
+.touch-pan-y {
+  touch-action: pan-y;
+}
+.touch-manipulation {
+  touch-action: manipulation;
+}
 .select-none {
   user-select: none;
 }
