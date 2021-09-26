@@ -24,7 +24,6 @@ test('it works', () => {
       },
     },
     plugins: [
-      require('@tailwindcss/aspect-ratio'),
       function ({ addVariant }) {
         addVariant(
           'foo',
