@@ -46,7 +46,6 @@
     "@swc/core": "^1.2.90",
     "@swc/jest": "^0.1.5",
     "@swc/register": "^0.1.7",
-    "@tailwindcss/aspect-ratio": "^0.2.1",
     "autoprefixer": "^10.3.3",
     "cross-env": "^7.0.3",
     "cssnano": "^5.0.8",
