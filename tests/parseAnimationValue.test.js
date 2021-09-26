@@ -38,6 +38,19 @@ describe('Tailwind Defaults', () => {
   })
 })
 
+describe('css variables', () => {
+  it('should be possible to use css variables', () => {
+    let parsed = parseAnimationValue('jump var(--animation-duration, 10s) linear infinite')
+    expect(parsed[0]).toEqual({
+      value: 'jump var(--animation-duration, 10s) linear infinite',
+      name: 'jump',
+      timingFunction: 'linear',
+      iterationCount: 'infinite',
+      unknown: ['var(--animation-duration, 10s)'],
+    })
+  })
+})
+
 describe('MDN Examples', () => {
   it.each([
     [
