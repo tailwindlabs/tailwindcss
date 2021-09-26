@@ -207,16 +207,23 @@ export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
 
   let [color, alpha] = splitAlpha(modifier)
 
-  if (lookup[color] !== undefined) {
+  if (alpha !== undefined) {
+    let normalizedColor =
+      lookup[color] ?? (isArbitraryValue(color) ? color.slice(1, -1) : undefined)
+
+    if (normalizedColor === undefined) {
+      return undefined
+    }
+
     if (isArbitraryValue(alpha)) {
-      return withAlphaValue(lookup[color], alpha.slice(1, -1))
+      return withAlphaValue(normalizedColor, alpha.slice(1, -1))
     }
 
     if (tailwindConfig.theme?.opacity?.[alpha] === undefined) {
       return undefined
     }
 
-    return withAlphaValue(lookup[color], tailwindConfig.theme.opacity[alpha])
+    return withAlphaValue(normalizedColor, tailwindConfig.theme.opacity[alpha])
   }
 
   return asValue(modifier, lookup, { validate: validateColor })
