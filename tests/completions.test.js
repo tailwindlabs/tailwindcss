@@ -1,4 +1,4 @@
-import resolveConfig from '../resolveConfig'
+import resolveConfig from '../src/public/resolve-config'
 import { createContext } from '../src/lib/setupContextUtils'
 
 it('should generate completions for every possible class, without variants', () => {

@@ -1,4 +1,4 @@
-import createPlugin from './../plugin'
+import createPlugin from '../src/public/create-plugin'
 import { run, html, css } from './util/run'
 
 test('plugins can create utilities with object syntax', () => {
