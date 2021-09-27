@@ -59,11 +59,22 @@ function getClasses(selector) {
 }
 
 function extractCandidates(node) {
-  let classes = node.type === 'rule' ? getClasses(node.selector) : []
+  let classes = []
+
+  if (node.type === 'rule') {
+    for (let selector of node.selectors) {
+      let classCandidates = getClasses(selector)
+      // At least one of the selectors contains non-"on-demandable" candidates.
+      if (classCandidates.length === 0) return []
+
+      classes = [...classes, ...classCandidates]
+    }
+    return classes
+  }
 
   if (node.type === 'atrule') {
     node.walkRules((rule) => {
-      classes = [...classes, ...getClasses(rule.selector)]
+      classes = [...classes, ...rule.selectors.flatMap((selector) => getClasses(selector))]
     })
   }
 
