@@ -456,7 +456,7 @@ function collectLayerPlugins(root) {
   return layerPlugins
 }
 
-function resolvePlugins(context, tailwindDirectives, root) {
+function resolvePlugins(context, root) {
   let corePluginList = Object.entries(corePlugins)
     .map(([name, plugin]) => {
       if (!context.tailwindConfig.corePlugins.includes(name)) {
@@ -475,7 +475,7 @@ function resolvePlugins(context, tailwindDirectives, root) {
     return typeof plugin === 'function' ? plugin : plugin.handler
   })
 
-  let layerPlugins = collectLayerPlugins(root, tailwindDirectives)
+  let layerPlugins = collectLayerPlugins(root)
 
   // TODO: This is a workaround for backwards compatibility, since custom variants
   // were historically sorted before screen/stackable variants.
@@ -667,12 +667,7 @@ function registerPlugins(plugins, context) {
   }
 }
 
-export function createContext(
-  tailwindConfig,
-  changedContent = [],
-  tailwindDirectives = new Set(),
-  root = postcss.root()
-) {
+export function createContext(tailwindConfig, changedContent = [], root = postcss.root()) {
   let context = {
     disposables: [],
     ruleCache: new Set(),
@@ -687,7 +682,7 @@ export function createContext(
     stylesheetCache: null,
   }
 
-  let resolvedPlugins = resolvePlugins(context, tailwindDirectives, root)
+  let resolvedPlugins = resolvePlugins(context, root)
   registerPlugins(resolvedPlugins, context)
 
   return context
@@ -698,7 +693,6 @@ let configContextMap = sharedState.configContextMap
 let contextSourcesMap = sharedState.contextSourcesMap
 
 export function getContext(
-  tailwindDirectives,
   root,
   result,
   tailwindConfig,
@@ -760,7 +754,7 @@ export function getContext(
 
   env.DEBUG && console.log('Setting up new context...')
 
-  let context = createContext(tailwindConfig, [], tailwindDirectives, root)
+  let context = createContext(tailwindConfig, [], root)
 
   trackModified([...contextDependencies], getFileModifiedMap(context))
 
