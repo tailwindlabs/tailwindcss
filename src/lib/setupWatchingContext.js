@@ -249,7 +249,6 @@ export default function setupWatchingContext(configOrPath) {
       }
 
       let [context, isNewContext] = getContext(
-        tailwindDirectives,
         root,
         result,
         tailwindConfig,

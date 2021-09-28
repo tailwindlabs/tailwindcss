@@ -22,7 +22,7 @@ export default function processTailwindFeatures(setupContext) {
         })
       },
       createContext(tailwindConfig, changedContent) {
-        return createContext(tailwindConfig, changedContent, tailwindDirectives, root)
+        return createContext(tailwindConfig, changedContent, root)
       },
     })(root, result)
 

@@ -139,7 +139,6 @@ export default function setupTrackingContext(configOrPath) {
       }
 
       let [context] = getContext(
-        tailwindDirectives,
         root,
         result,
         tailwindConfig,
