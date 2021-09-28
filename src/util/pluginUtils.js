@@ -18,30 +18,31 @@ import {
   lineWidth,
 } from './dataTypes'
 
-export function applyPseudoToMarker(selector, marker, state, join) {
-  let states = [state]
+export function applyStateToMarker(selector, marker, state, join) {
+  let markerIdx = selector.search(new RegExp(`${marker}[:[]`))
 
-  let markerIdx = selector.indexOf(marker + ':')
-
-  if (markerIdx !== -1) {
-    let existingMarker = selector.slice(markerIdx, selector.indexOf(' ', markerIdx))
-
-    states = states.concat(
-      selector.slice(markerIdx + marker.length + 1, existingMarker.length).split(':')
-    )
-
-    selector = selector.replace(existingMarker, '')
+  if (markerIdx === -1) {
+    return join(marker + state, selector)
   }
 
-  return join(`${[marker, ...states].join(':')}`, selector)
+  let markerSelector = selector.slice(markerIdx, selector.indexOf(' ', markerIdx))
+
+  return join(
+    marker + state + markerSelector.slice(markerIdx + marker.length),
+    selector.replace(markerSelector, '')
+  )
 }
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
     selectors.walkClasses((sel) => {
       let updatedClass = updateClass(sel.value, {
+        withAttr(className, attr) {
+          sel.parent.insertAfter(sel, selectorParser.attribute({ attribute: attr.slice(1, -1) }))
+          return className
+        },
         withPseudo(className, pseudo) {
-          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `${pseudo}` }))
+          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: pseudo }))
           return className
         },
       })
