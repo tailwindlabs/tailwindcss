@@ -149,7 +149,7 @@ function getCandidateFiles(context, tailwindConfig) {
 
   let candidateFiles = tailwindConfig.content.content
     .filter((item) => typeof item === 'string')
-    .map((contentPath) => normalizePath(path.resolve(contentPath)))
+    .map((contentPath) => normalizePath(contentPath))
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }
