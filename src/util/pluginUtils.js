@@ -18,36 +18,19 @@ import {
   lineWidth,
 } from './dataTypes'
 
-export function applyAttributeToMarker(selector, marker, state, join) {
-  let markerIdx = selector.indexOf(marker + ':')
+export function applyStateToMarker(selector, marker, state, join) {
+  let markerIdx = selector.search(new RegExp(`${marker}[:[]`))
 
-  if (markerIdx !== -1) {
-    let existingMarker = selector.slice(markerIdx, selector.indexOf(' ', markerIdx))
-
-    selector = selector.replace(existingMarker, '')
-
-    return join(existingMarker.replace(marker + ':', `${marker}[${state.slice(1, -1)}]:`), selector)
+  if (markerIdx === -1) {
+    return join(marker + state, selector)
   }
 
-  return join(`${marker}[${state.slice(1, -1)}]`, selector)
-}
+  let markerSelector = selector.slice(markerIdx, selector.indexOf(' ', markerIdx))
 
-export function applyPseudoToMarker(selector, marker, state, join) {
-  let states = [state.slice(1)]
-
-  let markerIdx = selector.indexOf(marker + ':')
-
-  if (markerIdx !== -1) {
-    let existingMarker = selector.slice(markerIdx, selector.indexOf(' ', markerIdx))
-
-    states = states.concat(
-      selector.slice(markerIdx + marker.length + 1, existingMarker.length).split(':')
-    )
-
-    selector = selector.replace(existingMarker, '')
-  }
-
-  return join(`${[marker, ...states].join(':')}`, selector)
+  return join(
+    marker + state + markerSelector.slice(markerIdx + marker.length),
+    selector.replace(markerSelector, '')
+  )
 }
 
 export function updateAllClasses(selectors, updateClass) {

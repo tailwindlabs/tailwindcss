@@ -10,8 +10,7 @@ import toColorValue from './util/toColorValue'
 import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
 import {
-  applyAttributeToMarker,
-  applyPseudoToMarker,
+  applyStateToMarker,
   updateLastClasses,
   updateAllClasses,
   transformAllSelectors,
@@ -200,21 +199,12 @@ export default {
             return null
           }
 
-          if (state.startsWith(':')) {
-            return applyPseudoToMarker(
-              variantSelector,
-              groupMarker,
-              state,
-              (marker, selector) => `${marker} ${selector}`
-            )
-          } else if (state.startsWith('[')) {
-            return applyAttributeToMarker(
-              variantSelector,
-              groupMarker,
-              state,
-              (marker, selector) => `${marker} ${selector}`
-            )
-          }
+          return applyStateToMarker(
+            variantSelector,
+            groupMarker,
+            state,
+            (marker, selector) => `${marker} ${selector}`
+          )
         })
       )
     }
@@ -236,7 +226,7 @@ export default {
             return null
           }
 
-          return applyPseudoToMarker(variantSelector, peerMarker, state, (marker, selector) =>
+          return applyStateToMarker(variantSelector, peerMarker, state, (marker, selector) =>
             selector.trim().startsWith('~') ? `${marker}${selector}` : `${marker} ~ ${selector}`
           )
         })
