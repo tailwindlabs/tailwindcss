@@ -10,6 +10,7 @@ import toColorValue from './util/toColorValue'
 import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
 import {
+  applyAttributeToMarker,
   applyPseudoToMarker,
   updateLastClasses,
   updateAllClasses,
@@ -128,11 +129,11 @@ export default {
   pseudoClassVariants: ({ config, addVariant }) => {
     let pseudoVariants = [
       // Positional
-      ['first', 'first-child'],
-      ['last', 'last-child'],
-      ['only', 'only-child'],
-      ['odd', 'nth-child(odd)'],
-      ['even', 'nth-child(even)'],
+      ['first', ':first-child'],
+      ['last', ':last-child'],
+      ['only', ':only-child'],
+      ['odd', ':nth-child(odd)'],
+      ['even', ':nth-child(even)'],
       'first-of-type',
       'last-of-type',
       'only-of-type',
@@ -140,6 +141,7 @@ export default {
       // State
       'visited',
       'target',
+      ['open', '[open]'],
 
       // Forms
       'default',
@@ -167,19 +169,23 @@ export default {
     ]
 
     for (let variant of pseudoVariants) {
-      let [variantName, state] = Array.isArray(variant) ? variant : [variant, variant]
+      let [variantName, state] = Array.isArray(variant) ? variant : [variant, `:${variant}`]
 
       addVariant(
         variantName,
-        transformAllClasses((className, { withPseudo }) => {
-          return withPseudo(`${variantName}${config('separator')}${className}`, `:${state}`)
+        transformAllClasses((className, { withAttr, withPseudo }) => {
+          if (state.startsWith(':')) {
+            return withPseudo(`${variantName}${config('separator')}${className}`, state)
+          } else if (state.startsWith('[')) {
+            return withAttr(`${variantName}${config('separator')}${className}`, state)
+          }
         })
       )
     }
 
     let groupMarker = prefixSelector(config('prefix'), '.group')
     for (let variant of pseudoVariants) {
-      let [variantName, state] = Array.isArray(variant) ? variant : [variant, variant]
+      let [variantName, state] = Array.isArray(variant) ? variant : [variant, `:${variant}`]
       let groupVariantName = `group-${variantName}`
 
       addVariant(
@@ -194,19 +200,28 @@ export default {
             return null
           }
 
-          return applyPseudoToMarker(
-            variantSelector,
-            groupMarker,
-            state,
-            (marker, selector) => `${marker} ${selector}`
-          )
+          if (state.startsWith(':')) {
+            return applyPseudoToMarker(
+              variantSelector,
+              groupMarker,
+              state,
+              (marker, selector) => `${marker} ${selector}`
+            )
+          } else if (state.startsWith('[')) {
+            return applyAttributeToMarker(
+              variantSelector,
+              groupMarker,
+              state,
+              (marker, selector) => `${marker} ${selector}`
+            )
+          }
         })
       )
     }
 
     let peerMarker = prefixSelector(config('prefix'), '.peer')
     for (let variant of pseudoVariants) {
-      let [variantName, state] = Array.isArray(variant) ? variant : [variant, variant]
+      let [variantName, state] = Array.isArray(variant) ? variant : [variant, `:${variant}`]
       let peerVariantName = `peer-${variantName}`
 
       addVariant(

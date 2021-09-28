@@ -18,8 +18,22 @@ import {
   lineWidth,
 } from './dataTypes'
 
+export function applyAttributeToMarker(selector, marker, state, join) {
+  let markerIdx = selector.indexOf(marker + ':')
+
+  if (markerIdx !== -1) {
+    let existingMarker = selector.slice(markerIdx, selector.indexOf(' ', markerIdx))
+
+    selector = selector.replace(existingMarker, '')
+
+    return join(existingMarker.replace(marker + ':', `${marker}[${state.slice(1, -1)}]:`), selector)
+  }
+
+  return join(`${marker}[${state.slice(1, -1)}]`, selector)
+}
+
 export function applyPseudoToMarker(selector, marker, state, join) {
-  let states = [state]
+  let states = [state.slice(1)]
 
   let markerIdx = selector.indexOf(marker + ':')
 
@@ -40,8 +54,12 @@ export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
     selectors.walkClasses((sel) => {
       let updatedClass = updateClass(sel.value, {
+        withAttr(className, attr) {
+          sel.parent.insertAfter(sel, selectorParser.attribute({ attribute: attr.slice(1, -1) }))
+          return className
+        },
         withPseudo(className, pseudo) {
-          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `${pseudo}` }))
+          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: pseudo }))
           return className
         },
       })
