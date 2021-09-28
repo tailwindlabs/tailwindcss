@@ -17,7 +17,7 @@ import {
   transformAllClasses,
   transformLastClasses,
 } from './util/pluginUtils'
-import packageJson from '../package.json'
+import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
 
 export default {
@@ -361,7 +361,7 @@ export default {
 
     addBase([
       postcss.comment({
-        text: `! tailwindcss v${packageJson.version} | MIT License | https://tailwindcss.com`,
+        text: `! tailwindcss v${tailwindVersion} | MIT License | https://tailwindcss.com`,
       }),
       ...preflightStyles.nodes,
     ])
