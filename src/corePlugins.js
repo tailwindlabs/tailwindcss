@@ -1168,8 +1168,9 @@ export default {
   textOverflow: ({ addUtilities }) => {
     addUtilities({
       '.truncate': { overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' },
-      '.overflow-ellipsis': { 'text-overflow': 'ellipsis' },
-      '.overflow-clip': { 'text-overflow': 'clip' },
+      '.overflow-ellipsis': { 'text-overflow': 'ellipsis' }, // Deprecated
+      '.text-ellipsis': { 'text-overflow': 'ellipsis' },
+      '.text-clip': { 'text-overflow': 'clip' },
     })
   },
 
