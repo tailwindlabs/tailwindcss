@@ -813,6 +813,76 @@ export default {
     })
   },
 
+  scrollSnapType: ({ addUtilities, addBase }) => {
+    addBase({
+      '@defaults scroll-snap-type': {
+        '--tw-scroll-snap-strictness': 'proximity',
+      },
+    })
+
+    addUtilities({
+      '.snap-none': { 'scroll-snap-type': 'none' },
+      '.snap-x': {
+        '@defaults scroll-snap-type': {},
+        'scroll-snap-type': 'x var(--tw-scroll-snap-strictness)',
+      },
+      '.snap-y': {
+        '@defaults scroll-snap-type': {},
+        'scroll-snap-type': 'y var(--tw-scroll-snap-strictness)',
+      },
+      '.snap-both': {
+        '@defaults scroll-snap-type': {},
+        'scroll-snap-type': 'both var(--tw-scroll-snap-strictness)',
+      },
+      '.snap-mandatory': { '--tw-scroll-snap-strictness': 'mandatory' },
+      '.snap-proximity': { '--tw-scroll-snap-strictness': 'proximity' },
+    })
+  },
+
+  scrollSnapAlign: ({ addUtilities }) => {
+    addUtilities({
+      '.snap-start': { 'scroll-snap-align': 'start' },
+      '.snap-end': { 'scroll-snap-align': 'end' },
+      '.snap-center': { 'scroll-snap-align': 'center' },
+      '.snap-align-none': { 'scroll-snap-align': 'none' },
+    })
+  },
+
+  scrollSnapStop: ({ addUtilities }) => {
+    addUtilities({
+      '.snap-normal': { 'scroll-snap-stop': 'normal' },
+      '.snap-always': { 'scroll-snap-stop': 'always' },
+    })
+  },
+
+  scrollMargin: createUtilityPlugin('scrollMargin', [
+    ['scroll-m', ['scroll-margin']],
+    [
+      ['scroll-mx', ['scroll-margin-left', 'scroll-margin-right']],
+      ['scroll-my', ['scroll-margin-top', 'scroll-margin-bottom']],
+    ],
+    [
+      ['scroll-mt', ['scroll-margin-top']],
+      ['scroll-mr', ['scroll-margin-right']],
+      ['scroll-mb', ['scroll-margin-bottom']],
+      ['scroll-ml', ['scroll-margin-left']],
+    ],
+  ]),
+
+  scrollPadding: createUtilityPlugin('scrollPadding', [
+    ['scroll-p', ['scroll-padding']],
+    [
+      ['scroll-px', ['scroll-padding-left', 'scroll-padding-right']],
+      ['scroll-py', ['scroll-padding-top', 'scroll-padding-bottom']],
+    ],
+    [
+      ['scroll-pt', ['scroll-padding-top']],
+      ['scroll-pr', ['scroll-padding-right']],
+      ['scroll-pb', ['scroll-padding-bottom']],
+      ['scroll-pl', ['scroll-padding-left']],
+    ],
+  ]),
+
   listStylePosition: ({ addUtilities }) => {
     addUtilities({
       '.list-inside': { 'list-style-position': 'inside' },
