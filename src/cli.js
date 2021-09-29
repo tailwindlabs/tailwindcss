@@ -422,7 +422,7 @@ async function build() {
     if (args['--purge']) {
       log.warn(['The `--purge` flag has been deprecated.', 'Please use `--content` instead.'])
       if (!args['--content']) {
-        args['--content'] = ['--purge']
+        args['--content'] = args['--purge']
       }
     }
 
