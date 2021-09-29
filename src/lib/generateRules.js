@@ -309,12 +309,13 @@ function* resolveMatches(candidate, context) {
       }
 
       log.warn([
-        // TODO: Improve this warning message
-        `We found ${matches.length} plugins that generated output for "${candidate}".`,
         // TODO: Update URL
-        'You can be explicit by introducing typehints: https://tailwindcss.com/docs/just-in-time-mode#ambiguous-values',
+        `The class "${candidate}" is ambiguous and matches multiple utilities. Use a type hint (https://tailwindcss.com/docs/just-in-time-mode#ambiguous-values) to fix this.`,
         '',
         ...messages,
+        `If this is just part of your content and not a class, replace it with "${candidate
+          .replace('[', '&lsqb;')
+          .replace(']', '&rsqb;')}" to silence this warning.`,
       ])
       continue
     }
