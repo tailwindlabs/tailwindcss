@@ -28,7 +28,7 @@ function getCandidateFiles(context, tailwindConfig) {
 
   let candidateFiles = tailwindConfig.content.content
     .filter((item) => typeof item === 'string')
-    .map((contentPath) => normalizePath(path.resolve(contentPath)))
+    .map((contentPath) => normalizePath(contentPath))
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }
@@ -159,7 +159,10 @@ export default function setupTrackingContext(configOrPath) {
 
         // Add template paths as postcss dependencies.
         for (let fileOrGlob of candidateFiles) {
-          registerDependency(parseDependency(fileOrGlob))
+          let dependency = parseDependency(fileOrGlob)
+          if (dependency) {
+            registerDependency(dependency)
+          }
         }
 
         for (let changedContent of resolvedChangedContent(

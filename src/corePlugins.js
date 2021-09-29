@@ -17,7 +17,7 @@ import {
   transformAllClasses,
   transformLastClasses,
 } from './util/pluginUtils'
-import packageJson from '../package.json'
+import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
 
 export default {
@@ -361,7 +361,7 @@ export default {
 
     addBase([
       postcss.comment({
-        text: `! tailwindcss v${packageJson.version} | MIT License | https://tailwindcss.com`,
+        text: `! tailwindcss v${tailwindVersion} | MIT License | https://tailwindcss.com`,
       }),
       ...preflightStyles.nodes,
     ])
@@ -1131,12 +1131,15 @@ export default {
     addUtilities({
       '.overflow-auto': { overflow: 'auto' },
       '.overflow-hidden': { overflow: 'hidden' },
+      '.overflow-clip': { overflow: 'clip' },
       '.overflow-visible': { overflow: 'visible' },
       '.overflow-scroll': { overflow: 'scroll' },
       '.overflow-x-auto': { 'overflow-x': 'auto' },
       '.overflow-y-auto': { 'overflow-y': 'auto' },
       '.overflow-x-hidden': { 'overflow-x': 'hidden' },
       '.overflow-y-hidden': { 'overflow-y': 'hidden' },
+      '.overflow-x-clip': { 'overflow-x': 'clip' },
+      '.overflow-y-clip': { 'overflow-y': 'clip' },
       '.overflow-x-visible': { 'overflow-x': 'visible' },
       '.overflow-y-visible': { 'overflow-y': 'visible' },
       '.overflow-x-scroll': { 'overflow-x': 'scroll' },
@@ -1168,8 +1171,9 @@ export default {
   textOverflow: ({ addUtilities }) => {
     addUtilities({
       '.truncate': { overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' },
-      '.overflow-ellipsis': { 'text-overflow': 'ellipsis' },
-      '.overflow-clip': { 'text-overflow': 'clip' },
+      '.overflow-ellipsis': { 'text-overflow': 'ellipsis' }, // Deprecated
+      '.text-ellipsis': { 'text-overflow': 'ellipsis' },
+      '.text-clip': { 'text-overflow': 'clip' },
     })
   },
 

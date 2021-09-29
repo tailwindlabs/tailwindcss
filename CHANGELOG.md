@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove dependency on `modern-normalize`, inline and consolidate with Preflight ([#5358](https://github.com/tailwindlabs/tailwindcss/pull/5358))
 - Enable extended color palette by default with updated color names ([#5384](https://github.com/tailwindlabs/tailwindcss/pull/5384))
 - Move `vertical-align` values to config file instead of hard-coding ([#5487](https://github.com/tailwindlabs/tailwindcss/pull/5487))
+- Rename `overflow-clip` to `text-clip` and `overflow-ellipsis` to `text-ellipsis` ([#5630](https://github.com/tailwindlabs/tailwindcss/pull/5630))
 
 ### Added
 
@@ -27,10 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `file` variant for `::file-selector-button` pseudo element ([#4936](https://github.com/tailwindlabs/tailwindcss/pull/4936))
 - Add `touch-action` utilities ([#5603](https://github.com/tailwindlabs/tailwindcss/pull/5603))
 - Add `inherit` to default color palette ([#5597](https://github.com/tailwindlabs/tailwindcss/pull/5597))
+- Add `overflow-clip`, `overflow-x-clip` and `overflow-y-clip` utilities ([#5630](https://github.com/tailwindlabs/tailwindcss/pull/5630))
 
 ### Fixed
 
 - Fix defining colors as functions when color opacity plugins are disabled ([#5470](https://github.com/tailwindlabs/tailwindcss/pull/5470))
+- Fix using negated `content` globs ([#5625](https://github.com/tailwindlabs/tailwindcss/pull/5625))
 
 ## [2.2.16] - 2021-09-26
 

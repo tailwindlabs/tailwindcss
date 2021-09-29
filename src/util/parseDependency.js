@@ -26,6 +26,10 @@ function parseGlob(pattern) {
 }
 
 export default function parseDependency(normalizedFileOrGlob) {
+  if (normalizedFileOrGlob.startsWith('!')) {
+    return null
+  }
+
   let message
 
   if (isGlob(normalizedFileOrGlob)) {
