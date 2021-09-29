@@ -1286,6 +1286,10 @@ export default {
     [
       ['border', [['@defaults border-width', {}], 'border-width']],
       [
+        ['border-x', [['@defaults border-width', {}], 'border-left-width', 'border-right-width']],
+        ['border-y', [['@defaults border-width', {}], 'border-top-width', 'border-bottom-width']],
+      ],
+      [
         ['border-t', [['@defaults border-width', {}], 'border-top-width']],
         ['border-r', [['@defaults border-width', {}], 'border-right-width']],
         ['border-b', [['@defaults border-width', {}], 'border-bottom-width']],
@@ -1343,6 +1347,43 @@ export default {
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
         type: ['color'],
+      }
+    )
+
+    matchUtilities(
+      {
+        'border-x': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-left-color': toColorValue(value),
+              'border-right-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: ['border-left-color', 'border-right-color'],
+            variable: '--tw-border-opacity',
+          })
+        },
+        'border-y': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-top-color': toColorValue(value),
+              'border-bottom-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: ['border-top-color', 'border-bottom-color'],
+            variable: '--tw-border-opacity',
+          })
+        },
+      },
+      {
+        values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
+        type: 'color',
       }
     )
 

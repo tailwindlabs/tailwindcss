@@ -15,30 +15,35 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
+  let properties = [].concat(property)
   if (typeof color === 'function') {
     return {
       [variable]: '1',
-      [property]: color({ opacityVariable: variable, opacityValue: `var(${variable})` }),
+      ...Object.fromEntries(
+        properties.map((p) => {
+          return [p, color({ opacityVariable: variable, opacityValue: `var(${variable})` })]
+        })
+      ),
     }
   }
 
   const parsed = parseColor(color)
 
   if (parsed === null) {
-    return {
-      [property]: color,
-    }
+    return Object.fromEntries(properties.map((p) => [p, color]))
   }
 
   if (parsed.alpha !== undefined) {
     // Has an alpha value, return color as-is
-    return {
-      [property]: color,
-    }
+    return Object.fromEntries(properties.map((p) => [p, color]))
   }
 
   return {
     [variable]: '1',
-    [property]: formatColor({ ...parsed, alpha: `var(${variable})` }),
+    ...Object.fromEntries(
+      properties.map((p) => {
+        return [p, formatColor({ ...parsed, alpha: `var(${variable})` })]
+      })
+    ),
   }
 }
