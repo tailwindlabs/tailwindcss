@@ -15,6 +15,7 @@ import fastGlob from 'fast-glob'
 import getModuleDependencies from './lib/getModuleDependencies'
 import log from './util/log'
 import packageJson from '../package.json'
+import normalizePath from 'normalize-path'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined,
@@ -437,12 +438,14 @@ async function build() {
   }
 
   function extractFileGlobs(config) {
-    return extractContent(config).filter((file) => {
-      // Strings in this case are files / globs. If it is something else,
-      // like an object it's probably a raw content object. But this object
-      // is not watchable, so let's remove it.
-      return typeof file === 'string'
-    })
+    return extractContent(config)
+      .filter((file) => {
+        // Strings in this case are files / globs. If it is something else,
+        // like an object it's probably a raw content object. But this object
+        // is not watchable, so let's remove it.
+        return typeof file === 'string'
+      })
+      .map((glob) => normalizePath(glob))
   }
 
   function extractRawContent(config) {
