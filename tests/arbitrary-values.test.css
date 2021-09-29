@@ -307,6 +307,58 @@
 .cursor-\[var\(--value\)\] {
   cursor: var(--value);
 }
+.scroll-m-\[7px\] {
+  scroll-margin: 7px;
+}
+.scroll-mx-\[7px\] {
+  scroll-margin-left: 7px;
+  scroll-margin-right: 7px;
+}
+.scroll-my-\[7px\] {
+  scroll-margin-top: 7px;
+  scroll-margin-bottom: 7px;
+}
+.scroll-mt-\[7px\] {
+  scroll-margin-top: 7px;
+}
+.scroll-mr-\[7px\] {
+  scroll-margin-right: 7px;
+}
+.scroll-mb-\[7px\] {
+  scroll-margin-bottom: 7px;
+}
+.scroll-ml-\[7px\] {
+  scroll-margin-left: 7px;
+}
+.scroll-mt-\[var\(--scroll-margin\)\] {
+  scroll-margin-top: var(--scroll-margin);
+}
+.scroll-p-\[7px\] {
+  scroll-padding: 7px;
+}
+.scroll-px-\[7px\] {
+  scroll-padding-left: 7px;
+  scroll-padding-right: 7px;
+}
+.scroll-py-\[7px\] {
+  scroll-padding-top: 7px;
+  scroll-padding-bottom: 7px;
+}
+.scroll-pt-\[7px\] {
+  scroll-padding-top: 7px;
+}
+.scroll-pr-\[7px\] {
+  scroll-padding-right: 7px;
+}
+.scroll-pb-\[7px\] {
+  scroll-padding-bottom: 7px;
+}
+.scroll-pl-\[7px\] {
+  scroll-padding-left: 7px;
+}
+.scroll-pt-\[var\(--scroll-padding\)\] {
+  scroll-padding-top: var(--scroll-padding);
+}
 .list-\[\'\\1f44d\'\] {
   list-style-type: '\1F44D';
 }

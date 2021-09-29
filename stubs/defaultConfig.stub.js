@@ -711,6 +711,11 @@ module.exports = {
       125: '1.25',
       150: '1.5',
     },
+    scrollMargin: (theme, { negative }) => ({
+      ...theme('spacing'),
+      ...negative(theme('spacing')),
+    }),
+    scrollPadding: (theme) => theme('spacing'),
     sepia: {
       0: '0',
       DEFAULT: '100%',

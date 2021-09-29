@@ -11,6 +11,7 @@
   --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
     rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
     scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  --tw-scroll-snap-strictness: proximity;
   --tw-border-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
   --tw-ring-offset-shadow: 0 0 #0000;
@@ -310,6 +311,24 @@
 }
 .resize-none {
   resize: none;
+}
+.snap-x {
+  scroll-snap-type: x var(--tw-scroll-snap-strictness);
+}
+.snap-mandatory {
+  --tw-scroll-snap-strictness: mandatory;
+}
+.snap-center {
+  scroll-snap-align: center;
+}
+.snap-always {
+  scroll-snap-stop: always;
+}
+.scroll-mt-6 {
+  scroll-margin-top: 1.5rem;
+}
+.scroll-p-6 {
+  scroll-padding: 1.5rem;
 }
 .list-inside {
   list-style-position: inside;
