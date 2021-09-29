@@ -486,6 +486,14 @@
 .border-2 {
   border-width: 2px;
 }
+.border-x-4 {
+  border-left-width: 4px;
+  border-right-width: 4px;
+}
+.border-y-4 {
+  border-top-width: 4px;
+  border-bottom-width: 4px;
+}
 .border-t {
   border-top-width: 1px;
 }
@@ -501,6 +509,16 @@
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+.border-x-black {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(0 0 0 / var(--tw-border-opacity));
+  border-right-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+.border-y-black {
+  --tw-border-opacity: 1;
+  border-top-color: rgb(0 0 0 / var(--tw-border-opacity));
+  border-bottom-color: rgb(0 0 0 / var(--tw-border-opacity));
 }
 .border-t-black {
   --tw-border-opacity: 1;
