@@ -39,7 +39,7 @@ export function issueFlagNotices(config) {
       .join(', ')
 
     log.warn([
-      `You have enabled experimental features: ${changes}`,
+      `You have enabled Tailwind CSS experimental features: ${changes}`,
       'Experimental features are not covered by semver, may introduce breaking changes, and can change at any time.',
     ])
   }
