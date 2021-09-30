@@ -187,7 +187,7 @@ function getTailwindConfig(configOrPath) {
 function resolvedChangedContent(context, candidateFiles) {
   let changedContent = context.tailwindConfig.content.files
     .filter((item) => typeof item.raw === 'string')
-    .map(({ raw, extension }) => ({ content: raw, extension }))
+    .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(context, candidateFiles)) {
     let content = fs.readFileSync(changedFile, 'utf8')
