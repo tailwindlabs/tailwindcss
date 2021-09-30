@@ -35,21 +35,6 @@ const builtInTransformers = {
 
 function getExtractor(tailwindConfig, fileExtension) {
   let extractors = tailwindConfig.content.extract
-  let contentOptions = tailwindConfig.content.options
-
-  if (typeof extractors === 'function') {
-    extractors = {
-      DEFAULT: extractors,
-    }
-  }
-  if (contentOptions.defaultExtractor) {
-    extractors.DEFAULT = contentOptions.defaultExtractor
-  }
-  for (let { extensions, extractor } of contentOptions.extractors || []) {
-    for (let extension of extensions) {
-      extractors[extension] = extractor
-    }
-  }
 
   return (
     extractors[fileExtension] ||
@@ -61,12 +46,6 @@ function getExtractor(tailwindConfig, fileExtension) {
 
 function getTransformer(tailwindConfig, fileExtension) {
   let transformers = tailwindConfig.content.transform
-
-  if (typeof transformers === 'function') {
-    transformers = {
-      DEFAULT: transformers,
-    }
-  }
 
   return (
     transformers[fileExtension] ||
