@@ -4,6 +4,7 @@ import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
+import log from '../util/log'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -225,15 +226,19 @@ function* resolveMatches(candidate, context) {
 
   for (let matchedPlugins of resolveMatchedPlugins(classCandidate, context)) {
     let matches = []
+    let typesByMatches = new Map()
+
     let [plugins, modifier] = matchedPlugins
     let isOnlyPlugin = plugins.length === 1
 
     for (let [sort, plugin] of plugins) {
+      let matchesPerPlugin = []
+
       if (typeof plugin === 'function') {
         for (let ruleSet of [].concat(plugin(modifier, { isOnlyPlugin }))) {
           let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
           for (let rule of rules) {
-            matches.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
+            matchesPerPlugin.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
           }
         }
       }
@@ -242,12 +247,80 @@ function* resolveMatches(candidate, context) {
         let ruleSet = plugin
         let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
         for (let rule of rules) {
-          matches.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
+          matchesPerPlugin.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
         }
+      }
+
+      if (matchesPerPlugin.length > 0) {
+        typesByMatches.set(matchesPerPlugin, sort.options?.type)
+        matches.push(matchesPerPlugin)
       }
     }
 
-    matches = applyPrefix(matches, context)
+    // Only keep the result of the very first plugin if we are dealing with
+    // arbitrary values, to protect against ambiguity.
+    if (isArbitraryValue(modifier) && matches.length > 1) {
+      let typesPerPlugin = matches.map((match) => new Set([...(typesByMatches.get(match) ?? [])]))
+
+      // Remove duplicates, so that we can detect proper unique types for each plugin.
+      for (let pluginTypes of typesPerPlugin) {
+        for (let type of pluginTypes) {
+          let removeFromOwnGroup = false
+
+          for (let otherGroup of typesPerPlugin) {
+            if (pluginTypes === otherGroup) continue
+
+            if (otherGroup.has(type)) {
+              otherGroup.delete(type)
+              removeFromOwnGroup = true
+            }
+          }
+
+          if (removeFromOwnGroup) pluginTypes.delete(type)
+        }
+      }
+
+      let messages = []
+
+      for (let [idx, group] of typesPerPlugin.entries()) {
+        for (let type of group) {
+          let rules = matches[idx]
+            .map(([, rule]) => rule)
+            .flat()
+            .map((rule) =>
+              rule
+                .toString()
+                .split('\n')
+                .slice(1, -1) // Remove selector and closing '}'
+                .map((line) => line.trim())
+                .map((x) => `      ${x}`) // Re-indent
+                .join('\n')
+            )
+            .join('\n\n')
+
+          messages.push(
+            `  - Replace "${candidate}" with "${candidate.replace(
+              '[',
+              `[${type}:`
+            )}" for:\n${rules}\n`
+          )
+          break
+        }
+      }
+
+      log.warn([
+        // TODO: Update URL
+        `The class "${candidate}" is ambiguous and matches multiple utilities. Use a type hint (https://tailwindcss.com/docs/just-in-time-mode#ambiguous-values) to fix this.`,
+        '',
+        ...messages,
+        `If this is just part of your content and not a class, replace it with "${candidate
+          .replace('[', '&lsqb;')
+          .replace(']', '&rsqb;')}" to silence this warning.`,
+      ])
+      continue
+    }
+
+    matches = applyPrefix(matches.flat(), context)
 
     if (important) {
       matches = applyImportant(matches, context)
@@ -315,6 +388,10 @@ function generateRules(candidates, context) {
     }
     return [sort | context.layerOrder[layer], rule]
   })
+}
+
+function isArbitraryValue(input) {
+  return input.startsWith('[') && input.endsWith(']')
 }
 
 export { resolveMatches, generateRules }
