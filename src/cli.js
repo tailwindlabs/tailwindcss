@@ -437,7 +437,7 @@ async function build() {
   }
 
   function extractContent(config) {
-    return config.content.content.concat(config.content.safelist)
+    return config.content.files
   }
 
   function extractFileGlobs(config) {

@@ -559,16 +559,13 @@ function registerPlugins(plugins, context) {
     )
   }
 
-  context.safelist = function () {
-    let safelist = (context.tailwindConfig.safelist ?? []).filter(Boolean)
-    if (safelist.length <= 0) return []
-
-    let output = []
+  let safelist = (context.tailwindConfig.safelist ?? []).filter(Boolean)
+  if (safelist.length > 0) {
     let checks = []
 
     for (let value of safelist) {
       if (typeof value === 'string') {
-        output.push(value)
+        context.changedContent.push({ content: value, extension: 'html' })
         continue
       }
 
@@ -584,51 +581,52 @@ function registerPlugins(plugins, context) {
       checks.push(value)
     }
 
-    if (checks.length <= 0) return output.map((value) => ({ raw: value, extension: 'html' }))
+    if (checks.length > 0) {
+      let patternMatchingCount = new Map()
 
-    let patternMatchingCount = new Map()
+      for (let util of classList) {
+        let utils = Array.isArray(util)
+          ? (() => {
+              let [utilName, options] = util
+              return Object.keys(options?.values ?? {}).map((value) => formatClass(utilName, value))
+            })()
+          : [util]
 
-    for (let util of classList) {
-      let utils = Array.isArray(util)
-        ? (() => {
-            let [utilName, options] = util
-            return Object.keys(options?.values ?? {}).map((value) => formatClass(utilName, value))
-          })()
-        : [util]
+        for (let util of utils) {
+          for (let { pattern, variants = [] } of checks) {
+            // RegExp with the /g flag are stateful, so let's reset the last
+            // index pointer to reset the state.
+            pattern.lastIndex = 0
 
-      for (let util of utils) {
-        for (let { pattern, variants = [] } of checks) {
-          // RegExp with the /g flag are stateful, so let's reset the last
-          // index pointer to reset the state.
-          pattern.lastIndex = 0
+            if (!patternMatchingCount.has(pattern)) {
+              patternMatchingCount.set(pattern, 0)
+            }
 
-          if (!patternMatchingCount.has(pattern)) {
-            patternMatchingCount.set(pattern, 0)
-          }
+            if (!pattern.test(util)) continue
 
-          if (!pattern.test(util)) continue
+            patternMatchingCount.set(pattern, patternMatchingCount.get(pattern) + 1)
 
-          patternMatchingCount.set(pattern, patternMatchingCount.get(pattern) + 1)
-
-          output.push(util)
-          for (let variant of variants) {
-            output.push(variant + context.tailwindConfig.separator + util)
+            context.changedContent.push({ content: util, extension: 'html' })
+            for (let variant of variants) {
+              context.changedContent.push({
+                content: variant + context.tailwindConfig.separator + util,
+                extension: 'html',
+              })
+            }
           }
         }
       }
+
+      for (let [regex, count] of patternMatchingCount.entries()) {
+        if (count !== 0) continue
+
+        log.warn([
+          // TODO: Improve this warning message
+          `You have a regex pattern in your "safelist" config (${regex}) that doesn't match any utilities.`,
+          'For more info, visit https://tailwindcss.com/docs/...',
+        ])
+      }
     }
-
-    for (let [regex, count] of patternMatchingCount.entries()) {
-      if (count !== 0) continue
-
-      log.warn([
-        // TODO: Improve this warning message
-        `You have a regex pattern in your "safelist" config (${regex}) that doesn't match any utilities.`,
-        'For more info, visit https://tailwindcss.com/docs/...',
-      ])
-    }
-
-    return output.map((value) => ({ raw: value, extension: 'html' }))
   }
 
   // Generate a list of strings for autocompletion purposes, e.g.
