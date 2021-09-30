@@ -162,6 +162,14 @@ textarea {
 }
 
 /*
+Remove the default border radius in Edge.
+*/
+
+button {
+  border-radius: 0;
+}
+
+/*
 Remove the inheritance of text transform in Edge and Firefox.
 */
 
