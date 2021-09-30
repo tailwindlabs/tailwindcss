@@ -42,13 +42,10 @@ const configUtils = {
   negative(scale) {
     return Object.keys(scale)
       .filter((key) => scale[key] !== '0')
-      .reduce(
-        (negativeScale, key) => ({
-          ...negativeScale,
-          [`-${key}`]: negateValue(scale[key]),
-        }),
-        {}
-      )
+      .reduce((negativeScale, key) => {
+        negativeScale[`-${key}`] = negateValue(scale[key])
+        return negativeScale
+      }, {})
   },
   breakpoints(screens) {
     return Object.keys(screens)
