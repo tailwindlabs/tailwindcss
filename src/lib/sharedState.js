@@ -1,5 +1,3 @@
-import LRU from 'quick-lru'
-
 export const env = {
   TAILWIND_MODE: process.env.TAILWIND_MODE,
   NODE_ENV: process.env.NODE_ENV,
@@ -10,4 +8,3 @@ export const env = {
 export const contextMap = new Map()
 export const configContextMap = new Map()
 export const contextSourcesMap = new Map()
-export const contentMatchCache = new LRU({ maxSize: 25000 })

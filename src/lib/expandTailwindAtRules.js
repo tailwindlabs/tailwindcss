@@ -1,10 +1,10 @@
+import LRU from 'quick-lru'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import bigSign from '../util/bigSign'
 import cloneNodes from '../util/cloneNodes'
 
 let env = sharedState.env
-let contentMatchCache = sharedState.contentMatchCache
 
 const PATTERNS = [
   /([^<>"'`\s]*\[\w*'[^"`\s]*'?\])/.source, // font-['some_font',sans-serif]
@@ -55,10 +55,16 @@ function getTransformer(tailwindConfig, fileExtension) {
   )
 }
 
+let extractorCache = new WeakMap()
+
 // Scans template contents for possible classes. This is a hot path on initial build but
 // not too important for subsequent builds. The faster the better though — if we can speed
 // up these regexes by 50% that could cut initial build time by like 20%.
-function getClassCandidates(content, extractor, contentMatchCache, candidates, seen) {
+function getClassCandidates(content, extractor, candidates, seen) {
+  if (!extractorCache.has(extractor)) {
+    extractorCache.set(extractor, new LRU({ maxSize: 25000 }))
+  }
+
   for (let line of content.split('\n')) {
     line = line.trim()
 
@@ -67,8 +73,8 @@ function getClassCandidates(content, extractor, contentMatchCache, candidates, s
     }
     seen.add(line)
 
-    if (contentMatchCache.has(line)) {
-      for (let match of contentMatchCache.get(line)) {
+    if (extractorCache.get(extractor).has(line)) {
+      for (let match of extractorCache.get(extractor).get(line)) {
         candidates.add(match)
       }
     } else {
@@ -79,7 +85,7 @@ function getClassCandidates(content, extractor, contentMatchCache, candidates, s
         candidates.add(match)
       }
 
-      contentMatchCache.set(line, lineMatchesSet)
+      extractorCache.get(extractor).set(line, lineMatchesSet)
     }
   }
 }
@@ -168,7 +174,7 @@ export default function expandTailwindAtRules(context) {
     for (let { content, extension } of context.changedContent) {
       let transformer = getTransformer(context.tailwindConfig, extension)
       let extractor = getExtractor(context.tailwindConfig, extension)
-      getClassCandidates(transformer(content), extractor, contentMatchCache, candidates, seen)
+      getClassCandidates(transformer(content), extractor, candidates, seen)
     }
 
     // ---
