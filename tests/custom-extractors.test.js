@@ -41,13 +41,26 @@ describe('modern', () => {
       expect(result.css).toMatchFormattedCss(expected)
     })
   })
+
+  test('extract function', () => {
+    let config = {
+      content: {
+        files: [path.resolve(__dirname, './custom-extractors.test.html')],
+        extract: customExtractor,
+      },
+    }
+
+    return run('@tailwind utilities', config).then((result) => {
+      expect(result.css).toMatchFormattedCss(expected)
+    })
+  })
 })
 
 describe('legacy', () => {
   test('defaultExtractor', () => {
     let config = {
       content: {
-        content: [path.resolve(__dirname, './custom-extractors.test.html')],
+        files: [path.resolve(__dirname, './custom-extractors.test.html')],
         options: {
           defaultExtractor: customExtractor,
         },
@@ -62,7 +75,7 @@ describe('legacy', () => {
   test('extractors array', () => {
     let config = {
       content: {
-        content: [path.resolve(__dirname, './custom-extractors.test.html')],
+        files: [path.resolve(__dirname, './custom-extractors.test.html')],
         options: {
           extractors: [
             {
@@ -71,19 +84,6 @@ describe('legacy', () => {
             },
           ],
         },
-      },
-    }
-
-    return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(expected)
-    })
-  })
-
-  test('extract function', () => {
-    let config = {
-      content: {
-        content: [path.resolve(__dirname, './custom-extractors.test.html')],
-        extract: customExtractor,
       },
     }
 
