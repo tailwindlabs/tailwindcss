@@ -20,8 +20,7 @@ import {
 import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
 
-export default {
-  // Variant plugins
+export let variantPlugins = {
   pseudoElementVariants: ({ config, addVariant }) => {
     addVariant(
       'first-letter',
@@ -360,8 +359,9 @@ export default {
       )
     }
   },
+}
 
-  // Actual plugins
+export let corePlugins = {
   preflight: ({ addBase }) => {
     let preflightStyles = postcss.parse(fs.readFileSync(`${__dirname}/css/preflight.css`, 'utf8'))
 

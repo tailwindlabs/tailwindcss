@@ -12,7 +12,7 @@ import escapeClassName from '../util/escapeClassName'
 import nameClass, { formatClass } from '../util/nameClass'
 import { coerceValue } from '../util/pluginUtils'
 import bigSign from '../util/bigSign'
-import corePlugins from '../corePlugins'
+import { variantPlugins, corePlugins } from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
 import { toPath } from '../util/toPath'
@@ -498,7 +498,7 @@ function collectLayerPlugins(root) {
 }
 
 function resolvePlugins(context, root) {
-  let corePluginList = Object.entries(corePlugins)
+  let corePluginList = Object.entries({ ...variantPlugins, ...corePlugins })
     .map(([name, plugin]) => {
       if (!context.tailwindConfig.corePlugins.includes(name)) {
         return null
@@ -520,12 +520,15 @@ function resolvePlugins(context, root) {
 
   // TODO: This is a workaround for backwards compatibility, since custom variants
   // were historically sorted before screen/stackable variants.
-  let beforeVariants = [corePlugins['pseudoElementVariants'], corePlugins['pseudoClassVariants']]
+  let beforeVariants = [
+    variantPlugins['pseudoElementVariants'],
+    variantPlugins['pseudoClassVariants'],
+  ]
   let afterVariants = [
-    corePlugins['directionVariants'],
-    corePlugins['reducedMotionVariants'],
-    corePlugins['darkVariants'],
-    corePlugins['screenVariants'],
+    variantPlugins['directionVariants'],
+    variantPlugins['reducedMotionVariants'],
+    variantPlugins['darkVariants'],
+    variantPlugins['screenVariants'],
   ]
 
   return [...corePluginList, ...beforeVariants, ...userPlugins, ...afterVariants, ...layerPlugins]
