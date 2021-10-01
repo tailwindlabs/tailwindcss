@@ -436,12 +436,8 @@ async function build() {
     return resolvedConfig
   }
 
-  function extractContent(config) {
-    return config.content.files
-  }
-
   function extractFileGlobs(config) {
-    return extractContent(config)
+    return config.content.files
       .filter((file) => {
         // Strings in this case are files / globs. If it is something else,
         // like an object it's probably a raw content object. But this object
@@ -452,7 +448,7 @@ async function build() {
   }
 
   function extractRawContent(config) {
-    return extractContent(config).filter((file) => {
+    return config.content.files.filter((file) => {
       return typeof file === 'object' && file !== null
     })
   }
