@@ -7,7 +7,7 @@ function customTransformer(content) {
 test('transform function', () => {
   let config = {
     content: {
-      content: [{ raw: html`<div class="uppercase"></div>` }],
+      files: [{ raw: html`<div class="uppercase"></div>` }],
       transform: customTransformer,
     },
   }
@@ -24,7 +24,7 @@ test('transform function', () => {
 test('transform.DEFAULT', () => {
   let config = {
     content: {
-      content: [{ raw: html`<div class="uppercase"></div>` }],
+      files: [{ raw: html`<div class="uppercase"></div>` }],
       transform: {
         DEFAULT: customTransformer,
       },
@@ -43,7 +43,7 @@ test('transform.DEFAULT', () => {
 test('transform.{extension}', () => {
   let config = {
     content: {
-      content: [
+      files: [
         { raw: html`<div class="uppercase"></div>`, extension: 'html' },
         { raw: html`<div class="uppercase"></div>`, extension: 'php' },
       ],

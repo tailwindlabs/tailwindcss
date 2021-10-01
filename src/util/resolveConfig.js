@@ -3,9 +3,9 @@ import corePluginList from '../corePluginList'
 import configurePlugins from './configurePlugins'
 import defaultConfig from '../../stubs/defaultConfig.stub'
 import colors from '../public/colors'
-import log from './log'
 import { defaults } from './defaults'
 import { toPath } from './toPath'
+import { normalizeConfig } from './normalizeConfig'
 
 function isFunction(input) {
   return typeof input === 'function'
@@ -220,56 +220,4 @@ export default function resolveConfig(configs) {
       ...allConfigs
     )
   )
-}
-
-function normalizeConfig(config) {
-  log.warn('purge-deprecation', [
-    'The `purge` option in your tailwind.config.js file has been deprecated.',
-    'Please rename this to `content` instead.',
-  ])
-
-  config.content = {
-    content: (() => {
-      let { content, purge } = config
-
-      if (Array.isArray(purge)) return purge
-      if (Array.isArray(purge?.content)) return purge.content
-      if (Array.isArray(content)) return content
-      if (Array.isArray(content?.content)) return content.content
-
-      return []
-    })(),
-    safelist: (() => {
-      let { content, purge } = config
-
-      let [safelistKey, safelistPaths] = (() => {
-        if (Array.isArray(content?.safelist)) return ['content.safelist', content.safelist]
-        if (Array.isArray(purge?.safelist)) return ['purge.safelist', purge.safelist]
-        if (Array.isArray(purge?.options?.safelist))
-          return ['purge.options.safelist', purge.options.safelist]
-        return [null, []]
-      })()
-
-      return safelistPaths.map((content) => {
-        if (typeof content === 'string') {
-          return { raw: content, extension: 'html' }
-        }
-
-        if (content instanceof RegExp) {
-          throw new Error(
-            `Values inside '${safelistKey}' can only be of type 'string', found 'regex'.`
-          )
-        }
-
-        throw new Error(
-          `Values inside '${safelistKey}' can only be of type 'string', found '${typeof content}'.`
-        )
-      })
-    })(),
-    extract: config.content?.extract || config.purge?.extract || {},
-    options: config.content?.options || config.purge?.options || {},
-    transform: config.content?.transform || config.purge?.transform || {},
-  }
-
-  return config
 }

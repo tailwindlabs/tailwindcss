@@ -436,12 +436,8 @@ async function build() {
     return resolvedConfig
   }
 
-  function extractContent(config) {
-    return config.content.content.concat(config.content.safelist)
-  }
-
   function extractFileGlobs(config) {
-    return extractContent(config)
+    return config.content.files
       .filter((file) => {
         // Strings in this case are files / globs. If it is something else,
         // like an object it's probably a raw content object. But this object
@@ -452,7 +448,7 @@ async function build() {
   }
 
   function extractRawContent(config) {
-    return extractContent(config).filter((file) => {
+    return config.content.files.filter((file) => {
       return typeof file === 'object' && file !== null
     })
   }
@@ -467,7 +463,7 @@ async function build() {
     for (let file of files) {
       changedContent.push({
         content: fs.readFileSync(path.resolve(file), 'utf8'),
-        extension: path.extname(file),
+        extension: path.extname(file).slice(1),
       })
     }
 
@@ -729,7 +725,7 @@ async function build() {
         chain = chain.then(async () => {
           changedContent.push({
             content: fs.readFileSync(path.resolve(file), 'utf8'),
-            extension: path.extname(file),
+            extension: path.extname(file).slice(1),
           })
 
           await rebuild(config)
@@ -741,7 +737,7 @@ async function build() {
       chain = chain.then(async () => {
         changedContent.push({
           content: fs.readFileSync(path.resolve(file), 'utf8'),
-          extension: path.extname(file),
+          extension: path.extname(file).slice(1),
         })
 
         await rebuild(config)

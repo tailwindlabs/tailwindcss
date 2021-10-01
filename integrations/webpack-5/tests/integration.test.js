@@ -230,9 +230,9 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
       javascript`
         module.exports = {
           content: {
-            content: ['./src/index.html'],
-            safelist: ['bg-red-500','bg-red-600']
+            files: ['./src/index.html'],
           },
+          safelist: ['bg-red-500','bg-red-600'],
           theme: {
             extend: {
             },

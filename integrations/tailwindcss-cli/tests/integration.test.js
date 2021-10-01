@@ -34,9 +34,9 @@ describe('static build', () => {
       javascript`
         module.exports = {
           content: {
-            content: ['./src/index.html'],
-            safelist: ['bg-red-500','bg-red-600']
+            files: ['./src/index.html'],
           },
+          safelist: ['bg-red-500','bg-red-600'],
           theme: {
             extend: {
             },

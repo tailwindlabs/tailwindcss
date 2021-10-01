@@ -1,0 +1,234 @@
+import log from './log'
+
+export function normalizeConfig(config) {
+  // Quick structure validation
+  /**
+   * type FilePath = string
+   * type RawFile = { raw: string, extension?: string }
+   * type ExtractorFn = (content: string) => Array<string>
+   * type TransformerFn = (content: string) => string
+   *
+   * type Content =
+   *   | Array<FilePath | RawFile>
+   *   | {
+   *       files: Array<FilePath | RawFile>,
+   *       extract?: ExtractorFn | { [extension: string]: ExtractorFn }
+   *       transform?: TransformerFn | { [extension: string]: TransformerFn }
+   *   }
+   */
+  let valid = (() => {
+    // `config.purge` should not exist anymore
+    if (config.purge) return false
+
+    // `config.content` should exist
+    if (!config.content) return false
+
+    // `config.content` should be an object or an array
+    if (
+      !Array.isArray(config.content) ||
+      !(typeof config.content === 'object' && config.content !== null)
+    ) {
+      return false
+    }
+
+    // When `config.content` is an array, it should consist of FilePaths or RawFiles
+    if (Array.isArray(config.content)) {
+      return config.content.every((path) => {
+        // `path` can be a string
+        if (typeof path === 'string') return true
+
+        // `path` can be an object { raw: string, extension?: string }
+        if (
+          // `raw` must be a string
+          typeof path?.raw === 'string' &&
+          // `extension` (if provided) should also be a string
+          path?.extension !== undefined &&
+          typeof path?.extension === 'string'
+        ) {
+          return true
+        }
+
+        return false
+      })
+    }
+
+    // When `config.content` is an object
+    if (typeof config.content === 'object' && config.content !== null) {
+      // Only `files`, `extract` and `transform` can exist in `config.content`
+      if (
+        Object.keys(config.content).some((key) => !['files', 'extract', 'transform'].includes(key))
+      ) {
+        return false
+      }
+
+      // `config.content.files` should exist of FilePaths or RawFiles
+      if (Array.isArray(config.content.files)) {
+        if (
+          !config.content.files.every((path) => {
+            // `path` can be a string
+            if (typeof path === 'string') return true
+
+            // `path` can be an object { raw: string, extension?: string }
+            if (
+              // `raw` must be a string
+              typeof path?.raw === 'string' &&
+              // `extension` (if provided) should also be a string
+              path?.extension !== undefined &&
+              typeof path?.extension === 'string'
+            ) {
+              return true
+            }
+
+            return false
+          })
+        ) {
+          return false
+        }
+
+        // `config.content.extract` is optional, and can be a Function or a Record<String, Function>
+        if (typeof config.content.extract === 'object') {
+          for (let value of Object.values(config.content.extract)) {
+            if (typeof value !== 'function') {
+              return false
+            }
+          }
+          return false
+        } else if (
+          !(config.content.extract === undefined || typeof config.content.extract === 'function')
+        ) {
+          return false
+        }
+
+        // `config.content.transform` is optional, and can be a Function or a Record<String, Function>
+        if (typeof config.content.transform === 'object') {
+          for (let value of Object.values(config.content.transform)) {
+            if (typeof value !== 'function') {
+              return false
+            }
+          }
+          return false
+        } else if (
+          !(
+            config.content.transform === undefined || typeof config.content.transform === 'function'
+          )
+        ) {
+          return false
+        }
+      }
+
+      return true
+    }
+
+    return false
+  })()
+
+  if (!valid) {
+    log.warn('purge-deprecation', [
+      'The `purge` option in your tailwind.config.js file has been deprecated.',
+      'Please rename this to `content` instead.',
+    ])
+  }
+
+  // Normalize the `safelist`
+  config.safelist = (() => {
+    let { content, purge, safelist } = config
+
+    if (Array.isArray(safelist)) return safelist
+    if (Array.isArray(content?.safelist)) return content.safelist
+    if (Array.isArray(purge?.safelist)) return purge.safelist
+    if (Array.isArray(purge?.options?.safelist)) return purge.options.safelist
+
+    return []
+  })()
+
+  // Normalize the `content`
+  config.content = {
+    files: (() => {
+      let { content, purge } = config
+
+      if (Array.isArray(purge)) return purge
+      if (Array.isArray(purge?.content)) return purge.content
+      if (Array.isArray(content)) return content
+      if (Array.isArray(content?.content)) return content.content
+      if (Array.isArray(content?.files)) return content.files
+
+      return []
+    })(),
+
+    extract: (() => {
+      let extract = (() => {
+        if (config.purge?.extract) return config.purge.extract
+        if (config.content?.extract) return config.content.extract
+
+        if (config.purge?.extract?.DEFAULT) return config.purge.extract.DEFAULT
+        if (config.content?.extract?.DEFAULT) return config.content.extract.DEFAULT
+
+        if (config.purge?.options?.extractors) return config.purge.options.extractors
+        if (config.content?.options?.extractors) return config.content.options.extractors
+
+        return {}
+      })()
+
+      let extractors = {}
+
+      extractors.DEFAULT = (() => {
+        if (config.purge?.options?.defaultExtractor) {
+          return config.purge.options.defaultExtractor
+        }
+
+        if (config.content?.options?.defaultExtractor) {
+          return config.content.options.defaultExtractor
+        }
+
+        return undefined
+      })()
+
+      // Functions
+      if (typeof extract === 'function') {
+        extractors.DEFAULT = extract
+      }
+
+      // Arrays
+      else if (Array.isArray(extract)) {
+        for (let { extensions, extractor } of extract ?? []) {
+          for (let extension of extensions) {
+            extractors[extension] = extractor
+          }
+        }
+      }
+
+      // Objects
+      else if (typeof extract === 'object' && extract !== null) {
+        Object.assign(extractors, extract)
+      }
+
+      return extractors
+    })(),
+
+    transform: (() => {
+      let transform = (() => {
+        if (config.purge?.transform) return config.purge.transform
+        if (config.content?.transform) return config.content.transform
+
+        if (config.purge?.transform?.DEFAULT) return config.purge.transform.DEFAULT
+        if (config.content?.transform?.DEFAULT) return config.content.transform.DEFAULT
+
+        return {}
+      })()
+
+      let transformers = {}
+
+      if (typeof transform === 'function') {
+        transformers.DEFAULT = transform
+      }
+
+      if (typeof transform === 'object' && transform !== null) {
+        Object.assign(transformers, transform)
+      }
+
+      return transformers
+    })(),
+  }
+
+  return config
+}

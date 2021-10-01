@@ -62,12 +62,7 @@ test('missing alpha generates nothing', async () => {
 
 test('arbitrary color with opacity from scale', async () => {
   let config = {
-    mode: 'jit',
-    purge: [
-      {
-        raw: 'bg-[wheat]/50',
-      },
-    ],
+    content: [{ raw: 'bg-[wheat]/50' }],
     theme: {},
     plugins: [],
   }
@@ -85,12 +80,7 @@ test('arbitrary color with opacity from scale', async () => {
 
 test('arbitrary color with arbitrary opacity', async () => {
   let config = {
-    mode: 'jit',
-    purge: [
-      {
-        raw: 'bg-[#bada55]/[0.2]',
-      },
-    ],
+    content: [{ raw: 'bg-[#bada55]/[0.2]' }],
     theme: {},
     plugins: [],
   }
@@ -108,12 +98,7 @@ test('arbitrary color with arbitrary opacity', async () => {
 
 test('undefined theme color with opacity from scale', async () => {
   let config = {
-    mode: 'jit',
-    purge: [
-      {
-        raw: 'bg-garbage/50',
-      },
-    ],
+    content: [{ raw: 'bg-garbage/50' }],
     theme: {},
     plugins: [],
   }

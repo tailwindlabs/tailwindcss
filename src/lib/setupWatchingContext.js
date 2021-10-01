@@ -147,7 +147,7 @@ function getCandidateFiles(context, tailwindConfig) {
     return candidateFilesCache.get(context)
   }
 
-  let candidateFiles = tailwindConfig.content.content
+  let candidateFiles = tailwindConfig.content.files
     .filter((item) => typeof item === 'string')
     .map((contentPath) => normalizePath(contentPath))
 
@@ -185,11 +185,9 @@ function getTailwindConfig(configOrPath) {
 }
 
 function resolvedChangedContent(context, candidateFiles) {
-  let changedContent = context.tailwindConfig.content.content
+  let changedContent = context.tailwindConfig.content.files
     .filter((item) => typeof item.raw === 'string')
-    .concat(context.tailwindConfig.content.safelist)
-    .concat(context.safelist())
-    .map(({ raw, extension }) => ({ content: raw, extension }))
+    .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(context, candidateFiles)) {
     let content = fs.readFileSync(changedFile, 'utf8')

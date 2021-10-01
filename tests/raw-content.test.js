@@ -29,19 +29,14 @@ test('raw content with extension', () => {
   let tailwind = require('../src')
   let config = {
     content: {
-      content: [
+      files: [
         {
           raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8'),
           extension: 'html',
         },
       ],
-      options: {
-        extractors: [
-          {
-            extractor: () => ['invisible'],
-            extensions: ['html'],
-          },
-        ],
+      extract: {
+        html: () => ['invisible'],
       },
     },
     corePlugins: { preflight: false },
