@@ -46,3 +46,52 @@ it.each`
     `)
   })
 })
+
+it('should still be possible to use the "old" v2 config', () => {
+  let config = {
+    purge: {
+      content: [
+        { raw: 'text-svelte', extension: 'svelte' },
+        { raw: '# My Big Heading', extension: 'md' },
+      ],
+      options: {
+        defaultExtractor(content) {
+          return content.split(' ').concat(['font-bold'])
+        },
+      },
+      extract: {
+        svelte(content) {
+          return content.replace('svelte', 'center').split(' ')
+        },
+      },
+      transform: {
+        md() {
+          return 'text-4xl'
+        },
+      },
+    },
+    theme: {
+      extends: {},
+    },
+    variants: {
+      extends: {},
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .text-center {
+        text-align: center;
+      }
+
+      .text-4xl {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+      }
+
+      .font-bold {
+        font-weight: 700;
+      }
+    `)
+  })
+})
