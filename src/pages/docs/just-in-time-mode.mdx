@@ -327,7 +327,7 @@ Similar to the `group-*` variants we've supported for years for styling an eleme
   <span class="h-4 w-4 bg-gray-200 peer-checked:bg-blue-500">
     <!-- ... -->
   </span>
-  <!-- ... -->  
+  <!-- ... -->
 </label>
 ```
 
@@ -514,6 +514,10 @@ For example, if you are using `postcss-cli`, set `TAILWIND_MODE=watch` in your d
 ```
 
 _If you're using Windows, we recommend [cross-env](https://www.npmjs.com/package/cross-env) for setting environment variables in your scripts._
+
+<a name="watch-mode-and-one-off-builds" style={{'scroll-margin-top': '6.875rem'}}></a>
+
+### One-off builds are hanging
 
 Note that setting `TAILWIND_MODE=watch` will start a long-running watch process in the background, so if you set that environment variable when trying to do a one-off build, it will look like the build is hanging. You should only set `TAILWIND_MODE=watch` when you are actually running a dev server/watch process.
 
