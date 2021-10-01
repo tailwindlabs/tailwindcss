@@ -296,7 +296,7 @@ export default {
     let mode = config('darkMode', 'media')
     if (mode === false) {
       mode = 'media'
-      log.warn([
+      log.warn('darkmode-false', [
         '`darkMode` is set to `false` in your config.',
         'This will behave just like the `media` value.',
       ])

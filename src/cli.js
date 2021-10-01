@@ -420,7 +420,10 @@ async function build() {
     let resolvedConfig = resolveConfigInternal(config)
 
     if (args['--purge']) {
-      log.warn(['The `--purge` flag has been deprecated.', 'Please use `--content` instead.'])
+      log.warn('purge-flag-deprecated', [
+        'The `--purge` flag has been deprecated.',
+        'Please use `--content` instead.',
+      ])
       if (!args['--content']) {
         args['--content'] = args['--purge']
       }

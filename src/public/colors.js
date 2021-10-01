@@ -1,15 +1,10 @@
 import log from '../util/log'
 
-let warned = []
-
 function warn({ version, from, to }) {
-  if (!warned.includes(from)) {
-    log.warn([
-      `As of Tailwind CSS ${version}, \`${from}\` has been renamed to \`${to}\`.`,
-      'Please update your color palette to eliminate this warning.',
-    ])
-    warned.push(from)
-  }
+  log.warn(`${from}-color-rename`, [
+    `As of Tailwind CSS ${version}, \`${from}\` has been renamed to \`${to}\`.`,
+    'Please update your color palette to eliminate this warning.',
+  ])
 }
 
 export default {
