@@ -293,24 +293,17 @@ function* resolveMatches(candidate, context) {
             )
             .join('\n\n')
 
-          messages.push(
-            `  - Replace "${candidate}" with "${candidate.replace(
-              '[',
-              `[${type}:`
-            )}" for:\n${rules}\n`
-          )
+          messages.push(`  Use \`${candidate.replace('[', `[${type}:`)}\` for \`${rules.trim()}\``)
           break
         }
       }
 
       log.warn([
-        // TODO: Update URL
-        `The class "${candidate}" is ambiguous and matches multiple utilities. Use a type hint (https://tailwindcss.com/docs/just-in-time-mode#ambiguous-values) to fix this.`,
-        '',
+        `The class \`${candidate}\` is ambiguous and matches multiple utilities.`,
         ...messages,
-        `If this is just part of your content and not a class, replace it with "${candidate
+        `If this is content and not a class, replace it with \`${candidate
           .replace('[', '&lsqb;')
-          .replace(']', '&rsqb;')}" to silence this warning.`,
+          .replace(']', '&rsqb;')}\` to silence this warning.`,
       ])
       continue
     }
