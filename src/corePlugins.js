@@ -636,6 +636,7 @@ export let corePlugins = {
   flex: createUtilityPlugin('flex'),
   flexShrink: createUtilityPlugin('flexShrink', [['flex-shrink', ['flex-shrink']]]),
   flexGrow: createUtilityPlugin('flexGrow', [['flex-grow', ['flex-grow']]]),
+  flexBasis: createUtilityPlugin('flexBasis', [['basis', ['flex-basis']]]),
 
   tableLayout: ({ addUtilities }) => {
     addUtilities({

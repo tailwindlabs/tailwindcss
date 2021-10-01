@@ -233,6 +233,12 @@
 .flex-grow-0 {
   flex-grow: 0;
 }
+.basis-auto {
+  flex-basis: auto;
+}
+.basis-7 {
+  flex-basis: 1.75rem;
+}
 .table-fixed {
   table-layout: fixed;
 }
