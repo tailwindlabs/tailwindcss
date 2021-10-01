@@ -4,7 +4,6 @@
   font-display: swap;
   font-style: normal;
   font-named-instance: 'Regular';
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   src: url('../fonts/Inter-roman-latin.var.woff2') format('woff2');
 }
 
@@ -14,7 +13,6 @@
   font-display: swap;
   font-style: italic;
   font-named-instance: 'Italic';
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   src: url('../fonts/Inter-italic-latin.var.woff2') format('woff2');
 }
 
