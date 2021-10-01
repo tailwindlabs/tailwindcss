@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unify config callback helpers into single object ([#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382))
 - Preserve original color format when adding opacity whenever possible ([#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154))
 - Add `scroll-behavior` utilities ([#5388](https://github.com/tailwindlabs/tailwindcss/pull/5388))
+- Add `will-change` utilities ([#5448](https://github.com/tailwindlabs/tailwindcss/pull/5448))
 - Add `column` utilities ([#5457](https://github.com/tailwindlabs/tailwindcss/pull/5457))
 - Add `border-hidden` utility ([#5485](https://github.com/tailwindlabs/tailwindcss/pull/5485))
 - Add `align-sub` and `align-super` utilities by default ([#5486](https://github.com/tailwindlabs/tailwindcss/pull/5486))
