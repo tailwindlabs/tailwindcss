@@ -1500,25 +1500,18 @@ test('the configFunction parameter is optional when using the `createPlugin.with
 
 test('keyframes are not escaped', () => {
   let config = {
-    content: [{ raw: html`<div class="foo-[abc]"></div>` }],
+    content: [{ raw: html`<div class="foo-[abc] md:foo-[def]"></div>` }],
+    corePlugins: { preflight: false },
     plugins: [
       function ({ matchUtilities }) {
         matchUtilities({
-          foo: (value, { includeRules }) => {
-            includeRules(
-              [
-                {
-                  [`@keyframes ${value}`]: {
-                    '25.001%': {
-                      color: 'black',
-                    },
-                  },
-                },
-              ],
-              { respectImportant: false }
-            )
-
+          foo: (value) => {
             return {
+              [`@keyframes ${value}`]: {
+                '25.001%': {
+                  color: 'black',
+                },
+              },
               animation: `${value} 1s infinite`,
             }
           },
@@ -1528,14 +1521,26 @@ test('keyframes are not escaped', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
+    expect(result.css).toMatchFormattedCss(`
       @keyframes abc {
         25.001% {
           color: black;
         }
       }
+
       .foo-\\[abc\\] {
         animation: abc 1s infinite;
+      }
+
+      @media (min-width: 768px) {
+        @keyframes def {
+          25.md\\:001\\% {
+            color: black;
+          }
+        }
+        .md\\:foo-\\[def\\] {
+          animation: def 1s infinite;
+        }
       }
     `)
   })

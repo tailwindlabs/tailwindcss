@@ -12,7 +12,7 @@ import escapeClassName from '../util/escapeClassName'
 import nameClass, { formatClass } from '../util/nameClass'
 import { coerceValue } from '../util/pluginUtils'
 import bigSign from '../util/bigSign'
-import corePlugins from '../corePlugins'
+import { variantPlugins, corePlugins } from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
 import { toPath } from '../util/toPath'
@@ -237,17 +237,11 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     addComponents(components, options) {
       let defaultOptions = {
-        variants: [],
         respectPrefix: true,
         respectImportant: false,
-        respectVariants: true,
       }
 
-      options = Object.assign(
-        {},
-        defaultOptions,
-        Array.isArray(options) ? { variants: options } : options
-      )
+      options = Object.assign({}, defaultOptions, Array.isArray(options) ? {} : options)
 
       for (let [identifier, rule] of withIdentifiers(components)) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
@@ -266,17 +260,11 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     addUtilities(utilities, options) {
       let defaultOptions = {
-        variants: [],
         respectPrefix: true,
         respectImportant: true,
-        respectVariants: true,
       }
 
-      options = Object.assign(
-        {},
-        defaultOptions,
-        Array.isArray(options) ? { variants: options } : options
-      )
+      options = Object.assign({}, defaultOptions, Array.isArray(options) ? {} : options)
 
       for (let [identifier, rule] of withIdentifiers(utilities)) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
@@ -295,10 +283,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     matchUtilities: function (utilities, options) {
       let defaultOptions = {
-        variants: [],
         respectPrefix: true,
         respectImportant: true,
-        respectVariants: true,
       }
 
       options = { ...defaultOptions, ...options }
@@ -338,24 +324,79 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             return []
           }
 
-          let includedRules = []
           let ruleSets = []
-            .concat(
-              rule(value, {
-                includeRules(rules) {
-                  includedRules.push(...rules)
-                },
-              })
-            )
+            .concat(rule(value))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
             }))
 
-          return [...includedRules, ...ruleSets]
+          return ruleSets
         }
 
         let withOffsets = [{ sort: offset, layer: 'utilities', options }, wrapped]
+
+        if (!context.candidateRuleMap.has(prefixedIdentifier)) {
+          context.candidateRuleMap.set(prefixedIdentifier, [])
+        }
+
+        context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
+      }
+    },
+    matchComponents: function (components, options) {
+      let defaultOptions = {
+        respectPrefix: true,
+        respectImportant: false,
+      }
+
+      options = { ...defaultOptions, ...options }
+
+      let offset = offsets.components++
+
+      for (let identifier in components) {
+        let prefixedIdentifier = prefixIdentifier(identifier, options)
+        let rule = components[identifier]
+
+        classList.add([prefixedIdentifier, options])
+
+        function wrapped(modifier, { isOnlyPlugin }) {
+          let { type = 'any' } = options
+          type = [].concat(type)
+          let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
+
+          if (value === undefined) {
+            return []
+          }
+
+          if (!type.includes(coercedType)) {
+            if (isOnlyPlugin) {
+              log.warn([
+                `Unnecessary typehint \`${coercedType}\` in \`${identifier}-${modifier}\`.`,
+                `You can safely update it to \`${identifier}-${modifier.replace(
+                  coercedType + ':',
+                  ''
+                )}\`.`,
+              ])
+            } else {
+              return []
+            }
+          }
+
+          if (!isValidArbitraryValue(value)) {
+            return []
+          }
+
+          let ruleSets = []
+            .concat(rule(value))
+            .filter(Boolean)
+            .map((declaration) => ({
+              [nameClass(identifier, modifier)]: declaration,
+            }))
+
+          return ruleSets
+        }
+
+        let withOffsets = [{ sort: offset, layer: 'components', options }, wrapped]
 
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
@@ -457,7 +498,7 @@ function collectLayerPlugins(root) {
 }
 
 function resolvePlugins(context, root) {
-  let corePluginList = Object.entries(corePlugins)
+  let corePluginList = Object.entries({ ...variantPlugins, ...corePlugins })
     .map(([name, plugin]) => {
       if (!context.tailwindConfig.corePlugins.includes(name)) {
         return null
@@ -479,12 +520,15 @@ function resolvePlugins(context, root) {
 
   // TODO: This is a workaround for backwards compatibility, since custom variants
   // were historically sorted before screen/stackable variants.
-  let beforeVariants = [corePlugins['pseudoElementVariants'], corePlugins['pseudoClassVariants']]
+  let beforeVariants = [
+    variantPlugins['pseudoElementVariants'],
+    variantPlugins['pseudoClassVariants'],
+  ]
   let afterVariants = [
-    corePlugins['directionVariants'],
-    corePlugins['reducedMotionVariants'],
-    corePlugins['darkVariants'],
-    corePlugins['screenVariants'],
+    variantPlugins['directionVariants'],
+    variantPlugins['reducedMotionVariants'],
+    variantPlugins['darkVariants'],
+    variantPlugins['screenVariants'],
   ]
 
   return [...corePluginList, ...beforeVariants, ...userPlugins, ...afterVariants, ...layerPlugins]

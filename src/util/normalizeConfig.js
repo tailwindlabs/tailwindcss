@@ -18,14 +18,18 @@ export function normalizeConfig(config) {
    */
   let valid = (() => {
     // `config.purge` should not exist anymore
-    if (config.purge) return false
+    if (config.purge) {
+      return false
+    }
 
     // `config.content` should exist
-    if (!config.content) return false
+    if (!config.content) {
+      return false
+    }
 
     // `config.content` should be an object or an array
     if (
-      !Array.isArray(config.content) ||
+      !Array.isArray(config.content) &&
       !(typeof config.content === 'object' && config.content !== null)
     ) {
       return false
@@ -38,17 +42,15 @@ export function normalizeConfig(config) {
         if (typeof path === 'string') return true
 
         // `path` can be an object { raw: string, extension?: string }
-        if (
-          // `raw` must be a string
-          typeof path?.raw === 'string' &&
-          // `extension` (if provided) should also be a string
-          path?.extension !== undefined &&
-          typeof path?.extension === 'string'
-        ) {
-          return true
+        // `raw` must be a string
+        if (typeof path?.raw !== 'string') return false
+
+        // `extension` (if provided) should also be a string
+        if (path?.extension && typeof path?.extension !== 'string') {
+          return false
         }
 
-        return false
+        return true
       })
     }
 
@@ -69,17 +71,15 @@ export function normalizeConfig(config) {
             if (typeof path === 'string') return true
 
             // `path` can be an object { raw: string, extension?: string }
-            if (
-              // `raw` must be a string
-              typeof path?.raw === 'string' &&
-              // `extension` (if provided) should also be a string
-              path?.extension !== undefined &&
-              typeof path?.extension === 'string'
-            ) {
-              return true
+            // `raw` must be a string
+            if (typeof path?.raw !== 'string') return false
+
+            // `extension` (if provided) should also be a string
+            if (path?.extension && typeof path?.extension !== 'string') {
+              return false
             }
 
-            return false
+            return true
           })
         ) {
           return false
@@ -92,7 +92,6 @@ export function normalizeConfig(config) {
               return false
             }
           }
-          return false
         } else if (
           !(config.content.extract === undefined || typeof config.content.extract === 'function')
         ) {
@@ -106,7 +105,6 @@ export function normalizeConfig(config) {
               return false
             }
           }
-          return false
         } else if (
           !(
             config.content.transform === undefined || typeof config.content.transform === 'function'

@@ -108,11 +108,6 @@ function applyVariant(variant, matches, context) {
     let result = []
 
     for (let [meta, rule] of matches) {
-      if (meta.options.respectVariants === false) {
-        result.push([meta, rule])
-        continue
-      }
-
       let container = postcss.root({ nodes: [rule.clone()] })
 
       for (let [variantSort, variantFunction] of variantFunctionTuples) {
