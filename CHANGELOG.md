@@ -25,6 +25,7 @@ Nothing yet!
 - Add native `aspect-ratio` utilities ([#5359](https://github.com/tailwindlabs/tailwindcss/pull/5359))
 - Unify config callback helpers into single object ([#5382](https://github.com/tailwindlabs/tailwindcss/pull/5382))
 - Preserve original color format when adding opacity whenever possible ([#5154](https://github.com/tailwindlabs/tailwindcss/pull/5154))
+- Add `accent-color` utilities ([#5387](https://github.com/tailwindlabs/tailwindcss/pull/5387))
 - Add `scroll-behavior` utilities ([#5388](https://github.com/tailwindlabs/tailwindcss/pull/5388))
 - Add `will-change` utilities ([#5448](https://github.com/tailwindlabs/tailwindcss/pull/5448))
 - Add `column` utilities ([#5457](https://github.com/tailwindlabs/tailwindcss/pull/5457))
