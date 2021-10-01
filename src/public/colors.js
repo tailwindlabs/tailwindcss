@@ -1,7 +1,7 @@
 import log from '../util/log'
 
 function warn({ version, from, to }) {
-  log.warn(`${from}-color-rename`, [
+  log.warn(`${from}-color-renamed`, [
     `As of Tailwind CSS ${version}, \`${from}\` has been renamed to \`${to}\`.`,
     'Please update your color palette to eliminate this warning.',
   ])
