@@ -237,17 +237,11 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     addComponents(components, options) {
       let defaultOptions = {
-        variants: [],
         respectPrefix: true,
         respectImportant: false,
-        respectVariants: true,
       }
 
-      options = Object.assign(
-        {},
-        defaultOptions,
-        Array.isArray(options) ? { variants: options } : options
-      )
+      options = Object.assign({}, defaultOptions, Array.isArray(options) ? {} : options)
 
       for (let [identifier, rule] of withIdentifiers(components)) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
@@ -266,17 +260,11 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     addUtilities(utilities, options) {
       let defaultOptions = {
-        variants: [],
         respectPrefix: true,
         respectImportant: true,
-        respectVariants: true,
       }
 
-      options = Object.assign(
-        {},
-        defaultOptions,
-        Array.isArray(options) ? { variants: options } : options
-      )
+      options = Object.assign({}, defaultOptions, Array.isArray(options) ? {} : options)
 
       for (let [identifier, rule] of withIdentifiers(utilities)) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
@@ -295,10 +283,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     matchUtilities: function (utilities, options) {
       let defaultOptions = {
-        variants: [],
         respectPrefix: true,
         respectImportant: true,
-        respectVariants: true,
       }
 
       options = { ...defaultOptions, ...options }
@@ -338,21 +324,14 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             return []
           }
 
-          let includedRules = []
           let ruleSets = []
-            .concat(
-              rule(value, {
-                includeRules(rules) {
-                  includedRules.push(...rules)
-                },
-              })
-            )
+            .concat(rule(value))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
             }))
 
-          return [...includedRules, ...ruleSets]
+          return ruleSets
         }
 
         let withOffsets = [{ sort: offset, layer: 'utilities', options }, wrapped]
