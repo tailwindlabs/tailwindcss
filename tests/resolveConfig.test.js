@@ -10,6 +10,7 @@ test('prefix key overrides default prefix', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         mobile: '400px',
@@ -40,6 +41,7 @@ test('important key overrides default important', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         mobile: '400px',
@@ -70,6 +72,7 @@ test('important (selector) key overrides default important', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         mobile: '400px',
@@ -100,6 +103,7 @@ test('separator key overrides default separator', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         mobile: '400px',
@@ -134,6 +138,7 @@ test('theme key is merged instead of replaced', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         'grey-darker': '#606f7b',
@@ -197,6 +202,7 @@ test('theme key is deeply merged instead of replaced', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         grey: {
@@ -235,6 +241,7 @@ test('missing top level keys are pulled from the default config', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: { green: '#00ff00' },
       screens: {
@@ -273,6 +280,7 @@ test('functions in the default theme section are lazily evaluated', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         cyan: 'cyan',
@@ -333,6 +341,7 @@ test('functions in the user theme section are lazily evaluated', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         cyan: 'cyan',
@@ -391,6 +400,7 @@ test('theme values in the extend section extend the existing theme', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         cyan: 'cyan',
@@ -461,6 +471,7 @@ test('theme values in the extend section extend the user theme', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       opacity: {
         0: '0',
@@ -535,6 +546,7 @@ test('theme values in the extend section can extend values that are depended on 
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         cyan: 'cyan',
@@ -588,6 +600,7 @@ test('theme values in the extend section are not deeply merged when they are sim
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       fonts: {
         sans: ['system-ui', 'Helvetica Neue', 'sans-serif'],
@@ -636,6 +649,7 @@ test('theme values in the extend section are deeply merged, when they are arrays
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       typography: {
         ArrayArray: {
@@ -696,6 +710,7 @@ test('the theme function can use a default value if the key is missing', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         cyan: 'cyan',
@@ -750,6 +765,7 @@ test('the theme function can resolve function values', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         red: 'red',
@@ -808,6 +824,7 @@ test('the theme function can resolve deep function values', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       spacing: {
         0: '0',
@@ -864,6 +881,7 @@ test('theme values in the extend section are lazily evaluated', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         cyan: 'cyan',
@@ -924,6 +942,7 @@ test('lazily evaluated values have access to the config utils', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       spacing: {
         1: '1px',
@@ -1010,6 +1029,7 @@ test('the original theme is not mutated', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       colors: {
         cyan: 'cyan',
@@ -1058,6 +1078,7 @@ test('custom properties are multiplied by -1 for negative values', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {},
   }
 
@@ -1165,6 +1186,7 @@ test('more than two config objects can be resolved', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       fontFamily: {
         body: ['Arial', 'sans-serif'],
@@ -1233,6 +1255,7 @@ test('plugin config modifications are applied', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         mobile: '400px',
@@ -1271,6 +1294,7 @@ test('user config takes precedence over plugin config modifications', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         mobile: '400px',
@@ -1321,6 +1345,7 @@ test('plugin config can register plugins that also have config', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         mobile: '400px',
@@ -1366,6 +1391,7 @@ test('plugin configs take precedence over plugin configs registered by that plug
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         mobile: '400px',
@@ -1416,6 +1442,7 @@ test('plugin theme extensions are added even if user overrides top-level theme c
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       width: {
         sm: '1rem',
@@ -1477,6 +1504,7 @@ test('user theme extensions take precedence over plugin theme extensions with th
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       width: {
         sm: '1rem',
@@ -1549,6 +1577,7 @@ test('extensions are applied in the right order', () => {
   }
 
   const defaultConfig = {
+    content: [],
     theme: {
       colors: {
         grey: {
@@ -1583,6 +1612,7 @@ test('core plugin configuration builds on the default list when starting with an
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {},
     corePlugins: {},
   }
@@ -1608,6 +1638,7 @@ test('core plugins that are disabled by default can be enabled', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {},
     corePlugins: { display: false },
   }
@@ -1631,6 +1662,7 @@ test('core plugin configurations stack', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {},
     corePlugins: ['float', 'display', 'padding'],
   }
@@ -1660,6 +1692,7 @@ test('plugins are merged', () => {
     prefix: '',
     important: false,
     separator: ':',
+    content: [],
     theme: {},
   }
 
@@ -1691,6 +1724,7 @@ test('all helpers can be destructured from the first function argument', () => {
     prefix: '-',
     important: false,
     separator: ':',
+    content: [],
     theme: {
       screens: {
         sm: '640px',
