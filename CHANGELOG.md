@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet!
+
+## [3.0.0-alpha.1] - 2021-10-01
+
 ### Changed
 
 - Remove AOT engine, make JIT the default ([#5340](https://github.com/tailwindlabs/tailwindcss/pull/5340))
@@ -1600,7 +1604,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.16...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.1...HEAD
+[3.0.0-alpha.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.16...v3.0.0-alpha.1
 [2.2.16]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.15...v2.2.16
 [2.2.15]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.14...v2.2.15
 [2.2.14]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.13...v2.2.14
