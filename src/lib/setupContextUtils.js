@@ -631,27 +631,17 @@ function registerPlugins(plugins, context) {
     return output.map((value) => ({ raw: value, extension: 'html' }))
   }
 
-  // Generate a list of strings for autocompletion purposes. Colors will have a
-  // tuple with options, e.g.:
-  // ['uppercase', 'lowercase', ['bg-red', { color: 'rgb(255 0 0)' }]]
-  context.completions = function () {
-    // TODO: Try and detect color from components?
-    // TODO: Should we provide a simple "public api" file with functions?
+  // Generate a list of strings for autocompletion purposes, e.g.
+  // ['uppercase', 'lowercase', ...]
+  context.getClassList = function () {
     let output = []
 
     for (let util of classList) {
       if (Array.isArray(util)) {
         let [utilName, options] = util
-        let isColor = [].concat(options.type).includes('color')
 
-        if (isColor) {
-          for (let [value, color] of Object.entries(options?.values ?? {})) {
-            output.push([formatClass(utilName, value), { color }])
-          }
-        } else {
-          for (let value of Object.keys(options?.values ?? {})) {
-            output.push(formatClass(utilName, value))
-          }
+        for (let value of Object.keys(options?.values ?? {})) {
+          output.push(formatClass(utilName, value))
         }
       } else {
         output.push(util)
