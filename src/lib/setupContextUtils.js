@@ -343,6 +343,68 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
       }
     },
+    matchComponents: function (components, options) {
+      let defaultOptions = {
+        respectPrefix: true,
+        respectImportant: false,
+      }
+
+      options = { ...defaultOptions, ...options }
+
+      let offset = offsets.components++
+
+      for (let identifier in components) {
+        let prefixedIdentifier = prefixIdentifier(identifier, options)
+        let rule = components[identifier]
+
+        classList.add([prefixedIdentifier, options])
+
+        function wrapped(modifier, { isOnlyPlugin }) {
+          let { type = 'any' } = options
+          type = [].concat(type)
+          let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
+
+          if (value === undefined) {
+            return []
+          }
+
+          if (!type.includes(coercedType)) {
+            if (isOnlyPlugin) {
+              log.warn([
+                `Unnecessary typehint \`${coercedType}\` in \`${identifier}-${modifier}\`.`,
+                `You can safely update it to \`${identifier}-${modifier.replace(
+                  coercedType + ':',
+                  ''
+                )}\`.`,
+              ])
+            } else {
+              return []
+            }
+          }
+
+          if (!isValidArbitraryValue(value)) {
+            return []
+          }
+
+          let ruleSets = []
+            .concat(rule(value))
+            .filter(Boolean)
+            .map((declaration) => ({
+              [nameClass(identifier, modifier)]: declaration,
+            }))
+
+          return ruleSets
+        }
+
+        let withOffsets = [{ sort: offset, layer: 'components', options }, wrapped]
+
+        if (!context.candidateRuleMap.has(prefixedIdentifier)) {
+          context.candidateRuleMap.set(prefixedIdentifier, [])
+        }
+
+        context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
+      }
+    },
   }
 }
 
