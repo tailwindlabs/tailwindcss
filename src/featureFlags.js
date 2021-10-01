@@ -38,7 +38,7 @@ export function issueFlagNotices(config) {
       .map((s) => chalk.yellow(s))
       .join(', ')
 
-    log.warn([
+    log.warn('experimental-flags-enabled', [
       `You have enabled experimental features: ${changes}`,
       'Experimental features are not covered by semver, may introduce breaking changes, and can change at any time.',
     ])

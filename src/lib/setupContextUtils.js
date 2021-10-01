@@ -559,8 +559,6 @@ function registerPlugins(plugins, context) {
     )
   }
 
-  //
-  let warnedAbout = new Set([])
   context.safelist = function () {
     let safelist = (context.tailwindConfig.safelist ?? []).filter(Boolean)
     if (safelist.length <= 0) return []
@@ -575,14 +573,11 @@ function registerPlugins(plugins, context) {
       }
 
       if (value instanceof RegExp) {
-        if (!warnedAbout.has('root-regex')) {
-          log.warn([
-            // TODO: Improve this warning message
-            'RegExp in the safelist option is not supported.',
-            'Please use the object syntax instead: https://tailwindcss.com/docs/...',
-          ])
-          warnedAbout.add('root-regex')
-        }
+        log.warn('root-regex', [
+          // TODO: Improve this warning message
+          'RegExp in the safelist option is not supported.',
+          'Please use the object syntax instead: https://tailwindcss.com/docs/...',
+        ])
         continue
       }
 

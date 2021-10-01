@@ -222,15 +222,11 @@ export default function resolveConfig(configs) {
   )
 }
 
-let warnedAbout = new Set()
 function normalizeConfig(config) {
-  if (!warnedAbout.has('purge-deprecation') && config.hasOwnProperty('purge')) {
-    log.warn([
-      'The `purge` option in your tailwind.config.js file has been deprecated.',
-      'Please rename this to `content` instead.',
-    ])
-    warnedAbout.add('purge-deprecation')
-  }
+  log.warn('purge-deprecation', [
+    'The `purge` option in your tailwind.config.js file has been deprecated.',
+    'Please rename this to `content` instead.',
+  ])
 
   config.content = {
     content: (() => {
