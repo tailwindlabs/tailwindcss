@@ -237,24 +237,30 @@ export default {
   directionVariants: ({ config, addVariant }) => {
     addVariant(
       'ltr',
-      transformAllSelectors(
-        (selector) =>
-          `[dir="ltr"] ${updateAllClasses(
-            selector,
-            (className) => `ltr${config('separator')}${className}`
-          )}`
-      )
+      transformAllSelectors((selector) => {
+        log.warn('rtl-experimental', [
+          'The RTL features in Tailwind CSS are currently in preview.',
+          'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
+        ])
+        return `[dir="ltr"] ${updateAllClasses(
+          selector,
+          (className) => `ltr${config('separator')}${className}`
+        )}`
+      })
     )
 
     addVariant(
       'rtl',
-      transformAllSelectors(
-        (selector) =>
-          `[dir="rtl"] ${updateAllClasses(
-            selector,
-            (className) => `rtl${config('separator')}${className}`
-          )}`
-      )
+      transformAllSelectors((selector) => {
+        log.warn('rtl-experimental', [
+          'The RTL features in Tailwind CSS are currently in preview.',
+          'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
+        ])
+        return `[dir="rtl"] ${updateAllClasses(
+          selector,
+          (className) => `rtl${config('separator')}${className}`
+        )}`
+      })
     )
   },
 
