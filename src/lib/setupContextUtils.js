@@ -306,18 +306,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             return []
           }
 
-          if (!type.includes(coercedType)) {
-            if (isOnlyPlugin) {
-              log.warn([
-                `Unnecessary typehint \`${coercedType}\` in \`${identifier}-${modifier}\`.`,
-                `You can safely update it to \`${identifier}-${modifier.replace(
-                  coercedType + ':',
-                  ''
-                )}\`.`,
-              ])
-            } else {
-              return []
-            }
+          if (!type.includes(coercedType) && !isOnlyPlugin) {
+            return []
           }
 
           if (!isValidArbitraryValue(value)) {
@@ -615,9 +605,9 @@ function registerPlugins(plugins, context) {
 
       if (value instanceof RegExp) {
         log.warn('root-regex', [
-          // TODO: Improve this warning message
-          'RegExp in the safelist option is not supported.',
-          'Please use the object syntax instead: https://tailwindcss.com/docs/...',
+          'Regular expressions in `safelist` work differently in Tailwind CSS v3.0.',
+          'Update your `safelist` configuration to eliminate this warning.',
+          // TODO: Add https://tw.wtf/regex-safelist
         ])
         continue
       }
@@ -665,9 +655,8 @@ function registerPlugins(plugins, context) {
         if (count !== 0) continue
 
         log.warn([
-          // TODO: Improve this warning message
-          `You have a regex pattern in your "safelist" config (${regex}) that doesn't match any utilities.`,
-          'For more info, visit https://tailwindcss.com/docs/...',
+          `The safelist pattern \`${regex}\` doesn't match any Tailwind CSS classes.`,
+          'Fix this pattern or remove it from your `safelist` configuration.',
         ])
       }
     }

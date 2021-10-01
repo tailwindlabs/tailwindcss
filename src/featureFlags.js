@@ -40,7 +40,7 @@ export function issueFlagNotices(config) {
 
     log.warn('experimental-flags-enabled', [
       `You have enabled experimental features: ${changes}`,
-      'Experimental features are not covered by semver, may introduce breaking changes, and can change at any time.',
+      'Experimental features in Tailwind CSS are not covered by semver, may introduce breaking changes, and can change at any time.',
     ])
   }
 }

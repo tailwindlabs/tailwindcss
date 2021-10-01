@@ -122,8 +122,9 @@ export function normalizeConfig(config) {
 
   if (!valid) {
     log.warn('purge-deprecation', [
-      'The `purge` option in your tailwind.config.js file has been deprecated.',
-      'Please rename this to `content` instead.',
+      'The `purge`/`content` options have changed in Tailwind CSS v3.0.',
+      'Update your configuration file to eliminate this warning.',
+      // TODO: Add https://tw.wtf/purge-deprecation
     ])
   }
 

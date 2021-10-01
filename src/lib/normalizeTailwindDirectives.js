@@ -42,7 +42,8 @@ export default function normalizeTailwindDirectives(root) {
     if (['layer', 'responsive', 'variants'].includes(atRule.name)) {
       if (['responsive', 'variants'].includes(atRule.name)) {
         log.warn(`${atRule.name}-at-rule-deprecated`, [
-          `'@${atRule.name}' is deprecated, use '@layer utilities' or '@layer components' instead.`,
+          `The \`@${atRule.name}\` directive has been deprecated in Tailwind CSS v3.0.`,
+          `Use \`@layer utilities\` or \`@layer components\` instead.`,
         ])
       }
       layerDirectives.add(atRule)
