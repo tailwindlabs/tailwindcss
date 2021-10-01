@@ -327,7 +327,7 @@ Similar to the `group-*` variants we've supported for years for styling an eleme
   <span class="h-4 w-4 bg-gray-200 peer-checked:bg-blue-500">
     <!-- ... -->
   </span>
-  <!-- ... -->  
+  <!-- ... -->
 </label>
 ```
 
@@ -489,6 +489,8 @@ We recommend you always compile your CSS in a separate one-off build before depl
 
 If you want Tailwind to rebuild the CSS completely from scratch while in watch mode, saving your `tailwind.config.js` file or your CSS input file will invalidate all of the caches and trigger a fresh rebuild.
 
+<a name="watch-mode-and-one-off-builds" style={{'scroll-margin-top': '6.875rem'}}></a>
+
 ### Styles don't update when saving content files
 
 As of Tailwind CSS v2.2+, the JIT engine depends on PostCSS's [directory dependency messages](https://github.com/postcss/postcss/blob/main/docs/guidelines/runner.md#3-dependencies) to register your content files as CSS build dependencies with your build tool. These are a fairly new addition to PostCSS (added in May 2021), and not all build tools have been updated to support them yet.
@@ -515,7 +517,9 @@ For example, if you are using `postcss-cli`, set `TAILWIND_MODE=watch` in your d
 
 _If you're using Windows, we recommend [cross-env](https://www.npmjs.com/package/cross-env) for setting environment variables in your scripts._
 
-Note that setting `TAILWIND_MODE=watch` will start a long-running watch process in the background, so if you set that environment variable when trying to do a one-off build, it will look like the build is hanging. You should only set `TAILWIND_MODE=watch` when you are actually running a dev server/watch process.
+Note that setting `TAILWIND_MODE=watch` will start a long-running watch process in the background, so if you set that environment variable when trying to do a one-off build, it will look like the build is hanging.
+
+You should only set `TAILWIND_MODE=watch` when you are actually running a dev server/watch process, and only if your build tool doesn't yet support PostCSS directory dependency messages. This flag is a temporary workaround for incompatible tooling, and will eventually be removed in a future version of Tailwind CSS.
 
 ### Styles rebuild in an infinite loop
 
