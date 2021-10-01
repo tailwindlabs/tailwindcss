@@ -55,7 +55,7 @@ function minimumImpactSelector(nodes) {
   return [bestNode, ...rest].join('').trim()
 }
 
-let elementSelectorParser = selectorParser((selectors) => {
+export let elementSelectorParser = selectorParser((selectors) => {
   return selectors.map((s) => {
     let nodes = s.split((n) => n.type === 'combinator' && n.value === ' ').pop()
     return minimumImpactSelector(nodes)
