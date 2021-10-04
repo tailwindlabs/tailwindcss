@@ -2,33 +2,27 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import { flagEnabled } from '../featureFlags'
 
-function isPseudoElement(n) {
-  if (n.type !== 'pseudo') {
-    return false
-  }
-
-  return (
-    n.value.startsWith('::') ||
-    [':before', ':after', ':first-line', ':first-letter'].includes(n.value)
-  )
-}
-
 function minimumImpactSelector(nodes) {
   let rest = nodes
-    // Keep all pseudo & combinator types (:not([hidden]) ~ :not([hidden]))
-    .filter((n) => n.type === 'pseudo' || n.type === 'combinator')
-    // Remove leading pseudo's (:hover, :focus, ...)
-    .filter((n, idx, all) => {
-      // Keep pseudo elements
-      if (isPseudoElement(n)) return true
+    .filter((node) => {
+      // Keep non-pseudo nodes
+      if (node.type !== 'pseudo') return true
 
-      if (idx === 0 && n.type === 'pseudo') return false
-      if (idx > 0 && n.type === 'pseudo' && all[idx - 1].type === 'pseudo') return false
+      // Keep pseudo nodes that have subnodes
+      // E.g.: `:not()` contains subnodes inside the parentheses
+      if (node.nodes.length > 0) return true
 
-      return true
+      // Keep pseudo `elements`
+      // This implicitly means that we ignore pseudo `classes`
+      return (
+        node.value.startsWith('::') ||
+        [':before', ':after', ':first-line', ':first-letter'].includes(node.value)
+      )
     })
+    .reverse()
 
-  let [bestNode] = nodes
+  let [bestNode] = rest
+  let splitPointIdx = -1
 
   for (let [type, getNode = (n) => n] of [
     ['class'],
@@ -44,15 +38,20 @@ function minimumImpactSelector(nodes) {
     ],
     ['attribute'],
   ]) {
-    let match = nodes.find((n) => n.type === type)
+    let idx = rest.findIndex((n) => n.type === type)
 
-    if (match) {
-      bestNode = getNode(match)
+    if (idx !== -1) {
+      splitPointIdx = idx
+      bestNode = getNode(rest[idx])
       break
     }
   }
 
-  return [bestNode, ...rest].join('').trim()
+  if (splitPointIdx === -1) {
+    return rest.reverse().join('').trim()
+  }
+
+  return [bestNode, ...rest.slice(0, splitPointIdx).reverse()].join('').trim()
 }
 
 export let elementSelectorParser = selectorParser((selectors) => {
