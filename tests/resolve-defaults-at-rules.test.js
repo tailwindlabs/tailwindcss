@@ -149,7 +149,7 @@ test('with multi-class variants', async () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .group-hover\\:scale-x-110,
-      .peer ~ {
+      .peer-focus\\:rotate-3 {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -191,7 +191,7 @@ test('with multi-class pseudo-element variants', async () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .group-hover\\:before\\:scale-x-110::before,
-      .peer ~ ::after {
+      .peer-focus\\:after\\:rotate-3::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -239,7 +239,7 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .group-hover\\:hover\\:before\\:scale-x-110::before,
-      .peer ~ :focus::after {
+      .peer-focus\\:focus\\:after\\:rotate-3::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -326,7 +326,7 @@ test('with apply', async () => {
       .foo,
       .bar::before,
       .baz::before,
-      .whats > :hover,
+      .next > span,
       .media-queries,
       .a,
       .b,

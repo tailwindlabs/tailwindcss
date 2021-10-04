@@ -41,9 +41,7 @@ it('should be possible to matchComponents', () => {
 
   return run('@tailwind base; @tailwind components; @tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      *,
-      ::before,
-      ::after {
+      .shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
