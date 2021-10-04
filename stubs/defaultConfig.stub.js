@@ -257,11 +257,6 @@ module.exports = {
       DEFAULT: '100%',
     },
     hueRotate: {
-      '-180': '-180deg',
-      '-90': '-90deg',
-      '-60': '-60deg',
-      '-30': '-30deg',
-      '-15': '-15deg',
       0: '0deg',
       15: '15deg',
       30: '30deg',
@@ -510,10 +505,9 @@ module.exports = {
       full: '100%',
       screen: '100vh',
     }),
-    inset: ({ theme, negative }) => ({
+    inset: ({ theme }) => ({
       auto: 'auto',
       ...theme('spacing'),
-      ...negative(theme('spacing')),
       '1/2': '50%',
       '1/3': '33.333333%',
       '2/3': '66.666667%',
@@ -521,13 +515,6 @@ module.exports = {
       '2/4': '50%',
       '3/4': '75%',
       full: '100%',
-      '-1/2': '-50%',
-      '-1/3': '-33.333333%',
-      '-2/3': '-66.666667%',
-      '-1/4': '-25%',
-      '-2/4': '-50%',
-      '-3/4': '-75%',
-      '-full': '-100%',
     }),
     keyframes: {
       spin: {
@@ -586,10 +573,9 @@ module.exports = {
       disc: 'disc',
       decimal: 'decimal',
     },
-    margin: ({ theme, negative }) => ({
+    margin: ({ theme }) => ({
       auto: 'auto',
       ...theme('spacing'),
-      ...negative(theme('spacing')),
     }),
     maxHeight: ({ theme }) => ({
       ...theme('spacing'),
@@ -705,14 +691,6 @@ module.exports = {
       8: '8px',
     },
     rotate: {
-      '-180': '-180deg',
-      '-90': '-90deg',
-      '-45': '-45deg',
-      '-12': '-12deg',
-      '-6': '-6deg',
-      '-3': '-3deg',
-      '-2': '-2deg',
-      '-1': '-1deg',
       0: '0deg',
       1: '1deg',
       2: '2deg',
@@ -742,9 +720,8 @@ module.exports = {
       125: '1.25',
       150: '1.5',
     },
-    scrollMargin: ({ theme, negative }) => ({
+    scrollMargin: ({ theme }) => ({
       ...theme('spacing'),
-      ...negative(theme('spacing')),
     }),
     scrollPadding: ({ theme }) => theme('spacing'),
     sepia: {
@@ -752,11 +729,6 @@ module.exports = {
       DEFAULT: '100%',
     },
     skew: {
-      '-12': '-12deg',
-      '-6': '-6deg',
-      '-3': '-3deg',
-      '-2': '-2deg',
-      '-1': '-1deg',
       0: '0deg',
       1: '1deg',
       2: '2deg',
@@ -764,9 +736,8 @@ module.exports = {
       6: '6deg',
       12: '12deg',
     },
-    space: ({ theme, negative }) => ({
+    space: ({ theme }) => ({
       ...theme('spacing'),
-      ...negative(theme('spacing')),
     }),
     stroke: {
       current: 'currentColor',
@@ -777,9 +748,8 @@ module.exports = {
       2: '2',
     },
     textColor: ({ theme }) => theme('colors'),
-    textIndent: ({ theme, negative }) => ({
+    textIndent: ({ theme }) => ({
       ...theme('spacing'),
-      ...negative(theme('spacing')),
     }),
     textOpacity: ({ theme }) => theme('opacity'),
     transformOrigin: {
@@ -831,9 +801,8 @@ module.exports = {
       out: 'cubic-bezier(0, 0, 0.2, 1)',
       'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
     },
-    translate: ({ theme, negative }) => ({
+    translate: ({ theme }) => ({
       ...theme('spacing'),
-      ...negative(theme('spacing')),
       '1/2': '50%',
       '1/3': '33.333333%',
       '2/3': '66.666667%',
@@ -841,13 +810,6 @@ module.exports = {
       '2/4': '50%',
       '3/4': '75%',
       full: '100%',
-      '-1/2': '-50%',
-      '-1/3': '-33.333333%',
-      '-2/3': '-66.666667%',
-      '-1/4': '-25%',
-      '-2/4': '-50%',
-      '-3/4': '-75%',
-      '-full': '-100%',
     }),
     width: ({ theme }) => ({
       auto: 'auto',

@@ -40,10 +40,16 @@ function mergeWith(target, ...sources) {
 const configUtils = {
   colors,
   negative(scale) {
+    // TODO: Log that this function isn't really needed anymore?
     return Object.keys(scale)
       .filter((key) => scale[key] !== '0')
       .reduce((negativeScale, key) => {
-        negativeScale[`-${key}`] = negateValue(scale[key])
+        let negativeValue = negateValue(scale[key])
+
+        if (negativeValue !== undefined) {
+          negativeScale[`-${key}`] = negativeValue
+        }
+
         return negativeScale
       }, {})
   },
