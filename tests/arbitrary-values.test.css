@@ -215,6 +215,9 @@
 .flex-grow-\[var\(--grow\)\] {
   flex-grow: var(--grow);
 }
+.basis-\[var\(--basis\)\] {
+  flex-basis: var(--basis);
+}
 .origin-\[50px_50px\] {
   transform-origin: 50px 50px;
 }
