@@ -1235,6 +1235,14 @@ export let corePlugins = {
     })
   },
 
+  overscrollBehaviorInline: ({ addUtilities }) => {
+    addUtilities({
+      '.overscroll-inline-auto': { 'overscroll-behavior-inline': 'auto' },
+      '.overscroll-inline-contain': { 'overscroll-behavior-inline': 'contain' },
+      '.overscroll-inline-none': { 'overscroll-behavior-inline': 'none' },
+    })
+  },
+
   scrollBehavior: ({ addUtilities }) => {
     addUtilities({
       '.scroll-auto': { 'scroll-behavior': 'auto' },

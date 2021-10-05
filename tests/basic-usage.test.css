@@ -469,6 +469,9 @@
 .overscroll-contain {
   overscroll-behavior: contain;
 }
+.overscroll-inline-contain {
+  overscroll-behavior-inline: contain;
+}
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
