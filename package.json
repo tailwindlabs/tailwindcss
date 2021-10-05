@@ -54,7 +54,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^27.1.0",
+    "jest": "^27.2.4",
     "jest-diff": "^27.2.0",
     "postcss": "^8.3.8",
     "postcss-cli": "^8.3.1",
