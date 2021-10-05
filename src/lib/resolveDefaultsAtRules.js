@@ -32,33 +32,15 @@ function minimumImpactSelector(nodes) {
     })
     .reverse()
 
-  let [bestNode] = rest
-  let splitPointIdx = -1
+  let searchFor = new Set(['tag', 'class', 'id', 'attribute'])
 
-  let searchFor = ['tag', 'class', 'id', 'attribute']
+  let splitPointIdx = rest.findIndex((n) => searchFor.has(n.type))
+  if (splitPointIdx === -1) return rest.reverse().join('').trim()
 
-  for (let type of searchFor) {
-    let idx = rest.findIndex((n) => n.type === type)
+  let node = rest[splitPointIdx]
+  let bestNode = getNode[node.type] ? getNode[node.type](node) : node
 
-    if (idx !== -1) {
-      splitPointIdx = idx
-      bestNode = getNode[type] ? getNode[type](rest[idx]) : rest[idx]
-      break
-    }
-  }
-
-  if (splitPointIdx === -1) {
-    return rest.reverse().join('').trim()
-  }
-
-  let other = rest.slice(0, splitPointIdx)
-  if (other.length > 0 && other[other.length - 1].spaces.before === '') {
-    if (searchFor.includes(other[other.length - 1].type)) {
-      return minimumImpactSelector(other.reverse())
-    }
-  }
-
-  return [bestNode, ...other.slice().reverse()].join('').trim()
+  return [bestNode, ...rest.slice(0, splitPointIdx).reverse()].join('').trim()
 }
 
 export let elementSelectorParser = selectorParser((selectors) => {
