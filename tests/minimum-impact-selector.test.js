@@ -3,6 +3,7 @@ import { elementSelectorParser } from '../src/lib/resolveDefaultsAtRules'
 it.each`
   before                                                                 | after
   ${'*'}                                                                 | ${'*'}
+  ${'*:hover'}                                                           | ${'*'}
   ${'* > *'}                                                             | ${'* > *'}
   ${'.foo'}                                                              | ${'.foo'}
   ${'.foo:hover'}                                                        | ${'.foo'}
