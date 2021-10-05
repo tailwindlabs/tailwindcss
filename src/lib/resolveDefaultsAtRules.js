@@ -2,6 +2,17 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import { flagEnabled } from '../featureFlags'
 
+let getNode = {
+  id(node) {
+    return selectorParser.attribute({
+      attribute: 'id',
+      operator: '=',
+      value: node.value,
+      quoteMark: '"',
+    })
+  },
+}
+
 function minimumImpactSelector(nodes) {
   let rest = nodes
     .filter((node) => {
@@ -24,25 +35,14 @@ function minimumImpactSelector(nodes) {
   let [bestNode] = rest
   let splitPointIdx = -1
 
-  for (let [type, getNode = (n) => n] of [
-    ['class'],
-    [
-      'id',
-      (n) =>
-        selectorParser.attribute({
-          attribute: 'id',
-          operator: '=',
-          value: n.value,
-          quoteMark: '"',
-        }),
-    ],
-    ['attribute'],
-  ]) {
+  let searchFor = ['tag', 'class', 'id', 'attribute']
+
+  for (let type of searchFor) {
     let idx = rest.findIndex((n) => n.type === type)
 
     if (idx !== -1) {
       splitPointIdx = idx
-      bestNode = getNode(rest[idx])
+      bestNode = getNode[type] ? getNode[type](rest[idx]) : rest[idx]
       break
     }
   }
@@ -51,7 +51,14 @@ function minimumImpactSelector(nodes) {
     return rest.reverse().join('').trim()
   }
 
-  return [bestNode, ...rest.slice(0, splitPointIdx).reverse()].join('').trim()
+  let other = rest.slice(0, splitPointIdx)
+  if (other.length > 0 && other[other.length - 1].spaces.before === '') {
+    if (searchFor.includes(other[other.length - 1].type)) {
+      return minimumImpactSelector(other.reverse())
+    }
+  }
+
+  return [bestNode, ...other.slice().reverse()].join('').trim()
 }
 
 export let elementSelectorParser = selectorParser((selectors) => {
