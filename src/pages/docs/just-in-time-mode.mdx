@@ -508,7 +508,7 @@ For example, if you are using `postcss-cli`, set `TAILWIND_MODE=watch` in your d
     "dev": "TAILWIND_MODE=watch postcss -i tailwind.css -o build.css --watch",
 
     // Do not set TAILWIND_MODE for one-off builds
-    "build": "postcss -i tailwind.css -o build.css",
+    "build": "postcss -i tailwind.css -o build.css --minify",
     // ...
   },
   // ...
@@ -582,10 +582,10 @@ You can use packages like `npm-run-all` or `concurrently` to compile your CSS al
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
     "dev:parcel": "parcel serve ./src/index.html",
-    "dev:css": "tailwindcss -o src/tailwind.css -w",
+    "dev:css": "tailwindcss -o src/tailwind.css --watch",
     "build": "npm-run-all build:css build:parcel",
     "build:parcel": "parcel build ./src/index.html",
-    "build:css": "tailwindcss -o src/tailwind.css",
+    "build:css": "tailwindcss -o src/tailwind.css --minify",
   },
 }
 ```
