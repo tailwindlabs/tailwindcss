@@ -21,6 +21,8 @@ it.each`
   ${'.owl > :not([hidden]) + :not([hidden])'}                            | ${'.owl > :not([hidden]) + :not([hidden])'}
   ${'.group:hover .group-hover\\:owl > :not([hidden]) + :not([hidden])'} | ${'.group-hover\\:owl > :not([hidden]) + :not([hidden])'}
   ${'.peer:first-child ~ .peer-first\\:shadow-md'}                       | ${'.peer-first\\:shadow-md'}
+  ${'.whats ~ .next > span:hover'}                                       | ${'span'}
+  ${'.foo .bar ~ .baz > .next > span > article:hover'}                   | ${'article'}
 `('should generate "$after" from "$before"', ({ before, after }) => {
   expect(elementSelectorParser.transformSync(before).join(', ')).toEqual(after)
 })

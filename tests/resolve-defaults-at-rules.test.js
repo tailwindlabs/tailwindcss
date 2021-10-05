@@ -326,7 +326,7 @@ test('with apply', async () => {
       .foo,
       .bar::before,
       .baz::before,
-      .next > span,
+      span,
       .media-queries,
       .a,
       .b,
