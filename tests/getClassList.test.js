@@ -18,4 +18,9 @@ it('should generate every possible class, without variants', () => {
   expect(context.getClassList()).toContain('-m-0')
   expect(context.getClassList()).not.toContain('-uppercase')
   expect(context.getClassList()).not.toContain('-opacity-50')
+  expect(
+    createContext(
+      resolveConfig({ theme: { extend: { margin: { DEFAULT: '5px' } } } })
+    ).getClassList()
+  ).not.toContain('-m-DEFAULT')
 })
