@@ -40,7 +40,15 @@ function minimumImpactSelector(nodes) {
   let node = rest[splitPointIdx]
   let bestNode = getNode[node.type] ? getNode[node.type](node) : node
 
-  return [bestNode, ...rest.slice(0, splitPointIdx).reverse()].join('').trim()
+  rest = rest.slice(0, splitPointIdx)
+
+  let combinatorIdx = rest.findIndex((n) => n.type === 'combinator' && n.value === '>')
+  if (combinatorIdx !== -1) {
+    rest.splice(0, combinatorIdx)
+    rest.unshift(selectorParser.universal())
+  }
+
+  return [bestNode, ...rest.reverse()].join('').trim()
 }
 
 export let elementSelectorParser = selectorParser((selectors) => {

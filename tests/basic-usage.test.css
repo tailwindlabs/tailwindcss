@@ -23,10 +23,10 @@
   --tw-scroll-snap-strictness: proximity;
 }
 
-.divide-x-2 > :not([hidden]) ~ :not([hidden]),
-.divide-y-4 > :not([hidden]) ~ :not([hidden]),
-.divide-x-0 > :not([hidden]) ~ :not([hidden]),
-.divide-y-0 > :not([hidden]) ~ :not([hidden]),
+.divide-x-2 > *,
+.divide-y-4 > *,
+.divide-x-0 > *,
+.divide-y-0 > *,
 .border,
 .border-2,
 .border-x-4,
