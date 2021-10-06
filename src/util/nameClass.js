@@ -14,7 +14,7 @@ export function formatClass(classPrefix, key) {
     return classPrefix
   }
 
-  if (key === '-') {
+  if (key === '-' || key === '-DEFAULT') {
     return `-${classPrefix}`
   }
 

@@ -8,7 +8,7 @@ test('it negates numeric CSS values', () => {
   expect(negateValue('-7ch')).toEqual('7ch')
 })
 
-test('it leaves keywords untouched', () => {
-  expect(negateValue('auto')).toEqual('auto')
-  expect(negateValue('cover')).toEqual('cover')
+test('values that cannot be negated become undefined', () => {
+  expect(negateValue('auto')).toBeUndefined()
+  expect(negateValue('cover')).toBeUndefined()
 })

@@ -17,6 +17,7 @@ import {
   position,
   lineWidth,
 } from './dataTypes'
+import negateValue from './negateValue'
 
 export function applyStateToMarker(selector, marker, state, join) {
   let markerIdx = selector.search(new RegExp(`${marker}[:[]`))
@@ -167,24 +168,50 @@ export function transformLastClasses(transformClass, { wrap, withRule } = {}) {
   }
 }
 
-export function asValue(modifier, lookup = {}, { validate = () => true } = {}) {
-  let value = lookup[modifier]
-
-  if (value !== undefined) {
-    return value
-  }
-
+function resolveArbitraryValue(modifier, validate) {
   if (!isArbitraryValue(modifier)) {
     return undefined
   }
 
-  value = modifier.slice(1, -1)
+  let value = modifier.slice(1, -1)
 
   if (!validate(value)) {
     return undefined
   }
 
   return normalize(value)
+}
+
+function asNegativeValue(modifier, lookup = {}, validate) {
+  let positiveValue = lookup[modifier]
+
+  if (positiveValue !== undefined) {
+    return negateValue(positiveValue)
+  }
+
+  if (isArbitraryValue(modifier)) {
+    let resolved = resolveArbitraryValue(modifier, validate)
+
+    if (resolved === undefined) {
+      return undefined
+    }
+
+    return negateValue(resolved)
+  }
+}
+
+export function asValue(modifier, options = {}, { validate = () => true } = {}) {
+  let value = options.values?.[modifier]
+
+  if (value !== undefined) {
+    return value
+  }
+
+  if (options.supportsNegativeValues && modifier.startsWith('-')) {
+    return asNegativeValue(modifier.slice(1), options.values, validate)
+  }
+
+  return resolveArbitraryValue(modifier, validate)
 }
 
 function isArbitraryValue(input) {
@@ -201,16 +228,16 @@ function splitAlpha(modifier) {
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
 }
 
-export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
-  if (lookup[modifier] !== undefined) {
-    return lookup[modifier]
+export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
+  if (options.values?.[modifier] !== undefined) {
+    return options.values?.[modifier]
   }
 
   let [color, alpha] = splitAlpha(modifier)
 
   if (alpha !== undefined) {
     let normalizedColor =
-      lookup[color] ?? (isArbitraryValue(color) ? color.slice(1, -1) : undefined)
+      options.values?.[color] ?? (isArbitraryValue(color) ? color.slice(1, -1) : undefined)
 
     if (normalizedColor === undefined) {
       return undefined
@@ -227,16 +254,16 @@ export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
     return withAlphaValue(normalizedColor, tailwindConfig.theme.opacity[alpha])
   }
 
-  return asValue(modifier, lookup, { validate: validateColor })
+  return asValue(modifier, options, { validate: validateColor })
 }
 
-export function asLookupValue(modifier, lookup = {}) {
-  return lookup[modifier]
+export function asLookupValue(modifier, options = {}) {
+  return options.values?.[modifier]
 }
 
 function guess(validate) {
-  return (modifier, lookup) => {
-    return asValue(modifier, lookup, { validate })
+  return (modifier, options) => {
+    return asValue(modifier, options, { validate })
   }
 }
 
@@ -265,7 +292,7 @@ function splitAtFirst(input, delim) {
   return [input.slice(0, idx), input.slice(idx + 1)]
 }
 
-export function coerceValue(types, modifier, values, tailwindConfig) {
+export function coerceValue(types, modifier, options, tailwindConfig) {
   if (isArbitraryValue(modifier)) {
     let [explicitType, value] = splitAtFirst(modifier.slice(1, -1), ':')
 
@@ -274,13 +301,13 @@ export function coerceValue(types, modifier, values, tailwindConfig) {
     }
 
     if (value.length > 0 && supportedTypes.includes(explicitType)) {
-      return [asValue(`[${value}]`, values, tailwindConfig), explicitType]
+      return [asValue(`[${value}]`, options), explicitType]
     }
   }
 
   // Find first matching type
   for (let type of [].concat(types)) {
-    let result = typeMap[type](modifier, values, tailwindConfig)
+    let result = typeMap[type](modifier, options, { tailwindConfig })
     if (result) return [result, type]
   }
 

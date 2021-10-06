@@ -17,6 +17,7 @@ import * as sharedState from './sharedState'
 import { env } from './sharedState'
 import { toPath } from '../util/toPath'
 import log from '../util/log'
+import negateValue from '../util/negateValue'
 
 function insertInto(list, value, { before = [] } = {}) {
   before = [].concat(before)
@@ -300,7 +301,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         function wrapped(modifier, { isOnlyPlugin }) {
           let { type = 'any' } = options
           type = [].concat(type)
-          let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
+          let [value, coercedType] = coerceValue(type, modifier, options, tailwindConfig)
 
           if (value === undefined) {
             return []
@@ -352,7 +353,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         function wrapped(modifier, { isOnlyPlugin }) {
           let { type = 'any' } = options
           type = [].concat(type)
-          let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
+          let [value, coercedType] = coerceValue(type, modifier, options, tailwindConfig)
 
           if (value === undefined) {
             return []
@@ -670,10 +671,16 @@ function registerPlugins(plugins, context) {
     for (let util of classList) {
       if (Array.isArray(util)) {
         let [utilName, options] = util
+        let negativeClasses = []
 
-        for (let value of Object.keys(options?.values ?? {})) {
-          output.push(formatClass(utilName, value))
+        for (let [key, value] of Object.entries(options?.values ?? {})) {
+          output.push(formatClass(utilName, key))
+          if (options?.supportsNegativeValues && negateValue(value)) {
+            negativeClasses.push(formatClass(utilName, `-${key}`))
+          }
         }
+
+        output.push(...negativeClasses)
       } else {
         output.push(util)
       }

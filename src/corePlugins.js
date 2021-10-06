@@ -529,19 +529,23 @@ export let corePlugins = {
     })
   },
 
-  inset: createUtilityPlugin('inset', [
-    ['inset', ['top', 'right', 'bottom', 'left']],
+  inset: createUtilityPlugin(
+    'inset',
     [
-      ['inset-x', ['left', 'right']],
-      ['inset-y', ['top', 'bottom']],
+      ['inset', ['top', 'right', 'bottom', 'left']],
+      [
+        ['inset-x', ['left', 'right']],
+        ['inset-y', ['top', 'bottom']],
+      ],
+      [
+        ['top', ['top']],
+        ['right', ['right']],
+        ['bottom', ['bottom']],
+        ['left', ['left']],
+      ],
     ],
-    [
-      ['top', ['top']],
-      ['right', ['right']],
-      ['bottom', ['bottom']],
-      ['left', ['left']],
-    ],
-  ]),
+    { supportsNegativeValues: true }
+  ),
 
   isolation: ({ addUtilities }) => {
     addUtilities({
@@ -550,8 +554,8 @@ export let corePlugins = {
     })
   },
 
-  zIndex: createUtilityPlugin('zIndex', [['z', ['zIndex']]]),
-  order: createUtilityPlugin('order'),
+  zIndex: createUtilityPlugin('zIndex', [['z', ['zIndex']]], { supportsNegativeValues: true }),
+  order: createUtilityPlugin('order', undefined, { supportsNegativeValues: true }),
   gridColumn: createUtilityPlugin('gridColumn', [['col', ['gridColumn']]]),
   gridColumnStart: createUtilityPlugin('gridColumnStart', [['col-start', ['gridColumnStart']]]),
   gridColumnEnd: createUtilityPlugin('gridColumnEnd', [['col-end', ['gridColumnEnd']]]),
@@ -576,19 +580,23 @@ export let corePlugins = {
     })
   },
 
-  margin: createUtilityPlugin('margin', [
-    ['m', ['margin']],
+  margin: createUtilityPlugin(
+    'margin',
     [
-      ['mx', ['margin-left', 'margin-right']],
-      ['my', ['margin-top', 'margin-bottom']],
+      ['m', ['margin']],
+      [
+        ['mx', ['margin-left', 'margin-right']],
+        ['my', ['margin-top', 'margin-bottom']],
+      ],
+      [
+        ['mt', ['margin-top']],
+        ['mr', ['margin-right']],
+        ['mb', ['margin-bottom']],
+        ['ml', ['margin-left']],
+      ],
     ],
-    [
-      ['mt', ['margin-top']],
-      ['mr', ['margin-right']],
-      ['mb', ['margin-bottom']],
-      ['ml', ['margin-left']],
-    ],
-  ]),
+    { supportsNegativeValues: true }
+  ),
 
   boxSizing: ({ addUtilities }) => {
     addUtilities({
@@ -653,33 +661,48 @@ export let corePlugins = {
   },
 
   transformOrigin: createUtilityPlugin('transformOrigin', [['origin', ['transformOrigin']]]),
-  translate: createUtilityPlugin('translate', [
+  translate: createUtilityPlugin(
+    'translate',
     [
       [
-        'translate-x',
-        [['@defaults transform', {}], '--tw-translate-x', ['transform', 'var(--tw-transform)']],
-      ],
-      [
-        'translate-y',
-        [['@defaults transform', {}], '--tw-translate-y', ['transform', 'var(--tw-transform)']],
+        [
+          'translate-x',
+          [['@defaults transform', {}], '--tw-translate-x', ['transform', 'var(--tw-transform)']],
+        ],
+        [
+          'translate-y',
+          [['@defaults transform', {}], '--tw-translate-y', ['transform', 'var(--tw-transform)']],
+        ],
       ],
     ],
-  ]),
-  rotate: createUtilityPlugin('rotate', [
-    ['rotate', [['@defaults transform', {}], '--tw-rotate', ['transform', 'var(--tw-transform)']]],
-  ]),
-  skew: createUtilityPlugin('skew', [
+    { supportsNegativeValues: true }
+  ),
+  rotate: createUtilityPlugin(
+    'rotate',
     [
       [
-        'skew-x',
-        [['@defaults transform', {}], '--tw-skew-x', ['transform', 'var(--tw-transform)']],
-      ],
-      [
-        'skew-y',
-        [['@defaults transform', {}], '--tw-skew-y', ['transform', 'var(--tw-transform)']],
+        'rotate',
+        [['@defaults transform', {}], '--tw-rotate', ['transform', 'var(--tw-transform)']],
       ],
     ],
-  ]),
+    { supportsNegativeValues: true }
+  ),
+  skew: createUtilityPlugin(
+    'skew',
+    [
+      [
+        [
+          'skew-x',
+          [['@defaults transform', {}], '--tw-skew-x', ['transform', 'var(--tw-transform)']],
+        ],
+        [
+          'skew-y',
+          [['@defaults transform', {}], '--tw-skew-y', ['transform', 'var(--tw-transform)']],
+        ],
+      ],
+    ],
+    { supportsNegativeValues: true }
+  ),
   scale: createUtilityPlugin('scale', [
     [
       'scale',
@@ -859,19 +882,23 @@ export let corePlugins = {
     })
   },
 
-  scrollMargin: createUtilityPlugin('scrollMargin', [
-    ['scroll-m', ['scroll-margin']],
+  scrollMargin: createUtilityPlugin(
+    'scrollMargin',
     [
-      ['scroll-mx', ['scroll-margin-left', 'scroll-margin-right']],
-      ['scroll-my', ['scroll-margin-top', 'scroll-margin-bottom']],
+      ['scroll-m', ['scroll-margin']],
+      [
+        ['scroll-mx', ['scroll-margin-left', 'scroll-margin-right']],
+        ['scroll-my', ['scroll-margin-top', 'scroll-margin-bottom']],
+      ],
+      [
+        ['scroll-mt', ['scroll-margin-top']],
+        ['scroll-mr', ['scroll-margin-right']],
+        ['scroll-mb', ['scroll-margin-bottom']],
+        ['scroll-ml', ['scroll-margin-left']],
+      ],
     ],
-    [
-      ['scroll-mt', ['scroll-margin-top']],
-      ['scroll-mr', ['scroll-margin-right']],
-      ['scroll-mb', ['scroll-margin-bottom']],
-      ['scroll-ml', ['scroll-margin-left']],
-    ],
-  ]),
+    { supportsNegativeValues: true }
+  ),
 
   scrollPadding: createUtilityPlugin('scrollPadding', [
     ['scroll-p', ['scroll-padding']],
@@ -1069,7 +1096,7 @@ export let corePlugins = {
           }
         },
       },
-      { values: theme('space') }
+      { values: theme('space'), supportsNegativeValues: true }
     )
 
     addUtilities({
@@ -1641,7 +1668,9 @@ export let corePlugins = {
     })
   },
 
-  textIndent: createUtilityPlugin('textIndent', [['indent', ['text-indent']]]),
+  textIndent: createUtilityPlugin('textIndent', [['indent', ['text-indent']]], {
+    supportsNegativeValues: true,
+  }),
 
   verticalAlign: ({ addUtilities, matchUtilities }) => {
     addUtilities({
@@ -1730,7 +1759,9 @@ export let corePlugins = {
   },
 
   lineHeight: createUtilityPlugin('lineHeight', [['leading', ['lineHeight']]]),
-  letterSpacing: createUtilityPlugin('letterSpacing', [['tracking', ['letterSpacing']]]),
+  letterSpacing: createUtilityPlugin('letterSpacing', [['tracking', ['letterSpacing']]], {
+    supportsNegativeValues: true,
+  }),
 
   textColor: ({ matchUtilities, theme, corePlugins }) => {
     matchUtilities(
@@ -2099,7 +2130,7 @@ export let corePlugins = {
           }
         },
       },
-      { values: theme('hueRotate') }
+      { values: theme('hueRotate'), supportsNegativeValues: true }
     )
   },
 
@@ -2250,7 +2281,7 @@ export let corePlugins = {
           }
         },
       },
-      { values: theme('backdropHueRotate') }
+      { values: theme('backdropHueRotate'), supportsNegativeValues: true }
     )
   },
 
