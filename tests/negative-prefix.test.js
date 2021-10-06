@@ -254,6 +254,49 @@ test('negating a default value', () => {
   })
 })
 
+test('using a negative prefix with a negative default scale value', () => {
+  let config = {
+    content: [{ raw: html`<div class="mt -mt"></div>` }],
+    theme: {
+      margin: {
+        DEFAULT: '8px',
+        '-DEFAULT': '-4px',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .mt {
+        margin-top: 8px;
+      }
+      .-mt {
+        margin-top: -4px;
+      }
+    `)
+  })
+})
+
+test('negating a default value with a configured prefix', () => {
+  let config = {
+    prefix: 'tw-',
+    content: [{ raw: html`<div class="tw--mt"></div>` }],
+    theme: {
+      margin: {
+        DEFAULT: '15px',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .tw--mt {
+        margin-top: -15px;
+      }
+    `)
+  })
+})
+
 test('arbitrary value keywords should be ignored', () => {
   let config = {
     content: [{ raw: html`<div class="-mt-[auto]"></div>` }],
