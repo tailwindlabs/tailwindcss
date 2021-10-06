@@ -300,7 +300,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         function wrapped(modifier, { isOnlyPlugin }) {
           let { type = 'any' } = options
           type = [].concat(type)
-          let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
+          let [value, coercedType] = coerceValue(type, modifier, options, tailwindConfig)
 
           if (value === undefined) {
             return []
@@ -352,7 +352,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         function wrapped(modifier, { isOnlyPlugin }) {
           let { type = 'any' } = options
           type = [].concat(type)
-          let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
+          let [value, coercedType] = coerceValue(type, modifier, options, tailwindConfig)
 
           if (value === undefined) {
             return []
