@@ -23,6 +23,25 @@ test('using a negative prefix with a negative scale value', () => {
   })
 })
 
+test('using a negative scale value with a plugin that does not support dynamic negative values', () => {
+  let config = {
+    content: [{ raw: html`<div class="-opacity-50"></div>` }],
+    theme: {
+      opacity: {
+        '-50': '0.5',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .-opacity-50 {
+        opacity: 0.5;
+      }
+    `)
+  })
+})
+
 test('using a negative prefix without a negative scale value', () => {
   let config = {
     content: [{ raw: html`<div class="mt-5 -mt-5"></div>` }],

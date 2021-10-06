@@ -3,7 +3,7 @@ import transformThemeValue from './transformThemeValue'
 export default function createUtilityPlugin(
   themeKey,
   utilityVariations = [[themeKey, [themeKey]]],
-  { filterDefault = false, type = 'any' } = {}
+  { filterDefault = false, ...options } = {}
 ) {
   let transformValue = transformThemeValue(themeKey)
   return function ({ matchUtilities, theme }) {
@@ -24,12 +24,12 @@ export default function createUtilityPlugin(
           })
         }, {}),
         {
+          ...options,
           values: filterDefault
             ? Object.fromEntries(
                 Object.entries(theme(themeKey) ?? {}).filter(([modifier]) => modifier !== 'DEFAULT')
               )
             : theme(themeKey),
-          type,
         }
       )
     }
