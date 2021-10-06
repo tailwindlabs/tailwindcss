@@ -75,7 +75,7 @@
     "didyoumean": "^1.2.2",
     "dlv": "^1.1.3",
     "fast-glob": "^3.2.7",
-    "glob-parent": "^6.0.1",
+    "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
     "normalize-path": "^3.0.0",
     "object-hash": "^2.2.0",
