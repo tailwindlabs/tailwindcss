@@ -2,60 +2,56 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import { flagEnabled } from '../featureFlags'
 
-function isPseudoElement(n) {
-  if (n.type !== 'pseudo') {
-    return false
-  }
-
-  return (
-    n.value.startsWith('::') ||
-    [':before', ':after', ':first-line', ':first-letter'].includes(n.value)
-  )
+let getNode = {
+  id(node) {
+    return selectorParser.attribute({
+      attribute: 'id',
+      operator: '=',
+      value: node.value,
+      quoteMark: '"',
+    })
+  },
 }
 
 function minimumImpactSelector(nodes) {
   let rest = nodes
-    // Keep all pseudo & combinator types (:not([hidden]) ~ :not([hidden]))
-    .filter((n) => n.type === 'pseudo' || n.type === 'combinator')
-    // Remove leading pseudo's (:hover, :focus, ...)
-    .filter((n, idx, all) => {
-      // Keep pseudo elements
-      if (isPseudoElement(n)) return true
+    .filter((node) => {
+      // Keep non-pseudo nodes
+      if (node.type !== 'pseudo') return true
 
-      if (idx === 0 && n.type === 'pseudo') return false
-      if (idx > 0 && n.type === 'pseudo' && all[idx - 1].type === 'pseudo') return false
+      // Keep pseudo nodes that have subnodes
+      // E.g.: `:not()` contains subnodes inside the parentheses
+      if (node.nodes.length > 0) return true
 
-      return true
+      // Keep pseudo `elements`
+      // This implicitly means that we ignore pseudo `classes`
+      return (
+        node.value.startsWith('::') ||
+        [':before', ':after', ':first-line', ':first-letter'].includes(node.value)
+      )
     })
+    .reverse()
 
-  let [bestNode] = nodes
+  let searchFor = new Set(['tag', 'class', 'id', 'attribute'])
 
-  for (let [type, getNode = (n) => n] of [
-    ['class'],
-    [
-      'id',
-      (n) =>
-        selectorParser.attribute({
-          attribute: 'id',
-          operator: '=',
-          value: n.value,
-          quoteMark: '"',
-        }),
-    ],
-    ['attribute'],
-  ]) {
-    let match = nodes.find((n) => n.type === type)
+  let splitPointIdx = rest.findIndex((n) => searchFor.has(n.type))
+  if (splitPointIdx === -1) return rest.reverse().join('').trim()
 
-    if (match) {
-      bestNode = getNode(match)
-      break
-    }
+  let node = rest[splitPointIdx]
+  let bestNode = getNode[node.type] ? getNode[node.type](node) : node
+
+  rest = rest.slice(0, splitPointIdx)
+
+  let combinatorIdx = rest.findIndex((n) => n.type === 'combinator' && n.value === '>')
+  if (combinatorIdx !== -1) {
+    rest.splice(0, combinatorIdx)
+    rest.unshift(selectorParser.universal())
   }
 
-  return [bestNode, ...rest].join('').trim()
+  return [bestNode, ...rest.reverse()].join('').trim()
 }
 
-let elementSelectorParser = selectorParser((selectors) => {
+export let elementSelectorParser = selectorParser((selectors) => {
   return selectors.map((s) => {
     let nodes = s.split((n) => n.type === 'combinator' && n.value === ' ').pop()
     return minimumImpactSelector(nodes)

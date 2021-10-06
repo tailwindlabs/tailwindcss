@@ -1,6 +1,12 @@
-*,
-::before,
-::after {
+.translate-x-5,
+.-translate-x-4,
+.translate-y-6,
+.-translate-x-3,
+.rotate-3,
+.skew-y-12,
+.skew-x-12,
+.scale-95,
+.transform {
   --tw-translate-x: 0;
   --tw-translate-y: 0;
   --tw-rotate: 0;
@@ -11,12 +17,36 @@
   --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
     rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
     scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.snap-x {
   --tw-scroll-snap-strictness: proximity;
+}
+
+.divide-x-2 > *,
+.divide-y-4 > *,
+.divide-x-0 > *,
+.divide-y-0 > *,
+.border,
+.border-2,
+.border-x-4,
+.border-y-4,
+.border-t,
+.border-b-4 {
   --tw-border-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
+}
+
+.shadow,
+.shadow-md,
+.shadow-lg {
   --tw-ring-offset-shadow: 0 0 #0000;
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
+}
+
+.ring,
+.ring-4 {
   --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
@@ -24,6 +54,18 @@
   --tw-ring-offset-shadow: 0 0 #0000;
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
+}
+
+.blur-md,
+.brightness-150,
+.contrast-50,
+.drop-shadow-md,
+.grayscale,
+.hue-rotate-60,
+.invert,
+.saturate-200,
+.sepia,
+.filter {
   --tw-blur: var(--tw-empty, /*!*/ /*!*/);
   --tw-brightness: var(--tw-empty, /*!*/ /*!*/);
   --tw-contrast: var(--tw-empty, /*!*/ /*!*/);
@@ -35,6 +77,18 @@
   --tw-drop-shadow: var(--tw-empty, /*!*/ /*!*/);
   --tw-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale)
     var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.backdrop-blur-lg,
+.backdrop-brightness-50,
+.backdrop-contrast-0,
+.backdrop-grayscale,
+.backdrop-hue-rotate-90,
+.backdrop-invert,
+.backdrop-opacity-75,
+.backdrop-saturate-150,
+.backdrop-sepia,
+.backdrop-filter {
   --tw-backdrop-blur: var(--tw-empty, /*!*/ /*!*/);
   --tw-backdrop-brightness: var(--tw-empty, /*!*/ /*!*/);
   --tw-backdrop-contrast: var(--tw-empty, /*!*/ /*!*/);
@@ -351,10 +405,10 @@
 .columns-md {
   columns: 28rem;
 }
-.break-before-page  {
+.break-before-page {
   break-before: page;
 }
-.break-inside-avoid-column  {
+.break-inside-avoid-column {
   break-inside: avoid-column;
 }
 .break-after-auto {

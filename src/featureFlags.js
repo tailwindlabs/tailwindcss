@@ -1,18 +1,24 @@
 import chalk from 'chalk'
 import log from './util/log'
 
-const featureFlags = {
+let defaults = {
+  optimizeUniversalDefaults: true,
+}
+
+let featureFlags = {
   future: [],
   experimental: ['optimizeUniversalDefaults'],
 }
 
 export function flagEnabled(config, flag) {
   if (featureFlags.future.includes(flag)) {
-    return config.future === 'all' || (config?.future?.[flag] ?? false)
+    return config.future === 'all' || (config?.future?.[flag] ?? defaults[flag] ?? false)
   }
 
   if (featureFlags.experimental.includes(flag)) {
-    return config.experimental === 'all' || (config?.experimental?.[flag] ?? false)
+    return (
+      config.experimental === 'all' || (config?.experimental?.[flag] ?? defaults[flag] ?? false)
+    )
   }
 
   return false
@@ -34,7 +40,7 @@ export function issueFlagNotices(config) {
   }
 
   if (experimentalFlagsEnabled(config).length > 0) {
-    const changes = experimentalFlagsEnabled(config)
+    let changes = experimentalFlagsEnabled(config)
       .map((s) => chalk.yellow(s))
       .join(', ')
 

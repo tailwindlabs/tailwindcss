@@ -8,9 +8,7 @@ it('should add the divide styles for divide-y and a default border color', () =>
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      *,
-      ::before,
-      ::after {
+      .divide-y > * {
         --tw-border-opacity: 1;
         border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
@@ -32,9 +30,7 @@ it('should add the divide styles for divide-x and a default border color', () =>
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      *,
-      ::before,
-      ::after {
+      .divide-x > * {
         --tw-border-opacity: 1;
         border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
@@ -56,9 +52,7 @@ it('should add the divide styles for divide-y-reverse and a default border color
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      *,
-      ::before,
-      ::after {
+      .divide-y-reverse > * {
         --tw-border-opacity: 1;
         border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
@@ -78,9 +72,7 @@ it('should add the divide styles for divide-x-reverse and a default border color
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      *,
-      ::before,
-      ::after {
+      .divide-x-reverse > * {
         --tw-border-opacity: 1;
         border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
@@ -100,9 +92,8 @@ it('should only inject the base styles once if we use divide and border at the s
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      *,
-      ::before,
-      ::after {
+      .divide-y > *,
+      .border-r {
         --tw-border-opacity: 1;
         border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
