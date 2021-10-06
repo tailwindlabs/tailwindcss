@@ -216,6 +216,25 @@ test('negating a negative scale value', () => {
   })
 })
 
+test('negating a default value', () => {
+  let config = {
+    content: [{ raw: html`<div class="-mt"></div>` }],
+    theme: {
+      margin: {
+        DEFAULT: '15px',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .-mt {
+        margin-top: -15px;
+      }
+    `)
+  })
+})
+
 test('arbitrary value keywords should be ignored', () => {
   let config = {
     content: [{ raw: html`<div class="-mt-[auto]"></div>` }],
