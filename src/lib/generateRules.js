@@ -185,6 +185,10 @@ function* resolveMatchedPlugins(classCandidate, context) {
     candidatePrefix = twConfigPrefix + candidatePrefix.slice(twConfigPrefixLen + 1)
   }
 
+  if (negative && context.candidateRuleMap.has(candidatePrefix)) {
+    yield [context.candidateRuleMap.get(candidatePrefix), '-DEFAULT']
+  }
+
   for (let [prefix, modifier] of candidatePermutations(candidatePrefix)) {
     if (context.candidateRuleMap.has(prefix)) {
       yield [context.candidateRuleMap.get(prefix), negative ? `-${modifier}` : modifier]
@@ -238,7 +242,7 @@ function* resolveMatches(candidate, context) {
         }
       }
       // Only process static plugins on exact matches
-      else if (modifier === 'DEFAULT') {
+      else if (modifier === 'DEFAULT' || modifier === '-DEFAULT') {
         let ruleSet = plugin
         let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
         for (let rule of rules) {
