@@ -1272,6 +1272,19 @@ export let corePlugins = {
     })
   },
 
+  scrollbarWidth: ({ addUtilities }) => {
+    addUtilities({
+      '.scrollbar-auto': { 'scrollbar-width': 'auto' },
+      '.scrollbar-thin': { 'scrollbar-width': 'thin' },
+      '.scrollbar-none': {
+        'scrollbar-width': 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+      },
+    })
+  },
+
   textOverflow: ({ addUtilities }) => {
     addUtilities({
       '.truncate': { overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' },
