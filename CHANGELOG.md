@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `flex-basis` utilities ([#5671](https://github.com/tailwindlabs/tailwindcss/pull/5671))
 - Make negative values a first-class feature ([#5709](https://github.com/tailwindlabs/tailwindcss/pull/5709))
+- Add `fit-content` values for `min/max-width/height` utilities ([#5638](https://github.com/tailwindlabs/tailwindcss/pull/5638))
 
 ## [3.0.0-alpha.1] - 2021-10-01
 
