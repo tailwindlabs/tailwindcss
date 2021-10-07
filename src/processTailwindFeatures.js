@@ -7,6 +7,7 @@ import resolveDefaultsAtRules from './lib/resolveDefaultsAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
 import detectNesting from './lib/detectNesting'
 import { createContext } from './lib/setupContextUtils'
+import { issueFlagNotices } from './featureFlags'
 
 export default function processTailwindFeatures(setupContext) {
   return function (root, result) {
@@ -31,6 +32,8 @@ export default function processTailwindFeatures(setupContext) {
         "The '-' character cannot be used as a custom separator in JIT mode due to parsing ambiguity. Please use another character like '_' instead."
       )
     }
+
+    issueFlagNotices(context.tailwindConfig)
 
     detectNesting(context)(root, result)
     expandTailwindAtRules(context)(root, result)
