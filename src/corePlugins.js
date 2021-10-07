@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import postcss from 'postcss'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
@@ -363,7 +364,9 @@ export let variantPlugins = {
 
 export let corePlugins = {
   preflight: ({ addBase }) => {
-    let preflightStyles = postcss.parse(fs.readFileSync(`${__dirname}/css/preflight.css`, 'utf8'))
+    let preflightStyles = postcss.parse(
+      fs.readFileSync(path.resolve(__dirname, 'css/preflight.css'), 'utf8')
+    )
 
     addBase([
       postcss.comment({
