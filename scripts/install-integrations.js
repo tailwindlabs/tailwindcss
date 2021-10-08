@@ -3,6 +3,8 @@ let { spawn } = require('child_process')
 let path = require('path')
 let root = process.cwd()
 
+//function for npm install
+
 function npmInstall(cwd) {
   return new Promise((resolve) => {
     let childProcess = spawn('npm', ['install'], { cwd })
