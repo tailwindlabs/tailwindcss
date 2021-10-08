@@ -235,7 +235,6 @@ export default function expandTailwindAtRules(context) {
     if (env.DEBUG) {
       console.log('Potential classes: ', candidates.size)
       console.log('Active contexts: ', sharedState.contextSourcesMap.size)
-      console.log('Content match entries', contentMatchCache.size)
     }
 
     // Clear the cache for the changed files
