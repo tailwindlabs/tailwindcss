@@ -212,7 +212,13 @@
 .flex-shrink-\[var\(--shrink\)\] {
   flex-shrink: var(--shrink);
 }
+.shrink-\[var\(--shrink\)\] {
+  flex-shrink: var(--shrink);
+}
 .flex-grow-\[var\(--grow\)\] {
+  flex-grow: var(--grow);
+}
+.grow-\[var\(--grow\)\] {
   flex-grow: var(--grow);
 }
 .basis-\[var\(--basis\)\] {

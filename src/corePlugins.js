@@ -645,8 +645,14 @@ export let corePlugins = {
   maxWidth: createUtilityPlugin('maxWidth', [['max-w', ['maxWidth']]]),
 
   flex: createUtilityPlugin('flex'),
-  flexShrink: createUtilityPlugin('flexShrink', [['flex-shrink', ['flex-shrink']]]),
-  flexGrow: createUtilityPlugin('flexGrow', [['flex-grow', ['flex-grow']]]),
+  flexShrink: createUtilityPlugin('flexShrink', [
+    ['flex-shrink', ['flex-shrink']], // Deprecated
+    ['shrink', ['flex-shrink']],
+  ]),
+  flexGrow: createUtilityPlugin('flexGrow', [
+    ['flex-grow', ['flex-grow']], // Deprecated
+    ['grow', ['flex-grow']],
+  ]),
   flexBasis: createUtilityPlugin('flexBasis', [['basis', ['flex-basis']]]),
 
   tableLayout: ({ addUtilities }) => {
