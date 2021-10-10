@@ -1278,6 +1278,29 @@ export let corePlugins = {
     })
   },
 
+  scrollbarGutter: ({ addUtilities, addBase }) => {
+    addBase({
+      '@defaults scrollbar-gutter': {
+        '--tw-scrollbar-gutter-modifier': '',
+      },
+    })
+
+    addUtilities([
+      {
+        '.scrollbar-gutter-auto': {
+          'scrollbar-gutter': 'auto',
+        },
+        '.scrollbar-stable': {
+          '@defaults scrollbar-gutter': {},
+          'scrollbar-gutter': 'stable var(--tw-scrollbar-gutter-modifier)',
+        },
+        '.scrollbar-both-edges': {
+          '--tw-scrollbar-gutter-modifier': 'both-edges',
+        },
+      },
+    ])
+  },
+
   textOverflow: ({ addUtilities }) => {
     addUtilities({
       '.truncate': { overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' },
