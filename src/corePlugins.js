@@ -1801,6 +1801,31 @@ export let corePlugins = {
     })
   },
 
+  textDecorationColor: ({ matchUtilities, theme, corePlugins }) => {
+    matchUtilities(
+      {
+        decoration: (value) => {
+          if (!corePlugins('textDecorationOpacity')) {
+            return {
+              'text-decoration-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'text-decoration-color',
+            variable: '--tw-decoration-opacity',
+          })
+        },
+      },
+      { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
+    )
+  },
+
+  textDecorationOpacity: createUtilityPlugin('textDecorationOpacity', [
+    ['decoration-opacity', ['--tw-decoration-opacity']],
+  ]),
+
   fontSmoothing: ({ addUtilities }) => {
     addUtilities({
       '.antialiased': {
