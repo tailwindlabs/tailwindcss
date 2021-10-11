@@ -734,6 +734,10 @@ async function build() {
 
     watcher = chokidar.watch([...contextDependencies, ...extractFileGlobs(config)], {
       ignoreInitial: true,
+      awaitWriteFinish: {
+        stabilityThreshold: 50,
+        pollInterval: 10,
+      },
     })
 
     let chain = Promise.resolve()
