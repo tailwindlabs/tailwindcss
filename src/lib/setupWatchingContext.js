@@ -84,6 +84,10 @@ function rebootWatcher(context, configPath, configDependencies, candidateFiles) 
 
     watcher = chokidar.watch([...candidateFiles, ...configDependencies], {
       ignoreInitial: true,
+      awaitWriteFinish: {
+        stabilityThreshold: 50,
+        pollInterval: 10,
+      },
     })
 
     setWatcher(context, watcher)
