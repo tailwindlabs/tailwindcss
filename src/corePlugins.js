@@ -1818,7 +1818,7 @@ export let corePlugins = {
           })
         },
       },
-      { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
+      { values: flattenColorPalette(theme('textDecorationColor')), type: 'color' }
     )
   },
 
