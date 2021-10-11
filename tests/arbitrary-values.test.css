@@ -807,6 +807,31 @@
 .text-opacity-\[var\(--value\)\] {
   --tw-text-opacity: var(--value);
 }
+.decoration-\[black\] {
+  --tw-decoration-opacity: 1;
+  text-decoration-color: rgb(0 0 0 / var(--tw-decoration-opacity));
+}
+.decoration-\[rgb\(123\2c 123\2c 123\)\] {
+  --tw-decoration-opacity: 1;
+  text-decoration-color: rgb(123 123 123 / var(--tw-decoration-opacity));
+}
+.decoration-\[rgb\(123\2c _123\2c _123\)\] {
+  --tw-decoration-opacity: 1;
+  text-decoration-color: rgb(123 123 123 / var(--tw-decoration-opacity));
+}
+.decoration-\[rgb\(123_123_123\)\] {
+  --tw-decoration-opacity: 1;
+  text-decoration-color: rgb(123 123 123 / var(--tw-decoration-opacity));
+}
+.decoration-\[color\:var\(--color\)\] {
+  text-decoration-color: var(--color);
+}
+.decoration-opacity-\[0\.8\] {
+  --tw-decoration-opacity: 0.8;
+}
+.decoration-opacity-\[var\(--value\)\] {
+  --tw-decoration-opacity: var(--value);
+}
 .placeholder-\[var\(--placeholder\)\]::placeholder {
   color: var(--placeholder);
 }

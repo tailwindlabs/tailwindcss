@@ -773,6 +773,13 @@
 .underline {
   text-decoration: underline;
 }
+.decoration-green-300 {
+  --tw-decoration-opacity: 1;
+  text-decoration-color: rgb(134 239 172 / var(--tw-decoration-opacity));
+}
+.decoration-opacity-50 {
+  --tw-decoration-opacity: 0.5;
+}
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

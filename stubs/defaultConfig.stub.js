@@ -787,6 +787,8 @@ module.exports = {
       2: '2',
     },
     textColor: ({ theme }) => theme('colors'),
+    textDecorationColor: ({ theme }) => theme('colors'),
+    textDecorationOpacity: ({ theme }) => theme('opacity'),
     textIndent: ({ theme }) => ({
       ...theme('spacing'),
     }),
