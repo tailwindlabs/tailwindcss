@@ -50,7 +50,7 @@
     "autoprefixer": "^10.3.6",
     "cross-env": "^7.0.3",
     "cssnano": "^5.0.8",
-    "esbuild": "^0.13.2",
+    "esbuild": "^0.13.4",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
