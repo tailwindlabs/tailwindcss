@@ -1801,30 +1801,16 @@ export let corePlugins = {
     })
   },
 
-  textDecorationColor: ({ matchUtilities, theme, corePlugins }) => {
+  textDecorationColor: ({ matchUtilities, theme }) => {
     matchUtilities(
       {
         decoration: (value) => {
-          if (!corePlugins('textDecorationOpacity')) {
-            return {
-              'text-decoration-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'text-decoration-color',
-            variable: '--tw-decoration-opacity',
-          })
+          return { 'text-decoration-color': toColorValue(value) }
         },
       },
-      { values: flattenColorPalette(theme('textDecorationColor')), type: 'color' }
+      { values: flattenColorPalette(theme('textDecorationColor')), type: ['color', 'any'] }
     )
   },
-
-  textDecorationOpacity: createUtilityPlugin('textDecorationOpacity', [
-    ['decoration-opacity', ['--tw-decoration-opacity']],
-  ]),
 
   fontSmoothing: ({ addUtilities }) => {
     addUtilities({
