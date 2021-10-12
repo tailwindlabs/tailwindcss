@@ -1801,6 +1801,17 @@ export let corePlugins = {
     })
   },
 
+  textDecorationColor: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        decoration: (value) => {
+          return { 'text-decoration-color': toColorValue(value) }
+        },
+      },
+      { values: flattenColorPalette(theme('textDecorationColor')), type: ['color', 'any'] }
+    )
+  },
+
   fontSmoothing: ({ addUtilities }) => {
     addUtilities({
       '.antialiased': {

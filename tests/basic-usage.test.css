@@ -773,6 +773,9 @@
 .underline {
   text-decoration: underline;
 }
+.decoration-red-600 {
+  text-decoration-color: #dc2626;
+}
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
