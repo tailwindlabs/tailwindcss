@@ -170,7 +170,7 @@ export function normalizeConfig(config) {
 
       let extractors = {}
 
-      extractors.DEFAULT = (() => {
+      let defaultExtractor = (() => {
         if (config.purge?.options?.defaultExtractor) {
           return config.purge.options.defaultExtractor
         }
@@ -181,6 +181,10 @@ export function normalizeConfig(config) {
 
         return undefined
       })()
+
+      if (defaultExtractor !== undefined) {
+        extractors.DEFAULT = defaultExtractor
+      }
 
       // Functions
       if (typeof extract === 'function') {
