@@ -145,6 +145,20 @@ describe('Build command', () => {
     )
   })
 
+  test('--content', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    await $(`${EXECUTABLE} --content ./src/index.html --output ./dist/main.css`)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+  })
+
   test('--postcss (postcss.config.js)', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 

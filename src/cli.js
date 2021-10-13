@@ -430,7 +430,7 @@ async function build() {
     }
 
     if (args['--content']) {
-      resolvedConfig.content = args['--content'].split(/(?<!{[^}]+),/)
+      resolvedConfig.content.files = args['--content'].split(/(?<!{[^}]+),/)
     }
 
     return resolvedConfig
