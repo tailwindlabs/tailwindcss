@@ -319,8 +319,8 @@ export let variantPlugins = {
           if (variantSelector === selector) {
             return null
           }
-
-          let darkSelector = prefixSelector(config('prefix'), `.dark`)
+          let darkModeClassName = config('darkModeClassName', '.dark');
+          let darkSelector = prefixSelector(config('prefix'), darkModeClassName)
 
           return `${darkSelector} ${variantSelector}`
         })
