@@ -186,7 +186,18 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
   return {
     addVariant(variantName, variantFunctions, options = {}) {
-      variantFunctions = [].concat(variantFunctions)
+      variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
+        if (typeof variantFunction !== 'string') {
+          return variantFunction
+        }
+
+        if (!variantFunction.startsWith('@')) {
+          return ({ format }) => format(variantFunction)
+        }
+
+        let [, name, params] = /@(.*?) (\(.*\))/g.exec(variantFunction)
+        return ({ wrap }) => wrap(postcss.atRule({ name, params }))
+      })
 
       insertInto(variantList, variantName, options)
       variantMap.set(variantName, variantFunctions)
