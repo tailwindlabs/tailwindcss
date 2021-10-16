@@ -23,6 +23,29 @@ it('should be possible to use the darkMode "class" mode', () => {
   })
 })
 
+it('should be possible to change default class with darkMode "class" mode', () => {
+  let config = {
+    darkMode: 'class',
+    darkModeClassName: '.test-dark',
+    content: [{ raw: html`<div class="dark:font-bold"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .test-dark .dark\\:font-bold {
+        font-weight: 700;
+      }
+    `)
+  })
+})
+
 it('should be possible to use the darkMode "media" mode', () => {
   let config = {
     darkMode: 'media',
