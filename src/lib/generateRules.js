@@ -5,6 +5,7 @@ import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
+import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -112,6 +113,8 @@ function applyVariant(variant, matches, context) {
 
       for (let [variantSort, variantFunction] of variantFunctionTuples) {
         let clone = container.clone()
+        let collectedFormats = []
+
         function modifySelectors(modifierFunction) {
           clone.each((rule) => {
             if (rule.type !== 'rule') {
@@ -134,13 +137,32 @@ function applyVariant(variant, matches, context) {
           container: clone,
           separator: context.tailwindConfig.separator,
           modifySelectors,
+          wrap(wrapper) {
+            let nodes = clone.nodes
+            clone.removeAll()
+            wrapper.append(nodes)
+            clone.append(wrapper)
+          },
+          withRule(modify) {
+            clone.walkRules(modify)
+          },
+          format(selectorFormat) {
+            collectedFormats.push(selectorFormat)
+          },
         })
 
         if (ruleWithVariant === null) {
           continue
         }
 
-        let withOffset = [{ ...meta, sort: variantSort | meta.sort }, clone.nodes[0]]
+        let withOffset = [
+          {
+            ...meta,
+            sort: variantSort | meta.sort,
+            collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
+          },
+          clone.nodes[0],
+        ]
         result.push(withOffset)
       }
     }
@@ -323,6 +345,22 @@ function* resolveMatches(candidate, context) {
     }
 
     for (let match of matches) {
+      // Apply final format selector
+      if (match[0].collectedFormats) {
+        let finalFormat = formatVariantSelector('&', ...match[0].collectedFormats)
+        let container = postcss.root({ nodes: [match[1].clone()] })
+        container.walkRules((rule) => {
+          if (inKeyframes(rule)) return
+
+          rule.selector = finalizeSelector(finalFormat, {
+            selector: rule.selector,
+            candidate,
+            context,
+          })
+        })
+        match[1] = container.nodes[0]
+      }
+
       yield match
     }
   }
