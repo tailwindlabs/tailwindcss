@@ -38,7 +38,7 @@
   }
 }
 @media (min-width: 1280px) {
-  .xl\:focus\:disabled\:\!float-right:focus:disabled {
+  .xl\:focus\:disabled\:\!float-right:disabled:focus {
     float: right !important;
   }
 }

@@ -79,12 +79,12 @@ it('should be possible to matchComponents', () => {
         color: #f0f;
       }
 
-      .hover\\:card-\\[\\#f0f\\]:hover .hover\\:card-header:hover {
+      .hover\\:card-\\[\\#f0f\\]:hover .card-header {
         border-top-width: 3px;
         border-top-color: #f0f;
       }
 
-      .hover\\:card-\\[\\#f0f\\]:hover .hover\\:card-footer:hover {
+      .hover\\:card-\\[\\#f0f\\]:hover .card-footer {
         border-bottom-width: 3px;
         border-bottom-color: #f0f;
       }

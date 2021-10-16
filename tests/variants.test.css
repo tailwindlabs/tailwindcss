@@ -313,11 +313,11 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
-.file\:hover\:bg-blue-600::file-selector-button:hover {
+.file\:hover\:bg-blue-600:hover::file-selector-button {
   --tw-bg-opacity: 1;
   background-color: rgb(37 99 235 / var(--tw-bg-opacity));
 }
-.open\:hover\:bg-red-200[open]:hover {
+.open\:hover\:bg-red-200:hover[open] {
   --tw-bg-opacity: 1;
   background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }
@@ -326,7 +326,7 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
-.focus\:hover\:shadow-md:focus:hover {
+.focus\:hover\:shadow-md:hover:focus {
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);

@@ -23,7 +23,7 @@
 .apply-test:hover {
   font-weight: 700;
 }
-.apply-test:focus:hover {
+.apply-test:hover:focus {
   font-weight: 700;
 }
 @media (min-width: 640px) {
@@ -31,7 +31,7 @@
     --tw-bg-opacity: 1;
     background-color: rgb(34 197 94 / var(--tw-bg-opacity));
   }
-  .apply-test:focus:nth-child(even) {
+  .apply-test:nth-child(even):focus {
     --tw-bg-opacity: 1;
     background-color: rgb(251 207 232 / var(--tw-bg-opacity));
   }
@@ -352,7 +352,7 @@ div {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
 }
-.focus\:hover\:font-light:focus:hover {
+.focus\:hover\:font-light:hover:focus {
   font-weight: 300;
 }
 .disabled\:font-bold:disabled {
