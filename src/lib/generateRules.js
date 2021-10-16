@@ -115,7 +115,15 @@ function applyVariant(variant, matches, context) {
         let clone = container.clone()
         let collectedFormats = []
 
+        let originals = new Map()
+
+        function prepareBackup() {
+          if (originals.size > 0) return // Already prepared, chicken out
+          clone.walkRules((rule) => originals.set(rule, rule.selector))
+        }
+
         function modifySelectors(modifierFunction) {
+          prepareBackup()
           clone.each((rule) => {
             if (rule.type !== 'rule') {
               return
@@ -130,11 +138,15 @@ function applyVariant(variant, matches, context) {
               })
             })
           })
+
           return clone
         }
 
         let ruleWithVariant = variantFunction({
-          container: clone,
+          get container() {
+            prepareBackup()
+            return clone
+          },
           separator: context.tailwindConfig.separator,
           modifySelectors,
           wrap(wrapper) {
@@ -153,6 +165,43 @@ function applyVariant(variant, matches, context) {
 
         if (ruleWithVariant === null) {
           continue
+        }
+
+        // We filled the `originals`, therefore we assume that somebody touched
+        // `container` or `modifySelectors`. Let's see if they did, so that we
+        // can restore the selectors, and collect the format strings.
+        if (originals.size > 0) {
+          clone.walkRules((rule) => {
+            if (!originals.has(rule)) return
+            let before = originals.get(rule)
+            if (before === rule.selector) return // No mutation happened
+
+            let modified = rule.selector
+
+            // Rebuild the base selector, this is what plugin authors would do
+            // as well. E.g.: `${variant}${separator}${className}`.
+            // However, plugin authors probably also prepend or append certain
+            // classes, pseudos, ids, ...
+            let rebuiltBase = selectorParser((selectors) => {
+              selectors.walkClasses((classNode) => {
+                classNode.value = `${variant}${context.tailwindConfig.separator}${classNode.value}`
+              })
+            }).processSync(before)
+
+            // Now that we know the original selector, the new selector, and
+            // the rebuild part in between, we can replace the part that plugin
+            // authors need to rebuild with `&`, and eventually store it in the
+            // collectedFormats. Similar to what `format('...')` would do.
+            //
+            // E.g.:
+            //                   variant: foo
+            //                  selector: .markdown > p
+            //      modified (by plugin): .foo .foo\\:markdown > p
+            //    rebuiltBase (internal): .foo\\:markdown > p
+            //                    format: .foo &
+            collectedFormats.push(modified.replace(rebuiltBase, '&'))
+            rule.selector = before
+          })
         }
 
         let withOffset = [
