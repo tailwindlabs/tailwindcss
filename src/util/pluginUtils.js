@@ -1,7 +1,6 @@
 import selectorParser from 'postcss-selector-parser'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
-import isKeyframeRule from './isKeyframeRule'
 import {
   normalize,
   length,
@@ -19,34 +18,10 @@ import {
 } from './dataTypes'
 import negateValue from './negateValue'
 
-export function applyStateToMarker(selector, marker, state, join) {
-  let markerIdx = selector.search(new RegExp(`${marker}[:[]`))
-
-  if (markerIdx === -1) {
-    return join(marker + state, selector)
-  }
-
-  let markerSelector = selector.slice(markerIdx, selector.indexOf(' ', markerIdx))
-
-  return join(
-    marker + state + markerSelector.slice(markerIdx + marker.length),
-    selector.replace(markerSelector, '')
-  )
-}
-
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
     selectors.walkClasses((sel) => {
-      let updatedClass = updateClass(sel.value, {
-        withAttr(className, attr) {
-          sel.parent.insertAfter(sel, selectorParser.attribute({ attribute: attr.slice(1, -1) }))
-          return className
-        },
-        withPseudo(className, pseudo) {
-          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: pseudo }))
-          return className
-        },
-      })
+      let updatedClass = updateClass(sel.value)
       sel.value = updatedClass
       if (sel.raws && sel.raws.value) {
         sel.raws.value = escapeCommas(sel.raws.value)
@@ -57,115 +32,6 @@ export function updateAllClasses(selectors, updateClass) {
   let result = parser.processSync(selectors)
 
   return result
-}
-
-export function updateLastClasses(selectors, updateClass) {
-  let parser = selectorParser((selectors) => {
-    selectors.each((sel) => {
-      let lastClass = sel.filter(({ type }) => type === 'class').pop()
-
-      if (lastClass === undefined) {
-        return
-      }
-
-      let updatedClass = updateClass(lastClass.value, {
-        withPseudo(className, pseudo) {
-          lastClass.parent.insertAfter(lastClass, selectorParser.pseudo({ value: `${pseudo}` }))
-          return className
-        },
-      })
-      lastClass.value = updatedClass
-      if (lastClass.raws && lastClass.raws.value) {
-        lastClass.raws.value = escapeCommas(lastClass.raws.value)
-      }
-    })
-  })
-  let result = parser.processSync(selectors)
-
-  return result
-}
-
-function splitByNotEscapedCommas(str) {
-  let chunks = []
-  let currentChunk = ''
-  for (let i = 0; i < str.length; i++) {
-    if (str[i] === ',' && str[i - 1] !== '\\') {
-      chunks.push(currentChunk)
-      currentChunk = ''
-    } else {
-      currentChunk += str[i]
-    }
-  }
-  chunks.push(currentChunk)
-  return chunks
-}
-
-export function transformAllSelectors(transformSelector, { wrap, withRule } = {}) {
-  return ({ container }) => {
-    container.walkRules((rule) => {
-      if (isKeyframeRule(rule)) {
-        return rule
-      }
-      let transformed = splitByNotEscapedCommas(rule.selector).map(transformSelector).join(',')
-      rule.selector = transformed
-      if (withRule) {
-        withRule(rule)
-      }
-      return rule
-    })
-
-    if (wrap) {
-      let wrapper = wrap()
-      let nodes = container.nodes
-      container.removeAll()
-      wrapper.append(nodes)
-      container.append(wrapper)
-    }
-  }
-}
-
-export function transformAllClasses(transformClass, { wrap, withRule } = {}) {
-  return ({ container }) => {
-    container.walkRules((rule) => {
-      let selector = rule.selector
-      let variantSelector = updateAllClasses(selector, transformClass)
-      rule.selector = variantSelector
-      if (withRule) {
-        withRule(rule)
-      }
-      return rule
-    })
-
-    if (wrap) {
-      let wrapper = wrap()
-      let nodes = container.nodes
-      container.removeAll()
-      wrapper.append(nodes)
-      container.append(wrapper)
-    }
-  }
-}
-
-export function transformLastClasses(transformClass, { wrap, withRule } = {}) {
-  return ({ container }) => {
-    container.walkRules((rule) => {
-      let selector = rule.selector
-      let variantSelector = updateLastClasses(selector, transformClass)
-      rule.selector = variantSelector
-      if (withRule) {
-        withRule(rule)
-      }
-      return rule
-    })
-
-    if (wrap) {
-      let wrapper = wrap()
-      let nodes = container.nodes
-      container.removeAll()
-      wrapper.append(nodes)
-      container.append(wrapper)
-    }
-  }
 }
 
 function resolveArbitraryValue(modifier, validate) {
