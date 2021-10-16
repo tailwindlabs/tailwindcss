@@ -198,22 +198,10 @@ div {
   }
 }
 .test-apply-font-variant {
-  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
-  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   --tw-ordinal: ordinal;
+  font-variant-numeric: var(--tw-font-variant-numeric);
   --tw-numeric-spacing: tabular-nums;
+  font-variant-numeric: var(--tw-font-variant-numeric);
 }
 .custom-component {
   background: #123456;
@@ -266,6 +254,16 @@ div {
 }
 .font-medium {
   font-weight: 500;
+}
+.test-apply-font-variant,
+.sm\:tabular-nums {
+  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
+  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
+  --tw-font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 .shadow-sm {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -427,24 +425,9 @@ div {
   .sm\:text-center {
     text-align: center;
   }
-  .sm\:ordinal,
-  .sm\:slashed-zero,
-  .sm\:lining-nums,
-  .sm\:oldstyle-nums,
-  .sm\:proportional-nums,
-  .sm\:tabular-nums,
-  .sm\:diagonal-fractions,
-  .sm\:stacked-fractions {
-    --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-    --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-    --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-    --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-    --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-    font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-      var(--tw-numeric-spacing) var(--tw-numeric-fraction);
-  }
   .sm\:tabular-nums {
     --tw-numeric-spacing: tabular-nums;
+    font-variant-numeric: var(--tw-font-variant-numeric);
   }
   .sm\:custom-util {
     background: #abcdef;

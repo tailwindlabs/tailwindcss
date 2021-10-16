@@ -126,22 +126,10 @@
 }
 /* TODO: This works but the generated CSS is unnecessarily verbose. */
 .complex-utilities {
-  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
-  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   --tw-ordinal: ordinal;
+  font-variant-numeric: var(--tw-font-variant-numeric);
   --tw-numeric-spacing: tabular-nums;
+  font-variant-numeric: var(--tw-font-variant-numeric);
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
@@ -152,14 +140,8 @@
     var(--tw-shadow);
 }
 .complex-utilities:focus {
-  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   --tw-numeric-fraction: diagonal-fractions;
+  font-variant-numeric: var(--tw-font-variant-numeric);
 }
 .basic-nesting-parent {
   .basic-nesting-child {
@@ -331,6 +313,15 @@ h2 {
 
 .important-modifier-variant:hover {
   border-radius: 0.375rem !important;
+}
+.complex-utilities {
+  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
+  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
+  --tw-font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 @keyframes spin {
   to {
