@@ -198,7 +198,7 @@ it('should not convert escaped underscores with spaces', () => {
   })
 })
 
-it('should warn and not generate if arbitrary values are ambigu', () => {
+it('should warn and not generate if arbitrary values are ambiguous', () => {
   // If we don't protect against this, then `bg-[200px_100px]` would both
   // generate the background-size as well as the background-position utilities.
   let config = {
