@@ -27,7 +27,7 @@ npm run style -- --fix
 You can run the test suite using the following commands:
 
 ```sh
-npm run babelify && npm test
+npm run swcify && npm test
 ```
 
 Please ensure that the tests are passing when submitting a pull request. If you're adding new features to Tailwind, please include tests.
