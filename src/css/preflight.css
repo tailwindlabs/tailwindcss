@@ -58,6 +58,14 @@ abbr[title] {
 }
 
 /*
+Remove the italics.
+*/
+
+dfn {
+  font-style: normal;
+}
+
+/*
 Remove the default font size and weight for headings.
 */
 
