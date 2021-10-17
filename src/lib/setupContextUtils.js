@@ -19,6 +19,35 @@ import { toPath } from '../util/toPath'
 import log from '../util/log'
 import negateValue from '../util/negateValue'
 
+function parseVariantFormatString(input) {
+  if (input.includes('{')) {
+    if (!isBalanced(input)) throw new Error(`Your { and } are unbalanced.`)
+
+    return input
+      .split(/{(.*)}/gim)
+      .flatMap((line) => parseVariantFormatString(line))
+      .filter(Boolean)
+  }
+
+  return [input.trim()]
+}
+
+function isBalanced(input) {
+  let count = 0
+
+  for (let char of input) {
+    if (char === '{') {
+      count++
+    } else if (char === '}') {
+      if (--count < 0) {
+        return false // unbalanced
+      }
+    }
+  }
+
+  return count === 0
+}
+
 function insertInto(list, value, { before = [] } = {}) {
   before = [].concat(before)
 
@@ -191,12 +220,27 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           return variantFunction
         }
 
-        if (!variantFunction.startsWith('@')) {
-          return ({ format }) => format(variantFunction)
-        }
+        variantFunction = variantFunction
+          .replace(/\n+/g, '')
+          .replace(/\s{1,}/g, ' ')
+          .trim()
 
-        let [, name, params] = /@(.*?) (\(.*\))/g.exec(variantFunction)
-        return ({ wrap }) => wrap(postcss.atRule({ name, params }))
+        let fns = parseVariantFormatString(variantFunction)
+          .map((str) => {
+            if (!str.startsWith('@')) {
+              return ({ format }) => format(str)
+            }
+
+            let [, name, params] = /@(.*?) (\(.*\))/g.exec(str)
+            return ({ wrap }) => wrap(postcss.atRule({ name, params }))
+          })
+          .reverse()
+
+        return (api) => {
+          for (let fn of fns) {
+            fn(api)
+          }
+        }
       })
 
       insertInto(variantList, variantName, options)

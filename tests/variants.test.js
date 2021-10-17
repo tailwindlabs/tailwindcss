@@ -244,3 +244,30 @@ it('should properly handle keyframes with multiple variants', async () => {
     }
   `)
 })
+
+test('custom addVariant with nested media & format shorthand', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="magic:text-center"></div> `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('magic', '@supports (hover: hover) { @media (print) { &:disabled } }')
+      },
+    ],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @supports (hover: hover) {
+        @media (print) {
+          .magic\\:text-center:disabled {
+            text-align: center;
+          }
+        }
+      }
+    `)
+  })
+})
