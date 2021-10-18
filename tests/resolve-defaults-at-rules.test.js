@@ -84,7 +84,7 @@ test('with pseudo-class variants', async () => {
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
-      .hover\\:focus\\:skew-y-6:hover:focus {
+      .hover\\:focus\\:skew-y-6:focus:hover {
         --tw-skew-y: 6deg;
         transform: var(--tw-transform);
       }
@@ -252,12 +252,12 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
           scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
-      .group:hover .group-hover\\:hover\\:before\\:scale-x-110:hover::before {
+      .group:hover .group-hover\\:hover\\:before\\:scale-x-110::before:hover {
         content: '';
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
-      .peer:focus ~ .peer-focus\\:focus\\:after\\:rotate-3:focus::after {
+      .peer:focus ~ .peer-focus\\:focus\\:after\\:rotate-3::after:focus {
         content: '';
         --tw-rotate: 3deg;
         transform: var(--tw-transform);

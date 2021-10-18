@@ -43,7 +43,7 @@ test('custom user-land utilities', () => {
       .hover\\:align-banana:hover {
         text-align: banana;
       }
-      .focus\\:hover\\:align-chocolate:focus:hover {
+      .focus\\:hover\\:align-chocolate:hover:focus {
         text-align: chocolate;
       }
     `)

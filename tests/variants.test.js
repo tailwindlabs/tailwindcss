@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run, css } from './util/run'
+import { run, css, html } from './util/run'
 
 test('variants', () => {
   let config = {
@@ -21,6 +21,124 @@ test('variants', () => {
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
+  })
+})
+
+test('order matters and produces different behaviour', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="hover:file:bg-pink-600"></div>
+          <div class="file:hover:bg-pink-600"></div>
+        `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .hover\\:file\\:bg-pink-600::file-selector-button:hover {
+        --tw-bg-opacity: 1;
+        background-color: rgb(219 39 119 / var(--tw-bg-opacity));
+      }
+
+      .file\\:hover\\:bg-pink-600:hover::file-selector-button {
+        --tw-bg-opacity: 1;
+        background-color: rgb(219 39 119 / var(--tw-bg-opacity));
+      }
+    `)
+  })
+})
+
+describe('custom advanced variants', () => {
+  test('prose-headings usage on its own', () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="prose-headings:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('prose-headings', ({ format }) => {
+            return format(':where(&) :is(h1, h2, h3, h4)')
+          })
+        },
+      ],
+    }
+
+    return run('@tailwind components;@tailwind utilities', config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        :where(.prose-headings\\:text-center) :is(h1, h2, h3, h4) {
+          text-align: center;
+        }
+      `)
+    })
+  })
+
+  test('prose-headings with another "simple" variant', () => {
+    let config = {
+      content: [
+        {
+          raw: html`
+            <div class="hover:prose-headings:text-center"></div>
+            <div class="prose-headings:hover:text-center"></div>
+          `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('prose-headings', ({ format }) => {
+            return format(':where(&) :is(h1, h2, h3, h4)')
+          })
+        },
+      ],
+    }
+
+    return run('@tailwind components;@tailwind utilities', config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        :where(.hover\\:prose-headings\\:text-center) :is(h1, h2, h3, h4):hover {
+          text-align: center;
+        }
+
+        :where(.prose-headings\\:hover\\:text-center:hover) :is(h1, h2, h3, h4) {
+          text-align: center;
+        }
+      `)
+    })
+  })
+
+  test('prose-headings with another "complex" variant', () => {
+    let config = {
+      content: [
+        {
+          raw: html`
+            <div class="group-hover:prose-headings:text-center"></div>
+            <div class="prose-headings:group-hover:text-center"></div>
+          `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('prose-headings', ({ format }) => {
+            return format(':where(&) :is(h1, h2, h3, h4)')
+          })
+        },
+      ],
+    }
+
+    return run('@tailwind utilities', config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .group:hover :where(.group-hover\\:prose-headings\\:text-center) :is(h1, h2, h3, h4) {
+          text-align: center;
+        }
+
+        :where(.group:hover .prose-headings\\:group-hover\\:text-center) :is(h1, h2, h3, h4) {
+          text-align: center;
+        }
+      `)
+    })
   })
 })
 
@@ -125,4 +243,31 @@ it('should properly handle keyframes with multiple variants', async () => {
       animation: bounce 1s infinite;
     }
   `)
+})
+
+test('custom addVariant with nested media & format shorthand', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="magic:text-center"></div> `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('magic', '@supports (hover: hover) { @media (print) { &:disabled } }')
+      },
+    ],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @supports (hover: hover) {
+        @media (print) {
+          .magic\\:text-center:disabled {
+            text-align: center;
+          }
+        }
+      }
+    `)
+  })
 })

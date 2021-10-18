@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Don't use pointer cursor on disabled buttons by default ([#5772](https://github.com/tailwindlabs/tailwindcss/pull/5772))
+- Improve `addVariant` API ([#5809](https://github.com/tailwindlabs/tailwindcss/pull/5809))
 
 ### Added
 

@@ -1521,7 +1521,7 @@ test('keyframes are not escaped', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
+    expect(result.css).toMatchFormattedCss(css`
       @keyframes abc {
         25.001% {
           color: black;
@@ -1534,10 +1534,11 @@ test('keyframes are not escaped', () => {
 
       @media (min-width: 768px) {
         @keyframes def {
-          25.md\\:001\\% {
+          25.001% {
             color: black;
           }
         }
+
         .md\\:foo-\\[def\\] {
           animation: def 1s infinite;
         }

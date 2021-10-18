@@ -3,129 +3,60 @@ import * as path from 'path'
 import postcss from 'postcss'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
-import prefixSelector from './util/prefixSelector'
 import parseAnimationValue from './util/parseAnimationValue'
 import flattenColorPalette from './util/flattenColorPalette'
 import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
 import toColorValue from './util/toColorValue'
 import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
-import {
-  applyStateToMarker,
-  updateLastClasses,
-  updateAllClasses,
-  transformAllSelectors,
-  transformAllClasses,
-  transformLastClasses,
-} from './util/pluginUtils'
 import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
 
 export let variantPlugins = {
-  pseudoElementVariants: ({ config, addVariant }) => {
-    addVariant(
-      'first-letter',
-      transformAllSelectors((selector) => {
-        return updateAllClasses(selector, (className, { withPseudo }) => {
-          return withPseudo(`first-letter${config('separator')}${className}`, '::first-letter')
-        })
-      })
-    )
+  pseudoElementVariants: ({ addVariant }) => {
+    addVariant('first-letter', '&::first-letter')
+    addVariant('first-line', '&::first-line')
 
-    addVariant(
-      'first-line',
-      transformAllSelectors((selector) => {
-        return updateAllClasses(selector, (className, { withPseudo }) => {
-          return withPseudo(`first-line${config('separator')}${className}`, '::first-line')
-        })
-      })
-    )
+    addVariant('marker', ['& *::marker', '&::marker'])
+    addVariant('selection', ['& *::selection', '&::selection'])
 
-    addVariant('marker', [
-      transformAllSelectors((selector) => {
-        let variantSelector = updateAllClasses(selector, (className) => {
-          return `marker${config('separator')}${className}`
-        })
+    addVariant('file', '&::file-selector-button')
 
-        return `${variantSelector} *::marker`
-      }),
-      transformAllSelectors((selector) => {
-        return updateAllClasses(selector, (className, { withPseudo }) => {
-          return withPseudo(`marker${config('separator')}${className}`, '::marker')
-        })
-      }),
-    ])
+    // TODO: Use `addVariant('before', '*::before')` instead, once `content`
+    // fix is implemented.
+    addVariant('before', ({ format, withRule }) => {
+      format('&::before')
 
-    addVariant('selection', [
-      transformAllSelectors((selector) => {
-        let variantSelector = updateAllClasses(selector, (className) => {
-          return `selection${config('separator')}${className}`
+      withRule((rule) => {
+        let foundContent = false
+        rule.walkDecls('content', () => {
+          foundContent = true
         })
-
-        return `${variantSelector} *::selection`
-      }),
-      transformAllSelectors((selector) => {
-        return updateAllClasses(selector, (className, { withPseudo }) => {
-          return withPseudo(`selection${config('separator')}${className}`, '::selection')
-        })
-      }),
-    ])
-
-    addVariant(
-      'file',
-      transformAllSelectors((selector) => {
-        return updateAllClasses(selector, (className, { withPseudo }) => {
-          return withPseudo(`file${config('separator')}${className}`, '::file-selector-button')
-        })
-      })
-    )
-
-    addVariant(
-      'before',
-      transformAllSelectors(
-        (selector) => {
-          return updateAllClasses(selector, (className, { withPseudo }) => {
-            return withPseudo(`before${config('separator')}${className}`, '::before')
-          })
-        },
-        {
-          withRule: (rule) => {
-            let foundContent = false
-            rule.walkDecls('content', () => {
-              foundContent = true
-            })
-            if (!foundContent) {
-              rule.prepend(postcss.decl({ prop: 'content', value: '""' }))
-            }
-          },
+        if (!foundContent) {
+          rule.prepend(postcss.decl({ prop: 'content', value: '""' }))
         }
-      )
-    )
+      })
+    })
 
-    addVariant(
-      'after',
-      transformAllSelectors(
-        (selector) => {
-          return updateAllClasses(selector, (className, { withPseudo }) => {
-            return withPseudo(`after${config('separator')}${className}`, '::after')
-          })
-        },
-        {
-          withRule: (rule) => {
-            let foundContent = false
-            rule.walkDecls('content', () => {
-              foundContent = true
-            })
-            if (!foundContent) {
-              rule.prepend(postcss.decl({ prop: 'content', value: '""' }))
-            }
-          },
+    // TODO: Use `addVariant('after', '*::after')` instead, once `content`
+    // fix is implemented.
+    addVariant('after', ({ format, withRule }) => {
+      format('&::after')
+
+      withRule((rule) => {
+        let foundContent = false
+        rule.walkDecls('content', () => {
+          foundContent = true
+        })
+
+        if (!foundContent) {
+          rule.prepend(postcss.decl({ prop: 'content', value: '""' }))
         }
-      )
-    )
+      })
+    })
   },
 
-  pseudoClassVariants: ({ config, addVariant }) => {
+  pseudoClassVariants: ({ addVariant }) => {
     let pseudoVariants = [
       // Positional
       ['first', ':first-child'],
@@ -165,137 +96,44 @@ export let variantPlugins = {
       'focus-visible',
       'active',
       'disabled',
-    ]
+    ].map((variant) => (Array.isArray(variant) ? variant : [variant, `:${variant}`]))
 
-    for (let variant of pseudoVariants) {
-      let [variantName, state] = Array.isArray(variant) ? variant : [variant, `:${variant}`]
-
-      addVariant(
-        variantName,
-        transformAllClasses((className, { withAttr, withPseudo }) => {
-          if (state.startsWith(':')) {
-            return withPseudo(`${variantName}${config('separator')}${className}`, state)
-          } else if (state.startsWith('[')) {
-            return withAttr(`${variantName}${config('separator')}${className}`, state)
-          }
-        })
-      )
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(variantName, `&${state}`)
     }
 
-    let groupMarker = prefixSelector(config('prefix'), '.group')
-    for (let variant of pseudoVariants) {
-      let [variantName, state] = Array.isArray(variant) ? variant : [variant, `:${variant}`]
-      let groupVariantName = `group-${variantName}`
-
-      addVariant(
-        groupVariantName,
-        transformAllSelectors((selector) => {
-          let variantSelector = updateAllClasses(selector, (className) => {
-            if (`.${className}` === groupMarker) return className
-            return `${groupVariantName}${config('separator')}${className}`
-          })
-
-          if (variantSelector === selector) {
-            return null
-          }
-
-          return applyStateToMarker(
-            variantSelector,
-            groupMarker,
-            state,
-            (marker, selector) => `${marker} ${selector}`
-          )
-        })
-      )
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(`group-${variantName}`, `:merge(.group)${state} &`)
     }
 
-    let peerMarker = prefixSelector(config('prefix'), '.peer')
-    for (let variant of pseudoVariants) {
-      let [variantName, state] = Array.isArray(variant) ? variant : [variant, `:${variant}`]
-      let peerVariantName = `peer-${variantName}`
-
-      addVariant(
-        peerVariantName,
-        transformAllSelectors((selector) => {
-          let variantSelector = updateAllClasses(selector, (className) => {
-            if (`.${className}` === peerMarker) return className
-            return `${peerVariantName}${config('separator')}${className}`
-          })
-
-          if (variantSelector === selector) {
-            return null
-          }
-
-          return applyStateToMarker(variantSelector, peerMarker, state, (marker, selector) =>
-            selector.trim().startsWith('~') ? `${marker}${selector}` : `${marker} ~ ${selector}`
-          )
-        })
-      )
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(`peer-${variantName}`, `:merge(.peer)${state} ~ &`)
     }
   },
 
-  directionVariants: ({ config, addVariant }) => {
-    addVariant(
-      'ltr',
-      transformAllSelectors((selector) => {
-        log.warn('rtl-experimental', [
-          'The RTL features in Tailwind CSS are currently in preview.',
-          'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
-        ])
-        return `[dir="ltr"] ${updateAllClasses(
-          selector,
-          (className) => `ltr${config('separator')}${className}`
-        )}`
-      })
-    )
+  directionVariants: ({ addVariant }) => {
+    addVariant('ltr', ({ format }) => {
+      log.warn('rtl-experimental', [
+        'The RTL features in Tailwind CSS are currently in preview.',
+        'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
+      ])
 
-    addVariant(
-      'rtl',
-      transformAllSelectors((selector) => {
-        log.warn('rtl-experimental', [
-          'The RTL features in Tailwind CSS are currently in preview.',
-          'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
-        ])
-        return `[dir="rtl"] ${updateAllClasses(
-          selector,
-          (className) => `rtl${config('separator')}${className}`
-        )}`
-      })
-    )
+      format('[dir="ltr"] &')
+    })
+
+    addVariant('rtl', ({ format }) => {
+      log.warn('rtl-experimental', [
+        'The RTL features in Tailwind CSS are currently in preview.',
+        'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
+      ])
+
+      format('[dir="rtl"] &')
+    })
   },
 
-  reducedMotionVariants: ({ config, addVariant }) => {
-    addVariant(
-      'motion-safe',
-      transformLastClasses(
-        (className) => {
-          return `motion-safe${config('separator')}${className}`
-        },
-        {
-          wrap: () =>
-            postcss.atRule({
-              name: 'media',
-              params: '(prefers-reduced-motion: no-preference)',
-            }),
-        }
-      )
-    )
-
-    addVariant(
-      'motion-reduce',
-      transformLastClasses(
-        (className) => {
-          return `motion-reduce${config('separator')}${className}`
-        },
-        {
-          wrap: () =>
-            postcss.atRule({
-              name: 'media',
-              params: '(prefers-reduced-motion: reduce)',
-            }),
-        }
-      )
-    )
+  reducedMotionVariants: ({ addVariant }) => {
+    addVariant('motion-safe', '@media (prefers-reduced-motion: no-preference)')
+    addVariant('motion-reduce', '@media (prefers-reduced-motion: reduce)')
   },
 
   darkVariants: ({ config, addVariant }) => {
@@ -309,55 +147,18 @@ export let variantPlugins = {
     }
 
     if (mode === 'class') {
-      addVariant(
-        'dark',
-        transformAllSelectors((selector) => {
-          let variantSelector = updateLastClasses(selector, (className) => {
-            return `dark${config('separator')}${className}`
-          })
-
-          if (variantSelector === selector) {
-            return null
-          }
-
-          let darkSelector = prefixSelector(config('prefix'), `.dark`)
-
-          return `${darkSelector} ${variantSelector}`
-        })
-      )
+      addVariant('dark', '.dark &')
     } else if (mode === 'media') {
-      addVariant(
-        'dark',
-        transformLastClasses(
-          (className) => {
-            return `dark${config('separator')}${className}`
-          },
-          {
-            wrap: () =>
-              postcss.atRule({
-                name: 'media',
-                params: '(prefers-color-scheme: dark)',
-              }),
-          }
-        )
-      )
+      addVariant('dark', '@media (prefers-color-scheme: dark)')
     }
   },
 
-  screenVariants: ({ config, theme, addVariant }) => {
+  screenVariants: ({ theme, addVariant }) => {
     for (let screen in theme('screens')) {
       let size = theme('screens')[screen]
       let query = buildMediaQuery(size)
 
-      addVariant(
-        screen,
-        transformLastClasses(
-          (className) => {
-            return `${screen}${config('separator')}${className}`
-          },
-          { wrap: () => postcss.atRule({ name: 'media', params: query }) }
-        )
-      )
+      addVariant(screen, `@media ${query}`)
     }
   },
 }
@@ -1745,25 +1546,56 @@ export let corePlugins = {
 
   fontVariantNumeric: ({ addUtilities }) => {
     addUtilities({
-      '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions':
-        {
-          '--tw-ordinal': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-slashed-zero': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-numeric-figure': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-numeric-spacing': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-numeric-fraction': 'var(--tw-empty,/*!*/ /*!*/)',
-          'font-variant-numeric':
-            'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)',
-        },
+      '@defaults font-variant-numeric': {
+        '--tw-ordinal': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-slashed-zero': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-numeric-figure': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-numeric-spacing': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-numeric-fraction': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-font-variant-numeric':
+          'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)',
+      },
       '.normal-nums': { 'font-variant-numeric': 'normal' },
-      '.ordinal': { '--tw-ordinal': 'ordinal' },
-      '.slashed-zero': { '--tw-slashed-zero': 'slashed-zero' },
-      '.lining-nums': { '--tw-numeric-figure': 'lining-nums' },
-      '.oldstyle-nums': { '--tw-numeric-figure': 'oldstyle-nums' },
-      '.proportional-nums': { '--tw-numeric-spacing': 'proportional-nums' },
-      '.tabular-nums': { '--tw-numeric-spacing': 'tabular-nums' },
-      '.diagonal-fractions': { '--tw-numeric-fraction': 'diagonal-fractions' },
-      '.stacked-fractions': { '--tw-numeric-fraction': 'stacked-fractions' },
+      '.ordinal': {
+        '@defaults font-variant-numeric': {},
+        '--tw-ordinal': 'ordinal',
+        'font-variant-numeric': 'var(--tw-font-variant-numeric)',
+      },
+      '.slashed-zero': {
+        '@defaults font-variant-numeric': {},
+        '--tw-slashed-zero': 'slashed-zero',
+        'font-variant-numeric': 'var(--tw-font-variant-numeric)',
+      },
+      '.lining-nums': {
+        '@defaults font-variant-numeric': {},
+        '--tw-numeric-figure': 'lining-nums',
+        'font-variant-numeric': 'var(--tw-font-variant-numeric)',
+      },
+      '.oldstyle-nums': {
+        '@defaults font-variant-numeric': {},
+        '--tw-numeric-figure': 'oldstyle-nums',
+        'font-variant-numeric': 'var(--tw-font-variant-numeric)',
+      },
+      '.proportional-nums': {
+        '@defaults font-variant-numeric': {},
+        '--tw-numeric-spacing': 'proportional-nums',
+        'font-variant-numeric': 'var(--tw-font-variant-numeric)',
+      },
+      '.tabular-nums': {
+        '@defaults font-variant-numeric': {},
+        '--tw-numeric-spacing': 'tabular-nums',
+        'font-variant-numeric': 'var(--tw-font-variant-numeric)',
+      },
+      '.diagonal-fractions': {
+        '@defaults font-variant-numeric': {},
+        '--tw-numeric-fraction': 'diagonal-fractions',
+        'font-variant-numeric': 'var(--tw-font-variant-numeric)',
+      },
+      '.stacked-fractions': {
+        '@defaults font-variant-numeric': {},
+        '--tw-numeric-fraction': 'stacked-fractions',
+        'font-variant-numeric': 'var(--tw-font-variant-numeric)',
+      },
     })
   },
 

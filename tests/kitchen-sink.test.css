@@ -23,7 +23,7 @@
 .apply-test:hover {
   font-weight: 700;
 }
-.apply-test:focus:hover {
+.apply-test:hover:focus {
   font-weight: 700;
 }
 @media (min-width: 640px) {
@@ -31,7 +31,7 @@
     --tw-bg-opacity: 1;
     background-color: rgb(34 197 94 / var(--tw-bg-opacity));
   }
-  .apply-test:focus:nth-child(even) {
+  .apply-test:nth-child(even):focus {
     --tw-bg-opacity: 1;
     background-color: rgb(251 207 232 / var(--tw-bg-opacity));
   }
@@ -198,22 +198,10 @@ div {
   }
 }
 .test-apply-font-variant {
-  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
-  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   --tw-ordinal: ordinal;
+  font-variant-numeric: var(--tw-font-variant-numeric);
   --tw-numeric-spacing: tabular-nums;
+  font-variant-numeric: var(--tw-font-variant-numeric);
 }
 .custom-component {
   background: #123456;
@@ -266,6 +254,16 @@ div {
 }
 .font-medium {
   font-weight: 500;
+}
+.test-apply-font-variant,
+.sm\:tabular-nums {
+  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
+  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
+  --tw-font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 .shadow-sm {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -352,7 +350,7 @@ div {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
 }
-.focus\:hover\:font-light:focus:hover {
+.focus\:hover\:font-light:hover:focus {
   font-weight: 300;
 }
 .disabled\:font-bold:disabled {
@@ -427,24 +425,9 @@ div {
   .sm\:text-center {
     text-align: center;
   }
-  .sm\:ordinal,
-  .sm\:slashed-zero,
-  .sm\:lining-nums,
-  .sm\:oldstyle-nums,
-  .sm\:proportional-nums,
-  .sm\:tabular-nums,
-  .sm\:diagonal-fractions,
-  .sm\:stacked-fractions {
-    --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-    --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-    --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-    --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-    --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-    font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
-      var(--tw-numeric-spacing) var(--tw-numeric-fraction);
-  }
   .sm\:tabular-nums {
     --tw-numeric-spacing: tabular-nums;
+    font-variant-numeric: var(--tw-font-variant-numeric);
   }
   .sm\:custom-util {
     background: #abcdef;
