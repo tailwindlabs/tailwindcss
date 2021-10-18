@@ -155,9 +155,6 @@ function applyVariant(variant, matches, context) {
             wrapper.append(nodes)
             clone.append(wrapper)
           },
-          withRule(modify) {
-            clone.walkRules(modify)
-          },
           format(selectorFormat) {
             collectedFormats.push(selectorFormat)
           },
