@@ -217,7 +217,10 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     addVariant(variantName, variantFunctions, options = {}) {
       variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
         if (typeof variantFunction !== 'string') {
-          return variantFunction
+          // Safelist public API functions
+          return ({ modifySelectors, container, separator }) => {
+            return variantFunction({ modifySelectors, container, separator })
+          }
         }
 
         variantFunction = variantFunction
