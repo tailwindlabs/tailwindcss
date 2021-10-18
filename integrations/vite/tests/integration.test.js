@@ -121,7 +121,7 @@ describe('watcher', () => {
           font-weight: 700;
         }
         @media (min-width: 768px) {
-          .md\\:font-medium {
+          .md\:font-medium {
             font-weight: 500;
           }
         }
@@ -158,7 +158,7 @@ describe('watcher', () => {
           font-weight: bold;
         }
         @media (min-width: 800px) {
-          .md\\:font-medium {
+          .md\:font-medium {
             font-weight: 500;
           }
         }

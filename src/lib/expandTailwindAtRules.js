@@ -14,7 +14,7 @@ const PATTERNS = [
   /([^<>"'`\s]*\['[^"'`\s]*'\])/.source, // `content-['hello']` but not `content-['hello']']`
   /([^<>"'`\s]*\["[^"'`\s]*"\])/.source, // `content-["hello"]` but not `content-["hello"]"]`
   /([^<>"'`\s]*\[[^"'`\s]+\][^<>"'`\s]*)/.source, // `fill-[#bada55]`, `fill-[#bada55]/50`
-  /([^<>"'`\s]*[^"'`\s:])/.source, //  `px-1.5`, `uppercase` but not `uppercase:`].join('|')
+  /([^<>"'`\s]*[^"'`\s:])/.source, //  `px-1.5`, `uppercase` but not `uppercase:`
 ].join('|')
 const BROAD_MATCH_GLOBAL_REGEXP = new RegExp(PATTERNS, 'g')
 const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g

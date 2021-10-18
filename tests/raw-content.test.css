@@ -513,29 +513,27 @@
   font-style: normal;
 }
 .ordinal,
-.slashed-zero,
-.lining-nums,
-.oldstyle-nums,
-.proportional-nums,
 .tabular-nums,
-.diagonal-fractions,
-.stacked-fractions {
+.diagonal-fractions {
   --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
   --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
   --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
   --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
   --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+  --tw-font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
     var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 .ordinal {
   --tw-ordinal: ordinal;
+  font-variant-numeric: var(--tw-font-variant-numeric);
 }
 .tabular-nums {
   --tw-numeric-spacing: tabular-nums;
+  font-variant-numeric: var(--tw-font-variant-numeric);
 }
 .diagonal-fractions {
   --tw-numeric-fraction: diagonal-fractions;
+  font-variant-numeric: var(--tw-font-variant-numeric);
 }
 .leading-relaxed {
   line-height: 1.625;

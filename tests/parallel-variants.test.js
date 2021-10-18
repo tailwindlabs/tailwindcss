@@ -1,5 +1,3 @@
-import { transformAllSelectors, updateAllClasses } from '../src/util/pluginUtils.js'
-
 import { run, html, css } from './util/run'
 
 test('basic parallel variants', async () => {
@@ -12,21 +10,8 @@ test('basic parallel variants', async () => {
       },
     ],
     plugins: [
-      function test({ addVariant, config }) {
-        addVariant('test', [
-          transformAllSelectors((selector) => {
-            let variantSelector = updateAllClasses(selector, (className) => {
-              return `test${config('separator')}${className}`
-            })
-
-            return `${variantSelector} *::test`
-          }),
-          transformAllSelectors((selector) => {
-            return updateAllClasses(selector, (className, { withPseudo }) => {
-              return withPseudo(`test${config('separator')}${className}`, '::test')
-            })
-          }),
-        ])
+      function test({ addVariant }) {
+        addVariant('test', ['& *::test', '&::test'])
       },
     ],
   }
@@ -36,22 +21,22 @@ test('basic parallel variants', async () => {
       .font-normal {
         font-weight: 400;
       }
-      .test\\:font-bold *::test {
+      .test\:font-bold *::test {
         font-weight: 700;
       }
-      .test\\:font-medium *::test {
+      .test\:font-medium *::test {
         font-weight: 500;
       }
-      .hover\\:test\\:font-black:hover *::test {
+      .hover\:test\:font-black *::test:hover {
         font-weight: 900;
       }
-      .test\\:font-bold::test {
+      .test\:font-bold::test {
         font-weight: 700;
       }
-      .test\\:font-medium::test {
+      .test\:font-medium::test {
         font-weight: 500;
       }
-      .hover\\:test\\:font-black:hover::test {
+      .hover\:test\:font-black::test:hover {
         font-weight: 900;
       }
     `)

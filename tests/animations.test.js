@@ -30,7 +30,7 @@ test('basic', () => {
           opacity: 0;
         }
       }
-      .hover\\:animate-ping:hover {
+      .hover\:animate-ping:hover {
         animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
       }
       @keyframes bounce {
@@ -44,7 +44,7 @@ test('basic', () => {
           animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
         }
       }
-      .group:hover .group-hover\\:animate-bounce {
+      .group:hover .group-hover\:animate-bounce {
         animation: bounce 1s infinite;
       }
     `)

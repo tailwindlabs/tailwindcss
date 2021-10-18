@@ -326,16 +326,16 @@ test('container can use variants', () => {
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 1024px) {
-        .lg\\:hover\\:container:hover {
+        .lg\:hover\:container:hover {
           width: 100%;
         }
         @media (min-width: 400px) {
-          .lg\\:hover\\:container:hover {
+          .lg\:hover\:container:hover {
             max-width: 400px;
           }
         }
         @media (min-width: 500px) {
-          .lg\\:hover\\:container:hover {
+          .lg\:hover\:container:hover {
             max-width: 500px;
           }
         }

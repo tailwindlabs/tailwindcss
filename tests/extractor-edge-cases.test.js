@@ -9,7 +9,7 @@ test('PHP arrays', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .max-w-\\[16rem\\] {
+      .max-w-\[16rem\] {
         max-width: 16rem;
       }
     `)
@@ -21,8 +21,9 @@ test('arbitrary values with quotes', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .content-\\[\\'hello\\]\\'\\] {
-        content: 'hello]';
+      .content-\[\'hello\]\'\] {
+        --tw-content: 'hello]';
+        content: var(--tw-content);
       }
     `)
   })

@@ -44,12 +44,12 @@ it('should support arbitrary values for various background utilities', () => {
         background-color: rgb(239 68 68 / var(--tw-bg-opacity));
       }
 
-      .bg-\\[\\#ff0000\\] {
+      .bg-\[\#ff0000\] {
         --tw-bg-opacity: 1;
         background-color: rgb(255 0 0 / var(--tw-bg-opacity));
       }
 
-      .bg-\\[color\\:var\\(--bg-color\\)\\] {
+      .bg-\[color\:var\(--bg-color\)\] {
         background-color: var(--bg-color);
       }
 
@@ -57,11 +57,11 @@ it('should support arbitrary values for various background utilities', () => {
         background-image: linear-gradient(to right, var(--tw-gradient-stops));
       }
 
-      .bg-\\[url\\(\\'\\/image-1-0\\.png\\'\\)\\] {
+      .bg-\[url\(\'\/image-1-0\.png\'\)\] {
         background-image: url('/image-1-0.png');
       }
 
-      .bg-\\[url\\:var\\(--image-url\\)\\] {
+      .bg-\[url\:var\(--image-url\)\] {
         background-image: var(--image-url);
       }
     `)
@@ -86,8 +86,8 @@ it('should handle unknown typehints', () => {
   let config = { content: [{ raw: html`<div class="w-[length:12px]"></div>` }] }
 
   return run('@tailwind utilities', config).then((result) => {
-    return expect(result.css).toMatchFormattedCss(`
-      .w-\\[length\\:12px\\] {
+    return expect(result.css).toMatchFormattedCss(css`
+      .w-\[length\:12px\] {
         width: 12px;
       }
     `)
@@ -95,6 +95,13 @@ it('should handle unknown typehints', () => {
 })
 
 it('should convert _ to spaces', () => {
+  // Using custom css function here, because otherwise with String.raw, we run
+  // into an issue with `\2c ` escapes. If we use `\2c ` then JS complains
+  // about strict mode. But `\\2c ` is not what it expected.
+  function css(templates) {
+    return templates.join('')
+  }
+
   let config = {
     content: [
       {
@@ -169,15 +176,18 @@ it('should convert _ to spaces', () => {
       }
 
       .content-\\[_hello_world_\\] {
-        content: hello world;
+        --tw-content: hello world;
+        content: var(--tw-content);
       }
 
       .content-\\[___abc____\\] {
-        content: abc;
+        --tw-content: abc;
+        content: var(--tw-content);
       }
 
       .content-\\[\\'__hello__world__\\'\\] {
-        content: '  hello  world  ';
+        --tw-content: '  hello  world  ';
+        content: var(--tw-content);
       }
     `)
   })
@@ -185,20 +195,21 @@ it('should convert _ to spaces', () => {
 
 it('should not convert escaped underscores with spaces', () => {
   let config = {
-    content: [{ raw: html` <div class="content-['snake\\_case']"></div> ` }],
+    content: [{ raw: `<div class="content-['snake\\_case']"></div>` }],
     corePlugins: { preflight: false },
   }
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      .content-\\[\\'snake\\\\_case\\'\\] {
-        content: 'snake_case';
+      .content-\[\'snake\\_case\'\] {
+        --tw-content: 'snake_case';
+        content: var(--tw-content);
       }
     `)
   })
 })
 
-it('should warn and not generate if arbitrary values are ambigu', () => {
+it('should warn and not generate if arbitrary values are ambiguous', () => {
   // If we don't protect against this, then `bg-[200px_100px]` would both
   // generate the background-size as well as the background-position utilities.
   let config = {

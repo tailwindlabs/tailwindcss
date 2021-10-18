@@ -76,7 +76,7 @@ test('being an asshole', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      .-mt-\\[10px\\] {
+      .-mt-\[10px\] {
         margin-top: 55px;
       }
     `)
@@ -95,7 +95,7 @@ test('being a real asshole', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      .-mt-\\[10px\\] {
+      .-mt-\[10px\] {
         margin-top: -55px;
       }
     `)
@@ -209,7 +209,7 @@ test('arbitrary values', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      .-mt-\\[10px\\] {
+      .-mt-\[10px\] {
         margin-top: -10px;
       }
     `)

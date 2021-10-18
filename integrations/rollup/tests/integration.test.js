@@ -90,7 +90,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
           font-weight: 700;
         }
         @media (min-width: 768px) {
-          .md\\:font-medium {
+          .md\:font-medium {
             font-weight: 500;
           }
         }
@@ -127,7 +127,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
           font-weight: bold;
         }
         @media (min-width: 800px) {
-          .md\\:font-medium {
+          .md\:font-medium {
             font-weight: 500;
           }
         }
