@@ -1011,13 +1011,16 @@
   will-change: var(--will-change);
 }
 .content-\[\'hello\'\] {
-  content: 'hello';
+  --tw-content: 'hello';
+  content: var(--tw-content);
 }
 .content-\[attr\(content-before\)\] {
-  content: attr(content-before);
+  --tw-content: attr(content-before);
+  content: var(--tw-content);
 }
 .content-\[\'\>\'\] {
-  content: '>';
+  --tw-content: '>';
+  content: var(--tw-content);
 }
 @media (min-width: 1024px) {
   .lg\:grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {

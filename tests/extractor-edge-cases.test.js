@@ -22,7 +22,8 @@ test('arbitrary values with quotes', async () => {
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .content-\[\'hello\]\'\] {
-        content: 'hello]';
+        --tw-content: 'hello]';
+        content: var(--tw-content);
       }
     `)
   })

@@ -176,15 +176,18 @@ it('should convert _ to spaces', () => {
       }
 
       .content-\\[_hello_world_\\] {
-        content: hello world;
+        --tw-content: hello world;
+        content: var(--tw-content);
       }
 
       .content-\\[___abc____\\] {
-        content: abc;
+        --tw-content: abc;
+        content: var(--tw-content);
       }
 
       .content-\\[\\'__hello__world__\\'\\] {
-        content: '  hello  world  ';
+        --tw-content: '  hello  world  ';
+        content: var(--tw-content);
       }
     `)
   })
@@ -199,7 +202,8 @@ it('should not convert escaped underscores with spaces', () => {
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
       .content-\[\'snake\\_case\'\] {
-        content: 'snake_case';
+        --tw-content: 'snake_case';
+        content: var(--tw-content);
       }
     `)
   })
