@@ -15,7 +15,6 @@
 ::before,
 ::after {
   --tw-content: '';
-  content: var(--tw-content);
 }
 
 /*

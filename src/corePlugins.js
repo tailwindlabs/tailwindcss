@@ -22,8 +22,35 @@ export let variantPlugins = {
 
     addVariant('file', '&::file-selector-button')
 
-    addVariant('before', '&::before')
-    addVariant('after', '&::after')
+    addVariant('before', ({ container }) => {
+      container.walkRules((rule) => {
+        let foundContent = false
+        rule.walkDecls('content', () => {
+          foundContent = true
+        })
+
+        if (!foundContent) {
+          rule.prepend(postcss.decl({ prop: 'content', value: 'var(--tw-content)' }))
+        }
+      })
+
+      return '&::before'
+    })
+
+    addVariant('after', ({ container }) => {
+      container.walkRules((rule) => {
+        let foundContent = false
+        rule.walkDecls('content', () => {
+          foundContent = true
+        })
+
+        if (!foundContent) {
+          rule.prepend(postcss.decl({ prop: 'content', value: 'var(--tw-content)' }))
+        }
+      })
+
+      return '&::after'
+    })
   },
 
   pseudoClassVariants: ({ addVariant }) => {
