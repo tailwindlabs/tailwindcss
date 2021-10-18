@@ -968,5 +968,6 @@
   will-change: transform;
 }
 .content-none {
-  content: none;
+  --tw-content: none;
+  content: var(--tw-content);
 }

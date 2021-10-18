@@ -165,20 +165,20 @@
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .before\:block::before {
-  content: '';
+  content: var(--tw-content);
   display: block;
 }
 .before\:bg-red-500::before {
-  content: '';
+  content: var(--tw-content);
   --tw-bg-opacity: 1;
   background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 .after\:flex::after {
-  content: '';
+  content: var(--tw-content);
   display: flex;
 }
 .after\:uppercase::after {
-  content: '';
+  content: var(--tw-content);
   text-transform: uppercase;
 }
 .first\:shadow-md:first-child {

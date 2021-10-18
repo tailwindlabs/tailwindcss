@@ -61,9 +61,7 @@ describe('custom advanced variants', () => {
       ],
       plugins: [
         function ({ addVariant }) {
-          addVariant('prose-headings', ({ format }) => {
-            return format(':where(&) :is(h1, h2, h3, h4)')
-          })
+          addVariant('prose-headings', ':where(&) :is(h1, h2, h3, h4)')
         },
       ],
     }
@@ -89,9 +87,7 @@ describe('custom advanced variants', () => {
       ],
       plugins: [
         function ({ addVariant }) {
-          addVariant('prose-headings', ({ format }) => {
-            return format(':where(&) :is(h1, h2, h3, h4)')
-          })
+          addVariant('prose-headings', ':where(&) :is(h1, h2, h3, h4)')
         },
       ],
     }
@@ -121,9 +117,7 @@ describe('custom advanced variants', () => {
       ],
       plugins: [
         function ({ addVariant }) {
-          addVariant('prose-headings', ({ format }) => {
-            return format(':where(&) :is(h1, h2, h3, h4)')
-          })
+          addVariant('prose-headings', ':where(&) :is(h1, h2, h3, h4)')
         },
       ],
     }

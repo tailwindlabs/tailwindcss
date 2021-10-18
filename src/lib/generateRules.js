@@ -143,25 +143,29 @@ function applyVariant(variant, matches, context) {
         }
 
         let ruleWithVariant = variantFunction({
+          // Public API
           get container() {
             prepareBackup()
             return clone
           },
           separator: context.tailwindConfig.separator,
           modifySelectors,
+
+          // Private API for now
           wrap(wrapper) {
             let nodes = clone.nodes
             clone.removeAll()
             wrapper.append(nodes)
             clone.append(wrapper)
           },
-          withRule(modify) {
-            clone.walkRules(modify)
-          },
           format(selectorFormat) {
             collectedFormats.push(selectorFormat)
           },
         })
+
+        if (typeof ruleWithVariant === 'string') {
+          collectedFormats.push(ruleWithVariant)
+        }
 
         if (ruleWithVariant === null) {
           continue

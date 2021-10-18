@@ -22,37 +22,34 @@ export let variantPlugins = {
 
     addVariant('file', '&::file-selector-button')
 
-    // TODO: Use `addVariant('before', '*::before')` instead, once `content`
-    // fix is implemented.
-    addVariant('before', ({ format, withRule }) => {
-      format('&::before')
-
-      withRule((rule) => {
+    addVariant('before', ({ container }) => {
+      container.walkRules((rule) => {
         let foundContent = false
         rule.walkDecls('content', () => {
           foundContent = true
         })
+
         if (!foundContent) {
-          rule.prepend(postcss.decl({ prop: 'content', value: '""' }))
+          rule.prepend(postcss.decl({ prop: 'content', value: 'var(--tw-content)' }))
         }
       })
+
+      return '&::before'
     })
 
-    // TODO: Use `addVariant('after', '*::after')` instead, once `content`
-    // fix is implemented.
-    addVariant('after', ({ format, withRule }) => {
-      format('&::after')
-
-      withRule((rule) => {
+    addVariant('after', ({ container }) => {
+      container.walkRules((rule) => {
         let foundContent = false
         rule.walkDecls('content', () => {
           foundContent = true
         })
 
         if (!foundContent) {
-          rule.prepend(postcss.decl({ prop: 'content', value: '""' }))
+          rule.prepend(postcss.decl({ prop: 'content', value: 'var(--tw-content)' }))
         }
       })
+
+      return '&::after'
     })
   },
 
@@ -112,22 +109,22 @@ export let variantPlugins = {
   },
 
   directionVariants: ({ addVariant }) => {
-    addVariant('ltr', ({ format }) => {
+    addVariant('ltr', () => {
       log.warn('rtl-experimental', [
         'The RTL features in Tailwind CSS are currently in preview.',
         'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
       ])
 
-      format('[dir="ltr"] &')
+      return '[dir="ltr"] &'
     })
 
-    addVariant('rtl', ({ format }) => {
+    addVariant('rtl', () => {
       log.warn('rtl-experimental', [
         'The RTL features in Tailwind CSS are currently in preview.',
         'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
       ])
 
-      format('[dir="rtl"] &')
+      return '[dir="rtl"] &'
     })
   },
 
@@ -2265,5 +2262,7 @@ export let corePlugins = {
     { filterDefault: true }
   ),
   willChange: createUtilityPlugin('willChange', [['will-change', ['will-change']]]),
-  content: createUtilityPlugin('content'),
+  content: createUtilityPlugin('content', [
+    ['content', ['--tw-content', ['content', 'var(--tw-content)']]],
+  ]),
 }

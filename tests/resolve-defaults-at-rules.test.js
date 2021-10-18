@@ -121,12 +121,12 @@ test('with pseudo-element variants', async () => {
       }
       /* --- */
       .before\:scale-x-110::before {
-        content: '';
+        content: var(--tw-content);
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .after\:rotate-3::after {
-        content: '';
+        content: var(--tw-content);
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -205,12 +205,12 @@ test('with multi-class pseudo-element variants', async () => {
       }
       /* --- */
       .group:hover .group-hover\:before\:scale-x-110::before {
-        content: '';
+        content: var(--tw-content);
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .peer:focus ~ .peer-focus\:after\:rotate-3::after {
-        content: '';
+        content: var(--tw-content);
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -253,12 +253,12 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
       }
       /* --- */
       .group:hover .group-hover\:hover\:before\:scale-x-110::before:hover {
-        content: '';
+        content: var(--tw-content);
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .peer:focus ~ .peer-focus\:focus\:after\:rotate-3::after:focus {
-        content: '';
+        content: var(--tw-content);
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -288,7 +288,6 @@ test('with apply', async () => {
     }
 
     .baz::before {
-      content: '';
       @apply rotate-45;
     }
 
@@ -351,13 +350,12 @@ test('with apply', async () => {
         transform: var(--tw-transform);
       }
       .bar::before {
-        content: '';
+        content: var(--tw-content);
         --tw-scale-x: 1.1;
         --tw-scale-y: 1.1;
         transform: var(--tw-transform);
       }
       .baz::before {
-        content: '';
         --tw-rotate: 45deg;
         transform: var(--tw-transform);
       }
@@ -408,22 +406,18 @@ test('legacy pseudo-element syntax is supported', async () => {
     @tailwind utilities;
 
     .a:before {
-      content: '';
       @apply rotate-45;
     }
 
     .b:after {
-      content: '';
       @apply rotate-3;
     }
 
     .c:first-line {
-      content: '';
       @apply rotate-1;
     }
 
     .d:first-letter {
-      content: '';
       @apply rotate-6;
     }
   `
@@ -447,22 +441,18 @@ test('legacy pseudo-element syntax is supported', async () => {
       }
       /* --- */
       .a:before {
-        content: '';
         --tw-rotate: 45deg;
         transform: var(--tw-transform);
       }
       .b:after {
-        content: '';
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
       .c:first-line {
-        content: '';
         --tw-rotate: 1deg;
         transform: var(--tw-transform);
       }
       .d:first-letter {
-        content: '';
         --tw-rotate: 6deg;
         transform: var(--tw-transform);
       }
