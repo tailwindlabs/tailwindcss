@@ -82,22 +82,22 @@ export let variantPlugins = {
   },
 
   directionVariants: ({ addVariant }) => {
-    addVariant('ltr', ({ format }) => {
+    addVariant('ltr', () => {
       log.warn('rtl-experimental', [
         'The RTL features in Tailwind CSS are currently in preview.',
         'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
       ])
 
-      format('[dir="ltr"] &')
+      return '[dir="ltr"] &'
     })
 
-    addVariant('rtl', ({ format }) => {
+    addVariant('rtl', () => {
       log.warn('rtl-experimental', [
         'The RTL features in Tailwind CSS are currently in preview.',
         'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
       ])
 
-      format('[dir="rtl"] &')
+      return '[dir="rtl"] &'
     })
   },
 

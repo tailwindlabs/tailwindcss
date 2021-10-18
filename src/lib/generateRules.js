@@ -163,6 +163,10 @@ function applyVariant(variant, matches, context) {
           },
         })
 
+        if (typeof ruleWithVariant === 'string') {
+          collectedFormats.push(ruleWithVariant)
+        }
+
         if (ruleWithVariant === null) {
           continue
         }
