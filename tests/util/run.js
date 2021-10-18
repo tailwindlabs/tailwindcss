@@ -10,10 +10,6 @@ export function run(input, config, plugin = tailwind) {
   })
 }
 
-function syntax(templates) {
-  return templates.join('')
-}
-
-export let css = syntax
-export let html = syntax
-export let javascript = syntax
+export let css = String.raw
+export let html = String.raw
+export let javascript = String.raw

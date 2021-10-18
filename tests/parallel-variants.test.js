@@ -21,22 +21,22 @@ test('basic parallel variants', async () => {
       .font-normal {
         font-weight: 400;
       }
-      .test\\:font-bold *::test {
+      .test\:font-bold *::test {
         font-weight: 700;
       }
-      .test\\:font-medium *::test {
+      .test\:font-medium *::test {
         font-weight: 500;
       }
-      .hover\\:test\\:font-black *::test:hover {
+      .hover\:test\:font-black *::test:hover {
         font-weight: 900;
       }
-      .test\\:font-bold::test {
+      .test\:font-bold::test {
         font-weight: 700;
       }
-      .test\\:font-medium::test {
+      .test\:font-medium::test {
         font-weight: 500;
       }
-      .hover\\:test\\:font-black::test:hover {
+      .hover\:test\:font-black::test:hover {
         font-weight: 900;
       }
     `)

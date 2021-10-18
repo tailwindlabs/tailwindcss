@@ -11,7 +11,7 @@ test('it uses the values from the custom config file', () => {
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 400px) {
-        .mobile\\:font-bold {
+        .mobile\:font-bold {
           font-weight: 700;
         }
       }
@@ -32,7 +32,7 @@ test('custom config can be passed as an object', () => {
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 400px) {
-        .mobile\\:font-bold {
+        .mobile\:font-bold {
           font-weight: 700;
         }
       }
@@ -48,7 +48,7 @@ test('custom config path can be passed using `config` property in an object', ()
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 400px) {
-        .mobile\\:font-bold {
+        .mobile\:font-bold {
           font-weight: 700;
         }
       }
@@ -71,7 +71,7 @@ test('custom config can be passed under the `config` property', () => {
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 400px) {
-        .mobile\\:font-bold {
+        .mobile\:font-bold {
           font-weight: 700;
         }
       }
@@ -96,7 +96,7 @@ test('tailwind.config.cjs is picked up by default', () => {
     return run('@tailwind utilities').then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 400px) {
-          .mobile\\:font-bold {
+          .mobile\:font-bold {
             font-weight: 700;
           }
         }
@@ -122,7 +122,7 @@ test('tailwind.config.js is picked up by default', () => {
     return run('@tailwind utilities').then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 400px) {
-          .mobile\\:font-bold {
+          .mobile\:font-bold {
             font-weight: 700;
           }
         }
@@ -148,7 +148,7 @@ test('tailwind.config.cjs is picked up by default when passing an empty object',
     return run('@tailwind utilities', {}).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 400px) {
-          .mobile\\:font-bold {
+          .mobile\:font-bold {
             font-weight: 700;
           }
         }
@@ -174,7 +174,7 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
     return run('@tailwind utilities', {}).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 400px) {
-          .mobile\\:font-bold {
+          .mobile\:font-bold {
             font-weight: 700;
           }
         }

@@ -47,16 +47,16 @@ it('should be possible to matchComponents', () => {
         --tw-shadow: 0 0 #0000;
       }
 
-      .card-\\[\\#0088cc\\] {
+      .card-\[\#0088cc\] {
         color: #0088cc;
       }
 
-      .card-\\[\\#0088cc\\] .card-header {
+      .card-\[\#0088cc\] .card-header {
         border-top-width: 3px;
         border-top-color: #0088cc;
       }
 
-      .card-\\[\\#0088cc\\] .card-footer {
+      .card-\[\#0088cc\] .card-footer {
         border-bottom-width: 3px;
         border-bottom-color: #0088cc;
       }
@@ -75,16 +75,16 @@ it('should be possible to matchComponents', () => {
           var(--tw-shadow);
       }
 
-      .hover\\:card-\\[\\#f0f\\]:hover {
+      .hover\:card-\[\#f0f\]:hover {
         color: #f0f;
       }
 
-      .hover\\:card-\\[\\#f0f\\]:hover .card-header {
+      .hover\:card-\[\#f0f\]:hover .card-header {
         border-top-width: 3px;
         border-top-color: #f0f;
       }
 
-      .hover\\:card-\\[\\#f0f\\]:hover .card-footer {
+      .hover\:card-\[\#f0f\]:hover .card-footer {
         border-bottom-width: 3px;
         border-bottom-color: #f0f;
       }
