@@ -38,12 +38,12 @@ test('order matters and produces different behaviour', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      .hover\\:file\\:bg-pink-600::file-selector-button:hover {
+      .hover\:file\:bg-pink-600::file-selector-button:hover {
         --tw-bg-opacity: 1;
         background-color: rgb(219 39 119 / var(--tw-bg-opacity));
       }
 
-      .file\\:hover\\:bg-pink-600:hover::file-selector-button {
+      .file\:hover\:bg-pink-600:hover::file-selector-button {
         --tw-bg-opacity: 1;
         background-color: rgb(219 39 119 / var(--tw-bg-opacity));
       }
@@ -70,7 +70,7 @@ describe('custom advanced variants', () => {
 
     return run('@tailwind components;@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        :where(.prose-headings\\:text-center) :is(h1, h2, h3, h4) {
+        :where(.prose-headings\:text-center) :is(h1, h2, h3, h4) {
           text-align: center;
         }
       `)
@@ -98,11 +98,11 @@ describe('custom advanced variants', () => {
 
     return run('@tailwind components;@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        :where(.hover\\:prose-headings\\:text-center) :is(h1, h2, h3, h4):hover {
+        :where(.hover\:prose-headings\:text-center) :is(h1, h2, h3, h4):hover {
           text-align: center;
         }
 
-        :where(.prose-headings\\:hover\\:text-center:hover) :is(h1, h2, h3, h4) {
+        :where(.prose-headings\:hover\:text-center:hover) :is(h1, h2, h3, h4) {
           text-align: center;
         }
       `)
@@ -130,11 +130,11 @@ describe('custom advanced variants', () => {
 
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        .group:hover :where(.group-hover\\:prose-headings\\:text-center) :is(h1, h2, h3, h4) {
+        .group:hover :where(.group-hover\:prose-headings\:text-center) :is(h1, h2, h3, h4) {
           text-align: center;
         }
 
-        :where(.group:hover .prose-headings\\:group-hover\\:text-center) :is(h1, h2, h3, h4) {
+        :where(.group:hover .prose-headings\:group-hover\:text-center) :is(h1, h2, h3, h4) {
           text-align: center;
         }
       `)
@@ -155,7 +155,7 @@ test('stacked peer variants', async () => {
   `
 
   let expected = css`
-    .peer:disabled:focus:hover ~ .peer-disabled\\:peer-focus\\:peer-hover\\:border-blue-500 {
+    .peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:border-blue-500 {
       --tw-border-opacity: 1;
       border-color: rgb(59 130 246 / var(--tw-border-opacity));
     }
@@ -197,7 +197,7 @@ it('should properly handle keyframes with multiple variants', async () => {
       }
     }
 
-    .hover\\:animate-spin:hover {
+    .hover\:animate-spin:hover {
       animation: spin 1s linear infinite;
     }
 
@@ -213,7 +213,7 @@ it('should properly handle keyframes with multiple variants', async () => {
       }
     }
 
-    .hover\\:animate-bounce:hover {
+    .hover\:animate-bounce:hover {
       animation: bounce 1s infinite;
     }
 
@@ -223,7 +223,7 @@ it('should properly handle keyframes with multiple variants', async () => {
       }
     }
 
-    .focus\\:animate-spin:focus {
+    .focus\:animate-spin:focus {
       animation: spin 1s linear infinite;
     }
 
@@ -239,7 +239,7 @@ it('should properly handle keyframes with multiple variants', async () => {
       }
     }
 
-    .focus\\:animate-bounce:focus {
+    .focus\:animate-bounce:focus {
       animation: bounce 1s infinite;
     }
   `)
@@ -263,7 +263,7 @@ test('custom addVariant with nested media & format shorthand', () => {
     return expect(result.css).toMatchFormattedCss(css`
       @supports (hover: hover) {
         @media (print) {
-          .magic\\:text-center:disabled {
+          .magic\:text-center:disabled {
             text-align: center;
           }
         }

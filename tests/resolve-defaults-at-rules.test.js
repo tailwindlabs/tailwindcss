@@ -61,9 +61,9 @@ test('with pseudo-class variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .hover\\:scale-x-110,
-      .focus\\:rotate-3,
-      .hover\\:focus\\:skew-y-6 {
+      .hover\:scale-x-110,
+      .focus\:rotate-3,
+      .hover\:focus\:skew-y-6 {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -76,15 +76,15 @@ test('with pseudo-class variants', async () => {
           scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
-      .hover\\:scale-x-110:hover {
+      .hover\:scale-x-110:hover {
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
-      .focus\\:rotate-3:focus {
+      .focus\:rotate-3:focus {
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
-      .hover\\:focus\\:skew-y-6:focus:hover {
+      .hover\:focus\:skew-y-6:focus:hover {
         --tw-skew-y: 6deg;
         transform: var(--tw-transform);
       }
@@ -106,8 +106,8 @@ test('with pseudo-element variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .before\\:scale-x-110::before,
-      .after\\:rotate-3::after {
+      .before\:scale-x-110::before,
+      .after\:rotate-3::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -120,12 +120,12 @@ test('with pseudo-element variants', async () => {
           scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
-      .before\\:scale-x-110::before {
+      .before\:scale-x-110::before {
         content: '';
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
-      .after\\:rotate-3::after {
+      .after\:rotate-3::after {
         content: '';
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
@@ -148,8 +148,8 @@ test('with multi-class variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .group-hover\\:scale-x-110,
-      .peer-focus\\:rotate-3 {
+      .group-hover\:scale-x-110,
+      .peer-focus\:rotate-3 {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -162,11 +162,11 @@ test('with multi-class variants', async () => {
           scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
-      .group:hover .group-hover\\:scale-x-110 {
+      .group:hover .group-hover\:scale-x-110 {
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
-      .peer:focus ~ .peer-focus\\:rotate-3 {
+      .peer:focus ~ .peer-focus\:rotate-3 {
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -190,8 +190,8 @@ test('with multi-class pseudo-element variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .group-hover\\:before\\:scale-x-110::before,
-      .peer-focus\\:after\\:rotate-3::after {
+      .group-hover\:before\:scale-x-110::before,
+      .peer-focus\:after\:rotate-3::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -204,12 +204,12 @@ test('with multi-class pseudo-element variants', async () => {
           scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
-      .group:hover .group-hover\\:before\\:scale-x-110::before {
+      .group:hover .group-hover\:before\:scale-x-110::before {
         content: '';
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
-      .peer:focus ~ .peer-focus\\:after\\:rotate-3::after {
+      .peer:focus ~ .peer-focus\:after\:rotate-3::after {
         content: '';
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
@@ -238,8 +238,8 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .group-hover\\:hover\\:before\\:scale-x-110::before,
-      .peer-focus\\:focus\\:after\\:rotate-3::after {
+      .group-hover\:hover\:before\:scale-x-110::before,
+      .peer-focus\:focus\:after\:rotate-3::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -252,12 +252,12 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
           scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
-      .group:hover .group-hover\\:hover\\:before\\:scale-x-110::before:hover {
+      .group:hover .group-hover\:hover\:before\:scale-x-110::before:hover {
         content: '';
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
-      .peer:focus ~ .peer-focus\\:focus\\:after\\:rotate-3::after:focus {
+      .peer:focus ~ .peer-focus\:focus\:after\:rotate-3::after:focus {
         content: '';
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
@@ -485,7 +485,7 @@ test('with borders', async () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .border,
-      .md\\:border-2 {
+      .md\:border-2 {
         --tw-border-opacity: 1;
         border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
@@ -498,7 +498,7 @@ test('with borders', async () => {
         border-color: rgb(239 68 68 / var(--tw-border-opacity));
       }
       @media (min-width: 768px) {
-        .md\\:border-2 {
+        .md\:border-2 {
           border-width: 2px;
         }
       }
@@ -521,7 +521,7 @@ test('with shadows', async () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .shadow,
-      .md\\:shadow-xl {
+      .md\:shadow-xl {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
@@ -549,11 +549,11 @@ test('with shadows', async () => {
           var(--tw-ring-color);
         box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
       }
-      .ring-black\\/25 {
+      .ring-black\/25 {
         --tw-ring-color: rgb(0 0 0 / 0.25);
       }
       @media (min-width: 768px) {
-        .md\\:shadow-xl {
+        .md\:shadow-xl {
           --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
             var(--tw-shadow);

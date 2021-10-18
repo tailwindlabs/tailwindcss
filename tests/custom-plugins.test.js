@@ -586,7 +586,7 @@ test('plugins can create rules with escaped selectors', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .custom-top-1\\/4 {
+      .custom-top-1\/4 {
         top: 25%;
       }
     `)
@@ -866,7 +866,7 @@ test('when important is a selector it scopes all selectors in a rule, even thoug
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       #app .custom-rotate-90,
-      #app .custom-rotate-1\\/4 {
+      #app .custom-rotate-1\/4 {
         transform: rotate(90deg);
         transform: rotate(90deg);
       }
@@ -1110,7 +1110,7 @@ test('prefix will prefix all classes in a selector', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .tw-btn-blue .tw-w-1\\/4 > h1.tw-text-xl + a .tw-bar {
+      .tw-btn-blue .tw-w-1\/4 > h1.tw-text-xl + a .tw-bar {
         background-color: blue;
       }
     `)
@@ -1251,11 +1251,11 @@ test('plugins can be created using the `createPlugin` function', () => {
       .test-lg {
         test-property: 3rem;
       }
-      .hover\\:test-sm:hover {
+      .hover\:test-sm:hover {
         test-property: 1rem;
       }
       @media (min-width: 400px) {
-        .sm\\:test-sm {
+        .sm\:test-sm {
           test-property: 1rem;
         }
       }
@@ -1314,11 +1314,11 @@ test('plugins with extra options can be created using the `createPlugin.withOpti
       .banana-lg {
         test-property: 3rem;
       }
-      .hover\\:banana-sm:hover {
+      .hover\:banana-sm:hover {
         test-property: 1rem;
       }
       @media (min-width: 400px) {
-        .sm\\:banana-sm {
+        .sm\:banana-sm {
           test-property: 1rem;
         }
       }
@@ -1356,7 +1356,7 @@ test('plugins should cache correctly', () => {
         }
 
         @media (min-width: 400px) {
-          .sm\\:banana {
+          .sm\:banana {
             position: absolute;
           }
         }
@@ -1368,7 +1368,7 @@ test('plugins should cache correctly', () => {
         }
 
         @media (min-width: 400px) {
-          .sm\\:apple {
+          .sm\:apple {
             position: absolute;
           }
         }
@@ -1431,11 +1431,11 @@ test('plugins created using `createPlugin.withOptions` do not need to be invoked
       .banana-lg {
         test-property: 3rem;
       }
-      .hover\\:banana-sm:hover {
+      .hover\:banana-sm:hover {
         test-property: 1rem;
       }
       @media (min-width: 400px) {
-        .sm\\:banana-sm {
+        .sm\:banana-sm {
           test-property: 1rem;
         }
       }
@@ -1486,11 +1486,11 @@ test('the configFunction parameter is optional when using the `createPlugin.with
       .banana-lg {
         test-property: 3px;
       }
-      .hover\\:banana-sm:hover {
+      .hover\:banana-sm:hover {
         test-property: 1px;
       }
       @media (min-width: 400px) {
-        .sm\\:banana-sm {
+        .sm\:banana-sm {
           test-property: 1px;
         }
       }
@@ -1528,7 +1528,7 @@ test('keyframes are not escaped', () => {
         }
       }
 
-      .foo-\\[abc\\] {
+      .foo-\[abc\] {
         animation: abc 1s infinite;
       }
 
@@ -1539,7 +1539,7 @@ test('keyframes are not escaped', () => {
           }
         }
 
-        .md\\:foo-\\[def\\] {
+        .md\:foo-\[def\] {
           animation: def 1s infinite;
         }
       }

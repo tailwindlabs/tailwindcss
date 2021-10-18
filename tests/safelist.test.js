@@ -22,7 +22,7 @@ it('should safelist strings', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      .mt-\\[20px\\] {
+      .mt-\[20px\] {
         margin-top: 20px;
       }
 
@@ -39,7 +39,7 @@ it('should safelist strings', () => {
         color: rgb(229 231 235 / var(--tw-text-opacity));
       }
 
-      .hover\\:underline:hover {
+      .hover\:underline:hover {
         text-decoration: underline;
       }
     `)
@@ -73,12 +73,12 @@ it('should safelist based on a pattern regex', () => {
         text-transform: uppercase;
       }
 
-      .hover\\:bg-red-100:hover {
+      .hover\:bg-red-100:hover {
         --tw-bg-opacity: 1;
         background-color: rgb(254 226 226 / var(--tw-bg-opacity));
       }
 
-      .hover\\:bg-red-200:hover {
+      .hover\:bg-red-200:hover {
         --tw-bg-opacity: 1;
         background-color: rgb(254 202 202 / var(--tw-bg-opacity));
       }
@@ -122,12 +122,12 @@ it('should not generate duplicates', () => {
         text-transform: uppercase;
       }
 
-      .hover\\:bg-red-100:hover {
+      .hover\:bg-red-100:hover {
         --tw-bg-opacity: 1;
         background-color: rgb(254 226 226 / var(--tw-bg-opacity));
       }
 
-      .hover\\:bg-red-200:hover {
+      .hover\:bg-red-200:hover {
         --tw-bg-opacity: 1;
         background-color: rgb(254 202 202 / var(--tw-bg-opacity));
       }

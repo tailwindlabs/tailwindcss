@@ -40,10 +40,10 @@ test('custom user-land utilities', () => {
       .align-banana {
         text-align: banana;
       }
-      .hover\\:align-banana:hover {
+      .hover\:align-banana:hover {
         text-align: banana;
       }
-      .focus\\:hover\\:align-chocolate:hover:focus {
+      .focus\:hover\:align-chocolate:hover:focus {
         text-align: chocolate;
       }
     `)

@@ -18,11 +18,11 @@ test('class variants are inserted at `@tailwind variants`', async () => {
       .font-bold {
         font-weight: 700;
       }
-      .hover\\:font-bold:hover {
+      .hover\:font-bold:hover {
         font-weight: 700;
       }
       @media (min-width: 768px) {
-        .md\\:font-bold {
+        .md\:font-bold {
           font-weight: 700;
         }
       }
@@ -51,11 +51,11 @@ test('`@tailwind screens` works as an alias for `@tailwind variants`', async () 
       .font-bold {
         font-weight: 700;
       }
-      .hover\\:font-bold:hover {
+      .hover\:font-bold:hover {
         font-weight: 700;
       }
       @media (min-width: 768px) {
-        .md\\:font-bold {
+        .md\:font-bold {
           font-weight: 700;
         }
       }

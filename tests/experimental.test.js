@@ -47,7 +47,7 @@ test('experimental universal selector improvements (pseudo hover)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .hover\\:shadow {
+      .hover\:shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
@@ -57,7 +57,7 @@ test('experimental universal selector improvements (pseudo hover)', () => {
         resize: both;
       }
 
-      .hover\\:shadow:hover {
+      .hover\:shadow:hover {
         --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
@@ -80,7 +80,7 @@ test('experimental universal selector improvements (multiple classes: group)', (
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .group-hover\\:shadow {
+      .group-hover\:shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
@@ -90,7 +90,7 @@ test('experimental universal selector improvements (multiple classes: group)', (
         resize: both;
       }
 
-      .group:hover .group-hover\\:shadow {
+      .group:hover .group-hover\:shadow {
         --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
@@ -145,7 +145,7 @@ test('experimental universal selector improvements (hover:divide-y)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .hover\\:divide-y > * {
+      .hover\:divide-y > * {
         --tw-border-opacity: 1;
         border-color: rgb(229 231 235 / var(--tw-border-opacity));
       }
@@ -154,7 +154,7 @@ test('experimental universal selector improvements (hover:divide-y)', () => {
         resize: both;
       }
 
-      .hover\\:divide-y:hover > :not([hidden]) ~ :not([hidden]) {
+      .hover\:divide-y:hover > :not([hidden]) ~ :not([hidden]) {
         --tw-divide-y-reverse: 0;
         border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
         border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
