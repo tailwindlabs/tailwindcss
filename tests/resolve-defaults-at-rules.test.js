@@ -121,10 +121,12 @@ test('with pseudo-element variants', async () => {
       }
       /* --- */
       .before\:scale-x-110::before {
+        content: var(--tw-content);
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .after\:rotate-3::after {
+        content: var(--tw-content);
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -203,10 +205,12 @@ test('with multi-class pseudo-element variants', async () => {
       }
       /* --- */
       .group:hover .group-hover\:before\:scale-x-110::before {
+        content: var(--tw-content);
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .peer:focus ~ .peer-focus\:after\:rotate-3::after {
+        content: var(--tw-content);
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -249,10 +253,12 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
       }
       /* --- */
       .group:hover .group-hover\:hover\:before\:scale-x-110::before:hover {
+        content: var(--tw-content);
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
       .peer:focus ~ .peer-focus\:focus\:after\:rotate-3::after:focus {
+        content: var(--tw-content);
         --tw-rotate: 3deg;
         transform: var(--tw-transform);
       }
@@ -344,6 +350,7 @@ test('with apply', async () => {
         transform: var(--tw-transform);
       }
       .bar::before {
+        content: var(--tw-content);
         --tw-scale-x: 1.1;
         --tw-scale-y: 1.1;
         transform: var(--tw-transform);
