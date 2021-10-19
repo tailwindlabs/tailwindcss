@@ -43,5 +43,6 @@ export default function processTailwindFeatures(setupContext) {
     substituteScreenAtRules(context)(root, result)
     resolveDefaultsAtRules(context)(root, result)
     collapseAdjacentRules(context)(root, result)
+    collapseDuplicateDeclarations(context)(root, result)
   }
 }
