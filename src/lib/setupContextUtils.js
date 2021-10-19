@@ -206,10 +206,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       return identifier
     }
 
-    if (typeof context.tailwindConfig.prefix === 'function') {
-      return prefixSelector(context.tailwindConfig.prefix, `.${identifier}`).substr(1)
-    }
-
     return context.tailwindConfig.prefix + identifier
   }
 

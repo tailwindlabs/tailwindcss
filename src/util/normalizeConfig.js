@@ -140,6 +140,18 @@ export function normalizeConfig(config) {
     return []
   })()
 
+  // Normalize prefix option
+  if (typeof config.prefix === 'function') {
+    log.warn('prefix-function', [
+      'As of Tailwind CSS v3.0, `prefix` cannot be a function.',
+      'Update `prefix` in your configuration to be a string to eliminate this warning.',
+      // TODO: Add https://tw.wtf/prefix-function
+    ])
+    config.prefix = ''
+  } else {
+    config.prefix = config.prefix ?? ''
+  }
+
   // Normalize the `content`
   config.content = {
     files: (() => {
