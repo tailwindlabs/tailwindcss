@@ -199,7 +199,6 @@ div {
 }
 .test-apply-font-variant {
   --tw-ordinal: ordinal;
-  font-variant-numeric: var(--tw-font-variant-numeric);
   --tw-numeric-spacing: tabular-nums;
   font-variant-numeric: var(--tw-font-variant-numeric);
 }
