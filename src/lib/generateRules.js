@@ -253,7 +253,8 @@ function* resolveMatchedPlugins(classCandidate, context) {
   let candidatePrefix = classCandidate
   let negative = false
 
-  const twConfigPrefix = context.tailwindConfig.prefix || ''
+  const twConfigPrefix = context.tailwindConfig.prefix
+
   const twConfigPrefixLen = twConfigPrefix.length
   if (candidatePrefix[twConfigPrefixLen] === '-') {
     negative = true
