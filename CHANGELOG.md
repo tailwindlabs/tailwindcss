@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Don't use pointer cursor on disabled buttons by default ([#5772](https://github.com/tailwindlabs/tailwindcss/pull/5772))
 - Set default content value in preflight instead of within each before/after utility ([#5820](https://github.com/tailwindlabs/tailwindcss/pull/5820))
+- Remove `prefix` as a function ([#5829](https://github.com/tailwindlabs/tailwindcss/pull/5829))
 
 ### Added
 
