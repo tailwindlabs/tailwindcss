@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `grow-*` and `shrink-*` utilities, deprecate `flex-grow-*` and `flex-shrink-*` ([#5733](https://github.com/tailwindlabs/tailwindcss/pull/5733))
 - Add `text-decoration-color` utilities ([#5760](https://github.com/tailwindlabs/tailwindcss/pull/5760))
 - Add declarative `addVariant` syntax ([#5809](https://github.com/tailwindlabs/tailwindcss/pull/5809))
+- Add extra default values to `max-w-*`, `min-w-*`, `max-h-*`, and `min-h-*` to match `w-*` and `h-*` respectively. ([#5844](https://github.com/tailwindlabs/tailwindcss/pull/5844))
 
 ### Fixed
 
