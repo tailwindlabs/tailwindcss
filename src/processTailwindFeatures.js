@@ -5,6 +5,7 @@ import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import resolveDefaultsAtRules from './lib/resolveDefaultsAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
+import collapseDuplicateDeclarations from './lib/collapseDuplicateDeclarations'
 import detectNesting from './lib/detectNesting'
 import { createContext } from './lib/setupContextUtils'
 import { issueFlagNotices } from './featureFlags'
@@ -42,5 +43,6 @@ export default function processTailwindFeatures(setupContext) {
     substituteScreenAtRules(context)(root, result)
     resolveDefaultsAtRules(context)(root, result)
     collapseAdjacentRules(context)(root, result)
+    collapseDuplicateDeclarations(context)(root, result)
   }
 }

@@ -868,7 +868,6 @@ test('when important is a selector it scopes all selectors in a rule, even thoug
       #app .custom-rotate-90,
       #app .custom-rotate-1\/4 {
         transform: rotate(90deg);
-        transform: rotate(90deg);
       }
     `)
   })
@@ -951,7 +950,6 @@ test('all selectors in a rule are prefixed', () => {
     expect(result.css).toMatchFormattedCss(css`
       .tw-btn-blue,
       .tw-btn-red {
-        padding: 10px;
         padding: 10px;
       }
     `)

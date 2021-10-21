@@ -351,7 +351,6 @@ test('@applying classes from outside a @layer respects the source order', async 
   await run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
       .baz {
-        text-decoration: underline;
         text-decoration: none;
       }
 
@@ -398,6 +397,33 @@ test('@applying classes from outside a @layer respects the source order', async 
 
       .bar {
         text-decoration: none;
+      }
+    `)
+  })
+})
+
+it('should remove duplicate properties when using apply with similar properties', () => {
+  let config = {
+    content: [{ raw: 'foo' }],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    .foo {
+      @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        --tw-translate-x: -50%;
+        --tw-translate-y: -50%;
+        transform: var(--tw-transform);
       }
     `)
   })

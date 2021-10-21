@@ -10,8 +10,6 @@
 .class-order {
   padding: 2rem;
   padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 1.75rem;
   padding-bottom: 1.75rem;
   padding-top: 1rem;
   padding-right: 0.25rem;
@@ -127,7 +125,6 @@
 /* TODO: This works but the generated CSS is unnecessarily verbose. */
 .complex-utilities {
   --tw-ordinal: ordinal;
-  font-variant-numeric: var(--tw-font-variant-numeric);
   --tw-numeric-spacing: tabular-nums;
   font-variant-numeric: var(--tw-font-variant-numeric);
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
@@ -155,7 +152,6 @@
   font-weight: 700;
 }
 .use-dependant-only-b {
-  font-weight: 700;
   font-weight: 400;
 }
 .btn {
