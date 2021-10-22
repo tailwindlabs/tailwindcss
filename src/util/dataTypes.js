@@ -7,7 +7,22 @@ let UNDERSCORE = /_(?![^(]*\))/g // Underscore separator that is not located bet
 
 // This is not a data type, but rather a function that can normalize the
 // correct values.
-export function normalize(value) {
+export function normalize(value, isRoot = true) {
+  // Keep raw strings if it starts with `url(`
+  if (value.includes('url(')) {
+    return value
+      .split(/(url\(.*?\))/g)
+      .filter(Boolean)
+      .map((part) => {
+        if (/^url\(.*?\)$/.test(part)) {
+          return part
+        }
+
+        return normalize(part, false)
+      })
+      .join('')
+  }
+
   // Convert `_` to ` `, except for escaped underscores `\_`
   value = value
     .replace(
@@ -18,10 +33,9 @@ export function normalize(value) {
     .replace(/\\_/g, '_')
 
   // Remove leftover whitespace
-  value = value.trim()
-
-  // Keep raw strings if it starts with `url(`
-  if (value.startsWith('url(')) return value
+  if (isRoot) {
+    value = value.trim()
+  }
 
   // Add spaces around operators inside calc() that do not follow an operator
   // or '('.
