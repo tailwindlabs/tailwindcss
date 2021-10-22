@@ -448,28 +448,42 @@ function generateRules(candidates, context) {
     allRules.push(matches)
   }
 
-  return allRules.flat(1).map(([{ sort, layer, options }, rule]) => {
-    if (options.respectImportant) {
-      if (context.tailwindConfig.important === true) {
+  // Strategy based on `tailwindConfig.important`
+  let strategy = ((important) => {
+    if (important === true) {
+      return (rule) => {
         rule.walkDecls((d) => {
           if (d.parent.type === 'rule' && !inKeyframes(d.parent)) {
             d.important = true
           }
         })
-      } else if (typeof context.tailwindConfig.important === 'string') {
+      }
+    }
+
+    if (typeof important === 'string') {
+      return (rule) => {
+        rule.selectors = rule.selectors.map((selector) => {
+          return `${important} ${selector}`
+        })
+      }
+    }
+  })(context.tailwindConfig.important)
+
+  return allRules.flat(1).map(([{ sort, layer, options }, rule]) => {
+    if (options.respectImportant) {
+      if (strategy) {
         let container = postcss.root({ nodes: [rule.clone()] })
         container.walkRules((r) => {
           if (inKeyframes(r)) {
             return
           }
 
-          r.selectors = r.selectors.map((selector) => {
-            return `${context.tailwindConfig.important} ${selector}`
-          })
+          strategy(r)
         })
         rule = container.nodes[0]
       }
     }
+
     return [sort | context.layerOrder[layer], rule]
   })
 }
