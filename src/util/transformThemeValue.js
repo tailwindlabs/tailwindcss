@@ -59,29 +59,11 @@ export default function transformThemeValue(themeSection) {
     }
   }
 
-  if (
-    [
-      'borderColor',
-      'caretColor',
-      'colors',
-      'divideColor',
-      'fill',
-      'gradientColorStops',
-      'placeholderColor',
-      'ringColor',
-      'ringOffsetColor',
-      'stroke',
-      'textColor',
-    ].includes(themeSection)
-  ) {
-    return (value) => {
-      if (typeof value === 'function') {
-        value = value({})
-      }
-
-      return value
+  return (value) => {
+    if (typeof value === 'function') {
+      value = value({})
     }
-  }
 
-  return (value) => value
+    return value
+  }
 }
