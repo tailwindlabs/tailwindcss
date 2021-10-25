@@ -428,3 +428,40 @@ it('should remove duplicate properties when using apply with similar properties'
     `)
   })
 })
+
+it('should apply all the definitions of a class', () => {
+  let config = {
+    content: [{ raw: html`<div class="foo"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer utilities {
+      .aspect-w-1 {
+        position: relative;
+      }
+
+      .aspect-w-1 {
+        --tw-aspect-w: 1;
+      }
+    }
+
+    @layer components {
+      .foo {
+        @apply aspect-w-1;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        position: relative;
+        --tw-aspect-w: 1;
+      }
+    `)
+  })
+})
