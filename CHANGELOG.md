@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleanup duplicate properties ([#5830](https://github.com/tailwindlabs/tailwindcss/pull/5830))
 - Allow `_` inside `url()` when using arbitrary values ([#5853](https://github.com/tailwindlabs/tailwindcss/pull/5853))
 - Prevent crashes when using comments in `@layer` AtRules ([#5854](https://github.com/tailwindlabs/tailwindcss/pull/5854))
+- Handle color transformations properly with `theme(...)` for all relevant plugins ([#4533](https://github.com/tailwindlabs/tailwindcss/pull/4533), [#5871](https://github.com/tailwindlabs/tailwindcss/pull/5871))
 
 ## [3.0.0-alpha.1] - 2021-10-01
 
