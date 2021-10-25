@@ -3,13 +3,8 @@ import postcss from 'postcss'
 export default function transformThemeValue(themeSection) {
   if (['fontSize', 'outline'].includes(themeSection)) {
     return (value) => {
-      if (typeof value === 'function') {
-        value = value({})
-      }
-
-      if (Array.isArray(value)) {
-        value = value[0]
-      }
+      if (typeof value === 'function') value = value({})
+      if (Array.isArray(value)) value = value[0]
 
       return value
     }
@@ -31,13 +26,8 @@ export default function transformThemeValue(themeSection) {
     ].includes(themeSection)
   ) {
     return (value) => {
-      if (typeof value === 'function') {
-        value = value({})
-      }
-
-      if (Array.isArray(value)) {
-        value = value.join(', ')
-      }
+      if (typeof value === 'function') value = value({})
+      if (Array.isArray(value)) value = value.join(', ')
 
       return value
     }
@@ -47,22 +37,15 @@ export default function transformThemeValue(themeSection) {
   // instead of commas for arbitrary values.
   if (['gridTemplateColumns', 'gridTemplateRows', 'objectPosition'].includes(themeSection)) {
     return (value) => {
-      if (typeof value === 'function') {
-        value = value({})
-      }
-
-      if (typeof value === 'string') {
-        value = postcss.list.comma(value).join(' ')
-      }
+      if (typeof value === 'function') value = value({})
+      if (typeof value === 'string') value = postcss.list.comma(value).join(' ')
 
       return value
     }
   }
 
   return (value) => {
-    if (typeof value === 'function') {
-      value = value({})
-    }
+    if (typeof value === 'function') value = value({})
 
     return value
   }
