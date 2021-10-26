@@ -148,6 +148,21 @@ module.exports = {
 }
 ```
 
+You can also specify a default line-height using object syntax:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    fontSize: {
+      sm: ['14px', {
+        lineHeight: '20px',
+      }],
+    }
+  }
+}
+```
+
 We already provide default line heights for each `.text-{size}` class.
 
 ### Providing a default letter-spacing
