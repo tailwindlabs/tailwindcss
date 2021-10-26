@@ -828,7 +828,7 @@
   outline-style: dashed;
 }
 .outline-none {
-  outline-style: none;
+  outline: 2px solid transparent;
 }
 .outline-4 {
   outline-width: 4px;
