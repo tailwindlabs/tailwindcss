@@ -150,6 +150,10 @@ export let variantPlugins = {
     }
   },
 
+  printVariant: ({ addVariant }) => {
+    addVariant('print', '@media print')
+  },
+
   screenVariants: ({ theme, addVariant }) => {
     for (let screen in theme('screens')) {
       let size = theme('screens')[screen]
