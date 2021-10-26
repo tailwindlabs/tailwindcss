@@ -1801,6 +1801,14 @@ export let corePlugins = {
     })
   },
 
+  outlineWidth: createUtilityPlugin('outlineWidth', [['outline', ['outline-width']]], {
+    type: ['length', 'number', 'percentage'],
+  }),
+
+  outlineOffset: createUtilityPlugin('outlineOffset', [['outline-offset', ['outline-offset']]], {
+    type: ['length', 'number', 'percentage'],
+  }),
+
   outlineColor: ({ matchUtilities, theme }) => {
     matchUtilities(
       {
@@ -1811,14 +1819,6 @@ export let corePlugins = {
       { values: flattenColorPalette(theme('outlineColor')), type: ['color'] }
     )
   },
-
-  outlineWidth: createUtilityPlugin('outlineWidth', [['outline', ['outline-width']]], {
-    type: ['length', 'number', 'percentage'],
-  }),
-
-  outlineOffset: createUtilityPlugin('outlineOffset', [['outline-offset', ['outline-offset']]], {
-    type: ['length', 'number', 'percentage'],
-  }),
 
   ringWidth: ({ matchUtilities, addBase, addUtilities, theme }) => {
     let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')

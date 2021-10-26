@@ -701,14 +701,14 @@ module.exports = {
     placeholderColor: ({ theme }) => theme('colors'),
     placeholderOpacity: ({ theme }) => theme('opacity'),
     outlineColor: ({ theme }) => theme('colors'),
-    outlineWidth: {
+    outlineOffset: {
       0: '0px',
       1: '1px',
       2: '2px',
       4: '4px',
       8: '8px',
     },
-    outlineOffset: {
+    outlineWidth: {
       0: '0px',
       1: '1px',
       2: '2px',
