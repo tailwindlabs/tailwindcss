@@ -705,6 +705,21 @@ module.exports = {
     padding: ({ theme }) => theme('spacing'),
     placeholderColor: ({ theme }) => theme('colors'),
     placeholderOpacity: ({ theme }) => theme('opacity'),
+    outlineColor: ({ theme }) => theme('colors'),
+    outlineWidth: {
+      0: '0px',
+      1: '1px',
+      2: '2px',
+      4: '4px',
+      8: '8px',
+    },
+    outlineOffset: {
+      0: '0px',
+      1: '1px',
+      2: '2px',
+      4: '4px',
+      8: '8px',
+    },
     ringColor: ({ theme }) => ({
       DEFAULT: theme('colors.blue.500', '#3b82f6'),
       ...theme('colors'),

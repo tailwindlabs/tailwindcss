@@ -1790,19 +1790,35 @@ export let corePlugins = {
     }
   })(),
 
-  outline: ({ matchUtilities, theme }) => {
+  outlineStyle: ({ addUtilities }) => {
+    addUtilities({
+      '.outline': { 'outline-style': 'solid' },
+      '.outline-dashed': { 'outline-style': 'dashed' },
+      '.outline-dotted': { 'outline-style': 'dotted' },
+      '.outline-double': { 'outline-style': 'double' },
+      '.outline-hidden': { 'outline-style': 'hidden' },
+      '.outline-none': { 'outline-style': 'none' },
+    })
+  },
+
+  outlineColor: ({ matchUtilities, theme }) => {
     matchUtilities(
       {
         outline: (value) => {
-          value = Array.isArray(value) ? value : value.split(',')
-          let [outline, outlineOffset = '0'] = Array.isArray(value) ? value : [value]
-
-          return { outline, 'outline-offset': outlineOffset }
+          return { 'outline-color': toColorValue(value) }
         },
       },
-      { values: theme('outline') }
+      { values: flattenColorPalette(theme('outlineColor')), type: ['color'] }
     )
   },
+
+  outlineWidth: createUtilityPlugin('outlineWidth', [['outline', ['outline-width']]], {
+    type: ['length', 'number', 'percentage'],
+  }),
+
+  outlineOffset: createUtilityPlugin('outlineOffset', [['outline-offset', ['outline-offset']]], {
+    type: ['length', 'number', 'percentage'],
+  }),
 
   ringWidth: ({ matchUtilities, addBase, addUtilities, theme }) => {
     let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')

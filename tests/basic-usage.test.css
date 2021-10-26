@@ -821,12 +821,22 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
+.outline {
+  outline-style: solid;
+}
+.outline-dashed {
+  outline-style: dashed;
+}
 .outline-none {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+  outline-style: none;
 }
 .outline-black {
-  outline: 2px dotted black;
+  outline-color: #000;
+}
+.outline-4 {
+  outline-width: 4px;
+}
+.outline-offset-2 {
   outline-offset: 2px;
 }
 .ring {
