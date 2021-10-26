@@ -1797,7 +1797,7 @@ export let corePlugins = {
       '.outline-dotted': { 'outline-style': 'dotted' },
       '.outline-double': { 'outline-style': 'double' },
       '.outline-hidden': { 'outline-style': 'hidden' },
-      '.outline-none': { 'outline': '2px solid transparent' },
+      '.outline-none': { outline: '2px solid transparent' },
     })
   },
 
