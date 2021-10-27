@@ -825,9 +825,20 @@
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
-.outline-black {
-  outline: 2px dotted black;
+.outline {
+  outline-style: solid;
+}
+.outline-dashed {
+  outline-style: dashed;
+}
+.outline-4 {
+  outline-width: 4px;
+}
+.outline-offset-2 {
   outline-offset: 2px;
+}
+.outline-black {
+  outline-color: #000;
 }
 .ring {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)

@@ -859,25 +859,20 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
-.outline-\[2px_solid_black\] {
-  outline: 2px solid black;
-  outline-offset: 0;
+.outline-\[10px\] {
+  outline-width: 10px;
 }
-.outline-\[2px_solid_black\2c 2px\] {
-  outline: 2px solid black;
-  outline-offset: 2px;
+.outline-\[length\:var\(--outline\)\] {
+  outline-width: var(--outline);
 }
-.outline-\[var\(--outline\)\] {
-  outline: var(--outline);
-  outline-offset: 0;
+.outline-offset-\[10px\] {
+  outline-offset: 10px;
 }
-.outline-\[var\(--outline\)\2c 3px\] {
-  outline: var(--outline);
-  outline-offset: 3px;
+.outline-\[black\] {
+  outline-color: black;
 }
-.outline-\[2px_solid_black\2c var\(--outline-offset\)\] {
-  outline: 2px solid black;
-  outline-offset: var(--outline-offset);
+.outline-\[color\:var\(--outline\)\] {
+  outline-color: var(--outline);
 }
 .ring-\[10px\] {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
