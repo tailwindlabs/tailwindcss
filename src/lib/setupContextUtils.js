@@ -230,7 +230,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
               return ({ format }) => format(str)
             }
 
-            let [, name, params] = /@(.*?) (\(.*\))/g.exec(str)
+            let [, name, params] = /@(.*?) (.*)/g.exec(str)
             return ({ wrap }) => wrap(postcss.atRule({ name, params }))
           })
           .reverse()

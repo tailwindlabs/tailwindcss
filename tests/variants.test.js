@@ -239,6 +239,31 @@ it('should properly handle keyframes with multiple variants', async () => {
   `)
 })
 
+test('custom addVariant with more complex media query params', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="magic:text-center"></div> `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('magic', '@media screen and (max-wdith: 600px)')
+      },
+    ],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media screen and (max-wdith: 600px) {
+        .magic\:text-center {
+          text-align: center;
+        }
+      }
+    `)
+  })
+})
+
 test('custom addVariant with nested media & format shorthand', () => {
   let config = {
     content: [
@@ -248,7 +273,7 @@ test('custom addVariant with nested media & format shorthand', () => {
     ],
     plugins: [
       function ({ addVariant }) {
-        addVariant('magic', '@supports (hover: hover) { @media (print) { &:disabled } }')
+        addVariant('magic', '@supports (hover: hover) { @media print { &:disabled } }')
       },
     ],
   }
@@ -256,7 +281,7 @@ test('custom addVariant with nested media & format shorthand', () => {
   return run('@tailwind components;@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
       @supports (hover: hover) {
-        @media (print) {
+        @media print {
           .magic\:text-center:disabled {
             text-align: center;
           }
