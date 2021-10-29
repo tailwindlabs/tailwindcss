@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix defining colors as functions when color opacity plugins are disabled ([#5470](https://github.com/tailwindlabs/tailwindcss/pull/5470))
 
+## [2.2.19] - 2021-10-29
+
+### Fixed
+
+- Ensure `corePlugins`  order is consisent in AOT mode ([#5928](https://github.com/tailwindlabs/tailwindcss/pull/5928))
+
 ## [2.2.18] - 2021-10-29
 
 ### Fixed
@@ -1594,7 +1600,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.18...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.19...HEAD
+[2.2.19]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.19...v2.2.19
 [2.2.18]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.17...v2.2.18
 [2.2.17]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.16...v2.2.17
 [2.2.16]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.15...v2.2.16
