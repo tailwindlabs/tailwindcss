@@ -73,6 +73,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix using negated `content` globs ([#5625](https://github.com/tailwindlabs/tailwindcss/pull/5625))
 - Fix using backslashes in `content` globs ([#5628](https://github.com/tailwindlabs/tailwindcss/pull/5628))
 
+## [2.2.19] - 2021-10-29
+
+### Fixed
+
+- Ensure `corePlugins`  order is consisent in AOT mode ([#5928](https://github.com/tailwindlabs/tailwindcss/pull/5928))
+
 ## [2.2.18] - 2021-10-29
 
 ### Fixed
@@ -1644,7 +1650,8 @@ No release notes
 - Everything!
 
 [unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.1...HEAD
-[3.0.0-alpha.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.18...v3.0.0-alpha.1
+[3.0.0-alpha.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.19...v3.0.0-alpha.1
+[2.2.19]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.18...v2.2.19
 [2.2.18]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.17...v2.2.18
 [2.2.17]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.16...v2.2.17
 [2.2.16]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.15...v2.2.16
