@@ -238,12 +238,15 @@ function resolveVariants([firstConfig, ...variantConfigs], variantOrder) {
 }
 
 function resolveCorePlugins(corePluginConfigs) {
-  const result = [...corePluginConfigs].reduceRight((resolved, corePluginConfig) => {
-    if (isFunction(corePluginConfig)) {
-      return corePluginConfig({ corePlugins: resolved })
-    }
-    return configurePlugins(corePluginConfig, resolved)
-  }, corePluginList)
+  const result = [...corePluginConfigs]
+    .reduceRight((resolved, corePluginConfig) => {
+      if (isFunction(corePluginConfig)) {
+        return corePluginConfig({ corePlugins: resolved })
+      }
+      return configurePlugins(corePluginConfig, resolved)
+    }, corePluginList)
+    .slice()
+    .sort((a, z) => Math.sign(corePluginList.indexOf(a) - corePluginList.indexOf(z)))
 
   return result
 }

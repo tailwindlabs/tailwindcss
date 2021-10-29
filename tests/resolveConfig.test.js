@@ -2182,7 +2182,7 @@ test('core plugin configurations stack', () => {
     separator: ':',
     theme: {},
     variants: {},
-    corePlugins: ['float', 'padding', 'margin'],
+    corePlugins: ['float', 'margin', 'padding'],
   })
 })
 
