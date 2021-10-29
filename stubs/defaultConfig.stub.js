@@ -279,7 +279,7 @@ module.exports = {
       '2xl': '0 25px 25px rgb(0 0 0 / 0.15)',
       none: '0 0 #0000',
     },
-    fill: { current: 'currentColor' },
+    fill: ({ theme }) => theme('colors'),
     grayscale: {
       0: '0',
       DEFAULT: '100%',
@@ -788,9 +788,7 @@ module.exports = {
     space: ({ theme }) => ({
       ...theme('spacing'),
     }),
-    stroke: {
-      current: 'currentColor',
-    },
+    stroke: ({ theme }) => theme('colors'),
     strokeWidth: {
       0: '0',
       1: '1',
