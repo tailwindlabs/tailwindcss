@@ -1782,9 +1782,15 @@ export let corePlugins = {
           shadow: (value) => {
             value = transformValue(value)
 
+            console.log('AHHHHHHH')
+
             return {
               '@defaults box-shadow': {},
               '--tw-shadow': value === 'none' ? '0 0 #0000' : value,
+              '--tw-shadow-colored':
+                value === 'none'
+                  ? '0 0 #0000'
+                  : value.replaceAll(/(rgb\(.+?\))/g, 'var(--tw-shadow-color)'),
               'box-shadow': defaultBoxShadow,
             }
           },
@@ -1793,6 +1799,20 @@ export let corePlugins = {
       )
     }
   })(),
+
+  boxShadowColor: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        shadow: (value) => {
+          return {
+            '--tw-shadow-color': toColorValue(value),
+            '--tw-shadow': 'var(--tw-shadow-colored)',
+          }
+        },
+      },
+      { values: flattenColorPalette(theme('colors')), type: ['color', 'any'] }
+    )
+  },
 
   outlineStyle: ({ addUtilities }) => {
     addUtilities({
