@@ -11,6 +11,7 @@ import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
 import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
+import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -1782,15 +1783,15 @@ export let corePlugins = {
           shadow: (value) => {
             value = transformValue(value)
 
-            console.log('AHHHHHHH')
+            let ast = parseBoxShadowValue(value)
+            for (let shadow of ast) {
+              shadow.color = 'var(--tw-shadow-color)'
+            }
 
             return {
               '@defaults box-shadow': {},
               '--tw-shadow': value === 'none' ? '0 0 #0000' : value,
-              '--tw-shadow-colored':
-                value === 'none'
-                  ? '0 0 #0000'
-                  : value.replaceAll(/(rgb\(.+?\))/g, 'var(--tw-shadow-color)'),
+              '--tw-shadow-colored': value === 'none' ? '0 0 #0000' : formatBoxShadowValue(ast),
               'box-shadow': defaultBoxShadow,
             }
           },
