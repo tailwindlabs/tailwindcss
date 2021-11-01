@@ -725,6 +725,10 @@ export let corePlugins = {
     ],
   ]),
 
+  listStyleImage: createUtilityPlugin('listStyleImage', [['list-image', ['list-style-image']]], {
+    type: ['image', 'url'],
+  }),
+
   listStylePosition: ({ addUtilities }) => {
     addUtilities({
       '.list-inside': { 'list-style-position': 'inside' },
