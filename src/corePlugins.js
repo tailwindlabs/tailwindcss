@@ -1,16 +1,16 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
-import createUtilityPlugin from './util/createUtilityPlugin'
-import buildMediaQuery from './util/buildMediaQuery'
-import parseAnimationValue from './util/parseAnimationValue'
-import flattenColorPalette from './util/flattenColorPalette'
-import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
-import toColorValue from './util/toColorValue'
-import isPlainObject from './util/isPlainObject'
-import transformThemeValue from './util/transformThemeValue'
 import { version as tailwindVersion } from '../package.json'
+import buildMediaQuery from './util/buildMediaQuery'
+import createUtilityPlugin from './util/createUtilityPlugin'
+import flattenColorPalette from './util/flattenColorPalette'
+import isPlainObject from './util/isPlainObject'
 import log from './util/log'
+import parseAnimationValue from './util/parseAnimationValue'
+import toColorValue from './util/toColorValue'
+import transformThemeValue from './util/transformThemeValue'
+import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -1643,6 +1643,16 @@ export let corePlugins = {
       },
       { values: flattenColorPalette(theme('textDecorationColor')), type: ['color', 'any'] }
     )
+  },
+
+  textDecorationStyle: ({ addUtilities }) => {
+    addUtilities({
+      '.decoration-solid': { 'text-decoration-style': 'solid' },
+      '.decoration-double': { 'text-decoration-style': 'double' },
+      '.decoration-dotted': { 'text-decoration-style': 'dotted' },
+      '.decoration-dashed': { 'text-decoration-style': 'dashed' },
+      '.decoration-wavy': { 'text-decoration-style': 'wavy' },
+    })
   },
 
   fontSmoothing: ({ addUtilities }) => {

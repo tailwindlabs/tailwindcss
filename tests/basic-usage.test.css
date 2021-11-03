@@ -774,6 +774,9 @@
 .decoration-red-600 {
   text-decoration-color: #dc2626;
 }
+.decoration-solid {
+  text-decoration-style: solid;
+}
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
