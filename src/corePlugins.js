@@ -1775,6 +1775,7 @@ export let corePlugins = {
           '--tw-ring-offset-shadow': '0 0 #0000',
           '--tw-ring-shadow': '0 0 #0000',
           '--tw-shadow': '0 0 #0000',
+          '--tw-shadow-colored': '0 0 #0000',
         },
       })
 
@@ -1785,6 +1786,10 @@ export let corePlugins = {
 
             let ast = parseBoxShadowValue(value)
             for (let shadow of ast) {
+              // Don't override color if the whole shadow is a variable
+              if (shadow.x === undefined || shadow.y === undefined) {
+                continue
+              }
               shadow.color = 'var(--tw-shadow-color)'
             }
 
@@ -1796,7 +1801,7 @@ export let corePlugins = {
             }
           },
         },
-        { values: theme('boxShadow') }
+        { values: theme('boxShadow'), type: ['shadow'] }
       )
     }
   })(),
@@ -1811,7 +1816,7 @@ export let corePlugins = {
           }
         },
       },
-      { values: flattenColorPalette(theme('colors')), type: ['color', 'any'] }
+      { values: flattenColorPalette(theme('boxShadowColor')), type: ['color'] }
     )
   },
 
@@ -1865,6 +1870,7 @@ export let corePlugins = {
         '--tw-ring-offset-shadow': '0 0 #0000',
         '--tw-ring-shadow': '0 0 #0000',
         '--tw-shadow': '0 0 #0000',
+        '--tw-shadow-colored': '0 0 #0000',
       },
     })
 
