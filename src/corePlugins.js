@@ -1787,9 +1787,10 @@ export let corePlugins = {
             let ast = parseBoxShadowValue(value)
             for (let shadow of ast) {
               // Don't override color if the whole shadow is a variable
-              if (shadow.x === undefined || shadow.y === undefined) {
+              if (!shadow.valid) {
                 continue
               }
+
               shadow.color = 'var(--tw-shadow-color)'
             }
 

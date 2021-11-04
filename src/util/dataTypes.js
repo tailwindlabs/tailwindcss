@@ -93,7 +93,7 @@ export function shadow(value) {
   let parsedShadows = parseBoxShadowValue(normalize(value))
 
   for (let parsedShadow of parsedShadows) {
-    if (parsedShadow.x === undefined || parsedShadow.y === undefined) {
+    if (!parsedShadow.valid) {
       return false
     }
   }

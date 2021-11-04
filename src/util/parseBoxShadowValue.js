@@ -49,6 +49,9 @@ export function parseBoxShadowValue(input) {
       }
     }
 
+    // Check if valid
+    result.valid = result.x !== undefined && result.y !== undefined
+
     return result
   })
 }
@@ -56,6 +59,10 @@ export function parseBoxShadowValue(input) {
 export function formatBoxShadowValue(shadows) {
   return shadows
     .map((shadow) => {
+      if (!shadow.valid) {
+        return shadow.raw
+      }
+
       return [shadow.keyword, shadow.x, shadow.y, shadow.blur, shadow.spread, shadow.color]
         .filter(Boolean)
         .join(' ')
