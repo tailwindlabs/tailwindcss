@@ -166,6 +166,7 @@ it('should convert _ to spaces', () => {
 
       .shadow-\\[0px_0px_4px_black\\] {
         --tw-shadow: 0px 0px 4px black;
+        --tw-shadow-colored: 0px 0px 4px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
       }

@@ -851,11 +851,13 @@
 }
 .shadow-\[0px_1px_2px_black\] {
   --tw-shadow: 0px 1px 2px black;
+  --tw-shadow-colored: 0px 1px 2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
-.shadow-\[var\(--value\)\] {
+.shadow-\[shadow\:var\(--value\)\] {
   --tw-shadow: var(--value);
+  --tw-shadow-colored: var(--value);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
