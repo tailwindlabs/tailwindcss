@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `grow-*` and `shrink-*` utilities, deprecate `flex-grow-*` and `flex-shrink-*` ([#5733](https://github.com/tailwindlabs/tailwindcss/pull/5733))
 - Add `text-decoration-color` utilities ([#5760](https://github.com/tailwindlabs/tailwindcss/pull/5760))
 - Add new declarative `addVariant` API ([#5809](https://github.com/tailwindlabs/tailwindcss/pull/5809))
+- Add first-class `print` variant for targeting printed media ([#5885](https://github.com/tailwindlabs/tailwindcss/pull/5885))
 - Add full color palette for `fill-*` and `stroke-*` utilities (#5933[](https://github.com/tailwindlabs/tailwindcss/pull/5933))
 - Add composable API for colored box shadows ([#5979](https://github.com/tailwindlabs/tailwindcss/pull/5979))
 
@@ -35,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow `_` inside `url()` when using arbitrary values ([#5853](https://github.com/tailwindlabs/tailwindcss/pull/5853))
 - Prevent crashes when using comments in `@layer` AtRules ([#5854](https://github.com/tailwindlabs/tailwindcss/pull/5854))
 - Handle color transformations properly with `theme(...)` for all relevant plugins ([#4533](https://github.com/tailwindlabs/tailwindcss/pull/4533), [#5871](https://github.com/tailwindlabs/tailwindcss/pull/5871))
+- Ensure `@apply`-ing a utility with multiple definitions works ([#5870](https://github.com/tailwindlabs/tailwindcss/pull/5870))
 
 ## [3.0.0-alpha.1] - 2021-10-01
 
