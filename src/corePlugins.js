@@ -11,6 +11,7 @@ import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
 import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
+import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -1774,6 +1775,7 @@ export let corePlugins = {
           '--tw-ring-offset-shadow': '0 0 #0000',
           '--tw-ring-shadow': '0 0 #0000',
           '--tw-shadow': '0 0 #0000',
+          '--tw-shadow-colored': '0 0 #0000',
         },
       })
 
@@ -1782,17 +1784,42 @@ export let corePlugins = {
           shadow: (value) => {
             value = transformValue(value)
 
+            let ast = parseBoxShadowValue(value)
+            for (let shadow of ast) {
+              // Don't override color if the whole shadow is a variable
+              if (!shadow.valid) {
+                continue
+              }
+
+              shadow.color = 'var(--tw-shadow-color)'
+            }
+
             return {
               '@defaults box-shadow': {},
               '--tw-shadow': value === 'none' ? '0 0 #0000' : value,
+              '--tw-shadow-colored': value === 'none' ? '0 0 #0000' : formatBoxShadowValue(ast),
               'box-shadow': defaultBoxShadow,
             }
           },
         },
-        { values: theme('boxShadow') }
+        { values: theme('boxShadow'), type: ['shadow'] }
       )
     }
   })(),
+
+  boxShadowColor: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        shadow: (value) => {
+          return {
+            '--tw-shadow-color': toColorValue(value),
+            '--tw-shadow': 'var(--tw-shadow-colored)',
+          }
+        },
+      },
+      { values: flattenColorPalette(theme('boxShadowColor')), type: ['color'] }
+    )
+  },
 
   outlineStyle: ({ addUtilities }) => {
     addUtilities({
@@ -1844,6 +1871,7 @@ export let corePlugins = {
         '--tw-ring-offset-shadow': '0 0 #0000',
         '--tw-ring-shadow': '0 0 #0000',
         '--tw-shadow': '0 0 #0000',
+        '--tw-shadow-colored': '0 0 #0000',
       },
     })
 

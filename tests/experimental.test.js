@@ -18,6 +18,7 @@ test('experimental universal selector improvements (box-shadow)', () => {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
       }
 
       .resize {
@@ -25,7 +26,9 @@ test('experimental universal selector improvements (box-shadow)', () => {
       }
 
       .shadow {
-        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
+        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+          0 1px 2px -1px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
       }
@@ -51,6 +54,7 @@ test('experimental universal selector improvements (pseudo hover)', () => {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
       }
 
       .resize {
@@ -58,7 +62,9 @@ test('experimental universal selector improvements (pseudo hover)', () => {
       }
 
       .hover\:shadow:hover {
-        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
+        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+          0 1px 2px -1px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
       }
@@ -84,6 +90,7 @@ test('experimental universal selector improvements (multiple classes: group)', (
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
       }
 
       .resize {
@@ -91,7 +98,9 @@ test('experimental universal selector improvements (multiple classes: group)', (
       }
 
       .group:hover .group-hover\:shadow {
-        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
+        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+          0 1px 2px -1px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
       }
@@ -187,6 +196,7 @@ test('experimental universal selector improvements (#app important)', () => {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
       }
 
       #app .resize {
@@ -200,7 +210,9 @@ test('experimental universal selector improvements (#app important)', () => {
       }
 
       #app .shadow {
-        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
+        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+          0 1px 2px -1px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
       }
