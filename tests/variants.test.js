@@ -134,6 +134,39 @@ describe('custom advanced variants', () => {
       `)
     })
   })
+
+  test('using variants with multi-class selectors', () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="screen:parent screen:child"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant, addComponents }) {
+          addComponents({
+            '.parent .child': {
+              foo: 'bar',
+            },
+          })
+          addVariant('screen', '@media screen')
+        },
+      ],
+    }
+
+    return run('@tailwind components;@tailwind utilities', config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        @media screen {
+          .screen\:parent .child {
+            foo: bar;
+          }
+          .parent .screen\:child {
+            foo: bar;
+          }
+        }
+      `)
+    })
+  })
 })
 
 test('stacked peer variants', async () => {
