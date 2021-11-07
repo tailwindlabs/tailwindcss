@@ -792,6 +792,9 @@
 .decoration-2 {
   text-decoration-thickness: 2px;
 }
+.underline-offset {
+  text-underline-offset: 1px;
+}
 .underline-offset-2 {
   text-underline-offset: 2px;
 }
