@@ -825,6 +825,24 @@
 .decoration-\[var\(--color\)\] {
   text-decoration-color: var(--color);
 }
+.emphasis-\[black\] {
+  text-emphasis-color: black;
+}
+.emphasis-\[rgb\(123\2c 123\2c 123\)\] {
+  text-emphasis-color: rgb(123, 123, 123);
+}
+.emphasis-\[rgb\(123\2c _123\2c _123\)\] {
+  text-emphasis-color: rgb(123, 123, 123);
+}
+.emphasis-\[rgb\(123_123_123\)\] {
+  text-emphasis-color: rgb(123 123 123);
+}
+.emphasis-\[color\:var\(--color\)\] {
+  text-emphasis-color: var(--color);
+}
+.emphasis-\[var\(--color\)\] {
+  text-emphasis-color: var(--color);
+}
 .placeholder-\[var\(--placeholder\)\]::placeholder {
   color: var(--placeholder);
 }

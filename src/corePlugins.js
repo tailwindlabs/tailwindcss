@@ -1646,6 +1646,38 @@ export let corePlugins = {
     )
   },
 
+  textEmphasis: ({ addUtilities }) => {
+    addUtilities({
+      '.emphasis-filled': { 'text-emphasis': 'filled' },
+      '.emphasis-open': { 'text-emphasis': 'open' },
+      '.emphasis-dot': { 'text-emphasis': 'dot' },
+      '.emphasis-circle': { 'text-emphasis': 'circle' },
+      '.emphasis-double-circle': { 'text-emphasis': 'double-circle' },
+      '.emphasis-triangle': { 'text-emphasis': 'triangle' },
+      '.emphasis-sesame': { 'text-emphasis': 'sesame' },
+    })
+  },
+
+  textEmphasisColor: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        emphasis: (value) => {
+          return { 'text-emphasis-color': toColorValue(value) }
+        },
+      },
+      { values: flattenColorPalette(theme('textEmphasisColor')), type: ['color', 'any'] }
+    )
+  },
+
+  textEmphasisPosition: ({ addUtilities }) => {
+    addUtilities({
+      '.emphasis-over': { 'text-emphasis-position': 'over' },
+      '.emphasis-under': { 'text-emphasis-position': 'under' },
+      '.emphasis-right': { 'text-emphasis-position': 'right' },
+      '.emphasis-left': { 'text-emphasis-position': 'left' },
+    })
+  },
+
   fontSmoothing: ({ addUtilities }) => {
     addUtilities({
       '.antialiased': {

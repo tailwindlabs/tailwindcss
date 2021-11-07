@@ -776,6 +776,15 @@
 .decoration-red-600 {
   text-decoration-color: #dc2626;
 }
+.emphasis-filled {
+  text-emphasis: filled;
+}
+.emphasis-red-600 {
+  text-emphasis-color: #dc2626;
+}
+.emphasis-over {
+  text-emphasis-position: over;
+}
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
