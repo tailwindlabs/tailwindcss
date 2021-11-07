@@ -1,16 +1,16 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
-import { version as tailwindVersion } from '../package.json'
-import buildMediaQuery from './util/buildMediaQuery'
 import createUtilityPlugin from './util/createUtilityPlugin'
-import flattenColorPalette from './util/flattenColorPalette'
-import isPlainObject from './util/isPlainObject'
-import log from './util/log'
+import buildMediaQuery from './util/buildMediaQuery'
 import parseAnimationValue from './util/parseAnimationValue'
-import toColorValue from './util/toColorValue'
-import transformThemeValue from './util/transformThemeValue'
+import flattenColorPalette from './util/flattenColorPalette'
 import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
+import toColorValue from './util/toColorValue'
+import isPlainObject from './util/isPlainObject'
+import transformThemeValue from './util/transformThemeValue'
+import { version as tailwindVersion } from '../package.json'
+import log from './util/log'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -1370,8 +1370,10 @@ export let corePlugins = {
 
   boxDecorationBreak: ({ addUtilities }) => {
     addUtilities({
-      '.decoration-slice': { 'box-decoration-break': 'slice' },
-      '.decoration-clone': { 'box-decoration-break': 'clone' },
+      '.decoration-slice': { 'box-decoration-break': 'slice' }, // Deprecated
+      '.decoration-clone': { 'box-decoration-break': 'clone' }, // Deprecated
+      '.box-decoration-slice': { 'box-decoration-break': 'slice' },
+      '.box-decoration-clone': { 'box-decoration-break': 'clone' },
     })
   },
 
@@ -1628,9 +1630,13 @@ export let corePlugins = {
 
   textDecoration: ({ addUtilities }) => {
     addUtilities({
-      '.underline': { 'text-decoration': 'underline' },
-      '.line-through': { 'text-decoration': 'line-through' },
-      '.no-underline': { 'text-decoration': 'none' },
+      '.underline': { 'text-decoration': 'underline' }, // Deprecated
+      '.line-through': { 'text-decoration': 'line-through' }, // Deprecated
+      '.no-underline': { 'text-decoration': 'none' }, // Deprecated
+      '.decoration-underline': { 'text-decoration': 'underline' },
+      '.decoration-overline': { 'text-decoration': 'overline' },
+      '.decoration-line-through': { 'text-decoration': 'line-through' },
+      '.decoration-none': { 'text-decoration': 'none' },
     })
   },
 
@@ -1652,6 +1658,27 @@ export let corePlugins = {
       '.decoration-dotted': { 'text-decoration-style': 'dotted' },
       '.decoration-dashed': { 'text-decoration-style': 'dashed' },
       '.decoration-wavy': { 'text-decoration-style': 'wavy' },
+    })
+  },
+
+  textDecorationThickness: createUtilityPlugin(
+    'textDecorationThickness',
+    [['decoration', ['text-decoration-thickness']]],
+    { type: ['length', 'percentage'] }
+  ),
+
+  textUnderlineOffset: createUtilityPlugin(
+    'textUnderlineOffset',
+    [['underline-offset', ['text-underline-offset']]],
+    { type: ['length', 'percentage'] }
+  ),
+
+  textUnderlinePosition: ({ addUtilities }) => {
+    addUtilities({
+      '.underline-auto': { 'text-underline-position': 'auto' },
+      '.underline-under': { 'text-underline-position': 'under' },
+      '.underline-right': { 'text-underline-position': 'right' },
+      '.underline-left': { 'text-underline-position': 'left' },
     })
   },
 

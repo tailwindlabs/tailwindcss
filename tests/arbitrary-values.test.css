@@ -825,6 +825,12 @@
 .decoration-\[var\(--color\)\] {
   text-decoration-color: var(--color);
 }
+.decoration-\[length\:10px\] {
+  text-decoration-thickness: 10px;
+}
+.underline-offset-\[10px\] {
+  text-underline-offset: 10px;
+}
 .placeholder-\[var\(--placeholder\)\]::placeholder {
   color: var(--placeholder);
 }
