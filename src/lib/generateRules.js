@@ -277,9 +277,27 @@ function splitWithSeparator(input, separator) {
   return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
 }
 
+// A list of variants that are forced to the end. This is useful for variants
+// that have pseudo elements which can't really be combined with other variant
+// if they are in the incorrect order.
+//
+// E.g.:
+//  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
+//  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
+//
+// `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
+let forcedVariantOrder = ['before', 'after']
+
 function* resolveMatches(candidate, context) {
   let separator = context.tailwindConfig.separator
   let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
+
+  // Sort the variants if we used a forced variant.
+  // Note: this will not sort the others, it would only sort the forced variants.
+  if (variants.some((variant) => forcedVariantOrder.includes(variant))) {
+    variants.sort((a, z) => forcedVariantOrder.indexOf(a) - forcedVariantOrder.indexOf(z))
+  }
+
   let important = false
 
   if (classCandidate.startsWith('!')) {

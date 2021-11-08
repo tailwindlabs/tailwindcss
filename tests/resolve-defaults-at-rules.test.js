@@ -252,12 +252,12 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
           scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
-      .group:hover .group-hover\:hover\:before\:scale-x-110::before:hover {
+      .group:hover .group-hover\:hover\:before\:scale-x-110:hover::before {
         content: var(--tw-content);
         --tw-scale-x: 1.1;
         transform: var(--tw-transform);
       }
-      .peer:focus ~ .peer-focus\:focus\:after\:rotate-3::after:focus {
+      .peer:focus ~ .peer-focus\:focus\:after\:rotate-3:focus::after {
         content: var(--tw-content);
         --tw-rotate: 3deg;
         transform: var(--tw-transform);

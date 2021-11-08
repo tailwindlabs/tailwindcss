@@ -323,3 +323,63 @@ test('custom addVariant with nested media & format shorthand', () => {
     `)
   })
 })
+
+test('before and after variants are a bit special, and forced to the end', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="before:hover:text-center"></div>
+          <div class="hover:before:text-center"></div>
+        `,
+      },
+    ],
+    plugins: [],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .before\:hover\:text-center:hover::before {
+        content: var(--tw-content);
+        text-align: center;
+      }
+
+      .hover\:before\:text-center:hover::before {
+        content: var(--tw-content);
+        text-align: center;
+      }
+    `)
+  })
+})
+
+test('before and after variants are a bit special, and forced to the end (2)', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="before:prose-headings:text-center"></div>
+          <div class="prose-headings:before:text-center"></div>
+        `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('prose-headings', ':where(&) :is(h1, h2, h3, h4)')
+      },
+    ],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      :where(.before\:prose-headings\:text-center) :is(h1, h2, h3, h4)::before {
+        content: var(--tw-content);
+        text-align: center;
+      }
+
+      :where(.prose-headings\:before\:text-center) :is(h1, h2, h3, h4)::before {
+        content: var(--tw-content);
+        text-align: center;
+      }
+    `)
+  })
+})
