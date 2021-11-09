@@ -49,7 +49,7 @@
     "@swc/register": "^0.1.7",
     "autoprefixer": "^10.4.0",
     "cross-env": "^7.0.3",
-    "cssnano": "^5.0.8",
+    "cssnano": "^5.0.10",
     "esbuild": "^0.13.12",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
