@@ -918,3 +918,15 @@
     background-color: rgb(253 224 71 / var(--tw-bg-opacity));
   }
 }
+@media (prefers-contrast: more) {
+  .contrast-more\:bg-yellow-300 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+  }
+}
+@media (prefers-contrast: less) {
+  .contrast-less\:bg-yellow-300 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+  }
+}

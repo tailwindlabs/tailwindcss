@@ -170,6 +170,11 @@ export let variantPlugins = {
     addVariant('portrait', '@media (orientation: portrait)')
     addVariant('landscape', '@media (orientation: landscape)')
   },
+
+  prefersContrastVariants: ({ addVariant }) => {
+    addVariant('contrast-more', '@media (prefers-contrast: more)')
+    addVariant('contrast-less', '@media (prefers-contrast: less)')
+  },
 }
 
 export let corePlugins = {
