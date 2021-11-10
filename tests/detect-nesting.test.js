@@ -19,7 +19,37 @@ it('should warn when we detect nested css', () => {
     expect(result.messages).toMatchObject([
       {
         type: 'warning',
-        text: 'Nested CSS detected, checkout the docs on how to support nesting: https://tailwindcss.com/docs/using-with-preprocessors#nesting',
+        text: [
+          'Nested CSS was detected, but CSS nesting has not been configured correctly.',
+          'Please enable a CSS nesting plugin *before* Tailwind in your configuration.',
+          'See how here: https://tailwindcss.com/docs/using-with-preprocessors#nesting',
+        ].join('\n'),
+      },
+    ])
+  })
+})
+
+it('should warn when we detect namespaced @tailwind at rules', () => {
+  let config = {
+    content: [{ raw: html`<div class="text-center"></div>` }],
+  }
+
+  let input = css`
+    .namespace {
+      @tailwind utilities;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.messages).toHaveLength(1)
+    expect(result.messages).toMatchObject([
+      {
+        type: 'warning',
+        text: [
+          'Nested @tailwind rules were detected, but are not supported.',
+          "Consider using a prefix to scope Tailwind's classes: https://tailwindcss.com/docs/configuration#prefix",
+          'Alternatively, use the important selector strategy: https://tailwindcss.com/docs/configuration#selector-strategy',
+        ].join('\n'),
       },
     ])
   })
