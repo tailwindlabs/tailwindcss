@@ -163,6 +163,11 @@ export let variantPlugins = {
       addVariant(screen, `@media ${query}`)
     }
   },
+
+  orientationVariants: ({ addVariant }) => {
+    addVariant('orientation-portrait', '@media (orientation: portrait)')
+    addVariant('orientation-landscape', '@media (orientation: landscape)')
+  },
 }
 
 export let corePlugins = {

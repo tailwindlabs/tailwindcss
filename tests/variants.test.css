@@ -899,3 +899,15 @@
     }
   }
 }
+@media (orientation: portrait) {
+  .orientation-portrait\:bg-yellow-300 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+  }
+}
+@media (orientation: landscape) {
+  .orientation-landscape\:bg-yellow-300 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+  }
+}
