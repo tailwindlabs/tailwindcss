@@ -610,6 +610,7 @@ function resolvePlugins(context, root) {
     variantPlugins['printVariant'],
     variantPlugins['screenVariants'],
     variantPlugins['orientationVariants'],
+    variantPlugins['prefersContrastVariants'],
   ]
 
   return [...corePluginList, ...beforeVariants, ...userPlugins, ...afterVariants, ...layerPlugins]
