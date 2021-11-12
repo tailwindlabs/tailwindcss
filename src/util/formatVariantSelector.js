@@ -74,9 +74,90 @@ export function finalizeSelector(format, { selector, candidate, context }) {
         return p
       })
 
+      // This will make sure to move pseudo's to the correct spot (the end for
+      // pseudo elements) because otherwise the selector will never work
+      // anyway.
+      //
+      // E.g.:
+      //  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
+      //  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
+      //
+      // `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
+      function collectPseudoElements(selector) {
+        let nodes = []
+
+        for (let node of selector.nodes) {
+          if (isPseudoElement(node)) {
+            nodes.push(node)
+            selector.removeChild(node)
+          }
+
+          if (node?.nodes) {
+            nodes.push(...collectPseudoElements(node))
+          }
+        }
+
+        return nodes
+      }
+
+      let pseudoElements = collectPseudoElements(selector)
+      if (pseudoElements.length > 0) {
+        selector.nodes.push(pseudoElements.sort(sortSelector))
+      }
+
       return selector
     })
   }).processSync(selector)
+}
+
+// Note: As a rule, double colons (::) should be used instead of a single colon
+// (:). This distinguishes pseudo-classes from pseudo-elements. However, since
+// this distinction was not present in older versions of the W3C spec, most
+// browsers support both syntaxes for the original pseudo-elements.
+let pseudoElementsBC = [':before', ':after', ':first-line', ':first-letter']
+
+// These pseudo-elements _can_ be combined with other pseudo selectors AND the order does matter.
+let pseudoElementExceptions = ['::file-selector-button']
+
+// This will make sure to move pseudo's to the correct spot (the end for
+// pseudo elements) because otherwise the selector will never work
+// anyway.
+//
+// E.g.:
+//  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
+//  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
+//
+// `::before:hover` doesn't work, which means that we can make it work
+// for you by flipping the order.
+function sortSelector(a, z) {
+  // Both nodes are non-pseudo's so we can safely ignore them and keep
+  // them in the same order.
+  if (a.type !== 'pseudo' && z.type !== 'pseudo') {
+    return 0
+  }
+
+  // If one of them is a combinator, we need to keep it in the same order
+  // because that means it will start a new "section" in the selector.
+  if ((a.type === 'combinator') ^ (z.type === 'combinator')) {
+    return 0
+  }
+
+  // One of the items is a pseudo and the other one isn't. Let's move
+  // the pseudo to the right.
+  if ((a.type === 'pseudo') ^ (z.type === 'pseudo')) {
+    return (a.type === 'pseudo') - (z.type === 'pseudo')
+  }
+
+  // Both are pseudo's, move the pseudo elements (except for
+  // ::file-selector-button) to the right.
+  return isPseudoElement(a) - isPseudoElement(z)
+}
+
+function isPseudoElement(node) {
+  if (node.type !== 'pseudo') return false
+  if (pseudoElementExceptions.includes(node.value)) return false
+
+  return node.value.startsWith('::') || pseudoElementsBC.includes(node.value)
 }
 
 function resolveFunctionArgument(haystack, needle, arg) {
