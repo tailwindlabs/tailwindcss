@@ -259,3 +259,26 @@ describe('real examples', () => {
     })
   })
 })
+
+describe('pseudo elements', () => {
+  it.each`
+    before                                                   | after
+    ${'&::before'}                                           | ${'&::before'}
+    ${'&::before:hover'}                                     | ${'&:hover::before'}
+    ${'&:before:hover'}                                      | ${'&:hover:before'}
+    ${'&::file-selector-button:hover'}                       | ${'&::file-selector-button:hover'}
+    ${'&:hover::file-selector-button'}                       | ${'&:hover::file-selector-button'}
+    ${'.parent:hover &'}                                     | ${'.parent:hover &'}
+    ${'.parent::before &'}                                   | ${'.parent &::before'}
+    ${'.parent::before &:hover'}                             | ${'.parent &:hover::before'}
+    ${':where(&::before) :is(h1, h2, h3, h4)'}               | ${':where(&) :is(h1, h2, h3, h4)::before'}
+    ${':where(&::file-selector-button) :is(h1, h2, h3, h4)'} | ${':where(&::file-selector-button) :is(h1, h2, h3, h4)'}
+  `('should translate "$before" into "$after"', ({ before, after }) => {
+    let result = finalizeSelector(formatVariantSelector('&', before), {
+      selector: '.a',
+      candidate: 'a',
+    })
+
+    expect(result).toEqual(after.replace('&', '.a'))
+  })
+})
