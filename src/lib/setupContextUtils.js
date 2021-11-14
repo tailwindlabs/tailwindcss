@@ -570,6 +570,7 @@ function resolvePlugins(context, root) {
     variantPlugins['pseudoClassVariants'],
   ]
   let afterVariants = [
+    variantPlugins['childrenVariant'],
     variantPlugins['directionVariants'],
     variantPlugins['reducedMotionVariants'],
     variantPlugins['darkVariants'],

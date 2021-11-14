@@ -109,6 +109,10 @@ export let variantPlugins = {
     }
   },
 
+  childrenVariant: ({ addVariant }) => {
+    addVariant('children', '& > *')
+  },
+
   directionVariants: ({ addVariant }) => {
     addVariant('ltr', () => {
       log.warn('rtl-experimental', [
