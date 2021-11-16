@@ -2,6 +2,7 @@ import dlv from 'dlv'
 import didYouMean from 'didyoumean'
 import transformThemeValue from '../util/transformThemeValue'
 import parseValue from 'postcss-value-parser'
+import { normalizeScreens } from '../util/normalizeScreens'
 import buildMediaQuery from '../util/buildMediaQuery'
 import { toPath } from '../util/toPath'
 
@@ -173,12 +174,14 @@ export default function ({ tailwindConfig: config }) {
     },
     screen: (node, screen) => {
       screen = screen.replace(/^['"]+/g, '').replace(/['"]+$/g, '')
+      let screens = normalizeScreens(config.theme.screens)
+      let screenDefinition = screens.find(({ name }) => name === screen)
 
-      if (config.theme.screens[screen] === undefined) {
+      if (!screenDefinition) {
         throw node.error(`The '${screen}' screen does not exist in your theme.`)
       }
 
-      return buildMediaQuery(config.theme.screens[screen])
+      return buildMediaQuery(screenDefinition)
     },
   }
   return (root) => {
