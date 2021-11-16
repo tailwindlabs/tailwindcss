@@ -343,3 +343,39 @@ test('container can use variants', () => {
     `)
   })
 })
+
+test('container can use screens with tuple syntax', () => {
+  let config = {
+    content: [{ raw: html`<div class="container"></div>` }],
+    theme: {
+      screens: [
+        [1800, { min: '1800px' }],
+        [1200, { min: '1200px' }],
+        [768, { min: '768px' }],
+      ],
+    },
+  }
+
+  return run('@tailwind components', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .container {
+        width: 100%;
+      }
+      @media (min-width: 768px) {
+        .container {
+          max-width: 768px;
+        }
+      }
+      @media (min-width: 1200px) {
+        .container {
+          max-width: 1200px;
+        }
+      }
+      @media (min-width: 1800px) {
+        .container {
+          max-width: 1800px;
+        }
+      }
+    `)
+  })
+})
