@@ -23,6 +23,8 @@ export let variantPlugins = {
 
     addVariant('file', '&::file-selector-button')
 
+    addVariant('placeholder', '&::placeholder')
+
     addVariant('before', ({ container }) => {
       container.walkRules((rule) => {
         let foundContent = false
