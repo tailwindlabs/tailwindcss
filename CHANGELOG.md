@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet!
-
 ### Fixed
 
 - Enforce the order of some variants (like `before` and `after`) ([#6018](https://github.com/tailwindlabs/tailwindcss/pull/6018))
@@ -16,6 +14,7 @@ Nothing yet!
 ### Added
 
 - Add `placeholder` variant ([#6106](https://github.com/tailwindlabs/tailwindcss/pull/6106))
+- Add tuple syntax for configuring screens while guaranteeing order ([#5956](https://github.com/tailwindlabs/tailwindcss/pull/5956))
 
 ## [3.0.0-alpha.2] - 2021-11-08
 

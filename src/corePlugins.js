@@ -11,6 +11,7 @@ import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
 import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
+import { normalizeScreens } from './util/normalizeScreens'
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 
 export let variantPlugins = {
@@ -158,11 +159,10 @@ export let variantPlugins = {
   },
 
   screenVariants: ({ theme, addVariant }) => {
-    for (let screen in theme('screens')) {
-      let size = theme('screens')[screen]
-      let query = buildMediaQuery(size)
+    for (let screen of normalizeScreens(theme('screens'))) {
+      let query = buildMediaQuery(screen)
 
-      addVariant(screen, `@media ${query}`)
+      addVariant(screen.name, `@media ${query}`)
     }
   },
 }
@@ -182,24 +182,10 @@ export let corePlugins = {
   },
 
   container: (() => {
-    function extractMinWidths(breakpoints) {
-      return Object.values(breakpoints ?? {}).flatMap((breakpoints) => {
-        if (typeof breakpoints === 'string') {
-          breakpoints = { min: breakpoints }
-        }
-
-        if (!Array.isArray(breakpoints)) {
-          breakpoints = [breakpoints]
-        }
-
-        return breakpoints
-          .filter((breakpoint) => {
-            return breakpoint?.hasOwnProperty?.('min') || breakpoint?.hasOwnProperty('min-width')
-          })
-          .map((breakpoint) => {
-            return breakpoint['min-width'] ?? breakpoint.min
-          })
-      })
+    function extractMinWidths(breakpoints = []) {
+      return breakpoints
+        .flatMap((breakpoint) => breakpoint.values.map((breakpoint) => breakpoint.min))
+        .filter((v) => v !== undefined)
     }
 
     function mapMinWidthsToPadding(minWidths, screens, paddings) {
@@ -228,16 +214,11 @@ export let corePlugins = {
       }
 
       for (let minWidth of minWidths) {
-        for (let [screen, value] of Object.entries(screens)) {
-          let screenMinWidth =
-            typeof value === 'object' && value !== null ? value.min || value['min-width'] : value
-
-          if (`${screenMinWidth}` === `${minWidth}`) {
-            mapping.push({
-              screen,
-              minWidth,
-              padding: paddings[screen],
-            })
+        for (let screen of screens) {
+          for (let { min } of screen.values) {
+            if (min === minWidth) {
+              mapping.push({ minWidth, padding: paddings[screen.name] })
+            }
           }
         }
       }
@@ -246,12 +227,12 @@ export let corePlugins = {
     }
 
     return function ({ addComponents, theme }) {
-      let screens = theme('container.screens', theme('screens'))
+      let screens = normalizeScreens(theme('container.screens', theme('screens')))
       let minWidths = extractMinWidths(screens)
       let paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
 
       let generatePaddingFor = (minWidth) => {
-        let paddingConfig = paddings.find((padding) => `${padding.minWidth}` === `${minWidth}`)
+        let paddingConfig = paddings.find((padding) => padding.minWidth === minWidth)
 
         if (!paddingConfig) {
           return {}
