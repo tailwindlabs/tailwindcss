@@ -16,7 +16,7 @@ Nothing yet!
 ### Added
 
 - Add `placeholder` variant ([#6106](https://github.com/tailwindlabs/tailwindcss/pull/6106))
-- Add Tuple syntax for configuring screens ([#5956](https://github.com/tailwindlabs/tailwindcss/pull/5956))
+- Add tuple syntax for configuring screens while guaranteeing order ([#5956](https://github.com/tailwindlabs/tailwindcss/pull/5956))
 
 ## [3.0.0-alpha.2] - 2021-11-08
 
