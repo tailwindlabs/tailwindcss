@@ -13,6 +13,10 @@ Nothing yet!
 
 - Enforce the order of some variants (like `before` and `after`) ([#6018](https://github.com/tailwindlabs/tailwindcss/pull/6018))
 
+### Added
+
+- Add `placeholder` variant ([#6106](https://github.com/tailwindlabs/tailwindcss/pull/6106))
+
 ## [3.0.0-alpha.2] - 2021-11-08
 
 ### Changed
