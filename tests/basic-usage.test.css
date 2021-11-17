@@ -19,6 +19,16 @@
     scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.touch-pan-x,
+.touch-pan-y,
+.touch-pan-up,
+.touch-pinch-zoom {
+  --tw-pan-x: var(--tw-empty, /*!*/ /*!*/);
+  --tw-pan-y: var(--tw-empty, /*!*/ /*!*/);
+  --tw-pinch-zoom: var(--tw-empty, /*!*/ /*!*/);
+  --tw-touch-action: var(--tw-pan-x) var(--tw-pan-y) var(--tw-pinch-zoom);
+}
+
 .snap-x {
   --tw-scroll-snap-strictness: proximity;
 }
@@ -374,8 +384,21 @@
 .cursor-pointer {
   cursor: pointer;
 }
+.touch-pan-x {
+  --tw-pan-x: pan-x;
+  touch-action: var(--tw-touch-action);
+}
 .touch-pan-y {
-  touch-action: pan-y;
+  --tw-pan-y: pan-y;
+  touch-action: var(--tw-touch-action);
+}
+.touch-pan-up {
+  --tw-pan-y: pan-up;
+  touch-action: var(--tw-touch-action);
+}
+.touch-pinch-zoom {
+  --tw-pinch-zoom: pinch-zoom;
+  touch-action: var(--tw-touch-action);
 }
 .touch-manipulation {
   touch-action: manipulation;
