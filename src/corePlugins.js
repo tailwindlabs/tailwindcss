@@ -602,17 +602,54 @@ export let corePlugins = {
 
   cursor: createUtilityPlugin('cursor'),
 
-  touchAction: ({ addUtilities }) => {
+  touchAction: ({ addBase, addUtilities }) => {
+    addBase({
+      '@defaults touch-action': {
+        '--tw-pan-x': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-pan-y': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-pinch-zoom': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-touch-action': 'var(--tw-pan-x) var(--tw-pan-y) var(--tw-pinch-zoom)',
+      },
+    })
+
     addUtilities({
       '.touch-auto': { 'touch-action': 'auto' },
       '.touch-none': { 'touch-action': 'none' },
-      '.touch-pan-x': { 'touch-action': 'pan-x' },
-      '.touch-pan-left': { 'touch-action': 'pan-left' },
-      '.touch-pan-right': { 'touch-action': 'pan-right' },
-      '.touch-pan-y': { 'touch-action': 'pan-y' },
-      '.touch-pan-up': { 'touch-action': 'pan-up' },
-      '.touch-pan-down': { 'touch-action': 'pan-down' },
-      '.touch-pinch-zoom': { 'touch-action': 'pinch-zoom' },
+      '.touch-pan-x': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-x',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-left': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-left',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-right': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-right',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-y': {
+        '@defaults touch-action': {},
+        '--tw-pan-y': 'pan-y',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-up': {
+        '@defaults touch-action': {},
+        '--tw-pan-y': 'pan-up',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-down': {
+        '@defaults touch-action': {},
+        '--tw-pan-y': 'pan-down',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pinch-zoom': {
+        '@defaults touch-action': {},
+        '--tw-pinch-zoom': 'pinch-zoom',
+        'touch-action': 'var(--tw-touch-action)',
+      },
       '.touch-manipulation': { 'touch-action': 'manipulation' },
     })
   },
