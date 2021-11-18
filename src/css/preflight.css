@@ -17,10 +17,6 @@
   --tw-content: '';
 }
 
-::file-selector-button {
-  border-style: solid; /* 2 */
-}
-
 /*
 1. Use a consistent sensible line-height in all browsers.
 2. Prevent adjustments of font size after orientation changes in iOS.

@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `placeholder` variant ([#6106](https://github.com/tailwindlabs/tailwindcss/pull/6106))
 - Add tuple syntax for configuring screens while guaranteeing order ([#5956](https://github.com/tailwindlabs/tailwindcss/pull/5956))
 - Add combinable `touch-action` support ([#6115](https://github.com/tailwindlabs/tailwindcss/pull/6115))
-- Add `::file-selector-button` reset ([#6125](https://github.com/tailwindlabs/tailwindcss/pull/6125))
 
 ## [3.0.0-alpha.2] - 2021-11-08
 
