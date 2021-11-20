@@ -165,7 +165,7 @@ test('colons are allowed in quotes', () => {
   let config = {
     content: [
       {
-        raw: html`<div class="[a:'b:c:d']"></div>`,
+        raw: html`<div class="[content:'foo:bar']"></div>`,
       },
     ],
     corePlugins: { preflight: false },
@@ -179,8 +179,8 @@ test('colons are allowed in quotes', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .\[a\'\:b\:c\:d\'\] {
-        a: 'b:c:d';
+      .\[content\:\'foo\:bar\'\] {
+        content: 'foo:bar';
       }
     `)
   })
@@ -190,7 +190,7 @@ test('colons are allowed in braces', () => {
   let config = {
     content: [
       {
-        raw: html`<div class="[a:(b:c:d)]"></div>`,
+        raw: html`<div class="[background-image:url(http://example.com/picture.jpg)]"></div>`,
       },
     ],
     corePlugins: { preflight: false },
@@ -204,8 +204,8 @@ test('colons are allowed in braces', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .\[a\(\:b\:c\:d\)\] {
-        a: (b: c: d);
+      .\[background-image\:url\(http\:\/\/example\.com\/picture\.jpg\)\] {
+        background-image: url(http://example.com/picture.jpg);
       }
     `)
   })

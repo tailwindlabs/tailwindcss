@@ -8,6 +8,7 @@ import log from '../util/log'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
+import isValidArbitraryValue from '../util/isValidArbitraryValue'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -248,10 +249,16 @@ function parseRules(rule, cache, options = {}) {
 }
 
 function isArbitraryProperty(classCandidate) {
-  return classCandidate.match(/^\[[a-zA-Z0-9-_]+:\S+\]$/) !== null
+  let [, value] = classCandidate.match(/^\[[a-zA-Z0-9-_]+:(\S+)\]$/) ?? []
+
+  if (value === undefined) {
+    return false
+  }
+
+  return isValidArbitraryValue(normalize(value))
 }
 
-function resolveArbitraryProperty(classCandidate, context) {
+function constructArbitraryRule(classCandidate, context) {
   let declaration = classCandidate.slice(1, -1)
   let property = declaration.substr(0, declaration.indexOf(':'))
   let value = declaration.substr(declaration.indexOf(':') + 1)
@@ -261,6 +268,7 @@ function resolveArbitraryProperty(classCandidate, context) {
       { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
       () => ({
         [asClass(classCandidate)]: {
+          // TODO: Refactor so we don't call normalize twice
           [property]: normalize(value),
         },
       }),
@@ -274,7 +282,7 @@ function* resolveMatchedPlugins(classCandidate, context) {
   }
 
   if (isArbitraryProperty(classCandidate)) {
-    yield [resolveArbitraryProperty(classCandidate, context), 'DEFAULT']
+    yield [constructArbitraryRule(classCandidate, context), 'DEFAULT']
   }
 
   let candidatePrefix = classCandidate
