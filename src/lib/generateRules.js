@@ -6,7 +6,7 @@ import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
-import nameClass from '../util/nameClass'
+import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 
 let classNameParser = selectorParser((selectors) => {
@@ -258,16 +258,13 @@ function resolveArbitraryProperty(classCandidate, context) {
 
   return [
     [
-      [
-        { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
-        () => ({
-          [nameClass(classCandidate, 'DEFAULT')]: {
-            [property]: normalize(value),
-          },
-        }),
-      ],
+      { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
+      () => ({
+        [asClass(classCandidate)]: {
+          [property]: normalize(value),
+        },
+      }),
     ],
-    'DEFAULT',
   ]
 }
 
@@ -277,7 +274,7 @@ function* resolveMatchedPlugins(classCandidate, context) {
   }
 
   if (isArbitraryProperty(classCandidate)) {
-    yield resolveArbitraryProperty(classCandidate, context)
+    yield [resolveArbitraryProperty(classCandidate, context), 'DEFAULT']
   }
 
   let candidatePrefix = classCandidate
