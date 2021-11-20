@@ -617,6 +617,10 @@ function registerPlugins(plugins, context) {
   ])
   let reservedBits = BigInt(highestOffset.toString(2).length)
 
+  // A number one less than the top range of the highest offset area
+  // so arbitrary properties are always sorted at the end.
+  context.arbitraryPropertiesSort = ((1n << reservedBits) << 0n) - 1n
+
   context.layerOrder = {
     base: (1n << reservedBits) << 0n,
     components: (1n << reservedBits) << 1n,

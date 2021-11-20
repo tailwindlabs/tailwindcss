@@ -6,6 +6,8 @@ import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
+import nameClass from '../util/nameClass'
+import { normalize } from '../util/dataTypes'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -245,9 +247,37 @@ function parseRules(rule, cache, options = {}) {
   return [cache.get(rule), options]
 }
 
+function isArbitraryProperty(classCandidate) {
+  return classCandidate.match(/^\[[a-zA-Z0-9-_]+:\S+\]$/) !== null
+}
+
+function resolveArbitraryProperty(classCandidate, context) {
+  let declaration = classCandidate.slice(1, -1)
+  let property = declaration.substr(0, declaration.indexOf(':'))
+  let value = declaration.substr(declaration.indexOf(':') + 1)
+
+  return [
+    [
+      [
+        { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
+        () => ({
+          [nameClass(classCandidate, 'DEFAULT')]: {
+            [property]: normalize(value),
+          },
+        }),
+      ],
+    ],
+    'DEFAULT',
+  ]
+}
+
 function* resolveMatchedPlugins(classCandidate, context) {
   if (context.candidateRuleMap.has(classCandidate)) {
     yield [context.candidateRuleMap.get(classCandidate), 'DEFAULT']
+  }
+
+  if (isArbitraryProperty(classCandidate)) {
+    yield resolveArbitraryProperty(classCandidate, context)
   }
 
   let candidatePrefix = classCandidate
@@ -308,7 +338,6 @@ function* resolveMatches(candidate, context) {
 
     for (let [sort, plugin] of plugins) {
       let matchesPerPlugin = []
-
       if (typeof plugin === 'function') {
         for (let ruleSet of [].concat(plugin(modifier, { isOnlyPlugin }))) {
           let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
