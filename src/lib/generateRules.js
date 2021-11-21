@@ -248,28 +248,25 @@ function parseRules(rule, cache, options = {}) {
   return [cache.get(rule), options]
 }
 
-function isArbitraryProperty(classCandidate) {
-  let [, value] = classCandidate.match(/^\[[a-zA-Z0-9-_]+:(\S+)\]$/) ?? []
+function extractArbitraryProperty(classCandidate, context) {
+  let [, property, value] = classCandidate.match(/^\[([a-zA-Z0-9-_]+):(\S+)\]$/) ?? []
 
   if (value === undefined) {
-    return false
+    return null
   }
 
-  return isValidArbitraryValue(normalize(value))
-}
+  let normalized = normalize(value)
 
-function constructArbitraryRule(classCandidate, context) {
-  let declaration = classCandidate.slice(1, -1)
-  let property = declaration.substr(0, declaration.indexOf(':'))
-  let value = declaration.substr(declaration.indexOf(':') + 1)
+  if (!isValidArbitraryValue(normalized)) {
+    return null
+  }
 
   return [
     [
       { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
       () => ({
         [asClass(classCandidate)]: {
-          // TODO: Refactor so we don't call normalize twice
-          [property]: normalize(value),
+          [property]: normalized,
         },
       }),
     ],
@@ -281,9 +278,11 @@ function* resolveMatchedPlugins(classCandidate, context) {
     yield [context.candidateRuleMap.get(classCandidate), 'DEFAULT']
   }
 
-  if (isArbitraryProperty(classCandidate)) {
-    yield [constructArbitraryRule(classCandidate, context), 'DEFAULT']
-  }
+  yield* (function* (arbitraryPropertyRule) {
+    if (arbitraryPropertyRule !== null) {
+      yield [arbitraryPropertyRule, 'DEFAULT']
+    }
+  })(extractArbitraryProperty(classCandidate, context))
 
   let candidatePrefix = classCandidate
   let negative = false
@@ -343,6 +342,7 @@ function* resolveMatches(candidate, context) {
 
     for (let [sort, plugin] of plugins) {
       let matchesPerPlugin = []
+
       if (typeof plugin === 'function') {
         for (let ruleSet of [].concat(plugin(modifier, { isOnlyPlugin }))) {
           let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
