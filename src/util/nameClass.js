@@ -1,7 +1,7 @@
 import escapeClassName from './escapeClassName'
 import escapeCommas from './escapeCommas'
 
-function asClass(name) {
+export function asClass(name) {
   return escapeCommas(`.${escapeClassName(name)}`)
 }
 

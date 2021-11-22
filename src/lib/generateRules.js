@@ -6,6 +6,9 @@ import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
+import { asClass } from '../util/nameClass'
+import { normalize } from '../util/dataTypes'
+import isValidArbitraryValue from '../util/isValidArbitraryValue'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -245,10 +248,41 @@ function parseRules(rule, cache, options = {}) {
   return [cache.get(rule), options]
 }
 
+function extractArbitraryProperty(classCandidate, context) {
+  let [, property, value] = classCandidate.match(/^\[([a-zA-Z0-9-_]+):(\S+)\]$/) ?? []
+
+  if (value === undefined) {
+    return null
+  }
+
+  let normalized = normalize(value)
+
+  if (!isValidArbitraryValue(normalized)) {
+    return null
+  }
+
+  return [
+    [
+      { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
+      () => ({
+        [asClass(classCandidate)]: {
+          [property]: normalized,
+        },
+      }),
+    ],
+  ]
+}
+
 function* resolveMatchedPlugins(classCandidate, context) {
   if (context.candidateRuleMap.has(classCandidate)) {
     yield [context.candidateRuleMap.get(classCandidate), 'DEFAULT']
   }
+
+  yield* (function* (arbitraryPropertyRule) {
+    if (arbitraryPropertyRule !== null) {
+      yield [arbitraryPropertyRule, 'DEFAULT']
+    }
+  })(extractArbitraryProperty(classCandidate, context))
 
   let candidatePrefix = classCandidate
   let negative = false
