@@ -1656,13 +1656,10 @@ export let corePlugins = {
 
   textDecoration: ({ addUtilities }) => {
     addUtilities({
-      '.underline': { 'text-decoration': 'underline' }, // Deprecated
-      '.line-through': { 'text-decoration': 'line-through' }, // Deprecated
-      '.no-underline': { 'text-decoration': 'none' }, // Deprecated
-      '.decoration-underline': { 'text-decoration': 'underline' },
-      '.decoration-overline': { 'text-decoration': 'overline' },
-      '.decoration-line-through': { 'text-decoration': 'line-through' },
-      '.decoration-none': { 'text-decoration': 'none' },
+      '.underline': { 'text-decoration': 'underline' },
+      '.overline': { 'text-decoration': 'overline' },
+      '.line-through': { 'text-decoration': 'line-through' },
+      '.no-underline': { 'text-decoration': 'none' },
     })
   },
 
@@ -1698,15 +1695,6 @@ export let corePlugins = {
     [['underline-offset', ['text-underline-offset']]],
     { type: ['length', 'percentage'] }
   ),
-
-  textUnderlinePosition: ({ addUtilities }) => {
-    addUtilities({
-      '.underline-auto': { 'text-underline-position': 'auto' },
-      '.underline-under': { 'text-underline-position': 'under' },
-      '.underline-right': { 'text-underline-position': 'right' },
-      '.underline-left': { 'text-underline-position': 'left' },
-    })
-  },
 
   fontSmoothing: ({ addUtilities }) => {
     addUtilities({
