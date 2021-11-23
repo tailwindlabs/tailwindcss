@@ -299,3 +299,40 @@ test('layers are grouped and inserted at the matching @tailwind rule', () => {
     `)
   })
 })
+
+it('should keep `@supports` rules inside `@layer`s', () => {
+  let config = {
+    content: [{ raw: html`<div class="test"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    @layer utilities {
+      .test {
+        --tw-test: 1;
+      }
+
+      @supports (backdrop-filter: blur(1px)) {
+        .test {
+          --tw-test: 0.9;
+        }
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .test {
+        --tw-test: 1;
+      }
+
+      @supports (backdrop-filter: blur(1px)) {
+        .test {
+          --tw-test: 0.9;
+        }
+      }
+    `)
+  })
+})

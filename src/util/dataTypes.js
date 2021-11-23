@@ -1,4 +1,5 @@
 import { parseColor } from './color'
+import { parseBoxShadowValue } from './parseBoxShadowValue'
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
@@ -86,6 +87,18 @@ export function length(value) {
 let lineWidths = new Set(['thin', 'medium', 'thick'])
 export function lineWidth(value) {
   return lineWidths.has(value)
+}
+
+export function shadow(value) {
+  let parsedShadows = parseBoxShadowValue(normalize(value))
+
+  for (let parsedShadow of parsedShadows) {
+    if (!parsedShadow.valid) {
+      return false
+    }
+  }
+
+  return true
 }
 
 export function color(value) {

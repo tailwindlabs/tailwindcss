@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Enforce the order of some variants (like `before` and `after`) ([#6018](https://github.com/tailwindlabs/tailwindcss/pull/6018))
+
+### Added
+
+- Add `placeholder` variant ([#6106](https://github.com/tailwindlabs/tailwindcss/pull/6106))
+- Add tuple syntax for configuring screens while guaranteeing order ([#5956](https://github.com/tailwindlabs/tailwindcss/pull/5956))
+- Add combinable `touch-action` support ([#6115](https://github.com/tailwindlabs/tailwindcss/pull/6115))
+- Add support for "arbitrary properties" ([#6161](https://github.com/tailwindlabs/tailwindcss/pull/6161))
+- Add `portrait` and `landscape` variants ([#6046](https://github.com/tailwindlabs/tailwindcss/pull/6046))
+- Add `aspect-attrs` utility by default ([#6178](https://github.com/tailwindlabs/tailwindcss/pull/6178))
+
+## [3.0.0-alpha.2] - 2021-11-08
+
 ### Changed
 
 - Don't use pointer cursor on disabled buttons by default ([#5772](https://github.com/tailwindlabs/tailwindcss/pull/5772))
@@ -22,7 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add all standard `cursor-*` values by default ([#5734](https://github.com/tailwindlabs/tailwindcss/pull/5734))
 - Add `grow-*` and `shrink-*` utilities, deprecate `flex-grow-*` and `flex-shrink-*` ([#5733](https://github.com/tailwindlabs/tailwindcss/pull/5733))
 - Add `text-decoration-color` utilities ([#5760](https://github.com/tailwindlabs/tailwindcss/pull/5760))
-- Add declarative `addVariant` syntax ([#5809](https://github.com/tailwindlabs/tailwindcss/pull/5809))
+- Add new declarative `addVariant` API ([#5809](https://github.com/tailwindlabs/tailwindcss/pull/5809))
+- Add first-class `print` variant for targeting printed media ([#5885](https://github.com/tailwindlabs/tailwindcss/pull/5885))
+- Add full color palette for `fill-*` and `stroke-*` utilities (#5933[](https://github.com/tailwindlabs/tailwindcss/pull/5933))
+- Add composable API for colored box shadows ([#5979](https://github.com/tailwindlabs/tailwindcss/pull/5979))
 
 ### Fixed
 
@@ -33,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow `_` inside `url()` when using arbitrary values ([#5853](https://github.com/tailwindlabs/tailwindcss/pull/5853))
 - Prevent crashes when using comments in `@layer` AtRules ([#5854](https://github.com/tailwindlabs/tailwindcss/pull/5854))
 - Handle color transformations properly with `theme(...)` for all relevant plugins ([#4533](https://github.com/tailwindlabs/tailwindcss/pull/4533), [#5871](https://github.com/tailwindlabs/tailwindcss/pull/5871))
+- Ensure `@apply`-ing a utility with multiple definitions works ([#5870](https://github.com/tailwindlabs/tailwindcss/pull/5870))
 
 ## [3.0.0-alpha.1] - 2021-10-01
 
@@ -77,7 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Ensure `corePlugins`  order is consisent in AOT mode ([#5928](https://github.com/tailwindlabs/tailwindcss/pull/5928))
+- Ensure `corePlugins` order is consisent in AOT mode ([#5928](https://github.com/tailwindlabs/tailwindcss/pull/5928))
 
 ## [2.2.18] - 2021-10-29
 
@@ -1649,7 +1668,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.2...HEAD
+[3.0.0-alpha.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.1...v3.0.0-alpha.2
 [3.0.0-alpha.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.19...v3.0.0-alpha.1
 [2.2.19]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.18...v2.2.19
 [2.2.18]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.17...v2.2.18

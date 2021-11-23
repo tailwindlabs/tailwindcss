@@ -15,6 +15,7 @@ import {
   relativeSize,
   position,
   lineWidth,
+  shadow,
 } from './dataTypes'
 import negateValue from './negateValue'
 
@@ -148,6 +149,7 @@ let typeMap = {
   'line-width': guess(lineWidth),
   'absolute-size': guess(absoluteSize),
   'relative-size': guess(relativeSize),
+  shadow: guess(shadow),
 }
 
 let supportedTypes = Object.keys(typeMap)

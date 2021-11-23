@@ -3,12 +3,28 @@ let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
 let resolveToolRoot = require('../../resolve-tool-root')
 
+let version = require('../../../package.json').version
+
 let { readOutputFile, writeInputFile, cleanupFile, fileExists, removeFile } = require('../../io')({
   output: 'dist',
   input: 'src',
 })
 
 let EXECUTABLE = 'node ../../lib/cli.js'
+
+function dedent(input) {
+  let lines = input.split('\n')
+
+  let minIndent = lines.reduce(
+    (min, line) => Math.min(min, line.trim() === '' ? Infinity : line.match(/^\s*/)[0].length),
+    Infinity
+  )
+
+  return lines
+    .map((line) => line.slice(minIndent))
+    .join('\n')
+    .trim()
+}
 
 describe('Build command', () => {
   test('--output', async () => {
@@ -264,26 +280,25 @@ describe('Build command', () => {
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} --help`)
 
-    expect(combined).toMatchInlineSnapshot(`
-      "
-      tailwindcss v3.0.0-alpha.1
+    expect(dedent(combined)).toEqual(
+      dedent(`
+        tailwindcss v${version}
 
-      Usage:
-         tailwindcss build [options]
+        Usage:
+           tailwindcss build [options]
 
-      Options:
-         -i, --input              Input file
-         -o, --output             Output file
-         -w, --watch              Watch for changes and rebuild as needed
-             --content            Content paths to use for removing unused classes
-             --postcss            Load custom PostCSS configuration
-         -m, --minify             Minify the output
-         -c, --config             Path to a custom config file
-             --no-autoprefixer    Disable autoprefixer
-         -h, --help               Display usage information
-
-      "
-    `)
+        Options:
+           -i, --input              Input file
+           -o, --output             Output file
+           -w, --watch              Watch for changes and rebuild as needed
+               --content            Content paths to use for removing unused classes
+               --postcss            Load custom PostCSS configuration
+           -m, --minify             Minify the output
+           -c, --config             Path to a custom config file
+               --no-autoprefixer    Disable autoprefixer
+           -h, --help               Display usage information
+      `)
+    )
   })
 })
 
@@ -325,19 +340,18 @@ describe('Init command', () => {
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} init --help`)
 
-    expect(combined).toMatchInlineSnapshot(`
-      "
-      tailwindcss v3.0.0-alpha.1
+    expect(dedent(combined)).toEqual(
+      dedent(`
+        tailwindcss v${version}
 
-      Usage:
-         tailwindcss init [options]
+        Usage:
+           tailwindcss init [options]
 
-      Options:
-         -f, --full               Initialize a full \`tailwind.config.js\` file
-         -p, --postcss            Initialize a \`postcss.config.js\` file
-         -h, --help               Display usage information
-
-      "
-    `)
+        Options:
+           -f, --full               Initialize a full \`tailwind.config.js\` file
+           -p, --postcss            Initialize a \`postcss.config.js\` file
+           -h, --help               Display usage information
+      `)
+    )
   })
 })

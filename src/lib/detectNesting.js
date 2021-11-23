@@ -2,6 +2,23 @@ export default function (_context) {
   return (root, result) => {
     let found = false
 
+    root.walkAtRules('tailwind', (node) => {
+      if (found) return false
+
+      if (node.parent && node.parent.type !== 'root') {
+        found = true
+        node.warn(
+          result,
+          [
+            'Nested @tailwind rules were detected, but are not supported.',
+            "Consider using a prefix to scope Tailwind's classes: https://tailwindcss.com/docs/configuration#prefix",
+            'Alternatively, use the important selector strategy: https://tailwindcss.com/docs/configuration#selector-strategy',
+          ].join('\n')
+        )
+        return false
+      }
+    })
+
     root.walkRules((rule) => {
       if (found) return false
 
@@ -9,10 +26,12 @@ export default function (_context) {
         found = true
         nestedRule.warn(
           result,
-          // TODO: Improve this warning message
-          'Nested CSS detected, checkout the docs on how to support nesting: https://tailwindcss.com/docs/using-with-preprocessors#nesting'
+          [
+            'Nested CSS was detected, but CSS nesting has not been configured correctly.',
+            'Please enable a CSS nesting plugin *before* Tailwind in your configuration.',
+            'See how here: https://tailwindcss.com/docs/using-with-preprocessors#nesting',
+          ].join('\n')
         )
-
         return false
       })
     })
