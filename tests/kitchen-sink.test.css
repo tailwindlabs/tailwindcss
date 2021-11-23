@@ -509,11 +509,6 @@ div {
     }
   }
 }
-@media (orientation: portrait) {
-  .portrait\:text-center {
-    text-align: center;
-  }
-}
 @media (min-width: 1280px) and (max-width: 1535px) {
   .range\:text-right {
     text-align: right;
