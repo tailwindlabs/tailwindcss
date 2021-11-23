@@ -115,7 +115,7 @@ module.exports = {
       auto: 'auto',
       square: '1 / 1',
       video: '16 / 9',
-      dimensions: 'attr(width) / attr(height)'
+      attrs: 'attr(width) / attr(height)'
     },
     backdropBlur: ({ theme }) => theme('blur'),
     backdropBrightness: ({ theme }) => theme('brightness'),
