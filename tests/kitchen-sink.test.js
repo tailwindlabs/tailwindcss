@@ -11,7 +11,6 @@ test('it works', () => {
     theme: {
       extend: {
         screens: {
-          portrait: { raw: '(orientation: portrait)' },
           range: { min: '1280px', max: '1535px' },
           multi: [{ min: '640px', max: '767px' }, { max: '868px' }],
         },
