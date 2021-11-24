@@ -802,29 +802,23 @@
 .underline {
   text-decoration: underline;
 }
-.decoration-underline {
-  text-decoration: underline;
-}
 .decoration-red-600 {
   text-decoration-color: #dc2626;
 }
 .decoration-solid {
   text-decoration-style: solid;
 }
-.decoration {
+.decoration-1 {
   text-decoration-thickness: 1px;
 }
 .decoration-2 {
   text-decoration-thickness: 2px;
 }
-.underline-offset {
+.underline-offset-1 {
   text-underline-offset: 1px;
 }
 .underline-offset-2 {
   text-underline-offset: 2px;
-}
-.underline-right {
-  text-underline-position: right;
 }
 .antialiased {
   -webkit-font-smoothing: antialiased;

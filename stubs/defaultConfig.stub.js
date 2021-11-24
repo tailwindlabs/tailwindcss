@@ -799,6 +799,8 @@ module.exports = {
     textColor: ({ theme }) => theme('colors'),
     textDecorationColor: ({ theme }) => theme('colors'),
     textDecorationThickness: {
+      auto: 'auto',
+      'from-font': 'from-font',
       0: '0px',
       1: '1px',
       2: '2px',
@@ -806,6 +808,7 @@ module.exports = {
       8: '8px',
     },
     textUnderlineOffset: {
+      auto: 'auto',
       0: '0px',
       1: '1px',
       2: '2px',
