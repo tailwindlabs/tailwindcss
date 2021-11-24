@@ -1396,8 +1396,10 @@ export let corePlugins = {
 
   boxDecorationBreak: ({ addUtilities }) => {
     addUtilities({
-      '.decoration-slice': { 'box-decoration-break': 'slice' },
-      '.decoration-clone': { 'box-decoration-break': 'clone' },
+      '.decoration-slice': { 'box-decoration-break': 'slice' }, // Deprecated
+      '.decoration-clone': { 'box-decoration-break': 'clone' }, // Deprecated
+      '.box-decoration-slice': { 'box-decoration-break': 'slice' },
+      '.box-decoration-clone': { 'box-decoration-break': 'clone' },
     })
   },
 
@@ -1655,6 +1657,7 @@ export let corePlugins = {
   textDecoration: ({ addUtilities }) => {
     addUtilities({
       '.underline': { 'text-decoration': 'underline' },
+      '.overline': { 'text-decoration': 'overline' },
       '.line-through': { 'text-decoration': 'line-through' },
       '.no-underline': { 'text-decoration': 'none' },
     })
@@ -1670,6 +1673,28 @@ export let corePlugins = {
       { values: flattenColorPalette(theme('textDecorationColor')), type: ['color', 'any'] }
     )
   },
+
+  textDecorationStyle: ({ addUtilities }) => {
+    addUtilities({
+      '.decoration-solid': { 'text-decoration-style': 'solid' },
+      '.decoration-double': { 'text-decoration-style': 'double' },
+      '.decoration-dotted': { 'text-decoration-style': 'dotted' },
+      '.decoration-dashed': { 'text-decoration-style': 'dashed' },
+      '.decoration-wavy': { 'text-decoration-style': 'wavy' },
+    })
+  },
+
+  textDecorationThickness: createUtilityPlugin(
+    'textDecorationThickness',
+    [['decoration', ['text-decoration-thickness']]],
+    { type: ['length', 'percentage'] }
+  ),
+
+  textUnderlineOffset: createUtilityPlugin(
+    'textUnderlineOffset',
+    [['underline-offset', ['text-underline-offset']]],
+    { type: ['length', 'percentage'] }
+  ),
 
   fontSmoothing: ({ addUtilities }) => {
     addUtilities({
