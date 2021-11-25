@@ -16,6 +16,24 @@ test('arbitrary values', () => {
   })
 })
 
+it('should support modifiers for arbitrary values that contain the separator', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="hover:bg-[url('https://github.com/tailwindlabs.png')]"></div> `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .hover\:bg-\[url\(\'https\:\/\/github\.com\/tailwindlabs\.png\'\)\]:hover {
+        background-image: url('https://github.com/tailwindlabs.png');
+      }
+    `)
+  })
+})
+
 it('should support arbitrary values for various background utilities', () => {
   let config = {
     content: [
