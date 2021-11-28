@@ -258,6 +258,16 @@ summary {
   display: list-item;
 }
 
+/* 
+Removes the default spacing and list style for `main` element.
+*/
+
+main {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
 /*
 Removes the default spacing and border for appropriate elements.
 */
