@@ -1670,7 +1670,7 @@ export let corePlugins = {
           return { 'text-decoration-color': toColorValue(value) }
         },
       },
-      { values: flattenColorPalette(theme('textDecorationColor')), type: ['color', 'any'] }
+      { values: flattenColorPalette(theme('textDecorationColor')), type: ['color'] }
     )
   },
 

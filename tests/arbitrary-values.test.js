@@ -16,6 +16,28 @@ test('arbitrary values', () => {
   })
 })
 
+it('should be possible to differentiate between decoration utilities', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="decoration-[3px] decoration-[#ccc]"></div> `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .decoration-\[\#ccc\] {
+        text-decoration-color: #ccc;
+      }
+
+      .decoration-\[3px\] {
+        text-decoration-thickness: 3px;
+      }
+    `)
+  })
+})
+
 it('should support modifiers for arbitrary values that contain the separator', () => {
   let config = {
     content: [
