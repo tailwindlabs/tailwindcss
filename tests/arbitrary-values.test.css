@@ -368,10 +368,13 @@
 .scroll-pt-\[var\(--scroll-padding\)\] {
   scroll-padding-top: var(--scroll-padding);
 }
+.list-\[url\(\'\/path-to-image\.png\'\)\] {
+  list-style-image: url('/path-to-image.png');
+}
 .list-\[\'\\1f44d\'\] {
   list-style-type: '\1F44D';
 }
-.list-\[var\(--value\)\] {
+.list-\[string\:var\(--value\)\] {
   list-style-type: var(--value);
 }
 .columns-\[20\] {

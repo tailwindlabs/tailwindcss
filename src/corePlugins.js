@@ -751,6 +751,10 @@ export let corePlugins = {
     ],
   ]),
 
+  listStyleImage: createUtilityPlugin('listStyleImage', [['list', ['list-style-image']]], {
+    type: ['lookup', 'url'],
+  }),
+
   listStylePosition: ({ addUtilities }) => {
     addUtilities({
       '.list-inside': { 'list-style-position': 'inside' },
@@ -758,7 +762,9 @@ export let corePlugins = {
     })
   },
 
-  listStyleType: createUtilityPlugin('listStyleType', [['list', ['listStyleType']]]),
+  listStyleType: createUtilityPlugin('listStyleType', [['list', ['listStyleType']]], {
+    type: ['lookup', 'string'],
+  }),
 
   appearance: ({ addUtilities }) => {
     addUtilities({
