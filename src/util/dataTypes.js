@@ -1,6 +1,8 @@
 import { parseColor } from './color'
 import { parseBoxShadowValue } from './parseBoxShadowValue'
 
+let cssFunctions = ['min', 'max', 'clamp', 'calc']
+
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
 let COMMA = /,(?![^(]*\))/g // Comma separator that is not located between brackets. E.g.: `cubiz-bezier(a, b, c)` these don't count.
@@ -51,11 +53,11 @@ export function url(value) {
 }
 
 export function number(value) {
-  return !isNaN(Number(value))
+  return !isNaN(Number(value)) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?`).test(value))
 }
 
 export function percentage(value) {
-  return /%$/g.test(value) || /^calc\(.+?%\)/g.test(value)
+  return /%$/g.test(value) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(value))
 }
 
 let lengthUnits = [
@@ -79,9 +81,9 @@ let lengthUnits = [
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
   return (
+    value === 0 ||
     new RegExp(`${lengthUnitsPattern}$`).test(value) ||
-    new RegExp(`^calc\\(.+?${lengthUnitsPattern}`).test(value) ||
-    value === 0
+    cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?${lengthUnitsPattern}`).test(value))
   )
 }
 

@@ -139,6 +139,9 @@
 .min-h-\[var\(--height\)\] {
   min-height: var(--height);
 }
+.w-\[0\] {
+  width: 0;
+}
 .w-\[3\.23rem\] {
   width: 3.23rem;
 }
@@ -766,6 +769,9 @@
 }
 .text-\[length\:var\(--font-size\)\] {
   font-size: var(--font-size);
+}
+.text-\[min\(10vh\2c 100px\)\] {
+  font-size: min(10vh, 100px);
 }
 .font-\[300\] {
   font-weight: 300;
