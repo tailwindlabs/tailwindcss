@@ -764,6 +764,9 @@
 .font-\[\'Some_Font\'\2c var\(--other-font\)\] {
   font-family: 'Some Font', var(--other-font);
 }
+.text-\[0\] {
+  font-size: 0;
+}
 .text-\[2\.23rem\] {
   font-size: 2.23rem;
 }
