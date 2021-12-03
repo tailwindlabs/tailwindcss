@@ -80,7 +80,8 @@ let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
   return (
     new RegExp(`${lengthUnitsPattern}$`).test(value) ||
-    new RegExp(`^calc\\(.+?${lengthUnitsPattern}`).test(value)
+    new RegExp(`^calc\\(.+?${lengthUnitsPattern}`).test(value) ||
+    value === 0
   )
 }
 
