@@ -139,6 +139,9 @@
 .min-h-\[var\(--height\)\] {
   min-height: var(--height);
 }
+.w-\[0\] {
+  width: 0;
+}
 .w-\[3\.23rem\] {
   width: 3.23rem;
 }
