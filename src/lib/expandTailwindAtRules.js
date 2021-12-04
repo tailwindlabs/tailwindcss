@@ -39,6 +39,7 @@ const builtInTransformers = {
 
 function getExtractor(tailwindConfig, fileExtension) {
   let extractors = tailwindConfig.content.extract
+  fileExtension = fileExtension.replace(/\./g, '')
 
   return (
     extractors[fileExtension] ||
@@ -50,6 +51,7 @@ function getExtractor(tailwindConfig, fileExtension) {
 
 function getTransformer(tailwindConfig, fileExtension) {
   let transformers = tailwindConfig.content.transform
+  fileExtension = fileExtension.replace(/\./g, '')
 
   return (
     transformers[fileExtension] ||
