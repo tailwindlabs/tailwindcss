@@ -80,11 +80,13 @@ let lengthUnits = [
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
-  return (
-    value === '0' ||
-    new RegExp(`${lengthUnitsPattern}$`).test(value) ||
-    cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?${lengthUnitsPattern}`).test(value))
-  )
+  return value.split(UNDERSCORE).every((part) => {
+    return (
+      part === '0' ||
+      new RegExp(`${lengthUnitsPattern}$`).test(part) ||
+      cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?${lengthUnitsPattern}`).test(part))
+    )
+  })
 }
 
 let lineWidths = new Set(['thin', 'medium', 'thick'])

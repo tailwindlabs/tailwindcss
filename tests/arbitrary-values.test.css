@@ -666,6 +666,9 @@
 .bg-\[length\:var\(--value\)\] {
   background-size: var(--value);
 }
+.bg-\[center_top_1rem\] {
+  background-position: center top 1rem;
+}
 .bg-\[position\:200px_100px\] {
   background-position: 200px 100px;
 }
