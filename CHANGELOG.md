@@ -21,7 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `text-decoration-style`, `text-decoration-thickness`, and `text-underline-offset` utilities ([#6004](https://github.com/tailwindlabs/tailwindcss/pull/6004))
 - Add `menu` reset to preflight ([#6213](https://github.com/tailwindlabs/tailwindcss/pull/6213))
 - Allow `0` as a valid `length` value ([#6233](https://github.com/tailwindlabs/tailwindcss/pull/6233), [#6259](https://github.com/tailwindlabs/tailwindcss/pull/6259))
-- Add css functions to data types ([#6258](https://github.com/tailwindlabs/tailwindcss/pull/6258))
+- Add CSS functions to data types ([#6258](https://github.com/tailwindlabs/tailwindcss/pull/6258))
+- Add CSS functions to data types ([#6258](https://github.com/tailwindlabs/tailwindcss/pull/6258))
+- Support negative values for `scale-*` utilities ([c48e629](https://github.com/tailwindlabs/tailwindcss/commit/c48e629955585ad18dadba9f470fda59cc448ab7))
 
 ### Changed
 
