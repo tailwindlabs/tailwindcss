@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `placeholder` variant ([#6106](https://github.com/tailwindlabs/tailwindcss/pull/6106))
 - Add tuple syntax for configuring screens while guaranteeing order ([#5956](https://github.com/tailwindlabs/tailwindcss/pull/5956))
-- Add combinable `touch-action` support ([#6115](https://github.com/tailwindlabs/tailwindcss/pull/6115))
+- Add composable `touch-action` utilities ([#6115](https://github.com/tailwindlabs/tailwindcss/pull/6115))
 - Add support for "arbitrary properties" ([#6161](https://github.com/tailwindlabs/tailwindcss/pull/6161))
 - Add `portrait` and `landscape` variants ([#6046](https://github.com/tailwindlabs/tailwindcss/pull/6046))
 - Add `text-decoration-style`, `text-decoration-thickness`, and `text-underline-offset` utilities ([#6004](https://github.com/tailwindlabs/tailwindcss/pull/6004))
