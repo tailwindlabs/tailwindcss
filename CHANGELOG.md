@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add CSS functions to data types ([#6258](https://github.com/tailwindlabs/tailwindcss/pull/6258))
 - Add CSS functions to data types ([#6258](https://github.com/tailwindlabs/tailwindcss/pull/6258))
 - Support negative values for `scale-*` utilities ([c48e629](https://github.com/tailwindlabs/tailwindcss/commit/c48e629955585ad18dadba9f470fda59cc448ab7))
+- Improve `length` data type, by validating each value individually ([#6283](https://github.com/tailwindlabs/tailwindcss/pull/6283))
 
 ### Changed
 
