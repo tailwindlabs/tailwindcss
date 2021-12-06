@@ -6,6 +6,7 @@
 .skew-y-12,
 .skew-x-12,
 .scale-95,
+.-scale-x-100,
 .transform {
   --tw-translate-x: 0;
   --tw-translate-y: 0;
@@ -357,6 +358,10 @@
 .scale-95 {
   --tw-scale-x: 0.95;
   --tw-scale-y: 0.95;
+  transform: var(--tw-transform);
+}
+.-scale-x-100 {
+  --tw-scale-x: -1;
   transform: var(--tw-transform);
 }
 .transform {
