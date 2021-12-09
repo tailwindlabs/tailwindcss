@@ -301,5 +301,10 @@
     "source": "/upgrading-to-v2",
     "destination": "https://v2.tailwindcss.com/docs/upgrading-to-v2",
     "permanent": false
+  },
+  {
+    "source": "/docs/configuring-variants",
+    "destination": "https://v2.tailwindcss.com/docs/configuring-variants",
+    "permanent": false
   }
 ]
