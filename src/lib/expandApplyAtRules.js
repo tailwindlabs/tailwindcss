@@ -129,10 +129,10 @@ function processApply(root, context) {
     // TODO: Should we use postcss-selector-parser for this instead?
     function replaceSelector(selector, utilitySelectors, candidate) {
       let needle = `.${escapeClassName(candidate)}`
-      let utilitySelectorsList = utilitySelectors.split(/\s*,\s*/g)
+      let utilitySelectorsList = utilitySelectors.split(/\s*\,(?![^(]*\))\s*/g)
 
       return selector
-        .split(/\s*,\s*/g)
+        .split(/\s*\,(?![^(]*\))\s*/g)
         .map((s) => {
           let replaced = []
 
