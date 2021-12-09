@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.0.0] - 2021-12-09
+
 ### Fixed
 
 - Enforce the order of some variants (like `before` and `after`) ([#6018](https://github.com/tailwindlabs/tailwindcss/pull/6018))
@@ -1677,7 +1681,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.2...v3.0.0
 [3.0.0-alpha.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.1...v3.0.0-alpha.2
 [3.0.0-alpha.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.19...v3.0.0-alpha.1
 [2.2.19]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.18...v2.2.19
