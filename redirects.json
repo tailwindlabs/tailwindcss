@@ -306,5 +306,10 @@
     "source": "/docs/configuring-variants",
     "destination": "https://v2.tailwindcss.com/docs/configuring-variants",
     "permanent": false
+  },
+  {
+    "source": "/docs/guides/vue-3-vite",
+    "destination": "/docs/guides/vite",
+    "permanent": false
   }
 ]
