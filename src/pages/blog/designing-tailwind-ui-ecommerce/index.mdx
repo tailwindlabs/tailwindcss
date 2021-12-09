@@ -1,0 +1,135 @@
+import { adamwathan } from '@/authors'
+import card from './card.jpg'
+
+export const meta = {
+  private: true,
+  title: 'Designing Tailwind UI Ecommerce',
+  description: `Hey! We've been working on this new Tailwind UI Ecommerce kit for months now and are finally closing in on the finish line so I thought I'd write up a bit about the process and give you an update on where things are at.`,
+  date: '2021-08-07T12:45:00.0Z',
+  authors: [adamwathan],
+  image: card,
+}
+
+Hey! We've been working on this new Tailwind UI Ecommerce kit for months now and are finally closing in on the finish line so I thought I'd write up a bit about the process and give you an update on where things are at.
+
+Designing and building a big component kit like this is a _huge_ amount of work. If you weren't following along when Steve and I started working on Tailwind UI in the first place, it took about 10 months before we had something we felt good about releasing. We designed dozens of components only to scrap all of them and start from scratch at least three separate times. _Oof._
+
+We've learned a lot since then and have really refined our process, and it's made putting together these ecommerce ideas go a lot smoother.
+
+---
+
+**The first step was to research and catalog**. We started by studying as many ecommerce sites as we could possibly find and cataloging every UI pattern we could pick out, like:
+
+- Product overviews
+- Product lists
+- Product feature details
+- Category previews
+- Checkout forms
+- Shopping carts
+- Category filters
+- Customer reviews
+- Order history
+- Order details
+- Category mega menus
+- Product quickviews
+- Promo sections
+
+We scoured dozens of different types of stores as part of this research, including clothing stores like [Everlane](https://www.everlane.com/), shoe stores like [Allbirds](https://www.allbirds.com/), office accessory makers like [Grovemade](https://grovemade.com/), mattress companies like [Casper](https://casper.com/), audio plugin developers like [Toontrack](https://www.toontrack.com/), and tons more. We tried not to focus on any one specific _type_ of store, and I think that really helped in identifying which patterns are truly universal for these types of sites, and how different ideas fit into those patterns.
+
+Some of them were pretty hard to identify, especially because there's quite a bit of overlap between the sort of patterns you see in an ecommerce site and in a more brochure-style marketing website.
+
+For example, this section isn't really that different from a hero section you might see on a marketing site:
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/adidas-hero.jpg)
+
+So should the ecommerce kit have "Hero Sections" too, like the marketing kit? And if so what makes them different — why have two duplicate categories?
+
+It took a lot of research and thinking before we eventually noticed that in ecommerce sites, the "hero" is almost _never_ a real hero. It's never something with like a summary of the whole brand or anything, like "Handmade office accessories for the modern knowledge worker", it's always some timely promotional thing like "Get 50% off until the end of the summer" or "Our fall collection just dropped, explore it now".
+
+We also noticed that these "hero" sections were almost always designs that could very easily be moved to the middle of the page — they were never really true "header" content. This is when we came up with the concept of a "promo section", which is like a big banner that promotes a sale or a new product and _could_ be used as a hero, but could also be mixed in with other page content as well.
+
+There were lots of little eureka moments like this that don't seem like much when you see the finished result but man, it is hard work to figure this stuff out. Organizing and categorizing all of these ideas was almost as much work as designing them.
+
+---
+
+**Next was designing full page examples**. If there's one thing we learned from the initial work on the Application UI and Marketing packages, it's that the components you extract are a lot better when designed in the context of a complete page.
+
+For the first set of Tailwind UI stuff, we did a lot of designing in isolation, just thinking through a nice pagination design for example. But what we found is that when we started putting all that stuff together into real UIs, lots of little things felt off.
+
+Sometimes it was the font size being a little too big compared to other elements in the design, maybe not using enough whitespace, or giving an element too much contrast, making it stand out against the rest of the page when it was supposed to feel like secondary content. When we reworked our approach to always _extract_ smaller examples from bigger examples, everything really started to click a lot better.
+
+So for the ecommerce package, we designed _everything_ as page examples from the very beginning. In total, we've designed around 50 complete pages so far, including home pages, category listings, product pages, checkout forms, and tons more.
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/50-pages.jpg)
+
+We'd reuse a few things across pages to move quickly (like footer or navbar ideas), but generally we tried to make every core element of every page unique, to generate as many ideas as possible.
+
+---
+
+**Then we built the pages.** A lot of folks assume we have this like really clean design hand-off process where we create these bullet-proof, perfect Figma designs, then implement them exactly as-is in their perfect form but that's totally not true at all.
+
+What happens instead is we take the full page designs that are in _pretty good_ shape, build them as best we can, then we review the finished designs together in the browser to make adjustments. Usually there are a _lot_ of little changes that happen, especially stuff related to little spacing details that are just easier to judge in the browser than they are in a design file. Sometimes though we make really drastic changes, like totally replacing part of the design with something else if we decide it just doesn't look as good as we hoped, or if it would make the code extremely complicated to match the design exactly but for little or no benefit over a slightly different design.
+
+Here's an example of a design that changed a _lot_ during the building process — Figma on the left, final HTML version on the right:
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/figma-vs-html.jpg)
+
+Definitely think everything turns out a lot better when we are open to iterating on designs like this as we go instead of just throwing them over the wall.
+
+If you're interested in the actual process we use for writing the templates, we author them in a sort of home-grown templating language driven by PostHTML, which we ultimately use to render the components to multiple targets, like HTML, React, and Vue.
+
+Here's what it looks like:
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/templating-sample.jpg)
+
+You can read more about it [in this email I sent back in April](https://blog.tailwindcss.com/building-react-and-vue-support-for-tailwind-ui) if you're curious about more of the details!
+
+---
+
+**Next, we extracted the individual components.** Once the page designs are finalized and built, we extract the individual elements into their own templates. This is where "Product Overviews" are extracted from product pages, "Product Lists" are extracted from category pages, and "Promo Sections" are extracted from storefront home pages.
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/exploded-view.jpg)
+
+The thing that's tough about this process is it's not really as simple as just "a page is comprised of components" — as you probably know even _components_ are comprised of components, so deciding exactly how to slice things for Tailwind UI is always tough.
+
+Generally we err on the side of bigger components, because it's easy for someone to pull out a small piece of a bigger component if they like it and want to use it elsewhere, but it's not always easy to come up with ideas for the bigger components yourself if all you have is the tiny individual pieces.
+
+The way I like to think about it is we're trying to give you pre-built LEGO creations, not just the bricks.
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/lego.jpeg)
+
+It's easy to take the wheels off the truck if that's all you need — it's harder to turn the wheels, a seat, and some headlights into a nice truck from scratch though.
+
+For example, this single "Product Overview" section could be cut up into a bunch of smaller components:
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/product-overview.jpg)
+
+There's an image gallery, a star review widget, a color swatch picker, and a feature accordion there at a bare minimum. But I think providing it holistically like this is the better place to start — you can still grab all that stuff if you need it but as a bigger component it also serves as _inspiration_ and that's a really important ingredient in what makes Tailwind UI a cool product.
+
+We might extract a lot of these things into smaller components as well down the road, but I definitely think this "outside-in" approach is the right way to go overall.
+
+---
+
+**Finally, take inventory, and repeat the whole thing.** A lesson I keep re-learning over and over again about product design is that no amount of planning will lead to the right product on the first try. You have to be keep iterating and improving — it's not a linear process.
+
+For this ecommerce kit, we couldn't really see where the holes were in the product until we had designed and built a bunch of pages, extracted all of those components, and then assessed where we were at.
+
+We noticed a bunch of things we were blind to at first, for example, we only had two mega menu ideas — probably because it was really easy to just not design the "open" state of any navbar when designing new pages. So we went back to the design step, and came up with a bunch of new concepts to flesh out the category.
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/mega-menu-concepts.jpg)
+
+We also noticed that we had a disproportionate number of sort of card-based designs on off-white backgrounds, and not enough just flat simple designs which I think is a lot more common in ecommerce design. So we went back to the beginning and designed a bunch of new pages to fill this gap as well:
+
+![](https://tailwindui.nyc3.cdn.digitaloceanspaces.com/20210806-ecommerce-update/white-backgrounds.jpg)
+
+We're less than a week away from when we hope to release this thing and every day we are _still_ designing brand new things to fill gaps we are identifying as we get closer to the finish line. The product is getting more awesome every day though, and I think these are the best designs we've come up with for Tailwind UI period _(thank god really, getting worse at this would be depressing.)_
+
+---
+
+**So when is it coming out?** I don't want to make any promises but we are trying _really_ hard to get this thing out the door mid-next week. I'll definitely send out another update when we know for sure, but it's looking good right now even though we've still got a lot to wrap up.
+
+As mentioned in an earlier update, the ecommerce kit is a separate product so it will be a paid add-on for existing customers, but if you already own the Marketing and Application UI packages, it's going to be _really_ affordable, like cheaper than taking your kids out for lunch sort of territory. I **hate** when companies give the best deals to new customers _(hello telecom industry)_ instead of rewarding the people who supported them from the beginning, and we will never be that type of business.
+
+Thanks as always for following along — look for another update early next week, and fingers crossed we'll have this ready for release shortly after!
+
+– Adam

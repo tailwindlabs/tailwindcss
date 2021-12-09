@@ -1,123 +1,126 @@
 ---
 title: "Height"
-description: "Utilities for setting the height of an element"
+description: "Utilities for setting the height of an element."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/height'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=height'
 import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
+  utilities,
   sort: numbersFirst,
 }
 
-## Auto
+## Basic usage
 
-Use `h-auto` to let the browser determine the height for the element.
-
-```html amber
-<template preview>
-  <div class="h-auto w-40 mx-auto rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center p-6">h-auto</div>
-</template>
-
-<div class="**h-auto** ...">h-auto</div>
-```
-
-## Screen height
-
-Use `h-screen` to make an element span the entire height of the viewport.
-
-```html rose
-<template preview>
-  <div class="h-screen mx-auto rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center p-6">h-screen</div>
-</template>
-
-<div class="**h-screen** p-6 ...">h-screen</div>
-```
-
-## Fixed height
+### Fixed heights
 
 Use `h-{number}` or `h-px` to set an element to a fixed height.
 
-```html indigo
-<template preview>
-    <div class="flex justify-around items-end space-between-3">
-        <div>
-            <div class="h-8 w-8 rounded-md bg-indigo-500 text-white text-2xl font-extrabold"></div>
-            <p class="text-center mt-2 text-sm text-indigo-600">h-8</p>
-        </div>
-        <div>
-            <div class="h-12 w-8 rounded-md bg-indigo-500 text-white text-2xl font-extrabold"></div>
-            <p class="text-center mt-2 text-sm text-indigo-600">h-12</p>
-        </div>
-        <div>
-            <div class="h-16 w-8 rounded-md bg-indigo-500 text-white text-2xl font-extrabold"></div>
-            <p class="text-center mt-2 text-sm text-indigo-600">h-16</p>
-        </div>
-        <div>
-            <div class="h-24 w-8 rounded-md bg-indigo-500 text-white text-2xl font-extrabold"></div>
-            <p class="text-center mt-2 text-sm text-indigo-600">h-24</p>
-        </div>
+<Example>
+  <div class="flex justify-center items-end space-x-4 font-mono font-bold text-xs text-center text-white">
+    <div class="w-8 bg-blue-500 rounded-lg shadow-lg h-96 relative">
+      <div class="absolute w-8 bottom-6">
+        <div class="-rotate-90">h-96</div>
+      </div>
     </div>
-</template>
+    <div class="w-8 bg-blue-500 rounded-lg shadow-lg h-80 relative">
+      <div class="absolute w-8 bottom-6">
+        <div class="-rotate-90">h-80</div>
+      </div>
+    </div>
+    <div class="w-8 bg-blue-500 rounded-lg shadow-lg h-64 relative">
+      <div class="absolute w-8 bottom-6">
+        <div class="-rotate-90">h-64</div>
+      </div>
+    </div>
+    <div class="w-8 bg-blue-500 rounded-lg shadow-lg h-48 relative">
+      <div class="absolute w-8 bottom-6">
+        <div class="-rotate-90">h-48</div>
+      </div>
+    </div>
+    <div class="w-8 bg-blue-500 rounded-lg shadow-lg h-40 relative">
+      <div class="absolute w-8 bottom-6">
+        <div class="-rotate-90">h-40</div>
+      </div>
+    </div>
+    <div class="w-8 bg-blue-500 rounded-lg shadow-lg h-32 relative">
+      <div class="absolute w-8 bottom-6">
+        <div class="-rotate-90">h-32</div>
+      </div>
+    </div>
+    <div class="w-8 bg-blue-500 rounded-lg shadow-lg h-24 relative">
+      <div class="absolute w-8 bottom-6">
+        <div class="-rotate-90">h-24</div>
+      </div>
+    </div>
+  </div>
+</Example>
 
-<div>
-    <div class="**h-8** ..."></div>
-    <div class="**h-12** ..."></div>
-    <div class="**h-16** ..."></div>
-    <div class="**h-24** ..."></div>
-</div>
+```html
+<div class="**h-96** ...">h-96</div>
+<div class="**h-80** ...">h-80</div>
+<div class="**h-64** ...">h-64</div>
+<div class="**h-48** ...">h-48</div>
+<div class="**h-40** ...">h-40</div>
+<div class="**h-32** ...">h-32</div>
+<div class="**h-24** ...">h-24</div>
 ```
 
-## Full height
+### Full height
 
 Use `h-full` to set an element's height to 100% of its parent, as long as the parent has a defined height.
 
 ```html
-<template preview class="flex justify-around items-end text-sm p-4">
-  <div class="h-48">
-    <div class="h-full w-40 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center p-6">h-full</div>
-  </div>
-</template>
-
 <div class="h-48">
-  <div class="**h-full** ...">h-full</div>
+  <div class="**h-full** ...">
+    <!-- This element will have a height of `12rem` (h-48) -->
+  </div>
+</div>
+```
+
+### Viewport height
+
+Use `h-screen` to make an element span the entire height of the viewport.
+
+```html
+<div class="**h-screen**">
+  <!-- ... -->
 </div>
 ```
 
 ---
 
-## Responsive
+## <Heading ignore>Applying conditionally</Heading>
 
-To control the height of an element at a specific breakpoint, add a `{screen}:` prefix to any existing width utility. For example, adding the class `md:h-full` to an element would apply the `h-full` utility at medium screen sizes and above.
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-```html
-<div class="h-8 **md:h-full**"></div>
-```
+<HoverFocusAndOtherStates defaultClass="h-8" featuredClass="h-full" />
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="h-8" featuredClass="h-full" />
 
 ---
 
-## Customizing
+## Using custom values
 
-### Height Scale
+### Customizing your theme
 
 By default, Tailwind's height scale is a combination of the [default spacing scale](/docs/customizing-spacing#default-spacing-scale) as well as some additional values specific to heights.
 
-You can customize the spacing scale for padding, margin, width, and height all at once in the `theme.spacing` section of your `tailwind.config.js` file:
+You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      spacing: {
-+       sm: '8px',
-+       md: '16px',
-+       lg: '24px',
-+       xl: '48px',
+      extend: {
++       spacing: {
++         '128': '32rem',
++       }
       }
     }
   }
@@ -125,24 +128,20 @@ You can customize the spacing scale for padding, margin, width, and height all a
 
 To customize height separately, use the `theme.height` section of your `tailwind.config.js` file.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      height: {
-+       sm: '8px',
-+       md: '16px',
-+       lg: '24px',
-+       xl: '48px',
+      extend: {
++       height: {
++         '128': '32rem',
++       }
       }
     }
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="height" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="height" />
+<ArbitraryValues property="height" featuredClass="h-[32rem]" />

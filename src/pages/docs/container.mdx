@@ -3,56 +3,60 @@ title: "Container"
 description: "A component for fixing an element's width to the current breakpoint."
 ---
 
-import { defaultConfig } from '@/utils/defaultConfig'
+import defaultConfig from 'defaultConfig'
 export const screens = defaultConfig.theme.screens
 
-export const classes = (
-  <table className="w-full text-left border-collapse">
-    <colgroup>
-      <col className="w-1/4" />
-      <col className="w-1/4" />
-      <col className="w-1/2" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
-          <div className="pb-2 border-b border-gray-200">Class</div>
-        </th>
-        <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
-          <div className="pb-2 border-b border-gray-200">Breakpoint</div>
-        </th>
-        <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
-          <div className="pb-2 border-b border-gray-200">Properties</div>
-        </th>
-      </tr>
-    </thead>
-    <tbody className="align-baseline">
-      <tr>
-        <td translate="no" rowSpan={6} className="py-2 font-mono text-xs text-violet-600 whitespace-nowrap">
-          container
-        </td>
-        <td className="py-2 text-xs italic">
-          None
-        </td>
-        <td translate="no" className="py-2 font-mono text-xs text-light-blue-600 whitespace-pre">
-          width: 100%;
-        </td>
-      </tr>
-      {Object.keys(screens).map((screen) => (
-        <tr key={screen}>
-          <td translate="no" className="py-2 border-t border-gray-200 font-mono text-xs">
-            {screen} <span className="font-sans italic">({screens[screen]})</span>
+export const classes = {
+  custom: (
+    <table className="w-full text-left border-collapse">
+      <colgroup>
+        <col className="w-1/4" />
+        <col className="w-1/4" />
+        <col className="w-1/2" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0">
+            <div className="py-2 pr-2 border-b border-gray-200">Class</div>
+          </th>
+          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0">
+            <div className="py-2 px-2 border-b border-gray-200">Breakpoint</div>
+          </th>
+          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0">
+            <div className="py-2 pl-2 border-b border-gray-200">Properties</div>
+          </th>
+        </tr>
+      </thead>
+      <tbody className="align-baseline">
+        <tr>
+          <td translate="no" rowSpan={6} className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap">
+            container
           </td>
-          <td translate="no" className="py-2 font-mono text-xs text-light-blue-600 whitespace-pre border-t border-gray-200">
-            max-width: {screens[screen]};
+          <td className="py-2 px-2 text-xs italic">
+            None
+          </td>
+          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre">
+            width: 100%;
           </td>
         </tr>
-      ))}
-    </tbody>
-  </table>
-)
+        {Object.keys(screens).map((screen) => (
+          <tr key={screen}>
+            <td translate="no" className="py-2 px-2 border-t border-gray-100 font-mono text-xs">
+              {screen} <span className="font-sans italic">({screens[screen]})</span>
+            </td>
+            <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100">
+              max-width: {screens[screen]};
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ),
+}
 
-## Usage
+## Basic usage
+
+### Using the container
 
 The `container` class sets the `max-width` of an element to match the `min-width` of the current breakpoint. This is useful if you'd prefer to design for a fixed set of screen sizes instead of trying to accommodate a fully fluid viewport.
 
@@ -76,7 +80,11 @@ To add horizontal padding, use the `px-{size}` utilities:
 
 If you'd like to center your containers by default or include default horizontal padding, see the [customization options](#customizing) below.
 
-## Responsive variants
+---
+
+## Applying conditionally
+
+### Responsive variants
 
 The `container` class also includes responsive variants like `md:container` by default that allow you to make something behave like a container at only a certain breakpoint and up:
 
@@ -87,14 +95,15 @@ The `container` class also includes responsive variants like `md:container` by d
 </div>
 ```
 
+---
+
 ## Customizing
 
 ### Centering by default
 
 To center containers by default, set the `center` option to `true` in the `theme.container` section of your config file:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     container: {
@@ -104,12 +113,11 @@ module.exports = {
 }
 ```
 
-### Horizontal padding
+### Adding horizontal padding
 
 To add horizontal padding by default, specify the amount of padding you'd like using the `padding` option in the `theme.container` section of your config file:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     container: {
@@ -121,8 +129,7 @@ module.exports = {
 
 If you want to specify a different padding amount for each breakpoint, use an object to provide a `default` value and any breakpoint-specific overrides:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     container: {
@@ -136,32 +143,4 @@ module.exports = {
     },
   },
 };
-```
-
-### Disabling responsive variants
-
-If you'd like to disable the responsive variants, you can do so using by setting `container` to an empty array in the `variants` section of your `tailwind.config.js` file:
-
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    variants: {
-      // ...
-+     container: [],
-    }
-  }
-```
-
-### Disabling entirely
-
-If you don't plan to use the `container` class in your project, you can disable it entirely by setting the `container` property to `false` in the `corePlugins` section of your config file:
-
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    corePlugins: {
-      // ...
-+     container: false,
-    }
-  }
 ```

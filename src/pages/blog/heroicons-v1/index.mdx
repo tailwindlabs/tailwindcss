@@ -1,0 +1,51 @@
+import { adamwathan } from '@/authors'
+import card from './card.jpg'
+
+export const meta = {
+  title: 'Heroicons v1.0',
+  description: `Today we're releasing Heroicons v1.0, which includes over 450+ free icons in two styles, official React and Vue libraries, and Figma assets.`,
+  date: '2021-03-29T19:00:00.000Z',
+  authors: [adamwathan],
+  image: card,
+}
+
+Just over a year ago we released the very first version of [Heroicons](https://heroicons.com), which is a set of beautiful UI icons we designed alongside Tailwind UI. Since then we've added tons of new icons, and designed and launched a dedicated web experience.
+
+Today we're excited to finally release Heroicons v1.0, which includes over 450+ free icons in two styles, official React and Vue libraries, and Figma assets.
+
+<!--more-->
+
+<a href="https://heroicons.com">
+  <img src={card} alt="Heroicons" />
+</a>
+
+## React + Vue Libraries
+
+In addition to grabbing the icons you need directly from the website, you can now install our official React and Vue libraries for quick and easy access to each icon as a dedicated component.
+
+Here's what it looks like with React for example:
+
+```js
+import { BeakerIcon } from '@heroicons/react/solid'
+
+function MyComponent() {
+  return (
+    <div>
+      <BeakerIcon className="h-5 w-5 text-blue-500" />
+      <p>...</p>
+    </div>
+  )
+}
+```
+
+[Check out the documentation](https://github.com/tailwindlabs/heroicons) on GitHub to learn more.
+
+## Figma Assets
+
+We've also published an official [Heroicons Figma file](https://www.figma.com/community/file/958423903283802665/heroicons) on our new Figma Community page!
+
+It includes all the icons from Heroicons as individual Figma components so you can easily use them in your projects without having to manually import each SVG.
+
+<Footer>
+  Want to start playing with it? <a href="https://heroicons.com">Visit the Heroicons website →</a>
+</Footer>

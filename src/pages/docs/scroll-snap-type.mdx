@@ -1,0 +1,207 @@
+---
+title: "Scroll Snap Type"
+description: "Utilities for controlling how strictly snap points are enforced in a snap container."
+---
+
+import utilities from 'utilities?plugin=scrollSnapType'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Horizontal scroll snapping
+
+Use the `snap-x` utility to enable horizontal scroll snapping within an element.
+
+For scroll snapping to work, you need to also set the [scroll snap alignment](/docs/scroll-snap-align) on the children within the element.
+
+<Example p="none" hint="Scroll in the grid of images to see the expected behaviour">
+  <!-- Snap Point -->
+  <div class="flex ml-[50%] items-end justify-start pt-10 mb-6">
+    <div class="ml-2 rounded font-mono text-[0.625rem] leading-6 px-1.5 ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-600">snap point</div>
+    <div class="absolute top-0 bottom-0 left-1/2 border-l border-indigo-500"></div>
+  </div>
+  <!-- Contents -->
+  <div class="relative w-full flex gap-6 snap-x overflow-x-auto pb-14">
+    <div class="snap-center shrink-0">
+      <div class="shrink-0 w-4 sm:w-48"></div>
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1622890806166-111d7f6c7c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1575424909138-46b05e5919ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1559333086-b0a56225a93c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0">
+      <div class="shrink-0 w-4 sm:w-48"></div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="**snap-x** ...">
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1622890806166-111d7f6c7c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1575424909138-46b05e5919ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1559333086-b0a56225a93c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+</div>
+```
+
+### Mandatory scroll snapping
+
+Use the `snap-mandatory` utility to force a snap container to always come to rest on a snap point.
+
+<Example p="none" hint="Scroll in the grid of images to see the expected behaviour">
+  <!-- Snap Point -->
+  <div class="flex ml-[50%] items-end justify-start pt-10 mb-6">
+    <div class="ml-2 rounded font-mono text-[0.625rem] leading-6 px-1.5 ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-600">snap point</div>
+    <div class="absolute top-0 bottom-0 left-1/2 border-l border-indigo-500"></div>
+  </div>
+  <!-- Contents -->
+  <div class="relative w-full flex gap-6 snap-x scroll-mandatory overflow-x-auto pb-14">
+    <div class="snap-center shrink-0">
+      <div class="shrink-0 w-4 sm:w-48"></div>
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1622890806166-111d7f6c7c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1575424909138-46b05e5919ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1559333086-b0a56225a93c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0">
+      <div class="shrink-0 w-4 sm:w-48"></div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="**snap-mandatory** snap-x ...">
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1622890806166-111d7f6c7c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1575424909138-46b05e5919ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1559333086-b0a56225a93c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+</div>
+```
+
+### Proximity scroll snapping
+
+Use the `snap-proximity` utility to make a snap container come to rest on snap points that are close in proximity. This is the browser default.
+
+<Example p="none" hint="Scroll in the grid of images to see the expected behaviour">
+  <!-- Snap Point -->
+  <div class="flex ml-[50%] items-end justify-start pt-10 mb-6">
+    <div class="ml-2 rounded font-mono text-[0.625rem] leading-6 px-1.5 ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-600">snap point</div>
+    <div class="absolute top-0 bottom-0 left-1/2 border-l border-indigo-500"></div>
+  </div>
+  <!-- Contents -->
+  <div class="relative w-full flex gap-6 snap-x scroll-proximity overflow-x-auto pb-14">
+    <div class="snap-center shrink-0">
+      <div class="shrink-0 w-4 sm:w-48"></div>
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1622890806166-111d7f6c7c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1575424909138-46b05e5919ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-center shrink-0">
+      <div class="shrink-0 w-4 sm:w-48"></div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="**scroll-proximity** snap-x ...">
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1622890806166-111d7f6c7c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-center ...">
+    <img src="https://images.unsplash.com/photo-1575424909138-46b05e5919ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+</div>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates featuredClass="snap-x" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries featuredClass="snap-x" />

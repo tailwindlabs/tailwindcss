@@ -1,228 +1,167 @@
 ---
 title: "Flex"
 description: "Utilities for controlling how flex items both grow and shrink."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/flex'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=flex'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Initial
+## Basic usage
+
+### Initial
 
 Use `flex-initial` to allow a flex item to shrink but not grow, taking into account its initial size:
 
-```html indigo
-<template preview>
-  <p class="text-sm text-indigo-600">Items don't grow when there's extra space</p>
-  <div class="mt-2 flex space-x-4">
-    <div class="flex-initial rounded-md bg-indigo-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Short
-    </div>
-    <div class="flex-initial rounded-md bg-indigo-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Medium length
-    </div>
+<Example resizable>
+  <div class="mt-2 flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-blue rounded-lg">
+    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-blue-300">01</div>
+    <div class="p-4 flex-initial w-24 sm:w-64 rounded-lg flex items-center justify-center bg-blue-500 shadow-lg">02</div>
+    <div class="p-4 flex-initial w-14 sm:w-32 rounded-lg flex items-center justify-center bg-blue-500 shadow-lg">03</div>
   </div>
+</Example>
 
-  <p class="mt-8 text-sm text-indigo-600">Items shrink if possible when needed</p>
-  <div class="mt-2 flex space-x-4">
-    <div class="flex-initial rounded-md bg-indigo-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Short
-    </div>
-    <div class="flex-initial rounded-md bg-indigo-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Medium length
-    </div>
-    <div class="flex-initial rounded-md bg-indigo-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
-    </div>
-  </div>
-</template>
-
+```html
 <div class="flex">
-  <div class="**flex-initial** ...">
-    <!-- Won't grow, but will shrink if needed -->
+  <div class="flex-none w-14 h-14">
+    01
   </div>
-  <div class="**flex-initial** ...">
-    <!-- Won't grow, but will shrink if needed -->
+  <div class="**flex-initial** w-64 ...">
+    02
   </div>
-  <div class="**flex-initial** ...">
-    <!-- Won't grow, but will shrink if needed -->
+  <div class="**flex-initial** w-32 ...">
+    03
   </div>
 </div>
 ```
 
-## Flex 1
+### Flex 1
 
 Use `flex-1` to allow a flex item to grow and shrink as needed, ignoring its initial size:
 
-```html fuchsia
-<template preview>
-  <p class="text-sm text-fuchsia-600">Default behavior</p>
-  <div class="mt-2 flex space-x-4">
-    <div class="rounded-md bg-fuchsia-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Short
-    </div>
-    <div class="rounded-md bg-fuchsia-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Medium length
-    </div>
-    <div class="rounded-md bg-fuchsia-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-        Significantly larger amount of content
-    </div>
+<Example resizable>
+  <div class="mt-2 flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-pink rounded-lg">
+    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-pink-300">01</div>
+    <div class="p-4 flex-1 w-64 rounded-lg flex items-center justify-center bg-pink-500 shadow-lg">02</div>
+    <div class="p-4 flex-1 w-32 rounded-lg flex items-center justify-center bg-pink-500 shadow-lg">03</div>
   </div>
+</Example>
 
-  <p class="mt-8 text-sm text-fuchsia-600">With <code>.flex-1</code></p>
-  <div class="mt-2 flex space-x-4">
-    <div class="flex-1 rounded-md bg-fuchsia-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Short
-    </div>
-    <div class="flex-1 rounded-md bg-fuchsia-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Medium length
-    </div>
-    <div class="flex-1 rounded-md bg-fuchsia-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Significantly larger amount of content
-    </div>
-  </div>
-</template>
-
+```html
 <div class="flex">
-  <div class="**flex-1** ...">
-    <!-- Will grow and shrink as needed without taking initial size into account -->
+  <div class="flex-none ...">
+    01
   </div>
-  <div class="**flex-1** ...">
-    <!-- Will grow and shrink as needed without taking initial size into account -->
+  <div class="**flex-1** w-64 ...">
+    02
   </div>
-  <div class="**flex-1** ...">
-    <!-- Will grow and shrink as needed without taking initial size into account -->
+  <div class="**flex-1** w-32 ...">
+    03
   </div>
 </div>
 ```
 
-## Auto
+### Auto
 
 Use `flex-auto` to allow a flex item to grow and shrink, taking into account its initial size:
 
-```html lightBlue
-<template preview>
-  <p class="text-sm text-light-blue-600">Default behavior</p>
-  <div class="mt-2 flex space-x-4">
-    <div class="rounded-md bg-light-blue-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Short
-    </div>
-    <div class="rounded-md bg-light-blue-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Medium length
-    </div>
-    <div class="rounded-md bg-light-blue-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Significantly larger amount of content
-    </div>
+<Example resizable>
+  <div class="mt-2 flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-violet rounded-lg">
+    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-violet-300">01</div>
+    <div class="p-4 flex-auto w-64 rounded-lg flex items-center justify-center bg-violet-500 shadow-lg">02</div>
+    <div class="p-4 flex-auto w-32 rounded-lg flex items-center justify-center bg-violet-500 shadow-lg">03</div>
   </div>
-
-  <p class="mt-8 text-sm text-light-blue-600">With <code>.flex-auto</code></p>
-  <div class="mt-2 flex space-x-4">
-    <div class="flex-auto rounded-md bg-light-blue-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Short
-    </div>
-    <div class="flex-auto rounded-md bg-light-blue-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Medium length
-    </div>
-    <div class="flex-auto rounded-md bg-light-blue-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Significantly larger amount of content
-    </div>
-  </div>
-</template>
-
-<div class="flex ...">
-  <div class="**flex-auto** ...">
-    <!-- Will grow and shrink as needed taking initial size into account -->
-  </div>
-  <div class="**flex-auto** ...">
-    <!-- Will grow and shrink as needed taking initial size into account -->
-  </div>
-  <div class="**flex-auto** ...">
-    <!-- Will grow and shrink as needed taking initial size into account -->
-  </div>
-</div>
-```
-
-## None
-
-Use `flex-none` to prevent a flex item from growing or shrinking:
-
-```html emerald
-<template preview>
-  <div class="flex space-x-4">
-    <div class="flex-1 rounded-md bg-emerald-300 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Item that can grow or shrink if needed
-    </div>
-    <div class="flex-none rounded-md bg-emerald-500 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Item that cannot grow or shrink
-    </div>
-    <div class="flex-1 rounded-md bg-emerald-300 text-white font-semibold flex items-center justify-center py-3 px-6">
-      Item that can grow or shrink if needed
-    </div>
-  </div>
-</template>
-
-<div class="flex ...">
-  <div class="flex-1 ...">
-    <!-- Will grow and shrink as needed -->
-  </div>
-  <div class="**flex-none** ...">
-    <!-- Will not grow or shrink -->
-  </div>
-  <div class="flex-1 ...">
-    <!-- Will grow and shrink as needed -->
-  </div>
-</div>
-```
-
-## Responsive
-
-To control how a flex item both grows and shrinks at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:flex-1` to apply the `flex-1` utility at only medium screen sizes and above.
+</Example>
 
 ```html
 <div class="flex ...">
-  <!-- ... -->
-  <div class="flex-none **md:flex-1** ...">
-    Responsive flex item
+  <div class="flex-none ...">
+    01
   </div>
-  <!-- ... -->
+  <div class="**flex-auto** w-64 ...">
+    02
+  </div>
+  <div class="**flex-auto** w-32 ...">
+    03
+  </div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### None
 
-## Customizing
+Use `flex-none` to prevent a flex item from growing or shrinking:
 
-### Flex Values
+<Example resizable>
+  <div class="flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-indigo rounded-lg">
+    <div class="flex-none last:pr-8 sm:last:pr-0">
+      <div class="p-4 w-14 h-14 rounded-lg flex items-center justify-center bg-indigo-300">
+        01
+      </div>
+    </div>
+    <div class="flex-none last:pr-8 sm:last:pr-0">
+      <div class="p-4 w-72 rounded-lg flex items-center justify-center bg-indigo-500 shadow-lg">
+        02
+      </div>
+    </div>
+    <div class="flex-none flex-1 last:pr-8 sm:last:pr-0">
+      <div class="p-4 rounded-lg flex items-center justify-center bg-indigo-300">
+        03
+      </div>
+    </div>
+  </div>
+</Example>
 
-By default, Tailwind provides four `flex` utilities. You change, add, or remove these by editing the `theme.flex` section of your Tailwind config.
+```html
+<div class="flex ...">
+  <div class="flex-none w-14 h-14 ...">
+    01
+  </div>
+  <div class="**flex-none** ...">
+    02
+  </div>
+  <div class="flex-1 ...">
+    03
+  </div>
+</div>
+```
 
-```diff-js
-  // tailwind.config.js
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="flex-none" featuredClass="flex-1" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="flex-none" featuredClass="flex-1" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides four `flex` utilities. You can customize these values by editing `theme.flex` or `theme.extend.flex` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      flex: {
-        '1': '1 1 0%',
-        auto: '1 1 auto',
--       initial: '0 1 auto',
-+       inherit: 'inherit',
-        none: 'none',
-+       '2': '2 2 0%',
+      extend: {
++       flex: {
++         '2': '2 2 0%'
++       }
       }
     }
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="flex" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="flex" />
+<ArbitraryValues property="flex" featuredClass="flex-[2_2_0%]" />

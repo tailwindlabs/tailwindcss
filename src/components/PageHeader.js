@@ -1,11 +1,10 @@
-import clsx from 'clsx'
-
-export function PageHeader({ title, description, badge = {}, border = true }) {
+export function PageHeader({ title, description, badge = {}, section }) {
   if (!title && !description) return null
 
   return (
-    <div className={clsx('pb-10', { 'border-b border-gray-200 mb-10': border })}>
+    <header id="header" className="relative z-20">
       <div>
+        {section && <p className="mb-2 text-sm leading-6 font-semibold text-sky-500">{section}</p>}
         <h1 className="inline-block text-3xl font-extrabold text-gray-900 tracking-tight">
           {title}
         </h1>
@@ -16,7 +15,7 @@ export function PageHeader({ title, description, badge = {}, border = true }) {
           </dl>
         )}
       </div>
-      {description && <p className="mt-1 text-lg text-gray-500">{description}</p>}
-    </div>
+      {description && <p className="mt-2 text-lg text-gray-700">{description}</p>}
+    </header>
   )
 }

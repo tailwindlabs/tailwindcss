@@ -3,54 +3,54 @@ title: "Fill"
 description: "Utilities for styling the fill of SVG elements."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/fill'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=fill'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
 
-Use `fill-current` to set the fill color of an SVG to the current text color. This makes it easy to set an element's fill color by combining this class with an existing [text color utility](/docs/text-color).
+### Setting the fill color
 
-Useful for styling icon sets like [Zondicons](http://www.zondicons.com/) that are drawn entirely with fills.
+Use the `fill-{color}` utilities to change the fill color of an SVG.
 
-```html emerald
-<template preview>
-  <div class="text-center">
-    <svg class="fill-current text-emerald-600 inline-block h-12 w-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path d="M18 9.87V20H2V9.87a4.25 4.25 0 0 0 3-.38V14h10V9.5a4.26 4.26 0 0 0 3 .37zM3 0h4l-.67 6.03A3.43 3.43 0 0 1 3 9C1.34 9 .42 7.73.95 6.15L3 0zm5 0h4l.7 6.3c.17 1.5-.91 2.7-2.42 2.7h-.56A2.38 2.38 0 0 1 7.3 6.3L8 0zm5 0h4l2.05 6.15C19.58 7.73 18.65 9 17 9a3.42 3.42 0 0 1-3.33-2.97L13 0z"/>
-    </svg>
+<Example>
+  <div class="flex items-center justify-center">
+    <svg class="fill-blue-500 h-12" viewBox="0 0 46 48" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M23.0002 0C12.5068 0 4.00017 8.50659 4.00017 19V32.5335C4.00017 32.8383 3.9145 33.1371 3.75292 33.3956L0.912672 37.94C0.0801118 39.2721 1.0378 41 2.60867 41H43.3917C44.9625 41 45.9202 39.2721 45.0877 37.94L42.2474 33.3956C42.0858 33.1371 42.0002 32.8383 42.0002 32.5335V19C42.0002 8.50659 33.4936 0 23.0002 0ZM23.0002 48C20.2388 48 18.0002 45.7614 18.0002 43H28.0002C28.0002 45.7614 25.7616 48 23.0002 48Z"/></svg>
   </div>
-</template>
+</Example>
 
-<svg class="**fill-current text-green-600** ..."></svg>
+```html
+<svg class="**fill-blue-500** ...">
+  <!-- ... -->
+</svg>
 ```
 
-## Customizing
+This can be useful for styling icon sets like [Heroicons](https://heroicons.com).
 
-Control which fill utilities Tailwind generates by customizing the `theme.fill` section of your `tailwind.config.js` file:
+---
 
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
--     fill: {
--       current: 'currentColor',
--     }
-+     fill: theme => ({
-+       'red': theme('colors.red.500'),
-+       'green': theme('colors.green.500'),
-+       'blue': theme('colors.blue.500'),
-+     })
-    }
-  }
-```
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="fill" />
+<HoverFocusAndOtherStates defaultClass="stroke-cyan-500" featuredClass="stroke-cyan-700" element="svg" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="fill" />
+<BreakpointsAndMediaQueries defaultClass="stroke-cyan-500" featuredClass="stroke-cyan-700" element="svg" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+<CustomizePluginColors name="fill" configKey="fill" />
+
+### Arbitrary values
+
+<ArbitraryValues property="fill" featuredClass="fill-[#243c5a]" element="svg" />

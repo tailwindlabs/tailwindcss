@@ -1,0 +1,142 @@
+import { adamwathan } from '@/authors'
+import cardImage from './card.jpg'
+import robinImage from './robin.jpg'
+
+export const meta = {
+  title: 'From Nine Hundred to One: How We Hired Robin Malfait',
+  description: `Back in May we published our first job posting for a full-stack developer to join our team. This is the story of how we worked through almost 900 applications, and eventually hired Robin Malfait, a talented developer from Belgium who is starting with us today.`,
+  date: '2020-08-10T13:30:00.000Z',
+  authors: [adamwathan],
+  image: cardImage,
+}
+
+Back in May we published [our first job posting](https://jobs.tailwindui.com/full-stack-developer) to help us find a full-stack developer to join our team.
+
+After receiving almost 900 applications and interviewing dozens of talented people, we're excited to finally share that [Robin Malfait](https://twitter.com/malfaitrobin) accepted our offer for the position and is officially part of the Tailwind Labs team as of today!
+
+<!--more-->
+
+<img src={robinImage} alt="" />
+
+Robin is a talented developer from Belgium, and has been an active member of the Tailwind community for a long time. If you're a Tailwind UI customer and have ever asked a question in the `#react` channel on our Discord server, there's a 90% chance he's the helpful person who answered your question. He even built a [bookmarklet](https://gist.github.com/RobinMalfait/a90e8651196c273dfa51eec0f43e1676) to help people convert Tailwind UI components to JSX!
+
+Robin is a seriously experienced React developer, and is joining us to help spearhead the open-source [renderless UI libraries](https://twitter.com/adamwathan/status/1265815748917813248) we are working on that will be the foundation for official React and Vue _(to start anyways)_ support in Tailwind UI.
+
+We're super excited that he is finally starting with us today, and can't wait to watch his contributions enable people to build awesome UIs even faster and with more confidence. Welcome to the team dude!
+
+What follows is the story of how we went about hiring for this role, and how we narrowed down the candidates from almost 900 initial applications to finally making an offer to Robin.
+
+---
+
+## The Job Posting
+
+Before this role, we had only hired [Brad](https://blog.tailwindcss.com/welcoming-brad-cornes-to-the-tailwind-team) who we already knew and trusted, so we didn't need a job posting or any sort of rigorous application process.
+
+I knew that if we wanted to get really great candidates, we had to write a compelling job posting. After about 3-4 days of working on it, this is where we ended up:
+
+[**Read the job posting &rarr;**](https://jobs.tailwindui.com/full-stack-developer)
+
+Here are the important things I focused on when writing it:
+
+- Be specific about the projects the applicant would be working on after they started
+- Be clear that we are a small team, so everyone has to do a bit of everything, including customer support
+- Give concrete examples of projects we just finished that the applicant would have worked on if they were already at the company
+- Go into detail about specific hard problems we expect to run into on the next major upcoming project, to help the applicant understand the sort of expertise that would be valuable to us
+- Share concrete salary and benefit information. I would never apply for a job without a clear understanding of the salary, so why should I expect talented people to apply for our posting without it?
+
+We got _tons_ of positive feedback about this posting, and I'm really proud of how it turned out. I think it was very applicant-centric, and I think it made a big difference in the quality of submissions we got.
+
+## The Application Process
+
+One thing we did a bit differently from other companies is that we didn't ask for a resume or give applicants a big list of questions to answer. All we asked for was an "application", in whatever form the person decided. It could be a cover letter, a small website, a video, a slide deck, whatever.
+
+I decided to ask for applications this way for a few reasons:
+
+- I just don't think resumes are that important
+- I wanted to filter for people with some inherent marketing sensibilities, we're a tiny company so we need [T-shaped](https://en.wikipedia.org/wiki/T-shaped_skills) people more than we need specialists
+- I wanted to filter for people who can ship things, and making the application completely free-form tells you a lot about someone's ability to take something from nothing to polished product on their own
+- I wanted to find someone who talked about the stuff we were looking for without being prompted for it — finding someone who was naturally well-aligned with what we are trying to do would be a big advantage for us
+- I expected a lot of applications, and I thought asking for applications this way would make it easy to filter people out who were using a shotgun approach to job-searching and not specifically interested in working with us
+
+Even with what I think was a fairly intimidating application process, we got well over 100 applications where there was clearly a lot of time spent crafting something very specific for our posting, including Robin's of course:
+
+[**Read Robin's application &rarr;**](https://robin-malfait-tailwind-job-application.now.sh/)
+
+Some people did some _really_ out there and creative things in their applications _(one person even made an interactive game!)_ but Robin's stood out to us for a few reasons:
+
+- The visual design was great. We're a very design-focused company, so having good taste in design is really important to us.
+- His story about learning to program and getting into the Laravel community told me we had a rich shared history, even if we had never met.
+- He took a chance and shared some strong opinions he had about component design that were _extremely_ relevant to some work we'll be doing very soon, and I agreed with what he was saying and even learned a few things.
+- He shared a super interesting [open-source library](https://github.com/RobinMalfait/lazy-collections) he authored, which despite being very unknown, still had very well thought-out and complete documentation that was presented in a very well-structured way. It was clear he thinks about visual design even when authoring a markdown file.
+- He shared lots of concrete ideas for projects he'd like to work on with us, and a lot of them were things I was already excited about doing.
+- He capitalized the "H" in "GitHub" _(holy shit I hate when people don't do that)_.
+
+Robin's was one of maybe 40-50 that _really_ stood out from a content perspective.
+
+## Filtering the Applications
+
+Dealing with almost 900 job applications is a lot of work. Over half of them we were able to discard immediately because they just provided a link to their LinkedIn profile or a generic resume, but filtering through the rest was really tough.
+
+I've never hired anyone this way before, and at first I really felt like we needed to meet with and interview _everyone_ who submitted a quality application. As the applications poured in though, I realized this was just not practical, and that we had to put some sort of cap on it.
+
+I decided to sort the good applications as best I could, then just slice off the top 20 and start there. It meant there were lots of great people we wouldn't talk to and that maybe we even missed out on the absolute best applicant, but the reality is that we only have so much time we can dedicate to this, and I had to believe that out of the ~20 best applications, there would certainly be _multiple_ people we wouldn't regret hiring at all, even if there was a chance that the absolute best person was somewhere in the other 30.
+
+## The Interview Process
+
+We started by scheduling video interviews with the top ~20 applicants, which took about 3 weeks to get through.
+
+These were 30-45 minute calls where we had a pretty casual conversation about a few topics:
+
+- What the person had been working on recently, and where they think their strengths are
+- Why they applied for the job, and what about the role was interesting to them
+- What we as a company are going to be doing over the next year or so, and digging into a few projects in detail
+- Answering any questions the person had about the job or our company
+
+This was a great way just to get to know the people who applied and get a gut sense for who stood out the most. We really enjoyed meeting with every single person we talked to, but made the hard decision to filter down again to about 10 people for the next phase.
+
+## Take-Home Project
+
+The next step in the application process was a take-home project, where the applicant had to build out a design Steve had created using either Vue or React. We estimated it to be about a 4-8 hour project.
+
+We provided a zip file containing all of the instructions, the design as a Figma file, and a walk-through video of a working implementation outlining any behavior that was hard to capture in Figma.
+
+[**See the take-home project on GitHub &rarr;**](https://github.com/adamwathan/tailwind-take-home-project)
+
+We tried to give very clear instructions, and made sure to point out where we wanted people to focus their time, and what areas we didn't want them to overthink or spend too much time on.
+
+We gave each candidate about two weeks to complete the project, just to make sure they had the opportunity to fit it into their schedule without it being disruptive.
+
+All of the submissions we got back were great, but again we forced ourselves to limit the candidates for the next phase, this time down to 6 people.
+
+One thing we really loved about Robin's submission was that he spent a lot of time guiding us through his solution with comments in the code. For regular production code I would say it was definitely overkill, but as part of a job application I thought it was extremely helpful to get a behind-the-scenes look into how he actually _thinks_ about the code he is writing. He also spent a lot of time describing alternate solutions to certain problems and why he didn't go with those approaches, which was very beneficial as well.
+
+## Pairing Session
+
+The final step in the application process was a two-hour pair programming session with me.
+
+When pairing as part of an interview process like this, there's a really high risk of the inherent power dynamic coloring how the whole thing goes. I _really_ wanted to avoid that as much as possible, so I did two things:
+
+- I made sure whatever we were pairing on was something completely new, that I had no prior experience with
+- I let the candidate suggest a few things for us to pair on, and picked something from their list
+
+I absolutely didn't want to pair on something where I knew all the answers and I was just watching to see if the candidate could figure out something I already knew. That is absolutely not representative of real work and I don't think it would've been useful at all.
+
+Instead, by choosing a problem that neither of us had significant experience with, we got to put the power dynamic aside (as much as possible at least), and just focus on learning something new together, and seeing how we helped each other get unstuck.
+
+Some of the things I paired on included:
+
+- Building a date picker from scratch
+- Learning XState
+- Building a modal dialog with the Vue 3 composition API
+
+I really enjoyed this process and am very proud of how we put it together. It was definitely the most informative part of the interview process and really gave me a ton of confidence that we were offering the job to the right person.
+
+For Robin's session, we decided to build an SVG charting library from scratch _(something neither of us had ever done before)_, in Svelte _(a framework neither of us had ever used before)_. This was Robin's idea, and that he had the courage to tackle two completely new problems at the same time _in an interview context_ really impressed me. We had a great time pairing together on this, and not once in the session did it ever feel like either of us was ahead of the other person or trying to catch them up on something. We had really great chemistry and it felt very energizing and productive, and reminded me of some of the best pairing sessions I've had in my career, which is pretty incredible given we'd never worked together before, and that he was being evaluated for a job.
+
+## Making the offer
+
+This whole process took about 1.5 months, and at the end we had a very hard time choosing between the top few candidates. Realistically we could've hired any of them and not regretted it, but my experience interviewing and pairing with Robin stood out just a bit more and I was really excited to be able to offer him the role. We know he's going to be an amazing fit for the team, and I can't wait to dig in to some hard problems with him in the coming months.
+
+<Footer>
+  Want to talk about this post? <a href="https://github.com/tailwindcss/tailwindcss/discussions/2153">Discuss this on GitHub →</a>
+</Footer>

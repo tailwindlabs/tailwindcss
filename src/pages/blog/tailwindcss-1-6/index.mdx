@@ -1,0 +1,156 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: 'Tailwind CSS v1.6.0',
+  description: `Tailwind CSS v1.6.0 is now available, with animations and more!`,
+  date: '2020-07-28T16:58:33.714Z',
+  authors: [adamwathan],
+  image,
+}
+
+It's like Tailwind CSS v1.5 except now there's animation support, overscroll utilities, and more!
+
+There aren't supposed to be any breaking changes here, but I thought that [last time](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.5.0) too. If I _did_ break something, first person to report it gets a Tailwind shirt.
+
+<!--more-->
+
+## New Features
+
+### Animation support
+
+Tailwind CSS v1.6 adds a brand new `animation` core plugin, with 4 general purpose animations included out of the box:
+
+- `animate-spin`
+- `animate-ping`
+- `animate-pulse`
+- `animate-bounce`
+
+```html
+<button type="button" class="bg-indigo-600 ..." disabled>
+  <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+    <!-- ... -->
+  </svg>
+  Processing
+</button>
+```
+
+These are completely customizable as always, using the `animation` and `keyframes` sections of your `tailwind.config.js` theme:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      animation: {
+        wiggle: 'wiggle 1s ease-in-out infinite',
+      },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
+        },
+      },
+    },
+  },
+}
+```
+
+For more information and a live demo, [read the new animation documentation](https://tailwindcss.com/docs/animation). For behind the scenes details about the design rationale, [check out the pull request](https://github.com/tailwindlabs/tailwindcss/pull/2068).
+
+### New `prefers-reduced-motion` variants
+
+To go along with the new animation features, we've also added new `motion-safe` and `motion-reduce` variants that allow you to conditionally apply CSS based on the [`prefers-reduced-motion` media feature](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion).
+
+These can be useful in conjunction with transition and animation utilities to disable problematic motion for users who are sensitive to it:
+
+```html
+<div class="... transition duration-150 ease-in-out motion-reduce:transition-none ..."></div>
+```
+
+...or to explicitly opt-in to motion to make sure it's only being shown to users who haven't opted out:
+
+```html
+<div class="... motion-safe:transition duration-150 ease-in-out ..."></div>
+```
+
+These can be combined with responsive variants and pseudo-class variants as well:
+
+```html
+<!-- With responsive variants -->
+<div class="sm:motion-reduce:translate-y-0"></div>
+
+<!-- With pseudo-class variants -->
+<div class="motion-reduce:hover:translate-y-0"></div>
+
+<!-- With responsive and pseudo-class variants -->
+<div class="sm:motion-reduce:hover:translate-y-0"></div>
+```
+
+These are currently not enabled for any utilities by default, but you can enabled them as needed in the `variants` section of your `tailwind.config.js` file:
+
+```js tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    translate: ['responsive', 'hover', 'focus', 'motion-safe', 'motion-reduce'],
+  },
+}
+```
+
+For more details, check out [the updated variants documentation](https://tailwindcss.com/docs/pseudo-class-variants).
+
+### New `overscroll-behavior` utilities
+
+We've also added new utilities for the [`overscroll-behavior`](https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior) property.
+
+You can use these utilities to control how "scroll chaining" works in your sites, and avoid scrolling the whole page when you reach the top or bottom of an embedded scrollable area.
+
+```html
+<div class="overscroll-y-contain ...">
+  <!-- ... -->
+</button>
+```
+
+Note that this is currently **not supported in Safari**, but in my opinion it's not a huge deal to treat this as a progressive enhancement anyways, since it falls back fairly gracefully.
+
+This plugin can be configured in your `tailwind.config.js` file as `overscrollBehavior`:
+
+```js tailwind.config.js
+module.exports = {
+  // ...
+
+  // Disabling the plugin
+  corePlugins: {
+    overscrollBehavior: false,
+  },
+
+  // Customizing the enabled variants
+  variants: {
+    overscrollBehavior: ['responsive', 'hover'],
+  },
+}
+```
+
+### Generate your CSS without an input file
+
+If you never write any custom CSS and you're sick of creating this file all the time...
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+...then I've got news for you baby — if you're using our `tailwindcss` CLI tool you can start depositing those 58 characters into your savings account instead of wasting them on a pointless CSS file.
+
+The input file argument is now optional in the CLI tool, so if you don't actually _need_ a custom CSS file, you can just write this:
+
+```bash
+npx tailwindcss build -o compiled.css
+```
+
+Your kids are going to be so grateful for the extra time you get to spend together.
+
+<Footer>
+  Want to talk about this post? <a href="https://github.com/tailwindcss/tailwindcss/discussions/2088">Discuss this on GitHub →</a>
+</Footer>

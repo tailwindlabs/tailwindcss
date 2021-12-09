@@ -3,172 +3,225 @@ title: "Font Variant Numeric"
 description: "Utilities for controlling the variant of numbers."
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.normal-nums': { fontVariantNumeric: 'normal' },
-        '.ordinal': { fontVariantNumeric: 'ordinal' },
-        '.slashed-zero': { fontVariantNumeric: 'slashed-zero' },
-        '.lining-nums': { fontVariantNumeric: 'lining-nums' },
-        '.oldstyle-nums': { fontVariantNumeric: 'oldstyle-nums' },
-        '.proportional-nums': { fontVariantNumeric: 'proportional-nums' },
-        '.tabular-nums': { fontVariantNumeric: 'tabular-nums' },
-        '.diagonal-fractions': { fontVariantNumeric: 'diagonal-fractions' },
-        '.stacked-fractions': { fontVariantNumeric: 'stacked-fractions' },
-      })
-    }
-  }
+  utilities: {
+    '.normal-nums': { 'font-variant-numeric': 'normal' },
+    '.ordinal': { 'font-variant-numeric': 'ordinal' },
+    '.slashed-zero': { 'font-variant-numeric': 'slashed-zero' },
+    '.lining-nums': { 'font-variant-numeric': 'lining-nums' },
+    '.oldstyle-nums': { 'font-variant-numeric': 'oldstyle-nums' },
+    '.proportional-nums': { 'font-variant-numeric': 'proportional-nums' },
+    '.tabular-nums': { 'font-variant-numeric': 'tabular-nums' },
+    '.diagonal-fractions': { 'font-variant-numeric': 'diagonal-fractions' },
+    '.stacked-fractions': { 'font-variant-numeric': 'stacked-fractions' },
+  },
 }
 
-## Usage
+## Basic usage
+
+### Applying numeric variants
 
 Use the `font-variant-numeric` utilities to enable additional glyphs for numbers, fractions, and ordinal markers *(in fonts that support them)*.
 
 These utilities are composable so you can enable multiple `font-variant-numeric` features by combining multiple classes in your HTML:
 
 ```html
-<p class="**ordinal slashed-zero tabular-nums** ...">1234567890</p>
+<p class="**ordinal slashed-zero tabular-nums** ...">
+  1234567890
+</p>
 ```
 
 Note that many fonts don't support these features *(stacked fractions support for example is especially rare)*, so some of these utilities may have no effect depending on the font family you are using.
+
+-- block
 
 ### Ordinal
 
 Use the `ordinal` utility to enable special glyphs for the ordinal markers.
 
-```html emerald
-<template preview>
-  <p class="font-source ordinal text-3xl text-center text-emerald-600">1st</p>
-</template>
+-- column
 
+<Example>
+  <p class="font-source ordinal text-center text-gray-700 text-lg">1st</p>
+</Example>
+
+```html
 <p class="**ordinal** ...">1st</p>
 ```
 
+-- /block
+
+-- block
 
 ### Slashed Zero
 
 Use the `slashed-zero` utility to force a 0 with a slash; this is useful when a clear distinction between O and 0 is needed.
 
-```html lightBlue
-<template preview>
-  <p class="font-source slashed-zero text-3xl text-center text-light-blue-600">0</p>
-</template>
+-- column
 
+<Example>
+  <p class="font-source slashed-zero text-center text-gray-700 text-lg">0</p>
+</Example>
+
+```html
 <p class="**slashed-zero** ...">0</p>
 ```
+
+-- /block
+
+-- block
 
 ### Lining figures
 
 Use the `lining-nums` utility to use the numeric glyphs that are all aligned by their baseline. This corresponds to the `lnum` OpenType feature. This is the default for most fonts.
 
-```html rose
-<template preview>
-  <p class="font-source lining-nums text-3xl text-center text-rose-600">1234567890</p>
-</template>
+-- column
 
-<p class="**lining-nums** ...">1234567890</p>
+<Example>
+  <p class="font-source lining-nums text-center text-gray-700 text-lg">1234567890</p>
+</Example>
+
+```html
+<p class="**lining-nums** ...">
+  1234567890
+</p>
 ```
+
+-- /block
+
+-- block
 
 ### Oldstyle figures
 
 Use the `oldstyle-nums` utility to use numeric glyphs where some numbers have descenders. This corresponds to the `onum` OpenType feature.
 
-```html fuchsia
-<template preview>
-  <p class="font-source oldstyle-nums text-3xl text-center text-fuchsia-600">1234567890</p>
-</template>
+-- column
 
-<p class="**oldstyle-nums** ...">1234567890</p>
+<Example>
+  <p class="font-source oldstyle-nums text-center text-gray-700 text-lg">1234567890</p>
+</Example>
+
+```html
+<p class="**oldstyle-nums** ...">
+  1234567890
+</p>
 ```
+
+-- /block
+
+-- block
 
 ### Proportional figures
 
 Use the `proportional-nums` utility to use numeric glyphs that have proportional widths (rather than uniform/tabular). This corresponds to the `pnum` OpenType feature.
 
-```html indigo
-<template preview>
-  <div class="max-w-sm text-right">
-    <p class="font-source proportional-nums text-3xl text-indigo-600">12121</p>
-    <p class="font-source proportional-nums text-3xl text-indigo-600">90909</p>
-  </div>
-</template>
+-- column
 
-<p class="**proportional-nums** ...">12121</p>
-<p class="**proportional-nums** ...">90909</p>
+<Example>
+  <div class="max-w-sm text-right">
+    <p class="font-source proportional-nums text-gray-700 text-lg">12121</p>
+    <p class="font-source proportional-nums text-gray-700 text-lg">90909</p>
+  </div>
+</Example>
+
+```html
+<p class="**proportional-nums** ...">
+  12121
+</p>
+<p class="**proportional-nums** ...">
+  90909
+</p>
 ```
+
+-- /block
+
+-- block
 
 ### Tabular figures
 
 Use the `tabular-nums` utility to use numeric glyphs that have uniform/tabular widths (rather than proportional). This corresponds to the `tnum` OpenType feature.
 
-```html amber
-<template preview>
-  <div class="max-w-sm text-right">
-    <p class="font-source tabular-nums text-3xl text-amber-600">12121</p>
-    <p class="font-source tabular-nums text-3xl text-amber-600">90909</p>
-  </div>
-</template>
+-- column
 
-<p class="**tabular-nums** ...">12121</p>
-<p class="**tabular-nums** ...">90909</p>
+<Example>
+  <div class="max-w-sm text-right">
+    <p class="font-source tabular-nums text-gray-700 text-lg">12121</p>
+    <p class="font-source tabular-nums text-gray-700 text-lg">90909</p>
+  </div>
+</Example>
+
+```html
+<p class="**tabular-nums** ...">
+  12121
+</p>
+<p class="**tabular-nums** ...">
+  90909
+</p>
 ```
+
+-- /block
+
+-- block
 
 ### Diagonal fractions
 
 Use the `diagonal-fractions` utility to replace numbers separated by a slash with common diagonal fractions. This corresponds to the `frac` OpenType feature.
 
-```html emerald
-<template preview>
-  <p class="font-source diagonal-fractions text-3xl text-center text-emerald-600">1/2 3/4 5/6</p>
-</template>
+-- column
 
-<p class="**diagonal-fractions** ...">1/2 3/4 5/6</p>
+<Example>
+  <p class="font-source diagonal-fractions text-center text-gray-700 text-lg">1/2 3/4 5/6</p>
+</Example>
+
+```html
+<p class="**diagonal-fractions** ...">
+  1/2 3/4 5/6
+</p>
 ```
+
+-- /block
+
+-- block
 
 ### Stacked fractions
 
 Use the `stacked-fractions` utility to replace numbers separated by a slash with common stacked fractions. This corresponds to the `frac` OpenType feature. Very few fonts seem to support this feature — we've used Ubuntu Mono here.
 
-```html lightBlue
-<template preview>
-  <p class="font-ubuntu-mono stacked-fractions text-3xl text-center text-light-blue-600">1/2 3/4 5/6</p>
-</template>
+-- column
 
-<p class="**stacked-fractions** ...">1/2 3/4 5/6</p>
+<Example>
+  <p class="font-ubuntu-mono stacked-fractions text-center text-gray-700 text-lg">1/2 3/4 5/6</p>
+</Example>
+
+```html
+<p class="**stacked-fractions** ...">
+  1/2 3/4 5/6
+</p>
 ```
 
+-- /block
 
 ### Resetting numeric font variants
 
 Use the `normal-nums` propery to reset numeric font variants. This is usually useful for resetting a font feature at a particular breakpoint:
 
 ```html
-<p class="slashed-zero tabular-nums **md:normal-nums** ...">12345</p>
+<p class="slashed-zero tabular-nums **md:normal-nums** ...">
+  12345
+</p>
 ```
 
-## Responsive
+---
 
-To control `font-variant-numeric` property of an element at a specific breakpoint, add a `{screen}:` prefix to any existing `font-variant-numeric` utility. For example, use `md:tabular-nums` to apply the `tabular-nums` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<div class="proportional-nums **md:tabular-nums**">
-  <!-- ... -->
-</div>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="proportional-nums" featuredClass="tabular-nums" element="p"  />
 
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-## Customizing
-
-### Variants
-
-<Variants plugin="fontVariantNumeric" />
-
-### Disabling
-
-<Disabling plugin="fontVariantNumeric" />
+<BreakpointsAndMediaQueries defaultClass="proportional-nums" featuredClass="tabular-nums" element="p"  />

@@ -1,0 +1,37 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: 'Tailwind CSS v1.8.0',
+  description: `Tailwind CSS v1.8.0 is now available, with font-variant-numeric support, experimental dark mode, and more!`,
+  date: '2020-09-04T20:15:00.000Z',
+  authors: [adamwathan],
+  image,
+}
+
+Tailwind CSS v1.8 is now available with a handful of new utilities, a couple new features, and an exciting new experiment!
+
+<!--more-->
+
+## New features
+
+- New `font-variant-numeric` utilities ([#2305](https://github.com/tailwindlabs/tailwindcss/pull/2305))
+- New `place-items`, `place-content`, `place-self`, `justify-items`, and `justify-self` utilities ([#2306](https://github.com/tailwindlabs/tailwindcss/pull/2306))
+- New `preserveHtmlElements` option for `purge` ([#2283](https://github.com/tailwindlabs/tailwindcss/pull/2283))
+- New `layers` mode for `purge` ([#2288](https://github.com/tailwindlabs/tailwindcss/pull/2288))
+- Support configuring variants as functions ([#2309](https://github.com/tailwindlabs/tailwindcss/pull/2309))
+- Dark mode variant (experimental) ([#2279](https://github.com/tailwindlabs/tailwindcss/pull/2279))
+
+## Changes
+
+- CSS within `@layer` at-rules are now grouped with the corresponding `@tailwind` at-rule ([#2312](https://github.com/tailwindlabs/tailwindcss/pull/2312))
+
+## Deprecations
+
+- The `conservative` purge mode has been deprecated in favor of the new `layers` mode ([#2288](https://github.com/tailwindlabs/tailwindcss/pull/2288))
+
+Check out the [full release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.8.0) for more details.
+
+<Footer>
+  Want to talk about this post? <a href="https://github.com/tailwindcss/tailwindcss/discussions/2315">Discuss this on GitHub →</a>
+</Footer>

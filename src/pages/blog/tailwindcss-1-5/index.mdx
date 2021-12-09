@@ -1,0 +1,146 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: 'Tailwind CSS v1.5.0',
+  description: `Tailwind CSS v1.5.0 is here, now with component variants, responsive container variants, focus-visible support, and more.`,
+  date: '2020-07-15T18:55:18.391Z',
+  authors: [adamwathan],
+  image,
+}
+
+<!--excerpt-->
+
+I was hoping to save v1.5.0 for something _really_ exciting but we needed a new feature to support the new [`@tailwindcss/typography`](https://github.com/tailwindcss/typography) plugin so h\*ck it, we're dropping some new stuff on you early.
+
+No breaking changes, this is a minor release and we're professionals you silly goose.
+
+<!--/excerpt-->
+
+I was hoping to save v1.5.0 for something _really_ exciting but we needed a new feature to support the new [`@tailwindcss/typography`](https://github.com/tailwindcss/typography) plugin so h\*ck it, we're dropping some new stuff on you early.
+
+No breaking changes, this is a minor release and we're professionals you silly goose.
+
+## New Features
+
+### Component `variants` support
+
+Until Tailwind CSS v1.5.0, only "utility" classes were really intended to be used with `variants` (like "responsive", "hover", "focus", etc.)
+
+While these are still much more useful for utilities than any other type of class, we now support generating variants for component classes as well, like the `prose` classes in the new `@tailwindcss/typography` plugin:
+
+```html
+<article class="prose md:prose-lg">
+  <!-- Content -->
+</article>
+```
+
+You can take advantage of this feature in your own component classes by using the new `variants` option in the second argument of the `addComponents` plugin API:
+
+```js
+plugin(function ({ addComponents })) {
+  addComponents({
+    '.card': {
+      // ...
+    }
+  }, {
+    variants: ['responsive']
+  })
+})
+```
+
+...or using the array shorthand you might be familiar with from the `addUtilities` API:
+
+```js
+plugin(function ({ addComponents })) {
+  addComponents({
+    '.card': {
+      // ...
+    }
+  }, ['responsive'])
+})
+```
+
+To take advantage of these feature in your custom CSS (rather than using the plugin API), you can use a new `@layer` directive to explicitly tell Tailwind that your styles belong to the "components" bucket:
+
+```css
+@layer components {
+  @responsive {
+    .card {
+      /* ... */
+    }
+  }
+}
+```
+
+This helps Tailwind purge your unused CSS correctly, ensuring it doesn't remove any responsive component variants when using the default "conservative" purge mode.
+
+### Responsive `container` variants
+
+Piggy-backing off of the new component `variants` support, the `container` class now supports variants!
+
+```html
+<!-- Only lock the width at `md` sizes and above -->
+<div class="md:container">
+  <!-- ... -->
+</div>
+```
+
+We've enabled responsive variants by default, but if you are sick in the head you can also manually enable other variants like `focus`, `group-hover`, whatever:
+
+```js tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    container: ['responsive', 'focus', 'group-hover'],
+  },
+}
+```
+
+### New `focus-visible` variant
+
+We've added support for the [`:focus-visible` pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible) using a new `focus-visible` variant.
+
+This is super useful for adding focus styles that _only_ appear to keyboard users, and are ignored for mouse users:
+
+```html
+<button class="focus-visible:outline-none focus-visible:shadow-outline ...">
+  Click me
+</button>
+```
+
+It's not enabled for anything by default, but you can enable it in the `variants` section of your config file:
+
+```js tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus', 'focus-visible'],
+  },
+}
+```
+
+Browser support is still pretty weak on this but getting better. In the mean time, check out the [polyfill](https://github.com/WICG/focus-visible) and corresponding [PostCSS plugin](https://github.com/csstools/postcss-focus-visible) if you'd like to use this in all browsers right away.
+
+### New `checked` variant
+
+We've added a new `checked` variant you can use to conditionally style things like checkboxes and radio buttons:
+
+```html
+<input type="checkbox" class="bg-white checked:bg-blue-500" />
+```
+
+It's not enabled for anything by default, but you can enable it in the `variants` section of your config file:
+
+```js tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus', 'checked'],
+  },
+}
+```
+
+<Footer>
+  Want to talk about this post? <a href="https://github.com/tailwindcss/tailwindcss/discussions/2033">Discuss this on GitHub →</a>
+</Footer>

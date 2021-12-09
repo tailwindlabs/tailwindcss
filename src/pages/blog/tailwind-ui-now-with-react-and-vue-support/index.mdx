@@ -1,0 +1,77 @@
+import { adamwathan } from '@/authors'
+import card from './card.jpg'
+
+export const meta = {
+  title: 'Tailwind UI: Now with React + Vue support',
+  description: `Last year we released Tailwind UI — a huge directory of professionally designed UI examples built with Tailwind CSS. Today we’re excited to add first class support for React and Vue 3 to all of the examples in Tailwind UI, which makes it even easier to adapt them for your projects.`,
+  date: '2021-04-14T16:01:00.000Z',
+  authors: [adamwathan],
+  image: card,
+}
+
+Last year we released [Tailwind UI](https://tailwindui.com) — a huge directory of professionally designed UI examples built with Tailwind CSS. Up until now, all of the examples in Tailwind UI have been pure HTML which is sort of the lowest common denominator for all web developers, and makes it possible to adapt them to any templating language or JavaScript framework.
+
+Today we’re excited to add first class support for React and Vue 3 to all of the examples in Tailwind UI, which makes it even easier to adapt them for your projects.
+
+<!--more-->
+
+<a href="https://tailwindui.com">
+  <img src={card} alt="Tailwind UI: Now for React and Vue" />
+</a>
+
+It’s been [a long journey](https://blog.tailwindcss.com/building-react-and-vue-support-for-tailwind-ui) but I am super proud of where we ended up on this one, and really think it’s going to make Tailwind UI a useful tool for a whole new group of Tailwind CSS users.
+
+## Functional and accessible
+
+All of the React and Vue examples in Tailwind UI are powered [Headless UI](https://headlessui.dev) which is a library of components we developed to decouple all of the complicated JS behavior you need to build complex components like modals and dropdowns from the actual styles and markup.
+
+Headless UI handles all of the ARIA attribute management, keyboard interactions, focus handling, and more for you, meaning all of the React and Vue examples provided in Tailwind UI are fully functional, with no need to write any of that complex JS stuff yourself. All of that gnarly complexity is safely tucked away in your `node_modules` folder where we can make improvements and fix bugs on your behalf, without you ever having to change your own code.
+
+## Fully customizable
+
+With Headless UI, we’ve managed to abstract away all of the complicated JS functionality without taking away any control over the actual markup. That means that the entire design is still in entirely under your control.
+
+```jsx
+import { useState } from 'react'
+import { Switch } from '@headlessui/react'
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+export default function Example() {
+  const [enabled, setEnabled] = useState(false)
+
+  return (
+    <Switch
+      checked={enabled}
+      onChange={setEnabled}
+      className={classNames(
+        enabled ? 'bg-indigo-600' : 'bg-gray-200',
+        'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+      )}
+    >
+      <span className="sr-only">Use setting</span>
+      <span
+        aria-hidden="true"
+        className={classNames(
+          enabled ? 'translate-x-5' : 'translate-x-0',
+          'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'
+        )}
+      />
+    </Switch>
+  )
+}
+```
+
+You can copy a React or Vue example from Tailwind UI and change absolutely everything about it, from the border radius to the padding to the box shadows to the font-size, all by simply adding utility classes like you’re used to.
+
+## Get started
+
+If you’re already a Tailwind UI customer, all of this stuff is available to you today as a totally free update. Just log in to your account, select between HTML, React, or Vue in the dropdown above any component, and grab the code in the format you want.
+
+If you haven’t checked out Tailwind UI yet, browse the free preview components to get a feel for how it all works. It’s an awesome tool for moving fast on a new side-project idea, finding inspiration for a new feature you need to build at work, or learning how to implement a specific little UI trick with Tailwind, and a great way to support our work on open-source projects like Tailwind CSS, Headless UI, and Heroicons.
+
+<Footer>
+  Want to check it out? <a href="https://tailwindui.com">Visit the Tailwind UI website →</a>
+</Footer>

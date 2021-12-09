@@ -3,72 +3,85 @@ title: "Text Overflow"
 description: "Utilities for controlling text overflow in an element."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/textOverflow'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = {
+  utilities: {
+    'truncate': {
+      'overflow': 'hidden',
+      'text-overflow': 'ellipsis',
+      'white-space': 'nowrap',
+    },
+    'text-ellipsis': { 'text-overflow': 'ellipsis' },
+    'text-clip': { 'text-overflow': 'clip' },
+  },
+}
 
-## Truncate
+## Basic usage
+
+### Truncate
 
 Use `truncate` to truncate overflowing text with an ellipsis (<code>…</code>) if needed.
 
-```html indigo
-<template preview>
-  <p class="truncate max-w-xs px-6 py-4 mx-auto bg-indigo-200 text-indigo-500 font-medium rounded-lg">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
-  </p>
-</template>
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="mx-auto max-w-sm bg-white shadow-xl p-8 text-gray-700 text-sm leading-6 sm:text-base sm:leading-7">
+      <p class="truncate">
+        The longest word in any of the major English language dictionaries is <span class="text-gray-900 font-medium">pneumonoultramicroscopicsilicovolcanoconiosis,</span> a word that refers to a lung disease contracted from the inhalation of very fine silica particles, specifically from a volcano; medically, it is the same as silicosis.
+      </p>
+    </div>
+  </div>
+</Example>
 
+```html
 <p class="**truncate** ...">...</p>
 ```
 
-## Overflow Ellipsis
+### Overflow Ellipsis
 
 Use `overflow-ellipsis` to truncate overflowing text with an ellipsis (<code>…</code>) if needed.
 
-```html emerald
-<template preview>
-  <p class="overflow-ellipsis overflow-hidden max-w-xs px-6 py-4 mx-auto bg-emerald-200 text-emerald-500 font-medium rounded-lg">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
-  </p>
-</template>
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="mx-auto max-w-sm bg-white shadow-xl p-8 text-gray-700 text-sm leading-6 sm:text-base sm:leading-7">
+      <p class="overflow-ellipsis overflow-hidden">
+        The longest word in any of the major English language dictionaries is <span class="text-gray-900 font-medium">pneumonoultramicroscopicsilicovolcanoconiosis,</span> a word that refers to a lung disease contracted from the inhalation of very fine silica particles, specifically from a volcano; medically, it is the same as silicosis.
+      </p>
+    </div>
+  </div>
+</Example>
 
+```html
 <p class="**overflow-ellipsis** overflow-hidden ...">...</p>
 ```
 
-## Overflow Clip
+### Overflow Clip
 
-Use `overflow-clip` to truncate the text at the limit of the content area.
+Use `text-clip` to truncate the text at the limit of the content area.
 
-```html lightBlue
-<template preview>
-  <p class="overflow-clip overflow-hidden max-w-xs px-6 py-4 mx-auto bg-light-blue-200 text-light-blue-500 font-medium rounded-lg">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
-  </p>
-</template>
-
-<p class="**overflow-clip** overflow-hidden ...">...</p>
-```
-
-## Responsive
-
-To control the text overflow in an element only at a specific breakpoint, add a `{screen}:` prefix to any existing text overflow utility. For example, adding the class `md:overflow-clip` to an element would apply the `overflow-clip` utility at medium screen sizes and above.
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="mx-auto max-w-sm bg-white shadow-xl p-8 text-gray-700 text-sm leading-6 sm:text-base sm:leading-7">
+      <p class="text-clip overflow-hidden">
+        The longest word in any of the major English language dictionaries is <span class="text-gray-900 font-medium">pneumonoultramicroscopicsilicovolcanoconiosis,</span> a word that refers to a lung disease contracted from the inhalation of very fine silica particles, specifically from a volcano; medically, it is the same as silicosis.
+      </p>
+    </div>
+  </div>
+</Example>
 
 ```html
-<p class="truncate **md:overflow-clip** ...">
-  <!-- ... -->
-</p>
+<p class="**text-clip** overflow-hidden ...">...</p>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="textOverflow" />
+<HoverFocusAndOtherStates defaultClass="truncate" featuredClass="text-clip" element="p" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="textOverflow" />
+<BreakpointsAndMediaQueries defaultClass="truncate" featuredClass="text-clip" element="p" />

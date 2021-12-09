@@ -3,150 +3,132 @@ title: "Whitespace"
 description: "Utilities for controlling an element's white-space property."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/whitespace'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=whitespace'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Normal
+## Basic usage
+
+### Normal
 
 Use `whitespace-normal` to cause text to wrap normally within an element. Newlines and spaces will be collapsed.
 
-```html indigo
-<template preview>
-  <div class="w-3/4 px-6 py-4 bg-indigo-200 rounded-lg">
-    <div class="whitespace-normal font-flow text-indigo-500 text-3xl leading-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
+<Example p="none">
+  <div class="bg-white p-8 shadow-xl text-gray-700 max-w-md mx-auto overflow-auto text-sm leading-6 sm:text-base sm:leading-7">
+    <div class="whitespace-normal">Hey everyone!
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.
+You will never know.</div>
+</div>
+</Example>
 
-  reprehenderit saepe quam aliquid odio accusamus.</div>
-  </div>
-</template>
-
+```html
 <div class="w-3/4 ...">
-  <div class="**whitespace-normal** ...">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
+  <div class="**whitespace-normal** ...">Hey everyone!
 
-  reprehenderit saepe quam aliquid odio accusamus.</div>
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.
+
+You will never know.</div>
 </div>
 ```
 
-## No Wrap
+### No Wrap
 
 Use `whitespace-nowrap` to prevent text from wrapping within an element. Newlines and spaces will be collapsed.
 
-```html emerald
-<template preview>
-  <div class="w-3/4 px-6 py-4 bg-emerald-200 rounded-lg overflow-x-auto">
-    <div class="whitespace-nowrap font-flow text-emerald-500 text-3xl leading-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
+<Example p="none">
+  <div class="bg-white px-6 py-8 shadow-xl text-gray-700 max-w-md mx-auto overflow-auto text-sm leading-6 sm:text-base sm:leading-7">
+    <div class="whitespace-nowrap">Hey everyone!
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.
+You will never know.</div>
+</div>
+</Example>
 
-  reprehenderit saepe quam aliquid odio accusamus.</div>
-  </div>
-</template>
-
+```html
 <div class="w-3/4 overflow-x-auto ...">
-  <div class="**whitespace-nowrap** ...">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
+  <div class="**whitespace-nowrap** ...">Hey everyone!
 
-  reprehenderit saepe quam aliquid odio accusamus.</div>
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.
+
+You will never know.</div>
 </div>
 ```
 
-## Pre
+### Pre
 
 Use `whitespace-pre` to preserve newlines and spaces within an element. Text will not be wrapped.
 
-```html amber
-<template preview>
-  <div class="w-3/4 px-6 py-4 bg-amber-200 rounded-lg overflow-x-auto">
-    <div class="whitespace-pre font-flow text-amber-500 text-3xl leading-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
+<Example p="none">
+  <div class="bg-white px-6 py-8 shadow-xl text-gray-700 max-w-md mx-auto overflow-auto text-sm leading-6 sm:text-base sm:leading-7">
+    <div class="whitespace-pre">Hey everyone!<br>
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.</br>
+You will never know.</div>
+</div>
+</Example>
 
-  reprehenderit saepe quam aliquid odio accusamus.</div>
-  </div>
-</template>
-
+```html
 <div class="w-3/4 overflow-x-auto ...">
-  <div class="**whitespace-pre** ...">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
+  <div class="**whitespace-pre** ...">Hey everyone!
 
-  reprehenderit saepe quam aliquid odio accusamus.</div>
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.
+
+You will never know.</div>
 </div>
 ```
 
-## Pre Line
+### Pre Line
 
 Use `whitespace-pre-line` to preserve newlines but not spaces within an element. Text will be wrapped normally.
 
-```html lightBlue
-<template preview>
-  <div class="w-3/4 px-6 py-4 bg-light-blue-200 rounded-lg">
-    <div class="whitespace-pre-line font-flow text-light-blue-500 text-3xl leading-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
+<Example p="none">
+  <div class="bg-white px-6 py-8 shadow-xl text-gray-700 max-w-md mx-auto overflow-auto text-sm leading-6 sm:text-base sm:leading-7">
+    <div class="whitespace-pre-line">Hey everyone!<br>
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.</br>
+You will never know.</div>
+</div>
+</Example>
 
-  reprehenderit saepe quam aliquid odio accusamus.</div>
-  </div>
-</template>
-
+```html
 <div class="w-3/4 ...">
-  <div class="**whitespace-pre-line** ...">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
+  <div class="**whitespace-pre-line** ...">Hey everyone!
 
-  reprehenderit saepe quam aliquid odio accusamus.</div>
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.
+
+You will never know.</div>
 </div>
 ```
 
-## Pre Wrap
+### Pre Wrap
 
 Use `whitespace-pre-wrap` to preserve newlines and spaces within an element. Text will be wrapped normally.
 
-```html rose
-<template preview>
-  <div class="w-3/4 px-6 py-4 bg-rose-200 rounded-lg">
-    <div class="whitespace-pre-wrap font-flow text-rose-500 text-3xl leading-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
-
-  reprehenderit saepe quam aliquid odio accusamus.</div>
-  </div>
-</template>
-
-<div class="w-3/4 ...">
-  <div class="**whitespace-pre-wrap** ...">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-      eum natus enim maxime
-      laudantium quibusdam illo nihil,
-
-  reprehenderit saepe quam aliquid odio accusamus.</div>
+<Example p="none">
+  <div class="bg-white px-6 py-8 shadow-xl text-gray-700 max-w-md mx-auto overflow-auto text-sm leading-6 sm:text-base sm:leading-7">
+    <div class="whitespace-pre-wrap">Hey everyone!<br>
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.</br>
+You will never know.</div>
 </div>
-```
-
-## Responsive
-
-To control the whitespace property of an element only at a specific breakpoint, add a `{screen}:` prefix to any existing whitespace utility. For example, adding the class `md:whitespace-pre` to an element would apply the `whitespace-pre` utility at medium screen sizes and above.
+</Example>
 
 ```html
-<div class="whitespace-normal **md:whitespace-pre** ...">
-<!-- ... -->
+<div class="w-3/4 ...">
+  <div class="**whitespace-pre-wrap** ...">Hey everyone!
+
+It's almost 2022       and we still don't know if there is aliens living among us, or do we? Maybe the person writing this is an alien.
+
+You will never know.</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="whitespace" />
+<HoverFocusAndOtherStates defaultClass="whitespace-normal" featuredClass="whitespace-pre" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="whitespace" />
+<BreakpointsAndMediaQueries defaultClass="whitespace-normal" featuredClass="whitespace-pre" />

@@ -11,41 +11,58 @@ export function Heading({
   badge,
   className = '',
   hidden = false,
-  toc = false,
+  ignore = false,
   style = {},
+  nextElement,
   ...props
 }) {
   let Component = `h${level}`
-  const { registerHeading, unregisterHeading } = useContext(ContentsContext)
+  const context = useContext(ContentsContext)
 
   let ref = useRef()
   let top = useTop(ref)
 
   useEffect(() => {
-    if (toc && typeof top !== 'undefined') {
-      registerHeading(id, top)
+    if (!context) return
+    if (typeof top !== 'undefined') {
+      context.registerHeading(id, top)
     }
     return () => {
-      unregisterHeading(id)
+      context.unregisterHeading(id)
     }
-  }, [toc, top, id, registerHeading, unregisterHeading])
+  }, [top, id, context?.registerHeading, context?.unregisterHeading])
 
   return (
     <Component
-      className={clsx('group flex whitespace-pre-wrap', className)}
+      className={clsx('group flex whitespace-pre-wrap', className, {
+        '-ml-4 pl-4': !hidden,
+        'mb-2 text-sm leading-6 text-sky-500 font-semibold tracking-normal':
+          level === 2 && nextElement?.type === 'heading' && nextElement?.depth === 3,
+      })}
       id={id}
       ref={ref}
       style={{ ...(hidden ? { marginBottom: 0 } : {}), ...style }}
+      data-docsearch-ignore={ignore ? '' : undefined}
       {...props}
     >
       {!hidden && (
-        // eslint-disable-next-line
         <a
           href={`#${id}`}
-          className="absolute after:hash opacity-0 group-hover:opacity-100"
-          style={{ marginLeft: '-1em', paddingRight: '0.5em', boxShadow: 'none', color: '#a1a1aa' }}
+          className="absolute -ml-10 flex items-center opacity-0 border-0 group-hover:opacity-100"
           aria-label="Anchor"
-        />
+        >
+          &#8203;
+          <div className="w-6 h-6 text-gray-400 ring-1 ring-gray-900/5 rounded-md shadow-sm flex items-center justify-center hover:ring-gray-900/10 hover:shadow hover:text-gray-700">
+            <svg width="12" height="12" fill="none" aria-hidden="true">
+              <path
+                d="M3.75 1v10M8.25 1v10M1 3.75h10M1 8.25h10"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+        </a>
       )}
       {number && (
         <span className="bg-cyan-100 w-8 h-8 inline-flex items-center justify-center rounded-full text-cyan-700 text-xl mr-3 flex-none">

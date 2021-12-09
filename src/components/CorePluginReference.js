@@ -1,4 +1,4 @@
-import { corePluginsWithExamples } from '@/utils/corePluginsWithExamples'
+import corePluginsWithExamples from 'utilities?examples'
 
 const descriptions = {
   preflight: "Tailwind's base/reset styles",
@@ -25,31 +25,35 @@ export function CorePluginReference() {
           </tr>
         </thead>
         <tbody>
-          {corePluginsWithExamples.map(({ plugin, example }) => (
-            <tr key={plugin}>
-              <td>
-                <code>{plugin}</code>
-              </td>
-              <td>
-                {descriptions[plugin]
-                  ?.split(/`([^`]+)`/)
-                  .map((segment, i) =>
-                    i % 2 === 0 ? segment : <code key={i}>{segment}</code>
-                  ) || (
-                  <>
-                    The{' '}
-                    <code>
-                      {plugin.replace(
-                        /([a-z])([A-Z])/g,
-                        (_m, p1, p2) => `${p1}-${p2.toLowerCase()}`
-                      )}
-                    </code>{' '}
-                    utilities like <code>{example}</code>
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
+          {corePluginsWithExamples
+            .sort(({ plugin: a }, { plugin: b }) => {
+              return a < b ? -1 : 1
+            })
+            .map(({ plugin, example }) => (
+              <tr key={plugin}>
+                <td>
+                  <code>{plugin}</code>
+                </td>
+                <td>
+                  {descriptions[plugin]
+                    ?.split(/`([^`]+)`/)
+                    .map((segment, i) =>
+                      i % 2 === 0 ? segment : <code key={i}>{segment}</code>
+                    ) || (
+                    <>
+                      The{' '}
+                      <code>
+                        {plugin.replace(
+                          /([a-z])([A-Z])/g,
+                          (_m, p1, p2) => `${p1}-${p2.toLowerCase()}`
+                        )}
+                      </code>{' '}
+                      utilities like <code>{example}</code>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

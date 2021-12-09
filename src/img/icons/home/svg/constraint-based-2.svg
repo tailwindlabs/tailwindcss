@@ -1,0 +1,99 @@
+<svg width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="32" cy="32" r="32" fill="#fff"></circle>
+  <circle cx="32" cy="32" r="29" fill="#E0E7FF"></circle>
+  <mask id="constraint-based_svg__a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="58"
+    height="58">
+    <circle cx="32" cy="32" r="29" fill="url(#constraint-based_svg__a)"></circle>
+  </mask>
+  <g mask="url(#constraint-based_svg__a)">
+    <path opacity="0.1" fill="#4338CA" d="M46 63V0h1v63zm-29 0V0h1v63z"></path>
+    <path opacity="0.1" fill="#4338CA" d="M63 18H0v-1h63z"></path>
+    <path opacity="0.06" fill="#312E81" d="M47 47H17V17h30z"></path>
+    <path opacity="0.1" fill="#4338CA" d="M63 47H0v-1h63z"></path>
+    <g filter="url(#constraint-based_svg__c)">
+      <rect x="18" y="18" width="12" height="12" rx="4" fill="#fff"></rect>
+      <rect x="17.5" y="17.5" width="13" height="13" rx="4.5" stroke="#122F3F" stroke-opacity="0.05"></rect>
+    </g>
+    <g filter="url(#constraint-based_svg__d)">
+      <path
+        d="M38.576 34.524a2 2 0 012.841.007l4.007 4.061a2 2 0 01-.003 2.813l-4.007 4.043a2 2 0 01-2.835.006l-4.043-4.043a2 2 0 01-.003-2.825l4.043-4.062z"
+        fill="#4F46E5"></path>
+      <path
+        d="M41.773 34.18a2.5 2.5 0 00-3.551-.009l-4.044 4.062a2.5 2.5 0 00.005 3.532l4.043 4.043a2.5 2.5 0 003.543-.008l4.007-4.043a2.5 2.5 0 00.004-3.516l-4.007-4.062z"
+        stroke="#4F46E5"></path>
+    </g>
+    <g filter="url(#constraint-based_svg__e)">
+      <mask id="constraint-based_svg__b" maskUnits="userSpaceOnUse" x="33" y="17" width="14" height="14" fill="#000">
+        <path fill="#fff" d="M33 17h14v14H33z"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M40 18a6 6 0 100 12 6 6 0 000-12zm0 3a3 3 0 100 6 3 3 0 000-6z"></path>
+      </mask>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M40 18a6 6 0 100 12 6 6 0 000-12zm0 3a3 3 0 100 6 3 3 0 000-6z"
+        fill="#fff"></path>
+      <path
+        d="M35 24a5 5 0 015-5v-2a7 7 0 00-7 7h2zm5 5a5 5 0 01-5-5h-2a7 7 0 007 7v-2zm5-5a5 5 0 01-5 5v2a7 7 0 007-7h-2zm-5-5a5 5 0 015 5h2a7 7 0 00-7-7v2zm-2 5a2 2 0 012-2v-2a4 4 0 00-4 4h2zm2 2a2 2 0 01-2-2h-2a4 4 0 004 4v-2zm2-2a2 2 0 01-2 2v2a4 4 0 004-4h-2zm-2-2a2 2 0 012 2h2a4 4 0 00-4-4v2z"
+        fill="#122F3F" fill-opacity="0.05" mask="url(#constraint-based_svg__b)"></path>
+    </g>
+    <g filter="url(#constraint-based_svg__g)">
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.856 34.707c.471-.943 1.816-.943 2.288 0l4.72 9.442A1.28 1.28 0 0128.72 46h-9.44c-.95 0-1.569-1-1.143-1.851l4.72-9.442z"
+        fill="#fff"></path>
+      <path
+        d="M25.59 34.483c-.654-1.31-2.526-1.31-3.18 0l-4.72 9.442a1.779 1.779 0 001.59 2.575h9.44a1.779 1.779 0 001.59-2.575l-4.72-9.441z"
+        stroke="#122F3F" stroke-opacity="0.05"></path>
+    </g>
+  </g>
+  <path d="M60.5 32c0 15.74-12.76 28.5-28.5 28.5S3.5 47.74 3.5 32 16.26 3.5 32 3.5 60.5 16.26 60.5 32z" stroke="#334155"
+    stroke-opacity="0.06"></path>
+  <defs>
+    <filter id="constraint-based_svg__c" x="14" y="16" width="20" height="20" filterUnits="userSpaceOnUse"
+      color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+      <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha">
+      </feColorMatrix>
+      <feOffset dy="2"></feOffset>
+      <feGaussianBlur stdDeviation="1.5"></feGaussianBlur>
+      <feColorMatrix values="0 0 0 0 0.0354167 0 0 0 0 0.0391579 0 0 0 0 0.2125 0 0 0 0.1 0"></feColorMatrix>
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_0:1733"></feBlend>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow_0:1733" result="shape"></feBlend>
+    </filter>
+    <filter id="constraint-based_svg__d" x="29.95" y="31.935" width="20.05" height="20.105" filterUnits="userSpaceOnUse"
+      color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+      <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha">
+      </feColorMatrix>
+      <feOffset dy="2"></feOffset>
+      <feGaussianBlur stdDeviation="1.5"></feGaussianBlur>
+      <feColorMatrix values="0 0 0 0 0.0354167 0 0 0 0 0.0391579 0 0 0 0 0.2125 0 0 0 0.2 0"></feColorMatrix>
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_0:1733"></feBlend>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow_0:1733" result="shape"></feBlend>
+    </filter>
+    <filter id="constraint-based_svg__e" x="30" y="16" width="20" height="20" filterUnits="userSpaceOnUse"
+      color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+      <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha">
+      </feColorMatrix>
+      <feOffset dy="2"></feOffset>
+      <feGaussianBlur stdDeviation="1.5"></feGaussianBlur>
+      <feColorMatrix values="0 0 0 0 0.0354167 0 0 0 0 0.0391579 0 0 0 0 0.2125 0 0 0 0.1 0"></feColorMatrix>
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_0:1733"></feBlend>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow_0:1733" result="shape"></feBlend>
+    </filter>
+    <filter id="constraint-based_svg__g" x="13.999" y="32" width="20.003" height="20" filterUnits="userSpaceOnUse"
+      color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+      <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha">
+      </feColorMatrix>
+      <feOffset dy="2"></feOffset>
+      <feGaussianBlur stdDeviation="1.5"></feGaussianBlur>
+      <feColorMatrix values="0 0 0 0 0.0354167 0 0 0 0 0.0391579 0 0 0 0 0.2125 0 0 0 0.1 0"></feColorMatrix>
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_0:1733"></feBlend>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow_0:1733" result="shape"></feBlend>
+    </filter>
+    <radialGradient id="constraint-based_svg__a" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+      gradientTransform="matrix(0 29 -77 0 32 32)">
+      <stop offset="0.444" stop-color="#C4C4C4"></stop>
+      <stop offset="0.961" stop-color="#C4C4C4" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+</svg>

@@ -175,7 +175,7 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
 
         ### Configure Tailwind to remove unused styles in production
 
-        In your \`tailwind.config.js\` file, configure the \`purge\` option with the paths to all of your ${joinAsSpeech(
+        In your \`tailwind.config.js\` file, configure the \`content\` option with the paths to all of your ${joinAsSpeech(
           types
         )} so Tailwind can tree-shake unused styles in production builds:
 

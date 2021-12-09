@@ -73,7 +73,7 @@ function Snippet({ color, snippet }) {
     >
       <pre
         className={clsx(
-          'scrollbar-none overflow-x-auto p-6 text-sm leading-snug language-html text-white',
+          'scrollbar-none overflow-x-auto p-6 text-sm leading-snug language-html text-gray-50',
           {
             'bg-black bg-opacity-75': codeBackground[color],
           }
@@ -87,7 +87,7 @@ function Snippet({ color, snippet }) {
 
 export function CodeSample({ preview, src, snippet, previewClassName, color = 'gray' }) {
   return (
-    <div className="relative overflow-hidden mb-8">
+    <div className="not-prose relative overflow-hidden mb-8">
       {preview ? (
         <div
           className={clsx(
@@ -132,7 +132,7 @@ export function ResizableCodeSample({
   }, [])
 
   return (
-    <div className="relative mb-8">
+    <div className="not-prose relative mb-8">
       <div
         ref={previewContainerRef}
         className={`relative rounded-t-xl ${containerBackground[color]}`}

@@ -3,72 +3,76 @@ title: "Word Break"
 description: "Utilities for controlling word breaks in an element."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/wordBreak'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=wordBreak'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Normal
+## Basic usage
+
+### Normal
 
 Use `break-normal` to only add line breaks at normal word break points.
 
-```html lightBlue
-<template preview>
-  <p class="break-normal max-w-xs px-6 py-4 mx-auto bg-light-blue-200 text-light-blue-500 font-medium rounded-lg">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
-  </p>
-</template>
+<Example p="none">
+  <div class="overflow-x-scroll sm:overflow-x-visible px-4">
+    <div class="mx-auto max-w-sm bg-white shadow-xl p-8 text-gray-500">
+      <p class="break-normal">The longest word in any of the major English language dictionaries is
+      <span class="text-gray-900 font-medium">pneumonoultramicroscopicsilicovolcanoconiosis,</span>
+      a word that refers to a lung disease contracted from the inhalation of very fine silica particles, specifically from a volcano; medically, it is the same as silicosis.</p>
+    </div>
+  </div>
+</Example>
 
+```html
 <p class="**break-normal** ...">...</p>
 ```
 
-## Break Words
+### Break Words
 
 Use `break-words` to add line breaks mid-word if needed.
 
-```html amber
-<template preview>
-  <p class="break-words max-w-xs px-6 py-4 mx-auto bg-amber-200 text-amber-500 font-medium rounded-lg">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
-  </p>
-</template>
+<Example p="none">
+  <div class="px-4">
+    <div class="mx-auto max-w-sm bg-white shadow-xl p-8 text-gray-500">
+      <p class="break-words">The longest word in any of the major English language dictionaries is
+      <span class="text-gray-900 font-medium">pneumonoultramicroscopicsilicovolcanoconiosis,</span>
+      a word that refers to a lung disease contracted from the inhalation of very fine silica particles, specifically from a volcano; medically, it is the same as silicosis.</p>
+    </div>
+  </div>
+</Example>
 
+```html
 <p class="**break-words** ...">...</p>
 ```
 
-## Break All
+### Break All
 
 Use `break-all` to add line breaks whenever necessary, without trying to preserve whole words.
 
-```html emerald
-<template preview>
-  <p class="break-all max-w-xs px-6 py-4 mx-auto bg-emerald-200 text-emerald-500 font-medium rounded-lg">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
-  </p>
-</template>
+<Example p="none">
+  <div class="px-4">
+    <div class="mx-auto max-w-sm bg-white shadow-xl p-8 text-gray-500">
+      <p class="break-all">The longest word in any of the major English language dictionaries is
+      <span class="text-gray-900 font-medium">pneumonoultramicroscopicsilicovolcanoconiosis,</span>
+      a word that refers to a lung disease contracted from the inhalation of very fine silica particles, specifically from a volcano; medically, it is the same as silicosis.</p>
+    </div>
+  </div>
+</Example>
 
+```html
 <p class="**break-all** ...">...</p>
 ```
 
-## Responsive
+---
 
-To control the word breaks in an element only at a specific breakpoint, add a `{screen}:` prefix to any existing word break utility. For example, adding the class `md:break-all` to an element would apply the `break-all` utility at medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<p class="break-normal **md:break-all** ...">
-  <!-- ... -->
-</p>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="break-normal" featuredClass="break-all" element="p" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Variants
-
-<Variants plugin="wordBreak" />
-
-### Disabling
-
-<Disabling plugin="wordBreak" />
+<BreakpointsAndMediaQueries defaultClass="break-normal" featuredClass="break-all" element="p" />

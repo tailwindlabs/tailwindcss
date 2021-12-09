@@ -11,64 +11,58 @@ Now that dark mode is a first-class feature of many operating systems, it's beco
 
 To make this as easy as possible, Tailwind includes a `dark` variant that lets you style your site differently when dark mode is enabled:
 
+<Example p="none">
+  <div class="grid grid-cols-1 sm:grid-cols-2">
+    <div class="p-8 pt-7">
+      <p class="mb-2 text-sm font-medium text-gray-500">Light mode</p>
+      <div class="bg-white rounded-lg px-6 py-8 ring-1 ring-gray-900/5 shadow-xl">
+        <div>
+          <span class="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg">
+            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </span>
+        </div>
+        <h3 class="mt-5 text-base font-medium text-gray-900 tracking-tight">Writes Upside-Down</h3>
+        <p class="mt-2 text-sm text-gray-500">
+          The Zero Gravity Pen can be used to write in any orientation, including upside-down. It even works in outer space.
+        </p>
+      </div>
+    </div>
+    <div class="bg-gray-900 p-8 pt-7">
+      <p class="mb-2 text-sm font-medium text-gray-400">Dark mode</p>
+      <div class="bg-gray-800 rounded-lg px-6 py-8 ring-1 ring-gray-900/5 shadow-xl">
+        <div>
+          <span class="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg">
+            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </span>
+        </div>
+        <h3 class="mt-5 text-base font-medium text-white tracking-tight">Writes Upside-Down</h3>
+        <p class="mt-2 text-sm text-gray-400">
+          The Zero Gravity Pen can be used to write in any orientation, including upside-down. It even works in outer space.
+        </p>
+      </div>
+    </div>
+  </div>
+</Example>
+
 ```html
-<div class="bg-white **dark:bg-gray-800**">
-  <h1 class="text-gray-900 **dark:text-white**">Dark mode is here!</h1>
-  <p class="text-gray-600 **dark:text-gray-300**">
-    Lorem ipsum...
+<div class="bg-white **dark:bg-gray-900** rounded-lg px-6 py-8 ring-1 ring-gray-900/5 shadow-xl">
+  <div>
+    <span class="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg">
+      <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><!-- ... --></svg>
+    </span>
+  </div>
+  <h3 class="text-gray-900 **dark:text-white** mt-5 text-base font-medium tracking-tight">Writes Upside-Down</h3>
+  <p class="text-gray-500 **dark:text-gray-400** mt-2 text-sm">
+    The Zero Gravity Pen can be used to write in any orientation, including upside-down. It even works in outer space.
   </p>
 </div>
 ```
 
-It's important to note that because of file size considerations, **the dark mode variant is not enabled in Tailwind by default**.
-
-To enable it, set the `darkMode` option in your `tailwind.config.js` file to `media`:
-
-```js
-// tailwind.config.js
-module.exports = {
-  darkMode: 'media',
-  // ...
-}
-```
-
-Now whenever dark mode is enabled on the user's operating system, `dark:{class}` classes will take precedence over unprefixed classes. The `media` strategy uses the `prefers-color-scheme` media feature under the hood, but if you'd like to support toggling dark mode manually, you can also [use the 'class' strategy](#toggling-dark-mode-manually) for more control.
-
-By default, when `darkMode` is enabled `dark` variants are only generated for color-related classes, which includes text color, background color, border color, gradients, and placeholder color.
-
----
-
-## Stacking with other variants
-
-The `dark` variant can be combined with both [responsive](https://tailwindcss.com/docs/responsive-design) variants and [state variants](https://tailwindcss.com/docs/hover-focus-and-other-states) (like hover and focus):
-
-```html
-<button class="lg:dark:hover:bg-white ...">
-  <!-- ... -->
-</button>
-```
-
-The responsive variant needs to come first, then `dark`, then the state variant for this to work.
-
----
-
-## Enabling for other utilities
-
-To enable the `dark` variant for other utilities, add `dark` to the variants list for whatever utility you'd like to enable it for:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      textOpacity: ['dark']
-    }
-  }
-}
-```
-
-By default, the `dark` variant is enabled for `backgroundColor`, `borderColor`, `gradientColorStops`, `placeholderColor`, and `textColor`.
+By default this uses the `prefers-color-scheme` CSS media feature, but you can also build sites that support toggling dark mode manually using the ['class' strategy](#toggling-dark-mode-manually).
 
 ---
 
@@ -76,8 +70,7 @@ By default, the `dark` variant is enabled for `backgroundColor`, `borderColor`, 
 
 If you want to support toggling dark mode manually instead of relying on the operating system preference, use the `class` strategy instead of the `media` strategy:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   darkMode: 'class',
   // ...
@@ -131,25 +124,3 @@ localStorage.removeItem('theme')
 ```
 
 Again you can manage this however you like, even storing the preference server-side in a database and rendering the class on the server — it's totally up to you.
-
-### Specificity considerations
-
-When using the `class` strategy, the specificity of dark mode utilities will be higher than regular utilities because the selector contains an extra class. This means that in certain situations the behavior of some combination of utilities can be slightly different in `class` mode than it is in `media` mode.
-
-For example, consider this HTML:
-
-```html
-<div class="text-black text-opacity-50 dark:text-white">
-  <!-- ... -->
-</div>
-```
-
-When using the `media` strategy, `dark:text-white` has the same specificity as `text-black` and `text-opacity-50`. Because `text-opacity-50` is defined later in the generated CSS than `dark:text-white`, the white text will have 50% opacity.
-
-When using the `class` strategy, `dark:text-white` has a _higher_ specificity, so even though it is defined sooner, it will actually override `text-opacity-50` and reset the opacity back to 1. So when using the `class` strategy, you'll need to re-specify the opacity in dark mode:
-
-```html
-<div class="text-black text-opacity-50 dark:text-white dark:text-opacity-50">
-  <!-- ... -->
-</div>
-```

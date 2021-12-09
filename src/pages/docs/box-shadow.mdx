@@ -1,114 +1,128 @@
 ---
 title: "Box Shadow"
 description: "Utilities for controlling the box shadow of an element."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/boxShadow'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=boxShadow'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = {
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      'box-shadow': properties['--tw-shadow'],
+    }
+  },
+}
 
-## Outer shadow
+## Basic usage
+
+### Adding an outer shadow
 
 Use the `shadow-sm`, `shadow`, `shadow-md`, `shadow-lg`, `shadow-xl`, or `shadow-2xl` utilities to apply different sized outer box shadows to an element.
 
-```html indigo
-<template preview>
-  <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
-    <div class="shadow-sm h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-sm</div>
-    <div class="shadow h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow</div>
-    <div class="shadow-md h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-md</div>
-    <div class="shadow-lg h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-lg</div>
-    <div class="shadow-xl h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-xl</div>
-    <div class="shadow-2xl h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-2xl</div>
+<Example p="none">
+  <div class="flex sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-12 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-md</p>
+      <div class="w-24 h-24 rounded-lg bg-white shadow-md"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-lg</p>
+      <div class="w-24 h-24 rounded-lg bg-white shadow-lg"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-xl</p>
+      <div class="w-24 h-24 rounded-lg bg-white shadow-xl"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-2xl</p>
+      <div class="w-24 h-24 rounded-lg bg-white shadow-2xl"></div>
+    </div>
   </div>
-</template>
+  </div>
+</Example>
 
-<div class="**shadow-sm** ..."></div>
-<div class="**shadow** ..."></div>
+```html
 <div class="**shadow-md** ..."></div>
 <div class="**shadow-lg** ..."></div>
 <div class="**shadow-xl** ..."></div>
 <div class="**shadow-2xl** ..."></div>
 ```
 
-## Inner shadow
+### Adding an inner shadow
 
 Use the `shadow-inner` utility to apply a subtle inset box shadow to an element. This can be useful for things like form controls or wells.
 
-```html purple
-<template preview>
-  <div class="flex justify-center items-center">
-    <div class="shadow-inner h-24 w-40 font-medium bg-purple-200  text-purple-500 rounded-md flex items-center justify-center">.shadow-inner</div>
+<Example>
+  <div class="flex items-center justify-around gap-4 font-mono font-bold">
+    <div class="flex flex-col items-center">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-inner</p>
+      <div class="w-24 h-24 rounded-lg bg-white shadow-inner ring-1 ring-black/5"></div>
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**shadow-inner** ..."></div>
 ```
 
-## No shadow
+### Removing the shadow
 
 Use `shadow-none` to remove an existing box shadow from an element. This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
 
-```html rose
-<template preview>
-  <div class="flex justify-center items-center">
-    <div class="shadow-none h-24 w-40 font-medium bg-rose-200 text-rose-500 rounded-md flex items-center justify-center">.shadow-none</div>
+<Example>
+  <div class="flex items-center justify-around gap-4 font-mono font-bold">
+    <div class="flex flex-col items-center">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-none</p>
+      <div class="w-24 h-24 rounded-lg bg-white shadow-none"></div>
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**shadow-none** ..."></div>
 ```
 
-## Responsive
+---
 
-To control the shadow of an element at a specific breakpoint, add a `{screen}:` prefix to any existing shadow utility. For example, use `md:shadow-lg` to apply the `shadow-lg` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<div class="shadow **md:shadow-lg** ...">
-  <!-- ... -->
-</div>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="shadow" featuredClass="shadow-lg" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Box Shadows
+<BreakpointsAndMediaQueries defaultClass="shadow" featuredClass="shadow-lg" />
 
-By default, Tailwind provides six drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can change, add, or remove these by editing the `theme.boxShadow` section of your Tailwind config.
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides six drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can customize these values by editing `theme.boxShadow` or `theme.extend.boxShadow` in your `tailwind.config.js` file.
 
 If a `DEFAULT` shadow is provided, it will be used for the non-suffixed `shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `shadow-2` utility.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      boxShadow: {
-        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-+       '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
-        inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-        none: 'none',
+      extend: {
++       boxShadow: {
++         '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
++       }
       }
     }
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="boxShadow" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="boxShadow" />
+<ArbitraryValues property="box-shadow" featuredClass="shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]" />

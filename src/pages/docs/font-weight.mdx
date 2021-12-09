@@ -1,94 +1,85 @@
 ---
 title: "Font Weight"
 description: "Utilities for controlling the font weight of an element."
-features:
-  responsive: true
-  customizable: true
-  hover: true
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/fontWeight'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=fontWeight'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Setting the font weight
 
 Control the font weight of an element using the `font-{weight}` utilities.
 
-```html lightBlue
-<template preview>
-  <dl class="text-light-blue-600 space-y-6">
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">thin</dt>
-      <dd class="text-xl font-thin">The quick brown fox jumps over the lazy dog.</dd>
+<Example>
+  <div class="flex flex-col gap-8">
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">font-light</span>
+      <p class="font-light text-lg text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
     </div>
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">extralight</dt>
-      <dd class="text-xl font-extralight">The quick brown fox jumps over the lazy dog.</dd>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">font-normal</span>
+      <p class="font-normal text-lg text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
     </div>
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">light</dt>
-      <dd class="text-xl font-light">The quick brown fox jumps over the lazy dog.</dd>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">font-medium</span>
+      <p class="font-medium text-lg text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
     </div>
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">normal</dt>
-      <dd class="text-xl font-normal">The quick brown fox jumps over the lazy dog.</dd>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">font-semibold</span>
+      <p class="font-semibold text-lg text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
     </div>
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">medium</dt>
-      <dd class="text-xl font-medium">The quick brown fox jumps over the lazy dog.</dd>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">font-bold</span>
+      <p class="font-bold text-lg text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
     </div>
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">semibold</dt>
-      <dd class="text-xl font-semibold">The quick brown fox jumps over the lazy dog.</dd>
-    </div>
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">bold</dt>
-      <dd class="text-xl font-bold">The quick brown fox jumps over the lazy dog.</dd>
-    </div>
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">extrabold</dt>
-      <dd class="text-xl font-extrabold">The quick brown fox jumps over the lazy dog.</dd>
-    </div>
-    <div class="flex items-start">
-      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">black</dt>
-      <dd class="text-xl font-black">The quick brown fox jumps over the lazy dog.</dd>
-    </div>
-  </dl> 
-</template>
+  </div>
+</Example>
 
-<p class="**font-thin** ...">The quick brown fox ...</p>
-<p class="**font-extralight** ...">The quick brown fox ...</p>
+```html
 <p class="**font-light** ...">The quick brown fox ...</p>
 <p class="**font-normal** ...">The quick brown fox ...</p>
 <p class="**font-medium** ...">The quick brown fox ...</p>
 <p class="**font-semibold** ...">The quick brown fox ...</p>
 <p class="**font-bold** ...">The quick brown fox ...</p>
-<p class="**font-extrabold** ...">The quick brown fox ...</p>
-<p class="**font-black** ...">The quick brown fox ...</p>
 ```
 
-## Responsive
+---
 
-To control the font weight of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font weight utility. For example, use `md:font-bold` to apply the `font-bold` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<p class="font-normal **md:font-bold** ...">The quick brown fox jumps over the lazy dog.</p>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="font-normal" featuredClass="font-bold" element="p"  />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Font Weights
+<BreakpointsAndMediaQueries defaultClass="font-normal" featuredClass="font-bold" element="p"  />
+
+---
+
+## Using custom values
+
+### Customizing your theme
 
 By default, Tailwind provides 10 `font-weight` utilities. You change, add, or remove these by editing the `theme.fontWeight` section of your Tailwind config.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       fontWeight: {
@@ -108,10 +99,8 @@ By default, Tailwind provides 10 `font-weight` utilities. You change, add, or re
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="fontWeight" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="fontWeight" />
+<ArbitraryValues property="font-weight" featuredClass="font-[1100]" element="p"  />

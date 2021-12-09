@@ -1,0 +1,32 @@
+---
+title: Editor Setup
+description: Plugins and configuration settings that can improve the developer experience when working with Tailwind CSS.
+---
+
+## Syntax support
+
+Tailwind CSS uses a lot of custom CSS at-rules like `@tailwind`, `@apply`, and `@screen`, and in many editors this can trigger warnings or errors where these rules aren't recognized.
+
+The solution to this is almost always to install a plugin for your editor/IDE for PostCSS language support instead of regular CSS. For example, VS Code has a [PostCSS Language Support](https://marketplace.visualstudio.com/items?itemName=csstools.postcss) plugin you can use that works great with Tailwind CSS.
+
+In some cases, you may need to disable native CSS linting/validations if your editor is very strict about the syntax it expects in your CSS files.
+
+
+## IntelliSense for VS Code
+
+The official [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension for Visual Studio Code enhances the Tailwind development experience by providing users with advanced features such as autocomplete, syntax highlighting, and linting.
+
+<img src={require('@/img/intellisense.png').default} alt="Tailwind CSS IntelliSense extension for Visual Studio Code" width={1344} height={672} className="rounded-lg" />
+
+- **Autocomplete**. Intelligent suggestions for class names, as well as [CSS functions and directives](/docs/functions-and-directives).
+- **Linting**. Highlights errors and potential bugs in both your CSS and your markup.
+- **Hover Previews**. See the complete CSS for a Tailwind class name by hovering over it.
+- **Syntax Highlighting**. Provides syntax definitions so that Tailwind features are highlighted correctly.
+
+Check out the project [on GitHub](https://github.com/tailwindcss/intellisense) to learn more, or [add it to Visual Studio Code](vscode:extension/bradlc.vscode-tailwindcss) to get started now.
+
+## JetBrains IDEs
+
+JetBrains IDEs like WebStorm, PhpStorm, and others include support for intelligent Tailwind CSS completions in your HTML and when using `@apply`.
+
+[Learn more about Tailwind CSS support in JetBrains IDEs &rarr;](https://www.jetbrains.com/help/webstorm/tailwind-css.html)

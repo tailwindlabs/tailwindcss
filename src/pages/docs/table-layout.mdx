@@ -1,151 +1,154 @@
 ---
 title: "Table Layout"
 description: "Utilities for controlling the table layout algorithm."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/tableLayout'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=tableLayout'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Auto
+## Basic usage
+
+### Auto
 
 Use `table-auto` to allow the table to automatically size columns to fit the contents of the cell.
 
-```html emerald
-<template preview>
-  <table class="table-auto">
-    <thead>
-      <tr>
-        <th class="px-4 py-2 text-emerald-600">Title</th>
-        <th class="px-4 py-2 text-emerald-600">Author</th>
-        <th class="px-4 py-2 text-emerald-600">Views</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">Intro to CSS</td>
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">Adam</td>
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">858</td>
-      </tr>
-      <tr class="bg-emerald-200">
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">A Long and Winding Tour of the History of UI Frameworks and Tools and the Impact on Design</td>
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">Adam</td>
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">112</td>
-      </tr>
-      <tr>
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">Intro to JavaScript</td>
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">Chris</td>
-        <td class="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">1,280</td>
-      </tr>
-    </tbody>
-  </table>
-</template>
+<Example p="none">
+  <div class="shadow-sm overflow-hidden my-8">
+    <table class="border-collapse table-auto w-full text-sm">
+      <thead>
+        <tr>
+          <th class="border-b font-medium p-4 pl-8 pt-0 pb-3 text-gray-400 text-left">Song</th>
+          <th class="border-b font-medium p-4 pt-0 pb-3 text-gray-400 text-left">Artist</th>
+          <th class="border-b font-medium p-4 pr-8 pt-0 pb-3 text-gray-400 text-left">Year</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <tr>
+          <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">The Sliding Mr. Bones (Next Stop, Pottersville)</td>
+          <td class="border-b border-gray-100 p-4 text-gray-500">Malcolm Lockyer</td>
+          <td class="border-b border-gray-100 p-4 pr-8 text-gray-500">1961</td>
+        </tr>
+        <tr>
+          <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">Witchy Woman</td>
+          <td class="border-b border-gray-100 p-4 text-gray-500">The Eagles</td>
+          <td class="border-b border-gray-100 p-4 pr-8 text-gray-500">1972</td>
+        </tr>
+        <tr>
+          <td class="border-b border-gray-200 p-4 pl-8 text-gray-500">Shining Star</td>
+          <td class="border-b border-gray-200 p-4 text-gray-500">Earth, Wind, and Fire</td>
+          <td class="border-b border-gray-200 p-4 pr-8 text-gray-500">1975</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</Example>
 
+```html
 <table class="**table-auto**">
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Author</th>
-      <th>Views</th>
+      <th>Song</th>
+      <th>Artist</th>
+      <th>Year</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Intro to CSS</td>
-      <td>Adam</td>
-      <td>858</td>
-    </tr>
-    <tr class="bg-emerald-200">
-      <td>A Long and Winding Tour of the History of UI Frameworks and Tools and the Impact on Design</td>
-      <td>Adam</td>
-      <td>112</td>
+      <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
+      <td>Malcolm Lockyer</td>
+      <td>1961</td>
     </tr>
     <tr>
-      <td>Intro to JavaScript</td>
-      <td>Chris</td>
-      <td>1,280</td>
+      <td>Witchy Woman</td>
+      <td>The Eagles</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <td>Shining Star</td>
+      <td>Earth, Wind, and Fire</td>
+      <td>1975</td>
     </tr>
   </tbody>
 </table>
 ```
 
-## Fixed
+### Fixed
 
 Use `table-fixed` to allow the table to ignore the content and use fixed widths for columns. The width of the first row will set the column widths for the whole table.
 
 You can manually set the widths for some columns and the rest of the available width will be divided evenly amongst the columns without explicit width.
 
-```html lightBlue
-<template preview>
-  <table class="table-fixed">
-    <thead>
-      <tr>
-        <th class="w-1/2 px-4 py-2 text-light-blue-600">Title</th>
-        <th class="w-1/4 px-4 py-2 text-light-blue-600">Author</th>
-        <th class="w-1/4 px-4 py-2 text-light-blue-600">Views</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">Intro to CSS</td>
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">Adam</td>
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">858</td>
-      </tr>
-      <tr class="bg-light-blue-200">
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">A Long and Winding Tour of the History of UI Frameworks and Tools and the Impact on Design</td>
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">Adam</td>
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">112</td>
-      </tr>
-      <tr>
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">Intro to JavaScript</td>
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">Chris</td>
-        <td class="border border-light-blue-500 px-4 py-2 text-light-blue-600 font-medium">1,280</td>
-      </tr>
-    </tbody>
-  </table>
-</template>
+<Example p="none">
+  <div class="shadow-sm overflow-hidden my-8">
+    <table class="border-collapse table-fixed w-full text-sm">
+      <thead>
+        <tr>
+          <th class="border-b font-medium p-4 pl-8 pt-0 pb-3 text-gray-400 text-left">Song</th>
+          <th class="border-b font-medium p-4 pt-0 pb-3 text-gray-400 text-left">Artist</th>
+          <th class="border-b font-medium p-4 pr-8 pt-0 pb-3 text-gray-400 text-left">Year</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <tr>
+          <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">The Sliding Mr. Bones (Next Stop, Pottersville)</td>
+          <td class="border-b border-gray-100 p-4 text-gray-500">Malcolm Lockyer</td>
+          <td class="border-b border-gray-100 p-4 pr-8 text-gray-500">1961</td>
+        </tr>
+        <tr>
+          <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">Witchy Woman</td>
+          <td class="border-b border-gray-100 p-4 text-gray-500">The Eagles</td>
+          <td class="border-b border-gray-100 p-4 pr-8 text-gray-500">1972</td>
+        </tr>
+        <tr>
+          <td class="border-b border-gray-200 p-4 pl-8 text-gray-500">Shining Star</td>
+          <td class="border-b border-gray-200 p-4 text-gray-500">Earth, Wind, and Fire</td>
+          <td class="border-b border-gray-200 p-4 pr-8 text-gray-500">1975</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</Example>
 
+```html
 <table class="**table-fixed**">
   <thead>
     <tr>
-      <th class="w-1/2 ...">Title</th>
-      <th class="w-1/4 ...">Author</th>
-      <th class="w-1/4 ...">Views</th>
+      <th>Song</th>
+      <th>Artist</th>
+      <th>Year</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Intro to CSS</td>
-      <td>Adam</td>
-      <td>858</td>
-    </tr>
-    <tr class="bg-blue-200">
-      <td>A Long and Winding Tour of the History of UI Frameworks and Tools and the Impact on Design</td>
-      <td>Adam</td>
-      <td>112</td>
+      <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
+      <td>Malcolm Lockyer</td>
+      <td>1961</td>
     </tr>
     <tr>
-      <td>Intro to JavaScript</td>
-      <td>Chris</td>
-      <td>1,280</td>
+      <td>Witchy Woman</td>
+      <td>The Eagles</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <td>Shining Star</td>
+      <td>Earth, Wind, and Fire</td>
+      <td>1975</td>
     </tr>
   </tbody>
 </table>
 ```
 
-## Customizing
+---
 
-### Variants
+## <Heading ignore>Applying conditionally</Heading>
 
-<Variants plugin="tableLayout" />
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-### Disabling
+<HoverFocusAndOtherStates element="table" featuredClass="table-fixed" />
 
-<Disabling plugin="tableLayout" />
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries element="table" featuredClass="table-fixed" />

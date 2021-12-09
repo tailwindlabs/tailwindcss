@@ -1,20 +1,23 @@
 ---
 title: "Text Color"
 description: "Utilities for controlling the text color of an element."
-features:
-  responsive: true
-  customizable: true
-  hover: true
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/textColor'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
-import { Heading } from '@/components/Heading'
+import utilities from 'utilities?plugin=textColor'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
+  utilities,
+  transformProperties: ({ selector, properties }) => {
+    delete properties['--tw-text-opacity']
+    Object.keys(properties).forEach(key => {
+      properties[key] = properties[key].replace(' / var(--tw-text-opacity)', '')
+    })
+    return properties
+  },
   preview: (css, { className }) => (
     <td
       className={`text-center font-medium text-base whitespace-nowrap align-middle ${className}`}
@@ -27,126 +30,82 @@ export const classes = {
   ),
 }
 
-## Usage
+## Basic usage
+
+### Setting the text color
 
 Control the text color of an element using the `text-{color}` utilities.
 
-```html
-<template preview>
-  <p class="text-purple-600 text-center text-xl font-semibold truncate">
-    The quick brown fox jumps over the lazy dog.
-  </p>
-</template>
-
-<p class="**text-purple-600** ..."></p>
-```
-
-### Changing opacity
-
-Control the opacity of an element's text color using the `text-opacity-{amount}` utilities.
-
-```html
-<template preview>
-  <div class="space-y-4">
-    <p class="font-semibold text-xl text-purple-700 text-opacity-100">The quick brown fox jumps over the lazy dog.</p>
-    <p class="font-semibold text-xl text-purple-700 text-opacity-75">The quick brown fox jumps over the lazy dog.</p>
-    <p class="font-semibold text-xl text-purple-700 text-opacity-50">The quick brown fox jumps over the lazy dog.</p>
-    <p class="font-semibold text-xl text-purple-700 text-opacity-25">The quick brown fox jumps over the lazy dog.</p>
-    <p class="font-semibold text-xl text-purple-700 text-opacity-0">The quick brown fox jumps over the lazy dog.</p>
+<Example>
+  <div class="relative text-xl text-center font-medium leading-6">
+    <p class="text-blue-600">The quick brown fox jumps over the lazy dog.</p>
   </div>
-</template>
-
-<p class="text-purple-700 **text-opacity-100** ...">The quick brown fox ...</p>
-<p class="text-purple-700 **text-opacity-75** ...">The quick brown fox ...</p>
-<p class="text-purple-700 **text-opacity-50** ...">The quick brown fox ...</p>
-<p class="text-purple-700 **text-opacity-25** ...">The quick brown fox ...</p>
-<p class="text-purple-700 **text-opacity-0** ...">The quick brown fox ...</p>
-```
-
-Learn more in the [text opacity documentation](/docs/text-opacity).
-
-## Responsive
-
-To control the text color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing text color utility. For example, use `md:text-green-600` to apply the `text-green-600` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<p class="text-blue-600 **md:text-green-600** ...">
-  The quick brown fox...
-</p>
+<p class="**text-blue-600**">The quick brown fox...</p>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### Changing the opacity
 
-## Hover
+Control the opacity of an element's text color using the color opacity modifier.
 
-To control the text color of an element on hover, add the `hover:` prefix to any existing text color utility. For example, use `hover:text-blue-600` to apply the `text-blue-600` utility on hover.
-
-```html rose
-<template preview>
-  <div class="text-center">
-    <button type="button" class="py-2 px-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-white hover:text-red-500 focus:outline-none" tabindex="-1">
-      Hover me
-    </button>
+<Example>
+  <div class="text-xl font-medium leading-6 space-y-4">
+    <p class="text-blue-600/100">The quick brown fox jumps over the lazy dog.</p>
+    <p class="text-blue-600/75">The quick brown fox jumps over the lazy dog.</p>
+    <p class="text-blue-600/50">The quick brown fox jumps over the lazy dog.</p>
+    <p class="text-blue-600/25">The quick brown fox jumps over the lazy dog.</p>
   </div>
-</template>
-
-<button class="text-white **hover:text-red-500** ...">
-  Hover me
-</button>
-```
-
-Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
+</Example>
 
 ```html
-<button class="... md:text-blue-500 **md:hover:text-blue-600** ...">Button</button>
+<p class="text-blue-600**/100**">The quick brown fox...</p>
+<p class="text-blue-600**/75**">The quick brown fox...</p>
+<p class="text-blue-600**/50**">The quick brown fox...</p>
+<p class="text-blue-600**/25**">The quick brown fox...</p>
+<p class="text-blue-600**/0**">The quick brown fox...</p>
 ```
 
-## Focus
+You can use any value defined in your [opacity scale](/docs/opacity), or use arbitrary values if you need to deviate from your design tokens.
 
-To control the text color of an element on focus, add the `focus:` prefix to any existing text color utility. For example, use `focus:text-blue-600` to apply the `text-blue-600` utility on focus.
+```html
+<p class="text-blue-600**/[.06]**">The quick brown fox...</p>
+```
 
-```html emerald
-<template preview>
-  <div class="max-w-xs w-full mx-auto">
-    <input class="border border-emerald-300 focus:border-emerald-500 bg-white text-green-900 appearance-none inline-block w-full focus:text-red-600 rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates featuredClass="text-blue-600">
+
+<Example hint="Try hovering over the text to see the expected behaviour">
+  <div class="relative text-xl text-center font-medium leading-6">
+    <p class="text-gray-500 hover:text-blue-600">The quick brown fox jumps over the lazy dog.</p>
   </div>
-</template>
-
-<input class="text-green-900 focus:text-red-600 ...">
-```
-
-Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
+</Example>
 
 ```html
-<input class="... md:text-gray-900 **md:focus:text-red-600** ...">
+<p class="text-gray-500 **hover:text-blue-600**">The quick brown fox...</p>
 ```
 
-## Customizing
+</HoverFocusAndOtherStates>
 
-### Text Colors
 
-By default, Tailwind makes the entire [default color palette](/docs/customizing-colors#default-color-palette) available as text colors.
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-You can [customize your color palette](/docs/colors#customizing) by editing `theme.colors` in your `tailwind.config.js` file, or customize just your text colors in the `theme.textColor` section.
+<BreakpointsAndMediaQueries defaultClass="text-blue-600" featuredClass="text-green-600" element="p" />
 
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
--     textColor: theme => theme('colors'),
-+     textColor: {
-+       'primary': '#3490dc',
-+       'secondary': '#ffed4a',
-+       'danger': '#e3342f',
-+     }
-    }
-  }
-```
+---
 
-### Variants
+## Using custom values
 
-<Variants plugin="textColor" />
+### Customizing your theme
 
-### Disabling
+<CustomizePluginColors name="text" configKey="textColor" />
 
-<Disabling plugin="textColor" />
+### Arbitrary values
+
+<ArbitraryValues property="color" featuredClass="text-[#50d71e]" element="p" />

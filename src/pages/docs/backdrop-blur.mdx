@@ -1,74 +1,111 @@
 ---
 title: "Backdrop Blur"
 description: "Utilities for applying backdrop blur filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=backdropBlur'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingBackdropFilters } from '@/components/RemovingBackdropFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.backdrop-blur-none': { '--tw-backdrop-blur': 'blur(0)' },
-        '.backdrop-blur-sm': { '--tw-backdrop-blur': 'blur(4px)' },
-        '.backdrop-blur': { '--tw-backdrop-blur': 'blur(8px)' },
-        '.backdrop-blur-md': { '--tw-backdrop-blur': 'blur(12px)' },
-        '.backdrop-blur-lg': { '--tw-backdrop-blur': 'blur(16px)' },
-        '.backdrop-blur-xl': { '--tw-backdrop-blur': 'blur(24px)' },
-        '.backdrop-blur-2xl': { '--tw-backdrop-blur': 'blur(40px)' },
-        '.backdrop-blur-3xl': { '--tw-backdrop-blur': 'blur(64px)' },
-      })
+  utilities,
+  filterRules: ([utility]) => utility !== '.backdrop-blur-0',
+  transformProperties: ({ properties }) => {
+    return {
+      'backdrop-filter': properties['--tw-backdrop-blur'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `backdrop-blur-{amount?}` utilities alongside the `backdrop-filter` utility to control an element’s backdrop blur.
+### Blurring behind an element
+
+Use the `backdrop-blur-{amount?}` utilities to control an element’s backdrop blur.
+
+<Example p="none">
+  <div class="flex justify-start sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-blur-sm</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-blur-sm h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-blur-md</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-blur-md h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-blur-xl</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-blur-xl h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="backdrop-filter backdrop-blur-lg ...">
+<div class="**backdrop-blur-sm** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-blur-md** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-blur-xl** bg-white/30 ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing backdrop filters
 
-To control an element's backdrop blur at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop blur utility. For example, use `md:backdrop-blur-lg` to apply the `backdrop-blur-lg` utility at only medium screen sizes and above.
+<RemovingBackdropFilters defaultClass="backdrop-blur-md backdrop-brightness-150" />
 
-```html
-<div class="backdrop-filter backdrop-blur-sm **md:backdrop-blur-lg** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `backdrop-blur` utilities are generated using the `backdropBlur` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="backdrop-blur-sm" featuredClass="backdrop-blur-lg" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="backdrop-blur-sm" featuredClass="backdrop-blur-lg" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `backdrop-blur` utilities. You can customize these values by editing `theme.backdropBlur` or `theme.extend.backdropBlur` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       backdropBlur: {
 +         xs: '2px',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="backdropBlur" name="backdrop blur" />
-
-### Disabling
-
-<Disabling plugin="backdropBlur" name="backdrop blur" />
+<ArbitraryValues property="backdrop-blur" featuredClass="backdrop-blur-[2px]" />

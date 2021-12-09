@@ -1,71 +1,110 @@
 ---
 title: "Backdrop Saturate"
 description: "Utilities for applying backdrop saturation filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=backdropSaturate'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingBackdropFilters } from '@/components/RemovingBackdropFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.backdrop-saturate-0': { '--tw-backdrop-saturate': 'saturate(0)' },
-        '.backdrop-saturate-50': { '--tw-backdrop-saturate': 'saturate(.5)' },
-        '.backdrop-saturate-100': { '--tw-backdrop-saturate': 'saturate(1)' },
-        '.backdrop-saturate-150': { '--tw-backdrop-saturate': 'saturate(1.5)' },
-        '.backdrop-saturate-200': { '--tw-backdrop-saturate': 'saturate(2)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      'backdrop-filter': properties['--tw-backdrop-saturate'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `saturate-{amount}` utilities alongside the `backdrop-filter` utility to control an element's backdrop saturation.
+### Changing backdrop saturation
+
+Use the `saturate-{amount}` utilities to control an element's backdrop saturation.
+
+<Example p="none">
+  <div class="flex justify-start sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-saturate-50</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-saturate-50 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-saturate-125</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-saturate-125 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-saturate-200</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-saturate-200 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="backdrop-filter backdrop-saturate-125 ...">
+<div class="**backdrop-saturate-50** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-saturate-125** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-saturate-200** bg-white/30 ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing backdrop filters
 
-To control an element's backrop saturation at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop saturate utility. For example, use `md:backdrop-saturate-150` to apply the `backdrop-saturate-150` utility at only medium screen sizes and above.
+<RemovingBackdropFilters defaultClass="backdrop-blur-md backdrop-saturate-150" />
 
-```html
-<div class="backdrop-filter backdrop-saturate-110 **md:backdrop-saturate-150** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `backdrop-saturate` utilities are generated using the `backdropSaturate` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="backdrop-saturate-50" featuredClass="backdrop-saturate-150" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="backdrop-saturate-50" featuredClass="backdrop-saturate-150" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `backdrop-saturate` utilities. You can customize these values by editing `theme.backdropSaturate` or `theme.extend.backdropSaturate` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       backdropSaturate: {
 +         25: '.25',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="backdropSaturate" name="backdrop saturate" />
-
-### Disabling
-
-<Disabling plugin="backdropSaturate" name="backdrop saturate" />
+<ArbitraryValues property="backdrop-saturate" featuredClass="backdrop-saturate-[.25]" />

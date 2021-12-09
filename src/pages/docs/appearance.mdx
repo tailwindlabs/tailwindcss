@@ -1,49 +1,47 @@
 ---
 title: "Appearance"
 description: "Utilities for suppressing native form control styling."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/appearance'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=appearance'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Removing default element appearance
 
 Use `appearance-none` to reset any browser specific styling on an element. This utility is often used when creating [custom form components](/docs/examples/forms).
 
-```html indigo
-<template preview>
-  <div class="max-w-sm mx-auto">
-    <div class="flex my-4">
+<Example>
+  <div class="max-w-sm mx-auto items-center">
+    <div class="flex my-6">
       <select class="w-16">
         <option>Yes</option>
         <option>No</option>
         <option>Maybe</option>
       </select>
-      <div class="mx-4">
+      <div class="mx-6 text-gray-900 text-sm font-semibold">
         Default browser styles applied
       </div>
     </div>
-    <div class="flex my-4">
+    <div class="flex my-6 items-center">
       <select class="appearance-none w-16">
         <option>Yes</option>
         <option>No</option>
         <option>Maybe</option>
       </select>
-      <div class="mx-4">
+      <div class="mx-6 text-gray-900 text-sm font-semibold">
         Default styles removed
       </div>
     </div>
   </div>
-</template>
+</Example>
 
+```html
 <select>
   <option>Yes</option>
   <option>No</option>
@@ -56,13 +54,3 @@ Use `appearance-none` to reset any browser specific styling on an element. This 
   <option>Maybe</option>
 </select>
 ```
-
-## Customizing
-
-### Variants
-
-<Variants plugin="appearance" />
-
-### Disabling
-
-<Disabling plugin="appearance" />

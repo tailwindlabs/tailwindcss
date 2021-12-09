@@ -1,0 +1,78 @@
+---
+title: "Outline Offset"
+description: "Utilities for controlling the offset of an element's outline."
+---
+
+import utilities from 'utilities?plugin=outlineOffset'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Setting the outline offset
+
+Use the `outline-{offset}` utilities to change the offset of an element's outline.
+
+<Example>
+  <div class="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-4 font-bold text-white text-sm text-center font-bold">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-offset-0</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline outline-2 outline-offset-0 outline-sky-500">Button A</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-offset-2</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline outline-2 outline-offset-2 outline-sky-500">Button B</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-offset-4</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline outline-2 outline-offset-4 outline-sky-500">Button C</button>
+    </div>
+  </div>
+</Example>
+
+```html
+<button class="outline **outline-offset-0** ...">Button A</button>
+<button class="outline **outline-offset-2** ...">Button B</button>
+<button class="outline **outline-offset-4** ...">Button C</button>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="outline" featuredClass="outline-offset-2" element="button" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="outline" featuredClass="outline-offset-2" element="button" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+You can customize the `outline-offset-{width}` utilities by editing `theme.outlineOffset` or `theme.extend.outlineOffset` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       outlineOffset: {
++         3: '3px',
++       }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="outline-offset" featuredClass="outline-offset-[3px]" element="button" />

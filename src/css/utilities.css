@@ -7,31 +7,24 @@
   }
 }
 
-.scrollbar-w-2::-webkit-scrollbar {
-  @apply w-2 h-2 !important;
+.scrollbar-w-1\.5::-webkit-scrollbar {
+  @apply w-1.5 h-1.5 !important;
 }
 
-.scrollbar-track-gray-lighter::-webkit-scrollbar-track {
+.scrollbar-track-gray-100::-webkit-scrollbar-track {
+  @apply bg-gray-100 !important;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
   @apply bg-gray-300 !important;
-}
-
-.scrollbar-thumb-gray::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 !important;
 }
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
   @apply rounded !important;
 }
 
-@supports (position: sticky) {
-  @media (min-width: theme('screens.lg')) {
-    .sticky\?lg\:h-screen {
-      height: 100vh !important;
-    }
-    .sticky\?lg\:h-\(screen-18\) {
-      height: calc(100vh - theme('spacing.18'));
-    }
-  }
+.scrollbar-track-rounded::-webkit-scrollbar-track {
+  @apply rounded !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -98,18 +91,16 @@
   background-size: 16px 16px;
 }
 
-.after\:hash::after {
-  content: '#';
-}
-
 .code-highlight {
-  border-radius: 0.1875rem;
-  padding: 0.0625rem 0.1875rem;
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.1875rem;
   margin: 0 -0.1875rem;
 }
 
-body.cursor-grabbing * {
-  cursor: grabbing !important;
+.dragging-ew,
+.dragging-ew * {
+  cursor: ew-resize !important;
+  user-select: none !important;
 }
 
 .mono-active > div:not(.not-mono) > span {

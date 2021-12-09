@@ -1,97 +1,90 @@
 ---
 title: "Flex Wrap"
 description: "Utilities for controlling how flex items wrap."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/flexWrap'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=flexWrap'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Don't wrap
+## Basic usage
+
+### Don't wrap
 
 Use `flex-nowrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
 
-```html emerald
-<template preview>
-  <div class="flex flex-nowrap space-x-4">
-    <div class="h-12 w-2/5 rounded-md text-white flex-none bg-emerald-500 flex items-center justify-center text-2xl font-semibold ">1</div>
-    <div class="h-12 w-2/5 rounded-md text-white flex-none bg-emerald-500 flex items-center justify-center text-2xl font-semibold ">2</div>
-    <div class="h-12 w-2/5 rounded-md text-white flex-none bg-emerald-500 flex items-center justify-center text-2xl font-semibold ">3</div>
+<Example>
+  <div class="flex flex-nowrap gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-light-blue rounded-lg">
+    <div class="w-2/5 flex-none last:pr-8">
+      <div class="p-4 w-full rounded-lg flex items-center justify-center bg-light-blue-500 shadow-lg">01</div>
+    </div>
+    <div class="w-2/5 flex-none last:pr-8">
+      <div class="p-4 w-full rounded-lg flex items-center justify-center bg-light-blue-500 shadow-lg">02</div>
+    </div>
+    <div class="w-2/5 flex-none last:pr-8">
+      <div class="p-4 w-full rounded-lg flex items-center justify-center bg-light-blue-500 shadow-lg">03</div>
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="flex **flex-nowrap**">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
 </div>
 ```
 
-## Wrap normally
+### Wrap normally
 
 Use `flex-wrap` to allow flex items to wrap:
 
-```html lightBlue
-<template preview>
-  <div class="flex flex-wrap -m-2">
-    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-light-blue-500 flex items-center justify-center text-2xl font-semibold ">1</div>
-    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-light-blue-500 flex items-center justify-center text-2xl font-semibold ">2</div>
-    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-light-blue-500 flex items-center justify-center text-2xl font-semibold ">3</div>
+<Example>
+  <div class="flex flex-wrap gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-indigo rounded-lg">
+    <div class="p-4 w-2/5 rounded-lg flex items-center justify-center bg-indigo-500 shadow-lg">01</div>
+    <div class="p-4 w-2/5 rounded-lg flex items-center justify-center bg-indigo-500 shadow-lg">02</div>
+    <div class="p-4 w-2/5 rounded-lg flex items-center justify-center bg-indigo-500 shadow-lg">03</div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="flex **flex-wrap**">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
 </div>
 ```
 
-## Wrap reversed
+### Wrap reversed
 
 Use `flex-wrap-reverse` to wrap flex items in the reverse direction:
 
-```html purple
-<template preview>
-  <div class="flex flex-wrap-reverse -m-2">
-    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-purple-500 flex items-center justify-center text-2xl font-semibold ">1</div>
-    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-purple-500 flex items-center justify-center text-2xl font-semibold ">2</div>
-    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-purple-500 flex items-center justify-center text-2xl font-semibold ">3</div>
+<Example>
+  <div class="flex flex-wrap-reverse gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-fuchsia rounded-lg">
+    <div class="p-4 w-2/5 rounded-lg flex items-center justify-center bg-fuchsia-500 shadow-lg">01</div>
+    <div class="p-4 w-2/5 rounded-lg flex items-center justify-center bg-fuchsia-500 shadow-lg">02</div>
+    <div class="p-4 w-2/5 rounded-lg flex items-center justify-center bg-fuchsia-500 shadow-lg">03</div>
   </div>
-</template>
-
-<div class="flex **flex-wrap-reverse**">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-</div>
-```
-
-## Responsive
-
-To control how flex items wrap at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:flex-wrap-reverse` to apply the `flex-wrap-reverse` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="flex flex-wrap **md:flex-wrap-reverse** ...">
-  <!-- ... -->
+<div class="flex **flex-wrap-reverse**">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="flexWrap" name="flex-wrap" />
+<HoverFocusAndOtherStates defaultClass="flex flex-wrap" featuredClass="flex-wrap-reverse" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="flexWrap" name="flex-wrap" />
+<BreakpointsAndMediaQueries defaultClass="flex flex-wrap" featuredClass="flex-wrap-reverse" />

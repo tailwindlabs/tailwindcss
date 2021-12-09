@@ -3,58 +3,64 @@ title: "Grid Template Columns"
 description: "Utilities for specifying the columns in a grid layout."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/gridTemplateColumns'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=gridTemplateColumns'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Specifying the columns in a grid
 
 Use the `grid-cols-{n}` utilities to create grids with _n_ equally sized columns.
 
-```html fuchsia
-<template preview class="bg-white p-8">
-  <div class="grid grid-cols-3 gap-4">
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">1</div>
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">2</div>
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">3</div>
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">4</div>
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">5</div>
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">6</div>
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">7</div>
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">8</div>
-    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">9</div>
+<Example>
+  <div class="grid grid-cols-4 gap-4 font-mono text-white text-sm text-center font-bold leading-6 bg-stripes-fuchsia rounded-lg">
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">01</div>
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">02</div>
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">03</div>
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">04</div>
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">05</div>
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">06</div>
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">07</div>
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">08</div>
+    <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">09</div>
   </div>
-</template>
-
-<div class="grid **grid-cols-3** gap-4">
-  <div>1</div>
-  <!-- ... -->
-  <div>9</div>
-</div>
-```
-
-## Responsive
-
-To control the columns of a grid at a specific breakpoint, add a `{screen}:` prefix to any existing grid-template-columns utility. For example, use `md:grid-cols-6` to apply the `grid-cols-6` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="grid grid-cols-1 **md:grid-cols-6**">
+<div class="grid **grid-cols-4** gap-4">
+  <div>01</div>
   <!-- ... -->
+  <div>09</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-By default, Tailwind includes grid-template-column utilities for creating basic grids with up to 12 equal width columns. You change, add, or remove these by customizing the `gridTemplateColumns` section of your Tailwind theme config.
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="grid grid-cols-1" featuredClass="grid-cols-6" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="grid grid-cols-1" featuredClass="grid-cols-6" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes `grid-template-column` utilities for creating basic grids with up to 12 equal width columns. You can customize these values by editing `theme.gridTemplateColumns` or `theme.extend.gridTemplateColumns` in your `tailwind.config.js` file.
 
 You have direct access to the `grid-template-columns` CSS property here so you can make your custom column values as generic or as complicated and site-specific as you like.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
@@ -70,12 +76,8 @@ You have direct access to the `grid-template-columns` CSS property here so you c
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="gridTemplateColumns" name="grid-template-columns" />
-
-### Disabling
-
-<Disabling plugin="gridTemplateColumns" name="grid-template-columns" />
+<ArbitraryValues property="grid-template-columns" featuredClass="grid-cols-[200px_minmax(900px,_1fr)_100px]" />

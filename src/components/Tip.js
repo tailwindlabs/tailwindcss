@@ -1,24 +1,42 @@
 export function TipGood({ children }) {
   return (
-    <p className="flex items-start mt-8 mb-4 space-x-2">
-      <svg className="w-6 h-6 flex-none mt-0.5" fill="none" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="12" fill="#A7F3D0" />
-        <path d="M18 8l-8 8-4-4" stroke="#047857" strokeWidth="2" />
-      </svg>
-      <strong className="flex-1 text-base leading-7 font-semibold text-gray-900">{children}</strong>
-    </p>
+    <div className="flex items-start my-6 space-x-4">
+      <div className="relative mt-1 w-4 h-4 rounded-full bg-cyan-500 text-white flex items-center justify-center ring-2 ring-cyan-500">
+        <svg width="6" height="4.5" className="overflow-visible" aria-hidden="true">
+          <path
+            d="M6 0L2 4.5L0 2.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <div className="absolute top-full mt-1 left-[0.46875rem] w-px h-[1.375rem] bg-cyan-500/30 rounded-full" />
+      </div>
+      <p className="m-0 flex-1 text-base font-semibold text-gray-900">{children}</p>
+    </div>
   )
 }
 
 export function TipBad({ children }) {
   return (
-    <p className="flex items-start mt-8 mb-4 space-x-2">
-      <svg className="w-6 h-6 flex-none mt-0.5" fill="none" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="12" fill="#FECDD3" />
-        <path d="M8 8l8 8M16 8l-8 8" stroke="#B91C1C" strokeWidth="2" />
-      </svg>
-      <strong className="flex-1 text-base leading-7 font-semibold text-gray-900">{children}</strong>
-    </p>
+    <div className="flex items-start my-6 space-x-4">
+      <div className="relative mt-1 w-4 h-4 rounded-full bg-rose-400 text-white flex items-center justify-center ring-2 ring-rose-400">
+        <svg width="6" height="6" className="overflow-visible" aria-hidden="true">
+          <path
+            d="M0 0L6 6M6 0L0 6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <div className="absolute top-full mt-1 left-[0.46875rem] w-px h-[1.375rem] bg-rose-200 rounded-full" />
+      </div>
+      <p className="m-0 flex-1 text-base font-semibold text-gray-900">{children}</p>
+    </div>
   )
 }
 
@@ -41,33 +59,21 @@ export function TipCompat({ children }) {
 
 export function TipInfo({ children }) {
   return (
-    <div className="text-sm leading-6 bg-blue-50 text-blue-800 px-6 py-4 mb-8 rounded-lg">
-      <div className="flex items-start space-x-3">
-        <svg className="mt-1" height="40" width="40" fill="none" viewBox="0 0 40 40">
-          <path
-            fill="#93C5FD"
-            d="M5 5a3 3 0 013-3h13.757a3 3 0 012.122.879L30.12 9.12a3 3 0 01.88 2.123V31a3 3 0 01-3 3H8a3 3 0 01-3-3V5z"
-          />
-          <path
-            fill="#DBEAFE"
-            d="M7 5a1 1 0 011-1h13a1 1 0 011 1v5a1 1 0 001 1h5a1 1 0 011 1v19a1 1 0 01-1 1H8a1 1 0 01-1-1V5z"
-          />
-          <path
-            stroke="#93C5FD"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M17 18h7m-9 3h10m-8 3h7"
-          />
-          <path
-            fill="#60A5FA"
-            fillRule="evenodd"
-            d="M24.634 26.22a8.001 8.001 0 00-11.977-10.562A8 8 0 0023.22 27.635l2.872 2.872a1 1 0 000 1.414l5.657 5.657a1 1 0 001.414 0l1.414-1.414a1 1 0 000-1.415l-5.657-5.656a1 1 0 00-1.414 0l-2.872-2.873zm-2.078-.663a6 6 0 10-8.485-8.485 6 6 0 008.485 8.485z"
-            clipRule="evenodd"
-          />
-        </svg>
-        <p className="flex-1 min-w-0">{children}</p>
-      </div>
+    <div className="not-prose mt-6 -mb-1 flex space-x-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="flex-none w-5 h-5 text-gray-400"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fillRule="evenodd"
+          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+          clipRule="evenodd"
+        />
+      </svg>
+
+      <p className="text-gray-700 text-sm font-medium">{children}</p>
     </div>
   )
 }

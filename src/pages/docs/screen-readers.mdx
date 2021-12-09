@@ -3,13 +3,15 @@ title: "Screen Readers"
 description: "Utilities for improving accessibility with screen readers."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/accessibility'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=accessibility'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Screen-reader-only elements
 
 Use `sr-only` to hide an element visually without hiding it from screen readers:
 
@@ -20,6 +22,8 @@ Use `sr-only` to hide an element visually without hiding it from screen readers:
 </a>
 ```
 
+### Undoing screen-reader-only elements
+
 Use `not-sr-only` to undo `sr-only`, making an element visible to sighted users as well as screen readers. This can be useful when you want to visually hide something on small screens but show it on larger screens for example:
 
 ```html
@@ -29,20 +33,22 @@ Use `not-sr-only` to undo `sr-only`, making an element visible to sighted users 
 </a>
 ```
 
-By default, `responsive` and `focus` variants are generated for these utilities. You can use `focus:not-sr-only` to make an element visually hidden by default but visible when the user tabs to it — useful for "skip to content" links:
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates featuredClass="not-sr-only" variant="focus">
 
 ```html
-<a href="#" class="sr-only focus:not-sr-only">
+<a href="#content" class="sr-only **focus:not-sr-only**">
   Skip to content
 </a>
 ```
 
-## Customizing
+</HoverFocusAndOtherStates>
 
-### Variants
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Variants plugin="accessibility" />
-
-### Disabling
-
-<Disabling plugin="accessibility" />
+<BreakpointsAndMediaQueries defaultClass="sr-only" featuredClass="not-sr-only" />

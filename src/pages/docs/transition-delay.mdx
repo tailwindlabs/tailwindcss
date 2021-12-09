@@ -3,68 +3,77 @@ title: "Transition Delay"
 description: "Utilities for controlling the delay of CSS transitions."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/transitionDelay'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=transitionDelay'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Delaying transitions
 
 Use the `delay-{amount}` utilities to control an element's transition-delay.
 
-```html amber
-<template preview>
-  <div class="flex justify-around items-center">
-    <button class="transition delay-150 duration-300 ease-in-out transform hover:scale-125 bg-amber-600 text-white font-semibold px-6 py-3 rounded-md">
-      Hover me
-    </button>
-    <button class="transition delay-300 duration-300 ease-in-out transform hover:scale-125 bg-amber-600 text-white font-semibold px-6 py-3 rounded-md">
-      Hover me
-    </button>
-    <button class="transition delay-700 duration-300 ease-in-out transform hover:scale-125 bg-amber-600 text-white font-semibold px-6 py-3 rounded-md">
-      Hover me
-    </button>
+<Example hint="Hover each button to see the expected behaviour">
+  <div class="flex flex-col sm:flex-row gap-8 sm:gap-0 justify-around text-white text-sm font-bold leading-6">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">delay-150</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-blue-500 text-white rounded-md shadow-sm hover:scale-125 ease-in-out duration-300 delay-150">Button A</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">delay-300</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-blue-500 text-white rounded-md shadow-sm hover:scale-125 ease-in-out duration-300 delay-300">Button B</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">delay-700</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-blue-500 text-white rounded-md shadow-sm hover:scale-125 ease-in-out duration-300 delay-700">Button C</button>
+    </div>
   </div>
-</template>
+</Example>
 
-<button class="transition **delay-150** duration-300 ease-in-out ...">Hover me</button>
-<button class="transition **delay-300** duration-300 ease-in-out ...">Hover me</button>
-<button class="transition **delay-700** duration-300 ease-in-out ...">Hover me</button>
+```html
+<button class="transition **delay-150** duration-300 ease-in-out ...">Button A</button>
+<button class="transition **delay-300** duration-300 ease-in-out ...">Button B</button>
+<button class="transition **delay-700** duration-300 ease-in-out ...">Button C</button>
 ```
 
-## Responsive
+---
 
-To control an element's transition-delay at a specific breakpoint, add a `{screen}:` prefix to any existing transition-delay utility. For example, use `md:delay-500` to apply the `delay-500` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-## Customizing
+<HoverFocusAndOtherStates defaultClass="transition duration-300 delay-150" featuredClass="delay-0" />
 
-### Delay values
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-By default, Tailwind provides eight general purpose transition-delay utilities. You change, add, or remove these by customizing the `transitionDelay` section of your Tailwind theme config.
+<BreakpointsAndMediaQueries defaultClass="transition duration-300 delay-150" featuredClass="delay-0" />
 
-```diff-js
-  // tailwind.config.js
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides eight general purpose transition-delay utilities. You can customize these values by editing `theme.transitionDelay` or `theme.extend.transitionDelay` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        transitionDelay: {
++       transitionDelay: {
 +         '0': '0ms',
 +         '2000': '2000ms',
-        }
++       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="transitionDelay" name="transition-delay" />
-
-### Disabling
-
-<Disabling plugin="transitionDelay" name="transition-delay" />
+<ArbitraryValues property="transition-delay" featuredClass="delay-[2000ms]" />

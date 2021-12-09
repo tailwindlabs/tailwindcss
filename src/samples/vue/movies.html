@@ -1,0 +1,29 @@
+<template>
+  <div class="divide-y divide-gray-100">
+    <nav>
+      <NavItem href="/new" isActive>New Releases</NavItem>
+      <NavItem href="/top">Top Rated</NavItem>
+      <NavItem href="/picks">Vincent’s Picks</NavItem>
+    </nav>
+    <List>
+      <ListItem v-for="movie in movies" :key="movie.id" :movie="movie" />
+    </List>
+  </div>
+</template>
+
+<script>
+  import Nav from './Nav.vue'
+  import NavItem from './NavItem.vue'
+  import List from './List.vue'
+  import ListItem from './ListItem.vue'
+
+  export default {
+    props: ['movies'],
+    components: {
+      Nav,
+      NavItem,
+      List,
+      ListItem,
+    },
+  }
+</script>

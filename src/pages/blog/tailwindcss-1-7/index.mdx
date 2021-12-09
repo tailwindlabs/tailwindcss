@@ -1,0 +1,372 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: 'Tailwind CSS v1.7.0',
+  description: `Tailwind CSS v1.7.0 is now available, with gradients and more!`,
+  date: '2020-08-18T19:15:00.000Z',
+  authors: [adamwathan],
+  image,
+}
+
+Another new Tailwind release is here! This time with support for gradients, background-clip, experimental support for using `@apply` with variant utilities, and tons more. Let's dig in!
+
+<!--more-->
+
+## New features
+
+### Gradients
+
+The big one for this release — Tailwind now ships with built-in support for background gradients!
+
+Gradients are designed with a highly composable API that lets you specify up to three color stops in one of 8 directions by default:
+
+```html
+<div class="bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+  <!-- ... -->
+</div>
+```
+
+![](https://user-images.githubusercontent.com/4323180/90427639-ce57e280-e090-11ea-8611-53a64707fafc.png)
+
+This is made possible by a new `backgroundImage` core plugin (which you can use for any background images you like!) and a new `gradientColorStops` core plugin.
+
+The default configuration for these plugins looks like this:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    backgroundImage: {
+      'gradient-to-t': 'linear-gradient(to top, var(--gradient-color-stops))',
+      'gradient-to-tr': 'linear-gradient(to top right, var(--gradient-color-stops))',
+      'gradient-to-r': 'linear-gradient(to right, var(--gradient-color-stops))',
+      'gradient-to-br': 'linear-gradient(to bottom right, var(--gradient-color-stops))',
+      'gradient-to-b': 'linear-gradient(to bottom, var(--gradient-color-stops))',
+      'gradient-to-bl': 'linear-gradient(to bottom left, var(--gradient-color-stops))',
+      'gradient-to-l': 'linear-gradient(to left, var(--gradient-color-stops))',
+      'gradient-to-tl': 'linear-gradient(to top left, var(--gradient-color-stops))',
+    },
+    gradientColorStops: (theme) => theme('colors'),
+  },
+  variants: {
+    backgroundImage: ['responsive'],
+    gradientColorStops: ['responsive', 'hover', 'focus'],
+  },
+}
+```
+
+Learn more [the original pull request](https://github.com/tailwindlabs/tailwindcss/pull/2176).
+
+### New background-clip utilities
+
+We've also added a new `backgroundClip` core plugin that you can use to control how background are rendered within an element.
+
+It includes 4 new utilities:
+
+| Class             | CSS                            |
+| ----------------- | ------------------------------ |
+| `bg-clip-border`  | `background-clip: border-box`  |
+| `bg-clip-padding` | `background-clip: padding-box` |
+| `bg-clip-content` | `background-clip: content-box` |
+| `bg-clip-text`    | `background-clip: text`        |
+
+Combined with the new gradient features, you can use this to do cool gradient text stuff like this:
+
+```html
+<h1 class="text-6xl font-bold">
+  <span class="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500">
+    Greetings from Tailwind v1.7.
+  </span>
+</h1>
+```
+
+![](https://user-images.githubusercontent.com/4323180/90427567-b54f3180-e090-11ea-988b-c95ed716866f.png)
+
+Only responsive variants are enabled for the `backgroundClip` plugin by default:
+
+```js tailwind.config.js
+module.exports = {
+  variants: {
+    backgroundClip: ['responsive'],
+  },
+}
+```
+
+### New gap utility aliases
+
+For some dumb reason I named the `column-gap` and `row-gap` utilities `col-gap-{n}` and `row-gap-{n}` respectively, which isn't terrible but it's not consistent with how other things in Tailwind are named.
+
+I was finding myself getting them wrong all the time — is `row-gap` the gaps in a row, or the gap between rows?
+
+Tailwind v1.7 introduces new `gap-x-{n}` and `gap-y-{n}` utilities that do the exact same thing but have names that don't suck. They make way more sense than the actual CSS names now that gap for flexbox is starting to roll out too, since flexbox has no "columns".
+
+These utilities will replace the old ones in v2.0, but for now they both exist together.
+
+**We recommend migrating to the new names now, and disabling the old names using this feature flag:**
+
+```js tailwind.config.js
+module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: true,
+  },
+  // ...
+}
+```
+
+Tailwind will issue a warning in the console to remind you that you are including deprecated classes in your build until you enable this flag.
+
+### New `contents` display utility
+
+We've added a new `contents` class for the recent `display: contents` CSS feature.
+
+```html
+<div class="flex">
+  <div><!-- ... --></div>
+  <!-- This container will act as a phantom container, and its children will be treated as part of the parent flex container -->
+  <div class="contents">
+    <div><!-- ... --></div>
+    <div><!-- ... --></div>
+  </div>
+  <div><!-- ... --></div>
+</div>
+```
+
+Learn more about it in [this great article by Rachel Andrew](https://rachelandrew.co.uk/archives/2016/01/29/vanishing-boxes-with-display-contents/).
+
+### Default letter-spacing per font-size
+
+You can now configure a default letter-spacing value for each font-size in your `tailwind.config.js` theme, using a tuple syntax:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    fontSize: {
+      2xl: ['24px', {
+        letterSpacing: '-0.01em',
+      }],
+      // Or with a default line-height as well
+      3xl: ['32px', {
+        letterSpacing: '-0.02em',
+        lineHeight: '40px',
+      }],
+    }
+  }
+}
+```
+
+This new syntax is supported in addition to the simpler `[{fontSize}, {lineHeight}]` syntax that was recently introduced.
+
+### Divide border styles
+
+We've added utilities for setting the border style on the `divide` utilities:
+
+```html
+<div class="divide-y divide-dashed">
+  <div><!-- ... --></div>
+  <div><!-- ... --></div>
+  <div><!-- ... --></div>
+  <div><!-- ... --></div>
+</div>
+```
+
+These utilities include `responsive` variants by default:
+
+```js tailwind.config.js
+module.exports = {
+  variants: {
+    divideStyle: ['responsive'],
+  },
+}
+```
+
+### Access entire config object from plugins
+
+The `config` function passed to the plugin API now returns the entire config option when invoked with no arguments:
+
+```js
+tailwind.plugin(function ({ config, addUtilities, /* ... */ })) {
+  // Returns entire config object
+  config()
+})
+```
+
+### Define colors as closures
+
+You can now define your colors as callbacks, which receive a bag of parameters you can use to generate your color value.
+
+This is particularly useful when trying to make your custom colors work with the `backgroundOpacity`, `textOpacity`, etc. utilities
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    colors: {
+      primary: ({ opacityVariable }) => `rgba(var(--color-primary), var(${variable}, 1))`,
+    },
+  },
+}
+```
+
+Currently the only thing passed through is an `opacityVariable` property, which contains the name of the current opacity variable (`--background-opacity`, `--text-opacity`, etc.) depending on which plugin is using the color.
+
+## Deprecations
+
+Tailwind v1.7 introduces a new feature flagging and deprecation system designed to make upgrades as painless as possible.
+
+Any time we deprecate functionality or introduce new (stable) breaking changes, they will be available in Tailwind v1.x under a `future` property in your `tailwind.config.js` file.
+
+Whenever there are deprecations or breaking changes available, Tailwind will warn you in the console on every build until you adopt the new changes and enable the flag in your config file:
+
+```
+risk - There are upcoming breaking changes: removeDeprecatedGapUtilities
+risk - We highly recommend opting-in to these changes now to simplify upgrading Tailwind in the future.
+risk - https://tailwindcss.com/docs/upcoming-changes
+```
+
+You can opt-in to a breaking change by setting that flag to `true` in your `tailwind.config.js` file:
+
+```js tailwind.config.js
+module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: true,
+  },
+}
+```
+
+If you'd prefer not to opt-in but would like to silence the warning, explicitly set the flag to `false`:
+
+```js tailwind.config.js
+module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: false,
+  },
+}
+```
+
+**We do not recommend this**, as it will make upgrading to Tailwind v2.0 more difficult.
+
+### Deprecated gap utilities
+
+As mentioned previously, Tailwind v1.7.0 introduces new `gap-x-{n}` and `gap-y-{n}` utilities to replace the current `col-gap-{n}` and `row-gap-{n}` utilities.
+
+By default both classes will exist, but the old utilities will be removed in Tailwind v2.0.
+
+To migrate to the new class names, simply replace any existing usage of the old names with the new names:
+
+```diff
+- <div class="col-gap-4 row-gap-2 ...">
++ <div class="gap-x-4 gap-y-2 ...">
+```
+
+To opt-in to the new names now, enable the `removeDeprecatedGapUtilities` flag in your `tailwind.config.js` file:
+
+```js tailwind.config.js
+module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: true,
+  },
+}
+```
+
+## Experimental features
+
+Tailwind v1.7.0 introduces a new experimental feature system that allows you to opt-in to new functionality that is coming to Tailwind soon but isn't quite stable yet.
+
+It's important to note that **experimental features may introduce breaking changes, do not follow semver, and can change at any time**.
+
+If you like to live on the wild side though, you can enable all of them like so:
+
+```js tailwind.config.js
+module.exports = {
+  experimental: 'all',
+}
+```
+
+With that out of the way, here is some of the fun stuff we're working on that we're pumped you can finally play with...
+
+### Use `@apply` with variants and other complex classes
+
+This is a huge one — you can finally use `@apply` with responsive variants, pseudo-class variants, and other complex classes!
+
+```css
+.btn {
+  @apply bg-indigo hover:bg-indigo-700 sm:text-lg;
+}
+```
+
+There are a lot of details to understand with this one, so I recommend [reading the pull request](https://github.com/tailwindlabs/tailwindcss/pull/2159) to learn about how it all works.
+
+This introduces breaking changes to how `@apply` worked before, so be sure to read all of the details before just flipping the switch.
+
+To enable this feature, use the `applyComplexClasses` flag:
+
+```js tailwind.config.js
+module.exports = {
+  experimental: {
+    applyComplexClasses: true,
+  },
+}
+```
+
+### New color palette
+
+We've added a teaser of the new Tailwind 2.0 color palette that you can start playing with today using the `uniformColorPalette` flag:
+
+```js tailwind.config.js
+module.exports = {
+  experimental: {
+    uniformColorPalette: true,
+  },
+}
+```
+
+The idea behind the new palette is that every color at every shade has a similar perceived brightness. So you can swap `indigo-600` with `blue-600` and expect the same color contrast.
+
+We do expect these colors to continue to change a lot as we iterate on them, so use these at your own risk.
+
+### Extended spacing scale
+
+We've added a much bigger spacing scale that includes new micro values like `0.5`, `1.5`, `2.5`, and `3.5`, as well as new large values like `72`, `80`, and `96`, _and_ added percentage based fractional values to the whole spacing scale (`1/2`, `5/6`, `7/12`, etc.)
+
+You can enable the extended spacing scale using the `extendedSpacingScale` flag:
+
+```js tailwind.config.js
+module.exports = {
+  experimental: {
+    extendedSpacingScale: true,
+  },
+}
+```
+
+This is pretty stable, I would be surprised if we change this.
+
+### Default line-heights per font-size by default
+
+We've added recommended default line-heights to every built-in font-size, which can be enabled using the `defaultLineHeights` flag:
+
+```js tailwind.config.js
+module.exports = {
+  experimental: {
+    defaultLineHeights: true,
+  },
+}
+```
+
+This is a breaking change and will impact your designs, as previously all font sizes had a default line-height of `1.5`.
+
+### Extended font size scale
+
+We've added three new font sizes (`7xl`, `8xl`, and `9xl`) to keep up with the latest huge-as-hell-hero-text trends. They include default line-heights as well.
+
+You can enable them under the `extendedFontSizeScale` flag:
+
+```js tailwind.config.js
+module.exports = {
+  experimental: {
+    extendedFontSizeScale: true,
+  },
+}
+```
+
+<Footer>
+  Want to talk about this post? <a href="https://github.com/tailwindcss/tailwindcss/discussions/2183">Discuss this on GitHub →</a>
+</Footer>

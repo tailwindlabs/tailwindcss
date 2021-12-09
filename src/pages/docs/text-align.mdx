@@ -2,71 +2,84 @@
 title: "Text Alignment"
 shortTitle: Text Align
 description: "Utilities for controlling the alignment of text."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/textAlign'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=textAlign'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Setting the text alignment
 
 Control the text alignment of an element using the `.text-left`, `.text-center`, `.text-right`, and `.text-justify` utilities.
 
-```html purple
-<template preview>
-  <p class="text-left font-flow leading-5 text-3xl text-purple-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
-</template>
-
-<p class="**text-left** ...">Lorem ipsum dolor sit amet ...</p>
-```
-
-```html rose
-<template preview>
-  <p class="text-center font-flow leading-5 text-3xl text-rose-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
-</template>
-
-<p class="**text-center** ...">Lorem ipsum dolor sit amet ...</p>
-```
-
-```html emerald
-<template preview>
-  <p class="text-right font-flow leading-5 text-3xl text-emerald-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
-</template>
-
-<p class="**text-right** ...">Lorem ipsum dolor sit amet ...</p>
-```
-
-```html amber
-<template preview>
-  <p class="text-justify font-flow leading-5 text-3xl text-amber-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
-</template>
-
-<p class="**text-justify** ...">Lorem ipsum dolor sit amet ...</p>
-```
-
-## Responsive
-
-To control the text alignment of an element at a specific breakpoint, add a `{screen}:` prefix to any existing text alignment utility. For example, use `md:text-center` to apply the `text-center` utility at only medium screen sizes and above.
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="mx-auto max-w-xl bg-white shadow-xl p-8 text-gray-700 text-sm leading-6 sm:text-base sm:leading-7">
+      <p class="text-left">
+        So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
+      </p>
+    </div>
+  </div>
+</Example>
 
 ```html
-<p class="text-left **md:text-center** ...">Lorem ipsum dolor sit amet ...</p>
+<p class="**text-left** ...">So I started to walk into the water...</p>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="mx-auto max-w-xl bg-white shadow-xl p-8 text-gray-700 text-sm leading-6 sm:text-base sm:leading-7">
+      <p class="text-center">
+        So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
+      </p>
+    </div>
+  </div>
+</Example>
 
-## Customizing
+```html
+<p class="**text-center** ...">So I started to walk into the water...</p>
+```
 
-### Variants
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="mx-auto max-w-xl bg-white shadow-xl p-8 text-gray-700 text-sm leading-6 sm:text-base sm:leading-7">
+      <p class="text-right">
+        So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
+      </p>
+    </div>
+  </div>
+</Example>
 
-<Variants plugin="textAlign" name="text alignment" />
+```html
+<p class="**text-right** ...">So I started to walk into the water...</p>
+```
 
-### Disabling
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="mx-auto max-w-xl bg-white shadow-xl p-8 text-gray-700 text-sm leading-6 sm:text-base sm:leading-7">
+      <p class="text-justify">
+        So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
+      </p>
+    </div>
+  </div>
+</Example>
 
-<Disabling plugin="textAlign" name="text alignment" />
+```html
+<p class="**text-justify** ...">So I started to walk into the water...</p>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="text-left" featuredClass="text-center" element="p" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="text-left" featuredClass="text-center" element="p" />

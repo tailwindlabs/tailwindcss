@@ -3,58 +3,46 @@ title: "Grid Auto Flow"
 description: "Utilities for controlling how elements in a grid are auto-placed."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/gridAutoFlow'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=gridAutoFlow'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Controlling grid element placement
 
 Use the `grid-flow-{keyword}` utilities to control how the auto-placement algorithm works for a grid layout.
 
-```html purple
-<template preview class="bg-white p-8">
-  <div class="grid grid-cols-3 grid-rows-3 grid-flow-col gap-4">
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">1</div>
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">2</div>
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">3</div>
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">4</div>
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">5</div>
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">6</div>
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">7</div>
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">8</div>
-    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">9</div>
+<Example>
+  <div class="grid grid-cols-3 grid-rows-3 grid-flow-row-dense gap-4 font-mono text-white text-sm text-center font-bold leading-6 bg-stripes-purple rounded-lg">
+    <div class="p-4 col-span-2 rounded-lg bg-purple-300">01</div>
+    <div class="p-4 col-span-2 rounded-lg bg-purple-300">02</div>
+    <div class="p-4 rounded-lg shadow-lg bg-purple-500">03</div>
+    <div class="p-4 rounded-lg bg-purple-300">04</div>
+    <div class="p-4 rounded-lg bg-purple-300">05</div>
   </div>
-</template>
-
-<div class="grid **grid-flow-col** grid-cols-3 grid-rows-3 gap-4">
-  <div>1</div>
-  <!-- ... -->
-  <div>9</div>
-</div>
-```
-
-## Responsive
-
-To control the grid-auto-flow property at a specific breakpoint, add a `{screen}:` prefix to any existing grid-auto-flow utility. For example, use `md:grid-flow-col` to apply the `grid-flow-col` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="grid **md:grid-flow-col** ...">
-  <div>1</div>
-  <!-- ... -->
-  <div>9</div>
+<div class="grid **grid-flow-row-dense** grid-cols-3 grid-rows-3 ...">
+  <div class="col-span-2">01</div>
+  <div class="col-span-2">02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="gridAutoFlow" name="grid-auto-flow" />
+<HoverFocusAndOtherStates defaultClass="grid grid-flow-col" featuredClass="grid-flow-row" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="gridAutoFlow" name="grid-auto-flow" />
+<BreakpointsAndMediaQueries defaultClass="grid grid-flow-col" featuredClass="grid-flow-row" />

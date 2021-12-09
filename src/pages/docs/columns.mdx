@@ -1,0 +1,210 @@
+---
+title: "Columns"
+description: "Utilities for controlling the number of columns within an element."
+---
+
+import utilities from 'utilities?plugin=columns'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Adding based on column count
+
+Use the `columns-{count}` utilities to set the number of columns that should be created for the content within an element. The column width will be automatically adjusted to accommodate that number.
+
+<Example>
+  <div class="relative">
+    <div class="absolute inset-0 -top-8 -bottom-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <div class="bg-stripes-blue opacity-75 w-full h-full"></div>
+      <div class="hidden sm:block bg-stripes-blue opacity-75 w-full h-full"></div>
+      <div class="hidden sm:block bg-stripes-blue opacity-75 w-full h-full"></div>
+    </div>
+    <div class="relative columns-1 sm:columns-3 gap-8">
+      <div class="relative aspect-w-16 aspect-h-9">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2952&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="relative aspect-w-1 aspect-h-1 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2902&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="relative aspect-w-1 aspect-h-1 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1491904768633-2b7e3e7fede5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3131&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-1 aspect-h-1 mt-8 sm:mt-0">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1463288889890-a56b2853c40f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3132&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-16 aspect-h-9 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1611605645802-c21be743c321?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-1 aspect-h-1 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1498603993951-8a027a8a8f84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2936&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-1 aspect-h-1 mt-8 sm:mt-0">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1526400473556-aac12354f3db?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-1 aspect-h-1 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1617369120004-4fc70312c5e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1587&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-16 aspect-h-9 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1518892096458-a169843d7f7f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="**columns-3** ...">
+  <img class="w-full aspect-video ..." src="..." />
+  <img class="w-full aspect-square ..." src="..." />
+  <!-- ... -->
+</div>
+```
+
+### Adding based on column width
+
+Use the `columns-{width}` utilities to set the ideal column width for the content within an element, with the number of columns (the count) automatically adjusting to accommodate that value.
+
+This "t-shirt" scale is the same as the [max-width](/docs/max-width) scale, with the addition of `2xs` and `3xs`, since smaller columns may be desirable.
+
+<Example resizable className="max-h-[800px]" hint="Resize the example to see the expected behaviour">
+  <div class="relative">
+    <div class="columns-3xs gap-8 space-y-8">
+      <div class="relative aspect-w-16 aspect-h-9">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2952&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="relative aspect-w-1 aspect-h-1">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2902&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="relative hidden sm:block aspect-w-1 aspect-h-1">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1491904768633-2b7e3e7fede5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3131&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="relative hidden sm:block aspect-w-16 aspect-h-9">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1463288889890-a56b2853c40f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3132&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="**columns-3xs** ...">
+  <img class="w-full aspect-video ..." src="..." />
+  <img class="w-full aspect-square ..." src="..." />
+  <!-- ... -->
+</div>
+```
+
+### Setting the column gap
+
+To specify the width between columns, you can use the [gap-x](/docs/gap) utilities:
+
+<Example>
+  <div class="relative">
+    <div class="absolute inset-0 -top-8 -bottom-8 hidden sm:grid grid-cols-[1fr,2rem,1fr,2rem,1fr]">
+      <div class="opacity-75 w-full h-full"></div>
+      <div class="bg-stripes-blue opacity-75 h-full"></div>
+      <div class="opacity-75 w-full h-full"></div>
+      <div class="bg-stripes-blue opacity-75 h-full"></div>
+      <div class="opacity-75 w-full h-full"></div>
+    </div>
+    <div class="relative columns-1 sm:columns-3 gap-8">
+      <div class="relative aspect-w-16 aspect-h-9">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2952&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="relative aspect-w-1 aspect-h-1 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2902&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="relative aspect-w-1 aspect-h-1 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1491904768633-2b7e3e7fede5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3131&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-1 aspect-h-1 mt-8 sm:mt-0">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1463288889890-a56b2853c40f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3132&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-16 aspect-h-9 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1611605645802-c21be743c321?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-1 aspect-h-1 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1498603993951-8a027a8a8f84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2936&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-1 aspect-h-1 mt-8 sm:mt-0">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1526400473556-aac12354f3db?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-1 aspect-h-1 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1617369120004-4fc70312c5e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1587&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+      <div class="hidden sm:block relative aspect-w-16 aspect-h-9 mt-8">
+        <img class="w-full object-cover rounded-lg" src="https://images.unsplash.com/photo-1518892096458-a169843d7f7f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="**gap-8** columns-3 ...">
+  <img class="w-full aspect-video ..." src="..." />
+  <img class="w-full aspect-square ..." src="..." />
+  <!-- ... -->
+</div>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="columns-2" featuredClass="columns-3" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="columns-2" featuredClass="columns-3" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides a column count scale from `1-12` as well as a column t-shirt scale from `3xs-7xl`. You can customize these values by editing `theme.columns` or `theme.extend.columns` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       columns: {
++         '4xs': '14rem',
++       }
+      },
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="columns" featuredClass="columns-[10rem]" />

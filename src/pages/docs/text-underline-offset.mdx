@@ -1,0 +1,88 @@
+---
+title: "Text Underline Offset"
+description: "Utilities for controlling the offset of a text underline."
+---
+
+import utilities from 'utilities?plugin=textUnderlineOffset'
+import { numbersLast } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = {
+  utilities,
+  sort: (classes) => numbersLast(classes),
+}
+
+
+## Basic usage
+
+### Setting the underline offset
+
+Use the `underline-offset-{width}` utilities to change the offset of a text underline.
+
+<Example>
+  <div class="flex flex-col gap-8 text-gray-900">
+    <div>
+      <div class="font-medium text-sm text-gray-500 font-mono mb-3">underline-offset-1</div>
+      <p class="text-lg font-medium underline decoration-gray-900 underline-offset-1">The quick brown fox jumps over the lazy dog.</p>
+    </div>
+    <div>
+      <div class="font-medium text-sm text-gray-500 font-mono mb-3">underline-offset-2</div>
+      <p class="text-lg font-medium underline decoration-gray-900 underline-offset-2">The quick brown fox jumps over the lazy dog.</p>
+    </div>
+    <div>
+      <div class="font-medium text-sm text-gray-500 font-mono mb-3">underline-offset-4</div>
+      <p class="text-lg font-medium underline decoration-gray-900 underline-offset-4">The quick brown fox jumps over the lazy dog.</p>
+    </div>
+    <div>
+      <div class="font-medium text-sm text-gray-500 font-mono mb-3">underline-offset-8</div>
+      <p class="text-lg font-medium underline decoration-gray-900 underline-offset-8">The quick brown fox jumps over the lazy dog.</p>
+    </div>
+  </div>
+</Example>
+
+```html
+<p class="underline **underline-offset-1** ...">The quick brown fox...</p>
+<p class="underline **underline-offset-2** ...">The quick brown fox...</p>
+<p class="underline **underline-offset-4** ...">The quick brown fox...</p>
+<p class="underline **underline-offset-8** ...">The quick brown fox...</p>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="underline" featuredClass="underline-offset-4" element="p" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="underline" featuredClass="underline-offset-4" element="p" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+You can customize the `underline-offset-{width}` utilities by editing `theme.textUnderlineOffset` or `theme.extend.textUnderlineOffset` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       textUnderlineOffset: {
++         3: '3px',
++       }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="text-underline-offset" featuredClass="underline-offset-[3px]" element="p" />

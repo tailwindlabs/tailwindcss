@@ -1,0 +1,87 @@
+---
+title: "Aspect Ratio"
+description: "Utilities for controlling the aspect ratio of an element."
+---
+
+import utilities from 'utilities?plugin=aspectRatio'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Setting the aspect ratio
+
+Use the `aspect-{ratio}` utilities to set the desired aspect ratio of an element.
+
+<Example resizable>
+  <iframe class="w-full aspect-video rounded-lg shadow-lg" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</Example>
+
+```html
+<iframe class="w-full **aspect-video** ..." src="https://www.youtube.com/..."></iframe>
+```
+
+Tailwind doesn't include a large set of aspect ratio values out of the box since it's easier to just use arbitrary values. See the [arbitrary values](#arbitrary-values) section for more information.
+
+### Browser support
+
+The `aspect-{ratio}` utilities use the native `aspect-ratio` CSS property, which was not supported in Safari until version 15. Until Safari 15 is popularized, Tailwind's [aspect-ratio](https://github.com/tailwindlabs/tailwindcss-aspect-ratio) plugin is a good alternative.
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates featuredClass="aspect-square">
+
+```html
+<iframe class="w-full aspect-video **hover:aspect-square**" src="https://www.youtube.com/..."></iframe>
+```
+
+</HoverFocusAndOtherStates>
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries featuredClass="aspect-square">
+
+```html
+<iframe class="w-full aspect-video **md:aspect-square**" src="https://www.youtube.com/..."></iframe>
+```
+
+</BreakpointsAndMediaQueries>
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides a minimal set of `aspect-ratio` utilities. You can customize these values by editing `theme.aspectRatio` or `theme.extend.aspectRatio` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        aspectRatio: {
++         '4/3': '4 / 3',
+        },
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="aspect-ratio">
+
+```html
+<iframe class="w-full **aspect-[4/3]**" src="https://www.youtube.com/..."></iframe>
+```
+
+</ArbitraryValues>

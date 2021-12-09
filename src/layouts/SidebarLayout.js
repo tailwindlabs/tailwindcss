@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { VersionSwitcher } from '@/components/VersionSwitcher'
 import { createContext, forwardRef, useRef } from 'react'
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import clsx from 'clsx'
-import { gradients } from '@/utils/gradients'
+import { SearchButton } from '@/components/Search'
+import { Dialog } from '@headlessui/react'
 
 export const SidebarContext = createContext()
 
@@ -13,53 +13,117 @@ const NavItem = forwardRef(({ href, children, isActive, isPublished, fallbackHre
     <li ref={ref}>
       <Link href={isPublished ? href : fallbackHref}>
         <a
-          className={clsx('px-3 py-2 transition-colors duration-200 relative block', {
-            'text-cyan-700': isActive,
-            'hover:text-gray-900 text-gray-500': !isActive && isPublished,
+          className={clsx('block border-l pl-4 -ml-px', {
+            'text-sky-500 border-current font-semibold': isActive,
+            'border-transparent hover:border-gray-400': !isActive,
+            'text-gray-700 hover:text-gray-900': !isActive && isPublished,
             'text-gray-400': !isActive && !isPublished,
           })}
         >
-          <span
-            className={clsx('rounded-md absolute inset-0 bg-cyan-50', {
-              'opacity-0': !isActive
-            })}
-          />
-          <span className="relative">{children}</span>
+          {children}
         </a>
       </Link>
     </li>
   )
 })
 
+/**
+ * Find the nearst scrollable ancestor (or self if scrollable)
+ *
+ * Code adapted and simplified from the smoothscroll polyfill
+ *
+ *
+ * @param {Element} el
+ */
+function nearestScrollableContainer(el) {
+  /**
+   * indicates if an element can be scrolled
+   *
+   * @param {Node} el
+   */
+  function isScrollable(el) {
+    const style = window.getComputedStyle(el)
+    const overflowX = style['overflowX']
+    const overflowY = style['overflowY']
+    const canScrollY = el.clientHeight < el.scrollHeight
+    const canScrollX = el.clientWidth < el.scrollWidth
+
+    const isScrollableY = canScrollY && (overflowY === 'auto' || overflowY === 'scroll')
+    const isScrollableX = canScrollX && (overflowX === 'auto' || overflowX === 'scroll')
+
+    return isScrollableY || isScrollableX
+  }
+
+  while (el !== document.body && isScrollable(el) === false) {
+    el = el.parentNode || el.host
+  }
+
+  return el
+}
+
 function Nav({ nav, children, fallbackHref }) {
   const router = useRouter()
   const activeItemRef = useRef()
+  const previousActiveItemRef = useRef()
   const scrollRef = useRef()
 
   useIsomorphicLayoutEffect(() => {
+    function updatePreviousRef() {
+      previousActiveItemRef.current = activeItemRef.current
+    }
+
     if (activeItemRef.current) {
-      const scrollRect = scrollRef.current.getBoundingClientRect()
+      if (activeItemRef.current === previousActiveItemRef.current) {
+        updatePreviousRef()
+        return
+      }
+
+      updatePreviousRef()
+
+      const scrollable = nearestScrollableContainer(scrollRef.current)
+
+      const scrollRect = scrollable.getBoundingClientRect()
       const activeItemRect = activeItemRef.current.getBoundingClientRect()
 
       const top = activeItemRef.current.offsetTop
       const bottom = top - scrollRect.height + activeItemRect.height
 
-      if (scrollRef.current.scrollTop > top || scrollRef.current.scrollTop < bottom) {
-        scrollRef.current.scrollTop =
-          activeItemRef.current.offsetTop - scrollRect.height / 2 + activeItemRect.height / 2
+      if (scrollable.scrollTop > top || scrollable.scrollTop < bottom) {
+        scrollable.scrollTop = top - scrollRect.height / 2 + activeItemRect.height / 2
       }
     }
   }, [router.pathname])
 
   return (
-    <nav
-      id="nav"
-      ref={scrollRef}
-      className="px-1 pt-6 overflow-y-auto font-medium text-base sm:px-3 xl:px-5 lg:text-sm pb-10 lg:pt-10 lg:pb-14 sticky?lg:h-(screen-18)"
-    >
-      <div className="relative flex mb-8 px-3 lg:hidden">
-        <VersionSwitcher />
-      </div>
+    <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6">
+      <SearchButton className="hidden w-full mb-8 lg:flex items-center text-sm leading-6 text-gray-400 rounded-md ring-1 ring-gray-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-gray-300">
+        {({ actionKey }) => (
+          <>
+            <svg width="24" height="24" fill="none" aria-hidden="true" className="mr-3 flex-none">
+              <path
+                d="m19 19-3.5-3.5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle
+                cx="11"
+                cy="11"
+                r="6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Quick search...
+            {actionKey && (
+              <span className="ml-auto pl-3 flex-none text-xs font-semibold">{actionKey[0]}K</span>
+            )}
+          </>
+        )}
+      </SearchButton>
       <ul>
         <TopLevelNav />
         {children}
@@ -69,31 +133,33 @@ function Nav({ nav, children, fallbackHref }) {
               let publishedItems = nav[category].filter((item) => item.published !== false)
               if (publishedItems.length === 0 && !fallbackHref) return null
               return (
-                <li key={category} className="mt-8">
+                <li key={category} className="mt-12 lg:mt-8">
                   <h5
-                    className={clsx(
-                      'px-3 mb-3 lg:mb-3 uppercase tracking-wide font-semibold text-sm lg:text-xs',
-                      {
-                        'text-gray-900': publishedItems.length > 0,
-                        'text-gray-400': publishedItems.length === 0,
-                      }
-                    )}
+                    className={clsx('mb-8 lg:mb-3 font-semibold', {
+                      'text-gray-900': publishedItems.length > 0,
+                      'text-gray-400': publishedItems.length === 0,
+                    })}
                   >
                     {category}
                   </h5>
-                  <ul>
-                    {(fallbackHref ? nav[category] : publishedItems).map((item, i) => (
-                      <NavItem
-                        key={i}
-                        href={item.href}
-                        isActive={item.href === router.pathname}
-                        ref={item.href === router.pathname ? activeItemRef : undefined}
-                        isPublished={item.published !== false}
-                        fallbackHref={fallbackHref}
-                      >
-                        {item.shortTitle || item.title}
-                      </NavItem>
-                    ))}
+                  <ul className="space-y-6 lg:space-y-2 border-l border-gray-100">
+                    {(fallbackHref ? nav[category] : publishedItems).map((item, i) => {
+                      let isActive = item.match
+                        ? item.match.test(router.pathname)
+                        : item.href === router.pathname
+                      return (
+                        <NavItem
+                          key={i}
+                          href={item.href}
+                          isActive={isActive}
+                          ref={isActive ? activeItemRef : undefined}
+                          isPublished={item.published !== false}
+                          fallbackHref={fallbackHref}
+                        >
+                          {item.shortTitle || item.title}
+                        </NavItem>
+                      )
+                    })}
                   </ul>
                 </li>
               )
@@ -105,7 +171,7 @@ function Nav({ nav, children, fallbackHref }) {
 }
 
 const TopLevelAnchor = forwardRef(
-  ({ children, href, className, icon, isActive, onClick, color }, ref) => {
+  ({ children, href, className, icon, isActive, onClick, shadow }, ref) => {
     return (
       <li>
         <a
@@ -113,15 +179,20 @@ const TopLevelAnchor = forwardRef(
           href={href}
           onClick={onClick}
           className={clsx(
-            'flex items-center px-3 hover:text-gray-900 transition-colors duration-200',
+            'group flex items-center lg:text-sm lg:leading-6',
             className,
-            {
-              'text-gray-900': isActive,
-            }
+            isActive
+              ? 'font-semibold text-sky-500'
+              : 'font-medium text-gray-700 hover:text-gray-900'
           )}
         >
-          <div className={`mr-3 rounded-md bg-gradient-to-br ${gradients[color][0]}`}>
-            <svg className="h-6 w-6" viewBox="0 0 24 24">
+          <div
+            className={clsx(
+              'mr-4 rounded-md ring-1 ring-gray-900/5 shadow-sm group-hover:shadow group-hover:ring-gray-900/10',
+              shadow
+            )}
+          >
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
               {icon}
             </svg>
           </div>
@@ -146,28 +217,27 @@ function TopLevelLink({ href, as, ...props }) {
 
 function TopLevelNav() {
   let { pathname } = useRouter()
-  let current = pathname.split('/')[1]
 
   return (
     <>
       <TopLevelLink
-        href="/docs"
-        isActive={current === '' || current === 'docs'}
-        color="pink"
+        href="/docs/installation"
+        isActive={pathname.startsWith('/docs')}
         className="mb-4"
+        shadow="group-hover:shadow-sky-200"
         icon={
           <>
             <path
               fillRule="evenodd"
               clipRule="evenodd"
-              d="M9 6C10.0929 6 11.1175 6.29218 12 6.80269V16.8027C11.1175 16.2922 10.0929 16 9 16C7.90714 16 6.88252 16.2922 6 16.8027V6.80269C6.88252 6.29218 7.90714 6 9 6Z"
-              fill="#FFF1F2"
+              d="M8.5 7c1.093 0 2.117.27 3 .743V17a6.345 6.345 0 0 0-3-.743c-1.093 0-2.617.27-3.5.743V7.743C5.883 7.27 7.407 7 8.5 7Z"
+              className="fill-sky-200 group-hover:fill-sky-500"
             />
             <path
               fillRule="evenodd"
               clipRule="evenodd"
-              d="M15 6C16.0929 6 17.1175 6.29218 18 6.80269V16.8027C17.1175 16.2922 16.0929 16 15 16C13.9071 16 12.8825 16.2922 12 16.8027V6.80269C12.8825 6.29218 13.9071 6 15 6Z"
-              fill="#FECDD3"
+              d="M15.5 7c1.093 0 2.617.27 3.5.743V17c-.883-.473-2.407-.743-3.5-.743s-2.117.27-3 .743V7.743a6.344 6.344 0 0 1 3-.743Z"
+              className="fill-sky-400 group-hover:fill-sky-500"
             />
           </>
         }
@@ -176,35 +246,65 @@ function TopLevelNav() {
       </TopLevelLink>
       <TopLevelLink
         href="https://tailwindui.com/components?utm_source=tailwindcss&utm_medium=navigation"
-        color="violet"
         className="mb-4"
+        shadow="group-hover:shadow-indigo-200"
         icon={
           <>
-            <path d="M6 9l6-3 6 3v6l-6 3-6-3V9z" fill="#F5F3FF" />
-            <path d="M6 9l6 3v6l-6-3V9z" fill="#DDD6FE" />
-            <path d="M18 9l-6 3v6l6-3V9z" fill="#C4B5FD" />
+            <path
+              d="m6 9 6-3 6 3v6l-6 3-6-3V9Z"
+              className="fill-indigo-100 group-hover:fill-indigo-200"
+            />
+            <path d="m6 9 6 3v7l-6-3V9Z" className="fill-indigo-300 group-hover:fill-indigo-400" />
+            <path d="m18 9-6 3v7l6-3V9Z" className="fill-indigo-400 group-hover:fill-indigo-500" />
           </>
         }
       >
         Components
       </TopLevelLink>
       <TopLevelLink
-        href="https://play.tailwindcss.com"
-        color="amber"
+        href="https://www.youtube.com/tailwindlabs"
         className="mb-4"
+        shadow="group-hover:shadow-pink-200"
         icon={
           <>
             <path
               fillRule="evenodd"
               clipRule="evenodd"
-              d="M13.196 6.02a1 1 0 01.785 1.176l-2 10a1 1 0 01-1.961-.392l2-10a1 1 0 011.176-.784z"
-              fill="#FDE68A"
+              d="M19 12a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+              className="fill-pink-400 group-hover:fill-pink-500"
             />
             <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M15.293 9.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-2 2a1 1 0 01-1.414-1.414L16.586 12l-1.293-1.293a1 1 0 010-1.414zM8.707 9.293a1 1 0 010 1.414L7.414 12l1.293 1.293a1 1 0 11-1.414 1.414l-2-2a1 1 0 010-1.414l2-2a1 1 0 011.414 0z"
-              fill="#FDF4FF"
+              d="M11.082 9.107a.685.685 0 0 0-.72-.01.757.757 0 0 0-.362.653v4.5c0 .27.138.52.362.653.224.133.5.13.72-.01l3.571-2.25A.758.758 0 0 0 15 12a.758.758 0 0 0-.347-.643l-3.571-2.25Z"
+              className="fill-pink-50 group-hover:fill-pink-100"
+            />
+          </>
+        }
+      >
+        Screencasts
+      </TopLevelLink>
+      <TopLevelLink
+        href="https://play.tailwindcss.com"
+        className="mb-4"
+        shadow="group-hover:shadow-blue-200"
+        icon={
+          <>
+            <path
+              d="M4 12a7 7 0 0 1 7-7h2a7 7 0 1 1 0 14h-2a7 7 0 0 1-7-7Z"
+              className="fill-blue-400 group-hover:fill-blue-500"
+            />
+            <path
+              d="M10.25 9.75 7.75 12l2.5 2.25"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="stroke-blue-50"
+            />
+            <path
+              d="m13.75 9.75 2.5 2.25-2.5 2.25"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="stroke-blue-200"
             />
           </>
         }
@@ -212,103 +312,107 @@ function TopLevelNav() {
         Playground
       </TopLevelLink>
       <TopLevelLink
-        href="https://blog.tailwindcss.com"
-        color="teal"
-        className="mb-4"
-        icon={
-          <>
-            <path
-              d="M8 9a1 1 0 011-1h8a1 1 0 011 1v7.5a1.5 1.5 0 01-1.5 1.5h-7A1.5 1.5 0 018 16.5V9z"
-              fill="#6EE7B7"
-            />
-            <path
-              d="M15 7a1 1 0 00-1-1H7a1 1 0 00-1 1v9.5A1.5 1.5 0 007.5 18H16v-.085a1.5 1.5 0 01-1-1.415V7z"
-              fill="#ECFDF5"
-            />
-            <path fill="#A7F3D0" d="M8 8h5v4H8zM8 14h5v2H8z" />
-          </>
-        }
-      >
-        News
-      </TopLevelLink>
-      <TopLevelLink
         href="/resources"
-        isActive={current === 'resources'}
-        color="blue"
+        isActive={pathname === '/resources'}
         className="mb-4"
+        shadow="group-hover:shadow-purple-200"
         icon={
           <>
-            <path d="M17 13a1 1 0 011 1v3a1 1 0 01-1 1H8.5a2.5 2.5 0 010-5H17z" fill="#93C5FD" />
             <path
-              d="M12.743 7.722a1 1 0 011.414 0l2.122 2.121a1 1 0 010 1.414l-6.01 6.01a2.5 2.5 0 11-3.536-3.536l6.01-6.01z"
-              fill="#BFDBFE"
+              d="M6 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8ZM6 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1Z"
+              className="fill-purple-400 group-hover:fill-purple-500"
             />
-            <path d="M6 7a1 1 0 011-1h3a1 1 0 011 1v8.5a2.5 2.5 0 01-5 0V7z" fill="#EFF6FF" />
-            <path d="M9.5 15.5a1 1 0 11-2 0 1 1 0 012 0z" fill="#60A5FA" />
+            <path
+              d="M13 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2V8Z"
+              className="fill-purple-200 group-hover:fill-purple-300"
+            />
+            <path
+              d="M13 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-1Z"
+              className="fill-purple-400 group-hover:fill-purple-500"
+            />
           </>
         }
       >
         Resources
       </TopLevelLink>
       <TopLevelLink
-        href="https://www.youtube.com/tailwindlabs"
-        color="purple"
-        className="mb-10"
+        href="https://github.com/tailwindlabs/tailwindcss/discussions"
+        className="mb-8"
+        shadow="group-hover:shadow-violet-200"
         icon={
           <>
-            <circle cx="12" cy="12" r="7" fill="#F3E8FF" />
             <path
-              d="M14.52 11.136a1 1 0 010 1.728l-3.016 1.759A1 1 0 0110 13.759v-3.518a1 1 0 011.504-.864l3.015 1.76z"
-              fill="#C084FC"
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M11 5a6 6 0 0 0-4.687 9.746c.215.27.315.62.231.954l-.514 2.058a1 1 0 0 0 1.485 1.1l2.848-1.71c.174-.104.374-.15.576-.148H13a6 6 0 0 0 0-12h-2Z"
+              className="fill-violet-400 group-hover:fill-violet-500"
             />
+            <circle cx="12" cy="11" r="1" fill="#fff" />
+            <circle cx="9" cy="11" r="1" fill="#ddd6fe" />
+            <circle cx="15" cy="11" r="1" fill="#ddd6fe" />
           </>
         }
       >
-        Screencasts
+        Community
       </TopLevelLink>
     </>
   )
 }
 
-export function SidebarLayout({ children, navIsOpen, setNavIsOpen, nav, sidebar, fallbackHref }) {
+function Wrapper({ allowOverflow, children }) {
+  return <div className={allowOverflow ? undefined : 'overflow-hidden'}>{children}</div>
+}
+
+export function SidebarLayout({
+  children,
+  navIsOpen,
+  setNavIsOpen,
+  nav,
+  sidebar,
+  fallbackHref,
+  layoutProps: { allowOverflow = true } = {},
+}) {
   return (
     <SidebarContext.Provider value={{ nav, navIsOpen, setNavIsOpen }}>
-      <div className="w-full max-w-8xl mx-auto">
-        <div className="lg:flex">
-          <div
-            id="sidebar"
-            onClick={() => setNavIsOpen(false)}
-            className={clsx(
-              'fixed z-40 inset-0 flex-none h-full bg-black bg-opacity-25 w-full lg:bg-white lg:static lg:h-auto lg:overflow-y-visible lg:pt-0 lg:w-60 xl:w-72 lg:block',
-              {
-                hidden: !navIsOpen,
-              }
-            )}
-          >
-            <div
-              id="navWrapper"
-              onClick={(e) => e.stopPropagation()}
-              className="h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:bg-transparent overflow-hidden lg:top-18 bg-white mr-24 lg:mr-0"
-            >
-              <div className="hidden lg:block h-12 pointer-events-none absolute inset-x-0 z-10 bg-gradient-to-b from-white" />
-              <Nav nav={nav} fallbackHref={fallbackHref}>
-                {sidebar}
-              </Nav>
-            </div>
+      <Wrapper allowOverflow={allowOverflow}>
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="hidden lg:block fixed z-20 inset-0 top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] py-10 px-8 overflow-y-auto">
+            <Nav nav={nav} fallbackHref={fallbackHref}>
+              {sidebar}
+            </Nav>
           </div>
-          <div
-            id="content-wrapper"
-            className={clsx(
-              'min-w-0 w-full flex-auto lg:static lg:max-h-full lg:overflow-visible',
-              {
-                'overflow-hidden max-h-screen fixed': navIsOpen,
-              }
-            )}
-          >
-            {children}
-          </div>
+          <div className="lg:pl-[19.5rem]">{children}</div>
         </div>
-      </div>
+      </Wrapper>
+      <Dialog
+        as="div"
+        open={navIsOpen}
+        onClose={() => setNavIsOpen(false)}
+        className="fixed z-50 inset-0 overflow-y-auto lg:hidden"
+      >
+        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm" />
+        <div className="relative bg-white w-80 max-w-[calc(100%-3rem)] p-6">
+          <button
+            type="button"
+            onClick={() => setNavIsOpen(false)}
+            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600"
+          >
+            <span className="sr-only">Close navigation</span>
+            <svg viewBox="0 0 10 10" className="w-2.5 h-2.5 overflow-visible">
+              <path
+                d="M0 0L10 10M10 0L0 10"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+          <Nav nav={nav} fallbackHref={fallbackHref}>
+            {sidebar}
+          </Nav>
+        </div>
+      </Dialog>
     </SidebarContext.Provider>
   )
 }

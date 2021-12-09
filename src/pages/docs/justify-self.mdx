@@ -3,31 +3,33 @@ title: "Justify Self"
 description: "Utilities for controlling how an individual grid item is aligned along its inline axis."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/justifySelf'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=justifySelf'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Auto
+## Basic usage
+
+### Auto
 
 Use `justify-self-auto` to align an item based on the value of the grid's `justify-items` property:
 
-```html purple
-<template preview class="p-4">
-  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr h-32">
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-purple-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="justify-self-auto text-white text-2xl font-extrabold bg-purple-500 rounded-md flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-purple-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-purple-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-purple-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-purple-500 rounded-md flex justify-center items-center px-4 py-2"></div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr font-mono text-white text-sm font-bold leading-6 text-center">
+    <div class="p-4 rounded-lg bg-purple-300">01</div>
+    <div class="justify-self-auto p-4 rounded-lg bg-purple-500 shadow-lg">02</div>
+    <div class="p-4 rounded-lg bg-purple-300">03</div>
+    <div class="p-4 rounded-lg bg-purple-300">04</div>
+    <div class="p-4 rounded-lg bg-purple-300">05</div>
+    <div class="p-4 rounded-lg bg-purple-300">06</div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="grid justify-items-stretch ...">
   <!-- ... -->
-  <div class="**justify-self-auto** ...">1</div>
+  <div class="**justify-self-auto** ...">02</div>
   <!-- ... -->
   <!-- ... -->
   <!-- ... -->
@@ -35,25 +37,27 @@ Use `justify-self-auto` to align an item based on the value of the grid's `justi
 </div>
 ```
 
-## Start
+### Start
 
 Use `justify-self-start` to align a grid item to the start its inline axis:
 
-```html emerald
-<template preview class="p-4">
-  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr h-32">
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-emerald-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="justify-self-start text-white text-2xl font-extrabold bg-emerald-500 rounded-md flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-emerald-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-emerald-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-emerald-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-emerald-500 rounded-md flex justify-center items-center px-4 py-2"></div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr font-mono text-white text-sm font-bold leading-6 text-center">
+    <div class="p-4 rounded-lg bg-pink-300">01</div>
+    <div class="bg-stripes-pink rounded-lg">
+      <div class="justify-self-start p-4 w-14 h-14 rounded-lg bg-pink-500 shadow-lg">02</div>
+    </div>
+    <div class="p-4 rounded-lg bg-pink-300">03</div>
+    <div class="p-4 rounded-lg bg-pink-300">04</div>
+    <div class="p-4 rounded-lg bg-pink-300">05</div>
+    <div class="p-4 rounded-lg bg-pink-300">06</div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="grid justify-items-stretch ...">
   <!-- ... -->
-  <div class="**justify-self-start** ...">1</div>
+  <div class="**justify-self-start** ...">02</div>
   <!-- ... -->
   <!-- ... -->
   <!-- ... -->
@@ -61,25 +65,27 @@ Use `justify-self-start` to align a grid item to the start its inline axis:
 </div>
 ```
 
-## Center
+### Center
 
 Use `justify-self-center` to align a grid item along the center its inline axis:
 
-```html amber
-<template preview class="p-4">
-  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr h-32">
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-amber-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="justify-self-center text-white text-2xl font-extrabold bg-amber-500 rounded-md flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-amber-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-amber-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-amber-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-amber-500 rounded-md flex justify-center items-center px-4 py-2"></div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr font-mono text-white text-sm font-bold leading-6 text-center">
+    <div class="p-4 rounded-lg bg-indigo-300">01</div>
+    <div class="justify-self-center grid w-full bg-stripes-indigo rounded-lg">
+      <div class="justify-self-center p-4 w-14 h-14 rounded-lg bg-indigo-500 shadow-lg">02</div>
+    </div>
+    <div class="p-4 rounded-lg bg-indigo-300">03</div>
+    <div class="p-4 rounded-lg bg-indigo-300">04</div>
+    <div class="p-4 rounded-lg bg-indigo-300">05</div>
+    <div class="p-4 rounded-lg bg-indigo-300">06</div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="grid justify-items-stretch ...">
   <!-- ... -->
-  <div class="**justify-self-center** ...">1</div>
+  <div class="**justify-self-center** ...">02</div>
   <!-- ... -->
   <!-- ... -->
   <!-- ... -->
@@ -87,25 +93,27 @@ Use `justify-self-center` to align a grid item along the center its inline axis:
 </div>
 ```
 
-## End
+### End
 
 Use `justify-self-end` to align a grid item to the end its inline axis:
 
-```html rose
-<template preview class="p-4">
-  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr h-32">
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-rose-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="justify-self-end text-white text-2xl font-extrabold bg-rose-500 rounded-md flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-rose-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-rose-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-rose-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-rose-500 rounded-md flex justify-center items-center px-4 py-2"></div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr font-mono text-white text-sm font-bold leading-6 text-center">
+    <div class="p-4 rounded-lg bg-blue-300">01</div>
+    <div class="justify-self-end grid w-full bg-stripes-blue rounded-lg">
+      <div class="justify-self-end p-4 w-14 h-14 rounded-lg bg-blue-500 shadow-lg">02</div>
+    </div>
+    <div class="p-4 rounded-lg bg-blue-300">03</div>
+    <div class="p-4 rounded-lg bg-blue-300">04</div>
+    <div class="p-4 rounded-lg bg-blue-300">05</div>
+    <div class="p-4 rounded-lg bg-blue-300">06</div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="grid justify-items-stretch ...">
   <!-- ... -->
-  <div class="**justify-self-end** ...">1</div>
+  <div class="**justify-self-end** ...">02</div>
   <!-- ... -->
   <!-- ... -->
   <!-- ... -->
@@ -113,25 +121,37 @@ Use `justify-self-end` to align a grid item to the end its inline axis:
 </div>
 ```
 
-## Stretch
+### Stretch
 
 Use `justify-self-stretch` to stretch a grid item to fill the grid area on its inline axis:
 
-```html fuchsia
-<template preview class="p-4">
-  <div class="grid grid-cols-3 gap-4 justify-items-start auto-rows-fr h-32">
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-fuchsia-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="justify-self-stretch text-white text-2xl font-extrabold bg-fuchsia-500 rounded-md flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-fuchsia-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-fuchsia-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-fuchsia-500 rounded-md flex justify-center items-center px-4 py-2"></div>
-    <div class="text-white text-2xl font-extrabold bg-stripes bg-stripes-fuchsia-500 rounded-md flex justify-center items-center px-4 py-2"></div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 justify-items-stretch auto-rows-fr font-mono text-white text-sm font-bold leading-6 text-center">
+    <div class="bg-stripes-fuchsia rounded-lg">
+      <div class="p-4 w-14 h-14 rounded-lg bg-fuchsia-300">01</div>
+    </div>
+    <div class="justify-self-stretch grid w-full bg-stripes-fuchsia rounded-lg">
+      <div class="justify-self-stretch p-4 rounded-lg bg-fuchsia-500 shadow-lg">02</div>
+    </div>
+    <div class="bg-stripes-fuchsia rounded-lg">
+      <div class="p-4 w-14 h-14 rounded-lg bg-fuchsia-300">03</div>
+    </div>
+    <div class="bg-stripes-fuchsia rounded-lg">
+      <div class="p-4 w-14 h-14 rounded-lg bg-fuchsia-300">04</div>
+    </div>
+    <div class="bg-stripes-fuchsia rounded-lg">
+      <div class="p-4 w-14 h-14 rounded-lg bg-fuchsia-300">05</div>
+    </div>
+    <div class="bg-stripes-fuchsia rounded-lg">
+      <div class="p-4 w-14 h-14 rounded-lg bg-fuchsia-300">06</div>
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="grid justify-items-start ...">
   <!-- ... -->
-  <div class="**justify-self-stretch** ...">1</div>
+  <div class="**justify-self-stretch** ...">02</div>
   <!-- ... -->
   <!-- ... -->
   <!-- ... -->
@@ -139,18 +159,14 @@ Use `justify-self-stretch` to stretch a grid item to fill the grid area on its i
 </div>
 ```
 
-## Responsive
+---
 
-To control the alignment of a grid item inside its grid area at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:justify-self-end` to apply the `justify-self-end` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-## Customizing
+<HoverFocusAndOtherStates defaultClass="justify-self-start" featuredClass="justify-self-end" />
 
-### Variants
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Variants plugin="justifySelf" name="justify-self" />
-
-### Disabling
-
-<Disabling plugin="justifySelf" name="justify-self" />
+<BreakpointsAndMediaQueries defaultClass="justify-self-start" featuredClass="justify-self-end" />

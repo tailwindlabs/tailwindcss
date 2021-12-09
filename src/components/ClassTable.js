@@ -1,91 +1,8 @@
-import dlv from 'dlv'
-import { memo } from 'react'
-import { defaultConfig } from '@/utils/defaultConfig'
+import { memo, useEffect, useRef, useState } from 'react'
 import { isObject } from '@/utils/isObject'
 import { castArray } from '@/utils/castArray'
 import clsx from 'clsx'
 import { Heading } from '@/components/Heading'
-import nameClass from 'tailwindcss/lib/util/nameClass'
-
-let normalizeProperties = function (input) {
-  if (typeof input !== 'object') return input
-  if (Array.isArray(input)) return input.map(normalizeProperties)
-  return Object.keys(input).reduce((newObj, key) => {
-    let val = input[key]
-    let newVal = typeof val === 'object' ? normalizeProperties(val) : val
-    newObj[key.replace(/([a-z])([A-Z])/g, (m, p1, p2) => `${p1}-${p2.toLowerCase()}`)] = newVal
-    return newObj
-  }, {})
-}
-
-function getUtilities(plugin) {
-  if (!plugin) return {}
-  const utilities = {}
-
-  function addUtilities(utils) {
-    utils = Array.isArray(utils) ? utils : [utils]
-    for (let i = 0; i < utils.length; i++) {
-      for (let prop in utils[i]) {
-        utilities[prop] = normalizeProperties(utils[i][prop])
-      }
-    }
-  }
-
-  plugin()({
-    addUtilities,
-    addBase() {},
-    matchUtilities: (matches, { values }) => {
-      let modifierValues = Object.entries(values)
-
-      let result = Object.entries(matches).flatMap(([name, utilityFunction]) => {
-        return modifierValues
-          .map(([modifier, value]) => {
-            let declarations = utilityFunction(value, {
-              includeRules(rules) {
-                addUtilities(rules)
-              },
-            })
-
-            if (!declarations) {
-              return null
-            }
-
-            return {
-              [nameClass(name, modifier)]: declarations,
-            }
-          })
-          .filter(Boolean)
-      })
-
-      for (let obj of result) {
-        for (let key in obj) {
-          let deleteKey = false
-          for (let subkey in obj[key]) {
-            if (subkey.includes('&')) {
-              result.push({
-                [subkey.replace(/&/g, key)]: obj[key][subkey],
-              })
-              deleteKey = true
-            }
-          }
-
-          if (deleteKey) delete obj[key]
-        }
-      }
-
-      addUtilities(result)
-    },
-    config: () => ({
-      mode: 'aot',
-      future: 'all',
-    }),
-    theme: (path, defaultValue) => dlv(defaultConfig.theme, path, defaultValue),
-    variants: () => [],
-    e: (x) => x.replace(/([:.])/g, '\\$1'),
-    corePlugins: () => true,
-  })
-  return utilities
-}
 
 function stringifyProperties(
   properties,
@@ -111,57 +28,73 @@ function stringifyProperties(
 
 export const ClassTable = memo(
   ({
-    plugin,
+    utilities = {},
     filterRules = () => true,
     filterProperties,
     preview,
+    rowStyle,
     sort = (x) => x,
     transformSelector = (x) => x.replace(/^\./g, '').replace(/\\/g, ''),
     transformProperties = ({ properties }) => properties,
     transformValue,
     custom,
+    scroll,
   }) => {
-    let utilities = {}
-    castArray(plugin).forEach((p) => {
-      Object.assign(utilities, getUtilities(p))
-    })
     utilities = Object.fromEntries(Object.entries(utilities).filter(filterRules))
+    let classes = Object.keys(utilities)
+    let isScrollable = scroll || classes.length > 12
+    let isCollapsable = classes.length > 10
+    let [isCollapsed, setIsCollapsed] = useState(isCollapsable)
+    let ref = useRef()
+    let isInitial = useRef(true)
+
+    useEffect(() => {
+      if (isInitial.current) {
+        isInitial.current = false
+        return
+      }
+      if (isCollapsed) {
+        ref.current.scrollIntoView(true)
+      }
+    }, [isCollapsed])
 
     return (
-      <div className="border-b border-gray-200 overflow-hidden relative">
-        <Heading level={2} id="class-reference" toc={true} className="relative">
-          <span className="sr-only">Default class reference</span>
+      <div ref={ref} className="mt-10 relative">
+        <Heading level={2} id="class-reference" className="relative scroll-mt-[var(--scroll-mt)]">
+          <span className="sr-only">Quick reference</span>
         </Heading>
         <div
           className={clsx(
-            'overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch',
-            { 'lg:max-h-sm': Object.keys(utilities).length > 12 }
+            'overflow-hidden lg:overflow-auto scrollbar-w-1.5 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-thumb-gray-300 scrollbar-track-rounded',
+            isCollapsed && 'max-h-96',
+            !isScrollable && isCollapsed && 'lg:max-h-[none]',
+            isScrollable && 'supports-scrollbars:pr-2 lg:max-h-96'
           )}
         >
           {custom || (
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr>
-                  <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
-                    <div className="pb-2 pr-2 border-b border-gray-200">Class</div>
+                  <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0">
+                    <div className="py-2 pr-2 border-b border-gray-200">Class</div>
                   </th>
                   <th
                     className={clsx(
-                      'z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0',
+                      'sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0',
                       {
                         'hidden sm:table-cell': preview,
                       }
                     )}
                   >
                     <div
-                      className={clsx('pb-2 pl-2 border-b border-gray-200', { 'pr-2': preview })}
+                      className={clsx('py-2 pl-2 border-b border-gray-200', { 'pr-2': preview })}
                     >
                       Properties
                     </div>
                   </th>
                   {preview && (
-                    <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
-                      <div className="pb-2 pl-2 border-b border-gray-200">
+                    <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0">
+                      <div className="py-2 pl-2 border-b border-gray-200">
                         <span className="sr-only">Preview</span>&nbsp;
                       </div>
                     </th>
@@ -169,18 +102,18 @@ export const ClassTable = memo(
                 </tr>
               </thead>
               <tbody className="align-baseline">
-                {sort(Object.keys(utilities)).map((utility, i) => {
+                {sort(classes).map((utility, i) => {
                   let selector = utility
-                  let properties = utilities[selector]
+                  let properties = { ...utilities[selector] }
 
                   return (
-                    <tr key={utility}>
+                    <tr key={utility} style={rowStyle ? rowStyle({ css: properties }) : undefined}>
                       <td
                         translate="no"
                         className={clsx(
-                          'py-2 pr-2 font-mono text-xs text-violet-600 whitespace-nowrap',
+                          'py-2 pr-2 font-mono font-medium text-xs leading-6 text-sky-500 whitespace-nowrap',
                           {
-                            'border-t border-gray-200': i !== 0,
+                            'border-t border-gray-100': i !== 0,
                           }
                         )}
                       >
@@ -189,9 +122,9 @@ export const ClassTable = memo(
                       <td
                         translate="no"
                         className={clsx(
-                          'py-2 pl-2 font-mono text-xs text-light-blue-600 whitespace-pre',
+                          'py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre',
                           {
-                            'border-t border-gray-200': i !== 0,
+                            'border-t border-gray-100': i !== 0,
                             'hidden sm:table-cell sm:pr-2': preview,
                           }
                         )}
@@ -203,7 +136,8 @@ export const ClassTable = memo(
                       </td>
                       {preview &&
                         preview(properties, {
-                          className: i === 0 ? '' : 'border-t border-gray-200',
+                          utility,
+                          className: i === 0 ? '' : 'border-t border-gray-100',
                         })}
                     </tr>
                   )
@@ -211,7 +145,34 @@ export const ClassTable = memo(
               </tbody>
             </table>
           )}
+          <div className="sticky bottom-0 h-px -mt-px bg-gray-200" />
         </div>
+        {isCollapsable && (
+          <div
+            className={clsx(
+              'inset-x-0 flex justify-center lg:hidden',
+              isCollapsed
+                ? '-mt-9 relative'
+                : 'mt-4 sticky bottom-[calc(1rem+env(safe-area-inset-bottom,0))]'
+            )}
+          >
+            <div
+              className={clsx(
+                'absolute inset-x-0 bg-gradient-to-t from-white',
+                isCollapsed
+                  ? '-top-8 bottom-0'
+                  : '-top-4 bottom-[calc(-1*(1rem+env(safe-area-inset-bottom,0)))]'
+              )}
+            />
+            <button
+              type="button"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="relative text-sm font-semibold text-gray-900 bg-white py-2 px-4 rounded-full ring-1 ring-gray-900/10 shadow-sm"
+            >
+              {isCollapsed ? 'Show all classes' : 'Show fewer classes'}
+            </button>
+          </div>
+        )}
       </div>
     )
   }

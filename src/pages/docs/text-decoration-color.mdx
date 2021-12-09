@@ -1,0 +1,86 @@
+---
+title: "Text Decoration Color"
+description: "Utilities for controlling the color of text decorations."
+---
+
+import utilities from 'utilities?plugin=textDecorationColor'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Setting the text decoration color
+
+Use the `decoration-{color}` utilities to change the color of an element's [text decoration](/docs/text-decoration).
+
+<Example p="none">
+  <div class="bg-white p-8 text-gray-900 shadow-lg max-w-sm mx-auto text-sm leading-6 sm:text-base sm:leading-7">
+    <p class="text-sm leading-6">I’m Derek, an astro-engineer based in Tattooine. I like to build X-Wings at <a href="#" class="font-bold underline decoration-sky-500 decoration-2">My Company, Inc</a>. Outside of work, I like to <a href="#" class="font-bold underline decoration-pink-500 decoration-2">watch pod-racing</a> and have <a href="#" class="font-bold underline decoration-indigo-500 decoration-2">light-saber</a> fights.</p>
+  </div>
+</Example>
+
+```html
+<div>
+  <p>
+    I’m Derek, an astro-engineer based in Tattooine. I like to build X-Wings at
+    <a class="underline **decoration-sky-500**">My Company, Inc</a>.
+    Outside of work, I like to <a class="underline **decoration-pink-500**">watch
+    pod-racing</a> and have <a class="underline **decoration-indigo-500**">light-saber</a> fights.
+  </p>
+</div>
+```
+
+### Changing the opacity
+
+Control the opacity of an element's text decoration color using the color opacity modifier.
+
+<Example p="none">
+  <div class="bg-white p-8 text-gray-900 shadow-lg max-w-sm mx-auto text-sm leading-6 sm:text-base sm:leading-7">
+    <p class="text-sm leading-6">I’m Derek, an astro-engineer based in Tattooine. I like to build X-Wings at <a href="#" class="font-bold underline decoration-sky-500/30 decoration-2">My Company, Inc</a>. Outside of work, I like to <a href="#" class="font-bold underline decoration-pink-500/30 decoration-2">watch pod-racing</a> and have <a href="#" class="font-bold underline decoration-indigo-500/30 decoration-2">light-saber</a> fights.</p>
+  </div>
+</Example>
+
+```html
+<div>
+  <p>
+    I’m Derek, an astro-engineer based in Tattooine. I like to build X-Wings at
+    <a class="underline **decoration-sky-500/30**">My Company, Inc</a>.
+    Outside of work, I like to <a class="underline **decoration-pink-500/30**">watch
+    pod-racing</a> and have <a class="underline **decoration-indigo-500/30**">light-saber</a> fights.
+  </p>
+</div>
+```
+
+You can use any value defined in your [opacity scale](/docs/opacity), or use arbitrary values if you need to deviate from your design tokens.
+
+```html
+<strong class="underline **decoration-sky-500/[.33]**"></strong>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="underline decoration-sky-600" featuredClass="decoration-blue-400" element="p" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="underline decoration-sky-600" featuredClass="decoration-blue-400" element="p" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+<CustomizePluginColors name="text decoration" configKey="textDecorationColor" />
+
+### Arbitrary values
+
+<ArbitraryValues property="text-decoration-color" featuredClass="decoration-[#50d71e]" element="p" />

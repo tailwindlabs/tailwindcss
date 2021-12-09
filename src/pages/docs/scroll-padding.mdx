@@ -1,0 +1,114 @@
+---
+title: "Scroll Padding"
+description: "Utilities for controlling an element's scroll offset within a snap container."
+---
+
+import utilities from 'utilities?plugin=scrollPadding'
+import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = {
+  utilities,
+  sort: (classes) => numbersFirst(classes),
+}
+
+## Basic usage
+
+### Setting the scroll padding
+
+Use the `scroll-p{side}-{size}` utilities to set the scroll offset of an element within a snap container.
+
+<Example p="none" hint="Scroll in the grid of images to see the expected behaviour">
+  <div class="bg-stripes-pink w-6 absolute left-0 top-0 bottom-0 rounded-l-lg"></div>
+  <div class="w-full flex gap-8 snap-x scroll-pl-6 overflow-x-auto py-14">
+    <div class="snap-start shrink-0 first:pl-6 last:pr-[calc(100%-21.5rem)]">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-start shrink-0 first:pl-6 last:pr-[calc(100%-21.5rem)]">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-start shrink-0 first:pl-6 last:pr-[calc(100%-21.5rem)]">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1622890806166-111d7f6c7c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-start shrink-0 first:pl-6 last:pr-[calc(100%-21.5rem)]">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+    <div class="snap-start shrink-0 first:pl-6 last:pr-[calc(100%-21.5rem)]">
+      <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1575424909138-46b05e5919ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="**scroll-pl-6** snap-x ...">
+  <div class="snap-start ...">
+    <img src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-start ...">
+    <img src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-start ...">
+    <img src="https://images.unsplash.com/photo-1622890806166-111d7f6c7c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-start ...">
+    <img src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+  <div class="snap-start ...">
+    <img src="https://images.unsplash.com/photo-1575424909138-46b05e5919ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=160&q=80" />
+  </div>
+</div>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="scroll-p-8" featuredClass="scroll-p-0" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="scroll-p-8" featuredClass="scroll-p-0" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind's scroll padding scale uses the [default spacing scale](/docs/customizing-spacing). You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       spacing: {
++         '96': '24rem',
++       }
+      }
+    }
+  }
+```
+
+Alternatively, you can customize just the scroll padding scale by editing `theme.scrollPadding` or `theme.extend.scrollPadding` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       scrollPadding: {
++         '96': '24rem',
++       },
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="scroll-padding" featuredClass="scroll-p-[24rem]" />

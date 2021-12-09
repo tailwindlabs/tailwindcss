@@ -1,28 +1,22 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, createContext, useContext, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { DocSearchModal, useDocSearchKeyboardEvents } from '@docsearch/react'
+import { DocSearchModal } from '@docsearch/react'
+import clsx from 'clsx'
+import { useActionKey } from '@/hooks/useActionKey'
 
-const ACTION_KEY_DEFAULT = ['Ctrl ', 'Control']
-const ACTION_KEY_APPLE = ['⌘', 'Command']
+const INDEX_NAME = 'tailwindcss_dev'
+const API_KEY = '5fc87cef58bb80203d2207578309fab6'
+const APP_ID = 'KNPXZI5B0M'
 
-function Hit({ hit, children }) {
-  return (
-    <Link href={hit.url}>
-      <a>{children}</a>
-    </Link>
-  )
-}
+const SearchContext = createContext()
 
-export function Search() {
+export function SearchProvider({ children }) {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
-  const searchButtonRef = useRef()
   const [initialQuery, setInitialQuery] = useState(null)
-  const [browserDetected, setBrowserDetected] = useState(false)
-  const [actionKey, setActionKey] = useState(ACTION_KEY_DEFAULT)
 
   const onOpen = useCallback(() => {
     setIsOpen(true)
@@ -45,76 +39,37 @@ export function Search() {
     onOpen,
     onClose,
     onInput,
-    searchButtonRef,
   })
-
-  useEffect(() => {
-    if (typeof navigator !== 'undefined') {
-      if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
-        setActionKey(ACTION_KEY_APPLE)
-      } else {
-        setActionKey(ACTION_KEY_DEFAULT)
-      }
-      setBrowserDetected(true)
-    }
-  }, [])
 
   return (
     <>
       <Head>
-        <link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossOrigin="true" />
+        <link rel="preconnect" href={`https://${APP_ID}-dsn.algolia.net`} crossOrigin="true" />
       </Head>
-      <button
-        type="button"
-        ref={searchButtonRef}
-        onClick={onOpen}
-        className="group leading-6 font-medium flex items-center space-x-3 sm:space-x-4 hover:text-gray-600 transition-colors duration-200 w-full py-2"
+      <SearchContext.Provider
+        value={{
+          isOpen,
+          onOpen,
+          onClose,
+          onInput,
+        }}
       >
-        <svg
-          width="24"
-          height="24"
-          fill="none"
-          className="text-gray-400 group-hover:text-gray-500 transition-colors duration-200"
-        >
-          <path
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <span>
-          Quick search<span className="hidden sm:inline"> for anything</span>
-        </span>
-        <span
-          style={{ opacity: browserDetected ? '1' : '0' }}
-          className="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md"
-        >
-          <span className="sr-only">Press </span>
-          <kbd className="font-sans">
-            <abbr title={actionKey[1]} className="no-underline">
-              {actionKey[0]}
-            </abbr>
-          </kbd>
-          <span className="sr-only"> and </span>
-          <kbd className="font-sans">K</kbd>
-          <span className="sr-only"> to search</span>
-        </span>
-      </button>
+        {children}
+      </SearchContext.Provider>
       {isOpen &&
         createPortal(
           <DocSearchModal
             initialQuery={initialQuery}
             initialScrollY={window.scrollY}
             searchParameters={{
-              facetFilters: 'version:v2',
+              facetFilters: 'version:v3',
               distinct: 1,
             }}
+            placeholder="Search documentation"
             onClose={onClose}
-            indexName="tailwindcss"
-            apiKey="3df93446658cd9c4e314d4c02a052188"
-            appId="BH4D9OD16A"
+            indexName={INDEX_NAME}
+            apiKey={API_KEY}
+            appId={APP_ID}
             navigator={{
               navigate({ suggestionUrl }) {
                 setIsOpen(false)
@@ -123,7 +78,7 @@ export function Search() {
             }}
             hitComponent={Hit}
             transformItems={(items) => {
-              return items.map((item) => {
+              return items.map((item, index) => {
                 // We transform the absolute URL into a relative URL to
                 // leverage Next's preloading.
                 const a = document.createElement('a')
@@ -134,6 +89,15 @@ export function Search() {
                 return {
                   ...item,
                   url: `${a.pathname}${hash}`,
+                  __is_result: () => true,
+                  __is_parent: () => item.type === 'lvl1' && items.length > 1 && index === 0,
+                  __is_child: () =>
+                    item.type !== 'lvl1' &&
+                    items.length > 1 &&
+                    items[0].type === 'lvl1' &&
+                    index !== 0,
+                  __is_first: () => index === 1,
+                  __is_last: () => index === items.length - 1 && index !== 0,
                 }
               })
             }}
@@ -141,5 +105,93 @@ export function Search() {
           document.body
         )}
     </>
+  )
+}
+
+function Hit({ hit, children }) {
+  return (
+    <Link href={hit.url}>
+      <a
+        className={clsx({
+          'DocSearch-Hit--Result': hit.__is_result?.(),
+          'DocSearch-Hit--Parent': hit.__is_parent?.(),
+          'DocSearch-Hit--FirstChild': hit.__is_first?.(),
+          'DocSearch-Hit--LastChild': hit.__is_last?.(),
+          'DocSearch-Hit--Child': hit.__is_child?.(),
+        })}
+      >
+        {children}
+      </a>
+    </Link>
+  )
+}
+
+export function SearchButton({ children, ...props }) {
+  let searchButtonRef = useRef()
+  let actionKey = useActionKey()
+  let { onOpen, onInput } = useContext(SearchContext)
+
+  useEffect(() => {
+    function onKeyDown(event) {
+      if (searchButtonRef && searchButtonRef.current === document.activeElement && onInput) {
+        if (/[a-zA-Z0-9]/.test(String.fromCharCode(event.keyCode))) {
+          onInput(event)
+        }
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [onInput, searchButtonRef])
+
+  return (
+    <button type="button" ref={searchButtonRef} onClick={onOpen} {...props}>
+      {typeof children === 'function' ? children({ actionKey }) : children}
+    </button>
+  )
+}
+
+function useDocSearchKeyboardEvents({ isOpen, onOpen, onClose }) {
+  useEffect(() => {
+    function onKeyDown(event) {
+      function open() {
+        // We check that no other DocSearch modal is showing before opening
+        // another one.
+        if (!document.body.classList.contains('DocSearch--active')) {
+          onOpen()
+        }
+      }
+
+      if (
+        (event.keyCode === 27 && isOpen) ||
+        (event.key === 'k' && (event.metaKey || event.ctrlKey)) ||
+        (!isEditingContent(event) && event.key === '/' && !isOpen)
+      ) {
+        event.preventDefault()
+
+        if (isOpen) {
+          onClose()
+        } else if (!document.body.classList.contains('DocSearch--active')) {
+          open()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [isOpen, onOpen, onClose])
+}
+
+function isEditingContent(event) {
+  let element = event.target
+  let tagName = element.tagName
+  return (
+    element.isContentEditable ||
+    tagName === 'INPUT' ||
+    tagName === 'SELECT' ||
+    tagName === 'TEXTAREA'
   )
 }

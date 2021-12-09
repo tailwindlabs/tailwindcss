@@ -3,134 +3,182 @@ title: "Place Items"
 description: "Utilities for controlling how items are justified and aligned at the same time."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/placeItems'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=placeItems'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Start
+## Basic usage
+
+### Start
 
 Use `place-items-start` to place grid items on the start of their grid areas on both axis:
 
-```html emerald
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-start h-48">
-    <div class="rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">1</div>
-    <div class="rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">2</div>
-    <div class="rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">3</div>
-    <div class="rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">4</div>
-    <div class="rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">5</div>
-    <div class="rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">6</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-4 h-56 gap-4">
+      <div class="bg-stripes-cyan grid place-items-start rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-cyan-500">01</div>
+      </div>
+      <div class="bg-stripes-cyan grid place-items-start rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-cyan-500">02</div>
+      </div>
+      <div class="bg-stripes-cyan grid place-items-start rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-cyan-500">03</div>
+      </div>
+      <div class="bg-stripes-cyan grid place-items-start rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-cyan-500">04</div>
+      </div>
+      <div class="bg-stripes-cyan grid place-items-start rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-cyan-500">05</div>
+      </div>
+      <div class="bg-stripes-cyan grid place-items-start rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-cyan-500">06</div>
+      </div>
+    </div>
   </div>
-</template>
+</Example>
 
-<div class="grid grid-cols-3 gap-2 **place-items-start** h-48 ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
+```html
+<div class="grid grid-cols-3 gap-4 **place-items-start** ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-## End
+### End
 
 Use `place-items-end` to place grid items on the end of their grid areas on both axis:
 
-```html amber
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-end h-48">
-    <div class="rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">1</div>
-    <div class="rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">2</div>
-    <div class="rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">3</div>
-    <div class="rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">4</div>
-    <div class="rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">5</div>
-    <div class="rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">6</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-4 h-56 gap-4">
+      <div class="bg-stripes-violet grid place-items-end rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-violet-500">01</div>
+      </div>
+      <div class="bg-stripes-violet grid place-items-end rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-violet-500">02</div>
+      </div>
+      <div class="bg-stripes-violet grid place-items-end rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-violet-500">03</div>
+      </div>
+      <div class="bg-stripes-violet grid place-items-end rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-violet-500">04</div>
+      </div>
+      <div class="bg-stripes-violet grid place-items-end rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-violet-500">05</div>
+      </div>
+      <div class="bg-stripes-violet grid place-items-end rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-violet-500">06</div>
+      </div>
+    </div>
   </div>
-</template>
+</Example>
 
-<div class="grid grid-cols-3 gap-2 **place-items-end** h-48 ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
+```html
+<div class="grid grid-cols-3 gap-4 **place-items-end** h-56 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-## Center
+### Center
 
 Use `place-items-center` to place grid items on the center of their grid areas on both axis:
 
-```html purple
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-center h-48">
-    <div class="rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">1</div>
-    <div class="rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">2</div>
-    <div class="rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">3</div>
-    <div class="rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">4</div>
-    <div class="rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">5</div>
-    <div class="rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">6</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-4 h-56 gap-4">
+      <div class="bg-stripes-pink grid place-items-center rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-pink-500">01</div>
+      </div>
+      <div class="bg-stripes-pink grid place-items-center rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-pink-500">02</div>
+      </div>
+      <div class="bg-stripes-pink grid place-items-center rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-pink-500">03</div>
+      </div>
+      <div class="bg-stripes-pink grid place-items-center rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-pink-500">04</div>
+      </div>
+      <div class="bg-stripes-pink grid place-items-center rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-pink-500">05</div>
+      </div>
+      <div class="bg-stripes-pink grid place-items-center rounded-lg">
+        <div class="p-4 w-14 h-14 flex items-center justify-center shadow-lg rounded-lg bg-pink-500">06</div>
+      </div>
+    </div>
   </div>
-</template>
+</Example>
 
-<div class="grid grid-cols-3 gap-2 **place-items-center** h-48 ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
+```html
+<div class="grid grid-cols-3 gap-4 **place-items-center** h-56 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-## Stretch
+### Stretch
 
 Use `place-items-stretch` to stretch items along their grid areas on both axis:
 
-```html lightBlue
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-stretch h-48">
-    <div class="rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
-    <div class="rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">2</div>
-    <div class="rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
-    <div class="rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">4</div>
-    <div class="rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">5</div>
-    <div class="rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">6</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-4 h-56 gap-4">
+      <div class="bg-stripes-blue grid place-items-stretch rounded-lg">
+        <div class="p-4 flex items-center justify-center shadow-lg rounded-lg bg-blue-500">01</div>
+      </div>
+      <div class="bg-stripes-blue grid place-items-stretch rounded-lg">
+        <div class="p-4 flex items-center justify-center shadow-lg rounded-lg bg-blue-500">02</div>
+      </div>
+      <div class="bg-stripes-blue grid place-items-stretch rounded-lg">
+        <div class="p-4 flex items-center justify-center shadow-lg rounded-lg bg-blue-500">03</div>
+      </div>
+      <div class="bg-stripes-blue grid place-items-stretch rounded-lg">
+        <div class="p-4 flex items-center justify-center shadow-lg rounded-lg bg-blue-500">04</div>
+      </div>
+      <div class="bg-stripes-blue grid place-items-stretch rounded-lg">
+        <div class="p-4 flex items-center justify-center shadow-lg rounded-lg bg-blue-500">05</div>
+      </div>
+      <div class="bg-stripes-blue grid place-items-stretch rounded-lg">
+        <div class="p-4 flex items-center justify-center shadow-lg rounded-lg bg-blue-500">06</div>
+      </div>
+    </div>
   </div>
-</template>
-
-<div class="grid grid-cols-3 gap-2 **place-items-stretch** h-48 ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
-</div>
-```
-
-## Responsive
-
-To place items at a specific breakpoint, add a `{screen}:` prefix to any existing `place-items` utility. For example, use `md:place-items-center` to apply the `place-items-center` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="place-items-start md:place-items-center">
-  <!-- ... -->
+<div class="grid grid-cols-3 gap-4 **place-items-stretch** h-56 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="placeItems" name="place-items" />
+<HoverFocusAndOtherStates defaultClass="place-items-start" featuredClass="place-items-center" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="placeItems" name="place-items" />
+<BreakpointsAndMediaQueries defaultClass="place-items-start" featuredClass="place-items-center" />

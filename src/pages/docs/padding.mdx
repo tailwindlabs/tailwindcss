@@ -1,169 +1,168 @@
 ---
 title: "Padding"
 description: "Utilities for controlling an element's padding."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/padding'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
-import { numbersFirstByPrefix } from '@/utils/sortClasses'
+import utilities from 'utilities?plugin=padding'
+import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
 
 export const classes = {
-  plugin,
-  sort: numbersFirstByPrefix,
+  utilities,
+  sort: (classes) => numbersFirst(classes),
 }
 
-## Add padding to a single side
+## Basic usage
+
+### Add padding to a single side
 
 Control the padding on one side of an element using the `p{t|r|b|l}-{size}` utilities.
 
 For example, `pt-6` would add `1.5rem` of padding to the top of an element, `pr-4` would add `1rem` of padding to the right of an element, `pb-8` would add `2rem` of padding to the bottom of an element, and `pl-2` would add `0.5rem` of padding to the left of an element.
 
-```html rose
-<template preview>
-  <div class="flex flex-wrap items-start justify-center text-white font-mono -mx-5">
-    <div class="mx-5 bg-rose-500 bg-stripes bg-stripes-white rounded-md overflow-hidden pt-6">
-      <div class="bg-rose-500 flex items-center justify-center py-3 px-4">
-        pt-6
+<Example>
+  <div class="flex flex-wrap items-start justify-center font-mono text-white text-sm font-bold leading-6 -mx-5">
+    <div class="flex items-start">
+      <div class="flex-none px-5">
+        <div class="bg-purple-500 shadow-lg rounded-lg overflow-hidden">
+          <div class="h-6 bg-stripes-white rounded-t-lg"></div>
+          <div class="p-4">pt-6</div>
+        </div>
+      </div>
+      <div class="flex-none px-5 pt-6">
+        <div class="flex bg-purple-500 shadow-lg rounded-lg overflow-hidden">
+          <div class="flex-none p-4">pr-4</div>
+          <div class="flex-none w-4 bg-stripes-white"></div>
+        </div>
       </div>
     </div>
-    <div class="mx-5 bg-rose-500 bg-stripes bg-stripes-white rounded-md overflow-hidden pr-4 mt-6">
-      <div class="bg-rose-500 flex items-center justify-center py-3 px-4">
-        pr-4
+    <div class="flex items-start">
+      <div class="flex-none px-5 pt-6">
+        <div class="bg-purple-500 shadow-lg rounded-lg overflow-hidden">
+          <div class="p-4">pb-8</div>
+          <div class="h-8 bg-stripes-white"></div>
+        </div>
       </div>
-    </div>
-    <div class="mx-5 bg-rose-500 bg-stripes bg-stripes-white rounded-md overflow-hidden pb-8 mt-6">
-      <div class="bg-rose-500 flex items-center justify-center py-3 px-4">
-        pb-8
-      </div>
-    </div>
-    <div class="mx-5 bg-rose-500 bg-stripes bg-stripes-white rounded-md overflow-hidden pl-2 mt-6">
-      <div class="bg-rose-500 flex items-center justify-center py-3 px-4">
-        pl-2
+      <div class="flex-none flex px-5 pt-6">
+        <div class="flex bg-purple-500 shadow-lg rounded-lg overflow-hidden">
+          <div class="flex-none w-2 bg-stripes-white"></div>
+          <div class="flex-none p-4">pl-2</div>
+        </div>
       </div>
     </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**pt-6** ...">pt-6</div>
 <div class="**pr-4** ...">pr-4</div>
 <div class="**pb-8** ...">pb-8</div>
 <div class="**pl-2** ...">pl-2</div>
 ```
 
-## Add horizontal padding
+### Add horizontal padding
 
 Control the horizontal padding of an element using the `px-{size}` utilities.
 
-```html emerald
-<template preview>
-  <div class="flex justify-center text-white font-mono">
-    <div class="bg-emerald-500 bg-stripes bg-stripes-white rounded-md overflow-hidden px-8">
-      <div class="bg-emerald-500 py-3 px-4">px-8</div>
+<Example>
+  <div class="flex justify-center font-mono text-white text-sm font-bold leading-6">
+    <div class="bg-indigo-500 rounded-lg shadow-lg overflow-hidden flex">
+      <div class="w-8 bg-stripes-white"></div>
+      <div class="p-4">px-8</div>
+      <div class="w-8 bg-stripes-white"></div>
     </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**px-8** ...">px-8</div>
 ```
 
-## Add vertical padding
+### Add vertical padding
 
 Control the vertical padding of an element using the `py-{size}` utilities.
 
-```html indigo
-<template preview>
-  <div class="flex justify-center text-white font-mono">
-    <div class="bg-indigo-500 bg-stripes bg-stripes-white rounded-md overflow-hidden py-8">
-      <div class="bg-indigo-500 py-3 px-4">py-8</div>
+<Example>
+  <div class="flex justify-center font-mono text-white text-sm font-bold leading-6">
+    <div class="bg-pink-500 rounded-lg shadow-lg">
+      <div class="h-8 bg-stripes-white"></div>
+      <div class="p-4">py-8</div>
+      <div class="h-8 bg-stripes-white"></div>
     </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**py-8** ...">py-8</div>
 ```
 
-## Add padding to all sides
+### Add padding to all sides
 
 Control the padding on all sides of an element using the `p-{size}` utilities.
 
-```html fuchsia
-<template preview>
-  <div class="flex justify-center text-white font-mono">
-    <div class="bg-fuchsia-500 bg-stripes bg-stripes-white rounded-md overflow-hidden p-8">
-      <div class="bg-fuchsia-500 py-3 px-4">p-8</div>
+<Example>
+  <div class="flex justify-center font-mono text-white text-sm font-bold leading-6">
+    <div class="bg-violet-500 bg-stripes-white rounded-lg shadow-lg p-8">
+      <div class="bg-violet-500 p-4">p-8</div>
     </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**p-8** ...">p-8</div>
 ```
 
 ---
 
-## Responsive
+## <Heading ignore>Applying conditionally</Heading>
 
-To control the padding of an element at a specific breakpoint, add a `{screen}:` prefix to any existing padding utility. For example, adding the class `md:py-8` to an element would apply the `py-8` utility at medium screen sizes and above.
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-```html
-<div class="**md:py-8** ...">
-  <!-- ... -->
-</div>
-```
+<HoverFocusAndOtherStates defaultClass="py-4" featuredClass="py-8" />
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="py-4" featuredClass="py-8" />
 
 ---
 
-## Customizing
+## Using custom values
 
-### Padding scale
+### Customizing your theme
 
-By default, Tailwind provides 19 fixed padding utilities for each side and axis.
+By default, Tailwind's padding scale uses the [default spacing scale](/docs/customizing-spacing). You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
 
-If you'd like to customize these values for padding, margin, width, and height all at once, use the `theme.spacing` section of your `tailwind.config.js` file.
-
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      spacing: {
-+       sm: '8px',
-+       md: '16px',
-+       lg: '24px',
-+       xl: '48px',
+      extend: {
++       spacing: {
++         '5px': '5px',
++       }
       }
     }
   }
 ```
 
-To customize only the padding values, use the `theme.padding` section of your `tailwind.config.js` file.
+Alternatively, you can customize just the padding scale by editing `theme.padding` or `theme.extend.padding` in your `tailwind.config.js` file.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      padding: {
-+       sm: '8px',
-+       md: '16px',
-+       lg: '24px',
-+       xl: '48px',
+      extend: {
++       padding: {
++         '5px': '5px',
++       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="padding" />
-
-### Disabling
-
-<Disabling plugin="padding" />
+<ArbitraryValues property="padding" featuredClass="p-[5px]" />

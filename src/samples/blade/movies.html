@@ -1,0 +1,12 @@
+<div class="divide-y divide-gray-100">
+  <x-nav>
+    <x-nav-item href="/new" :isActive="true">New Releases</x-nav-item>
+    <x-nav-item href="/top">Top Rated</x-nav-item>
+    <x-nav-item href="/picks">Vincent’s Picks</x-nav-item>
+  </x-nav>
+  <x-list>
+    @foreach ($movies as $movie)
+      <x-list-item :movie="$movie" />
+    @endforeach
+  </x-list>
+</div>

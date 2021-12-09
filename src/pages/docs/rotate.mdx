@@ -3,81 +3,140 @@ title: "Rotate"
 description: "Utilities for rotating elements with transform."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/rotate'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=rotate'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HardwareAcceleration } from '@/components/HardwareAcceleration'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingTransforms } from '@/components/RemovingTransforms'
 
-export const classes = { plugin }
+export const classes = {
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      transform: `rotate(${properties['--tw-rotate']})`
+    }
+  },
+}
 
-## Usage
+## Basic sage
 
-Rotate an element by first enabling transforms with the `transform` utility, then specifying the rotation angle using the `rotate-{angle}` utilities.
+### Rotating an element
 
-```html lightBlue
-<template preview>
-  <div class="flex flex-col justify-around space-y-12 md:flex-row md:space-y-0 md:space-x-12">
-    <div class="w-16 h-16 bg-light-blue-400 bg-stripes bg-stripes-white">
-      <img class="h-16 w-16 transform rotate-0" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+Use the `rotate-{angle}` utilities to rotate an element.
+
+<Example p="none">
+  <div class="flex sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-12 sm:gap-4 font-mono font-bold p-8 shrink-0">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-9">rotate-0</p>
+      <div class="relative">
+        <div class="absolute inset-0">
+          <img class="w-24 h-24 object-cover rounded-lg opacity-25" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        </div>
+        <div class="relative z-10 rotate-0">
+          <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+        </div>
+      </div>
     </div>
-    <div class="w-16 h-16 bg-light-blue-400 bg-stripes bg-stripes-white">
-      <img class="h-16 w-16 transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-9">rotate-45</p>
+      <div class="relative">
+        <div class="absolute inset-0">
+          <img class="w-24 h-24 object-cover rounded-lg opacity-25" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        </div>
+        <div class="relative z-10 rotate-45">
+          <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+        </div>
+      </div>
     </div>
-    <div class="w-16 h-16 bg-light-blue-400 bg-stripes bg-stripes-white">
-      <img class="h-16 w-16 transform rotate-90" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-9">rotate-90</p>
+      <div class="relative">
+        <div class="absolute inset-0">
+          <img class="w-24 h-24 object-cover rounded-lg opacity-25" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        </div>
+        <div class="relative z-10 rotate-90">
+          <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+        </div>
+      </div>
     </div>
-    <div class="w-16 h-16 bg-light-blue-400 bg-stripes bg-stripes-white">
-      <img class="h-16 w-16 transform rotate-180" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-9">rotate-180</p>
+      <div class="relative">
+        <div class="absolute inset-0">
+          <img class="w-24 h-24 object-cover rounded-lg opacity-25" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        </div>
+        <div class="relative z-10 rotate-180">
+          <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+        </div>
+      </div>
     </div>
   </div>
-</template>
-
-<img class="transform **rotate-0** ...">
-<img class="transform **rotate-45** ...">
-<img class="transform **rotate-90** ...">
-<img class="transform **rotate-180** ...">
-```
-
-## Responsive
-
-To control the rotation of an element at a specific breakpoint, add a `{screen}:` prefix to any existing rotate utility. For example, use `md:rotate-90` to apply the `rotate-90` utility at only medium screen sizes and above.
+  </div>
+</Example>
 
 ```html
-<div class="transform rotate-45 **md:rotate-90**"></div>
+<img class="**rotate-0** ...">
+<img class="**rotate-45** ...">
+<img class="**rotate-90** ...">
+<img class="**rotate-180** ...">
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### Using negative values
 
-## Customizing
+To use a negative rotate value, prefix the class name with a dash to convert it to a negative value.
 
-### Rotate scale
+```html
+<img class="**-rotate-45** ...">
+```
 
-By default, Tailwind provides seven general purpose rotate utilities. You change, add, or remove these by editing the `theme.rotate` section of your Tailwind config.
+### Removing transforms
 
-```diff-js
-  // tailwind.config.js
+<RemovingTransforms defaultClass="scale-75 translate-x-4 skew-y-3" />
+
+### Hardware acceleration
+
+<HardwareAcceleration defaultClass="rotate-45" />
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates featuredClass="rotate-45" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries featuredClass="rotate-45" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `rotate` utilities. You can customize these values by editing `theme.rotate` or `theme.extend.rotate` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      rotate: {
--       '-180': '-180deg',
-        '-90': '-90deg',
--       '-45': '-45deg',
-        '0': '0',
-        '45': '45deg',
-        '90': '90deg',
-+       '135': '135deg',
-        '180': '180deg',
-+       '270': '270deg',
+      extend: {
++       rotate: {
++         '17': '17deg',
++       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="rotate" />
-
-### Disabling
-
-<Disabling plugin="rotate" />
+<ArbitraryValues property="rotate" featuredClass="rotate-[17deg]" />

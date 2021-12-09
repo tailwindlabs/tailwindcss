@@ -1,326 +1,351 @@
 import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
-import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
-import { gradients } from '@/utils/gradients'
-import { ReactComponent as Icon } from '@/img/icons/home/performance.svg'
-import { Fragment, useEffect, useRef } from 'react'
-import { motion, animate, useMotionValue, useTransform } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import { tokenizeWithLines } from '../../macros/tokenize.macro'
-import { addClassTokens2 } from '@/utils/addClassTokens'
-import shuffleSeed from '@/utils/shuffleSeed'
+import { TabBar } from '@/components/TabBar'
+import iconUrl from '@/img/icons/home/performance.png'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
+import { GridLockup } from '../GridLockup'
+import { lines as html } from '../../samples/performance.html?highlight'
+import { lines as css } from '../../samples/performance.txt?highlight=css'
+import { useInView } from 'react-intersection-observer'
+import { animate } from 'framer-motion'
 
-const DURATION = 6.5
-const BASE_RANGE = [0, 5000]
+const START_DELAY = 500
+const CLASS_DELAY = 1000
+const CHAR_DELAY = 75
+const SAVE_DELAY = 50
+const BUILD_DELAY = 100
 
-function Counter({ from, to, round = 0, progress }) {
-  const ref = useRef()
-  const value = useTransform(progress, BASE_RANGE, [from, to], { clamp: false })
-  const { format: formatNumber } = new Intl.NumberFormat(undefined, {
-    minimumFractionDigits: round,
-    maximumFractionDigits: round,
-  })
+function Typing({ classes, rules, onStartedClass, onFinishedClass }) {
+  let [text, setText] = useState('')
 
   useEffect(() => {
-    return value.onChange((v) => {
-      ref.current.firstChild.data = formatNumber(round === 0 ? Math.round(v) : v.toFixed(round))
-    })
-  }, [])
+    let newText = classes.substr(0, text.length + 1)
+    let isSpace = newText.endsWith(' ')
+    let isEnd = text.length + 1 > classes.length
+    let isEndOfClass = isSpace || isEnd
+    if (isEndOfClass) {
+      onFinishedClass(newText.split(' ').filter(Boolean).length - 1)
+    }
+    let handle = window.setTimeout(
+      () => {
+        if (newText.endsWith(' ') || newText.length === 1) {
+          onStartedClass()
+        }
+        setText(newText)
+      },
+      isSpace ? CLASS_DELAY : CHAR_DELAY
+    )
+    return () => {
+      window.clearTimeout(handle)
+    }
+  }, [classes, text, onStartedClass, onFinishedClass])
 
-  return <span ref={ref}>{formatNumber(value.get())}</span>
+  return text.split(' ').map((cls, index) => (
+    <Fragment key={cls}>
+      {index !== 0 && ' '}
+      <span
+        className={clsx(
+          'whitespace-nowrap',
+          index === rules.length - 1 && 'code-highlight animate-flash-code-slow'
+        )}
+      >
+        {cls}
+      </span>
+    </Fragment>
+  ))
 }
 
-const { lines } = tokenizeWithLines.html(
-  `<div class="fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
-  <div class="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto">
-    <div class="rounded-lg shadow-xs overflow-hidden">
-      <div class="p-4">
-        <div class="flex items-start">
-          <div class="flex-shrink-0">
-            <svg class="h-6 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div class="ml-3 w-0 flex-1 pt-0.5">
-            <p class="text-sm font-medium text-gray-900">
-              Successfully saved!
-            </p>
-            <p class="mt-1 text-sm text-gray-500">
-              Anyone with a link can now view this file.
-            </p>
-          </div>
-          <div class="ml-4 flex-shrink-0 flex">
-            <button class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150">
-              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`
-)
-
-addClassTokens2(lines)
-
-const allClasses = 'fixed flex-col rounded-sm shadow px-4 justify-content text-center flex-shrink-0 md:text-left h-16 w-16 md:h-24 md:w-24 rounded-full mx-auto text-lg text-purple-500 md:text-left text-gray-600 text-green-400 text-blue-500 rounded-pill p-4 max-w-screen-xl mt-5 leading-7 whitespace-nowrap sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none flex-1 xl:mx-0 xl:grid-cols-4 border border-gray-200 text-4xl leading-6 leading-10 font-extrabold  leading-5 h-5 w-5 text-green-500 text-5xl leading-none font-extrabold text-white tracking-tight border-t text-sm border-indigo-600 py-4 font-medium px-5 flex items-center space-x-3 text-base leading-6 text-white absolute right-full ml-4 bottom-0 transform -translate-x-1/2 py-3 mx-4 w-full duration-150 h-full transition py-0 pl-4 pr-8 border-transparent bg-transparent text-gray-500 px-5 py-3 appearance-none underline bg-indigo-700 min-w-full divide-y divide-gray-200 items-baseline text-indigo-600 hover:text-indigo-500'.split(
-  ' '
-)
-
-const usedClasses = shuffleSeed.shuffle(
-  'fixed px-4 flex-shrink-0 text-green-400 p-4 flex-1 leading-5 text-sm font-medium ml-4 transition'.split(
-    ' '
-  ),
-  1
-)
-
-const unusedClasses = shuffleSeed.shuffle(
-  allClasses.filter((c) => !usedClasses.includes(c)),
-  1
-)
-
 export function Performance() {
-  const progress = useMotionValue(0)
-  const { ref, inView } = useInView({
-    threshold: 0.5,
-    triggerOnce: true,
-  })
+  let [visibleRules, setVisibleRules] = useState([])
+  let [saved, setSaved] = useState(true)
+  let [lastFinishedClass, setLastFinishedClass] = useState(-1)
+  let [active, setActive] = useState(false)
+  let scrollRef = useRef()
+  let { ref: typingRef, inView: typingInView } = useInView({ threshold: 1 })
+  let { ref: containerRef, inView: containerInView } = useInView({ threshold: 0 })
 
   useEffect(() => {
-    if (!inView) return
-    animate(progress, BASE_RANGE[1], {
-      type: 'spring',
-      damping: 50,
-    })
-  }, [inView])
+    if (typingInView && !active) {
+      let handle = window.setTimeout(() => setActive(true), START_DELAY)
+      return () => {
+        window.clearTimeout(handle)
+      }
+    }
+  }, [active, typingInView])
+
+  useEffect(() => {
+    if (!containerInView && active) {
+      setActive(false)
+      setVisibleRules([])
+      setSaved(true)
+      setLastFinishedClass(-1)
+    }
+  }, [active, containerInView])
+
+  let rules = []
+  let chunk = []
+  for (let line of css) {
+    chunk.push(line)
+    let empty = line.every(({ content }) => content.trim() === '')
+    if (empty) {
+      rules.push(chunk)
+      chunk = []
+    }
+  }
+
+  rules = rules.filter((_, i) => visibleRules.includes(i))
+
+  let onStartedClass = useCallback(() => {
+    setSaved(false)
+  }, [])
+
+  useEffect(() => {
+    if (lastFinishedClass < 0) return
+    let handle1 = window.setTimeout(() => setSaved(true), SAVE_DELAY)
+    let handle2 = window.setTimeout(
+      () =>
+        setVisibleRules(
+          [
+            [0],
+            [0, 1],
+            [0, 1, 3],
+            [0, 1, 3, 4],
+            [0, 1, 3, 4, 5],
+            [0, 1, 2, 3, 4, 5],
+            [0, 1, 2, 3, 4, 5, 6],
+          ][lastFinishedClass]
+        ),
+      SAVE_DELAY + BUILD_DELAY
+    )
+    return () => {
+      window.clearTimeout(handle1)
+      window.clearTimeout(handle2)
+    }
+  }, [lastFinishedClass])
 
   return (
     <section id="performance">
-      <div className="px-4 sm:px-6 md:px-8 mb-10 sm:mb-16 md:mb-20">
-        <IconContainer className={`${gradients.teal[0]} mb-8`}>
-          <Icon />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        <IconContainer>
+          <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption as="h2" className="text-teal-500 mb-3">
-          Performance
-        </Caption>
-        <BigText className="mb-8">It’s tiny in production.</BigText>
-        <Paragraph className="mb-6">
+        <Caption className="text-sky-500">Performance</Caption>
+        <BigText>It's tiny — never ship unused CSS again.</BigText>
+        <Paragraph>
           Tailwind automatically removes all unused CSS when building for production, which means
           your final CSS bundle is the smallest it could possibly be. In fact, most Tailwind
           projects ship less than 10kB of CSS to the client.
         </Paragraph>
-        <Link href="/docs/optimizing-for-production" className="text-teal-500 hover:text-teal-700">
-          Learn more -&gt;
+        <Link href="/docs/optimizing-for-production" color="sky">
+          Learn more<span className="sr-only">, optimizing for production</span>
         </Link>
       </div>
-      <GradientLockup
-        color="teal"
-        rotate={1}
-        pin="right"
+      <GridLockup
+        className="mt-14"
+        overhang="md"
         left={
-          <div
-            ref={ref}
-            className="relative z-10 rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 tabular-nums"
-          >
-            <div className="bg-white rounded-tl-xl sm:rounded-t-xl">
-              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 w-14 h-14 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <svg
-                  viewBox="0 0 64 64"
-                  className="absolute inset-0 w-full h-full text-green-400"
-                  transform="rotate(90) scale(1 -1)"
-                >
-                  <motion.path
-                    d="M6,32a26,26 0 1,0 52,0a26,26 0 1,0 -52,0"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeDasharray="0 1"
-                    initial={{ pathLength: 0, strokeWidth: 6 }}
-                    animate={inView ? { pathLength: 1, strokeWidth: 12 } : undefined}
-                    transition={{
-                      duration: DURATION,
-                    }}
-                  />
-                </svg>
-                <div className="relative bg-white rounded-full w-10 h-10 shadow-sm" />
-                <svg viewBox="0 0 64 64" className="absolute inset-0 w-full h-full">
-                  <motion.path
-                    d="M22.668 33.333l5.333 5.334 13.334-13.334"
-                    fill="none"
-                    stroke="#22C55E"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeDasharray="0 1"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={inView ? { pathLength: 1, opacity: 1 } : undefined}
-                    transition={{
-                      pathLength: { delay: DURATION - 0.5, duration: 0.3 },
-                      opacity: { delay: DURATION - 0.5, duration: 0 },
-                    }}
-                  />
-                </svg>
-              </div>
-              <dl className="p-4 pb-0 sm:p-6 sm:pb-0">
-                <div className="flex-none w-full pl-18 sm:pl-20 sm:py-0.5">
-                  <dt className="text-sm font-medium">Production build</dt>
-                  <dd className="text-3xl sm:text-4xl font-extrabold text-gray-900">
-                    <Counter from={2413.4} to={8.7} round={1} progress={progress} />
-                    kB
-                  </dd>
-                </div>
-                <div className="flex items-center border-t border-gray-100 -mx-4 sm:-mx-6 mt-4 sm:mt-6 px-4 sm:px-6 py-3 font-mono text-xs leading-5">
-                  <dt className="whitespace-pre">Purged </dt>
-                  <dd className="flex-auto">
-                    <Counter from={0} to={20144} progress={progress} /> unused classes
-                  </dd>
-                  <dd className="text-rose-700 hidden sm:flex lg:hidden xl:flex items-center">
-                    <span>
-                      -<Counter from={0} to={160215} progress={progress} /> lines
-                    </span>
-                    <svg viewBox="0 0 82 12" width="82" height="12" className="flex-none ml-2">
-                      <motion.rect
-                        width="12"
-                        height="12"
-                        fill="#f43f5e"
-                        style={{
-                          fill: useTransform(progress, (p) =>
-                            p >= BASE_RANGE[1] * 0.35 ? '#f43f5e' : '#e4e4e7'
-                          ),
-                        }}
-                      />
-                      <motion.rect
-                        width="12"
-                        height="12"
-                        x="14"
-                        style={{
-                          fill: useTransform(progress, (p) =>
-                            p >= BASE_RANGE[1] * 0.75 ? '#f43f5e' : '#e4e4e7'
-                          ),
-                        }}
-                      />
-                      <motion.rect
-                        width="12"
-                        height="12"
-                        x="28"
-                        style={{
-                          fill: useTransform(progress, (p) =>
-                            p >= BASE_RANGE[1] * 0.9 ? '#f43f5e' : '#e4e4e7'
-                          ),
-                        }}
-                      />
-                      <motion.rect
-                        width="12"
-                        height="12"
-                        x="42"
-                        style={{
-                          fill: useTransform(progress, (p) =>
-                            p >= BASE_RANGE[1] * 0.99 ? '#f43f5e' : '#e4e4e7'
-                          ),
-                        }}
-                      />
-                      <rect width="12" height="12" x="56" fill="#e4e4e7" />
-                      <rect width="12" height="12" x="70" fill="#e4e4e7" />
-                    </svg>
-                  </dd>
-                </div>
-              </dl>
-            </div>
+          <div className="relative">
             <div
-              className="relative bg-teal-700 lg:rounded-b-xl overflow-hidden p-4"
-              style={{ maxHeight: 251 }}
+              ref={containerRef}
+              className="relative bg-gray-800 shadow-xl pt-2 overflow-hidden sm:rounded-xl lg:grid lg:grid-cols-2 lg:grid-rows-1"
             >
-              <div className="bg-black bg-opacity-75 absolute inset-0" />
-              <div className="relative font-mono text-xs sm:text-sm text-teal-200">
-                {allClasses.map((c, i) =>
-                  usedClasses.includes(c) ? (
-                    <Fragment key={i}>
-                      <span
-                        className={clsx('code-highlight whitespace-nowrap', {
-                          'animate-flash-code-slow': inView,
+              <div className="row-end-1">
+                <TabBar
+                  side="left"
+                  primary={{ name: 'index.html', saved }}
+                  secondary={[
+                    { name: 'tailwind.config.js' },
+                    { name: 'package.json', open: false, className: 'hidden sm:block' },
+                  ]}
+                >
+                  <svg width="15" height="14" fill="none" stroke="currentColor">
+                    <rect width="14" height="13" x="0.5" y="0.5" rx="3" />
+                    <path d="M7.5 0V14" />
+                  </svg>
+                  <svg width="12" height="2" fill="currentColor">
+                    <circle cx="1" cy="1" r="1" />
+                    <circle cx="6" cy="1" r="1" />
+                    <circle cx="11" cy="1" r="1" />
+                  </svg>
+                </TabBar>
+                <CodeWindow.Code2
+                  lines={html.length}
+                  language="html"
+                  wrap={true}
+                  showLineNumbers={false}
+                  overflow={false}
+                  className="border-r border-gray-500/30 h-[20.8125rem] overflow-hidden p-4 md:pl-0"
+                >
+                  {html.map((tokens, lineIndex) => (
+                    <div key={lineIndex} className="flex">
+                      <div className="hidden md:block text-gray-600 flex-none pr-4 text-right select-none w-[3.125rem] mr-4">
+                        {lineIndex + 1}
+                      </div>
+                      <div>
+                        {tokens.map((token, tokenIndex) => {
+                          if (token.content === '__CLASSES__') {
+                            return (
+                              <span
+                                key={tokenIndex}
+                                ref={typingRef}
+                                className={getClassNameForToken(token)}
+                              >
+                                {active && (
+                                  <Typing
+                                    classes="flex items-center px-4 py-3 text-white bg-blue-500 hover:bg-blue-400"
+                                    rules={rules}
+                                    onStartedClass={onStartedClass}
+                                    onFinishedClass={setLastFinishedClass}
+                                  />
+                                )}
+                                <span className="border -mx-px" style={{ height: '1.125rem' }} />
+                              </span>
+                            )
+                          }
+                          return (
+                            <span key={tokenIndex} className={getClassNameForToken(token)}>
+                              {token.content}
+                            </span>
+                          )
                         })}
-                        style={{
-                          animationDelay: `${
-                            (DURATION / usedClasses.length) * usedClasses.indexOf(c)
-                          }s`,
-                        }}
-                      >
-                        {c}
-                      </span>{' '}
-                    </Fragment>
-                  ) : (
-                    <Fragment key={i}>
-                      <span
-                        className={clsx('transition-colors duration-500 whitespace-nowrap', {
-                          'text-teal-200': !inView,
-                          'text-teal-900': inView,
-                        })}
-                        style={{
-                          transitionDelay: `${
-                            (DURATION / unusedClasses.length) * unusedClasses.indexOf(c)
-                          }s`,
-                        }}
-                      >
-                        {c}
-                      </span>{' '}
-                    </Fragment>
-                  )
-                )}
+                      </div>
+                    </div>
+                  ))}
+                </CodeWindow.Code2>
               </div>
-              <div
-                className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(to top, rgba(4, 30, 28, 1), rgba(4, 30, 28, 0))',
-                }}
-              />
+              <div className="row-span-2 border-t border-gray-500/30 pt-1.5 lg:border-0 lg:pt-0">
+                <TabBar side="right" primary={{ name: 'build.css', saved: true }}>
+                  <svg width="12" height="2" fill="currentColor">
+                    <circle cx="1" cy="1" r="1" />
+                    <circle cx="6" cy="1" r="1" />
+                    <circle cx="11" cy="1" r="1" />
+                  </svg>
+                </TabBar>
+                <CodeWindow.Code2
+                  ref={scrollRef}
+                  language="css"
+                  overflow={false}
+                  lines={Math.max(1, rules.flat().length)}
+                  className="border-r border-gray-500/30 h-[20.8125rem] lg:h-[31.6875rem] scroll-smooth overflow-hidden"
+                >
+                  {rules.map((rule) => (
+                    <Rule
+                      key={rule[0].find(({ content }) => content.trim()).content}
+                      rule={rule}
+                      scrollRef={scrollRef}
+                    />
+                  ))}
+                </CodeWindow.Code2>
+              </div>
+              <div className="row-start-1 row-end-2 border-t border-gray-500/30">
+                <div className="h-1.5 border-r border-gray-500/30" />
+                <TabBar side="right" primary={{ name: 'Terminal' }} showTabMarkers={false}>
+                  <svg width="12" height="2" fill="currentColor">
+                    <circle cx="1" cy="1" r="1" />
+                    <circle cx="6" cy="1" r="1" />
+                    <circle cx="11" cy="1" r="1" />
+                  </svg>
+                </TabBar>
+                <Terminal rules={rules} />
+              </div>
             </div>
           </div>
         }
-        right={
-          <CodeWindow className="bg-cyan-500">
-            <CodeWindow.Code2 lines={lines.length}>
-              {lines.map((tokens, lineIndex) => (
-                <Fragment key={lineIndex}>
-                  {tokens.map((token, tokenIndex) => {
-                    if (
-                      token.types[token.types.length - 1] === 'class' &&
-                      usedClasses.includes(token.content)
-                    ) {
-                      return (
-                        <span
-                          key={tokenIndex}
-                          className={clsx('code-highlight', getClassNameForToken(token), {
-                            'animate-flash-code-slow': inView,
-                          })}
-                          style={{
-                            animationDelay: `${
-                              (DURATION / usedClasses.length) * usedClasses.indexOf(token.content)
-                            }s`,
-                          }}
-                        >
-                          {token.content}
-                        </span>
-                      )
-                    }
-
-                    return (
-                      <span key={tokenIndex} className={getClassNameForToken(token)}>
-                        {token.content}
-                      </span>
-                    )
-                  })}
-                  {'\n'}
-                </Fragment>
-              ))}
-            </CodeWindow.Code2>
-          </CodeWindow>
-        }
       />
     </section>
+  )
+}
+
+function Terminal({ rules }) {
+  let scrollRef = useRef()
+
+  useEffect(() => {
+    let top = scrollRef.current.scrollHeight - scrollRef.current.offsetHeight
+
+    if (CSS.supports('scroll-behavior', 'smooth')) {
+      scrollRef.current.scrollTo({ top })
+    } else {
+      animate(scrollRef.current.scrollTop, top, {
+        onUpdate: (top) => scrollRef.current.scrollTo({ top }),
+      })
+    }
+  }, [rules.length])
+
+  return (
+    <div
+      ref={scrollRef}
+      className="flex-auto border-r border-gray-500/30 text-gray-400 font-mono p-4 pb-0 h-[8.75rem] overflow-hidden scroll-smooth flex"
+    >
+      <svg viewBox="0 -9 3 24" className="flex-none overflow-visible text-pink-400 w-auto h-6 mr-3">
+        <path
+          d="M0 0L3 3L0 6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <pre className="flex-auto leading-6 text-sm">
+        <code className="block space-y-1 pb-4">
+          <div>
+            npx tailwindcss <span className="xl:hidden">-o</span>
+            <span className="hidden xl:inline">--output</span> build.css --content index.html{' '}
+            <span className="xl:hidden">-w</span> <span className="hidden xl:inline">--watch</span>
+          </div>
+          {rules.map((_rule, index) => (
+            <div key={index} className={index === rules.length - 1 ? 'text-gray-200' : undefined}>
+              <span className="code-highlight animate-flash-code-slow">
+                Rebuilding... Done in {[5, 6, 5, 7, 4, 5][index % 6]}ms.
+              </span>
+            </div>
+          ))}
+        </code>
+      </pre>
+    </div>
+  )
+}
+
+function Rule({ rule, scrollRef }) {
+  let ref = useRef()
+
+  useEffect(() => {
+    let top =
+      ref.current.offsetTop - scrollRef.current.offsetHeight / 2 + ref.current.offsetHeight / 2
+
+    if (CSS.supports('scroll-behavior', 'smooth')) {
+      scrollRef.current.scrollTo({ top })
+    } else {
+      animate(scrollRef.current.scrollTop, top, {
+        onUpdate: (top) => scrollRef.current.scrollTo({ top }),
+      })
+    }
+  }, [scrollRef])
+
+  return (
+    <div ref={ref}>
+      {rule.map((tokens, lineIndex) => {
+        let contentIndex = tokens.findIndex(({ content }) => content.trim())
+        if (contentIndex === -1) {
+          return '\n'
+        }
+        return (
+          <Fragment key={lineIndex}>
+            {tokens.slice(0, contentIndex).map((token) => token.content)}
+            <span className="code-highlight animate-flash-code-slow">
+              {tokens.slice(contentIndex).map((token, tokenIndex) => {
+                return (
+                  <span key={tokenIndex} className={getClassNameForToken(token)}>
+                    {token.content}
+                  </span>
+                )
+              })}
+            </span>
+            {'\n'}
+          </Fragment>
+        )
+      })}
+    </div>
   )
 }

@@ -1,0 +1,331 @@
+---
+title: Reusing Styles
+description: Managing duplication and creating reusable abstractions.
+---
+
+import { TipGood, TipBad, TipInfo } from '@/components/Tip'
+import { MultiCursorDemo } from '@/components/MultiCursorDemo'
+
+Tailwind encourages a [utility-first](/docs/utility-first) workflow, where designs are implemented using only low-level utility classes. This is a powerful way to avoid premature abstraction and the pain points that come with it.
+
+But of course as a project grows, you'll inevitably find yourself repeating common utility combinations to recreate the same design in many different places.
+
+For example, in the template below you can see the utility classes for each avatar image are repeated six separate times:
+
+<Example p="none">
+  <div class="w-72 sm:w-96 px-8 sm:px-12 py-6 sm:py-8 mx-auto bg-white shadow">
+    <div class="flex text-base items-center space-x-2">
+      <h4 class="text-base font-semibold text-gray-900">Contributors</h4>
+      <span class="text-xs rounded-full px-2 py-1 bg-gray-100 font-semibold text-gray-700">204</span>
+    </div>
+    <div class="mt-3 flex -space-x-2 overflow-hidden">
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt=""/>
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    </div>
+    <div class="mt-3 text-sm font-medium">
+      <a href="#" class="text-blue-500">+ 198 others</a>
+    </div>
+  </div>
+</Example>
+
+```html
+<div>
+  <div class="flex items-center space-x-2 text-base">
+    <h4 class="font-semibold text-gray-900">Contributors</h4>
+    <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">204</span>
+  </div>
+  <div class="mt-3 flex -space-x-2 overflow-hidden">
+    <img class="**inline-block h-12 w-12 rounded-full ring-2 ring-white**" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="**inline-block h-12 w-12 rounded-full ring-2 ring-white**" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="**inline-block h-12 w-12 rounded-full ring-2 ring-white**" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt=""/>
+    <img class="**inline-block h-12 w-12 rounded-full ring-2 ring-white**" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="**inline-block h-12 w-12 rounded-full ring-2 ring-white**" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+  </div>
+  <div class="mt-3 text-sm font-medium">
+    <a href="#" class="text-blue-500">+ 198 others</a>
+  </div>
+</div>
+```
+
+Don't panic! In this guide, you'll learn about different strategies for reusing styles in your project, as well as best practices for when to employ each one.
+
+---
+
+## Using editor and language features
+
+A lot of the time duplication like this isn't even a real problem because it's all together in one place, or doesn't even actually exist because you're iterating over an array of items and only writing the markup once.
+
+If the styles you need to reuse only need to be reused within a single file, multi-cursor editing and loops are the simplest way to manage any duplication.
+
+### Multi-cursor editing
+
+When duplication is localized to a group of elements in a single file, the easiest way to deal with it to use [multi-cursor editing](https://code.visualstudio.com/docs/editor/codebasics#_multiple-selections-multicursor) to quickly select and edit the class list for each element at once:
+
+<MultiCursorDemo />
+
+You'd be surprised at how often this ends up being the best solution. If you can quickly edit all of the duplicated class lists simultaneously, there's no benefit to introducing any additional abstraction.
+
+### Loops
+
+Before you assume you're going to need to extract a component or create a custom class for something, make sure you're _actually_ using it more than once in your template.
+
+A lot of the time a design element that shows up more than once in the rendered page is only actually authored once because the actual markup is rendered in a loop.
+
+For example, the duplicate avatars at the beginning of this guide would almost certainly be rendered in a loop in a real project:
+
+<Example p="none">
+  <div class="w-72 sm:w-96 px-8 sm:px-12 py-6 sm:py-8 mx-auto bg-white shadow">
+    <div class="flex text-base items-center space-x-2">
+      <h4 class="text-base font-semibold text-gray-900">Contributors</h4>
+      <span class="text-xs rounded-full px-2 py-1 bg-gray-100 font-semibold text-gray-700">204</span>
+    </div>
+    <div class="mt-3 flex -space-x-2 overflow-hidden">
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt=""/>
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    </div>
+    <div class="mt-3 text-sm font-medium">
+      <a href="#" class="text-blue-500">+ 198 others</a>
+    </div>
+  </div>
+</Example>
+
+```html
+<div>
+  <div class="flex items-center space-x-2 text-base">
+    <h4 class="font-semibold text-gray-900">Contributors</h4>
+    <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">204</span>
+  </div>
+  <div class="mt-3 flex -space-x-2 overflow-hidden">
+**    {#each contributors as user}**
+**      <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="{user.avatarUrl}" alt="{user.handle}"/>**
+**    {/each}**
+  </div>
+  <div class="mt-3 text-sm font-medium">
+    <a href="#" class="text-blue-500">+ 198 others</a>
+  </div>
+</div>
+```
+
+You could even rewrite the navigation example using a loop or `map` if you preferred as well:
+
+<Example p="none">
+  <div class="sm:px-8 flex sm:justify-center">
+    <div class="bg-white px-6 py-4 shadow">
+      <nav class="flex justify-center space-x-4">
+        <a href="/dashboard" class="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">Home</a>
+        <a href="/team" class="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">Team</a>
+        <a href="/projects" class="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">Projects</a>
+        <a href="/reports" class="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">Reports</a>
+      </nav>
+    </div>
+  </div>
+</Example>
+
+```jsx
+<nav className="flex sm:justify-center space-x-4">
+  {[
+    ['Home', '/dashboard'],
+    ['Team', '/team'],
+    ['Team', '/projects'],
+    ['Reports', '/reports'],
+  ].map(([title, url]) => (
+    <a href={url} className="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">{title}</a>
+  ))}
+</nav>
+```
+
+When elements are rendered in a loop like this, the actual class list is only written once so there's no actual duplication problem to solve.
+
+---
+
+## Extracting components and partials
+
+If you need to reuse some styles across multiple files, the best strategy is to create a _component_ if you're using a front-end framework like React, Svelte, or Vue, or a _template partial_ if you're using a templating language like Blade, ERB, Twig, or Nunjucks.
+
+<Example p="none">
+  <div class="w-72 sm:w-96 px-8 sm:px-12 py-6 sm:py-8 mx-auto bg-white shadow">
+    <div>
+      <img class="rounded" src="https://images.unsplash.com/photo-1452784444945-3f422708fe5e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=512&q=80" width="512" height="341" alt="Beach" />
+      <div class="mt-2">
+        <div>
+          <div class="text-xs text-gray-600 uppercase font-bold tracking-wider">Private Villa</div>
+          <div class="font-bold text-gray-700 leading-snug">
+            <a href="#" class="hover:underline">Relaxing All-Inclusive Resort in Cancun</a>
+          </div>
+          <div class="mt-2 text-sm text-gray-600">$299 USD per night</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```html VacationCard.vue
+<template>
+  <div>
+    <img class="rounded" :src="img" :alt="imgAlt">
+    <div class="mt-2">
+      <div>
+        <div class="text-xs text-gray-600 uppercase font-bold tracking-wider">{{ eyebrow }}</div>
+        <div class="font-bold text-gray-700 leading-snug">
+          <a :href="url" class="hover:underline">{{ title }}</a>
+        </div>
+        <div class="mt-2 text-sm text-gray-600">{{ pricing }}</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    props: ['img', 'imgAlt', 'eyebrow', 'title', 'pricing', 'url']
+  }
+</script>
+```
+
+Now you can use this component in as many places as you like, while still having a single source of truth for the styles so they can easily be updated together in one place.
+
+### Compared to CSS abstractions
+
+Unless a component is a single HTML element, the information needed to define it can't be captured in CSS alone. For anything even remotely complex, the HTML structure is just as important as the CSS.
+
+<TipBad>Don't rely on CSS classes to extract complex components</TipBad>
+
+<Example p="none">
+  <div class="px-6 py-12">
+    <div class="max-w-sm mx-auto p-6 flex items-center bg-white rounded-xl shadow-md space-x-4">
+      <div class="shrink-0">
+        <svg class="h-12 w-12" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="a"><stop stop-color="#2397B3" offset="0%"/><stop stop-color="#13577E" offset="100%"/></linearGradient><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="b"><stop stop-color="#73DFF2" offset="0%"/><stop stop-color="#47B1EB" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><path d="M28.872 22.096c.084.622.128 1.258.128 1.904 0 7.732-6.268 14-14 14-2.176 0-4.236-.496-6.073-1.382l-6.022 2.007c-1.564.521-3.051-.966-2.53-2.53l2.007-6.022A13.944 13.944 0 0 1 1 24c0-7.331 5.635-13.346 12.81-13.95A9.967 9.967 0 0 0 13 14c0 5.523 4.477 10 10 10a9.955 9.955 0 0 0 5.872-1.904z" fill="url(#a)" transform="translate(1 1)"/><path d="M35.618 20.073l2.007 6.022c.521 1.564-.966 3.051-2.53 2.53l-6.022-2.007A13.944 13.944 0 0 1 23 28c-7.732 0-14-6.268-14-14S15.268 0 23 0s14 6.268 14 14c0 2.176-.496 4.236-1.382 6.073z" fill="url(#b)" transform="translate(1 1)"/><path d="M18 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM24 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM30 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" fill="#FFF"/></g></svg>
+      </div>
+      <div>
+        <div class="text-base sm:text-xl font-medium text-black">ChitChat</div>
+        <p class="text-sm sm:text-base text-gray-500">You have a new message!</p>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```html
+<!-- Even with custom CSS, you still need to duplicate this HTML structure -->
+<div class="chat-notification">
+  <div class="chat-notification-logo-wrapper">
+    <img class="chat-notification-logo" src="/img/logo.svg" alt="ChitChat Logo">
+  </div>
+  <div class="chat-notification-content">
+    <h4 class="chat-notification-title">ChitChat</h4>
+    <p class="chat-notification-message">You have a new message!</p>
+  </div>
+</div>
+
+<style>
+  .chat-notification { /* ... */ }
+  .chat-notification-logo-wrapper { /* ... */ }
+  .chat-notification-logo { /* ... */ }
+  .chat-notification-content { /* ... */ }
+  .chat-notification-title { /* ... */ }
+  .chat-notification-message { /* ... */ }
+</style>
+```
+
+Even if you create classes for the different elements in a component like this, _you still have to duplicate the HTML every time you want to use this component_. Sure you can update the font-size for every instance in a single place, but what if you need to turn the title into a link?
+
+Components and template partials solve this problem much better than CSS-only abstractions because a component can encapsulate the HTML _and_ the styles. Changing the font-size for every instance is just as easy as it is with CSS, but now you can turn all of the titles into links in a single place too.
+
+<TipGood>Create a template partial or JavaScript component</TipGood>
+
+<Example p="none">
+  <div class="px-6 py-12">
+    <div class="max-w-sm mx-auto p-6 flex items-center bg-white rounded-xl shadow-md space-x-4">
+      <div class="shrink-0">
+        <svg class="h-12 w-12" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="a"><stop stop-color="#2397B3" offset="0%"/><stop stop-color="#13577E" offset="100%"/></linearGradient><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="b"><stop stop-color="#73DFF2" offset="0%"/><stop stop-color="#47B1EB" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><path d="M28.872 22.096c.084.622.128 1.258.128 1.904 0 7.732-6.268 14-14 14-2.176 0-4.236-.496-6.073-1.382l-6.022 2.007c-1.564.521-3.051-.966-2.53-2.53l2.007-6.022A13.944 13.944 0 0 1 1 24c0-7.331 5.635-13.346 12.81-13.95A9.967 9.967 0 0 0 13 14c0 5.523 4.477 10 10 10a9.955 9.955 0 0 0 5.872-1.904z" fill="url(#a)" transform="translate(1 1)"/><path d="M35.618 20.073l2.007 6.022c.521 1.564-.966 3.051-2.53 2.53l-6.022-2.007A13.944 13.944 0 0 1 23 28c-7.732 0-14-6.268-14-14S15.268 0 23 0s14 6.268 14 14c0 2.176-.496 4.236-1.382 6.073z" fill="url(#b)" transform="translate(1 1)"/><path d="M18 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM24 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM30 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" fill="#FFF"/></g></svg>
+      </div>
+      <div>
+        <div class="text-base sm:text-xl font-medium text-black">ChitChat</div>
+        <p class="text-sm sm:text-base text-gray-500">You have a new message!</p>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```jsx Notification.jsx
+function Notification({ imageUrl, imageAlt, title, message }) {
+  return (
+    <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+      <div className="shrink-0">
+        <img className="h-12 w-12" src={imageUrl} alt={imageAlt}>
+      </div>
+      <div>
+        <div className="text-xl font-medium text-black">{title}</div>
+        <p className="text-gray-500">{message}</p>
+      </div>
+    </div>
+  )
+}
+```
+
+When you create components and template partials like this, there's no reason to use anything other than utility classes because you already have a single source of truth for the styles.
+
+---
+
+## Extracting classes with @apply
+
+If you're using a traditional templating language like ERB or Twig, creating a template partial for something as small as a button can feel like overkill compared to a simple CSS class like `btn`.
+
+While it's highly recommended that you create proper template partials for more complex components, you can use Tailwind's `@apply` directive to extract repeated utility patterns to custom CSS classes when a template partial feels heavy-handed.
+
+Here's what a `btn-primary` class might look like using `@apply` to compose it from existing utilities:
+
+<Example>
+  <div class="text-center">
+    <button type="button" class="py-2 px-5 bg-violet-500 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
+      Save changes
+    </button>
+  </div>
+</Example>
+
+```html HTML
+<!-- Before extracting a custom class -->
+<button class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+  Save changes
+</button>
+
+<!-- After extracting a custom class -->
+<button class="**btn-primary**">
+  Save changes
+</button>
+```
+
+<div className="-mb-4"/>
+
+```css CSS
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+  }
+}
+```
+
+Learn more about `@apply` and `@layer` in the [Functions & Directives](/docs/functions-and-directives#layer) documentation.
+
+
+### Avoiding premature abstraction
+
+Whatever you do, **don't use <code className="font-semibold text-gray-900">@apply</code> just to make things look "cleaner"**. Yes, HTML templates littered with Tailwind classes are kind of ugly. Making changes in a project that has tons of custom CSS is worse.
+
+If you start using `@apply` for everything, you are basically just writing CSS again and throwing away all of the workflow and maintainability advantages Tailwind gives you, for example:
+
+- **You have to think up class names all the time** — nothing will slow you down or drain your energy like coming up with a class name for something that doesn't deserve to be named.
+- **You have to jump between multiple files to make changes** — which is a way bigger workflow killer than you'd think before co-locating everything together.
+- **Changing styles is scarier** — CSS is global, are you _sure_ you can change the min-width value in that class without breaking something in another part of the site?
+- **Your CSS bundle will be bigger** — oof.
+
+If you're going to use `@apply`, use it for very small, highly reusable things like buttons and form controls — and even then only if you're not using a framework like React where a component would be a better choice.

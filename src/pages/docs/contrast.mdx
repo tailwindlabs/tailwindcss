@@ -1,73 +1,117 @@
 ---
 title: "Contrast"
 description: "Utilities for applying contrast filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=contrast'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingFilters } from '@/components/RemovingFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.contrast-0': { '--tw-contrast': 'contrast(0)' },
-        '.contrast-50': { '--tw-contrast': 'contrast(.5)' },
-        '.contrast-75': { '--tw-contrast': 'contrast(.75)' },
-        '.contrast-100': { '--tw-contrast': 'contrast(1)' },
-        '.contrast-125': { '--tw-contrast': 'contrast(1.25)' },
-        '.contrast-150': { '--tw-contrast': 'contrast(1.5)' },
-        '.contrast-200': { '--tw-contrast': 'contrast(2)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      filter: properties['--tw-contrast'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `contrast-{amount?}` utilities alongside the `filter` utility to control an element's contrast.
+### Changing element contrast
+
+Use the `contrast-{amount?}` utilities to control an element's contrast.
+
+<Example p="none">
+  <div class="flex justify-start sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">contrast-50</p>
+      <div class="relative contrast-50">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">contrast-100</p>
+      <div class="relative contrast-100">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">contrast-125</p>
+      <div class="relative contrast-125">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">contrast-200</p>
+      <div class="relative contrast-200">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="filter contrast-125 ...">
+<div class="**contrast-50** ...">
+  <!-- ... -->
+</div>
+<div class="**contrast-100** ...">
+  <!-- ... -->
+</div>
+<div class="**contrast-125** ...">
+  <!-- ... -->
+</div>
+<div class="**contrast-200** ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing filters
 
-To control an element's contrast at a specific breakpoint, add a `{screen}:` prefix to any existing contrast utility. For example, use `md:contrast-150` to apply the `contrast-150` utility at only medium screen sizes and above.
+<RemovingFilters defaultClass="blur-md invert contrast-125" />
 
-```html
-<div class="filter contrast-110 **md:contrast-150** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `contrast` utilities are generated using the `contrast` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="contrast-125" featuredClass="contrast-150" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="contrast-125" featuredClass="contrast-150" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `contrast` utilities. You can customize these values by editing `theme.contrast` or `theme.extend.contrast` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       contrast: {
 +         25: '.25',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="contrast" name="contrast" />
-
-### Disabling
-
-<Disabling plugin="contrast" name="contrast" />
+<ArbitraryValues property="contrast" featuredClass="contrast-[.25]" />

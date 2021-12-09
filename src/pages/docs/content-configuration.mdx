@@ -1,0 +1,510 @@
+---
+title: Content Configuration
+shortTitle: Content
+description: Configuring the content sources for your project.
+---
+
+import { TipGood, TipBad } from '@/components/Tip'
+import { SnippetGroup } from '@/components/SnippetGroup'
+import { ThemeReference } from '@/components/ThemeReference'
+
+The `content` section of your `tailwind.config.js` file is where you configure the paths to all of your HTML templates, JavaScript components, and any other source files that contain Tailwind class names.
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{html,js}'
+    './components/**/*.{html,js}',
+  ],
+  // ...
+}
+```
+
+This guide covers everything you need to know to make sure Tailwind generates all of the CSS needed for your project.
+
+---
+
+## Configuring source paths
+
+Tailwind CSS works by scanning all of your HTML, JavaScript components, and any other template files for class names, then generating all of the corresponding CSS for those styles.
+
+In order for Tailwind to generate all of the CSS you need, it needs to know about every single file in your project that contains any Tailwind class names.
+
+Configure the paths to all of your content files in the `content` section of your configuration file:
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{html,js}'
+    './components/**/*.{html,js}'
+  ],
+  // ...
+}
+```
+
+Paths are configured as [glob patterns](https://en.wikipedia.org/wiki/Glob_(programming)), making it easy to match all of the content files in your project without a ton of configuration:
+
+- Use `*` to match anything except slashes and hidden files
+- Use `**` to match zero or more directories
+- Use comma separate values between `{}` to match against a list of options
+
+Tailwind uses the [fast-glob](https://github.com/mrmlnc/fast-glob) library under-the-hood — check out their documentation other supported pattern features.
+
+### Pattern recommendations
+
+For the best performance and to avoid false positives, be as specific as possible with your content configuration.
+
+If you use a really broad pattern like this one, Tailwind will even scan `node_modules` for content which is probably not what you want:
+
+<TipBad>Don't use extremely broad patterns</TipBad>
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './**/*.{html,js}',
+  ],
+  // ...
+}
+```
+
+If you have any files you need to scan that are at the root of your project (often an `index.html` file), list that file independently so your other patterns can be more specific:
+
+<TipGood>Be specific with your content patterns</TipGood>
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './components/**/*.{html,js}',
+    './pages/**/*.{html,js}',
+    './index.html',
+  ],
+  // ...
+}
+```
+
+Some frameworks hide their main HTML entry point in a different place than the rest of your templates (often `public/index.html`), so if you are adding Tailwind classes to that file make sure it's included in your configuration as well:
+
+<TipGood>Don't forget your HTML entry point if applicable</TipGood>
+
+```js tailwind.config.js
+  module.exports = {
+    content: [
+>     './public/index.html',
+      './src/**/*.{html,js}',
+    ],
+    // ...
+  }
+```
+
+If you have any JavaScript files that manipulate your HTML to add classes, make sure you include those as well:
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    // ...
+    './src/**/*.js',
+  ],
+  // ...
+}
+```
+
+```js src/spaghetti.js
+// ...
+menuButton.addEventListener('click', function () {
+  let classList = document.getElementById('nav').classList
+  classList.toggle('hidden')
+  classList.toggle('block')
+})
+// ...
+```
+
+It's also important that you don't scan any CSS files — configure Tailwind to scan your _templates_ where your class names are being used, never the CSS file that Tailwind is generating.
+
+<TipBad>Never include CSS files in your content configuration</TipBad>
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './src/**/*.css',
+  ],
+  // ...
+}
+```
+
+### Class detection in-depth
+
+The way Tailwind scans your source code for classes is intentionally very simple — we don't actually parse or execute any of your code in the language it's written in, we just use regular expressions to extract every string that could possibly be a class name.
+
+For example, here's some HTML with every potential class name string individually highlighted:
+
+```html
+<**div** **class**="**md:flex**">
+  <**div** **class**="**md:flex-shrink-0**">
+    <**img** **class**="**rounded-lg** **md:w-56**" **src**="**/img/shopping.jpg**" **alt**="**Woman** **paying** **for** **a** **purchase**">
+  </**div**>
+  <**div** **class**="**mt-4** **md:mt-0** **md:ml-6**">
+    <**div** **class**="**uppercase** **tracking-wide** **text-sm** **text-indigo-600** **font-bold**">
+      **Marketing**
+    </**div**>
+    <**a** **href**="**/get-started**" **class**="**block** **mt-1** **text-lg** **leading-tight** **font-semibold** **text-gray-900** **hover:underline**">
+      **Finding** **customers** **for** **your** **new** **business**
+    </**a**>
+    <**p** **class**="**mt-2** **text-gray-600**">
+      **Getting** **a** **new** **business** **off** **the** **ground** **is** **a** **lot** **of** **hard** **work.**
+      **Here** **are** **five** **ideas** **you** **can** **use** **to** **find** **your** **first** **customers.**
+    </**p**>
+  </**div**>
+</**div**>
+```
+
+We don't just limit our search to `class="..."` attributes because you could be using classes anywhere, like in some JavaScript for toggling a menu:
+
+```html spaghetti.js
+<script>
+  menuButton.addEventListener('click', function () {
+    let classList = document.getElementById('nav').classList
+    classList.toggle('**hidden**')
+    classList.toggle('**block**')
+  })
+</script>
+```
+
+By using this very simple approach, Tailwind works extremely reliably with any programming language, like JSX for example:
+
+```jsx Button.jsx
+const sizes = {
+  md: 'px-4 py-2 rounded-md text-base',
+  lg: 'px-5 py-3 rounded-lg text-lg',
+}
+
+const colors = {
+  indigo: 'bg-indigo-500 hover:bg-indigo-600 text-white',
+  cyan: 'bg-cyan-600 hover:bg-cyan-700 text-white',
+}
+
+export default function Button({ color, size, children }) {
+  let colorClasses = colors[color]
+  let sizeClasses = sizes[size]
+
+  return (
+    <button type="button" className={`font-bold ${sizeClasses} ${colorClasses}`}>
+      {children}
+    </button>
+  )
+}
+```
+
+The most important implication of how Tailwind extracts class names is that it will only find classes that exist _as complete unbroken strings_ in your source files.
+
+If you use string interpolation or concatenate partial class names together, Tailwind will not find them and therefore will not generate the corresponding CSS:
+
+<TipBad>Don't construct class names dynamically</TipBad>
+
+```html
+<div class="text-{{ error ? 'red' : 'green' }}-600"></div>
+```
+
+In the example above, the strings `text-red-600` and `text-green-600` do not exist, so Tailwind will not generate those classes.
+
+Instead, make sure any class names you're using exist in full:
+
+<TipGood>Always use complete class names</TipGood>
+
+```html
+<div class="{{ error ? 'text-red-600' : 'text-green-600' }}"></div>
+```
+
+As long as you always use complete class names in your code, Tailwind will generate all of your CSS perfectly every time.
+
+
+### Working with third-party libraries
+
+If you're working with any third-party libraries (for example [Select2](https://select2.org/)) and styling that library with your own custom CSS, we recommend writing those styles _without_ using Tailwind's `@layer` feature:
+
+```css main.css
+@tailwind base;
+@tailwind components;
+
+.select2-dropdown {
+  @apply rounded-b-lg shadow-md;
+}
+.select2-search {
+  @apply border border-gray-300 rounded;
+}
+.select2-results__group {
+  @apply text-lg font-bold text-gray-900;
+}
+/* ... */
+
+@tailwind utilities;
+```
+
+This will ensure that Tailwind _always_ includes those styles in your CSS, which is a lot easier than configuring Tailwind to scan the source code of a third-party library.
+
+If you've created your own reusable set of components that are styled with Tailwind and are importing them in multiple projects, make sure to configure Tailwind to scan those components for class names:
+
+```js tailwind.config.js
+  module.exports = {
+    content: [
+      './components/**/*.{html,js}',
+      './pages/**/*.{html,js}',
+>     './node_modules/@my-company/tailwind-components/**/*.js',
+    ],
+    // ...
+  }
+```
+
+This will make sure Tailwind generates all of the CSS needed for those components as well.
+
+### Configuring raw content
+
+If for whatever reason you need to configure Tailwind to scan some raw content rather than the contents of a file, use an object with a `raw` key instead of a path:
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{html,js}'
+    './components/**/*.{html,js}',
+    { raw: '<div class="font-bold">', extension: 'html' },
+  ],
+  // ...
+}
+```
+
+There aren't many valid use-cases for this — [safelisting](#safelisting-classes) is usually what you really want instead.
+
+---
+
+## Safelisting classes
+
+For the smallest file size and best development experience, we highly recommend relying on your `content` configuration to tell Tailwind which classes to generate as much as possible.
+
+Safelisting is a last-resort, and should only be used in situations where it's impossible to scan certain content for class names. These situations are rare, and you should almost never need this feature.
+
+If you need to make sure Tailwind generates certain class names that don't exist in your content files, use the `safelist` option:
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{html,js}'
+    './components/**/*.{html,js}',
+  ],
+  safelist: [
+    'bg-red-500',
+    'text-3xl',
+    'lg:text-4xl',
+  ]
+  // ...
+}
+```
+
+One example of where this can be useful is if your site displays user-generated content and you want users to be able to use a constrained set of Tailwind classes in their content that might not exist in your own site's source files.
+
+### Using regular expressions
+
+Tailwind supports pattern-based safelisting for situations where you need to safelist a lot of classes:
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{html,js}'
+    './components/**/*.{html,js}',
+  ],
+  safelist: [
+    'text-2xl',
+    'text-3xl',
+    {
+      pattern: /bg-(red|green|blue)-(100|200|300)/,
+    },
+  ],
+  // ...
+}
+```
+
+Patterns can only match against base utility names like `/bg-red-.+/`, and won't match if the pattern includes a variant modifier like `/hover:bg-red-.+/`.
+
+If you want to force Tailwind to generate variants for any matched classes, include them using the `variants` option:
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{html,js}'
+    './components/**/*.{html,js}',
+  ],
+  safelist: [
+    'text-2xl',
+    'text-3xl',
+    {
+      pattern: /bg-(red|green|blue)-(100|200|300)/,
+      variants: ['hover', 'focus'],
+    },
+  ],
+  // ...
+}
+```
+
+---
+
+## Transforming source files
+
+If you're authoring content in a format that _compiles_ to HTML (like Markdown), it often makes sense to compile that content to HTML _before_ scanning it for class names.
+
+Use the `content.transform` option to transform any content matching a specific file extension before extracting classes:
+
+```js tailwind.config.js
+const remark = require('remark')
+
+module.exports = {
+  content: {
+    files: ['./src/**/*.{html,md}'],
+    transform: {
+      md: (content) => {
+        return remark().process(content)
+      }
+    }
+  },
+  // ...
+}
+```
+
+When using `content.transform`, you'll need to provide your source paths using `content.files` instead of as a top-level array under `content`.
+
+---
+
+## Customizing extraction logic
+
+Use the `extract` option to override the logic Tailwind uses to detect class names for specific file extensions:
+
+```js tailwind.config.js
+module.exports = {
+  content: {
+    files: ['./src/**/*.{html,wtf}'],
+    extract: {
+      wtf: (content) => {
+        return content.match(/[^<>"'`\s]*/)
+      }
+    }
+  },
+  // ...
+}
+```
+
+This is an advanced feature and most users won't need it — the default extraction logic in Tailwind works extremely well for almost all projects.
+
+As with transforming, when using `content.extract`, you'll need to provide your source paths using `content.files` instead of as a top-level array under `content`.
+
+---
+
+## Troubleshooting
+
+### Classes aren't generated
+
+If Tailwind isn't generating classes, make sure your `content` configuration is correct and matches all of the right source files.
+
+A common mistake is missing a file extension, for example if you're using `jsx` instead of `js` for your React components:
+
+```diff-js tailwind.config.js
+  module.exports = {
+    content: [
+-     './src/**/*.{html,js}'
++     './src/**/*.{html,js,jsx}'
+    ],
+    // ...
+  }
+```
+
+Or creating a new folder mid-project that wasn't covered originally and forgetting to add it to your configuration:
+
+```diff-js tailwind.config.js
+  module.exports = {
+    content: [
+      './pages/**/*.{html,js}',
+      './components/**/*.{html,js}',
++     './util/**/*.{html,js,js}'
+    ],
+    // ...
+  }
+```
+
+### Dynamic class names
+
+As outlined in [Class detection in-depth](#class-detection-in-depth), Tailwind doesn't actually run your source code and won't detect dynamically constructed class names.
+
+<TipBad>Don't construct class names dynamically</TipBad>
+
+```html
+<div class="text-{{ error ? 'red' : 'green' }}-600"></div>
+```
+
+Make sure you always use complete class names in your code:
+
+<TipGood>Always use complete class names</TipGood>
+
+```html
+<div class="{{ error ? 'text-red-600' : 'text-green-600' }}"></div>
+```
+
+### Styles rebuild in an infinite loop
+
+If your CSS seems to be rebuilding in an infinite loop, there's a good chance it's because your build tool doesn't support the `glob` option when [registering PostCSS dependencies](https://github.com/postcss/postcss/blob/main/docs/guidelines/runner.md#31-rebuild-when-dependencies-change).
+
+Many build tools (such as webpack) don't support this option, and as a result we can only tell them to watch specific files or _entire directories_. We can't tell webpack to _only_ watch `*.html` files in a directory for example.
+
+That means that if building your CSS causes _any_ files in those directories to change, a rebuild will be triggered, even if the changed file doesn't match the extension in your glob.
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    // With some build tools, your CSS will rebuild
+    // any time *any* file in `src` changes.
+    './src/**/*.{html,js}',
+  ],
+  // ...
+}
+```
+
+So if you are watching `src/**/*.html` for changes, but you are writing your CSS output file to `src/css/styles.css`, you will get an infinite rebuild loop using some tools.
+
+Ideally we could warn you about this in the console, but many tools support it perfectly fine (including our own CLI tool), and we have no reliable way to detect what build tool you are using.
+
+To solve this problem, use more specific paths in your `content` config, making sure to only include directories that won't change when your CSS builds:
+
+```diff-js tailwind.config.js
+  module.exports = {
+    content: [
+-     './src/**/*.{html,js}',
++     './src/pages/**/*.{html,js}',
++     './src/components/**/*.{html,js}',
++     './src/layouts/**/*.{html,js}',
++     './src/index.html',
+    ],
+    // ...
+  }
+```
+
+If necessary, adjust your actual project directory structure to make sure you can target your template files without accidentally catching your CSS file or other build artifacts like manifest files.
+
+If you absolutely can't change your content config or directory structure, your best bet is to compile your CSS separately with a tool that has complete glob support. We recommend using [Tailwind CLI](/docs/installation), which is a fast, simple, purpose-built tool for compiling your CSS with Tailwind.
+
+### It just isn't working properly
+
+If you are experiencing weird, hard to describe issues with the output, or things just don't seem like they are working at all, there's a good chance it's due to your build tool not supporting PostCSS dependency messages properly _(or at all)_. One known example of this currently is [Stencil](https://github.com/ionic-team/stencil-postcss/issues/38).
+
+When you are having these sorts of issues, we recommend using [Tailwind CLI](/docs/installation) to compile your CSS separately instead of trying to integrate Tailwind into your existing tooling.
+
+You can use packages like `npm-run-all` or `concurrently` to compile your CSS alongside your usual development command by adding some scripts to your project like this:
+
+```js
+// package.json
+{
+  // ...
+  "scripts": {
+    "start": "concurrently \"npm run start:css\" \"react-scripts start\"",
+    "start:css": "tailwindcss -o src/tailwind.css --watch",
+    "build": "npm run build:css && react-scripts build",
+    "build:css": "NODE_ENV=production tailwindcss -o src/tailwind.css -m",
+  },
+}
+```
+
+Either way, please be sure to [check for an existing issue](https://github.com/tailwindlabs/tailwindcss/issues) or [open a new one](https://github.com/tailwindlabs/tailwindcss/issues/new/choose) so we can figure out the problem and try to improve compatibility with whatever tool you are using.

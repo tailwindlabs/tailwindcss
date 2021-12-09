@@ -1,0 +1,119 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: 'Tailwind CSS v2.1',
+  description: `We just released Tailwind CSS v2.1 which brings the new JIT engine to core, adds first-class CSS filter support, and more!`,
+  date: '2021-04-05T19:00:00.000Z',
+  authors: [adamwathan],
+  image,
+}
+
+The first new feature update since Tailwind CSS v2.0 is here and loaded with lots of cool stuff! We've merged the new JIT engine to core, added first-class support for composable CSS filters, added blending mode utilities, and a bunch more.
+
+<!--more-->
+
+Here are some of the highlights:
+
+- [JIT engine in core](#jit-engine-in-core)
+- [Composable CSS filters API](#new-filter-and-backdrop-filter-utilities)
+- [New blending mode utilities](#new-blending-mode-utilities)
+- [New isolation utilities](#new-isolation-utilities)
+
+For the full details, [check out the release notes](https://github.com/tailwindlabs/tailwindcss/releases/tag/v2.1.0) on GitHub.
+
+---
+
+<a name="jit-engine-in-core"></a>
+
+## JIT engine in core
+
+The [brand-new JIT engine we announced in March](https://blog.tailwindcss.com/just-in-time-the-next-generation-of-tailwind-css) has now been merged into core, and is available as an opt-in feature using a new `mode` option in your `tailwind.config.js` file:
+
+```js tailwind.config.js
+module.exports = {
+  mode: 'jit',
+  purge: [
+    // ...
+  ],
+  // ...
+}
+```
+
+**This feature is still in preview** which means some details may change as we iron out the kinks, and it's not subject to semantic versioning.
+
+If you were using `@tailwindcss/jit` before, you can now migrate to Tailwind CSS v2.1 instead, as that's where all new development on the engine will happen.
+
+Read the [Just-in-Time Mode documentation](https://tailwindcss.com/docs/just-in-time-mode) to learn more.
+
+<a name="new-filter-and-backdrop-filter-utilities"></a>
+
+## Composable CSS filters API
+
+This is a huge one — we've finally added first-class support for CSS filters!
+
+They work a lot like our `transform` utilities, where you use `filter` to enable filters, and combine it with utilities like `grayscale`, `blur-lg`, or `saturate-200` to compose filters on the fly.
+
+Here's what `filter` looks like:
+
+```html
+<div class="filter blur-md grayscale invert ...">
+  <!-- ... -->
+</div>
+```
+
+...and here's what `backdrop-filter` looks like:
+
+```html
+<div class="backdrop-filter backdrop-blur backdrop-brightness-50 ...">
+  <!-- ... -->
+</div>
+```
+
+Check out the [filter](https://tailwindcss.com/docs/filter) and [backdrop-filter](https://tailwindcss.com/docs/backdrop-filter) to learn more. We'll add a bunch of helpful visual examples there soon!
+
+<a name="new-blending-mode-utilities"></a>
+
+## New blending mode utilities
+
+We've added brand new utilities for `mix-blend-mode` and `background-blend-mode`:
+
+```html
+<div class="mix-blend-multiply ...">
+  <!-- ... -->
+</div>
+```
+
+Check out [the documentation](https://tailwindcss.com/docs/mix-blend-mode) to learn more.
+
+<a name="new-isolation-utilities"></a>
+
+## New isolation utilities
+
+We've added new `isolate` and `isolation-auto` utilities for working with the `isolation` property:
+
+```html
+<div class="isolate ...">
+  <!-- ... -->
+</div>
+```
+
+This can be really helpful for scoping blending mode features or z-index adjustments and is super powerful. Check out [the documentation](https://tailwindcss.com/docs/isolation) to learn more.
+
+I also highly recommend [this great article by Josh Comeau](https://www.joshwcomeau.com/css/stacking-contexts/#airtight-abstractions-with-isolation) to see it in action.
+
+---
+
+## Upgrading
+
+Tailwind CSS v2.1 is an incremental upgrade with no breaking changes, so to upgrade you just need to run:
+
+```bash
+npm install tailwindcss@latest
+```
+
+If you were previously using `@tailwindcss/jit`, you can now switch back to `tailwindcss` and update your PostCSS configuration accordingly.
+
+<Footer>
+  Ready to upgrade? <a href="https://npmjs.com/tailwindcss">Get it from npm →</a>
+</Footer>

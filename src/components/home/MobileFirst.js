@@ -1,278 +1,258 @@
 import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
-import { GradientLockup } from '@/components/GradientLockup'
-import { gradients } from '@/utils/gradients'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { motion, useTransform, useMotionValue } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
-import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
-import styles from './MobileFirst.module.css'
-import { tokenizeWithLines } from '../../macros/tokenize.macro'
+import iconUrl from '@/img/icons/home/mobile-first.png'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import clsx from 'clsx'
-import { useMedia } from '@/hooks/useMedia'
-
-const MIN_WIDTH = 400
-const HANDLE_RADIUS = 2.125
-
-const images = {
-  '/kevin-francis.jpg': require('@/img/kevin-francis.jpg').default,
-  '/beach-house.jpg': require('@/img/beach-house.jpg').default,
-  '/beach-house-view.jpg': require('@/img/beach-house-view.jpg').default,
-  '/beach-house-interior.jpg': require('@/img/beach-house-interior.jpg').default,
-}
-
-const { code: html, lines, classNames } = tokenizeWithLines.html(
-  `<div class="{container}">
-  <div class="{header}">
-    <p class="{preheading}">Entire house</p>
-    <h2 class="{heading}">Beach House in Collingwood</h2>
-  </div>
-  <div class="{metaContainer}">
-    <div class="{meta}">
-      <svg width="20" height="20" fill="currentColor" class="text-violet-600">
-        <path d="M9.05 3.691c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.372 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.539 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.363-1.118l-2.8-2.034c-.784-.57-.381-1.81.587-1.81H7.03a1 1 0 00.95-.69L9.05 3.69z" />
-      </svg>
-      <div class="ml-1">
-        <span class="text-black">4.94</span>
-        <span class="{ratingCount}">(128)</span>
-      </div>
-      <div class="text-base font-normal mx-2">·</div>
-      <div>Collingwood, Ontario</div>
-    </div>
-    <hr class="{hr}">
-  </div>
-  <div class="{footerContainer}">
-    <p class="flex items-center text-black text-sm font-medium">
-      <img src="/kevin-francis.jpg" alt="" class="w-6 h-6 rounded-full mr-2 bg-gray-100">
-      Hosted by Kevin Francis
-    </p>
-    <button type="button" class="bg-violet-100 text-violet-700 text-base font-semibold px-6 py-2 rounded-lg">Check availability</button>
-  </div>
-  <div class="{imgContainer}">
-    <div class="w-full grid grid-cols-3 grid-rows-2 gap-2">
-      <div class="{imgLgContainer}">
-        <img src="/beach-house.jpg" alt="" class="{imgLg}" />
-      </div>
-      <div class="{imgSmContainer}">
-        <img src="/beach-house-interior.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100" />
-      </div>
-      <div class="{imgSmContainer}">
-        <img src="/beach-house-view.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100" />
-      </div>
-    </div>
-  </div>
-</div>
-`,
-  'original',
-  (code, { classNames }) =>
-    code.replace(/\{([^}]+)\}/g, (m, key) => {
-      const sm = classNames.sm[key].split(' ').filter(Boolean)
-      const md = classNames.md[key].split(' ').filter(Boolean)
-      const lg = classNames.lg[key].split(' ').filter(Boolean)
-
-      return [
-        ...sm,
-        ...md.filter((c) => !sm.includes(c)).map((c) => `sm:${c}`),
-        ...lg.filter((c) => !md.includes(c)).map((c) => `md:${c}`),
-      ].join(' ')
-    }),
-  {
-    classNames: {
-      sm: {
-        container: 'grid grid-cols-1',
-        header: 'relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-3 bg-gradient-to-t from-black',
-        preheading: 'text-sm font-medium text-white',
-        heading: 'text-xl font-semibold text-white',
-        metaContainer: 'col-start-1 row-start-2 px-4',
-        meta: 'flex items-center text-sm font-medium my-5',
-        ratingCount: '',
-        hr: 'w-16 border-gray-300 hidden',
-        footerContainer: 'col-start-1 row-start-3 space-y-3 px-4',
-        imgContainer: 'col-start-1 row-start-1 flex',
-        imgLgContainer: 'relative col-span-3 row-span-2',
-        imgLg: 'absolute inset-0 w-full h-full object-cover bg-gray-100',
-        imgSmContainer: 'relative hidden',
-      },
-      md: {
-        container: 'grid grid-cols-2 px-8 py-12 gap-x-8',
-        header: 'relative z-10 col-start-1 row-start-1 bg-none',
-        preheading: 'text-sm font-medium mb-1 text-gray-500',
-        heading: 'text-2xl leading-7 font-semibold text-black',
-        metaContainer: 'col-start-1 row-start-2 pb-16',
-        meta: 'flex items-center text-sm font-medium mt-2 mb-4',
-        ratingCount: 'hidden',
-        hr: 'w-16 border-gray-300 block',
-        footerContainer: 'col-start-1 row-start-3 space-y-3',
-        imgContainer: 'col-start-2 row-start-1 row-span-3 flex',
-        imgLgContainer: 'relative col-span-3 row-span-2',
-        imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100',
-        imgSmContainer: 'relative hidden',
-      },
-      lg: {
-        container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
-        header: 'relative z-10 col-start-1 row-start-1 bg-none',
-        preheading: 'text-sm font-medium mb-1 text-gray-500',
-        heading: 'text-3xl font-semibold text-black',
-        metaContainer: 'col-start-1 row-start-2 pb-16',
-        meta: 'flex items-center text-sm font-medium mt-2 mb-4',
-        ratingCount: 'inline',
-        hr: 'w-16 border-gray-300 block',
-        footerContainer: 'col-start-1 row-start-3 space-y-3',
-        imgContainer: 'col-start-2 row-start-1 row-span-3 flex',
-        imgLgContainer: 'relative col-span-2 row-span-2',
-        imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100',
-        imgSmContainer: 'relative block',
-      },
-    },
-  }
-)
+import { GridLockup } from '../GridLockup'
+import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
+import { lines } from '../../pages/examples/mobile-first-demo'
 
 addClassTokens2(lines)
 
-function BrowserWindow({ size, onChange, height = 385 }) {
-  const x = useMotionValue(0)
-  const constraintsRef = useRef()
-  const [constraintsWidth, setConstraintsWidth] = useState()
-  const md = useMedia('(min-width: 768px)')
-  const marginRight = useTransform(x, (x) => -x)
+const MIN_WIDTH = 400
+
+function BrowserWindow({ size, onChange }) {
+  let x = useMotionValue(0)
+  let constraintsRef = useRef()
+  let handleRef = useRef()
+  let iframeRef = useRef()
+  let iframePointerEvents = useMotionValue('auto')
+
+  useEffect(() => {
+    function onMessage(e) {
+      if (e.source === iframeRef.current.contentWindow) {
+        onChange(e.data)
+      }
+    }
+
+    window.addEventListener('message', onMessage)
+
+    return () => {
+      window.removeEventListener('message', onMessage)
+    }
+  }, [])
 
   useIsomorphicLayoutEffect(() => {
-    const update = () => {
-      const width =
-        constraintsRef.current.offsetWidth -
-        parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) *
-          (HANDLE_RADIUS * 2)
-      setConstraintsWidth(width)
-      x.set(-width)
-    }
-    const observer = new window.ResizeObserver(update)
+    let observer = new window.ResizeObserver(() => {
+      let width = constraintsRef.current.offsetWidth - handleRef.current.offsetWidth
+      if (x.get() > width) {
+        x.set(width)
+      }
+    })
     observer.observe(constraintsRef.current)
-    update()
     return () => {
       observer.disconnect()
     }
   }, [])
 
   useEffect(() => {
-    if (!constraintsWidth) return
-
-    function updateSize(x) {
-      if (!md) {
-        onChange('sm')
-      } else if (constraintsWidth >= 500) {
-        if (x < -((constraintsWidth / 3) * 2)) {
-          size !== 'sm' && onChange('sm')
-        } else if (x < -(constraintsWidth / 3)) {
-          size !== 'md' && onChange('md')
-        } else if (x >= -(constraintsWidth / 3)) {
-          size !== 'lg' && onChange('lg')
-        }
-      } else {
-        if (x < -(constraintsWidth / 2)) {
-          size !== 'sm' && onChange('sm')
-        } else {
-          size !== 'md' && onChange('md')
-        }
-      }
-    }
-
-    updateSize(x.get())
-
-    return x.onChange(updateSize)
-  }, [x, size, constraintsWidth, md])
+    handleRef.current.onselectstart = () => false
+  }, [])
 
   return (
     <div className="relative">
       <motion.div
-        className="shadow-lg rounded-xl"
-        style={{ marginRight: md ? marginRight : 'auto' }}
+        className="shadow-xl sm:rounded-xl min-w-full max-w-full demo-sm:min-w-0 demo-sm:max-w-none"
+        style={{ width: useTransform(x, (x) => x + MIN_WIDTH) }}
       >
-        <div className="rounded-xl ring-1 ring-black ring-opacity-5">
-          <div
-            className="py-2 grid items-center gap-6 px-4 rounded-tr-xl sm:rounded-t-xl bg-gradient-to-b from-gray-50 to-gray-100"
-            style={{ gridTemplateColumns: '1fr minmax(min-content, 640px) 1fr' }}
-          >
-            <div className="flex space-x-1.5">
-              <div className="w-3 h-3 rounded-full bg-gray-300" />
-              <div className="w-3 h-3 rounded-full bg-gray-300" />
-              <div className="w-3 h-3 rounded-full bg-gray-300" />
+        <div className="sm:rounded-xl ring-1 ring-gray-900/5">
+          <div className="sm:rounded-t-xl bg-gradient-to-b from-white to-[#FBFBFB]">
+            <div
+              className={clsx(
+                'py-2.5 grid items-center px-4',
+                size === undefined ? 'gap-6' : 'gap-8'
+              )}
+              style={{
+                gridTemplateColumns:
+                  size === undefined ? '2.625rem 1fr 2.625rem' : '7.125rem 1fr 7.125rem',
+              }}
+            >
+              <div className="flex items-center">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#EC6A5F]" />
+                <div className="ml-1.5 w-2.5 h-2.5 rounded-full bg-[#F4BF50]" />
+                <div className="ml-1.5 w-2.5 h-2.5 rounded-full bg-[#61C454]" />
+                {size !== undefined && (
+                  <>
+                    <svg
+                      width="24"
+                      height="24"
+                      fill="none"
+                      className="ml-4 flex-none text-gray-400"
+                    >
+                      <path
+                        d="m15 7-5 5 5 5"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <svg
+                      width="24"
+                      height="24"
+                      fill="none"
+                      className="ml-2 flex-none text-gray-400"
+                    >
+                      <path
+                        d="m10 7 5 5-5 5"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </>
+                )}
+              </div>
+              <div>
+                <div className="bg-gray-100 rounded-md font-medium text-xs leading-6 py-1 flex items-center justify-center ring-1 ring-inset ring-gray-900/5 mx-auto w-4/5">
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="text-gray-300 w-3.5 h-3.5 mr-1.5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  workcation.com
+                </div>
+              </div>
+              {size !== undefined && (
+                <div className="flex justify-end">
+                  <svg width="24" height="24" fill="none" className="text-gray-400">
+                    <path
+                      d="M12.5 6a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM12.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM18.5 6a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM18.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM6.5 6a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM6.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM12.5 18a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM18.5 18a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM6.5 18a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              )}
             </div>
-            <div className="border border-black border-opacity-5 rounded-md overflow-hidden shadow-sm">
-              <div className="bg-gradient-to-b from-white to-gray-50 text-sm py-1.5 text-center">
-                workcation.com
+            <div className="grid grid-cols-3 text-xs leading-5 overflow-hidden">
+              <div className="bg-gray-100 text-gray-400 rounded-tr border border-gray-900/5 px-4 py-1.5 -mb-px -ml-px flex items-center justify-center space-x-2">
+                <svg width="17" height="10" fill="currentColor" className="flex-none text-gray-300">
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M8.5 0C6.233 0 4.817 1.111 4.25 3.334c.85-1.112 1.842-1.528 2.975-1.25.647.158 1.109.618 1.62 1.127C9.68 4.041 10.643 5 12.75 5c2.267 0 3.683-1.111 4.25-3.333-.85 1.111-1.841 1.528-2.975 1.25-.647-.159-1.109-.619-1.62-1.128C11.57.96 10.607 0 8.5 0ZM4.25 5C1.983 5 .567 6.111 0 8.334c.85-1.112 1.842-1.528 2.975-1.25.647.158 1.109.618 1.62 1.127C5.43 9.041 6.393 10 8.5 10c2.267 0 3.684-1.11 4.25-3.333-.85 1.111-1.842 1.528-2.975 1.25-.647-.159-1.109-.619-1.62-1.128C7.32 5.96 6.357 5 4.25 5Z"
+                  />
+                </svg>
+                <div className="truncate">Tailwind UI - Official Tailwind CSS Components</div>
+              </div>
+              <div className="text-gray-900 font-medium px-4 py-1.5 flex items-center justify-center space-x-2">
+                <svg
+                  width="15"
+                  height="14"
+                  fill="currentColor"
+                  className="flex-none text-indigo-600"
+                >
+                  <path d="M6.541 11.753a1.803 1.803 0 0 1-.485 1.277c-.241.253-.552.426-.89.497-.34.07-.691.034-1.01-.103a1.736 1.736 0 0 1-.776-.67 1.79 1.79 0 0 1-.272-1c.004-.306.086-.604.239-.866.152-.262.37-.48.63-.628-.01.047.039-.024 0 0l.797-.723a3.759 3.759 0 0 0 .988-2.535c0-1.28-.734-2.581-1.788-3.262.04.024-.015-.041 0 0a1.72 1.72 0 0 1-.63-.628 1.766 1.766 0 0 1-.238-.865A1.802 1.802 0 0 1 3.592.97c.24-.253.55-.426.89-.496.338-.07.69-.035 1.008.102.319.139.59.372.776.67.187.298.282.647.272 1a3.77 3.77 0 0 0 1.006 2.552l.35.35c.14.125.287.241.44.35.265.143.489.36.644.625a1.73 1.73 0 0 1-.645 2.381c.015-.03-.027.016 0 0a3.89 3.89 0 0 0-1.296 1.393 4.007 4.007 0 0 0-.496 1.856Zm1.921-9.512c0 .348.101.69.29.979.188.29.457.515.77.648a1.678 1.678 0 0 0 1.872-.382 1.803 1.803 0 0 0 .372-1.919 1.752 1.752 0 0 0-.632-.79 1.685 1.685 0 0 0-2.168.22c-.322.33-.503.778-.504 1.244Zm1.718 7.751c-.34 0-.672.104-.954.297a1.752 1.752 0 0 0-.633.79A1.802 1.802 0 0 0 8.966 13a1.679 1.679 0 0 0 1.871.382c.314-.134.582-.36.77-.65a1.796 1.796 0 0 0-.214-2.223 1.684 1.684 0 0 0-1.214-.516Zm4.393-2.995c0-.348-.1-.688-.29-.978a1.727 1.727 0 0 0-.77-.649 1.677 1.677 0 0 0-.993-.1 1.7 1.7 0 0 0-.878.482 1.803 1.803 0 0 0-.373 1.92c.13.32.35.596.633.79a1.684 1.684 0 0 0 2.167-.22c.323-.331.504-.779.504-1.245Z" />
+                  <path d="M2.147 5.237c-.34 0-.672.103-.954.296a1.753 1.753 0 0 0-.633.79 1.803 1.803 0 0 0 .373 1.92c.24.245.545.413.878.48.333.069.679.034.993-.099.314-.133.582-.359.77-.648a1.795 1.795 0 0 0-.214-2.223 1.714 1.714 0 0 0-1.213-.516Z" />
+                </svg>
+                <div className="truncate">Workcation - Find a trip that suits you</div>
+              </div>
+              <div className="bg-gray-100 text-gray-400 rounded-tl border border-gray-900/5 pl-4 pr-8 py-1.5 -mb-px -mr-4 flex items-center justify-center space-x-2">
+                <svg width="15" height="16" fill="currentColor" className="flex-none text-gray-300">
+                  <path d="m2.973 9.822 9.154-3.056c-.183-1.144-.314-1.908-.465-2.491-.162-.627-.291-.795-.342-.853a1.785 1.785 0 0 0-.643-.467c-.071-.03-.27-.102-.917-.063-.684.042-1.581.181-3.003.406-1.42.225-2.318.37-2.98.542-.627.162-.796.292-.854.342a1.792 1.792 0 0 0-.466.643c-.03.071-.102.271-.063.918.041.683.181 1.581.406 3.002.063.399.12.755.173 1.077Z" />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M.447 9.117C.012 6.367-.206 4.993.265 3.89a4.166 4.166 0 0 1 1.09-1.5C2.26 1.6 3.633 1.382 6.382.946c2.75-.436 4.125-.653 5.229-.182a4.164 4.164 0 0 1 1.5 1.09c.79.904 1.007 2.278 1.442 5.028.436 2.75.653 4.124.182 5.227a4.164 4.164 0 0 1-1.09 1.5c-.903.79-2.278 1.008-5.028 1.443-2.749.436-4.124.653-5.227.182a4.166 4.166 0 0 1-1.5-1.09C1.1 13.241.883 11.867.447 9.117Zm4.85 4.882c.735-.044 1.684-.193 3.087-.415 1.404-.222 2.351-.374 3.066-.56.691-.179 1.01-.354 1.216-.534a2.68 2.68 0 0 0 .7-.964c.108-.252.176-.609.133-1.322-.045-.736-.193-1.685-.416-3.088-.222-1.404-.373-2.352-.559-3.066-.18-.692-.354-1.01-.534-1.216a2.678 2.678 0 0 0-.964-.7c-.252-.108-.609-.176-1.323-.133-.736.044-1.684.193-3.088.415-1.403.223-2.35.374-3.065.56-.692.179-1.01.354-1.216.534a2.678 2.678 0 0 0-.7.964c-.108.251-.176.609-.133 1.322.045.737.193 1.685.415 3.088.223 1.404.374 2.352.56 3.066.179.692.354 1.01.534 1.216.265.303.594.543.964.7.252.109.608.176 1.323.133Z"
+                  />
+                </svg>
+                <div className="truncate">
+                  Headless UI – Unstyled, fully accessible UI components
+                </div>
               </div>
             </div>
           </div>
           <div className="relative bg-white border-t border-gray-200 rounded-b-xl pb-8 -mb-8">
-            <div
-              className="overflow-auto"
-              style={{ height }}
-              dangerouslySetInnerHTML={{
-                __html: html
-                  .replace(/\{([^}]+)\}/g, (_, name) => classNames[size][name] || '')
-                  .replace(/src="([^"]+)"/g, (_, src) => `src="${images[src]}" loading="lazy"`)
-                  .replace(/<button type="button"/g, '<div class="cursor-pointer inline-flex"><div')
-                  .replace(/<\/button>/g, '</div></div>'),
-              }}
-            ></div>
+            <motion.iframe
+              ref={iframeRef}
+              src="/examples/mobile-first-demo"
+              title="Mobile-first Demo"
+              className="w-full h-[30.625rem]"
+              style={{ pointerEvents: iframePointerEvents }}
+            />
           </div>
         </div>
       </motion.div>
       <div
         ref={constraintsRef}
-        className="absolute bottom-0 pointer-events-none"
+        className="absolute inset-y-0 pointer-events-none"
         style={{
-          top: `${50 / 16}rem`,
-          right: `-${HANDLE_RADIUS}rem`,
-          width: `calc(100% - ${MIN_WIDTH}px + ${HANDLE_RADIUS}rem + ${HANDLE_RADIUS}rem - 2px)`,
+          right: `-${22 / 16}rem`,
+          width: `calc(100% - ${MIN_WIDTH}px + ${22 / 16}rem)`,
         }}
       >
         <motion.div
+          ref={handleRef}
           drag="x"
           _dragX={x}
           dragMomentum={false}
-          dragElastic={0.08}
+          dragElastic={0}
           dragConstraints={constraintsRef}
-          className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg hidden md:flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-violet-500 focus-visible:ring-white"
-          style={{
-            x,
-            width: `${HANDLE_RADIUS * 2}rem`,
-            height: `${HANDLE_RADIUS * 2}rem`,
-            marginTop: `-${HANDLE_RADIUS}rem`,
+          className="absolute z-10 top-1/2 left-0 p-2 -mt-6 hidden demo-sm:flex items-center justify-center pointer-events-auto cursor-ew-resize"
+          style={{ x }}
+          onDragStart={() => {
+            document.documentElement.classList.add('dragging-ew')
+            iframePointerEvents.set('none')
           }}
-          onDragStart={() => document.body.classList.add('cursor-grabbing')}
-          onDragEnd={() => document.body.classList.remove('cursor-grabbing')}
+          onDragEnd={() => {
+            document.documentElement.classList.remove('dragging-ew')
+            iframePointerEvents.set('auto')
+          }}
         >
-          <svg width="40" height="40" fill="none">
-            <path
-              d="M26.665 13.333L33.332 20l-6.667 6.667m-13.333 0L6.665 20l6.667-6.667"
-              stroke="#fff"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <div className="w-1.5 h-8 bg-gray-500/60 rounded-full" />
         </motion.div>
       </div>
     </div>
   )
 }
 
+function Marker({ label, active, className }) {
+  return (
+    <div className={clsx('flex items-start flex-none', className)}>
+      <div className="flex flex-col items-center ml-[-2px]">
+        <div className={clsx('w-px h-14', active ? 'bg-indigo-600' : 'bg-gray-100')} />
+        <div
+          className={clsx(
+            'mt-[3px] w-[5px] h-[5px] shadow-sm rounded-full ring-1',
+            active ? 'bg-indigo-600 ring-indigo-600' : 'bg-white ring-gray-500/[0.15]'
+          )}
+        />
+      </div>
+      <div
+        className={clsx(
+          'ml-1.5 rounded font-mono text-[0.625rem] leading-6 px-1.5 ring-1 ring-inset',
+          active ? 'bg-indigo-50 text-indigo-600 ring-indigo-600' : 'bg-gray-100 ring-gray-100'
+        )}
+      >
+        {label}
+      </div>
+    </div>
+  )
+}
+
 export function MobileFirst() {
-  const [size, setSize] = useState('lg')
+  let [size, setSize] = useState()
 
   return (
-    <section id="mobile-first">
-      <div className="px-4 sm:px-6 md:px-8 mb-10 sm:mb-16 md:mb-20">
-        <IconContainer className={`${gradients.violet[0]} mb-8`}>
-          <Icon />
+    <section id="mobile-first" className="overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        <IconContainer>
+          <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption as="h2" className="text-violet-600 mb-3">
-          Mobile-first
-        </Caption>
-        <BigText className="mb-8">Responsive everything.</BigText>
-        <Paragraph as="div" className="mb-6">
+        <Caption className="text-indigo-500">Mobile-first</Caption>
+        <BigText>Responsive everything.</BigText>
+        <Paragraph as="div">
           <p>
             Wrestling with a bunch of complex media queries in your CSS sucks, so Tailwind lets you
             build responsive designs right in your HTML instead.
@@ -282,45 +262,61 @@ export function MobileFirst() {
             at a specific breakpoint.
           </p>
         </Paragraph>
-        <Link href="/docs/responsive-design" className="text-violet-600 hover:text-violet-800">
-          Learn more -&gt;
+        <Link href="/docs/responsive-design" color="indigo">
+          Learn more<span className="sr-only">, responsive design</span>
         </Link>
       </div>
-      <GradientLockup
-        color="violet"
-        rotate={2}
+      <div className="hidden mt-16 mb-12 border-b border-gray-100 xl:mb-0 demo-sm:block">
+        <div className="mb-[-3px] flex max-w-7xl mx-auto px-6 sm:px-8 md:px-10">
+          <Marker label="sm" active={size !== undefined} className="ml-[40rem] w-32" />
+          <Marker label="md" active={size === 'md' || size === 'lg'} className="w-64" />
+          <Marker label="lg" active={size === 'lg'} className="w-64" />
+          <Marker label="xl" className="w-64" />
+          <Marker label="2xl" />
+        </div>
+      </div>
+      <GridLockup
+        className="mt-10 demo-sm:-mt-2.5"
+        overhang="md"
+        beams={0}
         left={
           <>
-            <div className="pr-8 sm:px-6 md:px-2 lg:px-0 max-w-screen-sm lg:max-w-3xl xl:max-w-5xl mx-auto">
+            <div className="sm:px-2 demo-sm:-mt-24 xl:mt-0">
               <BrowserWindow size={size} onChange={setSize} />
             </div>
-            <CodeWindow className={`bg-indigo-500 ${styles.code}`}>
+            <CodeWindow className="!max-h-[24.75rem] lg:!h-[24.75rem]">
               <CodeWindow.Code2 lines={lines.length}>
                 {lines.map((tokens, lineIndex) => (
                   <div key={lineIndex}>
                     {tokens.map((token, tokenIndex) => {
-                      if (
-                        token.types[token.types.length - 1] === 'class' &&
-                        (token.content.startsWith('sm:') || token.content.startsWith('md:'))
-                      ) {
-                        const faded =
-                          size === 'sm' || (size !== 'lg' && token.content.startsWith('md:'))
-                        const highlighted =
-                          (size === 'md' && token.content.startsWith('sm:')) ||
-                          (size === 'lg' && token.content.startsWith('md:'))
+                      if (token.types[token.types.length - 1] === 'class') {
+                        let isSm = token.content.startsWith('sm:')
+                        let isMd = token.content.startsWith('md:')
+                        let isLg = token.content.startsWith('lg:')
 
-                        return (
-                          <span
-                            key={tokenIndex}
-                            className={clsx(
-                              'code-highlight transition duration-500',
-                              getClassNameForToken(token),
-                              { 'opacity-50': faded, 'bg-code-highlight': highlighted }
-                            )}
-                          >
-                            {token.content}
-                          </span>
-                        )
+                        if (isSm || isMd || isLg) {
+                          let faded =
+                            size === undefined ||
+                            (size === 'sm' && (isMd || isLg)) ||
+                            (size === 'md' && isLg)
+                          let highlighted =
+                            (size === 'sm' && isSm) ||
+                            (size === 'md' && isMd) ||
+                            (size === 'lg' && isLg)
+
+                          return (
+                            <span
+                              key={tokenIndex}
+                              className={clsx(
+                                'code-highlight transition duration-500',
+                                getClassNameForToken(token),
+                                { 'opacity-50': faded, 'bg-code-highlight': highlighted }
+                              )}
+                            >
+                              {token.content}
+                            </span>
+                          )
+                        }
                       }
                       return (
                         <span key={tokenIndex} className={getClassNameForToken(token)}>

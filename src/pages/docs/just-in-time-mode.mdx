@@ -2,7 +2,6 @@
 title: Just-in-Time Mode
 shortTitle: Just-in-Time Mode
 description: A faster, more powerful, on-demand engine for Tailwind CSS v2.1+.
-featureVersion: 'v2.1+'
 ---
 import { Heading } from '@/components/Heading'
 import { TipGood, TipBad, TipInfo } from '@/components/Tip'
@@ -42,8 +41,7 @@ To see it in action, [watch our announcement video](https://www.youtube.com/watc
 
 To enable just-in-time mode, set the `mode` option to `'jit'` in your `tailwind.config.js` file:
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
 +   mode: 'jit',
     purge: [
@@ -58,8 +56,7 @@ To enable just-in-time mode, set the `mode` option to `'jit'` in your `tailwind.
 
 Since JIT mode generates your CSS on-demand by scanning your template files, it's crucial that you configure the `purge` option in your `tailwind.config.js` file with all of your template paths, otherwise your CSS will be empty:
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     mode: 'jit',
 +   // These paths are just examples, customize them to match your project structure
@@ -127,13 +124,13 @@ Note that you still need to [write purgeable HTML](https://tailwindcss.com/docs/
 
 <TipBad>Don't use string concatenation to create class names</TipBad>
 
-```jsx mt-4
+```jsx
 <div className={`mt-[${size === 'lg' ? '22px' : '17px' }]`}></div>
 ```
 
 <TipGood>Do dynamically select a complete class name</TipGood>
 
-```jsx mt-4
+```jsx
 <div className={ size === 'lg' ? 'mt-[22px]' : 'mt-[17px]' }></div>
 ```
 
@@ -141,13 +138,13 @@ Tailwind doesn't include any sort of client-side runtime, so class names need to
 
 <TipBad>Arbitrary values cannot be computed from dynamic values</TipBad>
 
-```html mt-4
+```html
 <div class="bg-[{{ userThemeColor }}]"></div>
 ```
 
 <TipGood>Use inline styles for truly dynamic or user-defined values</TipGood>
 
-```html mt-4
+```html
 <div style="background-color: {{ userThemeColor }}"></div>
 ```
 
@@ -157,14 +154,14 @@ It's also important to note that CSS classes cannot contain spaces, which means 
 
 <TipBad>Don't use spaces in arbitrary values</TipBad>
 
-```html mt-4
+```html
 <div class="h-[calc(1000px - 4rem)]">...</div>
 <div class="grid-cols-[1fr 700px 2fr]">...</div>
 ```
 
 <TipGood>Remove spaces or replace with commas as appropriate</TipGood>
 
-```html mt-4
+```html
 <div class="h-[calc(1000px-4rem)]">...</div>
 <div class="grid-cols-[1fr,700px,2fr]">...</div>
 ```
@@ -398,8 +395,7 @@ In the JIT engine, variants are grouped together _per variant_:
 
 This means that it's not possible to specify the variant order per core plugin anymore — the variants will always be in the same order for all utilities. This could be a problem for you if previously you needed `hover` to defeat `focus` for a specific utility for example and had ensured `hover` came after `focus` in the variant list.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports {
     // Variant configuration (including order) is not respected by the JIT engine
 -   variants: {
@@ -530,8 +526,7 @@ Many build tools (such as webpack) don't support this option, and as a result we
 That means that if building your CSS causes _any_ files in those directories to change, a rebuild will be triggered, even if the changed file doesn't match the extension in your glob.
 
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   purge: [
     // Your CSS will rebuild any time *any* file in `src` changes

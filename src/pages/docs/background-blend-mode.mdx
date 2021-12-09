@@ -1,18 +1,19 @@
 ---
 title: "Background Blend Mode"
 description: "Utilities for controlling how an element's background image should blend with its background color."
-featureVersion: 'v2.1+'
 ---
 
-import plugin from 'tailwindcss/lib/plugins/backgroundBlendMode'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=backgroundBlendMode'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
 
-Use the `bg-blend-{mode}` utilities to control how an element's background image should be blended its background color.
+### Setting the background blend mode
+
+Use the `bg-blend-{mode}` utilities to control how an element's background image(s) should blend with its background color.
 
 ```html
 <div class="bg-blend-multiply ...">
@@ -20,24 +21,14 @@ Use the `bg-blend-{mode}` utilities to control how an element's background image
 </div>
 ```
 
-## Responsive
+---
 
-To control the background-blend-mode property at a specific breakpoint, add a `{screen}:` prefix to any existing background-blend-mode utility. For example, use `md:bg-blend-darken` to apply the `bg-blend-darken` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<div class="bg-blend-lighten **md:bg-blend-darken** ...">
-  <!-- ... -->
-</div>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="bg-blend-lighten" featuredClass="bg-blend-darken" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Variants
-
-<Variants plugin="backgroundBlendMode" name="background-blend-mode" />
-
-### Disabling
-
-<Disabling plugin="backgroundBlendMode" name="background-blend-mode" />
+<BreakpointsAndMediaQueries defaultClass="bg-blend-lighten" featuredClass="bg-blend-darken" />

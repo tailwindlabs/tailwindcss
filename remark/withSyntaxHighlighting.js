@@ -1,35 +1,37 @@
-const visit = require('unist-util-visit')
-const { highlightCode } = require('./utils')
-
-const colors = {
-  amber: 'bg-amber-500',
-  emerald: 'bg-emerald-500',
-  fuchsia: 'bg-fuchsia-400',
-  indigo: 'bg-indigo-400',
-  lightBlue: 'bg-light-blue-500',
-  purple: 'bg-purple-400',
-  rose: 'bg-rose-400',
-}
+const { highlightCode, addImport } = require('./utils')
 
 module.exports.withSyntaxHighlighting = () => {
   return (tree) => {
-    visit(tree, 'code', (node) => {
-      if (node.lang !== null) {
-        node.type = 'html'
-        node.value = [
-          `<div class="my-6 rounded-xl overflow-hidden ${colors[node.meta] || 'bg-gray-800'}">`,
-          `<pre class="language-${node.lang} ${
-            colors[node.meta] ? 'bg-black bg-opacity-75' : ''
-          }">`,
-          `<code class="language-${node.lang}">`,
-          highlightCode(node.value, node.lang),
-          '</code>',
-          '</pre>',
-          '</div>',
+    let preTree = { children: [] }
+    let componentName
+    tree.children = tree.children.flatMap((node) => {
+      if (node.type !== 'code') return node
+      if (node.lang === null) return node
+
+      node.type = 'html'
+      node.value = [
+        `<pre class="language-${node.lang}">`,
+        `<code class="language-${node.lang}">`,
+        highlightCode(node.value, node.lang),
+        '</code>',
+        '</pre>',
+      ]
+        .filter(Boolean)
+        .join('')
+
+      if (node.meta) {
+        if (!componentName) {
+          componentName = addImport(preTree, '@/components/Editor', 'Editor')
+        }
+        return [
+          { type: 'jsx', value: `<${componentName} filename="${node.meta}">` },
+          node,
+          { type: 'jsx', value: `</${componentName}>` },
         ]
-          .filter(Boolean)
-          .join('')
       }
+
+      return node
     })
+    tree.children = [...preTree.children, ...tree.children]
   }
 }

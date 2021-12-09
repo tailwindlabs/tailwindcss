@@ -3,158 +3,172 @@ title: "Top / Right / Bottom / Left"
 description: "Utilities for controlling the placement of positioned elements."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/inset'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=inset'
 import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
-  sort: numbersFirst,
+  utilities,
+  sort: (classes) => numbersFirst(classes),
 }
 
-## Usage
+## Basic usage
+
+### Placing a positioned element
 
 Use the `{top|right|bottom|left|inset}-0` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
 
 Combined with Tailwind's padding and margin utilities, you'll probably find that these are all you need to precisely control absolutely positioned elements.
 
-```html emerald
-<template preview>
-  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute inset-x-0 top-0 h-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">1</div>
+<Example>
+  <div class="grid grid-cols-3 grid-rows-3 place-items-center gap-4 font-mono text-white text-sm font-bold leading-6">
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 w-14 h-14 absolute left-0 top-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">01</div>
     </div>
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute inset-y-0 right-0 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">2</div>
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 absolute inset-x-0 top-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">02</div>
     </div>
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute inset-x-0 bottom-0 h-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">3</div>
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 w-14 h-14 absolute right-0 top-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">03</div>
     </div>
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute inset-y-0 left-0 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">4</div>
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 w-14 absolute inset-y-0 left-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">04</div>
     </div>
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute inset-0 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">5</div>
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 absolute inset-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">05</div>
     </div>
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute left-0 top-0 h-16 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">6</div>
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 w-14 absolute inset-y-0 right-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">06</div>
     </div>
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute top-0 right-0 h-16 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">7</div>
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 w-14 h-14 absolute left-0 bottom-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">07</div>
     </div>
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute right-0 bottom-0 h-16 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">8</div>
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 absolute inset-x-0 bottom-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">08</div>
     </div>
-    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
-      <div class="absolute bottom-0 left-0 h-16 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">9</div>
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 w-14 h-14 absolute right-0 bottom-0 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg">09</div>
     </div>
   </div>
-</template>
+</Example>
+
+```html
+<!-- Pin to top left corner -->
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **left-0 top-0** h-16 w-16 ...">01</div>
+</div>
 
 <!-- Span top edge -->
 <div class="relative h-32 w-32 ...">
-  <div class="absolute **inset-x-0 top-0** h-16 ...">1</div>
-</div>
-
-<!-- Span right edge -->
-<div class="relative h-32 w-32 ...">
-  <div class="absolute **inset-y-0 right-0** w-16 ...">2</div>
-</div>
-
-<!-- Span bottom edge -->
-<div class="relative h-32 w-32 ...">
-  <div class="absolute **inset-x-0 bottom-0** h-16 ...">3</div>
-</div>
-
-<!-- Span left edge -->
-<div class="relative h-32 w-32 ...">
-  <div class="absolute **inset-y-0 left-0** w-16 ...">4</div>
-</div>
-
-<!-- Fill entire parent -->
-<div class="relative h-32 w-32 ...">
-  <div class="absolute **inset-0** ...">5</div>
-</div>
-
-<!-- Pin to top left corner -->
-<div class="relative h-32 w-32 ...">
-  <div class="absolute **left-0 top-0** h-16 w-16 ...">6</div>
+  <div class="absolute **inset-x-0 top-0** h-16 ...">02</div>
 </div>
 
 <!-- Pin to top right corner -->
 <div class="relative h-32 w-32 ...">
-  <div class="absolute **top-0 right-0** h-16 w-16 ...">7</div>
+  <div class="absolute **top-0 right-0** h-16 w-16 ...">03</div>
 </div>
 
-<!-- Pin to bottom right corner -->
+<!-- Span left edge -->
 <div class="relative h-32 w-32 ...">
-  <div class="absolute **bottom-0 right-0** h-16 w-16 ...">8</div>
+  <div class="absolute **inset-y-0 left-0** w-16 ...">04</div>
+</div>
+
+<!-- Fill entire parent -->
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **inset-0** ...">05</div>
+</div>
+
+<!-- Span right edge -->
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **inset-y-0 right-0** w-16 ...">06</div>
 </div>
 
 <!-- Pin to bottom left corner -->
 <div class="relative h-32 w-32 ...">
-  <div class="absolute **bottom-0 left-0** h-16 w-16 ...">9</div>
+  <div class="absolute **bottom-0 left-0** h-16 w-16 ...">07</div>
+</div>
+
+<!-- Span bottom edge -->
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **inset-x-0 bottom-0** h-16 ...">08</div>
+</div>
+
+<!-- Pin to bottom right corner -->
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **bottom-0 right-0** h-16 w-16 ...">09</div>
 </div>
 ```
 
-## Responsive
+### Using negative values
 
-To position an element only at a specific breakpoint, add a `{screen}:` prefix to any existing positioning utility. For example, adding the class `md:inset-y-0` to an element would apply the `inset-y-0` utility at medium screen sizes and above.
+To use a negative top/right/bottom/left value, prefix the class name with a dash to convert it to a negative value.
+
+<Example>
+  <div class="flex justify-center font-mono text-white text-sm font-bold leading-6">
+    <div class="relative w-18 h-18 sm:w-32 sm:h-32 rounded-lg bg-stripes-purple">
+      <div class="p-4 w-14 h-14 absolute -left-4 -top-4 flex items-center justify-center bg-purple-500 shadow-lg rounded-lg"></div>
+    </div>
+  </div>
+</Example>
 
 ```html
-<div class="relative h-32 ...">
-  <div class="absolute inset-0 **md:inset-y-0** ..."></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute h-14 w-14 **-left-4 -top-4** ..."></div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Top / Right / Bottom / Left scale
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-By default, Tailwind provides top/right/bottom/left/inset utilities for a combination of the [default spacing scale](/docs/customizing-spacing#default-spacing-scale), `auto`, `full` as well as some additional fraction values. 
+<HoverFocusAndOtherStates defaultClass="top-4" featuredClass="top-6" />
 
-You can change, add, or remove these by editing the `theme.inset` section of your `tailwind.config.js` file.
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
-      inset: {
-        '0': 0,
-        // ...
--       '64': '16rem',
-+       '1/5': '20%',
-      }
-    }
-  }
-```
+<BreakpointsAndMediaQueries defaultClass="top-4" featuredClass="top-6" />
 
-### Negative values
+---
 
-If you'd like to add any negative top/right/bottom/left classes that take the same form as Tailwind's [negative margin](/docs/margin#negative-margins) classes, prefix the keys in your config file with a dash:
+## Using custom values
 
-```diff-js
-  // tailwind.config.js
+### Customizing your theme
+
+By default, Tailwind provides top/right/bottom/left/inset utilities for a combination of the [default spacing scale](/docs/customizing-spacing#default-spacing-scale), `auto`, `full` as well as some additional fraction values.
+
+You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        inset: {
-+         '-16': '-4rem',
-        }
++       spacing: {
++         '3px': '3px',
++       }
       }
     }
   }
 ```
 
-Tailwind is smart enough to generate classes like `-top-16` when it sees the leading dash, not `top--16` like you might expect.
+Alternatively, you can customize just the top/right/bottom/left/inset scale by editing `theme.inset` or `theme.extend.inset` in your `tailwind.config.js` file.
 
-### Variants
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       inset: {
++         '3px': '3px',
++       }
+      }
+    }
+  }
+```
 
-<Variants plugin="inset" name="top, right, bottom, left, and inset" />
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Disabling
+### Arbitrary values
 
-<Disabling plugin="inset" name="top, right, bottom, left, and inset" />
+<ArbitraryValues property="top/right/bottom/left" featuredClass="top-[3px]" />

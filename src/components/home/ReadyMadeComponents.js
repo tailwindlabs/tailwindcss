@@ -1,122 +1,87 @@
 import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
-import { GradientLockup } from '@/components/GradientLockup'
-import { gradients } from '@/utils/gradients'
-import { ReactComponent as Icon } from '@/img/icons/home/ready-made-components.svg'
+import iconUrl from '@/img/icons/home/ready-made-components.png'
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
+import { GridLockup } from '../GridLockup'
 
-function AnimatedImage({ initial = {}, inView, ...props }) {
+function AnimatedImage({ animate = false, delay = 0, ...props }) {
   return (
     <motion.img
       initial={false}
-      animate={inView ? { opacity: 1, y: 0, x: 0 } : { opacity: 0, ...initial }}
-      transition={{ duration: 1 }}
+      animate={animate ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.5, delay }}
+      alt=""
       {...props}
     />
   )
 }
+
+const w = 1213
+const h = 675
+
+const getStyle = (x, y, width) => ({
+  top: `${(y / h) * 100}%`,
+  left: `${(x / w) * 100}%`,
+  width: `${(width / w) * 100}%`,
+})
+
+const images = [
+  { src: require('@/img/tailwindui/0.png').default, x: 27, y: 24, width: 236 },
+  { src: require('@/img/tailwindui/1.png').default, x: 287, y: 0, width: 567 },
+  { src: require('@/img/tailwindui/2.png').default, x: 878, y: 47, width: 308 },
+  { src: require('@/img/tailwindui/3.jpg').default, x: 0, y: 289, width: 472 },
+  { src: require('@/img/tailwindui/4.jpg').default, x: 496, y: 289, width: 441 },
+  { src: require('@/img/tailwindui/5.png').default, x: 961, y: 289, width: 252 },
+]
 
 export function ReadyMadeComponents() {
   const { ref: inViewRef, inView } = useInView({ threshold: 0.5, triggerOnce: true })
 
   return (
     <section id="ready-made-components">
-      <div className="px-4 sm:px-6 md:px-8 mb-10 sm:mb-16 md:mb-20">
-        <IconContainer className={`${gradients.violet[0]} mb-8`}>
-          <Icon />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        <IconContainer>
+          <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption as="h2" className="text-violet-600 mb-3">
-          Ready-made components
-        </Caption>
-        <BigText className="mb-8">
+        <Caption className="text-indigo-500">Ready-made components</Caption>
+        <BigText>
           <Widont>Move even faster with Tailwind UI.</Widont>
         </BigText>
-        <Paragraph className="mb-6">
+        <Paragraph>
           Tailwind UI is a collection of beautiful, fully responsive UI components, designed and
           developed by us, the creators of Tailwind CSS. It's got hundreds of ready-to-use examples
           to choose from, and is guaranteed to help you find the perfect starting point for what you
           want to build.
         </Paragraph>
-        <Link href="https://tailwindui.com/" className="text-violet-600 hover:text-violet-800">
-          Learn more -&gt;
+        <Link href="https://tailwindui.com/" color="indigo">
+          Learn more
         </Link>
       </div>
-      <GradientLockup
-        color="violet"
-        rotate={-2}
+      <GridLockup
+        className="mt-10"
+        beams={0}
+        overhang="lg"
+        leftProps={{
+          style: {
+            maskImage: 'linear-gradient(to bottom, white, white, transparent)',
+            WebkitMaskImage: 'linear-gradient(to bottom, white, white, transparent)',
+          },
+        }}
         left={
-          <div className="-mx-8" ref={inViewRef}>
-            <div className="relative" style={{ paddingTop: `${(1811 / 3771) * 100}%` }}>
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 3771 1811" fill="none">
-                <defs>
-                  <clipPath id="foo">
-                    <rect x="2028" y="1214" width="256" height="500" rx="8" />
-                    <rect x="1716" y="1030" width="280" height="535" rx="8" />
-                    <rect x="1716" y="934" width="1276" height="64" rx="8" />
-                    <rect x="2028" y="1030" width="380" height="152" rx="8" />
-                    <rect x="2428" y="1030" width="380" height="152" rx="8" />
-                    <rect x="2828" y="1030" width="380" height="152" rx="8" />
-                    <rect x="799" y="307" width="885" height="595" rx="8" />
-                    <rect x="244" y="934" width="1440" height="778" rx="8" />
-                    <rect x="2808" y="1214" width="880" height="361" rx="8" />
-                    <rect x="1716" y="449" width="1440" height="453" rx="8" />
-                  </clipPath>
-                </defs>
-                <image
-                  clipPath="url(#foo)"
-                  xlinkHref={require('@/img/tailwindui.jpg').default}
-                  width="3771"
-                  height="1811"
-                />
-              </svg>
-              <AnimatedImage
-                src={require('@/img/tailwindui-table.png').default}
-                alt=""
-                className="absolute shadow-2xl rounded-md"
-                style={{
-                  top: 0,
-                  left: `${(1356 / 3771) * 100}%`,
-                  width: `${(1410 / 3771) * 100}%`,
-                }}
-                initial={{ y: '-20%' }}
-                inView={inView}
-              />
-              <AnimatedImage
-                src={require('@/img/tailwindui-workcation.png').default}
-                alt=""
-                className="absolute shadow-2xl rounded-md"
-                style={{
-                  right: 0,
-                  top: `${(377 / 1811) * 100}%`,
-                  width: `${(819 / 3771) * 100}%`,
-                }}
-                initial={{ x: '10%' }}
-                inView={inView}
-              />
-              <AnimatedImage
-                src={require('@/img/tailwindui-form.png').default}
-                alt=""
-                className="absolute shadow-2xl rounded-md"
-                style={{
-                  bottom: 0,
-                  left: `${(2300 / 3771) * 100}%`,
-                  width: `${(690 / 3771) * 100}%`,
-                }}
-                initial={{ y: '15%' }}
-                inView={inView}
-              />
-              <AnimatedImage
-                src={require('@/img/tailwindui-projects.png').default}
-                alt=""
-                className="absolute shadow-2xl rounded-md"
-                style={{
-                  left: 0,
-                  top: `${(462 / 1811) * 100}%`,
-                  width: `${(1057 / 3771) * 100}%`,
-                }}
-                initial={{ x: '-10%' }}
-                inView={inView}
-              />
+          <div ref={inViewRef} className="flex justify-center">
+            <div className="w-[216%] ml-[28%] flex-none sm:w-[76rem] sm:ml-0">
+              <div className="relative" style={{ paddingTop: `${(h / w) * 100}%` }}>
+                {images.map(({ src, x, y, width }, index) => (
+                  <AnimatedImage
+                    key={src}
+                    animate={inView}
+                    delay={index * 0.2}
+                    src={src}
+                    className="absolute shadow-xl rounded-lg"
+                    style={getStyle(x, y, width)}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         }

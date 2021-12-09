@@ -1,204 +1,173 @@
 ---
 title: "Margin"
 description: "Utilities for controlling an element's margin."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/margin'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
-import { numbersFirstByPrefix } from '@/utils/sortClasses'
+import utilities from 'utilities?plugin=margin'
+import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
-  sort: numbersFirstByPrefix,
+  utilities,
+  sort: (classes) => numbersFirst(classes),
 }
 
-## Add margin to a single side
+## Basic usage
+
+### Add margin to a single side
 
 Control the margin on one side of an element using the `m{t|r|b|l}-{size}` utilities.
 
 For example, `mt-6` would add `1.5rem` of margin to the top of an element, `mr-4` would add `1rem` of margin to the right of an element, `mb-8` would add `2rem` of margin to the bottom of an element, and `ml-2` would add `0.5rem` of margin to the left of an element.
 
-```html rose
-<template preview>
-  <div class="flex flex-wrap justify-around items-center text-white font-mono">
-
-    <div class="bg-stripes bg-stripes-rose-500 overflow-hidden m-2 sm:m-0">
-      <div class="mt-8 bg-rose-500 flex rounded-md items-center justify-center py-3 px-4">mt-8</div>
+<Example p="none">
+  <div class="relative font-mono text-white text-sm font-bold leading-6 h-56">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 md:-ml-24">
+      <div class="flow-root bg-stripes-purple rounded-b-lg">
+        <div class="bg-purple-500 rounded-lg shadow-lg p-4 mt-6">mt-6</div>
+      </div>
     </div>
-
-    <div class="bg-stripes bg-stripes-rose-500 overflow-hidden m-2 sm:m-0">
-      <div class="mr-8 bg-rose-500 flex rounded-md items-center justify-center py-3 px-4">mr-8</div>
+    <div class="absolute right-0 top-1/2 -translate-y-1/2">
+      <div class="flow-root bg-stripes-purple rounded-l-lg">
+        <div class="flex-none bg-purple-500 rounded-lg shadow-lg p-4 mr-4">mr-4</div>
+      </div>
     </div>
-
-    <div class="bg-stripes bg-stripes-rose-500 overflow-hidden m-2 sm:m-0">
-      <div class="mb-8 bg-rose-500 flex rounded-md items-center justify-center py-3 px-4">mb-8</div>
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 md:ml-24">
+      <div class="flow-root bg-stripes-purple rounded-t-lg">
+        <div class="bg-purple-500 rounded-lg shadow-lg p-4 mb-8">mb-8</div>
+      </div>
     </div>
-
-    <div class="bg-stripes bg-stripes-rose-500 overflow-hidden m-2 sm:m-0">
-      <div class="ml-8 bg-rose-500 flex rounded-md items-center justify-center py-3 px-4">ml-8</div>
+    <div class="absolute left-0 top-1/2 -translate-y-1/2">
+      <div class="flow-root bg-stripes-purple rounded-r-lg">
+        <div class="flex-none bg-purple-500 rounded-lg shadow-lg p-4 ml-2">ml-2</div>
+      </div>
     </div>
   </div>
-</template>
+</Example>
 
-<div class="**mt-8** ...">mt-8</div>
-<div class="**mr-8** ...">mr-8</div>
+```html
+<div class="**mt-6** ...">mt-6</div>
+<div class="**mr-4** ...">mr-4</div>
 <div class="**mb-8** ...">mb-8</div>
-<div class="**ml-8** ...">ml-8</div>
+<div class="**ml-2** ...">ml-2</div>
 ```
 
-## Add horizontal margin
+### Add horizontal margin
 
 Control the horizontal margin of an element using the `mx-{size}` utilities.
 
-```html purple
-<template preview>
-  <div class="flex justify-around items-center text-white font-mono">
-    <div class="bg-stripes bg-stripes-purple-500">
-      <div class="mx-8 bg-purple-500 rounded-md flex items-center justify-center py-3 px-4">mx-8</div>
+<Example>
+  <div class="flex justify-center font-mono text-white text-sm font-bold leading-6">
+    <div class="bg-stripes-indigo rounded-lg">
+      <div class="bg-indigo-500 rounded-lg shadow-lg p-4 mx-8">mx-8</div>
     </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**mx-8** ...">mx-8</div>
 ```
 
-## Add vertical margin
+### Add vertical margin
 
 Control the vertical margin of an element using the `my-{size}` utilities.
 
-```html emerald
-<template preview>
-  <div class="flex justify-around items-center text-white font-mono">
-    <div class="bg-stripes bg-stripes-emerald-500">
-      <div class="my-8 bg-emerald-500 rounded-md flex items-center justify-center py-3 px-4">my-8</div>
+<Example>
+  <div class="flex justify-center font-mono text-white text-sm font-bold leading-6">
+    <div class="flow-root bg-stripes-pink rounded-lg">
+      <div class="bg-pink-500 rounded-lg shadow-lg p-4 my-8">my-8</div>
     </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**my-8** ...">my-8</div>
 ```
 
-## Add margin to all sides
+### Add margin to all sides
 
 Control the margin on all sides of an element using the `m-{size}` utilities.
 
-```html lightBlue
-<template preview>
-  <div class="flex justify-around items-center text-white font-mono">
-    <div class="bg-stripes bg-stripes-light-blue-500">
-      <div class="m-8 bg-light-blue-500 rounded-md flex items-center justify-center py-3 px-4">m-8</div>
+<Example>
+  <div class="flex justify-center font-mono text-white text-sm font-bold leading-6">
+    <div class="flow-root bg-stripes-blue rounded-lg">
+      <div class="bg-blue-500 rounded-lg shadow-lg p-4 m-8">m-8</div>
     </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**m-8** ...">m-8</div>
 ```
 
-## Negative margins
+### Using negative values
 
-Control the negative margin of an element using the `-m{side?}-{size}` utilities.
+To use a negative margin value, prefix the class name with a dash to convert it to a negative value.
 
-```html fuchsia
-<template preview>
-  <div class="flex justify-around items-center text-white font-mono">
+<Example>
+  <div class="flex justify-center font-mono text-white text-sm font-bold leading-6">
     <div class="flex flex-col items-center">
-      <div class="relative w-32 h-16 bg-fuchsia-300 rounded-md overflow-hidden">
-        <div class="absolute bottom-0 w-full h-8 bg-stripes bg-stripes-red-900"></div>
-      </div>
-      <div class="relative -mt-8 bg-fuchsia-500 rounded-md flex items-center justify-center py-3 px-4">-mt-8</div>
+      <div class="relative w-36 h-16 bg-light-blue-400/20 border border-light-blue-700/10 rounded-md overflow-hidden"></div>
+      <div class="relative -mt-8 bg-light-blue-500 rounded-md flex items-center justify-center p-4 shadow-lg">-mt-8</div>
     </div>
   </div>
-</template>
-
-<div class="w-32 h-16 bg-fuchsia-300 ..."></div>
-<div class="**-mt-8** bg-fuchsia-500 ...">-mt-8</div>
-```
-
----
-
-## Responsive
-
-To control the margin of an element at a specific breakpoint, add a `{screen}:` prefix to any existing margin utility. For example, adding the class `md:my-8` to an element would apply the `my-8` utility at medium screen sizes and above.
+</Example>
 
 ```html
-<div class="mt-8 **md:my-8**">
-    <!-- ... -->
-</div>
+<div class="w-36 h-16 bg-light-blue-400 opacity-20 ..."></div>
+<div class="**-mt-8** bg-light-blue-300 ...">-mt-8</div>
 ```
-
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Margin scale
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-By default, Tailwind provides 20 margin utilities for each side and axis.
+<HoverFocusAndOtherStates defaultClass="mt-4" featuredClass="mt-8" />
 
-If you'd like to customize these values for padding, margin, width, and height all at once, use the `theme.spacing` section of your `tailwind.config.js` file.
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
-      spacing: {
-+       sm: '8px',
-+       md: '16px',
-+       lg: '24px',
-+       xl: '48px',
-      }
-    }
-  }
-```
+<BreakpointsAndMediaQueries defaultClass="mt-4" featuredClass="mt-8" />
 
-To customize only the margin values, use the `theme.margin` section of your `tailwind.config.js` file.
+---
 
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
-      margin: {
-+       sm: '8px',
-+       md: '16px',
-+       lg: '24px',
-+       xl: '48px',
-      }
-    }
-  }
-```
+## Using custom values
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+### Customizing your theme
 
-### Negative values
+By default, Tailwind's margin scale uses the [default spacing scale](/docs/customizing-spacing). You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
 
-If you'd like to add additional negative margin classes (taking the form `-m{side?}-{size}`), prefix the keys in your config file with a dash:
-
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        margin: {
-+         '-72': '-18rem',
-        }
++       spacing: {
++         '5px': '5px',
++       }
       }
     }
   }
 ```
 
-Tailwind is smart enough to generate classes like `-mx-72` when it sees the leading dash, not `mx--72` like you might expect.
+Alternatively, you can customize just the margin scale by editing `theme.margin` or `theme.extend.margin` in your `tailwind.config.js` file.
 
-### Variants
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       margin: {
++         '5px': '5px',
++       }
+      }
+    }
+  }
+```
 
-<Variants plugin="margin" />
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Disabling
+### Arbitrary values
 
-<Disabling plugin="margin" />
+<ArbitraryValues property="margin" featuredClass="m-[5px]" />

@@ -1,0 +1,82 @@
+---
+title: "Text Decoration Thickness"
+description: "Utilities for controlling the thickness of text decorations."
+---
+
+import utilities from 'utilities?plugin=textDecorationThickness'
+import { numbersLast } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = {
+  utilities,
+  sort: (classes) => numbersLast(classes),
+}
+
+## Basic usage
+
+### Setting the text decoration thickness
+
+Use the `decoration-{width}` utilities to change the thickness of an element's [text decoration](/docs/text-decoration).
+
+<Example>
+  <div class="flex flex-col gap-8 text-gray-900">
+    <div>
+      <div class="font-medium text-sm text-gray-500 font-mono mb-3">decoration-1</div>
+      <p class="text-lg font-medium underline decoration-gray-900 decoration-1">The quick brown fox jumps over the lazy dog.</p>
+    </div>
+    <div>
+      <div class="font-medium text-sm text-gray-500 font-mono mb-3">decoration-2</div>
+      <p class="text-lg font-medium underline decoration-gray-900 decoration-2">The quick brown fox jumps over the lazy dog.</p>
+    </div>
+    <div>
+      <div class="font-medium text-sm text-gray-500 font-mono mb-3">decoration-4</div>
+      <p class="text-lg font-medium underline decoration-gray-900 decoration-4">The quick brown fox jumps over the lazy dog.</p>
+    </div>
+  </div>
+</Example>
+
+```html
+<p class="underline **decoration-1** ...">The quick brown fox...</p>
+<p class="underline **decoration-2** ...">The quick brown fox...</p>
+<p class="underline **decoration-4** ...">The quick brown fox...</p>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="underline" featuredClass="decoration-4" element="p" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="underline" featuredClass="decoration-4" element="p" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+You can customize the `decoration-{width}` utilities by editing `theme.textDecorationThickness` or `theme.extend.textDecorationThickness` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       textDecorationThickness: {
++         3: '3px',
++       }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="text-decoration-thickness" featuredClass="decoration-[3px]" element="p" />

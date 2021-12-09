@@ -1,74 +1,63 @@
 ---
 title: "List Style Position"
 description: "Utilities for controlling the position of bullets/numbers in lists."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/listStylePosition'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=listStylePosition'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Setting the list style position
 
 Control the position of the markers and text indentation in a list using the `list-inside` and `list-outside` utilities.
 
-```html lightBlue
-<template preview class="p-4 px-8">
-  <div class="mb-6">
-    <p class="mb-1 text-sm text-light-blue-600">.list-inside</p>
-    <ul class="list-disc list-inside bg-light-blue-200 bg-stripes bg-stripes-white text-light-blue-600 py-2 rounded-md">
-      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
-      <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
-      <li>Quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
-    </ul>
-  </p>
+<Example>
+  <div class="flex flex-col sm:flex-row gap-8">
+    <div class="relative">
+      <div class="absolute left-8 -top-8 -bottom-8 w-px bg-pink-400/40"></div>
+      <p class="font-medium text-sm text-gray-500 font-mono mb-3 ml-8">list-inside</p>
+      <ul class="list-disc list-inside text-normal text-gray-700 bg-white rounded-xl shadow-lg ring-1 ring-gray-900/5 p-4 pl-8">
+        <li>5 cups chopped Porcini mushrooms</li>
+        <li>1/2 cup of olive oil</li>
+        <li>3lb of celery</li>
+      </ul>
+    </div>
+    <div class="relative">
+      <div class="absolute left-8 -top-0 sm:-top-8 -bottom-8 w-px bg-pink-400/40"></div>
+      <p class="font-medium text-sm text-gray-500 font-mono mb-3 ml-8">list-outside</p>
+      <ul class="list-disc list-outside text-normal text-gray-700 bg-white rounded-xl shadow-lg ring-1 ring-gray-900/5 p-4 pl-8">
+        <li>5 cups chopped Porcini mushrooms</li>
+        <li>1/2 cup of olive oil</li>
+        <li>3lb of celery</li>
+      </ul>
+    </div>
   </div>
-  <div class="mb-6">
-    <p class="mb-1 text-sm text-light-blue-600">.list-outside</p>
-    <ul class="list-disc list-outside bg-light-blue-200 bg-stripes bg-stripes-white text-light-blue-600 py-2 rounded-md">
-      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
-      <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
-      <li>Quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
-    </ul>
-  </div>
-</template>
-
-<ul class="list-inside bg-rose-200 ...">
-  <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
-  ...
-</ul>
-
-<ul class="list-outside bg-rose-200 ...">
-  <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
-  ...
-</ul>
-```
-
-## Responsive
-
-To control the list style position of a list element at a specific breakpoint, add a `{screen}:` prefix to any existing list utility. For example, use `.md:list-inside` to apply the `list-inside` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<ul class="list-outside **md:list-inside**">
-  <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+<ul class="list-inside ...">
+  <li>5 cups chopped Porcini mushrooms</li>
+  <!-- ... -->
+</ul>
+
+<ul class="list-outside ...">
+  <li>5 cups chopped Porcini mushrooms</li>
   <!-- ... -->
 </ul>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="listStylePosition" />
+<HoverFocusAndOtherStates defaultClass="list-outside" featuredClass="list-inside" element="ul" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="listStylePosition" />
+<BreakpointsAndMediaQueries defaultClass="list-outside" featuredClass="list-inside" element="ul" />

@@ -9,7 +9,7 @@ Since Tailwind is a PostCSS plugin, there's nothing stopping you from using it w
 
 It's important to note that **you don't need to use a preprocessor with Tailwind** — you typically write very little CSS on a Tailwind project anyways so using a preprocessor just isn't as beneficial as it would be in a project where you write a lot of custom CSS.
 
-This guide only exists as a reference for people who need to or would like to integrate Tailwind with a preprocessor for one reason or another.
+This guide only exists as a reference for people who need to integrate Tailwind with a preprocessor for reasons outside of their control, not because it is a recommended practice.
 
 ---
 
@@ -234,9 +234,11 @@ module.exports = {
 
 ## Using Sass, Less, or Stylus
 
+For the best development experience, we highly recommended that you [use PostCSS exclusively](#using-post-css-as-your-preprocessor), and that you don't use preprocessors like Sass or Less in your Tailwind projects.
+
 To use Tailwind with a preprocessing tool like Sass, Less, or Stylus, you'll need to add an additional build step to your project that lets you run your preprocessed CSS through PostCSS. If you're using Autoprefixer in your project, you already have something like this set up.
 
-The exact instructions will be different depending on which build tool you are using, so see our [installation documentation](/docs/installation#3-process-your-css-with-tailwind) to learn more about integrating Tailwind into your existing build process.
+See our documentation on [installing Tailwind as a PostCSS plugin](/docs/installation/using-postcss) to learn more about integrating Tailwind into your existing build process.
 
 The most important thing to understand about using Tailwind with a preprocessor is that **preprocessors like Sass, Less, and Stylus run separately, before Tailwind**. This means that you can't feed output from Tailwind's `theme()` function into a Sass color function for example, because the `theme()` function isn't actually evaluated until your Sass has been compiled to CSS and fed into PostCSS.
 
@@ -247,8 +249,6 @@ The most important thing to understand about using Tailwind with a preprocessor 
   background-color: darken(theme('colors.red.500'), 10%);
 }
 ```
-
-For the most cohesive development experience, it's recommended that you [use PostCSS exclusively](#using-post-css-as-your-preprocessor).
 
 Aside from that, each preprocessor has its own quirk or two when used with Tailwind, which are outlined with workarounds below.
 

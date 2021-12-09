@@ -1,123 +1,119 @@
 ---
 title: "Flex Grow"
 description: "Utilities for controlling how flex items grow."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/flexGrow'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = {
+  utilities: {
+    '.grow': { 'flex-grow': '1' },
+    '.grow-0': { 'flex-grow': '0' },
+  },
+}
 
-## Grow
+## Basic usage
 
-Use `flex-grow` to allow a flex item to grow to fill any available space:
+### Grow
 
-```html purple resizable
-<template preview class="p-6">
-  <div class="flex space-x-4">
-    <div class="flex-none w-16 h-16 rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center">
-      <svg class="w-5 h-5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.286 8.875v-2.25a5.58 5.58 0 011.673-3.977A5.76 5.76 0 0110 1a5.76 5.76 0 014.04 1.648 5.581 5.581 0 011.674 3.977v2.25c.606 0 1.188.237 1.617.659.428.422.669.994.669 1.591v5.625c0 .597-.24 1.169-.67 1.591a2.304 2.304 0 01-1.616.659H4.286a2.304 2.304 0 01-1.617-.659A2.233 2.233 0 012 16.75v-5.625c0-.597.24-1.169.67-1.591a2.304 2.304 0 011.616-.659zm9.143-2.25v2.25H6.57v-2.25c0-.895.362-1.754 1.005-2.386A3.456 3.456 0 0110 3.25c.91 0 1.781.356 2.424.989a3.349 3.349 0 011.005 2.386z" fill="currentColor"/></svg>
+Use `grow` to allow a flex item to grow to fill any available space:
+
+<Example resizable>
+  <div class="flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-indigo rounded-lg">
+    <div class="w-14 h-14 flex-none rounded-lg flex items-center justify-center bg-indigo-300">
+      01
     </div>
-    <div class="flex-grow h-16 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center">
-      <svg class="h-5 w-14" fill="none"><path d="M6 5l-5 5m0 0l5 5m-5-5h12M24 10.005l2 1.999 4-3.998m6 1.999C36 14.972 31.97 19 27 19c-4.98 0-9-4.028-9-8.995C17.99 5.028 22.02 1 26.99 1c4.97-.01 9 4.018 9 8.985l.01.02zM48 5l5 5m0 0l-5 5m5-5H41" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="p-4 grow rounded-lg flex items-center justify-center bg-indigo-500 shadow-lg">
+      02
     </div>
-    <div class="flex-none w-16 h-16 rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center">
-      <svg class="w-5 h-5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.286 8.875v-2.25a5.58 5.58 0 011.673-3.977A5.76 5.76 0 0110 1a5.76 5.76 0 014.04 1.648 5.581 5.581 0 011.674 3.977v2.25c.606 0 1.188.237 1.617.659.428.422.669.994.669 1.591v5.625c0 .597-.24 1.169-.67 1.591a2.304 2.304 0 01-1.616.659H4.286a2.304 2.304 0 01-1.617-.659A2.233 2.233 0 012 16.75v-5.625c0-.597.24-1.169.67-1.591a2.304 2.304 0 011.616-.659zm9.143-2.25v2.25H6.57v-2.25c0-.895.362-1.754 1.005-2.386A3.456 3.456 0 0110 3.25c.91 0 1.781.356 2.424.989a3.349 3.349 0 011.005 2.386z" fill="currentColor"/></svg>
-    </div>
-  </div>
-</template>
-
-<div class="flex ...">
-  <div class="flex-none w-16 h-16 ...">
-    <!-- This item will not grow -->
-  </div>
-  <div class="**flex-grow** h-16 ...">
-    <!-- This item will grow -->
-  </div>
-  <div class="flex-none w-16 h-16 ...">
-    <!-- This item will not grow -->
-  </div>
-</div>
-```
-
-## Don't grow
-
-Use `flex-grow-0` to prevent a flex item from growing:
-
-```html emerald resizable
-<template preview class="p-6">
-  <div class="flex space-x-4">
-    <div class="flex-grow h-16 rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center">
-      <svg class="h-5 w-14" fill="none"><path d="M6 5l-5 5m0 0l5 5m-5-5h12M24 10.005l2 1.999 4-3.998m6 1.999C36 14.972 31.97 19 27 19c-4.98 0-9-4.028-9-8.995C17.99 5.028 22.02 1 26.99 1c4.97-.01 9 4.018 9 8.985l.01.02zM48 5l5 5m0 0l-5 5m5-5H41" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-    <div class="flex-grow-0 w-16 h-16 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center">
-      <svg class="w-5 h-5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.286 8.875v-2.25a5.58 5.58 0 011.673-3.977A5.76 5.76 0 0110 1a5.76 5.76 0 014.04 1.648 5.581 5.581 0 011.674 3.977v2.25c.606 0 1.188.237 1.617.659.428.422.669.994.669 1.591v5.625c0 .597-.24 1.169-.67 1.591a2.304 2.304 0 01-1.616.659H4.286a2.304 2.304 0 01-1.617-.659A2.233 2.233 0 012 16.75v-5.625c0-.597.24-1.169.67-1.591a2.304 2.304 0 011.616-.659zm9.143-2.25v2.25H6.57v-2.25c0-.895.362-1.754 1.005-2.386A3.456 3.456 0 0110 3.25c.91 0 1.781.356 2.424.989a3.349 3.349 0 011.005 2.386z" fill="currentColor"/></svg>
-    </div>
-    <div class="flex-grow h-16 rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center">
-      <svg class="h-5 w-14" fill="none"><path d="M6 5l-5 5m0 0l5 5m-5-5h12M24 10.005l2 1.999 4-3.998m6 1.999C36 14.972 31.97 19 27 19c-4.98 0-9-4.028-9-8.995C17.99 5.028 22.02 1 26.99 1c4.97-.01 9 4.018 9 8.985l.01.02zM48 5l5 5m0 0l-5 5m5-5H41" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="p-4 w-14 h-14 flex-none rounded-lg flex items-center justify-center bg-indigo-300">
+      03
     </div>
   </div>
-</template>
-
-<div class="flex ...">
-  <div class="flex-grow h-16 ...">
-    <!-- This item will grow -->
-  </div>
-  <div class="**flex-grow-0** h-16 ...">
-    <!-- This item will not grow -->
-  </div>
-  <div class="flex-grow h-16 ...">
-    <!-- This item will grow -->
-  </div>
-</div>
-```
-
-## Responsive
-
-To control how a flex item grows at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:flex-grow-0` to apply the `flex-grow-0` utility at only medium screen sizes and above.
+</Example>
 
 ```html
 <div class="flex ...">
-  <!-- ... -->
-  <div class="flex-grow **md:flex-grow-0** ...">
-    Responsive flex item
+  <div class="flex-none w-14 h-14 ...">
+    01
   </div>
-  <!-- ... -->
+  <div class="**grow** h-14 ...">
+    02
+  </div>
+  <div class="flex-none w-14 h-14 ...">
+    03
+  </div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### Don't grow
 
-## Customizing
+Use `grow-0` to prevent a flex item from growing:
 
-### Grow Values
+<Example resizable>
+  <div class="flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-pink rounded-lg">
+    <div class="p-4 grow rounded-lg flex items-center justify-center bg-pink-300">
+      01
+    </div>
+    <div class="shrink-0 w-14 h-14 grow-0 rounded-lg flex items-center justify-center bg-pink-500 shadow-lg">
+      02
+    </div>
+    <div class="p-4 grow rounded-lg hidden md:flex items-center justify-center bg-pink-300">
+      03
+    </div>
+  </div>
+</Example>
 
-By default, Tailwind provides two `flex-grow` utilities. You change, add, or remove these by editing the `theme.flexGrow` section of your Tailwind config.
+```html
+<div class="flex ...">
+  <div class="grow h-14 ...">
+    01
+  </div>
+  <div class="**grow-0** h-14 ...">
+    02
+  </div>
+  <div class="grow h-14 ...">
+    03
+  </div>
+</div>
+```
 
-```diff-js
-  // tailwind.config.js
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="grow" featuredClass="grow-0" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="grow" featuredClass="grow-0" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides two `grow` utilities. You can customize these values by editing `theme.flexGrow` or `theme.extend.flexGrow` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      flexGrow: {
-        '0': 0,
--       DEFAULT: 1,
-+       DEFAULT: 2,
-+       '1': 1,
+      extend: {
++       flexGrow: {
++         '2': 2
++       }
       }
     }
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="flexGrow" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="flexGrow" />
+<ArbitraryValues property="flex-grow" featuredClass="grow-[2]" />

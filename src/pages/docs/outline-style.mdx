@@ -1,0 +1,82 @@
+---
+title: "Outline Style"
+description: "Utilities for controlling the style of an element's outline."
+---
+
+import utilities from 'utilities?plugin=outlineStyle'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Setting the outline style
+
+Use the `outline-{style}` utilities to change the style of an element's outline.
+
+<Example>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-white text-sm font-semibold text-center">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline outline-2 outline-offset-2 outline-indigo-500">Button A</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-dashed</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline-dashed outline-2 outline-offset-2 outline-indigo-500">Button B</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-dotted</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline-dotted outline-2 outline-offset-2 outline-indigo-500">Button C</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-double</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline-double outline-3 outline-offset-2 outline-indigo-500">Button D</button>
+    </div>
+  </div>
+</Example>
+
+```html
+<button class="**outline** outline-2  outline-offset-2 ...">Button A</button>
+<button class="**outline-dashed** outline-2 outline-offset-2 ...">Button B</button>
+<button class="**outline-dotted** outline-2 outline-offset-2 ...">Button C</button>
+<button class="**outline-double** outline-3 outline-offset-2 ...">Button D</button>
+```
+
+### Removing outlines
+
+Use `outline-none` to hide the default browser outline on focused elements.
+
+It is highly recommended to apply your own focus styling for accessibility when using this utility.
+
+<Example hint="Focus the input to see the expected behaviour">
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-x-16 gap-y-8 px-0 sm:px-10 font-mono font-bold">
+    <input type="text" placeholder="Default focus styles" class="font-sans block text-sm w-full py-2 px-3 border border-transparent ring-1 ring-gray-900/10 text-gray-500 rounded-lg shadow-sm" />
+    <input type="text" placeholder="Custom focus styles" class="font-sans block text-sm w-full py-2 px-3 border border-transparent ring-1 ring-gray-900/10 text-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-500" />
+  </div>
+</Example>
+
+```html
+<input type="text"
+  placeholder="Default focus style"
+  class="..." />
+
+<input type="text"
+  placeholder="Custom focus style"
+  class="**focus:outline-none focus:ring focus:border-blue-500** ..." />
+```
+
+The `outline-none` utility is implemented using a transparent outline under the hood to ensure elements are still visibly focused to [Windows high contrast mode](https://blogs.windows.com/msedgedev/2020/09/17/styling-for-windows-high-contrast-with-new-standards-for-forced-colors/) users.
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="outline" featuredClass="outline-dashed" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="outline" featuredClass="outline-dashed" />

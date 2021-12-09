@@ -2,67 +2,85 @@
 .token.class-name,
 .token.selector,
 .token.selector .class,
+.token.selector.class,
 .token.function {
-  @apply text-fuchsia-400;
+  @apply text-pink-400;
 }
 
 .token.attr-name,
 .token.keyword,
 .token.rule,
-.token.operator,
 .token.pseudo-class,
 .token.important {
-  @apply text-cyan-400;
+  @apply text-gray-300;
 }
 
 .token.attr-value,
 .token.class,
-.token.string,
-.token.number,
-.token.unit,
-.token.color {
-  @apply text-lime-300;
+.token.string {
+  @apply text-sky-300;
 }
 
 .token.punctuation,
-.token.module,
+.token.attr-equals {
+  @apply text-gray-500;
+}
+
+.token.attr-value * {
+  @apply text-sky-300;
+}
+
+.token.attr-value .attr-equals,
+.token.attr-value .attr-equals + .punctuation,
+.token.attr-value > .punctuation:last-child {
+  @apply text-gray-500;
+}
+
 .token.property {
-  @apply text-light-blue-200;
+  @apply text-sky-300;
 }
 
-.token.atapply .token:not(.rule):not(.important) {
-  color: inherit;
+.token.unit {
+  @apply text-teal-200;
 }
 
-.language-shell .token:not(.comment) {
+.language-shell .token:not(.comment),
+.token.atapply .token:not(.rule):not(.important):not(.punctuation) {
   color: inherit;
 }
 
 .language-css .token.function {
-  color: inherit;
+  @apply text-teal-200;
 }
 
-.token.comment {
+.token.comment,
+.token.module,
+.token.operator,
+.token.combinator {
   @apply text-gray-400;
 }
 
-.token.deleted:not(.prefix) {
-  @apply relative block -mx-4 px-4;
+.token.unchanged {
+  @apply block;
 }
 
-.token.deleted:not(.prefix)::after {
-  content: '';
-  @apply pointer-events-none absolute inset-0 block bg-rose-400 bg-opacity-25;
+.token.deleted,
+.token.inserted {
+  @apply block relative -mx-9 pl-8 pr-5 border-l-4 before:absolute before:top-0 before:left-4;
 }
 
-.token.deleted.prefix {
-  @apply text-gray-400 select-none;
+.token.inserted {
+  @apply bg-teal-400/[0.15] border-teal-400 before:content-['+'] before:text-teal-400;
 }
 
-.token.inserted:not(.prefix) {
-  @apply block bg-emerald-700 bg-opacity-50 -mx-4 px-4;
+.token.deleted {
+  @apply bg-rose-500/[0.15] border-rose-400 before:content-['-'] before:text-rose-400;
 }
 
-.token.inserted.prefix {
-  @apply text-emerald-200 text-opacity-75 select-none;
+pre[class^='language-diff-'] {
+  @apply flex px-9;
+}
+
+pre[class^='language-diff-'] > code {
+  @apply flex-none min-w-full;
 }

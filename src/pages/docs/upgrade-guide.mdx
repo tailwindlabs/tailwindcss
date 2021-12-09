@@ -1,0 +1,400 @@
+---
+title: "Upgrade Guide"
+description: "Upgrading your Tailwind CSS projects from v2 to v3."
+---
+
+Tailwind CSS v3.0 is a major update to the framework with a brand new internal engine and as such includes a small number of breaking changes.
+
+We take stability very seriously and have worked hard to make any breaking changes as painless as possible. For most projects, upgrading to Tailwind CSS v3.0 should take less than 30 minutes.
+
+To learn more about what's new in Tailwind CSS v3.0, read the [Tailwind CSS v3.0 announcement](/blog/tailwindcss-v3) on our blog.
+
+---
+
+## Upgrade packages
+
+Update Tailwind, as well as PostCSS and autoprefixer, using npm:
+
+```shell
+npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+```
+
+Note that Tailwind CSS v3.0 requires PostCSS 8, and no longer supports PostCSS 7. If you can't upgrade to PostCSS 8, we recommend using [Tailwind CLI](/docs/installation) instead of installing Tailwind as a PostCSS plugin.
+
+### Official plugins
+
+All of our first-party plugins have been updated for compatibility with v3.0.
+
+If you're using any of our plugins, make sure to update them all to the latest version at the same time to avoid version constraint errors.
+
+```html
+npm install -D tailwindcss@latest \
+  **@tailwindcss/typography@latest** \
+  **@tailwindcss/forms@latest** \
+  **@tailwindcss/aspect-ratio@latest** \
+  **@tailwindcss/line-clamp@latest** \
+  postcss@latest \
+  autoprefixer@latest
+```
+
+### Play CDN
+
+For Tailwind CSS v3.0, the CSS-based CDN build we've offered in the past has been replaced by the new [Play CDN](/docs/installation/play-cdn), which gives you the full power of the new engine right in the browser with no build step.
+
+To try it out, throw this `<script>` tag in your `<head>`:
+
+```diff-html
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Example</title>
++     <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+      <!-- -->
+    </body>
+  </html>
+```
+
+The Play CDN is designed for development purposes only — compiling your own static CSS build is a much better choice in production.
+
+---
+
+## Migrating to the JIT engine
+
+The new [Just-in-Time engine](/blog/just-in-time-the-next-generation-of-tailwind-css) we announced in March has replaced the classic engine in Tailwind CSS v3.0.
+
+The new engine generates the styles you need for your project on-demand, and might necessitate some small changes to your project depending on how you have Tailwind configured.
+
+### Configure content sources
+
+Since Tailwind no longer uses PurgeCSS under the hood, we've renamed the `purge` option to `content` to better reflect what it's for:
+
+```diff-js tailwind.config.js
+  module.exports = {
+-   purge: [
++   content: [
+      // Example content paths...
+      './public/**/*.html',
+      './src/**/*.{js,jsx,ts,tsx,vue}',
+    ],
+    theme: {
+      // ...
+    }
+    // ...
+  }
+```
+
+If you weren't already using the `purge` option in your project, it's crucial that you configure your template paths now or your compiled CSS will be empty.
+
+Since we're not using PurgeCSS under the hood anymore, some of the advanced purge options have changed. See the new [content configuration](/docs/content-configuration) documentation for more information on advanced options.
+
+### Remove dark mode configuration
+
+The dark mode feature is now enabled using the `media` strategy by default, so you can remove this key entirely from your `tailwind.config.js` file, *unless* you're using the `class` strategy.
+
+```diff-js tailwind.config.js
+  module.exports = {
+-   darkMode: 'media',
+    // ...
+  }
+```
+
+You can also safely remove this key if it's currently set to `false`:
+
+```diff-js tailwind.config.js
+  module.exports = {
+-   darkMode: 'false',
+    // ...
+  }
+```
+
+### Remove variant configuration
+
+In Tailwind CSS v3.0, every variant is automatically available for every utility by default, so you can remove the `variants` section from your `tailwind.config.js` file:
+
+```diff-js tailwind.config.js
+  module.exports = {
+    // ...
+-   variants: {
+-     extend: {
+-       padding: ['hover'],
+-     }
+-   },
+  }
+```
+
+### Replace @variants with @layer
+
+Since all variants are now enabled by default, you no longer need to explicity enable these for custom CSS using the `@variants` or `@repsonsive` directives.
+
+Instead, add any custom CSS to appropriate "layer" using the `@layer` directive:
+
+```diff-css
+-  @variants hover, focus {
++  @layer utilities {
+     .content-auto {
+       content-visibility: auto;
+     }
+   }
+```
+
+Any custom CSS added to one of Tailwind's layers will automatically support variants.
+
+See the documentation on [adding custom styles using CSS and @layer](/docs/adding-custom-styles#using-css-and-layer) for more information.
+
+### Automatic transforms and filters
+
+In Tailwind CSS v3.0, transform and filter utilities like `scale-50` and `brightness-75` will automatically take effect without needing to add the `transform`, `filter`, or `backdrop-filter` classes:
+
+```diff-html
+- <div class="transform scale-50 filter grayscale backdrop-filter backdrop-blur-sm">
++ <div class="scale-50 grayscale backdrop-blur-sm">
+```
+
+While there's no harm in leaving them in your HTML, they can safely be removed.
+
+---
+
+## Color palette changes
+
+Tailwind CSS v3.0 now includes every color from the extended color palette by default, including previously disabled colors like cyan, rose, fuchsia, and lime, and all five variations of gray.
+
+### Removed color aliases
+
+In v2.0, several of the default colors were actually aliases for the extended colors:
+
+| v2 Default | v2 Extended |
+| --- | --- |
+| `green` | `emerald` |
+| `yellow` | `amber` |
+| `purple` | `violet` |
+
+In v3.0, these colors use their extended names by default, so what was previously `bg-green-500` is now `bg-emerald-500`, and `bg-green-500` now refers to the green from the extended palette.
+
+If you're using these colors in your project, the simplest way to upgrade is to alias them back to their previous names in your `tailwind.config.js` file:
+
+```diff-js tailwind.config.js
+  const colors = require('tailwindcss/colors')
+
+  module.exports = {
+    theme: {
+      extend: {
++       colors: {
++         green: colors.emerald,
++         yellow: colors.amber,
++         purple: colors.violet,
++       }
+      },
+    },
+    // ...
+  }
+```
+
+If you are already using a custom color palette, this change doesn't impact you at all.
+
+### Renamed gray scales
+
+As part of enabling all of the extended colors by default, we've given the different gray shades shorter single-word names to make them more practical to use and make it less awkward for them to co-exist at the same time.
+
+| v2 Default | v2 Extended | v3 Unified |
+| --- | --- | --- |
+| N/A | `blueGray` | `slate` |
+| `gray` | `coolGray` | `gray` |
+| N/A | `gray` | `zinc` |
+| N/A | `trueGray` | `neutral` |
+| N/A | `warmGray` | `stone` |
+
+If you were referencing any of the extended grays, you should update your references to the new names, for example:
+
+```diff-js tailwind.config.js
+  const colors = require('tailwindcss/colors')
+
+  module.exports = {
+    theme: {
+      extend: {
+        colors: {
+-         gray: colors.trueGray,
++         gray: colors.neutral,
+        }
+      },
+    },
+    // ...
+  }
+```
+
+If you weren't referencing any of the grays from the extended color palette, this change doesn't impact you at all.
+
+
+---
+
+## Class name changes
+
+Some class names in Tailwind CSS v3.0 have changed to avoid naming collisions, improve the developer experience, or make it possible to support new features.
+
+Wherever possible we have preserved the old name as well so many of these changes are non-breaking, but you're encouraged to update to the new class names.
+
+### overflow-clip/ellipsis
+
+Those damn browser developers added a real `overflow: clip` property, so using `overflow-clip` for `text-overflow: clip` is a really bad idea now.
+
+We've renamed `overflow-clip` to `text-clip`, and renamed `overflow-ellipsis` to `text-ellipsis` to avoid the naming collision:
+
+```diff-html
+- <div class="overflow-clip overflow-ellipsis">
++ <div class="text-clip text-ellipsis">
+```
+
+This is extremely unlikely to affect anyone, as there are very few use-cases for `text-clip` and it's only really included for the sake of completion.
+
+### flex-grow/shrink
+
+We've added `grow-*` and `shrink-*` as aliases for `flex-grow-*` and `flex-shrink-*`:
+
+```diff-html
+- <div class="flex-grow-0 flex-shrink">
++ <div class="grow-0 shrink">
+```
+
+The old class names will always work but you're encouraged to update to the new ones.
+
+### outline-black/white
+
+Since browsers are finally starting to respect border radius when rendering outlines, we've added separate utilities for the `outline-style`, `outline-color`, `outline-width` and `outline-offset` properties.
+
+This means that `outline-white` and `outline-black` now only set the outline _color_, whereas in v2 they set the color, width, style, and offset.
+
+If you are using `outline-white` or `outline-black` in your project, you can bring back the old styles by adding the following custom CSS to your project:
+
+```css
+@layer utilities {
+  .outline-black {
+    outline: 2px dotted black;
+    outline-offset: 2px;
+  }
+
+  .outline-white {
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+}
+```
+
+Alternatively, you can update any usage of them in your CSS with the following classes:
+
+```diff-html
+- <div class="outline-black">
++ <div class="outline-black outline-2 outline-dotted outline-offset-2">
+
+- <div class="outline-white">
++ <div class="outline-white outline-2 outline-dotted outline-offset-2">
+```
+
+
+### decoration-clone/slice
+
+We've added `box-decoration-clone` and `box-decoration-slice` as aliases for `decoration-clone` and `decoration-slice` to avoid confusion with all of the new `text-decoration` utilities that use the `decoration-` namespace:
+
+```diff-html
+- <div class="decoration-clone"></div>
++ <div class="box-decoration-clone"></div>
+
+- <div class="decoration-slice"></div>
++ <div class="box-decoration-slice"></div>
+```
+
+The old class names will always work but you're encouraged to update to the new ones.
+
+---
+
+## Other minor changes
+
+Tailwind CSS v3.0 necessitates a couple of other small breaking changes that are unlikely to affect many people, but have been captured here.
+
+### Separator cannot be a dash
+
+The dash (`-`) character cannot be used as a custom separator in v3.0 because of a parsing ambiguity it introduces in the engine.
+
+You'll have to switch to another character like `_` instead:
+
+```diff-js tailwind.config.js
+  module.exports = {
+    // ...
+-   seperator: '-',
++   seperator: '_',
+  }
+```
+
+
+### Prefix cannot be a function
+
+Prior to Tailwind CSS v3.0, it was possible to define your class prefix as a function:
+
+```js tailwind.config.js
+module.exports = {
+  // ...
+  prefix(selector) {
+    // ...
+  },
+}
+```
+
+This isn't possible in the new engine and we've had to remove support for this feature.
+
+Instead, use a static prefix that is the same for every class Tailwind generates:
+
+```js tailwind.config.js
+module.exports = {
+  // ...
+  prefix: 'tw-',
+}
+```
+
+
+### File modifier order reversed
+
+Super minor change since v3.0.0-alpha.2 where the `file` modifier was introduced — if you were combining it with other modifiers like `hover` or `focus`, you'll need to flip the modifier order:
+
+```diff-html
+- <input class="file:hover:bg-blue-600 ...">
++ <input class="hover:file:bg-blue-600 ...">
+```
+
+Learn more in the [ordering stacked modifiers](/docs/hover-focus-and-other-states#ordering-stacked-modifiers) documentation.
+
+### Base layer must be present
+
+In Tailwind CSS v3.0, the `@tailwind base` directive must be present for utilities like transforms, filters, and shadows to work as expected.
+
+If you were previously disabling Tailwind's base styles by not including this directive, you should add it back and disable `preflight` in your `corePlugins` configuration instead:
+
+```diff-css main.css
++  @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+```
+
+```diff-js tailwind.config.js
+  module.exports = {
+    // ...
++   corePlugins: {
++     preflight: false,
++   },
+  }
+```
+
+This will disable Tailwind's global base styles without affecting utilities that rely on adding their own base styles to function correctly.
+
+### Screens layer has been renamed
+
+The `@tailwind screens` layer has been renamed to `@tailwind variants`:
+
+```diff-css main.css
+   /* ... */
+-  @tailwind screens;
++  @tailwind variants;
+```
+
+I think you are more likely to be attacked by a shark while working at your desk than you are to be affected by this change.

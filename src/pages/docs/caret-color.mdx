@@ -1,0 +1,70 @@
+---
+title: "Caret Color"
+description: "Utilities for controlling the color of the text input cursor."
+---
+
+import utilities from 'utilities?plugin=caretColor'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Setting the caret color
+
+Use the `caret-{color}` utilities to change the color of the text input cursor.
+
+<Example hint="Focus the textarea to see the new caret color">
+  <div class="w-full flex items-center justify-center">
+    <textarea class="text-sm p-2 w-80 ring-1 ring-gray-900/10 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 caret-pink-500" rows="2"></textarea>
+  </div>
+</Example>
+
+```html
+<textarea class="**caret-pink-500** ..."></textarea>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates featuredClass="caret-indigo-500" variant="focus">
+
+```html
+<textarea class="caret-blue-500 **focus:caret-indigo-500**"></textarea>
+```
+
+</HoverFocusAndOtherStates>
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries featuredClass="caret-indigo-500">
+
+```html
+<textarea class="caret-blue-500 **md:caret-indigo-500**"></textarea>
+```
+
+</BreakpointsAndMediaQueries>
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+<CustomizePluginColors name="caret" configKey="caretColor" />
+
+### Arbitrary values
+
+<ArbitraryValues property="caret-color">
+
+```html
+<textarea class="**caret-[#50d71e]**"></textarea>
+```
+
+</ArbitraryValues>

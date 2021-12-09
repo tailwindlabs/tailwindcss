@@ -3,126 +3,134 @@ title: "Border Collapse"
 description: "Utilities for controlling whether table borders should collapse or be separated."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/borderCollapse'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=borderCollapse'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Separate
+## Basic usage
 
-Use `border-separate` to force each cell to display its own separate borders.
-
-```html emerald
-<template preview>
-  <table class="border-separate w-full border-2 border-emerald-800">
-    <thead class="bg-emerald-200">
-      <tr>
-        <th class="border-2 border-emerald-600 px-4 py-2 text-emerald-800 text-left font-flow">State</th>
-        <th class="border-2 border-emerald-600 px-4 py-2 text-emerald-800 text-left font-flow">City</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Indiana</td>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Indianapolis</td>
-      </tr>
-      <tr>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Ohio</td>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Columbus</td>
-      </tr>
-      <tr>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Michigan</td>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Detroit</td>
-      </tr>
-    </tbody>
-  </table>
-</template>
-
-<table class="**border-separate** border border-green-800 ...">
-  <thead>
-    <tr>
-      <th class="border border-green-600 ...">State</th>
-      <th class="border border-green-600 ...">City</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-green-600 ...">Indiana</td>
-      <td class="border border-green-600 ...">Indianapolis</td>
-    </tr>
-    <tr>
-      <td class="border border-green-600 ...">Ohio</td>
-      <td class="border border-green-600 ...">Columbus</td>
-    </tr>
-    <tr>
-      <td class="border border-green-600 ...">Michigan</td>
-      <td class="border border-green-600 ...">Detroit</td>
-    </tr>
-  </tbody>
-</table>
-```
-
-## Collapse
+### Collapse
 
 Use `border-collapse` to combine adjacent cell borders into a single border when possible. Note that this includes collapsing borders on the top-level `<table>` tag.
 
-```html emerald
-<template preview>
-  <table class="border-collapse w-full border-2 border-emerald-800">
-    <thead class="bg-emerald-200">
-      <tr>
-        <th class="border-2 border-emerald-600 px-4 py-2 text-emerald-800 text-left font-flow">State</th>
-        <th class="border-2 border-emerald-600 px-4 py-2 text-emerald-800 text-left font-flow">City</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Indiana</td>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Indianapolis</td>
-      </tr>
-      <tr>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Ohio</td>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Columbus</td>
-      </tr>
-      <tr>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Michigan</td>
-        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Detroit</td>
-      </tr>
-    </tbody>
-  </table>
-</template>
+<Example p="none">
+  <div class="px-4 py-8 sm:px-8">
+    <table class="border-collapse w-full border border-gray-400 bg-white text-sm shadow-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="w-1/2 border border-gray-300 font-semibold p-4 text-gray-900 text-left">State</th>
+          <th class="w-1/2 border border-gray-300 font-semibold p-4 text-gray-900 text-left">City</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border border-gray-300 p-4 text-gray-500">Indiana</td>
+          <td class="border border-gray-300 p-4 text-gray-500">Indianapolis</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 p-4 text-gray-500">Ohio</td>
+          <td class="border border-gray-300 p-4 text-gray-500">Columbus</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 p-4 text-gray-500">Michigan</td>
+          <td class="border border-gray-300 p-4 text-gray-500">Detroit</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</Example>
 
-<table class="**border-collapse** border border-green-800 ...">
+```html
+<table class="**border-collapse** border border-gray-400 ...">
   <thead>
     <tr>
-      <th class="border border-green-600 ...">State</th>
-      <th class="border border-green-600 ...">City</th>
+      <th class="border border-gray-300 ...">State</th>
+      <th class="border border-gray-300 ...">City</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td class="border border-green-600 ...">Indiana</td>
-      <td class="border border-green-600 ...">Indianapolis</td>
+      <td class="border border-gray-300 ...">Indiana</td>
+      <td class="border border-gray-300 ...">Indianapolis</td>
     </tr>
     <tr>
-      <td class="border border-green-600 ...">Ohio</td>
-      <td class="border border-green-600 ...">Columbus</td>
+      <td class="border border-gray-300 ...">Ohio</td>
+      <td class="border border-gray-300 ...">Columbus</td>
     </tr>
     <tr>
-      <td class="border border-green-600 ...">Michigan</td>
-      <td class="border border-green-600 ...">Detroit</td>
+      <td class="border border-gray-300 ...">Michigan</td>
+      <td class="border border-gray-300 ...">Detroit</td>
     </tr>
   </tbody>
 </table>
 ```
 
-## Customizing
+### Separate
 
-### Variants
+Use `border-separate` to force each cell to display its own separate borders.
 
-<Variants plugin="borderCollapse" />
+<Example p="none">
+  <div class="px-4 py-8 sm:px-8">
+    <table class="border-separate w-full border border-gray-400 bg-white text-sm shadow-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="w-1/2 border border-gray-300 font-semibold p-4 text-gray-900 text-left">State</th>
+          <th class="w-1/2 border border-gray-300 font-semibold p-4 text-gray-900 text-left">City</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border border-gray-300 p-4 text-gray-500">Indiana</td>
+          <td class="border border-gray-300 p-4 text-gray-500">Indianapolis</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 p-4 text-gray-500">Ohio</td>
+          <td class="border border-gray-300 p-4 text-gray-500">Columbus</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 p-4 text-gray-500">Michigan</td>
+          <td class="border border-gray-300 p-4 text-gray-500">Detroit</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</Example>
 
-### Disabling
+```html
+<table class="**border-separate** border border-gray-400 ...">
+  <thead>
+    <tr>
+      <th class="border border-gray-300 ...">State</th>
+      <th class="border border-gray-300 ...">City</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-gray-300 ...">Indiana</td>
+      <td class="border border-gray-300 ...">Indianapolis</td>
+    </tr>
+    <tr>
+      <td class="border border-gray-300 ...">Ohio</td>
+      <td class="border border-gray-300 ...">Columbus</td>
+    </tr>
+    <tr>
+      <td class="border border-gray-300 ...">Michigan</td>
+      <td class="border border-gray-300 ...">Detroit</td>
+    </tr>
+  </tbody>
+</table>
+```
 
-<Disabling plugin="borderCollapse" />
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates element="table" featuredClass="border-collapse" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries element="table" featuredClass="border-collapse" />

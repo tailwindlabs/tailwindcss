@@ -1,68 +1,97 @@
 ---
 title: "Grayscale"
 description: "Utilities for applying grayscale filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=grayscale'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingFilters } from '@/components/RemovingFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.grayscale-0': { '--tw-grayscale': 'grayscale(0)' },
-        '.grayscale': { '--tw-grayscale': 'grayscale(1)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      filter: properties['--tw-grayscale'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `grayscale` and `grayscale-0` utilities alongside the `filter` utility to whether an element should be rendered as grayscale or in full color.
+### Making an element grayscale
+
+Use the `grayscale` and `grayscale-0` utilities to control whether an element should be rendered as grayscale or in full color.
+
+<Example p="none">
+  <div class="flex justify-center sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">grayscale-0</p>
+      <div class="relative grayscale-0">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">grayscale</p>
+      <div class="relative grayscale">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="filter grayscale ...">
+<div class="**grayscale-0** ...">
+  <!-- ... -->
+</div>
+<div class="**grayscale** ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing filters
 
-To control an element's grayscale filter at a specific breakpoint, add a `{screen}:` prefix to any existing grayscale utility. For example, use `md:grayscale-0` to apply the `grayscale-0` utility at only medium screen sizes and above.
+<RemovingFilters defaultClass="blur-md invert grayscale" />
 
-```html
-<div class="filter grayscale **md:grayscale-0** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `grayscale` utilities are generated using the `grayscale` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="grayscale" featuredClass="grayscale-0" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="grayscale" featuredClass="grayscale-0" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `grayscale` utilities. You can customize these values by editing `theme.grayscale` or `theme.extend.grayscale` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       grayscale: {
 +         50: '50%',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="grayscale" name="grayscale" />
-
-### Disabling
-
-<Disabling plugin="grayscale" name="grayscale" />
+<ArbitraryValues property="grayscale" featuredClass="grayscale-[50%]" />

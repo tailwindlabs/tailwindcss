@@ -69,7 +69,7 @@ export function TuiBanner() {
                 </span>
               </p>
             </div>
-            <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
+            <div className="order-3 mt-2 shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
               <div className="rounded-md shadow-sm">
                 <a
                   href="https://tailwindui.com?utm_source=tailwindcss&utm_medium=footer-banner"
@@ -79,7 +79,7 @@ export function TuiBanner() {
                 </a>
               </div>
             </div>
-            <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
+            <div className="order-2 shrink-0 sm:order-3 sm:ml-2">
               <button
                 onClick={() => {
                   try {

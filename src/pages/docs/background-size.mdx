@@ -1,74 +1,87 @@
 ---
 title: "Background Size"
 description: "Utilities for controlling the background size of an element's background image."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/backgroundSize'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=backgroundSize'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Auto
+## Basic usage
+
+### Auto
 
 Use `bg-auto` to display the background image at its default size.
 
-```html amber
-<template preview>
-  <div class="w-full bg-amber-200 h-48 bg-auto bg-no-repeat bg-center" style="background-image:url('/img/placeholder-amber.svg');">
+<Example>
+  <div class="relative flex items-center justify-center h-48 rounded-lg w-56 sm:w-96 mx-auto overflow-hidden">
+    <div class="absolute inset-0 opacity-50 bg-stripes-gray"></div>
+    <div class="relative z-10 w-full h-full bg-auto bg-no-repeat bg-center bg-[url(https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=160&q=80)]">
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**bg-auto** bg-no-repeat bg-center ..." style="background-image: url(...)"></div>
 ```
 
-## Cover
+### Cover
 
 Use `bg-cover` to scale the background image until it fills the background layer.
 
-```html emerald
-<template preview>
-  <div class="w-full mx-auto bg-emerald-200 h-96 bg-center bg-cover" style="background-image:url('/img/placeholder-emerald.svg');">
+<Example>
+  <div class="relative flex items-center justify-center rounded-lg overflow-hidden w-56 sm:w-96 mx-auto">
+    <div class="absolute inset-0 opacity-50 bg-stripes-gray"></div>
+    <div class="relative z-10 w-full h-48 bg-cover bg-no-repeat bg-center bg-[url(https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&h=640&q=80)]">
+    </div>
   </div>
-</template>
+</Example>
 
-<div class="bg-cover bg-center ..." style="background-image: url(...)"></div>
+```html
+<div class="**bg-cover** bg-center ..." style="background-image: url(...)"></div>
 ```
 
-## Contain
+### Contain
 
 Use `bg-contain` to scale the background image to the outer edges without cropping or stretching.
 
-```html indigo
-<template preview>
-  <div class="w-full bg-indigo-300 h-48 bg-center bg-no-repeat bg-contain" style="background-image:url('/img/placeholder-indigo.svg');">
+<Example>
+  <div class="relative flex items-center justify-center rounded-lg overflow-hidden w-56 sm:w-96 mx-auto">
+    <div class="absolute inset-0 opacity-50 bg-stripes-gray"></div>
+    <div class="relative z-10 w-full h-48 bg-contain bg-no-repeat bg-center sm:bg-top bg-[url(https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&h=640&q=80)]">
+    </div>
   </div>
-</template>
-
-<div class="bg-contain bg-center ..." style="background-image: url(...)"></div>
-```
-
-## Responsive
-
-To control the size of an element's background image at a specific breakpoint, add a `{screen}:` prefix to any existing background size utility. For example, adding the class `md:bg-contain` to an element would apply the `bg-contain` utility at medium screen sizes and above.
+</Example>
 
 ```html
-<div class="bg-auto **md:bg-contain** ..."></div>
+<div class="**bg-contain** bg-center ..." style="background-image: url(...)"></div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="bg-auto" featuredClass="bg-contain" />
+
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="bg-auto" featuredClass="bg-contain" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
 
 By default, Tailwind provides utilities for `auto`, `cover`, and `contain` background sizes. You can change, add, or remove these by editing the `theme.backgroundSize` section of your config.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       backgroundSize: {
@@ -82,10 +95,8 @@ By default, Tailwind provides utilities for `auto`, `cover`, and `contain` backg
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="backgroundSize" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="backgroundSize" />
+<ArbitraryValues property="background-size" featuredClass="bg-[length:200px_100px]" />

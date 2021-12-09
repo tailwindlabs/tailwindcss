@@ -1,78 +1,121 @@
 ---
 title: "Backdrop Hue Rotate"
 description: "Utilities for applying backdrop hue-rotate filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=backdropHueRotate'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingBackdropFilters } from '@/components/RemovingBackdropFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-      '.-backdrop-hue-rotate-180': { '--tw-backdrop-hue-rotate':  'hue-rotate(-180deg)' },
-      '.-backdrop-hue-rotate-90': { '--tw-backdrop-hue-rotate':  'hue-rotate(-90deg)' },
-      '.-backdrop-hue-rotate-60': { '--tw-backdrop-hue-rotate':  'hue-rotate(-60deg)' },
-      '.-backdrop-hue-rotate-30': { '--tw-backdrop-hue-rotate':  'hue-rotate(-30deg)' },
-      '.-backdrop-hue-rotate-15': { '--tw-backdrop-hue-rotate':  'hue-rotate(-15deg)' },
-      '.backdrop-hue-rotate-0': { '--tw-backdrop-hue-rotate': 'hue-rotate(0deg)' },
-      '.backdrop-hue-rotate-15': { '--tw-backdrop-hue-rotate': 'hue-rotate(15deg)' },
-      '.backdrop-hue-rotate-30': { '--tw-backdrop-hue-rotate': 'hue-rotate(30deg)' },
-      '.backdrop-hue-rotate-60': { '--tw-backdrop-hue-rotate': 'hue-rotate(60deg)' },
-      '.backdrop-hue-rotate-90': { '--tw-backdrop-hue-rotate': 'hue-rotate(90deg)' },
-      '.backdrop-hue-rotate-180': { '--tw-backdrop-hue-rotate': 'hue-rotate(180deg)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      'backdrop-filter': properties['--tw-backdrop-hue-rotate'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `backdrop-hue-rotate-{amount}` utilities alongside the `backdrop-filter` utility to rotate the hue of an element's backdrop.
+### Rotating the backdrop's hue
+
+Use the `backdrop-hue-rotate-{amount}` utilities to rotate the hue of an element's backdrop.
+
+<Example p="none">
+  <div class="flex justify-start sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-hue-rotate-90</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-hue-rotate-90 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-hue-rotate-180</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-hue-rotate-180 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">-backdrop-hue-rotate-60</p>
+      <div class="relative">
+        <div class="absolute inset-6 -backdrop-hue-rotate-60 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="backdrop-filter backdrop-hue-rotate-15 ...">
+<div class="**backdrop-hue-rotate-90** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-hue-rotate-180** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**-backdrop-hue-rotate-60** bg-white/30 ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Using negative values
 
-To control an element's backdrop hue rotation at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop hue-rotate utility. For example, use `md:backdrop-hue-rotate-60` to apply the `backdrop-hue-rotate-60` utility at only medium screen sizes and above.
+To use a negative backdrop hue rotate value, prefix the class name with a dash to convert it to a negative value.
 
 ```html
-<div class="backdrop-filter backdrop-hue-rotate-15 **md:backdrop-hue-rotate-60** ...">
+<div class="**-backdrop-hue-rotate-60**">
   <!-- ... -->
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### Removing backdrop filters
 
-## Customizing
+<RemovingBackdropFilters defaultClass="backdrop-blur-md backdrop-hue-rotate-180" />
 
-You can customize which `backdrop-hue-rotate` utilities are generated using the `backdropHueRotate` key in the `theme` section of your `tailwind.config.js` file.
+---
 
-```diff-js
-  // tailwind.config.js
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="backdrop-hue-rotate-15" featuredClass="backdrop-hue-rotate-60" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="backdrop-hue-rotate-15" featuredClass="backdrop-hue-rotate-60" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `backdrop-hue-rotate` utilities. You can customize these values by editing `theme.backdropHueRotate` or `theme.extend.backdropHueRotate` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       backdropHueRotate: {
 +         '-270': '-270deg',
 +         270: '270deg',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="backdropHueRotate" name="backdrop hue-rotate" />
-
-### Disabling
-
-<Disabling plugin="backdropHueRotate" name="backdrop hue-rotate" />
+<ArbitraryValues property="backdrop-hue-rotate" featuredClass="backdrop-hue-rotate-[270deg]" />

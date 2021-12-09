@@ -1,800 +1,1328 @@
 ---
-title: Hover, Focus, & Other States
+title: Handling Hover, Focus, and Other States
+shortTitle: Hover, Focus, and Other States
 description: Using utilities to style elements on hover, focus, and more.
 ---
 
-import { Heading } from '@/components/Heading'
-import { TipCompat } from '@/components/Tip'
-import { DefaultVariantsConfig } from '@/components/DefaultVariantsConfig'
-import { VariantEnabledList } from '@/components/VariantEnabledList'
+import { TipGood, TipBad, TipInfo } from '@/components/Tip'
 
-## <Heading hidden>Overview</Heading>
+Every utility class in Tailwind can be applied _conditionally_ by adding modifier to the beginning of the class name that describes the condition you want to target.
 
-Similar to how Tailwind handles [responsive design](/docs/responsive-design), styling elements on hover, focus, and more can be accomplished by prefixing utilities with the appropriate state variant.
+For example, to apply the `bg-sky-700` class on hover, use the `hover:bg-sky-700` class:
 
-```html purple
-<template preview>
-  <form class="flex w-full max-w-sm mx-auto space-x-3">
-    <input class="flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="email" placeholder="Your email">
-    <button class="flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200" type="button">
-      Sign up
-    </button>
-  </form>
-</template>
-
-<form>
-  <input class="border border-transparent **focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent** ...">
-  <button class="bg-purple-600 **hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50** ...">
-    Sign up
-  </button>
-</form>
-```
-
-**Not all state variants are enabled for all utilities by default due to file-size considerations**, but we've tried our best to enable the most commonly used combinations out of the box.
-
-For a complete list of which variants are enabled by default, see the [reference table](#default-variants-reference) at the end of this page.
-
-If you need to target a state that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
-
----
-
-## Hover
-
-Add the `hover:` prefix to only apply a utility on hover.
-
-```html rose
-<template preview>
-  <div class="text-center">
-    <button type="button" class="py-2 px-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none" tabindex="-1">
-      Hover me
+<Example hint="Hover over this button to see the background color change">
+  <div class="grid place-items-center">
+    <button class="bg-sky-500 hover:bg-sky-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white">
+      Save changes
     </button>
   </div>
-</template>
-
-<button class="bg-red-500 **hover:bg-red-700** ...">
-  Hover me
-</button>
-```
-
-<div>
-  <VariantEnabledList variant="hover"/>
-</div>
-
-You can control whether `hover` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      padding: ['hover'],
-    }
-  },
-}
-```
-
----
-
-## Focus
-
-Add the `focus:` prefix to only apply a utility on focus.
-
-```html lightBlue
-<template preview>
-  <div class="max-w-xs w-full mx-auto">
-    <input class="py-3 px-4 bg-white rounded-lg placeholder-gray-400 text-gray-900 appearance-none inline-block w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Focus me">
-  </div>
-</template>
-
-<input class="**focus:ring-2 focus:ring-blue-600** ...">
-```
-
-<div>
-  <VariantEnabledList variant="focus"/>
-</div>
-
-You can control whether `focus` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      maxHeight: ['focus'],
-    }
-  },
-}
-```
-
----
-
-## Active
-
-Add the `active:` prefix to only apply a utility when an element is active.
-
-```html emerald
-<template preview>
-  <div class="text-center">
-    <button type="button" class="py-2 px-4 bg-emerald-500 text-white font-semibold rounded-lg shadow-md active:bg-emerald-700 focus:outline-none" tabindex="-1">
-      Click me
-    </button>
-  </div>
-</template>
-
-<button class="bg-green-500 **active:bg-green-700** ...">
-  Click me
-</button>
-```
-
-<div>
-  <VariantEnabledList variant="active"/>
-</div>
-
-You can control whether `active` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      backgroundColor: ['active'],
-    }
-  },
-}
-```
-
----
-
-## Group-hover
-
-If you need to style a child element when hovering over a specific parent element, add the `group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
-
-```html indigo
-<template preview>
-  <div class="group px-6 py-5 max-w-full mx-auto w-72 border border-indigo-500 border-opacity-25 cursor-pointer rounded-lg select-none overflow-hidden space-y-1 hover:bg-white hover:shadow-lg hover:border-transparent">
-    <p class="font-semibold text-lg text-indigo-600 group-hover:text-gray-900">New Project</p>
-    <p class="text-indigo-500 group-hover:text-gray-500">Create a new project from a variety of starting templates.</p>
-  </div>
-</template>
-
-<div class="**group** border-indigo-500 hover:bg-white hover:shadow-lg hover:border-transparent ...">
-  <p class="text-indigo-600 **group-hover:text-gray-900** ...">New Project</p>
-  <p class="text-indigo-500 **group-hover:text-gray-500** ...">Create a new project from a variety of starting templates.</p>
-</div>
-```
-
-<div>
-  <VariantEnabledList variant="group-hover"/>
-</div>
-
-You can control whether `group-hover` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      divideColor: ['group-hover'],
-    }
-  },
-}
-```
-
----
-
-## Group-focus
-
-The `group-focus` variant works just like [`group-hover`](#group-hover) except for focus:
-
-```html amber
-<template preview>
-  <div class="text-center">
-    <button type="button" class="group inline-flex items-center py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg shadow-md focus:bg-amber-600 focus:outline-none">
-      <svg fill="currentColor" viewBox="0 0 20 20" class="-ml-1 mr-3 w-5 h-5 text-white group-focus:text-amber-300"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
-      Bookmark
-    </button>
-  </div>
-</template>
-
-<button class="**group** bg-yellow-500 focus:bg-yellow-600 ...">
-  <svg class="text-white **group-focus:text-yellow-300** ..."></svg>
-  Bookmark
-</button>
-```
-
-<div>
-  <VariantEnabledList variant="group-focus"/>
-</div>
-
-You can control whether `group-focus` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      backgroundColor: ['group-focus'],
-    }
-  },
-}
-```
-
----
-
-## Focus-within
-
-Add the `focus-within:` prefix to only apply a utility when that element or any of its descendants have focus.
-
-```html purple
-<template preview>
-  <form class="w-full max-w-sm mx-auto">
-    <div class="relative text-gray-400 focus-within:text-gray-600">
-      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
-      </div>
-      <input id="email" class="py-3 px-4 bg-white placeholder-gray-400 text-gray-900 rounded-lg shadow-md appearance-none w-full block pl-12 focus:outline-none" placeholder="you@example.com">
-    </div>
-  </form>
-</template>
-
-<form>
-  <div class="text-gray-400 **focus-within:text-gray-600** ...">
-    <div class="...">
-      <svg fill="currentColor"></svg>
-    </div>
-    <input class="focus:ring-2 focus:ring-gray-300 ...">
-  </div>
-</form>
-```
-
-<div>
-  <VariantEnabledList variant="focus-within"/>
-</div>
-
-You can control whether `focus-within` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      scale: ['focus-within'],
-    }
-  },
-}
-```
-
----
-
-## Focus-visible
-
-<TipCompat>Note that focus-visible currently requires JS and PostCSS polyfills for sufficient browser support.</TipCompat>
-
-Add the `focus-visible:` prefix to only apply a utility when an element has focus but only if the user is using the keyboard.
-
-```html rose
-<template preview>
-  <div class="flex justify-center space-x-8">
-    <button type="button" class="py-2 px-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:bg-red-500 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-opacity-75">
-      Ring on focus
-    </button>
-    <button type="button" class="py-2 px-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:bg-red-500 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-opacity-75">
-      Ring on focus-visible
-    </button>
-  </div>
-</template>
-
-<button class="**focus:ring-2 focus:ring-red-500** ...">
-  Ring on focus
-</button>
-<button class="**focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500** ...">
-  Ring on focus-visible
-</button>
-```
-
-Note that currently only [Chrome, Edge, and Firefox](https://caniuse.com/?search=focus-visible) support `focus-visible` natively, so for sufficient browser support you should install and configure both the [focus-visible JS polyfill](https://github.com/WICG/focus-visible) and the [focus-visible PostCSS polyfill](https://github.com/csstools/postcss-focus-visible). Make sure to include the PostCSS plugin _after_ Tailwind in your list of PostCSS plugins:
-
-```js
-// postcss.config.js
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    'postcss-focus-visible': {},
-    autoprefixer: {}
-  }
-}
-```
-
-<div>
-  <VariantEnabledList variant="focus-visible"/>
-</div>
-
-You can control whether `focus-visible` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      textDecoration: ['focus-visible'],
-    }
-  },
-}
-```
-
----
-
-## Motion-safe
-
-Add the `motion-safe:` prefix to only apply a utility when the `prefers-reduced-motion` media feature matches `no-preference`.
-
-For example, this button will only animate on hover if the user hasn't enabled "Reduce motion" on their system.
-
-```html lightBlue
-<template preview>
-  <div class="text-center">
-    <button type="button" class="py-2 px-4 bg-light-blue-500 text-white font-semibold rounded-lg shadow-md transform transition motion-safe:hover:scale-110 duration-500 focus:outline-none" tabindex="-1">
-      Hover me
-    </button>
-  </div>
-</template>
-
-<button class="transform **motion-safe:hover:scale-110** ...">
-  Hover me
-</button>
-```
-
-Note that unlike most other variants, `motion-safe` can be combined with both responsive variants _and_ other variants like `hover`, by stacking them in this order:
+</Example>
 
 ```html
-<div class="**sm:motion-safe:hover:animate-spin**">
-  <!-- ... -->
-</div>
-```
-
-<div>
-  <VariantEnabledList variant="motion-safe"/>
-</div>
-
-You can control whether `motion-safe` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      animation: ['motion-safe'],
-    }
-  },
-}
-```
-
----
-
-## Motion-reduce
-
-Add the `motion-reduce:` prefix to only apply a utility when the `prefers-reduced-motion` media feature matches `reduce`.
-
-For example, this button will animate on hover by default, but the animations will be disabled if the user has enabled "Reduce motion" on their system.
-
-```html fuchsia
-<template preview>
-  <div class="text-center">
-    <button type="button" class="py-2 px-4 bg-fuchsia-500 text-white font-semibold rounded-lg shadow-md transform transition motion-reduce:transform-none hover:scale-110 duration-500 focus:outline-none" tabindex="-1">
-      Hover me
-    </button>
-  </div>
-</template>
-
-<button class="transform hover:scale-110 **motion-reduce:transform-none** ...">
-  Hover me
+<button class="bg-sky-600 **hover:bg-sky-700** ...">
+  Save changes
 </button>
 ```
 
-Note that unlike most other variants, `motion-reduce` can be combined with both responsive variants _and_ other variants like `hover`, by stacking them in this order:
+<details className="-mt-2 mb-10 rounded-xl border px-6 py-3 prose open:pb-5">
+  <summary className="font-medium cursor-default select-none text-gray-900">How does this compare to traditional CSS?</summary>
 
-```html
-<div class="**sm:motion-reduce:hover:animate-none**">
-  <!-- ... -->
-</div>
-```
+When writing CSS the traditional way, a single class name would do different things based on the current state.
 
-<div>
-  <VariantEnabledList variant="motion-reduce"/>
-</div>
-
-You can control whether `motion-reduce` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      animation: ['motion-reduce'],
-    }
-  },
-}
-```
-
----
-
-## Disabled
-
-Add the `disabled:` prefix to only apply a utility when an element is disabled.
-
-```html emerald
-<template preview>
-  <div class="text-center space-x-8">
-    <button type="button" class="py-2 px-4 bg-emerald-500 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 focus:outline-none disabled:opacity-50" tabindex="-1">
-      Submit
-    </button>
-    <button type="button" class="py-2 px-4 bg-emerald-500 text-white font-semibold rounded-lg shadow-md disabled:opacity-50" disabled tabindex="-1">
-      Submit
-    </button>
-  </div>
-</template>
-
-<button class="**disabled:opacity-50** ...">
-  Submit
-</button>
-<button class="**disabled:opacity-50** ..." disabled>
-  Submit
-</button>
-```
-
-<div>
-  <VariantEnabledList variant="disabled"/>
-</div>
-
-You can control whether `disabled` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      opacity: ['disabled'],
-    }
-  },
-}
-```
-
----
-
-## Visited
-
-Add the `visited:` prefix to only apply a utility when a link has been visited.
-
-```html indigo
-<template preview>
-  <div class="text-center space-x-16">
-    <a href="#" class="font-semibold text-blue-600 ">Unvisited link</a>
-    <a href="#" class="font-semibold text-purple-600 ">Visited link</a>
-  </div>
-</template>
-
-<a href="#" class="text-blue-600 **visited:text-purple-600** ...">Link</a>
-```
-
-<div>
-  <VariantEnabledList variant="visited"/>
-</div>
-
-You can control whether `visited` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      textColor: ['visited'],
-    }
-  },
-}
-```
-
----
-
-## Checked
-
-Add the `checked:` prefix to only apply a utility when a radio or checkbox is currently checked.
-
-```html lightBlue
-<template preview>
-  <div class="p-4 max-w-xs mx-auto bg-white rounded-xl shadow-md">
-    <label class="flex items-center space-x-3">
-      <input type="checkbox" name="checked-demo" value="1" class="form-tick appearance-none h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none">
-      <span class="text-gray-900 font-medium">Option 1</span>
-    </label>
-  </div>
-</template>
-
-<input type="checkbox" class="appearance-none **checked:bg-blue-600 checked:border-transparent** ...">
-```
-
-<div>
-  <VariantEnabledList variant="checked"/>
-</div>
-
-You can control whether `checked` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      backgroundColor: ['checked'],
-      borderColor: ['checked'],
-    }
-  },
-}
-```
-
----
-
-## First-child
-
-Add the `first:` prefix to only apply a utility when it is the first-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
-
-```html indigo
-<template preview>
-  <div class="flex justify-around">
-    <div class="bg-indigo-500 rounded-md p-8 transform first:rotate-45"></div>
-    <div class="bg-indigo-500 rounded-md p-8 transform first:rotate-45"></div>
-    <div class="bg-indigo-500 rounded-md p-8 transform first:rotate-45"></div>
-    <div class="bg-indigo-500 rounded-md p-8 transform first:rotate-45"></div>
-  </div>
-</template>
-
-<div class="...">
-  <div v-for="item in items" class="transform **first:rotate-45** ...">
-    {{ item }}
-  </div>
-</div>
-```
-
-It's important to note that you should add any `first:` utilities to the child element, not the parent element.
-
-<div>
-  <VariantEnabledList variant="first-child"/>
-</div>
-
-You can control whether `first` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      borderWidth: ['first'],
-    }
-  },
-}
-```
-
----
-
-## Last-child
-
-Add the `last:` prefix to only apply a utility when it is the last-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
-
-```html amber
-<template preview>
-  <div class="flex justify-around">
-    <div class="bg-amber-500 rounded-md p-8 transform last:rotate-45"></div>
-    <div class="bg-amber-500 rounded-md p-8 transform last:rotate-45"></div>
-    <div class="bg-amber-500 rounded-md p-8 transform last:rotate-45"></div>
-    <div class="bg-amber-500 rounded-md p-8 transform last:rotate-45"></div>
-  </div>
-</template>
-
-<div class="...">
-  <div v-for="item in items" class="transform **last:rotate-45** ...">
-    {{ item }}
-  </div>
-</div>
-```
-
-It's important to note that you should add any `last:` utilities to the child element, not the parent element.
-
-<div>
-  <VariantEnabledList variant="last-child"/>
-</div>
-
-You can control whether `last` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      borderWidth: ['last'],
-    }
-  },
-}
-```
-
----
-
-## Odd-child
-
-Add the `odd:` prefix to only apply a utility when it is an odd-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
-
-```html rose
-<template preview>
-  <div class="flex justify-around">
-    <div class="bg-rose-500 rounded-md p-8 transform odd:rotate-45"></div>
-    <div class="bg-rose-500 rounded-md p-8 transform odd:rotate-45"></div>
-    <div class="bg-rose-500 rounded-md p-8 transform odd:rotate-45"></div>
-    <div class="bg-rose-500 rounded-md p-8 transform odd:rotate-45"></div>
-  </div>
-</template>
-
-<div class="...">
-  <div v-for="item in items" class="transform **odd:rotate-45** ...">
-    {{ item }}
-  </div>
-</div>
-```
-
-It's important to note that you should add any `odd:` utilities to the child element, not the parent element.
-
-<div>
-  <VariantEnabledList variant="odd-child"/>
-</div>
-
-You can control whether `odd` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      backgroundColor: ['odd'],
-    }
-  },
-}
-```
-
----
-
-## Even-child
-
-Add the `even:` prefix to only apply a utility when it is an even-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
-
-```html fuchsia
-<template preview>
-  <div class="flex justify-around">
-    <div class="bg-fuchsia-500 rounded-md p-8 transform even:rotate-45"></div>
-    <div class="bg-fuchsia-500 rounded-md p-8 transform even:rotate-45"></div>
-    <div class="bg-fuchsia-500 rounded-md p-8 transform even:rotate-45"></div>
-    <div class="bg-fuchsia-500 rounded-md p-8 transform even:rotate-45"></div>
-  </div>
-</template>
-
-<div class="...">
-  <div v-for="item in items" class="transform **even:rotate-45** ...">
-    {{ item }}
-  </div>
-</div>
-```
-
-It's important to note that you should add any `even:` utilities to the child element, not the parent element.
-
-<div>
-  <VariantEnabledList variant="even-child"/>
-</div>
-
-You can control whether `even` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    extend: {
-      backgroundColor: ['even'],
-    }
-  },
-}
-```
-
----
-
-## Combining with responsive prefixes
-
-State variants are also responsive, meaning you can do things like change an element's hover style at different breakpoints for example.
-
-To apply a state variant at a specific breakpoint, add the responsive prefix first, before the state prefix:
-
-```html
-<button class="... hover:bg-green-500 **sm:hover:bg-blue-500**">
-  <!-- ... -->
-</button>
-```
-
----
-
-## Generating variants for custom utilities
-
-You can generate state variants for your own custom CSS classes by wrapping them with the `@variants` directive:
+<TipBad>Traditionally the same class name applies different styles on hover</TipBad>
 
 ```css
-/* Input: */
-@variants group-hover, hover, focus {
-  .banana {
-    color: yellow;
-  }
+.btn-primary {
+  background-color: #0ea5e9;
 }
-
-/* Output: */
-.banana {
-  color: yellow;
+.btn-primary:hover {
+  background-color: #0369a1;
 }
-.group:hover .group-hover\:banana {
-  color: yellow;
-}
-.hover\:banana:hover {
-  color: yellow;
-}
-.focus\:banana:focus {
-  color: yellow;
-}
-
 ```
 
-For more information, see the [@variants directive documentation](/docs/functions-and-directives#variants).
+In Tailwind, rather than adding the styles for a hover state to an existing class, you add another class to the element that _only_ does something on hover.
+
+<TipGood>In Tailwind, separate classes are used for the default state and the hover state</TipGood>
+
+```css
+.bg-sky-500 {
+  background-color: #0ea5e9;
+}
+.hover\:bg-sky-700:hover {
+  background-color: #0369a1;
+}
+```
+
+Notice how `hover:bg-sky-700` _only_ defines styles for the `:hover` state? It does nothing by default, but as soon as you hover over an element with that class, the background color will change to `sky-700`.
+
+This is what we mean when we say a utility class can be applied _conditionally_ — by using modifiers you can control exactly how your design behaves in different states, without ever leaving your HTML.
+
+</details>
+
+Tailwind includes modifiers for just about everything you'll ever need, including:
+
+- [Pseudo-classes](#pseudo-classes), like `:hover`, `:focus`, `:first-child`, and `:required`
+- [Pseudo-elements](#pseudo-elements), like `::before`, `::after`, `::placeholder`, and `::selection`
+- [Media queries](#media-queries), like responsive breakpoints, dark mode, and `prefers-reduced-motion`
+- [Attribute selectors](#attribute-selectors), like `[dir="rtl"]` and `[open]`
+
+These modifiers can even be [stacked](#ordering-stacked-modifiers) to target more specific situations, for example changing the background color in dark mode, at the medium breakpoint, on hover:
+
+```html
+<button class="**dark:md:hover:bg-fuchsia-600** ...">
+  Save changes
+</button>
+```
+
+In this guide you'll learn about every modifier available in the framework, how to use with them with your own custom classes, and even how to create your own.
 
 ---
 
-## Creating custom variants
+## Pseudo-classes
 
-You can create your own variants for any states Tailwind doesn't support by default by writing a custom variant plugin.
+### Hover, focus, and active
 
-For example, this simple plugin adds support for the `required` pseudo-class variant:
+Style elements on hover, focus, and active using the `hover`, `focus`, and `active` modifiers:
+
+<Example hint="Try interacting with this button to see the hover, focus, and active states">
+  <div class="grid place-items-center">
+    <button type="button" class="bg-violet-500 hover:bg-violet-600 focus:outline-none focus:ring focus:ring-violet-300 active:bg-violet-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white">
+      Save changes
+    </button>
+  </div>
+</Example>
+
+```html
+<button class="bg-violet-500 **hover:bg-violet-400** **active:bg-violet-600** **focus:outline-none focus:ring focus:ring-violet-300** ...">
+  Save changes
+</button>
+```
+
+Tailwind also includes modifiers for other interactive states like `:visited`, `:focus-within`, `:focus-visible`, and more.
+
+See the [pseudo-class reference](#pseudo-class-reference) for a complete list of available pseudo-class modifiers.
+
+### First, last, odd, and even
+
+Style an element when it is the first-child or last-child using the `first` and `last` modifiers:
+
+<Example p="none">
+  <div class="px-4">
+    <div class="max-w-md mx-auto bg-white shadow">
+      <ul role="list" class="p-6 divide-y divide-gray-200">
+        <li class="py-4 flex first:pt-0 last:pb-0">
+          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+          <div class="ml-3 overflow-hidden">
+            <p class="text-sm font-medium text-gray-900">Kristen Ramos</p>
+            <p class="text-sm text-gray-500 truncate">kristen.ramos@example.com</p>
+          </div>
+        </li>
+        <li class="py-4 flex first:pt-0 last:pb-0">
+          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+          <div class="ml-3 overflow-hidden">
+            <p class="text-sm font-medium text-gray-900">Floyd Miles</p>
+            <p class="text-sm text-gray-500 truncate">floyd.miles@example.com</p>
+          </div>
+        </li>
+        <li class="py-4 flex first:pt-0 last:pb-0">
+          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+          <div class="ml-3 overflow-hidden">
+            <p class="text-sm font-medium text-gray-900">Courtney Henry</p>
+            <p class="text-sm text-gray-500 truncate">courtney.henry@example.com</p>
+          </div>
+        </li>
+        <li class="py-4 flex first:pt-0 last:pb-0">
+          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+          <div class="ml-3 overflow-hidden">
+            <p class="text-sm font-medium text-gray-900">Ted Fox</p>
+            <p class="text-sm text-gray-500 truncate">ted.fox@example.com</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</Example>
+
+```html
+<ul role="list" class="p-6 divide-y divide-gray-200">
+  {#each people as person}
+    <!-- Remove top/bottom padding when first/last child -->
+    <li class="flex py-4 **first:pt-0** **last:pb-0**">
+      <img class="h-10 w-10 rounded-full" src="{person.imageUrl}" alt="" />
+      <div class="ml-3 overflow-hidden">
+        <p class="text-sm font-medium text-gray-900">{person.name}</p>
+        <p class="text-sm text-gray-500 truncate">{person.email}</p>
+      </div>
+    </li>
+  {/each}
+</ul>
+```
+
+You can also style an element when it's an odd or even child using the `odd` and `even` modifiers:
+
+<Example p="none">
+  <div class="px-0 sm:px-6">
+    <div class="bg-white shadow">
+      <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <div class="overflow-hidden">
+            <table class="min-w-full">
+              <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                    Name
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                    Title
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                    Email
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    Jane Cooper
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    Regional Paradigm Technician
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    jane.cooper@example.com
+                  </td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    Cody Fisher
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    Product Directives Officer
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    cody.fisher@example.com
+                  </td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    Leonard Krasner
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    Senior Designer
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    leonard.krasner@example.com
+                  </td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    Emily Selman
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    VP, Hardware Engineering
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    emily.selman@example.com
+                  </td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    Anna Roberts
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    Chief Strategy Officer
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    anna.roberts@example.com
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```html
+<table>
+  <!-- ... -->
+  <tbody>
+    {#each people as person}
+      <!-- Use a white background for odd rows, and gray-100 for even rows -->
+      <tr class="**odd:bg-white** **even:bg-gray-100**">
+        <td>{person.name}</td>
+        <td>{person.title}</td>
+        <td>{person.email}</td>
+      </tr>
+    {/each}
+  </tbody>
+</table>
+```
+
+Tailwind also includes modifiers for other structural pseudo-classes like `:only-child`, `:first-of-type`, `:empty`, and more.
+
+See the [pseudo-class reference](#pseudo-class-reference) for a complete list of available pseudo-class modifiers.
+
+### Form states
+
+Style form elements in different states using modifiers like `required`, `invalid`, and `disabled`:
+
+<Example hint="Try making the email address valid to see the styles change" p="none">
+  <div class="max-w-sm mx-auto bg-white shadow py-5 px-6">
+    <form>
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+        <div class="mt-1">
+          <input type="text" name="username" id="username" class="px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="tbone" disabled />
+        </div>
+      </div>
+      <div class="mt-6">
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <div class="mt-1">
+          <input type="email" name="email" id="email" class="px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="george@krugerindustrial." placeholder="you@example.com" />
+        </div>
+      </div>
+      <div class="mt-6">
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <div class="mt-1">
+          <input type="password" name="password" id="password" class="px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="Bosco" />
+        </div>
+      </div>
+      <div class="mt-6 text-right">
+        <button class="bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white">
+          Save changes
+        </button>
+      </div>
+    </form>
+  </div>
+</Example>
+
+```html
+<form>
+  <label class="block">
+    <span class="block text-sm font-medium text-gray-700">Username</span>
+    <!-- Using form state modifers, the classes can be identical for every input -->
+    <input type="text" value="tbone" disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+      focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+      **disabled:bg-gray-50** **disabled:text-gray-500** **disabled:border-gray-200** **disabled:shadow-none**
+      **invalid:border-pink-500** **invalid:text-pink-600**
+      **focus:invalid:border-pink-500** **focus:invalid:ring-pink-500**
+    "/>
+  </label>
+  <!-- ... -->
+</form>
+```
+
+Using modifiers for this sort of thing can reduce the amount of conditional logic in your templates, letting you use the same set of classes regardless of what state an input is in and letting the browser apply the right styles for you.
+
+Tailwind also includes modifiers for other form states like `:read-only`, `:indeterminate`, `:checked`,  and more.
+
+See the [pseudo-class reference](#disabled) for a complete list of available pseudo-class modifiers.
+
+### Styling based on parent state <small>(group-{'{modifier}'})</small>
+
+When you need to style an element based on the state of some _parent_ element, mark the parent with the `group` class, and use `group-*` modifiers like `group-hover` to style the target element:
+
+<Example hint="Hover over the card to see both text elements change color">
+  <a href="#" class="group block max-w-xs mx-auto rounded-lg p-4 bg-white ring-1 ring-gray-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
+    <div class="flex items-center space-x-3">
+      <svg class="h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M11 19H6.931A1.922 1.922 0 015 17.087V8h12.069C18.135 8 19 8.857 19 9.913V11" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M14 7.64L13.042 6c-.36-.616-1.053-1-1.806-1H7.057C5.921 5 5 5.86 5 6.92V11M17 15v4M19 17h-4" />
+      </svg>
+      <h3 class="text-sm text-gray-900 font-semibold group-hover:text-white">New project</h3>
+    </div>
+    <p class="text-sm text-gray-500 group-hover:text-white">Create a new project from a variety of starting templates.</p>
+  </a>
+</Example>
+
+```html
+<a href="#" class="**group** block max-w-xs mx-auto rounded-lg p-6 bg-whitering-1 ring-gray-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
+  <div class="flex items-center space-x-3">
+    <svg class="h-6 w-6 stroke-sky-500 **group-hover:stroke-white**" fill="none" viewBox="0 0 24 24"><!-- ... --></svg>
+    <h3 class="text-gray-900 **group-hover:text-white** text-sm font-semibold">New project</h3>
+  </div>
+  <p class="text-gray-500 **group-hover:text-white** text-sm">Create a new project from a variety of starting templates.</p>
+</a>
+```
+
+This pattern works with every pseudo-class modifier, for example `group-focus`, `group-active`, or even `group-odd`.
+
+
+### Styling based on sibling state <small>(peer-{'{modifier}'})</small>
+
+When you need to style an element based on the state of a _sibling_ element, mark the sibling with the `peer` class, and use `peer-*` modifiers like `peer-invalid` to style the target element:
+
+<Example hint="Try making the email address valid to see the warning disappear" p="none">
+  <div class="max-w-sm mx-auto bg-white shadow pt-6 pb-5 px-6">
+    <form>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <div class="mt-1">
+          <input type="email" name="email" id="email" class="peer px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="george@krugerindustrial." placeholder="you@example.com" />
+          <p class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">Please provide a valid email address.</p>
+        </div>
+      </div>
+    </form>
+  </div>
+</Example>
+
+```html
+<form>
+  <label class="block">
+    <span class="block text-sm font-medium text-gray-700">Username</span>
+    <input type="email" class="**peer** ..."/>
+    <p class="mt-2 invisible **peer-invalid:visible** text-pink-600 text-sm">
+      Please provide a valid email address.
+    </p>
+  </label>
+</form>
+```
+
+This makes it possible to do all sorts of neat tricks, like [floating labels](https://www.youtube.com/watch?v=nJzKi6oIvBA) for example without any JS.
+
+This pattern works with every pseudo-class modifier, for example `peer-focus`, `peer-required`, and `peer-disabled`.
+
+---
+
+## Pseudo-elements
+
+### Before and after
+
+Style the `::before` and `::after` pseudo-elements using the `before` and `after` modifiers:
+
+<Example p="none">
+  <div class="max-w-sm mx-auto bg-white shadow pt-6 pb-5 px-6">
+    <form>
+      <label class="block">
+        <span class="block text-sm font-medium text-gray-700 after:content-['*'] after:ml-0.5 after:text-red-500">Email</span>
+        <input type="email" name="email" id="email" class="mt-1 px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" placeholder="you@example.com" />
+      </label>
+    </form>
+  </div>
+</Example>
+
+```html
+<label class="block">
+  <span class="**after:content-['*']** **after:ml-0.5** **after:text-red-500** block text-sm font-medium text-gray-700">
+    Email
+  </span>
+  <input type="email" name="email" class="mt-1 px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" placeholder="you@example.com" />
+</label>
+```
+
+When using these modifiers, Tailwind will automatically add `content: ''` by default so you don't have to specify it unless you want a different value:
+
+
+<Example p="none">
+  <div class="px-6">
+    <div class="max-w-lg mx-auto bg-white shadow py-8 px-6">
+      <blockquote class="text-2xl font-semibold italic text-center text-gray-900">
+        When you look <span class="relative inline-block before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-pink-500"><span class="relative text-white">annoyed</span></span> all the time, people think that you're busy.
+      </blockquote>
+    </div>
+  </div>
+</Example>
+
+```html
+<blockquote class="text-2xl font-semibold italic text-center text-gray-900">
+  When you look
+  <span class="**before:block** **before:absolute** **before:-inset-1** **before:-skew-y-3** **before:bg-pink-500** relative inline-block">
+    <span class="relative text-white">annoyed</span>
+  </span>
+  all the time, people think that you're busy.
+</blockquote>
+```
+
+It's worth noting that you don't really need `::before` and `::after` pseudo-elements for most things in Tailwind projects — it's usually simpler to just use a real HTML element.
+
+For example, here's the same design from above but using a `<span>` instead of the `::before` pseudo-element, which is a little easier to read and is actually less code:
+
+```html
+  <blockquote class="text-2xl font-semibold italic text-center text-gray-900">
+    When you look
+    <span class="relative">
+>     <span class="block absolute -inset-1 -skew-y-3 bg-pink-500" aria-hidden="true"></span>
+      <span class="relative text-white">annoyed</span>
+    </span>
+    all the time, people think that you're busy.
+  </blockquote>
+```
+
+Save `before` and `after` for situations where it's important that the content of the pseudo-element is not actually in the DOM and can't be selected by the user.
+
+### Placeholder text
+
+Style the placeholder text of any input or textarea using the `placeholder` modifier:
+
+<Example>
+  <div class="max-w-sm mx-auto">
+    <form>
+      <label class="relative block">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+          <svg class="h-5 w-5 fill-gray-300" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+        <span class="sr-only">Search</span>
+        <input type="text" name="search" class="block w-full border border-gray-300 rounded-md py-2 pl-9 pr-3 shadow-sm placeholder:italic placeholder:text-gray-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for anything..."
+        />
+      </label>
+    </form>
+  </div>
+</Example>
+
+```html
+<label class="relative block">
+  <span class="sr-only">Search</span>
+  <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+    <svg class="h-5 w-5 fill-gray-300" viewBox="0 0 20 20"><!-- ... --></svg>
+  </span>
+  <input class="**placeholder:italic** **placeholder:text-gray-400** block w-full border border-gray-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for anything..." type="text" name="search"/>
+</label>
+```
+
+### File input buttons
+
+Style the button in file inputs using the `file` modifier:
+
+<Example p="none">
+  <div class="px-6">
+    <div class="max-w-sm mx-auto bg-white shadow py-8 px-6">
+      <form class="flex items-center space-x-6">
+        <div class="shrink-0">
+          <img class="h-16 w-16 object-cover rounded-full" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80" alt="Current profile photo" />
+        </div>
+        <label class="block">
+          <span class="sr-only">Choose profile photo</span>
+          <input type="file" class="block w-full text-sm text-gray-500 file:text-sm file:font-semibold file:py-2 file:px-4 file:bg-violet-50 file:text-violet-700 file:rounded-full file:border-0 file:mr-4 hover:file:bg-violet-100"
+          />
+        </label>
+      </form>
+    </div>
+  </div>
+</Example>
+
+```html
+<form class="flex items-center space-x-6">
+  <div class="shrink-0">
+    <img class="h-16 w-16 object-cover rounded-full" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80" alt="Current profile photo" />
+  </div>
+  <label class="block">
+    <span class="sr-only">Choose profile photo</span>
+    <input type="file" class="block w-full text-sm text-gray-500
+      **file:mr-4** **file:py-2** **file:px-4**
+      **file:rounded-full** **file:border-0**
+      **file:text-sm** **file:font-semibold**
+      **file:bg-violet-50** **file:text-violet-700**
+      **hover:file:bg-violet-100**
+    "/>
+  </label>
+</form>
+```
+
+Note that Tailwind's [border reset](/docs/preflight#border-styles-are-reset-globally) is not applied to file input buttons. This means that to add a border to a file input button, you need to explicitly set the [border-style](/docs/border-style) using a class like `file:border-solid` alongside any [border-width](/docs/border-width) utility:
+
+```html
+<input type="file" class="file:border **file:border-solid** ..." />
+```
+
+### List markers
+
+Style the counters or bullets in lists using the `marker` modifier:
+
+<Example p="none">
+  <div class="px-6">
+    <div class="max-w-sm mx-auto bg-white shadow py-8 px-8">
+      <h2 class="text-base font-semibold text-gray-900">Ingredients</h2>
+      <ul role="list" class="mt-3 list-disc pl-5 space-y-3 text-gray-500 marker:text-sky-400">
+        <li>5 cups chopped Porcini mushrooms</li>
+        <li>1/2 cup of olive oil</li>
+        <li>3lb of celery</li>
+      </ul>
+    </div>
+  </div>
+</Example>
+
+```html
+<ul role="list" class="**marker:text-sky-400** list-disc pl-5 space-y-3 text-gray-500 marker:text-sky-400">
+  <li>5 cups chopped Porcini mushrooms</li>
+  <li>1/2 cup of olive oil</li>
+  <li>3lb of celery</li>
+</ul>
+```
+
+We've designed the `marker` modifier to be inheritable, so although you can use it directly on an `<li>` element, you can also use it on a parent to avoid repeating yourself.
+
+### Highlighted text
+
+Style the active text selection using the `selection` modifier:
+
+<Example p="none" hint="Try selecting some of this text with your mouse">
+  <div class="px-6">
+    <div class="max-w-lg mx-auto bg-white shadow py-8 px-6 selection:bg-fuchsia-300 selection:text-fuchsia-900">
+      <p>
+        So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
+      </p>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="**selection:bg-fuchsia-300** **selection:text-fuchsia-900**">
+  <p>
+    So I started to walk into the water. I won't lie to you boys, I was
+    terrified. But I pressed on, and as I made my way past the breakers
+    a strange calm came over me. I don't know if it was divine intervention
+    or the kinship of all living things but I tell you Jerry at that moment,
+    I <em>was</em> a marine biologist.
+  </p>
+</div>
+```
+
+We've designed the `selection` modifier to be inheritable, so you can add it anywhere in the tree and it will be applied to all descendant elements.
+
+This makes it easy to set the selection color to match your brand across your entire site:
+
+```html
+<html>
+<head>
+  <!-- ... -->
+</head>
+<body class="**selection:bg-pink-300**">
+  <!-- ... -->
+</body>
+</html>
+```
+
+### First-line and first-letter
+
+Style the first line in a block of content using the `first-line` modifier, and the first letter using the `first-letter` modifier:
+
+<Example p="none">
+  <div class="px-6">
+    <div class="max-w-lg mx-auto bg-white shadow py-8 px-6 font-serif">
+      <p class="first-line:uppercase first-line:tracking-widest first-letter:text-gray-900 first-letter:text-7xl first-letter:leading-none first-letter:float-left first-letter:font-bold first-letter:mr-3">
+        Well, let me tell you something, funny boy. Y'know that little stamp, the one that says "New York Public Library"? Well that may not mean anything to you, but that means a lot to me. One whole hell of a lot.
+      </p>
+      <p class="mt-6">
+        Sure, go ahead, laugh if you want to. I've seen your type before: Flashy, making the scene, flaunting convention. Yeah, I know what you're thinking. What's this guy making such a big stink about old library books? Well, let me give you a hint, junior.
+      </p>
+    </div>
+  </div>
+</Example>
+
+```html
+<p class="**first-line:uppercase** **first-line:tracking-widest**
+  **first-letter:text-7xl** **first-letter:font-bold** **first-letter:text-gray-900**
+  **first-letter:mr-3** **first-letter:float-left**
+">
+  Well, let me tell you something, funny boy. Y'know that little stamp, the one
+  that says "New York Public Library"? Well that may not mean anything to you,
+  but that means a lot to me. One whole hell of a lot.
+</p>
+```
+
+---
+
+## Media queries
+
+### Responsive breakpoints
+
+To style an element at a specific breakpoint, use responsive modifiers like `md` and `lg`.
+
+For example, this will render a 3-column grid on mobile, a 4-column grid on medium-width screens, and a 6-column grid on large-width screens:
+
+```html
+<div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+  <!-- ... -->
+</div>
+```
+
+Check out the [Responsive Design](/docs/responsive-design) documentation for an in-depth look at how these features work.
+
+### Prefers color scheme
+
+The `prefers-color-scheme` media query tells you whether the user prefers a light theme or dark theme, and is usually configured at the operating system level.
+
+Use utilities with no modifier to target light mode, and use the `dark` modifier to provide overrides for dark mode:
+
+<Example p="none">
+  <div class="grid grid-cols-1 sm:grid-cols-2">
+    <div class="p-8 pt-7">
+      <p class="mb-2 text-sm font-medium text-gray-500">Light mode</p>
+      <div class="bg-white rounded-lg px-6 py-8 ring-1 ring-gray-900/5 shadow-xl">
+        <div>
+          <span class="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg">
+            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </span>
+        </div>
+        <h3 class="mt-5 text-base font-medium text-gray-900 tracking-tight">Writes Upside-Down</h3>
+        <p class="mt-2 text-sm text-gray-500">
+          The Zero Gravity Pen can be used to write in any orientation, including upside-down. It even works in outer space.
+        </p>
+      </div>
+    </div>
+    <div class="bg-gray-900 p-8 pt-7">
+      <p class="mb-2 text-sm font-medium text-gray-400">Dark mode</p>
+      <div class="bg-gray-800 rounded-lg px-6 py-8 ring-1 ring-gray-900/5 shadow-xl">
+        <div>
+          <span class="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg">
+            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </span>
+        </div>
+        <h3 class="mt-5 text-base font-medium text-white tracking-tight">Writes Upside-Down</h3>
+        <p class="mt-2 text-sm text-gray-400">
+          The Zero Gravity Pen can be used to write in any orientation, including upside-down. It even works in outer space.
+        </p>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="bg-white **dark:bg-gray-900** rounded-lg px-6 py-8 ring-1 ring-gray-900/5 shadow-xl">
+  <div>
+    <span class="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg">
+      <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><!-- ... --></svg>
+    </span>
+  </div>
+  <h3 class="text-gray-900 **dark:text-white** mt-5 text-base font-medium tracking-tight">Writes Upside-Down</h3>
+  <p class="text-gray-500 **dark:text-gray-400** mt-2 text-sm">
+    The Zero Gravity Pen can be used to write in any orientation, including upside-down. It even works in outer space.
+  </p>
+</div>
+```
+
+Check out the [Dark Mode](/docs/dark-mode) documentation for an in-depth look at how this feature works.
+
+### Prefers reduced motion
+
+The `prefers-reduced-motion` media query tells you if the user has requested that you minimize non-essential motion.
+
+Use the `motion-reduce` modifier to conditionally add styles when the user has requested reduced motion:
+
+<Example hint="Try emulating `prefers-reduced-motion: reduce` in your developer tools to hide the spinner">
+  <div class="flex items-center justify-center">
+    <button type="button" class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500" disabled>
+      <svg class="motion-reduce:hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      Processing...
+    </button>
+  </div>
+</Example>
+
+```html
+<button type="button" class="bg-indigo-500 ..." disabled>
+  <svg class="**motion-reduce:hidden** animate-spin ..." viewBox="0 0 24 24"><!-- ... --></svg>
+  Processing...
+</button>
+```
+
+Tailwind also includes a `motion-safe` modifier that only adds styles when the user has _not_ requested reduced motion. This can be useful when using the `motion-reduce` helper would mean having to "undo" a lot of styles:
+
+```html
+<!-- Using `motion-reduce` can mean lots of "undoing" styles -->
+<button class="hover:-translate-y-0.5 transition **motion-reduce:hover:translate-y-0** **motion-reduce:transition-none** ...">
+  Save changes
+</button>
+
+<!-- Using `motion-safe` is less code in these situations -->
+<button class="**motion-safe:hover:-translate-x-0.5** **motion-safe:transition** ...">
+  Save changes
+</button>
+```
+
+### Viewport orientation
+
+Use the `portrait` and `landscape` modifiers to conditionally add styles when the viewport is in a specific orientation:
+
+```html
+<div>
+  <div class="portrait:hidden">
+    <!-- ... -->
+  </div>
+  <div class="landscape:hidden">
+    <p>
+      This experience is designed to be viewed in landscape. Please rotate your
+      device to view the site.
+    </p>
+  </div>
+</div>
+```
+
+### Print styles
+
+Use the `print` modifier to conditionally add styles that only apply when the document is being printed:
+
+```html
+<div>
+  <article class="**print:hidden**">
+    <h1>My Secret Pizza Recipe</h1>
+    <p>This recipe is a secret, and must not be shared with anyone</p>
+    <!-- ... -->
+  </article>
+  <div class="hidden **print:block**">
+    Are you seriously trying to print this? It's secret!
+  </div>
+</div>
+```
+
+---
+
+## Attribute selectors
+
+### RTL support
+
+_Right-to-left support is experimental and the details of how it works may change. Share your feedback in the [community](https://github.com/tailwindlabs/tailwindcss/discussions) to help us get it ready for prime time._
+
+Use the `rtl` and `ltr` modifiers conditionally add styles in right-to-left and left-to-right modes respectively when building multi-directional layouts:
+
+<Example>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-10 max-w-lg mx-auto">
+    <div dir="ltr">
+      <p class="mb-4 text-sm font-medium text-gray-500">Left-to-right</p>
+      <div class="group flex items-center">
+        <img class="shrink-0 h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+        <div class="ml-3 rtl:ml-0 rtl:mr-3">
+          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Tom Cook</p>
+          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">Director of Operations</p>
+        </div>
+      </div>
+    </div>
+    <div dir="rtl">
+      <p class="mb-4 text-sm font-medium text-gray-500">Right-to-left</p>
+      <div class="group flex items-center">
+        <img class="shrink-0 h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1563833717765-00462801314e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+        <div class="ml-3 rtl:ml-0 rtl:mr-3">
+          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">تامر كرم</p>
+          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">الرئيس التنفيذي</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Example>
+
+```html
+  <div class="group flex items-center">
+    <img class="shrink-0 h-12 w-12 rounded-full" src="..." alt="" />
+>   <div class="ltr:ml-3 rtl:mr-3">
+      <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">...</p>
+      <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">...</p>
+    </div>
+  </div>
+```
+
+Note that the `ltr` modifier will not take effect unless the `dir` attribute is explicitly set to `ltr`, so if you are building a multi-directional site make sure to always set a direction, not just in `rtl` mode.
+
+<TipInfo>Always set the direction, even if left-to-right is your default</TipInfo>
+
+```html
+<html dir="ltr">
+  <!-- ... -->
+</html>
+```
+
+Remember, these modifiers are only useful if you are building a site that needs to support _both_ left-to-right and right-to-left layouts. If you're building a site that only needs to support a single direction, you don't need these modifiers — just apply the styles that make sense for your content.
+
+
+### Open/closed state
+
+Use the `open` modifier to conditionally add styles when a `<details>` or `<dialog>` element is in an open state:
+
+<Example hint="Try toggling the disclosure to see the styles change">
+  <div class="max-w-lg mx-auto">
+    <details class="open:bg-white open:ring-1 open:ring-black/5 open:shadow-lg p-6 rounded-lg" open>
+      <summary class="text-sm leading-6 text-gray-900 font-semibold select-none">
+        Why do they call it Ovaltine?
+      </summary>
+      <div class="mt-3 text-sm leading-6 text-gray-600">
+        <p>The mug is round. The jar is round. They should call it Roundtine.</p>
+      </div>
+    </details>
+  </div>
+</Example>
+
+
+```html
+  <div class="max-w-lg mx-auto p-8">
+>   <details class="open:bg-white open:ring-1 open:ring-black/5 open:shadow-lg p-6 rounded-lg" open>
+      <summary class="text-sm leading-6 text-gray-900 font-semibold select-none">
+        Why do they call it Ovaltine?
+      </summary>
+      <div class="mt-3 text-sm leading-6 text-gray-600">
+        <p>The mug is round. The jar is round. They should call it Roundtine.</p>
+      </div>
+    </details>
+  </div>
+```
+
+
+---
+
+## Advanced topics
+
+### Using with your own classes
+
+All of Tailwind's modifiers are available to use with your own custom classes as long as you've defined them in one of Tailwind's [layers](/docs/adding-custom-styles#using-css-and-layer) or added them using a [plugin](/docs/adding-custom-styles#writing-plugins):
+
+```css main.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .content-auto {
+    content-visibility: auto;
+  }
+}
+```
+
+```html HTML
+<div class="**lg:content-auto**">
+  <!-- ... -->
+</div>
+```
+
+### Ordering stacked modifiers
+
+When stacking modifiers, they are applied from the inside-out, like nested function calls:
 
 ```js
-// tailwind.config.js
-const plugin = require('tailwindcss/plugin')
+// These modifiers:
+'dark:group-hover:focus:opacity-100'
+
+// ...are applied like this:
+dark(groupHover(focus('opacity-100')))
+```
+
+For the most part this doesn't actually matter, but there are a few situations where the order you use actually generates meaningfully different CSS.
+
+For example, if you have `darkMode` configured to `class`, combining the `dark` and `group-hover` modifiers generates a different result depending on the order you use:
+
+```css
+/* dark:group-hover:opacity-100 */
+.dark .group:hover .dark\:group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+/* group-hover:dark:opacity-100 */
+.group:hover .dark .group-hover\:dark\:opacity-100 {
+  opacity: 1;
+}
+```
+
+In the first example, the `dark` element needs to be a parent of the `group` element, but in the second example it's reversed.
+
+Another place this is important is when using modifiers like `prose-headings` that are included with the official typography plugin:
+
+```css
+/* prose-headings:hover:underline */
+.prose-headings\:hover\:underline:hover :is(:where(h1, h2, h3, h4, th)) {
+  text-decoration: underline;
+}
+
+/* hover:prose-headings:underline */
+.hover\:prose-headings\:underline :is(:where(h1, h2, h3, h4, th)):hover {
+  text-decoration: underline;
+}
+```
+
+In the first example, every single heading is underlined when you hover over the article itself, whereas in the second example each heading is only underlined when you hover over that heading.
+
+
+### Creating custom modifiers
+
+You can add your own modifiers to Tailwind by creating a plugin that uses the `addVariant` API:
+
+```js tailwind.config.js
+let plugin = require('tailwindcss/plugin')
 
 module.exports = {
+  // ...
   plugins: [
-    plugin(function({ addVariant, e }) {
-      addVariant('required', ({ modifySelectors, separator }) => {
-        modifySelectors(({ className }) => {
-          return `.${e(`required${separator}${className}`)}:required`
-        })
-      })
+    plugin(function ({ addVariant }) {
+      // Add a `third` variant, ie. `third:pb-0`
+      addVariant('third', '&:nth-child(3)')
     })
   ]
 }
 ```
 
-Learn more about writing variant plugins in the [variant plugin documentation](/docs/plugins#adding-variants).
+Learn more in the [Plugins](/docs/plugins#adding-variants) documentation.
 
 ---
 
-## Default variants reference
+## Appendix
 
-Due to file-size considerations, Tailwind does not include all variants for all utilities by default.
+### Quick reference
 
-To configure which variants are enabled for your project, see the [configuring variants documentation](/docs/configuring-variants).
+A quick reference table of every single modifier included in Tailwind by default.
 
-<div>
-  <DefaultVariantsConfig />
+<div class="overflow-scroll max-w-screen">
+
+| Modifier | CSS |
+| --- | --- |
+| <a href="#hover" className="whitespace-nowrap">hover</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:hover</code> |
+| <a href="#focus" className="whitespace-nowrap">focus</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:focus</code> |
+| <a href="#focus-within" className="whitespace-nowrap">focus-within</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:focus-within</code> |
+| <a href="#focus-visible" className="whitespace-nowrap">focus-visible</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:focus-visible</code> |
+| <a href="#active" className="whitespace-nowrap">active</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:active</code> |
+| <a href="#visited" className="whitespace-nowrap">visited</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:visited</code> |
+| <a href="#target" className="whitespace-nowrap">target</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:target</code> |
+| <a href="#first" className="whitespace-nowrap">first</a> | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:first-child</code> |
+| <a href="#last" className="whitespace-nowrap">last</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:last-child</code> |
+| <a href="#only" className="whitespace-nowrap">only</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:only-child</code> |
+| <a href="#odd" className="whitespace-nowrap">odd</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:nth-child(odd)</code> |
+| <a href="#even" className="whitespace-nowrap">even</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:nth-child(even)</code> |
+| <a href="#first-of-type" className="whitespace-nowrap">first-of-type</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:first-of-type</code> |
+| <a href="#last-of-type" className="whitespace-nowrap">last-of-type</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:last-of-type</code> |
+| <a href="#only-of-type" className="whitespace-nowrap">only-of-type</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:only-of-type</code> |
+| <a href="#empty" className="whitespace-nowrap">empty</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:empty</code> |
+| <a href="#disabled" className="whitespace-nowrap">disabled</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:disabled</code> |
+| <a href="#checked" className="whitespace-nowrap">checked</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:checked</code> |
+| <a href="#indeterminate" className="whitespace-nowrap">indeterminate</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:indeterminate</code> |
+| <a href="#default" className="whitespace-nowrap">default</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:default</code> |
+| <a href="#required" className="whitespace-nowrap">required</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:required</code> |
+| <a href="#valid" className="whitespace-nowrap">valid</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:valid</code> |
+| <a href="#invalid" className="whitespace-nowrap">invalid</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:invalid</code> |
+| <a href="#in-range" className="whitespace-nowrap">in-range</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:in-range</code> |
+| <a href="#out-of-range" className="whitespace-nowrap">out-of-range</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:out-of-range</code> |
+| <a href="#placeholder-shown" className="whitespace-nowrap">placeholder-shown</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:placeholder-shown</code> |
+| <a href="#autofill" className="whitespace-nowrap">autofill</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:autofill</code> |
+| <a href="#read-only" className="whitespace-nowrap">read-only</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>:read-only</code> |
+| <a href="#open" className="whitespace-nowrap">open</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>[open]</code> |
+| <a href="#before-and-after" className="whitespace-nowrap">before</a> | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>::before</code> |
+| <a href="#before-and-after" className="whitespace-nowrap">after</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>::after</code> |
+| <a href="#first-line-and-first-letter" className="whitespace-nowrap">first-letter</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>::first-letter</code> |
+| <a href="#first-line-and-first-letter" className="whitespace-nowrap">first-line</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>::first-line</code> |
+| <a href="#highlighted-text" className="whitespace-nowrap">marker</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>::marker</code> |
+| <a href="#selection" className="whitespace-nowrap">selection</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>::selection</code> |
+| <a href="#file" className="whitespace-nowrap">file</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>::file-selector-button</code> |
+| <a href="#placeholder" className="whitespace-nowrap">placeholder</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-gray-400">&</span>::placeholder</code> |
+| <a href="#responsive-breakpoints" className="whitespace-nowrap">sm</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (min-width: 640px)</code> |
+| <a href="#responsive-breakpoints" className="whitespace-nowrap">md</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (min-width: 768px)</code> |
+| <a href="#responsive-breakpoints" className="whitespace-nowrap">lg</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (min-width: 1024px)</code> |
+| <a href="#responsive-breakpoints" className="whitespace-nowrap">xl</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (min-width: 1280px)</code> |
+| <a href="#responsive-breakpoints" className="whitespace-nowrap">2xl</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (min-width: 1536px)</code> |
+| <a href="#prefers-color-scheme" className="whitespace-nowrap">dark</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (prefers-color-scheme: dark)</code> |
+| <a href="#viewport-orientation" className="whitespace-nowrap">portrait</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (orientation: portrait)</code> |
+| <a href="#viewport-orientation" className="whitespace-nowrap">landscape</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (orientation: landscape)</code> |
+| <a href="#prefers-reduced-motion" className="whitespace-nowrap">motion-safe</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (prefers-reduced-motion: no-preference)</code> |
+| <a href="#prefers-reduced-motion" className="whitespace-nowrap">motion-reduce</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (prefers-reduced-motion: reduce)</code> |
+| <a href="#print-styles" className="whitespace-nowrap">print</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media print</code> |
+| <a href="#rtl-support" className="whitespace-nowrap">rtl</a> | <code className="whitespace-nowrap before:content-none after:content-none">[dir="rtl"] <span className="text-gray-400">&</span></code> |
+| <a href="#rtl-support" className="whitespace-nowrap">ltr</a> | <code className="whitespace-nowrap before:content-none after:content-none">[dir="ltr"] <span className="text-gray-400">&</span></code> |
+
 </div>
+
+### Pseudo-class reference
+
+This is a comprehensive list of examples for all the pseudo-class modifiers included in Tailwind to complement the [pseudo-classes  documentation](/docs/hover-focus-and-other-states#pseudo-classes) at the beginning of this guide.
+
+#### hover <small>(:hover)</small>
+
+Style an element when the user hovers over it with the mouse cursor using the `hover` modifier:
+
+```html
+<div class="bg-black **hover:bg-white** ...">
+  <!-- ... -->
+</div>
+```
+
+#### focus <small>(:focus)</small>
+
+Style an element when it has focus the `focus` modifier:
+
+```html
+<input class="border-gray-300 **focus:border-blue-400** ..." />
+```
+
+#### focus-within <small>(:focus-within)</small>
+
+Style an element when it or one of its descendants has focus using the `focus-within` modifier:
+
+```html
+<div class="**focus-within:shadow-lg** ...">
+  <input type="text" />
+</div>
+```
+
+#### focus-visible <small>(:focus-visible)</small>
+
+Style an element when it has been focused using the keyboard using the `focus-visible` modifier:
+
+```html
+<button class="focus:outline-none **focus-visible:ring** ...">
+  Submit
+</button>
+```
+
+#### active <small>(:active)</small>
+
+Style an element when it is being pressed using the `active` modifier:
+
+```html
+<button class="bg-blue-500 **active:bg-blue-600** ...">
+  Submit
+</button>
+```
+
+#### visited <small>(:visited)</small>
+
+Style a link when it has already been visited using the `visited` modifier:
+
+```html
+<a href="https://seinfeldquotes.com" class="text-blue-600 **visited:text-purple-600** ...">
+  Inspiration
+</a>
+```
+
+#### target <small>(:target)</small>
+
+Style an element if its ID matches the current URL fragment using the `target` modifier:
+
+```html
+<div id="about" class="**target:shadow-lg** ...">
+  <!-- ... -->
+</div>
+```
+
+#### first <small>(:first-child)</small>
+
+Style an element if it's the first child using the `first` modifier:
+
+```html
+<ul>
+  {#each people as person}
+    <li class="py-4 **first:pt-0** ...">
+      <!-- ... -->
+    </li>
+  {/each}
+</ul>
+```
+
+#### last <small>(:last-child)</small>
+
+Style an element if it's the last child using the `last` modifier:
+
+```html
+<ul>
+  {#each people as person}
+    <li class="py-4 **last:pb-0** ...">
+      <!-- ... -->
+    </li>
+  {/each}
+</ul>
+```
+
+#### only <small>(:only-child)</small>
+
+Style an element if it's the only child using the `only` modifier:
+
+```html
+<ul>
+  {#each people as person}
+    <li class="py-4 **only:py-0** ...">
+      <!-- ... -->
+    </li>
+  {/each}
+</ul>
+```
+
+#### odd <small>(:nth-child(odd))</small>
+
+Style an element if it's an oddly numbered child using the `odd` modifier:
+
+```html
+<table>
+  {#each people as person}
+    <tr class="bg-white **odd:bg-gray-100** ...">
+      <!-- ... -->
+    </tr>
+  {/each}
+</table>
+```
+
+#### even <small>(:nth-child(even))</small>
+
+Style an element if it's an evenly numbered child using the `even` modifier:
+
+```html
+<table>
+  {#each people as person}
+    <tr class="bg-white **even:bg-gray-100** ...">
+      <!-- ... -->
+    </tr>
+  {/each}
+</table>
+```
+
+#### first-of-type <small>(:first-of-type)</small>
+
+Style an element if it's the first child of its type using the `first-of-type` modifier:
+
+```html
+<nav>
+  <img src="/logo.svg" alt="Vandelay Industries" />
+  {#each links as link}
+    <a href="#" class="ml-2 **first-of-type:ml-6** ...">
+      <!-- ... -->
+    </a>
+  {/each}
+</table>
+```
+
+#### last-of-type <small>(:last-of-type)</small>
+
+Style an element if it's the last child of its type using the `last-of-type` modifier:
+
+```html
+<nav>
+  <img src="/logo.svg" alt="Vandelay Industries" />
+  {#each links as link}
+    <a href="#" class="mr-2 **last-of-type:mr-6** ...">
+      <!-- ... -->
+    </a>
+  {/each}
+  <button>More</button>
+</table>
+```
+
+#### only-of-type <small>(:only-of-type)</small>
+
+Style an element if it's the only child of its type using the `only-of-type` modifier:
+
+```html
+<nav>
+  <img src="/logo.svg" alt="Vandelay Industries" />
+  {#each links as link}
+    <a href="#" class="mx-2 **only-of-type:mx-6** ...">
+      <!-- ... -->
+    </a>
+  {/each}
+  <button>More</button>
+</table>
+```
+
+#### empty <small>(:empty)</small>
+
+Style an element if it has no content using the `empty` modifier:
+
+```html
+<ul>
+  {#each people as person}
+    <li class="**empty:hidden** ...">{person.hobby}</li>
+  {/each}
+</ul>
+```
+
+#### disabled <small>(:disabled)</small>
+
+Style an input when it's disabled using the `disabled` modifier:
+
+```html
+<input class="**disabled:opacity-75** ..." />
+```
+
+#### checked <small>(:checked)</small>
+
+Style a checkbox or radio button when it's checked using the `checked` modifier:
+
+```html
+<input type="checkbox" class="appearance-none **checked:bg-blue-500** ..." />
+```
+
+#### indeterminate <small>(:indeterminate)</small>
+
+Style a checkbox or radio button in an indeterminate state using the `indeterminate` modifier:
+
+```html
+<input type="checkbox" class="appearance-none **indeterminate:bg-gray-300** ..." />
+```
+
+#### default <small>(:default)</small>
+
+Style an option, checkbox or radio button that was the default value when the page initially loaded using the `default` modifier:
+
+```html
+<input type="checkbox" class="**default:ring-2** ..." />
+```
+
+#### required <small>(:required)</small>
+
+Style an input when it's required using the `required` modifier:
+
+```html
+<input class="**required:border-red-500** ..." />
+```
+
+#### valid <small>(:valid)</small>
+
+Style an input when it's valid using the `valid` modifier:
+
+```html
+<input class="**required:border-green-500** ..." />
+```
+
+#### invalid <small>(:invalid)</small>
+
+Style an input when it's valid using the `valid` modifier:
+
+```html
+<input class="**required:border-red-500** ..." />
+```
+
+#### in-range <small>(:in-range)</small>
+
+Style an input when it's value is within a specified range limit using the `in-range` modifier:
+
+```html
+<input min="1" max="5" class="**in-range:border-green-500** ..." />
+```
+
+#### out-of-range <small>(:out-of-range)</small>
+
+Style an input when it's value is outside of a specified range limit using the `out-of-range` modifier:
+
+```html
+<input min="1" max="5" class="**out-of-range:border-red-500** ..." />
+```
+
+#### placeholder-shown <small>(:placeholder-shown)</small>
+
+Style an input when the placeholder is shown using the `placeholder-shown` modifier:
+
+```html
+<input class="**placeholder-shown:border-gray-500** ..." placeholder="you@example.com" />
+```
+
+#### autofill <small>(:autofill)</small>
+
+Style an input when it has been autofilled by the browser using the `autofill` modifier:
+
+```html
+<input class="**autofill:bg-yellow-200** ..." />
+```
+
+#### read-only <small>(:read-only)</small>
+
+Style an input when it is read-only using the `read-only` modifier:
+
+```html
+<input class="**read-only:bg-gray-100** ..." />
+```

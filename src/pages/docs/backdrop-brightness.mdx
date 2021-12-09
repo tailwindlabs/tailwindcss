@@ -1,78 +1,111 @@
 ---
 title: "Backdrop Brightness"
 description: "Utilities for applying backdrop brightness filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=backdropBrightness'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingBackdropFilters } from '@/components/RemovingBackdropFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.backdrop-brightness-0': { '--tw-backdrop-brightness': 'brightness(0)' },
-        '.backdrop-brightness-50': { '--tw-backdrop-brightness': 'brightness(.5)' },
-        '.backdrop-brightness-75': { '--tw-backdrop-brightness': 'brightness(.75)' },
-        '.backdrop-brightness-90': { '--tw-backdrop-brightness': 'brightness(.9)' },
-        '.backdrop-brightness-95': { '--tw-backdrop-brightness': 'brightness(.95)' },
-        '.backdrop-brightness-100': { '--tw-backdrop-brightness': 'brightness(1)' },
-        '.backdrop-brightness-105': { '--tw-backdrop-brightness': 'brightness(1.05)' },
-        '.backdrop-brightness-110': { '--tw-backdrop-brightness': 'brightness(1.1)' },
-        '.backdrop-brightness-125': { '--tw-backdrop-brightness': 'brightness(1.25)' },
-        '.backdrop-brightness-150': { '--tw-backdrop-brightness': 'brightness(1.5)' },
-        '.backdrop-brightness-200': { '--tw-backdrop-brightness': 'brightness(2)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      'backdrop-filter': properties['--tw-backdrop-brightness'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `backdrop-brightness-{amount?}` utilities alongside the `backdrop-filter` utility to control an element's backdrop brightness.
+### Controlling backdrop brightness
+
+Use the `backdrop-brightness-{amount?}` utilities to control an element's backdrop brightness.
+
+<Example p="none">
+  <div class="flex justify-start sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-brightness-50</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-brightness-50 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-brightness-125</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-brightness-125 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-brightness-200</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-brightness-200 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="backdrop-filter backdrop-brightness-125 ...">
+<div class="**backdrop-brightness-50** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-brightness-125** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-brightness-200** bg-white/30 ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing backdrop filters
 
-To control an element's backdrop brightness at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop brightness utility. For example, use `md:backdrop-brightness-150` to apply the `backdrop-brightness-150` utility at only medium screen sizes and above.
+<RemovingBackdropFilters defaultClass="backdrop-blur-md backdrop-brightness-150" />
 
-```html
-<div class="backdrop-filter backdrop-brightness-110 **md:backdrop-brightness-150** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `backdrop-brightness` utilities are generated using the `backdropBrightness` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="backdrop-brightness-110" featuredClass="backdrop-brightness-150" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="backdrop-brightness-110" featuredClass="backdrop-brightness-150" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `backdrop-brightness` utilities. You can customize these values by editing `theme.backdropBrightness` or `theme.extend.backdropBrightness` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       backdropBrightness: {
 +         25: '.25',
 +         175: '1.75',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="backdropBrightness" name="backdrop brightness" />
-
-### Disabling
-
-<Disabling plugin="backdropBrightness" name="backdrop brightness" />
+<ArbitraryValues property="backdrop-brightness" featuredClass="backdrop-brightness-[1.75]" />

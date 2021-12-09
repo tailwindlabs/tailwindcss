@@ -3,13 +3,12 @@ title: "Divide Style"
 description: "Utilities for controlling the border style between elements."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/divideStyle'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
-import { Heading } from '@/components/Heading'
+import utilities from 'utilities?plugin=divideStyle'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
+  utilities,
   transformSelector: (selector) => (
     <>
       {selector.split('>').shift().trim().replace(/^\./, '').replace(/\\/g, '')} <span className="ml-1 text-purple-300">> * + *</span>
@@ -17,44 +16,36 @@ export const classes = {
   ),
 }
 
-## Usage
+## Basic usage
+
+### Set the divide style
 
 Control the border style between elements using the `divide-{style}` utilities.
 
-```html amber
-<template preview>
-  <div class="divide-y-4 divide-amber-600 divide-dashed">
-    <div class="text-center font-extrabold text-2xl text-amber-600 py-3">1</div>
-    <div class="text-center font-extrabold text-2xl text-amber-600 py-3">2</div>
-    <div class="text-center font-extrabold text-2xl text-amber-600 py-3">3</div>
+<Example p="none">
+  <div class="grid grid-cols-1 divide-dashed divide-y font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
+    <div class="p-4 text-gray-400 bg-white">01</div>
+    <div class="p-4 text-gray-400 bg-white">02</div>
+    <div class="p-4 text-gray-400 bg-white">03</div>
   </div>
-</template>
-
-<div class="divide-y-4 divide-yellow-600 **divide-dashed**">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-</div>
-```
-
-## Responsive
-
-To control the border style between elements at a specific breakpoint, add a `{screen}:` prefix to any existing divide style utility. For example, use `md:divide-dashed` to apply the `divide-dashed` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="divide-y-2 divide-dashed **md:divide-solid**">
-  <!-- ... -->
+<div class="divide-y **divide-dashed**">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="divideStyle" />
+<HoverFocusAndOtherStates defaultClass="divide-y divide-dashed" featuredClass="divide-solid" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="divideStyle" />
+<BreakpointsAndMediaQueries defaultClass="divide-y divide-dashed" featuredClass="divide-solid" />

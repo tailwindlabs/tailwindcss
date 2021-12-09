@@ -1,12 +1,4 @@
-import {
-  useState,
-  useEffect,
-  createContext,
-  Fragment,
-  useCallback,
-  isValidElement,
-  useContext,
-} from 'react'
+import { useState, useEffect, createContext, Fragment, useCallback, useContext } from 'react'
 import { ClassTable } from '@/components/ClassTable'
 import { useRouter } from 'next/router'
 import { usePrevNext } from '@/hooks/usePrevNext'
@@ -14,6 +6,9 @@ import Link from 'next/link'
 import { SidebarLayout, SidebarContext } from '@/layouts/SidebarLayout'
 import { PageHeader } from '@/components/PageHeader'
 import clsx from 'clsx'
+import { Footer } from '@/components/Footer'
+import { Heading } from '@/components/Heading'
+import { MDXProvider } from '@mdx-js/react'
 
 export const ContentsContext = createContext()
 
@@ -27,62 +22,67 @@ function TableOfContents({ tableOfContents, currentSection }) {
     }
   }
 
+  function isActive(section) {
+    if (section.slug === currentSection) {
+      return true
+    }
+    if (!section.children) {
+      return false
+    }
+    return section.children.findIndex(isActive) > -1
+  }
+
+  let pageHasSubsections = tableOfContents.some((section) => section.children.length > 0)
+
   return (
     <>
-      <h5 className="text-gray-900 uppercase tracking-wide font-semibold mb-3 text-sm lg:text-xs">
-        On this page
-      </h5>
-      <ul className="overflow-x-hidden text-gray-500 font-medium">
-        {tableOfContents.map((section) => {
-          let sectionIsActive =
-            currentSection === section.slug ||
-            section.children.findIndex(({ slug }) => slug === currentSection) > -1
-
-          return (
-            <Fragment key={section.slug}>
-              <li>
+      <h5 className="text-gray-900 font-semibold mb-4 text-sm leading-6">On this page</h5>
+      <ul className="text-gray-700 text-sm leading-6">
+        {tableOfContents.map((section) => (
+          <Fragment key={section.slug}>
+            <li>
+              <a
+                href={`#${section.slug}`}
+                onClick={closeNav}
+                className={clsx(
+                  'block py-1',
+                  pageHasSubsections ? 'font-medium' : '',
+                  isActive(section) ? 'font-medium text-sky-500' : 'hover:text-gray-900'
+                )}
+              >
+                {section.title}
+              </a>
+            </li>
+            {section.children.map((subsection) => (
+              <li className="ml-4" key={subsection.slug}>
                 <a
-                  href={`#${section.slug}`}
+                  href={`#${subsection.slug}`}
                   onClick={closeNav}
                   className={clsx(
-                    'block transform transition-colors duration-200 py-2 hover:text-gray-900',
-                    {
-                      'text-gray-900': sectionIsActive,
-                    }
+                    'group flex items-start py-1',
+                    isActive(subsection) ? 'text-sky-500' : 'hover:text-gray-900'
                   )}
                 >
-                  {section.title}
+                  <svg
+                    width="3"
+                    height="24"
+                    viewBox="0 -9 3 24"
+                    className="mr-2 text-gray-400 overflow-visible group-hover:text-gray-600"
+                  >
+                    <path
+                      d="M0 0L3 3L0 6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  {subsection.title}
                 </a>
               </li>
-              {section.children.map((subsection) => {
-                let subsectionIsActive = currentSection === subsection.slug
-
-                return (
-                  <li
-                    className={clsx({
-                      'ml-4': isMainNav,
-                      'ml-2': !isMainNav,
-                    })}
-                    key={subsection.slug}
-                  >
-                    <a
-                      href={`#${subsection.slug}`}
-                      onClick={closeNav}
-                      className={clsx(
-                        'block py-2 transition-colors duration-200 hover:text-gray-900 font-medium',
-                        {
-                          'text-gray-900': subsectionIsActive,
-                        }
-                      )}
-                    >
-                      {subsection.title}
-                    </a>
-                  </li>
-                )
-              })}
-            </Fragment>
-          )
-        })}
+            ))}
+          </Fragment>
+        ))}
       </ul>
     </>
   )
@@ -158,12 +158,10 @@ export function ContentsLayoutOuter({ children, layoutProps, ...props }) {
   )
 }
 
-export function ContentsLayout({ children, meta, classes, tableOfContents }) {
+export function ContentsLayout({ children, meta, classes, tableOfContents, section }) {
   const router = useRouter()
   const toc = [
-    ...(classes
-      ? [{ title: 'Default class reference', slug: 'class-reference', children: [] }]
-      : []),
+    ...(classes ? [{ title: 'Quick reference', slug: 'class-reference', children: [] }] : []),
     ...tableOfContents,
   ]
 
@@ -171,63 +169,40 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   let { prev, next } = usePrevNext()
 
   return (
-    <div id={meta.containerId} className="w-full flex">
-      <div className="min-w-0 flex-auto px-4 sm:px-6 xl:px-8 pt-10 pb-24 lg:pb-16">
-        <PageHeader
-          title={meta.title}
-          description={meta.description}
-          badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
-          border={!classes && meta.headerSeparator !== false}
-        />
-        <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
-          <div>
-            {classes && (
-              <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />
-            )}
-            {children}
-          </div>
-        </ContentsContext.Provider>
-
-        {(prev || next) && (
-          <div className="mt-16 flex leading-6 font-medium">
-            {prev && (
-              <Link href={prev.href}>
-                <a className="flex mr-8 transition-colors duration-200 hover:text-gray-900">
-                  <span aria-hidden="true" className="mr-2">
-                    ←
-                  </span>
-                  {prev.shortTitle || prev.title}
-                </a>
-              </Link>
-            )}
-            {next && (
-              <Link href={next.href}>
-                <a className="flex text-right ml-auto transition-colors duration-200 hover:text-gray-900">
-                  {next.shortTitle || next.title}
-                  <span aria-hidden="true" className="ml-2">
-                    →
-                  </span>
-                </a>
-              </Link>
-            )}
+    <div className="max-w-3xl mx-auto pt-10 xl:max-w-none xl:ml-0 xl:mr-[15.5rem] xl:pr-16">
+      <PageHeader
+        title={meta.title}
+        description={meta.description}
+        badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
+        section={section}
+      />
+      <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
+        {classes ? (
+          <>
+            <ClassTable {...classes} />
+            <div id="content" className="relative z-20 prose mt-12">
+              <MDXProvider components={{ Heading }}>{children}</MDXProvider>
+            </div>
+          </>
+        ) : (
+          <div id="content" className="relative z-20 prose mt-8">
+            <MDXProvider components={{ Heading }}>{children}</MDXProvider>
           </div>
         )}
-        <div className="mt-12 border-t border-gray-200 pt-6 text-right">
-          <Link
-            href={`https://github.com/tailwindlabs/tailwindcss.com/edit/master/src/pages${router.pathname}.mdx`}
-          >
-            <a className="mt-10 text-sm hover:text-gray-900">Edit this page on GitHub</a>
-          </Link>
-        </div>
-      </div>
-      <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 mr-8">
-        <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) pt-10 pb-6 top-18">
-          {toc.length > 0 && (
-            <div className="mb-8">
-              <TableOfContents tableOfContents={toc} currentSection={currentSection} />
-            </div>
-          )}
-        </div>
+      </ContentsContext.Provider>
+
+      <Footer previous={prev} next={next}>
+        <Link
+          href={`https://github.com/tailwindlabs/tailwindcss.com/edit/master/src/pages${router.pathname}.mdx`}
+        >
+          <a className="hover:text-gray-900">Edit this page on GitHub</a>
+        </Link>
+      </Footer>
+
+      <div className="fixed z-20 top-[3.8125rem] bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 px-8 overflow-y-auto hidden xl:block">
+        {toc.length > 0 && (
+          <TableOfContents tableOfContents={toc} currentSection={currentSection} />
+        )}
       </div>
     </div>
   )

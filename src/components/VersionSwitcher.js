@@ -1,44 +1,68 @@
-import { tailwindVersion } from '@/utils/tailwindVersion'
+import pkg from 'tailwindcss/package.json?fields=version'
+import { Menu } from '@headlessui/react'
 import clsx from 'clsx'
-import { useRef } from 'react'
 
 export function VersionSwitcher({ className }) {
-  let selectRef = useRef()
-
-  function submit(e) {
-    e.preventDefault()
-    if (selectRef.current.value === 'v0') {
-      window.location = 'https://tailwindcss-v0.netlify.app/'
-    }
-    if (selectRef.current.value === 'v1') {
-      window.location = 'https://v1.tailwindcss.com/'
-    }
-  }
-
   return (
-    <form onSubmit={submit} className={clsx('relative', className)}>
-      <label>
-        <span className="sr-only">Tailwind CSS Version</span>
-        <select
-          ref={selectRef}
-          className="appearance-none block bg-transparent pr-7 py-1 text-gray-500 font-medium text-sm focus:outline-none focus:text-gray-900 transition-colors duration-200"
-          onChange={submit}
-        >
-          <option value="v2">v{tailwindVersion}</option>
-          <option value="v1">v1.9.6</option>
-          <option value="v0">v0.7.4</option>
-        </select>
-      </label>
-      <svg
-        className="w-5 h-5 text-gray-400 absolute top-1/2 right-0 -mt-2.5 pointer-events-none"
-        fill="currentColor"
-      >
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-        />
-      </svg>
-    </form>
+    <Menu as="div" className="relative">
+      <Menu.Button className="text-xs leading-5 font-semibold bg-gray-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-gray-400/20">
+        v3.0.0
+        <svg width="6" height="3" className="ml-2 overflow-visible" aria-hidden="true">
+          <path
+            d="M0 0L3 3L6 0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+      </Menu.Button>
+      <Menu.Items className="absolute top-full mt-1 py-2 w-40 rounded-lg bg-white shadow ring-1 ring-gray-900/5 text-sm leading-6 font-semibold text-gray-700">
+        <Menu.Item disabled>
+          <span className="flex items-center justify-between px-3 py-1 text-sky-500">
+            v3.0.0
+            <svg width="24" height="24" fill="none">
+              <path
+                d="m7.75 12.75 2.25 2.5 6.25-6.5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }) => (
+            <a
+              href="https://v2.tailwindcss.com"
+              className={clsx('block px-3 py-1', active && 'bg-gray-50 text-gray-900')}
+            >
+              v2.2.19
+            </a>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }) => (
+            <a
+              href="https://v1.tailwindcss.com"
+              className={clsx('block px-3 py-1', active && 'bg-gray-50 text-gray-900')}
+            >
+              v1.9.6
+            </a>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }) => (
+            <a
+              href="https://tailwindcss-v0.netlify.app/"
+              className={clsx('block px-3 py-1', active && 'bg-gray-50 text-gray-900')}
+            >
+              v0.7.4
+            </a>
+          )}
+        </Menu.Item>
+      </Menu.Items>
+    </Menu>
   )
 }

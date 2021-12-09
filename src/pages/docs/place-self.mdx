@@ -3,160 +3,158 @@ title: "Place Self"
 description: "Utilities for controlling how an individual item is justified and aligned at the same time."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/placeSelf'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=placeSelf'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Auto
+## Basic usage
+
+### Auto
 
 Use `place-self-auto` to align an item based on the value of the container's `place-items` property:
 
-```html emerald
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-stretch h-48">
-    <div class="rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">1</div>
-    <div class="place-self-auto rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">2</div>
-    <div class="rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">3</div>
-    <div class="rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">4</div>
-    <div class="rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">5</div>
-    <div class="rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">6</div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 place-iems-stretch font-mono text-white text-sm font-bold leading-6">
+    <div class="p-8 rounded-lg flex items-center justify-center bg-indigo-300">01</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-indigo-500 shadow-lg palce-self-auto">02</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-indigo-300">03</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-indigo-300">04</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-indigo-300">05</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-indigo-300">06</div>
   </div>
-</template>
+</Example>
 
-<div class="grid grid-cols-3 gap-2 ...">
-  <div>1</div>
-  <div class="**place-self-auto** ...">2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
+```html
+<div class="grid grid-cols-3 gap-4 ...">
+  <div>01</div>
+  <div class="**place-self-auto** ...">02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-## Start
+### Start
 
 Use `place-self-start` to align an item to the start on both axes:
 
-```html fuchsia
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-stretch h-48">
-    <div class="rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">1</div>
-    <div class="place-self-start rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">2</div>
-    <div class="rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">3</div>
-    <div class="rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">4</div>
-    <div class="rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">5</div>
-    <div class="rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">6</div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 place-iems-stretch font-mono text-white text-sm font-bold leading-6">
+    <div class="p-8 rounded-lg flex items-center justify-center bg-purple-300">01</div>
+    <div class="bg-stripes-purple rounded-lg grid">
+      <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-purple-500 shadow-lg place-self-start">02</div>
+    </div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-purple-300">03</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-purple-300">04</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-purple-300">05</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-purple-300">06</div>
   </div>
-</template>
+</Example>
 
-<div class="grid grid-cols-3 gap-2 ...">
-  <div>1</div>
-  <div class="**place-self-start** ...">2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
+```html
+<div class="grid grid-cols-3 gap-4 ...">
+  <div>01</div>
+  <div class="**place-self-start** ...">02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-## Center
+### Center
 
 Use `place-self-center` to align an item at the center on both axes:
 
-```html amber
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-stretch h-48">
-    <div class="rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">1</div>
-    <div class="place-self-center rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">2</div>
-    <div class="rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">3</div>
-    <div class="rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">4</div>
-    <div class="rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">5</div>
-    <div class="rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">6</div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 place-iems-stretch font-mono text-white text-sm font-bold leading-6">
+    <div class="p-8 rounded-lg flex items-center justify-center bg-light-blue-300">01</div>
+    <div class="bg-stripes-light-blue rounded-lg grid">
+      <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-light-blue-500 shadow-lg place-self-center">02</div>
+    </div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-light-blue-300">03</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-light-blue-300">04</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-light-blue-300">05</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-light-blue-300">06</div>
   </div>
-</template>
+</Example>
 
-<div class="grid grid-cols-3 gap-2 ...">
-  <div>1</div>
-  <div class="**place-self-center** ...">2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
+```html
+<div class="grid grid-cols-3 gap-4 ...">
+  <div>01</div>
+  <div class="**place-self-center** ...">02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-## End
+### End
 
 Use `place-self-end` to align an item to the end on both axes:
 
-```html purple
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-stretch h-48">
-    <div class="rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">1</div>
-    <div class="place-self-end rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">2</div>
-    <div class="rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">3</div>
-    <div class="rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">4</div>
-    <div class="rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">5</div>
-    <div class="rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">6</div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 place-iems-stretch font-mono text-white text-sm font-bold leading-6">
+    <div class="p-8 rounded-lg flex items-center justify-center bg-pink-300">01</div>
+    <div class="bg-stripes-pink rounded-lg grid">
+      <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-pink-500 shadow-lg place-self-end">02</div>
+    </div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-pink-300">03</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-pink-300">04</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-pink-300">05</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-pink-300">06</div>
   </div>
-</template>
+</Example>
 
-<div class="grid grid-cols-3 gap-2 ...">
-  <div>1</div>
-  <div class="**place-self-end** ...">2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
+```html
+<div class="grid grid-cols-3 gap-4 ...">
+  <div>01</div>
+  <div class="**place-self-end** ...">02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-## Stretch
+### Stretch
 
 Use `place-self-stretch` to stretch an item on both axes:
 
-```html lightBlue
-<template preview>
-  <div class="grid grid-cols-3 gap-2 place-items-stretch h-48">
-    <div class="rounded-md bg-light-blue-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">1</div>
-    <div class="place-self-stretch rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">2</div>
-    <div class="rounded-md bg-light-blue-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">3</div>
-    <div class="rounded-md bg-light-blue-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">4</div>
-    <div class="rounded-md bg-light-blue-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">5</div>
-    <div class="rounded-md bg-light-blue-300 text-white text-2xl font-extrabold flex items-center justify-center py-3 px-6">6</div>
+<Example>
+  <div class="grid grid-cols-3 gap-4 place-iems-stretch font-mono text-white text-sm font-bold leading-6">
+    <div class="p-8 rounded-lg flex items-center justify-center bg-fuchsia-300">01</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-fuchsia-500 shadow-lg place-self-stretch">02</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-fuchsia-300">03</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-fuchsia-300">04</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-fuchsia-300">05</div>
+    <div class="p-8 rounded-lg flex items-center justify-center bg-fuchsia-300">06</div>
   </div>
-</template>
-
-<div class="grid grid-cols-3 gap-2 ...">
-  <div>1</div>
-  <div class="**place-self-stretch** ...">2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
-</div>
-```
-
-## Responsive
-
-To place an item at a specific breakpoint, add a `{screen}:` prefix to any existing `place-self` utility. For example, use `md:place-self-end` to apply the `place-self-end` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="place-self-start md:place-self-end">
-  <!-- ... -->
+<div class="grid grid-cols-3 gap-2 ...">
+  <div>01</div>
+  <div class="**place-self-stretch** ...">02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="placeSelf" name="place-self" />
+<HoverFocusAndOtherStates defaultClass="place-self-start" featuredClass="place-self-end" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="placeSelf" name="place-self" />
+<BreakpointsAndMediaQueries defaultClass="place-self-start" featuredClass="place-self-end" />

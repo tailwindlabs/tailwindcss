@@ -1,0 +1,48 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="32" cy="32" r="32" fill="white" />
+  <circle cx="32" cy="32" r="29" fill="#E0F2FE" />
+  <mask id="mask0_0:2869" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="58" height="58">
+    <circle cx="32" cy="32" r="29" fill="url(#paint0_linear_0:2869)" />
+  </mask>
+  <g mask="url(#mask0_0:2869)">
+    <rect opacity="0.07" y="19" width="63" height="1" fill="#075985" />
+    <rect opacity="0.07" y="44" width="63" height="1" fill="#075985" />
+    <rect opacity="0.07" x="18" y="4" width="63" height="1" transform="rotate(90 18 4)" fill="#075985" />
+    <rect opacity="0.07" x="47" y="4" width="63" height="1" transform="rotate(90 47 4)" fill="#075985" />
+    <g filter="url(#filter0_d_0:2869)">
+      <path
+        d="M16 22C16 19.7909 17.7909 18 20 18H44C46.2091 18 48 19.7909 48 22V42C48 44.2091 46.2091 46 44 46H20C17.7909 46 16 44.2091 16 42V22Z"
+        fill="white" />
+      <path
+        d="M20 17.5C17.5147 17.5 15.5 19.5147 15.5 22V42C15.5 44.4853 17.5147 46.5 20 46.5H44C46.4853 46.5 48.5 44.4853 48.5 42V22C48.5 19.5147 46.4853 17.5 44 17.5H20Z"
+        stroke="#122F3F" stroke-opacity="0.05" />
+    </g>
+    <rect x="20" y="22" width="6" height="6" rx="2" fill="#0EA5E9" />
+    <rect x="20" y="36" width="6" height="6" rx="2" fill="#0EA5E9" />
+    <path d="M31 23H35" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M31 37H39" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M31 27H43" stroke="#BAE6FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M31 41H43" stroke="#BAE6FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="16" y="31.5" width="32" height="1" fill="#E0F2FE" />
+  </g>
+  <path
+    d="M60.5 32C60.5 47.7401 47.7401 60.5 32 60.5C16.2599 60.5 3.5 47.7401 3.5 32C3.5 16.2599 16.2599 3.5 32 3.5C47.7401 3.5 60.5 16.2599 60.5 32Z"
+    stroke="#334155" stroke-opacity="0.06" />
+  <defs>
+    <filter id="filter0_d_0:2869" x="12" y="16" width="40" height="36" filterUnits="userSpaceOnUse"
+      color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+        result="hardAlpha" />
+      <feOffset dy="2" />
+      <feGaussianBlur stdDeviation="1.5" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0354167 0 0 0 0 0.0391579 0 0 0 0 0.2125 0 0 0 0.1 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0:2869" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0:2869" result="shape" />
+    </filter>
+    <linearGradient id="paint0_linear_0:2869" x1="32" y1="24" x2="32" y2="61" gradientUnits="userSpaceOnUse">
+      <stop offset="0.628378" stop-color="#C4C4C4" />
+      <stop offset="0.952703" stop-color="#C4C4C4" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+</svg>

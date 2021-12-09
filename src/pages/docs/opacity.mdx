@@ -1,87 +1,83 @@
 ---
 title: "Opacity"
 description: "Utilities for controlling the opacity of an element."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/opacity'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=opacity'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Changing an element's opacity
 
 Control the opacity of an element using the `opacity-{amount}` utilities.
 
-```html lightBlue
-<template preview>
-  <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
-    <div class="h-16 rounded-md opacity-100 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">100%</div>
-    <div class="h-16 rounded-md opacity-75 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">75%</div>
-    <div class="h-16 rounded-md opacity-50 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">50%</div>
-    <div class="h-16 rounded-md opacity-25 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">25%</div>
-    <div class="h-16 rounded-md opacity-0 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">0%</div>
+<Example>
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 text-white text-sm font-bold leading-6">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">opacity-100</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-indigo-500 text-white rounded-md shadow-sm opacity-100">Button A</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">opacity-75</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-indigo-500 text-white rounded-md shadow-sm opacity-75">Button B</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">opacity-50</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-indigo-500 text-white rounded-md shadow-sm opacity-50">Button C</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">opacity-25</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-indigo-500 text-white rounded-md shadow-sm opacity-25">Button D</button>
+    </div>
   </div>
-</template>
-
-<div class="bg-light-blue-600 **opacity-100** ..."></div>
-<div class="bg-light-blue-600 **opacity-75** ..."></div>
-<div class="bg-light-blue-600 **opacity-50** ..."></div>
-<div class="bg-light-blue-600 **opacity-25** ..."></div>
-<div class="bg-light-blue-600 **opacity-0** ..."></div>
-```
-
-## Responsive
-
-To control the opacity of an element at a specific breakpoint, add a `{screen}:` prefix to any existing opacity utility. For example, use `md:opacity-50` to apply the `opacity-50` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="opacity-100 **md:opacity-50** ...">
-  <!-- ... -->
-</div>
+<button class="bg-indigo-500 **opacity-100** ..."></button>
+<button class="bg-indigo-500 **opacity-75** ..."></button>
+<button class="bg-indigo-500 **opacity-50** ..."></button>
+<button class="bg-indigo-500 **opacity-25** ..."></button>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Opacity Scale
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-By default, Tailwind provides five opacity utilities based on a simple numeric scale. You change, add, or remove these by editing the `theme.opacity` section of your Tailwind config.
+<HoverFocusAndOtherStates defaultClass="opacity-50" featuredClass="opacity-100" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="opacity-50" featuredClass="opacity-100" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides several opacity utilities for general purpose use. You can customize these values by editing `theme.opacity` or `theme.extend.opacity` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      opacity: {
-        '0': '0',
--       '25': '.25',
--       '50': '.5',
--       '75': '.75',
-+       '10': '.1',
-+       '20': '.2',
-+       '30': '.3',
-+       '40': '.4',
-+       '50': '.5',
-+       '60': '.6',
-+       '70': '.7',
-+       '80': '.8',
-+       '90': '.9',
-        '100': '1',
+      extend: {
++       opacity: {
++         '67': '.67',
++       }
       }
     }
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="opacity" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="opacity" />
+<ArbitraryValues property="opacity" featuredClass="opacity-[.67]" />

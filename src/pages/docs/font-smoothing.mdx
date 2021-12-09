@@ -1,61 +1,50 @@
 ---
 title: "Font Smoothing"
 description: "Utilities for controlling the font smoothing of an element."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/fontSmoothing'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=fontSmoothing'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Subpixel Antialiasing
+## Basic usage
 
-Use the `subpixel-antialiased` utility to render text using subpixel antialiasing.
+### Applying font smoothing
 
-```html lightBlue
-<template preview>
-  <p class="subpixel-antialiased text-lg text-light-blue-800">The quick brown fox jumps over the lazy dog.</p>
-</template>
+Use the `subpixel-antialiased` utility to render text using subpixel antialiasing and the `antialiased` utility to render text using grayscale antialiasing.
 
+<Example>
+  <div class="flex flex-col gap-8">
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">subpixel-antialiased</span>
+      <p class="subpixel-antialiased text-lg font-medium text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
+    </div>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">antialiased</span>
+      <p class="antialiased text-lg font-medium text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
+    </div>
+  </div>
+</Example>
+
+```html
 <p class="**subpixel-antialiased** ...">The quick brown fox ...</p>
-```
-
-## Grayscale Antialiasing
-
-Use the `antialiased` utility to render text using grayscale antialiasing.
-
-```html emerald
-<template preview>
-  <p class="antialiased text-lg text-emerald-800">The quick brown fox jumps over the lazy dog.</p>
-</template>
-
 <p class="**antialiased** ...">The quick brown fox ...</p>
 ```
 
-## Responsive
+---
 
-To control the font smoothing of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font smoothing utility. For example, use `md:antialiased` to apply the `antialiased` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<p class="antialiased sm:subpixel-antialiased **md:antialiased** ...">
-  The quick brown fox jumps over the lazy dog.
-</p>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="antialiased" featuredClass="subpixel-antialiased" element="p" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Variants
-
-<Variants plugin="fontSmoothing" />
-
-### Disabling
-
-<Disabling plugin="fontSmoothing" />
+<BreakpointsAndMediaQueries defaultClass="antialiased" featuredClass="subpixel-antialiased" element="p" />

@@ -3,68 +3,77 @@ title: "Transition Timing Function"
 description: "Utilities for controlling the easing of CSS transitions."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/transitionTimingFunction'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=transitionTimingFunction'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Controlling the easing curve
 
 Use the `ease-{timing}` utilities to control an element's easing curve.
 
-```html indigo
-<template preview>
-  <div class="flex justify-around items-center">
-    <button class="transition duration-700 ease-in transform hover:scale-125 bg-indigo-600 text-white font-semibold py-3 px-6 rounded-md">
-      Hover me
-    </button>
-    <button class="transition duration-700 ease-out transform hover:scale-125 bg-indigo-600 text-white font-semibold py-3 px-6 rounded-md">
-      Hover me
-    </button>
-    <button class="transition duration-700 ease-in-out transform hover:scale-125 bg-indigo-600 text-white font-semibold py-3 px-6 rounded-md">
-      Hover me
-    </button>
+<Example hint="Hover each button to see the expected behaviour">
+  <div class="flex flex-col sm:flex-row gap-8 sm:gap-0 justify-around text-white text-sm font-bold leading-6">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">ease-in</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-sky-500 text-white rounded-md shadow-sm hover:scale-125 ease-in duration-300">Button A</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">ease-out</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-sky-500 text-white rounded-md shadow-sm hover:scale-125 ease-out duration-300">Button B</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">ease-in-out</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-sky-500 text-white rounded-md shadow-sm hover:scale-125 ease-in-out duration-300">Button C</button>
+    </div>
   </div>
-</template>
+</Example>
 
-<button class="transition **ease-in** duration-700 ...">Hover me</button>
-<button class="transition **ease-out** duration-700 ...">Hover me</button>
-<button class="transition **ease-in-out** duration-700 ...">Hover me</button>
+```html
+<button class="**ease-in** duration-300 ...">Button A</button>
+<button class="**ease-out** duration-300 ...">Button B</button>
+<button class="**ease-in-out** duration-300 ...">Button C</button>
 ```
 
-## Responsive
+---
 
-To control an element's transition-timing-function at a specific breakpoint, add a `{screen}:` prefix to any existing transition-timing-function utility. For example, use `md:ease-in-out` to apply the `ease-in-out` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-## Customizing
+<HoverFocusAndOtherStates defaultClass="transition duration-150 ease-out" featuredClass="ease-in" />
 
-### Timing values
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-By default, Tailwind provides four general purpose transition-timing-function utilities. You change, add, or remove these by customizing the `transitionTimingFunction` section of your Tailwind theme config.
+<BreakpointsAndMediaQueries defaultClass="transition duration-150 ease-out" featuredClass="ease-in" />
 
-```diff-js
-  // tailwind.config.js
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides four general purpose transition-timing-function utilities. You can customize these values by editing `theme.transitionTimingFunction` or `theme.extend.transitionTimingFunction` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        transitionTimingFunction: {
++       transitionTimingFunction: {
 +         'in-expo': 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
 +         'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
-        }
++       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="transitionTimingFunction" name="transition-timing-function" />
-
-### Disabling
-
-<Disabling plugin="transitionTimingFunction" name="transition-timing-function" />
+<ArbitraryValues property="transition-timing-function" featuredClass="ease-[cubic-bezier(0.95,0.05,0.795,0.035)]" />

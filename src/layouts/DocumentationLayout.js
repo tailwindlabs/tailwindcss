@@ -1,12 +1,12 @@
 import { SidebarLayout } from '@/layouts/SidebarLayout'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import twitterSquare from '@/img/twitter-square.jpg'
+import socialSquare from '@/img/social-square.jpg'
 import { Title } from '@/components/Title'
 import { documentationNav } from '@/navs/documentation'
 
 export function DocumentationLayout(props) {
-  const router = useRouter()
+  let router = useRouter()
 
   return (
     <>
@@ -18,10 +18,12 @@ export function DocumentationLayout(props) {
         <meta
           key="twitter:image"
           name="twitter:image"
-          content={`https://tailwindcss.com${twitterSquare}`}
+          content={`https://tailwindcss.com${socialSquare}`}
         />
       </Head>
       <SidebarLayout nav={documentationNav} {...props} />
     </>
   )
 }
+
+DocumentationLayout.nav = documentationNav

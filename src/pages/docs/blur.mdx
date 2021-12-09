@@ -1,74 +1,118 @@
 ---
 title: "Blur"
 description: "Utilities for applying blur filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=blur'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingFilters } from '@/components/RemovingFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.blur-none': { '--tw-blur': 'blur(0)' },
-        '.blur-sm': { '--tw-blur': 'blur(4px)' },
-        '.blur': { '--tw-blur': 'blur(8px)' },
-        '.blur-md': { '--tw-blur': 'blur(12px)' },
-        '.blur-lg': { '--tw-blur': 'blur(16px)' },
-        '.blur-xl': { '--tw-blur': 'blur(24px)' },
-        '.blur-2xl': { '--tw-blur': 'blur(40px)' },
-        '.blur-3xl': { '--tw-blur': 'blur(64px)' },
-      })
+  utilities,
+  filterRules: ([utility]) => utility !== '.blur-0',
+  transformProperties: ({ properties }) => {
+    return {
+      filter: properties['--tw-blur'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `blur-{amount?}` utilities alongside the `filter` utility to blur an element.
+### Blurring elements
+
+Use the `blur-{amount?}` utilities to blur an element.
+
+<Example p="none">
+  <div class="flex sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+    <div class="flex items-center justify-around gap-12 sm:gap-4 font-mono font-bold shrink-0 p-8">
+      <div class="flex flex-col items-center shrink-0">
+        <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">blur-none</p>
+        <div class="relative blur-none">
+          <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+        </div>
+      </div>
+      <div class="flex flex-col items-center shrink-0">
+        <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">blur-sm</p>
+        <div class="relative blur-sm">
+          <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+        </div>
+      </div>
+      <div class="flex flex-col items-center shrink-0">
+        <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">blur-lg</p>
+        <div class="relative blur-lg">
+          <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+        </div>
+      </div>
+      <div class="flex flex-col items-center shrink-0">
+        <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">blur-2xl</p>
+        <div class="relative blur-2xl">
+          <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+          <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Example>
 
 ```html
-<div class="filter blur-lg ...">
+<div class="**blur-none** ...">
+  <!-- ... -->
+</div>
+<div class="**blur-sm** ...">
+  <!-- ... -->
+</div>
+<div class="**blur-lg** ...">
+  <!-- ... -->
+</div>
+<div class="**blur-2xl** ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing filters
 
-To control an element's blur at a specific breakpoint, add a `{screen}:` prefix to any existing blur utility. For example, use `md:blur-lg` to apply the `blur-lg` utility at only medium screen sizes and above.
+<RemovingFilters defaultClass="blur-md invert brightness-150" />
 
-```html
-<div class="filter blur-sm **md:blur-lg** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `blur` utilities are generated using the `blur` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="blur" featuredClass="blur-lg" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="blur" featuredClass="blur-lg" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `blur` utilities. You can customize these values by editing `theme.blur` or `theme.extend.blur` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       blur: {
 +         xs: '2px',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="blur" name="blur" />
-
-### Disabling
-
-<Disabling plugin="blur" name="blur" />
+<ArbitraryValues property="blur" featuredClass="blur-[2px]" />

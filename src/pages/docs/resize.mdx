@@ -3,58 +3,79 @@ title: "Resize"
 description: "Utilities for controlling how an element can be resized."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/resize'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=resize'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Resize in all directions
+## Basic usage
+
+### Resizing in all directions
 
 Use `resize` to make an element horizontally and vertically resizable.
 
-```html purple
-<template preview>
-  <textarea class="resize border rounded-md"></textarea>
-</template>
+<Example hint="Drag the textarea handle in the demo to see the expected behaviour">
+  <div class="w-full flex items-center justify-center">
+    <textarea class="resize text-sm p-2 w-80 ring-1 ring-gray-900/10 shadow-sm rounded-md" rows="3"></textarea>
+  </div>
+</Example>
+
+```html
+<textarea class="**resize** rounded-md"></textarea>
 ```
 
-## Resize vertically
+### Resizing vertically
 
 Use `resize-y` to make an element vertically resizable.
 
-```html emerald
-<template preview>
-  <textarea class="resize-y border rounded-md"></textarea>
-</template>
+<Example hint="Drag the textarea handle in the demo to see the expected behaviour">
+  <div class="w-full flex items-center justify-center">
+    <textarea class="resize-y text-sm p-2 w-80 ring-1 ring-gray-900/10 shadow-sm rounded-md" rows="3"></textarea>
+  </div>
+</Example>
+
+```html
+<textarea class="**resize-y** rounded-md"></textarea>
 ```
 
-## Resize horizontally
+### Resizing horizontally
 
 Use `resize-x` to make an element horizontally resizable.
 
-```html amber
-<template preview>
-  <textarea class="resize-x border rounded-md"></textarea>
-</template>
+<Example hint="Drag the textarea handle in the demo to see the expected behaviour">
+  <div class="w-full flex items-center justify-center">
+    <textarea class="resize-x text-sm p-2 w-80 ring-1 ring-gray-900/10 shadow-sm rounded-md" rows="3"></textarea>
+  </div>
+</Example>
+
+```html
+<textarea class="**resize-x** rounded-md"></textarea>
 ```
 
-## Prevent resizing
+### Preventing resizing
 
 Use `resize-none` to prevent an element from being resizable.
 
-```html lightBlue
-<template preview>
-  <textarea class="resize-none border rounded-md"></textarea>
-</template>
+<Example hint="Notice that the textarea handle is gone">
+  <div class="w-full flex items-center justify-center">
+    <textarea class="resize-none text-sm p-2 w-80 ring-1 ring-gray-900/10 shadow-sm rounded-md" rows="3"></textarea>
+  </div>
+</Example>
+
+```html
+<textarea class="**resize-none** rounded-md"></textarea>
 ```
 
-## Customizing
+---
 
-### Variants
+## <Heading ignore>Applying conditionally</Heading>
 
-<Variants plugin="resize" name="resizing" />
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-### Disabling
+<HoverFocusAndOtherStates defaultClass="resize-none" featuredClass="resize" />
 
-<Disabling plugin="resize" name="resizing" />
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="resize-none" featuredClass="resize" />

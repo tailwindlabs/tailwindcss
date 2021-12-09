@@ -1,78 +1,59 @@
 ---
 title: "Min-Width"
-description: "Utilities for setting the minimum width of an element"
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
+description: "Utilities for setting the minimum width of an element."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/minWidth'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=minWidth'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
 
-Set the minimum width of an element using the `min-w-0` or `min-w-full` utilities.
+### Setting the minimum width
 
-```html indigo
-<template preview>
-  <div class="w-24 min-w-full mx-auto rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">
-    min-w-full
-  </div>
-</template>
-
-<div class="w-24 **min-w-full** ...">
-  min-w-full
-</div>
-```
-
----
-
-## Responsive
-
-To control the min-width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing min-width utility.
+Set the minimum width of an element using the `min-w-{width}` utilities.
 
 ```html
-<div class="w-24 min-w-full **md:min-w-0** ...">
+<span class="**min-w-full** ...">
   <!-- ... -->
-</div>
+</span>
 ```
-
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Min-width scale
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-Customize Tailwind's default min-width scale in the `theme.minWidth` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="w-24 min-w-full" featuredClass="min-w-0" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="w-24 min-w-full" featuredClass="min-w-0" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+You can customize your `min-width` scale by editing `theme.minWidth` or `theme.extend.minWidth` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      minWidth: {
-+       '0': '0',
-+       '1/4': '25%',
++     minWidth: {
 +       '1/2': '50%',
-+       '3/4': '75%',
-+       'full': '100%',
-      }
++     }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="minWidth" name="min-width" />
-
-### Disabling
-
-<Disabling plugin="minWidth" name="min-width" />
+<ArbitraryValues property="min-width" featuredClass="min-w-[50%]" />

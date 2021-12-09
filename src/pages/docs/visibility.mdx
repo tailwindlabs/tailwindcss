@@ -1,71 +1,64 @@
 ---
 title: "Visibility"
 description: "Utilities for controlling the visibility of an element."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/visibility'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=visibility'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Invisible
+## Basic usage
+
+### Making elements invisible
 
 Use `invisible` to hide an element, but still maintain its place in the DOM, affecting the layout of other elements (compare with `.hidden` from the [display](/docs/display#hidden) documentation).
 
-```html indigo
-<template preview class="flex justify-center p-10 space-x-4">
-  <div class="rounded-md bg-indigo-500 w-32 h-16 flex items-center justify-center text-white text-3xl font-extrabold">1</div>
-  <div class="invisible rounded-md bg-indigo-500 w-32 h-16 flex items-center justify-center text-white text-3xl font-extrabold">2</div>
-  <div class="rounded-md bg-indigo-500 w-32 h-16 flex items-center justify-center text-white text-3xl font-extrabold">3</div>
-</template>
+<Example>
+  <div class="grid grid-cols-3 gap-4 font-mono text-white text-sm font-bold leading-6">
+    <div class="p-4 flex items-center justify-center bg-cyan-500 shadow-lg rounded-lg">01</div>
+    <div class="invisible p-4 flex items-center justify-center bg-cyan-500 shadow-lg rounded-lg">02</div>
+    <div class="p-4 flex items-center justify-center bg-cyan-500 shadow-lg rounded-lg">03</div>
+  </div>
+</Example>
 
-<div class="flex justify-center space-x-4">
-  <div>1</div>
-  <div class="**invisible** ...">2</div>
-  <div>3</div>
+```html
+<div class="grid grid-cols-3 gap-4">
+  <div>01</div>
+  <div class="**invisible** ...">02</div>
+  <div>03</div>
 </div>
 ```
 
-## Visible
+### Making elements visible
 
 Use `visible` to make an element visible. This is mostly useful for undoing the `invisible` utility at different screen sizes.
 
-```html purple
-<template preview class="flex justify-center p-10 space-x-4">
-  <div class="rounded-md bg-purple-500 w-32 h-16 flex items-center justify-center text-white text-3xl font-extrabold">1</div>
-  <div class="visible rounded-md bg-purple-500 w-32 h-16 flex items-center justify-center text-white text-3xl font-extrabold">2</div>
-  <div class="rounded-md bg-purple-500 w-32 h-16 flex items-center justify-center text-white text-3xl font-extrabold">3</div>
-</template>
+<Example>
+  <div class="grid grid-cols-3 gap-4 font-mono text-white text-sm font-bold leading-6">
+    <div class="p-4 flex items-center justify-center bg-fuchsia-500 shadow-lg rounded-lg">01</div>
+    <div class="visible p-4 flex items-center justify-center bg-fuchsia-500 shadow-lg rounded-lg">02</div>
+    <div class="p-4 flex items-center justify-center bg-fuchsia-500 shadow-lg rounded-lg">03</div>
+  </div>
+</Example>
 
-<div class="flex justify-center space-x-4">
-  <div>1</div>
-  <div class="**visible** ...">2</div>
-  <div>3</div>
+```html
+<div class="grid grid-cols-3 gap-4">
+  <div>01</div>
+  <div class="**visible** ...">02</div>
+  <div>03</div>
 </div>
 ```
 
-## Responsive
+---
 
-To apply a visibility utility only at a specific breakpoint, add a `{screen}:` prefix to the existing class name. For example, adding the class `md:invisible` to an element would apply the `invisible` utility at medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<div class="visible **md:invisible** ..."></div>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="visible" featuredClass="invisible" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Variants
-
-<Variants plugin="visibility" />
-
-### Disabling
-
-<Disabling plugin="visibility" />
+<BreakpointsAndMediaQueries defaultClass="visible" featuredClass="invisible" />

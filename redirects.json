@@ -218,6 +218,88 @@
     "destination": "https://github.com/tailwindlabs/tailwindcss-typography",
     "permanent": false
   },
-  { "source": "/docs/intellisense", "destination": "/docs/editor-support", "permanent": false },
-  { "source": "/community", "destination": "/resources", "permanent": false }
+  { "source": "/docs/intellisense", "destination": "/docs/editor-setup", "permanent": false },
+  {
+    "source": "/docs/extracting-components",
+    "destination": "/docs/reusing-styles",
+    "permanent": false
+  },
+  { "source": "/docs/editor-support", "destination": "/docs/editor-setup", "permanent": false },
+  { "source": "/docs/breakpoints", "destination": "/docs/screens", "permanent": false },
+  { "source": "/docs", "destination": "/docs/installation", "permanent": false },
+  {
+    "source": "/docs/placeholder-color",
+    "destination": "/docs/hover-focus-and-other-states#placeholder-text",
+    "permanent": false
+  },
+  {
+    "source": "/docs/placeholder-opacity",
+    "destination": "/docs/hover-focus-and-other-states#placeholder-text",
+    "permanent": false
+  },
+  {
+    "source": "/docs/text-opacity",
+    "destination": "/docs/text-color#changing-the-opacity",
+    "permanent": false
+  },
+  {
+    "source": "/docs/background-opacity",
+    "destination": "/docs/background-color#changing-the-opacity",
+    "permanent": false
+  },
+  {
+    "source": "/docs/border-opacity",
+    "destination": "/docs/border-color#changing-the-opacity",
+    "permanent": false
+  },
+  {
+    "source": "/docs/divide-opacity",
+    "destination": "/docs/divide-color#changing-the-opacity",
+    "permanent": false
+  },
+  {
+    "source": "/docs/ring-opacity",
+    "destination": "/docs/ring-color#changing-the-opacity",
+    "permanent": false
+  },
+  {
+    "source": "/docs/outline",
+    "destination": "/docs/outline-width",
+    "permanent": false
+  },
+  {
+    "source": "/docs/filter",
+    "destination": "/docs/blur",
+    "permanent": false
+  },
+  {
+    "source": "/docs/backdrop-filter",
+    "destination": "/docs/backdrop-blur",
+    "permanent": false
+  },
+  {
+    "source": "/docs/transform",
+    "destination": "/docs/scale",
+    "permanent": false
+  },
+  {
+    "source": "/docs/adding-base-styles",
+    "destination": "/docs/adding-custom-styles#adding-base-styles",
+    "permanent": false
+  },
+  {
+    "source": "/docs/adding-new-utilities",
+    "destination": "/docs/adding-custom-styles#adding-custom-utilities",
+    "permanent": false
+  },
+  {
+    "source": "/community",
+    "destination": "https://github.com/tailwindlabs/tailwindcss/discussions",
+    "permanent": false
+  },
+  {
+    "source": "/upgrading-to-v2",
+    "destination": "https://v2.tailwindcss.com/docs/upgrading-to-v2",
+    "permanent": false
+  }
 ]

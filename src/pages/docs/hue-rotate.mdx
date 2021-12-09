@@ -1,78 +1,128 @@
 ---
 title: "Hue Rotate"
 description: "Utilities for applying hue-rotate filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=hueRotate'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingFilters } from '@/components/RemovingFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-      '.-hue-rotate-180': { '--tw-hue-rotate':  'hue-rotate(-180deg)' },
-      '.-hue-rotate-90': { '--tw-hue-rotate':  'hue-rotate(-90deg)' },
-      '.-hue-rotate-60': { '--tw-hue-rotate':  'hue-rotate(-60deg)' },
-      '.-hue-rotate-30': { '--tw-hue-rotate':  'hue-rotate(-30deg)' },
-      '.-hue-rotate-15': { '--tw-hue-rotate':  'hue-rotate(-15deg)' },
-      '.hue-rotate-0': { '--tw-hue-rotate': 'hue-rotate(0deg)' },
-      '.hue-rotate-15': { '--tw-hue-rotate': 'hue-rotate(15deg)' },
-      '.hue-rotate-30': { '--tw-hue-rotate': 'hue-rotate(30deg)' },
-      '.hue-rotate-60': { '--tw-hue-rotate': 'hue-rotate(60deg)' },
-      '.hue-rotate-90': { '--tw-hue-rotate': 'hue-rotate(90deg)' },
-      '.hue-rotate-180': { '--tw-hue-rotate': 'hue-rotate(180deg)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      filter: properties['--tw-hue-rotate'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `hue-rotate-{amount}` utilities alongside the `filter` utility to rotate the hue of an element.
+### Rotating an element's hue
+
+Use the `hue-rotate-{amount}` utilities to rotate the hue of an element.
+
+<Example p="none">
+  <div class="flex justify-start sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">hue-rotate-15</p>
+      <div class="relative hue-rotate-15">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">hue-rotate-90</p>
+      <div class="relative hue-rotate-90">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">hue-rotate-180</p>
+      <div class="relative hue-rotate-180">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">-hue-rotate-60</p>
+      <div class="relative -hue-rotate-60">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="filter hue-rotate-15 ...">
+<div class="**hue-rotate-15** ...">
+  <!-- ... -->
+</div>
+<div class="**hue-rotate-90** ...">
+  <!-- ... -->
+</div>
+<div class="**hue-rotate-180** ...">
+  <!-- ... -->
+</div>
+<div class="**-hue-rotate-60** ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Using negative values
 
-To control an element's hue rotation at a specific breakpoint, add a `{screen}:` prefix to any existing hue-rotate utility. For example, use `md:hue-rotate-60` to apply the `hue-rotate-60` utility at only medium screen sizes and above.
+To use a negative hue-rotate value, prefix the class name with a dash to convert it to a negative value.
 
 ```html
-<div class="filter hue-rotate-15 **md:hue-rotate-60** ...">
+<div class="-hue-rotate-60 ...">
   <!-- ... -->
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### Removing filters
 
-## Customizing
+<RemovingFilters defaultClass="blur-md invert hue-rotate-180" />
 
-You can customize which `hue-rotate` utilities are generated using the `hueRotate` key in the `theme` section of your `tailwind.config.js` file.
+---
 
-```diff-js
-  // tailwind.config.js
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="hue-rotate-60" featuredClass="hue-rotate-0" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="hue-rotate-60" featuredClass="hue-rotate-0" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `hue-rotate` utilities. You can customize these values by editing `theme.hueRotate` or `theme.extend.hueRotate` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       hueRotate: {
 +         '-270': '-270deg',
 +         270: '270deg',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="hueRotate" name="hue-rotate" />
-
-### Disabling
-
-<Disabling plugin="hueRotate" name="hue-rotate" />
+<ArbitraryValues property="hue-rotate" featuredClass="hue-rotate-[270deg]" />

@@ -3,70 +3,111 @@ title: "Drop Shadow"
 description: "Utilities for applying drop-shadow filters to an element."
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=dropShadow'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingFilters } from '@/components/RemovingFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-      '.drop-shadow-sm': {'--tw-drop-shadow': 'drop-shadow(0 1px 1px rgba(0,0,0,0.05))' },
-      '.drop-shadow': {'--tw-drop-shadow': 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.06))' },
-      '.drop-shadow-md': {'--tw-drop-shadow': 'drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06))' },
-      '.drop-shadow-lg': {'--tw-drop-shadow': 'drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1))' },
-      '.drop-shadow-xl': {'--tw-drop-shadow': 'drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08))' },
-      '.drop-shadow-2xl': {'--tw-drop-shadow': 'drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15))' },
-      '.drop-shadow-none': {'--tw-drop-shadow': 'drop-shadow(0 0 #0000)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      filter: properties['--tw-drop-shadow'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `drop-shadow-{amount}` utilities alongside the `filter` utility to add a drop shadow to an element.
+### Adding a drop shadow
+
+Use the `drop-shadow-{amount}` utilities to add a drop shadow to an element.
+
+<Example p="none">
+  <div class="flex justify-start sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">drop-shadow-md</p>
+      <div class="drop-shadow-md">
+        <div class="w-24 h-24 bg-white rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">drop-shadow-lg</p>
+      <div class="drop-shadow-lg">
+        <div class="w-24 h-24 bg-white rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">drop-shadow-xl</p>
+      <div class="drop-shadow-xl">
+        <div class="w-24 h-24 bg-white rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">drop-shadow-2xl</p>
+      <div class="drop-shadow-2xl">
+        <div class="w-24 h-24 bg-white rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="filter drop-shadow-lg ...">
+<div class="**drop-shadow-md** ...">
+  <!-- ... -->
+</div>
+<div class="**drop-shadow-lg** ...">
+  <!-- ... -->
+</div>
+<div class="**drop-shadow-xl** ...">
+  <!-- ... -->
+</div>
+<div class="**drop-shadow-2xl** ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing filters
 
-To control an element's drop shadow at a specific breakpoint, add a `{screen}:` prefix to any existing drop-shadow utility. For example, use `md:drop-shadow-xl` to apply the `drop-shadow-xl` utility at only medium screen sizes and above.
+<RemovingFilters defaultClass="blur-md invert drop-shadow-xl" />
 
-```html
-<div class="filter drop-shadow-md **md:drop-shadow-xl** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `drop-shadow` utilities are generated using the `dropShadow` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="drop-shadow-md" featuredClass="drop-shadow-xl" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="drop-shadow-md" featuredClass="drop-shadow-xl" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `dropShadow` utilities. You can customize these values by editing `theme.dropShadow` or `theme.extend.dropShadow` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       dropShadow: {
 +         '3xl': '0 35px 35px rgba(0, 0, 0, 0.25)',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="dropShadow" name="drop-shadow" />
-
-### Disabling
-
-<Disabling plugin="dropShadow" name="drop-shadow" />
+<ArbitraryValues property="drop-shadow" featuredClass="drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)]" />

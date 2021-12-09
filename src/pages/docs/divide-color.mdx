@@ -3,18 +3,26 @@ title: "Divide Color"
 description: "Utilities for controlling the border color between elements."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/divideColor'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
-import { Heading } from '@/components/Heading'
+import utilities from 'utilities?plugin=divideColor'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
+  utilities,
   transformSelector: (selector) => (
     <>
       {selector.split('>').shift().trim().replace(/^\./, '').replace(/\\/g, '')} <span className="ml-1 text-purple-300">> * + *</span>
     </>
   ),
+  transformProperties: ({ selector, properties }) => {
+    delete properties['--tw-divide-opacity']
+    Object.keys(properties).forEach(key => {
+      properties[key] = properties[key].replace(' / var(--tw-divide-opacity)', '')
+    })
+    return properties
+  },
   preview: (css, { className }) => (
     <td className={`relative w-20 p-2 ${className}`}>
       <div className="absolute inset-0 flex flex-col m-2">
@@ -32,92 +40,75 @@ export const classes = {
   ),
 }
 
-## Usage
+## Basic usage
+
+### Setting the divide color
 
 Control the border color between elements using the `divide-{color}` utilities.
 
-```html fuchsia
-<template preview>
-  <div class="divide-y divide-fuchsia-300">
-    <div class="text-center font-extrabold text-2xl text-fuchsia-600 py-3">1</div>
-    <div class="text-center font-extrabold text-2xl text-fuchsia-600 py-3">2</div>
-    <div class="text-center font-extrabold text-2xl text-fuchsia-600 py-3">3</div>
+<Example p="none">
+  <div class="grid grid-cols-1 divide-y divide-blue-200 font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
+    <div class="p-4 text-blue-500 bg-white">01</div>
+    <div class="p-4 text-blue-500 bg-white">02</div>
+    <div class="p-4 text-blue-500 bg-white">03</div>
   </div>
-</template>
+</Example>
 
-<div class="**divide-y divide-fuchsia-300**">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-</div>
-```
-
-### Changing opacity
-
-Control the opacity of borders between elements using the `divide-opacity-{amount}` utilities.
-
-```html lightBlue
-<template preview>
-  <div class="divide-y-4 divide-black divide-opacity-25">
-    <div class="text-center font-extrabold text-2xl text-light-blue-600 py-3">1</div>
-    <div class="text-center font-extrabold text-2xl text-light-blue-600 py-3">2</div>
-    <div class="text-center font-extrabold text-2xl text-light-blue-600 py-3">3</div>
-  </div>
-</template>
-
-<div class="divide-y-4 **divide-black divide-opacity-25**">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-</div>
-```
-
-Learn more in the [divide opacity documentation](/docs/divide-opacity).
-
----
-
-## Responsive
-
-To control the borders between elements at a specific breakpoint, add a `{screen}:` prefix to any existing divide utility. For example, adding the class `md:divide-x-8` to an element would apply the `divide-x-8` utility at medium screen sizes and above.
 
 ```html
-<div class="divide-y divide-teal-400 **md:divide-pink-400**">
-  <div class="py-2">1</div>
-  <div class="py-2">2</div>
-  <div class="py-2">3</div>
+<div class="**divide-y divide-blue-200**">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### Changing the opacity
+
+Control the opacity of the divide color using the color opacity modifier.
+
+<Example p="none">
+  <div class="grid grid-cols-1 divide-y-4 divide-gray-400/25 font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
+    <div class="p-4 text-gray-400 bg-white">01</div>
+    <div class="p-4 text-gray-400 bg-white">02</div>
+    <div class="p-4 text-gray-400 bg-white">03</div>
+  </div>
+</Example>
+
+```html
+<div class="divide-y-4 divide-gray-400**/25** ...">
+  <!-- ... -->
+</div>
+```
+
+You can use any value defined in your [opacity scale](/docs/opacity), or use arbitrary values if you need to deviate from your design tokens.
+
+```html
+<div class="divide-y-4 divide-gray-400**/[.24]** ...">
+  <!-- ... -->
+</div>
+```
 
 ---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Border Colors
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-By default, Tailwind makes the entire [default color palette](/docs/customizing-colors#default-color-palette) available as divide colors.
+<HoverFocusAndOtherStates defaultClass="divide-y divide-teal-400" featuredClass="divide-pink-400" />
 
-You can [customize your color palette](/docs/colors#customizing) by editing the `theme.colors` section of your `tailwind.config.js` file, customize just your border and divide colors together using the `theme.borderColor` section, or customize only the divide colors using the `theme.divideColor` section.
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
-      divideColor: theme => ({
--       ...theme('borderColors'),
-+       'primary': '#3490dc',
-+       'secondary': '#ffed4a',
-+       'danger': '#e3342f',
-      })
-    }
-  }
-```
+<BreakpointsAndMediaQueries defaultClass="divide-y divide-teal-400" featuredClass="divide-pink-400" />
 
-### Variants
+---
 
-<Variants plugin="divideColor" />
+## Using custom values
 
-### Disabling
+### Customizing your theme
 
-<Disabling plugin="divideColor" />
+<CustomizePluginColors name="divide" configKey="divideColor" />
+
+### Arbitrary values
+
+<ArbitraryValues property="divide-{color}" featuredClass="divide-[#243c5a]" />

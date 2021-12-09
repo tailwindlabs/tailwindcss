@@ -3,110 +3,117 @@ title: "Object Fit"
 description: "Utilities for controlling how a replaced element's content should be resized."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/objectFit'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=objectFit'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Contain
+## Basic usage
 
-Resize an element's content to stay contained within its container using `.object-contain`.
-
-```html rose
-<template preview>
-  <div class="bg-rose-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
-    <img class="h-48 w-full object-contain" src="/img/placeholder-rose.svg" alt="">
-  </div>
-</template>
-
-<div class="bg-rose-300 ...">
-  <img class="**object-contain** h-48 w-full ...">
-</div>
-```
-
-## Cover
+### Resizing to cover a container
 
 Resize an element's content to cover its container using `.object-cover`.
 
-```html indigo
-<template preview>
-  <div class="bg-indigo-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
-    <img class="h-48 w-full object-cover" src="/img/placeholder-indigo.svg" alt="">
+<Example>
+  <div class="text-center rounded-lg overflow-hidden w-56 sm:w-96 mx-auto">
+    <img class="object-cover h-48 w-full " src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80" />
   </div>
-</template>
+</Example>
 
+```html
 <div class="bg-indigo-300 ...">
-  <img class="**object-cover** h-48 w-full ...">
+  <img class="**object-cover** h-48 w-96 ...">
 </div>
 ```
 
-## Fill
+### Containing an element
+
+Resize an element's content to stay contained within its container using `.object-contain`.
+
+<Example>
+  <div class="relative rounded-lg text-center overflow-hidden w-56 sm:w-96 mx-auto">
+    <div class="absolute inset-0 opacity-50 bg-stripes-gray"></div>
+    <img class="relative z-10 object-contain h-48 w-full" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80" />
+  </div>
+</Example>
+
+```html
+<div class="bg-purple-300 ...">
+  <img class="**object-contain** h-48 w-96 ...">
+</div>
+```
+
+### Stretching to fit a container
 
 Stretch an element's content to fit its container using `.object-fill`.
 
-```html lightBlue
-<template preview>
-  <div class="bg-light-blue-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
-    <img class="h-48 w-full object-fill" src="/img/placeholder-light-blue.png" alt="">
+<Example>
+  <div class="bg-stripes-light-blue-blue rounded-lg text-center overflow-hidden w-56 sm:w-96 mx-auto">
+    <img class="object-fill h-48 w-full" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80" />
   </div>
-</template>
+</Example>
 
+```html
 <div class="bg-light-blue-300 ...">
-  <img class="**object-fill** h-48 w-full ...">
+  <img class="**object-fill** h-48 w-96 ...">
 </div>
 ```
 
-## None
-
-Display an element's content at its original size ignoring the container size using `.object-none`.
-
-```html amber
-<template preview>
-  <div class="bg-amber-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
-    <img class="h-48 w-full object-none" src="/img/placeholder-amber.svg" alt="">
-  </div>
-</template>
-
-<div class="bg-yellow-300">
-  <img class="**object-none** h-48 w-full ...">
-</div>
-```
-
-## Scale Down
+### Scaling down if too large
 
 Display an element's content at its original size but scale it down to fit its container if necessary using `.object-scale-down`.
 
-```html emerald
-<template preview>
-  <div class="bg-emerald-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
-    <img class="h-48 w-full object-scale-down" src="/img/placeholder-emerald.svg" alt="">
+<Example>
+  <div class="relative rounded-lg text-center overflow-hidden w-56 sm:w-96 mx-auto">
+    <div class="absolute inset-0 opacity-50 bg-stripes-gray"></div>
+    <img class="relative z-10 object-scale-down h-48 w-full" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=160&q=80" />
   </div>
-</template>
-
-<div class="bg-green-300">
-  <img class="**object-scale-down** h-48 w-full ...">
-</div>
-```
-
-## Responsive
-
-To control how a replaced element's content should be resized only at a specific breakpoint, add a `{screen}:` prefix to any existing object fit utility. For example, adding the class `md:object-scale-down` to an element would apply the `object-scale-down` utility at medium screen sizes and above.
+</Example>
 
 ```html
-<div>
-  <img class="object-contain **md:object-scale-down** ..." src="...">
+<div class="bg-cyan-300">
+  <img class="**object-scale-down** h-48 w-96 ...">
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### Using an element's original size
 
-## Customizing
+Display an element's content at its original size ignoring the container size using `.object-none`.
 
-### Variants
+<Example>
+  <div class="relative rounded-lg text-center overflow-hidden w-56 sm:w-96 mx-auto">
+    <div class="absolute inset-0 opacity-50 bg-stripes-gray"></div>
+    <img class="relative z-10 object-none h-48 w-full" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80" />
+  </div>
+</Example>
 
-<Variants plugin="objectFit" name="object-fit" />
+```html
+<div class="bg-yellow-300">
+  <img class="**object-none** h-48 w-96 ...">
+</div>
+```
 
-### Disabling
+---
 
-<Disabling plugin="objectFit" name="object-fit" />
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="object-contain" featuredClass="object-scale-down">
+
+```html
+<img class="object-contain **hover:object-scale-down**">
+```
+
+</HoverFocusAndOtherStates>
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="object-contain" featuredClass="object-scale-down">
+
+```html
+<img class="object-contain **md:object-scale-down**">
+```
+
+</BreakpointsAndMediaQueries>

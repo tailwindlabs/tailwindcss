@@ -7,15 +7,15 @@ import {
   Widont,
   InlineCode,
 } from '@/components/home/common'
-import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
-import { gradients } from '@/utils/gradients'
-import { ReactComponent as Icon } from '@/img/icons/home/state-variants.svg'
-import { tokenizeWithLines } from '../../macros/tokenize.macro'
+import iconUrl from '@/img/icons/home/state-variants.png'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import { useEffect, useRef, useState } from 'react'
 import { usePrevious } from '@/hooks/usePrevious'
 import clsx from 'clsx'
+import { GridLockup } from '../GridLockup'
+import { lines } from '../../samples/state-variants.html?highlight'
+import { animate } from 'framer-motion'
 
 const projects = [
   { title: 'API Integration', category: 'Engineering' },
@@ -41,65 +41,13 @@ const faces = [
   'photo-1534528741775-53994a69daeb',
 ]
 
-const {
-  lines,
-} = tokenizeWithLines.html(`<section class="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
-  <header class="flex items-center justify-between">
-    <h2 class="text-lg leading-6 font-medium text-black">Projects</h2>
-    <button class="(new-btn-hover)hover:bg-light-blue-200 (new-btn-hover)hover:text-light-blue-800 group flex items-center rounded-md bg-light-blue-100 text-light-blue-600 text-sm font-medium px-4 py-2">
-      <svg class="(new-btn-hover)group-hover:text-light-blue-600 text-light-blue-500 mr-2" width="12" height="20" fill="currentColor">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M6 5a1 1 0 011 1v3h3a1 1 0 110 2H7v3a1 1 0 11-2 0v-3H2a1 1 0 110-2h3V6a1 1 0 011-1z"/>
-      </svg>
-      New
-    </button>
-  </header>
-  <form class="relative">
-    <svg width="20" height="20" fill="currentColor" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
-    </svg>
-    <input class="(input-focus)focus:border-light-blue-500 (input-focus)focus:ring-1 (input-focus)focus:ring-light-blue-500 (input-focus)focus:outline-none w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10" type="text" aria-label="Filter projects" placeholder="Filter projects" />
-  </form>
-  <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-    <li x-for="item in items">
-      <a :href="item.url" class="(item-hover)hover:bg-light-blue-500 (item-hover)hover:border-transparent (item-hover)hover:shadow-lg group block rounded-lg p-4 border border-gray-200">
-        <dl class="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
-          <div>
-            <dt class="sr-only">Title</dt>
-            <dd class="(item-hover)group-hover:text-white leading-6 font-medium text-black">
-              {item.title}
-            </dd>
-          </div>
-          <div>
-            <dt class="sr-only">Category</dt>
-            <dd class="(item-hover)group-hover:text-light-blue-200 text-sm font-medium sm:mb-4 lg:mb-0 xl:mb-4">
-              {item.category}
-            </dd>
-          </div>
-          <div class="col-start-2 row-start-1 row-end-3">
-            <dt class="sr-only">Users</dt>
-            <dd class="flex justify-end sm:justify-start lg:justify-end xl:justify-start -space-x-2">
-              <img x-for="user in item.users" :src="user.avatar" :alt="user.name" width="48" height="48" class="w-7 h-7 rounded-full bg-gray-100 border-2 border-white" />
-            </dd>
-          </div>
-        </dl>
-      </a>
-    </li>
-    <li class="(new-hover)hover:shadow-lg flex rounded-lg">
-      <a href="/new" class="(new-hover)hover:border-transparent (new-hover)hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4">
-        New Project
-      </a>
-    </li>
-  </ul>
-</section>
-`)
-
 addClassTokens2(lines)
 
 const lineRanges = {
-  'new-btn-hover': [3, 8],
-  'input-focus': [14, 14],
-  'item-hover': [18, 39],
-  'new-hover': [41, 45],
+  'new-btn-hover': [4, 9],
+  'input-focus': [15, 15],
+  'item-hover': [20, 39],
+  'new-hover': [42, 47],
 }
 
 export function StateVariants() {
@@ -109,20 +57,25 @@ export function StateVariants() {
   const linesContainerRef = useRef()
 
   function scrollTo(rangeOrRanges) {
-    const ranges = Array.isArray(rangeOrRanges) ? rangeOrRanges : [rangeOrRanges]
+    let ranges = Array.isArray(rangeOrRanges) ? rangeOrRanges : [rangeOrRanges]
     if (ranges.length === 0) return
-    const linesSorted = ranges.flat().sort((a, b) => a - b)
-    const minLine = linesSorted[0]
-    const maxLine = linesSorted[linesSorted.length - 1]
-    const $lines = linesContainerRef.current.children
-    const containerHeight = codeContainerRef.current.offsetHeight
-    const top = $lines[minLine].offsetTop
-    const height = $lines[maxLine].offsetTop + $lines[maxLine].offsetHeight - top
+    let linesSorted = ranges.flat().sort((a, b) => a - b)
+    let minLine = linesSorted[0]
+    let maxLine = linesSorted[linesSorted.length - 1]
+    let $lines = linesContainerRef.current.children
+    let containerHeight = codeContainerRef.current.offsetHeight
+    let top = $lines[minLine].offsetTop
+    let height = $lines[maxLine].offsetTop + $lines[maxLine].offsetHeight - top
 
-    codeContainerRef.current.scrollTo({
-      top: top - containerHeight / 2 + height / 2,
-      behavior: 'smooth',
-    })
+    top = top - containerHeight / 2 + height / 2
+
+    if (CSS.supports('scroll-behavior', 'smooth')) {
+      codeContainerRef.current.scrollTo({ top })
+    } else {
+      animate(codeContainerRef.current.scrollTop, top, {
+        onUpdate: (top) => codeContainerRef.current.scrollTo({ top }),
+      })
+    }
   }
 
   useEffect(() => {
@@ -135,142 +88,125 @@ export function StateVariants() {
 
   return (
     <section id="state-variants">
-      <div className="px-4 sm:px-6 md:px-8 mb-10 sm:mb-16 md:mb-20">
-        <IconContainer className={`${gradients.lightblue[0]} mb-8`}>
-          <Icon />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        <IconContainer>
+          <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption as="h2" className="text-light-blue-500 mb-3">
-          State variants
-        </Caption>
-        <BigText className="mb-8">
+        <Caption className="text-blue-500">State variants</Caption>
+        <BigText>
           <Widont>Hover and focus states? We got ’em.</Widont>
         </BigText>
-        <Paragraph className="mb-6">
+        <Paragraph>
           Want to style something on hover? Stick <InlineCode>hover:</InlineCode> at the beginning
           of the class you want to add. Works for <InlineCode>focus</InlineCode>,{' '}
           <InlineCode>active</InlineCode>, <InlineCode>disabled</InlineCode>,{' '}
           <InlineCode>focus-within</InlineCode>, <InlineCode>focus-visible</InlineCode>, and even
           fancy states we invented ourselves like <InlineCode>group-hover</InlineCode>.
         </Paragraph>
-        <Link
-          href="/docs/hover-focus-and-other-states"
-          className="text-light-blue-500 hover:text-light-blue-700"
-        >
-          Learn more -&gt;
+        <Link href="/docs/hover-focus-and-other-states" color="blue">
+          Learn more<span className="sr-only">, handling hover, focus, and other states</span>
         </Link>
       </div>
-      <GradientLockup
-        color="lightblue"
-        rotate={1}
+      <GridLockup
+        className="mt-10 xl:mt-2"
+        beams={4}
         left={
-          <div className="relative z-10 bg-white rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8">
-            <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
-              <header className="flex items-center justify-between">
-                <h2 className="text-lg leading-6 font-medium text-black">Projects</h2>
-                <div
-                  className="hover:bg-light-blue-200 hover:text-light-blue-800 group flex items-center rounded-md bg-light-blue-100 text-light-blue-600 text-sm font-medium px-4 py-2 cursor-pointer"
-                  onMouseEnter={() => {
-                    setStates((states) => [...states, 'new-btn-hover'])
-                  }}
-                  onMouseLeave={() => {
-                    setStates((states) => states.filter((x) => x !== 'new-btn-hover'))
-                  }}
-                >
+          <div className="relative z-10 bg-white rounded-xl shadow-xl ring-1 ring-gray-900/5 overflow-hidden my-auto xl:mt-18">
+            <section>
+              <header className="bg-white space-y-4 p-4 sm:px-8 sm:py-6 lg:p-4 xl:px-8 xl:py-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-semibold text-gray-900">Projects</h2>
+                  <div
+                    className="group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 cursor-pointer shadow-sm hover:bg-blue-400"
+                    onMouseEnter={() => {
+                      setStates((states) => [...states, 'new-btn-hover'])
+                    }}
+                    onMouseLeave={() => {
+                      setStates((states) => states.filter((x) => x !== 'new-btn-hover'))
+                    }}
+                  >
+                    <svg width="20" height="20" fill="currentColor" className="mr-2">
+                      <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
+                    </svg>
+                    New
+                  </div>
+                </div>
+                <form className="group relative">
                   <svg
-                    width="12"
+                    width="20"
                     height="20"
                     fill="currentColor"
-                    className="group-hover:text-light-blue-600 text-light-blue-500 mr-2"
+                    className="absolute left-3 top-1/2 -mt-2.5 text-gray-400 pointer-events-none group-focus-within:text-blue-500"
                   >
                     <path
                       fillRule="evenodd"
                       clipRule="evenodd"
-                      d="M6 5a1 1 0 011 1v3h3a1 1 0 110 2H7v3a1 1 0 11-2 0v-3H2a1 1 0 110-2h3V6a1 1 0 011-1z"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                     />
                   </svg>
-                  New
-                </div>
-              </header>
-              <form className="relative">
-                <svg
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  <input
+                    onFocus={() => {
+                      setStates((states) => [...states, 'input-focus'])
+                    }}
+                    onBlur={() => {
+                      setStates((states) => states.filter((x) => x !== 'input-focus'))
+                      // resetScroll()
+                    }}
+                    type="text"
+                    aria-label="Filter projects"
+                    placeholder="Filter projects..."
+                    className="w-full text-sm leading-6 text-gray-900 placeholder-gray-400 rounded-md py-2 pl-10 ring-1 ring-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                </svg>
-                <input
-                  onFocus={() => {
-                    setStates((states) => [...states, 'input-focus'])
-                  }}
-                  onBlur={() => {
-                    setStates((states) => states.filter((x) => x !== 'input-focus'))
-                    // resetScroll()
-                  }}
-                  type="text"
-                  aria-label="Filter projects"
-                  placeholder="Filter projects"
-                  className="w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10 focus:border-light-blue-500 focus:outline-none focus:ring-1 focus:ring-light-blue-500"
-                />
-              </form>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
+                </form>
+              </header>
+              <ul className="bg-gray-50 p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 text-sm leading-6">
                 {projects.map((project, i, a) => (
                   <li
                     key={i}
-                    className={i === a.length - 1 ? 'hidden sm:block lg:hidden xl:block' : ''}
+                    className={clsx(
+                      'group cursor-pointer rounded-md p-3 bg-white ring-1 ring-gray-200 shadow-sm hover:bg-blue-500 hover:ring-blue-500 hover:shadow-md',
+                      i === a.length - 1 ? 'hidden sm:block lg:hidden xl:block' : ''
+                    )}
+                    onMouseEnter={() => {
+                      setStates((states) => [...states, 'item-hover'])
+                    }}
+                    onMouseLeave={() => {
+                      setStates((states) => states.filter((x) => x !== 'item-hover'))
+                    }}
                   >
-                    <div
-                      className="group cursor-pointer rounded-lg p-4 border border-gray-200 hover:bg-light-blue-500 hover:border-transparent hover:shadow-lg"
-                      onMouseEnter={() => {
-                        setStates((states) => [...states, 'item-hover'])
-                      }}
-                      onMouseLeave={() => {
-                        setStates((states) => states.filter((x) => x !== 'item-hover'))
-                      }}
-                    >
-                      <dl className="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
-                        <div>
-                          <dt className="sr-only">Title</dt>
-                          <dd className="leading-6 font-medium text-black group-hover:text-white">
-                            {project.title}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="sr-only">Category</dt>
-                          <dd className="text-sm font-medium group-hover:text-light-blue-200 sm:mb-4 lg:mb-0 xl:mb-4">
-                            {project.category}
-                          </dd>
-                        </div>
-                        <div className="col-start-2 row-start-1 row-end-3">
-                          <dt className="sr-only">Users</dt>
-                          <dd className="flex justify-end sm:justify-start lg:justify-end xl:justify-start -space-x-2">
-                            {Array.from({ length: 5 }).map((_, j) => (
-                              <img
-                                key={j}
-                                src={`https://images.unsplash.com/${
-                                  faces[i * 5 + j]
-                                }?auto=format&fit=facearea&facepad=2&w=48&h=48&q=80`}
-                                alt=""
-                                width="48"
-                                height="48"
-                                className="w-7 h-7 rounded-full bg-gray-100 border-2 border-white"
-                                loading="lazy"
-                              />
-                            ))}
-                          </dd>
-                        </div>
-                      </dl>
-                    </div>
+                    <dl className="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
+                      <div>
+                        <dt className="sr-only">Title</dt>
+                        <dd className="font-semibold text-gray-900 group-hover:text-white">
+                          {project.title}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="sr-only">Category</dt>
+                        <dd className="group-hover:text-blue-200">{project.category}</dd>
+                      </div>
+                      <div className="col-start-2 row-start-1 row-end-3 sm:mt-4 lg:mt-0 xl:mt-4">
+                        <dt className="sr-only">Users</dt>
+                        <dd className="flex justify-end sm:justify-start lg:justify-end xl:justify-start -space-x-1.5">
+                          {Array.from({ length: 5 }).map((_, j) => (
+                            <img
+                              key={j}
+                              src={`https://images.unsplash.com/${
+                                faces[i * 5 + j]
+                              }?auto=format&fit=facearea&facepad=2&w=48&h=48&q=80`}
+                              alt=""
+                              className="w-6 h-6 rounded-full bg-gray-100 ring-2 ring-white"
+                              loading="lazy"
+                            />
+                          ))}
+                        </dd>
+                      </div>
+                    </dl>
                   </li>
                 ))}
-                <li className="hover:shadow-lg flex rounded-lg">
+                <li className="flex">
                   <div
-                    className="hover:border-transparent hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4 cursor-pointer"
+                    className="group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sm leading-6 text-gray-900 font-medium py-3 cursor-pointer hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500"
                     onMouseEnter={() => {
                       setStates((states) => [...states, 'new-hover'])
                     }}
@@ -278,7 +214,15 @@ export function StateVariants() {
                       setStates((states) => states.filter((x) => x !== 'new-hover'))
                     }}
                   >
-                    New Project
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                      className="mb-1 text-gray-400 group-hover:text-blue-500"
+                    >
+                      <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
+                    </svg>
+                    New project
                   </div>
                 </li>
               </ul>
@@ -286,8 +230,8 @@ export function StateVariants() {
           </div>
         }
         right={
-          <CodeWindow className="bg-light-blue-500">
-            <CodeWindow.Code2 ref={codeContainerRef} lines={lines.length}>
+          <CodeWindow>
+            <CodeWindow.Code2 ref={codeContainerRef} lines={lines.length} className="scroll-smooth">
               <div
                 ref={linesContainerRef}
                 className={clsx('mono', { 'mono-active': states.length > 0 })}

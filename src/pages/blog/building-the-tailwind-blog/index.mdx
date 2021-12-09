@@ -1,0 +1,269 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: 'Building the Tailwind Blog with Next.js',
+  description: `One of the things we believe as a team is that everything we make should be sealed with a blog post. Forcing ourselves to write up a short announcement post for every project we work on acts as a built-in quality check, making sure that we never call a project "done" until we feel comfortable telling the world it's out there. The problem was that up until today, we didn't actually have anywhere to publish those posts!`,
+  date: '2020-06-30T18:05:31Z',
+  authors: [adamwathan],
+  image,
+}
+
+One of the things we believe as a team is that everything we make should be [sealed with a blog post](https://public.3.basecamp.com/p/toAcDMxu8Fvq2yMfd2azTuaV). Forcing ourselves to write up a short announcement post for every project we work on acts as a built-in quality check, making sure that we never call a project "done" until we feel comfortable telling the world it's out there.
+
+The problem was that up until today, we didn't actually have anywhere to publish those posts!
+
+<!--more-->
+
+## Choosing a platform
+
+We're a team of developers so naturally there was no way we could convince ourselves to use something off-the-shelf, and opted to build something simple and custom with [Next.js](http://nextjs.org).
+
+There are a lot of things to like about Next.js, but the primary reason we decided to use it is that it has great support for [MDX](https://mdxjs.com/), which is the format we wanted to use to author our posts.
+
+```md
+# My first MDX post
+
+MDX is a really cool authoring format because it lets
+you embed React components right in your markdown:
+
+<MyComponent myProp={5} />
+
+How cool is that?
+```
+
+MDX is really interesting because unlike regular Markdown, you can embed live React components directly in your content. This is exciting because it unlocks a lot of opportunities in how you communicate ideas in your writing. Instead of relying only on images, videos, or code blocks, you can build interactive demos and stick them directly between two paragraphs of content, without throwing away the ergonomics of authoring in Markdown.
+
+We're planning to do a redesign and rebuild of the Tailwind CSS documentation site later this year and being able to embed interactive components makes a huge difference in our ability to teach how the framework works, so using our little blog site as a test project made a lot of sense.
+
+## Organizing our content
+
+We started by writing posts as simple MDX documents that lived directly in the `pages` directory. Eventually though we realized that just about every post would also have associated assets, for example an Open Graph image at the bare minimum.
+
+Having to store those in another folder felt a bit sloppy, so we decided instead to give every post its own folder in the `pages` directory, and put the post content in an `index.mdx` file.
+
+```
+public/
+src/
+├── components/
+├── css/
+├── img/
+└── pages/
+    ├── building-the-tailwindcss-blog/
+    │   ├── index.mdx
+    │   └── card.jpeg
+    ├── introducing-linting-for-tailwindcss-intellisense/
+    │   ├── index.mdx
+    │   ├── css.png
+    │   ├── html.png
+    │   └── card.jpeg
+    ├── _app.js
+    ├── _document.js
+    └── index.js
+next.config.js
+package.json
+postcss.config.js
+README.md
+tailwind.config.js
+```
+
+This let us co-locate any assets for that post in the same folder, and leverage webpack's [file-loader](https://github.com/tailwindcss/blog/blob/59bd38f2f423f133c0b6157a925ec2875ce880af/next.config.js#L28-L39) to import those assets directly into the post.
+
+## Metadata
+
+We store metadata about each post in a `meta` object that we export at the top of each MDX file:
+
+```js
+import { bradlc } from '@/authors'
+import openGraphImage from './card.jpeg'
+
+export const meta = {
+  title: 'Introducing linting for Tailwind CSS IntelliSense',
+  description: `Today we’re releasing a new version of the Tailwind CSS IntelliSense extension for Visual Studio Code that adds Tailwind-specific linting to both your CSS and your markup.`,
+  date: '2020-06-23T18:52:03Z',
+  authors: [bradlc],
+  image: openGraphImage,
+  discussion: 'https://github.com/tailwindcss/tailwindcss/discussions/1956',
+}
+
+// Post content goes here
+```
+
+This is where we define the post title (used for the actual `h1` on the post page and the page title), the description (for Open Graph previews), the publish date, the authors, the Open Graph image, and a link to the GitHub Discussions thread for the post.
+
+We store all of our authors data in a separate file that just contains each team member's name, Twitter handle, and avatar.
+
+```js
+import adamwathanAvatar from './img/adamwathan.jpg'
+import bradlcAvatar from './img/bradlc.jpg'
+import steveschogerAvatar from './img/steveschoger.jpg'
+
+export const adamwathan = {
+  name: 'Adam Wathan',
+  twitter: '@adamwathan',
+  avatar: adamwathanAvatar,
+}
+
+export const bradlc = {
+  name: 'Brad Cornes',
+  twitter: '@bradlc',
+  avatar: bradlcAvatar,
+}
+
+export const steveschoger = {
+  name: 'Steve Schoger',
+  twitter: '@steveschoger',
+  avatar: steveschogerAvatar,
+}
+```
+
+The nice thing about actually importing the author object into a post instead of connecting it through some sort of identifier is that we can easily add an author inline if we wanted to:
+
+```js
+export const meta = {
+  title: 'An example of a guest post by someone not on the team',
+  authors: [
+    {
+      name: 'Simon Vrachliotis',
+      twitter: '@simonswiss',
+      avatar: 'https://pbs.twimg.com/profile_images/1160929863/n510426211_274341_6220_400x400.jpg',
+    },
+  ],
+  // ...
+}
+```
+
+This makes it easy for us to keep author information in sync by giving it a central source of truth, but doesn't give up any flexibility.
+
+## Displaying post previews
+
+We wanted to display previews for each post on the homepage, and this turned out to be a surprisingly challenging problem.
+
+Essentially what we wanted to be able to do was use the `getStaticProps` feature of Next.js to get a list of all the posts at build-time, extract the information we need, and pass that in to the actual page component to render.
+
+The challenge is that we wanted to do this without actually importing every single page, because that would mean that our bundle for the homepage would contain every single blog post for the entire site, leading to a much bigger bundle than necessary. Maybe not a big deal right now when we only have a couple of posts, but once you're up to dozens or hundreds of posts that's a lot of wasted bytes.
+
+We tried a few different approaches but the one we settled on was using webpack's [resourceQuery](https://webpack.js.org/configuration/module/#ruleresourcequery) feature combined with a couple of custom loaders to make it possible to load each blog post in two formats:
+
+1. The entire post, used for post pages.
+2. The post preview, where we load the minimum data needed for the homepage.
+
+The way we set it up, any time we add a `?preview` query to the end of an import for an individual post, we get back a much smaller version of that post that just includes the metadata and the preview excerpt, rather than the entire post content.
+
+Here's a snippet of what that custom loader looks like:
+
+```js
+{
+  resourceQuery: /preview/,
+  use: [
+    ...mdx,
+    createLoader(function (src) {
+      if (src.includes('<!--​more​-->')) {
+        const [preview] = src.split('<!--​more​-->')
+        return this.callback(null, preview)
+      }
+
+      const [preview] = src.split('<!--​/excerpt​-->')
+      return this.callback(null, preview.replace('<!--​excerpt​-->', ''))
+    }),
+  ],
+},
+```
+
+It lets us define the excerpt for each post either by sticking `<!--​more-->` after the intro paragraph, or by wrapping the excerpt in a pair of `<!--​excerpt-->` and `<!--​/excerpt-->` tags, allowing us to write an excerpt that's completely independent from the post content.
+
+```
+export const meta = {
+  // ...
+}
+
+This is the beginning of the post, and what we'd like to
+show on the homepage.
+
+<!--​more-->
+
+Anything after that is not included in the bundle unless
+you are actually viewing that post.
+```
+
+Solving this problem in an elegant way was pretty challenging, but ultimately it was cool to come up with a solution that let us keep everything in one file instead of using a separate file for the preview and the actual post content.
+
+## Generating next/previous post links
+
+The last challenge we had when building this simple site was being able to include links to the next and previous post whenever you're viewing an individual post.
+
+At its core, what we needed to do was load up all of the posts (ideally at build-time), find the current post in that list, then grab the post that came before and the post that came after so we could pass those through to the page component as props.
+
+This ended up being harder than we expected, because it turns out that MDX doesn't currently support `getStaticProps` the way you'd normally use it. You can't actually export it directly from your MDX files, instead you have to store your code in a separate file and re-export it from there.
+
+We didn't want to load this extra code when just importing our post _previews_ on the homepage, and we also didn't want to have to repeat this code in every single post, so we decided to prepend this export to the beginning of each post using another custom loader:
+
+```js
+{
+  use: [
+    ...mdx,
+    createLoader(function (src) {
+      const content = [
+        'import Post from "@/components/Post"',
+        'export { getStaticProps } from "@/getStaticProps"',
+        src,
+        'export default (props) => <Post meta={meta} {...props} />',
+      ].join('\n')
+
+      if (content.includes('<!--​more-->')) {
+        return this.callback(null, content.split('<!--​more-->').join('\n'))
+      }
+
+      return this.callback(null, content.replace(/<!--​excerpt-->.*<!--\/excerpt-->/s, ''))
+    }),
+  ],
+}
+```
+
+We also needed to use this custom loader to actually pass those static props to our `Post` component, so we appended that extra export you see above as well.
+
+This wasn't the only issue though. It turns out `getStaticProps` doesn't give you any information about the current page being rendered, so we had no way of knowing what post we were looking at when trying to determine the next and previous posts. I suspect this is solvable, but due to time constraints we opted to do more of that work on the client and less at build time, so we could actually see what the current route was when trying to figure out which links we needed.
+
+We load up all of the posts in `getStaticProps`, and map them to very lightweight objects that just contain the URL for the post, and the post title:
+
+```js
+import getAllPostPreviews from '@/getAllPostPreviews'
+
+export async function getStaticProps() {
+  return {
+    props: {
+      posts: getAllPostPreviews().map((post) => ({
+        title: post.module.meta.title,
+        link: post.link.substr(1),
+      })),
+    },
+  }
+}
+```
+
+Then in our actual `Post` layout component, we use the current route to determine the next and previous posts:
+
+```js
+export default function Post({ meta, children, posts }) {
+  const router = useRouter()
+  const postIndex = posts.findIndex((post) => post.link === router.pathname)
+  const previous = posts[postIndex + 1]
+  const next = posts[postIndex - 1]
+
+  // ...
+}
+```
+
+This works well enough for now, but again long-term I'd like to figure out a simpler solution that lets us load only the next and previous posts in `getStaticProps` instead of the entire thing.
+
+There's an interesting library by Hashicorp designed to make it possible to treat MDX files like a data source called [Next MDX Remote](https://github.com/hashicorp/next-mdx-remote) that we will probably explore in the future. It should let us switch to dynamic slug-based routing which would give us access to the current pathname in `getStaticProps` and give us a lot more power.
+
+## Wrapping up
+
+Overall, building this little site with Next.js was a fun learning experience. I'm always surprised at how complicated seemingly simple things end up being with a lot of these tools, but I'm very bullish on the future of Next.js and looking forward to building the next iteration of [tailwindcss.com](https://tailwindcss.com) with it in the months to come.
+
+If you're interested in checking out the codebase for this blog or even submitting a pull request to simplify any of the things I mentioned above, [check out the repository on GitHub](https://github.com/tailwindcss/blog).
+
+<Footer>
+  Want to talk about this post? <a href="https://github.com/tailwindcss/tailwindcss/discussions/1987">Discuss this on GitHub →</a>
+</Footer>

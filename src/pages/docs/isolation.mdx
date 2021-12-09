@@ -1,16 +1,17 @@
 ---
 title: "Isolation"
 description: "Utilities for controlling whether an element should explicitly create a new stacking context."
-featureVersion: 'v2.1+'
 ---
 
-import plugin from 'tailwindcss/lib/plugins/isolation'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=isolation'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Setting the stacking context
 
 Use the `isolate` and `isolation-auto` utilities to control whether an element should explicitly create a new stacking context.
 
@@ -20,24 +21,14 @@ Use the `isolate` and `isolation-auto` utilities to control whether an element s
 </div>
 ```
 
-## Responsive
+---
 
-To control the isolation property at a specific breakpoint, add a `{screen}:` prefix to any existing isolation utility. For example, use `md:isolation-auto` to apply the `isolation-auto` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<div class="isolate **md:isolation-auto** ...">
-  <!-- ... -->
-</div>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="isolate" featuredClass="isolation-auto" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Variants
-
-<Variants plugin="isolation" name="isolation" />
-
-### Disabling
-
-<Disabling plugin="isolation" name="isolation" />
+<BreakpointsAndMediaQueries defaultClass="isolate" featuredClass="isolation-auto" />

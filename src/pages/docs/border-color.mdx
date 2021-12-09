@@ -1,157 +1,185 @@
 ---
 title: "Border Color"
 description: "Utilities for controlling the color of an element's borders."
-features:
-  responsive: true
-  customizable: true
-  hover: true
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/borderColor'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
-import { Heading } from '@/components/Heading'
+import utilities from 'utilities?plugin=borderColor'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
-  preview: (css, { className }) => (
+  utilities,
+  transformProperties: ({ selector, properties }) => {
+    delete properties['--tw-border-opacity']
+    Object.keys(properties).forEach(key => {
+      properties[key] = properties[key].replace(' / var(--tw-border-opacity)', '')
+    })
+    return properties
+  },
+  preview: (css, { utility, className }) => (
     <td className={`relative w-16 p-2 font-mono text-xs whitespace-pre ${className}`}>
       <div
-        className="absolute inset-0 m-2 border"
+        className="absolute inset-0 m-2"
         style={{
-          borderColor: Array.isArray(css['border-color'])
-            ? css['border-color'][0]
-            : css['border-color'],
+          ...css,
+          borderWidth: {
+            all: '1px',
+            x: '0 1px',
+            y: '1px 0',
+            t: '1px 0 0',
+            r: '0 1px 0 0',
+            b: '0 0 1px',
+            l: '0 0 0 1px'
+          }[utility.match(/^\.border-(?:([xytrbl])-)?/)?.[1] || 'all'],
         }}
       />
     </td>
   ),
 }
 
-## Usage
+## Basic usage
+
+### Setting the border color
 
 Control the border color of an element using the `border-{color}` utilities.
 
-```html rose
-<template preview>
-  <div class="max-w-xs w-full mx-auto">
-    <input class="border border-red-500 bg-white text-gray-900 appearance-none block w-full rounded-md py-3 px-4 focus:outline-none" placeholder="Your email">
+<Example>
+  <div class="max-w-xs mx-auto space-y-1">
+    <label>
+      <span class="text-gray-900 text-sm font-medium">Email address</span>
+      <input type="text" placeholder="jane@example.com" class="font-sans block text-sm leading-5 w-full py-2 px-3 border-2 border-rose-600 text-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-rose-200 focus:border-rose-500" />
+    </label>
+    <span class="text-rose-600 text-sm">This field is required.</span>
   </div>
-</template>
-
-<input class="border-2 **border-red-500** ...">
-```
-
-### Changing opacity
-
-Control the opacity of an element's border color using the `border-opacity-{amount}` utilities.
-
-```html lightBlue
-<template preview>
-  <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
-    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-100 font-extrabold text-light-blue-600 flex justify-center items-center">100%</div>
-    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-75 font-extrabold text-light-blue-600 flex justify-center items-center">75%</div>
-    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-50 font-extrabold text-light-blue-600 flex justify-center items-center">50%</div>
-    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-25 font-extrabold text-light-blue-600 flex justify-center items-center">25%</div>
-    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-0 font-extrabold text-light-blue-600 flex justify-center items-center">0%</div>
-  </div>
-</template>
-
-<div class="border-4 border-light-blue-500 **border-opacity-100** ..."></div>
-<div class="border-4 border-light-blue-500 **border-opacity-75** ..."></div>
-<div class="border-4 border-light-blue-500 **border-opacity-50** ..."></div>
-<div class="border-4 border-light-blue-500 **border-opacity-25** ..."></div>
-<div class="border-4 border-light-blue-500 **border-opacity-0** ..."></div>
-```
-
-Learn more in the [border opacity documentation](/docs/border-opacity).
-
-## Responsive
-
-To control the border color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border color utility. For example, use `md:border-green-500` to apply the `border-green-500` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<button class="border-blue-500 **md:border-green-500** ...">
-  Button
-</button>
+<input class="border-2 **border-rose-500** ...">
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### Changing the opacity
 
-## Hover
+Control the opacity of an element's border color using the color opacity modifier.
 
-To control the border color of an element on hover, add the `hover:` prefix to any existing border color utility. For example, use `hover:border-blue-500` to apply the `border-blue-500` utility on hover.
-
-```html purple
-<template preview>
-  <div class="flex items-center justify-center">
-    <button class="border-2 border-purple-500 hover:border-gray-500 bg-transparent text-purple-700 hover:text-gray-700 py-3 px-4 font-semibold rounded-md">
-      Button
-    </button>
+<Example>
+  <div class="grid lg:grid-cols-3 gap-4 text-white text-sm text-center font-bold leading-6">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-indigo-500/100</p>
+      <div class="p-4 shadow-sm bg-white w-16 h-16 border-indigo-500/100 border-4"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-indigo-500/75</p>
+      <div class="p-4 shadow-sm bg-white w-16 h-16 border-indigo-500/75 border-4"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-indigo-500/50</p>
+      <div class="p-4 shadow-sm bg-white w-16 h-16 border-indigo-500/50 border-4"></div>
+    </div>
   </div>
-</template>
-
-<button class="border-2 border-purple-500 **hover:border-gray-500** ...">
-  Button
-</button>
-```
-
-Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
+</Example>
 
 ```html
-<button class="... md:border-blue-500 md:hover:border-blue-700 ...">Button</button>
+<div class="border-4 border-indigo-500**/100** ..."></div>
+<div class="border-4 border-indigo-500**/75** ..."></div>
+<div class="border-4 border-indigo-500**/50** ..."></div>
 ```
 
-## Focus
-
-To control the border color of an element on focus, add the `focus:` prefix to any existing border color utility. For example, use `focus:border-blue-500` to apply the `border-blue-500` utility on focus.
-
-```html blue
-<template preview>
-  <div class="max-w-xs w-full mx-auto">
-    <input class="border border-gray-300 bg-white text-gray-900 appearance-none block w-full rounded-md py-3 px-4 focus:border-blue-500 focus:outline-none" placeholder="Your email">
-  </div>
-</template>
-
-<input class="border border-red-500 focus:border-blue-500 ...">
-```
-
-Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
+You can use any value defined in your [opacity scale](/docs/opacity), or use arbitrary values if you need to deviate from your design tokens.
 
 ```html
-<input class="... md:border-gray-200 md:focus:border-white ...">
+<div class="border-4 border-indigo-600**/[.55]** ..."></div>
+```
+
+### Individual sides
+
+Use the `border-{side}-{color}` utilities to set the border color for one side of an element.
+
+<Example>
+  <div class="flex flex-col sm:flex-row items-center justify-around gap-4 text-white text-sm text-center font-bold leading-6">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-t-indigo-500</p>
+      <div class="p-4 shadow-sm bg-white ring-1 ring-gray-900/5 w-16 h-16 border-indigo-200 border-4 border-t-indigo-500"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-r-indigo-500</p>
+      <div class="p-4 shadow-sm bg-white ring-1 ring-gray-900/5 w-16 h-16 border-indigo-200 border-4 border-r-indigo-500"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-b-indigo-500</p>
+      <div class="p-4 shadow-sm bg-white ring-1 ring-gray-900/5 w-16 h-16 border-indigo-200 border-4 border-b-indigo-500"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-l-indigo-500</p>
+      <div class="p-4 shadow-sm bg-white ring-1 ring-gray-900/5 w-16 h-16 border-indigo-200 border-4 border-l-indigo-500"></div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="border-4 border-indigo-200 **border-t-indigo-500** ..."></div>
+<div class="border-4 border-indigo-200 **border-r-indigo-500** ..."></div>
+<div class="border-4 border-indigo-200 **border-b-indigo-500** ..."></div>
+<div class="border-4 border-indigo-200 **border-l-indigo-500** ..."></div>
+```
+
+### Horizontal and vertical sides
+
+Use the `border-{x|y}-{color}` utilities to set the border color on two sides of an element at the same time.
+
+<Example>
+  <div class="flex flex-col sm:flex-row items-center justify-around gap-4 text-white text-sm text-center font-bold leading-6">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-x-indigo-500</p>
+      <div class="p-4 shadow-sm bg-white ring-1 ring-gray-900/5 w-16 h-16 border-indigo-200 border-4 border-x-indigo-500"></div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-y-indigo-500</p>
+      <div class="p-4 shadow-sm bg-white ring-1 ring-gray-900/5 w-16 h-16 border-indigo-200 border-4 border-y-indigo-500"></div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="border-4 border-indigo-200 **border-x-indigo-500** ..."></div>
+<div class="border-4 border-indigo-200 **border-y-indigo-500** ..."></div>
 ```
 
 ---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Border Colors
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-By default, Tailwind makes the entire [default color palette](/docs/customizing-colors#default-color-palette) available as border colors.
+<HoverFocusAndOtherStates featuredClass="border-gray-500">
 
-You can [customize your color palette](/docs/colors#customizing) by editing the `theme.colors` section of your `tailwind.config.js` file, or customize just your border colors using the `theme.borderColor` section.
+<Example hint="Try hovering over the text to see the expected behaviour">
+  <div class="grid place-content-center text-white text-sm text-center font-bold leading-6">
+    <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 hover:border-indigo-300 rounded-md shadow-sm">Send email</button>
+  </div>
+</Example>
 
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
-      borderColor: theme => ({
--       ...theme('colors'),
-        DEFAULT: theme('colors.gray.300', 'currentColor'),
-+       'primary': '#3490dc',
-+       'secondary': '#ffed4a',
-+       'danger': '#e3342f',
-      })
-    }
-  }
+```html
+<button class="border border-gray-300 **hover:border-indigo-300** ...">
+  Send email
+</button>
 ```
 
-### Variants
+</HoverFocusAndOtherStates>
 
-<Variants plugin="borderColor" />
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Disabling
+<BreakpointsAndMediaQueries defaultClass="border-blue-500" featuredClass="border-green-500" element="button" />
 
-<Disabling plugin="borderColor" />
+---
+
+## Using custom values
+
+### Customizing your theme
+
+<CustomizePluginColors name="border" configKey="borderColor" />
+
+### Arbitrary values
+
+<ArbitraryValues property="border-color" featuredClass="border-[#243c5a]" element="button" />

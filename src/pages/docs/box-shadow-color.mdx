@@ -1,0 +1,93 @@
+---
+title: "Box Shadow Color"
+description: "Utilities for controlling the color of a box shadow."
+---
+
+import utilities from 'utilities?plugin=boxShadowColor'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = {
+  utilities,
+  filterProperties: (property) => property !== '--tw-shadow',
+}
+
+## Basic usage
+
+### Setting the box shadow color
+
+Use the `shadow-{color}` utilities to change the color of an existing box shadow. By default colored shadows have an opacity of 100%, but you can adjust this using the opacity modifier.
+
+<Example>
+  <div class="flex flex-col sm:flex-row justify-center gap-8 sm:gap-16">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-cyan-500/50</p>
+      <button class="py-2 px-3 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-cyan-500/50 focus:outline-none">Subscribe</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-blue-500/50</p>
+      <button class="py-2 px-3 bg-blue-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-blue-500/50 focus:outline-none">Subscribe</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-indigo-500/50</p>
+      <button class="py-2 px-3 bg-indigo-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-indigo-500/50 focus:outline-none">Subscribe</button>
+    </div>
+  </div>
+</Example>
+
+```html
+<button class="bg-cyan-500 **shadow-lg shadow-cyan-500/50** ...">Subscribe</button>
+<button class="bg-blue-500 **shadow-lg shadow-blue-500/50** ...">Subscribe</button>
+<button class="bg-indigo-500 **shadow-lg shadow-indigo-500/50** ...">Subscribe</button>
+```
+
+### Using shadows on colored backgrounds
+
+When using shadows on a colored background, colored shadows can often look more natural than the default black-based shadows, which tend to appear gray and washed-out.
+
+<Example p="none">
+  <div class="flex justify-around bg-indigo-300 px-8 pt-10 pb-12 space-x-6">
+    <div class="flex flex-col items-center">
+      <p class="mb-3 text-sm font-medium text-indigo-900">Default shadow</p>
+      <button class="py-2 px-3 bg-white text-indigo-600 text-sm font-semibold rounded-md shadow-lg focus:outline-none">Subscribe</button>
+    </div>
+    <div class="flex flex-col items-center">
+      <p class="mb-3 text-sm font-medium text-indigo-900">Colored shadow</p>
+      <button class="py-2 px-3 bg-white text-indigo-600 text-sm font-semibold rounded-md shadow-lg shadow-indigo-500/40 focus:outline-none">Subscribe</button>
+    </div>
+  </div>
+</Example>
+
+```html
+<!-- Default shadow-->
+<button class="shadow-lg">Subscribe</button>
+
+<!-- Colored shadow-->
+<button class="shadow-lg **shadow-indigo-500/40** ...">Subscribe</button>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="shadow shadow-blue-500/40" featuredClass="shadow-indigo-500/40" element="button" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="shadow shadow-blue-500/40" featuredClass="shadow-indigo-500/40" element="button" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+<CustomizePluginColors name="box shadow" configKey="boxShadowColor" />
+
+### Arbitrary values
+
+<ArbitraryValues property="box-shadow" featuredClass="shadow-[#50d71e]" element="button" />

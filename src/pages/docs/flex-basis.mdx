@@ -1,0 +1,103 @@
+---
+title: "Flex Basis"
+description: "Utilities for controlling the initial size of flex items."
+---
+
+import utilities from 'utilities?plugin=flexBasis'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Setting the flex basis
+
+Use the `basis-{size}` utilities to set the initial size of flex items.
+
+<Example>
+  <div class="flex flex-row space-x-4 font-mono text-white text-sm font-bold leading-6">
+    <div class="basis-1/4 h-14 rounded-lg flex items-center justify-center bg-fuchsia-500 shadow-lg">01</div>
+    <div class="basis-1/4 h-14 rounded-lg flex items-center justify-center bg-fuchsia-500 shadow-lg">02</div>
+    <div class="basis-1/2 h-14 rounded-lg flex items-center justify-center bg-fuchsia-500 shadow-lg">03</div>
+  </div>
+</Example>
+
+```html
+<div class="flex flex-row">
+  <div class="**basis-1/4**">01</div>
+  <div class="**basis-1/4**">02</div>
+  <div class="**basis-1/2**">03</div>
+</div>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="basis-1/3" featuredClass="basis-1/2" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries featuredClass="basis-1/3">
+
+```html
+<div class="flex flex-row">
+  <div class="basis-1/4 **md:basis-1/3**">01</div>
+  <div class="basis-1/4 **md:basis-1/3**">02</div>
+  <div class="basis-1/2 **md:basis-1/3**">03</div>
+</div>
+```
+
+</BreakpointsAndMediaQueries>
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+The default flex basis scale is a combination of the [default spacing scale](/docs/customizing-spacing#default-spacing-scale) as well as a set of percentage based values.
+
+You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       spacing: {
++         '112': '28rem',
++         '128': '32rem',
++       }
+      }
+    }
+  }
+```
+
+Alternatively, you can customize just the flex basis scale by editing `theme.flexBasis` or `theme.extend.flexBasis` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       flexBasis: {
++         '1/7': '14.2857143%',
++         '2/7': '28.5714286%',
++         '3/7': '42.8571429%',
++         '4/7': '57.1428571%',
++         '5/7': '71.4285714%',
++         '6/7': '85.7142857%',
++       }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="flex-basis" featuredClass="flex-basis-[14.2857143%]" />

@@ -1,110 +1,84 @@
 ---
 title: "Width"
-description: "Utilities for setting the width of an element"
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
+description: "Utilities for setting the width of an element."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/width'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=width'
 import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
+  utilities,
   sort: numbersFirst,
 }
 
-## Auto
+## Basic usage
 
-Use `w-auto` to let the browser calculate and select the width for the element. You can use it to unset a specific width:
-
-```html
-<div class="w-24 **md:w-auto** ..."></div>
-```
-
-## Screen Width
-
-Use `w-screen` to make an element span the entire width of the viewport.
-
-```html
-<div class="h-12 **w-screen**"></div>
-```
-
-## Fixed Width
+### Fixed widths
 
 Use `w-{number}` or `w-px` to set an element to a fixed width.
 
-
-```html lightBlue
-<template preview>
-  <div class="flex flex-col space-y-8 mx-auto w-64">
-    <div class="flex items-center space-x-4">
-      <p class="text-sm text-light-blue-600 w-12 text-right">w-8</p>
-      <div class="h-8 w-8 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold"></div>
-    </div>
-    <div class="flex items-center space-x-4">
-      <p class="text-sm text-light-blue-600 w-12 text-right">w-12</p>
-      <div class="h-8 w-12 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold"></div>
-    </div>
-    <div class="flex items-center space-x-4">
-      <p class="text-sm text-light-blue-600 w-12 text-right">w-16</p>
-      <div class="h-8 w-16 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold"></div>
-    </div>
-    <div class="flex items-center space-x-4">
-      <p class="text-sm text-light-blue-600 w-12 text-right">w-24</p>
-      <div class="h-8 w-24 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold"></div>
+<Example>
+  <div class="flex justify-center">
+    <div class="space-y-4 font-mono font-bold text-xs text-center text-white">
+      <div class="px-4 py-2 bg-blue-500 rounded-lg shadow-lg w-96 hidden sm:block">w-96</div>
+      <div class="px-4 py-2 bg-blue-500 rounded-lg shadow-lg w-80 hidden sm:block">w-80</div>
+      <div class="px-4 py-2 bg-blue-500 rounded-lg shadow-lg w-64 hidden sm:block">w-64</div>
+      <div class="px-4 py-2 bg-blue-500 rounded-lg shadow-lg w-48">w-48</div>
+      <div class="px-4 py-2 bg-blue-500 rounded-lg shadow-lg w-40">w-40</div>
+      <div class="px-4 py-2 bg-blue-500 rounded-lg shadow-lg w-32">w-32</div>
+      <div class="px-4 py-2 bg-blue-500 rounded-lg shadow-lg w-24">w-24</div>
     </div>
   </div>
-</template>
+</Example>
 
-<div>
-  <div class="**w-8** ..."></div>
-  <div class="**w-12** ..."></div>
-  <div class="**w-16** ..."></div>
-  <div class="**w-24** ..."></div>
-</div>
+```html
+<div class="**w-96** ..."></div>
+<div class="**w-80** ..."></div>
+<div class="**w-64** ..."></div>
+<div class="**w-48** ..."></div>
+<div class="**w-40** ..."></div>
+<div class="**w-32** ..."></div>
+<div class="**w-24** ..."></div>
 ```
 
-## Fluid Width
+### Percentage widths
 
 Use `w-{fraction}` or `w-full` to set an element to a percentage based width.
 
-```html rose
-<template preview>
-  <div class="space-y-6">
-    <div class="flex rounded-md overflow-hidden text-white font-mono">
-      <div class="w-1/2 px-2 py-4 bg-rose-400 text-center">w-1/2</div>
-      <div class="w-1/2 px-2 py-4 bg-rose-500 text-center">w-1/2</div>
+<Example>
+  <div class="space-y-4 font-mono font-bold text-xs text-white">
+    <div class="flex space-x-4">
+      <div class="w-1/2 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-1/2</div>
+      <div class="w-1/2 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-1/2</div>
     </div>
-    <div class="flex rounded-md overflow-hidden text-white font-mono">
-      <div class="w-2/5 px-2 py-4 bg-rose-400 text-center">w-2/5</div>
-      <div class="w-3/5 px-2 py-4 bg-rose-500 text-center">w-3/5</div>
+    <div class="flex space-x-4">
+      <div class="w-2/5 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-2/5</div>
+      <div class="w-3/5 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-3/5</div>
     </div>
-    <div class="flex rounded-md overflow-hidden text-white font-mono">
-      <div class="w-1/3 px-2 py-4 bg-rose-400 text-center">w-1/3</div>
-      <div class="w-2/3 px-2 py-4 bg-rose-500 text-center">w-2/3</div>
+    <div class="flex space-x-4">
+      <div class="w-1/3 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-1/3</div>
+      <div class="w-2/3 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-2/3</div>
     </div>
-    <div class="flex rounded-md overflow-hidden text-white font-mono">
-      <div class="w-1/4 px-2 py-4 bg-rose-400 text-center">w-1/4</div>
-      <div class="w-3/4 px-2 py-4 bg-rose-500 text-center">w-3/4</div>
+    <div class="space-x-4 hidden sm:flex">
+      <div class="w-1/4 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-1/4</div>
+      <div class="w-3/4 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-3/4</div>
     </div>
-    <div class="flex rounded-md overflow-hidden text-white font-mono">
-      <div class="w-1/5 px-2 py-4 bg-rose-400 text-center">w-1/5</div>
-      <div class="w-4/5 px-2 py-4 bg-rose-500 text-center">w-4/5</div>
+    <div class="space-x-4 hidden sm:flex">
+      <div class="w-1/5 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-1/5</div>
+      <div class="w-4/5 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-4/5</div>
     </div>
-    <div class="flex rounded-md overflow-hidden text-white font-mono">
-      <div class="w-1/6 px-2 py-4 bg-rose-400 text-center">w-1/6</div>
-      <div class="w-5/6 px-2 py-4 bg-rose-500 text-center">w-5/6</div>
+    <div class="space-x-4 hidden sm:flex">
+      <div class="w-1/6 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-1/6</div>
+      <div class="w-5/6 px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center">w-5/6</div>
     </div>
-    <div class="rounded-md w-full px-2 py-4 bg-rose-500 text-center text-white font-mono">w-full</div>
+    <div class="w-full px-4 py-2 bg-violet-500 rounded-lg shadow-lg text-center text-white font-mono">w-full</div>
   </div>
-</template>
+</Example>
 
-
+```html
 <div class="flex ...">
   <div class="**w-1/2** ... ">w-1/2</div>
   <div class="**w-1/2** ... ">w-1/2</div>
@@ -132,35 +106,44 @@ Use `w-{fraction}` or `w-full` to set an element to a percentage based width.
 <div class="**w-full** ...">w-full</div>
 ```
 
-## Responsive
+### Viewport width
 
-To control the width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing width utility. For example, adding the class `md:w-full` to an element would apply the `w-full` utility at medium screen sizes and above.
+Use `w-screen` to make an element span the entire width of the viewport.
 
 ```html
-<div class="w-1/2 **md:w-full** ...">
+<div class="**w-screen**">
   <!-- ... -->
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Width scale
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="w-1/2" featuredClass="w-full" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="w-1/2" featuredClass="w-full" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
 
 By default, Tailwind's width scale is a combination of the [default spacing scale](/docs/customizing-spacing#default-spacing-scale) as well as some additional values specific to widths.
 
-You can customize the spacing scale for padding, margin, width, and height all at once in the `theme.spacing` or `theme.extend.spacing` sections of your `tailwind.config.js` file:
+You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
 +       spacing: {
-+         '72': '18rem',
-+         '84': '21rem',
-+         '96': '24rem',
++         '128': '32rem',
 +       }
       }
     }
@@ -169,30 +152,20 @@ You can customize the spacing scale for padding, margin, width, and height all a
 
 To customize width separately, use the `theme.width` section of your `tailwind.config.js` file.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
 +       width: {
-+         '1/7': '14.2857143%',
-+         '2/7': '28.5714286%',
-+         '3/7': '42.8571429%',
-+         '4/7': '57.1428571%',
-+         '5/7': '71.4285714%',
-+         '6/7': '85.7142857%',
++         '128': '32rem',
 +       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="width" />
-
-### Disabling
-
-<Disabling plugin="width" />
+<ArbitraryValues property="width" featuredClass="w-[32rem]" />

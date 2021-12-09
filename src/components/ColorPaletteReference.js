@@ -20,7 +20,7 @@ export function ColorPaletteReference({ colors }) {
         return (
           <div key={i}>
             <div className="flex flex-col space-y-3 sm:flex-row text-xs sm:space-y-0 sm:space-x-4">
-              <div className="w-32 flex-shrink-0">
+              <div className="w-16 shrink-0">
                 <div className="h-10 flex flex-col justify-center">
                   <div className="text-sm font-semibold text-gray-900">
                     {title
@@ -29,17 +29,6 @@ export function ColorPaletteReference({ colors }) {
                         return i !== 0 && l.toUpperCase() === l ? [' ', l] : [l]
                       })
                       .join('')}
-                  </div>
-                  <div>
-                    <code className="text-xs text-gray-500">
-                      colors.
-                      {value
-                        .split('')
-                        .map((l, i) => {
-                          return i === 0 ? l.toLowerCase() : l
-                        })
-                        .join('')}
-                    </code>
                   </div>
                 </div>
               </div>
@@ -52,8 +41,10 @@ export function ColorPaletteReference({ colors }) {
                         style={{ backgroundColor: value }}
                       />
                       <div className="px-0.5 md:flex md:justify-between md:space-x-2 2xl:space-x-0 2xl:block">
-                        <div className="w-6 font-medium text-gray-900">{name}</div>
-                        <div>{value.replace(/^#[a-f0-9]+/gi, (m) => m.toUpperCase())}</div>
+                        <div className="w-6 font-medium text-gray-900 2xl:w-full">{name}</div>
+                        <div className="text-gray-500 font-mono lowercase">
+                          {value.replace(/^#[a-f0-9]+/gi, (m) => m.toUpperCase())}
+                        </div>
                       </div>
                     </div>
                   )

@@ -1,89 +1,97 @@
 ---
 title: "User Select"
 description: "Utilities for controlling whether the user can select text in an element."
-features:
- responsive: true
- customizable: false
- hover: false
- focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/userSelect'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=userSelect'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Disable selecting text
+## Basic uage
+
+### Disabling text selection
 
 Use `select-none` to prevent selecting text in an element and its children.
 
-```html amber
-<template preview>
-  <div class="mx-auto max-w-sm bg-amber-200 p-2 select-none text-center">
-    This text is not selectable
+<Example hint="Try selecting the text to see the expected behaviour">
+  <div class="flex justify-center">
+    <div class="select-none inline-flex text-center bg-white text-gray-900 font-semibold font-sans text-sm shadow-lg rounded-lg ring-1 ring-gray-900/5 px-4 py-3">
+      The quick brown fox jumps over the lazy dog.
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**select-none** ...">
-  This text is not selectable
+  The quick brown fox jumps over the lazy dog.
 </div>
 ```
 
-## Allow selecting text
+### Allowing text selection
 
 Use `select-text` to allow selecting text in an element and its children.
 
-```html emerald
-<template preview>
-  <div class="mx-auto max-w-sm bg-emerald-200 p-2 select-text text-center">
-    This text is selectable
+<Example hint="Try selecting the text to see the expected behaviour">
+  <div class="flex justify-center">
+    <div class="select-text inline-flex text-center bg-white text-gray-900 font-semibold font-sans text-sm shadow-lg rounded-lg ring-1 ring-gray-900/5 px-4 py-3">
+      The quick brown fox jumps over the lazy dog.
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**select-text** ...">
-  This text is selectable
+  The quick brown fox jumps over the lazy dog.
 </div>
 ```
 
-## Select all text in one click
+### Selecting all text in one click
 
 Use `select-all` to automatically select all the text in an element when a user clicks.
 
-```html fuchsia
-<template preview>
-  <div class="mx-auto max-w-sm bg-fuchsia-200 p-2 select-all text-center">
-    Click anywhere in this text to select it all
+<Example hint="Try selecting the text to see the expected behaviour">
+  <div class="flex justify-center">
+    <div class="select-all inline-flex text-center bg-white text-gray-900 font-semibold font-sans text-sm shadow-lg rounded-lg ring-1 ring-gray-900/5 px-4 py-3">
+      The quick brown fox jumps over the lazy dog.
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**select-all** ...">
-  Click anywhere in this text to select it all
+  The quick brown fox jumps over the lazy dog.
 </div>
 ```
 
-## Auto
+### Using aut select behaviour
 
 Use `select-auto` to use the default browser behavior for selecting text. Useful for undoing other classes like `.select-none` at different breakpoints.
 
-```html lightBlue
-<template preview>
-  <div class="mx-auto max-w-sm bg-light-blue-200 p-2 select-auto text-center">
-    This text is selectable
+<Example hint="Try selecting the text to see the expected behaviour">
+  <div class="flex justify-center">
+    <div class="select-auto inline-flex text-center bg-white text-gray-900 font-semibold font-sans text-sm shadow-lg rounded-lg ring-1 ring-gray-900/5 px-4 py-3">
+      The quick brown fox jumps over the lazy dog.
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="**select-auto** ...">
-  This text is selectable
+  The quick brown fox jumps over the lazy dog.
 </div>
 ```
 
-## Customizing
+---
 
-### Variants
+## <Heading ignore>Applying conditionally</Heading>
 
-<Variants plugin="userSelect" name="user-select" />
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-### Disabling
+<HoverFocusAndOtherStates featuredClass="select-all" />
 
-<Disabling plugin="userSelect" name="user-select" />
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries featuredClass="select-all" />

@@ -3,12 +3,13 @@ title: "Ring Offset Width"
 description: "Utilities for simulating an offset when adding outline rings."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/ringOffsetWidth'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=ringOffsetWidth'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
+  utilities,
   transformProperties: ({ selector, properties }) => {
     properties['box-shadow'] = `0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color), var(--tw-ring-shadow)`
     return properties
@@ -16,76 +17,77 @@ export const classes = {
 }
 
 
-## Usage
+## Basic usage
+
+### Setting the ring offset width
 
 Use the `ring-offset-{width}` utilities to simulate an offset by adding solid white box-shadow and increasing the thickness of the accompanying outline ring to accommodate the offset.
 
-```html fuchsia
-<template preview class="p-0 border -mb-px">
-  <div class="bg-white grid grid-cols-1 sm:grid-cols-3 gap-6 justify-items-center p-8 ">
-    <button tabindex="-1" class="focus:outline-none text-sm w-32 py-3 rounded-md font-semibold text-white bg-pink-500 ring ring-pink-600 ring-offset-0">
-      ring-offset-0
-    </button>
-    <button tabindex="-1" class="focus:outline-none text-sm w-32 py-3 rounded-md font-semibold text-white bg-pink-500 ring ring-pink-600 ring-offset-2">
-      ring-offset-2
-    </button>
-    <button tabindex="-1" class="focus:outline-none text-sm w-32 py-3 rounded-md font-semibold text-white bg-pink-500 ring ring-pink-600 ring-offset-4">
-      ring-offset-4
-    </button>
+<Example>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-white text-sm text-center font-bold leading-6 text-white">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm font-mono text-gray-500 text-center mb-3">ring-offset-0</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-2 ring-offset-gray-50 ring-pink-500 ring-offset-0">Button A</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm font-mono text-gray-500 text-center mb-3">ring-offset-2</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-2 ring-offset-gray-50 ring-pink-500 ring-offset-2">Button B</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm font-mono text-gray-500 text-center mb-3">ring-offset-4</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-2 ring-offset-gray-50 ring-pink-500 ring-offset-4">Button C</button>
+    </div>
   </div>
-</template>
+</Example>
 
-<button class="... ring ring-pink-600 **ring-offset-0**">ring-0</button>
-<button class="... ring ring-pink-600 **ring-offset-2**">ring-2</button>
-<button class="... ring ring-pink-600 **ring-offset-4**">ring-4</button>
+```html
+<button class="... ring ring-pink-500 **ring-offset-0**">ring-offet-0</button>
+<button class="... ring ring-pink-500 **ring-offset-2**">ring-offset-2</button>
+<button class="... ring ring-pink-500 **ring-offset-4**">ring-offset-4</button>
 ```
 
 ### Changing the offset color
 
 You can't actually offset a box-shadow in CSS, so we have to fake it using a solid color shadow that matches the parent background color. We use white by default, but if you are adding a ring offset over a different background color, you should use the `ring-offset-{color}` utilities to match the parent background color:
 
-```html emerald
-<template preview class="p-0">
-  <div class="bg-emerald-100 grid grid-cols-1 gap-6 justify-items-center p-8 ">
-    <p class="font-semibold text-emerald-600">bg-green-100</p>
-    <button tabindex="-1" class="focus:outline-none text-sm px-5 py-3 rounded-md font-semibold text-white bg-emerald-500 ring ring-emerald-600 ring-offset-4 ring-offset-emerald-100">
-      ring-offset-green-100
-    </button>
+<Example>
+  <div class="grid place-content-center text-white text-sm text-center font-bold leading-6 text-white">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm font-mono text-gray-500 text-center mb-3">ring-offset-pink-500</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-2 ring-offset-4 ring-offset-pink-100 ring-pink-500">Save Changes</button>
+    </div>
   </div>
-</template>
-
-<div class="... **bg-green-100**">
-  <button class="... ring ring-green-600 **ring-offset-4** **ring-offset-green-100**">
-    ring-offset-green-100
-  </button>
-</div>
-```
-
-For more information, see the [ringOffsetColor documentation](/docs/ring-offset-color).
-
----
-
-
-## Responsive
-
-To control the ring offset width at a specific breakpoint, add a `{screen}:` prefix to any existing ring offset width utility. For example, use `md:ring-offset-4` to apply the `ring-offset-4` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<button class="ring-2 ring-offset-2 **md:ring-offset-4**">
-  <!-- ... -->
+<button class="... ring ring-pink-500 **ring-offset-2** **ring-offset-pink-100**">
+  Save Changes
 </button>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+For more information, see the [ring offset color](/docs/ring-offset-color) documentation.
 
 ---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="ring-2 ring-offset-2" featuredClass="ring-offset-4" element="button" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="ring-2 ring-offset-2" featuredClass="ring-offset-4" element="button" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
 
 To customize which ring offset width utilities are generated, add your custom values under `ringOffsetWidth` key in the `theme` section of your `tailwind.config.js` file.
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     extend: {
@@ -99,12 +101,8 @@ module.exports = {
 }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="ringOffsetWidth" />
-
-### Disabling
-
-<Disabling plugin="ringOffsetWidth" />
+<ArbitraryValues property="ring-offset" featuredClass="ring-offset-[3px]" />

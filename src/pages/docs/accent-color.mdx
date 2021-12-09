@@ -1,0 +1,96 @@
+---
+title: "Accent Color"
+description: "Utilities for controlling the accented color of a form control."
+---
+
+import utilities from 'utilities?plugin=accentColor'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Setting the accent color
+
+Use the `accent-{color}` utilities to change the accent color of an element. This is helpful for styling elements like checkboxes and radio groups by overriding the browser's default color.
+
+<Example>
+  <div class="flex flex-wrap justify-center gap-6">
+    <label class="flex items-center space-x-2">
+      <input type="checkbox" checked>
+      <div class="text-gray-900 text-sm font-semibold">
+        Browser default
+      </div>
+    </label>
+    <label class="flex items-center space-x-2">
+      <input type="checkbox" class="accent-pink-500" checked>
+      <div class="text-gray-900 text-sm font-semibold">
+        Customized
+      </div>
+    </label>
+  </div>
+</Example>
+
+```html
+<label>
+  <input type="checkbox" checked> Browser default
+</label>
+<label>
+  <input type="checkbox" class="**accent-pink-500**" checked> Customized
+</label>
+```
+
+### Changing the opacity
+
+While it's possible to control the opacity of the accent color using the color opacity modifier, the `rgba()` alpha value is only supported in Firefox at this time *(last tested November 2021)*.
+
+```html
+<input type="checkbox" class="**accent-emerald-500/25**" checked> Emerald
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates featuredClass="accent-pink-500">
+
+```html
+<input type="checkbox" class="accent-pink-300 **focus:accent-pink-500**" checked>
+```
+
+Note, while it's possible to set an accent color using the `hover` and `active` modifiers, the resulting color will be slightly different than what you set, as browsers automatically adjust the brightness of the accent color for these two states.
+
+</HoverFocusAndOtherStates>
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries featuredClass="accent-pink-500">
+
+```html
+<input type="checkbox" class="accent-pink-300 **md:accent-pink-500**" checked>
+```
+
+</BreakpointsAndMediaQueries>
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+<CustomizePluginColors name="accent" configKey="accentColor" />
+
+### Arbitrary values
+
+<ArbitraryValues property="accent-color">
+
+```html
+<input type="checkbox" class="**accent-[#50d71e]**" checked>
+```
+
+</ArbitraryValues>

@@ -1,160 +1,88 @@
 ---
 title: "Cursor"
 description: "Utilities for controlling the cursor style when hovering over an element."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/cursor'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=cursor'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = {
+  utilities,
+  rowStyle: ({ css }) => css,
+  preview: (css, { className, utility }) => (
+    <td
+      className={`align-middle ${className}`}
+    >
+      <img className="w-6 h-6 mx-auto drop-shadow" src={`/img/cursors/${utility.substr(1)}.svg`} />
+    </td>
+  ),
+}
 
-## Auto
+## Basic Usage
 
-Use `cursor-auto` to allow the browser to change the cursor based on the current content (e.g. automatically change to `text` cursor when hovering over text).
+### Setting the cursor style
 
-```html rose
-<template preview>
-  <div class="cursor-auto max-w-xs p-2 bg-rose-200 mx-auto text-center">
-    Hover over this text
+Use the `cursor-{style}` to control which cursor is displayed when hovering over an element.
+
+<Example hint="Hover over each button to see the cursor change">
+  <div class="flex flex-col sm:flex-row gap-4 sm:gap-0 items-center justify-around">
+    <button type="button" class="w-full sm:w-auto py-2 px-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white text-sm font-semibold rounded-md shadow focus:outline-none cursor-pointer" tabindex="-1">
+      Submit
+    </button>
+    <button type="button" class="w-full sm:w-auto py-2 px-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white text-sm font-semibold rounded-md shadow focus:outline-none cursor-progress" tabindex="-1">
+      Saving...
+    </button>
+    <button type="button" class="w-full sm:w-auto py-2 px-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white text-sm font-semibold rounded-md shadow focus:outline-none cursor-not-allowed" tabindex="-1" disabled>
+      Confirm
+    </button>
   </div>
-</template>
+</Example>
 
-<div class="**cursor-auto** ...">
-  Hover over this text
-</div>
+```html
+<button type="button" class="**cursor-pointer** ...">
+  Submit
+</button>
+<button type="button" class="**cursor-progress** ...">
+  Saving...
+</button>
+<button type="button" disabled class="**cursor-not-allowed** ...">
+  Confirm
+</button>
 ```
 
-## Default
+## <Heading ignore>Applying conditionally</Heading>
 
-Use `cursor-default` to change the mouse cursor to always use the platform-dependent default cursor (usually an arrow).
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-```html amber
-<template preview>
-  <div class="cursor-default max-w-xs p-2 bg-amber-200 mx-auto text-center">
-    Hover over this text
-  </div>
-</template>
+<HoverFocusAndOtherStates defaultClass="cursor-not-allowed" featuredClass="cursor-auto" variant="focus" />
 
-<div class="**cursor-default** ...">
-  Hover over this text
-</div>
-```
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-## Pointer
+<BreakpointsAndMediaQueries defaultClass="cursor-not-allowed" featuredClass="cursor-auto" />
 
-Use `cursor-pointer` to change the mouse cursor to indicate an interactive element (usually a pointing hand).
 
-```html purple
-<template preview>
-  <div class="cursor-pointer max-w-xs p-2 bg-purple-200 mx-auto text-center">
-    Hover me
-  </div>
-</template>
+## Using custom values
 
-<div class="**cursor-pointer** ...">
-  Hover me
-</div>
-```
+### Customizing your theme
 
-## Wait
+By default, Tailwind includes `cursor` utilities for many built in options. You can customize these values by editing `theme.cursor` or `theme.extend.cursor` in your `tailwind.config.js` file.
 
-Use `cursor-wait` to change the mouse cursor to indicate something is happening in the background (usually an hourglass or watch).
-
-```html emerald
-<template preview>
-  <div class="cursor-wait max-w-xs p-2 bg-emerald-200 mx-auto text-center">
-    Hover me
-  </div>
-</template>
-
-<div class="**cursor-wait** ...">
-  Hover me
-</div>
-```
-
-## Text
-
-Use `cursor-text` to change the mouse cursor to indicate the text can be selected (usually an I-beam shape).
-
-```html fuchsia
-<template preview>
-  <div class="cursor-text max-w-xs p-2 bg-fuchsia-200 mx-auto text-center">
-    Hover me
-  </div>
-</template>
-
-<div class="cursor-text ...">
-  Hover me
-</div>
-```
-
-## Move
-
-Use `cursor-move` to change the mouse cursor to indicate something that can be moved.
-
-```html indigo
-<template preview>
-  <div class="cursor-move max-w-xs p-2 bg-indigo-200 mx-auto text-center">
-    Hover me
-  </div>
-</template>
-
-<div class="**cursor-move** ...">
-  Hover me
-</div>
-```
-
-## Not Allowed
-
-Use `cursor-not-allowed` to change the mouse cursor to indicate something can not be interacted with or clicked.
-
-```html lightBlue
-<template preview>
-  <div class="cursor-not-allowed max-w-xs p-2 bg-light-blue-200 mx-auto text-center">
-    Hover me
-  </div>
-</template>
-
-<div class="**cursor-not-allowed** ...">
-  Hover me
-</div>
-```
-
-## Customizing
-
-### Cursors
-
-By default, Tailwind provides six `cursor` utilities. You change, add, or remove these by editing the `theme.cursor` section of your Tailwind config.
-
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      cursor: {
-        auto: 'auto',
-        default: 'default',
-        pointer: 'pointer',
--       wait: 'wait',
-        text: 'text',
--       move: 'move',
-        'not-allowed': 'not-allowed',
-+       crosshair: 'crosshair',
-+       'zoom-in': 'zoom-in',
+      extend: {
++       cursor: {
++         'fancy': 'url(hand.cur), pointer',
++       }
       }
     }
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="cursor" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="cursor" />
+<ArbitraryValues property="cursor" featuredClass={'cursor-' + '[url(hand.cur),_pointer]'} />

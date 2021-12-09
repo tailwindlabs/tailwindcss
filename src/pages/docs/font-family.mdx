@@ -1,87 +1,71 @@
 ---
 title: "Font Family"
 description: "Utilities for controlling the font family of an element."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/fontFamily'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=fontFamily'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Sans-serif
+## Basic usage
 
-Use `font-sans` to apply a web safe sans-serif font family:
+### Setting the font family
 
-```html lightBlue
-<template preview>
-  <p class="font-sans text-xl text-light-blue-600 text-center">
-    The quick brown fox jumps over the lazy dog.
-  </p>
-</template>
+You can control the typeface of text using the font family utilities.
 
-<p class="**font-sans** ...">
-  The quick brown fox jumps over the lazy dog.
-</p>
-```
-
-## Serif
-
-Use `font-serif` to apply a web safe serif font family:
-
-```html emerald
-<template preview>
-  <p class="font-serif text-xl text-emerald-600 text-center">
-    The quick brown fox jumps over the lazy dog.
-  </p>
-</template>
-
-<p class="**font-serif** ...">
-  The quick brown fox jumps over the lazy dog.
-</p>
-```
-
-## Monospaced
-
-Use `font-mono` to apply a web safe monospaced font family:
-
-```html indigo
-<template preview>
-  <p class="font-mono text-xl text-indigo-600 text-center">
-    The quick brown fox jumps over the lazy dog.
-  </p>
-</template>
-
-<p class="**font-mono** ...">
-  The quick brown fox jumps over the lazy dog.
-</p>
-```
-
-## Responsive
-
-To control the font family of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font family utility class. For example, use `md:font-serif` to apply the `font-serif` utility at only medium screen sizes and above.
+<Example>
+  <div class="flex flex-col gap-8">
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">font-sans</span>
+      <p class="font-sans text-lg font-medium text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
+    </div>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">font-serif</span>
+      <p class="font-serif text-lg font-medium text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
+    </div>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">font-mono</span>
+      <p class="font-mono text-lg font-medium text-gray-900">
+        The quick brown fox jumps over the lazy dog.
+      </p>
+    </div>
+  </div>
+</Example>
 
 ```html
-<p class="font-sans **md:font-serif**">
-  <!-- ... -->
-</p>
+<p class="**font-sans** ...">The quick brown fox ...</p>
+<p class="**font-serif** ...">The quick brown fox ...</p>
+<p class="**font-mono** ...">The quick brown fox ...</p>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Font Families
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="font-sans" featuredClass="font-serif" element="p" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="font-sans" featuredClass="font-serif" element="p" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
 
 By default, Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospaced stack. You can change, add, or remove these by editing the `theme.fontFamily` section of your Tailwind config.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       fontFamily: {
@@ -120,13 +104,10 @@ Note that **Tailwind does not automatically escape font names** for you. If you'
   // ...or escape the space:
   'sans': ['Exo\\ 2', ...],
 }
-
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="fontFamily" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="fontFamily" />
+<ArbitraryValues property="font-family" featuredClass="font-['Open_Sans']" element="p" />

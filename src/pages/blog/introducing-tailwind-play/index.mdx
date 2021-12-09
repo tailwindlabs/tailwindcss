@@ -1,0 +1,49 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: `Introducing Tailwind Play`,
+  description: `Tailwind Play is an advanced online playground for Tailwind CSS that lets you use all of Tailwind's build-time features directly in the browser.`,
+  date: '2020-10-07T13:00:00.000Z',
+  authors: [adamwathan],
+  image,
+}
+
+To get the most out of Tailwind, you need a build step. It's the only way to be able to customize your [`tailwind.config.js`](https://tailwindcss.com/docs/configuration) file, extract components with [`@apply`](https://tailwindcss.com/docs/functions-and-directives#apply), or include [plugins](https://tailwindcss.com/docs/plugins).
+
+This isn't a problem if you've already bought in to the framework, but if you're just trying to kick the tires for the first time it's a lot of friction. You either have to set up a local development environment with PostCSS support, or stick to the static CDN build, which means you lose out on lots of cool features.
+
+So today we're excited to release the first version of [**Tailwind Play**](https://play.tailwindcss.com), an advanced online playground for Tailwind CSS that lets you use all of Tailwind's build-time features directly in the browser.
+
+<!--more-->
+
+<div className="my-8 aspect-w-16 aspect-h-9">
+  <iframe
+    src="https://www.youtube.com/embed/eCWhTZ34Hck"
+    frameBorder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+It includes support for all of Tailwind's coolest features, plus tons of stuff that's even better in Tailwind Play than it is in your editor, like:
+
+- Customizing your Tailwind theme
+- Enabling special variants, like `group-hover` or `focus-within`
+- Using custom directives in your CSS like `@apply`, `@variants`, and `@responsive`
+- Adding plugins like `@tailwindcss/typography`
+- Intelligent code completion and linting
+- Responsive design mode
+- One-click sharing
+
+The code completion even updates the rendered preview in _real-time_, which creates an incredible design workflow in the browser — just navigate through different padding utilities with the arrow keys for example to find the perfect value without ever saving the file or even hitting enter!
+
+Our responsive design mode that lets you fine-tune the viewport while you're working on your design, just like you can in Chrome DevTools. You can even drag the viewport beyond the available space, and the preview area will automatically zoom out, letting you design for larger screens even when you have limited space.
+
+One-click sharing really is just that — you don't even need to create an account. Click "Share" and you've immediately got a link to a snapshot of what you're working on that you can share online.
+
+**Check it out at [play.tailwindcss.com](https://play.tailwindcss.com)** and let us know what you think!
+
+<Footer>
+  Want to talk about this post? <a href="https://github.com/tailwindcss/tailwindcss/discussions/2511">Discuss this on GitHub →</a>
+</Footer>

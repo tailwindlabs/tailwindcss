@@ -3,56 +3,56 @@ title: "Stroke"
 description: "Utilities for styling the stroke of SVG elements."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/stroke'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=stroke'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { CustomizePluginColors } from '@/components/CustomizePluginColors'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
 
-Use `stroke-current` to set the stroke color of an SVG to the current text color. This makes it easy to set an element's stroke color by combining this class with an existing [text color utility](/docs/text-color).
+### Setting the stroke color
 
-Useful for styling icon sets like [Heroicons](http://heroicons.com/) that are drawn entirely with strokes.
+Use the `stroke-{color}` utilities to change the stroke color of an SVG.
 
-```html purple
-<template preview>
-  <div class="text-center">
-    <svg class="stroke-current text-purple-600 inline-block h-12 w-12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="8" cy="21" r="2" />
-      <circle cx="20" cy="21" r="2" />
-      <path d="M5.67 6H23l-1.68 8.39a2 2 0 0 1-2 1.61H8.75a2 2 0 0 1-2-1.74L5.23 2.74A2 2 0 0 0 3.25 1H1" />
+<Example>
+  <div class="flex items-center justify-center">
+    <svg class="stroke-cyan-500 h-10" viewBox="0 0 48 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1 13C1 10.2386 3.23858 8 6 8H13.4914C14.3844 8 15.1691 7.40805 15.4144 6.54944L16.5856 2.45056C16.8309 1.59196 17.6156 1 18.5086 1H29.4914C30.3844 1 31.1691 1.59195 31.4144 2.45056L32.5856 6.54944C32.8309 7.40804 33.6156 8 34.5086 8H42C44.7614 8 47 10.2386 47 13V34C47 36.7614 44.7614 39 42 39H6C3.23858 39 1 36.7614 1 34V13Z" stroke-width="2"/> <circle cx="24" cy="23" r="9" stroke-width="2"/>
     </svg>
   </div>
-</template>
+</Example>
 
-<svg class="**stroke-current text-purple-600** ..."></svg>
+```html
+<svg class="**stroke-cyan-500** ...">
+  <!-- ... -->
+</svg>
 ```
 
-## Customizing
+This can be useful for styling icon sets like [Heroicons](https://heroicons.com).
 
-Control which stroke utilities Tailwind generates by customizing the `theme.stroke` section in your `tailwind.config.js` file:
+---
 
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
--     stroke: {
--       current: 'currentColor',
--     }
-+     stroke: theme => ({
-+       'red': theme('colors.red.500'),
-+       'green': theme('colors.green.500'),
-+       'blue': theme('colors.blue.500'),
-+     })
-    }
-  }
-```
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="stroke" />
+<HoverFocusAndOtherStates defaultClass="stroke-cyan-500" featuredClass="stroke-cyan-700" element="svg" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="stroke" />
+<BreakpointsAndMediaQueries defaultClass="stroke-cyan-500" featuredClass="stroke-cyan-700" element="svg" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+<CustomizePluginColors name="stroke" configKey="stroke" />
+
+### Arbitrary values
+
+<ArbitraryValues property="stroke" featuredClass="stroke-[#243c5a]" element="svg" />

@@ -5,9 +5,13 @@ description: A reference for the custom functions and directives Tailwind expose
 
 import { TipGood, TipBad } from '@/components/Tip'
 
-## @tailwind
+## Directives
 
-Use the `@tailwind` directive to insert Tailwind's `base`, `components`, `utilities` and `screens` styles into your CSS.
+Directives are custom Tailwind-specific [at-rules](https://developer.mozilla.org/en-US/docs/Web/CSS/At-rule) you can use in your CSS that offer special functionality for Tailwind CSS projects.
+
+### @tailwind
+
+Use the `@tailwind` directive to insert Tailwind's `base`, `components`, `utilities` and `variants` styles into your CSS.
 
 ```css
 /**
@@ -29,78 +33,70 @@ Use the `@tailwind` directive to insert Tailwind's `base`, `components`, `utilit
 @tailwind utilities;
 
 /**
- * Use this directive to control where Tailwind injects the responsive
- * variations of each utility.
+ * Use this directive to control where Tailwind injects the hover, focus,
+ * responsive, dark mode, and other variants of each class.
  *
  * If omitted, Tailwind will append these classes to the very end of
  * your stylesheet by default.
  */
-@tailwind screens;
+@tailwind variants;
 ```
 
----
+### @layer
 
-## @apply
+Use the `@layer` directive to tell Tailwind which "bucket" a set of custom styles belong to. Valid layers are `base`, `components`, and `utilities`.
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+}
+
+@layer components {
+  .btn-blue {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  }
+}
+
+@layer utilities {
+  .filter-none {
+    filter: none;
+  }
+  .filter-grayscale {
+    filter: grayscale(100%);
+  }
+}
+```
+
+Tailwind will automatically move any CSS within a `@layer` directive to the same place as the corresponding `@tailwind` rule, so you don't have to worry about authoring your CSS in a specific order to avoid specificity issues.
+
+Any custom CSS added to a layer will only be included in the final build if that CSS is actually used in your HTML, just like all of the classes built in to Tailwind by default.
+
+Wrapping any custom CSS in a `@layer` directive also makes it possible to use modifiers with those rules, like `hover:` and `focus:` or responsive modifiers like `md:` and `lg:`.
+
+### @apply
 
 Use `@apply` to inline any existing utility classes into your own custom CSS.
 
-This is useful when you find a common utility pattern in your HTML that you'd like to extract to a new component.
+This is useful when you need to write custom CSS (like to override the styles in a third-party library) but still want to work with your design tokens and use the same syntax you're used to using in your HTML.
 
 ```css
-.btn {
-  @apply font-bold py-2 px-4 rounded;
+.select2-dropdown {
+  @apply rounded-b-lg shadow-md;
 }
-.btn-blue {
-  @apply bg-blue-500 hover:bg-blue-700 text-white;
+.select2-search {
+  @apply border border-gray-300 rounded;
 }
-```
-
-Note that classes are applied based on their location in your original CSS, not based on the order you list them after the `@apply` directive. This is to ensure that the behavior you get when extracting a list of classes with `@apply` matches how those classes behave when listed directly in your HTML.
-
-```css
-/* Input */
-.btn {
-  @apply py-2 p-4;
-}
-
-/* Output */
-.btn {
-  padding: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-```
-
-If you want fine-grained control over the order in which classes are applied, use multiple `@apply` statements:
-
-```css
-/* Input */
-.btn {
-  @apply py-2;
-  @apply p-4;
-}
-
-/* Output */
-.btn {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding: 1rem;
-}
-```
-
-You can also mix `@apply` declarations with normal CSS declarations:
-
-```css
-/* Input */
-.btn {
-  transform: translateY(-1px);
-  @apply bg-black;
-}
-
-/* Output */
-.btn {
-  background-color: #000;
-  transform: translateY(-1px);
+.select2-results__group {
+  @apply text-lg font-bold text-gray-900;
 }
 ```
 
@@ -154,220 +150,77 @@ Note that if you're using Sass/SCSS, you'll need to use Sass' interpolation feat
 }
 ```
 
----
+#### Using @apply with per-component CSS
 
-## @layer
+Component frameworks like Vue and Svelte support adding per-component styles within a `<style>` block that lives in each component file.
 
-Use the `@layer` directive to tell Tailwind which "bucket" a set of custom styles belong to. Valid layers are a `base`, `components`, and `utilities`.
+If you try to `@apply` a custom class you've defined in your global CSS in one of these per-component `<style>` blocks, you'll get an error about the class not existing:
 
-```css
+```css main.css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  h1 {
-    @apply text-2xl;
-  }
-  h2 {
-    @apply text-xl;
-  }
-}
-
 @layer components {
-  .btn-blue {
-    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
-  }
-}
-
-@layer utilities {
-  @variants hover, focus {
-    .filter-none {
-      filter: none;
-    }
-    .filter-grayscale {
-      filter: grayscale(100%);
-    }
+  .card {
+    background-color: theme('colors.white');
+    border-radius: theme('borderRadius.lg');
+    padding: theme('spacing.6');
+    box-shadow: theme('boxShadow.xl');
   }
 }
 ```
 
-Tailwind will automatically move any CSS within a `@layer` directive to the same place as the corresponding `@tailwind` rule, so you don't have to worry as much about authoring your CSS in a specific order to avoid specificity issues.
+```html Card.svelte
+<div>
+  <slot></slot>
+</div>
 
-Wrapping any custom CSS in a `@layer` directive also tells Tailwind to consider those styles for purging when purging that layer. Read our [documentation on optimizing for production](/docs/optimizing-for-production) for more details.
+<style>
+  div {
+    /* Won't work because this file and main.css are processed separately */
+    @apply card;
+  }
+</style>
+```
+
+This is because under-the-hood, frameworks like Vue and Svelte are processing every single `<style>` block independently, and running your PostCSS plugin chain against each one in isolation.
+
+That means if you have 10 components that each have a `<style>` block, Tailwind is being run 10 separate times, and each run has zero knowledge about the other runs. Because of this, when you try to `@apply card` in `Card.svelte` it fails, because Tailwind has no idea that the `card` class exists since Svelte processed `Card.svelte` and `main.css` in total isolation from each other.
+
+The solution to this problem is to define any custom styles you want to `@apply` in your components using the [plugin system](/docs/plugins) instead:
+
+```js tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
+module.exports = {
+  // ...
+  plugins: [
+    plugin(function ({ addComponents, theme }) {
+      addComponents({
+        '.card': {
+          backgroundColor: theme('colors.white');
+          borderRadius: theme('borderRadius.lg');
+          padding: theme('spacing.6');
+          boxShadow: theme('boxShadow.xl');
+        }
+      })
+    })
+  ]
+}
+```
+
+This way any file processed by Tailwind that uses this config file will have access to those styles.
+
+Honestly though the best solution is to just not do weird stuff like this at all. Use Tailwind's utilities directly in your markup the way they are intended to be used, and don't abuse the `@apply` feature to do things like this and you will have a much better experience.
 
 ---
 
+## Functions
 
-## @variants
+Tailwind adds a few custom functions you can use in your CSS to access Tailwind-specific values. These functions are evaluated at build-time, and are replaced by static values in your final CSS.
 
-You can generate `responsive`, `hover`, `focus`, `active`, and other [variants](/docs/hover-focus-and-other-states) of your own utilities by wrapping their definitions in the `@variants` directive.
-
-```css
-@variants focus, hover {
-  .rotate-0 {
-    transform: rotate(0deg);
-  }
-  .rotate-90 {
-    transform: rotate(90deg);
-  }
-}
-```
-
-This will generate the following CSS:
-
-```css
-.rotate-0 {
-  transform: rotate(0deg);
-}
-.rotate-90 {
-  transform: rotate(90deg);
-}
-
-.focus\:rotate-0:focus {
-  transform: rotate(0deg);
-}
-.focus\:rotate-90:focus {
-  transform: rotate(90deg);
-}
-
-.hover\:rotate-0:hover {
-  transform: rotate(0deg);
-}
-.hover\:rotate-90:hover {
-  transform: rotate(90deg);
-}
-```
-
-It's important to note that **variants are generated in the order you specify them**.
-
-So if you want focus utilities to take priority over hover utilities for example, make sure focus comes *after* hover in the list:
-
-```css
-/* Input */
-@variants hover, focus {
-  .banana {
-    color: yellow;
-  }
-}
-
-/* Output */
-.banana {
-  color: yellow;
-}
-.hover\:banana:hover {
-  color: yellow;
-}
-.focus\:banana:focus {
-  color: yellow;
-}
-```
-
-The `@variants` at-rule supports all of the values that are supported in the `variants` section of your config file, as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
-
----
-
-## @responsive
-
-You can generate responsive variants of your own classes by wrapping their definitions in the `@responsive` directive:
-
-```css
-@responsive {
-  .bg-gradient-brand {
-    background-image: linear-gradient(blue, green);
-  }
-}
-```
-
-This is a shortcut for writing out `@variants responsive { ... }` which works as well.
-
-Using the default breakpoints, this would generate these classes:
-
-```css
-.bg-gradient-brand {
-  background-image: linear-gradient(blue, green);
-}
-
-/* ... */
-
-@media (min-width: 640px) {
-  .sm\:bg-gradient-brand {
-    background-image: linear-gradient(blue, green);
-  }
-  /* ... */
-}
-
-@media  (min-width: 768px) {
-  .md\:bg-gradient-brand {
-    background-image: linear-gradient(blue, green);
-  }
-  /* ... */
-}
-
-@media (min-width: 1024px) {
-  .lg\:bg-gradient-brand {
-    background-image: linear-gradient(blue, green);
-  }
-  /* ... */
-}
-
-@media (min-width: 1280px) {
-  .xl\:bg-gradient-brand {
-    background-image: linear-gradient(blue, green);
-  }
-  /* ... */
-}
-```
-
-The responsive variants will be added to Tailwind's existing media queries at the end of your stylesheet. This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
-
----
-
-## @screen
-
-The `@screen` directive allows you to create media queries that reference your breakpoints by name instead of duplicating their values in your own CSS.
-
-For example, say you have a `sm` breakpoint at `640px` and you need to write some custom CSS that references this breakpoint.
-
-Instead of writing a raw media query that duplicates that value like this:
-
-```css
-@media (min-width: 640px) {
-  /* ... */
-}
-```
-
-...you can use the `@screen` directive and reference the breakpoint by name:
-
-```css
-@screen sm {
-  /* ... */
-}
-```
-
----
-
-## screen()
-
-The `screen` function accepts a screen name like `md` and generates the corresponding media feature expression:
-
-```css
-/* Input */
-@media screen(sm) {
-  /* ... */
-}
-
-/* Output */
-@media (min-width: 640px) {
-  /* ... */
-}
-```
-
-This can be useful when you using Tailwind with other CSS tooling that handles the `@screen` directive poorly. For example `postcss-nesting` doesn't understand `@screen` but understands `@media`, so using `@media` alongside the `screen()` function behaves more correctly.
-
----
-
-## theme()
+### theme()
 
 Use the `theme()` function to access your Tailwind config values using dot notation.
 
@@ -402,5 +255,23 @@ Since Tailwind uses a [nested object syntax](/docs/colors#nested-object-syntax) 
 ```css
 .btn-blue {
   background-color: theme('colors.blue.500');
+}
+```
+
+### screen()
+
+The `screen` function allows you to create media queries that reference your breakpoints by name instead of duplicating their values in your own CSS.
+
+```css
+@media screen(sm) {
+  /* ... */
+}
+```
+
+This will resolve to the underlying screen value at build-time, generating a regular media query that matches specificied breakpoint:
+
+```css
+@media (min-width: 640px) {
+  /* ... */
 }
 ```

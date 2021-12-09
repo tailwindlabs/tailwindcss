@@ -1,0 +1,129 @@
+---
+title: "Content"
+description: "Utilities for controlling the content of the before and after pseudo-elements."
+---
+
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = {
+  utilities: {
+    'content-none': { 'content': '""' }
+  }
+}
+
+## Basic usage
+
+### Setting a pseudo-element's content
+
+Use the `content-{value}` utilities along with the `before` and `after` variant modifiers to set the contents of the `::before` and `::after` pseudo-elements.
+
+Out of the box, `content-none` is the only available preconfigured content utility. And while you can add additional utilities by [customizing your theme](#customizing-your-theme), it generally makes more sense to just use an arbitrary value.
+
+Use the square bracket notation to define any arbitrary content value on the fly.
+
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="p-8 w-full max-w-xl mx-auto bg-white shadow-lg text-gray-500">
+      Higher resolution means more than just a better-quality image. With a Retina 6K display, <a href="https://www.apple.com/pro-display-xdr/" class="text-blue-600 font-medium after:content-['_↗'] after:text-sm after:font-bold" target="_blank">Pro Display XDR</a> gives you nearly 40 percent more screen real estate than a 5K display.
+    </div>
+  </div>
+</Example>
+
+```html
+Higher resolution means more than just a better-quality image. With a Retina
+6K display, <a class="text-red-600 **after:content-['_↗']** ..." href="https://www.
+apple.com/pro-display-xdr/" target="_blank">Pro Display XDR</a> gives you
+nearly 40 percent more screen real estate than a 5K display.
+```
+
+### Referencing an attribute value
+
+These content utilities even support CSS features like the `attr()` function, which you can use to reference a value stored in an attribute:
+
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="font-semibold text-gray-900 p-8 w-full max-w-xl mx-auto bg-white shadow-lg flex items-center justify-center">
+      <div before="Hello World" class="before:content-[attr(before)]"></div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div before="Hello World" class="before:content-[attr(before)]">
+  <!-- ... -->
+</div>
+```
+
+### Using spaces and underscores
+
+Since whitespace denotes the end of a class in HTML, replace any spaces in an arbitrary value with an underscore:
+
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="font-semibold text-gray-900 p-8 w-full max-w-xl mx-auto bg-white shadow-lg flex items-center justify-center">
+      <div class="before:content-['Hello_World']"></div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="before:content-['Hello_World']">
+  <!-- ... -->
+</div>
+```
+
+If you need to include an actual underscore, you can do this by escaping it with a backslash:
+
+<Example p="none">
+  <div class="px-4 sm:px-0">
+    <div class="font-semibold text-gray-900 p-8 w-full max-w-xl mx-auto bg-white shadow-lg flex items-center justify-center">
+      <div class="before:content-['Hello\_World']"></div>
+    </div>
+  </div>
+</Example>
+
+```html
+<div class="before:content-['Hello\_World']">
+  <!-- ... -->
+</div>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="before:content-['Not_Hovering']" featuredClass="before:content-['Hovering']" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="before:content-['Mobile']" featuredClass="before:content-['Desktop']" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind only provides the `content-none` utility. You can customize these values by editing `theme.content` or `theme.extend.content` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       content: {
++         'link': 'url("/icons/link.svg")',
++       },
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="content" featuredClass="before:content-['Hello_World']" />

@@ -1,0 +1,65 @@
+---
+title: "Will Change"
+description: "Utilities for optimizing upcoming animations of elements that are expected to change."
+---
+
+import utilities from 'utilities?plugin=willChange'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Optimizing with will change
+
+Use `will-change-scroll`, `will-change-contents` and `will-change-transform` to optimize an element that's expected to change in the near future by instructing the browser to prepare the necessary animation before it actually begins.
+
+```html
+<div class="overflow-auto **will-change-scroll**">
+  <!-- ... -->
+</div>
+```
+
+It's recommended that you apply these utilities just before an element changes, and then remove it shortly after it finishes using `will-change-auto`.
+
+The will-change property is intended to be used as a last resort when dealing with **known performance problems**. Avoid using these utilities too much, or simply in anticipation of performance issues, as it could actually cause the page to be less performant.
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="will-change-auto" featuredClass="will-change-scroll" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="will-change-auto" featuredClass="will-change-scroll" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides four `will-change` utilities. You can customize these values by editing `theme.willChange` or `theme.extend.willChange` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       willChange: {
++         left-top: 'left, top',
++       }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="will-change" featuredClass="will-change-[top,left]" />

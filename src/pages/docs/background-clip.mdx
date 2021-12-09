@@ -3,75 +3,69 @@ title: "Background Clip"
 description: "Utilities for controlling the bounding box of an element's background."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/backgroundClip'
-import { ConfigSample } from '@/components/ConfigSample'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=backgroundClip'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Setting the background clip
 
 Use the `bg-clip-{keyword}` utilities to control the bounding box of an element's background.
 
-```html indigo
-<template preview>
-  <div class="grid grid-cols-1 gap-2 lg:grid-cols-3">
-    <div class="bg-clip-border p-6 rounded-md bg-indigo-600 border-4 border-indigo-300 border-dashed font-extrabold text-white flex justify-center items-center">
-      <span class="py-2">.bg-clip-border</span>
+<Example>
+  <div class="flex flex-col sm:flex-row items-center justify-center space-y-10 sm:space-y-0 sm:space-x-10">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">bg-clip-border</p>
+      <div class="w-24 h-24 bg-clip-border p-3 rounded-lg shadow-lg bg-indigo-500 border-4 border-white/50 border-dashed font-mono font-extrabold text-sm text-white flex justify-center items-center"></div>
     </div>
-    <div class="bg-clip-padding p-6 rounded-md bg-indigo-600 border-4 border-indigo-300 border-dashed font-extrabold text-white flex justify-center items-center">
-      <span class="py-2">.bg-clip-padding</span>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">bg-clip-padding</p>
+      <div class="w-24 h-24 bg-clip-padding p-3 rounded-lg shadow-lg bg-indigo-500 border-4 border-indigo-500/50 border-dashed font-mono font-extrabold text-sm text-white flex justify-center items-center"></div>
     </div>
-    <div class="bg-clip-content p-6 rounded-md bg-indigo-600 border-4 border-indigo-300 border-dashed font-extrabold text-white flex justify-center items-center">
-      <span class="py-2">.bg-clip-content</span>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">bg-clip-content</p>
+      <div class="w-24 h-24 bg-clip-content p-3 rounded-lg bg-indigo-500 border-4 border-indigo-500/50 border-dashed font-mono font-extrabold text-sm text-white flex justify-center items-center"></div>
     </div>
   </div>
-</template>
+</Example>
 
-<div class="**bg-clip-border** p-6 bg-indigo-600 border-4 border-indigo-300 border-dashed"></div>
-<div class="**bg-clip-padding** p-6 bg-indigo-600 border-4 border-indigo-300 border-dashed"></div>
-<div class="**bg-clip-content** p-6 bg-indigo-600 border-4 border-indigo-300 border-dashed"></div>
+```html
+<div class="**bg-clip-border** p-6 bg-violet-600 border-4 border-violet-300 border-dashed"></div>
+<div class="**bg-clip-padding** p-6 bg-violet-600 border-4 border-violet-300 border-dashed"></div>
+<div class="**bg-clip-content** p-6 bg-violet-600 border-4 border-violet-300 border-dashed"></div>
 ```
 
-## Cropping to text
+### Cropping to text
 
 Use `bg-clip-text` to crop an element's background to match the shape of the text. Useful for effects where you want a background image to be visible through the text.
 
-```html emerald
-<template preview>
-  <div class="text-center text-5xl font-extrabold leading-none tracking-tight">
-    <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
+<Example>
+  <div class="text-4xl sm:text-5xl font-extrabold leading-none tracking-tight text-center">
+    <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
       Hello world
     </span>
   </div>
-</template>
+</Example>
 
+```html
 <div class="text-5xl font-extrabold ...">
-  <span class="**bg-clip-text** text-transparent bg-gradient-to-r from-green-400 to-blue-500">
+  <span class="**bg-clip-text** text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
     Hello world
   </span>
 </div>
 ```
 
-## Responsive
+---
 
-To control the bounding box of an element's background at a specific breakpoint, add a `{screen}:` prefix to any existing background clip utility. For example, adding the class `md:bg-clip-padding` to an element would apply the `bg-clip-padding` utility at medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<div class="bg-clip-border **md:bg-clip-padding**">
-  <!-- ... -->
-</div>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="bg-clip-border" featuredClass="bg-clip-padding" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Variants
-
-<Variants plugin="backgroundClip" />
-
-### Disabling
-
-<Disabling plugin="backgroundClip" />
+<BreakpointsAndMediaQueries defaultClass="bg-clip-border" featuredClass="bg-clip-padding" />

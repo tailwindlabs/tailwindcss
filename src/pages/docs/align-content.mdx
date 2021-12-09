@@ -3,234 +3,179 @@ title: "Align Content"
 description: "Utilities for controlling how rows are positioned in multi-row flex and grid containers."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/alignContent'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=alignContent'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Start
+## Basic usage
+
+### Start
 
 Use `content-start` to pack rows in a container against the start of the cross axis:
 
-```html rose
-<template preview class="p-4">
-  <div class="flex content-start flex-wrap h-48 bg-stripes bg-stripes-rose-500 rounded-lg">
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">1</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">2</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">3</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">4</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">5</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-4 content-start w-full rounded-lg bg-stripes-purple text-center h-56">
+      <div class="p-4 shadow-lg rounded-lg bg-purple-500">01</div>
+      <div class="p-4 shadow-lg rounded-lg bg-purple-500">02</div>
+      <div class="p-4 shadow-lg rounded-lg bg-purple-500">03</div>
+      <div class="p-4 shadow-lg rounded-lg bg-purple-500">04</div>
+      <div class="p-4 shadow-lg rounded-lg bg-purple-500">05</div>
     </div>
   </div>
-</template>
+</Example>
 
-<div class="h-48 flex flex-wrap **content-start** ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
+```html
+<div class="h-56 grid grid-cols-3 gap-4 **content-start** ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
 </div>
 ```
 
-## Center
+### Center
 
 Use `content-center` to pack rows in a container in the center of the cross axis:
 
-```html indigo
-<template preview class="p-4">
-  <div class="flex content-center flex-wrap h-48 bg-stripes bg-stripes-indigo-500 rounded-lg">
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">1</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">2</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">3</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">4</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">5</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-4 content-center w-full rounded-lg bg-stripes-light-blue text-center h-56">
+      <div class="p-4 shadow-lg rounded-lg bg-light-blue-500">01</div>
+      <div class="p-4 shadow-lg rounded-lg bg-light-blue-500">02</div>
+      <div class="p-4 shadow-lg rounded-lg bg-light-blue-500">03</div>
+      <div class="p-4 shadow-lg rounded-lg bg-light-blue-500">04</div>
+      <div class="p-4 shadow-lg rounded-lg bg-light-blue-500">05</div>
     </div>
   </div>
-</template>
+</Example>
 
-<div class="h-48 flex flex-wrap **content-center** ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
+```html
+<div class="h-56 grid grid-cols-3 gap-4 **content-center** ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
 </div>
 ```
 
-## End
+### End
 
 Use `content-end` to pack rows in a container against the end of the cross axis:
 
-```html emerald
-<template preview class="p-4">
-  <div class="flex content-end flex-wrap h-48 bg-stripes bg-stripes-emerald-500 rounded-lg">
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">1</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">2</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">3</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">4</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">5</div>
+
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-4 content-end w-full rounded-lg bg-stripes-pink text-center h-56">
+      <div class="p-4 shadow-lg rounded-lg bg-pink-500">01</div>
+      <div class="p-4 shadow-lg rounded-lg bg-pink-500">02</div>
+      <div class="p-4 shadow-lg rounded-lg bg-pink-500">03</div>
+      <div class="p-4 shadow-lg rounded-lg bg-pink-500">04</div>
+      <div class="p-4 shadow-lg rounded-lg bg-pink-500">05</div>
     </div>
   </div>
-</template>
+</Example>
 
-<div class="h-48 flex flex-wrap **content-end** ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
+```html
+<div class="h-56 grid grid-cols-3 gap-4 **content-end** ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
 </div>
 ```
 
-## Space between
+### Space between
 
 Use `content-between` to distribute rows in a container such that there is an equal amount of space between each line:
 
-```html amber
-<template preview class="p-4">
-  <div class="flex content-between flex-wrap h-48 rounded-lg bg-stripes bg-stripes-amber-500">
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">1</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">2</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">3</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">4</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">5</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-4 content-between w-full rounded-lg bg-stripes-violet text-center h-56">
+      <div class="p-4 shadow-lg rounded-lg bg-violet-500">01</div>
+      <div class="p-4 shadow-lg rounded-lg bg-violet-500">02</div>
+      <div class="p-4 shadow-lg rounded-lg bg-violet-500">03</div>
+      <div class="p-4 shadow-lg rounded-lg bg-violet-500">04</div>
+      <div class="p-4 shadow-lg rounded-lg bg-violet-500">05</div>
     </div>
   </div>
-</template>
+</Example>
 
-<div class="h-48 flex flex-wrap **content-between** ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
+```html
+<div class="h-56 grid grid-cols-3 gap-4 **content-between** ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
 </div>
 ```
 
-## Space around
+### Space around
 
 Use `content-around` to distribute rows in a container such that there is an equal amount of space around each line:
 
-```html lightBlue
-<template preview class="p-4">
-  <div class="flex content-around flex-wrap h-48 bg-stripes bg-stripes-light-blue-500 rounded-lg">
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">1</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">2</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">3</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">4</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">5</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-x-4 content-around w-full rounded-lg bg-stripes-blue text-center h-56">
+      <div class="p-4 shadow-lg rounded-lg bg-blue-500">01</div>
+      <div class="p-4 shadow-lg rounded-lg bg-blue-500">02</div>
+      <div class="p-4 shadow-lg rounded-lg bg-blue-500">03</div>
+      <div class="p-4 shadow-lg rounded-lg bg-blue-500">04</div>
+      <div class="p-4 shadow-lg rounded-lg bg-blue-500">05</div>
     </div>
   </div>
-</template>
+</Example>
 
-<div class="h-48 flex flex-wrap **content-around** ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
+```html
+<div class="h-56 grid grid-cols-3 gap-4 **content-around** ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
 </div>
 ```
 
-## Space evenly
+### Space evenly
 
 Use `content-evenly` to distribute rows in a container such that there is an equal amount of space around each item, but also accounting for the doubling of space you would normally see between each item when using `content-around`:
 
-```html purple
-<template preview class="p-4">
-  <div class="flex content-evenly flex-wrap h-48 bg-stripes bg-stripes-purple-500 rounded-lg">
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">1</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">2</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">3</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">4</div>
-    </div>
-    <div class="w-1/3 p-2">
-      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">5</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="grid grid-cols-3 gap-x-4 content-evenly w-full rounded-lg bg-stripes-indigo text-center h-56">
+      <div class="p-4 shadow-lg rounded-lg bg-indigo-500">01</div>
+      <div class="p-4 shadow-lg rounded-lg bg-indigo-500">02</div>
+      <div class="p-4 shadow-lg rounded-lg bg-indigo-500">03</div>
+      <div class="p-4 shadow-lg rounded-lg bg-indigo-500">04</div>
+      <div class="p-4 shadow-lg rounded-lg bg-indigo-500">05</div>
     </div>
   </div>
-</template>
-
-<div class="h-48 flex flex-wrap **content-evenly** ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-</div>
-```
-
-## Responsive
-
-To control the alignment of flex content at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:content-around` to apply the `content-around` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="content-start **md:content-around** ...">
-  <!-- ... -->
+<div class="h-56 grid grid-cols-3 gap-4 **content-evenly** ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="alignContent" name="align-content" />
+<HoverFocusAndOtherStates defaultClass="content-start" featuredClass="content-around" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="alignContent" name="align-content" />
+<BreakpointsAndMediaQueries defaultClass="content-start" featuredClass="content-around" />

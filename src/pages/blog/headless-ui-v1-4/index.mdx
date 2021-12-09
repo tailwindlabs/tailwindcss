@@ -1,0 +1,202 @@
+import { adamwathan, robinmalfait } from '@/authors'
+import card from './card.jpg'
+import banner from './banner.jpg'
+import ecommerce from './ecommerce-screenie.jpg'
+import { Tab } from '@headlessui/react'
+import ReactExample1 from './snippets/react-1.mdx'
+import ReactExample2 from './snippets/react-2.mdx'
+import ReactExample3 from './snippets/react-3.mdx'
+import ReactExample4 from './snippets/react-4.mdx'
+import VueExample1 from './snippets/vue-1.mdx'
+import VueExample2 from './snippets/vue-2.mdx'
+import VueExample3 from './snippets/vue-3.mdx'
+import VueExample4 from './snippets/vue-4.mdx'
+
+export const meta = {
+  title: 'Headless UI v1.4: The One With Tabs',
+  description: `We just released Headless UI v1.4, which includes a brand new \`Tab\` component, and new APIs for manually closing \`Popover\` and \`Disclosure\` components more easily.`,
+  date: '2021-07-29T12:00:00.000Z',
+  authors: [adamwathan, robinmalfait],
+  image: card,
+}
+
+We just released Headless UI v1.4, which includes a brand new `Tab` component, and new APIs for manually closing `Popover` and `Disclosure` components more easily.
+
+<!--more-->
+
+<a href="https://headlessui.dev">
+  <img src={banner} alt="Headless UI v1.4" />
+</a>
+
+## Tabs
+
+Earlier this year we started working on [Tailwind UI Ecommerce](https://tailwindui.com/ecommerce), and we realized pretty quickly we were going to need to support tabs in Headless UI to be able to build the new interfaces we were designing.
+
+<a href="https://tailwindui.com/ecommerce">
+  <img
+    src={ecommerce}
+    alt="Product details interface design from Tailwind UI Ecommerce."
+  />
+</a>
+
+Here's what we ended up with:
+
+<Tab.Group as="div" className="my-6 bg-gray-800 rounded-md">
+  <Tab.List className="relative space-x-2 px-4 pt-3">
+    <Tab
+      className={({ selected }) =>
+        `py-2 px-4 inline-block rounded-md ${
+          selected ? 'bg-gray-700' : 'bg-transparent hover:bg-gray-700'
+        } text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-600`
+      }
+    >
+      React
+    </Tab>
+    <Tab
+      className={({ selected }) =>
+        `py-2 px-4 inline-block rounded-md ${
+          selected ? 'bg-gray-700' : 'bg-transparent hover:bg-gray-700'
+        } text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-600`
+      }
+    >
+      Vue
+    </Tab>
+  </Tab.List>
+  <Tab.Panels>
+    <Tab.Panel className="prose focus:outline-none">
+      <ReactExample1 />
+    </Tab.Panel>
+    <Tab.Panel className="prose focus:outline-none">
+      <VueExample1 />
+    </Tab.Panel>
+  </Tab.Panels>
+</Tab.Group>
+
+And yep, those are tabs!
+
+Like all Headless UI components, this totally abstracts away stuff like keyboard navigation for you so you can create custom tabs in a completely declarative way, without having to think about any of the tricky accessibility details.
+
+[Check out the documentation](https://headlessui.dev/react/tabs) to learn more.
+
+### Closing Disclosures and Popovers
+
+Up until now, there was no way to close a `Disclosure` without clicking the actual button used to open it. For typical disclosure use cases this isn't a big deal, but it often makes sense to use disclosures for things like mobile navigation, where you want to close it when someone clicks a link _inside_ of it.
+
+Now you can use `Disclosure.Button` or (`DisclosureButton` in Vue) within your disclosure panel to close the panel, making it easy to wrap up things like links or other buttons so the panel doesn't stay open:
+
+<Tab.Group as="div" className="my-6 bg-gray-800 rounded-md">
+  <Tab.List className="relative space-x-2 px-4 pt-3">
+    <Tab
+      className={({ selected }) =>
+        `py-2 px-4 inline-block rounded-md ${
+          selected ? 'bg-gray-700' : 'bg-transparent hover:bg-gray-700'
+        } text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-600`
+      }
+    >
+      React
+    </Tab>
+    <Tab
+      className={({ selected }) =>
+        `py-2 px-4 inline-block rounded-md ${
+          selected ? 'bg-gray-700' : 'bg-transparent hover:bg-gray-700'
+        } text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-600`
+      }
+    >
+      Vue
+    </Tab>
+  </Tab.List>
+  <Tab.Panels>
+    <Tab.Panel className="prose focus:outline-none">
+      <ReactExample2 />
+    </Tab.Panel>
+    <Tab.Panel className="prose focus:outline-none">
+      <VueExample2 />
+    </Tab.Panel>
+  </Tab.Panels>
+</Tab.Group>
+
+The same thing works with `Popover` components, too:
+
+<Tab.Group as="div" className="my-6 bg-gray-800 rounded-md">
+  <Tab.List className="relative space-x-2 px-4 pt-3">
+    <Tab
+      className={({ selected }) =>
+        `py-2 px-4 inline-block rounded-md ${
+          selected ? 'bg-gray-700' : 'bg-transparent hover:bg-gray-700'
+        } text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-600`
+      }
+    >
+      React
+    </Tab>
+    <Tab
+      className={({ selected }) =>
+        `py-2 px-4 inline-block rounded-md ${
+          selected ? 'bg-gray-700' : 'bg-transparent hover:bg-gray-700'
+        } text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-600`
+      }
+    >
+      Vue
+    </Tab>
+  </Tab.List>
+  <Tab.Panels>
+    <Tab.Panel className="prose focus:outline-none">
+      <ReactExample3 />
+    </Tab.Panel>
+    <Tab.Panel className="prose focus:outline-none">
+      <VueExample3 />
+    </Tab.Panel>
+  </Tab.Panels>
+</Tab.Group>
+
+If you need finer control, we also pass a `close` function via the render prop/scoped slot, so you can imperatively close the panel when you need to:
+
+<Tab.Group as="div" className="my-6 bg-gray-800 rounded-md">
+  <Tab.List className="relative space-x-2 px-4 pt-3">
+    <Tab
+      className={({ selected }) =>
+        `py-2 px-4 inline-block rounded-md ${
+          selected ? 'bg-gray-700' : 'bg-transparent hover:bg-gray-700'
+        } text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-600`
+      }
+    >
+      React
+    </Tab>
+    <Tab
+      className={({ selected }) =>
+        `py-2 px-4 inline-block rounded-md ${
+          selected ? 'bg-gray-700' : 'bg-transparent hover:bg-gray-700'
+        } text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-600`
+      }
+    >
+      Vue
+    </Tab>
+  </Tab.List>
+  <Tab.Panels>
+    <Tab.Panel className="prose focus:outline-none">
+      <ReactExample4 />
+    </Tab.Panel>
+    <Tab.Panel className="prose focus:outline-none">
+      <VueExample4 />
+    </Tab.Panel>
+  </Tab.Panels>
+</Tab.Group>
+
+For more details, check out the updated [Popover](https://headlessui.dev/react/popover#closing-popovers-manually) and [Disclosure](https://headlessui.dev/react/disclosure#closing-disclosures-manually) documentation.
+
+## Try it out
+
+Headless UI v1.4 is a minor update so there are no breaking changes. To upgrade, just install the latest version via npm:
+
+```shell
+# For React
+npm install @headlessui/react
+
+# For Vue
+npm install @headlessui/vue
+```
+
+Check out [the official website](https://headlessui.dev) for the latest documentation, and check out [Tailwind UI](https://tailwindui.com) if you want to play tons of styled examples.
+
+<Footer>
+  Ready to try it out? <a href="https://headlessui.dev">Visit the Headless UI website →</a>
+</Footer>

@@ -3,82 +3,69 @@ title: "Stroke Width"
 description: "Utilities for styling the stroke width of SVG elements."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/strokeWidth'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=strokeWidth'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Setting the stroke width
 
 Use the `stroke-{width}` utilities to set the stroke width of an SVG.
 
-Useful for styling icon sets like [Heroicons](http://heroicons.com/) that are drawn entirely with strokes.
-
-```html emerald
-<template preview>
-  <div class="text-center">
-    <svg class="stroke-current stroke-1 text-emerald-600 inline-block h-24 w-24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="14.31" y1="8" x2="20.05" y2="17.94" />
-      <line x1="9.69" y1="8" x2="21.17" y2="8" />
-      <line x1="7.38" y1="12" x2="13.12" y2="2.06" />
-      <line x1="9.69" y1="16" x2="3.95" y2="6.06" />
-      <line x1="14.31" y1="16" x2="2.83" y2="16" />
-      <line x1="16.62" y1="12" x2="10.88" y2="21.94" />
-    </svg>
-    <svg class="stroke-current stroke-2 text-emerald-600 inline-block h-24 w-24" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="14.31" y1="8" x2="20.05" y2="17.94" />
-      <line x1="9.69" y1="8" x2="21.17" y2="8" />
-      <line x1="7.38" y1="12" x2="13.12" y2="2.06" />
-      <line x1="9.69" y1="16" x2="3.95" y2="6.06" />
-      <line x1="14.31" y1="16" x2="2.83" y2="16" />
-      <line x1="16.62" y1="12" x2="10.88" y2="21.94" />
-    </svg>
+<Example>
+  <div class="flex items-center justify-center space-x-8">
+    <svg class="stroke-indigo-500 stroke-1" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="23" stroke-linejoin="round"/> <path d="M23 1C23 1 15 10.4901 15 24C15 37.5099 23 47 23 47" stroke-linejoin="round"/> <path d="M25 1C25 1 33 10.4901 33 24C33 37.5099 25 47 25 47" stroke-linejoin="round"/> <path d="M1 24H47"/> </svg>
+    <svg class="stroke-indigo-500 stroke-2" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="23" stroke-linejoin="round"/> <path d="M23 1C23 1 15 10.4901 15 24C15 37.5099 23 47 23 47" stroke-linejoin="round"/> <path d="M25 1C25 1 33 10.4901 33 24C33 37.5099 25 47 25 47" stroke-linejoin="round"/> <path d="M1 24H47"/> </svg>
   </div>
-</template>
-
-<svg class="stroke-current **stroke-1** text-green-600 ..."></svg>
-<svg class="stroke-current **stroke-2** text-green-600 ..."></svg>
-```
-
-## Responsive
-
-To control the stroke width of an SVG element at a specific breakpoint, add a `{screen}:` prefix to any existing width utility. For example, adding the class `md:stroke-2` to an element would apply the `stroke-2` utility at medium screen sizes and above.
+</Example>
 
 ```html
-<svg class="stroke-1 **md:stroke-2** ...">
-  <!-- ... -->
-</svg>
+<svg class="**stroke-1** ..."></svg>
+<svg class="**stroke-2** ..."></svg>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+This can be useful for styling icon sets like [Heroicons](https://heroicons.com).
 
-## Customizing
+---
 
-Control which stroke-width utilities Tailwind generates by customizing the `theme.strokeWidth` section in your `tailwind.config.js` file:
+## <Heading ignore>Applying conditionally</Heading>
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="stroke-1" featuredClass="stroke-2" element="svg" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="stroke-1" featuredClass="stroke-2" element="svg" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes `stroke-width` utilities for creating basic grids with up to 6 equal width rows. You can customize these values by editing `theme.strokeWidth` or `theme.extend.strokeWidth` in your `tailwind.config.js` file.
+
+You have direct access to the `stroke-width` CSS property here so you can make your custom rows values as generic or as complicated and site-specific as you like.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        strokeWidth: {
-+         '3': '3',
-+         '4': '4',
-        }
++       strokeWidth: {
++         '2': '2px',
++       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="strokeWidth" name="stroke-width" />
-
-### Disabling
-
-<Disabling plugin="strokeWidth" name="stroke-width" />
+<ArbitraryValues property="stroke-width" featuredClass="stroke-[2px]" element="svg" />

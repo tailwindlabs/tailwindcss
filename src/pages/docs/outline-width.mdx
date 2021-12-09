@@ -1,0 +1,80 @@
+---
+title: "Outline Width"
+description: "Utilities for controlling the width of an element's outline."
+---
+
+import utilities from 'utilities?plugin=outlineWidth'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Setting the outline width
+
+Use the `outline-{width}` utilities to change the width of an element's outline.
+
+<Example>
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 font-bold text-white text-sm text-center font-bold">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-1</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline outline-1 outline-offset-2 outline-blue-500">Button A</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-2</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline outline-2 outline-offset-2 outline-blue-500">Button B</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">outline-4</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm outline outline-4 outline-offset-2 outline-blue-500">Button C</button>
+    </div>
+  </div>
+</Example>
+
+```html
+<button class="outline outline-offset-2 **outline-1** ...">Button A</button>
+<button class="outline outline-offset-2 **outline-2** ...">Button B</button>
+<button class="outline outline-offset-2 **outline-4** ...">Button C</button>
+```
+
+The default outline width is `3px`.
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="outline" featuredClass="outline-2" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="outline" featuredClass="outline-2" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+You can customize the `outline-{width}` utilities by editing `theme.outlineWidth` or `theme.extend.outlineWidth` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       outlineWidth: {
++         5: '5px',
++       }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="outline-width" featuredClass="outline-[5px]" />

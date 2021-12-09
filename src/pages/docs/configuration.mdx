@@ -9,17 +9,20 @@ Because Tailwind is a framework for building bespoke user interfaces, it has bee
 
 By default, Tailwind will look for an optional `tailwind.config.js` file at the root of your project where you can define any customizations.
 
-```js
-// Example `tailwind.config.js` file
-const colors = require('tailwindcss/colors')
-
+```js tailwind.config.js
 module.exports = {
+  content: ['./src/**/*.{html,js}'],
   theme: {
     colors: {
-      gray: colors.coolGray,
-      blue: colors.lightBlue,
-      red: colors.rose,
-      pink: colors.fuchsia,
+      'blue': '#1fb6ff',
+      'purple': '#7e5bef',
+      'pink': '#ff49db',
+      'orange': '#ff7849',
+      'green': '#13ce66',
+      'yellow': '#ffc82c',
+      'gray-dark': '#273444',
+      'gray': '#8492a6',
+      'gray-light': '#d3dce6',
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
@@ -27,24 +30,20 @@ module.exports = {
     },
     extend: {
       spacing: {
-        '128': '32rem',
-        '144': '36rem',
+        '8xl': '96rem',
+        '9xl': '128rem',
       },
       borderRadius: {
         '4xl': '2rem',
       }
     }
   },
-  variants: {
-    extend: {
-      borderColor: ['focus-visible'],
-      opacity: ['disabled'],
-    }
-  }
 }
 ```
 
 Every section of the config file is optional, so you only have to specify what you'd like to change. Any missing sections will fall back to Tailwind's [default configuration](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js).
+
+---
 
 ## Creating your configuration file
 
@@ -56,15 +55,10 @@ npx tailwindcss init
 
 This will create a minimal `tailwind.config.js` file at the root of your project:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  content: [],
   theme: {
-    extend: {},
-  },
-  variants: {
     extend: {},
   },
   plugins: [],
@@ -79,10 +73,15 @@ To use a name other than `tailwind.config.js`, pass it as an argument on the com
 npx tailwindcss init tailwindcss-config.js
 ```
 
-If you use a custom file name, you will need to specify it when including Tailwind as a plugin in your PostCSS configuration as well:
+When you use a custom file name, you will need to specify it as a command-line argument when compiling your CSS with the Tailwind CLI tool:
 
-```js
-// postcss.config.js
+```shell
+npx tailwindcss -c ./tailwindcss-config.js -i input.css -o output.css
+```
+
+If you're using Tailwind as a PostCSS plugin, you will need to specify your custom configuration path in your PostCSS configuration:
+
+```js postcss.config.js
 module.exports = {
   plugins: {
     tailwindcss: { config: './tailwindcss-config.js' },
@@ -100,7 +99,7 @@ npx tailwindcss init -p
 
 This will generate a `postcss.config.js` file in your project that looks like this:
 
-```js
+```js postcss.config.js
 module.exports = {
   plugins: {
     tailwindcss: {},
@@ -121,19 +120,44 @@ npx tailwindcss init --full
 
 You'll get a file that matches the [default configuration file](https://unpkg.com/browse/tailwindcss@latest/stubs/defaultConfig.stub.js) Tailwind uses internally.
 
-## Theme
+---
+
+## Configuration options
+
+### Content
+
+The `content` section is where you configure the paths to all of your HTML templates, JS components, and any other files that contain Tailwind class names.
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{html,js}'
+    './components/**/*.{html,js}'
+  ],
+  // ...
+}
+```
+
+Learn more about configuring your content sources in the [Content Configuration](/docs/content-configuration) documentation.
+
+### Theme
 
 The `theme` section is where you define your color palette, fonts, type scale, border sizes, breakpoints — anything related to the visual design of your site.
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
+  // ...
   theme: {
     colors: {
-      gray: colors.coolGray,
-      blue: colors.lightBlue,
-      red: colors.rose,
-      pink: colors.fuchsia,
+      'blue': '#1fb6ff',
+      'purple': '#7e5bef',
+      'pink': '#ff49db',
+      'orange': '#ff7849',
+      'green': '#13ce66',
+      'yellow': '#ffc82c',
+      'gray-dark': '#273444',
+      'gray': '#8492a6',
+      'gray-light': '#d3dce6',
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
@@ -141,8 +165,8 @@ module.exports = {
     },
     extend: {
       spacing: {
-        '128': '32rem',
-        '144': '36rem',
+        '8xl': '96rem',
+        '9xl': '128rem',
       },
       borderRadius: {
         '4xl': '2rem',
@@ -154,32 +178,13 @@ module.exports = {
 
 Learn more about the default theme and how to customize it in the [theme configuration guide](/docs/theme).
 
-## Variants
-
-The `variants` section lets you control which [variants](/docs/hover-focus-and-other-states) are generated for each core utility plugin.
-
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    fill: [],
-    extend: {
-      borderColor: ['focus-visible'],
-      opacity: ['disabled'],
-    }
-  },
-}
-```
-
-Learn more in the [variants configuration guide](/docs/configuring-variants).
-
-## Plugins
+### Plugins
 
 The `plugins` section allows you to register plugins with Tailwind that can be used to generate extra utilities, components, base styles, or custom variants.
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
+  // ...
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
@@ -191,13 +196,13 @@ module.exports = {
 
 Learn more about writing your own plugins in the [plugin authoring guide](/docs/plugins).
 
-## Presets
+### Presets
 
 The `presets` section allows you to specify your own custom base configuration instead of using Tailwind's default base configuration.
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
+  // ...
   presets: [
     require('@acmecorp/base-tailwind-config')
   ],
@@ -206,20 +211,18 @@ module.exports = {
   theme: {
     //...
   },
-  // ...
 }
 ```
 
 Learn more about presets in the [presets documentation](/docs/presets).
 
-## Prefix
+### Prefix
 
 The `prefix` option allows you to add a custom prefix to all of Tailwind's generated utility classes. This can be really useful when layering Tailwind on top of existing CSS where there might be naming conflicts.
 
 For example, you could add a `tw-` prefix by setting the `prefix` option like so:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   prefix: 'tw-',
 }
@@ -240,7 +243,7 @@ Now every class will be generated with the configured prefix:
 /* etc. */
 ```
 
-It's important to understand that this prefix is added _after_ any variant prefixes. That means that classes with responsive or state prefixes like `sm:` or `hover:` will still have the responsive or state prefix *first*, with your custom prefix appearing after the colon:
+It's important to understand that this prefix is added _after_ any variant modifiers. That means that classes with responsive or state modifiers like `sm:` or `hover:` will still have the responsive or state modifier *first*, with your custom prefix appearing after the colon:
 
 ```html
 <div class="tw-text-lg md:tw-text-xl tw-bg-red-500 **hover:tw-bg-blue-500**">
@@ -250,15 +253,15 @@ It's important to understand that this prefix is added _after_ any variant prefi
 
 Prefixes are only added to classes generated by Tailwind; **no prefix will be added to your own custom classes.**
 
-That means if you add your own responsive utility like this:
+That means if you add your own custom utility like this:
 
 ```css
-@variants hover {
+@layer utilities {
   .bg-brand-gradient { /* ... */ }
 }
 ```
 
-...the generated responsive classes will not have your configured prefix:
+...the generated variants will not have your configured prefix:
 
 ```css
 .bg-brand-gradient { /* ... */ }
@@ -268,19 +271,18 @@ That means if you add your own responsive utility like this:
 If you'd like to prefix your own utilities as well, just add the prefix to the class definition:
 
 ```css
-@variants hover {
+@layer utilities {
   .tw-bg-brand-gradient { /* ... */ }
 }
 ```
 
-## Important
+### Important
 
 The `important` option lets you control whether or not Tailwind's utilities should be marked with `!important`. This can be really useful when using Tailwind with existing CSS that has high specificity selectors.
 
 To generate utilities as `!important`, set the `important` key in your configuration options to `true`:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   important: true,
 }
@@ -306,22 +308,22 @@ Note that any of your own custom utilities **will not** automatically be marked 
 If you'd like to make your own utilities `!important`, just add `!important` to the end of each declaration yourself:
 
 ```css
-@responsive {
+@layer utilities {
   .bg-brand-gradient {
     background-image: linear-gradient(#3490dc, #6574cd) !important;
   }
 }
 ```
 
-### Selector strategy
+#### Selector strategy
 
 Setting `important` to `true` can introduce some issues when incorporating third-party JS libraries that add inline styles to your elements. In those cases, Tailwind's `!important` utilities defeat the inline styles, which can break your intended design.
 
 To get around this, you can set `important` to an ID selector like `#app` instead:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
+  // ...
   important: '#app',
 }
 ```
@@ -354,68 +356,28 @@ After your configuration is all set up and your root element matches the selecto
 </html>
 ```
 
-When using the selector strategy, be sure that the template file that includes your root selector is included in your [purge configuration](/docs/optimizing-for-production#basic-usage), otherwise all of your CSS will be removed when building for production.
+When using the selector strategy, be sure that the template file that includes your root selector is included in your [content configuration](/docs/optimizing-for-production#basic-usage), otherwise all of your CSS will be removed when building for production.
 
 
-## Separator
+### Separator
 
-The `separator` option lets you customize what character or string should be used to separate variant prefixes (screen sizes, `hover`, `focus`, etc.) from utility names (`text-center`, `items-end`, etc.).
+The `separator` option lets you customize which character should be used to separate modifiers (screen sizes, `hover`, `focus`, etc.) from utility names (`text-center`, `items-end`, etc.).
 
 We use a colon by default (`:`), but it can be useful to change this if you're using a templating language like [Pug](https://pugjs.org) that doesn't support special characters in class names.
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   separator: '_',
 }
 ```
 
-## Variant Order
-
-If you are using the `extend` feature to enable extra variants, those variants are automatically sorted to respect a sensible default variant order.
-
-You can customize this if necessary under the `variantOrder` key:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variantOrder: [
-    'first',
-    'last',
-    'odd',
-    'even',
-    'visited',
-    'checked',
-    'group-hover',
-    'group-focus',
-    'focus-within',
-    'hover',
-    'focus',
-    'focus-visible',
-    'active',
-    'disabled',
-  ]
-}
-```
-
-## Core Plugins
+### Core Plugins
 
 The `corePlugins` section lets you completely disable classes that Tailwind would normally generate by default if you don't need them for your project.
 
-If you don't provide any `corePlugins` configuration, all core plugins will be enabled by default:
+To disable specific core plugins, provide an object for `corePlugins` that sets those plugins to `false`:
 
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-}
-```
-
-If you'd like to disable specific core plugins, provide an object for `corePlugins` that sets those plugins to `false`:
-
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   corePlugins: {
     float: false,
@@ -427,8 +389,7 @@ module.exports = {
 
 If you'd like to safelist which core plugins should be enabled, provide an array that includes a list of the core plugins you'd like to use:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   corePlugins: [
     'margin',
@@ -441,8 +402,7 @@ module.exports = {
 
 If you'd like to disable all of Tailwind's core plugins and simply use Tailwind as a tool for processing your own custom plugins, provide an empty array:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   corePlugins: []
 }
@@ -452,6 +412,8 @@ module.exports = {
 Here's a list of every core plugin for reference:
 
 <CorePluginReference />
+
+---
 
 ## Referencing in JavaScript
 

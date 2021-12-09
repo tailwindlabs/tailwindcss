@@ -1,0 +1,436 @@
+import { adamwathan } from '@/authors'
+import stackedListExample from './stacked-list-example.png'
+
+export const meta = {
+  private: true,
+  title: 'Building React + Vue support for Tailwind UI',
+  description: `Hey! We're getting really close to releasing React + Vue support for Tailwind UI, so I thought it would be interesting to share some of the behind-the-scenes efforts that have gone into even making it possible.`,
+  date: '2021-04-12T19:45:00.0Z',
+  authors: [adamwathan],
+}
+
+Hey! We're getting _really_ close to releasing React + Vue support for Tailwind UI, so I thought it would be interesting to share some of the behind-the-scenes efforts that have gone into even making it possible.
+
+Grab some popcorn...
+
+## The Backstory
+
+From the day we started working on Tailwind UI somewhere in mid-2019 I knew that ultimately it would be 10x more valuable to people if they could grab fully interactive examples built using their favorite JS framework. Trying to make that happen for the first release was way too ambitious though, so we had to figure out how to get there one step at a time.
+
+We decided to focus on vanilla HTML first because it's totally universal, and even if something like JSX would be more helpful for some people, there are lots of existing tools out there for converting HTML to JSX that people could lean on already.
+
+We also made the hard trade-off not to provide any JS for interactions like toggling a responsive menu or opening and closing a modal dialog in the first version. I felt like anything we provided would just do more harm than good, because there's no one JS framework that makes up the majority of the Tailwind user base. If we catered to React developers, we'd be making it harder to use for the 70% of people _not_ using React. If we catered to Vue developers, we'd be making it harder for the 70% of people _not_ using Vue. If we tried to write it in custom vanilla JS, well we'd be making it harder for literally everyone _(seriously do you have any idea how much code it takes to build a robust enter/leave transition system from scratch in JS?)_
+
+So instead I just documented the different states using comments in the HTML, and left it to the end user to wire it up with their favorite JS framework. I know a lot of people love that about [Bulma](https://bulma.io), and I think it was a great approach for us to start with as well.
+
+But once we felt like Tailwind UI was pretty fleshed out with hundreds of great examples, we decided it was time to tackle the JS problem and see what we could do.
+
+## What should it even be?
+
+As an abstract concept adding "JavaScript support" to Tailwind UI sounds straightforward, but when you dig in to the details it is _not_. There are _so_ many decisions to make about what to even build, and so many trade-offs you have to consider when trying to make something useful for as many people as possible.
+
+I tossed the whole concept around in the back of my head for a full year while working on Tailwind UI before I actually had a plan I was happy with. Ultimately, these are the core values I decided on when designing a solution:
+
+1. **The promise of Tailwind UI is that it's just a code snippet** — it's easy to customize and adapt by directly editing the code. Any JS examples we provide need to respect this foundational idea.
+2. **The JS needs to be updateable**. Unlike the markup which we expect people to just totally own and edit to their heart's content, the JS needs to come from `node_modules` _somehow_, because building these things right is hard, there are going to be bugs, and we want to be able to fix them for people without asking them to copy a new code snippet. On top of that, we don't want people to have to carefully transport 200 lines of JS they didn't write around their codebase, and constantly worry about accidentally breaking some small implementation detail by mistake.
+3. **It just has to be better than vanilla HTML**. At the end of the day, the most important thing is that we make the existing experience _better_ for people using the JS frameworks we decide to add support for first. Any time I found myself frustrated by two competing trade-offs that made it hard to make something _perfect_, asking myself "is this still strictly better and in no ways worse for framework X users than vanilla HTML?" provided a lot of clarity.
+
+The other thing that was really important to me is that none of the underlying JS stuff was proprietary or Tailwind UI-specific. To me, Tailwind UI is not a UI kit like Ant Design or Material UI — those are great projects but it's not what I wanted to build.
+
+To me, Tailwind UI is a collection of _blueprints_, showing you how to build awesome stuff using tools that are _already available_ to you. If you want to use things exactly as they come off the shelf you totally can and you'll get great results. But you should also be able to use Tailwind UI as a helpful starting point, tweak it to the nines, and end up with something that feels uniquely _yours_, even if we gave you a boost at the beginning.
+
+So before we could add JavaScript support to Tailwind UI, we needed to build some tools.
+
+## Building Headless UI
+
+Years ago I remember seeing Kent C. Dodds' [downshift](https://www.downshift-js.com) library and thinking _"man, this is a cool concept — all of the complex behavior is tucked away in the library, but all of the actual markup and styling is left to the user"_.
+
+This sort of approach is the perfect fit for Tailwind philosophically, because the entire goal of Tailwind is to help you build totally custom designs more quickly. Tailwind + a library of JS components that abstract away all of the keyboard navigation and accessibility logic without including any design opinions would be such a powerful combo — it would let teams building totally custom UIs move almost as fast as teams who were content to use hard-to-customize, opinionated frameworks.
+
+We looked to see if there were any other tools out there solving these same problems, and while there were a few awesome projects in the space ([Reach UI](https://reach.tech) and [Reakit](https://reakit.io) especially at the time, and [react-aria](https://react-spectrum.adobe.com/react-aria/) since starting on our own library, phenomenal work by all those folks), ultimately we decided that something so important for our company would be best to build and control ourselves.
+
+There were two big reasons we ended up starting our own project:
+
+1. **We wanted the APIs to work well with a class-based styling solution like Tailwind.** A lot of the other tools out there expected you to write custom CSS to target the different bits of each component, which is very different than the workflow you use to style things with Tailwind. We wanted to design something that was very class-friendly.
+2. **We wanted to support multiple frameworks using a consistent API.** There are React libraries, Vue libraries, Angular libraries, and others, but each one is different, designed by different people with different tastes. We wanted something that would be as consistent as possible from framework to framework, so that the framework-specific examples in Tailwind UI wouldn't be radically different from each other.
+
+I was really excited about what we were going to end up with at the end, but holy crap this was going to be a lot of work.
+
+### Getting the ball rolling
+
+We decided to call this project "Headless UI" and in August of last year [Robin Malfait](https://twitter.com/malfaitrobin) joined the team to work on it full-time, pretty much exclusively.
+
+The very first thing he worked on was a `Transition` component for React that would allow you to add enter/leave animations to elements, entirely using classes, and was very inspired by the [`<transition>`](https://v3.vuejs.org/guide/transitions-enterleave.html#enter-leave-transitions) component in Vue:
+
+```jsx
+<Transition
+  show={isOpen}
+  enter="transition-opacity duration-75"
+  enterFrom="opacity-0"
+  enterTo="opacity-100"
+  leave="transition-opacity duration-150"
+  leaveFrom="opacity-100"
+  leaveTo="opacity-0"
+>
+  I will fade in and out
+</Transition>
+```
+
+This is a great example of what I meant earlier when I said we really wanted to design components that were "class-friendly". This component makes it really easy to style your enter/leave transitions with regular old Tailwind utility classes, so it feels just like styling anything else in your app. It's also _not_ coupled to Tailwind in any way though, and you can use whatever classes you want!
+
+We published the [first public release](https://blog.tailwindcss.com/headless-ui-unstyled-accessible-ui-components) in October, and it included React and Vue libraries with the first three components:
+
+- Menu Button (or dropdown)
+- Listbox (or custom select)
+- Switch (or toggle)
+
+We landed on a set of APIs that used "compound components" to abstract away all of the complexity while communicating with each other via [context](https://reactjs.org/docs/context.html) (or [provide/inject](https://v3.vuejs.org/api/composition-api.html#provide-inject) in Vue).
+
+Here's what a custom dropdown looks like in React:
+
+```jsx
+import { Menu } from '@headlessui/react'
+
+function MyDropdown() {
+  return (
+    <Menu as="div" className="relative">
+      <Menu.Button className="px-4 py-2 rounded bg-blue-600 text-white ...">Options</Menu.Button>
+      <Menu.Items className="absolute mt-1 right-0">
+        <Menu.Item>
+          {({ active }) => (
+            <a className={`${active && 'bg-blue-500 text-white'} ...`} href="/account-settings">
+              Account settings
+            </a>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }) => (
+            <a className={`${active && 'bg-blue-500 text-white'} ...`} href="/documentation">
+              Documentation
+            </a>
+          )}
+        </Menu.Item>
+        <Menu.Item disabled>
+          <span className="opacity-75 ...">Invite a friend (coming soon!)</span>
+        </Menu.Item>
+      </Menu.Items>
+    </Menu>
+  )
+}
+```
+
+You'll notice that to do things like style the "active" dropdown item, we use a [render prop](https://reactjs.org/docs/render-props.html) (or a [scoped slot](https://v3.vuejs.org/guide/component-slots.html#scoped-slots) in Vue):
+
+```jsx
+<Menu.Item>
+  {({ active }) => (
+    <a className={`${active && 'bg-blue-500 text-white'} ...`} href="/documentation">
+      Documentation
+    </a>
+  )}
+</Menu.Item>
+```
+
+Render props aren't as common as they used to be because hooks have replaced the need for them in many situations. But for this sort of problem where you need access to internal state that's managed by the component you're consuming, they are still the right (only?) solution, and very elegant.
+
+### Designing the right components
+
+After releasing the first version of Headless UI in October, we buckled down for a couple of months to release [Tailwind CSS v2.0](https://blog.tailwindcss.com/tailwindcss-v2), and then spent the last month of the year focused on bug fixes and lots of project house keeping before taking a break for the holidays.
+
+When we came back, we buckled down hard to get to work on actually adding React + Vue support to Tailwind UI itself, and the first thing we needed to was audit all of the interactive behavior we needed for the examples in Tailwind UI and figure out what Headless UI abstractions we needed to design.
+
+This was actually a pretty interesting and challenging job, because it's really not always obvious how a certain design-specific interaction should map to an established UI pattern that has known accessibility expectations.
+
+Some are obvious:
+
+- A modal dialog should be a [dialog](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role)
+- A toggle should be a [switch](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/Switch_role)
+- A dropdown should be a [menu](https://www.w3.org/TR/wai-aria-practices/examples/menu-button/menu-button-links.html) _(well, sometimes...)_
+
+But some are a lot trickier. For example, what about mobile menus, the kind of thing you open with a hamburger button?
+
+_If it opens kinda like a popup, is that a menu like a dropdown?_
+
+_What if it slides in from the side of the screen?_
+
+_What if it just opens in place and pushes the rest of the page further down?_
+
+We worked through questions like this regularly, and landing on good solutions took a lot of research and experimentation. We're lucky to have [David Luhr](https://twitter.com/david_luhr) on the team who has specialized in accessibility for a long time, and with his help we were able to feel really good about the solutions we landed on.
+
+Here's what we decided we needed in order to support the patterns that already existed in Tailwind UI:
+
+- **Menu Button**. Used for dropdown menus that only contain links or buttons, like a little actions menu at the end of a table row.
+- **Listbox**. For custom `select` implementations where you want to include extra stuff in the `option` elements. For example a country picker where you put a flag next to each country.
+- **Switch**. For custom toggle switches that behave like checkboxes.
+- **Disclosure**. For showing/hiding content in place. Think like collapsable FAQ questions. Also useful for bigger chunks of UI too though, like a mobile menu that opens in place and pushes the rest of the page down.
+- **Dialog**. For, well, modal dialogs! But also for mobile navigation that slides out from the side of the page, and other "take-over"-style UIs, even if they don't look like a traditional panel-centered-in-the-screen modal.
+- **Popover**. For panels that pop up on top of the page when you click a button. This is useful for menus where you need lots of custom content that would violate the strictness of regular `role="menu"` menu buttons. We use these for some mobile menus, flyout menus in navigation bars, and other interesting places too. It's kind of like a menu/disclosure hybrid.
+- **Radio Group**. For custom radio selection UIs, like where you want a set of clickable cards instead of a boring little radio circle.
+
+We ran into tons of challenges building this stuff, especially around complex stuff like focus management, and _especially_ around nested focus management.
+
+Imaging you have a modal that opens, and inside that modal there's a dropdown. You open the modal, then open the dropdown, and hit escape. What happens? Well the dropdown should close right, but the modal should stay open.
+
+I guarantee 99% of modals on the internet would close too in this case, even though they aren't supposed to. But not ours — ours works!
+
+We _(well mostly Robin)_ spent _months_ working on little details like this to make everything as bullet-proof as possible, and while I'm sure there have to be bugs hiding in there still somewhere, where we ended up feels _so_ rock solid compared to almost every UI you encounter day-to-day on the web.
+
+We still have a lot of new patterns we want to add to Headless UI like tabs, accordions, maybe even _gulp_ a datepicker, and we're looking forward to exploring other frameworks in the future (Alpine.js is next on our list), but we're super proud to call what we're releasing this week Headless UI v1.0 and commit to a stable API going forward.
+
+We think you're gonna love it. _&lt;/TimCook&gt;_
+
+## Just enough abstraction
+
+With the Headless UI stuff figured out, the next big problem was figuring out _exactly_ what a React or Vue version of an existing Tailwind UI example should look like.
+
+The examples in Tailwind UI are pure HTML snippets — you find something you like, copy the HTML into your project, then tweak it as much you like, chop it up into individual components, whatever you want. We don't make any assumptions about how you're going to use it, what elements you're going to keep or delete, or how you want to abstract away any duplication with your preferred tools.
+
+This is an easy decision when working with pure HTML — what other choice do you really even have? But when offering framework-specific examples, it gets a lot trickier to know exactly what to provide.
+
+The biggest question was how hard should we try to remove any duplication, and what are the right approaches to doing so?
+
+Both React and Vue are _component_ frameworks, and the way you reuse code in your projects is by extracting bits of UI into components that you can use over and over again.
+
+The challenge is that creating components like that is always _very_ project specific. Take this list component for example:
+
+<img src={stackedListExample} alt="Stacked list component example from Tailwind UI" />
+
+Fully componentized in a real app, the final code might look something like this:
+
+```jsx
+<TeamList>
+  {projectMembers.map(member => (
+    <TeamList.Item teamMember={member}>
+  ))}
+</TeamList>
+```
+
+It looks super clean sure, but it's forcing a lot of opinions on you.
+
+For example, it assumes the items are team members. What if you're building an invoicing app and you want to use this pattern for a list of clients instead? Hell, you might be using this for a sports betting app and these should be baseball teams, not even people!
+
+It also makes assumptions about the shape of a `member` object. It would have to encode that it's pulling out a `name` and an `email` property, even though your data might be different.
+
+The other issue is that in frameworks like Vue, you can only have one component per file. This means copying an example that was made up of 4-5 subcomponents would mean you have to copy 4-5 different snippets, create files for each one, and link them all together with the correct names/paths.
+
+To me, something about doing all of this for people felt like going too far, at least for the problem we're trying to solve today. When everything is super broken up like that with predefined prop APIs and deliberately chosen component names, **it feels like you aren't supposed to change it anymore**. What I love about Tailwind UI is that clicking the "code" tab feels like opening up some complex piece of electronics and seeing all of the circuitry right there in front of you. It's a learning opportunity, and you can read the markup and class names and understand how it all works together.
+
+I wrestled with it for a long time, but ultimately decided that right now we were trying to solve two main problems:
+
+1. **Give people code using the syntax they actually need**, like giving React users JSX instead of HTML so they don't have to manually convert things like `for` to `htmlFor`.
+2. **Make the interactive elements work out of the box**, so dropdowns, mobile menus, toggles, and everything else was ready to go, instead of having to write all of that boilerplate JS yourself.
+
+I decided that the right solution was to focus on solving those problems, and be careful not to do anything that would turn Tailwind UI into a different product.
+
+So this is what's different when you look at a React or Vue example compared to the vanilla HTML version:
+
+1. **Each framework example uses the right syntax** — React examples use JSX, and Vue examples are provided in the single-file component syntax.
+2. **Transitions are real now** — instead of comments telling you what classes to add at each phase of a transition, the transition is just there, using either a Headless UI transition component or Vue's native transition component.
+3. **Interactive elements are handled by Headless UI** — you'll see a few imports in any example that requires JS where we pull in the required Headless UI components and then those are used directly in the markup.
+4. **Any repeated chunks of markup have been converted into basic loops** — any data-driven loop stuff (like lists of people, or navigation items) are extracted into simple variables right there in the example to reduce duplication but still keep everything together in one place. In your own projects, you'd swap this out with data from an API or database or whatever, but we keep the examples simple and don't make any assumptions for you.
+5. **Icons are pulled in from the Heroicons library**. Instead of inlining the SVG directly whenever an icon is used, we pull them in from our React/Vue icon libraries instead to keep the markup simpler.
+
+Here's an example of what it actually looks like:
+
+```jsx
+import { Menu, Transition } from '@headlessui/react'
+import { DotsVerticalIcon } from '@heroicons/react/solid'
+import { Fragment } from 'react'
+
+const people = [
+  {
+    name: 'Calvin Hawkins',
+    email: 'calvin.hawkins@example.com',
+    image:
+      'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  },
+  {
+    name: 'Kristen Ramos',
+    email: 'kristen.ramos@example.com',
+    image:
+      'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  },
+  {
+    name: 'Ted Fox',
+    email: 'ted.fox@example.com',
+    image:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  },
+]
+
+export default function Example() {
+  return (
+    <ul className="divide-y divide-gray-200">
+      {people.map((person) => (
+        <li key={person.email} className="py-4 flex">
+          <img className="h-10 w-10 rounded-full" src={person.image} alt="" />
+          <div className="ml-3">
+            <p className="text-sm font-medium text-gray-900">{person.name}</p>
+            <p className="text-sm text-gray-500">{person.email}</p>
+          </div>
+          <Menu as="div" className="ml-3 relative inline-block text-left">
+            {({ open }) => (
+              <>
+                <div>
+                  <Menu.Button className="bg-gray-100 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+                    <span className="sr-only">Open options</span>
+                    <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+                  </Menu.Button>
+                </div>
+
+                <Transition
+                  show={open}
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items
+                    static
+                    className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  >
+                    <div className="py-1">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            View details
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            Send message
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </div>
+                  </Menu.Items>
+                </Transition>
+              </>
+            )}
+          </Menu>
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+
+It's still a single example where you can see everything that's going on at once, and you can cut it up however makes the most sense for your project. You get to define your own prop APIs to meet your own needs, name things however makes the most sense for your domain, and fetch your data in whatever way works best with the other technologies you work with.
+
+## The machine that makes it work
+
+So that's how it all works from a customer's perspective, but if you're curious how we actually built this stuff internally, it's pretty interesting and worth talking about.
+
+Tailwind UI is like 450 examples or something now, and converting all of that stuff to React/Vue by hand would have been absolute torture, and impossible to maintain in the long-term. So we needed some way to automate it.
+
+If you're anything like me, the entire idea of automatically generating this stuff in different formats might make you cringe. For me at least, my gut reaction is just _"well there goes the human touch — it's just going to feel like machine-generated garbage now"_, and of course that is not acceptable to me at all — I want to be proud of the stuff we release, not feel like we had to make really ugly compromises.
+
+So however we did this, the output had to live up to our standards. This meant we were gonna have to build a system to do this ourselves, from scratch.
+
+For the first 2 months of the year, [Brad](https://twitter.com/bradlc) spent all of his time building a custom authoring chain specifically for Tailwind UI components that could take our HTML and turn it into React code that looked like it was hand-written by a person.
+
+Here's how it works — instead of authoring our examples in vanilla HTML, we author them in a sort of custom flavor of HTML full of custom elements that we ultimately transform to vanilla HTML using [PostHTML](https://github.com/posthtml/posthtml).
+
+Here's what one of our dropdown examples looks like in our internal authoring format:
+
+```html
+<x-menu as="div" id="options-menu" class="relative inline-block text-left">
+  <div>
+    <x-menu-button
+      class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+    >
+      Options
+      <x-heroicon type="solid" name="chevron-down" class="-mr-1 ml-2 h-5 w-5" />
+    </x-menu-button>
+  </div>
+
+  <x-transition
+    as="x-fragment"
+    enter="transition ease-out duration-100"
+    enter-start="transform opacity-0 scale-95"
+    enter-end="transform opacity-100 scale-100"
+    leave="transition ease-in duration-75"
+    leave-start="transform opacity-100 scale-100"
+    leave-end="transform opacity-0 scale-95"
+  >
+    <x-menu-items
+      class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+    >
+      <div class="py-1">
+        <x-menu-item>
+          <a
+            href="#"
+            class="block px-4 py-2 text-sm"
+            x-active-class="bg-gray-100 text-gray-900"
+            x-not-active-class="text-gray-700"
+          >
+            Account settings
+          </a>
+        </x-menu-item>
+        <x-menu-item>
+          <a
+            href="#"
+            class="block px-4 py-2 text-sm"
+            x-active-class="bg-gray-100 text-gray-900"
+            x-not-active-class="text-gray-700"
+          >
+            Support
+          </a>
+        </x-menu-item>
+        <x-menu-item>
+          <a
+            href="#"
+            class="block px-4 py-2 text-sm"
+            x-active-class="bg-gray-100 text-gray-900"
+            x-not-active-class="text-gray-700"
+          >
+            License
+          </a>
+        </x-menu-item>
+      </div>
+    </x-menu-items>
+  </x-transition>
+</x-menu>
+```
+
+You can probably already see why authoring things this way makes it so much easier to convert to something like React or Vue than just writing the HTML by hand.
+
+We crawl this document as an AST, and actually transform it into _four_ formats:
+
+1. The vanilla HTML you get when you copy the snippet.
+2. The HTML that gets injected into the preview pane, where we use some very quick and dirty Alpine.js to demo the different interactions in the example.
+3. The React snippet for you to copy.
+4. The Vue snippet for you to copy.
+
+The key to getting sensible output is really just having total control of the input format. It's still hard work, but when you can encode the _intent_ of each example into a custom input format, converting that to another format turns out _so_ much better than trying to write something that can convert arbitrary jQuery to React or something.
+
+There's still some dark magic in there with regular expressions and all of the other usual suspects, but ultimately by keeping things as declarative as possible and hiding the real complexity inside of Headless UI, we're mostly just transforming markup which is a lot more restricted than regular code.
+
+## When's it coming out?
+
+React and Vue support for Tailwind UI is going to be available to everyone on Wednesday April 14th — two days from now! It's a completely free update for all customers, you'll just see a new little dropdown appear in the UI for changing the snippet language and you'll be ready to go.
+
+We'll also be releasing Headless UI v1.0 on the same day _(of course, since how else would this Tailwind UI stuff even work)_ along with a brand new documentation site, so even if you're not a Tailwind UI customer, there's gonna be lots of new free open-source goodies for you to play with.
+
+Thanks as always to everyone supporting our work on this stuff — it's seriously a gift to get to work on tools like this for other developers every day and it brings us a ton of fulfillment to see people benefiting from what we build.
+
+Hope you enjoy the stuff!
+
+– Adam

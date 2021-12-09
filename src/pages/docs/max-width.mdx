@@ -1,63 +1,83 @@
 ---
 title: "Max-Width"
-description: "Utilities for setting the maximum width of an element"
+description: "Utilities for setting the maximum width of an element."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/maxWidth'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=maxWidth'
 import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
+  utilities,
   sort: numbersFirst,
 }
 
-## Usage
+## Basic usage
+
+### Setting the maximum width
 
 Set the maximum width of an element using the `max-w-{size}` utilities.
 
-```html emerald resizable
-<template preview>
-  <div class="max-w-md mx-auto rounded-md h-16 bg-emerald-500 select-none"></div>
-</template>
+<Example resizable>
+  <div class="overflow-hidden relative max-w-md mx-auto bg-white shadow-lg ring-1 ring-black/5 rounded-xl flex items-center gap-6">
+    <img class="absolute -left-6 w-28 h-28 rounded-full shadow-lg" src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
+    <div class="min-w-0 py-5 pl-28 pr-5">
+      <div class="text-gray-900 font-medium text-sm sm:text-base truncate">Andrew Alfred</div>
+      <div class="text-gray-500 font-medium text-sm sm:text-base leading-tight truncate">Assistant to the Traveling Secretary</div>
+    </div>
+  </div>
+</Example>
 
-<div class="**max-w-md** mx-auto ...">
+```html
+<div class="**max-w-md** ...">
   <!-- ... -->
 </div>
 ```
 
-## Reading width
+### Reading width
 
 The `max-w-prose` utility gives an element a max-width optimized for readability and adapts based on the font size.
 
-```html purple
-<template preview>
-  <div class="max-w-prose text-sm text-purple-700 p-6">
-    <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+<Example>
+  <div class="space-y-8">
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">text-sm</span>
+      <div class="max-w-prose text-sm font-medium text-gray-900">
+        <p>Oh yeah. It's the best part. It's crunchy, it's explosive, it's where the muffin breaks free of the pan and sort of does it's own thing. I'll tell you. That's a million dollor idea right there. Just sell the tops.</p>
+      </div>
+    </div>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">text-base</span>
+      <div class="max-w-prose text-base font-medium text-gray-900">
+        <p>Oh yeah. It's the best part. It's crunchy, it's explosive, it's where the muffin breaks free of the pan and sort of does it's own thing. I'll tell you. That's a million dollor idea right there. Just sell the tops.</p>
+      </div>
+    </div>
+    <div>
+      <span class="font-medium text-sm text-gray-500 font-mono mb-3">text-xl</span>
+      <div class="max-w-prose text-xl font-medium text-gray-900">
+        <p>Oh yeah. It's the best part. It's crunchy, it's explosive, it's where the muffin breaks free of the pan and sort of does it's own thing. I'll tell you. That's a million dollor idea right there. Just sell the tops.</p>
+      </div>
+    </div>
   </div>
-  <div class="max-w-prose text-base text-purple-700 p-6">
-    <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
-  </div>
-  <div class="max-w-prose text-xl text-purple-700 p-6">
-    <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
-  </div>
-</template>
+</Example>
 
+```html
 <div class="text-sm **max-w-prose** ...">
-  <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+  <p>Oh yeah. It's the best part. It's crunchy, it's explosive, it's where the muffin breaks free of the pan and sort of does it's own thing. I'll tell you. That's a million dollor idea right there. Just sell the tops.</p>
 </div>
 
 <div class="text-base **max-w-prose** ...">
-  <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+  <p>Oh yeah. It's the best part. It's crunchy, it's explosive, it's where the muffin breaks free of the pan and sort of does it's own thing. I'll tell you. That's a million dollor idea right there. Just sell the tops.</p>
 </div>
 
 <div class="text-xl **max-w-prose** ...">
-  <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+  <p>Oh yeah. It's the best part. It's crunchy, it's explosive, it's where the muffin breaks free of the pan and sort of does it's own thing. I'll tell you. That's a million dollor idea right there. Just sell the tops.</p>
 </div>
 ```
 
-## Constraining to your breakpoints
+### Constraining to your breakpoints
 
 The `max-w-screen-{breakpoint}` classes can be used to give an element a max-width matching a specific breakpoint. These values are automatically derived from the [`theme.screens` section](/docs/theme#screens) of your `tailwind.config.js` file.
 
@@ -69,47 +89,36 @@ The `max-w-screen-{breakpoint}` classes can be used to give an element a max-wid
 
 ---
 
-## Responsive
+## <Heading ignore>Applying conditionally</Heading>
 
-To control the max-width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing max-width utility.
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-```html
-<div class="max-w-sm **md:max-w-lg** ...">
-  <!-- ... -->
-</div>
-```
+<HoverFocusAndOtherStates defaultClass="max-w-sm" featuredClass="max-w-lg" />
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="max-w-sm" featuredClass="max-w-lg" />
 
 ---
 
-## Customizing
+## Using custom values
 
-### Max-Width Scale
+### Customizing your theme
 
-Customize Tailwind's default max-width scale for the `max-w-*` classes in the `theme.maxWidth` section of your `tailwind.config.js` file.
+You can customize your `max-width` scale by editing `theme.maxWidth` or `theme.extend.maxWidth` in your `tailwind.config.js` file.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-      maxWidth: {
-+       '1/4': '25%',
++     maxWidth: {
 +       '1/2': '50%',
-+       '3/4': '75%',
-      }
++     }
     }
   }
 ```
 
-The `max-w-screen-*` classes are derived from the [`theme.screens` section](/docs/theme#screens) of your `tailwind.config.js` file.
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+### Arbitrary values
 
-### Variants
-
-<Variants plugin="maxWidth" name="max-width" />
-
-### Disabling
-
-<Disabling plugin="maxWidth" name="max-width" />
+<ArbitraryValues property="max-width" featuredClass="max-w-[50%]" />

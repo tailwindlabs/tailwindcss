@@ -17,6 +17,18 @@
 }
 
 @font-face {
+  font-family: 'Fira Code VF';
+  font-weight: 300 700;
+  font-style: normal;
+  src: url('../fonts/FiraCode-VF.woff2') format('woff2-variations'),
+    url('../fonts/FiraCode-VF.woff') format('woff-variations');
+}
+
+.font-mono {
+  font-variant-ligatures: none;
+}
+
+@font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 400;

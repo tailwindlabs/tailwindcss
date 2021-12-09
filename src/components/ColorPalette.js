@@ -1,4 +1,4 @@
-import { defaultConfig } from '@/utils/defaultConfig'
+import defaultConfig from 'defaultConfig'
 import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
 import dlv from 'dlv'
 

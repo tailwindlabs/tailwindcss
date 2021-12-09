@@ -1,70 +1,99 @@
 ---
 title: "Invert"
 description: "Utilities for applying invert filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=invert'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingFilters } from '@/components/RemovingFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.invert-0': { '--tw-invert': 'invert(0)' },
-        '.invert': { '--tw-invert': 'invert(1)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      filter: properties['--tw-invert'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `invert` and `invert-0` utilities alongside the `filter` utility to whether an element should be rendered with inverted colors or normally.
+### Inverting an element's color
+
+Use the `invert` and `invert-0` utilities to control whether an element should be rendered with inverted colors or normally.
+
+<Example p="none">
+  <div class="flex justify-center sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">invert-0</p>
+      <div class="relative invert-0">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">invert</p>
+      <div class="relative invert">
+        <img class="w-24 h-24 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="filter invert ...">
+<div class="**invert-0** ...">
+  <!-- ... -->
+</div>
+<div class="**invert** ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing filters
 
-To control an element's invert filter at a specific breakpoint, add a `{screen}:` prefix to any existing invert utility. For example, use `md:invert-0` to apply the `invert-0` utility at only medium screen sizes and above.
+<RemovingFilters defaultClass="blur-md invert brightness-150" />
 
-```html
-<div class="filter invert **md:invert-0** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `invert` utilities are generated using the `invert` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="invert" featuredClass="invert-0" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="invert" featuredClass="invert-0" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `invert` utilities. You can customize these values by editing `theme.invert` or `theme.extend.invert` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       invert: {
 +         25: '.25',
 +         50: '.5',
 +         75: '.75',
 +       }
-+     }
+      }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="invert" name="invert" />
-
-### Disabling
-
-<Disabling plugin="invert" name="invert" />
+<ArbitraryValues property="invert" featuredClass="invert-[.25]" />

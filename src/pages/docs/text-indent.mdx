@@ -1,0 +1,105 @@
+---
+title: "Text Indent"
+description: "Utilities for controlling the amount of empty space shown before text in a block."
+---
+
+import utilities from 'utilities?plugin=textIndent'
+import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = {
+  utilities,
+  sort: (classes) => numbersFirst(classes),
+}
+
+## Basic usage
+
+### Adding a text indent
+
+Use the `indent-{width}` utilities to set the amount of empty space (indentation) that's shown before text in a block.
+
+<Example p="none">
+  <div class="bg-white p-8 shadow-xl text-gray-700 max-w-md mx-auto overflow-auto leading-6">
+    <p class="indent-8">
+      So I started to walk into the water. I won't lie to you boys, I was
+      terrified. But I pressed on, and as I made my way past the breakers
+      a strange calm came over me. I don't know if it was divine intervention
+      or the kinship of all living things but I tell you Jerry at that moment,
+      I <em>was</em> a marine biologist.
+    </p>
+  </div>
+</Example>
+
+```html
+<p class="**indent-8**">
+  So I started to walk into the water. I won't lie to you boys, I was
+  terrified. But I pressed on, and as I made my way past the breakers
+  a strange calm came over me. I don't know if it was divine intervention
+  or the kinship of all living things but I tell you Jerry at that moment,
+  I <em>was</em> a marine biologist.
+</p>
+```
+
+### Using negative values
+
+To use a negative text indent value, prefix the class name with a dash to convert it to a negative value.
+
+```html
+<div class="**-indent-8**">
+  So I started to walk into the water. I won't lie to...
+</div>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="indent-4" featuredClass="indent-8" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="indent-4" featuredClass="indent-8" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+The default text indent scale is based on the [default spacing scale](/docs/customizing-spacing#default-spacing-scale). You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       spacing: {
++         '128': '32rem',
++       }
+      }
+    }
+  }
+```
+
+Alternatively, you can customize just the text indent scale by editing `theme.textIndent` or `theme.extend.textIndent` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       textIndent: {
++         '128': '32rem',
++       }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="text-indent" featuredClass="indent-[50%]" />

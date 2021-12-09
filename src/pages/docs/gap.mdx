@@ -3,37 +3,38 @@ title: "Gap"
 description: "Utilities for controlling gutters between grid and flexbox items."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/gap'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=gap'
 import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
 export const classes = {
-  plugin,
+  utilities,
   sort: numbersFirst,
 }
 
-## Usage
+## Basic usage
+
+### Setting the gap between elements
 
 Use `gap-{size}` to change the gap between both rows and columns in grid and flexbox layouts.
 
-```html indigo
-<template preview class="p-6">
-  <div>
-    <div class="grid grid-cols-2 gap-4">
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-    </div>
+<Example>
+  <div class="grid grid-cols-2 gap-4 font-mono text-white text-sm text-center font-bold leading-6 bg-stripes-violet rounded-lg">
+    <div class="p-4 rounded-lg shadow-lg bg-violet-500">01</div>
+    <div class="p-4 rounded-lg shadow-lg bg-violet-500">02</div>
+    <div class="p-4 rounded-lg shadow-lg bg-violet-500">03</div>
+    <div class="p-4 rounded-lg shadow-lg bg-violet-500">04</div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="grid **gap-4** grid-cols-2">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
 </div>
 ```
 
@@ -41,89 +42,76 @@ Use `gap-{size}` to change the gap between both rows and columns in grid and fle
 
 Use `gap-x-{size}` and `gap-y-{size}` to change the gap between rows and columns independently.
 
-```html rose
-<template preview class="p-6">
-  <div>
-    <div class="grid grid-cols-3 gap-x-8 gap-y-4">
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-    </div>
+<Example>
+  <div class="grid grid-cols-3 gap-x-8 gap-y-4 font-mono text-white text-sm text-center font-bold leading-6 bg-stripes-light-blue rounded-lg">
+    <div class="p-4 rounded-lg shadow-lg bg-light-blue-500">01</div>
+    <div class="p-4 rounded-lg shadow-lg bg-light-blue-500">02</div>
+    <div class="p-4 rounded-lg shadow-lg bg-light-blue-500">03</div>
+    <div class="p-4 rounded-lg shadow-lg bg-light-blue-500">04</div>
+    <div class="p-4 rounded-lg shadow-lg bg-light-blue-500">05</div>
+    <div class="p-4 rounded-lg shadow-lg bg-light-blue-500">06</div>
   </div>
-</template>
-
-<div class="grid **gap-x-8** **gap-y-4** grid-cols-3">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
-</div>
-```
-
----
-
-## Responsive
-
-To control the gap at a specific breakpoint, add a `{screen}:` prefix to any existing gap utility. For example, use `md:gap-6` to apply the `gap-6` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="grid gap-4 **md:gap-6** ...">
-  <!-- ... -->
+<div class="grid **gap-x-8** **gap-y-4** grid-cols-3">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="grid gap-4" featuredClass="gap-6" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="grid gap-4" featuredClass="gap-6" />
 
 ---
 
-## Customizing
+## Using custom values
 
-By default, Tailwind's gap scale matches your configured [spacing scale](/docs/customizing-spacing).
+### Customizing your theme
 
-You can customize the global spacing scale in the `theme.spacing` or `theme.extend.spacing` sections of your `tailwind.config.js` file:
+By default, Tailwind's gap scale uses the [default spacing scale](/docs/customizing-spacing). You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
 
-```diff-js
-  // tailwind.config.js
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        spacing: {
-+         '72': '18rem',
-+         '84': '21rem',
-+         '96': '24rem',
-        }
-      }
-    }
-  }
-```
-
-To customize the gap scale separately, use the `gap` section of your Tailwind theme config.
-
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
-      extend: {
-        gap: {
++       spacing: {
 +         '11': '2.75rem',
-+         '13': '3.25rem',
-        }
++       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Alternatively, you can customize just the gap scale by editing `theme.gap` or `theme.extend.gap` in your `tailwind.config.js` file.
 
-### Variants
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       gap: {
++         '11': '2.75rem',
++       }
+      }
+    }
+  }
+```
 
-<Variants plugin="gap" />
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Disabling
+### Arbitrary values
 
-<Disabling plugin="gap" />
+<ArbitraryValues property="gap" featuredClass="gap-[2.75rem]" />

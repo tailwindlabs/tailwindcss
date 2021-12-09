@@ -1,95 +1,110 @@
 ---
 title: "Backdrop Contrast"
 description: "Utilities for applying backdrop contrast filters to an element."
-featureVersion: 'v2.1+'
 ---
 
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=backdropContrast'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { RemovingBackdropFilters } from '@/components/RemovingBackdropFilters'
 
 export const classes = {
-  plugin: function () {
-    return function ({ addUtilities }) {
-      addUtilities({
-        '.backdrop-contrast-0': { '--tw-backdrop-contrast': 'contrast(0)' },
-        '.backdrop-contrast-50': { '--tw-backdrop-contrast': 'contrast(.5)' },
-        '.backdrop-contrast-75': { '--tw-backdrop-contrast': 'contrast(.75)' },
-        '.backdrop-contrast-100': { '--tw-backdrop-contrast': 'contrast(1)' },
-        '.backdrop-contrast-125': { '--tw-backdrop-contrast': 'contrast(1.25)' },
-        '.backdrop-contrast-150': { '--tw-backdrop-contrast': 'contrast(1.5)' },
-        '.backdrop-contrast-200': { '--tw-backdrop-contrast': 'contrast(2)' },
-      })
+  utilities,
+  transformProperties: ({ properties }) => {
+    return {
+      'backdrop-filter': properties['--tw-backdrop-contrast'],
     }
-  }
+  },
 }
 
-## Usage
+## Basic usage
 
-Use the `backdrop-contrast-{amount?}` utilities alongside the `backdrop-filter` utility to control an element's backdrop contrast.
+### Controlling backdrop contrast
+
+Use the `backdrop-contrast-{amount?}` utilities to control an element's backdrop contrast.
+
+<Example p="none">
+  <div class="flex justify-start sm:block overflow-scroll sm:overflow-visible scroll-p-8">
+  <div class="flex items-center justify-around gap-6 sm:gap-4 font-mono font-bold shrink-0 p-8">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-contrast-50</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-contrast-50 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-contrast-125</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-contrast-125 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">backdrop-contrast-200</p>
+      <div class="relative">
+        <div class="absolute inset-6 backdrop-contrast-200 h-20 w-20 bg-white/30"></div>
+        <img class="w-32 h-32 object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=320&h=320&q=80" />
+        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</Example>
 
 ```html
-<div class="backdrop-filter backdrop-contrast-125 ...">
+<div class="**backdrop-contrast-50** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-contrast-125** bg-white/30 ...">
+  <!-- ... -->
+</div>
+<div class="**backdrop-contrast-200** bg-white/30 ...">
   <!-- ... -->
 </div>
 ```
 
-## Responsive
+### Removing backdrop filters
 
-To control an element's backdrop contrast at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop contrast utility. For example, use `md:backdrop-contrast-150` to apply the `backdrop-contrast-150` utility at only medium screen sizes and above.
+<RemovingBackdropFilters defaultClass="backdrop-blur-md backdrop-contrast-125" />
 
-```html
-<div class="backdrop-filter backdrop-contrast-110 **md:backdrop-contrast-150** ...">
-  <!-- ... -->
-</div>
-```
+---
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+## <Heading ignore>Applying conditionally</Heading>
 
-## Customizing
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-You can customize which `backdrop-contrast` utilities are generated using the `backdropContrast` key in the `theme` section of your `tailwind.config.js` file.
+<HoverFocusAndOtherStates defaultClass="backdrop-contrast-125" featuredClass="backdrop-contrast-150" />
 
-```diff-js
-  // tailwind.config.js
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="backdrop-contrast-125" featuredClass="backdrop-contrast-150" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes a handful of general purpose `backdrop-contrast` utilities. You can customize these values by editing `theme.backdropContrast` or `theme.extend.backdropContrast` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
-+     extend: {
+      extend: {
 +       backdropContrast: {
 +         25: '.25',
 +       }
-+     }
-    }
-  }
-```
-
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
-
-### Backdrop Contrast Scale
-
-You can customize the values for the `backdrop-contrast` filter in your Tailwind config.
-
-```diff-js
-  // tailwind.config.js
-  module.exports = {
-    theme: {
-      backdropContrast: {
-        0: '0',
-+       25: '.25',
-        50: '.5',
-        75: '.75',
-        100: '1',
-        125: '1.25',
-        150: '1.5',
-        200: '2',
       }
     }
   }
 ```
 
-### Variants
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-<Variants plugin="backdropContrast" name="backdrop contrast" />
+### Arbitrary values
 
-### Disabling
-
-<Disabling plugin="backdropContrast" name="backdrop contrast" />
+<ArbitraryValues property="backdrop-contrast" featuredClass="backdrop-contrast-[.25]" />

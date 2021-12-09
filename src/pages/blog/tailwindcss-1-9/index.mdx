@@ -1,0 +1,210 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: 'Tailwind CSS v1.9.0',
+  description: `We just released Tailwind CSS v1.9 which adds support for configuration presets, useful new CSS grid utilities, extended border radius, rotate, and skew scales, helpful accessibility improvements, and more!`,
+  date: '2020-10-13T18:30:00.000Z',
+  authors: [adamwathan],
+  image,
+}
+
+We just released Tailwind CSS v1.9 which adds support for configuration presets, useful new CSS grid utilities, extended border radius, rotate, and skew scales, helpful accessibility improvements, and more!
+
+<!--more-->
+
+Let's dig in to the highlights...
+
+- [Configuration presets](#configuration-presets)
+- [Utilities for `grid-auto-columns` and `grid-auto-rows`](#utilities-for-grid-auto-columns-and-grid-auto-rows)
+- [Focus indicator improvements and configurable outlines](#focus-indicator-improvements-and-configurable-outlines)
+- [Extended border radius, rotate, and skew scales](#extended-border-radius-rotate-and-skew-scales)
+- [Upgrading to v1.9](#upgrading)
+
+For the complete summary of changes [check out the release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.9.0).
+
+---
+
+<h2 id="configuration-presets">Configuration presets</h2>
+
+Tailwind CSS v1.9 adds a new `presets` key to the `tailwind.config.js` file that makes it possible to configure a custom "base configuration" for your projects.
+
+```js tailwind.config.js
+module.exports = {
+  presets: [require('@my-company/tailwind-base')],
+  theme: {
+    extend: {
+      // Project specific overrides...
+    },
+  },
+}
+```
+
+Whatever you provide under `presets` _replaces_ the default Tailwind base configuration, so you can define your own totally custom starting point. This is really helpful if you're part of a team that works on multiple different Tailwind projects that all need to share the same brand colors, font customizations, or spacing scale.
+
+You can even list multiple presets, which are merged together from top to bottom:
+
+```js tailwind.config.js
+module.exports = {
+  presets: [
+    require('@my-company/tailwind-base'),
+    require('@my-company/tailwind-marketing'),
+  ],
+  theme: {
+    extend: {
+      // Project specific overrides...
+    },
+  },
+}
+```
+
+The logic to merge your project-specific configuration with your custom base configuration is exactly the same as how things work with the default configuration, so all of the features you're used to like `extend` still work exactly the way you'd expect.
+
+---
+
+<h2 id="utilities-for-grid-auto-columns-and-grid-auto-rows">
+  Utilities for grid-auto-columns and grid-auto-rows
+</h2>
+
+We've added new `gridAutoColumns` and `gridAutoRows` core plugins that add new utilities for the `grid-auto-columns` and `grid-auto-rows` CSS properties respectively.
+
+These utilities let you control the size of implicitly-created grid columns and rows. Use them to set a default column/row size whenever you don't specify a number of columns/rows for your grid.
+
+```html
+<div class="grid grid-flow-col auto-cols-max">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+```
+
+Here's a list of the new utilities that are included out of the box:
+
+| Class            | CSS                                  |
+| ---------------- | ------------------------------------ |
+| `auto-cols-auto` | `grid-auto-columns: auto;`           |
+| `auto-cols-min`  | `grid-auto-columns: min-content;`    |
+| `auto-cols-max`  | `grid-auto-columns: max-content;`    |
+| `auto-cols-fr`   | `grid-auto-columns: minmax(0, 1fr);` |
+| `auto-rows-auto` | `grid-auto-rows: auto;`              |
+| `auto-rows-min`  | `grid-auto-rows: min-content;`       |
+| `auto-rows-max`  | `grid-auto-rows: max-content;`       |
+| `auto-rows-fr`   | `grid-auto-rows: minmax(0, 1fr);`    |
+
+We include `responsive` variants for these utilities by default, and they can be configured just like you'd expect under the `gridAutoColumns` and `gridAutoRows` sections of your `tailwind.config.js` file.
+
+---
+
+<h2 id="focus-indicator-improvements-and-configurable-outlines">
+  Focus indicator improvements and configurable outlines
+</h2>
+
+We've updated the `outline-none` class to render a _transparent_ outline by default instead of rendering _no_ outline. This is really helpful for people who use [Windows high contrast mode](https://blogs.windows.com/msedgedev/2020/09/17/styling-for-windows-high-contrast-with-new-standards-for-forced-colors/), where custom box-shadow-based focus styles are completely invisible.
+
+Now you can create custom focus styles using box shadows _safely_, without making your sites difficult to use for people with low vision.
+
+```html
+<button class="... focus:outline-none focus:shadow-outline">
+  <!-- ... -->
+</button>
+```
+
+We've also added two new outline styles: `outline-white` and `outline-black`.
+
+These utilities render a 2px dotted outline in their respective color, with a 2px offset. They work great as general purpose unobtrusive focus indicators that make it easy for keyboard users to see which element on the screen is selected, without clashing too much with your design.
+
+We've included both `white` and `black` variations so you can always be sure to have an option available that has sufficient contrast against whatever background color you're using.
+
+```html
+<!-- Use `outline-white` on dark backgrounds -->
+<div class="bg-gray-900">
+  <button class="... focus:outline-white">
+    <!-- ... -->
+  </button>
+</div>
+
+<!-- Use `outline-black` on light backgrounds -->
+<div class="bg-white">
+  <button class="... focus:outline-black">
+    <!-- ... -->
+  </button>
+</div>
+```
+
+Of course, you're also free to create whatever custom focus styles you like using background colors, box shadows, borders, whatever. These are great if you don't want to get too fancy though.
+
+We've made the `outline` property configurable as well, so you can now define custom outlines in your `tailwind.config.js` file:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      outline: {
+        blue: '2px solid #0000ff',
+      },
+    },
+  },
+}
+```
+
+You can also provide an `outline-offset` value for any custom outline utilities using a tuple of the form `[outline, outlineOffset]`:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      outline: {
+        blue: ['2px solid #0000ff', '1px'],
+      },
+    },
+  },
+}
+```
+
+---
+
+<h2 id="extended-border-radius-rotate-and-skew-scales">
+  Extended border radius, rotate, and skew scales
+</h2>
+
+We've added three new border radius utilities by default:
+
+| Class         | Value              |
+| ------------- | ------------------ |
+| `rounded-xl`  | `0.75rem` _(12px)_ |
+| `rounded-2xl` | `1rem` _(16px)_    |
+| `rounded-3xl` | `1.5rem`_(24px)_   |
+
+...and an extended set of smaller values for both the `rotate` and `skew` utilities:
+
+| Class       | Value   |
+| ----------- | ------- |
+| `rotate-1`  | `1deg`  |
+| `rotate-2`  | `2deg`  |
+| `rotate-3`  | `3deg`  |
+| `rotate-6`  | `6deg`  |
+| `rotate-12` | `12deg` |
+| `skew-1`    | `1deg`  |
+| `skew-2`    | `2deg`  |
+
+Negative versions are included for all of these as well. Super handy for more subtle rotate and skew effects!
+
+---
+
+<h2 id="upgrading">Upgrading</h2>
+
+Tailwind CSS v1.9 is a non-breaking minor release, so to upgrade all you need to do is run:
+
+```bash
+# npm
+npm install tailwindcss@^1.9
+
+# yarn
+yarn add tailwindcss@^1.9
+```
+
+We have promoted two previously experimental features (`defaultLineHeights` and `standardFontWeights`) to `future`, so we also recommend [opting-in to those changes now](https://tailwindcss.com/docs/upcoming-changes#default-line-heights-for-font-size-utilities) to simplify the upgrade to Tailwind CSS v2.0 later this fall.
+
+<Footer>
+  Want to talk about this post? <a href="https://github.com/tailwindcss/tailwindcss/discussions/2552">Discuss this on GitHub →</a>
+</Footer>

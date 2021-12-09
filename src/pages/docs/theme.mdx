@@ -9,10 +9,7 @@ import { ThemeReference } from '@/components/ThemeReference'
 
 The `theme` section of your `tailwind.config.js` file is where you define your project's color palette, type scale, fonts, breakpoints, border radius values, and more.
 
-```js
-// tailwind.config.js
-const colors = require('tailwindcss/colors')
-
+```js tailwind.config.js
 module.exports = {
   theme: {
     screens: {
@@ -22,10 +19,15 @@ module.exports = {
       xl: '1440px',
     },
     colors: {
-      gray: colors.coolGray,
-      blue: colors.lightBlue,
-      red: colors.rose,
-      pink: colors.fuchsia,
+      'blue': '#1fb6ff',
+      'purple': '#7e5bef',
+      'pink': '#ff49db',
+      'orange': '#ff7849',
+      'green': '#13ce66',
+      'yellow': '#ffc82c',
+      'gray-dark': '#273444',
+      'gray': '#8492a6',
+      'gray-light': '#d3dce6',
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
@@ -44,7 +46,7 @@ module.exports = {
 }
 ```
 
-We provide a sensible [default theme](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js#L7) with a very generous set of values to get you started, but don't be afraid to change it or extend; you're encouraged to customize it as much as you need to fit the goals of your design.
+We provide a sensible [default theme](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js) with a very generous set of values to get you started, but don't be afraid to change it or extend it; you're encouraged to customize it as much as you need to fit the goals of your design.
 
 ---
 
@@ -58,8 +60,7 @@ See the [theme configuration reference](#configuration-reference) or the [defaul
 
 The `screens` key allows you to customize the responsive breakpoints in your project.
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     screens: {
@@ -79,8 +80,7 @@ To learn more, see the [breakpoint customization documentation](/docs/breakpoint
 
 The `colors` key allows you to customize the global color palette for your project.
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     colors: {
@@ -107,8 +107,7 @@ To learn more, see the [color customization documentation](/docs/colors).
 
 The `spacing` key allows you to customize the global spacing and sizing scale for your project.
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     spacing: {
@@ -152,7 +151,7 @@ module.exports = {
 }
 ```
 
-By default, these values are inherited by the `padding`, `margin`, `width`, `height`, `maxHeight`, `gap`, `inset`, `space`, and `translate` core plugins.
+By default, these values are inherited by the `padding`, `margin`, `width`, `height`, `maxHeight`, `flex-basis`, `gap`, `inset`, `space`, `translate`, `scrollMargin`, `scrollPadding`, and `textIndent` core plugins.
 
 To learn more, see the [spacing customization documentation](/docs/customizing-spacing).
 
@@ -194,6 +193,8 @@ To learn more about customizing a specific core plugin, visit the documentation 
 
 For a complete reference of available theme properties and their default values, [see the default theme configuration](https://github.com/tailwindlabs/tailwindcss/blob/v1/stubs/defaultConfig.stub.js#L5).
 
+---
+
 ## Customizing the default theme
 
 Out of the box, your project will automatically inherit the values from [the default theme configuration](https://github.com/tailwindlabs/tailwindcss/blob/v1/stubs/defaultConfig.stub.js#L5). If you would like to customize the default theme, you have a few different options depending on your goals.
@@ -204,8 +205,7 @@ If you'd like to preserve the default values for a theme option but also add new
 
 For example, if you wanted to add an extra breakpoint but preserve the existing ones, you could extend the `screens` property:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     extend: {
@@ -222,8 +222,7 @@ module.exports = {
 
 To override an option in the default theme, add your overrides directly under the `theme` section of your `tailwind.config.js`:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     // Replaces all of the default `opacity` values
@@ -245,8 +244,7 @@ Any keys you **do not** provide will be inherited from the default theme, so in 
 
 You can of course both override some parts of the default theme and extend other parts of the default theme within the same configuration:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     opacity: {
@@ -268,18 +266,22 @@ module.exports = {
 
 ### Referencing other values
 
-If you need to reference another value in your theme, you can do so by providing a closure instead of a static value. The closure will receive a `theme()` function that you can use to look up other values in your theme using dot notation.
+If you need to reference another value in your theme, you can do so by providing a closure instead of a static value. The closure will receive an object that includes a `theme()` function that you can use to look up other values in your theme using dot notation.
 
-For example, you could generate `fill` utilities for every color in your color palette by referencing `theme('colors')` in your `fill` configuration:
+For example, you could generate `background-size` utilities for every value in your spacing scale by referencing `theme('spacing')` in your `backgroundSize` configuration:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
-    colors: {
+    spacing: {
       // ...
     },
-    fill: theme => theme('colors')
+    backgroundSize: ({ theme }) => {
+      auto: 'auto',
+      cover: 'cover',
+      contain: 'contain',
+      ...theme('spacing')
+    }
   }
 }
 ```
@@ -290,12 +292,11 @@ Note that you can only use this kind of closure with top-level theme keys, not t
 
 <TipBad>You can't use functions for individual values</TipBad>
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     fill: {
-      gray: theme => theme('colors.gray')
+      gray: ({ theme }) => theme('colors.gray')
     }
   }
 }
@@ -303,11 +304,10 @@ module.exports = {
 
 <TipGood>Use functions for top-level theme keys</TipGood>
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
-    fill: theme => ({
+    fill: ({ theme }) => ({
       gray: theme('colors.gray')
     })
   }
@@ -320,8 +320,7 @@ If you'd like to reference a value in the default theme for any reason, you can 
 
 One example of where this is useful is if you'd like to add a font family to one of Tailwind's default font stacks:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -344,8 +343,7 @@ If you don't want to generate any classes for a certain core plugin, it's better
 
 <TipBad>Don't assign an empty object in your theme configuration</TipBad>
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     opacity: {},
@@ -355,8 +353,7 @@ module.exports = {
 
 <TipGood>Do disable the plugin in your corePlugins configuration</TipGood>
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   corePlugins: {
     opacity: false,
@@ -366,53 +363,7 @@ module.exports = {
 
 The end result is the same, but since many core plugins expose no configuration they can only be disabled using `corePlugins` anyways, so it's better to be consistent.
 
-### Adding your own keys
-
-There are a number of situations where it can be useful to add your own keys to the `theme` object.
-
-One example of this is adding new keys to create a single source of truth for values that are common between multiple core plugins. For example, you could extract a shared `positions` object that could be referenced by both the `backgroundPosition` and `objectPosition` plugins:
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    positions: {
-      bottom: 'bottom',
-      center: 'center',
-      left: 'left',
-      'left-bottom': 'left bottom',
-      'left-top': 'left top',
-      right: 'right',
-      'right-bottom': 'right bottom',
-      'right-top': 'right top',
-      top: 'top',
-    },
-    backgroundPosition: theme => theme('positions'),
-    objectPosition: theme => theme('positions'),
-  }
-}
-```
-
-Another example is adding a new key to reference inside a custom plugin. For example, if you've written a `filters` plugin for your project, you might add a `filters` key to your `theme` object that the plugin references:
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    filters: {
-      none: 'none',
-      grayscale: 'grayscale(1)',
-      invert: 'invert(1)',
-      sepia: 'sepia(1)',
-    }
-  },
-  plugins: [
-    require('./plugins/filters')
-  ],
-}
-```
-
-Since the entire `theme` object is available in your CSS using the [theme function](/docs/functions-and-directives#theme), you might also add a key just to be able to reference it in your CSS.
+---
 
 ## Configuration reference
 

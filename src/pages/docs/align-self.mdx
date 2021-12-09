@@ -3,132 +3,132 @@ title: "Align Self"
 description: "Utilities for controlling how an individual flex or grid item is positioned along its container's cross axis."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/alignSelf'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=alignSelf'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Auto
+## Basic usage
+
+### Auto
 
 Use `self-auto` to align an item based on the value of the container's `align-items` property:
 
-```html emerald
-<template preview class="p-6">
-  <div class="flex items-stretch h-24 space-x-2">
-    <div class="flex-1 rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
-    <div class="self-auto flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center">2</div>
-    <div class="flex-1 rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="flex items-stretch gap-4 w-full rounded-lg bg-stripes-light-blue h-24">
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-light-blue-300">01</div>
+      <div class="self-auto p-4 flex-1 flex items-center justify-center shadow-lg rounded-lg bg-light-blue-500">02</div>
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-light-blue-300">03</div>
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="flex items-stretch ...">
-  <div>1</div>
-  <div class="**self-auto** ...">2</div>
-  <div>3</div>
+  <div>01</div>
+  <div class="**self-auto** ...">02</div>
+  <div>03</div>
 </div>
 ```
 
-## Start
+### Start
 
 Use `self-start` to align an item to the start of the container's cross axis, despite the container's `align-items` value:
 
-```html amber
-<template preview class="p-6">
-  <div class="flex items-stretch h-24 space-x-2">
-    <div class="flex-1 rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
-    <div class="self-start flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
-    <div class="flex-1 rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="flex items-stretch gap-4 w-full rounded-lg bg-stripes-pink h-24">
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-pink-300">01</div>
+      <div class="self-start p-4 flex-1 flex items-center justify-center shadow-lg rounded-lg bg-pink-500">02</div>
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-pink-300">03</div>
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="flex items-stretch ...">
-  <div>1</div>
-  <div class="**self-start** ...">2</div>
-  <div>3</div>
+  <div>01</div>
+  <div class="**self-start** ...">02</div>
+  <div>03</div>
 </div>
 ```
 
-## Center
+### Center
 
 Use `self-center` to align an item along the center of the container's cross axis, despite the container's `align-items` value:
 
-```html purple
-<template preview class="p-6">
-  <div class="flex items-stretch h-24 space-x-2">
-    <div class="flex-1 rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
-    <div class="self-center flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
-    <div class="flex-1 rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="flex items-stretch gap-4 w-full rounded-lg bg-stripes-purple h-24">
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-purple-300">01</div>
+      <div class="self-center p-4 flex-1 flex items-center justify-center shadow-lg rounded-lg bg-purple-500">02</div>
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-purple-300">03</div>
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="flex items-stretch ...">
-  <div>1</div>
-  <div class="**self-center** ...">2</div>
-  <div>3</div>
+  <div>01</div>
+  <div class="**self-center** ...">02</div>
+  <div>03</div>
 </div>
 ```
 
-## End
+### End
 
 Use `self-end` to align an item to the end of the container's cross axis, despite the container's `align-items` value:
 
-```html rose
-<template preview class="p-6">
-  <div class="flex items-stretch h-24 space-x-2">
-    <div class="flex-1 rounded-md bg-rose-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
-    <div class="self-end flex-1 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
-    <div class="flex-1 rounded-md bg-rose-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="flex items-stretch gap-4 w-full rounded-lg bg-stripes-indigo h-24">
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-indigo-300">01</div>
+      <div class="self-end p-4 flex-1 flex items-center justify-center shadow-lg rounded-lg bg-indigo-500">02</div>
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-indigo-300">03</div>
+    </div>
   </div>
-</template>
+</Example>
 
+```html
 <div class="flex items-stretch ...">
-  <div>1</div>
-  <div class="**self-end** ...">2</div>
-  <div>3</div>
+  <div>01</div>
+  <div class="**self-end** ...">02</div>
+  <div>03</div>
 </div>
 ```
 
-## Stretch
+### Stretch
 
 Use `self-stretch` to stretch an item to fill the container's cross axis, despite the container's `align-items` value:
 
-```html fuchsia
-<template preview class="p-6">
-  <div class="flex items-stretch h-24 space-x-2">
-    <div class="flex-1 rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
-    <div class="self-stretch flex-1 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
-    <div class="flex-1 rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
+<Example>
+  <div class="font-mono text-white text-sm font-bold leading-6">
+    <div class="flex items-stretch gap-4 w-full rounded-lg bg-stripes-fuchsia h-24">
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-fuchsia-300">01</div>
+      <div class="self-stretch p-4 flex-1 flex items-center justify-center shadow-lg rounded-lg bg-fuchsia-500">02</div>
+      <div class="p-4 flex-1 flex items-center justify-center rounded-lg bg-fuchsia-300">03</div>
+    </div>
   </div>
-</template>
-
-<div class="flex items-stretch ...">
-  <div>1</div>
-  <div class="**self-stretch** ...">2</div>
-  <div>3</div>
-</div>
-```
-
-## Responsive
-
-To control the alignment of a flex item at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:self-end` to apply the `self-end` utility at only medium screen sizes and above.
+</Example>
 
 ```html
-<div class="items-stretch ...">
-  <div class="self-auto **md:self-end** ...">
-    <!-- ... -->
-  </div>
+<div class="flex items-stretch ...">
+  <div>01</div>
+  <div class="**self-stretch** ...">02</div>
+  <div>03</div>
 </div>
 ```
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+---
 
-## Customizing
+## <Heading ignore>Applying conditionally</Heading>
 
-### Variants
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-<Variants plugin="alignSelf" name="align-self" />
+<HoverFocusAndOtherStates defaultClass="self-auto" featuredClass="self-end" />
 
-### Disabling
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-<Disabling plugin="alignSelf" name="align-self" />
+<BreakpointsAndMediaQueries defaultClass="self-auto" featuredClass="self-end" />

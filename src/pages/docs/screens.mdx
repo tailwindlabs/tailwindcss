@@ -1,0 +1,267 @@
+---
+title: Customizing Screens
+shortTitle: Screens
+description: Customizing the default breakpoints for your project.
+---
+
+import { Heading } from '@/components/Heading'
+
+## <Heading hidden>Configuring custom screens</Heading>
+
+You define your project's breakpoints in the `theme.screens` section of your `tailwind.config.js` file. The keys become your [responsive modifiers](/docs/responsive-design) (like `md:text-center`), and the values are the `min-width` where that breakpoint should start.
+
+The default breakpoints are inspired by common device resolutions:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'sm': '640px',
+      // => @media (min-width: 640px) { ... }
+
+      'md': '768px',
+      // => @media (min-width: 768px) { ... }
+
+      'lg': '1024px',
+      // => @media (min-width: 1024px) { ... }
+
+      'xl': '1280px',
+      // => @media (min-width: 1280px) { ... }
+
+      '2xl': '1536px',
+      // => @media (min-width: 1536px) { ... }
+    }
+  }
+}
+```
+
+Feel free to have as few or as many screens as you want, naming them in whatever way you'd prefer for your project.
+
+### Overriding the defaults
+
+To completely replace the default breakpoints, add your custom `screens` configuration directly under the `theme` key:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'sm': '576px',
+      // => @media (min-width: 576px) { ... }
+
+      'md': '960px',
+      // => @media (min-width: 960px) { ... }
+
+      'lg': '1440px',
+      // => @media (min-width: 1440px) { ... }
+    },
+  }
+}
+```
+
+Any default screens you haven't overridden (such as `xl` using the above example) will be removed and will not be available as screen modifiers.
+
+### Overriding a single screen
+
+To override a single screen size (like `lg`), add your custom `screens` value under the `theme.extend` key:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      screens: {
+        'lg': '992px',
+        // => @media (min-width: 1168px) { ... }
+      },
+    },
+  },
+}
+```
+
+This will replace the default `screens` value with the same name, without changing the order of your breakpoints.
+
+### Adding larger breakpoints
+
+The easiest way to add an additional larger breakpoint is using the `extend` key:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      screens: {
+        '3xl': '1600px',
+      },
+    },
+  },
+  variants: {},
+  plugins: [],
+}
+```
+
+This will add your custom screen to the end of the default breakpoint list.
+
+### Adding smaller breakpoints
+
+If you want to add an additional small breakpoint, you can't use `extend` because the small breakpoint would be added to the end of the breakpoint list, and breakpoints need to be sorted from smallest to largest in order to work as expected with a min-width breakpoint system.
+
+Instead, override the entire `screens` key, re-specifying the default breakpoints:
+
+```js tailwind.config.js
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+module.exports = {
+  theme: {
+    screens: {
+      'xs': '475px',
+      ...defaultTheme.screens,
+    },
+  },
+  variants: {},
+  plugins: [],
+}
+```
+
+We expose the default theme at `tailwindcss/defaultTheme` so you don't have to maintain the list of default breakpoints yourself.
+
+### Using custom screen names
+
+You can name your custom screens whatever you like, and are not limited to following the `sm`/`md`/`lg`/`xl`/`2xl`  convention that Tailwind uses by default.
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'tablet': '640px',
+      // => @media (min-width: 640px) { ... }
+
+      'laptop': '1024px',
+      // => @media (min-width: 1024px) { ... }
+
+      'desktop': '1280px',
+      // => @media (min-width: 1280px) { ... }
+    },
+  }
+}
+```
+
+Your responsive modifiers will reflect these custom screen names, so using them in your HTML would now look like this:
+
+```html
+<div class="grid grid-cols-1 **tablet**:grid-cols-2 **laptop**:grid-cols-3 **desktop**:grid-cols-4">
+  <!-- ... -->
+</div>
+```
+
+---
+
+## Advanced configuration
+
+By default, breakpoints are min-width to encourage a [mobile-first](/docs/responsive-design#mobile-first) workflow. If you need more control over your media queries, you can also define them using an object syntax that lets you specify explicit min-width and max-width values.
+
+### Max-width breakpoints
+
+If you want to work with max-width breakpoints instead of min-width, you can specify your screens as objects with a `max` key:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      '2xl': {'max': '1535px'},
+      // => @media (max-width: 1535px) { ... }
+
+      'xl': {'max': '1279px'},
+      // => @media (max-width: 1279px) { ... }
+
+      'lg': {'max': '1023px'},
+      // => @media (max-width: 1023px) { ... }
+
+      'md': {'max': '767px'},
+      // => @media (max-width: 767px) { ... }
+
+      'sm': {'max': '639px'},
+      // => @media (max-width: 639px) { ... }
+    }
+  }
+}
+```
+
+Make sure to list max-width breakpoints in descending order so that they override each other as expected.
+
+### Fixed-range breakpoints
+
+If you want your breakpoints to specify both a `min-width` and a `max-width`, use the `min` and `max` keys together:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'sm': {'min': '640px', 'max': '767px'},
+      // => @media (min-width: 640px and max-width: 767px) { ... }
+
+      'md': {'min': '768px', 'max': '1023px'},
+      // => @media (min-width: 768px and max-width: 1023px) { ... }
+
+      'lg': {'min': '1024px', 'max': '1279px'},
+      // => @media (min-width: 1024px and max-width: 1279px) { ... }
+
+      'xl': {'min': '1280px', 'max': '1535px'},
+      // => @media (min-width: 1280px and max-width: 1535px) { ... }
+
+      '2xl': {'min': '1536px'},
+      // => @media (min-width: 1536px) { ... }
+    },
+  }
+}
+```
+
+Unlike regular min-width or max-width breakpoints, breakpoints defined this way will only take effect when the viewport size is explicitly within the defined range.
+
+```html
+<div class="md:text-center">
+  This text will be centered on medium screens, but revert back
+  to the default (left-aligned) at all other screen sizes.
+</div>
+```
+
+### Multi-range breakpoints
+
+Sometimes it can be useful to have a single breakpoint definition apply in multiple ranges.
+
+For example, say you have a sidebar and want your breakpoints to be based on the content-area width rather than the entire viewport. You can simulate this by having one of your breakpoints fall back to a smaller breakpoint when the sidebar becomes visible and shrinks the content area:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'sm': '500px',
+      'md': [
+        // Sidebar appears at 768px, so revert to `sm:` styles between 768px
+        // and 868px, after which the main content area is wide enough again to
+        // apply the `md:` styles.
+        {'min': '668px', 'max': '767px'},
+        {'min': '868px'}
+      ],
+      'lg': '1100px',
+      'xl': '1400px',
+    }
+  }
+}
+```
+
+### Custom media queries
+
+If you want full control over the generated media query, use the `raw` key:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      screens: {
+        'tall': { 'raw': '(min-height: 800px)' },
+        // => @media (min-height: 800px) { ... }
+      }
+    }
+  }
+}
+```
+
+Media queries defined using the `raw` key will be output as-is, and the `min` and `max` keys will be ignored.

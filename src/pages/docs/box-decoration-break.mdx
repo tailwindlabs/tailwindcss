@@ -1,53 +1,67 @@
 ---
 title: "Box Decoration Break"
 description: "Utilities for controlling how element fragments should be rendered across multiple lines, columns, or pages."
-featureVersion: 'v2.1+'
 ---
 
-import plugin from 'tailwindcss/lib/plugins/boxDecorationBreak'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=boxDecorationBreak'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = {
+  utilities: {
+    'box-decoration-clone': {'box-decoration-break': 'clone'},
+    'box-decoration-slice': {'box-decoration-break': 'slice'},
+  },
+}
 
-## Usage
+## Basic usage
 
-Use the `decoration-slice` and `decoration-clone` utilities to control whether properties like background, border, border-image, box-shadow, clip-page, margin, and padding should be rendered as if the element were one continuous fragment, or distinct blocks.
+### Setting the box decoration break
 
-```html amber
-<template preview>
-  <div class="text-center text-5xl font-extrabold leading-none tracking-tight">
-    <span class="decoration-clone bg-clip-text text-transparent bg-gradient-to-b from-amber-400 to-red-500">
-      Hello<br>
-      World
-    </span>
+Use the `box-decoration-slice` and `box-decoration-clone` utilities to control whether properties like background, border, border-image, box-shadow, clip-page, margin, and padding should be rendered as if the element were one continuous fragment, or distinct blocks.
+
+<Example>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 px-10 font-mono font-bold">
+    <div class="flex flex-col">
+      <p class="font-medium text-sm text-gray-500 font-mono mb-3">box-decoration-slice</p>
+      <div class="text-5xl font-extrabold leading-none tracking-tight font-sans">
+        <span class="box-decoration-slice text-white bg-gradient-to-r from-indigo-600 to-pink-500 leading-[3.5rem] px-2">
+          Hello<br>
+          World
+        </span>
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <p class="font-medium text-sm text-gray-500 font-mono mb-3">box-decoration-clone</p>
+      <div class="text-5xl font-extrabold leading-none tracking-tight font-sans">
+        <span class="box-decoration-clone text-white bg-gradient-to-r from-indigo-600 to-pink-500 leading-[3.5rem] px-2">
+          Hello<br>
+          World
+        </span>
+      </div>
+    </div>
   </div>
-</template>
+</Example>
 
-<span class="**decoration-clone** bg-gradient-to-b from-yellow-400 to-red-500 text-transparent ...">
+```html
+<span class="**box-decoration-slice** bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 ...">
+  Hello<br>
+  World
+</span>
+<span class="**box-decoration-clone** bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 ...">
   Hello<br>
   World
 </span>
 ```
 
-## Responsive
+---
 
-To control the box-decoration-break property at a specific breakpoint, add a `{screen}:` prefix to any existing box-decoration-break utility. For example, use `md:decoration-slice` to apply the `decoration-slice` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<div class="decoration-clone **md:decoration-slice** ...">
-  <!-- ... -->
-</div>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="box-decoration-clone" featuredClass="box-decoration-slice" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-### Variants
-
-<Variants plugin="boxDecorationBreak" name="box-decoration-break" />
-
-### Disabling
-
-<Disabling plugin="boxDecorationBreak" name="box-decoration-break" />
+<BreakpointsAndMediaQueries defaultClass="box-decoration-clone" featuredClass="box-decoration-slice" />

@@ -3,68 +3,77 @@ title: "Transition Duration"
 description: "Utilities for controlling the duration of CSS transitions."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/transitionDuration'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=transitionDuration'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Changing transition duration
 
 Use the `duration-{amount}` utilities to control an element's transition-duration.
 
-```html emerald
-<template preview>
-  <div class="flex justify-around items-center">
-    <button class="transition duration-150 ease-in-out transform hover:scale-125 bg-emerald-600 text-white font-semibold py-3 px-6 rounded-md">
-      Hover me
-    </button>
-    <button class="transition duration-300 ease-in-out transform hover:scale-125 bg-emerald-600 text-white font-semibold py-3 px-6 rounded-md">
-      Hover me
-    </button>
-    <button class="transition duration-700 ease-in-out transform hover:scale-125 bg-emerald-600 text-white font-semibold py-3 px-6 rounded-md">
-      Hover me
-    </button>
+<Example hint="Hover each button to see the expected behaviour">
+  <div class="flex flex-col sm:flex-row gap-8 sm:gap-0 justify-around text-white text-sm font-bold leading-6">
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">duration-150</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-violet-500 text-white rounded-md shadow-sm hover:scale-125 ease-in-out duration-150">Button A</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">duration-300</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-violet-500 text-white rounded-md shadow-sm hover:scale-125 ease-in-out duration-300">Button B</button>
+    </div>
+    <div class="flex flex-col items-center shrink-0">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">duration-700</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-violet-500 text-white rounded-md shadow-sm hover:scale-125 ease-in-out duration-700">Button C</button>
+    </div>
   </div>
-</template>
+</Example>
 
-<button class="transition **duration-150** ease-in-out ...">Hover me</button>
-<button class="transition **duration-300** ease-in-out ...">Hover me</button>
-<button class="transition **duration-700** ease-in-out ...">Hover me</button>
+```html
+<button class="transition **duration-150** ease-in-out ...">Button A</button>
+<button class="transition **duration-300** ease-in-out ...">Button B</button>
+<button class="transition **duration-700** ease-in-out ...">Button C</button>
 ```
 
-## Responsive
+---
 
-To control an element's transition-duration at a specific breakpoint, add a `{screen}:` prefix to any existing transition-duration utility. For example, use `md:duration-500` to apply the `duration-500` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-## Customizing
+<HoverFocusAndOtherStates defaultClass="transition duration-0" featuredClass="duration-150" />
 
-### Duration values
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-By default, Tailwind provides eight general purpose transition-duration utilities. You change, add, or remove these by customizing the `transitionDuration` section of your Tailwind theme config.
+<BreakpointsAndMediaQueries defaultClass="transition duration-0" featuredClass="duration-150" />
 
-```diff-js
-  // tailwind.config.js
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind provides eight general purpose transition-duration utilities. You can customize these values by editing `theme.transitionDuration` or `theme.extend.transitionDuration` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        transitionDuration: {
++       transitionDuration: {
 +         '0': '0ms',
 +         '2000': '2000ms',
-        }
++       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="transitionDuration" name="transition-duration" />
-
-### Disabling
-
-<Disabling plugin="transitionDuration" name="transition-duration" />
+<ArbitraryValues property="transition-duration" featuredClass="transition-[2000ms]" />

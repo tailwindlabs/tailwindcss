@@ -3,61 +3,61 @@ title: "Grid Auto Rows"
 description: "Utilities for controlling the size of implicitly-created grid rows."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/gridAutoRows'
-import { Variants } from '@/components/Variants'
-import { Disabling } from '@/components/Disabling'
+import utilities from 'utilities?plugin=gridAutoRows'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
-export const classes = { plugin }
+export const classes = { utilities }
 
-## Usage
+## Basic usage
+
+### Sizing implicitly-created grid rows
 
 Use the `auto-rows-{size}` utilities to control the size implicitly-created grid rows.
 
 ```html
 <div class="grid grid-flow-row **auto-rows-max**">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
 </div>
 ```
 
-## Responsive
+---
 
-To control the grid-auto-rows property at a specific breakpoint, add a `{screen}:` prefix to any existing grid-auto-rows utility. For example, use `md:auto-rows-min` to apply the `auto-rows-min` utility at only medium screen sizes and above.
+## <Heading ignore>Applying conditionally</Heading>
 
-```html
-<div class="grid grid-flow-row auto-rows-max **md:auto-rows-min**">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-</div>
-```
+### <Heading ignore>Hover, focus, and other states</Heading>
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+<HoverFocusAndOtherStates defaultClass="grid grid-flow-row auto-rows-max" featuredClass="auto-rows-min" />
 
-## Customizing
+### <Heading ignore>Breakpoints and media queries</Heading>
 
-By default, Tailwind includes four general purpose grid-auto-rows utilities. You can customize these in the `theme.gridAutoRows` section of your `tailwind.config.js` file.
+<BreakpointsAndMediaQueries defaultClass="grid grid-flow-row auto-rows-max" featuredClass="auto-rows-min" />
 
-```js
-  // tailwind.config.js
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind includes four general purpose `grid-auto-rows` utilities. You can customize these values by editing `theme.gridAutoRows` or `theme.extend.gridAutoRows` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        gridAutoRows: {
-          '2fr': 'minmax(0, 2fr)',
-        }
++       gridAutoRows: {
++         '2fr': 'minmax(0, 2fr)',
++       }
       }
     }
   }
 ```
 
-Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
 
-### Variants
+### Arbitrary values
 
-<Variants plugin="gridAutoRows" name="grid-auto-rows" />
-
-### Disabling
-
-<Disabling plugin="gridAutoRows" name="grid-auto-rows" />
+<ArbitraryValues property="grid-auto-rows" featuredClass="auto-rows-[minmax(0,_2fr)]" />

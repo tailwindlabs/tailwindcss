@@ -1,1 +1,4 @@
 **/*.mdx
+**/generated/
+src/samples/
+**/snippet.*

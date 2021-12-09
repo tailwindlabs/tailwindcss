@@ -1,0 +1,87 @@
+---
+title: "Touch Action"
+description: "Utilities for controlling how an element can be scrolled and zoomed on touchscreens."
+---
+
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = {
+  utilities: {
+    '.touch-auto': { 'touch-action': 'auto' },
+    '.touch-none': { 'touch-action': 'none' },
+    '.touch-pan-x': { 'touch-action': 'pan-x' },
+    '.touch-pan-left': { 'touch-action': 'pan-left' },
+    '.touch-pan-right': { 'touch-action': 'pan-right' },
+    '.touch-pan-y': { 'touch-action': 'pan-y' },
+    '.touch-pan-up': { 'touch-action': 'pan-up' },
+    '.touch-pan-down': { 'touch-action': 'pan-down' },
+    '.touch-pinch-zoom': { 'touch-action': 'pinch-zoom' },
+    '.touch-manipulation': { 'touch-action': 'manipulation' },
+  },
+}
+
+
+## Basic usage
+
+### Setting the touch action
+
+Use the `touch-{action}` utilities to control how an element can be scrolled (panned) and zoomed (pinched) on touchscreens.
+
+<Example hint="Try panning these images on a touchscreen">
+  <div class="grid sm:grid-cols-2 gap-x-6 gap-y-14 font-mono font-bold">
+    <div class="flex flex-col items-center">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">touch-auto</p>
+      <div class="grid w-full h-48 overflow-auto touch-auto rounded-lg shadow-lg">
+        <img class="col-span-1 col-start-1 col-end-1 w-[150%] max-w-none" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=400&q=80" />
+      </div>
+    </div>
+    <div class="flex flex-col items-center">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">touch-none</p>
+      <div class="w-full h-48 overflow-auto touch-none rounded-lg shadow-lg">
+        <img class="w-[150%] max-w-none" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=400&q=80" />
+      </div>
+    </div>
+    <div class="flex flex-col items-center">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">touch-pan-x</p>
+      <div class="w-full h-48 overflow-auto touch-pan-x rounded-lg shadow-lg">
+        <img class="w-[150%] max-w-none" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=400&q=80" />
+      </div>
+    </div>
+    <div class="flex flex-col items-center">
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">touch-pan-y</p>
+      <div class="w-full h-48 overflow-auto touch-pan-y rounded-lg shadow-lg">
+        <img class="w-[150%] max-w-none" src="https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=400&q=80" />
+      </div>
+    </div>
+  </div>
+</Example>
+
+
+```html
+<div class="w-full h-48 **overflow-auto touch-auto** ...">
+  <img class="w-[150%] max-w-none h-auto" src="..." />
+</div>
+<div class="w-full h-48 **overflow-auto touch-none** ...">
+  <img class="w-[150%] max-w-none h-auto" src="..." />
+</div>
+<div class="w-full h-48 **overflow-auto touch-pan-x** ...">
+  <img class="w-[150%] max-w-none h-auto" src="..." />
+</div>
+<div class="w-full h-48 **overflow-auto touch-pan-y** ...">
+  <img class="w-[150%] max-w-none h-auto" src="..." />
+</div>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates featuredClass="touch-pan-x" variant="focus" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries featuredClass="touch-pan-x" />
