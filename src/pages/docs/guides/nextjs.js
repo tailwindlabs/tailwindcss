@@ -107,7 +107,7 @@ export default function UsingNextJS({ code }) {
     >
       <div className="relative z-10 prose mb-16 max-w-3xl">
         <p>
-          The quickest way to start using Tailwind CSS in your Next.js project is to use the <a href="https://github.com/vercel/next.js/tree/b54cbcca8223efbee4029d3c015146a91020a92b/examples/with-tailwindcss">Next.js + Tailwind CSS Example</a>. This will automatically configure your Tailwind setup based on the official Next.js example. If you'd like to configure Tailwind manually, continue with the rest of this guide.
+          The quickest way to start using Tailwind CSS in your Next.js project is to use the <a href="https://github.com/vercel/next.js/tree/4d4f3093019179b1928ec07c16f38882241c0375/examples/with-tailwindcss">Next.js + Tailwind CSS Example</a>. This will automatically configure your Tailwind setup based on the official Next.js example. If you'd like to configure Tailwind manually, continue with the rest of this guide.
         </p>
       </div>
       <Steps steps={steps} code={code} />
