@@ -170,9 +170,11 @@ function Completion({ inView }) {
 
   return (
     <span className="token attr-value">
-      <ColorDecorator color={colors.teal[600]} />
-      text-teal-600
-      {stage >= 1 && stage < 2 && ' '}
+      <span className="hidden sm:inline-flex items-baseline">
+        <ColorDecorator color={colors.teal[600]} />
+        text-teal-600
+        {stage >= 1 && stage < 2 && ' '}
+      </span>
       {stage >= 1 && stage < 2 && <ColorDecorator color={colors.teal[400]} />}
       {stage >= 0 &&
         stage < 2 &&
@@ -180,21 +182,22 @@ function Completion({ inView }) {
           .split('')
           .filter((char) => (stage >= 1 && stage < 6 ? char !== ' ' : true))
           .map((char, i) => (
-            <motion.span
-              key={char}
-              initial={{ display: 'none' }}
-              animate={{ display: 'inline' }}
-              transition={{ delay: (i + 1) * 0.3 }}
-              onAnimationComplete={() => setTyped(typed + char)}
-            >
-              {char}
-            </motion.span>
+            <span key={char} className={char === ' ' ? 'hidden sm:inline' : undefined}>
+              <motion.span
+                initial={{ display: 'none' }}
+                animate={{ display: 'inline' }}
+                transition={{ delay: (i + 1) * 0.3 }}
+                onAnimationComplete={() => setTyped(typed + char)}
+              >
+                {char}
+              </motion.span>
+            </span>
           ))}
       {stage === 1 && 'eal-400'}
       {(stage < 2 || stage === 6) && <span className="border -mx-px h-5" />}
       {stage >= 2 && stage <= 5 && (
         <Fragment key={stage}>
-          {stage < 5 && ' '}
+          <span className="hidden sm:inline">{stage < 5 && ' '}</span>
           {stage < 5 && <ColorDecorator color={colors.teal[400]} />}
           {stage >= 4 && <span className="relative border -mx-px h-5" />}
           {stage === 5 && (
@@ -203,7 +206,8 @@ function Completion({ inView }) {
                 className="inline-flex items-baseline"
                 style={{ background: 'rgba(81, 92, 126, 0.4)' }}
               >
-                &nbsp;
+                <span className="hidden sm:inline">&nbsp;</span>
+                &#8203;
                 <ColorDecorator color={colors.teal[400]} />
               </span>
             </>
@@ -252,8 +256,10 @@ function Completion({ inView }) {
                             style={{ background: completion[2] }}
                           />
                         ) : (
-                          <svg fill="currentColor" className="w-5 h-5 text-gray-400">
+                          <svg className="w-5 h-5">
                             <path
+                              className="!text-gray-400"
+                              fill="currentColor"
                               fillRule="evenodd"
                               clipRule="evenodd"
                               d="M16 5H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1ZM4 4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4Zm1 4h10v1H5V8Zm10 3H5v1h10v-1Z"
@@ -261,13 +267,13 @@ function Completion({ inView }) {
                           </svg>
                         )}
                       </span>
-                      <span className="flex-none">
+                      <span className="flex-none !text-gray-50">
                         {completion[0].split(new RegExp(`(^${typed.trim()})`)).map((part, j) =>
                           part ? (
                             j % 2 === 0 ? (
                               part
                             ) : (
-                              <span key={j} className="text-teal-200">
+                              <span key={j} className="!text-teal-200">
                                 {part}
                               </span>
                             )
@@ -275,7 +281,7 @@ function Completion({ inView }) {
                         )}
                       </span>
                       {i === selectedCompletionIndex && completion[1] ? (
-                        <span className="hidden sm:block flex-auto text-right text-gray-400 truncate pl-4">
+                        <span className="hidden sm:block flex-auto text-right !text-gray-400 truncate pl-4">
                           {completion[1]}
                         </span>
                       ) : null}
@@ -293,7 +299,7 @@ function Completion({ inView }) {
 function ColorDecorator({ color }) {
   return (
     <span
-      className="inline-flex w-2.5 h-2.5 md:w-3 md:h-3 rounded ring-1 ring-gray-900/30 relative top-px mr-0.5 md:mr-1"
+      className="inline-flex w-3 h-3 rounded ring-1 ring-gray-900/30 relative top-px mr-1"
       style={{ background: color }}
     />
   )
@@ -334,7 +340,7 @@ export function EditorTools() {
             />
             <CodeWindow className="!h-[39.0625rem]">
               <div className="flex-auto flex min-h-0">
-                <div className="flex-none w-14 border-r border-gray-500/30 flex flex-col items-center justify-between pt-3.5 pb-4">
+                <div className="hidden sm:flex flex-none w-14 border-r border-gray-500/30 flex-col items-center justify-between pt-3.5 pb-4">
                   <svg width="24" height="216" fill="none">
                     <path
                       d="M3 69l6-6m-2-5a7 7 0 1014 0 7 7 0 00-14 0z"
