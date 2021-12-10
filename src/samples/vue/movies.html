@@ -1,10 +1,10 @@
 <template>
   <div class="divide-y divide-gray-100">
-    <nav>
+    <Nav>
       <NavItem href="/new" isActive>New Releases</NavItem>
       <NavItem href="/top">Top Rated</NavItem>
       <NavItem href="/picks">Vincent’s Picks</NavItem>
-    </nav>
+    </Nav>
     <List>
       <ListItem v-for="movie in movies" :key="movie.id" :movie="movie" />
     </List>
