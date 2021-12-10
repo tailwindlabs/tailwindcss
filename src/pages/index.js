@@ -123,7 +123,7 @@ function Header() {
 
 export default function Home() {
   return (
-    <div className="space-y-20 sm:space-y-32 md:space-y-40">
+    <>
       <Head>
         <meta
           key="twitter:title"
@@ -137,7 +137,7 @@ export default function Home() {
         />
         <title>Tailwind CSS - Rapidly build modern websites without ever leaving your HTML.</title>
       </Head>
-      <div className="space-y-20 overflow-hidden sm:space-y-32 md:space-y-40">
+      <div className="mb-20 space-y-20 overflow-hidden sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40">
         <Header />
         <section className="text-center px-8">
           <h2 className="text-gray-900 text-4xl tracking-tight font-extrabold sm:text-5xl">
@@ -175,7 +175,7 @@ export default function Home() {
         </section>
       </div>
       <Testimonials />
-      <div className="space-y-20 overflow-hidden sm:space-y-32 md:space-y-40">
+      <div className="pt-20 mb-20 space-y-20 overflow-hidden sm:pt-32 sm:mb-32 sm:space-y-32 md:pt-40 md:mb-40 md:space-y-40">
         <ConstraintBased />
         <BuildAnything />
         <Performance />
@@ -189,6 +189,6 @@ export default function Home() {
         <ReadyMadeComponents />
       </div>
       <Footer />
-    </div>
+    </>
   )
 }
