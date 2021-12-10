@@ -167,6 +167,44 @@ describe('custom advanced variants', () => {
       `)
     })
   })
+
+  test('using multiple classNames in your custom variant', () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="my-variant:underline test"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('my-variant', '&:where(.one, .two, .three)')
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind components;
+      @tailwind utilities;
+
+      @layer components {
+        .test {
+          @apply my-variant:italic;
+        }
+      }
+    `
+
+    return run(input, config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .test:where(.one, .two, .three) {
+          font-style: italic;
+        }
+
+        .my-variant\:underline:where(.one, .two, .three) {
+          text-decoration: underline;
+        }
+      `)
+    })
+  })
 })
 
 test('stacked peer variants', async () => {
