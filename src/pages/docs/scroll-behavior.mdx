@@ -1,0 +1,36 @@
+---
+title: "Scroll Behavior"
+description: "Utilities for controlling the scroll behavior of an element."
+---
+
+import utilities from 'utilities?plugin=scrollBehavior'
+import { numbersFirst } from '@/utils/sortClasses'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+
+export const classes = { utilities }
+
+## Basic usage
+
+### Adding smooth scrolling
+
+Use the `scroll-smooth` utilities to enable smooth scrolling within an element.
+
+```html
+<html class="scroll-smooth">
+  <!-- ... -->
+</html>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates defaultClass="scroll-smooth" featuredClass="scroll-auto" element="html" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries defaultClass="scroll-smooth" featuredClass="scroll-auto" element="html" />

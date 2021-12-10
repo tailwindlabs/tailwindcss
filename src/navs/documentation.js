@@ -207,6 +207,7 @@ export const documentationNav = {
     pages['caret-color'],
     pages['pointer-events'],
     pages['resize'],
+    pages['scroll-behavior'],
     pages['scroll-margin'],
     pages['scroll-padding'],
     pages['scroll-snap-align'],
