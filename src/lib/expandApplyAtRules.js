@@ -4,12 +4,12 @@ import { resolveMatches } from './generateRules'
 import bigSign from '../util/bigSign'
 import escapeClassName from '../util/escapeClassName'
 
-function containsBase(selector, classCandidateBase) {
+function containsBase(selector, classCandidateBase, separator) {
   return parser((selectors) => {
     let contains = false
 
     selectors.walkClasses((classSelector) => {
-      if (classSelector.value.split(':').pop() === classCandidateBase) {
+      if (classSelector.value.split(separator).pop() === classCandidateBase) {
         contains = true
         return false
       }
@@ -215,7 +215,10 @@ function processApply(root, context) {
         let base = applyCandidate.split(context.tailwindConfig.separator).pop()
 
         for (let [meta, node] of rules) {
-          if (containsBase(parent.selector, base) && containsBase(node.selector, base)) {
+          if (
+            containsBase(parent.selector, base, context.tailwindConfig.separator) &&
+            containsBase(node.selector, base, context.tailwindConfig.separator)
+          ) {
             throw node.error(
               `Circular dependency detected when using: \`@apply ${applyCandidate}\``
             )
