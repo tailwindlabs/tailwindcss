@@ -341,6 +341,37 @@ export let corePlugins = {
     { supportsNegativeValues: true }
   ),
 
+  insetSafe: ({ addUtilities }) => {
+    addUtilities({
+      '.inset-safe': {
+        top: 'env(safe-area-inset-top)',
+        bottom: 'env(safe-area-inset-bottom)',
+        left: 'env(safe-area-inset-left)',
+        right: 'env(safe-area-inset-right)',
+      },
+      '.inset-x-safe': {
+        left: 'env(safe-area-inset-left)',
+        right: 'env(safe-area-inset-right)',
+      },
+      '.inset-y-safe': {
+        top: 'env(safe-area-inset-top)',
+        bottom: 'env(safe-area-inset-bottom)',
+      },
+      '.top-safe': {
+        top: 'env(safe-area-inset-top)',
+      },
+      '.bottom-safe': {
+        bottom: 'env(safe-area-inset-bottom)',
+      },
+      '.left-safe': {
+        left: 'env(safe-area-inset-left)',
+      },
+      '.right-safe': {
+        right: 'env(safe-area-inset-right)',
+      },
+    })
+  },
+
   isolation: ({ addUtilities }) => {
     addUtilities({
       '.isolate': { isolation: 'isolate' },
@@ -391,6 +422,35 @@ export let corePlugins = {
     ],
     { supportsNegativeValues: true }
   ),
+
+  marginSafe: ({ addUtilities }) => {
+    addUtilities({
+      '.m-safe': {
+        margin:
+          'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)',
+      },
+      '.mx-safe': {
+        'margin-left': 'env(safe-area-inset-left)',
+        'margin-right': 'env(safe-area-inset-right)',
+      },
+      '.my-safe': {
+        'margin-top': 'env(safe-area-inset-top)',
+        'margin-bottom': 'env(safe-area-inset-bottom)',
+      },
+      '.mt-safe': {
+        'margin-top': 'env(safe-area-inset-top)',
+      },
+      '.mb-safe': {
+        'margin-bottom': 'env(safe-area-inset-bottom)',
+      },
+      '.ml-safe': {
+        'margin-left': 'env(safe-area-inset-left)',
+      },
+      '.mr-safe': {
+        'margin-right': 'env(safe-area-inset-right)',
+      },
+    })
+  },
 
   boxSizing: ({ addUtilities }) => {
     addUtilities({
@@ -1501,6 +1561,35 @@ export let corePlugins = {
       ['pl', ['padding-left']],
     ],
   ]),
+
+  paddingSafe: ({ addUtilities }) => {
+    addUtilities({
+      '.p-safe': {
+        padding:
+          'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)',
+      },
+      '.px-safe': {
+        'padding-left': 'env(safe-area-inset-left)',
+        'padding-right': 'env(safe-area-inset-right)',
+      },
+      '.py-safe': {
+        'padding-top': 'env(safe-area-inset-top)',
+        'padding-bottom': 'env(safe-area-inset-bottom)',
+      },
+      '.pt-safe': {
+        'padding-top': 'env(safe-area-inset-top)',
+      },
+      '.pb-safe': {
+        'padding-bottom': 'env(safe-area-inset-bottom)',
+      },
+      '.pl-safe': {
+        'padding-left': 'env(safe-area-inset-left)',
+      },
+      '.pr-safe': {
+        'padding-right': 'env(safe-area-inset-right)',
+      },
+    })
+  },
 
   textAlign: ({ addUtilities }) => {
     addUtilities({
