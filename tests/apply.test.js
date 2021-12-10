@@ -577,3 +577,42 @@ it('should throw when trying to apply an indirect circular dependency with a mod
     expect(err.reason).toBe('Circular dependency detected when using: `@apply a`')
   })
 })
+
+it('rules with vendor prefixes are still separate when optimizing defaults rules', () => {
+  let config = {
+    experimental: { optimizeUniversalDefaults: true },
+    content: [{ raw: html`<div class="border"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      input[type='range']::-moz-range-thumb {
+        @apply border;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      [type='range']::-moz-range-thumb {
+        --tw-border-opacity: 1;
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+      }
+      .border {
+        --tw-border-opacity: 1;
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+      }
+      input[type='range']::-moz-range-thumb {
+        border-width: 1px;
+      }
+      .border {
+        border-width: 1px;
+      }
+    `)
+  })
+})
