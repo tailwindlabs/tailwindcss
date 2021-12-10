@@ -2355,6 +2355,17 @@ export let corePlugins = {
     )
   },
 
+  direction: ({ addUtilities }) => {
+    addUtilities({
+      '.direction-ltr': {
+        direction: 'ltr',
+      },
+      '.direction-rtl': {
+        direction: 'rtl',
+      },
+    })
+  },
+
   transitionDelay: createUtilityPlugin('transitionDelay', [['delay', ['transitionDelay']]]),
   transitionDuration: createUtilityPlugin(
     'transitionDuration',
