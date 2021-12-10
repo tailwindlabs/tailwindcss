@@ -1,7 +1,23 @@
 import postcss from 'postcss'
+import parser from 'postcss-selector-parser'
 import { resolveMatches } from './generateRules'
 import bigSign from '../util/bigSign'
 import escapeClassName from '../util/escapeClassName'
+
+function containsBase(selector, classCandidateBase) {
+  return parser((selectors) => {
+    let contains = false
+
+    selectors.walkClasses((classSelector) => {
+      if (classSelector.value.split(':').pop() === classCandidateBase) {
+        contains = true
+        return false
+      }
+    })
+
+    return contains
+  }).transformSync(selector)
+}
 
 function prefix(context, selector) {
   let prefix = context.tailwindConfig.prefix
@@ -196,7 +212,15 @@ function processApply(root, context) {
       let siblings = []
 
       for (let [applyCandidate, important, rules] of candidates) {
+        let base = applyCandidate.split(context.tailwindConfig.separator).pop()
+
         for (let [meta, node] of rules) {
+          if (containsBase(parent.selector, base) && containsBase(node.selector, base)) {
+            throw node.error(
+              `Circular dependency detected when using: \`@apply ${applyCandidate}\``
+            )
+          }
+
           let root = postcss.root({ nodes: [node.clone()] })
           let canRewriteSelector =
             node.type !== 'atrule' || (node.type === 'atrule' && node.name !== 'keyframes')
