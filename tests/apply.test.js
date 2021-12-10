@@ -465,3 +465,115 @@ it('should apply all the definitions of a class', () => {
     `)
   })
 })
+
+it('should throw when trying to apply a direct circular dependency', () => {
+  let config = {
+    content: [{ raw: html`<div class="foo"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo:not(.text-red-500) {
+        @apply text-red-500;
+      }
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe('Circular dependency detected when using: `@apply text-red-500`')
+  })
+})
+
+it('should throw when trying to apply an indirect circular dependency', () => {
+  let config = {
+    content: [{ raw: html`<div class="a"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .a {
+        @apply b;
+      }
+
+      .b {
+        @apply c;
+      }
+
+      .c {
+        @apply a;
+      }
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe('Circular dependency detected when using: `@apply a`')
+  })
+})
+
+it('should throw when trying to apply an indirect circular dependency with a modifier (1)', () => {
+  let config = {
+    content: [{ raw: html`<div class="a"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .a {
+        @apply b;
+      }
+
+      .b {
+        @apply c;
+      }
+
+      .c {
+        @apply hover:a;
+      }
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe('Circular dependency detected when using: `@apply hover:a`')
+  })
+})
+
+it('should throw when trying to apply an indirect circular dependency with a modifier (2)', () => {
+  let config = {
+    content: [{ raw: html`<div class="a"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .a {
+        @apply b;
+      }
+
+      .b {
+        @apply hover:c;
+      }
+
+      .c {
+        @apply a;
+      }
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe('Circular dependency detected when using: `@apply a`')
+  })
+})
