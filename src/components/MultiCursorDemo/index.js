@@ -161,16 +161,16 @@ export function MultiCursorDemo() {
         <div className="sm:px-8 flex sm:justify-center">
           <div className="bg-white px-6 py-4 shadow">
             <nav className="flex justify-center space-x-4">
-              <Link href="/dashboard" className={linkClassName}>
+              <Link href="#/dashboard" className={linkClassName}>
                 Home
               </Link>
-              <Link href="/team" className={linkClassName}>
+              <Link href="#/team" className={linkClassName}>
                 Team
               </Link>
-              <Link href="/projects" className={linkClassName}>
+              <Link href="#/projects" className={linkClassName}>
                 Projects
               </Link>
-              <Link href="/reports" className={linkClassName}>
+              <Link href="#/reports" className={linkClassName}>
                 Reports
               </Link>
             </nav>
