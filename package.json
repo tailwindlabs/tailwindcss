@@ -51,7 +51,7 @@
     "cross-env": "^7.0.3",
     "cssnano": "^5.0.12",
     "esbuild": "^0.14.2",
-    "eslint": "^8.2.0",
+    "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.3",
