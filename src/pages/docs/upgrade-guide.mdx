@@ -68,6 +68,15 @@ The new [Just-in-Time engine](/blog/just-in-time-the-next-generation-of-tailwind
 
 The new engine generates the styles you need for your project on-demand, and might necessitate some small changes to your project depending on how you have Tailwind configured.
 
+If you were already opting in to `mode: 'jit'` in Tailwind CSS v2.x, you can safely remove that from your configuration in v3.0:
+
+```diff-js tailwind.config.js
+  module.exports = {
+-   mode: 'jit',
+    // ...
+  }
+```
+
 ### Configure content sources
 
 Since Tailwind no longer uses PurgeCSS under the hood, we've renamed the `purge` option to `content` to better reflect what it's for:

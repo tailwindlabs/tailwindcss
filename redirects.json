@@ -311,5 +311,10 @@
     "source": "/docs/guides/vue-3-vite",
     "destination": "/docs/guides/vite",
     "permanent": false
+  },
+  {
+    "source": "/docs/just-in-time-mode",
+    "destination": "https://v2.tailwindcss.com/docs/just-in-time-mode",
+    "permanent": false
   }
 ]
