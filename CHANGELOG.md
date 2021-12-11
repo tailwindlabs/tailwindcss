@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Warn about invalid globs in `content` ([#6449](https://github.com/tailwindlabs/tailwindcss/pull/6449))
+- Add 'text-decoration-color' to default 'transition' and 'transition-colors' utilities ([#6405](https://github.com/tailwindlabs/tailwindcss/pull/6405))
 
 ### Fixed
 
