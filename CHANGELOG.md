@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+- Add 'text-decoration-color' to default 'transition' and 'transition-colors' utilities ([#6405](https://github.com/tailwindlabs/tailwindcss/pull/6405))
 
 ## [3.0.1] - 2021-12-10
 
