@@ -1,1 +1,2 @@
-module.exports = require('./lib/public/colors').default
+let colors = require('./lib/public/colors')
+module.exports = (colors.__esModule ? colors : { default: colors }).default

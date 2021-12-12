@@ -351,7 +351,6 @@ test('@applying classes from outside a @layer respects the source order', async 
   await run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
       .baz {
-        text-decoration: underline;
         text-decoration: none;
       }
 
@@ -398,6 +397,221 @@ test('@applying classes from outside a @layer respects the source order', async 
 
       .bar {
         text-decoration: none;
+      }
+    `)
+  })
+})
+
+it('should remove duplicate properties when using apply with similar properties', () => {
+  let config = {
+    content: [{ raw: 'foo' }],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    .foo {
+      @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        --tw-translate-x: -50%;
+        --tw-translate-y: -50%;
+        transform: var(--tw-transform);
+      }
+    `)
+  })
+})
+
+it('should apply all the definitions of a class', () => {
+  let config = {
+    content: [{ raw: html`<div class="foo"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer utilities {
+      .aspect-w-1 {
+        position: relative;
+      }
+
+      .aspect-w-1 {
+        --tw-aspect-w: 1;
+      }
+    }
+
+    @layer components {
+      .foo {
+        @apply aspect-w-1;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        position: relative;
+        --tw-aspect-w: 1;
+      }
+    `)
+  })
+})
+
+it('should throw when trying to apply a direct circular dependency', () => {
+  let config = {
+    content: [{ raw: html`<div class="foo"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo:not(.text-red-500) {
+        @apply text-red-500;
+      }
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe('Circular dependency detected when using: `@apply text-red-500`')
+  })
+})
+
+it('should throw when trying to apply an indirect circular dependency', () => {
+  let config = {
+    content: [{ raw: html`<div class="a"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .a {
+        @apply b;
+      }
+
+      .b {
+        @apply c;
+      }
+
+      .c {
+        @apply a;
+      }
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe('Circular dependency detected when using: `@apply a`')
+  })
+})
+
+it('should throw when trying to apply an indirect circular dependency with a modifier (1)', () => {
+  let config = {
+    content: [{ raw: html`<div class="a"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .a {
+        @apply b;
+      }
+
+      .b {
+        @apply c;
+      }
+
+      .c {
+        @apply hover:a;
+      }
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe('Circular dependency detected when using: `@apply hover:a`')
+  })
+})
+
+it('should throw when trying to apply an indirect circular dependency with a modifier (2)', () => {
+  let config = {
+    content: [{ raw: html`<div class="a"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .a {
+        @apply b;
+      }
+
+      .b {
+        @apply hover:c;
+      }
+
+      .c {
+        @apply a;
+      }
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe('Circular dependency detected when using: `@apply a`')
+  })
+})
+
+it('rules with vendor prefixes are still separate when optimizing defaults rules', () => {
+  let config = {
+    experimental: { optimizeUniversalDefaults: true },
+    content: [{ raw: html`<div class="border"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      input[type='range']::-moz-range-thumb {
+        @apply border;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      [type='range']::-moz-range-thumb {
+        --tw-border-opacity: 1;
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+      }
+      .border {
+        --tw-border-opacity: 1;
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+      }
+      input[type='range']::-moz-range-thumb {
+        border-width: 1px;
+      }
+      .border {
+        border-width: 1px;
       }
     `)
   })

@@ -18,7 +18,7 @@ import packageJson from '../package.json'
 import normalizePath from 'normalize-path'
 
 let env = {
-  DEBUG: process.env.DEBUG !== undefined,
+  DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
 }
 
 // ---

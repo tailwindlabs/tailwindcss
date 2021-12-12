@@ -16,6 +16,46 @@ test('arbitrary values', () => {
   })
 })
 
+it('should be possible to differentiate between decoration utilities', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="decoration-[3px] decoration-[#ccc]"></div> `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .decoration-\[\#ccc\] {
+        text-decoration-color: #ccc;
+      }
+
+      .decoration-\[3px\] {
+        text-decoration-thickness: 3px;
+      }
+    `)
+  })
+})
+
+it('should support modifiers for arbitrary values that contain the separator', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="hover:bg-[url('https://github.com/tailwindlabs.png')]"></div> `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .hover\:bg-\[url\(\'https\:\/\/github\.com\/tailwindlabs\.png\'\)\]:hover {
+        background-image: url('https://github.com/tailwindlabs.png');
+      }
+    `)
+  })
+})
+
 it('should support arbitrary values for various background utilities', () => {
   let config = {
     content: [
@@ -166,6 +206,7 @@ it('should convert _ to spaces', () => {
 
       .shadow-\\[0px_0px_4px_black\\] {
         --tw-shadow: 0px 0px 4px black;
+        --tw-shadow-colored: 0px 0px 4px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
       }
@@ -218,5 +259,37 @@ it('should warn and not generate if arbitrary values are ambiguous', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css``)
+  })
+})
+
+it('should support colons in URLs', () => {
+  let config = {
+    content: [
+      { raw: html`<div class="bg-[url('https://www.spacejam.com/1996/img/bg_stars.gif')]"></div>` },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .bg-\[url\(\'https\:\/\/www\.spacejam\.com\/1996\/img\/bg_stars\.gif\'\)\] {
+        background-image: url('https://www.spacejam.com/1996/img/bg_stars.gif');
+      }
+    `)
+  })
+})
+
+it('should support unescaped underscores in URLs', () => {
+  let config = {
+    content: [
+      { raw: html`<div class="bg-[url('brown_potato.jpg'),_url('red_tomato.png')]"></div>` },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(`
+      .bg-\\[url\\(\\'brown_potato\\.jpg\\'\\)\\2c _url\\(\\'red_tomato\\.png\\'\\)\\] {
+        background-image: url('brown_potato.jpg'), url('red_tomato.png');
+      }
+    `)
   })
 })

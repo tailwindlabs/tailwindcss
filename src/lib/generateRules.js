@@ -6,6 +6,9 @@ import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
+import { asClass } from '../util/nameClass'
+import { normalize } from '../util/dataTypes'
+import isValidArbitraryValue from '../util/isValidArbitraryValue'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -245,10 +248,41 @@ function parseRules(rule, cache, options = {}) {
   return [cache.get(rule), options]
 }
 
+function extractArbitraryProperty(classCandidate, context) {
+  let [, property, value] = classCandidate.match(/^\[([a-zA-Z0-9-_]+):(\S+)\]$/) ?? []
+
+  if (value === undefined) {
+    return null
+  }
+
+  let normalized = normalize(value)
+
+  if (!isValidArbitraryValue(normalized)) {
+    return null
+  }
+
+  return [
+    [
+      { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
+      () => ({
+        [asClass(classCandidate)]: {
+          [property]: normalized,
+        },
+      }),
+    ],
+  ]
+}
+
 function* resolveMatchedPlugins(classCandidate, context) {
   if (context.candidateRuleMap.has(classCandidate)) {
     yield [context.candidateRuleMap.get(classCandidate), 'DEFAULT']
   }
+
+  yield* (function* (arbitraryPropertyRule) {
+    if (arbitraryPropertyRule !== null) {
+      yield [arbitraryPropertyRule, 'DEFAULT']
+    }
+  })(extractArbitraryProperty(classCandidate, context))
 
   let candidatePrefix = classCandidate
   let negative = false
@@ -448,28 +482,42 @@ function generateRules(candidates, context) {
     allRules.push(matches)
   }
 
-  return allRules.flat(1).map(([{ sort, layer, options }, rule]) => {
-    if (options.respectImportant) {
-      if (context.tailwindConfig.important === true) {
+  // Strategy based on `tailwindConfig.important`
+  let strategy = ((important) => {
+    if (important === true) {
+      return (rule) => {
         rule.walkDecls((d) => {
           if (d.parent.type === 'rule' && !inKeyframes(d.parent)) {
             d.important = true
           }
         })
-      } else if (typeof context.tailwindConfig.important === 'string') {
+      }
+    }
+
+    if (typeof important === 'string') {
+      return (rule) => {
+        rule.selectors = rule.selectors.map((selector) => {
+          return `${important} ${selector}`
+        })
+      }
+    }
+  })(context.tailwindConfig.important)
+
+  return allRules.flat(1).map(([{ sort, layer, options }, rule]) => {
+    if (options.respectImportant) {
+      if (strategy) {
         let container = postcss.root({ nodes: [rule.clone()] })
         container.walkRules((r) => {
           if (inKeyframes(r)) {
             return
           }
 
-          r.selectors = r.selectors.map((selector) => {
-            return `${context.tailwindConfig.important} ${selector}`
-          })
+          strategy(r)
         })
         rule = container.nodes[0]
       }
     }
+
     return [sort | context.layerOrder[layer], rule]
   })
 }

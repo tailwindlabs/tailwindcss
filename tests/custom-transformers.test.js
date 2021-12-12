@@ -1,3 +1,4 @@
+import path from 'path'
 import { run, html, css } from './util/run'
 
 function customTransformer(content) {
@@ -44,11 +45,12 @@ test('transform.{extension}', () => {
   let config = {
     content: {
       files: [
-        { raw: html`<div class="uppercase"></div>`, extension: 'html' },
-        { raw: html`<div class="uppercase"></div>`, extension: 'php' },
+        path.resolve(__dirname, './custom-transformers.test.html'),
+        path.resolve(__dirname, './custom-transformers.test.php'),
       ],
       transform: {
-        html: customTransformer,
+        html: () => 'uppercase',
+        php: () => 'lowercase',
       },
     },
   }

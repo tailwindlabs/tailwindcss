@@ -27,7 +27,7 @@ test('basic parallel variants', async () => {
       .test\:font-medium *::test {
         font-weight: 500;
       }
-      .hover\:test\:font-black *::test:hover {
+      .hover\:test\:font-black *:hover::test {
         font-weight: 900;
       }
       .test\:font-bold::test {
@@ -36,7 +36,7 @@ test('basic parallel variants', async () => {
       .test\:font-medium::test {
         font-weight: 500;
       }
-      .hover\:test\:font-black::test:hover {
+      .hover\:test\:font-black:hover::test {
         font-weight: 900;
       }
     `)

@@ -134,6 +134,77 @@ describe('custom advanced variants', () => {
       `)
     })
   })
+
+  test('using variants with multi-class selectors', () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="screen:parent screen:child"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant, addComponents }) {
+          addComponents({
+            '.parent .child': {
+              foo: 'bar',
+            },
+          })
+          addVariant('screen', '@media screen')
+        },
+      ],
+    }
+
+    return run('@tailwind components;@tailwind utilities', config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        @media screen {
+          .screen\:parent .child {
+            foo: bar;
+          }
+          .parent .screen\:child {
+            foo: bar;
+          }
+        }
+      `)
+    })
+  })
+
+  test('using multiple classNames in your custom variant', () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="my-variant:underline test"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('my-variant', '&:where(.one, .two, .three)')
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind components;
+      @tailwind utilities;
+
+      @layer components {
+        .test {
+          @apply my-variant:italic;
+        }
+      }
+    `
+
+    return run(input, config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .test:where(.one, .two, .three) {
+          font-style: italic;
+        }
+
+        .my-variant\:underline:where(.one, .two, .three) {
+          text-decoration: underline;
+        }
+      `)
+    })
+  })
 })
 
 test('stacked peer variants', async () => {
@@ -239,6 +310,31 @@ it('should properly handle keyframes with multiple variants', async () => {
   `)
 })
 
+test('custom addVariant with more complex media query params', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="magic:text-center"></div> `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('magic', '@media screen and (max-wdith: 600px)')
+      },
+    ],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media screen and (max-wdith: 600px) {
+        .magic\:text-center {
+          text-align: center;
+        }
+      }
+    `)
+  })
+})
+
 test('custom addVariant with nested media & format shorthand', () => {
   let config = {
     content: [
@@ -248,7 +344,7 @@ test('custom addVariant with nested media & format shorthand', () => {
     ],
     plugins: [
       function ({ addVariant }) {
-        addVariant('magic', '@supports (hover: hover) { @media (print) { &:disabled } }')
+        addVariant('magic', '@supports (hover: hover) { @media print { &:disabled } }')
       },
     ],
   }
@@ -256,11 +352,71 @@ test('custom addVariant with nested media & format shorthand', () => {
   return run('@tailwind components;@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
       @supports (hover: hover) {
-        @media (print) {
+        @media print {
           .magic\:text-center:disabled {
             text-align: center;
           }
         }
+      }
+    `)
+  })
+})
+
+test('before and after variants are a bit special, and forced to the end', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="before:hover:text-center"></div>
+          <div class="hover:before:text-center"></div>
+        `,
+      },
+    ],
+    plugins: [],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .before\:hover\:text-center:hover::before {
+        content: var(--tw-content);
+        text-align: center;
+      }
+
+      .hover\:before\:text-center:hover::before {
+        content: var(--tw-content);
+        text-align: center;
+      }
+    `)
+  })
+})
+
+test('before and after variants are a bit special, and forced to the end (2)', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="before:prose-headings:text-center"></div>
+          <div class="prose-headings:before:text-center"></div>
+        `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('prose-headings', ':where(&) :is(h1, h2, h3, h4)')
+      },
+    ],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      :where(.before\:prose-headings\:text-center) :is(h1, h2, h3, h4)::before {
+        content: var(--tw-content);
+        text-align: center;
+      }
+
+      :where(.prose-headings\:before\:text-center) :is(h1, h2, h3, h4)::before {
+        content: var(--tw-content);
+        text-align: center;
       }
     `)
   })

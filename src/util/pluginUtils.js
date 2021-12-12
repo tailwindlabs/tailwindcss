@@ -15,6 +15,7 @@ import {
   relativeSize,
   position,
   lineWidth,
+  shadow,
 } from './dataTypes'
 import negateValue from './negateValue'
 
@@ -148,6 +149,7 @@ let typeMap = {
   'line-width': guess(lineWidth),
   'absolute-size': guess(absoluteSize),
   'relative-size': guess(relativeSize),
+  shadow: guess(shadow),
 }
 
 let supportedTypes = Object.keys(typeMap)
@@ -160,9 +162,18 @@ function splitAtFirst(input, delim) {
 
 export function coerceValue(types, modifier, options, tailwindConfig) {
   if (isArbitraryValue(modifier)) {
-    let [explicitType, value] = splitAtFirst(modifier.slice(1, -1), ':')
+    let arbitraryValue = modifier.slice(1, -1)
+    let [explicitType, value] = splitAtFirst(arbitraryValue, ':')
 
-    if (explicitType !== undefined && !supportedTypes.includes(explicitType)) {
+    // It could be that this resolves to `url(https` which is not a valid
+    // identifier. We currently only support "simple" words with dashes or
+    // underscores. E.g.: family-name
+    if (!/^[\w-_]+$/g.test(explicitType)) {
+      value = arbitraryValue
+    }
+
+    //
+    else if (explicitType !== undefined && !supportedTypes.includes(explicitType)) {
       return []
     }
 

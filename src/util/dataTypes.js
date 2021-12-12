@@ -1,4 +1,7 @@
 import { parseColor } from './color'
+import { parseBoxShadowValue } from './parseBoxShadowValue'
+
+let cssFunctions = ['min', 'max', 'clamp', 'calc']
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
@@ -7,7 +10,22 @@ let UNDERSCORE = /_(?![^(]*\))/g // Underscore separator that is not located bet
 
 // This is not a data type, but rather a function that can normalize the
 // correct values.
-export function normalize(value) {
+export function normalize(value, isRoot = true) {
+  // Keep raw strings if it starts with `url(`
+  if (value.includes('url(')) {
+    return value
+      .split(/(url\(.*?\))/g)
+      .filter(Boolean)
+      .map((part) => {
+        if (/^url\(.*?\)$/.test(part)) {
+          return part
+        }
+
+        return normalize(part, false)
+      })
+      .join('')
+  }
+
   // Convert `_` to ` `, except for escaped underscores `\_`
   value = value
     .replace(
@@ -18,10 +36,9 @@ export function normalize(value) {
     .replace(/\\_/g, '_')
 
   // Remove leftover whitespace
-  value = value.trim()
-
-  // Keep raw strings if it starts with `url(`
-  if (value.startsWith('url(')) return value
+  if (isRoot) {
+    value = value.trim()
+  }
 
   // Add spaces around operators inside calc() that do not follow an operator
   // or '('.
@@ -36,11 +53,11 @@ export function url(value) {
 }
 
 export function number(value) {
-  return !isNaN(Number(value))
+  return !isNaN(Number(value)) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?`).test(value))
 }
 
 export function percentage(value) {
-  return /%$/g.test(value) || /^calc\(.+?%\)/g.test(value)
+  return /%$/g.test(value) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(value))
 }
 
 let lengthUnits = [
@@ -63,15 +80,30 @@ let lengthUnits = [
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
-  return (
-    new RegExp(`${lengthUnitsPattern}$`).test(value) ||
-    new RegExp(`^calc\\(.+?${lengthUnitsPattern}`).test(value)
-  )
+  return value.split(UNDERSCORE).every((part) => {
+    return (
+      part === '0' ||
+      new RegExp(`${lengthUnitsPattern}$`).test(part) ||
+      cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?${lengthUnitsPattern}`).test(part))
+    )
+  })
 }
 
 let lineWidths = new Set(['thin', 'medium', 'thick'])
 export function lineWidth(value) {
   return lineWidths.has(value)
+}
+
+export function shadow(value) {
+  let parsedShadows = parseBoxShadowValue(normalize(value))
+
+  for (let parsedShadow of parsedShadows) {
+    if (!parsedShadow.valid) {
+      return false
+    }
+  }
+
+  return true
 }
 
 export function color(value) {

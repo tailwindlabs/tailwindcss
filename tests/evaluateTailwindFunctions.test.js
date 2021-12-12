@@ -1,17 +1,22 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/evaluateTailwindFunctions'
+import { css } from './util/run'
 
 function run(input, opts = {}) {
   return postcss([plugin({ tailwindConfig: opts })]).process(input, { from: undefined })
 }
 
 test('it looks up values in the theme using dot notation', () => {
-  const input = `
-    .banana { color: theme('colors.yellow'); }
+  let input = css`
+    .banana {
+      color: theme('colors.yellow');
+    }
   `
 
-  const output = `
-    .banana { color: #f7cc50; }
+  let output = css`
+    .banana {
+      color: #f7cc50;
+    }
   `
 
   return run(input, {
@@ -26,13 +31,119 @@ test('it looks up values in the theme using dot notation', () => {
   })
 })
 
-test('quotes are optional around the lookup path', () => {
-  const input = `
-    .banana { color: theme(colors.yellow); }
+test('color can be a function', () => {
+  let input = css`
+    .backgroundColor {
+      color: theme('backgroundColor.fn');
+    }
+    .borderColor {
+      color: theme('borderColor.fn');
+    }
+    .caretColor {
+      color: theme('caretColor.fn');
+    }
+    .colors {
+      color: theme('colors.fn');
+    }
+    .divideColor {
+      color: theme('divideColor.fn');
+    }
+    .fill {
+      color: theme('fill.fn');
+    }
+    .gradientColorStops {
+      color: theme('gradientColorStops.fn');
+    }
+    .placeholderColor {
+      color: theme('placeholderColor.fn');
+    }
+    .ringColor {
+      color: theme('ringColor.fn');
+    }
+    .ringOffsetColor {
+      color: theme('ringOffsetColor.fn');
+    }
+    .stroke {
+      color: theme('stroke.fn');
+    }
+    .textColor {
+      color: theme('textColor.fn');
+    }
   `
 
-  const output = `
-    .banana { color: #f7cc50; }
+  let output = css`
+    .backgroundColor {
+      color: #f00;
+    }
+    .borderColor {
+      color: #f00;
+    }
+    .caretColor {
+      color: #f00;
+    }
+    .colors {
+      color: #f00;
+    }
+    .divideColor {
+      color: #f00;
+    }
+    .fill {
+      color: #f00;
+    }
+    .gradientColorStops {
+      color: #f00;
+    }
+    .placeholderColor {
+      color: #f00;
+    }
+    .ringColor {
+      color: #f00;
+    }
+    .ringOffsetColor {
+      color: #f00;
+    }
+    .stroke {
+      color: #f00;
+    }
+    .textColor {
+      color: #f00;
+    }
+  `
+
+  let fn = () => `#f00`
+
+  return run(input, {
+    theme: {
+      backgroundColor: { fn },
+      borderColor: { fn },
+      caretColor: { fn },
+      colors: { fn },
+      divideColor: { fn },
+      fill: { fn },
+      gradientColorStops: { fn },
+      placeholderColor: { fn },
+      ringColor: { fn },
+      ringOffsetColor: { fn },
+      stroke: { fn },
+      textColor: { fn },
+    },
+  }).then((result) => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('quotes are optional around the lookup path', () => {
+  let input = css`
+    .banana {
+      color: theme(colors.yellow);
+    }
+  `
+
+  let output = css`
+    .banana {
+      color: #f7cc50;
+    }
   `
 
   return run(input, {
@@ -48,12 +159,16 @@ test('quotes are optional around the lookup path', () => {
 })
 
 test('a default value can be provided', () => {
-  const input = `
-    .cookieMonster { color: theme('colors.blue', #0000ff); }
+  let input = css`
+    .cookieMonster {
+      color: theme('colors.blue', #0000ff);
+    }
   `
 
-  const output = `
-    .cookieMonster { color: #0000ff; }
+  let output = css`
+    .cookieMonster {
+      color: #0000ff;
+    }
   `
 
   return run(input, {
@@ -69,12 +184,16 @@ test('a default value can be provided', () => {
 })
 
 test('the default value can use the theme function', () => {
-  const input = `
-    .cookieMonster { color: theme('colors.blue', theme('colors.yellow')); }
+  let input = css`
+    .cookieMonster {
+      color: theme('colors.blue', theme('colors.yellow'));
+    }
   `
 
-  const output = `
-    .cookieMonster { color: #f7cc50; }
+  let output = css`
+    .cookieMonster {
+      color: #f7cc50;
+    }
   `
 
   return run(input, {
@@ -90,12 +209,16 @@ test('the default value can use the theme function', () => {
 })
 
 test('quotes are preserved around default values', () => {
-  const input = `
-    .heading { font-family: theme('fontFamily.sans', "Helvetica Neue"); }
+  let input = css`
+    .heading {
+      font-family: theme('fontFamily.sans', 'Helvetica Neue');
+    }
   `
 
-  const output = `
-    .heading { font-family: "Helvetica Neue"; }
+  let output = css`
+    .heading {
+      font-family: 'Helvetica Neue';
+    }
   `
 
   return run(input, {
@@ -111,12 +234,16 @@ test('quotes are preserved around default values', () => {
 })
 
 test('an unquoted list is valid as a default value', () => {
-  const input = `
-    .heading { font-family: theme('fontFamily.sans', Helvetica, Arial, sans-serif); }
+  let input = css`
+    .heading {
+      font-family: theme('fontFamily.sans', Helvetica, Arial, sans-serif);
+    }
   `
 
-  const output = `
-    .heading { font-family: Helvetica, Arial, sans-serif; }
+  let output = css`
+    .heading {
+      font-family: Helvetica, Arial, sans-serif;
+    }
   `
 
   return run(input, {
@@ -132,8 +259,10 @@ test('an unquoted list is valid as a default value', () => {
 })
 
 test('a missing root theme value throws', () => {
-  const input = `
-    .heading { color: theme('colours.gray.100'); }
+  let input = css`
+    .heading {
+      color: theme('colours.gray.100');
+    }
   `
 
   return expect(
@@ -150,8 +279,10 @@ test('a missing root theme value throws', () => {
 })
 
 test('a missing nested theme property throws', () => {
-  const input = `
-    .heading { color: theme('colors.red'); }
+  let input = css`
+    .heading {
+      color: theme('colors.red');
+    }
   `
 
   return expect(
@@ -169,8 +300,10 @@ test('a missing nested theme property throws', () => {
 })
 
 test('a missing nested theme property with a close alternative throws with a suggestion', () => {
-  const input = `
-    .heading { color: theme('colors.yellw'); }
+  let input = css`
+    .heading {
+      color: theme('colors.yellw');
+    }
   `
 
   return expect(
@@ -187,8 +320,10 @@ test('a missing nested theme property with a close alternative throws with a sug
 })
 
 test('a path through a non-object throws', () => {
-  const input = `
-    .heading { color: theme('colors.yellow.100'); }
+  let input = css`
+    .heading {
+      color: theme('colors.yellow.100');
+    }
   `
 
   return expect(
@@ -205,8 +340,10 @@ test('a path through a non-object throws', () => {
 })
 
 test('a path which exists but is not a string throws', () => {
-  const input = `
-    .heading { color: theme('colors.yellow'); }
+  let input = css`
+    .heading {
+      color: theme('colors.yellow');
+    }
   `
 
   return expect(
@@ -221,8 +358,10 @@ test('a path which exists but is not a string throws', () => {
 })
 
 test('a path which exists but is invalid throws', () => {
-  const input = `
-    .heading { color: theme('colors'); }
+  let input = css`
+    .heading {
+      color: theme('colors');
+    }
   `
 
   return expect(
@@ -235,8 +374,10 @@ test('a path which exists but is invalid throws', () => {
 })
 
 test('a path which is an object throws with a suggested key', () => {
-  const input = `
-    .heading { color: theme('colors'); }
+  let input = css`
+    .heading {
+      color: theme('colors');
+    }
   `
 
   return expect(
@@ -253,12 +394,16 @@ test('a path which is an object throws with a suggested key', () => {
 })
 
 test('array values are joined by default', () => {
-  const input = `
-    .heading { font-family: theme('fontFamily.sans'); }
+  let input = css`
+    .heading {
+      font-family: theme('fontFamily.sans');
+    }
   `
 
-  const output = `
-    .heading { font-family: Inter, Helvetica, sans-serif; }
+  let output = css`
+    .heading {
+      font-family: Inter, Helvetica, sans-serif;
+    }
   `
 
   return run(input, {
@@ -274,14 +419,22 @@ test('array values are joined by default', () => {
 })
 
 test('font sizes are retrieved without default line-heights or letter-spacing', () => {
-  const input = `
-    .heading-1 { font-size: theme('fontSize.lg'); }
-    .heading-2 { font-size: theme('fontSize.xl'); }
+  let input = css`
+    .heading-1 {
+      font-size: theme('fontSize.lg');
+    }
+    .heading-2 {
+      font-size: theme('fontSize.xl');
+    }
   `
 
-  const output = `
-    .heading-1 { font-size: 20px; }
-    .heading-2 { font-size: 24px; }
+  let output = css`
+    .heading-1 {
+      font-size: 20px;
+    }
+    .heading-2 {
+      font-size: 24px;
+    }
   `
 
   return run(input, {
@@ -298,12 +451,16 @@ test('font sizes are retrieved without default line-heights or letter-spacing', 
 })
 
 test('outlines are retrieved without default outline-offset', () => {
-  const input = `
-    .element { outline: theme('outline.black'); }
+  let input = css`
+    .element {
+      outline: theme('outline.black');
+    }
   `
 
-  const output = `
-    .element { outline: 2px dotted black; }
+  let output = css`
+    .element {
+      outline: 2px dotted black;
+    }
   `
 
   return run(input, {
@@ -319,12 +476,16 @@ test('outlines are retrieved without default outline-offset', () => {
 })
 
 test('font-family values are joined when an array', () => {
-  const input = `
-    .element { font-family: theme('fontFamily.sans'); }
+  let input = css`
+    .element {
+      font-family: theme('fontFamily.sans');
+    }
   `
 
-  const output = `
-    .element { font-family: Helvetica, Arial, sans-serif; }
+  let output = css`
+    .element {
+      font-family: Helvetica, Arial, sans-serif;
+    }
   `
 
   return run(input, {
@@ -340,12 +501,16 @@ test('font-family values are joined when an array', () => {
 })
 
 test('box-shadow values are joined when an array', () => {
-  const input = `
-    .element { box-shadow: theme('boxShadow.wtf'); }
+  let input = css`
+    .element {
+      box-shadow: theme('boxShadow.wtf');
+    }
   `
 
-  const output = `
-    .element { box-shadow: 0 0 2px black, 1px 2px 3px white; }
+  let output = css`
+    .element {
+      box-shadow: 0 0 2px black, 1px 2px 3px white;
+    }
   `
 
   return run(input, {
@@ -361,12 +526,16 @@ test('box-shadow values are joined when an array', () => {
 })
 
 test('transition-property values are joined when an array', () => {
-  const input = `
-    .element { transition-property: theme('transitionProperty.colors'); }
+  let input = css`
+    .element {
+      transition-property: theme('transitionProperty.colors');
+    }
   `
 
-  const output = `
-    .element { transition-property: color, fill; }
+  let output = css`
+    .element {
+      transition-property: color, fill;
+    }
   `
 
   return run(input, {
@@ -382,12 +551,16 @@ test('transition-property values are joined when an array', () => {
 })
 
 test('transition-duration values are joined when an array', () => {
-  const input = `
-    .element { transition-duration: theme('transitionDuration.lol'); }
+  let input = css`
+    .element {
+      transition-duration: theme('transitionDuration.lol');
+    }
   `
 
-  const output = `
-    .element { transition-duration: 1s, 2s; }
+  let output = css`
+    .element {
+      transition-duration: 1s, 2s;
+    }
   `
 
   return run(input, {
@@ -403,16 +576,18 @@ test('transition-duration values are joined when an array', () => {
 })
 
 test('basic screen function calls are expanded', () => {
-  const input = `
+  let input = css`
     @media screen(sm) {
-      .foo {}
+      .foo {
+      }
     }
   `
 
-  const output = `
-  @media (min-width: 600px) {
-    .foo {}
-  }
+  let output = css`
+    @media (min-width: 600px) {
+      .foo {
+      }
+    }
   `
 
   return run(input, {
@@ -424,16 +599,18 @@ test('basic screen function calls are expanded', () => {
 })
 
 test('screen function supports max-width screens', () => {
-  const input = `
+  let input = css`
     @media screen(sm) {
-      .foo {}
+      .foo {
+      }
     }
   `
 
-  const output = `
-  @media (max-width: 600px) {
-    .foo {}
-  }
+  let output = css`
+    @media (max-width: 600px) {
+      .foo {
+      }
+    }
   `
 
   return run(input, {
@@ -445,16 +622,18 @@ test('screen function supports max-width screens', () => {
 })
 
 test('screen function supports min-width screens', () => {
-  const input = `
+  let input = css`
     @media screen(sm) {
-      .foo {}
+      .foo {
+      }
     }
   `
 
-  const output = `
-  @media (min-width: 600px) {
-    .foo {}
-  }
+  let output = css`
+    @media (min-width: 600px) {
+      .foo {
+      }
+    }
   `
 
   return run(input, {
@@ -466,16 +645,18 @@ test('screen function supports min-width screens', () => {
 })
 
 test('screen function supports min-width and max-width screens', () => {
-  const input = `
+  let input = css`
     @media screen(sm) {
-      .foo {}
+      .foo {
+      }
     }
   `
 
-  const output = `
-  @media (min-width: 600px) and (max-width: 700px) {
-    .foo {}
-  }
+  let output = css`
+    @media (min-width: 600px) and (max-width: 700px) {
+      .foo {
+      }
+    }
   `
 
   return run(input, {
@@ -487,16 +668,18 @@ test('screen function supports min-width and max-width screens', () => {
 })
 
 test('screen function supports raw screens', () => {
-  const input = `
+  let input = css`
     @media screen(mono) {
-      .foo {}
+      .foo {
+      }
     }
   `
 
-  const output = `
-  @media monochrome {
-    .foo {}
-  }
+  let output = css`
+    @media monochrome {
+      .foo {
+      }
+    }
   `
 
   return run(input, {
@@ -508,16 +691,18 @@ test('screen function supports raw screens', () => {
 })
 
 test('screen arguments can be quoted', () => {
-  const input = `
+  let input = css`
     @media screen('sm') {
-      .foo {}
+      .foo {
+      }
     }
   `
 
-  const output = `
-  @media (min-width: 600px) {
-    .foo {}
-  }
+  let output = css`
+    @media (min-width: 600px) {
+      .foo {
+      }
+    }
   `
 
   return run(input, {

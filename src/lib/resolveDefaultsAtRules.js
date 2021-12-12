@@ -71,6 +71,8 @@ function extractElementSelector(selector) {
 export default function resolveDefaultsAtRules({ tailwindConfig }) {
   return (root) => {
     let variableNodeMap = new Map()
+
+    /** @type {Set<import('postcss').AtRule>} */
     let universals = new Set()
 
     root.walkAtRules('defaults', (rule) => {
@@ -90,31 +92,50 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
     })
 
     for (let universal of universals) {
-      let selectors = new Set()
+      /** @type {Map<string, Set<string>>} */
+      let selectorGroups = new Map()
 
       let rules = variableNodeMap.get(universal.params) ?? []
 
       for (let rule of rules) {
         for (let selector of extractElementSelector(rule.selector)) {
+          // If selector contains a vendor prefix after a pseudo element or class,
+          // we consider them separately because merging the declarations into
+          // a single rule will cause browsers that do not understand the
+          // vendor prefix to throw out the whole rule
+          let selectorGroupName =
+            selector.includes(':-') || selector.includes('::-') ? selector : '__DEFAULT__'
+
+          let selectors = selectorGroups.get(selectorGroupName) ?? new Set()
+          selectorGroups.set(selectorGroupName, selectors)
+
           selectors.add(selector)
         }
       }
 
-      if (selectors.size === 0) {
+      if (selectorGroups.size === 0) {
         universal.remove()
         continue
       }
 
-      let universalRule = postcss.rule()
-
       if (flagEnabled(tailwindConfig, 'optimizeUniversalDefaults')) {
-        universalRule.selectors = [...selectors]
+        for (let [, selectors] of selectorGroups) {
+          let universalRule = postcss.rule()
+
+          universalRule.selectors = [...selectors]
+
+          universalRule.append(universal.nodes.map((node) => node.clone()))
+          universal.before(universalRule)
+        }
       } else {
+        let universalRule = postcss.rule()
+
         universalRule.selectors = ['*', '::before', '::after']
+
+        universalRule.append(universal.nodes)
+        universal.before(universalRule)
       }
 
-      universalRule.append(universal.nodes)
-      universal.before(universalRule)
       universal.remove()
     }
   }

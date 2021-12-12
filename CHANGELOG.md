@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add extra default values to `max-w-*`, `min-w-*`, `max-h-*`, and `min-h-*` to match `w-*` and `h-*` respectively. ([#5844](https://github.com/tailwindlabs/tailwindcss/pull/5844))
+
+## [3.0.1] - 2021-12-10
+
+### Fixed
+
+- Ensure complex variants with multiple classes work ([#6311](https://github.com/tailwindlabs/tailwindcss/pull/6311))
+- Re-add `default` interop to public available functions ([#6348](https://github.com/tailwindlabs/tailwindcss/pull/6348))
+- Detect circular dependencies when using `@apply` ([#6365](https://github.com/tailwindlabs/tailwindcss/pull/6365))
+- Fix defaults optimization when vendor prefixes are involved ([#6369](https://github.com/tailwindlabs/tailwindcss/pull/6369))
+
+## [3.0.0] - 2021-12-09
+
+### Fixed
+
+- Enforce the order of some variants (like `before` and `after`) ([#6018](https://github.com/tailwindlabs/tailwindcss/pull/6018))
+
+### Added
+
+- Add `placeholder` variant ([#6106](https://github.com/tailwindlabs/tailwindcss/pull/6106))
+- Add composable `touch-action` utilities ([#6115](https://github.com/tailwindlabs/tailwindcss/pull/6115))
+- Add support for "arbitrary properties" ([#6161](https://github.com/tailwindlabs/tailwindcss/pull/6161))
+- Add `portrait` and `landscape` variants ([#6046](https://github.com/tailwindlabs/tailwindcss/pull/6046))
+- Add `text-decoration-style`, `text-decoration-thickness`, and `text-underline-offset` utilities ([#6004](https://github.com/tailwindlabs/tailwindcss/pull/6004))
+- Add `menu` reset to preflight ([#6213](https://github.com/tailwindlabs/tailwindcss/pull/6213))
+- Allow `0` as a valid `length` value ([#6233](https://github.com/tailwindlabs/tailwindcss/pull/6233), [#6259](https://github.com/tailwindlabs/tailwindcss/pull/6259))
+- Add CSS functions to data types ([#6258](https://github.com/tailwindlabs/tailwindcss/pull/6258))
+- Support negative values for `scale-*` utilities ([c48e629](https://github.com/tailwindlabs/tailwindcss/commit/c48e629955585ad18dadba9f470fda59cc448ab7))
+- Improve `length` data type, by validating each value individually ([#6283](https://github.com/tailwindlabs/tailwindcss/pull/6283))
+
+### Changed
+
+- Deprecate `decoration-slice` and `decoration-break` in favor `box-decoration-slice` and `box-decoration-break` _(non-breaking)_ ([#6004](https://github.com/tailwindlabs/tailwindcss/pull/6004))
+
+## [3.0.0-alpha.2] - 2021-11-08
+
 ### Changed
 
 - Don't use pointer cursor on disabled buttons by default ([#5772](https://github.com/tailwindlabs/tailwindcss/pull/5772))
@@ -22,14 +58,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add all standard `cursor-*` values by default ([#5734](https://github.com/tailwindlabs/tailwindcss/pull/5734))
 - Add `grow-*` and `shrink-*` utilities, deprecate `flex-grow-*` and `flex-shrink-*` ([#5733](https://github.com/tailwindlabs/tailwindcss/pull/5733))
 - Add `text-decoration-color` utilities ([#5760](https://github.com/tailwindlabs/tailwindcss/pull/5760))
-- Add declarative `addVariant` syntax ([#5809](https://github.com/tailwindlabs/tailwindcss/pull/5809))
-- Add extra default values to `max-w-*`, `min-w-*`, `max-h-*`, and `min-h-*` to match `w-*` and `h-*` respectively. ([#5844](https://github.com/tailwindlabs/tailwindcss/pull/5844))
+- Add new declarative `addVariant` API ([#5809](https://github.com/tailwindlabs/tailwindcss/pull/5809))
+- Add first-class `print` variant for targeting printed media ([#5885](https://github.com/tailwindlabs/tailwindcss/pull/5885))
+- Add `outline-style`, `outline-color`, `outline-width` and `outline-offset` utilities ([#5887](https://github.com/tailwindlabs/tailwindcss/pull/5887))
+- Add full color palette for `fill-*` and `stroke-*` utilities (#5933[](https://github.com/tailwindlabs/tailwindcss/pull/5933))
+- Add composable API for colored box shadows ([#5979](https://github.com/tailwindlabs/tailwindcss/pull/5979))
 
 ### Fixed
 
 - Configure chokidar's `awaitWriteFinish` setting to avoid occasional stale builds on Windows ([#5774](https://github.com/tailwindlabs/tailwindcss/pull/5774))
 - Fix CLI `--content` option ([#5775](https://github.com/tailwindlabs/tailwindcss/pull/5775))
 - Fix before/after utilities overriding custom content values at larger breakpoints ([#5820](https://github.com/tailwindlabs/tailwindcss/pull/5820))
+- Cleanup duplicate properties ([#5830](https://github.com/tailwindlabs/tailwindcss/pull/5830))
+- Allow `_` inside `url()` when using arbitrary values ([#5853](https://github.com/tailwindlabs/tailwindcss/pull/5853))
+- Prevent crashes when using comments in `@layer` AtRules ([#5854](https://github.com/tailwindlabs/tailwindcss/pull/5854))
+- Handle color transformations properly with `theme(...)` for all relevant plugins ([#4533](https://github.com/tailwindlabs/tailwindcss/pull/4533), [#5871](https://github.com/tailwindlabs/tailwindcss/pull/5871))
+- Ensure `@apply`-ing a utility with multiple definitions works ([#5870](https://github.com/tailwindlabs/tailwindcss/pull/5870))
 
 ## [3.0.0-alpha.1] - 2021-10-01
 
@@ -69,6 +113,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix defining colors as functions when color opacity plugins are disabled ([#5470](https://github.com/tailwindlabs/tailwindcss/pull/5470))
 - Fix using negated `content` globs ([#5625](https://github.com/tailwindlabs/tailwindcss/pull/5625))
 - Fix using backslashes in `content` globs ([#5628](https://github.com/tailwindlabs/tailwindcss/pull/5628))
+
+## [2.2.19] - 2021-10-29
+
+### Fixed
+
+- Ensure `corePlugins` order is consisent in AOT mode ([#5928](https://github.com/tailwindlabs/tailwindcss/pull/5928))
+
+## [2.2.18] - 2021-10-29
+
+### Fixed
+
+- Bump versions for security vulnerabilities ([#5924](https://github.com/tailwindlabs/tailwindcss/pull/5924))
+
+## [2.2.17] - 2021-10-13
+
+### Fixed
+
+- Configure chokidar's `awaitWriteFinish` setting to avoid occasional stale builds on Windows ([#5758](https://github.com/tailwindlabs/tailwindcss/pull/5758))
 
 ## [2.2.16] - 2021-09-26
 
@@ -1628,8 +1690,14 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.1...HEAD
-[3.0.0-alpha.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.16...v3.0.0-alpha.1
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.1...HEAD
+[3.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.2...v3.0.0
+[3.0.0-alpha.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.1...v3.0.0-alpha.2
+[3.0.0-alpha.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.19...v3.0.0-alpha.1
+[2.2.19]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.18...v2.2.19
+[2.2.18]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.17...v2.2.18
+[2.2.17]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.16...v2.2.17
 [2.2.16]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.15...v2.2.16
 [2.2.15]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.14...v2.2.15
 [2.2.14]: https://github.com/tailwindlabs/tailwindcss/compare/v2.2.13...v2.2.14

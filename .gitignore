@@ -5,6 +5,7 @@
 /peers
 /example
 .vscode
+.DS_Store
 tailwind.config.js
 index.html
 yarn.lock

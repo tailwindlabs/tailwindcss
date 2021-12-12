@@ -50,6 +50,125 @@ test('custom user-land utilities', () => {
   })
 })
 
+test('comments can be used inside layers without crashing', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="important-utility important-component"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    theme: {},
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer base {
+      /* Important base */
+      div {
+        background-color: #bada55;
+      }
+    }
+
+    @layer utilities {
+      /* Important utility */
+      .important-utility {
+        text-align: banana;
+      }
+    }
+
+    @layer components {
+      /* Important component */
+      .important-component {
+        text-align: banana;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      /* Important base */
+      div {
+        background-color: #bada55;
+      }
+
+      /* Important component */
+      .important-component {
+        text-align: banana;
+      }
+
+      /* Important utility */
+      .important-utility {
+        text-align: banana;
+      }
+    `)
+  })
+})
+
+test('comments can be used inside layers (with important) without crashing', () => {
+  let config = {
+    important: true,
+    content: [
+      {
+        raw: html`<div class="important-utility important-component"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    theme: {},
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer base {
+      /* Important base */
+      div {
+        background-color: #bada55;
+      }
+    }
+
+    @layer utilities {
+      /* Important utility */
+      .important-utility {
+        text-align: banana;
+      }
+    }
+
+    @layer components {
+      /* Important component */
+      .important-component {
+        text-align: banana;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      /* Important base */
+      div {
+        background-color: #bada55;
+      }
+
+      /* Important component */
+      .important-component {
+        text-align: banana;
+      }
+
+      /* Important utility */
+      .important-utility {
+        text-align: banana !important;
+      }
+    `)
+  })
+})
+
 test('layers are grouped and inserted at the matching @tailwind rule', () => {
   let config = {
     content: [
@@ -175,6 +294,43 @@ test('layers are grouped and inserted at the matching @tailwind rule', () => {
       @layer chocolate {
         a {
           text-decoration: underline;
+        }
+      }
+    `)
+  })
+})
+
+it('should keep `@supports` rules inside `@layer`s', () => {
+  let config = {
+    content: [{ raw: html`<div class="test"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    @layer utilities {
+      .test {
+        --tw-test: 1;
+      }
+
+      @supports (backdrop-filter: blur(1px)) {
+        .test {
+          --tw-test: 0.9;
+        }
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .test {
+        --tw-test: 1;
+      }
+
+      @supports (backdrop-filter: blur(1px)) {
+        .test {
+          --tw-test: 0.9;
         }
       }
     `)

@@ -11,6 +11,8 @@ import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
 import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
+import { normalizeScreens } from './util/normalizeScreens'
+import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -21,6 +23,8 @@ export let variantPlugins = {
     addVariant('selection', ['& *::selection', '&::selection'])
 
     addVariant('file', '&::file-selector-button')
+
+    addVariant('placeholder', '&::placeholder')
 
     addVariant('before', ({ container }) => {
       container.walkRules((rule) => {
@@ -150,13 +154,21 @@ export let variantPlugins = {
     }
   },
 
-  screenVariants: ({ theme, addVariant }) => {
-    for (let screen in theme('screens')) {
-      let size = theme('screens')[screen]
-      let query = buildMediaQuery(size)
+  printVariant: ({ addVariant }) => {
+    addVariant('print', '@media print')
+  },
 
-      addVariant(screen, `@media ${query}`)
+  screenVariants: ({ theme, addVariant }) => {
+    for (let screen of normalizeScreens(theme('screens'))) {
+      let query = buildMediaQuery(screen)
+
+      addVariant(screen.name, `@media ${query}`)
     }
+  },
+
+  orientationVariants: ({ addVariant }) => {
+    addVariant('portrait', '@media (orientation: portrait)')
+    addVariant('landscape', '@media (orientation: landscape)')
   },
 }
 
@@ -175,24 +187,10 @@ export let corePlugins = {
   },
 
   container: (() => {
-    function extractMinWidths(breakpoints) {
-      return Object.values(breakpoints ?? {}).flatMap((breakpoints) => {
-        if (typeof breakpoints === 'string') {
-          breakpoints = { min: breakpoints }
-        }
-
-        if (!Array.isArray(breakpoints)) {
-          breakpoints = [breakpoints]
-        }
-
-        return breakpoints
-          .filter((breakpoint) => {
-            return breakpoint?.hasOwnProperty?.('min') || breakpoint?.hasOwnProperty('min-width')
-          })
-          .map((breakpoint) => {
-            return breakpoint['min-width'] ?? breakpoint.min
-          })
-      })
+    function extractMinWidths(breakpoints = []) {
+      return breakpoints
+        .flatMap((breakpoint) => breakpoint.values.map((breakpoint) => breakpoint.min))
+        .filter((v) => v !== undefined)
     }
 
     function mapMinWidthsToPadding(minWidths, screens, paddings) {
@@ -221,16 +219,11 @@ export let corePlugins = {
       }
 
       for (let minWidth of minWidths) {
-        for (let [screen, value] of Object.entries(screens)) {
-          let screenMinWidth =
-            typeof value === 'object' && value !== null ? value.min || value['min-width'] : value
-
-          if (`${screenMinWidth}` === `${minWidth}`) {
-            mapping.push({
-              screen,
-              minWidth,
-              padding: paddings[screen],
-            })
+        for (let screen of screens) {
+          for (let { min } of screen.values) {
+            if (min === minWidth) {
+              mapping.push({ minWidth, padding: paddings[screen.name] })
+            }
           }
         }
       }
@@ -239,12 +232,12 @@ export let corePlugins = {
     }
 
     return function ({ addComponents, theme }) {
-      let screens = theme('container.screens', theme('screens'))
+      let screens = normalizeScreens(theme('container.screens', theme('screens')))
       let minWidths = extractMinWidths(screens)
       let paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
 
       let generatePaddingFor = (minWidth) => {
-        let paddingConfig = paddings.find((padding) => `${padding.minWidth}` === `${minWidth}`)
+        let paddingConfig = paddings.find((padding) => padding.minWidth === minWidth)
 
         if (!paddingConfig) {
           return {}
@@ -510,27 +503,31 @@ export let corePlugins = {
     ],
     { supportsNegativeValues: true }
   ),
-  scale: createUtilityPlugin('scale', [
-    [
-      'scale',
-      [
-        ['@defaults transform', {}],
-        '--tw-scale-x',
-        '--tw-scale-y',
-        ['transform', 'var(--tw-transform)'],
-      ],
-    ],
+  scale: createUtilityPlugin(
+    'scale',
     [
       [
-        'scale-x',
-        [['@defaults transform', {}], '--tw-scale-x', ['transform', 'var(--tw-transform)']],
+        'scale',
+        [
+          ['@defaults transform', {}],
+          '--tw-scale-x',
+          '--tw-scale-y',
+          ['transform', 'var(--tw-transform)'],
+        ],
       ],
       [
-        'scale-y',
-        [['@defaults transform', {}], '--tw-scale-y', ['transform', 'var(--tw-transform)']],
+        [
+          'scale-x',
+          [['@defaults transform', {}], '--tw-scale-x', ['transform', 'var(--tw-transform)']],
+        ],
+        [
+          'scale-y',
+          [['@defaults transform', {}], '--tw-scale-y', ['transform', 'var(--tw-transform)']],
+        ],
       ],
     ],
-  ]),
+    { supportsNegativeValues: true }
+  ),
 
   transform: ({ addBase, addUtilities }) => {
     addBase({
@@ -614,17 +611,54 @@ export let corePlugins = {
 
   cursor: createUtilityPlugin('cursor'),
 
-  touchAction: ({ addUtilities }) => {
+  touchAction: ({ addBase, addUtilities }) => {
+    addBase({
+      '@defaults touch-action': {
+        '--tw-pan-x': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-pan-y': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-pinch-zoom': 'var(--tw-empty,/*!*/ /*!*/)',
+        '--tw-touch-action': 'var(--tw-pan-x) var(--tw-pan-y) var(--tw-pinch-zoom)',
+      },
+    })
+
     addUtilities({
       '.touch-auto': { 'touch-action': 'auto' },
       '.touch-none': { 'touch-action': 'none' },
-      '.touch-pan-x': { 'touch-action': 'pan-x' },
-      '.touch-pan-left': { 'touch-action': 'pan-left' },
-      '.touch-pan-right': { 'touch-action': 'pan-right' },
-      '.touch-pan-y': { 'touch-action': 'pan-y' },
-      '.touch-pan-up': { 'touch-action': 'pan-up' },
-      '.touch-pan-down': { 'touch-action': 'pan-down' },
-      '.touch-pinch-zoom': { 'touch-action': 'pinch-zoom' },
+      '.touch-pan-x': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-x',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-left': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-left',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-right': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-right',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-y': {
+        '@defaults touch-action': {},
+        '--tw-pan-y': 'pan-y',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-up': {
+        '@defaults touch-action': {},
+        '--tw-pan-y': 'pan-up',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pan-down': {
+        '@defaults touch-action': {},
+        '--tw-pan-y': 'pan-down',
+        'touch-action': 'var(--tw-touch-action)',
+      },
+      '.touch-pinch-zoom': {
+        '@defaults touch-action': {},
+        '--tw-pinch-zoom': 'pinch-zoom',
+        'touch-action': 'var(--tw-touch-action)',
+      },
       '.touch-manipulation': { 'touch-action': 'manipulation' },
     })
   },
@@ -1366,8 +1400,10 @@ export let corePlugins = {
 
   boxDecorationBreak: ({ addUtilities }) => {
     addUtilities({
-      '.decoration-slice': { 'box-decoration-break': 'slice' },
-      '.decoration-clone': { 'box-decoration-break': 'clone' },
+      '.decoration-slice': { 'box-decoration-break': 'slice' }, // Deprecated
+      '.decoration-clone': { 'box-decoration-break': 'clone' }, // Deprecated
+      '.box-decoration-slice': { 'box-decoration-break': 'slice' },
+      '.box-decoration-clone': { 'box-decoration-break': 'clone' },
     })
   },
 
@@ -1625,6 +1661,7 @@ export let corePlugins = {
   textDecoration: ({ addUtilities }) => {
     addUtilities({
       '.underline': { 'text-decoration': 'underline' },
+      '.overline': { 'text-decoration': 'overline' },
       '.line-through': { 'text-decoration': 'line-through' },
       '.no-underline': { 'text-decoration': 'none' },
     })
@@ -1637,9 +1674,31 @@ export let corePlugins = {
           return { 'text-decoration-color': toColorValue(value) }
         },
       },
-      { values: flattenColorPalette(theme('textDecorationColor')), type: ['color', 'any'] }
+      { values: flattenColorPalette(theme('textDecorationColor')), type: ['color'] }
     )
   },
+
+  textDecorationStyle: ({ addUtilities }) => {
+    addUtilities({
+      '.decoration-solid': { 'text-decoration-style': 'solid' },
+      '.decoration-double': { 'text-decoration-style': 'double' },
+      '.decoration-dotted': { 'text-decoration-style': 'dotted' },
+      '.decoration-dashed': { 'text-decoration-style': 'dashed' },
+      '.decoration-wavy': { 'text-decoration-style': 'wavy' },
+    })
+  },
+
+  textDecorationThickness: createUtilityPlugin(
+    'textDecorationThickness',
+    [['decoration', ['text-decoration-thickness']]],
+    { type: ['length', 'percentage'] }
+  ),
+
+  textUnderlineOffset: createUtilityPlugin(
+    'textUnderlineOffset',
+    [['underline-offset', ['text-underline-offset']]],
+    { type: ['length', 'percentage'] }
+  ),
 
   fontSmoothing: ({ addUtilities }) => {
     addUtilities({
@@ -1770,6 +1829,7 @@ export let corePlugins = {
           '--tw-ring-offset-shadow': '0 0 #0000',
           '--tw-ring-shadow': '0 0 #0000',
           '--tw-shadow': '0 0 #0000',
+          '--tw-shadow-colored': '0 0 #0000',
         },
       })
 
@@ -1778,29 +1838,73 @@ export let corePlugins = {
           shadow: (value) => {
             value = transformValue(value)
 
+            let ast = parseBoxShadowValue(value)
+            for (let shadow of ast) {
+              // Don't override color if the whole shadow is a variable
+              if (!shadow.valid) {
+                continue
+              }
+
+              shadow.color = 'var(--tw-shadow-color)'
+            }
+
             return {
               '@defaults box-shadow': {},
               '--tw-shadow': value === 'none' ? '0 0 #0000' : value,
+              '--tw-shadow-colored': value === 'none' ? '0 0 #0000' : formatBoxShadowValue(ast),
               'box-shadow': defaultBoxShadow,
             }
           },
         },
-        { values: theme('boxShadow') }
+        { values: theme('boxShadow'), type: ['shadow'] }
       )
     }
   })(),
 
-  outline: ({ matchUtilities, theme }) => {
+  boxShadowColor: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        shadow: (value) => {
+          return {
+            '--tw-shadow-color': toColorValue(value),
+            '--tw-shadow': 'var(--tw-shadow-colored)',
+          }
+        },
+      },
+      { values: flattenColorPalette(theme('boxShadowColor')), type: ['color'] }
+    )
+  },
+
+  outlineStyle: ({ addUtilities }) => {
+    addUtilities({
+      '.outline-none': {
+        outline: '2px solid transparent',
+        'outline-offset': '2px',
+      },
+      '.outline': { 'outline-style': 'solid' },
+      '.outline-dashed': { 'outline-style': 'dashed' },
+      '.outline-dotted': { 'outline-style': 'dotted' },
+      '.outline-double': { 'outline-style': 'double' },
+      '.outline-hidden': { 'outline-style': 'hidden' },
+    })
+  },
+
+  outlineWidth: createUtilityPlugin('outlineWidth', [['outline', ['outline-width']]], {
+    type: ['length', 'number', 'percentage'],
+  }),
+
+  outlineOffset: createUtilityPlugin('outlineOffset', [['outline-offset', ['outline-offset']]], {
+    type: ['length', 'number', 'percentage'],
+  }),
+
+  outlineColor: ({ matchUtilities, theme }) => {
     matchUtilities(
       {
         outline: (value) => {
-          value = Array.isArray(value) ? value : value.split(',')
-          let [outline, outlineOffset = '0'] = Array.isArray(value) ? value : [value]
-
-          return { outline, 'outline-offset': outlineOffset }
+          return { 'outline-color': toColorValue(value) }
         },
       },
-      { values: theme('outline') }
+      { values: flattenColorPalette(theme('outlineColor')), type: ['color'] }
     )
   },
 
@@ -1821,6 +1925,7 @@ export let corePlugins = {
         '--tw-ring-offset-shadow': '0 0 #0000',
         '--tw-ring-shadow': '0 0 #0000',
         '--tw-shadow': '0 0 #0000',
+        '--tw-shadow-colored': '0 0 #0000',
       },
     })
 
