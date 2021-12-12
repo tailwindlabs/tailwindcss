@@ -101,25 +101,23 @@ Use `flex` to create a block-level flex container.
 Use `inline-flex` to create an inline flex container that flows with text.
 
 <Example p="none">
-  <div class="mx-auto max-w-lg bg-white shadow-xl p-4 text-gray-500 text-sm leading-6 sm:text-base sm:leading-7">
-    No. It isn't and the most distressing part of it is, not that she went out with him but that HE stopped seeing her. Do you understand? He,
-    <div class="inline-flex items-center align-middle mt-[-3px]">
-      <img src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=80" alt="" class="w-5 h-5 rounded-full mx-1" />
-      <span class="font-medium text-gray-900">Newman</span>
-    </div>,
-    stopped seeing her. Newman never stopped seeing anybody. Newman will see whoever is willing to see him. Not so much why she did see him as disturbing as that is. But why, did HE, Newman, stop seeing her?
-  </div>
+  <p class="mx-auto max-w-lg bg-white shadow-xl p-4 text-gray-500 text-sm leading-6 sm:text-base sm:leading-7">
+    Today I spent most of the day researching ways to take advantage of the fact that bottles can be returned for 10 cents in Michigan, but only 5 cents here. <span class="ml-1 inline-flex items-baseline">
+      <img src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=80" alt="" class="self-center w-5 h-5 rounded-full mr-1" />
+      <span class="font-medium text-gray-900">Kramer</span>
+    </span> keeps telling me there is no way to make it work, that he has run the numbers on every possible approach, but I just have to believe there's a way to make it work, there's simply too much opportunity here.
+  </p>
 </Example>
 
 ```html
-<div>
-  No. It isn't and the most distressing part of it is, ...
-  <div class="**inline-flex** items-center align-middle">
-    <img src="path/to/image.jpg" alt="" class="w-5 h-5 rounded-full mx-1" />
-    <span>Newman</span>
-  </div>
-  stopped seeing her. Newman never stopped seeing anybody. ...
-</div>
+<p>
+  Today I spent most of the day researching ways to ...
+  <span class="**inline-flex** items-baseline">
+    <img src="path/to/image.jpg" alt="" class="self-center w-5 h-5 rounded-full mx-1" />
+    <span>Kramer</span>
+  </span>
+  keeps telling me there is no way to make it work, that ...
+</p>
 ```
 
 ### Grid
