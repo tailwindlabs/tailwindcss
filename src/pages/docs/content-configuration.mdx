@@ -13,7 +13,7 @@ The `content` section of your `tailwind.config.js` file is where you configure t
 ```js tailwind.config.js
 module.exports = {
   content: [
-    './pages/**/*.{html,js}'
+    './pages/**/*.{html,js}',
     './components/**/*.{html,js}',
   ],
   // ...
@@ -35,7 +35,7 @@ Configure the paths to all of your content files in the `content` section of you
 ```js tailwind.config.js
 module.exports = {
   content: [
-    './pages/**/*.{html,js}'
+    './pages/**/*.{html,js}',
     './components/**/*.{html,js}'
   ],
   // ...
@@ -307,7 +307,7 @@ Tailwind supports pattern-based safelisting for situations where you need to saf
 ```js tailwind.config.js
 module.exports = {
   content: [
-    './pages/**/*.{html,js}'
+    './pages/**/*.{html,js}',
     './components/**/*.{html,js}',
   ],
   safelist: [
@@ -328,7 +328,7 @@ If you want to force Tailwind to generate variants for any matched classes, incl
 ```js tailwind.config.js
 module.exports = {
   content: [
-    './pages/**/*.{html,js}'
+    './pages/**/*.{html,js}',
     './components/**/*.{html,js}',
   ],
   safelist: [
@@ -406,7 +406,7 @@ A common mistake is missing a file extension, for example if you're using `jsx` 
 ```diff-js tailwind.config.js
   module.exports = {
     content: [
--     './src/**/*.{html,js}'
+-     './src/**/*.{html,js}',
 +     './src/**/*.{html,js,jsx}'
     ],
     // ...
