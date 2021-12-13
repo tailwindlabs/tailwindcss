@@ -233,6 +233,28 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           .push([{ sort: offset, layer: 'base' }, rule])
       }
     },
+    /**
+     * @param {string} group
+     * @param {Record<string, string | string[]>} declarations
+     */
+    addDefaults(group, declarations) {
+      const groups = {
+        [`@defaults ${group}`]: declarations,
+      }
+
+      for (let [identifier, rule] of withIdentifiers(groups)) {
+        let prefixedIdentifier = prefixIdentifier(identifier, {})
+        let offset = offsets.base++
+
+        if (!context.candidateRuleMap.has(prefixedIdentifier)) {
+          context.candidateRuleMap.set(prefixedIdentifier, [])
+        }
+
+        context.candidateRuleMap
+          .get(prefixedIdentifier)
+          .push([{ sort: offset, layer: 'base' }, rule])
+      }
+    },
     addComponents(components, options) {
       let defaultOptions = {
         respectPrefix: true,
