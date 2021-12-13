@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Warn about invalid globs in `content` ([#6449](https://github.com/tailwindlabs/tailwindcss/pull/6449))
 
 ## [3.0.2] - 2021-12-13
 
