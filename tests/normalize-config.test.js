@@ -1,4 +1,6 @@
+import { normalizeConfig } from '../src/util/normalizeConfig'
 import { run, css } from './util/run'
+import resolveConfig from '../src/public/resolve-config'
 
 it.each`
   config
@@ -93,5 +95,37 @@ it('should still be possible to use the "old" v2 config', () => {
         font-weight: 700;
       }
     `)
+  })
+})
+
+it('should keep content files with globs', () => {
+  let config = {
+    content: ['./example-folder/**/*.{html,js}'],
+  }
+
+  expect(normalizeConfig(resolveConfig(config)).content).toEqual({
+    files: ['./example-folder/**/*.{html,js}'],
+    extract: {},
+    transform: {},
+  })
+})
+
+it('should rewrite globs with incorrect bracket expansion', () => {
+  let config = {
+    content: [
+      './{example-folder}/**/*.{html,js}',
+      './{example-folder}/**/*.{html}',
+      './example-folder/**/*.{html}',
+    ],
+  }
+
+  expect(normalizeConfig(resolveConfig(config)).content).toEqual({
+    files: [
+      './example-folder/**/*.{html,js}',
+      './example-folder/**/*.html',
+      './example-folder/**/*.html',
+    ],
+    extract: {},
+    transform: {},
   })
 })

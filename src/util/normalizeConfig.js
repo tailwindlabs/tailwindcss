@@ -245,5 +245,12 @@ export function normalizeConfig(config) {
     })(),
   }
 
+  // Rewrite globs to prevent bogus globs.
+  // E.g.: `./src/*.{html}` is invalid, the `{html}` should just be `html`
+  config.content.files = config.content.files.map((file) => {
+    if (typeof file !== 'string') return file
+    return file.replace(/{([^,]*?)}/g, '$1')
+  })
+
   return config
 }
