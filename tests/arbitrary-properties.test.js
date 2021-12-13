@@ -231,3 +231,45 @@ test('invalid class', () => {
     expect(result.css).toMatchFormattedCss(css``)
   })
 })
+
+test('invalid arbitrary property', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="[autoplay:\${autoplay}]"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css``)
+  })
+})
+
+test('invalid arbitrary property 2', () => {
+  let config = {
+    content: [
+      {
+        raw: html`[0:02]`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css``)
+  })
+})

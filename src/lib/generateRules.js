@@ -248,6 +248,21 @@ function parseRules(rule, cache, options = {}) {
   return [cache.get(rule), options]
 }
 
+const IS_VALID_PROPERTY_NAME = /^[a-z_-]/
+
+function isValidPropName(name) {
+  return IS_VALID_PROPERTY_NAME.test(name)
+}
+
+function isParsableCssValue(property, value) {
+  try {
+    postcss.parse(`a{${property}:${value}}`).toResult()
+    return true
+  } catch (err) {
+    return false
+  }
+}
+
 function extractArbitraryProperty(classCandidate, context) {
   let [, property, value] = classCandidate.match(/^\[([a-zA-Z0-9-_]+):(\S+)\]$/) ?? []
 
@@ -255,9 +270,17 @@ function extractArbitraryProperty(classCandidate, context) {
     return null
   }
 
+  if (!isValidPropName(property)) {
+    return null
+  }
+
+  if (!isValidArbitraryValue(value)) {
+    return null
+  }
+
   let normalized = normalize(value)
 
-  if (!isValidArbitraryValue(normalized)) {
+  if (!isParsableCssValue(property, normalized)) {
     return null
   }
 
