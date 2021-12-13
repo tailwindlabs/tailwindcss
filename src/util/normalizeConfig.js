@@ -1,4 +1,4 @@
-import log from './log'
+import log, { dim } from './log'
 
 export function normalizeConfig(config) {
   // Quick structure validation
@@ -245,12 +245,18 @@ export function normalizeConfig(config) {
     })(),
   }
 
-  // Rewrite globs to prevent bogus globs.
+  // Validate globs to prevent bogus globs.
   // E.g.: `./src/*.{html}` is invalid, the `{html}` should just be `html`
-  config.content.files = config.content.files.map((file) => {
-    if (typeof file !== 'string') return file
-    return file.replace(/{([^,]*?)}/g, '$1')
-  })
+  for (let file of config.content.files) {
+    if (typeof file === 'string' && /{([^,]*?)}/g.test(file)) {
+      log.warn('invalid-glob-braces', [
+        `The glob pattern ${dim(file)} in your config is invalid.`,
+        `    Update it to ${dim(file.replace(/{([^,]*?)}/g, '$1'))} to silence this warning.`,
+        // TODO: Add https://tw.wtf/invalid-glob-braces
+      ])
+      break
+    }
+  }
 
   return config
 }

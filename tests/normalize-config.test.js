@@ -110,7 +110,10 @@ it('should keep content files with globs', () => {
   })
 })
 
-it('should rewrite globs with incorrect bracket expansion', () => {
+it('should warn when we detect invalid globs with incorrect brace expansion', () => {
+  let log = require('../src/util/log')
+  let spy = jest.spyOn(log.default, 'warn')
+
   let config = {
     content: [
       './{example-folder}/**/*.{html,js}',
@@ -119,13 +122,20 @@ it('should rewrite globs with incorrect bracket expansion', () => {
     ],
   }
 
+  // No rewrite happens
   expect(normalizeConfig(resolveConfig(config)).content).toEqual({
     files: [
-      './example-folder/**/*.{html,js}',
-      './example-folder/**/*.html',
-      './example-folder/**/*.html',
+      './{example-folder}/**/*.{html,js}',
+      './{example-folder}/**/*.{html}',
+      './example-folder/**/*.{html}',
     ],
     extract: {},
     transform: {},
   })
+
+  // But a warning should happen
+  expect(spy).toHaveBeenCalledTimes(2)
+  expect(spy.mock.calls.map((x) => x[0])).toEqual(['invalid-glob-braces', 'invalid-glob-braces'])
+
+  spy.mockClear()
 })
