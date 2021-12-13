@@ -651,7 +651,15 @@ function registerPlugins(plugins, context) {
         let utils = Array.isArray(util)
           ? (() => {
               let [utilName, options] = util
-              return Object.keys(options?.values ?? {}).map((value) => formatClass(utilName, value))
+              let classes = Object.keys(options?.values ?? {}).map((value) =>
+                formatClass(utilName, value)
+              )
+
+              if (options?.supportsNegativeValues) {
+                classes = [...classes, ...classes.map((cls) => '-' + cls)]
+              }
+
+              return classes
             })()
           : [util]
 
