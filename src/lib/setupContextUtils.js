@@ -252,7 +252,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push([{ sort: offset, layer: 'base' }, rule])
+          .push([{ sort: offset, layer: 'defaults' }, rule])
       }
     },
     addComponents(components, options) {
@@ -550,6 +550,7 @@ function registerPlugins(plugins, context) {
   let variantList = []
   let variantMap = new Map()
   let offsets = {
+    defaults: 0n,
     base: 0n,
     components: 0n,
     utilities: 0n,
@@ -577,6 +578,7 @@ function registerPlugins(plugins, context) {
 
   let highestOffset = ((args) => args.reduce((m, e) => (e > m ? e : m)))([
     offsets.base,
+    offsets.defaults,
     offsets.components,
     offsets.utilities,
     offsets.user,
@@ -588,13 +590,14 @@ function registerPlugins(plugins, context) {
   context.arbitraryPropertiesSort = ((1n << reservedBits) << 0n) - 1n
 
   context.layerOrder = {
-    base: (1n << reservedBits) << 0n,
-    components: (1n << reservedBits) << 1n,
-    utilities: (1n << reservedBits) << 2n,
-    user: (1n << reservedBits) << 3n,
+    defaults: (1n << reservedBits) << 0n,
+    base: (1n << reservedBits) << 1n,
+    components: (1n << reservedBits) << 2n,
+    utilities: (1n << reservedBits) << 3n,
+    user: (1n << reservedBits) << 4n,
   }
 
-  reservedBits += 4n
+  reservedBits += 5n
 
   let offset = 0
   context.variantOrder = new Map(
