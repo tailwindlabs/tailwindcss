@@ -1,4 +1,6 @@
+import { normalizeConfig } from '../src/util/normalizeConfig'
 import { run, css } from './util/run'
+import resolveConfig from '../src/public/resolve-config'
 
 it.each`
   config
@@ -94,4 +96,46 @@ it('should still be possible to use the "old" v2 config', () => {
       }
     `)
   })
+})
+
+it('should keep content files with globs', () => {
+  let config = {
+    content: ['./example-folder/**/*.{html,js}'],
+  }
+
+  expect(normalizeConfig(resolveConfig(config)).content).toEqual({
+    files: ['./example-folder/**/*.{html,js}'],
+    extract: {},
+    transform: {},
+  })
+})
+
+it('should warn when we detect invalid globs with incorrect brace expansion', () => {
+  let log = require('../src/util/log')
+  let spy = jest.spyOn(log.default, 'warn')
+
+  let config = {
+    content: [
+      './{example-folder}/**/*.{html,js}',
+      './{example-folder}/**/*.{html}',
+      './example-folder/**/*.{html}',
+    ],
+  }
+
+  // No rewrite happens
+  expect(normalizeConfig(resolveConfig(config)).content).toEqual({
+    files: [
+      './{example-folder}/**/*.{html,js}',
+      './{example-folder}/**/*.{html}',
+      './example-folder/**/*.{html}',
+    ],
+    extract: {},
+    transform: {},
+  })
+
+  // But a warning should happen
+  expect(spy).toHaveBeenCalledTimes(2)
+  expect(spy.mock.calls.map((x) => x[0])).toEqual(['invalid-glob-braces', 'invalid-glob-braces'])
+
+  spy.mockClear()
 })
