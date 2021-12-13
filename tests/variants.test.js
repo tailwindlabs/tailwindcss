@@ -200,7 +200,7 @@ describe('custom advanced variants', () => {
         }
 
         .my-variant\:underline:where(.one, .two, .three) {
-          text-decoration: underline;
+          text-decoration-line: underline;
         }
       `)
     })

@@ -303,7 +303,7 @@ test('@apply classes from outside a @layer', async () => {
       }
 
       .baz {
-        text-decoration: underline;
+        text-decoration-line: underline;
         --tw-text-opacity: 1;
         color: rgb(239 68 68 / var(--tw-text-opacity));
         font-weight: 700;
@@ -351,7 +351,7 @@ test('@applying classes from outside a @layer respects the source order', async 
   await run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
       .baz {
-        text-decoration: none;
+        text-decoration-line: none;
       }
 
       .container {
@@ -396,7 +396,7 @@ test('@applying classes from outside a @layer respects the source order', async 
       }
 
       .bar {
-        text-decoration: none;
+        text-decoration-line: none;
       }
     `)
   })

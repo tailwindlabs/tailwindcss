@@ -40,7 +40,7 @@ it('should safelist strings', () => {
       }
 
       .hover\:underline:hover {
-        text-decoration: underline;
+        text-decoration-line: underline;
       }
     `)
   })
