@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Temporarily disable optimize univeral defaults ([#6461](https://github.com/tailwindlabs/tailwindcss/pull/6461))
+- Temporarily disable optimize universal defaults, fixes issue with transforms/filters/rings not being `@apply`-able in CSS modules/Svelte components/Vue components ([#6461](https://github.com/tailwindlabs/tailwindcss/pull/6461))
 
 ## [3.0.1] - 2021-12-10
 
