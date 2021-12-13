@@ -121,9 +121,7 @@ export default function UsingVite({ code }) {
       description="Setting up Tailwind CSS in a Vue 3 and Vite project."
     >
       <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p>
-          {/* what do I put here */}
-        </p>
+        <p></p>
       </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>

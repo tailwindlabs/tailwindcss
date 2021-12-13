@@ -139,9 +139,7 @@ export default function UsingGatsby({ code }) {
       description="Setting up Tailwind CSS in a Gatsby project."
     >
       <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p>
-          {/* What goes here */}
-        </p>
+        <p></p>
       </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
