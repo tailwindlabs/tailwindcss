@@ -255,11 +255,11 @@ function extractArbitraryProperty(classCandidate, context) {
     return null
   }
 
-  let normalized = normalize(value)
-
-  if (!isValidArbitraryValue(normalized)) {
+  if (!isValidArbitraryValue(value)) {
     return null
   }
+
+  let normalized = normalize(value)
 
   return [
     [
