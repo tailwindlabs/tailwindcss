@@ -226,7 +226,11 @@ Learn more in the [adding base styles documentation](/docs/adding-base-styles).
 
 If you'd like to completely disable Preflight — perhaps because you're integrating Tailwind into an existing project or because you'd like to provide your own base styles — all you need to do is set `preflight` to `false` in the `corePlugins` section of your `tailwind.config.js` file:
 
-<ConfigSample
-  path="corePlugins"
-  add={{ preflight: false }}
-/>
+
+```diff-js tailwind.config.js
+  module.exports = {
++   corePlugins: {
++    preflight: false,
++   }
+  }
+```
