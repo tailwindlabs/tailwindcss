@@ -1,4 +1,5 @@
 import { run, html, css } from './util/run'
+import { DEFAULTS_LAYER } from '../src/lib/expandTailwindAtRules'
 
 test('basic utilities', async () => {
   let config = {
@@ -701,6 +702,7 @@ test('defaults without @tailwind base', () => {
     experimental: { optimizeUniversalDefaults: true },
     content: [{ raw: html`<div class="scale-150"></div>` }],
     corePlugins: { preflight: false },
+    [DEFAULTS_LAYER]: true,
   }
 
   // No @tailwind base directive means that we need to generate the defaults for each of the utility classes in that context
@@ -734,6 +736,7 @@ test('defaults and apply without @tailwind base', () => {
     experimental: { optimizeUniversalDefaults: true },
     content: [{ raw: html`<div class="my-card"></div>` }],
     corePlugins: { preflight: false },
+    [DEFAULTS_LAYER]: true,
   }
 
   // No @tailwind base directive means that we need to generate the defaults for each of the utility classes in that context

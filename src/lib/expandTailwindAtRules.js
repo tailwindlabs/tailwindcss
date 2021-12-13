@@ -150,6 +150,9 @@ function buildStylesheet(rules, context) {
   return returnValue
 }
 
+// export const DEFAULTS_LAYER = Symbol('defaults-layer')
+export const DEFAULTS_LAYER = '__defaults'
+
 export default function expandTailwindAtRules(context) {
   return (root) => {
     let layerNodes = {
@@ -222,7 +225,9 @@ export default function expandTailwindAtRules(context) {
     // @defaults rules are unconditionally added first to ensure that
     // using any utility that relies on defaults will work even when
     // compiled in an isolated environment like CSS modules
-    root.prepend(cloneNodes([...defaultNodes], root.source))
+    if (context.tailwindConfig[DEFAULTS_LAYER] !== false) {
+      root.prepend(cloneNodes([...defaultNodes], root.source))
+    }
 
     if (layerNodes.base) {
       layerNodes.base.before(cloneNodes([...baseNodes], layerNodes.base.source))
