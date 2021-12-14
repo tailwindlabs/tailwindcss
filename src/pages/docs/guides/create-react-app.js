@@ -7,7 +7,9 @@ let steps = [
     title: 'Create your project',
     body: () => (
       <p>
-        Start by creating a new React project with <a href="https://create-react-app.dev/docs/getting-started">Create React App</a> if you don't have one already set up.
+        Start by creating a new React project with{' '}
+        <a href="https://create-react-app.dev/docs/getting-started">Create React App</a> if you
+        don't have one already set up.
       </p>
     ),
     code: {
@@ -20,8 +22,8 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init command to generate both{' '}
-        <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
+        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init
+        command to generate both <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
       </p>
     ),
     code: {
@@ -55,7 +57,8 @@ let steps = [
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your <code>./src/index.css</code> file.
+        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your{' '}
+        <code>./src/index.css</code> file.
       </p>
     ),
     code: {
@@ -79,11 +82,7 @@ let steps = [
   },
   {
     title: 'Start using Tailwind in your project',
-    body: () => (
-      <p>
-        Start using Tailwind’s utility classes to style your content.
-      </p>
-    ),
+    body: () => <p>Start using Tailwind’s utility classes to style your content.</p>,
     code: {
       name: 'App.js',
       lang: 'jsx',
@@ -94,7 +93,7 @@ let steps = [
 >     </h1>
     )
   }`,
-        },
+    },
   },
 ]
 

@@ -7,7 +7,9 @@ let steps = [
     title: 'Create your project',
     body: () => (
       <p>
-        Start by creating a new Next.js project if you don’t have one set up already. The most common approach is to use <a href="https://nextjs.org/docs/api-reference/create-next-app">Create Next App</a>.
+        Start by creating a new Next.js project if you don’t have one set up already. The most
+        common approach is to use{' '}
+        <a href="https://nextjs.org/docs/api-reference/create-next-app">Create Next App</a>.
       </p>
     ),
     code: {
@@ -20,8 +22,8 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init command to generate both{' '}
-        <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
+        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init
+        command to generate both <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
       </p>
     ),
     code: {
@@ -56,7 +58,8 @@ let steps = [
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your <code>./styles/globals.css</code> file.
+        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your{' '}
+        <code>./styles/globals.css</code> file.
       </p>
     ),
     code: {
@@ -80,11 +83,7 @@ let steps = [
   },
   {
     title: 'Start using Tailwind in your project',
-    body: () => (
-      <p>
-        Start using Tailwind’s utility classes to style your content.
-      </p>
-    ),
+    body: () => <p>Start using Tailwind’s utility classes to style your content.</p>,
     code: {
       name: 'index.js',
       lang: 'jsx',
@@ -107,7 +106,13 @@ export default function UsingNextJS({ code }) {
     >
       <div className="relative z-10 prose mb-16 max-w-3xl">
         <p>
-          The quickest way to start using Tailwind CSS in your Next.js project is to use the <a href="https://github.com/vercel/next.js/tree/4d4f3093019179b1928ec07c16f38882241c0375/examples/with-tailwindcss">Next.js + Tailwind CSS Example</a>. This will automatically configure your Tailwind setup based on the official Next.js example. If you'd like to configure Tailwind manually, continue with the rest of this guide.
+          The quickest way to start using Tailwind CSS in your Next.js project is to use the{' '}
+          <a href="https://github.com/vercel/next.js/tree/4d4f3093019179b1928ec07c16f38882241c0375/examples/with-tailwindcss">
+            Next.js + Tailwind CSS Example
+          </a>
+          . This will automatically configure your Tailwind setup based on the official Next.js
+          example. If you'd like to configure Tailwind manually, continue with the rest of this
+          guide.
         </p>
       </div>
       <Steps steps={steps} code={code} />

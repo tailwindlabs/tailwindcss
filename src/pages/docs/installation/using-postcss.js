@@ -74,8 +74,8 @@ let steps = [
     title: 'Start your build process',
     body: () => (
       <p>
-        Run your build process with <code>npm run dev</code> or whatever command is configured
-        in your <code>package.json</code> file.
+        Run your build process with <code>npm run dev</code> or whatever command is configured in
+        your <code>package.json</code> file.
       </p>
     ),
     code: {
