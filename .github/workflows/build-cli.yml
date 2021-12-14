@@ -1,7 +1,7 @@
 name: Build Standalone CLI
 
 on:
-  create:
+  push:
     tags:
       - 'v*'
 
@@ -13,6 +13,12 @@ jobs:
     runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
+
+      - run: git fetch --tags
+
+      - name: Resolve version
+        id: vars
+        run: echo "::set-output name=tag_name::$(git describe --tags --abbrev=0)"
 
       - name: Use Node.js 16
         uses: actions/setup-node@v2
@@ -34,10 +40,6 @@ jobs:
       - name: Test
         run: npm test
         working-directory: standalone-cli
-
-      - name: Resolve version
-        id: vars
-        run: echo "::set-output name=tag_name::$(git describe --tags --abbrev=0)"
 
       - name: Release
         uses: softprops/action-gh-release@v1
