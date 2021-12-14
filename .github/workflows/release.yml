@@ -42,7 +42,7 @@ jobs:
           CI: true
 
       - name: Publish
-        run: npm publish --tag next
+        run: npm publish
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
