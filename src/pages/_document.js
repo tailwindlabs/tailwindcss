@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
 
 const FAVICON_VERSION = 3
@@ -14,12 +15,7 @@ export default class Document extends NextDocument {
 
   render() {
     return (
-      <Html
-        lang="en"
-        className={`text-gray-500 antialiased [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] ${
-          this.props.dangerousAsPath.startsWith('/examples/') ? '' : 'bg-white'
-        }`}
-      >
+      <Html lang="en" className="dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem]">
         <Head>
           <link rel="apple-touch-icon" sizes="180x180" href={v('/favicons/apple-touch-icon.png')} />
           <link rel="icon" type="image/png" sizes="32x32" href={v('/favicons/favicon-32x32.png')} />
@@ -33,7 +29,11 @@ export default class Document extends NextDocument {
           <meta name="msapplication-config" content={v('/favicons/browserconfig.xml')} />
           <meta name="theme-color" content="#ffffff" />
         </Head>
-        <body>
+        <body
+          className={clsx('antialiased text-gray-500 dark:text-gray-400', {
+            'bg-white dark:bg-gray-900': !this.props.dangerousAsPath.startsWith('/examples/'),
+          })}
+        >
           <Main />
           <NextScript />
           <script> </script>

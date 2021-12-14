@@ -36,7 +36,9 @@ function TableOfContents({ tableOfContents, currentSection }) {
 
   return (
     <>
-      <h5 className="text-gray-900 font-semibold mb-4 text-sm leading-6">On this page</h5>
+      <h5 className="text-gray-900 font-semibold mb-4 text-sm leading-6 dark:text-gray-100">
+        On this page
+      </h5>
       <ul className="text-gray-700 text-sm leading-6">
         {tableOfContents.map((section) => (
           <Fragment key={section.slug}>
@@ -47,7 +49,9 @@ function TableOfContents({ tableOfContents, currentSection }) {
                 className={clsx(
                   'block py-1',
                   pageHasSubsections ? 'font-medium' : '',
-                  isActive(section) ? 'font-medium text-sky-500' : 'hover:text-gray-900'
+                  isActive(section)
+                    ? 'font-medium text-sky-500 dark:text-sky-400'
+                    : 'hover:text-gray-900 dark:text-gray-400'
                 )}
               >
                 {section.title}
@@ -60,14 +64,16 @@ function TableOfContents({ tableOfContents, currentSection }) {
                   onClick={closeNav}
                   className={clsx(
                     'group flex items-start py-1',
-                    isActive(subsection) ? 'text-sky-500' : 'hover:text-gray-900'
+                    isActive(subsection)
+                      ? 'text-sky-500 dark:text-sky-400'
+                      : 'hover:text-gray-900 dark:text-gray-400'
                   )}
                 >
                   <svg
                     width="3"
                     height="24"
                     viewBox="0 -9 3 24"
-                    className="mr-2 text-gray-400 overflow-visible group-hover:text-gray-600"
+                    className="mr-2 text-gray-400 overflow-visible group-hover:text-gray-600 dark:text-gray-600"
                   >
                     <path
                       d="M0 0L3 3L0 6"
@@ -180,12 +186,12 @@ export function ContentsLayout({ children, meta, classes, tableOfContents, secti
         {classes ? (
           <>
             <ClassTable {...classes} />
-            <div id="content" className="relative z-20 prose mt-12">
+            <div id="content" className="relative z-20 prose mt-12 dark:prose-dark">
               <MDXProvider components={{ Heading }}>{children}</MDXProvider>
             </div>
           </>
         ) : (
-          <div id="content" className="relative z-20 prose mt-8">
+          <div id="content" className="relative z-20 prose mt-8 dark:prose-dark">
             <MDXProvider components={{ Heading }}>{children}</MDXProvider>
           </div>
         )}

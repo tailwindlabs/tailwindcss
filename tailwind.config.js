@@ -211,6 +211,30 @@ module.exports = {
             },
           },
         },
+        dark: {
+          css: {
+            color: theme('colors.gray.400'),
+            'h2, h3, h4': {
+              color: theme('colors.gray.200'),
+            },
+            code: {
+              color: theme('colors.gray.200'),
+            },
+            hr: {
+              borderColor: theme('colors.gray.200'),
+              opacity: '0.05',
+            },
+            pre: {
+              boxShadow: 'inset 0 0 0 1px rgb(255 255 255 / 0.1)',
+            },
+            a: {
+              color: theme('colors.white'),
+            },
+            strong: {
+              color: theme('colors.gray.200'),
+            },
+          },
+        },
       }),
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],

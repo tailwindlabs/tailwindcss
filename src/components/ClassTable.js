@@ -75,26 +75,31 @@ export const ClassTable = memo(
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr>
-                  <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0">
-                    <div className="py-2 pr-2 border-b border-gray-200">Class</div>
+                  <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0 dark:bg-gray-900 dark:text-gray-300">
+                    <div className="py-2 pr-2 border-b border-gray-200 dark:border-gray-400/20">
+                      Class
+                    </div>
                   </th>
                   <th
                     className={clsx(
-                      'sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0',
+                      'sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0 dark:bg-gray-900 dark:text-gray-300',
                       {
                         'hidden sm:table-cell': preview,
                       }
                     )}
                   >
                     <div
-                      className={clsx('py-2 pl-2 border-b border-gray-200', { 'pr-2': preview })}
+                      className={clsx(
+                        'py-2 pl-2 border-b border-gray-200 dark:border-gray-400/20',
+                        { 'pr-2': preview }
+                      )}
                     >
                       Properties
                     </div>
                   </th>
                   {preview && (
-                    <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0">
-                      <div className="py-2 pl-2 border-b border-gray-200">
+                    <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0 dark:bg-gray-900 dark:text-gray-300">
+                      <div className="py-2 pl-2 border-b border-gray-200 dark:border-gray-400/20">
                         <span className="sr-only">Preview</span>&nbsp;
                       </div>
                     </th>
@@ -111,9 +116,9 @@ export const ClassTable = memo(
                       <td
                         translate="no"
                         className={clsx(
-                          'py-2 pr-2 font-mono font-medium text-xs leading-6 text-sky-500 whitespace-nowrap',
+                          'py-2 pr-2 font-mono font-medium text-xs leading-6 text-sky-500 whitespace-nowrap dark:text-sky-400',
                           {
-                            'border-t border-gray-100': i !== 0,
+                            'border-t border-gray-100 dark:border-gray-400/10': i !== 0,
                           }
                         )}
                       >
@@ -122,9 +127,9 @@ export const ClassTable = memo(
                       <td
                         translate="no"
                         className={clsx(
-                          'py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre',
+                          'py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre dark:text-indigo-300',
                           {
-                            'border-t border-gray-100': i !== 0,
+                            'border-t border-gray-100 dark:border-gray-400/10': i !== 0,
                             'hidden sm:table-cell sm:pr-2': preview,
                           }
                         )}
@@ -137,7 +142,8 @@ export const ClassTable = memo(
                       {preview &&
                         preview(properties, {
                           utility,
-                          className: i === 0 ? '' : 'border-t border-gray-100',
+                          className:
+                            i === 0 ? '' : 'border-t border-gray-100 dark:border-gray-400/10',
                         })}
                     </tr>
                   )
@@ -145,7 +151,7 @@ export const ClassTable = memo(
               </tbody>
             </table>
           )}
-          <div className="sticky bottom-0 h-px -mt-px bg-gray-200" />
+          <div className="sticky bottom-0 h-px -mt-px bg-gray-200 dark:bg-gray-400/20" />
         </div>
         {isCollapsable && (
           <div

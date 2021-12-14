@@ -44,15 +44,18 @@ function Well({
         </div>
       )}
       <Component
-        style={{ backgroundPosition: '10px 10px', ...style }}
-        className="not-prose relative bg-grid-gray-100 bg-gray-50 rounded-xl overflow-hidden"
+        style={style}
+        className="not-prose relative bg-gray-50 rounded-xl overflow-hidden dark:bg-gray-800/25"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-50 opacity-60" />
+        <div
+          style={{ backgroundPosition: '10px 10px' }}
+          className="absolute inset-0 bg-grid-gray-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-gray-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]"
+        />
         <div
           className={clsx('relative rounded-xl overflow-auto', paddingClassName, className)}
           {...(html ? { dangerouslySetInnerHTML: { __html: html } } : { children })}
         />
-        <div className="absolute inset-0 pointer-events-none border border-black/5 rounded-xl" />
+        <div className="absolute inset-0 pointer-events-none border border-black/5 rounded-xl dark:border-white/5" />
       </Component>
     </div>
   )

@@ -10,15 +10,26 @@ import clsx from 'clsx'
 function Featured() {
   return (
     <Link href="/blog/tailwindcss-v3">
-      <a className="ml-3 text-xs leading-5 text-sky-600 bg-sky-400/10 rounded-full py-1 px-3 hidden xl:flex items-center hover:bg-sky-400/20">
+      <a className="ml-3 text-xs leading-5 font-medium text-sky-600 dark:text-sky-400 bg-sky-400/10 rounded-full py-1 px-3 hidden xl:flex items-center hover:bg-sky-400/20">
         <strong className="font-semibold">Tailwind CSS v3.0</strong>
-        <svg width="2" height="2" fill="currentColor" aria-hidden="true" className="ml-2">
+        <svg
+          width="2"
+          height="2"
+          fill="currentColor"
+          aria-hidden="true"
+          className="ml-2 text-sky-600 dark:text-sky-400/70"
+        >
           <circle cx="1" cy="1" r="1" />
         </svg>
         <span className="ml-2">
           Just-in-Time all the time, colored shadows, scroll snap and more
         </span>
-        <svg width="3" height="6" className="ml-3 overflow-visible text-sky-300" aria-hidden="true">
+        <svg
+          width="3"
+          height="6"
+          className="ml-3 overflow-visible text-sky-300 dark:text-sky-400"
+          aria-hidden="true"
+        >
           <path
             d="M0 0L3 3L0 6"
             fill="none"
@@ -153,7 +164,15 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
             <img
               src={require('@/img/beams/docs@tinypng.png').default}
               alt=""
-              className="w-[71.75rem] flex-none max-w-none"
+              className="w-[71.75rem] flex-none max-w-none dark:hidden"
+            />
+          </picture>
+          <picture>
+            <source srcSet={require('@/img/beams/docs-dark@30.avif').default} type="image/avif" />
+            <img
+              src={require('@/img/beams/docs-dark@tinypng.png').default}
+              alt=""
+              className="w-[90rem] flex-none max-w-none hidden dark:block"
             />
           </picture>
         </div>
@@ -162,8 +181,8 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
         className={clsx(
           'sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-gray-900/10',
           isOpaque
-            ? 'bg-white supports-backdrop-blur:bg-white/95'
-            : 'bg-white/95 supports-backdrop-blur:bg-white/60'
+            ? 'bg-white supports-backdrop-blur:bg-white/95 dark:bg-transparent'
+            : 'bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent'
         )}
       >
         <div className="max-w-8xl mx-auto">
@@ -189,7 +208,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
               <VersionSwitcher />
               <Featured />
               <nav className="hidden lg:block ml-auto">
-                <ul className="flex space-x-8 text-sm leading-6 font-semibold text-gray-700">
+                <ul className="flex space-x-8 text-sm leading-6 font-semibold text-gray-700 dark:text-gray-200">
                   <NavItems />
                 </ul>
               </nav>
