@@ -17,7 +17,7 @@ function Card({ title, superTitle, href, color, body, image, button }) {
   return (
     <li className="relative flex flex-col sm:flex-row xl:flex-col items-start">
       <div className="order-1 sm:ml-6 xl:ml-0">
-        <h3 className="mb-1 text-gray-900 font-semibold">
+        <h3 className="mb-1 text-gray-900 font-semibold dark:text-gray-200">
           {button ? (
             <>
               <span className={clsx('mb-1 block text-sm leading-6', color)}>{superTitle}</span>
@@ -30,7 +30,7 @@ function Card({ title, superTitle, href, color, body, image, button }) {
             </a>
           )}
         </h3>
-        <div className="prose prose-sm text-gray-600">{body}</div>
+        <div className="prose prose-sm text-gray-600 dark:prose-dark">{body}</div>
         {button && (
           <Button href={href} className="mt-6">
             {button}
@@ -62,11 +62,13 @@ export default function Resources() {
   return (
     <BasicLayout>
       <header className="mb-20 max-w-xl">
-        <p className="mb-4 text-sm leading-6 font-semibold text-sky-500">Resources</p>
-        <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-gray-900">
+        <p className="mb-4 text-sm leading-6 font-semibold text-sky-500 dark:text-sky-400">
+          Resources
+        </p>
+        <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-200">
           Everything else you need to build awesome Tailwind CSS websites
         </h1>
-        <p className="text-lg text-gray-700">
+        <p className="text-lg text-gray-700 dark:text-gray-400">
           We think Tailwind is an amazing CSS framework, but you need more than just a CSS framework
           to produce visually awesome work.
         </p>
@@ -74,10 +76,10 @@ export default function Resources() {
 
       <div className="space-y-16">
         <section>
-          <h2 className="mb-2 text-2xl leading-7 tracking-tight text-gray-900 font-bold">
+          <h2 className="mb-2 text-2xl leading-7 tracking-tight text-gray-900 font-bold dark:text-gray-200">
             Design resources
           </h2>
-          <div className="mb-10 prose text-gray-600 max-w-3xl">
+          <div className="mb-10 prose text-gray-600 max-w-3xl dark:prose-dark">
             <p>
               Design is hard so we made a few resources to help you with it. These resources are a
               great way to help you with your designs and a great way to support the development of
@@ -136,20 +138,23 @@ export default function Resources() {
             ].map(({ title, description, images, color, body, href }) => (
               <li
                 key={title}
-                className="-mx-4 p-4 pb-10 bg-gray-50 flex flex-col-reverse items-start sm:mx-0 sm:p-10 sm:rounded-2xl xl:flex-row"
+                className="-mx-4 p-4 pb-10 bg-gray-50 flex flex-col-reverse items-start sm:mx-0 sm:p-10 sm:rounded-2xl xl:flex-row dark:bg-gray-800/50"
               >
                 <div className="flex-auto">
                   <h3 className={clsx('mb-4 text-sm leading-6 font-semibold', color)}>{title}</h3>
-                  <p className="mb-2 text-xl font-semibold tracking-tight text-gray-900">
+                  <p className="mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-200">
                     {description}
                   </p>
-                  <div className="mb-6 text-sm leading-6 text-gray-600 space-y-4">{body}</div>
+                  <div className="mb-6 text-sm leading-6 text-gray-600 space-y-4 dark:text-gray-400">
+                    {body}
+                  </div>
                   <Button
                     href={href}
                     color={[
                       'bg-gray-700 text-white hover:bg-gray-800 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-400',
                       'text-gray-300 group-hover:text-gray-200',
                     ]}
+                    darkColor="gray"
                   >
                     Learn more<span className="sr-only">, {title}</span>
                   </Button>
@@ -168,10 +173,10 @@ export default function Resources() {
         </section>
 
         <section>
-          <h2 className="mb-2 text-2xl leading-7 tracking-tight text-gray-900 font-bold">
+          <h2 className="mb-2 text-2xl leading-7 tracking-tight text-gray-900 font-bold dark:text-gray-200">
             Additional resources
           </h2>
-          <div className="mb-10 prose text-gray-600 max-w-3xl">
+          <div className="mb-10 prose text-gray-600 max-w-3xl dark:prose-dark">
             <p>
               Tailwind isn’t the only open-source project we maintain. We’ve made a few other
               resources to help you with your design and development workflow.
@@ -233,9 +238,11 @@ export default function Resources() {
           </CardGroup>
         </section>
 
-        <section className="border-t border-gray-100 pt-16">
-          <h2 className="mb-2 text-xl tracking-tight text-gray-900 font-bold">Screencasts</h2>
-          <div className="mb-10 prose text-gray-600 max-w-3xl">
+        <section className="border-t border-gray-100 pt-16 dark:border-gray-200/5">
+          <h2 className="mb-2 text-xl tracking-tight text-gray-900 font-bold dark:text-gray-200">
+            Screencasts
+          </h2>
+          <div className="mb-10 prose text-gray-600 max-w-3xl dark:prose-dark">
             <p>
               Head over to our official YouTube channel and dive into dozens of videos that will
               teach you everything from Tailwind basics to advanced concepts.
@@ -292,11 +299,11 @@ export default function Resources() {
           <Button href="https://www.youtube.com/tailwindlabs">See all our screencasts</Button>
         </section>
 
-        <section className="border-t border-gray-100 pt-16">
-          <h2 className="mb-2 text-xl tracking-tight text-gray-900 font-bold">
+        <section className="border-t border-gray-100 pt-16 dark:border-gray-200/5">
+          <h2 className="mb-2 text-xl tracking-tight text-gray-900 font-bold dark:text-gray-200">
             Connect and contribute
           </h2>
-          <div className="mb-10 prose text-gray-600 max-w-3xl">
+          <div className="mb-10 prose text-gray-600 max-w-3xl dark:prose-dark">
             <p>
               Whether you're a beginner or an advanced user, getting involved in the Tailwind
               community is a great way to connect with like-minded folks who are building awesome
@@ -331,12 +338,14 @@ export default function Resources() {
             ].map(({ title, href, description, icon }) => (
               <li key={title} className="relative flex flex-row-reverse">
                 <div className="flex-auto ml-6">
-                  <h3 className="mb-2 font-semibold text-gray-900">
+                  <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-200">
                     <a href={href} className="before:absolute before:inset-0">
                       {title}
                     </a>
                   </h3>
-                  <p className="text-sm leading-6 text-gray-600">{description}</p>
+                  <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
+                    {description}
+                  </p>
                 </div>
                 <div className="flex-none w-16 h-16 p-[0.1875rem] rounded-full ring-1 ring-gray-900/10 shadow overflow-hidden">
                   {icon}

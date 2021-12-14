@@ -25,12 +25,13 @@ let colors = {
 }
 
 let colorsDark = {
+  gray: ['dark:bg-gray-700 dark:text-gray-100', 'dark:text-gray-500'],
   sky: ['dark:bg-sky-500 dark:text-sky-50', 'dark:text-sky-300'],
 }
 
 export function Button({
   color = 'gray',
-  darkColor,
+  darkColor = color,
   href,
   children,
   className = '',
