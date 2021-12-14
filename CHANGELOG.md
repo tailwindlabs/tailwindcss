@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Don't output unparsable values ([#6469](https://github.com/tailwindlabs/tailwindcss/pull/6469))
+- Fix text decoration utilities from overriding the new text decoration color/style/thickness utilities when used with a modifier ([#6378](https://github.com/tailwindlabs/tailwindcss/pull/6378))
 
 ## [3.0.2] - 2021-12-13
 
