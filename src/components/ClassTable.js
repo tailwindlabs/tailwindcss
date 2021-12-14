@@ -164,7 +164,7 @@ export const ClassTable = memo(
           >
             <div
               className={clsx(
-                'absolute inset-x-0 bg-gradient-to-t from-white',
+                'absolute inset-x-0 bg-gradient-to-t from-white dark:from-gray-900',
                 isCollapsed
                   ? '-top-8 bottom-0'
                   : '-top-4 bottom-[calc(-1*(1rem+env(safe-area-inset-bottom,0)))]'
