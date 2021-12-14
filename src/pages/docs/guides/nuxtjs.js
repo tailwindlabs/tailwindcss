@@ -165,9 +165,6 @@ export default function UsingNextJS({ code }) {
       title="Install Tailwind CSS with Nuxt.js"
       description="Setting up Tailwind CSS in a Nuxt.js project."
     >
-      <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p></p>
-      </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )

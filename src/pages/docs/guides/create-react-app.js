@@ -104,9 +104,6 @@ export default function UsingCRA({ code }) {
       title="Install Tailwind CSS with Create React App"
       description="Setting up Tailwind CSS in a Create React App project."
     >
-      <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p></p>
-      </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )

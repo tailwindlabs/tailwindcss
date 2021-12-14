@@ -128,9 +128,6 @@ export default function UsingLaravel({ code }) {
       title="Install Tailwind CSS with Laravel"
       description="Setting up Tailwind CSS in a Laravel project."
     >
-      <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p></p>
-      </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )
