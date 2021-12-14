@@ -7,13 +7,13 @@ let steps = [
     title: 'Create your project',
     body: () => (
       <p>
-        Start by creating a new React project with the <a href="https://github.com/facebook/create-react-app/discussions/11278">upcoming version</a> of Create React App, which supports PostCSS 8. If you already have an existing project, follow the upgrade instructions in the link above.
+        Start by creating a new React project with <a href="https://create-react-app.dev/docs/getting-started">Create React App</a> if you don't have one already set up.
       </p>
     ),
     code: {
       name: 'Terminal',
       lang: 'terminal',
-      code: 'npx create-react-app@next --scripts-version=@next --template=cra-template@next my-project\ncd my-project',
+      code: 'npx create-react-app my-project\ncd my-project',
     },
   },
   {
