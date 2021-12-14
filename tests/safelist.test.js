@@ -194,3 +194,31 @@ it('should not safelist when an sparse/holey list is provided', () => {
     `)
   })
 })
+
+it('should safelist negatives based on a pattern regex', () => {
+  let config = {
+    content: [{ raw: html`<div class="uppercase"></div>` }],
+    safelist: [
+      {
+        pattern: /^-top-1$/,
+        variants: ['hover'],
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .-top-1 {
+        top: -0.25rem;
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+      }
+
+      .hover\:-top-1:hover {
+        top: -0.25rem;
+      }
+    `)
+  })
+})

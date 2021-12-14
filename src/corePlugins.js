@@ -529,27 +529,26 @@ export let corePlugins = {
     { supportsNegativeValues: true }
   ),
 
-  transform: ({ addBase, addUtilities }) => {
-    addBase({
-      '@defaults transform': {
-        '--tw-translate-x': '0',
-        '--tw-translate-y': '0',
-        '--tw-rotate': '0',
-        '--tw-skew-x': '0',
-        '--tw-skew-y': '0',
-        '--tw-scale-x': '1',
-        '--tw-scale-y': '1',
-        '--tw-transform': [
-          'translateX(var(--tw-translate-x))',
-          'translateY(var(--tw-translate-y))',
-          'rotate(var(--tw-rotate))',
-          'skewX(var(--tw-skew-x))',
-          'skewY(var(--tw-skew-y))',
-          'scaleX(var(--tw-scale-x))',
-          'scaleY(var(--tw-scale-y))',
-        ].join(' '),
-      },
+  transform: ({ addDefaults, addUtilities }) => {
+    addDefaults('transform', {
+      '--tw-translate-x': '0',
+      '--tw-translate-y': '0',
+      '--tw-rotate': '0',
+      '--tw-skew-x': '0',
+      '--tw-skew-y': '0',
+      '--tw-scale-x': '1',
+      '--tw-scale-y': '1',
+      '--tw-transform': [
+        'translateX(var(--tw-translate-x))',
+        'translateY(var(--tw-translate-y))',
+        'rotate(var(--tw-rotate))',
+        'skewX(var(--tw-skew-x))',
+        'skewY(var(--tw-skew-y))',
+        'scaleX(var(--tw-scale-x))',
+        'scaleY(var(--tw-scale-y))',
+      ].join(' '),
     })
+
     addUtilities({
       '.transform': { '@defaults transform': {}, transform: 'var(--tw-transform)' },
       '.transform-cpu': {
@@ -611,14 +610,12 @@ export let corePlugins = {
 
   cursor: createUtilityPlugin('cursor'),
 
-  touchAction: ({ addBase, addUtilities }) => {
-    addBase({
-      '@defaults touch-action': {
-        '--tw-pan-x': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-pan-y': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-pinch-zoom': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-touch-action': 'var(--tw-pan-x) var(--tw-pan-y) var(--tw-pinch-zoom)',
-      },
+  touchAction: ({ addDefaults, addUtilities }) => {
+    addDefaults('touch-action', {
+      '--tw-pan-x': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-pan-y': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-pinch-zoom': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-touch-action': 'var(--tw-pan-x) var(--tw-pan-y) var(--tw-pinch-zoom)',
     })
 
     addUtilities({
@@ -681,11 +678,9 @@ export let corePlugins = {
     })
   },
 
-  scrollSnapType: ({ addUtilities, addBase }) => {
-    addBase({
-      '@defaults scroll-snap-type': {
-        '--tw-scroll-snap-strictness': 'proximity',
-      },
+  scrollSnapType: ({ addDefaults, addUtilities }) => {
+    addDefaults('scroll-snap-type', {
+      '--tw-scroll-snap-strictness': 'proximity',
     })
 
     addUtilities({
@@ -1182,22 +1177,21 @@ export let corePlugins = {
     })
   },
 
-  borderColor: ({ addBase, matchUtilities, theme, corePlugins }) => {
+  borderColor: ({ addDefaults, matchUtilities, theme, corePlugins }) => {
     if (!corePlugins('borderOpacity')) {
       let value = theme('borderColor.DEFAULT', 'currentColor')
-      addBase({
-        '@defaults border-width': {
-          'border-color': toColorValue(value),
-        },
+      addDefaults('border-width', {
+        'border-color': toColorValue(value),
       })
     } else {
-      addBase({
-        '@defaults border-width': withAlphaVariable({
+      addDefaults(
+        'border-width',
+        withAlphaVariable({
           color: theme('borderColor.DEFAULT', 'currentColor'),
           property: 'border-color',
           variable: '--tw-border-opacity',
-        }),
-      })
+        })
+      )
     }
 
     matchUtilities(
@@ -1823,14 +1817,12 @@ export let corePlugins = {
       `var(--tw-shadow)`,
     ].join(', ')
 
-    return function ({ matchUtilities, addBase, theme }) {
-      addBase({
-        '@defaults box-shadow': {
-          '--tw-ring-offset-shadow': '0 0 #0000',
-          '--tw-ring-shadow': '0 0 #0000',
-          '--tw-shadow': '0 0 #0000',
-          '--tw-shadow-colored': '0 0 #0000',
-        },
+    return function ({ matchUtilities, addDefaults, theme }) {
+      addDefaults(' box-shadow', {
+        '--tw-ring-offset-shadow': '0 0 #0000',
+        '--tw-ring-shadow': '0 0 #0000',
+        '--tw-shadow': '0 0 #0000',
+        '--tw-shadow-colored': '0 0 #0000',
       })
 
       matchUtilities(
@@ -1908,7 +1900,7 @@ export let corePlugins = {
     )
   },
 
-  ringWidth: ({ matchUtilities, addBase, addUtilities, theme }) => {
+  ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme }) => {
     let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
     let ringColorDefault = withAlphaValue(
       theme('ringColor.DEFAULT'),
@@ -1916,17 +1908,15 @@ export let corePlugins = {
       `rgb(147 197 253 / ${ringOpacityDefault})`
     )
 
-    addBase({
-      '@defaults ring-width': {
-        '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-ring-offset-width': theme('ringOffsetWidth.DEFAULT', '0px'),
-        '--tw-ring-offset-color': theme('ringOffsetColor.DEFAULT', '#fff'),
-        '--tw-ring-color': ringColorDefault,
-        '--tw-ring-offset-shadow': '0 0 #0000',
-        '--tw-ring-shadow': '0 0 #0000',
-        '--tw-shadow': '0 0 #0000',
-        '--tw-shadow-colored': '0 0 #0000',
-      },
+    addDefaults('ring-width', {
+      '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-ring-offset-width': theme('ringOffsetWidth.DEFAULT', '0px'),
+      '--tw-ring-offset-color': theme('ringOffsetColor.DEFAULT', '#fff'),
+      '--tw-ring-color': ringColorDefault,
+      '--tw-ring-offset-shadow': '0 0 #0000',
+      '--tw-ring-shadow': '0 0 #0000',
+      '--tw-shadow': '0 0 #0000',
+      '--tw-shadow-colored': '0 0 #0000',
     })
 
     matchUtilities(
@@ -2133,30 +2123,28 @@ export let corePlugins = {
     )
   },
 
-  filter: ({ addBase, addUtilities }) => {
-    addBase({
-      '@defaults filter': {
-        '--tw-blur': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-invert': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-drop-shadow': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-filter': [
-          'var(--tw-blur)',
-          'var(--tw-brightness)',
-          'var(--tw-contrast)',
-          'var(--tw-grayscale)',
-          'var(--tw-hue-rotate)',
-          'var(--tw-invert)',
-          'var(--tw-saturate)',
-          'var(--tw-sepia)',
-          'var(--tw-drop-shadow)',
-        ].join(' '),
-      },
+  filter: ({ addDefaults, addUtilities }) => {
+    addDefaults('filter', {
+      '--tw-blur': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-invert': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-drop-shadow': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-filter': [
+        'var(--tw-blur)',
+        'var(--tw-brightness)',
+        'var(--tw-contrast)',
+        'var(--tw-grayscale)',
+        'var(--tw-hue-rotate)',
+        'var(--tw-invert)',
+        'var(--tw-saturate)',
+        'var(--tw-sepia)',
+        'var(--tw-drop-shadow)',
+      ].join(' '),
     })
     addUtilities({
       '.filter': { '@defaults filter': {}, filter: 'var(--tw-filter)' },
@@ -2299,30 +2287,28 @@ export let corePlugins = {
     )
   },
 
-  backdropFilter: ({ addBase, addUtilities }) => {
-    addBase({
-      '@defaults backdrop-filter': {
-        '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-invert': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-opacity': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
-        '--tw-backdrop-filter': [
-          'var(--tw-backdrop-blur)',
-          'var(--tw-backdrop-brightness)',
-          'var(--tw-backdrop-contrast)',
-          'var(--tw-backdrop-grayscale)',
-          'var(--tw-backdrop-hue-rotate)',
-          'var(--tw-backdrop-invert)',
-          'var(--tw-backdrop-opacity)',
-          'var(--tw-backdrop-saturate)',
-          'var(--tw-backdrop-sepia)',
-        ].join(' '),
-      },
+  backdropFilter: ({ addDefaults, addUtilities }) => {
+    addDefaults('backdrop-filter', {
+      '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-invert': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-opacity': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
+      '--tw-backdrop-filter': [
+        'var(--tw-backdrop-blur)',
+        'var(--tw-backdrop-brightness)',
+        'var(--tw-backdrop-contrast)',
+        'var(--tw-backdrop-grayscale)',
+        'var(--tw-backdrop-hue-rotate)',
+        'var(--tw-backdrop-invert)',
+        'var(--tw-backdrop-opacity)',
+        'var(--tw-backdrop-saturate)',
+        'var(--tw-backdrop-sepia)',
+      ].join(' '),
     })
     addUtilities({
       '.backdrop-filter': {

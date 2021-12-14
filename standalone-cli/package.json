@@ -1,0 +1,21 @@
+{
+  "name": "tailwindcss-standalone",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "pkg standalone.js --out-path dist --targets node16-macos-x64,node16-macos-arm64,node16-win-x64,node16-linux-x64 --compress Brotli --no-bytecode --public-packages \"*\" --public",
+    "prebuild": "rimraf dist",
+    "postbuild": "move-file dist/standalone-macos-x64 dist/tailwindcss-macos-x64 && move-file dist/standalone-macos-arm64 dist/tailwindcss-macos-arm64 && move-file dist/standalone-win-x64.exe dist/tailwindcss-windows-x64.exe && move-file dist/standalone-linux-x64 dist/tailwindcss-linux-x64",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.0",
+    "@tailwindcss/forms": "^0.4.0",
+    "@tailwindcss/line-clamp": "^0.3.0",
+    "@tailwindcss/typography": "^0.5.0",
+    "jest": "^27.2.5",
+    "move-file-cli": "^3.0.0",
+    "pkg": "^5.3.3",
+    "rimraf": "^3.0.2",
+    "tailwindcss": "file:.."
+  }
+}

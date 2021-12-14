@@ -3,10 +3,7 @@ import path from 'path'
 
 import { run, css } from './util/run'
 
-beforeEach(() => jest.resetModules())
-
-test('raw content', () => {
-  let tailwind = require('../src')
+it('raw content', () => {
   let config = {
     content: [{ raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8') }],
     corePlugins: { preflight: false },
@@ -17,7 +14,7 @@ test('raw content', () => {
     @tailwind utilities;
   `
 
-  return run(input, config, tailwind).then((result) => {
+  return run(input, config).then((result) => {
     let expectedPath = path.resolve(__dirname, './raw-content.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
@@ -26,7 +23,6 @@ test('raw content', () => {
 })
 
 test('raw content with extension', () => {
-  let tailwind = require('../src')
   let config = {
     content: {
       files: [
@@ -42,7 +38,7 @@ test('raw content with extension', () => {
     corePlugins: { preflight: false },
   }
 
-  return run('@tailwind utilities', config, tailwind).then((result) => {
+  return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .invisible {
         visibility: hidden;
