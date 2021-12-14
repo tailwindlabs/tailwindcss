@@ -99,6 +99,7 @@ function buildStylesheet(rules, context) {
 
   let returnValue = {
     base: new Set(),
+    defaults: new Set(),
     components: new Set(),
     utilities: new Set(),
     variants: new Set(),
@@ -125,6 +126,11 @@ function buildStylesheet(rules, context) {
       continue
     }
 
+    if (sort & context.layerOrder.defaults) {
+      returnValue.defaults.add(rule)
+      continue
+    }
+
     if (sort & context.layerOrder.components) {
       returnValue.components.add(rule)
       continue
@@ -143,6 +149,8 @@ function buildStylesheet(rules, context) {
 
   return returnValue
 }
+
+export const DEFAULTS_LAYER = Symbol('defaults-layer')
 
 export default function expandTailwindAtRules(context) {
   return (root) => {
@@ -202,6 +210,7 @@ export default function expandTailwindAtRules(context) {
     env.DEBUG && console.timeEnd('Build stylesheet')
 
     let {
+      defaults: defaultNodes,
       base: baseNodes,
       components: componentNodes,
       utilities: utilityNodes,
@@ -211,6 +220,13 @@ export default function expandTailwindAtRules(context) {
     // ---
 
     // Replace any Tailwind directives with generated CSS
+
+    // @defaults rules are unconditionally added first to ensure that
+    // using any utility that relies on defaults will work even when
+    // compiled in an isolated environment like CSS modules
+    if (context.tailwindConfig[DEFAULTS_LAYER] !== false) {
+      root.prepend(cloneNodes([...defaultNodes], root.source))
+    }
 
     if (layerNodes.base) {
       layerNodes.base.before(cloneNodes([...baseNodes], layerNodes.base.source))

@@ -5,6 +5,12 @@ export function defaults(target, ...sources) {
         target[k] = source[k]
       }
     }
+
+    for (let k of Object.getOwnPropertySymbols(source)) {
+      if (!target?.hasOwnProperty?.(k)) {
+        target[k] = source[k]
+      }
+    }
   }
 
   return target
