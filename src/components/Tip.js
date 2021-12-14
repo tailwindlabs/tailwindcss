@@ -1,7 +1,7 @@
 export function TipGood({ children }) {
   return (
     <div className="flex items-start my-6 space-x-4">
-      <div className="relative mt-1 w-4 h-4 rounded-full bg-cyan-500 text-white flex items-center justify-center ring-2 ring-cyan-500">
+      <div className="relative mt-1 w-4 h-4 rounded-full bg-cyan-500 text-white flex items-center justify-center ring-2 ring-cyan-500 dark:bg-sky-500 dark:ring-sky-500">
         <svg width="6" height="4.5" className="overflow-visible" aria-hidden="true">
           <path
             d="M6 0L2 4.5L0 2.5"
@@ -12,9 +12,11 @@ export function TipGood({ children }) {
             strokeLinejoin="round"
           />
         </svg>
-        <div className="absolute top-full mt-1 left-[0.46875rem] w-px h-[1.375rem] bg-cyan-500/30 rounded-full" />
+        <div className="absolute top-full mt-1 left-[0.46875rem] w-px h-[1.375rem] bg-cyan-500/30 rounded-full dark:bg-sky-400/30" />
       </div>
-      <p className="m-0 flex-1 text-base font-semibold text-gray-900">{children}</p>
+      <p className="m-0 flex-1 text-base font-semibold text-gray-900 dark:text-gray-200">
+        {children}
+      </p>
     </div>
   )
 }
@@ -22,7 +24,7 @@ export function TipGood({ children }) {
 export function TipBad({ children }) {
   return (
     <div className="flex items-start my-6 space-x-4">
-      <div className="relative mt-1 w-4 h-4 rounded-full bg-rose-400 text-white flex items-center justify-center ring-2 ring-rose-400">
+      <div className="relative mt-1 w-4 h-4 rounded-full bg-rose-400 text-white flex items-center justify-center ring-2 ring-rose-400 dark:bg-red-400 dark:ring-red-400">
         <svg width="6" height="6" className="overflow-visible" aria-hidden="true">
           <path
             d="M0 0L6 6M6 0L0 6"
@@ -33,9 +35,11 @@ export function TipBad({ children }) {
             strokeLinejoin="round"
           />
         </svg>
-        <div className="absolute top-full mt-1 left-[0.46875rem] w-px h-[1.375rem] bg-rose-200 rounded-full" />
+        <div className="absolute top-full mt-1 left-[0.46875rem] w-px h-[1.375rem] bg-rose-200 rounded-full dark:bg-red-200/25" />
       </div>
-      <p className="m-0 flex-1 text-base font-semibold text-gray-900">{children}</p>
+      <p className="m-0 flex-1 text-base font-semibold text-gray-900 dark:text-gray-200">
+        {children}
+      </p>
     </div>
   )
 }
