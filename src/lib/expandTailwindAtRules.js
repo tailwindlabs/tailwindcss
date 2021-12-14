@@ -150,8 +150,7 @@ function buildStylesheet(rules, context) {
   return returnValue
 }
 
-// export const DEFAULTS_LAYER = Symbol('defaults-layer')
-export const DEFAULTS_LAYER = '__defaults'
+export const DEFAULTS_LAYER = Symbol('defaults-layer')
 
 export default function expandTailwindAtRules(context) {
   return (root) => {
