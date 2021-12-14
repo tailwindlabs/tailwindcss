@@ -39,7 +39,7 @@ export function Button({
   ...props
 }) {
   let colorClasses = typeof color === 'string' ? colors[color] : color
-  let darkColorClasses = typeof darkColor === 'string' ? colorsDark[darkColor] : []
+  let darkColorClasses = typeof darkColor === 'string' ? colorsDark[darkColor] || [] : darkColor
 
   return (
     <Link href={href}>
