@@ -111,7 +111,7 @@ let steps = [
 export default function PlayCdn({ code }) {
   return (
     <InstallationLayout>
-      <div className="relative z-10 prose mb-16 max-w-3xl">
+      <div className="relative z-10 prose mb-16 max-w-3xl dark:prose-dark">
         <p>
           Use the Play CDN to try Tailwind right in the browser without any build step. The Play CDN
           is designed for development purposes only, and is not the best choice for production.
