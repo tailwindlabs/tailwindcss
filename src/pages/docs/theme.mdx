@@ -276,12 +276,12 @@ module.exports = {
     spacing: {
       // ...
     },
-    backgroundSize: ({ theme }) => {
+    backgroundSize: ({ theme }) => ({
       auto: 'auto',
       cover: 'cover',
       contain: 'contain',
       ...theme('spacing')
-    }
+    })
   }
 }
 ```
