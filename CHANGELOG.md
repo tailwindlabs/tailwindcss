@@ -7,7 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Warn about invalid globs in `content` ([#6449](https://github.com/tailwindlabs/tailwindcss/pull/6449))
 - Add 'text-decoration-color' to default 'transition' and 'transition-colors' utilities ([#6405](https://github.com/tailwindlabs/tailwindcss/pull/6405))
+
+### Fixed
+
+- Don't output unparsable values ([#6469](https://github.com/tailwindlabs/tailwindcss/pull/6469))
+- Fix text decoration utilities from overriding the new text decoration color/style/thickness utilities when used with a modifier ([#6378](https://github.com/tailwindlabs/tailwindcss/pull/6378))
+
+## [3.0.2] - 2021-12-13
+
+### Fixed
+
+- Temporarily disable optimize universal defaults, fixes issue with transforms/filters/rings not being `@apply`-able in CSS modules/Svelte components/Vue components ([#6461](https://github.com/tailwindlabs/tailwindcss/pull/6461))
 
 ## [3.0.1] - 2021-12-10
 
@@ -1690,7 +1704,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.2...HEAD
+[3.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.2...v3.0.0
 [3.0.0-alpha.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.0-alpha.1...v3.0.0-alpha.2

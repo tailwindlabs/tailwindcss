@@ -552,7 +552,7 @@
   --tw-text-opacity: 0.1;
 }
 .underline {
-  text-decoration: underline;
+  text-decoration-line: underline;
 }
 .antialiased {
   -webkit-font-smoothing: antialiased;

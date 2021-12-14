@@ -805,7 +805,7 @@
   --tw-text-opacity: 0.1;
 }
 .underline {
-  text-decoration: underline;
+  text-decoration-line: underline;
 }
 .decoration-red-600 {
   text-decoration-color: #dc2626;

@@ -12,6 +12,10 @@ function log(chalk, messages, key) {
   messages.forEach((message) => console.warn(chalk, '-', message))
 }
 
+export function dim(input) {
+  return chalk.dim(input)
+}
+
 export default {
   info(key, messages) {
     log(chalk.bold.cyan('info'), ...(Array.isArray(key) ? [key] : [messages, key]))

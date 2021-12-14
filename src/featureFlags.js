@@ -2,7 +2,11 @@ import chalk from 'chalk'
 import log from './util/log'
 
 let defaults = {
-  optimizeUniversalDefaults: true,
+  // TODO: Drop this once we can safely rely on optimizeUniversalDefaults being
+  // the default.
+  optimizeUniversalDefaults: process.env.NODE_ENV === 'test' ? true : false,
+
+  // optimizeUniversalDefaults: true
 }
 
 let featureFlags = {

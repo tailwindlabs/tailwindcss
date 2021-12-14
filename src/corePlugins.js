@@ -1660,10 +1660,10 @@ export let corePlugins = {
 
   textDecoration: ({ addUtilities }) => {
     addUtilities({
-      '.underline': { 'text-decoration': 'underline' },
-      '.overline': { 'text-decoration': 'overline' },
-      '.line-through': { 'text-decoration': 'line-through' },
-      '.no-underline': { 'text-decoration': 'none' },
+      '.underline': { 'text-decoration-line': 'underline' },
+      '.overline': { 'text-decoration-line': 'overline' },
+      '.line-through': { 'text-decoration-line': 'line-through' },
+      '.no-underline': { 'text-decoration-line': 'none' },
     })
   },
 

@@ -123,7 +123,7 @@
   background-color: rgb(253 224 71 / var(--tw-bg-opacity));
 }
 .first-line\:underline::first-line {
-  text-decoration: underline;
+  text-decoration-line: underline;
 }
 .marker\:text-lg *::marker {
   font-size: 1.125rem;
