@@ -96,7 +96,7 @@ function Nav({ nav, children, fallbackHref }) {
 
   return (
     <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6">
-      <SearchButton className="hidden w-full mb-8 lg:flex items-center text-sm leading-6 text-gray-400 rounded-md ring-1 ring-gray-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-gray-300 dark:bg-gray-400/10">
+      <SearchButton className="hidden w-full mb-8 lg:flex items-center text-sm leading-6 text-gray-400 rounded-md ring-1 ring-gray-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-gray-300 dark:bg-gray-400/10 dark:highlight-white/5">
         {({ actionKey }) => (
           <>
             <svg width="24" height="24" fill="none" aria-hidden="true" className="mr-3 flex-none">
@@ -188,9 +188,9 @@ const TopLevelAnchor = forwardRef(
         >
           <div
             className={clsx(
-              'mr-4 rounded-md ring-1 ring-gray-900/5 shadow-sm group-hover:shadow group-hover:ring-gray-900/10 dark:bg-gray-800 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none',
+              'mr-4 rounded-md ring-1 ring-gray-900/5 shadow-sm group-hover:shadow group-hover:ring-gray-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none',
               shadow,
-              isActive && activeBackground
+              isActive ? activeBackground : 'dark:bg-gray-800 dark:highlight-white/5'
             )}
           >
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">

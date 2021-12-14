@@ -335,6 +335,13 @@ module.exports = {
         },
         { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
       )
+
+      matchUtilities(
+        {
+          highlight: (value) => ({ boxShadow: `inset 0 1px 0 0 ${value}` }),
+        },
+        { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
+      )
     },
     function ({ addUtilities, theme }) {
       let backgroundSize = '7.07px 7.07px'

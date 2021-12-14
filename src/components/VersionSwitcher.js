@@ -5,7 +5,7 @@ import clsx from 'clsx'
 export function VersionSwitcher({ className }) {
   return (
     <Menu as="div" className="relative">
-      <Menu.Button className="text-xs leading-5 font-semibold bg-gray-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-gray-400/20">
+      <Menu.Button className="text-xs leading-5 font-semibold bg-gray-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-gray-400/20 dark:highlight-white/5">
         v3.0.0
         <svg width="6" height="3" className="ml-2 overflow-visible" aria-hidden="true">
           <path
