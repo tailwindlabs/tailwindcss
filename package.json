@@ -101,7 +101,8 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/integrations/"
+      "/integrations/",
+      "/standalone-cli/"
     ],
     "transform": {
       "\\.js$": "@swc/jest"
