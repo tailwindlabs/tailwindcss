@@ -53,15 +53,18 @@ export function Footer({ children, previous, next }) {
           <p>Copyright &copy; 2021 Tailwind Labs Inc.</p>
           <p className="sm:ml-4 sm:pl-4 sm:border-l sm:border-gray-200 dark:sm:border-gray-200/5">
             <Link href="/brand">
-              <a className="hover:text-gray-900">Trademark Policy</a>
+              <a className="hover:text-gray-900 dark:hover:text-gray-400">Trademark Policy</a>
             </Link>
           </p>
         </div>
         {children ? (
           children
         ) : (
-          <div className="flex space-x-10 text-gray-400">
-            <a href="https://github.com/tailwindlabs/tailwindcss" className="hover:text-gray-500">
+          <div className="flex space-x-10 text-gray-400 dark:text-gray-500">
+            <a
+              href="https://github.com/tailwindlabs/tailwindcss"
+              className="hover:text-gray-500 dark:hover:text-gray-400"
+            >
               <span className="sr-only">GitHub</span>
               <svg width="25" height="24" fill="currentColor">
                 <path
@@ -71,7 +74,7 @@ export function Footer({ children, previous, next }) {
                 />
               </svg>
             </a>
-            <a href="/discord" className="hover:text-gray-500">
+            <a href="/discord" className="hover:text-gray-500 dark:hover:text-gray-400">
               <span className="sr-only">Discord</span>
               <svg width="23" height="24" fill="currentColor">
                 <path d="M9.555 9.23c-.74 0-1.324.624-1.324 1.385S8.827 12 9.555 12c.739 0 1.323-.624 1.323-1.385.013-.761-.584-1.385-1.323-1.385Zm4.737 0c-.74 0-1.324.624-1.324 1.385S13.564 12 14.292 12c.74 0 1.324-.624 1.324-1.385s-.584-1.385-1.324-1.385Z" />
