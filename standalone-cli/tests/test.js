@@ -17,9 +17,7 @@ it('works', () => {
 })
 
 it('supports first-party plugins', () => {
-  let result = exec(
-    '--content tests/fixtures/plugins.html --config tests/fixtures/test.config.js'
-  )
+  let result = exec('--content tests/fixtures/plugins.html --config tests/fixtures/test.config.js')
   expect(result).toContain('.aspect-w-1')
   expect(result).toContain('.form-input')
   expect(result).toContain('.line-clamp-2')
