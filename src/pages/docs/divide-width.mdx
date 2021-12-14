@@ -36,7 +36,7 @@ export const classes = {
 Add borders between horizontal elements using the `divide-x-{width}` utilities.
 
 <Example>
-  <div class="grid grid-cols-3 divide-x divide-gray-200 font-mono text-white text-sm text-center font-bold leading-6 rounded-lg shadow-lg overflow-hidden">
+  <div class="grid grid-cols-3 divide-x font-mono text-white text-sm text-center font-bold leading-6 rounded-lg shadow-lg overflow-hidden">
     <div class="p-4 text-gray-400 bg-white">01</div>
     <div class="p-4 text-gray-400 bg-white">02</div>
     <div class="p-4 text-gray-400 bg-white">03</div>
@@ -44,7 +44,7 @@ Add borders between horizontal elements using the `divide-x-{width}` utilities.
 </Example>
 
 ```html
-<div class="grid grid-cols-3 **divide-x** divide-green-500">
+<div class="grid grid-cols-3 **divide-x**">
   <div>01</div>
   <div>02</div>
   <div>03</div>
@@ -56,7 +56,7 @@ Add borders between horizontal elements using the `divide-x-{width}` utilities.
 Add borders between stacked elements using the `divide-y-{width}` utilities.
 
 <Example p="none">
-  <div class="grid grid-cols-1 divide-y divide-gray-200 font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
+  <div class="grid grid-cols-1 divide-y font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
     <div class="p-4 text-gray-400 bg-white">01</div>
     <div class="p-4 text-gray-400 bg-white">02</div>
     <div class="p-4 text-gray-400 bg-white">03</div>
@@ -64,7 +64,7 @@ Add borders between stacked elements using the `divide-y-{width}` utilities.
 </Example>
 
 ```html
-<div class="grid grid-cols-1 **divide-y** divide-yellow-500">
+<div class="grid grid-cols-1 **divide-y**">
   <div>01</div>
   <div>02</div>
   <div>03</div>
@@ -76,7 +76,7 @@ Add borders between stacked elements using the `divide-y-{width}` utilities.
 If your elements are in reverse order (using say `flex-row-reverse` or `flex-col-reverse`), use the `divide-x-reverse` or `divide-y-reverse` utilities to ensure the border is added to the correct side of each element.
 
 <Example p="none">
-  <div class="flex flex-col-reverse divide-y divide-y-reverse divide-gray-200 font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
+  <div class="flex flex-col-reverse divide-y divide-y-reverse font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
     <div class="p-4 text-gray-400 bg-white">01</div>
     <div class="p-4 text-gray-400 bg-white">02</div>
     <div class="p-4 text-gray-400 bg-white">03</div>
@@ -84,7 +84,7 @@ If your elements are in reverse order (using say `flex-row-reverse` or `flex-col
 </Example>
 
 ```html
-<div class="flex **flex-col-reverse divide-y divide-y-reverse** divide-rose-400">
+<div class="flex **flex-col-reverse divide-y divide-y-reverse**">
   <div>01</div>
   <div>02</div>
   <div>03</div>
