@@ -42,7 +42,7 @@ function validatePath(config, path, defaultValue) {
     ? pathToString(path)
     : path.replace(/^['"]+/g, '').replace(/['"]+$/g, '')
   const pathSegments = Array.isArray(path) ? path : toPath(pathString)
-  const value = dlv(config.theme, pathString, defaultValue)
+  const value = dlv(config.theme, pathSegments, defaultValue)
 
   if (value === undefined) {
     let error = `'${pathString}' does not exist in your theme config.`
