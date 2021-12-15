@@ -8,7 +8,6 @@ import {
   InlineCode,
 } from '@/components/home/common'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
-import iconUrl from '@/img/icons/home/state-variants.png'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import { useEffect, useRef, useState } from 'react'
 import { usePrevious } from '@/hooks/usePrevious'
@@ -89,9 +88,11 @@ export function StateVariants() {
   return (
     <section id="state-variants">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-blue-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/state-variants.png').default}
+          dark={require('@/img/icons/home/dark/state-variants.png').default}
+        />
         <Caption className="text-blue-500">State variants</Caption>
         <BigText>
           <Widont>Hover and focus states? We got ’em.</Widont>

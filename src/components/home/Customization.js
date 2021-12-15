@@ -9,7 +9,6 @@ import {
 } from '@/components/home/common'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
-import iconUrl from '@/img/icons/home/customization.png'
 import { useEffect, useRef, useState } from 'react'
 import tailwindColors from 'tailwindcss/colors'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -90,9 +89,11 @@ export function Customization() {
   return (
     <section id="customization">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-pink-500 dark:highlight-white/30"
+          light={require('@/img/icons/home/customization.png').default}
+          dark={require('@/img/icons/home/dark/customization.png').default}
+        />
         <Caption className="text-pink-500 dark:text-pink-400">Customization</Caption>
         <BigText>
           <Widont>Extend it, tweak it, change it.</Widont>

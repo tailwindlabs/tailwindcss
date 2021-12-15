@@ -1,7 +1,6 @@
 import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
-import iconUrl from '@/img/icons/home/constraint-based.png'
 import defaultConfig from 'defaultConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
@@ -279,9 +278,11 @@ export function ConstraintBased() {
   return (
     <section id="constraint-based" className="relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-indigo-500 dark:highlight-white/10"
+          light={require('@/img/icons/home/constraint-based.png').default}
+          dark={require('@/img/icons/home/dark/constraint-based.png').default}
+        />
         <Caption className="text-indigo-500 dark:text-indigo-400">Constraint-based</Caption>
         <BigText>
           <Widont>An API for your design system.</Widont>

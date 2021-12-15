@@ -1,7 +1,6 @@
 import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { TabBar } from '@/components/TabBar'
-import iconUrl from '@/img/icons/home/performance.png'
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { GridLockup } from '../GridLockup'
@@ -127,9 +126,11 @@ export function Performance() {
   return (
     <section id="performance">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-sky-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/performance.png').default}
+          dark={require('@/img/icons/home/dark/performance.png').default}
+        />
         <Caption className="text-sky-500">Performance</Caption>
         <BigText>It's tiny — never ship unused CSS again.</BigText>
         <Paragraph>

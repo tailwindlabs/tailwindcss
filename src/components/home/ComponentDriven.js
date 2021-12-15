@@ -11,7 +11,6 @@ import { GridLockup } from '@/components/GridLockup'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { Fragment, useEffect, useState } from 'react'
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
-import iconUrl from '@/img/icons/home/component-driven.png'
 import { Tabs } from '@/components/Tabs'
 import { AnimatePresence, motion } from 'framer-motion'
 import clsx from 'clsx'
@@ -532,9 +531,11 @@ export function ComponentDriven() {
   return (
     <section id="component-driven">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-sky-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/component-driven.png').default}
+          dark={require('@/img/icons/home/dark/component-driven.png').default}
+        />
         <Caption className="text-sky-500">Component-driven</Caption>
         <BigText>
           <Widont>Worried about duplication? Don’t be.</Widont>

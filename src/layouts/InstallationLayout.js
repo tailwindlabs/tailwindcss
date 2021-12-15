@@ -21,7 +21,11 @@ let readNext = [
         primitive utilities.
       </p>
     ),
-    image: require('@/img/icons/home/utility-first.png').default,
+    icon: {
+      className: 'dark:bg-indigo-500 dark:highlight-white/20',
+      light: require('@/img/icons/home/utility-first.png').default,
+      dark: require('@/img/icons/home/dark/utility-first.png').default,
+    },
   },
   {
     title: 'Responsive Design',
@@ -32,7 +36,11 @@ let readNext = [
         modifiers.
       </p>
     ),
-    image: require('@/img/icons/home/mobile-first.png').default,
+    icon: {
+      className: 'dark:bg-indigo-500 dark:highlight-white/20',
+      light: require('@/img/icons/home/mobile-first.png').default,
+      dark: require('@/img/icons/home/dark/mobile-first.png').default,
+    },
   },
   {
     title: 'Hover, Focus & Other States',
@@ -43,7 +51,11 @@ let readNext = [
         modifiers.
       </p>
     ),
-    image: require('@/img/icons/home/state-variants.png').default,
+    icon: {
+      className: 'dark:bg-blue-500 dark:highlight-white/20',
+      light: require('@/img/icons/home/state-variants.png').default,
+      dark: require('@/img/icons/home/dark/state-variants.png').default,
+    },
   },
   {
     title: 'Dark Mode',
@@ -51,7 +63,11 @@ let readNext = [
     body: () => (
       <p>Optimize your site for dark mode directly in your HTML using the dark mode modifier.</p>
     ),
-    image: require('@/img/icons/home/dark-mode.png').default,
+    icon: {
+      className: 'dark:bg-gray-600 dark:highlight-white/20',
+      light: require('@/img/icons/home/dark-mode.png').default,
+      dark: require('@/img/icons/home/dark/dark-mode.png').default,
+    },
   },
   {
     title: 'Reusing Styles',
@@ -61,7 +77,11 @@ let readNext = [
         Manage duplication and keep your projects maintainable by creating reusable abstractions.
       </p>
     ),
-    image: require('@/img/icons/home/component-driven.png').default,
+    icon: {
+      className: 'dark:bg-sky-500 dark:highlight-white/20',
+      light: require('@/img/icons/home/component-driven.png').default,
+      dark: require('@/img/icons/home/dark/component-driven.png').default,
+    },
   },
   {
     title: 'Customizing the Framework',
@@ -69,7 +89,11 @@ let readNext = [
     body: () => (
       <p>Customize the framework to match your brand and extend it with your own custom styles.</p>
     ),
-    image: require('@/img/icons/home/customization.png').default,
+    icon: {
+      className: 'dark:bg-pink-500 dark:highlight-white/30',
+      light: require('@/img/icons/home/customization.png').default,
+      dark: require('@/img/icons/home/dark/customization.png').default,
+    },
   },
 ]
 
@@ -140,9 +164,11 @@ export function InstallationLayout({ children }) {
         <ul className="mt-10 grid grid-cols-1 gap-x-16 gap-y-8 xl:grid-cols-2 xl:gap-y-10">
           {readNext.map((item) => (
             <li key={item.title} className="relative flex items-start">
-              <IconContainer className="flex-none">
-                <img src={item.image} alt="" />
-              </IconContainer>
+              <IconContainer
+                className={clsx('flex-none', item.icon.className)}
+                light={item.icon.light}
+                dark={item.icon.dark}
+              />
               <div className="flex-auto ml-6">
                 <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-200">
                   <Link href={item.href}>

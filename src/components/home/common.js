@@ -1,12 +1,29 @@
 import clsx from 'clsx'
 import { Button } from '../Button'
 
-export function IconContainer({ as: Component = 'div', color, className = '', ...props }) {
+export function IconContainer({ as: Component = 'div', className = '', light, dark, ...props }) {
   return (
     <Component
-      className={`w-16 h-16 rounded-full ring-1 ring-gray-900/10 shadow overflow-hidden ${className}`}
+      className={`w-16 h-16 p-[0.1875rem] rounded-full ring-1 ring-gray-900/10 shadow overflow-hidden ${className}`}
       {...props}
-    />
+    >
+      {light && (
+        <div
+          className="aspect-w-1 aspect-h-1 bg-[length:100%] dark:hidden"
+          style={{
+            backgroundImage: `url(${light})`,
+          }}
+        />
+      )}
+      {dark && (
+        <div
+          className="hidden aspect-w-1 aspect-h-1 bg-[length:100%] dark:block"
+          style={{
+            backgroundImage: `url(${dark})`,
+          }}
+        />
+      )}
+    </Component>
   )
 }
 

@@ -2,7 +2,6 @@ import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/h
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { motion } from 'framer-motion'
 import { Fragment, useEffect, useState } from 'react'
-import iconUrl from '@/img/icons/home/editor-tools.png'
 import { useInView } from 'react-intersection-observer'
 import colors from 'tailwindcss/colors'
 import dlv from 'dlv'
@@ -309,9 +308,11 @@ export function EditorTools() {
   return (
     <section id="editor-tools">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-sky-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/editor-tools.png').default}
+          dark={require('@/img/icons/home/dark/editor-tools.png').default}
+        />
         <Caption className="text-sky-500">Editor tools</Caption>
         <BigText>World-class IDE integration.</BigText>
         <Paragraph as="div">

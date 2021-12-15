@@ -10,7 +10,6 @@ import {
   InlineCode,
 } from '@/components/home/common'
 import { CodeWindow } from '@/components/CodeWindow'
-import iconUrl from '@/img/icons/home/dark-mode.png'
 import { addClassTokens } from '@/utils/addClassTokens'
 import { Token } from '@/components/Code'
 import clsx from 'clsx'
@@ -108,9 +107,11 @@ export function DarkMode() {
   return (
     <section id="dark-mode">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-gray-600 dark:highlight-white/20"
+          light={require('@/img/icons/home/dark-mode.png').default}
+          dark={require('@/img/icons/home/dark/dark-mode.png').default}
+        />
         <Caption className="text-gray-500">Dark mode</Caption>
         <BigText>
           <Widont>Now with Dark Mode.</Widont>

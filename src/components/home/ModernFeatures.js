@@ -9,7 +9,6 @@ import {
 } from '@/components/home/common'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
-import iconUrl from '@/img/icons/home/modern-features.png'
 import { Fragment, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import clsx from 'clsx'
@@ -108,9 +107,11 @@ export function ModernFeatures() {
   return (
     <section id="modern-features">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-indigo-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/modern-features.png').default}
+          dark={require('@/img/icons/home/dark/modern-features.png').default}
+        />
         <Caption className="text-indigo-500 dark:text-indigo-400">Modern features</Caption>
         <BigText>
           <Widont>Cutting-edge is our comfort zone.</Widont>

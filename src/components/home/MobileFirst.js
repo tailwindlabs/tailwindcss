@@ -2,7 +2,6 @@ import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/h
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { motion, useTransform, useMotionValue } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import iconUrl from '@/img/icons/home/mobile-first.png'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import clsx from 'clsx'
 import { GridLockup } from '../GridLockup'
@@ -268,9 +267,11 @@ export function MobileFirst() {
   return (
     <section id="mobile-first" className="overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-indigo-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/mobile-first.png').default}
+          dark={require('@/img/icons/home/dark/mobile-first.png').default}
+        />
         <Caption className="text-indigo-500 dark:text-indigo-400">Mobile-first</Caption>
         <BigText>Responsive everything.</BigText>
         <Paragraph as="div">
