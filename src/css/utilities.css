@@ -27,65 +27,6 @@
   @apply rounded !important;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .motion-reduce\:transform-none:hover {
-    transform: none !important;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .motion-safe\:hover\:-translate-y-1:hover {
-    --transform-translate-y: -0.25rem !important;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .motion-safe\:hover\:scale-110:hover {
-    --transform-scale-x: 1.1 !important;
-    --transform-scale-y: 1.1 !important;
-  }
-}
-
-.focus\:bg-gray-600:focus {
-  @apply bg-gray-600 !important;
-}
-
-.focus\:text-white:focus {
-  @apply text-white !important;
-}
-
-.group:hover .group-hover\:text-white {
-  @apply text-white !important;
-}
-
-.focus-within\:border-teal-500:focus-within {
-  @apply border-teal-500 !important;
-}
-
-.focus-visible\:underline:focus-visible {
-  @apply underline !important;
-}
-
-.focus-visible\:underline.focus-visible {
-  @apply underline !important;
-}
-
-.active\:bg-blue-700:active {
-  @apply bg-blue-700 !important;
-}
-
-.checked\:bg-blue-600:checked {
-  @apply bg-blue-600 !important;
-}
-
-.checked\:border-transparent:checked {
-  @apply border-transparent !important;
-}
-
-.appearance-none::-ms-expand {
-  display: none !important;
-}
-
 .bg-checkered {
   background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23F0F0F0' d='M0 0h8v8H0zm8 8h8v8H8z'/%3E%3C/svg%3E");
   background-size: 16px 16px;
@@ -110,13 +51,4 @@
 .mono > div > span {
   transition-duration: 0.5s;
   transition-property: background-color, border-color, color, fill, stroke;
-}
-
-.form-tick:checked {
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-  border-color: transparent;
-  background-color: currentColor;
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
 }
