@@ -329,7 +329,9 @@ function AtApplySection() {
   return (
     <div className="mt-20 relative max-w-7xl mx-auto px-4 sm:mt-32 sm:px-6 md:px-8 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:grid-rows-1">
       <div className="lg:col-span-7 xl:col-span-6 lg:row-end-1">
-        <h3 className="text-3xl text-gray-900 font-extrabold">Not into component frameworks?</h3>
+        <h3 className="text-3xl text-gray-900 font-extrabold dark:text-gray-200">
+          Not into component frameworks?
+        </h3>
         <Paragraph>
           If you like to keep it old school use Tailwind's <InlineCode>@apply</InlineCode> directive
           to extract repeated utility patterns into custom CSS classes just by copying and pasting
