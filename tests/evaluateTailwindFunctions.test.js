@@ -31,6 +31,111 @@ test('it looks up values in the theme using dot notation', () => {
   })
 })
 
+test('it looks up values in the theme using bracket notation', () => {
+  let input = css`
+    .banana {
+      color: theme('colors[yellow]');
+    }
+  `
+
+  let output = css`
+    .banana {
+      color: #f7cc50;
+    }
+  `
+
+  return run(input, {
+    theme: {
+      colors: {
+        yellow: '#f7cc50',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it looks up values in the theme using consecutive bracket notation', () => {
+  let input = css`
+    .banana {
+      color: theme('colors[yellow][100]');
+    }
+  `
+
+  let output = css`
+    .banana {
+      color: #f7cc50;
+    }
+  `
+
+  return run(input, {
+    theme: {
+      colors: {
+        yellow: {
+          100: '#f7cc50',
+        },
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it looks up values in the theme using bracket notation that have dots in them', () => {
+  let input = css`
+    .banana {
+      padding-top: theme('spacing[1.5]');
+    }
+  `
+
+  let output = css`
+    .banana {
+      padding-top: 0.375rem;
+    }
+  `
+
+  return run(input, {
+    theme: {
+      spacing: {
+        '1.5': '0.375rem',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('theme with mismatched brackets throws an error ', async () => {
+  let config = {
+    theme: {
+      spacing: {
+        '1.5': '0.375rem',
+      },
+    },
+  }
+
+  let input = (path) => css`
+    .banana {
+      padding-top: theme('${path}');
+    }
+  `
+
+  await expect(run(input('spacing[1.5]]'), config)).rejects.toThrowError(
+    `Path is invalid. Has unbalanced brackets: spacing[1.5]]`
+  )
+
+  await expect(run(input('spacing[[1.5]'), config)).rejects.toThrowError(
+    `Path is invalid. Has unbalanced brackets: spacing[[1.5]`
+  )
+
+  await expect(run(input('spacing[a['), config)).rejects.toThrowError(
+    `Path is invalid. Has unbalanced brackets: spacing[a[`
+  )
+})
+
 test('color can be a function', () => {
   let input = css`
     .backgroundColor {
