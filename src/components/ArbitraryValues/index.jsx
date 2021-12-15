@@ -30,7 +30,7 @@ export function ArbitraryValues({ property, name, defaultClass, featuredClass, e
       )}
       <p>
         Learn more about arbitrary value support in the{' '}
-        <a href="/docs/adding-custom-styles#arbitrary-values">arbitrary values</a> documentation.
+        <a href="/docs/adding-custom-styles#using-arbitrary-values">arbitrary values</a> documentation.
       </p>
     </>
   )
