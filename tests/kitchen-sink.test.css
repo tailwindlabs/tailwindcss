@@ -378,8 +378,8 @@ div {
 }
 @media (prefers-reduced-motion: no-preference) {
   .motion-safe\:transition {
-    transition-property: background-color, border-color, text-decoration-color, color, fill, stroke, opacity, box-shadow,
-      transform, filter, backdrop-filter;
+    transition-property: background-color, border-color, color, text-decoration-color, fill, stroke,
+      opacity, box-shadow, transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
@@ -389,8 +389,8 @@ div {
 }
 @media (prefers-reduced-motion: reduce) {
   .motion-reduce\:transition {
-    transition-property: background-color, border-color, text-decoration-color, color, fill, stroke, opacity, box-shadow,
-      transform, filter, backdrop-filter;
+    transition-property: background-color, border-color, color, text-decoration-color, fill, stroke,
+      opacity, box-shadow, transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
@@ -492,8 +492,8 @@ div {
   }
   @media (prefers-reduced-motion: no-preference) {
     .md\:motion-safe\:hover\:transition:hover {
-      transition-property: background-color, border-color, text-decoration-color, color, fill, stroke, opacity, box-shadow,
-        transform, filter, backdrop-filter;
+      transition-property: background-color, border-color, color, text-decoration-color, fill,
+        stroke, opacity, box-shadow, transform, filter, backdrop-filter;
       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       transition-duration: 150ms;
     }
