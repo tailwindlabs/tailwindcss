@@ -306,6 +306,9 @@ module.exports = {
       )
       addVariant('supports-scrollbars', '@supports selector(::-webkit-scrollbar)')
       addVariant('children', '& > *')
+      addVariant('scrollbar', '&::-webkit-scrollbar')
+      addVariant('scrollbar-track', '&::-webkit-scrollbar-track')
+      addVariant('scrollbar-thumb', '&::-webkit-scrollbar-thumb')
     },
     function ({ addUtilities, theme }) {
       const shadows = theme('boxShadow')

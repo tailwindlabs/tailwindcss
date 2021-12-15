@@ -7,26 +7,6 @@
   }
 }
 
-.scrollbar-w-1\.5::-webkit-scrollbar {
-  @apply w-1.5 h-1.5 !important;
-}
-
-.scrollbar-track-gray-100::-webkit-scrollbar-track {
-  @apply bg-gray-100 !important;
-}
-
-.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 !important;
-}
-
-.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
-  @apply rounded !important;
-}
-
-.scrollbar-track-rounded::-webkit-scrollbar-track {
-  @apply rounded !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .motion-reduce\:transform-none:hover {
     transform: none !important;

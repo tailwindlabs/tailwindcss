@@ -65,7 +65,7 @@ export const ClassTable = memo(
         </Heading>
         <div
           className={clsx(
-            'overflow-hidden lg:overflow-auto scrollbar-w-1.5 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-thumb-gray-300 scrollbar-track-rounded',
+            'overflow-hidden lg:overflow-auto scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar-track:!bg-gray-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-gray-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-gray-500/[0.16] dark:scrollbar-thumb:!bg-gray-500/50',
             isCollapsed && 'max-h-96',
             !isScrollable && isCollapsed && 'lg:max-h-[none]',
             isScrollable && 'supports-scrollbars:pr-2 lg:max-h-96'
