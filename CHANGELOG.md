@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [3.0.5] - 2021-12-15
+
+### Fixed
+
+- Revert: add `li` to list-style reset ([9777562d](https://github.com/tailwindlabs/tailwindcss/commit/9777562da37ee631bbf77374c0d14825f09ef9af))
+
 ## [3.0.4] - 2021-12-15
 
 ### Fixed
@@ -1717,7 +1723,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.5...HEAD
+[3.0.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.4...v3.0.5
 [3.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.3...v3.0.4
 [3.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.1...v3.0.2
