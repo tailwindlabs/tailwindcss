@@ -173,7 +173,7 @@ export const ClassTable = memo(
             <button
               type="button"
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="relative text-sm font-semibold text-gray-900 bg-white py-2 px-4 rounded-full ring-1 ring-gray-900/10 shadow-sm"
+              className="relative text-sm font-semibold text-gray-900 bg-white py-2 px-4 rounded-full ring-1 ring-gray-900/10 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:highlight-white/5"
             >
               {isCollapsed ? 'Show all classes' : 'Show fewer classes'}
             </button>
