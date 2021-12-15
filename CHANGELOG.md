@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Insert always on defaults layer in correct spot ([#6526](https://github.com/tailwindlabs/tailwindcss/pull/6526))
 
 ## [3.0.3] - 2021-12-15
 
