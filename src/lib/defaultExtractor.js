@@ -1,5 +1,5 @@
 const PATTERNS = [
-  // /([^<>"'`\s]*\[\w*'[^"`\s]*'?\])/.source, // font-['some_font',sans-serif]
+  /([^<>"'`\s]*\[\w*'[^"`\s]*'?\])/.source, // font-['some_font',sans-serif]
   /([^<>"'`\s]*\[\w*"[^"`\s]*"?\])/.source, // font-["some_font",sans-serif]
   /([^<>"'`\s]*\[\w*\('[^"'`\s]*'\)\])/.source, // bg-[url('...')]
   /([^<>"'`\s]*\[\w*\("[^"'`\s]*"\)\])/.source, // bg-[url("...")]
