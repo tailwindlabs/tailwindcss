@@ -272,7 +272,7 @@ export function ConstraintBased() {
         <IconContainer>
           <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption className="text-indigo-500">Constraint-based</Caption>
+        <Caption className="text-indigo-500 dark:text-indigo-400">Constraint-based</Caption>
         <BigText>
           <Widont>An API for your design system.</Widont>
         </BigText>
@@ -282,7 +282,7 @@ export function ConstraintBased() {
           spacing, typography, shadows, and everything else that makes up a well-engineered design
           system.
         </Paragraph>
-        <Link href="/docs/utility-first" color="indigo">
+        <Link href="/docs/utility-first" color="indigo" darkColor="gray">
           Learn more<span className="sr-only">, utility-first fundamentals</span>
         </Link>
         <div className="mt-10">
@@ -290,7 +290,7 @@ export function ConstraintBased() {
             tabs={tabs}
             selected={tab}
             onChange={(tab) => setTab(tab)}
-            className="text-indigo-600"
+            className="text-indigo-600 dark:text-indigo-500"
             iconClassName="text-indigo-500"
           />
         </div>

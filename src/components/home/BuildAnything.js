@@ -246,7 +246,7 @@ export function BuildAnything() {
         <IconContainer>
           <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption className="text-pink-500">Build anything</Caption>
+        <Caption className="text-pink-500 dark:text-pink-400">Build anything</Caption>
         <BigText>
           <Widont>Build whatever you want, seriously.</Widont>
         </BigText>
@@ -255,7 +255,7 @@ export function BuildAnything() {
           Even with the same color palette and sizing scale, it's easy to build the same component
           with a completely different look in the next project.
         </Paragraph>
-        <Link href="/docs/installation" color="pink">
+        <Link href="/docs/installation" color="pink" darkColor="gray">
           Get started<span className="sr-only">, installation</span>
         </Link>
         <div className="mt-10">

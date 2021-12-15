@@ -855,8 +855,8 @@ function Testimonial({ author, content, url, expanded }) {
 
   return (
     <li ref={ref} className="text-sm leading-6">
-      <figure className="relative flex flex-col-reverse bg-gray-50 rounded-lg p-6">
-        <blockquote className="mt-6 text-gray-700">
+      <figure className="relative flex flex-col-reverse bg-gray-50 rounded-lg p-6 dark:bg-gray-800">
+        <blockquote className="mt-6 text-gray-700 dark:text-gray-300">
           {typeof content === 'string' ? <p>{content}</p> : content}
         </blockquote>
         <figcaption className="flex items-center space-x-4">
@@ -867,7 +867,7 @@ function Testimonial({ author, content, url, expanded }) {
             loading="lazy"
           />
           <div className="flex-auto">
-            <div className="text-base text-gray-900 font-semibold">
+            <div className="text-base text-gray-900 font-semibold dark:text-gray-300">
               {url ? (
                 <a href={url} tabIndex={focusable || expanded ? 0 : -1}>
                   <span className="absolute inset-0" />
@@ -963,7 +963,7 @@ export function Testimonials() {
       </div>
       <div
         className={clsx(
-          'inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-white pt-32 pb-8 pointer-events-none',
+          'inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-white pt-32 pb-8 pointer-events-none dark:from-gray-900',
           expanded ? 'sticky -mt-52' : 'absolute',
           transition && 'transition-opacity duration-300',
           expanded && (showCollapseButton ? 'opacity-100' : 'opacity-0')
@@ -972,7 +972,7 @@ export function Testimonials() {
         <button
           type="button"
           className={clsx(
-            'relative bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-sm text-white font-semibold h-12 px-6 rounded-lg flex items-center',
+            'relative bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-sm text-white font-semibold h-12 px-6 rounded-lg flex items-center dark:bg-gray-700',
             transition && 'transition-transform',
             expanded && !showCollapseButton && 'translate-y-4',
             (!expanded || showCollapseButton) && 'pointer-events-auto'

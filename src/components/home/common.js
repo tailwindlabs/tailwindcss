@@ -17,7 +17,7 @@ export function Caption({ className = '', ...props }) {
 export function BigText({ className = '', ...props }) {
   return (
     <p
-      className={`mt-4 text-3xl sm:text-4xl text-gray-900 font-extrabold tracking-tight ${className}`}
+      className={`mt-4 text-3xl sm:text-4xl text-gray-900 font-extrabold tracking-tight dark:text-gray-50 ${className}`}
       {...props}
     />
   )
@@ -32,7 +32,12 @@ export function Link({ className, ...props }) {
 }
 
 export function InlineCode({ className = '', ...props }) {
-  return <code className={`font-mono text-gray-900 font-medium ${className}`} {...props} />
+  return (
+    <code
+      className={`font-mono text-gray-900 font-medium dark:text-gray-200 ${className}`}
+      {...props}
+    />
+  )
 }
 
 export { Widont } from '@/components/Widont'

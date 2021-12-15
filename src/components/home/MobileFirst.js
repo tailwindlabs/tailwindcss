@@ -250,7 +250,7 @@ export function MobileFirst() {
         <IconContainer>
           <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption className="text-indigo-500">Mobile-first</Caption>
+        <Caption className="text-indigo-500 dark:text-indigo-400">Mobile-first</Caption>
         <BigText>Responsive everything.</BigText>
         <Paragraph as="div">
           <p>
@@ -262,7 +262,7 @@ export function MobileFirst() {
             at a specific breakpoint.
           </p>
         </Paragraph>
-        <Link href="/docs/responsive-design" color="indigo">
+        <Link href="/docs/responsive-design" color="indigo" darkColor="gray">
           Learn more<span className="sr-only">, responsive design</span>
         </Link>
       </div>

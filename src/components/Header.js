@@ -109,23 +109,23 @@ export function NavItems() {
     <>
       <li>
         <Link href="/docs/installation">
-          <a className="hover:text-sky-500">Docs</a>
+          <a className="hover:text-sky-500 dark:hover:text-sky-400">Docs</a>
         </Link>
       </li>
       <li>
-        <a href="https://tailwindui.com" className="hover:text-sky-500">
+        <a href="https://tailwindui.com" className="hover:text-sky-500 dark:hover:text-sky-400">
           Components
         </a>
       </li>
       <li>
         <Link href="/blog">
-          <a className="hover:text-sky-500">Blog</a>
+          <a className="hover:text-sky-500 dark:hover:text-sky-400">Blog</a>
         </Link>
       </li>
       <li>
         <a
           href="https://github.com/tailwindlabs/tailwindcss"
-          className="block w-6 h-6 text-gray-400 hover:text-gray-500"
+          className="block w-6 h-6 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
         >
           <span className="sr-only">Tailwind CSS on GitHub</span>
           <svg viewBox="0 0 16 16" width="24" height="24" fill="currentColor" aria-hidden="true">

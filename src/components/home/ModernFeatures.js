@@ -111,7 +111,7 @@ export function ModernFeatures() {
         <IconContainer>
           <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption className="text-indigo-500">Modern features</Caption>
+        <Caption className="text-indigo-500 dark:text-indigo-400">Modern features</Caption>
         <BigText>
           <Widont>Cutting-edge is our comfort zone.</Widont>
         </BigText>
@@ -126,7 +126,7 @@ export function ModernFeatures() {
             <InlineCode>:focus-visible</InlineCode>, and tons more.
           </p>
         </Paragraph>
-        <Link href="/docs/grid-template-columns" color="indigo">
+        <Link href="/docs/grid-template-columns" color="indigo" darkColor="gray">
           Learn more<span className="sr-only">, grid template columns</span>
         </Link>
         <div className="mt-10">

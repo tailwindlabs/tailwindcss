@@ -93,7 +93,7 @@ export function Customization() {
         <IconContainer>
           <img src={iconUrl} alt="" />
         </IconContainer>
-        <Caption className="text-pink-500">Customization</Caption>
+        <Caption className="text-pink-500 dark:text-pink-400">Customization</Caption>
         <BigText>
           <Widont>Extend it, tweak it, change it.</Widont>
         </BigText>
@@ -108,7 +108,7 @@ export function Customization() {
             transform it into your own custom CSS framework.
           </p>
         </Paragraph>
-        <Link href="/docs/configuration" color="pink">
+        <Link href="/docs/configuration" color="pink" darkColor="gray">
           Learn more<span className="sr-only">, configuration</span>
         </Link>
         <div className="mt-10">
