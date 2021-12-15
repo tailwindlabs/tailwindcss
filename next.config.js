@@ -59,7 +59,7 @@ module.exports = withBundleAnalyzer({
 
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|webp|avif|mp4)$/i,
-      issuer: /\.jsx?$/,
+      issuer: /\.(jsx?|tsx?|mdx)$/,
       use: [
         {
           loader: 'file-loader',
