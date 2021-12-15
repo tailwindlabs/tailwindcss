@@ -560,6 +560,7 @@ async function build() {
     let changedContent = []
     let configDependencies = []
     let contextDependencies = new Set()
+    let lastBuiltCSS = ''
     let watcher = null
 
     function refreshConfig() {
@@ -664,12 +665,20 @@ async function build() {
               return process.stdout.write(result.css)
             }
 
+            if (result.css === lastBuiltCSS) {
+              // there is no change on the built CSS
+              // no need to rewrite the output file
+              return
+            }
+
             await Promise.all(
               [
                 fs.promises.writeFile(output, result.css, () => true),
                 result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
               ].filter(Boolean)
             )
+
+            lastBuiltCSS = result.css
           })
           .then(() => {
             let end = process.hrtime.bigint()
