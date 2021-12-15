@@ -221,15 +221,22 @@ export default function expandTailwindAtRules(context) {
 
     // Replace any Tailwind directives with generated CSS
 
+    if (layerNodes.base) {
+      layerNodes.base.before(cloneNodes([...baseNodes], layerNodes.base.source))
+    }
+
     // @defaults rules are unconditionally added first to ensure that
     // using any utility that relies on defaults will work even when
     // compiled in an isolated environment like CSS modules
     if (context.tailwindConfig[DEFAULTS_LAYER] !== false) {
-      root.prepend(cloneNodes([...defaultNodes], root.source))
+      if (layerNodes.base) {
+        layerNodes.base.after(cloneNodes([...defaultNodes], root.source))
+      } else {
+        root.prepend(cloneNodes([...defaultNodes], root.source))
+      }
     }
 
     if (layerNodes.base) {
-      layerNodes.base.before(cloneNodes([...baseNodes], layerNodes.base.source))
       layerNodes.base.remove()
     }
 
