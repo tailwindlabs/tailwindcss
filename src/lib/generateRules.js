@@ -325,7 +325,6 @@ function* resolveMatchedPlugins(classCandidate, context) {
   for (let [prefix, modifier] of candidatePermutations(candidatePrefix)) {
     if (context.candidateRuleMap.has(prefix)) {
       yield [context.candidateRuleMap.get(prefix), negative ? `-${modifier}` : modifier]
-      return
     }
   }
 }
