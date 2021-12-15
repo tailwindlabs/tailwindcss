@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Don't mutate custom color palette when overriding per-plugin colors ([#6546](https://github.com/tailwindlabs/tailwindcss/pull/6546))
 
 ## [3.0.6] - 2021-12-16
 
