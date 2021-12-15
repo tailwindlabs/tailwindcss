@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: git fetch --tags
+      - run: git fetch --tags -f
 
       - name: Resolve version
         id: vars
