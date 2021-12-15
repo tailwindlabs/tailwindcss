@@ -65,10 +65,10 @@ export function TipInfo({ children }) {
   return (
     <div className="not-prose mt-6 -mb-1 flex space-x-2">
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="flex-none w-5 h-5 text-gray-400"
+        className="flex-none w-5 h-5 text-gray-400 dark:text-gray-600"
         viewBox="0 0 20 20"
         fill="currentColor"
+        aria-hidden="true"
       >
         <path
           fillRule="evenodd"
@@ -77,7 +77,7 @@ export function TipInfo({ children }) {
         />
       </svg>
 
-      <p className="text-gray-700 text-sm font-medium">{children}</p>
+      <p className="text-gray-700 text-sm font-medium dark:text-gray-200">{children}</p>
     </div>
   )
 }
