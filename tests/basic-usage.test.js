@@ -57,3 +57,55 @@ test('all plugins are executed that match a candidate', () => {
     `)
   })
 })
+
+test('per-plugin colors with the same key can differ when using a custom colors object', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="bg-theme text-theme">This should be green text on red background.</div>
+        `,
+      },
+    ],
+    theme: {
+      // colors & theme MUST be plain objects
+      // If they're functions here the test passes regardless
+      colors: {
+        theme: {
+          bg: 'red',
+          text: 'green',
+        },
+      },
+      extend: {
+        textColor: {
+          theme: {
+            DEFAULT: 'green',
+          },
+        },
+        backgroundColor: {
+          theme: {
+            DEFAULT: 'red',
+          },
+        },
+      },
+    },
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-theme {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+      }
+      .text-theme {
+        --tw-text-opacity: 1;
+        color: rgb(0 128 0 / var(--tw-text-opacity));
+      }
+    `)
+  })
+})

@@ -6,6 +6,8 @@ import colors from '../public/colors'
 import { defaults } from './defaults'
 import { toPath } from './toPath'
 import { normalizeConfig } from './normalizeConfig'
+import isPlainObject from './isPlainObject'
+import { cloneDeep } from './cloneDeep'
 
 function isFunction(input) {
   return typeof input === 'function'
@@ -144,7 +146,15 @@ function resolveFunctionKeys(object) {
       val = isFunction(val) ? val(resolvePath, configUtils) : val
     }
 
-    return val === undefined ? defaultValue : val
+    if (val === undefined) {
+      return defaultValue
+    }
+
+    if (isPlainObject(val)) {
+      return cloneDeep(val)
+    }
+
+    return val
   }
 
   resolvePath.theme = resolvePath
