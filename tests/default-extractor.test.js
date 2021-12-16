@@ -1,4 +1,4 @@
-import { promises as fs } from "fs"
+import { promises as fs } from 'fs'
 import extract from '../src/lib/defaultExtractor'
 
 test('Extract $input', async () => {

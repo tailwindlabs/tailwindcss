@@ -1,4 +1,5 @@
 const PATTERNS = [
+  /(\["(text-\[10px\]))/.source, // text-[foo] in ["text-[foo] or ['text-[foo]
   /([^<>"'`\s]*\[\w*'[^"`\s]*'?\])/.source, // font-['some_font',sans-serif]
   /([^<>"'`\s]*\[\w*"[^"`\s]*"?\])/.source, // font-["some_font",sans-serif]
   /([^<>"'`\s]*\[\w*\('[^"'`\s]*'\)\])/.source, // bg-[url('...')]

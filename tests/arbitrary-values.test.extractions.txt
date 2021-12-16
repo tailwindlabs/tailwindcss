@@ -99,6 +99,7 @@
 123_123_123
 123_456_789
 144
+14px
 15
 15px
 16/9
@@ -151,8 +152,10 @@ Title
 Title<
 UTF-8
 VALID
+[
 \1F44D
 ]
+]<
 _2_2,pointer
 _black
 _infinite
@@ -315,6 +318,7 @@ delay-
 delay-[var(--delay)]
 device-width,
 div
+div>
 divide-
 divide-[black]
 divide-[var(--value)]
@@ -436,6 +440,8 @@ length:200px_100px
 length:var
 lg:grid-cols-
 lg:grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]
+lg:text-
+lg:text-[14px]
 linear-gradient
 linename
 link
@@ -651,6 +657,7 @@ stylesheet
 syntax-wise
 text-
 text-[0]
+text-[10px]
 text-[2.23rem]
 text-[angle:var(--angle)]
 text-[black]
