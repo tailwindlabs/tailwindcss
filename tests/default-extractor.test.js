@@ -30,10 +30,10 @@ const input = html`
     let classes04 = ['text-[11px]']
     let classes05 = ['text-[21px]', 'text-[22px]', 'lg:text-[24px]']
     let classes06 = ["text-[31px]", "text-[32px]"]
-    let classes07 = [${"`"}text-[41px]${"`"}, ${"`"}text-[42px]${"`"}]
+    let classes07 = [${'`'}text-[41px]${'`'}, ${'`'}text-[42px]${'`'}]
     let classes08 = {"text-[51px]":"text-[52px]"}
     let classes09 = {'text-[61px]':'text-[62px]'}
-    let classes10 = {${"`"}text-[71px]${"`"}:${"`"}text-[72px]${"`"}}
+    let classes10 = {${'`'}text-[71px]${'`'}:${'`'}text-[72px]${'`'}}
     let classes11 = ['hover:']
     let classes12 = ['hover:\'abc']
     let classes13 = ["lg:text-[4px]"]
@@ -82,7 +82,7 @@ const includes = [
   `lg:text-[24px]`,
 ]
 
-const excludes = [`uppercase:`, 'hover:', 'hover:\'abc', `font-bold`]
+const excludes = [`uppercase:`, 'hover:', "hover:'abc", `font-bold`]
 
 test('The default extractor works as expected', async () => {
   const extractions = defaultExtractor(input.trim())
