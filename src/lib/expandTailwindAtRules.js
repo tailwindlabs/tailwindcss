@@ -3,7 +3,7 @@ import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import bigSign from '../util/bigSign'
 import cloneNodes from '../util/cloneNodes'
-import defaultExtractor from './defaultExtractor'
+import { defaultExtractor } from './defaultExtractor'
 
 let env = sharedState.env
 

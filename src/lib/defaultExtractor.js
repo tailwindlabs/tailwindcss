@@ -1,7 +1,6 @@
 const PATTERNS = [
-  /(\["(text-\[10px\]))/.source, // text-[foo] in ["text-[foo] or ['text-[foo]
   /([^<>"'`\s]*\[\w*'[^"`\s]*'?\])/.source, // font-['some_font',sans-serif]
-  /([^<>"'`\s]*\[\w*"[^"`\s]*"?\])/.source, // font-["some_font",sans-serif]
+  /([^<>"'`\s]*\[\w*"[^'`\s]*"?\])/.source, // font-["some_font",sans-serif]
   /([^<>"'`\s]*\[\w*\('[^"'`\s]*'\)\])/.source, // bg-[url('...')]
   /([^<>"'`\s]*\[\w*\("[^"'`\s]*"\)\])/.source, // bg-[url("...")]
   /([^<>"'`\s]*\[\w*\('[^"`\s]*'\)\])/.source, // bg-[url('...'),url('...')]
@@ -16,7 +15,7 @@ const PATTERNS = [
 const BROAD_MATCH_GLOBAL_REGEXP = new RegExp(PATTERNS, 'g')
 const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g
 
-export default (content) => {
+export function defaultExtractor(content) {
   let broadMatches = content.match(BROAD_MATCH_GLOBAL_REGEXP) || []
   let innerMatches = content.match(INNER_MATCH_GLOBAL_REGEXP) || []
 
