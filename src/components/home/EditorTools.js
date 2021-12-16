@@ -337,7 +337,7 @@ export function EditorTools() {
             <img
               src={require('@/img/beams/overlay.webp').default}
               alt=""
-              className="absolute z-10 bottom-0 -left-80 w-[45.0625rem] pointer-events-none"
+              className="absolute z-10 bottom-0 -left-80 w-[45.0625rem] pointer-events-none dark:hidden"
             />
             <CodeWindow className="!h-[39.0625rem]">
               <div className="flex-auto flex min-h-0">

@@ -17,21 +17,22 @@ import { Footer } from '@/components/home/Footer'
 import NextLink from 'next/link'
 import Head from 'next/head'
 import { NavItems, NavPopover } from '@/components/Header'
+import styles from './index.module.css'
+import clsx from 'clsx'
 
 function Header() {
   return (
     <header className="relative">
       <div className="px-4 sm:px-6 md:px-8">
-        <div className="absolute inset-0 bottom-10 bg-gray-50 dark:bg-black/25">
-          <img
-            src={require('@/img/beams/hero@75.jpg').default}
-            alt=""
-            className="absolute bottom-0 left-1/2 w-[150rem] ml-[-75rem] max-w-none dark:hidden"
-          />
+        <div
+          className={clsx(
+            'absolute inset-0 bottom-10 bg-bottom bg-no-repeat bg-gray-50 dark:bg-black/25',
+            styles.beams
+          )}
+        >
           <div
-            className="absolute inset-0 bg-grid-gray-900/[0.04]"
+            className="absolute inset-0 bg-grid-gray-900/[0.04] bg-[bottom_1px_center] dark:bg-grid-gray-400/[0.05] dark:bg-bottom dark:border-b dark:border-gray-100/5"
             style={{
-              backgroundPosition: 'bottom 1px center',
               maskImage: 'linear-gradient(to bottom, transparent, black)',
               WebkitMaskImage: 'linear-gradient(to bottom, transparent, black)',
             }}

@@ -17,9 +17,9 @@
 }
 
 :global(.dark) .beams-1 {
-  background-image: none;
-  background-size: 0rem 100%;
-  height: 0rem;
+  background-image: url('../img/beams/1-dark@tinypng.png');
+  background-size: 141.5rem 100%;
+  height: 35.0625rem;
 }
 
 .beams-2 {
@@ -53,9 +53,9 @@
 }
 
 :global(.dark) .beams-4 {
-  background-image: none;
-  background-size: 0rem 100%;
-  height: 0rem;
+  background-image: url('../img/beams/4-dark@tinypng.png');
+  background-size: 129.375rem 100%;
+  height: 37.5rem;
 }
 
 .beams-5 {
@@ -65,9 +65,9 @@
 }
 
 :global(.dark) .beams-5 {
-  background-image: none;
-  background-size: 0rem 100%;
-  height: 0rem;
+  background-image: url('../img/beams/5-dark@tinypng.png');
+  background-size: 127.875rem 100%;
+  height: 35rem;
 }
 
 .beams-6 {
@@ -77,9 +77,9 @@
 }
 
 :global(.dark) .beams-6 {
-  background-image: none;
-  background-size: 0rem 100%;
-  height: 0rem;
+  background-image: url('../img/beams/6-dark@tinypng.png');
+  background-size: 141.875rem 100%;
+  height: 37.0625rem;
 }
 
 .beams-7 {
@@ -89,9 +89,9 @@
 }
 
 :global(.dark) .beams-7 {
-  background-image: none;
-  background-size: 0rem 100%;
-  height: 0rem;
+  background-image: url('../img/beams/7-dark@tinypng.png');
+  background-size: 137.3125rem 100%;
+  height: 37.0625rem;
 }
 
 .beams-8 {
@@ -101,7 +101,7 @@
 }
 
 :global(.dark) .beams-8 {
-  background-image: none;
-  background-size: 0rem 100%;
-  height: 0rem;
+  background-image: url('../img/beams/8-dark@tinypng.png');
+  background-size: 136.75rem 100%;
+  height: 52.625rem;
 }
