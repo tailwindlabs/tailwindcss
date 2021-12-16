@@ -26,6 +26,11 @@ const input = html`
   <script>
     let classes1 = ["text-[10px]"]
     let classes2 = ["hover:font-bold"]
+    let classes3 = {"code": "<div class=\"text-blue-500\"></div>"} -->
+    let classes4 = ['text-[11px]']
+    let classes5 = ['text-[21px]', 'text-[22px]']
+    let classes5 = ["text-[31px]", "text-[32px]"]
+    let classes5 = [\`text-[41px]\`, \`text-[42px]\`]
     let obj = {
       uppercase:true
     }
@@ -51,6 +56,12 @@ const includes = [
   `uppercase`,
   `hover:font-bold`,
   `text-[10px]`,
+  `text-[11px]`,
+  `text-blue-500`,
+  `text-[21px]`,
+  `text-[22px]`,
+  `text-[31px]`,
+  `text-[32px]`,
 ]
 
 const excludes = [`uppercase:`, `font-bold`]
