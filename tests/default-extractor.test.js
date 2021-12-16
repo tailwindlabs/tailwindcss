@@ -69,7 +69,7 @@ const excludes = [`uppercase:`, `font-bold`]
 test('The default extractor works as expected', async () => {
   const extractions = defaultExtractor(input.trim())
 
-  console.log(extractions)
+  console.log(Array.from(new Set(extractions)).sort())
 
   for (const str of includes) {
     expect(extractions).toContain(str)
