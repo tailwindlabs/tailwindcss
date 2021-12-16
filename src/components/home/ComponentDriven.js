@@ -323,7 +323,8 @@ function ApplyExample({ inView }) {
 }
 
 function AtApplySection() {
-  const { inView, ref } = useInView({ threshold: 0.5, triggerOnce: true })
+  let { inView, ref } = useInView({ threshold: 0.5, triggerOnce: true })
+  let fade = ['transition-opacity duration-1500 delay-500', { 'opacity-25': inView }]
 
   return (
     <div className="mt-20 relative max-w-7xl mx-auto px-4 sm:mt-32 sm:px-6 md:px-8 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:grid-rows-1">
@@ -344,26 +345,21 @@ function AtApplySection() {
       <div className="pt-10 lg:col-span-5 xl:col-span-6 lg:row-start-1 lg:row-end-2">
         <div
           ref={ref}
-          className="relative z-10 bg-white rounded-xl shadow-xl ring-1 ring-gray-900/5"
+          className="relative z-10 bg-white rounded-xl shadow-xl ring-1 ring-gray-900/5 dark:bg-gray-800 dark:highlight-white/10"
         >
           <article>
             <h2
               className={clsx(
-                'transition-opacity duration-1500 delay-500 text-lg font-semibold text-gray-900 pt-4 pb-2 px-4 sm:px-6 lg:px-4 xl:px-6',
-                { 'opacity-25': inView }
+                'text-lg font-semibold text-gray-900 pt-4 pb-2 px-4 sm:px-6 lg:px-4 xl:px-6 dark:text-gray-100',
+                ...fade
               )}
             >
               Weekly one-on-one
             </h2>
-            <dl
-              className={clsx(
-                'transition-opacity duration-1500 delay-500 flex flex-wrap divide-y divide-gray-200 border-b border-gray-200 text-sm sm:text-base lg:text-sm xl:text-base',
-                { 'opacity-25': inView }
-              )}
-            >
+            <dl className="flex flex-wrap divide-y divide-gray-200 border-b border-gray-200 text-sm sm:text-base lg:text-sm xl:text-base dark:divide-gray-200/5 dark:border-gray-200/5">
               <div className="px-4 sm:px-6 lg:px-4 xl:px-6 pb-4">
                 <dt className="sr-only">Date and time</dt>
-                <dd>
+                <dd className={clsx(...fade)}>
                   <time dateTime="2020-11-15T10:00:00-05:00">Thu Nov 15, 2020 10:00am</time> -{' '}
                   <time dateTime="2020-11-15T11:00:00-05:00">
                     11:00am<span className="sr-only sm:not-sr-only"> EST</span>
@@ -371,27 +367,53 @@ function AtApplySection() {
                 </dd>
               </div>
               <div className="w-full flex-none flex items-center p-4 sm:p-6 lg:p-4 xl:p-6">
-                <dt className="w-2/5 sm:w-1/4 flex-none text-gray-900 font-medium">Location</dt>
-                <dd>
+                <dt
+                  className={clsx(
+                    'w-2/5 sm:w-1/4 flex-none text-gray-900 font-medium dark:text-gray-300',
+                    ...fade
+                  )}
+                >
+                  Location
+                </dt>
+                <dd className={clsx(...fade)}>
                   Kitchener, <abbr title="Ontario">ON</abbr>
                 </dd>
               </div>
               <div className="w-full flex-none flex items-center p-4 sm:p-6 lg:p-4 xl:p-6">
-                <dt className="w-2/5 sm:w-1/4 flex-none text-gray-900 font-medium">Description</dt>
-                <dd className="italic">No meeting description</dd>
+                <dt
+                  className={clsx(
+                    'w-2/5 sm:w-1/4 flex-none text-gray-900 font-medium dark:text-gray-300',
+                    ...fade
+                  )}
+                >
+                  Description
+                </dt>
+                <dd className={clsx('italic', ...fade)}>No meeting description</dd>
               </div>
               <div className="w-full flex-none flex items-center p-4 sm:py-5 sm:px-6 lg:p-4 xl:py-5 xl:px-6">
-                <dt className="w-2/5 sm:w-1/4 flex-none text-gray-900 font-medium">Attendees</dt>
-                <dd className="text-sm font-medium text-gray-700 bg-gray-100 rounded-full py-1 px-3">
+                <dt
+                  className={clsx(
+                    'w-2/5 sm:w-1/4 flex-none text-gray-900 font-medium dark:text-gray-300',
+                    ...fade
+                  )}
+                >
+                  Attendees
+                </dt>
+                <dd
+                  className={clsx(
+                    'text-sm font-medium text-gray-700 bg-gray-100 rounded-full py-1 px-3 dark:bg-gray-700 dark:text-gray-300',
+                    ...fade
+                  )}
+                >
                   Andrew McDonald
                 </dd>
               </div>
             </dl>
             <div className="grid grid-cols-2 gap-x-4 sm:gap-x-6 lg:gap-x-4 xl:gap-x-6 p-4 sm:px-6 sm:py-5 lg:p-4 xl:px-6 xl:py-5">
-              <div className="text-base font-medium rounded-lg bg-gray-100 text-gray-900 py-3 text-center cursor-pointer">
+              <div className="text-base font-medium rounded-lg bg-gray-100 text-gray-900 py-3 text-center cursor-pointer dark:bg-gray-600 dark:text-gray-400 dark:highlight-white/10">
                 Decline
               </div>
-              <div className="text-base font-medium rounded-lg bg-sky-500 text-white py-3 text-center cursor-pointer">
+              <div className="text-base font-medium rounded-lg bg-sky-500 text-white py-3 text-center cursor-pointer dark:highlight-white/20">
                 Accept
               </div>
             </div>
@@ -563,7 +585,7 @@ export function ComponentDriven() {
       <GridLockup.Container className="mt-10 xl:mt-2" beams={8}>
         <GridLockup.Grid
           left={
-            <div className="relative z-10 bg-white rounded-xl shadow-xl ring-1 ring-gray-900/5 divide-y divide-gray-100 my-auto xl:mt-18">
+            <div className="relative z-10 bg-white rounded-xl shadow-xl ring-1 ring-gray-900/5 divide-y divide-gray-100 my-auto xl:mt-18 dark:bg-gray-800 dark:divide-gray-200/5 dark:highlight-white/10">
               <nav className="py-4 px-4 sm:px-6 lg:px-4 xl:px-6 text-sm font-medium">
                 <ul className="flex space-x-3">
                   <li>
@@ -572,12 +594,12 @@ export function ComponentDriven() {
                     </div>
                   </li>
                   <li>
-                    <div className="px-3 py-2 rounded-md bg-gray-50 cursor-pointer">
+                    <div className="px-3 py-2 rounded-md bg-gray-50 cursor-pointer dark:bg-transparent dark:text-gray-300 dark:ring-1 dark:ring-gray-700">
                       Top<span className="hidden sm:inline"> Rated</span>
                     </div>
                   </li>
                   <li>
-                    <div className="px-3 py-2 rounded-md bg-gray-50 cursor-pointer">
+                    <div className="px-3 py-2 rounded-md bg-gray-50 cursor-pointer dark:bg-transparent dark:text-gray-300 dark:ring-1 dark:ring-gray-700">
                       Vincent’s Picks
                     </div>
                   </li>
@@ -600,9 +622,11 @@ export function ComponentDriven() {
                     className="flex-none rounded-md bg-gray-100"
                   />
                   <div className="min-w-0 relative flex-auto">
-                    <h2 className="font-semibold text-gray-900 truncate sm:pr-20">{title}</h2>
+                    <h2 className="font-semibold text-gray-900 truncate sm:pr-20 dark:text-gray-100">
+                      {title}
+                    </h2>
                     <dl className="mt-2 flex flex-wrap text-sm leading-6 font-medium">
-                      <div className="hidden absolute top-0 right-0 sm:flex items-center space-x-1">
+                      <div className="hidden absolute top-0 right-0 sm:flex items-center space-x-1 dark:text-gray-100">
                         <dt className="text-sky-500">
                           <span className="sr-only">Star rating</span>
                           <svg width="16" height="20" fill="currentColor">
@@ -611,9 +635,11 @@ export function ComponentDriven() {
                         </dt>
                         <dd>{starRating}</dd>
                       </div>
-                      <div>
+                      <div className="dark:text-gray-200">
                         <dt className="sr-only">Rating</dt>
-                        <dd className="px-1.5 ring-1 ring-gray-200 rounded">{rating}</dd>
+                        <dd className="px-1.5 ring-1 ring-gray-200 rounded dark:ring-gray-600">
+                          {rating}
+                        </dd>
                       </div>
                       <div className="ml-2">
                         <dt className="sr-only">Year</dt>
