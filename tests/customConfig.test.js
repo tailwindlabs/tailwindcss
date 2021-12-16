@@ -384,3 +384,41 @@ test('function presets can be mixed with object presets', () => {
     `)
   })
 })
+
+test('Using presets without an empty presets array doesnt overwrite plugins', () => {
+  let plugin = require('../plugin')
+
+  let config = {
+    presets: [
+      require('../stubs/defaultConfig.stub.js'),
+      {
+        theme: {},
+        plugins: [
+          plugin(
+            function ({ matchUtilities, theme }) {
+              matchUtilities(
+                { 'aspect-w': (value) => [{ color: value }] },
+                { values: theme('aspectRatio') }
+              )
+            },
+            {
+              theme: { aspectRatio: { foo: 'red' } },
+            }
+          ),
+        ],
+      },
+      {
+        theme: { colors: {} },
+      },
+    ],
+    content: [{ raw: `<div class="aspect-w-foo"></div>` }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .aspect-w-foo {
+        color: red;
+      }
+    `)
+  })
+})

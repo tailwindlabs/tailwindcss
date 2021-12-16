@@ -1,11 +1,12 @@
 import defaultConfig from '../../stubs/defaultConfig.stub.js'
 import { flagEnabled } from '../featureFlags'
 
-export default function getAllConfigs(config) {
-  const configs = (config?.presets ?? [defaultConfig])
+export default function getAllConfigs(config, depth = 0) {
+  const presets = config?.presets ?? (depth > 0 ? [] : [defaultConfig])
+  const configs = presets
     .slice()
     .reverse()
-    .flatMap((preset) => getAllConfigs(preset instanceof Function ? preset() : preset))
+    .flatMap((preset) => getAllConfigs(preset instanceof Function ? preset() : preset, depth + 1))
 
   const features = {
     // Add experimental configs here...
