@@ -26,9 +26,9 @@ const input = html`
   <script>
     let classes01 = ["text-[10px]"]
     let classes02 = ["hover:font-bold"]
-    let classes03 = {"code": "<div class=\"text-blue-500\"></div>"} -->
+    let classes03 = {"code": "<div class=\"text-sm text-blue-500\"></div>"} -->
     let classes04 = ['text-[11px]']
-    let classes05 = ['text-[21px]', 'text-[22px]']
+    let classes05 = ['text-[21px]', 'text-[22px]', 'lg:text-[24px]']
     let classes06 = ["text-[31px]", "text-[32px]"]
     let classes07 = [${"`"}text-[41px]${"`"}, ${"`"}text-[42px]${"`"}]
     let classes08 = {"text-[51px]":"text-[52px]"}
@@ -36,6 +36,7 @@ const input = html`
     let classes10 = {${"`"}text-[71px]${"`"}:${"`"}text-[72px]${"`"}}
     let classes11 = ['hover:']
     let classes12 = ['hover:\'abc']
+    let classes13 = ["lg:text-[4px]"]
 
     let obj = {
       uppercase:true
@@ -61,6 +62,7 @@ const includes = [
   `px-1.5`,
   `uppercase`,
   `hover:font-bold`,
+  `text-sm`,
   `text-[10px]`,
   `text-[11px]`,
   `text-blue-500`,
@@ -76,6 +78,8 @@ const includes = [
   `text-[62px]`,
   `text-[71px]`,
   `text-[72px]`,
+  `lg:text-[4px]`,
+  `lg:text-[24px]`,
 ]
 
 const excludes = [`uppercase:`, 'hover:', 'hover:\'abc', `font-bold`]
