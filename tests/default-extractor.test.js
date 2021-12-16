@@ -34,6 +34,8 @@ const input = html`
     let classes08 = {"text-[51px]":"text-[52px]"}
     let classes09 = {'text-[61px]':'text-[62px]'}
     let classes10 = {${"`"}text-[71px]${"`"}:${"`"}text-[72px]${"`"}}
+    let classes11 = ['hover:']
+    let classes12 = ['hover:\'abc']
 
     let obj = {
       uppercase:true
@@ -76,7 +78,7 @@ const includes = [
   `text-[72px]`,
 ]
 
-const excludes = [`uppercase:`, `font-bold`]
+const excludes = [`uppercase:`, 'hover:', 'hover:\'abc', `font-bold`]
 
 test('The default extractor works as expected', async () => {
   const extractions = defaultExtractor(input.trim())
