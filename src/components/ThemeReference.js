@@ -56,7 +56,7 @@ const descriptions = {
 
 export function ThemeReference() {
   return (
-    <div className="prose">
+    <div className="prose dark:prose-dark">
       <table>
         <thead>
           <tr>
