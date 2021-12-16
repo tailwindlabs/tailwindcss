@@ -14,28 +14,28 @@ export const classes = {
     <table className="w-full text-left border-collapse">
       <thead>
         <tr>
-          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0">
-            <div className="py-2 pr-2 border-b border-gray-200">Class</div>
+          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0 dark:bg-gray-900 dark:text-gray-300">
+            <div className="py-2 pr-2 border-b border-gray-200 dark:border-gray-400/20">Class</div>
           </th>
-          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0">
-            <div className="py-2 pl-2 border-b border-gray-200">Properties</div>
+          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0 dark:bg-gray-900 dark:text-gray-300">
+            <div className="py-2 pl-2 border-b border-gray-200 dark:border-gray-400/20">Properties</div>
           </th>
         </tr>
       </thead>
       <tbody className="align-baseline">
         <tr>
-          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap">
+          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap dark:text-sky-400">
             animate-none
           </td>
-          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre">
+          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre dark:text-indigo-300">
             animation: none;
           </td>
         </tr>
         <tr>
-          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap border-t border-gray-100">
+          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap border-t border-gray-100 dark:border-gray-400/10 dark:text-sky-400">
             animate-spin
           </td>
-          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100">
+          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100 dark:border-gray-400/10 dark:text-indigo-300">
             {redent(`
               animation: spin 1s linear infinite;\n
               @keyframes spin {
@@ -50,10 +50,10 @@ export const classes = {
           </td>
         </tr>
         <tr>
-          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap border-t border-gray-100">
+          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap border-t border-gray-100 dark:border-gray-400/10 dark:text-sky-400">
             animate-ping
           </td>
-          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100">
+          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100 dark:border-gray-400/10 dark:text-indigo-300">
             {redent(`
               animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;\n
               @keyframes ping {
@@ -66,10 +66,10 @@ export const classes = {
           </td>
         </tr>
         <tr>
-          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap border-t border-gray-100">
+          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap border-t border-gray-100 dark:border-gray-400/10 dark:text-sky-400">
             animate-pulse
           </td>
-          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100">
+          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100 dark:border-gray-400/10 dark:text-indigo-300">
             {redent(`
               animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n
               @keyframes pulse {
@@ -84,10 +84,10 @@ export const classes = {
           </td>
         </tr>
         <tr>
-          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap border-t border-gray-100">
+          <td translate="no" className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap border-t border-gray-100 dark:border-gray-400/10 dark:text-sky-400">
             animate-bounce
           </td>
-          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100">
+          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100 dark:border-gray-400/10 dark:text-indigo-300">
             {redent(`
               animation: bounce 1s infinite;\n
               @keyframes bounce {
