@@ -62,7 +62,7 @@ export function NavPopover() {
     <>
       <button
         type="button"
-        className="text-gray-500 w-8 h-8 flex items-center justify-center hover:text-gray-600"
+        className="text-gray-500 w-8 h-8 flex items-center justify-center hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
         onClick={() => setIsOpen(true)}
       >
         <span className="sr-only">Navigation</span>
@@ -78,10 +78,10 @@ export function NavPopover() {
       </button>
       <Dialog as="div" className="fixed z-50 inset-0 md:hidden" open={isOpen} onClose={setIsOpen}>
         <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm" />
-        <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-gray-900">
+        <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-gray-900 dark:bg-gray-900 dark:text-gray-400">
           <button
             type="button"
-            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600"
+            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
             onClick={() => setIsOpen(false)}
           >
             <span className="sr-only">Close navigation</span>
@@ -179,7 +179,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
       </div>
       <div
         className={clsx(
-          'sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-gray-900/10',
+          'sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-gray-900/10 dark:border-gray-50/[0.06]',
           isOpaque
             ? 'bg-white supports-backdrop-blur:bg-white/95 dark:bg-transparent'
             : 'bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent'
@@ -188,7 +188,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
         <div className="max-w-8xl mx-auto">
           <div
             className={clsx(
-              'py-4 border-b border-gray-900/10 lg:px-8 lg:border-0',
+              'py-4 border-b border-gray-900/10 lg:px-8 lg:border-0 dark:border-gray-300/10',
               hasNav ? 'mx-4 lg:mx-0' : 'px-4'
             )}
           >
@@ -212,7 +212,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                   <NavItems />
                 </ul>
               </nav>
-              <SearchButton className="ml-auto text-gray-500 w-8 h-8 -my-1 flex items-center justify-center hover:text-gray-600 lg:hidden">
+              <SearchButton className="ml-auto text-gray-500 w-8 h-8 -my-1 flex items-center justify-center hover:text-gray-600 lg:hidden dark:text-gray-400 dark:hover:text-gray-300">
                 <span className="sr-only">Search</span>
                 <svg
                   width="24"
@@ -234,11 +234,11 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
             </div>
           </div>
           {hasNav && (
-            <div className="flex items-center p-4 border-b border-gray-900/10 lg:hidden">
+            <div className="flex items-center p-4 border-b border-gray-900/10 lg:hidden dark:border-gray-50/[0.06]">
               <button
                 type="button"
                 onClick={() => onNavToggle(!navIsOpen)}
-                className="text-gray-500 hover:text-gray-600"
+                className="text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
               >
                 <span className="sr-only">Navigation</span>
                 <svg width="24" height="24">
@@ -272,7 +272,9 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                       </svg>
                     </li>
                   )}
-                  <li className="font-semibold text-gray-900 truncate">{title}</li>
+                  <li className="font-semibold text-gray-900 truncate dark:text-gray-200">
+                    {title}
+                  </li>
                 </ol>
               )}
             </div>

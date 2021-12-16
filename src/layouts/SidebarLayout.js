@@ -405,11 +405,11 @@ export function SidebarLayout({
         className="fixed z-50 inset-0 overflow-y-auto lg:hidden"
       >
         <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm" />
-        <div className="relative bg-white w-80 max-w-[calc(100%-3rem)] p-6">
+        <div className="relative bg-white w-80 max-w-[calc(100%-3rem)] p-6 dark:bg-gray-900">
           <button
             type="button"
             onClick={() => setNavIsOpen(false)}
-            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600"
+            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
           >
             <span className="sr-only">Close navigation</span>
             <svg viewBox="0 0 10 10" className="w-2.5 h-2.5 overflow-visible">
