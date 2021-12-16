@@ -18,7 +18,6 @@ const PATTERNS = [
 ].join('|')
 
 const BROAD_MATCH_GLOBAL_REGEXP = new RegExp(PATTERNS, 'g')
-console.log(BROAD_MATCH_GLOBAL_REGEXP)
 const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g
 
 /**
