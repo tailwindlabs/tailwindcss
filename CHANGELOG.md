@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.0.6] - 2021-12-16
+
 ### Fixed
 
 - Support square bracket notation in paths ([#6519](https://github.com/tailwindlabs/tailwindcss/pull/6519))
@@ -1726,7 +1730,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.5...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.6...HEAD
+[3.0.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.6...v3.0.6
 [3.0.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.4...v3.0.5
 [3.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.3...v3.0.4
 [3.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.2...v3.0.3
