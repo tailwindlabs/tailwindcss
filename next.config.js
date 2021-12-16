@@ -362,6 +362,7 @@ function getUtilities(plugin, { includeNegativeValues = false } = {}) {
 
   plugin({
     addBase: () => {},
+    addDefaults: () => {},
     addComponents: () => {},
     corePlugins: () => true,
     prefix: (x) => x,
