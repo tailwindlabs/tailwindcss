@@ -217,6 +217,9 @@ module.exports = {
             'h2, h3, h4': {
               color: theme('colors.gray.200'),
             },
+            'h2 small, h3 small, h4 small': {
+              color: theme('colors.gray.400'),
+            },
             code: {
               color: theme('colors.gray.200'),
             },
