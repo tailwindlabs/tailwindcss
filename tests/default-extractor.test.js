@@ -1,6 +1,7 @@
+import { html } from './util/run'
 import { defaultExtractor } from '../src/lib/defaultExtractor'
 
-const input = `
+const input = html`
   <div class="font-['some_font',sans-serif]"></div>
   <div class='font-["some_font",sans-serif]'></div>
   <div class="bg-[url('...')]"></div>
@@ -21,6 +22,14 @@ const input = `
   <div class="uppercase"></div>
   <div class="uppercase:"></div>
   <div class="hover:font-bold"></div>
+
+  <script>
+    let classes1 = ["text-[10px]"]
+    let classes2 = ["hover:font-bold"]
+    let obj = {
+      uppercase:true
+    }
+  </script>
 `
 
 const includes = [
@@ -41,12 +50,10 @@ const includes = [
   `px-1.5`,
   `uppercase`,
   `hover:font-bold`,
+  `text-[10px]`,
 ]
 
-const excludes = [
-  `uppercase:`,
-  `font-bold`,
-]
+const excludes = [`uppercase:`, `font-bold`]
 
 test('The default extractor works as expected', async () => {
   const extractions = defaultExtractor(input.trim())
