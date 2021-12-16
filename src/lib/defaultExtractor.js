@@ -18,9 +18,13 @@ const BROAD_MATCH_GLOBAL_REGEXP = new RegExp(PATTERNS, 'g')
 console.log(BROAD_MATCH_GLOBAL_REGEXP)
 const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g
 
+/**
+ * @param {string} content
+ */
 export function defaultExtractor(content) {
-  let broadMatches = content.match(BROAD_MATCH_GLOBAL_REGEXP) || []
+  let broadMatches = content.matchAll(BROAD_MATCH_GLOBAL_REGEXP)
   let innerMatches = content.match(INNER_MATCH_GLOBAL_REGEXP) || []
+  let results = [...broadMatches, ...innerMatches].flat().filter(v => v !== undefined)
 
-  return [...broadMatches, ...innerMatches]
+  return results
 }
