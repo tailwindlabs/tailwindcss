@@ -4,7 +4,7 @@ import image from './card.jpg'
 export const meta = {
   title: 'Standalone CLI: Use Tailwind CSS without Node.js',
   description: `Today we're announcing a new standalone CLI build that gives you the full power of Tailwind CLI in a self-contained executable — no Node.js or npm required.`,
-  date: '2021-12-15T22:00:00.000Z',
+  date: '2021-12-16T16:00:00.000Z',
   authors: [adamwathan],
   image,
 }
@@ -61,6 +61,8 @@ module.exports = {
 }
 ```
 
+You get all the power of our standard npm-distributed CLI in a convenient, portable package — no dependencies required.
+
 ---
 
 ## How does it work?
@@ -71,4 +73,8 @@ This is what makes it possible for you to still use a `tailwind.config.js` file 
 
 ---
 
-This new standalone CLI will make it easier than ever to use Tailwind no matter what environment you're working in. Give it a try and let us know what we can do to make it even better!
+## Which CLI should I use?
+
+If you are already using npm in your project, use the npm-distributed version of our CLI that we've always provided. It's simpler to update, the file size is smaller, and you're already in the ecosystem anyways — there's no benefit at all to using the standalone build.
+
+If on the other hand you're working on a project where you don't otherwise need Node.js or npm, the standalone build can be a great choice. If Tailwind was the only reason you had a `package.json` file, this is probably going to feel like a nicer solution.
