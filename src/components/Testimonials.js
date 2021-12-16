@@ -295,7 +295,7 @@ let testimonials = [
       url: 'https://twitter.com/debs_obrien/status/1243255468241420288',
       author: {
         name: `Debbie O'Brien`,
-        role: 'Head of Learning @ Nuxt.js',
+        role: 'Head Developer Advocate @ Bit',
         avatar: require('@/img/avatars/debbie-obrien.jpg').default,
       },
     },
