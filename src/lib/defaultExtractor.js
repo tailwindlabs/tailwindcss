@@ -27,7 +27,7 @@ const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/
 export function defaultExtractor(content) {
   let broadMatches = content.matchAll(BROAD_MATCH_GLOBAL_REGEXP)
   let innerMatches = content.match(INNER_MATCH_GLOBAL_REGEXP) || []
-  let results = [...broadMatches, ...innerMatches].flat().filter(v => v !== undefined)
+  let results = [...broadMatches, ...innerMatches].flat().filter((v) => v !== undefined)
 
   return results
 }
