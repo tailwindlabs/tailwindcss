@@ -455,6 +455,16 @@ For example, here's the same design from above but using a `<span>` instead of t
 
 Save `before` and `after` for situations where it's important that the content of the pseudo-element is not actually in the DOM and can't be selected by the user.
 
+Note that if you've disabled our [preflight base styles](/docs/preflight), the content property will not be set to an emtpy string by default, and you will need to include `content-['']` any time you use the `before` and `after` modifiers.
+
+<TipInfo>If you've disabled preflight make sure to set the content manually</TipInfo>
+
+```html
+<div class="**before:content-['']** before:block ...">
+  <!-- ... -->
+</div>
+```
+
 ### Placeholder text
 
 Style the placeholder text of any input or textarea using the `placeholder` modifier:

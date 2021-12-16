@@ -7,7 +7,9 @@ let steps = [
     title: 'Create your project',
     body: () => (
       <p>
-        Start by creating a new Nuxt.js project if you don’t have one set up already. The most common approach is to use <a href="https://nuxtjs.org/guides/get-started/installation">Create Nuxt App</a>.
+        Start by creating a new Nuxt.js project if you don’t have one set up already. The most
+        common approach is to use{' '}
+        <a href="https://nuxtjs.org/guides/get-started/installation">Create Nuxt App</a>.
       </p>
     ),
     code: {
@@ -21,9 +23,14 @@ let steps = [
     body: () => (
       <>
         <p>
-          Using npm, install <code>tailwindcss</code> and its peer dependencies, as well as <code>@nuxt/postcss8</code>, and then run the init command to generate the <code>tailwind.config.js</code> file.
+          Using npm, install <code>tailwindcss</code> and its peer dependencies, as well as{' '}
+          <code>@nuxt/postcss8</code>, and then run the init command to generate the{' '}
+          <code>tailwind.config.js</code> file.
         </p>
-        <p className="mt-3 text-xs italic">Using <code>@latest</code> is required because Nuxt installs PostCSS v7 and Autoprefixer v9 by default.</p>
+        <p className="mt-3 text-xs italic">
+          Using <code>@latest</code> is required because Nuxt installs PostCSS v7 and Autoprefixer
+          v9 by default.
+        </p>
       </>
     ),
     code: {
@@ -54,7 +61,8 @@ let steps = [
     title: 'Add Tailwind to your PostCSS configuration',
     body: () => (
       <p>
-        Add <code>tailwindcss</code> and <code>autoprefixer</code> to the <code>build.postcss.plugins</code> object of your <code>nuxt.config.js</code> file.
+        Add <code>tailwindcss</code> and <code>autoprefixer</code> to the{' '}
+        <code>build.postcss.plugins</code> object of your <code>nuxt.config.js</code> file.
       </p>
     ),
     code: {
@@ -101,7 +109,8 @@ let steps = [
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Create an <code>./assets/css/main.css</code> file and add the <code>@tailwind</code> directives for each of Tailwind’s layers.
+        Create an <code>./assets/css/main.css</code> file and add the <code>@tailwind</code>{' '}
+        directives for each of Tailwind’s layers.
       </p>
     ),
     code: {
@@ -114,7 +123,8 @@ let steps = [
     title: 'Import the CSS file',
     body: () => (
       <p>
-        Add the newly-created <code>./assets/css/main.css</code> file to the <code>css</code> array in the <code>nuxt.config.js</code> file.
+        Add the newly-created <code>./assets/css/main.css</code> file to the <code>css</code> array
+        in the <code>nuxt.config.js</code> file.
       </p>
     ),
     code: {
@@ -142,11 +152,7 @@ let steps = [
   },
   {
     title: 'Start using Tailwind in your project',
-    body: () => (
-      <p>
-        Start using Tailwind’s utility classes to style your content.
-      </p>
-    ),
+    body: () => <p>Start using Tailwind’s utility classes to style your content.</p>,
     code: {
       name: 'App.vue',
       lang: 'html',
@@ -165,9 +171,6 @@ export default function UsingNextJS({ code }) {
       title="Install Tailwind CSS with Nuxt.js"
       description="Setting up Tailwind CSS in a Nuxt.js project."
     >
-      <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p></p>
-      </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )

@@ -7,7 +7,9 @@ let steps = [
     title: 'Create your project',
     body: () => (
       <p>
-        Start by creating a new Laravel project if you don’t have one set up already. The most common approach is to use <a href="https://laravel.com/docs/8.x#the-laravel-installer">the Laravel Installer</a>.
+        Start by creating a new Laravel project if you don’t have one set up already. The most
+        common approach is to use{' '}
+        <a href="https://laravel.com/docs/8.x#the-laravel-installer">the Laravel Installer</a>.
       </p>
     ),
     code: {
@@ -73,7 +75,8 @@ let steps = [
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your <code>./resources/css/app.css</code> file.
+        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your{' '}
+        <code>./resources/css/app.css</code> file.
       </p>
     ),
     code: {
@@ -99,7 +102,8 @@ let steps = [
     title: 'Start using Tailwind in your project',
     body: () => (
       <p>
-        Make sure your compiled CSS is included in the <code>{'<head>'}</code> then start using Tailwind’s utility classes to style your content.
+        Make sure your compiled CSS is included in the <code>{'<head>'}</code> then start using
+        Tailwind’s utility classes to style your content.
       </p>
     ),
     code: {
@@ -128,9 +132,6 @@ export default function UsingLaravel({ code }) {
       title="Install Tailwind CSS with Laravel"
       description="Setting up Tailwind CSS in a Laravel project."
     >
-      <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p></p>
-      </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )

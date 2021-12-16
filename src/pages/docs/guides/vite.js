@@ -7,7 +7,12 @@ let steps = [
     title: 'Create your project',
     body: () => (
       <p>
-        Start by creating a new Vite project if you don’t have one set up already. The most common approach is to use <a href="https://github.com/vitejs/vite/tree/main/packages/create-vite#readme">Create Vite</a>.
+        Start by creating a new Vite project if you don’t have one set up already. The most common
+        approach is to use{' '}
+        <a href="https://github.com/vitejs/vite/tree/main/packages/create-vite#readme">
+          Create Vite
+        </a>
+        .
       </p>
     ),
     code: {
@@ -20,8 +25,8 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init command to generate both{' '}
-        <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
+        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init
+        command to generate both <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
       </p>
     ),
     code: {
@@ -56,7 +61,8 @@ let steps = [
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Create a <code>./src/index.css</code> file and add the <code>@tailwind</code> directives for each of Tailwind’s layers.
+        Create a <code>./src/index.css</code> file and add the <code>@tailwind</code> directives for
+        each of Tailwind’s layers.
       </p>
     ),
     code: {
@@ -69,7 +75,8 @@ let steps = [
     title: 'Import the CSS file',
     body: () => (
       <p>
-        Import the newly-created <code>./src/index.css</code> file in your <code>./src/main.js</code> file.
+        Import the newly-created <code>./src/index.css</code> file in your{' '}
+        <code>./src/main.js</code> file.
       </p>
     ),
     code: {
@@ -97,11 +104,7 @@ let steps = [
   },
   {
     title: 'Start using Tailwind in your project',
-    body: () => (
-      <p>
-        Start using Tailwind’s utility classes to style your content.
-      </p>
-    ),
+    body: () => <p>Start using Tailwind’s utility classes to style your content.</p>,
     code: {
       name: 'App.vue',
       lang: 'html',
@@ -120,9 +123,6 @@ export default function UsingVite({ code }) {
       title="Install Tailwind CSS with Vue 3 and Vite"
       description="Setting up Tailwind CSS in a Vue 3 and Vite project."
     >
-      <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p></p>
-      </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )

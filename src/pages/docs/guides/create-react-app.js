@@ -7,21 +7,23 @@ let steps = [
     title: 'Create your project',
     body: () => (
       <p>
-        Start by creating a new React project with the <a href="https://github.com/facebook/create-react-app/discussions/11278">upcoming version</a> of Create React App, which supports PostCSS 8. If you already have an existing project, follow the upgrade instructions in the link above.
+        Start by creating a new React project with{' '}
+        <a href="https://create-react-app.dev/docs/getting-started">Create React App</a> if you
+        don't have one already set up.
       </p>
     ),
     code: {
       name: 'Terminal',
       lang: 'terminal',
-      code: 'npx create-react-app@next --scripts-version=@next --template=cra-template@next my-project\ncd my-project',
+      code: 'npx create-react-app my-project\ncd my-project',
     },
   },
   {
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init command to generate both{' '}
-        <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
+        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init
+        command to generate both <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
       </p>
     ),
     code: {
@@ -42,7 +44,7 @@ let steps = [
       lang: 'js',
       code: `  module.exports = {
 >   content: [
->     "./src/**/*.{js,jsx}",
+>     "./src/**/*.{js,jsx,ts,tsx}",
 >   ],
     theme: {
       extend: {},
@@ -55,7 +57,8 @@ let steps = [
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your <code>./src/index.css</code> file.
+        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your{' '}
+        <code>./src/index.css</code> file.
       </p>
     ),
     code: {
@@ -79,11 +82,7 @@ let steps = [
   },
   {
     title: 'Start using Tailwind in your project',
-    body: () => (
-      <p>
-        Start using Tailwind’s utility classes to style your content.
-      </p>
-    ),
+    body: () => <p>Start using Tailwind’s utility classes to style your content.</p>,
     code: {
       name: 'App.js',
       lang: 'jsx',
@@ -94,7 +93,7 @@ let steps = [
 >     </h1>
     )
   }`,
-        },
+    },
   },
 ]
 
@@ -104,9 +103,6 @@ export default function UsingCRA({ code }) {
       title="Install Tailwind CSS with Create React App"
       description="Setting up Tailwind CSS in a Create React App project."
     >
-      <div className="relative z-10 prose mb-16 max-w-3xl">
-        <p>=</p>
-      </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )

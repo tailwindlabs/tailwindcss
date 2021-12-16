@@ -80,6 +80,24 @@ When using shadows on a colored background, colored shadows can often look more 
 
 <BreakpointsAndMediaQueries defaultClass="shadow shadow-blue-500/40" featuredClass="shadow-indigo-500/40" element="button" />
 
+### Preserving shadow color when changing the shadow size
+
+Note that if you change the [box shadow](/docs/box-shadow) size at a different breakpoint, or on another state like hover, it will override any existing shadow colors.
+
+```html
+<!-- This shadow will NOT be red at medium screens and above -->
+<div class="shadow-lg shadow-red-500 **md:shadow-xl**"></div>
+```
+
+To preserve the shadow color in these states, it needs to be respecified:
+
+```html
+<!-- This shadow WILL be red at medium screens and above -->
+<div class="shadow-lg shadow-red-500 **md:shadow-xl md:shadow-red-500**"></div>
+```
+
+It's necessary for Tailwind to work this way, as otherwise there would be no way to switch back to the default shadow.
+
 ---
 
 ## Using custom values
