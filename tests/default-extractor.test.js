@@ -24,13 +24,17 @@ const input = html`
   <div class="hover:font-bold"></div>
 
   <script>
-    let classes1 = ["text-[10px]"]
-    let classes2 = ["hover:font-bold"]
-    let classes3 = {"code": "<div class=\"text-blue-500\"></div>"} -->
-    let classes4 = ['text-[11px]']
-    let classes5 = ['text-[21px]', 'text-[22px]']
-    let classes5 = ["text-[31px]", "text-[32px]"]
-    let classes5 = [\`text-[41px]\`, \`text-[42px]\`]
+    let classes01 = ["text-[10px]"]
+    let classes02 = ["hover:font-bold"]
+    let classes03 = {"code": "<div class=\"text-blue-500\"></div>"} -->
+    let classes04 = ['text-[11px]']
+    let classes05 = ['text-[21px]', 'text-[22px]']
+    let classes06 = ["text-[31px]", "text-[32px]"]
+    let classes07 = [${"`"}text-[41px]${"`"}, ${"`"}text-[42px]${"`"}]
+    let classes08 = {"text-[51px]":"text-[52px]"}
+    let classes09 = {'text-[61px]':'text-[62px]'}
+    let classes10 = {${"`"}text-[71px]${"`"}:${"`"}text-[72px]${"`"}}
+
     let obj = {
       uppercase:true
     }
@@ -62,6 +66,14 @@ const includes = [
   `text-[22px]`,
   `text-[31px]`,
   `text-[32px]`,
+  `text-[41px]`,
+  `text-[42px]`,
+  `text-[51px]`,
+  `text-[52px]`,
+  `text-[61px]`,
+  `text-[62px]`,
+  `text-[71px]`,
+  `text-[72px]`,
 ]
 
 const excludes = [`uppercase:`, `font-bold`]
@@ -69,7 +81,7 @@ const excludes = [`uppercase:`, `font-bold`]
 test('The default extractor works as expected', async () => {
   const extractions = defaultExtractor(input.trim())
 
-  console.log(Array.from(new Set(extractions)).sort())
+  // console.log(Array.from(new Set(extractions)).sort())
 
   for (const str of includes) {
     expect(extractions).toContain(str)
