@@ -233,6 +233,13 @@ module.exports = {
             strong: {
               color: theme('colors.gray.200'),
             },
+            thead: {
+              color: theme('colors.gray.300'),
+              borderBottomColor: 'rgb(148 163 184 / 0.2)',
+            },
+            'tbody tr': {
+              borderBottomColor: 'rgb(148 163 184 / 0.1)',
+            },
           },
         },
       }),
