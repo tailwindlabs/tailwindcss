@@ -1,0 +1,105 @@
+import { adamwathan } from '@/authors'
+import image from './card.jpg'
+
+export const meta = {
+  title: 'Effortless Typography, Even in Dark Mode',
+  description: `Today we're announcing the next version of the Tailwind CSS Typography plugin, which brings easy dark mode support and a brand new customization API.`,
+  date: '2021-12-17T18:50:00.000Z',
+  authors: [adamwathan],
+  image,
+}
+
+<!--excerpt-->
+
+Today we're announcing the next version of the [Tailwind CSS Typography plugin](/docs/typography-plugin), which brings easy dark mode support, a brand new customization API, and the `not-prose` class I wasn't sure we'd ever figure out how to support.
+
+<!--/excerpt-->
+
+Today we're announcing the next version of the [Tailwind CSS Typography plugin](/docs/typography-plugin), which brings easy dark mode support, a brand new customization API, and the `not-prose` class I wasn't sure we'd ever figure out how to support.
+
+<div className="aspect-w-16 aspect-h-9 my-12">
+  <iframe
+    src="https://www.youtube.com/embed/Aa2RjxU-BCw"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+Tailwind CSS Typography v0.5 is designed for Tailwind CSS v3.0, so make sure you're on the latest version of Tailwind, then install the new plugin release from npm:
+
+```shell
+npm install -D @tailwindcss/typography
+```
+
+To learn more about everything the plugin provides, check out our update [typography plugin](/docs/typography-plugin) documentation.
+
+---
+
+## Easy dark mode support
+
+We've added a `prose-invert` class you can use to easily swap out your typography colors in dark mode:
+
+```html
+<body class="bg-white dark:bg-gray-900">
+  <article class="prose **dark:prose-invert**">
+    {{ markdown }}
+  </article>
+</body>
+```
+
+The dark themes are hand-crafted by our expert design team, and automatically adapt to whatever grays you're using.
+
+---
+
+## Pick your gray scale
+
+Tailwind CSS v3.0 ships with five different sets of grays by default, and the updated typography plugin includes classes for each one, making it easy to match your typography to the rest of your site:
+
+```html
+<article class="prose **prose-slate**">
+  {{ markdown }}
+</article>
+```
+
+We've simplified how we define color themes internally too, which makes it easier to add your own if you need to.
+
+---
+
+## HTML-based customization API
+
+We've added tons of modifiers you can use to tweak specific elements in your prose styles, directly in your HTML:
+
+```html
+<article class="prose prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600">
+  {{ markdown }}
+</article>
+```
+
+This makes it easy to do things like style links to match your brand, add a border radius to images, and tons more.
+
+Check out the [element modifiers](https://tailwindcss.com/docs/typography-plugin#element-modifiers) documentation to learn more.
+
+---
+
+## Undo prose styles
+
+Ever needed to stick some non-content HTML in the middle of your content? Now you can wrap that with `not-prose` to make sure the prose styles don't interfere with it:
+
+```html
+<article class="prose">
+  <h1>My Heading</h1>
+  <p>...</p>
+
+  <div class="not-prose">
+    <!-- Some HTML that needs to be prose-free -->
+  </div>
+
+  <p>...</p>
+  <!-- ... -->
+</article>
+```
+
+---
+
+Ready to try it out? Check out the [typography plugin documentation](/docs/typography-plugin) to learn more and get started.
