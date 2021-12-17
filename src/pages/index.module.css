@@ -3,9 +3,7 @@
   background-size: 150rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  .beams {
-    background-image: url('../img/beams/hero-dark@90.jpg');
-    background-size: 86.125rem;
-  }
+:global(.dark) .beams {
+  background-image: url('../img/beams/hero-dark@90.jpg');
+  background-size: 86.125rem;
 }
