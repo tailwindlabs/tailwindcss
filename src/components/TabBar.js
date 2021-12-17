@@ -24,7 +24,7 @@ export function TabBar({ primary, secondary = [], showTabMarkers = true, side, c
       </div>
       <div
         className={clsx(
-          'flex-auto flex items-center bg-gray-700/50 border border-gray-500/30',
+          'flex-auto flex items-center bg-gray-700/50 border border-gray-500/30 dark:bg-gray-800/50',
           side === 'left' ? 'rounded-tl lg:rounded-tr' : 'rounded-tl'
         )}
       >

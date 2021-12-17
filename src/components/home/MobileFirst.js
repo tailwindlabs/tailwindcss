@@ -140,7 +140,7 @@ function BrowserWindow({ size, onChange }) {
               )}
             </div>
             <div className="grid grid-cols-3 text-xs leading-5 overflow-hidden">
-              <div className="bg-gray-100 text-gray-400 rounded-tr border border-gray-900/5 px-4 py-1.5 -mb-px -ml-px flex items-center justify-center space-x-2 dark:bg-gray-800 dark:text-gray-500">
+              <div className="pointer-events-none select-none bg-gray-100 text-gray-400 rounded-tr border border-gray-900/5 px-4 py-1.5 -mb-px -ml-px flex items-center justify-center space-x-2 dark:bg-gray-800 dark:text-gray-500">
                 <svg
                   width="17"
                   height="10"
@@ -155,7 +155,7 @@ function BrowserWindow({ size, onChange }) {
                 </svg>
                 <div className="truncate">Tailwind UI - Official Tailwind CSS Components</div>
               </div>
-              <div className="text-gray-900 font-medium px-4 py-1.5 flex items-center justify-center space-x-2 dark:text-gray-200">
+              <div className="pointer-events-none select-none text-gray-900 font-medium px-4 py-1.5 flex items-center justify-center space-x-2 dark:text-gray-200">
                 <svg
                   width="15"
                   height="14"
@@ -167,7 +167,7 @@ function BrowserWindow({ size, onChange }) {
                 </svg>
                 <div className="truncate">Workcation - Find a trip that suits you</div>
               </div>
-              <div className="bg-gray-100 text-gray-400 rounded-tl border border-gray-900/5 pl-4 pr-8 py-1.5 -mb-px -mr-4 flex items-center justify-center space-x-2 dark:bg-gray-800 dark:text-gray-500">
+              <div className="pointer-events-none select-none bg-gray-100 text-gray-400 rounded-tl border border-gray-900/5 pl-4 pr-8 py-1.5 -mb-px -mr-4 flex items-center justify-center space-x-2 dark:bg-gray-800 dark:text-gray-500">
                 <svg
                   width="15"
                   height="16"
@@ -187,7 +187,7 @@ function BrowserWindow({ size, onChange }) {
               </div>
             </div>
           </div>
-          <div className="relative bg-white border-t border-gray-200 rounded-b-xl pb-8 -mb-8">
+          <div className="relative bg-white border-t border-gray-200 rounded-b-xl pb-8 -mb-8 dark:bg-gray-800 dark:border-gray-900/50">
             <motion.iframe
               ref={iframeRef}
               src="/examples/mobile-first-demo"

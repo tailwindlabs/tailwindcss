@@ -149,7 +149,7 @@ export function Performance() {
           <div className="relative">
             <div
               ref={containerRef}
-              className="relative bg-gray-800 shadow-xl pt-2 overflow-hidden sm:rounded-xl lg:grid lg:grid-cols-2 lg:grid-rows-1 dark:ring-1 dark:ring-inset dark:ring-white/10"
+              className="relative bg-gray-800 shadow-xl pt-2 overflow-hidden sm:rounded-xl lg:grid lg:grid-cols-2 lg:grid-rows-1 dark:bg-gray-900/70 dark:backdrop-blur dark:ring-1 dark:ring-inset dark:ring-white/10"
             >
               <div className="row-end-1">
                 <TabBar
