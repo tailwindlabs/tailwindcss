@@ -20,28 +20,28 @@ Use the `border`, `.border-0`, `.border-2`, `.border-4`, or `.border-8` utilitie
   <div class="flex flex-col sm:flex-row items-center justify-around gap-4 text-white text-sm text-center font-bold leading-6">
     <div class="flex flex-col items-center shrink-0">
       <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border</p>
-      <div class="p-4 shadow-sm bg-white dark:bg-gray-900 w-16 h-16 border-indigo-600 dark:border-light-blue-500 border"></div>
+      <div class="p-4 shadow-sm bg-white dark:bg-gray-900 w-16 h-16 border-indigo-600 dark:border-sky-500 border"></div>
     </div>
     <div class="flex flex-col items-center shrink-0">
       <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-2</p>
-      <div class="p-4 shadow-sm bg-white dark:bg-gray-900 w-16 h-16 border-indigo-600 dark:border-light-blue-500 border-2"></div>
+      <div class="p-4 shadow-sm bg-white dark:bg-gray-900 w-16 h-16 border-indigo-600 dark:border-sky-500 border-2"></div>
     </div>
     <div class="flex flex-col items-center shrink-0">
       <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-4</p>
-      <div class="p-4 shadow-sm bg-white dark:bg-gray-900 w-16 h-16 border-indigo-600 dark:border-light-blue-500 border-4"></div>
+      <div class="p-4 shadow-sm bg-white dark:bg-gray-900 w-16 h-16 border-indigo-600 dark:border-sky-500 border-4"></div>
     </div>
     <div class="flex flex-col items-center shrink-0">
       <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">border-8</p>
-      <div class="p-4 shadow-sm bg-white dark:bg-gray-900 w-16 h-16 border-indigo-600 dark:border-light-blue-500 border-8"></div>
+      <div class="p-4 shadow-sm bg-white dark:bg-gray-900 w-16 h-16 border-indigo-600 dark:border-sky-500 border-8"></div>
     </div>
   </div>
 </Example>
 
 ```html
-<div class="**border** border-indigo-600 ..."></div>
-<div class="**border-2** border-indigo-600 ..."></div>
-<div class="**border-4** border-indigo-600 ..."></div>
-<div class="**border-8** border-indigo-600 ..."></div>
+<div class="**border** border-indigo-600 ..." dark-class="**border** border-sky-500"></div>
+<div class="**border-2** border-indigo-600 ..." dark-class="**border-2** border-sky-500"></div>
+<div class="**border-4** border-indigo-600 ..." dark-class="**border-4** border-sky-500"></div>
+<div class="**border-8** border-indigo-600 ..." dark-class="**border-8** border-sky-500"></div>
 ```
 
 ### Individual sides
@@ -103,7 +103,7 @@ Use the `border-{x|y}-{width}` utilities to set the border width on two sides of
 You can also add borders between child elements using the `divide-{x/y}-{width}` and `divide-{color}` utilities.
 
 <Example p="none">
-  <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-200/5 font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
+  <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700 font-mono text-white text-sm text-center font-bold leading-6 shadow-lg overflow-hidden max-w-sm mx-auto">
     <div class="p-4 text-gray-400 bg-white dark:bg-gray-800">01</div>
     <div class="p-4 text-gray-400 bg-white dark:bg-gray-800">02</div>
     <div class="p-4 text-gray-400 bg-white dark:bg-gray-800">03</div>
@@ -111,7 +111,7 @@ You can also add borders between child elements using the `divide-{x/y}-{width}`
 </Example>
 
 ```html
-<div class="**divide-y** divide-gray-200 ...">
+<div class="**divide-y** divide-gray-200 ..." dark-class="**divide-y** divide-gray-700 ...">
   <div>01</div>
   <div>02</div>
   <div>03</div>
