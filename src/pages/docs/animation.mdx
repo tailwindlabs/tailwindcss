@@ -142,7 +142,7 @@ Add the `animate-ping` utility to make an element scale and fade like a radar pi
 <Example>
   <div class="flex items-center justify-center">
     <span class="relative inline-flex">
-      <button type="button" class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-sky-500 bg-white transition ease-in-out duration-150 cursor-not-allowed ring-1 ring-gray-900/10" disabled>
+      <button type="button" class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-sky-500 bg-white dark:bg-gray-800 transition ease-in-out duration-150 cursor-not-allowed ring-1 ring-gray-900/10 dark:ring-gray-200/20" disabled>
         Transactions
       </button>
       <span class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
@@ -166,17 +166,17 @@ Add the `animate-pulse` utility to make an element gently fade in and out — us
 
 <Example>
   <div class="flex items-center justify-center">
-    <div class="bg-white p-4 ring-1 ring-gray-900/5 rounded-lg shadow-lg max-w-xs w-full h-28">
+    <div class="bg-white dark:bg-gray-800 p-4 ring-1 ring-gray-900/5 rounded-lg shadow-lg max-w-xs w-full h-28">
       <div class="flex space-x-4 animate-pulse">
-        <div class="rounded-full bg-gray-200 h-10 w-10"></div>
+        <div class="rounded-full bg-gray-200 dark:bg-gray-700 h-10 w-10"></div>
         <div class="flex-1 space-y-6 py-1">
-          <div class="h-2 bg-gray-200 rounded"></div>
+          <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded"></div>
           <div class="space-y-3">
             <div class="grid grid-cols-3 gap-4">
-              <div class="h-2 bg-gray-200 rounded col-span-2"></div>
-              <div class="h-2 bg-gray-200 rounded col-span-1"></div>
+              <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded col-span-2"></div>
+              <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded col-span-1"></div>
             </div>
-            <div class="h-2 bg-gray-200 rounded"></div>
+            <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
         </div>
       </div>
@@ -187,15 +187,15 @@ Add the `animate-pulse` utility to make an element gently fade in and out — us
 ```html
 <div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
   <div class="**animate-pulse** flex space-x-4">
-    <div class="rounded-full bg-gray-100 h-10 w-10"></div>
+    <div class="rounded-full bg-gray-200 h-10 w-10" dark-class="rounded-full bg-gray-700 h-10 w-10"></div>
     <div class="flex-1 space-y-6 py-1">
-      <div class="h-2 bg-gray-100 rounded"></div>
+      <div class="h-2 bg-gray-200 rounded" dark-class="h-2 bg-gray-700 rounded"></div>
       <div class="space-y-3">
         <div class="grid grid-cols-3 gap-4">
-          <div class="h-2 bg-gray-100 rounded col-span-2"></div>
-          <div class="h-2 bg-gray-100 rounded col-span-1"></div>
+          <div class="h-2 bg-gray-200 rounded col-span-2" dark-class="h-2 bg-gray-700 rounded col-span-2"></div>
+          <div class="h-2 bg-gray-200 rounded col-span-1" dark-class="h-2 bg-gray-700 rounded col-span-1"></div>
         </div>
-        <div class="h-2 bg-gray-100 rounded"></div>
+        <div class="h-2 bg-gray-200 rounded" dark-class="h-2 bg-gray-700 rounded"></div>
       </div>
     </div>
   </div>
@@ -208,7 +208,7 @@ Add the `animate-bounce` utility to make an element bounce up and down — usefu
 
 <Example>
   <div class="flex justify-center">
-    <div class="animate-bounce bg-white p-2 w-10 h-10 ring-1 ring-gray-900/5 shadow-lg rounded-full flex items-center justify-center">
+    <div class="animate-bounce bg-white dark:bg-gray-800 p-2 w-10 h-10 ring-1 ring-gray-900/5 dark:ring-gray-200/20 shadow-lg rounded-full flex items-center justify-center">
       <svg class="w-6 h-6 text-violet-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
         <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
       </svg>
