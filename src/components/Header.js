@@ -44,7 +44,7 @@ function Featured() {
   )
 }
 
-export function NavPopover() {
+export function NavPopover({ display = 'md:hidden', className, ...props }) {
   let [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export function NavPopover() {
   }, [isOpen])
 
   return (
-    <>
+    <div className={clsx(className, display)} {...props}>
       <button
         type="button"
         className="text-gray-500 w-8 h-8 flex items-center justify-center hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
@@ -76,9 +76,14 @@ export function NavPopover() {
           />
         </svg>
       </button>
-      <Dialog as="div" className="fixed z-50 inset-0 md:hidden" open={isOpen} onClose={setIsOpen}>
-        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm" />
-        <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-gray-900 dark:bg-gray-900 dark:text-gray-400">
+      <Dialog
+        as="div"
+        className={clsx('fixed z-50 inset-0', display)}
+        open={isOpen}
+        onClose={setIsOpen}
+      >
+        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-gray-900/80" />
+        <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-gray-900 dark:bg-gray-800 dark:text-gray-400 dark:highlight-white/5">
           <button
             type="button"
             className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
@@ -100,7 +105,7 @@ export function NavPopover() {
           </ul>
         </div>
       </Dialog>
-    </>
+    </div>
   )
 }
 
@@ -228,9 +233,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                   <circle cx="11" cy="11" r="6" />
                 </svg>
               </SearchButton>
-              <div className="ml-2 -my-1 lg:hidden">
-                <NavPopover />
-              </div>
+              <NavPopover className="ml-2 -my-1" display="lg:hidden" />
             </div>
           </div>
           {hasNav && (

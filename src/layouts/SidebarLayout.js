@@ -61,7 +61,7 @@ function nearestScrollableContainer(el) {
   return el
 }
 
-function Nav({ nav, children, fallbackHref }) {
+function Nav({ nav, children, fallbackHref, mobile = false }) {
   const router = useRouter()
   const activeItemRef = useRef()
   const previousActiveItemRef = useRef()
@@ -125,7 +125,7 @@ function Nav({ nav, children, fallbackHref }) {
         )}
       </SearchButton>
       <ul>
-        <TopLevelNav />
+        <TopLevelNav mobile={mobile} />
         {children}
         {nav &&
           Object.keys(nav)
@@ -142,7 +142,12 @@ function Nav({ nav, children, fallbackHref }) {
                   >
                     {category}
                   </h5>
-                  <ul className="space-y-6 lg:space-y-2 border-l border-gray-100 dark:border-gray-800">
+                  <ul
+                    className={clsx(
+                      'space-y-6 lg:space-y-2 border-l border-gray-100',
+                      mobile ? 'dark:border-gray-700' : 'dark:border-gray-800'
+                    )}
+                  >
                     {(fallbackHref ? nav[category] : publishedItems).map((item, i) => {
                       let isActive = item.match
                         ? item.match.test(router.pathname)
@@ -171,7 +176,10 @@ function Nav({ nav, children, fallbackHref }) {
 }
 
 const TopLevelAnchor = forwardRef(
-  ({ children, href, className, icon, isActive, onClick, shadow, activeBackground }, ref) => {
+  (
+    { children, href, className, icon, isActive, onClick, shadow, activeBackground, mobile },
+    ref
+  ) => {
     return (
       <li>
         <a
@@ -190,7 +198,11 @@ const TopLevelAnchor = forwardRef(
             className={clsx(
               'mr-4 rounded-md ring-1 ring-gray-900/5 shadow-sm group-hover:shadow group-hover:ring-gray-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none',
               shadow,
-              isActive ? activeBackground : 'dark:bg-gray-800 dark:highlight-white/5'
+              isActive
+                ? activeBackground
+                : mobile
+                ? 'dark:bg-gray-700 dark:highlight-white/5'
+                : 'dark:bg-gray-800 dark:highlight-white/5'
             )}
           >
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
@@ -216,12 +228,13 @@ function TopLevelLink({ href, as, ...props }) {
   )
 }
 
-function TopLevelNav() {
+function TopLevelNav({ mobile }) {
   let { pathname } = useRouter()
 
   return (
     <>
       <TopLevelLink
+        mobile={mobile}
         href="/docs/installation"
         isActive={pathname.startsWith('/docs')}
         className="mb-4"
@@ -253,6 +266,7 @@ function TopLevelNav() {
         Documentation
       </TopLevelLink>
       <TopLevelLink
+        mobile={mobile}
         href="https://tailwindui.com/components?utm_source=tailwindcss&utm_medium=navigation"
         className="mb-4"
         shadow="group-hover:shadow-indigo-200"
@@ -260,15 +274,24 @@ function TopLevelNav() {
           <>
             <path
               d="m6 9 6-3 6 3v6l-6 3-6-3V9Z"
-              className="fill-indigo-100 group-hover:fill-indigo-200 dark:fill-gray-400"
+              className={clsx(
+                'fill-indigo-100 group-hover:fill-indigo-200',
+                mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400'
+              )}
             />
             <path
               d="m6 9 6 3v7l-6-3V9Z"
-              className="fill-indigo-300 group-hover:fill-indigo-400 dark:fill-gray-500"
+              className={clsx(
+                'fill-indigo-300 group-hover:fill-indigo-400',
+                mobile ? 'dark:fill-gray-400' : 'dark:fill-gray-500'
+              )}
             />
             <path
               d="m18 9-6 3v7l6-3V9Z"
-              className="fill-indigo-400 group-hover:fill-indigo-500 dark:fill-gray-600"
+              className={clsx(
+                'fill-indigo-400 group-hover:fill-indigo-500',
+                mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
+              )}
             />
           </>
         }
@@ -276,6 +299,7 @@ function TopLevelNav() {
         Components
       </TopLevelLink>
       <TopLevelLink
+        mobile={mobile}
         href="https://www.youtube.com/tailwindlabs"
         className="mb-4"
         shadow="group-hover:shadow-pink-200"
@@ -285,11 +309,17 @@ function TopLevelNav() {
               fillRule="evenodd"
               clipRule="evenodd"
               d="M19 12a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-              className="fill-pink-400 group-hover:fill-pink-500 dark:fill-gray-600"
+              className={clsx(
+                'fill-pink-400 group-hover:fill-pink-500',
+                mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
+              )}
             />
             <path
               d="M11.082 9.107a.685.685 0 0 0-.72-.01.757.757 0 0 0-.362.653v4.5c0 .27.138.52.362.653.224.133.5.13.72-.01l3.571-2.25A.758.758 0 0 0 15 12a.758.758 0 0 0-.347-.643l-3.571-2.25Z"
-              className="fill-pink-50 group-hover:fill-pink-100 dark:fill-gray-400"
+              className={clsx(
+                'fill-pink-50 group-hover:fill-pink-100',
+                mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400'
+              )}
             />
           </>
         }
@@ -297,6 +327,7 @@ function TopLevelNav() {
         Screencasts
       </TopLevelLink>
       <TopLevelLink
+        mobile={mobile}
         href="https://play.tailwindcss.com"
         className="mb-4"
         shadow="group-hover:shadow-blue-200"
@@ -304,21 +335,30 @@ function TopLevelNav() {
           <>
             <path
               d="M4 12a7 7 0 0 1 7-7h2a7 7 0 1 1 0 14h-2a7 7 0 0 1-7-7Z"
-              className="fill-blue-400 group-hover:fill-blue-500 dark:fill-gray-600"
+              className={clsx(
+                'fill-blue-400 group-hover:fill-blue-500',
+                mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
+              )}
             />
             <path
               d="M10.25 9.75 7.75 12l2.5 2.25"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="stroke-blue-50 dark:stroke-gray-400"
+              className={clsx(
+                'stroke-blue-50 dark:stroke-gray-400',
+                mobile ? 'dark:stroke-gray-300' : 'dark:stroke-gray-400'
+              )}
             />
             <path
               d="m13.75 9.75 2.5 2.25-2.5 2.25"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="stroke-blue-200 dark:stroke-gray-400"
+              className={clsx(
+                'stroke-blue-200',
+                mobile ? 'dark:stroke-gray-300' : 'dark:stroke-gray-400'
+              )}
             />
           </>
         }
@@ -326,6 +366,7 @@ function TopLevelNav() {
         Playground
       </TopLevelLink>
       <TopLevelLink
+        mobile={mobile}
         href="/resources"
         isActive={pathname === '/resources'}
         className="mb-4"
@@ -334,15 +375,24 @@ function TopLevelNav() {
           <>
             <path
               d="M6 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8ZM6 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1Z"
-              className="fill-purple-400 group-hover:fill-purple-500 dark:fill-gray-600"
+              className={clsx(
+                'fill-purple-400 group-hover:fill-purple-500',
+                mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
+              )}
             />
             <path
               d="M13 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2V8Z"
-              className="fill-purple-200 group-hover:fill-purple-300 dark:fill-gray-400"
+              className={clsx(
+                'fill-purple-200 group-hover:fill-purple-300',
+                mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400'
+              )}
             />
             <path
               d="M13 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-1Z"
-              className="fill-purple-400 group-hover:fill-purple-500 dark:fill-gray-600"
+              className={clsx(
+                'fill-purple-400 group-hover:fill-purple-500',
+                mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
+              )}
             />
           </>
         }
@@ -350,6 +400,7 @@ function TopLevelNav() {
         Resources
       </TopLevelLink>
       <TopLevelLink
+        mobile={mobile}
         href="https://github.com/tailwindlabs/tailwindcss/discussions"
         className="mb-8"
         shadow="group-hover:shadow-violet-200"
@@ -359,11 +410,32 @@ function TopLevelNav() {
               fillRule="evenodd"
               clipRule="evenodd"
               d="M11 5a6 6 0 0 0-4.687 9.746c.215.27.315.62.231.954l-.514 2.058a1 1 0 0 0 1.485 1.1l2.848-1.71c.174-.104.374-.15.576-.148H13a6 6 0 0 0 0-12h-2Z"
-              className="fill-violet-400 group-hover:fill-violet-500 dark:fill-gray-600"
+              className={clsx(
+                'fill-violet-400 group-hover:fill-violet-500',
+                mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
+              )}
             />
-            <circle cx="12" cy="11" r="1" className="fill-white dark:fill-gray-400" />
-            <circle cx="9" cy="11" r="1" className="fill-violet-200 dark:fill-gray-400" />
-            <circle cx="15" cy="11" r="1" className="fill-violet-200 dark:fill-gray-400" />
+            <circle
+              cx="12"
+              cy="11"
+              r="1"
+              className={clsx('fill-white', mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400')}
+            />
+            <circle
+              cx="9"
+              cy="11"
+              r="1"
+              className={clsx(
+                'fill-violet-200',
+                mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400'
+              )}
+            />
+            <circle
+              cx="15"
+              cy="11"
+              r="1"
+              className={clsx('fill-violet-200 dark:fill-gray-400', mobile ? '' : '')}
+            />
           </>
         }
       >
@@ -404,8 +476,8 @@ export function SidebarLayout({
         onClose={() => setNavIsOpen(false)}
         className="fixed z-50 inset-0 overflow-y-auto lg:hidden"
       >
-        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm" />
-        <div className="relative bg-white w-80 max-w-[calc(100%-3rem)] p-6 dark:bg-gray-900">
+        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-gray-900/80" />
+        <div className="relative bg-white w-80 max-w-[calc(100%-3rem)] p-6 dark:bg-gray-800">
           <button
             type="button"
             onClick={() => setNavIsOpen(false)}
@@ -422,7 +494,7 @@ export function SidebarLayout({
               />
             </svg>
           </button>
-          <Nav nav={nav} fallbackHref={fallbackHref}>
+          <Nav nav={nav} fallbackHref={fallbackHref} mobile={true}>
             {sidebar}
           </Nav>
         </div>

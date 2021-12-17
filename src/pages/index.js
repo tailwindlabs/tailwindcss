@@ -57,9 +57,7 @@ function Header() {
                 <circle cx="11" cy="11" r="6" />
               </svg>
             </SearchButton>
-            <div className="-my-1 ml-2 -mr-1 md:hidden">
-              <NavPopover />
-            </div>
+            <NavPopover className="-my-1 ml-2 -mr-1" display="md:hidden" />
             <nav className="hidden md:block">
               <ul className="flex items-center space-x-8">
                 <NavItems />
