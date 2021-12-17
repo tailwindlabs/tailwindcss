@@ -855,7 +855,7 @@ function Testimonial({ author, content, url, expanded }) {
 
   return (
     <li ref={ref} className="text-sm leading-6">
-      <figure className="relative flex flex-col-reverse bg-gray-50 rounded-lg p-6 dark:bg-gray-800">
+      <figure className="relative flex flex-col-reverse bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5">
         <blockquote className="mt-6 text-gray-700 dark:text-gray-300">
           {typeof content === 'string' ? <p>{content}</p> : content}
         </blockquote>
