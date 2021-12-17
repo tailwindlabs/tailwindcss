@@ -134,12 +134,12 @@ export function DarkMode() {
             <DarkModeSwitch enabled={enabled} onChange={setEnabled} />
             <div
               className={clsx('mt-6 sm:mt-10 relative z-10 rounded-xl shadow-xl', {
-                dark: enabled,
+                'demo-dark': enabled,
               })}
               dangerouslySetInnerHTML={{
                 __html: code
                   .replace(/\(light\)/g, '')
-                  .replace(/dark:/g, 'transition-all duration-500 dark:')
+                  .replace(/demo-dark:/g, 'transition-all duration-500 demo-dark:')
                   .replace(
                     'src="/full-stack-radio.png"',
                     `src="${require('@/img/full-stack-radio.png').default}" loading="lazy"`
@@ -167,14 +167,14 @@ export function DarkMode() {
 
 function DarkModeToken({ token, parentTypes, enabled, children }) {
   if (token[0] === 'class') {
-    if (token[1].startsWith('dark:')) {
+    if (token[1].startsWith('demo-dark:')) {
       return (
         <span
           className={clsx('code-highlight transition-colors duration-500', {
             'bg-code-highlight': enabled,
           })}
         >
-          {children}
+          {token[1].replace(/^demo-dark:/, 'dark:')}
         </span>
       )
     }
