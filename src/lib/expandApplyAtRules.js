@@ -266,6 +266,42 @@ function processApply(root, context) {
 
           if (canRewriteSelector) {
             root.walkRules((rule) => {
+              // Let's imagine you have the following structure:
+              //
+              // .foo {
+              //   @apply bar;
+              // }
+              //
+              // @supports (a: b) {
+              //   .bar {
+              //     color: blue
+              //   }
+              //
+              //   .something-unrelated {}
+              // }
+              //
+              // In this case we want to apply `.bar` but it happens to be in
+              // an atrule node. We clone that node instead of the nested one
+              // because we still want that @supports rule to be there once we
+              // applied everything.
+              //
+              // However it happens to be that the `.something-unrelated` is
+              // also in that same shared @supports atrule. This is not good,
+              // and this should not be there. The good part is that this is
+              // a clone already and it can be safely removed. The question is
+              // how do we know we can remove it. Basically what we can do is
+              // match it against the applyCandidate that you want to apply. If
+              // it doesn't match the we can safely delete it.
+              //
+              // If we didn't do this, then the `replaceSelector` function
+              // would have replaced this with something that didn't exist and
+              // therefore it removed the selector altogether. In this specific
+              // case it would result in `{}` instead of `.something-unrelated {}`
+              if (!extractClasses(rule).some((thing) => thing === applyCandidate)) {
+                rule.remove()
+                return
+              }
+
               rule.selector = replaceSelector(parent.selector, rule.selector, applyCandidate)
 
               rule.walkDecls((d) => {

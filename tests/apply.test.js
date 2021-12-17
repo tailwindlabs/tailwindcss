@@ -712,3 +712,65 @@ it('should not be possible to apply user css with variants', () => {
     )
   })
 })
+
+it('should not apply unrelated siblings when applying something from within atrules', () => {
+  let config = {
+    content: [{ raw: html`<div class="foo bar something-unrelated"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo {
+        font-weight: bold;
+        @apply bar;
+      }
+
+      .bar {
+        color: green;
+      }
+
+      @supports (a: b) {
+        .bar {
+          color: blue;
+        }
+
+        .something-unrelated {
+          color: red;
+        }
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        font-weight: bold;
+        color: green;
+      }
+
+      @supports (a: b) {
+        .foo {
+          color: blue;
+        }
+      }
+
+      .bar {
+        color: green;
+      }
+
+      @supports (a: b) {
+        .bar {
+          color: blue;
+        }
+
+        .something-unrelated {
+          color: red;
+        }
+      }
+    `)
+  })
+})
