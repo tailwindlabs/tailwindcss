@@ -149,15 +149,15 @@ function useTheme() {
 
 export function ThemeToggle({ panelClassName = 'mt-4' }) {
   let [setting, setSetting] = useTheme()
-
+  console.log(setting)
   return (
     <Listbox value={setting} onChange={setSetting}>
       <Listbox.Button type="button">
         <span className="dark:hidden">
-          <SunIcon className="w-6 h-6" selected={true} />
+          <SunIcon className="w-6 h-6" selected={setting !== 'system'} />
         </span>
         <span className="hidden dark:inline">
-          <MoonIcon className="w-6 h-6" selected={true} />
+          <MoonIcon className="w-6 h-6" selected={setting !== 'system'} />
         </span>
       </Listbox.Button>
       <Listbox.Options
