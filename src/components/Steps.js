@@ -6,7 +6,9 @@ import { SnippetGroup } from '@/components/SnippetGroup'
 import { Editor } from '@/components/Editor'
 import { Transition } from '@headlessui/react'
 
-export function Steps({ steps, code }) {
+export function Steps({ steps, code, level = 2 }) {
+  let StepHeading = `h${level}`
+
   return (
     <>
       <div className="hidden sm:block absolute top-0 left-[15%] pt-[40%] 2xl:left-[40%] 2xl:pt-[8%] dark:hidden">
@@ -28,9 +30,9 @@ export function Steps({ steps, code }) {
             style={{ counterIncrement: 'step' }}
           >
             <div className="mb-6 col-span-2 xl:mb-0">
-              <h3 className="text-sm leading-6 text-gray-900 font-semibold mb-2 dark:text-gray-200">
+              <StepHeading className="text-sm leading-6 text-gray-900 font-semibold mb-2 dark:text-gray-200">
                 {step.title}
-              </h3>
+              </StepHeading>
               <div className="prose prose-sm dark:prose-dark">
                 <step.body />
               </div>

@@ -97,7 +97,7 @@ export default function TailwindCli({ code }) {
           the Tailwind CLI tool.
         </p>
       </div>
-      <Steps steps={steps} code={code} />
+      <Steps level={3} steps={steps} code={code} />
       {/*
         <Cta
           label="Read the documentation"

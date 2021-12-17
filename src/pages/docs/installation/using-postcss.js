@@ -122,7 +122,7 @@ export default function UsingPostCss({ code }) {
           build tools like webpack, Rollup, Vite, and Parcel.
         </p>
       </div>
-      <Steps steps={steps} code={code} />
+      <Steps level={3} steps={steps} code={code} />
       <Cta
         label="Explore our framework guides"
         href="/docs/installation/framework-guides"
