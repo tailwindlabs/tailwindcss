@@ -14,6 +14,7 @@ function Well({
   html,
   children,
   hint,
+  lightOnly = false,
 }) {
   let paddingKey = padding ?? p
   let paddingClassName = paddingMap[paddingKey]
@@ -49,17 +50,29 @@ function Well({
       )}
       <Component
         style={style}
-        className="not-prose relative bg-gray-50 rounded-xl overflow-hidden dark:bg-gray-800/25"
+        className={clsx(
+          'not-prose relative bg-gray-50 rounded-xl overflow-hidden',
+          !lightOnly && 'dark:bg-gray-800/25'
+        )}
       >
         <div
           style={{ backgroundPosition: '10px 10px' }}
-          className="absolute inset-0 bg-grid-gray-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-gray-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]"
+          className={clsx(
+            'absolute inset-0 bg-grid-gray-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))]',
+            !lightOnly &&
+              'dark:bg-grid-gray-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]'
+          )}
         />
         <div
           className={clsx('relative rounded-xl overflow-auto', paddingClassName, className)}
           {...(html ? { dangerouslySetInnerHTML: { __html: html } } : { children })}
         />
-        <div className="absolute inset-0 pointer-events-none border border-black/5 rounded-xl dark:border-white/5" />
+        <div
+          className={clsx(
+            'absolute inset-0 pointer-events-none border border-black/5 rounded-xl',
+            !lightOnly && 'dark:border-white/5'
+          )}
+        />
       </Component>
     </div>
   )
