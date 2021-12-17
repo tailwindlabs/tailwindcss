@@ -86,7 +86,14 @@ const includes = [
   `hover:test`,
 ]
 
-const excludes = [`uppercase:`, 'hover:', "hover:'abc", `font-bold`, `<div class='hover:test'>`, `test`]
+const excludes = [
+  `uppercase:`,
+  'hover:',
+  "hover:'abc",
+  `font-bold`,
+  `<div class='hover:test'>`,
+  `test`,
+]
 
 test('The default extractor works as expected', async () => {
   const extractions = defaultExtractor(input.trim())
