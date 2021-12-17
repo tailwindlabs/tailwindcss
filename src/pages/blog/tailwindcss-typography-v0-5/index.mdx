@@ -26,10 +26,12 @@ Today we're announcing the next version of the [Tailwind CSS Typography plugin](
   ></iframe>
 </div>
 
+For a full tour of everything that's new, check out [the official release video](https://www.youtube.com/watch?v=GEYkwfYytAM) on our YouTube channel.
+
 Tailwind CSS Typography v0.5 is designed for Tailwind CSS v3.0, so make sure you're on the latest version of Tailwind, then install the new plugin release from npm:
 
 ```shell
-npm install -D @tailwindcss/typography
+npm install -D @tailwindcss/typography@latest
 ```
 
 To learn more about everything the plugin provides, check out our update [typography plugin](/docs/typography-plugin) documentation.
@@ -48,7 +50,7 @@ We've added a `prose-invert` class you can use to easily swap out your typograph
 </body>
 ```
 
-The dark themes are hand-crafted by our expert design team, and automatically adapt to whatever grays you're using.
+The dark themes are hand-crafted by our expert design team, and automatically adapt to whatever gray scale you're using.
 
 ---
 
@@ -64,6 +66,8 @@ Tailwind CSS v3.0 ships with five different sets of grays by default, and the up
 
 We've simplified how we define color themes internally too, which makes it easier to add your own if you need to.
 
+Check out the [documentation](https://tailwindcss.com/docs/typography-plugin#choosing-a-gray-scale) to learn more.
+
 ---
 
 ## HTML-based customization API
@@ -71,7 +75,7 @@ We've simplified how we define color themes internally too, which makes it easie
 We've added tons of modifiers you can use to tweak specific elements in your prose styles, directly in your HTML:
 
 ```html
-<article class="prose prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600">
+<article class="prose **prose-img:rounded-xl** **prose-headings:underline** **prose-a:text-blue-600**">
   {{ markdown }}
 </article>
 ```
