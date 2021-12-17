@@ -8,7 +8,7 @@ module.exports = {
     optimizeUniversalDefaults: true,
   },
   content: ['./src/**/*.{js,jsx,mdx,html}', './remark/**/*.js'],
-  darkMode: 'class',
+  darkMode: 'media',
   theme: {
     // `demo-*` screens are used for the "mobile-first" responsive demo
     screens: {
@@ -319,6 +319,7 @@ module.exports = {
       addVariant('scrollbar', '&::-webkit-scrollbar')
       addVariant('scrollbar-track', '&::-webkit-scrollbar-track')
       addVariant('scrollbar-thumb', '&::-webkit-scrollbar-thumb')
+      addVariant('demo-dark', '.demo-dark &')
     },
     function ({ addUtilities, theme }) {
       const shadows = theme('boxShadow')
