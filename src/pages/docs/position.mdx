@@ -135,32 +135,32 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
 <Example p="none">
   <div class="px-3">
-    <div class="relative max-w-md mx-auto bg-white shadow-lg h-80 overflow-hidden ring-1 ring-gray-900/5">
-      <div class="absolute top-0 left-0 right-0 px-4 py-3 flex items-center font-semibold text-sm text-gray-900 bg-gray-50/90 backdrop-blur-sm ring-1 ring-gray-900/10">Contacts</div>
-      <div class="overflow-auto flex flex-col divide-y h-80">
+    <div class="relative max-w-md mx-auto bg-white dark:bg-gray-800 shadow-lg h-80 overflow-hidden ring-1 ring-gray-900/5">
+      <div class="absolute top-0 left-0 right-0 px-4 py-3 flex items-center font-semibold text-sm text-gray-900 dark:text-gray-200 bg-gray-50/90 dark:bg-gray-700/90 backdrop-blur-sm ring-1 ring-gray-900/10 dark:ring-black/10">Contacts</div>
+      <div class="overflow-auto flex flex-col divide-y h-80 dark:divide-gray-200/5">
         <div class="flex items-center gap-4 p-4">
           <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-          <strong class="text-gray-900 text-sm font-medium">Andrew Alfred</strong>
+          <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Andrew Alfred</strong>
         </div>
         <div class="flex items-center gap-4 p-4">
           <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-          <strong class="text-gray-900 text-sm font-medium">Debra Houston</strong>
+          <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Debra Houston</strong>
         </div>
         <div class="flex items-center gap-4 p-4">
           <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-          <strong class="text-gray-900 text-sm font-medium">Jane White</strong>
+          <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Jane White</strong>
         </div>
         <div class="flex items-center gap-4 p-4">
           <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-          <strong class="text-gray-900 text-sm font-medium">Ray Flint</strong>
+          <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Ray Flint</strong>
         </div>
         <div class="flex items-center gap-4 p-4">
           <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-          <strong class="text-gray-900 text-sm font-medium">Mindy Albrect</strong>
+          <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Mindy Albrect</strong>
         </div>
         <div class="flex items-center gap-4 p-4">
           <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-          <strong class="text-gray-900 text-sm font-medium">David Arnold</strong>
+          <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">David Arnold</strong>
         </div>
       </div>
     </div>
@@ -192,67 +192,67 @@ Offsets are calculated relative to the element's normal position and the element
 
 <Example p="none">
   <div class="px-3">
-    <div class="relative max-w-md mx-auto bg-white shadow-lg h-80 overflow-auto ring-1 ring-gray-900/5 -my-px">
+    <div class="relative max-w-md mx-auto bg-white dark:bg-gray-800 shadow-lg h-80 overflow-auto ring-1 ring-gray-900/5 -my-px">
       <div class="relative">
-        <div class="sticky top-0 px-4 py-3 flex items-center font-semibold text-sm text-gray-900 bg-gray-50/90 backdrop-blur-sm ring-1 ring-gray-900/10">A</div>
-        <div class="divide-y">
+        <div class="sticky top-0 px-4 py-3 flex items-center font-semibold text-sm text-gray-900 dark:text-gray-200 bg-gray-50/90 dark:bg-gray-700/90 backdrop-blur-sm ring-1 ring-gray-900/10 dark:ring-black/10">A</div>
+        <div class="divide-y dark:divide-gray-200/5">
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Andrew Alfred</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Andrew Alfred</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Aisha Houston</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Aisha Houston</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Anna White</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Anna White</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Andy Flint</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Andy Flint</strong>
           </div>
         </div>
       </div>
       <div class="relative">
-        <div class="sticky top-0 px-4 py-3 flex items-center font-semibold text-sm text-gray-900 bg-gray-50/90 backdrop-blur-sm ring-1 ring-gray-900/10">B</div>
-        <div class="divide-y">
+        <div class="sticky top-0 px-4 py-3 flex items-center font-semibold text-sm text-gray-900 dark:text-gray-200 bg-gray-50/90 dark:bg-gray-700/90 backdrop-blur-sm ring-1 ring-gray-900/10 dark:ring-black/10">B</div>
+        <div class="divide-y dark:divide-gray-200/5">
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Bob Alfred</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Bob Alfred</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Bianca Houston</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Bianca Houston</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Brianna White</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Brianna White</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Bert Flint</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Bert Flint</strong>
           </div>
         </div>
       </div>
       <div class="relative">
-        <div class="sticky top-0 px-4 py-3 flex items-center font-semibold text-sm text-gray-900 bg-gray-50/90 backdrop-blur-sm ring-1 ring-gray-900/10">C</div>
-        <div class="divide-y">
+        <div class="sticky top-0 px-4 py-3 flex items-center font-semibold text-sm text-gray-900 dark:text-gray-200 bg-gray-50/90 dark:bg-gray-700/90 backdrop-blur-sm ring-1 ring-gray-900/10 dark:ring-black/10">C</div>
+        <div class="divide-y dark:divide-gray-200/5">
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Colton Alfred</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Colton Alfred</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Cynthia Houston</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Cynthia Houston</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Cheyenne White</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Cheyenne White</strong>
           </div>
           <div class="flex items-center gap-4 p-4">
             <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80" />
-            <strong class="text-gray-900 text-sm font-medium">Charlie Flint</strong>
+            <strong class="text-gray-900 text-sm font-medium dark:text-gray-200">Charlie Flint</strong>
           </div>
         </div>
       </div>
