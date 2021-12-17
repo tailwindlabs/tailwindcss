@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve circular dependency detection when using `@apply` ([#6588](https://github.com/tailwindlabs/tailwindcss/pull/6588))
 - Only generate variants for non-`user` layers ([#6589](https://github.com/tailwindlabs/tailwindcss/pull/6589))
 - Properly extract classes with arbitrary values in arrays and classes followed by escaped quotes ([#6590](https://github.com/tailwindlabs/tailwindcss/pull/6590))
+- Improve jsx interpolation candidate matching ([#6593](https://github.com/tailwindlabs/tailwindcss/pull/6593))
 
 ## [3.0.6] - 2021-12-16
 
