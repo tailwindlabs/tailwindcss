@@ -149,7 +149,7 @@ export function Performance() {
           <div className="relative">
             <div
               ref={containerRef}
-              className="relative bg-gray-800 shadow-xl pt-2 overflow-hidden sm:rounded-xl lg:grid lg:grid-cols-2 lg:grid-rows-1"
+              className="relative bg-gray-800 shadow-xl pt-2 overflow-hidden sm:rounded-xl lg:grid lg:grid-cols-2 lg:grid-rows-1 dark:ring-1 dark:ring-inset dark:ring-white/10"
             >
               <div className="row-end-1">
                 <TabBar
@@ -228,7 +228,7 @@ export function Performance() {
                   language="css"
                   overflow={false}
                   lines={Math.max(1, rules.flat().length)}
-                  className="border-r border-gray-500/30 h-[20.8125rem] lg:h-[31.6875rem] scroll-smooth overflow-hidden"
+                  className="h-[20.8125rem] lg:h-[31.6875rem] scroll-smooth overflow-hidden"
                 >
                   {rules.map((rule) => (
                     <Rule
