@@ -32,3 +32,8 @@
   transition-duration: 0.5s;
   transition-property: background-color, border-color, color, fill, stroke;
 }
+
+.changing-theme,
+.changing-theme * {
+  transition: none !important;
+}
