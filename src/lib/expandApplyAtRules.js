@@ -1,22 +1,33 @@
 import postcss from 'postcss'
 import parser from 'postcss-selector-parser'
+
 import { resolveMatches } from './generateRules'
 import bigSign from '../util/bigSign'
 import escapeClassName from '../util/escapeClassName'
 
-function containsBase(selector, classCandidateBase, separator) {
-  return parser((selectors) => {
-    let contains = false
+function extractClasses(node) {
+  let classes = new Set()
+  let container = postcss.root({ nodes: [node.clone()] })
 
-    selectors.walkClasses((classSelector) => {
-      if (classSelector.value.split(separator).pop() === classCandidateBase) {
-        contains = true
-        return false
-      }
-    })
+  container.walkRules((rule) => {
+    parser((selectors) => {
+      selectors.walkClasses((classSelector) => {
+        classes.add(classSelector.value)
+      })
+    }).processSync(rule.selector)
+  })
 
-    return contains
-  }).transformSync(selector)
+  return Array.from(classes)
+}
+
+function extractBaseCandidates(candidates, separator) {
+  let baseClasses = new Set()
+
+  for (let candidate of candidates) {
+    baseClasses.add(candidate.split(separator).pop())
+  }
+
+  return Array.from(baseClasses)
 }
 
 function prefix(context, selector) {
@@ -212,15 +223,40 @@ function processApply(root, context) {
       let siblings = []
 
       for (let [applyCandidate, important, rules] of candidates) {
-        let base = applyCandidate.split(context.tailwindConfig.separator).pop()
-
         for (let [meta, node] of rules) {
-          if (
-            containsBase(parent.selector, base, context.tailwindConfig.separator) &&
-            containsBase(node.selector, base, context.tailwindConfig.separator)
-          ) {
+          let parentClasses = extractClasses(parent)
+          let nodeClasses = extractClasses(node)
+
+          // Add base utility classes from the @apply node to the list of
+          // classes to check whether it intersects and therefore results in a
+          // circular dependency or not.
+          //
+          // E.g.:
+          // .foo {
+          //   @apply hover:a; // This applies "a" but with a modifier
+          // }
+          //
+          // We only have to do that with base classes of the `node`, not of the `parent`
+          // E.g.:
+          // .hover\:foo {
+          //   @apply bar;
+          // }
+          // .bar {
+          //   @apply foo;
+          // }
+          //
+          // This should not result in a circular dependency because we are
+          // just applying `.foo` and the rule above is `.hover\:foo` which is
+          // unrelated. However, if we were to apply `hover:foo` then we _did_
+          // have to include this one.
+          nodeClasses = nodeClasses.concat(
+            extractBaseCandidates(nodeClasses, context.tailwindConfig.separator)
+          )
+
+          let intersects = parentClasses.some((selector) => nodeClasses.includes(selector))
+          if (intersects) {
             throw node.error(
-              `Circular dependency detected when using: \`@apply ${applyCandidate}\``
+              `You cannot \`@apply\` the \`${applyCandidate}\` utility here because it creates a circular dependency.`
             )
           }
 
@@ -250,7 +286,6 @@ function processApply(root, context) {
       // Inject the rules, sorted, correctly
       let nodes = siblings.sort(([a], [z]) => bigSign(a.sort - z.sort)).map((s) => s[1])
 
-      // console.log(parent)
       // `parent` refers to the node at `.abc` in: .abc { @apply mt-2 }
       parent.after(nodes)
     }
