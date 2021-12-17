@@ -57,7 +57,7 @@ function BrowserWindow({ size, onChange }) {
         style={{ width: useTransform(x, (x) => x + MIN_WIDTH) }}
       >
         <div className="sm:rounded-xl ring-1 ring-gray-900/5">
-          <div className="sm:rounded-t-xl bg-gradient-to-b from-white to-[#FBFBFB] dark:bg-none dark:bg-gray-700">
+          <div className="sm:rounded-t-xl bg-gradient-to-b from-white to-[#FBFBFB] dark:bg-none dark:bg-gray-700 dark:highlight-white/10">
             <div
               className={clsx(
                 'py-2.5 grid items-center px-4',
