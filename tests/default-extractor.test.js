@@ -1,7 +1,9 @@
 import { html } from './util/run'
 import { defaultExtractor } from '../src/lib/defaultExtractor'
 
-const input = html`
+let jsxExample = "<div className={`overflow-scroll${conditionIsOpen ? '' : ' hidden'}`}></div>"
+const input =
+  html`
   <div class="font-['some_font',sans-serif]"></div>
   <div class='font-["some_font",sans-serif]'></div>
   <div class="bg-[url('...')]"></div>
@@ -44,7 +46,7 @@ const input = html`
       uppercase:true
     }
   </script>
-`
+` + jsxExample
 
 const includes = [
   `font-['some_font',sans-serif]`,
@@ -84,6 +86,7 @@ const includes = [
   `lg:text-[24px]`,
   `content-['>']`,
   `hover:test`,
+  `overflow-scroll`,
 ]
 
 const excludes = [
