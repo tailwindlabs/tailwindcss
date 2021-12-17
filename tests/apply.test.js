@@ -484,7 +484,9 @@ it('should throw when trying to apply a direct circular dependency', () => {
   `
 
   return run(input, config).catch((err) => {
-    expect(err.reason).toBe('Circular dependency detected when using: `@apply text-red-500`')
+    expect(err.reason).toBe(
+      'You cannot `@apply` the `text-red-500` utility here because it creates a circular dependency.'
+    )
   })
 })
 
@@ -514,7 +516,39 @@ it('should throw when trying to apply an indirect circular dependency', () => {
   `
 
   return run(input, config).catch((err) => {
-    expect(err.reason).toBe('Circular dependency detected when using: `@apply a`')
+    expect(err.reason).toBe(
+      'You cannot `@apply` the `a` utility here because it creates a circular dependency.'
+    )
+  })
+})
+
+it('should not throw when the selector is different (but contains the base partially)', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-gray-500"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    .focus\:bg-gray-500 {
+      @apply bg-gray-500;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-gray-500 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+      }
+
+      .focus\:bg-gray-500 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+      }
+    `)
   })
 })
 
@@ -544,7 +578,9 @@ it('should throw when trying to apply an indirect circular dependency with a mod
   `
 
   return run(input, config).catch((err) => {
-    expect(err.reason).toBe('Circular dependency detected when using: `@apply hover:a`')
+    expect(err.reason).toBe(
+      'You cannot `@apply` the `hover:a` utility here because it creates a circular dependency.'
+    )
   })
 })
 
@@ -574,7 +610,9 @@ it('should throw when trying to apply an indirect circular dependency with a mod
   `
 
   return run(input, config).catch((err) => {
-    expect(err.reason).toBe('Circular dependency detected when using: `@apply a`')
+    expect(err.reason).toBe(
+      'You cannot `@apply` the `a` utility here because it creates a circular dependency.'
+    )
   })
 })
 
