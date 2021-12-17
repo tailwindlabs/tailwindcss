@@ -297,7 +297,7 @@ function processApply(root, context) {
               // would have replaced this with something that didn't exist and
               // therefore it removed the selector altogether. In this specific
               // case it would result in `{}` instead of `.something-unrelated {}`
-              if (!extractClasses(rule).some((thing) => thing === applyCandidate)) {
+              if (!extractClasses(rule).some((candidate) => candidate === applyCandidate)) {
                 rule.remove()
                 return
               }
