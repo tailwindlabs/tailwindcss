@@ -654,3 +654,61 @@ it('rules with vendor prefixes are still separate when optimizing defaults rules
     `)
   })
 })
+
+it('should be possible to apply user css', () => {
+  let config = {
+    content: [{ raw: html`<div></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    .foo {
+      color: red;
+    }
+
+    .bar {
+      @apply foo;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        color: red;
+      }
+
+      .bar {
+        color: red;
+      }
+    `)
+  })
+})
+
+it('should not be possible to apply user css with variants', () => {
+  let config = {
+    content: [{ raw: html`<div></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    .foo {
+      color: red;
+    }
+
+    .bar {
+      @apply hover:foo;
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe(
+      'The `hover:foo` class does not exist. If `hover:foo` is a custom class, make sure it is defined within a `@layer` directive.'
+    )
+  })
+})
