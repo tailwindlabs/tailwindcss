@@ -117,7 +117,7 @@ export default function PlayCdn({ code }) {
           is designed for development purposes only, and is not the best choice for production.
         </p>
       </div>
-      <Steps steps={steps} code={code} />
+      <Steps level={3} steps={steps} code={code} />
     </InstallationLayout>
   )
 }

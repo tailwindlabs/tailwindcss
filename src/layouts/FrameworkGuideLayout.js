@@ -3,7 +3,7 @@ import { BasicLayout } from '@/layouts/BasicLayout'
 export function FrameworkGuideLayout({ title, description, children }) {
   return (
     <BasicLayout>
-      <header className="mb-10 md:flex md:items-start">
+      <header id="header" className="mb-10 md:flex md:items-start">
         <div className="flex-auto max-w-4xl">
           <p className="mb-4 text-sm leading-6 font-semibold text-sky-500 dark:text-sky-400">
             Installation

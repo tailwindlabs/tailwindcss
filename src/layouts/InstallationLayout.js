@@ -102,7 +102,7 @@ export function InstallationLayout({ children }) {
 
   return (
     <BasicLayout>
-      <header className="mb-10 md:flex md:items-start">
+      <header id="header" className="mb-10 md:flex md:items-start">
         <div className="flex-auto max-w-4xl">
           <p className="mb-4 text-sm leading-6 font-semibold text-sky-500 dark:text-sky-400">
             Installation
@@ -120,9 +120,12 @@ export function InstallationLayout({ children }) {
           </p>
         </div>
       </header>
-      <section className="mb-16 relative">
+      <section id="content" className="mb-16 relative">
         <div className="relative z-10">
-          <h2 className="text-gray-900 text-xl tracking-tight font-bold mb-3 dark:text-gray-200">
+          <h2
+            data-docsearch-ignore
+            className="text-gray-900 text-xl tracking-tight font-bold mb-3 dark:text-gray-200"
+          >
             Installation
           </h2>
           <div className="flex overflow-auto mb-6 -mx-4 sm:-mx-6">
@@ -130,18 +133,20 @@ export function InstallationLayout({ children }) {
               <ul className="border-b border-gray-200 space-x-6 flex whitespace-nowrap dark:border-gray-200/5">
                 {Object.entries(tabs).map(([name, href]) => (
                   <li key={name}>
-                    <Link href={href} scroll={false}>
-                      <a
-                        className={clsx(
-                          'flex text-sm leading-6 font-semibold pt-3 pb-2.5 border-b-2 -mb-px',
-                          href === router.pathname
-                            ? 'text-sky-500 border-current'
-                            : 'text-gray-900 border-transparent hover:border-gray-300 dark:text-gray-200'
-                        )}
-                      >
-                        {name}
-                      </a>
-                    </Link>
+                    <h2>
+                      <Link href={href} scroll={false}>
+                        <a
+                          className={clsx(
+                            'flex text-sm leading-6 font-semibold pt-3 pb-2.5 border-b-2 -mb-px',
+                            href === router.pathname
+                              ? 'text-sky-500 border-current'
+                              : 'text-gray-900 border-transparent hover:border-gray-300 dark:text-gray-200'
+                          )}
+                        >
+                          {name}
+                        </a>
+                      </Link>
+                    </h2>
                   </li>
                 ))}
               </ul>
