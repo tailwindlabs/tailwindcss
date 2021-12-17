@@ -27,7 +27,7 @@ const input = html`
   <script>
     let classes01 = ["text-[10px]"]
     let classes02 = ["hover:font-bold"]
-    let classes03 = {"code": "<div class=\"text-sm text-blue-500\"></div>"} -->
+    let classes03 = {"code": "<div class=\"text-sm text-blue-500\"></div>"}
     let classes04 = ['text-[11px]']
     let classes05 = ['text-[21px]', 'text-[22px]', 'lg:text-[24px]']
     let classes06 = ["text-[31px]", "text-[32px]"]
