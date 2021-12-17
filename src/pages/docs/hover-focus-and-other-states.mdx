@@ -563,7 +563,7 @@ Style the counters or bullets in lists using the `marker` modifier:
 </Example>
 
 ```html
-<ul role="list" class="**marker:text-sky-400** list-disc pl-5 space-y-3 text-gray-500">
+<ul role="list" class="**marker:text-sky-400** list-disc pl-5 space-y-3 text-gray-500" dark-class="**marker:text-sky-400** list-disc pl-5 space-y-3 text-gray-400">
   <li>5 cups chopped Porcini mushrooms</li>
   <li>1/2 cup of olive oil</li>
   <li>3lb of celery</li>
@@ -633,6 +633,9 @@ Style the first line in a block of content using the `first-line` modifier, and 
 ```html
 <p class="**first-line:uppercase** **first-line:tracking-widest**
   **first-letter:text-7xl** **first-letter:font-bold** **first-letter:text-gray-900**
+  **first-letter:mr-3** **first-letter:float-left**
+" dark-class="**first-line:uppercase** **first-line:tracking-widest**
+  **first-letter:text-7xl** **first-letter:font-bold** **first-letter:text-white**
   **first-letter:mr-3** **first-letter:float-left**
 ">
   Well, let me tell you something, funny boy. Y'know that little stamp, the one
@@ -831,8 +834,8 @@ Use the `rtl` and `ltr` modifiers conditionally add styles in right-to-left and 
   <div class="group flex items-center">
     <img class="shrink-0 h-12 w-12 rounded-full" src="..." alt="" />
 >   <div class="ltr:ml-3 rtl:mr-3">
-      <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">...</p>
-      <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">...</p>
+      <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900" dark-class="text-sm font-medium text-gray-300 group-hover:text-white">...</p>
+      <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700" dark-class="text-sm font-medium text-gray-500 group-hover:text-gray-300">...</p>
     </div>
   </div>
 ```

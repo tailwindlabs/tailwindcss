@@ -19,10 +19,10 @@ Any offsets will be ignored and the element will not act as a position reference
 
 <Example>
   <div class="relative text-sm font-medium leading-6">
-    <div class="bg-purple-400/20 border border-purple-700/10 rounded-lg p-4">
-      <div class="static bg-purple-400/20 border border-purple-700/10 p-4 h-32">
-        <p class="text-purple-700">Static parent</p>
-        <div class="absolute bottom-0 left-0 bg-purple-500 shadow-lg rounded-lg p-4 text-white">
+    <div class="bg-purple-400/20 border border-purple-700/10 rounded-lg p-4 dark:bg-sky-900/70 dark:border-0">
+      <div class="static bg-purple-400/20 border border-purple-700/10 p-4 h-32 dark:bg-sky-400/20 dark:border-0">
+        <p class="text-purple-700 dark:text-sky-200">Static parent</p>
+        <div class="absolute bottom-0 left-0 bg-purple-500 shadow-lg rounded-lg p-4 text-white dark:bg-sky-500">
           <p>Absolute child</p>
         </div>
       </div>
@@ -47,10 +47,10 @@ Offsets are calculated relative to the element's normal position and the element
 
 <Example>
   <div class="relative text-sm font-medium leading-6">
-    <div class="bg-sky-400/20 border border-sky-700/10 rounded-lg p-4">
-      <div class="relative bg-sky-400/20 border border-sky-700/10 p-4 h-32">
-        <p class="text-sky-700">Relative parent</p>
-        <div class="absolute bottom-0 left-0 bg-sky-500 shadow-lg rounded-lg p-4 text-white">
+    <div class="bg-sky-400/20 border border-sky-700/10 rounded-lg p-4 dark:bg-blue-900/70 dark:border-0">
+      <div class="relative bg-sky-400/20 border border-sky-700/10 p-4 h-32 dark:bg-blue-400/20 dark:border-0">
+        <p class="text-sky-700 dark:text-white">Relative parent</p>
+        <div class="absolute bottom-0 left-0 bg-sky-500 shadow-lg rounded-lg p-4 text-white dark:bg-blue-500">
           <p>Absolute child</p>
         </div>
       </div>
@@ -78,10 +78,10 @@ Offsets are calculated relative to the nearest parent that has a position other 
     <div>
       <p class="text-sm text-gray-500 font-medium mb-4">With static positioning</p>
       <div class="relative text-sm font-medium leading-6">
-        <div class="relative bg-indigo-400/20 border border-indigo-700/10 rounded-lg p-4">
-          <p class="text-indigo-700 -mt-2 mb-2">Relative parent</p>
-          <div class="static bg-indigo-400/20 border border-indigo-700/10 p-4 h-32 flex flex-col justify-between">
-            <p class="text-indigo-700">Static parent</p>
+        <div class="relative bg-indigo-400/20 border border-indigo-700/10 rounded-lg p-4 dark:bg-indigo-900/80 dark:border-0">
+          <p class="text-indigo-700 -mt-2 mb-2 dark:text-indigo-200">Relative parent</p>
+          <div class="static bg-indigo-400/20 border border-indigo-700/10 p-4 h-32 flex flex-col justify-between dark:border-0">
+            <p class="text-indigo-700 dark:text-indigo-200">Static parent</p>
             <div class="flex gap-4">
               <div class=" bottom-0 left-0 bg-indigo-500 shadow-lg rounded-lg p-4 text-white">
                 <p>Static child</p>
@@ -97,10 +97,10 @@ Offsets are calculated relative to the nearest parent that has a position other 
     <div>
       <p class="text-sm text-gray-500 font-medium mb-4">With absolute positioning</p>
       <div class="relative text-sm font-medium leading-6">
-        <div class="relative bg-indigo-400/20 border border-indigo-700/10 rounded-lg p-4">
-          <p class="text-indigo-700 -mt-2 mb-2">Relative parent</p>
-          <div class="static bg-indigo-400/20 border border-indigo-700/10 p-4 h-32 flex flex-col justify-between">
-            <p class="text-indigo-700">Static parent</p>
+        <div class="relative bg-indigo-400/20 border border-indigo-700/10 rounded-lg p-4 dark:bg-indigo-900/80 dark:border-0">
+          <p class="text-indigo-700 -mt-2 mb-2 dark:text-indigo-200">Relative parent</p>
+          <div class="static bg-indigo-400/20 border border-indigo-700/10 p-4 h-32 flex flex-col justify-between dark:border-0">
+            <p class="text-indigo-700 dark:text-indigo-200">Static parent</p>
             <div class="flex gap-4">
               <div class="absolute top-0 right-0 bg-indigo-500 shadow-lg rounded-lg p-4 text-white">
                 <p>Absolute child</p>
