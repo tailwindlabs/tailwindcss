@@ -421,3 +421,27 @@ test('before and after variants are a bit special, and forced to the end (2)', (
     `)
   })
 })
+
+it('should not generate variants of user css if it is not inside a layer', () => {
+  let config = {
+    content: [{ raw: html`<div class="hover:foo"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    .foo {
+      color: red;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        color: red;
+      }
+    `)
+  })
+})
