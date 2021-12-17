@@ -1,10 +1,11 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<mask id="path-1-outside-1_84_46" maskUnits="userSpaceOnUse" x="0.75" y="0.75" width="18" height="19" fill="black">
+<mask id="path-1-outside-1_118_581" maskUnits="userSpaceOnUse" x="0.75" y="0.75" width="18" height="19" fill="black">
 <rect fill="white" x="0.75" y="0.75" width="18" height="19"/>
 <path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z"/>
 </mask>
 <path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" fill="#0F172A"/>
-<path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" stroke="white" stroke-width="3" stroke-linejoin="round" mask="url(#path-1-outside-1_84_46)"/>
+<path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" stroke="white" stroke-width="3" stroke-linejoin="round" mask="url(#path-1-outside-1_118_581)"/>
+<rect x="12.25" y="11.25" width="10.5" height="11.5" rx="2.5" fill="#C4C4C4" stroke="white" stroke-width="1.5"/>
 <path d="M13.75 13.75C13.75 13.1977 14.1977 12.75 14.75 12.75H20.25C20.8023 12.75 21.25 13.1977 21.25 13.75V20.25C21.25 20.8023 20.8023 21.25 20.25 21.25H14.75C14.1977 21.25 13.75 20.8023 13.75 20.25V13.75Z" fill="white" stroke="#0F172A" stroke-width="1.5" stroke-linecap="square"/>
 <path d="M16.75 15.75H18.25" stroke="#0F172A" stroke-width="1.5" stroke-linecap="square"/>
 <path d="M16.75 18.25H18.25" stroke="#0F172A" stroke-width="1.5" stroke-linecap="square"/>

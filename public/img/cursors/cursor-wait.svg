@@ -1,15 +1,15 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<mask id="path-1-outside-1_84_16" maskUnits="userSpaceOnUse" x="0.75" y="0.75" width="18" height="19" fill="black">
+<mask id="path-1-outside-1_118_553" maskUnits="userSpaceOnUse" x="0.75" y="0.75" width="18" height="19" fill="black">
 <rect fill="white" x="0.75" y="0.75" width="18" height="19"/>
 <path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z"/>
 </mask>
 <path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" fill="#0F172A"/>
-<path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" stroke="white" stroke-width="3" stroke-linejoin="round" mask="url(#path-1-outside-1_84_16)"/>
+<path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" stroke="white" stroke-width="3" stroke-linejoin="round" mask="url(#path-1-outside-1_118_553)"/>
 <circle cx="17" cy="18" r="4" fill="white" stroke="white" stroke-width="1.5"/>
 <circle cx="17" cy="18" r="2.75" stroke="#0F172A" stroke-opacity="0.3" stroke-width="1.5"/>
-<path d="M19.75 18C19.75 16.4812 18.5188 15.25 17 15.25C15.4812 15.25 14.25 16.4812 14.25 18C14.25 19.5188 15.4812 20.75 17 20.75" stroke="url(#paint0_linear_84_16)" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M19.75 18C19.75 16.4812 18.5188 15.25 17 15.25C15.4812 15.25 14.25 16.4812 14.25 18C14.25 19.5188 15.4812 20.75 17 20.75" stroke="url(#paint0_linear_118_553)" stroke-width="1.5" stroke-linecap="round"/>
 <defs>
-<linearGradient id="paint0_linear_84_16" x1="18.8333" y1="18.3667" x2="17.3667" y2="20.5667" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint0_linear_118_553" x1="18.8333" y1="18.3667" x2="17.3667" y2="20.5667" gradientUnits="userSpaceOnUse">
 <stop stop-color="#0F172A"/>
 <stop offset="0.748408" stop-color="#0F172A" stop-opacity="0"/>
 </linearGradient>
