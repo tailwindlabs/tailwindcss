@@ -1,7 +1,7 @@
 const PATTERNS = [
-  /(?:\['([^'\s]+[^"'`\s:\\])')/.source, // ['text-lg' -> text-lg
-  /(?:\["([^"\s]+[^"'`\s:\\])")/.source, // ["text-lg" -> text-lg
-  /(?:\[`([^`\s]+[^"'`\s:\\])`)/.source, // [`text-lg` -> text-lg
+  /(?:\['([^'\s]+[^<>"'`\s:\\])')/.source, // ['text-lg' -> text-lg
+  /(?:\["([^"\s]+[^<>"'`\s:\\])")/.source, // ["text-lg" -> text-lg
+  /(?:\[`([^`\s]+[^<>"'`\s:\\])`)/.source, // [`text-lg` -> text-lg
   /([^<>"'`\s]*\[\w*'[^"`\s]*'?\])/.source, // font-['some_font',sans-serif]
   /([^<>"'`\s]*\[\w*"[^'`\s]*"?\])/.source, // font-["some_font",sans-serif]
   /([^<>"'`\s]*\[\w*\('[^"'`\s]*'\)\])/.source, // bg-[url('...')]

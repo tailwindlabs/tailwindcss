@@ -22,6 +22,7 @@ const input = html`
   <div class="uppercase"></div>
   <div class="uppercase:"></div>
   <div class="hover:font-bold"></div>
+  <div class="content-['>']"></div>
 
   <script>
     let classes01 = ["text-[10px]"]
@@ -37,6 +38,7 @@ const input = html`
     let classes11 = ['hover:']
     let classes12 = ['hover:\'abc']
     let classes13 = ["lg:text-[4px]"]
+    let classes14 = ["<div class='hover:test'>"]
 
     let obj = {
       uppercase:true
@@ -80,9 +82,11 @@ const includes = [
   `text-[72px]`,
   `lg:text-[4px]`,
   `lg:text-[24px]`,
+  `content-['>']`,
+  `hover:test`,
 ]
 
-const excludes = [`uppercase:`, 'hover:', "hover:'abc", `font-bold`]
+const excludes = [`uppercase:`, 'hover:', "hover:'abc", `font-bold`, `<div class='hover:test'>`, `test`]
 
 test('The default extractor works as expected', async () => {
   const extractions = defaultExtractor(input.trim())
