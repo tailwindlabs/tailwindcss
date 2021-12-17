@@ -95,35 +95,49 @@ function Nav({ nav, children, fallbackHref, mobile = false }) {
   }, [router.pathname])
 
   return (
-    <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6">
-      <SearchButton className="hidden w-full mb-8 lg:flex items-center text-sm leading-6 text-gray-400 rounded-md ring-1 ring-gray-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-gray-300 dark:bg-gray-400/10 dark:highlight-white/5">
-        {({ actionKey }) => (
-          <>
-            <svg width="24" height="24" fill="none" aria-hidden="true" className="mr-3 flex-none">
-              <path
-                d="m19 19-3.5-3.5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <circle
-                cx="11"
-                cy="11"
-                r="6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Quick search...
-            {actionKey && (
-              <span className="ml-auto pl-3 flex-none text-xs font-semibold">{actionKey[0]}K</span>
+    <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6 relative">
+      <div className="sticky top-0 -ml-0.5">
+        <div className="h-10 bg-white dark:bg-gray-900"></div>
+        <div class="bg-white dark:bg-gray-900 relative">
+          <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-gray-400 rounded-md ring-1 ring-gray-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-gray-300 dark:bg-gray-400/10 dark:highlight-white/5">
+            {({ actionKey }) => (
+              <>
+                <svg
+                  width="24"
+                  height="24"
+                  fill="none"
+                  aria-hidden="true"
+                  className="mr-3 flex-none"
+                >
+                  <path
+                    d="m19 19-3.5-3.5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Quick search...
+                {actionKey && (
+                  <span className="ml-auto pl-3 flex-none text-xs font-semibold">
+                    {actionKey[0]}K
+                  </span>
+                )}
+              </>
             )}
-          </>
-        )}
-      </SearchButton>
+          </SearchButton>
+        </div>
+        <div className="h-12 -mb-4 bg-gradient-to-b from-white dark:from-gray-900"></div>
+      </div>
       <ul>
         <TopLevelNav mobile={mobile} />
         {children}
@@ -479,7 +493,7 @@ export function SidebarLayout({
     <SidebarContext.Provider value={{ nav, navIsOpen, setNavIsOpen }}>
       <Wrapper allowOverflow={allowOverflow}>
         <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
-          <div className="hidden lg:block fixed z-20 inset-0 top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] py-10 px-8 overflow-y-auto">
+          <div className="hidden lg:block fixed z-20 inset-0 top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] px-8 overflow-y-auto">
             <Nav nav={nav} fallbackHref={fallbackHref}>
               {sidebar}
             </Nav>
