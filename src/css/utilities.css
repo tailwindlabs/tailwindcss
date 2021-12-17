@@ -25,7 +25,7 @@
 }
 
 .mono-active > div:not(.not-mono) > span {
-  color: rgba(255, 255, 255, 0.25);
+  color: theme('colors.gray.600');
 }
 
 .mono > div > span {
