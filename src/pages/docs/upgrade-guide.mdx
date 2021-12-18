@@ -361,7 +361,6 @@ module.exports = {
 }
 ```
 
-
 ### File modifier order reversed
 
 Super minor change since v3.0.0-alpha.2 where the `file` modifier was introduced — if you were combining it with other modifiers like `hover` or `focus`, you'll need to flip the modifier order:
@@ -372,6 +371,40 @@ Super minor change since v3.0.0-alpha.2 where the `file` modifier was introduced
 ```
 
 Learn more in the [ordering stacked modifiers](/docs/hover-focus-and-other-states#ordering-stacked-modifiers) documentation.
+
+
+### Fill and stroke use color palette
+
+The `fill-{color}` and `stroke-{color}` utilities mirror your `theme.colors` key by default now. This isn't a breaking change if you haven't customized your color palette, but if you have, the `fill-current` and `stroke-current` classes may not work if you don't have `current` included in your own custom color palette.
+
+Add `current` to your custom color palette to resolve this:
+
+```diff-js tailwind.config.js
+  module.exports = {
+    // ...
+    theme: {
+      colors: {
++       current: 'currentColor',
+        // ...
+      }
+    }
+  }
+```
+
+### Negative values removed
+
+The negative prefix in utilites like `-mx-4` is a first class feature in Tailwind now, rather than something driven by your theme, so you can add `-` in front of any utility that support negative values and it will just work.
+
+The negative values have been removed from the default theme, so if you were referencing them with `theme()`, you will see an error when trying to compile your CSS.
+
+Use the `calc()` function to update any affected code:
+
+```diff-css
+  .my-class {
+-   top: theme('top.-4')
++   top: calc(theme('top.4') * -1)
+  }
+```
 
 ### Base layer must be present
 
