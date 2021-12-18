@@ -229,19 +229,19 @@ function resolveChangedFiles(context, candidateFiles) {
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
 export default function setupWatchingContext(configOrPath) {
-  return ({ tailwindDirectives, registerDependency }) => {
+  return ({ tailwindDirectives, registerDependency, applyDirectives }) => {
     return (root, result) => {
       let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
         getTailwindConfig(configOrPath)
 
       let contextDependencies = new Set(configDependencies)
 
-      // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
-      // to be dependencies of the context. Can reuse the context even if they change.
+      // If there are no @tailwind or @apply rules, we don't consider this CSS file or it's
+      // dependencies to be dependencies of the context. Can reuse the context even if they change.
       // We may want to think about `@layer` being part of this trigger too, but it's tough
       // because it's impossible for a layer in one file to end up in the actual @tailwind rule
       // in another file since independent sources are effectively isolated.
-      if (tailwindDirectives.size > 0) {
+      if (tailwindDirectives.size > 0 || applyDirectives.size > 0) {
         // Add current css file as a context dependencies.
         contextDependencies.add(result.opts.from)
 
@@ -299,7 +299,7 @@ export default function setupWatchingContext(configOrPath) {
         registerDependency({ type: 'dependency', file: touchFile })
       }
 
-      if (tailwindDirectives.size > 0) {
+      if (tailwindDirectives.size > 0 || applyDirectives.size > 0) {
         for (let changedContent of resolvedChangedContent(context, candidateFiles)) {
           context.changedContent.push(changedContent)
         }

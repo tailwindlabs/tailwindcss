@@ -1,10 +1,15 @@
 import log from '../util/log'
 
 export default function normalizeTailwindDirectives(root) {
-  let tailwindDirectives = new Set()
-  let layerDirectives = new Set()
+  const tailwindDirectives = new Set()
+  const layerDirectives = new Set()
+  const applyDirectives = new Set()
 
   root.walkAtRules((atRule) => {
+    if (atRule.name === 'apply') {
+      applyDirectives.add(atRule)
+      return
+    }
     if (atRule.name === 'import') {
       if (atRule.params === '"tailwindcss/base"' || atRule.params === "'tailwindcss/base'") {
         atRule.name = 'tailwind'
@@ -74,5 +79,5 @@ export default function normalizeTailwindDirectives(root) {
     }
   }
 
-  return tailwindDirectives
+  return { tailwindDirectives, layerDirectives, applyDirectives }
 }
