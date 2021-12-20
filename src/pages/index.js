@@ -42,7 +42,7 @@ function Header() {
         <div className="relative pt-6 lg:pt-8 flex items-center justify-between text-gray-700 font-semibold text-sm leading-6 dark:text-gray-200">
           <Logo className="w-auto h-5" />
           <div className="flex items-center">
-            <SearchButton className="text-gray-500 w-8 h-8 -my-1 flex items-center justify-center md:hidden">
+            <SearchButton className="text-gray-500 hover:text-gray-600 w-8 h-8 -my-1 flex items-center justify-center md:hidden dark:hover:text-gray-300">
               <span className="sr-only">Search</span>
               <svg
                 width="24"
