@@ -137,7 +137,7 @@ function Nav({ nav, children, fallbackHref, mobile = false }) {
             )}
           </SearchButton>
         </div>
-        {!mobile && <div className="h-12 -mb-4 bg-gradient-to-b from-white dark:from-gray-900" />}
+        {!mobile && <div className="h-8 bg-gradient-to-b from-white dark:from-gray-900" />}
       </div>
       <ul>
         <TopLevelNav mobile={mobile} />
