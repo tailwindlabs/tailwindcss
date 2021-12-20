@@ -201,7 +201,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents, secti
         <Link
           href={`https://github.com/tailwindlabs/tailwindcss.com/edit/master/src/pages${router.pathname}.mdx`}
         >
-          <a className="hover:text-gray-900">Edit this page on GitHub</a>
+          <a className="hover:text-gray-900 dark:hover:text-gray-400">Edit this page on GitHub</a>
         </Link>
       </Footer>
 
