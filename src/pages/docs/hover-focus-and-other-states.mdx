@@ -275,19 +275,19 @@ Style form elements in different states using modifiers like `required`, `invali
       <div>
         <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
         <div class="mt-1">
-          <input type="text" name="username" id="username" class="px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="tbone" disabled />
+          <input type="text" name="username" id="username" class="px-3 py-2 bg-white border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="tbone" disabled />
         </div>
       </div>
       <div class="mt-6">
         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
         <div class="mt-1">
-          <input type="email" name="email" id="email" class="px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="george@krugerindustrial." placeholder="you@example.com" />
+          <input type="email" name="email" id="email" class="px-3 py-2 bg-white border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="george@krugerindustrial." placeholder="you@example.com" />
         </div>
       </div>
       <div class="mt-6">
         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
         <div class="mt-1">
-          <input type="password" name="password" id="password" class="px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="Bosco" />
+          <input type="password" name="password" id="password" class="px-3 py-2 bg-white border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="Bosco" />
         </div>
       </div>
       <div class="mt-6 text-right">
@@ -304,7 +304,7 @@ Style form elements in different states using modifiers like `required`, `invali
   <label class="block">
     <span class="block text-sm font-medium text-gray-700">Username</span>
     <!-- Using form state modifers, the classes can be identical for every input -->
-    <input type="text" value="tbone" disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+    <input type="text" value="tbone" disabled class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
       focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
       **disabled:bg-gray-50** **disabled:text-gray-500** **disabled:border-gray-200** **disabled:shadow-none**
       **invalid:border-pink-500** **invalid:text-pink-600**
@@ -363,7 +363,7 @@ When you need to style an element based on the state of a _sibling_ element, mar
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
         <div class="mt-1">
-          <input type="email" name="email" id="email" class="peer px-3 py-2 border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="george@krugerindustrial." placeholder="you@example.com" />
+          <input type="email" name="email" id="email" class="peer px-3 py-2 bg-white border shadow-sm border-gray-300 placeholder-gray-400  disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" value="george@krugerindustrial." placeholder="you@example.com" />
           <p class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">Please provide a valid email address.</p>
         </div>
       </div>
@@ -483,7 +483,7 @@ Style the placeholder text of any input or textarea using the `placeholder` modi
           </svg>
         </span>
         <span class="sr-only">Search</span>
-        <input type="text" name="search" class="block w-full border border-gray-300 rounded-md py-2 pl-9 pr-3 shadow-sm placeholder:italic placeholder:text-gray-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for anything..."
+        <input type="text" name="search" class="block bg-white w-full border border-gray-300 rounded-md py-2 pl-9 pr-3 shadow-sm placeholder:italic placeholder:text-gray-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for anything..."
         />
       </label>
     </form>
@@ -496,7 +496,7 @@ Style the placeholder text of any input or textarea using the `placeholder` modi
   <span class="absolute inset-y-0 left-0 flex items-center pl-2">
     <svg class="h-5 w-5 fill-gray-300" viewBox="0 0 20 20"><!-- ... --></svg>
   </span>
-  <input class="**placeholder:italic** **placeholder:text-gray-400** block w-full border border-gray-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for anything..." type="text" name="search"/>
+  <input class="**placeholder:italic** **placeholder:text-gray-400** block bg-white w-full border border-gray-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for anything..." type="text" name="search"/>
 </label>
 ```
 
