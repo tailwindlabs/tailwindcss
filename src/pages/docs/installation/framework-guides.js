@@ -12,7 +12,7 @@ import { ReactComponent as CraLogo } from '@/img/guides/cra.svg'
 export default function FrameworkGuides() {
   return (
     <InstallationLayout>
-      <div className="prose mb-16 max-w-3xl">
+      <div className="prose mb-10 max-w-3xl dark:prose-dark">
         <p>
           Framework-specific guides that cover our recommended approach to installing Tailwind CSS
           in a number of popular environments.
@@ -24,7 +24,7 @@ export default function FrameworkGuides() {
             name: 'Next.js',
             slug: 'nextjs',
             description: 'Full-featured React framework with great developer experience.',
-            logo: NextJsLogo,
+            logo: () => <NextJsLogo className="dark:invert" />,
           },
           {
             name: 'Laravel',
@@ -59,20 +59,20 @@ export default function FrameworkGuides() {
         ].map(({ name, description, logo: Logo, slug }) => (
           <li key={name} className="relative flex flex-row-reverse">
             <div className="ml-6 flex-auto">
-              <h3 className="mb-2 leading-6 text-gray-900 font-semibold">
+              <h3 className="mb-2 leading-6 text-gray-900 font-semibold dark:text-gray-200">
                 <Link href={`/docs/guides/${slug}`}>
                   <a className="before:absolute before:inset-0">{name}</a>
                 </Link>
               </h3>
-              <p className="text-sm leading-6 text-gray-700">{description}</p>
+              <p className="text-sm leading-6 text-gray-700 dark:text-gray-400">{description}</p>
             </div>
-            <div className="flex-none w-14 h-14 rounded-full bg-white ring-1 ring-gray-900/5 shadow flex items-center justify-center overflow-hidden">
+            <div className="flex-none w-14 h-14 rounded-full bg-white ring-1 ring-gray-900/5 shadow flex items-center justify-center overflow-hidden dark:bg-gray-800 dark:highlight-white/5">
               <Logo />
             </div>
           </li>
         ))}
       </ul>
-      <div className="mt-16 prose max-w-3xl">
+      <div className="mt-16 prose max-w-3xl dark:prose-dark">
         <p>
           Don't see your framework of choice? Try using{' '}
           <Link href="/docs/installation">

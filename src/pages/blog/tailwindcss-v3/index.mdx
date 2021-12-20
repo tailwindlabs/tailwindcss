@@ -100,15 +100,15 @@ After about five false starts, we finally figured out an approach we liked, and 
 <Example>
   <div class="flex flex-col sm:flex-row justify-center gap-8 sm:gap-16">
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-cyan-500/50</p>
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">shadow-cyan-500/50</p>
       <button class="py-2 px-3 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-cyan-500/50 focus:outline-none">Subscribe</button>
     </div>
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-blue-500/50</p>
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">shadow-blue-500/50</p>
       <button class="py-2 px-3 bg-blue-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-blue-500/50 focus:outline-none">Subscribe</button>
     </div>
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">shadow-indigo-500/50</p>
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">shadow-indigo-500/50</p>
       <button class="py-2 px-3 bg-indigo-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-indigo-500/50 focus:outline-none">Subscribe</button>
     </div>
   </div>
@@ -131,7 +131,7 @@ We've added a comprehensive set of utilities for the CSS Scroll Snap module, giv
 <Example p="none" hint="Scroll in the grid of images to see the expected behaviour">
   <!-- Snap Point -->
   <div class="flex ml-[50%] items-end justify-start pt-10 mb-6">
-    <div class="ml-2 rounded font-mono text-[0.625rem] leading-6 px-1.5 ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-600">snap point</div>
+    <div class="ml-2 rounded font-mono text-[0.625rem] leading-6 px-1.5 ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-600 dark:bg-indigo-500 dark:ring-0 dark:text-white dark:highlight-white/10">snap point</div>
     <div class="absolute top-0 bottom-0 left-1/2 border-l border-indigo-500"></div>
   </div>
   <!-- Contents -->
@@ -318,8 +318,8 @@ Now you can change underline colors, thickness, and more:
 
 
 <Example p="none">
-  <div class="bg-white p-8 text-gray-900 shadow-lg max-w-md mx-auto text-sm leading-6 sm:text-base sm:leading-7">
-    <p class="text-base leading-6">I’m Derek, an astro-engineer based in Tatooine. I like to build X-Wings at <a href="#" class="font-semibold text-gray-900 underline decoration-sky-500 decoration-2">My Company, Inc</a>. Outside of work, I like to <a href="#" class="font-semibold text-gray-900 underline decoration-pink-500 decoration-2 decoration-dotted">watch pod-racing</a> and have <a href="#" class="font-semibold text-gray-900 underline decoration-indigo-500 decoration-2 decoration-wavy">light-saber</a> fights.</p>
+  <div class="bg-white p-8 text-gray-900 shadow-lg max-w-md mx-auto text-sm leading-6 sm:text-base sm:leading-7 dark:bg-gray-800 dark:text-gray-200">
+    <p class="text-base leading-6">I’m Derek, an astro-engineer based in Tatooine. I like to build X-Wings at <a href="#" class="font-semibold underline decoration-sky-500 decoration-2">My Company, Inc</a>. Outside of work, I like to <a href="#" class="font-semibold underline decoration-pink-500 decoration-2 decoration-dotted">watch pod-racing</a> and have <a href="#" class="font-semibold underline decoration-indigo-500 decoration-2 decoration-wavy">light-saber</a> fights.</p>
   </div>
 </Example>
 
@@ -344,22 +344,22 @@ We've added experimental support for multi-directional layouts with new `rtl` an
 <Example>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-10 max-w-lg mx-auto">
     <div dir="ltr">
-      <p class="mb-4 text-sm font-medium text-gray-500">Left-to-right</p>
+      <p class="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">Left-to-right</p>
       <div class="group flex items-center">
         <img class="shrink-0 h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
         <div class="ml-3 rtl:ml-0 rtl:mr-3">
-          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Tom Cook</p>
-          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">Director of Operations</p>
+          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-300 dark:group-hover:text-white">Tom Cook</p>
+          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300">Director of Operations</p>
         </div>
       </div>
     </div>
     <div dir="rtl">
-      <p class="mb-4 text-sm font-medium text-gray-500">Right-to-left</p>
+      <p class="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">Right-to-left</p>
       <div class="group flex items-center">
         <img class="shrink-0 h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1563833717765-00462801314e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
         <div class="ml-3 rtl:ml-0 rtl:mr-3">
-          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">تامر كرم</p>
-          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">الرئيس التنفيذي</p>
+          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-300 dark:group-hover:text-white">تامر كرم</p>
+          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300">الرئيس التنفيذي</p>
         </div>
       </div>
     </div>
@@ -370,8 +370,8 @@ We've added experimental support for multi-directional layouts with new `rtl` an
   <div class="group flex items-center">
     <img class="shrink-0 h-12 w-12 rounded-full" src="..." alt="" />
 >   <div class="ltr:ml-3 rtl:mr-3">
-      <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">...</p>
-      <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">...</p>
+      <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900" dark-class="text-sm font-medium text-gray-300 group-hover:text-white">...</p>
+      <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700" dark-class="text-sm font-medium text-gray-500 group-hover:text-gray-300">...</p>
     </div>
   </div>
 ```

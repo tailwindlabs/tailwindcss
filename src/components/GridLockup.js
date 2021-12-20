@@ -1,16 +1,5 @@
 import clsx from 'clsx'
-
-let beamsImages = [
-  [require('@/img/beams/0.jpg').default, 'w-[122.375rem] ml-[-61.1875rem]'],
-  [require('@/img/beams/1.jpg').default, 'w-[138.125rem] ml-[-69.0625rem]'],
-  [require('@/img/beams/2.jpg').default, 'w-[165rem] ml-[-82.5rem]'],
-  [require('@/img/beams/3.jpg').default, 'w-[124.125rem] ml-[-62.0625rem]'],
-  [require('@/img/beams/4.jpg').default, 'w-[123.25rem] ml-[-61.625rem]'],
-  [require('@/img/beams/5.jpg').default, 'w-[123.25rem] ml-[-61.625rem]'],
-  [require('@/img/beams/6.jpg').default, 'w-[118.5rem] ml-[-59.25rem]'],
-  [require('@/img/beams/7.jpg').default, 'w-[141.25rem] ml-[-70.625rem]'],
-  [require('@/img/beams/8.jpg').default, 'w-[150rem] ml-[-75rem]'],
-]
+import styles from './GridLockup.module.css'
 
 let overhangs = { sm: 'top-0 xl:top-8', md: 'top-0 xl:top-14', lg: 'top-0 xl:top-18' }
 
@@ -33,24 +22,36 @@ export function GridLockup({
 GridLockup.Container = function Grid({ beams = 0, className, overhang = 'sm', children }) {
   return (
     <div className={clsx('relative pt-10 xl:pt-0', className)}>
+      <div
+        className={clsx(
+          'hidden dark:block absolute top-0 inset-x-0 h-[37.5rem] bg-gradient-to-b from-[#0c1120]',
+          overhangs[overhang]
+        )}
+      />
       {beams !== -1 && (
-        <img
-          src={beamsImages[beams][0]}
-          alt=""
+        <div
           className={clsx(
-            'absolute left-1/2 max-w-none',
-            beamsImages[beams][1],
+            'absolute top-0 inset-x-0 bg-top bg-no-repeat',
+            styles[`beams-${beams}`],
             overhangs[overhang]
           )}
         />
       )}
       <div
-        className={clsx('absolute inset-0 bg-grid-gray-900/[0.04] bg-top', overhangs[overhang])}
-        style={{
-          maskImage: 'linear-gradient(to top, transparent, black)',
-          WebkitMaskImage: 'linear-gradient(to top, transparent, black)',
-        }}
+        className={clsx(
+          'absolute top-0 inset-x-0 h-[37.5rem] bg-grid-gray-900/[0.04] bg-top [mask-image:linear-gradient(0deg,transparent,black)] dark:bg-grid-gray-100/[0.03] dark:bg-[center_top_-1px] dark:border-t dark:border-gray-100/5',
+          overhangs[overhang]
+        )}
       />
+      {/* <div
+        className={clsx(
+          'absolute top-0 inset-x-0 min-h-[37.5rem]  bg-top bg-no-repeat dark:border-t dark:border-gray-100/5',
+          styles.beams,
+          overhangs[overhang]
+        )}
+      >
+        <div className="absolute inset-0 bg-grid-gray-900/[0.04] bg-top [mask-image:linear-gradient(0deg,transparent,black)] dark:bg-grid-gray-100/[0.03] dark:bg-[center_top_-1px]" />
+      </div> */}
       {children}
     </div>
   )

@@ -24,8 +24,8 @@ For example, to apply the `bg-sky-700` class on hover, use the `hover:bg-sky-700
 </button>
 ```
 
-<details className="-mt-2 mb-10 rounded-xl border px-6 py-3 prose open:pb-5">
-  <summary className="font-medium cursor-default select-none text-gray-900">How does this compare to traditional CSS?</summary>
+<details className="-mt-2 mb-10 rounded-xl border px-6 py-3 prose open:pb-5 dark:prose-dark dark:border-gray-800">
+  <summary className="font-medium cursor-default select-none text-gray-900 dark:text-gray-200">How does this compare to traditional CSS?</summary>
 
 When writing CSS the traditional way, a single class name would do different things based on the current state.
 
@@ -551,9 +551,9 @@ Style the counters or bullets in lists using the `marker` modifier:
 
 <Example p="none">
   <div class="px-6">
-    <div class="max-w-sm mx-auto bg-white shadow py-8 px-8">
-      <h2 class="text-base font-semibold text-gray-900">Ingredients</h2>
-      <ul role="list" class="mt-3 list-disc pl-5 space-y-3 text-gray-500 marker:text-sky-400">
+    <div class="max-w-sm mx-auto bg-white shadow py-8 px-8 dark:bg-gray-800">
+      <h2 class="text-base font-semibold text-gray-900 dark:text-gray-200">Ingredients</h2>
+      <ul role="list" class="mt-3 list-disc pl-5 space-y-3 text-gray-500 marker:text-sky-400 dark:text-gray-400">
         <li>5 cups chopped Porcini mushrooms</li>
         <li>1/2 cup of olive oil</li>
         <li>3lb of celery</li>
@@ -563,7 +563,7 @@ Style the counters or bullets in lists using the `marker` modifier:
 </Example>
 
 ```html
-<ul role="list" class="**marker:text-sky-400** list-disc pl-5 space-y-3 text-gray-500">
+<ul role="list" class="**marker:text-sky-400** list-disc pl-5 space-y-3 text-gray-500" dark-class="**marker:text-sky-400** list-disc pl-5 space-y-3 text-gray-400">
   <li>5 cups chopped Porcini mushrooms</li>
   <li>1/2 cup of olive oil</li>
   <li>3lb of celery</li>
@@ -578,7 +578,7 @@ Style the active text selection using the `selection` modifier:
 
 <Example p="none" hint="Try selecting some of this text with your mouse">
   <div class="px-6">
-    <div class="max-w-lg mx-auto bg-white shadow py-8 px-6 selection:bg-fuchsia-300 selection:text-fuchsia-900">
+    <div class="max-w-lg mx-auto bg-white text-gray-700 shadow py-8 px-6 selection:bg-fuchsia-300 selection:text-fuchsia-900 dark:bg-gray-800 dark:text-gray-400">
       <p>
         So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I <em>was</em> a marine biologist.
       </p>
@@ -619,8 +619,8 @@ Style the first line in a block of content using the `first-line` modifier, and 
 
 <Example p="none">
   <div class="px-6">
-    <div class="max-w-lg mx-auto bg-white shadow py-8 px-6 font-serif">
-      <p class="first-line:uppercase first-line:tracking-widest first-letter:text-gray-900 first-letter:text-7xl first-letter:leading-none first-letter:float-left first-letter:font-bold first-letter:mr-3">
+    <div class="max-w-lg mx-auto bg-white text-gray-700 shadow py-8 px-6 font-serif dark:bg-gray-800 dark:text-gray-200">
+      <p class="first-line:uppercase first-line:tracking-widest first-letter:text-gray-900 first-letter:text-7xl first-letter:leading-none first-letter:float-left first-letter:font-bold first-letter:mr-3 dark:first-letter:text-white">
         Well, let me tell you something, funny boy. Y'know that little stamp, the one that says "New York Public Library"? Well that may not mean anything to you, but that means a lot to me. One whole hell of a lot.
       </p>
       <p class="mt-6">
@@ -633,6 +633,9 @@ Style the first line in a block of content using the `first-line` modifier, and 
 ```html
 <p class="**first-line:uppercase** **first-line:tracking-widest**
   **first-letter:text-7xl** **first-letter:font-bold** **first-letter:text-gray-900**
+  **first-letter:mr-3** **first-letter:float-left**
+" dark-class="**first-line:uppercase** **first-line:tracking-widest**
+  **first-letter:text-7xl** **first-letter:font-bold** **first-letter:text-white**
   **first-letter:mr-3** **first-letter:float-left**
 ">
   Well, let me tell you something, funny boy. Y'know that little stamp, the one
@@ -805,22 +808,22 @@ Use the `rtl` and `ltr` modifiers conditionally add styles in right-to-left and 
 <Example>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-10 max-w-lg mx-auto">
     <div dir="ltr">
-      <p class="mb-4 text-sm font-medium text-gray-500">Left-to-right</p>
+      <p class="mb-4 text-sm font-medium">Left-to-right</p>
       <div class="group flex items-center">
         <img class="shrink-0 h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
         <div class="ml-3 rtl:ml-0 rtl:mr-3">
-          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Tom Cook</p>
-          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">Director of Operations</p>
+          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-300 dark:group-hover:text-white">Tom Cook</p>
+          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300">Director of Operations</p>
         </div>
       </div>
     </div>
     <div dir="rtl">
-      <p class="mb-4 text-sm font-medium text-gray-500">Right-to-left</p>
+      <p class="mb-4 text-sm font-medium">Right-to-left</p>
       <div class="group flex items-center">
         <img class="shrink-0 h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1563833717765-00462801314e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
         <div class="ml-3 rtl:ml-0 rtl:mr-3">
-          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">تامر كرم</p>
-          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">الرئيس التنفيذي</p>
+          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-300 dark:group-hover:text-white">تامر كرم</p>
+          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300">الرئيس التنفيذي</p>
         </div>
       </div>
     </div>
@@ -831,8 +834,8 @@ Use the `rtl` and `ltr` modifiers conditionally add styles in right-to-left and 
   <div class="group flex items-center">
     <img class="shrink-0 h-12 w-12 rounded-full" src="..." alt="" />
 >   <div class="ltr:ml-3 rtl:mr-3">
-      <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">...</p>
-      <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">...</p>
+      <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900" dark-class="text-sm font-medium text-gray-300 group-hover:text-white">...</p>
+      <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700" dark-class="text-sm font-medium text-gray-500 group-hover:text-gray-300">...</p>
     </div>
   </div>
 ```

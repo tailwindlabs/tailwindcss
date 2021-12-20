@@ -13,12 +13,12 @@ export default function PostItem({ title, category, slug, date, children, wide =
         'pt-8': category,
       })}
     >
-      <h3 className="mb-4 text-xl text-gray-900 tracking-tight font-bold">
+      <h3 className="mb-4 text-xl text-gray-900 tracking-tight font-bold dark:text-gray-200">
         <Link href={`/blog/${slug}`}>
           <a>{title}</a>
         </Link>
       </h3>
-      <div className="mb-6 prose">{children}</div>
+      <div className="mb-6 prose dark:prose-dark">{children}</div>
       <div className="mt-auto flex flex-row-reverse items-center justify-end">
         <dl>
           {category && (
@@ -31,7 +31,7 @@ export default function PostItem({ title, category, slug, date, children, wide =
           )}
           <dt className="sr-only">Date</dt>
           <dd
-            className={clsx('text-sm leading-6', {
+            className={clsx('text-sm leading-6 dark:text-gray-400', {
               'lg:absolute lg:top-0 lg:right-full lg:mr-8 lg:whitespace-nowrap': wide,
             })}
           >

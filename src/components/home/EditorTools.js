@@ -2,7 +2,6 @@ import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/h
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { motion } from 'framer-motion'
 import { Fragment, useEffect, useState } from 'react'
-import iconUrl from '@/img/icons/home/editor-tools.png'
 import { useInView } from 'react-intersection-observer'
 import colors from 'tailwindcss/colors'
 import dlv from 'dlv'
@@ -309,9 +308,11 @@ export function EditorTools() {
   return (
     <section id="editor-tools">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-sky-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/editor-tools.png').default}
+          dark={require('@/img/icons/home/dark/editor-tools.png').default}
+        />
         <Caption className="text-sky-500">Editor tools</Caption>
         <BigText>World-class IDE integration.</BigText>
         <Paragraph as="div">
@@ -324,7 +325,7 @@ export function EditorTools() {
             within your editor and with no configuration required.
           </p>
         </Paragraph>
-        <Link href="/docs/intellisense" color="sky">
+        <Link href="/docs/intellisense" color="sky" darkColor="gray">
           Learn more<span className="sr-only">, editor setup</span>
         </Link>
       </div>
@@ -336,7 +337,7 @@ export function EditorTools() {
             <img
               src={require('@/img/beams/overlay.webp').default}
               alt=""
-              className="absolute z-10 bottom-0 -left-80 w-[45.0625rem] pointer-events-none"
+              className="absolute z-10 bottom-0 -left-80 w-[45.0625rem] pointer-events-none dark:hidden"
             />
             <CodeWindow className="!h-[39.0625rem]">
               <div className="flex-auto flex min-h-0">

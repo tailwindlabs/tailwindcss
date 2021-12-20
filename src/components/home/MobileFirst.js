@@ -2,7 +2,6 @@ import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/h
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { motion, useTransform, useMotionValue } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import iconUrl from '@/img/icons/home/mobile-first.png'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import clsx from 'clsx'
 import { GridLockup } from '../GridLockup'
@@ -58,7 +57,7 @@ function BrowserWindow({ size, onChange }) {
         style={{ width: useTransform(x, (x) => x + MIN_WIDTH) }}
       >
         <div className="sm:rounded-xl ring-1 ring-gray-900/5">
-          <div className="sm:rounded-t-xl bg-gradient-to-b from-white to-[#FBFBFB]">
+          <div className="sm:rounded-t-xl bg-gradient-to-b from-white to-[#FBFBFB] dark:bg-none dark:bg-gray-700 dark:highlight-white/10">
             <div
               className={clsx(
                 'py-2.5 grid items-center px-4',
@@ -79,7 +78,7 @@ function BrowserWindow({ size, onChange }) {
                       width="24"
                       height="24"
                       fill="none"
-                      className="ml-4 flex-none text-gray-400"
+                      className="ml-4 flex-none text-gray-400 dark:text-gray-500"
                     >
                       <path
                         d="m15 7-5 5 5 5"
@@ -93,7 +92,7 @@ function BrowserWindow({ size, onChange }) {
                       width="24"
                       height="24"
                       fill="none"
-                      className="ml-2 flex-none text-gray-400"
+                      className="ml-2 flex-none text-gray-400 dark:text-gray-500"
                     >
                       <path
                         d="m10 7 5 5-5 5"
@@ -107,11 +106,11 @@ function BrowserWindow({ size, onChange }) {
                 )}
               </div>
               <div>
-                <div className="bg-gray-100 rounded-md font-medium text-xs leading-6 py-1 flex items-center justify-center ring-1 ring-inset ring-gray-900/5 mx-auto w-4/5">
+                <div className="bg-gray-100 rounded-md font-medium text-xs leading-6 py-1 flex items-center justify-center ring-1 ring-inset ring-gray-900/5 mx-auto w-4/5 dark:bg-gray-800 dark:text-gray-500">
                   <svg
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    className="text-gray-300 w-3.5 h-3.5 mr-1.5"
+                    className="text-gray-300 w-3.5 h-3.5 mr-1.5 dark:text-gray-500"
                   >
                     <path
                       fillRule="evenodd"
@@ -124,7 +123,12 @@ function BrowserWindow({ size, onChange }) {
               </div>
               {size !== undefined && (
                 <div className="flex justify-end">
-                  <svg width="24" height="24" fill="none" className="text-gray-400">
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    className="text-gray-400 dark:text-gray-500"
+                  >
                     <path
                       d="M12.5 6a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM12.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM18.5 6a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM18.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM6.5 6a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM6.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM12.5 18a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM18.5 18a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM6.5 18a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z"
                       stroke="currentColor"
@@ -136,8 +140,13 @@ function BrowserWindow({ size, onChange }) {
               )}
             </div>
             <div className="grid grid-cols-3 text-xs leading-5 overflow-hidden">
-              <div className="bg-gray-100 text-gray-400 rounded-tr border border-gray-900/5 px-4 py-1.5 -mb-px -ml-px flex items-center justify-center space-x-2">
-                <svg width="17" height="10" fill="currentColor" className="flex-none text-gray-300">
+              <div className="pointer-events-none select-none bg-gray-100 text-gray-400 rounded-tr border border-gray-900/5 px-4 py-1.5 -mb-px -ml-px flex items-center justify-center space-x-2 dark:bg-gray-800 dark:text-gray-500">
+                <svg
+                  width="17"
+                  height="10"
+                  fill="currentColor"
+                  className="flex-none text-gray-300 dark:text-gray-500"
+                >
                   <path
                     fillRule="evenodd"
                     clipRule="evenodd"
@@ -146,20 +155,25 @@ function BrowserWindow({ size, onChange }) {
                 </svg>
                 <div className="truncate">Tailwind UI - Official Tailwind CSS Components</div>
               </div>
-              <div className="text-gray-900 font-medium px-4 py-1.5 flex items-center justify-center space-x-2">
+              <div className="pointer-events-none select-none text-gray-900 font-medium px-4 py-1.5 flex items-center justify-center space-x-2 dark:text-gray-200">
                 <svg
                   width="15"
                   height="14"
                   fill="currentColor"
-                  className="flex-none text-indigo-600"
+                  className="flex-none text-indigo-600 dark:text-gray-400"
                 >
                   <path d="M6.541 11.753a1.803 1.803 0 0 1-.485 1.277c-.241.253-.552.426-.89.497-.34.07-.691.034-1.01-.103a1.736 1.736 0 0 1-.776-.67 1.79 1.79 0 0 1-.272-1c.004-.306.086-.604.239-.866.152-.262.37-.48.63-.628-.01.047.039-.024 0 0l.797-.723a3.759 3.759 0 0 0 .988-2.535c0-1.28-.734-2.581-1.788-3.262.04.024-.015-.041 0 0a1.72 1.72 0 0 1-.63-.628 1.766 1.766 0 0 1-.238-.865A1.802 1.802 0 0 1 3.592.97c.24-.253.55-.426.89-.496.338-.07.69-.035 1.008.102.319.139.59.372.776.67.187.298.282.647.272 1a3.77 3.77 0 0 0 1.006 2.552l.35.35c.14.125.287.241.44.35.265.143.489.36.644.625a1.73 1.73 0 0 1-.645 2.381c.015-.03-.027.016 0 0a3.89 3.89 0 0 0-1.296 1.393 4.007 4.007 0 0 0-.496 1.856Zm1.921-9.512c0 .348.101.69.29.979.188.29.457.515.77.648a1.678 1.678 0 0 0 1.872-.382 1.803 1.803 0 0 0 .372-1.919 1.752 1.752 0 0 0-.632-.79 1.685 1.685 0 0 0-2.168.22c-.322.33-.503.778-.504 1.244Zm1.718 7.751c-.34 0-.672.104-.954.297a1.752 1.752 0 0 0-.633.79A1.802 1.802 0 0 0 8.966 13a1.679 1.679 0 0 0 1.871.382c.314-.134.582-.36.77-.65a1.796 1.796 0 0 0-.214-2.223 1.684 1.684 0 0 0-1.214-.516Zm4.393-2.995c0-.348-.1-.688-.29-.978a1.727 1.727 0 0 0-.77-.649 1.677 1.677 0 0 0-.993-.1 1.7 1.7 0 0 0-.878.482 1.803 1.803 0 0 0-.373 1.92c.13.32.35.596.633.79a1.684 1.684 0 0 0 2.167-.22c.323-.331.504-.779.504-1.245Z" />
                   <path d="M2.147 5.237c-.34 0-.672.103-.954.296a1.753 1.753 0 0 0-.633.79 1.803 1.803 0 0 0 .373 1.92c.24.245.545.413.878.48.333.069.679.034.993-.099.314-.133.582-.359.77-.648a1.795 1.795 0 0 0-.214-2.223 1.714 1.714 0 0 0-1.213-.516Z" />
                 </svg>
                 <div className="truncate">Workcation - Find a trip that suits you</div>
               </div>
-              <div className="bg-gray-100 text-gray-400 rounded-tl border border-gray-900/5 pl-4 pr-8 py-1.5 -mb-px -mr-4 flex items-center justify-center space-x-2">
-                <svg width="15" height="16" fill="currentColor" className="flex-none text-gray-300">
+              <div className="pointer-events-none select-none bg-gray-100 text-gray-400 rounded-tl border border-gray-900/5 pl-4 pr-8 py-1.5 -mb-px -mr-4 flex items-center justify-center space-x-2 dark:bg-gray-800 dark:text-gray-500">
+                <svg
+                  width="15"
+                  height="16"
+                  fill="currentColor"
+                  className="flex-none text-gray-300 dark:text-gray-500"
+                >
                   <path d="m2.973 9.822 9.154-3.056c-.183-1.144-.314-1.908-.465-2.491-.162-.627-.291-.795-.342-.853a1.785 1.785 0 0 0-.643-.467c-.071-.03-.27-.102-.917-.063-.684.042-1.581.181-3.003.406-1.42.225-2.318.37-2.98.542-.627.162-.796.292-.854.342a1.792 1.792 0 0 0-.466.643c-.03.071-.102.271-.063.918.041.683.181 1.581.406 3.002.063.399.12.755.173 1.077Z" />
                   <path
                     fillRule="evenodd"
@@ -173,7 +187,7 @@ function BrowserWindow({ size, onChange }) {
               </div>
             </div>
           </div>
-          <div className="relative bg-white border-t border-gray-200 rounded-b-xl pb-8 -mb-8">
+          <div className="relative bg-white border-t border-gray-200 rounded-b-xl pb-8 -mb-8 dark:bg-gray-800 dark:border-gray-900/50">
             <motion.iframe
               ref={iframeRef}
               src="/examples/mobile-first-demo"
@@ -221,18 +235,24 @@ function Marker({ label, active, className }) {
   return (
     <div className={clsx('flex items-start flex-none', className)}>
       <div className="flex flex-col items-center ml-[-2px]">
-        <div className={clsx('w-px h-14', active ? 'bg-indigo-600' : 'bg-gray-100')} />
+        <div
+          className={clsx('w-px h-14', active ? 'bg-indigo-600' : 'bg-gray-100 dark:bg-gray-800')}
+        />
         <div
           className={clsx(
             'mt-[3px] w-[5px] h-[5px] shadow-sm rounded-full ring-1',
-            active ? 'bg-indigo-600 ring-indigo-600' : 'bg-white ring-gray-500/[0.15]'
+            active
+              ? 'bg-indigo-600 ring-indigo-600'
+              : 'bg-white ring-gray-500/[0.15] dark:bg-gray-900 dark:ring-gray-700'
           )}
         />
       </div>
       <div
         className={clsx(
-          'ml-1.5 rounded font-mono text-[0.625rem] leading-6 px-1.5 ring-1 ring-inset',
-          active ? 'bg-indigo-50 text-indigo-600 ring-indigo-600' : 'bg-gray-100 ring-gray-100'
+          'ml-1.5 rounded font-mono text-[0.625rem] leading-6 px-1.5 ring-1 ring-inset dark:ring-0',
+          active
+            ? 'bg-indigo-50 text-indigo-600 ring-indigo-600 dark:bg-indigo-500 dark:text-white dark:highlight-white/10'
+            : 'bg-gray-100 ring-gray-100 dark:bg-gray-800 dark:highlight-white/5'
         )}
       >
         {label}
@@ -247,10 +267,12 @@ export function MobileFirst() {
   return (
     <section id="mobile-first" className="overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
-        <Caption className="text-indigo-500">Mobile-first</Caption>
+        <IconContainer
+          className="dark:bg-indigo-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/mobile-first.png').default}
+          dark={require('@/img/icons/home/dark/mobile-first.png').default}
+        />
+        <Caption className="text-indigo-500 dark:text-indigo-400">Mobile-first</Caption>
         <BigText>Responsive everything.</BigText>
         <Paragraph as="div">
           <p>
@@ -262,11 +284,11 @@ export function MobileFirst() {
             at a specific breakpoint.
           </p>
         </Paragraph>
-        <Link href="/docs/responsive-design" color="indigo">
+        <Link href="/docs/responsive-design" color="indigo" darkColor="gray">
           Learn more<span className="sr-only">, responsive design</span>
         </Link>
       </div>
-      <div className="hidden mt-16 mb-12 border-b border-gray-100 xl:mb-0 demo-sm:block">
+      <div className="hidden mt-16 mb-12 border-b border-gray-100 xl:mb-0 demo-sm:block dark:border-gray-800">
         <div className="mb-[-3px] flex max-w-7xl mx-auto px-6 sm:px-8 md:px-10">
           <Marker label="sm" active={size !== undefined} className="ml-[40rem] w-32" />
           <Marker label="md" active={size === 'md' || size === 'lg'} className="w-64" />

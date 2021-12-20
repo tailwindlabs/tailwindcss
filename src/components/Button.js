@@ -24,8 +24,20 @@ let colors = {
   ],
 }
 
+let colorsDark = {
+  gray: [
+    'dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500',
+    'dark:text-gray-500 dark:group-hover:text-gray-400',
+  ],
+  sky: [
+    'dark:bg-sky-500 dark:text-sky-50 dark:hover:bg-sky-400 dark:hover:text-white dark:focus:ring-sky-200',
+    'dark:text-sky-300 dark:group-hover:text-sky-100',
+  ],
+}
+
 export function Button({
   color = 'gray',
+  darkColor = color,
   href,
   children,
   className = '',
@@ -33,6 +45,7 @@ export function Button({
   ...props
 }) {
   let colorClasses = typeof color === 'string' ? colors[color] : color
+  let darkColorClasses = typeof darkColor === 'string' ? colorsDark[darkColor] || [] : darkColor
 
   return (
     <Link href={href}>
@@ -40,6 +53,7 @@ export function Button({
         className={clsx(
           'group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2',
           colorClasses[0],
+          darkColorClasses[0],
           className,
           reverse && 'flex-row-reverse'
         )}
@@ -47,7 +61,12 @@ export function Button({
       >
         {children}
         <svg
-          className={clsx('overflow-visible', reverse ? 'mr-3' : 'ml-3', colorClasses[1])}
+          className={clsx(
+            'overflow-visible',
+            reverse ? 'mr-3' : 'ml-3',
+            colorClasses[1],
+            darkColorClasses[1]
+          )}
           width="3"
           height="6"
           viewBox="0 0 3 6"

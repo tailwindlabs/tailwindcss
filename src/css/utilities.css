@@ -7,26 +7,6 @@
   }
 }
 
-.scrollbar-w-1\.5::-webkit-scrollbar {
-  @apply w-1.5 h-1.5 !important;
-}
-
-.scrollbar-track-gray-100::-webkit-scrollbar-track {
-  @apply bg-gray-100 !important;
-}
-
-.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 !important;
-}
-
-.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
-  @apply rounded !important;
-}
-
-.scrollbar-track-rounded::-webkit-scrollbar-track {
-  @apply rounded !important;
-}
-
 .bg-checkered {
   background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23F0F0F0' d='M0 0h8v8H0zm8 8h8v8H8z'/%3E%3C/svg%3E");
   background-size: 16px 16px;
@@ -45,10 +25,15 @@
 }
 
 .mono-active > div:not(.not-mono) > span {
-  color: rgba(255, 255, 255, 0.25);
+  color: theme('colors.gray.600');
 }
 
 .mono > div > span {
   transition-duration: 0.5s;
   transition-property: background-color, border-color, color, fill, stroke;
+}
+
+.changing-theme,
+.changing-theme * {
+  transition: none !important;
 }

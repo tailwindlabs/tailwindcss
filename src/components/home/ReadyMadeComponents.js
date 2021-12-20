@@ -1,5 +1,4 @@
 import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
-import iconUrl from '@/img/icons/home/ready-made-components.png'
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
 import { GridLockup } from '../GridLockup'
@@ -40,9 +39,11 @@ export function ReadyMadeComponents() {
   return (
     <section id="ready-made-components">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-indigo-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/ready-made-components.png').default}
+          dark={require('@/img/icons/home/dark/ready-made-components.png').default}
+        />
         <Caption className="text-indigo-500">Ready-made components</Caption>
         <BigText>
           <Widont>Move even faster with Tailwind UI.</Widont>
@@ -53,7 +54,7 @@ export function ReadyMadeComponents() {
           to choose from, and is guaranteed to help you find the perfect starting point for what you
           want to build.
         </Paragraph>
-        <Link href="https://tailwindui.com/" color="indigo">
+        <Link href="https://tailwindui.com/" color="indigo" darkColor="gray">
           Learn more
         </Link>
       </div>

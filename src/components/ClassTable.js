@@ -65,7 +65,7 @@ export const ClassTable = memo(
         </Heading>
         <div
           className={clsx(
-            'overflow-hidden lg:overflow-auto scrollbar-w-1.5 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-thumb-gray-300 scrollbar-track-rounded',
+            'overflow-hidden lg:overflow-auto scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-gray-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-gray-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-gray-500/[0.16] dark:scrollbar-thumb:!bg-gray-500/50',
             isCollapsed && 'max-h-96',
             !isScrollable && isCollapsed && 'lg:max-h-[none]',
             isScrollable && 'supports-scrollbars:pr-2 lg:max-h-96'
@@ -75,26 +75,31 @@ export const ClassTable = memo(
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr>
-                  <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0">
-                    <div className="py-2 pr-2 border-b border-gray-200">Class</div>
+                  <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0 dark:bg-gray-900 dark:text-gray-300">
+                    <div className="py-2 pr-2 border-b border-gray-200 dark:border-gray-400/20">
+                      Class
+                    </div>
                   </th>
                   <th
                     className={clsx(
-                      'sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0',
+                      'sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0 dark:bg-gray-900 dark:text-gray-300',
                       {
                         'hidden sm:table-cell': preview,
                       }
                     )}
                   >
                     <div
-                      className={clsx('py-2 pl-2 border-b border-gray-200', { 'pr-2': preview })}
+                      className={clsx(
+                        'py-2 pl-2 border-b border-gray-200 dark:border-gray-400/20',
+                        { 'pr-2': preview }
+                      )}
                     >
                       Properties
                     </div>
                   </th>
                   {preview && (
-                    <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0">
-                      <div className="py-2 pl-2 border-b border-gray-200">
+                    <th className="sticky z-10 top-0 text-sm leading-6 font-semibold text-gray-700 bg-white p-0 dark:bg-gray-900 dark:text-gray-300">
+                      <div className="py-2 pl-2 border-b border-gray-200 dark:border-gray-400/20">
                         <span className="sr-only">Preview</span>&nbsp;
                       </div>
                     </th>
@@ -111,9 +116,9 @@ export const ClassTable = memo(
                       <td
                         translate="no"
                         className={clsx(
-                          'py-2 pr-2 font-mono font-medium text-xs leading-6 text-sky-500 whitespace-nowrap',
+                          'py-2 pr-2 font-mono font-medium text-xs leading-6 text-sky-500 whitespace-nowrap dark:text-sky-400',
                           {
-                            'border-t border-gray-100': i !== 0,
+                            'border-t border-gray-100 dark:border-gray-400/10': i !== 0,
                           }
                         )}
                       >
@@ -122,9 +127,9 @@ export const ClassTable = memo(
                       <td
                         translate="no"
                         className={clsx(
-                          'py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre',
+                          'py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre dark:text-indigo-300',
                           {
-                            'border-t border-gray-100': i !== 0,
+                            'border-t border-gray-100 dark:border-gray-400/10': i !== 0,
                             'hidden sm:table-cell sm:pr-2': preview,
                           }
                         )}
@@ -137,7 +142,8 @@ export const ClassTable = memo(
                       {preview &&
                         preview(properties, {
                           utility,
-                          className: i === 0 ? '' : 'border-t border-gray-100',
+                          className:
+                            i === 0 ? '' : 'border-t border-gray-100 dark:border-gray-400/10',
                         })}
                     </tr>
                   )
@@ -145,7 +151,7 @@ export const ClassTable = memo(
               </tbody>
             </table>
           )}
-          <div className="sticky bottom-0 h-px -mt-px bg-gray-200" />
+          <div className="sticky bottom-0 h-px -mt-px bg-gray-200 dark:bg-gray-400/20" />
         </div>
         {isCollapsable && (
           <div
@@ -158,7 +164,7 @@ export const ClassTable = memo(
           >
             <div
               className={clsx(
-                'absolute inset-x-0 bg-gradient-to-t from-white',
+                'absolute inset-x-0 bg-gradient-to-t from-white dark:from-gray-900',
                 isCollapsed
                   ? '-top-8 bottom-0'
                   : '-top-4 bottom-[calc(-1*(1rem+env(safe-area-inset-bottom,0)))]'
@@ -167,7 +173,7 @@ export const ClassTable = memo(
             <button
               type="button"
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="relative text-sm font-semibold text-gray-900 bg-white py-2 px-4 rounded-full ring-1 ring-gray-900/10 shadow-sm"
+              className="relative text-sm font-semibold text-gray-900 bg-white py-2 px-4 rounded-full ring-1 ring-gray-900/10 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:highlight-white/5"
             >
               {isCollapsed ? 'Show all classes' : 'Show fewer classes'}
             </button>

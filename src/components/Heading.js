@@ -36,7 +36,7 @@ export function Heading({
     <Component
       className={clsx('group flex whitespace-pre-wrap', className, {
         '-ml-4 pl-4': !hidden,
-        'mb-2 text-sm leading-6 text-sky-500 font-semibold tracking-normal':
+        'mb-2 text-sm leading-6 text-sky-500 font-semibold tracking-normal dark:text-sky-400':
           level === 2 && nextElement?.type === 'heading' && nextElement?.depth === 3,
       })}
       id={id}
@@ -52,7 +52,7 @@ export function Heading({
           aria-label="Anchor"
         >
           &#8203;
-          <div className="w-6 h-6 text-gray-400 ring-1 ring-gray-900/5 rounded-md shadow-sm flex items-center justify-center hover:ring-gray-900/10 hover:shadow hover:text-gray-700">
+          <div className="w-6 h-6 text-gray-400 ring-1 ring-gray-900/5 rounded-md shadow-sm flex items-center justify-center hover:ring-gray-900/10 hover:shadow hover:text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:shadow-none dark:ring-0">
             <svg width="12" height="12" fill="none" aria-hidden="true">
               <path
                 d="M3.75 1v10M8.25 1v10M1 3.75h10M1 8.25h10"

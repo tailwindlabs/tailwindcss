@@ -21,7 +21,7 @@ const footerNav = [
 export function Footer() {
   return (
     <footer className="pb-16 text-sm leading-6">
-      <div className="max-w-7xl mx-auto divide-y divide-gray-200 px-4 sm:px-6 md:px-8">
+      <div className="max-w-7xl mx-auto divide-y divide-gray-200 px-4 sm:px-6 md:px-8 dark:divide-gray-700">
         <div className="flex">
           {footerNav.map((sections) => (
             <div
@@ -30,12 +30,14 @@ export function Footer() {
             >
               {Object.entries(sections).map(([title, items]) => (
                 <div key={title} className="lg:flex-none lg:w-1/2">
-                  <h2 className="font-semibold text-gray-900">{title}</h2>
+                  <h2 className="font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
                   <ul className="mt-3 space-y-2">
                     {items.map((item) => (
                       <li key={item.href}>
                         <Link href={item.href}>
-                          <a className="hover:text-gray-900">{item.title}</a>
+                          <a className="hover:text-gray-900 dark:hover:text-gray-300">
+                            {item.title}
+                          </a>
                         </Link>
                       </li>
                     ))}

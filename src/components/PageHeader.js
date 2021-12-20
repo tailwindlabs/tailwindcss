@@ -4,8 +4,12 @@ export function PageHeader({ title, description, badge = {}, section }) {
   return (
     <header id="header" className="relative z-20">
       <div>
-        {section && <p className="mb-2 text-sm leading-6 font-semibold text-sky-500">{section}</p>}
-        <h1 className="inline-block text-3xl font-extrabold text-gray-900 tracking-tight">
+        {section && (
+          <p className="mb-2 text-sm leading-6 font-semibold text-sky-500 dark:text-sky-400">
+            {section}
+          </p>
+        )}
+        <h1 className="inline-block text-3xl font-extrabold text-gray-900 tracking-tight dark:text-gray-200">
           {title}
         </h1>
         {badge.key && badge.value && (
@@ -15,7 +19,9 @@ export function PageHeader({ title, description, badge = {}, section }) {
           </dl>
         )}
       </div>
-      {description && <p className="mt-2 text-lg text-gray-700">{description}</p>}
+      {description && (
+        <p className="mt-2 text-lg text-gray-700 dark:text-gray-400">{description}</p>
+      )}
     </header>
   )
 }

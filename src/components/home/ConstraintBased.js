@@ -1,7 +1,6 @@
 import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
-import iconUrl from '@/img/icons/home/constraint-based.png'
 import defaultConfig from 'defaultConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
@@ -126,20 +125,20 @@ function Bars({ sizes, className }) {
   return (
     <motion.ul
       exit={{ opacity: 0 }}
-      className={clsx('font-mono text-xs pt-6 space-y-4', className)}
+      className={clsx('relative font-mono text-xs pt-6 space-y-4', className)}
     >
       {sizes.map((key, i) => (
         <li key={key}>
           <motion.div
-            className="h-6 origin-left bg-white shadow ring-1 ring-gray-700/5 px-1 flex items-center"
+            className="h-6 origin-left bg-white shadow ring-1 ring-gray-700/5 px-1 flex items-center dark:bg-indigo-500 dark:text-white dark:highlight-white/10"
             style={{ width: defaultConfig.theme.width[key], borderRadius: 4 }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: i * 0.1, damping: 100 }}
           >
-            <div className="flex-none w-0.5 h-1 bg-gray-300" />
+            <div className="flex-none w-0.5 h-1 bg-gray-300 dark:bg-white" />
             <span className="flex-auto text-center">w-{key}</span>
-            <div className="flex-none w-0.5 h-1 bg-gray-300" />
+            <div className="flex-none w-0.5 h-1 bg-gray-300 dark:bg-white" />
           </motion.div>
         </li>
       ))}
@@ -163,7 +162,7 @@ function Colors() {
   return (
     <motion.ul
       exit={{ opacity: 0 }}
-      className="space-y-6 font-mono text-[0.625rem] leading-5 pt-5 px-5"
+      className="relative space-y-6 font-mono text-[0.625rem] leading-5 pt-5 px-5"
     >
       {['sky', 'blue', 'indigo', 'purple'].map((color, i) => (
         <motion.li
@@ -171,27 +170,27 @@ function Colors() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: i * 0.1 }}
-          className="bg-white rounded-lg shadow ring-1 ring-gray-700/5 p-2"
+          className="bg-white rounded-lg shadow ring-1 ring-gray-700/5 p-2 dark:bg-gray-900 dark:ring-white/10"
         >
           <ul className="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-5 xl:grid-cols-10 gap-2">
             {Object.keys(defaultConfig.theme.colors[color]).map((key) => (
               <li
                 key={key}
-                className="pt-full rounded-sm ring-1 ring-inset ring-gray-900/5"
+                className="pt-full rounded-sm ring-1 ring-inset ring-gray-900/5 dark:ring-0 dark:highlight-white/10"
                 style={{
                   backgroundColor: defaultConfig.theme.colors[color][key],
                 }}
               />
             ))}
           </ul>
-          <div className="mt-2 flex items-center justify-between">
+          <div className="mt-2 flex items-center justify-between text-gray-500">
             <span className="flex-1">{color}-50</span>
-            <svg width="47" height="4" viewBox="0 0 47 4" fill="none">
-              <circle cx="1.5" cy="2" r="1.5" fill={defaultConfig.theme.colors.slate[200]} />
-              <circle cx="12.5" cy="2" r="1.5" fill={defaultConfig.theme.colors.slate[300]} />
-              <circle cx="23.5" cy="2" r="1.5" fill={defaultConfig.theme.colors.slate[400]} />
-              <circle cx="34.5" cy="2" r="1.5" fill={defaultConfig.theme.colors.slate[300]} />
-              <circle cx="45.5" cy="2" r="1.5" fill={defaultConfig.theme.colors.slate[200]} />
+            <svg width="47" height="4" viewBox="0 0 47 4" fill="currentColor">
+              <circle cx="1.5" cy="2" r="1.5" className="text-gray-200 dark:text-gray-800" />
+              <circle cx="12.5" cy="2" r="1.5" className="text-gray-300 dark:text-gray-700" />
+              <circle cx="23.5" cy="2" r="1.5" className="text-gray-400 dark:text-gray-600" />
+              <circle cx="34.5" cy="2" r="1.5" className="text-gray-300 dark:text-gray-700" />
+              <circle cx="45.5" cy="2" r="1.5" className="text-gray-200 dark:text-gray-800" />
             </svg>
             <span className="flex-1 text-right">{color}-900</span>
           </div>
@@ -206,7 +205,7 @@ function Typography() {
     <motion.div
       key="typography"
       exit={{ opacity: 0 }}
-      className="h-full flex flex-col justify-center space-y-8 sm:space-y-5 lg:space-y-8 xl:space-y-5 xl:px-5"
+      className="relative h-full flex flex-col justify-center space-y-8 sm:space-y-5 lg:space-y-8 xl:space-y-5 xl:px-5"
     >
       {[
         [
@@ -217,13 +216,21 @@ function Typography() {
         ['font-mono', 'text-sm leading-6 sm:leading-7 lg:leading-6 xl:leading-7'],
       ].map((font, i) => (
         <motion.div
-          className="sm:bg-white sm:rounded-lg sm:ring-1 sm:ring-gray-700/5 sm:shadow sm:p-3 lg:bg-transparent lg:rounded-none lg:ring-0 lg:shadow-none lg:p-0 xl:bg-white xl:rounded-lg xl:ring-1 xl:ring-gray-700/5 xl:shadow xl:p-3"
+          key={font[0]}
+          className="sm:bg-white sm:rounded-lg sm:ring-1 sm:ring-gray-700/5 sm:shadow sm:p-3 lg:bg-transparent lg:rounded-none lg:ring-0 lg:shadow-none lg:p-0 xl:bg-white xl:rounded-lg xl:ring-1 xl:ring-gray-700/5 xl:shadow xl:p-3 dark:ring-white/10 dark:sm:bg-gray-900 dark:sm:ring-1 dark:lg:bg-transparent dark:lg:ring-0 dark:xl:bg-gray-900 dark:xl:ring-1"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: i * 0.1 }}
         >
-          <h4 className="text-xs leading-5 font-mono pb-2 border-b border-gray-100">{font[0]}</h4>
-          <div className={clsx('mt-2 sm:mt-3 lg:mt-2 xl:mt-3 text-gray-700', ...font)}>
+          <h4 className="text-xs leading-5 font-mono pb-2 border-b border-gray-100 text-gray-500 dark:border-gray-200/10">
+            {font[0]}
+          </h4>
+          <div
+            className={clsx(
+              'mt-2 sm:mt-3 lg:mt-2 xl:mt-3 text-gray-700 dark:text-gray-400',
+              ...font
+            )}
+          >
             The quick brown fox jumps over the lazy&nbsp;dog.
           </div>
         </motion.div>
@@ -236,7 +243,7 @@ function Shadows() {
   return (
     <motion.div
       exit={{ opacity: 0 }}
-      className="h-full flex flex-col font-mono text-xs leading-5 pt-5 sm:pt-0 lg:pt-5 xl:pt-0 px-5 sm:px-8 lg:px-5 xl:px-8"
+      className="relative h-full flex flex-col font-mono text-xs leading-5 pt-5 sm:pt-0 lg:pt-5 xl:pt-0 px-5 sm:px-8 lg:px-5 xl:px-8"
     >
       <ul className="my-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6 -mr-0.5">
         {['shadow-sm', 'shadow', 'shadow-md', 'shadow-lg', 'shadow-xl', 'shadow-2xl'].map(
@@ -246,7 +253,7 @@ function Shadows() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: [0.1, 0.1, 0.2, 0.2, 0.3, 0.3][i] }}
-              className="bg-white rounded-lg p-3 pt-10"
+              className="rounded-lg"
               style={{
                 boxShadow:
                   defaultConfig.theme.boxShadow[
@@ -254,7 +261,9 @@ function Shadows() {
                   ],
               }}
             >
-              {shadow}
+              <div className="bg-white rounded-lg p-3 pt-10 dark:bg-gray-700 dark:highlight-white/10">
+                {shadow}
+              </div>
             </motion.li>
           )
         )}
@@ -269,10 +278,12 @@ export function ConstraintBased() {
   return (
     <section id="constraint-based" className="relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
-        <Caption className="text-indigo-500">Constraint-based</Caption>
+        <IconContainer
+          className="dark:bg-indigo-500 dark:highlight-white/10"
+          light={require('@/img/icons/home/constraint-based.png').default}
+          dark={require('@/img/icons/home/dark/constraint-based.png').default}
+        />
+        <Caption className="text-indigo-500 dark:text-indigo-400">Constraint-based</Caption>
         <BigText>
           <Widont>An API for your design system.</Widont>
         </BigText>
@@ -282,7 +293,7 @@ export function ConstraintBased() {
           spacing, typography, shadows, and everything else that makes up a well-engineered design
           system.
         </Paragraph>
-        <Link href="/docs/utility-first" color="indigo">
+        <Link href="/docs/utility-first" color="indigo" darkColor="gray">
           Learn more<span className="sr-only">, utility-first fundamentals</span>
         </Link>
         <div className="mt-10">
@@ -290,25 +301,33 @@ export function ConstraintBased() {
             tabs={tabs}
             selected={tab}
             onChange={(tab) => setTab(tab)}
-            className="text-indigo-600"
-            iconClassName="text-indigo-500"
+            className="text-indigo-600 dark:text-indigo-400"
+            iconClassName="text-indigo-500 dark:text-indigo-400"
           />
         </div>
       </div>
       <GridLockup
         className="mt-10 xl:mt-2"
         left={
-          <div className="relative z-10 bg-white ring-1 ring-gray-900/5 rounded-lg shadow-xl px-6 py-5 my-auto xl:mt-18">
-            <div className="absolute inset-x-0 inset-y-5 border-t border-b border-gray-100 pointer-events-none" />
-            <div className="absolute inset-x-6 inset-y-0 border-l border-r border-gray-100 pointer-events-none" />
-            <div className="bg-gray-50 flex overflow-hidden h-88">
-              <div
-                className="bg-white/40 w-64 sm:w-[28rem] lg:w-64 xl:w-[28rem] mx-auto border-r border-gray-100"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 6'%3E%3Crect x='32' width='1' height='1' fill='%23cbd5e1'/%3E%3Crect width='1' height='6' fill='%23f1f5f9'/%3E%3C/svg%3E")`,
-                  backgroundSize: '4rem 0.375rem',
-                }}
-              >
+          <div className="relative z-10 bg-white ring-1 ring-gray-900/5 rounded-lg shadow-xl px-6 py-5 my-auto xl:mt-18 dark:bg-gray-800">
+            <div className="absolute inset-x-0 inset-y-5 border-t border-b border-gray-100 pointer-events-none dark:border-gray-700" />
+            <div className="absolute inset-x-6 inset-y-0 border-l border-r border-gray-100 pointer-events-none dark:border-gray-700" />
+            <div className="bg-gray-50 flex overflow-hidden h-88 dark:bg-gray-900/50">
+              <div className="relative bg-white/40 w-64 sm:w-[28rem] lg:w-64 xl:w-[28rem] mx-auto border-r border-gray-100 dark:bg-transparent dark:border-gray-100/5">
+                <div
+                  className="absolute inset-0 dark:hidden"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 6'%3E%3Crect x='32' width='1' height='1' fill='%23cbd5e1'/%3E%3Crect width='1' height='6' fill='%23f1f5f9'/%3E%3C/svg%3E")`,
+                    backgroundSize: '4rem 0.375rem',
+                  }}
+                />
+                <div
+                  className="hidden absolute inset-0 opacity-5 dark:block"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 6'%3E%3Crect x='32' width='1' height='1' fill='%23f1f5f9'/%3E%3Crect width='1' height='6' fill='%23f1f5f9'/%3E%3C/svg%3E")`,
+                    backgroundSize: '4rem 0.375rem',
+                  }}
+                />
                 <AnimatePresence initial={false} exitBeforeEnter>
                   {tab === 'Sizing' && <Sizing key="sizing" />}
                   {tab === 'Colors' && <Colors key="colors" />}

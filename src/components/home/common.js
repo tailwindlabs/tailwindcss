@@ -1,12 +1,29 @@
 import clsx from 'clsx'
 import { Button } from '../Button'
 
-export function IconContainer({ as: Component = 'div', color, className = '', ...props }) {
+export function IconContainer({ as: Component = 'div', className = '', light, dark, ...props }) {
   return (
     <Component
-      className={`w-16 h-16 rounded-full ring-1 ring-gray-900/10 shadow overflow-hidden ${className}`}
+      className={`w-16 h-16 p-[0.1875rem] rounded-full ring-1 ring-gray-900/10 shadow overflow-hidden ${className}`}
       {...props}
-    />
+    >
+      {light && (
+        <div
+          className="aspect-w-1 aspect-h-1 bg-[length:100%] dark:hidden"
+          style={{
+            backgroundImage: `url(${light})`,
+          }}
+        />
+      )}
+      {dark && (
+        <div
+          className="hidden aspect-w-1 aspect-h-1 bg-[length:100%] dark:block"
+          style={{
+            backgroundImage: `url(${dark})`,
+          }}
+        />
+      )}
+    </Component>
   )
 }
 
@@ -17,7 +34,7 @@ export function Caption({ className = '', ...props }) {
 export function BigText({ className = '', ...props }) {
   return (
     <p
-      className={`mt-4 text-3xl sm:text-4xl text-gray-900 font-extrabold tracking-tight ${className}`}
+      className={`mt-4 text-3xl sm:text-4xl text-gray-900 font-extrabold tracking-tight dark:text-gray-50 ${className}`}
       {...props}
     />
   )
@@ -32,7 +49,12 @@ export function Link({ className, ...props }) {
 }
 
 export function InlineCode({ className = '', ...props }) {
-  return <code className={`font-mono text-gray-900 font-medium ${className}`} {...props} />
+  return (
+    <code
+      className={`font-mono text-gray-900 font-medium dark:text-gray-200 ${className}`}
+      {...props}
+    />
+  )
 }
 
 export { Widont } from '@/components/Widont'

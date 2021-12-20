@@ -25,8 +25,8 @@ const ranges = [
   getRange(' mx-auto'),
   getRange(' font-medium'),
   getRange(' class="font-medium"'),
-  getRange(' class="text-sky-500"'),
-  getRange(' class="text-gray-700"'),
+  getRange(' class="text-sky-500 dark:text-sky-400"'),
+  getRange(' class="text-gray-700 dark:text-gray-500"'),
   getRange(' text-center'),
   getRange('md:flex '),
   getRange(' md:p-0'),
@@ -251,7 +251,7 @@ export function Hero() {
           <AnimateSharedLayout>
             <motion.div
               layout={layout}
-              className="relative z-10 rounded-lg shadow-xl text-gray-900 mx-auto sm:w-[23.4375rem]"
+              className="relative z-10 rounded-lg shadow-xl text-gray-900 mx-auto sm:w-[23.4375rem] dark:text-gray-300"
               initial={false}
               animate={
                 containerRect?.width
@@ -265,11 +265,14 @@ export function Hero() {
               <motion.div
                 layout={layout}
                 transition={TRANSITION}
-                className={clsx('bg-white rounded-lg overflow-hidden ring-1 ring-gray-900/5', {
-                  flex: step >= 8 && md,
-                  'p-8': step >= 0,
-                  'text-center': (step >= 7 && !md) || (step < 14 && md),
-                })}
+                className={clsx(
+                  'bg-white rounded-lg overflow-hidden ring-1 ring-gray-900/5 dark:bg-gray-800 dark:highlight-white/5 dark:ring-0',
+                  {
+                    flex: step >= 8 && md,
+                    'p-8': step >= 0,
+                    'text-center': (step >= 7 && !md) || (step < 14 && md),
+                  }
+                )}
               >
                 <motion.div
                   layout={layout}
@@ -351,20 +354,26 @@ export function Hero() {
                     <motion.p
                       layout={layout}
                       initial={false}
-                      animate={{
-                        ...(step >= 5 ? { color: colors.sky[500] } : { color: '#000' }),
-                      }}
                       transition={TRANSITION}
+                      className={clsx(
+                        'transition-colors duration-500',
+                        step >= 5
+                          ? 'text-sky-500 dark:text-sky-400'
+                          : 'text-black dark:text-gray-300'
+                      )}
                     >
                       Sarah Dayan
                     </motion.p>
                     <motion.p
                       layout={layout}
                       initial={false}
-                      animate={{
-                        ...(step >= 6 ? { color: colors.gray[700] } : { color: '#000' }),
-                      }}
                       transition={TRANSITION}
+                      className={clsx(
+                        'transition-colors duration-500',
+                        step >= 6
+                          ? 'text-gray-700 dark:text-gray-500'
+                          : 'text-black dark:text-gray-300'
+                      )}
                     >
                       Staff Engineer, Algolia
                     </motion.p>

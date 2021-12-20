@@ -1,0 +1,107 @@
+.beams-0 {
+  background-image: url('../img/beams/0.jpg');
+  background-size: 122.375rem 100%;
+  height: 32.9375rem;
+}
+
+:global(.dark) .beams-0 {
+  background-image: url('../img/beams/0-dark@tinypng.png');
+  background-size: 125.5rem 100%;
+  height: 28.8125rem;
+}
+
+.beams-1 {
+  background-image: url('../img/beams/1.jpg');
+  background-size: 138.125rem 100%;
+  height: 31.1875rem;
+}
+
+:global(.dark) .beams-1 {
+  background-image: url('../img/beams/1-dark@tinypng.png');
+  background-size: 141.5rem 100%;
+  height: 35.0625rem;
+}
+
+.beams-2 {
+  background-image: url('../img/beams/2.jpg');
+  background-size: 165rem 100%;
+  height: 32.3125rem;
+}
+
+:global(.dark) .beams-2 {
+  background-image: none;
+  background-size: 0rem 100%;
+  height: 0rem;
+}
+
+.beams-3 {
+  background-image: url('../img/beams/3.jpg');
+  background-size: 124.125rem 100%;
+  height: 36.125rem;
+}
+
+:global(.dark) .beams-3 {
+  background-image: none;
+  background-size: 0rem 100%;
+  height: 0rem;
+}
+
+.beams-4 {
+  background-image: url('../img/beams/4.jpg');
+  background-size: 123.25rem 100%;
+  height: 32.9375rem;
+}
+
+:global(.dark) .beams-4 {
+  background-image: url('../img/beams/4-dark@tinypng.png');
+  background-size: 129.375rem 100%;
+  height: 37.5rem;
+}
+
+.beams-5 {
+  background-image: url('../img/beams/5.jpg');
+  background-size: 123.25rem 100%;
+  height: 31.0625rem;
+}
+
+:global(.dark) .beams-5 {
+  background-image: url('../img/beams/5-dark@tinypng.png');
+  background-size: 127.875rem 100%;
+  height: 35rem;
+}
+
+.beams-6 {
+  background-image: url('../img/beams/6.jpg');
+  background-size: 118.5rem 100%;
+  height: 32.9375rem;
+}
+
+:global(.dark) .beams-6 {
+  background-image: url('../img/beams/6-dark@tinypng.png');
+  background-size: 141.875rem 100%;
+  height: 37.0625rem;
+}
+
+.beams-7 {
+  background-image: url('../img/beams/7.jpg');
+  background-size: 141.25rem 100%;
+  height: 33.5rem;
+}
+
+:global(.dark) .beams-7 {
+  background-image: url('../img/beams/7-dark@tinypng.png');
+  background-size: 137.3125rem 100%;
+  height: 37.0625rem;
+}
+
+.beams-8 {
+  background-image: url('../img/beams/8.jpg');
+  background-size: 150rem 100%;
+  height: 60.1875rem;
+}
+
+:global(.dark) .beams-8 {
+  background-image: url('../img/beams/8-dark@tinypng.png');
+  background-size: 136.75rem 100%;
+  height: 52.625rem;
+}

@@ -1,4 +1,10 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-outside-1_118_663" maskUnits="userSpaceOnUse" x="2" y="2" width="20" height="20" fill="black">
+<rect fill="white" x="2" y="2" width="20" height="20"/>
+<path d="M16.6063 15.1922C17.4816 14.0236 18 12.5724 18 11C18 7.13401 14.866 4 11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C12.5723 18 14.0235 17.4816 15.1921 16.6064L18.9999 20.4142L20.4141 19L16.6063 15.1922Z"/>
+</mask>
+<path d="M16.6063 15.1922C17.4816 14.0236 18 12.5724 18 11C18 7.13401 14.866 4 11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C12.5723 18 14.0235 17.4816 15.1921 16.6064L18.9999 20.4142L20.4141 19L16.6063 15.1922Z" fill="#0F172A"/>
+<path d="M16.6063 15.1922C17.4816 14.0236 18 12.5724 18 11C18 7.13401 14.866 4 11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C12.5723 18 14.0235 17.4816 15.1921 16.6064L18.9999 20.4142L20.4141 19L16.6063 15.1922Z" stroke="white" stroke-width="3" stroke-linecap="square" stroke-linejoin="round" mask="url(#path-1-outside-1_118_663)"/>
 <path d="M15.5 15.5L19 19" stroke="#0F172A" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
 <circle cx="11" cy="11" r="6.25" fill="white" stroke="#0F172A" stroke-width="1.5"/>
 <path d="M11 9V13" stroke="#0F172A" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>

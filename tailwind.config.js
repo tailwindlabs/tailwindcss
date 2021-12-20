@@ -211,6 +211,41 @@ module.exports = {
             },
           },
         },
+        dark: {
+          css: {
+            color: theme('colors.gray.400'),
+            'h2, h3, h4': {
+              color: theme('colors.gray.200'),
+            },
+            'h2 small, h3 small, h4 small': {
+              color: theme('colors.gray.400'),
+            },
+            code: {
+              color: theme('colors.gray.200'),
+            },
+            hr: {
+              borderColor: theme('colors.gray.200'),
+              opacity: '0.05',
+            },
+            pre: {
+              boxShadow: 'inset 0 0 0 1px rgb(255 255 255 / 0.1)',
+            },
+            a: {
+              color: theme('colors.white'),
+              borderBottomColor: theme('colors.sky.400'),
+            },
+            strong: {
+              color: theme('colors.gray.200'),
+            },
+            thead: {
+              color: theme('colors.gray.300'),
+              borderBottomColor: 'rgb(148 163 184 / 0.2)',
+            },
+            'tbody tr': {
+              borderBottomColor: 'rgb(148 163 184 / 0.1)',
+            },
+          },
+        },
       }),
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
@@ -282,6 +317,10 @@ module.exports = {
       )
       addVariant('supports-scrollbars', '@supports selector(::-webkit-scrollbar)')
       addVariant('children', '& > *')
+      addVariant('scrollbar', '&::-webkit-scrollbar')
+      addVariant('scrollbar-track', '&::-webkit-scrollbar-track')
+      addVariant('scrollbar-thumb', '&::-webkit-scrollbar-thumb')
+      addVariant('demo-dark', '.demo-dark &')
     },
     function ({ addUtilities, theme }) {
       const shadows = theme('boxShadow')
@@ -308,6 +347,13 @@ module.exports = {
               `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
             )}")`,
           }),
+        },
+        { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
+      )
+
+      matchUtilities(
+        {
+          highlight: (value) => ({ boxShadow: `inset 0 1px 0 0 ${value}` }),
         },
         { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
       )

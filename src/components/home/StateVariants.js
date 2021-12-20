@@ -8,7 +8,6 @@ import {
   InlineCode,
 } from '@/components/home/common'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
-import iconUrl from '@/img/icons/home/state-variants.png'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import { useEffect, useRef, useState } from 'react'
 import { usePrevious } from '@/hooks/usePrevious'
@@ -89,9 +88,11 @@ export function StateVariants() {
   return (
     <section id="state-variants">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
+        <IconContainer
+          className="dark:bg-blue-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/state-variants.png').default}
+          dark={require('@/img/icons/home/dark/state-variants.png').default}
+        />
         <Caption className="text-blue-500">State variants</Caption>
         <BigText>
           <Widont>Hover and focus states? We got ’em.</Widont>
@@ -103,7 +104,7 @@ export function StateVariants() {
           <InlineCode>focus-within</InlineCode>, <InlineCode>focus-visible</InlineCode>, and even
           fancy states we invented ourselves like <InlineCode>group-hover</InlineCode>.
         </Paragraph>
-        <Link href="/docs/hover-focus-and-other-states" color="blue">
+        <Link href="/docs/hover-focus-and-other-states" color="blue" darkColor="gray">
           Learn more<span className="sr-only">, handling hover, focus, and other states</span>
         </Link>
       </div>
@@ -111,11 +112,11 @@ export function StateVariants() {
         className="mt-10 xl:mt-2"
         beams={4}
         left={
-          <div className="relative z-10 bg-white rounded-xl shadow-xl ring-1 ring-gray-900/5 overflow-hidden my-auto xl:mt-18">
+          <div className="relative z-10 rounded-xl bg-white shadow-xl ring-1 ring-gray-900/5 overflow-hidden my-auto xl:mt-18 dark:bg-gray-800">
             <section>
-              <header className="bg-white space-y-4 p-4 sm:px-8 sm:py-6 lg:p-4 xl:px-8 xl:py-6">
+              <header className="rounded-t-xl space-y-4 p-4 sm:px-8 sm:py-6 lg:p-4 xl:px-8 xl:py-6 dark:highlight-white/10">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-semibold text-gray-900">Projects</h2>
+                  <h2 className="font-semibold text-gray-900 dark:text-white">Projects</h2>
                   <div
                     className="group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 cursor-pointer shadow-sm hover:bg-blue-400"
                     onMouseEnter={() => {
@@ -131,12 +132,12 @@ export function StateVariants() {
                     New
                   </div>
                 </div>
-                <form className="group relative">
+                <form className="group relative rounded-md dark:bg-gray-700 dark:highlight-white/10 dark:focus-within:bg-transparent">
                   <svg
                     width="20"
                     height="20"
                     fill="currentColor"
-                    className="absolute left-3 top-1/2 -mt-2.5 text-gray-400 pointer-events-none group-focus-within:text-blue-500"
+                    className="absolute left-3 top-1/2 -mt-2.5 text-gray-400 pointer-events-none group-focus-within:text-blue-500 dark:text-gray-500"
                   >
                     <path
                       fillRule="evenodd"
@@ -155,16 +156,16 @@ export function StateVariants() {
                     type="text"
                     aria-label="Filter projects"
                     placeholder="Filter projects..."
-                    className="w-full text-sm leading-6 text-gray-900 placeholder-gray-400 rounded-md py-2 pl-10 ring-1 ring-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full text-sm leading-6 bg-transparent text-gray-900 placeholder:text-gray-400 rounded-md py-2 pl-10 ring-1 ring-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-100 dark:placeholder:text-gray-500 dark:ring-0 dark:focus:ring-2"
                   />
                 </form>
               </header>
-              <ul className="bg-gray-50 p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 text-sm leading-6">
+              <ul className="bg-gray-50 p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 text-sm leading-6 dark:bg-gray-900/40 dark:ring-1 dark:ring-white/5">
                 {projects.map((project, i, a) => (
                   <li
                     key={i}
                     className={clsx(
-                      'group cursor-pointer rounded-md p-3 bg-white ring-1 ring-gray-200 shadow-sm hover:bg-blue-500 hover:ring-blue-500 hover:shadow-md',
+                      'group cursor-pointer rounded-md p-3 bg-white ring-1 ring-gray-200 shadow-sm hover:bg-blue-500 hover:ring-blue-500 hover:shadow-md dark:bg-gray-700 dark:ring-0 dark:highlight-white/10 dark:hover:bg-blue-500',
                       i === a.length - 1 ? 'hidden sm:block lg:hidden xl:block' : ''
                     )}
                     onMouseEnter={() => {
@@ -177,7 +178,7 @@ export function StateVariants() {
                     <dl className="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
                       <div>
                         <dt className="sr-only">Title</dt>
-                        <dd className="font-semibold text-gray-900 group-hover:text-white">
+                        <dd className="font-semibold text-gray-900 group-hover:text-white dark:text-gray-100">
                           {project.title}
                         </dd>
                       </div>
@@ -195,7 +196,7 @@ export function StateVariants() {
                                 faces[i * 5 + j]
                               }?auto=format&fit=facearea&facepad=2&w=48&h=48&q=80`}
                               alt=""
-                              className="w-6 h-6 rounded-full bg-gray-100 ring-2 ring-white"
+                              className="w-6 h-6 rounded-full bg-gray-100 ring-2 ring-white dark:ring-gray-700 dark:group-hover:ring-white"
                               loading="lazy"
                             />
                           ))}
@@ -206,7 +207,7 @@ export function StateVariants() {
                 ))}
                 <li className="flex">
                   <div
-                    className="group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sm leading-6 text-gray-900 font-medium py-3 cursor-pointer hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500"
+                    className="group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sm leading-6 text-gray-900 font-medium py-3 cursor-pointer hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 dark:border-gray-700 dark:text-gray-100 dark:hover:border-blue-500 dark:hover:bg-transparent dark:hover:text-blue-500"
                     onMouseEnter={() => {
                       setStates((states) => [...states, 'new-hover'])
                     }}

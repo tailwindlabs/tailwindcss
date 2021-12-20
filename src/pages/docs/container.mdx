@@ -16,35 +16,35 @@ export const classes = {
       </colgroup>
       <thead>
         <tr>
-          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0">
-            <div className="py-2 pr-2 border-b border-gray-200">Class</div>
+          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0 dark:bg-gray-900 dark:text-gray-300">
+            <div className="py-2 pr-2 border-b border-gray-200 dark:border-gray-400/20">Class</div>
           </th>
-          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0">
-            <div className="py-2 px-2 border-b border-gray-200">Breakpoint</div>
+          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0 dark:bg-gray-900 dark:text-gray-300">
+            <div className="py-2 px-2 border-b border-gray-200 dark:border-gray-400/20">Breakpoint</div>
           </th>
-          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0">
-            <div className="py-2 pl-2 border-b border-gray-200">Properties</div>
+          <th className="sticky top-0 bg-white text-sm leading-6 font-semibold text-gray-700 p-0 dark:bg-gray-900 dark:text-gray-300">
+            <div className="py-2 pl-2 border-b border-gray-200 dark:border-gray-400/20">Properties</div>
           </th>
         </tr>
       </thead>
       <tbody className="align-baseline">
         <tr>
-          <td translate="no" rowSpan={6} className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap">
+          <td translate="no" rowSpan={6} className="py-2 pr-2 font-mono font-bold text-xs leading-6 text-sky-500 whitespace-nowrap dark:text-sky-400">
             container
           </td>
           <td className="py-2 px-2 text-xs italic">
             None
           </td>
-          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre">
+          <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre dark:text-indigo-300">
             width: 100%;
           </td>
         </tr>
         {Object.keys(screens).map((screen) => (
           <tr key={screen}>
-            <td translate="no" className="py-2 px-2 border-t border-gray-100 font-mono text-xs">
+            <td translate="no" className="py-2 px-2 border-t border-gray-100 font-mono text-xs dark:border-gray-400/10">
               {screen} <span className="font-sans italic">({screens[screen]})</span>
             </td>
-            <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100">
+            <td translate="no" className="py-2 pl-2 font-mono text-xs leading-6 text-indigo-600 whitespace-pre border-t border-gray-100 dark:text-indigo-300 dark:border-gray-400/10">
               max-width: {screens[screen]};
             </td>
           </tr>

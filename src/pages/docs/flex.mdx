@@ -18,7 +18,7 @@ Use `flex-initial` to allow a flex item to shrink but not grow, taking into acco
 
 <Example resizable>
   <div class="mt-2 flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-blue rounded-lg">
-    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-blue-300">01</div>
+    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-blue-300 dark:bg-blue-800 dark:text-blue-500">01</div>
     <div class="p-4 flex-initial w-24 sm:w-64 rounded-lg flex items-center justify-center bg-blue-500 shadow-lg">02</div>
     <div class="p-4 flex-initial w-14 sm:w-32 rounded-lg flex items-center justify-center bg-blue-500 shadow-lg">03</div>
   </div>
@@ -44,7 +44,7 @@ Use `flex-1` to allow a flex item to grow and shrink as needed, ignoring its ini
 
 <Example resizable>
   <div class="mt-2 flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-pink rounded-lg">
-    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-pink-300">01</div>
+    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-pink-300 dark:bg-pink-800 dark:text-pink-400">01</div>
     <div class="p-4 flex-1 w-64 rounded-lg flex items-center justify-center bg-pink-500 shadow-lg">02</div>
     <div class="p-4 flex-1 w-32 rounded-lg flex items-center justify-center bg-pink-500 shadow-lg">03</div>
   </div>
@@ -70,7 +70,7 @@ Use `flex-auto` to allow a flex item to grow and shrink, taking into account its
 
 <Example resizable>
   <div class="mt-2 flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-violet rounded-lg">
-    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-violet-300">01</div>
+    <div class="p-4 flex-none w-14 h-14 rounded-lg flex items-center justify-center bg-violet-300 dark:bg-violet-800 dark:text-violet-400">01</div>
     <div class="p-4 flex-auto w-64 rounded-lg flex items-center justify-center bg-violet-500 shadow-lg">02</div>
     <div class="p-4 flex-auto w-32 rounded-lg flex items-center justify-center bg-violet-500 shadow-lg">03</div>
   </div>
@@ -97,7 +97,7 @@ Use `flex-none` to prevent a flex item from growing or shrinking:
 <Example resizable>
   <div class="flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-indigo rounded-lg">
     <div class="flex-none last:pr-8 sm:last:pr-0">
-      <div class="p-4 w-14 h-14 rounded-lg flex items-center justify-center bg-indigo-300">
+      <div class="p-4 w-14 h-14 rounded-lg flex items-center justify-center bg-indigo-300 dark:bg-indigo-800 dark:text-indigo-400">
         01
       </div>
     </div>
@@ -107,7 +107,7 @@ Use `flex-none` to prevent a flex item from growing or shrinking:
       </div>
     </div>
     <div class="flex-none flex-1 last:pr-8 sm:last:pr-0">
-      <div class="p-4 rounded-lg flex items-center justify-center bg-indigo-300">
+      <div class="p-4 rounded-lg flex items-center justify-center bg-indigo-300 dark:bg-indigo-800 dark:text-indigo-400">
         03
       </div>
     </div>

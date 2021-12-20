@@ -6,10 +6,12 @@ import { SnippetGroup } from '@/components/SnippetGroup'
 import { Editor } from '@/components/Editor'
 import { Transition } from '@headlessui/react'
 
-export function Steps({ steps, code }) {
+export function Steps({ steps, code, level = 2 }) {
+  let StepHeading = `h${level}`
+
   return (
     <>
-      <div className="hidden sm:block absolute top-0 left-[15%] pt-[40%] 2xl:left-[40%] 2xl:pt-[8%]">
+      <div className="hidden sm:block absolute top-0 left-[15%] pt-[40%] 2xl:left-[40%] 2xl:pt-[8%] dark:hidden">
         <img
           src={require('@/img/beams/installation.jpg').default}
           alt=""
@@ -21,15 +23,17 @@ export function Steps({ steps, code }) {
           <li
             key={step.title}
             className={clsx(
-              'relative pl-10 xl:grid grid-cols-5 gap-16 before:content-[counter(step)] before:absolute before:left-0 before:flex before:items-center before:justify-center before:w-[calc(1.375rem+1px)] before:h-[calc(1.375rem+1px)] before:text-[0.625rem] before:font-bold before:text-gray-700 before:rounded-md before:shadow-sm before:ring-1 before:ring-gray-900/5',
+              'relative pl-10 xl:grid grid-cols-5 gap-16 before:content-[counter(step)] before:absolute before:left-0 before:flex before:items-center before:justify-center before:w-[calc(1.375rem+1px)] before:h-[calc(1.375rem+1px)] before:text-[0.625rem] before:font-bold before:text-gray-700 before:rounded-md before:shadow-sm before:ring-1 before:ring-gray-900/5 dark:before:bg-gray-700 dark:before:text-gray-200 dark:before:ring-0 dark:before:shadow-none dark:before:highlight-white/5',
               index !== steps.length - 1 &&
-                'pb-8 after:absolute after:top-[calc(1.875rem+1px)] after:bottom-0 after:left-[0.6875rem] after:w-px after:bg-gray-200'
+                'pb-8 after:absolute after:top-[calc(1.875rem+1px)] after:bottom-0 after:left-[0.6875rem] after:w-px after:bg-gray-200 dark:after:bg-gray-200/5'
             )}
             style={{ counterIncrement: 'step' }}
           >
             <div className="mb-6 col-span-2 xl:mb-0">
-              <h3 className="text-sm leading-6 text-gray-900 font-semibold mb-2">{step.title}</h3>
-              <div className="prose prose-sm">
+              <StepHeading className="text-sm leading-6 text-gray-900 font-semibold mb-2 dark:text-gray-200">
+                {step.title}
+              </StepHeading>
+              <div className="prose prose-sm dark:prose-dark">
                 <step.body />
               </div>
             </div>
@@ -155,7 +159,7 @@ function Snippet({ code, highlightedCode }) {
   }
 
   return (
-    <div className="relative z-10 -ml-10 col-span-3 bg-gray-800 rounded-xl shadow-lg xl:ml-0">
+    <div className="relative z-10 -ml-10 col-span-3 bg-gray-800 rounded-xl shadow-lg xl:ml-0 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-white/10">
       <TabBar name={code.name}>
         <CopyButton code={code.code} />
       </TabBar>

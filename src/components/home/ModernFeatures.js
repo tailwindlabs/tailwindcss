@@ -9,7 +9,6 @@ import {
 } from '@/components/home/common'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
-import iconUrl from '@/img/icons/home/modern-features.png'
 import { Fragment, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import clsx from 'clsx'
@@ -108,10 +107,12 @@ export function ModernFeatures() {
   return (
     <section id="modern-features">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <IconContainer>
-          <img src={iconUrl} alt="" />
-        </IconContainer>
-        <Caption className="text-indigo-500">Modern features</Caption>
+        <IconContainer
+          className="dark:bg-indigo-500 dark:highlight-white/20"
+          light={require('@/img/icons/home/modern-features.png').default}
+          dark={require('@/img/icons/home/dark/modern-features.png').default}
+        />
+        <Caption className="text-indigo-500 dark:text-indigo-400">Modern features</Caption>
         <BigText>
           <Widont>Cutting-edge is our comfort zone.</Widont>
         </BigText>
@@ -126,7 +127,7 @@ export function ModernFeatures() {
             <InlineCode>:focus-visible</InlineCode>, and tons more.
           </p>
         </Paragraph>
-        <Link href="/docs/grid-template-columns" color="indigo">
+        <Link href="/docs/grid-template-columns" color="indigo" darkColor="gray">
           Learn more<span className="sr-only">, grid template columns</span>
         </Link>
         <div className="mt-10">
@@ -134,8 +135,8 @@ export function ModernFeatures() {
             tabs={tabs}
             selected={feature}
             onChange={setFeature}
-            className="text-indigo-600"
-            iconClassName="text-indigo-500"
+            className="text-indigo-600 dark:text-indigo-400"
+            iconClassName="text-indigo-500 dark:text-indigo-400"
           />
         </div>
       </div>

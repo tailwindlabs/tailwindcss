@@ -46,18 +46,18 @@ export const classes = {
 Use the `ring-{width}` utilities to apply solid box-shadow of a specific thickness to an element. Rings are a semi-transparent blue color by default, similar to the default focus ring style in many systems.
 
 <Example>
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-white text-center font-bold leading-6 text-white">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-white text-center font-bold leading-6">
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">ring-2</p>
-      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-2 ring-offset-2 ring-offset-gray-50 ring-blue-300">Button A</button>
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">ring-2</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-2 ring-offset-2 ring-offset-gray-50 ring-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:ring-offset-gray-900 dark:border-transparent">Button A</button>
     </div>
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">ring</p>
-        <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring ring-offset-2 ring-offset-gray-50 ring-blue-300">Button B</button>
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">ring</p>
+        <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring ring-offset-2 ring-offset-gray-50 ring-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:ring-offset-gray-900 dark:border-transparent">Button B</button>
     </div>
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3">ring-4</p>
-      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-4 ring-offset-2 ring-offset-gray-50 ring-blue-300">Button C</button>
+      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">ring-4</p>
+      <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-4 ring-offset-2 ring-offset-gray-50 ring-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:ring-offset-gray-900 dark:border-transparent">Button C</button>
     </div>
   </div>
 </Example>
@@ -77,8 +77,8 @@ You can also control the color, opacity, and offset of rings using the [ringColo
 The ring width utilities make it easy to use custom focus rings by adding `focus:` to the beginning of any `ring-{width}` utility.
 
 <Example hint="Focus this button to see the ring appear">
-  <div class="flex justify-center max-w-md mx-auto gap-4 text-white text-sm text-center font-bold leading-6 text-white">
-    <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-violet-300 ring-offset-2 ring-offset-gray-50 focus:outline-none focus:ring-2">Save Changes</button>
+  <div class="flex justify-center max-w-md mx-auto gap-4 text-white text-sm text-center font-bold leading-6">
+    <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm ring-violet-300 ring-offset-2 ring-offset-gray-50 focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-200 dark:border-transparent">Save Changes</button>
   </div>
 </Example>
 
@@ -93,13 +93,13 @@ The `focus` variant is enabled by default for the [ringColor](/docs/ring-color),
 Use the `ring-inset` utility to force a ring to render on the inside of an element instead of the outside. This can be useful for elements at the edge of the screen where part of the ring wouldn't be visible.
 
 <Example>
-  <div class="flex justify-center max-w-md mx-auto gap-4 text-white text-sm text-center font-bold leading-6 text-white">
-    <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 rounded-md shadow-sm ring-pink-300 ring-2 ring-inset">Save Changes</button>
+  <div class="flex justify-center max-w-md mx-auto gap-4 text-white text-sm text-center font-bold leading-6">
+    <button class="px-4 py-2 font-semibold text-sm bg-white text-gray-700 rounded-md shadow-sm ring-pink-300 ring-2 ring-inset dark:bg-gray-700 dark:text-gray-200 dark:ring-pink-500">Save Changes</button>
   </div>
 </Example>
 
 ```html
-<button class="... ring-2 ring-pink-300 **ring-inset**">
+<button class="... ring-2 ring-pink-300 **ring-inset**" dark-class="... ring-2 ring-pink-500 **ring-inset**">
   Save Changes
 </button>
 ```

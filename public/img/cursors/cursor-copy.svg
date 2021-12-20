@@ -1,10 +1,14 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<mask id="path-1-outside-1_84_69" maskUnits="userSpaceOnUse" x="0.75" y="0.75" width="18" height="19" fill="black">
+<mask id="path-1-outside-1_118_607" maskUnits="userSpaceOnUse" x="0.75" y="0.75" width="18" height="19" fill="black">
 <rect fill="white" x="0.75" y="0.75" width="18" height="19"/>
 <path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z"/>
 </mask>
 <path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" fill="#0F172A"/>
-<path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" stroke="white" stroke-width="3" stroke-linejoin="round" mask="url(#path-1-outside-1_84_69)"/>
-<path d="M18 15V21" stroke="#0F172A" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
-<path d="M21 18L15 18" stroke="#0F172A" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
+<path d="M8 18.25L2.75 2.75L17.25 9L9.75 10.75L8 18.25Z" stroke="white" stroke-width="3" stroke-linejoin="round" mask="url(#path-1-outside-1_118_607)"/>
+<mask id="path-2-outside-2_118_607" maskUnits="userSpaceOnUse" x="12" y="12" width="12" height="12" fill="black">
+<rect fill="white" x="12" y="12" width="12" height="12"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19 17V14H17V17H14V19H17V22H19V19H22V17H19Z"/>
+</mask>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19 17V14H17V17H14V19H17V22H19V19H22V17H19Z" fill="#0F172A"/>
+<path d="M19 14H20.5C20.5 13.1716 19.8284 12.5 19 12.5V14ZM19 17H17.5C17.5 17.8284 18.1716 18.5 19 18.5V17ZM17 14V12.5C16.1716 12.5 15.5 13.1716 15.5 14H17ZM17 17V18.5C17.8284 18.5 18.5 17.8284 18.5 17H17ZM14 17V15.5C13.1716 15.5 12.5 16.1716 12.5 17H14ZM14 19H12.5C12.5 19.8284 13.1716 20.5 14 20.5V19ZM17 19H18.5C18.5 18.1716 17.8284 17.5 17 17.5V19ZM17 22H15.5C15.5 22.8284 16.1716 23.5 17 23.5V22ZM19 22V23.5C19.8284 23.5 20.5 22.8284 20.5 22H19ZM19 19V17.5C18.1716 17.5 17.5 18.1716 17.5 19H19ZM22 19V20.5C22.8284 20.5 23.5 19.8284 23.5 19H22ZM22 17H23.5C23.5 16.1716 22.8284 15.5 22 15.5V17ZM17.5 14V17H20.5V14H17.5ZM17 15.5H19V12.5H17V15.5ZM18.5 17V14H15.5V17H18.5ZM14 18.5H17V15.5H14V18.5ZM15.5 19V17H12.5V19H15.5ZM17 17.5H14V20.5H17V17.5ZM18.5 22V19H15.5V22H18.5ZM19 20.5H17V23.5H19V20.5ZM17.5 19V22H20.5V19H17.5ZM22 17.5H19V20.5H22V17.5ZM20.5 17V19H23.5V17H20.5ZM19 18.5H22V15.5H19V18.5Z" fill="white" mask="url(#path-2-outside-2_118_607)"/>
 </svg>
