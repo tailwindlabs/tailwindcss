@@ -206,15 +206,15 @@ const TopLevelAnchor = forwardRef(
             className,
             isActive
               ? 'font-semibold text-sky-500 dark:text-sky-400'
-              : 'font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400'
+              : 'font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300'
           )}
         >
           <div
             className={clsx(
-              'mr-4 rounded-md ring-1 ring-gray-900/5 shadow-sm group-hover:shadow group-hover:ring-gray-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none',
+              'mr-4 rounded-md ring-1 ring-gray-900/5 shadow-sm group-hover:shadow group-hover:ring-gray-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none dark:group-hover:highlight-white/10',
               shadow,
               isActive
-                ? activeBackground
+                ? [activeBackground, 'dark:highlight-white/10']
                 : mobile
                 ? 'dark:bg-gray-700 dark:highlight-white/5'
                 : 'dark:bg-gray-800 dark:highlight-white/5'
@@ -253,7 +253,7 @@ function TopLevelNav({ mobile }) {
         href="/docs/installation"
         isActive={pathname.startsWith('/docs')}
         className="mb-4"
-        shadow="group-hover:shadow-sky-200"
+        shadow="group-hover:shadow-sky-200 dark:group-hover:bg-sky-500"
         activeBackground="dark:bg-sky-500"
         icon={
           <>
@@ -265,7 +265,7 @@ function TopLevelNav({ mobile }) {
                 'fill-sky-200 group-hover:fill-sky-500',
                 pathname.startsWith('/docs')
                   ? 'dark:fill-sky-300 dark:group-hover:fill-sky-300'
-                  : 'dark:fill-gray-400 dark:group-hover:fill-sky-200'
+                  : 'dark:fill-gray-400 dark:group-hover:fill-sky-300'
               )}
             />
             <path
@@ -276,7 +276,7 @@ function TopLevelNav({ mobile }) {
                 'fill-sky-400 group-hover:fill-sky-500',
                 pathname.startsWith('/docs')
                   ? 'dark:fill-sky-200 dark:group-hover:fill-sky-200'
-                  : 'dark:fill-gray-600 dark:group-hover:fill-sky-500'
+                  : 'dark:fill-gray-600 dark:group-hover:fill-sky-200'
               )}
             />
           </>
@@ -288,7 +288,7 @@ function TopLevelNav({ mobile }) {
         mobile={mobile}
         href="https://tailwindui.com/components?utm_source=tailwindcss&utm_medium=navigation"
         className="mb-4"
-        shadow="group-hover:shadow-indigo-200"
+        shadow="group-hover:shadow-indigo-200 dark:group-hover:bg-indigo-500"
         icon={
           <>
             <path
@@ -301,14 +301,14 @@ function TopLevelNav({ mobile }) {
             <path
               d="m6 9 6 3v7l-6-3V9Z"
               className={clsx(
-                'fill-indigo-300 group-hover:fill-indigo-400',
+                'fill-indigo-300 group-hover:fill-indigo-400 dark:group-hover:fill-indigo-300',
                 mobile ? 'dark:fill-gray-400' : 'dark:fill-gray-500'
               )}
             />
             <path
               d="m18 9-6 3v7l6-3V9Z"
               className={clsx(
-                'fill-indigo-400 group-hover:fill-indigo-500',
+                'fill-indigo-400 group-hover:fill-indigo-500 dark:group-hover:fill-indigo-400',
                 mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
               )}
             />
@@ -321,7 +321,7 @@ function TopLevelNav({ mobile }) {
         mobile={mobile}
         href="https://www.youtube.com/tailwindlabs"
         className="mb-4"
-        shadow="group-hover:shadow-pink-200"
+        shadow="group-hover:shadow-pink-200 dark:group-hover:bg-pink-500"
         icon={
           <>
             <path
@@ -329,14 +329,14 @@ function TopLevelNav({ mobile }) {
               clipRule="evenodd"
               d="M19 12a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
               className={clsx(
-                'fill-pink-400 group-hover:fill-pink-500',
+                'fill-pink-400 group-hover:fill-pink-500 dark:group-hover:fill-pink-300',
                 mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
               )}
             />
             <path
               d="M11.082 9.107a.685.685 0 0 0-.72-.01.757.757 0 0 0-.362.653v4.5c0 .27.138.52.362.653.224.133.5.13.72-.01l3.571-2.25A.758.758 0 0 0 15 12a.758.758 0 0 0-.347-.643l-3.571-2.25Z"
               className={clsx(
-                'fill-pink-50 group-hover:fill-pink-100',
+                'fill-pink-50 group-hover:fill-pink-100 dark:group-hover:fill-white',
                 mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400'
               )}
             />
@@ -349,13 +349,13 @@ function TopLevelNav({ mobile }) {
         mobile={mobile}
         href="https://play.tailwindcss.com"
         className="mb-4"
-        shadow="group-hover:shadow-blue-200"
+        shadow="group-hover:shadow-blue-200 dark:group-hover:bg-blue-500"
         icon={
           <>
             <path
               d="M4 12a7 7 0 0 1 7-7h2a7 7 0 1 1 0 14h-2a7 7 0 0 1-7-7Z"
               className={clsx(
-                'fill-blue-400 group-hover:fill-blue-500',
+                'fill-blue-400 group-hover:fill-blue-500 dark:group-hover:fill-blue-400',
                 mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
               )}
             />
@@ -365,7 +365,7 @@ function TopLevelNav({ mobile }) {
               strokeLinecap="round"
               strokeLinejoin="round"
               className={clsx(
-                'stroke-blue-50 dark:stroke-gray-400',
+                'stroke-blue-50 dark:stroke-gray-400 dark:group-hover:stroke-white',
                 mobile ? 'dark:stroke-gray-300' : 'dark:stroke-gray-400'
               )}
             />
@@ -375,7 +375,7 @@ function TopLevelNav({ mobile }) {
               strokeLinecap="round"
               strokeLinejoin="round"
               className={clsx(
-                'stroke-blue-200',
+                'stroke-blue-200 dark:group-hover:stroke-white',
                 mobile ? 'dark:stroke-gray-300' : 'dark:stroke-gray-400'
               )}
             />
@@ -389,14 +389,14 @@ function TopLevelNav({ mobile }) {
         href="/resources"
         isActive={pathname === '/resources'}
         className="mb-4"
-        shadow="group-hover:shadow-purple-200"
+        shadow="group-hover:shadow-purple-200 dark:group-hover:bg-purple-400"
         activeBackground="dark:bg-purple-400"
         icon={
           <>
             <path
               d="M6 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8ZM6 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1Z"
               className={clsx(
-                'fill-purple-400 group-hover:fill-purple-500',
+                'fill-purple-400 group-hover:fill-purple-500 dark:group-hover:fill-purple-300',
                 pathname === '/resources'
                   ? 'dark:fill-purple-300 dark:group-hover:fill-purple-300'
                   : mobile
@@ -407,7 +407,7 @@ function TopLevelNav({ mobile }) {
             <path
               d="M13 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2V8Z"
               className={clsx(
-                'fill-purple-200 group-hover:fill-purple-300',
+                'fill-purple-200 group-hover:fill-purple-300 dark:group-hover:fill-white',
                 pathname === '/resources'
                   ? 'dark:fill-white dark:group-hover:fill-white'
                   : mobile
@@ -418,7 +418,7 @@ function TopLevelNav({ mobile }) {
             <path
               d="M13 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-1Z"
               className={clsx(
-                'fill-purple-400 group-hover:fill-purple-500',
+                'fill-purple-400 group-hover:fill-purple-500 dark:group-hover:fill-purple-300',
                 pathname === '/resources'
                   ? 'dark:fill-purple-300 dark:group-hover:fill-purple-300'
                   : mobile
@@ -435,7 +435,7 @@ function TopLevelNav({ mobile }) {
         mobile={mobile}
         href="https://github.com/tailwindlabs/tailwindcss/discussions"
         className="mb-8"
-        shadow="group-hover:shadow-violet-200"
+        shadow="group-hover:shadow-violet-200 dark:group-hover:bg-violet-500"
         icon={
           <>
             <path
@@ -443,7 +443,7 @@ function TopLevelNav({ mobile }) {
               clipRule="evenodd"
               d="M11 5a6 6 0 0 0-4.687 9.746c.215.27.315.62.231.954l-.514 2.058a1 1 0 0 0 1.485 1.1l2.848-1.71c.174-.104.374-.15.576-.148H13a6 6 0 0 0 0-12h-2Z"
               className={clsx(
-                'fill-violet-400 group-hover:fill-violet-500',
+                'fill-violet-400 group-hover:fill-violet-500 dark:group-hover:fill-violet-300',
                 mobile ? 'dark:fill-gray-500' : 'dark:fill-gray-600'
               )}
             />
@@ -451,14 +451,17 @@ function TopLevelNav({ mobile }) {
               cx="12"
               cy="11"
               r="1"
-              className={clsx('fill-white', mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400')}
+              className={clsx(
+                'fill-white dark:group-hover:fill-white',
+                mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400'
+              )}
             />
             <circle
               cx="9"
               cy="11"
               r="1"
               className={clsx(
-                'fill-violet-200',
+                'fill-violet-200 dark:group-hover:fill-white',
                 mobile ? 'dark:fill-gray-300' : 'dark:fill-gray-400'
               )}
             />
@@ -466,7 +469,10 @@ function TopLevelNav({ mobile }) {
               cx="15"
               cy="11"
               r="1"
-              className={clsx('fill-violet-200 dark:fill-gray-400', mobile ? '' : '')}
+              className={clsx(
+                'fill-violet-200 dark:fill-gray-400 dark:group-hover:fill-white',
+                mobile ? '' : ''
+              )}
             />
           </>
         }
