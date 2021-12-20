@@ -219,11 +219,11 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                     <NavItems />
                   </ul>
                 </nav>
-                <div className="flex items-center border-l border-gray-200 ml-6 pl-6 space-x-6 dark:border-gray-800">
+                <div className="flex items-center border-l border-gray-200 ml-6 pl-6 dark:border-gray-800">
                   <ThemeToggle panelClassName="mt-8" />
                   <a
                     href="https://github.com/tailwindlabs/tailwindcss"
-                    className="block text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                    className="ml-6 block text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                   >
                     <span className="sr-only">Tailwind CSS on GitHub</span>
                     <svg

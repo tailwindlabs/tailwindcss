@@ -157,6 +157,7 @@ export function ThemeToggle({ panelClassName = 'mt-4' }) {
 
   return (
     <Listbox value={setting} onChange={setSetting}>
+      <Listbox.Label className="sr-only">Theme</Listbox.Label>
       <Listbox.Button type="button">
         <span className="dark:hidden">
           <SunIcon className="w-6 h-6" selected={setting !== 'system'} />
