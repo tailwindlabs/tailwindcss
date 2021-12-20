@@ -1,7 +1,7 @@
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import { Listbox } from '@headlessui/react'
 import clsx from 'clsx'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 function update() {
   if (
@@ -106,6 +106,7 @@ function PcIcon({ selected, ...props }) {
 
 function useTheme() {
   let [setting, setSetting] = useState('system')
+  let initial = useRef(true)
 
   useIsomorphicLayoutEffect(() => {
     let theme = localStorage.theme
@@ -120,7 +121,11 @@ function useTheme() {
     } else if (setting === 'light' || setting === 'dark') {
       localStorage.theme = setting
     }
-    update()
+    if (initial.current) {
+      initial.current = false
+    } else {
+      update()
+    }
   }, [setting])
 
   useEffect(() => {
@@ -149,7 +154,7 @@ function useTheme() {
 
 export function ThemeToggle({ panelClassName = 'mt-4' }) {
   let [setting, setSetting] = useTheme()
-  console.log(setting)
+
   return (
     <Listbox value={setting} onChange={setSetting}>
       <Listbox.Button type="button">
