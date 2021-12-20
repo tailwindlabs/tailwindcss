@@ -154,6 +154,7 @@ export function Performance() {
               <div className="row-end-1">
                 <TabBar
                   side="left"
+                  translucent={true}
                   primary={{ name: 'index.html', saved }}
                   secondary={[
                     { name: 'tailwind.config.js' },
@@ -216,7 +217,11 @@ export function Performance() {
                 </CodeWindow.Code2>
               </div>
               <div className="row-span-2 border-t border-gray-500/30 pt-1.5 lg:border-0 lg:pt-0">
-                <TabBar side="right" primary={{ name: 'build.css', saved: true }}>
+                <TabBar
+                  side="right"
+                  translucent={true}
+                  primary={{ name: 'build.css', saved: true }}
+                >
                   <svg width="12" height="2" fill="currentColor">
                     <circle cx="1" cy="1" r="1" />
                     <circle cx="6" cy="1" r="1" />
@@ -241,7 +246,12 @@ export function Performance() {
               </div>
               <div className="row-start-1 row-end-2 border-t border-gray-500/30">
                 <div className="h-1.5 border-r border-gray-500/30" />
-                <TabBar side="right" primary={{ name: 'Terminal' }} showTabMarkers={false}>
+                <TabBar
+                  side="right"
+                  translucent={true}
+                  primary={{ name: 'Terminal' }}
+                  showTabMarkers={false}
+                >
                   <svg width="12" height="2" fill="currentColor">
                     <circle cx="1" cy="1" r="1" />
                     <circle cx="6" cy="1" r="1" />

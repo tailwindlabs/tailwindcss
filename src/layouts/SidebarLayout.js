@@ -15,8 +15,9 @@ const NavItem = forwardRef(({ href, children, isActive, isPublished, fallbackHre
         <a
           className={clsx('block border-l pl-4 -ml-px', {
             'text-sky-500 border-current font-semibold dark:text-sky-400': isActive,
-            'border-transparent hover:border-gray-400': !isActive,
-            'text-gray-700 hover:text-gray-900 dark:text-gray-400': !isActive && isPublished,
+            'border-transparent hover:border-gray-400 dark:hover:border-gray-500': !isActive,
+            'text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300':
+              !isActive && isPublished,
             'text-gray-400': !isActive && !isPublished,
           })}
         >
@@ -96,10 +97,10 @@ function Nav({ nav, children, fallbackHref, mobile = false }) {
 
   return (
     <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6 relative">
-      <div className="sticky top-0 -ml-0.5">
-        <div className="h-10 bg-white dark:bg-gray-900"></div>
-        <div class="bg-white dark:bg-gray-900 relative">
-          <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-gray-400 rounded-md ring-1 ring-gray-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-gray-300 dark:bg-gray-400/10 dark:highlight-white/5">
+      <div className="sticky top-0 -ml-0.5 pointer-events-none">
+        <div className="h-10 bg-white dark:bg-gray-900" />
+        <div className="bg-white dark:bg-gray-900 relative pointer-events-auto">
+          <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-gray-400 rounded-md ring-1 ring-gray-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-gray-300 dark:bg-gray-800 dark:highlight-white/5 dark:hover:bg-gray-700">
             {({ actionKey }) => (
               <>
                 <svg
@@ -136,7 +137,7 @@ function Nav({ nav, children, fallbackHref, mobile = false }) {
             )}
           </SearchButton>
         </div>
-        <div className="h-12 -mb-4 bg-gradient-to-b from-white dark:from-gray-900"></div>
+        <div className="h-12 -mb-4 bg-gradient-to-b from-white dark:from-gray-900" />
       </div>
       <ul>
         <TopLevelNav mobile={mobile} />

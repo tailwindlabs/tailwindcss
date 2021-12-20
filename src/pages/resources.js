@@ -151,7 +151,7 @@ export default function Resources() {
                   <Button
                     href={href}
                     color={[
-                      'bg-gray-700 text-white hover:bg-gray-800 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-400',
+                      'bg-gray-700 text-white hover:bg-gray-800 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-400 dark:focus:ring-offset-0',
                       'text-gray-300 group-hover:text-gray-200',
                     ]}
                     darkColor="gray"

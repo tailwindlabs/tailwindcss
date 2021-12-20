@@ -25,10 +25,10 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
           <div className="text-sm leading-6 mb-16 xl:mb-0">
             <div className="hidden mb-5 pb-5 border-b border-gray-200 xl:block dark:border-gray-200/5">
               <Link href="/blog">
-                <a className="group flex font-semibold text-gray-700 hover:text-gray-900 dark:text-gray-200">
+                <a className="group flex font-semibold text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
                   <svg
                     viewBox="0 -9 3 24"
-                    className="overflow-visible mr-3 text-gray-400 w-auto h-6 group-hover:text-gray-600"
+                    className="overflow-visible mr-3 text-gray-400 w-auto h-6 group-hover:text-gray-600 dark:group-hover:text-gray-300"
                   >
                     <path
                       d="M3 0L0 3L3 6"

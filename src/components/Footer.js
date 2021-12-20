@@ -8,10 +8,10 @@ export function Footer({ children, previous, next }) {
         <div className="mb-10 text-gray-700 font-semibold flex items-center dark:text-gray-200">
           {previous && (
             <Link href={previous.href}>
-              <a className="group flex items-center hover:text-gray-900">
+              <a className="group flex items-center hover:text-gray-900 dark:hover:text-white">
                 <svg
                   viewBox="0 0 3 6"
-                  className="mr-3 w-auto h-1.5 text-gray-400 overflow-visible group-hover:text-gray-600"
+                  className="mr-3 w-auto h-1.5 text-gray-400 overflow-visible group-hover:text-gray-600 dark:group-hover:text-gray-300"
                 >
                   <path
                     d="M3 0L0 3L3 6"
@@ -28,11 +28,11 @@ export function Footer({ children, previous, next }) {
           )}
           {next && (
             <Link href={next.href}>
-              <a className="group ml-auto flex items-center hover:text-gray-900">
+              <a className="group ml-auto flex items-center hover:text-gray-900 dark:hover:text-white">
                 {next.shortTitle || next.title}
                 <svg
                   viewBox="0 0 3 6"
-                  className="ml-3 w-auto h-1.5 text-gray-400 overflow-visible group-hover:text-gray-600"
+                  className="ml-3 w-auto h-1.5 text-gray-400 overflow-visible group-hover:text-gray-600 dark:group-hover:text-gray-300"
                 >
                   <path
                     d="M0 0L3 3L0 6"

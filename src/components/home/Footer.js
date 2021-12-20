@@ -35,7 +35,9 @@ export function Footer() {
                     {items.map((item) => (
                       <li key={item.href}>
                         <Link href={item.href}>
-                          <a className="hover:text-gray-900">{item.title}</a>
+                          <a className="hover:text-gray-900 dark:hover:text-gray-300">
+                            {item.title}
+                          </a>
                         </Link>
                       </li>
                     ))}

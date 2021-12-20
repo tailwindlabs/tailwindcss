@@ -25,8 +25,14 @@ let colors = {
 }
 
 let colorsDark = {
-  gray: ['dark:bg-gray-700 dark:text-gray-100', 'dark:text-gray-500'],
-  sky: ['dark:bg-sky-500 dark:text-sky-50', 'dark:text-sky-300'],
+  gray: [
+    'dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500',
+    'dark:text-gray-500 dark:group-hover:text-gray-400',
+  ],
+  sky: [
+    'dark:bg-sky-500 dark:text-sky-50 dark:hover:bg-sky-400 dark:hover:text-white dark:focus:ring-sky-200',
+    'dark:text-sky-300 dark:group-hover:text-sky-100',
+  ],
 }
 
 export function Button({

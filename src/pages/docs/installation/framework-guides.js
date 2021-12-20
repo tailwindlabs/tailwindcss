@@ -12,7 +12,7 @@ import { ReactComponent as CraLogo } from '@/img/guides/cra.svg'
 export default function FrameworkGuides() {
   return (
     <InstallationLayout>
-      <div className="prose mb-16 max-w-3xl dark:prose-dark">
+      <div className="prose mb-10 max-w-3xl dark:prose-dark">
         <p>
           Framework-specific guides that cover our recommended approach to installing Tailwind CSS
           in a number of popular environments.
@@ -24,7 +24,7 @@ export default function FrameworkGuides() {
             name: 'Next.js',
             slug: 'nextjs',
             description: 'Full-featured React framework with great developer experience.',
-            logo: NextJsLogo,
+            logo: () => <NextJsLogo className="dark:invert" />,
           },
           {
             name: 'Laravel',
@@ -66,7 +66,7 @@ export default function FrameworkGuides() {
               </h3>
               <p className="text-sm leading-6 text-gray-700 dark:text-gray-400">{description}</p>
             </div>
-            <div className="flex-none w-14 h-14 rounded-full bg-white ring-1 ring-gray-900/5 shadow flex items-center justify-center overflow-hidden">
+            <div className="flex-none w-14 h-14 rounded-full bg-white ring-1 ring-gray-900/5 shadow flex items-center justify-center overflow-hidden dark:bg-gray-800">
               <Logo />
             </div>
           </li>

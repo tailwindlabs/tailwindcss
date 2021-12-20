@@ -140,7 +140,7 @@ export function InstallationLayout({ children }) {
                             'flex text-sm leading-6 font-semibold pt-3 pb-2.5 border-b-2 -mb-px',
                             href === router.pathname
                               ? 'text-sky-500 border-current'
-                              : 'text-gray-900 border-transparent hover:border-gray-300 dark:text-gray-200'
+                              : 'text-gray-900 border-transparent hover:border-gray-300 dark:text-gray-200 dark:hover:border-gray-700'
                           )}
                         >
                           {name}

@@ -972,7 +972,7 @@ export function Testimonials() {
         <button
           type="button"
           className={clsx(
-            'relative bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-sm text-white font-semibold h-12 px-6 rounded-lg flex items-center dark:bg-gray-700',
+            'relative bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-sm text-white font-semibold h-12 px-6 rounded-lg flex items-center dark:bg-gray-700 dark:hover:bg-gray-600',
             transition && 'transition-transform',
             expanded && !showCollapseButton && 'translate-y-4',
             (!expanded || showCollapseButton) && 'pointer-events-auto'

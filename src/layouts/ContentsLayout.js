@@ -51,7 +51,7 @@ function TableOfContents({ tableOfContents, currentSection }) {
                   pageHasSubsections ? 'font-medium' : '',
                   isActive(section)
                     ? 'font-medium text-sky-500 dark:text-sky-400'
-                    : 'hover:text-gray-900 dark:text-gray-400'
+                    : 'hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300'
                 )}
               >
                 {section.title}
@@ -66,14 +66,14 @@ function TableOfContents({ tableOfContents, currentSection }) {
                     'group flex items-start py-1',
                     isActive(subsection)
                       ? 'text-sky-500 dark:text-sky-400'
-                      : 'hover:text-gray-900 dark:text-gray-400'
+                      : 'hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300'
                   )}
                 >
                   <svg
                     width="3"
                     height="24"
                     viewBox="0 -9 3 24"
-                    className="mr-2 text-gray-400 overflow-visible group-hover:text-gray-600 dark:text-gray-600"
+                    className="mr-2 text-gray-400 overflow-visible group-hover:text-gray-600 dark:text-gray-600 dark:group-hover:text-gray-500"
                   >
                     <path
                       d="M0 0L3 3L0 6"

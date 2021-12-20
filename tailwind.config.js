@@ -232,6 +232,7 @@ module.exports = {
             },
             a: {
               color: theme('colors.white'),
+              borderBottomColor: theme('colors.sky.400'),
             },
             strong: {
               color: theme('colors.gray.200'),
