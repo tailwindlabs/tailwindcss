@@ -26,10 +26,22 @@ export default function MobileFirstDemo() {
     md.addEventListener('change', onChange)
     lg.addEventListener('change', onChange)
 
+    let darkModeObserver = new MutationObserver(([mutation]) => {
+      if (mutation.target.classList.contains('dark')) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    })
+    darkModeObserver.observe(window.parent.document.documentElement, {
+      attributeFilter: ['class'],
+    })
+
     return () => {
       sm.removeEventListener('change', onChange)
       md.removeEventListener('change', onChange)
       lg.removeEventListener('change', onChange)
+      darkModeObserver.disconnect()
     }
   }, [])
 
