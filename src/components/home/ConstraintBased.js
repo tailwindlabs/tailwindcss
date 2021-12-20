@@ -301,8 +301,8 @@ export function ConstraintBased() {
             tabs={tabs}
             selected={tab}
             onChange={(tab) => setTab(tab)}
-            className="text-indigo-600 dark:text-indigo-500"
-            iconClassName="text-indigo-500"
+            className="text-indigo-600 dark:text-indigo-400"
+            iconClassName="text-indigo-500 dark:text-indigo-400"
           />
         </div>
       </div>

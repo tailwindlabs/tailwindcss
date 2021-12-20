@@ -135,8 +135,8 @@ export function ModernFeatures() {
             tabs={tabs}
             selected={feature}
             onChange={setFeature}
-            className="text-indigo-600"
-            iconClassName="text-indigo-500"
+            className="text-indigo-600 dark:text-indigo-400"
+            iconClassName="text-indigo-500 dark:text-indigo-400"
           />
         </div>
       </div>

@@ -117,8 +117,8 @@ export function Customization() {
             tabs={themeTabs}
             selected={theme}
             onChange={setTheme}
-            className="text-pink-500"
-            iconClassName="text-pink-500"
+            className="text-pink-500 dark:text-pink-400"
+            iconClassName="text-pink-500 dark:text-pink-400"
           />
         </div>
       </div>
