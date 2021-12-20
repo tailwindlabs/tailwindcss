@@ -66,7 +66,7 @@ export default function FrameworkGuides() {
               </h3>
               <p className="text-sm leading-6 text-gray-700 dark:text-gray-400">{description}</p>
             </div>
-            <div className="flex-none w-14 h-14 rounded-full bg-white ring-1 ring-gray-900/5 shadow flex items-center justify-center overflow-hidden dark:bg-gray-800">
+            <div className="flex-none w-14 h-14 rounded-full bg-white ring-1 ring-gray-900/5 shadow flex items-center justify-center overflow-hidden dark:bg-gray-800 dark:highlight-white/5">
               <Logo />
             </div>
           </li>
