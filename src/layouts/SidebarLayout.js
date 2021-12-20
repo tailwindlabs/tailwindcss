@@ -98,7 +98,7 @@ function Nav({ nav, children, fallbackHref, mobile = false }) {
   return (
     <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6 relative">
       <div className="sticky top-0 -ml-0.5 pointer-events-none">
-        <div className="h-10 bg-white dark:bg-gray-900" />
+        {!mobile && <div className="h-10 bg-white dark:bg-gray-900" />}
         <div className="bg-white dark:bg-gray-900 relative pointer-events-auto">
           <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-gray-400 rounded-md ring-1 ring-gray-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-gray-300 dark:bg-gray-800 dark:highlight-white/5 dark:hover:bg-gray-700">
             {({ actionKey }) => (
@@ -137,7 +137,7 @@ function Nav({ nav, children, fallbackHref, mobile = false }) {
             )}
           </SearchButton>
         </div>
-        <div className="h-12 -mb-4 bg-gradient-to-b from-white dark:from-gray-900" />
+        {!mobile && <div className="h-12 -mb-4 bg-gradient-to-b from-white dark:from-gray-900" />}
       </div>
       <ul>
         <TopLevelNav mobile={mobile} />
@@ -513,7 +513,7 @@ export function SidebarLayout({
           <button
             type="button"
             onClick={() => setNavIsOpen(false)}
-            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
+            className="absolute z-10 top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
           >
             <span className="sr-only">Close navigation</span>
             <svg viewBox="0 0 10 10" className="w-2.5 h-2.5 overflow-visible">
