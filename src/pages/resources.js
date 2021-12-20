@@ -319,10 +319,12 @@ export default function Resources() {
                 description:
                   'Join over 10,000 members on the Discord group to chat about Tailwind and other related topics.',
                 icon: (
-                  <Icon className="bg-[#838CF1]/[0.15]">
-                    <DiscordIcon className="w-6 h-auto" />
+                  <Icon className="bg-[#838CF1]/[0.15] dark:bg-indigo-700">
+                    <DiscordIcon className="w-6 h-auto dark:fill-indigo-200" />
                   </Icon>
                 ),
+                className:
+                  'ring-1 ring-gray-900/10 dark:bg-indigo-500 dark:ring-0 dark:highlight-white/20',
               },
               {
                 title: 'GitHub Discussions',
@@ -330,12 +332,14 @@ export default function Resources() {
                 description:
                   'Have an issue with your project? Connect with other members of the Tailwind community to get some assistance.',
                 icon: (
-                  <Icon className="bg-gray-100">
-                    <GitHubIcon className="w-7 h-auto" />
+                  <Icon className="bg-gray-100 dark:bg-gray-800">
+                    <GitHubIcon className="w-7 h-auto dark:fill-gray-400" />
                   </Icon>
                 ),
+                className:
+                  'ring-1 ring-gray-900/10 dark:bg-gray-600 dark:ring-0 dark:highlight-white/20',
               },
-            ].map(({ title, href, description, icon }) => (
+            ].map(({ title, href, description, icon, className }) => (
               <li key={title} className="relative flex flex-row-reverse">
                 <div className="flex-auto ml-6">
                   <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-200">
@@ -347,7 +351,12 @@ export default function Resources() {
                     {description}
                   </p>
                 </div>
-                <div className="flex-none w-16 h-16 p-[0.1875rem] rounded-full ring-1 ring-gray-900/10 shadow overflow-hidden">
+                <div
+                  className={clsx(
+                    'flex-none w-16 h-16 p-[0.1875rem] rounded-full shadow overflow-hidden',
+                    className
+                  )}
+                >
                   {icon}
                 </div>
               </li>
