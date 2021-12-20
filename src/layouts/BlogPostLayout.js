@@ -85,6 +85,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
           <div className="grid grid-cols-1 gap-y-10 gap-x-8 md:grid-cols-2">
             {latestPosts
               .filter((post) => post.slug !== slug)
+              .slice(0, 2)
               .map((post) => (
                 <PostItem key={post.slug} {...post}>
                   <p>{post.description}</p>
