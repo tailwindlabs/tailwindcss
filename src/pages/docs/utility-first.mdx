@@ -175,7 +175,7 @@ This component is fully responsive and includes a button with hover and focus st
 
 The biggest maintainability concern when using a utility-first approach is managing commonly repeated utility combinations.
 
-This is easily solved by [extracting components](/docs/reusing-styles), usually as template partials or components.
+This is easily solved by [extracting components and partials](/docs/reusing-styles#extracting-components-and-partials), and using [editor and language features](/docs/reusing-styles#using-editor-and-language-features) like multi-cursor editing and simple loops.
 
 ```html
 <!-- PrimaryButton.vue -->
@@ -184,37 +184,6 @@ This is easily solved by [extracting components](/docs/reusing-styles), usually 
     <slot/>
   </button>
 </template>
-```
-
-You can also use Tailwind's `@apply` feature to create CSS abstractions around common utility patterns.
-
-<Example>
-  <div class="text-center">
-    <button type="button" class="py-2 px-4 bg-sky-500 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none" tabindex="-1">
-      Save changes
-    </button>
-  </div>
-</Example>
-
-```html
-<!-- Using utilities -->
-<button class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-sky-500 hover:bg-sky-700">
-  Save changes
-</button>
-
-<!-- Extracting classes using @apply -->
-<button class="**btn btn-sky**">
-  Button
-</button>
-
-<style>
-  **.btn** {
-    @apply py-2 px-4 font-semibold rounded-lg shadow-lg;
-  }
-  **.btn-sky** {
-    @apply text-white bg-sky-500 hover:bg-sky-700;
-  }
-</style>
 ```
 
 Aside from that, maintaining a utility-first CSS project turns out to be a lot easier than maintaining a large CSS codebase, simply because HTML is so much easier to maintain than CSS. Large companies like GitHub, Netflix, Heroku, Kickstarter, Twitch, Segment, and more are using this approach with great success.
