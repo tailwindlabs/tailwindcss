@@ -23,7 +23,7 @@ let steps = [
     body: () => (
       <p>
         Add <code>tailwindcss</code> and <code>autoprefixer</code> to your{' '}
-        <code>postcss.config.js</code> file.
+        <code>postcss.config.js</code> file, or wherever PostCSS is configured in your project.
       </p>
     ),
     code: {
