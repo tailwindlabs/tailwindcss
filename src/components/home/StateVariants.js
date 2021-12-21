@@ -132,7 +132,7 @@ export function StateVariants() {
                     New
                   </div>
                 </div>
-                <form className="group relative rounded-md dark:bg-gray-700 dark:highlight-white/10 dark:focus-within:bg-transparent">
+                <div className="group relative rounded-md dark:bg-gray-700 dark:highlight-white/10 dark:focus-within:bg-transparent">
                   <svg
                     width="20"
                     height="20"
@@ -158,7 +158,7 @@ export function StateVariants() {
                     placeholder="Filter projects..."
                     className="w-full text-sm leading-6 bg-transparent text-gray-900 placeholder:text-gray-400 rounded-md py-2 pl-10 ring-1 ring-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-100 dark:placeholder:text-gray-500 dark:ring-0 dark:focus:ring-2"
                   />
-                </form>
+                </div>
               </header>
               <ul className="bg-gray-50 p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 text-sm leading-6 dark:bg-gray-900/40 dark:ring-1 dark:ring-white/5">
                 {projects.map((project, i, a) => (
