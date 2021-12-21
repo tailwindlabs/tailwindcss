@@ -65,7 +65,7 @@ export default function Resources() {
         <p className="mb-4 text-sm leading-6 font-semibold text-sky-500 dark:text-sky-400">
           Resources
         </p>
-        <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-200">
+        <h1 className="mb-2 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-200">
           Everything else you need to build awesome Tailwind CSS websites
         </h1>
         <p className="text-lg text-gray-700 dark:text-gray-400">

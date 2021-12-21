@@ -8,7 +8,7 @@ export default function Blog() {
   return (
     <main className="max-w-5xl mx-auto px-4 pb-28 sm:px-6 md:px-8 xl:px-12 xl:max-w-6xl">
       <header className="pt-16 pb-9 sm:pb-16 sm:text-center">
-        <h1 className="mb-4 text-4xl tracking-tight text-gray-900 font-extrabold dark:text-gray-200">
+        <h1 className="mb-4 text-3xl sm:text-4xl tracking-tight text-gray-900 font-extrabold dark:text-gray-200">
           Blog
         </h1>
         <p className="text-lg text-gray-700 dark:text-gray-400">

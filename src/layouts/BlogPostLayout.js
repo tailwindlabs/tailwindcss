@@ -19,7 +19,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
       <main>
         <article className={clsx('relative pt-10', grid)}>
           <Metadata meta={meta} />
-          <h1 className="col-span-full text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:text-center xl:mb-16 dark:text-gray-200">
+          <h1 className="col-span-full text-3xl sm:text-4xl sm:text-center xl:mb-16 font-extrabold tracking-tight text-gray-900 dark:text-gray-200">
             <Widont>{meta.title}</Widont>
           </h1>
           <div className="text-sm leading-6 mb-16 xl:mb-0">

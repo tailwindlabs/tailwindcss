@@ -9,7 +9,7 @@ export function PageHeader({ title, description, badge = {}, section }) {
             {section}
           </p>
         )}
-        <h1 className="inline-block text-3xl font-extrabold text-gray-900 tracking-tight dark:text-gray-200">
+        <h1 className="inline-block text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight dark:text-gray-200">
           {title}
         </h1>
         {badge.key && badge.value && (
