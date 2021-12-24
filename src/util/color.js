@@ -5,8 +5,11 @@ let SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
 let VALUE = `(?:\\d+|\\d*\\.\\d+)%?`
 let SEP = `(?:\\s*,\\s*|\\s+)`
 let ALPHA_SEP = `\\s*[,/]\\s*`
-let RGB_HSL = new RegExp(
-  `^(rgb|hsl)a?\\(\\s*(${VALUE})${SEP}(${VALUE})${SEP}(${VALUE})(?:${ALPHA_SEP}(${VALUE}))?\\s*\\)$`
+let RGB = new RegExp(
+  `^rgba?\\(\\s*(${VALUE})${SEP}(${VALUE})${SEP}(${VALUE})(?:${ALPHA_SEP}(${VALUE}))?\\s*\\)$`
+)
+let HSL = new RegExp(
+  `^hsla?\\(\\s*((?:${VALUE})(?:deg|rad|grad|turn)?)${SEP}(${VALUE})${SEP}(${VALUE})(?:${ALPHA_SEP}(${VALUE}))?\\s*\\)$`
 )
 
 export function parseColor(value) {
@@ -37,13 +40,23 @@ export function parseColor(value) {
     }
   }
 
-  let match = value.match(RGB_HSL)
+  let rgbMatch = value.match(RGB)
 
-  if (match !== null) {
+  if (rgbMatch !== null) {
     return {
-      mode: match[1],
-      color: [match[2], match[3], match[4]].map((v) => v.toString()),
-      alpha: match[5]?.toString?.(),
+      mode: 'rgb',
+      color: [rgbMatch[1], rgbMatch[2], rgbMatch[3]].map((v) => v.toString()),
+      alpha: rgbMatch[4]?.toString?.(),
+    }
+  }
+
+  let hslMatch = value.match(HSL)
+
+  if (hslMatch !== null) {
+    return {
+      mode: 'hsl',
+      color: [hslMatch[1], hslMatch[2], hslMatch[3]].map((v) => v.toString()),
+      alpha: hslMatch[4]?.toString?.(),
     }
   }
 
