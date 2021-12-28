@@ -2,9 +2,9 @@
   "name": "tailwindcss-standalone",
   "version": "0.0.0",
   "scripts": {
-    "build": "pkg standalone.js --out-path dist --targets node16-macos-x64,node16-macos-arm64,node16-win-x64,node16-linux-x64 --compress Brotli --no-bytecode --public-packages \"*\" --public",
+    "build": "pkg standalone.js --out-path dist --targets node16-macos-x64,node16-macos-arm64,node16-win-x64,node16-linux-x64,node16-linux-arm64 --compress Brotli --no-bytecode --public-packages \"*\" --public",
     "prebuild": "rimraf dist",
-    "postbuild": "move-file dist/standalone-macos-x64 dist/tailwindcss-macos-x64 && move-file dist/standalone-macos-arm64 dist/tailwindcss-macos-arm64 && move-file dist/standalone-win-x64.exe dist/tailwindcss-windows-x64.exe && move-file dist/standalone-linux-x64 dist/tailwindcss-linux-x64",
+    "postbuild": "move-file dist/standalone-macos-x64 dist/tailwindcss-macos-x64 && move-file dist/standalone-macos-arm64 dist/tailwindcss-macos-arm64 && move-file dist/standalone-win-x64.exe dist/tailwindcss-windows-x64.exe && move-file dist/standalone-linux-x64 dist/tailwindcss-linux-x64 && move-file dist/standalone-linux-arm64 dist/tailwindcss-linux-arm64",
     "test": "jest"
   },
   "devDependencies": {
