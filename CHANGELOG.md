@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reduce specificity of `abbr` rule in preflight ([#6671](https://github.com/tailwindlabs/tailwindcss/pull/6671))
 - Support HSL with hue units in arbitrary values ([#6726](https://github.com/tailwindlabs/tailwindcss/pull/6726))
+- Add `node16-linux-arm64` target for standalone CLI ([#6693](https://github.com/tailwindlabs/tailwindcss/pull/6693))
 
 ## [3.0.7] - 2021-12-17
 
