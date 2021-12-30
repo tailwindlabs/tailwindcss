@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Improve `DEBUG` flag ([#6797](https://github.com/tailwindlabs/tailwindcss/pull/6797))
+- Improve `DEBUG` flag ([#6797](https://github.com/tailwindlabs/tailwindcss/pull/6797), [#6804](https://github.com/tailwindlabs/tailwindcss/pull/6804))
 
 ## [3.0.8] - 2021-12-28
 
