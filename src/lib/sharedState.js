@@ -35,13 +35,13 @@ export function resolveDebug(debug) {
 
   let debuggers = debug.split(',').map((d) => d.split(':')[0])
 
-  // Ignoring tailwind / tailwindcss
-  if (debuggers.includes('-tailwindcss') || debuggers.includes('-tailwind')) {
+  // Ignoring tailwindcss
+  if (debuggers.includes('-tailwindcss')) {
     return false
   }
 
-  // Definitely including tailwind / tailwindcss
-  if (debuggers.includes('tailwindcss') || debuggers.includes('tailwind')) {
+  // Including tailwindcss
+  if (debuggers.includes('tailwindcss')) {
     return true
   }
 
