@@ -293,3 +293,49 @@ it('should support unescaped underscores in URLs', () => {
     `)
   })
 })
+
+it('should be possible to read theme values in arbitrary values (without quotes)', () => {
+  let config = {
+    content: [{ raw: html`<div class="w-[theme(spacing.1)] w-[theme(spacing[0.5])]"></div>` }],
+    theme: {
+      spacing: {
+        0.5: 'calc(.5 * .25rem)',
+        1: 'calc(1 * .25rem)',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .w-\[theme\(spacing\.1\)\] {
+        width: calc(1 * 0.25rem);
+      }
+      .w-\[theme\(spacing\[0\.5\]\)\] {
+        width: calc(0.5 * 0.25rem);
+      }
+    `)
+  })
+})
+
+it('should be possible to read theme values in arbitrary values (with quotes)', () => {
+  let config = {
+    content: [{ raw: html`<div class="w-[theme('spacing.1')] w-[theme('spacing[0.5]')]"></div>` }],
+    theme: {
+      spacing: {
+        0.5: 'calc(.5 * .25rem)',
+        1: 'calc(1 * .25rem)',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .w-\[theme\(\'spacing\.1\'\)\] {
+        width: calc(1 * 0.25rem);
+      }
+      .w-\[theme\(\'spacing\[0\.5\]\'\)\] {
+        width: calc(0.5 * 0.25rem);
+      }
+    `)
+  })
+})
