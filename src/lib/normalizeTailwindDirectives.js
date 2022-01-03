@@ -79,5 +79,5 @@ export default function normalizeTailwindDirectives(root) {
     }
   }
 
-  return { tailwindDirectives, layerDirectives, applyDirectives }
+  return { tailwindDirectives, applyDirectives }
 }
