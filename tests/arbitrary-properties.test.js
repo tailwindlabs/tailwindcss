@@ -273,3 +273,51 @@ test('invalid arbitrary property 2', () => {
     expect(result.css).toMatchFormattedCss(css``)
   })
 })
+
+it('should be possible to read theme values in arbitrary properties (without quotes)', () => {
+  let config = {
+    content: [{ raw: html`<div class="[--a:theme(colors.blue.500)] [color:var(--a)]"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .\[--a\:theme\(colors\.blue\.500\)\] {
+        --a: #3b82f6;
+      }
+      .\[color\:var\(--a\)\] {
+        color: var(--a);
+      }
+    `)
+  })
+})
+
+it('should be possible to read theme values in arbitrary properties (with quotes)', () => {
+  let config = {
+    content: [{ raw: html`<div class="[--a:theme('colors.blue.500')] [color:var(--a)]"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .\[--a\:theme\(\'colors\.blue\.500\'\)\] {
+        --a: #3b82f6;
+      }
+      .\[color\:var\(--a\)\] {
+        color: var(--a);
+      }
+    `)
+  })
+})

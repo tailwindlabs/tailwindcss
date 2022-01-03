@@ -324,6 +324,15 @@ test('arbitrary values with angle brackets in double quotes', async () => {
   expect(extractions).toContain(`hover:focus:content-[">"]`)
 })
 
+test('arbitrary values with theme lookup using quotes', () => {
+  const extractions = defaultExtractor(`
+    <p class="[--y:theme('colors.blue.500')] [color:var(--y)]"></p>
+  `)
+
+  expect(extractions).toContain(`[--y:theme('colors.blue.500')]`)
+  expect(extractions).toContain(`[color:var(--y)]`)
+})
+
 test('special characters', async () => {
   const extractions = defaultExtractor(`
     <div class="<sm:underline md>:font-bold"></div>
