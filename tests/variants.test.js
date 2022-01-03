@@ -445,3 +445,25 @@ it('should not generate variants of user css if it is not inside a layer', () =>
     `)
   })
 })
+
+it('should be possible to use responsive modifiers that are defined with special characters', () => {
+  let config = {
+    content: [{ raw: html`<div class="<sm:underline"></div>` }],
+    theme: {
+      screens: {
+        '<sm': { max: '399px' },
+      },
+    },
+    plugins: [],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (max-width: 399px) {
+        .\<sm\:underline {
+          text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})

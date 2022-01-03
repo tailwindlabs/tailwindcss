@@ -323,3 +323,12 @@ test('arbitrary values with angle brackets in double quotes', async () => {
   expect(extractions).toContain(`hover:content-["<"]`)
   expect(extractions).toContain(`hover:focus:content-[">"]`)
 })
+
+test('special characters', async () => {
+  const extractions = defaultExtractor(`
+    <div class="<sm:underline md>:font-bold"></div>
+  `)
+
+  expect(extractions).toContain(`<sm:underline`)
+  expect(extractions).toContain(`md>:font-bold`)
+})
