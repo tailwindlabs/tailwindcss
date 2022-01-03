@@ -58,7 +58,7 @@ hr {
 Add the correct text decoration in Chrome, Edge, and Safari.
 */
 
-abbr[title] {
+abbr:where([title]) {
   text-decoration: underline dotted;
 }
 

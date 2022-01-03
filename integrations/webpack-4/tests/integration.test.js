@@ -25,11 +25,11 @@ describe('static build', () => {
   })
 })
 
-describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watcher %p', (env) => {
+describe('watcher', () => {
   test(`classes are generated when the html file changes`, async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
-    let runningProcess = $('webpack --mode=development --watch', { env })
+    let runningProcess = $('webpack --mode=development --watch')
 
     await waitForOutputFileCreation('main.css')
 
@@ -81,7 +81,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
   test(`classes are generated when the tailwind.config.js file changes`, async () => {
     await writeInputFile('index.html', html`<div class="font-bold md:font-medium"></div>`)
 
-    let runningProcess = $('webpack --mode=development --watch', { env })
+    let runningProcess = $('webpack --mode=development --watch')
 
     await waitForOutputFileCreation('main.css')
 
@@ -142,7 +142,7 @@ describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watch
   test(`classes are generated when the index.css file changes`, async () => {
     await writeInputFile('index.html', html`<div class="font-bold btn"></div>`)
 
-    let runningProcess = $('webpack --mode=development --watch', { env })
+    let runningProcess = $('webpack --mode=development --watch')
 
     await waitForOutputFileCreation('main.css')
 

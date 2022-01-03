@@ -1,5 +1,4 @@
 import setupTrackingContext from './lib/setupTrackingContext'
-import setupWatchingContext from './lib/setupWatchingContext'
 import processTailwindFeatures from './processTailwindFeatures'
 import { env } from './lib/sharedState'
 
@@ -14,12 +13,7 @@ module.exports = function tailwindcss(configOrPath) {
           return root
         },
       function (root, result) {
-        let setupContext =
-          env.TAILWIND_MODE === 'watch'
-            ? setupWatchingContext(configOrPath)
-            : setupTrackingContext(configOrPath)
-
-        processTailwindFeatures(setupContext)(root, result)
+        processTailwindFeatures(setupTrackingContext(configOrPath))(root, result)
       },
       env.DEBUG &&
         function (root) {

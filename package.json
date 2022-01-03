@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "3.0.7",
+  "version": "3.0.9",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -25,7 +25,7 @@
     "prepublishOnly": "npm install --force && npm run swcify",
     "style": "eslint .",
     "pretest": "npm run generate:plugin-list",
-    "test": "cross-env TAILWIND_MODE=build jest",
+    "test": "jest",
     "test:integrations": "npm run test --prefix ./integrations",
     "install:integrations": "node scripts/install-integrations.js",
     "posttest": "npm run style",
@@ -43,22 +43,22 @@
     "*.js"
   ],
   "devDependencies": {
-    "@swc/cli": "^0.1.52",
+    "@swc/cli": "^0.1.55",
     "@swc/core": "^1.2.118",
-    "@swc/jest": "^0.2.11",
+    "@swc/jest": "^0.2.15",
     "@swc/register": "^0.1.7",
     "autoprefixer": "^10.4.0",
     "cross-env": "^7.0.3",
-    "cssnano": "^5.0.12",
+    "cssnano": "^5.0.14",
     "esbuild": "^0.14.2",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^27.4.3",
+    "jest": "^27.4.5",
     "jest-diff": "^27.4.2",
-    "postcss": "^8.4.4",
+    "postcss": "^8.4.5",
     "postcss-cli": "^8.3.1",
-    "prettier": "^2.5.0",
+    "prettier": "^2.5.1",
     "rimraf": "^3.0.0"
   },
   "peerDependencies": {
@@ -85,8 +85,7 @@
     "postcss-selector-parser": "^6.0.7",
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
-    "resolve": "^1.20.0",
-    "tmp": "^0.2.1"
+    "resolve": "^1.20.0"
   },
   "browserslist": [
     "> 1%",

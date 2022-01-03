@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [3.0.9] - 2022-01-03
+
+### Fixed
+
+- Improve `DEBUG` flag ([#6797](https://github.com/tailwindlabs/tailwindcss/pull/6797), [#6804](https://github.com/tailwindlabs/tailwindcss/pull/6804))
+- Ensure we can use `<` and `>` characters in modifiers ([#6851](https://github.com/tailwindlabs/tailwindcss/pull/6851))
+- Validate `theme()` works in arbitrary values ([#6852](https://github.com/tailwindlabs/tailwindcss/pull/6852))
+- Properly detect `theme()` value usage in arbitrary properties ([#6854](https://github.com/tailwindlabs/tailwindcss/pull/6854))
+- Improve collapsing of duplicate declarations ([#6856](https://github.com/tailwindlabs/tailwindcss/pull/6856))
+- Remove support for `TAILWIND_MODE=watch` ([#6858](https://github.com/tailwindlabs/tailwindcss/pull/6858))
+
+## [3.0.8] - 2021-12-28
+
+### Fixed
+
+- Reduce specificity of `abbr` rule in preflight ([#6671](https://github.com/tailwindlabs/tailwindcss/pull/6671))
+- Support HSL with hue units in arbitrary values ([#6726](https://github.com/tailwindlabs/tailwindcss/pull/6726))
+- Add `node16-linux-arm64` target for standalone CLI ([#6693](https://github.com/tailwindlabs/tailwindcss/pull/6693))
+
 ## [3.0.7] - 2021-12-17
 
 ### Fixed
@@ -1741,7 +1760,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.7...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.9...HEAD
+[3.0.9]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.8...v3.0.9
+[3.0.8]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.7...v3.0.8
 [3.0.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.6...v3.0.7
 [3.0.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.5...v3.0.6
 [3.0.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.4...v3.0.5

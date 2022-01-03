@@ -351,6 +351,7 @@ test('@applying classes from outside a @layer respects the source order', async 
   await run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
       .baz {
+        text-decoration-line: underline;
         text-decoration-line: none;
       }
 
