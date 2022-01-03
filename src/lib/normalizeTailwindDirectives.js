@@ -1,9 +1,9 @@
 import log from '../util/log'
 
 export default function normalizeTailwindDirectives(root) {
-  const tailwindDirectives = new Set()
-  const layerDirectives = new Set()
-  const applyDirectives = new Set()
+  let tailwindDirectives = new Set()
+  let layerDirectives = new Set()
+  let applyDirectives = new Set()
 
   root.walkAtRules((atRule) => {
     if (atRule.name === 'apply') {
