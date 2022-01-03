@@ -53,9 +53,7 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`, {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $(`vite --port ${PORT}`)
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
@@ -110,9 +108,7 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`, {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $(`vite --port ${PORT}`)
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
@@ -177,9 +173,7 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`, {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $(`vite --port ${PORT}`)
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(

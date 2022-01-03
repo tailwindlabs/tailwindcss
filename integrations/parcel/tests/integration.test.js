@@ -43,9 +43,7 @@ describe.skip('watcher', () => {
       `
     )
 
-    let runningProcess = $('parcel watch ./src/index.html --no-cache', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('parcel watch ./src/index.html --no-cache')
 
     await waitForOutputFileCreation(/index\.\w+\.css$/)
 
@@ -103,9 +101,7 @@ describe.skip('watcher', () => {
       `
     )
 
-    let runningProcess = $('parcel watch ./src/index.html --no-cache', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('parcel watch ./src/index.html --no-cache')
 
     await waitForOutputFileCreation(/index\.\w+\.css$/)
 
@@ -172,9 +168,7 @@ describe.skip('watcher', () => {
       `
     )
 
-    let runningProcess = $('parcel watch ./src/index.html --no-cache', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('parcel watch ./src/index.html --no-cache')
 
     await waitForOutputFileCreation(/index\.\w+\.css$/)
 

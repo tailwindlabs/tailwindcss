@@ -25,7 +25,7 @@
     "prepublishOnly": "npm install --force && npm run swcify",
     "style": "eslint .",
     "pretest": "npm run generate:plugin-list",
-    "test": "cross-env TAILWIND_MODE=build jest",
+    "test": "jest",
     "test:integrations": "npm run test --prefix ./integrations",
     "install:integrations": "node scripts/install-integrations.js",
     "posttest": "npm run style",
@@ -85,8 +85,7 @@
     "postcss-selector-parser": "^6.0.7",
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
-    "resolve": "^1.20.0",
-    "tmp": "^0.2.1"
+    "resolve": "^1.20.0"
   },
   "browserslist": [
     "> 1%",

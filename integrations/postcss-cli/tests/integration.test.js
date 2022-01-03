@@ -32,9 +32,7 @@ describe('watcher', () => {
   test('classes are generated when the html file changes', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
-    let runningProcess = $('postcss ./src/index.css -o ./dist/main.css -w --verbose', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('postcss ./src/index.css -o ./dist/main.css -w --verbose')
     await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
@@ -83,9 +81,7 @@ describe('watcher', () => {
   test('classes are generated when the tailwind.config.js file changes', async () => {
     await writeInputFile('index.html', html`<div class="font-bold md:font-medium"></div>`)
 
-    let runningProcess = $('postcss ./src/index.css -o ./dist/main.css -w --verbose', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('postcss ./src/index.css -o ./dist/main.css -w --verbose')
 
     await runningProcess.onStderr(ready)
 
@@ -145,9 +141,7 @@ describe('watcher', () => {
   test('classes are generated when the index.css file changes', async () => {
     await writeInputFile('index.html', html`<div class="font-bold btn"></div>`)
 
-    let runningProcess = $('postcss ./src/index.css -o ./dist/main.css -w --verbose', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('postcss ./src/index.css -o ./dist/main.css -w --verbose')
 
     await runningProcess.onStderr(ready)
 
