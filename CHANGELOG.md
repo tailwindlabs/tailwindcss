@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure we can use `<` and `>` characters in modifiers ([#6851](https://github.com/tailwindlabs/tailwindcss/pull/6851))
 - Validate `theme()` works in arbitrary values ([#6852](https://github.com/tailwindlabs/tailwindcss/pull/6852))
 - Properly detect `theme()` value usage in arbitrary properties ([#6854](https://github.com/tailwindlabs/tailwindcss/pull/6854))
+- Improve collapsing of duplicate declarations ([#6856](https://github.com/tailwindlabs/tailwindcss/pull/6856))
 
 ## [3.0.8] - 2021-12-28
 
