@@ -8,8 +8,8 @@ export default function normalizeTailwindDirectives(root) {
   root.walkAtRules((atRule) => {
     if (atRule.name === 'apply') {
       applyDirectives.add(atRule)
-      return
     }
+
     if (atRule.name === 'import') {
       if (atRule.params === '"tailwindcss/base"' || atRule.params === "'tailwindcss/base'") {
         atRule.name = 'tailwind'
