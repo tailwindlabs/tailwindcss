@@ -41,31 +41,13 @@ function formatNodes(root) {
   }
 }
 
-let outputStates = new Map()
 async function outputFile(file, contents) {
-  if (outputStates.has(file)) {
-    let { contents: oldContents, stats: oldStats } = outputStates.get(file)
-
-    let stats = await fs.promises.stat(file, { bigint: true })
-
-    // If the modified timestamp changed then we need to write the file. It
-    // could be that we end up with the exact same contents, but we already did
-    // the work internally so just writing it will be faster than comparing
-    // full output files.
-    // If the contents changed, then we also have to write the file.
-    if (stats.mtimeMs === oldStats.mtimeMs && contents === oldContents) {
-      return // Skip writing the file
-    }
+  if (fs.existsSync(file) && (await fs.promises.readFile(file, 'utf8')) === contents) {
+    return // Skip writing the file
   }
 
   // Write the file
   await fs.promises.writeFile(file, contents, 'utf8')
-
-  // Store latest information in the cache
-  outputStates.set(file, {
-    contents,
-    stats: await fs.promises.stat(file, { bigint: true }),
-  })
 }
 
 function help({ message, usage, commands, options }) {
