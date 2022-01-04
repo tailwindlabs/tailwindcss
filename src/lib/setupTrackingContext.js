@@ -119,11 +119,12 @@ export default function setupTrackingContext(configOrPath) {
 
       let contextDependencies = new Set(configDependencies)
 
-      // If there are no @tailwind or @apply rules, we don't consider this CSS file or it's
-      // dependencies to be dependencies of the context. Can reuse the context even if they change.
-      // We may want to think about `@layer` being part of this trigger too, but it's tough
-      // because it's impossible for a layer in one file to end up in the actual @tailwind rule
-      // in another file since independent sources are effectively isolated.
+      // If there are no @tailwind or @apply rules, we don't consider this CSS
+      // file or its dependencies to be dependencies of the context. Can reuse
+      // the context even if they change. We may want to think about `@layer`
+      // being part of this trigger too, but it's tough because it's impossible
+      // for a layer in one file to end up in the actual @tailwind rule in
+      // another file since independent sources are effectively isolated.
       if (tailwindDirectives.size > 0 || applyDirectives.size > 0) {
         // Add current css file as a context dependencies.
         contextDependencies.add(result.opts.from)
