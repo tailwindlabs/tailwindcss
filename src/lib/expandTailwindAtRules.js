@@ -140,17 +140,28 @@ export default function expandTailwindAtRules(context) {
       variants: null,
     }
 
-    // Make sure this file contains Tailwind directives. If not, we can save
-    // a lot of work and bail early. Also we don't have to register our touch
-    // file as a dependency since the output of this CSS does not depend on
-    // the source of any templates. Think Vue <style> blocks for example.
-    root.walkAtRules('tailwind', (rule) => {
-      if (Object.keys(layerNodes).includes(rule.params)) {
-        layerNodes[rule.params] = rule
+    let hasApply = false
+
+    root.walkAtRules((rule) => {
+      // Make sure this file contains Tailwind directives. If not, we can save
+      // a lot of work and bail early. Also we don't have to register our touch
+      // file as a dependency since the output of this CSS does not depend on
+      // the source of any templates. Think Vue <style> blocks for example.
+      if (rule.name === 'tailwind') {
+        if (Object.keys(layerNodes).includes(rule.params)) {
+          layerNodes[rule.params] = rule
+        }
+      }
+
+      // We also want to check for @apply because the user can
+      // apply classes in an isolated environment like CSS
+      // modules and we still need to inject defaults
+      if (rule.name === 'apply') {
+        hasApply = true
       }
     })
 
-    if (Object.values(layerNodes).every((n) => n === null)) {
+    if (Object.values(layerNodes).every((n) => n === null) && !hasApply) {
       return root
     }
 
