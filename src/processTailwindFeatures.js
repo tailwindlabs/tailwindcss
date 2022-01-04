@@ -12,10 +12,11 @@ import { issueFlagNotices } from './featureFlags'
 
 export default function processTailwindFeatures(setupContext) {
   return function (root, result) {
-    let tailwindDirectives = normalizeTailwindDirectives(root)
+    let { tailwindDirectives, applyDirectives } = normalizeTailwindDirectives(root)
 
     let context = setupContext({
       tailwindDirectives,
+      applyDirectives,
       registerDependency(dependency) {
         result.messages.push({
           plugin: 'tailwindcss',

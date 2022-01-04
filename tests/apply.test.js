@@ -775,3 +775,38 @@ it('should not apply unrelated siblings when applying something from within atru
     `)
   })
 })
+
+it('should be possible to apply user css without tailwind directives', () => {
+  let config = {
+    content: [{ raw: html`<div class="foo"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    .bop {
+      color: red;
+    }
+    .bar {
+      background-color: blue;
+    }
+    .foo {
+      @apply absolute bar bop;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .bop {
+        color: red;
+      }
+      .bar {
+        background-color: blue;
+      }
+      .foo {
+        position: absolute;
+        color: red;
+        background-color: blue;
+      }
+    `)
+  })
+})
