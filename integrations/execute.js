@@ -21,9 +21,14 @@ module.exports = function $(command, options = {}) {
   let abortController = new AbortController()
   let cwd = resolveToolRoot()
 
-  let args = command.split(' ')
-  command = args.shift()
-  command = command === 'node' ? command : path.resolve(cwd, 'node_modules', '.bin', command)
+  let args = options.shell
+    ? [command]
+    : (() => {
+        let args = command.split(' ')
+        command = args.shift()
+        command = command === 'node' ? command : path.resolve(cwd, 'node_modules', '.bin', command)
+        return [command, args]
+      })()
 
   let stdoutMessages = []
   let stderrMessages = []
@@ -55,7 +60,7 @@ module.exports = function $(command, options = {}) {
   }, 200)
 
   let runningProcess = new Promise((resolve, reject) => {
-    let child = spawn(command, args, {
+    let child = spawn(...args, {
       ...options,
       env: {
         ...process.env,
