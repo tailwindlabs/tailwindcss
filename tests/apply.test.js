@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { DEFAULTS_LAYER } from '../src/lib/expandTailwindAtRules.js'
 
 import { run, html, css } from './util/run'
 
@@ -806,6 +807,42 @@ it('should be possible to apply user css without tailwind directives', () => {
         position: absolute;
         color: red;
         background-color: blue;
+      }
+    `)
+  })
+})
+
+fit('apply can emit defaults in isolated environments without @tailwind directives', () => {
+  let config = {
+    [DEFAULTS_LAYER]: true,
+    experimental: { optimizeUniversalDefaults: true },
+
+    content: [{ raw: html`<div class="foo"></div>` }],
+  }
+
+  let input = css`
+    .foo {
+      @apply focus:rotate-90;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+      }
+      .foo:focus {
+        --tw-rotate: 90deg;
+        transform: var(--tw-transform);
       }
     `)
   })
