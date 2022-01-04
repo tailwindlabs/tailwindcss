@@ -50,6 +50,17 @@ async function outputFile(file, contents) {
   await fs.promises.writeFile(file, contents, 'utf8')
 }
 
+function drainStdin() {
+  return new Promise((resolve, reject) => {
+    let result = ''
+    process.stdin.on('data', (chunk) => {
+      result += chunk
+    })
+    process.stdin.on('end', () => resolve(result))
+    process.stdin.on('error', (err) => reject(err))
+  })
+}
+
 function help({ message, usage, commands, options }) {
   let indent = 2
 
@@ -364,7 +375,7 @@ async function build() {
     input = args['--input'] = args['_'][1]
   }
 
-  if (input && !fs.existsSync((input = path.resolve(input)))) {
+  if (input && input !== '-' && !fs.existsSync((input = path.resolve(input)))) {
     console.error(`Specified input file ${args['--input']} does not exist.`)
     process.exit(9)
   }
@@ -546,8 +557,8 @@ async function build() {
 
           return Promise.all(
             [
-              fs.promises.writeFile(output, result.css, () => true),
-              result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
+              outputFile(output, result.css),
+              result.map && outputFile(output + '.map', result.map.toString()),
             ].filter(Boolean)
           )
         })
@@ -558,9 +569,21 @@ async function build() {
         })
     }
 
-    let css = input
-      ? fs.readFileSync(path.resolve(input), 'utf8')
-      : '@tailwind base; @tailwind components; @tailwind utilities'
+    let css = await (() => {
+      // Piping in data, let's drain the stdin
+      if (input === '-') {
+        return drainStdin()
+      }
+
+      // Input file has been provided
+      if (input) {
+        return fs.readFileSync(path.resolve(input), 'utf8')
+      }
+
+      // No input file provided, fallback to default atrules
+      return '@tailwind base; @tailwind components; @tailwind utilities'
+    })()
+
     return processCSS(css)
   }
 
@@ -694,9 +717,21 @@ async function build() {
           })
       }
 
-      let css = input
-        ? fs.readFileSync(path.resolve(input), 'utf8')
-        : '@tailwind base; @tailwind components; @tailwind utilities'
+      let css = await (() => {
+        // Piping in data, let's drain the stdin
+        if (input === '-') {
+          return drainStdin()
+        }
+
+        // Input file has been provided
+        if (input) {
+          return fs.readFileSync(path.resolve(input), 'utf8')
+        }
+
+        // No input file provided, fallback to default atrules
+        return '@tailwind base; @tailwind components; @tailwind utilities'
+      })()
+
       let result = await processCSS(css)
       env.DEBUG && console.timeEnd('Finished in')
       return result
