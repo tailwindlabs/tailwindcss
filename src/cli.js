@@ -41,6 +41,33 @@ function formatNodes(root) {
   }
 }
 
+let outputStates = new Map()
+async function outputFile(file, contents) {
+  if (outputStates.has(file)) {
+    let { contents: oldContents, stats: oldStats } = outputStates.get(file)
+
+    let stats = await fs.promises.stat(file, { bigint: true })
+
+    // If the modified timestamp changed then we need to write the file. It
+    // could be that we end up with the exact same contents, but we already did
+    // the work internally so just writing it will be faster than comparing
+    // full output files.
+    // If the contents changed, then we also have to write the file.
+    if (stats.mtimeMs === oldStats.mtimeMs && contents === oldContents) {
+      return // Skip writing the file
+    }
+  }
+
+  // Write the file
+  await fs.promises.writeFile(file, contents, 'utf8')
+
+  // Store latest information in the cache
+  outputStates.set(file, {
+    contents,
+    stats: await fs.promises.stat(file, { bigint: true }),
+  })
+}
+
 function help({ message, usage, commands, options }) {
   let indent = 2
 
@@ -534,6 +561,7 @@ async function build() {
           if (!output) {
             return process.stdout.write(result.css)
           }
+
           return Promise.all(
             [
               fs.promises.writeFile(output, result.css, () => true),
@@ -560,7 +588,6 @@ async function build() {
     let changedContent = []
     let configDependencies = []
     let contextDependencies = new Set()
-    let lastBuiltCSS = ''
     let watcher = null
 
     function refreshConfig() {
@@ -665,20 +692,12 @@ async function build() {
               return process.stdout.write(result.css)
             }
 
-            if (result.css === lastBuiltCSS) {
-              // there is no change on the built CSS
-              // no need to rewrite the output file
-              return
-            }
-
-            await Promise.all(
+            return Promise.all(
               [
-                fs.promises.writeFile(output, result.css, () => true),
-                result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
+                outputFile(output, result.css),
+                result.map && outputFile(output + '.map', result.map.toString()),
               ].filter(Boolean)
             )
-
-            lastBuiltCSS = result.css
           })
           .then(() => {
             let end = process.hrtime.bigint()
