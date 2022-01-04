@@ -41,6 +41,15 @@ function formatNodes(root) {
   }
 }
 
+async function outputFile(file, contents) {
+  if (fs.existsSync(file) && (await fs.promises.readFile(file, 'utf8')) === contents) {
+    return // Skip writing the file
+  }
+
+  // Write the file
+  await fs.promises.writeFile(file, contents, 'utf8')
+}
+
 function help({ message, usage, commands, options }) {
   let indent = 2
 
@@ -534,6 +543,7 @@ async function build() {
           if (!output) {
             return process.stdout.write(result.css)
           }
+
           return Promise.all(
             [
               fs.promises.writeFile(output, result.css, () => true),
@@ -664,10 +674,10 @@ async function build() {
               return process.stdout.write(result.css)
             }
 
-            await Promise.all(
+            return Promise.all(
               [
-                fs.promises.writeFile(output, result.css, () => true),
-                result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
+                outputFile(output, result.css),
+                result.map && outputFile(output + '.map', result.map.toString()),
               ].filter(Boolean)
             )
           })
