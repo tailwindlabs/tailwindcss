@@ -546,8 +546,8 @@ async function build() {
 
           return Promise.all(
             [
-              fs.promises.writeFile(output, result.css, () => true),
-              result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
+              outputFile(output, result.css),
+              result.map && outputFile(output + '.map', result.map.toString()),
             ].filter(Boolean)
           )
         })
