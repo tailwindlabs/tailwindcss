@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix `@apply` in files without `@tailwind` directives ([#6580](https://github.com/tailwindlabs/tailwindcss/pull/6580), [#6875](https://github.com/tailwindlabs/tailwindcss/pull/6875))
 - CLI: avoid unnecessary writes to output files ([#6550](https://github.com/tailwindlabs/tailwindcss/pull/6550))
 
+### Added
+
+- Allow piping data into the CLI ([#6876](https://github.com/tailwindlabs/tailwindcss/pull/6876))
+
 ## [3.0.9] - 2022-01-03
 
 ### Fixed
