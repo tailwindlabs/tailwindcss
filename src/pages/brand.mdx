@@ -46,10 +46,11 @@ These assets are provided for use in situations like articles and video tutorial
     <span className="sr-only">Download logotype</span>
     <div className="max-w-xl">
       <div className="relative" style={{ paddingTop: `${33 / 262 * 100}%` }}>
-        <img className="absolute inset-0 w-full h-full" src={require('@/img/brand/tailwindcss-logotype.svg').default} alt="" width={262} height={33} style={{ margin: 0 }} />
+        <img className="absolute inset-0 w-full h-full block dark:hidden" src={require('@/img/brand/tailwindcss-logotype.svg').default} alt="" width={262} height={33} style={{ margin: 0 }} />
+        <img className="absolute inset-0 w-full h-full hidden dark:block" src={require('@/img/brand/tailwindcss-logotype-white.svg').default} alt="" width={262} height={33} style={{ margin: 0 }} />
       </div>
     </div>
   </a>
 </div>
 
-<a href={require('@/img/brand/tailwindcss-logotype.svg').default} download>Download logotype</a>
+<a href="/brand/tailwindcss-logotype.zip" download>Download logotype</a>
