@@ -2,7 +2,9 @@ import path from 'path'
 import postcss from 'postcss'
 import tailwind from '../../src'
 import { DEFAULTS_LAYER } from '../../src/lib/expandTailwindAtRules'
+
 export * from "./strings"
+export * from "./defaults"
 
 export function run(input, config, plugin = tailwind) {
   let { currentTestName } = expect.getState()
