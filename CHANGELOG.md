@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Preserve case of css variables added by plugins ([#6888](https://github.com/tailwindlabs/tailwindcss/pull/6888))
 - Ignore content files that don't exist ([#6901](https://github.com/tailwindlabs/tailwindcss/pull/6901))
+- Revert apply defaults in isolation ([9fdc391](https://github.com/tailwindlabs/tailwindcss/commit/9fdc391d4ff93e7e350f5ce439060176b1f0162f))
 
 ## [3.0.10] - 2022-01-04
 
