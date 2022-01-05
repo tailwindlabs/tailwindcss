@@ -15,9 +15,9 @@ test('basic utilities', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .rotate-3,
-      .skew-y-6,
-      .scale-x-110 {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -25,22 +25,19 @@ test('basic utilities', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .rotate-3 {
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .skew-y-6 {
         --tw-skew-y: 6deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .scale-x-110 {
         --tw-scale-x: 1.1;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -62,9 +59,9 @@ test('with pseudo-class variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .hover\:scale-x-110,
-      .focus\:rotate-3,
-      .hover\:focus\:skew-y-6 {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -72,22 +69,19 @@ test('with pseudo-class variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .hover\:scale-x-110:hover {
         --tw-scale-x: 1.1;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .focus\:rotate-3:focus {
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .hover\:focus\:skew-y-6:focus:hover {
         --tw-skew-y: 6deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -107,8 +101,9 @@ test('with pseudo-element variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .before\:scale-x-110::before,
-      .after\:rotate-3::after {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -116,20 +111,17 @@ test('with pseudo-element variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .before\:scale-x-110::before {
         content: var(--tw-content);
         --tw-scale-x: 1.1;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .after\:rotate-3::after {
         content: var(--tw-content);
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -149,8 +141,9 @@ test('with multi-class variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .group-hover\:scale-x-110,
-      .peer-focus\:rotate-3 {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -158,18 +151,15 @@ test('with multi-class variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .group:hover .group-hover\:scale-x-110 {
         --tw-scale-x: 1.1;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .peer:focus ~ .peer-focus\:rotate-3 {
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -191,8 +181,9 @@ test('with multi-class pseudo-element variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .group-hover\:before\:scale-x-110::before,
-      .peer-focus\:after\:rotate-3::after {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -200,20 +191,17 @@ test('with multi-class pseudo-element variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .group:hover .group-hover\:before\:scale-x-110::before {
         content: var(--tw-content);
         --tw-scale-x: 1.1;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .peer:focus ~ .peer-focus\:after\:rotate-3::after {
         content: var(--tw-content);
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -239,8 +227,9 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .group-hover\:hover\:before\:scale-x-110::before,
-      .peer-focus\:focus\:after\:rotate-3::after {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -248,20 +237,17 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .group:hover .group-hover\:hover\:before\:scale-x-110:hover::before {
         content: var(--tw-content);
         --tw-scale-x: 1.1;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .peer:focus ~ .peer-focus\:focus\:after\:rotate-3:focus::after {
         content: var(--tw-content);
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -323,17 +309,9 @@ test('with apply', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .foo,
-      .bar::before,
-      .baz::before,
-      span,
-      .media-queries,
-      .a,
-      .b,
-      .c,
-      .a::before,
-      .b::after,
-      .recursive {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -341,54 +319,51 @@ test('with apply', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .foo {
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .bar::before {
         content: var(--tw-content);
         --tw-scale-x: 1.1;
         --tw-scale-y: 1.1;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .baz::before {
         --tw-rotate: 45deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .whats ~ .next > span:hover {
         --tw-skew-x: 6deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       @media (min-width: 768px) {
         .media-queries {
           --tw-rotate: 45deg;
-          transform: var(--tw-transform);
+          transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         }
       }
       .a,
       .b,
       .c {
         --tw-skew-y: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .a,
       .b {
         --tw-rotate: 45deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .a::before,
       .b::after {
         --tw-rotate: 90deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .recursive {
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -436,26 +411,23 @@ test('legacy pseudo-element syntax is supported', async () => {
         --tw-skew-y: 0;
         --tw-scale-x: 1;
         --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       /* --- */
       .a:before {
         --tw-rotate: 45deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .b:after {
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .c:first-line {
         --tw-rotate: 1deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
       .d:first-letter {
         --tw-rotate: 6deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -475,10 +447,10 @@ test('with borders', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .border,
-      .md\:border-2 {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+      *,
+      ::before,
+      ::after {
+        border-color: #e5e7eb;
       }
       /* --- */
       .border {
@@ -511,16 +483,10 @@ test('with shadows', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .shadow,
-      .md\:shadow-xl {
-        --tw-ring-offset-shadow: 0 0 #0000;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-colored: 0 0 #0000;
-      }
-
-      .ring-1 {
-        --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+      *,
+      ::before,
+      ::after {
+        --tw-ring-inset: ;
         --tw-ring-offset-width: 0px;
         --tw-ring-offset-color: #fff;
         --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -574,6 +540,17 @@ test('when no utilities that need the defaults are used', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       /* --- */
     `)
   })
@@ -596,7 +573,7 @@ test('when a utility uses defaults but they do not exist', async () => {
       /* --- */
       .rotate-3 {
         --tw-rotate: 3deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -604,7 +581,7 @@ test('when a utility uses defaults but they do not exist', async () => {
 
 test('selectors are reduced to the lowest possible specificity', async () => {
   let config = {
-    experimental: 'all',
+    experimental: { optimizeUniversalDefaults: true },
     content: [{ raw: html`<div class="foo"></div>` }],
     corePlugins: [],
   }
@@ -720,12 +697,9 @@ test('defaults without @tailwind base', () => {
         --tw-rotate: 0;
         --tw-skew-x: 0;
         --tw-skew-y: 0;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         --tw-scale-x: 1.5;
         --tw-scale-y: 1.5;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -758,12 +732,9 @@ test('defaults and apply without @tailwind base', () => {
         --tw-rotate: 0;
         --tw-skew-x: 0;
         --tw-skew-y: 0;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         --tw-scale-x: 1.5;
         --tw-scale-y: 1.5;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
       }
     `)
   })

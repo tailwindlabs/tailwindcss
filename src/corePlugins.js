@@ -1563,18 +1563,19 @@ export let corePlugins = {
     })
   },
 
-  fontVariantNumeric: ({ addUtilities }) => {
+  fontVariantNumeric: ({ addDefaults, addUtilities }) => {
     let cssFontVariantNumericValue =
       'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)'
 
+    addDefaults('font-variant-numeric', {
+      '--tw-ordinal': ' ',
+      '--tw-slashed-zero': ' ',
+      '--tw-numeric-figure': ' ',
+      '--tw-numeric-spacing': ' ',
+      '--tw-numeric-fraction': ' ',
+    })
+
     addUtilities({
-      '@defaults font-variant-numeric': {
-        '--tw-ordinal': ' ',
-        '--tw-slashed-zero': ' ',
-        '--tw-numeric-figure': ' ',
-        '--tw-numeric-spacing': ' ',
-        '--tw-numeric-fraction': ' ',
-      },
       '.normal-nums': { 'font-variant-numeric': 'normal' },
       '.ordinal': {
         '@defaults font-variant-numeric': {},

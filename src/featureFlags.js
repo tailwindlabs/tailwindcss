@@ -2,7 +2,7 @@ import chalk from 'chalk'
 import log from './util/log'
 
 let defaults = {
-  optimizeUniversalDefaults: true,
+  optimizeUniversalDefaults: false,
 }
 
 let featureFlags = {

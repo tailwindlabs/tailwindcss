@@ -146,9 +146,6 @@ div {
   --tw-skew-y: 0;
   --tw-scale-x: 1;
   --tw-scale-y: 1;
-  --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .shadow-sm,
@@ -162,7 +159,7 @@ div {
 }
 
 .focus\:ring-2 {
-  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+  --tw-ring-inset: ;
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -221,10 +218,10 @@ div {
 .scale-50 {
   --tw-scale-x: 0.5;
   --tw-scale-y: 0.5;
-  transform: var(--tw-transform);
+  transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .transform {
-  transform: var(--tw-transform);
+  transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
   grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
@@ -258,11 +255,11 @@ div {
 }
 .test-apply-font-variant,
 .sm\:tabular-nums {
-  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
-  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
-  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
+  --tw-ordinal: ;
+  --tw-slashed-zero: ;
+  --tw-numeric-figure: ;
+  --tw-numeric-spacing: ;
+  --tw-numeric-fraction: ;
   --tw-font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
     var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
@@ -326,7 +323,7 @@ div {
 .hover\:scale-75:hover {
   --tw-scale-x: 0.75;
   --tw-scale-y: 0.75;
-  transform: var(--tw-transform);
+  transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .hover\:font-bold:hover {
   font-weight: 700;

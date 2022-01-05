@@ -9,8 +9,7 @@ it('should add the divide styles for divide-y and a default border color', () =>
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
       .divide-y > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+        border-color: #e5e7eb;
       }
 
       .divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -31,8 +30,7 @@ it('should add the divide styles for divide-x and a default border color', () =>
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
       .divide-x > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+        border-color: #e5e7eb;
       }
 
       .divide-x > :not([hidden]) ~ :not([hidden]) {
@@ -53,8 +51,7 @@ it('should add the divide styles for divide-y-reverse and a default border color
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
       .divide-y-reverse > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+        border-color: #e5e7eb;
       }
 
       .divide-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -73,8 +70,7 @@ it('should add the divide styles for divide-x-reverse and a default border color
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
       .divide-x-reverse > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+        border-color: #e5e7eb;
       }
 
       .divide-x-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -94,8 +90,7 @@ it('should only inject the base styles once if we use divide and border at the s
     expect(result.css).toMatchCss(css`
       .divide-y > *,
       .border-r {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+        border-color: #e5e7eb;
       }
 
       .divide-y > :not([hidden]) ~ :not([hidden]) {
