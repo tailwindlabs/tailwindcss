@@ -4,6 +4,7 @@ import { generateRules } from './generateRules'
 import bigSign from '../util/bigSign'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
+import { flagEnabled } from '../featureFlags'
 
 let env = sharedState.env
 
@@ -156,7 +157,7 @@ export default function expandTailwindAtRules(context) {
       // We also want to check for @apply because the user can
       // apply classes in an isolated environment like CSS
       // modules and we still need to inject defaults
-      if (rule.name === 'apply') {
+      if (rule.name === 'apply' && flagEnabled(context.tailwindConfig, 'optimizeUniversalDefaults')) {
         hasApply = true
       }
     })

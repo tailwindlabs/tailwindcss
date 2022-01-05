@@ -847,3 +847,41 @@ it('apply can emit defaults in isolated environments without @tailwind directive
     `)
   })
 })
+
+it('apply does not emit defaults in isolated environments without optimizeUniversalDefaults', () => {
+  let config = {
+    [DEFAULTS_LAYER]: true,
+    experimental: { optimizeUniversalDefaults: false },
+    content: [{ raw: html`<div class="foo"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+
+    .foo {
+      @apply focus:rotate-90;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      *,::before,::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+      }
+      .foo:focus {
+        --tw-rotate: 90deg;
+        transform: var(--tw-transform);
+      }
+    `)
+  })
+})
