@@ -91,13 +91,14 @@ let steps = [
 export default function TailwindCli({ code }) {
   return (
     <InstallationLayout>
-      <div className="relative z-10 prose mb-16 max-w-3xl dark:prose-dark">
+      <div id="content" className="relative z-10 prose mb-16 max-w-3xl dark:prose-dark">
+        <h3 className="sr-only">Tailwind CLI</h3>
         <p>
           The simplest and fastest way to get up and running with Tailwind CSS from scratch is with
           the Tailwind CLI tool.
         </p>
       </div>
-      <Steps level={3} steps={steps} code={code} />
+      <Steps level={4} steps={steps} code={code} />
       {/*
         <Cta
           label="Read the documentation"

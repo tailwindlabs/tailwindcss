@@ -120,7 +120,7 @@ export function InstallationLayout({ children }) {
           </p>
         </div>
       </header>
-      <section id="content" className="mb-16 relative">
+      <section className="mb-16 relative">
         <div className="relative z-10">
           <h2
             data-docsearch-ignore

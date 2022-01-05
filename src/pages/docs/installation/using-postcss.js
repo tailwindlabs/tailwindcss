@@ -116,13 +116,14 @@ let steps = [
 export default function UsingPostCss({ code }) {
   return (
     <InstallationLayout>
-      <div className="relative z-10 prose mb-16 max-w-3xl dark:prose-dark">
+      <div id="content" className="relative z-10 prose mb-16 max-w-3xl dark:prose-dark">
+        <h3 className="sr-only">Using PostCSS</h3>
         <p>
           Installing Tailwind CSS as a PostCSS plugin is the most seamless way to integrate it with
           build tools like webpack, Rollup, Vite, and Parcel.
         </p>
       </div>
-      <Steps level={3} steps={steps} code={code} />
+      <Steps level={4} steps={steps} code={code} />
       <Cta
         label="Explore our framework guides"
         href="/docs/installation/framework-guides"
