@@ -8,7 +8,8 @@ let steps = [
     body: () => (
       <p>
         Start by creating a new React project with{' '}
-        <a href="https://create-react-app.dev/docs/getting-started">Create React App v5.0+</a> if you don't have one already set up.
+        <a href="https://create-react-app.dev/docs/getting-started">Create React App v5.0+</a> if
+        you don't have one already set up.
       </p>
     ),
     code: {
@@ -124,8 +125,8 @@ export function getStaticProps() {
 
 UsingCRA.layoutProps = {
   meta: {
-    title: 'Installation: Tailwind CSS with Create React App',
-    section: 'Getting Started',
+    title: 'Install Tailwind CSS with Create React App',
+    section: 'Installation',
   },
   Layout: DocumentationLayout,
   allowOverflow: false,

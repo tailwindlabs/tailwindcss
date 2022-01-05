@@ -174,8 +174,8 @@ export function getStaticProps() {
 
 UsingGatsby.layoutProps = {
   meta: {
-    title: 'Installation: Tailwind CSS with Gatsby',
-    section: 'Getting Started',
+    title: 'Install Tailwind CSS with Gatsby',
+    section: 'Installation',
   },
   Layout: DocumentationLayout,
   allowOverflow: false,

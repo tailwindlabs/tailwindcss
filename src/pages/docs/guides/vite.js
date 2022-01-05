@@ -150,8 +150,8 @@ export function getStaticProps() {
 
 UsingVite.layoutProps = {
   meta: {
-    title: 'Installation: Tailwind CSS with Vue 3 and Vite',
-    section: 'Getting Started',
+    title: 'Install Tailwind CSS with Vue 3 and Vite',
+    section: 'Installation',
   },
   Layout: DocumentationLayout,
   allowOverflow: false,

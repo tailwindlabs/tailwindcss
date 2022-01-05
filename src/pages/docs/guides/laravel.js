@@ -154,8 +154,8 @@ export function getStaticProps() {
 
 UsingLaravel.layoutProps = {
   meta: {
-    title: 'Installation: Tailwind CSS with Laravel',
-    section: 'Getting Started',
+    title: 'Install Tailwind CSS with Laravel',
+    section: 'Installation',
   },
   Layout: DocumentationLayout,
   allowOverflow: false,

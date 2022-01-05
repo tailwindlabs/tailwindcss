@@ -193,8 +193,8 @@ export function getStaticProps() {
 
 UsingNextJS.layoutProps = {
   meta: {
-    title: 'Installation: Tailwind CSS with Nuxt.js',
-    section: 'Getting Started',
+    title: 'Install Tailwind CSS with Nuxt.js',
+    section: 'Installation',
   },
   Layout: DocumentationLayout,
   allowOverflow: false,
