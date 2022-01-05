@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-// import { DEFAULTS_LAYER } from '../src/lib/expandTailwindAtRules.js'
+import { DEFAULTS_LAYER } from '../src/lib/expandTailwindAtRules.js'
 
 import { run, html, css } from './util/run'
 
@@ -812,7 +812,6 @@ it('should be possible to apply user css without tailwind directives', () => {
   })
 })
 
-/*
 it('apply can emit defaults in isolated environments without @tailwind directives', () => {
   let config = {
     [DEFAULTS_LAYER]: true,
@@ -848,4 +847,3 @@ it('apply can emit defaults in isolated environments without @tailwind directive
     `)
   })
 })
-*/
