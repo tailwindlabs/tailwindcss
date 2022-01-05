@@ -157,7 +157,10 @@ export default function expandTailwindAtRules(context) {
       // We also want to check for @apply because the user can
       // apply classes in an isolated environment like CSS
       // modules and we still need to inject defaults
-      if (rule.name === 'apply' && flagEnabled(context.tailwindConfig, 'optimizeUniversalDefaults')) {
+      if (
+        rule.name === 'apply' &&
+        flagEnabled(context.tailwindConfig, 'optimizeUniversalDefaults')
+      ) {
         hasApply = true
       }
     })

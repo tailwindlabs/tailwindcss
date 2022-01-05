@@ -866,7 +866,9 @@ it('apply does not emit defaults in isolated environments without optimizeUniver
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      *,::before,::after {
+      *,
+      ::before,
+      ::after {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
