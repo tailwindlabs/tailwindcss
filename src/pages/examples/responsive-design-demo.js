@@ -1,6 +1,6 @@
 export default function ReponsiveDesignDemo() {
   return (
-    <div class="flex items-center justify-center p-8 w-screen h-screen">
+    <div className="flex items-center justify-center p-8 w-screen h-screen">
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-xl overflow-hidden sm:max-w-2xl ring-1 ring-gray-900/5">
         <div className="flex flex-col sm:flex-row">
           <div className="sm:shrink-0">
