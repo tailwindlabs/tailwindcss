@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Preserve case of css variables added by plugins ([#6888](https://github.com/tailwindlabs/tailwindcss/pull/6888))
+- Ignore content files that don't exist ([#6901](https://github.com/tailwindlabs/tailwindcss/pull/6901))
 
 ## [3.0.10] - 2022-01-04
 
