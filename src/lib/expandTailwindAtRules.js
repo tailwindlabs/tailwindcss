@@ -4,7 +4,6 @@ import { generateRules } from './generateRules'
 import bigSign from '../util/bigSign'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
-import { flagEnabled } from '../featureFlags'
 
 let env = sharedState.env
 
