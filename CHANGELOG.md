@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Optimize universal selectors by default ([#6906](https://github.com/tailwindlabs/tailwindcss/pull/6906))
 
 ## [3.0.11] - 2022-01-05
 
