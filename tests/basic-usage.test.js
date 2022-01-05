@@ -109,3 +109,31 @@ test('per-plugin colors with the same key can differ when using a custom colors 
     `)
   })
 })
+
+it('fasly config values still work', () => {
+  let config = {
+    content: [{ raw: html`<div class="inset-0"></div>` }],
+    theme: {
+      inset: {
+        0: 0,
+      },
+    },
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .inset-0 {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+    `)
+  })
+})
