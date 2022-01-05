@@ -435,7 +435,14 @@ function trackModified(files, fileModifiedMap) {
     let parsed = url.parse(file)
     let pathname = parsed.hash ? parsed.href.replace(parsed.hash, '') : parsed.href
     pathname = parsed.search ? pathname.replace(parsed.search, '') : pathname
-    let newModified = fs.statSync(decodeURIComponent(pathname)).mtimeMs
+    let newModified = fs.statSync(decodeURIComponent(pathname), { throwIfNoEntry: false })?.mtimeMs
+    if (!newModified) {
+      // It could happen that a file is passed in that doesn't exist. E.g.:
+      // postcss-cli will provide you a fake path when reading from stdin. This
+      // path then looks like /path-to-your-project/stdin In that case we just
+      // want to ignore it and don't track changes at all.
+      continue
+    }
 
     if (!fileModifiedMap.has(file) || newModified > fileModifiedMap.get(file)) {
       changed = true
