@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 test('arbitrary values', () => {
   let config = {
@@ -27,6 +27,7 @@ it('should be possible to differentiate between decoration utilities', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .decoration-\[\#ccc\] {
         text-decoration-color: #ccc;
       }
@@ -49,6 +50,7 @@ it('should support modifiers for arbitrary values that contain the separator', (
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .hover\:bg-\[url\(\'https\:\/\/github\.com\/tailwindlabs\.png\'\)\]:hover {
         background-image: url('https://github.com/tailwindlabs.png');
       }
@@ -79,6 +81,7 @@ it('should support arbitrary values for various background utilities', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .bg-red-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity));
@@ -118,7 +121,9 @@ it('should not generate any css if an unknown typehint is used', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    return expect(result.css).toMatchFormattedCss(css``)
+    return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+    `)
   })
 })
 
@@ -127,6 +132,7 @@ it('should handle unknown typehints', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .w-\[length\:12px\] {
         width: 12px;
       }
@@ -139,7 +145,10 @@ it('should convert _ to spaces', () => {
   // into an issue with `\2c ` escapes. If we use `\2c ` then JS complains
   // about strict mode. But `\\2c ` is not what it expected.
   function css(templates) {
-    return templates.join('')
+    return `
+      ${defaults}\n
+      ${templates.join('')}
+    `
   }
 
   let config = {
@@ -244,6 +253,7 @@ it('should not convert escaped underscores with spaces', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .content-\[\'snake\\_case\'\] {
         --tw-content: 'snake_case';
         content: var(--tw-content);
@@ -260,7 +270,9 @@ it('should warn and not generate if arbitrary values are ambiguous', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    return expect(result.css).toMatchFormattedCss(css``)
+    return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+    `)
   })
 })
 
@@ -273,6 +285,7 @@ it('should support colons in URLs', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .bg-\[url\(\'https\:\/\/www\.spacejam\.com\/1996\/img\/bg_stars\.gif\'\)\] {
         background-image: url('https://www.spacejam.com/1996/img/bg_stars.gif');
       }
@@ -289,6 +302,7 @@ it('should support unescaped underscores in URLs', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(`
+      ${defaults}
       .bg-\\[url\\(\\'brown_potato\\.jpg\\'\\)\\2c _url\\(\\'red_tomato\\.png\\'\\)\\] {
         background-image: url('brown_potato.jpg'), url('red_tomato.png');
       }
@@ -309,6 +323,7 @@ it('should be possible to read theme values in arbitrary values (without quotes)
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .w-\[theme\(spacing\.1\)\] {
         width: calc(1 * 0.25rem);
       }
@@ -332,6 +347,7 @@ it('should be possible to read theme values in arbitrary values (with quotes)', 
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .w-\[theme\(\'spacing\.1\'\)\] {
         width: calc(1 * 0.25rem);
       }

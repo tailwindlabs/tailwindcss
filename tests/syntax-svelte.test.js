@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { run } from './util/run'
+import { run, defaults } from './util/run'
 
 let css = String.raw
 
@@ -19,6 +19,7 @@ test('it detects svelte based on the file extension', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
+      ${defaults}
       .bg-red-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity));
@@ -65,6 +66,7 @@ test('using raw with svelte extension', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
+      ${defaults}
       .bg-red-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity));

@@ -1,4 +1,4 @@
-import { run, html, css } from '../util/run'
+import { run, html, css, defaults } from '../util/run'
 
 test('opacity variables are given to colors defined as closures', () => {
   let config = {
@@ -32,6 +32,7 @@ test('opacity variables are given to colors defined as closures', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .from-primary {
         --tw-gradient-from: rgb(31, 31, 31);
         --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(31, 31, 31, 0));

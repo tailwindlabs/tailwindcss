@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { DEFAULTS_LAYER } from '../src/lib/expandTailwindAtRules.js'
 
 import { run, html, css, defaults } from './util/run'
 
@@ -284,6 +283,7 @@ test('@apply classes from outside a @layer', async () => {
 
   await run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .font-bold {
         font-weight: 700;
       }
@@ -351,6 +351,7 @@ test('@applying classes from outside a @layer respects the source order', async 
 
   await run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .baz {
         text-decoration-line: underline;
         text-decoration-line: none;
@@ -419,6 +420,7 @@ it('should remove duplicate properties when using apply with similar properties'
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .foo {
         position: absolute;
         top: 50%;
@@ -462,6 +464,7 @@ it('should apply all the definitions of a class', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .foo {
         position: relative;
         --tw-aspect-w: 1;
@@ -543,6 +546,7 @@ it('should not throw when the selector is different (but contains the base parti
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .bg-gray-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(107 114 128 / var(--tw-bg-opacity));
@@ -641,6 +645,7 @@ it('rules with vendor prefixes are still separate when optimizing defaults rules
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       [type='range']::-moz-range-thumb {
         border-color: #e5e7eb;
       }
@@ -678,6 +683,7 @@ it('should be possible to apply user css', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .foo {
         color: red;
       }
@@ -749,6 +755,7 @@ it('should not apply unrelated siblings when applying something from within atru
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .foo {
         font-weight: bold;
         color: green;
@@ -797,6 +804,7 @@ it('should be possible to apply user css without tailwind directives', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .bop {
         color: red;
       }
@@ -814,7 +822,6 @@ it('should be possible to apply user css without tailwind directives', () => {
 
 it('apply can emit defaults in isolated environments without @tailwind directives', () => {
   let config = {
-    [DEFAULTS_LAYER]: true,
     experimental: { optimizeUniversalDefaults: true },
 
     content: [{ raw: html`<div class="foo"></div>` }],
@@ -829,6 +836,7 @@ it('apply can emit defaults in isolated environments without @tailwind directive
   // TODO: Do we want this to work?
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .foo {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -850,7 +858,6 @@ it('apply can emit defaults in isolated environments without @tailwind directive
 
 it('apply does not emit defaults in isolated environments without optimizeUniversalDefaults', () => {
   let config = {
-    [DEFAULTS_LAYER]: true,
     experimental: { optimizeUniversalDefaults: false },
     content: [{ raw: html`<div class="foo"></div>` }],
     corePlugins: { preflight: false },

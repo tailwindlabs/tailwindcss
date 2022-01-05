@@ -1,5 +1,5 @@
 import { normalizeConfig } from '../src/util/normalizeConfig'
-import { run, css } from './util/run'
+import { run, css, defaults } from './util/run'
 import resolveConfig from '../src/public/resolve-config'
 
 it.each`
@@ -10,6 +10,7 @@ it.each`
 `('should normalize content $config', ({ config }) => {
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .text-center {
         text-align: center;
       }
@@ -25,6 +26,7 @@ it.each`
 `('should normalize safelist $config', ({ config }) => {
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .text-center {
         text-align: center;
       }
@@ -42,6 +44,7 @@ it.each`
 `('should normalize extractors $config', ({ config }) => {
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .font-bold {
         font-weight: 700;
       }
@@ -82,6 +85,7 @@ it('should still be possible to use the "old" v2 config', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .text-center {
         text-align: center;
       }

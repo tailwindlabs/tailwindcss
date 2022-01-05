@@ -1,4 +1,4 @@
-import { css } from "./strings"
+import { css } from './strings'
 
 export const defaults = css`
   *,

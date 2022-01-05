@@ -332,6 +332,8 @@ it('should keep `@supports` rules inside `@layer`s', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .test {
         --tw-test: 1;
       }

@@ -1,10 +1,11 @@
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 test('options are not required', () => {
   let config = { content: [{ raw: html`<div class="container"></div>` }] }
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .container {
         width: 100%;
       }
@@ -49,6 +50,7 @@ test('screens can be passed explicitly', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .container {
         width: 100%;
       }
@@ -78,6 +80,7 @@ test('screens are ordered ascending by min-width', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .container {
         width: 100%;
       }
@@ -111,6 +114,7 @@ test('screens are deduplicated by min-width', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .container {
         width: 100%;
       }
@@ -140,6 +144,7 @@ test('the container can be centered by default', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .container {
         width: 100%;
         margin-right: auto;
@@ -186,6 +191,7 @@ test('horizontal padding can be included by default', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .container {
         width: 100%;
         padding-right: 2rem;
@@ -243,6 +249,7 @@ test('responsive horizontal padding can be included by default', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .container {
         width: 100%;
         padding-right: 1rem;
@@ -292,6 +299,7 @@ test('setting all options at once', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .container {
         width: 100%;
         margin-right: auto;
@@ -325,6 +333,7 @@ test('container can use variants', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       @media (min-width: 1024px) {
         .lg\:hover\:container:hover {
           width: 100%;

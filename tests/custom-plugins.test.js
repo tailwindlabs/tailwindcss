@@ -27,6 +27,7 @@ test('plugins can create utilities with object syntax', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-object-fill {
         object-fit: fill;
       }
@@ -68,6 +69,7 @@ test('plugins can create utilities with arrays of objects', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-object-fill {
         object-fit: fill;
       }
@@ -116,6 +118,7 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-object-fill {
         object-fit: fill;
       }
@@ -163,6 +166,7 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-object-fill {
         object-fit: fill;
       }
@@ -202,6 +206,7 @@ test('plugins can create components with object syntax', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .btn-blue {
         background-color: blue;
         color: white;
@@ -333,6 +338,7 @@ test('plugins can create components with raw PostCSS nodes', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .btn-blue {
         background-color: blue;
         color: white;
@@ -386,6 +392,7 @@ test('plugins can create components with mixed object styles and raw PostCSS nod
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .btn-blue {
         background-color: blue;
         color: white;
@@ -434,6 +441,7 @@ test('plugins can create components with media queries with object syntax', () =
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-container {
         width: 100%;
       }
@@ -495,6 +503,7 @@ test('media queries can be defined multiple times using objects-in-array syntax'
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-container {
         width: 100%;
       }
@@ -549,6 +558,7 @@ test('plugins can create nested rules', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .btn-blue {
         background-color: blue;
         color: white;
@@ -589,6 +599,7 @@ test('plugins can create rules with escaped selectors', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-top-1\/4 {
         top: 25%;
       }
@@ -632,6 +643,7 @@ test('plugins can access the current config', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-container {
         width: 100%;
       }
@@ -677,6 +689,7 @@ test('plugins can check if corePlugins are enabled', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .test {
         text-color: false;
         opacity: true;
@@ -735,6 +748,7 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .btn {
         border-radius: 0.25rem;
       }
@@ -783,6 +797,7 @@ test('plugins can add multiple sets of utilities and components', () => {
 
   return run('@tailwind components; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .card {
         padding: 1rem;
         border-radius: 0.25rem;
@@ -819,6 +834,7 @@ test('plugins respect prefix and important options by default when adding utilit
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .tw-custom-rotate-90 {
         transform: rotate(90deg) !important;
       }
@@ -844,6 +860,7 @@ test('when important is a selector it is used to scope utilities instead of addi
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       #app .tw-custom-rotate-90 {
         transform: rotate(90deg);
       }
@@ -868,6 +885,7 @@ test('when important is a selector it scopes all selectors in a rule, even thoug
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       #app .custom-rotate-90,
       #app .custom-rotate-1\/4 {
         transform: rotate(90deg);
@@ -893,6 +911,7 @@ test('important utilities are not made double important when important option is
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-rotate-90 {
         transform: rotate(90deg) !important;
       }
@@ -917,6 +936,7 @@ test("component declarations respect the 'prefix' option by default", () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .tw-btn-blue {
         background-color: blue;
       }
@@ -951,6 +971,7 @@ test('all selectors in a rule are prefixed', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .tw-btn-blue,
       .tw-btn-red {
         padding: 10px;
@@ -979,6 +1000,7 @@ test("component declarations can optionally ignore 'prefix' option", () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .btn-blue {
         background-color: blue;
       }
@@ -1003,6 +1025,7 @@ test("component declarations are not affected by the 'important' option", () => 
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .btn-blue {
         background-color: blue;
       }
@@ -1030,6 +1053,7 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .tw-btn-blue {
         background-color: blue;
       }
@@ -1057,6 +1081,7 @@ test('prefix can optionally be ignored for utilities', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-rotate-90 {
         transform: rotate(90deg);
       }
@@ -1084,6 +1109,7 @@ test('important can optionally be ignored for utilities', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-rotate-90 {
         transform: rotate(90deg);
       }
@@ -1111,6 +1137,7 @@ test('prefix will prefix all classes in a selector', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .tw-btn-blue .tw-w-1\/4 > h1.tw-text-xl + a .tw-bar {
         background-color: blue;
       }
@@ -1146,6 +1173,7 @@ test('plugins can be provided as an object with a handler function', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .custom-object-fill {
         object-fit: fill;
       }
@@ -1194,6 +1222,7 @@ test('plugins can provide a config but no handler', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .tw-custom-object-fill {
         object-fit: fill;
       }
@@ -1523,6 +1552,7 @@ test('keyframes are not escaped', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       @keyframes abc {
         25.001% {
           color: black;

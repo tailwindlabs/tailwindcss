@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { html, run, css } from './util/run'
+import { html, run, css, defaults } from './util/run'
 
 test('basic usage', () => {
   let config = {
@@ -46,6 +46,7 @@ test('all plugins are executed that match a candidate', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .bg-green-light {
         --tw-bg-opacity: 1;
         background-color: rgb(0 128 0 / var(--tw-bg-opacity));
@@ -98,6 +99,7 @@ test('per-plugin colors with the same key can differ when using a custom colors 
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .bg-theme {
         --tw-bg-opacity: 1;
         background-color: rgb(255 0 0 / var(--tw-bg-opacity));

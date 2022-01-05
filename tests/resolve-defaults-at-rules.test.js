@@ -1,5 +1,4 @@
 import { run, html, css } from './util/run'
-import { DEFAULTS_LAYER } from '../src/lib/expandTailwindAtRules'
 
 test('basic utilities', async () => {
   let config = {
@@ -26,6 +25,7 @@ test('basic utilities', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
+
       /* --- */
       .rotate-3 {
         --tw-rotate: 3deg;
@@ -76,6 +76,7 @@ test('with pseudo-class variants', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
+
       /* --- */
       .hover\:scale-x-110:hover {
         --tw-scale-x: 1.1;
@@ -124,6 +125,7 @@ test('with pseudo-element variants', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
+
       /* --- */
       .before\:scale-x-110::before {
         content: var(--tw-content);
@@ -168,6 +170,7 @@ test('with multi-class variants', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
+
       /* --- */
       .group:hover .group-hover\:scale-x-110 {
         --tw-scale-x: 1.1;
@@ -212,6 +215,7 @@ test('with multi-class pseudo-element variants', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
+
       /* --- */
       .group:hover .group-hover\:before\:scale-x-110::before {
         content: var(--tw-content);
@@ -262,6 +266,7 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
+
       /* --- */
       .group:hover .group-hover\:hover\:before\:scale-x-110:hover::before {
         content: var(--tw-content);
@@ -348,6 +353,7 @@ test('with apply', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
+
       /* --- */
       .foo {
         --tw-rotate: 3deg;
@@ -506,6 +512,7 @@ test('with borders', async () => {
       ::after {
         border-color: #e5e7eb;
       }
+
       /* --- */
       .border {
         border-width: 1px;
@@ -549,6 +556,7 @@ test('with shadows', async () => {
         --tw-shadow: 0 0 #0000;
         --tw-shadow-colored: 0 0 #0000;
       }
+
       /* --- */
       .shadow {
         --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -605,6 +613,7 @@ test('when no utilities that need the defaults are used', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
+
       /* --- */
     `)
   })
@@ -735,7 +744,6 @@ test('defaults without @tailwind base', () => {
     experimental: { optimizeUniversalDefaults: true },
     content: [{ raw: html`<div class="scale-150"></div>` }],
     corePlugins: { preflight: false },
-    [DEFAULTS_LAYER]: true,
   }
 
   // No @tailwind base directive means that we need to generate the defaults for each of the utility classes in that context
@@ -768,7 +776,6 @@ test('defaults and apply without @tailwind base', () => {
     experimental: { optimizeUniversalDefaults: true },
     content: [{ raw: html`<div class="my-card"></div>` }],
     corePlugins: { preflight: false },
-    [DEFAULTS_LAYER]: true,
   }
 
   // No @tailwind base directive means that we need to generate the defaults for each of the utility classes in that context

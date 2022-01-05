@@ -1,4 +1,4 @@
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 test('opacity', () => {
   let config = {
@@ -25,6 +25,7 @@ test('opacity', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
+      ${defaults}
       .divide-black > :not([hidden]) ~ :not([hidden]) {
         border-color: #000;
       }
@@ -77,6 +78,7 @@ test('colors defined as functions work when opacity plugins are disabled', () =>
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
+      ${defaults}
       .divide-primary > :not([hidden]) ~ :not([hidden]) {
         border-color: rgb(var(--color-primary));
       }

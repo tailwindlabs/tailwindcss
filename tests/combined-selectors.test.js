@@ -66,6 +66,7 @@ it('should generate the partial selector, if only a partial is used (utilities l
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       :root {
         font-weight: bold;
       }
