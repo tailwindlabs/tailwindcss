@@ -199,7 +199,7 @@ div {
 .test-apply-font-variant {
   --tw-ordinal: ordinal;
   --tw-numeric-spacing: tabular-nums;
-  font-variant-numeric: var(--tw-font-variant-numeric);
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 .custom-component {
   background: #123456;
@@ -429,7 +429,7 @@ div {
   }
   .sm\:tabular-nums {
     --tw-numeric-spacing: tabular-nums;
-    font-variant-numeric: var(--tw-font-variant-numeric);
+    font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   }
   .sm\:custom-util {
     background: #abcdef;
