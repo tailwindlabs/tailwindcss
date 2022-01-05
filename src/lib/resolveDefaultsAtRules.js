@@ -113,12 +113,12 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
         }
       }
 
-      if (selectorGroups.size === 0) {
-        universal.remove()
-        continue
-      }
-
       if (flagEnabled(tailwindConfig, 'optimizeUniversalDefaults')) {
+        if (selectorGroups.size === 0) {
+          universal.remove()
+          continue
+        }
+
         for (let [, selectors] of selectorGroups) {
           let universalRule = postcss.rule()
 

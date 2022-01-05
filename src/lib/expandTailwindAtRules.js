@@ -141,8 +141,6 @@ export default function expandTailwindAtRules(context) {
       variants: null,
     }
 
-    let hasApply = false
-
     root.walkAtRules((rule) => {
       // Make sure this file contains Tailwind directives. If not, we can save
       // a lot of work and bail early. Also we don't have to register our touch
@@ -153,19 +151,9 @@ export default function expandTailwindAtRules(context) {
           layerNodes[rule.params] = rule
         }
       }
-
-      // We also want to check for @apply because the user can
-      // apply classes in an isolated environment like CSS
-      // modules and we still need to inject defaults
-      if (
-        rule.name === 'apply' &&
-        flagEnabled(context.tailwindConfig, 'optimizeUniversalDefaults')
-      ) {
-        hasApply = true
-      }
     })
 
-    if (Object.values(layerNodes).every((n) => n === null) && !hasApply) {
+    if (Object.values(layerNodes).every((n) => n === null)) {
       return root
     }
 
