@@ -34,7 +34,7 @@ test('custom user-land utilities', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-          *,
+      *,
       ::before,
       ::after {
         --tw-translate-x: 0;

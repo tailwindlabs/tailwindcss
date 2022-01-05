@@ -138,7 +138,7 @@ it('should add the divide styles for divide-y-reverse and a default border color
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
-          *,
+      *,
       ::before,
       ::after {
         --tw-translate-x: 0;
@@ -201,7 +201,7 @@ it('should add the divide styles for divide-x-reverse and a default border color
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
-          *,
+      *,
       ::before,
       ::after {
         --tw-translate-x: 0;
@@ -264,7 +264,7 @@ it('should only inject the base styles once if we use divide and border at the s
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
     expect(result.css).toMatchCss(css`
-          *,
+      *,
       ::before,
       ::after {
         --tw-translate-x: 0;

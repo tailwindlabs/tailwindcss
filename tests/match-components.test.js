@@ -56,6 +56,11 @@ it('should be possible to matchComponents', () => {
         --tw-pinch-zoom: ;
         --tw-scroll-snap-strictness: proximity;
         border-color: #e5e7eb;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
         --tw-ring-inset: ;
         --tw-ring-offset-width: 0px;
         --tw-ring-offset-color: #fff;
@@ -82,13 +87,6 @@ it('should be possible to matchComponents', () => {
         --tw-backdrop-opacity: ;
         --tw-backdrop-saturate: ;
         --tw-backdrop-sepia: ;
-      }
-
-      .shadow {
-        --tw-ring-offset-shadow: 0 0 #0000;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-colored: 0 0 #0000;
       }
 
       .card-\[\#0088cc\] {

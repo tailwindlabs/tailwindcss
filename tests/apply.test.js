@@ -425,7 +425,9 @@ it('should remove duplicate properties when using apply with similar properties'
         left: 50%;
         --tw-translate-x: -50%;
         --tw-translate-y: -50%;
-        transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+          scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -838,9 +840,9 @@ it('apply can emit defaults in isolated environments without @tailwind directive
       }
       .foo:focus {
         --tw-rotate: 90deg;
-        transform: translate(var(--tw-translate-x),var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+          scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -913,9 +915,9 @@ it('apply does not emit defaults in isolated environments without optimizeUniver
       }
       .foo:focus {
         --tw-rotate: 90deg;
-        transform: translate(var(--tw-translate-x),var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+          scaleY(var(--tw-scale-y));
       }
     `)
   })
