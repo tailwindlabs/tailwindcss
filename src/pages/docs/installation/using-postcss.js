@@ -117,7 +117,7 @@ export default function UsingPostCss({ code }) {
   return (
     <InstallationLayout>
       <div id="content" className="relative z-10 prose mb-16 max-w-3xl dark:prose-dark">
-        <h3 className="sr-only">Using PostCSS</h3>
+        <h3 className="sr-only">Installing Tailwind CSS as a PostCSS plugin</h3>
         <p>
           Installing Tailwind CSS as a PostCSS plugin is the most seamless way to integrate it with
           build tools like webpack, Rollup, Vite, and Parcel.
