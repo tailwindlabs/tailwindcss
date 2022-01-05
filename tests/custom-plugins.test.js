@@ -1892,3 +1892,22 @@ test('animation values are joined when retrieved using the theme function', () =
     `)
   })
 })
+
+test('custom properties are not converted to kebab-case when added to base layer', () => {
+  let config = {
+    content: [],
+    plugins: [
+      function ({ addBase }) {
+        addBase({
+          ':root': {
+            '--colors-primaryThing-500': '0, 0, 255',
+          },
+        })
+      },
+    ],
+  }
+
+  return run('@tailwind base', config).then((result) => {
+    expect(result.css).toContain(`--colors-primaryThing-500: 0, 0, 255;`)
+  })
+})
