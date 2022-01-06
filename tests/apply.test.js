@@ -645,7 +645,6 @@ it('rules with vendor prefixes are still separate when optimizing defaults rules
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       [type='range']::-moz-range-thumb {
         border-color: #e5e7eb;
       }
@@ -804,7 +803,6 @@ it('should be possible to apply user css without tailwind directives', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .bop {
         color: red;
       }
@@ -842,6 +840,7 @@ it('should be possible to apply a class from another rule with multiple selector
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .c {
         text-decoration-line: underline;
       }
@@ -872,6 +871,7 @@ it('should be possible to apply a class from another rule with multiple selector
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       span,
       .b {
         text-decoration-line: underline;
@@ -906,6 +906,7 @@ it('should be possible to apply a class from another rule with multiple selector
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       #a,
       .b {
         text-decoration-line: underline;
@@ -934,7 +935,6 @@ it('apply can emit defaults in isolated environments without @tailwind directive
   // TODO: Do we want this to work?
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .foo {
         --tw-translate-x: 0;
         --tw-translate-y: 0;

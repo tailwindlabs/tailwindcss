@@ -208,7 +208,9 @@ test('a color', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
+      ${defaults({
+        defaultBorderColor: 'currentColor',
+      })}
     `)
   })
 })

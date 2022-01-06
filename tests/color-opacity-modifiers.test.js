@@ -142,7 +142,9 @@ test('function colors are supported', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
+      ${defaults({
+        defaultBorderColor: 'currentColor',
+      })}
       .bg-blue\/50 {
         background-color: rgba(var(--colors-blue), 0.5);
       }

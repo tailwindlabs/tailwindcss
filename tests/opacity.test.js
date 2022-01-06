@@ -78,7 +78,9 @@ test('colors defined as functions work when opacity plugins are disabled', () =>
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      ${defaults}
+      ${defaults({
+        defaultBorderColor: 'currentColor',
+      })}
       .divide-primary > :not([hidden]) ~ :not([hidden]) {
         border-color: rgb(var(--color-primary));
       }

@@ -32,7 +32,9 @@ test('opacity variables are given to colors defined as closures', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
+      ${defaults({
+        defaultBorderColor: 'currentColor',
+      })}
       .from-primary {
         --tw-gradient-from: rgb(31, 31, 31);
         --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(31, 31, 31, 0));

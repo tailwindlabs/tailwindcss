@@ -274,7 +274,10 @@ test('the default config can be removed by using an empty presets key in a prese
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
+      ${defaults({
+        defaultBorderColor: 'currentColor',
+        defaultRingColor: 'rgb(147 197 253 / 0.5)',
+      })}
       .min-h-primary {
         min-height: 48px;
       }
