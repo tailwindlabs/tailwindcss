@@ -812,6 +812,104 @@ it('should be possible to apply user css without tailwind directives', () => {
   })
 })
 
+it('should be possible to apply a class from another rule with multiple selectors (2 classes)', () => {
+  let config = {
+    content: [{ raw: html`<div class="c"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .a,
+      .b {
+        @apply underline;
+      }
+
+      .c {
+        @apply b;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .c {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+it('should be possible to apply a class from another rule with multiple selectors (1 class, 1 tag)', () => {
+  let config = {
+    content: [{ raw: html`<div class="c"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    @layer utilities {
+      span,
+      .b {
+        @apply underline;
+      }
+
+      .c {
+        @apply b;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      span,
+      .b {
+        text-decoration-line: underline;
+      }
+
+      .c {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+it('should be possible to apply a class from another rule with multiple selectors (1 class, 1 id)', () => {
+  let config = {
+    content: [{ raw: html`<div class="c"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      #a,
+      .b {
+        @apply underline;
+      }
+
+      .c {
+        @apply b;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      #a,
+      .b {
+        text-decoration-line: underline;
+      }
+
+      .c {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
 /*
 it('apply can emit defaults in isolated environments without @tailwind directives', () => {
   let config = {

@@ -89,24 +89,37 @@ function getClasses(selector) {
   return parser.transformSync(selector)
 }
 
-function extractCandidates(node) {
+function extractCandidates(node, state = { containsNonOnDemandable: false }, depth = 0) {
   let classes = []
 
+  // Handle normal rules
   if (node.type === 'rule') {
     for (let selector of node.selectors) {
       let classCandidates = getClasses(selector)
       // At least one of the selectors contains non-"on-demandable" candidates.
-      if (classCandidates.length === 0) return []
+      if (classCandidates.length === 0) {
+        state.containsNonOnDemandable = true
+      }
 
-      classes = [...classes, ...classCandidates]
+      for (let classCandidate of classCandidates) {
+        classes.push(classCandidate)
+      }
     }
-    return classes
   }
 
-  if (node.type === 'atrule') {
+  // Handle at-rules (which contains nested rules)
+  else if (node.type === 'atrule') {
     node.walkRules((rule) => {
-      classes = [...classes, ...rule.selectors.flatMap((selector) => getClasses(selector))]
+      for (let classCandidate of rule.selectors.flatMap((selector) =>
+        getClasses(selector, state, depth + 1)
+      )) {
+        classes.push(classCandidate)
+      }
     })
+  }
+
+  if (depth === 0) {
+    return [state.containsNonOnDemandable || classes.length === 0, classes]
   }
 
   return classes
@@ -115,13 +128,16 @@ function extractCandidates(node) {
 function withIdentifiers(styles) {
   return parseStyles(styles).flatMap((node) => {
     let nodeMap = new Map()
-    let candidates = extractCandidates(node)
+    let [containsNonOnDemandableSelectors, candidates] = extractCandidates(node)
 
-    // If this isn't "on-demandable", assign it a universal candidate.
-    if (candidates.length === 0) {
-      return [['*', node]]
+    // If this isn't "on-demandable", assign it a universal candidate to always include it.
+    if (containsNonOnDemandableSelectors) {
+      candidates.unshift('*')
     }
 
+    // However, it could be that it also contains "on-demandable" candidates.
+    // E.g.: `span, .foo {}`, in that case it should still be possible to use
+    // `@apply foo` for example.
     return candidates.map((c) => {
       if (!nodeMap.has(node)) {
         nodeMap.set(node, node)
