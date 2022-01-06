@@ -47,7 +47,7 @@
     "@swc/core": "^1.2.118",
     "@swc/jest": "^0.2.15",
     "@swc/register": "^0.1.7",
-    "autoprefixer": "^10.4.0",
+    "autoprefixer": "^10.4.1",
     "cross-env": "^7.0.3",
     "cssnano": "^5.0.14",
     "esbuild": "^0.14.2",
@@ -82,7 +82,7 @@
     "postcss-js": "^4.0.0",
     "postcss-load-config": "^3.1.0",
     "postcss-nested": "5.0.6",
-    "postcss-selector-parser": "^6.0.7",
+    "postcss-selector-parser": "^6.0.8",
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
     "resolve": "^1.20.0"

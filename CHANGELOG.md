@@ -9,15 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Optimize universal selectors by default ([#6906](https://github.com/tailwindlabs/tailwindcss/pull/6906))
+- Allow use of falsy values in theme config ([#6917](https://github.com/tailwindlabs/tailwindcss/pull/6917))
+- Ensure we can apply classes that are grouped with non-class selectors ([#6922](https://github.com/tailwindlabs/tailwindcss/pull/6922))
+- Improve standalone CLI compatibility on Linux by switching to the `linuxstatic` build target ([#6914](https://github.com/tailwindlabs/tailwindcss/pull/6914))
+- Optimize universal selector and default handling ([#6906](https://github.com/tailwindlabs/tailwindcss/pull/6906))
+
 
 ## [3.0.11] - 2022-01-05
 
 ### Fixed
 
-- Preserve case of css variables added by plugins ([#6888](https://github.com/tailwindlabs/tailwindcss/pull/6888))
-- Ignore content files that don't exist ([#6901](https://github.com/tailwindlabs/tailwindcss/pull/6901))
-- Revert apply defaults in isolation ([9fdc391](https://github.com/tailwindlabs/tailwindcss/commit/9fdc391d4ff93e7e350f5ce439060176b1f0162f))
+- Preserve casing of CSS variables added by plugins ([#6888](https://github.com/tailwindlabs/tailwindcss/pull/6888))
+- Ignore content paths that are passed in but don't actually exist ([#6901](https://github.com/tailwindlabs/tailwindcss/pull/6901))
+- Revert change that applies Tailwind's defaults in isolated environments like CSS modules ([9fdc391](https://github.com/tailwindlabs/tailwindcss/commit/9fdc391d4ff93e7e350f5ce439060176b1f0162f))
 
 ## [3.0.10] - 2022-01-04
 

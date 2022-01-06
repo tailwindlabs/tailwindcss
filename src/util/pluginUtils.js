@@ -185,7 +185,7 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
   // Find first matching type
   for (let type of [].concat(types)) {
     let result = typeMap[type](modifier, options, { tailwindConfig })
-    if (result) return [result, type]
+    if (result !== undefined) return [result, type]
   }
 
   return []
