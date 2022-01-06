@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Allow use of falsy values in theme config ([#6917](https://github.com/tailwindlabs/tailwindcss/pull/6917))
+- Ensure we can apply classes defined with non-"on-demandable" selectors ([#6922](https://github.com/tailwindlabs/tailwindcss/pull/6922))
 
 
 ## [3.0.11] - 2022-01-05
