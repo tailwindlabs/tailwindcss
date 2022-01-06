@@ -101,6 +101,8 @@ Now instead of `dark:{class}` classes being applied based on `prefers-color-sche
 </html>
 ```
 
+ If you've set <a href="/docs/configuration#prefix">a prefix</a> in your Tailwind config, be sure to add that to the `dark` class. For example, if you have a prefix of `tw-`, you'll need to use the `tw-dark` class to enable dark mode.
+
 How you add the `dark` class to the `html` element is up to you, but a common approach is to use a bit of JS that reads a preference from somewhere (like `localStorage`) and updates the DOM accordingly.
 
 Here's a simple example of how you can support light mode, dark mode, as well as respecting the operating system preference:
