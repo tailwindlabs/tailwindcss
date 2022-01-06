@@ -59,10 +59,25 @@ export default function FrameworkGuides() {
           },
         ].map(({ name, description, logo: Logo, slug }) => (
           <li key={name} className="relative flex flex-row-reverse">
-            <div className="ml-6 flex-auto">
+            <div className="peer group ml-6 flex-auto">
               <h4 className="mb-2 leading-6 text-gray-900 font-semibold dark:text-gray-200">
                 <Link href={`/docs/guides/${slug}`}>
-                  <a className="before:absolute before:inset-0">{name}</a>
+                  <a className="before:absolute before:-inset-3 before:rounded-2xl">
+                    {name}
+                    <svg
+                      viewBox="0 0 3 6"
+                      className="ml-3 w-auto h-1.5 overflow-visible inline -mt-px text-gray-400 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+                    >
+                      <path
+                        d="M0 0L3 3L0 6"
+                        fill="none"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </a>
                 </Link>
               </h4>
               <p className="text-sm leading-6 text-gray-700 dark:text-gray-400">{description}</p>
@@ -70,6 +85,7 @@ export default function FrameworkGuides() {
             <div className="flex-none w-14 h-14 rounded-full bg-white ring-1 ring-gray-900/5 shadow flex items-center justify-center overflow-hidden dark:bg-gray-800 dark:highlight-white/5">
               <Logo />
             </div>
+            <div className="absolute -z-10 -inset-3 rounded-2xl bg-gray-50 dark:bg-gray-800/50 opacity-0 peer-hover:opacity-100" />
           </li>
         ))}
       </ul>

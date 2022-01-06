@@ -174,16 +174,32 @@ export function InstallationLayout({ children }) {
                 light={item.icon.light}
                 dark={item.icon.dark}
               />
-              <div className="flex-auto ml-6">
+              <div className="peer group flex-auto ml-6">
                 <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-200">
                   <Link href={item.href}>
-                    <a className="before:absolute before:inset-0">{item.title}</a>
+                    <a className="before:absolute before:-inset-3 before:rounded-2xl sm:before:-inset-4">
+                      {item.title}
+                      <svg
+                        viewBox="0 0 3 6"
+                        className="ml-3 w-auto h-1.5 overflow-visible inline -mt-px text-gray-400 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+                      >
+                        <path
+                          d="M0 0L3 3L0 6"
+                          fill="none"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </a>
                   </Link>
                 </h3>
                 <div className="prose prose-sm text-gray-600 dark:prose-dark">
                   <item.body />
                 </div>
               </div>
+              <div className="absolute -z-10 -inset-3 rounded-2xl bg-gray-50 dark:bg-gray-800/50 opacity-0 peer-hover:opacity-100 sm:-inset-4" />
             </li>
           ))}
         </ul>

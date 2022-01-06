@@ -24,7 +24,13 @@ function Card({ title, superTitle, href, color, body, image, button }) {
               {title}
             </>
           ) : (
-            <a href={href} className="before:absolute before:inset-0">
+            <a
+              href={href}
+              className={clsx(
+                'before:absolute before:inset-0',
+                !button && 'hover:text-gray-600 dark:hover:text-white'
+              )}
+            >
               <span className={clsx('mb-1 block text-sm leading-6', color)}>{superTitle}</span>
               {title}
             </a>
@@ -341,10 +347,26 @@ export default function Resources() {
               },
             ].map(({ title, href, description, icon, className }) => (
               <li key={title} className="relative flex flex-row-reverse">
-                <div className="flex-auto ml-6">
+                <div className="peer group flex-auto ml-6">
                   <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-200">
-                    <a href={href} className="before:absolute before:inset-0">
+                    <a
+                      href={href}
+                      className="before:absolute before:-inset-3 before:rounded-2xl sm:before:-inset-4"
+                    >
                       {title}
+                      <svg
+                        viewBox="0 0 3 6"
+                        className="ml-3 w-auto h-1.5 overflow-visible inline -mt-px text-gray-400 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+                      >
+                        <path
+                          d="M0 0L3 3L0 6"
+                          fill="none"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </a>
                   </h3>
                   <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
@@ -353,12 +375,13 @@ export default function Resources() {
                 </div>
                 <div
                   className={clsx(
-                    'flex-none w-16 h-16 p-[0.1875rem] rounded-full shadow overflow-hidden',
+                    'flex-none w-16 h-16 p-[0.1875rem] rounded-full shadow overflow-hidden pointer-events-none',
                     className
                   )}
                 >
                   {icon}
                 </div>
+                <div className="absolute -z-10 -inset-3 rounded-2xl bg-gray-50 dark:bg-gray-800/50 opacity-0 peer-hover:opacity-100 sm:-inset-4" />
               </li>
             ))}
           </ul>
