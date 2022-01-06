@@ -72,47 +72,6 @@ function extractApplyCandidates(params) {
   return [candidates, false]
 }
 
-function partitionApplyParents(root) {
-  let applyParents = new Set()
-
-  root.walkAtRules('apply', (rule) => {
-    applyParents.add(rule.parent)
-  })
-
-  for (let rule of applyParents) {
-    let nodeGroups = []
-    let lastGroup = []
-
-    for (let node of rule.nodes) {
-      if (node.type === 'atrule' && node.name === 'apply') {
-        if (lastGroup.length > 0) {
-          nodeGroups.push(lastGroup)
-          lastGroup = []
-        }
-        nodeGroups.push([node])
-      } else {
-        lastGroup.push(node)
-      }
-    }
-
-    if (lastGroup.length > 0) {
-      nodeGroups.push(lastGroup)
-    }
-
-    if (nodeGroups.length === 1) {
-      continue
-    }
-
-    for (let group of [...nodeGroups].reverse()) {
-      let newParent = rule.clone({ nodes: [] })
-      newParent.append(group)
-      rule.after(newParent)
-    }
-
-    rule.remove()
-  }
-}
-
 function processApply(root, context) {
   let applyCandidates = new Set()
 
@@ -343,7 +302,6 @@ function processApply(root, context) {
 
 export default function expandApplyAtRules(context) {
   return (root) => {
-    partitionApplyParents(root)
     processApply(root, context)
   }
 }
