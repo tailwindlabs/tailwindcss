@@ -179,6 +179,8 @@ export default function expandTailwindAtRules(context) {
       getClassCandidates(transformer(content), extractor, candidates, seen)
     }
 
+    env.DEBUG && console.timeEnd('Reading changed files')
+
     // ---
 
     // Generate the actual CSS
