@@ -52,14 +52,8 @@ test('@apply', () => {
       .selectors-group {
         @apply group-hover:text-center lg:group-hover:text-left;
       }
-      /* TODO: This works but the generated CSS is unnecessarily verbose. */
       .complex-utilities {
         @apply ordinal tabular-nums focus:diagonal-fractions shadow-lg hover:shadow-xl;
-      }
-      .basic-nesting-parent {
-        .basic-nesting-child {
-          @apply font-bold hover:font-normal;
-        }
       }
       .use-base-only-a {
         @apply font-bold;
@@ -907,6 +901,196 @@ it('should be possible to apply a class from another rule with multiple selector
         text-decoration-line: underline;
       }
     `)
+  })
+})
+
+describe('multiple instances', () => {
+  it('should be possible to apply multiple "instances" of the same class', () => {
+    let config = {
+      content: [{ raw: html`` }],
+      plugins: [],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      .a {
+        @apply b;
+      }
+
+      .b {
+        @apply uppercase;
+      }
+
+      .b {
+        color: red;
+      }
+    `
+
+    return run(input, config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .a {
+          text-transform: uppercase;
+          color: red;
+        }
+
+        .b {
+          text-transform: uppercase;
+          color: red;
+        }
+      `)
+    })
+  })
+
+  it('should be possible to apply a combination of multiple "instances" of the same class', () => {
+    let config = {
+      content: [{ raw: html`` }],
+      plugins: [],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      .a {
+        @apply b;
+      }
+
+      .b {
+        @apply uppercase;
+        color: red;
+      }
+    `
+
+    return run(input, config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .a {
+          text-transform: uppercase;
+          color: red;
+        }
+
+        .b {
+          text-transform: uppercase;
+          color: red;
+        }
+      `)
+    })
+  })
+
+  it('should generate the same output, even if it was used in a @layer', () => {
+    let config = {
+      content: [{ raw: html`<div class="a b"></div>` }],
+      plugins: [],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind components;
+
+      @layer components {
+        .a {
+          @apply b;
+        }
+
+        .b {
+          @apply uppercase;
+          color: red;
+        }
+      }
+    `
+
+    return run(input, config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .a {
+          text-transform: uppercase;
+          color: red;
+        }
+
+        .b {
+          text-transform: uppercase;
+          color: red;
+        }
+      `)
+    })
+  })
+
+  it('should be possible to apply a combination of multiple "instances" of the same class (defined in a layer)', () => {
+    let config = {
+      content: [{ raw: html`<div class="a b"></div>` }],
+      plugins: [],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind components;
+
+      @layer components {
+        .a {
+          color: red;
+          @apply b;
+          color: blue;
+        }
+
+        .b {
+          @apply text-green-500;
+          text-decoration: underline;
+        }
+      }
+    `
+
+    return run(input, config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .a {
+          color: red;
+          --tw-text-opacity: 1;
+          color: rgb(34 197 94 / var(--tw-text-opacity));
+          text-decoration: underline;
+          color: blue;
+        }
+
+        .b {
+          --tw-text-opacity: 1;
+          color: rgb(34 197 94 / var(--tw-text-opacity));
+          text-decoration: underline;
+        }
+      `)
+    })
+  })
+
+  it('should properly maintain the order', () => {
+    let config = {
+      content: [{ raw: html`` }],
+      plugins: [],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      h2 {
+        @apply text-xl;
+        @apply lg:text-3xl;
+        @apply sm:text-2xl;
+      }
+    `
+
+    return run(input, config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        h2 {
+          font-size: 1.25rem;
+          line-height: 1.75rem;
+        }
+
+        @media (min-width: 1024px) {
+          h2 {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+          }
+        }
+
+        @media (min-width: 640px) {
+          h2 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+          }
+        }
+      `)
+    })
   })
 })
 

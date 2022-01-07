@@ -122,7 +122,6 @@
     text-align: left;
   }
 }
-/* TODO: This works but the generated CSS is unnecessarily verbose. */
 .complex-utilities {
   --tw-ordinal: ordinal;
   --tw-numeric-spacing: tabular-nums;
@@ -143,14 +142,6 @@
 .complex-utilities:focus {
   --tw-numeric-fraction: diagonal-fractions;
   font-variant-numeric: var(--tw-font-variant-numeric);
-}
-.basic-nesting-parent {
-  .basic-nesting-child {
-    font-weight: 700;
-  }
-  .basic-nesting-child:hover {
-    font-weight: 400;
-  }
 }
 .use-base-only-a {
   font-weight: 700;

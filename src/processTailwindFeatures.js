@@ -14,6 +14,8 @@ export default function processTailwindFeatures(setupContext) {
   return function (root, result) {
     let { tailwindDirectives, applyDirectives } = normalizeTailwindDirectives(root)
 
+    detectNesting()(root, result)
+
     let context = setupContext({
       tailwindDirectives,
       applyDirectives,
@@ -37,7 +39,6 @@ export default function processTailwindFeatures(setupContext) {
 
     issueFlagNotices(context.tailwindConfig)
 
-    detectNesting(context)(root, result)
     expandTailwindAtRules(context)(root, result)
     expandApplyAtRules(context)(root, result)
     evaluateTailwindFunctions(context)(root, result)
