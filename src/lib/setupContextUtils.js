@@ -20,58 +20,6 @@ import log from '../util/log'
 import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 
-function partitionRules(root) {
-  if (!root.walkAtRules) return [root]
-
-  let applyParents = new Set()
-  let rules = []
-
-  root.walkAtRules('apply', (rule) => {
-    applyParents.add(rule.parent)
-  })
-
-  if (applyParents.size === 0) {
-    rules.push(root)
-  }
-
-  for (let rule of applyParents) {
-    let nodeGroups = []
-    let lastGroup = []
-
-    for (let node of rule.nodes) {
-      if (node.type === 'atrule' && node.name === 'apply') {
-        if (lastGroup.length > 0) {
-          nodeGroups.push(lastGroup)
-          lastGroup = []
-        }
-        nodeGroups.push([node])
-      } else {
-        lastGroup.push(node)
-      }
-    }
-
-    if (lastGroup.length > 0) {
-      nodeGroups.push(lastGroup)
-    }
-
-    if (nodeGroups.length === 1) {
-      rules.push(rule)
-      continue
-    }
-
-    for (let group of [...nodeGroups].reverse()) {
-      let clone = rule.clone({ nodes: [] })
-      clone.append(group)
-      rules.unshift(clone)
-      rule.after(clone)
-    }
-
-    rule.remove()
-  }
-
-  return rules
-}
-
 function parseVariantFormatString(input) {
   if (input.includes('{')) {
     if (!isBalanced(input)) throw new Error(`Your { and } are unbalanced.`)
@@ -284,9 +232,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           context.candidateRuleMap.set(identifier, [])
         }
 
-        context.candidateRuleMap
-          .get(identifier)
-          .push(...partitionRules(rule).map((rule) => [{ sort: offset, layer: 'user' }, rule]))
+        context.candidateRuleMap.get(identifier).push([{ sort: offset, layer: 'user' }, rule])
       }
     },
     addBase(base) {
@@ -300,7 +246,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push(...partitionRules(rule).map((rule) => [{ sort: offset, layer: 'base' }, rule]))
+          .push([{ sort: offset, layer: 'base' }, rule])
       }
     },
     /**
@@ -321,12 +267,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push(
-            ...partitionRules(rule).map((rule) => [
-              { sort: offsets.base++, layer: 'defaults' },
-              rule,
-            ])
-          )
+          .push([{ sort: offsets.base++, layer: 'defaults' }, rule])
       }
     },
     addComponents(components, options) {
@@ -348,12 +289,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push(
-            ...partitionRules(rule).map((rule) => [
-              { sort: offsets.components++, layer: 'components', options },
-              rule,
-            ])
-          )
+          .push([{ sort: offsets.components++, layer: 'components', options }, rule])
       }
     },
     addUtilities(utilities, options) {
@@ -375,12 +311,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push(
-            ...partitionRules(rule).map((rule) => [
-              { sort: offsets.utilities++, layer: 'utilities', options },
-              rule,
-            ])
-          )
+          .push([{ sort: offsets.utilities++, layer: 'utilities', options }, rule])
       }
     },
     matchUtilities: function (utilities, options) {
