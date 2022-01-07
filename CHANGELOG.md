@@ -17,10 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure we can apply classes that are grouped with non-class selectors ([#6922](https://github.com/tailwindlabs/tailwindcss/pull/6922))
 - Improve standalone CLI compatibility on Linux by switching to the `linuxstatic` build target ([#6914](https://github.com/tailwindlabs/tailwindcss/pull/6914))
 - Ensure `@apply` works consistently with or without `@layer` ([#6938](https://github.com/tailwindlabs/tailwindcss/pull/6938))
-- Only emit defaults when using base layer ([#6906](https://github.com/tailwindlabs/tailwindcss/pull/6906))
-- Emit plugin defaults regardless of usage ([#6906](https://github.com/tailwindlabs/tailwindcss/pull/6906))
-- Move default border color back to preflight ([#6906](https://github.com/tailwindlabs/tailwindcss/pull/6906))
-- Change `experimental.optimizeUniversalDefaults` to only work with `@tailwind base` ([#6906](https://github.com/tailwindlabs/tailwindcss/pull/6906))
+- Only emit defaults when using base layer ([#6926](https://github.com/tailwindlabs/tailwindcss/pull/6926))
+- Emit plugin defaults regardless of usage ([#6926](https://github.com/tailwindlabs/tailwindcss/pull/6926))
+- Move default border color back to preflight ([#6926](https://github.com/tailwindlabs/tailwindcss/pull/6926))
+- Change `experimental.optimizeUniversalDefaults` to only work with `@tailwind base` ([#6926](https://github.com/tailwindlabs/tailwindcss/pull/6926))
 
 ## [3.0.11] - 2022-01-05
 
