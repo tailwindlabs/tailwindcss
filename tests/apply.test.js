@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-// import { DEFAULTS_LAYER } from '../src/lib/expandTailwindAtRules.js'
 
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 test('@apply', () => {
   let config = {
@@ -419,7 +418,9 @@ it('should remove duplicate properties when using apply with similar properties'
         left: 50%;
         --tw-translate-x: -50%;
         --tw-translate-y: -50%;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+          scaleY(var(--tw-scale-y));
       }
     `)
   })
@@ -633,14 +634,6 @@ it('rules with vendor prefixes are still separate when optimizing defaults rules
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      [type='range']::-moz-range-thumb {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
-      }
-      .border {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
-      }
       input[type='range']::-moz-range-thumb {
         border-width: 1px;
       }
@@ -1094,10 +1087,8 @@ describe('multiple instances', () => {
   })
 })
 
-/*
 it('apply can emit defaults in isolated environments without @tailwind directives', () => {
   let config = {
-    [DEFAULTS_LAYER]: true,
     experimental: { optimizeUniversalDefaults: true },
 
     content: [{ raw: html`<div class="foo"></div>` }],
@@ -1111,23 +1102,40 @@ it('apply can emit defaults in isolated environments without @tailwind directive
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      .foo {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-      }
       .foo:focus {
         --tw-rotate: 90deg;
-        transform: var(--tw-transform);
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+          scaleY(var(--tw-scale-y));
       }
     `)
   })
 })
-*/
+
+it('apply does not emit defaults in isolated environments without optimizeUniversalDefaults', () => {
+  let config = {
+    experimental: { optimizeUniversalDefaults: false },
+    content: [{ raw: html`<div class="foo"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+
+    .foo {
+      @apply focus:rotate-90;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+      .foo:focus {
+        --tw-rotate: 90deg;
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+          skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+          scaleY(var(--tw-scale-y));
+      }
+    `)
+  })
+})

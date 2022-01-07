@@ -1,4 +1,4 @@
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 it('should be possible to matchComponents', () => {
   let config = {
@@ -41,12 +41,7 @@ it('should be possible to matchComponents', () => {
 
   return run('@tailwind base; @tailwind components; @tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      .shadow {
-        --tw-ring-offset-shadow: 0 0 #0000;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-colored: 0 0 #0000;
-      }
+      ${defaults}
 
       .card-\[\#0088cc\] {
         color: #0088cc;

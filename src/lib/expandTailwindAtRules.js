@@ -129,8 +129,6 @@ function buildStylesheet(rules, context) {
   return returnValue
 }
 
-export const DEFAULTS_LAYER = Symbol('defaults-layer')
-
 export default function expandTailwindAtRules(context) {
   return (root) => {
     let layerNodes = {
@@ -139,8 +137,6 @@ export default function expandTailwindAtRules(context) {
       utilities: null,
       variants: null,
     }
-
-    // let hasApply = false
 
     root.walkAtRules((rule) => {
       // Make sure this file contains Tailwind directives. If not, we can save
@@ -152,13 +148,6 @@ export default function expandTailwindAtRules(context) {
           layerNodes[rule.params] = rule
         }
       }
-
-      // We also want to check for @apply because the user can
-      // apply classes in an isolated environment like CSS
-      // modules and we still need to inject defaults
-      // if (rule.name === 'apply') {
-      //   hasApply = true
-      // }
     })
 
     if (Object.values(layerNodes).every((n) => n === null)) {
@@ -214,18 +203,7 @@ export default function expandTailwindAtRules(context) {
     // Replace any Tailwind directives with generated CSS
 
     if (layerNodes.base) {
-      layerNodes.base.before(cloneNodes([...baseNodes], layerNodes.base.source))
-    }
-
-    // @defaults rules are unconditionally added first to ensure that
-    // using any utility that relies on defaults will work even when
-    // compiled in an isolated environment like CSS modules
-    if (context.tailwindConfig[DEFAULTS_LAYER] !== false) {
-      if (layerNodes.base) {
-        layerNodes.base.after(cloneNodes([...defaultNodes], root.source))
-      } else {
-        root.prepend(cloneNodes([...defaultNodes], root.source))
-      }
+      layerNodes.base.before(cloneNodes([...baseNodes, ...defaultNodes], layerNodes.base.source))
     }
 
     if (layerNodes.base) {

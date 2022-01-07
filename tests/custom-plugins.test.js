@@ -1,5 +1,5 @@
 import createPlugin from '../src/public/create-plugin'
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 test('plugins can create utilities with object syntax', () => {
   let config = {
@@ -245,6 +245,8 @@ test('plugins can add base styles with object syntax', () => {
       button {
         font-family: inherit;
       }
+
+      ${defaults}
     `)
   })
 })
@@ -285,6 +287,7 @@ test('plugins can add base styles with raw PostCSS nodes', () => {
       button {
         font-family: inherit;
       }
+      ${defaults}
     `)
   })
 })

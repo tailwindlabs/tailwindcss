@@ -213,7 +213,9 @@ it('should convert _ to spaces', () => {
 
       .drop-shadow-\\[0px_1px_3px_black\\] {
         --tw-drop-shadow: drop-shadow(0px 1px 3px black);
-        filter: var(--tw-filter);
+        filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale)
+          var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia)
+          var(--tw-drop-shadow);
       }
 
       .content-\\[_hello_world_\\] {

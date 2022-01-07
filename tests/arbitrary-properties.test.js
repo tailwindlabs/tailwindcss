@@ -1,4 +1,4 @@
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 test('basic arbitrary properties', () => {
   let config = {
@@ -18,6 +18,8 @@ test('basic arbitrary properties', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .\[paint-order\:markers\] {
         paint-order: markers;
       }
@@ -43,6 +45,8 @@ test('arbitrary properties with modifiers', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       @media (prefers-color-scheme: dark) {
         @media (min-width: 1024px) {
           .dark\:lg\:hover\:\[paint-order\:markers\]:hover {
@@ -72,6 +76,8 @@ test('arbitrary properties are sorted after utilities', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .content-none {
         --tw-content: none;
         content: var(--tw-content);
@@ -104,6 +110,8 @@ test('using CSS variables', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .\[--my-var\:auto\] {
         --my-var: auto;
       }
@@ -129,6 +137,8 @@ test('using underscores as spaces', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .\[--my-var\:2px_4px\] {
         --my-var: 2px 4px;
       }
@@ -154,6 +164,8 @@ test('using the important modifier', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .\!\[--my-var\:2px_4px\] {
         --my-var: 2px 4px !important;
       }
@@ -179,6 +191,8 @@ test('colons are allowed in quotes', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .\[content\:\'foo\:bar\'\] {
         content: 'foo:bar';
       }
@@ -204,6 +218,8 @@ test('colons are allowed in braces', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .\[background-image\:url\(http\:\/\/example\.com\/picture\.jpg\)\] {
         background-image: url(http://example.com/picture.jpg);
       }
@@ -228,7 +244,9 @@ test('invalid class', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css``)
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+    `)
   })
 })
 
@@ -249,7 +267,9 @@ test('invalid arbitrary property', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css``)
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+    `)
   })
 })
 
@@ -270,7 +290,9 @@ test('invalid arbitrary property 2', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css``)
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+    `)
   })
 })
 
@@ -288,6 +310,8 @@ it('should be possible to read theme values in arbitrary properties (without quo
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .\[--a\:theme\(colors\.blue\.500\)\] {
         --a: #3b82f6;
       }
@@ -312,6 +336,8 @@ it('should be possible to read theme values in arbitrary properties (with quotes
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .\[--a\:theme\(\'colors\.blue\.500\'\)\] {
         --a: #3b82f6;
       }

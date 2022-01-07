@@ -122,11 +122,6 @@ test('experimental universal selector improvements (child selectors: divide-y)',
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .divide-y > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
-      }
-
       .resize {
         resize: both;
       }
@@ -154,11 +149,6 @@ test('experimental universal selector improvements (hover:divide-y)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .hover\:divide-y > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
-      }
-
       .resize {
         resize: both;
       }
@@ -187,11 +177,6 @@ test('experimental universal selector improvements (#app important)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .divide-y > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
-      }
-
       .shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;

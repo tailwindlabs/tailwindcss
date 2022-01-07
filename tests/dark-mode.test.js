@@ -1,4 +1,4 @@
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 it('should be possible to use the darkMode "class" mode', () => {
   let config = {
@@ -15,6 +15,7 @@ it('should be possible to use the darkMode "class" mode', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .dark .dark\:font-bold {
         font-weight: 700;
       }
@@ -37,6 +38,7 @@ it('should be possible to use the darkMode "media" mode', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       @media (prefers-color-scheme: dark) {
         .dark\:font-bold {
           font-weight: 700;
@@ -60,6 +62,8 @@ it('should default to the `media` mode when no mode is provided', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       @media (prefers-color-scheme: dark) {
         .dark\:font-bold {
           font-weight: 700;
@@ -84,6 +88,8 @@ it('should default to the `media` mode when mode is set to `false`', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       @media (prefers-color-scheme: dark) {
         .dark\:font-bold {
           font-weight: 700;
