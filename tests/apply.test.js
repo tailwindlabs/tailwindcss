@@ -52,7 +52,6 @@ test('@apply', () => {
       .selectors-group {
         @apply group-hover:text-center lg:group-hover:text-left;
       }
-      /* TODO: This works but the generated CSS is unnecessarily verbose. */
       .complex-utilities {
         @apply ordinal tabular-nums focus:diagonal-fractions shadow-lg hover:shadow-xl;
       }

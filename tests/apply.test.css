@@ -122,7 +122,6 @@
     text-align: left;
   }
 }
-/* TODO: This works but the generated CSS is unnecessarily verbose. */
 .complex-utilities {
   --tw-ordinal: ordinal;
   --tw-numeric-spacing: tabular-nums;
