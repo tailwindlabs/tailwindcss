@@ -1,4 +1,4 @@
-import { run, html, css, defaults } from './util/run'
+import { run, html, css } from './util/run'
 
 it('should not safelist anything', () => {
   let config = {
@@ -7,7 +7,6 @@ it('should not safelist anything', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .uppercase {
         text-transform: uppercase;
       }
@@ -23,7 +22,6 @@ it('should safelist strings', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .mt-\[20px\] {
         margin-top: 20px;
       }
@@ -61,7 +59,6 @@ it('should safelist based on a pattern regex', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .bg-red-100 {
         --tw-bg-opacity: 1;
         background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -111,7 +108,6 @@ it('should not generate duplicates', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .bg-red-100 {
         --tw-bg-opacity: 1;
         background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -152,7 +148,6 @@ it('should safelist when using a custom prefix', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .tw-bg-red-100 {
         --tw-bg-opacity: 1;
         background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -178,7 +173,6 @@ it('should not safelist when an empty list is provided', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .uppercase {
         text-transform: uppercase;
       }
@@ -194,7 +188,6 @@ it('should not safelist when an sparse/holey list is provided', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .uppercase {
         text-transform: uppercase;
       }
@@ -215,7 +208,6 @@ it('should safelist negatives based on a pattern regex', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .-top-1 {
         top: -0.25rem;
       }

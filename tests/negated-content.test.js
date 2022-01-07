@@ -19,7 +19,6 @@ it('should be possible to use negated content patterns', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-
       .uppercase {
         text-transform: uppercase;
       }

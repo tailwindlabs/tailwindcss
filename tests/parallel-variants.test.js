@@ -1,4 +1,4 @@
-import { run, html, css, defaults } from './util/run'
+import { run, html, css } from './util/run'
 
 test('basic parallel variants', async () => {
   let config = {
@@ -18,7 +18,6 @@ test('basic parallel variants', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .font-normal {
         font-weight: 400;
       }

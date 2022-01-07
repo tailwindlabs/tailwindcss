@@ -283,7 +283,6 @@ test('@apply classes from outside a @layer', async () => {
 
   await run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .font-bold {
         font-weight: 700;
       }
@@ -351,7 +350,6 @@ test('@applying classes from outside a @layer respects the source order', async 
 
   await run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .baz {
         text-decoration-line: underline;
         text-decoration-line: none;
@@ -420,7 +418,6 @@ it('should remove duplicate properties when using apply with similar properties'
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .foo {
         position: absolute;
         top: 50%;
@@ -464,7 +461,6 @@ it('should apply all the definitions of a class', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .foo {
         position: relative;
         --tw-aspect-w: 1;
@@ -546,7 +542,6 @@ it('should not throw when the selector is different (but contains the base parti
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .bg-gray-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(107 114 128 / var(--tw-bg-opacity));
@@ -682,7 +677,6 @@ it('should be possible to apply user css', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .foo {
         color: red;
       }
@@ -754,7 +748,6 @@ it('should not apply unrelated siblings when applying something from within atru
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .foo {
         font-weight: bold;
         color: green;
@@ -840,7 +833,6 @@ it('should be possible to apply a class from another rule with multiple selector
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .c {
         text-decoration-line: underline;
       }
@@ -871,7 +863,6 @@ it('should be possible to apply a class from another rule with multiple selector
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       span,
       .b {
         text-decoration-line: underline;
@@ -906,7 +897,6 @@ it('should be possible to apply a class from another rule with multiple selector
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       #a,
       .b {
         text-decoration-line: underline;
@@ -932,18 +922,8 @@ it('apply can emit defaults in isolated environments without @tailwind directive
     }
   `
 
-  // TODO: Do we want this to work?
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      .foo {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
       .foo:focus {
         --tw-rotate: 90deg;
         transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))

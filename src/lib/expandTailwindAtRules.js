@@ -209,8 +209,6 @@ export default function expandTailwindAtRules(context) {
     // compiled in an isolated environment like CSS modules
     if (layerNodes.base) {
       layerNodes.base.after(cloneNodes([...defaultNodes], root.source))
-    } else {
-      root.prepend(cloneNodes([...defaultNodes], root.source))
     }
 
     if (layerNodes.base) {

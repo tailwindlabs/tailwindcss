@@ -1,4 +1,4 @@
-import { run, defaults } from './util/run'
+import { run } from './util/run'
 
 let css = String.raw
 
@@ -16,7 +16,6 @@ test('it detects classes in lit-html templates', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      ${defaults}
       .rounded {
         border-radius: 0.25rem;
       }

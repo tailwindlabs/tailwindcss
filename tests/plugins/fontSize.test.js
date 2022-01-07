@@ -1,4 +1,4 @@
-import { run, html, css, defaults } from '../util/run'
+import { run, html, css } from '../util/run'
 
 test('font-size utilities can include a default line-height', () => {
   let config = {
@@ -14,7 +14,6 @@ test('font-size utilities can include a default line-height', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      ${defaults}
       .text-sm {
         font-size: 12px;
       }
@@ -44,7 +43,6 @@ test('font-size utilities can include a default letter-spacing', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      ${defaults}
       .text-sm {
         font-size: 12px;
       }
@@ -74,7 +72,6 @@ test('font-size utilities can include a default line-height and letter-spacing',
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      ${defaults}
       .text-sm {
         font-size: 12px;
       }

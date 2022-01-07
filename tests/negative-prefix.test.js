@@ -1,4 +1,4 @@
-import { run, html, css, defaults } from './util/run'
+import { run, html, css } from './util/run'
 
 test('using a negative prefix with a negative scale value', () => {
   let config = {
@@ -13,7 +13,6 @@ test('using a negative prefix with a negative scale value', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .mt-2 {
         margin-top: 8px;
       }
@@ -36,7 +35,6 @@ test('using a negative scale value with a plugin that does not support dynamic n
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .-opacity-50 {
         opacity: 0.5;
       }
@@ -56,7 +54,6 @@ test('using a negative prefix without a negative scale value', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .mt-5 {
         margin-top: 20px;
       }
@@ -79,7 +76,6 @@ test('being an asshole', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .-mt-\[10px\] {
         margin-top: 55px;
       }
@@ -99,7 +95,6 @@ test('being a real asshole', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .-mt-\[10px\] {
         margin-top: -55px;
       }
@@ -119,7 +114,6 @@ test('a value that includes a variable', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .mt-5 {
         margin-top: var(--sizing-5);
       }
@@ -142,7 +136,6 @@ test('a value that includes a calc', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .mt-5 {
         margin-top: calc(52px * -3);
       }
@@ -165,7 +158,6 @@ test('a keyword value', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .mt-auto {
         margin-top: auto;
       }
@@ -185,7 +177,6 @@ test('a zero value', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .mt-0 {
         margin-top: 0;
       }
@@ -207,11 +198,7 @@ test('a color', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    return expect(result.css).toMatchCss(css`
-      ${defaults({
-        defaultBorderColor: 'currentColor',
-      })}
-    `)
+    return expect(result.css).toMatchCss(css``)
   })
 })
 
@@ -222,7 +209,6 @@ test('arbitrary values', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .-mt-\[10px\] {
         margin-top: -10px;
       }
@@ -242,7 +228,6 @@ test('negating a negative scale value', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .-mt-weird {
         margin-top: 15px;
       }
@@ -262,7 +247,6 @@ test('negating a default value', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .-mt {
         margin-top: -15px;
       }
@@ -283,7 +267,6 @@ test('using a negative prefix with a negative default scale value', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .mt {
         margin-top: 8px;
       }
@@ -307,7 +290,6 @@ test('negating a default value with a configured prefix', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
-      ${defaults}
       .tw--mt {
         margin-top: -15px;
       }
@@ -321,8 +303,6 @@ test('arbitrary value keywords should be ignored', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    return expect(result.css).toMatchCss(css`
-      ${defaults}
-    `)
+    return expect(result.css).toMatchCss(css``)
   })
 })

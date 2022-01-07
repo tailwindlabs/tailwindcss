@@ -1,4 +1,4 @@
-import { run, html, css, defaults } from './util/run'
+import { run, html, css } from './util/run'
 
 test('class variants are inserted at `@tailwind variants`', async () => {
   let config = {
@@ -15,7 +15,6 @@ test('class variants are inserted at `@tailwind variants`', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .font-bold {
         font-weight: 700;
       }
@@ -49,7 +48,6 @@ test('`@tailwind screens` works as an alias for `@tailwind variants`', async () 
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .font-bold {
         font-weight: 700;
       }

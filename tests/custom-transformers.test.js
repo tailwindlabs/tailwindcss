@@ -1,5 +1,5 @@
 import path from 'path'
-import { run, html, css, defaults } from './util/run'
+import { run, html, css } from './util/run'
 
 function customTransformer(content) {
   return content.replace(/uppercase/g, 'lowercase')
@@ -15,7 +15,6 @@ test('transform function', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .lowercase {
         text-transform: lowercase;
       }
@@ -35,7 +34,6 @@ test('transform.DEFAULT', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .lowercase {
         text-transform: lowercase;
       }
@@ -59,7 +57,6 @@ test('transform.{extension}', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .uppercase {
         text-transform: uppercase;
       }

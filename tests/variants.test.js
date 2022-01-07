@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run, css, html, defaults } from './util/run'
+import { run, css, html } from './util/run'
 
 test('variants', () => {
   let config = {
@@ -38,7 +38,6 @@ test('order matters and produces different behaviour', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .hover\:file\:bg-pink-600::file-selector-button:hover {
         --tw-bg-opacity: 1;
         background-color: rgb(219 39 119 / var(--tw-bg-opacity));
@@ -69,7 +68,6 @@ describe('custom advanced variants', () => {
 
     return run('@tailwind components;@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
         :where(.prose-headings\:text-center) :is(h1, h2, h3, h4) {
           text-align: center;
         }
@@ -96,7 +94,6 @@ describe('custom advanced variants', () => {
 
     return run('@tailwind components;@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
         :where(.hover\:prose-headings\:text-center) :is(h1, h2, h3, h4):hover {
           text-align: center;
         }
@@ -127,7 +124,6 @@ describe('custom advanced variants', () => {
 
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
         .group:hover :where(.group-hover\:prose-headings\:text-center) :is(h1, h2, h3, h4) {
           text-align: center;
         }
@@ -160,7 +156,6 @@ describe('custom advanced variants', () => {
 
     return run('@tailwind components;@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
         @media screen {
           .screen\:parent .child {
             foo: bar;
@@ -200,7 +195,6 @@ describe('custom advanced variants', () => {
 
     return run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
         .test:where(.one, .two, .three) {
           font-style: italic;
         }
@@ -252,7 +246,6 @@ it('should properly handle keyframes with multiple variants', async () => {
 
   let result = await run(input, config)
   expect(result.css).toMatchFormattedCss(css`
-    ${defaults}
     @keyframes spin {
       to {
         transform: rotate(360deg);
@@ -333,7 +326,6 @@ test('custom addVariant with more complex media query params', () => {
 
   return run('@tailwind components;@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @media screen and (max-wdith: 600px) {
         .magic\:text-center {
           text-align: center;
@@ -359,7 +351,6 @@ test('custom addVariant with nested media & format shorthand', () => {
 
   return run('@tailwind components;@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @supports (hover: hover) {
         @media print {
           .magic\:text-center:disabled {
@@ -386,7 +377,6 @@ test('before and after variants are a bit special, and forced to the end', () =>
 
   return run('@tailwind components;@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .before\:hover\:text-center:hover::before {
         content: var(--tw-content);
         text-align: center;
@@ -419,7 +409,6 @@ test('before and after variants are a bit special, and forced to the end (2)', (
 
   return run('@tailwind components;@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       :where(.before\:prose-headings\:text-center) :is(h1, h2, h3, h4)::before {
         content: var(--tw-content);
         text-align: center;
@@ -450,7 +439,6 @@ it('should not generate variants of user css if it is not inside a layer', () =>
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .foo {
         color: red;
       }
@@ -471,7 +459,6 @@ it('should be possible to use responsive modifiers that are defined with special
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @media (max-width: 399px) {
         .\<sm\:underline {
           text-decoration-line: underline;

@@ -1,4 +1,4 @@
-import { run, css, html, defaults } from './util/run'
+import { run, css, html } from './util/run'
 
 test('basic color opacity modifier', async () => {
   let config = {
@@ -7,7 +7,6 @@ test('basic color opacity modifier', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .bg-red-500\/50 {
         background-color: rgb(239 68 68 / 0.5);
       }
@@ -29,7 +28,6 @@ test('colors with slashes are matched first', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .bg-red-500\/50 {
         --tw-bg-opacity: 1;
         background-color: rgb(255 0 0 / var(--tw-bg-opacity));
@@ -45,7 +43,6 @@ test('arbitrary color opacity modifier', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .bg-red-500\/\[var\(--opacity\)\] {
         background-color: rgb(239 68 68 / var(--opacity));
       }
@@ -59,7 +56,7 @@ test('missing alpha generates nothing', async () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`${defaults}`)
+    expect(result.css).toMatchFormattedCss(``)
   })
 })
 
@@ -72,7 +69,6 @@ test('arbitrary color with opacity from scale', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .bg-\[wheat\]\/50 {
         background-color: rgb(245 222 179 / 0.5);
       }
@@ -89,7 +85,6 @@ test('arbitrary color with arbitrary opacity', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .bg-\[\#bada55\]\/\[0\.2\] {
         background-color: rgb(186 218 85 / 0.2);
       }
@@ -105,7 +100,7 @@ test('undefined theme color with opacity from scale', async () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`${defaults}`)
+    expect(result.css).toMatchFormattedCss(``)
   })
 })
 
@@ -124,7 +119,7 @@ test('values not in the opacity config are ignored', async () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`${defaults}`)
+    expect(result.css).toMatchFormattedCss(``)
   })
 })
 
@@ -142,9 +137,6 @@ test('function colors are supported', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults({
-        defaultBorderColor: 'currentColor',
-      })}
       .bg-blue\/50 {
         background-color: rgba(var(--colors-blue), 0.5);
       }
@@ -173,7 +165,6 @@ test('utilities that support any type are supported', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .from-red-500\/50 {
         --tw-gradient-from: rgb(239 68 68 / 0.5);
         --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(239 68 68 / 0));

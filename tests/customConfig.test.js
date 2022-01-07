@@ -3,14 +3,13 @@ import path from 'path'
 import { cjsConfigFile, defaultConfigFile } from '../src/constants'
 import inTempDirectory from '../jest/runInTempDirectory'
 
-import { run, html, css, javascript, defaults } from './util/run'
+import { run, html, css, javascript } from './util/run'
 
 test('it uses the values from the custom config file', () => {
   let config = require(path.resolve(`${__dirname}/fixtures/custom-config.js`))
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @media (min-width: 400px) {
         .mobile\:font-bold {
           font-weight: 700;
@@ -32,7 +31,6 @@ test('custom config can be passed as an object', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @media (min-width: 400px) {
         .mobile\:font-bold {
           font-weight: 700;
@@ -49,7 +47,6 @@ test('custom config path can be passed using `config` property in an object', ()
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @media (min-width: 400px) {
         .mobile\:font-bold {
           font-weight: 700;
@@ -73,8 +70,6 @@ test('custom config can be passed under the `config` property', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
-
       @media (min-width: 400px) {
         .mobile\:font-bold {
           font-weight: 700;
@@ -100,7 +95,6 @@ test('tailwind.config.cjs is picked up by default', () => {
 
     return run('@tailwind utilities').then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
         @media (min-width: 400px) {
           .mobile\:font-bold {
             font-weight: 700;
@@ -127,7 +121,6 @@ test('tailwind.config.js is picked up by default', () => {
 
     return run('@tailwind utilities').then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
         @media (min-width: 400px) {
           .mobile\:font-bold {
             font-weight: 700;
@@ -154,8 +147,6 @@ test('tailwind.config.cjs is picked up by default when passing an empty object',
 
     return run('@tailwind utilities', {}).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
-
         @media (min-width: 400px) {
           .mobile\:font-bold {
             font-weight: 700;
@@ -182,8 +173,6 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
 
     return run('@tailwind utilities', {}).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        ${defaults}
-
         @media (min-width: 400px) {
           .mobile\:font-bold {
             font-weight: 700;
@@ -211,7 +200,6 @@ test('the default config can be overridden using the presets key', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .min-h-0 {
         min-height: 0px;
       }
@@ -242,7 +230,6 @@ test('presets can be functions', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .min-h-0 {
         min-height: 0px;
       }
@@ -274,10 +261,6 @@ test('the default config can be removed by using an empty presets key in a prese
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults({
-        defaultBorderColor: 'currentColor',
-        defaultRingColor: 'rgb(147 197 253 / 0.5)',
-      })}
       .min-h-primary {
         min-height: 48px;
       }

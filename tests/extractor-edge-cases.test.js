@@ -1,4 +1,4 @@
-import { run, html, css, defaults } from './util/run'
+import { run, html, css } from './util/run'
 
 test('PHP arrays', async () => {
   let config = {
@@ -9,7 +9,6 @@ test('PHP arrays', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .max-w-\[16rem\] {
         max-width: 16rem;
       }
@@ -22,7 +21,6 @@ test('arbitrary values with quotes', async () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .content-\[\'hello\]\'\] {
         --tw-content: 'hello]';
         content: var(--tw-content);

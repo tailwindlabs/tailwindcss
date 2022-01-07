@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run, css, defaults } from './util/run'
+import { run, css } from './util/run'
 
 it('raw content', () => {
   let config = {
@@ -40,7 +40,6 @@ test('raw content with extension', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .invisible {
         visibility: hidden;
       }

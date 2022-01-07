@@ -1,4 +1,4 @@
-import { run, html, css, defaults } from './util/run'
+import { run, html, css } from './util/run'
 
 test('basic', () => {
   let config = {
@@ -15,7 +15,6 @@ test('basic', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @keyframes spin {
         to {
           transform: rotate(360deg);
@@ -69,7 +68,6 @@ test('custom', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @keyframes one {
         to {
           transform: rotate(360deg);
@@ -100,7 +98,6 @@ test('custom prefixed', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @keyframes tw-one {
         to {
           transform: rotate(360deg);
@@ -127,7 +124,6 @@ test('multiple', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @keyframes bounce {
         0%,
         100% {
@@ -169,7 +165,6 @@ test('multiple custom', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       @keyframes one {
         to {
           transform: rotate(360deg);

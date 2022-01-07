@@ -1,4 +1,4 @@
-import { run, css, html, defaults } from './util/run'
+import { run, css, html } from './util/run'
 
 it('should collapse duplicate declarations with the same units (px)', () => {
   let config = {
@@ -20,7 +20,6 @@ it('should collapse duplicate declarations with the same units (px)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .example {
         height: 200px;
       }
@@ -48,7 +47,6 @@ it('should collapse duplicate declarations with the same units (no unit)', () =>
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .example {
         line-height: 2;
       }
@@ -76,7 +74,6 @@ it('should not collapse duplicate declarations with the different units', () => 
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .example {
         height: 100px;
         height: 50%;
@@ -109,7 +106,6 @@ it('should collapse the duplicate declarations with the same unit, but leave the
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .example {
         height: 200px;
         height: 100%;
@@ -140,7 +136,6 @@ it('should collapse the duplicate declarations with the exact same value', () =>
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .example {
         color: blue;
         height: var(--value);
@@ -170,7 +165,6 @@ it('should work on a real world example', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults}
       .h-available {
         height: 100%;
         height: 100vh;
