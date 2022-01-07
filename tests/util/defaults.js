@@ -5,9 +5,7 @@ import { css } from './strings'
  * @param {string} [param0.defaultRingColor]
  * @returns {string}
  */
-export function defaults({
-  defaultRingColor = `rgb(59 130 246 / 0.5)`,
-} = {}) {
+export function defaults({ defaultRingColor = `rgb(59 130 246 / 0.5)` } = {}) {
   return css`
     *,
     ::before,
