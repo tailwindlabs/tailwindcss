@@ -56,11 +56,6 @@ test('@apply', () => {
       .complex-utilities {
         @apply ordinal tabular-nums focus:diagonal-fractions shadow-lg hover:shadow-xl;
       }
-      .basic-nesting-parent {
-        .basic-nesting-child {
-          @apply font-bold hover:font-normal;
-        }
-      }
       .use-base-only-a {
         @apply font-bold;
       }

@@ -144,14 +144,6 @@
   --tw-numeric-fraction: diagonal-fractions;
   font-variant-numeric: var(--tw-font-variant-numeric);
 }
-.basic-nesting-parent {
-  .basic-nesting-child {
-    font-weight: 700;
-  }
-  .basic-nesting-child:hover {
-    font-weight: 400;
-  }
-}
 .use-base-only-a {
   font-weight: 700;
 }
