@@ -507,12 +507,6 @@ test('with borders', async () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      *,
-      ::before,
-      ::after {
-        border-color: #e5e7eb;
-      }
-
       /* --- */
       .border {
         border-width: 1px;

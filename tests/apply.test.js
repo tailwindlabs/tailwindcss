@@ -640,12 +640,6 @@ it('rules with vendor prefixes are still separate when optimizing defaults rules
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      [type='range']::-moz-range-thumb {
-        border-color: #e5e7eb;
-      }
-      .border {
-        border-color: #e5e7eb;
-      }
       input[type='range']::-moz-range-thumb {
         border-width: 1px;
       }

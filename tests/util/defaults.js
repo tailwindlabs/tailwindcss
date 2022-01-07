@@ -2,12 +2,10 @@ import { css } from './strings'
 
 /**
  * @param {object} param0
- * @param {string} [param0.defaultBorderColor]
  * @param {string} [param0.defaultRingColor]
  * @returns {string}
  */
 export function defaults({
-  defaultBorderColor = `#e5e7eb`,
   defaultRingColor = `rgb(59 130 246 / 0.5)`,
 } = {}) {
   return css`
@@ -25,7 +23,6 @@ export function defaults({
       --tw-pan-y: ;
       --tw-pinch-zoom: ;
       --tw-scroll-snap-strictness: proximity;
-      border-color: ${defaultBorderColor};
       --tw-ordinal: ;
       --tw-slashed-zero: ;
       --tw-numeric-figure: ;

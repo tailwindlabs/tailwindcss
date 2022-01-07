@@ -1179,13 +1179,7 @@ export let corePlugins = {
     })
   },
 
-  borderColor: ({ addDefaults, matchUtilities, theme, corePlugins }) => {
-    let value = theme('borderColor.DEFAULT', 'currentColor')
-
-    addDefaults('border-width', {
-      'border-color': toColorValue(value),
-    })
-
+  borderColor: ({ matchUtilities, theme, corePlugins }) => {
     matchUtilities(
       {
         border: (value) => {
