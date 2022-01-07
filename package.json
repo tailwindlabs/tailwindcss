@@ -50,7 +50,7 @@
     "autoprefixer": "^10.4.1",
     "cssnano": "^5.0.14",
     "esbuild": "^0.14.10",
-    "eslint": "^8.4.1",
+    "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.5",
