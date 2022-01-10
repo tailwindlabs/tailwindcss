@@ -1139,3 +1139,66 @@ it('apply does not emit defaults in isolated environments without optimizeUniver
     `)
   })
 })
+
+it('should work outside of layer', async () => {
+  let config = {
+    content: [{ raw: html`<div class="input-text"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    .input-text {
+      @apply bg-white;
+      background-color: red;
+    }
+  `
+
+  let result
+  result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .input-text {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      background-color: red;
+    }
+  `)
+
+  result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .input-text {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      background-color: red;
+    }
+  `)
+})
+
+it('should work in layer', async () => {
+  let config = {
+    content: [{ raw: html`<div class="input-text"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind components;
+    @layer components {
+      .input-text {
+        @apply bg-white;
+        background-color: red;
+      }
+    }
+  `
+
+  await run(input, config)
+  const result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .input-text {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      background-color: red;
+    }
+  `)
+})
