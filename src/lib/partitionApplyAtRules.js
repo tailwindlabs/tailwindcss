@@ -1,15 +1,14 @@
 function partitionRules(root) {
-  if (!root.walkAtRules) return [root]
+  if (!root.walkAtRules) return
 
   let applyParents = new Set()
-  let rules = []
 
   root.walkAtRules('apply', (rule) => {
     applyParents.add(rule.parent)
   })
 
   if (applyParents.size === 0) {
-    rules.push(root)
+    return
   }
 
   for (let rule of applyParents) {
@@ -33,21 +32,17 @@ function partitionRules(root) {
     }
 
     if (nodeGroups.length === 1) {
-      rules.push(rule)
       continue
     }
 
     for (let group of [...nodeGroups].reverse()) {
       let clone = rule.clone({ nodes: [] })
       clone.append(group)
-      rules.unshift(clone)
       rule.after(clone)
     }
 
     rule.remove()
   }
-
-  return rules
 }
 
 export default function expandApplyAtRules() {
