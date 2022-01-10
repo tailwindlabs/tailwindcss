@@ -1202,3 +1202,54 @@ it('should work in layer', async () => {
     }
   `)
 })
+
+it('apply partitioning works with media queries', async () => {
+  let config = {
+    content: [{ raw: html`` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @layer base {
+      html,
+      body {
+        @apply text-green-600;
+        font-size: 1rem;
+      }
+
+      @media print {
+        html,
+        body {
+          @apply text-red-600;
+          font-size: 2rem;
+        }
+      }
+    }
+  `
+
+  await run(input, config)
+  const result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    html,
+    body {
+      --tw-text-opacity: 1;
+      color: rgb(22 163 74 / var(--tw-text-opacity));
+      font-size: 1rem;
+    }
+
+    @media print {
+      html,
+      body {
+        --tw-text-opacity: 1;
+        color: rgb(220 38 38 / var(--tw-text-opacity));
+      }
+      html,
+      body {
+        font-size: 2rem;
+      }
+    }
+    ${defaults}
+  `)
+})
