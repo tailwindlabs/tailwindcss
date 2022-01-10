@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Fix consecutive builds with at apply producing different CSS ([#6999](https://github.com/tailwindlabs/tailwindcss/pull/6999))
 
 ## [3.0.12] - 2022-01-07
 
