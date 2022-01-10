@@ -41,3 +41,34 @@ test('it warns when there is an empty content key', async () => {
   expect(warn).toHaveBeenCalledTimes(1)
   expect(warn.mock.calls.map((x) => x[0])).toEqual(['no-content-found'])
 })
+
+test('it warns when there are no utilities generated', async () => {
+  let config = {
+    content: [{ raw: html`nothing here matching a utility` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  await run(input, config)
+
+  expect(warn).toHaveBeenCalledTimes(1)
+  expect(warn.mock.calls.map((x) => x[0])).toEqual(['no-utilities-generated'])
+})
+
+it('warnings are not thrown when only variant utilities are generated', async () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:underline"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  await run(input, config)
+
+  expect(warn).toHaveBeenCalledTimes(0)
+})
