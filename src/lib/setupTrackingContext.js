@@ -16,6 +16,7 @@ import { env } from './sharedState'
 
 import { getContext, getFileModifiedMap } from './setupContextUtils'
 import parseDependency from '../util/parseDependency'
+import log from '../util/log'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -116,6 +117,13 @@ export default function setupTrackingContext(configOrPath) {
     return (root, result) => {
       let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
         getTailwindConfig(configOrPath)
+
+      if (tailwindConfig.content.files.length === 0) {
+        log.warn(
+          'no-content-found',
+          'The `content` key is missing or empty. Please populate the content key as Tailwind generates utilities on-demand based on the files that use them.'
+        )
+      }
 
       let contextDependencies = new Set(configDependencies)
 
