@@ -3,6 +3,7 @@ import { InstallationLayout } from '@/layouts/InstallationLayout'
 import Link from 'next/link'
 
 import { ReactComponent as NextJsLogo } from '@/img/guides/nextjs.svg'
+import { ReactComponent as NextJsLogoWhite } from '@/img/guides/nextjs-white.svg'
 import { ReactComponent as SvelteLogo } from '@/img/guides/svelte.svg'
 import { ReactComponent as LaravelLogo } from '@/img/guides/laravel.svg'
 import { ReactComponent as ViteLogo } from '@/img/guides/vite.svg'
@@ -26,7 +27,8 @@ export default function FrameworkGuides() {
             name: 'Next.js',
             slug: 'nextjs',
             description: 'Full-featured React framework with great developer experience.',
-            logo: () => <NextJsLogo className="dark:invert" />,
+            logo: NextJsLogo,
+            logoDark: NextJsLogoWhite,
           },
           {
             name: 'Laravel',
