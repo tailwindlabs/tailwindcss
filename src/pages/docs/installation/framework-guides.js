@@ -3,6 +3,7 @@ import { InstallationLayout } from '@/layouts/InstallationLayout'
 import Link from 'next/link'
 
 import { ReactComponent as NextJsLogo } from '@/img/guides/nextjs.svg'
+import { ReactComponent as SvelteLogo } from '@/img/guides/svelte.svg'
 import { ReactComponent as LaravelLogo } from '@/img/guides/laravel.svg'
 import { ReactComponent as ViteLogo } from '@/img/guides/vite.svg'
 import { ReactComponent as NuxtJsLogo } from '@/img/guides/nuxtjs.svg'
@@ -56,6 +57,12 @@ export default function FrameworkGuides() {
             slug: 'create-react-app',
             description: 'CLI tool for scaffolding a new single-page React application.',
             logo: CraLogo,
+          },
+          {
+            name: 'SvelteKit',
+            slug: 'sveltekit',
+            description: 'The fastest way to build apps of all sizes with Svelte.js.',
+            logo: SvelteLogo,
           },
         ].map(({ name, description, logo: Logo, slug }) => (
           <li key={name} className="relative flex flex-row-reverse">
