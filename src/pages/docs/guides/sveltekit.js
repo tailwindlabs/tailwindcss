@@ -108,7 +108,7 @@ export default function UsingSvelteKit({ code }) {
       title="Install Tailwind CSS with SvelteKit"
       description="Setting up Tailwind CSS in a SvelteKit project."
     >
-      <div className="relative z-10 max-w-3xl mb-16 prose">
+      <div className="relative z-10 max-w-3xl mb-16 prose dark:prose-dark">
         <p>
           The quickest way to start using Tailwind CSS in your SvelteKit project is to use the{' '}
           <a href="https://kit.svelte.dev/docs#introduction-getting-started">
