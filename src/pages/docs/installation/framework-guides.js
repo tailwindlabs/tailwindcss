@@ -64,7 +64,7 @@ export default function FrameworkGuides() {
             description: 'The fastest way to build apps of all sizes with Svelte.js.',
             logo: SvelteLogo,
           },
-        ].map(({ name, description, logo: Logo, slug }) => (
+        ].map(({ name, description, logo: Logo, logoDark: LogoDark, slug }) => (
           <li key={name} className="relative flex flex-row-reverse">
             <div className="peer group ml-6 flex-auto">
               <h4 className="mb-2 leading-6 text-gray-900 font-semibold dark:text-gray-200">
@@ -90,7 +90,13 @@ export default function FrameworkGuides() {
               <p className="text-sm leading-6 text-gray-700 dark:text-gray-400">{description}</p>
             </div>
             <div className="flex-none w-14 h-14 rounded-full bg-white ring-1 ring-gray-900/5 shadow flex items-center justify-center overflow-hidden dark:bg-gray-800 dark:highlight-white/5">
-              <Logo />
+              {LogoDark !== undefined
+                ? <>
+                  <Logo className="block dark:hidden" />
+                  <LogoDark className="hidden dark:block" />
+                </>
+                : <Logo className="dark:block" />
+              }
             </div>
             <div className="absolute -z-10 -inset-3 rounded-2xl bg-gray-50 dark:bg-gray-800/50 opacity-0 peer-hover:opacity-100" />
           </li>
