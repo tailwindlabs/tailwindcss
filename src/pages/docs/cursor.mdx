@@ -12,10 +12,13 @@ export const classes = {
   utilities,
   rowStyle: ({ css }) => css,
   preview: (css, { className, utility }) => (
-    <td
-      className={`align-middle ${className}`}
-    >
-      <img className="w-6 h-6 mx-auto drop-shadow" src={`/img/cursors/${utility.substr(1)}.svg`} />
+    <td className={`align-middle ${className}`}>
+      {utility !== '.cursor-none' && (
+        <img
+          className="w-6 h-6 mx-auto drop-shadow"
+          src={`/img/cursors/${utility.substr(1)}.svg`}
+        />
+      )}
     </td>
   ),
 }
