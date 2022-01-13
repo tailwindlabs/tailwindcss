@@ -25,47 +25,42 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Use the community project{' '}
-        <a href="https://github.com/svelte-add/svelte-add#readme">Svelte Add</a> to generate{' '}
-        <code>tailwindcss.config.cjs</code>, <code>postcss.config.cjs</code>, and stub files for
-        your css and layout. Then install <code>tailwindcss</code> and it's peer dependencies via
-        npm.
+        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the following
+        commands to generate both <code>tailwind.config.cjs</code> and <code>postcss.config.cjs</code>.
       </p>
     ),
     code: {
       name: 'Terminal',
       lang: 'terminal',
-      code: 'npx svelte-add@latest tailwindcss\nnpm install',
+      code: 'npm install -D tailwindcss postcss autoprefixer\nnpx tailwindcss init tailwind.config.cjs -p\nmv postcss.config.js postcss.config.cjs',
     },
   },
   {
     title: 'Configure your template paths',
     body: () => (
       <p>
-        Add the paths to all of your template files in the generated{' '}
+        Add the paths to all of your template files in your{' '}
         <code>tailwind.config.cjs</code> file.
       </p>
     ),
     code: {
       name: 'tailwind.config.cjs',
       lang: 'javascript',
-      code: `  const config = {
+      code: `  module.exports = {
 >   content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
       extend: {}
     },
     plugins: []
-  };
-
-  module.exports = config;`,
+  };`,
     },
   },
   {
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Add the <code>@tailwind</code> directives for each of Tailwind's layers to your{' '}
-        <code>./src/app.css</code> file if not.
+        Create a <code>./src/app.css</code> file and add the <code>@tailwind</code> directives for
+        each of Tailwind’s layers.
       </p>
     ),
     code: {
@@ -74,6 +69,24 @@ let steps = [
       code: `@tailwind base;
 @tailwind components;
 @tailwind utilities;`,
+    },
+  },
+  {
+    title: 'Import the CSS file',
+    body: () => (
+      <p>
+        Create a <code>./src/routes/__layout.svelte</code> file
+        and import the newly-created <code>app.css</code> file.
+      </p>
+    ),
+    code: {
+      name: '__layout.svelte',
+      lang: 'html',
+      code: `<script>
+  import "../app.css";
+</script>
+
+<slot />`,
     },
   },
   {
@@ -95,9 +108,9 @@ let steps = [
     code: {
       name: 'index.svelte',
       lang: 'html',
-      code: `> <h1 class="text-3xl font-bold underline">
->   Hello world!
-> </h1>`,
+      code: `<h1 class="text-3xl font-bold underline">
+  Hello world!
+</h1>`,
     },
   },
 ]
@@ -108,21 +121,6 @@ export default function UsingSvelteKit({ code }) {
       title="Install Tailwind CSS with SvelteKit"
       description="Setting up Tailwind CSS in a SvelteKit project."
     >
-      <div className="relative z-10 max-w-3xl mb-16 prose prose-slate dark:prose-dark">
-        <p>
-          The quickest way to start using Tailwind CSS in your SvelteKit project is to use the{' '}
-          <a href="https://kit.svelte.dev/docs#introduction-getting-started">
-            {' '}
-            SvelteKit Introduction Guide{' '}
-          </a>{' '}
-          and <a href="https://github.com/svelte-add/tailwindcss">
-            Tailwind CSS with svelte-add
-          </a>{' '}
-          to automatically setup your project. That's it, it is that easy to get Tailwind CSS
-          configured in a SvelteKit project!
-        </p>
-      </div>
-
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )
