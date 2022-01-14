@@ -22,9 +22,15 @@ export default function MobileFirstDemo() {
       window.parent.postMessage(breakpoint, '*')
     }
 
-    sm.addEventListener('change', onChange)
-    md.addEventListener('change', onChange)
-    lg.addEventListener('change', onChange)
+    if (sm?.addEventListener) {
+      sm.addEventListener('change', onChange)
+      md.addEventListener('change', onChange)
+      lg.addEventListener('change', onChange)
+    } else {
+      sm.addListener(onChange)
+      md.addListener(onChange)
+      lg.addListener(onChange)
+    }
 
     let darkModeObserver = new MutationObserver(([mutation]) => {
       if (mutation.target.classList.contains('dark')) {
@@ -38,9 +44,16 @@ export default function MobileFirstDemo() {
     })
 
     return () => {
-      sm.removeEventListener('change', onChange)
-      md.removeEventListener('change', onChange)
-      lg.removeEventListener('change', onChange)
+      if (sm?.addEventListener) {
+        sm.removeEventListener('change', onChange)
+        md.removeEventListener('change', onChange)
+        lg.removeEventListener('change', onChange)
+      } else {
+        sm.removeListener(onChange)
+        md.removeListener(onChange)
+        lg.removeListener(onChange)
+      }
+
       darkModeObserver.disconnect()
     }
   }, [])

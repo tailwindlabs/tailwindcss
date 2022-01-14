@@ -130,7 +130,12 @@ function useTheme() {
 
   useEffect(() => {
     let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    mediaQuery.addEventListener('change', update)
+
+    if (mediaQuery?.addEventListener) {
+      mediaQuery.addEventListener('change', update)
+    } else {
+      mediaQuery.addListener(update)
+    }
 
     function onStorage() {
       update()
@@ -144,7 +149,12 @@ function useTheme() {
     window.addEventListener('storage', onStorage)
 
     return () => {
-      mediaQuery.removeEventListener('change', update)
+      if (mediaQuery?.removeEventListener) {
+        mediaQuery.removeEventListener('change', update)
+      } else {
+        mediaQuery.removeListener(update)
+      }
+
       window.removeEventListener('storage', onStorage)
     }
   }, [])
