@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Show warnings for invalid content config ([#7065](https://github.com/tailwindlabs/tailwindcss/pull/7065))
 
 ## [3.0.13] - 2022-01-11
 

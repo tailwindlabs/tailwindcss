@@ -2,6 +2,7 @@ import LRU from 'quick-lru'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import bigSign from '../util/bigSign'
+import log from '../util/log'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
 
@@ -225,6 +226,14 @@ export default function expandTailwindAtRules(context) {
       layerNodes.variants.remove()
     } else {
       root.append(cloneNodes([...screenNodes], root.source))
+    }
+
+    // If we've got a utility layer and no utilities are generated there's likely something wrong
+    // TODO: Detect utility variants only
+    if (layerNodes.utilities && utilityNodes.size === 0 && screenNodes.size === 0) {
+      log.warn('content-problems', [
+        'No utilities were generated there is likely a problem with the `content` key in the tailwind config. For more information see the documentation: https://tailwindcss.com/docs/content-configuration',
+      ])
     }
 
     // ---
