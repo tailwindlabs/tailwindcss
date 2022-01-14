@@ -23,7 +23,7 @@ test('it warns when there is no content key', async () => {
   await run(input, config)
 
   expect(warn).toHaveBeenCalledTimes(1)
-  expect(warn.mock.calls.map((x) => x[0])).toEqual(['no-content-found'])
+  expect(warn.mock.calls.map((x) => x[0])).toEqual(['content-problems'])
 })
 
 test('it warns when there is an empty content key', async () => {
@@ -39,7 +39,7 @@ test('it warns when there is an empty content key', async () => {
   await run(input, config)
 
   expect(warn).toHaveBeenCalledTimes(1)
-  expect(warn.mock.calls.map((x) => x[0])).toEqual(['no-content-found'])
+  expect(warn.mock.calls.map((x) => x[0])).toEqual(['content-problems'])
 })
 
 test('it warns when there are no utilities generated', async () => {
@@ -55,7 +55,7 @@ test('it warns when there are no utilities generated', async () => {
   await run(input, config)
 
   expect(warn).toHaveBeenCalledTimes(1)
-  expect(warn.mock.calls.map((x) => x[0])).toEqual(['no-utilities-generated'])
+  expect(warn.mock.calls.map((x) => x[0])).toEqual(['content-problems'])
 })
 
 it('warnings are not thrown when only variant utilities are generated', async () => {
