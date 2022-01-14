@@ -9,7 +9,7 @@ export function PageHeader({ title, description, badge = {}, section }) {
             {section}
           </p>
         )}
-        <h1 className="inline-block text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight dark:text-gray-200">
+        <h1 className="inline-block text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">
           {title}
         </h1>
         {badge.key && badge.value && (
@@ -20,7 +20,7 @@ export function PageHeader({ title, description, badge = {}, section }) {
         )}
       </div>
       {description && (
-        <p className="mt-2 text-lg text-gray-700 dark:text-gray-400">{description}</p>
+        <p className="mt-2 text-lg text-slate-700 dark:text-slate-400">{description}</p>
       )}
     </header>
   )

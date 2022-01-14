@@ -66,8 +66,8 @@ module.exports = () => {
       //   node.value = [
       //     `<div class="${next?.type === 'code' ? 'mt-6 -mb-4' : 'my-6'} ${
       //       paddingMap[padding]
-      //     } not-prose relative bg-grid bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" style="background-size:2rem">`,
-      //     '<div class="absolute inset-0 bg-gradient-to-b from-gray-50"></div>',
+      //     } not-prose relative bg-grid bg-slate-50 border border-slate-200 rounded-lg overflow-hidden" style="background-size:2rem">`,
+      //     '<div class="absolute inset-0 bg-gradient-to-b from-slate-50"></div>',
       //     '<div class="relative">',
       //     node.value,
       //     '</div>',

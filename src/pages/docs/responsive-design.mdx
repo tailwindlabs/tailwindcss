@@ -44,7 +44,7 @@ Here's a simple example of a marketing page component that uses a stacked layout
     <div class="p-8">
       <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Case study</div>
       <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Finding customers for your new business</a>
-      <p class="mt-2 text-gray-500">Getting a new business off the ground is a lot of hard work. Here are five ideas you can use to find your first customers.</p>
+      <p class="mt-2 text-slate-500">Getting a new business off the ground is a lot of hard work. Here are five ideas you can use to find your first customers.</p>
     </div>
   </div>
 </div>
@@ -70,7 +70,7 @@ What this means is that unprefixed utilities (like `uppercase`) take effect on a
 
 Where this approach surprises people most often is that to style something for mobile, you need to use the unprefixed version of a utility, not the `sm:` prefixed version. Don't think of `sm:` as meaning "on small screens", think of it as "at the small *breakpoint*".
 
-<TipBad>Don't use <code className="text-sm font-bold text-gray-800">sm:</code> to target mobile devices</TipBad>
+<TipBad>Don't use <code className="text-sm font-bold text-slate-800">sm:</code> to target mobile devices</TipBad>
 
 ```html
 <!-- This will only center text on screens 640px and wider, not on small screens -->

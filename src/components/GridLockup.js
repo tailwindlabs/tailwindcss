@@ -39,18 +39,18 @@ GridLockup.Container = function Grid({ beams = 0, className, overhang = 'sm', ch
       )}
       <div
         className={clsx(
-          'absolute top-0 inset-x-0 h-[37.5rem] bg-grid-gray-900/[0.04] bg-top [mask-image:linear-gradient(0deg,transparent,black)] dark:bg-grid-gray-100/[0.03] dark:bg-[center_top_-1px] dark:border-t dark:border-gray-100/5',
+          'absolute top-0 inset-x-0 h-[37.5rem] bg-grid-slate-900/[0.04] bg-top [mask-image:linear-gradient(0deg,transparent,black)] dark:bg-grid-slate-100/[0.03] dark:bg-[center_top_-1px] dark:border-t dark:border-slate-100/5',
           overhangs[overhang]
         )}
       />
       {/* <div
         className={clsx(
-          'absolute top-0 inset-x-0 min-h-[37.5rem]  bg-top bg-no-repeat dark:border-t dark:border-gray-100/5',
+          'absolute top-0 inset-x-0 min-h-[37.5rem]  bg-top bg-no-repeat dark:border-t dark:border-slate-100/5',
           styles.beams,
           overhangs[overhang]
         )}
       >
-        <div className="absolute inset-0 bg-grid-gray-900/[0.04] bg-top [mask-image:linear-gradient(0deg,transparent,black)] dark:bg-grid-gray-100/[0.03] dark:bg-[center_top_-1px]" />
+        <div className="absolute inset-0 bg-grid-slate-900/[0.04] bg-top [mask-image:linear-gradient(0deg,transparent,black)] dark:bg-grid-slate-100/[0.03] dark:bg-[center_top_-1px]" />
       </div> */}
       {children}
     </div>

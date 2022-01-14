@@ -1,9 +1,9 @@
 export default function ListItem({ movie }) {
   return (
     <article className="flex items-start space-x-6 p-6">
-      <img src={movie.image} alt="" width="60" height="88" className="flex-none rounded-md bg-gray-100" />
+      <img src={movie.image} alt="" width="60" height="88" className="flex-none rounded-md bg-slate-100" />
       <div className="min-w-0 relative flex-auto">
-        <h2 className="font-semibold text-gray-900 truncate pr-20">{movie.title}</h2>
+        <h2 className="font-semibold text-slate-900 truncate pr-20">{movie.title}</h2>
         <dl className="mt-2 flex flex-wrap text-sm leading-6 font-medium">
           <div className="absolute top-0 right-0 flex items-center space-x-1">
             <dt className="text-sky-500">
@@ -16,7 +16,7 @@ export default function ListItem({ movie }) {
           </div>
           <div>
             <dt className="sr-only">Rating</dt>
-            <dd className="px-1.5 ring-1 ring-gray-200 rounded">{movie.rating}</dd>
+            <dd className="px-1.5 ring-1 ring-slate-200 rounded">{movie.rating}</dd>
           </div>
           <div className="ml-2">
             <dt className="sr-only">Year</dt>
@@ -25,7 +25,7 @@ export default function ListItem({ movie }) {
           <div>
             <dt className="sr-only">Genre</dt>
             <dd className="flex items-center">
-              <svg width="2" height="2" fill="currentColor" className="mx-2 text-gray-300" aria-hidden="true">
+              <svg width="2" height="2" fill="currentColor" className="mx-2 text-slate-300" aria-hidden="true">
                 <circle cx="1" cy="1" r="1" />
               </svg>
               {movie.genre}
@@ -34,7 +34,7 @@ export default function ListItem({ movie }) {
           <div>
             <dt className="sr-only">Runtime</dt>
             <dd className="flex items-center">
-              <svg width="2" height="2" fill="currentColor" className="mx-2 text-gray-300" aria-hidden="true">
+              <svg width="2" height="2" fill="currentColor" className="mx-2 text-slate-300" aria-hidden="true">
                 <circle cx="1" cy="1" r="1" />
               </svg>
               {movie.runtime}
@@ -42,7 +42,7 @@ export default function ListItem({ movie }) {
           </div>
           <div className="flex-none w-full mt-2 font-normal">
             <dt className="sr-only">Cast</dt>
-            <dd className="text-gray-400">{movie.cast}</dd>
+            <dd className="text-slate-400">{movie.cast}</dd>
           </div>
         </dl>
       </div>

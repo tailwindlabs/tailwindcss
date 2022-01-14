@@ -4,9 +4,9 @@ import { Component } from '@angular/core'
   selector: 'app-list-item',
   template: `
     <article class="flex items-start space-x-6 p-6">
-      <img [src]="movie.image" alt="" width="60" height="88" class="flex-none rounded-md bg-gray-100" />
+      <img [src]="movie.image" alt="" width="60" height="88" class="flex-none rounded-md bg-slate-100" />
       <div class="min-w-0 relative flex-auto">
-        <h2 class="font-semibold text-gray-900 truncate pr-20">{{ movie.title }}</h2>
+        <h2 class="font-semibold text-slate-900 truncate pr-20">{{ movie.title }}</h2>
         <dl class="mt-2 flex flex-wrap text-sm leading-6 font-medium">
           <div class="absolute top-0 right-0 flex items-center space-x-1">
             <dt class="text-sky-500">
@@ -19,7 +19,7 @@ import { Component } from '@angular/core'
           </div>
           <div>
             <dt class="sr-only">Rating</dt>
-            <dd class="px-1.5 ring-1 ring-gray-200 rounded">{{ movie.rating }}</dd>
+            <dd class="px-1.5 ring-1 ring-slate-200 rounded">{{ movie.rating }}</dd>
           </div>
           <div class="ml-2">
             <dt class="sr-only">Year</dt>
@@ -28,7 +28,7 @@ import { Component } from '@angular/core'
           <div>
             <dt class="sr-only">Genre</dt>
             <dd class="flex items-center">
-              <svg width="2" height="2" fill="currentColor" class="mx-2 text-gray-300" aria-hidden="true">
+              <svg width="2" height="2" fill="currentColor" class="mx-2 text-slate-300" aria-hidden="true">
                 <circle cx="1" cy="1" r="1" />
               </svg>
               {{ movie.genre }}
@@ -37,7 +37,7 @@ import { Component } from '@angular/core'
           <div>
             <dt class="sr-only">Runtime</dt>
             <dd class="flex items-center">
-              <svg width="2" height="2" fill="currentColor" class="mx-2 text-gray-300" aria-hidden="true">
+              <svg width="2" height="2" fill="currentColor" class="mx-2 text-slate-300" aria-hidden="true">
                 <circle cx="1" cy="1" r="1" />
               </svg>
               {{ movie.runtime }}
@@ -45,7 +45,7 @@ import { Component } from '@angular/core'
           </div>
           <div class="flex-none w-full mt-2 font-normal">
             <dt class="sr-only">Cast</dt>
-            <dd class="text-gray-400">{{ movie.cast }}</dd>
+            <dd class="text-slate-400">{{ movie.cast }}</dd>
           </div>
         </dl>
       </div>

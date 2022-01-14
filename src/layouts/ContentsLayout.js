@@ -36,10 +36,10 @@ function TableOfContents({ tableOfContents, currentSection }) {
 
   return (
     <>
-      <h5 className="text-gray-900 font-semibold mb-4 text-sm leading-6 dark:text-gray-100">
+      <h5 className="text-slate-900 font-semibold mb-4 text-sm leading-6 dark:text-slate-100">
         On this page
       </h5>
-      <ul className="text-gray-700 text-sm leading-6">
+      <ul className="text-slate-700 text-sm leading-6">
         {tableOfContents.map((section) => (
           <Fragment key={section.slug}>
             <li>
@@ -51,7 +51,7 @@ function TableOfContents({ tableOfContents, currentSection }) {
                   pageHasSubsections ? 'font-medium' : '',
                   isActive(section)
                     ? 'font-medium text-sky-500 dark:text-sky-400'
-                    : 'hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300'
+                    : 'hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300'
                 )}
               >
                 {section.title}
@@ -66,14 +66,14 @@ function TableOfContents({ tableOfContents, currentSection }) {
                     'group flex items-start py-1',
                     isActive(subsection)
                       ? 'text-sky-500 dark:text-sky-400'
-                      : 'hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300'
+                      : 'hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300'
                   )}
                 >
                   <svg
                     width="3"
                     height="24"
                     viewBox="0 -9 3 24"
-                    className="mr-2 text-gray-400 overflow-visible group-hover:text-gray-600 dark:text-gray-600 dark:group-hover:text-gray-500"
+                    className="mr-2 text-slate-400 overflow-visible group-hover:text-slate-600 dark:text-slate-600 dark:group-hover:text-slate-500"
                   >
                     <path
                       d="M0 0L3 3L0 6"
@@ -186,12 +186,12 @@ export function ContentsLayout({ children, meta, classes, tableOfContents, secti
         {classes ? (
           <>
             <ClassTable {...classes} />
-            <div id="content" className="relative z-20 prose mt-12 dark:prose-dark">
+            <div id="content" className="relative z-20 prose prose-slate mt-12 dark:prose-dark">
               <MDXProvider components={{ Heading }}>{children}</MDXProvider>
             </div>
           </>
         ) : (
-          <div id="content" className="relative z-20 prose mt-8 dark:prose-dark">
+          <div id="content" className="relative z-20 prose prose-slate mt-8 dark:prose-dark">
             <MDXProvider components={{ Heading }}>{children}</MDXProvider>
           </div>
         )}
@@ -201,7 +201,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents, secti
         <Link
           href={`https://github.com/tailwindlabs/tailwindcss.com/edit/master/src/pages${router.pathname}.mdx`}
         >
-          <a className="hover:text-gray-900 dark:hover:text-gray-400">Edit this page on GitHub</a>
+          <a className="hover:text-slate-900 dark:hover:text-slate-400">Edit this page on GitHub</a>
         </Link>
       </Footer>
 

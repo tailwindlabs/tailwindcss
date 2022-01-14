@@ -25,7 +25,7 @@
     "@sindresorhus/slugify": "^1.1.0",
     "@svgr/webpack": "^5.5.0",
     "@tailwindcss/aspect-ratio": "^0.4.0",
-    "@tailwindcss/typography": "0.5.0-alpha.2",
+    "@tailwindcss/typography": "^0.5.0",
     "autoprefixer": "^10.4.0",
     "brotli-size": "^4.0.0",
     "clean-css": "^4.2.3",

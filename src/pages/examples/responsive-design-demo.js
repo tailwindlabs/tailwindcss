@@ -1,7 +1,7 @@
 export default function ReponsiveDesignDemo() {
   return (
     <div className="flex items-center justify-center p-8 w-screen h-screen">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-xl overflow-hidden sm:max-w-2xl ring-1 ring-gray-900/5">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-xl overflow-hidden sm:max-w-2xl ring-1 ring-slate-900/5">
         <div className="flex flex-col sm:flex-row">
           <div className="sm:shrink-0">
             <img
@@ -16,11 +16,11 @@ export default function ReponsiveDesignDemo() {
             <div className="font-medium text-sm leading-6 text-indigo-600">Company retreats</div>
             <a
               href="#"
-              className="block font-semibold text-base text-gray-900 leading-6 hover:underline"
+              className="block font-semibold text-base text-slate-900 leading-6 hover:underline"
             >
               Incredible accomodation for your team
             </a>
-            <p className="text-sm text-gray-600 leading-6">
+            <p className="text-sm text-slate-600 leading-6">
               Looking to take your team away on a retreat to enjoy awesome food and take in some
               sunshine? We have a list of places to do just that.{' '}
             </p>

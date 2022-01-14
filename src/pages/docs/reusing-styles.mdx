@@ -15,8 +15,8 @@ For example, in the template below you can see the utility classes for each avat
 <Example p="none">
   <div class="w-72 sm:w-96 px-8 sm:px-12 py-6 sm:py-8 mx-auto bg-white shadow">
     <div class="flex text-base items-center space-x-2">
-      <h4 class="text-base font-semibold text-gray-900">Contributors</h4>
-      <span class="text-xs rounded-full px-2 py-1 bg-gray-100 font-semibold text-gray-700">204</span>
+      <h4 class="text-base font-semibold text-slate-900">Contributors</h4>
+      <span class="text-xs rounded-full px-2 py-1 bg-slate-100 font-semibold text-slate-700">204</span>
     </div>
     <div class="mt-3 flex -space-x-2 overflow-hidden">
       <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
@@ -34,8 +34,8 @@ For example, in the template below you can see the utility classes for each avat
 ```html
 <div>
   <div class="flex items-center space-x-2 text-base">
-    <h4 class="font-semibold text-gray-900">Contributors</h4>
-    <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">204</span>
+    <h4 class="font-semibold text-slate-900">Contributors</h4>
+    <span class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">204</span>
   </div>
   <div class="mt-3 flex -space-x-2 overflow-hidden">
     <img class="**inline-block h-12 w-12 rounded-full ring-2 ring-white**" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
@@ -79,8 +79,8 @@ For example, the duplicate avatars at the beginning of this guide would almost c
 <Example p="none">
   <div class="w-72 sm:w-96 px-8 sm:px-12 py-6 sm:py-8 mx-auto bg-white shadow">
     <div class="flex text-base items-center space-x-2">
-      <h4 class="text-base font-semibold text-gray-900">Contributors</h4>
-      <span class="text-xs rounded-full px-2 py-1 bg-gray-100 font-semibold text-gray-700">204</span>
+      <h4 class="text-base font-semibold text-slate-900">Contributors</h4>
+      <span class="text-xs rounded-full px-2 py-1 bg-slate-100 font-semibold text-slate-700">204</span>
     </div>
     <div class="mt-3 flex -space-x-2 overflow-hidden">
       <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
@@ -98,8 +98,8 @@ For example, the duplicate avatars at the beginning of this guide would almost c
 ```html
 <div>
   <div class="flex items-center space-x-2 text-base">
-    <h4 class="font-semibold text-gray-900">Contributors</h4>
-    <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">204</span>
+    <h4 class="font-semibold text-slate-900">Contributors</h4>
+    <span class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">204</span>
   </div>
   <div class="mt-3 flex -space-x-2 overflow-hidden">
 **    {#each contributors as user}**
@@ -118,10 +118,10 @@ You could even rewrite the navigation example using a loop or `map` if you prefe
   <div class="sm:px-8 flex sm:justify-center">
     <div class="bg-white px-6 py-4 shadow">
       <nav class="flex justify-center space-x-4">
-        <a href="#/dashboard" class="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">Home</a>
-        <a href="#/team" class="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">Team</a>
-        <a href="#/projects" class="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">Projects</a>
-        <a href="#/reports" class="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">Reports</a>
+        <a href="#/dashboard" class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900">Home</a>
+        <a href="#/team" class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900">Team</a>
+        <a href="#/projects" class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900">Projects</a>
+        <a href="#/reports" class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900">Reports</a>
       </nav>
     </div>
   </div>
@@ -135,7 +135,7 @@ You could even rewrite the navigation example using a loop or `map` if you prefe
     ['Projects', '/projects'],
     ['Reports', '/reports'],
   ].map(([title, url]) => (
-    <a href={url} className="rounded-lg px-3 py-2 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900">{title}</a>
+    <a href={url} className="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900">{title}</a>
   ))}
 </nav>
 ```
@@ -154,11 +154,11 @@ If you need to reuse some styles across multiple files, the best strategy is to 
       <img class="rounded" src="https://images.unsplash.com/photo-1452784444945-3f422708fe5e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=512&q=80" width="512" height="341" alt="Beach" />
       <div class="mt-2">
         <div>
-          <div class="text-xs text-gray-600 uppercase font-bold tracking-wider">Private Villa</div>
-          <div class="font-bold text-gray-700 leading-snug">
+          <div class="text-xs text-slate-600 uppercase font-bold tracking-wider">Private Villa</div>
+          <div class="font-bold text-slate-700 leading-snug">
             <a href="#" class="hover:underline">Relaxing All-Inclusive Resort in Cancun</a>
           </div>
-          <div class="mt-2 text-sm text-gray-600">$299 USD per night</div>
+          <div class="mt-2 text-sm text-slate-600">$299 USD per night</div>
         </div>
       </div>
     </div>
@@ -171,11 +171,11 @@ If you need to reuse some styles across multiple files, the best strategy is to 
     <img class="rounded" :src="img" :alt="imgAlt">
     <div class="mt-2">
       <div>
-        <div class="text-xs text-gray-600 uppercase font-bold tracking-wider">{{ eyebrow }}</div>
-        <div class="font-bold text-gray-700 leading-snug">
+        <div class="text-xs text-slate-600 uppercase font-bold tracking-wider">{{ eyebrow }}</div>
+        <div class="font-bold text-slate-700 leading-snug">
           <a :href="url" class="hover:underline">{{ title }}</a>
         </div>
-        <div class="mt-2 text-sm text-gray-600">{{ pricing }}</div>
+        <div class="mt-2 text-sm text-slate-600">{{ pricing }}</div>
       </div>
     </div>
   </div>
@@ -204,7 +204,7 @@ Unless a component is a single HTML element, the information needed to define it
       </div>
       <div>
         <div class="text-base sm:text-xl font-medium text-black">ChitChat</div>
-        <p class="text-sm sm:text-base text-gray-500">You have a new message!</p>
+        <p class="text-sm sm:text-base text-slate-500">You have a new message!</p>
       </div>
     </div>
   </div>
@@ -246,7 +246,7 @@ Components and template partials solve this problem much better than CSS-only ab
       </div>
       <div>
         <div class="text-base sm:text-xl font-medium text-black">ChitChat</div>
-        <p class="text-sm sm:text-base text-gray-500">You have a new message!</p>
+        <p class="text-sm sm:text-base text-slate-500">You have a new message!</p>
       </div>
     </div>
   </div>
@@ -261,7 +261,7 @@ function Notification({ imageUrl, imageAlt, title, message }) {
       </div>
       <div>
         <div className="text-xl font-medium text-black">{title}</div>
-        <p className="text-gray-500">{message}</p>
+        <p className="text-slate-500">{message}</p>
       </div>
     </div>
   )
@@ -319,7 +319,7 @@ Learn more about `@apply` and `@layer` in the [Functions & Directives](/docs/fun
 
 ### Avoiding premature abstraction
 
-Whatever you do, **don't use <code className="font-semibold text-gray-900">@apply</code> just to make things look "cleaner"**. Yes, HTML templates littered with Tailwind classes are kind of ugly. Making changes in a project that has tons of custom CSS is worse.
+Whatever you do, **don't use <code className="font-semibold text-slate-900">@apply</code> just to make things look "cleaner"**. Yes, HTML templates littered with Tailwind classes are kind of ugly. Making changes in a project that has tons of custom CSS is worse.
 
 If you start using `@apply` for everything, you are basically just writing CSS again and throwing away all of the workflow and maintainability advantages Tailwind gives you, for example:
 

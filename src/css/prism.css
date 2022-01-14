@@ -12,7 +12,7 @@
 .token.rule,
 .token.pseudo-class,
 .token.important {
-  @apply text-gray-300;
+  @apply text-slate-300;
 }
 
 .token.attr-value,
@@ -23,7 +23,7 @@
 
 .token.punctuation,
 .token.attr-equals {
-  @apply text-gray-500;
+  @apply text-slate-500;
 }
 
 .token.attr-value * {
@@ -33,7 +33,7 @@
 .token.attr-value .attr-equals,
 .token.attr-value .attr-equals + .punctuation,
 .token.attr-value > .punctuation:last-child {
-  @apply text-gray-500;
+  @apply text-slate-500;
 }
 
 .token.property {
@@ -57,7 +57,7 @@
 .token.module,
 .token.operator,
 .token.combinator {
-  @apply text-gray-400;
+  @apply text-slate-400;
 }
 
 .token.unchanged {

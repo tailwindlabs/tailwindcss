@@ -22,7 +22,7 @@ export function ColorPaletteReference({ colors }) {
             <div className="flex flex-col space-y-3 sm:flex-row text-xs sm:space-y-0 sm:space-x-4">
               <div className="w-16 shrink-0">
                 <div className="h-10 flex flex-col justify-center">
-                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-200">
+                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-200">
                     {title
                       .split('')
                       .flatMap((l, i) => {
@@ -41,10 +41,10 @@ export function ColorPaletteReference({ colors }) {
                         style={{ backgroundColor: value }}
                       />
                       <div className="px-0.5 md:flex md:justify-between md:space-x-2 2xl:space-x-0 2xl:block">
-                        <div className="w-6 font-medium text-gray-900 2xl:w-full dark:text-white">
+                        <div className="w-6 font-medium text-slate-900 2xl:w-full dark:text-white">
                           {name}
                         </div>
-                        <div className="text-gray-500 font-mono lowercase dark:text-gray-400">
+                        <div className="text-slate-500 font-mono lowercase dark:text-slate-400">
                           {value.replace(/^#[a-f0-9]+/gi, (m) => m.toUpperCase())}
                         </div>
                       </div>

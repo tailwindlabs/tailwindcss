@@ -23,17 +23,17 @@ export function Steps({ steps, code, level = 2 }) {
           <li
             key={step.title}
             className={clsx(
-              'relative pl-10 xl:grid grid-cols-5 gap-16 before:content-[counter(step)] before:absolute before:left-0 before:flex before:items-center before:justify-center before:w-[calc(1.375rem+1px)] before:h-[calc(1.375rem+1px)] before:text-[0.625rem] before:font-bold before:text-gray-700 before:rounded-md before:shadow-sm before:ring-1 before:ring-gray-900/5 dark:before:bg-gray-700 dark:before:text-gray-200 dark:before:ring-0 dark:before:shadow-none dark:before:highlight-white/5',
+              'relative pl-10 xl:grid grid-cols-5 gap-16 before:content-[counter(step)] before:absolute before:left-0 before:flex before:items-center before:justify-center before:w-[calc(1.375rem+1px)] before:h-[calc(1.375rem+1px)] before:text-[0.625rem] before:font-bold before:text-slate-700 before:rounded-md before:shadow-sm before:ring-1 before:ring-slate-900/5 dark:before:bg-slate-700 dark:before:text-slate-200 dark:before:ring-0 dark:before:shadow-none dark:before:highlight-white/5',
               index !== steps.length - 1 &&
-                'pb-8 after:absolute after:top-[calc(1.875rem+1px)] after:bottom-0 after:left-[0.6875rem] after:w-px after:bg-gray-200 dark:after:bg-gray-200/5'
+                'pb-8 after:absolute after:top-[calc(1.875rem+1px)] after:bottom-0 after:left-[0.6875rem] after:w-px after:bg-slate-200 dark:after:bg-slate-200/5'
             )}
             style={{ counterIncrement: 'step' }}
           >
             <div className="mb-6 col-span-2 xl:mb-0">
-              <StepHeading className="text-sm leading-6 text-gray-900 font-semibold mb-2 dark:text-gray-200">
+              <StepHeading className="text-sm leading-6 text-slate-900 font-semibold mb-2 dark:text-slate-200">
                 {step.title}
               </StepHeading>
-              <div className="prose prose-sm dark:prose-dark">
+              <div className="prose prose-slate prose-sm dark:prose-dark">
                 <step.body />
               </div>
             </div>
@@ -64,7 +64,7 @@ function CopyButton({ code }) {
       <button
         type="button"
         className={clsx({
-          'text-gray-500 hover:text-gray-400': state === 'idle',
+          'text-slate-500 hover:text-slate-400': state === 'idle',
           'text-sky-400': state === 'copied',
         })}
         onClick={() => {
@@ -121,7 +121,10 @@ function CopyButton({ code }) {
 function Code({ code, lang, pad }) {
   return (
     <pre
-      className={clsx('text-sm leading-6 text-gray-50 flex ligatures-none', pad && 'overflow-auto')}
+      className={clsx(
+        'text-sm leading-6 text-slate-50 flex ligatures-none',
+        pad && 'overflow-auto'
+      )}
     >
       <code
         className={clsx('flex-none min-w-full', pad && 'p-5')}
@@ -159,7 +162,7 @@ function Snippet({ code, highlightedCode }) {
   }
 
   return (
-    <div className="relative z-10 -ml-10 col-span-3 bg-gray-800 rounded-xl shadow-lg xl:ml-0 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-white/10">
+    <div className="relative z-10 -ml-10 col-span-3 bg-slate-800 rounded-xl shadow-lg xl:ml-0 dark:shadow-none dark:ring-1 dark:ring-inset dark:ring-white/10">
       <TabBar name={code.name}>
         <CopyButton code={code.code} />
       </TabBar>
@@ -172,12 +175,12 @@ function Snippet({ code, highlightedCode }) {
 
 function TabBar({ name, children }) {
   return (
-    <div className="relative flex text-gray-400 text-xs leading-6">
+    <div className="relative flex text-slate-400 text-xs leading-6">
       <div className="mt-2 flex-none text-sky-300 border-t border-b border-t-transparent border-b-sky-300 px-4 py-1 flex items-center">
         {name}
       </div>
       <div className="flex-auto flex pt-2 rounded-tr-xl overflow-hidden">
-        <div className="flex-auto -mr-px bg-gray-700/50 border border-gray-500/30 rounded-tl" />
+        <div className="flex-auto -mr-px bg-slate-700/50 border border-slate-500/30 rounded-tl" />
       </div>
       {children && (
         <div className="absolute top-2 right-0 h-8 flex items-center pr-4">{children}</div>

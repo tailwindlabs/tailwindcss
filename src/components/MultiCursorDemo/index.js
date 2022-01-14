@@ -50,7 +50,7 @@ function Link({ className, ...props }) {
     <a
       {...props}
       className={clsx(
-        'rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900',
+        'rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900',
         className
       )}
     />

@@ -4,7 +4,7 @@ export function Logo({ className, ...props }) {
   return (
     <svg
       viewBox="0 0 248 31"
-      className={clsx('text-gray-900 dark:text-white', className)}
+      className={clsx('text-slate-900 dark:text-white', className)}
       {...props}
     >
       <path

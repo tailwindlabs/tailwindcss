@@ -22,7 +22,7 @@ export function Tabs({ tabs, selected, onChange, className, iconClassName }) {
                 className={`mb-6 ${
                   selected === name
                     ? iconClassName
-                    : 'text-gray-300 group-hover:text-gray-400 dark:text-gray-600 dark:group-hover:text-gray-500'
+                    : 'text-slate-300 group-hover:text-slate-400 dark:text-slate-600 dark:group-hover:text-slate-500'
                 }`}
               >
                 {icon(selected === name)}

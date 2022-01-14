@@ -21,25 +21,25 @@ Use `pointer-events-none` to make an element ignore pointer events. The pointer 
 <Example hint="Try clicking the search icons to see the expected behaviour">
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 px-0 sm:px-10 font-mono font-bold">
     <div class="flex flex-col">
-      <p class="font-medium text-sm text-gray-500 font-mono mb-3 dark:text-gray-400">pointer-events-auto</p>
+      <p class="font-medium text-sm text-slate-500 font-mono mb-3 dark:text-slate-400">pointer-events-auto</p>
       <div class="relative rounded-lg shadow-sm w-full">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-auto">
-          <svg class="absolute text-gray-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <svg class="absolute text-slate-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
           </svg>
         </div>
-        <input type="text" placeholder="Search" class="font-sans block text-sm w-full pl-10 py-2 px-3 ring-1 ring-gray-900/10 text-gray-500 rounded-lg dark:bg-gray-800 dark:ring-0 dark:highlight-white/5 dark:text-gray-400" />
+        <input type="text" placeholder="Search" class="font-sans block text-sm w-full pl-10 py-2 px-3 ring-1 ring-slate-900/10 text-slate-500 rounded-lg dark:bg-slate-800 dark:ring-0 dark:highlight-white/5 dark:text-slate-400" />
       </div>
     </div>
     <div class="flex flex-col">
-      <p class="font-medium text-sm text-gray-500 font-mono mb-3 dark:text-gray-400">pointer-events-none</p>
+      <p class="font-medium text-sm text-slate-500 font-mono mb-3 dark:text-slate-400">pointer-events-none</p>
       <div class="relative rounded-lg shadow-sm w-full">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg class="absolute text-gray-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <svg class="absolute text-slate-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
           </svg>
         </div>
-        <input type="text" placeholder="Search" class="font-sans block text-sm w-full pl-10 py-2 px-3 ring-1 ring-gray-900/10 text-gray-500 rounded-lg dark:bg-gray-800 dark:ring-0 dark:highlight-white/5 dark:text-gray-400" />
+        <input type="text" placeholder="Search" class="font-sans block text-sm w-full pl-10 py-2 px-3 ring-1 ring-slate-900/10 text-slate-500 rounded-lg dark:bg-slate-800 dark:ring-0 dark:highlight-white/5 dark:text-slate-400" />
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@ Use `pointer-events-none` to make an element ignore pointer events. The pointer 
 ```html
 <div class="relative ...">
   <div class="absolute **pointer-events-auto** ...">
-    <svg class="absolute text-gray-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+    <svg class="absolute text-slate-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
       <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
     </svg>
   </div>
@@ -57,7 +57,7 @@ Use `pointer-events-none` to make an element ignore pointer events. The pointer 
 
 <div class="relative ...">
   <div class="absolute **pointer-events-none** ...">
-    <svg class="absolute text-gray-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+    <svg class="absolute text-slate-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
       <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
     </svg>
   </div>

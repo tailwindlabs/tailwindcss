@@ -19,16 +19,16 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
       <main>
         <article className={clsx('relative pt-10', grid)}>
           <Metadata meta={meta} />
-          <h1 className="col-span-full text-3xl sm:text-4xl sm:text-center xl:mb-16 font-extrabold tracking-tight text-gray-900 dark:text-gray-200">
+          <h1 className="col-span-full text-3xl sm:text-4xl sm:text-center xl:mb-16 font-extrabold tracking-tight text-slate-900 dark:text-slate-200">
             <Widont>{meta.title}</Widont>
           </h1>
           <div className="text-sm leading-6 mb-16 xl:mb-0">
-            <div className="hidden mb-5 pb-5 border-b border-gray-200 xl:block dark:border-gray-200/5">
+            <div className="hidden mb-5 pb-5 border-b border-slate-200 xl:block dark:border-slate-200/5">
               <Link href="/blog">
-                <a className="group flex font-semibold text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
+                <a className="group flex font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white">
                   <svg
                     viewBox="0 -9 3 24"
-                    className="overflow-visible mr-3 text-gray-400 w-auto h-6 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                    className="overflow-visible mr-3 text-slate-400 w-auto h-6 group-hover:text-slate-600 dark:group-hover:text-slate-300"
                   >
                     <path
                       d="M3 0L0 3L3 6"
@@ -45,7 +45,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
             </div>
             <dl>
               <dt className="sr-only">Date</dt>
-              <dd className="absolute top-0 inset-x-0 text-gray-700 sm:text-center dark:text-gray-400">
+              <dd className="absolute top-0 inset-x-0 text-slate-700 sm:text-center dark:text-slate-400">
                 <time dateTime={meta.date}>{postDateTemplate.render(new Date(meta.date))}</time>
               </dd>
               <div className="sm:flex sm:flex-wrap sm:justify-center xl:block">
@@ -58,10 +58,10 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
                     <img
                       src={author.avatar}
                       alt=""
-                      className="mr-3 w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-800"
+                      className="mr-3 w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800"
                     />
                     <div>
-                      <div className="text-gray-900 dark:text-gray-200">{author.name}</div>
+                      <div className="text-slate-900 dark:text-slate-200">{author.name}</div>
                       <a
                         href={`https://twitter.com/${author.twitter}`}
                         className="text-sky-500 hover:text-sky-600 dark:text-sky-400"
@@ -74,14 +74,16 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
               </div>
             </dl>
           </div>
-          <div className="prose dark:prose-dark">
+          <div className="prose prose-slate dark:prose-dark">
             <MDXProvider components={mdxComponents}>{children}</MDXProvider>
           </div>
         </article>
       </main>
       <footer className={clsx('mt-14 sm:mt-16', grid)}>
-        <div className="col-start-2 pt-14 sm:pt-16 border-t border-gray-200 dark:border-gray-200/5">
-          <h2 className="mb-10 font-semibold text-gray-900 dark:text-gray-200">Latest articles</h2>
+        <div className="col-start-2 pt-14 sm:pt-16 border-t border-slate-200 dark:border-slate-200/5">
+          <h2 className="mb-10 font-semibold text-slate-900 dark:text-slate-200">
+            Latest articles
+          </h2>
           <div className="grid grid-cols-1 gap-y-10 gap-x-8 md:grid-cols-2">
             {latestPosts
               .filter((post) => post.slug !== slug)

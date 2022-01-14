@@ -100,15 +100,15 @@ After about five false starts, we finally figured out an approach we liked, and 
 <Example>
   <div class="flex flex-col sm:flex-row justify-center gap-8 sm:gap-16">
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">shadow-cyan-500/50</p>
+      <p class="font-medium text-sm text-slate-500 font-mono text-center mb-3 dark:text-slate-400">shadow-cyan-500/50</p>
       <button class="py-2 px-3 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-cyan-500/50 focus:outline-none">Subscribe</button>
     </div>
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">shadow-blue-500/50</p>
+      <p class="font-medium text-sm text-slate-500 font-mono text-center mb-3 dark:text-slate-400">shadow-blue-500/50</p>
       <button class="py-2 px-3 bg-blue-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-blue-500/50 focus:outline-none">Subscribe</button>
     </div>
     <div class="flex flex-col items-center shrink-0">
-      <p class="font-medium text-sm text-gray-500 font-mono text-center mb-3 dark:text-gray-400">shadow-indigo-500/50</p>
+      <p class="font-medium text-sm text-slate-500 font-mono text-center mb-3 dark:text-slate-400">shadow-indigo-500/50</p>
       <button class="py-2 px-3 bg-indigo-500 text-white text-sm font-semibold rounded-md shadow-lg shadow-indigo-500/50 focus:outline-none">Subscribe</button>
     </div>
   </div>
@@ -234,11 +234,11 @@ We've added support for the new accent-color property, as well as a modifier for
           </div>
           <label class="block">
             <span class="sr-only">Choose profile photo</span>
-            <input type="file" class="block w-full text-sm text-gray-500 file:text-sm file:font-semibold file:py-2 file:px-4 file:bg-violet-50 file:text-violet-700 file:rounded-full file:border-0 file:mr-4 hover:file:bg-violet-100"
+            <input type="file" class="block w-full text-sm text-slate-500 file:text-sm file:font-semibold file:py-2 file:px-4 file:bg-violet-50 file:text-violet-700 file:rounded-full file:border-0 file:mr-4 hover:file:bg-violet-100"
             />
           </label>
         </div>
-        <label class="mt-6 flex items-center justify-center space-x-2 text-sm font-medium text-gray-600">
+        <label class="mt-6 flex items-center justify-center space-x-2 text-sm font-medium text-slate-600">
           <input type="checkbox" class="accent-violet-500" checked/>
           <span>Yes, send me all your stupid updates</span>
         </label>
@@ -255,7 +255,7 @@ We've added support for the new accent-color property, as well as a modifier for
     </div>
     <label class="block">
       <span class="sr-only">Choose profile photo</span>
-      <input type="file" class="block w-full text-sm text-gray-500
+      <input type="file" class="block w-full text-sm text-slate-500
         **file:mr-4** **file:py-2** **file:px-4**
         **file:rounded-full** **file:border-0**
         **file:text-sm** **file:font-semibold**
@@ -264,7 +264,7 @@ We've added support for the new accent-color property, as well as a modifier for
       "/>
     </label>
   </div>
-  <label class="mt-6 flex items-center justify-center space-x-2 text-sm font-medium text-gray-600">
+  <label class="mt-6 flex items-center justify-center space-x-2 text-sm font-medium text-slate-600">
     <input type="checkbox" class="**accent-violet-500**" checked/>
     <span>Yes, send me all your stupid updates</span>
   </label>
@@ -318,7 +318,7 @@ Now you can change underline colors, thickness, and more:
 
 
 <Example p="none">
-  <div class="bg-white p-8 text-gray-900 shadow-lg max-w-md mx-auto text-sm leading-6 sm:text-base sm:leading-7 dark:bg-gray-800 dark:text-gray-200">
+  <div class="bg-white p-8 text-slate-900 shadow-lg max-w-md mx-auto text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-200">
     <p class="text-base leading-6">I’m Derek, an astro-engineer based in Tatooine. I like to build X-Wings at <a href="#" class="font-semibold underline decoration-sky-500 decoration-2">My Company, Inc</a>. Outside of work, I like to <a href="#" class="font-semibold underline decoration-pink-500 decoration-2 decoration-dotted">watch pod-racing</a> and have <a href="#" class="font-semibold underline decoration-indigo-500 decoration-2 decoration-wavy">light-saber</a> fights.</p>
   </div>
 </Example>
@@ -344,22 +344,22 @@ We've added experimental support for multi-directional layouts with new `rtl` an
 <Example>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-10 max-w-lg mx-auto">
     <div dir="ltr">
-      <p class="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">Left-to-right</p>
+      <p class="mb-4 text-sm font-medium text-slate-500 dark:text-slate-400">Left-to-right</p>
       <div class="group flex items-center">
         <img class="shrink-0 h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
         <div class="ml-3 rtl:ml-0 rtl:mr-3">
-          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-300 dark:group-hover:text-white">Tom Cook</p>
-          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300">Director of Operations</p>
+          <p class="text-sm font-medium text-slate-700 group-hover:text-slate-900 dark:text-slate-300 dark:group-hover:text-white">Tom Cook</p>
+          <p class="text-sm font-medium text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300">Director of Operations</p>
         </div>
       </div>
     </div>
     <div dir="rtl">
-      <p class="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">Right-to-left</p>
+      <p class="mb-4 text-sm font-medium text-slate-500 dark:text-slate-400">Right-to-left</p>
       <div class="group flex items-center">
         <img class="shrink-0 h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1563833717765-00462801314e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
         <div class="ml-3 rtl:ml-0 rtl:mr-3">
-          <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-300 dark:group-hover:text-white">تامر كرم</p>
-          <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300">الرئيس التنفيذي</p>
+          <p class="text-sm font-medium text-slate-700 group-hover:text-slate-900 dark:text-slate-300 dark:group-hover:text-white">تامر كرم</p>
+          <p class="text-sm font-medium text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300">الرئيس التنفيذي</p>
         </div>
       </div>
     </div>
@@ -370,8 +370,8 @@ We've added experimental support for multi-directional layouts with new `rtl` an
   <div class="group flex items-center">
     <img class="shrink-0 h-12 w-12 rounded-full" src="..." alt="" />
 >   <div class="ltr:ml-3 rtl:mr-3">
-      <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900" dark-class="text-sm font-medium text-gray-300 group-hover:text-white">...</p>
-      <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700" dark-class="text-sm font-medium text-gray-500 group-hover:text-gray-300">...</p>
+      <p class="text-sm font-medium text-slate-700 group-hover:text-slate-900" dark-class="text-sm font-medium text-slate-300 group-hover:text-white">...</p>
+      <p class="text-sm font-medium text-slate-500 group-hover:text-slate-700" dark-class="text-sm font-medium text-slate-500 group-hover:text-slate-300">...</p>
     </div>
   </div>
 ```

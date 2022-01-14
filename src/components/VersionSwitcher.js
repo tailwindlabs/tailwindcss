@@ -5,7 +5,7 @@ import clsx from 'clsx'
 export function VersionSwitcher({ className }) {
   return (
     <Menu as="div" className="relative">
-      <Menu.Button className="text-xs leading-5 font-semibold bg-gray-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-gray-400/20 dark:highlight-white/5">
+      <Menu.Button className="text-xs leading-5 font-semibold bg-slate-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-slate-400/20 dark:highlight-white/5">
         v{pkg.version}
         <svg width="6" height="3" className="ml-2 overflow-visible" aria-hidden="true">
           <path
@@ -17,7 +17,7 @@ export function VersionSwitcher({ className }) {
           />
         </svg>
       </Menu.Button>
-      <Menu.Items className="absolute top-full mt-1 py-2 w-40 rounded-lg bg-white shadow ring-1 ring-gray-900/5 text-sm leading-6 font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:highlight-white/5">
+      <Menu.Items className="absolute top-full mt-1 py-2 w-40 rounded-lg bg-white shadow ring-1 ring-slate-900/5 text-sm leading-6 font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:highlight-white/5">
         <Menu.Item disabled>
           <span className="flex items-center justify-between px-3 py-1 text-sky-500 dark:text-sky-400">
             v{pkg.version}
@@ -38,7 +38,7 @@ export function VersionSwitcher({ className }) {
               href="https://v2.tailwindcss.com"
               className={clsx(
                 'block px-3 py-1',
-                active && 'bg-gray-50 text-gray-900 dark:bg-gray-600/30 dark:text-white'
+                active && 'bg-slate-50 text-slate-900 dark:bg-slate-600/30 dark:text-white'
               )}
             >
               v2.2.19
@@ -51,7 +51,7 @@ export function VersionSwitcher({ className }) {
               href="https://v1.tailwindcss.com"
               className={clsx(
                 'block px-3 py-1',
-                active && 'bg-gray-50 text-gray-900 dark:bg-gray-600/30 dark:text-white'
+                active && 'bg-slate-50 text-slate-900 dark:bg-slate-600/30 dark:text-white'
               )}
             >
               v1.9.6
@@ -64,7 +64,7 @@ export function VersionSwitcher({ className }) {
               href="https://tailwindcss-v0.netlify.app/"
               className={clsx(
                 'block px-3 py-1',
-                active && 'bg-gray-50 text-gray-900 dark:bg-gray-600/30 dark:text-white'
+                active && 'bg-slate-50 text-slate-900 dark:bg-slate-600/30 dark:text-white'
               )}
             >
               v0.7.4

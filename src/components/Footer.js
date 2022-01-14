@@ -5,13 +5,13 @@ export function Footer({ children, previous, next }) {
   return (
     <footer className={clsx('text-sm leading-6', previous || next ? 'mt-12' : 'mt-16')}>
       {(previous || next) && (
-        <div className="mb-10 text-gray-700 font-semibold flex items-center dark:text-gray-200">
+        <div className="mb-10 text-slate-700 font-semibold flex items-center dark:text-slate-200">
           {previous && (
             <Link href={previous.href}>
-              <a className="group flex items-center hover:text-gray-900 dark:hover:text-white">
+              <a className="group flex items-center hover:text-slate-900 dark:hover:text-white">
                 <svg
                   viewBox="0 0 3 6"
-                  className="mr-3 w-auto h-1.5 text-gray-400 overflow-visible group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                  className="mr-3 w-auto h-1.5 text-slate-400 overflow-visible group-hover:text-slate-600 dark:group-hover:text-slate-300"
                 >
                   <path
                     d="M3 0L0 3L3 6"
@@ -28,11 +28,11 @@ export function Footer({ children, previous, next }) {
           )}
           {next && (
             <Link href={next.href}>
-              <a className="group ml-auto flex items-center hover:text-gray-900 dark:hover:text-white">
+              <a className="group ml-auto flex items-center hover:text-slate-900 dark:hover:text-white">
                 {next.shortTitle || next.title}
                 <svg
                   viewBox="0 0 3 6"
-                  className="ml-3 w-auto h-1.5 text-gray-400 overflow-visible group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                  className="ml-3 w-auto h-1.5 text-slate-400 overflow-visible group-hover:text-slate-600 dark:group-hover:text-slate-300"
                 >
                   <path
                     d="M0 0L3 3L0 6"
@@ -48,22 +48,22 @@ export function Footer({ children, previous, next }) {
           )}
         </div>
       )}
-      <div className="pt-10 pb-28 border-t border-gray-200 sm:flex justify-between text-gray-500 dark:border-gray-200/5">
+      <div className="pt-10 pb-28 border-t border-slate-200 sm:flex justify-between text-slate-500 dark:border-slate-200/5">
         <div className="mb-6 sm:mb-0 sm:flex">
           <p>Copyright &copy; {new Date().getFullYear()} Tailwind Labs Inc.</p>
-          <p className="sm:ml-4 sm:pl-4 sm:border-l sm:border-gray-200 dark:sm:border-gray-200/5">
+          <p className="sm:ml-4 sm:pl-4 sm:border-l sm:border-slate-200 dark:sm:border-slate-200/5">
             <Link href="/brand">
-              <a className="hover:text-gray-900 dark:hover:text-gray-400">Trademark Policy</a>
+              <a className="hover:text-slate-900 dark:hover:text-slate-400">Trademark Policy</a>
             </Link>
           </p>
         </div>
         {children ? (
           children
         ) : (
-          <div className="flex space-x-10 text-gray-400 dark:text-gray-500">
+          <div className="flex space-x-10 text-slate-400 dark:text-slate-500">
             <a
               href="https://github.com/tailwindlabs/tailwindcss"
-              className="hover:text-gray-500 dark:hover:text-gray-400"
+              className="hover:text-slate-500 dark:hover:text-slate-400"
             >
               <span className="sr-only">GitHub</span>
               <svg width="25" height="24" fill="currentColor">
@@ -74,7 +74,7 @@ export function Footer({ children, previous, next }) {
                 />
               </svg>
             </a>
-            <a href="/discord" className="hover:text-gray-500 dark:hover:text-gray-400">
+            <a href="/discord" className="hover:text-slate-500 dark:hover:text-slate-400">
               <span className="sr-only">Discord</span>
               <svg width="23" height="24" fill="currentColor">
                 <path d="M9.555 9.23c-.74 0-1.324.624-1.324 1.385S8.827 12 9.555 12c.739 0 1.323-.624 1.323-1.385.013-.761-.584-1.385-1.323-1.385Zm4.737 0c-.74 0-1.324.624-1.324 1.385S13.564 12 14.292 12c.74 0 1.324-.624 1.324-1.385s-.584-1.385-1.324-1.385Z" />

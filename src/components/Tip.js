@@ -14,7 +14,7 @@ export function TipGood({ children }) {
         </svg>
         <div className="absolute top-full mt-1 left-[0.46875rem] w-px h-[1.375rem] bg-cyan-500/30 rounded-full dark:bg-sky-400/30" />
       </div>
-      <p className="m-0 flex-1 text-base font-semibold text-gray-900 dark:text-gray-200">
+      <p className="m-0 flex-1 text-base font-semibold text-slate-900 dark:text-slate-200">
         {children}
       </p>
     </div>
@@ -37,7 +37,7 @@ export function TipBad({ children }) {
         </svg>
         <div className="absolute top-full mt-1 left-[0.46875rem] w-px h-[1.375rem] bg-rose-200 rounded-full dark:bg-red-200/25" />
       </div>
-      <p className="m-0 flex-1 text-base font-semibold text-gray-900 dark:text-gray-200">
+      <p className="m-0 flex-1 text-base font-semibold text-slate-900 dark:text-slate-200">
         {children}
       </p>
     </div>
@@ -46,9 +46,9 @@ export function TipBad({ children }) {
 
 export function TipCompat({ children }) {
   return (
-    <div className="text-sm bg-light-blue-100 text-light-blue-800 font-medium px-4 py-3 mb-4 rounded-xl">
+    <div className="text-sm bg-sky-100 text-sky-800 font-medium px-4 py-3 mb-4 rounded-xl">
       <div className="flex items-start space-x-3">
-        <svg width="20" height="20" className="text-light-blue-500" fill="currentColor">
+        <svg width="20" height="20" className="text-sky-500" fill="currentColor">
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -65,7 +65,7 @@ export function TipInfo({ children }) {
   return (
     <div className="not-prose mt-6 -mb-1 flex space-x-2">
       <svg
-        className="flex-none w-5 h-5 text-gray-400 dark:text-gray-600"
+        className="flex-none w-5 h-5 text-slate-400 dark:text-slate-600"
         viewBox="0 0 20 20"
         fill="currentColor"
         aria-hidden="true"
@@ -77,7 +77,7 @@ export function TipInfo({ children }) {
         />
       </svg>
 
-      <p className="text-gray-700 text-sm font-medium dark:text-gray-200">{children}</p>
+      <p className="text-slate-700 text-sm font-medium dark:text-slate-200">{children}</p>
     </div>
   )
 }

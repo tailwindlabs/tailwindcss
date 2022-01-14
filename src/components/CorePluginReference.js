@@ -6,7 +6,7 @@ const descriptions = {
   accessibility: 'The `sr-only` and `not-sr-only` utilities',
   backgroundOpacity: 'The `background-color` opacity utilities like `bg-opacity-25`',
   borderOpacity: 'The `border-color` opacity utilities like `border-opacity-25`',
-  divideColor: 'The between elements `border-color` utilities like `divide-gray-500`',
+  divideColor: 'The between elements `border-color` utilities like `divide-slate-500`',
   divideWidth: 'The between elements `border-width` utilities like `divide-x-2`',
   placeholderColor: 'The placeholder `color` utilities like `placeholder-red-600`',
   placeholderOpacity: 'The placeholder `color` opacity utilities like `placeholder-opacity-25`',
@@ -16,7 +16,7 @@ const descriptions = {
 
 export function CorePluginReference() {
   return (
-    <div className="prose dark:prose-dark">
+    <div className="prose prose-slate dark:prose-dark">
       <table>
         <thead>
           <tr>

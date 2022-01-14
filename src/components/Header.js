@@ -63,7 +63,7 @@ export function NavPopover({ display = 'md:hidden', className, ...props }) {
     <div className={clsx(className, display)} {...props}>
       <button
         type="button"
-        className="text-gray-500 w-8 h-8 flex items-center justify-center hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
+        className="text-slate-500 w-8 h-8 flex items-center justify-center hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"
         onClick={() => setIsOpen(true)}
       >
         <span className="sr-only">Navigation</span>
@@ -83,11 +83,11 @@ export function NavPopover({ display = 'md:hidden', className, ...props }) {
         open={isOpen}
         onClose={setIsOpen}
       >
-        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-gray-900/80" />
-        <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-gray-900 dark:bg-gray-800 dark:text-gray-400 dark:highlight-white/5">
+        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-slate-900/80" />
+        <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-400 dark:highlight-white/5">
           <button
             type="button"
-            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
+            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"
             onClick={() => setIsOpen(false)}
           >
             <span className="sr-only">Close navigation</span>
@@ -112,7 +112,7 @@ export function NavPopover({ display = 'md:hidden', className, ...props }) {
               </a>
             </li>
           </ul>
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-200/10">
+          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-200/10">
             <ThemeSelect />
           </div>
         </div>
@@ -186,16 +186,16 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
       </div>
       <div
         className={clsx(
-          'sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-gray-900/10 dark:border-gray-50/[0.06]',
+          'sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06]',
           isOpaque
-            ? 'bg-white supports-backdrop-blur:bg-white/95 dark:bg-gray-900/75'
+            ? 'bg-white supports-backdrop-blur:bg-white/95 dark:bg-slate-900/75'
             : 'bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent'
         )}
       >
         <div className="max-w-8xl mx-auto">
           <div
             className={clsx(
-              'py-4 border-b border-gray-900/10 lg:px-8 lg:border-0 dark:border-gray-300/10',
+              'py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10',
               hasNav ? 'mx-4 lg:mx-0' : 'px-4'
             )}
           >
@@ -215,16 +215,16 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
               <VersionSwitcher />
               <Featured />
               <div className="relative hidden lg:flex items-center ml-auto">
-                <nav className="text-sm leading-6 font-semibold text-gray-700 dark:text-gray-200">
+                <nav className="text-sm leading-6 font-semibold text-slate-700 dark:text-slate-200">
                   <ul className="flex space-x-8">
                     <NavItems />
                   </ul>
                 </nav>
-                <div className="flex items-center border-l border-gray-200 ml-6 pl-6 dark:border-gray-800">
+                <div className="flex items-center border-l border-slate-200 ml-6 pl-6 dark:border-slate-800">
                   <ThemeToggle panelClassName="mt-8" />
                   <a
                     href="https://github.com/tailwindlabs/tailwindcss"
-                    className="ml-6 block text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                    className="ml-6 block text-slate-400 hover:text-slate-500 dark:hover:text-slate-300"
                   >
                     <span className="sr-only">Tailwind CSS on GitHub</span>
                     <svg
@@ -238,7 +238,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                   </a>
                 </div>
               </div>
-              <SearchButton className="ml-auto text-gray-500 w-8 h-8 -my-1 flex items-center justify-center hover:text-gray-600 lg:hidden dark:text-gray-400 dark:hover:text-gray-300">
+              <SearchButton className="ml-auto text-slate-500 w-8 h-8 -my-1 flex items-center justify-center hover:text-slate-600 lg:hidden dark:text-slate-400 dark:hover:text-slate-300">
                 <span className="sr-only">Search</span>
                 <svg
                   width="24"
@@ -258,11 +258,11 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
             </div>
           </div>
           {hasNav && (
-            <div className="flex items-center p-4 border-b border-gray-900/10 lg:hidden dark:border-gray-50/[0.06]">
+            <div className="flex items-center p-4 border-b border-slate-900/10 lg:hidden dark:border-slate-50/[0.06]">
               <button
                 type="button"
                 onClick={() => onNavToggle(!navIsOpen)}
-                className="text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
+                className="text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"
               >
                 <span className="sr-only">Navigation</span>
                 <svg width="24" height="24">
@@ -284,7 +284,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                         width="3"
                         height="6"
                         aria-hidden="true"
-                        className="mx-3 overflow-visible text-gray-400"
+                        className="mx-3 overflow-visible text-slate-400"
                       >
                         <path
                           d="M0 0L3 3L0 6"
@@ -296,7 +296,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                       </svg>
                     </li>
                   )}
-                  <li className="font-semibold text-gray-900 truncate dark:text-gray-200">
+                  <li className="font-semibold text-slate-900 truncate dark:text-slate-200">
                     {title}
                   </li>
                 </ol>

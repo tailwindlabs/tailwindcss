@@ -16,7 +16,7 @@ const previewBackground = {
   amber: 'bg-gradient-to-r from-amber-50 to-amber-100',
   emerald: 'bg-gradient-to-r from-emerald-50 to-teal-100',
   fuchsia: 'bg-gradient-to-r from-fuchsia-50 to-fuchsia-100',
-  gray: 'bg-gradient-to-r from-gray-50 to-gray-100',
+  gray: 'bg-gradient-to-r from-slate-50 to-slate-100',
   indigo: 'bg-gradient-to-r from-indigo-50 to-indigo-100',
   lightBlue: 'bg-gradient-to-r from-light-blue-50 to-light-blue-100',
   purple: 'bg-gradient-to-r from-purple-50 to-purple-100',
@@ -68,12 +68,12 @@ function Snippet({ color, snippet }) {
   return (
     <div
       className={clsx('overflow-hidden rounded-b-xl', codeBackground[color], {
-        'bg-gray-800': !codeBackground[color],
+        'bg-slate-800': !codeBackground[color],
       })}
     >
       <pre
         className={clsx(
-          'scrollbar-none overflow-x-auto p-6 text-sm leading-snug language-html text-gray-50',
+          'scrollbar-none overflow-x-auto p-6 text-sm leading-snug language-html text-slate-50',
           {
             'bg-black bg-opacity-75': codeBackground[color],
           }

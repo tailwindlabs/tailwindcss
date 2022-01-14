@@ -47,13 +47,13 @@ function TabItem({ children, selectedIndex, myIndex, marker }) {
     <Tab
       className={clsx(
         'flex items-center relative z-10 overflow-hidden px-4 py-1',
-        isSelected ? 'text-sky-300' : 'text-gray-400'
+        isSelected ? 'text-sky-300' : 'text-slate-400'
       )}
     >
       <span className="z-10">{children}</span>
 
       {marker === 'close' && (
-        <svg viewBox="0 0 4 4" className="ml-2.5 flex-none w-1 h-1 text-gray-500 overflow-visible">
+        <svg viewBox="0 0 4 4" className="ml-2.5 flex-none w-1 h-1 text-slate-500 overflow-visible">
           <path d="M-1 -1L5 5M5 -1L-1 5" fill="none" stroke="currentColor" strokeLinecap="round" />
         </svg>
       )}
@@ -66,7 +66,7 @@ function TabItem({ children, selectedIndex, myIndex, marker }) {
       {!isSelected && (
         <TabAdornment
           className={clsx(
-            'bg-gray-700/50 border-y border-gray-500/30',
+            'bg-slate-700/50 border-y border-slate-500/30',
             edges.leading === 'capped' && 'border-l rounded-tl',
             edges.trailing === 'capped' && 'border-r rounded-tr'
           )}
@@ -75,7 +75,7 @@ function TabItem({ children, selectedIndex, myIndex, marker }) {
 
       {/* Divider between inactive tabs */}
       {edges.trailing === 'normal' && (
-        <TabAdornment className="inset-y-px border-r border-gray-200/5 z-20" />
+        <TabAdornment className="inset-y-px border-r border-slate-200/5 z-20" />
       )}
 
       {/* Active tab highlight bar */}
@@ -97,10 +97,10 @@ export function SnippetGroup({ children, actions }) {
     <Tab.Group
       as="div"
       onChange={setSelectedIndex}
-      className="not-prose bg-gray-800 rounded-xl shadow-md"
+      className="not-prose bg-slate-800 rounded-xl shadow-md"
     >
       <div className="flex">
-        <Tab.List className="flex text-gray-400 text-xs leading-6 overflow-hidden rounded-tl-xl pt-2">
+        <Tab.List className="flex text-slate-400 text-xs leading-6 overflow-hidden rounded-tl-xl pt-2">
           {children.map((child, tabIndex) => (
             <TabItem key={child.props.filename} myIndex={tabIndex} selectedIndex={selectedIndex}>
               {child.props.filename}
@@ -110,7 +110,7 @@ export function SnippetGroup({ children, actions }) {
         <div className="flex-auto flex pt-2 rounded-tr-xl overflow-hidden">
           <div
             className={clsx(
-              'flex-auto flex justify-end bg-gray-700/50 border-y border-gray-500/30 pr-4',
+              'flex-auto flex justify-end bg-slate-700/50 border-y border-slate-500/30 pr-4',
               selectedIndex === children.length - 1 ? 'rounded-tl border-l' : ''
             )}
           />
@@ -123,7 +123,7 @@ export function SnippetGroup({ children, actions }) {
         {children.map((child) => (
           <Tab.Panel
             key={child.props.filename}
-            className="flex-none min-w-full p-5 text-sm leading-6 text-gray-50 ligatures-none"
+            className="flex-none min-w-full p-5 text-sm leading-6 text-slate-50 ligatures-none"
           >
             {child.props.children}
           </Tab.Panel>

@@ -16,16 +16,16 @@ export const classes = { utilities }
 Use `inline`, `inline-block`, and `block` to control the flow of text and elements.
 
 <Example p="none">
-  <div class="mx-auto max-w-xs bg-white shadow-xl p-4 text-gray-500 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-gray-800 dark:text-gray-400">
-    When controlling the flow of text, using the CSS property <span class="inline bg-sky-100 font-bold text-sm text-gray-900 font-mono rounded dark:bg-gray-600 dark:text-gray-200">display: inline</span>
+  <div class="mx-auto max-w-xs bg-white shadow-xl p-4 text-slate-500 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400">
+    When controlling the flow of text, using the CSS property <span class="inline bg-sky-100 font-bold text-sm text-slate-900 font-mono rounded dark:bg-slate-600 dark:text-slate-200">display: inline</span>
     will cause the text inside the element to wrap normally.
     <br><br>
     While using the property
-    <span class="inline-block bg-sky-100 font-bold text-sm text-gray-900 font-mono rounded dark:bg-gray-600 dark:text-gray-200">display: inline-block</span>
+    <span class="inline-block bg-sky-100 font-bold text-sm text-slate-900 font-mono rounded dark:bg-slate-600 dark:text-slate-200">display: inline-block</span>
     will wrap the element to prevent the text inside from extending beyond its parent.
     <br><br>
     Lastly, using the property
-    <span class="block bg-sky-100 font-bold text-sm text-gray-900 font-mono rounded dark:bg-gray-600 dark:text-gray-200">display: block</span>
+    <span class="block bg-sky-100 font-bold text-sm text-slate-900 font-mono rounded dark:bg-slate-600 dark:text-slate-200">display: block</span>
     will put the element on it's own line and fill its parent.
   </div>
 </Example>
@@ -49,12 +49,12 @@ Use `inline`, `inline-block`, and `block` to control the flow of text and elemen
 Use `flow-root` to create a block-level element with its own [block formatting context](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context).
 
 <Example p="none">
-  <div class="mx-auto max-w-xs bg-white shadow-xl p-4 text-gray-500 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-gray-800 dark:text-gray-400">
+  <div class="mx-auto max-w-xs bg-white shadow-xl p-4 text-slate-500 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400">
     <div class="flow-root bg-stripes-purple mb-0.5">
-      <div class="my-4 bg-white dark:bg-gray-800">Well, let me tell you something, funny boy. Y'know that little stamp, the one that says "New York Public Library"? Well that may not mean anything to you, but that means a lot to me. One whole hell of a lot.</div>
+      <div class="my-4 bg-white dark:bg-slate-800">Well, let me tell you something, funny boy. Y'know that little stamp, the one that says "New York Public Library"? Well that may not mean anything to you, but that means a lot to me. One whole hell of a lot.</div>
     </div>
     <div class="flow-root bg-stripes-purple mt-0.5">
-      <div class="my-4 bg-white dark:bg-gray-800">Sure, go ahead, laugh if you want to. I've seen your type before: Flashy, making the scene, flaunting convention. Yeah, I know what you're thinking. What's this guy making such a big stink about old library books? Well, let me give you a hint, junior. </div>
+      <div class="my-4 bg-white dark:bg-slate-800">Sure, go ahead, laugh if you want to. I've seen your type before: Flashy, making the scene, flaunting convention. Yeah, I know what you're thinking. What's this guy making such a big stink about old library books? Well, let me give you a hint, junior. </div>
     </div>
   </div>
 </Example>
@@ -75,12 +75,12 @@ Use `flow-root` to create a block-level element with its own [block formatting c
 Use `flex` to create a block-level flex container.
 
 <Example p="none">
-  <div class="mx-auto max-w-xs bg-white shadow-xl p-4 text-gray-500 leading-6 flex justify-center dark:bg-gray-800 dark:text-gray-400">
+  <div class="mx-auto max-w-xs bg-white shadow-xl p-4 text-slate-500 leading-6 flex justify-center dark:bg-slate-800 dark:text-slate-400">
     <div class="flex items-center gap-4 p-4">
       <img class="w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=80">
       <div class="flex flex-col">
-        <strong class="text-gray-900 font-medium dark:text-gray-200">Andrew Alfred</strong>
-        <span class="text-gray-500 font-medium dark:text-gray-400">Technical advisor</span>
+        <strong class="text-slate-900 font-medium dark:text-slate-200">Andrew Alfred</strong>
+        <span class="text-slate-500 font-medium dark:text-slate-400">Technical advisor</span>
       </div>
     </div>
   </div>
@@ -101,10 +101,10 @@ Use `flex` to create a block-level flex container.
 Use `inline-flex` to create an inline flex container that flows with text.
 
 <Example p="none">
-  <p class="mx-auto max-w-lg bg-white shadow-xl p-4 text-gray-500 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-gray-800 dark:text-gray-400">
+  <p class="mx-auto max-w-lg bg-white shadow-xl p-4 text-slate-500 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400">
     Today I spent most of the day researching ways to take advantage of the fact that bottles can be returned for 10 cents in Michigan, but only 5 cents here. <span class="ml-1 inline-flex items-baseline">
       <img src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=80" alt="" class="self-center w-5 h-5 rounded-full mr-1" />
-      <span class="font-medium text-gray-900 dark:text-gray-200">Kramer</span>
+      <span class="font-medium text-slate-900 dark:text-slate-200">Kramer</span>
     </span> keeps telling me there is no way to make it work, that he has run the numbers on every possible approach, but I just have to believe there's a way to make it work, there's simply too much opportunity here.
   </p>
 </Example>
@@ -150,21 +150,21 @@ Use `inline-grid` to create an inline grid container.
 
 <Example p="none">
   <div class="space-x-3 overflow-x-scroll w-full p-8 whitespace-nowrap">
-    <div class="inline-grid grid-cols-3 gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-light-blue rounded-lg text-center">
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">01</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">02</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">03</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">04</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">05</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">06</div>
+    <div class="inline-grid grid-cols-3 gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-sky rounded-lg text-center">
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">01</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">02</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">03</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">04</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">05</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">06</div>
     </div>
-    <div class="inline-grid grid-cols-3 gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-light-blue rounded-lg text-center">
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">01</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">02</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">03</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">04</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">05</div>
-      <div class="p-4 w-14 h-14 bg-light-blue-500 shadow-lg rounded-lg">06</div>
+    <div class="inline-grid grid-cols-3 gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-sky rounded-lg text-center">
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">01</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">02</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">03</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">04</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">05</div>
+      <div class="p-4 w-14 h-14 bg-sky-500 shadow-lg rounded-lg">06</div>
     </div>
   </div>
 </Example>
@@ -223,26 +223,26 @@ Use the `table`, `.table-row`, `.table-cell`, `.table-caption`, `.table-column`,
     <div class="table border-collapse table-auto w-full text-sm">
       <div class="table-header-group">
         <div class="table-row">
-          <div class="table-cell border-b dark:border-gray-600 font-medium p-4 pl-8 pt-0 pb-3 text-gray-400 dark:text-gray-200 text-left">Song</div>
-          <div class="table-cell border-b dark:border-gray-600 font-medium p-4 pt-0 pb-3 text-gray-400 dark:text-gray-200 text-left">Artist</div>
-          <div class="table-cell border-b dark:border-gray-600 font-medium p-4 pr-8 pt-0 pb-3 text-gray-400 dark:text-gray-200 text-left">Year</div>
+          <div class="table-cell border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Song</div>
+          <div class="table-cell border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Artist</div>
+          <div class="table-cell border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Year</div>
         </div>
       </div>
-      <div class="table-row-group bg-white dark:bg-gray-800">
+      <div class="table-row-group bg-white dark:bg-slate-800">
         <div class="table-row">
-          <div class="table-cell border-b border-gray-100 dark:border-gray-700 p-4 pl-8 text-gray-500 dark:text-gray-400">The Sliding Mr. Bones (Next Stop, Pottersville)</div>
-          <div class="table-cell border-b border-gray-100 dark:border-gray-700 p-4 text-gray-500 dark:text-gray-400">Malcolm Lockyer</div>
-          <div class="table-cell border-b border-gray-100 dark:border-gray-700 p-4 pr-8 text-gray-500 dark:text-gray-400">1961</div>
+          <div class="table-cell border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">The Sliding Mr. Bones (Next Stop, Pottersville)</div>
+          <div class="table-cell border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Malcolm Lockyer</div>
+          <div class="table-cell border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">1961</div>
         </div>
         <div class="table-row">
-          <div class="table-cell border-b border-gray-100 dark:border-gray-700 p-4 pl-8 text-gray-500 dark:text-gray-400">Witchy Woman</div>
-          <div class="table-cell border-b border-gray-100 dark:border-gray-700 p-4 text-gray-500 dark:text-gray-400">The Eagles</div>
-          <div class="table-cell border-b border-gray-100 dark:border-gray-700 p-4 pr-8 text-gray-500 dark:text-gray-400">1972</div>
+          <div class="table-cell border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">Witchy Woman</div>
+          <div class="table-cell border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">The Eagles</div>
+          <div class="table-cell border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">1972</div>
         </div>
         <div class="table-row">
-          <div class="table-cell border-b border-gray-200 dark:border-gray-600 p-4 pl-8 text-gray-500 dark:text-gray-400">Shining Star</div>
-          <div class="table-cell border-b border-gray-200 dark:border-gray-600 p-4 text-gray-500 dark:text-gray-400">Earth, Wind, and Fire</div>
-          <div class="table-cell border-b border-gray-200 dark:border-gray-600 p-4 pr-8 text-gray-500 dark:text-gray-400">1975</div>
+          <div class="table-cell border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">Shining Star</div>
+          <div class="table-cell border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400">Earth, Wind, and Fire</div>
+          <div class="table-cell border-b border-slate-200 dark:border-slate-600 p-4 pr-8 text-slate-500 dark:text-slate-400">1975</div>
         </div>
       </div>
     </div>

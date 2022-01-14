@@ -5,7 +5,7 @@ import ListItem from './ListItem.js'
 
 export default function Movies({ movies }) {
   return (
-    <div className="divide-y divide-gray-100">
+    <div className="divide-y divide-slate-100">
       <Nav>
         <NavItem href="/new" isActive>New Releases</NavItem>
         <NavItem href="/top">Top Rated</NavItem>

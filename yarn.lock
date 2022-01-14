@@ -1533,10 +1533,10 @@
   resolved "https://registry.yarnpkg.com/@tailwindcss/aspect-ratio/-/aspect-ratio-0.4.0.tgz#c635dd7331cbcc1b111cebdc2647dd3493ebdd3e"
   integrity sha512-WJu0I4PpqNPuutpaA9zDUq2JXR+lorZ7PbLcKNLmb6GL9/HLfC7w3CRsMhJF4BbYd/lkY6CfXOvkYpuGnZfkpQ==
 
-"@tailwindcss/typography@0.5.0-alpha.2":
-  version "0.5.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.5.0-alpha.2.tgz#70ce7ed3a501f5a814cc5a8e4a9b13e47d38f421"
-  integrity sha512-xeTOHK2ki2ZfmmL0ThdPShM6iPtVtsw9Lt/9X6ZpZ0eaueluQESGIaE7r/3ZqqrN5ljpWkg6/5n04jyIOwiChA==
+"@tailwindcss/typography@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.5.0.tgz#47886ec46ac41e1211d24fea05301046d9b30906"
+  integrity sha512-1p/3C6C+JJziS/ghtG8ACYalbA2SyLJY27Pm33cVTlAoY6VQ7zfm2H64cPxUMBkVIlWXTtWHhZcZJPobMRmQAA==
   dependencies:
     lodash.castarray "^4.4.0"
     lodash.isplainobject "^4.0.6"

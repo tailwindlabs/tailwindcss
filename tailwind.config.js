@@ -1,5 +1,4 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
-const colors = require('tailwindcss/colors')
 const svgToDataUri = require('mini-svg-data-uri')
 const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette')
 
@@ -18,48 +17,6 @@ module.exports = {
       lg: '1024px',
       xl: '1280px',
       '2xl': '1536px',
-    },
-    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-
-      black: '#000',
-      white: '#fff',
-
-      amber: colors.amber,
-      blue: colors.blue,
-      cyan: colors.cyan,
-      emerald: colors.emerald,
-      fuchsia: colors.fuchsia,
-      gray: colors.slate,
-      green: colors.green,
-      indigo: colors.indigo,
-      'light-blue': colors.sky,
-      sky: colors.sky,
-      lime: colors.lime,
-      orange: {
-        ...colors.orange,
-        1000: '#4a2008',
-      },
-      pink: {
-        ...colors.pink,
-        1000: '#460d25',
-      },
-      purple: colors.purple,
-      red: colors.red,
-      rose: colors.rose,
-      teal: colors.teal,
-      violet: colors.violet,
-      yellow: colors.yellow,
-
-      code: {
-        punctuation: '#A1E8FF',
-        tag: '#D58FFF',
-        'attr-name': '#4BD0FB',
-        'attr-value': '#A2F679',
-        string: '#A2F679',
-        highlight: 'rgb(125 211 252 / 0.1)',
-      },
     },
     aspectRatio: {
       auto: 'auto',
@@ -83,13 +40,18 @@ module.exports = {
       16: '16',
     },
     extend: {
+      colors: {
+        code: {
+          highlight: 'rgb(125 211 252 / 0.1)',
+        },
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {
             maxWidth: 'none',
-            color: theme('colors.gray.700'),
+            color: theme('colors.slate.700'),
             hr: {
-              borderColor: theme('colors.gray.100'),
+              borderColor: theme('colors.slate.100'),
               marginTop: '3em',
               marginBottom: '3em',
             },
@@ -109,7 +71,7 @@ module.exports = {
             },
             'h2 small, h3 small, h4 small': {
               fontFamily: theme('fontFamily.mono').join(', '),
-              color: theme('colors.gray.500'),
+              color: theme('colors.slate.500'),
               fontWeight: 500,
             },
             'h2 small': {
@@ -127,16 +89,23 @@ module.exports = {
             'h2, h3, h4': {
               'scroll-margin-top': 'var(--scroll-mt)',
             },
+            ul: {
+              listStyleType: 'none',
+              paddingLeft: 0,
+            },
             'ul > li': {
+              position: 'relative',
               paddingLeft: '1.75em',
             },
             'ul > li::before': {
+              content: '""',
               width: '0.75em',
               height: '0.125em',
+              position: 'absolute',
               top: 'calc(0.875em - 0.0625em)',
               left: 0,
               borderRadius: '999px',
-              backgroundColor: theme('colors.gray.300'),
+              backgroundColor: theme('colors.slate.300'),
             },
             a: {
               fontWeight: theme('fontWeight.semibold'),
@@ -151,7 +120,7 @@ module.exports = {
               fontWeight: 'inherit',
             },
             strong: {
-              color: theme('colors.gray.900'),
+              color: theme('colors.slate.900'),
               fontWeight: theme('fontWeight.semibold'),
             },
             'a strong': {
@@ -163,7 +132,7 @@ module.exports = {
               fontVariantLigatures: 'none',
             },
             pre: {
-              color: theme('colors.gray.50'),
+              color: theme('colors.slate.50'),
               borderRadius: theme('borderRadius.xl'),
               padding: theme('padding.5'),
               boxShadow: theme('boxShadow.md'),
@@ -186,15 +155,15 @@ module.exports = {
               lineHeight: theme('fontSize.sm')[1].lineHeight,
             },
             thead: {
-              color: theme('colors.gray.700'),
-              borderBottomColor: theme('colors.gray.200'),
+              color: theme('colors.slate.700'),
+              borderBottomColor: theme('colors.slate.200'),
             },
             'thead th': {
               paddingTop: 0,
               fontWeight: theme('fontWeight.semibold'),
             },
             'tbody tr': {
-              borderBottomColor: theme('colors.gray.100'),
+              borderBottomColor: theme('colors.slate.100'),
             },
             'tbody tr:last-child': {
               borderBottomWidth: '1px',
@@ -213,18 +182,18 @@ module.exports = {
         },
         dark: {
           css: {
-            color: theme('colors.gray.400'),
+            color: theme('colors.slate.400'),
             'h2, h3, h4, thead th': {
-              color: theme('colors.gray.200'),
+              color: theme('colors.slate.200'),
             },
             'h2 small, h3 small, h4 small': {
-              color: theme('colors.gray.400'),
+              color: theme('colors.slate.400'),
             },
             code: {
-              color: theme('colors.gray.200'),
+              color: theme('colors.slate.200'),
             },
             hr: {
-              borderColor: theme('colors.gray.200'),
+              borderColor: theme('colors.slate.200'),
               opacity: '0.05',
             },
             pre: {
@@ -235,10 +204,10 @@ module.exports = {
               borderBottomColor: theme('colors.sky.400'),
             },
             strong: {
-              color: theme('colors.gray.200'),
+              color: theme('colors.slate.200'),
             },
             thead: {
-              color: theme('colors.gray.300'),
+              color: theme('colors.slate.300'),
               borderBottomColor: 'rgb(148 163 184 / 0.2)',
             },
             'tbody tr': {

@@ -25,7 +25,7 @@
 }
 
 .mono-active > div:not(.not-mono) > span {
-  color: theme('colors.gray.600');
+  color: theme('colors.slate.600');
 }
 
 .mono > div > span {

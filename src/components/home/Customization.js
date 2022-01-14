@@ -34,7 +34,7 @@ const themes = {
     bodySize: '14pt',
     colors: {
       primary: 'blue',
-      secondary: 'gray',
+      secondary: 'slate',
     },
   },
   Playful: {
@@ -61,7 +61,7 @@ const themes = {
     classNameDisplay: sourceSerifProRegular,
     classNameBody: synonymVariable,
     colors: {
-      primary: 'gray',
+      primary: 'slate',
       secondary: 'emerald',
     },
   },
@@ -126,10 +126,10 @@ export function Customization() {
         className="mt-10 xl:mt-2"
         beams={6}
         left={
-          <div className="relative z-10 bg-white ring-1 ring-gray-900/5 rounded-lg shadow-xl px-6 py-5 my-auto xl:mt-18 dark:bg-gray-800">
-            <div className="absolute inset-x-0 inset-y-5 border-t border-b border-gray-100 pointer-events-none dark:border-gray-700" />
-            <div className="absolute inset-x-6 inset-y-0 border-l border-r border-gray-100 pointer-events-none dark:border-gray-700" />
-            <div className="bg-gray-50 overflow-hidden py-6 sm:py-9 lg:py-6 xl:py-9 px-6 dark:bg-gray-900/50">
+          <div className="relative z-10 bg-white ring-1 ring-slate-900/5 rounded-lg shadow-xl px-6 py-5 my-auto xl:mt-18 dark:bg-slate-800">
+            <div className="absolute inset-x-0 inset-y-5 border-t border-b border-slate-100 pointer-events-none dark:border-slate-700" />
+            <div className="absolute inset-x-6 inset-y-0 border-l border-r border-slate-100 pointer-events-none dark:border-slate-700" />
+            <div className="bg-slate-50 overflow-hidden py-6 sm:py-9 lg:py-6 xl:py-9 px-6 dark:bg-slate-900/50">
               <div className="sm:flex lg:block xl:flex">
                 <div className="relative flex-auto flex min-w-0">
                   <div className="w-full flex-none">
@@ -137,11 +137,11 @@ export function Customization() {
                     <ul className="space-y-8">
                       <li>
                         <dl className="grid">
-                          <div className="font-mono text-xs leading-5 pb-1 border-b border-gray-200 text-gray-500 dark:border-gray-200/10">
+                          <div className="font-mono text-xs leading-5 pb-1 border-b border-slate-200 text-slate-500 dark:border-slate-200/10">
                             <dt className="sr-only">CSS class</dt>
                             <dd>font-display</dd>
                           </div>
-                          <div className="col-start-2 text-right font-mono text-xs leading-5 text-gray-400 pb-1 border-b border-gray-200 dark:text-gray-500 dark:border-gray-200/10">
+                          <div className="col-start-2 text-right font-mono text-xs leading-5 text-slate-400 pb-1 border-b border-slate-200 dark:text-slate-500 dark:border-slate-200/10">
                             <dt className="sr-only">Font name</dt>
                             <AnimatePresence initial={false} exitBeforeEnter>
                               <motion.dd
@@ -154,7 +154,7 @@ export function Customization() {
                               </motion.dd>
                             </AnimatePresence>
                           </div>
-                          <div className="mt-4 col-span-2 text-4xl sm:text-5xl lg:text-4xl xl:text-5xl text-gray-900 dark:text-gray-200">
+                          <div className="mt-4 col-span-2 text-4xl sm:text-5xl lg:text-4xl xl:text-5xl text-slate-900 dark:text-slate-200">
                             <dt className="sr-only">Sample</dt>
                             <AnimatePresence initial={false} exitBeforeEnter>
                               <motion.dd
@@ -172,11 +172,11 @@ export function Customization() {
                       </li>
                       <li>
                         <dl className="grid">
-                          <div className="font-mono text-xs leading-5 pb-1 border-b border-gray-200 text-gray-500 dark:border-gray-200/10">
+                          <div className="font-mono text-xs leading-5 pb-1 border-b border-slate-200 text-slate-500 dark:border-slate-200/10">
                             <dt className="sr-only">CSS class</dt>
                             <dd>font-body</dd>
                           </div>
-                          <div className="col-start-2 text-right font-mono text-xs leading-5 text-gray-400 pb-1 border-b border-gray-200 dark:text-gray-500 dark:border-gray-200/10">
+                          <div className="col-start-2 text-right font-mono text-xs leading-5 text-slate-400 pb-1 border-b border-slate-200 dark:text-slate-500 dark:border-slate-200/10">
                             <dt className="sr-only">Font size</dt>
                             <AnimatePresence initial={false} exitBeforeEnter>
                               <motion.dd
@@ -189,7 +189,7 @@ export function Customization() {
                               </motion.dd>
                             </AnimatePresence>
                           </div>
-                          <div className="mt-4 col-span-2 text-sm leading-6 text-gray-700 dark:text-gray-400">
+                          <div className="mt-4 col-span-2 text-sm leading-6 text-slate-700 dark:text-slate-400">
                             <dt className="sr-only">Sample</dt>
                             <AnimatePresence initial={false} exitBeforeEnter>
                               <motion.dd
@@ -233,7 +233,7 @@ export function Customization() {
                         key={name}
                         className={index === 0 ? undefined : 'hidden sm:block lg:hidden xl:block'}
                       >
-                        <dl className="grid bg-white text-gray-500 rounded-lg shadow-md p-3 dark:bg-gray-900 dark:ring-1 dark:ring-white/10">
+                        <dl className="grid bg-white text-slate-500 rounded-lg shadow-md p-3 dark:bg-slate-900 dark:ring-1 dark:ring-white/10">
                           <div className="font-mono text-xs">
                             <dt className="sr-only">CSS class prefix</dt>
                             <dd>bg-{name}</dd>
@@ -249,7 +249,7 @@ export function Customization() {
                                 {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((key) => (
                                   <motion.li
                                     key={key}
-                                    className="pt-full sm:w-8 lg:w-auto xl:w-8 rounded-sm ring-1 ring-inset ring-gray-900/5 dark:ring-0 dark:highlight-white/10"
+                                    className="pt-full sm:w-8 lg:w-auto xl:w-8 rounded-sm ring-1 ring-inset ring-slate-900/5 dark:ring-0 dark:highlight-white/10"
                                     initial={false}
                                     animate={{
                                       backgroundColor: tailwindColors[color][key],

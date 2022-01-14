@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core'
 @Component({
   selector: 'app-movies',
   template: `
-    <div class="divide-y divide-gray-100">
+    <div class="divide-y divide-slate-100">
       <app-nav>
         <app-nav-item routerLink="/new" [isActive]="true">New Releases</app-nav-item>
         <app-nav-item routerLink="/top">Top Rated</app-nav-item>

@@ -149,7 +149,7 @@ export function Performance() {
           <div className="relative">
             <div
               ref={containerRef}
-              className="relative bg-gray-800 shadow-xl pt-2 overflow-hidden sm:rounded-xl lg:grid lg:grid-cols-2 lg:grid-rows-1 dark:bg-gray-900/70 dark:backdrop-blur dark:ring-1 dark:ring-inset dark:ring-white/10"
+              className="relative bg-slate-800 shadow-xl pt-2 overflow-hidden sm:rounded-xl lg:grid lg:grid-cols-2 lg:grid-rows-1 dark:bg-slate-900/70 dark:backdrop-blur dark:ring-1 dark:ring-inset dark:ring-white/10"
             >
               <div className="row-end-1">
                 <TabBar
@@ -177,11 +177,11 @@ export function Performance() {
                   wrap={true}
                   showLineNumbers={false}
                   overflow={false}
-                  className="border-r border-gray-500/30 h-[20.8125rem] overflow-hidden p-4 md:pl-0"
+                  className="border-r border-slate-500/30 h-[20.8125rem] overflow-hidden p-4 md:pl-0"
                 >
                   {html.map((tokens, lineIndex) => (
                     <div key={lineIndex} className="flex">
-                      <div className="hidden md:block text-gray-600 flex-none pr-4 text-right select-none w-[3.125rem] mr-4">
+                      <div className="hidden md:block text-slate-600 flex-none pr-4 text-right select-none w-[3.125rem] mr-4">
                         {lineIndex + 1}
                       </div>
                       <div>
@@ -216,7 +216,7 @@ export function Performance() {
                   ))}
                 </CodeWindow.Code2>
               </div>
-              <div className="row-span-2 border-t border-gray-500/30 pt-1.5 lg:border-0 lg:pt-0">
+              <div className="row-span-2 border-t border-slate-500/30 pt-1.5 lg:border-0 lg:pt-0">
                 <TabBar
                   side="right"
                   translucent={true}
@@ -244,8 +244,8 @@ export function Performance() {
                   ))}
                 </CodeWindow.Code2>
               </div>
-              <div className="row-start-1 row-end-2 border-t border-gray-500/30">
-                <div className="h-1.5 border-r border-gray-500/30" />
+              <div className="row-start-1 row-end-2 border-t border-slate-500/30">
+                <div className="h-1.5 border-r border-slate-500/30" />
                 <TabBar
                   side="right"
                   translucent={true}
@@ -286,7 +286,7 @@ function Terminal({ rules }) {
   return (
     <div
       ref={scrollRef}
-      className="flex-auto border-r border-gray-500/30 text-gray-400 font-mono p-4 pb-0 h-[8.75rem] overflow-hidden scroll-smooth flex"
+      className="flex-auto border-r border-slate-500/30 text-slate-400 font-mono p-4 pb-0 h-[8.75rem] overflow-hidden scroll-smooth flex"
     >
       <svg viewBox="0 -9 3 24" className="flex-none overflow-visible text-pink-400 w-auto h-6 mr-3">
         <path
@@ -306,7 +306,7 @@ function Terminal({ rules }) {
             <span className="xl:hidden">-w</span> <span className="hidden xl:inline">--watch</span>
           </div>
           {rules.map((_rule, index) => (
-            <div key={index} className={index === rules.length - 1 ? 'text-gray-200' : undefined}>
+            <div key={index} className={index === rules.length - 1 ? 'text-slate-200' : undefined}>
               <span className="code-highlight animate-flash-code-slow">
                 Rebuilding... Done in {[5, 6, 5, 7, 4, 5][index % 6]}ms.
               </span>

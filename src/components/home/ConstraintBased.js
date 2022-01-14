@@ -130,15 +130,15 @@ function Bars({ sizes, className }) {
       {sizes.map((key, i) => (
         <li key={key}>
           <motion.div
-            className="h-6 origin-left bg-white shadow ring-1 ring-gray-700/5 px-1 flex items-center dark:bg-indigo-500 dark:text-white dark:highlight-white/10"
+            className="h-6 origin-left bg-white shadow ring-1 ring-slate-700/5 px-1 flex items-center dark:bg-indigo-500 dark:text-white dark:highlight-white/10"
             style={{ width: defaultConfig.theme.width[key], borderRadius: 4 }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: i * 0.1, damping: 100 }}
           >
-            <div className="flex-none w-0.5 h-1 bg-gray-300 dark:bg-white" />
+            <div className="flex-none w-0.5 h-1 bg-slate-300 dark:bg-white" />
             <span className="flex-auto text-center">w-{key}</span>
-            <div className="flex-none w-0.5 h-1 bg-gray-300 dark:bg-white" />
+            <div className="flex-none w-0.5 h-1 bg-slate-300 dark:bg-white" />
           </motion.div>
         </li>
       ))}
@@ -170,27 +170,27 @@ function Colors() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: i * 0.1 }}
-          className="bg-white rounded-lg shadow ring-1 ring-gray-700/5 p-2 dark:bg-gray-900 dark:ring-white/10"
+          className="bg-white rounded-lg shadow ring-1 ring-slate-700/5 p-2 dark:bg-slate-900 dark:ring-white/10"
         >
           <ul className="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-5 xl:grid-cols-10 gap-2">
             {Object.keys(defaultConfig.theme.colors[color]).map((key) => (
               <li
                 key={key}
-                className="pt-full rounded-sm ring-1 ring-inset ring-gray-900/5 dark:ring-0 dark:highlight-white/10"
+                className="pt-full rounded-sm ring-1 ring-inset ring-slate-900/5 dark:ring-0 dark:highlight-white/10"
                 style={{
                   backgroundColor: defaultConfig.theme.colors[color][key],
                 }}
               />
             ))}
           </ul>
-          <div className="mt-2 flex items-center justify-between text-gray-500">
+          <div className="mt-2 flex items-center justify-between text-slate-500">
             <span className="flex-1">{color}-50</span>
             <svg width="47" height="4" viewBox="0 0 47 4" fill="currentColor">
-              <circle cx="1.5" cy="2" r="1.5" className="text-gray-200 dark:text-gray-800" />
-              <circle cx="12.5" cy="2" r="1.5" className="text-gray-300 dark:text-gray-700" />
-              <circle cx="23.5" cy="2" r="1.5" className="text-gray-400 dark:text-gray-600" />
-              <circle cx="34.5" cy="2" r="1.5" className="text-gray-300 dark:text-gray-700" />
-              <circle cx="45.5" cy="2" r="1.5" className="text-gray-200 dark:text-gray-800" />
+              <circle cx="1.5" cy="2" r="1.5" className="text-slate-200 dark:text-slate-800" />
+              <circle cx="12.5" cy="2" r="1.5" className="text-slate-300 dark:text-slate-700" />
+              <circle cx="23.5" cy="2" r="1.5" className="text-slate-400 dark:text-slate-600" />
+              <circle cx="34.5" cy="2" r="1.5" className="text-slate-300 dark:text-slate-700" />
+              <circle cx="45.5" cy="2" r="1.5" className="text-slate-200 dark:text-slate-800" />
             </svg>
             <span className="flex-1 text-right">{color}-900</span>
           </div>
@@ -217,17 +217,17 @@ function Typography() {
       ].map((font, i) => (
         <motion.div
           key={font[0]}
-          className="sm:bg-white sm:rounded-lg sm:ring-1 sm:ring-gray-700/5 sm:shadow sm:p-3 lg:bg-transparent lg:rounded-none lg:ring-0 lg:shadow-none lg:p-0 xl:bg-white xl:rounded-lg xl:ring-1 xl:ring-gray-700/5 xl:shadow xl:p-3 dark:ring-white/10 dark:sm:bg-gray-900 dark:sm:ring-1 dark:lg:bg-transparent dark:lg:ring-0 dark:xl:bg-gray-900 dark:xl:ring-1"
+          className="sm:bg-white sm:rounded-lg sm:ring-1 sm:ring-slate-700/5 sm:shadow sm:p-3 lg:bg-transparent lg:rounded-none lg:ring-0 lg:shadow-none lg:p-0 xl:bg-white xl:rounded-lg xl:ring-1 xl:ring-slate-700/5 xl:shadow xl:p-3 dark:ring-white/10 dark:sm:bg-slate-900 dark:sm:ring-1 dark:lg:bg-transparent dark:lg:ring-0 dark:xl:bg-slate-900 dark:xl:ring-1"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: i * 0.1 }}
         >
-          <h4 className="text-xs leading-5 font-mono pb-2 border-b border-gray-100 text-gray-500 dark:border-gray-200/10">
+          <h4 className="text-xs leading-5 font-mono pb-2 border-b border-slate-100 text-slate-500 dark:border-slate-200/10">
             {font[0]}
           </h4>
           <div
             className={clsx(
-              'mt-2 sm:mt-3 lg:mt-2 xl:mt-3 text-gray-700 dark:text-gray-400',
+              'mt-2 sm:mt-3 lg:mt-2 xl:mt-3 text-slate-700 dark:text-slate-400',
               ...font
             )}
           >
@@ -261,7 +261,7 @@ function Shadows() {
                   ],
               }}
             >
-              <div className="bg-white rounded-lg p-3 pt-10 dark:bg-gray-700 dark:highlight-white/10">
+              <div className="bg-white rounded-lg p-3 pt-10 dark:bg-slate-700 dark:highlight-white/10">
                 {shadow}
               </div>
             </motion.li>
@@ -309,11 +309,11 @@ export function ConstraintBased() {
       <GridLockup
         className="mt-10 xl:mt-2"
         left={
-          <div className="relative z-10 bg-white ring-1 ring-gray-900/5 rounded-lg shadow-xl px-6 py-5 my-auto xl:mt-18 dark:bg-gray-800">
-            <div className="absolute inset-x-0 inset-y-5 border-t border-b border-gray-100 pointer-events-none dark:border-gray-700" />
-            <div className="absolute inset-x-6 inset-y-0 border-l border-r border-gray-100 pointer-events-none dark:border-gray-700" />
-            <div className="bg-gray-50 flex overflow-hidden h-88 dark:bg-gray-900/50">
-              <div className="relative bg-white/40 w-64 sm:w-[28rem] lg:w-64 xl:w-[28rem] mx-auto border-r border-gray-100 dark:bg-transparent dark:border-gray-100/5">
+          <div className="relative z-10 bg-white ring-1 ring-slate-900/5 rounded-lg shadow-xl px-6 py-5 my-auto xl:mt-18 dark:bg-slate-800">
+            <div className="absolute inset-x-0 inset-y-5 border-t border-b border-slate-100 pointer-events-none dark:border-slate-700" />
+            <div className="absolute inset-x-6 inset-y-0 border-l border-r border-slate-100 pointer-events-none dark:border-slate-700" />
+            <div className="bg-slate-50 flex overflow-hidden h-88 dark:bg-slate-900/50">
+              <div className="relative bg-white/40 w-64 sm:w-[28rem] lg:w-64 xl:w-[28rem] mx-auto border-r border-slate-100 dark:bg-transparent dark:border-slate-100/5">
                 <div
                   className="absolute inset-0 dark:hidden"
                   style={{
