@@ -16,7 +16,6 @@ import { env } from './sharedState'
 
 import { getContext, getFileModifiedMap } from './setupContextUtils'
 import parseDependency from '../util/parseDependency'
-import log from '../util/log'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
