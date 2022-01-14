@@ -231,10 +231,9 @@ export default function expandTailwindAtRules(context) {
     // If we've got a utility layer and no utilities are generated there's likely something wrong
     // TODO: Detect utility variants only
     if (layerNodes.utilities && utilityNodes.size === 0 && screenNodes.size === 0) {
-      log.warn(
-        'no-utilities-generated',
+      log.warn('no-utilities-generated', [
         'No utilities were generated there is likely a problem with the `content` key in the tailwind config.'
-      )
+      ])
     }
 
     // ---

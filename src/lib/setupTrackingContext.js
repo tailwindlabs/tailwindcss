@@ -119,10 +119,9 @@ export default function setupTrackingContext(configOrPath) {
         getTailwindConfig(configOrPath)
 
       if (tailwindConfig.content.files.length === 0) {
-        log.warn(
-          'no-content-found',
+        log.warn('no-content-found', [
           'The `content` key is missing or empty. Please populate the content key as Tailwind generates utilities on-demand based on the files that use them.'
-        )
+        ])
       }
 
       let contextDependencies = new Set(configDependencies)
