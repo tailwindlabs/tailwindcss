@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.0.14] - 2022-01-14
+
 ### Added
 
 - Show warnings for invalid content config ([#7065](https://github.com/tailwindlabs/tailwindcss/pull/7065))
@@ -1805,7 +1809,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.13...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.14...HEAD
+[3.0.14]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.13...v3.0.14
 [3.0.13]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.12...v3.0.13
 [3.0.12]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.11...v3.0.12
 [3.0.11]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.10...v3.0.11
