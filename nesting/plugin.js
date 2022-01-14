@@ -14,7 +14,10 @@ module.exports = function nesting(opts = postcssNested) {
     })
 
     let plugin = (() => {
-      if (typeof opts === 'function') {
+      if (
+        typeof opts === 'function' ||
+        (typeof opts === 'object' && opts?.hasOwnProperty('postcssPlugin'))
+      ) {
         return opts
       }
 

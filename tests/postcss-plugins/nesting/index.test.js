@@ -74,7 +74,7 @@ it('should default to the bundled postcss-nested plugin (no options)', async () 
   `)
 })
 
-it('should default to the bundled postcss-nested plugin (empty ooptions)', async () => {
+it('should default to the bundled postcss-nested plugin (empty options)', async () => {
   let input = css`
     .foo {
       color: black;
@@ -85,6 +85,29 @@ it('should default to the bundled postcss-nested plugin (empty ooptions)', async
   `
 
   expect(await run(input, {})).toMatchCss(css`
+    .foo {
+      color: black;
+    }
+
+    @media screen(md) {
+      .foo {
+        color: blue;
+      }
+    }
+  `)
+})
+
+it('should be possible to use postcss-nested plugin with options', async () => {
+  let input = css`
+    .foo {
+      color: black;
+      @screen md {
+        color: blue;
+      }
+    }
+  `
+
+  expect(await run(input, postcssNested({ noIsPseudoSelector: true }))).toMatchCss(css`
     .foo {
       color: black;
     }
