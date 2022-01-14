@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run, css, html } from './util/run'
+import { run, css, html, defaults } from './util/run'
 
 test('variants', () => {
   let config = {
@@ -462,6 +462,78 @@ it('should be possible to use responsive modifiers that are defined with special
       @media (max-width: 399px) {
         .\<sm\:underline {
           text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})
+
+it('including just the base layer should not produce variants', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:container sm:underline"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  return run('@tailwind base', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(
+      css`
+        ${defaults}
+      `
+    )
+  })
+})
+
+it('variants for components should not be produced in a file without a components layer', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:container sm:underline"></div>` }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:underline {
+          text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})
+
+it('variants for utilities should not be produced in a file without a utilities layer', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:container sm:underline"></div>` }],
+  }
+
+  return run('@tailwind components', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:container {
+          width: 100%;
+        }
+        @media (min-width: 640px) {
+          .sm\:container {
+            max-width: 640px;
+          }
+        }
+        @media (min-width: 768px) {
+          .sm\:container {
+            max-width: 768px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .sm\:container {
+            max-width: 1024px;
+          }
+        }
+        @media (min-width: 1280px) {
+          .sm\:container {
+            max-width: 1280px;
+          }
+        }
+        @media (min-width: 1536px) {
+          .sm\:container {
+            max-width: 1536px;
+          }
         }
       }
     `)

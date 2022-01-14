@@ -205,9 +205,6 @@ export default function expandTailwindAtRules(context) {
 
     if (layerNodes.base) {
       layerNodes.base.before(cloneNodes([...baseNodes, ...defaultNodes], layerNodes.base.source))
-    }
-
-    if (layerNodes.base) {
       layerNodes.base.remove()
     }
 
@@ -221,16 +218,34 @@ export default function expandTailwindAtRules(context) {
       layerNodes.utilities.remove()
     }
 
+    // We do post-filtering to not alter the emitted order of the variants
+    const variantNodes = Array.from(screenNodes).filter((node) => {
+      const parentLayer = node.raws.tailwind?.parentLayer
+
+      if (parentLayer === 'components') {
+        return layerNodes.components !== null
+      }
+
+      if (parentLayer === 'utilities') {
+        return layerNodes.utilities !== null
+      }
+
+      return true
+    })
+
     if (layerNodes.variants) {
-      layerNodes.variants.before(cloneNodes([...screenNodes], layerNodes.variants.source))
+      layerNodes.variants.before(cloneNodes(variantNodes, layerNodes.variants.source))
       layerNodes.variants.remove()
-    } else {
-      root.append(cloneNodes([...screenNodes], root.source))
+    } else if (variantNodes.length > 0) {
+      root.append(cloneNodes(variantNodes, root.source))
     }
 
     // If we've got a utility layer and no utilities are generated there's likely something wrong
-    // TODO: Detect utility variants only
-    if (layerNodes.utilities && utilityNodes.size === 0 && screenNodes.size === 0) {
+    const hasUtilityVariants = variantNodes.some(
+      (node) => node.raws.tailwind?.parentLayer === 'utilities'
+    )
+
+    if (layerNodes.utilities && utilityNodes.size === 0 && !hasUtilityVariants) {
       log.warn('content-problems', [
         'No utilities were generated there is likely a problem with the `content` key in the tailwind config. For more information see the documentation: https://tailwindcss.com/docs/content-configuration',
       ])

@@ -216,6 +216,12 @@ function applyVariant(variant, matches, context) {
           })
         }
 
+        // This tracks the originating layer for the variant
+        // For example:
+        // .sm:underline {} is a variant of something in the utilities layer
+        // .sm:container {} is a variant of the container component
+        clone.nodes[0].raws.tailwind = { parentLayer: meta.layer }
+
         let withOffset = [
           {
             ...meta,
