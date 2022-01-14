@@ -2,8 +2,6 @@ import NextLink from 'next/link'
 import { DocumentationLayout } from '@/layouts/DocumentationLayout'
 import { InstallationLayout } from '@/layouts/InstallationLayout'
 import { Steps } from '@/components/Steps'
-import { black } from 'tailwindcss/colors'
-import { theme } from 'tailwind.config'
 
 let steps = [
   {
@@ -89,7 +87,6 @@ let steps = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>/* ... */</script>
 >   <style type="text/tailwindcss">
 >     @layer utilities {
 >       .content-auto {
@@ -100,6 +97,32 @@ let steps = [
   </head>
   <body>
 >   <div class="lg:content-auto">
+      <!-- ... -->
+    </div>
+  </body>
+  </html>`,
+    },
+  },
+  {
+    title: 'Try working with a core plugin',
+    body: () => (
+      <p>
+        Enable core plugins, like forms and typography, using the <code>plugins</code> query
+        parameter.
+      </p>
+    ),
+    code: {
+      name: 'index.html',
+      lang: 'html',
+      code: `  <!doctype html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  </head>
+  <body>
+>   <div class="prose">
       <!-- ... -->
     </div>
   </body>
