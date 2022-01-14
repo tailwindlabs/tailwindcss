@@ -258,5 +258,11 @@ export function normalizeConfig(config) {
     }
   }
 
+  if (config.content.files.length === 0) {
+    log.warn('no-content-found', [
+      'The `content` key is missing or empty. Please populate the content key as Tailwind generates utilities on-demand based on the files that use them.'
+    ])
+  }
+
   return config
 }
