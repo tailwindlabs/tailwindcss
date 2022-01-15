@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure to transpile the PostCSS Nesting plugin (tailwindcss/nesting) ([#7080](https://github.com/tailwindlabs/tailwindcss/pull/7080))
 
 ## [3.0.15] - 2022-01-15
 
