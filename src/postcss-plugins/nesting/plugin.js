@@ -1,7 +1,7 @@
-let postcss = require('postcss')
-let postcssNested = require('postcss-nested')
+import postcss from 'postcss'
+import postcssNested from 'postcss-nested'
 
-module.exports = function nesting(opts = postcssNested) {
+export function nesting(opts = postcssNested) {
   return (root, result) => {
     root.walkAtRules('screen', (rule) => {
       rule.name = 'media'
