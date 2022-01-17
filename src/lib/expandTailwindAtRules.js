@@ -247,7 +247,7 @@ export default function expandTailwindAtRules(context) {
 
     if (layerNodes.utilities && utilityNodes.size === 0 && !hasUtilityVariants) {
       log.warn('content-problems', [
-        'No utilities were generated there is likely a problem with the `content` key in the tailwind config. For more information see the documentation: https://tailwindcss.com/docs/content-configuration',
+        'No utilities were generated, there is likely a problem with the `content` key in the Tailwind config. For more information see the documentation: https://tailwindcss.com/docs/content-configuration',
       ])
     }
 
