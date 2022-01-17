@@ -486,11 +486,42 @@ export let corePlugins = {
     })
   },
 
-  borderCollapse: ({ addUtilities }) => {
+  borderCollapse: ({ addDefaults, addUtilities }) => {
+    addDefaults('borderSpacing', {
+      '--tw-border-spacing-x': '0',
+      '--tw-border-spacing-y': '0',
+    })
+
     addUtilities({
       '.border-collapse': { 'border-collapse': 'collapse' },
-      '.border-separate': { 'border-collapse': 'separate' },
+      '.border-separate': {
+        'border-collapse': 'separate',
+        'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
+      },
     })
+  },
+
+  borderSpacing: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        'border-spacing': (value) => {
+          value = value === '0' ? '0px' : value
+
+          return { '--tw-border-spacing-x': value, '--tw-border-spacing-y': value }
+        },
+        'border-spacing-x': (value) => {
+          value = value === '0' ? '0px' : value
+
+          return { '--tw-border-spacing-x': value }
+        },
+        'border-spacing-y': (value) => {
+          value = value === '0' ? '0px' : value
+
+          return { '--tw-border-spacing-y': value }
+        },
+      },
+      { values: theme('borderSpacing') }
+    )
   },
 
   transformOrigin: createUtilityPlugin('transformOrigin', [['origin', ['transformOrigin']]]),
