@@ -82,7 +82,7 @@ export default function FrameworkGuides() {
             logoDark: AngularLogoWhite,
           },
           {
-            name: 'Ruby On Rails',
+            name: 'Ruby on Rails',
             slug: 'ruby-on-rails',
             description:
               'Full-stack framework with all the tools needed to build amazing web apps.',
@@ -92,8 +92,7 @@ export default function FrameworkGuides() {
           {
             name: 'Remix',
             slug: 'remix',
-            description:
-              'Full stack framework focused on web fundamentals and modern UX.',
+            description: 'Full stack framework focused on web fundamentals and modern UX.',
             logo: RemixLogo,
             logoDark: RemixLogoWhite,
           },
