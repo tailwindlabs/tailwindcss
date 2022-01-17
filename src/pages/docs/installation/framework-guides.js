@@ -10,6 +10,8 @@ import { ReactComponent as ViteLogo } from '@/img/guides/vite.svg'
 import { ReactComponent as NuxtJsLogo } from '@/img/guides/nuxtjs.svg'
 import { ReactComponent as GatsbyLogo } from '@/img/guides/gatsby.svg'
 import { ReactComponent as CraLogo } from '@/img/guides/cra.svg'
+import { ReactComponent as AngularLogo } from '@/img/guides/angular.svg'
+import { ReactComponent as AngularLogoWhite } from '@/img/guides/angular-white.svg'
 import { ReactComponent as RemixLogo } from '@/img/guides/remix.svg'
 import { ReactComponent as RemixLogoWhite } from '@/img/guides/remix-white.svg'
 import { ReactComponent as RailsLogo } from '@/img/guides/rails.svg'
@@ -71,6 +73,13 @@ export default function FrameworkGuides() {
             slug: 'sveltekit',
             description: 'The fastest way to build apps of all sizes with Svelte.js.',
             logo: SvelteLogo,
+          },
+          {
+            name: 'Angular',
+            slug: 'angular',
+            description: 'Platform for building mobile and desktop web applications.',
+            logo: AngularLogo,
+            logoDark: AngularLogoWhite,
           },
           {
             name: 'Ruby On Rails',
