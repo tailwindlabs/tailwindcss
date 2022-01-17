@@ -312,7 +312,7 @@ export function ConstraintBased() {
           <div className="relative z-10 bg-white ring-1 ring-slate-900/5 rounded-lg shadow-xl px-6 py-5 my-auto xl:mt-18 dark:bg-slate-800">
             <div className="absolute inset-x-0 inset-y-5 border-t border-b border-slate-100 pointer-events-none dark:border-slate-700" />
             <div className="absolute inset-x-6 inset-y-0 border-l border-r border-slate-100 pointer-events-none dark:border-slate-700" />
-            <div className="bg-slate-50 flex overflow-hidden h-88 dark:bg-slate-900/50">
+            <div className="bg-slate-50 flex overflow-hidden h-[22rem] dark:bg-slate-900/50">
               <div className="relative bg-white/40 w-64 sm:w-[28rem] lg:w-64 xl:w-[28rem] mx-auto border-r border-slate-100 dark:bg-transparent dark:border-slate-100/5">
                 <div
                   className="absolute inset-0 dark:hidden"

@@ -324,7 +324,7 @@ function ApplyExample({ inView }) {
 
 function AtApplySection() {
   let { inView, ref } = useInView({ threshold: 0.5, triggerOnce: true })
-  let fade = ['transition-opacity duration-1500 delay-500', { 'opacity-25': inView }]
+  let fade = ['transition-opacity duration-[1.5s] delay-500', { 'opacity-25': inView }]
 
   return (
     <div className="mt-20 relative max-w-7xl mx-auto px-4 sm:mt-32 sm:px-6 md:px-8 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:grid-rows-1">

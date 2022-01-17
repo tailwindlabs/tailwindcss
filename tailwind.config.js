@@ -221,28 +221,13 @@ module.exports = {
         mono: ['Fira Code VF', ...defaultTheme.fontFamily.mono],
         source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
         'ubuntu-mono': ['Ubuntu Mono', ...defaultTheme.fontFamily.mono],
-        system: defaultTheme.fontFamily.sans,
-        flow: 'Flow',
       },
       spacing: {
         18: '4.5rem',
-        88: '22rem',
         full: '100%',
       },
-      width: {
-        xl: '36rem',
-      },
       maxWidth: {
-        '4.5xl': '60rem',
         '8xl': '90rem',
-      },
-      maxHeight: (theme) => ({
-        sm: '30rem',
-        '(screen-18)': `calc(100vh - ${theme('spacing.18')})`,
-      }),
-      boxShadow: {
-        px: '0 0 0 1px rgba(0, 0, 0, 0.5)',
-        link: 'inset 0 -0.125em 0 0 #fff, inset 0 -0.375em 0 0 rgba(165, 243, 252, 0.4)',
       },
       keyframes: {
         'flash-code': {
@@ -254,13 +239,6 @@ module.exports = {
         'flash-code': 'flash-code 1s forwards',
         'flash-code-slow': 'flash-code 2s forwards',
       },
-      cursor: {
-        grab: 'grab',
-        grabbing: 'grabbing',
-      },
-      transitionDuration: {
-        1500: '1.5s',
-      },
       backgroundImage: (theme) => ({
         squiggle: `url("${svgToDataUri(
           `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6 3" enable-background="new 0 0 6 3" width="6" height="3" fill="${theme(
@@ -268,12 +246,6 @@ module.exports = {
           )}"><polygon points="5.5,0 2.5,3 1.1,3 4.1,0"/><polygon points="4,0 6,2 6,0.6 5.4,0"/><polygon points="0,2 1,3 2.4,3 0,0.6"/></svg>`
         )}")`,
       }),
-      scale: {
-        80: '0.8',
-      },
-      skew: {
-        '-20': '-20deg',
-      },
     },
   },
   plugins: [
@@ -290,23 +262,6 @@ module.exports = {
       addVariant('scrollbar-track', '&::-webkit-scrollbar-track')
       addVariant('scrollbar-thumb', '&::-webkit-scrollbar-thumb')
       addVariant('demo-dark', '.demo-dark &')
-    },
-    function ({ addUtilities, theme }) {
-      const shadows = theme('boxShadow')
-      addUtilities(
-        Object.keys(shadows).reduce(
-          (utils, key) => ({
-            ...utils,
-            [`.text-shadow${key === 'DEFAULT' ? '' : `-${key}`}`]: {
-              textShadow: shadows[key].replace(
-                /([0-9]+(px)? [0-9]+(px)? [0-9]+(px)?) [0-9]+(px)?/g,
-                '$1'
-              ),
-            },
-          }),
-          {}
-        )
-      )
     },
     function ({ matchUtilities, theme }) {
       matchUtilities(

@@ -42,10 +42,3 @@
   font-style: normal;
   src: url('../fonts/Ubuntu-Mono-bold.woff2') format('woff2');
 }
-
-@font-face {
-  font-family: 'Flow';
-  font-weight: 400;
-  font-style: normal;
-  src: url('../fonts/flow-circular.woff') format('woff');
-}
