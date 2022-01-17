@@ -10,6 +10,10 @@ import { ReactComponent as ViteLogo } from '@/img/guides/vite.svg'
 import { ReactComponent as NuxtJsLogo } from '@/img/guides/nuxtjs.svg'
 import { ReactComponent as GatsbyLogo } from '@/img/guides/gatsby.svg'
 import { ReactComponent as CraLogo } from '@/img/guides/cra.svg'
+import { ReactComponent as RemixLogo } from '@/img/guides/remix.svg'
+import { ReactComponent as RemixLogoWhite } from '@/img/guides/remix-white.svg'
+import PhoenixLogo from '@/img/guides/phoenix.png'
+import ParcelLogo from '@/img/guides/parcel.png'
 
 export default function FrameworkGuides() {
   return (
@@ -65,6 +69,40 @@ export default function FrameworkGuides() {
             slug: 'sveltekit',
             description: 'The fastest way to build apps of all sizes with Svelte.js.',
             logo: SvelteLogo,
+          },
+          {
+            name: 'Remix',
+            slug: 'remix',
+            description:
+              'Full stack framework focused on web fundamentals and modern UX.',
+            logo: RemixLogo,
+            logoDark: RemixLogoWhite,
+          },
+          {
+            name: 'Phoenix',
+            slug: 'phoenix',
+            description: 'A framework to build rich, interactive applications with Elixir.',
+            logo: () => (
+              <img
+                src={PhoenixLogo}
+                alt="Phoenix"
+                role="presentation"
+                className="w-10 h-10 object-contain object-center"
+              />
+            ),
+          },
+          {
+            name: 'Parcel',
+            slug: 'parcel',
+            description: 'The zero-configuration build tool for the web.',
+            logo: () => (
+              <img
+                src={ParcelLogo}
+                alt="Parcel"
+                role="presentation"
+                className="w-10 h-10 object-contain object-center"
+              />
+            ),
           },
         ].map(({ name, description, logo: Logo, logoDark: LogoDark, slug }) => (
           <li key={name} className="relative flex flex-row-reverse">
