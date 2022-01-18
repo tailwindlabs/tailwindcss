@@ -144,6 +144,7 @@ export let variantPlugins = {
       log.warn('darkmode-false', [
         'The `darkMode` option in your Tailwind CSS configuration is set to `false`, which now behaves the same as `media`.',
         'Change `darkMode` to `media` or remove it entirely.',
+        'https://tailwindcss.com/docs/upgrade-guide#remove-dark-mode-configuration',
       ])
     }
 
