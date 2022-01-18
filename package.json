@@ -55,7 +55,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.7",
     "jest-diff": "^27.4.6",
-    "postcss": "^8.4.5",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.0"
   },
@@ -83,7 +82,8 @@
     "postcss-selector-parser": "^6.0.8",
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
-    "resolve": "^1.21.0"
+    "resolve": "^1.21.0",
+    "postcss": "^8.4.5"
   },
   "browserslist": [
     "> 1%",
