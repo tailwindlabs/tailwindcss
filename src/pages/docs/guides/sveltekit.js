@@ -25,8 +25,9 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the following
-        commands to generate both <code>tailwind.config.cjs</code> and <code>postcss.config.cjs</code>.
+        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the
+        following commands to generate both <code>tailwind.config.cjs</code> and{' '}
+        <code>postcss.config.cjs</code>.
       </p>
     ),
     code: {
@@ -39,8 +40,7 @@ let steps = [
     title: 'Configure your template paths',
     body: () => (
       <p>
-        Add the paths to all of your template files in your{' '}
-        <code>tailwind.config.cjs</code> file.
+        Add the paths to all of your template files in your <code>tailwind.config.cjs</code> file.
       </p>
     ),
     code: {
@@ -75,8 +75,8 @@ let steps = [
     title: 'Import the CSS file',
     body: () => (
       <p>
-        Create a <code>./src/routes/__layout.svelte</code> file
-        and import the newly-created <code>app.css</code> file.
+        Create a <code>./src/routes/__layout.svelte</code> file and import the newly-created{' '}
+        <code>app.css</code> file.
       </p>
     ),
     code: {
@@ -148,7 +148,7 @@ export function getStaticProps() {
 
 UsingSvelteKit.layoutProps = {
   meta: {
-    title: 'Installation: Tailwind CSS with SvelteKit',
+    title: 'Install Tailwind CSS with SvelteKit',
     section: 'Getting Started',
   },
   Layout: DocumentationLayout,

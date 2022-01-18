@@ -21,8 +21,8 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Install <code>tailwindcss</code> via npm, and then run the init
-        command to generate a <code>tailwind.config.js</code> file.
+        Install <code>tailwindcss</code> via npm, and then run the init command to generate a{' '}
+        <code>tailwind.config.js</code> file.
       </p>
     ),
     code: {
@@ -56,7 +56,8 @@ let steps = [
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your <code>./src/styles.css</code> file.
+        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your{' '}
+        <code>./src/styles.css</code> file.
       </p>
     ),
     code: {
@@ -124,7 +125,7 @@ export function getStaticProps() {
 
 UsingAngular.layoutProps = {
   meta: {
-    title: 'Installation: Tailwind CSS with Angular',
+    title: 'Install Tailwind CSS with Angular',
     section: 'Getting Started',
   },
   Layout: DocumentationLayout,
