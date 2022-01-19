@@ -656,7 +656,7 @@ function registerPlugins(plugins, context) {
         log.warn('root-regex', [
           'Regular expressions in `safelist` work differently in Tailwind CSS v3.0.',
           'Update your `safelist` configuration to eliminate this warning.',
-          // TODO: Add https://tw.wtf/regex-safelist
+          'https://tailwindcss.com/docs/content-configuration#safelisting-classes',
         ])
         continue
       }
@@ -714,6 +714,7 @@ function registerPlugins(plugins, context) {
         log.warn([
           `The safelist pattern \`${regex}\` doesn't match any Tailwind CSS classes.`,
           'Fix this pattern or remove it from your `safelist` configuration.',
+          'https://tailwindcss.com/docs/content-configuration#safelisting-classes',
         ])
       }
     }
