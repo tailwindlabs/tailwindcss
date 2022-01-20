@@ -28,7 +28,7 @@ let steps = [
     code: {
       name: 'Terminal',
       lang: 'terminal',
-      code: 'npm install -D tailwindcss\nnpx tailwindcss init',
+      code: 'npm install -D tailwindcss postcss autoprefixer\nnpx tailwindcss init',
     },
   },
   {
