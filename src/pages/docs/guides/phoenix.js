@@ -149,7 +149,7 @@ let steps = [
     code: {
       name: 'app.js',
       lang: 'diff-js',
-      code: `- // Remove this line if you add a your own CSS build pipeline (e.g postcss).
+      code: `- // Remove this line if you add your own CSS build pipeline (e.g postcss).
 - import "../css/app.css"`,
     },
   },
