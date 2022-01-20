@@ -358,6 +358,23 @@ After your configuration is all set up and your root element matches the selecto
 
 When using the selector strategy, be sure that the template file that includes your root selector is included in your [content configuration](/docs/optimizing-for-production#basic-usage), otherwise all of your CSS will be removed when building for production.
 
+#### Important modifier
+
+Alternatively, you can make any utility important by adding a `!` character to the beginning:
+
+```html
+<p class="font-bold !font-medium">
+  This will be medium even though bold comes later in the CSS.
+</p>
+```
+
+The `!` always goes at the beginning of the utility name, after any variants, but before any prefix:
+
+```html
+<div class="sm:hover:!tw-font-bold">
+```
+
+This can be useful in rare situations where you need to increase specificity because you're at war with some styles you don't control.
 
 ### Separator
 
