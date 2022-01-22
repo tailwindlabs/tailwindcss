@@ -3,6 +3,7 @@ import * as path from 'path'
 import postcss from 'postcss'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
+import escapeClassName from './util/escapeClassName'
 import parseAnimationValue from './util/parseAnimationValue'
 import flattenColorPalette from './util/flattenColorPalette'
 import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
@@ -578,11 +579,10 @@ export let corePlugins = {
     })
   },
 
-  animation: ({ matchUtilities, theme, prefix }) => {
-    let prefixName = (name) => prefix(`.${name}`).slice(1)
+  animation: ({ matchUtilities, theme, prefix, config }) => {
     let keyframes = Object.fromEntries(
       Object.entries(theme('keyframes') ?? {}).map(([key, value]) => {
-        return [key, { [`@keyframes ${prefixName(key)}`]: value }]
+        return [key, { [`@keyframes ${config('prefix')}${escapeClassName(key)}`]: value }]
       })
     )
 
@@ -599,7 +599,7 @@ export let corePlugins = {
                   if (name === undefined || keyframes[name] === undefined) {
                     return value
                   }
-                  return value.replace(name, prefixName(name))
+                  return value.replace(name, `${config('prefix')}${escapeClassName(name)}`)
                 })
                 .join(', '),
             },
