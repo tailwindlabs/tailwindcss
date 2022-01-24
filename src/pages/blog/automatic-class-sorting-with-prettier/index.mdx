@@ -1,0 +1,115 @@
+import { reinink, adamwathan } from '@/authors'
+import card from './card.jpg'
+import banner from './banner.jpg'
+
+export const meta = {
+  title: 'Automatic Class Sorting with Prettier',
+  description: `People have been talking about the best way to sort your utility classes in Tailwind projects for at least four years. Today we’re excited to announce that you can finally stop worrying about it with the release of our official Prettier plugin for Tailwind CSS.`,
+  date: '2022-01-24T19:00:00.000Z',
+  authors: [reinink, adamwathan],
+  image: card,
+}
+
+People have been talking about the best way to sort your utility classes in Tailwind projects for [at least four years](https://github.com/tailwindlabs/discuss/issues/97). Today we're excited to announce that you can finally stop worrying about it with the release of our official <a href="https://github.com/tailwindlabs/prettier-plugin-tailwindcss">Prettier plugin for Tailwind CSS</a>.
+
+<!--more-->
+
+<div class="my-10">
+  <a href="https://github.com/tailwindlabs/prettier-plugin-tailwindcss">
+    <img src={banner} alt="" />
+  </a>
+</div>
+
+This plugin scans your templates for class attributes containing Tailwind CSS classes, and then sorts those classes automatically following our [recommended class order](#how-classes-are-sorted).
+
+```html HTML
+<!-- Before -->
+<button class="text-white px-4 sm:px-8 py-2 sm:py-3 bg-sky-700 hover:bg-sky-800">...</button>
+
+<!-- After -->
+<button class="bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3">...</button>
+```
+
+It works seamlessly with custom Tailwind configurations, and because it's just a [Prettier](https://prettier.io/) plugin, it works anywhere Prettier works — including every popular editor and IDE, and of course on the command line.
+
+To get started, just install `prettier-plugin-tailwindcss` as a dev-dependency:
+
+```sh Terminal
+npm install -D prettier prettier-plugin-tailwindcss
+```
+
+This plugin follows Prettier's [autoloading convention](https://prettier.io/docs/en/plugins.html), so as long as you've got Prettier set up in your project, it'll start working automatically as soon as it's installed.
+
+---
+
+## How classes are sorted
+
+At it's core, all this plugin does is organize your classes in the same order that Tailwind orders them in your CSS.
+
+This means that any classes in the base layer will be sorted first, followed by classes in the components layer, and then finally classes in the utilities layer.
+
+```html
+<!-- `container` is a component so it comes first -->
+<div class="container mx-auto px-6">
+  <!-- ... -->
+</div>
+```
+
+Utilities themselves are sorted in the same order we sort them in the CSS as well, which means that any classes that override other classes always appear later in the class list:
+
+```diff-html
+- <div class="pt-2 p-4">
++ <div class="p-4 pt-2">
+    <!-- ... -->
+  </div>
+```
+
+The actual order of the different utilities is loosely based on the box model, and tries to put high impact classes that affect the layout at the beginning and decorative classes at the end, while also trying to keep related utilities together:
+
+```diff-html
+- <div class="text-gray-700 shadow-md p-3 border-gray-300 ml-4 h-24 flex border-2 ">
++ <div class="ml-4 flex h-24 border-2 border-gray-300 p-3 text-gray-700 shadow-md">
+    <!-- ... -->
+  </div>
+```
+
+Modifiers like `hover:` and `focus:` are grouped together and sorted after any plain utilities:
+
+```diff-html
+- <div class="hover:opacity-75 opacity-50 hover:scale-150 scale-125">
++ <div class="scale-125 opacity-50 hover:scale-150 hover:opacity-75">
+    <!-- ... -->
+  </div>
+```
+
+Responsive modifiers like `md:` and `lg:` are grouped together at the end in the same order they're configured in your theme — which is smallest to largest by default:
+
+```diff-html
+- <div class="lg:grid-cols-4 grid sm:grid-cols-3 grid-cols-2">
++ <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+    <!-- ... -->
+  </div>
+```
+
+Any custom classes that don't come from Tailwind plugins (like classes for targeting a third-party library) are always sorted to the front, so it's easy to see when an element is using them:
+
+```diff-html
+- <div class="p-3 shadow-xl select2-dropdown ">
++ <div class="select2-dropdown p-3 shadow-xl">
+    <!-- ... -->
+  </div>
+```
+
+---
+
+## Customization
+
+We think [Prettier gets it right](https://prettier.io/docs/en/option-philosophy.html) when it comes to being opinionated and offering little in terms of customizability — at the end of the day the biggest benefit to sorting your classes is that it's just one less thing to argue with your team about.
+
+We've tried really hard to come up with a sort order that is easy to understand and communicates the most important information as fast as possible.
+
+The plugin _will_ respect your `tailwind.config.js` file and work with any Tailwind plugins you've installed, but **there is no way to change the sort order**. Just like with Prettier, we think that the benefits of auto-formatting will quickly outweigh any stylistic preferences you have and that you'll get used to it pretty fast.
+
+<Footer>
+  Ready to try it out? <a href="https://github.com/tailwindlabs/prettier-plugin-tailwindcss">Check out the full documentation on GitHub →</a>
+</Footer>
