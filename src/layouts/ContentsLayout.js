@@ -109,21 +109,16 @@ function useTableOfContents(tableOfContents) {
   useEffect(() => {
     if (tableOfContents.length === 0 || headings.length === 0) return
     function onScroll() {
-      let y = window.pageYOffset
-      let windowHeight = window.innerHeight
+      let style = window.getComputedStyle(document.documentElement)
+      let scrollMt = parseFloat(style.getPropertyValue('--scroll-mt').match(/[\d.]+/)?.[0] ?? 0)
+      let fontSize = parseFloat(style.fontSize.match(/[\d.]+/)?.[0] ?? 16)
+      scrollMt = scrollMt * fontSize
+
       let sortedHeadings = headings.concat([]).sort((a, b) => a.top - b.top)
-      if (y <= 0) {
-        setCurrentSection(sortedHeadings[0].id)
-        return
-      }
-      if (y + windowHeight >= document.body.scrollHeight) {
-        setCurrentSection(sortedHeadings[sortedHeadings.length - 1].id)
-        return
-      }
-      const middle = y + windowHeight / 2
+      let top = window.pageYOffset + scrollMt + 1
       let current = sortedHeadings[0].id
       for (let i = 0; i < sortedHeadings.length; i++) {
-        if (middle >= sortedHeadings[i].top) {
+        if (top >= sortedHeadings[i].top) {
           current = sortedHeadings[i].id
         }
       }
@@ -134,7 +129,12 @@ function useTableOfContents(tableOfContents) {
       passive: true,
     })
     onScroll()
-    return () => window.removeEventListener('scroll', onScroll, true)
+    return () => {
+      window.removeEventListener('scroll', onScroll, {
+        capture: true,
+        passive: true,
+      })
+    }
   }, [headings, tableOfContents])
 
   return { currentSection, registerHeading, unregisterHeading }
