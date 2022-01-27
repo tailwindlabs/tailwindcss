@@ -1253,3 +1253,36 @@ it('apply partitioning works with media queries', async () => {
     ${defaults}
   `)
 })
+
+it('should be possible to use apply in plugins', async () => {
+  let config = {
+    content: [{ raw: html`<div class="a b"></div>` }],
+    corePlugins: { preflight: false },
+    plugins: [
+      function ({ addComponents }) {
+        addComponents({
+          '.a': {
+            color: 'red',
+          },
+          '.b': {
+            '@apply a': {},
+            color: 'blue',
+          },
+        })
+      },
+    ],
+  }
+
+  return run('@tailwind components', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .a {
+        color: red;
+      }
+
+      .b {
+        color: red;
+        color: blue;
+      }
+    `)
+  })
+})
