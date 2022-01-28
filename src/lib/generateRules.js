@@ -262,7 +262,8 @@ function parseRules(rule, cache, options = {}) {
 const IS_VALID_PROPERTY_NAME = /^[a-z_-]/
 
 function isValidPropName(name) {
-  return IS_VALID_PROPERTY_NAME.test(name)
+  // TODO: properly fix this!
+  return IS_VALID_PROPERTY_NAME.test(name) && !name.startsWith('http')
 }
 
 function isParsableCssValue(property, value) {
