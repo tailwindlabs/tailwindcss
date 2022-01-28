@@ -68,7 +68,7 @@ function CopyButton({ code }) {
           'text-sky-400': state === 'copied',
         })}
         onClick={() => {
-          navigator.clipboard.writeText(redent(code.replace(/^[+->]/gm, ' '))).then(() => {
+          navigator.clipboard.writeText(redent(code.replace(/^[+>-]/gm, ' '))).then(() => {
             setState({ state: 'copied', i: i + 1 })
           })
         }}
