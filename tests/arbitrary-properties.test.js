@@ -347,3 +347,18 @@ it('should be possible to read theme values in arbitrary properties (with quotes
     `)
   })
 })
+
+it('should not generate invalid CSS', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="[https://en.wikipedia.org/wiki]"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css``)
+  })
+})
