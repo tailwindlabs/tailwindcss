@@ -352,13 +352,27 @@ it('should not generate invalid CSS', () => {
   let config = {
     content: [
       {
-        raw: html`<div class="[https://en.wikipedia.org/wiki]"></div>`,
+        raw: html`
+          <div class="[https://en.wikipedia.org/wiki]"></div>
+          <div class="[http://example.org]"></div>
+          <div class="[http://example]"></div>
+          <div class="[ftp://example]"></div>
+          <div class="[stillworks:/example]"></div>
+        `,
+
+        // NOTE: In this case `stillworks:/example` being generated is not ideal
+        // but it at least doesn't produce invalid CSS when run through prettier
+        // So we can let it through since it is technically valid
       },
     ],
     corePlugins: { preflight: false },
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    return expect(result.css).toMatchFormattedCss(css``)
+    return expect(result.css).toMatchFormattedCss(css`
+      .\[stillworks\:\/example\] {
+        stillworks: /example;
+      }
+    `)
   })
 })
