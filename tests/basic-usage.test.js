@@ -160,12 +160,14 @@ it('shadows support values without a leading zero', () => {
       .shadow-one {
         --tw-shadow: 0.5rem 0.5rem 0.5rem #0005;
         --tw-shadow-colored: 0.5rem 0.5rem 0.5rem var(--tw-shadow-color);
-        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
       }
       .shadow-two {
         --tw-shadow: 0.5rem 0.5rem 0.5rem #0005;
         --tw-shadow-colored: 0.5rem 0.5rem 0.5rem var(--tw-shadow-color);
-        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
       }
     `)
   })
