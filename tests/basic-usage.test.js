@@ -137,3 +137,38 @@ it('fasly config values still work', () => {
     `)
   })
 })
+
+it('shadows support values without a leading zero', () => {
+  let config = {
+    content: [{ raw: html`<div class="shadow-one shadow-two"></div>` }],
+    theme: {
+      boxShadow: {
+        one: '0.5rem 0.5rem 0.5rem #0005',
+        two: '.5rem .5rem .5rem #0005',
+      },
+    },
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .shadow-one {
+        --tw-shadow: 0.5rem 0.5rem 0.5rem #0005;
+        --tw-shadow-colored: 0.5rem 0.5rem 0.5rem var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+      .shadow-two {
+        --tw-shadow: 0.5rem 0.5rem 0.5rem #0005;
+        --tw-shadow-colored: 0.5rem 0.5rem 0.5rem var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+    `)
+  })
+})
