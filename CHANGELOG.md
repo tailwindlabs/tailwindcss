@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Fix preflight border color fallback ([#7288](https://github.com/tailwindlabs/tailwindcss/pull/7288))
 
 ## [3.0.18] - 2022-01-28
 
