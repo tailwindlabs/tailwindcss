@@ -666,6 +666,7 @@ function registerPlugins(plugins, context) {
 
     if (checks.length > 0) {
       let patternMatchingCount = new Map()
+      let prefixLength = context.tailwindConfig.prefix.length
 
       for (let util of classList) {
         let utils = Array.isArray(util)
@@ -675,7 +676,20 @@ function registerPlugins(plugins, context) {
               let classes = values.map((value) => formatClass(utilName, value))
 
               if (options?.supportsNegativeValues) {
+                // This is the normal negated version
+                // e.g. `-inset-1` or `-tw-inset-1`
                 classes = [...classes, ...classes.map((cls) => '-' + cls)]
+
+                // This is the negated version *after* the prefix
+                // e.g. `tw--inset-1`
+                // The prefix is already attached to util name
+                // So we add the negative after the prefix
+                classes = [
+                  ...classes,
+                  ...classes.map(
+                    (cls) => cls.slice(0, prefixLength) + '-' + cls.slice(prefixLength)
+                  ),
+                ]
               }
 
               return classes
