@@ -63,9 +63,23 @@ function applyPrefix(matches, context) {
     let [meta] = match
     if (meta.options.respectPrefix) {
       let container = postcss.root({ nodes: [match[1].clone()] })
+      let classCandidate = match[1].raws.tailwind.classCandidate
+
       container.walkRules((r) => {
-        r.selector = prefixSelector(context.tailwindConfig.prefix, r.selector)
+        // If this is a negative utility with a dash *before* the prefix we
+        // have to ensure that the generated selector matches the candidate
+
+        // Not doing this will cause `-tw-top-1` to generate the class `.tw--top-1`
+        // The disconnect between candidate <-> class can cause @apply to hard crash.
+        let shouldPrependNegative = classCandidate.startsWith('-')
+
+        r.selector = prefixSelector(
+          context.tailwindConfig.prefix,
+          r.selector,
+          shouldPrependNegative
+        )
       })
+
       match[1] = container.nodes[0]
     }
   }
@@ -371,6 +385,14 @@ function splitWithSeparator(input, separator) {
   return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
 }
 
+function* recordCandidates(matches, classCandidate) {
+  for (const match of matches) {
+    match[1].raws.tailwind = { classCandidate }
+
+    yield match
+  }
+}
+
 function* resolveMatches(candidate, context) {
   let separator = context.tailwindConfig.separator
   let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
@@ -482,7 +504,9 @@ function* resolveMatches(candidate, context) {
       continue
     }
 
-    matches = applyPrefix(matches.flat(), context)
+    matches = matches.flat()
+    matches = Array.from(recordCandidates(matches, classCandidate))
+    matches = applyPrefix(matches, context)
 
     if (important) {
       matches = applyImportant(matches, context)
