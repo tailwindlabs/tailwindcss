@@ -1,0 +1,7 @@
+node_modules
+vendor
+!tailwind.config.js
+!**/src/**
+!**/public/**
+!phoenix/assets/**
+!**/index.html
