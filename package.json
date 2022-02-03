@@ -46,7 +46,7 @@
     "@swc/cli": "^0.1.55",
     "@swc/core": "^1.2.127",
     "@swc/jest": "^0.2.17",
-    "@swc/register": "^0.1.7",
+    "@swc/register": "^0.1.10",
     "autoprefixer": "^10.4.2",
     "cssnano": "^5.0.15",
     "esbuild": "^0.14.10",
