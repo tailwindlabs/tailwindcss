@@ -167,12 +167,14 @@ textarea {
 }
 
 /*
-Remove the inheritance of text transform in Edge and Firefox.
+1. Remove the inheritance of text transform in Edge and Firefox.
+2. Remove default button styles.
 */
 
 button,
 select {
-  text-transform: none;
+  text-transform: none; /* 1 */
+  background-color: initial; /* 2 */
 }
 
 /*
@@ -185,7 +187,6 @@ button,
 [type='reset'],
 [type='submit'] {
   -webkit-appearance: button; /* 1 */
-  background-color: transparent; /* 2 */
   background-image: none; /* 2 */
 }
 
