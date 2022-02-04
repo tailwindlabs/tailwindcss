@@ -12,7 +12,7 @@ import { createContext } from './lib/setupContextUtils'
 import { issueFlagNotices } from './featureFlags'
 
 export default function processTailwindFeatures(setupContext) {
-  return function (root, result) {
+  return async function (root, result) {
     let { tailwindDirectives, applyDirectives } = normalizeTailwindDirectives(root)
 
     detectNesting()(root, result)
@@ -21,7 +21,7 @@ export default function processTailwindFeatures(setupContext) {
     // itself.
     partitionApplyAtRules()(root, result)
 
-    let context = setupContext({
+    let context = await setupContext({
       tailwindDirectives,
       applyDirectives,
       registerDependency(dependency) {

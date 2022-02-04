@@ -4,9 +4,24 @@ import { cjsConfigFile, defaultConfigFile } from '../src/constants'
 import inTempDirectory from '../jest/runInTempDirectory'
 
 import { run, html, css, javascript } from './util/run'
+import { getTailwindConfig } from '../src/lib/setupTrackingContext'
 
 test('it uses the values from the custom config file', () => {
   let config = require(path.resolve(`${__dirname}/fixtures/custom-config.js`))
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 400px) {
+        .mobile\:font-bold {
+          font-weight: 700;
+        }
+      }
+    `)
+  })
+})
+
+test('it resolves a typescript config file', async () => {
+  let [config] = await getTailwindConfig(path.resolve(`${__dirname}/fixtures/ts-config.ts`))
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`

@@ -2,7 +2,7 @@ import setupTrackingContext from './lib/setupTrackingContext'
 import processTailwindFeatures from './processTailwindFeatures'
 import { env } from './lib/sharedState'
 
-module.exports = function tailwindcss(configOrPath) {
+const plugin = function tailwindcss(configOrPath) {
   return {
     postcssPlugin: 'tailwindcss',
     plugins: [
@@ -12,8 +12,8 @@ module.exports = function tailwindcss(configOrPath) {
           console.time('JIT TOTAL')
           return root
         },
-      function (root, result) {
-        processTailwindFeatures(setupTrackingContext(configOrPath))(root, result)
+      async function (root, result) {
+        await processTailwindFeatures(setupTrackingContext(configOrPath))(root, result)
       },
       env.DEBUG &&
         function (root) {
@@ -25,4 +25,7 @@ module.exports = function tailwindcss(configOrPath) {
   }
 }
 
+module.exports = plugin
 module.exports.postcss = true
+module.exports.tailwindcss = plugin
+module.exports.defineConfig = (config) => config

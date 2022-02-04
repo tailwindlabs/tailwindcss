@@ -4,6 +4,7 @@ import path from 'path'
 import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
 import normalizePath from 'normalize-path'
+import { loadConfig } from 'unconfig'
 
 import hash from '../util/hashConfig'
 import getModuleDependencies from '../lib/getModuleDependencies'
@@ -34,8 +35,24 @@ function getCandidateFiles(context, tailwindConfig) {
 }
 
 // Get the config object based on a path
-function getTailwindConfig(configOrPath) {
+export async function getTailwindConfig(configOrPath) {
   let userConfigPath = resolveConfigPath(configOrPath)
+
+  // Try loading with unconfig first
+  if (!userConfigPath || typeof userConfigPath === 'string') {
+    const unconfig = await loadConfig({
+      merge: false,
+      sources: [
+        { files: userConfigPath?.replace(/\.ts$/, ''), extensions: ['ts'], skipOnError: true },
+        { files: 'tailwind.config', extensions: ['ts'], skipOnError: true },
+      ],
+    })
+
+    if (unconfig.sources.length > 0) {
+      const resolvedConfig = resolveConfig(unconfig.config)
+      return [resolvedConfig, null, hash(resolvedConfig), []]
+    }
+  }
 
   if (userConfigPath !== null) {
     let [prevConfig, prevConfigHash, prevDeps, prevModified] =
@@ -113,9 +130,9 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
 // plugins) then return it
 export default function setupTrackingContext(configOrPath) {
   return ({ tailwindDirectives, registerDependency, applyDirectives }) => {
-    return (root, result) => {
+    return async (root, result) => {
       let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-        getTailwindConfig(configOrPath)
+        await getTailwindConfig(configOrPath)
 
       let contextDependencies = new Set(configDependencies)
 

@@ -83,7 +83,8 @@
     "postcss-selector-parser": "^6.0.9",
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
-    "resolve": "^1.22.0"
+    "resolve": "^1.22.0",
+    "unconfig": "^0.2.2"
   },
   "browserslist": [
     "> 1%",
