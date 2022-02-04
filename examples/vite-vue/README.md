@@ -1,7 +1,12 @@
-# Vue 3 + Vite
+# Tailwind CSS + Vite + Vue 3
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is an example Vite application that has Tailwind CSS v3.0+ installed. You may use it as a reference for what files, directories, and related configuration may be needed to set up a project. If you would like to use Tailwind CSS in your own project you can follow our guide [Install Tailwind CSS with Vite](https://tailwindcss.com/docs/guides/vite).
 
-## Recommended IDE Setup
+## Notable files
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+- package.json
+- tailwind.config.cjs
+- postcss.config.cjs
+- src/index.css
+- src/main.js
+- src/App.vue
