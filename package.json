@@ -98,6 +98,7 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
+      "/examples/",
       "/integrations/",
       "/standalone-cli/"
     ],
