@@ -12,11 +12,6 @@
     "tailwind": "lib/cli.js",
     "tailwindcss": "lib/cli.js"
   },
-  "contributors": [
-    "Adam Wathan <adam.wathan@gmail.com>",
-    "Jonathan Reinink <jonathan@reinink.ca>",
-    "David Hemphill <davidlee.hemphill@gmail.com>"
-  ],
   "scripts": {
     "preswcify": "npm run generate:plugin-list && rimraf lib",
     "swcify": "swc src --out-dir lib --copy-files",
