@@ -25,33 +25,33 @@ function getClassNameFromSelector(selector) {
 // Example with dynamic classes:
 // ['grid-cols', '[[linename],1fr,auto]']
 // ['grid', 'cols-[[linename],1fr,auto]']
-function* candidatePermutations(candidate, lastIndex = Infinity) {
-  if (lastIndex < 0) {
-    return
+function* candidatePermutations(candidate) {
+  let lastIndex = Infinity
+
+  while (lastIndex >= 0) {
+    let dashIdx
+
+    if (lastIndex === Infinity && candidate.endsWith(']')) {
+      let bracketIdx = candidate.indexOf('[')
+
+      // If character before `[` isn't a dash or a slash, this isn't a dynamic class
+      // eg. string[]
+      dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
+    } else {
+      dashIdx = candidate.lastIndexOf('-', lastIndex)
+    }
+
+    if (dashIdx < 0) {
+      break
+    }
+
+    let prefix = candidate.slice(0, dashIdx)
+    let modifier = candidate.slice(dashIdx + 1)
+
+    yield [prefix, modifier]
+
+    lastIndex = dashIdx - 1
   }
-
-  let dashIdx
-
-  if (lastIndex === Infinity && candidate.endsWith(']')) {
-    let bracketIdx = candidate.indexOf('[')
-
-    // If character before `[` isn't a dash or a slash, this isn't a dynamic class
-    // eg. string[]
-    dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
-  } else {
-    dashIdx = candidate.lastIndexOf('-', lastIndex)
-  }
-
-  if (dashIdx < 0) {
-    return
-  }
-
-  let prefix = candidate.slice(0, dashIdx)
-  let modifier = candidate.slice(dashIdx + 1)
-
-  yield [prefix, modifier]
-
-  yield* candidatePermutations(candidate, dashIdx - 1)
 }
 
 function applyPrefix(matches, context) {

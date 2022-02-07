@@ -172,3 +172,19 @@ it('shadows support values without a leading zero', () => {
     `)
   })
 })
+
+it('can scan extremely long classes without crashing', () => {
+  let val = 'cols-' + '-a'.repeat(65536)
+  let config = {
+    content: [{ raw: html`<div class="${val}"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css``)
+  })
+})
