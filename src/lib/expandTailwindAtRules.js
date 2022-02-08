@@ -158,7 +158,7 @@ export default function expandTailwindAtRules(context) {
     // ---
 
     // Find potential rules in changed files
-    let candidates = new Set(['*'])
+    let candidates = new Set([sharedState.NOT_ON_DEMAND])
     let seen = new Set()
 
     env.DEBUG && console.time('Reading changed files')

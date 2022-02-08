@@ -5,6 +5,7 @@ import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
+import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
@@ -382,6 +383,10 @@ function* resolveMatchedPlugins(classCandidate, context) {
 }
 
 function splitWithSeparator(input, separator) {
+  if (input === sharedState.NOT_ON_DEMAND) {
+    return [sharedState.NOT_ON_DEMAND]
+  }
+
   return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
 }
 

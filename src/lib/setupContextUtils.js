@@ -138,7 +138,7 @@ function withIdentifiers(styles) {
 
     // If this isn't "on-demandable", assign it a universal candidate to always include it.
     if (containsNonOnDemandableSelectors) {
-      candidates.unshift('*')
+      candidates.unshift(sharedState.NOT_ON_DEMAND)
     }
 
     // However, it could be that it also contains "on-demandable" candidates.
@@ -163,8 +163,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
   }
 
   function prefixIdentifier(identifier, options) {
-    if (identifier === '*') {
-      return '*'
+    if (identifier === sharedState.NOT_ON_DEMAND) {
+      return sharedState.NOT_ON_DEMAND
     }
 
     if (!options.respectPrefix) {
