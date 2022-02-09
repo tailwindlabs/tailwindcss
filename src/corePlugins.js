@@ -209,7 +209,10 @@ let cssBackdropFilterValue = [
 export let corePlugins = {
   preflight: ({ addBase }) => {
     let preflightStyles = postcss.parse(
-      fs.readFileSync(path.join(__dirname, './css/preflight.css'), 'utf8')
+      fs.readFileSync(path.join(__dirname, './css/preflight.css'), 'utf8'),
+      {
+        from: 'Tailwind Preflight',
+      }
     )
 
     addBase([
