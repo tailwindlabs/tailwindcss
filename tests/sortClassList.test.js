@@ -11,6 +11,10 @@ it.each([
   // Utilities with variants
   ['px-3 focus:hover:p-3 hover:p-1 py-3', 'px-3 py-3 hover:p-1 focus:hover:p-3'],
 
+  // Utitlies with important
+  ['px-3 !py-4', 'px-3 !py-4'],
+  ['!py-4 px-3', '!py-4 px-3'],
+
   // Components with variants
   ['hover:container container', 'container hover:container'],
 
@@ -44,6 +48,10 @@ it.each([
     'tw-px-3 focus:hover:tw-p-3 hover:tw-p-1 tw-py-3',
     'tw-px-3 tw-py-3 hover:tw-p-1 focus:hover:tw-p-3',
   ],
+
+  // Utitlies with important
+  ['tw-px-3 !tw-py-4', 'tw-px-3 !tw-py-4'],
+  ['!tw-py-4 tw-px-3', '!tw-py-4 tw-px-3'],
 
   // Components with variants
   ['hover:tw-container tw-container', 'tw-container hover:tw-container'],
