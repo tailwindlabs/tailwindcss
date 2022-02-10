@@ -249,6 +249,51 @@ test('@apply error when using a prefixed .group utility', async () => {
   )
 })
 
+test('@apply error when using .peer utility', async () => {
+  let config = {
+    darkMode: 'class',
+    content: [{ raw: '<div class="foo"></div>' }],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo {
+        @apply peer;
+      }
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrowError(
+    `@apply should not be used with the 'peer' utility`
+  )
+})
+
+test('@apply error when using a prefixed .peer utility', async () => {
+  let config = {
+    prefix: 'tw-',
+    darkMode: 'class',
+    content: [{ raw: html`<div class="foo"></div>` }],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo {
+        @apply tw-peer;
+      }
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrowError(
+    `@apply should not be used with the 'tw-peer' utility`
+  )
+})
+
 test('@apply classes from outside a @layer', async () => {
   let config = {
     content: [{ raw: html`<div class="foo bar baz font-bold"></div>` }],
