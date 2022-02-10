@@ -164,7 +164,7 @@ describe.skip('watcher', () => {
       'index.html',
       html`
         <link rel="stylesheet" href="./index.css" />
-        <div class="font-bold btn"></div>
+        <div class="btn font-bold"></div>
       `
     )
 
@@ -190,7 +190,7 @@ describe.skip('watcher', () => {
 
           @layer components {
             .btn {
-              @apply px-2 py-1 rounded;
+              @apply rounded px-2 py-1;
             }
           }
         `
@@ -222,7 +222,7 @@ describe.skip('watcher', () => {
 
           @layer components {
             .btn {
-              @apply px-2 py-1 rounded bg-red-500;
+              @apply rounded bg-red-500 px-2 py-1;
             }
           }
         `
