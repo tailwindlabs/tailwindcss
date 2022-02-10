@@ -20,7 +20,7 @@ it('should be possible to differentiate between decoration utilities', () => {
   let config = {
     content: [
       {
-        raw: html` <div class="decoration-[3px] decoration-[#ccc]"></div> `,
+        raw: html` <div class="decoration-[#ccc] decoration-[3px]"></div> `,
       },
     ],
   }

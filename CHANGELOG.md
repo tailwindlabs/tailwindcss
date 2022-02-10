@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet!
+### Added
+
+- Expose `context.sortClassList(classes)` ([#7412](https://github.com/tailwindlabs/tailwindcss/pull/7412))
 
 ## [3.0.19] - 2022-02-07
 

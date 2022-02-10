@@ -77,6 +77,7 @@
     "postcss-nested": "5.0.6",
     "postcss-selector-parser": "^6.0.9",
     "postcss-value-parser": "^4.2.0",
+    "prettier-plugin-tailwindcss": "^0.1.7",
     "quick-lru": "^5.1.1",
     "resolve": "^1.22.0"
   },

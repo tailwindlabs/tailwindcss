@@ -15,20 +15,20 @@ test('@apply', () => {
 
     @layer components {
       .basic-example {
-        @apply px-4 py-2 bg-blue-500 rounded-md;
+        @apply rounded-md bg-blue-500 px-4 py-2;
       }
       .class-order {
-        @apply pt-4 pr-1 px-3 py-7 p-8;
+        @apply p-8 px-3 py-7 pt-4 pr-1;
       }
       .with-additional-properties {
         font-weight: 500;
         @apply text-right;
       }
       .variants {
-        @apply xl:focus:font-black hover:font-bold lg:font-light focus:font-medium font-semibold;
+        @apply font-semibold hover:font-bold focus:font-medium lg:font-light xl:focus:font-black;
       }
       .only-variants {
-        @apply xl:focus:font-black hover:font-bold lg:font-light focus:font-medium;
+        @apply hover:font-bold focus:font-medium lg:font-light xl:focus:font-black;
       }
       .apply-group-variant {
         @apply group-hover:text-center lg:group-hover:text-left;
@@ -41,7 +41,7 @@ test('@apply', () => {
       }
       .multiple,
       .selectors {
-        @apply px-4 py-2 bg-blue-500 rounded-md;
+        @apply rounded-md bg-blue-500 px-4 py-2;
       }
       .multiple-variants,
       .selectors-variants {
@@ -52,7 +52,7 @@ test('@apply', () => {
         @apply group-hover:text-center lg:group-hover:text-left;
       }
       .complex-utilities {
-        @apply ordinal tabular-nums focus:diagonal-fractions shadow-lg hover:shadow-xl;
+        @apply ordinal tabular-nums shadow-lg hover:shadow-xl focus:diagonal-fractions;
       }
       .use-base-only-a {
         @apply font-bold;
@@ -67,10 +67,10 @@ test('@apply', () => {
         @apply use-dependant-only-a font-normal;
       }
       .btn {
-        @apply font-bold py-2 px-4 rounded;
+        @apply rounded py-2 px-4 font-bold;
       }
       .btn-blue {
-        @apply btn bg-blue-500 hover:bg-blue-700 text-white;
+        @apply btn bg-blue-500 text-white hover:bg-blue-700;
       }
       .recursive-apply-a {
         @apply font-black sm:font-thin;
@@ -96,7 +96,7 @@ test('@apply', () => {
       }
 
       h1 {
-        @apply text-2xl lg:text-2xl sm:text-3xl;
+        @apply text-2xl sm:text-3xl lg:text-2xl;
       }
       h2 {
         @apply text-2xl;
@@ -105,7 +105,7 @@ test('@apply', () => {
       }
 
       .important-modifier {
-        @apply px-4 !rounded-md;
+        @apply !rounded-md px-4;
       }
 
       .important-modifier-variant {
@@ -249,9 +249,54 @@ test('@apply error when using a prefixed .group utility', async () => {
   )
 })
 
+test('@apply error when using .peer utility', async () => {
+  let config = {
+    darkMode: 'class',
+    content: [{ raw: '<div class="foo"></div>' }],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo {
+        @apply peer;
+      }
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrowError(
+    `@apply should not be used with the 'peer' utility`
+  )
+})
+
+test('@apply error when using a prefixed .peer utility', async () => {
+  let config = {
+    prefix: 'tw-',
+    darkMode: 'class',
+    content: [{ raw: html`<div class="foo"></div>` }],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+      .foo {
+        @apply tw-peer;
+      }
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrowError(
+    `@apply should not be used with the 'tw-peer' utility`
+  )
+})
+
 test('@apply classes from outside a @layer', async () => {
   let config = {
-    content: [{ raw: html`<div class="font-bold foo bar baz"></div>` }],
+    content: [{ raw: html`<div class="foo bar baz font-bold"></div>` }],
   }
 
   let input = css`
@@ -317,7 +362,7 @@ test('@apply classes from outside a @layer', async () => {
 
 test('@applying classes from outside a @layer respects the source order', async () => {
   let config = {
-    content: [{ raw: html`<div class="container font-bold foo bar baz"></div>` }],
+    content: [{ raw: html`<div class="foo bar baz container font-bold"></div>` }],
   }
 
   let input = css`
@@ -406,7 +451,7 @@ it('should remove duplicate properties when using apply with similar properties'
     @tailwind utilities;
 
     .foo {
-      @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+      @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform;
     }
   `
 
@@ -778,7 +823,7 @@ it('should be possible to apply user css without tailwind directives', () => {
       background-color: blue;
     }
     .foo {
-      @apply absolute bar bop;
+      @apply bar bop absolute;
     }
   `
 

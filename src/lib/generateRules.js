@@ -234,7 +234,7 @@ function applyVariant(variant, matches, context) {
         // For example:
         // .sm:underline {} is a variant of something in the utilities layer
         // .sm:container {} is a variant of the container component
-        clone.nodes[0].raws.tailwind = { parentLayer: meta.layer }
+        clone.nodes[0].raws.tailwind = { ...clone.nodes[0].raws.tailwind, parentLayer: meta.layer }
 
         let withOffset = [
           {
@@ -387,7 +387,7 @@ function splitWithSeparator(input, separator) {
 
 function* recordCandidates(matches, classCandidate) {
   for (const match of matches) {
-    match[1].raws.tailwind = { classCandidate }
+    match[1].raws.tailwind = { ...match[1].raws.tailwind, classCandidate }
 
     yield match
   }
@@ -517,6 +517,8 @@ function* resolveMatches(candidate, context) {
     }
 
     for (let match of matches) {
+      match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate }
+
       // Apply final format selector
       if (match[0].collectedFormats) {
         let finalFormat = formatVariantSelector('&', ...match[0].collectedFormats)
