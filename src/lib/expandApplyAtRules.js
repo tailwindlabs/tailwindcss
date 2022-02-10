@@ -162,11 +162,10 @@ function processApply(root, context) {
 
       for (let applyCandidate of applyCandidates) {
         if (!applyClassCache.has(applyCandidate)) {
-          if (applyCandidate === prefix(context, 'group')) {
+          if ([prefix(context, 'group'), prefix(context, 'peer')].includes(applyCandidate)) {
             // TODO: Link to specific documentation page with error code.
             throw apply.error(`@apply should not be used with the '${applyCandidate}' utility`)
           }
-
           throw apply.error(
             `The \`${applyCandidate}\` class does not exist. If \`${applyCandidate}\` is a custom class, make sure it is defined within a \`@layer\` directive.`
           )
