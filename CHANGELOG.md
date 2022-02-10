@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.0.20] - 2022-02-10
+
 ### Added
 
 - Expose `context.sortClassList(classes)` ([#7412](https://github.com/tailwindlabs/tailwindcss/pull/7412))
@@ -1849,7 +1853,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.19...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.20...HEAD
+[3.0.20]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.19...v3.0.20
 [3.0.19]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.18...v3.0.19
 [3.0.18]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.17...v3.0.18
 [3.0.17]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.16...v3.0.17
