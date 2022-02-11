@@ -50,7 +50,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.7",
     "jest-diff": "^27.4.6",
-    "postcss": "^8.4.6",
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.7",
     "rimraf": "^3.0.0"
@@ -73,6 +72,7 @@
     "is-glob": "^4.0.3",
     "normalize-path": "^3.0.0",
     "object-hash": "^2.2.0",
+    "postcss": "^8.4.6",
     "postcss-js": "^4.0.0",
     "postcss-load-config": "^3.1.0",
     "postcss-nested": "5.0.6",

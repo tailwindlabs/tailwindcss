@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Temporarily move postcss to dependencies ([#7424](https://github.com/tailwindlabs/tailwindcss/pull/7424))
 
 ## [3.0.21] - 2022-02-10
 
