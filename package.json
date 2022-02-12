@@ -49,7 +49,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.7",
-    "jest-diff": "^27.4.6",
+    "jest-diff": "^27.5.1",
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.7",
     "rimraf": "^3.0.0"
