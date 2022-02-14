@@ -57,7 +57,7 @@ export let variantPlugins = {
     })
   },
 
-  pseudoClassVariants: ({ addVariant }) => {
+  pseudoClassVariants: ({ addVariant, theme }) => {
     let pseudoVariants = [
       // Positional
       ['first', ':first-child'],
