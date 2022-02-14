@@ -73,6 +73,22 @@ export let variantPlugins = {
       [
         'visited',
         ({ container }) => {
+          let toRemove = ['--tw-text-opacity', '--tw-border-opacity', '--tw-bg-opacity']
+
+          container.walkDecls((decl) => {
+            if (toRemove.includes(decl.prop)) {
+              decl.remove()
+
+              return
+            }
+
+            for (const varName of toRemove) {
+              if (decl.value.includes(`/ var(${varName})`)) {
+                decl.value = decl.value.replace(`/ var(${varName})`, '')
+              }
+            }
+          })
+
           return ':visited'
         },
       ],
