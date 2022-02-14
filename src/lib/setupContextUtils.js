@@ -744,33 +744,25 @@ function registerPlugins(plugins, context) {
   // sorting could be weird since you still require them in order to make the
   // host utitlies work properly. (Thanks Biology)
   let parasiteUtilities = new Set([prefix(context, 'group'), prefix(context, 'peer')])
-  context.sortClassList = function sortClassList(classes) {
+  context.getSortOrder = function getSortOrder(classes) {
     let sortedClassNames = new Map()
     for (let [sort, rule] of generateRules(new Set(classes), context)) {
       if (sortedClassNames.has(rule.raws.tailwind.candidate)) continue
       sortedClassNames.set(rule.raws.tailwind.candidate, sort)
     }
 
-    return classes
-      .map((className) => {
-        let order = sortedClassNames.get(className) ?? null
+    return classes.map((className) => {
+      let order = sortedClassNames.get(className) ?? null
 
-        if (order === null && parasiteUtilities.has(className)) {
-          // This will make sure that it is at the very beginning of the
-          // `components` layer which technically means 'before any
-          // components'.
-          order = context.layerOrder.components
-        }
+      if (order === null && parasiteUtilities.has(className)) {
+        // This will make sure that it is at the very beginning of the
+        // `components` layer which technically means 'before any
+        // components'.
+        order = context.layerOrder.components
+      }
 
-        return [className, order]
-      })
-      .sort(([, a], [, z]) => {
-        if (a === z) return 0
-        if (a === null) return -1
-        if (z === null) return 1
-        return bigSign(a - z)
-      })
-      .map(([className]) => className)
+      return [className, order]
+    })
   }
 
   // Generate a list of strings for autocompletion purposes, e.g.

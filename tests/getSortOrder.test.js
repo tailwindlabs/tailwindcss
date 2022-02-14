@@ -1,5 +1,42 @@
 import resolveConfig from '../src/public/resolve-config'
 import { createContext } from '../src/lib/setupContextUtils'
+import bigSign from '../src/util/bigSign'
+
+/**
+ * This is a function that the prettier-plugin-tailwindcss would use. It would
+ * do the actual sorting based on the classes and order we return from `getSortOrder`.
+ *
+ * This way the actual sorting logic is done in the plugin which allows you to
+ * put unknown classes at the end for example.
+ *
+ * @param {Array<[string, bigint]>} arrayOfTuples
+ * @returns {string}
+ */
+function defaultSort(arrayOfTuples) {
+  return arrayOfTuples
+    .sort(([, a], [, z]) => {
+      if (a === z) return 0
+      if (a === null) return -1
+      if (z === null) return 1
+      return bigSign(a - z)
+    })
+    .map(([className]) => className)
+    .join(' ')
+}
+
+it('should return a list of tuples with the sort order', () => {
+  let input = 'font-bold underline hover:font-medium unknown'
+  let config = {}
+  let context = createContext(resolveConfig(config))
+  expect(context.getSortOrder(input.split(' '))).toEqual([
+    ['font-bold', expect.any(BigInt)],
+    ['underline', expect.any(BigInt)],
+    ['hover:font-medium', expect.any(BigInt)],
+
+    // Unknown values receive `null`
+    ['unknown', null],
+  ])
+})
 
 it.each([
   // Utitlies
@@ -33,7 +70,7 @@ it.each([
 ])('should sort "%s" based on the order we generate them in to "%s"', (input, output) => {
   let config = {}
   let context = createContext(resolveConfig(config))
-  expect(context.sortClassList(input.split(' ')).join(' ')).toEqual(output)
+  expect(defaultSort(context.getSortOrder(input.split(' ')))).toEqual(output)
 })
 
 it.each([
@@ -73,6 +110,6 @@ it.each([
   (input, output) => {
     let config = { prefix: 'tw-' }
     let context = createContext(resolveConfig(config))
-    expect(context.sortClassList(input.split(' ')).join(' ')).toEqual(output)
+    expect(defaultSort(context.getSortOrder(input.split(' ')))).toEqual(output)
   }
 )
