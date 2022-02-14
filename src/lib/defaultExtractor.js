@@ -8,6 +8,8 @@ const PATTERNS = [
   /([^<>"'`\s]*\[\w*\("[^"'`\s]*"\)\])/.source, // bg-[url("...")]
   /([^<>"'`\s]*\[\w*\('[^"`\s]*'\)\])/.source, // bg-[url('...'),url('...')]
   /([^<>"'`\s]*\[\w*\("[^'`\s]*"\)\])/.source, // bg-[url("..."),url("...")]
+  /([^<>"'`\s]*\[[^<>"'`\s]*\('[^"`\s]*'\)+\])/.source, // h-[calc(100%-theme('spacing.1'))]
+  /([^<>"'`\s]*\[[^<>"'`\s]*\("[^'`\s]*"\)+\])/.source, // h-[calc(100%-theme("spacing.1"))]
   /([^<>"'`\s]*\['[^"'`\s]*'\])/.source, // `content-['hello']` but not `content-['hello']']`
   /([^<>"'`\s]*\["[^"'`\s]*"\])/.source, // `content-["hello"]` but not `content-["hello"]"]`
   /([^<>"'`\s]*\[[^<>"'`\s]*:[^\]\s]*\])/.source, // `[attr:value]`

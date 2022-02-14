@@ -341,3 +341,32 @@ it('should be possible to read theme values in arbitrary values (with quotes)', 
     `)
   })
 })
+
+it('should be possible to read theme values in arbitrary values (with quotes) when inside calc or similar functions', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div
+          class="w-[calc(100%-theme('spacing.1'))] w-[calc(100%-theme('spacing[0.5]'))]"
+        ></div>`,
+      },
+    ],
+    theme: {
+      spacing: {
+        0.5: 'calc(.5 * .25rem)',
+        1: 'calc(1 * .25rem)',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .w-\[calc\(100\%-theme\(\'spacing\.1\'\)\)\] {
+        width: calc(100% - calc(1 * 0.25rem));
+      }
+      .w-\[calc\(100\%-theme\(\'spacing\[0\.5\]\'\)\)\] {
+        width: calc(100% - calc(0.5 * 0.25rem));
+      }
+    `)
+  })
+})
