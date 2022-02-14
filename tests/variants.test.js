@@ -539,3 +539,32 @@ it('variants for utilities should not be produced in a file without a utilities 
     `)
   })
 })
+
+test('The visited variant removes opacity support', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <a class="visited:border-red-500 visited:bg-red-500 visited:text-red-500"
+            >Look, it's a link!</a
+          >
+        `,
+      },
+    ],
+    plugins: [],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .visited\:border-red-500:visited {
+        border-color: rgb(239 68 68);
+      }
+      .visited\:bg-red-500:visited {
+        background-color: rgb(239 68 68);
+      }
+      .visited\:text-red-500:visited {
+        color: rgb(239 68 68);
+      }
+    `)
+  })
+})
