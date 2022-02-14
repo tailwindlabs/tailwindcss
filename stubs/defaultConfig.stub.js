@@ -927,6 +927,11 @@ module.exports = {
       40: '40',
       50: '50',
     },
+    pair: {
+      "1": "",
+      "2": "",
+      "3": "",
+    }
   },
   variantOrder: [
     'first',
