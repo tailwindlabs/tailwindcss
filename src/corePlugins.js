@@ -145,12 +145,12 @@ export let variantPlugins = {
     }
 
     for (let [variantName, state] of pseudoVariants) {
-      Object.keys(theme("pair") ?? {}).forEach((key) => {
+      Object.keys(theme('pair') ?? {}).forEach((key) => {
         addVariant(`pair-${key}-${variantName}`, [
           `:merge(.pair-${key})${state} ~ &`,
           `:merge(.pair-${key})${state} ~ * &`,
-        ]);
-      });
+        ])
+      })
     }
   },
 
@@ -2367,11 +2367,11 @@ export let corePlugins = {
   ]),
 
   pair: ({ addUtilities, theme }) => {
-    const pairUtilities = Object.keys(theme("pair") ?? {});
+    const pairUtilities = Object.keys(theme('pair') ?? {})
     addUtilities(
-      pairUtilities.map(key => {
-        return {[`.pair-${key}`]: {}}
+      pairUtilities.map((key) => {
+        return { [`.pair-${key}`]: {} }
       })
-    );
-  }
+    )
+  },
 }
