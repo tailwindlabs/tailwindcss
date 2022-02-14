@@ -145,22 +145,11 @@ export let variantPlugins = {
     }
 
     for (let [variantName, state] of pseudoVariants) {
-      Object.keys(theme("pair") ?? {}).forEach(key => {
-        addVariant(
-          `pair-${key}-${variantName}`,
-          ({ modifySelectors, separator }) => {
-            modifySelectors(({ className }) => {
-              return (
-                `.pair-${key}:${variantName} ~ .${e(
-                  `pair-${key}-${variantName}${separator}${className}`
-                )},\n` +
-                `.pair-${key}:${variantName} ~ * .${e(
-                  `pair-${key}-${variantName}${separator}${className}`
-                )}`
-              );
-            });
-          }
-        );
+      Object.keys(theme("pair") ?? {}).forEach((key) => {
+        addVariant(`pair-${key}-${variantName}`, [
+          `:merge(.pair-${key})${state} ~ &`,
+          `:merge(.pair-${key})${state} ~ * &`,
+        ]);
       });
     }
   },
@@ -2376,14 +2365,13 @@ export let corePlugins = {
   content: createUtilityPlugin('content', [
     ['content', ['--tw-content', ['content', 'var(--tw-content)']]],
   ]),
-  pair: ({ addUtilities, theme, e,}) => {
+
+  pair: ({ addUtilities, theme }) => {
     const pairUtilities = Object.keys(theme("pair") ?? {});
     addUtilities(
       pairUtilities.map(key => {
-        return {
-          [`.${e(`pair-${key}`)}`]: {},
-        };
+        return {[`.pair-${key}`]: {}}
       })
     );
-  },
+  }
 }
