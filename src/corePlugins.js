@@ -70,7 +70,12 @@ export let variantPlugins = {
       'only-of-type',
 
       // State
-      'visited',
+      [
+        'visited',
+        ({ container }) => {
+          return ':visited'
+        },
+      ],
       'target',
       ['open', '[open]'],
 
@@ -100,15 +105,27 @@ export let variantPlugins = {
     ].map((variant) => (Array.isArray(variant) ? variant : [variant, `:${variant}`]))
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(variantName, `&${state}`)
+      addVariant(variantName, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `&${result}`
+      })
     }
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(`group-${variantName}`, `:merge(.group)${state} &`)
+      addVariant(`group-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `:merge(.group)${result} &`
+      })
     }
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(`peer-${variantName}`, `:merge(.peer)${state} ~ &`)
+      addVariant(`peer-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `:merge(.peer)${result} ~ &`
+      })
     }
   },
 
