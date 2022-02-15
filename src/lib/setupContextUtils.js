@@ -744,7 +744,7 @@ function registerPlugins(plugins, context) {
   // sorting could be weird since you still require them in order to make the
   // host utitlies work properly. (Thanks Biology)
   let parasiteUtilities = new Set([prefix(context, 'group'), prefix(context, 'peer')])
-  context.getSortOrder = function getSortOrder(classes) {
+  context.getClassOrder = function getClassOrder(classes) {
     let sortedClassNames = new Map()
     for (let [sort, rule] of generateRules(new Set(classes), context)) {
       if (sortedClassNames.has(rule.raws.tailwind.candidate)) continue

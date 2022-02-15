@@ -4,7 +4,7 @@ import bigSign from '../src/util/bigSign'
 
 /**
  * This is a function that the prettier-plugin-tailwindcss would use. It would
- * do the actual sorting based on the classes and order we return from `getSortOrder`.
+ * do the actual sorting based on the classes and order we return from `getClassOrder`.
  *
  * This way the actual sorting logic is done in the plugin which allows you to
  * put unknown classes at the end for example.
@@ -28,7 +28,7 @@ it('should return a list of tuples with the sort order', () => {
   let input = 'font-bold underline hover:font-medium unknown'
   let config = {}
   let context = createContext(resolveConfig(config))
-  expect(context.getSortOrder(input.split(' '))).toEqual([
+  expect(context.getClassOrder(input.split(' '))).toEqual([
     ['font-bold', expect.any(BigInt)],
     ['underline', expect.any(BigInt)],
     ['hover:font-medium', expect.any(BigInt)],
@@ -70,7 +70,7 @@ it.each([
 ])('should sort "%s" based on the order we generate them in to "%s"', (input, output) => {
   let config = {}
   let context = createContext(resolveConfig(config))
-  expect(defaultSort(context.getSortOrder(input.split(' ')))).toEqual(output)
+  expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
 })
 
 it.each([
@@ -110,6 +110,6 @@ it.each([
   (input, output) => {
     let config = { prefix: 'tw-' }
     let context = createContext(resolveConfig(config))
-    expect(defaultSort(context.getSortOrder(input.split(' ')))).toEqual(output)
+    expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
   }
 )
