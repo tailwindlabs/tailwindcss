@@ -1,12 +1,14 @@
 import { html } from './util/run'
 import { defaultExtractor } from '../src/lib/defaultExtractor'
 
-let jsxExample = `
+const jsExamples = `
+  document.body.classList.add(["pl-1.5"].join(" "));
+`
+const jsxExamples = `
   <div className={\`overflow-scroll\${conditionIsOpen ? '' : ' hidden'}\`}></div>
   <div className={\`\${['pr-1.5'].join(' ')}\`}><div>
 `
-const input =
-  html`
+const htmlExamples = html`
   <div class="font-['some_font',sans-serif]"></div>
   <div class='font-["some_font",sans-serif]'></div>
   <div class="bg-[url('...')]"></div>
@@ -54,7 +56,7 @@ const input =
       'ml-0.5': true,
     }
   </script>
-` + jsxExample
+`
 
 const includes = [
   `font-['some_font',sans-serif]`,
@@ -72,6 +74,7 @@ const includes = [
   `fill-[#bada55]`,
   `fill-[#bada55]/50`,
   `px-1.5`,
+  `pl-1.5`,
   `pr-1.5`,
   `ml-0.5`,
   `uppercase`,
@@ -114,7 +117,7 @@ const excludes = [
 ]
 
 test('The default extractor works as expected', async () => {
-  const extractions = defaultExtractor(input.trim())
+  const extractions = defaultExtractor([jsExamples, jsxExamples, htmlExamples].join('\n').trim())
 
   for (const str of includes) {
     expect(extractions).toContain(str)
