@@ -5,6 +5,7 @@ export const env = {
 export const contextMap = new Map()
 export const configContextMap = new Map()
 export const contextSourcesMap = new Map()
+export const NOT_ON_DEMAND = new String('*')
 
 export function resolveDebug(debug) {
   if (debug === undefined) {

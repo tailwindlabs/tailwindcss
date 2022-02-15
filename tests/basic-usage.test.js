@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { html, run, css } from './util/run'
+import { html, run, css, defaults } from './util/run'
 
 test('basic usage', () => {
   let config = {
@@ -186,5 +186,66 @@ it('can scan extremely long classes without crashing', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css``)
+  })
+})
+
+it('does not produce duplicate output when seeing variants preceding a wildcard (*)', () => {
+  let config = {
+    content: [{ raw: html`underline focus:*` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    * {
+      color: red;
+    }
+
+    .combined,
+    * {
+      text-align: center;
+    }
+
+    @layer base {
+      * {
+        color: blue;
+      }
+
+      .combined,
+      * {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      * {
+        color: blue;
+      }
+
+      .combined,
+      * {
+        color: red;
+      }
+
+      ${defaults}
+
+      .underline {
+        text-decoration-line: underline;
+      }
+
+      * {
+        color: red;
+      }
+
+      .combined,
+      * {
+        text-align: center;
+      }
+    `)
   })
 })
