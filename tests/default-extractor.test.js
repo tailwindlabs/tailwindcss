@@ -3,10 +3,14 @@ import { defaultExtractor } from '../src/lib/defaultExtractor'
 
 const jsExamples = `
   document.body.classList.add(["pl-1.5"].join(" "));
+  document.body.classList.add(['pl-2.5'].join(" "));
 `
 const jsxExamples = `
   <div className={\`overflow-scroll\${conditionIsOpen ? '' : ' hidden'}\`}></div>
   <div className={\`\${['pr-1.5'].join(' ')}\`}><div>
+  <div className={\`\${['pr-2.5', 'pr-3.5'].join(' ')}\`}><div>
+  <div className={\`\${["pr-4.5"].join(' ')}\`}><div>
+  <div className={\`\${["pr-5.5", "pr-6.5"].join(' ')}\`}><div>
 `
 const htmlExamples = html`
   <div class="font-['some_font',sans-serif]"></div>
@@ -75,7 +79,13 @@ const includes = [
   `fill-[#bada55]/50`,
   `px-1.5`,
   `pl-1.5`,
+  `pl-2.5`,
   `pr-1.5`,
+  `pr-2.5`,
+  `pr-3.5`,
+  `pr-4.5`,
+  `pr-5.5`,
+  `pr-6.5`,
   `ml-0.5`,
   `uppercase`,
   `lowercase`,
@@ -357,20 +367,30 @@ test('special characters', async () => {
   expect(extractions).toContain(`md>:font-bold`)
 })
 
-test('arbitrary values with template literal in single quotes', async () => {
-  const extractions = defaultExtractor(`
-    <div class=\`\${['pr-1.5']}\`></div>
-  `)
+test('arbitrary values with single quotes array within template literal', async () => {
+  const extractions = defaultExtractor(`<div class=\`\${['pr-1.5']}\`></div>`)
 
   expect(extractions).toContain('pr-1.5')
   expect(extractions).toContain('pr-1')
 })
 
-test('arbitrary values with template literal in double quotes', async () => {
-  const extractions = defaultExtractor(`
-    <div class=\`\${["pr-1.5"]}\`></div>
-  `)
+test('arbitrary values with double quotes array within template literal', async () => {
+  const extractions = defaultExtractor(`<div class=\`\${["pr-1.5"]}\`></div>`)
 
   expect(extractions).toContain('pr-1.5')
   expect(extractions).toContain('pr-1')
+})
+
+test('arbitrary values with single quotes array within function', async () => {
+  const extractions = defaultExtractor(`document.body.classList.add(['pl-1.5'].join(" "));`)
+
+  expect(extractions).toContain('pl-1.5')
+  expect(extractions).toContain('pl-1')
+})
+
+test('arbitrary values with double quotes array within function', async () => {
+  const extractions = defaultExtractor(`document.body.classList.add(["pl-1.5"].join(" "));`)
+
+  expect(extractions).toContain('pl-1.5')
+  expect(extractions).toContain('pl-1')
 })
