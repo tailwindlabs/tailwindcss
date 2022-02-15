@@ -1,7 +1,10 @@
 import { html } from './util/run'
 import { defaultExtractor } from '../src/lib/defaultExtractor'
 
-let jsxExample = "<div className={`overflow-scroll${conditionIsOpen ? '' : ' hidden'}`}></div>"
+let jsxExample = `
+  <div className={\`overflow-scroll\${conditionIsOpen ? '' : ' hidden'}\`}></div>
+  <div className={\`\${['pr-1.5'].join(' ')}\`}><div>
+`
 const input =
   html`
   <div class="font-['some_font',sans-serif]"></div>
@@ -46,7 +49,9 @@ const input =
     let classes14 = ["<div class='hover:test'>"]
 
     let obj = {
-      lowercase: true
+      lowercase: true,
+      "normal-case": true,
+      'ml-0.5': true,
     }
   </script>
 ` + jsxExample
@@ -67,8 +72,11 @@ const includes = [
   `fill-[#bada55]`,
   `fill-[#bada55]/50`,
   `px-1.5`,
+  `pr-1.5`,
+  `ml-0.5`,
   `uppercase`,
   `lowercase`,
+  `normal-case`,
   `hover:font-bold`,
   `text-sm`,
   `text-[10px]`,
@@ -344,4 +352,22 @@ test('special characters', async () => {
 
   expect(extractions).toContain(`<sm:underline`)
   expect(extractions).toContain(`md>:font-bold`)
+})
+
+test('arbitrary values with template literal in single quotes', async () => {
+  const extractions = defaultExtractor(`
+    <div class=\`\${['pr-1.5']}\`></div>
+  `)
+
+  expect(extractions).toContain('pr-1.5')
+  expect(extractions).toContain('pr-1')
+})
+
+test('arbitrary values with template literal in double quotes', async () => {
+  const extractions = defaultExtractor(`
+    <div class=\`\${["pr-1.5"]}\`></div>
+  `)
+
+  expect(extractions).toContain('pr-1.5')
+  expect(extractions).toContain('pr-1')
 })
