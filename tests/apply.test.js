@@ -1,7 +1,14 @@
 import fs from 'fs'
 import path from 'path'
+import * as sharedState from '../src/lib/sharedState.js'
 
 import { run, html, css, defaults } from './util/run'
+
+beforeEach(() => {
+  sharedState.contextMap.clear()
+  sharedState.configContextMap.clear()
+  sharedState.contextSourcesMap.clear()
+})
 
 test('@apply', () => {
   let config = {
