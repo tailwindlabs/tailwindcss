@@ -10,7 +10,7 @@ import { TipGood, TipBad } from '@/components/Tip'
 
 Plugins let you register new styles for Tailwind to inject into the user's stylesheet using JavaScript instead of CSS.
 
-To get started with your first plugin, import Tailwind's `plugin` function from `tailwindcss/plugin`. Then inside your `plugins` array, and call it with an anonymous function as the first argument.
+To get started with your first plugin, import Tailwind's `plugin` function from `tailwindcss/plugin`. Then inside your `plugins` array, call the imported `plugin` function with an anonymous function as the first argument.
 
 ```js tailwind.config.js
 const plugin = require('tailwindcss/plugin')
