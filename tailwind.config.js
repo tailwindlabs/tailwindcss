@@ -213,6 +213,9 @@ module.exports = {
             'tbody tr': {
               borderBottomColor: 'rgb(148 163 184 / 0.1)',
             },
+            blockQuote: {
+              color: theme('colors.white'),
+            },
           },
         },
       }),
