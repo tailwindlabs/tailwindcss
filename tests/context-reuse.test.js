@@ -1,17 +1,94 @@
+const fs = require('fs')
 const path = require('path')
-const process = require('child_process')
-const { promisify } = require('util')
-const exec = promisify(process.exec)
+const postcss = require('postcss')
+const tailwind = require('../src/index.js')
+const sharedState = require('../src/lib/sharedState.js')
+const configPath = path.resolve(__dirname, './context-reuse.tailwind.config.js')
+const { css } = require('./util/run.js')
 
-test.skip('a build re-uses the context across multiple files with the same config', async () => {
-  const filepath = path.resolve(__dirname, './context-reuse.worker.js')
+function run(input, config = {}, from = null) {
+  from = from || path.resolve(__filename)
 
-  const { stdout } = await exec(`node ${filepath}`)
+  return postcss(tailwind(config)).process(input, { from })
+}
 
-  const results = JSON.parse(stdout.trim())
+beforeEach(async () => {
+  let config = {
+    content: [path.resolve(__dirname, './context-reuse.test.html')],
+    corePlugins: { preflight: false },
+  }
 
-  expect(results[0].activeContexts).toBe(1)
-  expect(results[1].activeContexts).toBe(1)
-  expect(results[2].activeContexts).toBe(1)
-  expect(results[3].activeContexts).toBe(1)
+  await fs.promises.writeFile(configPath, `module.exports = ${JSON.stringify(config)};`)
+})
+
+afterEach(async () => {
+  await fs.promises.unlink(configPath)
+})
+
+it('a build re-uses the context across multiple files with the same config', async () => {
+  let from = path.resolve(__filename)
+
+  let results = [
+    await run(`@tailwind utilities;`, configPath, `${from}?id=1`),
+
+    // Using @apply directives should still re-use the context
+    // They depend on the config but do not the other way around
+    await run(`body { @apply bg-blue-400; }`, configPath, `${from}?id=2`),
+    await run(`body { @apply text-red-400; }`, configPath, `${from}?id=3`),
+    await run(`body { @apply mb-4; }`, configPath, `${from}?id=4`),
+  ]
+
+  let dependencies = results.map((result) => {
+    return result.messages
+      .filter((message) => message.type === 'dependency')
+      .map((message) => message.file)
+  })
+
+  // The content files don't have any utilities in them so this should be empty
+  expect(results[0].css).toMatchFormattedCss(css``)
+
+  // However, @apply is being used so we want to verify that they're being inlined into the CSS rules
+  expect(results[1].css).toMatchFormattedCss(css`
+    body {
+      --tw-bg-opacity: 1;
+      background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+    }
+  `)
+
+  expect(results[2].css).toMatchFormattedCss(css`
+    body {
+      --tw-text-opacity: 1;
+      color: rgb(248 113 113 / var(--tw-text-opacity));
+    }
+  `)
+
+  expect(results[3].css).toMatchFormattedCss(css`
+    body {
+      margin-bottom: 1rem;
+    }
+  `)
+
+  // Files with @tailwind directives depends on the PostCSS tree, config, AND any content files
+  expect(dependencies[0]).toEqual([
+    path.resolve(__dirname, 'context-reuse.test.html'),
+    path.resolve(__dirname, 'context-reuse.tailwind.config.js'),
+  ])
+
+  expect(dependencies[1]).toEqual([
+    path.resolve(__dirname, 'context-reuse.test.html'),
+    path.resolve(__dirname, 'context-reuse.tailwind.config.js')
+  ])
+
+  expect(dependencies[2]).toEqual([
+    path.resolve(__dirname, 'context-reuse.test.html'),
+    path.resolve(__dirname, 'context-reuse.tailwind.config.js'),
+  ])
+
+  expect(dependencies[3]).toEqual([
+    path.resolve(__dirname, 'context-reuse.test.html'),
+    path.resolve(__dirname, 'context-reuse.tailwind.config.js')
+  ])
+
+  // And none of this should have resulted in multiple contexts being created
+  // expect(sharedState.contextSourcesMap.size).toBe(1)
 })
