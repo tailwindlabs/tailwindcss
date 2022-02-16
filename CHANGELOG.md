@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.0.23] - 2022-02-16
+
 ### Fixed
 
 - Remove opacity variables from `:visited` pseudo class ([#7458](https://github.com/tailwindlabs/tailwindcss/pull/7458))
@@ -1870,7 +1874,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.22...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.23...HEAD
+[3.0.23]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.22...v3.0.23
 [3.0.22]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.21...v3.0.22
 [3.0.21]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.20...v3.0.21
 [3.0.20]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.19...v3.0.20
