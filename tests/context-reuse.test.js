@@ -74,20 +74,13 @@ it('a build re-uses the context across multiple files with the same config', asy
     path.resolve(__dirname, 'context-reuse.tailwind.config.js'),
   ])
 
-  expect(dependencies[1]).toEqual([
-    path.resolve(__dirname, 'context-reuse.test.html'),
-    path.resolve(__dirname, 'context-reuse.tailwind.config.js')
-  ])
+  // @apply depends only on the containing PostCSS tree *and* the config file but no content files
+  // as they cannot affect the outcome of the @apply directives
+  expect(dependencies[1]).toEqual([path.resolve(__dirname, 'context-reuse.tailwind.config.js')])
 
-  expect(dependencies[2]).toEqual([
-    path.resolve(__dirname, 'context-reuse.test.html'),
-    path.resolve(__dirname, 'context-reuse.tailwind.config.js'),
-  ])
+  expect(dependencies[2]).toEqual([path.resolve(__dirname, 'context-reuse.tailwind.config.js')])
 
-  expect(dependencies[3]).toEqual([
-    path.resolve(__dirname, 'context-reuse.test.html'),
-    path.resolve(__dirname, 'context-reuse.tailwind.config.js')
-  ])
+  expect(dependencies[3]).toEqual([path.resolve(__dirname, 'context-reuse.tailwind.config.js')])
 
   // And none of this should have resulted in multiple contexts being created
   // expect(sharedState.contextSourcesMap.size).toBe(1)
