@@ -74,7 +74,7 @@
     "object-hash": "^2.2.0",
     "postcss": "^8.4.6",
     "postcss-js": "^4.0.0",
-    "postcss-load-config": "^3.1.0",
+    "postcss-load-config": "^3.1.3",
     "postcss-nested": "5.0.6",
     "postcss-selector-parser": "^6.0.9",
     "postcss-value-parser": "^4.2.0",
