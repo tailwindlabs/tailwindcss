@@ -63,8 +63,10 @@ const htmlExamples = html`
       "normal-case": true,
       'ml-0.5': true,
       'ml-0.5': true,
-      "h-[106px]": true,
-      "h-[107px]": true
+      'h-[106px]': true,
+      'h-[107px]': true
+      "h-[108px]": true,
+      "h-[109px]": true
     }
   </script>
 `
@@ -102,6 +104,8 @@ const includes = [
   `h-[105px]`,
   `h-[106px]`,
   `h-[107px]`,
+  `h-[108px]`,
+  `h-[109px]`,
   `uppercase`,
   `lowercase`,
   `normal-case`,
