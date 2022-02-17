@@ -11,6 +11,10 @@ const jsxExamples = `
   <div className={\`\${['pr-2.5', 'pr-3.5'].join(' ')}\`}><div>
   <div className={\`\${["pr-4.5"].join(' ')}\`}><div>
   <div className={\`\${["pr-5.5", "pr-6.5"].join(' ')}\`}><div>
+  <div className={\`\${['h-[100px]'].join(' ')}\`}><div>
+  <div className={\`\${['h-[101px]', 'h-[102px]'].join(' ')}\`}><div>
+  <div className={\`\${["h-[103px]"].join(' ')}\`}><div>
+  <div className={\`\${["h-[104px]", "h-[105px]"].join(' ')}\`}><div>
 `
 const htmlExamples = html`
   <div class="font-['some_font',sans-serif]"></div>
@@ -87,6 +91,12 @@ const includes = [
   `pr-5.5`,
   `pr-6.5`,
   `ml-0.5`,
+  `h-[100px]`,
+  `h-[101px]`,
+  `h-[102px]`,
+  `h-[103px]`,
+  `h-[104px]`,
+  `h-[105px]`,
   `uppercase`,
   `lowercase`,
   `normal-case`,
