@@ -111,3 +111,37 @@ Learn more about customizing the default theme in the [theme customization](/doc
 ### Arbitrary values
 
 <ArbitraryValues property="font-family" featuredClass="font-['Open_Sans']" element="p" />
+
+### Customizing the default font family
+
+For convenience, [Preflight](/docs/preflight) sets the font family on the `html` element to match your configured `sans` font, so one way to change the default font for your project is to customize the `sans` key in your `fontFamily` configuration:
+
+```diff-js tailwind.config.js
+  const defaultTheme = require('tailwindcss/defaultTheme')
+  
+  module.exports = {
+    theme: {
+      extend: {
+        fontFamily: {
++         'sans': ['Proxima Nova', ...defaultTheme.fontFamily.sans],
+        },
+      }
+    }
+  }
+```
+
+You can also customize the default font used in your project by [adding a custom base style](/docs/adding-custom-styles#adding-base-styles) that sets the `font-family` property explicitly:
+
+```css main.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: Proxima Nova, system-ui, sans-serif;
+  }
+}
+```
+
+This is the best approach if you have customized your font family utilities to have different names and don't want there to be `font-sans` utility available in your project.
