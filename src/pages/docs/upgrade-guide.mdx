@@ -30,6 +30,8 @@ npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
 
 Note that Tailwind CSS v3.0 requires PostCSS 8, and no longer supports PostCSS 7. If you can't upgrade to PostCSS 8, we recommend using [Tailwind CLI](/docs/installation) instead of installing Tailwind as a PostCSS plugin.
 
+If you are using nesting in your custom CSS (in combination with a PostCSS nesting plugin), you should also [configure the `tailwindcss/nesting` plugin](https://tailwindcss.com/docs/using-with-preprocessors#nesting) in your PostCSS configuration to ensure compatibility with Tailwind CSS v3.0.
+
 ### Official plugins
 
 All of our first-party plugins have been updated for compatibility with v3.0.
