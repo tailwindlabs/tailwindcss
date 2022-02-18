@@ -83,5 +83,5 @@ it('a build re-uses the context across multiple files with the same config', asy
   expect(dependencies[3]).toEqual([path.resolve(__dirname, 'context-reuse.tailwind.config.js')])
 
   // And none of this should have resulted in multiple contexts being created
-  // expect(sharedState.contextSourcesMap.size).toBe(1)
+  expect(sharedState.contextSourcesMap.size).toBe(1)
 })

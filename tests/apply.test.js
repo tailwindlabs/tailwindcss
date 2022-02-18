@@ -1,14 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import * as sharedState from '../src/lib/sharedState.js'
 
 import { run, html, css, defaults } from './util/run'
-
-beforeEach(() => {
-  sharedState.contextMap.clear()
-  sharedState.configContextMap.clear()
-  sharedState.contextSourcesMap.clear()
-})
 
 test('@apply', () => {
   let config = {
@@ -1334,4 +1327,55 @@ it('should be possible to use apply in plugins', async () => {
       }
     `)
   })
+})
+
+it('The apply class cache is invalidated when rules change', async () => {
+  let config = {
+    content: [{ raw: html`<div></div>` }],
+    plugins: [],
+  }
+
+  let inputBefore = css`
+    .foo {
+      color: green;
+    }
+
+    .bar {
+      @apply foo;
+    }
+  `
+
+  let inputAfter = css`
+    .foo {
+      color: red;
+    }
+
+    .bar {
+      @apply foo;
+    }
+  `
+
+  let result = await run(inputBefore, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo {
+      color: green;
+    }
+
+    .bar {
+      color: green;
+    }
+  `)
+
+  result = await run(inputAfter, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo {
+      color: red;
+    }
+
+    .bar {
+      color: red;
+    }
+  `)
 })
