@@ -52,7 +52,7 @@ This will create new CSS files in the `/dist` folder which you can reference in 
     <title>Hello, world!</title>
   </head>
   <body>
-    <h1 class="text-2xl font-bold text-center">Hello world!</h1>
+    <h1 class="text-center text-2xl font-bold">Hello world!</h1>
   </body>
 </html>
 ```
