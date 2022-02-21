@@ -1,5 +1,4 @@
 const path = require('path')
-const querystring = require('querystring')
 const { createLoader } = require('simple-functional-loader')
 const frontMatter = require('front-matter')
 const withSmartQuotes = require('@silvenon/remark-smartypants')
@@ -255,7 +254,7 @@ module.exports = withBundleAnalyzer({
         }),
         ...mdx,
         createLoader(function (source) {
-          let { meta: fields } = querystring.parse(this.resourceQuery.substr(1))
+          let fields = new URLSearchParams(this.resourceQuery.substr(1)).get('meta') ?? undefined
           let { attributes: meta, body } = frontMatter(source)
           if (fields) {
             for (let field in meta) {
