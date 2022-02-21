@@ -22,7 +22,7 @@ import ParcelLogo from '@/img/guides/parcel.png'
 export default function FrameworkGuides() {
   return (
     <InstallationLayout>
-      <div id="content" className="prose prose-slate mb-10 max-w-3xl dark:prose-dark">
+      <div id="content-wrapper" className="prose prose-slate mb-10 max-w-3xl dark:prose-dark">
         <h3 className="sr-only">Framework Guides</h3>
         <p>
           Framework-specific guides that cover our recommended approach to installing Tailwind CSS

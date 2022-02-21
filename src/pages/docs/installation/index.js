@@ -91,7 +91,10 @@ let steps = [
 export default function TailwindCli({ code }) {
   return (
     <InstallationLayout>
-      <div id="content" className="relative z-10 prose prose-slate mb-16 max-w-3xl dark:prose-dark">
+      <div
+        id="content-wrapper"
+        className="relative z-10 prose prose-slate mb-16 max-w-3xl dark:prose-dark"
+      >
         <h3 className="sr-only">Installing Tailwind CLI</h3>
         <p>
           The simplest and fastest way to get up and running with Tailwind CSS from scratch is with
