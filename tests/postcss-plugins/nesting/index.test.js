@@ -1,6 +1,7 @@
 import postcss from 'postcss'
 import postcssNested from 'postcss-nested'
 import plugin from '../../../src/postcss-plugins/nesting'
+import { visitorSpyPlugin } from './plugins.js'
 
 it('should be possible to load a custom nesting plugin', async () => {
   let input = css`
@@ -166,6 +167,46 @@ test('@screen rules can work with `@apply`', async () => {
   `)
 })
 
+test('nesting does not break downstream plugin visitors', async () => {
+  let input = css`
+    .foo {
+      color: black;
+    }
+    @suppoerts (color: blue) {
+      .foo {
+        color: blue;
+      }
+    }
+    /* Comment */
+  `
+
+  let spyPlugin = visitorSpyPlugin()
+
+  let plugins = [plugin(postcssNested), spyPlugin.plugin]
+
+  let result = await run(input, plugins)
+
+  expect(result).toMatchCss(css`
+    .foo {
+      color: black;
+    }
+    @suppoerts (color: blue) {
+      .foo {
+        color: blue;
+      }
+    }
+    /* Comment */
+  `)
+
+  expect(spyPlugin.spies.Once).toHaveBeenCalled()
+  expect(spyPlugin.spies.OnceExit).toHaveBeenCalled()
+  expect(spyPlugin.spies.Root).toHaveBeenCalled()
+  expect(spyPlugin.spies.Rule).toHaveBeenCalled()
+  expect(spyPlugin.spies.AtRule).toHaveBeenCalled()
+  expect(spyPlugin.spies.Comment).toHaveBeenCalled()
+  expect(spyPlugin.spies.Declaration).toHaveBeenCalled()
+})
+
 // ---
 
 function indentRecursive(node, indent = 0) {
@@ -187,11 +228,21 @@ function formatNodes(root) {
 }
 
 async function run(input, options) {
-  return (
-    await postcss([options === undefined ? plugin : plugin(options), formatNodes]).process(input, {
-      from: undefined,
-    })
-  ).toString()
+  let plugins = []
+
+  if (Array.isArray(options)) {
+    plugins = options
+  } else {
+    plugins.push(options === undefined ? plugin : plugin(options))
+  }
+
+  plugins.push(formatNodes)
+
+  let result = await postcss(plugins).process(input, {
+    from: undefined,
+  })
+
+  return result.toString()
 }
 
 function css(templates) {
