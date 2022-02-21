@@ -5,7 +5,7 @@ let comparisonMap = {
 let types = new Set(Object.keys(comparisonMap))
 
 export default function collapseAdjacentRules() {
-  return (root) => {
+  function collapseRulesIn(root) {
     let currentRule = null
     root.each((node) => {
       if (!types.has(node.type)) {
@@ -35,5 +35,20 @@ export default function collapseAdjacentRules() {
         currentRule = node
       }
     })
+
+    // After we've collapsed adjacent rules & at-rules, we need to collapse
+    // adjacent rules & at-rules that are children of at-rules.
+    // We do not care about nesting rules because Tailwind CSS
+    // explicitly does not handle rule nesting on its own as
+    // the user is expected to use a nesting plugin
+    root.each((node) => {
+      if (node.type === 'atrule') {
+        collapseRulesIn(node)
+      }
+    })
+  }
+
+  return (root) => {
+    collapseRulesIn(root)
   }
 }

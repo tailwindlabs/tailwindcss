@@ -1289,9 +1289,6 @@ it('apply partitioning works with media queries', async () => {
       body {
         --tw-text-opacity: 1;
         color: rgb(220 38 38 / var(--tw-text-opacity));
-      }
-      html,
-      body {
         font-size: 2rem;
       }
     }
