@@ -205,7 +205,7 @@ module.exports.highlightCode = function highlightCode(code, prismLanguage) {
           ? `<span class="token ${token.types.join(' ')}">${token.content}</span>`
           : token.content
       )
-      .join('')}</span>`
+      .join('')}\n</span>`
   }
 
   if (isDiff || highlightedLines.length) {
