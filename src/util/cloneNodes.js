@@ -4,6 +4,12 @@ export default function cloneNodes(nodes, source) {
 
     if (source !== undefined) {
       cloned.source = source
+
+      if ('walk' in cloned) {
+        cloned.walk((child) => {
+          child.source = source
+        })
+      }
     }
 
     return cloned
