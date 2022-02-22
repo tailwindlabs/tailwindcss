@@ -84,7 +84,7 @@ export function SearchProvider({ children }) {
                 const a = document.createElement('a')
                 a.href = item.url
 
-                const hash = a.hash === '#content-wrapper' ? '' : a.hash
+                const hash = a.hash === '#content-wrapper' || a.hash === '#header' ? '' : a.hash
 
                 if (item.hierarchy?.lvl0) {
                   item.hierarchy.lvl0 = item.hierarchy.lvl0.replace(/&amp;/g, '&')
