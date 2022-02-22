@@ -110,6 +110,103 @@ test('per-plugin colors with the same key can differ when using a custom colors 
   })
 })
 
+test('default ring color can be a function', () => {
+  function color(variable) {
+    return function ({ opacityVariable, opacityValue }) {
+      if (opacityValue !== undefined) {
+        return `rgba(${variable}, ${opacityValue})`
+      }
+      if (opacityVariable !== undefined) {
+        return `rgba(${variable}, var(${opacityVariable}, 1))`
+      }
+      return `rgb(${variable})`
+    }
+  }
+
+  let config = {
+    content: [
+      {
+        raw: html` <div class="ring"></div> `,
+      },
+    ],
+
+    theme: {
+      extend: {
+        ringColor: {
+          DEFAULT: color('var(--red)'),
+        },
+      },
+    },
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-pan-x: ;
+        --tw-pan-y: ;
+        --tw-pinch-zoom: ;
+        --tw-scroll-snap-strictness: proximity;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgba(var(--red), 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-blur: ;
+        --tw-brightness: ;
+        --tw-contrast: ;
+        --tw-grayscale: ;
+        --tw-hue-rotate: ;
+        --tw-invert: ;
+        --tw-saturate: ;
+        --tw-sepia: ;
+        --tw-drop-shadow: ;
+        --tw-backdrop-blur: ;
+        --tw-backdrop-brightness: ;
+        --tw-backdrop-contrast: ;
+        --tw-backdrop-grayscale: ;
+        --tw-backdrop-hue-rotate: ;
+        --tw-backdrop-invert: ;
+        --tw-backdrop-opacity: ;
+        --tw-backdrop-saturate: ;
+        --tw-backdrop-sepia: ;
+      }
+
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
 it('fasly config values still work', () => {
   let config = {
     content: [{ raw: html`<div class="inset-0"></div>` }],

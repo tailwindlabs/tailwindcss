@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Prevent nesting plugin from breaking other plugins ([#7563](https://github.com/tailwindlabs/tailwindcss/pull/7563))
 - Recursively collapse adjacent rules ([#7565](https://github.com/tailwindlabs/tailwindcss/pull/7565))
+- Allow default ring color to be a function ([#7587](https://github.com/tailwindlabs/tailwindcss/pull/7587))
 
 ## [3.0.23] - 2022-02-16
 
