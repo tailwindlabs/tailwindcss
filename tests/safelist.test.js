@@ -53,6 +53,7 @@ it('should safelist based on a pattern regex', () => {
       {
         pattern: /bg-(red)-(100|200)/,
         variants: ['hover'],
+        opacities: ['50'],
       },
     ],
   }
@@ -64,9 +65,17 @@ it('should safelist based on a pattern regex', () => {
         background-color: rgb(254 226 226 / var(--tw-bg-opacity));
       }
 
+      .bg-red-100\/50 {
+        background-color: rgb(254 226 226 / 0.5);
+      }
+
       .bg-red-200 {
         --tw-bg-opacity: 1;
         background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+      }
+
+      .bg-red-200\/50 {
+        background-color: rgb(254 202 202 / 0.5);
       }
 
       .uppercase {
@@ -78,9 +87,17 @@ it('should safelist based on a pattern regex', () => {
         background-color: rgb(254 226 226 / var(--tw-bg-opacity));
       }
 
+      .hover\:bg-red-100\/50:hover {
+        background-color: rgb(254 226 226 / 0.5);
+      }
+
       .hover\:bg-red-200:hover {
         --tw-bg-opacity: 1;
         background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+      }
+
+      .hover\:bg-red-200\/50:hover {
+        background-color: rgb(254 202 202 / 0.5);
       }
     `)
   })

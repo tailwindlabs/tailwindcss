@@ -703,7 +703,7 @@ function registerPlugins(plugins, context) {
           : [util]
 
         for (let util of utils) {
-          for (let { pattern, variants = [] } of checks) {
+          for (let { pattern, variants = [], opacities = [] } of checks) {
             // RegExp with the /g flag are stateful, so let's reset the last
             // index pointer to reset the state.
             pattern.lastIndex = 0
@@ -720,6 +720,18 @@ function registerPlugins(plugins, context) {
             for (let variant of variants) {
               context.changedContent.push({
                 content: variant + context.tailwindConfig.separator + util,
+                extension: 'html',
+              })
+              for (let opacity of opacities) {
+                context.changedContent.push({
+                  content: variant + context.tailwindConfig.separator + util + '/' + opacity,
+                  extension: 'html',
+                })
+              }
+            }
+            for (let opacity of opacities) {
+              context.changedContent.push({
+                content: util + '/' + opacity,
                 extension: 'html',
               })
             }
