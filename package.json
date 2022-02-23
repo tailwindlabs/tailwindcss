@@ -52,7 +52,8 @@
     "jest-diff": "^27.5.1",
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.7",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "source-map-js": "^1.0.2"
   },
   "peerDependencies": {
     "autoprefixer": "^10.0.2",
