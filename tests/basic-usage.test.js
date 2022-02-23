@@ -346,3 +346,31 @@ it('does not produce duplicate output when seeing variants preceding a wildcard 
     `)
   })
 })
+
+it('it can parse box shadows with variables', () => {
+  let config = {
+    content: [{ raw: html`<div class="shadow-lg"></div>` }],
+    theme: {
+      boxShadow: {
+        lg: 'var(-a, 0 35px 60px -15px rgba(0, 0, 0)), 0 0 1px rgb(0, 0, 0)',
+      },
+    },
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .shadow-lg {
+        --tw-shadow: var(-a, 0 35px 60px -15px rgba(0, 0, 0)), 0 0 1px rgb(0, 0, 0);
+        --tw-shadow-colored: 0 35px 60px -15px var(--tw-shadow-color),
+          0 0 1px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+    `)
+  })
+})
