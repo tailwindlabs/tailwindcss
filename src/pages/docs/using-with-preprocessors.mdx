@@ -41,11 +41,11 @@ Then add it as the very first plugin in your PostCSS configuration:
 ```js
 // postcss.config.js
 module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('tailwindcss'),
-    require('autoprefixer'),
-  ]
+  plugins: {
+    'postcss-import': {},
+    tailwindcss: {},
+    autoprefixer: {},
+  }
 }
 ```
 
@@ -129,12 +129,12 @@ It's included directly in the `tailwindcss` package itself, so to use it all you
 ```js
 // postcss.config.js
 module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('tailwindcss/nesting'),
-    require('tailwindcss'),
-    require('autoprefixer'),
-  ]
+  plugins: {
+    'postcss-import': {},
+    'tailwindcss/nesting': {},
+    tailwindcss: {},
+    autoprefixer: {},
+  }
 }
 ```
 
@@ -143,7 +143,7 @@ By default, it uses the [postcss-nested](https://github.com/postcss/postcss-nest
 If you'd rather use [postcss-nesting](https://github.com/jonathantneal/postcss-nesting) (which is based on the work-in-progress [CSS Nesting](https://drafts.csswg.org/css-nesting-1/) specification), first install the plugin:
 
 ```shell
-npm install postcss-nesting
+npm install -D postcss-nesting
 ```
 
 Then pass the plugin itself as an argument to `tailwindcss/nesting` in your PostCSS configuration:
@@ -151,12 +151,12 @@ Then pass the plugin itself as an argument to `tailwindcss/nesting` in your Post
 ```js
 // postcss.config.js
 module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('tailwindcss/nesting')(require('postcss-nesting')),
-    require('tailwindcss'),
-    require('autoprefixer'),
-  ]
+  plugins: {
+    'postcss-import': {},
+    'tailwindcss/nesting': 'postcss-nesting',
+    tailwindcss: {},
+    autoprefixer: {},
+  }
 }
 ```
 
@@ -167,14 +167,14 @@ Note that if you are using [`postcss-preset-env`](https://github.com/csstools/po
 ```js
 // postcss.config.js
 module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('tailwindcss/nesting')(require('postcss-nesting')),
-    require('tailwindcss'),
-    require('postcss-preset-env')({
-      features: { 'nesting-rules': false }
-    }),
-  ]
+  plugins: {
+    'postcss-import': {},
+    'tailwindcss/nesting': 'postcss-nesting',
+    tailwindcss: {},
+    'postcss-preset-env': {
+      features: { 'nesting-rules': false },
+    },
+  }
 }
 ```
 
@@ -216,17 +216,17 @@ For automatically managing vendor prefixes in your CSS, you should use [Autopref
 To use it, install it via npm:
 
 ```shell
-npm install autoprefixer
+npm install -D autoprefixer
 ```
 
 Then add it to the very end of your plugin list in your PostCSS configuration:
 
 ```js
 module.exports = {
-  plugins: [
-    require('tailwindcss'),
-    require('autoprefixer'),
-  ]
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  }
 }
 ```
 
