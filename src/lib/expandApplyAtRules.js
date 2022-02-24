@@ -45,6 +45,17 @@ function* pathToRoot(node) {
   }
 }
 
+function shallowClone(node, overrides = {}) {
+  let children = node.nodes
+  node.nodes = []
+
+  const tmp = node.clone(overrides)
+
+  node.nodes = children
+
+  return tmp
+}
+
 /**
  * @param {import('postcss').Node} node
  */
@@ -58,7 +69,7 @@ function structuralCloneOfNode(node) {
       break
     }
 
-    node = parent.clone({
+    node = shallowClone(parent, {
       nodes: [node],
     })
   }
@@ -146,7 +157,7 @@ function buildApplyCache(applyCandidates, context) {
  * @returns {ApplyCache}
  */
 function lazyCache(buildCacheFn) {
-  let cache
+  let cache = null
 
   return {
     get: (name) => {
