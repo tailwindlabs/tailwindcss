@@ -142,6 +142,27 @@ function buildApplyCache(applyCandidates, context) {
 }
 
 /**
+ * @param {() => ApplyCache} buildCacheFn
+ * @returns {ApplyCache}
+ */
+function lazyCache(buildCacheFn) {
+  let cache
+
+  return {
+    get: (name) => {
+      cache = cache || buildCacheFn()
+
+      return cache.get(name)
+    },
+    has: (name) => {
+      cache = cache || buildCacheFn()
+
+      return cache.has(name)
+    },
+  }
+}
+
+/**
  * @param {ApplyCache[]} caches
  * @returns {ApplyCache}
  */
@@ -398,7 +419,7 @@ function processApply(root, context, localCache) {
 
 export default function expandApplyAtRules(context) {
   return (root) => {
-    let localCache = buildLocalApplyCache(root, context)
+    let localCache = lazyCache(() => buildLocalApplyCache(root, context))
 
     processApply(root, context, localCache)
   }
