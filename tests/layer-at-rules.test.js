@@ -5,7 +5,7 @@ test('custom user-land utilities', () => {
     content: [
       {
         raw: html`<div
-          class="uppercase focus:hover:align-chocolate align-banana hover:align-banana"
+          class="focus:hover:align-chocolate align-banana hover:align-banana uppercase"
         ></div>`,
       },
     ],

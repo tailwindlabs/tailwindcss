@@ -5,6 +5,7 @@ import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
+import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
@@ -25,33 +26,33 @@ function getClassNameFromSelector(selector) {
 // Example with dynamic classes:
 // ['grid-cols', '[[linename],1fr,auto]']
 // ['grid', 'cols-[[linename],1fr,auto]']
-function* candidatePermutations(candidate, lastIndex = Infinity) {
-  if (lastIndex < 0) {
-    return
+function* candidatePermutations(candidate) {
+  let lastIndex = Infinity
+
+  while (lastIndex >= 0) {
+    let dashIdx
+
+    if (lastIndex === Infinity && candidate.endsWith(']')) {
+      let bracketIdx = candidate.indexOf('[')
+
+      // If character before `[` isn't a dash or a slash, this isn't a dynamic class
+      // eg. string[]
+      dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
+    } else {
+      dashIdx = candidate.lastIndexOf('-', lastIndex)
+    }
+
+    if (dashIdx < 0) {
+      break
+    }
+
+    let prefix = candidate.slice(0, dashIdx)
+    let modifier = candidate.slice(dashIdx + 1)
+
+    yield [prefix, modifier]
+
+    lastIndex = dashIdx - 1
   }
-
-  let dashIdx
-
-  if (lastIndex === Infinity && candidate.endsWith(']')) {
-    let bracketIdx = candidate.indexOf('[')
-
-    // If character before `[` isn't a dash or a slash, this isn't a dynamic class
-    // eg. string[]
-    dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
-  } else {
-    dashIdx = candidate.lastIndexOf('-', lastIndex)
-  }
-
-  if (dashIdx < 0) {
-    return
-  }
-
-  let prefix = candidate.slice(0, dashIdx)
-  let modifier = candidate.slice(dashIdx + 1)
-
-  yield [prefix, modifier]
-
-  yield* candidatePermutations(candidate, dashIdx - 1)
 }
 
 function applyPrefix(matches, context) {
@@ -63,9 +64,23 @@ function applyPrefix(matches, context) {
     let [meta] = match
     if (meta.options.respectPrefix) {
       let container = postcss.root({ nodes: [match[1].clone()] })
+      let classCandidate = match[1].raws.tailwind.classCandidate
+
       container.walkRules((r) => {
-        r.selector = prefixSelector(context.tailwindConfig.prefix, r.selector)
+        // If this is a negative utility with a dash *before* the prefix we
+        // have to ensure that the generated selector matches the candidate
+
+        // Not doing this will cause `-tw-top-1` to generate the class `.tw--top-1`
+        // The disconnect between candidate <-> class can cause @apply to hard crash.
+        let shouldPrependNegative = classCandidate.startsWith('-')
+
+        r.selector = prefixSelector(
+          context.tailwindConfig.prefix,
+          r.selector,
+          shouldPrependNegative
+        )
       })
+
       match[1] = container.nodes[0]
     }
   }
@@ -216,6 +231,12 @@ function applyVariant(variant, matches, context) {
           })
         }
 
+        // This tracks the originating layer for the variant
+        // For example:
+        // .sm:underline {} is a variant of something in the utilities layer
+        // .sm:container {} is a variant of the container component
+        clone.nodes[0].raws.tailwind = { ...clone.nodes[0].raws.tailwind, parentLayer: meta.layer }
+
         let withOffset = [
           {
             ...meta,
@@ -259,7 +280,34 @@ function isValidPropName(name) {
   return IS_VALID_PROPERTY_NAME.test(name)
 }
 
+/**
+ * @param {string} declaration
+ * @returns {boolean}
+ */
+function looksLikeUri(declaration) {
+  // Quick bailout for obvious non-urls
+  // This doesn't support schemes that don't use a leading // but that's unlikely to be a problem
+  if (!declaration.includes('://')) {
+    return false
+  }
+
+  try {
+    const url = new URL(declaration)
+    return url.scheme !== '' && url.host !== ''
+  } catch (err) {
+    // Definitely not a valid url
+    return false
+  }
+}
+
 function isParsableCssValue(property, value) {
+  // We don't want to to treat [https://example.com] as a custom property
+  // Even though, according to the CSS grammar, it's a totally valid CSS declaration
+  // So we short-circuit here by checking if the custom property looks like a url
+  if (looksLikeUri(`${property}:${value}`)) {
+    return false
+  }
+
   try {
     postcss.parse(`a{${property}:${value}}`).toResult()
     return true
@@ -335,7 +383,19 @@ function* resolveMatchedPlugins(classCandidate, context) {
 }
 
 function splitWithSeparator(input, separator) {
+  if (input === sharedState.NOT_ON_DEMAND) {
+    return [sharedState.NOT_ON_DEMAND]
+  }
+
   return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
+}
+
+function* recordCandidates(matches, classCandidate) {
+  for (const match of matches) {
+    match[1].raws.tailwind = { ...match[1].raws.tailwind, classCandidate }
+
+    yield match
+  }
 }
 
 function* resolveMatches(candidate, context) {
@@ -449,7 +509,9 @@ function* resolveMatches(candidate, context) {
       continue
     }
 
-    matches = applyPrefix(matches.flat(), context)
+    matches = matches.flat()
+    matches = Array.from(recordCandidates(matches, classCandidate))
+    matches = applyPrefix(matches, context)
 
     if (important) {
       matches = applyImportant(matches, context)
@@ -460,6 +522,8 @@ function* resolveMatches(candidate, context) {
     }
 
     for (let match of matches) {
+      match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate }
+
       // Apply final format selector
       if (match[0].collectedFormats) {
         let finalFormat = formatVariantSelector('&', ...match[0].collectedFormats)

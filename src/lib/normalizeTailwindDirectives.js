@@ -49,6 +49,7 @@ export default function normalizeTailwindDirectives(root) {
         log.warn(`${atRule.name}-at-rule-deprecated`, [
           `The \`@${atRule.name}\` directive has been deprecated in Tailwind CSS v3.0.`,
           `Use \`@layer utilities\` or \`@layer components\` instead.`,
+          'https://tailwindcss.com/docs/upgrade-guide#replace-variants-with-layer',
         ])
       }
       layerDirectives.add(atRule)

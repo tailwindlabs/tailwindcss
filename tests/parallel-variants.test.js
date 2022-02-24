@@ -5,7 +5,7 @@ test('basic parallel variants', async () => {
     content: [
       {
         raw: html`<div
-          class="font-normal hover:test:font-black test:font-bold test:font-medium"
+          class="hover:test:font-black test:font-bold test:font-medium font-normal"
         ></div>`,
       },
     ],

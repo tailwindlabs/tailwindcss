@@ -253,7 +253,7 @@ describe('watcher', () => {
   })
 
   test('classes are generated when the index.css file changes', async () => {
-    await writeInputFile('index.html', html`<div class="font-bold btn"></div>`)
+    await writeInputFile('index.html', html`<div class="btn font-bold"></div>`)
 
     let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
     await runningProcess.onStderr(ready)
@@ -275,7 +275,7 @@ describe('watcher', () => {
 
         @layer components {
           .btn {
-            @apply px-2 py-1 rounded;
+            @apply rounded px-2 py-1;
           }
         }
       `
@@ -306,7 +306,7 @@ describe('watcher', () => {
 
         @layer components {
           .btn {
-            @apply px-2 py-1 rounded bg-red-500;
+            @apply rounded bg-red-500 px-2 py-1;
           }
         }
       `

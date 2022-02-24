@@ -26,6 +26,8 @@ const input =
   <div class="hover:font-bold"></div>
   <div class="content-['>']"></div>
   <div class="[--y:theme(colors.blue.500)]">
+  <div class="w-[calc(100%-theme('spacing.1'))]">
+  <div class='w-[calc(100%-theme("spacing.2"))]'>
 
   <script>
     let classes01 = ["text-[10px]"]
@@ -90,6 +92,8 @@ const includes = [
   `hover:test`,
   `overflow-scroll`,
   `[--y:theme(colors.blue.500)]`,
+  `w-[calc(100%-theme('spacing.1'))]`,
+  `w-[calc(100%-theme("spacing.2"))]`,
 ]
 
 const excludes = [

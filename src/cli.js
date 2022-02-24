@@ -437,7 +437,6 @@ async function build() {
 
   function resolveConfig() {
     let config = configPath ? require(configPath) : {}
-    let resolvedConfig = resolveConfigInternal(config)
 
     if (args['--purge']) {
       log.warn('purge-flag-deprecated', [
@@ -450,10 +449,13 @@ async function build() {
     }
 
     if (args['--content']) {
-      resolvedConfig.content.files = args['--content'].split(/(?<!{[^}]+),/)
+      let files = args['--content'].split(/(?<!{[^}]+),/)
+      let resolvedConfig = resolveConfigInternal(config, { content: { files } })
+      resolvedConfig.content.files = files
+      return resolvedConfig
     }
 
-    return resolvedConfig
+    return resolveConfigInternal(config)
   }
 
   function extractFileGlobs(config) {

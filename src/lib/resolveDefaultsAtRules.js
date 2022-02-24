@@ -120,7 +120,9 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
         }
 
         for (let [, selectors] of selectorGroups) {
-          let universalRule = postcss.rule()
+          let universalRule = postcss.rule({
+            source: universal.source,
+          })
 
           universalRule.selectors = [...selectors]
 
@@ -128,7 +130,9 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
           universal.before(universalRule)
         }
       } else {
-        let universalRule = postcss.rule()
+        let universalRule = postcss.rule({
+          source: universal.source,
+        })
 
         universalRule.selectors = ['*', '::before', '::after']
 

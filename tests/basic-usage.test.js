@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { html, run, css } from './util/run'
+import { html, run, css, defaults } from './util/run'
 
 test('basic usage', () => {
   let config = {
@@ -110,6 +110,103 @@ test('per-plugin colors with the same key can differ when using a custom colors 
   })
 })
 
+test('default ring color can be a function', () => {
+  function color(variable) {
+    return function ({ opacityVariable, opacityValue }) {
+      if (opacityValue !== undefined) {
+        return `rgba(${variable}, ${opacityValue})`
+      }
+      if (opacityVariable !== undefined) {
+        return `rgba(${variable}, var(${opacityVariable}, 1))`
+      }
+      return `rgb(${variable})`
+    }
+  }
+
+  let config = {
+    content: [
+      {
+        raw: html` <div class="ring"></div> `,
+      },
+    ],
+
+    theme: {
+      extend: {
+        ringColor: {
+          DEFAULT: color('var(--red)'),
+        },
+      },
+    },
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      *,
+      ::before,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-pan-x: ;
+        --tw-pan-y: ;
+        --tw-pinch-zoom: ;
+        --tw-scroll-snap-strictness: proximity;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgba(var(--red), 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-blur: ;
+        --tw-brightness: ;
+        --tw-contrast: ;
+        --tw-grayscale: ;
+        --tw-hue-rotate: ;
+        --tw-invert: ;
+        --tw-saturate: ;
+        --tw-sepia: ;
+        --tw-drop-shadow: ;
+        --tw-backdrop-blur: ;
+        --tw-backdrop-brightness: ;
+        --tw-backdrop-contrast: ;
+        --tw-backdrop-grayscale: ;
+        --tw-backdrop-hue-rotate: ;
+        --tw-backdrop-invert: ;
+        --tw-backdrop-opacity: ;
+        --tw-backdrop-saturate: ;
+        --tw-backdrop-sepia: ;
+      }
+
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
 it('fasly config values still work', () => {
   let config = {
     content: [{ raw: html`<div class="inset-0"></div>` }],
@@ -133,6 +230,146 @@ it('fasly config values still work', () => {
         right: 0;
         bottom: 0;
         left: 0;
+      }
+    `)
+  })
+})
+
+it('shadows support values without a leading zero', () => {
+  let config = {
+    content: [{ raw: html`<div class="shadow-one shadow-two"></div>` }],
+    theme: {
+      boxShadow: {
+        one: '0.5rem 0.5rem 0.5rem #0005',
+        two: '.5rem .5rem .5rem #0005',
+      },
+    },
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .shadow-one {
+        --tw-shadow: 0.5rem 0.5rem 0.5rem #0005;
+        --tw-shadow-colored: 0.5rem 0.5rem 0.5rem var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+      .shadow-two {
+        --tw-shadow: 0.5rem 0.5rem 0.5rem #0005;
+        --tw-shadow-colored: 0.5rem 0.5rem 0.5rem var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+    `)
+  })
+})
+
+it('can scan extremely long classes without crashing', () => {
+  let val = 'cols-' + '-a'.repeat(65536)
+  let config = {
+    content: [{ raw: html`<div class="${val}"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css``)
+  })
+})
+
+it('does not produce duplicate output when seeing variants preceding a wildcard (*)', () => {
+  let config = {
+    content: [{ raw: html`underline focus:*` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    * {
+      color: red;
+    }
+
+    .combined,
+    * {
+      text-align: center;
+    }
+
+    @layer base {
+      * {
+        color: blue;
+      }
+
+      .combined,
+      * {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      * {
+        color: blue;
+      }
+
+      .combined,
+      * {
+        color: red;
+      }
+
+      ${defaults}
+
+      .underline {
+        text-decoration-line: underline;
+      }
+
+      * {
+        color: red;
+      }
+
+      .combined,
+      * {
+        text-align: center;
+      }
+    `)
+  })
+})
+
+it('it can parse box shadows with variables', () => {
+  let config = {
+    content: [{ raw: html`<div class="shadow-lg"></div>` }],
+    theme: {
+      boxShadow: {
+        lg: 'var(-a, 0 35px 60px -15px rgba(0, 0, 0)), 0 0 1px rgb(0, 0, 0)',
+      },
+    },
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .shadow-lg {
+        --tw-shadow: var(-a, 0 35px 60px -15px rgba(0, 0, 0)), 0 0 1px rgb(0, 0, 0);
+        --tw-shadow-colored: 0 35px 60px -15px var(--tw-shadow-color),
+          0 0 1px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
       }
     `)
   })

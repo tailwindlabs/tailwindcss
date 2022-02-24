@@ -19,57 +19,11 @@ import { toPath } from '../util/toPath'
 import log from '../util/log'
 import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
+import { generateRules } from './generateRules'
 
-function partitionRules(root) {
-  if (!root.walkAtRules) return [root]
-
-  let applyParents = new Set()
-  let rules = []
-
-  root.walkAtRules('apply', (rule) => {
-    applyParents.add(rule.parent)
-  })
-
-  if (applyParents.size === 0) {
-    rules.push(root)
-  }
-
-  for (let rule of applyParents) {
-    let nodeGroups = []
-    let lastGroup = []
-
-    for (let node of rule.nodes) {
-      if (node.type === 'atrule' && node.name === 'apply') {
-        if (lastGroup.length > 0) {
-          nodeGroups.push(lastGroup)
-          lastGroup = []
-        }
-        nodeGroups.push([node])
-      } else {
-        lastGroup.push(node)
-      }
-    }
-
-    if (lastGroup.length > 0) {
-      nodeGroups.push(lastGroup)
-    }
-
-    if (nodeGroups.length === 1) {
-      rules.push(rule)
-      continue
-    }
-
-    for (let group of [...nodeGroups].reverse()) {
-      let clone = rule.clone({ nodes: [] })
-      clone.append(group)
-      rules.unshift(clone)
-      rule.after(clone)
-    }
-
-    rule.remove()
-  }
-
-  return rules
+function prefix(context, selector) {
+  let prefix = context.tailwindConfig.prefix
+  return typeof prefix === 'function' ? prefix(selector) : prefix + selector
 }
 
 function parseVariantFormatString(input) {
@@ -184,7 +138,7 @@ function withIdentifiers(styles) {
 
     // If this isn't "on-demandable", assign it a universal candidate to always include it.
     if (containsNonOnDemandableSelectors) {
-      candidates.unshift('*')
+      candidates.unshift(sharedState.NOT_ON_DEMAND)
     }
 
     // However, it could be that it also contains "on-demandable" candidates.
@@ -209,8 +163,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
   }
 
   function prefixIdentifier(identifier, options) {
-    if (identifier === '*') {
-      return '*'
+    if (identifier === sharedState.NOT_ON_DEMAND) {
+      return sharedState.NOT_ON_DEMAND
     }
 
     if (!options.respectPrefix) {
@@ -284,9 +238,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           context.candidateRuleMap.set(identifier, [])
         }
 
-        context.candidateRuleMap
-          .get(identifier)
-          .push(...partitionRules(rule).map((rule) => [{ sort: offset, layer: 'user' }, rule]))
+        context.candidateRuleMap.get(identifier).push([{ sort: offset, layer: 'user' }, rule])
       }
     },
     addBase(base) {
@@ -300,7 +252,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push(...partitionRules(rule).map((rule) => [{ sort: offset, layer: 'base' }, rule]))
+          .push([{ sort: offset, layer: 'base' }, rule])
       }
     },
     /**
@@ -321,12 +273,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push(
-            ...partitionRules(rule).map((rule) => [
-              { sort: offsets.base++, layer: 'defaults' },
-              rule,
-            ])
-          )
+          .push([{ sort: offsets.base++, layer: 'defaults' }, rule])
       }
     },
     addComponents(components, options) {
@@ -348,12 +295,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push(
-            ...partitionRules(rule).map((rule) => [
-              { sort: offsets.components++, layer: 'components', options },
-              rule,
-            ])
-          )
+          .push([{ sort: offsets.components++, layer: 'components', options }, rule])
       }
     },
     addUtilities(utilities, options) {
@@ -375,12 +317,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push(
-            ...partitionRules(rule).map((rule) => [
-              { sort: offsets.utilities++, layer: 'utilities', options },
-              rule,
-            ])
-          )
+          .push([{ sort: offsets.utilities++, layer: 'utilities', options }, rule])
       }
     },
     matchUtilities: function (utilities, options) {
@@ -725,7 +662,7 @@ function registerPlugins(plugins, context) {
         log.warn('root-regex', [
           'Regular expressions in `safelist` work differently in Tailwind CSS v3.0.',
           'Update your `safelist` configuration to eliminate this warning.',
-          // TODO: Add https://tw.wtf/regex-safelist
+          'https://tailwindcss.com/docs/content-configuration#safelisting-classes',
         ])
         continue
       }
@@ -735,17 +672,30 @@ function registerPlugins(plugins, context) {
 
     if (checks.length > 0) {
       let patternMatchingCount = new Map()
+      let prefixLength = context.tailwindConfig.prefix.length
 
       for (let util of classList) {
         let utils = Array.isArray(util)
           ? (() => {
               let [utilName, options] = util
-              let classes = Object.keys(options?.values ?? {}).map((value) =>
-                formatClass(utilName, value)
-              )
+              let values = Object.keys(options?.values ?? {})
+              let classes = values.map((value) => formatClass(utilName, value))
 
               if (options?.supportsNegativeValues) {
+                // This is the normal negated version
+                // e.g. `-inset-1` or `-tw-inset-1`
                 classes = [...classes, ...classes.map((cls) => '-' + cls)]
+
+                // This is the negated version *after* the prefix
+                // e.g. `tw--inset-1`
+                // The prefix is already attached to util name
+                // So we add the negative after the prefix
+                classes = [
+                  ...classes,
+                  ...classes.map(
+                    (cls) => cls.slice(0, prefixLength) + '-' + cls.slice(prefixLength)
+                  ),
+                ]
               }
 
               return classes
@@ -783,14 +733,41 @@ function registerPlugins(plugins, context) {
         log.warn([
           `The safelist pattern \`${regex}\` doesn't match any Tailwind CSS classes.`,
           'Fix this pattern or remove it from your `safelist` configuration.',
+          'https://tailwindcss.com/docs/content-configuration#safelisting-classes',
         ])
       }
     }
   }
 
+  // A list of utilities that are used by certain Tailwind CSS utilities but
+  // that don't exist on their own. This will result in them "not existing" and
+  // sorting could be weird since you still require them in order to make the
+  // host utitlies work properly. (Thanks Biology)
+  let parasiteUtilities = new Set([prefix(context, 'group'), prefix(context, 'peer')])
+  context.getClassOrder = function getClassOrder(classes) {
+    let sortedClassNames = new Map()
+    for (let [sort, rule] of generateRules(new Set(classes), context)) {
+      if (sortedClassNames.has(rule.raws.tailwind.candidate)) continue
+      sortedClassNames.set(rule.raws.tailwind.candidate, sort)
+    }
+
+    return classes.map((className) => {
+      let order = sortedClassNames.get(className) ?? null
+
+      if (order === null && parasiteUtilities.has(className)) {
+        // This will make sure that it is at the very beginning of the
+        // `components` layer which technically means 'before any
+        // components'.
+        order = context.layerOrder.components
+      }
+
+      return [className, order]
+    })
+  }
+
   // Generate a list of strings for autocompletion purposes, e.g.
   // ['uppercase', 'lowercase', ...]
-  context.getClassList = function () {
+  context.getClassList = function getClassList() {
     let output = []
 
     for (let util of classList) {

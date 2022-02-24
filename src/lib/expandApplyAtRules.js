@@ -140,7 +140,7 @@ function processApply(root, context) {
     for (let apply of applies) {
       let candidates = perParentApplies.get(apply.parent) || []
 
-      perParentApplies.set(apply.parent, candidates)
+      perParentApplies.set(apply.parent, [candidates, apply.source])
 
       let [applyCandidates, important] = extractApplyCandidates(apply.params)
 
@@ -161,12 +161,12 @@ function processApply(root, context) {
       }
 
       for (let applyCandidate of applyCandidates) {
-        if (!applyClassCache.has(applyCandidate)) {
-          if (applyCandidate === prefix(context, 'group')) {
-            // TODO: Link to specific documentation page with error code.
-            throw apply.error(`@apply should not be used with the '${applyCandidate}' utility`)
-          }
+        if ([prefix(context, 'group'), prefix(context, 'peer')].includes(applyCandidate)) {
+          // TODO: Link to specific documentation page with error code.
+          throw apply.error(`@apply should not be used with the '${applyCandidate}' utility`)
+        }
 
+        if (!applyClassCache.has(applyCandidate)) {
           throw apply.error(
             `The \`${applyCandidate}\` class does not exist. If \`${applyCandidate}\` is a custom class, make sure it is defined within a \`@layer\` directive.`
           )
@@ -178,7 +178,7 @@ function processApply(root, context) {
       }
     }
 
-    for (const [parent, candidates] of perParentApplies) {
+    for (const [parent, [candidates, atApplySource]] of perParentApplies) {
       let siblings = []
 
       for (let [applyCandidate, important, rules] of candidates) {
@@ -220,6 +220,12 @@ function processApply(root, context) {
           }
 
           let root = postcss.root({ nodes: [node.clone()] })
+
+          // Make sure every node in the entire tree points back at the @apply rule that generated it
+          root.walk((node) => {
+            node.source = atApplySource
+          })
+
           let canRewriteSelector =
             node.type !== 'atrule' || (node.type === 'atrule' && node.name !== 'keyframes')
 

@@ -70,7 +70,28 @@ export let variantPlugins = {
       'only-of-type',
 
       // State
-      'visited',
+      [
+        'visited',
+        ({ container }) => {
+          let toRemove = ['--tw-text-opacity', '--tw-border-opacity', '--tw-bg-opacity']
+
+          container.walkDecls((decl) => {
+            if (toRemove.includes(decl.prop)) {
+              decl.remove()
+
+              return
+            }
+
+            for (const varName of toRemove) {
+              if (decl.value.includes(`/ var(${varName})`)) {
+                decl.value = decl.value.replace(`/ var(${varName})`, '')
+              }
+            }
+          })
+
+          return ':visited'
+        },
+      ],
       'target',
       ['open', '[open]'],
 
@@ -100,15 +121,27 @@ export let variantPlugins = {
     ].map((variant) => (Array.isArray(variant) ? variant : [variant, `:${variant}`]))
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(variantName, `&${state}`)
+      addVariant(variantName, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `&${result}`
+      })
     }
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(`group-${variantName}`, `:merge(.group)${state} &`)
+      addVariant(`group-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `:merge(.group)${result} &`
+      })
     }
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(`peer-${variantName}`, `:merge(.peer)${state} ~ &`)
+      addVariant(`peer-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `:merge(.peer)${result} ~ &`
+      })
     }
   },
 
@@ -144,6 +177,7 @@ export let variantPlugins = {
       log.warn('darkmode-false', [
         'The `darkMode` option in your Tailwind CSS configuration is set to `false`, which now behaves the same as `media`.',
         'Change `darkMode` to `media` or remove it entirely.',
+        'https://tailwindcss.com/docs/upgrade-guide#remove-dark-mode-configuration',
       ])
     }
 
@@ -1891,7 +1925,7 @@ export let corePlugins = {
   ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme }) => {
     let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
     let ringColorDefault = withAlphaValue(
-      theme('ringColor.DEFAULT'),
+      theme('ringColor')?.DEFAULT,
       ringOpacityDefault,
       `rgb(147 197 253 / ${ringOpacityDefault})`
     )
