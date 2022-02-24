@@ -14,7 +14,7 @@
   "dependencies": {
     "@badrap/bar-of-progress": "^0.1.1",
     "@docsearch/react": "1.0.0-alpha.27",
-    "@headlessui/react": "^1.5.0",
+    "@headlessui/react": "^0.0.0-insiders.336faab",
     "@juggle/resize-observer": "^3.2.0",
     "@mdx-js/loader": "^1.6.21",
     "@next/bundle-analyzer": "^9.4.4",

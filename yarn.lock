@@ -1180,10 +1180,10 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.2.1.tgz#9551142a1980503752536b5050fd99f4a7f13b17"
   integrity sha512-gfta+H8aziZsm8pZa0vj04KO6biEiisppNgA1kbJvFrrWu9Vm7eaUEy76DIxsuTaWvti5fkJVhllWc6ZTE+Mdw==
 
-"@headlessui/react@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.5.0.tgz#483b44ba2c8b8d4391e1d2c863898d7dd0cc0296"
-  integrity sha512-aaRnYxBb3MU2FNJf3Ut9RMTUqqU3as0aI1lQhgo2n9Fa67wRu14iOGqx93xB+uMNVfNwZ5B3y/Ndm7qZGuFeMQ==
+"@headlessui/react@^0.0.0-insiders.336faab":
+  version "0.0.0-insiders.336faab"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-0.0.0-insiders.336faab.tgz#e313059bc6751c172b396863936468c7bbd8cff0"
+  integrity sha512-EM3ItKdGsRSPRKw0kWNk3mGmS+FQKjOTKRAHP3Nt3wwuRCbgCz9U4/l1raf560B8Nmq9puPUTNCKpF6G0GNn0g==
 
 "@juggle/resize-observer@^3.2.0":
   version "3.3.1"
