@@ -13,7 +13,7 @@ function log(type, messages, key) {
 }
 
 export function dim(input) {
-  return chalk.dim(input)
+  return colors.dim(input)
 }
 
 export default {
