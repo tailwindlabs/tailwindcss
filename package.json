@@ -14,7 +14,7 @@
   "dependencies": {
     "@badrap/bar-of-progress": "^0.1.1",
     "@docsearch/react": "1.0.0-alpha.27",
-    "@headlessui/react": "^0.0.0-dev.8335bee",
+    "@headlessui/react": "^1.5.0",
     "@juggle/resize-observer": "^3.2.0",
     "@mdx-js/loader": "^1.6.21",
     "@next/bundle-analyzer": "^9.4.4",
@@ -46,7 +46,7 @@
     "just-group-by": "^1.0.0",
     "mini-svg-data-uri": "^1.4.3",
     "minimatch": "^3.0.4",
-    "next": "^12.1.0",
+    "next": "11",
     "postcss": "^8.4.5",
     "postcss-focus-visible": "^5.0.0",
     "postcss-import": "^14.0.1",
@@ -73,7 +73,7 @@
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "2.x",
-    "glyphhanger": "^4.0.1",
+    "glyphhanger": "^5.0.0",
     "prettier": "^2.5.0"
   }
 }
