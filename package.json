@@ -61,7 +61,6 @@
   },
   "dependencies": {
     "arg": "^5.0.1",
-    "chalk": "^4.1.2",
     "chokidar": "^3.5.3",
     "color-name": "^1.1.4",
     "cosmiconfig": "^7.0.1",
@@ -73,6 +72,7 @@
     "is-glob": "^4.0.3",
     "normalize-path": "^3.0.0",
     "object-hash": "^2.2.0",
+    "picocolors": "^1.0.0",
     "postcss": "^8.4.6",
     "postcss-js": "^4.0.0",
     "postcss-load-config": "^3.1.3",
