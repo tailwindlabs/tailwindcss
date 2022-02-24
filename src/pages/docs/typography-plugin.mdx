@@ -34,8 +34,7 @@ npm install -D @tailwindcss/typography
 
 Then add the plugin to your `tailwind.config.js` file:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     // ...
@@ -314,15 +313,14 @@ See our internal [style definitions](https://github.com/tailwindlabs/tailwindcss
 
 If you need to use a class name other than `prose` for any reason, you can do so using the `className` option when registering the plugin:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     // ...
   },
   plugins: [
     require('@tailwindcss/typography')({
-        className: 'wysiwyg',
+      className: 'wysiwyg',
     }),
   ]
   ...
@@ -377,8 +375,7 @@ module.exports = {
 
 Like with all theme customizations in Tailwind, you can also define the `typography` key as a function if you need access to the `theme` helper:
 
-```js
-// tailwind.config.js
+```js tailwind.config.js
 module.exports = {
   theme: {
     extend: {
