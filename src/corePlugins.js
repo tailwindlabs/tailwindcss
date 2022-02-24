@@ -1964,10 +1964,16 @@ export let corePlugins = {
     })
   },
 
-  ringColor: ({ matchUtilities, theme }) => {
+  ringColor: ({ matchUtilities, theme, corePlugins }) => {
     matchUtilities(
       {
         ring: (value) => {
+          if (!corePlugins('ringOpacity')) {
+            return {
+              '--tw-ring-color': toColorValue(value),
+            }
+          }
+
           return withAlphaVariable({
             color: value,
             property: '--tw-ring-color',
