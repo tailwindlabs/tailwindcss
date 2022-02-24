@@ -179,6 +179,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents, secti
       <PageHeader
         title={meta.title}
         description={meta.description}
+        repo={meta.repo}
         badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
         section={section}
       />
