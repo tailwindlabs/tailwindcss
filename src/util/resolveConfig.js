@@ -68,7 +68,9 @@ const configUtils = {
   },
   rgb(property) {
     if (!property.startsWith('--')) {
-      throw new Error("The rgb() helper requires a custom property name to be passed as the first argument.")
+      throw new Error(
+        'The rgb() helper requires a custom property name to be passed as the first argument.'
+      )
     }
 
     return ({ opacityValue }) => {
@@ -81,7 +83,9 @@ const configUtils = {
   },
   hsl(property) {
     if (!property.startsWith('--')) {
-      throw new Error("The hsl() helper requires a custom property name to be passed as the first argument.")
+      throw new Error(
+        'The hsl() helper requires a custom property name to be passed as the first argument.'
+      )
     }
 
     return ({ opacityValue }) => {
