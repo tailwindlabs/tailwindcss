@@ -71,7 +71,7 @@
     "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
     "normalize-path": "^3.0.0",
-    "object-hash": "^2.2.0",
+    "object-hash": "^3.0.0",
     "picocolors": "^1.0.0",
     "postcss": "^8.4.6",
     "postcss-js": "^4.0.0",
