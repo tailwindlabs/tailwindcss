@@ -1,29 +1,39 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState, Fragment } from 'react'
 import { isObject } from '@/utils/isObject'
 import { castArray } from '@/utils/castArray'
 import clsx from 'clsx'
 import { Heading } from '@/components/Heading'
 
-function stringifyProperties(
+function renderProperties(
   properties,
   { filter = () => true, transformValue = (x) => x, indent = 0 } = {}
 ) {
-  let lines = []
-  Object.keys(properties).forEach((property) => {
+  return Object.keys(properties).map((property) => {
     if (isObject(properties[property])) {
-      lines.push(`${property} {`)
-      lines.push(
-        stringifyProperties(properties[property], { filter, transformValue, indent: indent + 1 })
-      )
-      lines.push('}')
+      return [
+        `${property} {`,
+        renderProperties(properties[property], { filter, transformValue, indent: indent + 1 }),
+        '}',
+      ].join('\n')
     } else {
-      castArray(properties[property]).forEach((value, i) => {
-        if (!filter(property, value, properties)) return
-        lines.push(`${'  '.repeat(indent)}${property}: ${transformValue(value)};`)
-      })
+      return castArray(properties[property])
+        .filter((value) => filter(property, value, properties))
+        .map((value, i) => {
+          let transformedValue = transformValue(value)
+          let px = /^[\d.]+rem$/.test(transformedValue)
+            ? `${parseFloat(transformedValue) * 16}px`
+            : null
+          return (
+            <Fragment key={i}>
+              {'  '.repeat(indent)}
+              {property}: {transformedValue};
+              {px && <span className="text-indigo-400"> {`/* ${px} */`}</span>}
+              {'\n'}
+            </Fragment>
+          )
+        })
     }
   })
-  return lines.join('\n')
 }
 
 export const ClassTable = memo(
@@ -134,7 +144,7 @@ export const ClassTable = memo(
                           }
                         )}
                       >
-                        {stringifyProperties(transformProperties({ selector, properties }), {
+                        {renderProperties(transformProperties({ selector, properties }), {
                           filter: filterProperties,
                           transformValue,
                         })}
