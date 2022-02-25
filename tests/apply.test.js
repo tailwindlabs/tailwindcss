@@ -1329,7 +1329,7 @@ it('should be possible to use apply in plugins', async () => {
   })
 })
 
-it('The apply class cache is invalidated when rules change', async () => {
+it('should apply using the updated user CSS when the source has changed', async () => {
   let config = {
     content: [{ raw: html`<div></div>` }],
     plugins: [],
