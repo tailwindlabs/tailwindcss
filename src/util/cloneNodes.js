@@ -1,4 +1,4 @@
-export default function cloneNodes(nodes, source) {
+export default function cloneNodes(nodes, source = undefined, raws = undefined) {
   return nodes.map((node) => {
     let cloned = node.clone()
 
@@ -9,6 +9,13 @@ export default function cloneNodes(nodes, source) {
         cloned.walk((child) => {
           child.source = source
         })
+      }
+    }
+
+    if (raws !== undefined) {
+      cloned.raws.tailwind = {
+        ...cloned.raws.tailwind,
+        ...raws,
       }
     }
 

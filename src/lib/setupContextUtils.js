@@ -230,17 +230,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       // Preserved for backwards compatibility but not used in v3.0+
       return []
     },
-    addUserCss(userCss) {
-      for (let [identifier, rule] of withIdentifiers(userCss)) {
-        let offset = offsets.user++
-
-        if (!context.candidateRuleMap.has(identifier)) {
-          context.candidateRuleMap.set(identifier, [])
-        }
-
-        context.candidateRuleMap.get(identifier).push([{ sort: offset, layer: 'user' }, rule])
-      }
-    },
     addBase(base) {
       for (let [identifier, rule] of withIdentifiers(base)) {
         let prefixedIdentifier = prefixIdentifier(identifier, {})
@@ -519,15 +508,6 @@ function collectLayerPlugins(root) {
       }
       layerRule.remove()
     }
-  })
-
-  root.walkRules((rule) => {
-    // At this point it is safe to include all the left-over css from the
-    // user's css file. This is because the `@tailwind` and `@layer` directives
-    // will already be handled and will be removed from the css tree.
-    layerPlugins.push(function ({ addUserCss }) {
-      addUserCss(rule, { respectPrefix: false })
-    })
   })
 
   return layerPlugins
