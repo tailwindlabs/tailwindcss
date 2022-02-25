@@ -17,6 +17,22 @@ test('important modifier', () => {
       },
     ],
     corePlugins: { preflight: false },
+    plugins: [
+      function ({ theme, matchUtilities }) {
+        matchUtilities(
+          {
+            'custom-parent': (value) => {
+              return {
+                '.custom-child': {
+                  margin: value,
+                },
+              }
+            },
+          },
+          { values: theme('spacing') }
+        )
+      },
+    ],
   }
 
   let input = css`
@@ -56,6 +72,9 @@ test('important modifier', () => {
       }
       .\!font-bold {
         font-weight: 700 !important;
+      }
+      .\!custom-parent-5 .custom-child {
+        margin: 1.25rem !important;
       }
       .hover\:\!text-center:hover {
         text-align: center !important;
