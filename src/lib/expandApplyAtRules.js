@@ -49,7 +49,7 @@ function shallowClone(node, overrides = {}) {
   let children = node.nodes
   node.nodes = []
 
-  const tmp = node.clone(overrides)
+  let tmp = node.clone(overrides)
 
   node.nodes = children
 
