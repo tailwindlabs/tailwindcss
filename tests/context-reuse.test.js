@@ -25,7 +25,7 @@ afterEach(async () => {
   await fs.promises.unlink(configPath)
 })
 
-it('a build re-uses the context across multiple files with the same config', async () => {
+it('re-uses the context across multiple files with the same config', async () => {
   let from = path.resolve(__filename)
 
   let results = [
