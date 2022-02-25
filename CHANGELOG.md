@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Allow default ring color to be a function ([#7587](https://github.com/tailwindlabs/tailwindcss/pull/7587))
+- Add `rgb` and `hsl` color helpers for CSS variables ([#7665](https://github.com/tailwindlabs/tailwindcss/pull/7665))
 
 ## [3.0.23] - 2022-02-16
 
