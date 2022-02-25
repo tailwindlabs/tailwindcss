@@ -45,6 +45,13 @@ function* pathToRoot(node) {
   }
 }
 
+/**
+ * Only clone the node itself and not its children
+ *
+ * @param {*} node
+ * @param {*} overrides
+ * @returns
+ */
 function shallowClone(node, overrides = {}) {
   let children = node.nodes
   node.nodes = []
@@ -57,9 +64,46 @@ function shallowClone(node, overrides = {}) {
 }
 
 /**
+ * Clone just the nodes all the way to the top that are required to represent
+ * this singular rule in the tree.
+ *
+ * For example, if we have CSS like this:
+ * ```css
+ * @media (min-width: 768px) {
+ *   @supports (display: grid) {
+ *     .foo {
+ *       display: grid;
+ *       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ *     }
+ *   }
+ *
+ *   @supports (backdrop-filter: blur(1px)) {
+ *     .bar {
+ *       backdrop-filter: blur(1px);
+ *     }
+ *   }
+ *
+ *   .baz {
+ *     color: orange;
+ *   }
+ * }
+ * ```
+ *
+ * And we're cloning `.bar` it'll return a cloned version of what's required for just that single node:
+ *
+ * ```css
+ * @media (min-width: 768px) {
+ *   @supports (backdrop-filter: blur(1px)) {
+ *     .bar {
+ *       backdrop-filter: blur(1px);
+ *     }
+ *   }
+ * }
+ * ```
+ *
  * @param {import('postcss').Node} node
  */
-function structuralCloneOfNode(node) {
+function nestedClone(node) {
   for (let parent of pathToRoot(node)) {
     if (node === parent) {
       continue
@@ -94,8 +138,8 @@ function buildLocalApplyCache(root, context) {
       }
     }
 
-    // Walk to the top of the rule
-    let container = structuralCloneOfNode(rule)
+    // Clone what's required to represent this singular rule in the tree
+    let container = nestedClone(rule)
 
     for (let className of extractClasses(rule)) {
       let list = cache.get(className) || []
@@ -146,6 +190,8 @@ function buildApplyCache(applyCandidates, context) {
 }
 
 /**
+ * Build a cache only when it's first used
+ *
  * @param {() => ApplyCache} buildCacheFn
  * @returns {ApplyCache}
  */
@@ -167,6 +213,9 @@ function lazyCache(buildCacheFn) {
 }
 
 /**
+ * Take a series of multiple caches and merge
+ * them so they act like one large cache
+ *
  * @param {ApplyCache[]} caches
  * @returns {ApplyCache}
  */
@@ -423,6 +472,7 @@ function processApply(root, context, localCache) {
 
 export default function expandApplyAtRules(context) {
   return (root) => {
+    // Build a cache of the user's CSS so we can use it to resolve classes used by @apply
     let localCache = lazyCache(() => buildLocalApplyCache(root, context))
 
     processApply(root, context, localCache)
