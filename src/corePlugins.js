@@ -468,6 +468,8 @@ export let corePlugins = {
 
   display: ({ addUtilities }) => {
     addUtilities({
+      '.inherit': { display: 'inherit' },
+      '.initial': { display: 'initial' },
       '.block': { display: 'block' },
       '.inline-block': { display: 'inline-block' },
       '.inline': { display: 'inline' },
