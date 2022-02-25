@@ -207,7 +207,7 @@ it('can use rgb helper when defining custom properties for colors (opacity plugi
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .divide-primary > :not([hidden]) ~ :not([hidden]) {
         border-color: rgb(var(--color-primary) / 1);
       }
