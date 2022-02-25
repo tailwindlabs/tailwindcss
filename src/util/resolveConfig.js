@@ -66,6 +66,36 @@ const configUtils = {
         {}
       )
   },
+  rgb(property) {
+    if (!property.startsWith('--')) {
+      throw new Error(
+        'The rgb() helper requires a custom property name to be passed as the first argument.'
+      )
+    }
+
+    return ({ opacityValue }) => {
+      if (opacityValue === undefined || opacityValue === 1) {
+        return `rgb(var(${property}) / 1.0)`
+      }
+
+      return `rgb(var(${property}) / ${opacityValue})`
+    }
+  },
+  hsl(property) {
+    if (!property.startsWith('--')) {
+      throw new Error(
+        'The hsl() helper requires a custom property name to be passed as the first argument.'
+      )
+    }
+
+    return ({ opacityValue }) => {
+      if (opacityValue === undefined || opacityValue === 1) {
+        return `hsl(var(${property}) / 1)`
+      }
+
+      return `hsl(var(${property}) / ${opacityValue})`
+    }
+  },
 }
 
 function value(valueToResolve, ...args) {
