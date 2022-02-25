@@ -7,7 +7,9 @@ const configPath = path.resolve(__dirname, './context-reuse.tailwind.config.js')
 const { css } = require('./util/run.js')
 
 function run(input, config = {}, from = null) {
-  from = from || path.resolve(__filename)
+  let { currentTestName } = expect.getState()
+
+  from = `${path.resolve(__filename)}?test=${currentTestName}&${from}`
 
   return postcss(tailwind(config)).process(input, { from })
 }
@@ -26,16 +28,14 @@ afterEach(async () => {
 })
 
 it('re-uses the context across multiple files with the same config', async () => {
-  let from = path.resolve(__filename)
-
   let results = [
-    await run(`@tailwind utilities;`, configPath, `${from}?id=1`),
+    await run(`@tailwind utilities;`, configPath, `id=1`),
 
     // Using @apply directives should still re-use the context
     // They depend on the config but do not the other way around
-    await run(`body { @apply bg-blue-400; }`, configPath, `${from}?id=2`),
-    await run(`body { @apply text-red-400; }`, configPath, `${from}?id=3`),
-    await run(`body { @apply mb-4; }`, configPath, `${from}?id=4`),
+    await run(`body { @apply bg-blue-400; }`, configPath, `id=2`),
+    await run(`body { @apply text-red-400; }`, configPath, `id=3`),
+    await run(`body { @apply mb-4; }`, configPath, `id=4`),
   ]
 
   let dependencies = results.map((result) => {
@@ -84,4 +84,44 @@ it('re-uses the context across multiple files with the same config', async () =>
 
   // And none of this should have resulted in multiple contexts being created
   expect(sharedState.contextSourcesMap.size).toBe(1)
+})
+
+it('updates layers when any CSS containing @tailwind directives changes', async () => {
+  let result
+
+  // Compile the initial version once
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .custom-utility {
+        color: orange;
+      }
+    }
+  `
+
+  result = await run(input, configPath, `id=1`)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .only\:custom-utility:only-child {
+      color: orange;
+    }
+  `)
+
+  // Save the file with a change
+  input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .custom-utility {
+        color: blue;
+      }
+    }
+  `
+
+  result = await run(input, configPath, `id=1`)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .only\:custom-utility:only-child {
+      color: blue;
+    }
+  `)
 })

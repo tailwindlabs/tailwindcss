@@ -20,6 +20,7 @@ import log from '../util/log'
 import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { generateRules } from './generateRules'
+import { hasContentChanged } from './cacheInvalidation.js'
 
 function prefix(context, selector) {
   let prefix = context.tailwindConfig.prefix
@@ -822,6 +823,8 @@ export function getContext(
     existingContext = context
   }
 
+  let cssDidChange = hasContentChanged(sourcePath, root)
+
   // If there's already a context in the cache and we don't need to
   // reset the context, return the cached context.
   if (existingContext) {
@@ -829,7 +832,7 @@ export function getContext(
       [...contextDependencies],
       getFileModifiedMap(existingContext)
     )
-    if (!contextDependenciesChanged) {
+    if (!contextDependenciesChanged && !cssDidChange) {
       return [existingContext, false]
     }
   }
