@@ -791,8 +791,6 @@ export function createContext(tailwindConfig, changedContent = [], root = postcs
   let resolvedPlugins = resolvePlugins(context, root)
   registerPlugins(resolvedPlugins, context)
 
-  sharedState.contextInvalidationCount++
-
   return context
 }
 

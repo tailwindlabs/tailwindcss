@@ -125,38 +125,3 @@ it('updates layers when any CSS containing @tailwind directives changes', async 
     }
   `)
 })
-
-it('invalidates the context when any CSS containing @tailwind directives changes', async () => {
-  sharedState.contextInvalidationCount = 0
-  sharedState.sourceHashMap.clear()
-
-  // Save the file a handful of times with no changes
-  // This builds the context at most once
-  for (let n = 0; n < 5; n++) {
-    await run(`@tailwind utilities;`, configPath, `id=1`)
-  }
-
-  expect(sharedState.contextInvalidationCount).toBe(1)
-
-  // Save the file twice with a change
-  // This should rebuild the context again but only once
-  await run(`@tailwind utilities; .foo {}`, configPath, `id=1`)
-  await run(`@tailwind utilities; .foo {}`, configPath, `id=1`)
-
-  expect(sharedState.contextInvalidationCount).toBe(2)
-
-  // Save the file twice with a content but not length change
-  // This should rebuild the context two more times
-  await run(`@tailwind utilities; .bar {}`, configPath, `id=1`)
-  await run(`@tailwind utilities; .baz {}`, configPath, `id=1`)
-
-  expect(sharedState.contextInvalidationCount).toBe(4)
-
-  // Save a file with a change that does not affect the context
-  // No invalidation should occur
-  await run(`.foo { @apply mb-1; }`, configPath, `id=2`)
-  await run(`.foo { @apply mb-1; }`, configPath, `id=2`)
-  await run(`.foo { @apply mb-1; }`, configPath, `id=2`)
-
-  expect(sharedState.contextInvalidationCount).toBe(4)
-})

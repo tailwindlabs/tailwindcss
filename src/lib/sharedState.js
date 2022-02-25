@@ -5,13 +5,7 @@ export const env = {
 export const contextMap = new Map()
 export const configContextMap = new Map()
 export const contextSourcesMap = new Map()
-/**
- * A map of source files to their sizes / hashes
- *
- * @type {Map<string, string>}
- */
 export const sourceHashMap = new Map()
-export const contextInvalidationCount = 0
 export const NOT_ON_DEMAND = new String('*')
 
 export function resolveDebug(debug) {
