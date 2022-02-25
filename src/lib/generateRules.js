@@ -88,7 +88,7 @@ function applyPrefix(matches, context) {
   return matches
 }
 
-function applyImportant(matches) {
+function applyImportant(matches, classCandidate) {
   if (matches.length === 0) {
     return matches
   }
@@ -98,7 +98,10 @@ function applyImportant(matches) {
     let container = postcss.root({ nodes: [rule.clone()] })
     container.walkRules((r) => {
       r.selector = updateAllClasses(r.selector, (className) => {
-        return `!${className}`
+        if (className === classCandidate) {
+          return `!${className}`
+        }
+        return className
       })
       r.walkDecls((d) => (d.important = true))
     })
@@ -514,7 +517,7 @@ function* resolveMatches(candidate, context) {
     matches = applyPrefix(matches, context)
 
     if (important) {
-      matches = applyImportant(matches, context)
+      matches = applyImportant(matches, classCandidate)
     }
 
     for (let variant of variants) {
