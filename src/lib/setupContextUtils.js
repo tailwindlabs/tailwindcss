@@ -677,29 +677,37 @@ function registerPlugins(plugins, context) {
           for (let check of checks) {
             let [pattern = /(?:)/, variants = [], opacities = []] = (() => {
               if (check instanceof RegExp) {
-                let pattern = check
-                return [pattern]
-              } else if (Array.isArray(check) || Array.isArray(check.pattern)) {
-                if (Array.isArray(check.pattern)) check = check.pattern
+                return [check]
+              }
+
+              if (Array.isArray(check)) {
                 if (check.length == 1) {
-                  let [pattern] = check
-                  return [pattern]
-                } else if (check.length == 2) {
+                  return check
+                }
+
+                if (check.length == 2) {
                   if (check[1] instanceof RegExp) {
                     let [variants, pattern] = check
                     return [pattern, variants]
-                  } else {
-                    let [pattern, opacities] = check
-                    return [pattern, [], opacities]
                   }
-                } else if (check.length == 3) {
+
+                  let [pattern, opacities] = check
+                  return [pattern, [], opacities]
+                }
+
+                if (check.length == 3) {
                   let [variants, pattern, opacities] = check
                   return [pattern, variants, opacities]
-                } else return
-              } else if (check instanceof Object) {
-                let { pattern, variants = [] } = check
-                return [pattern, variants]
-              } else return
+                }
+
+                throw new Error(
+                  `Array values in your Tailwind CSS \`safelist\` must contain 1–3 items, found invalid entry containing ${check.length}.`
+                )
+              }
+
+              // Check must be an object in the shape of { pattern: ..., variants: ... }
+              let { pattern, variants = [] } = check
+              return [pattern, variants]
             })()
 
             // RegExp with the /g flag are stateful, so let's reset the last

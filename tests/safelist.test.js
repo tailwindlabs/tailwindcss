@@ -86,105 +86,6 @@ it('should safelist based on a pattern regex', () => {
   })
 })
 
-it('should safelist based on a pattern tupple with regex', () => {
-  let config = {
-    content: [{ raw: html`<div class="uppercase"></div>` }],
-    safelist: [
-      {
-        pattern: [['hover'], /bg-(red)-(100|200)/],
-      },
-      {
-        pattern: [/bg-(green)-(100|200)/, ['50']],
-      },
-      {
-        pattern: [['hover'], /bg-(blue)-(100|200)/, ['50']],
-      },
-    ],
-  }
-
-  return run('@tailwind utilities', config).then((result) => {
-    return expect(result.css).toMatchCss(css`
-      .bg-red-100 {
-        --tw-bg-opacity: 1;
-        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
-      }
-
-      .bg-red-200 {
-        --tw-bg-opacity: 1;
-        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
-      }
-
-      .bg-green-100 {
-        --tw-bg-opacity: 1;
-        background-color: rgb(220 252 231 / var(--tw-bg-opacity));
-      }
-
-      .bg-green-100\/50 {
-        background-color: rgb(220 252 231 / 0.5);
-      }
-
-      .bg-green-200 {
-        --tw-bg-opacity: 1;
-        background-color: rgb(187 247 208 / var(--tw-bg-opacity));
-      }
-
-      .bg-green-200\/50 {
-        background-color: rgb(187 247 208 / 0.5);
-      }
-
-      .bg-blue-100 {
-        --tw-bg-opacity: 1;
-        background-color: rgb(219 234 254 / var(--tw-bg-opacity));
-      }
-
-      .bg-blue-100\/50 {
-        background-color: rgb(219 234 254 / 0.5);
-      }
-
-      .bg-blue-200 {
-        --tw-bg-opacity: 1;
-        background-color: rgb(191 219 254 / var(--tw-bg-opacity));
-      }
-
-      .bg-blue-200\/50 {
-        background-color: rgb(191 219 254 / 0.5);
-      }
-
-      .uppercase {
-        text-transform: uppercase;
-      }
-
-      .hover\:bg-red-100:hover {
-        --tw-bg-opacity: 1;
-        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
-      }
-
-      .hover\:bg-red-200:hover {
-        --tw-bg-opacity: 1;
-        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
-      }
-
-      .hover\:bg-blue-100:hover {
-        --tw-bg-opacity: 1;
-        background-color: rgb(219 234 254 / var(--tw-bg-opacity));
-      }
-
-      .hover\:bg-blue-100\/50:hover {
-        background-color: rgb(219 234 254 / 0.5);
-      }
-
-      .hover\:bg-blue-200:hover {
-        --tw-bg-opacity: 1;
-        background-color: rgb(191 219 254 / var(--tw-bg-opacity));
-      }
-
-      .hover\:bg-blue-200\/50:hover {
-        background-color: rgb(191 219 254 / 0.5);
-      }
-    `)
-  })
-})
-
 it('should safelist based on a regex', () => {
   let config = {
     content: [{ raw: html`<div class="uppercase"></div>` }],
@@ -210,7 +111,7 @@ it('should safelist based on a regex', () => {
   })
 })
 
-it('should safelist based on a tupple with regex', () => {
+it('should safelist based on a tuple with regex', () => {
   let config = {
     content: [{ raw: html`<div class="uppercase"></div>` }],
     safelist: [
