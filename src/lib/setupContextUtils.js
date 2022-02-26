@@ -638,15 +638,6 @@ function registerPlugins(plugins, context) {
         continue
       }
 
-      if (value instanceof RegExp) {
-        log.warn('root-regex', [
-          'Regular expressions in `safelist` work differently in Tailwind CSS v3.0.',
-          'Update your `safelist` configuration to eliminate this warning.',
-          'https://tailwindcss.com/docs/content-configuration#safelisting-classes',
-        ])
-        continue
-      }
-
       checks.push(value)
     }
 
@@ -683,7 +674,34 @@ function registerPlugins(plugins, context) {
           : [util]
 
         for (let util of utils) {
-          for (let { pattern, variants = [] } of checks) {
+          for (let check of checks) {
+            let [pattern = /(?:)/, variants = [], opacities = []] = (() => {
+              if (check instanceof RegExp) {
+                let pattern = check
+                return [pattern]
+              } else if (Array.isArray(check) || Array.isArray(check.pattern)) {
+                if (Array.isArray(check.pattern)) check = check.pattern
+                if (check.length == 1) {
+                  let [pattern] = check
+                  return [pattern]
+                } else if (check.length == 2) {
+                  if (check[1] instanceof RegExp) {
+                    let [variants, pattern] = check
+                    return [pattern, variants]
+                  } else {
+                    let [pattern, opacities] = check
+                    return [pattern, [], opacities]
+                  }
+                } else if (check.length == 3) {
+                  let [variants, pattern, opacities] = check
+                  return [pattern, variants, opacities]
+                } else return
+              } else if (check instanceof Object) {
+                let { pattern, variants = [] } = check
+                return [pattern, variants]
+              } else return
+            })()
+
             // RegExp with the /g flag are stateful, so let's reset the last
             // index pointer to reset the state.
             pattern.lastIndex = 0
@@ -700,6 +718,20 @@ function registerPlugins(plugins, context) {
             for (let variant of variants) {
               context.changedContent.push({
                 content: variant + context.tailwindConfig.separator + util,
+                extension: 'html',
+              })
+
+              for (let opacity of opacities) {
+                context.changedContent.push({
+                  content: variant + context.tailwindConfig.separator + util + '/' + opacity,
+                  extension: 'html',
+                })
+              }
+            }
+
+            for (let opacity of opacities) {
+              context.changedContent.push({
+                content: util + '/' + opacity,
                 extension: 'html',
               })
             }
