@@ -5635,10 +5635,10 @@ prettier@^2.5.0:
   resolved "https://registry.npmjs.org/prettier/-/prettier-2.5.0.tgz"
   integrity sha512-FM/zAKgWTxj40rH03VxzIPdXmj39SwSjwG0heUcNFwI+EMZJnY93yAiKXM3dObIKAM5TA88werc8T/EwhB45eg==
 
-prismjs@^1.25.0:
-  version "1.25.0"
-  resolved "https://registry.npmjs.org/prismjs/-/prismjs-1.25.0.tgz"
-  integrity sha512-WCjJHl1KEWbnkQom1+SzftbtXMKQoezOCYs5rECqMN+jP+apI7ftoflyqigqzopSO3hMhTEb0mFClA8lkolgEg==
+prismjs@^1.27.0:
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.27.0.tgz#bb6ee3138a0b438a3653dd4d6ce0cc6510a45057"
+  integrity sha512-t13BGPUlFDR7wRB5kQDG4jjl7XeuH6jbJGt11JHPL96qwsEHNX2+68tFXqc1/k+/jALsbSWJKUOT/hcYAZ5LkA==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
