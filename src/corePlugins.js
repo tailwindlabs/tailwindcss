@@ -134,7 +134,8 @@ export let variantPlugins = {
   },
 
   darkVariants: ({ config, addVariant }) => {
-    let mode = config('darkMode', 'media')
+    let [mode, className = '.dark'] = [].concat(config('darkMode', 'media'))
+    
     if (mode === false) {
       mode = 'media'
       log.warn('darkmode-false', [
@@ -144,8 +145,7 @@ export let variantPlugins = {
     }
 
     if (mode === 'class') {
-      let darkModeClassName = config('darkModeClassName', '.dark')
-      addVariant('dark', `${darkModeClassName} &`)
+      addVariant('dark', `${className} &`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     }
