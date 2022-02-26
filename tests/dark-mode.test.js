@@ -23,10 +23,9 @@ it('should be possible to use the darkMode "class" mode', () => {
   })
 })
 
-it('should be possible to change default class with darkMode "class" mode', () => {
+it('should be possible to change the class name', () => {
   let config = {
-    darkMode: 'class',
-    darkModeClassName: '.test-dark',
+    darkMode: ['class', '.test-dark'],
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
   }
@@ -39,7 +38,8 @@ it('should be possible to change default class with darkMode "class" mode', () =
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .test-dark .dark\\:font-bold {
+      ${defaults}
+      .test-dark .dark\:font-bold {
         font-weight: 700;
       }
     `)
