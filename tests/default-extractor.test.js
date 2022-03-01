@@ -1,9 +1,22 @@
 import { html } from './util/run'
 import { defaultExtractor } from '../src/lib/defaultExtractor'
 
-let jsxExample = "<div className={`overflow-scroll${conditionIsOpen ? '' : ' hidden'}`}></div>"
-const input =
-  html`
+const jsExamples = `
+  document.body.classList.add(["pl-1.5"].join(" "));
+  document.body.classList.add(['pl-2.5'].join(" "));
+`
+const jsxExamples = `
+  <div className={\`overflow-scroll\${conditionIsOpen ? '' : ' hidden'}\`}></div>
+  <div className={\`\${['pr-1.5'].join(' ')}\`}><div>
+  <div className={\`\${['pr-2.5', 'pr-3.5'].join(' ')}\`}><div>
+  <div className={\`\${["pr-4.5"].join(' ')}\`}><div>
+  <div className={\`\${["pr-5.5", "pr-6.5"].join(' ')}\`}><div>
+  <div className={\`\${['h-[100px]'].join(' ')}\`}><div>
+  <div className={\`\${['h-[101px]', 'h-[102px]'].join(' ')}\`}><div>
+  <div className={\`\${["h-[103px]"].join(' ')}\`}><div>
+  <div className={\`\${["h-[104px]", "h-[105px]"].join(' ')}\`}><div>
+`
+const htmlExamples = html`
   <div class="font-['some_font',sans-serif]"></div>
   <div class='font-["some_font",sans-serif]'></div>
   <div class="bg-[url('...')]"></div>
@@ -46,10 +59,21 @@ const input =
     let classes14 = ["<div class='hover:test'>"]
 
     let obj = {
-      lowercase: true
+      lowercase: true,
+      "normal-case": true,
+      'ml-0.5': true,
+      'ml-0.5': true,
+      'h-[106px]': true,
+      "h-[107px]": true,
+    }
+    let obj2 = {
+      'h-[108px]': true
+    }
+    let obj3 = {
+      "h-[109px]": true
     }
   </script>
-` + jsxExample
+`
 
 const includes = [
   `font-['some_font',sans-serif]`,
@@ -67,8 +91,28 @@ const includes = [
   `fill-[#bada55]`,
   `fill-[#bada55]/50`,
   `px-1.5`,
+  `pl-1.5`,
+  `pl-2.5`,
+  `pr-1.5`,
+  `pr-2.5`,
+  `pr-3.5`,
+  `pr-4.5`,
+  `pr-5.5`,
+  `pr-6.5`,
+  `ml-0.5`,
+  `h-[100px]`,
+  `h-[101px]`,
+  `h-[102px]`,
+  `h-[103px]`,
+  `h-[104px]`,
+  `h-[105px]`,
+  `h-[106px]`,
+  `h-[107px]`,
+  `h-[108px]`,
+  `h-[109px]`,
   `uppercase`,
   `lowercase`,
+  `normal-case`,
   `hover:font-bold`,
   `text-sm`,
   `text-[10px]`,
@@ -106,7 +150,7 @@ const excludes = [
 ]
 
 test('The default extractor works as expected', async () => {
-  const extractions = defaultExtractor(input.trim())
+  const extractions = defaultExtractor([jsExamples, jsxExamples, htmlExamples].join('\n').trim())
 
   for (const str of includes) {
     expect(extractions).toContain(str)
@@ -344,4 +388,32 @@ test('special characters', async () => {
 
   expect(extractions).toContain(`<sm:underline`)
   expect(extractions).toContain(`md>:font-bold`)
+})
+
+test('with single quotes array within template literal', async () => {
+  const extractions = defaultExtractor(`<div class=\`\${['pr-1.5']}\`></div>`)
+
+  expect(extractions).toContain('pr-1.5')
+  expect(extractions).toContain('pr-1')
+})
+
+test('with double quotes array within template literal', async () => {
+  const extractions = defaultExtractor(`<div class=\`\${["pr-1.5"]}\`></div>`)
+
+  expect(extractions).toContain('pr-1.5')
+  expect(extractions).toContain('pr-1')
+})
+
+test('with single quotes array within function', async () => {
+  const extractions = defaultExtractor(`document.body.classList.add(['pl-1.5'].join(" "));`)
+
+  expect(extractions).toContain('pl-1.5')
+  expect(extractions).toContain('pl-1')
+})
+
+test('with double quotes array within function', async () => {
+  const extractions = defaultExtractor(`document.body.classList.add(["pl-1.5"].join(" "));`)
+
+  expect(extractions).toContain('pl-1.5')
+  expect(extractions).toContain('pl-1')
 })
