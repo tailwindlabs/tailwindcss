@@ -181,3 +181,47 @@ test('multiple custom', () => {
     `)
   })
 })
+
+fit('with dots in the name', () => {
+  let config = {
+    content: [{
+      raw: html`
+        <div class="animate-zoom-.5"></div>
+        <div class="animate-zoom-1.5"></div>
+      `
+    }],
+    theme: {
+      extend: {
+        keyframes: {
+          'zoom-.5': { to: { transform: 'scale(0.5)' } },
+          'zoom-1.5': { to: { transform: 'scale(1.5)' } },
+        },
+        animation: {
+          'zoom-.5': 'zoom-.5 2s',
+          'zoom-1.5': 'zoom-1.5 2s',
+        },
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @keyframes zoom-\.5 {
+        to {
+          transform: scale(0.5);
+        }
+      }
+      .animate-zoom-\.5 {
+        animation: zoom-\.5 2s;
+      }
+      @keyframes zoom-1\.5 {
+        to {
+          transform: scale(1.5);
+        }
+      }
+      .animate-zoom-1\.5 {
+        animation: zoom-1\.5 2s;
+      }
+    `)
+  })
+})
