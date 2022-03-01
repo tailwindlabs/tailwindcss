@@ -184,12 +184,14 @@ test('multiple custom', () => {
 
 test('with dots in the name', () => {
   let config = {
-    content: [{
-      raw: html`
-        <div class="animate-zoom-.5"></div>
-        <div class="animate-zoom-1.5"></div>
-      `
-    }],
+    content: [
+      {
+        raw: html`
+          <div class="animate-zoom-.5"></div>
+          <div class="animate-zoom-1.5"></div>
+        `,
+      },
+    ],
     theme: {
       extend: {
         keyframes: {
@@ -229,12 +231,14 @@ test('with dots in the name', () => {
 test('with dots in the name and prefix', () => {
   let config = {
     prefix: 'tw-',
-    content: [{
-      raw: html`
-        <div class="tw-animate-zoom-.5"></div>
-        <div class="tw-animate-zoom-1.5"></div>
-      `
-    }],
+    content: [
+      {
+        raw: html`
+          <div class="tw-animate-zoom-.5"></div>
+          <div class="tw-animate-zoom-1.5"></div>
+        `,
+      },
+    ],
     theme: {
       extend: {
         keyframes: {
