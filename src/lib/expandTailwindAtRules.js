@@ -204,17 +204,29 @@ export default function expandTailwindAtRules(context) {
     // Replace any Tailwind directives with generated CSS
 
     if (layerNodes.base) {
-      layerNodes.base.before(cloneNodes([...baseNodes, ...defaultNodes], layerNodes.base.source))
+      layerNodes.base.before(
+        cloneNodes([...baseNodes, ...defaultNodes], layerNodes.base.source, {
+          layer: 'base',
+        })
+      )
       layerNodes.base.remove()
     }
 
     if (layerNodes.components) {
-      layerNodes.components.before(cloneNodes([...componentNodes], layerNodes.components.source))
+      layerNodes.components.before(
+        cloneNodes([...componentNodes], layerNodes.components.source, {
+          layer: 'components',
+        })
+      )
       layerNodes.components.remove()
     }
 
     if (layerNodes.utilities) {
-      layerNodes.utilities.before(cloneNodes([...utilityNodes], layerNodes.utilities.source))
+      layerNodes.utilities.before(
+        cloneNodes([...utilityNodes], layerNodes.utilities.source, {
+          layer: 'utilities',
+        })
+      )
       layerNodes.utilities.remove()
     }
 
@@ -234,10 +246,18 @@ export default function expandTailwindAtRules(context) {
     })
 
     if (layerNodes.variants) {
-      layerNodes.variants.before(cloneNodes(variantNodes, layerNodes.variants.source))
+      layerNodes.variants.before(
+        cloneNodes(variantNodes, layerNodes.variants.source, {
+          layer: 'variants',
+        })
+      )
       layerNodes.variants.remove()
     } else if (variantNodes.length > 0) {
-      root.append(cloneNodes(variantNodes, root.source))
+      root.append(
+        cloneNodes(variantNodes, root.source, {
+          layer: 'variants',
+        })
+      )
     }
 
     // If we've got a utility layer and no utilities are generated there's likely something wrong

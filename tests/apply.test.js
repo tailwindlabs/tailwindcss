@@ -1289,9 +1289,6 @@ it('apply partitioning works with media queries', async () => {
       body {
         --tw-text-opacity: 1;
         color: rgb(220 38 38 / var(--tw-text-opacity));
-      }
-      html,
-      body {
         font-size: 2rem;
       }
     }
@@ -1330,4 +1327,55 @@ it('should be possible to use apply in plugins', async () => {
       }
     `)
   })
+})
+
+it('should apply using the updated user CSS when the source has changed', async () => {
+  let config = {
+    content: [{ raw: html`<div></div>` }],
+    plugins: [],
+  }
+
+  let inputBefore = css`
+    .foo {
+      color: green;
+    }
+
+    .bar {
+      @apply foo;
+    }
+  `
+
+  let inputAfter = css`
+    .foo {
+      color: red;
+    }
+
+    .bar {
+      @apply foo;
+    }
+  `
+
+  let result = await run(inputBefore, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo {
+      color: green;
+    }
+
+    .bar {
+      color: green;
+    }
+  `)
+
+  result = await run(inputAfter, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo {
+      color: red;
+    }
+
+    .bar {
+      color: red;
+    }
+  `)
 })

@@ -20,6 +20,7 @@ import log from '../util/log'
 import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { generateRules } from './generateRules'
+import { hasContentChanged } from './cacheInvalidation.js'
 
 function prefix(context, selector) {
   let prefix = context.tailwindConfig.prefix
@@ -229,17 +230,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     variants: () => {
       // Preserved for backwards compatibility but not used in v3.0+
       return []
-    },
-    addUserCss(userCss) {
-      for (let [identifier, rule] of withIdentifiers(userCss)) {
-        let offset = offsets.user++
-
-        if (!context.candidateRuleMap.has(identifier)) {
-          context.candidateRuleMap.set(identifier, [])
-        }
-
-        context.candidateRuleMap.get(identifier).push([{ sort: offset, layer: 'user' }, rule])
-      }
     },
     addBase(base) {
       for (let [identifier, rule] of withIdentifiers(base)) {
@@ -521,15 +511,6 @@ function collectLayerPlugins(root) {
     }
   })
 
-  root.walkRules((rule) => {
-    // At this point it is safe to include all the left-over css from the
-    // user's css file. This is because the `@tailwind` and `@layer` directives
-    // will already be handled and will be removed from the css tree.
-    layerPlugins.push(function ({ addUserCss }) {
-      addUserCss(rule, { respectPrefix: false })
-    })
-  })
-
   return layerPlugins
 }
 
@@ -744,33 +725,25 @@ function registerPlugins(plugins, context) {
   // sorting could be weird since you still require them in order to make the
   // host utitlies work properly. (Thanks Biology)
   let parasiteUtilities = new Set([prefix(context, 'group'), prefix(context, 'peer')])
-  context.sortClassList = function sortClassList(classes) {
+  context.getClassOrder = function getClassOrder(classes) {
     let sortedClassNames = new Map()
     for (let [sort, rule] of generateRules(new Set(classes), context)) {
       if (sortedClassNames.has(rule.raws.tailwind.candidate)) continue
       sortedClassNames.set(rule.raws.tailwind.candidate, sort)
     }
 
-    return classes
-      .map((className) => {
-        let order = sortedClassNames.get(className) ?? null
+    return classes.map((className) => {
+      let order = sortedClassNames.get(className) ?? null
 
-        if (order === null && parasiteUtilities.has(className)) {
-          // This will make sure that it is at the very beginning of the
-          // `components` layer which technically means 'before any
-          // components'.
-          order = context.layerOrder.components
-        }
+      if (order === null && parasiteUtilities.has(className)) {
+        // This will make sure that it is at the very beginning of the
+        // `components` layer which technically means 'before any
+        // components'.
+        order = context.layerOrder.components
+      }
 
-        return [className, order]
-      })
-      .sort(([, a], [, z]) => {
-        if (a === z) return 0
-        if (a === null) return -1
-        if (z === null) return 1
-        return bigSign(a - z)
-      })
-      .map(([className]) => className)
+      return [className, order]
+    })
   }
 
   // Generate a list of strings for autocompletion purposes, e.g.
@@ -850,6 +823,8 @@ export function getContext(
     existingContext = context
   }
 
+  let cssDidChange = hasContentChanged(sourcePath, root)
+
   // If there's already a context in the cache and we don't need to
   // reset the context, return the cached context.
   if (existingContext) {
@@ -857,7 +832,7 @@ export function getContext(
       [...contextDependencies],
       getFileModifiedMap(existingContext)
     )
-    if (!contextDependenciesChanged) {
+    if (!contextDependenciesChanged && !cssDidChange) {
       return [existingContext, false]
     }
   }

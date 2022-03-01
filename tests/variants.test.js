@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import postcss from 'postcss'
 
 import { run, css, html, defaults } from './util/run'
 
@@ -564,6 +565,40 @@ test('The visited variant removes opacity support', () => {
       }
       .visited\:text-red-500:visited {
         color: rgb(239 68 68);
+      }
+    `)
+  })
+})
+
+it('appends variants to the correct place when using postcss documents', () => {
+  let config = {
+    content: [{ raw: html`<div class="underline sm:underline"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  const doc = postcss.document()
+  doc.append(postcss.parse(`a {}`))
+  doc.append(postcss.parse(`@tailwind base`))
+  doc.append(postcss.parse(`@tailwind utilities`))
+  doc.append(postcss.parse(`b {}`))
+
+  const result = doc.toResult()
+
+  return run(result, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      a {
+      }
+      ${defaults}
+      .underline {
+        text-decoration-line: underline;
+      }
+      @media (min-width: 640px) {
+        .sm\:underline {
+          text-decoration-line: underline;
+        }
+      }
+      b {
       }
     `)
   })
