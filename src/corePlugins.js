@@ -613,10 +613,11 @@ export let corePlugins = {
     })
   },
 
-  animation: ({ matchUtilities, theme, prefix, config }) => {
+  animation: ({ matchUtilities, theme, config }) => {
+    let prefixName = (name) => `${config('prefix')}${escapeClassName(name)}`
     let keyframes = Object.fromEntries(
       Object.entries(theme('keyframes') ?? {}).map(([key, value]) => {
-        return [key, { [`@keyframes ${config('prefix')}${escapeClassName(key)}`]: value }]
+        return [key, { [`@keyframes ${prefixName(key)}`]: value }]
       })
     )
 
@@ -633,7 +634,7 @@ export let corePlugins = {
                   if (name === undefined || keyframes[name] === undefined) {
                     return value
                   }
-                  return value.replace(name, `${config('prefix')}${escapeClassName(name)}`)
+                  return value.replace(name, prefixName(name))
                 })
                 .join(', '),
             },
