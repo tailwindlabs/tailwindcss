@@ -498,8 +498,6 @@ div {
       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       transition-duration: 150ms;
     }
-  }
-  @media (prefers-reduced-motion: no-preference) {
     .dark .md\:dark\:motion-safe\:foo\:active\:custom-util:active {
       background: #abcdef !important;
     }

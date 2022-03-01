@@ -2,7 +2,7 @@ import { run, html, css } from './util/run'
 
 test('basic utilities', async () => {
   let config = {
-    content: [{ raw: html`<div class="scale-x-110 rotate-3 skew-y-6"></div>` }],
+    content: [{ raw: html`<div class="rotate-3 skew-y-6 scale-x-110"></div>` }],
     corePlugins: ['transform', 'scale', 'rotate', 'skew'],
   }
 
@@ -526,7 +526,7 @@ test('with borders', async () => {
 
 test('with shadows', async () => {
   let config = {
-    content: [{ raw: html`<div class="shadow md:shadow-xl ring-1 ring-black/25"></div>` }],
+    content: [{ raw: html`<div class="shadow ring-1 ring-black/25 md:shadow-xl"></div>` }],
     corePlugins: ['boxShadow', 'ringColor', 'ringWidth'],
   }
 

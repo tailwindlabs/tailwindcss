@@ -7,7 +7,7 @@ import path from 'path'
 import arg from 'arg'
 import fs from 'fs'
 import postcssrc from 'postcss-load-config'
-import { cosmiconfig } from 'cosmiconfig'
+import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import tailwind from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
@@ -397,8 +397,8 @@ async function build() {
       ? await (async () => {
           let file = path.resolve(customPostCssPath)
 
-          // Implementation, see: https://unpkg.com/browse/postcss-load-config@3.0.1/src/index.js
-          let { config = {} } = await cosmiconfig('postcss').load(file)
+          // Implementation, see: https://unpkg.com/browse/postcss-load-config@3.1.0/src/index.js
+          let { config = {} } = await lilconfig('postcss').load(file)
           if (typeof config === 'function') {
             config = config()
           } else {
@@ -437,7 +437,6 @@ async function build() {
 
   function resolveConfig() {
     let config = configPath ? require(configPath) : {}
-    let resolvedConfig = resolveConfigInternal(config)
 
     if (args['--purge']) {
       log.warn('purge-flag-deprecated', [
@@ -450,10 +449,13 @@ async function build() {
     }
 
     if (args['--content']) {
-      resolvedConfig.content.files = args['--content'].split(/(?<!{[^}]+),/)
+      let files = args['--content'].split(/(?<!{[^}]+),/)
+      let resolvedConfig = resolveConfigInternal(config, { content: { files } })
+      resolvedConfig.content.files = files
+      return resolvedConfig
     }
 
-    return resolvedConfig
+    return resolveConfigInternal(config)
   }
 
   function extractFileGlobs(config) {

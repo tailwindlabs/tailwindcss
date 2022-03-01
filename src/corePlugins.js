@@ -71,7 +71,28 @@ export let variantPlugins = {
       'only-of-type',
 
       // State
-      'visited',
+      [
+        'visited',
+        ({ container }) => {
+          let toRemove = ['--tw-text-opacity', '--tw-border-opacity', '--tw-bg-opacity']
+
+          container.walkDecls((decl) => {
+            if (toRemove.includes(decl.prop)) {
+              decl.remove()
+
+              return
+            }
+
+            for (const varName of toRemove) {
+              if (decl.value.includes(`/ var(${varName})`)) {
+                decl.value = decl.value.replace(`/ var(${varName})`, '')
+              }
+            }
+          })
+
+          return ':visited'
+        },
+      ],
       'target',
       ['open', '[open]'],
 
@@ -101,15 +122,27 @@ export let variantPlugins = {
     ].map((variant) => (Array.isArray(variant) ? variant : [variant, `:${variant}`]))
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(variantName, `&${state}`)
+      addVariant(variantName, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `&${result}`
+      })
     }
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(`group-${variantName}`, `:merge(.group)${state} &`)
+      addVariant(`group-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `:merge(.group)${result} &`
+      })
     }
 
     for (let [variantName, state] of pseudoVariants) {
-      addVariant(`peer-${variantName}`, `:merge(.peer)${state} ~ &`)
+      addVariant(`peer-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `:merge(.peer)${result} ~ &`
+      })
     }
   },
 
@@ -139,7 +172,8 @@ export let variantPlugins = {
   },
 
   darkVariants: ({ config, addVariant }) => {
-    let mode = config('darkMode', 'media')
+    let [mode, className = '.dark'] = [].concat(config('darkMode', 'media'))
+
     if (mode === false) {
       mode = 'media'
       log.warn('darkmode-false', [
@@ -150,7 +184,7 @@ export let variantPlugins = {
     }
 
     if (mode === 'class') {
-      addVariant('dark', '.dark &')
+      addVariant('dark', `${className} &`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     }
@@ -1489,6 +1523,8 @@ export let corePlugins = {
       '.text-center': { 'text-align': 'center' },
       '.text-right': { 'text-align': 'right' },
       '.text-justify': { 'text-align': 'justify' },
+      '.text-start': { 'text-align': 'start' },
+      '.text-end': { 'text-align': 'end' },
     })
   },
 
@@ -1892,7 +1928,7 @@ export let corePlugins = {
   ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme }) => {
     let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
     let ringColorDefault = withAlphaValue(
-      theme('ringColor.DEFAULT'),
+      theme('ringColor')?.DEFAULT,
       ringOpacityDefault,
       `rgb(147 197 253 / ${ringOpacityDefault})`
     )
@@ -1931,10 +1967,16 @@ export let corePlugins = {
     })
   },
 
-  ringColor: ({ matchUtilities, theme }) => {
+  ringColor: ({ matchUtilities, theme, corePlugins }) => {
     matchUtilities(
       {
         ring: (value) => {
+          if (!corePlugins('ringOpacity')) {
+            return {
+              '--tw-ring-color': toColorValue(value),
+            }
+          }
+
           return withAlphaVariable({
             color: value,
             property: '--tw-ring-color',

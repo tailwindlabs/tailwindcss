@@ -2,7 +2,7 @@ import { run, html, css } from '../util/run'
 
 test('font-size utilities can include a default line-height', () => {
   let config = {
-    content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
+    content: [{ raw: html`<div class="text-md text-sm text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
@@ -14,12 +14,12 @@ test('font-size utilities can include a default line-height', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .text-sm {
-        font-size: 12px;
-      }
       .text-md {
         font-size: 16px;
         line-height: 24px;
+      }
+      .text-sm {
+        font-size: 12px;
       }
       .text-lg {
         font-size: 20px;
@@ -31,7 +31,7 @@ test('font-size utilities can include a default line-height', () => {
 
 test('font-size utilities can include a default letter-spacing', () => {
   let config = {
-    content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
+    content: [{ raw: html`<div class="text-md text-sm text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
@@ -43,12 +43,12 @@ test('font-size utilities can include a default letter-spacing', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .text-sm {
-        font-size: 12px;
-      }
       .text-md {
         font-size: 16px;
         letter-spacing: -0.01em;
+      }
+      .text-sm {
+        font-size: 12px;
       }
       .text-lg {
         font-size: 20px;
@@ -60,7 +60,7 @@ test('font-size utilities can include a default letter-spacing', () => {
 
 test('font-size utilities can include a default line-height and letter-spacing', () => {
   let config = {
-    content: [{ raw: html`<div class="text-sm text-md text-lg"></div>` }],
+    content: [{ raw: html`<div class="text-md text-sm text-lg"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
@@ -72,13 +72,13 @@ test('font-size utilities can include a default line-height and letter-spacing',
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .text-sm {
-        font-size: 12px;
-      }
       .text-md {
         font-size: 16px;
         line-height: 24px;
         letter-spacing: -0.01em;
+      }
+      .text-sm {
+        font-size: 12px;
       }
       .text-lg {
         font-size: 20px;

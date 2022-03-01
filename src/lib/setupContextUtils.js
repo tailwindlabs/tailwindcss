@@ -19,6 +19,13 @@ import { toPath } from '../util/toPath'
 import log from '../util/log'
 import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
+import { generateRules } from './generateRules'
+import { hasContentChanged } from './cacheInvalidation.js'
+
+function prefix(context, selector) {
+  let prefix = context.tailwindConfig.prefix
+  return typeof prefix === 'function' ? prefix(selector) : prefix + selector
+}
 
 function parseVariantFormatString(input) {
   if (input.includes('{')) {
@@ -132,7 +139,7 @@ function withIdentifiers(styles) {
 
     // If this isn't "on-demandable", assign it a universal candidate to always include it.
     if (containsNonOnDemandableSelectors) {
-      candidates.unshift('*')
+      candidates.unshift(sharedState.NOT_ON_DEMAND)
     }
 
     // However, it could be that it also contains "on-demandable" candidates.
@@ -157,8 +164,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
   }
 
   function prefixIdentifier(identifier, options) {
-    if (identifier === '*') {
-      return '*'
+    if (identifier === sharedState.NOT_ON_DEMAND) {
+      return sharedState.NOT_ON_DEMAND
     }
 
     if (!options.respectPrefix) {
@@ -223,17 +230,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     variants: () => {
       // Preserved for backwards compatibility but not used in v3.0+
       return []
-    },
-    addUserCss(userCss) {
-      for (let [identifier, rule] of withIdentifiers(userCss)) {
-        let offset = offsets.user++
-
-        if (!context.candidateRuleMap.has(identifier)) {
-          context.candidateRuleMap.set(identifier, [])
-        }
-
-        context.candidateRuleMap.get(identifier).push([{ sort: offset, layer: 'user' }, rule])
-      }
     },
     addBase(base) {
       for (let [identifier, rule] of withIdentifiers(base)) {
@@ -515,15 +511,6 @@ function collectLayerPlugins(root) {
     }
   })
 
-  root.walkRules((rule) => {
-    // At this point it is safe to include all the left-over css from the
-    // user's css file. This is because the `@tailwind` and `@layer` directives
-    // will already be handled and will be removed from the css tree.
-    layerPlugins.push(function ({ addUserCss }) {
-      addUserCss(rule, { respectPrefix: false })
-    })
-  })
-
   return layerPlugins
 }
 
@@ -666,17 +653,30 @@ function registerPlugins(plugins, context) {
 
     if (checks.length > 0) {
       let patternMatchingCount = new Map()
+      let prefixLength = context.tailwindConfig.prefix.length
 
       for (let util of classList) {
         let utils = Array.isArray(util)
           ? (() => {
               let [utilName, options] = util
-              let classes = Object.keys(options?.values ?? {}).map((value) =>
-                formatClass(utilName, value)
-              )
+              let values = Object.keys(options?.values ?? {})
+              let classes = values.map((value) => formatClass(utilName, value))
 
               if (options?.supportsNegativeValues) {
+                // This is the normal negated version
+                // e.g. `-inset-1` or `-tw-inset-1`
                 classes = [...classes, ...classes.map((cls) => '-' + cls)]
+
+                // This is the negated version *after* the prefix
+                // e.g. `tw--inset-1`
+                // The prefix is already attached to util name
+                // So we add the negative after the prefix
+                classes = [
+                  ...classes,
+                  ...classes.map(
+                    (cls) => cls.slice(0, prefixLength) + '-' + cls.slice(prefixLength)
+                  ),
+                ]
               }
 
               return classes
@@ -720,9 +720,35 @@ function registerPlugins(plugins, context) {
     }
   }
 
+  // A list of utilities that are used by certain Tailwind CSS utilities but
+  // that don't exist on their own. This will result in them "not existing" and
+  // sorting could be weird since you still require them in order to make the
+  // host utitlies work properly. (Thanks Biology)
+  let parasiteUtilities = new Set([prefix(context, 'group'), prefix(context, 'peer')])
+  context.getClassOrder = function getClassOrder(classes) {
+    let sortedClassNames = new Map()
+    for (let [sort, rule] of generateRules(new Set(classes), context)) {
+      if (sortedClassNames.has(rule.raws.tailwind.candidate)) continue
+      sortedClassNames.set(rule.raws.tailwind.candidate, sort)
+    }
+
+    return classes.map((className) => {
+      let order = sortedClassNames.get(className) ?? null
+
+      if (order === null && parasiteUtilities.has(className)) {
+        // This will make sure that it is at the very beginning of the
+        // `components` layer which technically means 'before any
+        // components'.
+        order = context.layerOrder.components
+      }
+
+      return [className, order]
+    })
+  }
+
   // Generate a list of strings for autocompletion purposes, e.g.
   // ['uppercase', 'lowercase', ...]
-  context.getClassList = function () {
+  context.getClassList = function getClassList() {
     let output = []
 
     for (let util of classList) {
@@ -797,6 +823,8 @@ export function getContext(
     existingContext = context
   }
 
+  let cssDidChange = hasContentChanged(sourcePath, root)
+
   // If there's already a context in the cache and we don't need to
   // reset the context, return the cached context.
   if (existingContext) {
@@ -804,7 +832,7 @@ export function getContext(
       [...contextDependencies],
       getFileModifiedMap(existingContext)
     )
-    if (!contextDependenciesChanged) {
+    if (!contextDependenciesChanged && !cssDidChange) {
       return [existingContext, false]
     }
   }
