@@ -57,7 +57,8 @@ One important thing to note about `postcss-import` is that it strictly adheres t
 /* components.css */
 
 .btn {
-  @apply px-4 py-2 rounded font-semibold bg-gray-200 text-black;
+  padding: theme('spacing.4') theme('spacing.2');
+  /* ... */
 }
 
 /* Will not work */
@@ -77,14 +78,16 @@ The easiest solution to this problem is to never mix regular CSS and imports in 
 ```css
 /* components/buttons.css */
 .btn {
-  @apply px-4 py-2 rounded font-semibold bg-gray-200 text-black;
+  padding: theme('spacing.4') theme('spacing.2');
+  /* ... */
 }
 ```
 
 ```css
 /* components/card.css */
 .card {
-  @apply p-4 bg-white shadow rounded;
+  padding: theme('spacing.4');
+  /* ... */
 }
 ```
 
