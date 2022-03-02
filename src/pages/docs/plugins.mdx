@@ -237,6 +237,36 @@ Any custom utilities added using `addUtilities` can automatically be used with m
 
 Learn more in the [Hover, Focus, and Other States](/docs/hover-focus-and-other-states) documentation.
 
+### Providing default values
+
+Utility plugins can provide default values by including a configuration object as the second argument to the `plugin` function:
+
+```js ./plugins/tab-size.js
+const plugin = require('tailwindcss/plugin')
+
+module.exports = plugin(function({ matchUtilities, theme }) {
+  matchUtilities(
+    {
+      tab: (value) => ({
+        tabSize: value
+      }),
+    },
+    { values: theme('tabSize') }
+  )
+}, {
+  theme: {
+    tabSize: {
+      1: '1',
+      2: '2',
+      4: '4',
+      8: '8',
+    }
+  }
+})
+```
+
+These values behave just like the values in the default configuration, and can be overridden or extended by the end user.
+
 ---
 
 ## Adding components
@@ -439,6 +469,38 @@ The first argument is the modifier name that users will use in their HTML, so th
   <button class="bg-blue-500 **hocus:bg-blue-600**">...</button>
 </form>
 ```
+
+---
+
+## Extending the configuration
+
+Plugins can merge their own set of configuration values into the user's `tailwind.config.js` configuration by providing an object as the second argument to the `plugin` function:
+
+```js ./plugins/tab-size.js
+const plugin = require('tailwindcss/plugin')
+
+module.exports = plugin(function({ matchUtilities, theme }) {
+  matchUtilities(
+    {
+      tab: (value) => ({
+        tabSize: value
+      }),
+    },
+    { values: theme('tabSize') }
+  )
+}, {
+  theme: {
+    tabSize: {
+      1: '1',
+      2: '2',
+      4: '4',
+      8: '8',
+    }
+  }
+})
+```
+
+This can be useful for things like providing default `theme` values for the classes your plugin generates.
 
 ---
 
