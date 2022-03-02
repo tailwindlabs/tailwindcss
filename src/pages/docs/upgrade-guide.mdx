@@ -174,7 +174,7 @@ In Tailwind CSS v3.0, transform and filter utilities like `scale-50` and `bright
 + <div class="scale-50 grayscale backdrop-blur-sm">
 ```
 
-While there's no harm in leaving them in your HTML, they can safely be removed.
+While there's no harm in leaving them in your HTML, they can safely be removed — with one exception. If you're relying on `transform` to create a new stacking context, you may want to leave it, otherwise you may run into z-order issues. Alternatively, replace it with `relative` or `isolate` to force a new stacking context.
 
 ---
 
