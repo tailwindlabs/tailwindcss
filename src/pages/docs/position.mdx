@@ -15,7 +15,7 @@ export const classes = { utilities }
 
 Use `static` to position an element according to the normal flow of the document.
 
-Any offsets will be ignored and the element will not act as a position reference for absolutely positioned children.
+Any [offsets](/docs/top-right-bottom-left) will be ignored and the element will not act as a position reference for absolutely positioned children.
 
 <Example>
   <div class="relative text-sm font-medium leading-6">
@@ -43,7 +43,7 @@ Any offsets will be ignored and the element will not act as a position reference
 
 Use `relative` to position an element according to the normal flow of the document.
 
-Offsets are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
+Any [offsets](/docs/top-right-bottom-left) are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
 
 <Example>
   <div class="relative text-sm font-medium leading-6">
@@ -71,7 +71,7 @@ Offsets are calculated relative to the element's normal position and the element
 
 Use `absolute` to position an element *outside* of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.
 
-Offsets are calculated relative to the nearest parent that has a position other than `static`, and the element *will* act as a position reference for other absolutely positioned children.
+Any [offsets](/docs/top-right-bottom-left) are calculated relative to the nearest parent that has a position other than `static`, and the element *will* act as a position reference for other absolutely positioned children.
 
 <Example>
   <div class="space-y-8">
@@ -131,7 +131,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
 
 Use `fixed` to position an element relative to the browser window.
 
-Offsets are calculated relative to the viewport and the element *will* act as a position reference for absolutely positioned children.
+Any [offsets](/docs/top-right-bottom-left) are calculated relative to the viewport and the element *will* act as a position reference for absolutely positioned children.
 
 <Example p="none">
   <div class="px-3">
@@ -188,7 +188,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
 Use `sticky` to position an element as `relative` until it crosses a specified threshold, then treat it as fixed until its parent is off screen.
 
-Offsets are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
+Any [offsets](/docs/top-right-bottom-left) are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
 
 <Example p="none">
   <div class="px-3">
