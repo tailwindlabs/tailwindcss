@@ -161,6 +161,10 @@ let commands = {
       '--input': { type: String, description: 'Input file' },
       '--output': { type: String, description: 'Output file' },
       '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
+      '--poll': {
+        type: Boolean,
+        description: 'Use polling instead of filesystem events when watching',
+      },
       '--content': {
         type: String,
         description: 'Content paths to use for removing unused classes',
@@ -187,6 +191,7 @@ let commands = {
       '-o': '--output',
       '-m': '--minify',
       '-w': '--watch',
+      '-p': '--poll',
     },
   },
 }
@@ -367,11 +372,12 @@ async function build() {
   let input = args['--input']
   let output = args['--output']
   let shouldWatch = args['--watch']
-  let shouldCoalesceWriteEvents = process.platform === 'win32'
+  let shouldPoll = args['--poll']
+  let shouldCoalesceWriteEvents = shouldPoll || process.platform === 'win32'
   let includePostCss = args['--postcss']
 
   // Polling interval in milliseconds
-  // Used only when coalescing add/change events on Windows
+  // Used only when polling or coalescing add/change events on Windows
   let pollInterval = 10
 
   // TODO: Deprecate this in future versions
@@ -751,6 +757,8 @@ async function build() {
     }
 
     watcher = chokidar.watch([...contextDependencies, ...extractFileGlobs(config)], {
+      usePolling: shouldPoll,
+      interval: shouldPoll ? pollInterval : undefined,
       ignoreInitial: true,
       awaitWriteFinish: shouldCoalesceWriteEvents
         ? {
