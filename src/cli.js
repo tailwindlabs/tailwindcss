@@ -367,7 +367,12 @@ async function build() {
   let input = args['--input']
   let output = args['--output']
   let shouldWatch = args['--watch']
+  let shouldCoalesceWriteEvents = process.platform === 'win32'
   let includePostCss = args['--postcss']
+
+  // Polling interval in milliseconds
+  // Used only when coalescing add/change events on Windows
+  let pollInterval = 10
 
   // TODO: Deprecate this in future versions
   if (!input && args['_'][1]) {
@@ -747,13 +752,12 @@ async function build() {
 
     watcher = chokidar.watch([...contextDependencies, ...extractFileGlobs(config)], {
       ignoreInitial: true,
-      awaitWriteFinish:
-        process.platform === 'win32'
-          ? {
-              stabilityThreshold: 50,
-              pollInterval: 10,
-            }
-          : false,
+      awaitWriteFinish: shouldCoalesceWriteEvents
+        ? {
+            stabilityThreshold: 50,
+            pollInterval: pollInterval,
+          }
+        : false,
     })
 
     let chain = Promise.resolve()
