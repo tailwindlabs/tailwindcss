@@ -6,7 +6,7 @@ Thanks for your interest in contributing to Tailwind CSS! Please take a moment t
 
 **Please ask first before starting work on any significant new features.**
 
-It's never a fun experience to have your pull request declined after investing a lot of time and effort into a new feature. To avoid this from happening, we request that contributors create [a a feature request](https://github.com/tailwindlabs/tailwindcss/discussions/new?category=ideas) to first discuss any significant new ideas. This includes things like adding new utilities, creating new at-rules, etc.
+It's never a fun experience to have your pull request declined after investing a lot of time and effort into a new feature. To avoid this from happening, we request that contributors create [a feature request](https://github.com/tailwindlabs/tailwindcss/discussions/new?category=ideas) to first discuss any significant new ideas. This includes things like adding new utilities, creating new at-rules, etc.
 
 ## Coding standards
 
