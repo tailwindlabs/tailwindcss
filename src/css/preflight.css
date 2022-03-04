@@ -349,12 +349,16 @@ object {
 }
 
 /*
-Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14). Only use height auto if height hasnt been set on the img tag
 */
 
 img,
 video {
   max-width: 100%;
+}
+
+video:not([height]),
+img:not([height]){
   height: auto;
 }
 
