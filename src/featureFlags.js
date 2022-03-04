@@ -1,4 +1,4 @@
-import chalk from 'chalk'
+import colors from 'picocolors'
 import log from './util/log'
 
 let defaults = {
@@ -41,7 +41,7 @@ export function issueFlagNotices(config) {
 
   if (experimentalFlagsEnabled(config).length > 0) {
     let changes = experimentalFlagsEnabled(config)
-      .map((s) => chalk.yellow(s))
+      .map((s) => colors.yellow(s))
       .join(', ')
 
     log.warn('experimental-flags-enabled', [

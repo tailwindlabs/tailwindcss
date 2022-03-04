@@ -124,7 +124,7 @@ export function normalizeConfig(config) {
     log.warn('purge-deprecation', [
       'The `purge`/`content` options have changed in Tailwind CSS v3.0.',
       'Update your configuration file to eliminate this warning.',
-      // TODO: Add https://tw.wtf/purge-deprecation
+      'https://tailwindcss.com/docs/upgrade-guide#configure-content-sources',
     ])
   }
 
@@ -145,7 +145,7 @@ export function normalizeConfig(config) {
     log.warn('prefix-function', [
       'As of Tailwind CSS v3.0, `prefix` cannot be a function.',
       'Update `prefix` in your configuration to be a string to eliminate this warning.',
-      // TODO: Add https://tw.wtf/prefix-function
+      'https://tailwindcss.com/docs/upgrade-guide#prefix-cannot-be-a-function',
     ])
     config.prefix = ''
   } else {
@@ -250,8 +250,8 @@ export function normalizeConfig(config) {
   for (let file of config.content.files) {
     if (typeof file === 'string' && /{([^,]*?)}/g.test(file)) {
       log.warn('invalid-glob-braces', [
-        `The glob pattern ${dim(file)} in your config is invalid.`,
-        `    Update it to ${dim(file.replace(/{([^,]*?)}/g, '$1'))} to silence this warning.`,
+        `The glob pattern ${dim(file)} in your Tailwind CSS configuration is invalid.`,
+        `Update it to ${dim(file.replace(/{([^,]*?)}/g, '$1'))} to silence this warning.`,
         // TODO: Add https://tw.wtf/invalid-glob-braces
       ])
       break
@@ -260,7 +260,9 @@ export function normalizeConfig(config) {
 
   if (config.content.files.length === 0) {
     log.warn('content-problems', [
-      'The `content` key is missing or empty. Please populate the content key as Tailwind generates utilities on-demand based on the files that use them. For more information see the documentation: https://tailwindcss.com/docs/content-configuration',
+      'The `content` option in your Tailwind CSS configuration is missing or empty.',
+      'Configure your content sources or your generated CSS will be missing styles.',
+      'https://tailwindcss.com/docs/content-configuration',
     ])
   }
 

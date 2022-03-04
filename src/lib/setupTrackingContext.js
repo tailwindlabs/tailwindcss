@@ -112,7 +112,7 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
 export default function setupTrackingContext(configOrPath) {
-  return ({ tailwindDirectives, registerDependency, applyDirectives }) => {
+  return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
       let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
         getTailwindConfig(configOrPath)
@@ -125,7 +125,7 @@ export default function setupTrackingContext(configOrPath) {
       // being part of this trigger too, but it's tough because it's impossible
       // for a layer in one file to end up in the actual @tailwind rule in
       // another file since independent sources are effectively isolated.
-      if (tailwindDirectives.size > 0 || applyDirectives.size > 0) {
+      if (tailwindDirectives.size > 0) {
         // Add current css file as a context dependencies.
         contextDependencies.add(result.opts.from)
 
@@ -153,7 +153,7 @@ export default function setupTrackingContext(configOrPath) {
       // We may want to think about `@layer` being part of this trigger too, but it's tough
       // because it's impossible for a layer in one file to end up in the actual @tailwind rule
       // in another file since independent sources are effectively isolated.
-      if (tailwindDirectives.size > 0 || applyDirectives.size > 0) {
+      if (tailwindDirectives.size > 0) {
         let fileModifiedMap = getFileModifiedMap(context)
 
         // Add template paths as postcss dependencies.

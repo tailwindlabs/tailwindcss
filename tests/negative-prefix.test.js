@@ -148,7 +148,7 @@ test('a value that includes a calc', () => {
 
 test('a keyword value', () => {
   let config = {
-    content: [{ raw: html`<div class="mt-auto -mt-auto"></div>` }],
+    content: [{ raw: html`<div class="-mt-auto mt-auto"></div>` }],
     theme: {
       margin: {
         auto: 'auto',

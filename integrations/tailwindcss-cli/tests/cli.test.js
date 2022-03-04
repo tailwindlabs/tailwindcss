@@ -291,6 +291,7 @@ describe('Build command', () => {
            -i, --input              Input file
            -o, --output             Output file
            -w, --watch              Watch for changes and rebuild as needed
+           -p, --poll               Use polling instead of filesystem events when watching
                --content            Content paths to use for removing unused classes
                --postcss            Load custom PostCSS configuration
            -m, --minify             Minify the output

@@ -8,7 +8,11 @@ test('collapse adjacent rules', () => {
     content: [path.resolve(__dirname, './collapse-adjacent-rules.test.html')],
     corePlugins: { preflight: false },
     theme: {},
-    plugins: [],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('foo-bar', '@supports (foo: bar)')
+      },
+    ],
   }
 
   let input = css`
@@ -44,6 +48,9 @@ test('collapse adjacent rules', () => {
     .foo,
     .bar {
       font-weight: 700;
+    }
+    .some-apply-thing {
+      @apply foo-bar:md:text-black foo-bar:md:font-bold foo-bar:text-black foo-bar:font-bold md:font-bold md:text-black;
     }
   `
 

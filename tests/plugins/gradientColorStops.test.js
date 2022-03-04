@@ -5,7 +5,7 @@ test('opacity variables are given to colors defined as closures', () => {
     content: [
       {
         raw: html`<div
-          class="text-primary text-secondary text-opacity-50 from-primary from-secondary via-primary via-secondary to-primary to-secondary"
+          class="text-primary text-secondary from-primary from-secondary via-primary via-secondary to-primary to-secondary text-opacity-50"
         ></div>`,
       },
     ],
