@@ -529,6 +529,41 @@ export let corePlugins = {
     })
   },
 
+  borderSpacing: ({ addDefaults, matchUtilities, theme }) => {
+    addDefaults('border-spacing', {
+      '--tw-border-spacing-x': 0,
+      '--tw-border-spacing-y': 0,
+    })
+
+    matchUtilities(
+      {
+        'border-spacing': (value) => {
+          return {
+            '--tw-border-spacing-x': value,
+            '--tw-border-spacing-y': value,
+            '@defaults border-spacing': {},
+            'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
+          }
+        },
+        'border-spacing-x': (value) => {
+          return {
+            '--tw-border-spacing-x': value,
+            '@defaults border-spacing': {},
+            'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
+          }
+        },
+        'border-spacing-y': (value) => {
+          return {
+            '--tw-border-spacing-y': value,
+            '@defaults border-spacing': {},
+            'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
+          }
+        },
+      },
+      { values: theme('borderSpacing') }
+    )
+  },
+
   transformOrigin: createUtilityPlugin('transformOrigin', [['origin', ['transformOrigin']]]),
   translate: createUtilityPlugin(
     'translate',

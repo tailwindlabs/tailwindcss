@@ -152,6 +152,8 @@ test('default ring color can be a function', () => {
       *,
       ::before,
       ::after {
+        --tw-border-spacing-x: 0;
+        --tw-border-spacing-y: 0;
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;

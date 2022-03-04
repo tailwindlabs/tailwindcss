@@ -10,6 +10,8 @@ export function defaults({ defaultRingColor = `rgb(59 130 246 / 0.5)` } = {}) {
     *,
     ::before,
     ::after {
+      --tw-border-spacing-x: 0;
+      --tw-border-spacing-y: 0;
       --tw-translate-x: 0;
       --tw-translate-y: 0;
       --tw-rotate: 0;
