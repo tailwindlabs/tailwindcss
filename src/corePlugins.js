@@ -522,38 +522,42 @@ export let corePlugins = {
     })
   },
 
-  borderCollapse: ({ addDefaults, addUtilities }) => {
-    addDefaults('borderSpacing', {
-      '--tw-border-spacing-x': '0',
-      '--tw-border-spacing-y': '0',
-    })
-
+  borderCollapse: ({ addUtilities }) => {
     addUtilities({
       '.border-collapse': { 'border-collapse': 'collapse' },
-      '.border-separate': {
-        'border-collapse': 'separate',
-        'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
-      },
+      '.border-separate': { 'border-collapse': 'separate' },
     })
   },
 
-  borderSpacing: ({ matchUtilities, theme }) => {
+  borderSpacing: ({ addDefaults, matchUtilities, theme }) => {
+    addDefaults('border-spacing', {
+      '--tw-border-spacing-x': 0,
+      '--tw-border-spacing-y': 0,
+    })
+
     matchUtilities(
       {
         'border-spacing': (value) => {
-          value = value === '0' ? '0px' : value
-
-          return { '--tw-border-spacing-x': value, '--tw-border-spacing-y': value }
+          return {
+            '--tw-border-spacing-x': value,
+            '--tw-border-spacing-y': value,
+            '@defaults border-spacing': {},
+            'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
+          }
         },
         'border-spacing-x': (value) => {
-          value = value === '0' ? '0px' : value
-
-          return { '--tw-border-spacing-x': value }
+          return {
+            '--tw-border-spacing-x': value,
+            '@defaults border-spacing': {},
+            'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
+          }
         },
         'border-spacing-y': (value) => {
-          value = value === '0' ? '0px' : value
-
-          return { '--tw-border-spacing-y': value }
+          return {
+            '--tw-border-spacing-y': value,
+            '@defaults border-spacing': {},
+            'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
+          }
         },
       },
       { values: theme('borderSpacing') }
