@@ -720,3 +720,13 @@
 .ease-in-out {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
+.rendering-auto {
+  image-rendering: auto;
+}
+.rendering-crisp-edges {
+  image-rendering: crisp-edges;
+}
+.rendering-pixelated {
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: pixelated;
+}

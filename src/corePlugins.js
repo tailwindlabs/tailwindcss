@@ -2401,4 +2401,18 @@ export let corePlugins = {
   content: createUtilityPlugin('content', [
     ['content', ['--tw-content', ['content', 'var(--tw-content)']]],
   ]),
+  imageRendering: ({ addUtilities }) => {
+    addUtilities({
+      '.rendering-auto': {
+        'image-rendering': 'auto',
+      },
+      '.rendering-crisp-edges': {
+        'image-rendering': 'crisp-edges',
+      },
+      '.rendering-pixelated': {
+        '-ms-interpolation-mode': 'nearest-neighbor',
+        'image-rendering': 'pixelated',
+      },
+    })
+  },
 }
