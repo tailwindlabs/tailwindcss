@@ -303,6 +303,19 @@ function looksLikeUri(declaration) {
   }
 }
 
+function isParsableNode(node) {
+  let isParsable = true
+
+  node.walkDecls((decl) => {
+    if (!isParsableCssValue(decl.name, decl.value)) {
+      isParsable = false
+      return false
+    }
+  })
+
+  return isParsable
+}
+
 function isParsableCssValue(property, value) {
   // We don't want to to treat [https://example.com] as a custom property
   // Even though, according to the CSS grammar, it's a totally valid CSS declaration
@@ -514,6 +527,8 @@ function* resolveMatches(candidate, context) {
         ])
         continue
       }
+
+      matches = matches.map((list) => list.filter((match) => isParsableNode(match[1])))
     }
 
     matches = matches.flat()
