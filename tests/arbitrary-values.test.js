@@ -370,3 +370,17 @@ it('should be possible to read theme values in arbitrary values (with quotes) wh
     `)
   })
 })
+
+it('should not output unparsable arbitrary CSS values', () => {
+  let config = {
+    content: [
+      {
+        raw: 'let classes = `w-[${sizes.width}]`',
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(``)
+  })
+})

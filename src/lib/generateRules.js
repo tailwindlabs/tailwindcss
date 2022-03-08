@@ -303,6 +303,19 @@ function looksLikeUri(declaration) {
   }
 }
 
+function isParsableNode(node) {
+  let isParsable = true
+
+  node.walkDecls((decl) => {
+    if (!isParsableCssValue(decl.name, decl.value)) {
+      isParsable = false
+      return false
+    }
+  })
+
+  return isParsable
+}
+
 function isParsableCssValue(property, value) {
   // We don't want to to treat [https://example.com] as a custom property
   // Even though, according to the CSS grammar, it's a totally valid CSS declaration
@@ -456,60 +469,66 @@ function* resolveMatches(candidate, context) {
       }
     }
 
-    // Only keep the result of the very first plugin if we are dealing with
-    // arbitrary values, to protect against ambiguity.
-    if (isArbitraryValue(modifier) && matches.length > 1) {
-      let typesPerPlugin = matches.map((match) => new Set([...(typesByMatches.get(match) ?? [])]))
+    if (isArbitraryValue(modifier)) {
+      // When generated arbitrary values are ambiguous, we can't know
+      // which to pick so don't generate any utilities for them
+      if (matches.length > 1) {
+        let typesPerPlugin = matches.map((match) => new Set([...(typesByMatches.get(match) ?? [])]))
 
-      // Remove duplicates, so that we can detect proper unique types for each plugin.
-      for (let pluginTypes of typesPerPlugin) {
-        for (let type of pluginTypes) {
-          let removeFromOwnGroup = false
+        // Remove duplicates, so that we can detect proper unique types for each plugin.
+        for (let pluginTypes of typesPerPlugin) {
+          for (let type of pluginTypes) {
+            let removeFromOwnGroup = false
 
-          for (let otherGroup of typesPerPlugin) {
-            if (pluginTypes === otherGroup) continue
+            for (let otherGroup of typesPerPlugin) {
+              if (pluginTypes === otherGroup) continue
 
-            if (otherGroup.has(type)) {
-              otherGroup.delete(type)
-              removeFromOwnGroup = true
+              if (otherGroup.has(type)) {
+                otherGroup.delete(type)
+                removeFromOwnGroup = true
+              }
             }
+
+            if (removeFromOwnGroup) pluginTypes.delete(type)
           }
-
-          if (removeFromOwnGroup) pluginTypes.delete(type)
         }
-      }
 
-      let messages = []
+        let messages = []
 
-      for (let [idx, group] of typesPerPlugin.entries()) {
-        for (let type of group) {
-          let rules = matches[idx]
-            .map(([, rule]) => rule)
-            .flat()
-            .map((rule) =>
-              rule
-                .toString()
-                .split('\n')
-                .slice(1, -1) // Remove selector and closing '}'
-                .map((line) => line.trim())
-                .map((x) => `      ${x}`) // Re-indent
-                .join('\n')
+        for (let [idx, group] of typesPerPlugin.entries()) {
+          for (let type of group) {
+            let rules = matches[idx]
+              .map(([, rule]) => rule)
+              .flat()
+              .map((rule) =>
+                rule
+                  .toString()
+                  .split('\n')
+                  .slice(1, -1) // Remove selector and closing '}'
+                  .map((line) => line.trim())
+                  .map((x) => `      ${x}`) // Re-indent
+                  .join('\n')
+              )
+              .join('\n\n')
+
+            messages.push(
+              `  Use \`${candidate.replace('[', `[${type}:`)}\` for \`${rules.trim()}\``
             )
-            .join('\n\n')
-
-          messages.push(`  Use \`${candidate.replace('[', `[${type}:`)}\` for \`${rules.trim()}\``)
-          break
+            break
+          }
         }
+
+        log.warn([
+          `The class \`${candidate}\` is ambiguous and matches multiple utilities.`,
+          ...messages,
+          `If this is content and not a class, replace it with \`${candidate
+            .replace('[', '&lsqb;')
+            .replace(']', '&rsqb;')}\` to silence this warning.`,
+        ])
+        continue
       }
 
-      log.warn([
-        `The class \`${candidate}\` is ambiguous and matches multiple utilities.`,
-        ...messages,
-        `If this is content and not a class, replace it with \`${candidate
-          .replace('[', '&lsqb;')
-          .replace(']', '&rsqb;')}\` to silence this warning.`,
-      ])
-      continue
+      matches = matches.map((list) => list.filter((match) => isParsableNode(match[1])))
     }
 
     matches = matches.flat()

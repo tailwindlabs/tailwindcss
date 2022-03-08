@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only add `!` to selector class matching template candidate when using important modifier with mutli-class selectors ([#7664](https://github.com/tailwindlabs/tailwindcss/pull/7664))
 - Correctly parse and prefix animation names with dots ([#7163](https://github.com/tailwindlabs/tailwindcss/pull/7163))
 - Fix extraction from template literal/function with array ([#7481](https://github.com/tailwindlabs/tailwindcss/pull/7481))
+- Don't output unparsable arbitrary values ([#7789](https://github.com/tailwindlabs/tailwindcss/pull/7789))
 
 ### Changed
 
