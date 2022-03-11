@@ -376,3 +376,28 @@ it('can parse box shadows with variables', () => {
     `)
   })
 })
+
+it('should generate styles using :not(.unknown-class) even if `.unknown-class` does not exist', () => {
+  let config = {
+    content: [{ raw: html`<div></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind components;
+
+    @layer components {
+      div:not(.unknown-class) {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      div:not(.unknown-class) {
+        color: red;
+      }
+    `)
+  })
+})
