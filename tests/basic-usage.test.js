@@ -349,7 +349,7 @@ it('does not produce duplicate output when seeing variants preceding a wildcard 
   })
 })
 
-it('it can parse box shadows with variables', () => {
+it('can parse box shadows with variables', () => {
   let config = {
     content: [{ raw: html`<div class="shadow-lg"></div>` }],
     theme: {
