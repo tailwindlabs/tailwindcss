@@ -349,7 +349,7 @@ it('does not produce duplicate output when seeing variants preceding a wildcard 
   })
 })
 
-it('it can parse box shadows with variables', () => {
+it('can parse box shadows with variables', () => {
   let config = {
     content: [{ raw: html`<div class="shadow-lg"></div>` }],
     theme: {
@@ -372,6 +372,31 @@ it('it can parse box shadows with variables', () => {
           0 0 1px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
           var(--tw-shadow);
+      }
+    `)
+  })
+})
+
+it('should generate styles using :not(.unknown-class) even if `.unknown-class` does not exist', () => {
+  let config = {
+    content: [{ raw: html`<div></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind components;
+
+    @layer components {
+      div:not(.unknown-class) {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      div:not(.unknown-class) {
+        color: red;
       }
     `)
   })

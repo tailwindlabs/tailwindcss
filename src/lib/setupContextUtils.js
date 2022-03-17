@@ -85,12 +85,18 @@ function parseStyles(styles) {
   })
 }
 
-function getClasses(selector) {
+function getClasses(selector, mutate) {
   let parser = selectorParser((selectors) => {
     let allClasses = []
+
+    if (mutate) {
+      mutate(selectors)
+    }
+
     selectors.walkClasses((classNode) => {
       allClasses.push(classNode.value)
     })
+
     return allClasses
   })
   return parser.transformSync(selector)
@@ -101,8 +107,20 @@ function extractCandidates(node, state = { containsNonOnDemandable: false }, dep
 
   // Handle normal rules
   if (node.type === 'rule') {
+    // Ignore everything inside a :not(...). This allows you to write code like
+    // `div:not(.foo)`. If `.foo` is never found in your code, then we used to
+    // not generated it. But now we will ignore everything inside a `:not`, so
+    // that it still gets generated.
+    function ignoreNot(selectors) {
+      selectors.walkPseudos((pseudo) => {
+        if (pseudo.value === ':not') {
+          pseudo.remove()
+        }
+      })
+    }
+
     for (let selector of node.selectors) {
-      let classCandidates = getClasses(selector)
+      let classCandidates = getClasses(selector, ignoreNot)
       // At least one of the selectors contains non-"on-demandable" candidates.
       if (classCandidates.length === 0) {
         state.containsNonOnDemandable = true
@@ -117,9 +135,7 @@ function extractCandidates(node, state = { containsNonOnDemandable: false }, dep
   // Handle at-rules (which contains nested rules)
   else if (node.type === 'atrule') {
     node.walkRules((rule) => {
-      for (let classCandidate of rule.selectors.flatMap((selector) =>
-        getClasses(selector, state, depth + 1)
-      )) {
+      for (let classCandidate of rule.selectors.flatMap((selector) => getClasses(selector))) {
         classes.push(classCandidate)
       }
     })
