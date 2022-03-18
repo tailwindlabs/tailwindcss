@@ -241,6 +241,16 @@ Remove the inner padding in Chrome and Safari on macOS.
 }
 
 /*
+Remove X form decoration in Edge and Chrome.
+*/
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+}
+
+/*
 1. Correct the inability to style clickable types in iOS and Safari.
 2. Change font properties to `inherit` in Safari.
 */
@@ -301,6 +311,13 @@ Prevent resizing textareas horizontally by default.
 
 textarea {
   resize: vertical;
+}
+
+/*
+Remove default black outline in Edge and Chrome
+*/
+textarea, input {
+    outline: none;
 }
 
 /*
