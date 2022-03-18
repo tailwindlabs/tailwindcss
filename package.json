@@ -36,7 +36,7 @@
     "scripts/*.js",
     "stubs/*.stub.js",
     "nesting/*",
-    "types/*",
+    "types/**/*",
     "*.d.ts",
     "*.css",
     "*.js"
