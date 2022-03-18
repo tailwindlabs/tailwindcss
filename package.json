@@ -4,7 +4,7 @@
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
-  "style": "dist/tailwind.css",
+  "types": "types/index.d.ts",
   "repository": "https://github.com/tailwindlabs/tailwindcss.git",
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
@@ -13,18 +13,20 @@
     "tailwindcss": "lib/cli.js"
   },
   "scripts": {
-    "preswcify": "npm run generate:plugin-list && rimraf lib",
+    "preswcify": "npm run generate && rimraf lib",
     "swcify": "swc src --out-dir lib --copy-files",
     "postswcify": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
     "rebuild-fixtures": "npm run swcify && node -r @swc/register scripts/rebuildFixtures.js",
     "prepublishOnly": "npm install --force && npm run swcify",
     "style": "eslint .",
-    "pretest": "npm run generate:plugin-list",
+    "pretest": "npm run generate",
     "test": "jest",
     "test:integrations": "npm run test --prefix ./integrations",
     "install:integrations": "node scripts/install-integrations.js",
     "posttest": "npm run style",
-    "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js"
+    "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
+    "generate:types": "node -r @swc/register scripts/generate-types.js",
+    "generate": "npm run generate:plugin-list && npm run generate:types"
   },
   "files": [
     "src/*",
@@ -34,6 +36,8 @@
     "scripts/*.js",
     "stubs/*.stub.js",
     "nesting/*",
+    "types/*",
+    "*.d.ts",
     "*.css",
     "*.js"
   ],
