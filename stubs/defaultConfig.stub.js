@@ -1,5 +1,4 @@
-/** @type {import('tailwindcss/types').Config} */
-const config = {
+module.exports = {
   content: [],
   presets: [],
   darkMode: 'media', // or 'class'
@@ -952,5 +951,3 @@ const config = {
   ],
   plugins: [],
 }
-
-module.exports = config
