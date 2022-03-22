@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `--poll` option to the CLI ([#7725](https://github.com/tailwindlabs/tailwindcss/pull/7725))
 - Add new `border-spacing` utilities ([#7102](https://github.com/tailwindlabs/tailwindcss/pull/7102))
 - Add `enabled` variant ([#7905](https://github.com/tailwindlabs/tailwindcss/pull/7905))
+- Add TypeScript types for the `tailwind.config.js` file ([#7891](https://github.com/tailwindlabs/tailwindcss/pull/7891))
 
 ## [3.0.23] - 2022-02-16
 
