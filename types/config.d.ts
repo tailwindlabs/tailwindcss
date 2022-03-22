@@ -304,19 +304,20 @@ interface RequiredConfig {
 }
 
 interface OptionalConfig {
-  important: ImportantConfig
-  prefix: PrefixConfig
-  separator: SeparatorConfig
-  safelist: SafelistConfig
-  presets: PresetsConfig
-  future: FutureConfig
-  experimental: ExperimentalConfig
-  darkMode: DarkModeConfig
-  theme: ThemeConfig
-  corePlugins: CorePluginsConfig
-  plugins: PluginsConfig
+  important: Partial<ImportantConfig>
+  prefix: Partial<PrefixConfig>
+  separator: Partial<SeparatorConfig>
+  safelist: Partial<SafelistConfig>
+  presets: Partial<PresetsConfig>
+  future: Partial<FutureConfig>
+  experimental: Partial<ExperimentalConfig>
+  darkMode: Partial<DarkModeConfig>
+  theme: Partial<ThemeConfig>
+  corePlugins: Partial<CorePluginsConfig>
+  plugins: Partial<PluginsConfig>
   /** Custom */
   [key: string]: any
 }
 
 export type Config = RequiredConfig & Partial<OptionalConfig>
+
