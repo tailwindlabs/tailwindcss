@@ -218,6 +218,9 @@ interface ThemeConfig {
   transitionDuration: ResolvableTo<KeyValuePair>
   willChange: ResolvableTo<KeyValuePair>
   content: ResolvableTo<KeyValuePair>
+
+  /** Custom */
+  [key: string]: any
 }
 
 // Core plugins related config
