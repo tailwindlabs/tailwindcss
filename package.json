@@ -54,7 +54,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
     "jest-diff": "^27.5.1",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.0",
     "prettier-plugin-tailwindcss": "^0.1.8",
     "rimraf": "^3.0.0",
     "source-map-js": "^1.0.2"
