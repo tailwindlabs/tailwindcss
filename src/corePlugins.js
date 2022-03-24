@@ -172,6 +172,11 @@ export let variantPlugins = {
     addVariant('motion-reduce', '@media (prefers-reduced-motion: reduce)')
   },
 
+  hoverVariants: ({ addVariant }) => {
+    addVariant('hover-none', '@media (hover: none)')
+    addVariant('hover-hover', '@media (hover: hover)')
+  },
+
   darkVariants: ({ config, addVariant }) => {
     let [mode, className = '.dark'] = [].concat(config('darkMode', 'media'))
 
