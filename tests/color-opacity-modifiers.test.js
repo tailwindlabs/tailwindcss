@@ -178,3 +178,62 @@ test('utilities that support any type are supported', async () => {
     `)
   })
 })
+
+test('opacity modifier in combination with partial custom properties', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="bg-[hsl(var(--foo),50%,50%)]"></div>
+          <div class="bg-[hsl(123,var(--foo),50%)]"></div>
+          <div class="bg-[hsl(123,50%,var(--foo))]"></div>
+          <div class="bg-[hsl(var(--foo),50%,50%)]/50"></div>
+          <div class="bg-[hsl(123,var(--foo),50%)]/50"></div>
+          <div class="bg-[hsl(123,50%,var(--foo))]/50"></div>
+          <div class="bg-[hsl(var(--foo),var(--bar),var(--baz))]/50"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[hsl\(var\(--foo\)\2c 50\%\2c 50\%\)\] {
+        --tw-bg-opacity: 1;
+        background-color: hsl(var(--foo) 50% 50% / var(--tw-bg-opacity));
+      }
+
+      .bg-\[hsl\(123\2c var\(--foo\)\2c 50\%\)\] {
+        --tw-bg-opacity: 1;
+        background-color: hsl(123 var(--foo) 50% / var(--tw-bg-opacity));
+      }
+
+      .bg-\[hsl\(123\2c 50\%\2c var\(--foo\)\)\] {
+        --tw-bg-opacity: 1;
+        background-color: hsl(123 50% var(--foo) / var(--tw-bg-opacity));
+      }
+
+      .bg-\[hsl\(var\(--foo\)\2c 50\%\2c 50\%\)\]\/50 {
+        background-color: hsl(var(--foo) 50% 50% / 0.5);
+      }
+
+      .bg-\[hsl\(123\2c var\(--foo\)\2c 50\%\)\]\/50 {
+        background-color: hsl(123 var(--foo) 50% / 0.5);
+      }
+
+      .bg-\[hsl\(123\2c 50\%\2c var\(--foo\)\)\]\/50 {
+        background-color: hsl(123 50% var(--foo) / 0.5);
+      }
+
+      .bg-\[hsl\(var\(--foo\)\2c var\(--bar\)\2c var\(--baz\)\)\]\/50 {
+        background-color: hsl(var(--foo) var(--bar) var(--baz) / 0.5);
+      }
+    `)
+  })
+})
