@@ -26,7 +26,7 @@ export let variantPlugins = {
     addVariant('file', '&::file-selector-button')
 
     addVariant('placeholder', '&::placeholder')
-    
+
     addVariant('backdrop', '&::backdrop')
 
     addVariant('before', ({ container }) => {
