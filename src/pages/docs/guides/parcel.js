@@ -23,14 +23,31 @@ let steps = [
     body: () => (
       <p>
         Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init
-        command to generate both <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
+        command to generate <code>tailwind.config.js</code>.
       </p>
     ),
     code: {
       name: 'Terminal',
       lang: 'terminal',
-      code: 'npm install -D tailwindcss postcss autoprefixer\nnpx tailwindcss init -p',
+      code: 'npm install -D tailwindcss postcss\nnpx tailwindcss init',
     },
+  },
+  {
+    title: 'Configure PostCSS',
+    body: () => (
+      <p>
+        Create a <code>.postcssrc</code> file in your project root, and enable the <code>tailwindcss</code> plugin.
+      </p>
+    ),
+    code: {
+      name: '.postcssrc',
+      lang: 'json',
+      code: `{
+  "plugins": {
+    "tailwindcss": {}
+  }
+}`
+    }
   },
   {
     title: 'Configure your template paths',
