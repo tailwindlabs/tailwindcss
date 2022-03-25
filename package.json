@@ -60,7 +60,6 @@
     "source-map-js": "^1.0.2"
   },
   "peerDependencies": {
-    "autoprefixer": "^10.0.2",
     "postcss": "^8.0.9"
   },
   "dependencies": {
