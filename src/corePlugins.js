@@ -2367,6 +2367,14 @@ export let corePlugins = {
     })
   },
 
+  contentVisibility: ({ addUtilities }) => {
+    addUtilities({
+      '.content-visibility-visible': { 'content-visibility': 'visible' },
+      '.content-visibility-hidden': { 'content-visibility': 'hidden' },
+      '.content-visibility-auto': { 'content-visibility': 'auto' },
+    })
+  },
+
   transitionProperty: ({ matchUtilities, theme }) => {
     let defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
     let defaultDuration = theme('transitionDuration.DEFAULT')

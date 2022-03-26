@@ -700,6 +700,15 @@
 .backdrop-filter-none {
   backdrop-filter: none;
 }
+.content-visibility-visible {
+  content-visibility: visible;
+}
+.content-visibility-hidden {
+  content-visibility: hidden;
+}
+.content-visibility-auto {
+  content-visibility: auto;
+}
 .transition {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke,
     opacity, box-shadow, transform, filter, backdrop-filter;
