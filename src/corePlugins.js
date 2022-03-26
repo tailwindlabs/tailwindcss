@@ -2367,6 +2367,22 @@ export let corePlugins = {
     })
   },
 
+  contain: ({ addUtilities, matchUtilities }) => {
+    addUtilities([
+      {
+        '.contain-none': { contain: 'none' },
+        '.contain-strict': { contain: 'strict' },
+        '.contain-content': { contain: 'content' },
+        '.contain-size': { contain: 'size' },
+        '.contain-layout': { contain: 'layout' },
+        '.contain-style': { contain: 'style' },
+        '.contain-paint': { contain: 'paint' },
+      },
+    ])
+
+    matchUtilities({ contain: (value) => ({ contain: value }) })
+  },
+
   transitionProperty: ({ matchUtilities, theme }) => {
     let defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
     let defaultDuration = theme('transitionDuration.DEFAULT')

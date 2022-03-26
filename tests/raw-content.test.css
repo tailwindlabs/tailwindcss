@@ -700,6 +700,12 @@
 .backdrop-filter-none {
   backdrop-filter: none;
 }
+.contain-content {
+  contain: content;
+}
+.contain-size {
+  contain: size;
+}
 .transition {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke,
     opacity, box-shadow, transform, filter, backdrop-filter;

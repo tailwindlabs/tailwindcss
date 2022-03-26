@@ -1009,6 +1009,9 @@
   --tw-backdrop-sepia: sepia(0.38);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
+.contain-\[style_layout_paint\] {
+  contain: style layout paint;
+}
 .transition-\[opacity\2c width\] {
   transition-property: opacity, width;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
