@@ -147,6 +147,30 @@ export let variantPlugins = {
         return `:merge(.peer)${result} ~ &`
       })
     }
+
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(`not-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `&:not(${result})`
+      })
+    }
+
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(`group-not-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `:merge(.group):not(${result}) &`
+      })
+    }
+
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(`peer-not-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return `:merge(.peer):not(${result}) ~ &`
+      })
+    }
   },
 
   directionVariants: ({ addVariant }) => {
