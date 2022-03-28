@@ -104,10 +104,10 @@ let steps = [
     },
   },
   {
-    title: 'Try working with a core plugin',
+    title: 'Try using a first-party plugin',
     body: () => (
       <p>
-        Enable core plugins, like forms and typography, using the <code>plugins</code> query
+        Enable first-party plugins, like forms and typography, using the <code>plugins</code> query
         parameter.
       </p>
     ),
