@@ -13,53 +13,9 @@ interface RecursiveKeyValuePair<K extends keyof any = string, V = string> {
 }
 type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
 
-type DotNotation<T, K extends keyof T = keyof T> = K extends string
-  ? T[K] extends Record<string, any>
-    ? T[K] extends any[]
-      ? K | `${K}.${DotNotation<T[K], Exclude<keyof T[K], keyof any[]>>}`
-      : K | `${K}.${DotNotation<T[K], keyof T[K]>}`
-    : K
-  : never
-type Path<T> = DotNotation<T> | keyof T
-type PathValue<T, P extends Path<T>> = P extends `${infer K}.${infer Rest}`
-  ? K extends keyof T
-    ? Rest extends Path<T[K]>
-      ? PathValue<T[K], Rest>
-      : never
-    : never
-  : P extends keyof T
-  ? T[P]
-  : never
-
-// Removes arbitrary values like: { [key: string]: any }
-type WithoutStringKey<T> = { [K in keyof T as string extends K ? never : K]: T[K] }
-
-type Unpack<T> = T extends ResolvableTo<infer R>
-  ? { [K in keyof R]: Unpack<R[K]> }
-  : T extends object
-  ? { [K in keyof T]: Unpack<T[K]> }
-  : T
-
-// This will remove all the callbacks and simplify it to the actual object
-// it uses or the object it returns. It will also remove the `extend`
-// section because at runtime that's gone anyway.
-type UnpackedTheme = Omit<WithoutStringKey<Unpack<Config['theme']>>, 'extend'>
-
-// This will add additional information purely for code completion. E.g.:
-type AugmentedTheme = Expand<Omit<UnpackedTheme, 'colors'> & { colors: DefaultColors }>
-
 interface PluginUtils {
   colors: DefaultColors
-
-  // Dynamic based on (default) theme config
-  theme<P extends Path<AugmentedTheme>, TDefaultValue>(
-    path: P,
-    defaultValue?: TDefaultValue
-  ): PathValue<AugmentedTheme, P>
-  // Path is just a string, useful for third party plugins where we don't
-  // know the resulting type without generics.
-  theme<TDefaultValue = any>(path: string, defaultValue?: TDefaultValue): TDefaultValue
-
+  theme(path: string, defaultValue?: unknown): any
   breakpoints<I = Record<string, unknown>, O = I>(arg: I): O
   rgb(arg: string): (arg: Partial<{ opacityVariable: string; opacityValue: number }>) => string
   hsl(arg: string): (arg: Partial<{ opacityVariable: string; opacityValue: number }>) => string
@@ -367,4 +323,3 @@ interface OptionalConfig {
 }
 
 export type Config = RequiredConfig & Partial<OptionalConfig>
-
