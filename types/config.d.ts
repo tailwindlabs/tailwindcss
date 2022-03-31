@@ -15,7 +15,7 @@ type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
 
 interface PluginUtils {
   colors: DefaultColors
-  theme(path: string, defaultValue: unknown): keyof ThemeConfig
+  theme(path: string, defaultValue?: unknown): any
   breakpoints<I = Record<string, unknown>, O = I>(arg: I): O
   rgb(arg: string): (arg: Partial<{ opacityVariable: string; opacityValue: number }>) => string
   hsl(arg: string): (arg: Partial<{ opacityVariable: string; opacityValue: number }>) => string
@@ -218,6 +218,9 @@ interface ThemeConfig {
   transitionDuration: ResolvableTo<KeyValuePair>
   willChange: ResolvableTo<KeyValuePair>
   content: ResolvableTo<KeyValuePair>
+
+  /** Custom */
+  [key: string]: any
 }
 
 // Core plugins related config
@@ -320,4 +323,3 @@ interface OptionalConfig {
 }
 
 export type Config = RequiredConfig & Partial<OptionalConfig>
-
