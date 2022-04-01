@@ -57,7 +57,9 @@ export function number(value) {
 }
 
 export function percentage(value) {
-  return /%$/g.test(value) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(value))
+  return value.split(UNDERSCORE).every((part) => {
+    return /%$/g.test(part) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(part))
+  })
 }
 
 let lengthUnits = [

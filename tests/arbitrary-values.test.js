@@ -384,3 +384,25 @@ it('should not output unparsable arbitrary CSS values', () => {
     return expect(result.css).toMatchFormattedCss(``)
   })
 })
+
+// Issue: https://github.com/tailwindlabs/tailwindcss/issues/7997
+// `top_right_50%` was a valid percentage before introducing this change
+it('should correctly validate each part when checking for `percentage` data types', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[top_right_50%]"></div>` }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[top_right_50\%\] {
+        background-position: top right 50%;
+      }
+    `)
+  })
+})
