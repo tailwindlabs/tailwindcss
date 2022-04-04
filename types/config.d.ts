@@ -158,18 +158,18 @@ interface ThemeConfig {
   textIndent: ThemeConfig['spacing']
   fontFamily: ResolvableTo<KeyValuePair<string, string[]>>
   fontSize: ResolvableTo<
-    | KeyValuePair<string, string>
-    | KeyValuePair<string, [fontSize: string, lineHeight: string]>
-    | KeyValuePair<
-        string,
-        [
+    KeyValuePair<
+      string,
+      | string
+      | [fontSize: string, lineHeight: string]
+      | [
           fontSize: string,
           configuration: Partial<{
             lineHeight: string
             letterSpacing: string
           }>
         ]
-      >
+    >
   >
   fontWeight: ResolvableTo<KeyValuePair>
   lineHeight: ResolvableTo<KeyValuePair>
