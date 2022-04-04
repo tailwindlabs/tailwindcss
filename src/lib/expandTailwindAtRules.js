@@ -17,8 +17,8 @@ const builtInTransformers = {
   svelte: (content) => content.replace(/(?:^|\s)class:/g, ' '),
 }
 
-function getExtractor(tailwindConfig, fileExtension) {
-  let extractors = tailwindConfig.content.extract
+function getExtractor(context, fileExtension) {
+  let extractors = context.tailwindConfig.content.extract
 
   return (
     extractors[fileExtension] ||
@@ -165,7 +165,7 @@ export default function expandTailwindAtRules(context) {
 
     for (let { content, extension } of context.changedContent) {
       let transformer = getTransformer(context.tailwindConfig, extension)
-      let extractor = getExtractor(context.tailwindConfig, extension)
+      let extractor = getExtractor(context, extension)
       getClassCandidates(transformer(content), extractor, candidates, seen)
     }
 

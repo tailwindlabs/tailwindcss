@@ -316,6 +316,9 @@
 .cursor-\[url\(hand\.cur\)_2_2\2c pointer\] {
   cursor: url(hand.cur) 2 2, pointer;
 }
+.cursor-\[url\(\'\.\/path_to_hand\.cur\'\)_2_2\2c pointer\] {
+  cursor: url("./path_to_hand.cur") 2 2, pointer;
+}
 .cursor-\[var\(--value\)\] {
   cursor: var(--value);
 }

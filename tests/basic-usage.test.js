@@ -401,3 +401,32 @@ it('should generate styles using :not(.unknown-class) even if `.unknown-class` d
     `)
   })
 })
+
+it('supports multiple backgrounds as arbitrary values even if only some are quoted', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div
+          class="bg-[url('/images/one-two-three.png'),linear-gradient(to_right,_#eeeeee,_#000000)]"
+        ></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[url\(\'\/images\/one-two-three\.png\'\)\2c
+        linear-gradient\(to_right\2c
+        _\#eeeeee\2c
+        _\#000000\)\] {
+        background-image: url('/images/one-two-three.png'),
+          linear-gradient(to right, #eeeeee, #000000);
+      }
+    `)
+  })
+})
