@@ -71,12 +71,15 @@ type DarkModeConfig =
   /** Use the `class` stategy with a custom class instead of `.dark`. */
   | ['class', string]
 
+type Screen = { raw: string } | { min: string } | { max: string } | { min: string; max: string }
+type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>
+
 // Theme related config
 interface ThemeConfig {
   extend: Partial<Omit<ThemeConfig, 'extend'>>
 
   /** Responsiveness */
-  screens: ResolvableTo<KeyValuePair>
+  screens: ResolvableTo<ScreensConfig>
 
   /** Reusable base configs */
   colors: ResolvableTo<RecursiveKeyValuePair>
@@ -85,12 +88,7 @@ interface ThemeConfig {
   /** Components */
   container: ResolvableTo<
     Partial<{
-      screens:
-        | string[] /** List of breakpoints. E.g.: '400px', '500px' */
-        /** Named breakpoints. E.g.: { sm: '400px' } */
-        | Record<string | number, string>
-        /** Name breakpoints with explicit min and max values. E.g.: { sm: { min: '300px', max: '400px' } } */
-        | Record<string, { min: string; max: string }>
+      screens: ScreensConfig
       center: boolean
       padding: string | Record<string, string>
     }>
