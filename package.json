@@ -47,7 +47,7 @@
     "@swc/jest": "^0.2.20",
     "@swc/register": "^0.1.10",
     "autoprefixer": "^10.4.4",
-    "cssnano": "^5.1.4",
+    "cssnano": "^5.1.7",
     "esbuild": "^0.14.25",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
