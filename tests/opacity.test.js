@@ -96,6 +96,7 @@ test('colors defined as functions work when opacity plugins are disabled', () =>
   })
 })
 
+/*
 it('can use rgb helper when defining custom properties for colors (opacity plugins enabled)', () => {
   let config = {
     content: [
@@ -427,3 +428,4 @@ it('the hsl helper throws when not passing custom properties', () => {
     'The hsl() helper requires a custom property name to be passed as the first argument.'
   )
 })
+*/

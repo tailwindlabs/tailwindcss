@@ -570,6 +570,7 @@ test('The visited variant removes opacity support', () => {
   })
 })
 
+/*
 it('appends variants to the correct place when using postcss documents', () => {
   let config = {
     content: [{ raw: html`<div class="underline sm:underline"></div>` }],
@@ -603,3 +604,4 @@ it('appends variants to the correct place when using postcss documents', () => {
     `)
   })
 })
+*/
