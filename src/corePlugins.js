@@ -1975,7 +1975,10 @@ export let corePlugins = {
   ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme }) => {
     let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
     let ringColorDefault = withAlphaValue(
+      /*
       theme('ringColor')?.DEFAULT,
+      */
+      theme('ringColor.DEFAULT'),
       ringOpacityDefault,
       `rgb(147 197 253 / ${ringOpacityDefault})`
     )
