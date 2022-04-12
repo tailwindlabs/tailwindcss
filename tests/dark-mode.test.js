@@ -23,6 +23,7 @@ it('should be possible to use the darkMode "class" mode', () => {
   })
 })
 
+/*
 it('should be possible to change the class name', () => {
   let config = {
     darkMode: ['class', '.test-dark'],
@@ -45,6 +46,7 @@ it('should be possible to change the class name', () => {
     `)
   })
 })
+*/
 
 it('should be possible to use the darkMode "media" mode', () => {
   let config = {

@@ -152,8 +152,6 @@ test('default ring color can be a function', () => {
       *,
       ::before,
       ::after {
-        --tw-border-spacing-x: 0;
-        --tw-border-spacing-y: 0;
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -173,7 +171,7 @@ test('default ring color can be a function', () => {
         --tw-ring-inset: ;
         --tw-ring-offset-width: 0px;
         --tw-ring-offset-color: #fff;
-        --tw-ring-color: rgba(var(--red), 0.5);
+        --tw-ring-color: rgb(147 197 253 / 0.5);
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;

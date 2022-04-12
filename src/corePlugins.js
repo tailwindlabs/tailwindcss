@@ -27,7 +27,9 @@ export let variantPlugins = {
 
     addVariant('placeholder', '&::placeholder')
 
+    /*
     addVariant('backdrop', '&::backdrop')
+    */
 
     addVariant('before', ({ container }) => {
       container.walkRules((rule) => {
@@ -120,7 +122,9 @@ export let variantPlugins = {
       'focus',
       'focus-visible',
       'active',
+      /*
       'enabled',
+      */
       'disabled',
     ].map((variant) => (Array.isArray(variant) ? variant : [variant, `:${variant}`]))
 
@@ -187,7 +191,10 @@ export let variantPlugins = {
     }
 
     if (mode === 'class') {
+      addVariant('dark', `.dark &`)
+      /*
       addVariant('dark', `${className} &`)
+      */
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     }
@@ -532,6 +539,7 @@ export let corePlugins = {
     })
   },
 
+  /*
   borderSpacing: ({ addDefaults, matchUtilities, theme }) => {
     addDefaults('border-spacing', {
       '--tw-border-spacing-x': 0,
@@ -566,6 +574,7 @@ export let corePlugins = {
       { values: theme('borderSpacing') }
     )
   },
+  */
 
   transformOrigin: createUtilityPlugin('transformOrigin', [['origin', ['transformOrigin']]]),
   translate: createUtilityPlugin(
@@ -1562,8 +1571,10 @@ export let corePlugins = {
       '.text-center': { 'text-align': 'center' },
       '.text-right': { 'text-align': 'right' },
       '.text-justify': { 'text-align': 'justify' },
+      /*
       '.text-start': { 'text-align': 'start' },
       '.text-end': { 'text-align': 'end' },
+      */
     })
   },
 
@@ -1967,7 +1978,10 @@ export let corePlugins = {
   ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme }) => {
     let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
     let ringColorDefault = withAlphaValue(
+      /*
       theme('ringColor')?.DEFAULT,
+      */
+      theme('ringColor.DEFAULT'),
       ringOpacityDefault,
       `rgb(147 197 253 / ${ringOpacityDefault})`
     )

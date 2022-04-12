@@ -1,8 +1,6 @@
 *,
 ::before,
 ::after {
-  --tw-border-spacing-x: 0;
-  --tw-border-spacing-y: 0;
   --tw-translate-x: 0;
   --tw-translate-y: 0;
   --tw-rotate: 0;
@@ -253,19 +251,6 @@
 }
 .border-collapse {
   border-collapse: collapse;
-}
-.border-spacing-4 {
-  --tw-border-spacing-x: 1rem;
-  --tw-border-spacing-y: 1rem;
-  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
-}
-.border-spacing-x-6 {
-  --tw-border-spacing-x: 1.5rem;
-  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
-}
-.border-spacing-y-8 {
-  --tw-border-spacing-y: 2rem;
-  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
 }
 .origin-top-right {
   transform-origin: top right;
