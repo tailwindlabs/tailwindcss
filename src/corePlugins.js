@@ -27,7 +27,9 @@ export let variantPlugins = {
 
     addVariant('placeholder', '&::placeholder')
 
+    /*
     addVariant('backdrop', '&::backdrop')
+    */
 
     addVariant('before', ({ container }) => {
       container.walkRules((rule) => {
