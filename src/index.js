@@ -15,7 +15,6 @@ module.exports = function tailwindcss(configOrPath) {
       function (root, result) {
         let context = setupTrackingContext(configOrPath)
 
-        /*
         if (root.type === 'document') {
           let roots = root.nodes.filter((node) => node.type === 'root')
 
@@ -27,7 +26,6 @@ module.exports = function tailwindcss(configOrPath) {
 
           return
         }
-        */
 
         processTailwindFeatures(context)(root, result)
       },

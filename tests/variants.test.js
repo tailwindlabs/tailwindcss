@@ -1,8 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-/*
 import postcss from 'postcss'
-*/
 
 import { run, css, html, defaults } from './util/run'
 
@@ -572,7 +570,6 @@ test('The visited variant removes opacity support', () => {
   })
 })
 
-/*
 it('appends variants to the correct place when using postcss documents', () => {
   let config = {
     content: [{ raw: html`<div class="underline sm:underline"></div>` }],
@@ -606,4 +603,3 @@ it('appends variants to the correct place when using postcss documents', () => {
     `)
   })
 })
-*/

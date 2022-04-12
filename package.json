@@ -4,6 +4,7 @@
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
+  "types": "types/index.d.ts",
   "repository": "https://github.com/tailwindlabs/tailwindcss.git",
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
@@ -25,7 +26,7 @@
     "posttest": "npm run style",
     "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
     "generate:types": "node -r @swc/register scripts/generate-types.js",
-    "generate": "npm run generate:plugin-list"
+    "generate": "npm run generate:plugin-list && npm run generate:types"
   },
   "files": [
     "src/*",
@@ -35,6 +36,8 @@
     "scripts/*.js",
     "stubs/*.stub.js",
     "nesting/*",
+    "types/**/*",
+    "*.d.ts",
     "*.css",
     "*.js"
   ],

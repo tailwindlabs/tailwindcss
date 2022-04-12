@@ -66,7 +66,6 @@ const configUtils = {
         {}
       )
   },
-  /*
   rgb(property) {
     if (!property.startsWith('--')) {
       throw new Error(
@@ -97,7 +96,6 @@ const configUtils = {
       return `hsl(var(${property}) / ${opacityValue})`
     }
   },
-  */
 }
 
 function value(valueToResolve, ...args) {
