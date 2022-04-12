@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet!
+
+## [3.0.24] - 2022-05-12
+
 ### Fixed
 
 - Prevent nesting plugin from breaking other plugins ([#7563](https://github.com/tailwindlabs/tailwindcss/pull/7563))
@@ -1895,7 +1899,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.23...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.24...HEAD
+[3.0.24]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.23...v3.0.24
 [3.0.23]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.22...v3.0.23
 [3.0.22]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.21...v3.0.22
 [3.0.21]: https://github.com/tailwindlabs/tailwindcss/compare/v3.0.20...v3.0.21
