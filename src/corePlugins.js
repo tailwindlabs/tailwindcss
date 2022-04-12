@@ -179,7 +179,7 @@ export let variantPlugins = {
   },
 
   darkVariants: ({ config, addVariant }) => {
-    let [mode, className = '.dark'] = [].concat(config('darkMode', 'media'))
+    let [mode] = [].concat(config('darkMode', 'media'))
 
     if (mode === false) {
       mode = 'media'
