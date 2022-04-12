@@ -536,6 +536,7 @@ export let corePlugins = {
     })
   },
 
+  /*
   borderSpacing: ({ addDefaults, matchUtilities, theme }) => {
     addDefaults('border-spacing', {
       '--tw-border-spacing-x': 0,
@@ -570,6 +571,7 @@ export let corePlugins = {
       { values: theme('borderSpacing') }
     )
   },
+  */
 
   transformOrigin: createUtilityPlugin('transformOrigin', [['origin', ['transformOrigin']]]),
   translate: createUtilityPlugin(

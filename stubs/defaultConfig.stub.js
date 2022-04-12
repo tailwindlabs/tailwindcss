@@ -194,9 +194,11 @@ module.exports = {
       '3xl': '1.5rem',
       full: '9999px',
     },
+    /*
     borderSpacing: ({ theme }) => ({
       ...theme('spacing'),
     }),
+    */
     borderWidth: {
       DEFAULT: '1px',
       0: '0px',
