@@ -122,7 +122,9 @@ export let variantPlugins = {
       'focus',
       'focus-visible',
       'active',
+      /*
       'enabled',
+      */
       'disabled',
     ].map((variant) => (Array.isArray(variant) ? variant : [variant, `:${variant}`]))
 
