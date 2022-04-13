@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Types: allow for arbitrary theme values (for 3rd party plugins) ([#7926](https://github.com/tailwindlabs/tailwindcss/pull/7926))
+- Don’t split vars with numbers in them inside arbitrary values ([#8091](https://github.com/tailwindlabs/tailwindcss/pull/8091))
 
 ### Added
 
