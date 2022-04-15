@@ -295,13 +295,17 @@
   justify-items: end;
 }
 .gap-4 {
-  gap: 1rem;
+  --tw-gap-x: 1rem;
+  --tw-gap-y: 1rem;
+  gap: var(--tw-gap-y) var(--tw-gap-x);
 }
 .gap-x-2 {
-  column-gap: 0.5rem;
+  --tw-gap-x: 0.5rem;
+  column-gap: var(--tw-gap-x);
 }
 .gap-y-3 {
-  row-gap: 0.75rem;
+  --tw-gap-y: 0.75rem;
+  row-gap: var(--tw-gap-y);
 }
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;

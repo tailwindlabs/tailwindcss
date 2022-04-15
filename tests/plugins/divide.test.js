@@ -24,6 +24,8 @@ it('should add the divide styles for divide-y and a default border color', () =>
         --tw-pan-y: ;
         --tw-pinch-zoom: ;
         --tw-scroll-snap-strictness: proximity;
+        --tw-gap-x: 0;
+        --tw-gap-y: 0;
         --tw-ordinal: ;
         --tw-slashed-zero: ;
         --tw-numeric-figure: ;
@@ -90,6 +92,8 @@ it('should add the divide styles for divide-x and a default border color', () =>
         --tw-pan-y: ;
         --tw-pinch-zoom: ;
         --tw-scroll-snap-strictness: proximity;
+        --tw-gap-x: 0;
+        --tw-gap-y: 0;
         --tw-ordinal: ;
         --tw-slashed-zero: ;
         --tw-numeric-figure: ;
@@ -156,6 +160,8 @@ it('should add the divide styles for divide-y-reverse and a default border color
         --tw-pan-y: ;
         --tw-pinch-zoom: ;
         --tw-scroll-snap-strictness: proximity;
+        --tw-gap-x: 0;
+        --tw-gap-y: 0;
         --tw-ordinal: ;
         --tw-slashed-zero: ;
         --tw-numeric-figure: ;
@@ -220,6 +226,8 @@ it('should add the divide styles for divide-x-reverse and a default border color
         --tw-pan-y: ;
         --tw-pinch-zoom: ;
         --tw-scroll-snap-strictness: proximity;
+        --tw-gap-x: 0;
+        --tw-gap-y: 0;
         --tw-ordinal: ;
         --tw-slashed-zero: ;
         --tw-numeric-figure: ;
@@ -284,6 +292,8 @@ it('should only inject the base styles once if we use divide and border at the s
         --tw-pan-y: ;
         --tw-pinch-zoom: ;
         --tw-scroll-snap-strictness: proximity;
+        --tw-gap-x: 0;
+        --tw-gap-y: 0;
         --tw-ordinal: ;
         --tw-slashed-zero: ;
         --tw-numeric-figure: ;

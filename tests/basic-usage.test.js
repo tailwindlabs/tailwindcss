@@ -165,6 +165,8 @@ test('default ring color can be a function', () => {
         --tw-pan-y: ;
         --tw-pinch-zoom: ;
         --tw-scroll-snap-strictness: proximity;
+        --tw-gap-x: 0;
+        --tw-gap-y: 0;
         --tw-ordinal: ;
         --tw-slashed-zero: ;
         --tw-numeric-figure: ;

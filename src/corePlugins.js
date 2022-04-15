@@ -894,6 +894,9 @@ export let corePlugins = {
     ['grid-cols', ['gridTemplateColumns']],
   ]),
   gridTemplateRows: createUtilityPlugin('gridTemplateRows', [['grid-rows', ['gridTemplateRows']]]),
+  gridTemplateColumnsFit: createUtilityPlugin('gridTemplateColumnsFit', [
+    ['grid-cols-fit', ['gridTemplateColumns']],
+  ]),
 
   flexDirection: ({ addUtilities }) => {
     addUtilities({
@@ -974,13 +977,40 @@ export let corePlugins = {
     })
   },
 
-  gap: createUtilityPlugin('gap', [
-    ['gap', ['gap']],
-    [
-      ['gap-x', ['columnGap']],
-      ['gap-y', ['rowGap']],
-    ],
-  ]),
+  gap: ({ addDefaults, matchUtilities, theme }) => {
+    addDefaults('gap', {
+      '--tw-gap-x': 0,
+      '--tw-gap-y': 0,
+    })
+
+    matchUtilities(
+      {
+        gap: (value) => {
+          return {
+            '--tw-gap-x': value,
+            '--tw-gap-y': value,
+            '@defaults gap': {},
+            gap: 'var(--tw-gap-y) var(--tw-gap-x)',
+          }
+        },
+        'gap-x': (value) => {
+          return {
+            '--tw-gap-x': value,
+            '@defaults gap': {},
+            'column-gap': 'var(--tw-gap-x)',
+          }
+        },
+        'gap-y': (value) => {
+          return {
+            '--tw-gap-y': value,
+            '@defaults gap': {},
+            'row-gap': 'var(--tw-gap-y)',
+          }
+        },
+      },
+      { values: theme('gap') }
+    )
+  },
 
   space: ({ matchUtilities, addUtilities, theme }) => {
     matchUtilities(

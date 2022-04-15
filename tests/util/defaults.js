@@ -23,6 +23,8 @@ export function defaults({ defaultRingColor = `rgb(59 130 246 / 0.5)` } = {}) {
       --tw-pan-y: ;
       --tw-pinch-zoom: ;
       --tw-scroll-snap-strictness: proximity;
+      --tw-gap-x: 0;
+      --tw-gap-y: 0;
       --tw-ordinal: ;
       --tw-slashed-zero: ;
       --tw-numeric-figure: ;

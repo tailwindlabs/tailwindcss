@@ -14,6 +14,8 @@
   --tw-pan-y: ;
   --tw-pinch-zoom: ;
   --tw-scroll-snap-strictness: proximity;
+  --tw-gap-x: 0;
+  --tw-gap-y: 0;
   --tw-ordinal: ;
   --tw-slashed-zero: ;
   --tw-numeric-figure: ;
@@ -414,6 +416,12 @@
 .grid-rows-3 {
   grid-template-rows: repeat(3, minmax(0, 1fr));
 }
+.grid-cols-fit-4 {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(0, calc((100% / 4) - var(--tw-gap-x) / 4 * 3))
+  );
+}
 .flex-row-reverse {
   flex-direction: row-reverse;
 }
@@ -439,13 +447,17 @@
   justify-items: end;
 }
 .gap-4 {
-  gap: 1rem;
+  --tw-gap-x: 1rem;
+  --tw-gap-y: 1rem;
+  gap: var(--tw-gap-y) var(--tw-gap-x);
 }
 .gap-x-2 {
-  column-gap: 0.5rem;
+  --tw-gap-x: 0.5rem;
+  column-gap: var(--tw-gap-x);
 }
 .gap-y-3 {
-  row-gap: 0.75rem;
+  --tw-gap-y: 0.75rem;
+  row-gap: var(--tw-gap-y);
 }
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;

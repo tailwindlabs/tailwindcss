@@ -399,22 +399,30 @@
   grid-template-rows: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
 }
 .gap-\[20px\] {
-  gap: 20px;
+  --tw-gap-x: 20px;
+  --tw-gap-y: 20px;
+  gap: var(--tw-gap-y) var(--tw-gap-x);
 }
 .gap-\[var\(--value\)\] {
-  gap: var(--value);
+  --tw-gap-x: var(--value);
+  --tw-gap-y: var(--value);
+  gap: var(--tw-gap-y) var(--tw-gap-x);
 }
 .gap-x-\[20px\] {
-  column-gap: 20px;
+  --tw-gap-x: 20px;
+  column-gap: var(--tw-gap-x);
 }
 .gap-x-\[var\(--value\)\] {
-  column-gap: var(--value);
+  --tw-gap-x: var(--value);
+  column-gap: var(--tw-gap-x);
 }
 .gap-y-\[20px\] {
-  row-gap: 20px;
+  --tw-gap-y: 20px;
+  row-gap: var(--tw-gap-y);
 }
 .gap-y-\[var\(--value\)\] {
-  row-gap: var(--value);
+  --tw-gap-y: var(--value);
+  row-gap: var(--tw-gap-y);
 }
 .space-x-\[20cm\] > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
