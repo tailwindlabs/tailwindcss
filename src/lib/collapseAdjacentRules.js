@@ -29,7 +29,11 @@ export default function collapseAdjacentRules() {
             (currentRule[property] ?? '').replace(/\s+/g, ' ')
         )
       ) {
-        currentRule.append(node.nodes)
+        // An AtRule may not have children (for example if we encounter duplicate @import url(…) rules)
+        if (node.nodes) {
+          currentRule.append(node.nodes)
+        }
+
         node.remove()
       } else {
         currentRule = node
