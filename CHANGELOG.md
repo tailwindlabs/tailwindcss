@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow for custom properties in `rgb`, `rgba`, `hsl` and `hsla` colors ([#7933](https://github.com/tailwindlabs/tailwindcss/pull/7933))
 - Remove autoprefixer as explicit peer-dependency to avoid invalid warnings in situations where it isn't actually needed ([#7949](https://github.com/tailwindlabs/tailwindcss/pull/7949))
 - Ensure the `percentage` data type is validated correctly ([#8015](https://github.com/tailwindlabs/tailwindcss/pull/8015))
+- Make sure `font-weight` is inherited by form controls in all browsers ([#8078](https://github.com/tailwindlabs/tailwindcss/pull/8078))
 
 ### Changed
 
