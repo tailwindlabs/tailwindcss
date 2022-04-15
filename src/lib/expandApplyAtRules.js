@@ -282,15 +282,19 @@ function processApply(root, context, localCache) {
   // TODO: Should we use postcss-selector-parser for this instead?
   function replaceSelector(selector, utilitySelectors, candidate) {
     let needle = `.${escapeClassName(candidate)}`
-    let utilitySelectorsList = utilitySelectors.split(/\s*\,(?![^(]*\))\s*/g)
+    let needles = [...new Set([needle, needle.replace(/\\2c /g, '\\,')])]
+    let utilitySelectorsList = utilitySelectors.split(/\s*(?<!\\)\,(?![^(]*\))\s*/g)
 
     return selector
-      .split(/\s*\,(?![^(]*\))\s*/g)
+      .split(/\s*(?<!\\)\,(?![^(]*\))\s*/g)
       .map((s) => {
         let replaced = []
 
         for (let utilitySelector of utilitySelectorsList) {
-          let replacedSelector = utilitySelector.replace(needle, s)
+          let replacedSelector = utilitySelector
+          for (const needle of needles) {
+            replacedSelector = replacedSelector.replace(needle, s)
+          }
           if (replacedSelector === utilitySelector) {
             continue
           }

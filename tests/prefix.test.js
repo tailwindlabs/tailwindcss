@@ -374,3 +374,29 @@ it('prefix does not detect and generate unnecessary classes', async () => {
 
   expect(result.css).toMatchFormattedCss(css``)
 })
+
+it('supports prefixed utilities using arbitrary values', async () => {
+  let config = {
+    prefix: 'tw-',
+    content: [{ raw: html`foo` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    .foo {
+      @apply tw-text-[color:rgb(var(--button-background,var(--primary-button-background)))];
+      @apply tw-ease-[cubic-bezier(0.77,0,0.175,1)];
+      @apply tw-rounded-[min(4px,var(--input-border-radius))];
+    }
+  `
+
+  const result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo {
+      color: rgb(var(--button-background, var(--primary-button-background)));
+      transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+      border-radius: min(4px, var(--input-border-radius));
+    }
+  `)
+})
