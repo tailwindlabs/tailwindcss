@@ -358,3 +358,19 @@ it('prefix with negative values and variants in the safelist', async () => {
     }
   `)
 })
+
+it('prefix does not detect and generate unnecessary classes', async () => {
+  let config = {
+    prefix: 'tw-_',
+    content: [{ raw: html`-aaa-filter aaaa-table aaaa-hidden` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  const result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css``)
+})

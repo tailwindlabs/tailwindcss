@@ -382,7 +382,11 @@ function* resolveMatchedPlugins(classCandidate, context) {
   const twConfigPrefix = context.tailwindConfig.prefix
 
   const twConfigPrefixLen = twConfigPrefix.length
-  if (candidatePrefix[twConfigPrefixLen] === '-') {
+
+  const hasMatchingPrefix =
+    candidatePrefix.startsWith(twConfigPrefix) || candidatePrefix.startsWith(`-${twConfigPrefix}`)
+
+  if (candidatePrefix[twConfigPrefixLen] === '-' && hasMatchingPrefix) {
     negative = true
     candidatePrefix = twConfigPrefix + candidatePrefix.slice(twConfigPrefixLen + 1)
   }
