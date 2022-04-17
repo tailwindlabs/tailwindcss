@@ -103,6 +103,7 @@ module.exports = {
       72: '18rem',
       80: '20rem',
       96: '24rem',
+      inherit: 'inherit'
     },
     animation: {
       none: 'none',
