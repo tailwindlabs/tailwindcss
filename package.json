@@ -60,7 +60,8 @@
     "stringify-object": "^3.3.0",
     "tailwindcss": "^3.0.24",
     "tinytime": "^0.2.6",
-    "unist-util-visit": "^2.0.3"
+    "unist-util-visit": "^2.0.3",
+    "zustand": "^4.0.0-rc.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.x",

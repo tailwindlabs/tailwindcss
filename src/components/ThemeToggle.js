@@ -1,7 +1,13 @@
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import { Listbox } from '@headlessui/react'
 import clsx from 'clsx'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
+import create from 'zustand'
+
+const useSetting = create((set) => ({
+  setting: 'system',
+  setSetting: (setting) => set({ setting }),
+}))
 
 function update() {
   if (
@@ -105,7 +111,7 @@ function PcIcon({ selected, ...props }) {
 }
 
 function useTheme() {
-  let [setting, setSetting] = useState('system')
+  let { setting, setSetting } = useSetting()
   let initial = useRef(true)
 
   useIsomorphicLayoutEffect(() => {
