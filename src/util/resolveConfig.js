@@ -75,7 +75,7 @@ const configUtils = {
 
     return ({ opacityValue }) => {
       if (opacityValue === undefined || opacityValue === 1) {
-        return `rgb(var(${property}) / 1.0)`
+        return `rgb(var(${property}))`
       }
 
       return `rgb(var(${property}) / ${opacityValue})`
@@ -90,7 +90,7 @@ const configUtils = {
 
     return ({ opacityValue }) => {
       if (opacityValue === undefined || opacityValue === 1) {
-        return `hsl(var(${property}) / 1)`
+        return `hsl(var(${property}))`
       }
 
       return `hsl(var(${property}) / ${opacityValue})`

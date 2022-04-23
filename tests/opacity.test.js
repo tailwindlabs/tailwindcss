@@ -209,37 +209,37 @@ it('can use rgb helper when defining custom properties for colors (opacity plugi
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .divide-primary > :not([hidden]) ~ :not([hidden]) {
-        border-color: rgb(var(--color-primary) / 1);
+        border-color: rgb(var(--color-primary));
       }
       .divide-primary\/50 > :not([hidden]) ~ :not([hidden]) {
         border-color: rgb(var(--color-primary) / 0.5);
       }
       .border-primary {
-        border-color: rgb(var(--color-primary) / 1);
+        border-color: rgb(var(--color-primary));
       }
       .border-primary\/50 {
         border-color: rgb(var(--color-primary) / 0.5);
       }
       .bg-primary {
-        background-color: rgb(var(--color-primary) / 1);
+        background-color: rgb(var(--color-primary));
       }
       .bg-primary\/50 {
         background-color: rgb(var(--color-primary) / 0.5);
       }
       .text-primary {
-        color: rgb(var(--color-primary) / 1);
+        color: rgb(var(--color-primary));
       }
       .text-primary\/50 {
         color: rgb(var(--color-primary) / 0.5);
       }
       .placeholder-primary::placeholder {
-        color: rgb(var(--color-primary) / 1);
+        color: rgb(var(--color-primary));
       }
       .placeholder-primary\/50::placeholder {
         color: rgb(var(--color-primary) / 0.5);
       }
       .ring-primary {
-        --tw-ring-color: rgb(var(--color-primary) / 1);
+        --tw-ring-color: rgb(var(--color-primary));
       }
       .ring-primary\/50 {
         --tw-ring-color: rgb(var(--color-primary) / 0.5);
@@ -361,37 +361,37 @@ it('can use hsl helper when defining custom properties for colors (opacity plugi
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
       .divide-primary > :not([hidden]) ~ :not([hidden]) {
-        border-color: hsl(var(--color-primary) / 1);
+        border-color: hsl(var(--color-primary));
       }
       .divide-primary\/50 > :not([hidden]) ~ :not([hidden]) {
         border-color: hsl(var(--color-primary) / 0.5);
       }
       .border-primary {
-        border-color: hsl(var(--color-primary) / 1);
+        border-color: hsl(var(--color-primary));
       }
       .border-primary\/50 {
         border-color: hsl(var(--color-primary) / 0.5);
       }
       .bg-primary {
-        background-color: hsl(var(--color-primary) / 1);
+        background-color: hsl(var(--color-primary));
       }
       .bg-primary\/50 {
         background-color: hsl(var(--color-primary) / 0.5);
       }
       .text-primary {
-        color: hsl(var(--color-primary) / 1);
+        color: hsl(var(--color-primary));
       }
       .text-primary\/50 {
         color: hsl(var(--color-primary) / 0.5);
       }
       .placeholder-primary::placeholder {
-        color: hsl(var(--color-primary) / 1);
+        color: hsl(var(--color-primary));
       }
       .placeholder-primary\/50::placeholder {
         color: hsl(var(--color-primary) / 0.5);
       }
       .ring-primary {
-        --tw-ring-color: hsl(var(--color-primary) / 1);
+        --tw-ring-color: hsl(var(--color-primary));
       }
       .ring-primary\/50 {
         --tw-ring-color: hsl(var(--color-primary) / 0.5);
