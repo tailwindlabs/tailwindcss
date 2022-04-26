@@ -68,6 +68,8 @@ it('should support arbitrary values for various background utilities', () => {
           <!-- By implicit type -->
           <div class="bg-[url('/image-1-0.png')]"></div>
           <div class="bg-[#ff0000]"></div>
+          <div class="bg-[rgb(var(--bg-color))]"></div>
+          <div class="bg-[hsl(var(--bg-color))]"></div>
 
           <!-- By explicit type -->
           <div class="bg-[url:var(--image-url)]"></div>
@@ -87,6 +89,14 @@ it('should support arbitrary values for various background utilities', () => {
       .bg-\[\#ff0000\] {
         --tw-bg-opacity: 1;
         background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+      }
+
+      .bg-\[rgb\(var\(--bg-color\)\)\] {
+        background-color: rgb(var(--bg-color));
+      }
+
+      .bg-\[hsl\(var\(--bg-color\)\)\] {
+        background-color: hsl(var(--bg-color));
       }
 
       .bg-\[color\:var\(--bg-color\)\] {
