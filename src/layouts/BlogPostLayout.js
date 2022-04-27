@@ -14,6 +14,8 @@ let postDateWithDayTemplate = tinytime('{dddd}, {MMMM} {DD}, {YYYY}')
 let postDateTemplate = tinytime('{MMMM} {DD}, {YYYY}')
 
 export function BlogPostLayout({ children, meta, slug, latestPosts }) {
+  let isUpdate = meta.type === 'update'
+
   return (
     <div className="overflow-hidden">
       <div className="max-w-8xl mx-auto">
@@ -41,12 +43,12 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
       <div className="px-4 sm:px-6 md:px-8">
         <div className="max-w-3xl mx-auto pb-28">
           <main>
-            <article className={clsx('relative', meta.isUpdate ? 'pt-8' : 'pt-10')}>
+            <article className={clsx('relative', isUpdate ? 'pt-8' : 'pt-10')}>
               <Metadata meta={meta} />
               <h1
                 className={clsx(
                   'font-extrabold tracking-tight text-slate-900 dark:text-slate-200',
-                  meta.isUpdate
+                  isUpdate
                     ? 'mb-10 text-2xl leading-10'
                     : 'mb-10 text-3xl sm:mb-16 sm:text-4xl sm:text-center'
                 )}
@@ -59,7 +61,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
                   <dd
                     className={clsx(
                       'absolute top-0 inset-x-0 text-slate-700 dark:text-slate-400',
-                      meta.isUpdate ? '' : 'sm:text-center'
+                      isUpdate ? '' : 'sm:text-center'
                     )}
                   >
                     <time dateTime={meta.date}>
