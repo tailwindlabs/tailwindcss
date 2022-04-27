@@ -90,6 +90,11 @@ export function SearchProvider({ children }) {
                   item.hierarchy.lvl0 = item.hierarchy.lvl0.replace(/&amp;/g, '&')
                 }
 
+                if (item._highlightResult?.hierarchy?.lvl0?.value) {
+                  item._highlightResult.hierarchy.lvl0.value =
+                    item._highlightResult.hierarchy.lvl0.value.replace(/&amp;/g, '&')
+                }
+
                 return {
                   ...item,
                   url: `${a.pathname}${hash}`,
