@@ -78,7 +78,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
               {meta.authors.map((author) => (
                 <li
                   key={author.twitter}
-                  className="flex items-center font-medium whitespace-nowrap px-5 mt-6 sm:mx-3 xl:mx-0"
+                  className="flex items-center font-medium whitespace-nowrap px-5 mt-6"
                 >
                   <img
                     src={author.avatar}
