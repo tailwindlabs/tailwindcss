@@ -28,19 +28,30 @@ export default function Blog() {
         <div
           className={clsx(
             'hidden absolute bottom-0 right-full mr-7 md:mr-[3.25rem] w-px bg-slate-200 dark:bg-slate-800 sm:block',
-            posts[0].module.meta.isUpdate ? 'top-8' : 'top-3'
+            posts[0].module.meta.isUpdate ? 'top-6 md:top-8' : 'top-3'
           )}
         />
-        <div className="space-y-16">
-          {posts.map(({ slug, module: { default: Component, meta } }) => (
-            <article key={slug} className="relative">
+        {posts.map(({ slug, module: { default: Component, meta } }, index) => {
+          let previous = posts[index - 1]?.module.meta
+
+          return (
+            <article
+              key={slug}
+              className={clsx(
+                'relative',
+                previous && meta.isUpdate && previous.isUpdate && 'mt-10 md:mt-8',
+                previous && meta.isUpdate && !previous.isUpdate && 'mt-[3.25rem] md:mt-12',
+                previous && !meta.isUpdate && previous.isUpdate && 'mt-[3.25rem] md:mt-12',
+                previous && !meta.isUpdate && !previous.isUpdate && 'mt-16'
+              )}
+            >
               <svg
                 viewBox="0 0 9 9"
                 className={clsx(
                   'hidden absolute right-full mr-6 md:mr-12 w-[calc(0.5rem+1px)] h-[calc(0.5rem+1px)] overflow-visible sm:block',
                   meta.isUpdate
-                    ? 'top-5 md:top-7 text-slate-300 dark:text-slate-600'
-                    : 'top-2.5 text-sky-400'
+                    ? 'top-5 md:top-6 lg:top-7 text-slate-300 dark:text-slate-600'
+                    : 'top-2 lg:top-2.5 text-sky-400'
                 )}
               >
                 {!meta.isUpdate && (
@@ -65,7 +76,7 @@ export default function Blog() {
               </svg>
               {meta.isUpdate ? (
                 <Link href={`/blog/${slug}`}>
-                  <a className="relative block leading-8 -mx-4 md:-mx-6 -my-2 md:-my-4 px-4 md:px-6 py-2 md:py-4 sm:rounded-2xl hover:bg-slate-50/70 dark:hover:bg-slate-800/50">
+                  <a className="relative block leading-8 -mx-4 md:-mx-6 px-4 md:px-6 pt-10 pb-3 md:pb-4 md:pt-12 lg:pt-4 sm:rounded-2xl hover:bg-slate-50/70 dark:hover:bg-slate-800/50">
                     <div className="line-clamp-2">
                       <h3 className="inline font-semibold text-slate-900 tracking-tight dark:text-slate-200">
                         {meta.title}
@@ -78,7 +89,12 @@ export default function Blog() {
                 </Link>
               ) : (
                 <>
-                  <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-200">
+                  <h3
+                    className={clsx(
+                      'text-xl font-bold tracking-tight text-slate-900 dark:text-slate-200',
+                      meta.isUpdate ? '' : 'pt-8 lg:pt-0'
+                    )}
+                  >
                     <Link href={`/blog/${slug}`}>
                       <a>{meta.title}</a>
                     </Link>
@@ -88,40 +104,38 @@ export default function Blog() {
                   </div>
                 </>
               )}
-              <div className="flex flex-row-reverse justify-end items-center">
-                <dl
+              <dl
+                className={clsx(
+                  'absolute left-0 lg:left-auto lg:right-full lg:mr-[calc(6.5rem+1px)]',
+                  meta.isUpdate ? 'top-3 pointer-events-none md:top-4' : 'top-0'
+                )}
+              >
+                <dt className="sr-only">Date</dt>
+                <dd
                   className={clsx(
-                    'lg:absolute lg:right-full lg:mr-[calc(6.5rem+1px)]',
-                    meta.isUpdate ? 'top-4' : 'top-0'
+                    'whitespace-nowrap text-sm leading-6 dark:text-slate-400',
+                    meta.isUpdate ? 'lg:leading-8' : 'lg:leading-7'
                   )}
                 >
-                  <dt className="sr-only">Date</dt>
-                  <dd
-                    className={clsx(
-                      'whitespace-nowrap text-sm dark:text-slate-400',
-                      meta.isUpdate ? 'leading-8' : 'leading-7'
-                    )}
-                  >
-                    <time dateTime={meta.date}>{postDateTemplate.render(new Date(meta.date))}</time>
-                  </dd>
-                </dl>
-                <svg
-                  width="2"
-                  height="2"
-                  fill="currentColor"
-                  className="mx-4 text-slate-700 lg:hidden"
-                >
-                  <circle cx="1" cy="1" r="1" />
-                </svg>
-                {!meta.isUpdate && (
-                  <Button href={`/blog/${slug}`}>
-                    Read more<span className="sr-only">, {meta.title}</span>
-                  </Button>
-                )}
-              </div>
+                  <time dateTime={meta.date}>{postDateTemplate.render(new Date(meta.date))}</time>
+                </dd>
+              </dl>
+              <svg
+                width="2"
+                height="2"
+                fill="currentColor"
+                className="mx-4 text-slate-700 lg:hidden"
+              >
+                <circle cx="1" cy="1" r="1" />
+              </svg>
+              {!meta.isUpdate && (
+                <Button href={`/blog/${slug}`}>
+                  Read more<span className="sr-only">, {meta.title}</span>
+                </Button>
+              )}
             </article>
-          ))}
-        </div>
+          )
+        })}
       </div>
     </main>
   )
