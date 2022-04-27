@@ -309,7 +309,7 @@ function processApply(root, context, localCache) {
 
   // Collect all apply candidates and their rules
   for (let apply of applies) {
-    let candidates = []
+    let [candidates] = perParentApplies.get(apply.parent) || [[], apply.source]
 
     perParentApplies.set(apply.parent, [candidates, apply.source])
 
