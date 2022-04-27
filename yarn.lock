@@ -2,6 +2,25 @@
 # yarn lockfile v1
 
 
+"@algolia/autocomplete-core@1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-core/-/autocomplete-core-1.5.2.tgz#ec0178e07b44fd74a057728ac157291b26cecf37"
+  integrity sha512-DY0bhyczFSS1b/CqJlTE/nQRtnTAHl6IemIkBy0nEWnhDzRDdtdx4p5Uuk3vwAFxwEEgi1WqKwgSSMx6DpNL4A==
+  dependencies:
+    "@algolia/autocomplete-shared" "1.5.2"
+
+"@algolia/autocomplete-preset-algolia@1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-preset-algolia/-/autocomplete-preset-algolia-1.5.2.tgz#36c5638cc6dba6ea46a86e5a0314637ca40a77ca"
+  integrity sha512-3MRYnYQFJyovANzSX2CToS6/5cfVjbLLqFsZTKcvF3abhQzxbqwwaMBlJtt620uBUOeMzhdfasKhCc40+RHiZw==
+  dependencies:
+    "@algolia/autocomplete-shared" "1.5.2"
+
+"@algolia/autocomplete-shared@1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-shared/-/autocomplete-shared-1.5.2.tgz#e157f9ad624ab8fd940ff28bd2094cdf199cdd79"
+  integrity sha512-ylQAYv5H0YKMfHgVWX0j0NmL8XBcAeeeVQUmppnnMtzDbDnca6CzhKj3Q8eF9cHCgcdTDdb5K+3aKyGWA0obug==
+
 "@algolia/cache-browser-local-storage@4.9.2":
   version "4.9.2"
   resolved "https://registry.npmjs.org/@algolia/cache-browser-local-storage/-/cache-browser-local-storage-4.9.2.tgz"
@@ -1123,19 +1142,19 @@
   resolved "https://registry.npmjs.org/@badrap/bar-of-progress/-/bar-of-progress-0.1.2.tgz"
   integrity sha512-bCwx/HbgUfJEndzlubJF5FVQrFEcGX4HZsoCfoa+gSq37pjbJBvIyqMBLIGnb5y0ICovIrxJUxvlbmxeic0rSQ==
 
-"@docsearch/css@^1.0.0-alpha.27":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.npmjs.org/@docsearch/css/-/css-1.0.0-alpha.28.tgz"
-  integrity sha512-1AhRzVdAkrWwhaxTX6/R7SnFHz8yLz1W8I/AldlTrfbNvZs9INk1FZiEFTJdgHaP68nhgQNWSGlQiDiI3y2RYg==
+"@docsearch/css@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@docsearch/css/-/css-3.0.0.tgz#fe57b474802ffd706d3246eab25d52fac8aa3698"
+  integrity sha512-1kkV7tkAsiuEd0shunYRByKJe3xQDG2q7wYg24SOw1nV9/2lwEd4WrUYRJC/ukGTl2/kHeFxsaUvtiOy0y6fFA==
 
-"@docsearch/react@1.0.0-alpha.27":
-  version "1.0.0-alpha.27"
-  resolved "https://registry.npmjs.org/@docsearch/react/-/react-1.0.0-alpha.27.tgz"
-  integrity sha512-jcgUHZsrNNRsaVsplqKhXWheh4VzRTCdhsPuVhJMRvfsFUqXEPo/7kVt5xIybtOj9u+/FVdeSO+APJEE2rakYA==
+"@docsearch/react@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@docsearch/react/-/react-3.0.0.tgz#d02ebdc67573412185a6a4df13bc254c7c0da491"
+  integrity sha512-yhMacqS6TVQYoBh/o603zszIb5Bl8MIXuOc6Vy617I74pirisDzzcNh0NEaYQt50fVVR3khUbeEhUEWEWipESg==
   dependencies:
-    "@docsearch/css" "^1.0.0-alpha.27"
-    "@francoischalifour/autocomplete-core" "^1.0.0-alpha.27"
-    "@francoischalifour/autocomplete-preset-algolia" "^1.0.0-alpha.27"
+    "@algolia/autocomplete-core" "1.5.2"
+    "@algolia/autocomplete-preset-algolia" "1.5.2"
+    "@docsearch/css" "3.0.0"
     algoliasearch "^4.0.0"
 
 "@emotion/is-prop-valid@^0.8.2":
@@ -1149,16 +1168,6 @@
   version "0.7.4"
   resolved "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.7.4.tgz"
   integrity sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==
-
-"@francoischalifour/autocomplete-core@^1.0.0-alpha.27":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.npmjs.org/@francoischalifour/autocomplete-core/-/autocomplete-core-1.0.0-alpha.28.tgz"
-  integrity sha512-rL9x+72btViw+9icfBKUJjZj87FgjFrD2esuTUqtj4RAX3s4AuVZiN8XEsfjQBSc6qJk31cxlvqZHC/BIyYXgg==
-
-"@francoischalifour/autocomplete-preset-algolia@^1.0.0-alpha.27":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.npmjs.org/@francoischalifour/autocomplete-preset-algolia/-/autocomplete-preset-algolia-1.0.0-alpha.28.tgz"
-  integrity sha512-bprfNmYt1opFUFEtD2XfY/kEsm13bzHQgU80uMjhuK0DJ914IjolT1GytpkdM6tJ4MBvyiJPP+bTtWO+BZ7c7w==
 
 "@hapi/accept@5.0.2":
   version "5.0.2"

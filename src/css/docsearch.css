@@ -3,7 +3,7 @@
 }
 
 .DocSearch-Container {
-  @apply w-screen h-screen fixed z-[200] top-0 left-0 flex flex-col bg-black/20 backdrop-blur-sm p-4 sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-slate-900/80;
+  @apply w-screen h-screen fixed z-[200] top-0 left-0 cursor-auto flex flex-col bg-black/20 backdrop-blur-sm p-4 sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-slate-900/80;
 }
 
 .DocSearch-LoadingIndicator svg {
@@ -439,16 +439,20 @@
   @apply text-sky-500 font-semibold dark:text-sky-400;
 }
 
-.DocSearch-Hit-action [data-cy] {
+.DocSearch-Hit-action [title='Save this search'],
+.DocSearch-Hit-action [title='Remove this search from history'],
+.DocSearch-Hit-action [title='Remove this search from favorites'] {
   width: 1.5rem;
   height: 1.5rem;
 }
 
-.DocSearch-Hit-action [data-cy] svg {
+.DocSearch-Hit-action [title='Save this search'] svg,
+.DocSearch-Hit-action [title='Remove this search from history'] svg,
+.DocSearch-Hit-action [title='Remove this search from favorites'] svg {
   display: none;
 }
 
-.DocSearch-Hit-action [data-cy='fav-recent'] {
+.DocSearch-Hit-action [title='Save this search'] {
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12 5 2 5h5l-4 4 2 5-5-3-5 3 2-5-4-4h5l2-5Z' stroke='%23CBD5E1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 
   .dark & {
@@ -456,11 +460,11 @@
   }
 }
 
-.DocSearch-Hit-action [data-cy='fav-recent']:hover {
+.DocSearch-Hit-action [title='Save this search']:hover {
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12 5 2 5h5l-4 4 2 5-5-3-5 3 2-5-4-4h5l2-5Z' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-.DocSearch-Hit-action [data-cy='remove-recent'] {
+.DocSearch-Hit-action [title='Remove this search from history'] {
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17 7 7 17M7 7l10 10' stroke='%2394A3B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 
   .dark & {
@@ -468,7 +472,7 @@
   }
 }
 
-.DocSearch-Hit-action [data-cy='remove-recent']:hover {
+.DocSearch-Hit-action [title='Remove this search from history']:hover {
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17 7 7 17M7 7l10 10' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 
   .dark & {
@@ -476,15 +480,15 @@
   }
 }
 
-.DocSearch-Hit-action [data-cy='remove-fav']::before {
+.DocSearch-Hit-action [title='Remove this search from favorites']::before {
   @apply absolute inset-0 content-[''] pointer-events-none bg-sky-50 dark:bg-slate-700/30;
 }
 
-.DocSearch-Hit[aria-selected='true'] [data-cy='remove-fav']::before {
+.DocSearch-Hit[aria-selected='true'] [title='Remove this search from favorites']::before {
   @apply bg-sky-100 dark:bg-slate-700/40;
 }
 
-.DocSearch-Hit-action [data-cy='remove-fav']::after {
+.DocSearch-Hit-action [title='Remove this search from favorites']::after {
   content: '';
   position: absolute;
   pointer-events: none;
@@ -504,7 +508,7 @@
   }
 }
 
-.DocSearch-Hit-action [data-cy='remove-fav']:hover::after {
+.DocSearch-Hit-action [title='Remove this search from favorites']:hover::after {
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12 5 2 5h5l-4 4 2 5-5-3-5 3 2-5-4-4h5l2-5Z' fill='%230EA5E9' stroke='%230EA5E9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg width='1' height='1' fill='%23e2e8f0' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17 7 7 17M7 7l10 10' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");

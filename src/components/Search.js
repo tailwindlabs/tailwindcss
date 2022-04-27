@@ -71,9 +71,9 @@ export function SearchProvider({ children }) {
             apiKey={API_KEY}
             appId={APP_ID}
             navigator={{
-              navigate({ suggestionUrl }) {
+              navigate({ itemUrl }) {
                 setIsOpen(false)
-                router.push(suggestionUrl)
+                router.push(itemUrl)
               },
             }}
             hitComponent={Hit}
