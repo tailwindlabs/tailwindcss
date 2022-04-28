@@ -121,7 +121,7 @@ export function color(value) {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
-    if (parseColor(part) !== null) return colors++, true
+    if (parseColor(part, { loose: true }) !== null) return colors++, true
 
     return false
   })
