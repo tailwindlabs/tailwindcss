@@ -28,13 +28,15 @@ export default function Blog() {
         <div
           className={clsx(
             'hidden absolute bottom-0 right-full mr-7 md:mr-[3.25rem] w-px bg-slate-200 dark:bg-slate-800 sm:block',
-            posts[0].module.meta.type === 'update' ? 'top-6 md:top-8' : 'top-3'
+            posts[0].module.meta.type === 'update' ? 'top-3' : 'top-3'
           )}
         />
         {posts.map(({ slug, module: { default: Component, meta } }, index) => {
-          let isUpdate = meta.type === 'update'
+          // let isUpdate = meta.type === 'update'
+          let isUpdate = false
           let prev = posts[index - 1]?.module.meta
-          let prevIsUpdate = prev?.type === 'update'
+          // let prevIsUpdate = prev?.type === 'update'
+          let prevIsUpdate = false
 
           return (
             <article
@@ -51,12 +53,12 @@ export default function Blog() {
                 viewBox="0 0 9 9"
                 className={clsx(
                   'hidden absolute right-full mr-6 md:mr-12 w-[calc(0.5rem+1px)] h-[calc(0.5rem+1px)] overflow-visible sm:block',
-                  isUpdate
-                    ? 'top-5 md:top-6 lg:top-7 text-slate-300 dark:text-slate-600'
-                    : 'top-2 lg:top-2.5 text-sky-400'
+                  true
+                    ? 'top-5 lg:top-2 text-slate-200 dark:text-slate-600'
+                    : 'top-5 lg:top-2.5 text-sky-400'
                 )}
               >
-                {!isUpdate && (
+                {!true && (
                   <circle
                     cx="4.5"
                     cy="4.5"
@@ -72,14 +74,14 @@ export default function Blog() {
                   cy="4.5"
                   r="4.5"
                   stroke="currentColor"
-                  className={isUpdate ? 'fill-white dark:fill-slate-900' : 'fill-current'}
+                  className={true ? 'fill-white dark:fill-slate-900' : 'fill-current'}
                   strokeWidth={2}
                 />
               </svg>
               {isUpdate ? (
                 <Link href={`/blog/${slug}`}>
                   <a className="relative block leading-8 -mx-4 md:-mx-6 px-4 md:px-6 pt-10 pb-3 md:pb-4 md:pt-12 lg:pt-4 sm:rounded-2xl hover:bg-slate-50/70 dark:hover:bg-slate-800/50">
-                    <div className="line-clamp-2">
+                    <div className="line-clamp-3">
                       <h3 className="inline font-semibold text-slate-900 tracking-tight dark:text-slate-200">
                         {meta.title}
                       </h3>
@@ -87,13 +89,18 @@ export default function Blog() {
                         &nbsp;&nbsp;—&nbsp;&nbsp;{meta.description}
                       </p>
                     </div>
+                    <div className="mt-3">
+                      <Button href={`/blog/${slug}`}>
+                        Read more<span className="sr-only">, {meta.title}</span>
+                      </Button>
+                    </div>
                   </a>
                 </Link>
               ) : (
                 <>
                   <h3
                     className={clsx(
-                      'text-xl font-bold tracking-tight text-slate-900 dark:text-slate-200',
+                      'text-base font-bold tracking-tight text-slate-900 dark:text-slate-200',
                       isUpdate ? '' : 'pt-8 lg:pt-0'
                     )}
                   >
@@ -101,7 +108,7 @@ export default function Blog() {
                       <a>{meta.title}</a>
                     </Link>
                   </h3>
-                  <div className="mt-4 mb-6 prose prose-slate dark:prose-dark">
+                  <div className="mt-2 mb-4 prose prose-slate dark:prose-dark line-clamp-2">
                     <Component />
                   </div>
                 </>
@@ -113,12 +120,7 @@ export default function Blog() {
                 )}
               >
                 <dt className="sr-only">Date</dt>
-                <dd
-                  className={clsx(
-                    'whitespace-nowrap text-sm leading-6 dark:text-slate-400',
-                    isUpdate ? 'lg:leading-8' : 'lg:leading-7'
-                  )}
-                >
+                <dd className={clsx('whitespace-nowrap text-sm leading-6 dark:text-slate-400')}>
                   <time dateTime={meta.date}>{postDateTemplate.render(new Date(meta.date))}</time>
                 </dd>
               </dl>
@@ -130,7 +132,23 @@ export default function Blog() {
               >
                 <circle cx="1" cy="1" r="1" />
               </svg>
-              {!isUpdate && (
+              <span className="flex items-center text-sm text-sky-500 font-medium">
+                Read more
+                <svg
+                  class="mt-px overflow-visible ml-2.5 text-sky-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
+                  width="3"
+                  height="6"
+                  viewBox="0 0 3 6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M0 0L3 3L0 6"></path>
+                </svg>
+              </span>
+              {!true && (
                 <Button href={`/blog/${slug}`}>
                   Read more<span className="sr-only">, {meta.title}</span>
                 </Button>
