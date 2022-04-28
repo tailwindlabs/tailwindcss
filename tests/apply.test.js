@@ -658,6 +658,94 @@ it('should throw when trying to apply an indirect circular dependency with a mod
   })
 })
 
+it('should not throw when the circular dependency is part of a different selector (1)', () => {
+  let config = {
+    content: [{ raw: html`<div class="c"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    @layer utilities {
+      html.dark .a,
+      .b {
+        color: red;
+      }
+    }
+
+    html.dark .c {
+      @apply b;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      html.dark .c {
+        color: red;
+      }
+    `)
+  })
+})
+
+it('should not throw when the circular dependency is part of a different selector (2)', () => {
+  let config = {
+    content: [{ raw: html`<div class="c"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    @layer utilities {
+      html.dark .a,
+      .b {
+        color: red;
+      }
+    }
+
+    html.dark .c {
+      @apply hover:b;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      html.dark .c:hover {
+        color: red;
+      }
+    `)
+  })
+})
+
+it('should throw when the circular dependency is part of the same selector', () => {
+  let config = {
+    content: [{ raw: html`<div class="c"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    @layer utilities {
+      html.dark .a,
+      html.dark .b {
+        color: red;
+      }
+    }
+
+    html.dark .c {
+      @apply hover:b;
+    }
+  `
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toBe(
+      'You cannot `@apply` the `hover:b` utility here because it creates a circular dependency.'
+    )
+  })
+})
+
 it('rules with vendor prefixes are still separate when optimizing defaults rules', () => {
   let config = {
     experimental: { optimizeUniversalDefaults: true },

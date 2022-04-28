@@ -8,18 +8,30 @@ import escapeClassName from '../util/escapeClassName'
 /** @typedef {Map<string, [any, import('postcss').Rule[]]>} ApplyCache */
 
 function extractClasses(node) {
-  let classes = new Set()
+  /** @type {Map<string, Set<string>>} */
+  let groups = new Map()
+
   let container = postcss.root({ nodes: [node.clone()] })
 
   container.walkRules((rule) => {
     parser((selectors) => {
       selectors.walkClasses((classSelector) => {
+        let parentSelector = classSelector.parent.toString()
+
+        let classes = groups.get(parentSelector)
+        if (!classes) {
+          groups.set(parentSelector, (classes = new Set()))
+        }
+
         classes.add(classSelector.value)
       })
     }).processSync(rule.selector)
   })
 
-  return Array.from(classes)
+  let normalizedGroups = Array.from(groups.values(), (classes) => Array.from(classes))
+  let classes = normalizedGroups.flat()
+
+  return Object.assign(classes, { groups: normalizedGroups })
 }
 
 function extractBaseCandidates(candidates, separator) {
@@ -353,9 +365,22 @@ function processApply(root, context, localCache) {
     let siblings = []
 
     for (let [applyCandidate, important, rules] of candidates) {
+      let potentialApplyCandidates = [
+        applyCandidate,
+        ...extractBaseCandidates([applyCandidate], context.tailwindConfig.separator),
+      ]
+
       for (let [meta, node] of rules) {
         let parentClasses = extractClasses(parent)
         let nodeClasses = extractClasses(node)
+
+        // When we encounter a rule like `.dark .a, .b { … }` we only want to be left with `[.dark, .a]` if the base applyCandidate is `.a` or with `[.b]` if the base applyCandidate is `.b`
+        // So we've split them into groups
+        nodeClasses = nodeClasses.groups
+          .filter((classList) =>
+            classList.some((className) => potentialApplyCandidates.includes(className))
+          )
+          .flat()
 
         // Add base utility classes from the @apply node to the list of
         // classes to check whether it intersects and therefore results in a
