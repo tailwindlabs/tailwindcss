@@ -9,6 +9,7 @@ import fs from 'fs'
 import postcssrc from 'postcss-load-config'
 import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
+import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
 import tailwind from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
 import fastGlob from 'fast-glob'
@@ -415,7 +416,7 @@ async function build() {
 
   async function loadPostCssPlugins() {
     let customPostCssPath = typeof args['--postcss'] === 'string' ? args['--postcss'] : undefined
-    let { plugins: configPlugins } = customPostCssPath
+    let config = customPostCssPath
       ? await (async () => {
           let file = path.resolve(customPostCssPath)
 
@@ -431,9 +432,15 @@ async function build() {
             config.plugins = []
           }
 
-          return { plugins: loadPlugins(config, file) }
+          return {
+            file,
+            plugins: loadPlugins(config, file),
+            options: loadOptions(config, file),
+          }
         })()
       : await postcssrc()
+
+    let configPlugins = config.plugins
 
     let configPluginTailwindIdx = configPlugins.findIndex((plugin) => {
       if (typeof plugin === 'function' && plugin.name === 'tailwindcss') {
@@ -454,7 +461,7 @@ async function build() {
         ? configPlugins
         : configPlugins.slice(configPluginTailwindIdx + 1)
 
-    return [beforePlugins, afterPlugins]
+    return [beforePlugins, afterPlugins, config.options]
   }
 
   function resolveConfig() {
@@ -538,7 +545,9 @@ async function build() {
 
     tailwindPlugin.postcss = true
 
-    let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+    let [beforePlugins, afterPlugins, postcssOptions] = includePostCss
+      ? await loadPostCssPlugins()
+      : [[], [], {}]
 
     let plugins = [
       ...beforePlugins,
@@ -573,7 +582,7 @@ async function build() {
       let start = process.hrtime.bigint()
       return Promise.resolve()
         .then(() => (output ? fs.promises.mkdir(path.dirname(output), { recursive: true }) : null))
-        .then(() => processor.process(css, { from: input, to: output }))
+        .then(() => processor.process(css, { ...postcssOptions, from: input, to: output }))
         .then((result) => {
           if (!output) {
             return process.stdout.write(result.css)
