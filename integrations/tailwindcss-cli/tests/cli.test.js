@@ -277,6 +277,74 @@ describe('Build command', () => {
     )
   })
 
+  test('--postcss supports process options', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = javascript`
+      let path = require('path')
+      let postcss = require('postcss')
+
+      module.exports = {
+        map: { inline: true },
+        plugins: [
+          function tailwindcss() {
+            return require(path.resolve('..', '..'))
+          },
+        ],
+      }
+    `
+
+    await writeInputFile('../postcss.config.js', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --postcss`)
+
+    let contents = await readOutputFile('main.css')
+
+    expect(contents).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    expect(contents).toContain(`/*# sourceMappingURL`)
+  })
+
+  test('--postcss supports process options with custom config', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = javascript`
+      let path = require('path')
+      let postcss = require('postcss')
+
+      module.exports = {
+        map: { inline: true },
+        plugins: [
+          function tailwindcss() {
+            return require(path.resolve('..', '..'))
+          },
+        ],
+      }
+    `
+
+    await writeInputFile('../custom.postcss.config.js', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --postcss ./custom.postcss.config.js`)
+
+    let contents = await readOutputFile('main.css')
+
+    expect(contents).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    expect(contents).toContain(`/*# sourceMappingURL`)
+  })
+
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} --help`)
 
