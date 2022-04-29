@@ -1,9 +1,7 @@
 import Link from 'next/link'
 import clsx from 'clsx'
-import tinytime from 'tinytime'
 import { Button } from '@/components/Button'
-
-const postDateTemplate = tinytime('{MMMM} {DD}, {YYYY}')
+import { formatDate } from '@/utils/formatDate'
 
 export default function PostItem({ title, category, slug, date, children, wide = false }) {
   return (
@@ -35,7 +33,7 @@ export default function PostItem({ title, category, slug, date, children, wide =
               'lg:absolute lg:top-0 lg:right-full lg:mr-8 lg:whitespace-nowrap': wide,
             })}
           >
-            <time dateTime={date}>{postDateTemplate.render(new Date(date))}</time>
+            <time dateTime={date}>{formatDate(date, '{MMMM} {DD}, {YYYY}')}</time>
           </dd>
         </dl>
         <svg

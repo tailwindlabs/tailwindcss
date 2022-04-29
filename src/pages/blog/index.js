@@ -3,10 +3,9 @@ import { Widont } from '@/components/Widont'
 import { getAllPostPreviews } from '@/utils/getAllPosts'
 import Link from 'next/link'
 import clsx from 'clsx'
-import tinytime from 'tinytime'
+import { formatDate } from '@/utils/formatDate'
 
 let posts = getAllPostPreviews()
-let postDateTemplate = tinytime('{MMMM} {DD}, {YYYY}')
 
 export default function Blog() {
   return (
@@ -52,7 +51,7 @@ export default function Blog() {
                 <dl className="absolute left-0 top-0 lg:left-auto lg:right-full lg:mr-[calc(6.5rem+1px)]">
                   <dt className="sr-only">Date</dt>
                   <dd className={clsx('whitespace-nowrap text-sm leading-6 dark:text-slate-400')}>
-                    <time dateTime={meta.date}>{postDateTemplate.render(new Date(meta.date))}</time>
+                    <time dateTime={meta.date}>{formatDate(meta.date, '{MMMM} {DD}, {YYYY}')}</time>
                   </dd>
                 </dl>
               </div>

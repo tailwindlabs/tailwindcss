@@ -1,6 +1,5 @@
 import { Widont } from '@/components/home/common'
 import Link from 'next/link'
-import tinytime from 'tinytime'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { MDXProvider } from '@mdx-js/react'
@@ -9,9 +8,7 @@ import { getAllPosts } from '@/utils/getAllPosts'
 import clsx from 'clsx'
 import { NewsletterForm } from '@/components/NewsletterForm'
 import { Button } from '@/components/Button'
-
-let postDateWithDayTemplate = tinytime('{dddd}, {MMMM} {DD}, {YYYY}')
-let postDateTemplate = tinytime('{MMMM} {DD}, {YYYY}')
+import { formatDate } from '@/utils/formatDate'
 
 export function BlogPostLayout({ children, meta, slug, latestPosts }) {
   let isUpdate = meta.type === 'update'
@@ -65,7 +62,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
                     )}
                   >
                     <time dateTime={meta.date}>
-                      {postDateWithDayTemplate.render(new Date(meta.date))}
+                      {formatDate(meta.date, '{dddd}, {MMMM} {DD}, {YYYY}')}
                     </time>
                   </dd>
                 </dl>
@@ -141,7 +138,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
                           dateTime={post.date}
                           className="text-sm leading-7 dark:text-slate-400"
                         >
-                          {postDateTemplate.render(new Date(post.date))}
+                          {formatDate(post.date, '{MMMM} {DD}, {YYYY}')}
                         </time>
                         <Button href={`/blog/${post.slug}`} className="order-1 mt-6">
                           Read more<span className="sr-only">, {post.title}</span>
