@@ -11,8 +11,6 @@ import { Button } from '@/components/Button'
 import { formatDate } from '@/utils/formatDate'
 
 export function BlogPostLayout({ children, meta, slug, latestPosts }) {
-  let isUpdate = meta.type === 'update'
-
   return (
     <div className="overflow-hidden">
       <div className="max-w-8xl mx-auto">
@@ -40,14 +38,11 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
       <div className="px-4 sm:px-6 md:px-8">
         <div className="max-w-3xl mx-auto pb-28">
           <main>
-            <article className={clsx('relative', isUpdate ? 'pt-8' : 'pt-10')}>
+            <article className="relative pt-10">
               <Metadata meta={meta} />
               <h1
                 className={clsx(
-                  'font-extrabold tracking-tight text-slate-900 dark:text-slate-200',
-                  isUpdate
-                    ? 'mb-10 text-2xl leading-10'
-                    : 'mb-10 text-3xl sm:mb-16 sm:text-4xl sm:text-center'
+                  'text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-200 md:text-3xl'
                 )}
               >
                 <Widont>{meta.title}</Widont>
@@ -56,10 +51,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
                 <dl>
                   <dt className="sr-only">Date</dt>
                   <dd
-                    className={clsx(
-                      'absolute top-0 inset-x-0 text-slate-700 dark:text-slate-400',
-                      isUpdate ? '' : 'sm:text-center'
-                    )}
+                    className={clsx('absolute top-0 inset-x-0 text-slate-700 dark:text-slate-400')}
                   >
                     <time dateTime={meta.date}>
                       {formatDate(meta.date, '{dddd}, {MMMM} {DD}, {YYYY}')}
@@ -67,36 +59,40 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
                   </dd>
                 </dl>
               </div>
-              <div className="prose prose-slate dark:prose-dark">
+              <div className="mt-6">
+                <ul className={clsx('flex flex-wrap text-sm leading-6 -mt-6 -mx-5')}>
+                  {meta.authors.map((author) => (
+                    <li
+                      key={author.twitter}
+                      className="flex items-center font-medium whitespace-nowrap px-5 mt-6"
+                    >
+                      <img
+                        src={author.avatar}
+                        alt=""
+                        className="mr-3 w-9 h-9 rounded-full bg-slate-50 dark:bg-slate-800"
+                      />
+                      <div className="text-sm leading-4">
+                        <div className="text-slate-900 dark:text-slate-200">{author.name}</div>
+                        <div className="mt-1">
+                          <a
+                            href={`https://twitter.com/${author.twitter}`}
+                            className="text-sky-500 hover:text-sky-600 dark:text-sky-400"
+                          >
+                            @{author.twitter}
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className={clsx('mt-12 prose prose-slate dark:prose-dark')}>
                 <MDXProvider components={mdxComponents}>{children}</MDXProvider>
               </div>
             </article>
           </main>
-          <footer className="mt-4">
-            <ul className="flex flex-wrap text-sm leading-6 -mx-5">
-              {meta.authors.map((author) => (
-                <li
-                  key={author.twitter}
-                  className="flex items-center font-medium whitespace-nowrap px-5 mt-6"
-                >
-                  <img
-                    src={author.avatar}
-                    alt=""
-                    className="mr-3 w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800"
-                  />
-                  <div>
-                    <div className="text-slate-900 dark:text-slate-200">{author.name}</div>
-                    <a
-                      href={`https://twitter.com/${author.twitter}`}
-                      className="text-sky-500 hover:text-sky-600 dark:text-sky-400"
-                    >
-                      @{author.twitter}
-                    </a>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <div className="relative mt-16 sm:mt-28">
+          <footer className="mt-16">
+            <div className="relative">
               <img
                 src={require('@/img/beams/blog-post-form@80.jpg').default}
                 alt=""
