@@ -175,7 +175,7 @@ module.exports = withBundleAnalyzer({
       ],
     })
 
-    let mdx = [
+    let mdx = (plugins = []) => [
       {
         loader: '@mdx-js/loader',
         options: {
@@ -186,6 +186,7 @@ module.exports = withBundleAnalyzer({
             withSyntaxHighlighting,
             withNextLinks,
             withSmartQuotes,
+            ...plugins,
           ],
           rehypePlugins: [withLinkRoles],
         },
@@ -217,7 +218,7 @@ module.exports = withBundleAnalyzer({
     config.module.rules.push({
       test: /\.mdx$/,
       resourceQuery: /rss/,
-      use: [options.defaultLoaders.babel, ...mdx],
+      use: [options.defaultLoaders.babel, ...mdx()],
     })
 
     config.module.rules.push({
@@ -225,16 +226,23 @@ module.exports = withBundleAnalyzer({
       resourceQuery: /preview/,
       use: [
         options.defaultLoaders.babel,
-        ...mdx,
         createLoader(function (src) {
-          if (src.includes('<!--more-->')) {
-            const [preview] = src.split('<!--more-->')
-            return preview
-          }
-
           const [preview] = src.split('<!--/excerpt-->')
           return preview.replace('<!--excerpt-->', '')
         }),
+        ...mdx([
+          () => (tree) => {
+            let firstParagraphIndex = tree.children.findIndex((child) => child.type === 'paragraph')
+            if (firstParagraphIndex > -1) {
+              tree.children = tree.children.filter((child, index) => {
+                if (child.type === 'import' || child.type === 'export') {
+                  return true
+                }
+                return index <= firstParagraphIndex
+              })
+            }
+          },
+        ]),
       ],
     })
 
@@ -252,7 +260,7 @@ module.exports = withBundleAnalyzer({
             source.replace(/export const/gs, 'const') + `\nMDXContent.layoutProps = layoutProps\n`
           )
         }),
-        ...mdx,
+        ...mdx(),
         createLoader(function (source) {
           let fields = new URLSearchParams(this.resourceQuery.substr(1)).get('meta') ?? undefined
           let { attributes: meta, body } = frontMatter(source)
