@@ -12,7 +12,7 @@ export default function Blog() {
     <main className="max-w-[52rem] mx-auto px-4 pb-28 sm:px-6 md:px-8 xl:px-12 lg:max-w-6xl">
       <header className="py-16 sm:text-center">
         <h1 className="mb-4 text-3xl sm:text-4xl tracking-tight text-slate-900 font-extrabold dark:text-slate-200">
-          Blog
+          Latest Updates
         </h1>
         <p className="text-lg text-slate-700 dark:text-slate-400">
           <Widont>All the latest Tailwind CSS news, straight from the team.</Widont>
