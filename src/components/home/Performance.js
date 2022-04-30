@@ -132,7 +132,7 @@ export function Performance() {
           dark={require('@/img/icons/home/dark/performance.png').default}
         />
         <Caption className="text-sky-500">Performance</Caption>
-        <BigText>It's tiny — never ship unused CSS again.</BigText>
+        <BigText>It’s tiny — never ship unused CSS again.</BigText>
         <Paragraph>
           Tailwind automatically removes all unused CSS when building for production, which means
           your final CSS bundle is the smallest it could possibly be. In fact, most Tailwind
