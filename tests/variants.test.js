@@ -603,3 +603,131 @@ it('appends variants to the correct place when using postcss documents', () => {
     `)
   })
 })
+
+it('variants support multiple, grouped selectors (html)', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:base1 sm:base2"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .base1 .foo,
+      .base1 .bar {
+        color: red;
+      }
+
+      .base2 .bar .base2-foo {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:base1 .foo,
+        .sm\:base1 .bar {
+          color: red;
+        }
+
+        .sm\:base2 .bar .base2-foo {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants support multiple, grouped selectors (apply)', () => {
+  let config = {
+    content: [{ raw: html`<div class="baz"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .base .foo,
+      .base .bar {
+        color: red;
+      }
+    }
+    .baz {
+      @apply sm:base;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .baz .foo,
+        .baz .bar {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants only picks the used selectors in a group (html)', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:b"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .a,
+      .b {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:b {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants only picks the used selectors in a group (apply)', () => {
+  let config = {
+    content: [{ raw: html`<div class="baz"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .a,
+      .b {
+        color: red;
+      }
+    }
+    .baz {
+      @apply sm:b;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .baz {
+          color: red;
+        }
+      }
+    `)
+  })
+})
