@@ -50,6 +50,8 @@ export function finalizeSelector(format, { selector, candidate, context }) {
 
   format = format.replace(PARENT, `.${escapeClassName(candidate)}`)
 
+  let formatAst = selectorParser().astSync(format)
+
   // Normalize escaped classes, e.g.:
   //
   // The idea would be to replace the escaped `base` in the selector with the
@@ -69,11 +71,11 @@ export function finalizeSelector(format, { selector, candidate, context }) {
 
   // We can safely replace the escaped base now, since the `base` section is
   // now in a normalized escaped value.
-  selector = ast.toString()
-
-  selector = selector.replace(`.${escapeClassName(base)}`, format)
-
-  ast = selectorParser().astSync(selector)
+  ast.walkClasses((node) => {
+    if (node.value === base) {
+      node.replaceWith(...formatAst.nodes)
+    }
+  })
 
   // This will make sure to move pseudo's to the correct spot (the end for
   // pseudo elements) because otherwise the selector will never work
