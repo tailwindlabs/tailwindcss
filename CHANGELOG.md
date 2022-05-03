@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support PostCSS config options in config file in CLI ([#8226](https://github.com/tailwindlabs/tailwindcss/pull/8226))
 - Remove default `[hidden]` style in preflight ([#8248](https://github.com/tailwindlabs/tailwindcss/pull/8248))
 - Only check selectors containing base apply candidates for circular dependencies ([#8222](https://github.com/tailwindlabs/tailwindcss/pull/8222))
+- Handle utilities with multiple and/or grouped selectors better ([#8262](https://github.com/tailwindlabs/tailwindcss/pull/8262))
 
 ### Added
 
