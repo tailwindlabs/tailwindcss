@@ -52,6 +52,17 @@ export function finalizeSelector(format, { selector, candidate, context }) {
 
   let formatAst = selectorParser().astSync(format)
 
+  // Remove extraneous selectors that do not include the base class/candidate being matched against
+  // For example if we have a utility defined `.a, .b { color: red}`
+  // And the formatted variant is sm:b then we want the final selector to be `.sm\:b` and not `.a, .sm\:b`
+  ast.each((node) => {
+    let hasClassesMatchingCandidate = node.some((n) => n.type === 'class' && n.value === base)
+
+    if (!hasClassesMatchingCandidate) {
+      node.remove()
+    }
+  })
+
   // Normalize escaped classes, e.g.:
   //
   // The idea would be to replace the escaped `base` in the selector with the
