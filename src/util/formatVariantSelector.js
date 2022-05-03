@@ -30,6 +30,8 @@ export function formatVariantSelector(current, ...others) {
 }
 
 export function finalizeSelector(format, { selector, candidate, context }) {
+  let ast = selectorParser().astSync(selector)
+
   let separator = context?.tailwindConfig?.separator ?? ':'
 
   // Split by the separator, but ignore the separator inside square brackets:
@@ -48,6 +50,19 @@ export function finalizeSelector(format, { selector, candidate, context }) {
 
   format = format.replace(PARENT, `.${escapeClassName(candidate)}`)
 
+  let formatAst = selectorParser().astSync(format)
+
+  // Remove extraneous selectors that do not include the base class/candidate being matched against
+  // For example if we have a utility defined `.a, .b { color: red}`
+  // And the formatted variant is sm:b then we want the final selector to be `.sm\:b` and not `.a, .sm\:b`
+  ast.each((node) => {
+    let hasClassesMatchingCandidate = node.some((n) => n.type === 'class' && n.value === base)
+
+    if (!hasClassesMatchingCandidate) {
+      node.remove()
+    }
+  })
+
   // Normalize escaped classes, e.g.:
   //
   // The idea would be to replace the escaped `base` in the selector with the
@@ -59,65 +74,61 @@ export function finalizeSelector(format, { selector, candidate, context }) {
   //   base in selector: bg-\\[rgb\\(255\\,0\\,0\\)\\]
   //       escaped base: bg-\\[rgb\\(255\\2c 0\\2c 0\\)\\]
   //
-  selector = selectorParser((selectors) => {
-    return selectors.walkClasses((node) => {
-      if (node.raws && node.value.includes(base)) {
-        node.raws.value = escapeClassName(unescape(node.raws.value))
-      }
-
-      return node
-    })
-  }).processSync(selector)
+  ast.walkClasses((node) => {
+    if (node.raws && node.value.includes(base)) {
+      node.raws.value = escapeClassName(unescape(node.raws.value))
+    }
+  })
 
   // We can safely replace the escaped base now, since the `base` section is
   // now in a normalized escaped value.
-  selector = selector.replace(`.${escapeClassName(base)}`, format)
+  ast.walkClasses((node) => {
+    if (node.value === base) {
+      node.replaceWith(...formatAst.nodes)
+    }
+  })
+
+  // This will make sure to move pseudo's to the correct spot (the end for
+  // pseudo elements) because otherwise the selector will never work
+  // anyway.
+  //
+  // E.g.:
+  //  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
+  //  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
+  //
+  // `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
+  function collectPseudoElements(selector) {
+    let nodes = []
+
+    for (let node of selector.nodes) {
+      if (isPseudoElement(node)) {
+        nodes.push(node)
+        selector.removeChild(node)
+      }
+
+      if (node?.nodes) {
+        nodes.push(...collectPseudoElements(node))
+      }
+    }
+
+    return nodes
+  }
 
   // Remove unnecessary pseudo selectors that we used as placeholders
-  return selectorParser((selectors) => {
-    return selectors.map((selector) => {
-      selector.walkPseudos((p) => {
-        if (selectorFunctions.has(p.value)) {
-          p.replaceWith(p.nodes)
-        }
-
-        return p
-      })
-
-      // This will make sure to move pseudo's to the correct spot (the end for
-      // pseudo elements) because otherwise the selector will never work
-      // anyway.
-      //
-      // E.g.:
-      //  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
-      //  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
-      //
-      // `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
-      function collectPseudoElements(selector) {
-        let nodes = []
-
-        for (let node of selector.nodes) {
-          if (isPseudoElement(node)) {
-            nodes.push(node)
-            selector.removeChild(node)
-          }
-
-          if (node?.nodes) {
-            nodes.push(...collectPseudoElements(node))
-          }
-        }
-
-        return nodes
+  ast.each((selector) => {
+    selector.walkPseudos((p) => {
+      if (selectorFunctions.has(p.value)) {
+        p.replaceWith(p.nodes)
       }
-
-      let pseudoElements = collectPseudoElements(selector)
-      if (pseudoElements.length > 0) {
-        selector.nodes.push(pseudoElements.sort(sortSelector))
-      }
-
-      return selector
     })
-  }).processSync(selector)
+
+    let pseudoElements = collectPseudoElements(selector)
+    if (pseudoElements.length > 0) {
+      selector.nodes.push(pseudoElements.sort(sortSelector))
+    }
+  })
+
+  return ast.toString()
 }
 
 // Note: As a rule, double colons (::) should be used instead of a single colon
