@@ -34,6 +34,15 @@ function extractClasses(node) {
   return Object.assign(classes, { groups: normalizedGroups })
 }
 
+let selectorExtractor = parser((root) => root.nodes.map((node) => node.toString()))
+
+/**
+ * @param {string} ruleSelectors
+ */
+function extractSelectors(ruleSelectors) {
+  return selectorExtractor.transformSync(ruleSelectors)
+}
+
 function extractBaseCandidates(candidates, separator) {
   let baseClasses = new Set()
 
@@ -295,10 +304,9 @@ function processApply(root, context, localCache) {
   function replaceSelector(selector, utilitySelectors, candidate) {
     let needle = `.${escapeClassName(candidate)}`
     let needles = [...new Set([needle, needle.replace(/\\2c /g, '\\,')])]
-    let utilitySelectorsList = utilitySelectors.split(/\s*(?<!\\)\,(?![^(]*\))\s*/g)
+    let utilitySelectorsList = extractSelectors(utilitySelectors)
 
-    return selector
-      .split(/\s*(?<!\\)\,(?![^(]*\))\s*/g)
+    return extractSelectors(selector)
       .map((s) => {
         let replaced = []
 
