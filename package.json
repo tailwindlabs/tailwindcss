@@ -52,7 +52,7 @@
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^27.5.1",
+    "jest": "^28.0.3",
     "jest-diff": "^27.5.1",
     "prettier": "^2.6.2",
     "prettier-plugin-tailwindcss": "^0.1.10",
