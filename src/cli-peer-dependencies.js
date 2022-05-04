@@ -1,4 +1,6 @@
-export let postcss = require('postcss')
+export function lazyPostcss() {
+  return require('postcss')
+}
 
 export function lazyAutoprefixer() {
   return require('autoprefixer')

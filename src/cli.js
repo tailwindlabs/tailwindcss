@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { postcss, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
+import { lazyPostcss, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
 
 import chokidar from 'chokidar'
 import path from 'path'
@@ -144,6 +144,15 @@ function oneOf(...options) {
     },
     { manualParsing: true }
   )
+}
+
+function loadPostcss() {
+  // Try to load a local `postcss` version first
+  try {
+    return require('postcss')
+  } catch {}
+
+  return lazyPostcss()
 }
 
 let commands = {
@@ -576,6 +585,7 @@ async function build() {
         })(),
     ].filter(Boolean)
 
+    let postcss = loadPostcss()
     let processor = postcss(plugins)
 
     function processCSS(css) {
@@ -709,6 +719,7 @@ async function build() {
       let tailwindPluginIdx = plugins.indexOf('__TAILWIND_PLUGIN_POSITION__')
       let copy = plugins.slice()
       copy.splice(tailwindPluginIdx, 1, tailwindPlugin)
+      let postcss = loadPostcss()
       let processor = postcss(copy)
 
       function processCSS(css) {
