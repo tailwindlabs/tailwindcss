@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only check selectors containing base apply candidates for circular dependencies ([#8222](https://github.com/tailwindlabs/tailwindcss/pull/8222))
 - Rewrite default class extractor ([#8204](https://github.com/tailwindlabs/tailwindcss/pull/8204))
 
+### Changed
+
+- Try using local `postcss` installation first in the CLI ([#8270](https://github.com/tailwindlabs/tailwindcss/pull/8270))
+
 ### Added
 
 - Allow default ring color to be a function ([#7587](https://github.com/tailwindlabs/tailwindcss/pull/7587))
