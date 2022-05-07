@@ -125,6 +125,14 @@ function applyVariant(variant, matches, context) {
     return matches
   }
 
+  // Register arbitrary variants
+  if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
+    let selector = normalize(variant.slice(1, -1))
+    let sort = Array.from(context.variantOrder.values()).pop() << 1n
+    context.variantMap.set(variant, [[sort, () => selector]])
+    context.variantOrder.set(variant, sort)
+  }
+
   if (context.variantMap.has(variant)) {
     let variantFunctionTuples = context.variantMap.get(variant)
     let result = []
