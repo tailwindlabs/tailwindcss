@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `backdrop` variant ([#7924](https://github.com/tailwindlabs/tailwindcss/pull/7924))
 - Add `grid-flow-dense` utility ([#8193](https://github.com/tailwindlabs/tailwindcss/pull/8193))
 - Add `mix-blend-plus-lighter` utility ([#8288](https://github.com/tailwindlabs/tailwindcss/pull/8288))
+- Add arbitrary variants ([#8299](https://github.com/tailwindlabs/tailwindcss/pull/8299))
 
 ## [3.0.24] - 2022-04-12
 
