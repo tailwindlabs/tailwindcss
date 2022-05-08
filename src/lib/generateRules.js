@@ -11,6 +11,7 @@ import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 import { parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
+import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -420,7 +421,7 @@ function splitWithSeparator(input, separator) {
     return [sharedState.NOT_ON_DEMAND]
   }
 
-  return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
+  return Array.from(splitAtTopLevelOnly(input, separator))
 }
 
 function* recordCandidates(matches, classCandidate) {

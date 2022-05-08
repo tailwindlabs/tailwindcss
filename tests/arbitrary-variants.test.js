@@ -180,3 +180,26 @@ test('attribute selectors', () => {
     `)
   })
 })
+
+test('multiple attribute selectors', () => {
+  let config = {
+    content: [{ raw: html`<div class="[&[data-foo][data-bar]:not([data-baz])]:underline"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[\&\[data-foo\]\[data-bar\]\:not\(\[data-baz\]\)\]\:underline[data-foo][data-bar]:not([data-baz]) {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
