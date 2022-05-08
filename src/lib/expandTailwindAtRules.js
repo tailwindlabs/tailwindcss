@@ -24,7 +24,7 @@ function getExtractor(context, fileExtension) {
     extractors[fileExtension] ||
     extractors.DEFAULT ||
     builtInExtractors[fileExtension] ||
-    builtInExtractors.DEFAULT
+    builtInExtractors.DEFAULT(context)
   )
 }
 

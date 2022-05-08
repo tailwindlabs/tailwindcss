@@ -1,25 +1,34 @@
 import * as regex from './regex'
 
-let patterns = Array.from(buildRegExps())
+export function defaultExtractor(context) {
+  let patterns = Array.from(buildRegExps(context))
 
-/**
- * @param {string} content
- */
-export function defaultExtractor(content) {
-  /** @type {(string|string)[]} */
-  let results = []
+  /**
+   * @param {string} content
+   */
+  return (content) => {
+    /** @type {(string|string)[]} */
+    let results = []
 
-  for (let pattern of patterns) {
-    results.push(...(content.match(pattern) ?? []))
+    for (let pattern of patterns) {
+      results.push(...(content.match(pattern) ?? []))
+    }
+
+    return results.filter((v) => v !== undefined).map(clipAtBalancedParens)
   }
-
-  return results.filter((v) => v !== undefined).map(clipAtBalancedParens)
 }
 
-function* buildRegExps() {
+function* buildRegExps(context) {
+  let separator = context.tailwindConfig.separator
+
   yield regex.pattern([
     // Variants
-    /((?=([^\s"'\\\[]+:))\2)?/,
+    '((?=((',
+    regex.any(
+      [regex.pattern([/\[[^\s"'\\]+\]/, separator]), regex.pattern([/[^\s"'\[\\]+/, separator])],
+      true
+    ),
+    ')+))\\2)?',
 
     // Important (optional)
     /!?/,

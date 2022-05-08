@@ -170,6 +170,30 @@ function withIdentifiers(styles) {
   })
 }
 
+export function parseVariant(variant) {
+  variant = variant
+    .replace(/\n+/g, '')
+    .replace(/\s{1,}/g, ' ')
+    .trim()
+
+  let fns = parseVariantFormatString(variant)
+    .map((str) => {
+      if (!str.startsWith('@')) {
+        return ({ format }) => format(str)
+      }
+
+      let [, name, params] = /@(.*?)( .+|[({].*)/g.exec(str)
+      return ({ wrap }) => wrap(postcss.atRule({ name, params: params.trim() }))
+    })
+    .reverse()
+
+  return (api) => {
+    for (let fn of fns) {
+      fn(api)
+    }
+  }
+}
+
 function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets, classList }) {
   function getConfigValue(path, defaultValue) {
     return path ? dlv(tailwindConfig, path, defaultValue) : tailwindConfig
@@ -201,27 +225,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           }
         }
 
-        variantFunction = variantFunction
-          .replace(/\n+/g, '')
-          .replace(/\s{1,}/g, ' ')
-          .trim()
-
-        let fns = parseVariantFormatString(variantFunction)
-          .map((str) => {
-            if (!str.startsWith('@')) {
-              return ({ format }) => format(str)
-            }
-
-            let [, name, params] = /@(.*?) (.*)/g.exec(str)
-            return ({ wrap }) => wrap(postcss.atRule({ name, params }))
-          })
-          .reverse()
-
-        return (api) => {
-          for (let fn of fns) {
-            fn(api)
-          }
-        }
+        return parseVariant(variantFunction)
       })
 
       insertInto(variantList, variantName, options)

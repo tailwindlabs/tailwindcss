@@ -9,7 +9,9 @@ import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
+import { parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
+import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -123,6 +125,17 @@ function applyImportant(matches, classCandidate) {
 function applyVariant(variant, matches, context) {
   if (matches.length === 0) {
     return matches
+  }
+
+  // Register arbitrary variants
+  if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
+    let selector = normalize(variant.slice(1, -1))
+
+    let fn = parseVariant(selector)
+
+    let sort = Array.from(context.variantOrder.values()).pop() << 1n
+    context.variantMap.set(variant, [[sort, fn]])
+    context.variantOrder.set(variant, sort)
   }
 
   if (context.variantMap.has(variant)) {
@@ -407,7 +420,7 @@ function splitWithSeparator(input, separator) {
     return [sharedState.NOT_ON_DEMAND]
   }
 
-  return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
+  return Array.from(splitAtTopLevelOnly(input, separator))
 }
 
 function* recordCandidates(matches, classCandidate) {
