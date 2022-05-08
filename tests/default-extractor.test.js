@@ -1,5 +1,5 @@
 import { html } from './util/run'
-import { defaultExtractor } from '../src/lib/defaultExtractor'
+import { defaultExtractor as createDefaultExtractor } from '../src/lib/defaultExtractor'
 
 const jsExamples = `
   document.body.classList.add(["pl-1.5"].join(" "));
@@ -162,6 +162,13 @@ const excludes = [
   `<div class='hover:test'>`,
   `test`,
 ]
+
+let defaultExtractor
+
+beforeEach(() => {
+  let context = { tailwindConfig: { separator: ':' } }
+  defaultExtractor = createDefaultExtractor(context)
+})
 
 test('The default extractor works as expected', async () => {
   const extractions = defaultExtractor([jsExamples, jsxExamples, htmlExamples].join('\n').trim())
