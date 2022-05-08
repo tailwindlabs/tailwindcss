@@ -19,7 +19,7 @@ export function defaultExtractor(content) {
 function* buildRegExps() {
   yield regex.pattern([
     // Variants
-    /((?=([^\s"'\\]+:))\2)?/,
+    /((?=((\[[^\s"'\[\]\\]+\]:|[^\s"'\[\\]+:)+))\2)?/,
 
     // Important (optional)
     /!?/,
