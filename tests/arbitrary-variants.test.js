@@ -160,7 +160,7 @@ test('at-rules', () => {
 
 test('attribute selectors', () => {
   let config = {
-    content: [{ raw: html`<div class="[&:[data-open]]:underline"></div>` }],
+    content: [{ raw: html`<div class="[&[data-open]]:underline"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -174,7 +174,7 @@ test('attribute selectors', () => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
 
-      .\[\&\:data-open\]\:underline > * {
+      .\[\&\[data-open\]\]\:underline[data-open] {
         text-decoration-line: underline;
       }
     `)
