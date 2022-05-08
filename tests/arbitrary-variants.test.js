@@ -342,3 +342,38 @@ test('multiple attribute selectors with custom separator (2)', () => {
     `)
   })
 })
+
+test('with @apply', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="foo"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = `
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    .foo {
+      @apply [@media_screen{@media(hover:hover){&:hover}}]:underline;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      @media screen {
+        @media (hover: hover) {
+          .foo:hover {
+            text-decoration-line: underline;
+          }
+        }
+      }
+    `)
+  })
+})
