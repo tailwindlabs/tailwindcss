@@ -182,8 +182,8 @@ export function parseVariant(variant) {
         return ({ format }) => format(str)
       }
 
-      let [, name, params] = /@(.*?) (.*)/g.exec(str)
-      return ({ wrap }) => wrap(postcss.atRule({ name, params }))
+      let [, name, params] = /@(.*?)( .+|[({].*)/g.exec(str)
+      return ({ wrap }) => wrap(postcss.atRule({ name, params: params.trim() }))
     })
     .reverse()
 

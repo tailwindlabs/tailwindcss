@@ -131,7 +131,6 @@ function applyVariant(variant, matches, context) {
   if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
     let selector = normalize(variant.slice(1, -1))
 
-    // TODO: Error recovery for @supports(what:ever) -- note the absence of a space
     let fn = parseVariant(selector)
 
     let sort = Array.from(context.variantOrder.values()).pop() << 1n

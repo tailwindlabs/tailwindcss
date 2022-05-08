@@ -135,7 +135,7 @@ test('using the important modifier', () => {
 
 test('at-rules', () => {
   let config = {
-    content: [{ raw: html`<div class="[@supports_(what:ever)]:underline"></div>` }],
+    content: [{ raw: html`<div class="[@supports(what:ever)]:underline"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -150,7 +150,7 @@ test('at-rules', () => {
       ${defaults}
 
       @supports (what: ever) {
-        .\[\@supports_\(what\:ever\)\]\:underline {
+        .\[\@supports\(what\:ever\)\]\:underline {
           text-decoration-line: underline;
         }
       }
@@ -162,7 +162,7 @@ test('nested at-rules', () => {
   let config = {
     content: [
       {
-        raw: html`<div class="[@media_screen{@media_(hover:hover)}]:underline"></div>`,
+        raw: html`<div class="[@media_screen{@media(hover:hover)}]:underline"></div>`,
       },
     ],
     corePlugins: { preflight: false },
@@ -180,7 +180,7 @@ test('nested at-rules', () => {
 
       @media screen {
         @media (hover: hover) {
-          .\[\@media_screen\{\@media_\(hover\:hover\)\}\]\:underline {
+          .\[\@media_screen\{\@media\(hover\:hover\)\}\]\:underline {
             text-decoration-line: underline;
           }
         }
@@ -191,7 +191,7 @@ test('nested at-rules', () => {
 
 test('at-rules with selector modifications', () => {
   let config = {
-    content: [{ raw: html`<div class="[@media_(hover:hover){&:hover}]:underline"></div>` }],
+    content: [{ raw: html`<div class="[@media(hover:hover){&:hover}]:underline"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -206,7 +206,7 @@ test('at-rules with selector modifications', () => {
       ${defaults}
 
       @media (hover: hover) {
-        .\[\@media_\(hover\:hover\)\{\&\:hover\}\]\:underline:hover {
+        .\[\@media\(hover\:hover\)\{\&\:hover\}\]\:underline:hover {
           text-decoration-line: underline;
         }
       }
@@ -218,7 +218,7 @@ test('nested at-rules with selector modifications', () => {
   let config = {
     content: [
       {
-        raw: html`<div class="[@media_screen{@media_(hover:hover){&:hover}}]:underline"></div>`,
+        raw: html`<div class="[@media_screen{@media(hover:hover){&:hover}}]:underline"></div>`,
       },
     ],
     corePlugins: { preflight: false },
@@ -236,7 +236,7 @@ test('nested at-rules with selector modifications', () => {
 
       @media screen {
         @media (hover: hover) {
-          .\[\@media_screen\{\@media_\(hover\:hover\)\{\&\:hover\}\}\]\:underline:hover {
+          .\[\@media_screen\{\@media\(hover\:hover\)\{\&\:hover\}\}\]\:underline:hover {
             text-decoration-line: underline;
           }
         }
