@@ -176,6 +176,19 @@ In Tailwind CSS v3.0, transform and filter utilities like `scale-50` and `bright
 
 While there's no harm in leaving them in your HTML, they can safely be removed — with one exception. If you're relying on `transform` to create a new stacking context, you may want to leave it, otherwise you may run into z-order issues. Alternatively, replace it with `relative` or `isolate` to force a new stacking context.
 
+### New opacity modifier syntax
+
+The new engine introduces [a new syntax](https://tailwindcss.com/docs/background-color#changing-the-opacity) for changing the opacity of color utilities that we recommend migrating to from utilities like `bg-opacity-{value}`:
+
+```diff-html
+- <div class="bg-black bg-opacity-25">
++ <div class="bg-black/25">
+```
+
+The old approach still works so this isn't a breaking change, but the new syntax is what we plan to encourage going forward.
+
+This new syntax works for all color utilities, even utilities that didn't have any way to change the opacity in the past like `from-red-500/75`.
+
 ---
 
 ## Color palette changes
