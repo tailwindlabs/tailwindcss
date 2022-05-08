@@ -13,29 +13,50 @@ import * as regex from '../lib/regex'
  *        ╰──────────────┴──┴───────────── Ignored b/c inside >= 1 levels of parens
  *
  * @param {string} input
- * @param {string} char
+ * @param {string} separator
  */
-export function* splitAtTopLevelOnly(input, char) {
-  let SPECIALS = new RegExp(`[(){}\\[\\]${regex.escape(char)}]`, 'g')
+export function* splitAtTopLevelOnly(input, separator) {
+  let SPECIALS = new RegExp(`[(){}\\[\\]${regex.escape(separator)}]`, 'g')
 
   let depth = 0
   let lastIndex = 0
   let found = false
+  let separatorIndex = 0
+  let separatorStart = 0
+  let separatorLength = separator.length
 
   // Find all paren-like things & character
   // And only split on commas if they're top-level
   for (let match of input.matchAll(SPECIALS)) {
+    let matchesSeparator = match[0] === separator[separatorIndex]
+    let atEndOfSeparator = separatorIndex === separatorLength - 1
+    let matchesFullSeparator = matchesSeparator && atEndOfSeparator
+
     if (match[0] === '(') depth++
     if (match[0] === ')') depth--
     if (match[0] === '[') depth++
     if (match[0] === ']') depth--
     if (match[0] === '{') depth++
     if (match[0] === '}') depth--
-    if (match[0] === char && depth === 0) {
+
+    if (matchesSeparator && depth === 0) {
+      if (separatorStart === 0) {
+        separatorStart = match.index
+      }
+
+      separatorIndex++
+    }
+
+    if (matchesFullSeparator && depth === 0) {
       found = true
 
-      yield input.substring(lastIndex, match.index)
-      lastIndex = match.index + match[0].length
+      yield input.substring(lastIndex, separatorStart)
+      lastIndex = separatorStart + separatorLength
+    }
+
+    if (separatorIndex === separatorLength) {
+      separatorIndex = 0
+      separatorStart = 0
     }
   }
 
