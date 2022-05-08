@@ -9,6 +9,7 @@ import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
+import { parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 
 let classNameParser = selectorParser((selectors) => {
@@ -128,8 +129,12 @@ function applyVariant(variant, matches, context) {
   // Register arbitrary variants
   if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
     let selector = normalize(variant.slice(1, -1))
+
+    // TODO: Error recovery for @supports(what:ever) -- note the absence of a space
+    let fn = parseVariant(selector)
+
     let sort = Array.from(context.variantOrder.values()).pop() << 1n
-    context.variantMap.set(variant, [[sort, () => selector]])
+    context.variantMap.set(variant, [[sort, fn]])
     context.variantOrder.set(variant, sort)
   }
 

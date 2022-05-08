@@ -132,3 +132,28 @@ test('using the important modifier', () => {
     `)
   })
 })
+
+test('at-rules', () => {
+  let config = {
+    content: [{ raw: html`<div class="[@supports_(what:ever){&:hover}]:underline"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      @supports (what: ever) {
+        .\[\@supports_\(what\:ever\)\{\&\:hover\}\]\:underline:hover {
+          text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})
