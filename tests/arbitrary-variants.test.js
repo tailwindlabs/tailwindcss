@@ -204,7 +204,7 @@ test('multiple attribute selectors', () => {
   })
 })
 
-test('multiple attribute selectors with custom separator', () => {
+test('multiple attribute selectors with custom separator (1)', () => {
   let config = {
     separator: '__',
     content: [
@@ -224,6 +224,32 @@ test('multiple attribute selectors with custom separator', () => {
       ${defaults}
 
       .\[\&\[data-foo\]\[data-bar\]\:not\(\[data-baz\]\)\]__underline[data-foo][data-bar]:not([data-baz]) {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+test('multiple attribute selectors with custom separator (2)', () => {
+  let config = {
+    separator: '_@',
+    content: [
+      { raw: html`<div class="[&[data-foo][data-bar]:not([data-baz])]_@underline"></div>` },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[\&\[data-foo\]\[data-bar\]\:not\(\[data-baz\]\)\]_\@underline[data-foo][data-bar]:not([data-baz]) {
         text-decoration-line: underline;
       }
     `)
