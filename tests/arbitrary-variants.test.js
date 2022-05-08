@@ -157,3 +157,26 @@ test('at-rules', () => {
     `)
   })
 })
+
+test('attribute selectors', () => {
+  let config = {
+    content: [{ raw: html`<div class="[&:[data-open]]:underline"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[\&\:data-open\]\:underline > * {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
