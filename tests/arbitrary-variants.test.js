@@ -158,6 +158,37 @@ test('at-rules', () => {
   })
 })
 
+test('nested at-rules', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="[@media_screen{@media_(hover:hover)}]:underline"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      @media screen {
+        @media (hover: hover) {
+          .\[\@media_screen\{\@media_\(hover\:hover\)\}\]\:underline {
+            text-decoration-line: underline;
+          }
+        }
+      }
+    `)
+  })
+})
+
 test('at-rules with selector modifications', () => {
   let config = {
     content: [{ raw: html`<div class="[@media_(hover:hover){&:hover}]:underline"></div>` }],
@@ -177,6 +208,37 @@ test('at-rules with selector modifications', () => {
       @media (hover: hover) {
         .\[\@media_\(hover\:hover\)\{\&\:hover\}\]\:underline:hover {
           text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})
+
+test('nested at-rules with selector modifications', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="[@media_screen{@media_(hover:hover){&:hover}}]:underline"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      @media screen {
+        @media (hover: hover) {
+          .\[\@media_screen\{\@media_\(hover\:hover\)\{\&\:hover\}\}\]\:underline:hover {
+            text-decoration-line: underline;
+          }
         }
       }
     `)
