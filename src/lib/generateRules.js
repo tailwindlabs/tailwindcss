@@ -345,9 +345,15 @@ function* resolveMatchedPlugins(parsed, context) {
   }
 }
 
-function* recordCandidates(matches, classCandidate) {
+function* recordCandidates(matches, candidate) {
   for (const match of matches) {
-    match[1].raws.tailwind = { ...match[1].raws.tailwind, classCandidate }
+    match[1].raws.tailwind = {
+      ...match[1].raws.tailwind,
+      classCandidate: candidate.withoutVariants,
+
+      // todo: rename?
+      parsedCandidate: candidate,
+    }
 
     yield match
   }
@@ -472,7 +478,7 @@ function* resolveMatches(candidate, context) {
     }
 
     matches = matches.flat()
-    matches = Array.from(recordCandidates(matches, classCandidate))
+    matches = Array.from(recordCandidates(matches, parsed))
     matches = applyPrefix(matches, context)
 
     if (important) {
