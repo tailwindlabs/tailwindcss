@@ -336,39 +336,32 @@ function extractArbitraryProperty(classCandidate, context) {
   ]
 }
 
-function* resolveMatchedPlugins(classCandidate, context) {
+function* resolveMatchedPlugins(parsed, context) {
+  let classCandidate = parsed.withoutVariants
+
   if (context.candidateRuleMap.has(classCandidate)) {
     yield [context.candidateRuleMap.get(classCandidate), 'DEFAULT']
   }
 
-  yield* (function* (arbitraryPropertyRule) {
-    if (arbitraryPropertyRule !== null) {
-      yield [arbitraryPropertyRule, 'DEFAULT']
-    }
-  })(extractArbitraryProperty(classCandidate, context))
-
-  let candidatePrefix = classCandidate
-  let negative = false
-
-  const twConfigPrefix = context.tailwindConfig.prefix
-
-  const twConfigPrefixLen = twConfigPrefix.length
-
-  const hasMatchingPrefix =
-    candidatePrefix.startsWith(twConfigPrefix) || candidatePrefix.startsWith(`-${twConfigPrefix}`)
-
-  if (candidatePrefix[twConfigPrefixLen] === '-' && hasMatchingPrefix) {
-    negative = true
-    candidatePrefix = twConfigPrefix + candidatePrefix.slice(twConfigPrefixLen + 1)
+  if (parsed.type === 'custom') {
+    yield [extractArbitraryProperty(classCandidate, context), 'DEFAULT']
   }
 
-  if (negative && context.candidateRuleMap.has(candidatePrefix)) {
+  if (parsed.type !== 'constrained' && parsed.type !== 'partial') {
+    return
+  }
+
+  let candidatePrefix = parsed.negative
+    ? parsed.prefix + parsed.withoutVariants.slice(parsed.prefix.length + 1)
+    : parsed.withoutVariants
+
+  if (parsed.negative && context.candidateRuleMap.has(candidatePrefix)) {
     yield [context.candidateRuleMap.get(candidatePrefix), '-DEFAULT']
   }
 
   for (let [prefix, modifier] of candidatePermutations(candidatePrefix)) {
     if (context.candidateRuleMap.has(prefix)) {
-      yield [context.candidateRuleMap.get(prefix), negative ? `-${modifier}` : modifier]
+      yield [context.candidateRuleMap.get(prefix), parsed.negative ? `-${modifier}` : modifier]
     }
   }
 }
@@ -404,7 +397,7 @@ function* resolveMatches(candidate, context) {
   //   throw new Error(`Class ${candidate} should be written as ${corrected}`)
   // }
 
-  for (let matchedPlugins of resolveMatchedPlugins(classCandidate, context)) {
+  for (let matchedPlugins of resolveMatchedPlugins(parsed, context)) {
     let matches = []
     let typesByMatches = new Map()
 
