@@ -471,7 +471,27 @@ function processApply(root, context, localCache) {
               return
             }
 
-            rule.selector = replaceSelector(parent.selector, rule.selector, applyCandidate)
+            // Strip the important selector from the parent selector if at the beginning
+            let importantSelector =
+              typeof context.tailwindConfig.important === 'string'
+                ? context.tailwindConfig.important
+                : null
+
+            // We only want to move the "important" selector if this is a Tailwind-generated utility
+            // We do *not* want to do this for user CSS that happens to be structured the same
+            let isGenerated = parent.raws.tailwind !== undefined
+
+            let parentSelector =
+              isGenerated && importantSelector && parent.selector.indexOf(importantSelector) === 0
+                ? parent.selector.slice(importantSelector.length)
+                : parent.selector
+
+            rule.selector = replaceSelector(parentSelector, rule.selector, applyCandidate)
+
+            // And then re-add it if it was removed
+            if (importantSelector && parentSelector !== parent.selector) {
+              rule.selector = `${importantSelector} ${rule.selector}`
+            }
 
             rule.walkDecls((d) => {
               d.important = meta.important || important
