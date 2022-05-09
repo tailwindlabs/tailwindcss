@@ -89,10 +89,13 @@ function applyPrefix(matches, context) {
   return matches
 }
 
-function applyImportant(matches, classCandidate) {
+function applyImportant(matches, parsed) {
   if (matches.length === 0) {
     return matches
   }
+
+  let classCandidate = parsed.withoutVariants
+
   let result = []
 
   for (let [meta, rule] of matches) {
@@ -482,7 +485,7 @@ function* resolveMatches(candidate, context) {
     matches = applyPrefix(matches, context)
 
     if (important) {
-      matches = applyImportant(matches, classCandidate)
+      matches = applyImportant(matches, parsed)
     }
 
     for (let variant of variants) {
