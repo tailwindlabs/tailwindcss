@@ -1467,3 +1467,84 @@ it('should apply using the updated user CSS when the source has changed', async 
     }
   `)
 })
+
+it('apply + layer utilities + selector variants (like group) + important selector', async () => {
+  let config = {
+    important: '#myselector',
+    content: [{ raw: html`<div class="custom-utility"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .custom-utility {
+        @apply font-normal group-hover:underline;
+      }
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    #myselector .custom-utility {
+      font-weight: 400;
+    }
+
+    #myselector .group:hover .custom-utility {
+      text-decoration-line: underline;
+    }
+  `)
+})
+
+it('apply + user CSS + selector variants (like group) + important selector (1)', async () => {
+  let config = {
+    important: '#myselector',
+    content: [{ raw: html`<div class="custom-utility"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    .custom-utility {
+      @apply font-normal group-hover:underline;
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .custom-utility {
+      font-weight: 400;
+    }
+
+    .group:hover .custom-utility {
+      text-decoration-line: underline;
+    }
+  `)
+})
+
+it('apply + user CSS + selector variants (like group) + important selector (2)', async () => {
+  let config = {
+    important: '#myselector',
+    content: [{ raw: html`<div class="custom-utility"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    #myselector .custom-utility {
+      @apply font-normal group-hover:underline;
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    #myselector .custom-utility {
+      font-weight: 400;
+    }
+
+    .group:hover #myselector .custom-utility {
+      text-decoration-line: underline;
+    }
+  `)
+})
