@@ -6,7 +6,7 @@ import path from 'path'
 // https://github.com/micromatch/glob-base/blob/master/index.js
 function parseGlob(pattern) {
   let glob = pattern
-  let base = globParent(pattern)
+  const base = globParent(pattern)
 
   if (base !== '.') {
     glob = pattern.substr(base.length)
@@ -33,7 +33,7 @@ export default function parseDependency(normalizedFileOrGlob) {
   let message
 
   if (isGlob(normalizedFileOrGlob)) {
-    let { base, glob } = parseGlob(normalizedFileOrGlob)
+    const { base, glob } = parseGlob(normalizedFileOrGlob)
     message = { type: 'dir-dependency', dir: path.resolve(base), glob }
   } else {
     message = { type: 'dependency', file: path.resolve(normalizedFileOrGlob) }

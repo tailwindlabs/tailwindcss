@@ -10,13 +10,13 @@ export let selectorFunctions = new Set([MERGE])
 
 export function formatVariantSelector(current, ...others) {
   for (let other of others) {
-    let incomingValue = resolveFunctionArgument(other, MERGE)
+    const incomingValue = resolveFunctionArgument(other, MERGE)
     if (incomingValue !== null) {
-      let existingValue = resolveFunctionArgument(current, MERGE, incomingValue)
+      const existingValue = resolveFunctionArgument(current, MERGE, incomingValue)
       if (existingValue !== null) {
-        let existingTarget = `${MERGE}(${incomingValue})`
-        let splitIdx = other.indexOf(existingTarget)
-        let addition = other.slice(splitIdx + existingTarget.length).split(' ')[0]
+        const existingTarget = `${MERGE}(${incomingValue})`
+        const splitIdx = other.indexOf(existingTarget)
+        const addition = other.slice(splitIdx + existingTarget.length).split(' ')[0]
 
         current = current.replace(existingTarget, existingTarget + addition)
         continue
@@ -30,9 +30,9 @@ export function formatVariantSelector(current, ...others) {
 }
 
 export function finalizeSelector(format, { selector, candidate, context }) {
-  let ast = selectorParser().astSync(selector)
+  const ast = selectorParser().astSync(selector)
 
-  let separator = context?.tailwindConfig?.separator ?? ':'
+  const separator = context?.tailwindConfig?.separator ?? ':'
 
   // Split by the separator, but ignore the separator inside square brackets:
   //
@@ -41,8 +41,8 @@ export function finalizeSelector(format, { selector, candidate, context }) {
   //           │  │     │            ╰── We will not split here
   //           ╰──┴─────┴─────────────── We will split here
   //
-  let splitter = new RegExp(`\\${separator}(?![^[]*\\])`)
-  let base = candidate.split(splitter).pop()
+  const splitter = new RegExp(`\\${separator}(?![^[]*\\])`)
+  const base = candidate.split(splitter).pop()
 
   if (context?.tailwindConfig?.prefix) {
     format = prefixSelector(context.tailwindConfig.prefix, format)
@@ -50,13 +50,13 @@ export function finalizeSelector(format, { selector, candidate, context }) {
 
   format = format.replace(PARENT, `.${escapeClassName(candidate)}`)
 
-  let formatAst = selectorParser().astSync(format)
+  const formatAst = selectorParser().astSync(format)
 
   // Remove extraneous selectors that do not include the base class/candidate being matched against
   // For example if we have a utility defined `.a, .b { color: red}`
   // And the formatted variant is sm:b then we want the final selector to be `.sm\:b` and not `.a, .sm\:b`
   ast.each((node) => {
-    let hasClassesMatchingCandidate = node.some((n) => n.type === 'class' && n.value === base)
+    const hasClassesMatchingCandidate = node.some((n) => n.type === 'class' && n.value === base)
 
     if (!hasClassesMatchingCandidate) {
       node.remove()
@@ -122,7 +122,7 @@ export function finalizeSelector(format, { selector, candidate, context }) {
       }
     })
 
-    let pseudoElements = collectPseudoElements(selector)
+    const pseudoElements = collectPseudoElements(selector)
     if (pseudoElements.length > 0) {
       selector.nodes.push(pseudoElements.sort(sortSelector))
     }
@@ -135,10 +135,10 @@ export function finalizeSelector(format, { selector, candidate, context }) {
 // (:). This distinguishes pseudo-classes from pseudo-elements. However, since
 // this distinction was not present in older versions of the W3C spec, most
 // browsers support both syntaxes for the original pseudo-elements.
-let pseudoElementsBC = [':before', ':after', ':first-line', ':first-letter']
+const pseudoElementsBC = [':before', ':after', ':first-line', ':first-letter']
 
 // These pseudo-elements _can_ be combined with other pseudo selectors AND the order does matter.
-let pseudoElementExceptions = ['::file-selector-button']
+const pseudoElementExceptions = ['::file-selector-button']
 
 // This will make sure to move pseudo's to the correct spot (the end for
 // pseudo elements) because otherwise the selector will never work

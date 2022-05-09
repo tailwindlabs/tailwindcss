@@ -1,6 +1,6 @@
 export default function cloneNodes(nodes, source = undefined, raws = undefined) {
   return nodes.map((node) => {
-    let cloned = node.clone()
+    const cloned = node.clone()
 
     if (source !== undefined) {
       cloned.source = source

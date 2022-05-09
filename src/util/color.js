@@ -30,7 +30,7 @@ export function parseColor(value, { loose = false } = {}) {
     return { mode: 'rgb', color: namedColors[value].map((v) => v.toString()) }
   }
 
-  let hex = value
+  const hex = value
     .replace(SHORT_HEX, (_, r, g, b, a) => ['#', r, r, g, g, b, b, a ? a + a : ''].join(''))
     .match(HEX)
 
@@ -44,13 +44,13 @@ export function parseColor(value, { loose = false } = {}) {
     }
   }
 
-  let match = value.match(RGB) ?? value.match(HSL)
+  const match = value.match(RGB) ?? value.match(HSL)
 
   if (match === null) {
     return null
   }
 
-  let color = [match[2], match[3], match[4]].filter(Boolean).map((v) => v.toString())
+  const color = [match[2], match[3], match[4]].filter(Boolean).map((v) => v.toString())
 
   if (!loose && color.length !== 3) {
     return null

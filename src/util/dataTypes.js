@@ -68,7 +68,7 @@ export function percentage(value) {
   })
 }
 
-let lengthUnits = [
+const lengthUnits = [
   'cm',
   'mm',
   'Q',
@@ -86,7 +86,7 @@ let lengthUnits = [
   'vmin',
   'vmax',
 ]
-let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
+const lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
   return value.split(UNDERSCORE).every((part) => {
     return (

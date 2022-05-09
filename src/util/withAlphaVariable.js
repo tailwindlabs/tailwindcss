@@ -5,7 +5,7 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
     return color({ opacityValue: alphaValue })
   }
 
-  let parsed = parseColor(color)
+  const parsed = parseColor(color)
 
   if (parsed === null) {
     return defaultValue
@@ -15,7 +15,7 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
-  let properties = [].concat(property)
+  const properties = [].concat(property)
   if (typeof color === 'function') {
     return {
       [variable]: '1',

@@ -20,9 +20,9 @@ import {
 import negateValue from './negateValue'
 
 export function updateAllClasses(selectors, updateClass) {
-  let parser = selectorParser((selectors) => {
+  const parser = selectorParser((selectors) => {
     selectors.walkClasses((sel) => {
-      let updatedClass = updateClass(sel.value)
+      const updatedClass = updateClass(sel.value)
       sel.value = updatedClass
       if (sel.raws && sel.raws.value) {
         sel.raws.value = escapeCommas(sel.raws.value)
@@ -30,7 +30,7 @@ export function updateAllClasses(selectors, updateClass) {
     })
   })
 
-  let result = parser.processSync(selectors)
+  const result = parser.processSync(selectors)
 
   return result
 }
@@ -40,7 +40,7 @@ function resolveArbitraryValue(modifier, validate) {
     return undefined
   }
 
-  let value = modifier.slice(1, -1)
+  const value = modifier.slice(1, -1)
 
   if (!validate(value)) {
     return undefined
@@ -50,14 +50,14 @@ function resolveArbitraryValue(modifier, validate) {
 }
 
 function asNegativeValue(modifier, lookup = {}, validate) {
-  let positiveValue = lookup[modifier]
+  const positiveValue = lookup[modifier]
 
   if (positiveValue !== undefined) {
     return negateValue(positiveValue)
   }
 
   if (isArbitraryValue(modifier)) {
-    let resolved = resolveArbitraryValue(modifier, validate)
+    const resolved = resolveArbitraryValue(modifier, validate)
 
     if (resolved === undefined) {
       return undefined
@@ -68,7 +68,7 @@ function asNegativeValue(modifier, lookup = {}, validate) {
 }
 
 export function asValue(modifier, options = {}, { validate = () => true } = {}) {
-  let value = options.values?.[modifier]
+  const value = options.values?.[modifier]
 
   if (value !== undefined) {
     return value
@@ -86,7 +86,7 @@ function isArbitraryValue(input) {
 }
 
 function splitAlpha(modifier) {
-  let slashIdx = modifier.lastIndexOf('/')
+  const slashIdx = modifier.lastIndexOf('/')
 
   if (slashIdx === -1 || slashIdx === modifier.length - 1) {
     return [modifier]
@@ -100,10 +100,10 @@ export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
     return options.values?.[modifier]
   }
 
-  let [color, alpha] = splitAlpha(modifier)
+  const [color, alpha] = splitAlpha(modifier)
 
   if (alpha !== undefined) {
-    let normalizedColor =
+    const normalizedColor =
       options.values?.[color] ?? (isArbitraryValue(color) ? color.slice(1, -1) : undefined)
 
     if (normalizedColor === undefined) {
@@ -134,7 +134,7 @@ function guess(validate) {
   }
 }
 
-let typeMap = {
+const typeMap = {
   any: asValue,
   color: asColor,
   url: guess(url),
@@ -152,18 +152,18 @@ let typeMap = {
   shadow: guess(shadow),
 }
 
-let supportedTypes = Object.keys(typeMap)
+const supportedTypes = Object.keys(typeMap)
 
 function splitAtFirst(input, delim) {
-  let idx = input.indexOf(delim)
+  const idx = input.indexOf(delim)
   if (idx === -1) return [undefined, input]
   return [input.slice(0, idx), input.slice(idx + 1)]
 }
 
 export function coerceValue(types, modifier, options, tailwindConfig) {
   if (isArbitraryValue(modifier)) {
-    let arbitraryValue = modifier.slice(1, -1)
-    let [explicitType, value] = splitAtFirst(arbitraryValue, ':')
+    const arbitraryValue = modifier.slice(1, -1)
+    const [explicitType, value] = splitAtFirst(arbitraryValue, ':')
 
     // It could be that this resolves to `url(https` which is not a valid
     // identifier. We currently only support "simple" words with dashes or
@@ -184,7 +184,7 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
 
   // Find first matching type
   for (let type of [].concat(types)) {
-    let result = typeMap[type](modifier, options, { tailwindConfig })
+    const result = typeMap[type](modifier, options, { tailwindConfig })
     if (result !== undefined) return [result, type]
   }
 

@@ -16,7 +16,7 @@ let quotes = new Set(['"', "'", '`'])
 // E.g.: w-[this-is\\]w-\\[weird-but-valid]
 // E.g.: content-['this-is-also-valid]-weirdly-enough']
 export default function isValidArbitraryValue(value) {
-  let stack = []
+  const stack = []
   let inQuotes = false
 
   for (let i = 0; i < value.length; i++) {

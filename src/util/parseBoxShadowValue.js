@@ -7,10 +7,10 @@ let LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
 export function parseBoxShadowValue(input) {
   let shadows = Array.from(splitAtTopLevelOnly(input, ','))
   return shadows.map((shadow) => {
-    let value = shadow.trim()
-    let result = { raw: value }
-    let parts = value.split(SPACE)
-    let seen = new Set()
+    const value = shadow.trim()
+    const result = { raw: value }
+    const parts = value.split(SPACE)
+    const seen = new Set()
 
     for (let part of parts) {
       // Reset index, since the regex is stateful.

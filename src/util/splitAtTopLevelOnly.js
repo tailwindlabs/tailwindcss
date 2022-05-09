@@ -28,9 +28,9 @@ export function* splitAtTopLevelOnly(input, separator) {
   // Find all paren-like things & character
   // And only split on commas if they're top-level
   for (let match of input.matchAll(SPECIALS)) {
-    let matchesSeparator = match[0] === separator[separatorIndex]
-    let atEndOfSeparator = separatorIndex === separatorLength - 1
-    let matchesFullSeparator = matchesSeparator && atEndOfSeparator
+    const matchesSeparator = match[0] === separator[separatorIndex]
+    const atEndOfSeparator = separatorIndex === separatorLength - 1
+    const matchesFullSeparator = matchesSeparator && atEndOfSeparator
 
     if (match[0] === '(') depth++
     if (match[0] === ')') depth--
