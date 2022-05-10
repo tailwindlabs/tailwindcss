@@ -5,14 +5,13 @@ import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
-import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
-import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 import { isParsableNode, isParsableCssValue, isValidPropName } from '../util/css-validation.js'
+import { parseCandidate } from '../lib/candidate.js'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -374,14 +373,6 @@ function* resolveMatchedPlugins(classCandidate, context) {
   }
 }
 
-function splitWithSeparator(input, separator) {
-  if (input === sharedState.NOT_ON_DEMAND) {
-    return [sharedState.NOT_ON_DEMAND]
-  }
-
-  return Array.from(splitAtTopLevelOnly(input, separator))
-}
-
 function* recordCandidates(matches, classCandidate) {
   for (const match of matches) {
     match[1].raws.tailwind = { ...match[1].raws.tailwind, classCandidate }
@@ -391,14 +382,15 @@ function* recordCandidates(matches, classCandidate) {
 }
 
 function* resolveMatches(candidate, context) {
-  let separator = context.tailwindConfig.separator
-  let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
-  let important = false
+  let parsed = parseCandidate(candidate, context)
 
-  if (classCandidate.startsWith('!')) {
-    important = true
-    classCandidate = classCandidate.slice(1)
+  if (parsed === null) {
+    return
   }
+
+  let classCandidate = parsed.withoutVariants
+  let important = parsed.important
+  let variants = parsed.variants.map((v) => v.raw)
 
   // TODO: Reintroduce this in ways that doesn't break on false positives
   // function sortAgainst(toSort, against) {
