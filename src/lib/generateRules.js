@@ -151,138 +151,138 @@ function applyVariant(variant, matches, context) {
     context.variantOrder.set(variant, sort)
   }
 
-  if (context.variantMap.has(variant)) {
-    let variantFunctionTuples = context.variantMap.get(variant)
-    let result = []
+  if (!context.variantMap.has(variant)) {
+    return []
+  }
 
-    for (let [meta, rule] of matches) {
-      // Don't generate variants for user css
-      if (meta.layer === 'user') {
+  let variantFunctionTuples = context.variantMap.get(variant)
+  let result = []
+
+  for (let [meta, rule] of matches) {
+    // Don't generate variants for user css
+    if (meta.layer === 'user') {
+      continue
+    }
+
+    let container = postcss.root({ nodes: [rule.clone()] })
+
+    for (let [variantSort, variantFunction] of variantFunctionTuples) {
+      let clone = container.clone()
+      let collectedFormats = []
+
+      let originals = new Map()
+
+      function prepareBackup() {
+        if (originals.size > 0) return // Already prepared, chicken out
+        clone.walkRules((rule) => originals.set(rule, rule.selector))
+      }
+
+      function modifySelectors(modifierFunction) {
+        prepareBackup()
+        clone.each((rule) => {
+          if (rule.type !== 'rule') {
+            return
+          }
+
+          rule.selectors = rule.selectors.map((selector) => {
+            return modifierFunction({
+              get className() {
+                return getClassNameFromSelector(selector)
+              },
+              selector,
+            })
+          })
+        })
+
+        return clone
+      }
+
+      let ruleWithVariant = variantFunction({
+        // Public API
+        get container() {
+          prepareBackup()
+          return clone
+        },
+        separator: context.tailwindConfig.separator,
+        modifySelectors,
+
+        // Private API for now
+        wrap(wrapper) {
+          let nodes = clone.nodes
+          clone.removeAll()
+          wrapper.append(nodes)
+          clone.append(wrapper)
+        },
+        format(selectorFormat) {
+          collectedFormats.push(selectorFormat)
+        },
+        args,
+      })
+
+      if (typeof ruleWithVariant === 'string') {
+        collectedFormats.push(ruleWithVariant)
+      }
+
+      if (ruleWithVariant === null) {
         continue
       }
 
-      let container = postcss.root({ nodes: [rule.clone()] })
+      // We filled the `originals`, therefore we assume that somebody touched
+      // `container` or `modifySelectors`. Let's see if they did, so that we
+      // can restore the selectors, and collect the format strings.
+      if (originals.size > 0) {
+        clone.walkRules((rule) => {
+          if (!originals.has(rule)) return
+          let before = originals.get(rule)
+          if (before === rule.selector) return // No mutation happened
 
-      for (let [variantSort, variantFunction] of variantFunctionTuples) {
-        let clone = container.clone()
-        let collectedFormats = []
+          let modified = rule.selector
 
-        let originals = new Map()
-
-        function prepareBackup() {
-          if (originals.size > 0) return // Already prepared, chicken out
-          clone.walkRules((rule) => originals.set(rule, rule.selector))
-        }
-
-        function modifySelectors(modifierFunction) {
-          prepareBackup()
-          clone.each((rule) => {
-            if (rule.type !== 'rule') {
-              return
-            }
-
-            rule.selectors = rule.selectors.map((selector) => {
-              return modifierFunction({
-                get className() {
-                  return getClassNameFromSelector(selector)
-                },
-                selector,
-              })
+          // Rebuild the base selector, this is what plugin authors would do
+          // as well. E.g.: `${variant}${separator}${className}`.
+          // However, plugin authors probably also prepend or append certain
+          // classes, pseudos, ids, ...
+          let rebuiltBase = selectorParser((selectors) => {
+            selectors.walkClasses((classNode) => {
+              classNode.value = `${variant}${context.tailwindConfig.separator}${classNode.value}`
             })
-          })
+          }).processSync(before)
 
-          return clone
-        }
-
-        let ruleWithVariant = variantFunction({
-          // Public API
-          get container() {
-            prepareBackup()
-            return clone
-          },
-          separator: context.tailwindConfig.separator,
-          modifySelectors,
-
-          // Private API for now
-          wrap(wrapper) {
-            let nodes = clone.nodes
-            clone.removeAll()
-            wrapper.append(nodes)
-            clone.append(wrapper)
-          },
-          format(selectorFormat) {
-            collectedFormats.push(selectorFormat)
-          },
-          args,
+          // Now that we know the original selector, the new selector, and
+          // the rebuild part in between, we can replace the part that plugin
+          // authors need to rebuild with `&`, and eventually store it in the
+          // collectedFormats. Similar to what `format('...')` would do.
+          //
+          // E.g.:
+          //                   variant: foo
+          //                  selector: .markdown > p
+          //      modified (by plugin): .foo .foo\\:markdown > p
+          //    rebuiltBase (internal): .foo\\:markdown > p
+          //                    format: .foo &
+          collectedFormats.push(modified.replace(rebuiltBase, '&'))
+          rule.selector = before
         })
-
-        if (typeof ruleWithVariant === 'string') {
-          collectedFormats.push(ruleWithVariant)
-        }
-
-        if (ruleWithVariant === null) {
-          continue
-        }
-
-        // We filled the `originals`, therefore we assume that somebody touched
-        // `container` or `modifySelectors`. Let's see if they did, so that we
-        // can restore the selectors, and collect the format strings.
-        if (originals.size > 0) {
-          clone.walkRules((rule) => {
-            if (!originals.has(rule)) return
-            let before = originals.get(rule)
-            if (before === rule.selector) return // No mutation happened
-
-            let modified = rule.selector
-
-            // Rebuild the base selector, this is what plugin authors would do
-            // as well. E.g.: `${variant}${separator}${className}`.
-            // However, plugin authors probably also prepend or append certain
-            // classes, pseudos, ids, ...
-            let rebuiltBase = selectorParser((selectors) => {
-              selectors.walkClasses((classNode) => {
-                classNode.value = `${variant}${context.tailwindConfig.separator}${classNode.value}`
-              })
-            }).processSync(before)
-
-            // Now that we know the original selector, the new selector, and
-            // the rebuild part in between, we can replace the part that plugin
-            // authors need to rebuild with `&`, and eventually store it in the
-            // collectedFormats. Similar to what `format('...')` would do.
-            //
-            // E.g.:
-            //                   variant: foo
-            //                  selector: .markdown > p
-            //      modified (by plugin): .foo .foo\\:markdown > p
-            //    rebuiltBase (internal): .foo\\:markdown > p
-            //                    format: .foo &
-            collectedFormats.push(modified.replace(rebuiltBase, '&'))
-            rule.selector = before
-          })
-        }
-
-        // This tracks the originating layer for the variant
-        // For example:
-        // .sm:underline {} is a variant of something in the utilities layer
-        // .sm:container {} is a variant of the container component
-        clone.nodes[0].raws.tailwind = { ...clone.nodes[0].raws.tailwind, parentLayer: meta.layer }
-
-        let withOffset = [
-          {
-            ...meta,
-            sort: variantSort | meta.sort,
-            collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
-          },
-          clone.nodes[0],
-        ]
-        result.push(withOffset)
       }
-    }
 
-    return result
+      // This tracks the originating layer for the variant
+      // For example:
+      // .sm:underline {} is a variant of something in the utilities layer
+      // .sm:container {} is a variant of the container component
+      clone.nodes[0].raws.tailwind = { ...clone.nodes[0].raws.tailwind, parentLayer: meta.layer }
+
+      let withOffset = [
+        {
+          ...meta,
+          sort: variantSort | meta.sort,
+          collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
+        },
+        clone.nodes[0],
+      ]
+      result.push(withOffset)
+    }
   }
 
-  return []
+  return result
 }
 
 function parseRules(rule, cache, options = {}) {
