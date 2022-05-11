@@ -416,3 +416,78 @@ it('should correctly validate each part when checking for `percentage` data type
     `)
   })
 })
+
+it('arbitrary-value looking things in the config are preferred', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[#c0ffee]"></div>` }],
+    corePlugins: { preflight: false, backgroundOpacity: false },
+    plugins: [],
+    theme: {
+      colors: {
+        '[#c0ffee]': '#f0000d',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[\#c0ffee\] {
+        background-color: #f0000d;
+      }
+    `)
+  })
+})
+
+it('modifier-value looking things in the config are preferred', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-red-500/50"></div>` }],
+    corePlugins: { preflight: false, backgroundOpacity: false },
+    plugins: [],
+    theme: {
+      colors: {
+        'red-500/50': '#f0000d',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-red-500\/50 {
+        background-color: #f0000d;
+      }
+    `)
+  })
+})
+
+it('modifier-value looking things in the config are preferred', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[#ff0000]/[0.5]"></div>` }],
+    corePlugins: { preflight: false, backgroundOpacity: false },
+    plugins: [],
+    theme: {
+      colors: {
+        '[#ff0000]': '#f0000d',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[\#ff0000\]\/\[0\.5\] {
+        background-color: rgb(240 0 13 / 0.5);
+      }
+    `)
+  })
+})
