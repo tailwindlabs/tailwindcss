@@ -405,3 +405,104 @@ test('with @apply', () => {
     `)
   })
 })
+
+test('partial arbitrary variants', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="container-[sidebar] container-type-inline-size">
+            <div class="contain-[sidebar,min:500px]:flex"></div>
+            <div class="contain-[sidebar,max:500px]:flex"></div>
+            <div class="contain-[min:500px]:flex"></div>
+            <div class="contain-[max:500px]:flex"></div>
+            <div class="contain-[500px]:flex"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ addUtilities, matchVariant, matchUtilities }) => {
+        addUtilities({
+          '.container-type-size': { 'container-type': 'size' },
+          '.container-type-inline-size': { 'container-type': 'inline-size' },
+          '.container-type-block-size': { 'container-type': 'block-size' },
+          '.container-type-style': { 'container-type': 'style' },
+          '.container-type-state': { 'container-type': 'state' },
+        })
+
+        matchUtilities({
+          container: (value) => {
+            return {
+              'container-name': value,
+            }
+          },
+        })
+
+        matchVariant({
+          contain: (args) => {
+            if (args.includes(',')) {
+              let [name, query] = args.split(',')
+              let [type, value] = query.split(':')
+              return `@container ${name} (${
+                { min: 'min-width', max: 'max-width' }[type]
+              }: ${value})`
+            } else if (args.includes(':')) {
+              let [type, value] = args.split(':')
+              return `@container (${{ min: 'min-width', max: 'max-width' }[type]}: ${value})`
+            } else {
+              return `@container (min-width: ${args})`
+            }
+          },
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .container-type-inline-size {
+        container-type: inline-size;
+      }
+
+      .container-\[sidebar\] {
+        container-name: sidebar;
+      }
+
+      @container sidebar (min-width: 500px) {
+        .contain-\[sidebar\2c min\:500px\]\:flex {
+          display: flex;
+        }
+      }
+
+      @container sidebar (max-width: 500px) {
+        .contain-\[sidebar\2c max\:500px\]\:flex {
+          display: flex;
+        }
+      }
+
+      @container (min-width: 500px) {
+        .contain-\[min\:500px\]\:flex {
+          display: flex;
+        }
+      }
+
+      @container (max-width: 500px) {
+        .contain-\[max\:500px\]\:flex {
+          display: flex;
+        }
+      }
+
+      @container (min-width: 500px) {
+        .contain-\[500px\]\:flex {
+          display: flex;
+        }
+      }
+    `)
+  })
+})
