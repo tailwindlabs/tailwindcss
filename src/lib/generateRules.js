@@ -127,6 +127,14 @@ function applyVariant(variant, matches, context) {
     return matches
   }
 
+  let args
+
+  // Find partial arbitrary variants
+  if (variant.endsWith(']') && !variant.startsWith('[')) {
+    args = variant.slice(variant.lastIndexOf('[') + 1, -1)
+    variant = variant.slice(0, variant.indexOf(args) - 1 /* - */ - 1 /* [ */)
+  }
+
   // Register arbitrary variants
   if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
     let selector = normalize(variant.slice(1, -1))
@@ -204,6 +212,7 @@ function applyVariant(variant, matches, context) {
           format(selectorFormat) {
             collectedFormats.push(selectorFormat)
           },
+          args,
         })
 
         if (typeof ruleWithVariant === 'string') {
