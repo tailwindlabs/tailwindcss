@@ -170,6 +170,10 @@ function withIdentifiers(styles) {
   })
 }
 
+export function isValidVariantFormatString(format) {
+  return format.startsWith('@') || format.includes('&')
+}
+
 export function parseVariant(variant) {
   variant = variant
     .replace(/\n+/g, '')
@@ -223,6 +227,10 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           return ({ modifySelectors, container, separator }) => {
             return variantFunction({ modifySelectors, container, separator })
           }
+        }
+
+        if (!isValidVariantFormatString(variantFunction)) {
+          throw new Error("you're holding it wrong")
         }
 
         return parseVariant(variantFunction)

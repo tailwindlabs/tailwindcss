@@ -77,6 +77,34 @@ test('arbitrary variants with modifiers', () => {
   })
 })
 
+test('variants without & or an at-rule are ignored', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="[div]:underline"></div>
+          <div class="[:hover]:underline"></div>
+          <div class="[wtf-bbq]:underline"></div>
+          <div class="[lol]:hover:underline"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+    `)
+  })
+})
+
 test('arbitrary variants are sorted after other variants', () => {
   let config = {
     content: [{ raw: html`<div class="[&>*]:underline underline lg:underline"></div>` }],

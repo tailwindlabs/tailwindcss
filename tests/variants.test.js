@@ -206,6 +206,25 @@ describe('custom advanced variants', () => {
       `)
     })
   })
+
+  test('variant format string must include at-rule or &', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="wtf-bbq:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('wtf-bbq', 'lol')
+        },
+      ],
+    }
+
+    await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
+      "you're holding it wrong"
+    )
+  })
 })
 
 test('stacked peer variants', async () => {
