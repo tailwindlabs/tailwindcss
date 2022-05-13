@@ -228,7 +228,9 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             let result = variantFunction({ modifySelectors, container, separator })
 
             if (typeof result === 'string' && !isValidVariantFormatString(result)) {
-              throw new Error("Custom variants must use a media query or provide an `&` to specify selector placement.")
+              throw new Error(
+                `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
+              )
             }
 
             return result
@@ -236,7 +238,9 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         }
 
         if (!isValidVariantFormatString(variantFunction)) {
-          throw new Error("Custom variants must use a media query or provide an `&` to specify selector placement.")
+          throw new Error(
+            `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
+          )
         }
 
         return parseVariant(variantFunction)

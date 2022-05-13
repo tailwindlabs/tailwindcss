@@ -222,7 +222,7 @@ describe('custom advanced variants', () => {
     }
 
     await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
-      "Custom variants must use a media query or provide an `&` to specify selector placement."
+      "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
     )
   })
 
@@ -241,7 +241,7 @@ describe('custom advanced variants', () => {
     }
 
     await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
-      "Custom variants must use a media query or provide an `&` to specify selector placement."
+      "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
     )
   })
 })
