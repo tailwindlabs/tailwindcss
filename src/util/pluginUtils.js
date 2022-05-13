@@ -2,7 +2,6 @@ import selectorParser from 'postcss-selector-parser'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
 import {
-  normalize,
   length,
   number,
   percentage,
