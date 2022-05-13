@@ -225,6 +225,25 @@ describe('custom advanced variants', () => {
       "Custom variants must use a media query or provide an `&` to specify selector placement."
     )
   })
+
+  test('variant format string must include at-rule or & (2)', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="wtf-bbq:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('wtf-bbq', () => 'lol')
+        },
+      ],
+    }
+
+    await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
+      "Custom variants must use a media query or provide an `&` to specify selector placement."
+    )
+  })
 })
 
 test('stacked peer variants', async () => {

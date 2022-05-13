@@ -225,7 +225,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         if (typeof variantFunction !== 'string') {
           // Safelist public API functions
           return ({ modifySelectors, container, separator }) => {
-            return variantFunction({ modifySelectors, container, separator })
+            let result = variantFunction({ modifySelectors, container, separator })
+
+            if (typeof result === 'string' && !isValidVariantFormatString(result)) {
+              throw new Error("Custom variants must use a media query or provide an `&` to specify selector placement.")
+            }
+
+            return result
           }
         }
 
