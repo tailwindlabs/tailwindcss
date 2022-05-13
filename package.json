@@ -49,7 +49,7 @@
     "autoprefixer": "^10.4.5",
     "cssnano": "^5.1.7",
     "esbuild": "^0.14.38",
-    "eslint": "^8.13.0",
+    "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.0.3",
