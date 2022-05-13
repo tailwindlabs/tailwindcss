@@ -230,7 +230,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         }
 
         if (!isValidVariantFormatString(variantFunction)) {
-          throw new Error("you're holding it wrong")
+          throw new Error("Custom variants must use a media query or provide an `&` to specify selector placement.")
         }
 
         return parseVariant(variantFunction)

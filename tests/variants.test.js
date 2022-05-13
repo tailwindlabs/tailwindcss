@@ -207,7 +207,7 @@ describe('custom advanced variants', () => {
     })
   })
 
-  test('variant format string must include at-rule or &', async () => {
+  test('variant format string must include at-rule or & (1)', async () => {
     let config = {
       content: [
         {
@@ -222,7 +222,7 @@ describe('custom advanced variants', () => {
     }
 
     await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
-      "you're holding it wrong"
+      "Custom variants must use a media query or provide an `&` to specify selector placement."
     )
   })
 })
