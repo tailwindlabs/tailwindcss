@@ -15,8 +15,19 @@ import { candidatePermutations } from '../util/candidatePermutations'
 import * as sharedState from './sharedState'
 import { asClass } from '../util/nameClass.js'
 
-/** @type {Map<string, Candidate[]>} */
-let candidateCache = new Map()
+let caches = {
+  /** @type {Map<string, Candidate[]>} */
+  candidates: new Map(),
+
+  /** @type {Map<string, Variant>} */
+  variants: new Map(),
+
+  /** @type {Map<string, Modifier>} */
+  modifiers: new Map(),
+
+  /** @type {Map<string, Arbitrary | string>} */
+  arbitrary: new Map(),
+}
 
 /**
  *
@@ -25,17 +36,15 @@ let candidateCache = new Map()
  * @returns {Iterable<Candidate>}
  */
 export function parseCandidate(raw, context) {
-  let candidates = candidateCache.get(raw)
-
-  if (!candidates) {
-    candidates = Array.from(parseStructure(raw, context))
-      .map((candidate) => validateCandidate(candidate))
-      .filter(Boolean)
-
-    candidateCache.set(raw, candidates)
+  if (caches.candidates.has(raw)) {
+    return caches.candidates.get(raw)
   }
 
-  return candidates
+  let candidates = Array.from(parseStructure(raw, context))
+    .map((candidate) => validateCandidate(candidate))
+    .filter(Boolean)
+
+  return put(caches.candidates, raw, candidates)
 }
 
 /**
@@ -178,6 +187,7 @@ function* parseStructure(raw, context) {
   let [candidate, ...rawVariants] = Array.from(
     splitAtTopLevelOnly(raw, context.tailwindConfig.separator)
   ).reverse()
+
   let variants = rawVariants.map(parseVariant)
 
   // Important?
@@ -352,6 +362,10 @@ function extractArbitraryValue(raw) {
  * @returns {string | Arbitrary}
  */
 function parseArbitraryValue(raw) {
+  if (caches.arbitrary.has(raw)) {
+    return caches.arbitrary.get(raw)
+  }
+
   if (raw[0] !== '[' || raw[raw.length - 1] !== ']') {
     return raw
   }
@@ -372,18 +386,18 @@ function parseArbitraryValue(raw) {
   // identifier. We currently only support "simple" words with dashes or
   // underscores. E.g.: family-name
   if (!isValidDataType) {
-    return {
+    return put(caches.arbitrary, raw, {
       raw,
       value: raw.slice(1, -1),
       dataType: 'any',
-    }
+    })
   }
 
-  return {
+  return put(caches.arbitrary, raw, {
     raw,
     value,
     dataType,
-  }
+  })
 }
 
 /**
@@ -392,34 +406,38 @@ function parseArbitraryValue(raw) {
  * @returns {Variant}
  */
 function parseVariant(raw) {
+  if (caches.variants.has(raw)) {
+    return caches.variants.get(raw)
+  }
+
   if (raw[0] === '[' && raw[raw.length - 1] === ']') {
-    return {
+    return put(caches.variants, raw, {
       /** @type {'custom'} */
       type: 'custom',
       raw,
       value: raw.slice(1, -1),
       dataType: 'any',
-    }
+    })
   }
 
   if (raw[0] !== '[' && raw[raw.length - 1] === ']') {
     let value = raw.slice(raw.lastIndexOf('[') + 1, -1)
     let name = raw.slice(0, raw.indexOf(value) - 1 /* - */ - 1 /* [ */)
 
-    return {
+    return put(caches.variants, raw, {
       type: 'partial',
       raw,
       name,
       value,
       dataType: 'any',
-    }
+    })
   }
 
-  return {
+  return put(caches.variants, raw, {
     type: 'constrained',
     raw,
     name: raw,
-  }
+  })
 }
 
 /**
@@ -453,4 +471,19 @@ function parseModifiers(raw) {
   }
 
   return null
+}
+
+/**
+ * @template T
+ * @param {Map<string, T>} cache
+ * @param {string} key
+ * @param {T} value
+ * @returns {T}
+ */
+function put(cache, key, value) {
+  cache.set(key, value)
+
+  // console.log('CACHE MISS', { key, value })
+
+  return value
 }
