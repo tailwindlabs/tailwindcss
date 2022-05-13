@@ -46,14 +46,6 @@ function resolveArbitraryValue(modifier, validate) {
   return undefined
 }
 
-function asNegativeValue(modifier, lookup = {}, validate) {
-  let positiveValue = lookup[modifier]
-
-  if (positiveValue !== undefined) {
-    return negateValue(positiveValue)
-  }
-}
-
 export function asValue(modifier, options = {}, { candidate, validate = () => true } = {}) {
   if (isArbitraryValue(modifier)) {
     let resolved = resolveArbitraryValue(modifier, validate)
@@ -76,7 +68,11 @@ export function asValue(modifier, options = {}, { candidate, validate = () => tr
   }
 
   if (options.supportsNegativeValues && modifier.startsWith('-')) {
-    return asNegativeValue(modifier.slice(1), options.values, validate)
+    let positiveValue = options.values[modifier.slice(1)]
+
+    if (positiveValue !== undefined) {
+      return negateValue(positiveValue)
+    }
   }
 
   return undefined
