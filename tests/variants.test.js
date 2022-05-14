@@ -206,6 +206,44 @@ describe('custom advanced variants', () => {
       `)
     })
   })
+
+  test('variant format string must include at-rule or & (1)', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="wtf-bbq:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('wtf-bbq', 'lol')
+        },
+      ],
+    }
+
+    await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
+      "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
+    )
+  })
+
+  test('variant format string must include at-rule or & (2)', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="wtf-bbq:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('wtf-bbq', () => 'lol')
+        },
+      ],
+    }
+
+    await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
+      "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
+    )
+  })
 })
 
 test('stacked peer variants', async () => {

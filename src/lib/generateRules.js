@@ -9,7 +9,7 @@ import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
-import { parseVariant } from './setupContextUtils'
+import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 
@@ -130,6 +130,10 @@ function applyVariant(variant, matches, context) {
   // Register arbitrary variants
   if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
     let selector = normalize(variant.slice(1, -1))
+
+    if (!isValidVariantFormatString(selector)) {
+      return []
+    }
 
     let fn = parseVariant(selector)
 

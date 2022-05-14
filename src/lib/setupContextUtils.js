@@ -170,6 +170,10 @@ function withIdentifiers(styles) {
   })
 }
 
+export function isValidVariantFormatString(format) {
+  return format.startsWith('@') || format.includes('&')
+}
+
 export function parseVariant(variant) {
   variant = variant
     .replace(/\n+/g, '')
@@ -221,8 +225,22 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         if (typeof variantFunction !== 'string') {
           // Safelist public API functions
           return ({ modifySelectors, container, separator }) => {
-            return variantFunction({ modifySelectors, container, separator })
+            let result = variantFunction({ modifySelectors, container, separator })
+
+            if (typeof result === 'string' && !isValidVariantFormatString(result)) {
+              throw new Error(
+                `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
+              )
+            }
+
+            return result
           }
+        }
+
+        if (!isValidVariantFormatString(variantFunction)) {
+          throw new Error(
+            `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
+          )
         }
 
         return parseVariant(variantFunction)
