@@ -23,6 +23,11 @@ let env = {
   DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
 }
 
+let configs = {
+  tailwind: 'tailwind.config.js',
+  postcss: 'postcss.config.js',
+}
+
 // ---
 
 function indentRecursive(node, indent = 0) {
@@ -160,11 +165,11 @@ let commands = {
   init: {
     run: init,
     args: {
-      '--full': { type: Boolean, description: 'Initialize a full `tailwind.config.js` file' },
-      '--postcss': { type: Boolean, description: 'Initialize a `postcss.config.js` file' },
+      '--full': { type: Boolean, description: `Initialize a full \`${configs.tailwind}\` file` },
+      '--postcss': { type: Boolean, description: `Initialize a \`${configs.postcss}\` file` },
       '--types': {
         type: Boolean,
-        description: 'Add TypeScript types for the `tailwind.config.js` file',
+        description: `Add TypeScript types for the \`${configs.tailwind}\` file`,
       },
       '-f': '--full',
       '-p': '--postcss',
@@ -340,7 +345,7 @@ run()
 function init() {
   let messages = []
 
-  let tailwindConfigLocation = path.resolve(args['_'][1] ?? './tailwind.config.js')
+  let tailwindConfigLocation = path.resolve(args['_'][1] ?? `./${configs.tailwind}`)
   if (fs.existsSync(tailwindConfigLocation)) {
     messages.push(`${path.basename(tailwindConfigLocation)} already exists.`)
   } else {
@@ -367,7 +372,7 @@ function init() {
   }
 
   if (args['--postcss']) {
-    let postcssConfigLocation = path.resolve('./postcss.config.js')
+    let postcssConfigLocation = path.resolve(`./${configs.postcss}`)
     if (fs.existsSync(postcssConfigLocation)) {
       messages.push(`${path.basename(postcssConfigLocation)} already exists.`)
     } else {
@@ -421,7 +426,7 @@ async function build() {
   let configPath = args['--config']
     ? args['--config']
     : ((defaultPath) => (fs.existsSync(defaultPath) ? defaultPath : null))(
-        path.resolve('./tailwind.config.js')
+        path.resolve(`./${configs.tailwind}`)
       )
 
   async function loadPostCssPlugins() {
