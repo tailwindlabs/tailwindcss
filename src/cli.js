@@ -23,10 +23,26 @@ let env = {
   DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
 }
 
-let configs = {
-  tailwind: 'tailwind.config.js',
-  postcss: 'postcss.config.js',
+function isESM() {
+  const pkgPath = path.resolve('./package.json')
+
+  try {
+    let pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
+    return pkg.type && pkg.type === 'module'
+  } catch (err) {
+    return false
+  }
 }
+
+let configs = isESM()
+  ? {
+      tailwind: 'tailwind.config.cjs',
+      postcss: 'postcss.config.cjs',
+    }
+  : {
+      tailwind: 'tailwind.config.js',
+      postcss: 'postcss.config.js',
+    }
 
 // ---
 
