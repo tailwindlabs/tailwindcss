@@ -464,4 +464,68 @@ describe('Init command', () => {
       `)
     )
   })
+
+  test('--help in ESM package', async () => {
+    let pkg = await readOutputFile('../package.json')
+
+    await writeInputFile(
+      '../package.json',
+      JSON.stringify({
+        ...JSON.parse(pkg),
+        type: 'module',
+      })
+    )
+
+    let { combined } = await $(`${EXECUTABLE} init --help`)
+
+    expect(dedent(combined)).toEqual(
+      dedent(`
+        tailwindcss v${version}
+
+        Usage:
+           tailwindcss init [options]
+
+        Options:
+           -f, --full               Initialize a full \`tailwind.config.cjs\` file
+           -p, --postcss            Initialize a \`postcss.config.cjs\` file
+               --types              Add TypeScript types for the \`tailwind.config.cjs\` file
+           -h, --help               Display usage information
+      `)
+    )
+
+    await writeInputFile('../package.json', pkg)
+  })
+
+  test('cjs config created when in ESM package', async () => {
+    cleanupFile('tailwind.config.cjs')
+
+    let pkg = await readOutputFile('../package.json')
+
+    await writeInputFile(
+      '../package.json',
+      JSON.stringify({
+        ...JSON.parse(pkg),
+        type: 'module',
+      })
+    )
+
+    let { combined } = await $(`${EXECUTABLE} init`)
+
+    expect(combined).toMatchInlineSnapshot(`
+      "
+      Created Tailwind CSS config file: tailwind.config.cjs
+      "
+    `)
+
+    expect(await fileExists('./tailwind.config.cjs')).toBe(true)
+
+    // Not a clean way to test this.
+    expect(await readOutputFile('../tailwind.config.cjs')).toContain('module.exports =')
+
+    expect(await readOutputFile('../tailwind.config.cjs')).not.toContain(
+      `/** @type {import('tailwindcss/types').Config} */`
+    )
+
+    await writeInputFile('../package.json', pkg)
+  })
 })
