@@ -16,6 +16,7 @@ import { env } from './sharedState'
 
 import { getContext, getFileModifiedMap } from './setupContextUtils'
 import parseDependency from '../util/parseDependency'
+import { validateConfig } from '../util/validateConfig.js'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -63,6 +64,7 @@ function getTailwindConfig(configOrPath) {
       delete require.cache[file]
     }
     let newConfig = resolveConfig(require(userConfigPath))
+    newConfig = validateConfig(newConfig)
     let newHash = hash(newConfig)
     configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
     return [newConfig, userConfigPath, newHash, newDeps]
@@ -72,6 +74,8 @@ function getTailwindConfig(configOrPath) {
   let newConfig = resolveConfig(
     configOrPath.config === undefined ? configOrPath : configOrPath.config
   )
+
+  newConfig = validateConfig(newConfig)
 
   return [newConfig, null, hash(newConfig), []]
 }

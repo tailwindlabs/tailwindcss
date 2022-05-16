@@ -17,6 +17,7 @@ import getModuleDependencies from './lib/getModuleDependencies'
 import log from './util/log'
 import packageJson from '../package.json'
 import normalizePath from 'normalize-path'
+import { validateConfig } from './util/validateConfig.js'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
@@ -490,10 +491,13 @@ async function build() {
       let files = args['--content'].split(/(?<!{[^}]+),/)
       let resolvedConfig = resolveConfigInternal(config, { content: { files } })
       resolvedConfig.content.files = files
+      resolvedConfig = validateConfig(resolvedConfig)
       return resolvedConfig
     }
 
-    return resolveConfigInternal(config)
+    let resolvedConfig = resolveConfigInternal(config)
+    resolvedConfig = validateConfig(resolvedConfig)
+    return resolvedConfig
   }
 
   function extractFileGlobs(config) {
