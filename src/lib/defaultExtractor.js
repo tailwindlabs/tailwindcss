@@ -25,7 +25,10 @@ function* buildRegExps(context) {
     // Variants
     '((?=((',
     regex.any(
-      [regex.pattern([/\[[^\s"'\\]+\]/, separator]), regex.pattern([/[^\s"'\[\\]+/, separator])],
+      [
+        regex.pattern([/([^\s"'\[\\]+-)?\[[^\s"'\\]+\]/, separator]),
+        regex.pattern([/[^\s"'\[\\]+/, separator]),
+      ],
       true
     ),
     ')+))\\2)?',

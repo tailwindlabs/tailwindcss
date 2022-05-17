@@ -22,6 +22,8 @@ import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { generateRules } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
 
+let MATCH_VARIANT = Symbol()
+
 function prefix(context, selector) {
   let prefix = context.tailwindConfig.prefix
   return typeof prefix === 'function' ? prefix(selector) : prefix + selector
@@ -219,13 +221,18 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     return context.tailwindConfig.prefix + identifier
   }
 
-  return {
+  let api = {
     addVariant(variantName, variantFunctions, options = {}) {
       variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
         if (typeof variantFunction !== 'string') {
           // Safelist public API functions
-          return ({ modifySelectors, container, separator }) => {
-            let result = variantFunction({ modifySelectors, container, separator })
+          return ({ args, modifySelectors, container, separator, wrap, format }) => {
+            let result = variantFunction(
+              Object.assign(
+                { modifySelectors, container, separator },
+                variantFunction[MATCH_VARIANT] && { args, wrap, format }
+              )
+            )
 
             if (typeof result === 'string' && !isValidVariantFormatString(result)) {
               throw new Error(
@@ -462,7 +469,35 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
       }
     },
+    matchVariant: function (variants, options) {
+      for (let variant in variants) {
+        for (let [k, v] of Object.entries(options?.values ?? {})) {
+          api.addVariant(`${variant}-${k}`, variants[variant](v))
+        }
+
+        api.addVariant(
+          variant,
+          Object.assign(
+            ({ args, wrap }) => {
+              let formatString = variants[variant](args)
+              if (!formatString) return null
+
+              if (!formatString.startsWith('@')) {
+                return formatString
+              }
+
+              let [, name, params] = /@(.*?)( .+|[({].*)/g.exec(formatString)
+              return wrap(postcss.atRule({ name, params: params.trim() }))
+            },
+            { [MATCH_VARIANT]: true }
+          ),
+          options
+        )
+      }
+    },
   }
+
+  return api
 }
 
 let fileModifiedMapCache = new WeakMap()
