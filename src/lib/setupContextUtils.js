@@ -471,6 +471,10 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     matchVariant: function (variants, options) {
       for (let variant in variants) {
+        for (let [k, v] of Object.entries(options?.values ?? {})) {
+          api.addVariant(`${variant}-${k}`, variants[variant](v))
+        }
+
         api.addVariant(
           variant,
           Object.assign(

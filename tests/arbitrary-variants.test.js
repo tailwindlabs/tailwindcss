@@ -410,51 +410,14 @@ test('partial arbitrary variants', () => {
   let config = {
     content: [
       {
-        raw: html`
-          <div class="container-[sidebar] container-type-inline-size">
-            <div class="contain-[sidebar,min:500px]:flex"></div>
-            <div class="contain-[sidebar,max:500px]:flex"></div>
-            <div class="contain-[min:500px]:flex"></div>
-            <div class="contain-[max:500px]:flex"></div>
-            <div class="contain-[500px]:flex"></div>
-          </div>
-        `,
+        raw: html`<div class="potato-[yellow]:bg-yellow-200 potato-[baked]:w-3"></div> `,
       },
     ],
     corePlugins: { preflight: false },
     plugins: [
-      ({ addUtilities, matchVariant, matchUtilities }) => {
-        addUtilities({
-          '.container-type-size': { 'container-type': 'size' },
-          '.container-type-inline-size': { 'container-type': 'inline-size' },
-          '.container-type-block-size': { 'container-type': 'block-size' },
-          '.container-type-style': { 'container-type': 'style' },
-          '.container-type-state': { 'container-type': 'state' },
-        })
-
-        matchUtilities({
-          container: (value) => {
-            return {
-              'container-name': value,
-            }
-          },
-        })
-
+      ({ matchVariant }) => {
         matchVariant({
-          contain: (args) => {
-            if (args.includes(',')) {
-              let [name, query] = args.split(',')
-              let [type, value] = query.split(':')
-              return `@container ${name} (${
-                { min: 'min-width', max: 'max-width' }[type]
-              }: ${value})`
-            } else if (args.includes(':')) {
-              let [type, value] = args.split(':')
-              return `@container (${{ min: 'min-width', max: 'max-width' }[type]}: ${value})`
-            } else {
-              return `@container (min-width: ${args})`
-            }
-          },
+          potato: (flavor) => `.potato-${flavor} &`,
         })
       },
     ],
@@ -466,42 +429,109 @@ test('partial arbitrary variants', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .container-type-inline-size {
-        container-type: inline-size;
+      .potato-baked .potato-\[baked\]\:w-3 {
+        width: 0.75rem;
       }
 
-      .container-\[sidebar\] {
-        container-name: sidebar;
+      .potato-yellow .potato-\[yellow\]\:bg-yellow-200 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+      }
+    `)
+  })
+})
+
+test('partial arbitrary variants with default values', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="tooltip-bottom:mt-2 tooltip-top:mb-2"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant(
+          {
+            tooltip: (side) => `&${side}`,
+          },
+          {
+            values: {
+              bottom: '[data-location="bottom"]',
+              top: '[data-location="top"]',
+            },
+          }
+        )
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .tooltip-bottom\:mt-2[data-location='bottom'] {
+        margin-top: 0.5rem;
       }
 
-      @container sidebar (min-width: 500px) {
-        .contain-\[sidebar\2c min\:500px\]\:flex {
-          display: flex;
-        }
+      .tooltip-top\:mb-2[data-location='top'] {
+        margin-bottom: 0.5rem;
+      }
+    `)
+  })
+})
+
+test('matched variant values maintain the sort order they are registered in', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div
+          class="alphabet-c:underline alphabet-a:underline alphabet-d:underline alphabet-b:underline"
+        ></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant(
+          {
+            alphabet: (side) => `&${side}`,
+          },
+          {
+            values: {
+              a: '[data-value="a"]',
+              b: '[data-value="b"]',
+              c: '[data-value="c"]',
+              d: '[data-value="d"]',
+            },
+          }
+        )
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .alphabet-a\:underline[data-value='a'] {
+        text-decoration-line: underline;
       }
 
-      @container sidebar (max-width: 500px) {
-        .contain-\[sidebar\2c max\:500px\]\:flex {
-          display: flex;
-        }
+      .alphabet-b\:underline[data-value='b'] {
+        text-decoration-line: underline;
       }
 
-      @container (min-width: 500px) {
-        .contain-\[min\:500px\]\:flex {
-          display: flex;
-        }
+      .alphabet-c\:underline[data-value='c'] {
+        text-decoration-line: underline;
       }
 
-      @container (max-width: 500px) {
-        .contain-\[max\:500px\]\:flex {
-          display: flex;
-        }
-      }
-
-      @container (min-width: 500px) {
-        .contain-\[500px\]\:flex {
-          display: flex;
-        }
+      .alphabet-d\:underline[data-value='d'] {
+        text-decoration-line: underline;
       }
     `)
   })
