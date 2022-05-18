@@ -6,7 +6,7 @@ let cssFunctions = ['min', 'max', 'clamp', 'calc']
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
 let COMMA = /,(?![^(]*\))/g // Comma separator that is not located between brackets. E.g.: `cubiz-bezier(a, b, c)` these don't count.
-let UNDERSCORE = /_(?![^(]*\))/g // Underscore separator that is not located between brackets. E.g.: `rgba(255,_255,_255)_black` these don't count.
+let SPACE = /[ ](?![^(]*\))/g // space separator that is not located between brackets. E.g.: `rgba(255, 255, 255) black` these don't count.
 
 // This is not a data type, but rather a function that can normalize the
 // correct values.
@@ -63,7 +63,7 @@ export function number(value) {
 }
 
 export function percentage(value) {
-  return value.split(UNDERSCORE).every((part) => {
+  return value.split(SPACE).every((part) => {
     return /%$/g.test(part) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(part))
   })
 }
@@ -88,7 +88,7 @@ let lengthUnits = [
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
-  return value.split(UNDERSCORE).every((part) => {
+  return value.split(SPACE).every((part) => {
     return (
       part === '0' ||
       new RegExp(`${lengthUnitsPattern}$`).test(part) ||
@@ -117,7 +117,7 @@ export function shadow(value) {
 export function color(value) {
   let colors = 0
 
-  let result = value.split(UNDERSCORE).every((part) => {
+  let result = value.split(SPACE).every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -173,7 +173,7 @@ export function gradient(value) {
 let validPositions = new Set(['center', 'top', 'right', 'bottom', 'left'])
 export function position(value) {
   let positions = 0
-  let result = value.split(UNDERSCORE).every((part) => {
+  let result = value.split(SPACE).every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true

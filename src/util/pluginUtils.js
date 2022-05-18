@@ -36,17 +36,15 @@ export function updateAllClasses(selectors, updateClass) {
 }
 
 function resolveArbitraryValue(modifier, validate) {
-  if (!isArbitraryValue(modifier)) {
-    return undefined
+  if (isArbitraryValue(modifier)) {
+    if (!validate(modifier.value)) {
+      return undefined
+    }
+
+    return modifier.value
   }
 
-  let value = modifier.slice(1, -1)
-
-  if (!validate(value)) {
-    return undefined
-  }
-
-  return normalize(value)
+  return undefined
 }
 
 function asNegativeValue(modifier, lookup = {}, validate) {
@@ -55,7 +53,9 @@ function asNegativeValue(modifier, lookup = {}, validate) {
   if (positiveValue !== undefined) {
     return negateValue(positiveValue)
   }
+}
 
+export function asValue(modifier, options = {}, { candidate, validate = () => true } = {}) {
   if (isArbitraryValue(modifier)) {
     let resolved = resolveArbitraryValue(modifier, validate)
 
@@ -63,11 +63,13 @@ function asNegativeValue(modifier, lookup = {}, validate) {
       return undefined
     }
 
-    return negateValue(resolved)
-  }
-}
+    if (options.supportsNegativeValues && candidate.negative) {
+      return negateValue(resolved)
+    }
 
-export function asValue(modifier, options = {}, { validate = () => true } = {}) {
+    return resolved
+  }
+
   let value = options.values?.[modifier]
 
   if (value !== undefined) {
@@ -78,50 +80,56 @@ export function asValue(modifier, options = {}, { validate = () => true } = {}) 
     return asNegativeValue(modifier.slice(1), options.values, validate)
   }
 
-  return resolveArbitraryValue(modifier, validate)
+  return undefined
 }
 
 function isArbitraryValue(input) {
-  return input.startsWith('[') && input.endsWith(']')
+  return typeof input === 'object'
 }
 
-function splitAlpha(modifier) {
-  let slashIdx = modifier.lastIndexOf('/')
-
-  if (slashIdx === -1 || slashIdx === modifier.length - 1) {
-    return [modifier]
-  }
-
-  return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
-}
-
-export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
-  if (options.values?.[modifier] !== undefined) {
+/**
+ *
+ * @param {string} modifier
+ * @param {any} options
+ * @param {object} param2
+ * @param {any} param2.tailwindConfig
+ * @param {import('../lib/candidate').Candidate} param2.candidate
+ * @param {import('../lib/candidate').Plugin} param2.candidatePlugin
+ * @returns
+ */
+export function asColor(
+  modifier,
+  options = {},
+  { tailwindConfig = {}, candidate, candidatePlugin } = {}
+) {
+  if (options.values?.[modifier] !== undefined && candidatePlugin.modifiers.length === 0) {
     return options.values?.[modifier]
   }
 
-  let [color, alpha] = splitAlpha(modifier)
+  let alpha = candidatePlugin.modifiers[0]?.value ?? undefined
+
+  if (typeof alpha === 'string') {
+    alpha = tailwindConfig.theme?.opacity?.[alpha] ?? undefined
+
+    if (alpha === undefined) {
+      return undefined
+    }
+  } else if (typeof alpha === 'object') {
+    alpha = alpha.value
+  }
 
   if (alpha !== undefined) {
     let normalizedColor =
-      options.values?.[color] ?? (isArbitraryValue(color) ? color.slice(1, -1) : undefined)
+      options.values?.[modifier] ?? (isArbitraryValue(modifier) ? modifier.value : undefined)
 
     if (normalizedColor === undefined) {
       return undefined
     }
 
-    if (isArbitraryValue(alpha)) {
-      return withAlphaValue(normalizedColor, alpha.slice(1, -1))
-    }
-
-    if (tailwindConfig.theme?.opacity?.[alpha] === undefined) {
-      return undefined
-    }
-
-    return withAlphaValue(normalizedColor, tailwindConfig.theme.opacity[alpha])
+    return withAlphaValue(normalizedColor, alpha)
   }
 
-  return asValue(modifier, options, { validate: validateColor })
+  return asValue(modifier, options, { candidate, validate: validateColor })
 }
 
 export function asLookupValue(modifier, options = {}) {
@@ -129,8 +137,8 @@ export function asLookupValue(modifier, options = {}) {
 }
 
 function guess(validate) {
-  return (modifier, options) => {
-    return asValue(modifier, options, { validate })
+  return (modifier, options, { candidate }) => {
+    return asValue(modifier, options, { candidate, validate })
   }
 }
 
@@ -154,37 +162,22 @@ let typeMap = {
 
 let supportedTypes = Object.keys(typeMap)
 
-function splitAtFirst(input, delim) {
-  let idx = input.indexOf(delim)
-  if (idx === -1) return [undefined, input]
-  return [input.slice(0, idx), input.slice(idx + 1)]
-}
-
-export function coerceValue(types, modifier, options, tailwindConfig) {
+export function coerceValue(types, modifier, options, tailwindConfig, candidate, candidatePlugin) {
   if (isArbitraryValue(modifier)) {
-    let arbitraryValue = modifier.slice(1, -1)
-    let [explicitType, value] = splitAtFirst(arbitraryValue, ':')
-
-    // It could be that this resolves to `url(https` which is not a valid
-    // identifier. We currently only support "simple" words with dashes or
-    // underscores. E.g.: family-name
-    if (!/^[\w-_]+$/g.test(explicitType)) {
-      value = arbitraryValue
-    }
-
-    //
-    else if (explicitType !== undefined && !supportedTypes.includes(explicitType)) {
+    if (!supportedTypes.includes(modifier.dataType)) {
       return []
     }
 
-    if (value.length > 0 && supportedTypes.includes(explicitType)) {
-      return [asValue(`[${value}]`, options), explicitType]
+    // 'any' is the default data type for arbitrary values
+    // TODO: We should probably guess them when parsing candidates
+    if (modifier.dataType !== 'any') {
+      return [asValue(modifier, options), modifier.dataType]
     }
   }
 
   // Find first matching type
   for (let type of [].concat(types)) {
-    let result = typeMap[type](modifier, options, { tailwindConfig })
+    let result = typeMap[type](modifier, options, { tailwindConfig, candidate, candidatePlugin })
     if (result !== undefined) return [result, type]
   }
 

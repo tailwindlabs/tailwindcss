@@ -7,10 +7,9 @@ import { updateAllClasses } from '../util/pluginUtils'
 import log from '../util/log'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
-import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
-import { isParsableNode } from '../util/css-validation.js'
-import { parseCandidate } from '../lib/candidate.js'
+import { isParsableNode } from '../util/css-validation'
+import { parseCandidate } from './candidate'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -18,42 +17,6 @@ let classNameParser = selectorParser((selectors) => {
 
 function getClassNameFromSelector(selector) {
   return classNameParser.transformSync(selector)
-}
-
-// Generate match permutations for a class candidate, like:
-// ['ring-offset-blue', '100']
-// ['ring-offset', 'blue-100']
-// ['ring', 'offset-blue-100']
-// Example with dynamic classes:
-// ['grid-cols', '[[linename],1fr,auto]']
-// ['grid', 'cols-[[linename],1fr,auto]']
-function* candidatePermutations(candidate) {
-  let lastIndex = Infinity
-
-  while (lastIndex >= 0) {
-    let dashIdx
-
-    if (lastIndex === Infinity && candidate.endsWith(']')) {
-      let bracketIdx = candidate.indexOf('[')
-
-      // If character before `[` isn't a dash or a slash, this isn't a dynamic class
-      // eg. string[]
-      dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
-    } else {
-      dashIdx = candidate.lastIndexOf('-', lastIndex)
-    }
-
-    if (dashIdx < 0) {
-      break
-    }
-
-    let prefix = candidate.slice(0, dashIdx)
-    let modifier = candidate.slice(dashIdx + 1)
-
-    yield [prefix, modifier]
-
-    lastIndex = dashIdx - 1
-  }
 }
 
 function applyPrefix(matches, context) {
@@ -314,21 +277,21 @@ function extractArbitraryProperty(parsed, context) {
   ]
 }
 
+/**
+ *
+ * @param {import('./candidate').Candidate} parsed
+ * @param {any} context
+ */
 function* resolveMatchedPlugins(parsed, context) {
-  let classCandidate = parsed.withoutVariants
-
-  if (context.candidateRuleMap.has(classCandidate)) {
-    yield [context.candidateRuleMap.get(classCandidate), 'DEFAULT']
-  }
-
   if (parsed.type === 'custom') {
     yield [extractArbitraryProperty(parsed, context), 'DEFAULT']
   }
 
-  if (parsed.type !== 'constrained' && parsed.type !== 'partial') {
+  if (parsed.type !== 'constrained') {
     return
   }
 
+  // TODO: Can this be dropped?
   let candidatePrefix = parsed.negative
     ? parsed.prefix + parsed.withoutVariants.slice(parsed.prefix.length + 1)
     : parsed.withoutVariants
@@ -337,9 +300,13 @@ function* resolveMatchedPlugins(parsed, context) {
     yield [context.candidateRuleMap.get(candidatePrefix), '-DEFAULT']
   }
 
-  for (let [prefix, modifier] of candidatePermutations(candidatePrefix)) {
-    if (context.candidateRuleMap.has(prefix)) {
-      yield [context.candidateRuleMap.get(prefix), parsed.negative ? `-${modifier}` : modifier]
+  for (let plugin of parsed.plugins) {
+    let ruleGenerator =
+      context.candidateRuleMap.get(parsed.prefix + plugin.plugin) ||
+      context.candidateRuleMap.get(plugin.plugin)
+
+    if (ruleGenerator) {
+      yield [ruleGenerator, plugin.value, plugin]
     }
   }
 }
@@ -358,15 +325,15 @@ function* recordCandidates(matches, candidate) {
   }
 }
 
-function* resolveMatches(candidate, context) {
-  let parsed = parseCandidate(candidate, context)
-
-  if (parsed === null) {
-    return
+function* resolveMatches(candidateRaw, context) {
+  for (const candidate of parseCandidate(candidateRaw, context)) {
+    yield* resolveMatchesForCandidate(candidate, context)
   }
+}
 
-  let important = parsed.important
-  let variants = parsed.variants
+function* resolveMatchesForCandidate(candidate, context) {
+  let important = candidate.important
+  let variants = candidate.variants
 
   // TODO: Reintroduce this in ways that doesn't break on false positives
   // function sortAgainst(toSort, against) {
@@ -380,18 +347,20 @@ function* resolveMatches(candidate, context) {
   //   throw new Error(`Class ${candidate} should be written as ${corrected}`)
   // }
 
-  for (let matchedPlugins of resolveMatchedPlugins(parsed, context)) {
+  for (let matchedPlugins of resolveMatchedPlugins(candidate, context)) {
     let matches = []
     let typesByMatches = new Map()
 
-    let [plugins, modifier] = matchedPlugins
+    let [plugins, modifier, candidatePlugin] = matchedPlugins
     let isOnlyPlugin = plugins.length === 1
 
     for (let [sort, plugin] of plugins) {
       let matchesPerPlugin = []
 
       if (typeof plugin === 'function') {
-        for (let ruleSet of [].concat(plugin(modifier, { isOnlyPlugin }))) {
+        for (let ruleSet of [].concat(
+          plugin(modifier, { isOnlyPlugin, candidate, candidatePlugin })
+        )) {
           let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
           for (let rule of rules) {
             matchesPerPlugin.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
@@ -413,7 +382,7 @@ function* resolveMatches(candidate, context) {
       }
     }
 
-    if (isArbitraryValue(modifier)) {
+    if (typeof modifier === 'object') {
       // When generated arbitrary values are ambiguous, we can't know
       // which to pick so don't generate any utilities for them
       if (matches.length > 1) {
@@ -456,16 +425,16 @@ function* resolveMatches(candidate, context) {
               .join('\n\n')
 
             messages.push(
-              `  Use \`${candidate.replace('[', `[${type}:`)}\` for \`${rules.trim()}\``
+              `  Use \`${candidate.raw.replace('[', `[${type}:`)}\` for \`${rules.trim()}\``
             )
             break
           }
         }
 
         log.warn([
-          `The class \`${candidate}\` is ambiguous and matches multiple utilities.`,
+          `The class \`${candidate.raw}\` is ambiguous and matches multiple utilities.`,
           ...messages,
-          `If this is content and not a class, replace it with \`${candidate
+          `If this is content and not a class, replace it with \`${candidate.raw
             .replace('[', '&lsqb;')
             .replace(']', '&rsqb;')}\` to silence this warning.`,
         ])
@@ -476,19 +445,22 @@ function* resolveMatches(candidate, context) {
     }
 
     matches = matches.flat()
-    matches = Array.from(recordCandidates(matches, parsed))
+    matches = Array.from(recordCandidates(matches, candidate))
     matches = applyPrefix(matches, context)
 
     if (important) {
-      matches = applyImportant(matches, parsed)
+      matches = applyImportant(matches, candidate)
     }
 
     for (let variant of variants) {
       matches = applyVariant(variant, matches, context)
     }
 
+    let foundMatches = false
     for (let match of matches) {
-      match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate }
+      foundMatches = true
+
+      match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate: candidate.raw }
 
       // Apply final format selector
       if (match[0].collectedFormats) {
@@ -499,7 +471,7 @@ function* resolveMatches(candidate, context) {
 
           rule.selector = finalizeSelector(finalFormat, {
             selector: rule.selector,
-            candidate,
+            candidate: candidate.raw,
             context,
           })
         })
@@ -507,6 +479,25 @@ function* resolveMatches(candidate, context) {
       }
 
       yield match
+    }
+
+    // We always want to emit matches for `DEFAULT`-ish values
+    // so we'll continue matching in that case
+    if (
+      candidatePlugin &&
+      (candidatePlugin.value === 'DEFAULT' || candidatePlugin.value === '-DEFAULT')
+    ) {
+      continue
+    }
+
+    // If we've emitted matches we're done searching
+    // This is because the order of matched values is as follows:
+    // - Real values from the config
+    // - Real values from the config accounting for modifiers
+    // - Arbitrary values
+    // - Arbitrary values accounting for modifiers
+    if (foundMatches) {
+      break
     }
   }
 }
@@ -577,10 +568,6 @@ function generateRules(candidates, context) {
 
     return [sort | context.layerOrder[layer], rule]
   })
-}
-
-function isArbitraryValue(input) {
-  return input.startsWith('[') && input.endsWith(']')
 }
 
 export { resolveMatches, generateRules }

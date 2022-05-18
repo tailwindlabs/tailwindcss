@@ -6,6 +6,10 @@ export function asClass(name) {
 }
 
 export default function nameClass(classPrefix, key) {
+  if (typeof key === 'object') {
+    key = key.raw
+  }
+
   return asClass(formatClass(classPrefix, key))
 }
 
