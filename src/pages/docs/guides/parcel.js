@@ -15,7 +15,7 @@ let steps = [
     code: {
       name: 'Terminal',
       lang: 'terminal',
-      code: 'mkdir my-project\ncd my-project\nnpm install -D parcel\nmkdir src\ntouch src/index.html',
+      code: 'mkdir my-project\ncd my-project\nnpm init -y\nnpm install -D parcel\nmkdir src\ntouch src/index.html',
     },
   },
   {
