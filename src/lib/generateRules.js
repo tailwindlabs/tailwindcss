@@ -104,6 +104,10 @@ function applyVariant(variant, matches, context) {
     // Register arbitrary variants
     let fn = parseVariant(variant.value)
 
+    if (!isValidVariantFormatString(variant.value)) {
+      return []
+    }
+
     let sort = Array.from(context.variantOrder.values()).pop() << 1n
     context.variantMap.set(variant.raw, [[sort, fn]])
     context.variantOrder.set(variant.raw, sort)
