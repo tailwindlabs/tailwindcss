@@ -71,7 +71,8 @@ function validateCandidate(candidate) {
   }
 
   // Normalize arbitrary values
-  candidate.plugins = Array.from(validatePlugins(candidate.plugins))
+  let plugins = candidate.plugins
+  candidate.plugins = () => validatePlugins(plugins())
 
   return candidate
 }
@@ -169,15 +170,18 @@ function* parseStructure(raw, context) {
       variants: [],
       negative: false,
 
+      /** @type {'constrained'} */
       type: 'constrained',
-      plugins: [
-        {
+
+      // @ts-ignore
+      *plugins() {
+        yield {
           // @ts-ignore: TODO Would love to remove the need for the new String('*) stuff if at all ever maybe possible
           plugin: sharedState.NOT_ON_DEMAND,
           value: 'DEFAULT',
           modifiers: [],
-        },
-      ],
+        }
+      },
     }
 
     return
@@ -256,17 +260,19 @@ function* parseStructure(raw, context) {
     return
   }
 
-  // Generate each plugin
-  let plugins = generatePlugins(candidate, negative)
-
-  // Insert modifier versions of each plugin (if necessary)
-  plugins = insertModifierPlugins(plugins, parseModifiers(candidate))
-
   // Scan for the name up to the modifier, opening arbitrary value bracket, or end of string
   yield Object.assign({}, common, {
     /** @type {'constrained'} */
     type: 'constrained',
-    plugins: Array.from(plugins),
+    plugins: () => {
+      // Generate each plugin
+      let plugins = generatePlugins(candidate, negative)
+
+      // Insert modifier versions of each plugin (if necessary)
+      plugins = insertModifierPlugins(plugins, parseModifiers(candidate))
+
+      return plugins
+    }
   })
 }
 

@@ -37,7 +37,7 @@ export type Plugin = {
 type UtilityType =
   | {
       type: 'constrained'
-      plugins: Plugin[]
+      plugins(): Iterable<Plugin>
     }
   | { type: 'custom'; name: string; value: string; modifiers: Modifier[] }
 

@@ -304,7 +304,7 @@ function* resolveMatchedPlugins(parsed, context) {
     yield [context.candidateRuleMap.get(candidatePrefix), '-DEFAULT']
   }
 
-  for (let plugin of parsed.plugins) {
+  for (let plugin of parsed.plugins()) {
     let ruleGenerator =
       context.candidateRuleMap.get(parsed.prefix + plugin.plugin) ||
       context.candidateRuleMap.get(plugin.plugin)

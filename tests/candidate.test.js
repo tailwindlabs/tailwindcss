@@ -551,5 +551,17 @@ it.each([
     },
   })
 
+
+  // So we don't mutate the cached versions
+  actual = actual.map(candidate => ({
+    ...candidate,
+  }))
+
+  for (const candidate of actual) {
+    if ('plugins' in candidate) {
+      candidate.plugins = Array.from(candidate.plugins())
+    }
+  }
+
   expect(actual).toEqual(expected)
 })
