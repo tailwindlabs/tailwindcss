@@ -84,7 +84,7 @@ function Block({ src, filter, ...props }) {
           filter
         )}
       >
-        <img src={src} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={src} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
       </div>
     </motion.div>
   )
@@ -198,6 +198,7 @@ export function ModernFeatures() {
                   src={require('@/img/modern-features/5.jpg').default}
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
                 />
               </motion.div>
             </div>

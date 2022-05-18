@@ -10,6 +10,7 @@ function AnimatedImage({ animate = false, delay = 0, ...props }) {
       animate={animate ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
       transition={{ duration: 0.5, delay }}
       alt=""
+      loading="lazy"
       {...props}
     />
   )

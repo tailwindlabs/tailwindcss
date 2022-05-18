@@ -37,6 +37,7 @@ const themes = {
       src: require('@/img/classic-utility-jacket.jpg').default,
       originalWidth: 1200,
       originalHeight: 1600,
+      loading: "lazy"
     },
     contentContainer: 'p-6',
     header: '-mt-6 pt-6 pb-6',
@@ -98,6 +99,7 @@ const themes = {
       src: require('@/img/kids-jumper.jpg').default,
       originalWidth: 1200,
       originalHeight: 1700,
+      loading: "lazy",
       className: ['-mt-2 -mx-2', '-mt-2 -mx-2', '-my-2 -ml-2'],
     },
     contentContainer: 'p-6',
@@ -383,6 +385,7 @@ export function HtmlZenGarden({ theme }) {
                       key={name}
                       src={themes[name].image.src}
                       alt=""
+                      loading={themes[name].image.loading}
                       className="absolute max-w-none"
                       style={fit(
                         themes[theme].image.width({ containerWidth, col }),

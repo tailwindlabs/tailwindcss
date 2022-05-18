@@ -18,7 +18,7 @@ import { lines } from '../../samples/build-anything.html?highlight'
 const code = {
   Simple: `<div class="flex font-sans">
   <div class="flex-none w-48 relative">
-    <img src="/classic-utility-jacket.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" />
+    <img src="/classic-utility-jacket.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
   </div>
   <form class="flex-auto p-6">
     <div class="flex flex-wrap">
@@ -66,7 +66,7 @@ const code = {
 </div>`,
   Playful: `<div class="flex font-sans">
   <div class="flex-none w-56 relative">
-    <img src="/classic-utility-jacket.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" />
+    <img src="/classic-utility-jacket.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" loading="lazy" />
   </div>
   <form class="flex-auto p-6">
     <div class="flex flex-wrap">
@@ -114,7 +114,7 @@ const code = {
 </div>`,
   Elegant: `<div class="flex font-serif">
   <div class="flex-none w-52 relative">
-    <img src="/classic-utility-jacket.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" />
+    <img src="/classic-utility-jacket.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" loading="lazy" />
   </div>
   <form class="flex-auto p-6">
     <div class="flex flex-wrap items-baseline">
@@ -162,7 +162,7 @@ const code = {
 </div>`,
   Brutalist: `<div class="flex p-6 font-mono">
   <div class="flex-none w-48 mb-10 relative z-10 before:absolute before:top-1 before:left-1 before:w-full before:h-full before:bg-teal-400">
-    <img src="/classic-utility-jacket.jpg" alt="" class="absolute z-10 inset-0 w-full h-full object-cover rounded-lg" />
+    <img src="/classic-utility-jacket.jpg" alt="" class="absolute z-10 inset-0 w-full h-full object-cover rounded-lg" loading="lazy" />
   </div>
   <form class="flex-auto pl-6">
     <div class="relative flex flex-wrap items-baseline pb-6 before:bg-black before:absolute before:-top-6 before:bottom-0 before:-left-60 before:-right-6">
