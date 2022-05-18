@@ -43,7 +43,7 @@ type UtilityType =
 
 export type Candidate<T = UtilityType['type']> = UtilityCommon & Extract<UtilityType, { type: T }>
 
-export function parseCandidate(raw: string, context: any): Candidate | null
+export function parseCandidate(raw: string, context: any): Iterable<Candidate>
 
 export type AnyStringWithAutocomplete<T> = T | (string & Record<never, never>)
 

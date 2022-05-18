@@ -78,6 +78,11 @@ export function asValue(modifier, options = {}, { candidate, validate = () => tr
   return undefined
 }
 
+/**
+ *
+ * @param {string|import('../lib/candidate').Arbitrary} input
+ * @returns {input is import('../lib/candidate').Arbitrary}
+ */
 function isArbitraryValue(input) {
   return typeof input === 'object'
 }

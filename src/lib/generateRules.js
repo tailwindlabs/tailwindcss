@@ -475,7 +475,7 @@ function* resolveMatchesForCandidate(candidate, context) {
 
           rule.selector = finalizeSelector(finalFormat, {
             selector: rule.selector,
-            candidate: candidate.raw,
+            candidate,
             context,
           })
         })

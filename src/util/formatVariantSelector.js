@@ -42,13 +42,13 @@ export function finalizeSelector(format, { selector, candidate, context }) {
   //           ╰──┴─────┴─────────────── We will split here
   //
   let splitter = new RegExp(`\\${separator}(?![^[]*\\])`)
-  let base = candidate.split(splitter).pop()
+  let base = candidate.raw.split(splitter).pop()
 
   if (context?.tailwindConfig?.prefix) {
     format = prefixSelector(context.tailwindConfig.prefix, format)
   }
 
-  format = format.replace(PARENT, `.${escapeClassName(candidate)}`)
+  format = format.replace(PARENT, `.${escapeClassName(candidate.raw)}`)
 
   let formatAst = selectorParser().astSync(format)
 

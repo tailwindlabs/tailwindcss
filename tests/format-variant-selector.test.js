@@ -1,8 +1,9 @@
+import { parseCandidate } from '../src/lib/candidate'
 import { formatVariantSelector, finalizeSelector } from '../src/util/formatVariantSelector'
 
 it('should be possible to add a simple variant to a simple selector', () => {
   let selector = '.text-center'
-  let candidate = 'hover:text-center'
+  let candidate = Array.from(parseCandidate('hover:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = ['&:hover']
 
@@ -13,7 +14,7 @@ it('should be possible to add a simple variant to a simple selector', () => {
 
 it('should be possible to add a multiple simple variants to a simple selector', () => {
   let selector = '.text-center'
-  let candidate = 'focus:hover:text-center'
+  let candidate = Array.from(parseCandidate('focus:hover:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = ['&:hover', '&:focus']
 
@@ -24,7 +25,7 @@ it('should be possible to add a multiple simple variants to a simple selector', 
 
 it('should be possible to add a simple variant to a selector containing escaped parts', () => {
   let selector = '.bg-\\[rgba\\(0\\,0\\,0\\)\\]'
-  let candidate = 'hover:bg-[rgba(0,0,0)]'
+  let candidate = Array.from(parseCandidate('hover:bg-[rgba(0,0,0)]', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = ['&:hover']
 
@@ -35,7 +36,7 @@ it('should be possible to add a simple variant to a selector containing escaped 
 
 it('should be possible to add a simple variant to a selector containing escaped parts (escape is slightly different)', () => {
   let selector = '.bg-\\[rgba\\(0\\2c 0\\2c 0\\)\\]'
-  let candidate = 'hover:bg-[rgba(0,0,0)]'
+  let candidate = Array.from(parseCandidate('hover:bg-[rgba(0,0,0)]', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = ['&:hover']
 
@@ -46,7 +47,7 @@ it('should be possible to add a simple variant to a selector containing escaped 
 
 it('should be possible to add a simple variant to a more complex selector', () => {
   let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
-  let candidate = 'hover:space-x-4'
+  let candidate = Array.from(parseCandidate('hover:space-x-4', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = ['&:hover']
 
@@ -57,7 +58,7 @@ it('should be possible to add a simple variant to a more complex selector', () =
 
 it('should be possible to add multiple simple variants to a more complex selector', () => {
   let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
-  let candidate = 'disabled:focus:hover:space-x-4'
+  let candidate = Array.from(parseCandidate('disabled:focus:hover:space-x-4', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = ['&:hover', '&:focus', '&:disabled']
 
@@ -68,7 +69,7 @@ it('should be possible to add multiple simple variants to a more complex selecto
 
 it('should be possible to add a single merge variant to a simple selector', () => {
   let selector = '.text-center'
-  let candidate = 'group-hover:text-center'
+  let candidate = Array.from(parseCandidate('group-hover:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = [':merge(.group):hover &']
 
@@ -79,7 +80,7 @@ it('should be possible to add a single merge variant to a simple selector', () =
 
 it('should be possible to add multiple merge variants to a simple selector', () => {
   let selector = '.text-center'
-  let candidate = 'group-focus:group-hover:text-center'
+  let candidate = Array.from(parseCandidate('group-focus:group-hover:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = [':merge(.group):hover &', ':merge(.group):focus &']
 
@@ -90,7 +91,7 @@ it('should be possible to add multiple merge variants to a simple selector', () 
 
 it('should be possible to add a single merge variant to a more complex selector', () => {
   let selector = '.space-x-4 ~ :not([hidden]) ~ :not([hidden])'
-  let candidate = 'group-hover:space-x-4'
+  let candidate = Array.from(parseCandidate('group-hover:space-x-4', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = [':merge(.group):hover &']
 
@@ -101,7 +102,7 @@ it('should be possible to add a single merge variant to a more complex selector'
 
 it('should be possible to add multiple merge variants to a more complex selector', () => {
   let selector = '.space-x-4 ~ :not([hidden]) ~ :not([hidden])'
-  let candidate = 'group-focus:group-hover:space-x-4'
+  let candidate = Array.from(parseCandidate('group-focus:group-hover:space-x-4', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = [':merge(.group):hover &', ':merge(.group):focus &']
 
@@ -112,7 +113,7 @@ it('should be possible to add multiple merge variants to a more complex selector
 
 it('should be possible to add multiple unique merge variants to a simple selector', () => {
   let selector = '.text-center'
-  let candidate = 'peer-focus:group-hover:text-center'
+  let candidate = Array.from(parseCandidate('peer-focus:group-hover:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = [':merge(.group):hover &', ':merge(.peer):focus ~ &']
 
@@ -123,7 +124,7 @@ it('should be possible to add multiple unique merge variants to a simple selecto
 
 it('should be possible to add multiple unique merge variants to a simple selector', () => {
   let selector = '.text-center'
-  let candidate = 'group-hover:peer-focus:text-center'
+  let candidate = Array.from(parseCandidate('group-hover:peer-focus:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
   let variants = [':merge(.peer):focus ~ &', ':merge(.group):hover &']
 
@@ -149,7 +150,7 @@ it('should be possible to use multiple :merge() calls with different "arguments"
 
 it('group hover and prose headings combination', () => {
   let selector = '.text-center'
-  let candidate = 'group-hover:prose-headings:text-center'
+  let candidate = Array.from(parseCandidate('group-hover:prose-headings:text-center', { tailwindConfig: { separator: ':' } }))[0]
   let variants = [
     ':where(&) :is(h1, h2, h3, h4)', // Prose Headings
     ':merge(.group):hover &', // Group Hover
@@ -162,7 +163,7 @@ it('group hover and prose headings combination', () => {
 
 it('group hover and prose headings combination flipped', () => {
   let selector = '.text-center'
-  let candidate = 'prose-headings:group-hover:text-center'
+  let candidate = Array.from(parseCandidate('prose-headings:group-hover:text-center', { tailwindConfig: { separator: ':' } }))[0]
   let variants = [
     ':merge(.group):hover &', // Group Hover
     ':where(&) :is(h1, h2, h3, h4)', // Prose Headings
@@ -175,7 +176,7 @@ it('group hover and prose headings combination flipped', () => {
 
 it('should be possible to handle a complex utility', () => {
   let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
-  let candidate = 'peer-disabled:peer-first-child:group-hover:group-focus:focus:hover:space-x-4'
+  let candidate = Array.from(parseCandidate('peer-disabled:peer-first-child:group-hover:group-focus:focus:hover:space-x-4', { tailwindConfig: { separator: ':' } }))[0]
   let variants = [
     '&:hover', // Hover
     '&:focus', // Focus
@@ -193,7 +194,7 @@ it('should be possible to handle a complex utility', () => {
 describe('real examples', () => {
   it('example a', () => {
     let selector = '.placeholder-red-500::placeholder'
-    let candidate = 'hover:placeholder-red-500'
+    let candidate = Array.from(parseCandidate('hover:placeholder-red-500', { tailwindConfig: { separator: ':' } }))[0]
 
     let variants = ['&:hover']
 
@@ -204,7 +205,7 @@ describe('real examples', () => {
 
   it('example b', () => {
     let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
-    let candidate = 'group-hover:hover:space-x-4'
+    let candidate = Array.from(parseCandidate('group-hover:hover:space-x-4', { tailwindConfig: { separator: ':' } }))[0]
 
     let variants = ['&:hover', ':merge(.group):hover &']
 
@@ -215,7 +216,7 @@ describe('real examples', () => {
 
   it('should work for group-hover and class dark mode combinations', () => {
     let selector = '.text-center'
-    let candidate = 'dark:group-hover:text-center'
+    let candidate = Array.from(parseCandidate('dark:group-hover:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
     let variants = [':merge(.group):hover &', '.dark &']
 
@@ -226,7 +227,7 @@ describe('real examples', () => {
 
   it('should work for group-hover and class dark mode combinations (reversed)', () => {
     let selector = '.text-center'
-    let candidate = 'group-hover:dark:text-center'
+    let candidate = Array.from(parseCandidate('group-hover:dark:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
     let variants = ['.dark &', ':merge(.group):hover &']
 
@@ -238,7 +239,7 @@ describe('real examples', () => {
   describe('prose-headings', () => {
     it('should be possible to use hover:prose-headings:text-center', () => {
       let selector = '.text-center'
-      let candidate = 'hover:prose-headings:text-center'
+      let candidate = Array.from(parseCandidate('hover:prose-headings:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
       let variants = [':where(&) :is(h1, h2, h3, h4)', '&:hover']
 
@@ -249,7 +250,7 @@ describe('real examples', () => {
 
     it('should be possible to use prose-headings:hover:text-center', () => {
       let selector = '.text-center'
-      let candidate = 'prose-headings:hover:text-center'
+      let candidate = Array.from(parseCandidate('prose-headings:hover:text-center', { tailwindConfig: { separator: ':' } }))[0]
 
       let variants = ['&:hover', ':where(&) :is(h1, h2, h3, h4)']
 
@@ -276,7 +277,7 @@ describe('pseudo elements', () => {
   `('should translate "$before" into "$after"', ({ before, after }) => {
     let result = finalizeSelector(formatVariantSelector('&', before), {
       selector: '.a',
-      candidate: 'a',
+      candidate: Array.from(parseCandidate('a', { tailwindConfig: { separator: ':'} }))[0],
     })
 
     expect(result).toEqual(after.replace('&', '.a'))
