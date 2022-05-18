@@ -9,8 +9,7 @@ import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSe
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
-import isValidArbitraryValue from '../util/isValidArbitraryValue'
-import { isParsableNode, isParsableCssValue, isValidPropName } from '../util/css-validation.js'
+import { isParsableNode } from '../util/css-validation.js'
 import { parseCandidate } from '../lib/candidate.js'
 
 let classNameParser = selectorParser((selectors) => {
@@ -303,33 +302,13 @@ function parseRules(rule, cache, options = {}) {
   return [cache.get(rule), options]
 }
 
-function extractArbitraryProperty(classCandidate, context) {
-  let [, property, value] = classCandidate.match(/^\[([a-zA-Z0-9-_]+):(\S+)\]$/) ?? []
-
-  if (value === undefined) {
-    return null
-  }
-
-  if (!isValidPropName(property)) {
-    return null
-  }
-
-  if (!isValidArbitraryValue(value)) {
-    return null
-  }
-
-  let normalized = normalize(value)
-
-  if (!isParsableCssValue(property, normalized)) {
-    return null
-  }
-
+function extractArbitraryProperty(parsed, context) {
   return [
     [
       { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
       () => ({
-        [asClass(classCandidate)]: {
-          [property]: normalized,
+        [asClass(parsed.withoutVariants)]: {
+          [parsed.name]: parsed.value,
         },
       }),
     ],
@@ -344,7 +323,7 @@ function* resolveMatchedPlugins(parsed, context) {
   }
 
   if (parsed.type === 'custom') {
-    yield [extractArbitraryProperty(classCandidate, context), 'DEFAULT']
+    yield [extractArbitraryProperty(parsed, context), 'DEFAULT']
   }
 
   if (parsed.type !== 'constrained' && parsed.type !== 'partial') {
