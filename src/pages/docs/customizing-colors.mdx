@@ -120,6 +120,26 @@ module.exports = {
 
 The nested keys will be combined with the parent key to form class names like `bg-tahiti-400`.
 
+Like many other places in Tailwind, the special `DEFAULT` key can be used when you want to define a value with no suffix:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    colors: {
+      // ...
+      'tahiti': {
+        light: '#67e8f9',
+        DEFAULT: '#06b6d4',
+        dark: '#0e7490',
+      },
+      // ...
+    },
+  },
+}
+```
+
+This will create classes like `bg-tahiti`, `bg-tahiti-light`, and `bg-tahiti-dark`.
+
 ### Arbitrary values
 
 If you need a one-off custom color in your project, consider using Tailwind's arbitrary value notation to generate a class for that color on-demand instead of adding it to your theme:
