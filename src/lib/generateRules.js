@@ -131,25 +131,21 @@ function applyVariant(variant, matches, context) {
 
   let args
 
-  // Find partial arbitrary variants
-  if (variant.endsWith(']') && !variant.startsWith('[')) {
-    args = variant.slice(variant.lastIndexOf('[') + 1, -1)
-    variant = variant.slice(0, variant.indexOf(args) - 1 /* - */ - 1 /* [ */)
-  }
-
-  // Register arbitrary variants
-  if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
-    let selector = normalize(variant.slice(1, -1))
-
-    if (!isValidVariantFormatString(selector)) {
-      return []
-    }
-
-    let fn = parseVariant(selector)
+  if (variant.type === 'constrained') {
+    variant = variant.name
+  } else if (variant.type === 'partial' && variant.value !== '') {
+    // Find partial arbitrary variants
+    args = variant.value
+    variant = variant.name
+  } else if (variant.type === 'custom' && !context.variantMap.has(variant.raw)) {
+    // Register arbitrary variants
+    let fn = parseVariant(variant.value)
 
     let sort = Array.from(context.variantOrder.values()).pop() << 1n
-    context.variantMap.set(variant, [[sort, fn]])
-    context.variantOrder.set(variant, sort)
+    context.variantMap.set(variant.raw, [[sort, fn]])
+    context.variantOrder.set(variant.raw, sort)
+
+    variant = variant.raw
   }
 
   if (!context.variantMap.has(variant)) {
@@ -369,9 +365,8 @@ function* resolveMatches(candidate, context) {
     return
   }
 
-  let classCandidate = parsed.withoutVariants
   let important = parsed.important
-  let variants = parsed.variants.map((v) => v.raw)
+  let variants = parsed.variants
 
   // TODO: Reintroduce this in ways that doesn't break on false positives
   // function sortAgainst(toSort, against) {
