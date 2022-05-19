@@ -15,6 +15,6 @@
     ]
   },
   "devDependencies": {
-    "parcel": "nightly"
+    "parcel": "^2.5.0"
   }
 }

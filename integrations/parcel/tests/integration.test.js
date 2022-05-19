@@ -264,11 +264,8 @@ describe('watcher', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
         .btn {
-          border-radius: 0.25rem;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          border-radius: .25rem;
+          padding: .25rem .5rem;
         }
         .font-bold {
           font-weight: 700;
@@ -296,13 +293,10 @@ describe('watcher', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
         .btn {
-          border-radius: 0.25rem;
           --tw-bg-opacity: 1;
           background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          border-radius: .25rem;
+          padding: .25rem .5rem;
         }
         .font-bold {
           font-weight: 700;
