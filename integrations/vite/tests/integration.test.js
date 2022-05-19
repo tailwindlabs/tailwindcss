@@ -65,7 +65,7 @@ describe('watcher', () => {
     )
 
     await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
-    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+    await runningProcess.onStdout((message) => message.includes('page reload'))
 
     expect(await fetchCSS()).toIncludeCss(
       css`
@@ -79,7 +79,7 @@ describe('watcher', () => {
     )
 
     await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
-    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+    await runningProcess.onStdout((message) => message.includes('page reload'))
 
     expect(await fetchCSS()).toIncludeCss(
       css`
@@ -99,7 +99,7 @@ describe('watcher', () => {
     return runningProcess.stop()
   })
 
-  test.skip('classes are generated when globbed files change', async () => {
+  test('classes are generated when globbed files change', async () => {
     await writeInputFile(
       'index.html',
       html`
@@ -126,7 +126,7 @@ describe('watcher', () => {
     )
 
     await appendToInputFile('glob/index.html', html`<div class="font-normal"></div>`)
-    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+    await runningProcess.onStdout((message) => message.includes('page reload'))
 
     expect(await fetchCSS()).toIncludeCss(
       css`
@@ -140,7 +140,7 @@ describe('watcher', () => {
     )
 
     await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
-    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+    await runningProcess.onStdout((message) => message.includes('page reload'))
 
     expect(await fetchCSS()).toIncludeCss(
       css`
@@ -207,7 +207,7 @@ describe('watcher', () => {
         }
       `
     )
-    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+    await runningProcess.onStdout((message) => message.includes('[vite]'))
 
     expect(await fetchCSS()).toIncludeCss(
       css`
