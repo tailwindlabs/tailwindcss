@@ -55,7 +55,7 @@ expect.extend({
   },
   toIncludeCss(received, argument) {
     function stripped(str) {
-      return str.replace(/\s/g, '').replace(/;/g, '')
+      return str.replace('/* prettier-ignore */', '').replace(/\s/g, '').replace(/;/g, '')
     }
 
     const options = {

@@ -78,6 +78,55 @@ describe('watcher', () => {
     return runningProcess.stop()
   })
 
+  test(`classes are generated when globbed files change`, async () => {
+    await writeInputFile('glob/index.html', html`<div class="font-bold"></div>`)
+
+    let runningProcess = $('rollup -c --watch')
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('index.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    await appendToInputFile('glob/index.html', html`<div class="font-normal"></div>`)
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('index.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('index.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
   test(`classes are generated when the tailwind.config.js file changes`, async () => {
     await writeInputFile('index.html', html`<div class="font-bold md:font-medium"></div>`)
 
