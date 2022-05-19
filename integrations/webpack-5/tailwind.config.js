@@ -1,5 +1,8 @@
 module.exports = {
-  content: ['./src/index.html'],
+  content: [
+    './src/index.html',
+    './src/glob/*.{js,html}',
+  ],
   theme: {
     extend: {},
   },

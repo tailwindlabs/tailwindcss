@@ -99,6 +99,67 @@ describe('watcher', () => {
     return runningProcess.stop()
   })
 
+  test.skip('classes are generated when globbed files change', async () => {
+    await writeInputFile(
+      'index.html',
+      html`
+        <link rel="stylesheet" href="./index.css" />
+      `
+    )
+
+    await writeInputFile(
+      'glob/index.html',
+      html`
+        <div class="font-bold"></div>
+      `
+    )
+
+    let runningProcess = $(`vite --port ${PORT}`)
+    await runningProcess.onStdout((message) => message.includes('ready in'))
+
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    await appendToInputFile('glob/index.html', html`<div class="font-normal"></div>`)
+    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
+    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
   test('classes are generated when the tailwind.config.js file changes', async () => {
     await writeInputFile(
       'index.html',
