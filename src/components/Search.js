@@ -38,7 +38,6 @@ export function SearchProvider({ children }) {
     isOpen,
     onOpen,
     onClose,
-    onInput,
   })
 
   return (
