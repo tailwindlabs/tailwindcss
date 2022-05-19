@@ -100,19 +100,9 @@ describe('watcher', () => {
   })
 
   test('classes are generated when globbed files change', async () => {
-    await writeInputFile(
-      'index.html',
-      html`
-        <link rel="stylesheet" href="./index.css" />
-      `
-    )
+    await writeInputFile('index.html', html` <link rel="stylesheet" href="./index.css" /> `)
 
-    await writeInputFile(
-      'glob/index.html',
-      html`
-        <div class="font-bold"></div>
-      `
-    )
+    await writeInputFile('glob/index.html', html` <div class="font-bold"></div> `)
 
     let runningProcess = $(`vite --port ${PORT}`)
     await runningProcess.onStdout((message) => message.includes('ready in'))

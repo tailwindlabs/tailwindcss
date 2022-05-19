@@ -93,19 +93,9 @@ describe('watcher', () => {
   })
 
   test.skip('classes are generated when globbed files change', async () => {
-    await writeInputFile(
-      'index.html',
-      html`
-        <link rel="stylesheet" href="./index.css" />
-      `
-    )
+    await writeInputFile('index.html', html` <link rel="stylesheet" href="./index.css" /> `)
 
-    await writeInputFile(
-      'glob/index.html',
-      html`
-        <div class="font-bold"></div>
-      `
-    )
+    await writeInputFile('glob/index.html', html` <div class="font-bold"></div> `)
 
     let runningProcess = $('parcel watch ./src/index.html --no-cache')
 
@@ -264,8 +254,8 @@ describe('watcher', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
         .btn {
-          border-radius: .25rem;
-          padding: .25rem .5rem;
+          border-radius: 0.25rem;
+          padding: 0.25rem 0.5rem;
         }
         .font-bold {
           font-weight: 700;
@@ -295,8 +285,8 @@ describe('watcher', () => {
         .btn {
           --tw-bg-opacity: 1;
           background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          border-radius: .25rem;
-          padding: .25rem .5rem;
+          border-radius: 0.25rem;
+          padding: 0.25rem 0.5rem;
         }
         .font-bold {
           font-weight: 700;
