@@ -30,7 +30,7 @@ describe('static build', () => {
     )
 
     await $('vite build', {
-      env: { NODE_ENV: 'production' },
+      env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
     expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
@@ -53,7 +53,9 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`)
+    let runningProcess = $(`vite --port ${PORT}`, {
+      env: { NO_COLOR: '1' },
+    })
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
@@ -104,7 +106,9 @@ describe('watcher', () => {
 
     await writeInputFile('glob/index.html', html` <div class="font-bold"></div> `)
 
-    let runningProcess = $(`vite --port ${PORT}`)
+    let runningProcess = $(`vite --port ${PORT}`, {
+      env: { NO_COLOR: '1' },
+    })
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
@@ -159,7 +163,9 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`)
+    let runningProcess = $(`vite --port ${PORT}`, {
+      env: { NO_COLOR: '1' },
+    })
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
@@ -224,7 +230,9 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`)
+    let runningProcess = $(`vite --port ${PORT}`, {
+      env: { NO_COLOR: '1' },
+    })
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
