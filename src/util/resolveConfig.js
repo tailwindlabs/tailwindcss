@@ -8,6 +8,7 @@ import { toPath } from './toPath'
 import { normalizeConfig } from './normalizeConfig'
 import isPlainObject from './isPlainObject'
 import { cloneDeep } from './cloneDeep'
+import { withAlphaValue } from './withAlphaVariable'
 
 function isFunction(input) {
   return typeof input === 'function'
@@ -187,11 +188,22 @@ function resolveFunctionKeys(object) {
     return val
   }
 
-  resolvePath.theme = resolvePath
+  Object.assign(resolvePath, {
+    theme: resolvePath,
+    ...configUtils,
+    withAlpha(key, opacityValue) {
+      // TODO: This is kinda iffy but it works
+      const path = toPath(key)
+      const lastSegment = path.pop()
+      let value = resolvePath(path)[lastSegment]
 
-  for (let key in configUtils) {
-    resolvePath[key] = configUtils[key]
-  }
+      if (value === undefined) {
+        return value
+      }
+
+      return withAlphaValue(value, opacityValue)
+    },
+  })
 
   return Object.keys(object).reduce((resolved, key) => {
     return {

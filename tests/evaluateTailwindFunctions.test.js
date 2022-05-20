@@ -1,9 +1,14 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/evaluateTailwindFunctions'
+import tailwind from '../src/index'
 import { css } from './util/run'
 
 function run(input, opts = {}) {
   return postcss([plugin({ tailwindConfig: opts })]).process(input, { from: undefined })
+}
+
+function runFull(input, config) {
+  return postcss([tailwind(config)]).process(input, { from: undefined })
 }
 
 test('it looks up values in the theme using dot notation', () => {
@@ -812,6 +817,208 @@ test('screen arguments can be quoted', () => {
 
   return run(input, {
     theme: { screens: { sm: '600px' } },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function can extract alpha values for colors (1)', () => {
+  let input = css`
+    .foo {
+      color: theme(colors.blue.500 / 50%);
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: rgb(59 130 246 / 50%);
+    }
+  `
+
+  return run(input, {
+    theme: {
+      colors: { blue: { 500: '#3b82f6' } },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function can extract alpha values for colors (2)', () => {
+  let input = css`
+    .foo {
+      color: theme(colors.blue.500 / 0.5);
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: rgb(59 130 246 / 0.5);
+    }
+  `
+
+  return run(input, {
+    theme: {
+      colors: { blue: { 500: '#3b82f6' } },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function can extract alpha values for colors (3)', () => {
+  let input = css`
+    .foo {
+      color: theme(colors.blue.500 / var(--my-alpha));
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: rgb(59 130 246 / var(--my-alpha));
+    }
+  `
+
+  return run(input, {
+    theme: {
+      colors: { blue: { 500: '#3b82f6' } },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function can extract alpha values for colors (4)', () => {
+  let input = css`
+    .foo {
+      color: theme(colors.blue.500 / 50%);
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: hsl(217 91% 60% / 50%);
+    }
+  `
+
+  return run(input, {
+    theme: {
+      colors: {
+        blue: { 500: 'hsl(217, 91%, 60%)' },
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function can extract alpha values for colors (5)', () => {
+  let input = css`
+    .foo {
+      color: theme(colors.blue.500 / 0.5);
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: hsl(217 91% 60% / 0.5);
+    }
+  `
+
+  return run(input, {
+    theme: {
+      colors: {
+        blue: { 500: 'hsl(217, 91%, 60%)' },
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function can extract alpha values for colors (6)', () => {
+  let input = css`
+    .foo {
+      color: theme(colors.blue.500 / var(--my-alpha));
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: hsl(217 91% 60% / var(--my-alpha));
+    }
+  `
+
+  return run(input, {
+    theme: {
+      colors: {
+        blue: { 500: 'hsl(217, 91%, 60%)' },
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function can extract alpha values for colors (7)', () => {
+  let input = css`
+    .foo {
+      color: theme(colors.blue.500 / var(--my-alpha));
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: rgb(var(--foo) / var(--my-alpha));
+    }
+  `
+
+  return runFull(input, {
+    theme: {
+      colors: ({ rgb }) => ({
+        blue: {
+          500: rgb('--foo'),
+        },
+      }),
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function can extract alpha values for colors (8)', () => {
+  let input = css`
+    .foo {
+      color: theme(colors.blue.500 / theme(opacity.myalpha));
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: rgb(var(--foo) / 50%);
+    }
+  `
+
+  return runFull(input, {
+    theme: {
+      colors: ({ rgb }) => ({
+        blue: {
+          500: rgb('--foo'),
+        },
+      }),
+
+      opacity: {
+        myalpha: '50%',
+      },
+    },
   }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)

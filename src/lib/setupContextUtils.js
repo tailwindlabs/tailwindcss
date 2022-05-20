@@ -221,16 +221,25 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     return context.tailwindConfig.prefix + identifier
   }
 
+  function resolveThemeValue(path, defaultValue, opts = {}) {
+    const [pathRoot, ...subPaths] = toPath(path)
+    const value = getConfigValue(['theme', pathRoot, ...subPaths], defaultValue)
+    return transformThemeValue(pathRoot)(value, opts)
+  }
+
+  const theme = Object.assign(
+    (path, defaultValue = undefined) => resolveThemeValue(path, defaultValue),
+    {
+      withAlpha: (path, opacityValue) => resolveThemeValue(path, undefined, { opacityValue }),
+    }
+  )
+
   let api = {
     postcss,
     prefix: applyConfiguredPrefix,
     e: escapeClassName,
     config: getConfigValue,
-    theme(path, defaultValue) {
-      const [pathRoot, ...subPaths] = toPath(path)
-      const value = getConfigValue(['theme', pathRoot, ...subPaths], defaultValue)
-      return transformThemeValue(pathRoot)(value)
-    },
+    theme,
     corePlugins: (path) => {
       if (Array.isArray(tailwindConfig.corePlugins)) {
         return tailwindConfig.corePlugins.includes(path)
