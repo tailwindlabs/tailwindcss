@@ -25,15 +25,37 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the
-        following commands to generate both <code>tailwind.config.cjs</code> and{' '}
-        <code>postcss.config.cjs</code>.
+        Using npm, install <code>tailwindcss</code> and its peer dependencies, as well as{' '}
+        <code>svelte-preprocess</code>, and then run the following commands to generate both{' '}
+        <code>tailwind.config.cjs</code> and <code>postcss.config.cjs</code>.
       </p>
     ),
     code: {
       name: 'Terminal',
       lang: 'terminal',
-      code: 'npm install -D tailwindcss postcss autoprefixer\nnpx tailwindcss init tailwind.config.cjs -p\nmv postcss.config.js postcss.config.cjs',
+      code: 'npm install -D tailwindcss postcss autoprefixer svelte-preprocess\nnpx tailwindcss init tailwind.config.cjs -p\nmv postcss.config.js postcss.config.cjs',
+    },
+  },
+  {
+    title: 'Enable use of PostCSS in <style> blocks',
+    body: () => (
+      <p>
+        In your <code>svelte.config.js</code> file, import <code>svelte-preprocess</code> and
+        configure it to process <code>&lt;style&gt;</code> blocks as PostCSS.
+      </p>
+    ),
+    code: {
+      name: 'svelte.config.js',
+      lang: 'js',
+      code: `> import preprocess from "svelte-preprocess";
+
+  const config = {
+>   preprocess: [
+>     preprocess({
+>       postcss: true,
+>     }),
+>   ],
+  }`,
     },
   },
   {
