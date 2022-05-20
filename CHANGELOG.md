@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Try using local `postcss` installation first in the CLI ([#8270](https://github.com/tailwindlabs/tailwindcss/pull/8270))
+- Only apply hover styles when supported (future) ([#8394](https://github.com/tailwindlabs/tailwindcss/pull/8394))
 
 ### Added
 
