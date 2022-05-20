@@ -35,6 +35,82 @@ test('partial arbitrary variants', () => {
   })
 })
 
+test('partial arbitrary variants with at-rules', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="potato-[yellow]:bg-yellow-200 potato-[baked]:w-3"></div> `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant({
+          potato: (flavor) => `@media (potato: ${flavor})`,
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (potato: baked) {
+        .potato-\[baked\]\:w-3 {
+          width: 0.75rem;
+        }
+      }
+      @media (potato: yellow) {
+        .potato-\[yellow\]\:bg-yellow-200 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+        }
+      }
+    `)
+  })
+})
+
+test('partial arbitrary variants with at-rules and placeholder', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="potato-[yellow]:bg-yellow-200 potato-[baked]:w-3"></div> `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant({
+          potato: (flavor) => `@media (potato: ${flavor}) { &:potato }`,
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (potato: baked) {
+        .potato-\[baked\]\:w-3:potato {
+          width: 0.75rem;
+        }
+      }
+      @media (potato: yellow) {
+        .potato-\[yellow\]\:bg-yellow-200:potato {
+          --tw-bg-opacity: 1;
+          background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+        }
+      }
+    `)
+  })
+})
+
 test('partial arbitrary variants with default values', () => {
   let config = {
     content: [
