@@ -454,7 +454,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
               )
             }
 
-            return parseVariant(result)(api)
+            // result may be undefined with legacy variants that use APIs like `modifySelectors`
+            return result && parseVariant(result)(api)
           }
         }
 
