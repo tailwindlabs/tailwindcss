@@ -6,7 +6,7 @@ let defaults = {
 }
 
 let featureFlags = {
-  future: [],
+  future: ['hoverOnlyWhenSupported'],
   experimental: ['optimizeUniversalDefaults'],
 }
 
