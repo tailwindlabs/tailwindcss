@@ -4,7 +4,7 @@
  * Square bracket notation `a[b]` may be used to "escape" dots that would otherwise be interpreted as path separators.
  *
  * Example:
- * a -> ['a]
+ * a -> ['a']
  * a.b.c -> ['a', 'b', 'c']
  * a[b].c -> ['a', 'b', 'c']
  * a[b.c].e.f -> ['a', 'b.c', 'e', 'f']
