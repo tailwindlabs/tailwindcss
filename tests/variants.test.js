@@ -769,3 +769,39 @@ it('variants only picks the used selectors in a group (apply)', () => {
     `)
   })
 })
+
+test('hoverOnlyWhenSupported adds hover and pointer media features by default', () => {
+  let config = {
+    future: {
+      hoverOnlyWhenSupported: true,
+    },
+    content: [
+      { raw: html`<div class="hover:underline group-hover:underline peer-hover:underline"></div>` },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      @media (hover: hover) and (pointer: fine) {
+        .hover\:underline:hover {
+          text-decoration-line: underline;
+        }
+        .group:hover .group-hover\:underline {
+          text-decoration-line: underline;
+        }
+        .peer:hover ~ .peer-hover\:underline {
+          text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})

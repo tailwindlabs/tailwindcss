@@ -14,6 +14,7 @@ import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
 import { normalizeScreens } from './util/normalizeScreens'
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
+import { flagEnabled } from './featureFlags'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -60,14 +61,14 @@ export let variantPlugins = {
     })
   },
 
-  pseudoClassVariants: ({ addVariant }) => {
+  pseudoClassVariants: ({ addVariant, config }) => {
     let pseudoVariants = [
       // Positional
-      ['first', ':first-child'],
-      ['last', ':last-child'],
-      ['only', ':only-child'],
-      ['odd', ':nth-child(odd)'],
-      ['even', ':nth-child(even)'],
+      ['first', '&:first-child'],
+      ['last', '&:last-child'],
+      ['only', '&:only-child'],
+      ['odd', '&:nth-child(odd)'],
+      ['even', '&:nth-child(even)'],
       'first-of-type',
       'last-of-type',
       'only-of-type',
@@ -92,11 +93,11 @@ export let variantPlugins = {
             }
           })
 
-          return ':visited'
+          return '&:visited'
         },
       ],
       'target',
-      ['open', '[open]'],
+      ['open', '&[open]'],
 
       // Forms
       'default',
@@ -116,19 +117,24 @@ export let variantPlugins = {
 
       // Interactive
       'focus-within',
-      'hover',
+      [
+        'hover',
+        !flagEnabled(config(), 'hoverOnlyWhenSupported')
+          ? '&:hover'
+          : '@media (hover: hover) and (pointer: fine) { &:hover }',
+      ],
       'focus',
       'focus-visible',
       'active',
       'enabled',
       'disabled',
-    ].map((variant) => (Array.isArray(variant) ? variant : [variant, `:${variant}`]))
+    ].map((variant) => (Array.isArray(variant) ? variant : [variant, `&:${variant}`]))
 
     for (let [variantName, state] of pseudoVariants) {
       addVariant(variantName, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
 
-        return `&${result}`
+        return result
       })
     }
 
@@ -136,7 +142,7 @@ export let variantPlugins = {
       addVariant(`group-${variantName}`, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
 
-        return `:merge(.group)${result} &`
+        return result.replace(/&(\S+)/, ':merge(.group)$1 &')
       })
     }
 
@@ -144,7 +150,7 @@ export let variantPlugins = {
       addVariant(`peer-${variantName}`, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
 
-        return `:merge(.peer)${result} ~ &`
+        return result.replace(/&(\S+)/, ':merge(.peer)$1 ~ &')
       })
     }
   },
