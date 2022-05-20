@@ -439,7 +439,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
         if (typeof variantFunction !== 'string') {
           // Safelist public API functions
-          return ({ args, modifySelectors, container, separator, wrap, format }) => {
+          return (api) => {
+            let { args, modifySelectors, container, separator, wrap, format } = api
             let result = variantFunction(
               Object.assign(
                 { modifySelectors, container, separator },
@@ -453,7 +454,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
               )
             }
 
-            return result
+            // result may be undefined with legacy variants that use APIs like `modifySelectors`
+            return result && parseVariant(result)(api)
           }
         }
 
@@ -477,20 +479,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         api.addVariant(
           variant,
-          Object.assign(
-            ({ args, wrap }) => {
-              let formatString = variants[variant](args)
-              if (!formatString) return null
-
-              if (!formatString.startsWith('@')) {
-                return formatString
-              }
-
-              let [, name, params] = /@(.*?)( .+|[({].*)/g.exec(formatString)
-              return wrap(postcss.atRule({ name, params: params.trim() }))
-            },
-            { [MATCH_VARIANT]: true }
-          ),
+          Object.assign(({ args }) => variants[variant](args), { [MATCH_VARIANT]: true }),
           options
         )
       }
