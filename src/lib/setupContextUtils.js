@@ -222,40 +222,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
   }
 
   let api = {
-    addVariant(variantName, variantFunctions, options = {}) {
-      variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
-        if (typeof variantFunction !== 'string') {
-          // Safelist public API functions
-          return ({ args, modifySelectors, container, separator, wrap, format }) => {
-            let result = variantFunction(
-              Object.assign(
-                { modifySelectors, container, separator },
-                variantFunction[MATCH_VARIANT] && { args, wrap, format }
-              )
-            )
-
-            if (typeof result === 'string' && !isValidVariantFormatString(result)) {
-              throw new Error(
-                `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
-              )
-            }
-
-            return result
-          }
-        }
-
-        if (!isValidVariantFormatString(variantFunction)) {
-          throw new Error(
-            `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
-          )
-        }
-
-        return parseVariant(variantFunction)
-      })
-
-      insertInto(variantList, variantName, options)
-      variantMap.set(variantName, variantFunctions)
-    },
     postcss,
     prefix: applyConfiguredPrefix,
     e: escapeClassName,
@@ -468,6 +434,40 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
       }
+    },
+    addVariant(variantName, variantFunctions, options = {}) {
+      variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
+        if (typeof variantFunction !== 'string') {
+          // Safelist public API functions
+          return ({ args, modifySelectors, container, separator, wrap, format }) => {
+            let result = variantFunction(
+              Object.assign(
+                { modifySelectors, container, separator },
+                variantFunction[MATCH_VARIANT] && { args, wrap, format }
+              )
+            )
+
+            if (typeof result === 'string' && !isValidVariantFormatString(result)) {
+              throw new Error(
+                `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
+              )
+            }
+
+            return result
+          }
+        }
+
+        if (!isValidVariantFormatString(variantFunction)) {
+          throw new Error(
+            `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
+          )
+        }
+
+        return parseVariant(variantFunction)
+      })
+
+      insertInto(variantList, variantName, options)
+      variantMap.set(variantName, variantFunctions)
     },
     matchVariant: function (variants, options) {
       for (let variant in variants) {
