@@ -29,7 +29,7 @@ it('should not generate nested selectors if the feature flag is not enabled', ()
   })
 })
 
-fit('should be possible to group variants', () => {
+it('should be possible to group variants', () => {
   let config = {
     experimental: 'all',
     content: [
