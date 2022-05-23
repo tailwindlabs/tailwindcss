@@ -21,7 +21,7 @@ export function defaultExtractor(context) {
 
 function* buildRegExps(context) {
   let separator = context.tailwindConfig.separator
-  let groupedVariantsEnabled = flagEnabled(context.tailwindConfig, 'groupedVariants')
+  let variantGroupingEnabled = flagEnabled(context.tailwindConfig, 'variantGrouping')
 
   yield regex.pattern([
     // Variants
@@ -45,7 +45,7 @@ function* buildRegExps(context) {
       // Utilities
       regex.pattern([
         // Utility Name / Group Name
-        groupedVariantsEnabled ? /-?(?:[\w,()]+)/ : /-?(?:\w+)/,
+        variantGroupingEnabled ? /-?(?:[\w,()]+)/ : /-?(?:\w+)/,
 
         // Normal/Arbitrary values
         regex.optional(
