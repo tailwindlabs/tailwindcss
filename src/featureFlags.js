@@ -7,7 +7,7 @@ let defaults = {
 
 let featureFlags = {
   future: ['hoverOnlyWhenSupported'],
-  experimental: ['optimizeUniversalDefaults'],
+  experimental: ['optimizeUniversalDefaults', 'variantGrouping'],
 }
 
 export function flagEnabled(config, flag) {

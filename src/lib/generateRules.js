@@ -12,6 +12,7 @@ import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
+import { flagEnabled } from '../featureFlags'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -444,7 +445,7 @@ function* recordCandidates(matches, classCandidate) {
   }
 }
 
-function* resolveMatches(candidate, context) {
+function* resolveMatches(candidate, context, original = candidate) {
   let separator = context.tailwindConfig.separator
   let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
   let important = false
@@ -452,6 +453,15 @@ function* resolveMatches(candidate, context) {
   if (classCandidate.startsWith('!')) {
     important = true
     classCandidate = classCandidate.slice(1)
+  }
+
+  if (flagEnabled(context.tailwindConfig, 'variantGrouping')) {
+    if (classCandidate.startsWith('(') && classCandidate.endsWith(')')) {
+      let base = variants.slice().reverse().join(separator)
+      for (let part of classCandidate.slice(1, -1).split(/\,(?![^(]*\))/g)) {
+        yield* resolveMatches(base + separator + part, context, original)
+      }
+    }
   }
 
   // TODO: Reintroduce this in ways that doesn't break on false positives
@@ -585,7 +595,11 @@ function* resolveMatches(candidate, context) {
 
           rule.selector = finalizeSelector(finalFormat, {
             selector: rule.selector,
-            candidate,
+            candidate: original,
+            base: candidate
+              .split(new RegExp(`\\${context?.tailwindConfig?.separator ?? ':'}(?![^[]*\\])`))
+              .pop(),
+
             context,
           })
         })

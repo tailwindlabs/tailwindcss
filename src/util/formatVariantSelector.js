@@ -29,20 +29,26 @@ export function formatVariantSelector(current, ...others) {
   return current
 }
 
-export function finalizeSelector(format, { selector, candidate, context }) {
+export function finalizeSelector(
+  format,
+  {
+    selector,
+    candidate,
+    context,
+
+    // Split by the separator, but ignore the separator inside square brackets:
+    //
+    // E.g.: dark:lg:hover:[paint-order:markers]
+    //           ┬  ┬     ┬            ┬
+    //           │  │     │            ╰── We will not split here
+    //           ╰──┴─────┴─────────────── We will split here
+    //
+    base = candidate
+      .split(new RegExp(`\\${context?.tailwindConfig?.separator ?? ':'}(?![^[]*\\])`))
+      .pop(),
+  }
+) {
   let ast = selectorParser().astSync(selector)
-
-  let separator = context?.tailwindConfig?.separator ?? ':'
-
-  // Split by the separator, but ignore the separator inside square brackets:
-  //
-  // E.g.: dark:lg:hover:[paint-order:markers]
-  //           ┬  ┬     ┬            ┬
-  //           │  │     │            ╰── We will not split here
-  //           ╰──┴─────┴─────────────── We will split here
-  //
-  let splitter = new RegExp(`\\${separator}(?![^[]*\\])`)
-  let base = candidate.split(splitter).pop()
 
   if (context?.tailwindConfig?.prefix) {
     format = prefixSelector(context.tailwindConfig.prefix, format)
