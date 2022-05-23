@@ -297,7 +297,11 @@ export interface PluginAPI {
   e: (className: string) => string
 }
 export type PluginCreator = (api: PluginAPI) => void
-export type PluginsConfig = (PluginCreator | { handler: PluginCreator; config?: Config })[]
+export type PluginsConfig = (
+  | PluginCreator
+  | { handler: PluginCreator; config?: Config }
+  | { (options: any): { handler: PluginCreator; config?: Config }; __isOptionsFunction: true }
+)[]
 
 // Top level config related
 interface RequiredConfig {
