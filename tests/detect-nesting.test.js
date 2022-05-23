@@ -55,6 +55,23 @@ it('should warn when we detect namespaced @tailwind at rules', () => {
   })
 })
 
+it('should not warn when namespaced @tailwind at rules are within a :global pseudo-class', () => {
+  let config = {
+    content: [{ raw: html`<div class="text-center"></div>` }],
+  }
+
+  let input = css`
+    :global {
+      @tailwind utilities;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.messages).toHaveLength(0)
+    expect(result.messages).toEqual([])
+  })
+})
+
 it('should not warn when nesting a single rule inside a media query', () => {
   let config = {
     content: [{ raw: html`<div class="nested"></div>` }],
