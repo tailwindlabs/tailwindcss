@@ -206,10 +206,9 @@ function resolveFunctionKeys(object) {
   })
 
   return Object.keys(object).reduce((resolved, key) => {
-    return {
-      ...resolved,
-      [key]: isFunction(object[key]) ? object[key](resolvePath, configUtils) : object[key],
-    }
+    resolved[key] = isFunction(object[key]) ? object[key](resolvePath, configUtils) : object[key]
+
+    return resolved
   }, {})
 }
 
