@@ -23,6 +23,47 @@ function* buildRegExps(context) {
   let separator = context.tailwindConfig.separator
   let variantGroupingEnabled = flagEnabled(context.tailwindConfig, 'variantGrouping')
 
+  let utility = regex.any([
+    // Arbitrary properties
+    /\[[^\s:'"]+:[^\s\]]+\]/,
+
+    // Utilities
+    regex.pattern([
+      // Utility Name / Group Name
+      /-?(?:\w+)/,
+
+      // Normal/Arbitrary values
+      regex.optional(
+        regex.any([
+          regex.pattern([
+            // Arbitrary values
+            /-\[[^\s:]+\]/,
+
+            // Not immediately followed by an `{[(`
+            /(?![{([]])/,
+
+            // optionally followed by an opacity modifier
+            /(?:\/[^\s'"\\$]*)?/,
+          ]),
+
+          regex.pattern([
+            // Arbitrary values
+            /-\[[^\s]+\]/,
+
+            // Not immediately followed by an `{[(`
+            /(?![{([]])/,
+
+            // optionally followed by an opacity modifier
+            /(?:\/[^\s'"\\$]*)?/,
+          ]),
+
+          // Normal values w/o quotes — may include an opacity modifier
+          /[-\/][^\s'"\\$={]*/,
+        ])
+      ),
+    ]),
+  ])
+
   yield regex.pattern([
     // Variants
     '((?=((',
@@ -38,46 +79,15 @@ function* buildRegExps(context) {
     // Important (optional)
     /!?/,
 
-    regex.any([
-      // Arbitrary properties
-      /\[[^\s:'"]+:[^\s\]]+\]/,
+    variantGroupingEnabled
+      ? regex.any([
+          // Or any of those things but grouped separated by commas
+          regex.pattern([/\(/, utility, regex.zeroOrMore([/,/, utility]), /\)/]),
 
-      // Utilities
-      regex.pattern([
-        // Utility Name / Group Name
-        variantGroupingEnabled ? /-?(?:[\w,()]+)/ : /-?(?:\w+)/,
-
-        // Normal/Arbitrary values
-        regex.optional(
-          regex.any([
-            regex.pattern([
-              // Arbitrary values
-              /-\[[^\s:]+\]/,
-
-              // Not immediately followed by an `{[(`
-              /(?![{([]])/,
-
-              // optionally followed by an opacity modifier
-              /(?:\/[^\s'"\\$]*)?/,
-            ]),
-
-            regex.pattern([
-              // Arbitrary values
-              /-\[[^\s]+\]/,
-
-              // Not immediately followed by an `{[(`
-              /(?![{([]])/,
-
-              // optionally followed by an opacity modifier
-              /(?:\/[^\s'"\\$]*)?/,
-            ]),
-
-            // Normal values w/o quotes — may include an opacity modifier
-            /[-\/][^\s'"\\$={]*/,
-          ])
-        ),
-      ]),
-    ]),
+          // Arbitrary properties, constrained utilities, arbitrary values, etc…
+          utility,
+        ])
+      : utility,
   ])
 
   // 5. Inner matches

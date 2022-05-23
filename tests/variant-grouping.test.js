@@ -49,6 +49,41 @@ it('should be possible to group variants', () => {
   })
 })
 
+it('should be possible to group using constrained and arbitrary variants together', () => {
+  let config = {
+    experimental: 'all',
+    content: [
+      {
+        raw: html`<div
+          class="dark:[@supports(hover:hover)]:hover:[&>*]:([--potato:baked],bg-[#0088cc])"
+        ></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (prefers-color-scheme: dark) {
+        @supports (hover: hover) {
+          .dark\:\[\@supports\(hover\:hover\)\]\:hover\:\[\&\>\*\]\:\(\[--potato\:baked\]\2c
+            bg-\[\#0088cc\]\)
+            > *:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(0 136 204 / var(--tw-bg-opacity));
+            --potato: baked;
+          }
+        }
+      }
+    `)
+  })
+})
+
 it('should be possible to group multiple variants', () => {
   let config = {
     experimental: 'all',
