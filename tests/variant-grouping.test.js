@@ -178,6 +178,57 @@ it('should be possible to use nested multiple grouped variants', () => {
   })
 })
 
+it('should be possible to mix and match nesting and different variant combinations', () => {
+  let config = {
+    experimental: 'all',
+    content: [
+      {
+        raw: html`<div
+          class="md:[&>*]:(text-black,dark:(text-white,hover:[@supports(color:green)]:[&:nth-child(2n=1)]:text-gray-100))"
+        ></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 768px) {
+        .md\:\[\&\>\*\]\:\(text-black\2c
+          dark\:\(text-white\2c
+          hover\:\[\@supports\(color\:green\)\]\:\[\&\:nth-child\(2n\=1\)\]\:text-gray-100\)\)
+          > * {
+          --tw-text-opacity: 1;
+          color: rgb(0 0 0 / var(--tw-text-opacity));
+        }
+        @media (prefers-color-scheme: dark) {
+          .md\:\[\&\>\*\]\:\(text-black\2c
+            dark\:\(text-white\2c
+            hover\:\[\@supports\(color\:green\)\]\:\[\&\:nth-child\(2n\=1\)\]\:text-gray-100\)\)
+            > * {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity));
+          }
+          @supports (color: green) {
+            .md\:\[\&\>\*\]\:\(text-black\2c
+              dark\:\(text-white\2c
+              hover\:\[\@supports\(color\:green\)\]\:\[\&\:nth-child\(2n\=1\)\]\:text-gray-100\)\):nth-child(2n=1):hover
+              > * {
+              --tw-text-opacity: 1;
+              color: rgb(243 244 246 / var(--tw-text-opacity));
+            }
+          }
+        }
+      }
+    `)
+  })
+})
+
 it('should group with variants defined in external plugins', () => {
   let config = {
     experimental: 'all',
