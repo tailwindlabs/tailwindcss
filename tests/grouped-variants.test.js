@@ -3,11 +3,7 @@ import { run, html, css } from './util/run'
 // TODO: Remove this once we enable this by default
 it('should not generate nested selectors if the feature flag is not enabled', () => {
   let config = {
-    content: [
-      {
-        raw: html`<div class="md:(underline,italic)"></div>`,
-      },
-    ],
+    content: [{ raw: html`<div class="md:(underline,italic)"></div>` }],
     corePlugins: { preflight: false },
     plugins: [],
   }
@@ -32,11 +28,7 @@ it('should not generate nested selectors if the feature flag is not enabled', ()
 it('should be possible to group variants', () => {
   let config = {
     experimental: 'all',
-    content: [
-      {
-        raw: html`<div class="md:(underline,italic)"></div>`,
-      },
-    ],
+    content: [{ raw: html`<div class="md:(underline,italic)"></div>` }],
     corePlugins: { preflight: false },
     plugins: [],
   }
@@ -57,14 +49,36 @@ it('should be possible to group variants', () => {
   })
 })
 
+it('should be possible to group multiple variants', () => {
+  let config = {
+    experimental: 'all',
+    content: [{ raw: html`<div class="md:dark:(underline,italic)"></div>` }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 768px) {
+        @media (prefers-color-scheme: dark) {
+          .md\:dark\:\(underline\2c italic\) {
+            font-style: italic;
+            text-decoration-line: underline;
+          }
+        }
+      }
+    `)
+  })
+})
+
 it('should be possible to group nested grouped variants', () => {
   let config = {
     experimental: 'all',
-    content: [
-      {
-        raw: html`<div class="md:(underline,italic,hover:(uppercase,font-bold))"></div>`,
-      },
-    ],
+    content: [{ raw: html`<div class="md:(underline,italic,hover:(uppercase,font-bold))"></div>` }],
     corePlugins: { preflight: false },
     plugins: [],
   }
@@ -84,6 +98,45 @@ it('should be possible to group nested grouped variants', () => {
         .md\:\(underline\2c italic\2c hover\:\(uppercase\2c font-bold\)\):hover {
           font-weight: 700;
           text-transform: uppercase;
+        }
+      }
+    `)
+  })
+})
+
+it('should be possible to use nested multiple grouped variants', () => {
+  let config = {
+    experimental: 'all',
+    content: [
+      {
+        raw: html`<div class="md:(text-black,dark:(text-white,hover:focus:text-gray-100))"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 768px) {
+        .md\:\(text-black\2c dark\:\(text-white\2c hover\:focus\:text-gray-100\)\) {
+          --tw-text-opacity: 1;
+          color: rgb(0 0 0 / var(--tw-text-opacity));
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .md\:\(text-black\2c dark\:\(text-white\2c hover\:focus\:text-gray-100\)\) {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity));
+          }
+          .md\:\(text-black\2c dark\:\(text-white\2c hover\:focus\:text-gray-100\)\):focus:hover {
+            --tw-text-opacity: 1;
+            color: rgb(243 244 246 / var(--tw-text-opacity));
+          }
         }
       }
     `)
