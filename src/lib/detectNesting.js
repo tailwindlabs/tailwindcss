@@ -4,8 +4,12 @@ export default function (_context) {
 
     root.walkAtRules('tailwind', (node) => {
       if (found) return false
+      
+      const parentIsRoot = node.parent && node.parent.type === 'root';
+      const parentIsGlobal = node.parent && node.parent.selector === ':global';
+      const grandparentIsRoot = node.parent && node.parent.parent && node.parent.parent.type === 'root';
 
-      if (node.parent && node.parent.type !== 'root') {
+      if (!parentIsRoot && !parentIsGlobal && !grandparentIsRoot) {
         found = true
         node.warn(
           result,
