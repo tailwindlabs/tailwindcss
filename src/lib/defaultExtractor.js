@@ -1,3 +1,4 @@
+import { flagEnabled } from '../featureFlags.js'
 import * as regex from './regex'
 
 export function defaultExtractor(context) {
@@ -20,6 +21,7 @@ export function defaultExtractor(context) {
 
 function* buildRegExps(context) {
   let separator = context.tailwindConfig.separator
+  let groupedVariantsEnabled = flagEnabled(context.tailwindConfig, 'groupedVariants')
 
   yield regex.pattern([
     // Variants
@@ -43,7 +45,7 @@ function* buildRegExps(context) {
       // Utilities
       regex.pattern([
         // Utility Name / Group Name
-        /-?(?:\w+)/,
+        groupedVariantsEnabled ? /-?(?:[\w,()]+)/ : /-?(?:\w+)/,
 
         // Normal/Arbitrary values
         regex.optional(
