@@ -606,6 +606,7 @@ function resolvePlugins(context, root) {
   let afterVariants = [
     variantPlugins['directionVariants'],
     variantPlugins['reducedMotionVariants'],
+    variantPlugins['prefersContrastVariants'],
     variantPlugins['darkVariants'],
     variantPlugins['printVariant'],
     variantPlugins['screenVariants'],
