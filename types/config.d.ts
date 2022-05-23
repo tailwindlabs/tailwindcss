@@ -64,11 +64,11 @@ type ExperimentalConfig = Expand<'all' | Partial<Record<ExperimentalConfigValues
 
 // DarkMode related config
 type DarkModeConfig =
-  /** Use the `media` query strategy. */
+  // Use the `media` query strategy.
   | 'media'
-  /** Use the `class` stategy, which requires a `.dark` class on the `html`. */
+  // Use the `class` stategy, which requires a `.dark` class on the `html`.
   | 'class'
-  /** Use the `class` stategy with a custom class instead of `.dark`. */
+  // Use the `class` stategy with a custom class instead of `.dark`.
   | ['class', string]
 
 type Screen = { raw: string } | { min: string } | { max: string } | { min: string; max: string }
@@ -78,14 +78,14 @@ type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>
 interface ThemeConfig {
   extend: Partial<Omit<ThemeConfig, 'extend'>>
 
-  /** Responsiveness */
+  // Responsiveness
   screens: ResolvableTo<ScreensConfig>
 
-  /** Reusable base configs */
+  // Reusable base configs
   colors: ResolvableTo<RecursiveKeyValuePair>
   spacing: ResolvableTo<KeyValuePair>
 
-  /** Components */
+  // Components
   container: ResolvableTo<
     Partial<{
       screens: ScreensConfig
@@ -94,7 +94,7 @@ interface ThemeConfig {
     }>
   >
 
-  /** Utilities */
+  // Utilities
   inset: ThemeConfig['spacing']
   zIndex: ResolvableTo<KeyValuePair>
   order: ResolvableTo<KeyValuePair>
@@ -217,7 +217,7 @@ interface ThemeConfig {
   willChange: ResolvableTo<KeyValuePair>
   content: ResolvableTo<KeyValuePair>
 
-  /** Custom */
+  // Custom
   [key: string]: any
 }
 
@@ -242,7 +242,7 @@ type ValueType =
   | 'relative-size'
   | 'shadow'
 export interface PluginAPI {
-  /** for registering new static utility styles */
+  // for registering new static utility styles
   addUtilities(
     utilities: RecursiveKeyValuePair | RecursiveKeyValuePair[],
     options?: Partial<{
@@ -250,7 +250,7 @@ export interface PluginAPI {
       respectImportant: boolean
     }>
   ): void
-  /** for registering new dynamic utility styles */
+  // for registering new dynamic utility styles
   matchUtilities<T>(
     utilities: KeyValuePair<string, (value: T) => RecursiveKeyValuePair>,
     options?: Partial<{
@@ -261,7 +261,7 @@ export interface PluginAPI {
       supportsNegativeValues: boolean
     }>
   ): void
-  /** for registering new static component styles */
+  // for registering new static component styles
   addComponents(
     components: RecursiveKeyValuePair | RecursiveKeyValuePair[],
     options?: Partial<{
@@ -269,7 +269,7 @@ export interface PluginAPI {
       respectImportant: boolean
     }>
   ): void
-  /** for registering new dynamic component styles */
+  // for registering new dynamic component styles
   matchComponents<T>(
     components: KeyValuePair<string, (value: T) => RecursiveKeyValuePair>,
     options?: Partial<{
@@ -280,20 +280,20 @@ export interface PluginAPI {
       supportsNegativeValues: boolean
     }>
   ): void
-  /** for registering new base styles */
+  // for registering new base styles
   addBase(base: RecursiveKeyValuePair | RecursiveKeyValuePair[]): void
-  /** for registering custom variants */
+  // for registering custom variants
   addVariant(name: string, definition: string | string[] | (() => string) | (() => string)[]): void
-  /** for looking up values in the user’s theme configuration */
+  // for looking up values in the user’s theme configuration
   theme: <TDefaultValue = Config['theme']>(
     path?: string,
     defaultValue?: TDefaultValue
   ) => TDefaultValue
-  /** for looking up values in the user’s Tailwind configuration */
+  // for looking up values in the user’s Tailwind configuration
   config: <TDefaultValue = Config>(path?: string, defaultValue?: TDefaultValue) => TDefaultValue
-  /** for checking if a core plugin is enabled */
+  // for checking if a core plugin is enabled
   corePlugins(path: string): boolean
-  /** for manually escaping strings meant to be used in class names */
+  // for manually escaping strings meant to be used in class names
   e: (className: string) => string
 }
 export type PluginCreator = (api: PluginAPI) => void
@@ -320,7 +320,7 @@ interface OptionalConfig {
   theme: Partial<ThemeConfig>
   corePlugins: Partial<CorePluginsConfig>
   plugins: Partial<PluginsConfig>
-  /** Custom */
+  // Custom
   [key: string]: any
 }
 
