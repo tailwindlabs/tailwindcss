@@ -76,8 +76,6 @@ type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>
 
 // Theme related config
 interface ThemeConfig {
-  extend: Partial<Omit<ThemeConfig, 'extend'>>
-
   /** Responsiveness */
   screens: ResolvableTo<ScreensConfig>
 
@@ -317,7 +315,7 @@ interface OptionalConfig {
   future: Partial<FutureConfig>
   experimental: Partial<ExperimentalConfig>
   darkMode: Partial<DarkModeConfig>
-  theme: Partial<ThemeConfig>
+  theme: Partial<ThemeConfig & { extend: Partial<ThemeConfig> }>
   corePlugins: Partial<CorePluginsConfig>
   plugins: Partial<PluginsConfig>
   /** Custom */
