@@ -458,7 +458,7 @@ function* resolveMatches(candidate, context, original = candidate) {
   if (flagEnabled(context.tailwindConfig, 'variantGrouping')) {
     if (classCandidate.startsWith('(') && classCandidate.endsWith(')')) {
       let base = variants.slice().reverse().join(separator)
-      for (let part of classCandidate.slice(1, -1).split(/\,(?![^(]*\))/g)) {
+      for (let part of splitAtTopLevelOnly(classCandidate.slice(1, -1), ',')) {
         yield* resolveMatches(base + separator + part, context, original)
       }
     }
