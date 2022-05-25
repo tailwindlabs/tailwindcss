@@ -456,7 +456,7 @@ test('Theme function in JS can apply alpha values to colors (1)', () => {
   })
 })
 
-test('TTheme function in JS can apply alpha values to colors (2)', () => {
+test('Theme function in JS can apply alpha values to colors (2)', () => {
   let input = css`
     @tailwind utilities;
   `
@@ -484,7 +484,7 @@ test('TTheme function in JS can apply alpha values to colors (2)', () => {
   })
 })
 
-test('TTheme function in JS can apply alpha values to colors (3)', () => {
+test('Theme function in JS can apply alpha values to colors (3)', () => {
   let input = css`
     @tailwind utilities;
   `
@@ -512,7 +512,7 @@ test('TTheme function in JS can apply alpha values to colors (3)', () => {
   })
 })
 
-test('TTheme function in JS can apply alpha values to colors (4)', () => {
+test('Theme function in JS can apply alpha values to colors (4)', () => {
   let input = css`
     @tailwind utilities;
   `
@@ -540,7 +540,7 @@ test('TTheme function in JS can apply alpha values to colors (4)', () => {
   })
 })
 
-test('TTheme function in JS can apply alpha values to colors (5)', () => {
+test('Theme function in JS can apply alpha values to colors (5)', () => {
   let input = css`
     @tailwind utilities;
   `
@@ -568,7 +568,7 @@ test('TTheme function in JS can apply alpha values to colors (5)', () => {
   })
 })
 
-test('TTheme function in JS can apply alpha values to colors (6)', () => {
+test('Theme function in JS can apply alpha values to colors (6)', () => {
   let input = css`
     @tailwind utilities;
   `
@@ -596,7 +596,7 @@ test('TTheme function in JS can apply alpha values to colors (6)', () => {
   })
 })
 
-test('TTheme function in JS can apply alpha values to colors (7)', () => {
+test('Theme function in JS can apply alpha values to colors (7)', () => {
   let input = css`
     @tailwind utilities;
   `
@@ -619,6 +619,38 @@ test('TTheme function in JS can apply alpha values to colors (7)', () => {
       extend: {
         textColor: ({ theme }) => ({
           foo: theme('colors.blue.500 / var(--my-alpha)'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function prefers existing values in config', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: purple;
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: {
+        blue: {
+          '500 / 50%': 'purple',
+        },
+      },
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / 50%'),
         }),
       },
     },
