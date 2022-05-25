@@ -165,44 +165,75 @@ function mergeExtensions({ extend, ...theme }) {
   })
 }
 
-function resolveFunctionKeys(object) {
-  const resolvePath = (key, defaultValue) => {
-    const path = toPath(key)
+/**
+ *
+ * @param {string} key
+ * @return {Iterable<string[] & {alpha: string | undefined}>}
+ */
+function* toPaths(key) {
+  let path = toPath(key)
 
-    let index = 0
-    let val = object
-
-    while (val !== undefined && val !== null && index < path.length) {
-      val = val[path[index++]]
-      val = isFunction(val) ? val(resolvePath, configUtils) : val
-    }
-
-    if (val === undefined) {
-      return defaultValue
-    }
-
-    if (isPlainObject(val)) {
-      return cloneDeep(val)
-    }
-
-    return val
+  if (path.length === 0) {
+    return
   }
+
+  yield path
+
+  if (Array.isArray(key)) {
+    return
+  }
+
+  let pattern = /^(.*?)\s*\/\s*([^/]+)$/
+  let matches = key.match(pattern)
+
+  if (matches !== null) {
+    let [, prefix, alpha] = matches
+
+    let newPath = toPath(prefix)
+    newPath.alpha = alpha
+
+    yield newPath
+  }
+}
+
+function resolveFunctionKeys(object) {
+  // theme('colors.red.500 / 0.5') -> ['colors', 'red', '500 / 0', '5]
+
+  const resolvePath = (key, defaultValue) => {
+    for (const path of toPaths(key)) {
+      let index = 0
+      let val = object
+
+      while (val !== undefined && val !== null && index < path.length) {
+        val = val[path[index++]]
+
+        let shouldResolveAsFn =
+          isFunction(val) && (path.alpha === undefined || index < path.length - 1)
+
+        val = shouldResolveAsFn ? val(resolvePath, configUtils) : val
+      }
+
+      if (val !== undefined) {
+        if (path.alpha !== undefined) {
+          return withAlphaValue(val, path.alpha)
+        }
+
+        if (isPlainObject(val)) {
+          return cloneDeep(val)
+        }
+
+        return val
+      }
+    }
+
+    return defaultValue
+  }
+
+  // colors.red.500/50
 
   Object.assign(resolvePath, {
     theme: resolvePath,
     ...configUtils,
-    withAlpha(key, opacityValue) {
-      // TODO: This is kinda iffy but it works
-      const path = toPath(key)
-      const lastSegment = path.pop()
-      let value = resolvePath(path)[lastSegment]
-
-      if (value === undefined) {
-        return value
-      }
-
-      return withAlphaValue(value, opacityValue)
-    },
   })
 
   return Object.keys(object).reduce((resolved, key) => {

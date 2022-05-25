@@ -446,7 +446,7 @@ test('Theme function in JS can apply alpha values to colors (1)', () => {
       colors: { blue: { 500: '#3b82f6' } },
       extend: {
         textColor: ({ theme }) => ({
-          foo: theme.withAlpha('colors.blue.500', '50%'),
+          foo: theme('colors.blue.500 / 50%'),
         }),
       },
     },
@@ -474,7 +474,7 @@ test('TTheme function in JS can apply alpha values to colors (2)', () => {
       colors: { blue: { 500: '#3b82f6' } },
       extend: {
         textColor: ({ theme }) => ({
-          foo: theme.withAlpha('colors.blue.500', '0.5'),
+          foo: theme('colors.blue.500 / 0.5'),
         }),
       },
     },
@@ -502,7 +502,7 @@ test('TTheme function in JS can apply alpha values to colors (3)', () => {
       colors: { blue: { 500: '#3b82f6' } },
       extend: {
         textColor: ({ theme }) => ({
-          foo: theme.withAlpha('colors.blue.500', 'var(--my-alpha)'),
+          foo: theme('colors.blue.500 / var(--my-alpha)'),
         }),
       },
     },
@@ -530,7 +530,7 @@ test('TTheme function in JS can apply alpha values to colors (4)', () => {
       colors: { blue: { 500: 'hsl(217, 91%, 60%)' } },
       extend: {
         textColor: ({ theme }) => ({
-          foo: theme.withAlpha('colors.blue.500', '50%'),
+          foo: theme('colors.blue.500 / 50%'),
         }),
       },
     },
@@ -558,7 +558,7 @@ test('TTheme function in JS can apply alpha values to colors (5)', () => {
       colors: { blue: { 500: 'hsl(217, 91%, 60%)' } },
       extend: {
         textColor: ({ theme }) => ({
-          foo: theme.withAlpha('colors.blue.500', '0.5'),
+          foo: theme('colors.blue.500 / 0.5'),
         }),
       },
     },
@@ -586,7 +586,7 @@ test('TTheme function in JS can apply alpha values to colors (6)', () => {
       colors: { blue: { 500: 'hsl(217, 91%, 60%)' } },
       extend: {
         textColor: ({ theme }) => ({
-          foo: theme.withAlpha('colors.blue.500', 'var(--my-alpha)'),
+          foo: theme('colors.blue.500 / var(--my-alpha)'),
         }),
       },
     },
@@ -618,7 +618,7 @@ test('TTheme function in JS can apply alpha values to colors (7)', () => {
       }),
       extend: {
         textColor: ({ theme }) => ({
-          foo: theme.withAlpha('colors.blue.500', 'var(--my-alpha)'),
+          foo: theme('colors.blue.500 / var(--my-alpha)'),
         }),
       },
     },
