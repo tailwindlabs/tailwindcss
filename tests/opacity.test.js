@@ -427,3 +427,235 @@ it('the hsl helper throws when not passing custom properties', () => {
     'The hsl() helper requires a custom property name to be passed as the first argument.'
   )
 })
+
+test('Theme function in JS can apply alpha values to colors (1)', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: rgb(59 130 246 / 50%);
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: { blue: { 500: '#3b82f6' } },
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / 50%'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function in JS can apply alpha values to colors (2)', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: rgb(59 130 246 / 0.5);
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: { blue: { 500: '#3b82f6' } },
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / 0.5'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function in JS can apply alpha values to colors (3)', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: rgb(59 130 246 / var(--my-alpha));
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: { blue: { 500: '#3b82f6' } },
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / var(--my-alpha)'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function in JS can apply alpha values to colors (4)', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: hsl(217 91% 60% / 50%);
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: { blue: { 500: 'hsl(217, 91%, 60%)' } },
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / 50%'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function in JS can apply alpha values to colors (5)', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: hsl(217 91% 60% / 0.5);
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: { blue: { 500: 'hsl(217, 91%, 60%)' } },
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / 0.5'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function in JS can apply alpha values to colors (6)', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: hsl(217 91% 60% / var(--my-alpha));
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: { blue: { 500: 'hsl(217, 91%, 60%)' } },
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / var(--my-alpha)'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function in JS can apply alpha values to colors (7)', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: rgb(var(--foo) / var(--my-alpha));
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: ({ rgb }) => ({
+        blue: {
+          500: rgb('--foo'),
+        },
+      }),
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / var(--my-alpha)'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme function prefers existing values in config', () => {
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let output = css`
+    .text-foo {
+      color: purple;
+    }
+  `
+
+  return run(input, {
+    content: [{ raw: html`text-foo` }],
+    corePlugins: { textOpacity: false },
+    theme: {
+      colors: {
+        blue: {
+          '500 / 50%': 'purple',
+        },
+      },
+      extend: {
+        textColor: ({ theme }) => ({
+          foo: theme('colors.blue.500 / 50%'),
+        }),
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
