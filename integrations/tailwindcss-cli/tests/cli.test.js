@@ -345,6 +345,60 @@ describe('Build command', () => {
     expect(contents).toContain(`/*# sourceMappingURL`)
   })
 
+  test('postcss-import is supported by default', async () => {
+    cleanupFile('src/test.css')
+
+    await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
+    await writeInputFile(
+      'test.css',
+      css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
+        @import './imported.css';
+      `
+    )
+
+    await $(
+      `${EXECUTABLE} --input ./src/test.css --content ./src/index.html --output ./dist/main.css`
+    )
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        @media (min-width: 768px) {
+          .md\:something-cool {
+            color: red;
+          }
+        }
+      `
+    )
+  })
+
+  test('postcss-import is included when using a custom postcss configuration', async () => {
+    cleanupFile('src/test.css')
+
+    await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
+    await writeInputFile(
+      'test.css',
+      css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
+        @import './imported.css';
+      `
+    )
+
+    await $(
+      `${EXECUTABLE} --input ./src/test.css --content ./src/index.html --output ./dist/main.css --postcss`
+    )
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        @import './imported.css';
+      `
+    )
+  })
+
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} --help`)
 
