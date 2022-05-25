@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `matchVariant` API ([#8310](https://github.com/tailwindlabs/tailwindcss/pull/8310))
 - Add `prefers-contrast` media query variants ([#8410](https://github.com/tailwindlabs/tailwindcss/pull/8410))
 - Experimental support for variant grouping ([#8405](https://github.com/tailwindlabs/tailwindcss/pull/8405))
+- Add opacity support when referencing colors with `theme` function ([#8416](https://github.com/tailwindlabs/tailwindcss/pull/8416))
 
 ## [3.0.24] - 2022-04-12
 
