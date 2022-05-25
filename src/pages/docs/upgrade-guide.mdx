@@ -185,7 +185,14 @@ The new engine introduces [a new syntax](https://tailwindcss.com/docs/background
 + <div class="bg-black/25">
 ```
 
-The old approach still works so this isn't a breaking change, but the new syntax is what we plan to encourage going forward.
+The old approach still works in all cases except when using a `border-opacity-*` utility with the default `border` class — in v3 you'll need to explicitly specify your border color:
+
+```diff-html
+- <div class="border border-opacity-25">
++ <div class="border border-gray-200/25">
+```
+
+Every other situation behaves the same, so aside from that change your projects will work exactly as they did before. We do recommend using the new syntax going forward though, and plan to disable utilities like `border-opacity-*` and `bg-opacity-*` by default in v4, though you will still be able to enable them if needed.
 
 This new syntax works for all color utilities, even utilities that didn't have any way to change the opacity in the past like `from-red-500/75`.
 
