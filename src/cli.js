@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { lazyPostcss, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
+import { lazyPostcss, lazyPostcssImport, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
 
 import chokidar from 'chokidar'
 import path from 'path'
@@ -581,7 +581,19 @@ async function build() {
 
     let [beforePlugins, afterPlugins, postcssOptions] = includePostCss
       ? await loadPostCssPlugins()
-      : [[], [], {}]
+      : [
+          [
+            (() => {
+              try {
+                return require('postcss-import')
+              } catch {}
+
+              return lazyPostcssImport()
+            })(),
+          ],
+          [],
+          {},
+        ]
 
     let plugins = [
       ...beforePlugins,
