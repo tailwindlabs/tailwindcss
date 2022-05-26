@@ -42,7 +42,7 @@ export default function Blog() {
                 />
               </svg>
               <div className="relative">
-                <h3 className="text-base font-bold tracking-tight text-slate-900 dark:text-slate-200 pt-8 lg:pt-0">
+                <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-slate-200 pt-8 lg:pt-0">
                   {meta.title}
                 </h3>
                 <div className="mt-2 mb-4 prose prose-slate prose-a:relative prose-a:z-10 dark:prose-dark line-clamp-2">

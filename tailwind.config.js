@@ -127,6 +127,18 @@ module.exports = {
               color: 'inherit',
               fontWeight: 'inherit',
             },
+            kbd: {
+              background: theme('colors.slate.100'),
+              borderWidth: '1px',
+              borderColor: theme('colors.slate.200'),
+              padding: '0.125em 0.25em',
+              color: theme('colors.slate.700'),
+              fontWeight: 500,
+              fontSize: '0.875em',
+              fontVariantLigatures: 'none',
+              borderRadius: '4px',
+              margin: '0 1px',
+            },
             code: {
               fontWeight: theme('fontWeight.medium'),
               fontVariantLigatures: 'none',

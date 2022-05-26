@@ -42,7 +42,7 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
               <Metadata meta={meta} />
               <h1
                 className={clsx(
-                  'text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-200 md:text-3xl'
+                  'text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-200 md:text-3xl '
                 )}
               >
                 <Widont>{meta.title}</Widont>
