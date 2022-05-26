@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Experimental support for variant grouping ([#8405](https://github.com/tailwindlabs/tailwindcss/pull/8405))
 - Add opacity support when referencing colors with `theme` function ([#8416](https://github.com/tailwindlabs/tailwindcss/pull/8416))
 - Add `postcss-import` support to the CLI ([#8437](https://github.com/tailwindlabs/tailwindcss/pull/8437))
+- Add future flag to preserve custom, default ring color opacity ([#8448](https://github.com/tailwindlabs/tailwindcss/pull/8448))
 
 ## [3.0.24] - 2022-04-12
 
