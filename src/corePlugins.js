@@ -1977,13 +1977,20 @@ export let corePlugins = {
     )
   },
 
-  ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme }) => {
-    let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
-    let ringColorDefault = withAlphaValue(
-      theme('ringColor')?.DEFAULT,
-      ringOpacityDefault,
-      `rgb(147 197 253 / ${ringOpacityDefault})`
-    )
+  ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme, config }) => {
+    let ringColorDefault = (() => {
+      if (flagEnabled(config(), 'respectDefaultRingColorOpacity')) {
+        return theme('ringColor.DEFAULT')
+      }
+
+      let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
+
+      return withAlphaValue(
+        theme('ringColor')?.DEFAULT,
+        ringOpacityDefault,
+        `rgb(147 197 253 / ${ringOpacityDefault})`
+      )
+    })()
 
     addDefaults('ring-width', {
       '--tw-ring-inset': ' ',

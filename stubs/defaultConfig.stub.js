@@ -720,7 +720,7 @@ module.exports = {
       8: '8px',
     },
     ringColor: ({ theme }) => ({
-      DEFAULT: theme('colors.blue.500', '#3b82f6'),
+      DEFAULT: theme(`colors.blue.500 / ${theme('ringOpacity.DEFAULT')}`, '#3b82f67f'),
       ...theme('colors'),
     }),
     ringOffsetColor: ({ theme }) => theme('colors'),
