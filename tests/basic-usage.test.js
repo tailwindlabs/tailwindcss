@@ -664,3 +664,48 @@ it('Customizing the default ring color preserves its opacity when using respectD
     `)
   })
 })
+
+it('A bare ring-opacity utility is not supported when not using respectDefaultRingColorOpacity', () => {
+  let config = {
+    content: [{ raw: html`<div class="ring-opacity"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      ringOpacity: {
+        DEFAULT: '0.33',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css``)
+  })
+})
+
+it('A bare ring-opacity utility is supported when using respectDefaultRingColorOpacity', () => {
+  let config = {
+    future: { respectDefaultRingColorOpacity: true },
+    content: [{ raw: html`<div class="ring-opacity"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      ringOpacity: {
+        DEFAULT: '0.33',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .ring-opacity {
+        --tw-ring-opacity: 0.33;
+      }
+    `)
+  })
+})

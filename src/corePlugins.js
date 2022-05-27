@@ -2054,9 +2054,13 @@ export let corePlugins = {
     )
   },
 
-  ringOpacity: createUtilityPlugin('ringOpacity', [['ring-opacity', ['--tw-ring-opacity']]], {
-    filterDefault: true,
-  }),
+  ringOpacity: (helpers) => {
+    let { config } = helpers
+
+    return createUtilityPlugin('ringOpacity', [['ring-opacity', ['--tw-ring-opacity']]], {
+      filterDefault: !flagEnabled(config(), 'respectDefaultRingColorOpacity'),
+    })(helpers)
+  },
   ringOffsetWidth: createUtilityPlugin(
     'ringOffsetWidth',
     [['ring-offset', ['--tw-ring-offset-width']]],
