@@ -1,5 +1,5 @@
 import { adamwathan } from '@/authors'
-// import card from './card.jpg'
+import card from './card.jpg'
 import teamManagementScreenshot from './team-management.png'
 import playGeneratedCssScreenshot from './play-generated-css.png'
 import tailwindCssLanguageModeScreenshot from './tailwindcss-language-mode.png'
@@ -11,7 +11,7 @@ export const meta = {
   description: `It's been a while since I've written about what we've been working on so I have a lot to share! Too much honestly — so put your swim suit on, sit back in your lounge chair, and prepare to soak up some vitamin CSS.`,
   date: '2022-05-21T19:00:00.000Z',
   authors: [adamwathan],
-  // image: card,
+  image: card,
 }
 
 It's been a while since I've written about what we've been working on so I have a lot to share! Too much honestly — my main motivator for even getting this update out is that we've got even more stuff coming next week, and I feel like I'm not allowed to share that stuff until I share all of the stuff we've already shipped.
@@ -169,7 +169,7 @@ At the same time though, sharing credentials for anything is pretty low-end, and
 
 So a couple of weeks ago we decided to figure it out and build something.
 
-<img src={teamManagementScreenshot} alt=""/>
+<img src={teamManagementScreenshot} alt="Interface with a copyable invite URL and list of team members"/>
 
 What we landed on was a purely link based invitation system, where you could just copy your invite link, share it with your team in Slack/Discord/whatever, and reset your link if needed. You can also give people either "Member" or "Owner" permissions, which control whether they can manage team members or view billing history.
 
@@ -220,7 +220,7 @@ To get around this, we've always recommended people use the [PostCSS Language Su
 
 So a few weeks ago we released a first-party Tailwind CSS language mode as part of our [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension, which builds on the built-in CSS language mode to add Tailwind-specific syntax highlighting and fix the lint warnings you'd usually see, without losing any of CSS IntelliSense features you _do_ want to keep.
 
-<img src={tailwindCssLanguageModeScreenshot} alt=""/>
+<img src={tailwindCssLanguageModeScreenshot} alt="Sample CSS code shown with lint warnings when using built-in CSS language mode, and no lint warnings when using the Tailwind CSS language mode."/>
 
 Try it out by downloading the latest version of Tailwind CSS IntelliSense and choosing "Tailwind CSS" as the language mode for your CSS files.
 
@@ -230,7 +230,7 @@ Try it out by downloading the latest version of Tailwind CSS IntelliSense and ch
 
 We've made a bunch of little improvements to [Tailwind Play](https://play.tailwindcss.com) over the last couple of months, with my favorite being the new "Generated CSS" panel.
 
-<img src={playGeneratedCssScreenshot} alt=""/>
+<img src={playGeneratedCssScreenshot} alt="Tailwind Play interface with a panel showing the CSS generated for that playground."/>
 
 It shows you all of the CSS that was generated from your HTML and lets you filter by layer, which is incredibly useful for troubleshooting. Internally we are using this _all the time_ to debug weird issues around classes not being detected so we can perform whatever [horrific regex surgery](https://github.com/tailwindlabs/tailwindcss/blob/c4e443acc093d8980bf476f14255b793c5065b9a/src/lib/defaultExtractor.js#L22-L95) is necessary to make it work.
 
@@ -249,7 +249,7 @@ But that content didn't really fit into what we had designed, so at the eleventh
 So a few weeks ago we decided to finally design [something new](https://refactoringui.com).
 
 <a href="https://refactoringui.com">
-  <img src={refactoringUiHomepageScreenshot} alt=""/>
+  <img src={refactoringUiHomepageScreenshot} alt="Header section of redesigned Refactoring UI website."/>
 </a>
 
 I'm still extremely proud of this book — probably more so than anything we've ever made. It's got a 4.68 rating on [Goodreads](https://www.goodreads.com/en/book/show/43190966-refactoring-ui) with over 1100 ratings and almost 200 reviews, which feels pretty incredible to me for a self-published ebook.
@@ -265,7 +265,7 @@ We've teased this a bit [on Twitter](https://twitter.com/adamwathan/status/15269
 
 Here's a sneak peek at one of them — a documentation site template built with [Next.js](https://nextjs.org/) and Stripe's new [Markdoc](https://markdoc.io/) library:
 
-<img src={documentationTemplateTeaserScreenshot} alt=""/>
+<img src={documentationTemplateTeaserScreenshot} alt="Artboards for a documentation site design that includes mobile and desktop layouts, and light and dark color schemes."/>
 
 I'm unreasonably excited about getting these out. I'm really proud of Tailwind UI as a product, but one of the limitations of the _copy-and-pasteable-code-snippet_ format is that we don't get an opportunity to really show you how to componentize things, minimize duplication, and architect things as a complete, production-ready website.
 
