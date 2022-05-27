@@ -152,7 +152,7 @@ function applyVariant(variant, matches, context) {
   }
 
   if (context.variantMap.has(variant)) {
-    let variantFunctionTuples = context.variantMap.get(variant)
+    let variantFunctionTuples = context.variantMap.get(variant).slice()
     let result = []
 
     for (let [meta, rule] of matches) {
