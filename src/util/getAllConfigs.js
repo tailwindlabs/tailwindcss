@@ -9,6 +9,13 @@ export default function getAllConfigs(config) {
 
   const features = {
     // Add experimental configs here...
+    respectDefaultRingColorOpacity: {
+      theme: {
+        ringColor: {
+          DEFAULT: '#3b82f67f',
+        },
+      },
+    },
   }
 
   const experimentals = Object.keys(features)

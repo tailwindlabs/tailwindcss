@@ -430,3 +430,237 @@ it('supports multiple backgrounds as arbitrary values even if only some are quot
     `)
   })
 })
+
+it('The "default" ring opacity is used by the default ring color when not using respectDefaultRingColorOpacity (1)', () => {
+  let config = {
+    content: [{ raw: html`<div class="ring"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults({ defaultRingColor: 'rgb(59 130 246 / 0.5)' })}
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
+it('The "default" ring opacity is used by the default ring color when not using respectDefaultRingColorOpacity (2)', () => {
+  let config = {
+    content: [{ raw: html`<div class="ring"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      ringOpacity: {
+        DEFAULT: 0.75,
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults({ defaultRingColor: 'rgb(59 130 246 / 0.75)' })}
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
+it('Customizing the default ring color uses the "default" opacity when not using respectDefaultRingColorOpacity (1)', () => {
+  let config = {
+    content: [{ raw: html`<div class="ring"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      ringColor: {
+        DEFAULT: '#ff7f7f',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults({ defaultRingColor: 'rgb(255 127 127 / 0.5)' })}
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
+it('Customizing the default ring color uses the "default" opacity when not using respectDefaultRingColorOpacity (2)', () => {
+  let config = {
+    content: [{ raw: html`<div class="ring"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      ringColor: {
+        DEFAULT: '#ff7f7f00',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults({ defaultRingColor: 'rgb(255 127 127 / 0.5)' })}
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
+it('The "default" ring color ignores the default opacity when using respectDefaultRingColorOpacity (1)', () => {
+  let config = {
+    future: { respectDefaultRingColorOpacity: true },
+    content: [{ raw: html`<div class="ring"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults({ defaultRingColor: '#3b82f67f' })}
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
+it('The "default" ring color ignores the default opacity when using respectDefaultRingColorOpacity (2)', () => {
+  let config = {
+    future: { respectDefaultRingColorOpacity: true },
+    content: [{ raw: html`<div class="ring"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      ringOpacity: {
+        DEFAULT: 0.75,
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults({ defaultRingColor: '#3b82f67f' })}
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
+it('Customizing the default ring color preserves its opacity when using respectDefaultRingColorOpacity (1)', () => {
+  let config = {
+    future: { respectDefaultRingColorOpacity: true },
+    content: [{ raw: html`<div class="ring"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      ringColor: {
+        DEFAULT: '#ff7f7f',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults({ defaultRingColor: '#ff7f7f' })}
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
+
+it('Customizing the default ring color preserves its opacity when using respectDefaultRingColorOpacity (2)', () => {
+  let config = {
+    future: { respectDefaultRingColorOpacity: true },
+    content: [{ raw: html`<div class="ring"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      ringColor: {
+        DEFAULT: '#ff7f7f00',
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults({ defaultRingColor: '#ff7f7f00' })}
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+    `)
+  })
+})
