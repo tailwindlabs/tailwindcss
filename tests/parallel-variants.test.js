@@ -70,14 +70,14 @@ test('parallel variants can be generated using a function that returns parallel 
       .test\:font-medium *::test {
         font-weight: 500;
       }
-      .hover\:test\:font-black *:hover::test {
-        font-weight: 900;
-      }
       .test\:font-bold::test {
         font-weight: 700;
       }
       .test\:font-medium::test {
         font-weight: 500;
+      }
+      .hover\:test\:font-black *:hover::test {
+        font-weight: 900;
       }
       .hover\:test\:font-black:hover::test {
         font-weight: 900;
