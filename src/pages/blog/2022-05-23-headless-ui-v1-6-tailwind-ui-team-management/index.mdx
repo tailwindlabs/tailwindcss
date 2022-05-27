@@ -149,9 +149,9 @@ One of the many reasons dialogs are the hardest thing to build on the planet is 
 
 This works okay until people start using portals inside the focus trap. Now it's basically impossible to manage because you could tab to a datepicker or something that is conceptually inside the dialog, but isn't _actually_ because it's rendered in a portal for styling reasons.
 
-[Robin](https://twitter.com/malfaitrobin) came up with a [really cool solution](https://github.com/tailwindlabs/headlessui/pull/1432) for this that is super simple — instead of trying to manually control how tabbing works, just throw an invisible focusable element at the beginning of the focus trap and another one at the end. Now whenever the one at the end receives focus, you know to immediately focus the first item in the focus trap, and when the invisible element at the beginning receives focus, you know to focus the last item in the focus trap.
+[Robin](https://twitter.com/malfaitrobin) came up with a [really cool solution](https://github.com/tailwindlabs/headlessui/pull/1432) for this that is super simple — instead of trying to manually control how tabbing works, just throw an invisible focusable element at the beginning of the focus trap and another one at the end. Now whenever one of these sentinel elements receives focus you just move focus to where it actually should be, based on whether you're at the first element or the last element and whether the user was tabbing forwards or backwards.
 
-With this approach, you don't have to hijack the tab key at all — you just let the browser do all of the work and move focus whenever one of your sentinel elements receives focus.
+With this approach, you don't have to hijack the tab key at all — you just let the browser do all of the work and only move focus manually when one of your sentinel elements receives focus.
 
 After figuring this out we noticed a couple of other libraries already doing the same thing so it's nothing groundbreaking or new, but I thought it was pretty damn clever and worth sharing for anyone who hadn't thought of this technique.
 
