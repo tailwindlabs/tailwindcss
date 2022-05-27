@@ -130,6 +130,34 @@ export let variantPlugins = {
       'disabled',
     ].map((variant) => (Array.isArray(variant) ? variant : [variant, `&:${variant}`]))
 
+    // Base `:not` variants
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(`not-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return result.replace(/&(\S+)/, '&:not($1)')
+      })
+    }
+
+    // Group `:not` variants
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(`group-not-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return result.replace(/&(\S+)/, ':merge(.group):not($1) &')
+      })
+    }
+
+    // Peer `:not` variants
+    for (let [variantName, state] of pseudoVariants) {
+      addVariant(`peer-not-${variantName}`, (ctx) => {
+        let result = typeof state === 'function' ? state(ctx) : state
+
+        return result.replace(/&(\S+)/, ':merge(.peer):not($1) ~ &')
+      })
+    }
+
+    // Base variants
     for (let [variantName, state] of pseudoVariants) {
       addVariant(variantName, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
@@ -138,6 +166,7 @@ export let variantPlugins = {
       })
     }
 
+    // Group variants
     for (let [variantName, state] of pseudoVariants) {
       addVariant(`group-${variantName}`, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
@@ -146,6 +175,7 @@ export let variantPlugins = {
       })
     }
 
+    // Peer variants
     for (let [variantName, state] of pseudoVariants) {
       addVariant(`peer-${variantName}`, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
