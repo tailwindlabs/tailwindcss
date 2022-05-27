@@ -54,7 +54,7 @@ test('parallel variants can be generated using a function that returns parallel 
     ],
     plugins: [
       function test({ addVariant }) {
-        addVariant('test', ['& *::test', '&::test'])
+        addVariant('test', () => ['& *::test', '&::test'])
       },
     ],
   }
