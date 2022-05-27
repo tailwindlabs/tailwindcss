@@ -546,7 +546,7 @@ it('Customizing the default ring color uses the "default" opacity when not using
   })
 })
 
-it('The "default" ring opacity is used by the default ring color when using respectDefaultRingColorOpacity (1)', () => {
+it('The "default" ring color ignores the default opacity when using respectDefaultRingColorOpacity (1)', () => {
   let config = {
     future: { respectDefaultRingColorOpacity: true },
     content: [{ raw: html`<div class="ring"></div>` }],
@@ -560,7 +560,7 @@ it('The "default" ring opacity is used by the default ring color when using resp
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults({ defaultRingColor: 'rgb(59 130 246 / 0.5)' })}
+      ${defaults({ defaultRingColor: '#3b82f67f' })}
       .ring {
         --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
           var(--tw-ring-offset-color);
@@ -572,7 +572,7 @@ it('The "default" ring opacity is used by the default ring color when using resp
   })
 })
 
-it('The "default" ring opacity is used by the default ring color when using respectDefaultRingColorOpacity (2)', () => {
+it('The "default" ring color ignores the default opacity when using respectDefaultRingColorOpacity (2)', () => {
   let config = {
     future: { respectDefaultRingColorOpacity: true },
     content: [{ raw: html`<div class="ring"></div>` }],
@@ -591,7 +591,7 @@ it('The "default" ring opacity is used by the default ring color when using resp
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ${defaults({ defaultRingColor: 'rgb(59 130 246 / 0.75)' })}
+      ${defaults({ defaultRingColor: '#3b82f67f' })}
       .ring {
         --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
           var(--tw-ring-offset-color);
