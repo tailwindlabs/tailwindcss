@@ -201,6 +201,11 @@ module.exports = {
             'h2 small, h3 small, h4 small': {
               color: theme('colors.slate.400'),
             },
+            kbd: {
+              background: theme('colors.slate.700'),
+              borderColor: theme('colors.slate.600'),
+              color: theme('colors.slate.200'),
+            },
             code: {
               color: theme('colors.slate.200'),
             },
