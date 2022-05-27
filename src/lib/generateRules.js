@@ -216,6 +216,18 @@ function applyVariant(variant, matches, context) {
           args,
         })
 
+        // It can happen that a list of format strings is returned from within the function. In that
+        // case, we have to process them as well. We can use the existing `variantSort`.
+        if (Array.isArray(ruleWithVariant)) {
+          for (let variantFunction of ruleWithVariant) {
+            // This is a little bit scary since we are pushing to an array of items that we are
+            // currently looping over. However, you can also think of it like a processing queue
+            // where you keep handling jobs until everything is done.
+            variantFunctionTuples.push([variantSort, variantFunction])
+          }
+          continue
+        }
+
         if (typeof ruleWithVariant === 'string') {
           collectedFormats.push(ruleWithVariant)
         }
