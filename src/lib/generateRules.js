@@ -225,6 +225,10 @@ function applyVariant(variant, matches, context) {
             // where you keep handling jobs until everything is done and each job can queue more
             // jobs if needed.
             variantFunctionTuples.push([
+              // TODO: This could have potential bugs if we shift the sort order from variant A far
+              // enough into the sort space of variant B. The chances are low, but if this happens
+              // then this might be the place too look at. One potential solution to this problem is
+              // reserving additional X places for these 'unknown' variants in between.
               variantSort | BigInt(idx << ruleWithVariant.length),
               variantFunction,
             ])
