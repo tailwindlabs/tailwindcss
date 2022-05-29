@@ -22,7 +22,7 @@ let steps = [
     body: () => (
       <p>
         Install <code>tailwindcss</code>, its peer dependencies, and <code>concurrently</code> via npm, and then run the init
-        command to generate both <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
+        command to generate your <code>tailwind.config.js</code> file.
       </p>
     ),
     code: {
