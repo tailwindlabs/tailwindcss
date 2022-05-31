@@ -4,6 +4,7 @@ import postcss from 'postcss'
 import dlv from 'dlv'
 import selectorParser from 'postcss-selector-parser'
 
+import { flagEnabled } from '../featureFlags.js'
 import transformThemeValue from '../util/transformThemeValue'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
@@ -484,7 +485,10 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       insertInto(variantList, variantName, options)
       variantMap.set(variantName, variantFunctions)
     },
-    matchVariant: function (variants, options) {
+  }
+
+  if (flagEnabled(tailwindConfig, 'matchVariant')) {
+    api.matchVariant = function (variants, options) {
       for (let variant in variants) {
         for (let [k, v] of Object.entries(options?.values ?? {})) {
           api.addVariant(`${variant}-${k}`, variants[variant](v))
@@ -496,7 +500,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           options
         )
       }
-    },
+    }
   }
 
   return api
