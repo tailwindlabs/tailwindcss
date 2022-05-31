@@ -152,7 +152,7 @@ function applyVariant(variant, matches, context) {
   }
 
   if (context.variantMap.has(variant)) {
-    let variantFunctionTuples = context.variantMap.get(variant)
+    let variantFunctionTuples = context.variantMap.get(variant).slice()
     let result = []
 
     for (let [meta, rule] of matches) {
@@ -215,6 +215,26 @@ function applyVariant(variant, matches, context) {
           },
           args,
         })
+
+        // It can happen that a list of format strings is returned from within the function. In that
+        // case, we have to process them as well. We can use the existing `variantSort`.
+        if (Array.isArray(ruleWithVariant)) {
+          for (let [idx, variantFunction] of ruleWithVariant.entries()) {
+            // This is a little bit scary since we are pushing to an array of items that we are
+            // currently looping over. However, you can also think of it like a processing queue
+            // where you keep handling jobs until everything is done and each job can queue more
+            // jobs if needed.
+            variantFunctionTuples.push([
+              // TODO: This could have potential bugs if we shift the sort order from variant A far
+              // enough into the sort space of variant B. The chances are low, but if this happens
+              // then this might be the place too look at. One potential solution to this problem is
+              // reserving additional X places for these 'unknown' variants in between.
+              variantSort | BigInt(idx << ruleWithVariant.length),
+              variantFunction,
+            ])
+          }
+          continue
+        }
 
         if (typeof ruleWithVariant === 'string') {
           collectedFormats.push(ruleWithVariant)

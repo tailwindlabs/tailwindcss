@@ -206,3 +206,41 @@ test('matched variant values maintain the sort order they are registered in', ()
     `)
   })
 })
+
+test('matchVariant can return an array of format strings from the function', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="test-[a,b,c]:underline"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant({
+          test: (selector) => selector.split(',').map((selector) => `&.${selector} > *`),
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .test-\[a\2c b\2c c\]\:underline.a > * {
+        text-decoration-line: underline;
+      }
+
+      .test-\[a\2c b\2c c\]\:underline.b > * {
+        text-decoration-line: underline;
+      }
+
+      .test-\[a\2c b\2c c\]\:underline.c > * {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
