@@ -261,7 +261,8 @@ div {
 }
 .from-foo {
   --tw-gradient-from: #bada55;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(186 218 85 / 0));
+  --tw-gradient-to: rgb(186 218 85 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 .text-center {
   text-align: center;

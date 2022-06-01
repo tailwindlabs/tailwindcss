@@ -34,19 +34,21 @@ test('opacity variables are given to colors defined as closures', () => {
     expect(result.css).toMatchFormattedCss(css`
       .from-primary {
         --tw-gradient-from: rgb(31, 31, 31);
-        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(31, 31, 31, 0));
+        --tw-gradient-to: rgba(31, 31, 31, 0);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
       }
       .from-secondary {
         --tw-gradient-from: hsl(10, 50%, 50%);
-        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, hsl(10 50% 50% / 0));
+        --tw-gradient-to: hsl(10 50% 50% / 0);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
       }
       .via-primary {
-        --tw-gradient-stops: var(--tw-gradient-from), rgb(31, 31, 31),
-          var(--tw-gradient-to, rgba(31, 31, 31, 0));
+        --tw-gradient-to: rgba(31, 31, 31, 0);
+        --tw-gradient-stops: var(--tw-gradient-from), rgb(31, 31, 31), var(--tw-gradient-to);
       }
       .via-secondary {
-        --tw-gradient-stops: var(--tw-gradient-from), hsl(10, 50%, 50%),
-          var(--tw-gradient-to, hsl(10 50% 50% / 0));
+        --tw-gradient-to: hsl(10 50% 50% / 0);
+        --tw-gradient-stops: var(--tw-gradient-from), hsl(10, 50%, 50%), var(--tw-gradient-to);
       }
       .to-primary {
         --tw-gradient-to: rgb(31, 31, 31);

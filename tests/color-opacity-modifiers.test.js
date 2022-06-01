@@ -167,7 +167,8 @@ test('utilities that support any type are supported', async () => {
     expect(result.css).toMatchFormattedCss(css`
       .from-red-500\/50 {
         --tw-gradient-from: rgb(239 68 68 / 0.5);
-        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(239 68 68 / 0));
+        --tw-gradient-to: rgb(239 68 68 / 0);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
       }
       .fill-red-500\/25 {
         fill: rgb(239 68 68 / 0.25);

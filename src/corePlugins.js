@@ -1437,7 +1437,8 @@ export let corePlugins = {
 
             return {
               '--tw-gradient-from': toColorValue(value, 'from'),
-              '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to, ${transparentToValue})`,
+              '--tw-gradient-to': transparentToValue,
+              '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to)`,
             }
           },
         },
@@ -1449,10 +1450,11 @@ export let corePlugins = {
             let transparentToValue = transparentTo(value)
 
             return {
+              '--tw-gradient-to': transparentToValue,
               '--tw-gradient-stops': `var(--tw-gradient-from), ${toColorValue(
                 value,
                 'via'
-              )}, var(--tw-gradient-to, ${transparentToValue})`,
+              )}, var(--tw-gradient-to)`,
             }
           },
         },
