@@ -651,18 +651,22 @@
 }
 .from-\[\#da5b66\] {
   --tw-gradient-from: #da5b66;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(218 91 102 / 0));
+  --tw-gradient-to: rgb(218 91 102 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 .from-\[var\(--color\)\] {
   --tw-gradient-from: var(--color);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(255 255 255 / 0));
+  --tw-gradient-to: rgb(255 255 255 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 .via-\[\#da5b66\] {
-  --tw-gradient-stops: var(--tw-gradient-from), #da5b66, var(--tw-gradient-to, rgb(218 91 102 / 0));
+  --tw-gradient-to: rgb(218 91 102 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), #da5b66, var(--tw-gradient-to);
 }
 .via-\[var\(--color\)\] {
+  --tw-gradient-to: rgb(255 255 255 / 0);
   --tw-gradient-stops: var(--tw-gradient-from), var(--color),
-    var(--tw-gradient-to, rgb(255 255 255 / 0));
+    var(--tw-gradient-to);
 }
 .to-\[\#da5b66\] {
   --tw-gradient-to: #da5b66;
