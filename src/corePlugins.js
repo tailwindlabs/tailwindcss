@@ -105,6 +105,7 @@ export let variantPlugins = {
       'indeterminate',
       'placeholder-shown',
       'autofill',
+      'optional',
       'required',
       'valid',
       'invalid',
