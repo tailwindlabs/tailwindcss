@@ -5,7 +5,7 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
     return color({ opacityValue: alphaValue })
   }
 
-  if (typeof color === 'string' && color.includes('<alpha-value>')) {
+  if (color.includes('<alpha-value>')) {
     return color.replace('<alpha-value>', alphaValue)
   }
 
