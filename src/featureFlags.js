@@ -7,7 +7,7 @@ let defaults = {
 
 let featureFlags = {
   future: ['hoverOnlyWhenSupported', 'respectDefaultRingColorOpacity'],
-  experimental: ['optimizeUniversalDefaults', 'variantGrouping', 'matchVariant'],
+  experimental: ['optimizeUniversalDefaults', 'matchVariant' /* , 'variantGrouping' */],
 }
 
 export function flagEnabled(config, flag) {
