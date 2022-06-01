@@ -5,6 +5,10 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
     return color({ opacityValue: alphaValue })
   }
 
+  if (typeof color === 'string' && color.includes('<alpha-value>')) {
+    return color.replace('<alpha-value>', alphaValue)
+  }
+
   let parsed = parseColor(color)
 
   if (parsed === null) {
