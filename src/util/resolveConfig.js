@@ -8,7 +8,9 @@ import { toPath } from './toPath'
 import { normalizeConfig } from './normalizeConfig'
 import isPlainObject from './isPlainObject'
 import { cloneDeep } from './cloneDeep'
+import { parseColorFormat } from './pluginUtils'
 import { withAlphaValue } from './withAlphaVariable'
+import toColorValue from './toColorValue'
 
 function isFunction(input) {
   return typeof input === 'function'
@@ -66,36 +68,6 @@ const configUtils = {
         }),
         {}
       )
-  },
-  rgb(property) {
-    if (!property.startsWith('--')) {
-      throw new Error(
-        'The rgb() helper requires a custom property name to be passed as the first argument.'
-      )
-    }
-
-    return ({ opacityValue }) => {
-      if (opacityValue === undefined || opacityValue === 1) {
-        return `rgb(var(${property}) / 1.0)`
-      }
-
-      return `rgb(var(${property}) / ${opacityValue})`
-    }
-  },
-  hsl(property) {
-    if (!property.startsWith('--')) {
-      throw new Error(
-        'The hsl() helper requires a custom property name to be passed as the first argument.'
-      )
-    }
-
-    return ({ opacityValue }) => {
-      if (opacityValue === undefined || opacityValue === 1) {
-        return `hsl(var(${property}) / 1)`
-      }
-
-      return `hsl(var(${property}) / ${opacityValue})`
-    }
   },
 }
 
@@ -215,7 +187,9 @@ function resolveFunctionKeys(object) {
 
       if (val !== undefined) {
         if (path.alpha !== undefined) {
-          return withAlphaValue(val, path.alpha)
+          let normalized = parseColorFormat(val)
+
+          return withAlphaValue(normalized, path.alpha, toColorValue(normalized))
         }
 
         if (isPlainObject(val)) {
@@ -228,8 +202,6 @@ function resolveFunctionKeys(object) {
 
     return defaultValue
   }
-
-  // colors.red.500/50
 
   Object.assign(resolvePath, {
     theme: resolvePath,

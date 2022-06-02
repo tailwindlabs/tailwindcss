@@ -982,11 +982,11 @@ test('Theme function can extract alpha values for colors (7)', () => {
 
   return runFull(input, {
     theme: {
-      colors: ({ rgb }) => ({
+      colors: {
         blue: {
-          500: rgb('--foo'),
+          500: 'rgb(var(--foo) / <alpha-value>)',
         },
-      }),
+      },
     },
   }).then((result) => {
     expect(result.css).toMatchCss(output)
@@ -1009,11 +1009,11 @@ test('Theme function can extract alpha values for colors (8)', () => {
 
   return runFull(input, {
     theme: {
-      colors: ({ rgb }) => ({
+      colors: {
         blue: {
-          500: rgb('--foo'),
+          500: 'rgb(var(--foo) / <alpha-value>)',
         },
-      }),
+      },
 
       opacity: {
         myalpha: '50%',

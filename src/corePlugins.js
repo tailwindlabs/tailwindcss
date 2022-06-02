@@ -1988,6 +1988,10 @@ export let corePlugins = {
 
       let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
 
+      if (!theme('ringColor')?.DEFAULT) {
+        return `rgb(147 197 253 / ${ringOpacityDefault})`
+      }
+
       return withAlphaValue(
         theme('ringColor')?.DEFAULT,
         ringOpacityDefault,

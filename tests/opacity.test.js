@@ -96,7 +96,7 @@ test('colors defined as functions work when opacity plugins are disabled', () =>
   })
 })
 
-it('can use rgb helper when defining custom properties for colors (opacity plugins enabled)', () => {
+it('can use <alpha-value> defining custom properties for colors (opacity plugins enabled)', () => {
   let config = {
     content: [
       {
@@ -117,9 +117,9 @@ it('can use rgb helper when defining custom properties for colors (opacity plugi
       },
     ],
     theme: {
-      colors: ({ rgb }) => ({
-        primary: rgb('--color-primary'),
-      }),
+      colors: {
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+      },
     },
   }
 
@@ -192,9 +192,9 @@ it('can use rgb helper when defining custom properties for colors (opacity plugi
       },
     ],
     theme: {
-      colors: ({ rgb }) => ({
-        primary: rgb('--color-primary'),
-      }),
+      colors: {
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+      },
     },
     corePlugins: {
       backgroundOpacity: false,
@@ -269,9 +269,9 @@ it('can use hsl helper when defining custom properties for colors (opacity plugi
       },
     ],
     theme: {
-      colors: ({ hsl }) => ({
-        primary: hsl('--color-primary'),
-      }),
+      colors: {
+        primary: 'hsl(var(--color-primary) / <alpha-value>)',
+      },
     },
   }
 
@@ -344,9 +344,9 @@ it('can use hsl helper when defining custom properties for colors (opacity plugi
       },
     ],
     theme: {
-      colors: ({ hsl }) => ({
-        primary: hsl('--color-primary'),
-      }),
+      colors: {
+        primary: 'hsl(var(--color-primary) / <alpha-value>)',
+      },
     },
     corePlugins: {
       backgroundOpacity: false,
@@ -398,34 +398,6 @@ it('can use hsl helper when defining custom properties for colors (opacity plugi
       }
     `)
   })
-})
-
-it('the rgb helper throws when not passing custom properties', () => {
-  let config = {
-    theme: {
-      colors: ({ rgb }) => ({
-        primary: rgb('anything else'),
-      }),
-    },
-  }
-
-  return expect(run('@tailwind utilities', config)).rejects.toThrow(
-    'The rgb() helper requires a custom property name to be passed as the first argument.'
-  )
-})
-
-it('the hsl helper throws when not passing custom properties', () => {
-  let config = {
-    theme: {
-      colors: ({ hsl }) => ({
-        primary: hsl('anything else'),
-      }),
-    },
-  }
-
-  return expect(run('@tailwind utilities', config)).rejects.toThrow(
-    'The hsl() helper requires a custom property name to be passed as the first argument.'
-  )
 })
 
 test('Theme function in JS can apply alpha values to colors (1)', () => {
@@ -611,11 +583,11 @@ test('Theme function in JS can apply alpha values to colors (7)', () => {
     content: [{ raw: html`text-foo` }],
     corePlugins: { textOpacity: false },
     theme: {
-      colors: ({ rgb }) => ({
+      colors: {
         blue: {
-          500: rgb('--foo'),
+          500: 'rgb(var(--foo) / <alpha-value>)',
         },
-      }),
+      },
       extend: {
         textColor: ({ theme }) => ({
           foo: theme('colors.blue.500 / var(--my-alpha)'),
@@ -657,5 +629,102 @@ test('Theme function prefers existing values in config', () => {
   }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
+  })
+})
+
+it('should be possible to use an <alpha-value> as part of the color definition', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="bg-primary"></div> `,
+      },
+    ],
+    corePlugins: ['backgroundColor', 'backgroundOpacity'],
+    theme: {
+      colors: {
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .bg-primary {
+        --tw-bg-opacity: 1;
+        background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
+      }
+    `)
+  })
+})
+
+it('should be possible to use an <alpha-value> as part of the color definition with an opacity modifiers', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="bg-primary/50"></div> `,
+      },
+    ],
+    corePlugins: ['backgroundColor', 'backgroundOpacity'],
+    theme: {
+      colors: {
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .bg-primary\/50 {
+        background-color: rgb(var(--color-primary) / 0.5);
+      }
+    `)
+  })
+})
+
+it('should be possible to use an <alpha-value> as part of the color definition with an opacity modifiers', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="bg-primary"></div> `,
+      },
+    ],
+    corePlugins: ['backgroundColor'],
+    theme: {
+      colors: {
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .bg-primary {
+        background-color: rgb(var(--color-primary) / 1);
+      }
+    `)
+  })
+})
+
+it('should be possible to use <alpha-value> inside arbitrary values', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="bg-[rgb(var(--color-primary)/<alpha-value>)]/50"></div> `,
+      },
+    ],
+    corePlugins: ['backgroundColor', 'backgroundOpacity'],
+    theme: {
+      colors: {
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .bg-\[rgb\(var\(--color-primary\)\/\<alpha-value\>\)\]\/50 {
+        background-color: rgb(var(--color-primary) / 0.5);
+      }
+    `)
   })
 })

@@ -5,7 +5,7 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
     return color({ opacityValue: alphaValue })
   }
 
-  let parsed = parseColor(color)
+  let parsed = parseColor(color, { loose: true })
 
   if (parsed === null) {
     return defaultValue
