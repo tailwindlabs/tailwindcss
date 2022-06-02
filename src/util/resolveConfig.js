@@ -8,8 +8,9 @@ import { toPath } from './toPath'
 import { normalizeConfig } from './normalizeConfig'
 import isPlainObject from './isPlainObject'
 import { cloneDeep } from './cloneDeep'
-import { asColor } from './pluginUtils'
+import { asColor, normalizeColorAlpha, parseColorFormat, resolveColorAlpha } from './pluginUtils'
 import { withAlphaValue } from './withAlphaVariable'
+import toColorValue from './toColorValue.js'
 
 function isFunction(input) {
   return typeof input === 'function'
@@ -186,8 +187,9 @@ function resolveFunctionKeys(object) {
 
       if (val !== undefined) {
         if (path.alpha !== undefined) {
-          let x = 'x'
-          return asColor(x, { values: { [x]: val } }, {})?.({ opacityValue: path.alpha })
+          let normalized = parseColorFormat(val)
+
+          return withAlphaValue(normalized, path.alpha, toColorValue(normalized))
         }
 
         if (isPlainObject(val)) {
@@ -200,8 +202,6 @@ function resolveFunctionKeys(object) {
 
     return defaultValue
   }
-
-  // colors.red.500/50
 
   Object.assign(resolvePath, {
     theme: resolvePath,

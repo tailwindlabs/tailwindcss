@@ -18,6 +18,7 @@ import {
   shadow,
 } from './dataTypes'
 import negateValue from './negateValue'
+import toColorValue from './toColorValue.js'
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
@@ -95,13 +96,21 @@ function splitAlpha(modifier) {
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
 }
 
+export function parseColorFormat(value) {
+  if (typeof value === 'string' && value.includes('<alpha-value>')) {
+    let oldValue = value
+
+    return ({ opacityValue = 1 }) => oldValue.replace('<alpha-value>', opacityValue)
+  }
+
+  return value
+}
+
 export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
   if (options.values?.[modifier] !== undefined) {
     let value = options.values?.[modifier]
-    if (typeof value === 'string' && value.includes('<alpha-value>')) {
-      return ({ opacityValue = 1 }) => value.replace('<alpha-value>', opacityValue)
-    }
-    return value
+
+    return parseColorFormat(value)
   }
 
   let [color, alpha] = splitAlpha(modifier)
@@ -114,10 +123,7 @@ export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
       return undefined
     }
 
-    if (typeof normalizedColor === 'string' && normalizedColor.includes('<alpha-value>')) {
-      let value = normalizedColor
-      normalizedColor = ({ opacityValue = 1 }) => value.replace('<alpha-value>', opacityValue)
-    }
+    normalizedColor = parseColorFormat(normalizedColor)
 
     if (isArbitraryValue(alpha)) {
       return withAlphaValue(normalizedColor, alpha.slice(1, -1))
