@@ -441,46 +441,6 @@ describe('Init command', () => {
     // multiple keys in `theme` exists. However it loads `tailwindcss/colors`
     // which doesn't exists in this context.
     expect((await readOutputFile('../full.config.js')).split('\n').length).toBeGreaterThan(50)
-
-    expect(await readOutputFile('../full.config.js')).not.toContain(
-      `/** @type {import('tailwindcss/types').Config} */`
-    )
-  })
-
-  test('--types', async () => {
-    cleanupFile('simple.config.js')
-
-    let { combined } = await $(`${EXECUTABLE} init simple.config.js --types`)
-
-    expect(combined).toMatchInlineSnapshot(`
-      "
-      Created Tailwind CSS config file: simple.config.js
-      "
-    `)
-
-    expect(await readOutputFile('../simple.config.js')).toContain(
-      `/** @type {import('tailwindcss/types').Config} */`
-    )
-  })
-
-  test('--full --types', async () => {
-    cleanupFile('full.config.js')
-
-    let { combined } = await $(`${EXECUTABLE} init full.config.js --full --types`)
-
-    expect(combined).toMatchInlineSnapshot(`
-      "
-      Created Tailwind CSS config file: full.config.js
-      "
-    `)
-
-    // Not a clean way to test this. We could require the file and verify that
-    // multiple keys in `theme` exists. However it loads `tailwindcss/colors`
-    // which doesn't exists in this context.
-    expect((await readOutputFile('../full.config.js')).split('\n').length).toBeGreaterThan(50)
-    expect(await readOutputFile('../full.config.js')).toContain(
-      `/** @type {import('tailwindcss/types').Config} */`
-    )
   })
 
   test('--postcss', async () => {
@@ -513,7 +473,6 @@ describe('Init command', () => {
         Options:
            -f, --full               Initialize a full \`tailwind.config.js\` file
            -p, --postcss            Initialize a \`postcss.config.js\` file
-               --types              Add TypeScript types for the \`tailwind.config.js\` file
            -h, --help               Display usage information
       `)
     )
@@ -542,7 +501,6 @@ describe('Init command', () => {
         Options:
            -f, --full               Initialize a full \`tailwind.config.cjs\` file
            -p, --postcss            Initialize a \`postcss.config.cjs\` file
-               --types              Add TypeScript types for the \`tailwind.config.cjs\` file
            -h, --help               Display usage information
       `)
     )
@@ -575,10 +533,6 @@ describe('Init command', () => {
 
     // Not a clean way to test this.
     expect(await readOutputFile('../tailwind.config.cjs')).toContain('module.exports =')
-
-    expect(await readOutputFile('../tailwind.config.cjs')).not.toContain(
-      `/** @type {import('tailwindcss/types').Config} */`
-    )
 
     await writeInputFile('../package.json', pkg)
   })

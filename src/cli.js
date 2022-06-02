@@ -183,10 +183,6 @@ let commands = {
     args: {
       '--full': { type: Boolean, description: `Initialize a full \`${configs.tailwind}\` file` },
       '--postcss': { type: Boolean, description: `Initialize a \`${configs.postcss}\` file` },
-      '--types': {
-        type: Boolean,
-        description: `Add TypeScript types for the \`${configs.tailwind}\` file`,
-      },
       '-f': '--full',
       '-p': '--postcss',
     },
@@ -245,7 +241,7 @@ if (
   help({
     usage: [
       'tailwindcss [--input input.css] [--output output.css] [--watch] [options...]',
-      'tailwindcss init [--full] [--postcss] [--types] [options...]',
+      'tailwindcss init [--full] [--postcss] [options...]',
     ],
     commands: Object.keys(commands)
       .filter((command) => command !== 'build')
@@ -371,13 +367,6 @@ function init() {
         : path.resolve(__dirname, '../stubs/simpleConfig.stub.js'),
       'utf8'
     )
-
-    if (args['--types']) {
-      let typesHeading = "/** @type {import('tailwindcss/types').Config} */"
-      stubFile =
-        stubFile.replace(`module.exports = `, `${typesHeading}\nconst config = `) +
-        '\nmodule.exports = config'
-    }
 
     // Change colors import
     stubFile = stubFile.replace('../colors', 'tailwindcss/colors')
