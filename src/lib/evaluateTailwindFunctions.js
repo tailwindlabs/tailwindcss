@@ -6,7 +6,7 @@ import { normalizeScreens } from '../util/normalizeScreens'
 import buildMediaQuery from '../util/buildMediaQuery'
 import { toPath } from '../util/toPath'
 import { withAlphaValue } from '../util/withAlphaVariable'
-import { parseColorFormat } from '../util/pluginUtils.js'
+import { parseColorFormat } from '../util/pluginUtils'
 
 function isObject(input) {
   return typeof input === 'object' && input !== null

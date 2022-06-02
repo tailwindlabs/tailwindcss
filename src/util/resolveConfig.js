@@ -10,7 +10,7 @@ import isPlainObject from './isPlainObject'
 import { cloneDeep } from './cloneDeep'
 import { parseColorFormat } from './pluginUtils'
 import { withAlphaValue } from './withAlphaVariable'
-import toColorValue from './toColorValue.js'
+import toColorValue from './toColorValue'
 
 function isFunction(input) {
   return typeof input === 'function'
