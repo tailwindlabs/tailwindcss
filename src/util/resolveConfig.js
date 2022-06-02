@@ -8,7 +8,7 @@ import { toPath } from './toPath'
 import { normalizeConfig } from './normalizeConfig'
 import isPlainObject from './isPlainObject'
 import { cloneDeep } from './cloneDeep'
-import { asColor, normalizeColorAlpha, parseColorFormat, resolveColorAlpha } from './pluginUtils'
+import { parseColorFormat } from './pluginUtils'
 import { withAlphaValue } from './withAlphaVariable'
 import toColorValue from './toColorValue.js'
 

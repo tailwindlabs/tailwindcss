@@ -18,7 +18,6 @@ import {
   shadow,
 } from './dataTypes'
 import negateValue from './negateValue'
-import toColorValue from './toColorValue.js'
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
