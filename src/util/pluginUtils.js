@@ -107,9 +107,7 @@ export function parseColorFormat(value) {
 
 export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
   if (options.values?.[modifier] !== undefined) {
-    let value = options.values?.[modifier]
-
-    return parseColorFormat(value)
+    return parseColorFormat(options.values?.[modifier])
   }
 
   let [color, alpha] = splitAlpha(modifier)
