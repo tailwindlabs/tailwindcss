@@ -1,1 +1,1 @@
-declare namespace tailwindcss {}
+export type { Config } from './config.d'
