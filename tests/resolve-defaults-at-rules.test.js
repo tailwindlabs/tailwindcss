@@ -16,7 +16,8 @@ test('basic utilities', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -67,7 +68,8 @@ test('with pseudo-class variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -116,7 +118,8 @@ test('with pseudo-element variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -161,7 +164,8 @@ test('with multi-class variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -206,7 +210,8 @@ test('with multi-class pseudo-element variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -257,7 +262,8 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -344,7 +350,8 @@ test('with apply', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -540,7 +547,8 @@ test('with shadows', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-ring-inset: ;
         --tw-ring-offset-width: 0px;
         --tw-ring-offset-color: #fff;
@@ -598,7 +606,8 @@ test('when no utilities that need the defaults are used', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;

@@ -44,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add new `border-spacing` utilities ([#7102](https://github.com/tailwindlabs/tailwindcss/pull/7102))
 - Add `enabled` variant ([#7905](https://github.com/tailwindlabs/tailwindcss/pull/7905))
 - Add TypeScript types for the `tailwind.config.js` file ([#7891](https://github.com/tailwindlabs/tailwindcss/pull/7891))
-- Add `backdrop` variant ([#7924](https://github.com/tailwindlabs/tailwindcss/pull/7924))
+- Add `backdrop` variant ([#7924](https://github.com/tailwindlabs/tailwindcss/pull/7924), [#8526](https://github.com/tailwindlabs/tailwindcss/pull/8526))
 - Add `grid-flow-dense` utility ([#8193](https://github.com/tailwindlabs/tailwindcss/pull/8193))
 - Add `mix-blend-plus-lighter` utility ([#8288](https://github.com/tailwindlabs/tailwindcss/pull/8288))
 - Add arbitrary variants ([#8299](https://github.com/tailwindlabs/tailwindcss/pull/8299))

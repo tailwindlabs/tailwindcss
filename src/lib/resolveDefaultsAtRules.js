@@ -134,7 +134,7 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
           source: universal.source,
         })
 
-        universalRule.selectors = ['*', '::before', '::after']
+        universalRule.selectors = ['*', '::before', '::after', '::backdrop']
 
         universalRule.append(universal.nodes)
         universal.before(universalRule)

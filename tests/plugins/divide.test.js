@@ -10,7 +10,8 @@ it('should add the divide styles for divide-y and a default border color', () =>
     expect(result.css).toMatchCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-border-spacing-x: 0;
         --tw-border-spacing-y: 0;
         --tw-translate-x: 0;
@@ -76,7 +77,8 @@ it('should add the divide styles for divide-x and a default border color', () =>
     expect(result.css).toMatchCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-border-spacing-x: 0;
         --tw-border-spacing-y: 0;
         --tw-translate-x: 0;
@@ -142,7 +144,8 @@ it('should add the divide styles for divide-y-reverse and a default border color
     expect(result.css).toMatchCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-border-spacing-x: 0;
         --tw-border-spacing-y: 0;
         --tw-translate-x: 0;
@@ -206,7 +209,8 @@ it('should add the divide styles for divide-x-reverse and a default border color
     expect(result.css).toMatchCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-border-spacing-x: 0;
         --tw-border-spacing-y: 0;
         --tw-translate-x: 0;
@@ -270,7 +274,8 @@ it('should only inject the base styles once if we use divide and border at the s
     expect(result.css).toMatchCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-border-spacing-x: 0;
         --tw-border-spacing-y: 0;
         --tw-translate-x: 0;
