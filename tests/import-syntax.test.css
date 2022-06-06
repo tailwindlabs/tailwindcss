@@ -3,7 +3,8 @@ h1 {
 }
 *,
 ::before,
-::after {
+::after,
+::backdrop {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;

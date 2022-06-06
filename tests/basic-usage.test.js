@@ -151,7 +151,8 @@ test('default ring color can be a function', () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         --tw-border-spacing-x: 0;
         --tw-border-spacing-y: 0;
         --tw-translate-x: 0;
