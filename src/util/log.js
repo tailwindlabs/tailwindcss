@@ -3,7 +3,7 @@ import colors from 'picocolors'
 let alreadyShown = new Set()
 
 function log(type, messages, key) {
-  if (process.env.JEST_WORKER_ID !== undefined) return
+  if (typeof process !== 'undefined' && process.env.JEST_WORKER_ID) return
 
   if (key && alreadyShown.has(key)) return
   if (key) alreadyShown.add(key)
