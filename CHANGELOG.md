@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix candidate extractor regression ([#8558](https://github.com/tailwindlabs/tailwindcss/pull/8558))
 - Split `::backdrop`` into separate defaults group ([#8567](https://github.com/tailwindlabs/tailwindcss/pull/8567))
+- Fix postcss plugin type ([#8564](https://github.com/tailwindlabs/tailwindcss/pull/8564))
 
 ## [3.1.0] - 2022-06-08
 
