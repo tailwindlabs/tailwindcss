@@ -438,3 +438,14 @@ test('with double quotes array within function', async () => {
   expect(extractions).toContain('pl-1.5')
   expect(extractions).not.toContain('pl-1')
 })
+
+test('with angle brackets', async () => {
+  const extractions = defaultExtractor(
+    `<div class="bg-blue-200 <% if (useShadow) { %>shadow-xl<% } %>">test</div>`
+  )
+
+  expect(extractions).toContain('bg-blue-200')
+  expect(extractions).toContain('shadow-xl')
+  expect(extractions).not.toContain('>shadow-xl')
+  expect(extractions).not.toContain('shadow-xl<')
+})

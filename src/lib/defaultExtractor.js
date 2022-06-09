@@ -43,7 +43,7 @@ function* buildRegExps(context) {
             /(?![{([]])/,
 
             // optionally followed by an opacity modifier
-            /(?:\/[^\s'"\\$]*)?/,
+            /(?:\/[^\s'"\\><$]*)?/,
           ]),
 
           regex.pattern([
@@ -58,7 +58,7 @@ function* buildRegExps(context) {
           ]),
 
           // Normal values w/o quotes — may include an opacity modifier
-          /[-\/][^\s'"\\$={]*/,
+          /[-\/][^\s'"\\$={><]*/,
         ])
       ),
     ]),
