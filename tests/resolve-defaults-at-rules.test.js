@@ -16,7 +16,15 @@ test('basic utilities', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -68,7 +76,15 @@ test('with pseudo-class variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -118,7 +134,15 @@ test('with pseudo-element variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -164,7 +188,15 @@ test('with multi-class variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -210,7 +242,15 @@ test('with multi-class pseudo-element variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -262,7 +302,15 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -350,7 +398,15 @@ test('with apply', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -547,7 +603,16 @@ test('with shadows', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgb(59 130 246 / 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+      }
       ::backdrop {
         --tw-ring-inset: ;
         --tw-ring-offset-width: 0px;
@@ -606,7 +671,15 @@ test('when no utilities that need the defaults are used', async () => {
     expect(result.css).toMatchFormattedCss(css`
       *,
       ::before,
-      ::after,
+      ::after {
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;

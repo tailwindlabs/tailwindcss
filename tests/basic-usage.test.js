@@ -149,56 +149,7 @@ test('default ring color can be a function', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      *,
-      ::before,
-      ::after,
-      ::backdrop {
-        --tw-border-spacing-x: 0;
-        --tw-border-spacing-y: 0;
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-        --tw-pan-x: ;
-        --tw-pan-y: ;
-        --tw-pinch-zoom: ;
-        --tw-scroll-snap-strictness: proximity;
-        --tw-ordinal: ;
-        --tw-slashed-zero: ;
-        --tw-numeric-figure: ;
-        --tw-numeric-spacing: ;
-        --tw-numeric-fraction: ;
-        --tw-ring-inset: ;
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-color: rgba(var(--red), 0.5);
-        --tw-ring-offset-shadow: 0 0 #0000;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-colored: 0 0 #0000;
-        --tw-blur: ;
-        --tw-brightness: ;
-        --tw-contrast: ;
-        --tw-grayscale: ;
-        --tw-hue-rotate: ;
-        --tw-invert: ;
-        --tw-saturate: ;
-        --tw-sepia: ;
-        --tw-drop-shadow: ;
-        --tw-backdrop-blur: ;
-        --tw-backdrop-brightness: ;
-        --tw-backdrop-contrast: ;
-        --tw-backdrop-grayscale: ;
-        --tw-backdrop-hue-rotate: ;
-        --tw-backdrop-invert: ;
-        --tw-backdrop-opacity: ;
-        --tw-backdrop-saturate: ;
-        --tw-backdrop-sepia: ;
-      }
-
+      ${defaults({ defaultRingColor: 'rgba(var(--red), 0.5)' })}
       .ring {
         --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
           var(--tw-ring-offset-color);
@@ -210,7 +161,7 @@ test('default ring color can be a function', () => {
   })
 })
 
-it('fasly config values still work', () => {
+it('falsy config values still work', () => {
   let config = {
     content: [{ raw: html`<div class="inset-0"></div>` }],
     theme: {
