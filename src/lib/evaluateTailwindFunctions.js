@@ -162,7 +162,7 @@ let nodeTypePropertyMap = {
 export default function ({ tailwindConfig: config }) {
   let functions = {
     theme: (node, path, ...defaultValue) => {
-      let matches = path.match(/^([^\/\s]+)(?:\s*\/\s*([^\/\s]+))$/)
+      let matches = path.match(/^([^\s]+)(?![^\[]*\])(?:\s*\/\s*([^\/\s]+))$/)
       let alpha = undefined
 
       if (matches) {

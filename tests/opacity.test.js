@@ -728,3 +728,36 @@ it('should be possible to use <alpha-value> inside arbitrary values', () => {
     `)
   })
 })
+
+it('Theme functions can reference values with slashes in brackets', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="bg-foo1 bg-foo2"></div> `,
+      },
+    ],
+    theme: {
+      colors: {
+        'a/b': '#000000',
+      },
+      extend: {
+        backgroundColor: ({ theme }) => ({
+          foo1: theme('colors[a/b]'),
+          foo2: theme('colors[a/b]/50%'),
+        }),
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .bg-foo1 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+      }
+      .bg-foo2 {
+        background-color: rgb(0 0 0 / 50%);
+      }
+    `)
+  })
+})
