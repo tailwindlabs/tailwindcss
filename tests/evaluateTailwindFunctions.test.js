@@ -1024,3 +1024,34 @@ test('Theme function can extract alpha values for colors (8)', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('Theme functions can reference values with slashes in brackets', () => {
+  let input = css`
+    .foo1 {
+      color: theme(colors[a/b]);
+    }
+    .foo2 {
+      color: theme(colors[a/b]/50%);
+    }
+  `
+
+  let output = css`
+    .foo1 {
+      color: #000000;
+    }
+    .foo2 {
+      color: rgb(0 0 0 / 50%);
+    }
+  `
+
+  return runFull(input, {
+    theme: {
+      colors: {
+        'a/b': '#000000',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
