@@ -415,28 +415,24 @@ test('with single quotes array within template literal', async () => {
   const extractions = defaultExtractor(`<div class=\`\${['pr-1.5']}\`></div>`)
 
   expect(extractions).toContain('pr-1.5')
-  expect(extractions).not.toContain('pr-1')
 })
 
 test('with double quotes array within template literal', async () => {
   const extractions = defaultExtractor(`<div class=\`\${["pr-1.5"]}\`></div>`)
 
   expect(extractions).toContain('pr-1.5')
-  expect(extractions).not.toContain('pr-1')
 })
 
 test('with single quotes array within function', async () => {
   const extractions = defaultExtractor(`document.body.classList.add(['pl-1.5'].join(" "));`)
 
   expect(extractions).toContain('pl-1.5')
-  expect(extractions).not.toContain('pl-1')
 })
 
 test('with double quotes array within function', async () => {
   const extractions = defaultExtractor(`document.body.classList.add(["pl-1.5"].join(" "));`)
 
   expect(extractions).toContain('pl-1.5')
-  expect(extractions).not.toContain('pl-1')
 })
 
 test('with angle brackets', async () => {
@@ -448,4 +444,27 @@ test('with angle brackets', async () => {
   expect(extractions).toContain('shadow-xl')
   expect(extractions).not.toContain('>shadow-xl')
   expect(extractions).not.toContain('shadow-xl<')
+})
+
+test('markdown code fences', async () => {
+  const extractions = defaultExtractor('<!-- this should work: `.font-bold`, `.font-normal` -->')
+
+  expect(extractions).toContain('font-bold')
+  expect(extractions).toContain('font-normal')
+  expect(extractions).not.toContain('.font-bold')
+  expect(extractions).not.toContain('.font-normal')
+})
+
+test('classes in slim templates', async () => {
+  const extractions = defaultExtractor(`
+    p.bg-red-500.text-sm
+      'This is a paragraph
+        small.italic.text-gray-500
+          '(Look mom, no closing tag!)
+  `)
+
+  expect(extractions).toContain('bg-red-500')
+  expect(extractions).toContain('text-sm')
+  expect(extractions).toContain('italic')
+  expect(extractions).toContain('text-gray-500')
 })
