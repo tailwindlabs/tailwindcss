@@ -5,6 +5,7 @@ description: Using utilities to style elements on hover, focus, and more.
 ---
 
 import { TipGood, TipBad, TipInfo } from '@/components/Tip'
+import { SnippetGroup } from '@/components/SnippetGroup'
 
 Every utility class in Tailwind can be applied _conditionally_ by adding a modifier to the beginning of the class name that describes the condition you want to target.
 
@@ -655,6 +656,20 @@ Style the first line in a block of content using the `first-line` modifier, and 
 </p>
 ```
 
+### Dialog backdrops
+
+Style the backdrop of a [native `<dialog>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) using the `backdrop` modifier:
+
+```html
+<dialog class="**backdrop:bg-gray-50**">
+  <form method="dialog">
+    <!-- ... -->
+  </form>
+</dialog>
+```
+
+If you're using native `<dialog>` elements in your project, you may also want to read about [styling open/closed states](/docs/hover-focus-and-other-states#open-closed-state) using the `open` modifier.
+
 ---
 
 ## Media queries
@@ -770,6 +785,40 @@ Tailwind also includes a `motion-safe` modifier that only adds styles when the u
   Save changes
 </button>
 ```
+
+### Prefers contrast
+
+The `prefers-contrast` media query tells you if the user has requested more or less contrast.
+
+Use the `contrast-more` modifier to conditionally add styles when the user has requested more contrast:
+
+<Example hint="Try emulating `prefers-contrast: more` in your developer tools to see the changes" p="none">
+  <div class="max-w-sm mx-auto bg-white shadow pt-6 pb-4 px-6">
+    <form>
+      <div>
+        <label for="contrast-example" class="block text-sm font-medium text-slate-700">Social Security Number</label>
+        <div class="mt-1">
+          <input type="text" name="contrast-example" id="contrast-example" class="px-3 py-2 bg-white border shadow-sm border-slate-200 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 contrast-more:border-slate-400 contrast-more:placeholder-slate-500"  placeholder="000-00-0000" />
+          <p class="mt-2 text-sm text-slate-600 opacity-10 contrast-more:opacity-100">We need this to steal your identity.</p>
+        </div>
+      </div>
+    </form>
+  </div>
+</Example>
+
+```html
+<form>
+  <label class="block">
+    <span class="block text-sm font-medium text-slate-700">Social Security Number</span>
+    <input class="border-slate-200 placeholder-slate-400 **contrast-more:border-slate-400** **contrast-more:placeholder-slate-500**"/>
+    <p class="mt-2 opacity-10 **contrast-more:opacity-100** text-slate-600 text-sm">
+      We need this to steal your identity.
+    </p>
+  </label>
+</form>
+```
+
+Tailwind also includes a `contrast-less` modifier you can use to conditionally add styles when the user has requested less contrast.
 
 ### Viewport orientation
 
@@ -895,6 +944,151 @@ Use the `open` modifier to conditionally add styles when a `<details>` or `<dial
   </div>
 ```
 
+---
+
+## Custom modifiers
+
+### Using arbitrary variants
+
+Just like [arbitrary values](/docs/adding-custom-styles#using-arbitrary-values) let you use custom values with your utility classes, arbitrary variants let you write custom selector modifiers directly in your HTML.
+
+Arbitrary variants are just format strings that represent the selector, wrapped in square brackets. For example, this arbitrary modifier selects an element only when it is the third child:
+
+<SnippetGroup>
+
+```html HTML
+<ul role="list">
+  {#each items as item}
+    <li class="**[&:nth-child(3)]:underline**">{item}</li>
+  {/each}
+</ul>
+```
+
+```css Generated CSS
+/* https://media.giphy.com/media/uPnKU86sFa2fm/giphy.gif */
+.\[\&\:nth-child\(3\)\]\:underline:nth-child(3) {
+  text-decoration-style: underline
+}
+```
+
+</SnippetGroup>
+
+The format string is the same as what you'd use with the [`addVariant` plugin API]((/docs/plugins#adding-variants)), with the `&` representing the selector being modified.
+
+Arbitrary variants can be stacked with built-in modifiers or with each other, just like the rest of the modifiers in Tailwind:
+
+<SnippetGroup>
+
+```html HTML
+<ul role="list">
+  {#each items as item}
+    <li class="**lg:[&:nth-child(3)]:hover:underline**">{item}</li>
+  {/each}
+</ul>
+```
+
+```css Generated CSS
+/* https://media.giphy.com/media/Sd3cd0SrUKZEyWmAlM/giphy.gif */
+@media (min-width: 1024px) {
+  .lg\:\[\&\:nth-child\(3\)\]\:hover\:underline:hover:nth-child(3) {
+    text-decoration-line: underline;
+  }
+}
+```
+
+</SnippetGroup>
+
+
+If you need spaces in your selector, you can use an underscore. For example, this arbitrary modifier selects all `p` elements within the element where you've added the class:
+
+<SnippetGroup>
+
+```html HTML
+<div class="**[&_p]:mt-4**">
+  <p>Lorem ipsum...</p>
+  <ul>
+    <li>
+      <p>Lorem ipsum...</p>
+    </li>
+    <!-- ... -->
+  </ul>
+</div>
+```
+
+```css Generated CSS
+/* https://media.giphy.com/media/uPnKU86sFa2fm/giphy.gif */
+.\[\&\:nth-child\(3\)\]\:underline:nth-child(3) {
+  text-decoration-style: underline
+}
+```
+
+</SnippetGroup>
+
+You can also use at-rules like `@media` or `@supports` in arbitrary variants:
+
+<SnippetGroup>
+
+```html HTML
+<div class="flex **[@supports(display:grid)]:grid**">
+  <!-- ... -->
+</div>
+```
+
+```css Generated CSS
+/* https://media.giphy.com/media/sEms56zTGDx96/giphy.gif */
+@supports (display: grid) {
+  .\[\@supports\(display\:grid\)\]\:grid {
+    text-decoration-style: underline
+  }
+}
+```
+
+</SnippetGroup>
+
+With at-rule custom modifiers the `&` placeholder isn't necessary, just like when nesting with a preprocessor.
+
+You can even combine at-rules and regular selector modifiers by including the selector modifier within curly braces after the at-rule:
+
+
+<SnippetGroup>
+
+```html HTML
+<button type="button" class="**[@media(any-hover:hover){&:hover}]:opacity-100**">
+  <!-- ... -->
+</button>
+```
+
+```css Generated CSS
+/* https://media.giphy.com/media/l0IypeKl9NJhPFMrK/giphy.gif */
+@media (any-hover: hover) {
+  .\[\@media\(any-hover\:hover\)\{\&\:hover\}\]\:opacity-100:hover {
+    opacity: 1
+  }
+}
+```
+
+</SnippetGroup>
+
+
+### Creating a plugin
+
+If you find yourself using the same arbitrary modifier multiple times in your project, it might be worth extracting it to a plugin using the `addVariant` API:
+
+```js tailwind.config.js
+let plugin = require('tailwindcss/plugin')
+
+module.exports = {
+  // ...
+  plugins: [
+    plugin(function ({ addVariant }) {
+      // Add a `third` variant, ie. `third:pb-0`
+      addVariant('third', '&:nth-child(3)')
+    })
+  ]
+}
+```
+
+Learn more in the [adding variant plugins](/docs/plugins#adding-variants) documentation.
 
 ---
 
@@ -969,26 +1163,6 @@ Another place this is important is when using modifiers like `prose-headings` th
 In the first example, every single heading is underlined when you hover over the article itself, whereas in the second example each heading is only underlined when you hover over that heading.
 
 
-### Creating custom modifiers
-
-You can add your own modifiers to Tailwind by creating a plugin that uses the `addVariant` API:
-
-```js tailwind.config.js
-let plugin = require('tailwindcss/plugin')
-
-module.exports = {
-  // ...
-  plugins: [
-    plugin(function ({ addVariant }) {
-      // Add a `third` variant, ie. `third:pb-0`
-      addVariant('third', '&:nth-child(3)')
-    })
-  ]
-}
-```
-
-Learn more in the [Plugins](/docs/plugins#adding-variants) documentation.
-
 ---
 
 ## Appendix
@@ -1018,6 +1192,7 @@ A quick reference table of every single modifier included in Tailwind by default
 | <a href="#only-of-type" className="whitespace-nowrap">only-of-type</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>:only-of-type</code> |
 | <a href="#empty" className="whitespace-nowrap">empty</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>:empty</code> |
 | <a href="#disabled" className="whitespace-nowrap">disabled</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>:disabled</code> |
+| <a href="#enabled" className="whitespace-nowrap">enabled</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>:enabled</code> |
 | <a href="#checked" className="whitespace-nowrap">checked</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>:checked</code> |
 | <a href="#indeterminate" className="whitespace-nowrap">indeterminate</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>:indeterminate</code> |
 | <a href="#default" className="whitespace-nowrap">default</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>:default</code> |
@@ -1037,6 +1212,7 @@ A quick reference table of every single modifier included in Tailwind by default
 | <a href="#highlighted-text" className="whitespace-nowrap">marker</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>::marker</code> |
 | <a href="#selection" className="whitespace-nowrap">selection</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>::selection</code> |
 | <a href="#file-input-buttons" className="whitespace-nowrap">file</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>::file-selector-button</code> |
+| <a href="#dialog-backdrops" className="whitespace-nowrap">backdrop</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>::backdrop</code> |
 | <a href="#placeholder" className="whitespace-nowrap">placeholder</a>  | <code className="whitespace-nowrap before:content-none after:content-none"><span className="text-slate-400">&</span>::placeholder</code> |
 | <a href="#responsive-breakpoints" className="whitespace-nowrap">sm</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (min-width: 640px)</code> |
 | <a href="#responsive-breakpoints" className="whitespace-nowrap">md</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (min-width: 768px)</code> |
@@ -1048,6 +1224,8 @@ A quick reference table of every single modifier included in Tailwind by default
 | <a href="#viewport-orientation" className="whitespace-nowrap">landscape</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (orientation: landscape)</code> |
 | <a href="#prefers-reduced-motion" className="whitespace-nowrap">motion-safe</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (prefers-reduced-motion: no-preference)</code> |
 | <a href="#prefers-reduced-motion" className="whitespace-nowrap">motion-reduce</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (prefers-reduced-motion: reduce)</code> |
+| <a href="#prefers-contrast" className="whitespace-nowrap">contrast-more</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (prefers-contrast: more)</code> |
+| <a href="#prefers-contrast" className="whitespace-nowrap">contrast-less</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media (prefers-contrast: less)</code> |
 | <a href="#print-styles" className="whitespace-nowrap">print</a> | <code className="whitespace-nowrap before:content-none after:content-none">@media print</code> |
 | <a href="#rtl-support" className="whitespace-nowrap">rtl</a> | <code className="whitespace-nowrap before:content-none after:content-none">[dir="rtl"] <span className="text-slate-400">&</span></code> |
 | <a href="#rtl-support" className="whitespace-nowrap">ltr</a> | <code className="whitespace-nowrap before:content-none after:content-none">[dir="ltr"] <span className="text-slate-400">&</span></code> |
@@ -1261,6 +1439,14 @@ Style an input when it's disabled using the `disabled` modifier:
 
 ```html
 <input class="**disabled:opacity-75** ..." />
+```
+
+#### enabled <small>(:enabled)</small>
+
+Style an input when it's enabled using the `enabled` modifier, most helpful when you only want to apply another style when an element is not disabled:
+
+```html
+<input class="**enabled:hover:border-gray-400** disabled:opacity-75 ..." />
 ```
 
 #### checked <small>(:checked)</small>

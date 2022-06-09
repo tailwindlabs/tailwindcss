@@ -372,7 +372,7 @@ function getUtilities(plugin, { includeNegativeValues = false } = {}) {
     addComponents: () => {},
     corePlugins: () => true,
     prefix: (x) => x,
-    config: (option, defaultValue) => defaultValue,
+    config: (option, defaultValue) => (option ? defaultValue : { future: {} }),
     addUtilities,
     theme: (key, defaultValue) => dlv(defaultConfig.theme, key, defaultValue),
     matchUtilities: (matches, { values, supportsNegativeValues } = {}) => {

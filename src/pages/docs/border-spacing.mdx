@@ -1,0 +1,132 @@
+---
+title: "Border Spacing"
+description: "Utilities for controlling the spacing between table borders."
+---
+
+import utilities from 'utilities?plugin=borderSpacing'
+import { numbersFirst } from '@/utils/sortClasses'
+import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
+import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
+
+export const classes = {
+  utilities,
+  sort: (classes) => numbersFirst(classes),
+  transformProperties: ({ properties }) => {
+    let x = properties['--tw-border-spacing-x']
+    let y = properties['--tw-border-spacing-y']
+    return {
+      'border-spacing': `${x || 'var(--tw-border-spacing-x)'} ${y || 'var(--tw-border-spacing-y)'}`
+    }
+  },
+}
+
+## Basic usage
+
+### Setting the border spacing
+
+Use `border-spacing` to control the space between the borders of table cells with [separate borders](/docs/border-collapse#separate).
+
+<Example p="none">
+  <div class="px-4 py-8 sm:px-8">
+    <table class="border-separate border-spacing-2 w-full border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm">
+      <thead class="bg-slate-50 dark:bg-slate-700">
+        <tr>
+          <th class="w-1/2 border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">State</th>
+          <th class="w-1/2 border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">City</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Indiana</td>
+          <td class="border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Indianapolis</td>
+        </tr>
+        <tr>
+          <td class="border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Ohio</td>
+          <td class="border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Columbus</td>
+        </tr>
+        <tr>
+          <td class="border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Michigan</td>
+          <td class="border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Detroit</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</Example>
+
+```html
+<table class="border-separate **border-spacing-2** border border-slate-400 ..." dark-class="border-separate **border-spacing-2** border border-slate-500 ...">
+  <thead>
+    <tr>
+      <th class="border border-slate-300 ..." dark-class="border border-slate-600 ...">State</th>
+      <th class="border border-slate-300 ..." dark-class="border border-slate-600 ...">City</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-300 ..." dark-class="border border-slate-700 ...">Indiana</td>
+      <td class="border border-slate-300 ..." dark-class="border border-slate-700 ...">Indianapolis</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 ..." dark-class="border border-slate-700 ...">Ohio</td>
+      <td class="border border-slate-300 ..." dark-class="border border-slate-700 ...">Columbus</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-300 ..." dark-class="border border-slate-700 ...">Michigan</td>
+      <td class="border border-slate-300 ..." dark-class="border border-slate-700 ...">Detroit</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+---
+
+## <Heading ignore>Applying conditionally</Heading>
+
+### <Heading ignore>Hover, focus, and other states</Heading>
+
+<HoverFocusAndOtherStates element="table" featuredClass="border-spacing-2" />
+
+### <Heading ignore>Breakpoints and media queries</Heading>
+
+<BreakpointsAndMediaQueries element="table" featuredClass="border-spacing-4" />
+
+---
+
+## Using custom values
+
+### Customizing your theme
+
+By default, Tailwind's border spacing utilities use the [default spacing scale](/docs/customizing-spacing). You can customize your spacing scale by editing `theme.spacing` or `theme.extend.spacing` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       spacing: {
++         '13': '3.25rem',
++       }
+      }
+    }
+  }
+```
+
+Alternatively, you can customize just the border spacing scale by editing `theme.borderSpacing` or `theme.extend.borderSpacing` in your `tailwind.config.js` file.
+
+```diff-js tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
++       borderSpacing: {
++         '13': '3.25rem',
++       },
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization](/docs/theme#customizing-the-default-theme) documentation.
+
+### Arbitrary values
+
+<ArbitraryValues property="border-spacing" featuredClass="border-spacing-[7px]" />

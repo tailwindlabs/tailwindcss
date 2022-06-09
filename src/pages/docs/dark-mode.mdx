@@ -101,13 +101,17 @@ Now instead of `dark:{class}` classes being applied based on `prefers-color-sche
 </html>
 ```
 
- If you've set <a href="/docs/configuration#prefix">a prefix</a> in your Tailwind config, be sure to add that to the `dark` class. For example, if you have a prefix of `tw-`, you'll need to use the `tw-dark` class to enable dark mode.
+If you've set <a href="/docs/configuration#prefix">a prefix</a> in your Tailwind config, be sure to add that to the `dark` class. For example, if you have a prefix of `tw-`, you'll need to use the `tw-dark` class to enable dark mode.
 
 How you add the `dark` class to the `html` element is up to you, but a common approach is to use a bit of JS that reads a preference from somewhere (like `localStorage`) and updates the DOM accordingly.
 
+### Supporting system preference and manual selection
+
+The `class` strategy can be used to support both the user's system preference _or_ a manually selected mode by using the [`Window.matchMedia()` API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia).
+
 Here's a simple example of how you can support light mode, dark mode, as well as respecting the operating system preference:
 
-```js
+```js spaghetti.js
 // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
   document.documentElement.classList.add('dark')
@@ -126,3 +130,16 @@ localStorage.removeItem('theme')
 ```
 
 Again you can manage this however you like, even storing the preference server-side in a database and rendering the class on the server — it's totally up to you.
+
+### Customizing the class name
+
+Some frameworks (like NativeScript) have their own approach to enabling dark mode and add a different class name when dark mode is active.
+
+You can customize the dark mode selector name by setting `darkMode` to an array with your custom selector as the second item:
+
+```js tailwind.config.js
+module.exports = {
+  darkMode: ['class', '[data-mode="dark"]'],
+  // ...
+}
+```
