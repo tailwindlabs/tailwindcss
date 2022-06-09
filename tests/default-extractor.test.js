@@ -449,3 +449,12 @@ test('with angle brackets', async () => {
   expect(extractions).not.toContain('>shadow-xl')
   expect(extractions).not.toContain('shadow-xl<')
 })
+
+test('markdown code fences', async () => {
+  const extractions = defaultExtractor('<!-- this should work: `.font-bold`, `.font-normal` -->')
+
+  expect(extractions).toContain('font-bold')
+  expect(extractions).toContain('font-normal')
+  expect(extractions).not.toContain('.font-bold')
+  expect(extractions).not.toContain('.font-normal')
+})

@@ -25,7 +25,7 @@ function* buildRegExps(context) {
 
   let utility = regex.any([
     // Arbitrary properties
-    /\[[^\s:'"]+:[^\s\]]+\]/,
+    /\[[^\s:'"`]+:[^\s\]]+\]/,
 
     // Utilities
     regex.pattern([
@@ -43,7 +43,7 @@ function* buildRegExps(context) {
             /(?![{([]])/,
 
             // optionally followed by an opacity modifier
-            /(?:\/[^\s'"\\><$]*)?/,
+            /(?:\/[^\s'"`\\><$]*)?/,
           ]),
 
           regex.pattern([
@@ -54,11 +54,11 @@ function* buildRegExps(context) {
             /(?![{([]])/,
 
             // optionally followed by an opacity modifier
-            /(?:\/[^\s'"\\$]*)?/,
+            /(?:\/[^\s'"`\\$]*)?/,
           ]),
 
           // Normal values w/o quotes — may include an opacity modifier
-          /[-\/][^\s'"\\$={><]*/,
+          /[-\/][^\s'"`\\$={><]*/,
         ])
       ),
     ]),
@@ -69,8 +69,8 @@ function* buildRegExps(context) {
     '((?=((',
     regex.any(
       [
-        regex.pattern([/([^\s"'\[\\]+-)?\[[^\s"'\\]+\]/, separator]),
-        regex.pattern([/[^\s"'\[\\]+/, separator]),
+        regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`\\]+\]/, separator]),
+        regex.pattern([/[^\s"'`\[\\]+/, separator]),
       ],
       true
     ),
