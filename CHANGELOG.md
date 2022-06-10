@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure `\` is a valid arbitrary variant token ([#8576](https://github.com/tailwindlabs/tailwindcss/pull/8576))
+- Enable `postcss-import` in the CLI by default in watch mode ([#8574](https://github.com/tailwindlabs/tailwindcss/pull/8574), [#8580](https://github.com/tailwindlabs/tailwindcss/pull/8580))
 
 ## [3.1.1] - 2022-06-09
 
