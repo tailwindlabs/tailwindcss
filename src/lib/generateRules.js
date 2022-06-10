@@ -9,7 +9,10 @@ import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
+import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
+import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
+import { flagEnabled } from '../featureFlags'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -125,8 +128,31 @@ function applyVariant(variant, matches, context) {
     return matches
   }
 
+  let args
+
+  // Find partial arbitrary variants
+  if (variant.endsWith(']') && !variant.startsWith('[')) {
+    args = variant.slice(variant.lastIndexOf('[') + 1, -1)
+    variant = variant.slice(0, variant.indexOf(args) - 1 /* - */ - 1 /* [ */)
+  }
+
+  // Register arbitrary variants
+  if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
+    let selector = normalize(variant.slice(1, -1))
+
+    if (!isValidVariantFormatString(selector)) {
+      return []
+    }
+
+    let fn = parseVariant(selector)
+
+    let sort = Array.from(context.variantOrder.values()).pop() << 1n
+    context.variantMap.set(variant, [[sort, fn]])
+    context.variantOrder.set(variant, sort)
+  }
+
   if (context.variantMap.has(variant)) {
-    let variantFunctionTuples = context.variantMap.get(variant)
+    let variantFunctionTuples = context.variantMap.get(variant).slice()
     let result = []
 
     for (let [meta, rule] of matches) {
@@ -187,7 +213,28 @@ function applyVariant(variant, matches, context) {
           format(selectorFormat) {
             collectedFormats.push(selectorFormat)
           },
+          args,
         })
+
+        // It can happen that a list of format strings is returned from within the function. In that
+        // case, we have to process them as well. We can use the existing `variantSort`.
+        if (Array.isArray(ruleWithVariant)) {
+          for (let [idx, variantFunction] of ruleWithVariant.entries()) {
+            // This is a little bit scary since we are pushing to an array of items that we are
+            // currently looping over. However, you can also think of it like a processing queue
+            // where you keep handling jobs until everything is done and each job can queue more
+            // jobs if needed.
+            variantFunctionTuples.push([
+              // TODO: This could have potential bugs if we shift the sort order from variant A far
+              // enough into the sort space of variant B. The chances are low, but if this happens
+              // then this might be the place too look at. One potential solution to this problem is
+              // reserving additional X places for these 'unknown' variants in between.
+              variantSort | BigInt(idx << ruleWithVariant.length),
+              variantFunction,
+            ])
+          }
+          continue
+        }
 
         if (typeof ruleWithVariant === 'string') {
           collectedFormats.push(ruleWithVariant)
@@ -382,7 +429,11 @@ function* resolveMatchedPlugins(classCandidate, context) {
   const twConfigPrefix = context.tailwindConfig.prefix
 
   const twConfigPrefixLen = twConfigPrefix.length
-  if (candidatePrefix[twConfigPrefixLen] === '-') {
+
+  const hasMatchingPrefix =
+    candidatePrefix.startsWith(twConfigPrefix) || candidatePrefix.startsWith(`-${twConfigPrefix}`)
+
+  if (candidatePrefix[twConfigPrefixLen] === '-' && hasMatchingPrefix) {
     negative = true
     candidatePrefix = twConfigPrefix + candidatePrefix.slice(twConfigPrefixLen + 1)
   }
@@ -403,7 +454,7 @@ function splitWithSeparator(input, separator) {
     return [sharedState.NOT_ON_DEMAND]
   }
 
-  return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
+  return Array.from(splitAtTopLevelOnly(input, separator))
 }
 
 function* recordCandidates(matches, classCandidate) {
@@ -414,7 +465,7 @@ function* recordCandidates(matches, classCandidate) {
   }
 }
 
-function* resolveMatches(candidate, context) {
+function* resolveMatches(candidate, context, original = candidate) {
   let separator = context.tailwindConfig.separator
   let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
   let important = false
@@ -422,6 +473,15 @@ function* resolveMatches(candidate, context) {
   if (classCandidate.startsWith('!')) {
     important = true
     classCandidate = classCandidate.slice(1)
+  }
+
+  if (flagEnabled(context.tailwindConfig, 'variantGrouping')) {
+    if (classCandidate.startsWith('(') && classCandidate.endsWith(')')) {
+      let base = variants.slice().reverse().join(separator)
+      for (let part of splitAtTopLevelOnly(classCandidate.slice(1, -1), ',')) {
+        yield* resolveMatches(base + separator + part, context, original)
+      }
+    }
   }
 
   // TODO: Reintroduce this in ways that doesn't break on false positives
@@ -555,7 +615,11 @@ function* resolveMatches(candidate, context) {
 
           rule.selector = finalizeSelector(finalFormat, {
             selector: rule.selector,
-            candidate,
+            candidate: original,
+            base: candidate
+              .split(new RegExp(`\\${context?.tailwindConfig?.separator ?? ':'}(?![^[]*\\])`))
+              .pop(),
+
             context,
           })
         })

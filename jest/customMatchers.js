@@ -55,7 +55,7 @@ expect.extend({
   },
   toIncludeCss(received, argument) {
     function stripped(str) {
-      return str.replace(/\s/g, '').replace(/;/g, '')
+      return str.replace('/* prettier-ignore */', '').replace(/\s/g, '').replace(/;/g, '')
     }
 
     const options = {
@@ -100,7 +100,7 @@ expect.extend({
 expect.extend({
   // Compare two CSS strings with all whitespace removed
   // This is probably naive but it's fast and works well enough.
-  toMatchFormattedCss(received, argument) {
+  toMatchFormattedCss(received = '', argument = '') {
     function format(input) {
       return prettier.format(input.replace(/\n/g, ''), {
         parser: 'css',

@@ -33,7 +33,7 @@ describe('static build', () => {
   })
 })
 
-describe.skip('watcher', () => {
+describe('watcher', () => {
   test('classes are generated when the html file changes', async () => {
     await writeInputFile(
       'index.html',
@@ -72,6 +72,60 @@ describe.skip('watcher', () => {
 
     await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
       await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
+    })
+
+    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
+  test.skip('classes are generated when globbed files change', async () => {
+    await writeInputFile('index.html', html` <link rel="stylesheet" href="./index.css" /> `)
+
+    await writeInputFile('glob/index.html', html` <div class="font-bold"></div> `)
+
+    let runningProcess = $('parcel watch ./src/index.html --no-cache')
+
+    await waitForOutputFileCreation(/index\.\w+\.css$/)
+
+    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+      await appendToInputFile('glob/index.html', html`<div class="font-normal"></div>`)
+    })
+
+    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+      await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
     })
 
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
@@ -199,12 +253,10 @@ describe.skip('watcher', () => {
 
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
+        /* prettier-ignore */
         .btn {
-          border-radius: 0.25rem;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          border-radius: .25rem;
+          padding: .25rem .5rem;
         }
         .font-bold {
           font-weight: 700;
@@ -231,14 +283,12 @@ describe.skip('watcher', () => {
 
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
+        /* prettier-ignore */
         .btn {
-          border-radius: 0.25rem;
           --tw-bg-opacity: 1;
           background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          border-radius: .25rem;
+          padding: .25rem .5rem;
         }
         .font-bold {
           font-weight: 700;

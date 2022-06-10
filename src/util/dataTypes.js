@@ -42,10 +42,16 @@ export function normalize(value, isRoot = true) {
 
   // Add spaces around operators inside calc() that do not follow an operator
   // or '('.
-  return value.replace(
-    /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
-    '$1 $2 '
-  )
+  value = value.replace(/calc\(.+\)/g, (match) => {
+    return match.replace(
+      /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
+      '$1 $2 '
+    )
+  })
+
+  // Add spaces around some operators not inside calc() that do not follow an operator
+  // or '('.
+  return value.replace(/(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([\/])/g, '$1 $2 ')
 }
 
 export function url(value) {
@@ -57,7 +63,9 @@ export function number(value) {
 }
 
 export function percentage(value) {
-  return /%$/g.test(value) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(value))
+  return value.split(UNDERSCORE).every((part) => {
+    return /%$/g.test(part) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(part))
+  })
 }
 
 let lengthUnits = [
@@ -113,7 +121,7 @@ export function color(value) {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
-    if (parseColor(part) !== null) return colors++, true
+    if (parseColor(part, { loose: true }) !== null) return colors++, true
 
     return false
   })

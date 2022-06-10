@@ -44,8 +44,10 @@ export default function transformThemeValue(themeSection) {
     }
   }
 
-  return (value) => {
-    if (typeof value === 'function') value = value({})
+  return (value, opts = {}) => {
+    if (typeof value === 'function') {
+      value = value(opts)
+    }
 
     return value
   }

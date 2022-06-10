@@ -14,7 +14,7 @@
     ]
   },
   "devDependencies": {
-    "postcss": "^8.2.15",
-    "postcss-cli": "^8.3.1"
+    "postcss": "^8.4.14",
+    "postcss-cli": "^9.1.0"
   }
 }

@@ -4,6 +4,7 @@ import postcss from 'postcss'
 import dlv from 'dlv'
 import selectorParser from 'postcss-selector-parser'
 
+import { flagEnabled } from '../featureFlags.js'
 import transformThemeValue from '../util/transformThemeValue'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
@@ -21,6 +22,8 @@ import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { generateRules } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
+
+let MATCH_VARIANT = Symbol()
 
 function prefix(context, selector) {
   let prefix = context.tailwindConfig.prefix
@@ -170,6 +173,34 @@ function withIdentifiers(styles) {
   })
 }
 
+export function isValidVariantFormatString(format) {
+  return format.startsWith('@') || format.includes('&')
+}
+
+export function parseVariant(variant) {
+  variant = variant
+    .replace(/\n+/g, '')
+    .replace(/\s{1,}/g, ' ')
+    .trim()
+
+  let fns = parseVariantFormatString(variant)
+    .map((str) => {
+      if (!str.startsWith('@')) {
+        return ({ format }) => format(str)
+      }
+
+      let [, name, params] = /@(.*?)( .+|[({].*)/g.exec(str)
+      return ({ wrap }) => wrap(postcss.atRule({ name, params: params.trim() }))
+    })
+    .reverse()
+
+  return (api) => {
+    for (let fn of fns) {
+      fn(api)
+    }
+  }
+}
+
 function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets, classList }) {
   function getConfigValue(path, defaultValue) {
     return path ? dlv(tailwindConfig, path, defaultValue) : tailwindConfig
@@ -191,51 +222,25 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     return context.tailwindConfig.prefix + identifier
   }
 
-  return {
-    addVariant(variantName, variantFunctions, options = {}) {
-      variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
-        if (typeof variantFunction !== 'string') {
-          // Safelist public API functions
-          return ({ modifySelectors, container, separator }) => {
-            return variantFunction({ modifySelectors, container, separator })
-          }
-        }
+  function resolveThemeValue(path, defaultValue, opts = {}) {
+    const [pathRoot, ...subPaths] = toPath(path)
+    const value = getConfigValue(['theme', pathRoot, ...subPaths], defaultValue)
+    return transformThemeValue(pathRoot)(value, opts)
+  }
 
-        variantFunction = variantFunction
-          .replace(/\n+/g, '')
-          .replace(/\s{1,}/g, ' ')
-          .trim()
+  const theme = Object.assign(
+    (path, defaultValue = undefined) => resolveThemeValue(path, defaultValue),
+    {
+      withAlpha: (path, opacityValue) => resolveThemeValue(path, undefined, { opacityValue }),
+    }
+  )
 
-        let fns = parseVariantFormatString(variantFunction)
-          .map((str) => {
-            if (!str.startsWith('@')) {
-              return ({ format }) => format(str)
-            }
-
-            let [, name, params] = /@(.*?) (.*)/g.exec(str)
-            return ({ wrap }) => wrap(postcss.atRule({ name, params }))
-          })
-          .reverse()
-
-        return (api) => {
-          for (let fn of fns) {
-            fn(api)
-          }
-        }
-      })
-
-      insertInto(variantList, variantName, options)
-      variantMap.set(variantName, variantFunctions)
-    },
+  let api = {
     postcss,
     prefix: applyConfiguredPrefix,
     e: escapeClassName,
     config: getConfigValue,
-    theme(path, defaultValue) {
-      const [pathRoot, ...subPaths] = toPath(path)
-      const value = getConfigValue(['theme', pathRoot, ...subPaths], defaultValue)
-      return transformThemeValue(pathRoot)(value)
-    },
+    theme,
     corePlugins: (path) => {
       if (Array.isArray(tailwindConfig.corePlugins)) {
         return tailwindConfig.corePlugins.includes(path)
@@ -440,7 +445,65 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
       }
     },
+    addVariant(variantName, variantFunctions, options = {}) {
+      variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
+        if (typeof variantFunction !== 'string') {
+          // Safelist public API functions
+          return (api) => {
+            let { args, modifySelectors, container, separator, wrap, format } = api
+            let result = variantFunction(
+              Object.assign(
+                { modifySelectors, container, separator },
+                variantFunction[MATCH_VARIANT] && { args, wrap, format }
+              )
+            )
+
+            if (typeof result === 'string' && !isValidVariantFormatString(result)) {
+              throw new Error(
+                `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
+              )
+            }
+
+            if (Array.isArray(result)) {
+              return result.map((variant) => parseVariant(variant))
+            }
+
+            // result may be undefined with legacy variants that use APIs like `modifySelectors`
+            return result && parseVariant(result)(api)
+          }
+        }
+
+        if (!isValidVariantFormatString(variantFunction)) {
+          throw new Error(
+            `Your custom variant \`${variantName}\` has an invalid format string. Make sure it's an at-rule or contains a \`&\` placeholder.`
+          )
+        }
+
+        return parseVariant(variantFunction)
+      })
+
+      insertInto(variantList, variantName, options)
+      variantMap.set(variantName, variantFunctions)
+    },
   }
+
+  if (flagEnabled(tailwindConfig, 'matchVariant')) {
+    api.matchVariant = function (variants, options) {
+      for (let variant in variants) {
+        for (let [k, v] of Object.entries(options?.values ?? {})) {
+          api.addVariant(`${variant}-${k}`, variants[variant](v))
+        }
+
+        api.addVariant(
+          variant,
+          Object.assign(({ args }) => variants[variant](args), { [MATCH_VARIANT]: true }),
+          options
+        )
+      }
+    }
+  }
+
+  return api
 }
 
 let fileModifiedMapCache = new WeakMap()
@@ -560,6 +623,7 @@ function resolvePlugins(context, root) {
   let afterVariants = [
     variantPlugins['directionVariants'],
     variantPlugins['reducedMotionVariants'],
+    variantPlugins['prefersContrastVariants'],
     variantPlugins['darkVariants'],
     variantPlugins['printVariant'],
     variantPlugins['screenVariants'],

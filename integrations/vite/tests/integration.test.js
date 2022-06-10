@@ -30,7 +30,7 @@ describe('static build', () => {
     )
 
     await $('vite build', {
-      env: { NODE_ENV: 'production' },
+      env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
     expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
@@ -53,7 +53,9 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`)
+    let runningProcess = $(`vite --port ${PORT}`, {
+      env: { NO_COLOR: '1' },
+    })
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
@@ -65,7 +67,7 @@ describe('watcher', () => {
     )
 
     await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
-    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+    await runningProcess.onStdout((message) => message.includes('page reload'))
 
     expect(await fetchCSS()).toIncludeCss(
       css`
@@ -79,7 +81,60 @@ describe('watcher', () => {
     )
 
     await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
-    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+    await runningProcess.onStdout((message) => message.includes('page reload'))
+
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
+  test('classes are generated when globbed files change', async () => {
+    await writeInputFile('index.html', html` <link rel="stylesheet" href="./index.css" /> `)
+
+    await writeInputFile('glob/index.html', html` <div class="font-bold"></div> `)
+
+    let runningProcess = $(`vite --port ${PORT}`, {
+      env: { NO_COLOR: '1' },
+    })
+    await runningProcess.onStdout((message) => message.includes('ready in'))
+
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    await appendToInputFile('glob/index.html', html`<div class="font-normal"></div>`)
+    await runningProcess.onStdout((message) => message.includes('page reload'))
+
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
+    await runningProcess.onStdout((message) => message.includes('page reload'))
 
     expect(await fetchCSS()).toIncludeCss(
       css`
@@ -108,7 +163,9 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`)
+    let runningProcess = $(`vite --port ${PORT}`, {
+      env: { NO_COLOR: '1' },
+    })
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
@@ -146,7 +203,7 @@ describe('watcher', () => {
         }
       `
     )
-    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
+    await runningProcess.onStdout((message) => message.includes('[vite]'))
 
     expect(await fetchCSS()).toIncludeCss(
       css`
@@ -173,7 +230,9 @@ describe('watcher', () => {
       `
     )
 
-    let runningProcess = $(`vite --port ${PORT}`)
+    let runningProcess = $(`vite --port ${PORT}`, {
+      env: { NO_COLOR: '1' },
+    })
     await runningProcess.onStdout((message) => message.includes('ready in'))
 
     expect(await fetchCSS()).toIncludeCss(
