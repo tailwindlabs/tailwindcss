@@ -69,7 +69,7 @@ function* buildRegExps(context) {
     '((?=((',
     regex.any(
       [
-        regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`\\]+\]/, separator]),
+        regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
         regex.pattern([/[^\s"'`\[\\]+/, separator]),
       ],
       true
