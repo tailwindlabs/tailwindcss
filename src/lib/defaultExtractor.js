@@ -1,42 +1,184 @@
-const PATTERNS = [
-  /(?:\['([^'\s]+[^<>"'`\s:\\])')/.source, // ['text-lg' -> text-lg
-  /(?:\["([^"\s]+[^<>"'`\s:\\])")/.source, // ["text-lg" -> text-lg
-  /(?:\[`([^`\s]+[^<>"'`\s:\\])`)/.source, // [`text-lg` -> text-lg
-  /([^${(<>"'`\s]*\[\w*'[^"`\s]*'?\])/.source, // font-['some_font',sans-serif]
-  /([^${(<>"'`\s]*\[\w*"[^'`\s]*"?\])/.source, // font-["some_font",sans-serif]
-  /([^<>"'`\s]*\[\w*\('[^"'`\s]*'\)\])/.source, // bg-[url('...')]
-  /([^<>"'`\s]*\[\w*\("[^"'`\s]*"\)\])/.source, // bg-[url("...")]
-  /([^<>"'`\s]*\[\w*\('[^"`\s]*'\)\])/.source, // bg-[url('...'),url('...')]
-  /([^<>"'`\s]*\[\w*\("[^'`\s]*"\)\])/.source, // bg-[url("..."),url("...")]
-  /([^<>"'`\s]*\[[^<>"'`\s]*\('[^"`\s]*'\)+\])/.source, // h-[calc(100%-theme('spacing.1'))]
-  /([^<>"'`\s]*\[[^<>"'`\s]*\("[^'`\s]*"\)+\])/.source, // h-[calc(100%-theme("spacing.1"))]
-  /([^${(<>"'`\s]*\['[^"'`\s]*'\])/.source, // `content-['hello']` but not `content-['hello']']`
-  /([^${(<>"'`\s]*\["[^"'`\s]*"\])/.source, // `content-["hello"]` but not `content-["hello"]"]`
-  /([^<>"'`\s]*\[[^<>"'`\s]*:[^\]\s]*\])/.source, // `[attr:value]`
-  /([^<>"'`\s]*\[[^<>"'`\s]*:'[^"'`\s]*'\])/.source, // `[content:'hello']` but not `[content:"hello"]`
-  /([^<>"'`\s]*\[[^<>"'`\s]*:"[^"'`\s]*"\])/.source, // `[content:"hello"]` but not `[content:'hello']`
-  /([^<>"'`\s]*\[[^"'`\s]+\][^<>"'`\s]*)/.source, // `fill-[#bada55]`, `fill-[#bada55]/50`
-  /([^"'`\s]*[^<>"'`\s:\\])/.source, //  `<sm:underline`, `md>:font-bold`
-  /([^<>"'`\s]*[^"'`\s:\\])/.source, //  `px-1.5`, `uppercase` but not `uppercase:`
+import { flagEnabled } from '../featureFlags.js'
+import * as regex from './regex'
 
-  // Arbitrary properties
-  // /([^"\s]*\[[^\s]+?\][^"\s]*)/.source,
-  // /([^'\s]*\[[^\s]+?\][^'\s]*)/.source,
-  // /([^`\s]*\[[^\s]+?\][^`\s]*)/.source,
-].join('|')
+export function defaultExtractor(context) {
+  let patterns = Array.from(buildRegExps(context))
 
-const BROAD_MATCH_GLOBAL_REGEXP = new RegExp(PATTERNS, 'g')
-const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%$]*[^<>"'`\s.(){}[\]#=%:$]/g
+  /**
+   * @param {string} content
+   */
+  return (content) => {
+    /** @type {(string|string)[]} */
+    let results = []
+
+    for (let pattern of patterns) {
+      results.push(...(content.match(pattern) ?? []))
+    }
+
+    return results.filter((v) => v !== undefined).map(clipAtBalancedParens)
+  }
+}
+
+function* buildRegExps(context) {
+  let separator = context.tailwindConfig.separator
+  let variantGroupingEnabled = flagEnabled(context.tailwindConfig, 'variantGrouping')
+
+  let utility = regex.any([
+    // Arbitrary properties
+    /\[[^\s:'"`]+:[^\s\]]+\]/,
+
+    // Utilities
+    regex.pattern([
+      // Utility Name / Group Name
+      /-?(?:\w+)/,
+
+      // Normal/Arbitrary values
+      regex.optional(
+        regex.any([
+          regex.pattern([
+            // Arbitrary values
+            /-\[[^\s:]+\]/,
+
+            // Not immediately followed by an `{[(`
+            /(?![{([]])/,
+
+            // optionally followed by an opacity modifier
+            /(?:\/[^\s'"`\\><$]*)?/,
+          ]),
+
+          regex.pattern([
+            // Arbitrary values
+            /-\[[^\s]+\]/,
+
+            // Not immediately followed by an `{[(`
+            /(?![{([]])/,
+
+            // optionally followed by an opacity modifier
+            /(?:\/[^\s'"`\\$]*)?/,
+          ]),
+
+          // Normal values w/o quotes — may include an opacity modifier
+          /[-\/][^\s'"`\\$={><]*/,
+        ])
+      ),
+    ]),
+  ])
+
+  yield regex.pattern([
+    // Variants
+    '((?=((',
+    regex.any(
+      [
+        regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
+        regex.pattern([/[^\s"'`\[\\]+/, separator]),
+      ],
+      true
+    ),
+    ')+))\\2)?',
+
+    // Important (optional)
+    /!?/,
+
+    variantGroupingEnabled
+      ? regex.any([
+          // Or any of those things but grouped separated by commas
+          regex.pattern([/\(/, utility, regex.zeroOrMore([/,/, utility]), /\)/]),
+
+          // Arbitrary properties, constrained utilities, arbitrary values, etc…
+          utility,
+        ])
+      : utility,
+  ])
+
+  // 5. Inner matches
+  yield /[^<>"'`\s.(){}[\]#=%$]*[^<>"'`\s.(){}[\]#=%:$]/g
+}
+
+// We want to capture any "special" characters
+// AND the characters immediately following them (if there is one)
+let SPECIALS = /([\[\]'"`])([^\[\]'"`])?/g
+let ALLOWED_CLASS_CHARACTERS = /[^"'`\s<>\]]+/
 
 /**
- * @param {string} content
+ * Clips a string ensuring that parentheses, quotes, etc… are balanced
+ * Used for arbitrary values only
+ *
+ * We will go past the end of the balanced parens until we find a non-class character
+ *
+ * Depth matching behavior:
+ * w-[calc(100%-theme('spacing[some_key][1.5]'))]']
+ *   ┬    ┬          ┬┬       ┬        ┬┬   ┬┬┬┬┬┬┬
+ *   1    2          3        4        34   3 210 END
+ *   ╰────┴──────────┴────────┴────────┴┴───┴─┴┴┴
+ *
+ * @param {string} input
  */
-export function defaultExtractor(content) {
-  let broadMatches = content.matchAll(BROAD_MATCH_GLOBAL_REGEXP)
-  let innerMatches = content.match(INNER_MATCH_GLOBAL_REGEXP) || []
-  let results = [...broadMatches, ...innerMatches].flat().filter((v) => v !== undefined)
+function clipAtBalancedParens(input) {
+  // We are care about this for arbitrary values
+  if (!input.includes('-[')) {
+    return input
+  }
 
-  return results
+  let depth = 0
+  let openStringTypes = []
+
+  // Find all parens, brackets, quotes, etc
+  // Stop when we end at a balanced pair
+  // This is naive and will treat mismatched parens as balanced
+  // This shouldn't be a problem in practice though
+  let matches = input.matchAll(SPECIALS)
+
+  // We can't use lookbehind assertions because we have to support Safari
+  // So, instead, we've emulated it using capture groups and we'll re-work the matches to accommodate
+  matches = Array.from(matches).flatMap((match) => {
+    const [, ...groups] = match
+
+    return groups.map((group, idx) =>
+      Object.assign([], match, {
+        index: match.index + idx,
+        0: group,
+      })
+    )
+  })
+
+  for (let match of matches) {
+    let char = match[0]
+    let inStringType = openStringTypes[openStringTypes.length - 1]
+
+    if (char === inStringType) {
+      openStringTypes.pop()
+    } else if (char === "'" || char === '"' || char === '`') {
+      openStringTypes.push(char)
+    }
+
+    if (inStringType) {
+      continue
+    } else if (char === '[') {
+      depth++
+      continue
+    } else if (char === ']') {
+      depth--
+      continue
+    }
+
+    // We've gone one character past the point where we should stop
+    // This means that there was an extra closing `]`
+    // We'll clip to just before it
+    if (depth < 0) {
+      return input.substring(0, match.index)
+    }
+
+    // We've finished balancing the brackets but there still may be characters that can be included
+    // For example in the class `text-[#336699]/[.35]`
+    // The depth goes to `0` at the closing `]` but goes up again at the `[`
+
+    // If we're at zero and encounter a non-class character then we clip the class there
+    if (depth === 0 && !ALLOWED_CLASS_CHARACTERS.test(char)) {
+      return input.substring(0, match.index)
+    }
+  }
+
+  return input
 }
 
 // Regular utilities

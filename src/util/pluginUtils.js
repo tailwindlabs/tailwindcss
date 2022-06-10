@@ -95,9 +95,19 @@ function splitAlpha(modifier) {
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
 }
 
+export function parseColorFormat(value) {
+  if (typeof value === 'string' && value.includes('<alpha-value>')) {
+    let oldValue = value
+
+    return ({ opacityValue = 1 }) => oldValue.replace('<alpha-value>', opacityValue)
+  }
+
+  return value
+}
+
 export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
   if (options.values?.[modifier] !== undefined) {
-    return options.values?.[modifier]
+    return parseColorFormat(options.values?.[modifier])
   }
 
   let [color, alpha] = splitAlpha(modifier)
@@ -109,6 +119,8 @@ export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
     if (normalizedColor === undefined) {
       return undefined
     }
+
+    normalizedColor = parseColorFormat(normalizedColor)
 
     if (isArbitraryValue(alpha)) {
       return withAlphaValue(normalizedColor, alpha.slice(1, -1))

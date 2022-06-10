@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run, css } from './util/run'
+import { run, html, css } from './util/run'
 
 test('collapse adjacent rules', () => {
   let config = {
@@ -59,5 +59,23 @@ test('collapse adjacent rules', () => {
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
+  })
+})
+
+test('duplicate url imports does not break rule collapsing', () => {
+  let config = {
+    content: [{ raw: html`` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @import url('https://example.com');
+    @import url('https://example.com');
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @import url('https://example.com');
+    `)
   })
 })

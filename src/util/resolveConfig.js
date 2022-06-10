@@ -8,6 +8,9 @@ import { toPath } from './toPath'
 import { normalizeConfig } from './normalizeConfig'
 import isPlainObject from './isPlainObject'
 import { cloneDeep } from './cloneDeep'
+import { parseColorFormat } from './pluginUtils'
+import { withAlphaValue } from './withAlphaVariable'
+import toColorValue from './toColorValue'
 
 function isFunction(input) {
   return typeof input === 'function'
@@ -65,36 +68,6 @@ const configUtils = {
         }),
         {}
       )
-  },
-  rgb(property) {
-    if (!property.startsWith('--')) {
-      throw new Error(
-        'The rgb() helper requires a custom property name to be passed as the first argument.'
-      )
-    }
-
-    return ({ opacityValue }) => {
-      if (opacityValue === undefined || opacityValue === 1) {
-        return `rgb(var(${property}) / 1.0)`
-      }
-
-      return `rgb(var(${property}) / ${opacityValue})`
-    }
-  },
-  hsl(property) {
-    if (!property.startsWith('--')) {
-      throw new Error(
-        'The hsl() helper requires a custom property name to be passed as the first argument.'
-      )
-    }
-
-    return ({ opacityValue }) => {
-      if (opacityValue === undefined || opacityValue === 1) {
-        return `hsl(var(${property}) / 1)`
-      }
-
-      return `hsl(var(${property}) / ${opacityValue})`
-    }
   },
 }
 
@@ -164,40 +137,81 @@ function mergeExtensions({ extend, ...theme }) {
   })
 }
 
+/**
+ *
+ * @param {string} key
+ * @return {Iterable<string[] & {alpha: string | undefined}>}
+ */
+function* toPaths(key) {
+  let path = toPath(key)
+
+  if (path.length === 0) {
+    return
+  }
+
+  yield path
+
+  if (Array.isArray(key)) {
+    return
+  }
+
+  let pattern = /^(.*?)\s*\/\s*([^/]+)$/
+  let matches = key.match(pattern)
+
+  if (matches !== null) {
+    let [, prefix, alpha] = matches
+
+    let newPath = toPath(prefix)
+    newPath.alpha = alpha
+
+    yield newPath
+  }
+}
+
 function resolveFunctionKeys(object) {
+  // theme('colors.red.500 / 0.5') -> ['colors', 'red', '500 / 0', '5]
+
   const resolvePath = (key, defaultValue) => {
-    const path = toPath(key)
+    for (const path of toPaths(key)) {
+      let index = 0
+      let val = object
 
-    let index = 0
-    let val = object
+      while (val !== undefined && val !== null && index < path.length) {
+        val = val[path[index++]]
 
-    while (val !== undefined && val !== null && index < path.length) {
-      val = val[path[index++]]
-      val = isFunction(val) ? val(resolvePath, configUtils) : val
+        let shouldResolveAsFn =
+          isFunction(val) && (path.alpha === undefined || index < path.length - 1)
+
+        val = shouldResolveAsFn ? val(resolvePath, configUtils) : val
+      }
+
+      if (val !== undefined) {
+        if (path.alpha !== undefined) {
+          let normalized = parseColorFormat(val)
+
+          return withAlphaValue(normalized, path.alpha, toColorValue(normalized))
+        }
+
+        if (isPlainObject(val)) {
+          return cloneDeep(val)
+        }
+
+        return val
+      }
     }
 
-    if (val === undefined) {
-      return defaultValue
-    }
-
-    if (isPlainObject(val)) {
-      return cloneDeep(val)
-    }
-
-    return val
+    return defaultValue
   }
 
-  resolvePath.theme = resolvePath
-
-  for (let key in configUtils) {
-    resolvePath[key] = configUtils[key]
-  }
+  Object.assign(resolvePath, {
+    theme: resolvePath,
+    ...configUtils,
+  })
 
   return Object.keys(object).reduce((resolved, key) => {
-    return {
-      ...resolved,
-      [key]: isFunction(object[key]) ? object[key](resolvePath, configUtils) : object[key],
-    }
+    resolved[key] = isFunction(object[key]) ? object[key](resolvePath, configUtils) : object[key]
+
+    return resolved
   }, {})
 }
 

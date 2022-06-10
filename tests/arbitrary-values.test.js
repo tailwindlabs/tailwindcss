@@ -68,6 +68,8 @@ it('should support arbitrary values for various background utilities', () => {
           <!-- By implicit type -->
           <div class="bg-[url('/image-1-0.png')]"></div>
           <div class="bg-[#ff0000]"></div>
+          <div class="bg-[rgb(var(--bg-color))]"></div>
+          <div class="bg-[hsl(var(--bg-color))]"></div>
 
           <!-- By explicit type -->
           <div class="bg-[url:var(--image-url)]"></div>
@@ -87,6 +89,14 @@ it('should support arbitrary values for various background utilities', () => {
       .bg-\[\#ff0000\] {
         --tw-bg-opacity: 1;
         background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+      }
+
+      .bg-\[rgb\(var\(--bg-color\)\)\] {
+        background-color: rgb(var(--bg-color));
+      }
+
+      .bg-\[hsl\(var\(--bg-color\)\)\] {
+        background-color: hsl(var(--bg-color));
       }
 
       .bg-\[color\:var\(--bg-color\)\] {
@@ -382,5 +392,27 @@ it('should not output unparsable arbitrary CSS values', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(``)
+  })
+})
+
+// Issue: https://github.com/tailwindlabs/tailwindcss/issues/7997
+// `top_right_50%` was a valid percentage before introducing this change
+it('should correctly validate each part when checking for `percentage` data types', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[top_right_50%]"></div>` }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[top_right_50\%\] {
+        background-position: top right 50%;
+      }
+    `)
   })
 })

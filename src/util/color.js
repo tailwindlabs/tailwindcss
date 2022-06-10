@@ -8,13 +8,15 @@ let ALPHA_SEP = /\s*[,/]\s*/
 let CUSTOM_PROPERTY = /var\(--(?:[^ )]*?)\)/
 
 let RGB = new RegExp(
-  `^rgba?\\(\\s*(${VALUE.source}|${CUSTOM_PROPERTY.source})${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source})${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source})(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
+  `^(rgb)a?\\(\\s*(${VALUE.source}|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
 )
 let HSL = new RegExp(
-  `^hsla?\\(\\s*((?:${VALUE.source})(?:deg|rad|grad|turn)?|${CUSTOM_PROPERTY.source})${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source})${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source})(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
+  `^(hsl)a?\\(\\s*((?:${VALUE.source})(?:deg|rad|grad|turn)?|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
 )
 
-export function parseColor(value) {
+// In "loose" mode the color may contain fewer than 3 parts, as long as at least
+// one of the parts is variable.
+export function parseColor(value, { loose = false } = {}) {
   if (typeof value !== 'string') {
     return null
   }
@@ -42,27 +44,27 @@ export function parseColor(value) {
     }
   }
 
-  let rgbMatch = value.match(RGB)
+  let match = value.match(RGB) ?? value.match(HSL)
 
-  if (rgbMatch !== null) {
-    return {
-      mode: 'rgb',
-      color: [rgbMatch[1], rgbMatch[2], rgbMatch[3]].map((v) => v.toString()),
-      alpha: rgbMatch[4]?.toString?.(),
-    }
+  if (match === null) {
+    return null
   }
 
-  let hslMatch = value.match(HSL)
+  let color = [match[2], match[3], match[4]].filter(Boolean).map((v) => v.toString())
 
-  if (hslMatch !== null) {
-    return {
-      mode: 'hsl',
-      color: [hslMatch[1], hslMatch[2], hslMatch[3]].map((v) => v.toString()),
-      alpha: hslMatch[4]?.toString?.(),
-    }
+  if (!loose && color.length !== 3) {
+    return null
   }
 
-  return null
+  if (color.length < 3 && !color.some((part) => /^var\(.*?\)$/.test(part))) {
+    return null
+  }
+
+  return {
+    mode: match[1],
+    color,
+    alpha: match[5]?.toString?.(),
+  }
 }
 
 export function formatColor({ mode, color, alpha }) {

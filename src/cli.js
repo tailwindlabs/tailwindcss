@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { postcss, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
+import { lazyPostcss, lazyPostcssImport, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
 
 import chokidar from 'chokidar'
 import path from 'path'
@@ -9,6 +9,7 @@ import fs from 'fs'
 import postcssrc from 'postcss-load-config'
 import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
+import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
 import tailwind from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
 import fastGlob from 'fast-glob'
@@ -16,10 +17,32 @@ import getModuleDependencies from './lib/getModuleDependencies'
 import log from './util/log'
 import packageJson from '../package.json'
 import normalizePath from 'normalize-path'
+import { validateConfig } from './util/validateConfig.js'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
 }
+
+function isESM() {
+  const pkgPath = path.resolve('./package.json')
+
+  try {
+    let pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
+    return pkg.type && pkg.type === 'module'
+  } catch (err) {
+    return false
+  }
+}
+
+let configs = isESM()
+  ? {
+      tailwind: 'tailwind.config.cjs',
+      postcss: 'postcss.config.cjs',
+    }
+  : {
+      tailwind: 'tailwind.config.js',
+      postcss: 'postcss.config.js',
+    }
 
 // ---
 
@@ -145,16 +168,21 @@ function oneOf(...options) {
   )
 }
 
+function loadPostcss() {
+  // Try to load a local `postcss` version first
+  try {
+    return require('postcss')
+  } catch {}
+
+  return lazyPostcss()
+}
+
 let commands = {
   init: {
     run: init,
     args: {
-      '--full': { type: Boolean, description: 'Initialize a full `tailwind.config.js` file' },
-      '--postcss': { type: Boolean, description: 'Initialize a `postcss.config.js` file' },
-      '--types': {
-        type: Boolean,
-        description: 'Add TypeScript types for the `tailwind.config.js` file',
-      },
+      '--full': { type: Boolean, description: `Initialize a full \`${configs.tailwind}\` file` },
+      '--postcss': { type: Boolean, description: `Initialize a \`${configs.postcss}\` file` },
       '-f': '--full',
       '-p': '--postcss',
     },
@@ -213,7 +241,7 @@ if (
   help({
     usage: [
       'tailwindcss [--input input.css] [--output output.css] [--watch] [options...]',
-      'tailwindcss init [--full] [--postcss] [--types] [options...]',
+      'tailwindcss init [--full] [--postcss] [options...]',
     ],
     commands: Object.keys(commands)
       .filter((command) => command !== 'build')
@@ -329,7 +357,7 @@ run()
 function init() {
   let messages = []
 
-  let tailwindConfigLocation = path.resolve(args['_'][1] ?? './tailwind.config.js')
+  let tailwindConfigLocation = path.resolve(args['_'][1] ?? `./${configs.tailwind}`)
   if (fs.existsSync(tailwindConfigLocation)) {
     messages.push(`${path.basename(tailwindConfigLocation)} already exists.`)
   } else {
@@ -340,13 +368,6 @@ function init() {
       'utf8'
     )
 
-    if (args['--types']) {
-      let typesHeading = "/** @type {import('tailwindcss/types').Config} */"
-      stubFile =
-        stubFile.replace(`module.exports = `, `${typesHeading}\nconst config = `) +
-        '\nmodule.exports = config'
-    }
-
     // Change colors import
     stubFile = stubFile.replace('../colors', 'tailwindcss/colors')
 
@@ -356,7 +377,7 @@ function init() {
   }
 
   if (args['--postcss']) {
-    let postcssConfigLocation = path.resolve('./postcss.config.js')
+    let postcssConfigLocation = path.resolve(`./${configs.postcss}`)
     if (fs.existsSync(postcssConfigLocation)) {
       messages.push(`${path.basename(postcssConfigLocation)} already exists.`)
     } else {
@@ -410,12 +431,12 @@ async function build() {
   let configPath = args['--config']
     ? args['--config']
     : ((defaultPath) => (fs.existsSync(defaultPath) ? defaultPath : null))(
-        path.resolve('./tailwind.config.js')
+        path.resolve(`./${configs.tailwind}`)
       )
 
   async function loadPostCssPlugins() {
     let customPostCssPath = typeof args['--postcss'] === 'string' ? args['--postcss'] : undefined
-    let { plugins: configPlugins } = customPostCssPath
+    let config = customPostCssPath
       ? await (async () => {
           let file = path.resolve(customPostCssPath)
 
@@ -431,9 +452,15 @@ async function build() {
             config.plugins = []
           }
 
-          return { plugins: loadPlugins(config, file) }
+          return {
+            file,
+            plugins: loadPlugins(config, file),
+            options: loadOptions(config, file),
+          }
         })()
       : await postcssrc()
+
+    let configPlugins = config.plugins
 
     let configPluginTailwindIdx = configPlugins.findIndex((plugin) => {
       if (typeof plugin === 'function' && plugin.name === 'tailwindcss') {
@@ -454,7 +481,46 @@ async function build() {
         ? configPlugins
         : configPlugins.slice(configPluginTailwindIdx + 1)
 
-    return [beforePlugins, afterPlugins]
+    return [beforePlugins, afterPlugins, config.options]
+  }
+
+  function loadBuiltinPostcssPlugins() {
+    let postcss = loadPostcss()
+    let IMPORT_COMMENT = '__TAILWIND_RESTORE_IMPORT__: '
+    return [
+      [
+        (root) => {
+          root.walkAtRules('import', (rule) => {
+            if (rule.params.slice(1).startsWith('tailwindcss/')) {
+              rule.after(postcss.comment({ text: IMPORT_COMMENT + rule.params }))
+              rule.remove()
+            }
+          })
+        },
+        (() => {
+          try {
+            return require('postcss-import')
+          } catch {}
+
+          return lazyPostcssImport()
+        })(),
+        (root) => {
+          root.walkComments((rule) => {
+            if (rule.text.startsWith(IMPORT_COMMENT)) {
+              rule.after(
+                postcss.atRule({
+                  name: 'import',
+                  params: rule.text.replace(IMPORT_COMMENT, ''),
+                })
+              )
+              rule.remove()
+            }
+          })
+        },
+      ],
+      [],
+      {},
+    ]
   }
 
   function resolveConfig() {
@@ -474,10 +540,13 @@ async function build() {
       let files = args['--content'].split(/(?<!{[^}]+),/)
       let resolvedConfig = resolveConfigInternal(config, { content: { files } })
       resolvedConfig.content.files = files
+      resolvedConfig = validateConfig(resolvedConfig)
       return resolvedConfig
     }
 
-    return resolveConfigInternal(config)
+    let resolvedConfig = resolveConfigInternal(config)
+    resolvedConfig = validateConfig(resolvedConfig)
+    return resolvedConfig
   }
 
   function extractFileGlobs(config) {
@@ -538,7 +607,9 @@ async function build() {
 
     tailwindPlugin.postcss = true
 
-    let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+    let [beforePlugins, afterPlugins, postcssOptions] = includePostCss
+      ? await loadPostCssPlugins()
+      : loadBuiltinPostcssPlugins()
 
     let plugins = [
       ...beforePlugins,
@@ -567,13 +638,14 @@ async function build() {
         })(),
     ].filter(Boolean)
 
+    let postcss = loadPostcss()
     let processor = postcss(plugins)
 
     function processCSS(css) {
       let start = process.hrtime.bigint()
       return Promise.resolve()
         .then(() => (output ? fs.promises.mkdir(path.dirname(output), { recursive: true }) : null))
-        .then(() => processor.process(css, { from: input, to: output }))
+        .then(() => processor.process(css, { ...postcssOptions, from: input, to: output }))
         .then((result) => {
           if (!output) {
             return process.stdout.write(result.css)
@@ -637,7 +709,9 @@ async function build() {
       return resolveConfig()
     }
 
-    let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+    let [beforePlugins, afterPlugins] = includePostCss
+      ? await loadPostCssPlugins()
+      : loadBuiltinPostcssPlugins()
 
     let plugins = [
       ...beforePlugins,
@@ -700,6 +774,7 @@ async function build() {
       let tailwindPluginIdx = plugins.indexOf('__TAILWIND_PLUGIN_POSITION__')
       let copy = plugins.slice()
       copy.splice(tailwindPluginIdx, 1, tailwindPlugin)
+      let postcss = loadPostcss()
       let processor = postcss(copy)
 
       function processCSS(css) {
@@ -829,8 +904,10 @@ async function build() {
 
   if (shouldWatch) {
     /* Abort the watcher if stdin is closed to avoid zombie processes */
-    process.stdin.on('end', () => process.exit(0))
-    process.stdin.resume()
+    if (process.stdin.isTTY) {
+      process.stdin.on('end', () => process.exit(0))
+      process.stdin.resume()
+    }
     startWatcher()
   } else {
     buildOnce()

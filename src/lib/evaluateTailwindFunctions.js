@@ -5,6 +5,8 @@ import parseValue from 'postcss-value-parser'
 import { normalizeScreens } from '../util/normalizeScreens'
 import buildMediaQuery from '../util/buildMediaQuery'
 import { toPath } from '../util/toPath'
+import { withAlphaValue } from '../util/withAlphaVariable'
+import { parseColorFormat } from '../util/pluginUtils'
 
 function isObject(input) {
   return typeof input === 'object' && input !== null
@@ -37,7 +39,7 @@ function listKeys(obj) {
   return list(Object.keys(obj))
 }
 
-function validatePath(config, path, defaultValue) {
+function validatePath(config, path, defaultValue, themeOpts = {}) {
   const pathString = Array.isArray(path)
     ? pathToString(path)
     : path.replace(/^['"]+/g, '').replace(/['"]+$/g, '')
@@ -114,7 +116,7 @@ function validatePath(config, path, defaultValue) {
 
   return {
     isValid: true,
-    value: transformThemeValue(themeSection)(value),
+    value: transformThemeValue(themeSection)(value, themeOpts),
   }
 }
 
@@ -160,14 +162,28 @@ let nodeTypePropertyMap = {
 export default function ({ tailwindConfig: config }) {
   let functions = {
     theme: (node, path, ...defaultValue) => {
-      const { isValid, value, error } = validatePath(
+      let matches = path.match(/^([^\s]+)(?![^\[]*\])(?:\s*\/\s*([^\/\s]+))$/)
+      let alpha = undefined
+
+      if (matches) {
+        path = matches[1]
+        alpha = matches[2]
+      }
+
+      let { isValid, value, error } = validatePath(
         config,
         path,
-        defaultValue.length ? defaultValue : undefined
+        defaultValue.length ? defaultValue : undefined,
+        { opacityValue: alpha }
       )
 
       if (!isValid) {
         throw node.error(error)
+      }
+
+      if (alpha !== undefined) {
+        value = parseColorFormat(value)
+        value = withAlphaValue(value, alpha, value)
       }
 
       return value

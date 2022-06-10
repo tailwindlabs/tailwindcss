@@ -12,7 +12,7 @@
     "setupFilesAfterEnv": ["<rootDir>/../../jest/customMatchers.js"]
   },
   "devDependencies": {
-    "rollup": "^2.48.0",
-    "rollup-plugin-postcss": "^4.0.0"
+    "rollup": "^2.74.1",
+    "rollup-plugin-postcss": "^4.0.2"
   }
 }

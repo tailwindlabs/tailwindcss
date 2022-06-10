@@ -69,7 +69,8 @@ test('it works', () => {
       }
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         margin: 10px;
       }
     }
@@ -82,7 +83,8 @@ test('it works', () => {
       }
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         padding: 5px;
       }
       .foo .bg-black {

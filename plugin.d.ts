@@ -1,6 +1,11 @@
 import type { Config, PluginCreator } from './types/config'
-declare function createPlugin(
-  plugin: PluginCreator,
-  config?: Config
-): { handler: PluginCreator; config?: Config }
-export = createPlugin
+type Plugin = {
+  withOptions<T>(
+    plugin: (options: T) => PluginCreator,
+    config?: (options: T) => Config
+  ): { (options: T): { handler: PluginCreator; config?: Config }; __isOptionsFunction: true }
+  (plugin: PluginCreator, config?: Config): { handler: PluginCreator; config?: Config }
+}
+
+declare const plugin: Plugin
+export = plugin

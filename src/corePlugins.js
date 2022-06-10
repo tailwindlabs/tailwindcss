@@ -14,6 +14,7 @@ import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
 import { normalizeScreens } from './util/normalizeScreens'
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
+import { flagEnabled } from './featureFlags'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -60,14 +61,14 @@ export let variantPlugins = {
     })
   },
 
-  pseudoClassVariants: ({ addVariant }) => {
+  pseudoClassVariants: ({ addVariant, config }) => {
     let pseudoVariants = [
       // Positional
-      ['first', ':first-child'],
-      ['last', ':last-child'],
-      ['only', ':only-child'],
-      ['odd', ':nth-child(odd)'],
-      ['even', ':nth-child(even)'],
+      ['first', '&:first-child'],
+      ['last', '&:last-child'],
+      ['only', '&:only-child'],
+      ['odd', '&:nth-child(odd)'],
+      ['even', '&:nth-child(even)'],
       'first-of-type',
       'last-of-type',
       'only-of-type',
@@ -92,11 +93,11 @@ export let variantPlugins = {
             }
           })
 
-          return ':visited'
+          return '&:visited'
         },
       ],
       'target',
-      ['open', '[open]'],
+      ['open', '&[open]'],
 
       // Forms
       'default',
@@ -104,6 +105,7 @@ export let variantPlugins = {
       'indeterminate',
       'placeholder-shown',
       'autofill',
+      'optional',
       'required',
       'valid',
       'invalid',
@@ -116,19 +118,24 @@ export let variantPlugins = {
 
       // Interactive
       'focus-within',
-      'hover',
+      [
+        'hover',
+        !flagEnabled(config(), 'hoverOnlyWhenSupported')
+          ? '&:hover'
+          : '@media (hover: hover) and (pointer: fine) { &:hover }',
+      ],
       'focus',
       'focus-visible',
       'active',
       'enabled',
       'disabled',
-    ].map((variant) => (Array.isArray(variant) ? variant : [variant, `:${variant}`]))
+    ].map((variant) => (Array.isArray(variant) ? variant : [variant, `&:${variant}`]))
 
     for (let [variantName, state] of pseudoVariants) {
       addVariant(variantName, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
 
-        return `&${result}`
+        return result
       })
     }
 
@@ -136,7 +143,7 @@ export let variantPlugins = {
       addVariant(`group-${variantName}`, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
 
-        return `:merge(.group)${result} &`
+        return result.replace(/&(\S+)/, ':merge(.group)$1 &')
       })
     }
 
@@ -144,7 +151,7 @@ export let variantPlugins = {
       addVariant(`peer-${variantName}`, (ctx) => {
         let result = typeof state === 'function' ? state(ctx) : state
 
-        return `:merge(.peer)${result} ~ &`
+        return result.replace(/&(\S+)/, ':merge(.peer)$1 ~ &')
       })
     }
 
@@ -232,6 +239,11 @@ export let variantPlugins = {
   orientationVariants: ({ addVariant }) => {
     addVariant('portrait', '@media (orientation: portrait)')
     addVariant('landscape', '@media (orientation: landscape)')
+  },
+
+  prefersContrastVariants: ({ addVariant }) => {
+    addVariant('contrast-more', '@media (prefers-contrast: more)')
+    addVariant('contrast-less', '@media (prefers-contrast: less)')
   },
 }
 
@@ -908,6 +920,7 @@ export let corePlugins = {
     addUtilities({
       '.grid-flow-row': { gridAutoFlow: 'row' },
       '.grid-flow-col': { gridAutoFlow: 'column' },
+      '.grid-flow-dense': { gridAutoFlow: 'dense' },
       '.grid-flow-row-dense': { gridAutoFlow: 'row dense' },
       '.grid-flow-col-dense': { gridAutoFlow: 'column dense' },
     })
@@ -1448,7 +1461,8 @@ export let corePlugins = {
 
             return {
               '--tw-gradient-from': toColorValue(value, 'from'),
-              '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to, ${transparentToValue})`,
+              '--tw-gradient-to': transparentToValue,
+              '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to)`,
             }
           },
         },
@@ -1460,10 +1474,11 @@ export let corePlugins = {
             let transparentToValue = transparentTo(value)
 
             return {
+              '--tw-gradient-to': transparentToValue,
               '--tw-gradient-stops': `var(--tw-gradient-from), ${toColorValue(
                 value,
                 'via'
-              )}, var(--tw-gradient-to, ${transparentToValue})`,
+              )}, var(--tw-gradient-to)`,
             }
           },
         },
@@ -1894,6 +1909,7 @@ export let corePlugins = {
       '.mix-blend-saturation': { 'mix-blend-mode': 'saturation' },
       '.mix-blend-color': { 'mix-blend-mode': 'color' },
       '.mix-blend-luminosity': { 'mix-blend-mode': 'luminosity' },
+      '.mix-blend-plus-lighter': { 'mix-blend-mode': 'plus-lighter' },
     })
   },
 
@@ -1988,13 +2004,24 @@ export let corePlugins = {
     )
   },
 
-  ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme }) => {
-    let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
-    let ringColorDefault = withAlphaValue(
-      theme('ringColor')?.DEFAULT,
-      ringOpacityDefault,
-      `rgb(147 197 253 / ${ringOpacityDefault})`
-    )
+  ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme, config }) => {
+    let ringColorDefault = (() => {
+      if (flagEnabled(config(), 'respectDefaultRingColorOpacity')) {
+        return theme('ringColor.DEFAULT')
+      }
+
+      let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
+
+      if (!theme('ringColor')?.DEFAULT) {
+        return `rgb(147 197 253 / ${ringOpacityDefault})`
+      }
+
+      return withAlphaValue(
+        theme('ringColor')?.DEFAULT,
+        ringOpacityDefault,
+        `rgb(147 197 253 / ${ringOpacityDefault})`
+      )
+    })()
 
     addDefaults('ring-width', {
       '--tw-ring-inset': ' ',
@@ -2058,9 +2085,13 @@ export let corePlugins = {
     )
   },
 
-  ringOpacity: createUtilityPlugin('ringOpacity', [['ring-opacity', ['--tw-ring-opacity']]], {
-    filterDefault: true,
-  }),
+  ringOpacity: (helpers) => {
+    let { config } = helpers
+
+    return createUtilityPlugin('ringOpacity', [['ring-opacity', ['--tw-ring-opacity']]], {
+      filterDefault: !flagEnabled(config(), 'respectDefaultRingColorOpacity'),
+    })(helpers)
+  },
   ringOffsetWidth: createUtilityPlugin(
     'ringOffsetWidth',
     [['ring-offset', ['--tw-ring-offset-width']]],

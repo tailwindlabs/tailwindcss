@@ -6,6 +6,9 @@
     "build": "NODE_ENV=production node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css",
     "test": "jest --runInBand --forceExit"
   },
+  "dependencies": {
+    "tailwindcss": "file:../../"
+  },
   "jest": {
     "testTimeout": 10000,
     "displayName": "Tailwind CSS CLI",

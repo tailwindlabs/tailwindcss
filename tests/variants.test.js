@@ -206,6 +206,44 @@ describe('custom advanced variants', () => {
       `)
     })
   })
+
+  test('variant format string must include at-rule or & (1)', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="wtf-bbq:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('wtf-bbq', 'lol')
+        },
+      ],
+    }
+
+    await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
+      "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
+    )
+  })
+
+  test('variant format string must include at-rule or & (2)', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="wtf-bbq:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('wtf-bbq', () => 'lol')
+        },
+      ],
+    }
+
+    await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
+      "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
+    )
+  })
 })
 
 test('stacked peer variants', async () => {
@@ -599,6 +637,170 @@ it('appends variants to the correct place when using postcss documents', () => {
         }
       }
       b {
+      }
+    `)
+  })
+})
+
+it('variants support multiple, grouped selectors (html)', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:base1 sm:base2"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .base1 .foo,
+      .base1 .bar {
+        color: red;
+      }
+
+      .base2 .bar .base2-foo {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:base1 .foo,
+        .sm\:base1 .bar {
+          color: red;
+        }
+
+        .sm\:base2 .bar .base2-foo {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants support multiple, grouped selectors (apply)', () => {
+  let config = {
+    content: [{ raw: html`<div class="baz"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .base .foo,
+      .base .bar {
+        color: red;
+      }
+    }
+    .baz {
+      @apply sm:base;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .baz .foo,
+        .baz .bar {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants only picks the used selectors in a group (html)', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:b"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .a,
+      .b {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:b {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants only picks the used selectors in a group (apply)', () => {
+  let config = {
+    content: [{ raw: html`<div class="baz"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .a,
+      .b {
+        color: red;
+      }
+    }
+    .baz {
+      @apply sm:b;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .baz {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+test('hoverOnlyWhenSupported adds hover and pointer media features by default', () => {
+  let config = {
+    future: {
+      hoverOnlyWhenSupported: true,
+    },
+    content: [
+      { raw: html`<div class="hover:underline group-hover:underline peer-hover:underline"></div>` },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      @media (hover: hover) and (pointer: fine) {
+        .hover\:underline:hover {
+          text-decoration-line: underline;
+        }
+        .group:hover .group-hover\:underline {
+          text-decoration-line: underline;
+        }
+        .peer:hover ~ .peer-hover\:underline {
+          text-decoration-line: underline;
+        }
       }
     `)
   })
