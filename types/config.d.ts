@@ -1,4 +1,4 @@
-import type { CorePluginList } from './generated/CorePluginList'
+import type { CorePluginList } from './generated/corePluginList'
 import type { DefaultColors } from './generated/colors'
 
 // Helpers
