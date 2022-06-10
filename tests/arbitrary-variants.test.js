@@ -405,3 +405,91 @@ test('with @apply', () => {
     `)
   })
 })
+
+test('keeps escaped underscores', () => {
+  let config = {
+    content: [
+      {
+        raw: '<div class="[&_.foo\\_\\_bar]:underline"></div>',
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = `
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[\&_\.foo\\_\\_bar\]\:underline .foo__bar {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+test('keeps escaped underscores with multiple arbitrary variants', () => {
+  let config = {
+    content: [
+      {
+        raw: '<div class="[&_.foo\\_\\_bar]:[&_.bar\\_\\_baz]:underline"></div>',
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = `
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[\&_\.foo\\_\\_bar\]\:\[\&_\.bar\\_\\_baz\]\:underline .bar__baz .foo__bar {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+test('keeps escaped underscores in arbitrary variants mixed with normal variants', () => {
+  let config = {
+    content: [
+      {
+        raw: `
+          <div class="[&_.foo\\_\\_bar]:hover:underline"></div>
+          <div class="hover:[&_.foo\\_\\_bar]:underline"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = `
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[\&_\.foo\\_\\_bar\]\:hover\:underline:hover .foo__bar {
+        text-decoration-line: underline;
+      }
+
+      .hover\:\[\&_\.foo\\_\\_bar\]\:underline .foo__bar:hover {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
