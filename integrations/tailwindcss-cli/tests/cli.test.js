@@ -5,7 +5,14 @@ let resolveToolRoot = require('../../resolve-tool-root')
 
 let version = require('../../../package.json').version
 
-let { readOutputFile, writeInputFile, cleanupFile, fileExists, removeFile } = require('../../io')({
+let {
+  cleanupFile,
+  fileExists,
+  readOutputFile,
+  removeFile,
+  waitForOutputFileCreation,
+  writeInputFile,
+} = require('../../io')({
   output: 'dist',
   input: 'src',
 })
@@ -388,11 +395,11 @@ describe('Build command', () => {
       `
     )
 
-    let proc = $(
+    let runningProcess = $(
       `${EXECUTABLE} --watch --input ./src/test.css --content ./src/index.html --output ./dist/main.css`
     )
-    await new Promise((r) => setTimeout(r, 500))
-    await proc.stop()
+
+    await waitForOutputFileCreation('main.css')
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -403,6 +410,8 @@ describe('Build command', () => {
         }
       `
     )
+
+    return runningProcess.stop()
   })
 
   test('postcss-import is included when using a custom postcss configuration', async () => {
