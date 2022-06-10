@@ -776,7 +776,11 @@ test('hoverOnlyWhenSupported adds hover and pointer media features by default', 
       hoverOnlyWhenSupported: true,
     },
     content: [
-      { raw: html`<div class="hover:underline group-hover:underline peer-hover:underline"></div>` },
+      {
+        raw: html`<div
+          class="not-hover:underline group-not-hover:underline peer-not-hover:underline hover:underline group-hover:underline peer-hover:underline"
+        ></div>`,
+      },
     ],
     corePlugins: { preflight: false },
   }
@@ -792,6 +796,15 @@ test('hoverOnlyWhenSupported adds hover and pointer media features by default', 
       ${defaults}
 
       @media (hover: hover) and (pointer: fine) {
+        .not-hover\:underline:not(:hover) {
+          text-decoration-line: underline;
+        }
+        .group:not(:hover) .group-not-hover\:underline {
+          text-decoration-line: underline;
+        }
+        .peer:not(:hover) ~ .peer-not-hover\:underline {
+          text-decoration-line: underline;
+        }
         .hover\:underline:hover {
           text-decoration-line: underline;
         }
