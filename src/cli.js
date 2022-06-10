@@ -705,7 +705,44 @@ async function build() {
       return resolveConfig()
     }
 
-    let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+    let postcss = loadPostcss()
+    let IMPORT_COMMENT = '__TAILWIND_RESTORE_IMPORT__: '
+    let [beforePlugins, afterPlugins] = includePostCss
+      ? await loadPostCssPlugins()
+      : [
+          [
+            (root) => {
+              root.walkAtRules('import', (rule) => {
+                if (rule.params.slice(1).startsWith('tailwindcss/')) {
+                  rule.after(postcss.comment({ text: IMPORT_COMMENT + rule.params }))
+                  rule.remove()
+                }
+              })
+            },
+            (() => {
+              try {
+                return require('postcss-import')
+              } catch {}
+
+              return lazyPostcssImport()
+            })(),
+            (root) => {
+              root.walkComments((rule) => {
+                if (rule.text.startsWith(IMPORT_COMMENT)) {
+                  rule.after(
+                    postcss.atRule({
+                      name: 'import',
+                      params: rule.text.replace(IMPORT_COMMENT, ''),
+                    })
+                  )
+                  rule.remove()
+                }
+              })
+            },
+          ],
+          [],
+          {},
+        ]
 
     let plugins = [
       ...beforePlugins,
