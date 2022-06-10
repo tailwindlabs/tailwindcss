@@ -5,7 +5,14 @@ let resolveToolRoot = require('../../resolve-tool-root')
 
 let version = require('../../../package.json').version
 
-let { readOutputFile, writeInputFile, cleanupFile, fileExists, removeFile } = require('../../io')({
+let {
+  cleanupFile,
+  fileExists,
+  readOutputFile,
+  removeFile,
+  waitForOutputFileCreation,
+  writeInputFile,
+} = require('../../io')({
   output: 'dist',
   input: 'src',
 })
@@ -372,6 +379,39 @@ describe('Build command', () => {
         }
       `
     )
+  })
+
+  test('postcss-import is supported by default in watch mode', async () => {
+    cleanupFile('src/test.css')
+
+    await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
+    await writeInputFile(
+      'test.css',
+      css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
+        @import './imported.css';
+      `
+    )
+
+    let runningProcess = $(
+      `${EXECUTABLE} --watch --input ./src/test.css --content ./src/index.html --output ./dist/main.css`
+    )
+
+    await waitForOutputFileCreation('main.css')
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        @media (min-width: 768px) {
+          .md\:something-cool {
+            color: red;
+          }
+        }
+      `
+    )
+
+    return runningProcess.stop()
   })
 
   test('postcss-import is included when using a custom postcss configuration', async () => {

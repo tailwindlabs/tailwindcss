@@ -484,6 +484,45 @@ async function build() {
     return [beforePlugins, afterPlugins, config.options]
   }
 
+  function loadBuiltinPostcssPlugins() {
+    let postcss = loadPostcss()
+    let IMPORT_COMMENT = '__TAILWIND_RESTORE_IMPORT__: '
+    return [
+      [
+        (root) => {
+          root.walkAtRules('import', (rule) => {
+            if (rule.params.slice(1).startsWith('tailwindcss/')) {
+              rule.after(postcss.comment({ text: IMPORT_COMMENT + rule.params }))
+              rule.remove()
+            }
+          })
+        },
+        (() => {
+          try {
+            return require('postcss-import')
+          } catch {}
+
+          return lazyPostcssImport()
+        })(),
+        (root) => {
+          root.walkComments((rule) => {
+            if (rule.text.startsWith(IMPORT_COMMENT)) {
+              rule.after(
+                postcss.atRule({
+                  name: 'import',
+                  params: rule.text.replace(IMPORT_COMMENT, ''),
+                })
+              )
+              rule.remove()
+            }
+          })
+        },
+      ],
+      [],
+      {},
+    ]
+  }
+
   function resolveConfig() {
     let config = configPath ? require(configPath) : {}
 
@@ -568,44 +607,9 @@ async function build() {
 
     tailwindPlugin.postcss = true
 
-    let IMPORT_COMMENT = '__TAILWIND_RESTORE_IMPORT__: '
-
     let [beforePlugins, afterPlugins, postcssOptions] = includePostCss
       ? await loadPostCssPlugins()
-      : [
-          [
-            (root) => {
-              root.walkAtRules('import', (rule) => {
-                if (rule.params.slice(1).startsWith('tailwindcss/')) {
-                  rule.after(postcss.comment({ text: IMPORT_COMMENT + rule.params }))
-                  rule.remove()
-                }
-              })
-            },
-            (() => {
-              try {
-                return require('postcss-import')
-              } catch {}
-
-              return lazyPostcssImport()
-            })(),
-            (root) => {
-              root.walkComments((rule) => {
-                if (rule.text.startsWith(IMPORT_COMMENT)) {
-                  rule.after(
-                    postcss.atRule({
-                      name: 'import',
-                      params: rule.text.replace(IMPORT_COMMENT, ''),
-                    })
-                  )
-                  rule.remove()
-                }
-              })
-            },
-          ],
-          [],
-          {},
-        ]
+      : loadBuiltinPostcssPlugins()
 
     let plugins = [
       ...beforePlugins,
@@ -705,7 +709,9 @@ async function build() {
       return resolveConfig()
     }
 
-    let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+    let [beforePlugins, afterPlugins] = includePostCss
+      ? await loadPostCssPlugins()
+      : loadBuiltinPostcssPlugins()
 
     let plugins = [
       ...beforePlugins,
