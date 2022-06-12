@@ -461,6 +461,57 @@ test('before and after variants are a bit special, and forced to the end (2)', (
   })
 })
 
+test('returning non-strings and non-selectors in addVariant', () => {
+  /** @type {import('../types/config').Config} */
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="peer-aria-expanded:text-center"></div>
+          <div class="peer-aria-expanded-2:text-center"></div>
+        `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant, e }) {
+        addVariant('peer-aria-expanded', ({ modifySelectors, separator }) =>
+          // Returning anything other string | string[] | undefined here is not supported
+          // But we're trying to be lenient here and just throw it out
+          modifySelectors(
+            ({ className }) =>
+              `.peer[aria-expanded="true"] ~ .${e(`peer-aria-expanded${separator}${className}`)}`
+          )
+        )
+
+        addVariant('peer-aria-expanded-2', ({ modifySelectors, separator }) => {
+          let nodes = modifySelectors(
+            ({ className }) =>
+              `.peer[aria-expanded="false"] ~ .${e(`peer-aria-expanded${separator}${className}`)}`
+          )
+
+          return [
+            // Returning anything other than strings here is not supported
+            // But we're trying to be lenient here and just throw it out
+            nodes,
+            '.peer[aria-expanded="false"] ~ &',
+          ]
+        })
+      },
+    ],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .peer[aria-expanded='true'] ~ .peer-aria-expanded\:text-center {
+        text-align: center;
+      }
+      .peer[aria-expanded='false'] ~ .peer-aria-expanded-2\:text-center {
+        text-align: center;
+      }
+    `)
+  })
+})
+
 it('should not generate variants of user css if it is not inside a layer', () => {
   let config = {
     content: [{ raw: html`<div class="hover:foo"></div>` }],
