@@ -37,7 +37,7 @@ function* buildRegExps(context) {
         regex.any([
           regex.pattern([
             // Arbitrary values
-            /-\[[^\s:]+\]/,
+            /-(?:\w+-)*\[[^\s:]+\]/,
 
             // Not immediately followed by an `{[(`
             /(?![{([]])/,
@@ -48,7 +48,7 @@ function* buildRegExps(context) {
 
           regex.pattern([
             // Arbitrary values
-            /-\[[^\s]+\]/,
+            /-(?:\w+-)*\[[^\s]+\]/,
 
             // Not immediately followed by an `{[(`
             /(?![{([]])/,

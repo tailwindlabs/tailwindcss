@@ -468,3 +468,11 @@ test('classes in slim templates', async () => {
   expect(extractions).toContain('italic')
   expect(extractions).toContain('text-gray-500')
 })
+
+test('multi-word + arbitrary values + quotes', async () => {
+  const extractions = defaultExtractor(`
+    grid-cols-['repeat(2)']
+  `)
+
+  expect(extractions).toContain(`grid-cols-['repeat(2)']`)
+})
