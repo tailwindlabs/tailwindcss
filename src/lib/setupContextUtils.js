@@ -465,11 +465,14 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             }
 
             if (Array.isArray(result)) {
-              return result.map((variant) => parseVariant(variant))
+              return result
+                .filter((variant) => typeof variant === 'string')
+                .map((variant) => parseVariant(variant))
             }
 
             // result may be undefined with legacy variants that use APIs like `modifySelectors`
-            return result && parseVariant(result)(api)
+            // result may also be a postcss node if someone was returning the result from `modifySelectors`
+            return result && typeof result === 'string' && parseVariant(result)(api)
           }
         }
 
