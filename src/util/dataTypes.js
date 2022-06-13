@@ -40,7 +40,7 @@ export function normalize(value, isRoot = true) {
     value = value.trim()
   }
 
-  // Add spaces around operators inside math functions calc() that do not follow an operator
+  // Add spaces around operators inside math functions like calc() that do not follow an operator
   // or '('.
   value = value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
     return match.replace(
