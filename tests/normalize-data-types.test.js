@@ -20,7 +20,7 @@ let table = [
   ['var(--foo)', 'var(--foo)'],
   ['var(--headings-h1-size)', 'var(--headings-h1-size)'],
 
-  // calc(…) get's spaces around operators
+  // math functions like calc(…) get spaces around operators
   ['calc(1+2)', 'calc(1 + 2)'],
   ['calc(100%+1rem)', 'calc(100% + 1rem)'],
   ['calc(1+calc(100%-20px))', 'calc(1 + calc(100% - 20px))'],
@@ -29,6 +29,9 @@ let table = [
     'calc(var(--headings-h1-size)*calc(100%+50%))',
     'calc(var(--headings-h1-size) * calc(100% + 50%))',
   ],
+  ['min(1+2)', 'min(1 + 2)'],
+  ['max(1+2)', 'max(1 + 2)'],
+  ['clamp(1+2,1+3,1+4)', 'clamp(1 + 2,1 + 3,1 + 4)'],
   ['var(--heading-h1-font-size)', 'var(--heading-h1-font-size)'],
   ['var(--my-var-with-more-than-3-words)', 'var(--my-var-with-more-than-3-words)'],
   ['var(--width, calc(100%+1rem))', 'var(--width, calc(100% + 1rem))'],

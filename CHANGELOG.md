@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
 - Fix extraction of multi-word utilities with arbitrary values and quotes ([#8604](https://github.com/tailwindlabs/tailwindcss/pull/8604))
 - Fix casing of import of `corePluginList` type definition ([#8587](https://github.com/tailwindlabs/tailwindcss/pull/8587))
 - Ignore PostCSS nodes returned by `addVariant` ([#8608](https://github.com/tailwindlabs/tailwindcss/pull/8608))
+- Fix missing spaces around arithmetic operators ([#8615](https://github.com/tailwindlabs/tailwindcss/pull/8615))
 
 ## [3.1.2] - 2022-06-10
 
