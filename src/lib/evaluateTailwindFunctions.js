@@ -40,9 +40,7 @@ function listKeys(obj) {
 }
 
 function validatePath(config, path, defaultValue, themeOpts = {}) {
-  const pathString = Array.isArray(path)
-    ? pathToString(path)
-    : path.replace(/^['"]+/g, '').replace(/['"]+$/g, '')
+  const pathString = Array.isArray(path) ? pathToString(path) : path.replace(/^['"]+|['"]+$/g, '')
   const pathSegments = Array.isArray(path) ? path : toPath(pathString)
   const value = dlv(config.theme, pathSegments, defaultValue)
 
