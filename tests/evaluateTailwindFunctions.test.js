@@ -1055,3 +1055,53 @@ test('Theme functions can reference values with slashes in brackets', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('Theme functions with alpha value inside quotes', () => {
+  let input = css`
+    .foo {
+      color: theme('colors.yellow / 50%');
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: rgb(247 204 80 / 50%);
+    }
+  `
+
+  return runFull(input, {
+    theme: {
+      colors: {
+        yellow: '#f7cc50',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('Theme functions with alpha with quotes value around color only', () => {
+  let input = css`
+    .foo {
+      color: theme('colors.yellow' / 50%);
+    }
+  `
+
+  let output = css`
+    .foo {
+      color: rgb(247 204 80 / 50%);
+    }
+  `
+
+  return runFull(input, {
+    theme: {
+      colors: {
+        yellow: '#f7cc50',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
