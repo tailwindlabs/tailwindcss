@@ -162,6 +162,10 @@ let nodeTypePropertyMap = {
 export default function ({ tailwindConfig: config }) {
   let functions = {
     theme: (node, path, ...defaultValue) => {
+      // Strip quotes from beginning and end of string
+      // This allows the alpha value to be present inside of quotes
+      path = path.replace(/^['"]+|['"]+$/g, '')
+
       let matches = path.match(/^([^\s]+)(?![^\[]*\])(?:\s*\/\s*([^\/\s]+))$/)
       let alpha = undefined
 
