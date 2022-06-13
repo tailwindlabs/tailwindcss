@@ -163,15 +163,17 @@ function applyVariant(variant, matches, context) {
 
       let container = postcss.root({ nodes: [rule.clone()] })
 
-      for (let [variantSort, variantFunction] of variantFunctionTuples) {
-        let clone = container.clone()
+      for (let [variantSort, variantFunction, containerFromArray] of variantFunctionTuples) {
+        let clone = containerFromArray ?? container.clone()
         let collectedFormats = []
 
-        let originals = new Map()
-
         function prepareBackup() {
-          if (originals.size > 0) return // Already prepared, chicken out
-          clone.walkRules((rule) => originals.set(rule, rule.selector))
+          // Already prepared, chicken out
+          if (clone.raws.neededBackup) {
+            return
+          }
+          clone.raws.neededBackup = true
+          clone.walkRules((rule) => (rule.raws.originalSelector = rule.selector))
         }
 
         function modifySelectors(modifierFunction) {
@@ -231,6 +233,10 @@ function applyVariant(variant, matches, context) {
               // reserving additional X places for these 'unknown' variants in between.
               variantSort | BigInt(idx << ruleWithVariant.length),
               variantFunction,
+
+              // If the clone has been modified we have to pass that back
+              // though so each rule can use the modified container
+              clone.clone(),
             ])
           }
           continue
@@ -244,13 +250,15 @@ function applyVariant(variant, matches, context) {
           continue
         }
 
-        // We filled the `originals`, therefore we assume that somebody touched
+        // We had to backup selectors, therefore we assume that somebody touched
         // `container` or `modifySelectors`. Let's see if they did, so that we
         // can restore the selectors, and collect the format strings.
-        if (originals.size > 0) {
+        if (clone.raws.neededBackup) {
+          delete clone.raws.neededBackup
           clone.walkRules((rule) => {
-            if (!originals.has(rule)) return
-            let before = originals.get(rule)
+            let before = rule.raws.originalSelector
+            if (!before) return
+            delete rule.raws.originalSelector
             if (before === rule.selector) return // No mutation happened
 
             let modified = rule.selector

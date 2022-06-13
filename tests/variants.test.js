@@ -485,8 +485,7 @@ test('returning non-strings and non-selectors in addVariant', () => {
 
         addVariant('peer-aria-expanded-2', ({ modifySelectors, separator }) => {
           let nodes = modifySelectors(
-            ({ className }) =>
-              `.peer[aria-expanded="false"] ~ .${e(`peer-aria-expanded${separator}${className}`)}`
+            ({ className }) => `.${e(`peer-aria-expanded-2${separator}${className}`)}`
           )
 
           return [
