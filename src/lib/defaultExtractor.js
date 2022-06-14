@@ -12,7 +12,7 @@ export function defaultExtractor(context) {
     let results = []
 
     for (let pattern of patterns) {
-      results.push(...(content.match(pattern) ?? []))
+      results = [...results, ...(content.match(pattern) ?? [])]
     }
 
     return results.filter((v) => v !== undefined).map(clipAtBalancedParens)

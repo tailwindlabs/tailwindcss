@@ -476,3 +476,9 @@ test('multi-word + arbitrary values + quotes', async () => {
 
   expect(extractions).toContain(`grid-cols-['repeat(2)']`)
 })
+
+test('a lot of data', () => {
+  let extractions = defaultExtractor('underline '.repeat(2 ** 17))
+
+  expect(extractions).toContain(`underline`)
+})
