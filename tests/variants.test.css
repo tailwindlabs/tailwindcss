@@ -112,16 +112,14 @@
   line-height: 1.75rem;
 }
 .marker\:text-red-500 *::marker {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity));
+  color: rgb(239 68 68);
 }
 .marker\:text-lg::marker {
   font-size: 1.125rem;
   line-height: 1.75rem;
 }
 .marker\:text-red-500::marker {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity));
+  color: rgb(239 68 68);
 }
 .selection\:bg-blue-500 *::selection {
   --tw-bg-opacity: 1;

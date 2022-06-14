@@ -14,6 +14,7 @@ import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
 import { normalizeScreens } from './util/normalizeScreens'
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
+import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
 
 export let variantPlugins = {
@@ -21,7 +22,19 @@ export let variantPlugins = {
     addVariant('first-letter', '&::first-letter')
     addVariant('first-line', '&::first-line')
 
-    addVariant('marker', ['& *::marker', '&::marker'])
+    addVariant('marker', [
+      ({ container }) => {
+        removeAlphaVariables(container, ['--tw-text-opacity'])
+
+        return '& *::marker'
+      },
+      ({ container }) => {
+        removeAlphaVariables(container, ['--tw-text-opacity'])
+
+        return '&::marker'
+      },
+    ])
+
     addVariant('selection', ['& *::selection', '&::selection'])
 
     addVariant('file', '&::file-selector-button')
