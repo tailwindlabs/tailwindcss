@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Provide default to `<alpha-value>` when using `theme()` ([#8622](https://github.com/tailwindlabs/tailwindcss/pull/8622))
 
 ## [3.1.3] - 2022-06-14
 
@@ -21,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix "Maximum call stack size exceeded" bug ([#8636](https://github.com/tailwindlabs/tailwindcss/pull/8636))
 - Allow functions returning parallel variants to mutate the container ([#8622](https://github.com/tailwindlabs/tailwindcss/pull/8622))
 - Remove text opacity CSS variables from `::marker` ([#8622](https://github.com/tailwindlabs/tailwindcss/pull/8622))
-- Provide default to `<alpha-value>` when using `theme()` ([#8622](https://github.com/tailwindlabs/tailwindcss/pull/8622))
 
 ## [3.1.2] - 2022-06-10
 
