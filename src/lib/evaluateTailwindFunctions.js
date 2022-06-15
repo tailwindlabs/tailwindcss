@@ -183,9 +183,15 @@ export default function ({ tailwindConfig: config }) {
         throw node.error(error)
       }
 
-      if (alpha !== undefined) {
-        value = parseColorFormat(value)
-        value = withAlphaValue(value, alpha, value)
+      let maybeColor = parseColorFormat(value)
+      let isColorFunction = maybeColor !== undefined && typeof maybeColor === 'function'
+
+      if (alpha !== undefined || isColorFunction) {
+        if (alpha === undefined) {
+          alpha = 1.0
+        }
+
+        value = withAlphaValue(maybeColor, alpha, maybeColor)
       }
 
       return value

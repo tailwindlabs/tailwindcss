@@ -1025,6 +1025,36 @@ test('Theme function can extract alpha values for colors (8)', () => {
   })
 })
 
+test('Theme functions replace the alpha value placeholder even with no alpha provided', () => {
+  let input = css`
+    .foo {
+      background: theme(colors.blue.400);
+      color: theme(colors.blue.500);
+    }
+  `
+
+  let output = css`
+    .foo {
+      background: rgb(0 0 255 / 1);
+      color: rgb(var(--foo) / 1);
+    }
+  `
+
+  return runFull(input, {
+    theme: {
+      colors: {
+        blue: {
+          400: 'rgb(0 0 255 / <alpha-value>)',
+          500: 'rgb(var(--foo) / <alpha-value>)',
+        },
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('Theme functions can reference values with slashes in brackets', () => {
   let input = css`
     .foo1 {
