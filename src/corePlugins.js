@@ -1576,6 +1576,7 @@ export let corePlugins = {
 
   textAlign: ({ addUtilities }) => {
     addUtilities({
+      '.text-initial': { 'text-align': 'initial' },
       '.text-left': { 'text-align': 'left' },
       '.text-center': { 'text-align': 'center' },
       '.text-right': { 'text-align': 'right' },

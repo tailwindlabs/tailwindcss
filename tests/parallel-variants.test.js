@@ -67,11 +67,11 @@ test('parallel variants can be generated using a function that returns parallel 
       .test\:font-bold *::test {
         font-weight: 700;
       }
-      .test\:font-medium *::test {
-        font-weight: 500;
-      }
       .test\:font-bold::test {
         font-weight: 700;
+      }
+      .test\:font-medium *::test {
+        font-weight: 500;
       }
       .test\:font-medium::test {
         font-weight: 500;
@@ -116,11 +116,11 @@ test('a function that returns parallel variants can modify the container', async
       .test\:font-bold *::test {
         font-weight: calc(0 + 700);
       }
-      .test\:font-medium *::test {
-        font-weight: calc(0 + 500);
-      }
       .test\:font-bold::test {
         font-weight: calc(0 + 700);
+      }
+      .test\:font-medium *::test {
+        font-weight: calc(0 + 500);
       }
       .test\:font-medium::test {
         font-weight: calc(0 + 500);
