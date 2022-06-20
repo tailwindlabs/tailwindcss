@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Provide default to `<alpha-value>` when using `theme()` ([#8652](https://github.com/tailwindlabs/tailwindcss/pull/8652))
 - Detect arbitrary variants with quotes ([#8687](https://github.com/tailwindlabs/tailwindcss/pull/8687))
-- Don’t add spaces around raw `/`` that are preceded by numbers ([#8688](https://github.com/tailwindlabs/tailwindcss/pull/8688))
+- Don’t add spaces around raw `/` that are preceded by numbers ([#8688](https://github.com/tailwindlabs/tailwindcss/pull/8688))
 
 ## [3.1.3] - 2022-06-14
 
