@@ -493,3 +493,37 @@ test('keeps escaped underscores in arbitrary variants mixed with normal variants
     `)
   })
 })
+
+test('allows attribute variants with quotes', () => {
+  let config = {
+    content: [
+      {
+        raw: `
+          <div class="[&[data-test='2']]:underline"></div>
+          <div class='[&[data-test="2"]]:underline'></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = `
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[\&\[data-test\=\'2\'\]\]\:underline[data-test="2"] {
+        text-decoration-line: underline;
+      }
+
+      .\[\&\[data-test\=\"2\"\]\]\:underline[data-test='2'] {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
