@@ -70,6 +70,12 @@ function* buildRegExps(context) {
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
       regex.pattern([/[^\s"'`\[\\]+/, separator]),
     ]),
+
+    // With quotes allowed
+    regex.any([
+      regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s`]+\]/, separator]),
+      regex.pattern([/[^\s`\[\\]+/, separator]),
+    ]),
   ]
 
   for (const variantPattern of variantPatterns) {
