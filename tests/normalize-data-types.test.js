@@ -3,7 +3,8 @@ import { normalize } from '../src/util/dataTypes'
 let table = [
   ['foo', 'foo'],
   ['foo-bar', 'foo-bar'],
-  ['16/9', '16 / 9'],
+  ['16/9', '16/9'],
+  ['16_/_9', '16 / 9'],
 
   // '_'s are converted to spaces except when escaped
   ['foo_bar', 'foo bar'],
@@ -15,6 +16,10 @@ let table = [
     'url("https://example.com/abc+def/some-path/2022-01-01-abc/some_underscoered_path")',
     'url("https://example.com/abc+def/some-path/2022-01-01-abc/some_underscoered_path")',
   ],
+
+  // file-path-like-things without quotes are preserved as-is
+  ['/foo/bar/baz.png', '/foo/bar/baz.png'],
+  ['/foo/bar-2/baz.png', '/foo/bar-2/baz.png'],
 
   // var(…) is preserved as is
   ['var(--foo)', 'var(--foo)'],
@@ -37,7 +42,8 @@ let table = [
   ['var(--width, calc(100%+1rem))', 'var(--width, calc(100% + 1rem))'],
 
   // Misc
-  ['color(0_0_0/1.0)', 'color(0 0 0 / 1.0)'],
+  ['color(0_0_0/1.0)', 'color(0 0 0/1.0)'],
+  ['color(0_0_0_/_1.0)', 'color(0 0 0 / 1.0)'],
 ]
 
 it.each(table)('normalize data: %s', (input, output) => {

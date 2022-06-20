@@ -49,9 +49,7 @@ export function normalize(value, isRoot = true) {
     )
   })
 
-  // Add spaces around some operators not inside calc() that do not follow an operator
-  // or '('.
-  return value.replace(/(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([\/])/g, '$1 $2 ')
+  return value
 }
 
 export function url(value) {
