@@ -64,31 +64,35 @@ function* buildRegExps(context) {
     ]),
   ])
 
-  yield regex.pattern([
-    // Variants
-    '((?=((',
-    regex.any(
-      [
-        regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
-        regex.pattern([/[^\s"'`\[\\]+/, separator]),
-      ],
-      true
-    ),
-    ')+))\\2)?',
+  let variantPatterns = [
+    // Without quotes
+    regex.any([
+      regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
+      regex.pattern([/[^\s"'`\[\\]+/, separator]),
+    ]),
+  ]
 
-    // Important (optional)
-    /!?/,
+  for (const variantPattern of variantPatterns) {
+    yield regex.pattern([
+      // Variants
+      '((?=((',
+      variantPattern,
+      ')+))\\2)?',
 
-    variantGroupingEnabled
-      ? regex.any([
-          // Or any of those things but grouped separated by commas
-          regex.pattern([/\(/, utility, regex.zeroOrMore([/,/, utility]), /\)/]),
+      // Important (optional)
+      /!?/,
 
-          // Arbitrary properties, constrained utilities, arbitrary values, etc…
-          utility,
-        ])
-      : utility,
-  ])
+      variantGroupingEnabled
+        ? regex.any([
+            // Or any of those things but grouped separated by commas
+            regex.pattern([/\(/, utility, regex.zeroOrMore([/,/, utility]), /\)/]),
+
+            // Arbitrary properties, constrained utilities, arbitrary values, etc…
+            utility,
+          ])
+        : utility,
+    ])
+  }
 
   // 5. Inner matches
   yield /[^<>"'`\s.(){}[\]#=%$]*[^<>"'`\s.(){}[\]#=%:$]/g
