@@ -1,64 +1,59 @@
+import clsx from 'clsx'
+import Link from 'next/link'
+import { useRouteHash } from '@/hooks/useRouteHash'
 import { DocumentationLayout } from '@/layouts/DocumentationLayout'
 import { FrameworkGuideLayout } from '@/layouts/FrameworkGuideLayout'
 import { Steps } from '@/components/Steps'
 
-let steps = [
+let tabs = [
   {
-    title: 'Create your project',
-    body: () => (
-      <p>
-        Start by creating a new Laravel project if you don’t have one set up already. The most
-        common approach is to use{' '}
-        <a href="https://laravel.com/docs/8.x#the-laravel-installer">the Laravel Installer</a>.
-      </p>
-    ),
-    code: {
-      name: 'Terminal',
-      lang: 'terminal',
-      code: 'laravel new my-project\ncd my-project',
-    },
-  },
-  {
-    title: 'Install Tailwind CSS',
-    body: () => (
-      <p>
-        Install <code>tailwindcss</code> and its peer dependencies via npm, and create your{' '}
-        <code>tailwind.config.js</code> file.
-      </p>
-    ),
-    code: {
-      name: 'Terminal',
-      lang: 'terminal',
-      code: 'npm install -D tailwindcss postcss autoprefixer\nnpx tailwindcss init',
-    },
-  },
-  {
-    title: 'Add Tailwind to your Laravel Mix configuration',
-    body: () => (
-      <p>
-        In your <code>webpack.mix.js</code> file, add <code>tailwindcss</code> as a PostCSS plugin.
-      </p>
-    ),
-    code: {
-      name: 'webpack.mix.js',
-      lang: 'js',
-      code: `  mix.js("resources/js/app.js", "public/js")
-    .postCss("resources/css/app.css", "public/css", [
->     require("tailwindcss"),
-    ]);`,
-    },
-  },
-  {
-    title: 'Configure your template paths',
-    body: () => (
-      <p>
-        Add the paths to all of your template files in your <code>tailwind.config.js</code> file.
-      </p>
-    ),
-    code: {
-      name: 'tailwind.config.js',
-      lang: 'js',
-      code: `  module.exports = {
+    name: 'Using Vite',
+    href: '#vite',
+    steps: [
+      {
+        title: 'Create your project',
+        body: () => (
+          <p>
+            Start by creating a new Laravel project if you don’t have one set up already. The most
+            common approach is to use{' '}
+            <a href="https://laravel.com/docs/9.x#your-first-laravel-project">
+              the Composer <code>create-project</code> command
+            </a>
+            .
+          </p>
+        ),
+        code: {
+          name: 'Terminal',
+          lang: 'terminal',
+          code: 'composer create-project laravel/laravel my-project\ncd my-project',
+        },
+      },
+      {
+        title: 'Install Tailwind CSS',
+        body: () => (
+          <p>
+            Install <code>tailwindcss</code> and its peer dependencies via npm, and then run the init
+            command to generate both <code>tailwind.config.js</code> and <code>postcss.config.js</code>.
+          </p>
+        ),
+        code: {
+          name: 'Terminal',
+          lang: 'terminal',
+          code: 'npm install -D tailwindcss postcss autoprefixer\nnpx tailwindcss init -p',
+        },
+      },
+      {
+        title: 'Configure your template paths',
+        body: () => (
+          <p>
+            Add the paths to all of your template files in your <code>tailwind.config.js</code>{' '}
+            file.
+          </p>
+        ),
+        code: {
+          name: 'tailwind.config.js',
+          lang: 'js',
+          code: `  module.exports = {
 >   content: [
 >     "./resources/**/*.blade.php",
 >     "./resources/**/*.js",
@@ -69,47 +64,161 @@ let steps = [
     },
     plugins: [],
   }`,
-    },
+        },
+      },
+      {
+        title: 'Add the Tailwind directives to your CSS',
+        body: () => (
+          <p>
+            Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your{' '}
+            <code>./resources/css/app.css</code> file.
+          </p>
+        ),
+        code: {
+          name: 'app.css',
+          lang: 'css',
+          code: '@tailwind base;\n@tailwind components;\n@tailwind utilities;',
+        },
+      },
+      {
+        title: 'Start your build process',
+        body: () => (
+          <p>
+            Run your build process with <code>npm run watch</code>.
+          </p>
+        ),
+        code: {
+          name: 'Terminal',
+          lang: 'terminal',
+          code: 'npm run dev',
+        },
+      },
+      {
+        title: 'Start using Tailwind in your project',
+        body: () => (
+          <p>
+            Make sure your compiled CSS is included in the <code>{'<head>'}</code> then start using
+            Tailwind’s utility classes to style your content.
+          </p>
+        ),
+        code: {
+          name: 'app.blade.php',
+          lang: 'html',
+          code: `  <!doctype html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @vite('resources/css/app.css')
+  </head>
+  <body>
+>   <h1 class="text-3xl font-bold underline">
+>     Hello world!
+>   </h1>
+  </body>
+  </html>`,
+        },
+      },
+    ],
   },
   {
-    title: 'Add the Tailwind directives to your CSS',
-    body: () => (
-      <p>
-        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your{' '}
-        <code>./resources/css/app.css</code> file.
-      </p>
-    ),
-    code: {
-      name: 'app.css',
-      lang: 'css',
-      code: '@tailwind base;\n@tailwind components;\n@tailwind utilities;',
+    name: 'Using Laravel Mix',
+    href: '#mix',
+    steps: [
+      {
+        title: 'Install Tailwind CSS',
+        body: () => (
+          <p>
+            Install <code>tailwindcss</code> and its peer dependencies via npm, and create your{' '}
+            <code>tailwind.config.js</code> file.
+          </p>
+        ),
+        code: {
+          name: 'Terminal',
+          lang: 'terminal',
+          code: 'npm install -D tailwindcss postcss autoprefixer\nnpx tailwindcss init',
+        },
+      },
+      {
+        title: 'Add Tailwind to your Laravel Mix configuration',
+        body: () => (
+          <p>
+            In your <code>webpack.mix.js</code> file, add <code>tailwindcss</code> as a PostCSS
+            plugin.
+          </p>
+        ),
+        code: {
+          name: 'webpack.mix.js',
+          lang: 'js',
+          code: `  mix.js("resources/js/app.js", "public/js")
+    .postCss("resources/css/app.css", "public/css", [
+>     require("tailwindcss"),
+    ]);`,
+        },
+      },
+      {
+        title: 'Configure your template paths',
+        body: () => (
+          <p>
+            Add the paths to all of your template files in your <code>tailwind.config.js</code>{' '}
+            file.
+          </p>
+        ),
+        code: {
+          name: 'tailwind.config.js',
+          lang: 'js',
+          code: `  module.exports = {
+>   content: [
+>     "./resources/**/*.blade.php",
+>     "./resources/**/*.js",
+>     "./resources/**/*.vue",
+>   ],
+    theme: {
+      extend: {},
     },
-  },
-  {
-    title: 'Start your build process',
-    body: () => (
-      <p>
-        Run your build process with <code>npm run watch</code>.
-      </p>
-    ),
-    code: {
-      name: 'Terminal',
-      lang: 'terminal',
-      code: 'npm run watch',
-    },
-  },
-  {
-    title: 'Start using Tailwind in your project',
-    body: () => (
-      <p>
-        Make sure your compiled CSS is included in the <code>{'<head>'}</code> then start using
-        Tailwind’s utility classes to style your content.
-      </p>
-    ),
-    code: {
-      name: 'app.blade.php',
-      lang: 'html',
-      code: `  <!doctype html>
+    plugins: [],
+  }`,
+        },
+      },
+      {
+        title: 'Add the Tailwind directives to your CSS',
+        body: () => (
+          <p>
+            Add the <code>@tailwind</code> directives for each of Tailwind’s layers to your{' '}
+            <code>./resources/css/app.css</code> file.
+          </p>
+        ),
+        code: {
+          name: 'app.css',
+          lang: 'css',
+          code: '@tailwind base;\n@tailwind components;\n@tailwind utilities;',
+        },
+      },
+      {
+        title: 'Start your build process',
+        body: () => (
+          <p>
+            Run your build process with <code>npm run watch</code>.
+          </p>
+        ),
+        code: {
+          name: 'Terminal',
+          lang: 'terminal',
+          code: 'npm run watch',
+        },
+      },
+      {
+        title: 'Start using Tailwind in your project',
+        body: () => (
+          <p>
+            Make sure your compiled CSS is included in the <code>{'<head>'}</code> then start using
+            Tailwind’s utility classes to style your content.
+          </p>
+        ),
+        code: {
+          name: 'app.blade.php',
+          lang: 'html',
+          code: `  <!doctype html>
   <html>
   <head>
     <meta charset="utf-8">
@@ -122,17 +231,52 @@ let steps = [
 >   </h1>
   </body>
   </html>`,
-    },
+        },
+      },
+    ],
   },
 ]
 
 export default function UsingLaravel({ code }) {
+  let hash = useRouteHash()
+
+  let selectedTabIndex = tabs.findIndex((tab) => tab.href === hash)
+
+  if (selectedTabIndex === -1) {
+    selectedTabIndex = 0
+  }
+
   return (
     <FrameworkGuideLayout
       title="Install Tailwind CSS with Laravel"
       description="Setting up Tailwind CSS in a Laravel project."
     >
-      <Steps steps={steps} code={code} />
+      <div className="flex overflow-auto mb-6 -mx-4 sm:-mx-6">
+        <div className="flex-none min-w-full px-4 sm:px-6">
+          <ul className="border-b border-slate-200 space-x-6 flex whitespace-nowrap dark:border-slate-200/5">
+            {tabs.map((tab, tabIndex) => (
+              <li key={tab.name}>
+                <h2>
+                  <Link href={tab.href} scroll={false}>
+                    <a
+                      className={clsx(
+                        'flex text-sm leading-6 font-semibold pt-3 pb-2.5 border-b-2 -mb-px',
+                        tabIndex === selectedTabIndex
+                          ? 'text-sky-500 border-current'
+                          : 'text-slate-900 border-transparent hover:border-slate-300 dark:text-slate-200 dark:hover:border-slate-700'
+                      )}
+                    >
+                      {tab.name}
+                    </a>
+                  </Link>
+                </h2>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <Steps steps={tabs[selectedTabIndex].steps} code={code[selectedTabIndex]} />
     </FrameworkGuideLayout>
   )
 }
@@ -142,12 +286,14 @@ export function getStaticProps() {
 
   return {
     props: {
-      code: steps.map(({ code }) => {
-        if (code.lang && code.lang !== 'terminal') {
-          return highlightCode(code.code, code.lang)
-        }
-        return code.code
-      }),
+      code: tabs.map((tab) =>
+        tab.steps.map(({ code }) => {
+          if (code.lang && code.lang !== 'terminal') {
+            return highlightCode(code.code, code.lang)
+          }
+          return code.code
+        })
+      ),
     },
   }
 }
