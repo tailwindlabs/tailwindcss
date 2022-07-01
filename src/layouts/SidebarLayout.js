@@ -286,7 +286,7 @@ function TopLevelNav({ mobile }) {
       </TopLevelLink>
       <TopLevelLink
         mobile={mobile}
-        href="https://tailwindui.com/components?utm_source=tailwindcss&utm_medium=navigation"
+        href="https://tailwindui.com/components"
         className="mb-4"
         shadow="group-hover:shadow-indigo-200 dark:group-hover:bg-indigo-500"
         icon={
