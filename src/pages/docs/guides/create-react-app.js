@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { DocumentationLayout } from '@/layouts/DocumentationLayout'
 import { FrameworkGuideLayout } from '@/layouts/FrameworkGuideLayout'
 import { Steps } from '@/components/Steps'
@@ -103,6 +104,25 @@ export default function UsingCRA({ code }) {
       title="Install Tailwind CSS with Create React App"
       description="Setting up Tailwind CSS in a Create React App project."
     >
+      <div className="relative z-10 prose prose-slate mb-16 max-w-3xl dark:prose-dark">
+        <p>
+          Note that for new React projects, we highly recommend using{' '}
+          <Link href="https://vitejs.dev">
+            <a>Vite</a>
+          </Link>
+          ,{' '}
+          <Link href="https://nextjs.org">
+            <a>Next.js</a>
+          </Link>
+          , or{' '}
+          <Link href="https://parceljs.org">
+            <a>Parcel</a>
+          </Link>{' '}
+          instead of Create React App. They provide an equivalent or better developer experience but
+          with more flexibility, giving you more control over how Tailwind and PostCSS are
+          configured.
+        </p>
+      </div>
       <Steps steps={steps} code={code} />
     </FrameworkGuideLayout>
   )
