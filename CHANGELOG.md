@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Allows fallback values in plugin API helpers ([#8762](https://github.com/tailwindlabs/tailwindcss/pull/8762))
 
 ## [3.1.4] - 2022-06-21
 
