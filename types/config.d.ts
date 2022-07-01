@@ -12,6 +12,7 @@ interface RecursiveKeyValuePair<K extends keyof any = string, V = string> {
   [key: string]: V | RecursiveKeyValuePair<K, V>
 }
 type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
+type CSSRuleObject = RecursiveKeyValuePair<string, string | string[]>
 
 interface PluginUtils {
   colors: DefaultColors
@@ -242,7 +243,7 @@ type ValueType =
 export interface PluginAPI {
   // for registering new static utility styles
   addUtilities(
-    utilities: RecursiveKeyValuePair | RecursiveKeyValuePair[],
+    utilities: CSSRuleObject | CSSRuleObject[],
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
@@ -250,7 +251,7 @@ export interface PluginAPI {
   ): void
   // for registering new dynamic utility styles
   matchUtilities<T>(
-    utilities: KeyValuePair<string, (value: T) => RecursiveKeyValuePair>,
+    utilities: KeyValuePair<string, (value: T) => CSSRuleObject>,
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
@@ -261,7 +262,7 @@ export interface PluginAPI {
   ): void
   // for registering new static component styles
   addComponents(
-    components: RecursiveKeyValuePair | RecursiveKeyValuePair[],
+    components: CSSRuleObject | CSSRuleObject[],
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
@@ -269,7 +270,7 @@ export interface PluginAPI {
   ): void
   // for registering new dynamic component styles
   matchComponents<T>(
-    components: KeyValuePair<string, (value: T) => RecursiveKeyValuePair>,
+    components: KeyValuePair<string, (value: T) => CSSRuleObject>,
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
@@ -279,7 +280,7 @@ export interface PluginAPI {
     }>
   ): void
   // for registering new base styles
-  addBase(base: RecursiveKeyValuePair | RecursiveKeyValuePair[]): void
+  addBase(base: CSSRuleObject | CSSRuleObject[]): void
   // for registering custom variants
   addVariant(name: string, definition: string | string[] | (() => string) | (() => string)[]): void
   // for looking up values in the user’s theme configuration
