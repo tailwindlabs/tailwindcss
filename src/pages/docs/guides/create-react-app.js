@@ -114,6 +114,10 @@ export default function UsingCRA({ code }) {
           <Link href="https://nextjs.org">
             <a>Next.js</a>
           </Link>
+          ,{' '}
+          <Link href="https://remix.run">
+            <a>Remix</a>
+          </Link>
           , or{' '}
           <Link href="https://parceljs.org">
             <a>Parcel</a>
