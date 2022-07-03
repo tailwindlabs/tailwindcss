@@ -164,6 +164,7 @@ interface ThemeConfig {
           configuration: Partial<{
             lineHeight: string
             letterSpacing: string
+            fontWeight: string | number
           }>
         ]
     >

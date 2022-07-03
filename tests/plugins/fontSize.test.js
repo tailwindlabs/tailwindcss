@@ -31,12 +31,13 @@ test('font-size utilities can include a default line-height', () => {
 
 test('font-size utilities can include a default letter-spacing', () => {
   let config = {
-    content: [{ raw: html`<div class="text-md text-sm text-lg"></div>` }],
+    content: [{ raw: html`<div class="text-md text-sm text-lg text-xl"></div>` }],
     theme: {
       fontSize: {
         sm: '12px',
         md: ['16px', { letterSpacing: '-0.01em' }],
-        lg: ['20px', { letterSpacing: '-0.02em' }],
+        lg: ['20px', { letterSpacing: '-0.02em', fontWeight: 500 }],
+        xl: ['24px', { letterSpacing: '-0.03em', fontWeight: 'bold' }],
       },
     },
   }
@@ -53,6 +54,12 @@ test('font-size utilities can include a default letter-spacing', () => {
       .text-lg {
         font-size: 20px;
         letter-spacing: -0.02em;
+        font-weight: 500;
+      }
+      .text-xl {
+        font-size: 24px;
+        letter-spacing: -0.03em;
+        font-weight: bold;
       }
     `)
   })
