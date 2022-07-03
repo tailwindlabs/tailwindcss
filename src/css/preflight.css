@@ -203,15 +203,6 @@ input[type='submit'] {
 }
 
 /*
-Remove default button styles.
-*/
-
-button {
-  background-color: transparent;
-  background-image: none;
-}
-
-/*
 Use the modern Firefox focus style for all focusable elements.
 */
 
