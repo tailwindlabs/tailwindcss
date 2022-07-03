@@ -177,14 +177,29 @@ select {
 }
 
 /*
-Correct the inability to style clickable types in iOS and Safari.
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+
+Note: Keep separate from [type] to avoid too much specificity.
 */
 
-button,
+button {
+  -webkit-appearance: button; /* 1 */
+  background-color: transparent; /* 2 */
+  background-image: none; /* 2 */
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+*/
+
 [type='button'],
 [type='reset'],
 [type='submit'] {
-  -webkit-appearance: button;
+  -webkit-appearance: button; /* 1 */
+  background-color: transparent; /* 2 */
+  background-image: none; /* 2 */
 }
 
 /*
