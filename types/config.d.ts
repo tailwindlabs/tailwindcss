@@ -294,6 +294,8 @@ export interface PluginAPI {
   corePlugins(path: string): boolean
   // for manually escaping strings meant to be used in class names
   e: (className: string) => string
+  // for manually prefixing selectors
+  prefix: (selector: string) => string
 }
 export type PluginCreator = (api: PluginAPI) => void
 export type PluginsConfig = (
