@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix usage of postcss.config.js in standalone CLI ([#8769](https://github.com/tailwindlabs/tailwindcss/pull/8769))
 - Fix usage of special-character prefixes ([#8772](https://github.com/tailwindlabs/tailwindcss/pull/8772))
 - Don’t prefix selectors in arbitrary variants ([#8773](https://github.com/tailwindlabs/tailwindcss/pull/8773))
+- Add support for alpha values in safe list ([#8774](https://github.com/tailwindlabs/tailwindcss/pull/8774))
 
 ## [3.1.4] - 2022-06-21
 
