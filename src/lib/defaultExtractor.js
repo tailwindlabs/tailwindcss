@@ -1,4 +1,4 @@
-import { flagEnabled } from '../featureFlags.js'
+import { flagEnabled } from '../featureFlags'
 import * as regex from './regex'
 
 export function defaultExtractor(context) {
