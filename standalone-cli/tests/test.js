@@ -15,7 +15,13 @@ function exec(args) {
 }
 
 it('works', () => {
-  expect(exec('--content tests/fixtures/basic.html')).toContain('.uppercase')
+  let result = exec('--content tests/fixtures/basic.html')
+  expect(result).toContain('.uppercase')
+  expect(result).toContain('.\\[will-change\\:opacity\\]')
+  expect(result).toContain('will-change: opacity')
+
+  // Verify that no plugins are installed that modify the `[will-change:opacity]` class
+  expect(result).not.toContain('backface-visibility: hidden')
 })
 
 it('supports first-party plugins', () => {
@@ -29,15 +35,17 @@ it('supports first-party plugins', () => {
 it('supports postcss config files', async () => {
   // We have to run this test outside of any place with node_modules for it to properly test this situation
   let result = await inIsolatedContext(() => {
-    return exec(
-      '--content tests/fixtures/plugins.html --config tests/fixtures/test.config.js --postcss tests/fixtures/postcss.config.js'
-    )
+    // Emulate the user adding their own postcss plugins
+    execSync(`npm install postcss-will-change`)
+
+    return exec('--content tests/fixtures/basic.html --postcss tests/fixtures/postcss.config.js')
   })
 
-  expect(result).toContain('.aspect-w-1')
-  expect(result).toContain('.form-input')
-  expect(result).toContain('.line-clamp-2')
-  expect(result).toContain('.prose')
+  expect(result).toContain('.uppercase')
+
+  // Ensure the custom added postcss plugin is working
+  expect(result).toContain('will-change: opacity')
+  expect(result).toContain('backface-visibility: hidden')
 })
 
 /**
