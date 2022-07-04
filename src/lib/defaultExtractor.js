@@ -22,6 +22,10 @@ export function defaultExtractor(context) {
 function* buildRegExps(context) {
   let separator = context.tailwindConfig.separator
   let variantGroupingEnabled = flagEnabled(context.tailwindConfig, 'variantGrouping')
+  let prefix =
+    context.tailwindConfig.prefix !== ''
+      ? regex.optional(regex.pattern([/-?/, regex.escape(context.tailwindConfig.prefix)]))
+      : ''
 
   let utility = regex.any([
     // Arbitrary properties
@@ -87,6 +91,8 @@ function* buildRegExps(context) {
 
       // Important (optional)
       /!?/,
+
+      prefix,
 
       variantGroupingEnabled
         ? regex.any([
