@@ -35,6 +35,7 @@ export function finalizeSelector(
     selector,
     candidate,
     context,
+    isArbitraryVariant,
 
     // Split by the separator, but ignore the separator inside square brackets:
     //
@@ -50,7 +51,8 @@ export function finalizeSelector(
 ) {
   let ast = selectorParser().astSync(selector)
 
-  if (context?.tailwindConfig?.prefix) {
+  // We explicitly DO NOT prefix classes in arbitrary variants
+  if (context?.tailwindConfig?.prefix && !isArbitraryVariant) {
     format = prefixSelector(context.tailwindConfig.prefix, format)
   }
 
