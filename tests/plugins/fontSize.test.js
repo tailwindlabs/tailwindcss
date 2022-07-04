@@ -88,3 +88,34 @@ test('font-size utilities can include a default line-height and letter-spacing',
     `)
   })
 })
+
+test('font-size utilities can include a font-weight', () => {
+  let config = {
+    content: [{ raw: html`<div class="text-md text-sm text-lg"></div>` }],
+    theme: {
+      fontSize: {
+        sm: '12px',
+        md: ['16px', { lineHeight: '24px', fontWeight: 500 }],
+        lg: ['20px', { lineHeight: '28px', fontWeight: 'bold' }],
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .text-md {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 500;
+      }
+      .text-sm {
+        font-size: 12px;
+      }
+      .text-lg {
+        font-size: 20px;
+        line-height: 28px;
+        font-weight: bold;
+      }
+    `)
+  })
+})

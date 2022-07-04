@@ -1613,7 +1613,7 @@ export let corePlugins = {
       {
         text: (value) => {
           let [fontSize, options] = Array.isArray(value) ? value : [value]
-          let { lineHeight, letterSpacing } = isPlainObject(options)
+          let { lineHeight, letterSpacing, fontWeight } = isPlainObject(options)
             ? options
             : { lineHeight: options }
 
@@ -1621,6 +1621,7 @@ export let corePlugins = {
             'font-size': fontSize,
             ...(lineHeight === undefined ? {} : { 'line-height': lineHeight }),
             ...(letterSpacing === undefined ? {} : { 'letter-spacing': letterSpacing }),
+            ...(fontWeight === undefined ? {} : { 'font-weight': fontWeight }),
           }
         },
       },
