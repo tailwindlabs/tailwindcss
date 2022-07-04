@@ -72,8 +72,6 @@ async function inIsolatedContext(fn) {
   // Change the working directory to the new directory
   process.chdir(dest)
 
-  console.log(dest)
-
   try {
     return await fn()
   } finally {
