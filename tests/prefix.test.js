@@ -410,6 +410,7 @@ it('supports non-word prefixes (1)', async () => {
           <div class="@underline"></div>
           <div class="@bg-black"></div>
           <div class="@[color:red]"></div>
+          <div class="hover:before:@content-['Hovering']"></div>
           <div class="my-utility"></div>
           <div class="foo"></div>
 
@@ -452,6 +453,10 @@ it('supports non-word prefixes (1)', async () => {
       color: rgb(255 255 255 / var(--tw-text-opacity));
       background-color: red;
     }
+    .hover\:before\:\@content-\[\'Hovering\'\]:hover::before {
+      --tw-content: 'Hovering';
+      content: var(--tw-content);
+    }
   `)
 })
 
@@ -464,6 +469,7 @@ it('supports non-word prefixes (2)', async () => {
           <div class="@]$underline"></div>
           <div class="@]$bg-black"></div>
           <div class="@]$[color:red]"></div>
+          <div class="hover:before:@]$content-['Hovering']"></div>
           <div class="my-utility"></div>
           <div class="foo"></div>
 
@@ -489,6 +495,9 @@ it('supports non-word prefixes (2)', async () => {
   `
 
   const result = await run(input, config)
+
+  // TODO: The class `.hover\:before\:\@\]\$content-\[\'Hovering\'\]:hover::before` is not generated
+  // This happens because of the parenthesis/brace/bracket clipping performed on candidates
 
   expect(result.css).toMatchFormattedCss(css`
     .\@\]\$bg-black {
