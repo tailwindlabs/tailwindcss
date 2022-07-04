@@ -400,3 +400,120 @@ it('supports prefixed utilities using arbitrary values', async () => {
     }
   `)
 })
+
+it('supports non-word prefixes (1)', async () => {
+  let config = {
+    prefix: '@',
+    content: [
+      {
+        raw: html`
+          <div class="@underline"></div>
+          <div class="@bg-black"></div>
+          <div class="@[color:red]"></div>
+          <div class="hover:before:@content-['Hovering']"></div>
+          <div class="my-utility"></div>
+          <div class="foo"></div>
+
+          <!-- these won't be detected -->
+          <div class="overline"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .my-utility {
+        color: orange;
+      }
+    }
+    .foo {
+      @apply @text-white;
+      @apply [background-color:red];
+    }
+  `
+
+  const result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .\@bg-black {
+      --tw-bg-opacity: 1;
+      background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+    }
+    .\@underline {
+      text-decoration-line: underline;
+    }
+    .my-utility {
+      color: orange;
+    }
+    .foo {
+      --tw-text-opacity: 1;
+      color: rgb(255 255 255 / var(--tw-text-opacity));
+      background-color: red;
+    }
+    .hover\:before\:\@content-\[\'Hovering\'\]:hover::before {
+      --tw-content: 'Hovering';
+      content: var(--tw-content);
+    }
+  `)
+})
+
+it('supports non-word prefixes (2)', async () => {
+  let config = {
+    prefix: '@]$',
+    content: [
+      {
+        raw: html`
+          <div class="@]$underline"></div>
+          <div class="@]$bg-black"></div>
+          <div class="@]$[color:red]"></div>
+          <div class="hover:before:@]$content-['Hovering']"></div>
+          <div class="my-utility"></div>
+          <div class="foo"></div>
+
+          <!-- these won't be detected -->
+          <div class="overline"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .my-utility {
+        color: orange;
+      }
+    }
+    .foo {
+      @apply @]$text-white;
+      @apply [background-color:red];
+    }
+  `
+
+  const result = await run(input, config)
+
+  // TODO: The class `.hover\:before\:\@\]\$content-\[\'Hovering\'\]:hover::before` is not generated
+  // This happens because of the parenthesis/brace/bracket clipping performed on candidates
+
+  expect(result.css).toMatchFormattedCss(css`
+    .\@\]\$bg-black {
+      --tw-bg-opacity: 1;
+      background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+    }
+    .\@\]\$underline {
+      text-decoration-line: underline;
+    }
+    .my-utility {
+      color: orange;
+    }
+    .foo {
+      --tw-text-opacity: 1;
+      color: rgb(255 255 255 / var(--tw-text-opacity));
+      background-color: red;
+    }
+  `)
+})

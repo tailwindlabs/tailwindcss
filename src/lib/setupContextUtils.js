@@ -762,6 +762,17 @@ function registerPlugins(plugins, context) {
                 ]
               }
 
+              if ([].concat(options?.type).includes('color')) {
+                classes = [
+                  ...classes,
+                  ...classes.flatMap((cls) =>
+                    Object.keys(context.tailwindConfig.theme.opacity).map(
+                      (opacity) => `${cls}/${opacity}`
+                    )
+                  ),
+                ]
+              }
+
               return classes
             })()
           : [util]

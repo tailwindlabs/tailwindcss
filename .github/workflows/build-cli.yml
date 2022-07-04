@@ -8,8 +8,13 @@ on:
 env:
   CI: true
 
+permissions:
+  contents: read
+
 jobs:
   build_cli:
+    permissions:
+      contents: write  # for softprops/action-gh-release to create GitHub release
     runs-on: macos-11
     steps:
       - uses: actions/checkout@v2

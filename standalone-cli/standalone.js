@@ -12,6 +12,10 @@ let localModules = {
   '@tailwindcss/forms': require('@tailwindcss/forms'),
   '@tailwindcss/line-clamp': require('@tailwindcss/line-clamp'),
   '@tailwindcss/typography': require('@tailwindcss/typography'),
+
+  // These are present to allow them to be specified in the PostCSS config file
+  autoprefixer: require('autoprefixer'),
+  tailwindcss: require('tailwindcss'),
 }
 
 Module.prototype.require = function (id) {
