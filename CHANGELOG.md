@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Allows fallback values in plugin API helpers ([#8762](https://github.com/tailwindlabs/tailwindcss/pull/8762))
 - Fix usage of postcss.config.js in standalone CLI ([#8769](https://github.com/tailwindlabs/tailwindcss/pull/8769))
+- Fix usage of special-character prefixes ([#8772](https://github.com/tailwindlabs/tailwindcss/pull/8772))
 
 ## [3.1.4] - 2022-06-21
 
