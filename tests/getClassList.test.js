@@ -59,3 +59,26 @@ it('should generate every possible class while handling negatives and prefixes',
 
   expect(classes).not.toContain('-tw-m-DEFAULT')
 })
+
+it('should not generate utilities with opacity by default', () => {
+  let config = {}
+  let context = createContext(resolveConfig(config))
+  let classes = context.getClassList()
+
+  expect(classes).not.toContain('bg-red-500/50')
+})
+
+it('should not generate utilities with opacity even if safe-listed', () => {
+  let config = {
+    safelist: [
+      {
+        pattern: /^bg-red-(400|500)(\/(40|50))?$/,
+      },
+    ],
+  }
+
+  let context = createContext(resolveConfig(config))
+  let classes = context.getClassList()
+
+  expect(classes).not.toContain('bg-red-500/50')
+})

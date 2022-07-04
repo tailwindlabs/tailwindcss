@@ -51,7 +51,7 @@ it('should safelist based on a pattern regex', () => {
     content: [{ raw: html`<div class="uppercase"></div>` }],
     safelist: [
       {
-        pattern: /bg-(red)-(100|200)/,
+        pattern: /^bg-(red)-(100|200)$/,
         variants: ['hover'],
       },
     ],
@@ -92,15 +92,15 @@ it('should not generate duplicates', () => {
     safelist: [
       'uppercase',
       {
-        pattern: /bg-(red)-(100|200)/,
+        pattern: /^bg-(red)-(100|200)$/,
         variants: ['hover'],
       },
       {
-        pattern: /bg-(red)-(100|200)/,
+        pattern: /^bg-(red)-(100|200)$/,
         variants: ['hover'],
       },
       {
-        pattern: /bg-(red)-(100|200)/,
+        pattern: /^bg-(red)-(100|200)$/,
         variants: ['hover'],
       },
     ],
@@ -141,7 +141,7 @@ it('should safelist when using a custom prefix', () => {
     content: [{ raw: html`<div class="tw-uppercase"></div>` }],
     safelist: [
       {
-        pattern: /tw-bg-red-(100|200)/g,
+        pattern: /^tw-bg-red-(100|200)$/g,
       },
     ],
   }
@@ -218,6 +218,88 @@ it('should safelist negatives based on a pattern regex', () => {
 
       .hover\:-top-1:hover {
         top: -0.25rem;
+      }
+    `)
+  })
+})
+
+it('should safelist negatives based on a pattern regex', () => {
+  let config = {
+    content: [{ raw: html`<div class="uppercase"></div>` }],
+    safelist: [
+      {
+        pattern: /^bg-red-(400|500)(\/(40|50))?$/,
+        variants: ['hover'],
+      },
+      {
+        pattern: /^(fill|ring|text)-red-200\/50$/,
+        variants: ['hover'],
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .bg-red-400 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+      }
+      .bg-red-500 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+      }
+      .bg-red-400\/40 {
+        background-color: rgb(248 113 113 / 0.4);
+      }
+      .bg-red-400\/50 {
+        background-color: rgb(248 113 113 / 0.5);
+      }
+      .bg-red-500\/40 {
+        background-color: rgb(239 68 68 / 0.4);
+      }
+      .bg-red-500\/50 {
+        background-color: rgb(239 68 68 / 0.5);
+      }
+      .fill-red-200\/50 {
+        fill: rgb(254 202 202 / 0.5);
+      }
+      .uppercase {
+        text-transform: uppercase;
+      }
+      .text-red-200\/50 {
+        color: rgb(254 202 202 / 0.5);
+      }
+      .ring-red-200\/50 {
+        --tw-ring-color: rgb(254 202 202 / 0.5);
+      }
+      .hover\:bg-red-400:hover {
+        --tw-bg-opacity: 1;
+        background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+      }
+      .hover\:bg-red-500:hover {
+        --tw-bg-opacity: 1;
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+      }
+      .hover\:bg-red-400\/40:hover {
+        background-color: rgb(248 113 113 / 0.4);
+      }
+      .hover\:bg-red-400\/50:hover {
+        background-color: rgb(248 113 113 / 0.5);
+      }
+      .hover\:bg-red-500\/40:hover {
+        background-color: rgb(239 68 68 / 0.4);
+      }
+      .hover\:bg-red-500\/50:hover {
+        background-color: rgb(239 68 68 / 0.5);
+      }
+      .hover\:fill-red-200\/50:hover {
+        fill: rgb(254 202 202 / 0.5);
+      }
+      .hover\:text-red-200\/50:hover {
+        color: rgb(254 202 202 / 0.5);
+      }
+      .hover\:ring-red-200\/50:hover {
+        --tw-ring-color: rgb(254 202 202 / 0.5);
       }
     `)
   })
