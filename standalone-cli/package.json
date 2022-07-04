@@ -12,6 +12,7 @@
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/line-clamp": "^0.3.0",
     "@tailwindcss/typography": "^0.5.0",
+    "fs-extra": "^10.1.0",
     "jest": "^27.2.5",
     "move-file-cli": "^3.0.0",
     "pkg": "^5.3.3",
