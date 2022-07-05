@@ -55,6 +55,16 @@ fs.writeFileSync(
 
 const defaultThemeTypes = Object.entries(defaultTheme)
   .map(([name, value]) => {
+    // Special cases for slightly more accurate types
+    if (name === 'keyframes') {
+      return [name, `Record<${types.forKeys(value)}, Record<string, CSSDeclarationList>>`]
+    }
+
+    if (name === 'fontSize') {
+      return [name, `Record<${types.forKeys(value)}, [string, { lineHeight: string }]>`]
+    }
+
+    // General cases
     if (typeof value === 'string') {
       return [name, `string`]
     }
@@ -83,6 +93,7 @@ fs.writeFileSync(
     `
     import { Config } from '../../types'
     export type DefaultTheme = Config['theme'] & { ${defaultThemeTypes} }
+    export type CSSDeclarationList = Record<string, string>
   `,
     {
       semi: false,
