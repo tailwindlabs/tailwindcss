@@ -1,6 +1,7 @@
 import prettier from 'prettier'
 import { corePlugins } from '../src/corePlugins'
 import colors from '../src/public/colors'
+import defaultTheme from '../src/public/default-theme'
 import fs from 'fs'
 import path from 'path'
 
@@ -42,6 +43,66 @@ fs.writeFileSync(
       1,
       -1
     )}\n${deprecatedColors}\n}`,
+    {
+      semi: false,
+      singleQuote: true,
+      printWidth: 100,
+      parser: 'typescript',
+    }
+  )
+)
+
+function typeCoveringAllValues(value) {
+  if (Array.isArray(value)) {
+    let types = value.map(v => typeCoveringAllValues(v))
+    return `(${[...new Set(types)].join(' | ')})[]`
+  }
+
+  if (typeof value === 'object') {
+    let types = Object.values(value).map(value => typeCoveringAllValues(value))
+    return `${[...new Set(types)].join(' | ')}`
+  }
+
+  if (typeof value === 'string') {
+    return `string`
+  }
+
+  return `any`
+}
+
+const defaultThemeTypes = Object.entries(defaultTheme)
+  .map(([name, value]) => {
+    if (typeof value === 'string') {
+      return [name, `string`]
+    }
+
+    if (typeof value === 'function') {
+      return [name, null]
+    }
+
+    if (typeof value === 'object') {
+      if (Object.keys(value).length === 0) {
+        return [name, null]
+      }
+
+      let keyType = Object.keys(value).map((key) => `'${key}'`).join(' | ')
+      let valueType = typeCoveringAllValues(value)
+
+      return [name, `Record<${keyType}, ${valueType}>`]
+    }
+
+    return [name, `unknown`]
+  })
+  .filter(([, type]) => type !== null)
+  .map(([name, type]) => `${name}: ${type}`)
+  .join('\n')
+
+fs.writeFileSync(
+  path.join(process.cwd(), 'types', 'generated', 'default-theme.d.ts'),
+  prettier.format(`
+    import { Config } from '../../types'
+    export type DefaultTheme = Config['theme'] & { ${defaultThemeTypes} }
+  `,
     {
       semi: false,
       singleQuote: true,
