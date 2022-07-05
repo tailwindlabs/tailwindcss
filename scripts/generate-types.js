@@ -53,14 +53,14 @@ fs.writeFileSync(
 )
 
 function typeCoveringAllValues(value) {
+  let union = (values) => [...new Set(values.map((v) => typeCoveringAllValues(v)))].join(' | ')
+
   if (Array.isArray(value)) {
-    let types = value.map(v => typeCoveringAllValues(v))
-    return `(${[...new Set(types)].join(' | ')})[]`
+    return `(${union(value)})[]`
   }
 
   if (typeof value === 'object') {
-    let types = Object.values(value).map(value => typeCoveringAllValues(value))
-    return `${[...new Set(types)].join(' | ')}`
+    return union(Object.values(value))
   }
 
   if (typeof value === 'string') {
@@ -85,7 +85,9 @@ const defaultThemeTypes = Object.entries(defaultTheme)
         return [name, null]
       }
 
-      let keyType = Object.keys(value).map((key) => `'${key}'`).join(' | ')
+      let keyType = Object.keys(value)
+        .map((key) => `'${key}'`)
+        .join(' | ')
       let valueType = typeCoveringAllValues(value)
 
       return [name, `Record<${keyType}, ${valueType}>`]
@@ -99,7 +101,8 @@ const defaultThemeTypes = Object.entries(defaultTheme)
 
 fs.writeFileSync(
   path.join(process.cwd(), 'types', 'generated', 'default-theme.d.ts'),
-  prettier.format(`
+  prettier.format(
+    `
     import { Config } from '../../types'
     export type DefaultTheme = Config['theme'] & { ${defaultThemeTypes} }
   `,
