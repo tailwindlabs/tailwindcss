@@ -4,6 +4,7 @@ import colors from '../src/public/colors'
 import defaultTheme from '../src/public/default-theme'
 import fs from 'fs'
 import path from 'path'
+import * as types from './type-utils'
 
 fs.writeFileSync(
   path.join(process.cwd(), 'types', 'generated', 'corePluginList.d.ts'),
@@ -52,24 +53,6 @@ fs.writeFileSync(
   )
 )
 
-function typeCoveringAllValues(value) {
-  let union = (values) => [...new Set(values.map((v) => typeCoveringAllValues(v)))].join(' | ')
-
-  if (Array.isArray(value)) {
-    return `(${union(value)})[]`
-  }
-
-  if (typeof value === 'object') {
-    return union(Object.values(value))
-  }
-
-  if (typeof value === 'string') {
-    return `string`
-  }
-
-  return `any`
-}
-
 const defaultThemeTypes = Object.entries(defaultTheme)
   .map(([name, value]) => {
     if (typeof value === 'string') {
@@ -85,12 +68,7 @@ const defaultThemeTypes = Object.entries(defaultTheme)
         return [name, null]
       }
 
-      let keyType = Object.keys(value)
-        .map((key) => `'${key}'`)
-        .join(' | ')
-      let valueType = typeCoveringAllValues(value)
-
-      return [name, `Record<${keyType}, ${valueType}>`]
+      return [name, types.forValue(value)]
     }
 
     return [name, `unknown`]
