@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.1.5] - 2022-07-07
+
 ### Added
 
 - Support default `font-weight`s in font size utilities ([#8763](https://github.com/tailwindlabs/tailwindcss/pull/8763))
@@ -2000,7 +2004,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.5...HEAD
+[3.1.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.4...v3.1.5
 [3.1.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.3...v3.1.4
 [3.1.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.1...v3.1.2
