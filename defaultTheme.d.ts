@@ -1,3 +1,4 @@
 import type { Config } from './types/config'
-declare const theme: Config['theme']
+import { DefaultTheme } from './types/generated/default-theme'
+declare const theme: Config['theme'] & DefaultTheme
 export = theme
