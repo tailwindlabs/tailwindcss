@@ -51,7 +51,7 @@
     "esbuild": "^0.14.43",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "jest": "^28.1.2",
     "jest-diff": "^28.1.1",
     "prettier": "^2.7.1",
