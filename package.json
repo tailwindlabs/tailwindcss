@@ -48,7 +48,7 @@
     "@swc/register": "^0.1.10",
     "autoprefixer": "^10.4.7",
     "cssnano": "^5.1.12",
-    "esbuild": "^0.14.43",
+    "esbuild": "^0.14.48",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
