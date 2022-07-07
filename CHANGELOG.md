@@ -13,15 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Support default `font-weight`s in font size utilities ([#8763](https://github.com/tailwindlabs/tailwindcss/pull/8763))
-
+- Support configuring a default `font-weight` for each font size utility ([#8763](https://github.com/tailwindlabs/tailwindcss/pull/8763))
+- Add support for alpha values in safe list ([#8774](https://github.com/tailwindlabs/tailwindcss/pull/8774))
+ 
 ### Fixed
 
-- Allows fallback values in plugin API helpers ([#8762](https://github.com/tailwindlabs/tailwindcss/pull/8762))
-- Fix usage of postcss.config.js in standalone CLI ([#8769](https://github.com/tailwindlabs/tailwindcss/pull/8769))
-- Fix usage of special-character prefixes ([#8772](https://github.com/tailwindlabs/tailwindcss/pull/8772))
-- Don’t prefix selectors in arbitrary variants ([#8773](https://github.com/tailwindlabs/tailwindcss/pull/8773))
-- Add support for alpha values in safe list ([#8774](https://github.com/tailwindlabs/tailwindcss/pull/8774))
+- Improve types to support fallback values in the CSS-in-JS syntax used in plugin APIs ([#8762](https://github.com/tailwindlabs/tailwindcss/pull/8762))
+- Support including `tailwindcss` and `autoprefixer` in `postcss.config.js` in standalone CLI ([#8769](https://github.com/tailwindlabs/tailwindcss/pull/8769))
+- Fix using special-characters as prefixes ([#8772](https://github.com/tailwindlabs/tailwindcss/pull/8772))
+- Don’t prefix classes used within arbitrary variants ([#8773](https://github.com/tailwindlabs/tailwindcss/pull/8773))
 - Add more explicit types for the default theme ([#8780](https://github.com/tailwindlabs/tailwindcss/pull/8780))
 
 ## [3.1.4] - 2022-06-21
