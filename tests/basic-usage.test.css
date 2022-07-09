@@ -477,8 +477,20 @@
 .grid-cols-4 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+.grid-cols-fill-4 {
+  grid-template-columns: repeat(auto-fill, minmax(1rem, 1fr));
+}
+.grid-cols-fit-4 {
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+}
 .grid-rows-3 {
   grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+.grid-rows-fill-4 {
+  grid-template-rows: repeat(auto-fill, minmax(1rem, 1fr));
+}
+.grid-rows-fit-4 {
+  grid-template-rows: repeat(auto-fit, minmax(1rem, 1fr));
 }
 .flex-row-reverse {
   flex-direction: row-reverse;

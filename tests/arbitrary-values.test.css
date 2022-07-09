@@ -434,8 +434,20 @@
 .grid-cols-\[\[linename\]\2c 1fr\2c auto\] {
   grid-template-columns: [linename] 1fr auto;
 }
+.grid-cols-fill-\[200px\] {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
+}
+.grid-cols-fit-\[200px\] {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+}
 .grid-rows-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
   grid-template-rows: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
+}
+.grid-rows-fill-\[200px\] {
+  grid-template-rows: repeat(auto-fill, minmax(200px, 1fr))
+}
+.grid-rows-fit-\[200px\] {
+  grid-template-rows: repeat(auto-fit, minmax(200px, 1fr))
 }
 .gap-\[20px\] {
   gap: 20px;

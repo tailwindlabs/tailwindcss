@@ -910,17 +910,17 @@ export let corePlugins = {
     ['grid-cols', ['gridTemplateColumns']],
   ]),
   gridTemplateColumnsFill: createUtilityPlugin('gridTemplateColumnsFill', [
-    ['grid-cols-fill', ['gridTemplateColumnsFill']],
+    ['grid-cols-fill', ['gridTemplateColumns']],
   ]),
   gridTemplateColumnsFit: createUtilityPlugin('gridTemplateColumnsFit', [
-    ['grid-cols-fit', ['gridTemplateColumnsFit']],
+    ['grid-cols-fit', ['gridTemplateColumns']],
   ]),
   gridTemplateRows: createUtilityPlugin('gridTemplateRows', [['grid-rows', ['gridTemplateRows']]]),
   gridTemplateRowsFill: createUtilityPlugin('gridTemplateRowsFill', [
-    ['grid-rows-fill', ['gridTemplateRowsFill']],
+    ['grid-rows-fill', ['gridTemplateRows']],
   ]),
   gridTemplateRowsFit: createUtilityPlugin('gridTemplateRowsFit', [
-    ['grid-rows-fit', ['gridTemplateRowsFit']],
+    ['grid-rows-fit', ['gridTemplateRows']],
   ]),
 
   flexDirection: ({ addUtilities }) => {
