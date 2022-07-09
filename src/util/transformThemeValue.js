@@ -1,6 +1,24 @@
 import postcss from 'postcss'
 
 export default function transformThemeValue(themeSection) {
+  if (['gridTemplateRowsFill', 'gridTemplateColumnsFill'].includes(themeSection)) {
+    return (value) => {
+      if (typeof value === 'function') value = value({})
+      if (typeof value === 'string') value = `repeat(auto-fill, minmax(${value}, 1fr))`
+
+      return value
+    }
+  }
+
+  if (['gridTemplateRowsFit', 'gridTemplateColumnsFit'].includes(themeSection)) {
+    return (value) => {
+      if (typeof value === 'function') value = value({})
+      if (typeof value === 'string') value = `repeat(auto-fit, minmax(${value}, 1fr))`
+
+      return value
+    }
+  }
+
   if (['fontSize', 'outline'].includes(themeSection)) {
     return (value) => {
       if (typeof value === 'function') value = value({})
