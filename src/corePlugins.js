@@ -909,7 +909,19 @@ export let corePlugins = {
   gridTemplateColumns: createUtilityPlugin('gridTemplateColumns', [
     ['grid-cols', ['gridTemplateColumns']],
   ]),
+  gridTemplateColumnsFill: createUtilityPlugin('gridTemplateColumnsFill', [
+    ['grid-cols-fill', ['gridTemplateColumnsFill']],
+  ]),
+  gridTemplateColumnsFit: createUtilityPlugin('gridTemplateColumnsFit', [
+    ['grid-cols-fit', ['gridTemplateColumnsFit']],
+  ]),
   gridTemplateRows: createUtilityPlugin('gridTemplateRows', [['grid-rows', ['gridTemplateRows']]]),
+  gridTemplateRowsFill: createUtilityPlugin('gridTemplateRowsFill', [
+    ['grid-rows-fill', ['gridTemplateRowsFill']],
+  ]),
+  gridTemplateRowsFit: createUtilityPlugin('gridTemplateRowsFit', [
+    ['grid-rows-fit', ['gridTemplateRowsFit']],
+  ]),
 
   flexDirection: ({ addUtilities }) => {
     addUtilities({

@@ -1,3 +1,10 @@
+function gridTemplateHelper(spacing, pseudoClass) {
+  const values = Object.entries(spacing).map(([k, v]) => 
+       ({[k]: `repeat(${pseudoClass}, minmax(${v}, 1fr))`})
+  );
+  return Object.assign({}, ...values);
+}
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [],
@@ -508,6 +515,8 @@ module.exports = {
       11: 'repeat(11, minmax(0, 1fr))',
       12: 'repeat(12, minmax(0, 1fr))',
     },
+    gridTemplateColumnsFill: ({ theme }) => gridTemplateHelper(theme('spacing'), 'auto-fill'),
+    gridTemplateColumnsFit: ({ theme }) => gridTemplateHelper(theme('spacing'), 'auto-fit'),
     gridTemplateRows: {
       none: 'none',
       1: 'repeat(1, minmax(0, 1fr))',
@@ -517,6 +526,8 @@ module.exports = {
       5: 'repeat(5, minmax(0, 1fr))',
       6: 'repeat(6, minmax(0, 1fr))',
     },
+    gridTemplateRowsFill: ({ theme }) => gridTemplateHelper(theme('spacing'), 'auto-fill'),
+    gridTemplateRowsFit: ({ theme }) => gridTemplateHelper(theme('spacing'), 'auto-fit'),
     height: ({ theme }) => ({
       auto: 'auto',
       ...theme('spacing'),
