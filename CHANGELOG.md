@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix usage on Node 12.x ([b4e637e](https://github.com/tailwindlabs/tailwindcss/commit/b4e637e2e096a9d6f2210efba9541f6fd4f28e56))
+- Handle theme keys with slashes when using `theme()` in CSS ([#8831](https://github.com/tailwindlabs/tailwindcss/pull/8831))
 
 ## [3.1.5] - 2022-07-07
 
