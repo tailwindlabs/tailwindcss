@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Fix usage on Node 12.x ([b4e637e](https://github.com/tailwindlabs/tailwindcss/commit/b4e637e2e096a9d6f2210efba9541f6fd4f28e56))
 
 ## [3.1.5] - 2022-07-07
 
@@ -15,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support configuring a default `font-weight` for each font size utility ([#8763](https://github.com/tailwindlabs/tailwindcss/pull/8763))
 - Add support for alpha values in safe list ([#8774](https://github.com/tailwindlabs/tailwindcss/pull/8774))
- 
+
 ### Fixed
 
 - Improve types to support fallback values in the CSS-in-JS syntax used in plugin APIs ([#8762](https://github.com/tailwindlabs/tailwindcss/pull/8762))
