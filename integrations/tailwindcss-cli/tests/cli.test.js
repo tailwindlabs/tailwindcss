@@ -96,6 +96,21 @@ describe('Build command', () => {
     expect(withoutMinify.length).toBeGreaterThan(withMinify.length)
   })
 
+  test('--minify applies @parcel/css optimizations', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await writeInputFile('index.css', css`
+      .text-teal {
+        color: hsl(calc(360deg / 2) 50% 50%);
+      }
+    `)
+
+    await $(`${EXECUTABLE} --input ./src/index.css --output ./dist/main.css --minify`)
+
+    let withMinify = await readOutputFile('main.css')
+
+    expect(withMinify).toEqual(css`.text-teal{color:#40bfbf}`)
+  })
+
   test('--no-autoprefixer', async () => {
     await writeInputFile('index.html', html`<div class="select-none"></div>`)
 
