@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Add `grid-rows-fill`, `grid-rows-fit`, `grid-cols-fill`, and `grid-cols-fit` utilities ([#8812](https://github.com/tailwindlabs/tailwindcss/pull/8812))
 
 ## [3.1.5] - 2022-07-07
 
