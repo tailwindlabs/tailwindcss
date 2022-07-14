@@ -55,7 +55,7 @@
     "jest": "^28.1.2",
     "jest-diff": "^28.1.1",
     "prettier": "^2.7.1",
-    "prettier-plugin-tailwindcss": "^0.1.11",
+    "prettier-plugin-tailwindcss": "^0.1.12",
     "rimraf": "^3.0.0",
     "source-map-js": "^1.0.2"
   },
