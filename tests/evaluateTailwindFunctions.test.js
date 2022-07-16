@@ -1135,3 +1135,51 @@ test('Theme functions with alpha with quotes value around color only', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+it('can find values with slashes in the theme key while still allowing for alpha values ', () => {
+  let input = css`
+    .foo00 {
+      color: theme(colors.foo-5);
+    }
+    .foo01 {
+      color: theme(colors.foo-5/10);
+    }
+    .foo02 {
+      color: theme(colors.foo-5/10/25);
+    }
+    .foo03 {
+      color: theme(colors.foo-5 / 10);
+    }
+    .foo04 {
+      color: theme(colors.foo-5/10 / 25);
+    }
+  `
+
+  return runFull(input, {
+    theme: {
+      colors: {
+        'foo-5': '#050000',
+        'foo-5/10': '#051000',
+        'foo-5/10/25': '#051025',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .foo00 {
+        color: #050000;
+      }
+      .foo01 {
+        color: #051000;
+      }
+      .foo02 {
+        color: #051025;
+      }
+      .foo03 {
+        color: rgb(5 0 0 / 10);
+      }
+      .foo04 {
+        color: rgb(5 16 0 / 25);
+      }
+    `)
+  })
+})
