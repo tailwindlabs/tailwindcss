@@ -131,11 +131,7 @@ interface ThemeConfig {
   gridAutoColumns: ResolvableTo<KeyValuePair>
   gridAutoRows: ResolvableTo<KeyValuePair>
   gridTemplateColumns: ResolvableTo<KeyValuePair>
-  gridTemplateColumnsFill: ResolvableTo<KeyValuePair>
-  gridTemplateColumnsFit: ResolvableTo<KeyValuePair>
   gridTemplateRows: ResolvableTo<KeyValuePair>
-  gridTemplateRowsFill: ResolvableTo<KeyValuePair>
-  gridTemplateRowsFit: ResolvableTo<KeyValuePair>
   gap: ThemeConfig['spacing']
   space: ThemeConfig['spacing']
   divideWidth: ThemeConfig['borderWidth']

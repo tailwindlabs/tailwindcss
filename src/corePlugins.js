@@ -906,23 +906,60 @@ export let corePlugins = {
   },
 
   gridAutoRows: createUtilityPlugin('gridAutoRows', [['auto-rows', ['gridAutoRows']]]),
-  gridTemplateColumns: createUtilityPlugin('gridTemplateColumns', [
-    ['grid-cols', ['gridTemplateColumns']],
-  ]),
-  gridTemplateColumnsFill: createUtilityPlugin('gridTemplateColumnsFill', [
-    ['grid-cols-fill', ['gridTemplateColumns']],
-  ]),
-  gridTemplateColumnsFit: createUtilityPlugin('gridTemplateColumnsFit', [
-    ['grid-cols-fit', ['gridTemplateColumns']],
-  ]),
-  gridTemplateRows: createUtilityPlugin('gridTemplateRows', [['grid-rows', ['gridTemplateRows']]]),
-  gridTemplateRowsFill: createUtilityPlugin('gridTemplateRowsFill', [
-    ['grid-rows-fill', ['gridTemplateRows']],
-  ]),
-  gridTemplateRowsFit: createUtilityPlugin('gridTemplateRowsFit', [
-    ['grid-rows-fit', ['gridTemplateRows']],
-  ]),
-
+  gridTemplateColumns: ({ matchUtilities, theme }) => {
+    createUtilityPlugin('gridTemplateColumns', [['grid-cols', ['gridTemplateColumns']]])({
+      matchUtilities,
+      theme,
+    })
+    matchUtilities(
+      {
+        'grid-cols-fill': (value) => {
+          if (typeof value === 'function') {
+            value = value({})
+          }
+          return {
+            'grid-template-columns': `repeat(auto-fill, minmax(${value}, 1fr))`,
+          }
+        },
+        'grid-cols-fit': (value) => {
+          if (typeof value === 'function') {
+            value = value({})
+          }
+          return {
+            'grid-template-columns': `repeat(auto-fit, minmax(${value}, 1fr))`,
+          }
+        },
+      },
+      { values: theme('spacing') }
+    )
+  },
+  gridTemplateRows: ({ matchUtilities, theme }) => {
+    createUtilityPlugin('gridTemplateRows', [['grid-rows', ['gridTemplateRows']]])({
+      matchUtilities,
+      theme,
+    })
+    matchUtilities(
+      {
+        'grid-rows-fill': (value) => {
+          if (typeof value === 'function') {
+            value = value({})
+          }
+          return {
+            'grid-template-rows': `repeat(auto-fill, minmax(${value}, 1fr))`,
+          }
+        },
+        'grid-rows-fit': (value) => {
+          if (typeof value === 'function') {
+            value = value({})
+          }
+          return {
+            'grid-template-rows': `repeat(auto-fit, minmax(${value}, 1fr))`,
+          }
+        },
+      },
+      { values: theme('spacing') }
+    )
+  },
   flexDirection: ({ addUtilities }) => {
     addUtilities({
       '.flex-row': { 'flex-direction': 'row' },
