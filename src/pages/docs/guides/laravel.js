@@ -84,7 +84,7 @@ let tabs = [
         title: 'Start your build process',
         body: () => (
           <p>
-            Run your build process with <code>npm run watch</code>.
+            Run your build process with <code>npm run dev</code>.
           </p>
         ),
         code: {
