@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Changed
+- Refactored "whitelist" to "allowlist"
 
 ## [3.1.6] - 2022-07-11
 
