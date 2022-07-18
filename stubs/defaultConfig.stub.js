@@ -508,8 +508,6 @@ module.exports = {
       11: 'repeat(11, minmax(0, 1fr))',
       12: 'repeat(12, minmax(0, 1fr))',
     },
-    gridTemplateColumnsFill: ({ theme }) => theme('spacing'),
-    gridTemplateColumnsFit: ({ theme }) => theme('spacing'),
     gridTemplateRows: {
       none: 'none',
       1: 'repeat(1, minmax(0, 1fr))',
@@ -519,8 +517,6 @@ module.exports = {
       5: 'repeat(5, minmax(0, 1fr))',
       6: 'repeat(6, minmax(0, 1fr))',
     },
-    gridTemplateRowsFill: ({ theme }) => theme('spacing'),
-    gridTemplateRowsFit: ({ theme }) => theme('spacing'),
     height: ({ theme }) => ({
       auto: 'auto',
       ...theme('spacing'),
