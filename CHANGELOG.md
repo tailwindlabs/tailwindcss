@@ -1645,7 +1645,7 @@ No release notes
 
 - Make it possible to disable all core plugins using `corePlugins: false`
 - Make it possible to configure a single list of variants that applies to all utility plugins
-- Make it possible to whitelist which core plugins should be enabled
+- Make it possible to safelist which core plugins should be enabled
 
 ### Fixed
 
