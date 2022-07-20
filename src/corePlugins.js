@@ -224,6 +224,11 @@ export let variantPlugins = {
     addVariant('contrast-more', '@media (prefers-contrast: more)')
     addVariant('contrast-less', '@media (prefers-contrast: less)')
   },
+
+  touchVariants: ({ addVariant }) => {
+    addVariant('touch', '@media (hover: none)')
+    addVariant('no-touch', '@media (hover: hover)')
+  },
 }
 
 let cssTransformValue = [

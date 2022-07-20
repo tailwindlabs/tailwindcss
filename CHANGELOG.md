@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+- Add `touch` and `no-touch` variants ([#8907](https://github.com/tailwindlabs/tailwindcss/pull/8907))
 
 ## [3.1.6] - 2022-07-11
 
