@@ -18,7 +18,7 @@
     "postswcify": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
     "rebuild-fixtures": "npm run swcify && node -r @swc/register scripts/rebuildFixtures.js",
     "prepublishOnly": "npm install --force && npm run swcify",
-    "style": "eslint .",
+    "style": "eslint . && prettier --write '**/*.{js,ts,json}'",
     "pretest": "npm run generate",
     "test": "jest",
     "test:integrations": "npm run test --prefix ./integrations",
