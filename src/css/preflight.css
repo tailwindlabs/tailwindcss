@@ -179,10 +179,11 @@ select {
 /*
 1. Correct the inability to style clickable types in iOS and Safari.
 2. Remove default button styles.
+3. Exclude attribute selector higher than class when `<button type="button" />`
 */
 
 button,
-[type='button'],
+:not(button)[type='button'], /* 3 */
 [type='reset'],
 [type='submit'] {
   -webkit-appearance: button; /* 1 */
