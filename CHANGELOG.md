@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Added types for `resolveConfig` ([#8924](https://github.com/tailwindlabs/tailwindcss/pull/8924))
 
 ## [3.1.6] - 2022-07-11
 
