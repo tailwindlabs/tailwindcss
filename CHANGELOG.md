@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `grid-rows-fill`, `grid-rows-fit`, `grid-cols-fill`, and `grid-cols-fit` utilities ([#8812](https://github.com/tailwindlabs/tailwindcss/pull/8812))
+- Added types for `resolveConfig` ([#8924](https://github.com/tailwindlabs/tailwindcss/pull/8924))
 
 ## [3.1.6] - 2022-07-11
 
@@ -1647,7 +1648,7 @@ No release notes
 
 - Make it possible to disable all core plugins using `corePlugins: false`
 - Make it possible to configure a single list of variants that applies to all utility plugins
-- Make it possible to whitelist which core plugins should be enabled
+- Make it possible to safelist which core plugins should be enabled
 
 ### Fixed
 
