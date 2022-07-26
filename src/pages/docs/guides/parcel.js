@@ -36,7 +36,8 @@ let steps = [
     title: 'Configure PostCSS',
     body: () => (
       <p>
-        Create a <code>.postcssrc</code> file in your project root, and enable the <code>tailwindcss</code> plugin.
+        Create a <code>.postcssrc</code> file in your project root, and enable the{' '}
+        <code>tailwindcss</code> plugin.
       </p>
     ),
     code: {
@@ -46,8 +47,8 @@ let steps = [
   "plugins": {
     "tailwindcss": {}
   }
-}`
-    }
+}`,
+    },
   },
   {
     title: 'Configure your template paths',
@@ -59,7 +60,8 @@ let steps = [
     code: {
       name: 'tailwind.config.js',
       lang: 'js',
-      code: `  module.exports = {
+      code: `  /** @type {import('tailwindcss').Config} */ 
+  module.exports = {
 >   content: [
 >     "./src/**/*.{html,js,ts,jsx,tsx}",
 >   ],
@@ -99,10 +101,12 @@ let steps = [
   },
   {
     title: 'Start using Tailwind in your project',
-    body: () => (<p>
-      Add your CSS file to the <code>{'<head>'}</code> and start using Tailwind’s utility
-      classes to style your content.
-    </p>),
+    body: () => (
+      <p>
+        Add your CSS file to the <code>{'<head>'}</code> and start using Tailwind’s utility classes
+        to style your content.
+      </p>
+    ),
     code: {
       name: 'index.html',
       lang: 'html',

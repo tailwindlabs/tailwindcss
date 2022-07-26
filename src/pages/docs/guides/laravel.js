@@ -53,7 +53,8 @@ let tabs = [
         code: {
           name: 'tailwind.config.js',
           lang: 'js',
-          code: `  module.exports = {
+          code: `  /** @type {import('tailwindcss').Config} */
+  module.exports = {
 >   content: [
 >     "./resources/**/*.blade.php",
 >     "./resources/**/*.js",
@@ -167,7 +168,8 @@ let tabs = [
         code: {
           name: 'tailwind.config.js',
           lang: 'js',
-          code: `  module.exports = {
+          code: `  /** @type {import('tailwindcss').Config} */
+  module.exports = {
 >   content: [
 >     "./resources/**/*.blade.php",
 >     "./resources/**/*.js",

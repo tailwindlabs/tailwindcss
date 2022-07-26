@@ -68,7 +68,8 @@ let steps = [
     code: {
       name: 'tailwind.config.cjs',
       lang: 'javascript',
-      code: `  module.exports = {
+      code: `  /** @type {import('tailwindcss').Config} */ 
+  module.exports = {
 >   content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
       extend: {}

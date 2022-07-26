@@ -9,8 +9,8 @@ let steps = [
     body: () => (
       <p>
         Start by creating a new Phoenix project if you don't have one set up already. You can follow
-        their <a href="https://hexdocs.pm/phoenix/installation.html">installation guide</a> to get up
-        and running.
+        their <a href="https://hexdocs.pm/phoenix/installation.html">installation guide</a> to get
+        up and running.
       </p>
     ),
     code: {
@@ -23,7 +23,8 @@ let steps = [
     title: 'Install the Tailwind plugin',
     body: () => (
       <p>
-        Add the Tailwind plugin to your dependencies and run <code>mix deps.get</code> to install it.
+        Add the Tailwind plugin to your dependencies and run <code>mix deps.get</code> to install
+        it.
       </p>
     ),
     code: {
@@ -40,8 +41,8 @@ let steps = [
     title: 'Configure the Tailwind plugin',
     body: () => (
       <p>
-        In your <code>config.exs</code> file you can set which version of Tailwind CSS you want to use, the path to your Tailwind config,
-        and customize your asset paths.
+        In your <code>config.exs</code> file you can set which version of Tailwind CSS you want to
+        use, the path to your Tailwind config, and customize your asset paths.
       </p>
     ),
     code: {
@@ -59,11 +60,7 @@ let steps = [
   },
   {
     title: 'Update your deployment script',
-    body: () => (
-      <p>
-        Configure an alias to build your CSS on deployment.
-      </p>
-    ),
+    body: () => <p>Configure an alias to build your CSS on deployment.</p>,
     code: {
       name: 'mix.exs',
       lang: 'elixir',
@@ -93,7 +90,8 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Run the install command to download the standalone Tailwind CLI and generate a <code>tailwind.config.js</code> file in the <code>./assets</code> directory.
+        Run the install command to download the standalone Tailwind CLI and generate a{' '}
+        <code>tailwind.config.js</code> file in the <code>./assets</code> directory.
       </p>
     ),
     code: {
@@ -106,13 +104,15 @@ let steps = [
     title: 'Configure your template paths',
     body: () => (
       <p>
-        Add the paths to all of your template files in your <code>./assets/tailwind.config.js</code> file.
+        Add the paths to all of your template files in your <code>./assets/tailwind.config.js</code>{' '}
+        file.
       </p>
     ),
     code: {
       name: 'tailwind.config.js',
       lang: 'js',
-      code: `  module.exports = {
+      code: `  /** @type {import('tailwindcss').Config} */ 
+  module.exports = {
 >   content: [
 >     './js/**/*.js',
 >     '../lib/*_web.ex',
@@ -129,8 +129,8 @@ let steps = [
     title: 'Add the Tailwind directives to your CSS',
     body: () => (
       <p>
-        Add the <code>@tailwind</code>{' '}
-        directives for each of Tailwind’s layers to <code>./assets/css/app.css</code>
+        Add the <code>@tailwind</code> directives for each of Tailwind’s layers to{' '}
+        <code>./assets/css/app.css</code>
       </p>
     ),
     code: {
@@ -143,7 +143,8 @@ let steps = [
     title: 'Remove the default CSS import',
     body: () => (
       <p>
-        Remove the CSS import from <code>./assets/js/app.js</code>, as Tailwind is now handling this for you.
+        Remove the CSS import from <code>./assets/js/app.js</code>, as Tailwind is now handling this
+        for you.
       </p>
     ),
     code: {

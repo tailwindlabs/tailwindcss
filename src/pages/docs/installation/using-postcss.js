@@ -47,7 +47,8 @@ let steps = [
     code: {
       name: 'tailwind.config.js',
       lang: 'js',
-      code: `  module.exports = {
+      code: `  /** @type {import('tailwindcss').Config} */ 
+  module.exports = {
 >   content: ["./src/**/*.{html,js}"],
     theme: {
       extend: {},
@@ -118,7 +119,7 @@ export default function UsingPostCss({ code }) {
     <InstallationLayout>
       <div
         id="content-wrapper"
-        className="relative z-10 prose prose-slate mb-16 max-w-3xl dark:prose-dark"
+        className="relative z-10 max-w-3xl mb-16 prose prose-slate dark:prose-dark"
       >
         <h3 className="sr-only">Installing Tailwind CSS as a PostCSS plugin</h3>
         <p>
@@ -132,7 +133,7 @@ export default function UsingPostCss({ code }) {
         href="/docs/installation/framework-guides"
         description={
           <>
-            <strong className="text-slate-900 font-semibold dark:text-slate-200">
+            <strong className="font-semibold text-slate-900 dark:text-slate-200">
               Are you stuck?
             </strong>{' '}
             Setting up Tailwind with PostCSS can be a bit different across different build tools.

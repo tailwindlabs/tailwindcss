@@ -21,8 +21,8 @@ let steps = [
     title: 'Install Tailwind CSS',
     body: () => (
       <p>
-        Install <code>tailwindcss</code>, its peer dependencies, and <code>concurrently</code> via npm, and then run the init
-        command to generate your <code>tailwind.config.js</code> file.
+        Install <code>tailwindcss</code>, its peer dependencies, and <code>concurrently</code> via
+        npm, and then run the init command to generate your <code>tailwind.config.js</code> file.
       </p>
     ),
     code: {
@@ -41,7 +41,8 @@ let steps = [
     code: {
       name: 'tailwind.config.js',
       lang: 'js',
-      code: `  module.exports = {
+      code: `  /** @type {import('tailwindcss').Config} */ 
+  module.exports = {
 >   content: [
 >     "./app/**/*.{js,ts,jsx,tsx}",
 >   ],
@@ -56,7 +57,8 @@ let steps = [
     title: 'Update your package.json scripts',
     body: () => (
       <p>
-        Update the scripts in your <code>package.json</code> file to build both your development and production CSS.
+        Update the scripts in your <code>package.json</code> file to build both your development and
+        production CSS.
       </p>
     ),
     code: {
@@ -90,7 +92,8 @@ let steps = [
     title: 'Import the CSS file',
     body: () => (
       <p>
-        Import the compiled <code>./app/styles/app.css</code> file in your <code>./app/root.jsx</code> file.
+        Import the compiled <code>./app/styles/app.css</code> file in your{' '}
+        <code>./app/root.jsx</code> file.
       </p>
     ),
     code: {
