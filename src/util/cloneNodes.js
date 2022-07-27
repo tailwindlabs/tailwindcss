@@ -2,7 +2,11 @@ export default function cloneNodes(nodes, source = undefined, raws = undefined) 
   return nodes.map((node) => {
     let cloned = node.clone()
 
-    if (source !== undefined) {
+    // We always want override the source map
+    // except when explicitly told not to
+    let shouldOverwriteSource = node.raws.tailwind?.preserveSource !== true || !cloned.source
+
+    if (source !== undefined && shouldOverwriteSource) {
       cloned.source = source
 
       if ('walk' in cloned) {
