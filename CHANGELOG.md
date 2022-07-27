@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added types for `resolveConfig` ([#8924](https://github.com/tailwindlabs/tailwindcss/pull/8924))
 
+### Changed
+
+- Don't use `cursor: pointer` for buttons by default ([#8962](https://github.com/tailwindlabs/tailwindcss/pull/8962))
+
 ## [3.1.6] - 2022-07-11
 
 ### Fixed
