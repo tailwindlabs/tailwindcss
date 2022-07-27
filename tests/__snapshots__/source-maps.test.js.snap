@@ -347,3 +347,17 @@ Array [
   "2:18 -> 440:0",
 ]
 `;
+
+exports[`source maps for layer rules are not rewritten to point to @tailwind directives 1`] = `
+Array [
+  "2:6 -> 1:0",
+  "2:6 -> 2:10",
+  "2:25 -> 3:0",
+  "3:8 -> 4:8",
+  "4:10-31 -> 5:10-31",
+  "5:8 -> 6:8",
+  "3:8 -> 7:8",
+  "4:10-31 -> 8:10-31",
+  "5:8 -> 9:8",
+]
+`;

@@ -471,7 +471,11 @@ function splitWithSeparator(input, separator) {
 
 function* recordCandidates(matches, classCandidate) {
   for (const match of matches) {
-    match[1].raws.tailwind = { ...match[1].raws.tailwind, classCandidate }
+    match[1].raws.tailwind = {
+      ...match[1].raws.tailwind,
+      classCandidate,
+      preserveSource: match[0].options?.preserveSource ?? false,
+    }
 
     yield match
   }
