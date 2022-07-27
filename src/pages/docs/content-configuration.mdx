@@ -196,6 +196,8 @@ export default function Button({ color, size, children }) {
 }
 ```
 
+### Dynamic class names
+
 The most important implication of how Tailwind extracts class names is that it will only find classes that exist _as complete unbroken strings_ in your source files.
 
 If you use string interpolation or concatenate partial class names together, Tailwind will not find them and therefore will not generate the corresponding CSS:
@@ -428,9 +430,7 @@ Or creating a new folder mid-project that wasn't covered originally and forgetti
   }
 ```
 
-### Dynamic class names
-
-As outlined in [Class detection in-depth](#class-detection-in-depth), Tailwind doesn't actually run your source code and won't detect dynamically constructed class names.
+It could also be that you are trying to use dynamic class names, which won't work because Tailwind doesn't actually evaluate your source code and can only detect static unbroken class strings.
 
 <TipBad>Don't construct class names dynamically</TipBad>
 
@@ -445,6 +445,8 @@ Make sure you always use complete class names in your code:
 ```html
 <div class="{{ error ? 'text-red-600' : 'text-green-600' }}"></div>
 ```
+
+Read our documentation on [dynamic class names](#dynamic-class-names) for more details.
 
 ### Styles rebuild in an infinite loop
 
