@@ -5,7 +5,7 @@ import tailwind from '../../src'
 export * from './strings'
 export * from './defaults'
 
-let map = JSON.stringify({
+export let map = JSON.stringify({
   version: 3,
   file: null,
   sources: [],

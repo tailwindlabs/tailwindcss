@@ -39,7 +39,6 @@ it('apply generates source maps', async () => {
   expect(sources).not.toContain('<no source>')
   expect(sources.length).toBe(1)
 
-  // It would make the tests nicer to read and write
   expect(annotations).toMatchSnapshot()
 })
 
@@ -60,7 +59,6 @@ it('preflight + base have source maps', async () => {
   expect(sources).not.toContain('<no source>')
   expect(sources.length).toBe(1)
 
-  // It would make the tests nicer to read and write
   expect(annotations).toMatchSnapshot()
 })
 
@@ -81,7 +79,6 @@ it('utilities have source maps', async () => {
   expect(sources).not.toContain('<no source>')
   expect(sources.length).toBe(1)
 
-  // It would make the tests nicer to read and write
   expect(annotations).toStrictEqual(['2:4 -> 1:0', '2:4-23 -> 2:4-24', '2:4 -> 3:4', '2:23 -> 4:0'])
 })
 
@@ -102,6 +99,5 @@ it('components have source maps', async () => {
   expect(sources).not.toContain('<no source>')
   expect(sources.length).toBe(1)
 
-  // It would make the tests nicer to read and write
   expect(annotations).toMatchSnapshot()
 })
