@@ -471,6 +471,27 @@ The first argument is the modifier name that users will use in their HTML, so th
 </form>
 ```
 
+### Parent and sibling states
+
+Your custom modifiers won't automatically work with Tailwind's [parent](/docs/hover-focus-and-other-states#styling-based-on-parent-state) and [sibling](/docs/hover-focus-and-other-states#styling-based-on-sibling-state) state modifiers.
+
+To support the `group-*` and `peer-*` versions of your own custom modifiers, register them as separate variants using the special `:merge` directive to ensure the `.group` and `.peer` classes only appear once in the final selector.
+
+```js tailwind.config.js
+  const plugin = require('tailwindcss/plugin')
+
+  module.exports = {
+    // ...
+    plugins: [
+      plugin(function({ addVariant }) {
+        addVariant('optional', '&:optional')
+>       addVariant('group-optional', ':merge(.group):optional &')
+>       addVariant('peer-optional', ':merge(.peer):optional ~ &')
+      })
+    ]
+  }
+```
+
 ---
 
 ## Extending the configuration
