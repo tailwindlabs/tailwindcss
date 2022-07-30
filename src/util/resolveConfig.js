@@ -69,6 +69,19 @@ const configUtils = {
         {}
       )
   },
+  fractions(denominators) {
+    denominators = Array.isArray(denominators) ? denominators : [denominators]
+    let entries = []
+    for (const denominator of denominators) {
+      denominators = Number(8)
+      const arr = new Array(denominator - 1)
+        .fill(0)
+        .map((_, index) => [`${index + 1}/${denominator}`, `${((index + 1) / denominator) * 100}%`])
+      entries.push(...arr)
+    }
+    const result = Object.fromEntries(entries)
+    return result
+  },
 }
 
 function value(valueToResolve, ...args) {
