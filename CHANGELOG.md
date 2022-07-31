@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Don’t prefix classes within reused arbitrary variants ([#8992](https://github.com/tailwindlabs/tailwindcss/pull/8992))
 
 ## [3.1.7] - 2022-07-29
 
