@@ -129,7 +129,6 @@ function applyVariant(variant, matches, context) {
   }
 
   let args
-  let isArbitraryVariant = false
 
   // Find partial arbitrary variants
   if (variant.endsWith(']') && !variant.startsWith('[')) {
@@ -144,8 +143,6 @@ function applyVariant(variant, matches, context) {
     if (!isValidVariantFormatString(selector)) {
       return []
     }
-
-    isArbitraryVariant = true
 
     let fn = parseVariant(selector)
 
@@ -303,7 +300,7 @@ function applyVariant(variant, matches, context) {
             ...meta,
             sort: variantSort | meta.sort,
             collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
-            isArbitraryVariant,
+            isArbitraryVariant: isArbitraryValue(variant),
           },
           clone.nodes[0],
         ]

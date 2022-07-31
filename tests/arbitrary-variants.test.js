@@ -566,3 +566,52 @@ test('classes in arbitrary variants should not be prefixed', () => {
     `)
   })
 })
+
+test('classes in the same arbitrary variant should not be prefixed', () => {
+  let config = {
+    prefix: 'tw-',
+    content: [
+      {
+        raw: `
+          <div class="[.foo_&]:tw-text-red-400 [.foo_&]:tw-bg-white">should not be red</div>
+          <div class="foo">
+            <div class="[.foo_&]:tw-text-red-400 [.foo_&]:tw-bg-white">should be red</div>
+          </div>
+          <div class="[&_.foo]:tw-text-red-400 [&_.foo]:tw-bg-white">
+            <div>should not be red</div>
+            <div class="foo">should be red</div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = `
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo .\[\.foo_\&\]\:tw-bg-white {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      }
+
+      .foo .\[\.foo_\&\]\:tw-text-red-400 {
+        --tw-text-opacity: 1;
+        color: rgb(248 113 113 / var(--tw-text-opacity));
+      }
+
+      .\[\&_\.foo\]\:tw-bg-white .foo {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      }
+
+      .\[\&_\.foo\]\:tw-text-red-400 .foo {
+        --tw-text-opacity: 1;
+        color: rgb(248 113 113 / var(--tw-text-opacity));
+      }
+    `)
+  })
+})
