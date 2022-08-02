@@ -180,7 +180,7 @@ function resolveFunctionKeys(object) {
         val = val[path[index++]]
 
         let shouldResolveAsFn =
-          isFunction(val) && (path.alpha === undefined || index < path.length - 1)
+          isFunction(val) && (path.alpha === undefined || index <= path.length - 1)
 
         val = shouldResolveAsFn ? val(resolvePath, configUtils) : val
       }

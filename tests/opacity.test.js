@@ -761,3 +761,70 @@ it('Theme functions can reference values with slashes in brackets', () => {
     `)
   })
 })
+
+it('works with opacity values defined as a placeholder or a function in when colors is a function', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div
+            class="bg-foo10 bg-foo20 bg-foo30 bg-foo40 bg-foo11 bg-foo21 bg-foo31 bg-foo41"
+          ></div>
+        `,
+      },
+    ],
+    theme: {
+      colors: () => ({
+        foobar1: ({ opacityValue }) => `rgb(255 100 0 / ${opacityValue ?? '100%'})`,
+        foobar2: `rgb(255 100 0 / <alpha-value>)`,
+        foobar3: {
+          100: ({ opacityValue }) => `rgb(255 100 0 / ${opacityValue ?? '100%'})`,
+          200: `rgb(255 100 0 / <alpha-value>)`,
+        },
+      }),
+      extend: {
+        backgroundColor: ({ theme }) => ({
+          foo10: theme('colors.foobar1'),
+          foo20: theme('colors.foobar2'),
+          foo30: theme('colors.foobar3.100'),
+          foo40: theme('colors.foobar3.200'),
+          foo11: theme('colors.foobar1 / 50%'),
+          foo21: theme('colors.foobar2 / 50%'),
+          foo31: theme('colors.foobar3.100 / 50%'),
+          foo41: theme('colors.foobar3.200 / 50%'),
+        }),
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .bg-foo10 {
+        background-color: rgb(255 100 0 / 100%);
+      }
+      .bg-foo20 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 100 0 / var(--tw-bg-opacity));
+      }
+      .bg-foo30 {
+        background-color: rgb(255 100 0 / 100%);
+      }
+      .bg-foo40 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 100 0 / var(--tw-bg-opacity));
+      }
+      .bg-foo11 {
+        background-color: rgb(255 100 0 / 50%);
+      }
+      .bg-foo21 {
+        background-color: rgb(255 100 0 / 50%);
+      }
+      .bg-foo31 {
+        background-color: rgb(255 100 0 / 50%);
+      }
+      .bg-foo41 {
+        background-color: rgb(255 100 0 / 50%);
+      }
+    `)
+  })
+})
