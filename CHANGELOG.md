@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don’t prefix classes within reused arbitrary variants ([#8992](https://github.com/tailwindlabs/tailwindcss/pull/8992))
 - Fix usage of alpha values inside single-named colors that are functions ([#9008](https://github.com/tailwindlabs/tailwindcss/pull/9008))
 
+### Changed
+
+- Don't use `cursor: pointer` for buttons by default ([#8962](https://github.com/tailwindlabs/tailwindcss/pull/8962))
+
 ## [3.1.7] - 2022-07-29
 
 ### Fixed
@@ -21,10 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added types for `resolveConfig` ([#8924](https://github.com/tailwindlabs/tailwindcss/pull/8924))
-
-### Changed
-
-- Don't use `cursor: pointer` for buttons by default ([#8962](https://github.com/tailwindlabs/tailwindcss/pull/8962))
 
 ## [3.1.6] - 2022-07-11
 
