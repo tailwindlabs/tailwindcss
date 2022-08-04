@@ -1548,3 +1548,39 @@ it('apply + user CSS + selector variants (like group) + important selector (2)',
     }
   `)
 })
+
+it('can apply user utilities that start with a dash', async () => {
+  let config = {
+    content: [{ raw: html`<div class="foo-1 -foo-1 new-class"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo-1 {
+        margin: 10px;
+      }
+      .-foo-1 {
+        margin: -15px;
+      }
+      .new-class {
+        @apply -foo-1;
+      }
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo-1 {
+      margin: 10px;
+    }
+    .-foo-1 {
+      margin: -15px;
+    }
+    .new-class {
+      margin: -15px;
+    }
+  `)
+})
