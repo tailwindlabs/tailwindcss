@@ -499,6 +499,12 @@ function processApply(root, context, localCache) {
           })
         }
 
+        // It could be that the node we were inserted was removed because the class didn't match
+        // If that was the *only* rule in the parent, then we have nothing add so we skip it
+        if (!root.nodes[0]) {
+          continue
+        }
+
         // Insert it
         siblings.push([
           // Ensure that when we are sorting, that we take the layer order into account
