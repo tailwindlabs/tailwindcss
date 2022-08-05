@@ -13,10 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix usage of alpha values inside single-named colors that are functions ([#9008](https://github.com/tailwindlabs/tailwindcss/pull/9008))
 - Fix `@apply` of user utilities when negative and non-negative versions both exist ([#9027](https://github.com/tailwindlabs/tailwindcss/pull/9027))
 
-### Changed
-
-- Don't use `cursor: pointer` for buttons by default ([#8962](https://github.com/tailwindlabs/tailwindcss/pull/8962))
-
 ## [3.1.7] - 2022-07-29
 
 ### Fixed
