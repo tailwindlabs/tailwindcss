@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.1.8] - 2022-08-05
+
 ### Fixed
 
 - Don’t prefix classes within reused arbitrary variants ([#8992](https://github.com/tailwindlabs/tailwindcss/pull/8992))
@@ -2025,7 +2029,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.7...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.8...HEAD
+[3.1.8]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.7...v3.1.8
 [3.1.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.6...v3.1.7
 [3.1.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.5...v3.1.6
 [3.1.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.4...v3.1.5
