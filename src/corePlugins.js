@@ -1604,9 +1604,28 @@ export let corePlugins = {
     matchUtilities({ align: (value) => ({ 'vertical-align': value }) })
   },
 
-  fontFamily: createUtilityPlugin('fontFamily', [['font', ['fontFamily']]], {
-    type: ['lookup', 'generic-name', 'family-name'],
-  }),
+  fontFamily: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        font: (value) => {
+          let [families, options = {}] =
+            Array.isArray(value) && isPlainObject(value[1]) ? value : [value]
+          let { fontFeatureSettings } = options
+
+          return {
+            'font-family': Array.isArray(families) ? families.join(', ') : families,
+            ...(fontFeatureSettings === undefined
+              ? {}
+              : { 'font-feature-settings': fontFeatureSettings }),
+          }
+        },
+      },
+      {
+        values: theme('fontFamily'),
+        type: ['lookup', 'generic-name', 'family-name'],
+      }
+    )
+  },
 
   fontSize: ({ matchUtilities, theme }) => {
     matchUtilities(
