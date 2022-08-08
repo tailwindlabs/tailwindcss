@@ -464,7 +464,7 @@ function TopLevelNav({ mobile }) {
       <TopLevelLink
         mobile={mobile}
         href="https://github.com/tailwindlabs/tailwindcss/discussions"
-        className="mb-8"
+        className="mb-4"
         shadow="group-hover:shadow-violet-200 dark:group-hover:bg-violet-500"
         icon={
           <>
@@ -508,6 +508,48 @@ function TopLevelNav({ mobile }) {
         }
       >
         Community
+      </TopLevelLink>
+      <TopLevelLink
+        mobile={mobile}
+        href="https://github.com/tailwindlabs/tailwindcss/discussions"
+        className="mb-8"
+        shadow="group-hover:shadow-sky-200 dark:group-hover:bg-sky-500"
+        icon={
+          <>
+            <path
+              className={clsx(
+                'fill-sky-200 group-hover:fill-sky-300 dark:group-hover:fill-sky-200',
+                mobile ? 'dark:fill-slate-500' : 'dark:fill-slate-500'
+              )}
+              d="M5.5 14.361v3.14A1.5 1.5 0 007 19h10a1.5 1.5 0 001.5-1.5v-3.14c-2.102.42-4.275.64-6.5.64-2.225 0-4.399-.22-6.5-.64z"
+            />
+            <path
+              className={clsx(
+                'fill-sky-400 group-hover:fill-sky-500 dark:group-hover:fill-sky-300',
+                mobile ? 'dark:fill-slate-500' : 'dark:fill-slate-400'
+              )}
+              fill-rule="evenodd"
+              d="M9 6.5V7H6.5A1.5 1.5 0 005 8.5v3.53c0 .702.487 1.315 1.178 1.442C8.066 13.819 10.012 14 12 14s3.934-.181 5.822-.528A1.454 1.454 0 0019 12.03V8.5A1.5 1.5 0 0017.5 7H15v-.5A1.5 1.5 0 0013.5 5h-3A1.5 1.5 0 009 6.5zm1 0a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V7h-4v-.5zm2 6.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+              clip-rule="evenodd"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r=".75"
+              className={clsx(
+                'fill-white dark:group-hover:fill-white',
+                mobile ? 'dark:fill-slate-500' : 'dark:fill-slate-700'
+              )}
+            />
+          </>
+        }
+      >
+        <span className="inline-flex items-baseline">
+          Jobs{' '}
+          <span className="ml-2 font-medium text-xs leading-5 rounded-full text-sky-600 bg-sky-400/10 px-2 py-0.5  dark:text-sky-400">
+            New
+          </span>
+        </span>
       </TopLevelLink>
     </>
   )
