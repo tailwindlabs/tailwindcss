@@ -511,7 +511,7 @@ function TopLevelNav({ mobile }) {
       </TopLevelLink>
       <TopLevelLink
         mobile={mobile}
-        href="https://github.com/tailwindlabs/tailwindcss/discussions"
+        href="https://jobs.tailwindcss.com"
         className="mb-8"
         shadow="group-hover:shadow-sky-200 dark:group-hover:bg-sky-500"
         icon={
