@@ -660,8 +660,8 @@ async function build() {
         })
         .then(() => {
           let end = process.hrtime.bigint()
-          console.error()
-          console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
+          console.log()
+          console.log('Done in', (end - start) / BigInt(1e6) + 'ms.')
         })
     }
 
@@ -805,7 +805,7 @@ async function build() {
           })
           .then(() => {
             let end = process.hrtime.bigint()
-            console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
+            console.log('Done in', (end - start) / BigInt(1e6) + 'ms.')
           })
           .catch((err) => {
             if (err.name === 'CssSyntaxError') {
