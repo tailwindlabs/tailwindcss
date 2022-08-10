@@ -11,9 +11,10 @@ export default function getAllConfigs(config) {
     // Add experimental configs here...
     respectDefaultRingColorOpacity: {
       theme: {
-        ringColor: {
+        ringColor: ({ theme }) => ({
           DEFAULT: '#3b82f67f',
-        },
+          ...theme('colors'),
+        }),
       },
     },
   }
