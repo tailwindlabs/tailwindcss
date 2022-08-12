@@ -5,7 +5,7 @@
   "scripts": {
     "build": "pkg . --compress Brotli --no-bytecode --public-packages \"*\" --public",
     "prebuild": "rimraf dist",
-    "postbuild": "move-file dist/tailwindcss-standalone-macos-x64 dist/tailwindcss-macos-x64 && move-file dist/tailwindcss-standalone-macos-arm64 dist/tailwindcss-macos-arm64 && move-file dist/tailwindcss-standalone-win-x64.exe dist/tailwindcss-windows-x64.exe && move-file dist/tailwindcss-standalone-linuxstatic-x64 dist/tailwindcss-linux-x64 && move-file dist/tailwindcss-standalone-linuxstatic-arm64 dist/tailwindcss-linux-arm64",
+    "postbuild": "move-file dist/tailwindcss-standalone-macos-x64 dist/tailwindcss-macos-x64 && move-file dist/tailwindcss-standalone-macos-arm64 dist/tailwindcss-macos-arm64 && move-file dist/tailwindcss-standalone-win-x64.exe dist/tailwindcss-windows-x64.exe && move-file dist/tailwindcss-standalone-linuxstatic-x64 dist/tailwindcss-linux-x64 && move-file dist/tailwindcss-standalone-linuxstatic-arm64 dist/tailwindcss-linux-arm64 && move-file dist/tailwindcss-standalone-linuxstatic-armv7 dist/tailwindcss-linux-armv7",
     "test": "jest"
   },
   "devDependencies": {
@@ -27,7 +27,8 @@
       "node16-macos-arm64",
       "node16-win-x64",
       "node16-linuxstatic-x64",
-      "node16-linuxstatic-arm64"
+      "node16-linuxstatic-arm64",
+      "node16-linuxstatic-armv7"
     ],
     "outputPath": "dist"
   }
