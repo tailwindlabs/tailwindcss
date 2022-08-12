@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add support fo configuring default `font-feature-settings` for a font family ([#9039](https://github.com/tailwindlabs/tailwindcss/pull/9039))
+- Add a standalone CLI build for 32-bit Linux on ARM (`node16-linux-armv7`) ([#9084](https://github.com/tailwindlabs/tailwindcss/pull/9084))
 
 ### Fixed
 
