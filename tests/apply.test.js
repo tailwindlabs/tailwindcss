@@ -1641,7 +1641,10 @@ it('can apply joined classes when using elements', async () => {
   `)
 })
 
-it('can produce selectors that replace multiple instances of the same class', async () => {
+it('should not replace multiple instances of the same class in a single selector', async () => {
+  // NOTE: This test is non-normative and is not part of the spec of how `@apply` works per-se
+  // It describes how it currently works because the "correct" way produces a combinatorial explosion
+  // of selectors that is not easily doable
   let config = {
     content: [{ raw: html`<div class="foo-1 -foo-1 new-class"></div>` }],
     plugins: [],
@@ -1674,14 +1677,16 @@ it('can produce selectors that replace multiple instances of the same class', as
     .bar + .bar {
       color: fuchsia;
     }
-    header + header {
+    header + .foo {
       color: blue;
     }
-    main + main {
+    main + .foo {
       color: blue;
+    }
+    main + .bar {
       color: fuchsia;
     }
-    footer + footer {
+    footer + .bar {
       color: fuchsia;
     }
   `)

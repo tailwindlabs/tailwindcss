@@ -315,10 +315,24 @@ function processApply(root, context, localCache) {
       let replaced = new Set()
 
       utilitySelectorsList.each((utilitySelector) => {
+        let hasReplaced = false
         utilitySelector = utilitySelector.clone()
 
         utilitySelector.walkClasses((node) => {
           if (node.value !== candidateClass.value) {
+            return
+          }
+
+          // Don't replace multiple instances of the same class
+          // This is theoretically correct but only partially
+          // We'd need to generate every possible permutation of the replacement
+          // For example with `.foo + .foo { … }` and `section { @apply foo; }`
+          // We'd need to generate all of these:
+          // - `.foo + .foo`
+          // - `.foo + section`
+          // - `section + .foo`
+          // - `section + section`
+          if (hasReplaced) {
             return
           }
 
@@ -329,6 +343,8 @@ function processApply(root, context, localCache) {
 
           // Record that we did something and we want to use this new selector
           replaced.add(utilitySelector)
+
+          hasReplaced = true
         })
       })
 
