@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use absolute paths when resolving changed files for resilience against working directory changes ([#9032](https://github.com/tailwindlabs/tailwindcss/pull/9032))
 - Fix ring color utility generation when using `respectDefaultRingColorOpacity` ([#9070](https://github.com/tailwindlabs/tailwindcss/pull/9070))
+- Replace all occurrences of a class in a selector when using `@apply` ([#9107](https://github.com/tailwindlabs/tailwindcss/pull/9107))
+- Sort tags before classes when `@applying` a selector with joined classes ([#9107](https://github.com/tailwindlabs/tailwindcss/pull/9107))
 
 ## [3.1.8] - 2022-08-05
 

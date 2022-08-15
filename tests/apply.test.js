@@ -1584,3 +1584,105 @@ it('can apply user utilities that start with a dash', async () => {
     }
   `)
 })
+
+it('can apply joined classes when using elements', async () => {
+  let config = {
+    content: [{ raw: html`<div class="foo-1 -foo-1 new-class"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    .foo.bar {
+      color: red;
+    }
+    .bar.foo {
+      color: green;
+    }
+    header:nth-of-type(odd) {
+      @apply foo;
+    }
+    main {
+      @apply foo bar;
+    }
+    footer {
+      @apply bar;
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo.bar {
+      color: red;
+    }
+    .bar.foo {
+      color: green;
+    }
+    header.bar:nth-of-type(odd) {
+      color: red;
+      color: green;
+    }
+    main.bar {
+      color: red;
+    }
+    main.foo {
+      color: red;
+    }
+    main.bar {
+      color: green;
+    }
+    main.foo {
+      color: green;
+    }
+    footer.foo {
+      color: red;
+      color: green;
+    }
+  `)
+})
+
+it('can produce selectors that replace multiple instances of the same class', async () => {
+  let config = {
+    content: [{ raw: html`<div class="foo-1 -foo-1 new-class"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    .foo + .foo {
+      color: blue;
+    }
+    .bar + .bar {
+      color: fuchsia;
+    }
+    header {
+      @apply foo;
+    }
+    main {
+      @apply foo bar;
+    }
+    footer {
+      @apply bar;
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo + .foo {
+      color: blue;
+    }
+    .bar + .bar {
+      color: fuchsia;
+    }
+    header + header {
+      color: blue;
+    }
+    main + main {
+      color: blue;
+      color: fuchsia;
+    }
+    footer + footer {
+      color: fuchsia;
+    }
+  `)
+})
