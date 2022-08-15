@@ -528,9 +528,9 @@ function TopLevelNav({ mobile }) {
                 'fill-sky-400 group-hover:fill-sky-500 dark:group-hover:fill-sky-300',
                 mobile ? 'dark:fill-slate-500' : 'dark:fill-slate-400'
               )}
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M9 6.5V7H6.5A1.5 1.5 0 005 8.5v3.53c0 .702.487 1.315 1.178 1.442C8.066 13.819 10.012 14 12 14s3.934-.181 5.822-.528A1.454 1.454 0 0019 12.03V8.5A1.5 1.5 0 0017.5 7H15v-.5A1.5 1.5 0 0013.5 5h-3A1.5 1.5 0 009 6.5zm1 0a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V7h-4v-.5zm2 6.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             />
             <circle
               cx="12"
