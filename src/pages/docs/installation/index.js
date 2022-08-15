@@ -1,7 +1,7 @@
+import { Steps } from '@/components/Steps'
 import { DocumentationLayout } from '@/layouts/DocumentationLayout'
 import { InstallationLayout } from '@/layouts/InstallationLayout'
-import { Cta } from '@/components/Cta'
-import { Steps } from '@/components/Steps'
+import Link from 'next/link'
 
 let steps = [
   {
@@ -28,7 +28,7 @@ let steps = [
     code: {
       name: 'tailwind.config.js',
       lang: 'js',
-      code: `  /** @type {import('tailwindcss').Config} */ 
+      code: `  /** @type {import('tailwindcss').Config} */
   module.exports = {
 >   content: ["./src/**/*.{html,js}"],
     theme: {
@@ -99,7 +99,11 @@ export default function TailwindCli({ code }) {
         <h3 className="sr-only">Installing Tailwind CLI</h3>
         <p>
           The simplest and fastest way to get up and running with Tailwind CSS from scratch is with
-          the Tailwind CLI tool.
+          the Tailwind CLI tool. The CLI is also available as a{' '}
+          <Link href="/blog/standalone-cli">
+            <a>standalone executable</a>
+          </Link>{' '}
+          if you want to use it without installing Node.js.
         </p>
       </div>
       <Steps level={4} steps={steps} code={code} />
