@@ -17,6 +17,17 @@ export default function getAllConfigs(config) {
         }),
       },
     },
+
+    disableColorOpacityUtilitiesByDefault: {
+      corePlugins: {
+        backgroundOpacity: false,
+        borderOpacity: false,
+        divideOpacity: false,
+        placeholderOpacity: false,
+        ringOpacity: false,
+        textOpacity: false,
+      },
+    },
   }
 
   const experimentals = Object.keys(features)
