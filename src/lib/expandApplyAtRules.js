@@ -332,6 +332,24 @@ function processApply(root, context, localCache) {
         })
       })
 
+      // Sort tag names before class names
+      // This happens when replacing `.bar` in `.foo.bar` with a tag like `section`
+      for (const sel of replaced) {
+        sel.sort((a, b) => {
+          if (a.type === 'tag' && b.type === 'class') {
+            return -1
+          } else if (a.type === 'class' && b.type === 'tag') {
+            return 1
+          } else if (a.type === 'class' && b.type === 'pseudo') {
+            return -1
+          } else if (a.type === 'pseudo' && b.type === 'class') {
+            return 1
+          }
+
+          return sel.index(a) - sel.index(b)
+        })
+      }
+
       sel.replaceWith(...replaced)
     })
 
