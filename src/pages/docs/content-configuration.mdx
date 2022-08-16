@@ -260,6 +260,21 @@ If you've created your own reusable set of components that are styled with Tailw
 
 This will make sure Tailwind generates all of the CSS needed for those components as well.
 
+If you're working in a monorepo with workspaces, you may need to use `require.resolve` to make sure Tailwind can see your content files:
+
+```js tailwind.config.js
+  const path = require('path');
+
+  module.exports = {
+    content: [
+      './components/**/*.{html,js}',
+      './pages/**/*.{html,js}',
+>    path.join(require.resolve('@my-company/tailwind-components'), '**/*.js'),
+    ],
+    // ...
+  }
+```
+
 ### Configuring raw content
 
 If for whatever reason you need to configure Tailwind to scan some raw content rather than the contents of a file, use an object with a `raw` key instead of a path:
