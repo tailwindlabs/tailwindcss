@@ -98,12 +98,12 @@ let steps = [
     title: 'Import the CSS file',
     body: () => (
       <p>
-        Create a <code>./src/routes/__layout.svelte</code> file and import the newly-created{' '}
+        Create a <code>./src/routes/+layout.svelte</code> file and import the newly-created{' '}
         <code>app.css</code> file.
       </p>
     ),
     code: {
-      name: '__layout.svelte',
+      name: '+layout.svelte',
       lang: 'html',
       code: `<script>
   import "../app.css";
@@ -129,7 +129,7 @@ let steps = [
     title: 'Start using Tailwind in your project',
     body: () => <p>Start using Tailwind’s utility classes to style your content.</p>,
     code: {
-      name: 'index.svelte',
+      name: '+page.svelte',
       lang: 'html',
       code: `<h1 class="text-3xl font-bold underline">
   Hello world!
