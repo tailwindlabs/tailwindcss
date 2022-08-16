@@ -256,7 +256,7 @@ function extractApplyCandidates(params) {
   return [candidates, false]
 }
 
-function processApply(root, context, localCache, result) {
+function processApply(root, context, localCache, result, depth = 0) {
   let applyCandidates = new Set()
 
   // Collect all @apply rules and candidates
@@ -275,6 +275,12 @@ function processApply(root, context, localCache, result) {
   // Start the @apply process if we have rules with @apply in them
   if (applies.length === 0) {
     return
+  }
+
+  if (depth > 0) {
+    for (const applyNode of applies) {
+      applyNode.warn(result, `Deprecation: @apply will not support nested expansion in the future.`)
+    }
   }
 
   // Fill up some caches!
@@ -623,7 +629,7 @@ function processApply(root, context, localCache, result) {
   }
 
   // Do it again, in case we have other `@apply` rules
-  processApply(root, context, localCache, result)
+  processApply(root, context, localCache, result, depth + 1)
 }
 
 export default function expandApplyAtRules(context) {

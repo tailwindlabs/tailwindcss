@@ -1938,6 +1938,33 @@ it('warns when using multiple classes when one is inside :has()', async () => {
   await showsWarnings(run(input, config), [/with multiple classes/])
 })
 
+it('warns when nested applies are encountered', async () => {
+  let config = {
+    content: [{ raw: html`<div class="qux"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo {
+        color: red;
+      }
+      .bar {
+        @apply foo;
+      }
+      .baz {
+        @apply bar;
+      }
+    }
+    .qux {
+      @apply baz;
+    }
+  `
+
+  await showsWarnings(run(input, config), [/nested expansion/, /nested expansion/])
+})
+
 async function showsWarnings(promise, expectedWarnings) {
   let result = await promise
   let warnings = result.messages.filter((msg) => msg.type === 'warning').map((msg) => msg.text)
