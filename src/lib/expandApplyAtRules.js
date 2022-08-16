@@ -399,15 +399,6 @@ function processApply(root, context, localCache, result) {
     if (classCount > 1) {
       return 'Deprecation: @apply will not support matching rules with multiple classes (before variants are applied)'
     }
-
-    let hasMultipleSimpleSelectors = false
-    ast.walkCombinators((node) => {
-      hasMultipleSimpleSelectors = true
-    })
-
-    if (hasMultipleSimpleSelectors) {
-      return 'Deprecation: @apply will not support matching rules with multiple selectors'
-    }
   }
 
   function warnIfNotAllowedInFuture(result, applyNode, matchedRules) {
