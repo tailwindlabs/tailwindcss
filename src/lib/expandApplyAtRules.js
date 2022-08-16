@@ -3,6 +3,7 @@ import parser from 'postcss-selector-parser'
 
 import { resolveMatches } from './generateRules'
 import escapeClassName from '../util/escapeClassName'
+import { flagEnabled } from '../featureFlags'
 
 /** @typedef {Map<string, [any, import('postcss').Rule[]]>} ApplyCache */
 
@@ -257,6 +258,7 @@ function extractApplyCandidates(params) {
 
 function processApply(root, context, localCache) {
   let applyCandidates = new Set()
+  let strictMode = flagEnabled(context.tailwindConfig, 'applyStrictMode')
 
   // Collect all @apply rules and candidates
   let applies = []
@@ -265,6 +267,7 @@ function processApply(root, context, localCache) {
 
     for (let util of candidates) {
       applyCandidates.add(util)
+      applyCandidates.add(extractBaseCandidates([util], context.tailwindConfig.separator)[0])
     }
 
     applies.push(rule)
@@ -370,6 +373,39 @@ function processApply(root, context, localCache) {
     return selectorList.toString()
   }
 
+  function throwIfNotAllowedInStrictMode(applyNode, matchedRules) {
+    if (!strictMode) {
+      return
+    }
+
+    // We do this because `.foo .foo` produces two matches pointing to the same rule
+    // We want the error message to be more specific so we remove duplicates
+    let rules = Array.from(new Set(matchedRules.map((rule) => rule[1])))
+
+    if (rules.length > 1) {
+      throw applyNode.error('Strict Mode: @apply does not support matching multiple rules')
+    }
+
+    let ast = extractSelectors(rules[0].selector)
+
+    if (ast.length > 1) {
+      throw applyNode.error(
+        'Strict Mode: @apply does not support matching rules with multiple selectors'
+      )
+    }
+
+    let classCount = 0
+    ast.walkClasses(() => {
+      classCount += 1
+    })
+
+    if (classCount > 1) {
+      throw applyNode.error(
+        'Strict Mode: @apply does not support matching rules with multiple classes (before variants are applied)'
+      )
+    }
+  }
+
   let perParentApplies = new Map()
 
   // Collect all apply candidates and their rules
@@ -409,6 +445,17 @@ function processApply(root, context, localCache) {
       }
 
       let rules = applyClassCache.get(applyCandidate)
+
+      if (strictMode) {
+        let baseApplyCandidate = extractBaseCandidates(
+          [applyCandidate],
+          context.tailwindConfig.separator
+        )[0]
+
+        let baseRules = applyClassCache.get(baseApplyCandidate)
+
+        throwIfNotAllowedInStrictMode(apply, baseRules)
+      }
 
       candidates.push([applyCandidate, important, rules])
     }

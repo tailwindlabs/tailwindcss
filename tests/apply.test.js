@@ -1691,3 +1691,185 @@ it('should not replace multiple instances of the same class in a single selector
     }
   `)
 })
+
+it('Strict mode: Apply supports simple utilities', async () => {
+  let config = {
+    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo {
+        color: blue;
+      }
+    }
+    .bar {
+      @apply foo;
+    }
+  `
+
+  let output = css`
+    .bar {
+      color: blue;
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(output)
+})
+
+it('Strict mode: Apply supports simple utilities with simple variants', async () => {
+  let config = {
+    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo {
+        color: blue;
+      }
+    }
+    .bar {
+      @apply hover:foo;
+    }
+  `
+
+  let output = css`
+    .bar:hover {
+      color: blue;
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(output)
+})
+
+it('Strict mode: Apply supports simple utilities with complex variants', async () => {
+  let config = {
+    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo {
+        color: blue;
+      }
+    }
+    .bar {
+      @apply group-hover:foo;
+    }
+  `
+
+  let output = css`
+    .group:hover .bar {
+      color: blue;
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(output)
+})
+
+it('Strict mode: Apply does not support multiple matching rules', async () => {
+  let config = {
+    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo {
+        color: blue;
+      }
+      .foo {
+        color: green;
+      }
+    }
+    .bar {
+      @apply foo;
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrow(/matching multiple rules/)
+})
+
+it('Strict mode: Apply does not support rules with multiple of the same class', async () => {
+  let config = {
+    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo .foo {
+        color: blue;
+      }
+    }
+    .bar {
+      @apply foo;
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrow(/with multiple classes/)
+})
+
+it('Strict mode: Apply does not support rules with multiple different classes', async () => {
+  let config = {
+    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo .baz {
+        color: blue;
+      }
+    }
+    .bar {
+      @apply foo;
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrow(/with multiple classes/)
+})
+
+it('Strict mode: Apply does not support rules with multiple selectors', async () => {
+  let config = {
+    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo,
+      .baz {
+        color: blue;
+      }
+    }
+    .bar {
+      @apply foo;
+    }
+  `
+
+  await expect(run(input, config)).rejects.toThrow(/with multiple selectors/)
+})
