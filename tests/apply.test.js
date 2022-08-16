@@ -1692,9 +1692,8 @@ it('should not replace multiple instances of the same class in a single selector
   `)
 })
 
-it('Strict mode: Apply supports simple utilities', async () => {
+it('does not warn for simple utilities', async () => {
   let config = {
-    experimental: { applyStrictMode: true },
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
   }
@@ -1711,20 +1710,11 @@ it('Strict mode: Apply supports simple utilities', async () => {
     }
   `
 
-  let output = css`
-    .bar {
-      color: blue;
-    }
-  `
-
-  let result = await run(input, config)
-
-  expect(result.css).toMatchFormattedCss(output)
+  await doesNotShowWarnings(run(input, config))
 })
 
-it('Strict mode: Apply supports simple utilities with simple variants', async () => {
+it('does not warn for simple utilities with simple variants', async () => {
   let config = {
-    experimental: { applyStrictMode: true },
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
   }
@@ -1741,20 +1731,11 @@ it('Strict mode: Apply supports simple utilities with simple variants', async ()
     }
   `
 
-  let output = css`
-    .bar:hover {
-      color: blue;
-    }
-  `
-
-  let result = await run(input, config)
-
-  expect(result.css).toMatchFormattedCss(output)
+  await doesNotShowWarnings(run(input, config))
 })
 
-it('Strict mode: Apply supports simple utilities with complex variants', async () => {
+it('does not warn for simple utilities with complex variants', async () => {
   let config = {
-    experimental: { applyStrictMode: true },
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
   }
@@ -1771,20 +1752,11 @@ it('Strict mode: Apply supports simple utilities with complex variants', async (
     }
   `
 
-  let output = css`
-    .group:hover .bar {
-      color: blue;
-    }
-  `
-
-  let result = await run(input, config)
-
-  expect(result.css).toMatchFormattedCss(output)
+  await doesNotShowWarnings(run(input, config))
 })
 
-it('Strict mode: Apply does not support multiple matching rules', async () => {
+it('warns when matching multiple rules', async () => {
   let config = {
-    experimental: { applyStrictMode: true },
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
   }
@@ -1804,12 +1776,32 @@ it('Strict mode: Apply does not support multiple matching rules', async () => {
     }
   `
 
-  await expect(run(input, config)).rejects.toThrow(/matching multiple rules/)
+  await showsWarnings(run(input, config), [/matching multiple rules/])
 })
 
-it('Strict mode: Apply does not support rules with multiple of the same class', async () => {
+it('warns when matching rules that extend built in utilities', async () => {
   let config = {
-    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      header .bg-red-500 {
+        text-decoration: underline;
+      }
+    }
+    .bar {
+      @apply bg-red-500;
+    }
+  `
+
+  await showsWarnings(run(input, config), [/matching multiple rules/])
+})
+
+it('warns when matching rules with multiple of the same class', async () => {
+  let config = {
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
   }
@@ -1826,12 +1818,11 @@ it('Strict mode: Apply does not support rules with multiple of the same class', 
     }
   `
 
-  await expect(run(input, config)).rejects.toThrow(/with multiple classes/)
+  await showsWarnings(run(input, config), [/with multiple classes/])
 })
 
-it('Strict mode: Apply does not support rules with multiple different classes', async () => {
+it('warns when matching rules with multiple different classes', async () => {
   let config = {
-    experimental: { applyStrictMode: true },
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
   }
@@ -1848,12 +1839,32 @@ it('Strict mode: Apply does not support rules with multiple different classes', 
     }
   `
 
-  await expect(run(input, config)).rejects.toThrow(/with multiple classes/)
+  await showsWarnings(run(input, config), [/with multiple classes/])
 })
 
-it('Strict mode: Apply does not support rules with multiple selectors', async () => {
+it('warns when matching rules with multiple simple selectors', async () => {
   let config = {
-    experimental: { applyStrictMode: true },
+    content: [{ raw: html`<div class="bar"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      header .foo {
+        color: blue;
+      }
+    }
+    .bar {
+      @apply foo;
+    }
+  `
+
+  await showsWarnings(run(input, config), [/with multiple selectors/])
+})
+
+it('warns when matching rules with multiple selectors', async () => {
+  let config = {
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
   }
@@ -1871,5 +1882,20 @@ it('Strict mode: Apply does not support rules with multiple selectors', async ()
     }
   `
 
-  await expect(run(input, config)).rejects.toThrow(/with multiple selectors/)
+  await showsWarnings(run(input, config), [/with multiple selectors/])
 })
+
+async function showsWarnings(promise, expectedWarnings) {
+  let result = await promise
+  let warnings = result.messages.filter((msg) => msg.type === 'warning').map((msg) => msg.text)
+
+  expect(warnings).toHaveLength(expectedWarnings.length)
+
+  for (let [index, actual] of warnings.entries()) {
+    expect(actual).toMatch(expectedWarnings[index])
+  }
+}
+
+async function doesNotShowWarnings(promise) {
+  await showsWarnings(promise, [])
+}

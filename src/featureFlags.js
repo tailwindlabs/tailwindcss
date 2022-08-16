@@ -11,11 +11,7 @@ let featureFlags = {
     'respectDefaultRingColorOpacity',
     'disableColorOpacityUtilitiesByDefault',
   ],
-  experimental: [
-    'applyStrictMode',
-    'optimizeUniversalDefaults',
-    'matchVariant' /* , 'variantGrouping' */,
-  ],
+  experimental: ['optimizeUniversalDefaults', 'matchVariant' /* , 'variantGrouping' */],
 }
 
 export function flagEnabled(config, flag) {

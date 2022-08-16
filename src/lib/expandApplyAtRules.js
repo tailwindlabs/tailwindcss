@@ -1,4 +1,4 @@
-import postcss from 'postcss'
+import postcss, { Result } from 'postcss'
 import parser from 'postcss-selector-parser'
 
 import { resolveMatches } from './generateRules'
@@ -256,9 +256,8 @@ function extractApplyCandidates(params) {
   return [candidates, false]
 }
 
-function processApply(root, context, localCache) {
+function processApply(root, context, localCache, result) {
   let applyCandidates = new Set()
-  let strictMode = flagEnabled(context.tailwindConfig, 'applyStrictMode')
 
   // Collect all @apply rules and candidates
   let applies = []
@@ -373,25 +372,19 @@ function processApply(root, context, localCache) {
     return selectorList.toString()
   }
 
-  function throwIfNotAllowedInStrictMode(applyNode, matchedRules) {
-    if (!strictMode) {
-      return
-    }
-
+  function strictModeErrorMessage(matchedRules) {
     // We do this because `.foo .foo` produces two matches pointing to the same rule
     // We want the error message to be more specific so we remove duplicates
     let rules = Array.from(new Set(matchedRules.map((rule) => rule[1])))
 
     if (rules.length > 1) {
-      throw applyNode.error('Strict Mode: @apply does not support matching multiple rules')
+      return '@apply does not support matching multiple rules'
     }
 
     let ast = extractSelectors(rules[0].selector)
 
     if (ast.length > 1) {
-      throw applyNode.error(
-        'Strict Mode: @apply does not support matching rules with multiple selectors'
-      )
+      return '@apply does not support matching rules with multiple selectors'
     }
 
     let classCount = 0
@@ -400,10 +393,27 @@ function processApply(root, context, localCache) {
     })
 
     if (classCount > 1) {
-      throw applyNode.error(
-        'Strict Mode: @apply does not support matching rules with multiple classes (before variants are applied)'
-      )
+      return '@apply does not support matching rules with multiple classes (before variants are applied)'
     }
+
+    let hasMultipleSimpleSelectors = false
+    ast.walkCombinators((node) => {
+      hasMultipleSimpleSelectors = true
+    })
+
+    if (hasMultipleSimpleSelectors) {
+      return '@apply does not support matching rules with multiple selectors'
+    }
+  }
+
+  function warnIfNotAllowedInFuture(result, applyNode, matchedRules) {
+    let message = strictModeErrorMessage(matchedRules)
+
+    if (message === undefined) {
+      return
+    }
+
+    applyNode.warn(result, message)
   }
 
   let perParentApplies = new Map()
@@ -446,16 +456,14 @@ function processApply(root, context, localCache) {
 
       let rules = applyClassCache.get(applyCandidate)
 
-      if (strictMode) {
-        let baseApplyCandidate = extractBaseCandidates(
-          [applyCandidate],
-          context.tailwindConfig.separator
-        )[0]
+      let baseApplyCandidate = extractBaseCandidates(
+        [applyCandidate],
+        context.tailwindConfig.separator
+      )[0]
 
-        let baseRules = applyClassCache.get(baseApplyCandidate)
+      let baseRules = applyClassCache.get(baseApplyCandidate)
 
-        throwIfNotAllowedInStrictMode(apply, baseRules)
-      }
+      warnIfNotAllowedInFuture(result, apply, baseRules)
 
       candidates.push([applyCandidate, important, rules])
     }
@@ -620,14 +628,14 @@ function processApply(root, context, localCache) {
   }
 
   // Do it again, in case we have other `@apply` rules
-  processApply(root, context, localCache)
+  processApply(root, context, localCache, result)
 }
 
 export default function expandApplyAtRules(context) {
-  return (root) => {
+  return (root, result) => {
     // Build a cache of the user's CSS so we can use it to resolve classes used by @apply
     let localCache = lazyCache(() => buildLocalApplyCache(root, context))
 
-    processApply(root, context, localCache)
+    processApply(root, context, localCache, result)
   }
 }
