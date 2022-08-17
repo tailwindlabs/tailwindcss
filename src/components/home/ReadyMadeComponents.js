@@ -55,7 +55,7 @@ export function ReadyMadeComponents() {
           to choose from, and is guaranteed to help you find the perfect starting point for what you
           want to build.
         </Paragraph>
-        <Link href="https://tailwindui.com/" color="indigo" darkColor="gray">
+        <Link href="https://tailwindui.com/?ref=landing" color="indigo" darkColor="gray">
           Learn more
         </Link>
       </div>

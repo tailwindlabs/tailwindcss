@@ -129,7 +129,7 @@ export default function Resources() {
                   require('@/img/resources/tailwindui@75.jpg').default,
                 ],
                 color: 'text-sky-500',
-                href: 'https://tailwindui.com',
+                href: 'https://tailwindui.com/?ref=resources',
                 body: (
                   <>
                     <p>

@@ -286,7 +286,7 @@ function TopLevelNav({ mobile }) {
       </TopLevelLink>
       <TopLevelLink
         mobile={mobile}
-        href="https://tailwindui.com/components"
+        href="https://tailwindui.com/components?ref=sidebar"
         className="mb-4"
         shadow="group-hover:shadow-indigo-200 dark:group-hover:bg-indigo-500"
         icon={
@@ -319,7 +319,7 @@ function TopLevelNav({ mobile }) {
       </TopLevelLink>
       <TopLevelLink
         mobile={mobile}
-        href="https://tailwindui.com/templates"
+        href="https://tailwindui.com/templates?ref=sidebar"
         className="mb-4"
         shadow="group-hover:shadow-fuchsia-200 dark:group-hover:bg-fuchsia-600"
         icon={
