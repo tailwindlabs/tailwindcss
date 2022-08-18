@@ -22,8 +22,8 @@ export const classes = {
     }
     Object.keys(properties).forEach(key => {
       // TODO: This is iffy. Clean it up.
-      properties[key] = properties[key].replace(/calc\((\d+px) \* var\(.*\)\)/, "$1")
-      properties[key] = properties[key].replace(/calc\((\d+px) \* calc\(.*\)\)/, "0px")
+      properties[key] = properties[key].replace(/calc\((\d+px) \* var\(.*\)\)/, "0px")
+      properties[key] = properties[key].replace(/calc\((\d+px) \* calc\(.*\)\)/, "$1")
     })
     return properties
   },
