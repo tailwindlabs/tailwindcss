@@ -129,7 +129,7 @@ module.exports = withBundleAnalyzer({
 
     // Remove the 3px deadzone for drag gestures in Framer Motion
     config.module.rules.push({
-      test: /framer-motion/,
+      test: /node_modules\/framer-motion/,
       use: createLoader(function (source) {
         return source.replace(
           /var isDistancePastThreshold = .*?$/m,
