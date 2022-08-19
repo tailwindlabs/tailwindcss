@@ -1,10 +1,11 @@
 ---
-title: "Vertical Alignment"
+title: "Vertical Align"
 shortTitle: Vertical Align
 description: "Utilities for controlling the vertical alignment of an inline or table-cell box."
 ---
 
 import utilities from 'utilities?plugin=verticalAlign'
+import { ArbitraryValues } from '@/components/ArbitraryValues'
 import { BreakpointsAndMediaQueries } from '@/components/BreakpointsAndMediaQueries'
 import { HoverFocusAndOtherStates } from '@/components/HoverFocusAndOtherStates'
 
@@ -144,3 +145,11 @@ Use `align-text-bottom` to align the bottom of an element with the bottom of the
 ### <Heading ignore>Breakpoints and media queries</Heading>
 
 <BreakpointsAndMediaQueries defaultClass="align-middle" featuredClass="align-top" element="p" />
+
+---
+
+## Using custom values
+
+### Arbitrary values
+
+<ArbitraryValues property="vertical-align" featuredClass="align-[4px]" hasTheme={false} />
