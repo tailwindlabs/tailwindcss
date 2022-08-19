@@ -1990,6 +1990,7 @@ export let corePlugins = {
 
   outlineOffset: createUtilityPlugin('outlineOffset', [['outline-offset', ['outline-offset']]], {
     type: ['length', 'number', 'percentage'],
+    supportsNegativeValues: true,
   }),
 
   outlineColor: ({ matchUtilities, theme }) => {
