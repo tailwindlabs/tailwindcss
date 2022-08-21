@@ -82,6 +82,14 @@ This works for everything in the framework, including things like background col
 </div>
 ```
 
+It's even possible to use the [`theme` function](/docs/functions-and-directives#theme) to reference the design tokens in your `tailwind.config.js` file:
+
+```html
+<div class="grid grid-cols-[fit-content(theme(spacing.32))]">
+  <!-- ... -->
+</div>
+```
+
 ### Arbitrary properties
 
 If you ever need to use a CSS property that Tailwind doesn't include a utility for out of the box, you can also use square bracket notation to write completely arbitrary CSS:
