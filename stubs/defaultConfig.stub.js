@@ -540,6 +540,7 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
+      stretch: 'stretch',
     }),
     inset: ({ theme }) => ({
       auto: 'auto',
@@ -620,6 +621,7 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
+      stretch: 'stretch',
     }),
     maxWidth: ({ theme, breakpoints }) => ({
       none: 'none',
@@ -639,6 +641,7 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
+      stretch: 'stretch',
       prose: '65ch',
       ...breakpoints(theme('screens')),
     }),
@@ -649,6 +652,7 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
+      stretch: 'stretch',
     },
     minWidth: {
       0: '0px',
@@ -656,6 +660,7 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
+      stretch: 'stretch',
     },
     objectPosition: {
       bottom: 'bottom',
@@ -915,6 +920,7 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
+      stretch: 'stretch',
     }),
     willChange: {
       auto: 'auto',
