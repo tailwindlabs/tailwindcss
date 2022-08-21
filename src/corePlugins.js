@@ -1980,7 +1980,6 @@ export let corePlugins = {
       '.outline-dashed': { 'outline-style': 'dashed' },
       '.outline-dotted': { 'outline-style': 'dotted' },
       '.outline-double': { 'outline-style': 'double' },
-      '.outline-hidden': { 'outline-style': 'hidden' },
     })
   },
 
