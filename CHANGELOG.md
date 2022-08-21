@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use absolute paths when resolving changed files for resilience against working directory changes ([#9032](https://github.com/tailwindlabs/tailwindcss/pull/9032))
 - Fix ring color utility generation when using `respectDefaultRingColorOpacity` ([#9070](https://github.com/tailwindlabs/tailwindcss/pull/9070))
 - Sort tags before classes when `@applying` a selector with joined classes ([#9107](https://github.com/tailwindlabs/tailwindcss/pull/9107))
+- Remove invalid `outline-hidden` utility ([#9147](https://github.com/tailwindlabs/tailwindcss/pull/9147))
 
 ## [3.1.8] - 2022-08-05
 
