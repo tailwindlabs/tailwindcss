@@ -106,7 +106,7 @@ export default function Resources() {
                   require('@/img/resources/refactoringui@75.jpg').default,
                 ],
                 color: 'text-blue-500',
-                href: 'https://refactoringui.com',
+                href: 'https://refactoringui.com/?ref=resources',
                 body: (
                   <>
                     <p>
