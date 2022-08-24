@@ -855,6 +855,7 @@ async function build() {
     })
 
     let chain = Promise.resolve()
+    let pendingRebuilds = new Set()
 
     watcher.on('change', async (file) => {
       if (contextDependencies.has(file)) {
@@ -883,6 +884,41 @@ async function build() {
           await rebuild(config)
         })
       }
+    })
+
+    // Restore watching any files that are "removed"
+    // This can happen when a file is pseudo-atomically replaced (a copy is created, overwritten, the old one is unlinked, and the new one is renamed)
+    // TODO: An an optimization we should allow removal when the config changes
+    watcher.on('unlink', (file) => watcher.add(file))
+
+    // Some applications such as Visual Studio (but not VS Code)
+    // will only fire a rename event for atomic writes and not a change event
+    // This is very likely a chokidar bug but it's one we need to work around
+    // We treat this as a change event and rebuild the CSS
+    watcher.on('raw', (evt, filePath, meta) => {
+      if (evt !== 'rename') {
+        return
+      }
+
+      filePath = path.resolve(meta.watchedPath, filePath)
+
+      // Skip since we've already queued a rebuild for this file that hasn't happened yet
+      if (pendingRebuilds.has(filePath)) {
+        return
+      }
+
+      pendingRebuilds.add(filePath)
+
+      chain = chain.then(async () => {
+        pendingRebuilds.delete(filePath)
+
+        changedContent.push({
+          content: fs.readFileSync(path.resolve(filePath), 'utf8'),
+          extension: path.extname(filePath).slice(1),
+        })
+
+        await rebuild(config)
+      })
     })
 
     watcher.on('add', async (file) => {
