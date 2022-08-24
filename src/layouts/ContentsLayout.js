@@ -36,87 +36,91 @@ function TableOfContents({ tableOfContents, currentSection }) {
 
   return (
     <>
-      <h5 className="text-slate-900 font-semibold mb-4 text-sm leading-6 dark:text-slate-100">
-        On this page
-      </h5>
-      <ul className="text-slate-700 text-sm leading-6">
-        {tableOfContents.map((section) => (
-          <Fragment key={section.slug}>
-            <li>
-              <a
-                href={`#${section.slug}`}
-                onClick={closeNav}
-                className={clsx(
-                  'block py-1',
-                  pageHasSubsections ? 'font-medium' : '',
-                  isActive(section)
-                    ? 'font-medium text-sky-500 dark:text-sky-400'
-                    : 'hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300'
-                )}
-              >
-                {section.title}
-              </a>
-            </li>
-            {section.children.map((subsection) => (
-              <li className="ml-4" key={subsection.slug}>
+      <div className="px-8">
+        <h5 className="text-slate-900 font-semibold mb-4 text-sm leading-6 dark:text-slate-100">
+          On this page
+        </h5>
+        <ul className="text-slate-700 text-sm leading-6">
+          {tableOfContents.map((section) => (
+            <Fragment key={section.slug}>
+              <li>
                 <a
-                  href={`#${subsection.slug}`}
+                  href={`#${section.slug}`}
                   onClick={closeNav}
                   className={clsx(
-                    'group flex items-start py-1',
-                    isActive(subsection)
-                      ? 'text-sky-500 dark:text-sky-400'
+                    'block py-1',
+                    pageHasSubsections ? 'font-medium' : '',
+                    isActive(section)
+                      ? 'font-medium text-sky-500 dark:text-sky-400'
                       : 'hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300'
                   )}
                 >
-                  <svg
-                    width="3"
-                    height="24"
-                    viewBox="0 -9 3 24"
-                    className="mr-2 text-slate-400 overflow-visible group-hover:text-slate-600 dark:text-slate-600 dark:group-hover:text-slate-500"
-                  >
-                    <path
-                      d="M0 0L3 3L0 6"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  {subsection.title}
+                  {section.title}
                 </a>
               </li>
-            ))}
-          </Fragment>
-        ))}
-      </ul>
-      <div className="mt-16">
-        <a
-          href="https://www.refactoringui.com/?ref=sidebar"
-          className="relative block pt-80 -m-6 p-6 rounded-lg focus:outline-none focus:bg-slate-100 dark:focus:bg-slate-800/25"
-        >
-          <img
-            className="pointer-events-none h-[673px] w-[536px] max-w-none absolute -top-[112px] -right-6"
-            src="/img/refactoring-ui-sidebar.png"
-            alt="Refactoring UI by Adam Wathan and Steve Schoger"
-          />
-          <div>
-            <p className="text-[0.8125rem] font-semibold leading-5 text-sky-500 dark:text-sky-400">
-              From the creators of Tailwind CSS
-            </p>
-            <p className="mt-1 text-base font-bold tracking-tight leading-[1.375] text-slate-900 dark:text-slate-200">
-              Make your ideas look awesome, without relying on a designer.
-            </p>
-            <figure className="mt-6 pl-4 border-l border-slate-100 dark:border-slate-700">
-              <blockquote className="text-sm leading-5 text-slate-600 dark:text-slate-400">
-                “This is the survival kit I wish I had when I started building apps.”
-              </blockquote>
-              <figcaption className="mt-3 text-xs leading-5 text-slate-500">
-                Derrick Reimer, <span className="">SavvyCal</span>
-              </figcaption>
-            </figure>
-          </div>
-        </a>
+              {section.children.map((subsection) => (
+                <li className="ml-4" key={subsection.slug}>
+                  <a
+                    href={`#${subsection.slug}`}
+                    onClick={closeNav}
+                    className={clsx(
+                      'group flex items-start py-1',
+                      isActive(subsection)
+                        ? 'text-sky-500 dark:text-sky-400'
+                        : 'hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300'
+                    )}
+                  >
+                    <svg
+                      width="3"
+                      height="24"
+                      viewBox="0 -9 3 24"
+                      className="mr-2 text-slate-400 overflow-visible group-hover:text-slate-600 dark:text-slate-600 dark:group-hover:text-slate-500"
+                    >
+                      <path
+                        d="M0 0L3 3L0 6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    {subsection.title}
+                  </a>
+                </li>
+              ))}
+            </Fragment>
+          ))}
+        </ul>
+      </div>
+      <div className="mt-8 overflow-hidden">
+        <div className="p-8">
+          <a
+            href="https://www.refactoringui.com/?ref=sidebar"
+            className="relative block pt-80 -m-6 p-6 rounded-lg focus:outline-none focus:bg-slate-50 dark:focus:bg-slate-800/25"
+          >
+            <img
+              className="pointer-events-none h-[673px] w-[536px] max-w-none absolute -top-[112px] -right-6"
+              src="/img/refactoring-ui-sidebar.png"
+              alt="Refactoring UI by Adam Wathan and Steve Schoger"
+            />
+            <div>
+              <p className="text-[0.8125rem] font-semibold leading-5 text-sky-500 dark:text-sky-400">
+                From the creators of Tailwind CSS
+              </p>
+              <p className="mt-1 text-base font-bold tracking-tight leading-[1.375] text-slate-900 dark:text-slate-200">
+                Make your ideas look awesome, without relying on a designer.
+              </p>
+              <figure className="mt-6 pl-4 border-l border-slate-100 dark:border-slate-700">
+                <blockquote className="text-sm leading-5 text-slate-600 dark:text-slate-400">
+                  “This is the survival kit I wish I had when I started building apps.”
+                </blockquote>
+                <figcaption className="mt-3 text-xs leading-5 text-slate-500">
+                  Derrick Reimer, <span className="">SavvyCal</span>
+                </figcaption>
+              </figure>
+            </div>
+          </a>
+        </div>
       </div>
     </>
   )
@@ -240,7 +244,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents, secti
         </Link>
       </Footer>
 
-      <div className="fixed z-20 top-[3.8125rem] bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 px-8 overflow-y-auto hidden xl:block">
+      <div className="fixed z-20 top-[3.8125rem] bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto hidden xl:block">
         {toc.length > 0 && (
           <TableOfContents tableOfContents={toc} currentSection={currentSection} />
         )}
