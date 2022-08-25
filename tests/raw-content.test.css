@@ -43,6 +43,9 @@
 .invisible {
   visibility: hidden;
 }
+.collapsed {
+  visibility: collapse;
+}
 .absolute {
   position: absolute;
 }
