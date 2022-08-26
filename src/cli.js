@@ -904,11 +904,11 @@ async function build() {
      * @throws {Error} If the file is still missing or busy after the specified number of tries
      */
     async function readFileWithRetries(path, tries = 5) {
-      for (let n = 0; n < tries; n++) {
+      for (let n = 0; n <= tries; n++) {
         try {
           return await fs.promises.readFile(path, 'utf8')
         } catch (err) {
-          if (n < tries) {
+          if (n !== tries) {
             if (err.code === 'ENOENT' || err.code === 'EBUSY') {
               await new Promise((resolve) => setTimeout(resolve, 10))
 
@@ -935,7 +935,11 @@ async function build() {
         return
       }
 
-      filePath = path.resolve(meta.watchedPath, filePath)
+      let watchedPath = path.resolve(meta.watchedPath)
+
+      // Watched path might be the file itself
+      // Or the directory it is in
+      filePath = watchedPath.endsWith(filePath) ? watchedPath : path.resolve(watchedPath, filePath)
 
       // Skip since we've already queued a rebuild for this file that hasn't happened yet
       if (pendingRebuilds.has(filePath)) {
