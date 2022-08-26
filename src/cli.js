@@ -843,6 +843,11 @@ async function build() {
     }
 
     watcher = chokidar.watch([...contextDependencies, ...extractFileGlobs(config)], {
+      // Force checking for atomic writes in all situations
+      // This causes chokidar to wait up to 100ms for a file to re-added after it's been unlinked
+      // This only works when watching directories though
+      atomic: true,
+
       usePolling: shouldPoll,
       interval: shouldPoll ? pollInterval : undefined,
       ignoreInitial: true,
