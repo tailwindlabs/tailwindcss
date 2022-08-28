@@ -49,7 +49,7 @@ type SafelistConfig =
   | string[]
   | {
       pattern: RegExp
-      variants: string[]
+      variants?: string[]
     }[]
 
 // Presets related config
