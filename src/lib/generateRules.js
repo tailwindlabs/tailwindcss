@@ -649,8 +649,37 @@ function inKeyframes(rule) {
   return rule.parent && rule.parent.type === 'atrule' && rule.parent.name === 'keyframes'
 }
 
+function getImportantStrategy(important) {
+  if (important === true) {
+    return (rule) => {
+      if (inKeyframes(rule)) {
+        return
+      }
+
+      rule.walkDecls((d) => {
+        if (d.parent.type === 'rule' && !inKeyframes(d.parent)) {
+          d.important = true
+        }
+      })
+    }
+  }
+
+  if (typeof important === 'string') {
+    return (rule) => {
+      if (inKeyframes(rule)) {
+        return
+      }
+
+      rule.selectors = rule.selectors.map((selector) => {
+        return `${important} ${selector}`
+      })
+    }
+  }
+}
+
 function generateRules(candidates, context) {
   let allRules = []
+  let strategy = getImportantStrategy(context.tailwindConfig.important)
 
   for (let candidate of candidates) {
     if (context.notClassCache.has(candidate)) {
@@ -658,7 +687,11 @@ function generateRules(candidates, context) {
     }
 
     if (context.classCache.has(candidate)) {
-      allRules.push(context.classCache.get(candidate))
+      continue
+    }
+
+    if (context.candidateRuleCache.has(candidate)) {
+      allRules = allRules.concat(Array.from(context.candidateRuleCache.get(candidate)))
       continue
     }
 
@@ -670,47 +703,27 @@ function generateRules(candidates, context) {
     }
 
     context.classCache.set(candidate, matches)
-    allRules.push(matches)
-  }
 
-  // Strategy based on `tailwindConfig.important`
-  let strategy = ((important) => {
-    if (important === true) {
-      return (rule) => {
-        rule.walkDecls((d) => {
-          if (d.parent.type === 'rule' && !inKeyframes(d.parent)) {
-            d.important = true
-          }
-        })
-      }
-    }
+    let rules = context.candidateRuleCache.get(candidate) ?? new Set()
+    context.candidateRuleCache.set(candidate, rules)
 
-    if (typeof important === 'string') {
-      return (rule) => {
-        rule.selectors = rule.selectors.map((selector) => {
-          return `${important} ${selector}`
-        })
-      }
-    }
-  })(context.tailwindConfig.important)
+    for (const match of matches) {
+      let [{ sort, layer, options }, rule] = match
 
-  return allRules.flat(1).map(([{ sort, layer, options }, rule]) => {
-    if (options.respectImportant) {
-      if (strategy) {
+      if (options.respectImportant && strategy) {
         let container = postcss.root({ nodes: [rule.clone()] })
-        container.walkRules((r) => {
-          if (inKeyframes(r)) {
-            return
-          }
-
-          strategy(r)
-        })
+        container.walkRules(strategy)
         rule = container.nodes[0]
       }
-    }
 
-    return [sort | context.layerOrder[layer], rule]
-  })
+      let newEntry = [sort | context.layerOrder[layer], rule]
+      rules.add(newEntry)
+      context.ruleCache.add(newEntry)
+      allRules.push(newEntry)
+    }
+  }
+
+  return allRules
 }
 
 function isArbitraryValue(input) {
