@@ -686,10 +686,6 @@ function generateRules(candidates, context) {
       continue
     }
 
-    if (context.classCache.has(candidate)) {
-      continue
-    }
-
     if (context.candidateRuleCache.has(candidate)) {
       allRules = allRules.concat(Array.from(context.candidateRuleCache.get(candidate)))
       continue
