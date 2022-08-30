@@ -153,7 +153,14 @@ interface ThemeConfig {
   objectPosition: ResolvableTo<KeyValuePair>
   padding: ThemeConfig['spacing']
   textIndent: ThemeConfig['spacing']
-  fontFamily: ResolvableTo<KeyValuePair<string, string[]>>
+  fontFamily: ResolvableTo<
+    KeyValuePair<
+      string,
+      | string
+      | string[]
+      | [fontFamily: string | string[], configuration: Partial<{ fontFeatureSettings: string }>]
+    >
+  >
   fontSize: ResolvableTo<
     KeyValuePair<
       string,
