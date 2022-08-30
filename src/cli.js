@@ -962,11 +962,16 @@ async function build() {
         return
       }
 
-      let watchedPath = path.resolve(meta.watchedPath)
+      let watchedPath = meta.watchedPath
 
       // Watched path might be the file itself
       // Or the directory it is in
-      filePath = watchedPath.endsWith(filePath) ? watchedPath : path.resolve(watchedPath, filePath)
+      filePath = watchedPath.endsWith(filePath) ? watchedPath : path.join(watchedPath, filePath)
+
+      // Skip this event since the files it is for does not match any of the registered content globs
+      if (!micromatch.some([filePath], contentPatterns.all)) {
+        return
+      }
 
       // Skip since we've already queued a rebuild for this file that hasn't happened yet
       if (pendingRebuilds.has(filePath)) {
