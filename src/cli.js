@@ -17,6 +17,7 @@ import getModuleDependencies from './lib/getModuleDependencies'
 import log from './util/log'
 import packageJson from '../package.json'
 import normalizePath from 'normalize-path'
+import micromatch from 'micromatch'
 import { validateConfig } from './util/validateConfig.js'
 
 let env = {
@@ -837,6 +838,24 @@ async function build() {
     }
 
     let config = refreshConfig(configPath)
+    let contentPatterns = refreshContentPatterns(config)
+
+    /**
+     * @param {import('../types/config.js').RequiredConfig} config
+     * @return {{all: string[], dynamic: string[], static: string[]}}
+     **/
+    function refreshContentPatterns(config) {
+      let globs = extractFileGlobs(config)
+      let tasks = fastGlob.generateTasks(globs, { absolute: true })
+      let dynamic = tasks.filter((task) => task.dynamic).flatMap((task) => task.patterns)
+      let staticPatterns = tasks.filter((task) => !task.dynamic).flatMap((task) => task.patterns)
+
+      return {
+        all: [...staticPatterns, ...dynamicPatterns],
+        dynamic,
+        ['static']: staticPatterns,
+      }
+    }
 
     if (input) {
       contextDependencies.add(path.resolve(input))
@@ -867,6 +886,7 @@ async function build() {
         env.DEBUG && console.time('Resolve config')
         context = null
         config = refreshConfig(configPath)
+        contentPatterns = refreshContentPatterns(config)
         env.DEBUG && console.timeEnd('Resolve config')
 
         env.DEBUG && console.time('Watch new files')
@@ -924,7 +944,14 @@ async function build() {
     // Restore watching any files that are "removed"
     // This can happen when a file is pseudo-atomically replaced (a copy is created, overwritten, the old one is unlinked, and the new one is renamed)
     // TODO: An an optimization we should allow removal when the config changes
-    watcher.on('unlink', (file) => watcher.add(file))
+    watcher.on('unlink', (file) => {
+      file = normalizePath(file)
+
+      // Only re-add the file if it's not covered by a dynamic pattern
+      if (!micromatch.some([file], dynamicPatterns)) {
+        watcher.add(file)
+      }
+    })
 
     // Some applications such as Visual Studio (but not VS Code)
     // will only fire a rename event for atomic writes and not a change event
