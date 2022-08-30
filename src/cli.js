@@ -847,13 +847,12 @@ async function build() {
     function refreshContentPatterns(config) {
       let globs = extractFileGlobs(config)
       let tasks = fastGlob.generateTasks(globs, { absolute: true })
-      let dynamic = tasks.filter((task) => task.dynamic).flatMap((task) => task.patterns)
+      let dynamicPatterns = tasks.filter((task) => task.dynamic).flatMap((task) => task.patterns)
       let staticPatterns = tasks.filter((task) => !task.dynamic).flatMap((task) => task.patterns)
 
       return {
         all: [...staticPatterns, ...dynamicPatterns],
-        dynamic,
-        ['static']: staticPatterns,
+        dynamic: dynamicPatterns,
       }
     }
 
@@ -948,7 +947,7 @@ async function build() {
       file = normalizePath(file)
 
       // Only re-add the file if it's not covered by a dynamic pattern
-      if (!micromatch.some([file], dynamicPatterns)) {
+      if (!micromatch.some([file], contentPatterns.dynamic)) {
         watcher.add(file)
       }
     })
