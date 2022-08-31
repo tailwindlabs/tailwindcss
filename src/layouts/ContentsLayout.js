@@ -244,7 +244,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents, secti
         </Link>
       </Footer>
 
-      <div className="fixed z-20 top-[3.8125rem] bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto hidden xl:block">
+      <div className="fixed z-20 top-[3.8125rem] bottom-0 right-0 w-[19.5rem] py-10 overflow-y-auto hidden xl:block">
         {toc.length > 0 && (
           <TableOfContents tableOfContents={toc} currentSection={currentSection} />
         )}
