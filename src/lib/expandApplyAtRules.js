@@ -1,9 +1,8 @@
-import postcss, { Result } from 'postcss'
+import postcss from 'postcss'
 import parser from 'postcss-selector-parser'
 
 import { resolveMatches } from './generateRules'
 import escapeClassName from '../util/escapeClassName'
-import { flagEnabled } from '../featureFlags'
 
 /** @typedef {Map<string, [any, import('postcss').Rule[]]>} ApplyCache */
 
