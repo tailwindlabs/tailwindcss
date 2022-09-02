@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { lazyPostcss, lazyPostcssImport, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
+import { lazyPostcss, lazyPostcssImport, lazyParcelCss, lazyAutoprefixer } from '../peers/index.js'
 
 import chokidar from 'chokidar'
 import path from 'path'
@@ -353,6 +353,65 @@ if (args['--help']) {
 
 run()
 
+/// ---
+
+/** @type {import('@parcel/css')} */
+let parcelCss
+
+/** @returns {import('@parcel/css')} */
+function loadParcelCss() {
+  if (parcelCss) {
+    return parcelCss
+  }
+
+  // Try to load a local version first
+  try {
+    return parcelCss = require('@parcel/css')
+  } catch {}
+
+  return parcelCss = lazyParcelCss()
+}
+
+/**
+ *
+ * @param {boolean} shouldMinify
+ * @param {import('postcss').Result} result
+ * @returns {import('postcss').Result}
+ */
+async function minifyCss(shouldMinify, result) {
+  if (! shouldMinify) {
+    return result
+  }
+
+  let css = loadParcelCss()
+  let transformed
+
+  try {
+    transformed = css.transform({
+      filename: result.opts.from || 'input.css',
+      code: Buffer.from(result.css, 'utf-8'),
+      minify: true,
+      sourceMap: true,
+      sourceMap: !!result.map,
+      inputSourceMap: result.map ? result.map.toString() : undefined,
+    })
+  } catch (err) {
+    console.error("Unable to minify CSS. Using unminified version instead.")
+    console.error(err)
+
+    return result
+  }
+
+  return Object.assign(result, {
+    css: transformed.code.toString('utf8'),
+    map: result.map ? Object.assign(result.map, {
+      toString() {
+        return transformed.map.toString()
+      }
+    }) : result.map,
+  })
+}
+
 // ---
 
 function init() {
@@ -626,17 +685,6 @@ async function build() {
 
           return lazyAutoprefixer()
         })(),
-      args['--minify'] &&
-        (() => {
-          let options = { preset: ['default', { cssDeclarationSorter: false }] }
-
-          // Try to load a local `cssnano` version first
-          try {
-            return require('cssnano')
-          } catch {}
-
-          return lazyCssnano()(options)
-        })(),
     ].filter(Boolean)
 
     let postcss = loadPostcss()
@@ -647,6 +695,7 @@ async function build() {
       return Promise.resolve()
         .then(() => (output ? fs.promises.mkdir(path.dirname(output), { recursive: true }) : null))
         .then(() => processor.process(css, { ...postcssOptions, from: input, to: output }))
+        .then((result) => minifyCss(!!args['--minify'], result))
         .then((result) => {
           if (!output) {
             return process.stdout.write(result.css)
@@ -728,17 +777,6 @@ async function build() {
 
           return lazyAutoprefixer()
         })(),
-      args['--minify'] &&
-        (() => {
-          let options = { preset: ['default', { cssDeclarationSorter: false }] }
-
-          // Try to load a local `cssnano` version first
-          try {
-            return require('cssnano')
-          } catch {}
-
-          return lazyCssnano()(options)
-        })(),
     ].filter(Boolean)
 
     async function rebuild(config) {
@@ -785,6 +823,7 @@ async function build() {
             output ? fs.promises.mkdir(path.dirname(output), { recursive: true }) : null
           )
           .then(() => processor.process(css, { from: input, to: output }))
+          .then((result) => minifyCss(!!args['--minify'], result))
           .then(async (result) => {
             for (let message of result.messages) {
               if (message.type === 'dependency') {

@@ -10,6 +10,6 @@ export function lazyAutoprefixer() {
   return require('autoprefixer')
 }
 
-export function lazyCssnano() {
-  return require('cssnano')
+export function lazyParcelCss() {
+  return require('@parcel/css')
 }
