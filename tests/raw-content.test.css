@@ -43,7 +43,7 @@
 .invisible {
   visibility: hidden;
 }
-.collapsed {
+.collapse {
   visibility: collapse;
 }
 .absolute {
