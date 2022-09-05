@@ -359,7 +359,7 @@ video {
   height: auto;
 }
 
-/* Make elements with the HTML hidden attirubte stay hidden by default */
+/* Make elements with the HTML hidden attribute stay hidden by default */
 [hidden] {
   display: none;
 }

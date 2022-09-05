@@ -610,6 +610,45 @@ test('font-family values are joined when an array', () => {
   })
 })
 
+test('font-family values are retrieved without font-feature-settings', () => {
+  let input = css`
+    .heading-1 {
+      font-family: theme('fontFamily.sans');
+    }
+    .heading-2 {
+      font-family: theme('fontFamily.serif');
+    }
+    .heading-3 {
+      font-family: theme('fontFamily.mono');
+    }
+  `
+
+  let output = css`
+    .heading-1 {
+      font-family: Inter;
+    }
+    .heading-2 {
+      font-family: Times, serif;
+    }
+    .heading-3 {
+      font-family: Menlo, monospace;
+    }
+  `
+
+  return run(input, {
+    theme: {
+      fontFamily: {
+        sans: ['Inter', { fontFeatureSettings: '"cv11"' }],
+        serif: [['Times', 'serif'], { fontFeatureSettings: '"cv11"' }],
+        mono: ['Menlo, monospace', { fontFeatureSettings: '"cv11"' }],
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('box-shadow values are joined when an array', () => {
   let input = css`
     .element {

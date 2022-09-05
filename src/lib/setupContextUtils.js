@@ -873,6 +873,7 @@ export function createContext(tailwindConfig, changedContent = [], root = postcs
   let context = {
     disposables: [],
     ruleCache: new Set(),
+    candidateRuleCache: new Map(),
     classCache: new Map(),
     applyClassCache: new Map(),
     notClassCache: new Set(),
