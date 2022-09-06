@@ -22,6 +22,7 @@ import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { generateRules } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
+import { Offsets } from './offsets.js'
 
 let MATCH_VARIANT = Symbol()
 
@@ -201,6 +202,13 @@ export function parseVariant(variant) {
   }
 }
 
+/**
+ *
+ * @param {any} tailwindConfig
+ * @param {any} context
+ * @param {object} param2
+ * @param {Offsets} param2.offsets
+ */
 function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets, classList }) {
   function getConfigValue(path, defaultValue) {
     return path ? dlv(tailwindConfig, path, defaultValue) : tailwindConfig
@@ -255,7 +263,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     addBase(base) {
       for (let [identifier, rule] of withIdentifiers(base)) {
         let prefixedIdentifier = prefixIdentifier(identifier, {})
-        let offset = offsets.base++
+        let offset = offsets.create('base')
 
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
@@ -284,7 +292,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push([{ sort: offsets.base++, layer: 'defaults' }, rule])
+          .push([{ sort: offsets.create('defaults'), layer: 'defaults' }, rule])
       }
     },
     addComponents(components, options) {
@@ -307,7 +315,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push([{ sort: offsets.components++, layer: 'components', options }, rule])
+          .push([{ sort: offsets.create('components'), layer: 'components', options }, rule])
       }
     },
     addUtilities(utilities, options) {
@@ -330,7 +338,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push([{ sort: offsets.utilities++, layer: 'utilities', options }, rule])
+          .push([{ sort: offsets.create('utilities'), layer: 'utilities', options }, rule])
       }
     },
     matchUtilities: function (utilities, options) {
@@ -341,7 +349,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       options = { ...defaultOptions, ...options }
 
-      let offset = offsets.utilities++
+      let offset = offsets.create('utilities')
 
       for (let identifier in utilities) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
@@ -393,7 +401,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       options = { ...defaultOptions, ...options }
 
-      let offset = offsets.components++
+      let offset = offsets.create('components')
 
       for (let identifier in components) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
@@ -641,12 +649,10 @@ function resolvePlugins(context, root) {
 function registerPlugins(plugins, context) {
   let variantList = []
   let variantMap = new Map()
-  let offsets = {
-    defaults: 0n,
-    base: 0n,
-    components: 0n,
-    utilities: 0n,
-  }
+  context.variantMap = variantMap
+
+  let offsets = new Offsets(context)
+  context.offsets = offsets
 
   let classList = new Set()
 
@@ -667,44 +673,12 @@ function registerPlugins(plugins, context) {
     }
   }
 
-  let highestOffset = ((args) => args.reduce((m, e) => (e > m ? e : m)))([
-    offsets.base,
-    offsets.defaults,
-    offsets.components,
-    offsets.utilities,
-  ])
-  let reservedBits = BigInt(highestOffset.toString(2).length)
-
-  // A number one less than the top range of the highest offset area
-  // so arbitrary properties are always sorted at the end.
-  context.arbitraryPropertiesSort = ((1n << reservedBits) << 0n) - 1n
-
-  context.layerOrder = {
-    defaults: (1n << reservedBits) << 0n,
-    base: (1n << reservedBits) << 1n,
-    components: (1n << reservedBits) << 2n,
-    utilities: (1n << reservedBits) << 3n,
-  }
-
-  reservedBits += 5n
-
-  let offset = 0
-  context.variantOrder = new Map(
-    variantList
-      .map((variant, i) => {
-        let variantFunctions = variantMap.get(variant).length
-        let bits = (1n << BigInt(i + offset)) << reservedBits
-        offset += variantFunctions - 1
-        return [variant, bits]
-      })
-      .sort(([, a], [, z]) => bigSign(a - z))
-  )
-
-  context.minimumScreen = [...context.variantOrder.values()].shift()
+  // Make sure to record bit masks for every variant
+  offsets.recordVariants(variantList)
 
   // Build variantMap
   for (let [variantName, variantFunctions] of variantMap.entries()) {
-    let sort = context.variantOrder.get(variantName)
+    let sort = offsets.forVariant(variantName)
     context.variantMap.set(
       variantName,
       variantFunctions.map((variantFunction, idx) => [sort << BigInt(idx), variantFunction])

@@ -146,9 +146,10 @@ function applyVariant(variant, matches, context) {
 
     let fn = parseVariant(selector)
 
-    let sort = Array.from(context.variantOrder.values()).pop() << 1n
+    // TODO: Test that this won't clash with reserved bits from the last registered variant
+    let sort = context.offsets.recordVariant(variant)
+
     context.variantMap.set(variant, [[sort, fn]])
-    context.variantOrder.set(variant, sort)
   }
 
   if (context.variantMap.has(variant)) {
@@ -298,7 +299,7 @@ function applyVariant(variant, matches, context) {
         let withOffset = [
           {
             ...meta,
-            sort: variantSort | meta.sort,
+            sort: context.offsets.applyVariantSort(meta.sort, variantSort),
             collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
             isArbitraryVariant: isArbitraryValue(variant),
           },
@@ -409,9 +410,11 @@ function extractArbitraryProperty(classCandidate, context) {
     return null
   }
 
+  let sort = context.offsets.create('utilities')
+
   return [
     [
-      { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
+      { sort, layer: 'utilities' },
       () => ({
         [asClass(classCandidate)]: {
           [property]: normalized,
@@ -704,7 +707,7 @@ function generateRules(candidates, context) {
     context.candidateRuleCache.set(candidate, rules)
 
     for (const match of matches) {
-      let [{ sort, layer, options }, rule] = match
+      let [{ sort, options }, rule] = match
 
       if (options.respectImportant && strategy) {
         let container = postcss.root({ nodes: [rule.clone()] })
@@ -712,7 +715,7 @@ function generateRules(candidates, context) {
         rule = container.nodes[0]
       }
 
-      let newEntry = [sort | context.layerOrder[layer], rule]
+      let newEntry = [sort, rule]
       rules.add(newEntry)
       context.ruleCache.add(newEntry)
       allRules.push(newEntry)

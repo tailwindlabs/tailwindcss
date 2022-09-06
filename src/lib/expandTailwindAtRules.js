@@ -1,10 +1,10 @@
 import LRU from 'quick-lru'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
-import bigSign from '../util/bigSign'
 import log from '../util/log'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
+import { Offsets } from './offsets.js'
 
 let env = sharedState.env
 
@@ -74,8 +74,13 @@ function getClassCandidates(content, extractor, candidates, seen) {
   }
 }
 
+/**
+ *
+ * @param {[import('./offsets.js').RuleOffset, import('postcss').Node][]} rules
+ * @param {*} context
+ */
 function buildStylesheet(rules, context) {
-  let sortedRules = rules.sort(([a], [z]) => bigSign(a - z))
+  let sortedRules = context.offsets.sort(rules, ([offset]) => offset)
 
   let returnValue = {
     base: new Set(),
@@ -86,30 +91,7 @@ function buildStylesheet(rules, context) {
   }
 
   for (let [sort, rule] of sortedRules) {
-    if (sort >= context.minimumScreen) {
-      returnValue.variants.add(rule)
-      continue
-    }
-
-    if (sort & context.layerOrder.base) {
-      returnValue.base.add(rule)
-      continue
-    }
-
-    if (sort & context.layerOrder.defaults) {
-      returnValue.defaults.add(rule)
-      continue
-    }
-
-    if (sort & context.layerOrder.components) {
-      returnValue.components.add(rule)
-      continue
-    }
-
-    if (sort & context.layerOrder.utilities) {
-      returnValue.utilities.add(rule)
-      continue
-    }
+    returnValue[sort.layer].add(rule)
   }
 
   return returnValue
