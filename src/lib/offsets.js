@@ -115,6 +115,8 @@ export class Offsets {
   applyVariantSort(offset, bitmask) {
     return {
       ...offset,
+      layer: 'variants',
+      parentLayer: offset.layer === 'variants' ? offset.parentLayer : offset.layer,
       variants: offset.variants | bitmask,
     }
   }
