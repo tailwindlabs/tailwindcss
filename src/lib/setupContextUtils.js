@@ -646,7 +646,6 @@ function registerPlugins(plugins, context) {
     base: 0n,
     components: 0n,
     utilities: 0n,
-    user: 0n,
   }
 
   let classList = new Set()
@@ -673,7 +672,6 @@ function registerPlugins(plugins, context) {
     offsets.defaults,
     offsets.components,
     offsets.utilities,
-    offsets.user,
   ])
   let reservedBits = BigInt(highestOffset.toString(2).length)
 
@@ -686,7 +684,6 @@ function registerPlugins(plugins, context) {
     base: (1n << reservedBits) << 1n,
     components: (1n << reservedBits) << 2n,
     utilities: (1n << reservedBits) << 3n,
-    user: (1n << reservedBits) << 4n,
   }
 
   reservedBits += 5n
