@@ -3,7 +3,7 @@
 import bigSign from '../util/bigSign'
 
 /**
- * @typedef {'base' | 'defaults' | 'parasites' | 'components' | 'utilities' | 'variants' | 'user'} Layer
+ * @typedef {'base' | 'defaults' | 'components' | 'utilities' | 'variants' | 'user'} Layer
  */
 
 /**
@@ -17,59 +17,52 @@ import bigSign from '../util/bigSign'
  */
 
 export class Offsets {
-  /**
-   * Offsets for the next rule in a given layer
-   *
-   * @type {Record<Layer, bigint>}
-   */
-  offsets = {
-    defaults: 0n,
-    base: 0n,
-    parasites: 0n,
-    components: 0n,
-    utilities: 0n,
-    variants: 0n,
-    user: 0n,
-  }
+  constructor() {
+    /**
+     * Offsets for the next rule in a given layer
+     *
+     * @type {Record<Layer, bigint>}
+     */
+    this.offsets = {
+      defaults: 0n,
+      base: 0n,
+      components: 0n,
+      utilities: 0n,
+      variants: 0n,
+      user: 0n,
+    }
 
-  /**
-   * Positions for a given layer
-   *
-   * @type {Record<Layer, bigint>}
-   */
-  layerPositions = {
-    defaults: 0n,
-    base: 1n,
+    /**
+     * Positions for a given layer
+     *
+     * @type {Record<Layer, bigint>}
+     */
+    this.layerPositions = {
+      defaults: 0n,
+      base: 1n,
+      components: 2n,
+      utilities: 3n,
 
-    // This also not a layer but "parasite" utilities are sorted before components
-    parasites: 2n,
+      // There isn't technically a "user" layer, but we need to give it a position
+      // Because it's used for ordering user-css from @apply
+      user: 4n,
 
-    components: 3n,
-    utilities: 4n,
+      variants: 5n,
+    }
 
-    // There isn't technically a "user" layer, but we need to give it a position
-    // Because it's used for ordering user-css from @apply
-    user: 5n,
+    /**
+     * The total number of functions currently registered across all variants (including arbitrary variants)
+     *
+     * @type {bigint}
+     */
+    this.reservedVariantBits = 0n
 
-    variants: 6n,
-  }
-
-  /**
-   * The total number of functions currently registered across all variants (including arbitrary variants)
-   *
-   * @type {bigint}
-   */
-  reservedVariantBits = 0n
-
-  /**
-   * Positions for a given variant
-   *
-   * @type {Map<string, bigint>}
-   */
-  variantOffsets = new Map()
-
-  constructor(context) {
-    this.context = context
+    /**
+     * Positions for a given variant
+     *
+     * @type {Map<string, bigint>}
+     */
+    this.variantOffsets = new Map()
   }
 
   /**
@@ -155,10 +148,11 @@ export class Offsets {
    * This grouping is order-independent. For instance, we do not differentiate between `hover:focus` and `focus:hover`.
    *
    * @param {string[]} variants
+   * @param {(name: string) => number} getLength
    */
-  recordVariants(variants) {
+  recordVariants(variants, getLength) {
     for (const variant of variants) {
-      this.recordVariant(variant, this.context.variantMap.get(variant).length)
+      this.recordVariant(variant, getLength(variant))
     }
   }
 

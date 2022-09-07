@@ -650,7 +650,7 @@ function registerPlugins(plugins, context) {
   let variantMap = new Map()
   context.variantMap = variantMap
 
-  let offsets = new Offsets(context)
+  let offsets = new Offsets()
   context.offsets = offsets
 
   let classList = new Set()
@@ -673,7 +673,7 @@ function registerPlugins(plugins, context) {
   }
 
   // Make sure to record bit masks for every variant
-  offsets.recordVariants(variantList)
+  offsets.recordVariants(variantList, (variant) => variantMap.get(variant).length)
 
   // Build variantMap
   for (let [variantName, variantFunctions] of variantMap.entries()) {

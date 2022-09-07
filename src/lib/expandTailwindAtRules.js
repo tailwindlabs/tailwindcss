@@ -4,7 +4,6 @@ import { generateRules } from './generateRules'
 import log from '../util/log'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
-import { Offsets } from './offsets.js'
 
 let env = sharedState.env
 
