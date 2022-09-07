@@ -202,7 +202,7 @@ export class Offsets {
    * @param {string} variant
    * @param {number} fnCount
    *
-   * @returns {bigint} The highest offset for this variant
+   * @returns {RuleOffset} The highest offset for this variant
    */
   recordVariant(variant, fnCount = 1) {
     this.variantOffsets.set(variant, 1n << this.reservedVariantBits)
@@ -217,7 +217,10 @@ export class Offsets {
     // @see `RuleOffset.parallelIndex`
     this.reservedVariantBits += BigInt(fnCount)
 
-    return 1n << this.reservedVariantBits
+    return {
+      ...this.create('variants'),
+      variants: 1n << this.reservedVariantBits,
+    }
   }
 
   /**
