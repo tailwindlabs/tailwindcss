@@ -146,7 +146,6 @@ function applyVariant(variant, matches, context) {
 
     let fn = parseVariant(selector)
 
-    // TODO: Test that this won't clash with reserved bits from the last registered variant
     let sort = context.offsets.recordVariant(variant)
 
     context.variantMap.set(variant, [[sort, fn]])
