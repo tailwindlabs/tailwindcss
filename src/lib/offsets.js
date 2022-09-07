@@ -41,11 +41,12 @@ export class Offsets {
     base: 1n,
     components: 2n,
     utilities: 3n,
-    variants: 4n,
 
     // There isn't technically a "user" layer, but we need to give it a position
     // Because it's used for ordering user-css from @apply
-    user: 5n,
+    user: 4n,
+
+    variants: 5n,
   }
 
   /**
@@ -82,7 +83,6 @@ export class Offsets {
   }
 
   /**
-   * @param {Layer} layer
    * @returns {RuleOffset}
    */
   arbitraryProperty() {

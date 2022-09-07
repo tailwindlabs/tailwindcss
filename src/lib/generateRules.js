@@ -410,7 +410,7 @@ function extractArbitraryProperty(classCandidate, context) {
     return null
   }
 
-  let sort = context.offsets.create('utilities')
+  let sort = context.offsets.arbitraryProperty()
 
   return [
     [

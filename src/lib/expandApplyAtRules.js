@@ -2,7 +2,6 @@ import postcss from 'postcss'
 import parser from 'postcss-selector-parser'
 
 import { resolveMatches } from './generateRules'
-import bigSign from '../util/bigSign'
 import escapeClassName from '../util/escapeClassName'
 
 /** @typedef {Map<string, [any, import('postcss').Rule[]]>} ApplyCache */
@@ -557,7 +556,7 @@ function processApply(root, context, localCache) {
     }
 
     // Inject the rules, sorted, correctly
-    let nodes = siblings.sort(([a], [z]) => bigSign(a.sort - z.sort)).map((s) => s[1])
+    let nodes = context.offsets.sort(siblings, (sibling) => sibling[0].sort).map((s) => s[1])
 
     // `parent` refers to the node at `.abc` in: .abc { @apply mt-2 }
     parent.after(nodes)

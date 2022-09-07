@@ -12,7 +12,6 @@ import isPlainObject from '../util/isPlainObject'
 import escapeClassName from '../util/escapeClassName'
 import nameClass, { formatClass } from '../util/nameClass'
 import { coerceValue } from '../util/pluginUtils'
-import bigSign from '../util/bigSign'
 import { variantPlugins, corePlugins } from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
@@ -790,13 +789,22 @@ function registerPlugins(plugins, context) {
   // A list of utilities that are used by certain Tailwind CSS utilities but
   // that don't exist on their own. This will result in them "not existing" and
   // sorting could be weird since you still require them in order to make the
-  // host utitlies work properly. (Thanks Biology)
+  // host utilities work properly. (Thanks Biology)
   let parasiteUtilities = new Set([prefix(context, 'group'), prefix(context, 'peer')])
   context.getClassOrder = function getClassOrder(classes) {
-    let sortedClassNames = new Map()
-    for (let [sort, rule] of generateRules(new Set(classes), context)) {
-      if (sortedClassNames.has(rule.raws.tailwind.candidate)) continue
-      sortedClassNames.set(rule.raws.tailwind.candidate, sort)
+    // Non-util classes won't be generated, so we default them to null
+    let sortedClassNames = new Map(classes.map((className) => [className, null]))
+
+    // Sort all classes in order
+    // Non-tailwind classes won't be generated and will be left as `null`
+    let rules = generateRules(new Set(classes), context)
+    rules = context.offsets.sort(rules, (rule) => rule[0])
+
+    // Give each generated class an increasing index
+    let idx = 0n
+
+    for (const [, rule] of rules) {
+      sortedClassNames.set(rule.raws.tailwind.candidate, idx++)
     }
 
     return classes.map((className) => {
@@ -806,7 +814,7 @@ function registerPlugins(plugins, context) {
         // This will make sure that it is at the very beginning of the
         // `components` layer which technically means 'before any
         // components'.
-        order = context.layerOrder.components
+        order = null // TODO
       }
 
       return [className, order]
