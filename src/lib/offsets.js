@@ -88,41 +88,6 @@ export class Offsets {
   }
 
   /**
-   * @param {RuleOffset[]} rules
-   * @returns {{layers: Record<Layer, bigint>, rules: bigint[]}}
-   */
-  numeric(rules) {
-    let variantBits = this.reservedVariantBits
-    let parallelIndexBits = bitCount(max(rules.map((offset) => offset.parallelIndex)))
-    let arbitraryBits = 1n
-    let indexBits = bitCount(max(rules.map((offset) => offset.index)))
-
-    let layerPos = variantBits + parallelIndexBits + arbitraryBits + indexBits
-    let variantPos = parallelIndexBits + arbitraryBits + indexBits
-    let parallelPos = arbitraryBits + indexBits
-    let arbitraryPos = indexBits
-    let indexPos = 0n
-
-    return {
-      // @ts-ignore
-      layers: Object.fromEntries(
-        Object.entries(this.layerPositions).map(([layer, pos]) => [layer, pos << layerPos])
-      ),
-      rules: rules.map((offset) => {
-        const layer = this.layerPositions[offset.layer]
-
-        return (
-          (layer << layerPos) +
-          (offset.variants << variantPos) +
-          (offset.parallelIndex << parallelPos) +
-          (offset.arbitrary << arbitraryPos) +
-          (offset.index << indexPos)
-        )
-      }),
-    }
-  }
-
-  /**
    * @returns {RuleOffset}
    */
   arbitraryProperty() {
@@ -262,39 +227,4 @@ export class Offsets {
   sort(list, getOffset) {
     return list.sort((a, b) => bigSign(this.compare(getOffset(a), getOffset(b))))
   }
-}
-
-/**
- *
- * @param {bigint[]} nums
- * @returns {bigint|null}
- */
-function max(nums) {
-  let max = null
-
-  for (const num of nums) {
-    max = max ?? num
-    max = max > num ? max : num
-  }
-
-  return max
-}
-
-/**
- *
- * @param {bigint|null} value
- * @returns {bigint}
- */
-function bitCount(value) {
-  if (value === null) {
-    return 0n
-  }
-
-  let bits = 1n
-
-  while ((value >>= 1n)) {
-    bits += 1n
-  }
-
-  return bits
 }
