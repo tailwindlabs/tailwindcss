@@ -788,11 +788,17 @@ function registerPlugins(plugins, context) {
     }
   }
 
+  let darkClassName = [].concat(context.tailwindConfig.darkMode ?? 'media')[1] ?? 'dark'
+
   // A list of utilities that are used by certain Tailwind CSS utilities but
   // that don't exist on their own. This will result in them "not existing" and
   // sorting could be weird since you still require them in order to make the
   // host utilities work properly. (Thanks Biology)
-  let parasiteUtilities = [prefix(context, 'group'), prefix(context, 'peer')]
+  let parasiteUtilities = [
+    prefix(context, darkClassName),
+    prefix(context, 'group'),
+    prefix(context, 'peer'),
+  ]
   context.getClassOrder = function getClassOrder(classes) {
     // Non-util classes won't be generated, so we default them to null
     let sortedClassNames = new Map(classes.map((className) => [className, null]))
