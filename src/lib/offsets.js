@@ -144,7 +144,7 @@ export class Offsets {
       throw new Error(`Cannot find offset for unknown variant ${variant}`)
     }
 
-    return offset + BigInt(index)
+    return offset << BigInt(index)
   }
 
   /**

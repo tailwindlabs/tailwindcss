@@ -677,10 +677,12 @@ function registerPlugins(plugins, context) {
 
   // Build variantMap
   for (let [variantName, variantFunctions] of variantMap.entries()) {
-    let sort = offsets.forVariant(variantName)
     context.variantMap.set(
       variantName,
-      variantFunctions.map((variantFunction, idx) => [sort << BigInt(idx), variantFunction])
+      variantFunctions.map((variantFunction, idx) => [
+        offsets.forVariant(variantName, idx),
+        variantFunction,
+      ])
     )
   }
 
