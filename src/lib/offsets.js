@@ -137,6 +137,7 @@ export class Offsets {
    *
    * @param {string} variant
    * @param {number} index
+   * @returns {RuleOffset}
    */
   forVariant(variant, index = 0) {
     let offset = this.variantOffsets.get(variant)
@@ -144,20 +145,23 @@ export class Offsets {
       throw new Error(`Cannot find offset for unknown variant ${variant}`)
     }
 
-    return offset << BigInt(index)
+    return {
+      ...this.create('variants'),
+      variants: offset << BigInt(index),
+    }
   }
 
   /**
-   *
-   * @param {RuleOffset} offset
-   * @param {bigint} bitmask
+   * @param {RuleOffset} rule
+   * @param {RuleOffset} variant
+   * @returns {RuleOffset}
    */
-  applyVariantSort(offset, bitmask) {
+  applyVariantOffset(rule, variant) {
     return {
-      ...offset,
+      ...rule,
       layer: 'variants',
-      parentLayer: offset.layer === 'variants' ? offset.parentLayer : offset.layer,
-      variants: offset.variants | bitmask,
+      parentLayer: rule.layer === 'variants' ? rule.parentLayer : rule.layer,
+      variants: rule.variants | variant.variants,
     }
   }
 

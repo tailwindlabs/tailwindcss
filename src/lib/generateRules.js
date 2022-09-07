@@ -299,7 +299,7 @@ function applyVariant(variant, matches, context) {
         let withOffset = [
           {
             ...meta,
-            sort: context.offsets.applyVariantSort(meta.sort, variantSort),
+            sort: context.offsets.applyVariantOffset(meta.sort, variantSort),
             collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
             isArbitraryVariant: isArbitraryValue(variant),
           },
