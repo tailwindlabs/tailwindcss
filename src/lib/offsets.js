@@ -3,7 +3,7 @@
 import bigSign from '../util/bigSign'
 
 /**
- * @typedef {'base' | 'defaults' | 'components' | 'utilities' | 'variants' | 'user'} Layer
+ * @typedef {'base' | 'defaults' | 'parasites' | 'components' | 'utilities' | 'variants' | 'user'} Layer
  */
 
 /**
@@ -25,6 +25,7 @@ export class Offsets {
   offsets = {
     defaults: 0n,
     base: 0n,
+    parasites: 0n,
     components: 0n,
     utilities: 0n,
     variants: 0n,
@@ -39,14 +40,18 @@ export class Offsets {
   layerPositions = {
     defaults: 0n,
     base: 1n,
-    components: 2n,
-    utilities: 3n,
+
+    // This also not a layer but "parasite" utilities are sorted before components
+    parasites: 2n,
+
+    components: 3n,
+    utilities: 4n,
 
     // There isn't technically a "user" layer, but we need to give it a position
     // Because it's used for ordering user-css from @apply
-    user: 4n,
+    user: 5n,
 
-    variants: 5n,
+    variants: 6n,
   }
 
   /**
@@ -79,6 +84,41 @@ export class Offsets {
       variants: 0n,
       parallelIndex: 0n,
       index: this.offsets[layer]++,
+    }
+  }
+
+  /**
+   * @param {RuleOffset[]} rules
+   * @returns {{layers: Record<Layer, bigint>, rules: bigint[]}}
+   */
+  numeric(rules) {
+    let variantBits = this.reservedVariantBits
+    let parallelIndexBits = bitCount(max(rules.map((offset) => offset.parallelIndex)))
+    let arbitraryBits = 1n
+    let indexBits = bitCount(max(rules.map((offset) => offset.index)))
+
+    let layerPos = variantBits + parallelIndexBits + arbitraryBits + indexBits
+    let variantPos = parallelIndexBits + arbitraryBits + indexBits
+    let parallelPos = arbitraryBits + indexBits
+    let arbitraryPos = indexBits
+    let indexPos = 0n
+
+    return {
+      // @ts-ignore
+      layers: Object.fromEntries(
+        Object.entries(this.layerPositions).map(([layer, pos]) => [layer, pos << layerPos])
+      ),
+      rules: rules.map((offset) => {
+        const layer = this.layerPositions[offset.layer]
+
+        return (
+          (layer << layerPos) +
+          (offset.variants << variantPos) +
+          (offset.parallelIndex << parallelPos) +
+          (offset.arbitrary << arbitraryPos) +
+          (offset.index << indexPos)
+        )
+      }),
     }
   }
 
@@ -198,4 +238,39 @@ export class Offsets {
   sort(list, getOffset) {
     return list.sort((a, b) => bigSign(this.compare(getOffset(a), getOffset(b))))
   }
+}
+
+/**
+ *
+ * @param {bigint[]} nums
+ * @returns {bigint|null}
+ */
+function max(nums) {
+  let max = null
+
+  for (const num of nums) {
+    max = max ?? num
+    max = max > num ? max : num
+  }
+
+  return max
+}
+
+/**
+ *
+ * @param {bigint|null} value
+ * @returns {bigint}
+ */
+function bitCount(value) {
+  if (value === null) {
+    return 0n
+  }
+
+  let bits = 1n
+
+  while ((value >>= 1n)) {
+    bits += 1n
+  }
+
+  return bits
 }

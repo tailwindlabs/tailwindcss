@@ -800,11 +800,10 @@ function registerPlugins(plugins, context) {
     let rules = generateRules(new Set(classes), context)
     rules = context.offsets.sort(rules, (rule) => rule[0])
 
-    // Give each generated class an increasing index
-    let idx = 0n
+    let offsets = context.offsets.numeric(rules.map(([sort]) => sort))
 
-    for (const [, rule] of rules) {
-      sortedClassNames.set(rule.raws.tailwind.candidate, idx++)
+    for (const [index, [, rule]] of rules.entries()) {
+      sortedClassNames.set(rule.raws.tailwind.candidate, offsets.rules[index])
     }
 
     return classes.map((className) => {
@@ -814,7 +813,7 @@ function registerPlugins(plugins, context) {
         // This will make sure that it is at the very beginning of the
         // `components` layer which technically means 'before any
         // components'.
-        order = null // TODO
+        order = offsets.layers.parasites
       }
 
       return [className, order]
