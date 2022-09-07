@@ -792,7 +792,7 @@ function registerPlugins(plugins, context) {
   // that don't exist on their own. This will result in them "not existing" and
   // sorting could be weird since you still require them in order to make the
   // host utilities work properly. (Thanks Biology)
-  let parasiteUtilities = new Set([prefix(context, 'group'), prefix(context, 'peer')])
+  let parasiteUtilities = [prefix(context, 'group'), prefix(context, 'peer')]
   context.getClassOrder = function getClassOrder(classes) {
     // Non-util classes won't be generated, so we default them to null
     let sortedClassNames = new Map(classes.map((className) => [className, null]))
@@ -802,7 +802,7 @@ function registerPlugins(plugins, context) {
     let rules = generateRules(new Set(classes), context)
     rules = context.offsets.sort(rules, (rule) => rule[0])
 
-    let idx = BigInt(parasiteUtilities.size)
+    let idx = BigInt(parasiteUtilities.length)
 
     for (const [, rule] of rules) {
       sortedClassNames.set(rule.raws.tailwind.candidate, idx++)
@@ -810,12 +810,13 @@ function registerPlugins(plugins, context) {
 
     return classes.map((className) => {
       let order = sortedClassNames.get(className) ?? null
+      let parasiteIndex = parasiteUtilities.indexOf(className)
 
-      if (order === null && parasiteUtilities.has(className)) {
+      if (order === null && parasiteIndex !== -1) {
         // This will make sure that it is at the very beginning of the
         // `components` layer which technically means 'before any
         // components'.
-        order = BigInt(Array.from(parasiteUtilities).indexOf(className))
+        order = BigInt(parasiteIndex)
       }
 
       return [className, order]

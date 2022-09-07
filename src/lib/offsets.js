@@ -228,3 +228,19 @@ export class Offsets {
     return list.sort((a, b) => bigSign(this.compare(getOffset(a), getOffset(b))))
   }
 }
+
+/**
+ *
+ * @param {bigint[]} nums
+ * @returns {bigint|null}
+ */
+function max(nums) {
+  let max = null
+
+  for (const num of nums) {
+    max = max ?? num
+    max = max > num ? max : num
+  }
+
+  return max
+}
