@@ -162,6 +162,23 @@ export class Offsets {
       layer: 'variants',
       parentLayer: rule.layer === 'variants' ? rule.parentLayer : rule.layer,
       variants: rule.variants | variant.variants,
+
+      // TODO: Technically this is wrong. We should be handling parallel index on a per variant basis.
+      // We'll take the max of all the parallel indexes for now.
+      // @ts-ignore
+      parallelIndex: max([rule.parallelIndex, variant.parallelIndex]),
+    }
+  }
+
+  /**
+   * @param {RuleOffset} offset
+   * @param {number} parallelIndex
+   * @returns {RuleOffset}
+   */
+  applyParallelOffset(offset, parallelIndex) {
+    return {
+      ...offset,
+      parallelIndex: BigInt(parallelIndex),
     }
   }
 
