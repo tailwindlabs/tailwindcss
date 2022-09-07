@@ -79,7 +79,7 @@ function getClassCandidates(content, extractor, candidates, seen) {
  * @param {*} context
  */
 function buildStylesheet(rules, context) {
-  let sortedRules = context.offsets.sort(rules, ([offset]) => offset)
+  let sortedRules = context.offsets.sort(rules)
 
   let returnValue = {
     base: new Set(),

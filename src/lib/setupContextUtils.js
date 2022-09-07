@@ -806,7 +806,7 @@ function registerPlugins(plugins, context) {
     // Sort all classes in order
     // Non-tailwind classes won't be generated and will be left as `null`
     let rules = generateRules(new Set(classes), context)
-    rules = context.offsets.sort(rules, ([offset]) => offset)
+    rules = context.offsets.sort(rules)
 
     let idx = BigInt(parasiteUtilities.length)
 

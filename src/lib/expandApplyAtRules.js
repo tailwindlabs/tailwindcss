@@ -556,7 +556,7 @@ function processApply(root, context, localCache) {
     }
 
     // Inject the rules, sorted, correctly
-    let nodes = context.offsets.sort(siblings, ([offset]) => offset).map((s) => s[1])
+    let nodes = context.offsets.sort(siblings).map((s) => s[1])
 
     // `parent` refers to the node at `.abc` in: .abc { @apply mt-2 }
     parent.after(nodes)

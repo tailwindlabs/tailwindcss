@@ -214,12 +214,11 @@ export class Offsets {
 
   /**
    * @template T
-   * @param {T[]} list
-   * @param {(item: T) => RuleOffset} getOffset
-   * @returns {T[]}
+   * @param {[RuleOffset, T][]} list
+   * @returns {[RuleOffset, T][]}
    */
-  sort(list, getOffset) {
-    return list.sort((a, b) => bigSign(this.compare(getOffset(a), getOffset(b))))
+  sort(list) {
+    return list.sort(([a], [b]) => bigSign(this.compare(a, b)))
   }
 }
 
