@@ -41,6 +41,13 @@ jobs:
         env:
           CI: true
 
+      - name: Link and build Tailwind CSS
+        run: |
+          npm run swcify
+          ln -nfs `pwd` node_modules/tailwindcss
+        env:
+          CI: true
+
       - name: Test
         run: npm test
         env:
