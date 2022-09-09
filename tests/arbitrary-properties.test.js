@@ -338,11 +338,11 @@ it('should be possible to read theme values in arbitrary properties (with quotes
     return expect(result.css).toMatchFormattedCss(css`
       ${defaults}
 
-      .\[--a\:theme\(\'colors\.blue\.500\'\)\] {
-        --a: #3b82f6;
-      }
       .\[color\:var\(--a\)\] {
         color: var(--a);
+      }
+      .\[--a\:theme\(\'colors\.blue\.500\'\)\] {
+        --a: #3b82f6;
       }
     `)
   })
