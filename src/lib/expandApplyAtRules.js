@@ -34,13 +34,13 @@ function extractClasses(node) {
   return Object.assign(classes, { groups: normalizedGroups })
 }
 
-let selectorExtractor = parser((root) => root.nodes.map((node) => node.toString()))
+let selectorExtractor = parser()
 
 /**
  * @param {string} ruleSelectors
  */
 function extractSelectors(ruleSelectors) {
-  return selectorExtractor.transformSync(ruleSelectors)
+  return selectorExtractor.astSync(ruleSelectors)
 }
 
 function extractBaseCandidates(candidates, separator) {
@@ -299,30 +299,77 @@ function processApply(root, context, localCache) {
    * What happens in this function is that we prepend a `.` and escape the candidate.
    * This will result in `.hover\:font-bold`
    * Which means that we can replace `.hover\:font-bold` with `.abc` in `.hover\:font-bold:hover` resulting in `.abc:hover`
+   *
+   * @param {string} selector
+   * @param {string} utilitySelectors
+   * @param {string} candidate
    */
-  // TODO: Should we use postcss-selector-parser for this instead?
   function replaceSelector(selector, utilitySelectors, candidate) {
-    let needle = `.${escapeClassName(candidate)}`
-    let needles = [...new Set([needle, needle.replace(/\\2c /g, '\\,')])]
+    let selectorList = extractSelectors(selector)
     let utilitySelectorsList = extractSelectors(utilitySelectors)
+    let candidateList = extractSelectors(`.${escapeClassName(candidate)}`)
+    let candidateClass = candidateList.nodes[0].nodes[0]
 
-    return extractSelectors(selector)
-      .map((s) => {
-        let replaced = []
+    selectorList.each((sel) => {
+      /** @type {Set<import('postcss-selector-parser').Selector>} */
+      let replaced = new Set()
 
-        for (let utilitySelector of utilitySelectorsList) {
-          let replacedSelector = utilitySelector
-          for (const needle of needles) {
-            replacedSelector = replacedSelector.replace(needle, s)
+      utilitySelectorsList.each((utilitySelector) => {
+        let hasReplaced = false
+        utilitySelector = utilitySelector.clone()
+
+        utilitySelector.walkClasses((node) => {
+          if (node.value !== candidateClass.value) {
+            return
           }
-          if (replacedSelector === utilitySelector) {
-            continue
+
+          // Don't replace multiple instances of the same class
+          // This is theoretically correct but only partially
+          // We'd need to generate every possible permutation of the replacement
+          // For example with `.foo + .foo { … }` and `section { @apply foo; }`
+          // We'd need to generate all of these:
+          // - `.foo + .foo`
+          // - `.foo + section`
+          // - `section + .foo`
+          // - `section + section`
+          if (hasReplaced) {
+            return
           }
-          replaced.push(replacedSelector)
-        }
-        return replaced.join(', ')
+
+          // Since you can only `@apply` class names this is sufficient
+          // We want to replace the matched class name with the selector the user is using
+          // Ex: Replace `.text-blue-500` with `.foo.bar:is(.something-cool)`
+          node.replaceWith(...sel.nodes.map((node) => node.clone()))
+
+          // Record that we did something and we want to use this new selector
+          replaced.add(utilitySelector)
+
+          hasReplaced = true
+        })
       })
-      .join(', ')
+
+      // Sort tag names before class names
+      // This happens when replacing `.bar` in `.foo.bar` with a tag like `section`
+      for (const sel of replaced) {
+        sel.sort((a, b) => {
+          if (a.type === 'tag' && b.type === 'class') {
+            return -1
+          } else if (a.type === 'class' && b.type === 'tag') {
+            return 1
+          } else if (a.type === 'class' && b.type === 'pseudo') {
+            return -1
+          } else if (a.type === 'pseudo' && b.type === 'class') {
+            return 1
+          }
+
+          return sel.index(a) - sel.index(b)
+        })
+      }
+
+      sel.replaceWith(...replaced)
+    })
+
+    return selectorList.toString()
   }
 
   let perParentApplies = new Map()
@@ -497,6 +544,12 @@ function processApply(root, context, localCache) {
               d.important = meta.important || important
             })
           })
+        }
+
+        // It could be that the node we were inserted was removed because the class didn't match
+        // If that was the *only* rule in the parent, then we have nothing add so we skip it
+        if (!root.nodes[0]) {
+          continue
         }
 
         // Insert it

@@ -907,6 +907,9 @@
 .outline-offset-2 {
   outline-offset: 2px;
 }
+.-outline-offset-2 {
+  outline-offset: -2px;
+}
 .outline-black {
   outline-color: #000;
 }

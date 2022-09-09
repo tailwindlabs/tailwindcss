@@ -1604,9 +1604,28 @@ export let corePlugins = {
     matchUtilities({ align: (value) => ({ 'vertical-align': value }) })
   },
 
-  fontFamily: createUtilityPlugin('fontFamily', [['font', ['fontFamily']]], {
-    type: ['lookup', 'generic-name', 'family-name'],
-  }),
+  fontFamily: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        font: (value) => {
+          let [families, options = {}] =
+            Array.isArray(value) && isPlainObject(value[1]) ? value : [value]
+          let { fontFeatureSettings } = options
+
+          return {
+            'font-family': Array.isArray(families) ? families.join(', ') : families,
+            ...(fontFeatureSettings === undefined
+              ? {}
+              : { 'font-feature-settings': fontFeatureSettings }),
+          }
+        },
+      },
+      {
+        values: theme('fontFamily'),
+        type: ['lookup', 'generic-name', 'family-name'],
+      }
+    )
+  },
 
   fontSize: ({ matchUtilities, theme }) => {
     matchUtilities(
@@ -1961,7 +1980,6 @@ export let corePlugins = {
       '.outline-dashed': { 'outline-style': 'dashed' },
       '.outline-dotted': { 'outline-style': 'dotted' },
       '.outline-double': { 'outline-style': 'double' },
-      '.outline-hidden': { 'outline-style': 'hidden' },
     })
   },
 
@@ -1971,6 +1989,7 @@ export let corePlugins = {
 
   outlineOffset: createUtilityPlugin('outlineOffset', [['outline-offset', ['outline-offset']]], {
     type: ['length', 'number', 'percentage'],
+    supportsNegativeValues: true,
   }),
 
   outlineColor: ({ matchUtilities, theme }) => {

@@ -96,7 +96,7 @@ function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
 function resolveChangedFiles(candidateFiles, fileModifiedMap) {
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
-  let files = fastGlob.sync(candidateFiles)
+  let files = fastGlob.sync(candidateFiles, { absolute: true })
   for (let file of files) {
     let prevModified = fileModifiedMap.has(file) ? fileModifiedMap.get(file) : -Infinity
     let modified = fs.statSync(file).mtimeMs

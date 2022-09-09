@@ -661,3 +661,31 @@ it('A bare ring-opacity utility is supported when using respectDefaultRingColorO
     `)
   })
 })
+
+it('Ring color utilities are generated when using respectDefaultRingColorOpacity', () => {
+  let config = {
+    future: { respectDefaultRingColorOpacity: true },
+    content: [{ raw: html`<div class="ring ring-blue-500"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .ring {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+          var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+          var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+      .ring-blue-500 {
+        --tw-ring-opacity: 1;
+        --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
+      }
+    `)
+  })
+})

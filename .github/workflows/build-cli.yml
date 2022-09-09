@@ -1,6 +1,7 @@
 name: Build Standalone CLI
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'

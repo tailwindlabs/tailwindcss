@@ -17,6 +17,7 @@ import getModuleDependencies from './lib/getModuleDependencies'
 import log from './util/log'
 import packageJson from '../package.json'
 import normalizePath from 'normalize-path'
+import micromatch from 'micromatch'
 import { validateConfig } from './util/validateConfig.js'
 
 let env = {
@@ -837,12 +838,34 @@ async function build() {
     }
 
     let config = refreshConfig(configPath)
+    let contentPatterns = refreshContentPatterns(config)
+
+    /**
+     * @param {import('../types/config.js').RequiredConfig} config
+     * @return {{all: string[], dynamic: string[], static: string[]}}
+     **/
+    function refreshContentPatterns(config) {
+      let globs = extractFileGlobs(config)
+      let tasks = fastGlob.generateTasks(globs, { absolute: true })
+      let dynamicPatterns = tasks.filter((task) => task.dynamic).flatMap((task) => task.patterns)
+      let staticPatterns = tasks.filter((task) => !task.dynamic).flatMap((task) => task.patterns)
+
+      return {
+        all: [...staticPatterns, ...dynamicPatterns],
+        dynamic: dynamicPatterns,
+      }
+    }
 
     if (input) {
       contextDependencies.add(path.resolve(input))
     }
 
     watcher = chokidar.watch([...contextDependencies, ...extractFileGlobs(config)], {
+      // Force checking for atomic writes in all situations
+      // This causes chokidar to wait up to 100ms for a file to re-added after it's been unlinked
+      // This only works when watching directories though
+      atomic: true,
+
       usePolling: shouldPoll,
       interval: shouldPoll ? pollInterval : undefined,
       ignoreInitial: true,
@@ -855,12 +878,14 @@ async function build() {
     })
 
     let chain = Promise.resolve()
+    let pendingRebuilds = new Set()
 
     watcher.on('change', async (file) => {
       if (contextDependencies.has(file)) {
         env.DEBUG && console.time('Resolve config')
         context = null
         config = refreshConfig(configPath)
+        contentPatterns = refreshContentPatterns(config)
         env.DEBUG && console.timeEnd('Resolve config')
 
         env.DEBUG && console.time('Watch new files')
@@ -883,6 +908,93 @@ async function build() {
           await rebuild(config)
         })
       }
+    })
+
+    /**
+     * When rapidly saving files atomically a couple of situations can happen:
+     * - The file is missing since the external program has deleted it by the time we've gotten around to reading it from the earlier save.
+     * - The file is being written to by the external program by the time we're going to read it and is thus treated as busy because a lock is held.
+     *
+     * To work around this we retry reading the file a handful of times with a delay between each attempt
+     *
+     * @param {string} path
+     * @param {number} tries
+     * @returns {string}
+     * @throws {Error} If the file is still missing or busy after the specified number of tries
+     */
+    async function readFileWithRetries(path, tries = 5) {
+      for (let n = 0; n <= tries; n++) {
+        try {
+          return await fs.promises.readFile(path, 'utf8')
+        } catch (err) {
+          if (n !== tries) {
+            if (err.code === 'ENOENT' || err.code === 'EBUSY') {
+              await new Promise((resolve) => setTimeout(resolve, 10))
+
+              continue
+            }
+          }
+
+          throw err
+        }
+      }
+    }
+
+    // Restore watching any files that are "removed"
+    // This can happen when a file is pseudo-atomically replaced (a copy is created, overwritten, the old one is unlinked, and the new one is renamed)
+    // TODO: An an optimization we should allow removal when the config changes
+    watcher.on('unlink', (file) => {
+      file = normalizePath(file)
+
+      // Only re-add the file if it's not covered by a dynamic pattern
+      if (!micromatch.some([file], contentPatterns.dynamic)) {
+        watcher.add(file)
+      }
+    })
+
+    // Some applications such as Visual Studio (but not VS Code)
+    // will only fire a rename event for atomic writes and not a change event
+    // This is very likely a chokidar bug but it's one we need to work around
+    // We treat this as a change event and rebuild the CSS
+    watcher.on('raw', (evt, filePath, meta) => {
+      if (evt !== 'rename') {
+        return
+      }
+
+      let watchedPath = meta.watchedPath
+
+      // Watched path might be the file itself
+      // Or the directory it is in
+      filePath = watchedPath.endsWith(filePath) ? watchedPath : path.join(watchedPath, filePath)
+
+      // Skip this event since the files it is for does not match any of the registered content globs
+      if (!micromatch.some([filePath], contentPatterns.all)) {
+        return
+      }
+
+      // Skip since we've already queued a rebuild for this file that hasn't happened yet
+      if (pendingRebuilds.has(filePath)) {
+        return
+      }
+
+      pendingRebuilds.add(filePath)
+
+      chain = chain.then(async () => {
+        let content
+
+        try {
+          content = await readFileWithRetries(path.resolve(filePath))
+        } finally {
+          pendingRebuilds.delete(filePath)
+        }
+
+        changedContent.push({
+          content,
+          extension: path.extname(filePath).slice(1),
+        })
+
+        await rebuild(config)
+      })
     })
 
     watcher.on('add', async (file) => {

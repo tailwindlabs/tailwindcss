@@ -289,6 +289,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     addComponents(components, options) {
       let defaultOptions = {
+        preserveSource: false,
         respectPrefix: true,
         respectImportant: false,
       }
@@ -311,6 +312,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     addUtilities(utilities, options) {
       let defaultOptions = {
+        preserveSource: false,
         respectPrefix: true,
         respectImportant: true,
       }
@@ -579,14 +581,14 @@ function collectLayerPlugins(root) {
     } else if (layerRule.params === 'components') {
       for (let node of layerRule.nodes) {
         layerPlugins.push(function ({ addComponents }) {
-          addComponents(node, { respectPrefix: false })
+          addComponents(node, { respectPrefix: false, preserveSource: true })
         })
       }
       layerRule.remove()
     } else if (layerRule.params === 'utilities') {
       for (let node of layerRule.nodes) {
         layerPlugins.push(function ({ addUtilities }) {
-          addUtilities(node, { respectPrefix: false })
+          addUtilities(node, { respectPrefix: false, preserveSource: true })
         })
       }
       layerRule.remove()
@@ -871,6 +873,7 @@ export function createContext(tailwindConfig, changedContent = [], root = postcs
   let context = {
     disposables: [],
     ruleCache: new Set(),
+    candidateRuleCache: new Map(),
     classCache: new Map(),
     applyClassCache: new Map(),
     notClassCache: new Set(),

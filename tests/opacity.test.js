@@ -761,3 +761,272 @@ it('Theme functions can reference values with slashes in brackets', () => {
     `)
   })
 })
+
+it('works with opacity values defined as a placeholder or a function in when colors is a function', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div
+            class="bg-foo10 bg-foo20 bg-foo30 bg-foo40 bg-foo11 bg-foo21 bg-foo31 bg-foo41"
+          ></div>
+        `,
+      },
+    ],
+    theme: {
+      colors: () => ({
+        foobar1: ({ opacityValue }) => `rgb(255 100 0 / ${opacityValue ?? '100%'})`,
+        foobar2: `rgb(255 100 0 / <alpha-value>)`,
+        foobar3: {
+          100: ({ opacityValue }) => `rgb(255 100 0 / ${opacityValue ?? '100%'})`,
+          200: `rgb(255 100 0 / <alpha-value>)`,
+        },
+      }),
+      extend: {
+        backgroundColor: ({ theme }) => ({
+          foo10: theme('colors.foobar1'),
+          foo20: theme('colors.foobar2'),
+          foo30: theme('colors.foobar3.100'),
+          foo40: theme('colors.foobar3.200'),
+          foo11: theme('colors.foobar1 / 50%'),
+          foo21: theme('colors.foobar2 / 50%'),
+          foo31: theme('colors.foobar3.100 / 50%'),
+          foo41: theme('colors.foobar3.200 / 50%'),
+        }),
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .bg-foo10 {
+        background-color: rgb(255 100 0 / 100%);
+      }
+      .bg-foo20 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 100 0 / var(--tw-bg-opacity));
+      }
+      .bg-foo30 {
+        background-color: rgb(255 100 0 / 100%);
+      }
+      .bg-foo40 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 100 0 / var(--tw-bg-opacity));
+      }
+      .bg-foo11 {
+        background-color: rgb(255 100 0 / 50%);
+      }
+      .bg-foo21 {
+        background-color: rgb(255 100 0 / 50%);
+      }
+      .bg-foo31 {
+        background-color: rgb(255 100 0 / 50%);
+      }
+      .bg-foo41 {
+        background-color: rgb(255 100 0 / 50%);
+      }
+    `)
+  })
+})
+
+it('The disableColorOpacityUtilitiesByDefault flag disables the color opacity plugins and removes their variables', () => {
+  let config = {
+    future: {
+      disableColorOpacityUtilitiesByDefault: true,
+    },
+    content: [
+      {
+        raw: html`
+          <div
+            class="divide-blue-300 border-blue-300 bg-blue-300 text-blue-300 placeholder-blue-300 ring-blue-300"
+          ></div>
+          <div
+            class="divide-blue-300/50 border-blue-300/50 bg-blue-300/50 text-blue-300/50 placeholder-blue-300/50 ring-blue-300/50"
+          ></div>
+          <div
+            class="divide-blue-300/[var(--my-opacity)] border-blue-300/[var(--my-opacity)] bg-blue-300/[var(--my-opacity)] text-blue-300/[var(--my-opacity)] placeholder-blue-300/[var(--my-opacity)] ring-blue-300/[var(--my-opacity)]"
+          ></div>
+          <div
+            class="divide-opacity-50 border-opacity-50 bg-opacity-50 text-opacity-50 placeholder-opacity-50 ring-opacity-50"
+          ></div>
+        `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .divide-blue-300 > :not([hidden]) ~ :not([hidden]) {
+        border-color: #93c5fd;
+      }
+      .divide-blue-300\/50 > :not([hidden]) ~ :not([hidden]) {
+        border-color: rgb(147 197 253 / 0.5);
+      }
+      .divide-blue-300\/\[var\(--my-opacity\)\] > :not([hidden]) ~ :not([hidden]) {
+        border-color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .border-blue-300 {
+        border-color: #93c5fd;
+      }
+      .border-blue-300\/50 {
+        border-color: rgb(147 197 253 / 0.5);
+      }
+      .border-blue-300\/\[var\(--my-opacity\)\] {
+        border-color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .bg-blue-300 {
+        background-color: #93c5fd;
+      }
+      .bg-blue-300\/50 {
+        background-color: rgb(147 197 253 / 0.5);
+      }
+      .bg-blue-300\/\[var\(--my-opacity\)\] {
+        background-color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .text-blue-300 {
+        color: #93c5fd;
+      }
+      .text-blue-300\/50 {
+        color: rgb(147 197 253 / 0.5);
+      }
+      .text-blue-300\/\[var\(--my-opacity\)\] {
+        color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .placeholder-blue-300::placeholder {
+        color: #93c5fd;
+      }
+      .placeholder-blue-300\/50::placeholder {
+        color: rgb(147 197 253 / 0.5);
+      }
+      .placeholder-blue-300\/\[var\(--my-opacity\)\]::placeholder {
+        color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .ring-blue-300 {
+        --tw-ring-color: #93c5fd;
+      }
+      .ring-blue-300\/50 {
+        --tw-ring-color: rgb(147 197 253 / 0.5);
+      }
+      .ring-blue-300\/\[var\(--my-opacity\)\] {
+        --tw-ring-color: rgb(147 197 253 / var(--my-opacity));
+      }
+    `)
+  })
+})
+
+it('You can re-enable any opacity plugin even when disableColorOpacityUtilitiesByDefault is enabled', () => {
+  let config = {
+    future: {
+      disableColorOpacityUtilitiesByDefault: true,
+    },
+    corePlugins: {
+      backgroundOpacity: true,
+      borderOpacity: true,
+      divideOpacity: true,
+      placeholderOpacity: true,
+      ringOpacity: true,
+      textOpacity: true,
+    },
+    content: [
+      {
+        raw: html`
+          <div
+            class="divide-blue-300 border-blue-300 bg-blue-300 text-blue-300 placeholder-blue-300 ring-blue-300"
+          ></div>
+          <div
+            class="divide-blue-300/50 border-blue-300/50 bg-blue-300/50 text-blue-300/50 placeholder-blue-300/50 ring-blue-300/50"
+          ></div>
+          <div
+            class="divide-blue-300/[var(--my-opacity)] border-blue-300/[var(--my-opacity)] bg-blue-300/[var(--my-opacity)] text-blue-300/[var(--my-opacity)] placeholder-blue-300/[var(--my-opacity)] ring-blue-300/[var(--my-opacity)]"
+          ></div>
+          <div
+            class="divide-opacity-50 border-opacity-50 bg-opacity-50 text-opacity-50 placeholder-opacity-50 ring-opacity-50"
+          ></div>
+        `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .divide-blue-300 > :not([hidden]) ~ :not([hidden]) {
+        --tw-divide-opacity: 1;
+        border-color: rgb(147 197 253 / var(--tw-divide-opacity));
+      }
+      .divide-blue-300\/50 > :not([hidden]) ~ :not([hidden]) {
+        border-color: rgb(147 197 253 / 0.5);
+      }
+      .divide-blue-300\/\[var\(--my-opacity\)\] > :not([hidden]) ~ :not([hidden]) {
+        border-color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .divide-opacity-50 > :not([hidden]) ~ :not([hidden]) {
+        --tw-divide-opacity: 0.5;
+      }
+      .border-blue-300 {
+        --tw-border-opacity: 1;
+        border-color: rgb(147 197 253 / var(--tw-border-opacity));
+      }
+      .border-blue-300\/50 {
+        border-color: rgb(147 197 253 / 0.5);
+      }
+      .border-blue-300\/\[var\(--my-opacity\)\] {
+        border-color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .border-opacity-50 {
+        --tw-border-opacity: 0.5;
+      }
+      .bg-blue-300 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(147 197 253 / var(--tw-bg-opacity));
+      }
+      .bg-blue-300\/50 {
+        background-color: rgb(147 197 253 / 0.5);
+      }
+      .bg-blue-300\/\[var\(--my-opacity\)\] {
+        background-color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .bg-opacity-50 {
+        --tw-bg-opacity: 0.5;
+      }
+      .text-blue-300 {
+        --tw-text-opacity: 1;
+        color: rgb(147 197 253 / var(--tw-text-opacity));
+      }
+      .text-blue-300\/50 {
+        color: rgb(147 197 253 / 0.5);
+      }
+      .text-blue-300\/\[var\(--my-opacity\)\] {
+        color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .text-opacity-50 {
+        --tw-text-opacity: 0.5;
+      }
+      .placeholder-blue-300::placeholder {
+        --tw-placeholder-opacity: 1;
+        color: rgb(147 197 253 / var(--tw-placeholder-opacity));
+      }
+      .placeholder-blue-300\/50::placeholder {
+        color: rgb(147 197 253 / 0.5);
+      }
+      .placeholder-blue-300\/\[var\(--my-opacity\)\]::placeholder {
+        color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .placeholder-opacity-50::placeholder {
+        --tw-placeholder-opacity: 0.5;
+      }
+      .ring-blue-300 {
+        --tw-ring-opacity: 1;
+        --tw-ring-color: rgb(147 197 253 / var(--tw-ring-opacity));
+      }
+      .ring-blue-300\/50 {
+        --tw-ring-color: rgb(147 197 253 / 0.5);
+      }
+      .ring-blue-300\/\[var\(--my-opacity\)\] {
+        --tw-ring-color: rgb(147 197 253 / var(--my-opacity));
+      }
+      .ring-opacity-50 {
+        --tw-ring-opacity: 0.5;
+      }
+    `)
+  })
+})

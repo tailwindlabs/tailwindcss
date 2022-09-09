@@ -610,6 +610,45 @@ test('font-family values are joined when an array', () => {
   })
 })
 
+test('font-family values are retrieved without font-feature-settings', () => {
+  let input = css`
+    .heading-1 {
+      font-family: theme('fontFamily.sans');
+    }
+    .heading-2 {
+      font-family: theme('fontFamily.serif');
+    }
+    .heading-3 {
+      font-family: theme('fontFamily.mono');
+    }
+  `
+
+  let output = css`
+    .heading-1 {
+      font-family: Inter;
+    }
+    .heading-2 {
+      font-family: Times, serif;
+    }
+    .heading-3 {
+      font-family: Menlo, monospace;
+    }
+  `
+
+  return run(input, {
+    theme: {
+      fontFamily: {
+        sans: ['Inter', { fontFeatureSettings: '"cv11"' }],
+        serif: [['Times', 'serif'], { fontFeatureSettings: '"cv11"' }],
+        mono: ['Menlo, monospace', { fontFeatureSettings: '"cv11"' }],
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('box-shadow values are joined when an array', () => {
   let input = css`
     .element {
@@ -1133,5 +1172,53 @@ test('Theme functions with alpha with quotes value around color only', () => {
   }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
+  })
+})
+
+it('can find values with slashes in the theme key while still allowing for alpha values ', () => {
+  let input = css`
+    .foo00 {
+      color: theme(colors.foo-5);
+    }
+    .foo01 {
+      color: theme(colors.foo-5/10);
+    }
+    .foo02 {
+      color: theme(colors.foo-5/10/25);
+    }
+    .foo03 {
+      color: theme(colors.foo-5 / 10);
+    }
+    .foo04 {
+      color: theme(colors.foo-5/10 / 25);
+    }
+  `
+
+  return runFull(input, {
+    theme: {
+      colors: {
+        'foo-5': '#050000',
+        'foo-5/10': '#051000',
+        'foo-5/10/25': '#051025',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .foo00 {
+        color: #050000;
+      }
+      .foo01 {
+        color: #051000;
+      }
+      .foo02 {
+        color: #051025;
+      }
+      .foo03 {
+        color: rgb(5 0 0 / 10);
+      }
+      .foo04 {
+        color: rgb(5 16 0 / 25);
+      }
+    `)
   })
 })

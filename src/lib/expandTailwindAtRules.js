@@ -177,16 +177,12 @@ export default function expandTailwindAtRules(context) {
     let classCacheCount = context.classCache.size
 
     env.DEBUG && console.time('Generate rules')
-    let rules = generateRules(candidates, context)
+    generateRules(candidates, context)
     env.DEBUG && console.timeEnd('Generate rules')
 
     // We only ever add to the classCache, so if it didn't grow, there is nothing new.
     env.DEBUG && console.time('Build stylesheet')
     if (context.stylesheetCache === null || context.classCache.size !== classCacheCount) {
-      for (let rule of rules) {
-        context.ruleCache.add(rule)
-      }
-
       context.stylesheetCache = buildStylesheet([...context.ruleCache], context)
     }
     env.DEBUG && console.timeEnd('Build stylesheet')

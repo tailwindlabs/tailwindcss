@@ -146,6 +146,42 @@ test('a value that includes a calc', () => {
   })
 })
 
+test('a value that includes min/max/clamp functions', () => {
+  let config = {
+    content: [{ raw: html`<div class="mt-min -mt-min mt-max -mt-max mt-clamp -mt-clamp"></div>` }],
+    theme: {
+      margin: {
+        min: 'min(100vmin, 3rem)',
+        max: 'max(100vmax, 3rem)',
+        clamp: 'clamp(1rem, 100vh, 3rem)',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .mt-min {
+        margin-top: min(100vmin, 3rem);
+      }
+      .-mt-min {
+        margin-top: calc(min(100vmin, 3rem) * -1);
+      }
+      .mt-max {
+        margin-top: max(100vmax, 3rem);
+      }
+      .-mt-max {
+        margin-top: calc(max(100vmax, 3rem) * -1);
+      }
+      .mt-clamp {
+        margin-top: clamp(1rem, 100vh, 3rem);
+      }
+      .-mt-clamp {
+        margin-top: calc(clamp(1rem, 100vh, 3rem) * -1);
+      }
+    `)
+  })
+})
+
 test('a keyword value', () => {
   let config = {
     content: [{ raw: html`<div class="-mt-auto mt-auto"></div>` }],
