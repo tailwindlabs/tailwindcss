@@ -107,7 +107,7 @@ test('variants without & or an at-rule are ignored', () => {
 
 test('arbitrary variants are sorted after other variants', () => {
   let config = {
-    content: [{ raw: html`<div class="[&>*]:underline underline lg:underline"></div>` }],
+    content: [{ raw: html`<div class="underline lg:underline [&>*]:underline"></div>` }],
     corePlugins: { preflight: false },
   }
 
