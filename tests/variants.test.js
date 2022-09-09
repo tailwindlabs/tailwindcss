@@ -855,3 +855,92 @@ test('hoverOnlyWhenSupported adds hover and pointer media features by default', 
     `)
   })
 })
+
+test('multi-class utilities handle selector-mutating variants correctly', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div
+          class="hover:foo hover:bar hover:baz group-hover:foo group-hover:bar group-hover:baz peer-checked:foo peer-checked:bar peer-checked:baz"
+        ></div>`,
+      },
+      {
+        raw: html`<div
+          class="hover:foo1 hover:bar1 hover:baz1 group-hover:foo1 group-hover:bar1 group-hover:baz1 peer-checked:foo1 peer-checked:bar1 peer-checked:baz1"
+        ></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo.bar.baz {
+        color: red;
+      }
+      .foo1 .bar1 .baz1 {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .hover\:foo.bar.baz:hover {
+        color: red;
+      }
+      .hover\:bar.foo.baz:hover {
+        color: red;
+      }
+      .hover\:baz.foo.bar:hover {
+        color: red;
+      }
+      .hover\:foo1:hover .bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .hover\:bar1:hover .baz1 {
+        color: red;
+      }
+      .foo1 .bar1 .hover\:baz1:hover {
+        color: red;
+      }
+      .group:hover .group-hover\:foo.bar.baz {
+        color: red;
+      }
+      .group:hover .group-hover\:bar.foo.baz {
+        color: red;
+      }
+      .group:hover .group-hover\:baz.foo.bar {
+        color: red;
+      }
+      .group:hover .group-hover\:foo1 .bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .group:hover .group-hover\:bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .bar1 .group:hover .group-hover\:baz1 {
+        color: red;
+      }
+      .peer:checked ~ .peer-checked\:foo.bar.baz {
+        color: red;
+      }
+      .peer:checked ~ .peer-checked\:bar.foo.baz {
+        color: red;
+      }
+      .peer:checked ~ .peer-checked\:baz.foo.bar {
+        color: red;
+      }
+      .peer:checked ~ .peer-checked\:foo1 .bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .peer:checked ~ .peer-checked\:bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .bar1 .peer:checked ~ .peer-checked\:baz1 {
+        color: red;
+      }
+    `)
+  })
+})

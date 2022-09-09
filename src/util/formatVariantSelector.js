@@ -29,6 +29,58 @@ export function formatVariantSelector(current, ...others) {
   return current
 }
 
+/**
+ * Given any node in a selector this gets the "simple" selector it's a part of
+ * A simple selector is just a list of nodes without any combinators
+ * Technically :is(), :not(), :has(), etc… can have combinators but those are nested
+ * inside the relevant node and won't be picked up so they're fine to ignore
+ *
+ * @param {import('postcss-selector-parser').Node} node
+ * @returns {import('postcss-selector-parser').Node[]}
+ **/
+function simpleSelectorForNode(node) {
+  /** @type {import('postcss-selector-parser').Node[]} */
+  let nodes = []
+
+  // Walk backwards until we hit a combinator node (or the start)
+  while (node.prev() && node.prev().type !== 'combinator') {
+    node = node.prev()
+  }
+
+  // Now record all non-combinator nodes until we hit one (or the end)
+  while (node && node.type !== 'combinator') {
+    nodes.push(node)
+    node = node.next()
+  }
+
+  return nodes
+}
+
+/**
+ * Resorts the nodes in a selector to ensure they're in the correct order
+ * Tags go before classes, and pseudo classes go after classes
+ *
+ * @param {import('postcss-selector-parser').Selector} sel
+ * @returns {import('postcss-selector-parser').Selector}
+ **/
+function resortSelector(sel) {
+  sel.sort((a, b) => {
+    if (a.type === 'tag' && b.type === 'class') {
+      return -1
+    } else if (a.type === 'class' && b.type === 'tag') {
+      return 1
+    } else if (a.type === 'class' && b.type === 'pseudo' && b.value !== ':merge') {
+      return -1
+    } else if (a.type === 'pseudo' && a.value !== ':merge' && b.type === 'class') {
+      return 1
+    }
+
+    return sel.index(a) - sel.index(b)
+  })
+
+  return sel
+}
+
 export function finalizeSelector(
   format,
   {
@@ -88,12 +140,47 @@ export function finalizeSelector(
     }
   })
 
+  let simpleStart = selectorParser.comment({ value: '/*__simple__*/' })
+  let simpleEnd = selectorParser.comment({ value: '/*__simple__*/' })
+
   // We can safely replace the escaped base now, since the `base` section is
   // now in a normalized escaped value.
   ast.walkClasses((node) => {
-    if (node.value === base) {
-      node.replaceWith(...formatAst.nodes)
+    if (node.value !== base) {
+      return
     }
+
+    let parent = node.parent
+    let formatNodes = formatAst.nodes[0].nodes
+
+    // Perf optimization: if the parent is a single class we can just replace it and be done
+    if (parent.nodes.length === 1) {
+      node.replaceWith(...formatNodes)
+      return
+    }
+
+    let simpleSelector = simpleSelectorForNode(node)
+    parent.insertBefore(simpleSelector[0], simpleStart)
+    parent.insertAfter(simpleSelector[simpleSelector.length - 1], simpleEnd)
+
+    for (let child of formatNodes) {
+      parent.insertBefore(simpleSelector[0], child)
+    }
+
+    node.remove()
+
+    // Re-sort the simple selector to ensure it's in the correct order
+    simpleSelector = simpleSelectorForNode(simpleStart)
+    let firstNode = parent.index(simpleStart)
+
+    parent.nodes.splice(
+      firstNode,
+      simpleSelector.length,
+      ...resortSelector(selectorParser.selector({ nodes: simpleSelector })).nodes
+    )
+
+    simpleStart.remove()
+    simpleEnd.remove()
   })
 
   // This will make sure to move pseudo's to the correct spot (the end for
