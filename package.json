@@ -18,6 +18,7 @@
     "postswcify": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
     "rebuild-fixtures": "npm run swcify && node -r @swc/register scripts/rebuildFixtures.js",
     "prepublishOnly": "npm install --force && npm run swcify",
+    "prestyle": "ln -nfs `pwd` node_modules/tailwindcss && npm run swcify",
     "style": "eslint .",
     "pretest": "npm run generate",
     "test": "jest",
