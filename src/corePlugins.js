@@ -397,6 +397,7 @@ export let corePlugins = {
     addUtilities({
       '.visible': { visibility: 'visible' },
       '.invisible': { visibility: 'hidden' },
+      '.collapse': { visibility: 'collapse' },
     })
   },
 
