@@ -146,9 +146,9 @@ function applyVariant(variant, matches, context) {
 
     let fn = parseVariant(selector)
 
-    let sort = Array.from(context.variantOrder.values()).pop() << 1n
+    let sort = context.offsets.recordVariant(variant)
+
     context.variantMap.set(variant, [[sort, fn]])
-    context.variantOrder.set(variant, sort)
   }
 
   if (context.variantMap.has(variant)) {
@@ -227,11 +227,7 @@ function applyVariant(variant, matches, context) {
             // where you keep handling jobs until everything is done and each job can queue more
             // jobs if needed.
             variantFunctionTuples.push([
-              // TODO: This could have potential bugs if we shift the sort order from variant A far
-              // enough into the sort space of variant B. The chances are low, but if this happens
-              // then this might be the place too look at. One potential solution to this problem is
-              // reserving additional X places for these 'unknown' variants in between.
-              variantSort | BigInt(idx << ruleWithVariant.length),
+              context.offsets.applyParallelOffset(variantSort, idx),
               variantFunction,
 
               // If the clone has been modified we have to pass that back
@@ -298,7 +294,7 @@ function applyVariant(variant, matches, context) {
         let withOffset = [
           {
             ...meta,
-            sort: variantSort | meta.sort,
+            sort: context.offsets.applyVariantOffset(meta.sort, variantSort),
             collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
             isArbitraryVariant: isArbitraryValue(variant),
           },
@@ -409,9 +405,11 @@ function extractArbitraryProperty(classCandidate, context) {
     return null
   }
 
+  let sort = context.offsets.arbitraryProperty()
+
   return [
     [
-      { sort: context.arbitraryPropertiesSort, layer: 'utilities' },
+      { sort, layer: 'utilities' },
       () => ({
         [asClass(classCandidate)]: {
           [property]: normalized,
@@ -704,7 +702,7 @@ function generateRules(candidates, context) {
     context.candidateRuleCache.set(candidate, rules)
 
     for (const match of matches) {
-      let [{ sort, layer, options }, rule] = match
+      let [{ sort, options }, rule] = match
 
       if (options.respectImportant && strategy) {
         let container = postcss.root({ nodes: [rule.clone()] })
@@ -712,7 +710,7 @@ function generateRules(candidates, context) {
         rule = container.nodes[0]
       }
 
-      let newEntry = [sort | context.layerOrder[layer], rule]
+      let newEntry = [sort, rule]
       rules.add(newEntry)
       context.ruleCache.add(newEntry)
       allRules.push(newEntry)

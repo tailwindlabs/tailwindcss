@@ -12,7 +12,6 @@ import isPlainObject from '../util/isPlainObject'
 import escapeClassName from '../util/escapeClassName'
 import nameClass, { formatClass } from '../util/nameClass'
 import { coerceValue } from '../util/pluginUtils'
-import bigSign from '../util/bigSign'
 import { variantPlugins, corePlugins } from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
@@ -22,6 +21,7 @@ import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { generateRules } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
+import { Offsets } from './offsets.js'
 
 let MATCH_VARIANT = Symbol()
 
@@ -201,6 +201,13 @@ export function parseVariant(variant) {
   }
 }
 
+/**
+ *
+ * @param {any} tailwindConfig
+ * @param {any} context
+ * @param {object} param2
+ * @param {Offsets} param2.offsets
+ */
 function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offsets, classList }) {
   function getConfigValue(path, defaultValue) {
     return path ? dlv(tailwindConfig, path, defaultValue) : tailwindConfig
@@ -255,7 +262,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     addBase(base) {
       for (let [identifier, rule] of withIdentifiers(base)) {
         let prefixedIdentifier = prefixIdentifier(identifier, {})
-        let offset = offsets.base++
+        let offset = offsets.create('base')
 
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
@@ -284,7 +291,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push([{ sort: offsets.base++, layer: 'defaults' }, rule])
+          .push([{ sort: offsets.create('defaults'), layer: 'defaults' }, rule])
       }
     },
     addComponents(components, options) {
@@ -307,7 +314,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push([{ sort: offsets.components++, layer: 'components', options }, rule])
+          .push([{ sort: offsets.create('components'), layer: 'components', options }, rule])
       }
     },
     addUtilities(utilities, options) {
@@ -330,7 +337,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap
           .get(prefixedIdentifier)
-          .push([{ sort: offsets.utilities++, layer: 'utilities', options }, rule])
+          .push([{ sort: offsets.create('utilities'), layer: 'utilities', options }, rule])
       }
     },
     matchUtilities: function (utilities, options) {
@@ -341,7 +348,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       options = { ...defaultOptions, ...options }
 
-      let offset = offsets.utilities++
+      let offset = offsets.create('utilities')
 
       for (let identifier in utilities) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
@@ -393,7 +400,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       options = { ...defaultOptions, ...options }
 
-      let offset = offsets.components++
+      let offset = offsets.create('components')
 
       for (let identifier in components) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
@@ -641,13 +648,10 @@ function resolvePlugins(context, root) {
 function registerPlugins(plugins, context) {
   let variantList = []
   let variantMap = new Map()
-  let offsets = {
-    defaults: 0n,
-    base: 0n,
-    components: 0n,
-    utilities: 0n,
-    user: 0n,
-  }
+  context.variantMap = variantMap
+
+  let offsets = new Offsets()
+  context.offsets = offsets
 
   let classList = new Set()
 
@@ -668,49 +672,17 @@ function registerPlugins(plugins, context) {
     }
   }
 
-  let highestOffset = ((args) => args.reduce((m, e) => (e > m ? e : m)))([
-    offsets.base,
-    offsets.defaults,
-    offsets.components,
-    offsets.utilities,
-    offsets.user,
-  ])
-  let reservedBits = BigInt(highestOffset.toString(2).length)
-
-  // A number one less than the top range of the highest offset area
-  // so arbitrary properties are always sorted at the end.
-  context.arbitraryPropertiesSort = ((1n << reservedBits) << 0n) - 1n
-
-  context.layerOrder = {
-    defaults: (1n << reservedBits) << 0n,
-    base: (1n << reservedBits) << 1n,
-    components: (1n << reservedBits) << 2n,
-    utilities: (1n << reservedBits) << 3n,
-    user: (1n << reservedBits) << 4n,
-  }
-
-  reservedBits += 5n
-
-  let offset = 0
-  context.variantOrder = new Map(
-    variantList
-      .map((variant, i) => {
-        let variantFunctions = variantMap.get(variant).length
-        let bits = (1n << BigInt(i + offset)) << reservedBits
-        offset += variantFunctions - 1
-        return [variant, bits]
-      })
-      .sort(([, a], [, z]) => bigSign(a - z))
-  )
-
-  context.minimumScreen = [...context.variantOrder.values()].shift()
+  // Make sure to record bit masks for every variant
+  offsets.recordVariants(variantList, (variant) => variantMap.get(variant).length)
 
   // Build variantMap
   for (let [variantName, variantFunctions] of variantMap.entries()) {
-    let sort = context.variantOrder.get(variantName)
     context.variantMap.set(
       variantName,
-      variantFunctions.map((variantFunction, idx) => [sort << BigInt(idx), variantFunction])
+      variantFunctions.map((variantFunction, idx) => [
+        offsets.forVariant(variantName, idx),
+        variantFunction,
+      ])
     )
   }
 
@@ -816,26 +788,41 @@ function registerPlugins(plugins, context) {
     }
   }
 
+  let darkClassName = [].concat(context.tailwindConfig.darkMode ?? 'media')[1] ?? 'dark'
+
   // A list of utilities that are used by certain Tailwind CSS utilities but
   // that don't exist on their own. This will result in them "not existing" and
   // sorting could be weird since you still require them in order to make the
-  // host utitlies work properly. (Thanks Biology)
-  let parasiteUtilities = new Set([prefix(context, 'group'), prefix(context, 'peer')])
+  // host utilities work properly. (Thanks Biology)
+  let parasiteUtilities = [
+    prefix(context, darkClassName),
+    prefix(context, 'group'),
+    prefix(context, 'peer'),
+  ]
   context.getClassOrder = function getClassOrder(classes) {
-    let sortedClassNames = new Map()
-    for (let [sort, rule] of generateRules(new Set(classes), context)) {
-      if (sortedClassNames.has(rule.raws.tailwind.candidate)) continue
-      sortedClassNames.set(rule.raws.tailwind.candidate, sort)
+    // Non-util classes won't be generated, so we default them to null
+    let sortedClassNames = new Map(classes.map((className) => [className, null]))
+
+    // Sort all classes in order
+    // Non-tailwind classes won't be generated and will be left as `null`
+    let rules = generateRules(new Set(classes), context)
+    rules = context.offsets.sort(rules)
+
+    let idx = BigInt(parasiteUtilities.length)
+
+    for (const [, rule] of rules) {
+      sortedClassNames.set(rule.raws.tailwind.candidate, idx++)
     }
 
     return classes.map((className) => {
       let order = sortedClassNames.get(className) ?? null
+      let parasiteIndex = parasiteUtilities.indexOf(className)
 
-      if (order === null && parasiteUtilities.has(className)) {
+      if (order === null && parasiteIndex !== -1) {
         // This will make sure that it is at the very beginning of the
         // `components` layer which technically means 'before any
         // components'.
-        order = context.layerOrder.components
+        order = BigInt(parasiteIndex)
       }
 
       return [className, order]
