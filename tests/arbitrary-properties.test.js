@@ -324,7 +324,7 @@ it('should be possible to read theme values in arbitrary properties (without quo
 
 it('should be possible to read theme values in arbitrary properties (with quotes)', () => {
   let config = {
-    content: [{ raw: html`<div class="[--a:theme('colors.blue.500')] [color:var(--a)]"></div>` }],
+    content: [{ raw: html`<div class="[color:var(--a)] [--a:theme('colors.blue.500')]"></div>` }],
     corePlugins: { preflight: false },
   }
 
