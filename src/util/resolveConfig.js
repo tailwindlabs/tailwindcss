@@ -29,7 +29,7 @@ function mergeWith(target, ...sources) {
 
       if (merged === undefined) {
         if (isObject(target[k]) && isObject(source[k])) {
-          target[k] = mergeWith(target[k], source[k], customizer)
+          target[k] = mergeWith({}, target[k], source[k], customizer)
         } else {
           target[k] = source[k]
         }

@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Re-use existing entries in the rule cache ([#9208](https://github.com/tailwindlabs/tailwindcss/pull/9208))
 - Don't output duplicate utilities ([#9208](https://github.com/tailwindlabs/tailwindcss/pull/9208))
 - Fix `fontFamily` config TypeScript types ([#9214](https://github.com/tailwindlabs/tailwindcss/pull/9214))
+- Handle variants on complex selector utilities ([#9262](https://github.com/tailwindlabs/tailwindcss/pull/9262))
+- Don't mutate shared config objects ([#9294](https://github.com/tailwindlabs/tailwindcss/pull/9294))
+- Fix ordering of parallel variants ([#9282](https://github.com/tailwindlabs/tailwindcss/pull/9282))
 
 ## [3.1.8] - 2022-08-05
 

@@ -3,7 +3,7 @@ import { run, html, css, defaults } from './util/run'
 it('should be possible to use contrast-more and contrast-less variants', () => {
   let config = {
     content: [
-      { raw: html`<div class="contrast-more:bg-pink-500 contrast-less:bg-black bg-white"></div>` },
+      { raw: html`<div class="bg-white contrast-more:bg-pink-500 contrast-less:bg-black"></div>` },
     ],
     corePlugins: { preflight: false },
   }
