@@ -1787,6 +1787,6 @@ test('does not duplicate extended configs every time resolveConfig is called', (
 
   const result = createConfig('blue')
 
-  expect(shared.foo.bar.baz).toMatchObject([{ color: 'red' }, { color: 'blue' }])
+  expect(shared.foo.bar.baz).toMatchObject([{ color: 'red' }])
   expect(result.theme.foo.bar.baz).toMatchObject([{ color: 'red' }, { color: 'blue' }])
 })
