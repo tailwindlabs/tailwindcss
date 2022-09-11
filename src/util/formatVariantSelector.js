@@ -81,6 +81,29 @@ function resortSelector(sel) {
   return sel
 }
 
+function eliminateIrrelevantSelectors(sel, base) {
+  let hasClassesMatchingCandidate = false
+
+  sel.walk((child) => {
+    if (child.type === 'class' && child.value === base) {
+      hasClassesMatchingCandidate = true
+      return false // Stop walking
+    }
+  })
+
+  if (!hasClassesMatchingCandidate) {
+    sel.remove()
+  }
+
+  // We do NOT recursively eliminate sub selectors that don't have the base class
+  // as this is NOT a safe operation. For example, if we have:
+  // `.space-x-2 > :not([hidden]) ~ :not([hidden])`
+  // We cannot remove the [hidden] from the :not() because it would change the
+  // meaning of the selector.
+
+  // TODO: Can we do this for :matches, :is, and :where?
+}
+
 export function finalizeSelector(
   format,
   {
@@ -115,13 +138,7 @@ export function finalizeSelector(
   // Remove extraneous selectors that do not include the base class/candidate being matched against
   // For example if we have a utility defined `.a, .b { color: red}`
   // And the formatted variant is sm:b then we want the final selector to be `.sm\:b` and not `.a, .sm\:b`
-  ast.each((node) => {
-    let hasClassesMatchingCandidate = node.some((n) => n.type === 'class' && n.value === base)
-
-    if (!hasClassesMatchingCandidate) {
-      node.remove()
-    }
-  })
+  ast.each((sel) => eliminateIrrelevantSelectors(sel, base))
 
   // Normalize escaped classes, e.g.:
   //
