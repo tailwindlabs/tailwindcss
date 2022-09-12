@@ -944,3 +944,88 @@ test('multi-class utilities handle selector-mutating variants correctly', () => 
     `)
   })
 })
+
+test('class inside pseudo-class function :has', () => {
+  let config = {
+    content: [
+      { raw: html`<div class="foo hover:foo sm:foo"></div>` },
+      { raw: html`<div class="bar hover:bar sm:bar"></div>` },
+      { raw: html`<div class="baz hover:baz sm:baz"></div>` },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      :where(.foo) {
+        color: red;
+      }
+      :matches(.foo, .bar, .baz) {
+        color: orange;
+      }
+      :is(.foo) {
+        color: yellow;
+      }
+      html:has(.foo) {
+        color: green;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      :where(.foo) {
+        color: red;
+      }
+      :matches(.foo, .bar, .baz) {
+        color: orange;
+      }
+      :is(.foo) {
+        color: yellow;
+      }
+      html:has(.foo) {
+        color: green;
+      }
+
+      :where(.hover\:foo:hover) {
+        color: red;
+      }
+      :matches(.hover\:foo:hover, .bar, .baz) {
+        color: orange;
+      }
+      :matches(.foo, .hover\:bar:hover, .baz) {
+        color: orange;
+      }
+      :matches(.foo, .bar, .hover\:baz:hover) {
+        color: orange;
+      }
+      :is(.hover\:foo:hover) {
+        color: yellow;
+      }
+      html:has(.hover\:foo:hover) {
+        color: green;
+      }
+      @media (min-width: 640px) {
+        :where(.sm\:foo) {
+          color: red;
+        }
+        :matches(.sm\:foo, .bar, .baz) {
+          color: orange;
+        }
+        :matches(.foo, .sm\:bar, .baz) {
+          color: orange;
+        }
+        :matches(.foo, .bar, .sm\:baz) {
+          color: orange;
+        }
+        :is(.sm\:foo) {
+          color: yellow;
+        }
+        html:has(.sm\:foo) {
+          color: green;
+        }
+      }
+    `)
+  })
+})
