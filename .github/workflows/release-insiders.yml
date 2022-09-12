@@ -51,6 +51,12 @@ jobs:
         env:
           CI: true
 
+      - name: Unlink Tailwind CSS (for prettier)
+        run: |
+          unlink node_modules/tailwindcss
+        env:
+          CI: true
+
       - name: Resolve version
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
