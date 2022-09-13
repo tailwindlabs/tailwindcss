@@ -7,6 +7,7 @@ import buildMediaQuery from '../util/buildMediaQuery'
 import { toPath } from '../util/toPath'
 import { withAlphaValue } from '../util/withAlphaVariable'
 import { parseColorFormat } from '../util/pluginUtils'
+import log from '../util/log'
 
 function isObject(input) {
   return typeof input === 'object' && input !== null
@@ -196,7 +197,9 @@ function resolvePath(config, path, defaultValue) {
   return results.find((result) => result.isValid) ?? results[0]
 }
 
-export default function ({ tailwindConfig: config }) {
+export default function (context) {
+  let config = context.tailwindConfig
+
   let functions = {
     theme: (node, path, ...defaultValue) => {
       let { isValid, value, error, alpha } = resolvePath(
@@ -206,6 +209,24 @@ export default function ({ tailwindConfig: config }) {
       )
 
       if (!isValid) {
+        let parentNode = node.parent
+        let candidate = parentNode?.raws.tailwind?.candidate
+
+        if (parentNode && candidate !== undefined) {
+          // Remove this utility from any caches
+          context.markInvalidUtilityNode(parentNode)
+
+          // Remove the CSS node from the markup
+          parentNode.remove()
+
+          // Show a warning
+          log.warn('invalid-theme-key-in-class', [
+            `The utility \`${candidate}\` contains an invalid theme value and was not generated.`,
+          ])
+
+          return
+        }
+
         throw node.error(error)
       }
 

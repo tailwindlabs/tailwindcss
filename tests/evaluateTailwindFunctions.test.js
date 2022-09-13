@@ -1,14 +1,18 @@
+import fs from 'fs'
+import path from 'path'
 import postcss from 'postcss'
 import plugin from '../src/lib/evaluateTailwindFunctions'
-import tailwind from '../src/index'
-import { css } from './util/run'
+import { run as runFull, css, html } from './util/run'
 
 function run(input, opts = {}) {
-  return postcss([plugin({ tailwindConfig: opts })]).process(input, { from: undefined })
-}
-
-function runFull(input, config) {
-  return postcss([tailwind(config)]).process(input, { from: undefined })
+  return postcss([
+    plugin({
+      tailwindConfig: opts,
+      markInvalidUtilityNode() {
+        // no op
+      },
+    }),
+  ]).process(input, { from: undefined })
 }
 
 test('it looks up values in the theme using dot notation', () => {
@@ -1220,5 +1224,64 @@ it('can find values with slashes in the theme key while still allowing for alpha
         color: rgb(5 16 0 / 25);
       }
     `)
+  })
+})
+
+describe('context dependent', () => {
+  let configPath = path.resolve(__dirname, './evaluate-tailwind-functions.tailwind.config.js')
+  let filePath = path.resolve(__dirname, './evaluate-tailwind-functions.test.html')
+  let config = {
+    content: [filePath],
+    corePlugins: { preflight: false },
+  }
+
+  // Rebuild the config file for each test
+  beforeEach(() => fs.promises.writeFile(configPath, `module.exports = ${JSON.stringify(config)};`))
+  afterEach(() => fs.promises.unlink(configPath))
+
+  let warn
+
+  beforeEach(() => {
+    warn = jest.spyOn(require('../src/util/log').default, 'warn')
+  })
+
+  afterEach(() => warn.mockClear())
+
+  it('should not generate when theme fn doesnt resolve', async () => {
+    await fs.promises.writeFile(
+      filePath,
+      html`
+        <div class="underline [--box-shadow:theme('boxShadow.doesnotexist')]"></div>
+        <div class="bg-[theme('boxShadow.doesnotexist')]"></div>
+      `
+    )
+
+    // TODO: We need a way to reuse the context in our test suite without requiring writing to files
+    // It should be an explicit thing tho — like we create a context and pass it in or something
+    let result = await runFull('@tailwind utilities', configPath)
+
+    // 1. On first run it should work because it's been removed from the class cache
+    expect(result.css).toMatchCss(css`
+      .underline {
+        text-decoration-line: underline;
+      }
+    `)
+
+    // 2. But we get a warning in the console
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn.mock.calls.map((x) => x[0])).toEqual(['invalid-theme-key-in-class'])
+
+    // 3. The second run should work fine because it's been removed from the class cache
+    result = await runFull('@tailwind utilities', configPath)
+
+    expect(result.css).toMatchCss(css`
+      .underline {
+        text-decoration-line: underline;
+      }
+    `)
+
+    // 4. But we've not received any further logs about it
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn.mock.calls.map((x) => x[0])).toEqual(['invalid-theme-key-in-class'])
   })
 })

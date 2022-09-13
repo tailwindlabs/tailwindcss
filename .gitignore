@@ -17,3 +17,6 @@ isolate*.log
 
 # Generated files
 /src/corePluginList.js
+
+# Generated files during tests
+/tests/evaluate-tailwind-functions.test.html
