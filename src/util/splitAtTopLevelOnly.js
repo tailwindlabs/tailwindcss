@@ -1,5 +1,11 @@
 import * as regex from '../lib/regex'
 
+let except = new Map([
+  ['(', ')'],
+  ['[', ']'],
+  ['{', '}'],
+])
+
 /**
  * This splits a string on a top-level character.
  *
@@ -15,7 +21,44 @@ import * as regex from '../lib/regex'
  * @param {string} input
  * @param {string} separator
  */
-export function* splitAtTopLevelOnly(input, separator) {
+export function splitAtTopLevelOnly(input, separator) {
+  if (separator.length === 1) {
+    // Fast pass in case the separator is 1 character long.
+    // TODO: Handle separators with multiple characters
+    return splitFast(input, separator)
+  }
+
+  return splitOriginal(input, separator)
+}
+
+// TODO: Improve this so that we can handle separators of multiple characters long. For now, this is
+// just an optimization path.
+function splitFast(input, separator) {
+  let stack = []
+  let parts = []
+  let lastPos = 0
+
+  for (let idx = 0; idx < input.length; idx++) {
+    let char = input[idx]
+
+    if (char === separator && stack.length <= 0) {
+      parts.push(input.slice(lastPos, idx))
+      lastPos = idx + 1 /* Skip separator itself */
+    }
+
+    if (except.has(char)) {
+      stack.push(except.get(char))
+    } else if (stack[stack.length - 1] === char) {
+      stack.pop()
+    }
+  }
+
+  parts.push(input.slice(lastPos))
+
+  return parts
+}
+
+function* splitOriginal(input, separator) {
   let SPECIALS = new RegExp(`[(){}\\[\\]${regex.escape(separator)}]`, 'g')
 
   let depth = 0
