@@ -1,33 +1,13 @@
 import { parseColor } from './color'
 import { parseBoxShadowValue } from './parseBoxShadowValue'
+import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 
 let cssFunctions = ['min', 'max', 'clamp', 'calc']
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
-function splitBy(value, delimiter, exceptIn = [['(', ')']]) {
-  let except = new Map(exceptIn)
-
-  let stack = []
-  let parts = []
-  let lastPos = 0
-
-  for (let [idx, char] of value.split('').entries()) {
-    if (char === delimiter && stack.length <= 0) {
-      parts.push(value.slice(lastPos, idx))
-      lastPos = idx + 1 /* Skip delimiter itself */
-    }
-
-    if (except.has(char)) {
-      stack.push(except.get(char))
-    } else if (stack[stack.length - 1] === char) {
-      stack.pop()
-    }
-  }
-
-  parts.push(value.slice(lastPos))
-
-  return parts
+function splitBy(value, delimiter) {
+  return Array.from(splitAtTopLevelOnly(value, delimiter))
 }
 
 // This is not a data type, but rather a function that can normalize the
