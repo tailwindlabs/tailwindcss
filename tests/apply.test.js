@@ -1776,7 +1776,7 @@ it('does not warn when matching rules with multiple simple selectors without mul
   await doesNotShowWarnings(run(input, config))
 })
 
-it('does not warn when using pseudo elements', async () => {
+it('does not warn when using pseudo elements in a utility', async () => {
   let config = {
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
@@ -1792,7 +1792,7 @@ it('does not warn when using pseudo elements', async () => {
   await doesNotShowWarnings(run(input, config))
 })
 
-it('does not warn when using built in utilities that have multiple selector components', async () => {
+it('does not warn when using pseudo elements from variants', async () => {
   let config = {
     content: [{ raw: html`<div class="bar"></div>` }],
     plugins: [],
@@ -1801,7 +1801,26 @@ it('does not warn when using built in utilities that have multiple selector comp
   let input = css`
     @tailwind utilities;
     .bar {
-      @apply space-x-4 divide-x-4;
+      @apply placeholder:text-blue-600;
+    }
+  `
+
+  await doesNotShowWarnings(run(input, config))
+})
+
+it('does not warn when using built in utilities that have multiple selector components', async () => {
+  let config = {
+    content: [{ raw: html`<div class="bar baz"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    .bar {
+      @apply divide-x-4;
+    }
+    .baz {
+      @apply space-x-4;
     }
   `
 
@@ -1821,7 +1840,7 @@ it('warns when matching multiple rules', async () => {
         color: blue;
       }
       .foo {
-        color: green;
+        background: green;
       }
     }
     .bar {
