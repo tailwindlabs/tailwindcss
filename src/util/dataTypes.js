@@ -6,10 +6,6 @@ let cssFunctions = ['min', 'max', 'clamp', 'calc']
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
-function splitBy(value, delimiter) {
-  return Array.from(splitAtTopLevelOnly(value, delimiter))
-}
-
 // This is not a data type, but rather a function that can normalize the
 // correct values.
 export function normalize(value, isRoot = true) {
@@ -63,7 +59,7 @@ export function number(value) {
 }
 
 export function percentage(value) {
-  return splitBy(value, '_').every((part) => {
+  return splitAtTopLevelOnly(value, '_').every((part) => {
     return /%$/g.test(part) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(part))
   })
 }
@@ -88,7 +84,7 @@ let lengthUnits = [
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
-  return splitBy(value, '_').every((part) => {
+  return splitAtTopLevelOnly(value, '_').every((part) => {
     return (
       part === '0' ||
       new RegExp(`${lengthUnitsPattern}$`).test(part) ||
@@ -117,7 +113,7 @@ export function shadow(value) {
 export function color(value) {
   let colors = 0
 
-  let result = splitBy(value, '_').every((part) => {
+  let result = splitAtTopLevelOnly(value, '_').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -132,7 +128,7 @@ export function color(value) {
 
 export function image(value) {
   let images = 0
-  let result = splitBy(value, ',').every((part) => {
+  let result = splitAtTopLevelOnly(value, ',').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -173,7 +169,7 @@ export function gradient(value) {
 let validPositions = new Set(['center', 'top', 'right', 'bottom', 'left'])
 export function position(value) {
   let positions = 0
-  let result = splitBy(value, '_').every((part) => {
+  let result = splitAtTopLevelOnly(value, '_').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -191,7 +187,7 @@ export function position(value) {
 
 export function familyName(value) {
   let fonts = 0
-  let result = splitBy(value, ',').every((part) => {
+  let result = splitAtTopLevelOnly(value, ',').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true

@@ -5,7 +5,7 @@ let SPACE = /\ +(?![^(]*\))/g // Similar to the one above, but with spaces inste
 let LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
 
 export function parseBoxShadowValue(input) {
-  let shadows = Array.from(splitAtTopLevelOnly(input, ','))
+  let shadows = splitAtTopLevelOnly(input, ',')
   return shadows.map((shadow) => {
     let value = shadow.trim()
     let result = { raw: value }
