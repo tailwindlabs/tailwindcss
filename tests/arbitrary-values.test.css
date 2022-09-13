@@ -661,6 +661,9 @@
 .bg-opacity-\[var\(--value\)\] {
   --tw-bg-opacity: var(--value);
 }
+.bg-\[linear-gradient\(to_left\2c rgb\(var\(--green\)\)\2c blue\)\] {
+  background-image: linear-gradient(to left, rgb(var(--green)), blue);
+}
 .bg-\[url\(\'\/path-to-image\.png\'\)\] {
   background-image: url('/path-to-image.png');
 }
