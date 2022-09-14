@@ -856,6 +856,52 @@ function registerPlugins(plugins, context) {
   }
 }
 
+/**
+ * Mark as class as retroactively invalid
+ *
+ *
+ * @param {string} candidate
+ */
+function markInvalidUtilityCandidate(context, candidate) {
+  if (!context.classCache.has(candidate)) {
+    return
+  }
+
+  // Mark this as not being a real utility
+  context.notClassCache.add(candidate)
+
+  // Remove it from any candidate-specific caches
+  context.classCache.delete(candidate)
+  context.applyClassCache.delete(candidate)
+  context.candidateRuleMap.delete(candidate)
+  context.candidateRuleCache.delete(candidate)
+
+  // Ensure the stylesheet gets rebuilt
+  context.stylesheetCache = null
+}
+
+/**
+ * Mark as class as retroactively invalid
+ *
+ * @param {import('postcss').Node} node
+ */
+function markInvalidUtilityNode(context, node) {
+  let candidate = node.raws.tailwind.candidate
+
+  if (!candidate) {
+    return
+  }
+
+  for (const entry of context.ruleCache) {
+    if (entry[1].raws.tailwind.candidate === candidate) {
+      context.ruleCache.delete(entry)
+      // context.postCssNodeCache.delete(node)
+    }
+  }
+
+  markInvalidUtilityCandidate(context, candidate)
+}
+
 export function createContext(tailwindConfig, changedContent = [], root = postcss.root()) {
   let context = {
     disposables: [],
@@ -870,6 +916,9 @@ export function createContext(tailwindConfig, changedContent = [], root = postcs
     changedContent: changedContent,
     variantMap: new Map(),
     stylesheetCache: null,
+
+    markInvalidUtilityCandidate: (candidate) => markInvalidUtilityCandidate(context, candidate),
+    markInvalidUtilityNode: (node) => markInvalidUtilityNode(context, node),
   }
 
   let resolvedPlugins = resolvePlugins(context, root)
