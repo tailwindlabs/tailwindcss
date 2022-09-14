@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't mutate shared config objects ([#9294](https://github.com/tailwindlabs/tailwindcss/pull/9294))
 - Fix ordering of parallel variants ([#9282](https://github.com/tailwindlabs/tailwindcss/pull/9282))
 - Handle variants in utility selectors using `:where()` and `:has()` ([#9309](https://github.com/tailwindlabs/tailwindcss/pull/9309))
+- Improve data type analyses for arbitrary values ([#9320](https://github.com/tailwindlabs/tailwindcss/pull/9320))
 
 ## [3.1.8] - 2022-08-05
 

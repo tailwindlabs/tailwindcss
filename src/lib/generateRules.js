@@ -461,7 +461,7 @@ function splitWithSeparator(input, separator) {
     return [sharedState.NOT_ON_DEMAND]
   }
 
-  return Array.from(splitAtTopLevelOnly(input, separator))
+  return splitAtTopLevelOnly(input, separator)
 }
 
 function* recordCandidates(matches, classCandidate) {

@@ -1,5 +1,3 @@
-import * as regex from '../lib/regex'
-
 /**
  * This splits a string on a top-level character.
  *
@@ -15,57 +13,33 @@ import * as regex from '../lib/regex'
  * @param {string} input
  * @param {string} separator
  */
-export function* splitAtTopLevelOnly(input, separator) {
-  let SPECIALS = new RegExp(`[(){}\\[\\]${regex.escape(separator)}]`, 'g')
+export function splitAtTopLevelOnly(input, separator) {
+  let stack = []
+  let parts = []
+  let lastPos = 0
 
-  let depth = 0
-  let lastIndex = 0
-  let found = false
-  let separatorIndex = 0
-  let separatorStart = 0
-  let separatorLength = separator.length
+  for (let idx = 0; idx < input.length; idx++) {
+    let char = input[idx]
 
-  // Find all paren-like things & character
-  // And only split on commas if they're top-level
-  for (let match of input.matchAll(SPECIALS)) {
-    let matchesSeparator = match[0] === separator[separatorIndex]
-    let atEndOfSeparator = separatorIndex === separatorLength - 1
-    let matchesFullSeparator = matchesSeparator && atEndOfSeparator
-
-    if (match[0] === '(') depth++
-    if (match[0] === ')') depth--
-    if (match[0] === '[') depth++
-    if (match[0] === ']') depth--
-    if (match[0] === '{') depth++
-    if (match[0] === '}') depth--
-
-    if (matchesSeparator && depth === 0) {
-      if (separatorStart === 0) {
-        separatorStart = match.index
+    if (stack.length === 0 && char === separator[0]) {
+      if (separator.length === 1 || input.slice(idx, idx + separator.length) === separator) {
+        parts.push(input.slice(lastPos, idx))
+        lastPos = idx + separator.length
       }
-
-      separatorIndex++
     }
 
-    if (matchesFullSeparator && depth === 0) {
-      found = true
-
-      yield input.substring(lastIndex, separatorStart)
-      lastIndex = separatorStart + separatorLength
-    }
-
-    if (separatorIndex === separatorLength) {
-      separatorIndex = 0
-      separatorStart = 0
+    if (char === '(' || char === '[' || char === '{') {
+      stack.push(char)
+    } else if (
+      (char === ')' && stack[stack.length - 1] === '(') ||
+      (char === ']' && stack[stack.length - 1] === '[') ||
+      (char === '}' && stack[stack.length - 1] === '{')
+    ) {
+      stack.pop()
     }
   }
 
-  // Provide the last segment of the string if available
-  // Otherwise the whole string since no `char`s were found
-  // This mirrors the behavior of string.split()
-  if (found) {
-    yield input.substring(lastIndex)
-  } else {
-    yield input
-  }
+  parts.push(input.slice(lastPos))
+
+  return parts
 }

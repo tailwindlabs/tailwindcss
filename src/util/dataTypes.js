@@ -1,12 +1,10 @@
 import { parseColor } from './color'
 import { parseBoxShadowValue } from './parseBoxShadowValue'
+import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 
 let cssFunctions = ['min', 'max', 'clamp', 'calc']
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
-
-let COMMA = /,(?![^(]*\))/g // Comma separator that is not located between brackets. E.g.: `cubiz-bezier(a, b, c)` these don't count.
-let UNDERSCORE = /_(?![^(]*\))/g // Underscore separator that is not located between brackets. E.g.: `rgba(255,_255,_255)_black` these don't count.
 
 // This is not a data type, but rather a function that can normalize the
 // correct values.
@@ -61,7 +59,7 @@ export function number(value) {
 }
 
 export function percentage(value) {
-  return value.split(UNDERSCORE).every((part) => {
+  return splitAtTopLevelOnly(value, '_').every((part) => {
     return /%$/g.test(part) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(part))
   })
 }
@@ -86,7 +84,7 @@ let lengthUnits = [
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
-  return value.split(UNDERSCORE).every((part) => {
+  return splitAtTopLevelOnly(value, '_').every((part) => {
     return (
       part === '0' ||
       new RegExp(`${lengthUnitsPattern}$`).test(part) ||
@@ -115,7 +113,7 @@ export function shadow(value) {
 export function color(value) {
   let colors = 0
 
-  let result = value.split(UNDERSCORE).every((part) => {
+  let result = splitAtTopLevelOnly(value, '_').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -130,7 +128,7 @@ export function color(value) {
 
 export function image(value) {
   let images = 0
-  let result = value.split(COMMA).every((part) => {
+  let result = splitAtTopLevelOnly(value, ',').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -171,7 +169,7 @@ export function gradient(value) {
 let validPositions = new Set(['center', 'top', 'right', 'bottom', 'left'])
 export function position(value) {
   let positions = 0
-  let result = value.split(UNDERSCORE).every((part) => {
+  let result = splitAtTopLevelOnly(value, '_').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -189,7 +187,7 @@ export function position(value) {
 
 export function familyName(value) {
   let fonts = 0
-  let result = value.split(COMMA).every((part) => {
+  let result = splitAtTopLevelOnly(value, ',').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
