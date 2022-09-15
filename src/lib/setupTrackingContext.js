@@ -162,8 +162,7 @@ export default function setupTrackingContext(configOrPath) {
 
         // Add template paths as postcss dependencies.
         for (let fileOrGlob of candidateFiles) {
-          let dependency = parseDependency(fileOrGlob)
-          if (dependency) {
+          for (let dependency of parseDependency(fileOrGlob)) {
             registerDependency(dependency)
           }
         }

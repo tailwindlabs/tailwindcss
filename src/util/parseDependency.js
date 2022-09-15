@@ -1,6 +1,8 @@
 import isGlob from 'is-glob'
 import globParent from 'glob-parent'
+import fs from 'fs'
 import path from 'path'
+import { flagEnabled } from '../featureFlags'
 
 // Based on `glob-base`
 // https://github.com/micromatch/glob-base/blob/master/index.js
@@ -25,25 +27,50 @@ function parseGlob(pattern) {
   return { base, glob }
 }
 
-export default function parseDependency(normalizedFileOrGlob) {
-  if (normalizedFileOrGlob.startsWith('!')) {
-    return null
+function toDependency(pathDesc) {
+  if (!pathDesc.glob) {
+    return {
+      type: 'dependency',
+      file: pathDesc.base,
+    }
   }
 
-  let message
+  if (process.env.ROLLUP_WATCH === 'true') {
+    // rollup-plugin-postcss does not support dir-dependency messages
+    // but directories can be watched in the same way as files
+    return {
+      type: 'dependency',
+      file: pathDesc.base,
+    }
+  }
+
+  return {
+    type: 'dir-dependency',
+    dir: pathDesc.base,
+    glob: pathDesc.glob,
+  }
+}
+
+export default function parseDependency(normalizedFileOrGlob) {
+  if (normalizedFileOrGlob.startsWith('!')) {
+    return []
+  }
+
+  let paths = []
 
   if (isGlob(normalizedFileOrGlob)) {
     let { base, glob } = parseGlob(normalizedFileOrGlob)
-    message = { type: 'dir-dependency', dir: path.resolve(base), glob }
+
+    paths.push({ base: base, glob })
   } else {
-    message = { type: 'dependency', file: path.resolve(normalizedFileOrGlob) }
+    paths.push({ base: normalizedFileOrGlob, glob: null })
   }
 
-  // rollup-plugin-postcss does not support dir-dependency messages
-  // but directories can be watched in the same way as files
-  if (message.type === 'dir-dependency' && process.env.ROLLUP_WATCH === 'true') {
-    message = { type: 'dependency', file: message.dir }
-  }
+  paths = paths.map((pathDesc) =>
+    Object.assign(pathDesc, {
+      base: path.resolve(pathDesc.base),
+    })
+  )
 
-  return message
+  return paths.map(toDependency)
 }
