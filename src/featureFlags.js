@@ -11,7 +11,11 @@ let featureFlags = {
     'respectDefaultRingColorOpacity',
     'disableColorOpacityUtilitiesByDefault',
   ],
-  experimental: ['optimizeUniversalDefaults', 'matchVariant' /* , 'variantGrouping' */],
+  experimental: [
+    'optimizeUniversalDefaults',
+    'matchVariant',
+    // 'variantGrouping',
+  ],
 }
 
 export function flagEnabled(config, flag) {
