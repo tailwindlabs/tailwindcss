@@ -27,6 +27,19 @@ function parseGlob(pattern) {
   return { base, glob }
 }
 
+function resolvePathSymlinks(pathDesc) {
+  try {
+    let newPath = fs.realpathSync(pathDesc.base, { encoding: 'utf8' })
+    if (newPath !== pathDesc.base) {
+      return [pathDesc, { ...pathDesc, base: newPath }]
+    }
+  } catch {
+    // TODO: log this?
+  }
+
+  return [pathDesc]
+}
+
 function toDependency(pathDesc) {
   if (!pathDesc.glob) {
     return {
@@ -76,6 +89,12 @@ export default function parseDependency(context, normalizedFileOrGlob) {
       base: path.resolve(...resolveFrom, pathDesc.base),
     })
   )
+
+  // Resolve the symlink for the base directory / file in each path
+  // These are added as additional dependencies to watch for changes because
+  // some tools (like webpack) will only watch the actual file or directory
+  // but not the symlink itself even in projects that use monorepos.
+  paths = paths.flatMap(resolvePathSymlinks)
 
   return paths.map(toDependency)
 }
