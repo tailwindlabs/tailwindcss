@@ -51,7 +51,7 @@ function toDependency(pathDesc) {
   }
 }
 
-export default function parseDependency(normalizedFileOrGlob) {
+export default function parseDependency(context, normalizedFileOrGlob) {
   if (normalizedFileOrGlob.startsWith('!')) {
     return []
   }
@@ -66,9 +66,14 @@ export default function parseDependency(normalizedFileOrGlob) {
     paths.push({ base: normalizedFileOrGlob, glob: null })
   }
 
+  // Resolve base paths relative to the config file or current working directory
+  let resolveFrom = flagEnabled(context.tailwindConfig, 'resolveContentRelativeToConfig')
+    ? [context.userConfigPath ?? process.cwd()]
+    : [process.cwd()]
+
   paths = paths.map((pathDesc) =>
     Object.assign(pathDesc, {
-      base: path.resolve(pathDesc.base),
+      base: path.resolve(...resolveFrom, pathDesc.base),
     })
   )
 

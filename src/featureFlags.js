@@ -15,6 +15,7 @@ let featureFlags = {
     'optimizeUniversalDefaults',
     'matchVariant',
     // 'variantGrouping',
+    'resolveContentRelativeToConfig',
     'resolveConfigRelativeToInput',
   ],
 }

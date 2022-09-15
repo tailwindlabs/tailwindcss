@@ -997,6 +997,8 @@ export function getContext(
 
   let context = createContext(tailwindConfig, [], root)
 
+  Object.assign(context, { userConfigPath })
+
   trackModified([...contextDependencies], getFileModifiedMap(context))
 
   // ---
