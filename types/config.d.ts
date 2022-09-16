@@ -291,6 +291,7 @@ export interface PluginAPI {
   addBase(base: CSSRuleObject | CSSRuleObject[]): void
   // for registering custom variants
   addVariant(name: string, definition: string | string[] | (() => string) | (() => string)[]): void
+  matchVariant(name: string, cb: (options: { value: string }) => string | string[]): void
   // for looking up values in the user’s theme configuration
   theme: <TDefaultValue = Config['theme']>(
     path?: string,
