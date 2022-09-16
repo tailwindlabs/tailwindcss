@@ -11,9 +11,7 @@ test('partial arbitrary variants', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant({
-          potato: (flavor) => `.potato-${flavor} &`,
-        })
+        matchVariant('potato', ({ value: flavor }) => `.potato-${flavor} &`)
       },
     ],
   }
@@ -47,9 +45,7 @@ test('partial arbitrary variants with at-rules', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant({
-          potato: (flavor) => `@media (potato: ${flavor})`,
-        })
+        matchVariant('potato', ({ value: flavor }) => `@media (potato: ${flavor})`)
       },
     ],
   }
@@ -86,9 +82,7 @@ test('partial arbitrary variants with at-rules and placeholder', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant({
-          potato: (flavor) => `@media (potato: ${flavor}) { &:potato }`,
-        })
+        matchVariant('potato', ({ value: flavor }) => `@media (potato: ${flavor}) { &:potato }`)
       },
     ],
   }
@@ -125,17 +119,12 @@ test('partial arbitrary variants with default values', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant(
-          {
-            tooltip: (side) => `&${side}`,
+        matchVariant('tooltip', ({ value: side }) => `&${side}`, {
+          values: {
+            bottom: '[data-location="bottom"]',
+            top: '[data-location="top"]',
           },
-          {
-            values: {
-              bottom: '[data-location="bottom"]',
-              top: '[data-location="top"]',
-            },
-          }
-        )
+        })
       },
     ],
   }
@@ -170,19 +159,14 @@ test('matched variant values maintain the sort order they are registered in', ()
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant(
-          {
-            alphabet: (side) => `&${side}`,
+        matchVariant('alphabet', ({ value: side }) => `&${side}`, {
+          values: {
+            a: '[data-value="a"]',
+            b: '[data-value="b"]',
+            c: '[data-value="c"]',
+            d: '[data-value="d"]',
           },
-          {
-            values: {
-              a: '[data-value="a"]',
-              b: '[data-value="b"]',
-              c: '[data-value="c"]',
-              d: '[data-value="d"]',
-            },
-          }
-        )
+        })
       },
     ],
   }
@@ -223,9 +207,9 @@ test('matchVariant can return an array of format strings from the function', () 
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant({
-          test: (selector) => selector.split(',').map((selector) => `&.${selector} > *`),
-        })
+        matchVariant('test', ({ value: selector }) =>
+          selector.split(',').map((selector) => `&.${selector} > *`)
+        )
       },
     ],
   }
