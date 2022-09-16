@@ -10,7 +10,7 @@
  * @returns {Dependency[]}
  */
 export default function parseDependency(contentPath) {
-  if (contentPath.original.startsWith('!')) {
+  if (contentPath.ignore) {
     return []
   }
 

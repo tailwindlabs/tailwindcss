@@ -17,6 +17,8 @@ import { env } from './sharedState'
  * @property {string} original
  * @property {string} base
  * @property {string | null} glob
+ * @property {boolean} ignore
+ * @property {string} pattern
  */
 
 /**
@@ -33,37 +35,73 @@ import { env } from './sharedState'
 export function parseCandidateFiles(context, tailwindConfig) {
   let files = tailwindConfig.content.files
 
-  return files.flatMap((contentPath) => parseContentPath(context, contentPath))
+  // Normalize the file globs
+  files = files.filter((filePath) => typeof filePath === 'string')
+  files = files.map(normalizePath)
+
+  // Split into included and excluded globs
+  let tasks = fastGlob.generateTasks(files)
+
+  /** @type {ContentPath[]} */
+  let included = []
+
+  /** @type {ContentPath[]} */
+  let excluded = []
+
+  for (const task of tasks) {
+    included.push(...task.positive.map((filePath) => parseFilePath(filePath, false)))
+    excluded.push(...task.negative.map((filePath) => parseFilePath(filePath, true)))
+  }
+
+  let paths = [...included, ...excluded]
+
+  // Resolve paths relative to the config file or cwd
+  paths = resolveRelativePaths(context, paths)
+
+  // Resolve symlinks if possible
+  paths = paths.flatMap(resolvePathSymlinks)
+
+  // Update cached patterns
+  paths = paths.map(resolveGlobPattern)
+
+  return paths
 }
 
 /**
  *
- * @param {any} context
- * @param {RawFile | FilePath} filePath
- * @returns {ContentPath[]}
+ * @param {string} filePath
+ * @param {boolean} ignore
+ * @returns {ContentPath}
  */
-function parseContentPath(context, filePath) {
-  if (typeof filePath !== 'string') {
-    return []
+function parseFilePath(filePath, ignore) {
+  let contentPath = {
+    original: filePath,
+    base: filePath,
+    ignore,
+    pattern: filePath,
+    glob: null,
   }
-
-  filePath = normalizePath(filePath)
-
-  /** @type {ContentPath[]} */
-  let paths = []
 
   if (isGlob(filePath)) {
-    let { base, glob } = parseGlob(filePath)
-
-    paths.push({ original: filePath, base: base, glob })
-  } else {
-    paths.push({ original: filePath, base: filePath, glob: null })
+    Object.assign(contentPath, parseGlob(filePath))
   }
 
-  paths = resolveRelativePaths(context, paths)
-  paths = paths.flatMap(resolvePathSymlinks)
+  return contentPath
+}
 
-  return paths
+/**
+ *
+ * @param {ContentPath} contentPath
+ * @returns {ContentPath}
+ */
+function resolveGlobPattern(contentPath) {
+  contentPath.pattern = contentPath.glob
+    ? `${contentPath.base}/${contentPath.glob}`
+    : contentPath.base
+
+  contentPath.pattern = contentPath.ignore ? `!${contentPath.pattern}` : contentPath.pattern
+
+  return contentPath
 }
 
 /**
@@ -85,11 +123,11 @@ function resolveRelativePaths(context, contentPaths) {
     resolveFrom = [path.dirname(context.userConfigPath)]
   }
 
-  return contentPaths.map((contentPath) =>
-    Object.assign(contentPath, {
-      base: path.resolve(...resolveFrom, contentPath.base),
-    })
-  )
+  return contentPaths.map((contentPath) => {
+    contentPath.base = path.resolve(...resolveFrom, contentPath.base)
+
+    return contentPath
+  })
 }
 
 /**
@@ -102,16 +140,21 @@ function resolveRelativePaths(context, contentPaths) {
  * @returns {ContentPath[]}
  */
 function resolvePathSymlinks(contentPath) {
+  let paths = [contentPath]
+
   try {
-    let newPath = fs.realpathSync(contentPath.base, { encoding: 'utf8' })
-    if (newPath !== contentPath.base) {
-      return [contentPath, { ...contentPath, base: newPath }]
+    let resolvedPath = fs.realpathSync(contentPath.base)
+    if (resolvedPath !== contentPath.base) {
+      paths.push({
+        ...contentPath,
+        base: resolvedPath,
+      })
     }
   } catch {
     // TODO: log this?
   }
 
-  return [contentPath]
+  return paths
 }
 
 /**
@@ -141,13 +184,7 @@ export function resolvedChangedContent(context, candidateFiles, fileModifiedMap)
  * @returns {Set<string>}
  */
 function resolveChangedFiles(candidateFiles, fileModifiedMap) {
-  let paths = candidateFiles.map((contentPath) =>
-    contentPath.original.startsWith('!')
-      ? contentPath.original
-      : contentPath.glob
-      ? `${contentPath.base}/${contentPath.glob}`
-      : contentPath.base
-  )
+  let paths = candidateFiles.map((contentPath) => contentPath.pattern)
 
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
