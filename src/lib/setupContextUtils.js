@@ -501,13 +501,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
   if (flagEnabled(tailwindConfig, 'matchVariant')) {
     api.matchVariant = function (variant, variantFn, options) {
-      for (let [k, v] of Object.entries(options?.values ?? {})) {
-        api.addVariant(`${variant}-${k}`, variantFn(v))
+      for (let [key, value] of Object.entries(options?.values ?? {})) {
+        api.addVariant(`${variant}-${key}`, variantFn({ value }))
       }
 
       api.addVariant(
         variant,
-        Object.assign(({ args }) => variantFn(args), { [MATCH_VARIANT]: true }),
+        Object.assign(({ args }) => variantFn({ value: args }), { [MATCH_VARIANT]: true }),
         options
       )
     }
