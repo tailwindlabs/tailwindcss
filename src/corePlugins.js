@@ -1481,7 +1481,7 @@ export let corePlugins = {
   },
 
   backgroundSize: createUtilityPlugin('backgroundSize', [['bg', ['background-size']]], {
-    type: ['lookup', 'length', 'percentage'],
+    type: ['lookup', 'length', 'percentage', 'size'],
   }),
 
   backgroundAttachment: ({ addUtilities }) => {
