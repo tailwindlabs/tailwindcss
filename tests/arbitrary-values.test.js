@@ -463,3 +463,39 @@ it('should correctly validate each part when checking for `percentage` data type
     `)
   })
 })
+
+it('should correctly validate background size', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[auto_auto,cover,_contain,10px,10px_10%]"></div>` }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[auto_auto\2c cover\2c _contain\2c 10px\2c 10px_10\%\] {
+        background-size: auto auto, cover, contain, 10px, 10px 10%;
+      }
+    `)
+  })
+})
+
+it('should correctly validate combination of percentage and length', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[50px_10%] bg-[50%_10%] bg-[50px_10px]"></div>` }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css.trim()).toHaveLength(0)
+  })
+})

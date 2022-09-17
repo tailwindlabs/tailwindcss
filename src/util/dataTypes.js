@@ -6,6 +6,10 @@ let cssFunctions = ['min', 'max', 'clamp', 'calc']
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
+function isCSSFunction(value) {
+  return cssFunctions.some((fn) => new RegExp(`^${fn}\\(.*\\)`).test(value))
+}
+
 // This is not a data type, but rather a function that can normalize the
 // correct values.
 export function normalize(value, isRoot = true) {
@@ -55,13 +59,11 @@ export function url(value) {
 }
 
 export function number(value) {
-  return !isNaN(Number(value)) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?`).test(value))
+  return !isNaN(Number(value)) || isCSSFunction(value)
 }
 
 export function percentage(value) {
-  return splitAtTopLevelOnly(value, '_').every((part) => {
-    return /%$/g.test(part) || cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?%`).test(part))
-  })
+  return (value.endsWith('%') && number(value.slice(0, -1))) || isCSSFunction(value)
 }
 
 let lengthUnits = [
@@ -84,13 +86,11 @@ let lengthUnits = [
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
-  return splitAtTopLevelOnly(value, '_').every((part) => {
-    return (
-      part === '0' ||
-      new RegExp(`${lengthUnitsPattern}$`).test(part) ||
-      cssFunctions.some((fn) => new RegExp(`^${fn}\\(.+?${lengthUnitsPattern}`).test(part))
-    )
-  })
+  return (
+    value === '0' ||
+    new RegExp(`^[+-]?[0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?${lengthUnitsPattern}$`).test(value) ||
+    isCSSFunction(value)
+  )
 }
 
 let lineWidths = new Set(['thin', 'medium', 'thick'])
