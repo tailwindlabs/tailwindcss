@@ -20,6 +20,7 @@ import normalizePath from 'normalize-path'
 import micromatch from 'micromatch'
 import { validateConfig } from './util/validateConfig.js'
 import { parseCandidateFiles } from './lib/content.js'
+import resolveConfigPath from './util/resolveConfigPath.js'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
@@ -441,9 +442,23 @@ async function build() {
     // So we want to use that one and only that one
     configPath = path.resolve(args['--config'])
   } else {
+    let postcssOptions = {
+      config: `./${configs.tailwind}`,
+      experimental: {
+        contextualPaths: args['--experimental-contextual-paths'],
+      },
+    }
+
     // The user has not specified an exact config file to use
     // So we want to find the closest one to the input file
-    configPath = `./${configs.tailwind}`
+    // when experimental contextual paths are enabled
+    let maybeConfigPath = resolveConfigPath(postcssOptions, path.resolve(input))
+
+    if (fs.existsSync(maybeConfigPath)) {
+      configPath = maybeConfigPath
+    } else {
+      configPath = null
+    }
   }
 
   async function loadPostCssPlugins() {
