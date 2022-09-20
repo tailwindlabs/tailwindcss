@@ -937,7 +937,8 @@ export function getContext(
   tailwindConfig,
   userConfigPath,
   tailwindConfigHash,
-  contextDependencies
+  contextDependencies,
+  postcssOptions
 ) {
   let sourcePath = result.opts.from
   let isConfigFile = userConfigPath !== null
@@ -997,7 +998,10 @@ export function getContext(
 
   let context = createContext(tailwindConfig, [], root)
 
-  Object.assign(context, { userConfigPath })
+  Object.assign(context, {
+    userConfigPath,
+    postcssOptions,
+  })
 
   trackModified([...contextDependencies], getFileModifiedMap(context))
 

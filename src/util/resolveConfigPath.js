@@ -34,16 +34,10 @@ function pickResolvedPath(configPath, inputPath) {
   if (inputPath) {
     try {
       // Use require.resolve so we can find config file in parent directories
-      let resolvedPath = require.resolve(configPath, {
-        paths: [inputPath],
+      return require.resolve(configPath, {
+        paths: [path.dirname(inputPath)],
       })
-
-      let maybeConfig = require(resolvedPath)
-
-      if (typeof maybeConfig === 'object' && flagEnabled(maybeConfig, 'resolveConfigRelativeToInput')) {
-        return resolvedPath
-      }
-    } catch (e) {}
+    } catch {}
   }
 
   return path.resolve(configPath)
@@ -61,7 +55,11 @@ export default function resolveConfigPath(pathOrConfig, inputPath) {
     pathOrConfig.config !== undefined &&
     isString(pathOrConfig.config)
   ) {
-    return pickResolvedPath(pathOrConfig.config, inputPath)
+    if (pathOrConfig.experimental?.contextualPaths) {
+      return pickResolvedPath(pathOrConfig.config, inputPath)
+    }
+
+    return path.resolve(pathOrConfig.config)
   }
 
   // require('tailwindcss')({ config: { theme: ..., variants: ... } })
@@ -75,13 +73,13 @@ export default function resolveConfigPath(pathOrConfig, inputPath) {
 
   // require('tailwindcss')('custom-config.js')
   if (isString(pathOrConfig)) {
-    return pickResolvedPath(pathOrConfig, inputPath)
+    return path.resolve(pathOrConfig)
   }
 
   // require('tailwindcss')
   for (const configFile of ['./tailwind.config.js', './tailwind.config.cjs']) {
     try {
-      const configPath = pickResolvedPath(configFile, inputPath)
+      const configPath = path.resolve(configFile)
       fs.accessSync(configPath)
       return configPath
     } catch (err) {}
