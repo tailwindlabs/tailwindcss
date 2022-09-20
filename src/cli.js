@@ -631,18 +631,7 @@ async function build() {
         Once(root, { result }) {
           tailwind(({ createContext }) => {
             return () => {
-              let context = createContext(config, changedContent)
-              Object.assign(context, {
-                userConfigPath: configPath,
-                postcssOptions: args['--experimental-contextual-paths']
-                  ? {
-                      experimental: {
-                        contextualPaths: true,
-                      },
-                    }
-                  : {},
-              })
-              return context
+              return createContext(config, changedContent)
             }
           })(root, result)
         },
