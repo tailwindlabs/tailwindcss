@@ -459,6 +459,7 @@ describe('Build command', () => {
            -m, --minify             Minify the output
            -c, --config             Path to a custom config file
                --no-autoprefixer    Disable autoprefixer
+               --experimental-contextual-paths Enable experimental contextual path resolution
            -h, --help               Display usage information
       `)
     )

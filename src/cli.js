@@ -452,7 +452,7 @@ async function build() {
     // The user has not specified an exact config file to use
     // So we want to find the closest one to the input file
     // when experimental contextual paths are enabled
-    let maybeConfigPath = resolveConfigPath(postcssOptions, path.resolve(input))
+    let maybeConfigPath = resolveConfigPath(postcssOptions, input ? path.resolve(input) : null)
 
     if (fs.existsSync(maybeConfigPath)) {
       configPath = maybeConfigPath
