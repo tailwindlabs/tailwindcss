@@ -456,7 +456,7 @@ it('should correctly validate combination of percentage and length', () => {
 it('can explicitly specify type for percentage and length', () => {
   let config = {
     content: [
-      { raw: html`<div class="bg-[size:50px_10%] bg-[50px_10px] bg-[position:50%_10%]"></div>` },
+      { raw: html`<div class="bg-[50px_10px] bg-[size:50px_10%] bg-[position:50%_10%]"></div>` },
     ],
     corePlugins: { preflight: false },
     plugins: [],
