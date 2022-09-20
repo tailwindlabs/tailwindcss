@@ -1,19 +1,10 @@
 import fs from 'fs'
-import path from 'path'
-
-import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
-import normalizePath from 'normalize-path'
 
 import hash from '../util/hashConfig'
 import getModuleDependencies from '../lib/getModuleDependencies'
-
 import resolveConfig from '../public/resolve-config'
-
 import resolveConfigPath from '../util/resolveConfigPath'
-
-import { env } from './sharedState'
-
 import { getContext, getFileModifiedMap } from './setupContextUtils'
 import parseDependency from '../util/parseDependency'
 import { validateConfig } from '../util/validateConfig.js'
@@ -36,6 +27,7 @@ function getCandidateFiles(context, tailwindConfig) {
 // Get the config object based on a path
 function getTailwindConfig(configOrPath, inputPath) {
   let userConfigPath = resolveConfigPath(configOrPath, inputPath)
+  let postcssOptions = typeof configOrPath === 'object' && configOrPath !== null ? configOrPath : {}
 
   if (userConfigPath !== null) {
     let [prevConfig, prevConfigHash, prevDeps, prevModified] =
@@ -55,7 +47,7 @@ function getTailwindConfig(configOrPath, inputPath) {
 
     // It hasn't changed (based on timestamps)
     if (!modified) {
-      return [prevConfig, userConfigPath, prevConfigHash, prevDeps]
+      return [prevConfig, userConfigPath, prevConfigHash, prevDeps, postcssOptions]
     }
 
     // It has changed (based on timestamps), or first run
@@ -66,7 +58,7 @@ function getTailwindConfig(configOrPath, inputPath) {
     newConfig = validateConfig(newConfig)
     let newHash = hash(newConfig)
     configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
-    return [newConfig, userConfigPath, newHash, newDeps]
+    return [newConfig, userConfigPath, newHash, newDeps, postcssOptions]
   }
 
   // It's a plain object, not a path
@@ -76,7 +68,7 @@ function getTailwindConfig(configOrPath, inputPath) {
 
   newConfig = validateConfig(newConfig)
 
-  return [newConfig, null, hash(newConfig), []]
+  return [newConfig, null, hash(newConfig), [], postcssOptions]
 }
 
 // DISABLE_TOUCH = TRUE
@@ -87,7 +79,7 @@ function getTailwindConfig(configOrPath, inputPath) {
 export default function setupTrackingContext(configOrPath) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
-      let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+      let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies, postcssOptions] =
         getTailwindConfig(configOrPath, result.opts.from)
 
       let contextDependencies = new Set(configDependencies)
@@ -116,7 +108,8 @@ export default function setupTrackingContext(configOrPath) {
         tailwindConfig,
         userConfigPath,
         tailwindConfigHash,
-        contextDependencies
+        contextDependencies,
+        postcssOptions
       )
 
       let candidateFiles = getCandidateFiles(context, tailwindConfig)

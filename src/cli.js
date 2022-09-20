@@ -19,6 +19,8 @@ import packageJson from '../package.json'
 import normalizePath from 'normalize-path'
 import micromatch from 'micromatch'
 import { validateConfig } from './util/validateConfig.js'
+import { parseCandidateFiles } from './lib/content.js'
+import resolveConfigPath from './util/resolveConfigPath.js'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
@@ -218,6 +220,10 @@ let commands = {
       '--no-autoprefixer': {
         type: Boolean,
         description: 'Disable autoprefixer',
+      },
+      '--experimental-contextual-paths': {
+        type: Boolean,
+        description: 'Enable experimental contextual path resolution',
       },
       '-c': '--config',
       '-i': '--input',
@@ -429,11 +435,31 @@ async function build() {
     process.exit(9)
   }
 
-  let configPath = args['--config']
-    ? args['--config']
-    : ((defaultPath) => (fs.existsSync(defaultPath) ? defaultPath : null))(
-        path.resolve(`./${configs.tailwind}`)
-      )
+  let configPath
+
+  if (args['--config']) {
+    // The user has specified an exact config file to use
+    // So we want to use that one and only that one
+    configPath = path.resolve(args['--config'])
+  } else {
+    let postcssOptions = {
+      config: `./${configs.tailwind}`,
+      experimental: {
+        contextualPaths: args['--experimental-contextual-paths'],
+      },
+    }
+
+    // The user has not specified an exact config file to use
+    // So we want to find the closest one to the input file
+    // when experimental contextual paths are enabled
+    let maybeConfigPath = resolveConfigPath(postcssOptions, input ? path.resolve(input) : null)
+
+    if (fs.existsSync(maybeConfigPath)) {
+      configPath = maybeConfigPath
+    } else {
+      configPath = null
+    }
+  }
 
   async function loadPostCssPlugins() {
     let customPostCssPath = typeof args['--postcss'] === 'string' ? args['--postcss'] : undefined
@@ -551,14 +577,20 @@ async function build() {
   }
 
   function extractFileGlobs(config) {
-    return config.content.files
-      .filter((file) => {
-        // Strings in this case are files / globs. If it is something else,
-        // like an object it's probably a raw content object. But this object
-        // is not watchable, so let's remove it.
-        return typeof file === 'string'
-      })
-      .map((glob) => normalizePath(glob))
+    let context = {
+      userConfigPath: configPath,
+      postcssOptions: args['--experimental-contextual-paths']
+        ? {
+            experimental: {
+              contextualPaths: true,
+            },
+          }
+        : {},
+    }
+
+    let contentPaths = parseCandidateFiles(context, config)
+
+    return contentPaths.map((contentPath) => contentPath.pattern)
   }
 
   function extractRawContent(config) {
@@ -845,6 +877,7 @@ async function build() {
      * @return {{all: string[], dynamic: string[], static: string[]}}
      **/
     function refreshContentPatterns(config) {
+      // TODO: This can be optimized since we're using `fastGlob.generateTasks` indirectly in extractFileGlobs
       let globs = extractFileGlobs(config)
       let tasks = fastGlob.generateTasks(globs, { absolute: true })
       let dynamicPatterns = tasks.filter((task) => task.dynamic).flatMap((task) => task.patterns)
