@@ -838,6 +838,11 @@ function registerPlugins(plugins, context) {
         let negativeClasses = []
 
         for (let [key, value] of Object.entries(options?.values ?? {})) {
+          // Ignore undefined and null values
+          if (value == null) {
+            continue
+          }
+
           output.push(formatClass(utilName, key))
           if (options?.supportsNegativeValues && negateValue(value)) {
             negativeClasses.push(formatClass(utilName, `-${key}`))
