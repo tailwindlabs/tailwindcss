@@ -20,7 +20,6 @@ import normalizePath from 'normalize-path'
 import micromatch from 'micromatch'
 import { validateConfig } from './util/validateConfig.js'
 import { parseCandidateFiles } from './lib/content.js'
-import resolveConfigPath from './util/resolveConfigPath.js'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
@@ -220,10 +219,6 @@ let commands = {
       '--no-autoprefixer': {
         type: Boolean,
         description: 'Disable autoprefixer',
-      },
-      '--experimental-contextual-paths': {
-        type: Boolean,
-        description: 'Enable experimental contextual path resolution',
       },
       '-c': '--config',
       '-i': '--input',
@@ -435,31 +430,12 @@ async function build() {
     process.exit(9)
   }
 
-  let configPath
-
-  if (args['--config']) {
-    // The user has specified an exact config file to use
-    // So we want to use that one and only that one
-    configPath = path.resolve(args['--config'])
-  } else {
-    let postcssOptions = {
-      config: `./${configs.tailwind}`,
-      experimental: {
-        contextualPaths: args['--experimental-contextual-paths'],
-      },
-    }
-
-    // The user has not specified an exact config file to use
-    // So we want to find the closest one to the input file
-    // when experimental contextual paths are enabled
-    let maybeConfigPath = resolveConfigPath(postcssOptions, input ? path.resolve(input) : null)
-
-    if (fs.existsSync(maybeConfigPath)) {
-      configPath = maybeConfigPath
-    } else {
-      configPath = null
-    }
-  }
+  // TODO: Reference the @config path here if exists
+  let configPath = args['--config']
+    ? args['--config']
+    : ((defaultPath) => (fs.existsSync(defaultPath) ? defaultPath : null))(
+        path.resolve(`./${configs.tailwind}`)
+      )
 
   async function loadPostCssPlugins() {
     let customPostCssPath = typeof args['--postcss'] === 'string' ? args['--postcss'] : undefined
@@ -578,14 +554,8 @@ async function build() {
 
   function extractFileGlobs(config) {
     let context = {
+      tailwindConfig: config,
       userConfigPath: configPath,
-      postcssOptions: args['--experimental-contextual-paths']
-        ? {
-            experimental: {
-              contextualPaths: true,
-            },
-          }
-        : {},
     }
 
     let contentPaths = parseCandidateFiles(context, config)
