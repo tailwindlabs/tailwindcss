@@ -31,6 +31,7 @@ type ContentConfig =
   | (FilePath | RawFile)[]
   | {
       files: (FilePath | RawFile)[]
+      relative?: boolean
       extract?: ExtractorFn | { [extension: string]: ExtractorFn }
       transform?: TransformerFn | { [extension: string]: TransformerFn }
     }
