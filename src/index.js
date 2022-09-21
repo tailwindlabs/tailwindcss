@@ -1,6 +1,7 @@
 import setupTrackingContext from './lib/setupTrackingContext'
 import processTailwindFeatures from './processTailwindFeatures'
 import { env } from './lib/sharedState'
+import { findAtConfigPath } from './lib/findAtConfigPath'
 
 module.exports = function tailwindcss(configOrPath) {
   return {
@@ -13,6 +14,10 @@ module.exports = function tailwindcss(configOrPath) {
           return root
         },
       function (root, result) {
+        // Use the path for the `@config` directive if it exists, otherwise use the
+        // path for the file being processed
+        configOrPath = findAtConfigPath(root, result) ?? configOrPath
+
         let context = setupTrackingContext(configOrPath)
 
         if (root.type === 'document') {

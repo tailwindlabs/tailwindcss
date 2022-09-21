@@ -116,7 +116,7 @@ function resolveRelativePaths(context, contentPaths) {
   let resolveFrom = []
 
   // Resolve base paths relative to the config file (when possible) if the experimental flag is enabled
-  if (context.userConfigPath && context.postcssOptions?.experimental?.contextualPaths) {
+  if (context.userConfigPath && context.tailwindConfig.content.relative) {
     resolveFrom = [path.dirname(context.userConfigPath)]
   }
 

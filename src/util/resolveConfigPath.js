@@ -55,9 +55,9 @@ export default function resolveConfigPath(pathOrConfig, inputPath) {
     pathOrConfig.config !== undefined &&
     isString(pathOrConfig.config)
   ) {
-    if (pathOrConfig.experimental?.contextualPaths) {
-      return pickResolvedPath(pathOrConfig.config, inputPath)
-    }
+    // if (pathOrConfig.experimental?.contextualPaths) {
+    //   return pickResolvedPath(pathOrConfig.config, inputPath)
+    // }
 
     return path.resolve(pathOrConfig.config)
   }
