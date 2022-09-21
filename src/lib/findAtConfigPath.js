@@ -22,7 +22,8 @@ export function findAtConfigPath(root, result) {
       throw rule.error('Only `@config` at-rule is allowed per file.')
     }
 
-    configPath = rule.params.replace(/^['"]|['"]$/, '')
+    configPath = rule.params.replace(/^['"]|['"]$/g, '')
+    rule.remove()
 
     if (path.isAbsolute(configPath)) {
       throw rule.error('The `@config` at-rule cannot be used with an absolute path.')
