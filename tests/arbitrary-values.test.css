@@ -652,8 +652,14 @@
 .bg-\[\#0f0_var\(--value\)\] {
   background-color: #0f0 var(--value);
 }
+.bg-\[var\(--value1\)_var\(--value2\)\] {
+  background-color: var(--value1) var(--value2);
+}
 .bg-\[color\:var\(--value1\)_var\(--value2\)\] {
   background-color: var(--value1) var(--value2);
+}
+.bg-\[var\(--value\)\2c var\(--value\)\] {
+  background-color: var(--value), var(--value);
 }
 .bg-opacity-\[0\.11\] {
   --tw-bg-opacity: 0.11;

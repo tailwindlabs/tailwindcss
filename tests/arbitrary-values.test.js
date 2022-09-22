@@ -262,11 +262,58 @@ it('should not convert escaped underscores with spaces', () => {
   })
 })
 
-it('should warn and not generate if arbitrary values are ambiguous', () => {
-  // If we don't protect against this, then `bg-[200px_100px]` would both
-  // generate the background-size as well as the background-position utilities.
+it('should pick the fallback plugin when arbitrary values collide', () => {
   let config = {
-    content: [{ raw: html`<div class="bg-[200px_100px]"></div>` }],
+    content: [
+      {
+        raw: html`
+          <div>
+            <!-- Background color -->
+            <div class="bg-[var(--unknown)]"></div>
+            <!-- Background size -->
+            <div class="bg-[200px_100px]"></div>
+          </div>
+        `,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .bg-\[var\(--unknown\)\] {
+        background-color: var(--unknown);
+      }
+
+      .bg-\[200px_100px\] {
+        background-size: 200px 100px;
+      }
+    `)
+  })
+})
+
+it('should pick the fallback plugin when arbitrary values collide and can not be inferred', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[var(--tw-unknown)]"></div>` }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .bg-\[var\(--tw-unknown\)\] {
+        background-color: var(--tw-unknown);
+      }
+    `)
+  })
+})
+
+it('should warn and not generate if arbitrary values are ambiguous (without fallback)', () => {
+  let config = {
+    content: [{ raw: html`<div class="foo-[200px_100px]"></div>` }],
+    plugins: [
+      function ({ matchUtilities }) {
+        matchUtilities({ foo: (value) => ({ value }) }, { type: ['position'] })
+        matchUtilities({ foo: (value) => ({ value }) }, { type: ['length'] })
+      },
+    ],
   }
 
   return run('@tailwind utilities', config).then((result) => {
