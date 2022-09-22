@@ -1414,7 +1414,7 @@ export let corePlugins = {
           })
         },
       },
-      { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
+      { values: flattenColorPalette(theme('backgroundColor')), type: ['color', 'any'] }
     )
   },
 
@@ -1482,7 +1482,7 @@ export let corePlugins = {
   },
 
   backgroundSize: createUtilityPlugin('backgroundSize', [['bg', ['background-size']]], {
-    type: ['lookup', 'length', 'percentage'],
+    type: ['lookup', ['length', { disambiguate: true }], 'percentage'],
   }),
 
   backgroundAttachment: ({ addUtilities }) => {
