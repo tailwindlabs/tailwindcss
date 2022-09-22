@@ -59,7 +59,7 @@ export function normalizeConfig(config) {
       // Only `files`, `relative`, `extract`, and `transform` can exist in `config.content`
       if (
         Object.keys(config.content).some(
-          (key) => !['files', 'extract', 'transform', 'relative'].includes(key)
+          (key) => !['files', 'relative', 'extract', 'transform'].includes(key)
         )
       ) {
         return false

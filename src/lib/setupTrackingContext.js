@@ -25,8 +25,8 @@ function getCandidateFiles(context, tailwindConfig) {
 }
 
 // Get the config object based on a path
-function getTailwindConfig(configOrPath, inputPath) {
-  let userConfigPath = resolveConfigPath(configOrPath, inputPath)
+function getTailwindConfig(configOrPath) {
+  let userConfigPath = resolveConfigPath(configOrPath)
 
   if (userConfigPath !== null) {
     let [prevConfig, prevConfigHash, prevDeps, prevModified] =
@@ -79,7 +79,7 @@ export default function setupTrackingContext(configOrPath) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
       let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-        getTailwindConfig(configOrPath, result.opts.from)
+        getTailwindConfig(configOrPath)
 
       let contextDependencies = new Set(configDependencies)
 

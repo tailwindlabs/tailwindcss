@@ -3,7 +3,6 @@ import path from 'path'
 /**
  * Find the @config at-rule in the given CSS AST and return the relative path to the config file
  *
- *
  * @param {import('postcss').Root} root
  * @param {import('postcss').Result} result
  */
