@@ -19,7 +19,7 @@ function getCandidateFiles(context, tailwindConfig) {
     return candidateFilesCache.get(context)
   }
 
-  let candidateFiles = parseCandidateFiles(tailwindConfig)
+  let candidateFiles = parseCandidateFiles(context, tailwindConfig)
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }

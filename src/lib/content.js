@@ -27,10 +27,11 @@ import { env } from './sharedState'
  * If there are symlinks in the path then multiple paths will be returned
  * one for the symlink and one for the actual file
  *
+ * @param {*} context
  * @param {import('tailwindcss').Config} tailwindConfig
  * @returns {ContentPath[]}
  */
-export function parseCandidateFiles(tailwindConfig) {
+export function parseCandidateFiles(context, tailwindConfig) {
   let files = tailwindConfig.content.files
 
   // Normalize the file globs
@@ -54,7 +55,7 @@ export function parseCandidateFiles(tailwindConfig) {
   let paths = [...included, ...excluded]
 
   // Resolve paths relative to the config file or cwd
-  paths = resolveRelativePaths(paths)
+  paths = resolveRelativePaths(context, paths)
 
   // Update cached patterns
   paths = paths.map(resolveGlobPattern)
@@ -103,11 +104,17 @@ function resolveGlobPattern(contentPath) {
  * Resolve each path relative to the config file (when possible) if the experimental flag is enabled
  * Otherwise, resolve relative to the current working directory
  *
+ * @param {any} context
  * @param {ContentPath[]} contentPaths
  * @returns {ContentPath[]}
  */
-function resolveRelativePaths(contentPaths) {
+function resolveRelativePaths(context, contentPaths) {
   let resolveFrom = []
+
+  // Resolve base paths relative to the config file (when possible) if the experimental flag is enabled
+  if (context.userConfigPath && context.tailwindConfig.content.relative) {
+    resolveFrom = [path.dirname(context.userConfigPath)]
+  }
 
   return contentPaths.map((contentPath) => {
     contentPath.base = path.resolve(...resolveFrom, contentPath.base)

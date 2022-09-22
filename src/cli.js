@@ -552,7 +552,12 @@ async function build() {
   }
 
   function extractFileGlobs(config) {
-    let contentPaths = parseCandidateFiles(config)
+    let context = {
+      tailwindConfig: config,
+      userConfigPath: configPath,
+    }
+
+    let contentPaths = parseCandidateFiles(context, config)
 
     return contentPaths.map((contentPath) => contentPath.pattern)
   }

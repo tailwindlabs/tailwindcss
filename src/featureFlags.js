@@ -10,6 +10,7 @@ let featureFlags = {
     'hoverOnlyWhenSupported',
     'respectDefaultRingColorOpacity',
     'disableColorOpacityUtilitiesByDefault',
+    'relativeContentPathsByDefault',
   ],
   experimental: [
     'optimizeUniversalDefaults',
