@@ -57,6 +57,9 @@ export function parseCandidateFiles(context, tailwindConfig) {
   // Resolve paths relative to the config file or cwd
   paths = resolveRelativePaths(context, paths)
 
+  // Resolve symlinks if possible
+  paths = paths.flatMap(resolvePathSymlinks)
+
   // Update cached patterns
   paths = paths.map(resolveGlobPattern)
 
@@ -121,6 +124,33 @@ function resolveRelativePaths(context, contentPaths) {
 
     return contentPath
   })
+}
+
+/**
+ * Resolve the symlink for the base directory / file in each path
+ * These are added as additional dependencies to watch for changes because
+ * some tools (like webpack) will only watch the actual file or directory
+ * but not the symlink itself even in projects that use monorepos.
+ *
+ * @param {ContentPath} contentPath
+ * @returns {ContentPath[]}
+ */
+function resolvePathSymlinks(contentPath) {
+  let paths = [contentPath]
+
+  try {
+    let resolvedPath = fs.realpathSync(contentPath.base)
+    if (resolvedPath !== contentPath.base) {
+      paths.push({
+        ...contentPath,
+        base: resolvedPath,
+      })
+    }
+  } catch {
+    // TODO: log this?
+  }
+
+  return paths
 }
 
 /**
