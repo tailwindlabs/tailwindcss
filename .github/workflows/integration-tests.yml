@@ -15,7 +15,16 @@ jobs:
 
     strategy:
       matrix:
-        integration: [parcel, postcss-cli, rollup, rollup-sass, tailwindcss-cli, vite, webpack-4, webpack-5]
+        integration:
+          - content-resolution
+          - parcel
+          - postcss-cli
+          - rollup
+          - rollup-sass
+          - tailwindcss-cli
+          - vite
+          - webpack-4
+          - webpack-5
         node-version: [16]
 
     steps:

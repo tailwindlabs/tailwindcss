@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add negative value support for `outline-offset` ([#9136](https://github.com/tailwindlabs/tailwindcss/pull/9136))
 - Allow negating utilities using min/max/clamp ([#9237](https://github.com/tailwindlabs/tailwindcss/pull/9237))
 - Add new `collapse` utility for `visibility: collapse` ([#9181](https://github.com/tailwindlabs/tailwindcss/pull/9181))
+- Allow resolving content paths relative to the config file ([#9396](https://github.com/tailwindlabs/tailwindcss/pull/9396))
 
 ### Fixed
 

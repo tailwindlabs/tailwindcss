@@ -31,6 +31,7 @@ type ContentConfig =
   | (FilePath | RawFile)[]
   | {
       files: (FilePath | RawFile)[]
+      relative?: boolean
       extract?: ExtractorFn | { [extension: string]: ExtractorFn }
       transform?: TransformerFn | { [extension: string]: TransformerFn }
     }
@@ -56,20 +57,24 @@ type SafelistConfig =
 type PresetsConfig = Config[]
 
 // Future related config
-type FutureConfigValues = never // Replace with 'future-feature-1' | 'future-feature-2'
+type FutureConfigValues =
+  | 'hoverOnlyWhenSupported'
+  | 'respectDefaultRingColorOpacity'
+  | 'disableColorOpacityUtilitiesByDefault'
+  | 'relativeContentPathsByDefault'
 type FutureConfig = Expand<'all' | Partial<Record<FutureConfigValues, boolean>>> | []
 
 // Experimental related config
-type ExperimentalConfigValues = 'optimizeUniversalDefaults' // Replace with 'experimental-feature-1' | 'experimental-feature-2'
+type ExperimentalConfigValues = 'optimizeUniversalDefaults' | 'matchVariant'
 type ExperimentalConfig = Expand<'all' | Partial<Record<ExperimentalConfigValues, boolean>>> | []
 
 // DarkMode related config
 type DarkModeConfig =
   // Use the `media` query strategy.
   | 'media'
-  // Use the `class` stategy, which requires a `.dark` class on the `html`.
+  // Use the `class` strategy, which requires a `.dark` class on the `html`.
   | 'class'
-  // Use the `class` stategy with a custom class instead of `.dark`.
+  // Use the `class` strategy with a custom class instead of `.dark`.
   | ['class', string]
 
 type Screen = { raw: string } | { min: string } | { max: string } | { min: string; max: string }

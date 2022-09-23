@@ -105,6 +105,7 @@ it('should keep content files with globs', () => {
 
   expect(normalizeConfig(resolveConfig(config)).content).toEqual({
     files: ['./example-folder/**/*.{html,js}'],
+    relative: false,
     extract: {},
     transform: {},
   })
@@ -129,6 +130,7 @@ it('should warn when we detect invalid globs with incorrect brace expansion', ()
       './{example-folder}/**/*.{html}',
       './example-folder/**/*.{html}',
     ],
+    relative: false,
     extract: {},
     transform: {},
   })

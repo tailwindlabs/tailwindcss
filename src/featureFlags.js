@@ -10,8 +10,13 @@ let featureFlags = {
     'hoverOnlyWhenSupported',
     'respectDefaultRingColorOpacity',
     'disableColorOpacityUtilitiesByDefault',
+    'relativeContentPathsByDefault',
   ],
-  experimental: ['optimizeUniversalDefaults', 'matchVariant' /* , 'variantGrouping' */],
+  experimental: [
+    'optimizeUniversalDefaults',
+    'matchVariant',
+    // 'variantGrouping',
+  ],
 }
 
 export function flagEnabled(config, flag) {

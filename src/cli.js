@@ -19,6 +19,7 @@ import packageJson from '../package.json'
 import normalizePath from 'normalize-path'
 import micromatch from 'micromatch'
 import { validateConfig } from './util/validateConfig.js'
+import { parseCandidateFiles } from './lib/content.js'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined && process.env.DEBUG !== '0',
@@ -551,14 +552,14 @@ async function build() {
   }
 
   function extractFileGlobs(config) {
-    return config.content.files
-      .filter((file) => {
-        // Strings in this case are files / globs. If it is something else,
-        // like an object it's probably a raw content object. But this object
-        // is not watchable, so let's remove it.
-        return typeof file === 'string'
-      })
-      .map((glob) => normalizePath(glob))
+    let context = {
+      tailwindConfig: config,
+      userConfigPath: configPath,
+    }
+
+    let contentPaths = parseCandidateFiles(context, config)
+
+    return contentPaths.map((contentPath) => contentPath.pattern)
   }
 
   function extractRawContent(config) {

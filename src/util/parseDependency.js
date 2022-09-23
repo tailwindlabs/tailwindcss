@@ -1,49 +1,44 @@
-import isGlob from 'is-glob'
-import globParent from 'glob-parent'
-import path from 'path'
+// @ts-check
 
-// Based on `glob-base`
-// https://github.com/micromatch/glob-base/blob/master/index.js
-function parseGlob(pattern) {
-  let glob = pattern
-  let base = globParent(pattern)
+/**
+ * @typedef {{type: 'dependency', file: string} | {type: 'dir-dependency', dir: string, glob: string}} Dependency
+ */
 
-  if (base !== '.') {
-    glob = pattern.substr(base.length)
-    if (glob.charAt(0) === '/') {
-      glob = glob.substr(1)
-    }
+/**
+ *
+ * @param {import('../lib/content.js').ContentPath} contentPath
+ * @returns {Dependency[]}
+ */
+export default function parseDependency(contentPath) {
+  if (contentPath.ignore) {
+    return []
   }
 
-  if (glob.substr(0, 2) === './') {
-    glob = glob.substr(2)
-  }
-  if (glob.charAt(0) === '/') {
-    glob = glob.substr(1)
-  }
-
-  return { base, glob }
-}
-
-export default function parseDependency(normalizedFileOrGlob) {
-  if (normalizedFileOrGlob.startsWith('!')) {
-    return null
+  if (!contentPath.glob) {
+    return [
+      {
+        type: 'dependency',
+        file: contentPath.base,
+      },
+    ]
   }
 
-  let message
-
-  if (isGlob(normalizedFileOrGlob)) {
-    let { base, glob } = parseGlob(normalizedFileOrGlob)
-    message = { type: 'dir-dependency', dir: path.resolve(base), glob }
-  } else {
-    message = { type: 'dependency', file: path.resolve(normalizedFileOrGlob) }
+  if (process.env.ROLLUP_WATCH === 'true') {
+    // rollup-plugin-postcss does not support dir-dependency messages
+    // but directories can be watched in the same way as files
+    return [
+      {
+        type: 'dependency',
+        file: contentPath.base,
+      },
+    ]
   }
 
-  // rollup-plugin-postcss does not support dir-dependency messages
-  // but directories can be watched in the same way as files
-  if (message.type === 'dir-dependency' && process.env.ROLLUP_WATCH === 'true') {
-    message = { type: 'dependency', file: message.dir }
-  }
-
-  return message
+  return [
+    {
+      type: 'dir-dependency',
+      dir: contentPath.base,
+      glob: contentPath.glob,
+    },
+  ]
 }

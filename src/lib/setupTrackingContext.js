@@ -1,22 +1,14 @@
 import fs from 'fs'
-import path from 'path'
-
-import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
-import normalizePath from 'normalize-path'
 
 import hash from '../util/hashConfig'
 import getModuleDependencies from '../lib/getModuleDependencies'
-
 import resolveConfig from '../public/resolve-config'
-
 import resolveConfigPath from '../util/resolveConfigPath'
-
-import { env } from './sharedState'
-
 import { getContext, getFileModifiedMap } from './setupContextUtils'
 import parseDependency from '../util/parseDependency'
 import { validateConfig } from '../util/validateConfig.js'
+import { parseCandidateFiles, resolvedChangedContent } from './content.js'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -27,9 +19,7 @@ function getCandidateFiles(context, tailwindConfig) {
     return candidateFilesCache.get(context)
   }
 
-  let candidateFiles = tailwindConfig.content.files
-    .filter((item) => typeof item === 'string')
-    .map((contentPath) => normalizePath(contentPath))
+  let candidateFiles = parseCandidateFiles(context, tailwindConfig)
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }
@@ -78,36 +68,6 @@ function getTailwindConfig(configOrPath) {
   newConfig = validateConfig(newConfig)
 
   return [newConfig, null, hash(newConfig), []]
-}
-
-function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
-  let changedContent = context.tailwindConfig.content.files
-    .filter((item) => typeof item.raw === 'string')
-    .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
-
-  for (let changedFile of resolveChangedFiles(candidateFiles, fileModifiedMap)) {
-    let content = fs.readFileSync(changedFile, 'utf8')
-    let extension = path.extname(changedFile).slice(1)
-    changedContent.push({ content, extension })
-  }
-  return changedContent
-}
-
-function resolveChangedFiles(candidateFiles, fileModifiedMap) {
-  let changedFiles = new Set()
-  env.DEBUG && console.time('Finding changed files')
-  let files = fastGlob.sync(candidateFiles, { absolute: true })
-  for (let file of files) {
-    let prevModified = fileModifiedMap.has(file) ? fileModifiedMap.get(file) : -Infinity
-    let modified = fs.statSync(file).mtimeMs
-
-    if (modified > prevModified) {
-      changedFiles.add(file)
-      fileModifiedMap.set(file, modified)
-    }
-  }
-  env.DEBUG && console.timeEnd('Finding changed files')
-  return changedFiles
 }
 
 // DISABLE_TOUCH = TRUE
@@ -161,9 +121,8 @@ export default function setupTrackingContext(configOrPath) {
         let fileModifiedMap = getFileModifiedMap(context)
 
         // Add template paths as postcss dependencies.
-        for (let fileOrGlob of candidateFiles) {
-          let dependency = parseDependency(fileOrGlob)
-          if (dependency) {
+        for (let contentPath of candidateFiles) {
+          for (let dependency of parseDependency(contentPath)) {
             registerDependency(dependency)
           }
         }
