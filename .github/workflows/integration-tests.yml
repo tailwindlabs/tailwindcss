@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         integration:
+          - content-resolution
           - parcel
           - postcss-cli
           - rollup

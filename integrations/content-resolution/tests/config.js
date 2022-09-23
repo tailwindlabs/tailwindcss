@@ -1,12 +1,16 @@
 // @ts-config
 
-import fs from 'fs'
-import path from 'path'
+let fs = require('fs')
+let path = require('path')
 
-export async function writeConfigs({ both = {}, inRoot = {}, inDir = {} } = {}) {
+module.exports.writeConfigs = async function writeConfigs({
+  both = {},
+  inRoot = {},
+  inDir = {},
+} = {}) {
   let configs = [
     {
-      path: './content.tailwind.config.js',
+      path: '../tailwind.config.js',
       config: {
         ...both,
         ...inRoot,
@@ -18,7 +22,7 @@ export async function writeConfigs({ both = {}, inRoot = {}, inDir = {} } = {}) 
       },
     },
     {
-      path: './files/content.tailwind.config.js',
+      path: '../src/tailwind.config.js',
       config: {
         ...both,
         ...inDir,
@@ -43,7 +47,7 @@ export async function writeConfigs({ both = {}, inRoot = {}, inDir = {} } = {}) 
   }
 }
 
-export async function destroyConfigs() {
-  await fs.promises.unlink(path.resolve(__dirname, './content.tailwind.config.js'))
-  await fs.promises.unlink(path.resolve(__dirname, './files/content.tailwind.config.js'))
+module.exports.destroyConfigs = async function destroyConfigs() {
+  await fs.promises.unlink(path.resolve(__dirname, '../tailwind.config.js'))
+  await fs.promises.unlink(path.resolve(__dirname, '../src/tailwind.config.js'))
 }

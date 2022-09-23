@@ -2,7 +2,7 @@
 
 let stack = []
 
-export const cwd = {
+module.exports.cwd = {
   get current() {
     return process.cwd()
   },
