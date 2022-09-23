@@ -16,6 +16,7 @@ import getModuleDependencies from '../../lib/getModuleDependencies.js'
 import { parseCandidateFiles } from '../../lib/content.js'
 import { createWatcher } from './watching.js'
 import fastGlob from 'fast-glob'
+import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
 
 /**
  *
@@ -195,7 +196,7 @@ let state = {
     return content
   },
 
-  getContext({ createContext, cliConfigPath }) {
+  getContext({ createContext, cliConfigPath, root, result }) {
     if (this.context) {
       this.context.changedContent = this.changedContent.splice(0)
 
@@ -203,7 +204,7 @@ let state = {
     }
 
     env.DEBUG && console.time('Searching for config')
-    let configPath = cliConfigPath
+    let configPath = findAtConfigPath(root, result) ?? cliConfigPath
     env.DEBUG && console.timeEnd('Searching for config')
 
     env.DEBUG && console.time('Loading config')
@@ -212,6 +213,9 @@ let state = {
 
     env.DEBUG && console.time('Creating context')
     this.context = createContext(config, [])
+    Object.assign(this.context, {
+      userConfigPath: configPath,
+    })
     env.DEBUG && console.timeEnd('Creating context')
 
     env.DEBUG && console.time('Resolving content paths')
@@ -256,7 +260,7 @@ export async function createProcessor(args, cliConfigPath) {
           console.error('Rebuilding...')
 
           return () => {
-            return state.getContext({ createContext, cliConfigPath })
+            return state.getContext({ createContext, cliConfigPath, root, result })
           }
         })(root, result)
         env.DEBUG && console.timeEnd('Compiling CSS')
