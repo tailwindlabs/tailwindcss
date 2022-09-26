@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow resolving content paths relative to the config file ([#9396](https://github.com/tailwindlabs/tailwindcss/pull/9396))
 - Add `@config` support ([#9405](https://github.com/tailwindlabs/tailwindcss/pull/9405))
 - Add `fill-none` and `stroke-none` utilities by default ([#9403](https://github.com/tailwindlabs/tailwindcss/pull/9403))
+- Support `sort` function in `matchVariant` ([#9423](https://github.com/tailwindlabs/tailwindcss/pull/9423))
 
 ### Fixed
 
@@ -39,7 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't emit generated utilities with invalid uses of theme functions ([#9319](https://github.com/tailwindlabs/tailwindcss/pull/9319))
 - Revert change that only listened for stdin close on TTYs ([#9331](https://github.com/tailwindlabs/tailwindcss/pull/9331))
 - Ignore unset values (like `null` or `undefined`) when resolving the classList for intellisense ([#9385](https://github.com/tailwindlabs/tailwindcss/pull/9385))
-- Support `sort` function in `matchVariant` ([#9423](https://github.com/tailwindlabs/tailwindcss/pull/9423))
 
 ## [3.1.8] - 2022-08-05
 
