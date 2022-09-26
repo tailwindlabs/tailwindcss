@@ -7,6 +7,13 @@ import bigSign from '../util/bigSign'
  */
 
 /**
+ * @typedef {object} VariantOption
+ * @property {number} id An unique identifier to identify `matchVariant`
+ * @property {function | undefined} sort The sort function
+ * @property {string} value The value we want to compare
+ */
+
+/**
  * @typedef {object} RuleOffset
  * @property {Layer} layer The layer that this rule belongs to
  * @property {Layer} parentLayer The layer that this rule originally belonged to. Only different from layer if this is a variant.
@@ -14,6 +21,7 @@ import bigSign from '../util/bigSign'
  * @property {bigint} variants Dynamic size. 1 bit per registered variant. 0n means no variants
  * @property {bigint} parallelIndex Rule index for the parallel variant. 0 if not applicable.
  * @property {bigint} index Index of the rule / utility in it's given *parent* layer. Monotonically increasing.
+ * @property {VariantOption[]} options Some information on how we can sort arbitrary variants
  */
 
 export class Offsets {
@@ -77,6 +85,7 @@ export class Offsets {
       variants: 0n,
       parallelIndex: 0n,
       index: this.offsets[layer]++,
+      options: [],
     }
   }
 
@@ -112,14 +121,16 @@ export class Offsets {
   /**
    * @param {RuleOffset} rule
    * @param {RuleOffset} variant
+   * @param {VariantOption} options
    * @returns {RuleOffset}
    */
-  applyVariantOffset(rule, variant) {
+  applyVariantOffset(rule, variant, options) {
     return {
       ...rule,
       layer: 'variants',
       parentLayer: rule.layer === 'variants' ? rule.parentLayer : rule.layer,
       variants: rule.variants | variant.variants,
+      options: options.sort ? [].concat(options, rule.options) : rule.options,
 
       // TODO: Technically this is wrong. We should be handling parallel index on a per variant basis.
       // We'll take the max of all the parallel indexes for now.
@@ -151,7 +162,7 @@ export class Offsets {
    * @param {(name: string) => number} getLength
    */
   recordVariants(variants, getLength) {
-    for (const variant of variants) {
+    for (let variant of variants) {
       this.recordVariant(variant, getLength(variant))
     }
   }
@@ -191,6 +202,16 @@ export class Offsets {
     // Sort layers together
     if (a.layer !== b.layer) {
       return this.layerPositions[a.layer] - this.layerPositions[b.layer]
+    }
+
+    // Sort based on the sorting function
+    for (let aOptions of a.options) {
+      for (let bOptions of b.options) {
+        if (aOptions.id !== bOptions.id) continue
+        if (!aOptions.sort || !bOptions.sort) continue
+        let result = aOptions.sort(aOptions.value, bOptions.value)
+        if (result !== 0) return result
+      }
     }
 
     // Sort variants in the order they were registered

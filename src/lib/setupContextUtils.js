@@ -496,19 +496,23 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       insertInto(variantList, variantName, options)
       variantMap.set(variantName, variantFunctions)
+      context.variantOptions.set(variantName, options)
     },
   }
 
   if (flagEnabled(tailwindConfig, 'matchVariant')) {
+    let variantIdentifier = 0
     api.matchVariant = function (variant, variantFn, options) {
+      let id = ++variantIdentifier // A unique identifier that "groups" these variables together.
+
       for (let [key, value] of Object.entries(options?.values ?? {})) {
-        api.addVariant(`${variant}-${key}`, variantFn({ value }))
+        api.addVariant(`${variant}-${key}`, variantFn({ value }), { ...options, value, id })
       }
 
       api.addVariant(
         variant,
         Object.assign(({ args }) => variantFn({ value: args }), { [MATCH_VARIANT]: true }),
-        options
+        { ...options, id }
       )
     }
   }
@@ -919,6 +923,7 @@ export function createContext(tailwindConfig, changedContent = [], root = postcs
     changedContent: changedContent,
     variantMap: new Map(),
     stylesheetCache: null,
+    variantOptions: new Map(),
 
     markInvalidUtilityCandidate: (candidate) => markInvalidUtilityCandidate(context, candidate),
     markInvalidUtilityNode: (node) => markInvalidUtilityNode(context, node),

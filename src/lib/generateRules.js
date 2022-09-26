@@ -294,7 +294,11 @@ function applyVariant(variant, matches, context) {
         let withOffset = [
           {
             ...meta,
-            sort: context.offsets.applyVariantOffset(meta.sort, variantSort),
+            sort: context.offsets.applyVariantOffset(
+              meta.sort,
+              variantSort,
+              Object.assign({ value: args }, context.variantOptions.get(variant))
+            ),
             collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
             isArbitraryVariant: isArbitraryValue(variant),
           },
