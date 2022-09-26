@@ -1,6 +1,7 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
+import postcssValueParser from 'postcss-value-parser'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
 import escapeClassName from './util/escapeClassName'
@@ -208,10 +209,29 @@ export let variantPlugins = {
   },
 
   screenVariants: ({ theme, addVariant }) => {
+    let id = Symbol('screens')
+    let values = Object.values(theme('screens', {}))
+    let sort = !(
+      values.every((value) => typeof value === 'string') &&
+      new Set(values.map((value) => postcssValueParser.unit(value)?.unit ?? value)).size === 1
+    )
+      ? () => 0
+      : (a, z) => {
+          // Compare min-width screens
+          if (a.length === 1 && z.length === 1) {
+            let [{ min: aMin }] = a
+            let [{ min: zMin }] = z
+            return parseInt(aMin) - parseInt(zMin)
+          }
+
+          // Not a screen we want to even try and compare
+          return 0
+        }
+
     for (let screen of normalizeScreens(theme('screens'))) {
       let query = buildMediaQuery(screen)
 
-      addVariant(screen.name, `@media ${query}`)
+      addVariant(screen.name, `@media ${query}`, { id, sort, value: screen.values })
     }
   },
 

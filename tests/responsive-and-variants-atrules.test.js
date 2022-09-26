@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run, css } from './util/run'
+import { run, css, html } from './util/run'
 
 test('responsive and variants atrules', () => {
   let config = {
@@ -77,5 +77,39 @@ test('responsive and variants atrules', () => {
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
+  })
+})
+
+it('should sort breakpoints intelligentally', () => {
+  let config = {
+    content: [{ raw: html`<div class="xs:italic md:underline"></div>` }],
+    theme: {
+      extend: {
+        screens: {
+          xs: '123px',
+        },
+      },
+    },
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 123px) {
+        .xs\:italic {
+          font-style: italic;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .md\:underline {
+          text-decoration-line: underline;
+        }
+      }
+    `)
   })
 })
