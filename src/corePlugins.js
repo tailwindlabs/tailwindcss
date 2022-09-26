@@ -1062,7 +1062,7 @@ export let corePlugins = {
           }
         },
       },
-      { values: theme('divideWidth'), type: ['line-width', 'length'] }
+      { values: theme('divideWidth'), type: ['line-width', 'length', 'any'] }
     )
 
     addUtilities({
@@ -1290,7 +1290,7 @@ export let corePlugins = {
       },
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
-        type: ['color'],
+        type: ['color', 'any'],
       }
     )
 
@@ -1543,7 +1543,7 @@ export let corePlugins = {
           return { stroke: toColorValue(value) }
         },
       },
-      { values: flattenColorPalette(theme('stroke')), type: ['color', 'url'] }
+      { values: flattenColorPalette(theme('stroke')), type: ['color', 'url', 'any'] }
     )
   },
 
@@ -1648,7 +1648,7 @@ export let corePlugins = {
       },
       {
         values: theme('fontSize'),
-        type: ['absolute-size', 'relative-size', 'length', 'percentage'],
+        type: ['absolute-size', 'relative-size', 'length', 'percentage', 'any'],
       }
     )
   },
@@ -1772,7 +1772,7 @@ export let corePlugins = {
           return { 'text-decoration-color': toColorValue(value) }
         },
       },
-      { values: flattenColorPalette(theme('textDecorationColor')), type: ['color'] }
+      { values: flattenColorPalette(theme('textDecorationColor')), type: ['color', 'any'] }
     )
   },
 
@@ -1953,7 +1953,7 @@ export let corePlugins = {
             }
           },
         },
-        { values: theme('boxShadow'), type: ['shadow'] }
+        { values: theme('boxShadow'), type: ['shadow', 'any'] }
       )
     }
   })(),
@@ -2001,7 +2001,7 @@ export let corePlugins = {
           return { 'outline-color': toColorValue(value) }
         },
       },
-      { values: flattenColorPalette(theme('outlineColor')), type: ['color'] }
+      { values: flattenColorPalette(theme('outlineColor')), type: ['color', 'any'] }
     )
   },
 
