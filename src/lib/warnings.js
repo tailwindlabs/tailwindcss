@@ -64,12 +64,12 @@ function strictUtilityWarnings(matches) {
 
 /**
  *
- * @param {string} source
+ * @param {string} _source
  * @param {[meta: any, rule: any][]} matches
  * @param {import('postcss').Result} [result]
  * @param {import('postcss').Node} [node]
  */
-export function showStrictWarningsFor(source, matches, result = null, node = null) {
+export function showStrictWarningsFor(_source, matches, result = null, node = null) {
   let message = strictUtilityWarnings(matches)
 
   if (message === undefined) {
