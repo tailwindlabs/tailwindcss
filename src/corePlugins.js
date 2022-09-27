@@ -1327,7 +1327,7 @@ export let corePlugins = {
       },
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
-        type: 'color',
+        type: ['color', 'any'],
       }
     )
 
@@ -1388,7 +1388,7 @@ export let corePlugins = {
       },
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
-        type: 'color',
+        type: ['color', 'any'],
       }
     )
   },
