@@ -4,10 +4,26 @@ import log from '../util/log.js'
 let selectorExtractor = parser()
 
 /**
- * @param {string} ruleSelectors
+ * @param {import('postcss').Node} rule
  */
-function extractSelectors(ruleSelectors) {
-  return selectorExtractor.astSync(ruleSelectors)
+function extractSelectors(node) {
+  let rules = []
+
+  if (node.type === 'rule') {
+    rules.push(node)
+  }
+
+  let selectors = []
+
+  for (const rule of rules) {
+    for (let sel of selectorExtractor.astSync(rule.selector).nodes) {
+      selectors.push(sel)
+    }
+  }
+
+  return parser.root({
+    nodes: selectors,
+  })
 }
 
 /**
@@ -28,7 +44,7 @@ function strictUtilityWarnings(matches) {
     return 'deprecation: found-multiple-rules'
   }
 
-  let ast = extractSelectors(rules[0].selector)
+  let ast = extractSelectors(rules[0])
 
   if (ast.length > 1) {
     return 'deprecation: rule-contains-multiple-selectors'
