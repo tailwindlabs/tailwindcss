@@ -11,6 +11,8 @@ function extractSelectors(node) {
 
   if (node.type === 'rule') {
     rules.push(node)
+  } else {
+    node.walkRules((rule) => rules.push(rule))
   }
 
   let selectors = []
