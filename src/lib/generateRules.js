@@ -13,6 +13,7 @@ import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 import { flagEnabled } from '../featureFlags'
+import { showStrictWarningsFor } from './warnings'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -486,7 +487,10 @@ function* resolveMatches(candidate, context, original = candidate) {
     classCandidate = classCandidate.slice(1)
   }
 
+  let overallMatches = []
+
   if (flagEnabled(context.tailwindConfig, 'variantGrouping')) {
+    // TODO: Strict utility warnings may not work here
     if (classCandidate.startsWith('(') && classCandidate.endsWith(')')) {
       let base = variants.slice().reverse().join(separator)
       for (let part of splitAtTopLevelOnly(classCandidate.slice(1, -1), ',')) {
@@ -606,6 +610,11 @@ function* resolveMatches(candidate, context, original = candidate) {
     matches = Array.from(recordCandidates(matches, classCandidate))
     matches = applyPrefix(matches, context)
 
+    for (const match of matches) {
+      // Record the pre-variant/important matches so we can use them for strict utility detection
+      overallMatches.push(match)
+    }
+
     if (important) {
       matches = applyImportant(matches, classCandidate)
     }
@@ -640,6 +649,10 @@ function* resolveMatches(candidate, context, original = candidate) {
 
       yield match
     }
+  }
+
+  if (candidate !== sharedState.NOT_ON_DEMAND) {
+    showStrictWarningsFor('matches', overallMatches)
   }
 }
 

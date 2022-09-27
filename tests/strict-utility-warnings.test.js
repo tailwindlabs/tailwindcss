@@ -328,6 +328,245 @@ describe('@apply warnings', () => {
   })
 })
 
+describe('utility usage warnings', () => {
+  it('does not warn for simple utilities', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo {
+          color: blue;
+        }
+      }
+    `
+
+    await doesNotShowWarnings(run(input, config))
+  })
+
+  it('does not warn for simple utilities with simple variants', async () => {
+    let config = {
+      content: [{ raw: html`<div class="hover:foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo {
+          color: blue;
+        }
+      }
+    `
+
+    await doesNotShowWarnings(run(input, config))
+  })
+
+  it('does not warn for simple utilities with complex variants', async () => {
+    let config = {
+      content: [{ raw: html`<div class="group-hover:foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo {
+          color: blue;
+        }
+      }
+    `
+
+    await doesNotShowWarnings(run(input, config))
+  })
+
+  it('does not warn when matching rules with multiple simple selectors without multiple classes', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        header .foo {
+          color: blue;
+        }
+      }
+    `
+
+    await doesNotShowWarnings(run(input, config))
+  })
+
+  it('does not warn when using pseudo elements in a utility', async () => {
+    let config = {
+      content: [{ raw: html`<div class="placeholder-blue-600"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    await doesNotShowWarnings(run(input, config))
+  })
+
+  it('does not warn when using pseudo elements from variants', async () => {
+    let config = {
+      content: [{ raw: html`<div class="placeholder:text-blue-600"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    await doesNotShowWarnings(run(input, config))
+  })
+
+  it('does not warn when using built in utilities that have multiple selector components', async () => {
+    let config = {
+      content: [{ raw: html`<div class="space-x-4 divide-x-4"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    await doesNotShowWarnings(run(input, config))
+  })
+
+  it('does not warn when using an important selector', async () => {
+    let config = {
+      important: '.myapp',
+      content: [{ raw: html`<div class="space-x-4 divide-x-4"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    await doesNotShowWarnings(run(input, config))
+  })
+
+  it('warns when matching multiple rules', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo {
+          color: blue;
+        }
+        .foo {
+          background: green;
+        }
+      }
+    `
+
+    await showsWarnings(run(input, config), [/multiple-rules/])
+  })
+
+  it('warns when matching rules that extend built in utilities', async () => {
+    let config = {
+      content: [{ raw: html`<div class="bg-red-500"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        header .bg-red-500 {
+          text-decoration: underline;
+        }
+      }
+    `
+
+    await showsWarnings(run(input, config), [/multiple-rules/])
+  })
+
+  it('warns when matching rules with multiple of the same class', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo .foo {
+          color: blue;
+        }
+      }
+    `
+
+    await showsWarnings(run(input, config), [/multiple-classes/])
+  })
+
+  it('warns when matching rules with multiple different classes', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo .baz {
+          color: blue;
+        }
+      }
+    `
+
+    await showsWarnings(run(input, config), [/multiple-classes/])
+  })
+
+  it('warns when matching rules with multiple selectors', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo,
+        .baz {
+          color: blue;
+        }
+      }
+    `
+
+    await showsWarnings(run(input, config), [/multiple-selectors/])
+  })
+
+  it('warns when using multiple classes when one is inside :has()', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo:has(.baz) {
+          color: blue;
+        }
+      }
+    `
+
+    await showsWarnings(run(input, config), [/multiple-classes/])
+  })
+})
+
 async function showsWarnings(promise, expectedWarnings) {
   let result = await promise
 
