@@ -3,6 +3,7 @@ import parser from 'postcss-selector-parser'
 
 import { resolveMatches } from './generateRules'
 import escapeClassName from '../util/escapeClassName'
+import { showStrictWarningsFor } from './warnings.js'
 
 /** @typedef {Map<string, [any, import('postcss').Rule[]]>} ApplyCache */
 
@@ -377,45 +378,6 @@ function processApply(root, context, localCache, result, depth = 0) {
     return selectorList.toString()
   }
 
-  function strictModeErrorMessage(matchedRules) {
-    // We do this because `.foo .foo` produces two matches pointing to the same rule
-    // We want the error message to be more specific so we remove duplicates
-    let rules = Array.from(new Set(matchedRules.map((rule) => rule[1])))
-
-    if (rules.length === 0) {
-      return
-    }
-
-    if (rules.length > 1) {
-      return 'Deprecation: @apply will not support matching multiple rules'
-    }
-
-    let ast = extractSelectors(rules[0].selector)
-
-    if (ast.length > 1) {
-      return 'Deprecation: @apply will not support matching rules with multiple selectors'
-    }
-
-    let classCount = 0
-    ast.walkClasses(() => {
-      classCount += 1
-    })
-
-    if (classCount > 1) {
-      return 'Deprecation: @apply will not support matching rules with multiple classes (before variants are applied)'
-    }
-  }
-
-  function warnIfNotAllowedInFuture(result, applyNode, matchedRules) {
-    let message = strictModeErrorMessage(matchedRules)
-
-    if (message === undefined) {
-      return
-    }
-
-    applyNode.warn(result, message)
-  }
-
   let perParentApplies = new Map()
 
   // Collect all apply candidates and their rules
@@ -463,7 +425,7 @@ function processApply(root, context, localCache, result, depth = 0) {
 
       let baseRules = applyClassCache.get(baseApplyCandidate)
 
-      warnIfNotAllowedInFuture(result, apply, baseRules)
+      showStrictWarningsFor('apply', baseRules, result, apply)
 
       candidates.push([applyCandidate, important, rules])
     }
