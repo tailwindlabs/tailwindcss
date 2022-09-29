@@ -499,6 +499,9 @@
   --tw-divide-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-divide-opacity));
 }
+.divide-\[var\(--value\)\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--value);
+}
 .divide-opacity-\[0\.8\] > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 0.8;
 }
