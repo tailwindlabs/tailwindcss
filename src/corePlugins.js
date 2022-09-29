@@ -1482,7 +1482,7 @@ export let corePlugins = {
   },
 
   backgroundSize: createUtilityPlugin('backgroundSize', [['bg', ['background-size']]], {
-    type: ['lookup', ['length', { preferOnConflict: true }], 'percentage'],
+    type: ['lookup', 'length', 'percentage', 'size'],
   }),
 
   backgroundAttachment: ({ addUtilities }) => {
@@ -1503,7 +1503,7 @@ export let corePlugins = {
   },
 
   backgroundPosition: createUtilityPlugin('backgroundPosition', [['bg', ['background-position']]], {
-    type: ['lookup', 'position'],
+    type: ['lookup', ['position', { preferOnConflict: true }]],
   }),
 
   backgroundRepeat: ({ addUtilities }) => {

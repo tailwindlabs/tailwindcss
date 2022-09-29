@@ -18,6 +18,7 @@ import {
   shadow,
 } from './dataTypes'
 import negateValue from './negateValue'
+import { backgroundSize } from './validateFormalSyntax'
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
@@ -162,6 +163,7 @@ export let typeMap = {
   'absolute-size': guess(absoluteSize),
   'relative-size': guess(relativeSize),
   shadow: guess(shadow),
+  size: guess(backgroundSize),
 }
 
 let supportedTypes = Object.keys(typeMap)

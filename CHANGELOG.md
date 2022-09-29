@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Revert change that only listened for stdin close on TTYs ([#9331](https://github.com/tailwindlabs/tailwindcss/pull/9331))
 - Ignore unset values (like `null` or `undefined`) when resolving the classList for intellisense ([#9385](https://github.com/tailwindlabs/tailwindcss/pull/9385))
 - Implement fallback plugins when arbitrary values result in css from multiple plugins ([#9376](https://github.com/tailwindlabs/tailwindcss/pull/9376))
+- Improve type checking for formal syntax ([#9349](https://github.com/tailwindlabs/tailwindcss/pull/9349), [#9448](https://github.com/tailwindlabs/tailwindcss/pull/9448))
 
 ## [3.1.8] - 2022-08-05
 

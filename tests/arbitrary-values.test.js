@@ -285,7 +285,7 @@ it('should pick the fallback plugin when arbitrary values collide', () => {
       }
 
       .bg-\[200px_100px\] {
-        background-size: 200px 100px;
+        background-position: 200px 100px;
       }
     `)
   })
@@ -311,7 +311,7 @@ it('should warn and not generate if arbitrary values are ambiguous (without fall
     plugins: [
       function ({ matchUtilities }) {
         matchUtilities({ foo: (value) => ({ value }) }, { type: ['position'] })
-        matchUtilities({ foo: (value) => ({ value }) }, { type: ['length'] })
+        matchUtilities({ foo: (value) => ({ value }) }, { type: ['size'] })
       },
     ],
   }
@@ -459,6 +459,80 @@ it('should correctly validate each part when checking for `percentage` data type
     expect(result.css).toMatchFormattedCss(css`
       .bg-\[top_right_50\%\] {
         background-position: top right 50%;
+      }
+    `)
+  })
+})
+
+it('should correctly validate background size', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[auto_auto,cover,_contain,10px,10px_10%]"></div>` }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[auto_auto\2c cover\2c _contain\2c 10px\2c 10px_10\%\] {
+        background-size: auto auto, cover, contain, 10px, 10px 10%;
+      }
+    `)
+  })
+})
+
+it('should correctly validate combination of percentage and length', () => {
+  let config = {
+    content: [{ raw: html`<div class="bg-[50px_10%] bg-[50%_10%] bg-[50px_10px]"></div>` }],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[50px_10\%\] {
+        background-position: 50px 10%;
+      }
+      .bg-\[50\%_10\%\] {
+        background-position: 50% 10%;
+      }
+      .bg-\[50px_10px\] {
+        background-position: 50px 10px;
+      }
+    `)
+  })
+})
+
+it('can explicitly specify type for percentage and length', () => {
+  let config = {
+    content: [
+      { raw: html`<div class="bg-[size:50px_10%] bg-[50px_10px] bg-[position:50%_10%]"></div>` },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[size\:50px_10\%\] {
+        background-size: 50px 10%;
+      }
+      .bg-\[50px_10px\] {
+        background-position: 50px 10px;
+      }
+      .bg-\[position\:50\%_10\%\] {
+        background-position: 50% 10%;
       }
     `)
   })
