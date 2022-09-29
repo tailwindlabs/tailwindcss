@@ -285,7 +285,7 @@ it('should pick the fallback plugin when arbitrary values collide', () => {
       }
 
       .bg-\[200px_100px\] {
-        background-size: 200px 100px;
+        background-position: 200px 100px;
       }
     `)
   })
@@ -498,13 +498,13 @@ it('should correctly validate combination of percentage and length', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .bg-\[50px_10\%\] {
-        background-size: 50px 10%;
+        background-position: 50px 10%;
       }
       .bg-\[50\%_10\%\] {
-        background-size: 50% 10%;
+        background-position: 50% 10%;
       }
       .bg-\[50px_10px\] {
-        background-size: 50px 10px;
+        background-position: 50px 10px;
       }
     `)
   })
@@ -525,11 +525,11 @@ it('can explicitly specify type for percentage and length', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .bg-\[50px_10px\] {
-        background-size: 50px 10px;
-      }
       .bg-\[size\:50px_10\%\] {
         background-size: 50px 10%;
+      }
+      .bg-\[50px_10px\] {
+        background-position: 50px 10px;
       }
       .bg-\[position\:50\%_10\%\] {
         background-position: 50% 10%;
