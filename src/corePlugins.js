@@ -1110,7 +1110,7 @@ export let corePlugins = {
       },
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('divideColor'))),
-        type: 'color',
+        type: ['color', 'any'],
       }
     )
   },
@@ -1648,13 +1648,13 @@ export let corePlugins = {
       },
       {
         values: theme('fontSize'),
-        type: ['absolute-size', 'relative-size', 'length', 'percentage', 'any'],
+        type: ['absolute-size', 'relative-size', 'length', 'percentage'],
       }
     )
   },
 
   fontWeight: createUtilityPlugin('fontWeight', [['font', ['fontWeight']]], {
-    type: ['lookup', 'number'],
+    type: ['lookup', 'number', 'any'],
   }),
 
   textTransform: ({ addUtilities }) => {
@@ -1750,7 +1750,7 @@ export let corePlugins = {
           })
         },
       },
-      { values: flattenColorPalette(theme('textColor')), type: 'color' }
+      { values: flattenColorPalette(theme('textColor')), type: ['color', 'any'] }
     )
   },
 
@@ -1795,7 +1795,7 @@ export let corePlugins = {
   textUnderlineOffset: createUtilityPlugin(
     'textUnderlineOffset',
     [['underline-offset', ['text-underline-offset']]],
-    { type: ['length', 'percentage'] }
+    { type: ['length', 'percentage', 'any'] }
   ),
 
   fontSmoothing: ({ addUtilities }) => {
@@ -1953,7 +1953,7 @@ export let corePlugins = {
             }
           },
         },
-        { values: theme('boxShadow'), type: ['shadow', 'any'] }
+        { values: theme('boxShadow'), type: ['shadow'] }
       )
     }
   })(),
@@ -1968,7 +1968,7 @@ export let corePlugins = {
           }
         },
       },
-      { values: flattenColorPalette(theme('boxShadowColor')), type: ['color'] }
+      { values: flattenColorPalette(theme('boxShadowColor')), type: ['color', 'any'] }
     )
   },
 
@@ -1990,7 +1990,7 @@ export let corePlugins = {
   }),
 
   outlineOffset: createUtilityPlugin('outlineOffset', [['outline-offset', ['outline-offset']]], {
-    type: ['length', 'number', 'percentage'],
+    type: ['length', 'number', 'percentage', 'any'],
     supportsNegativeValues: true,
   }),
 
@@ -2081,7 +2081,7 @@ export let corePlugins = {
             ([modifier]) => modifier !== 'DEFAULT'
           )
         ),
-        type: 'color',
+        type: ['color', 'any'],
       }
     )
   },
@@ -2108,7 +2108,7 @@ export let corePlugins = {
           }
         },
       },
-      { values: flattenColorPalette(theme('ringOffsetColor')), type: 'color' }
+      { values: flattenColorPalette(theme('ringOffsetColor')), type: ['color', 'any'] }
     )
   },
 
