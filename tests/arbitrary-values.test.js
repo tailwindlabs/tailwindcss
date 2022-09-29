@@ -311,7 +311,7 @@ it('should warn and not generate if arbitrary values are ambiguous (without fall
     plugins: [
       function ({ matchUtilities }) {
         matchUtilities({ foo: (value) => ({ value }) }, { type: ['position'] })
-        matchUtilities({ foo: (value) => ({ value }) }, { type: ['length'] })
+        matchUtilities({ foo: (value) => ({ value }) }, { type: ['size'] })
       },
     ],
   }
@@ -496,7 +496,17 @@ it('should correctly validate combination of percentage and length', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css.trim()).toHaveLength(0)
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[50px_10\%\] {
+        background-size: 50px 10%;
+      }
+      .bg-\[50\%_10\%\] {
+        background-size: 50% 10%;
+      }
+      .bg-\[50px_10px\] {
+        background-size: 50px 10px;
+      }
+    `)
   })
 })
 
@@ -514,11 +524,14 @@ it('can explicitly specify type for percentage and length', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(`
-      .bg-\\[size\\:50px_10\\%\\] {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[50px_10px\] {
+        background-size: 50px 10px;
+      }
+      .bg-\[size\:50px_10\%\] {
         background-size: 50px 10%;
       }
-      .bg-\\[position\\:50\\%_10\\%\\] {
+      .bg-\[position\:50\%_10\%\] {
         background-position: 50% 10%;
       }
     `)
