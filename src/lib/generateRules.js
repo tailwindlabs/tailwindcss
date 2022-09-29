@@ -3,7 +3,7 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses } from '../util/pluginUtils'
+import { updateAllClasses, typeMap } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
@@ -539,68 +539,135 @@ function* resolveMatches(candidate, context, original = candidate) {
       }
 
       if (matchesPerPlugin.length > 0) {
-        typesByMatches.set(matchesPerPlugin, sort.options?.type)
+        let matchingTypes = (sort.options?.types ?? [])
+          .map(({ type }) => type)
+          // Only track the types for this plugin that resulted in some result
+          .filter((type) => {
+            return Boolean(
+              typeMap[type](modifier, sort.options, {
+                tailwindConfig: context.tailwindConfig,
+              })
+            )
+          })
+
+        if (matchingTypes.length > 0) {
+          typesByMatches.set(matchesPerPlugin, matchingTypes)
+        }
+
         matches.push(matchesPerPlugin)
       }
     }
 
     if (isArbitraryValue(modifier)) {
-      // When generated arbitrary values are ambiguous, we can't know
-      // which to pick so don't generate any utilities for them
       if (matches.length > 1) {
-        let typesPerPlugin = matches.map((match) => new Set([...(typesByMatches.get(match) ?? [])]))
-
-        // Remove duplicates, so that we can detect proper unique types for each plugin.
-        for (let pluginTypes of typesPerPlugin) {
-          for (let type of pluginTypes) {
-            let removeFromOwnGroup = false
-
-            for (let otherGroup of typesPerPlugin) {
-              if (pluginTypes === otherGroup) continue
-
-              if (otherGroup.has(type)) {
-                otherGroup.delete(type)
-                removeFromOwnGroup = true
-              }
-            }
-
-            if (removeFromOwnGroup) pluginTypes.delete(type)
-          }
-        }
-
-        let messages = []
-
-        for (let [idx, group] of typesPerPlugin.entries()) {
-          for (let type of group) {
-            let rules = matches[idx]
-              .map(([, rule]) => rule)
-              .flat()
-              .map((rule) =>
-                rule
-                  .toString()
-                  .split('\n')
-                  .slice(1, -1) // Remove selector and closing '}'
-                  .map((line) => line.trim())
-                  .map((x) => `      ${x}`) // Re-indent
-                  .join('\n')
-              )
-              .join('\n\n')
-
-            messages.push(
-              `  Use \`${candidate.replace('[', `[${type}:`)}\` for \`${rules.trim()}\``
+        // Partition plugins in 2 categories so that we can start searching in the plugins that
+        // don't have `any` as a type first.
+        let [withAny, withoutAny] = matches.reduce(
+          (group, plugin) => {
+            let hasAnyType = plugin.some(([{ options }]) =>
+              options.types.some(({ type }) => type === 'any')
             )
-            break
+
+            if (hasAnyType) {
+              group[0].push(plugin)
+            } else {
+              group[1].push(plugin)
+            }
+            return group
+          },
+          [[], []]
+        )
+
+        function findFallback(matches) {
+          // If only a single plugin matches, let's take that one
+          if (matches.length === 1) {
+            return matches[0]
           }
+
+          // Otherwise, find the plugin that creates a valid rule given the arbitrary value, and
+          // also has the correct type which preferOnConflicts the plugin in case of clashes.
+          return matches.find((rules) => {
+            let matchingTypes = typesByMatches.get(rules)
+            return rules.some(([{ options }, rule]) => {
+              if (!isParsableNode(rule)) {
+                return false
+              }
+
+              return options.types.some(
+                ({ type, preferOnConflict }) => matchingTypes.includes(type) && preferOnConflict
+              )
+            })
+          })
         }
 
-        log.warn([
-          `The class \`${candidate}\` is ambiguous and matches multiple utilities.`,
-          ...messages,
-          `If this is content and not a class, replace it with \`${candidate
-            .replace('[', '&lsqb;')
-            .replace(']', '&rsqb;')}\` to silence this warning.`,
-        ])
-        continue
+        // Try to find a fallback plugin, because we already know that multiple plugins matched for
+        // the given arbitrary value.
+        let fallback = findFallback(withoutAny) ?? findFallback(withAny)
+        if (fallback) {
+          matches = [fallback]
+        }
+
+        // We couldn't find a fallback plugin which means that there are now multiple plugins that
+        // generated css for the current candidate. This means that the result is ambiguous and this
+        // should not happen. We won't generate anything right now, so let's report this to the user
+        // by logging some options about what they can do.
+        else {
+          let typesPerPlugin = matches.map(
+            (match) => new Set([...(typesByMatches.get(match) ?? [])])
+          )
+
+          // Remove duplicates, so that we can detect proper unique types for each plugin.
+          for (let pluginTypes of typesPerPlugin) {
+            for (let type of pluginTypes) {
+              let removeFromOwnGroup = false
+
+              for (let otherGroup of typesPerPlugin) {
+                if (pluginTypes === otherGroup) continue
+
+                if (otherGroup.has(type)) {
+                  otherGroup.delete(type)
+                  removeFromOwnGroup = true
+                }
+              }
+
+              if (removeFromOwnGroup) pluginTypes.delete(type)
+            }
+          }
+
+          let messages = []
+
+          for (let [idx, group] of typesPerPlugin.entries()) {
+            for (let type of group) {
+              let rules = matches[idx]
+                .map(([, rule]) => rule)
+                .flat()
+                .map((rule) =>
+                  rule
+                    .toString()
+                    .split('\n')
+                    .slice(1, -1) // Remove selector and closing '}'
+                    .map((line) => line.trim())
+                    .map((x) => `      ${x}`) // Re-indent
+                    .join('\n')
+                )
+                .join('\n\n')
+
+              messages.push(
+                `  Use \`${candidate.replace('[', `[${type}:`)}\` for \`${rules.trim()}\``
+              )
+              break
+            }
+          }
+
+          log.warn([
+            `The class \`${candidate}\` is ambiguous and matches multiple utilities.`,
+            ...messages,
+            `If this is content and not a class, replace it with \`${candidate
+              .replace('[', '&lsqb;')
+              .replace(']', '&rsqb;')}\` to silence this warning.`,
+          ])
+          continue
+        }
       }
 
       matches = matches.map((list) => list.filter((match) => isParsableNode(match[1])))

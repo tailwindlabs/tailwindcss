@@ -30,6 +30,20 @@ function prefix(context, selector) {
   return typeof prefix === 'function' ? prefix(selector) : prefix + selector
 }
 
+function normalizeOptionTypes({ type = 'any', ...options }) {
+  let types = [].concat(type)
+
+  return {
+    ...options,
+    types: types.map((type) => {
+      if (Array.isArray(type)) {
+        return { type: type[0], ...type[1] }
+      }
+      return { type, preferOnConflict: false }
+    }),
+  }
+}
+
 function parseVariantFormatString(input) {
   if (input.includes('{')) {
     if (!isBalanced(input)) throw new Error(`Your { and } are unbalanced.`)
@@ -346,7 +360,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         respectImportant: true,
       }
 
-      options = { ...defaultOptions, ...options }
+      options = normalizeOptionTypes({ ...defaultOptions, ...options })
 
       let offset = offsets.create('utilities')
 
@@ -357,16 +371,24 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         classList.add([prefixedIdentifier, options])
 
         function wrapped(modifier, { isOnlyPlugin }) {
-          let { type = 'any' } = options
-          type = [].concat(type)
-          let [value, coercedType] = coerceValue(type, modifier, options, tailwindConfig)
+          let [value, coercedType] = coerceValue(options.types, modifier, options, tailwindConfig)
 
           if (value === undefined) {
             return []
           }
 
-          if (!type.includes(coercedType) && !isOnlyPlugin) {
-            return []
+          if (!options.types.some(({ type }) => type === coercedType)) {
+            if (isOnlyPlugin) {
+              log.warn([
+                `Unnecessary typehint \`${coercedType}\` in \`${identifier}-${modifier}\`.`,
+                `You can safely update it to \`${identifier}-${modifier.replace(
+                  coercedType + ':',
+                  ''
+                )}\`.`,
+              ])
+            } else {
+              return []
+            }
           }
 
           if (!isValidArbitraryValue(value)) {
@@ -398,7 +420,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         respectImportant: false,
       }
 
-      options = { ...defaultOptions, ...options }
+      options = normalizeOptionTypes({ ...defaultOptions, ...options })
 
       let offset = offsets.create('components')
 
@@ -409,15 +431,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         classList.add([prefixedIdentifier, options])
 
         function wrapped(modifier, { isOnlyPlugin }) {
-          let { type = 'any' } = options
-          type = [].concat(type)
-          let [value, coercedType] = coerceValue(type, modifier, options, tailwindConfig)
+          let [value, coercedType] = coerceValue(options.types, modifier, options, tailwindConfig)
 
           if (value === undefined) {
             return []
           }
 
-          if (!type.includes(coercedType)) {
+          if (!options.types.some(({ type }) => type === coercedType)) {
             if (isOnlyPlugin) {
               log.warn([
                 `Unnecessary typehint \`${coercedType}\` in \`${identifier}-${modifier}\`.`,
@@ -738,7 +758,7 @@ function registerPlugins(plugins, context) {
                 ]
               }
 
-              if ([].concat(options?.type).includes('color')) {
+              if (options.types.some(({ type }) => type === 'color')) {
                 classes = [
                   ...classes,
                   ...classes.flatMap((cls) =>

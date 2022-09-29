@@ -1268,8 +1268,11 @@ describe('context dependent', () => {
     `)
 
     // 2. But we get a warning in the console
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['invalid-theme-key-in-class'])
+    expect(warn).toHaveBeenCalledTimes(2)
+    expect(warn.mock.calls.map((x) => x[0])).toEqual([
+      'invalid-theme-key-in-class',
+      'invalid-theme-key-in-class',
+    ])
 
     // 3. The second run should work fine because it's been removed from the class cache
     result = await runFull('@tailwind utilities', configPath)
@@ -1281,7 +1284,10 @@ describe('context dependent', () => {
     `)
 
     // 4. But we've not received any further logs about it
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['invalid-theme-key-in-class'])
+    expect(warn).toHaveBeenCalledTimes(2)
+    expect(warn.mock.calls.map((x) => x[0])).toEqual([
+      'invalid-theme-key-in-class',
+      'invalid-theme-key-in-class',
+    ])
   })
 })

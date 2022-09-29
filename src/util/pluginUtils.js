@@ -146,7 +146,7 @@ function guess(validate) {
   }
 }
 
-let typeMap = {
+export let typeMap = {
   any: asValue,
   color: asColor,
   url: guess(url),
@@ -195,7 +195,7 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
   }
 
   // Find first matching type
-  for (let type of [].concat(types)) {
+  for (let { type } of types) {
     let result = typeMap[type](modifier, options, { tailwindConfig })
     if (result !== undefined) return [result, type]
   }
