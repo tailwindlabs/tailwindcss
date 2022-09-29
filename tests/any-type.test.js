@@ -1,5 +1,20 @@
 import { run, html, css } from './util/run'
 
+// Hi there, so you are debugging this test because something failed... right? Well we can look into
+// the future and guessed that this would happen. So basically it means that we (it was probably
+// you, silly) introduced a new plugin that conflicts with an existing plugin that has (either
+// implicit or explicit) an `any` type.
+//
+// Now it is your job to decide which one should win, and mark that one with
+// ```diff
+// - 'any'
+// + ['any', { preferOnConflict: true }]
+// ```
+// in the corePlugins.js file.
+//
+// You probably want to let the original one win for backwards compatible reasons.
+//
+// Good luck!
 test('any types are set on correct plugins', () => {
   let config = {
     content: [
