@@ -39,7 +39,7 @@ function normalizeOptionTypes({ type = 'any', ...options }) {
       if (Array.isArray(type)) {
         return { type: type[0], ...type[1] }
       }
-      return { type, disambiguate: false }
+      return { type, preferOnConflict: false }
     }),
   }
 }

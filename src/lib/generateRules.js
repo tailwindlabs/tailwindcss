@@ -585,7 +585,7 @@ function* resolveMatches(candidate, context, original = candidate) {
           }
 
           // Otherwise, find the plugin that creates a valid rule given the arbitrary value, and
-          // also has the correct type which disambiguates the plugin in case of clashes.
+          // also has the correct type which preferOnConflicts the plugin in case of clashes.
           return matches.find((rules) => {
             let matchingTypes = typesByMatches.get(rules)
             return rules.some(([{ options }, rule]) => {
@@ -594,7 +594,7 @@ function* resolveMatches(candidate, context, original = candidate) {
               }
 
               return options.types.some(
-                ({ type, disambiguate }) => matchingTypes.includes(type) && disambiguate
+                ({ type, preferOnConflict }) => matchingTypes.includes(type) && preferOnConflict
               )
             })
           })
