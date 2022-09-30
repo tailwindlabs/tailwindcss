@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `@config` support ([#9405](https://github.com/tailwindlabs/tailwindcss/pull/9405))
 - Add `fill-none` and `stroke-none` utilities by default ([#9403](https://github.com/tailwindlabs/tailwindcss/pull/9403))
 - Support `sort` function in `matchVariant` ([#9423](https://github.com/tailwindlabs/tailwindcss/pull/9423))
+- Implement the `supports` variant ([#9453](https://github.com/tailwindlabs/tailwindcss/pull/9453))
 
 ### Fixed
 
