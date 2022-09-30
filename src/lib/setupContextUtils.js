@@ -526,12 +526,16 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let id = ++variantIdentifier // A unique identifier that "groups" these variables together.
 
       for (let [key, value] of Object.entries(options?.values ?? {})) {
-        api.addVariant(`${variant}-${key}`, variantFn({ value }), { ...options, value, id })
+        api.addVariant(
+          `${variant}-${key}`,
+          Object.assign(({ args }) => variantFn({ ...args, value }), { [MATCH_VARIANT]: true }),
+          { ...options, value, id }
+        )
       }
 
       api.addVariant(
         variant,
-        Object.assign(({ args }) => variantFn({ value: args }), { [MATCH_VARIANT]: true }),
+        Object.assign(({ args }) => variantFn(args), { [MATCH_VARIANT]: true }),
         { ...options, id }
       )
     }

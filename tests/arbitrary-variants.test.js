@@ -707,3 +707,75 @@ it('should support supports', () => {
     `)
   })
 })
+
+it('should be possible to use named variants', () => {
+  let config = {
+    experimental: { matchVariant: true },
+    content: [
+      {
+        raw: html`
+          <!-- Default foo -->
+          <div class="foo">
+            <!-- Pseudo from values -->
+            <div class="foo-hover:p-1"></div>
+            <!-- Arbitrary pseudo -->
+            <div class="foo-[:focus]:p-2"></div>
+          </div>
+
+          <!-- Named foo -->
+          <div class="foo<dropdown>">
+            <!-- Pseudo from values -->
+            <div class="foo<dropdown>-hover:p-3"></div>
+
+            <!-- Arbitrary pseudo -->
+            <div class="foo<dropdown>-[:focus]:p-4"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant(
+          'foo',
+          ({ label, value } = {}) => {
+            if (label) {
+              return `:merge(.foo\\<${label}\\>)${value} &`
+            }
+
+            return `:merge(.foo)${value} &`
+          },
+          {
+            values: {
+              hover: ':hover',
+            },
+          }
+        )
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo:hover .foo-hover\:p-1 {
+        padding: 0.25rem;
+      }
+
+      .foo\<dropdown\>:hover .foo\<dropdown\>-hover\:p-3 {
+        padding: 0.75rem;
+      }
+
+      .foo:focus .foo-\[\:focus\]\:p-2 {
+        padding: 0.5rem;
+      }
+
+      .foo\<dropdown\>:focus .foo\<dropdown\>-\[\:focus\]\:p-4 {
+        padding: 1rem;
+      }
+    `)
+  })
+})
