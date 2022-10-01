@@ -54,12 +54,14 @@ jobs:
           tag_name: ${{ steps.vars.outputs.tag_name }}
           body: |
             * [Linux (arm64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ steps.vars.outputs.tag_name }}/tailwindcss-linux-arm64)
+            * [Linux (armv7)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ steps.vars.outputs.tag_name }}/tailwindcss-linux-armv7)
             * [Linux (x64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ steps.vars.outputs.tag_name }}/tailwindcss-linux-x64)
             * [macOS (arm64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ steps.vars.outputs.tag_name }}/tailwindcss-macos-arm64)
             * [macOS (x64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ steps.vars.outputs.tag_name }}/tailwindcss-macos-x64)
             * [Windows (x64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ steps.vars.outputs.tag_name }}/tailwindcss-windows-x64.exe)
           files: |
             standalone-cli/dist/tailwindcss-linux-arm64
+            standalone-cli/dist/tailwindcss-linux-armv7
             standalone-cli/dist/tailwindcss-linux-x64
             standalone-cli/dist/tailwindcss-macos-arm64
             standalone-cli/dist/tailwindcss-macos-x64
