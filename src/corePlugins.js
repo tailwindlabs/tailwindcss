@@ -234,7 +234,7 @@ export let variantPlugins = {
         }
 
         if (!check.includes(':')) {
-          check = `${check}: var(--tw-empty)`
+          check = `${check}: var(--tw)`
         }
 
         if (!(check.startsWith('(') && check.endsWith(')'))) {

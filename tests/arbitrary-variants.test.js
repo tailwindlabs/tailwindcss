@@ -640,7 +640,7 @@ it('should support supports', () => {
             <div class="supports-[(foo:bar)or(bar:baz)]:underline"></div>
             <!-- 'and' check (raw) -->
             <div class="supports-[(foo:bar)and(bar:baz)]:underline"></div>
-            <!-- No value give for the property, defaulting to prop: var(--tw-empty) -->
+            <!-- No value give for the property, defaulting to prop: var(--tw) -->
             <div class="supports-[container-type]:underline"></div>
             <!-- Named supports usage -->
             <div class="supports-grid:underline"></div>
@@ -699,7 +699,7 @@ it('should support supports', () => {
         }
       }
 
-      @supports (container-type: var(--tw-empty)) {
+      @supports (container-type: var(--tw)) {
         .supports-\[container-type\]\:underline {
           text-decoration-line: underline;
         }
