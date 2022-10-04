@@ -16,6 +16,7 @@ import { normalizeScreens } from './util/normalizeScreens'
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
+import { normalize } from './util/dataTypes'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -213,6 +214,37 @@ export let variantPlugins = {
 
       addVariant(screen.name, `@media ${query}`)
     }
+  },
+
+  supportsVariants: ({ matchVariant, theme, config }) => {
+    if (!flagEnabled(config(), 'matchVariant')) return
+
+    matchVariant(
+      'supports',
+      ({ value = '' }) => {
+        let check = normalize(value)
+        let isRaw = /^\w*\s*\(/.test(check)
+
+        // Chrome has a bug where `(condtion1)or(condition2)` is not valid
+        // But `(condition1) or (condition2)` is supported.
+        check = isRaw ? check.replace(/\b(and|or|not)\b/g, ' $1 ') : check
+
+        if (isRaw) {
+          return `@supports ${check}`
+        }
+
+        if (!check.includes(':')) {
+          check = `${check}: var(--tw)`
+        }
+
+        if (!(check.startsWith('(') && check.endsWith(')'))) {
+          check = `(${check})`
+        }
+
+        return `@supports ${check} `
+      },
+      { values: theme('supports') ?? {} }
+    )
   },
 
   orientationVariants: ({ addVariant }) => {

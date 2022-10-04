@@ -615,3 +615,95 @@ test('classes in the same arbitrary variant should not be prefixed', () => {
     `)
   })
 })
+
+it('should support supports', () => {
+  let config = {
+    experimental: { matchVariant: true },
+    theme: {
+      supports: {
+        grid: 'display: grid',
+      },
+    },
+    content: [
+      {
+        raw: html`
+          <div>
+            <!-- Property check -->
+            <div class="supports-[display:grid]:grid"></div>
+            <!-- Value with spaces, needs to be normalized -->
+            <div class="supports-[transform-origin:5%_5%]:underline"></div>
+            <!-- Selectors (raw) -->
+            <div class="supports-[selector(A>B)]:underline"></div>
+            <!-- 'not' check (raw) -->
+            <div class="supports-[not(foo:bar)]:underline"></div>
+            <!-- 'or' check (raw) -->
+            <div class="supports-[(foo:bar)or(bar:baz)]:underline"></div>
+            <!-- 'and' check (raw) -->
+            <div class="supports-[(foo:bar)and(bar:baz)]:underline"></div>
+            <!-- No value give for the property, defaulting to prop: var(--tw) -->
+            <div class="supports-[container-type]:underline"></div>
+            <!-- Named supports usage -->
+            <div class="supports-grid:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @supports (display: grid) {
+        .supports-grid\:underline {
+          text-decoration-line: underline;
+        }
+      }
+
+      @supports (display: grid) {
+        .supports-\[display\:grid\]\:grid {
+          display: grid;
+        }
+      }
+
+      @supports (transform-origin: 5% 5%) {
+        .supports-\[transform-origin\:5\%_5\%\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+
+      @supports selector(A > B) {
+        .supports-\[selector\(A\>B\)\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+
+      @supports not (foo: bar) {
+        .supports-\[not\(foo\:bar\)\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+
+      @supports (foo: bar) or (bar: baz) {
+        .supports-\[\(foo\:bar\)or\(bar\:baz\)\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+
+      @supports (foo: bar) and (bar: baz) {
+        .supports-\[\(foo\:bar\)and\(bar\:baz\)\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+
+      @supports (container-type: var(--tw)) {
+        .supports-\[container-type\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})
