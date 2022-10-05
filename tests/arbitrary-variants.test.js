@@ -708,51 +708,54 @@ it('should support supports', () => {
   })
 })
 
-it('should be possible to use named variants', () => {
+it('should be possible to use labels and arbitrary groups', () => {
   let config = {
-    experimental: { matchVariant: true },
+    experimental: 'all',
     content: [
       {
         raw: html`
-          <!-- Default foo -->
-          <div class="foo">
-            <!-- Pseudo from values -->
-            <div class="foo-hover:p-1"></div>
-            <!-- Arbitrary pseudo -->
-            <div class="foo-[:focus]:p-2"></div>
-          </div>
+          <div>
+            <div class="group">
+              <!-- Default group usage -->
+              <div class="group-hover:underline"></div>
 
-          <!-- Named foo -->
-          <div class="foo<dropdown>">
-            <!-- Pseudo from values -->
-            <div class="foo<dropdown>-hover:p-3"></div>
+              <!-- Arbitrary variants with pseudo class for group -->
+              <!-- With & -->
+              <div class="group-[&:focus]:underline"></div>
+              <!-- Without & -->
+              <div class="group-[:hover]:underline"></div>
 
-            <!-- Arbitrary pseudo -->
-            <div class="foo<dropdown>-[:focus]:p-4"></div>
+              <!-- Arbitrary variants with attributes selectors for group -->
+              <!-- With & -->
+              <div class="group-[&[data-open]]:underline"></div>
+              <!-- Without & -->
+              <div class="group-[[data-open]]:underline"></div>
+
+              <!-- Arbitrary variants with other selectors -->
+              <!-- With & -->
+              <div class="group-[.in-foo_&]:underline"></div>
+              <!-- Without & -->
+              <div class="group-[.in-foo]:underline"></div>
+            </div>
+
+            <!-- The same as above, but with labels -->
+            <div class="group<foo>">
+              <div class="group<foo>-hover:underline"></div>
+
+              <div class="group<foo>-[&:focus]:underline"></div>
+              <div class="group<foo>-[:hover]:underline"></div>
+
+              <div class="group<foo>-[&[data-open]]:underline"></div>
+              <div class="group<foo>-[[data-open]]:underline"></div>
+
+              <div class="group<foo>-[.in-foo_&]:underline"></div>
+              <div class="group<foo>-[.in-foo]:underline"></div>
+            </div>
           </div>
         `,
       },
     ],
     corePlugins: { preflight: false },
-    plugins: [
-      ({ matchVariant }) => {
-        matchVariant(
-          'foo',
-          ({ label, value } = {}) => {
-            if (label) {
-              return `:merge(.foo\\<${label}\\>)${value} &`
-            }
-
-            return `:merge(.foo)${value} &`
-          },
-          {
-            values: {
-              hover: ':hover',
-            },
-          }
-        )
-      },
-    ],
   }
 
   let input = css`
@@ -761,20 +764,149 @@ it('should be possible to use named variants', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .foo:hover .foo-hover\:p-1 {
-        padding: 0.25rem;
+      .group:hover .group-hover\:underline {
+        text-decoration-line: underline;
       }
-
-      .foo\<dropdown\>:hover .foo\<dropdown\>-hover\:p-3 {
-        padding: 0.75rem;
+      .group\<foo\>:hover .group\<foo\>-hover\:underline {
+        text-decoration-line: underline;
       }
-
-      .foo:focus .foo-\[\:focus\]\:p-2 {
-        padding: 0.5rem;
+      .group:focus .group-\[\&\:focus\]\:underline {
+        text-decoration-line: underline;
       }
+      .group:hover .group-\[\:hover\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group[data-open] .group-\[\&\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group[data-open] .group-\[\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .in-foo .group .group-\[\.in-foo_\&\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group.in-foo .group-\[\.in-foo\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\<foo\>:focus .group\<foo\>-\[\&\:focus\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\<foo\>:hover .group\<foo\>-\[\:hover\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\<foo\>[data-open] .group\<foo\>-\[\&\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\<foo\>[data-open] .group\<foo\>-\[\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .in-foo .group\<foo\> .group\<foo\>-\[\.in-foo_\&\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\<foo\>.in-foo .group\<foo\>-\[\.in-foo\]\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
 
-      .foo\<dropdown\>:focus .foo\<dropdown\>-\[\:focus\]\:p-4 {
-        padding: 1rem;
+it('should be possible to use labels and arbitrary peers', () => {
+  let config = {
+    experimental: 'all',
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="peer">
+              <!-- Default peer usage -->
+              <div class="peer-hover:underline"></div>
+
+              <!-- Arbitrary variants with pseudo class for peer -->
+              <!-- With & -->
+              <div class="peer-[&:focus]:underline"></div>
+              <!-- Without & -->
+              <div class="peer-[:hover]:underline"></div>
+
+              <!-- Arbitrary variants with attributes selectors for peer -->
+              <!-- With & -->
+              <div class="peer-[&[data-open]]:underline"></div>
+              <!-- Without & -->
+              <div class="peer-[[data-open]]:underline"></div>
+
+              <!-- Arbitrary variants with other selectors -->
+              <!-- With & -->
+              <div class="peer-[.in-foo_&]:underline"></div>
+              <!-- Without & -->
+              <div class="peer-[.in-foo]:underline"></div>
+            </div>
+
+            <!-- The same as above, but with labels -->
+            <div class="peer<foo>">
+              <div class="peer<foo>-hover:underline"></div>
+
+              <div class="peer<foo>-[&:focus]:underline"></div>
+              <div class="peer<foo>-[:hover]:underline"></div>
+
+              <div class="peer<foo>-[&[data-open]]:underline"></div>
+              <div class="peer<foo>-[[data-open]]:underline"></div>
+
+              <div class="peer<foo>-[.in-foo_&]:underline"></div>
+              <div class="peer<foo>-[.in-foo]:underline"></div>
+            </div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .peer:hover ~ .peer-hover\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\<foo\>:hover ~ .peer\<foo\>-hover\:underline {
+        text-decoration-line: underline;
+      }
+      .peer:focus ~ .peer-\[\&\:focus\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer:hover ~ .peer-\[\:hover\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[data-open] ~ .peer-\[\&\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[data-open] ~ .peer-\[\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .in-foo .peer ~ .peer-\[\.in-foo_\&\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer.in-foo ~ .peer-\[\.in-foo\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\<foo\>:focus ~ .peer\<foo\>-\[\&\:focus\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\<foo\>:hover ~ .peer\<foo\>-\[\:hover\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\<foo\>[data-open] ~ .peer\<foo\>-\[\&\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\<foo\>[data-open] ~ .peer\<foo\>-\[\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .in-foo .peer\<foo\> ~ .peer\<foo\>-\[\.in-foo_\&\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\<foo\>.in-foo ~ .peer\<foo\>-\[\.in-foo\]\:underline {
+        text-decoration-line: underline;
       }
     `)
   })
