@@ -528,14 +528,18 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       for (let [key, value] of Object.entries(options?.values ?? {})) {
         api.addVariant(
           `${variant}-${key}`,
-          Object.assign(({ args }) => variantFn({ ...args, value }), { [MATCH_VARIANT]: true }),
+          Object.assign(({ args, container }) => variantFn({ ...args, container, value }), {
+            [MATCH_VARIANT]: true,
+          }),
           { ...options, value, id }
         )
       }
 
       api.addVariant(
         variant,
-        Object.assign(({ args }) => variantFn(args), { [MATCH_VARIANT]: true }),
+        Object.assign(({ args, container }) => variantFn({ ...args, container }), {
+          [MATCH_VARIANT]: true,
+        }),
         { ...options, id }
       )
     }
