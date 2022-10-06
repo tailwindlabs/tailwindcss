@@ -75,7 +75,7 @@ export let variantPlugins = {
     })
   },
 
-  pseudoClassVariants: ({ addVariant, config }) => {
+  pseudoClassVariants: ({ addVariant, matchVariant, config }) => {
     let pseudoVariants = [
       // Positional
       ['first', '&:first-child'],
@@ -143,20 +143,33 @@ export let variantPlugins = {
       })
     }
 
-    for (let [variantName, state] of pseudoVariants) {
-      addVariant(`group-${variantName}`, (ctx) => {
-        let result = typeof state === 'function' ? state(ctx) : state
-
-        return result.replace(/&(\S+)/, ':merge(.group)$1 &')
-      })
+    let variants = {
+      group: ({ label }) =>
+        label ? [`:merge(.group\\<${label}\\>)`, ' &'] : [`:merge(.group)`, ' &'],
+      peer: ({ label }) =>
+        label ? [`:merge(.peer\\<${label}\\>)`, ' ~ &'] : [`:merge(.peer)`, ' ~ &'],
     }
 
-    for (let [variantName, state] of pseudoVariants) {
-      addVariant(`peer-${variantName}`, (ctx) => {
-        let result = typeof state === 'function' ? state(ctx) : state
+    for (let [name, fn] of Object.entries(variants)) {
+      matchVariant(
+        name,
+        (ctx = {}) => {
+          let { label, value = '' } = ctx
+          if (label) {
+            log.warn(`labelled-${name}-experimental`, [
+              `The labelled ${name} feature in Tailwind CSS is currently in preview.`,
+              'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
+            ])
+          }
 
-        return result.replace(/&(\S+)/, ':merge(.peer)$1 ~ &')
-      })
+          let result = normalize(typeof value === 'function' ? value(ctx) : value)
+          if (!result.includes('&')) result = '&' + result
+
+          let [a, b] = fn({ label })
+          return result.replace(/&(\S+)?/g, (_, pseudo = '') => a + pseudo + b)
+        },
+        { values: Object.fromEntries(pseudoVariants) }
+      )
     }
   },
 
@@ -216,9 +229,7 @@ export let variantPlugins = {
     }
   },
 
-  supportsVariants: ({ matchVariant, theme, config }) => {
-    if (!flagEnabled(config(), 'matchVariant')) return
-
+  supportsVariants: ({ matchVariant, theme }) => {
     matchVariant(
       'supports',
       ({ value = '' }) => {

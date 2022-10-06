@@ -14,7 +14,6 @@ let featureFlags = {
   ],
   experimental: [
     'optimizeUniversalDefaults',
-    'matchVariant',
     // 'variantGrouping',
   ],
 }

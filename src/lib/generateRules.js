@@ -128,12 +128,24 @@ function applyVariant(variant, matches, context) {
     return matches
   }
 
-  let args
+  let args = {}
 
-  // Find partial arbitrary variants
+  // Retrieve "label"
+  {
+    let match = /^[\w-]+\<(.*)\>-/g.exec(variant)
+    if (match) {
+      variant = variant.replace(`<${match[1]}>`, '')
+      args.label = match[1]
+    }
+  }
+
+  // Retrieve "arbitrary value"
   if (variant.endsWith(']') && !variant.startsWith('[')) {
-    args = variant.slice(variant.lastIndexOf('[') + 1, -1)
-    variant = variant.slice(0, variant.indexOf(args) - 1 /* - */ - 1 /* [ */)
+    let match = /-?\[(.*)\]/g.exec(variant)
+    if (match) {
+      variant = variant.replace(match[0], '')
+      args.value = match[1]
+    }
   }
 
   // Register arbitrary variants
@@ -297,7 +309,7 @@ function applyVariant(variant, matches, context) {
             sort: context.offsets.applyVariantOffset(
               meta.sort,
               variantSort,
-              Object.assign({ value: args }, context.variantOptions.get(variant))
+              Object.assign(args, context.variantOptions.get(variant))
             ),
             collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
             isArbitraryVariant: isArbitraryValue(variant),

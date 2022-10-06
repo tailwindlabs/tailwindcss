@@ -4,7 +4,6 @@ import postcss from 'postcss'
 import dlv from 'dlv'
 import selectorParser from 'postcss-selector-parser'
 
-import { flagEnabled } from '../featureFlags.js'
 import transformThemeValue from '../util/transformThemeValue'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
@@ -256,6 +255,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     }
   )
 
+  let variantIdentifier = 0
   let api = {
     postcss,
     prefix: applyConfiguredPrefix,
@@ -518,23 +518,27 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       variantMap.set(variantName, variantFunctions)
       context.variantOptions.set(variantName, options)
     },
-  }
-
-  if (flagEnabled(tailwindConfig, 'matchVariant')) {
-    let variantIdentifier = 0
-    api.matchVariant = function (variant, variantFn, options) {
+    matchVariant(variant, variantFn, options) {
       let id = ++variantIdentifier // A unique identifier that "groups" these variables together.
 
       for (let [key, value] of Object.entries(options?.values ?? {})) {
-        api.addVariant(`${variant}-${key}`, variantFn({ value }), { ...options, value, id })
+        api.addVariant(
+          `${variant}-${key}`,
+          Object.assign(({ args, container }) => variantFn({ ...args, container, value }), {
+            [MATCH_VARIANT]: true,
+          }),
+          { ...options, value, id }
+        )
       }
 
       api.addVariant(
         variant,
-        Object.assign(({ args }) => variantFn({ value: args }), { [MATCH_VARIANT]: true }),
+        Object.assign(({ args, container }) => variantFn({ ...args, container }), {
+          [MATCH_VARIANT]: true,
+        }),
         { ...options, id }
       )
-    }
+    },
   }
 
   return api

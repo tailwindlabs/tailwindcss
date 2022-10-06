@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `fill-none` and `stroke-none` utilities by default ([#9403](https://github.com/tailwindlabs/tailwindcss/pull/9403))
 - Support `sort` function in `matchVariant` ([#9423](https://github.com/tailwindlabs/tailwindcss/pull/9423))
 - Implement the `supports` variant ([#9453](https://github.com/tailwindlabs/tailwindcss/pull/9453))
+- Add experimental `label`s for variants ([#9456](https://github.com/tailwindlabs/tailwindcss/pull/9456))
 
 ### Fixed
 

@@ -2,7 +2,6 @@ import { run, html, css } from './util/run'
 
 test('partial arbitrary variants', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`<div class="potato-[yellow]:bg-yellow-200 potato-[baked]:w-3"></div> `,
@@ -36,7 +35,6 @@ test('partial arbitrary variants', () => {
 
 test('partial arbitrary variants with at-rules', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`<div class="potato-[yellow]:bg-yellow-200 potato-[baked]:w-3"></div> `,
@@ -73,7 +71,6 @@ test('partial arbitrary variants with at-rules', () => {
 
 test('partial arbitrary variants with at-rules and placeholder', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`<div class="potato-[yellow]:bg-yellow-200 potato-[baked]:w-3"></div> `,
@@ -110,7 +107,6 @@ test('partial arbitrary variants with at-rules and placeholder', () => {
 
 test('partial arbitrary variants with default values', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`<div class="tooltip-bottom:mt-2 tooltip-top:mb-2"></div>`,
@@ -148,7 +144,6 @@ test('partial arbitrary variants with default values', () => {
 
 test('matched variant values maintain the sort order they are registered in', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`<div
@@ -198,7 +193,6 @@ test('matched variant values maintain the sort order they are registered in', ()
 
 test('matchVariant can return an array of format strings from the function', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`<div class="test-[a,b,c]:underline"></div>`,
@@ -237,7 +231,6 @@ test('matchVariant can return an array of format strings from the function', () 
 
 it('should be possible to sort variants', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`
@@ -282,7 +275,6 @@ it('should be possible to sort variants', () => {
 
 it('should be possible to compare arbitrary variants and hardcoded variants', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`
@@ -336,7 +328,6 @@ it('should be possible to compare arbitrary variants and hardcoded variants', ()
 
 it('should be possible to sort stacked arbitrary variants correctly', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`
@@ -408,7 +399,6 @@ it('should be possible to sort stacked arbitrary variants correctly', () => {
 
 it('should maintain sort from other variants, if sort functions of arbitrary variants return 0', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`
@@ -459,7 +449,6 @@ it('should maintain sort from other variants, if sort functions of arbitrary var
 
 it('should sort arbitrary variants left to right (1)', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`
@@ -528,7 +517,6 @@ it('should sort arbitrary variants left to right (1)', () => {
 
 it('should sort arbitrary variants left to right (2)', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`
@@ -595,7 +583,6 @@ it('should sort arbitrary variants left to right (2)', () => {
 
 it('should guarantee that we are not passing values from other variants to the wrong function', () => {
   let config = {
-    experimental: { matchVariant: true },
     content: [
       {
         raw: html`
