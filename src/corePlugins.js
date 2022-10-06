@@ -809,6 +809,8 @@ export let corePlugins = {
 
     addUtilities({
       '.snap-none': { 'scroll-snap-type': 'none' },
+      '.snap-block': { 'scroll-snap-type': 'block' },
+      '.snap-inline': { 'scroll-snap-type': 'inline' },
       '.snap-x': {
         '@defaults scroll-snap-type': {},
         'scroll-snap-type': 'x var(--tw-scroll-snap-strictness)',
