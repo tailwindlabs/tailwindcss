@@ -618,7 +618,6 @@ test('classes in the same arbitrary variant should not be prefixed', () => {
 
 it('should support supports', () => {
   let config = {
-    experimental: { matchVariant: true },
     theme: {
       supports: {
         grid: 'display: grid',
@@ -710,7 +709,6 @@ it('should support supports', () => {
 
 it('should be possible to use labels and arbitrary groups', () => {
   let config = {
-    experimental: 'all',
     content: [
       {
         raw: html`
@@ -812,7 +810,6 @@ it('should be possible to use labels and arbitrary groups', () => {
 
 it('should be possible to use labels and arbitrary peers', () => {
   let config = {
-    experimental: 'all',
     content: [
       {
         raw: html`

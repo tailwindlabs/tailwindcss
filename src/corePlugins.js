@@ -229,9 +229,7 @@ export let variantPlugins = {
     }
   },
 
-  supportsVariants: ({ matchVariant, theme, config }) => {
-    if (!flagEnabled(config(), 'matchVariant')) return
-
+  supportsVariants: ({ matchVariant, theme }) => {
     matchVariant(
       'supports',
       ({ value = '' }) => {
