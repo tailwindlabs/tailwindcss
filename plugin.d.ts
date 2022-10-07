@@ -2,9 +2,9 @@ import type { Config, PluginCreator } from './types/config'
 type Plugin = {
   withOptions<T>(
     plugin: (options: T) => PluginCreator,
-    config?: (options: T) => Config
-  ): { (options: T): { handler: PluginCreator; config?: Config }; __isOptionsFunction: true }
-  (plugin: PluginCreator, config?: Config): { handler: PluginCreator; config?: Config }
+    config?: (options: T) => Partial<Config>
+  ): { (options: T): { handler: PluginCreator; config?: Partial<Config> }; __isOptionsFunction: true }
+  (plugin: PluginCreator, config?: Partial<Config>): { handler: PluginCreator; config?: Partial<Config> }
 }
 
 declare const plugin: Plugin
