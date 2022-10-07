@@ -71,6 +71,9 @@ function* buildRegExps(context) {
   let variantPatterns = [
     // Without quotes
     regex.any([
+      // This is here to provide special support for the `@` variant
+      regex.pattern([/@\[[^\s"'`]+\](\/[^\s"'`]+)?/, separator]),
+
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
       regex.pattern([/[^\s"'`\[\\]+/, separator]),
     ]),
