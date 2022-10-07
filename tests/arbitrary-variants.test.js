@@ -707,7 +707,7 @@ it('should support supports', () => {
   })
 })
 
-it('should be possible to use labels and arbitrary groups', () => {
+it('should be possible to use modifiers and arbitrary groups', () => {
   let config = {
     content: [
       {
@@ -736,7 +736,7 @@ it('should be possible to use labels and arbitrary groups', () => {
               <div class="group-[.in-foo]:underline"></div>
             </div>
 
-            <!-- The same as above, but with labels -->
+            <!-- The same as above, but with modifiers -->
             <div class="group/foo">
             <div class="group/foo">
             <div class="group/foo">
@@ -824,7 +824,7 @@ it('should be possible to use labels and arbitrary groups', () => {
   })
 })
 
-it('should be possible to use labels and arbitrary peers', () => {
+it('should be possible to use modifiers and arbitrary peers', () => {
   let config = {
     content: [
       {
@@ -853,7 +853,7 @@ it('should be possible to use labels and arbitrary peers', () => {
               <div class="peer-[.in-foo]:underline"></div>
             </div>
 
-            <!-- The same as above, but with labels -->
+            <!-- The same as above, but with modifiers -->
             <div class="peer/foo">
             <div class="peer/foo">
             <div class="peer/foo">

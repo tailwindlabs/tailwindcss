@@ -130,12 +130,12 @@ function applyVariant(variant, matches, context) {
 
   let args = {}
 
-  // Retrieve "label"
+  // Retrieve "modifier"
   {
     let match = /(.*)\/(.*)$/g.exec(variant)
     if (match) {
       variant = match[1]
-      args.label = match[2]
+      args.modifier = match[2]
     }
   }
 
