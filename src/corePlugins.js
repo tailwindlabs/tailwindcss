@@ -980,6 +980,7 @@ export let corePlugins = {
       '.place-content-between': { 'place-content': 'space-between' },
       '.place-content-around': { 'place-content': 'space-around' },
       '.place-content-evenly': { 'place-content': 'space-evenly' },
+      '.place-content-baseline': { 'place-content': 'baseline' },
       '.place-content-stretch': { 'place-content': 'stretch' },
     })
   },
