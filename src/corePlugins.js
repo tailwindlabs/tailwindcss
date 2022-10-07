@@ -897,7 +897,7 @@ export let corePlugins = {
   },
 
   listStyleType: createUtilityPlugin('listStyleType', [['list', ['listStyleType']]], {
-    type: ['lookup', 'string', 'any'],
+    type: ['lookup', 'any'],
   }),
 
   appearance: ({ addUtilities }) => {

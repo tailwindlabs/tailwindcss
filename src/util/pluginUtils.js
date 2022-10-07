@@ -16,7 +16,6 @@ import {
   position,
   lineWidth,
   shadow,
-  string,
 } from './dataTypes'
 import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
@@ -165,7 +164,6 @@ export let typeMap = {
   'relative-size': guess(relativeSize),
   shadow: guess(shadow),
   size: guess(backgroundSize),
-  string: guess(string),
 }
 
 let supportedTypes = Object.keys(typeMap)

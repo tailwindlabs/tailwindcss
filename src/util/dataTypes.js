@@ -250,7 +250,3 @@ let relativeSizes = new Set(['larger', 'smaller'])
 export function relativeSize(value) {
   return relativeSizes.has(value)
 }
-
-export function string(value) {
-  return value.startsWith("'") && value.endsWith("'")
-}
