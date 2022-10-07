@@ -132,10 +132,10 @@ function applyVariant(variant, matches, context) {
 
   // Retrieve "label"
   {
-    let match = /^[\w-]+\<(.*)\>-/g.exec(variant)
+    let match = /(.*)\/(.*)$/g.exec(variant)
     if (match) {
-      variant = variant.replace(`<${match[1]}>`, '')
-      args.label = match[1]
+      variant = match[1]
+      args.label = match[2]
     }
   }
 

@@ -145,9 +145,9 @@ export let variantPlugins = {
 
     let variants = {
       group: ({ label }) =>
-        label ? [`:merge(.group\\<${label}\\>)`, ' &'] : [`:merge(.group)`, ' &'],
+        label ? [`:merge(.group\\/${label})`, ' &'] : [`:merge(.group)`, ' &'],
       peer: ({ label }) =>
-        label ? [`:merge(.peer\\<${label}\\>)`, ' ~ &'] : [`:merge(.peer)`, ' ~ &'],
+        label ? [`:merge(.peer\\/${label})`, ' ~ &'] : [`:merge(.peer)`, ' ~ &'],
     }
 
     for (let [name, fn] of Object.entries(variants)) {
