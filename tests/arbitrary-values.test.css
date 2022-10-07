@@ -416,7 +416,7 @@
 .list-\[\'\\1f44d\'\] {
   list-style-type: '\1F44D';
 }
-.list-\[string\:var\(--value\)\] {
+.list-\[var\(--value\)\] {
   list-style-type: var(--value);
 }
 .columns-\[20\] {
