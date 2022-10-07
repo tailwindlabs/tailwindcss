@@ -1,11 +1,11 @@
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 test('custom user-land utilities', () => {
   let config = {
     content: [
       {
         raw: html`<div
-          class="uppercase focus:hover:align-chocolate align-banana hover:align-banana"
+          class="focus:hover:align-chocolate align-banana hover:align-banana uppercase"
         ></div>`,
       },
     ],
@@ -34,6 +34,8 @@ test('custom user-land utilities', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
       .uppercase {
         text-transform: uppercase;
       }
@@ -96,6 +98,8 @@ test('comments can be used inside layers without crashing', () => {
         background-color: #bada55;
       }
 
+      ${defaults}
+
       /* Important component */
       .important-component {
         text-align: banana;
@@ -155,6 +159,8 @@ test('comments can be used inside layers (with important) without crashing', () 
       div {
         background-color: #bada55;
       }
+
+      ${defaults}
 
       /* Important component */
       .important-component {
@@ -266,6 +272,8 @@ test('layers are grouped and inserted at the matching @tailwind rule', () => {
       p {
         font-weight: normal;
       }
+
+      ${defaults}
 
       .input {
         background: white;

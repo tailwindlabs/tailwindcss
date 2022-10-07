@@ -3,8 +3,13 @@ import log from '../util/log'
 export default function normalizeTailwindDirectives(root) {
   let tailwindDirectives = new Set()
   let layerDirectives = new Set()
+  let applyDirectives = new Set()
 
   root.walkAtRules((atRule) => {
+    if (atRule.name === 'apply') {
+      applyDirectives.add(atRule)
+    }
+
     if (atRule.name === 'import') {
       if (atRule.params === '"tailwindcss/base"' || atRule.params === "'tailwindcss/base'") {
         atRule.name = 'tailwind'
@@ -44,6 +49,7 @@ export default function normalizeTailwindDirectives(root) {
         log.warn(`${atRule.name}-at-rule-deprecated`, [
           `The \`@${atRule.name}\` directive has been deprecated in Tailwind CSS v3.0.`,
           `Use \`@layer utilities\` or \`@layer components\` instead.`,
+          'https://tailwindcss.com/docs/upgrade-guide#replace-variants-with-layer',
         ])
       }
       layerDirectives.add(atRule)
@@ -74,5 +80,5 @@ export default function normalizeTailwindDirectives(root) {
     }
   }
 
-  return tailwindDirectives
+  return { tailwindDirectives, applyDirectives }
 }

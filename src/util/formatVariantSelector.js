@@ -29,24 +29,116 @@ export function formatVariantSelector(current, ...others) {
   return current
 }
 
-export function finalizeSelector(format, { selector, candidate, context }) {
-  let separator = context?.tailwindConfig?.separator ?? ':'
+/**
+ * Given any node in a selector this gets the "simple" selector it's a part of
+ * A simple selector is just a list of nodes without any combinators
+ * Technically :is(), :not(), :has(), etc… can have combinators but those are nested
+ * inside the relevant node and won't be picked up so they're fine to ignore
+ *
+ * @param {import('postcss-selector-parser').Node} node
+ * @returns {import('postcss-selector-parser').Node[]}
+ **/
+function simpleSelectorForNode(node) {
+  /** @type {import('postcss-selector-parser').Node[]} */
+  let nodes = []
 
-  // Split by the separator, but ignore the separator inside square brackets:
-  //
-  // E.g.: dark:lg:hover:[paint-order:markers]
-  //           ┬  ┬     ┬            ┬
-  //           │  │     │            ╰── We will not split here
-  //           ╰──┴─────┴─────────────── We will split here
-  //
-  let splitter = new RegExp(`\\${separator}(?![^[]*\\])`)
-  let base = candidate.split(splitter).pop()
+  // Walk backwards until we hit a combinator node (or the start)
+  while (node.prev() && node.prev().type !== 'combinator') {
+    node = node.prev()
+  }
 
-  if (context?.tailwindConfig?.prefix) {
+  // Now record all non-combinator nodes until we hit one (or the end)
+  while (node && node.type !== 'combinator') {
+    nodes.push(node)
+    node = node.next()
+  }
+
+  return nodes
+}
+
+/**
+ * Resorts the nodes in a selector to ensure they're in the correct order
+ * Tags go before classes, and pseudo classes go after classes
+ *
+ * @param {import('postcss-selector-parser').Selector} sel
+ * @returns {import('postcss-selector-parser').Selector}
+ **/
+function resortSelector(sel) {
+  sel.sort((a, b) => {
+    if (a.type === 'tag' && b.type === 'class') {
+      return -1
+    } else if (a.type === 'class' && b.type === 'tag') {
+      return 1
+    } else if (a.type === 'class' && b.type === 'pseudo' && b.value !== ':merge') {
+      return -1
+    } else if (a.type === 'pseudo' && a.value !== ':merge' && b.type === 'class') {
+      return 1
+    }
+
+    return sel.index(a) - sel.index(b)
+  })
+
+  return sel
+}
+
+function eliminateIrrelevantSelectors(sel, base) {
+  let hasClassesMatchingCandidate = false
+
+  sel.walk((child) => {
+    if (child.type === 'class' && child.value === base) {
+      hasClassesMatchingCandidate = true
+      return false // Stop walking
+    }
+  })
+
+  if (!hasClassesMatchingCandidate) {
+    sel.remove()
+  }
+
+  // We do NOT recursively eliminate sub selectors that don't have the base class
+  // as this is NOT a safe operation. For example, if we have:
+  // `.space-x-2 > :not([hidden]) ~ :not([hidden])`
+  // We cannot remove the [hidden] from the :not() because it would change the
+  // meaning of the selector.
+
+  // TODO: Can we do this for :matches, :is, and :where?
+}
+
+export function finalizeSelector(
+  format,
+  {
+    selector,
+    candidate,
+    context,
+    isArbitraryVariant,
+
+    // Split by the separator, but ignore the separator inside square brackets:
+    //
+    // E.g.: dark:lg:hover:[paint-order:markers]
+    //           ┬  ┬     ┬            ┬
+    //           │  │     │            ╰── We will not split here
+    //           ╰──┴─────┴─────────────── We will split here
+    //
+    base = candidate
+      .split(new RegExp(`\\${context?.tailwindConfig?.separator ?? ':'}(?![^[]*\\])`))
+      .pop(),
+  }
+) {
+  let ast = selectorParser().astSync(selector)
+
+  // We explicitly DO NOT prefix classes in arbitrary variants
+  if (context?.tailwindConfig?.prefix && !isArbitraryVariant) {
     format = prefixSelector(context.tailwindConfig.prefix, format)
   }
 
   format = format.replace(PARENT, `.${escapeClassName(candidate)}`)
+
+  let formatAst = selectorParser().astSync(format)
+
+  // Remove extraneous selectors that do not include the base class/candidate being matched against
+  // For example if we have a utility defined `.a, .b { color: red}`
+  // And the formatted variant is sm:b then we want the final selector to be `.sm\:b` and not `.a, .sm\:b`
+  ast.each((sel) => eliminateIrrelevantSelectors(sel, base))
 
   // Normalize escaped classes, e.g.:
   //
@@ -59,65 +151,96 @@ export function finalizeSelector(format, { selector, candidate, context }) {
   //   base in selector: bg-\\[rgb\\(255\\,0\\,0\\)\\]
   //       escaped base: bg-\\[rgb\\(255\\2c 0\\2c 0\\)\\]
   //
-  selector = selectorParser((selectors) => {
-    return selectors.walkClasses((node) => {
-      if (node.raws && node.value.includes(base)) {
-        node.raws.value = escapeClassName(unescape(node.raws.value))
-      }
+  ast.walkClasses((node) => {
+    if (node.raws && node.value.includes(base)) {
+      node.raws.value = escapeClassName(unescape(node.raws.value))
+    }
+  })
 
-      return node
-    })
-  }).processSync(selector)
+  let simpleStart = selectorParser.comment({ value: '/*__simple__*/' })
+  let simpleEnd = selectorParser.comment({ value: '/*__simple__*/' })
 
   // We can safely replace the escaped base now, since the `base` section is
   // now in a normalized escaped value.
-  selector = selector.replace(`.${escapeClassName(base)}`, format)
+  ast.walkClasses((node) => {
+    if (node.value !== base) {
+      return
+    }
+
+    let parent = node.parent
+    let formatNodes = formatAst.nodes[0].nodes
+
+    // Perf optimization: if the parent is a single class we can just replace it and be done
+    if (parent.nodes.length === 1) {
+      node.replaceWith(...formatNodes)
+      return
+    }
+
+    let simpleSelector = simpleSelectorForNode(node)
+    parent.insertBefore(simpleSelector[0], simpleStart)
+    parent.insertAfter(simpleSelector[simpleSelector.length - 1], simpleEnd)
+
+    for (let child of formatNodes) {
+      parent.insertBefore(simpleSelector[0], child)
+    }
+
+    node.remove()
+
+    // Re-sort the simple selector to ensure it's in the correct order
+    simpleSelector = simpleSelectorForNode(simpleStart)
+    let firstNode = parent.index(simpleStart)
+
+    parent.nodes.splice(
+      firstNode,
+      simpleSelector.length,
+      ...resortSelector(selectorParser.selector({ nodes: simpleSelector })).nodes
+    )
+
+    simpleStart.remove()
+    simpleEnd.remove()
+  })
+
+  // This will make sure to move pseudo's to the correct spot (the end for
+  // pseudo elements) because otherwise the selector will never work
+  // anyway.
+  //
+  // E.g.:
+  //  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
+  //  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
+  //
+  // `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
+  function collectPseudoElements(selector) {
+    let nodes = []
+
+    for (let node of selector.nodes) {
+      if (isPseudoElement(node)) {
+        nodes.push(node)
+        selector.removeChild(node)
+      }
+
+      if (node?.nodes) {
+        nodes.push(...collectPseudoElements(node))
+      }
+    }
+
+    return nodes
+  }
 
   // Remove unnecessary pseudo selectors that we used as placeholders
-  return selectorParser((selectors) => {
-    return selectors.map((selector) => {
-      selector.walkPseudos((p) => {
-        if (selectorFunctions.has(p.value)) {
-          p.replaceWith(p.nodes)
-        }
-
-        return p
-      })
-
-      // This will make sure to move pseudo's to the correct spot (the end for
-      // pseudo elements) because otherwise the selector will never work
-      // anyway.
-      //
-      // E.g.:
-      //  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
-      //  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
-      //
-      // `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
-      function collectPseudoElements(selector) {
-        let nodes = []
-
-        for (let node of selector.nodes) {
-          if (isPseudoElement(node)) {
-            nodes.push(node)
-            selector.removeChild(node)
-          }
-
-          if (node?.nodes) {
-            nodes.push(...collectPseudoElements(node))
-          }
-        }
-
-        return nodes
+  ast.each((selector) => {
+    selector.walkPseudos((p) => {
+      if (selectorFunctions.has(p.value)) {
+        p.replaceWith(p.nodes)
       }
-
-      let pseudoElements = collectPseudoElements(selector)
-      if (pseudoElements.length > 0) {
-        selector.nodes.push(pseudoElements.sort(sortSelector))
-      }
-
-      return selector
     })
-  }).processSync(selector)
+
+    let pseudoElements = collectPseudoElements(selector)
+    if (pseudoElements.length > 0) {
+      selector.nodes.push(pseudoElements.sort(sortSelector))
+    }
+  })
+
+  return ast.toString()
 }
 
 // Note: As a rule, double colons (::) should be used instead of a single colon

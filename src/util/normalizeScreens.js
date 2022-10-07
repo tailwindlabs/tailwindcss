@@ -7,14 +7,17 @@
  *   - { sm: '100px', md: '200px' } // Object with string values
  *   - { sm: { min: '100px' }, md: { max: '100px' } } // Object with object values
  *   - { sm: [{ min: '100px' }, { max: '200px' }] } // Object with object array (multiple values)
- *   - [['sm', '100px'], ['md', '200px']] // Tuple object
  *
  * Output(s):
  *   - [{ name: 'sm', values: [{ min: '100px', max: '200px' }] }] // List of objects, that contains multiple values
  */
-export function normalizeScreens(screens) {
+export function normalizeScreens(screens, root = true) {
   if (Array.isArray(screens)) {
     return screens.map((screen) => {
+      if (root && Array.isArray(screen)) {
+        throw new Error('The tuple syntax is not supported for `screens`.')
+      }
+
       if (typeof screen === 'string') {
         return { name: screen.toString(), values: [{ min: screen, max: undefined }] }
       }
@@ -34,7 +37,7 @@ export function normalizeScreens(screens) {
     })
   }
 
-  return normalizeScreens(Object.entries(screens ?? {}))
+  return normalizeScreens(Object.entries(screens ?? {}), false)
 }
 
 function resolveValue({ 'min-width': _minWidth, min = _minWidth, max, raw } = {}) {

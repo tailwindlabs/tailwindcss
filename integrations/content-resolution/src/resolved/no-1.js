@@ -1,0 +1,1 @@
+// content-[resolved-static-negative]

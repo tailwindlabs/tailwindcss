@@ -9,6 +9,25 @@ export default function getAllConfigs(config) {
 
   const features = {
     // Add experimental configs here...
+    respectDefaultRingColorOpacity: {
+      theme: {
+        ringColor: ({ theme }) => ({
+          DEFAULT: '#3b82f67f',
+          ...theme('colors'),
+        }),
+      },
+    },
+
+    disableColorOpacityUtilitiesByDefault: {
+      corePlugins: {
+        backgroundOpacity: false,
+        borderOpacity: false,
+        divideOpacity: false,
+        placeholderOpacity: false,
+        ringOpacity: false,
+        textOpacity: false,
+      },
+    },
   }
 
   const experimentals = Object.keys(features)

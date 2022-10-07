@@ -1,4 +1,4 @@
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 it('should generate the partial selector, if only a partial is used (base layer)', () => {
   let config = {
@@ -35,6 +35,8 @@ it('should generate the partial selector, if only a partial is used (base layer)
       .a {
         color: black;
       }
+
+      ${defaults}
     `)
   })
 })

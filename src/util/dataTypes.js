@@ -1,10 +1,14 @@
 import { parseColor } from './color'
 import { parseBoxShadowValue } from './parseBoxShadowValue'
+import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
+
+let cssFunctions = ['min', 'max', 'clamp', 'calc']
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
-let COMMA = /,(?![^(]*\))/g // Comma separator that is not located between brackets. E.g.: `cubiz-bezier(a, b, c)` these don't count.
-let UNDERSCORE = /_(?![^(]*\))/g // Underscore separator that is not located between brackets. E.g.: `rgba(255,_255,_255)_black` these don't count.
+function isCSSFunction(value) {
+  return cssFunctions.some((fn) => new RegExp(`^${fn}\\(.*\\)`).test(value))
+}
 
 // This is not a data type, but rather a function that can normalize the
 // correct values.
@@ -38,12 +42,16 @@ export function normalize(value, isRoot = true) {
     value = value.trim()
   }
 
-  // Add spaces around operators inside calc() that do not follow an operator
+  // Add spaces around operators inside math functions like calc() that do not follow an operator
   // or '('.
-  return value.replace(
-    /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
-    '$1 $2 '
-  )
+  value = value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
+    return match.replace(
+      /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
+      '$1 $2 '
+    )
+  })
+
+  return value
 }
 
 export function url(value) {
@@ -51,11 +59,11 @@ export function url(value) {
 }
 
 export function number(value) {
-  return !isNaN(Number(value))
+  return !isNaN(Number(value)) || isCSSFunction(value)
 }
 
 export function percentage(value) {
-  return /%$/g.test(value) || /^calc\(.+?%\)/g.test(value)
+  return (value.endsWith('%') && number(value.slice(0, -1))) || isCSSFunction(value)
 }
 
 let lengthUnits = [
@@ -79,8 +87,9 @@ let lengthUnits = [
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {
   return (
-    new RegExp(`${lengthUnitsPattern}$`).test(value) ||
-    new RegExp(`^calc\\(.+?${lengthUnitsPattern}`).test(value)
+    value === '0' ||
+    new RegExp(`^[+-]?[0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?${lengthUnitsPattern}$`).test(value) ||
+    isCSSFunction(value)
   )
 }
 
@@ -104,11 +113,11 @@ export function shadow(value) {
 export function color(value) {
   let colors = 0
 
-  let result = value.split(UNDERSCORE).every((part) => {
+  let result = splitAtTopLevelOnly(value, '_').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
-    if (parseColor(part) !== null) return colors++, true
+    if (parseColor(part, { loose: true }) !== null) return colors++, true
 
     return false
   })
@@ -119,7 +128,7 @@ export function color(value) {
 
 export function image(value) {
   let images = 0
-  let result = value.split(COMMA).every((part) => {
+  let result = splitAtTopLevelOnly(value, ',').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -160,7 +169,7 @@ export function gradient(value) {
 let validPositions = new Set(['center', 'top', 'right', 'bottom', 'left'])
 export function position(value) {
   let positions = 0
-  let result = value.split(UNDERSCORE).every((part) => {
+  let result = splitAtTopLevelOnly(value, '_').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true
@@ -178,7 +187,7 @@ export function position(value) {
 
 export function familyName(value) {
   let fonts = 0
-  let result = value.split(COMMA).every((part) => {
+  let result = splitAtTopLevelOnly(value, ',').every((part) => {
     part = normalize(part)
 
     if (part.startsWith('var(')) return true

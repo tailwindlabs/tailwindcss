@@ -1,7 +1,8 @@
 import fs from 'fs'
 import path from 'path'
+import postcss from 'postcss'
 
-import { run, css, html } from './util/run'
+import { run, css, html, defaults } from './util/run'
 
 test('variants', () => {
   let config = {
@@ -166,6 +167,82 @@ describe('custom advanced variants', () => {
         }
       `)
     })
+  })
+
+  test('using multiple classNames in your custom variant', () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="my-variant:underline test"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('my-variant', '&:where(.one, .two, .three)')
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind components;
+      @tailwind utilities;
+
+      @layer components {
+        .test {
+          @apply my-variant:italic;
+        }
+      }
+    `
+
+    return run(input, config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .test:where(.one, .two, .three) {
+          font-style: italic;
+        }
+
+        .my-variant\:underline:where(.one, .two, .three) {
+          text-decoration-line: underline;
+        }
+      `)
+    })
+  })
+
+  test('variant format string must include at-rule or & (1)', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="wtf-bbq:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('wtf-bbq', 'lol')
+        },
+      ],
+    }
+
+    await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
+      "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
+    )
+  })
+
+  test('variant format string must include at-rule or & (2)', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="wtf-bbq:text-center"></div> `,
+        },
+      ],
+      plugins: [
+        function ({ addVariant }) {
+          addVariant('wtf-bbq', () => 'lol')
+        },
+      ],
+    }
+
+    await expect(run('@tailwind components;@tailwind utilities', config)).rejects.toThrowError(
+      "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
+    )
   })
 })
 
@@ -379,6 +456,575 @@ test('before and after variants are a bit special, and forced to the end (2)', (
       :where(.prose-headings\:before\:text-center) :is(h1, h2, h3, h4)::before {
         content: var(--tw-content);
         text-align: center;
+      }
+    `)
+  })
+})
+
+test('returning non-strings and non-selectors in addVariant', () => {
+  /** @type {import('../types/config').Config} */
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="peer-aria-expanded:text-center"></div>
+          <div class="peer-aria-expanded-2:text-center"></div>
+        `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant, e }) {
+        addVariant('peer-aria-expanded', ({ modifySelectors, separator }) =>
+          // Returning anything other string | string[] | undefined here is not supported
+          // But we're trying to be lenient here and just throw it out
+          modifySelectors(
+            ({ className }) =>
+              `.peer[aria-expanded="true"] ~ .${e(`peer-aria-expanded${separator}${className}`)}`
+          )
+        )
+
+        addVariant('peer-aria-expanded-2', ({ modifySelectors, separator }) => {
+          let nodes = modifySelectors(
+            ({ className }) => `.${e(`peer-aria-expanded-2${separator}${className}`)}`
+          )
+
+          return [
+            // Returning anything other than strings here is not supported
+            // But we're trying to be lenient here and just throw it out
+            nodes,
+            '.peer[aria-expanded="false"] ~ &',
+          ]
+        })
+      },
+    ],
+  }
+
+  return run('@tailwind components;@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .peer[aria-expanded='true'] ~ .peer-aria-expanded\:text-center {
+        text-align: center;
+      }
+      .peer[aria-expanded='false'] ~ .peer-aria-expanded-2\:text-center {
+        text-align: center;
+      }
+    `)
+  })
+})
+
+it('should not generate variants of user css if it is not inside a layer', () => {
+  let config = {
+    content: [{ raw: html`<div class="hover:foo"></div>` }],
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+
+    .foo {
+      color: red;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        color: red;
+      }
+    `)
+  })
+})
+
+it('should be possible to use responsive modifiers that are defined with special characters', () => {
+  let config = {
+    content: [{ raw: html`<div class="<sm:underline"></div>` }],
+    theme: {
+      screens: {
+        '<sm': { max: '399px' },
+      },
+    },
+    plugins: [],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (max-width: 399px) {
+        .\<sm\:underline {
+          text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})
+
+it('including just the base layer should not produce variants', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:container sm:underline"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  return run('@tailwind base', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(
+      css`
+        ${defaults}
+      `
+    )
+  })
+})
+
+it('variants for components should not be produced in a file without a components layer', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:container sm:underline"></div>` }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:underline {
+          text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})
+
+it('variants for utilities should not be produced in a file without a utilities layer', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:container sm:underline"></div>` }],
+  }
+
+  return run('@tailwind components', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:container {
+          width: 100%;
+        }
+        @media (min-width: 640px) {
+          .sm\:container {
+            max-width: 640px;
+          }
+        }
+        @media (min-width: 768px) {
+          .sm\:container {
+            max-width: 768px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .sm\:container {
+            max-width: 1024px;
+          }
+        }
+        @media (min-width: 1280px) {
+          .sm\:container {
+            max-width: 1280px;
+          }
+        }
+        @media (min-width: 1536px) {
+          .sm\:container {
+            max-width: 1536px;
+          }
+        }
+      }
+    `)
+  })
+})
+
+test('The visited variant removes opacity support', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <a class="visited:border-red-500 visited:bg-red-500 visited:text-red-500"
+            >Look, it's a link!</a
+          >
+        `,
+      },
+    ],
+    plugins: [],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .visited\:border-red-500:visited {
+        border-color: rgb(239 68 68);
+      }
+      .visited\:bg-red-500:visited {
+        background-color: rgb(239 68 68);
+      }
+      .visited\:text-red-500:visited {
+        color: rgb(239 68 68);
+      }
+    `)
+  })
+})
+
+it('appends variants to the correct place when using postcss documents', () => {
+  let config = {
+    content: [{ raw: html`<div class="underline sm:underline"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  const doc = postcss.document()
+  doc.append(postcss.parse(`a {}`))
+  doc.append(postcss.parse(`@tailwind base`))
+  doc.append(postcss.parse(`@tailwind utilities`))
+  doc.append(postcss.parse(`b {}`))
+
+  const result = doc.toResult()
+
+  return run(result, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      a {
+      }
+      ${defaults}
+      .underline {
+        text-decoration-line: underline;
+      }
+      @media (min-width: 640px) {
+        .sm\:underline {
+          text-decoration-line: underline;
+        }
+      }
+      b {
+      }
+    `)
+  })
+})
+
+it('variants support multiple, grouped selectors (html)', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:base1 sm:base2"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .base1 .foo,
+      .base1 .bar {
+        color: red;
+      }
+
+      .base2 .bar .base2-foo {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:base1 .foo,
+        .sm\:base1 .bar {
+          color: red;
+        }
+
+        .sm\:base2 .bar .base2-foo {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants support multiple, grouped selectors (apply)', () => {
+  let config = {
+    content: [{ raw: html`<div class="baz"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .base .foo,
+      .base .bar {
+        color: red;
+      }
+    }
+    .baz {
+      @apply sm:base;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .baz .foo,
+        .baz .bar {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants only picks the used selectors in a group (html)', () => {
+  let config = {
+    content: [{ raw: html`<div class="sm:b"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .a,
+      .b {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .sm\:b {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+it('variants only picks the used selectors in a group (apply)', () => {
+  let config = {
+    content: [{ raw: html`<div class="baz"></div>` }],
+    plugins: [],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .a,
+      .b {
+        color: red;
+      }
+    }
+    .baz {
+      @apply sm:b;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) {
+        .baz {
+          color: red;
+        }
+      }
+    `)
+  })
+})
+
+test('hoverOnlyWhenSupported adds hover and pointer media features by default', () => {
+  let config = {
+    future: {
+      hoverOnlyWhenSupported: true,
+    },
+    content: [
+      { raw: html`<div class="hover:underline group-hover:underline peer-hover:underline"></div>` },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      @media (hover: hover) and (pointer: fine) {
+        .hover\:underline:hover {
+          text-decoration-line: underline;
+        }
+        .group:hover .group-hover\:underline {
+          text-decoration-line: underline;
+        }
+        .peer:hover ~ .peer-hover\:underline {
+          text-decoration-line: underline;
+        }
+      }
+    `)
+  })
+})
+
+test('multi-class utilities handle selector-mutating variants correctly', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div
+          class="hover:foo hover:bar hover:baz group-hover:foo group-hover:bar group-hover:baz peer-checked:foo peer-checked:bar peer-checked:baz"
+        ></div>`,
+      },
+      {
+        raw: html`<div
+          class="hover:foo1 hover:bar1 hover:baz1 group-hover:foo1 group-hover:bar1 group-hover:baz1 peer-checked:foo1 peer-checked:bar1 peer-checked:baz1"
+        ></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .foo.bar.baz {
+        color: red;
+      }
+      .foo1 .bar1 .baz1 {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .hover\:foo.bar.baz:hover {
+        color: red;
+      }
+      .hover\:bar.foo.baz:hover {
+        color: red;
+      }
+      .hover\:baz.foo.bar:hover {
+        color: red;
+      }
+      .hover\:foo1:hover .bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .hover\:bar1:hover .baz1 {
+        color: red;
+      }
+      .foo1 .bar1 .hover\:baz1:hover {
+        color: red;
+      }
+      .group:hover .group-hover\:foo.bar.baz {
+        color: red;
+      }
+      .group:hover .group-hover\:bar.foo.baz {
+        color: red;
+      }
+      .group:hover .group-hover\:baz.foo.bar {
+        color: red;
+      }
+      .group:hover .group-hover\:foo1 .bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .group:hover .group-hover\:bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .bar1 .group:hover .group-hover\:baz1 {
+        color: red;
+      }
+      .peer:checked ~ .peer-checked\:foo.bar.baz {
+        color: red;
+      }
+      .peer:checked ~ .peer-checked\:bar.foo.baz {
+        color: red;
+      }
+      .peer:checked ~ .peer-checked\:baz.foo.bar {
+        color: red;
+      }
+      .peer:checked ~ .peer-checked\:foo1 .bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .peer:checked ~ .peer-checked\:bar1 .baz1 {
+        color: red;
+      }
+      .foo1 .bar1 .peer:checked ~ .peer-checked\:baz1 {
+        color: red;
+      }
+    `)
+  })
+})
+
+test('class inside pseudo-class function :has', () => {
+  let config = {
+    content: [
+      { raw: html`<div class="foo hover:foo sm:foo"></div>` },
+      { raw: html`<div class="bar hover:bar sm:bar"></div>` },
+      { raw: html`<div class="baz hover:baz sm:baz"></div>` },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      :where(.foo) {
+        color: red;
+      }
+      :matches(.foo, .bar, .baz) {
+        color: orange;
+      }
+      :is(.foo) {
+        color: yellow;
+      }
+      html:has(.foo) {
+        color: green;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      :where(.foo) {
+        color: red;
+      }
+      :matches(.foo, .bar, .baz) {
+        color: orange;
+      }
+      :is(.foo) {
+        color: yellow;
+      }
+      html:has(.foo) {
+        color: green;
+      }
+
+      :where(.hover\:foo:hover) {
+        color: red;
+      }
+      :matches(.hover\:foo:hover, .bar, .baz) {
+        color: orange;
+      }
+      :matches(.foo, .hover\:bar:hover, .baz) {
+        color: orange;
+      }
+      :matches(.foo, .bar, .hover\:baz:hover) {
+        color: orange;
+      }
+      :is(.hover\:foo:hover) {
+        color: yellow;
+      }
+      html:has(.hover\:foo:hover) {
+        color: green;
+      }
+      @media (min-width: 640px) {
+        :where(.sm\:foo) {
+          color: red;
+        }
+        :matches(.sm\:foo, .bar, .baz) {
+          color: orange;
+        }
+        :matches(.foo, .sm\:bar, .baz) {
+          color: orange;
+        }
+        :matches(.foo, .bar, .sm\:baz) {
+          color: orange;
+        }
+        :is(.sm\:foo) {
+          color: yellow;
+        }
+        html:has(.sm\:foo) {
+          color: green;
+        }
       }
     `)
   })

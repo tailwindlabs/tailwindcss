@@ -1,0 +1,19 @@
+{
+  "name": "rollup.js",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest --runInBand --forceExit"
+  },
+  "jest": {
+    "testTimeout": 10000,
+    "displayName": "rollup.js",
+    "setupFilesAfterEnv": ["<rootDir>/../../jest/customMatchers.js"]
+  },
+  "devDependencies": {
+    "rollup": "^2.74.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "sass": "^1.51.0"
+  }
+}

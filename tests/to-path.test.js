@@ -7,11 +7,12 @@ it('should keep an array as an array', () => {
 })
 
 it.each`
-  input         | output
-  ${'a.b.c'}    | ${['a', 'b', 'c']}
-  ${'a[0].b.c'} | ${['a', '0', 'b', 'c']}
-  ${'.a'}       | ${['', 'a']}
-  ${'[].a'}     | ${['', 'a']}
+  input             | output
+  ${'a.b.c'}        | ${['a', 'b', 'c']}
+  ${'a[0].b.c'}     | ${['a', '0', 'b', 'c']}
+  ${'.a'}           | ${['a']}
+  ${'[].a'}         | ${['a']}
+  ${'a[1.5][b][c]'} | ${['a', '1.5', 'b', 'c']}
 `('should convert "$input" to "$output"', ({ input, output }) => {
   expect(toPath(input)).toEqual(output)
 })

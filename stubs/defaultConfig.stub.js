@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [],
   presets: [],
@@ -115,7 +116,6 @@ module.exports = {
       auto: 'auto',
       square: '1 / 1',
       video: '16 / 9',
-      attrs: 'attr(width) / attr(height)'
     },
     backdropBlur: ({ theme }) => theme('blur'),
     backdropBrightness: ({ theme }) => theme('brightness'),
@@ -195,6 +195,9 @@ module.exports = {
       '3xl': '1.5rem',
       full: '9999px',
     },
+    borderSpacing: ({ theme }) => ({
+      ...theme('spacing'),
+    }),
     borderWidth: {
       DEFAULT: '1px',
       0: '0px',
@@ -281,7 +284,10 @@ module.exports = {
       '2xl': '0 25px 25px rgb(0 0 0 / 0.15)',
       none: '0 0 #0000',
     },
-    fill: ({ theme }) => theme('colors'),
+    fill: ({ theme }) => ({
+      ...theme('colors'),
+      none: 'none',
+    }),
     grayscale: {
       0: '0',
       DEFAULT: '100%',
@@ -790,7 +796,10 @@ module.exports = {
     space: ({ theme }) => ({
       ...theme('spacing'),
     }),
-    stroke: ({ theme }) => theme('colors'),
+    stroke: ({ theme }) => ({
+      ...theme('colors'),
+      none: 'none',
+    }),
     strokeWidth: {
       0: '0',
       1: '1',
@@ -855,8 +864,8 @@ module.exports = {
       none: 'none',
       all: 'all',
       DEFAULT:
-        'background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter',
-      colors: 'background-color, border-color, color, fill, stroke',
+        'color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter',
+      colors: 'color, background-color, border-color, text-decoration-color, fill, stroke',
       opacity: 'opacity',
       shadow: 'box-shadow',
       transform: 'transform',

@@ -71,6 +71,8 @@ function extractElementSelector(selector) {
 export default function resolveDefaultsAtRules({ tailwindConfig }) {
   return (root) => {
     let variableNodeMap = new Map()
+
+    /** @type {Set<import('postcss').AtRule>} */
     let universals = new Set()
 
     root.walkAtRules('defaults', (rule) => {
@@ -89,33 +91,73 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
       rule.remove()
     })
 
-    for (let universal of universals) {
-      let selectors = new Set()
+    if (flagEnabled(tailwindConfig, 'optimizeUniversalDefaults')) {
+      for (let universal of universals) {
+        /** @type {Map<string, Set<string>>} */
+        let selectorGroups = new Map()
 
-      let rules = variableNodeMap.get(universal.params) ?? []
+        let rules = variableNodeMap.get(universal.params) ?? []
 
-      for (let rule of rules) {
-        for (let selector of extractElementSelector(rule.selector)) {
-          selectors.add(selector)
+        for (let rule of rules) {
+          for (let selector of extractElementSelector(rule.selector)) {
+            // If selector contains a vendor prefix after a pseudo element or class,
+            // we consider them separately because merging the declarations into
+            // a single rule will cause browsers that do not understand the
+            // vendor prefix to throw out the whole rule
+            let selectorGroupName =
+              selector.includes(':-') || selector.includes('::-') ? selector : '__DEFAULT__'
+
+            let selectors = selectorGroups.get(selectorGroupName) ?? new Set()
+            selectorGroups.set(selectorGroupName, selectors)
+
+            selectors.add(selector)
+          }
         }
-      }
 
-      if (selectors.size === 0) {
+        if (flagEnabled(tailwindConfig, 'optimizeUniversalDefaults')) {
+          if (selectorGroups.size === 0) {
+            universal.remove()
+            continue
+          }
+
+          for (let [, selectors] of selectorGroups) {
+            let universalRule = postcss.rule({
+              source: universal.source,
+            })
+
+            universalRule.selectors = [...selectors]
+
+            universalRule.append(universal.nodes.map((node) => node.clone()))
+            universal.before(universalRule)
+          }
+        }
+
         universal.remove()
-        continue
+      }
+    } else if (universals.size) {
+      let universalRule = postcss.rule({
+        selectors: ['*', '::before', '::after'],
+      })
+
+      for (let universal of universals) {
+        universalRule.append(universal.nodes)
+
+        if (!universalRule.parent) {
+          universal.before(universalRule)
+        }
+
+        if (!universalRule.source) {
+          universalRule.source = universal.source
+        }
+
+        universal.remove()
       }
 
-      let universalRule = postcss.rule()
+      let backdropRule = universalRule.clone({
+        selectors: ['::backdrop'],
+      })
 
-      if (flagEnabled(tailwindConfig, 'optimizeUniversalDefaults')) {
-        universalRule.selectors = [...selectors]
-      } else {
-        universalRule.selectors = ['*', '::before', '::after']
-      }
-
-      universalRule.append(universal.nodes)
-      universal.before(universalRule)
-      universal.remove()
+      universalRule.after(backdropRule)
     }
   }
 }

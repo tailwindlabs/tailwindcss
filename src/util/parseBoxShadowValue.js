@@ -1,10 +1,11 @@
+import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
+
 let KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
-let COMMA = /\,(?![^(]*\))/g // Comma separator that is not located between brackets. E.g.: `cubiz-bezier(a, b, c)` these don't count.
 let SPACE = /\ +(?![^(]*\))/g // Similar to the one above, but with spaces instead.
-let LENGTH = /^-?(\d+)(.*?)$/g
+let LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
 
 export function parseBoxShadowValue(input) {
-  let shadows = input.split(COMMA)
+  let shadows = splitAtTopLevelOnly(input, ',')
   return shadows.map((shadow) => {
     let value = shadow.trim()
     let result = { raw: value }

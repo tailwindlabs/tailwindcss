@@ -1,4 +1,4 @@
-import log from './log'
+import log, { dim } from './log'
 
 export function normalizeConfig(config) {
   // Quick structure validation
@@ -56,9 +56,11 @@ export function normalizeConfig(config) {
 
     // When `config.content` is an object
     if (typeof config.content === 'object' && config.content !== null) {
-      // Only `files`, `extract` and `transform` can exist in `config.content`
+      // Only `files`, `relative`, `extract`, and `transform` can exist in `config.content`
       if (
-        Object.keys(config.content).some((key) => !['files', 'extract', 'transform'].includes(key))
+        Object.keys(config.content).some(
+          (key) => !['files', 'relative', 'extract', 'transform'].includes(key)
+        )
       ) {
         return false
       }
@@ -112,6 +114,14 @@ export function normalizeConfig(config) {
         ) {
           return false
         }
+
+        // `config.content.relative` is optional and can be a boolean
+        if (
+          typeof config.content.relative !== 'boolean' &&
+          typeof config.content.relative !== 'undefined'
+        ) {
+          return false
+        }
       }
 
       return true
@@ -124,7 +134,7 @@ export function normalizeConfig(config) {
     log.warn('purge-deprecation', [
       'The `purge`/`content` options have changed in Tailwind CSS v3.0.',
       'Update your configuration file to eliminate this warning.',
-      // TODO: Add https://tw.wtf/purge-deprecation
+      'https://tailwindcss.com/docs/upgrade-guide#configure-content-sources',
     ])
   }
 
@@ -145,7 +155,7 @@ export function normalizeConfig(config) {
     log.warn('prefix-function', [
       'As of Tailwind CSS v3.0, `prefix` cannot be a function.',
       'Update `prefix` in your configuration to be a string to eliminate this warning.',
-      // TODO: Add https://tw.wtf/prefix-function
+      'https://tailwindcss.com/docs/upgrade-guide#prefix-cannot-be-a-function',
     ])
     config.prefix = ''
   } else {
@@ -154,6 +164,16 @@ export function normalizeConfig(config) {
 
   // Normalize the `content`
   config.content = {
+    relative: (() => {
+      let { content } = config
+
+      if (content?.relative) {
+        return content.relative
+      }
+
+      return config.future?.relativeContentPathsByDefault ?? false
+    })(),
+
     files: (() => {
       let { content, purge } = config
 
@@ -243,6 +263,19 @@ export function normalizeConfig(config) {
 
       return transformers
     })(),
+  }
+
+  // Validate globs to prevent bogus globs.
+  // E.g.: `./src/*.{html}` is invalid, the `{html}` should just be `html`
+  for (let file of config.content.files) {
+    if (typeof file === 'string' && /{([^,]*?)}/g.test(file)) {
+      log.warn('invalid-glob-braces', [
+        `The glob pattern ${dim(file)} in your Tailwind CSS configuration is invalid.`,
+        `Update it to ${dim(file.replace(/{([^,]*?)}/g, '$1'))} to silence this warning.`,
+        // TODO: Add https://tw.wtf/invalid-glob-braces
+      ])
+      break
+    }
   }
 
   return config

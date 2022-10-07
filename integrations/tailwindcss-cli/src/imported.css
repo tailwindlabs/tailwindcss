@@ -1,0 +1,5 @@
+@layer utilities {
+  .something-cool {
+    color: red;
+  }
+}

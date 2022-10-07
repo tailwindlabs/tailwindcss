@@ -1,3 +1,4 @@
+let fs = require('fs')
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
 
@@ -15,6 +16,23 @@ describe('static build', () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+      env: { NODE_ENV: 'production' },
+    })
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+  })
+
+  it('should be possible to pipe in data', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    await $('cat ./src/index.css | node ../../lib/cli.js -i - -o ./dist/main.css', {
+      shell: true,
       env: { NODE_ENV: 'production' },
     })
 
@@ -71,6 +89,108 @@ describe('static build', () => {
       `
     )
   })
+
+  it('can read from a config file from an @config directive', async () => {
+    await writeInputFile('index.html', html`<div class="bg-yellow"></div>`)
+    await writeInputFile(
+      'index.css',
+      css`
+        @config "./tailwind.config.js";
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `
+    )
+    await writeInputFile(
+      'tailwind.config.js',
+      javascript`
+        module.exports = {
+          content: {
+            relative: true,
+            files: ['./index.html'],
+          },
+          theme: {
+            extend: {
+              colors: {
+                yellow: '#ff0',
+              }
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        }
+      `
+    )
+
+    await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+      env: { NODE_ENV: 'production' },
+    })
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
+  })
+
+  it('can read from a config file from an @config directive inside an @import from postcss-import', async () => {
+    await fs.promises.mkdir('./src/config', { recursive: true })
+
+    await writeInputFile('index.html', html`<div class="bg-yellow"></div>`)
+    await writeInputFile(
+      'config/myconfig.css',
+      css`
+        @config "../tailwind.config.js";
+      `
+    )
+    await writeInputFile(
+      'index.css',
+      css`
+        @import './config/myconfig';
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
+      `
+    )
+    await writeInputFile(
+      'tailwind.config.js',
+      javascript`
+        module.exports = {
+          content: {
+            relative: true,
+            files: ['./index.html'],
+          },
+          theme: {
+            extend: {
+              colors: {
+                yellow: '#ff0',
+              }
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        }
+      `
+    )
+
+    await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+      env: { NODE_ENV: 'production' },
+    })
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
+  })
 })
 
 describe('watcher', () => {
@@ -103,6 +223,55 @@ describe('watcher', () => {
     )
 
     await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
+  test('classes are generated when globbed files change', async () => {
+    await writeInputFile('glob/index.html', html`<div class="font-bold"></div>`)
+
+    let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    await appendToInputFile('glob/index.html', html`<div class="font-normal"></div>`)
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
+
+    await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
@@ -236,7 +405,7 @@ describe('watcher', () => {
   })
 
   test('classes are generated when the index.css file changes', async () => {
-    await writeInputFile('index.html', html`<div class="font-bold btn"></div>`)
+    await writeInputFile('index.html', html`<div class="btn font-bold"></div>`)
 
     let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
     await runningProcess.onStderr(ready)
@@ -258,7 +427,7 @@ describe('watcher', () => {
 
         @layer components {
           .btn {
-            @apply px-2 py-1 rounded;
+            @apply rounded px-2 py-1;
           }
         }
       `
@@ -289,7 +458,7 @@ describe('watcher', () => {
 
         @layer components {
           .btn {
-            @apply px-2 py-1 rounded bg-red-500;
+            @apply rounded bg-red-500 px-2 py-1;
           }
         }
       `
@@ -309,6 +478,127 @@ describe('watcher', () => {
         }
         .font-bold {
           font-weight: 700;
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
+  test('listens for changes to the @config directive', async () => {
+    await writeInputFile('index.html', html`<div class="bg-yellow"></div>`)
+    await writeInputFile(
+      'index.css',
+      css`
+        @config "./tailwind.config.js";
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `
+    )
+    await writeInputFile(
+      'tailwind.config.js',
+      javascript`
+        module.exports = {
+          content: {
+            relative: true,
+            files: ['./index.html'],
+          },
+          theme: {
+            extend: {
+              colors: {
+                yellow: '#ff0',
+              }
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        }
+      `
+    )
+    await writeInputFile(
+      'tailwind.2.config.js',
+      javascript`
+        module.exports = {
+          content: {
+            relative: true,
+            files: ['./index.html'],
+          },
+          theme: {
+            extend: {
+              colors: {
+                yellow: '#ff7',
+              }
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        }
+      `
+    )
+
+    let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
+
+    await writeInputFile(
+      'index.css',
+      css`
+        @config "./tailwind.2.config.js";
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `
+    )
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 119 / var(--tw-bg-opacity));
+        }
+      `
+    )
+
+    await writeInputFile(
+      'tailwind.2.config.js',
+      javascript`
+        module.exports = {
+          content: {
+            relative: true,
+            files: ['./index.html'],
+          },
+          theme: {
+            extend: {
+              colors: {
+                yellow: '#fff',
+              }
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        }
+      `
+    )
+    await runningProcess.onStderr(ready)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 255 / var(--tw-bg-opacity));
         }
       `
     )

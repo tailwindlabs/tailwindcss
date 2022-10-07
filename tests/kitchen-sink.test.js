@@ -69,7 +69,8 @@ test('it works', () => {
       }
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         margin: 10px;
       }
     }
@@ -82,7 +83,8 @@ test('it works', () => {
       }
       *,
       ::before,
-      ::after {
+      ::after,
+      ::backdrop {
         padding: 5px;
       }
       .foo .bg-black {
@@ -143,7 +145,7 @@ test('it works', () => {
       @apply m-5 mt-6;
     }
     .apply-order-b {
-      @apply mt-6 m-5;
+      @apply m-5 mt-6;
     }
     .apply-dark-group-example-a {
       @apply dark:group-hover:bg-green-500;

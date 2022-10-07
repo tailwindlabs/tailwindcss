@@ -3,7 +3,7 @@ import { run, html, css } from './util/run'
 test('experimental universal selector improvements (box-shadow)', () => {
   let config = {
     experimental: 'all',
-    content: [{ raw: html`<div class="shadow resize"></div>` }],
+    content: [{ raw: html`<div class="resize shadow"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -39,7 +39,7 @@ test('experimental universal selector improvements (box-shadow)', () => {
 test('experimental universal selector improvements (pseudo hover)', () => {
   let config = {
     experimental: 'all',
-    content: [{ raw: html`<div class="hover:shadow resize"></div>` }],
+    content: [{ raw: html`<div class="resize hover:shadow"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -75,7 +75,7 @@ test('experimental universal selector improvements (pseudo hover)', () => {
 test('experimental universal selector improvements (multiple classes: group)', () => {
   let config = {
     experimental: 'all',
-    content: [{ raw: html`<div class="group-hover:shadow resize"></div>` }],
+    content: [{ raw: html`<div class="resize group-hover:shadow"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -111,7 +111,7 @@ test('experimental universal selector improvements (multiple classes: group)', (
 test('experimental universal selector improvements (child selectors: divide-y)', () => {
   let config = {
     experimental: 'all',
-    content: [{ raw: html`<div class="divide-y resize"></div>` }],
+    content: [{ raw: html`<div class="resize divide-y"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -122,11 +122,6 @@ test('experimental universal selector improvements (child selectors: divide-y)',
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .divide-y > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
-      }
-
       .resize {
         resize: both;
       }
@@ -143,7 +138,7 @@ test('experimental universal selector improvements (child selectors: divide-y)',
 test('experimental universal selector improvements (hover:divide-y)', () => {
   let config = {
     experimental: 'all',
-    content: [{ raw: html`<div class="hover:divide-y resize"></div>` }],
+    content: [{ raw: html`<div class="resize hover:divide-y"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -154,11 +149,6 @@ test('experimental universal selector improvements (hover:divide-y)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .hover\:divide-y > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
-      }
-
       .resize {
         resize: both;
       }
@@ -176,7 +166,7 @@ test('experimental universal selector improvements (#app important)', () => {
   let config = {
     experimental: 'all',
     important: '#app',
-    content: [{ raw: html`<div class="shadow divide-y resize"></div>` }],
+    content: [{ raw: html`<div class="resize divide-y shadow"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -187,11 +177,6 @@ test('experimental universal selector improvements (#app important)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchCss(css`
-      .divide-y > * {
-        --tw-border-opacity: 1;
-        border-color: rgb(229 231 235 / var(--tw-border-opacity));
-      }
-
       .shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;

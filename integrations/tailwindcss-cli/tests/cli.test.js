@@ -5,7 +5,14 @@ let resolveToolRoot = require('../../resolve-tool-root')
 
 let version = require('../../../package.json').version
 
-let { readOutputFile, writeInputFile, cleanupFile, fileExists, removeFile } = require('../../io')({
+let {
+  cleanupFile,
+  fileExists,
+  readOutputFile,
+  removeFile,
+  waitForOutputFileCreation,
+  writeInputFile,
+} = require('../../io')({
   output: 'dist',
   input: 'src',
 })
@@ -277,6 +284,161 @@ describe('Build command', () => {
     )
   })
 
+  test('--postcss supports process options', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = javascript`
+      let path = require('path')
+      let postcss = require('postcss')
+
+      module.exports = {
+        map: { inline: true },
+        plugins: [
+          function tailwindcss() {
+            return require(path.resolve('..', '..'))
+          },
+        ],
+      }
+    `
+
+    await writeInputFile('../postcss.config.js', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --postcss`)
+
+    let contents = await readOutputFile('main.css')
+
+    expect(contents).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    expect(contents).toContain(`/*# sourceMappingURL`)
+  })
+
+  test('--postcss supports process options with custom config', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = javascript`
+      let path = require('path')
+      let postcss = require('postcss')
+
+      module.exports = {
+        map: { inline: true },
+        plugins: [
+          function tailwindcss() {
+            return require(path.resolve('..', '..'))
+          },
+        ],
+      }
+    `
+
+    await writeInputFile('../custom.postcss.config.js', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --postcss ./custom.postcss.config.js`)
+
+    let contents = await readOutputFile('main.css')
+
+    expect(contents).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    expect(contents).toContain(`/*# sourceMappingURL`)
+  })
+
+  test('postcss-import is supported by default', async () => {
+    cleanupFile('src/test.css')
+
+    await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
+    await writeInputFile(
+      'test.css',
+      css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
+        @import './imported.css';
+      `
+    )
+
+    await $(
+      `${EXECUTABLE} --input ./src/test.css --content ./src/index.html --output ./dist/main.css`
+    )
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        @media (min-width: 768px) {
+          .md\:something-cool {
+            color: red;
+          }
+        }
+      `
+    )
+  })
+
+  test('postcss-import is supported by default in watch mode', async () => {
+    cleanupFile('src/test.css')
+
+    await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
+    await writeInputFile(
+      'test.css',
+      css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
+        @import './imported.css';
+      `
+    )
+
+    let runningProcess = $(
+      `${EXECUTABLE} --watch --input ./src/test.css --content ./src/index.html --output ./dist/main.css`
+    )
+
+    await waitForOutputFileCreation('main.css')
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        @media (min-width: 768px) {
+          .md\:something-cool {
+            color: red;
+          }
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
+  test('postcss-import is included when using a custom postcss configuration', async () => {
+    cleanupFile('src/test.css')
+
+    await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
+    await writeInputFile(
+      'test.css',
+      css`
+        @import 'tailwindcss/base';
+        @import 'tailwindcss/components';
+        @import 'tailwindcss/utilities';
+        @import './imported.css';
+      `
+    )
+
+    await $(
+      `${EXECUTABLE} --input ./src/test.css --content ./src/index.html --output ./dist/main.css --postcss`
+    )
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        @import './imported.css';
+      `
+    )
+  })
+
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} --help`)
 
@@ -291,6 +453,7 @@ describe('Build command', () => {
            -i, --input              Input file
            -o, --output             Output file
            -w, --watch              Watch for changes and rebuild as needed
+           -p, --poll               Use polling instead of filesystem events when watching
                --content            Content paths to use for removing unused classes
                --postcss            Load custom PostCSS configuration
            -m, --minify             Minify the output
@@ -353,5 +516,64 @@ describe('Init command', () => {
            -h, --help               Display usage information
       `)
     )
+  })
+
+  test('--help in ESM package', async () => {
+    let pkg = await readOutputFile('../package.json')
+
+    await writeInputFile(
+      '../package.json',
+      JSON.stringify({
+        ...JSON.parse(pkg),
+        type: 'module',
+      })
+    )
+
+    let { combined } = await $(`${EXECUTABLE} init --help`)
+
+    expect(dedent(combined)).toEqual(
+      dedent(`
+        tailwindcss v${version}
+
+        Usage:
+           tailwindcss init [options]
+
+        Options:
+           -f, --full               Initialize a full \`tailwind.config.cjs\` file
+           -p, --postcss            Initialize a \`postcss.config.cjs\` file
+           -h, --help               Display usage information
+      `)
+    )
+
+    await writeInputFile('../package.json', pkg)
+  })
+
+  test('cjs config created when in ESM package', async () => {
+    cleanupFile('tailwind.config.cjs')
+
+    let pkg = await readOutputFile('../package.json')
+
+    await writeInputFile(
+      '../package.json',
+      JSON.stringify({
+        ...JSON.parse(pkg),
+        type: 'module',
+      })
+    )
+
+    let { combined } = await $(`${EXECUTABLE} init`)
+
+    expect(combined).toMatchInlineSnapshot(`
+      "
+      Created Tailwind CSS config file: tailwind.config.cjs
+      "
+    `)
+
+    expect(await fileExists('./tailwind.config.cjs')).toBe(true)
+
+    // Not a clean way to test this.
+    expect(await readOutputFile('../tailwind.config.cjs')).toContain('module.exports =')
+
+    await writeInputFile('../package.json', pkg)
   })
 })

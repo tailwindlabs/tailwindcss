@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { run, css } from './util/run'
+import { run, css, defaults } from './util/run'
 
 it('should be possible to use negated content patterns', () => {
   let config = {
@@ -18,6 +18,7 @@ it('should be possible to use negated content patterns', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
       .uppercase {
         text-transform: uppercase;
       }

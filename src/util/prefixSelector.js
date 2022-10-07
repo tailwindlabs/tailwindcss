@@ -1,12 +1,14 @@
 import parser from 'postcss-selector-parser'
-import { tap } from './tap'
 
-export default function (prefix, selector) {
+export default function (prefix, selector, prependNegative = false) {
   return parser((selectors) => {
     selectors.walkClasses((classSelector) => {
-      tap(classSelector.value, (baseClass) => {
-        classSelector.value = `${prefix}${baseClass}`
-      })
+      let baseClass = classSelector.value
+      let shouldPlaceNegativeBeforePrefix = prependNegative && baseClass.startsWith('-')
+
+      classSelector.value = shouldPlaceNegativeBeforePrefix
+        ? `-${prefix}${baseClass.slice(1)}`
+        : `${prefix}${baseClass}`
     })
   }).processSync(selector)
 }

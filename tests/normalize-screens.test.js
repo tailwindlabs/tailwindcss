@@ -60,39 +60,3 @@ it('should normalize an object with object values (min-width normalized to width
     { name: 'b', values: [{ min: undefined, max: '1200px' }] },
   ])
 })
-
-it('should normalize a tuple with string values', () => {
-  let screens = [
-    ['a', '768px'],
-    ['b', '1200px'],
-  ]
-
-  expect(normalizeScreens(screens)).toEqual([
-    { name: 'a', values: [{ min: '768px', max: undefined }] },
-    { name: 'b', values: [{ min: '1200px', max: undefined }] },
-  ])
-})
-
-it('should normalize a tuple with object values', () => {
-  let screens = [
-    ['a', { min: '768px' }],
-    ['b', { max: '1200px' }],
-  ]
-
-  expect(normalizeScreens(screens)).toEqual([
-    { name: 'a', values: [{ min: '768px', max: undefined }] },
-    { name: 'b', values: [{ min: undefined, max: '1200px' }] },
-  ])
-})
-
-it('should normalize a tuple with object values (min-width normalized to width)', () => {
-  let screens = [
-    ['a', { 'min-width': '768px' }],
-    ['b', { max: '1200px' }],
-  ]
-
-  expect(normalizeScreens(screens)).toEqual([
-    { name: 'a', values: [{ min: '768px', max: undefined }] },
-    { name: 'b', values: [{ min: undefined, max: '1200px' }] },
-  ])
-})

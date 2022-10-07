@@ -2,14 +2,21 @@ import namedColors from 'color-name'
 
 let HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
 let SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
-let VALUE = `(?:\\d+|\\d*\\.\\d+)%?`
-let SEP = `(?:\\s*,\\s*|\\s+)`
-let ALPHA_SEP = `\\s*[,/]\\s*`
-let RGB_HSL = new RegExp(
-  `^(rgb|hsl)a?\\(\\s*(${VALUE})${SEP}(${VALUE})${SEP}(${VALUE})(?:${ALPHA_SEP}(${VALUE}))?\\s*\\)$`
+let VALUE = /(?:\d+|\d*\.\d+)%?/
+let SEP = /(?:\s*,\s*|\s+)/
+let ALPHA_SEP = /\s*[,/]\s*/
+let CUSTOM_PROPERTY = /var\(--(?:[^ )]*?)\)/
+
+let RGB = new RegExp(
+  `^(rgb)a?\\(\\s*(${VALUE.source}|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
+)
+let HSL = new RegExp(
+  `^(hsl)a?\\(\\s*((?:${VALUE.source})(?:deg|rad|grad|turn)?|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
 )
 
-export function parseColor(value) {
+// In "loose" mode the color may contain fewer than 3 parts, as long as at least
+// one of the parts is variable.
+export function parseColor(value, { loose = false } = {}) {
   if (typeof value !== 'string') {
     return null
   }
@@ -37,17 +44,27 @@ export function parseColor(value) {
     }
   }
 
-  let match = value.match(RGB_HSL)
+  let match = value.match(RGB) ?? value.match(HSL)
 
-  if (match !== null) {
-    return {
-      mode: match[1],
-      color: [match[2], match[3], match[4]].map((v) => v.toString()),
-      alpha: match[5]?.toString?.(),
-    }
+  if (match === null) {
+    return null
   }
 
-  return null
+  let color = [match[2], match[3], match[4]].filter(Boolean).map((v) => v.toString())
+
+  if (!loose && color.length !== 3) {
+    return null
+  }
+
+  if (color.length < 3 && !color.some((part) => /^var\(.*?\)$/.test(part))) {
+    return null
+  }
+
+  return {
+    mode: match[1],
+    color,
+    alpha: match[5]?.toString?.(),
+  }
 }
 
 export function formatColor({ mode, color, alpha }) {

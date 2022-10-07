@@ -181,3 +181,96 @@ test('multiple custom', () => {
     `)
   })
 })
+
+test('with dots in the name', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="animate-zoom-.5"></div>
+          <div class="animate-zoom-1.5"></div>
+        `,
+      },
+    ],
+    theme: {
+      extend: {
+        keyframes: {
+          'zoom-.5': { to: { transform: 'scale(0.5)' } },
+          'zoom-1.5': { to: { transform: 'scale(1.5)' } },
+        },
+        animation: {
+          'zoom-.5': 'zoom-.5 2s',
+          'zoom-1.5': 'zoom-1.5 2s',
+        },
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @keyframes zoom-\.5 {
+        to {
+          transform: scale(0.5);
+        }
+      }
+      .animate-zoom-\.5 {
+        animation: zoom-\.5 2s;
+      }
+      @keyframes zoom-1\.5 {
+        to {
+          transform: scale(1.5);
+        }
+      }
+      .animate-zoom-1\.5 {
+        animation: zoom-1\.5 2s;
+      }
+    `)
+  })
+})
+
+test('with dots in the name and prefix', () => {
+  let config = {
+    prefix: 'tw-',
+    content: [
+      {
+        raw: html`
+          <div class="tw-animate-zoom-.5"></div>
+          <div class="tw-animate-zoom-1.5"></div>
+        `,
+      },
+    ],
+    theme: {
+      extend: {
+        keyframes: {
+          'zoom-.5': { to: { transform: 'scale(0.5)' } },
+          'zoom-1.5': { to: { transform: 'scale(1.5)' } },
+        },
+        animation: {
+          'zoom-.5': 'zoom-.5 2s',
+          'zoom-1.5': 'zoom-1.5 2s',
+        },
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @keyframes tw-zoom-\.5 {
+        to {
+          transform: scale(0.5);
+        }
+      }
+      .tw-animate-zoom-\.5 {
+        animation: tw-zoom-\.5 2s;
+      }
+      @keyframes tw-zoom-1\.5 {
+        to {
+          transform: scale(1.5);
+        }
+      }
+      .tw-animate-zoom-1\.5 {
+        animation: tw-zoom-1\.5 2s;
+      }
+    `)
+  })
+})

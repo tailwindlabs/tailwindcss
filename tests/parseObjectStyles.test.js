@@ -300,3 +300,17 @@ test('it can parse an array of styles', () => {
     }
   `)
 })
+
+test('custom properties preserve their case', () => {
+  const result = parseObjectStyles({
+    ':root': {
+      '--colors-aColor-500': '0',
+    },
+  })
+
+  expect(css(result)).toMatchCss(`
+    :root {
+      --colors-aColor-500: 0;
+    }
+  `)
+})

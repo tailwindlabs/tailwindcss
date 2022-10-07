@@ -185,7 +185,7 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
 
 test('the default config can be overridden using the presets key', () => {
   let config = {
-    content: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    content: [{ raw: html`<div class="min-h-primary min-h-secondary min-h-0"></div>` }],
     presets: [
       {
         theme: {
@@ -200,14 +200,14 @@ test('the default config can be overridden using the presets key', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .min-h-0 {
-        min-height: 0px;
-      }
       .min-h-primary {
         min-height: 48px;
       }
       .min-h-secondary {
         min-height: 24px;
+      }
+      .min-h-0 {
+        min-height: 0px;
       }
     `)
   })
@@ -215,7 +215,7 @@ test('the default config can be overridden using the presets key', () => {
 
 test('presets can be functions', () => {
   let config = {
-    content: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    content: [{ raw: html`<div class="min-h-primary min-h-secondary min-h-0"></div>` }],
     presets: [
       () => ({
         theme: {
@@ -230,14 +230,14 @@ test('presets can be functions', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .min-h-0 {
-        min-height: 0px;
-      }
       .min-h-primary {
         min-height: 48px;
       }
       .min-h-secondary {
         min-height: 24px;
+      }
+      .min-h-0 {
+        min-height: 0px;
       }
     `)
   })
@@ -245,7 +245,7 @@ test('presets can be functions', () => {
 
 test('the default config can be removed by using an empty presets key in a preset', () => {
   let config = {
-    content: [{ raw: html`<div class="min-h-0 min-h-primary min-h-secondary"></div>` }],
+    content: [{ raw: html`<div class="min-h-primary min-h-secondary min-h-0"></div>` }],
     presets: [
       {
         presets: [],
@@ -273,7 +273,7 @@ test('the default config can be removed by using an empty presets key in a prese
 
 test('presets can have their own presets', () => {
   let config = {
-    content: [{ raw: html`<div class="bg-transparent bg-black bg-white bg-red"></div>` }],
+    content: [{ raw: html`<div class="bg-red bg-transparent bg-black bg-white"></div>` }],
     presets: [
       {
         presets: [],
@@ -312,6 +312,9 @@ test('presets can have their own presets', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .bg-red {
+        background-color: #ee0000;
+      }
       .bg-transparent {
         background-color: transparent;
       }
@@ -321,16 +324,13 @@ test('presets can have their own presets', () => {
       .bg-white {
         background-color: white;
       }
-      .bg-red {
-        background-color: #ee0000;
-      }
     `)
   })
 })
 
 test('function presets can be mixed with object presets', () => {
   let config = {
-    content: [{ raw: html`<div class="bg-transparent bg-black bg-white bg-red"></div>` }],
+    content: [{ raw: html`<div class="bg-red bg-transparent bg-black bg-white"></div>` }],
     presets: [
       () => ({
         presets: [],
@@ -369,6 +369,9 @@ test('function presets can be mixed with object presets', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .bg-red {
+        background-color: #ee0000;
+      }
       .bg-transparent {
         background-color: transparent;
       }
@@ -377,9 +380,6 @@ test('function presets can be mixed with object presets', () => {
       }
       .bg-white {
         background-color: white;
-      }
-      .bg-red {
-        background-color: #ee0000;
       }
     `)
   })

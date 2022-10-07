@@ -5,6 +5,9 @@ import parseValue from 'postcss-value-parser'
 import { normalizeScreens } from '../util/normalizeScreens'
 import buildMediaQuery from '../util/buildMediaQuery'
 import { toPath } from '../util/toPath'
+import { withAlphaValue } from '../util/withAlphaVariable'
+import { parseColorFormat } from '../util/pluginUtils'
+import log from '../util/log'
 
 function isObject(input) {
   return typeof input === 'object' && input !== null
@@ -37,12 +40,10 @@ function listKeys(obj) {
   return list(Object.keys(obj))
 }
 
-function validatePath(config, path, defaultValue) {
-  const pathString = Array.isArray(path)
-    ? pathToString(path)
-    : path.replace(/^['"]+/g, '').replace(/['"]+$/g, '')
+function validatePath(config, path, defaultValue, themeOpts = {}) {
+  const pathString = Array.isArray(path) ? pathToString(path) : path.replace(/^['"]+|['"]+$/g, '')
   const pathSegments = Array.isArray(path) ? path : toPath(pathString)
-  const value = dlv(config.theme, pathString, defaultValue)
+  const value = dlv(config.theme, pathSegments, defaultValue)
 
   if (value === undefined) {
     let error = `'${pathString}' does not exist in your theme config.`
@@ -114,7 +115,7 @@ function validatePath(config, path, defaultValue) {
 
   return {
     isValid: true,
-    value: transformThemeValue(themeSection)(value),
+    value: transformThemeValue(themeSection)(value, themeOpts),
   }
 }
 
@@ -157,17 +158,87 @@ let nodeTypePropertyMap = {
   decl: 'value',
 }
 
-export default function ({ tailwindConfig: config }) {
+/**
+ * @param {string} path
+ * @returns {Iterable<[path: string, alpha: string|undefined]>}
+ */
+function* toPaths(path) {
+  // Strip quotes from beginning and end of string
+  // This allows the alpha value to be present inside of quotes
+  path = path.replace(/^['"]+|['"]+$/g, '')
+
+  let matches = path.match(/^([^\s]+)(?![^\[]*\])(?:\s*\/\s*([^\/\s]+))$/)
+  let alpha = undefined
+
+  yield [path, undefined]
+
+  if (matches) {
+    path = matches[1]
+    alpha = matches[2]
+
+    yield [path, alpha]
+  }
+}
+
+/**
+ *
+ * @param {any} config
+ * @param {string} path
+ * @param {any} defaultValue
+ */
+function resolvePath(config, path, defaultValue) {
+  const results = Array.from(toPaths(path)).map(([path, alpha]) => {
+    return Object.assign(validatePath(config, path, defaultValue, { opacityValue: alpha }), {
+      resolvedPath: path,
+      alpha,
+    })
+  })
+
+  return results.find((result) => result.isValid) ?? results[0]
+}
+
+export default function (context) {
+  let config = context.tailwindConfig
+
   let functions = {
     theme: (node, path, ...defaultValue) => {
-      const { isValid, value, error } = validatePath(
+      let { isValid, value, error, alpha } = resolvePath(
         config,
         path,
         defaultValue.length ? defaultValue : undefined
       )
 
       if (!isValid) {
+        let parentNode = node.parent
+        let candidate = parentNode?.raws.tailwind?.candidate
+
+        if (parentNode && candidate !== undefined) {
+          // Remove this utility from any caches
+          context.markInvalidUtilityNode(parentNode)
+
+          // Remove the CSS node from the markup
+          parentNode.remove()
+
+          // Show a warning
+          log.warn('invalid-theme-key-in-class', [
+            `The utility \`${candidate}\` contains an invalid theme value and was not generated.`,
+          ])
+
+          return
+        }
+
         throw node.error(error)
+      }
+
+      let maybeColor = parseColorFormat(value)
+      let isColorFunction = maybeColor !== undefined && typeof maybeColor === 'function'
+
+      if (alpha !== undefined || isColorFunction) {
+        if (alpha === undefined) {
+          alpha = 1.0
+        }
+
+        value = withAlphaValue(maybeColor, alpha, maybeColor)
       }
 
       return value

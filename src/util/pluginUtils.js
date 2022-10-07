@@ -19,6 +19,7 @@ import {
   string,
 } from './dataTypes'
 import negateValue from './negateValue'
+import { backgroundSize } from './validateFormalSyntax'
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
@@ -96,9 +97,19 @@ function splitAlpha(modifier) {
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
 }
 
+export function parseColorFormat(value) {
+  if (typeof value === 'string' && value.includes('<alpha-value>')) {
+    let oldValue = value
+
+    return ({ opacityValue = 1 }) => oldValue.replace('<alpha-value>', opacityValue)
+  }
+
+  return value
+}
+
 export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
   if (options.values?.[modifier] !== undefined) {
-    return options.values?.[modifier]
+    return parseColorFormat(options.values?.[modifier])
   }
 
   let [color, alpha] = splitAlpha(modifier)
@@ -110,6 +121,8 @@ export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
     if (normalizedColor === undefined) {
       return undefined
     }
+
+    normalizedColor = parseColorFormat(normalizedColor)
 
     if (isArbitraryValue(alpha)) {
       return withAlphaValue(normalizedColor, alpha.slice(1, -1))
@@ -135,7 +148,7 @@ function guess(validate) {
   }
 }
 
-let typeMap = {
+export let typeMap = {
   any: asValue,
   color: asColor,
   url: guess(url),
@@ -151,6 +164,7 @@ let typeMap = {
   'absolute-size': guess(absoluteSize),
   'relative-size': guess(relativeSize),
   shadow: guess(shadow),
+  size: guess(backgroundSize),
   string: guess(string),
 }
 
@@ -185,9 +199,9 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
   }
 
   // Find first matching type
-  for (let type of [].concat(types)) {
+  for (let { type } of types) {
     let result = typeMap[type](modifier, options, { tailwindConfig })
-    if (result) return [result, type]
+    if (result !== undefined) return [result, type]
   }
 
   return []
