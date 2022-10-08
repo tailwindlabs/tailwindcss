@@ -1003,6 +1003,7 @@ export let corePlugins = {
       '.content-between': { 'align-content': 'space-between' },
       '.content-around': { 'align-content': 'space-around' },
       '.content-evenly': { 'align-content': 'space-evenly' },
+      '.content-baseline': { 'align-content': 'baseline' },
     })
   },
 
