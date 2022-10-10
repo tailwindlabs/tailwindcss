@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implement the `supports` variant ([#9453](https://github.com/tailwindlabs/tailwindcss/pull/9453))
 - Add experimental `label`s for variants ([#9456](https://github.com/tailwindlabs/tailwindcss/pull/9456))
 - Added 'place-content-baseline' utility ([#9498](https://github.com/tailwindlabs/tailwindcss/pull/9498))
+- Added 'place-items-baseline' utility ([#9507](https://github.com/tailwindlabs/tailwindcss/pull/9507))
+- Added 'content-baseline' utility ([#9507](https://github.com/tailwindlabs/tailwindcss/pull/9507))
 
 ### Fixed
 

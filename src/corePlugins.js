@@ -990,6 +990,7 @@ export let corePlugins = {
       '.place-items-start': { 'place-items': 'start' },
       '.place-items-end': { 'place-items': 'end' },
       '.place-items-center': { 'place-items': 'center' },
+      '.place-items-baseline': { 'place-items': 'baseline' },
       '.place-items-stretch': { 'place-items': 'stretch' },
     })
   },
@@ -1002,6 +1003,7 @@ export let corePlugins = {
       '.content-between': { 'align-content': 'space-between' },
       '.content-around': { 'align-content': 'space-around' },
       '.content-evenly': { 'align-content': 'space-evenly' },
+      '.content-baseline': { 'align-content': 'baseline' },
     })
   },
 
