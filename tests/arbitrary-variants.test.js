@@ -738,31 +738,15 @@ it('should be possible to use modifiers and arbitrary groups', () => {
 
             <!-- The same as above, but with modifiers -->
             <div class="group/foo">
-            <div class="group/foo">
-            <div class="group/foo">
-              <div class="group-hover/foo:underline"></div>
-              <div class="group-hover/foo:underline"></div>
               <div class="group-hover/foo:underline"></div>
 
               <div class="group-[&:focus]/foo:underline"></div>
-              <div class="group-[&:focus]/foo:underline"></div>
-              <div class="group-[&:focus]/foo:underline"></div>
-              <div class="group-[:hover]/foo:underline"></div>
-              <div class="group-[:hover]/foo:underline"></div>
               <div class="group-[:hover]/foo:underline"></div>
 
               <div class="group-[&[data-open]]/foo:underline"></div>
-              <div class="group-[&[data-open]]/foo:underline"></div>
-              <div class="group-[&[data-open]]/foo:underline"></div>
-              <div class="group-[[data-open]]/foo:underline"></div>
-              <div class="group-[[data-open]]/foo:underline"></div>
               <div class="group-[[data-open]]/foo:underline"></div>
 
               <div class="group-[.in-foo_&]/foo:underline"></div>
-              <div class="group-[.in-foo_&]/foo:underline"></div>
-              <div class="group-[.in-foo_&]/foo:underline"></div>
-              <div class="group-[.in-foo]/foo:underline"></div>
-              <div class="group-[.in-foo]/foo:underline"></div>
               <div class="group-[.in-foo]/foo:underline"></div>
             </div>
           </div>
@@ -830,58 +814,42 @@ it('should be possible to use modifiers and arbitrary peers', () => {
       {
         raw: html`
           <div>
-            <div class="peer">
-              <!-- Default peer usage -->
-              <div class="peer-hover:underline"></div>
+            <div class="peer"></div>
 
-              <!-- Arbitrary variants with pseudo class for peer -->
-              <!-- With & -->
-              <div class="peer-[&:focus]:underline"></div>
-              <!-- Without & -->
-              <div class="peer-[:hover]:underline"></div>
+            <!-- Default peer usage -->
+            <div class="peer-hover:underline"></div>
 
-              <!-- Arbitrary variants with attributes selectors for peer -->
-              <!-- With & -->
-              <div class="peer-[&[data-open]]:underline"></div>
-              <!-- Without & -->
-              <div class="peer-[[data-open]]:underline"></div>
+            <!-- Arbitrary variants with pseudo class for peer -->
+            <!-- With & -->
+            <div class="peer-[&:focus]:underline"></div>
+            <!-- Without & -->
+            <div class="peer-[:hover]:underline"></div>
 
-              <!-- Arbitrary variants with other selectors -->
-              <!-- With & -->
-              <div class="peer-[.in-foo_&]:underline"></div>
-              <!-- Without & -->
-              <div class="peer-[.in-foo]:underline"></div>
-            </div>
+            <!-- Arbitrary variants with attributes selectors for peer -->
+            <!-- With & -->
+            <div class="peer-[&[data-open]]:underline"></div>
+            <!-- Without & -->
+            <div class="peer-[[data-open]]:underline"></div>
+
+            <!-- Arbitrary variants with other selectors -->
+            <!-- With & -->
+            <div class="peer-[.in-foo_&]:underline"></div>
+            <!-- Without & -->
+            <div class="peer-[.in-foo]:underline"></div>
 
             <!-- The same as above, but with modifiers -->
-            <div class="peer/foo">
-            <div class="peer/foo">
-            <div class="peer/foo">
-              <div class="peer-hover/foo:underline"></div>
-              <div class="peer-hover/foo:underline"></div>
-              <div class="peer-hover/foo:underline"></div>
+            <div class="peer/foo"></div>
 
-              <div class="peer-[&:focus]/foo:underline"></div>
-              <div class="peer-[&:focus]/foo:underline"></div>
-              <div class="peer-[&:focus]/foo:underline"></div>
-              <div class="peer-[:hover]/foo:underline"></div>
-              <div class="peer-[:hover]/foo:underline"></div>
-              <div class="peer-[:hover]/foo:underline"></div>
+            <div class="peer-hover/foo:underline"></div>
 
-              <div class="peer-[&[data-open]]/foo:underline"></div>
-              <div class="peer-[&[data-open]]/foo:underline"></div>
-              <div class="peer-[&[data-open]]/foo:underline"></div>
-              <div class="peer-[[data-open]]/foo:underline"></div>
-              <div class="peer-[[data-open]]/foo:underline"></div>
-              <div class="peer-[[data-open]]/foo:underline"></div>
+            <div class="peer-[&:focus]/foo:underline"></div>
+            <div class="peer-[:hover]/foo:underline"></div>
 
-              <div class="peer-[.in-foo_&]/foo:underline"></div>
-              <div class="peer-[.in-foo_&]/foo:underline"></div>
-              <div class="peer-[.in-foo_&]/foo:underline"></div>
-              <div class="peer-[.in-foo]/foo:underline"></div>
-              <div class="peer-[.in-foo]/foo:underline"></div>
-              <div class="peer-[.in-foo]/foo:underline"></div>
-            </div>
+            <div class="peer-[&[data-open]]/foo:underline"></div>
+            <div class="peer-[[data-open]]/foo:underline"></div>
+
+            <div class="peer-[.in-foo_&]/foo:underline"></div>
+            <div class="peer-[.in-foo]/foo:underline"></div>
           </div>
         `,
       },
