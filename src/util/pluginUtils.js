@@ -90,7 +90,16 @@ function splitAlpha(modifier) {
   let slashIdx = modifier.lastIndexOf('/')
 
   if (slashIdx === -1 || slashIdx === modifier.length - 1) {
-    return [modifier]
+    return [modifier, undefined]
+  }
+
+  let arbitrary = isArbitraryValue(modifier)
+
+  // The modifier could be of the form `[foo]/[bar]`
+  // We want to handle this case properly
+  // without affecting `[foo/bar]`
+  if (arbitrary && !modifier.includes(']/[')) {
+    return [modifier, undefined]
   }
 
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
@@ -106,14 +115,12 @@ export function parseColorFormat(value) {
   return value
 }
 
-export function asColor(modifier, options = {}, { tailwindConfig = {}, rawModifier } = {}) {
-  modifier = rawModifier
-
-  if (options.values?.[modifier] !== undefined) {
-    return parseColorFormat(options.values?.[modifier])
+export function asColor(modifier, options = {}, { tailwindConfig = {}, utilityModifier, rawModifier } = {}) {
+  if (options.values?.[rawModifier] !== undefined) {
+    return parseColorFormat(options.values?.[rawModifier])
   }
 
-  let [color, alpha] = splitAlpha(modifier)
+  let [color, alpha] = [modifier, utilityModifier]
 
   if (alpha !== undefined) {
     let normalizedColor =
@@ -136,7 +143,7 @@ export function asColor(modifier, options = {}, { tailwindConfig = {}, rawModifi
     return withAlphaValue(normalizedColor, tailwindConfig.theme.opacity[alpha])
   }
 
-  return asValue(modifier, options, { rawModifier, validate: validateColor })
+  return asValue(rawModifier, options, { rawModifier, utilityModifier, validate: validateColor })
 }
 
 export function asLookupValue(modifier, options = {}) {
@@ -211,15 +218,26 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
 /**
  *
  * @param {{type: string}[]} types
- * @param {string} modifier
+ * @param {string} rawModifier
  * @param {any} options
  * @param {any} tailwindConfig
  * @returns {Iterator<[value: string, type: string]>}
  */
-export function* getMatchingTypes(types, modifier, options, tailwindConfig) {
+export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
+  let [modifier, utilityModifier] = splitAlpha(rawModifier)
+
   for (const { type } of types ?? []) {
+    // TODO: This feels sus but it's required for certain lookup-based stuff to work as expected
+    // And for the color plugins otherwise we get output we shouldn't for unknown opacity utilities
+
+    // Basically asValue and asLookupValue need special treatment
+    if ((type === 'any' || type === 'lookup') && utilityModifier) {
+      modifier = rawModifier
+    }
+
     let result = typeMap[type](modifier, options, {
-      rawModifier: modifier,
+      rawModifier,
+      utilityModifier,
       tailwindConfig,
     })
 
