@@ -326,8 +326,8 @@ export interface PluginAPI {
 export type PluginCreator = (api: PluginAPI) => void
 export type PluginsConfig = (
   | PluginCreator
-  | { handler: PluginCreator; config?: Config }
-  | { (options: any): { handler: PluginCreator; config?: Config }; __isOptionsFunction: true }
+  | { handler: PluginCreator; config?: Partial<Config> }
+  | { (options: any): { handler: PluginCreator; config?: Partial<Config> }; __isOptionsFunction: true }
 )[]
 
 // Top level config related
