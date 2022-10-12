@@ -3,7 +3,7 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses, typeMap } from '../util/pluginUtils'
+import { updateAllClasses, getMatchingTypes } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
@@ -552,16 +552,12 @@ function* resolveMatches(candidate, context, original = candidate) {
       }
 
       if (matchesPerPlugin.length > 0) {
-        let matchingTypes = (sort.options?.types ?? [])
-          .map(({ type }) => type)
-          // Only track the types for this plugin that resulted in some result
-          .filter((type) => {
-            return Boolean(
-              typeMap[type](modifier, sort.options, {
-                tailwindConfig: context.tailwindConfig,
-              })
-            )
-          })
+        let matchingTypes = Array.from(getMatchingTypes(
+          sort.options?.types ?? [],
+          modifier,
+          sort.options ?? {},
+          context.tailwindConfig
+        )).map(([_, type]) => type)
 
         if (matchingTypes.length > 0) {
           typesByMatches.set(matchesPerPlugin, matchingTypes)

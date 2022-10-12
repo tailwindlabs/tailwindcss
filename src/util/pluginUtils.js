@@ -106,7 +106,9 @@ export function parseColorFormat(value) {
   return value
 }
 
-export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
+export function asColor(modifier, options = {}, { tailwindConfig = {}, rawModifier } = {}) {
+  modifier = rawModifier
+
   if (options.values?.[modifier] !== undefined) {
     return parseColorFormat(options.values?.[modifier])
   }
@@ -134,7 +136,7 @@ export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
     return withAlphaValue(normalizedColor, tailwindConfig.theme.opacity[alpha])
   }
 
-  return asValue(modifier, options, { validate: validateColor })
+  return asValue(modifier, options, { rawModifier, validate: validateColor })
 }
 
 export function asLookupValue(modifier, options = {}) {
@@ -142,8 +144,8 @@ export function asLookupValue(modifier, options = {}) {
 }
 
 function guess(validate) {
-  return (modifier, options) => {
-    return asValue(modifier, options, { validate })
+  return (modifier, options, extras) => {
+    return asValue(modifier, options, { ...extras, validate })
   }
 }
 
@@ -196,11 +198,33 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
     }
   }
 
+  let matches = getMatchingTypes(types, modifier, options, tailwindConfig)
+
   // Find first matching type
-  for (let { type } of types) {
-    let result = typeMap[type](modifier, options, { tailwindConfig })
-    if (result !== undefined) return [result, type]
+  for (let match of matches) {
+    return match
   }
 
   return []
+}
+
+/**
+ *
+ * @param {{type: string}[]} types
+ * @param {string} modifier
+ * @param {any} options
+ * @param {any} tailwindConfig
+ * @returns {Iterator<[value: string, type: string]>}
+ */
+export function* getMatchingTypes(types, modifier, options, tailwindConfig) {
+  for (const { type } of types ?? []) {
+    let result = typeMap[type](modifier, options, {
+      rawModifier: modifier,
+      tailwindConfig,
+    })
+
+    if (result !== undefined) {
+      yield [result, type]
+    }
+  }
 }
