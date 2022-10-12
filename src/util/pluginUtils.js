@@ -86,7 +86,7 @@ function isArbitraryValue(input) {
   return input.startsWith('[') && input.endsWith(']')
 }
 
-function splitAlpha(modifier) {
+function splitUtilityModifier(modifier) {
   let slashIdx = modifier.lastIndexOf('/')
 
   if (slashIdx === -1 || slashIdx === modifier.length - 1) {
@@ -224,7 +224,7 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
  * @returns {Iterator<[value: string, type: string]>}
  */
 export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
-  let [modifier, utilityModifier] = splitAlpha(rawModifier)
+  let [modifier, utilityModifier] = splitUtilityModifier(rawModifier)
 
   for (const { type } of types ?? []) {
     // TODO: This feels sus but it's required for certain lookup-based stuff to work as expected
