@@ -201,7 +201,7 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
     }
 
     if (value.length > 0 && supportedTypes.includes(explicitType)) {
-      return [asValue(`[${value}]`, options), explicitType]
+      return [asValue(`[${value}]`, options), explicitType, null]
     }
   }
 
@@ -221,18 +221,22 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
  * @param {string} rawModifier
  * @param {any} options
  * @param {any} tailwindConfig
- * @returns {Iterator<[value: string, type: string]>}
+ * @returns {Iterator<[value: string, type: string, modifier: string | null]>}
  */
 export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
   let [modifier, utilityModifier] = splitUtilityModifier(rawModifier)
+
+  if (utilityModifier !== undefined && modifier === '') {
+    modifier = 'DEFAULT'
+  }
 
   for (const { type } of types ?? []) {
     // TODO: This feels sus but it's required for certain lookup-based stuff to work as expected
     // And for the color plugins otherwise we get output we shouldn't for unknown opacity utilities
     // Basically asValue and asLookupValue need special treatment
-    let canUseUtilityModifier = type === 'any' || type === 'lookup'
+    let canUseUtilityModifier = type !== 'any' && type !== 'lookup'
 
-    if (utilityModifier && canUseUtilityModifier) {
+    if (utilityModifier && !canUseUtilityModifier) {
       modifier = rawModifier
     }
 
@@ -249,6 +253,9 @@ export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
     yield [
       result,
       type,
+      canUseUtilityModifier
+        ? (utilityModifier ?? null)
+        : null
     ]
   }
 }

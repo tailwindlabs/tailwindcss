@@ -22,5 +22,9 @@ export function formatClass(classPrefix, key) {
     return `-${classPrefix}${key}`
   }
 
+  if (key.startsWith('/')) {
+    return `${classPrefix}${key}`
+  }
+
   return `${classPrefix}-${key}`
 }

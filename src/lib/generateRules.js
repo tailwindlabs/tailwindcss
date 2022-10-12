@@ -34,13 +34,24 @@ function* candidatePermutations(candidate) {
 
   while (lastIndex >= 0) {
     let dashIdx
+    let wasSlash = false
 
     if (lastIndex === Infinity && candidate.endsWith(']')) {
       let bracketIdx = candidate.indexOf('[')
 
       // If character before `[` isn't a dash or a slash, this isn't a dynamic class
       // eg. string[]
-      dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
+      if (candidate[bracketIdx - 1] === '-') {
+        dashIdx = bracketIdx - 1
+      } else if (candidate[bracketIdx - 1] === '/') {
+        dashIdx = bracketIdx - 1
+        wasSlash = true
+      } else {
+        dashIdx = -1
+      }
+    } else if (lastIndex === Infinity && candidate.includes('/')) {
+      dashIdx = candidate.lastIndexOf('/')
+      wasSlash = true
     } else {
       dashIdx = candidate.lastIndexOf('-', lastIndex)
     }
@@ -50,11 +61,20 @@ function* candidatePermutations(candidate) {
     }
 
     let prefix = candidate.slice(0, dashIdx)
-    let modifier = candidate.slice(dashIdx + 1)
-
-    yield [prefix, modifier]
+    let modifier = candidate.slice(wasSlash ? dashIdx : dashIdx + 1)
 
     lastIndex = dashIdx - 1
+
+    if (candidate === 'test/[foo]' || candidate === 'test-1/[foo]') {
+      console.log({ prefix, modifier })
+    }
+
+    // TODO: This feels a bit hacky
+    if (prefix === '' || modifier === '/') {
+      continue
+    }
+
+    yield [prefix, modifier]
   }
 }
 
