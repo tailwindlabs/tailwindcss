@@ -57,8 +57,8 @@ it('should provide selectors for complex matchVariant variants like `group`', ()
   expect(variant.selectors({})).toEqual(['.group &'])
   expect(variant.selectors({ value: 'hover' })).toEqual(['.group:hover &'])
   expect(variant.selectors({ value: '.foo_&' })).toEqual(['.foo .group &'])
-  expect(variant.selectors({ label: 'foo', value: 'hover' })).toEqual(['.group\\<foo\\>:hover &'])
-  expect(variant.selectors({ label: 'foo', value: '.foo_&' })).toEqual(['.foo .group\\<foo\\> &'])
+  expect(variant.selectors({ modifier: 'foo', value: 'hover' })).toEqual(['.group\\/foo:hover &'])
+  expect(variant.selectors({ modifier: 'foo', value: '.foo_&' })).toEqual(['.foo .group\\/foo &'])
 })
 
 it('should provide selectors for variants with atrules', () => {
@@ -74,20 +74,20 @@ it('should provide selectors for variants with atrules', () => {
   ])
 })
 
-it('should provide selectors for custom plugins that do a combination of parallel variants with labels with arbitrary values and with atrules', () => {
+it('should provide selectors for custom plugins that do a combination of parallel variants with modifiers with arbitrary values and with atrules', () => {
   let config = {
     plugins: [
       function ({ matchVariant }) {
-        matchVariant('foo', ({ label, value }) => {
+        matchVariant('foo', ({ modifier, value }) => {
           return [
             `
-              @supports (foo: ${label}) {
+              @supports (foo: ${modifier}) {
                 @media (width <= 400px) {
                    &:hover
                 }
               }
             `,
-            `.${label}\\/${value} &:focus`,
+            `.${modifier}\\/${value} &:focus`,
           ]
         })
       },
@@ -98,7 +98,7 @@ it('should provide selectors for custom plugins that do a combination of paralle
   let variants = context.getVariants()
 
   let variant = variants.find((v) => v.name === 'foo')
-  expect(variant.selectors({ label: 'bar', value: 'baz' })).toEqual([
+  expect(variant.selectors({ modifier: 'bar', value: 'baz' })).toEqual([
     '@supports (foo: bar) { @media (width <= 400px) { &:hover } }',
     '.bar\\/baz &:focus',
   ])

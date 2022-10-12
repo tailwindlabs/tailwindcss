@@ -969,7 +969,7 @@ function registerPlugins(plugins, context) {
         name,
         isArbitrary: options.type === Symbol.for('MATCH_VARIANT'),
         values: Object.keys(options.values ?? {}),
-        selectors({ label, value } = {}) {
+        selectors({ modifier, value } = {}) {
           let candidate = '__TAILWIND_PLACEHOLDER__'
 
           let fns = (context.variantMap.get(name) ?? []).flatMap(([_, fn]) => fn)
@@ -979,7 +979,7 @@ function registerPlugins(plugins, context) {
             let localFormatStrings = []
 
             let api = {
-              args: { label, value: options.values?.[value] ?? value },
+              args: { modifier, value: options.values?.[value] ?? value },
               separator: context.tailwindConfig.separator,
               modifySelectors() {},
               format(str) {
