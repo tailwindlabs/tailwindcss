@@ -963,7 +963,7 @@ function registerPlugins(plugins, context) {
   context.getVariants = function getVariants() {
     let result = []
     for (let [name, options] of context.variantOptions.entries()) {
-      if (options.variantInfo === 1) continue
+      if (options.variantInfo === VARIANT_INFO.Base) continue
 
       result.push({
         name,
