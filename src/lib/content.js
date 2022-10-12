@@ -146,8 +146,9 @@ function resolvePathSymlinks(contentPath) {
         base: resolvedPath,
       })
     }
-  } catch {
-    // TODO: log this?
+  } catch (e) {
+    console.error("[error] Error while resolving path symlinks.");
+    console.error(e);
   }
 
   return paths
