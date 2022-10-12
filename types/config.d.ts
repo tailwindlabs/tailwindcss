@@ -12,7 +12,7 @@ interface RecursiveKeyValuePair<K extends keyof any = string, V = string> {
   [key: string]: V | RecursiveKeyValuePair<K, V>
 }
 type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
-type CSSRuleObject = RecursiveKeyValuePair<string, string | string[]>
+type CSSRuleObject = RecursiveKeyValuePair<string, null | string | string[]>
 
 interface PluginUtils {
   colors: DefaultColors
@@ -263,8 +263,11 @@ export interface PluginAPI {
     }>
   ): void
   // for registering new dynamic utility styles
-  matchUtilities<T>(
-    utilities: KeyValuePair<string, (value: T) => CSSRuleObject>,
+  matchUtilities<T = string>(
+    utilities: KeyValuePair<
+      string,
+      (value: T | string, extra: { modifier: string | null }) => CSSRuleObject
+    >,
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
