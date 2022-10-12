@@ -153,8 +153,7 @@ export let variantPlugins = {
     for (let [name, fn] of Object.entries(variants)) {
       matchVariant(
         name,
-        (ctx = {}) => {
-          let { modifier, value = '' } = ctx
+        (value = '', modifier) => {
           if (modifier) {
             log.warn(`modifier-${name}-experimental`, [
               `The ${name} variant modifier feature in Tailwind CSS is currently in preview.`,
@@ -232,7 +231,7 @@ export let variantPlugins = {
   supportsVariants: ({ matchVariant, theme }) => {
     matchVariant(
       'supports',
-      ({ value = '' }) => {
+      (value = '') => {
         let check = normalize(value)
         let isRaw = /^\w*\s*\(/.test(check)
 
