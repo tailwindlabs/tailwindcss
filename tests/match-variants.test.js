@@ -10,7 +10,7 @@ test('partial arbitrary variants', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('potato', ({ value: flavor }) => `.potato-${flavor} &`)
+        matchVariant('potato', (flavor) => `.potato-${flavor} &`)
       },
     ],
   }
@@ -43,7 +43,7 @@ test('partial arbitrary variants with at-rules', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('potato', ({ value: flavor }) => `@media (potato: ${flavor})`)
+        matchVariant('potato', (flavor) => `@media (potato: ${flavor})`)
       },
     ],
   }
@@ -79,7 +79,7 @@ test('partial arbitrary variants with at-rules and placeholder', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('potato', ({ value: flavor }) => `@media (potato: ${flavor}) { &:potato }`)
+        matchVariant('potato', (flavor) => `@media (potato: ${flavor}) { &:potato }`)
       },
     ],
   }
@@ -115,7 +115,7 @@ test('partial arbitrary variants with default values', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('tooltip', ({ value: side }) => `&${side}`, {
+        matchVariant('tooltip', (side) => `&${side}`, {
           values: {
             bottom: '[data-location="bottom"]',
             top: '[data-location="top"]',
@@ -154,7 +154,7 @@ test('matched variant values maintain the sort order they are registered in', ()
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('alphabet', ({ value: side }) => `&${side}`, {
+        matchVariant('alphabet', (side) => `&${side}`, {
           values: {
             a: '[data-value="a"]',
             b: '[data-value="b"]',
@@ -201,7 +201,7 @@ test('matchVariant can return an array of format strings from the function', () 
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('test', ({ value: selector }) =>
+        matchVariant('test', (selector) =>
           selector.split(',').map((selector) => `&.${selector} > *`)
         )
       },
@@ -243,7 +243,7 @@ it('should be possible to sort variants', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
+        matchVariant('min', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
@@ -287,7 +287,7 @@ it('should be possible to compare arbitrary variants and hardcoded variants', ()
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
+        matchVariant('min', (value) => `@media (min-width: ${value})`, {
           values: {
             example: '600px',
           },
@@ -347,13 +347,13 @@ it('should be possible to sort stacked arbitrary variants correctly', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
+        matchVariant('min', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
         })
 
-        matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
+        matchVariant('max', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             return parseInt(z.value) - parseInt(a.value)
           },
@@ -412,13 +412,13 @@ it('should maintain sort from other variants, if sort functions of arbitrary var
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
+        matchVariant('min', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
         })
 
-        matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
+        matchVariant('max', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             return parseInt(z.value) - parseInt(a.value)
           },
@@ -464,12 +464,12 @@ it('should sort arbitrary variants left to right (1)', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
+        matchVariant('min', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
         })
-        matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
+        matchVariant('max', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             return parseInt(z.value) - parseInt(a.value)
           },
@@ -532,12 +532,12 @@ it('should sort arbitrary variants left to right (2)', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
+        matchVariant('min', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
         })
-        matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
+        matchVariant('max', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             return parseInt(z.value) - parseInt(a.value)
           },
@@ -598,7 +598,7 @@ it('should guarantee that we are not passing values from other variants to the w
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
+        matchVariant('min', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             let lookup = ['100px', '200px']
             if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
@@ -607,7 +607,7 @@ it('should guarantee that we are not passing values from other variants to the w
             return lookup.indexOf(a.value) - lookup.indexOf(z.value)
           },
         })
-        matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
+        matchVariant('max', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             let lookup = ['300px', '400px']
             if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {

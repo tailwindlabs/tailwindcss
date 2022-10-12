@@ -296,18 +296,14 @@ export interface PluginAPI {
   addBase(base: CSSRuleObject | CSSRuleObject[]): void
   // for registering custom variants
   addVariant(name: string, definition: string | string[] | (() => string) | (() => string)[]): void
-  matchVariant(
+  matchVariant<T = string>(
     name: string,
-    cb: (options: { value: string; modifier: string | null }) => string | string[]
-  ): void
-  matchVariant<Values extends {}>(
-    name: string,
-    cb: (options: { value: string; modifier: string | null }) => string | string[],
-    options: {
-      values: Values
-      sort(
-        a: { value: keyof Values | string; modifier: string | null },
-        b: { value: keyof Values | string; modifier: string | null }
+    cb: (value: T | string, modifier: string | null) => string | string[],
+    options?: {
+      values?: KeyValuePair<string, T>,
+      sort?(
+        a: { value: T | string; modifier: string | null },
+        b: { value: T | string; modifier: string | null }
       ): number
     }
   ): void
