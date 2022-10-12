@@ -660,7 +660,6 @@ function resolvePlugins(context, root) {
     variantPlugins['pseudoClassVariants'],
   ]
   let afterVariants = [
-    variantPlugins['containerQueryVariants'],
     variantPlugins['supportsVariants'],
     variantPlugins['directionVariants'],
     variantPlugins['reducedMotionVariants'],
