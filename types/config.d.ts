@@ -298,9 +298,9 @@ export interface PluginAPI {
   addVariant(name: string, definition: string | string[] | (() => string) | (() => string)[]): void
   matchVariant<T = string>(
     name: string,
-    cb: (value: T | string, modifier: string | null) => string | string[],
+    cb: (value: T | string, extra: { modifier: string | null }) => string | string[],
     options?: {
-      values?: KeyValuePair<string, T>,
+      values?: KeyValuePair<string, T>
       sort?(
         a: { value: T | string; modifier: string | null },
         b: { value: T | string; modifier: string | null }
