@@ -10,7 +10,8 @@ import bigSign from '../util/bigSign'
  * @typedef {object} VariantOption
  * @property {number} id An unique identifier to identify `matchVariant`
  * @property {function | undefined} sort The sort function
- * @property {string} value The value we want to compare
+ * @property {string|null} value The value we want to compare
+ * @property {string|null} modifier The modifier that was used (if any)
  */
 
 /**
@@ -209,7 +210,16 @@ export class Offsets {
       for (let bOptions of b.options) {
         if (aOptions.id !== bOptions.id) continue
         if (!aOptions.sort || !bOptions.sort) continue
-        let result = aOptions.sort(aOptions.value, bOptions.value)
+        let result = aOptions.sort(
+          {
+            value: aOptions.value,
+            modifier: aOptions.modifier,
+          },
+          {
+            value: bOptions.value,
+            modifier: bOptions.modifier,
+          }
+        )
         if (result !== 0) return result
       }
     }

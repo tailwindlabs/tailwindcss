@@ -128,7 +128,8 @@ function applyVariant(variant, matches, context) {
     return matches
   }
 
-  let args = {}
+  /** @type {{modifier: string | null, value: string | null}} */
+  let args = { modifier: null, value: null }
 
   // Retrieve "modifier"
   {

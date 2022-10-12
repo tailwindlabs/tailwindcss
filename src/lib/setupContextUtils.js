@@ -520,10 +520,11 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
     },
     matchVariant(variant, variantFn, options) {
       let id = ++variantIdentifier // A unique identifier that "groups" these variables together.
+      let isSpecial = variant === '@'
 
       for (let [key, value] of Object.entries(options?.values ?? {})) {
         api.addVariant(
-          `${variant}-${key}`,
+          isSpecial ? `${variant}${key}` : `${variant}-${key}`,
           Object.assign(({ args, container }) => variantFn({ ...args, container, value }), {
             [MATCH_VARIANT]: true,
           }),

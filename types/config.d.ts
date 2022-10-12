@@ -296,7 +296,21 @@ export interface PluginAPI {
   addBase(base: CSSRuleObject | CSSRuleObject[]): void
   // for registering custom variants
   addVariant(name: string, definition: string | string[] | (() => string) | (() => string)[]): void
-  matchVariant(name: string, cb: (options: { value: string }) => string | string[]): void
+  matchVariant(
+    name: string,
+    cb: (options: { value: string; modifier: string | null }) => string | string[]
+  ): void
+  matchVariant<Values extends {}>(
+    name: string,
+    cb: (options: { value: string; modifier: string | null }) => string | string[],
+    options: {
+      values: Values
+      sort(
+        a: { value: keyof Values | string; modifier: string | null },
+        b: { value: keyof Values | string; modifier: string | null }
+      ): number
+    }
+  ): void
   // for looking up values in the user’s theme configuration
   theme: <TDefaultValue = Config['theme']>(
     path?: string,
