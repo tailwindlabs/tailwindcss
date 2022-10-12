@@ -18,7 +18,7 @@ import { toPath } from '../util/toPath'
 import log from '../util/log'
 import negateValue from '../util/negateValue'
 import isValidArbitraryValue from '../util/isValidArbitraryValue'
-import { generateRules } from './generateRules'
+import { generateRules, getClassNameFromSelector } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
 import { Offsets } from './offsets.js'
 import { flagEnabled } from '../featureFlags.js'
@@ -972,16 +972,36 @@ function registerPlugins(plugins, context) {
         selectors({ modifier, value } = {}) {
           let candidate = '__TAILWIND_PLACEHOLDER__'
 
+          let rule = postcss.rule({ selector: `.${candidate}` })
+          let container = postcss.root({ nodes: [rule.clone()] })
+
           let fns = (context.variantMap.get(name) ?? []).flatMap(([_, fn]) => fn)
           let formatStrings = []
           for (let fn of fns) {
-            let container = postcss.rule({ selector: `.${candidate}` })
             let localFormatStrings = []
 
             let api = {
               args: { modifier, value: options.values?.[value] ?? value },
               separator: context.tailwindConfig.separator,
-              modifySelectors() {},
+              modifySelectors(modifierFunction) {
+                // Run the modifierFunction over each rule
+                container.each((rule) => {
+                  if (rule.type !== 'rule') {
+                    return
+                  }
+
+                  rule.selectors = rule.selectors.map((selector) => {
+                    return modifierFunction({
+                      get className() {
+                        return getClassNameFromSelector(selector)
+                      },
+                      selector,
+                    })
+                  })
+                })
+
+                return container
+              },
               format(str) {
                 localFormatStrings.push(str)
               },
@@ -1005,7 +1025,43 @@ function registerPlugins(plugins, context) {
             }
           }
 
-          return formatStrings.map((formatString) =>
+          // Reverse engineer the result of the `container`
+          let manualFormatStrings = []
+
+          // Figure out all selectors
+          container.walkRules((rule) => {
+            let modified = rule.selector
+
+            // Rebuild the base selector, this is what plugin authors would do
+            // as well. E.g.: `${variant}${separator}${className}`.
+            // However, plugin authors probably also prepend or append certain
+            // classes, pseudos, ids, ...
+            let rebuiltBase = selectorParser((selectors) => {
+              selectors.walkClasses((classNode) => {
+                classNode.value = `${name}${context.tailwindConfig.separator}${classNode.value}`
+              })
+            }).processSync(modified)
+
+            // Now that we know the original selector, the new selector, and
+            // the rebuild part in between, we can replace the part that plugin
+            // authors need to rebuild with `&`, and eventually store it in the
+            // collectedFormats. Similar to what `format('...')` would do.
+            //
+            // E.g.:
+            //                   variant: foo
+            //                  selector: .markdown > p
+            //      modified (by plugin): .foo .foo\\:markdown > p
+            //    rebuiltBase (internal): .foo\\:markdown > p
+            //                    format: .foo &
+            manualFormatStrings.push(modified.replace(rebuiltBase, '&').replace(candidate, '&'))
+          })
+
+          // Figure out all atrules
+          container.walkAtRules((atrule) => {
+            manualFormatStrings.push(`@${atrule.name} (${atrule.params}) { & }`)
+          })
+
+          let result = formatStrings.map((formatString) =>
             finalizeSelector(formatVariantSelector('&', ...formatString), {
               selector: `.${candidate}`,
               candidate,
@@ -1016,6 +1072,13 @@ function registerPlugins(plugins, context) {
               .replace('{ & }', '')
               .trim()
           )
+
+          if (manualFormatStrings.length > 0) {
+            let combinedSelectorString = formatVariantSelector('&', ...manualFormatStrings)
+            if (combinedSelectorString !== '.&') result.push(combinedSelectorString)
+          }
+
+          return result
         },
       })
     }

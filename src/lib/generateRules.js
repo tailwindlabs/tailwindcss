@@ -18,7 +18,7 @@ let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
 })
 
-function getClassNameFromSelector(selector) {
+export function getClassNameFromSelector(selector) {
   return classNameParser.transformSync(selector)
 }
 

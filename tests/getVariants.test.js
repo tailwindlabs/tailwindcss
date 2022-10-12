@@ -1,3 +1,5 @@
+import postcss from 'postcss'
+import selectorParser from 'postcss-selector-parser'
 import resolveConfig from '../src/public/resolve-config'
 import { createContext } from '../src/lib/setupContextUtils'
 
@@ -102,4 +104,37 @@ it('should provide selectors for custom plugins that do a combination of paralle
     '@supports (foo: bar) { @media (width <= 400px) { &:hover } }',
     '.bar\\/baz &:focus',
   ])
+})
+
+it('should work for plugins that still use the modifySelectors API', () => {
+  let config = {
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('foo', ({ modifySelectors, container }) => {
+          // Manually mutating the selector
+          modifySelectors(({ selector }) => {
+            return selectorParser((selectors) => {
+              selectors.walkClasses((classNode) => {
+                classNode.value = `foo:${classNode.value}`
+                classNode.parent.insertBefore(classNode, selectorParser().astSync(`.foo `))
+              })
+            }).processSync(selector)
+          })
+
+          // Manually wrap in supports query
+          let wrapper = postcss.atRule({ name: 'supports', params: 'display: grid' })
+          let nodes = container.nodes
+          container.removeAll()
+          wrapper.append(nodes)
+          container.append(wrapper)
+        })
+      },
+    ],
+  }
+  let context = createContext(resolveConfig(config))
+
+  let variants = context.getVariants()
+
+  let variant = variants.find((v) => v.name === 'foo')
+  expect(variant.selectors({})).toEqual(['@supports (display: grid) { .foo .foo\\:& }'])
 })
