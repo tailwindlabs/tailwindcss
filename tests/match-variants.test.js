@@ -245,7 +245,7 @@ it('should be possible to sort variants', () => {
       ({ matchVariant }) => {
         matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
           sort(a, z) {
-            return parseInt(a) - parseInt(z)
+            return parseInt(a.value) - parseInt(z.value)
           },
         })
       },
@@ -292,7 +292,7 @@ it('should be possible to compare arbitrary variants and hardcoded variants', ()
             example: '600px',
           },
           sort(a, z) {
-            return parseInt(a) - parseInt(z)
+            return parseInt(a.value) - parseInt(z.value)
           },
         })
       },
@@ -349,13 +349,13 @@ it('should be possible to sort stacked arbitrary variants correctly', () => {
       ({ matchVariant }) => {
         matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
           sort(a, z) {
-            return parseInt(a) - parseInt(z)
+            return parseInt(a.value) - parseInt(z.value)
           },
         })
 
         matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
           sort(a, z) {
-            return parseInt(z) - parseInt(a)
+            return parseInt(z.value) - parseInt(a.value)
           },
         })
       },
@@ -414,13 +414,13 @@ it('should maintain sort from other variants, if sort functions of arbitrary var
       ({ matchVariant }) => {
         matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
           sort(a, z) {
-            return parseInt(a) - parseInt(z)
+            return parseInt(a.value) - parseInt(z.value)
           },
         })
 
         matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
           sort(a, z) {
-            return parseInt(z) - parseInt(a)
+            return parseInt(z.value) - parseInt(a.value)
           },
         })
       },
@@ -466,12 +466,12 @@ it('should sort arbitrary variants left to right (1)', () => {
       ({ matchVariant }) => {
         matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
           sort(a, z) {
-            return parseInt(a) - parseInt(z)
+            return parseInt(a.value) - parseInt(z.value)
           },
         })
         matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
           sort(a, z) {
-            return parseInt(z) - parseInt(a)
+            return parseInt(z.value) - parseInt(a.value)
           },
         })
       },
@@ -534,12 +534,12 @@ it('should sort arbitrary variants left to right (2)', () => {
       ({ matchVariant }) => {
         matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
           sort(a, z) {
-            return parseInt(a) - parseInt(z)
+            return parseInt(a.value) - parseInt(z.value)
           },
         })
         matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
           sort(a, z) {
-            return parseInt(z) - parseInt(a)
+            return parseInt(z.value) - parseInt(a.value)
           },
         })
       },
@@ -601,19 +601,19 @@ it('should guarantee that we are not passing values from other variants to the w
         matchVariant('min', ({ value }) => `@media (min-width: ${value})`, {
           sort(a, z) {
             let lookup = ['100px', '200px']
-            if (lookup.indexOf(a) === -1 || lookup.indexOf(z) === -1) {
+            if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
               throw new Error('We are seeing values that should not be there!')
             }
-            return lookup.indexOf(a) - lookup.indexOf(z)
+            return lookup.indexOf(a.value) - lookup.indexOf(z.value)
           },
         })
         matchVariant('max', ({ value }) => `@media (max-width: ${value})`, {
           sort(a, z) {
             let lookup = ['300px', '400px']
-            if (lookup.indexOf(a) === -1 || lookup.indexOf(z) === -1) {
+            if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
               throw new Error('We are seeing values that should not be there!')
             }
-            return lookup.indexOf(z) - lookup.indexOf(a)
+            return lookup.indexOf(z.value) - lookup.indexOf(a.value)
           },
         })
       },

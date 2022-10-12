@@ -128,14 +128,15 @@ function applyVariant(variant, matches, context) {
     return matches
   }
 
-  let args = {}
+  /** @type {{modifier: string | null, value: string | null}} */
+  let args = { modifier: null, value: null }
 
-  // Retrieve "label"
+  // Retrieve "modifier"
   {
-    let match = /^[\w-]+\<(.*)\>-/g.exec(variant)
+    let match = /(.*)\/(.*)$/g.exec(variant)
     if (match) {
-      variant = variant.replace(`<${match[1]}>`, '')
-      args.label = match[1]
+      variant = match[1]
+      args.modifier = match[2]
     }
   }
 

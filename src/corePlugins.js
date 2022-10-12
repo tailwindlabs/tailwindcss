@@ -144,20 +144,20 @@ export let variantPlugins = {
     }
 
     let variants = {
-      group: ({ label }) =>
-        label ? [`:merge(.group\\<${label}\\>)`, ' &'] : [`:merge(.group)`, ' &'],
-      peer: ({ label }) =>
-        label ? [`:merge(.peer\\<${label}\\>)`, ' ~ &'] : [`:merge(.peer)`, ' ~ &'],
+      group: ({ modifier }) =>
+        modifier ? [`:merge(.group\\/${modifier})`, ' &'] : [`:merge(.group)`, ' &'],
+      peer: ({ modifier }) =>
+        modifier ? [`:merge(.peer\\/${modifier})`, ' ~ &'] : [`:merge(.peer)`, ' ~ &'],
     }
 
     for (let [name, fn] of Object.entries(variants)) {
       matchVariant(
         name,
         (ctx = {}) => {
-          let { label, value = '' } = ctx
-          if (label) {
-            log.warn(`labelled-${name}-experimental`, [
-              `The labelled ${name} feature in Tailwind CSS is currently in preview.`,
+          let { modifier, value = '' } = ctx
+          if (modifier) {
+            log.warn(`modifier-${name}-experimental`, [
+              `The ${name} variant modifier feature in Tailwind CSS is currently in preview.`,
               'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
             ])
           }
@@ -165,7 +165,7 @@ export let variantPlugins = {
           let result = normalize(typeof value === 'function' ? value(ctx) : value)
           if (!result.includes('&')) result = '&' + result
 
-          let [a, b] = fn({ label })
+          let [a, b] = fn({ modifier })
           return result.replace(/&(\S+)?/g, (_, pseudo = '') => a + pseudo + b)
         },
         { values: Object.fromEntries(pseudoVariants) }
