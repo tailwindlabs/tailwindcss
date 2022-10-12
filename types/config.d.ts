@@ -323,7 +323,10 @@ export type PluginCreator = (api: PluginAPI) => void
 export type PluginsConfig = (
   | PluginCreator
   | { handler: PluginCreator; config?: Partial<Config> }
-  | { (options: any): { handler: PluginCreator; config?: Partial<Config> }; __isOptionsFunction: true }
+  | {
+      (options: any): { handler: PluginCreator; config?: Partial<Config> }
+      __isOptionsFunction: true
+    }
 )[]
 
 // Top level config related
