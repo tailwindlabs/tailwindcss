@@ -229,9 +229,10 @@ export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
   for (const { type } of types ?? []) {
     // TODO: This feels sus but it's required for certain lookup-based stuff to work as expected
     // And for the color plugins otherwise we get output we shouldn't for unknown opacity utilities
-
     // Basically asValue and asLookupValue need special treatment
-    if ((type === 'any' || type === 'lookup') && utilityModifier) {
+    let canUseUtilityModifier = type === 'any' || type === 'lookup'
+
+    if (utilityModifier && canUseUtilityModifier) {
       modifier = rawModifier
     }
 
@@ -241,8 +242,13 @@ export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
       tailwindConfig,
     })
 
-    if (result !== undefined) {
-      yield [result, type]
+    if (result === undefined) {
+      continue
     }
+
+    yield [
+      result,
+      type,
+    ]
   }
 }
