@@ -273,6 +273,7 @@ export interface PluginAPI {
       respectImportant: boolean
       type: ValueType | ValueType[]
       values: KeyValuePair<string, T>
+      modifiers: false | true
       supportsNegativeValues: boolean
     }>
   ): void
@@ -285,13 +286,17 @@ export interface PluginAPI {
     }>
   ): void
   // for registering new dynamic component styles
-  matchComponents<T>(
-    components: KeyValuePair<string, (value: T) => CSSRuleObject>,
+  matchComponents<T = string>(
+    components: KeyValuePair<
+      string,
+      (value: T | string, extra: { modifier: string | null }) => CSSRuleObject
+    >,
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
       type: ValueType | ValueType[]
       values: KeyValuePair<string, T>
+      modifiers: false | true
       supportsNegativeValues: boolean
     }>
   ): void
