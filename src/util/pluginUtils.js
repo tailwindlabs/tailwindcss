@@ -116,7 +116,7 @@ export function parseColorFormat(value) {
 }
 
 export function asColor(
-  modifier,
+  _,
   options = {},
   { tailwindConfig = {}, utilityModifier, rawModifier } = {}
 ) {
@@ -230,7 +230,7 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
  * @returns {Iterator<[value: string, type: string, modifier: string | null]>}
  */
 export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
-  let canUseUtilityModifier = options.modifiers === true // || typeof options.modifiers === 'object'
+  let canUseUtilityModifier = options.modifiers === true
 
   let [modifier, utilityModifier] = canUseUtilityModifier
     ? splitUtilityModifier(rawModifier)

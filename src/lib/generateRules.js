@@ -65,10 +65,6 @@ function* candidatePermutations(candidate) {
 
     lastIndex = dashIdx - 1
 
-    if (candidate === 'test/[foo]' || candidate === 'test-1/[foo]') {
-      console.log({ prefix, modifier })
-    }
-
     // TODO: This feels a bit hacky
     if (prefix === '' || modifier === '/') {
       continue
