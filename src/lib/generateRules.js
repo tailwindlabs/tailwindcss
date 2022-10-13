@@ -153,6 +153,10 @@ function applyVariant(variant, matches, context) {
     if (match) {
       variant = match[1]
       args.modifier = match[2]
+
+      if (!flagEnabled(context.tailwindConfig, 'generalizedModifiers')) {
+        return []
+      }
     }
   }
 
