@@ -2,6 +2,10 @@ import { run, html, css } from './util/run'
 
 test('match utilities with modifiers', async () => {
   let config = {
+    experimental: {
+      generalizedModifiers: true,
+    },
+
     content: [
       {
         raw: html`<div class="test test/foo test-1/foo test-2/foo test/[foo] test-1/[foo]"></div> `,
@@ -62,6 +66,9 @@ test('match utilities with modifiers', async () => {
 
 test('match utilities with modifiers in the config', async () => {
   let config = {
+    experimental: {
+      generalizedModifiers: true,
+    },
     content: [
       {
         raw: html`<div class="test test/foo test-1/foo test/[bar] test-1/[bar]"></div> `,
@@ -119,6 +126,9 @@ test('match utilities with modifiers in the config', async () => {
 
 test('match utilities can omit utilities by returning null', async () => {
   let config = {
+    experimental: {
+      generalizedModifiers: true,
+    },
     content: [
       {
         raw: html`<div class="test test/good test/bad"></div> `,
@@ -130,9 +140,12 @@ test('match utilities can omit utilities by returning null', async () => {
       ({ matchUtilities, theme }) => {
         matchUtilities(
           {
-            test: (value, { modifier }) => (modifier === 'bad' ? null : {
-              color: `${value}_${modifier}`,
-            }),
+            test: (value, { modifier }) =>
+              modifier === 'bad'
+                ? null
+                : {
+                    color: `${value}_${modifier}`,
+                  },
           },
           {
             values: {

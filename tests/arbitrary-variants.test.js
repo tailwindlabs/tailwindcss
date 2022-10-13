@@ -107,7 +107,7 @@ test('variants without & or an at-rule are ignored', () => {
 
 test('arbitrary variants are sorted after other variants', () => {
   let config = {
-    content: [{ raw: html`<div class="underline lg:underline [&>*]:underline"></div>` }],
+    content: [{ raw: html`<div class="[&>*]:underline underline lg:underline"></div>` }],
     corePlugins: { preflight: false },
   }
 
@@ -709,6 +709,9 @@ it('should support supports', () => {
 
 it('should be possible to use modifiers and arbitrary groups', () => {
   let config = {
+    experimental: {
+      generalizedModifiers: true,
+    },
     content: [
       {
         raw: html`
@@ -810,6 +813,9 @@ it('should be possible to use modifiers and arbitrary groups', () => {
 
 it('should be possible to use modifiers and arbitrary peers', () => {
   let config = {
+    experimental: {
+      generalizedModifiers: true,
+    },
     content: [
       {
         raw: html`

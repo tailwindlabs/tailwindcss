@@ -14,6 +14,7 @@ let featureFlags = {
   ],
   experimental: [
     'optimizeUniversalDefaults',
+    'generalizedModifiers',
     // 'variantGrouping',
   ],
 }

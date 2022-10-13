@@ -21,6 +21,7 @@ import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { generateRules } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
 import { Offsets } from './offsets.js'
+import { flagEnabled } from '../featureFlags.js'
 
 let MATCH_VARIANT = Symbol()
 
@@ -410,11 +411,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
               }
 
               return utilityModifier
-            }
+            },
           }
 
+          let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
           let ruleSets = []
-            .concat(rule(value, extras))
+            .concat(modifiersEnabled ? rule(value, extras) : rule(value))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
@@ -488,11 +491,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
               }
 
               return utilityModifier
-            }
+            },
           }
 
+          let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
           let ruleSets = []
-            .concat(rule(value, extras))
+            .concat(modifiersEnabled ? rule(value, extras) : rule(value))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
@@ -558,11 +563,17 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let id = ++variantIdentifier // A unique identifier that "groups" these variables together.
       let isSpecial = variant === '@'
 
+      let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
       for (let [key, value] of Object.entries(options?.values ?? {})) {
         api.addVariant(
           isSpecial ? `${variant}${key}` : `${variant}-${key}`,
           Object.assign(
-            ({ args, container }) => variantFn(value, { modifier: args.modifier, container }),
+            ({ args, container }) =>
+              variantFn(
+                value,
+                modifiersEnabled ? { modifier: args.modifier, container } : { container }
+              ),
             {
               [MATCH_VARIANT]: true,
             }
@@ -574,7 +585,11 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       api.addVariant(
         variant,
         Object.assign(
-          ({ args, container }) => variantFn(args.value, { modifier: args.modifier, container }),
+          ({ args, container }) =>
+            variantFn(
+              args.value,
+              modifiersEnabled ? { modifier: args.modifier, container } : { container }
+            ),
           {
             [MATCH_VARIANT]: true,
           }

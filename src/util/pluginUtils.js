@@ -19,6 +19,7 @@ import {
 } from './dataTypes'
 import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
+import { flagEnabled } from '../featureFlags.js'
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
@@ -230,9 +231,12 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
  * @returns {Iterator<[value: string, type: string, modifier: string | null]>}
  */
 export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
-  let canUseUtilityModifier = options.modifiers != null && (
-    options.modifiers === 'any' || typeof options.modifiers === 'object'
-  )
+  let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
+  let canUseUtilityModifier =
+    modifiersEnabled &&
+    options.modifiers != null &&
+    (options.modifiers === 'any' || typeof options.modifiers === 'object')
 
   let [modifier, utilityModifier] = canUseUtilityModifier
     ? splitUtilityModifier(rawModifier)
