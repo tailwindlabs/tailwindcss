@@ -116,3 +116,49 @@ test('match utilities with modifiers in the config', async () => {
     }
   `)
 })
+
+test('match utilities can omit utilities by returning null', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="test test/good test/bad"></div> `,
+      },
+    ],
+    corePlugins: { preflight: false },
+
+    plugins: [
+      ({ matchUtilities, theme }) => {
+        matchUtilities(
+          {
+            test: (value, { modifier }) => (modifier === 'bad' ? null : {
+              color: `${value}_${modifier}`,
+            }),
+          },
+          {
+            values: {
+              DEFAULT: 'default',
+              bar: 'bar',
+              '1': 'one',
+            },
+            modifiers: 'any',
+          }
+        )
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .test {
+      color: default_null;
+    }
+    .test\/good {
+      color: default_good;
+    }
+  `)
+})
