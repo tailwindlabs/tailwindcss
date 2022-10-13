@@ -371,7 +371,12 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         classList.add([prefixedIdentifier, options])
 
         function wrapped(modifier, { isOnlyPlugin }) {
-          let [value, coercedType, utilityModifier] = coerceValue(options.types, modifier, options, tailwindConfig)
+          let [value, coercedType, utilityModifier] = coerceValue(
+            options.types,
+            modifier,
+            options,
+            tailwindConfig
+          )
 
           if (value === undefined) {
             return []
@@ -431,7 +436,12 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         classList.add([prefixedIdentifier, options])
 
         function wrapped(modifier, { isOnlyPlugin }) {
-          let [value, coercedType, utilityModifier] = coerceValue(options.types, modifier, options, tailwindConfig)
+          let [value, coercedType, utilityModifier] = coerceValue(
+            options.types,
+            modifier,
+            options,
+            tailwindConfig
+          )
 
           if (value === undefined) {
             return []

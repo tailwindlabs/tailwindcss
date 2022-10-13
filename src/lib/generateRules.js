@@ -572,12 +572,14 @@ function* resolveMatches(candidate, context, original = candidate) {
       }
 
       if (matchesPerPlugin.length > 0) {
-        let matchingTypes = Array.from(getMatchingTypes(
-          sort.options?.types ?? [],
-          modifier,
-          sort.options ?? {},
-          context.tailwindConfig
-        )).map(([_, type]) => type)
+        let matchingTypes = Array.from(
+          getMatchingTypes(
+            sort.options?.types ?? [],
+            modifier,
+            sort.options ?? {},
+            context.tailwindConfig
+          )
+        ).map(([_, type]) => type)
 
         if (matchingTypes.length > 0) {
           typesByMatches.set(matchesPerPlugin, matchingTypes)

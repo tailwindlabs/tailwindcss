@@ -115,12 +115,18 @@ export function parseColorFormat(value) {
   return value
 }
 
-export function asColor(modifier, options = {}, { tailwindConfig = {}, utilityModifier, rawModifier } = {}) {
+export function asColor(
+  modifier,
+  options = {},
+  { tailwindConfig = {}, utilityModifier, rawModifier } = {}
+) {
   if (options.values?.[rawModifier] !== undefined) {
     return parseColorFormat(options.values?.[rawModifier])
   }
 
-  let [color, alpha] = [modifier, utilityModifier]
+  // TODO: Hoist this up to getMatchingTypes or something
+  // We do this here because we need the alpha value (if any)
+  let [color, alpha] = splitUtilityModifier(rawModifier)
 
   if (alpha !== undefined) {
     let normalizedColor =
@@ -224,22 +230,26 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
  * @returns {Iterator<[value: string, type: string, modifier: string | null]>}
  */
 export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
-  let [modifier, utilityModifier] = splitUtilityModifier(rawModifier)
+  let canUseUtilityModifier = options.modifiers === true // || typeof options.modifiers === 'object'
+
+  let [modifier, utilityModifier] = canUseUtilityModifier
+    ? splitUtilityModifier(rawModifier)
+    : [rawModifier, undefined]
 
   if (utilityModifier !== undefined && modifier === '') {
     modifier = 'DEFAULT'
   }
 
-  for (const { type } of types ?? []) {
-    // TODO: This feels sus but it's required for certain lookup-based stuff to work as expected
-    // And for the color plugins otherwise we get output we shouldn't for unknown opacity utilities
-    // Basically asValue and asLookupValue need special treatment
-    let canUseUtilityModifier = type !== 'any' && type !== 'lookup'
-
-    if (utilityModifier && !canUseUtilityModifier) {
-      modifier = rawModifier
+  // Check the full value first
+  // TODO: Move to asValue… somehow
+  if (utilityModifier !== undefined) {
+    let result = asValue(rawModifier, options, { rawModifier, utilityModifier, tailwindConfig })
+    if (result !== undefined) {
+      yield [result, 'any', null]
     }
+  }
 
+  for (const { type } of types ?? []) {
     let result = typeMap[type](modifier, options, {
       rawModifier,
       utilityModifier,
@@ -250,12 +260,6 @@ export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
       continue
     }
 
-    yield [
-      result,
-      type,
-      canUseUtilityModifier
-        ? (utilityModifier ?? null)
-        : null
-    ]
+    yield [result, type, utilityModifier ?? null]
   }
 }

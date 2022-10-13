@@ -24,6 +24,7 @@ test('match utilities with modifiers', async () => {
               '2': 'two',
               '1/foo': 'onefoo',
             },
+            modifiers: true,
           }
         )
       },
