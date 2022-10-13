@@ -235,7 +235,7 @@ it('should be possible to sort variants', () => {
       {
         raw: html`
           <div>
-            <div class="min-[500px]:underline min-[700px]:italic"></div>
+            <div class="testmin-[500px]:underline testmin-[700px]:italic"></div>
           </div>
         `,
       },
@@ -243,7 +243,7 @@ it('should be possible to sort variants', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', (value) => `@media (min-width: ${value})`, {
+        matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
@@ -259,13 +259,13 @@ it('should be possible to sort variants', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 500px) {
-        .min-\[500px\]\:underline {
+        .testmin-\[500px\]\:underline {
           text-decoration-line: underline;
         }
       }
 
       @media (min-width: 700px) {
-        .min-\[700px\]\:italic {
+        .testmin-\[700px\]\:italic {
           font-style: italic;
         }
       }
@@ -279,7 +279,7 @@ it('should be possible to compare arbitrary variants and hardcoded variants', ()
       {
         raw: html`
           <div>
-            <div class="min-[700px]:italic min-example:italic min-[500px]:italic"></div>
+            <div class="testmin-[700px]:italic testmin-example:italic testmin-[500px]:italic"></div>
           </div>
         `,
       },
@@ -287,7 +287,7 @@ it('should be possible to compare arbitrary variants and hardcoded variants', ()
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', (value) => `@media (min-width: ${value})`, {
+        matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
           values: {
             example: '600px',
           },
@@ -306,19 +306,19 @@ it('should be possible to compare arbitrary variants and hardcoded variants', ()
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 500px) {
-        .min-\[500px\]\:italic {
+        .testmin-\[500px\]\:italic {
           font-style: italic;
         }
       }
 
       @media (min-width: 600px) {
-        .min-example\:italic {
+        .testmin-example\:italic {
           font-style: italic;
         }
       }
 
       @media (min-width: 700px) {
-        .min-\[700px\]\:italic {
+        .testmin-\[700px\]\:italic {
           font-style: italic;
         }
       }
@@ -333,13 +333,13 @@ it('should be possible to sort stacked arbitrary variants correctly', () => {
         raw: html`
           <div>
             <!-- 4 -->
-            <div class="min-[150px]:max-[400px]:underline"></div>
+            <div class="testmin-[150px]:testmax-[400px]:underline"></div>
             <!-- 2 -->
-            <div class="min-[100px]:max-[350px]:underline"></div>
+            <div class="testmin-[100px]:testmax-[350px]:underline"></div>
             <!-- 1 -->
-            <div class="min-[100px]:max-[300px]:underline"></div>
+            <div class="testmin-[100px]:testmax-[300px]:underline"></div>
             <!-- 3 -->
-            <div class="min-[100px]:max-[400px]:underline"></div>
+            <div class="testmin-[100px]:testmax-[400px]:underline"></div>
           </div>
         `,
       },
@@ -347,13 +347,13 @@ it('should be possible to sort stacked arbitrary variants correctly', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', (value) => `@media (min-width: ${value})`, {
+        matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
         })
 
-        matchVariant('max', (value) => `@media (max-width: ${value})`, {
+        matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             return parseInt(z.value) - parseInt(a.value)
           },
@@ -370,17 +370,17 @@ it('should be possible to sort stacked arbitrary variants correctly', () => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 100px) {
         @media (max-width: 400px) {
-          .min-\[100px\]\:max-\[400px\]\:underline {
+          .testmin-\[100px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
         @media (max-width: 350px) {
-          .min-\[100px\]\:max-\[350px\]\:underline {
+          .testmin-\[100px\]\:testmax-\[350px\]\:underline {
             text-decoration-line: underline;
           }
         }
         @media (max-width: 300px) {
-          .min-\[100px\]\:max-\[300px\]\:underline {
+          .testmin-\[100px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
         }
@@ -388,7 +388,7 @@ it('should be possible to sort stacked arbitrary variants correctly', () => {
 
       @media (min-width: 150px) {
         @media (max-width: 400px) {
-          .min-\[150px\]\:max-\[400px\]\:underline {
+          .testmin-\[150px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
@@ -403,8 +403,8 @@ it('should maintain sort from other variants, if sort functions of arbitrary var
       {
         raw: html`
           <div>
-            <div class="min-[100px]:max-[200px]:focus:underline"></div>
-            <div class="min-[100px]:max-[200px]:hover:underline"></div>
+            <div class="testmin-[100px]:testmax-[200px]:focus:underline"></div>
+            <div class="testmin-[100px]:testmax-[200px]:hover:underline"></div>
           </div>
         `,
       },
@@ -412,13 +412,13 @@ it('should maintain sort from other variants, if sort functions of arbitrary var
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', (value) => `@media (min-width: ${value})`, {
+        matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
         })
 
-        matchVariant('max', (value) => `@media (max-width: ${value})`, {
+        matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             return parseInt(z.value) - parseInt(a.value)
           },
@@ -435,10 +435,10 @@ it('should maintain sort from other variants, if sort functions of arbitrary var
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 100px) {
         @media (max-width: 200px) {
-          .min-\[100px\]\:max-\[200px\]\:hover\:underline:hover {
+          .testmin-\[100px\]\:testmax-\[200px\]\:hover\:underline:hover {
             text-decoration-line: underline;
           }
-          .min-\[100px\]\:max-\[200px\]\:focus\:underline:focus {
+          .testmin-\[100px\]\:testmax-\[200px\]\:focus\:underline:focus {
             text-decoration-line: underline;
           }
         }
@@ -453,10 +453,10 @@ it('should sort arbitrary variants left to right (1)', () => {
       {
         raw: html`
           <div>
-            <div class="min-[200px]:max-[400px]:underline"></div>
-            <div class="min-[200px]:max-[300px]:underline"></div>
-            <div class="min-[100px]:max-[400px]:underline"></div>
-            <div class="min-[100px]:max-[300px]:underline"></div>
+            <div class="testmin-[200px]:testmax-[400px]:underline"></div>
+            <div class="testmin-[200px]:testmax-[300px]:underline"></div>
+            <div class="testmin-[100px]:testmax-[400px]:underline"></div>
+            <div class="testmin-[100px]:testmax-[300px]:underline"></div>
           </div>
         `,
       },
@@ -464,12 +464,12 @@ it('should sort arbitrary variants left to right (1)', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', (value) => `@media (min-width: ${value})`, {
+        matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
         })
-        matchVariant('max', (value) => `@media (max-width: ${value})`, {
+        matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             return parseInt(z.value) - parseInt(a.value)
           },
@@ -486,13 +486,13 @@ it('should sort arbitrary variants left to right (1)', () => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 100px) {
         @media (max-width: 400px) {
-          .min-\[100px\]\:max-\[400px\]\:underline {
+          .testmin-\[100px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
 
         @media (max-width: 300px) {
-          .min-\[100px\]\:max-\[300px\]\:underline {
+          .testmin-\[100px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
         }
@@ -500,13 +500,13 @@ it('should sort arbitrary variants left to right (1)', () => {
 
       @media (min-width: 200px) {
         @media (max-width: 400px) {
-          .min-\[200px\]\:max-\[400px\]\:underline {
+          .testmin-\[200px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
 
         @media (max-width: 300px) {
-          .min-\[200px\]\:max-\[300px\]\:underline {
+          .testmin-\[200px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
         }
@@ -521,10 +521,10 @@ it('should sort arbitrary variants left to right (2)', () => {
       {
         raw: html`
           <div>
-            <div class="max-[400px]:min-[200px]:underline"></div>
-            <div class="max-[300px]:min-[200px]:underline"></div>
-            <div class="max-[400px]:min-[100px]:underline"></div>
-            <div class="max-[300px]:min-[100px]:underline"></div>
+            <div class="testmax-[400px]:testmin-[200px]:underline"></div>
+            <div class="testmax-[300px]:testmin-[200px]:underline"></div>
+            <div class="testmax-[400px]:testmin-[100px]:underline"></div>
+            <div class="testmax-[300px]:testmin-[100px]:underline"></div>
           </div>
         `,
       },
@@ -532,12 +532,12 @@ it('should sort arbitrary variants left to right (2)', () => {
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', (value) => `@media (min-width: ${value})`, {
+        matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             return parseInt(a.value) - parseInt(z.value)
           },
         })
-        matchVariant('max', (value) => `@media (max-width: ${value})`, {
+        matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             return parseInt(z.value) - parseInt(a.value)
           },
@@ -554,12 +554,12 @@ it('should sort arbitrary variants left to right (2)', () => {
     expect(result.css).toMatchFormattedCss(css`
       @media (max-width: 400px) {
         @media (min-width: 100px) {
-          .max-\[400px\]\:min-\[100px\]\:underline {
+          .testmax-\[400px\]\:testmin-\[100px\]\:underline {
             text-decoration-line: underline;
           }
         }
         @media (min-width: 200px) {
-          .max-\[400px\]\:min-\[200px\]\:underline {
+          .testmax-\[400px\]\:testmin-\[200px\]\:underline {
             text-decoration-line: underline;
           }
         }
@@ -567,12 +567,12 @@ it('should sort arbitrary variants left to right (2)', () => {
 
       @media (max-width: 300px) {
         @media (min-width: 100px) {
-          .max-\[300px\]\:min-\[100px\]\:underline {
+          .testmax-\[300px\]\:testmin-\[100px\]\:underline {
             text-decoration-line: underline;
           }
         }
         @media (min-width: 200px) {
-          .max-\[300px\]\:min-\[200px\]\:underline {
+          .testmax-\[300px\]\:testmin-\[200px\]\:underline {
             text-decoration-line: underline;
           }
         }
@@ -587,10 +587,10 @@ it('should guarantee that we are not passing values from other variants to the w
       {
         raw: html`
           <div>
-            <div class="min-[200px]:max-[400px]:underline"></div>
-            <div class="min-[200px]:max-[300px]:underline"></div>
-            <div class="min-[100px]:max-[400px]:underline"></div>
-            <div class="min-[100px]:max-[300px]:underline"></div>
+            <div class="testmin-[200px]:testmax-[400px]:underline"></div>
+            <div class="testmin-[200px]:testmax-[300px]:underline"></div>
+            <div class="testmin-[100px]:testmax-[400px]:underline"></div>
+            <div class="testmin-[100px]:testmax-[300px]:underline"></div>
           </div>
         `,
       },
@@ -598,7 +598,7 @@ it('should guarantee that we are not passing values from other variants to the w
     corePlugins: { preflight: false },
     plugins: [
       ({ matchVariant }) => {
-        matchVariant('min', (value) => `@media (min-width: ${value})`, {
+        matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
           sort(a, z) {
             let lookup = ['100px', '200px']
             if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
@@ -607,7 +607,7 @@ it('should guarantee that we are not passing values from other variants to the w
             return lookup.indexOf(a.value) - lookup.indexOf(z.value)
           },
         })
-        matchVariant('max', (value) => `@media (max-width: ${value})`, {
+        matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
           sort(a, z) {
             let lookup = ['300px', '400px']
             if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
@@ -628,13 +628,13 @@ it('should guarantee that we are not passing values from other variants to the w
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 100px) {
         @media (max-width: 400px) {
-          .min-\[100px\]\:max-\[400px\]\:underline {
+          .testmin-\[100px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
 
         @media (max-width: 300px) {
-          .min-\[100px\]\:max-\[300px\]\:underline {
+          .testmin-\[100px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
         }
@@ -642,13 +642,13 @@ it('should guarantee that we are not passing values from other variants to the w
 
       @media (min-width: 200px) {
         @media (max-width: 400px) {
-          .min-\[200px\]\:max-\[400px\]\:underline {
+          .testmin-\[200px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
 
         @media (max-width: 300px) {
-          .min-\[200px\]\:max-\[300px\]\:underline {
+          .testmin-\[200px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
         }
