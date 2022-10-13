@@ -358,6 +358,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let defaultOptions = {
         respectPrefix: true,
         respectImportant: true,
+        modifiers: false,
       }
 
       options = normalizeOptionTypes({ ...defaultOptions, ...options })
@@ -400,8 +401,20 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             return []
           }
 
+          let extras = {
+            get modifier() {
+              if (!options.modifiers) {
+                log.warn(`modifier-used-without-options-for-${identifier}`, [
+                  'Your plugin must set `modifiers: true` in its options to support modifiers.',
+                ])
+              }
+
+              return utilityModifier
+            }
+          }
+
           let ruleSets = []
-            .concat(rule(value, { modifier: utilityModifier }))
+            .concat(rule(value, extras))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
@@ -423,6 +436,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let defaultOptions = {
         respectPrefix: true,
         respectImportant: false,
+        modifiers: false,
       }
 
       options = normalizeOptionTypes({ ...defaultOptions, ...options })
@@ -465,8 +479,20 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             return []
           }
 
+          let extras = {
+            get modifier() {
+              if (!options.modifiers) {
+                log.warn(`modifier-used-without-options-for-${identifier}`, [
+                  'Your plugin must set `modifiers: true` in its options to support modifiers.',
+                ])
+              }
+
+              return utilityModifier
+            }
+          }
+
           let ruleSets = []
-            .concat(rule(value, { modifier: utilityModifier }))
+            .concat(rule(value, extras))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
