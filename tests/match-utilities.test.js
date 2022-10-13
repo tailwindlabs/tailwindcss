@@ -8,8 +8,9 @@ test('match utilities with modifiers', async () => {
       },
     ],
     corePlugins: { preflight: false },
+
     plugins: [
-      ({ matchUtilities }) => {
+      ({ matchUtilities, theme }) => {
         matchUtilities(
           {
             test: (value, { modifier }) => ({
@@ -24,7 +25,7 @@ test('match utilities with modifiers', async () => {
               '2': 'two',
               '1/foo': 'onefoo',
             },
-            modifiers: true,
+            modifiers: 'any',
           }
         )
       },
@@ -55,6 +56,63 @@ test('match utilities with modifiers', async () => {
     }
     .test-1\/\[foo\] {
       color: one_[foo];
+    }
+  `)
+})
+
+test('match utilities with modifiers in the config', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="test test/foo test-1/foo test/[bar] test-1/[bar]"></div> `,
+      },
+    ],
+    corePlugins: { preflight: false },
+
+    plugins: [
+      ({ matchUtilities, theme }) => {
+        matchUtilities(
+          {
+            test: (value, { modifier }) => ({
+              color: `${value}_${modifier}`,
+            }),
+          },
+          {
+            values: {
+              DEFAULT: 'default',
+              bar: 'bar',
+              '1': 'one',
+            },
+            modifiers: {
+              foo: 'mewtwo',
+            },
+          }
+        )
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .test {
+      color: default_null;
+    }
+    .test\/foo {
+      color: default_mewtwo;
+    }
+    .test-1\/foo {
+      color: one_mewtwo;
+    }
+    .test\/\[bar\] {
+      color: default_bar;
+    }
+    .test-1\/\[bar\] {
+      color: one_bar;
     }
   `)
 })

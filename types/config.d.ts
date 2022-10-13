@@ -263,17 +263,17 @@ export interface PluginAPI {
     }>
   ): void
   // for registering new dynamic utility styles
-  matchUtilities<T = string>(
+  matchUtilities<T = string, U = string>(
     utilities: KeyValuePair<
       string,
-      (value: T | string, extra: { modifier: string | null }) => CSSRuleObject
+      (value: T | string, extra: { modifier: U | string | null }) => CSSRuleObject
     >,
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
       type: ValueType | ValueType[]
       values: KeyValuePair<string, T>
-      modifiers: false | true
+      modifiers: 'any' | KeyValuePair<string, U>
       supportsNegativeValues: boolean
     }>
   ): void
@@ -286,17 +286,17 @@ export interface PluginAPI {
     }>
   ): void
   // for registering new dynamic component styles
-  matchComponents<T = string>(
+  matchComponents<T = string, U = string>(
     components: KeyValuePair<
       string,
-      (value: T | string, extra: { modifier: string | null }) => CSSRuleObject
+      (value: T | string, extra: { modifier: U | string | null }) => CSSRuleObject
     >,
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
       type: ValueType | ValueType[]
       values: KeyValuePair<string, T>
-      modifiers: false | true
+      modifiers: 'any' | KeyValuePair<string, U>
       supportsNegativeValues: boolean
     }>
   ): void
