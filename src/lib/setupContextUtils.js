@@ -21,6 +21,7 @@ import isValidArbitraryValue from '../util/isValidArbitraryValue'
 import { generateRules } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
 import { Offsets } from './offsets.js'
+import { flagEnabled } from '../featureFlags.js'
 
 let MATCH_VARIANT = Symbol()
 
@@ -358,6 +359,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let defaultOptions = {
         respectPrefix: true,
         respectImportant: true,
+        modifiers: false,
       }
 
       options = normalizeOptionTypes({ ...defaultOptions, ...options })
@@ -371,7 +373,12 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         classList.add([prefixedIdentifier, options])
 
         function wrapped(modifier, { isOnlyPlugin }) {
-          let [value, coercedType] = coerceValue(options.types, modifier, options, tailwindConfig)
+          let [value, coercedType, utilityModifier] = coerceValue(
+            options.types,
+            modifier,
+            options,
+            tailwindConfig
+          )
 
           if (value === undefined) {
             return []
@@ -395,8 +402,22 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             return []
           }
 
+          let extras = {
+            get modifier() {
+              if (!options.modifiers) {
+                log.warn(`modifier-used-without-options-for-${identifier}`, [
+                  'Your plugin must set `modifiers: true` in its options to support modifiers.',
+                ])
+              }
+
+              return utilityModifier
+            },
+          }
+
+          let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
           let ruleSets = []
-            .concat(rule(value))
+            .concat(modifiersEnabled ? rule(value, extras) : rule(value))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
@@ -418,6 +439,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let defaultOptions = {
         respectPrefix: true,
         respectImportant: false,
+        modifiers: false,
       }
 
       options = normalizeOptionTypes({ ...defaultOptions, ...options })
@@ -431,7 +453,12 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         classList.add([prefixedIdentifier, options])
 
         function wrapped(modifier, { isOnlyPlugin }) {
-          let [value, coercedType] = coerceValue(options.types, modifier, options, tailwindConfig)
+          let [value, coercedType, utilityModifier] = coerceValue(
+            options.types,
+            modifier,
+            options,
+            tailwindConfig
+          )
 
           if (value === undefined) {
             return []
@@ -455,8 +482,22 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             return []
           }
 
+          let extras = {
+            get modifier() {
+              if (!options.modifiers) {
+                log.warn(`modifier-used-without-options-for-${identifier}`, [
+                  'Your plugin must set `modifiers: true` in its options to support modifiers.',
+                ])
+              }
+
+              return utilityModifier
+            },
+          }
+
+          let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
           let ruleSets = []
-            .concat(rule(value))
+            .concat(modifiersEnabled ? rule(value, extras) : rule(value))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
@@ -522,21 +563,37 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let id = ++variantIdentifier // A unique identifier that "groups" these variables together.
       let isSpecial = variant === '@'
 
+      let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
       for (let [key, value] of Object.entries(options?.values ?? {})) {
         api.addVariant(
           isSpecial ? `${variant}${key}` : `${variant}-${key}`,
-          Object.assign(({ args, container }) => variantFn({ ...args, container, value }), {
-            [MATCH_VARIANT]: true,
-          }),
+          Object.assign(
+            ({ args, container }) =>
+              variantFn(
+                value,
+                modifiersEnabled ? { modifier: args.modifier, container } : { container }
+              ),
+            {
+              [MATCH_VARIANT]: true,
+            }
+          ),
           { ...options, value, id }
         )
       }
 
       api.addVariant(
         variant,
-        Object.assign(({ args, container }) => variantFn({ ...args, container }), {
-          [MATCH_VARIANT]: true,
-        }),
+        Object.assign(
+          ({ args, container }) =>
+            variantFn(
+              args.value,
+              modifiersEnabled ? { modifier: args.modifier, container } : { container }
+            ),
+          {
+            [MATCH_VARIANT]: true,
+          }
+        ),
         { ...options, id }
       )
     },

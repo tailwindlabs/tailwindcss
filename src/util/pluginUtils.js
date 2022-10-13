@@ -19,6 +19,7 @@ import {
 } from './dataTypes'
 import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
+import { flagEnabled } from '../featureFlags.js'
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
@@ -86,11 +87,20 @@ function isArbitraryValue(input) {
   return input.startsWith('[') && input.endsWith(']')
 }
 
-function splitAlpha(modifier) {
+function splitUtilityModifier(modifier) {
   let slashIdx = modifier.lastIndexOf('/')
 
   if (slashIdx === -1 || slashIdx === modifier.length - 1) {
-    return [modifier]
+    return [modifier, undefined]
+  }
+
+  let arbitrary = isArbitraryValue(modifier)
+
+  // The modifier could be of the form `[foo]/[bar]`
+  // We want to handle this case properly
+  // without affecting `[foo/bar]`
+  if (arbitrary && !modifier.includes(']/[')) {
+    return [modifier, undefined]
   }
 
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
@@ -106,12 +116,18 @@ export function parseColorFormat(value) {
   return value
 }
 
-export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
-  if (options.values?.[modifier] !== undefined) {
-    return parseColorFormat(options.values?.[modifier])
+export function asColor(
+  _,
+  options = {},
+  { tailwindConfig = {}, utilityModifier, rawModifier } = {}
+) {
+  if (options.values?.[rawModifier] !== undefined) {
+    return parseColorFormat(options.values?.[rawModifier])
   }
 
-  let [color, alpha] = splitAlpha(modifier)
+  // TODO: Hoist this up to getMatchingTypes or something
+  // We do this here because we need the alpha value (if any)
+  let [color, alpha] = splitUtilityModifier(rawModifier)
 
   if (alpha !== undefined) {
     let normalizedColor =
@@ -134,7 +150,7 @@ export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
     return withAlphaValue(normalizedColor, tailwindConfig.theme.opacity[alpha])
   }
 
-  return asValue(modifier, options, { validate: validateColor })
+  return asValue(rawModifier, options, { rawModifier, utilityModifier, validate: validateColor })
 }
 
 export function asLookupValue(modifier, options = {}) {
@@ -142,8 +158,8 @@ export function asLookupValue(modifier, options = {}) {
 }
 
 function guess(validate) {
-  return (modifier, options) => {
-    return asValue(modifier, options, { validate })
+  return (modifier, options, extras) => {
+    return asValue(modifier, options, { ...extras, validate })
   }
 }
 
@@ -192,15 +208,73 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
     }
 
     if (value.length > 0 && supportedTypes.includes(explicitType)) {
-      return [asValue(`[${value}]`, options), explicitType]
+      return [asValue(`[${value}]`, options), explicitType, null]
     }
   }
 
+  let matches = getMatchingTypes(types, modifier, options, tailwindConfig)
+
   // Find first matching type
-  for (let { type } of types) {
-    let result = typeMap[type](modifier, options, { tailwindConfig })
-    if (result !== undefined) return [result, type]
+  for (let match of matches) {
+    return match
   }
 
   return []
+}
+
+/**
+ *
+ * @param {{type: string}[]} types
+ * @param {string} rawModifier
+ * @param {any} options
+ * @param {any} tailwindConfig
+ * @returns {Iterator<[value: string, type: string, modifier: string | null]>}
+ */
+export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
+  let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
+  let canUseUtilityModifier =
+    modifiersEnabled &&
+    options.modifiers != null &&
+    (options.modifiers === 'any' || typeof options.modifiers === 'object')
+
+  let [modifier, utilityModifier] = canUseUtilityModifier
+    ? splitUtilityModifier(rawModifier)
+    : [rawModifier, undefined]
+
+  if (utilityModifier !== undefined && modifier === '') {
+    modifier = 'DEFAULT'
+  }
+
+  // Check the full value first
+  // TODO: Move to asValue… somehow
+  if (utilityModifier !== undefined) {
+    if (typeof options.modifiers === 'object') {
+      let configValue = options.modifiers?.[utilityModifier] ?? null
+      if (configValue !== null) {
+        utilityModifier = configValue
+      } else if (isArbitraryValue(utilityModifier)) {
+        utilityModifier = utilityModifier.slice(1, -1)
+      }
+    }
+
+    let result = asValue(rawModifier, options, { rawModifier, utilityModifier, tailwindConfig })
+    if (result !== undefined) {
+      yield [result, 'any', null]
+    }
+  }
+
+  for (const { type } of types ?? []) {
+    let result = typeMap[type](modifier, options, {
+      rawModifier,
+      utilityModifier,
+      tailwindConfig,
+    })
+
+    if (result === undefined) {
+      continue
+    }
+
+    yield [result, type, utilityModifier ?? null]
+  }
 }

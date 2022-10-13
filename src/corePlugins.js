@@ -144,28 +144,27 @@ export let variantPlugins = {
     }
 
     let variants = {
-      group: ({ modifier }) =>
+      group: (_, { modifier }) =>
         modifier ? [`:merge(.group\\/${modifier})`, ' &'] : [`:merge(.group)`, ' &'],
-      peer: ({ modifier }) =>
+      peer: (_, { modifier }) =>
         modifier ? [`:merge(.peer\\/${modifier})`, ' ~ &'] : [`:merge(.peer)`, ' ~ &'],
     }
 
     for (let [name, fn] of Object.entries(variants)) {
       matchVariant(
         name,
-        (ctx = {}) => {
-          let { modifier, value = '' } = ctx
-          if (modifier) {
+        (value = '', extra) => {
+          if (extra.modifier) {
             log.warn(`modifier-${name}-experimental`, [
               `The ${name} variant modifier feature in Tailwind CSS is currently in preview.`,
               'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
             ])
           }
 
-          let result = normalize(typeof value === 'function' ? value(ctx) : value)
+          let result = normalize(typeof value === 'function' ? value(extra) : value)
           if (!result.includes('&')) result = '&' + result
 
-          let [a, b] = fn({ modifier })
+          let [a, b] = fn('', extra)
           return result.replace(/&(\S+)?/g, (_, pseudo = '') => a + pseudo + b)
         },
         { values: Object.fromEntries(pseudoVariants) }
@@ -232,7 +231,7 @@ export let variantPlugins = {
   supportsVariants: ({ matchVariant, theme }) => {
     matchVariant(
       'supports',
-      ({ value = '' }) => {
+      (value = '') => {
         let check = normalize(value)
         let isRaw = /^\w*\s*\(/.test(check)
 

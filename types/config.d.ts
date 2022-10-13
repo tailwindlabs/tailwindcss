@@ -12,7 +12,7 @@ interface RecursiveKeyValuePair<K extends keyof any = string, V = string> {
   [key: string]: V | RecursiveKeyValuePair<K, V>
 }
 type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
-type CSSRuleObject = RecursiveKeyValuePair<string, string | string[]>
+type CSSRuleObject = RecursiveKeyValuePair<string, null | string | string[]>
 
 interface PluginUtils {
   colors: DefaultColors
@@ -263,13 +263,17 @@ export interface PluginAPI {
     }>
   ): void
   // for registering new dynamic utility styles
-  matchUtilities<T>(
-    utilities: KeyValuePair<string, (value: T) => CSSRuleObject>,
+  matchUtilities<T = string, U = string>(
+    utilities: KeyValuePair<
+      string,
+      (value: T | string, extra: { modifier: U | string | null }) => CSSRuleObject | null
+    >,
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
       type: ValueType | ValueType[]
       values: KeyValuePair<string, T>
+      modifiers: 'any' | KeyValuePair<string, U>
       supportsNegativeValues: boolean
     }>
   ): void
@@ -282,13 +286,17 @@ export interface PluginAPI {
     }>
   ): void
   // for registering new dynamic component styles
-  matchComponents<T>(
-    components: KeyValuePair<string, (value: T) => CSSRuleObject>,
+  matchComponents<T = string, U = string>(
+    components: KeyValuePair<
+      string,
+      (value: T | string, extra: { modifier: U | string | null }) => CSSRuleObject | null
+    >,
     options?: Partial<{
       respectPrefix: boolean
       respectImportant: boolean
       type: ValueType | ValueType[]
       values: KeyValuePair<string, T>
+      modifiers: 'any' | KeyValuePair<string, U>
       supportsNegativeValues: boolean
     }>
   ): void
@@ -296,18 +304,14 @@ export interface PluginAPI {
   addBase(base: CSSRuleObject | CSSRuleObject[]): void
   // for registering custom variants
   addVariant(name: string, definition: string | string[] | (() => string) | (() => string)[]): void
-  matchVariant(
+  matchVariant<T = string>(
     name: string,
-    cb: (options: { value: string; modifier: string | null }) => string | string[]
-  ): void
-  matchVariant<Values extends {}>(
-    name: string,
-    cb: (options: { value: string; modifier: string | null }) => string | string[],
-    options: {
-      values: Values
-      sort(
-        a: { value: keyof Values | string; modifier: string | null },
-        b: { value: keyof Values | string; modifier: string | null }
+    cb: (value: T | string, extra: { modifier: string | null }) => string | string[],
+    options?: {
+      values?: KeyValuePair<string, T>
+      sort?(
+        a: { value: T | string; modifier: string | null },
+        b: { value: T | string; modifier: string | null }
       ): number
     }
   ): void
@@ -327,7 +331,10 @@ export type PluginCreator = (api: PluginAPI) => void
 export type PluginsConfig = (
   | PluginCreator
   | { handler: PluginCreator; config?: Partial<Config> }
-  | { (options: any): { handler: PluginCreator; config?: Partial<Config> }; __isOptionsFunction: true }
+  | {
+      (options: any): { handler: PluginCreator; config?: Partial<Config> }
+      __isOptionsFunction: true
+    }
 )[]
 
 // Top level config related

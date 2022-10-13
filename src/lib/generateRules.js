@@ -3,7 +3,7 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses, typeMap } from '../util/pluginUtils'
+import { updateAllClasses, getMatchingTypes } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
@@ -34,13 +34,24 @@ function* candidatePermutations(candidate) {
 
   while (lastIndex >= 0) {
     let dashIdx
+    let wasSlash = false
 
     if (lastIndex === Infinity && candidate.endsWith(']')) {
       let bracketIdx = candidate.indexOf('[')
 
       // If character before `[` isn't a dash or a slash, this isn't a dynamic class
       // eg. string[]
-      dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
+      if (candidate[bracketIdx - 1] === '-') {
+        dashIdx = bracketIdx - 1
+      } else if (candidate[bracketIdx - 1] === '/') {
+        dashIdx = bracketIdx - 1
+        wasSlash = true
+      } else {
+        dashIdx = -1
+      }
+    } else if (lastIndex === Infinity && candidate.includes('/')) {
+      dashIdx = candidate.lastIndexOf('/')
+      wasSlash = true
     } else {
       dashIdx = candidate.lastIndexOf('-', lastIndex)
     }
@@ -50,11 +61,16 @@ function* candidatePermutations(candidate) {
     }
 
     let prefix = candidate.slice(0, dashIdx)
-    let modifier = candidate.slice(dashIdx + 1)
-
-    yield [prefix, modifier]
+    let modifier = candidate.slice(wasSlash ? dashIdx : dashIdx + 1)
 
     lastIndex = dashIdx - 1
+
+    // TODO: This feels a bit hacky
+    if (prefix === '' || modifier === '/') {
+      continue
+    }
+
+    yield [prefix, modifier]
   }
 }
 
@@ -137,6 +153,10 @@ function applyVariant(variant, matches, context) {
     if (match) {
       variant = match[1]
       args.modifier = match[2]
+
+      if (!flagEnabled(context.tailwindConfig, 'generalizedModifiers')) {
+        return []
+      }
     }
   }
 
@@ -552,16 +572,14 @@ function* resolveMatches(candidate, context, original = candidate) {
       }
 
       if (matchesPerPlugin.length > 0) {
-        let matchingTypes = (sort.options?.types ?? [])
-          .map(({ type }) => type)
-          // Only track the types for this plugin that resulted in some result
-          .filter((type) => {
-            return Boolean(
-              typeMap[type](modifier, sort.options, {
-                tailwindConfig: context.tailwindConfig,
-              })
-            )
-          })
+        let matchingTypes = Array.from(
+          getMatchingTypes(
+            sort.options?.types ?? [],
+            modifier,
+            sort.options ?? {},
+            context.tailwindConfig
+          )
+        ).map(([_, type]) => type)
 
         if (matchingTypes.length > 0) {
           typesByMatches.set(matchesPerPlugin, matchingTypes)

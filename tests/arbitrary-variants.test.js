@@ -709,6 +709,9 @@ it('should support supports', () => {
 
 it('should be possible to use modifiers and arbitrary groups', () => {
   let config = {
+    experimental: {
+      generalizedModifiers: true,
+    },
     content: [
       {
         raw: html`
@@ -810,6 +813,9 @@ it('should be possible to use modifiers and arbitrary groups', () => {
 
 it('should be possible to use modifiers and arbitrary peers', () => {
   let config = {
+    experimental: {
+      generalizedModifiers: true,
+    },
     content: [
       {
         raw: html`
