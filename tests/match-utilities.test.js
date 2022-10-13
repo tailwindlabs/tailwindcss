@@ -14,7 +14,7 @@ test('match utilities with modifiers', async () => {
     corePlugins: { preflight: false },
 
     plugins: [
-      ({ matchUtilities, theme }) => {
+      ({ matchUtilities }) => {
         matchUtilities(
           {
             test: (value, { modifier }) => ({
@@ -77,7 +77,7 @@ test('match utilities with modifiers in the config', async () => {
     corePlugins: { preflight: false },
 
     plugins: [
-      ({ matchUtilities, theme }) => {
+      ({ matchUtilities }) => {
         matchUtilities(
           {
             test: (value, { modifier }) => ({
@@ -137,7 +137,7 @@ test('match utilities can omit utilities by returning null', async () => {
     corePlugins: { preflight: false },
 
     plugins: [
-      ({ matchUtilities, theme }) => {
+      ({ matchUtilities }) => {
         matchUtilities(
           {
             test: (value, { modifier }) =>
