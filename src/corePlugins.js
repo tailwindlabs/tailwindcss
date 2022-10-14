@@ -401,6 +401,26 @@ export let variantPlugins = {
     )
   },
 
+  dataVariants: ({ matchVariant, theme }) => {
+    matchVariant('data', (value) => `&[data-${value}]`, { values: theme('data') ?? {} })
+    matchVariant(
+      'group-data',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.group\\/${modifier})[data-${value}] &`
+          : `:merge(.group)[data-${value}] &`,
+      { values: theme('data') ?? {} }
+    )
+    matchVariant(
+      'peer-data',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.peer\\/${modifier})[data-${value}] ~ &`
+          : `:merge(.peer)[data-${value}] ~ &`,
+      { values: theme('data') ?? {} }
+    )
+  },
+
   orientationVariants: ({ addVariant }) => {
     addVariant('portrait', '@media (orientation: portrait)')
     addVariant('landscape', '@media (orientation: landscape)')

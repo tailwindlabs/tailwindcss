@@ -679,6 +679,74 @@ it('should support aria variants', () => {
   })
 })
 
+fit('should support data variants', () => {
+  let config = {
+    theme: {
+      data: {
+        checked: 'ui~="checked"',
+      },
+    },
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="data-checked:underline"></div>
+            <div class="data-[position=top]:underline"></div>
+            <div class="group-data-checked:underline"></div>
+            <div class="peer-data-checked:underline"></div>
+            <div class="group-data-checked/foo:underline"></div>
+            <div class="peer-data-checked/foo:underline"></div>
+            <div class="group-data-[position=top]:underline"></div>
+            <div class="peer-data-[position=top]:underline"></div>
+            <div class="group-data-[position=top]/foo:underline"></div>
+            <div class="peer-data-[position=top]/foo:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .data-checked\:underline[data-ui~='checked'] {
+        text-decoration-line: underline;
+      }
+      .data-\[position\=top\]\:underline[data-position='top'] {
+        text-decoration-line: underline;
+      }
+      .group[data-ui~='checked'] .group-data-checked\:underline {
+        text-decoration-line: underline;
+      }
+      .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .group[data-position='top'] .group-data-\[position\=top\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[data-ui~='checked'] ~ .peer-data-checked\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
 it('should support supports', () => {
   let config = {
     theme: {
