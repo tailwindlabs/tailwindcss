@@ -25,7 +25,7 @@ it('sorts min and max correctly relative to screens and each other', async () =>
       {
         raw: html`
           <div
-            class="max-[700px]:font-bold max-[800px]:font-bold min-[700px]:font-bold min-[800px]:font-bold font-bold sm:font-bold md:font-bold"
+            class="font-bold max-[800px]:font-bold max-[700px]:font-bold sm:font-bold min-[700px]:font-bold md:font-bold min-[800px]:font-bold"
           ></div>
         `,
       },
@@ -85,7 +85,7 @@ it('works when using min variants screens config is empty and variants all use t
       {
         raw: html`
           <div
-            class="min-[700px]:font-bold min-[800px]:font-bold font-bold sm:font-bold md:font-bold"
+            class="font-bold sm:font-bold min-[700px]:font-bold md:font-bold min-[800px]:font-bold"
           ></div>
         `,
       },
@@ -127,7 +127,7 @@ it('works when using max variants screens config is empty and variants all use t
       {
         raw: html`
           <div
-            class="max-[700px]:font-bold max-[800px]:font-bold font-bold sm:font-bold md:font-bold"
+            class="font-bold max-[800px]:font-bold max-[700px]:font-bold sm:font-bold md:font-bold"
           ></div>
         `,
       },
@@ -167,7 +167,7 @@ it('converts simple min-width screens for max variant', () => {
       {
         raw: html`
           <div
-            class="max-sm:font-bold max-[300px]:font-bold max-[700px]:font-bold max-lg:font-bold font-bold sm:font-bold md:font-bold"
+            class="font-bold max-lg:font-bold max-[700px]:font-bold max-sm:font-bold max-[300px]:font-bold sm:font-bold md:font-bold"
           ></div>
         `,
       },
@@ -227,7 +227,7 @@ it('does not have keyed screens for min variant', () => {
       {
         raw: html`
           <div
-            class="min-sm:font-bold min-[300px]:font-bold min-[700px]:font-bold min-lg:font-bold font-bold sm:font-bold md:font-bold"
+            class="min-sm:font-bold min-lg:font-bold font-bold min-[300px]:font-bold sm:font-bold min-[700px]:font-bold md:font-bold"
           ></div>
         `,
       },
@@ -275,7 +275,7 @@ it('warns when using min variants with complex screen configs', async () => {
   let config = {
     content: [
       {
-        raw: html` <div class="min-[700px]:font-bold font-bold sm:font-bold md:font-bold"></div> `,
+        raw: html` <div class="font-bold sm:font-bold min-[700px]:font-bold md:font-bold"></div> `,
       },
     ],
     corePlugins: { preflight: false },
@@ -323,7 +323,7 @@ it('warns when using min variants with simple configs containing mixed units', a
   let config = {
     content: [
       {
-        raw: html` <div class="min-[700px]:font-bold font-bold sm:font-bold md:font-bold"></div> `,
+        raw: html` <div class="font-bold sm:font-bold min-[700px]:font-bold md:font-bold"></div> `,
       },
     ],
     corePlugins: { preflight: false },
@@ -415,7 +415,7 @@ it('warns when using min variants with mixed units (with no screens config)', as
       {
         raw: html`
           <div
-            class="min-[700px]:font-bold min-[700rem]:font-bold font-bold sm:font-bold md:font-bold"
+            class="min-[700rem]:font-bold font-bold sm:font-bold min-[700px]:font-bold md:font-bold"
           ></div>
         `,
       },
@@ -451,7 +451,7 @@ it('warns when using max variants with complex screen configs', async () => {
   let config = {
     content: [
       {
-        raw: html` <div class="max-[700px]:font-bold font-bold sm:font-bold md:font-bold"></div> `,
+        raw: html` <div class="font-bold max-[700px]:font-bold sm:font-bold md:font-bold"></div> `,
       },
     ],
     corePlugins: { preflight: false },
@@ -499,7 +499,7 @@ it('warns when using max variants with simple configs containing mixed units', a
   let config = {
     content: [
       {
-        raw: html` <div class="max-[700px]:font-bold font-bold sm:font-bold md:font-bold"></div> `,
+        raw: html` <div class="font-bold max-[700px]:font-bold sm:font-bold md:font-bold"></div> `,
       },
     ],
     corePlugins: { preflight: false },
@@ -591,7 +591,7 @@ it('warns when using max variants with mixed units (with no screens config)', as
       {
         raw: html`
           <div
-            class="max-[700px]:font-bold max-[700rem]:font-bold font-bold sm:font-bold md:font-bold"
+            class="max-[700rem]:font-bold font-bold max-[700px]:font-bold sm:font-bold md:font-bold"
           ></div>
         `,
       },
@@ -629,7 +629,7 @@ it('warns when using min and max variants with mixed units (with no screens conf
       {
         raw: html`
           <div
-            class="min-[700px]:font-bold max-[700rem]:font-bold font-bold sm:font-bold md:font-bold"
+            class="max-[700rem]:font-bold font-bold sm:font-bold min-[700px]:font-bold md:font-bold"
           ></div>
         `,
       },
