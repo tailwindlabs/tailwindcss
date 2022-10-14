@@ -18,7 +18,7 @@ jobs:
       contents: write  # for softprops/action-gh-release to create GitHub release
     runs-on: macos-11
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - run: git fetch --tags -f
 
@@ -27,7 +27,7 @@ jobs:
         run: echo "::set-output name=tag_name::$(git describe --tags --abbrev=0)"
 
       - name: Use Node.js 16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
