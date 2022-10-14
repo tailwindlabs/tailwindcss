@@ -258,10 +258,23 @@ export let variantPlugins = {
   },
 
   ariaVariants: ({ matchVariant, theme }) => {
-    let options = { values: theme('aria') ?? {} }
-    matchVariant('aria', (value) => `&[aria-${value}]`, options)
-    matchVariant('group-aria', (value) => `:merge(.group)[aria-${value}] &`, options)
-    matchVariant('peer-aria', (value) => `:merge(.peer)[aria-${value}] ~ &`, options)
+    matchVariant('aria', (value) => `&[aria-${value}]`, { values: theme('aria') ?? {} })
+    matchVariant(
+      'group-aria',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.group\\/${modifier})[aria-${value}] &`
+          : `:merge(.group)[aria-${value}] &`,
+      { values: theme('aria') ?? {} }
+    )
+    matchVariant(
+      'peer-aria',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.peer\\/${modifier})[aria-${value}] ~ &`
+          : `:merge(.peer)[aria-${value}] ~ &`,
+      { values: theme('aria') ?? {} }
+    )
   },
 
   orientationVariants: ({ addVariant }) => {

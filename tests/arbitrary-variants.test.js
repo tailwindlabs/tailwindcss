@@ -626,6 +626,12 @@ it('should support aria variants', () => {
             <div class="aria-[sort=ascending]:underline"></div>
             <div class="group-aria-checked:underline"></div>
             <div class="peer-aria-checked:underline"></div>
+            <div class="group-aria-checked/foo:underline"></div>
+            <div class="peer-aria-checked/foo:underline"></div>
+            <div class="group-aria-[sort=ascending]:underline"></div>
+            <div class="peer-aria-[sort=ascending]:underline"></div>
+            <div class="group-aria-[sort=ascending]/foo:underline"></div>
+            <div class="peer-aria-[sort=ascending]/foo:underline"></div>
           </div>
         `,
       },
@@ -648,7 +654,25 @@ it('should support aria variants', () => {
       .group[aria-checked='true'] .group-aria-checked\:underline {
         text-decoration-line: underline;
       }
+      .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
       .peer[aria-checked='true'] ~ .peer-aria-checked\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline {
         text-decoration-line: underline;
       }
     `)
