@@ -616,6 +616,69 @@ test('classes in the same arbitrary variant should not be prefixed', () => {
   })
 })
 
+it('should support aria variants', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="aria-checked:underline"></div>
+            <div class="aria-[sort=ascending]:underline"></div>
+            <div class="group-aria-checked:underline"></div>
+            <div class="peer-aria-checked:underline"></div>
+            <div class="group-aria-checked/foo:underline"></div>
+            <div class="peer-aria-checked/foo:underline"></div>
+            <div class="group-aria-[sort=ascending]:underline"></div>
+            <div class="peer-aria-[sort=ascending]:underline"></div>
+            <div class="group-aria-[sort=ascending]/foo:underline"></div>
+            <div class="peer-aria-[sort=ascending]/foo:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .aria-checked\:underline[aria-checked='true'] {
+        text-decoration-line: underline;
+      }
+      .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'] {
+        text-decoration-line: underline;
+      }
+      .group[aria-checked='true'] .group-aria-checked\:underline {
+        text-decoration-line: underline;
+      }
+      .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[aria-checked='true'] ~ .peer-aria-checked\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
 it('should support supports', () => {
   let config = {
     theme: {

@@ -381,6 +381,26 @@ export let variantPlugins = {
     )
   },
 
+  ariaVariants: ({ matchVariant, theme }) => {
+    matchVariant('aria', (value) => `&[aria-${value}]`, { values: theme('aria') ?? {} })
+    matchVariant(
+      'group-aria',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.group\\/${modifier})[aria-${value}] &`
+          : `:merge(.group)[aria-${value}] &`,
+      { values: theme('aria') ?? {} }
+    )
+    matchVariant(
+      'peer-aria',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.peer\\/${modifier})[aria-${value}] ~ &`
+          : `:merge(.peer)[aria-${value}] ~ &`,
+      { values: theme('aria') ?? {} }
+    )
+  },
+
   orientationVariants: ({ addVariant }) => {
     addVariant('portrait', '@media (orientation: portrait)')
     addVariant('landscape', '@media (orientation: landscape)')

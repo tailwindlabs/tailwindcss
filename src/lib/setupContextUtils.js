@@ -717,6 +717,7 @@ function resolvePlugins(context, root) {
   let beforeVariants = [
     variantPlugins['pseudoElementVariants'],
     variantPlugins['pseudoClassVariants'],
+    variantPlugins['ariaVariants'],
   ]
   let afterVariants = [
     variantPlugins['supportsVariants'],
