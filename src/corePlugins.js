@@ -12,7 +12,12 @@ import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
 import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
-import { normalizeScreens } from './util/normalizeScreens'
+import {
+  normalizeScreens,
+  isScreenSortable,
+  compareScreens,
+  toScreen,
+} from './util/normalizeScreens'
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
@@ -220,12 +225,131 @@ export let variantPlugins = {
     addVariant('print', '@media print')
   },
 
-  screenVariants: ({ theme, addVariant }) => {
-    for (let screen of normalizeScreens(theme('screens'))) {
-      let query = buildMediaQuery(screen)
+  screenVariants: ({ theme, addVariant, matchVariant }) => {
+    let rawScreens = theme('screens') ?? {}
+    let areSimpleScreens = Object.values(rawScreens).every((v) => typeof v === 'string')
+    let screens = normalizeScreens(theme('screens'))
 
-      addVariant(screen.name, `@media ${query}`)
+    /** @type {Set<string>} */
+    let unitCache = new Set([])
+
+    /** @param {string} value */
+    function units(value) {
+      return value.match(/(\D+)$/)?.[1] ?? '(none)'
     }
+
+    /** @param {string} value */
+    function recordUnits(value) {
+      if (value !== undefined) {
+        unitCache.add(units(value))
+      }
+    }
+
+    /** @param {string} value */
+    function canUseUnits(value) {
+      recordUnits(value)
+
+      // If the cache was empty it'll become 1 because we've just added the current unit
+      // If the cache was not empty and the units are the same the size doesn't change
+      // Otherwise, if the units are different from what is already known the size will always be > 1
+      return unitCache.size === 1
+    }
+
+    for (const screen of screens) {
+      for (const value of screen.values) {
+        recordUnits(value.min)
+        recordUnits(value.max)
+      }
+    }
+
+    let screensUseConsistentUnits = unitCache.size <= 1
+
+    /**
+     * @typedef {import('./util/normalizeScreens').Screen} Screen
+     */
+
+    /**
+     * @param {'min' | 'max'} type
+     * @returns {Record<string, Screen>}
+     */
+    function buildScreenValues(type) {
+      return Object.fromEntries(
+        screens
+          .filter((screen) => isScreenSortable(screen).result)
+          .map((screen) => {
+            let { min, max } = screen.values[0]
+
+            if (type === 'min' && min !== undefined) {
+              return screen
+            } else if (type === 'min' && max !== undefined) {
+              return { ...screen, not: !screen.not }
+            } else if (type === 'max' && max !== undefined) {
+              return screen
+            } else if (type === 'max' && min !== undefined) {
+              return { ...screen, not: !screen.not }
+            }
+          })
+          .map((screen) => [screen.name, screen])
+      )
+    }
+
+    /**
+     * @param {'min' | 'max'} type
+     * @returns {(a: { value: string | Screen }, z: { value: string | Screen }) => number}
+     */
+    function buildSort(type) {
+      return (a, z) => compareScreens(type, a.value, z.value)
+    }
+
+    let maxSort = buildSort('max')
+    let minSort = buildSort('min')
+
+    /** @param {'min'|'max'} type */
+    function buildScreenVariant(type) {
+      return (value) => {
+        if (!areSimpleScreens) {
+          log.warn('complex-screen-config', [
+            'The min and max variants are not supported with a screen configuration containing objects.',
+          ])
+
+          return []
+        } else if (!screensUseConsistentUnits) {
+          log.warn('mixed-screen-units', [
+            'The min and max variants are not supported with a screen configuration containing mixed units.',
+          ])
+
+          return []
+        } else if (typeof value === 'string' && !canUseUnits(value)) {
+          log.warn('minmax-have-mixed-units', [
+            'The min and max variants are not supported with a screen configuration containing mixed units.',
+          ])
+
+          return []
+        }
+
+        return [`@media ${buildMediaQuery(toScreen(value, type))}`]
+      }
+    }
+
+    matchVariant('max', buildScreenVariant('max'), {
+      sort: maxSort,
+      values: areSimpleScreens ? buildScreenValues('max') : {},
+    })
+
+    // screens and min-* are sorted together when they can be
+    let id = 'min-screens'
+    for (let screen of screens) {
+      addVariant(screen.name, `@media ${buildMediaQuery(screen)}`, {
+        id,
+        sort: areSimpleScreens && screensUseConsistentUnits ? minSort : undefined,
+        value: screen,
+      })
+    }
+
+    matchVariant('min', buildScreenVariant('min'), {
+      id,
+      sort: minSort,
+    })
   },
 
   supportsVariants: ({ matchVariant, theme }) => {

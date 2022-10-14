@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prepare for container queries setup ([#9526](https://github.com/tailwindlabs/tailwindcss/pull/9526))
 - Add support for modifiers to `matchUtilities` ([#9541](https://github.com/tailwindlabs/tailwindcss/pull/9541))
 - Switch to positional argument + object for modifiers ([#9541](https://github.com/tailwindlabs/tailwindcss/pull/9541))
+- Add new `min` and `max` variants ([#9558](https://github.com/tailwindlabs/tailwindcss/pull/9558))
 
 ### Fixed
 

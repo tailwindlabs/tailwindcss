@@ -2,8 +2,8 @@ export default function buildMediaQuery(screens) {
   screens = Array.isArray(screens) ? screens : [screens]
 
   return screens
-    .map((screen) =>
-      screen.values.map((screen) => {
+    .map((screen) => {
+      let values = screen.values.map((screen) => {
         if (screen.raw !== undefined) {
           return screen.raw
         }
@@ -15,6 +15,8 @@ export default function buildMediaQuery(screens) {
           .filter(Boolean)
           .join(' and ')
       })
-    )
+
+      return screen.not ? `not all and ${values}` : values
+    })
     .join(', ')
 }

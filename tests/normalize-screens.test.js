@@ -4,8 +4,8 @@ it('should normalize an array of string values', () => {
   let screens = ['768px', '1200px']
 
   expect(normalizeScreens(screens)).toEqual([
-    { name: '768px', values: [{ min: '768px', max: undefined }] },
-    { name: '1200px', values: [{ min: '1200px', max: undefined }] },
+    { name: '768px', not: false, values: [{ min: '768px', max: undefined }] },
+    { name: '1200px', not: false, values: [{ min: '1200px', max: undefined }] },
   ])
 })
 
@@ -16,8 +16,8 @@ it('should normalize an object with string values', () => {
   }
 
   expect(normalizeScreens(screens)).toEqual([
-    { name: 'a', values: [{ min: '768px', max: undefined }] },
-    { name: 'b', values: [{ min: '1200px', max: undefined }] },
+    { name: 'a', not: false, values: [{ min: '768px', max: undefined }] },
+    { name: 'b', not: false, values: [{ min: '1200px', max: undefined }] },
   ])
 })
 
@@ -28,8 +28,8 @@ it('should normalize an object with object values', () => {
   }
 
   expect(normalizeScreens(screens)).toEqual([
-    { name: 'a', values: [{ min: '768px', max: undefined }] },
-    { name: 'b', values: [{ min: undefined, max: '1200px' }] },
+    { name: 'a', not: false, values: [{ min: '768px', max: undefined }] },
+    { name: 'b', not: false, values: [{ min: undefined, max: '1200px' }] },
   ])
 })
 
@@ -41,6 +41,7 @@ it('should normalize an object with multiple object values', () => {
   expect(normalizeScreens(screens)).toEqual([
     {
       name: 'a',
+      not: false,
       values: [
         { max: undefined, min: '768px', raw: undefined },
         { max: '1200px', min: undefined, raw: undefined },
@@ -56,7 +57,7 @@ it('should normalize an object with object values (min-width normalized to width
   }
 
   expect(normalizeScreens(screens)).toEqual([
-    { name: 'a', values: [{ min: '768px', max: undefined }] },
-    { name: 'b', values: [{ min: undefined, max: '1200px' }] },
+    { name: 'a', not: false, values: [{ min: '768px', max: undefined }] },
+    { name: 'b', not: false, values: [{ min: undefined, max: '1200px' }] },
   ])
 })

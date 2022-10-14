@@ -560,7 +560,9 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       context.variantOptions.set(variantName, options)
     },
     matchVariant(variant, variantFn, options) {
-      let id = ++variantIdentifier // A unique identifier that "groups" these variables together.
+      // A unique identifier that "groups" these variants together.
+      // This is for internal use only which is why it is not present in the types
+      let id = options?.id ?? ++variantIdentifier
       let isSpecial = variant === '@'
 
       let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
