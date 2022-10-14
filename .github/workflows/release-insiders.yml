@@ -16,17 +16,17 @@ jobs:
         node-version: [12]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
 
       - name: Use cached node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
@@ -59,10 +59,11 @@ jobs:
 
       - name: Resolve version
         id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: "Version based on commit: 0.0.0-insiders.${{ steps.vars.outputs.sha_short }}"
-        run: npm version 0.0.0-insiders.${{ steps.vars.outputs.sha_short }} --force --no-git-tag-version
+      - name: "Version based on commit: 0.0.0-insiders.${{ env.sha_short }}"
+        run: npm version 0.0.0-insiders.${{ env.sha_short }} --force --no-git-tag-version
 
       - name: Publish
         run: npm publish --tag insiders
@@ -81,6 +82,6 @@ jobs:
               ref: 'master',
               workflow_id: 'upgrade-tailwindcss.yml',
               inputs: {
-                insidersVersion: '0.0.0-insiders.${{ steps.vars.outputs.sha_short }}'
+                insidersVersion: '0.0.0-insiders.${{ env.sha_short }}'
               }
             })
