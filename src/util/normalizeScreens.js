@@ -1,4 +1,18 @@
 /**
+ * @typedef {object} ScreenValue
+ * @property {number|undefined} min
+ * @property {number|undefined} max
+ * @property {string|undefined} raw
+ */
+
+/**
+ * @typedef {object} Screen
+ * @property {string} name
+ * @property {boolean} not
+ * @property {ScreenValue[]} values
+ */
+
+/**
  * A function that normalizes the various forms that the screens object can be
  * provided in.
  *
@@ -10,6 +24,8 @@
  *
  * Output(s):
  *   - [{ name: 'sm', values: [{ min: '100px', max: '200px' }] }] // List of objects, that contains multiple values
+ *
+ * @returns {Screen[]}
  */
 export function normalizeScreens(screens, root = true) {
   if (Array.isArray(screens)) {
@@ -19,21 +35,21 @@ export function normalizeScreens(screens, root = true) {
       }
 
       if (typeof screen === 'string') {
-        return { name: screen.toString(), values: [{ min: screen, max: undefined }] }
+        return { name: screen.toString(), not: false, values: [{ min: screen, max: undefined }] }
       }
 
       let [name, options] = screen
       name = name.toString()
 
       if (typeof options === 'string') {
-        return { name, values: [{ min: options, max: undefined }] }
+        return { name, not: false, values: [{ min: options, max: undefined }] }
       }
 
       if (Array.isArray(options)) {
-        return { name, values: options.map((option) => resolveValue(option)) }
+        return { name, not: false, values: options.map((option) => resolveValue(option)) }
       }
 
-      return { name, values: [resolveValue(options)] }
+      return { name, not: false, values: [resolveValue(options)] }
     })
   }
 
