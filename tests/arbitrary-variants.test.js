@@ -624,6 +624,8 @@ it('should support aria variants', () => {
           <div>
             <div class="aria-checked:underline"></div>
             <div class="aria-[sort=ascending]:underline"></div>
+            <div class="group-aria-checked:underline"></div>
+            <div class="peer-aria-checked:underline"></div>
           </div>
         `,
       },
@@ -641,6 +643,12 @@ it('should support aria variants', () => {
         text-decoration-line: underline;
       }
       .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'] {
+        text-decoration-line: underline;
+      }
+      .group[aria-checked='true'] .group-aria-checked\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[aria-checked='true'] ~ .peer-aria-checked\:underline {
         text-decoration-line: underline;
       }
     `)
