@@ -221,10 +221,11 @@ export let variantPlugins = {
   },
 
   screenVariants: ({ theme, addVariant }) => {
-    for (let screen of normalizeScreens(theme('screens'))) {
-      let query = buildMediaQuery(screen)
+    let rawScreens = theme('screens') ?? {}
+    let screens = normalizeScreens(rawScreens)
 
-      addVariant(screen.name, `@media ${query}`)
+    for (let screen of screens) {
+      addVariant(screen.name, `@media ${buildMediaQuery(screen)}`)
     }
   },
 
