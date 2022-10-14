@@ -262,7 +262,7 @@ export let variantPlugins = {
       }
     }
 
-    let screensHaveMixedUnits = unitCache.size > 1
+    let screensUseConsistentUnits = unitCache.size <= 1
 
     /**
      * @typedef {import('./util/normalizeScreens').Screen} Screen
@@ -313,7 +313,7 @@ export let variantPlugins = {
           ])
 
           return []
-        } else if (screensHaveMixedUnits) {
+        } else if (!screensUseConsistentUnits) {
           log.warn('mixed-screen-units', [
             'The min and max variants are not supported with a screen configuration containing mixed units.',
           ])
@@ -341,7 +341,7 @@ export let variantPlugins = {
     for (let screen of screens) {
       addVariant(screen.name, `@media ${buildMediaQuery(screen)}`, {
         id,
-        sort: areSimpleScreens ? minSort : undefined,
+        sort: areSimpleScreens && screensUseConsistentUnits ? minSort : undefined,
         value: screen,
       })
     }

@@ -348,13 +348,13 @@ it('warns when using min variants with simple configs containing mixed units', a
     .font-bold {
       font-weight: 700;
     }
-    @media (min-width: 48rem) {
-      .md\:font-bold {
+    @media (min-width: 640px) {
+      .sm\:font-bold {
         font-weight: 700;
       }
     }
-    @media (min-width: 640px) {
-      .sm\:font-bold {
+    @media (min-width: 48rem) {
+      .md\:font-bold {
         font-weight: 700;
       }
     }
@@ -524,13 +524,13 @@ it('warns when using max variants with simple configs containing mixed units', a
     .font-bold {
       font-weight: 700;
     }
-    @media (min-width: 48rem) {
-      .md\:font-bold {
+    @media (min-width: 640px) {
+      .sm\:font-bold {
         font-weight: 700;
       }
     }
-    @media (min-width: 640px) {
-      .sm\:font-bold {
+    @media (min-width: 48rem) {
+      .md\:font-bold {
         font-weight: 700;
       }
     }
