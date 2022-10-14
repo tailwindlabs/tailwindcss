@@ -257,6 +257,13 @@ export let variantPlugins = {
     )
   },
 
+  ariaVariants: ({ matchVariant, theme }) => {
+    let options = { values: theme('aria') ?? {} }
+    matchVariant('aria', (value) => `&[aria-${value}]`, options)
+    matchVariant('group-aria', (value) => `:merge(.group)[aria-${value}] &`, options)
+    matchVariant('peer-aria', (value) => `:merge(.peer)[aria-${value}] ~ &`, options)
+  },
+
   orientationVariants: ({ addVariant }) => {
     addVariant('portrait', '@media (orientation: portrait)')
     addVariant('landscape', '@media (orientation: landscape)')
