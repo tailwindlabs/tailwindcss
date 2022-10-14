@@ -80,7 +80,7 @@ it('should provide selectors for custom plugins that do a combination of paralle
   let config = {
     plugins: [
       function ({ matchVariant }) {
-        matchVariant('foo', ({ modifier, value }) => {
+        matchVariant('foo', (value, { modifier }) => {
           return [
             `
               @supports (foo: ${modifier}) {
