@@ -43,14 +43,14 @@ jobs:
         env:
           CI: true
 
-      - name: Link and build Tailwind CSS
-        run: |
-          npm run swcify
-          ln -nfs `pwd` node_modules/tailwindcss
+      - name: Build Tailwind CSS
+        run: npm run swcify
         env:
           CI: true
 
       - name: Test
-        run: npm test
+        run: |
+          ln -nfs `pwd` node_modules/tailwindcss # So that Prettier can use the local version
+          npm test
         env:
           CI: true
