@@ -33,6 +33,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
       - name: Use cached node_modules (tailwindcss)
         id: cache-tailwindcss
