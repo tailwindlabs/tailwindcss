@@ -23,19 +23,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          # cache: 'npm'
 
-      - name: Use cached node_modules
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
-          restore-keys: |
-            nodeModules-
+      # - name: Use cached node_modules
+      #   id: cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: node_modules
+      #     key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+      #     restore-keys: |
+      #       nodeModules-
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        # if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
         env:
           CI: true
@@ -63,7 +63,7 @@ jobs:
         run: |
           echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: "Version based on commit: 0.0.0-insiders.${{ env.sha_short }}"
+      - name: 'Version based on commit: 0.0.0-insiders.${{ env.sha_short }}'
         run: npm version 0.0.0-insiders.${{ env.sha_short }} --force --no-git-tag-version
 
       - name: Publish
