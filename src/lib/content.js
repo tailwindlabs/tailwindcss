@@ -100,6 +100,12 @@ function resolveGlobPattern(contentPath) {
 
   contentPath.pattern = contentPath.ignore ? `!${contentPath.pattern}` : contentPath.pattern
 
+  // This is required for Windows support to properly pick up Glob paths.
+  // Afaik, this technically shouldn't be needed but there's probably
+  // some internal, direct path matching with a normalized path in
+  // a package which can't handle mixed directory separators
+  contentPath.pattern = normalizePath(contentPath.pattern)
+
   return contentPath
 }
 
