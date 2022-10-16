@@ -33,19 +33,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Use cached node_modules (tailwindcss)
-        id: cache-tailwindcss
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: nodeModules-${{ hashFiles('./package-lock.json') }}-${{ matrix.node-version }}-tailwindcss
-          restore-keys: |
-            nodeModules-
+      #     cache: 'npm'
+      #
+      # - name: Use cached node_modules (tailwindcss)
+      #   id: cache-tailwindcss
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: node_modules
+      #     key: nodeModules-${{ hashFiles('./package-lock.json') }}-${{ matrix.node-version }}-tailwindcss
+      #     restore-keys: |
+      #       nodeModules-
 
       - name: Install dependencies
-        if: steps.cache-tailwindcss.outputs.cache-hit != 'true'
+        # if: steps.cache-tailwindcss.outputs.cache-hit != 'true'
         run: npm install
         env:
           CI: true
