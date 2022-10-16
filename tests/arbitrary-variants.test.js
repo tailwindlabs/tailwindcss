@@ -679,7 +679,7 @@ it('should support aria variants', () => {
   })
 })
 
-fit('should support data variants', () => {
+it('should support data variants', () => {
   let config = {
     theme: {
       data: {
