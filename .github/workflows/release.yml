@@ -23,19 +23,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
-
-      - name: Use cached node_modules
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
-          restore-keys: |
-            nodeModules-
+      #     cache: 'npm'
+      #
+      # - name: Use cached node_modules
+      #   id: cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: node_modules
+      #     key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+      #     restore-keys: |
+      #       nodeModules-
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        # if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
         env:
           CI: true
@@ -45,8 +45,12 @@ jobs:
         env:
           CI: true
 
+      - name: Calculate tag
+        run: |
+          echo "tag_name=$(npm run calculate-tag-name --silent)" >> $GITHUB_ENV
+
       - name: Publish
-        run: npm publish
+        run: npm publish --tag ${{ env.tag_name }}
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

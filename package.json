@@ -26,7 +26,8 @@
     "posttest": "npm run style",
     "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
     "generate:types": "node -r @swc/register scripts/generate-types.js",
-    "generate": "npm run generate:plugin-list && npm run generate:types"
+    "generate": "npm run generate:plugin-list && npm run generate:types",
+    "calculate-tag-name": "node scripts/calculate-tag-name.js"
   },
   "files": [
     "src/*",
