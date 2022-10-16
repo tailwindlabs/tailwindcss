@@ -45,8 +45,12 @@ jobs:
         env:
           CI: true
 
-      - name: Publish
-        run: npm publish
+      - name: Calculate tag
+        run: |
+          echo "tag_name=$(npm run calculate-tag-name --silent)" >> $GITHUB_ENV
+
+      - name: Publish (${{ env.tag_name }})
+        run: npm publish --tag ${{ env.tag_name }}
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
