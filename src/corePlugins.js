@@ -375,7 +375,7 @@ export let variantPlugins = {
           check = `(${check})`
         }
 
-        return `@supports ${check} `
+        return `@supports ${check}`
       },
       { values: theme('supports') ?? {} }
     )
