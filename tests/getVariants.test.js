@@ -12,6 +12,7 @@ it('should return a list of variants with meta information about the variant', (
   expect(variants).toContainEqual({
     name: 'hover',
     isArbitrary: false,
+    hasDash: true,
     values: [],
     selectors: expect.any(Function),
   })
@@ -19,6 +20,7 @@ it('should return a list of variants with meta information about the variant', (
   expect(variants).toContainEqual({
     name: 'group',
     isArbitrary: true,
+    hasDash: true,
     values: expect.any(Array),
     selectors: expect.any(Function),
   })
@@ -137,4 +139,48 @@ it('should work for plugins that still use the modifySelectors API', () => {
 
   let variant = variants.find((v) => v.name === 'foo')
   expect(variant.selectors({})).toEqual(['@supports (display: grid) { .foo .foo\\:& }'])
+})
+
+it('should special case the `@`', () => {
+  let config = {
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant(
+          '@',
+          (value, { modifier }) => `@container ${modifier ?? ''} (min-width: ${value})`,
+          {
+            modifiers: 'any',
+            values: {
+              xs: '20rem',
+              sm: '24rem',
+              md: '28rem',
+              lg: '32rem',
+              xl: '36rem',
+              '2xl': '42rem',
+              '3xl': '48rem',
+              '4xl': '56rem',
+              '5xl': '64rem',
+              '6xl': '72rem',
+              '7xl': '80rem',
+            },
+          }
+        )
+      },
+    ],
+  }
+  let context = createContext(resolveConfig(config))
+
+  let variants = context.getVariants()
+
+  let variant = variants.find((v) => v.name === '@')
+  expect(variant).toEqual({
+    name: '@',
+    isArbitrary: true,
+    hasDash: false,
+    values: expect.any(Array),
+    selectors: expect.any(Function),
+  })
+  expect(variant.selectors({ value: 'xs', modifier: 'foo' })).toEqual([
+    '@container foo (min-width: 20rem)',
+  ])
 })
