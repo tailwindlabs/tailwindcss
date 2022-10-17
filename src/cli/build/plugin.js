@@ -17,6 +17,7 @@ import { parseCandidateFiles } from '../../lib/content.js'
 import { createWatcher } from './watching.js'
 import fastGlob from 'fast-glob'
 import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
+import log from '../../util/log'
 
 /**
  *
@@ -139,7 +140,7 @@ let state = {
     }
   },
 
-  loadConfig(configPath) {
+  loadConfig(configPath, content) {
     if (this.watcher && configPath) {
       this.refreshConfigDependencies(configPath)
     }
@@ -148,6 +149,11 @@ let state = {
 
     // @ts-ignore
     config = resolveConfig(config, { content: { files: [] } })
+
+    // Override content files if `--content` has been passed explicitly
+    if (content?.length > 0) {
+      config.content.files = content
+    }
 
     return config
   },
@@ -196,7 +202,7 @@ let state = {
     return content
   },
 
-  getContext({ createContext, cliConfigPath, root, result }) {
+  getContext({ createContext, cliConfigPath, root, result, content }) {
     if (this.context) {
       this.context.changedContent = this.changedContent.splice(0)
 
@@ -208,7 +214,7 @@ let state = {
     env.DEBUG && console.timeEnd('Searching for config')
 
     env.DEBUG && console.time('Loading config')
-    let config = this.loadConfig(configPath)
+    let config = this.loadConfig(configPath, content)
     env.DEBUG && console.timeEnd('Loading config')
 
     env.DEBUG && console.time('Creating context')
@@ -250,6 +256,19 @@ export async function createProcessor(args, cliConfigPath) {
     ? await loadPostCssPlugins(customPostCssPath)
     : loadBuiltinPostcssPlugins()
 
+  if (args['--purge']) {
+    log.warn('purge-flag-deprecated', [
+      'The `--purge` flag has been deprecated.',
+      'Please use `--content` instead.',
+    ])
+
+    if (!args['--content']) {
+      args['--content'] = args['--purge']
+    }
+  }
+
+  let content = args['--content']?.split(/(?<!{[^}]+),/) ?? []
+
   let tailwindPlugin = () => {
     return {
       postcssPlugin: 'tailwindcss',
@@ -260,7 +279,13 @@ export async function createProcessor(args, cliConfigPath) {
           console.error('Rebuilding...')
 
           return () => {
-            return state.getContext({ createContext, cliConfigPath, root, result })
+            return state.getContext({
+              createContext,
+              cliConfigPath,
+              root,
+              result,
+              content,
+            })
           }
         })(root, result)
         env.DEBUG && console.timeEnd('Compiling CSS')
