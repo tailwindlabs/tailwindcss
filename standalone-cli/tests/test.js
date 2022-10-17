@@ -51,7 +51,7 @@ it('supports postcss config files', async () => {
 /**
  * @template T
  * @param {() => T} fn
- * @returns {T}
+ * @returns {Promise<T>}
  */
 async function inIsolatedContext(fn) {
   // Create a new directory entirely outside of the package for the test
@@ -79,6 +79,6 @@ async function inIsolatedContext(fn) {
     process.chdir(__dirname)
 
     // Delete the new directory
-    await fs.rmdir(dest, { recursive: true })
+    await fs.rm(dest, { recursive: true })
   }
 }
