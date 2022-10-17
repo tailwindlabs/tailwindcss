@@ -169,9 +169,9 @@ describe('Build command', () => {
   })
 
   test('--content', async () => {
-    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await writeInputFile('other.html', html`<div class="font-bold"></div>`)
 
-    await $(`${EXECUTABLE} --content ./src/index.html --output ./dist/main.css`)
+    await $(`${EXECUTABLE} --content ./src/other.html --output ./dist/main.css`)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
