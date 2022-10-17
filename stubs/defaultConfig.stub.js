@@ -114,6 +114,7 @@ module.exports = {
     },
     aria: {
       checked: 'checked="true"',
+      current: 'current="true"',
       disabled: 'disabled="true"',
       expanded: 'expanded="true"',
       hidden: 'hidden="true"',
