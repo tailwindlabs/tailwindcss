@@ -969,6 +969,7 @@ function registerPlugins(plugins, context) {
         name,
         isArbitrary: options.type === Symbol.for('MATCH_VARIANT'),
         values: Object.keys(options.values ?? {}),
+        hasDash: name !== '@',
         selectors({ modifier, value } = {}) {
           let candidate = '__TAILWIND_PLACEHOLDER__'
 
