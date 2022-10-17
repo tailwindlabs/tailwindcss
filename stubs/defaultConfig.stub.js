@@ -295,8 +295,8 @@ module.exports = {
       none: '0 0 #0000',
     },
     fill: ({ theme }) => ({
-      ...theme('colors'),
       none: 'none',
+      ...theme('colors'),
     }),
     grayscale: {
       0: '0',
@@ -807,8 +807,8 @@ module.exports = {
       ...theme('spacing'),
     }),
     stroke: ({ theme }) => ({
-      ...theme('colors'),
       none: 'none',
+      ...theme('colors'),
     }),
     strokeWidth: {
       0: '0',
