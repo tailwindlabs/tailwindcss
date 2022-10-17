@@ -624,12 +624,15 @@ it('should support aria variants', () => {
           <div>
             <div class="aria-checked:underline"></div>
             <div class="aria-[sort=ascending]:underline"></div>
+            <div class="aria-[labelledby=a_b]:underline"></div>
             <div class="group-aria-checked:underline"></div>
             <div class="peer-aria-checked:underline"></div>
             <div class="group-aria-checked/foo:underline"></div>
             <div class="peer-aria-checked/foo:underline"></div>
             <div class="group-aria-[sort=ascending]:underline"></div>
             <div class="peer-aria-[sort=ascending]:underline"></div>
+            <div class="group-aria-[labelledby=a_b]:underline"></div>
+            <div class="peer-aria-[labelledby=a_b]:underline"></div>
             <div class="group-aria-[sort=ascending]/foo:underline"></div>
             <div class="peer-aria-[sort=ascending]/foo:underline"></div>
           </div>
@@ -651,6 +654,9 @@ it('should support aria variants', () => {
       .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'] {
         text-decoration-line: underline;
       }
+      .aria-\[labelledby\=a_b\]\:underline[aria-labelledby='a b'] {
+        text-decoration-line: underline;
+      }
       .group[aria-checked='true'] .group-aria-checked\:underline {
         text-decoration-line: underline;
       }
@@ -658,6 +664,9 @@ it('should support aria variants', () => {
         text-decoration-line: underline;
       }
       .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group[aria-labelledby='a b'] .group-aria-\[labelledby\=a_b\]\:underline {
         text-decoration-line: underline;
       }
       .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline {
@@ -670,6 +679,9 @@ it('should support aria variants', () => {
         text-decoration-line: underline;
       }
       .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=a_b\]\:underline {
         text-decoration-line: underline;
       }
       .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline {
@@ -692,12 +704,15 @@ it('should support data variants', () => {
           <div>
             <div class="data-checked:underline"></div>
             <div class="data-[position=top]:underline"></div>
+            <div class="data-[foo=bar_baz]:underline"></div>
             <div class="group-data-checked:underline"></div>
             <div class="peer-data-checked:underline"></div>
             <div class="group-data-checked/foo:underline"></div>
             <div class="peer-data-checked/foo:underline"></div>
             <div class="group-data-[position=top]:underline"></div>
             <div class="peer-data-[position=top]:underline"></div>
+            <div class="group-data-[foo=bar_baz]:underline"></div>
+            <div class="peer-data-[foo=bar_baz]:underline"></div>
             <div class="group-data-[position=top]/foo:underline"></div>
             <div class="peer-data-[position=top]/foo:underline"></div>
           </div>
@@ -719,6 +734,9 @@ it('should support data variants', () => {
       .data-\[position\=top\]\:underline[data-position='top'] {
         text-decoration-line: underline;
       }
+      .data-\[foo\=bar_baz\]\:underline[data-foo='bar baz'] {
+        text-decoration-line: underline;
+      }
       .group[data-ui~='checked'] .group-data-checked\:underline {
         text-decoration-line: underline;
       }
@@ -726,6 +744,9 @@ it('should support data variants', () => {
         text-decoration-line: underline;
       }
       .group[data-position='top'] .group-data-\[position\=top\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group[data-foo='bar baz'] .group-data-\[foo\=bar_baz\]\:underline {
         text-decoration-line: underline;
       }
       .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline {
@@ -738,6 +759,9 @@ it('should support data variants', () => {
         text-decoration-line: underline;
       }
       .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=bar_baz\]\:underline {
         text-decoration-line: underline;
       }
       .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline {

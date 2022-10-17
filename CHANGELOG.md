@@ -29,8 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for modifiers to `matchUtilities` ([#9541](https://github.com/tailwindlabs/tailwindcss/pull/9541))
 - Switch to positional argument + object for modifiers ([#9541](https://github.com/tailwindlabs/tailwindcss/pull/9541))
 - Add new `min` and `max` variants ([#9558](https://github.com/tailwindlabs/tailwindcss/pull/9558))
-- Add aria variants ([#9557](https://github.com/tailwindlabs/tailwindcss/pull/9557))
-- Add `data-*` variants ([#9559](https://github.com/tailwindlabs/tailwindcss/pull/9559))
+- Add `aria-*` variants ([#9557](https://github.com/tailwindlabs/tailwindcss/pull/9557), [#9588](https://github.com/tailwindlabs/tailwindcss/pull/9588))
+- Add `data-*` variants ([#9559](https://github.com/tailwindlabs/tailwindcss/pull/9559), [#9588](https://github.com/tailwindlabs/tailwindcss/pull/9588))
 - Upgrade to `postcss-nested` v6.0 ([#9546](https://github.com/tailwindlabs/tailwindcss/pull/9546))
 - Expose `context.getVariants` for intellisense ([#9505](https://github.com/tailwindlabs/tailwindcss/pull/9505))
 
