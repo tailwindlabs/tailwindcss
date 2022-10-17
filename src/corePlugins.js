@@ -382,41 +382,41 @@ export let variantPlugins = {
   },
 
   ariaVariants: ({ matchVariant, theme }) => {
-    matchVariant('aria', (value) => `&[aria-${value}]`, { values: theme('aria') ?? {} })
+    matchVariant('aria', (value) => `&[aria-${normalize(value)}]`, { values: theme('aria') ?? {} })
     matchVariant(
       'group-aria',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.group\\/${modifier})[aria-${value}] &`
-          : `:merge(.group)[aria-${value}] &`,
+          ? `:merge(.group\\/${modifier})[aria-${normalize(value)}] &`
+          : `:merge(.group)[aria-${normalize(value)}] &`,
       { values: theme('aria') ?? {} }
     )
     matchVariant(
       'peer-aria',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.peer\\/${modifier})[aria-${value}] ~ &`
-          : `:merge(.peer)[aria-${value}] ~ &`,
+          ? `:merge(.peer\\/${modifier})[aria-${normalize(value)}] ~ &`
+          : `:merge(.peer)[aria-${normalize(value)}] ~ &`,
       { values: theme('aria') ?? {} }
     )
   },
 
   dataVariants: ({ matchVariant, theme }) => {
-    matchVariant('data', (value) => `&[data-${value}]`, { values: theme('data') ?? {} })
+    matchVariant('data', (value) => `&[data-${normalize(value)}]`, { values: theme('data') ?? {} })
     matchVariant(
       'group-data',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.group\\/${modifier})[data-${value}] &`
-          : `:merge(.group)[data-${value}] &`,
+          ? `:merge(.group\\/${modifier})[data-${normalize(value)}] &`
+          : `:merge(.group)[data-${normalize(value)}] &`,
       { values: theme('data') ?? {} }
     )
     matchVariant(
       'peer-data',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.peer\\/${modifier})[data-${value}] ~ &`
-          : `:merge(.peer)[data-${value}] ~ &`,
+          ? `:merge(.peer\\/${modifier})[data-${normalize(value)}] ~ &`
+          : `:merge(.peer)[data-${normalize(value)}] ~ &`,
       { values: theme('data') ?? {} }
     )
   },
