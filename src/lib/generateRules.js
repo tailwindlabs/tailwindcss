@@ -162,10 +162,23 @@ function applyVariant(variant, matches, context) {
 
   // Retrieve "arbitrary value"
   if (variant.endsWith(']') && !variant.startsWith('[')) {
-    let match = /-?\[(.*)\]/g.exec(variant)
+    // We either have:
+    //   @[200px]
+    //   group-[:hover]
+    //
+    // But we don't want:
+    //   @-[200px]        (`-` is incorrect)
+    //   group[:hover]    (`-` is missing)
+    let match = /(.)(-?)\[(.*)\]/g.exec(variant)
     if (match) {
-      variant = variant.replace(match[0], '')
-      args.value = match[1]
+      let [, char, seperator, value] = match
+      // @-[200px] case
+      if (char === '@' && seperator === '-') return []
+      // group[:hover] case
+      if (char !== '@' && seperator === '') return []
+
+      variant = variant.replace(`${seperator}[${value}]`, '')
+      args.value = value
     }
   }
 
