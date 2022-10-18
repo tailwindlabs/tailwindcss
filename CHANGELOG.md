@@ -58,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't require `content` key in custom plugin configs ([#9502](https://github.com/tailwindlabs/tailwindcss/pull/9502), [#9545](https://github.com/tailwindlabs/tailwindcss/pull/9545))
 - Fix content path detection on Windows ([#9569](https://github.com/tailwindlabs/tailwindcss/pull/9569))
 - Ensure `--content` is used in the CLI when passed ([#9587](https://github.com/tailwindlabs/tailwindcss/pull/9587))
+- Increase strictness when using `applyVariant` on illegale candidates ([#9599](https://github.com/tailwindlabs/tailwindcss/pull/9599))
 
 ## [3.1.8] - 2022-08-05
 
