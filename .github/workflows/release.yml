@@ -68,6 +68,6 @@ jobs:
               ref: 'master',
               workflow_id: 'upgrade-tailwindcss.yml',
               inputs: {
-                version: ${{ env.tailwindcss_version }}
+                version: '${{ env.tailwindcss_version }}'
               }
             })
