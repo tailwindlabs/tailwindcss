@@ -145,7 +145,7 @@ function applyVariant(variant, matches, context) {
   }
 
   /** @type {{modifier: string | null, value: string | null}} */
-  let args = { modifier: null, value: null }
+  let args = { modifier: null, value: sharedState.NONE }
 
   // Retrieve "modifier"
   {

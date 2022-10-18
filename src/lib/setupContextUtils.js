@@ -577,6 +577,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
 
       for (let [key, value] of Object.entries(options?.values ?? {})) {
+        if (key === 'DEFAULT') continue
+
         api.addVariant(
           isSpecial ? `${variant}${key}` : `${variant}-${key}`,
           ({ args, container }) =>
@@ -594,13 +596,20 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         )
       }
 
+      let hasDefault = 'DEFAULT' in (options?.values ?? {})
+
       api.addVariant(
         variant,
-        ({ args, container }) =>
-          variantFn(
-            args.value,
+        ({ args, container }) => {
+          if (args.value === sharedState.NONE && !hasDefault) {
+            return null
+          }
+
+          return variantFn(
+            args.value === sharedState.NONE ? options.values.DEFAULT : args.value,
             modifiersEnabled ? { modifier: args.modifier, container } : { container }
-          ),
+          )
+        },
         {
           ...options,
           id,

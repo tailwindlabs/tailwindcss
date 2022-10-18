@@ -656,3 +656,135 @@ it('should guarantee that we are not passing values from other variants to the w
     `)
   })
 })
+
+it('should default to the DEFAULT value for variants', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="foo:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant('foo', (value) => `.foo${value} &`, {
+          values: {
+            DEFAULT: '.bar',
+          },
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo.bar .foo\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+it('should not generate anything if the matchVariant does not have a DEFAULT value configured', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="foo:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant('foo', (value) => `.foo${value} &`)
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css``)
+  })
+})
+
+it('should be possible to use `null` as a DEFAULT value', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="foo:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant('foo', (value) => `.foo${value === null ? '-good' : '-bad'} &`, {
+          values: { DEFAULT: null },
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo-good .foo\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+it('should be possible to use `undefined` as a DEFAULT value', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="foo:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant('foo', (value) => `.foo${value === undefined ? '-good' : '-bad'} &`, {
+          values: { DEFAULT: undefined },
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo-good .foo\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
