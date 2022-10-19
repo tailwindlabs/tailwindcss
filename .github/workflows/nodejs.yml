@@ -12,6 +12,9 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,21 +43,12 @@ jobs:
       - name: Install dependencies
         # if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
-        env:
-          CI: true
 
       - name: Build Tailwind CSS
         run: npm run swcify
-        env:
-          CI: true
 
       - name: Lint
         run: npm run style
-        env:
-          CI: true
 
       - name: Test
         run: npm test
-        env:
-          CI: true
-

@@ -7,6 +7,9 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,13 +40,9 @@ jobs:
       - name: Install dependencies
         # if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
-        env:
-          CI: true
 
       - name: Test
         run: npm test
-        env:
-          CI: true
 
       - name: Calculate environment variables
         run: |
@@ -53,7 +52,6 @@ jobs:
       - name: Publish
         run: npm publish --tag ${{ env.RELEASE_CHANNEL }}
         env:
-          CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Trigger Tailwind Play update
