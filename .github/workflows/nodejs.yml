@@ -48,9 +48,13 @@ jobs:
         env:
           CI: true
 
-      - name: Test
-        run: |
-          ln -nfs `pwd` node_modules/tailwindcss # So that Prettier can use the local version
-          npm test
+      - name: Lint
+        run: npm run style
         env:
           CI: true
+
+      - name: Test
+        run: npm test
+        env:
+          CI: true
+
