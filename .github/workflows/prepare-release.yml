@@ -1,0 +1,84 @@
+name: Prepare Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  CI: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    permissions:
+      contents: write  # for softprops/action-gh-release to create GitHub release
+
+    runs-on: macos-11
+
+    strategy:
+      matrix:
+        node-version: [16]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: git fetch --tags -f
+
+      - name: Resolve version
+        id: vars
+        run: |
+          echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      - name: Get release notes
+        run: |
+          RELEASE_NOTES=$(npm run release-notes --silent)
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Build tailwindcss
+        run: npm run prepublishOnly
+
+      - name: Install standalone cli dependencies
+        run: npm install
+        working-directory: standalone-cli
+
+      - name: Build standalone cli
+        run: npm run build
+        working-directory: standalone-cli
+
+      - name: Test
+        run: npm test
+        working-directory: standalone-cli
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          tag_name: ${{ env.TAG_NAME }}
+          body: |
+            ${{ env.RELEASE_NOTES }}
+
+            * [Linux (arm64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-linux-arm64)
+            * [Linux (armv7)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-linux-armv7)
+            * [Linux (x64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-linux-x64)
+            * [macOS (arm64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-macos-arm64)
+            * [macOS (x64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-macos-x64)
+            * [Windows (x64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-windows-x64.exe)
+          files: |
+            standalone-cli/dist/tailwindcss-linux-arm64
+            standalone-cli/dist/tailwindcss-linux-armv7
+            standalone-cli/dist/tailwindcss-linux-x64
+            standalone-cli/dist/tailwindcss-macos-arm64
+            standalone-cli/dist/tailwindcss-macos-x64
+            standalone-cli/dist/tailwindcss-windows-x64.exe

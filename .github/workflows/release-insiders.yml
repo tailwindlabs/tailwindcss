@@ -61,10 +61,10 @@ jobs:
       - name: Resolve version
         id: vars
         run: |
-          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: 'Version based on commit: 0.0.0-insiders.${{ env.sha_short }}'
-        run: npm version 0.0.0-insiders.${{ env.sha_short }} --force --no-git-tag-version
+      - name: 'Version based on commit: 0.0.0-insiders.${{ env.SHA_SHORT }}'
+        run: npm version 0.0.0-insiders.${{ env.SHA_SHORT }} --force --no-git-tag-version
 
       - name: Publish
         run: npm publish --tag insiders
@@ -83,6 +83,6 @@ jobs:
               ref: 'master',
               workflow_id: 'upgrade-tailwindcss.yml',
               inputs: {
-                insidersVersion: '0.0.0-insiders.${{ env.sha_short }}'
+                insidersVersion: '0.0.0-insiders.${{ env.SHA_SHORT }}'
               }
             })

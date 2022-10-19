@@ -47,17 +47,17 @@ jobs:
 
       - name: Calculate environment variables
         run: |
-          echo "tag_name=$(npm run calculate-tag-name --silent)" >> $GITHUB_ENV
-          echo "tailwindcss_version=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
+          echo "RELEASE_CHANNEL=$(npm run release-channel --silent)" >> $GITHUB_ENV
+          echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
 
       - name: Publish
-        run: npm publish --tag ${{ env.tag_name }}
+        run: npm publish --tag ${{ env.RELEASE_CHANNEL }}
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Trigger Tailwind Play update
-        if: env.tag_name == 'latest'
+        if: env.RELEASE_CHANNEL == 'latest'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
@@ -68,6 +68,6 @@ jobs:
               ref: 'master',
               workflow_id: 'upgrade-tailwindcss.yml',
               inputs: {
-                version: '${{ env.tailwindcss_version }}'
+                version: '${{ env.TAILWINDCSS_VERSION }}'
               }
             })
