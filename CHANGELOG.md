@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.2.0] - 2022-10-19
+
 ### Added
 
 - Add new `@config` directive ([#9405](https://github.com/tailwindlabs/tailwindcss/pull/9405))
@@ -2075,7 +2079,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.8...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.8...v3.2.0
 [3.1.8]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.7...v3.1.8
 [3.1.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.6...v3.1.7
 [3.1.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.5...v3.1.6
