@@ -1,9 +1,10 @@
 <p align="center">
-  <a href="https://tailwindcss.com/#gh-light-mode-only" target="_blank">
-    <img src="./.github/logo-light.svg" alt="Tailwind CSS" width="350" height="70">
-  </a>
-  <a href="https://tailwindcss.com/#gh-dark-mode-only" target="_blank">
-    <img src="./.github/logo-dark.svg" alt="Tailwind CSS" width="350" height="70">
+  <a href="https://tailwindcss.com" target="_blank">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./.github/logo-dark.svg">
+      <source media="(prefers-color-scheme: light)" srcset="./.github/logo-light.svg">
+      <img alt="Tailwind CSS" src="./.github/logo-light.svg" width="350" height="70" style="max-width: 100%;">
+    </picture>
   </a>
 </p>
 
