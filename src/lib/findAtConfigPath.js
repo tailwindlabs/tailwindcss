@@ -16,24 +16,22 @@ export function findAtConfigPath(root, result) {
 
     if (relativeTo === null) {
       throw rule.error(
-        'The `@config` at-rule cannot be used without a `from` option being set on the PostCSS config.'
+        'The `@config` directive cannot be used without setting `from` in your PostCSS config.'
       )
     }
 
     if (configPath) {
-      throw rule.error('Only `@config` at-rule is allowed per file.')
+      throw rule.error('Only one `@config` directive is allowed per file.')
     }
 
     let matches = rule.params.match(/(['"])(.*?)\1/)
     if (!matches) {
-      throw rule.error(
-        'The `@config` at-rule must be followed by a string containing the path to the config file.'
-      )
+      throw rule.error('A path is required when using the `@config` directive.')
     }
 
     let inputPath = matches[2]
     if (path.isAbsolute(inputPath)) {
-      throw rule.error('The `@config` at-rule cannot be used with an absolute path.')
+      throw rule.error('The `@config` directive cannot be used with an absolute path.')
     }
 
     configPath = path.resolve(path.dirname(relativeTo), inputPath)

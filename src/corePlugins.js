@@ -159,13 +159,6 @@ export let variantPlugins = {
       matchVariant(
         name,
         (value = '', extra) => {
-          if (extra.modifier) {
-            log.warn(`modifier-${name}-experimental`, [
-              `The ${name} variant modifier feature in Tailwind CSS is currently in preview.`,
-              'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
-            ])
-          }
-
           let result = normalize(typeof value === 'function' ? value(extra) : value)
           if (!result.includes('&')) result = '&' + result
 
@@ -309,19 +302,19 @@ export let variantPlugins = {
       return (value) => {
         if (!areSimpleScreens) {
           log.warn('complex-screen-config', [
-            'The min and max variants are not supported with a screen configuration containing objects.',
+            'The `min-*` and `max-*` variants are not supported with a `screens` configuration containing objects.',
           ])
 
           return []
         } else if (!screensUseConsistentUnits) {
           log.warn('mixed-screen-units', [
-            'The min and max variants are not supported with a screen configuration containing mixed units.',
+            'The `min-*` and `max-*` variants are not supported with a `screens` configuration containing mixed units.',
           ])
 
           return []
         } else if (typeof value === 'string' && !canUseUnits(value)) {
           log.warn('minmax-have-mixed-units', [
-            'The min and max variants are not supported with a screen configuration containing mixed units.',
+            'The `min-*` and `max-*` variants are not supported with a `screens` configuration containing mixed units.',
           ])
 
           return []
