@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add negative value support for `outline-offset` ([#9136](https://github.com/tailwindlabs/tailwindcss/pull/9136))
 - Allow negating utilities using `min`/`max`/`clamp` ([#9237](https://github.com/tailwindlabs/tailwindcss/pull/9237))
 - Add new `collapse` utility for `visibility: collapse` ([#9181](https://github.com/tailwindlabs/tailwindcss/pull/9181))
-- Implement fallback plugins when arbitrary values result in css from multiple plugins ([#9376](https://github.com/tailwindlabs/tailwindcss/pull/9376))
+- Implement fallback plugins when arbitrary values result in CSS from multiple plugins ([#9376](https://github.com/tailwindlabs/tailwindcss/pull/9376))
 - Allow resolving content paths relative to the config file ([#9396](https://github.com/tailwindlabs/tailwindcss/pull/9396))
 - Add `@config` support ([#9405](https://github.com/tailwindlabs/tailwindcss/pull/9405))
 - Add `fill-none` and `stroke-none` utilities by default ([#9403](https://github.com/tailwindlabs/tailwindcss/pull/9403))
