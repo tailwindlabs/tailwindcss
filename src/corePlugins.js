@@ -159,13 +159,6 @@ export let variantPlugins = {
       matchVariant(
         name,
         (value = '', extra) => {
-          if (extra.modifier) {
-            log.warn(`modifier-${name}-experimental`, [
-              `The ${name} variant modifier feature in Tailwind CSS is currently in preview.`,
-              'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
-            ])
-          }
-
           let result = normalize(typeof value === 'function' ? value(extra) : value)
           if (!result.includes('&')) result = '&' + result
 
