@@ -31,5 +31,8 @@
       "node16-linuxstatic-armv7"
     ],
     "outputPath": "dist"
+  },
+  "jest": {
+    "testTimeout": 30000
   }
 }
