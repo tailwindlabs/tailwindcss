@@ -33,6 +33,13 @@ jobs:
         run: |
           echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
+      - name: Get release notes
+        run: |
+          RELEASE_NOTES=$(npm run release-notes --silent)
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -60,6 +67,8 @@ jobs:
           draft: true
           tag_name: ${{ env.TAG_NAME }}
           body: |
+            ${{ env.RELEASE_NOTES }}
+
             * [Linux (arm64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-linux-arm64)
             * [Linux (armv7)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-linux-armv7)
             * [Linux (x64)](https://github.com/tailwindlabs/tailwindcss/releases/download/${{ env.TAG_NAME }}/tailwindcss-linux-x64)
