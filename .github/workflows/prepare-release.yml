@@ -1,4 +1,4 @@
-name: Build Standalone CLI
+name: Prepare Release
 
 on:
   workflow_dispatch:
