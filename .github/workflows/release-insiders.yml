@@ -7,6 +7,9 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,26 +40,12 @@ jobs:
       - name: Install dependencies
         # if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
-        env:
-          CI: true
 
-      - name: Link and build Tailwind CSS
-        run: |
-          npm run swcify
-          ln -nfs `pwd` node_modules/tailwindcss
-        env:
-          CI: true
+      - name: Build Tailwind CSS
+        run: npm run swcify
 
       - name: Test
         run: npm test
-        env:
-          CI: true
-
-      - name: Unlink Tailwind CSS (for prettier)
-        run: |
-          unlink node_modules/tailwindcss
-        env:
-          CI: true
 
       - name: Resolve version
         id: vars
@@ -69,7 +58,6 @@ jobs:
       - name: Publish
         run: npm publish --tag insiders
         env:
-          CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Trigger Tailwind Play update

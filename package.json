@@ -23,7 +23,6 @@
     "test": "jest",
     "test:integrations": "npm run test --prefix ./integrations",
     "install:integrations": "node scripts/install-integrations.js",
-    "posttest": "npm run style",
     "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
     "generate:types": "node -r @swc/register scripts/generate-types.js",
     "generate": "npm run generate:plugin-list && npm run generate:types",
@@ -57,7 +56,6 @@
     "jest": "^28.1.3",
     "jest-diff": "^28.1.3",
     "prettier": "^2.7.1",
-    "prettier-plugin-tailwindcss": "^0.1.13",
     "rimraf": "^3.0.0",
     "source-map-js": "^1.0.2"
   },

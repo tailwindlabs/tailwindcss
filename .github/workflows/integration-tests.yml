@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -47,8 +50,6 @@ jobs:
       - name: Install dependencies
         # if: steps.cache-tailwindcss.outputs.cache-hit != 'true'
         run: npm install
-        env:
-          CI: true
 
       - name: Build Tailwind CSS
         run: npm run prepublishOnly
@@ -65,8 +66,6 @@ jobs:
       - name: Install shared dependencies
         if: steps.cache-integrations.outputs.cache-hit != 'true'
         run: npm run install:integrations
-        env:
-          CI: true
 
       - name: Test ${{ matrix.integration }}
         run: npm test --prefix ./integrations/${{ matrix.integration }}

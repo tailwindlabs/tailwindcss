@@ -12,6 +12,9 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,17 +43,40 @@ jobs:
       - name: Install dependencies
         # if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
-        env:
-          CI: true
 
       - name: Build Tailwind CSS
         run: npm run swcify
-        env:
-          CI: true
 
       - name: Test
-        run: |
-          ln -nfs `pwd` node_modules/tailwindcss # So that Prettier can use the local version
-          npm test
-        env:
-          CI: true
+        run: npm test
+
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      #   cache: 'npm'
+      #
+      # - name: Use cached node_modules
+      #   id: cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: node_modules
+      #     key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+      #     restore-keys: |
+      #       nodeModules-
+
+      - name: Install dependencies
+        # if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Lint
+        run: npm run style
