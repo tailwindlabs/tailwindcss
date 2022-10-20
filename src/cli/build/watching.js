@@ -62,7 +62,7 @@ export function createWatcher(args, { state, rebuild }) {
       extension: path.extname(file).slice(1),
     })
 
-    chain = chain.then(() => rebuild(changedContent))
+    chain = chain.then(() => rebuild(changedContent.splice(0)))
 
     return chain
   }

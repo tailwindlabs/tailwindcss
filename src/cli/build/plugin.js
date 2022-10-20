@@ -329,6 +329,26 @@ export async function createProcessor(args, cliConfigPath) {
     return readInput()
       .then((css) => processor.process(css, { ...postcssOptions, from: input, to: output }))
       .then((result) => {
+        if (!state.watcher) {
+          return result
+        }
+
+        env.DEBUG && console.time('Recording PostCSS dependencies')
+        for (let message of result.messages) {
+          if (message.type === 'dependency') {
+            state.contextDependencies.add(message.file)
+          }
+        }
+        env.DEBUG && console.timeEnd('Recording PostCSS dependencies')
+
+        // TODO: This needs to be in a different spot
+        env.DEBUG && console.time('Watch new files')
+        state.watcher.refreshWatchedFiles()
+        env.DEBUG && console.timeEnd('Watch new files')
+
+        return result
+      })
+      .then((result) => {
         if (!output) {
           process.stdout.write(result.css)
           return

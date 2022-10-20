@@ -605,4 +605,105 @@ describe('watcher', () => {
 
     return runningProcess.stop()
   })
+
+  test('classes are generated (and kept) when the index.html file changes (and removed when css/config files are changed)', async () => {
+    let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
+
+    // Start with a simple single class
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Add another class
+    await writeInputFile('index.html', html`<div class="flex font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .flex {
+          display: flex;
+        }
+
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Remove a class, because of performance reasons both classes will still be in the css file
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .flex {
+          display: flex;
+        }
+
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Save the index.css file, this should trigger a fresh context
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `
+    )
+    await runningProcess.onStderr(ready)
+
+    // Only 1 class should stay, because we started from scratch
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Add another class
+    await writeInputFile('index.html', html`<div class="flex font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .flex {
+          display: flex;
+        }
+
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Remove a class, because of performance reasons both classes will still be in the css file
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+
+    // If everything goes right, then both classes should still be here (because of the performance
+    // improvement). If we didn't solve the bug where from now on every save is a fresh context
+    // then this only has 1 class. So let's hope there are 2!
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .flex {
+          display: flex;
+        }
+
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
 })

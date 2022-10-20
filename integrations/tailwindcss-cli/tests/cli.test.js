@@ -411,6 +411,31 @@ describe('Build command', () => {
       `
     )
 
+    await writeInputFile(
+      'imported.css',
+      css`
+        @layer utilities {
+          .something-cool {
+            color: blue;
+          }
+        }
+      `
+    )
+
+    await runningProcess.onStderr(function ready(message) {
+      return message.includes('Done in')
+    })
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        @media (min-width: 768px) {
+          .md\:something-cool {
+            color: blue;
+          }
+        }
+      `
+    )
+
     return runningProcess.stop()
   })
 
