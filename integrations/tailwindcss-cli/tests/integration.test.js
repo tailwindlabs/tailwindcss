@@ -621,16 +621,16 @@ describe('watcher', () => {
     )
 
     // Add another class
-    await writeInputFile('index.html', html`<div class="font-bold underline"></div>`)
+    await writeInputFile('index.html', html`<div class="flex font-bold"></div>`)
     await runningProcess.onStderr(ready)
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .font-bold {
-          font-weight: 700;
+        .flex {
+          display: flex;
         }
 
-        .underline {
-          text-decoration-line: underline;
+        .font-bold {
+          font-weight: 700;
         }
       `
     )
@@ -640,12 +640,12 @@ describe('watcher', () => {
     await runningProcess.onStderr(ready)
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .font-bold {
-          font-weight: 700;
+        .flex {
+          display: flex;
         }
 
-        .underline {
-          text-decoration-line: underline;
+        .font-bold {
+          font-weight: 700;
         }
       `
     )
@@ -671,16 +671,16 @@ describe('watcher', () => {
     )
 
     // Add another class
-    await writeInputFile('index.html', html`<div class="font-bold underline"></div>`)
+    await writeInputFile('index.html', html`<div class="flex font-bold"></div>`)
     await runningProcess.onStderr(ready)
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .font-bold {
-          font-weight: 700;
+        .flex {
+          display: flex;
         }
 
-        .underline {
-          text-decoration-line: underline;
+        .font-bold {
+          font-weight: 700;
         }
       `
     )
@@ -694,12 +694,12 @@ describe('watcher', () => {
     // then this only has 1 class. So let's hope there are 2!
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .font-bold {
-          font-weight: 700;
+        .flex {
+          display: flex;
         }
 
-        .underline {
-          text-decoration-line: underline;
+        .font-bold {
+          font-weight: 700;
         }
       `
     )
