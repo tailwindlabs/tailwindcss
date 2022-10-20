@@ -84,6 +84,7 @@ type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>
 interface ThemeConfig {
   // Responsiveness
   screens: ResolvableTo<ScreensConfig>
+  supports: ResolvableTo<Record<string, string>>
 
   // Reusable base configs
   colors: ResolvableTo<RecursiveKeyValuePair>
