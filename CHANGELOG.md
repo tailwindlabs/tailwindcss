@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix missing `supports` in types ([#9616](https://github.com/tailwindlabs/tailwindcss/pull/9616))
 - Fix missing PostCSS dependencies in the CLI ([#9617](https://github.com/tailwindlabs/tailwindcss/pull/9617))
+- Ensure `micromatch` is a proper CLI dependency ([#9620](https://github.com/tailwindlabs/tailwindcss/pull/9620))
 
 ## [3.2.0] - 2022-10-19
 
