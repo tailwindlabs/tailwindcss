@@ -126,6 +126,7 @@ test('font-size utilities can include a line-height modifier', () => {
       {
         raw: html`<div class="text-sm md:text-base">
           <div class="text-sm/6 md:text-base/7"></div>
+          <div class="text-sm/[21px] md:text-base/[33px]"></div>
         </div>`,
       },
     ],
@@ -151,6 +152,10 @@ test('font-size utilities can include a line-height modifier', () => {
         font-size: 12px;
         line-height: 24px;
       }
+      .text-sm\/\[21px\] {
+        font-size: 12px;
+        line-height: 21px;
+      }
       @media (min-width: 768px) {
         .md\:text-base {
           font-size: 16px;
@@ -159,6 +164,10 @@ test('font-size utilities can include a line-height modifier', () => {
         .md\:text-base\/7 {
           font-size: 16px;
           line-height: 28px;
+        }
+        .md\:text-base\/\[33px\] {
+          font-size: 16px;
+          line-height: 33px;
         }
       }
     `)
