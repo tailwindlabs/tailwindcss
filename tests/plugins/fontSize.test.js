@@ -119,3 +119,48 @@ test('font-size utilities can include a font-weight', () => {
     `)
   })
 })
+
+test('font-size utilities can include a line-height modifier', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="text-sm md:text-base">
+          <div class="text-sm/6 md:text-base/7"></div>
+        </div>`,
+      },
+    ],
+    theme: {
+      fontSize: {
+        sm: ['12px', '20px'],
+        base: ['16px', '24px'],
+      },
+      lineHeight: {
+        6: '24px',
+        7: '28px',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .text-sm {
+        font-size: 12px;
+        line-height: 20px;
+      }
+      .text-sm\/6 {
+        font-size: 12px;
+        line-height: 24px;
+      }
+      @media (min-width: 768px) {
+        .md\:text-base {
+          font-size: 16px;
+          line-height: 24px;
+        }
+        .md\:text-base\/7 {
+          font-size: 16px;
+          line-height: 28px;
+        }
+      }
+    `)
+  })
+})
