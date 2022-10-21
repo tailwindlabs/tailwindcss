@@ -127,6 +127,7 @@ test('font-size utilities can include a line-height modifier', () => {
         raw: html`<div class="text-sm md:text-base">
           <div class="text-sm/6 md:text-base/7"></div>
           <div class="text-sm/[21px] md:text-base/[33px]"></div>
+          <div class="text-sm/999 md:text-base/000"></div>
         </div>`,
       },
     ],
