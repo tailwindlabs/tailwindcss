@@ -233,14 +233,20 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
 export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
   let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
 
+  let [modifier, utilityModifier] = splitUtilityModifier(rawModifier)
+
   let canUseUtilityModifier =
     modifiersEnabled &&
     options.modifiers != null &&
-    (options.modifiers === 'any' || typeof options.modifiers === 'object')
+    (options.modifiers === 'any' ||
+      (typeof options.modifiers === 'object' &&
+        ((utilityModifier && isArbitraryValue(utilityModifier)) ||
+          utilityModifier in options.modifiers)))
 
-  let [modifier, utilityModifier] = canUseUtilityModifier
-    ? splitUtilityModifier(rawModifier)
-    : [rawModifier, undefined]
+  if (!canUseUtilityModifier) {
+    modifier = rawModifier
+    utilityModifier = undefined
+  }
 
   if (utilityModifier !== undefined && modifier === '') {
     modifier = 'DEFAULT'
