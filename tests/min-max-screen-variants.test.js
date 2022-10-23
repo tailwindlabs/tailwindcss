@@ -660,3 +660,48 @@ it('warns when using min and max variants with mixed units (with no screens conf
   expect(warn).toHaveBeenCalledTimes(1)
   expect(warn.mock.calls.map((x) => x[0])).toEqual(['minmax-have-mixed-units'])
 })
+
+it('should properly handle nested style', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="max-md:2-wide-grid" />`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      function ({ addUtilities }) {
+        addUtilities({
+          '.2-wide-grid': {
+            display: 'grid',
+            '> *': {
+              'grid-column': 'span 2',
+            },
+          },
+        })
+      },
+    ],
+    theme: {
+      screens: defaultScreens,
+    },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    @media not all and (min-width: 768px) {
+      .max-md\:2-wide-grid {
+        display: grid;
+      }
+      .max-md\:2-wide-grid > * {
+        grid-column: span 2;
+      }
+    }
+  `)
+
+  expect(warn).toHaveBeenCalledTimes(0)
+})
