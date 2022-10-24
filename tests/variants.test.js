@@ -1029,3 +1029,40 @@ test('class inside pseudo-class function :has', () => {
     `)
   })
 })
+
+test('variant functions returning arrays should output correct results when nesting', async () => {
+  let config = {
+    content: [{ raw: html`<div class="test:foo" />` }],
+    corePlugins: { preflight: false },
+    plugins: [
+      function ({ addUtilities, addVariant }) {
+        addVariant('test', () => ['@media (test)'])
+        addUtilities({
+          '.foo': {
+            display: 'grid',
+            '> *': {
+              'grid-column': 'span 2',
+            },
+          },
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    @media (test) {
+      .test\:foo {
+        display: grid;
+      }
+      .test\:foo > * {
+        grid-column: span 2;
+      }
+    }
+  `)
+})
