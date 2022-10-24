@@ -94,17 +94,18 @@ function parseFilePath(filePath, ignore) {
  * @returns {ContentPath}
  */
 function resolveGlobPattern(contentPath) {
-  contentPath.pattern = contentPath.glob
-    ? `${contentPath.base}/${contentPath.glob}`
-    : contentPath.base
-
-  contentPath.pattern = contentPath.ignore ? `!${contentPath.pattern}` : contentPath.pattern
-
   // This is required for Windows support to properly pick up Glob paths.
   // Afaik, this technically shouldn't be needed but there's probably
   // some internal, direct path matching with a normalized path in
   // a package which can't handle mixed directory separators
-  contentPath.pattern = normalizePath(contentPath.pattern)
+  let base = normalizePath(contentPath.base)
+
+  // If the user's file path contains any special characters (like parens) for instance fast-glob
+  // is like "OOOH SHINY" and treats them as such. So we have to escape the base path to fix this
+  base = fastGlob.escapePath(base)
+
+  contentPath.pattern = contentPath.glob ? `${base}/${contentPath.glob}` : base
+  contentPath.pattern = contentPath.ignore ? `!${contentPath.pattern}` : contentPath.pattern
 
   return contentPath
 }
