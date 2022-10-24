@@ -210,7 +210,7 @@ function applyVariant(variant, matches, context) {
       let container = postcss.root({ nodes: [rule.clone()] })
 
       for (let [variantSort, variantFunction, containerFromArray] of variantFunctionTuples) {
-        let clone = containerFromArray ?? container.clone()
+        let clone = (containerFromArray ?? container).clone()
         let collectedFormats = []
 
         function prepareBackup() {
