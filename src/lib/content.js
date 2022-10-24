@@ -100,6 +100,10 @@ function resolveGlobPattern(contentPath) {
   // a package which can't handle mixed directory separators
   let base = normalizePath(contentPath.base)
 
+  // If the user's file path contains any special characters (like parens) for instance fast-glob
+  // is like "OOOH SHINY" and treats them as such. So we have to escape the base path to fix this
+  base = fastGlob.escapePath(base)
+
   contentPath.pattern = contentPath.glob ? `${base}/${contentPath.glob}` : base
   contentPath.pattern = contentPath.ignore ? `!${contentPath.pattern}` : contentPath.pattern
 
