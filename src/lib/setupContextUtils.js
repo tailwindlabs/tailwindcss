@@ -584,7 +584,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           ({ args, container }) =>
             variantFn(
               value,
-              modifiersEnabled ? { modifier: args.modifier, container } : { container }
+              modifiersEnabled ? { modifier: (args ?? {}).modifier, container } : { container }
             ),
           {
             ...options,
@@ -601,6 +601,10 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       api.addVariant(
         variant,
         ({ args, container }) => {
+          if (!args) {
+            return null
+          }
+          
           if (args.value === sharedState.NONE && !hasDefault) {
             return null
           }
