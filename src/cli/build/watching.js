@@ -62,12 +62,18 @@ export function createWatcher(args, { state, rebuild }) {
       extension: path.extname(file).slice(1),
     })
 
-    chain = chain.then(() => rebuild(changedContent.splice(0)))
-
-    return chain
+    rebuild(changedContent.splice(0))
   }
 
-  watcher.on('change', (file) => recordChangedFile(file))
+  watcher.on('change', (file) => {
+    // Applications like Vim/Neovim fire both rename and change events in succession for atomic writes
+    // In that case rebuild has already been queued by rename, so can be skipped in change
+    if (pendingRebuilds.has(file)) {
+      return
+    } else {
+      chain = chain.then(() => recordChangedFile(file))
+    }
+  })
   watcher.on('add', (file) => recordChangedFile(file))
 
   // Restore watching any files that are "removed"
@@ -109,17 +115,21 @@ export function createWatcher(args, { state, rebuild }) {
 
     pendingRebuilds.add(filePath)
 
-    chain = chain.then(async () => {
-      let content
+    chain = chain
+      .then(async () => {
+        let content
 
-      try {
-        content = await readFileWithRetries(path.resolve(filePath))
-      } finally {
-        pendingRebuilds.delete(filePath)
-      }
+        try {
+          content = await readFileWithRetries(path.resolve(filePath))
+        } finally {
+          pendingRebuilds.delete(filePath)
+        }
 
-      return recordChangedFile(filePath, () => content)
-    })
+        return content
+      })
+      .then((content) => {
+        recordChangedFile(filePath, () => content)
+      })
   })
 
   return {
