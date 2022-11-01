@@ -13,12 +13,13 @@ test('important modifier', () => {
           <div class="lg:!opacity-50"></div>
           <div class="xl:focus:disabled:!float-right"></div>
           <div class="!custom-parent-5"></div>
+          <div class="btn !disabled"></div>
         `,
       },
     ],
     corePlugins: { preflight: false },
     plugins: [
-      function ({ theme, matchUtilities }) {
+      function ({ theme, matchUtilities, addComponents }) {
         matchUtilities(
           {
             'custom-parent': (value) => {
@@ -31,6 +32,13 @@ test('important modifier', () => {
           },
           { values: theme('spacing') }
         )
+        addComponents({
+          '.btn': {
+            '&.disabled, &:disabled': {
+              color: 'gray',
+            },
+          },
+        })
       },
     ],
   }
@@ -69,6 +77,13 @@ test('important modifier', () => {
         .\!container {
           max-width: 1536px !important;
         }
+      }
+      .btn.disabled,
+      .btn:disabled {
+        color: gray;
+      }
+      .btn.\!disabled {
+        color: gray !important;
       }
       .\!font-bold {
         font-weight: 700 !important;

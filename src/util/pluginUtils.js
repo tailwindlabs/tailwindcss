@@ -37,6 +37,23 @@ export function updateAllClasses(selectors, updateClass) {
   return result
 }
 
+export function filterSelectorsForClass(selectors, classCandidate) {
+  let parser = selectorParser((selectors) => {
+    selectors.each((sel) => {
+      const containsClass = sel.nodes.some(
+        (node) => node.type === 'class' && node.value === classCandidate
+      )
+      if (!containsClass) {
+        sel.remove()
+      }
+    })
+  })
+
+  let result = parser.processSync(selectors)
+
+  return result
+}
+
 function resolveArbitraryValue(modifier, validate) {
   if (!isArbitraryValue(modifier)) {
     return undefined
