@@ -16,10 +16,6 @@ function isFunction(input) {
   return typeof input === 'function'
 }
 
-function isObject(input) {
-  return typeof input === 'object' && input !== null
-}
-
 function mergeWith(target, ...sources) {
   let customizer = sources.pop()
 
@@ -28,7 +24,7 @@ function mergeWith(target, ...sources) {
       let merged = customizer(target[k], source[k])
 
       if (merged === undefined) {
-        if (isObject(target[k]) && isObject(source[k])) {
+        if (isPlainObject(target[k]) && isPlainObject(source[k])) {
           target[k] = mergeWith({}, target[k], source[k], customizer)
         } else {
           target[k] = source[k]
@@ -103,12 +99,12 @@ function mergeThemes(themes) {
 
 function mergeExtensionCustomizer(merged, value) {
   // When we have an array of objects, we do want to merge it
-  if (Array.isArray(merged) && isObject(merged[0])) {
+  if (Array.isArray(merged) && isPlainObject(merged[0])) {
     return merged.concat(value)
   }
 
   // When the incoming value is an array, and the existing config is an object, prepend the existing object
-  if (Array.isArray(value) && isObject(value[0]) && isObject(merged)) {
+  if (Array.isArray(value) && isPlainObject(value[0]) && isPlainObject(merged)) {
     return [merged, ...value]
   }
 

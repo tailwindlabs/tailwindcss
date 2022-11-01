@@ -591,6 +591,8 @@ test('theme values in the extend section are not deeply merged when they are sim
       extend: {
         fonts: {
           sans: ['Comic Sans'],
+          serif: ['Papyrus', { fontFeatureSettings: '"cv11"' }],
+          mono: [['Lobster', 'Papyrus'], { fontFeatureSettings: '"cv11"' }],
         },
       },
     },
@@ -619,8 +621,8 @@ test('theme values in the extend section are not deeply merged when they are sim
     theme: {
       fonts: {
         sans: ['Comic Sans'],
-        serif: ['Constantia', 'Georgia', 'serif'],
-        mono: ['Menlo', 'Courier New', 'monospace'],
+        serif: ['Papyrus', { fontFeatureSettings: '"cv11"' }],
+        mono: [['Lobster', 'Papyrus'], { fontFeatureSettings: '"cv11"' }],
       },
     },
   })
