@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't reuse container for array returning variant functions ([#9644](https://github.com/tailwindlabs/tailwindcss/pull/9644))
 - Exclude non-relevant selectors when generating rules with the important modifier ([#9677](https://github.com/tailwindlabs/tailwindcss/issues/9677))
 - Fix merging of arrays during config resolution ([#9706](https://github.com/tailwindlabs/tailwindcss/issues/9706))
+- Ensure configured `font-feature-settings` are included in Preflight ([#9707](https://github.com/tailwindlabs/tailwindcss/pull/9707))
 
 ## [3.2.1] - 2022-10-21
 
