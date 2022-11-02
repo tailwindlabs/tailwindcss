@@ -44,7 +44,7 @@
   ],
   "devDependencies": {
     "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.3.4",
+    "@swc/core": "^1.3.11",
     "@swc/jest": "^0.2.23",
     "@swc/register": "^0.1.10",
     "autoprefixer": "^10.4.12",
