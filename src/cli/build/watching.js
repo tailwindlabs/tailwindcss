@@ -83,6 +83,7 @@ export function createWatcher(args, { state, rebuild }) {
     // Clear all pending rebuilds for the about-to-be-built files
     changes.forEach((change) => pendingRebuilds.delete(change.file))
 
+    // Resolve the promise even when the rebuild fails
     return rebuild(changes).then(
       () => Promise.resolve(),
       () => Promise.resolve()
@@ -108,18 +109,17 @@ export function createWatcher(args, { state, rebuild }) {
     // It MUST happen synchronously before the rebuild is queued for this to be effective
     pendingRebuilds.add(file)
 
-    chain = chain.then(() => {
-      content = content ?? (() => fs.promises.readFile(file, 'utf8'))
-
-      changedContent.push({
-        file,
-        content,
-        extension: path.extname(file).slice(1),
-      })
-
-      // Resolves once this file has been rebuilt (or the rebuild for this file has failed)
-      return rebuildAndContinue()
+    changedContent.push({
+      file,
+      content: content ?? (() => fs.promises.readFile(file, 'utf8')),
+      extension: path.extname(file).slice(1),
     })
+
+    // Resolves once this file has been rebuilt (or the rebuild for this file has failed)
+    // This queues as many rebuilds as there are changed files
+    // But those rebuilds happen after some delay
+    // And will immediately resolve if there are no changes
+    chain = chain.then(rebuildAndContinue)
 
     return chain
   }
@@ -164,14 +164,16 @@ export function createWatcher(args, { state, rebuild }) {
       return
     }
 
+    // We'll go ahead and add the file to the pending rebuilds list here
+    // It'll be removed when the rebuild starts unless the read fails
+    // which will be taken care of as well
+    pendingRebuilds.add(filePath)
+
     async function enqueue() {
       try {
-        // We'll go ahead and add the file to the pending rebuilds list here
-        // It'll be removed when the rebuild starts unless the read fails
-        pendingRebuilds.add(filePath)
-
-        // We need to read the file outside of the chain because it may be gone by the time we get to it
-        // Doing the read immediately increases the chance that the file is still there
+        // We need to read the file as early as possible outside of the chain
+        // because it may be gone by the time we get to it. doing the read
+        // immediately increases the chance that the file is still there
         let content = await readFileWithRetries(path.resolve(filePath))
 
         if (content === undefined) {
@@ -184,13 +186,13 @@ export function createWatcher(args, { state, rebuild }) {
       } catch {
         // If reading the file fails, it's was probably a deleted temporary file
         // So we can ignore it and no rebuild is needed
-
-        // If the file read fails we still need to make sure the file isn't stuck in the pending rebuilds list
-        pendingRebuilds.delete(filePath)
       }
     }
 
-    enqueue()
+    enqueue().then(() => {
+      // If the file read fails we still need to make sure the file isn't stuck in the pending rebuilds list
+      pendingRebuilds.delete(filePath)
+    })
   })
 
   return {
