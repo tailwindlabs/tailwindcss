@@ -9,6 +9,14 @@ import path from 'path'
 import { readFileWithRetries } from './utils.js'
 
 /**
+ * The core idea of this watcher is:
+ * 1. Whenever a file is added, changed, or renamed we queue a rebuild
+ * 2. Perform as few rebuilds as possible by batching them together
+ * 3. Coalesce events that happen in quick succession to avoid unnecessary rebuilds
+ * 4. Ensure another rebuild happens _if_ changed while a rebuild is in progress
+ */
+
+/**
  *
  * @param {*} args
  * @param {{ state, rebuild(changedFiles: any[]): Promise<any> }} param1
@@ -42,38 +50,81 @@ export function createWatcher(args, { state, rebuild }) {
       : false,
   })
 
+  // A queue of rebuilds, file reads, etc… to run
   let chain = Promise.resolve()
-  let pendingRebuilds = new Set()
+
+  /**
+   * A list of files that have been changed since the last rebuild
+   *
+   * @type {{file: string, content: () => Promise<string>, extension: string}[]}
+   */
   let changedContent = []
+
+  /**
+   * A list of files for which a rebuild has already been queued.
+   * This is used to prevent duplicate rebuilds when multiple events are fired for the same file.
+   * The rebuilt file is cleared from this list when it's associated rebuild has _started_
+   * This is because if the file is changed during a rebuild it won't trigger a new rebuild which it should
+   **/
+  let pendingRebuilds = new Set()
+
+  /**
+   * Rebuilds the changed files and resolves when the rebuild is
+   * complete regardless of whether it was successful or not
+   */
+  async function rebuildAndContinue() {
+    let changes = changedContent.splice(0)
+
+    // There are no changes to rebuild so we can just do nothing
+    if (changes.length === 0) {
+      return Promise.resolve()
+    }
+
+    // Clear all pending rebuilds for the about-to-be-built files
+    changes.forEach((change) => pendingRebuilds.delete(change.file))
+
+    return rebuild(changes).then(
+      () => Promise.resolve(),
+      () => Promise.resolve()
+    )
+  }
 
   /**
    *
    * @param {*} file
    * @param {(() => Promise<string>) | null} content
+   * @returns {Promise<void>}
    */
   function recordChangedFile(file, content = null) {
     file = path.resolve(file)
 
-    content = content ?? (async () => await fs.promises.readFile(file, 'utf8'))
-
-    changedContent.push({
-      file,
-      content,
-      extension: path.extname(file).slice(1),
-    })
-
-    rebuild(changedContent.splice(0))
-  }
-
-  watcher.on('change', (file) => {
     // Applications like Vim/Neovim fire both rename and change events in succession for atomic writes
     // In that case rebuild has already been queued by rename, so can be skipped in change
     if (pendingRebuilds.has(file)) {
-      return
-    } else {
-      chain = chain.then(() => recordChangedFile(file))
+      return Promise.resolve()
     }
-  })
+
+    // Mark that a rebuild of this file is going to happen
+    // It MUST happen synchronously before the rebuild is queued for this to be effective
+    pendingRebuilds.add(file)
+
+    chain = chain.then(() => {
+      content = content ?? (() => fs.promises.readFile(file, 'utf8'))
+
+      changedContent.push({
+        file,
+        content,
+        extension: path.extname(file).slice(1),
+      })
+
+      // Resolves once this file has been rebuilt (or the rebuild for this file has failed)
+      return rebuildAndContinue()
+    })
+
+    return chain
+  }
+
+  watcher.on('change', (file) => recordChangedFile(file))
   watcher.on('add', (file) => recordChangedFile(file))
 
   // Restore watching any files that are "removed"
@@ -113,23 +164,33 @@ export function createWatcher(args, { state, rebuild }) {
       return
     }
 
-    pendingRebuilds.add(filePath)
+    async function enqueue() {
+      try {
+        // We'll go ahead and add the file to the pending rebuilds list here
+        // It'll be removed when the rebuild starts unless the read fails
+        pendingRebuilds.add(filePath)
 
-    chain = chain
-      .then(async () => {
-        let content
+        // We need to read the file outside of the chain because it may be gone by the time we get to it
+        // Doing the read immediately increases the chance that the file is still there
+        let content = await readFileWithRetries(path.resolve(filePath))
 
-        try {
-          content = await readFileWithRetries(path.resolve(filePath))
-        } finally {
-          pendingRebuilds.delete(filePath)
+        if (content === undefined) {
+          return
         }
 
-        return content
-      })
-      .then((content) => {
-        recordChangedFile(filePath, () => content)
-      })
+        // This will push the rebuild onto the chain
+        // @ts-ignore: TypeScript isn't picking up that content is a string here
+        await recordChangedFile(filePath, () => content)
+      } catch {
+        // If reading the file fails, it's was probably a deleted temporary file
+        // So we can ignore it and no rebuild is needed
+
+        // If the file read fails we still need to make sure the file isn't stuck in the pending rebuilds list
+        pendingRebuilds.delete(filePath)
+      }
+    }
+
+    enqueue()
   })
 
   return {
