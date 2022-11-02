@@ -83,23 +83,12 @@ export function createWatcher(args, { state, rebuild }) {
       return Promise.resolve()
     }
 
-    // If a rebuild is already in progress we don't want to start another one until the timer has expired
-    if (_timer) {
-      clearTimeout(_timer)
-      _reject()
-    }
-
     // Clear all pending rebuilds for the about-to-be-built files
     changes.forEach((change) => pendingRebuilds.delete(change.file))
 
-    let timer = new Promise((resolve, reject) => {
-      _timer = setTimeout(resolve, 10)
-      _reject = reject
-    })
-
     // Resolve the promise even when the rebuild fails
-    return timer.then(
-      () => rebuild(changes),
+    return rebuild(changes).then(
+      () => {},
       () => {}
     )
   }
@@ -129,11 +118,25 @@ export function createWatcher(args, { state, rebuild }) {
       extension: path.extname(file).slice(1),
     })
 
+    if (_timer) {
+      clearTimeout(_timer)
+      _reject()
+    }
+
+    // If a rebuild is already in progress we don't want to start another one until the 10ms timer has expired
+    chain = chain.then(
+      () =>
+        new Promise((resolve, reject) => {
+          _timer = setTimeout(resolve, 10)
+          _reject = reject
+        })
+    )
+
     // Resolves once this file has been rebuilt (or the rebuild for this file has failed)
     // This queues as many rebuilds as there are changed files
     // But those rebuilds happen after some delay
     // And will immediately resolve if there are no changes
-    chain = chain.then(rebuildAndContinue)
+    chain = chain.then(rebuildAndContinue, rebuildAndContinue)
 
     return chain
   }
