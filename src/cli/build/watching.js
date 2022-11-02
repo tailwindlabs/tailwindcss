@@ -68,6 +68,9 @@ export function createWatcher(args, { state, rebuild }) {
    **/
   let pendingRebuilds = new Set()
 
+  let _timer
+  let _reject
+
   /**
    * Rebuilds the changed files and resolves when the rebuild is
    * complete regardless of whether it was successful or not
@@ -80,13 +83,24 @@ export function createWatcher(args, { state, rebuild }) {
       return Promise.resolve()
     }
 
+    // If a rebuild is already in progress we don't want to start another one until the timer has expired
+    if (_timer) {
+      clearTimeout(_timer)
+      _reject()
+    }
+
     // Clear all pending rebuilds for the about-to-be-built files
     changes.forEach((change) => pendingRebuilds.delete(change.file))
 
+    let timer = new Promise((resolve, reject) => {
+      _timer = setTimeout(resolve, 10)
+      _reject = reject
+    })
+
     // Resolve the promise even when the rebuild fails
-    return rebuild(changes).then(
-      () => Promise.resolve(),
-      () => Promise.resolve()
+    return timer.then(
+      () => rebuild(changes),
+      () => {}
     )
   }
 
