@@ -29,7 +29,7 @@ function* buildRegExps(context) {
 
   let utility = regex.any([
     // Arbitrary properties
-    /\[[^\s:'"`]+:[^\s\]]+\]/,
+    /\[[^\s:'"`]+:[^\s]+\]/,
 
     // Utilities
     regex.pattern([
