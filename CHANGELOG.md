@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix merging of arrays during config resolution ([#9706](https://github.com/tailwindlabs/tailwindcss/issues/9706))
 - Ensure configured `font-feature-settings` are included in Preflight ([#9707](https://github.com/tailwindlabs/tailwindcss/pull/9707))
 - Fix fractional values not being parsed properly inside arbitrary properties ([#9705](https://github.com/tailwindlabs/tailwindcss/pull/9705))
+- Fix incorrect selectors when using `@apply` in selectors with combinators and pseudos ([#9722](https://github.com/tailwindlabs/tailwindcss/pull/9722))
 
 ## [3.2.1] - 2022-10-21
 
