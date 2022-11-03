@@ -653,6 +653,33 @@ test('font-family values are retrieved without font-feature-settings', () => {
   })
 })
 
+test('font-feature-settings values can be retrieved', () => {
+  let input = css`
+    .heading {
+      font-family: theme('fontFamily.sans');
+      font-feature-settings: theme('fontFamily.sans[1].fontFeatureSettings');
+    }
+  `
+
+  let output = css`
+    .heading {
+      font-family: Inter;
+      font-feature-settings: 'cv11';
+    }
+  `
+
+  return run(input, {
+    theme: {
+      fontFamily: {
+        sans: ['Inter', { fontFeatureSettings: "'cv11'" }],
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('box-shadow values are joined when an array', () => {
   let input = css`
     .element {
