@@ -582,15 +582,9 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         api.addVariant(
           isSpecial ? `${variant}${key}` : `${variant}-${key}`,
           ({ args, container }) => {
-            // For backwards compatibility reasons for older versions of the vscode intellisense
-            // plugin and the JetBrains plugin.
-            if (!args) {
-              return null
-            }
-
             return variantFn(
               value,
-              modifiersEnabled ? { modifier: args.modifier, container } : { container }
+              modifiersEnabled ? { modifier: args?.modifier, container } : { container }
             )
           },
 
@@ -609,19 +603,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       api.addVariant(
         variant,
         ({ args, container }) => {
-          // For backwards compatibility reasons for older versions of the vscode intellisense
-          // plugin and the JetBrains plugin.
-          if (!args) {
-            return null
-          }
-
-          if (args.value === sharedState.NONE && !hasDefault) {
+          if (args?.value === sharedState.NONE && !hasDefault) {
             return null
           }
 
           return variantFn(
-            args.value === sharedState.NONE ? options.values.DEFAULT : args.value,
-            modifiersEnabled ? { modifier: args.modifier, container } : { container }
+            args?.value === sharedState.NONE ? options.values.DEFAULT : args?.value,
+            modifiersEnabled ? { modifier: args?.modifier, container } : { container }
           )
         },
         {

@@ -827,30 +827,20 @@ it('should be possible to use `undefined` as a DEFAULT value', () => {
 })
 
 it('should not break things', () => {
-  let config = {
-    plugins: [
-      ({ matchVariant }) => {
-        matchVariant(
-          'foo',
-          (_value, { modifier: _modifier }) => {
-            expect(true).toBe(true) // Should not be called
-            return `.foo &`
-          },
-          {
-            modifiers: {
-              bar: 'bar',
-            },
-          }
-        )
-      },
-    ],
-  }
+  let config = {}
 
   let context = createContext(resolveConfig(config))
-  let [[, fn]] = context.variantMap.get('foo')
-  expect(fn()).toBe(null)
-  expect(fn({})).toBe(null)
-  expect(fn({ format() {} })).toBe(null)
+  let [[, fn]] = context.variantMap.get('group')
 
-  expect.assertions(3)
+  let format
+
+  expect(
+    fn({
+      format(input) {
+        format = input
+      },
+    })
+  ).toBe(undefined)
+
+  expect(format).toBe(':merge(.group) &')
 })
