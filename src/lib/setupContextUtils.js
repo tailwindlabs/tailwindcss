@@ -528,7 +528,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
         if (typeof variantFunction !== 'string') {
           // Safelist public API functions
-          return (api) => {
+          return (api = {}) => {
             let { args, modifySelectors, container, separator, wrap, format } = api
             let result = variantFunction(
               Object.assign(
@@ -581,11 +581,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         api.addVariant(
           isSpecial ? `${variant}${key}` : `${variant}-${key}`,
-          ({ args, container }) =>
-            variantFn(
+          ({ args, container }) => {
+            return variantFn(
               value,
-              modifiersEnabled ? { modifier: args.modifier, container } : { container }
-            ),
+              modifiersEnabled ? { modifier: args?.modifier, container } : { container }
+            )
+          },
+
           {
             ...options,
             value,
@@ -601,13 +603,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       api.addVariant(
         variant,
         ({ args, container }) => {
-          if (args.value === sharedState.NONE && !hasDefault) {
+          if (args?.value === sharedState.NONE && !hasDefault) {
             return null
           }
 
           return variantFn(
-            args.value === sharedState.NONE ? options.values.DEFAULT : args.value,
-            modifiersEnabled ? { modifier: args.modifier, container } : { container }
+            args?.value === sharedState.NONE ? options.values.DEFAULT : args?.value,
+            modifiersEnabled ? { modifier: args?.modifier, container } : { container }
           )
         },
         {
