@@ -27,6 +27,37 @@ test('basic arbitrary properties', () => {
   })
 })
 
+test('different arbitrary properties are picked up separately', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="[foo:bar] [bar:baz]"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[foo\:bar\] {
+        foo: bar;
+      }
+
+      .\[bar\:baz\] {
+        bar: baz;
+      }
+    `)
+  })
+})
+
 test('arbitrary properties with modifiers', () => {
   let config = {
     content: [
