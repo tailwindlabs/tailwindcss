@@ -27,6 +27,37 @@ test('basic arbitrary properties', () => {
   })
 })
 
+test('different arbitrary properties are picked up separately', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="[foo:bar] [bar:baz]"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[foo\:bar\] {
+        foo: bar;
+      }
+
+      .\[bar\:baz\] {
+        bar: baz;
+      }
+    `)
+  })
+})
+
 test('arbitrary properties with modifiers', () => {
   let config = {
     content: [
@@ -292,6 +323,67 @@ test('invalid arbitrary property 2', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
+    `)
+  })
+})
+
+test('using fractional spacing values inside theme() function', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div
+          class="[border:_calc(5vw_-_theme(spacing[2.5]))_double_theme('colors.fuchsia.700')]"
+        ></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[border\:_calc\(5vw_-_theme\(spacing\[2\.5\]\)\)_double_theme\(\'colors\.fuchsia\.700\'\)\] {
+        border: calc(5vw - 0.625rem) double #a21caf;
+      }
+    `)
+  })
+})
+
+test('using multiple arbitrary props having fractional spacing values', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div
+          class="[height:_calc(100vh_-_theme(spacing[2.5]))] [box-shadow:_0_calc(theme(spacing[0.5])_*_-1)_theme(colors.red.400)_inset]"
+        ></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+
+      .\[height\:_calc\(100vh_-_theme\(spacing\[2\.5\]\)\)\] {
+        height: calc(100vh - 0.625rem);
+      }
+      .\[box-shadow\:_0_calc\(theme\(spacing\[0\.5\]\)_\*_-1\)_theme\(colors\.red\.400\)_inset\] {
+        box-shadow: 0 calc(0.125rem * -1) #f87171 inset;
+      }
     `)
   })
 })

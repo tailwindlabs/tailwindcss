@@ -3,7 +3,7 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses, getMatchingTypes } from '../util/pluginUtils'
+import { updateAllClasses, filterSelectorsForClass, getMatchingTypes } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
@@ -116,12 +116,15 @@ function applyImportant(matches, classCandidate) {
   for (let [meta, rule] of matches) {
     let container = postcss.root({ nodes: [rule.clone()] })
     container.walkRules((r) => {
-      r.selector = updateAllClasses(r.selector, (className) => {
-        if (className === classCandidate) {
-          return `!${className}`
+      r.selector = updateAllClasses(
+        filterSelectorsForClass(r.selector, classCandidate),
+        (className) => {
+          if (className === classCandidate) {
+            return `!${className}`
+          }
+          return className
         }
-        return className
-      })
+      )
       r.walkDecls((d) => (d.important = true))
     })
     result.push([{ ...meta, important: true }, container.nodes[0]])
