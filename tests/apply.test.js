@@ -1691,3 +1691,53 @@ it('should not replace multiple instances of the same class in a single selector
     }
   `)
 })
+
+it('should maintain the correct selector when applying other utilities', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="check"></div>
+          </div>
+        `,
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+
+    .foo:hover.bar .baz {
+      @apply bg-black;
+      color: red;
+    }
+
+    .foo:hover.bar > .baz {
+      @apply bg-black;
+      color: red;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo.bar:hover .baz {
+        --tw-bg-opacity: 1;
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+      }
+
+      .foo:hover.bar .baz {
+        color: red;
+      }
+
+      .foo.bar:hover > .baz {
+        --tw-bg-opacity: 1;
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+      }
+
+      .foo:hover.bar > .baz {
+        color: red;
+      }
+    `)
+  })
+})
