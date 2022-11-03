@@ -1,3 +1,6 @@
+import resolveConfig from '../src/public/resolve-config'
+import { createContext } from '../src/lib/setupContextUtils'
+
 import { run, html, css } from './util/run'
 
 test('partial arbitrary variants', () => {
@@ -787,4 +790,67 @@ it('should be possible to use `undefined` as a DEFAULT value', () => {
       }
     `)
   })
+})
+
+it('should be possible to use `undefined` as a DEFAULT value', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="foo:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant('foo', (value) => `.foo${value === undefined ? '-good' : '-bad'} &`, {
+          values: { DEFAULT: undefined },
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .foo-good .foo\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+it('should not break things', () => {
+  let config = {
+    plugins: [
+      ({ matchVariant }) => {
+        matchVariant(
+          'foo',
+          (_value, { modifier: _modifier }) => {
+            expect(true).toBe(true) // Should not be called
+            return `.foo &`
+          },
+          {
+            modifiers: {
+              bar: 'bar',
+            },
+          }
+        )
+      },
+    ],
+  }
+
+  let context = createContext(resolveConfig(config))
+  let [[, fn]] = context.variantMap.get('foo')
+  expect(fn()).toBe(null)
+  expect(fn({})).toBe(null)
+  expect(fn({ format() {} })).toBe(null)
+
+  expect.assertions(3)
 })

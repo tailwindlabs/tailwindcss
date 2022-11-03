@@ -528,7 +528,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       variantFunctions = [].concat(variantFunctions).map((variantFunction) => {
         if (typeof variantFunction !== 'string') {
           // Safelist public API functions
-          return (api) => {
+          return (api = {}) => {
             let { args, modifySelectors, container, separator, wrap, format } = api
             let result = variantFunction(
               Object.assign(
@@ -581,11 +581,19 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         api.addVariant(
           isSpecial ? `${variant}${key}` : `${variant}-${key}`,
-          ({ args, container }) =>
-            variantFn(
+          ({ args, container }) => {
+            // For backwards compatibility reasons for older versions of the vscode intellisense
+            // plugin and the JetBrains plugin.
+            if (!args) {
+              return null
+            }
+
+            return variantFn(
               value,
-              modifiersEnabled ? { modifier: (args ?? {}).modifier, container } : { container }
-            ),
+              modifiersEnabled ? { modifier: args.modifier, container } : { container }
+            )
+          },
+
           {
             ...options,
             value,
@@ -601,10 +609,12 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       api.addVariant(
         variant,
         ({ args, container }) => {
+          // For backwards compatibility reasons for older versions of the vscode intellisense
+          // plugin and the JetBrains plugin.
           if (!args) {
             return null
           }
-          
+
           if (args.value === sharedState.NONE && !hasDefault) {
             return null
           }
