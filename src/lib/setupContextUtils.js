@@ -608,7 +608,11 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           }
 
           return variantFn(
-            args?.value === sharedState.NONE ? options.values.DEFAULT : args?.value,
+            args?.value === sharedState.NONE
+              ? options.values.DEFAULT
+              : // Falling back to args if it is a string, otherwise '' for older intellisense
+                // (JetBrains) plugins.
+                args?.value ?? (typeof args === 'string' ? args : ''),
             modifiersEnabled ? { modifier: args?.modifier, container } : { container }
           )
         },
