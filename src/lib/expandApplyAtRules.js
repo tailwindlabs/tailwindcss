@@ -376,7 +376,7 @@ function processApply(root, context, localCache) {
                 return 1
               }
 
-              return group.indexOf(a) - group.indexOf(b)
+              return 0
             })
           }
 
