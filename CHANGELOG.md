@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Fixed use of `raw` content in the CLI ([#9773](https://github.com/tailwindlabs/tailwindcss/pull/9773))
 
 ## [3.2.2] - 2022-11-04
 
