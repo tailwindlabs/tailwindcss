@@ -195,8 +195,8 @@ let state = {
       return file !== null && typeof file === 'object'
     })
 
-    for (let { raw: content, extension = 'html' } of rawContent) {
-      content.push({ content, extension })
+    for (let { raw: htmlContent, extension = 'html' } of rawContent) {
+      content.push({ content: htmlContent, extension })
     }
 
     return content
