@@ -191,6 +191,40 @@ describe('static build', () => {
       `
     )
   })
+
+  it('should work with raw content', async () => {
+    await writeInputFile(
+      '../tailwind.config.js',
+      javascript`
+        module.exports = {
+          content: {
+            files: [{ raw: 'bg-red-500'}],
+          },
+          theme: {
+            extend: {
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+          plugins: [],
+        }
+      `
+    )
+
+    await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+      env: { NODE_ENV: 'production' },
+    })
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+      `
+    )
+  })
 })
 
 describe('watcher', () => {
