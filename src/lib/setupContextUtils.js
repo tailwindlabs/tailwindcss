@@ -825,6 +825,7 @@ function registerPlugins(plugins, context) {
     if (checks.length > 0) {
       let patternMatchingCount = new Map()
       let prefixLength = context.tailwindConfig.prefix.length
+      let checkImportantUtils = checks.some((check) => check.pattern.source.includes('!'))
 
       for (let util of classList) {
         let utils = Array.isArray(util)
@@ -859,6 +860,10 @@ function registerPlugins(plugins, context) {
                     )
                   ),
                 ]
+              }
+
+              if (checkImportantUtils && options?.respectImportant) {
+                classes = [...classes, ...classes.map((cls) => '!' + cls)]
               }
 
               return classes

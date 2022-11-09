@@ -195,6 +195,35 @@ it('should not safelist when an sparse/holey list is provided', () => {
   })
 })
 
+it('should not safelist any invalid variants if provided', () => {
+  let config = {
+    content: [{ raw: html`<div class="uppercase"></div>` }],
+    safelist: [
+      {
+        pattern: /^bg-(red)-(100|200)$/,
+        variants: ['foo', 'bar'],
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .bg-red-100 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+      }
+      .bg-red-200 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+      }
+    `)
+  })
+})
+
 it('should safelist negatives based on a pattern regex', () => {
   let config = {
     content: [{ raw: html`<div class="uppercase"></div>` }],
@@ -300,6 +329,205 @@ it('should safelist negatives based on a pattern regex', () => {
       }
       .hover\:ring-red-200\/50:hover {
         --tw-ring-color: rgb(254 202 202 / 0.5);
+      }
+    `)
+  })
+})
+
+it('should safelist pattern regex with !important selector', () => {
+  let config = {
+    content: [{ raw: html`<div class="uppercase"></div>` }],
+    safelist: [{ pattern: /^!grid-cols-(4|5|6)$/ }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .\!grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      }
+
+      .\!grid-cols-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+      }
+
+      .\!grid-cols-6 {
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+      }
+    `)
+  })
+})
+
+it('should safelist pattern regex with custom prefix along with !important selector', () => {
+  let config = {
+    prefix: 'tw-',
+    content: [{ raw: html`<div class="tw-uppercase"></div>` }],
+    safelist: [{ pattern: /^!tw-grid-cols-(4|5|6)$/ }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .\!tw-grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      }
+
+      .\!tw-grid-cols-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+      }
+
+      .\!tw-grid-cols-6 {
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+      }
+
+      .tw-uppercase {
+        text-transform: uppercase;
+      }
+    `)
+  })
+})
+
+it('should safelist pattern regex having !important selector with variants', () => {
+  let config = {
+    content: [{ raw: html`<div class="uppercase"></div>` }],
+    safelist: [
+      {
+        pattern: /^!bg-gray-(500|600|700|800)$/,
+        variants: ['hover'],
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .\!bg-gray-500 {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(107 114 128 / var(--tw-bg-opacity)) !important;
+      }
+
+      .\!bg-gray-600 {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(75 85 99 / var(--tw-bg-opacity)) !important;
+      }
+
+      .\!bg-gray-700 {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(55 65 81 / var(--tw-bg-opacity)) !important;
+      }
+
+      .\!bg-gray-800 {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(31 41 55 / var(--tw-bg-opacity)) !important;
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+      }
+
+      .hover\:\!bg-gray-500:hover {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(107 114 128 / var(--tw-bg-opacity)) !important;
+      }
+
+      .hover\:\!bg-gray-600:hover {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(75 85 99 / var(--tw-bg-opacity)) !important;
+      }
+
+      .hover\:\!bg-gray-700:hover {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(55 65 81 / var(--tw-bg-opacity)) !important;
+      }
+
+      .hover\:\!bg-gray-800:hover {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(31 41 55 / var(--tw-bg-opacity)) !important;
+      }
+    `)
+  })
+})
+
+it('should safelist multiple patterns with !important selector', () => {
+  let config = {
+    content: [{ raw: html`<div class="uppercase"></div>` }],
+    safelist: [
+      {
+        pattern: /^!text-gray-(700|800|900)$/,
+        variants: ['hover'],
+      },
+      {
+        pattern: /^!bg-gray-(200|300|400)$/,
+        variants: ['hover'],
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .\!bg-gray-200 {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(229 231 235 / var(--tw-bg-opacity)) !important;
+      }
+
+      .\!bg-gray-300 {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(209 213 219 / var(--tw-bg-opacity)) !important;
+      }
+
+      .\!bg-gray-400 {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(156 163 175 / var(--tw-bg-opacity)) !important;
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+      }
+
+      .\!text-gray-700 {
+        --tw-text-opacity: 1 !important;
+        color: rgb(55 65 81 / var(--tw-text-opacity)) !important;
+      }
+
+      .\!text-gray-800 {
+        --tw-text-opacity: 1 !important;
+        color: rgb(31 41 55 / var(--tw-text-opacity)) !important;
+      }
+
+      .\!text-gray-900 {
+        --tw-text-opacity: 1 !important;
+        color: rgb(17 24 39 / var(--tw-text-opacity)) !important;
+      }
+
+      .hover\:\!bg-gray-200:hover {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(229 231 235 / var(--tw-bg-opacity)) !important;
+      }
+
+      .hover\:\!bg-gray-300:hover {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(209 213 219 / var(--tw-bg-opacity)) !important;
+      }
+
+      .hover\:\!bg-gray-400:hover {
+        --tw-bg-opacity: 1 !important;
+        background-color: rgb(156 163 175 / var(--tw-bg-opacity)) !important;
+      }
+
+      .hover\:\!text-gray-700:hover {
+        --tw-text-opacity: 1 !important;
+        color: rgb(55 65 81 / var(--tw-text-opacity)) !important;
+      }
+
+      .hover\:\!text-gray-800:hover {
+        --tw-text-opacity: 1 !important;
+        color: rgb(31 41 55 / var(--tw-text-opacity)) !important;
+      }
+
+      .hover\:\!text-gray-900:hover {
+        --tw-text-opacity: 1 !important;
+        color: rgb(17 24 39 / var(--tw-text-opacity)) !important;
       }
     `)
   })
