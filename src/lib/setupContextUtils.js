@@ -861,6 +861,10 @@ function registerPlugins(plugins, context) {
                 ]
               }
 
+              if (options?.respectImportant) {
+                classes = [...classes, ...classes.map((cls) => '!' + cls)]
+              }
+
               return classes
             })()
           : [util]
