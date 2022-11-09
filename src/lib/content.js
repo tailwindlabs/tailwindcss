@@ -196,7 +196,14 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
     let prevModified = fileModifiedMap.has(file) ? fileModifiedMap.get(file) : -Infinity
     let modified = fs.statSync(file).mtimeMs
 
-    if (modified > prevModified) {
+    // This check is intentionally >= because we track the last modified time of context dependencies
+    // earier in the process and we want to make sure we don't miss any changes that happen
+    // when a context dependency is also a content dependency
+    // Ideally, we'd do all this tracking at one time but that is a larger refactor
+    // than we want to commit to right now, so this is a decent compromise.
+    // This should be sufficient because file modification times will be off by at least
+    // 1ms (the precision of fstat in Node) in most cases if they exist and were changed.
+    if (modified >= prevModified) {
       changedFiles.add(file)
       fileModifiedMap.set(file, modified)
     }
