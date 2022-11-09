@@ -370,9 +370,9 @@ function processApply(root, context, localCache) {
                 return -1
               } else if (a.type === 'class' && b.type === 'tag') {
                 return 1
-              } else if (a.type === 'class' && b.type === 'pseudo') {
+              } else if (a.type === 'class' && b.type === 'pseudo' && b.value.startsWith('::')) {
                 return -1
-              } else if (a.type === 'pseudo' && b.type === 'class') {
+              } else if (a.type === 'pseudo' && a.value.startsWith('::') && b.type === 'class') {
                 return 1
               }
 

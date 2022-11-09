@@ -861,12 +861,12 @@ test('multi-class utilities handle selector-mutating variants correctly', () => 
     content: [
       {
         raw: html`<div
-          class="hover:foo hover:bar hover:baz group-hover:foo group-hover:bar group-hover:baz peer-checked:foo peer-checked:bar peer-checked:baz"
+          class="after:foo after:bar after:baz hover:foo hover:bar hover:baz group-hover:foo group-hover:bar group-hover:baz peer-checked:foo peer-checked:bar peer-checked:baz"
         ></div>`,
       },
       {
         raw: html`<div
-          class="hover:foo1 hover:bar1 hover:baz1 group-hover:foo1 group-hover:bar1 group-hover:baz1 peer-checked:foo1 peer-checked:bar1 peer-checked:baz1"
+          class="after:foo1 after:bar1 after:baz1 hover:foo1 hover:bar1 hover:baz1 group-hover:foo1 group-hover:bar1 group-hover:baz1 peer-checked:foo1 peer-checked:bar1 peer-checked:baz1"
         ></div>`,
       },
     ],
@@ -885,15 +885,45 @@ test('multi-class utilities handle selector-mutating variants correctly', () => 
     }
   `
 
+  // The second set of ::after cases (w/ descendant selectors)
+  // are clearly "wrong" BUT you can't have a descendant of a
+  // pseudo - element so the utilities `after:foo1` and
+  // `after:bar1` are non-sensical so this is still
+  // perfectly fine behavior
+
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .hover\:foo.bar.baz:hover {
+      .after\:foo.bar.baz::after {
+        content: var(--tw-content);
         color: red;
       }
-      .hover\:bar.foo.baz:hover {
+      .after\:bar.foo.baz::after {
+        content: var(--tw-content);
         color: red;
       }
-      .hover\:baz.foo.bar:hover {
+      .after\:baz.foo.bar::after {
+        content: var(--tw-content);
+        color: red;
+      }
+      .after\:foo1 .bar1 .baz1::after {
+        content: var(--tw-content);
+        color: red;
+      }
+      .foo1 .after\:bar1 .baz1::after {
+        content: var(--tw-content);
+        color: red;
+      }
+      .foo1 .bar1 .after\:baz1::after {
+        content: var(--tw-content);
+        color: red;
+      }
+      .hover\:foo:hover.bar.baz {
+        color: red;
+      }
+      .hover\:bar:hover.foo.baz {
+        color: red;
+      }
+      .hover\:baz:hover.foo.bar {
         color: red;
       }
       .hover\:foo1:hover .bar1 .baz1 {
