@@ -195,6 +195,35 @@ it('should not safelist when an sparse/holey list is provided', () => {
   })
 })
 
+it('should not safelist any invalid variants if provided', () => {
+  let config = {
+    content: [{ raw: html`<div class="uppercase"></div>` }],
+    safelist: [
+      {
+        pattern: /^bg-(red)-(100|200)$/,
+        variants: ['foo', 'bar'],
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .bg-red-100 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+      }
+      .bg-red-200 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+      }
+    `)
+  })
+})
+
 it('should safelist negatives based on a pattern regex', () => {
   let config = {
     content: [{ raw: html`<div class="uppercase"></div>` }],
