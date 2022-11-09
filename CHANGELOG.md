@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.2.3] - 2022-11-09
+
 ### Fixed
 
 - Fixed use of `raw` content in the CLI ([#9773](https://github.com/tailwindlabs/tailwindcss/pull/9773))
@@ -2106,7 +2110,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.3...HEAD
+[3.2.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.1...v3.2.2
 [3.2.1]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.1.8...v3.2.0
