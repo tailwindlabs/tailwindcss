@@ -97,14 +97,15 @@ export function createWatcher(args, { state, rebuild }) {
    *
    * @param {*} file
    * @param {(() => Promise<string>) | null} content
+   * @param {boolean} skipPendingCheck
    * @returns {Promise<void>}
    */
-  function recordChangedFile(file, content = null) {
+  function recordChangedFile(file, content = null, skipPendingCheck = false) {
     file = path.resolve(file)
 
     // Applications like Vim/Neovim fire both rename and change events in succession for atomic writes
     // In that case rebuild has already been queued by rename, so can be skipped in change
-    if (pendingRebuilds.has(file)) {
+    if (pendingRebuilds.has(file) && !skipPendingCheck) {
       return Promise.resolve()
     }
 
@@ -198,8 +199,10 @@ export function createWatcher(args, { state, rebuild }) {
         }
 
         // This will push the rebuild onto the chain
+        // We MUST skip the rebuild check here otherwise the rebuild will never happen on Linux
+        // This is because the order of events and timing is different on Linux
         // @ts-ignore: TypeScript isn't picking up that content is a string here
-        await recordChangedFile(filePath, () => content)
+        await recordChangedFile(filePath, () => content, true)
       } catch {
         // If reading the file fails, it's was probably a deleted temporary file
         // So we can ignore it and no rebuild is needed
