@@ -10,14 +10,26 @@ afterEach(() => warn.mockClear())
 
 it('can block classes matched literally', () => {
   let config = {
-    content: [{ raw: html`<div class="font-bold uppercase hover:text-sm bg-red-500/50"></div>` }],
-    blocklist: ['uppercase', 'hover:text-sm', 'bg-red-500/50'],
+    content: [
+      {
+        raw: html`<div
+          class="font-bold uppercase sm:hover:text-sm hover:text-sm bg-red-500/50"
+        ></div>`,
+      },
+    ],
+    blocklist: ['font', 'uppercase', 'hover:text-sm', 'bg-red-500/50'],
   }
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchCss(css`
       .font-bold {
         font-weight: 700;
+      }
+      @media (min-width: 640px) {
+        .sm\:hover\:text-sm:hover {
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+        }
       }
     `)
   })
