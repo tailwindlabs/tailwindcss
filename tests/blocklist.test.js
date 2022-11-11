@@ -13,23 +13,61 @@ it('can block classes matched literally', () => {
     content: [
       {
         raw: html`<div
-          class="font-bold uppercase sm:hover:text-sm hover:text-sm bg-red-500/50"
+          class="font-bold uppercase sm:hover:text-sm hover:text-sm bg-red-500/50 my-custom-class"
         ></div>`,
       },
     ],
-    blocklist: ['font', 'uppercase', 'hover:text-sm', 'bg-red-500/50'],
+    blocklist: ['font', 'uppercase', 'hover:text-sm', 'bg-red-500/50', 'my-custom-class'],
   }
 
-  return run('@tailwind utilities', config).then((result) => {
+  let input = css`
+    @tailwind utilities;
+    .my-custom-class {
+      color: red;
+    }
+  `
+
+  return run(input, config).then((result) => {
     return expect(result.css).toMatchCss(css`
       .font-bold {
         font-weight: 700;
+      }
+      .my-custom-class {
+        color: red;
       }
       @media (min-width: 640px) {
         .sm\:hover\:text-sm:hover {
           font-size: 0.875rem;
           line-height: 1.25rem;
         }
+      }
+    `)
+  })
+})
+
+it('can block classes inside @layer', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="font-bold my-custom-class"></div>`,
+      },
+    ],
+    blocklist: ['my-custom-class'],
+  }
+
+  let input = css`
+    @tailwind utilities;
+    @layer utilities {
+      .my-custom-class {
+        color: red;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    return expect(result.css).toMatchCss(css`
+      .font-bold {
+        font-weight: 700;
       }
     `)
   })
