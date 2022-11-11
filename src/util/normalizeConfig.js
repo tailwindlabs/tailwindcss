@@ -154,7 +154,16 @@ export function normalizeConfig(config) {
   config.blocklist = (() => {
     let { blocklist } = config
 
-    if (Array.isArray(blocklist)) return blocklist
+    if (Array.isArray(blocklist)) {
+      if (blocklist.every((item) => typeof item === 'string')) {
+        return blocklist
+      }
+
+      log.warn('blocklist-invalid', [
+        'The `blocklist` option must be an array of strings.',
+        'https://tailwindcss.com/docs/content-configuration#discarding-classes',
+      ])
+    }
 
     return []
   })()

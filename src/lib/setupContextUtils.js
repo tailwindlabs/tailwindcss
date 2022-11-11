@@ -1165,7 +1165,8 @@ export function createContext(tailwindConfig, changedContent = [], root = postcs
     candidateRuleCache: new Map(),
     classCache: new Map(),
     applyClassCache: new Map(),
-    notClassCache: new Set(),
+    // Seed the not class cache with the blocklist (which is only strings)
+    notClassCache: new Set(tailwindConfig.blocklist ?? []),
     postCssNodeCache: new Map(),
     candidateRuleMap: new Map(),
     tailwindConfig,
