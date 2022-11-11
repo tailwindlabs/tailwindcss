@@ -150,6 +150,15 @@ export function normalizeConfig(config) {
     return []
   })()
 
+  // Normalize the `blocklist`
+  config.blocklist = (() => {
+    let { blocklist } = config
+
+    if (Array.isArray(blocklist)) return blocklist
+
+    return []
+  })()
+
   // Normalize prefix option
   if (typeof config.prefix === 'function') {
     log.warn('prefix-function', [

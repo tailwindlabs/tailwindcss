@@ -793,6 +793,24 @@ function getImportantStrategy(important) {
   }
 }
 
+/**
+ *
+ * @param {string} candidate
+ * @param {*} context
+ * @returns {boolean}
+ */
+function isInBlocklist(candidate, context) {
+  let blocklist = context.tailwindConfig.blocklist ?? []
+
+  return blocklist.some((blocked) => {
+    if (typeof blocked === 'string') {
+      return blocked === candidate
+    }
+
+    return blocked.test(candidate)
+  })
+}
+
 function generateRules(candidates, context) {
   let allRules = []
   let strategy = getImportantStrategy(context.tailwindConfig.important)
@@ -804,6 +822,11 @@ function generateRules(candidates, context) {
 
     if (context.candidateRuleCache.has(candidate)) {
       allRules = allRules.concat(Array.from(context.candidateRuleCache.get(candidate)))
+      continue
+    }
+
+    if (isInBlocklist(candidate, context)) {
+      context.notClassCache.add(candidate)
       continue
     }
 
