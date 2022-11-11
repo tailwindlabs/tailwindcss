@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Allow users to block generation of certain utilities ([#9812](https://github.com/tailwindlabs/tailwindcss/pull/9812))
+- Add `blocklist` option to prevent generating unwanted CSS ([#9812](https://github.com/tailwindlabs/tailwindcss/pull/9812))
 
 ### Fixed
 
