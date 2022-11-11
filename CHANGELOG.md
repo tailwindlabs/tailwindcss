@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Allow users to block generation of certain utilities ([#9812](https://github.com/tailwindlabs/tailwindcss/pull/9812))
+
 ### Fixed
 
 - Fix watching of files on Linux when renames are involved ([#9796](https://github.com/tailwindlabs/tailwindcss/pull/9796))
