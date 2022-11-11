@@ -364,6 +364,23 @@ export async function createProcessor(args, cliConfigPath) {
         console.error()
         console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
       })
+      .then(
+        () => {},
+        (err) => {
+          // TODO: If an initial build fails we can't easily pick up any PostCSS dependencies
+          // that were collected before the error occurred
+          // The result is not stored on the error so we have to store it externally
+          // and pull the messages off of it here somehow
+
+          // This results in a less than ideal DX because the watcher will not pick up
+          // changes to imported CSS if one of them caused an error during the initial build
+          // If you fix it and then save the main CSS file so there's no error
+          // The watcher will start watching the imported CSS files and will be
+          // resilient to future errors.
+
+          console.error(err)
+        }
+      )
   }
 
   /**
