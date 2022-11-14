@@ -1,7 +1,6 @@
 import negateValue from './negateValue'
 import corePluginList from '../corePluginList'
 import configurePlugins from './configurePlugins'
-import defaultConfig from '../../stubs/defaultConfig.stub'
 import colors from '../public/colors'
 import { defaults } from './defaults'
 import { toPath } from './toPath'
@@ -260,7 +259,6 @@ export default function resolveConfig(configs) {
       prefix: '',
       important: false,
       separator: ':',
-      variantOrder: defaultConfig.variantOrder,
     },
   ]
 
