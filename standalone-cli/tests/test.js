@@ -30,6 +30,8 @@ it('supports first-party plugins', () => {
   expect(result).toContain('.form-input')
   expect(result).toContain('.line-clamp-2')
   expect(result).toContain('.prose')
+  expect(result).toContain('@container')
+  expect(result).toContain('@md\\:bg-teal-600')
 })
 
 it('supports postcss config files', async () => {
