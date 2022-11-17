@@ -291,6 +291,7 @@ export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
       }
     }
 
+    // TODO: What is this chunk for, since it doesn't use `utilityModifier`?
     let result = asValue(rawModifier, options)
 
     if (result !== undefined) {
