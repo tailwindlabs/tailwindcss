@@ -166,6 +166,36 @@ test('match utilities can omit utilities by returning null', async () => {
   `)
 })
 
+test('matching utilities with a basic configured value', () => {
+  let config = {
+    content: [{ raw: html`<div class="test-foo"></div>` }],
+    theme: {},
+    plugins: [
+      function ({ matchUtilities }) {
+        matchUtilities(
+          {
+            test: (value) => ({ value }),
+          },
+          {
+            values: {
+              foo: 'value_foo',
+            },
+          }
+        )
+      },
+    ],
+    corePlugins: [],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .test-foo {
+        value: value_foo;
+      }
+    `)
+  })
+})
+
 test('matching utilities with an arbitrary value and configured modifier', () => {
   let config = {
     content: [{ raw: html`<div class="test-[foo]/bar"></div>` }],
