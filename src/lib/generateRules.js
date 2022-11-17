@@ -10,7 +10,7 @@ import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSe
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
-import isValidArbitraryValue from '../util/isValidArbitraryValue'
+import isValidArbitraryValue from '../util/isSyntacticallyValidPropertyValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 import { flagEnabled } from '../featureFlags'
 

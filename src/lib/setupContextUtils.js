@@ -17,7 +17,7 @@ import { env } from './sharedState'
 import { toPath } from '../util/toPath'
 import log from '../util/log'
 import negateValue from '../util/negateValue'
-import isValidArbitraryValue from '../util/isValidArbitraryValue'
+import isSyntacticallyValidPropertyValue from '../util/isSyntacticallyValidPropertyValue'
 import { generateRules, getClassNameFromSelector } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
 import { Offsets } from './offsets.js'
@@ -407,7 +407,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             }
           }
 
-          if (!isValidArbitraryValue(value)) {
+          if (!isSyntacticallyValidPropertyValue(value)) {
             return []
           }
 
@@ -487,7 +487,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             }
           }
 
-          if (!isValidArbitraryValue(value)) {
+          if (!isSyntacticallyValidPropertyValue(value)) {
             return []
           }
 
