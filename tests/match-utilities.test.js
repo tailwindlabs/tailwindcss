@@ -504,3 +504,34 @@ test('matching utilities with a lookup value that looks like a configured value 
     `)
   })
 })
+
+test('matching utilities with a lookup value that does not match the configured type', () => {
+  let config = {
+    content: [{ raw: html`<div class="test-foo"></div>` }],
+    theme: {},
+    plugins: [
+      function ({ matchUtilities }) {
+        matchUtilities(
+          {
+            test: (value, { modifier }) => ({ value, modifier }),
+          },
+          {
+            values: {
+              foo: 'not-a-percentage',
+            },
+            type: ['percentage'],
+          }
+        )
+      },
+    ],
+    corePlugins: [],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .test-foo {
+        value: not-a-percentage;
+      }
+    `)
+  })
+})

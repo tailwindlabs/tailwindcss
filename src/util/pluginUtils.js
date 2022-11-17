@@ -216,8 +216,6 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
 
       return [result, type, null]
     }
-
-    return [options.values[modifier], 'lookup', null]
   }
 
   if (isArbitraryValue(modifier)) {
