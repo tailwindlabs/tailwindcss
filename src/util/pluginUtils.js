@@ -290,6 +290,12 @@ export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
         utilityModifier = utilityModifier.slice(1, -1)
       }
     }
+
+    let result = asValue(rawModifier, options)
+
+    if (result !== undefined) {
+      yield [result, 'any', null]
+    }
   }
 
   for (let { type } of types ?? []) {
