@@ -358,14 +358,14 @@ test('custom addVariant with more complex media query params', () => {
     ],
     plugins: [
       function ({ addVariant }) {
-        addVariant('magic', '@media screen and (max-wdith: 600px)')
+        addVariant('magic', '@media screen and (max-width: 600px)')
       },
     ],
   }
 
   return run('@tailwind components;@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media screen and (max-wdith: 600px) {
+      @media screen and (max-width: 600px) {
         .magic\:text-center {
           text-align: center;
         }
