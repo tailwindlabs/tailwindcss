@@ -60,6 +60,9 @@ test('match utilities with modifiers', async () => {
     .test-1\/\[foo\] {
       color: one_[foo];
     }
+    .test-\[8\]\/\[9\] {
+      color: eightnine_null;
+    }
   `)
 })
 
