@@ -185,7 +185,7 @@ test('font-size utilities can include a line-height modifier', () => {
           font-size: 19px;
           line-height: 32px;
         }
-        .md\:text-\[21\]\/\[29px\] {
+        .md\:text-\[21px\]\/\[29px\] {
           font-size: 21px;
           line-height: 29px;
         }
