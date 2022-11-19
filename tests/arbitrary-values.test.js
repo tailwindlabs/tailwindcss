@@ -541,7 +541,11 @@ it('can explicitly specify type for percentage and length', () => {
 it('can use CSS variables as arbitrary values without `var()`', () => {
   let config = {
     content: [
-      { raw: html`<div class="w-[--width-var] bg-[--color-var] text-[length:--size-var]"></div>` },
+      {
+        raw: html`<div
+          class="w-[--width-var] bg-[--color-var] bg-[--color-var,#000] bg-[length:--size-var] text-[length:--size-var,12px]"
+        ></div>`,
+      },
     ],
     corePlugins: { preflight: false },
     plugins: [],
@@ -559,8 +563,14 @@ it('can use CSS variables as arbitrary values without `var()`', () => {
       .bg-\[--color-var\] {
         background-color: var(--color-var);
       }
-      .text-\[length\:--size-var\] {
-        font-size: var(--size-var);
+      .bg-\[--color-var\2c \#000\] {
+        background-color: var(--color-var, #000);
+      }
+      .bg-\[length\:--size-var\] {
+        background-size: var(--size-var);
+      }
+      .text-\[length\:--size-var\2c 12px\] {
+        font-size: var(--size-var, 12px);
       }
     `)
   })
