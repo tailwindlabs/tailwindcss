@@ -11,9 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Cleanup unused `variantOrder` ([#9829](https://github.com/tailwindlabs/tailwindcss/pull/9829))
 - Fix `foo-[abc]/[def]` not being handled correctly ([#9866](https://github.com/tailwindlabs/tailwindcss/pull/9866))
-
-### Added
-
 - Add container queries plugin to standalone CLI ([#9865](https://github.com/tailwindlabs/tailwindcss/pull/9865))
 
 ## [3.2.4] - 2022-11-11
