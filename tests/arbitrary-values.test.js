@@ -537,3 +537,31 @@ it('can explicitly specify type for percentage and length', () => {
     `)
   })
 })
+
+it('can use CSS variables as arbitrary values without `var()`', () => {
+  let config = {
+    content: [
+      { raw: html`<div class="w-[--width-var] bg-[--color-var] text-[length:--size-var]"></div>` },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .w-\[--width-var\] {
+        width: var(--width-var);
+      }
+      .bg-\[--color-var\] {
+        background-color: var(--color-var);
+      }
+      .text-\[length\:--size-var\] {
+        font-size: var(--size-var);
+      }
+    `)
+  })
+})
