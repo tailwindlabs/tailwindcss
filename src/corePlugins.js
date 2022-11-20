@@ -714,6 +714,18 @@ export let corePlugins = {
 
   aspectRatio: createUtilityPlugin('aspectRatio', [['aspect', ['aspect-ratio']]]),
 
+  box: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        box: (value, { modifier }) => {
+          let [width, height] = Array.isArray(value) ? value : [value, modifier ?? value]
+          return { width, height }
+        },
+      },
+      { values: theme('box'), modifiers: theme('box') }
+    )
+  },
+
   height: createUtilityPlugin('height', [['h', ['height']]]),
   maxHeight: createUtilityPlugin('maxHeight', [['max-h', ['maxHeight']]]),
   minHeight: createUtilityPlugin('minHeight', [['min-h', ['minHeight']]]),
