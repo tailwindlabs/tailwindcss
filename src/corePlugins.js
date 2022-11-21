@@ -714,15 +714,15 @@ export let corePlugins = {
 
   aspectRatio: createUtilityPlugin('aspectRatio', [['aspect', ['aspect-ratio']]]),
 
-  box: ({ matchUtilities, theme }) => {
+  size: ({ matchUtilities, theme }) => {
     matchUtilities(
       {
-        box: (value, { modifier }) => {
-          let [width, height] = Array.isArray(value) ? value : [value, modifier ?? value]
+        size: (value) => {
+          let [width, height] = Array.isArray(value) ? value : [value, value]
           return { width, height }
         },
       },
-      { values: theme('box'), modifiers: theme('box') }
+      { values: theme('size') }
     )
   },
 

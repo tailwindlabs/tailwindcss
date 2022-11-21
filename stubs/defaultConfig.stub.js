@@ -216,7 +216,7 @@ module.exports = {
       4: '4px',
       8: '8px',
     },
-    box: ({ theme }) => ({
+    size: ({ theme }) => ({
       auto: 'auto',
       ...theme('spacing'),
       '1/2': '50%',
