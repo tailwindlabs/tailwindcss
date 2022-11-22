@@ -4,7 +4,9 @@ test('match utilities with modifiers', async () => {
   let config = {
     content: [
       {
-        raw: html`<div class="test test/foo test-1/foo test-2/foo test/[foo] test-1/[foo]"></div> `,
+        raw: html`<div
+          class="test test/foo test-1/foo test-2/foo test/[foo] test-1/[foo] test-[8]/[9]"
+        ></div> `,
       },
     ],
     corePlugins: { preflight: false },
@@ -24,6 +26,7 @@ test('match utilities with modifiers', async () => {
               '1': 'one',
               '2': 'two',
               '1/foo': 'onefoo',
+              '[8]/[9]': 'eightnine',
             },
             modifiers: 'any',
           }
@@ -56,6 +59,9 @@ test('match utilities with modifiers', async () => {
     }
     .test-1\/\[foo\] {
       color: one_[foo];
+    }
+    .test-\[8\]\/\[9\] {
+      color: eightnine_null;
     }
   `)
 })

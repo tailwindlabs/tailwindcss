@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `line-height` modifier support to `font-size` utilities ([#9875](https://github.com/tailwindlabs/tailwindcss/pull/9875))
+
 ### Fixed
 
 - Cleanup unused `variantOrder` ([#9829](https://github.com/tailwindlabs/tailwindcss/pull/9829))
