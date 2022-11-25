@@ -438,6 +438,14 @@ impl<'a> Iterator for Extractor<'a> {
 mod test {
     use super::*;
 
+    fn please_trace() {
+        tracing_subscriber::fmt()
+            .with_max_level(tracing::Level::TRACE)
+            .with_span_events(tracing_subscriber::fmt::format::FmtSpan::ACTIVE)
+            .compact()
+            .init();
+    }
+
     fn run(input: &str, loose: bool) -> Vec<&str> {
         Extractor::new(
             input.as_bytes(),
