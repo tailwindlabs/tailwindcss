@@ -7,9 +7,9 @@
   "cpu": [
     "arm"
   ],
-  "main": "@tailwindcss/oxide.linux-arm-gnueabihf.node",
+  "main": "tailwindcss-oxide.linux-arm-gnueabihf.node",
   "files": [
-    "@tailwindcss/oxide.linux-arm-gnueabihf.node"
+    "tailwindcss-oxide.linux-arm-gnueabihf.node"
   ],
   "license": "MIT",
   "engines": {
