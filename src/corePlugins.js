@@ -23,6 +23,21 @@ import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
 import { normalize } from './util/dataTypes'
 
+// Logical properties:
+// - margin
+// - padding
+// - inset
+// - border-width
+// - border-color
+// - border-style?
+// - border-radius
+//   - rounded-tl -> border-start-start -> rounded-ss / rounded-ts?
+//   - rounded-tr -> border-start-end -> rounded-se / rounded-te?
+//   - rounded-br -> border-end-end -> rounded-ee / rounded-be?
+//   - rounded-bl -> border-end-start -> rounded-es / rounded-bs?
+// - clear
+// - float
+
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
     addVariant('first-letter', '&::first-letter')
