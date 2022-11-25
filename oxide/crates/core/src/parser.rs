@@ -276,10 +276,15 @@ impl<'a> Extractor<'a> {
     fn parse_continue(&mut self, prev: u8, curr: u8, pos: usize) -> bool {
         match curr {
             // Enter arbitrary value mode
-            b'[' if prev == b'@' || prev == b'-' || prev == b' ' || prev == b'!' || prev == b'\0'  => {
+            b'[' if prev == b'@'
+                || prev == b'-'
+                || prev == b' '
+                || prev == b'!'
+                || prev == b'\0' =>
+            {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
-            },
+            }
 
             // Can't enter arbitrary value mode
             // This can't be a candidate
@@ -287,7 +292,7 @@ impl<'a> Extractor<'a> {
                 trace!("Arbitrary::Skip_Start\t");
 
                 return false;
-            },
+            }
 
             // Allowed characters in the candidate itself
             // None of these can come after a closing bracket `]`
