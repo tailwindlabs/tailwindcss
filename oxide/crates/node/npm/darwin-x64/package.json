@@ -7,9 +7,9 @@
   "cpu": [
     "x64"
   ],
-  "main": "@tailwindcss/oxide.darwin-x64.node",
+  "main": "tailwindcss-oxide.darwin-x64.node",
   "files": [
-    "@tailwindcss/oxide.darwin-x64.node"
+    "tailwindcss-oxide.darwin-x64.node"
   ],
   "license": "MIT",
   "engines": {

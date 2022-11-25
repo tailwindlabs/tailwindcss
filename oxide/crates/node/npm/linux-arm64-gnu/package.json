@@ -7,9 +7,9 @@
   "cpu": [
     "arm64"
   ],
-  "main": "@tailwindcss/oxide.linux-arm64-gnu.node",
+  "main": "tailwindcss-oxide.linux-arm64-gnu.node",
   "files": [
-    "@tailwindcss/oxide.linux-arm64-gnu.node"
+    "tailwindcss-oxide.linux-arm64-gnu.node"
   ],
   "license": "MIT",
   "engines": {

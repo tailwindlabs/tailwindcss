@@ -7,9 +7,9 @@
   "cpu": [
     "x64"
   ],
-  "main": "@tailwindcss/oxide.win32-x64-msvc.node",
+  "main": "tailwindcss-oxide.win32-x64-msvc.node",
   "files": [
-    "@tailwindcss/oxide.win32-x64-msvc.node"
+    "tailwindcss-oxide.win32-x64-msvc.node"
   ],
   "license": "MIT",
   "engines": {
