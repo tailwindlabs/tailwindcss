@@ -1,4 +1,3 @@
-use rayon::prelude::*;
 use std::path::PathBuf;
 
 #[macro_use]
@@ -16,7 +15,7 @@ pub struct ChangedContent {
 pub fn parse_candidate_strings_from_files(changed_content: Vec<ChangedContent>) -> Vec<String> {
   tailwindcss_core::parse_candidate_strings_from_files(
     changed_content
-      .into_par_iter()
+      .into_iter()
       .map(|changed_content| tailwindcss_core::ChangedContent {
         file: changed_content.file.map(PathBuf::from),
         content: changed_content.content,
