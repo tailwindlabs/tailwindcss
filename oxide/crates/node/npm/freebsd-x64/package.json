@@ -7,9 +7,9 @@
   "cpu": [
     "x64"
   ],
-  "main": "@tailwindcss/oxide.freebsd-x64.node",
+  "main": "tailwindcss-oxide.freebsd-x64.node",
   "files": [
-    "@tailwindcss/oxide.freebsd-x64.node"
+    "tailwindcss-oxide.freebsd-x64.node"
   ],
   "license": "MIT",
   "engines": {
