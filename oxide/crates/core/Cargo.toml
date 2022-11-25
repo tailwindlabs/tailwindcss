@@ -10,8 +10,8 @@ log = "0.4"
 rayon = "1.5.3"
 fxhash = "0.2.1"
 crossbeam = "0.8.2"
-tracing = { version = "0.1.37", features = ["max_level_trace", "release_max_level_warn"] }
-tracing-subscriber = "0.3.16"
+tracing = { version = "0.1.37", features = [] }
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 
 [dev-dependencies]
 criterion = { version = "0.3", features = ['html_reports'] }
