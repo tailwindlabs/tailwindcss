@@ -11,7 +11,6 @@ module.exports = {
       xl: '1280px',
       '2xl': '1536px',
     },
-    supports: {},
     colors: ({ colors }) => ({
       inherit: colors.inherit,
       current: colors.current,
@@ -41,34 +40,6 @@ module.exports = {
       pink: colors.pink,
       rose: colors.rose,
     }),
-    columns: {
-      auto: 'auto',
-      1: '1',
-      2: '2',
-      3: '3',
-      4: '4',
-      5: '5',
-      6: '6',
-      7: '7',
-      8: '8',
-      9: '9',
-      10: '10',
-      11: '11',
-      12: '12',
-      '3xs': '16rem',
-      '2xs': '18rem',
-      xs: '20rem',
-      sm: '24rem',
-      md: '28rem',
-      lg: '32rem',
-      xl: '36rem',
-      '2xl': '42rem',
-      '3xl': '48rem',
-      '4xl': '56rem',
-      '5xl': '64rem',
-      '6xl': '72rem',
-      '7xl': '80rem',
-    },
     spacing: {
       px: '1px',
       0: '0px',
@@ -106,6 +77,10 @@ module.exports = {
       80: '20rem',
       96: '24rem',
     },
+    accentColor: ({ theme }) => ({
+      ...theme('colors'),
+      auto: 'auto',
+    }),
     animation: {
       none: 'none',
       spin: 'spin 1s linear infinite',
@@ -177,19 +152,6 @@ module.exports = {
       '2xl': '40px',
       '3xl': '64px',
     },
-    brightness: {
-      0: '0',
-      50: '.5',
-      75: '.75',
-      90: '.9',
-      95: '.95',
-      100: '1',
-      105: '1.05',
-      110: '1.1',
-      125: '1.25',
-      150: '1.5',
-      200: '2',
-    },
     borderColor: ({ theme }) => ({
       ...theme('colors'),
       DEFAULT: theme('colors.gray.200', 'currentColor'),
@@ -227,11 +189,52 @@ module.exports = {
       none: 'none',
     },
     boxShadowColor: ({ theme }) => theme('colors'),
+    brightness: {
+      0: '0',
+      50: '.5',
+      75: '.75',
+      90: '.9',
+      95: '.95',
+      100: '1',
+      105: '1.05',
+      110: '1.1',
+      125: '1.25',
+      150: '1.5',
+      200: '2',
+    },
     caretColor: ({ theme }) => theme('colors'),
-    accentColor: ({ theme }) => ({
-      ...theme('colors'),
+    columns: {
       auto: 'auto',
-    }),
+      1: '1',
+      2: '2',
+      3: '3',
+      4: '4',
+      5: '5',
+      6: '6',
+      7: '7',
+      8: '8',
+      9: '9',
+      10: '10',
+      11: '11',
+      12: '12',
+      '3xs': '16rem',
+      '2xs': '18rem',
+      xs: '20rem',
+      sm: '24rem',
+      md: '28rem',
+      lg: '32rem',
+      xl: '36rem',
+      '2xl': '42rem',
+      '3xl': '48rem',
+      '4xl': '56rem',
+      '5xl': '64rem',
+      '6xl': '72rem',
+      '7xl': '80rem',
+    },
+    container: {},
+    content: {
+      none: 'none',
+    },
     contrast: {
       0: '0',
       50: '.5',
@@ -240,10 +243,6 @@ module.exports = {
       125: '1.25',
       150: '1.5',
       200: '2',
-    },
-    container: {},
-    content: {
-      none: 'none',
     },
     cursor: {
       auto: 'auto',
@@ -299,22 +298,6 @@ module.exports = {
       none: 'none',
       ...theme('colors'),
     }),
-    grayscale: {
-      0: '0',
-      DEFAULT: '100%',
-    },
-    hueRotate: {
-      0: '0deg',
-      15: '15deg',
-      30: '30deg',
-      60: '60deg',
-      90: '90deg',
-      180: '180deg',
-    },
-    invert: {
-      0: '0',
-      DEFAULT: '100%',
-    },
     flex: {
       1: '1 1 0%',
       auto: '1 1 auto',
@@ -417,6 +400,10 @@ module.exports = {
     },
     gap: ({ theme }) => theme('spacing'),
     gradientColorStops: ({ theme }) => theme('colors'),
+    grayscale: {
+      0: '0',
+      DEFAULT: '100%',
+    },
     gridAutoColumns: {
       auto: 'auto',
       min: 'min-content',
@@ -487,7 +474,7 @@ module.exports = {
       'span-6': 'span 6 / span 6',
       'span-full': '1 / -1',
     },
-    gridRowStart: {
+    gridRowEnd: {
       auto: 'auto',
       1: '1',
       2: '2',
@@ -497,7 +484,7 @@ module.exports = {
       6: '6',
       7: '7',
     },
-    gridRowEnd: {
+    gridRowStart: {
       auto: 'auto',
       1: '1',
       2: '2',
@@ -555,6 +542,14 @@ module.exports = {
       max: 'max-content',
       fit: 'fit-content',
     }),
+    hueRotate: {
+      0: '0deg',
+      15: '15deg',
+      30: '30deg',
+      60: '60deg',
+      90: '90deg',
+      180: '180deg',
+    },
     inset: ({ theme }) => ({
       auto: 'auto',
       ...theme('spacing'),
@@ -566,6 +561,10 @@ module.exports = {
       '3/4': '75%',
       full: '100%',
     }),
+    invert: {
+      0: '0',
+      DEFAULT: '100%',
+    },
     keyframes: {
       spin: {
         to: {
@@ -816,6 +815,7 @@ module.exports = {
       1: '1',
       2: '2',
     },
+    supports: {},
     textColor: ({ theme }) => theme('colors'),
     textDecorationColor: ({ theme }) => theme('colors'),
     textDecorationThickness: {
@@ -827,6 +827,10 @@ module.exports = {
       4: '4px',
       8: '8px',
     },
+    textIndent: ({ theme }) => ({
+      ...theme('spacing'),
+    }),
+    textOpacity: ({ theme }) => theme('opacity'),
     textUnderlineOffset: {
       auto: 'auto',
       0: '0px',
@@ -835,10 +839,6 @@ module.exports = {
       4: '4px',
       8: '8px',
     },
-    textIndent: ({ theme }) => ({
-      ...theme('spacing'),
-    }),
-    textOpacity: ({ theme }) => theme('opacity'),
     transformOrigin: {
       center: 'center',
       top: 'top',
