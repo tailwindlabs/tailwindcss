@@ -355,8 +355,8 @@ export async function createProcessor(args, cliConfigPath) {
         }
 
         return Promise.all([
-          outputFile(output, result.css),
-          result.map && outputFile(output + '.map', result.map.toString()),
+          outputFile(result.opts.to, result.css),
+          result.map && outputFile(result.opts.to + '.map', result.map.toString()),
         ])
       })
       .then(() => {
