@@ -3,19 +3,11 @@ env:
   DEBUG: napi:*
   APP_NAME: '@tailwindcss/oxide'
   MACOSX_DEPLOYMENT_TARGET: '10.13'
-'on':
+
+on:
   push:
     branches:
       - oxide
-    tags-ignore:
-      - '**'
-    paths-ignore:
-      - '**/*.md'
-      - LICENSE
-      - '**/*.gitignore'
-      - .editorconfig
-      - docs/**
-  pull_request: null
 jobs:
   build:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
