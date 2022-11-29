@@ -62,7 +62,10 @@ let commands = {
     args: {
       '--input': { type: String, description: 'Input file' },
       '--output': { type: String, description: 'Output file' },
-      '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
+      '--watch': {
+        type: oneOf(String, Boolean),
+        description: 'Watch for changes and rebuild as needed',
+      },
       '--poll': {
         type: Boolean,
         description: 'Use polling instead of filesystem events when watching',
@@ -159,8 +162,8 @@ let args = (() => {
       let flag = result['_'][i]
       if (!flag.startsWith('-')) continue
 
-      let flagName = flag
-      let handler = flags[flag]
+      let [flagName, flagValue] = flag.split('=')
+      let handler = flags[flagName]
 
       // Resolve flagName & handler
       while (typeof handler === 'string') {
@@ -173,19 +176,27 @@ let args = (() => {
       let args = []
       let offset = i + 1
 
-      // Parse args for current flag
-      while (result['_'][offset] && !result['_'][offset].startsWith('-')) {
-        args.push(result['_'][offset++])
+      // --flag value syntax was used so we need to pull `value` from `args`
+      if (flagValue === undefined) {
+        // Parse args for current flag
+        while (result['_'][offset] && !result['_'][offset].startsWith('-')) {
+          args.push(result['_'][offset++])
+        }
+
+        // Cleanup manually parsed flags + args
+        result['_'].splice(i, 1 + args.length)
+
+        // No args were provided, use default value defined in handler
+        // One arg was provided, use that directly
+        // Multiple args were provided so pass them all in an array
+        flagValue = args.length === 0 ? undefined : args.length === 1 ? args[0] : args
+      } else {
+        // Remove the whole flag from the args array
+        result['_'].splice(i, 1)
       }
 
-      // Cleanup manually parsed flags + args
-      result['_'].splice(i, 1 + args.length)
-
       // Set the resolved value in the `result` object
-      result[flagName] = handler.type(
-        args.length === 0 ? undefined : args.length === 1 ? args[0] : args,
-        flagName
-      )
+      result[flagName] = handler.type(flagValue, flagName)
     }
 
     // Ensure that the `command` is always the first argument in the `args`.
