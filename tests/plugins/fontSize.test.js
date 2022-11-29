@@ -14,16 +14,16 @@ test('font-size utilities can include a default line-height', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
+      .text-lg {
+        font-size: 20px;
+        line-height: 28px;
+      }
       .text-md {
         font-size: 16px;
         line-height: 24px;
       }
       .text-sm {
         font-size: 12px;
-      }
-      .text-lg {
-        font-size: 20px;
-        line-height: 28px;
       }
     `)
   })
@@ -43,16 +43,16 @@ test('font-size utilities can include a default letter-spacing', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
+      .text-lg {
+        font-size: 20px;
+        letter-spacing: -0.02em;
+      }
       .text-md {
         font-size: 16px;
         letter-spacing: -0.01em;
       }
       .text-sm {
         font-size: 12px;
-      }
-      .text-lg {
-        font-size: 20px;
-        letter-spacing: -0.02em;
       }
     `)
   })
@@ -72,6 +72,11 @@ test('font-size utilities can include a default line-height and letter-spacing',
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
+      .text-lg {
+        font-size: 20px;
+        line-height: 28px;
+        letter-spacing: -0.02em;
+      }
       .text-md {
         font-size: 16px;
         line-height: 24px;
@@ -79,11 +84,6 @@ test('font-size utilities can include a default line-height and letter-spacing',
       }
       .text-sm {
         font-size: 12px;
-      }
-      .text-lg {
-        font-size: 20px;
-        line-height: 28px;
-        letter-spacing: -0.02em;
       }
     `)
   })
@@ -103,6 +103,11 @@ test('font-size utilities can include a font-weight', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
+      .text-lg {
+        font-size: 20px;
+        line-height: 28px;
+        font-weight: bold;
+      }
       .text-md {
         font-size: 16px;
         line-height: 24px;
@@ -110,11 +115,6 @@ test('font-size utilities can include a font-weight', () => {
       }
       .text-sm {
         font-size: 12px;
-      }
-      .text-lg {
-        font-size: 20px;
-        line-height: 28px;
-        font-weight: bold;
       }
     `)
   })

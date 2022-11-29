@@ -21,28 +21,3 @@ it('raw content', () => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
-
-test('raw content with extension', () => {
-  let config = {
-    content: {
-      files: [
-        {
-          raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8'),
-          extension: 'html',
-        },
-      ],
-      extract: {
-        html: () => ['invisible'],
-      },
-    },
-    corePlugins: { preflight: false },
-  }
-
-  return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
-      .invisible {
-        visibility: hidden;
-      }
-    `)
-  })
-})

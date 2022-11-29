@@ -1,10 +1,13 @@
 import path from 'path'
 
 import { run } from './util/run'
+import { env } from '../src/lib/sharedState'
 
 let css = String.raw
 
-test('it detects svelte based on the file extension', () => {
+let t = env.OXIDE ? test.skip : test
+
+t('it detects svelte based on the file extension', () => {
   let config = {
     content: [path.resolve(__dirname, './syntax-svelte.test.svelte')],
     corePlugins: { preflight: false },
@@ -33,7 +36,7 @@ test('it detects svelte based on the file extension', () => {
   })
 })
 
-test('using raw with svelte extension', () => {
+t('using raw with svelte extension', () => {
   let config = {
     content: [
       {

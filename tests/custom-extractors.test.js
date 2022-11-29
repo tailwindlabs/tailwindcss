@@ -1,7 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import { run } from './util/run'
+import { run, css } from './util/run'
+import { env } from '../src/lib/sharedState'
 
 function customExtractor(content) {
   let matches = content.match(/class="([^"]+)"/)
@@ -11,7 +12,9 @@ function customExtractor(content) {
 let expectedPath = path.resolve(__dirname, './custom-extractors.test.css')
 let expected = fs.readFileSync(expectedPath, 'utf8')
 
-describe('modern', () => {
+let group = env.OXIDE ? describe.skip : describe
+
+group('modern', () => {
   test('extract.DEFAULT', () => {
     let config = {
       content: {
@@ -54,9 +57,34 @@ describe('modern', () => {
       expect(result.css).toMatchFormattedCss(expected)
     })
   })
+
+  test('raw content with extension', () => {
+    let config = {
+      content: {
+        files: [
+          {
+            raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8'),
+            extension: 'html',
+          },
+        ],
+        extract: {
+          html: () => ['invisible'],
+        },
+      },
+      corePlugins: { preflight: false },
+    }
+
+    return run('@tailwind utilities', config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        .invisible {
+          visibility: hidden;
+        }
+      `)
+    })
+  })
 })
 
-describe('legacy', () => {
+group('legacy', () => {
   test('defaultExtractor', () => {
     let config = {
       content: {

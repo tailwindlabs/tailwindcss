@@ -13,7 +13,7 @@ test.each([[true], [false]])('it works (using Rust: %p)', (useOxide) => {
 
   let config = {
     darkMode: 'class',
-    content: [path.resolve(__dirname, './kitchen-sink.test.html')],
+    content: [path.resolve(__dirname, './oxide.test.html')],
     corePlugins: { preflight: false },
     theme: {
       extend: {
@@ -166,9 +166,37 @@ test.each([[true], [false]])('it works (using Rust: %p)', (useOxide) => {
   `
 
   return run(input, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './kitchen-sink.test.css')
+    let expectedPath = path.resolve(__dirname, './oxide.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
+
+xit.each([[true], [false]])(
+  'should use the transformer for svelte files (using Rust: %p)',
+  (useOxide) => {
+    env.OXIDE = useOxide
+
+    let config = {
+      darkMode: 'class',
+      content: [path.resolve(__dirname, './oxide.test.svelte')],
+      corePlugins: { preflight: false },
+      theme: {},
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      let expectedPath = path.resolve(__dirname, './oxide-svelte.test.css')
+      let expected = fs.readFileSync(expectedPath, 'utf8')
+
+      expect(result.css).toMatchFormattedCss(expected)
+    })
+  }
+)

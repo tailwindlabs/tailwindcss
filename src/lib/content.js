@@ -174,9 +174,8 @@ export function resolvedChangedContent(context, candidateFiles, fileModifiedMap)
   let [changedFiles, mTimesToCommit] = resolveChangedFiles(candidateFiles, fileModifiedMap)
 
   for (let changedFile of changedFiles) {
-    let content = fs.readFileSync(changedFile, 'utf8')
     let extension = path.extname(changedFile).slice(1)
-    changedContent.push({ content, extension })
+    changedContent.push({ file: changedFile, extension })
   }
 
   return [changedContent, mTimesToCommit]
