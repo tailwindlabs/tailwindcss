@@ -1,0 +1,52 @@
+{
+  "name": "@tailwindcss/oxide",
+  "version": "0.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "napi": {
+    "name": "@tailwindcss/oxide",
+    "triples": {
+      "additional": [
+        "aarch64-apple-darwin",
+        "aarch64-linux-android",
+        "aarch64-unknown-linux-gnu",
+        "aarch64-unknown-linux-musl",
+        "aarch64-pc-windows-msvc",
+        "armv7-unknown-linux-gnueabihf",
+        "x86_64-unknown-linux-musl",
+        "x86_64-unknown-freebsd",
+        "i686-pc-windows-msvc",
+        "armv7-linux-androideabi"
+      ]
+    }
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@napi-rs/cli": "^2.13.0"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
+    "prepublishOnly": "napi prepublish -t npm",
+    "version": "napi version"
+  },
+  "optionalDependencies": {
+    "@tailwindcss/oxide-android-arm-eabi": "0.0.0",
+    "@tailwindcss/oxide-android-arm64": "0.0.0",
+    "@tailwindcss/oxide-darwin-arm64": "0.0.0",
+    "@tailwindcss/oxide-darwin-x64": "0.0.0",
+    "@tailwindcss/oxide-freebsd-x64": "0.0.0",
+    "@tailwindcss/oxide-linux-arm-gnueabihf": "0.0.0",
+    "@tailwindcss/oxide-linux-arm64-gnu": "0.0.0",
+    "@tailwindcss/oxide-linux-arm64-musl": "0.0.0",
+    "@tailwindcss/oxide-linux-x64-gnu": "0.0.0",
+    "@tailwindcss/oxide-linux-x64-musl": "0.0.0",
+    "@tailwindcss/oxide-win32-arm64-msvc": "0.0.0",
+    "@tailwindcss/oxide-win32-ia32-msvc": "0.0.0",
+    "@tailwindcss/oxide-win32-x64-msvc": "0.0.0"
+  }
+}
