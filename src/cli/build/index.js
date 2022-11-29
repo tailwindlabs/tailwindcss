@@ -34,8 +34,12 @@ export async function build(args, configs) {
   let processor = await createProcessor(args, configPath)
 
   if (shouldWatch) {
-    /* Abort the watcher if stdin is closed to avoid zombie processes */
-    process.stdin.on('end', () => process.exit(0))
+    // Abort the watcher if stdin is closed to avoid zombie processes
+    // You can disable this behavior with --watch=always
+    if (args['--watch'] !== 'always') {
+      process.stdin.on('end', () => process.exit(0))
+    }
+
     process.stdin.resume()
 
     await processor.watch()
