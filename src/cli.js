@@ -62,7 +62,10 @@ let commands = {
     args: {
       '--input': { type: String, description: 'Input file' },
       '--output': { type: String, description: 'Output file' },
-      '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
+      '--watch': {
+        type: oneOf(String, Boolean),
+        description: 'Watch for changes and rebuild as needed',
+      },
       '--poll': {
         type: Boolean,
         description: 'Use polling instead of filesystem events when watching',
