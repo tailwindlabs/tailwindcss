@@ -133,6 +133,14 @@ export function parseColorFormat(value) {
   return value
 }
 
+function unwrapArbitraryModifier(modifier) {
+  modifier = modifier.slice(1, -1)
+  if (modifier.startsWith('--')) {
+    modifier = `var(${modifier})`
+  }
+  return modifier
+}
+
 export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
   if (options.values?.[modifier] !== undefined) {
     return parseColorFormat(options.values?.[modifier])
@@ -153,7 +161,7 @@ export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
     normalizedColor = parseColorFormat(normalizedColor)
 
     if (isArbitraryValue(alpha)) {
-      return withAlphaValue(normalizedColor, alpha.slice(1, -1))
+      return withAlphaValue(normalizedColor, unwrapArbitraryModifier(alpha))
     }
 
     if (tailwindConfig.theme?.opacity?.[alpha] === undefined) {
@@ -287,7 +295,7 @@ export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
       if (configValue !== null) {
         utilityModifier = configValue
       } else if (isArbitraryValue(utilityModifier)) {
-        utilityModifier = utilityModifier.slice(1, -1)
+        utilityModifier = unwrapArbitraryModifier(utilityModifier)
       }
     }
   }
