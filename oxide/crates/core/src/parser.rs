@@ -565,6 +565,49 @@ mod test {
     }
 
     #[test]
+    fn it_should_ignore_leading_spaces() {
+        let candidates = run("        backdrop-filter-none", false);
+        assert_eq!(candidates, vec!["backdrop-filter-none"]);
+    }
+
+    #[test]
+    fn it_should_ignore_trailing_spaces() {
+        let candidates = run("backdrop-filter-none        ", false);
+        assert_eq!(candidates, vec!["backdrop-filter-none"]);
+    }
+
+    #[test]
+    fn it_should_keep_classes_before_an_ending_newline() {
+        let candidates = run("backdrop-filter-none\n", false);
+        assert_eq!(candidates, vec!["backdrop-filter-none"]);
+    }
+
+    #[test]
+    fn it_should_parse_out_the_correct_classes_from_tailwind_tests() {
+        // From: tests/arbitrary-variants.test.js
+        let candidates = run(
+            r#"
+                <div class="dark:lg:hover:[&>*]:underline"></div>
+
+                <div class="[&_.foo\_\_bar]:hover:underline"></div>
+                <div class="hover:[&_.foo\_\_bar]:underline"></div>
+            "#,
+            false,
+        );
+        // TODO: it should not include additional (separate) classes: class, hover:, foo: bar, underline
+        // TODO: Double check the expectations based on above information
+        assert_eq!(
+            candidates,
+            vec![
+                "class",
+                r#"dark:lg:hover:[&>*]:underline"#,
+                r#"[&_.foo\_\_bar]:hover:underline"#,
+                r#"hover:[&_.foo\_\_bar]:underline"#
+            ]
+        );
+    }
+
+    #[test]
     fn potential_candidates_are_skipped_when_hitting_impossible_characters() {
         let candidates = run("        <p class=\"text-sm text-blue-700\">A new software update is available. See what’s new in version 2.0.4.</p>", false);
         assert_eq!(
