@@ -54,14 +54,14 @@ test('match utilities with modifiers', async () => {
     .test-2\/foo {
       color: two_foo;
     }
+    .test-\[8\]\/\[9\] {
+      color: eightnine_null;
+    }
     .test\/\[foo\] {
       color: default_[foo];
     }
     .test\/foo {
       color: default_foo;
-    }
-    .test-\[8\]\/\[9\] {
-      color: eightnine_null;
     }
   `)
 })

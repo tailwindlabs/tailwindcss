@@ -553,11 +553,11 @@ it('can use CSS variables as arbitrary values without `var()`', () => {
       .w-\[--width-var\] {
         width: var(--width-var);
       }
-      .bg-\[--color-var\] {
-        background-color: var(--color-var);
-      }
       .bg-\[--color-var\2c \#000\] {
         background-color: var(--color-var, #000);
+      }
+      .bg-\[--color-var\] {
+        background-color: var(--color-var);
       }
       .bg-\[length\:--size-var\] {
         background-size: var(--size-var);
