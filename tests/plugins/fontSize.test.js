@@ -148,6 +148,14 @@ test('font-size utilities can include a line-height modifier', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchCss(css`
+      .text-\[13px\]\/6 {
+        font-size: 13px;
+        line-height: 24px;
+      }
+      .text-\[17px\]\/\[23px\] {
+        font-size: 17px;
+        line-height: 23px;
+      }
       .text-sm {
         font-size: 12px;
         line-height: 20px;
@@ -160,15 +168,15 @@ test('font-size utilities can include a line-height modifier', () => {
         font-size: 12px;
         line-height: 21px;
       }
-      .text-\[13px\]\/6 {
-        font-size: 13px;
-        line-height: 24px;
-      }
-      .text-\[17px\]\/\[23px\] {
-        font-size: 17px;
-        line-height: 23px;
-      }
       @media (min-width: 768px) {
+        .md\:text-\[19px\]\/8 {
+          font-size: 19px;
+          line-height: 32px;
+        }
+        .md\:text-\[21px\]\/\[29px\] {
+          font-size: 21px;
+          line-height: 29px;
+        }
         .md\:text-base {
           font-size: 16px;
           line-height: 24px;
@@ -180,14 +188,6 @@ test('font-size utilities can include a line-height modifier', () => {
         .md\:text-base\/\[33px\] {
           font-size: 16px;
           line-height: 33px;
-        }
-        .md\:text-\[19px\]\/8 {
-          font-size: 19px;
-          line-height: 32px;
-        }
-        .md\:text-\[21px\]\/\[29px\] {
-          font-size: 21px;
-          line-height: 29px;
         }
       }
     `)
