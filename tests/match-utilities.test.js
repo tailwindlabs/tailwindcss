@@ -45,8 +45,8 @@ test('match utilities with modifiers', async () => {
     .test {
       color: default_null;
     }
-    .test\/foo {
-      color: default_foo;
+    .test-1\/\[foo\] {
+      color: one_[foo];
     }
     .test-1\/foo {
       color: onefoo_null;
@@ -57,8 +57,8 @@ test('match utilities with modifiers', async () => {
     .test\/\[foo\] {
       color: default_[foo];
     }
-    .test-1\/\[foo\] {
-      color: one_[foo];
+    .test\/foo {
+      color: default_foo;
     }
     .test-\[8\]\/\[9\] {
       color: eightnine_null;
@@ -108,8 +108,8 @@ test('match utilities with modifiers in the config', async () => {
     .test {
       color: default_null;
     }
-    .test\/foo {
-      color: default_mewtwo;
+    .test-1\/\[bar\] {
+      color: one_bar;
     }
     .test-1\/foo {
       color: one_mewtwo;
@@ -117,8 +117,8 @@ test('match utilities with modifiers in the config', async () => {
     .test\/\[bar\] {
       color: default_bar;
     }
-    .test-1\/\[bar\] {
-      color: one_bar;
+    .test\/foo {
+      color: default_mewtwo;
     }
   `)
 })

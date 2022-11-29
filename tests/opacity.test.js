@@ -802,25 +802,25 @@ it('works with opacity values defined as a placeholder or a function in when col
       .bg-foo10 {
         background-color: rgb(255 100 0 / 100%);
       }
+      .bg-foo11 {
+        background-color: rgb(255 100 0 / 50%);
+      }
       .bg-foo20 {
         --tw-bg-opacity: 1;
         background-color: rgb(255 100 0 / var(--tw-bg-opacity));
       }
+      .bg-foo21 {
+        background-color: rgb(255 100 0 / 50%);
+      }
       .bg-foo30 {
         background-color: rgb(255 100 0 / 100%);
+      }
+      .bg-foo31 {
+        background-color: rgb(255 100 0 / 50%);
       }
       .bg-foo40 {
         --tw-bg-opacity: 1;
         background-color: rgb(255 100 0 / var(--tw-bg-opacity));
-      }
-      .bg-foo11 {
-        background-color: rgb(255 100 0 / 50%);
-      }
-      .bg-foo21 {
-        background-color: rgb(255 100 0 / 50%);
-      }
-      .bg-foo31 {
-        background-color: rgb(255 100 0 / 50%);
       }
       .bg-foo41 {
         background-color: rgb(255 100 0 / 50%);

@@ -39,12 +39,11 @@ test('order matters and produces different behaviour', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      .hover\:file\:bg-pink-600::file-selector-button:hover {
+      .file\:hover\:bg-pink-600:hover::file-selector-button {
         --tw-bg-opacity: 1;
         background-color: rgb(219 39 119 / var(--tw-bg-opacity));
       }
-
-      .file\:hover\:bg-pink-600:hover::file-selector-button {
+      .hover\:file\:bg-pink-600::file-selector-button:hover {
         --tw-bg-opacity: 1;
         background-color: rgb(219 39 119 / var(--tw-bg-opacity));
       }
@@ -290,21 +289,9 @@ it('should properly handle keyframes with multiple variants', async () => {
         transform: rotate(360deg);
       }
     }
-
     .animate-spin {
       animation: spin 1s linear infinite;
     }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .hover\:animate-spin:hover {
-      animation: spin 1s linear infinite;
-    }
-
     @keyframes bounce {
       0%,
       100% {
@@ -316,21 +303,17 @@ it('should properly handle keyframes with multiple variants', async () => {
         animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
       }
     }
-
     .hover\:animate-bounce:hover {
       animation: bounce 1s infinite;
     }
-
     @keyframes spin {
       to {
         transform: rotate(360deg);
       }
     }
-
-    .focus\:animate-spin:focus {
+    .hover\:animate-spin:hover {
       animation: spin 1s linear infinite;
     }
-
     @keyframes bounce {
       0%,
       100% {
@@ -342,9 +325,16 @@ it('should properly handle keyframes with multiple variants', async () => {
         animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
       }
     }
-
     .focus\:animate-bounce:focus {
       animation: bounce 1s infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .focus\:animate-spin:focus {
+      animation: spin 1s linear infinite;
     }
   `)
 })

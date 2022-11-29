@@ -13,11 +13,19 @@
     "tailwindcss": "lib/cli.js"
   },
   "scripts": {
+<<<<<<< HEAD
     "prebuild": "npm run generate && rimraf lib",
     "build": "swc src --out-dir lib --copy-files",
     "postbuild": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
     "rebuild-fixtures": "npm run build && node -r @swc/register scripts/rebuildFixtures.js",
     "prepublishOnly": "npm install --force && npm run build",
+=======
+    "preswcify": "npm run generate && rimraf lib",
+    "swcify": "swc src --out-dir lib --copy-files",
+    "postswcify": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
+    "rebuild-fixtures": "npm run swcify && node -r @swc/register scripts/rebuildFixtures.js",
+    "prepublishOnly": "npm install --force && npm run oxide:install --force && npm run oxide:build",
+>>>>>>> 593bb486 (use oxide)
     "style": "eslint .",
     "pretest": "npm run generate",
     "test": "jest",
@@ -27,7 +35,10 @@
     "generate:types": "node -r @swc/register scripts/generate-types.js",
     "generate": "npm run generate:plugin-list && npm run generate:types",
     "release-channel": "node ./scripts/release-channel.js",
-    "release-notes": "node ./scripts/release-notes.js"
+    "release-notes": "node ./scripts/release-notes.js",
+    "oxide:install": "npm install --prefix ./oxide",
+    "oxide:dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run swcify -- --watch' 'npm run --prefix ./oxide dev:node'",
+    "oxide:build": "npm run --prefix ./oxide build:node && npm run swcify"
   },
   "files": [
     "src/*",
@@ -48,6 +59,7 @@
     "@swc/jest": "^0.2.23",
     "@swc/register": "^0.1.10",
     "autoprefixer": "^10.4.13",
+    "concurrently": "^7.5.0",
     "cssnano": "^5.1.14",
     "esbuild": "^0.15.15",
     "eslint": "^8.27.0",
@@ -85,7 +97,8 @@
     "postcss-selector-parser": "^6.0.11",
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
-    "resolve": "^1.22.1"
+    "resolve": "^1.22.1",
+    "tailwind-oxide": "file:oxide/crates/node"
   },
   "browserslist": [
     "> 1%",

@@ -172,9 +172,8 @@ export function resolvedChangedContent(context, candidateFiles, fileModifiedMap)
     .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(candidateFiles, fileModifiedMap)) {
-    let content = fs.readFileSync(changedFile, 'utf8')
     let extension = path.extname(changedFile).slice(1)
-    changedContent.push({ content, extension })
+    changedContent.push({ file: changedFile, extension })
   }
 
   return changedContent

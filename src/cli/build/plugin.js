@@ -184,10 +184,17 @@ let state = {
     let files = fastGlob.sync(this.contentPatterns.all)
 
     for (let file of files) {
-      content.push({
-        content: fs.readFileSync(path.resolve(file), 'utf8'),
-        extension: path.extname(file).slice(1),
-      })
+      if (env.OXIDE) {
+        content.push({
+          file,
+          extension: path.extname(file).slice(1),
+        })
+      } else {
+        content.push({
+          content: fs.readFileSync(path.resolve(file), 'utf8'),
+          extension: path.extname(file).slice(1),
+        })
+      }
     }
 
     // Resolve raw content in the tailwind config
@@ -234,11 +241,9 @@ let state = {
       env.DEBUG && console.timeEnd('Watch new files')
     }
 
-    env.DEBUG && console.time('Reading content files')
     for (let file of this.readContentPaths()) {
       this.context.changedContent.push(file)
     }
-    env.DEBUG && console.timeEnd('Reading content files')
 
     return this.context
   },

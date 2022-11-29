@@ -200,14 +200,14 @@ test('the default config can be overridden using the presets key', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .min-h-0 {
+        min-height: 0px;
+      }
       .min-h-primary {
         min-height: 48px;
       }
       .min-h-secondary {
         min-height: 24px;
-      }
-      .min-h-0 {
-        min-height: 0px;
       }
     `)
   })
@@ -230,14 +230,14 @@ test('presets can be functions', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .min-h-0 {
+        min-height: 0px;
+      }
       .min-h-primary {
         min-height: 48px;
       }
       .min-h-secondary {
         min-height: 24px;
-      }
-      .min-h-0 {
-        min-height: 0px;
       }
     `)
   })
@@ -312,14 +312,14 @@ test('presets can have their own presets', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .bg-black {
+        background-color: black;
+      }
       .bg-red {
         background-color: #ee0000;
       }
       .bg-transparent {
         background-color: transparent;
-      }
-      .bg-black {
-        background-color: black;
       }
       .bg-white {
         background-color: white;
@@ -369,14 +369,14 @@ test('function presets can be mixed with object presets', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .bg-black {
+        background-color: black;
+      }
       .bg-red {
         background-color: #ee0000;
       }
       .bg-transparent {
         background-color: transparent;
-      }
-      .bg-black {
-        background-color: black;
       }
       .bg-white {
         background-color: white;

@@ -1,6 +1,7 @@
 export const env = {
   NODE_ENV: process.env.NODE_ENV,
   DEBUG: resolveDebug(process.env.DEBUG),
+  OXIDE: process.env.OXIDE,
 }
 export const contextMap = new Map()
 export const configContextMap = new Map()

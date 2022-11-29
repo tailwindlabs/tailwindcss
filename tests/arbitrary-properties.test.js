@@ -47,12 +47,12 @@ test('different arbitrary properties are picked up separately', () => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
 
-      .\[foo\:bar\] {
-        foo: bar;
-      }
-
       .\[bar\:baz\] {
         bar: baz;
+      }
+
+      .\[foo\:bar\] {
+        foo: bar;
       }
     `)
   })
@@ -378,11 +378,11 @@ test('using multiple arbitrary props having fractional spacing values', () => {
     return expect(result.css).toMatchFormattedCss(css`
       ${defaults}
 
-      .\[height\:_calc\(100vh_-_theme\(spacing\[2\.5\]\)\)\] {
-        height: calc(100vh - 0.625rem);
-      }
       .\[box-shadow\:_0_calc\(theme\(spacing\[0\.5\]\)_\*_-1\)_theme\(colors\.red\.400\)_inset\] {
         box-shadow: 0 calc(0.125rem * -1) #f87171 inset;
+      }
+      .\[height\:_calc\(100vh_-_theme\(spacing\[2\.5\]\)\)\] {
+        height: calc(100vh - 0.625rem);
       }
     `)
   })
@@ -430,11 +430,11 @@ it('should be possible to read theme values in arbitrary properties (with quotes
     return expect(result.css).toMatchFormattedCss(css`
       ${defaults}
 
-      .\[color\:var\(--a\)\] {
-        color: var(--a);
-      }
       .\[--a\:theme\(\'colors\.blue\.500\'\)\] {
         --a: #3b82f6;
+      }
+      .\[color\:var\(--a\)\] {
+        color: var(--a);
       }
     `)
   })

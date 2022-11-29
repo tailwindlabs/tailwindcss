@@ -517,11 +517,11 @@ test('allows attribute variants with quotes', () => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
 
-      .\[\&\[data-test\=\'2\'\]\]\:underline[data-test="2"] {
+      .\[\&\[data-test\=\"2\"\]\]\:underline[data-test='2'] {
         text-decoration-line: underline;
       }
 
-      .\[\&\[data-test\=\"2\"\]\]\:underline[data-test='2'] {
+      .\[\&\[data-test\=\'2\'\]\]\:underline[data-test='2'] {
         text-decoration-line: underline;
       }
     `)
@@ -554,12 +554,12 @@ test('classes in arbitrary variants should not be prefixed', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .foo .\[\.foo_\&\]\:tw-text-red-400 {
+      .\[\&_\.foo\]\:tw-text-red-400 .foo {
         --tw-text-opacity: 1;
         color: rgb(248 113 113 / var(--tw-text-opacity));
       }
 
-      .\[\&_\.foo\]\:tw-text-red-400 .foo {
+      .foo .\[\.foo_\&\]\:tw-text-red-400 {
         --tw-text-opacity: 1;
         color: rgb(248 113 113 / var(--tw-text-opacity));
       }
@@ -593,22 +593,19 @@ test('classes in the same arbitrary variant should not be prefixed', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .foo .\[\.foo_\&\]\:tw-bg-white {
-        --tw-bg-opacity: 1;
-        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-      }
-
-      .foo .\[\.foo_\&\]\:tw-text-red-400 {
-        --tw-text-opacity: 1;
-        color: rgb(248 113 113 / var(--tw-text-opacity));
-      }
-
       .\[\&_\.foo\]\:tw-bg-white .foo {
         --tw-bg-opacity: 1;
         background-color: rgb(255 255 255 / var(--tw-bg-opacity));
       }
-
       .\[\&_\.foo\]\:tw-text-red-400 .foo {
+        --tw-text-opacity: 1;
+        color: rgb(248 113 113 / var(--tw-text-opacity));
+      }
+      .foo .\[\.foo_\&\]\:tw-bg-white {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      }
+      .foo .\[\.foo_\&\]\:tw-text-red-400 {
         --tw-text-opacity: 1;
         color: rgb(248 113 113 / var(--tw-text-opacity));
       }
@@ -651,19 +648,16 @@ it('should support aria variants', () => {
       .aria-checked\:underline[aria-checked='true'] {
         text-decoration-line: underline;
       }
-      .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'] {
-        text-decoration-line: underline;
-      }
       .aria-\[labelledby\=a_b\]\:underline[aria-labelledby='a b'] {
         text-decoration-line: underline;
       }
-      .group[aria-checked='true'] .group-aria-checked\:underline {
+      .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'] {
         text-decoration-line: underline;
       }
       .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline {
         text-decoration-line: underline;
       }
-      .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline {
+      .group[aria-checked='true'] .group-aria-checked\:underline {
         text-decoration-line: underline;
       }
       .group[aria-labelledby='a b'] .group-aria-\[labelledby\=a_b\]\:underline {
@@ -672,19 +666,22 @@ it('should support aria variants', () => {
       .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline {
         text-decoration-line: underline;
       }
-      .peer[aria-checked='true'] ~ .peer-aria-checked\:underline {
+      .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline {
         text-decoration-line: underline;
       }
       .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline {
         text-decoration-line: underline;
       }
-      .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
+      .peer[aria-checked='true'] ~ .peer-aria-checked\:underline {
         text-decoration-line: underline;
       }
       .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=a_b\]\:underline {
         text-decoration-line: underline;
       }
       .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
         text-decoration-line: underline;
       }
     `)
@@ -731,19 +728,16 @@ it('should support data variants', () => {
       .data-checked\:underline[data-ui~='checked'] {
         text-decoration-line: underline;
       }
-      .data-\[position\=top\]\:underline[data-position='top'] {
-        text-decoration-line: underline;
-      }
       .data-\[foo\=bar_baz\]\:underline[data-foo='bar baz'] {
         text-decoration-line: underline;
       }
-      .group[data-ui~='checked'] .group-data-checked\:underline {
+      .data-\[position\=top\]\:underline[data-position='top'] {
         text-decoration-line: underline;
       }
       .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline {
         text-decoration-line: underline;
       }
-      .group[data-position='top'] .group-data-\[position\=top\]\:underline {
+      .group[data-ui~='checked'] .group-data-checked\:underline {
         text-decoration-line: underline;
       }
       .group[data-foo='bar baz'] .group-data-\[foo\=bar_baz\]\:underline {
@@ -752,19 +746,22 @@ it('should support data variants', () => {
       .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline {
         text-decoration-line: underline;
       }
-      .peer[data-ui~='checked'] ~ .peer-data-checked\:underline {
+      .group[data-position='top'] .group-data-\[position\=top\]\:underline {
         text-decoration-line: underline;
       }
       .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline {
         text-decoration-line: underline;
       }
-      .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
+      .peer[data-ui~='checked'] ~ .peer-data-checked\:underline {
         text-decoration-line: underline;
       }
       .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=bar_baz\]\:underline {
         text-decoration-line: underline;
       }
       .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
         text-decoration-line: underline;
       }
     `)
@@ -816,45 +813,38 @@ it('should support supports', () => {
           text-decoration-line: underline;
         }
       }
-
       @supports (display: grid) {
         .supports-\[display\:grid\]\:grid {
           display: grid;
         }
       }
-
-      @supports (transform-origin: 5% 5%) {
-        .supports-\[transform-origin\:5\%_5\%\]\:underline {
-          text-decoration-line: underline;
-        }
-      }
-
-      @supports selector(A > B) {
-        .supports-\[selector\(A\>B\)\]\:underline {
-          text-decoration-line: underline;
-        }
-      }
-
-      @supports not (foo: bar) {
-        .supports-\[not\(foo\:bar\)\]\:underline {
-          text-decoration-line: underline;
-        }
-      }
-
-      @supports (foo: bar) or (bar: baz) {
-        .supports-\[\(foo\:bar\)or\(bar\:baz\)\]\:underline {
-          text-decoration-line: underline;
-        }
-      }
-
       @supports (foo: bar) and (bar: baz) {
         .supports-\[\(foo\:bar\)and\(bar\:baz\)\]\:underline {
           text-decoration-line: underline;
         }
       }
-
+      @supports (foo: bar) or (bar: baz) {
+        .supports-\[\(foo\:bar\)or\(bar\:baz\)\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
       @supports (container-type: var(--tw)) {
         .supports-\[container-type\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+      @supports not (foo: bar) {
+        .supports-\[not\(foo\:bar\)\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+      @supports selector(A > B) {
+        .supports-\[selector\(A\>B\)\]\:underline {
+          text-decoration-line: underline;
+        }
+      }
+      @supports (transform-origin: 5% 5%) {
+        .supports-\[transform-origin\:5\%_5\%\]\:underline {
           text-decoration-line: underline;
         }
       }
@@ -917,46 +907,46 @@ it('should be possible to use modifiers and arbitrary groups', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .group:hover .group-hover\:underline {
-        text-decoration-line: underline;
-      }
       .group\/foo:hover .group-hover\/foo\:underline {
         text-decoration-line: underline;
       }
-      .group:focus .group-\[\&\:focus\]\:underline {
-        text-decoration-line: underline;
-      }
-      .group:hover .group-\[\:hover\]\:underline {
-        text-decoration-line: underline;
-      }
-      .group[data-open] .group-\[\&\[data-open\]\]\:underline {
-        text-decoration-line: underline;
-      }
-      .group[data-open] .group-\[\[data-open\]\]\:underline {
-        text-decoration-line: underline;
-      }
-      .in-foo .group .group-\[\.in-foo_\&\]\:underline {
-        text-decoration-line: underline;
-      }
-      .group.in-foo .group-\[\.in-foo\]\:underline {
+      .group:hover .group-hover\:underline {
         text-decoration-line: underline;
       }
       .group\/foo:focus .group-\[\&\:focus\]\/foo\:underline {
         text-decoration-line: underline;
       }
-      .group\/foo:hover .group-\[\:hover\]\/foo\:underline {
+      .group:focus .group-\[\&\:focus\]\:underline {
         text-decoration-line: underline;
       }
       .group\/foo[data-open] .group-\[\&\[data-open\]\]\/foo\:underline {
         text-decoration-line: underline;
       }
-      .group\/foo[data-open] .group-\[\[data-open\]\]\/foo\:underline {
+      .group[data-open] .group-\[\&\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\/foo.in-foo .group-\[\.in-foo\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .group.in-foo .group-\[\.in-foo\]\:underline {
         text-decoration-line: underline;
       }
       .in-foo .group\/foo .group-\[\.in-foo_\&\]\/foo\:underline {
         text-decoration-line: underline;
       }
-      .group\/foo.in-foo .group-\[\.in-foo\]\/foo\:underline {
+      .in-foo .group .group-\[\.in-foo_\&\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\/foo:hover .group-\[\:hover\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .group:hover .group-\[\:hover\]\:underline {
+        text-decoration-line: underline;
+      }
+      .group\/foo[data-open] .group-\[\[data-open\]\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .group[data-open] .group-\[\[data-open\]\]\:underline {
         text-decoration-line: underline;
       }
     `)
@@ -1018,46 +1008,46 @@ it('should be possible to use modifiers and arbitrary peers', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .peer:hover ~ .peer-hover\:underline {
-        text-decoration-line: underline;
-      }
       .peer\/foo:hover ~ .peer-hover\/foo\:underline {
         text-decoration-line: underline;
       }
-      .peer:focus ~ .peer-\[\&\:focus\]\:underline {
-        text-decoration-line: underline;
-      }
-      .peer:hover ~ .peer-\[\:hover\]\:underline {
-        text-decoration-line: underline;
-      }
-      .peer[data-open] ~ .peer-\[\&\[data-open\]\]\:underline {
-        text-decoration-line: underline;
-      }
-      .peer[data-open] ~ .peer-\[\[data-open\]\]\:underline {
-        text-decoration-line: underline;
-      }
-      .in-foo .peer ~ .peer-\[\.in-foo_\&\]\:underline {
-        text-decoration-line: underline;
-      }
-      .peer.in-foo ~ .peer-\[\.in-foo\]\:underline {
+      .peer:hover ~ .peer-hover\:underline {
         text-decoration-line: underline;
       }
       .peer\/foo:focus ~ .peer-\[\&\:focus\]\/foo\:underline {
         text-decoration-line: underline;
       }
-      .peer\/foo:hover ~ .peer-\[\:hover\]\/foo\:underline {
+      .peer:focus ~ .peer-\[\&\:focus\]\:underline {
         text-decoration-line: underline;
       }
       .peer\/foo[data-open] ~ .peer-\[\&\[data-open\]\]\/foo\:underline {
         text-decoration-line: underline;
       }
-      .peer\/foo[data-open] ~ .peer-\[\[data-open\]\]\/foo\:underline {
+      .peer[data-open] ~ .peer-\[\&\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo.in-foo ~ .peer-\[\.in-foo\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer.in-foo ~ .peer-\[\.in-foo\]\:underline {
         text-decoration-line: underline;
       }
       .in-foo .peer\/foo ~ .peer-\[\.in-foo_\&\]\/foo\:underline {
         text-decoration-line: underline;
       }
-      .peer\/foo.in-foo ~ .peer-\[\.in-foo\]\/foo\:underline {
+      .in-foo .peer ~ .peer-\[\.in-foo_\&\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo:hover ~ .peer-\[\:hover\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer:hover ~ .peer-\[\:hover\]\:underline {
+        text-decoration-line: underline;
+      }
+      .peer\/foo[data-open] ~ .peer-\[\[data-open\]\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+      .peer[data-open] ~ .peer-\[\[data-open\]\]\:underline {
         text-decoration-line: underline;
       }
     `)

@@ -273,15 +273,15 @@ it('should safelist negatives based on a pattern regex', () => {
         --tw-bg-opacity: 1;
         background-color: rgb(248 113 113 / var(--tw-bg-opacity));
       }
-      .bg-red-500 {
-        --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-      }
       .bg-red-400\/40 {
         background-color: rgb(248 113 113 / 0.4);
       }
       .bg-red-400\/50 {
         background-color: rgb(248 113 113 / 0.5);
+      }
+      .bg-red-500 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
       }
       .bg-red-500\/40 {
         background-color: rgb(239 68 68 / 0.4);
@@ -305,15 +305,15 @@ it('should safelist negatives based on a pattern regex', () => {
         --tw-bg-opacity: 1;
         background-color: rgb(248 113 113 / var(--tw-bg-opacity));
       }
-      .hover\:bg-red-500:hover {
-        --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-      }
       .hover\:bg-red-400\/40:hover {
         background-color: rgb(248 113 113 / 0.4);
       }
       .hover\:bg-red-400\/50:hover {
         background-color: rgb(248 113 113 / 0.5);
+      }
+      .hover\:bg-red-500:hover {
+        --tw-bg-opacity: 1;
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
       }
       .hover\:bg-red-500\/40:hover {
         background-color: rgb(239 68 68 / 0.4);

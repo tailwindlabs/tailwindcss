@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Title</title>
+    <link rel="stylesheet" href="./tailwind.css" />
+  </head>
+  <body>
+    <div class="range:text-right multi:text-left"></div>
+    <div
+      class="container hover:container sm:container md:container text-center sm:text-center md:text-center"
+    ></div>
+    <div class="grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
+    <div class="test-apply-font-variant"></div>
+    <div class="mt-6"></div>
+    <div class="bg-black"></div>
+    <div class="md:hover:border-r-blue-500/30"></div>
+    <div class="custom-util"></div>
+    <div class="hover:custom-util"></div>
+    <div class="group-hover:custom-util"></div>
+    <div class="foo:custom-util"></div>
+    <div class="foo:hover:custom-util"></div>
+    <div class="sm:custom-util"></div>
+    <div class="dark:custom-util"></div>
+    <div class="motion-safe:custom-util"></div>
+    <div class="md:dark:motion-safe:foo:active:custom-util"></div>
+    <div class="aspect-w-1 aspect-h-2"></div>
+    <div class="aspect-w-3 aspect-h-4"></div>
+    <div class="magic-none magic-tons"></div>
+    <div class="focus:font-normal"></div>
+    <div class="font-medium"></div>
+    <div class="bg-gradient-to-r from-foo"></div>
+    <div class="custom-component custom-util"></div>
+    <div class="bg-opacity-50"></div>
+    <div class="focus:ring-2 focus:ring-blue-500"></div>
+    <div class="hover:font-bold"></div>
+    <div class="disabled:font-bold"></div>
+    <div class="focus:hover:font-light"></div>
+    <div class="first:pt-0"></div>
+    <div class="container"></div>
+    <div class="bg-hero--home-1"></div>
+    <div class="group-hover:opacity-100"></div>
+    <div class="group-active:opacity-10"></div>
+    <div class="sm:motion-safe:group-active:focus:opacity-10"></div>
+    <div class="motion-safe:transition"></div>
+    <div class="motion-reduce:transition"></div>
+    <div class="md:motion-safe:hover:transition"></div>
+    <div class="md:sm:text-center shadow-sm md:shadow-sm"></div>
+    <div class="md:sm:text-center shadow-sm md:shadow-sm"></div>
+    <div class="bg-green-500 md:opacity-50 md:hover:opacity-20 sm:tabular-nums"></div>
+    <div class="text-center shadow-md hover:shadow-lg transform scale-50 hover:scale-75"></div>
+  </body>
+</html>
+
+<script>
+  defineComponent({
+    name: 'HelloWorld',
+    props: {
+      msg: {
+        type: String,
+        required: true,
+      },
+      things: Array /* PropType<string[]> */,
+    },
+    setup: () => {
+      const count = ref(0)
+      // Weird regex-looking stuff that once caused a stack overflow in candidatePermutations
+      const pattern = ' ]-[] '
+      return {
+        count,
+        stuff: [] /* string[] | undefined */,
+      }
+    },
+  })
+</script>
