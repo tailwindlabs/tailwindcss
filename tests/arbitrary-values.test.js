@@ -575,3 +575,31 @@ it('can use CSS variables as arbitrary values without `var()`', () => {
     `)
   })
 })
+
+it('can use CSS variables as arbitrary modifiers without `var()`', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="text-sm/[--line-height] bg-red-500/[--opacity]"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-red-500\/\[--opacity\] {
+        background-color: rgb(239 68 68 / var(--opacity));
+      }
+      .text-sm\/\[--line-height\] {
+        font-size: 0.875rem;
+        line-height: var(--line-height);
+      }
+    `)
+  })
+})
