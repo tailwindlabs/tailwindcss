@@ -23,13 +23,13 @@ test('it detects classes in lit-html templates', () => {
         --tw-bg-opacity: 1;
         background-color: rgb(96 165 250 / var(--tw-bg-opacity));
       }
-      .py-2 {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-      }
       .px-4 {
         padding-left: 1rem;
         padding-right: 1rem;
+      }
+      .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
       }
       .font-bold {
         font-weight: 700;

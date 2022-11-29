@@ -1,11 +1,14 @@
 import path from 'path'
 import { run, html, css } from './util/run'
+import { env } from '../src/lib/sharedState'
+
+let t = env.OXIDE ? test.skip : test
 
 function customTransformer(content) {
   return content.replace(/uppercase/g, 'lowercase')
 }
 
-test('transform function', () => {
+t('transform function', () => {
   let config = {
     content: {
       files: [{ raw: html`<div class="uppercase"></div>` }],
@@ -22,7 +25,7 @@ test('transform function', () => {
   })
 })
 
-test('transform.DEFAULT', () => {
+t('transform.DEFAULT', () => {
   let config = {
     content: {
       files: [{ raw: html`<div class="uppercase"></div>` }],
@@ -41,7 +44,7 @@ test('transform.DEFAULT', () => {
   })
 })
 
-test('transform.{extension}', () => {
+t('transform.{extension}', () => {
   let config = {
     content: {
       files: [

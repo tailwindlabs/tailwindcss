@@ -1,4 +1,4 @@
-export default function (value) {
+export default function negateValue(value) {
   value = `${value}`
 
   if (value === '0') {
