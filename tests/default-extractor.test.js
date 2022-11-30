@@ -482,3 +482,9 @@ test('a lot of data', () => {
 
   expect(extractions).toContain(`underline`)
 })
+
+test('ruby percent string array', () => {
+  let extractions = defaultExtractor('%w[text-[#bada55]]')
+
+  expect(extractions).toContain(`text-[#bada55]`)
+})

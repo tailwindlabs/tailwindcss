@@ -184,7 +184,7 @@ function clipAtBalancedParens(input) {
     // This means that there was an extra closing `]`
     // We'll clip to just before it
     if (depth < 0) {
-      return input.substring(0, match.index)
+      return input.substring(0, match.index - 1)
     }
 
     // We've finished balancing the brackets but there still may be characters that can be included
