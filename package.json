@@ -67,6 +67,7 @@
     "postcss": "^8.0.9"
   },
   "dependencies": {
+    "@tailwindcss/oxide": "file:oxide/crates/node",
     "arg": "^5.0.2",
     "chokidar": "^3.5.3",
     "color-name": "^1.1.4",
@@ -89,8 +90,7 @@
     "postcss-selector-parser": "^6.0.11",
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
-    "resolve": "^1.22.1",
-    "tailwind-oxide": "file:oxide/crates/node"
+    "resolve": "^1.22.1"
   },
   "browserslist": [
     "> 1%",
