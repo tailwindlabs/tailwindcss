@@ -217,7 +217,9 @@ it('should be possible to mix and match nesting and different variant combinatio
           @supports (color: green) {
             .md\:\[\&\>\*\]\:\(text-black\2c
               dark\:\(text-white\2c
-              hover\:\[\@supports\(color\:green\)\]\:\[\&\:nth-child\(2n\=1\)\]\:text-gray-100\)\):nth-child(2n=1):hover
+              hover\:\[\@supports\(color\:green\)\]\:\[\&\:nth-child\(2n\=1\)\]\:text-gray-100\)\):nth-child(
+                2n=1
+              ):hover
               > * {
               --tw-text-opacity: 1;
               color: rgb(243 244 246 / var(--tw-text-opacity));
