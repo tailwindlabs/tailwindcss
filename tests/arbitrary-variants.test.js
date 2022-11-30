@@ -1,4 +1,7 @@
 import { run, html, css, defaults } from './util/run'
+import { env } from '../src/lib/sharedState'
+
+let t = env.OXIDE ? test.skip : test
 
 test('basic arbitrary variants', () => {
   let config = {
@@ -319,7 +322,7 @@ test('multiple attribute selectors', () => {
   })
 })
 
-test('multiple attribute selectors with custom separator (1)', () => {
+t('multiple attribute selectors with custom separator (1)', () => {
   let config = {
     separator: '__',
     content: [
@@ -345,7 +348,7 @@ test('multiple attribute selectors with custom separator (1)', () => {
   })
 })
 
-test('multiple attribute selectors with custom separator (2)', () => {
+t('multiple attribute selectors with custom separator (2)', () => {
   let config = {
     separator: '_@',
     content: [
