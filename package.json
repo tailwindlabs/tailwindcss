@@ -36,6 +36,7 @@
     "cli/*",
     "lib/*",
     "peers/*",
+    "oxide/packages/tailwindcss/dist/*.js",
     "scripts/*.js",
     "stubs/*.stub.js",
     "nesting/*",
