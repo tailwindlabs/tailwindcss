@@ -1,1 +1,1 @@
-console.log('Using OXIDE (CLI)!')
+require('../../../../lib/cli/index.js')
