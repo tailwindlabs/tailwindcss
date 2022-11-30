@@ -6,7 +6,7 @@ import log from '../util/log'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
 
-import oxide from 'tailwind-oxide'
+import oxide from '@tailwindcss/oxide'
 
 let env = sharedState.env
 
