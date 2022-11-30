@@ -3,7 +3,10 @@ import { run, html, css } from './util/run'
 let warn
 
 beforeEach(() => {
-  warn = jest.spyOn(require('../src/util/log').default, 'warn')
+  warn = jest.spyOn(
+    process.env.OXIDE ? require('../lib/util/log').default : require('../src/util/log').default,
+    'warn'
+  )
 })
 
 afterEach(() => warn.mockClear())

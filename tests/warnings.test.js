@@ -3,7 +3,7 @@ import { html, run, css } from './util/run'
 let warn
 
 beforeEach(() => {
-  let log = require('../src/util/log')
+  let log = process.env.OXIDE ? require('../lib/util/log') : require('../src/util/log')
   warn = jest.spyOn(log.default, 'warn')
 })
 
