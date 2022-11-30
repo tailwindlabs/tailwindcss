@@ -319,7 +319,7 @@ impl<'a> Extractor<'a> {
     fn can_be_candidate(&mut self, c: u8) -> bool {
         self.in_candidate
             && !self.in_arbitrary
-            && (13..=127).contains(&c)
+            && (0..=127).contains(&c)
             && (self.idx_start == 0 || self.input[(self.idx_start - 1)] <= 127)
     }
 
