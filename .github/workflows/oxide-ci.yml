@@ -211,7 +211,7 @@ jobs:
       - oxide-build-linux
       - oxide-build-apple-silicon
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
 
       # - name: Use cached oxide node_modules
       #   id: cache-oxide
@@ -272,5 +272,53 @@ jobs:
           mv package_updated.json package.json
           npm publish --tag insiders --access public
           cd -
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  tailwind_oxide_release:
+    runs-on: ubuntu-latest
+    name: Build and release Tailwind CSS
+
+    needs:
+      - oxide-release
+
+    strategy:
+      matrix:
+        node-version: [14]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Resolve version
+        id: vars
+        run: |
+          echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "OXIDE_NPM_VERSION=0.0.0-insiders.$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Setup `@tailwindcss/oxide` version
+        run: |
+          sed "s#\"@tailwindcss/oxide\": \".*\"#\"@tailwindcss/oxide\": \"${{ env.OXIDE_NPM_VERSION }}\"#" package.json > package_updated.json
+          mv package_updated.json package.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Tailwind CSS
+        run: npm run swcify
+
+      - name: Test
+        run: npm test
+
+      - name: 'Version based on commit: 0.0.0-oxide.${{ env.SHA_SHORT }}'
+        run: npm version 0.0.0-oxide.${{ env.SHA_SHORT }} --force --no-git-tag-version
+
+      - name: Publish
+        run: npm publish --tag oxide
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
