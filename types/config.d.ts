@@ -11,7 +11,7 @@ type KeyValuePair<K extends keyof any = string, V = string> = Record<K, V>
 interface RecursiveKeyValuePair<K extends keyof any = string, V = string> {
   [key: string]: V | RecursiveKeyValuePair<K, V>
 }
-type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
+export type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
 type CSSRuleObject = RecursiveKeyValuePair<string, null | string | string[]>
 
 interface PluginUtils {
