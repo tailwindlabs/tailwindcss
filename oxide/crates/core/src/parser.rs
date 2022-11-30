@@ -18,6 +18,7 @@ pub struct Extractor<'a> {
     idx_start: usize,
     idx_end: usize,
     idx_last: usize,
+    idx_arbitrary_start: usize,
 
     in_arbitrary: bool,
     in_candidate: bool,
@@ -63,6 +64,7 @@ impl<'a> Extractor<'a> {
 
             idx_start: 0,
             idx_end: 0,
+            idx_arbitrary_start: 0,
 
             in_arbitrary: false,
             in_candidate: false,
@@ -197,7 +199,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_arbitrary(&mut self, curr: u8) -> bool {
+    fn parse_arbitrary(&mut self, curr: u8, pos: usize) -> bool {
         // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary valuesq
         if self.in_escape {
             return self.parse_escaped();
@@ -222,6 +224,11 @@ impl<'a> Extractor<'a> {
                 _ if !self.in_quotes() => {
                     trace!("Arbitrary::End\t");
                     self.in_arbitrary = false;
+
+                    if pos - self.idx_arbitrary_start == 1 {
+                        // We have an empty arbitrary value, which is not allowed
+                        return false;
+                    }
                 }
 
                 // We're probably in quotes or nested brackets, so we keep going
@@ -259,12 +266,13 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_start(&mut self, curr: u8) -> bool {
+    fn parse_start(&mut self, curr: u8, pos: usize) -> bool {
         match curr {
             // Enter arbitrary value mode
             b'[' => {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
+                self.idx_arbitrary_start = pos;
 
                 true
             }
@@ -292,11 +300,13 @@ impl<'a> Extractor<'a> {
                 || prev == b'-'
                 || prev == b' '
                 || prev == b':' // Variant separator
+                || prev == b'/' // Modifier separator
                 || prev == b'!'
                 || prev == b'\0' =>
             {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
+                self.idx_arbitrary_start = pos;
             }
 
             // Can't enter arbitrary value mode
@@ -350,10 +360,10 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn parse_char(&mut self, prev: u8, curr: u8, pos: usize) -> bool {
         if self.in_arbitrary {
-            self.parse_arbitrary(curr)
+            self.parse_arbitrary(curr, pos)
         } else if self.in_candidate {
             self.parse_continue(prev, curr, pos)
-        } else if self.parse_start(curr) {
+        } else if self.parse_start(curr, pos) {
             self.in_candidate = true;
             self.idx_start = pos;
             self.idx_end = pos;
