@@ -291,6 +291,7 @@ impl<'a> Extractor<'a> {
             b'[' if prev == b'@'
                 || prev == b'-'
                 || prev == b' '
+                || prev == b':' // Variant separator
                 || prev == b'!'
                 || prev == b'\0' =>
             {
