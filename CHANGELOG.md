@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support renaming of output files by `PostCSS` plugin. ([#9944](https://github.com/tailwindlabs/tailwindcss/pull/9944))
 - Improve return value of `resolveConfig`, unwrap `ResolvableTo` ([#9972](https://github.com/tailwindlabs/tailwindcss/pull/9972))
 
+### Changed
+
+- Alphabetize `theme` keys in default config ([#9953](https://github.com/tailwindlabs/tailwindcss/pull/9953))
+
 ## [3.2.4] - 2022-11-11
 
 ### Added
