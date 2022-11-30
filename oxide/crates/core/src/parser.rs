@@ -39,6 +39,18 @@ impl<'a> Extractor<'a> {
         candidates.extend(Self::new(input, opts).into_iter());
         candidates
     }
+
+    #[cfg(test)]
+    pub fn unique_ord(input: &'a [u8], opts: ExtractorOptions) -> Vec<&'a [u8]> {
+      // This is an inefficient way to get an ordered, unique
+      // list as a Vec but it is only meant for testing.
+      let mut candidates = Self::all(input, opts);
+      let mut unique_list = FxHashSet::default();
+      unique_list.reserve(candidates.len());
+      candidates.retain(|c| unique_list.insert(*c));
+
+      candidates
+    }
 }
 
 impl<'a> Extractor<'a> {
@@ -447,12 +459,13 @@ mod test {
     }
 
     fn run(input: &str, loose: bool) -> Vec<&str> {
-        Extractor::new(
+        Extractor::unique_ord(
             input.as_bytes(),
             ExtractorOptions {
                 preserve_spaces_in_arbitrary: loose,
             },
         )
+        .into_iter()
         .map(|s| unsafe { std::str::from_utf8_unchecked(s) })
         .collect()
     }
@@ -626,7 +639,7 @@ mod test {
                 "See",
                 // "what", // what is dropped because it is followed by the fancy: ’
                 // "s",    // s is dropped because it is preceeded by the fancy: ’
-                "new",
+                // "new", // Already seen
                 "in",
                 "version",
                 "p", // Hmm, becuse "</p>"
