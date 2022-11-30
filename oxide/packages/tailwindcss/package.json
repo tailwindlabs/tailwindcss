@@ -1,0 +1,34 @@
+{
+  "name": "tailwindcss",
+  "version": "0.0.0",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "main": "dist/postcss-plugin.js",
+  "types": "types/postscs-plugin.d.ts",
+  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "bin": {
+    "tailwind": "dist/cli.js",
+    "tailwindcss": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "swc src --out-dir dist --copy-files"
+  },
+  "files": [],
+  "browserslist": [
+    "> 1%",
+    "not edge <= 18",
+    "not ie 11",
+    "not op_mini all"
+  ],
+  "engines": {
+    "node": ">=12.13.0"
+  },
+  "devDependencies": {
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.3.21",
+    "@swc/jest": "^0.2.23",
+    "typescript": "^4.9.3"
+  }
+}
