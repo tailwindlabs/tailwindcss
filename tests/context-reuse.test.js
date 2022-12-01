@@ -83,8 +83,7 @@ it('re-uses the context across multiple files with the same config', async () =>
   expect(dependencies[3]).toEqual([path.resolve(__dirname, 'context-reuse.tailwind.config.js')])
 
   // And none of this should have resulted in multiple contexts being created
-  let localSharedState = process.env.OXIDE ? require('../lib/lib/sharedState') : sharedState
-  expect(localSharedState.contextSourcesMap.size).toBe(1)
+  expect(sharedState.contextSourcesMap.size).toBe(1)
 })
 
 it('updates layers when any CSS containing @tailwind directives changes', async () => {
