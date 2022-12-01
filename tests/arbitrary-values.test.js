@@ -1,7 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
+import { env } from '../src/lib/sharedState'
 import { run, html, css } from './util/run'
+
+let oxideSkip = env.OXIDE ? test.skip : test
 
 test('arbitrary values', () => {
   let config = {
@@ -15,6 +18,23 @@ test('arbitrary values', () => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
+
+oxideSkip(
+  'should only detect classes with arbitrary values that are properly terminated after the arbitrary value',
+  () => {
+    let config = {
+      content: [
+        {
+          raw: html`<div class="w-[do-not-generate-this]w-[it-is-invalid-syntax]"></div>`,
+        },
+      ],
+    }
+
+    return run('@tailwind utilities', config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css``)
+    })
+  }
+)
 
 it('should be possible to differentiate between decoration utilities', () => {
   let config = {

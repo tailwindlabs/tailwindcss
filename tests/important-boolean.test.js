@@ -90,8 +90,7 @@ describe('duplicate elision', () => {
     `
 
     let result = await run(input, config)
-    let localSharedState = process.env.OXIDE ? require('../lib/lib/sharedState') : sharedState
-    let allContexts = Array.from(localSharedState.contextMap.values())
+    let allContexts = Array.from(sharedState.contextMap.values())
 
     let context = allContexts[allContexts.length - 1]
 

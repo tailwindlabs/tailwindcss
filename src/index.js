@@ -1,5 +1,5 @@
 if (process.env.OXIDE) {
-  module.exports = require('./oxide/postcss-plugin.js')
+  module.exports = require('./oxide/postcss-plugin')
 } else {
-  module.exports = require('./plugin.js')
+  module.exports = require('./plugin')
 }
