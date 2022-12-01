@@ -1,5 +1,3 @@
-// @ts-check
-
 import path from 'path'
 import fs from 'fs'
 import postcssrc from 'postcss-load-config'
@@ -11,12 +9,12 @@ import tailwind from '../../../processTailwindFeatures'
 import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport } from './deps'
 import { formatNodes, drainStdin, outputFile } from './utils'
 import { env } from '../shared'
-import resolveConfig from '../../../../resolveConfig.js'
-import getModuleDependencies from '../../../lib/getModuleDependencies.js'
-import { parseCandidateFiles } from '../../../lib/content.js'
-import { createWatcher } from './watching.js'
+import resolveConfig from '../../../../resolveConfig'
+import getModuleDependencies from '../../../lib/getModuleDependencies'
+import { parseCandidateFiles } from '../../../lib/content'
+import { createWatcher } from './watching'
 import fastGlob from 'fast-glob'
-import { findAtConfigPath } from '../../../lib/findAtConfigPath.js'
+import { findAtConfigPath } from '../../../lib/findAtConfigPath'
 import log from '../../../util/log'
 
 /**

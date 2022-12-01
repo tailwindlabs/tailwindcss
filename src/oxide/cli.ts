@@ -1,1 +1,1 @@
-require('./cli/index')
+import './cli/index'
