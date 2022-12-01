@@ -15,7 +15,7 @@
   "scripts": {
     "prebuild": "npm run generate && rimraf lib",
     "build": "swc src --out-dir lib --copy-files",
-    "postbuild": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
+    "postbuild": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
     "rebuild-fixtures": "npm run build && node -r @swc/register scripts/rebuildFixtures.js",
     "style": "eslint .",
     "pretest": "npm run generate",
@@ -76,6 +76,7 @@
     "fast-glob": "^3.2.12",
     "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
+    "lightningcss": "^1.17.1",
     "lilconfig": "^2.0.6",
     "micromatch": "^4.0.5",
     "normalize-path": "^3.0.0",
