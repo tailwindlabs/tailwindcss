@@ -16,7 +16,7 @@
     "prebuild": "npm run generate && rimraf lib",
     "build": "swc src --out-dir lib --copy-files",
     "postbuild": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
-    "rebuild-fixtures": "npm run swcify && node -r @swc/register scripts/rebuildFixtures.js",
+    "rebuild-fixtures": "npm run build && node -r @swc/register scripts/rebuildFixtures.js",
     "style": "eslint .",
     "pretest": "npm run generate",
     "test": "jest",
@@ -28,15 +28,14 @@
     "release-channel": "node ./scripts/release-channel.js",
     "release-notes": "node ./scripts/release-notes.js",
     "oxide:install": "npm install --prefix ./oxide",
-    "oxide:dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run swcify -- --watch' 'npm run --prefix ./oxide dev:node'",
-    "oxide:build": "npm run --prefix ./oxide build:node && npm run swcify"
+    "oxide:dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run build -- --watch' 'npm run --prefix ./oxide dev:node'",
+    "oxide:build": "npm run --prefix ./oxide build:node && npm run build"
   },
   "files": [
     "src/*",
     "cli/*",
     "lib/*",
     "peers/*",
-    "oxide/packages/tailwindcss/dist/*.js",
     "scripts/*.js",
     "stubs/*.stub.js",
     "nesting/*",
