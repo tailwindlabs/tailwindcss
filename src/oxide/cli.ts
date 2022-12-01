@@ -1,0 +1,1 @@
+require('../cli/index.js')
