@@ -23,22 +23,6 @@ export function init(args, configs) {
     messages.push(`Created Tailwind CSS config file: ${path.basename(tailwindConfigLocation)}`)
   }
 
-  if (args['--postcss']) {
-    let postcssConfigLocation = path.resolve(`./${configs.postcss}`)
-    if (fs.existsSync(postcssConfigLocation)) {
-      messages.push(`${path.basename(postcssConfigLocation)} already exists.`)
-    } else {
-      let stubFile = fs.readFileSync(
-        path.resolve(__dirname, '../../../../stubs/defaultPostCssConfig.stub.js'),
-        'utf8'
-      )
-
-      fs.writeFileSync(postcssConfigLocation, stubFile, 'utf8')
-
-      messages.push(`Created PostCSS config file: ${path.basename(postcssConfigLocation)}`)
-    }
-  }
-
   if (messages.length > 0) {
     console.log()
     for (let message of messages) {

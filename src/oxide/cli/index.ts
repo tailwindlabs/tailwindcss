@@ -19,15 +19,7 @@ function isESM() {
   }
 }
 
-let configs = isESM()
-  ? {
-      tailwind: 'tailwind.config.cjs',
-      postcss: 'postcss.config.cjs',
-    }
-  : {
-      tailwind: 'tailwind.config.js',
-      postcss: 'postcss.config.js',
-    }
+let configs = isESM() ? { tailwind: 'tailwind.config.cjs' } : { tailwind: 'tailwind.config.js' }
 
 // ---
 
@@ -52,9 +44,7 @@ let commands = {
     run: init,
     args: {
       '--full': { type: Boolean, description: `Initialize a full \`${configs.tailwind}\` file` },
-      '--postcss': { type: Boolean, description: `Initialize a \`${configs.postcss}\` file` },
       '-f': '--full',
-      '-p': '--postcss',
     },
   },
   build: {
@@ -74,22 +64,10 @@ let commands = {
         type: String,
         description: 'Content paths to use for removing unused classes',
       },
-      '--purge': {
-        type: String,
-        deprecated: true,
-      },
-      '--postcss': {
-        type: oneOf(String, Boolean),
-        description: 'Load custom PostCSS configuration',
-      },
       '--minify': { type: Boolean, description: 'Minify the output' },
       '--config': {
         type: String,
         description: 'Path to a custom config file',
-      },
-      '--no-autoprefixer': {
-        type: Boolean,
-        description: 'Disable autoprefixer',
       },
       '-c': '--config',
       '-i': '--input',
@@ -114,7 +92,7 @@ if (
   help({
     usage: [
       'tailwindcss [--input input.css] [--output output.css] [--watch] [options...]',
-      'tailwindcss init [--full] [--postcss] [options...]',
+      'tailwindcss init [--full] [options...]',
     ],
     commands: Object.keys(commands)
       .filter((command) => command !== 'build')
