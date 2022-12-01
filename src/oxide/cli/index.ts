@@ -8,8 +8,6 @@ import { build } from './build'
 import { help } from './help'
 import { init } from './init'
 
-console.log('HELLO FROM OXIDE')
-
 function isESM() {
   const pkgPath = path.resolve('./package.json')
 

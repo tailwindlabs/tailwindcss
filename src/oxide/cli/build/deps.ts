@@ -1,5 +1,3 @@
-// @ts-check
-
 import {
   // @ts-ignore
   lazyPostcss,
@@ -12,7 +10,7 @@ import {
 
   // @ts-ignore
   lazyAutoprefixer,
-} from '../../../../peers/index.js'
+} from '../../../../peers/index'
 
 /**
  * @returns {import('postcss')}
