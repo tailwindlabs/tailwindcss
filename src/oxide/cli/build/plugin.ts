@@ -6,7 +6,7 @@ import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, l
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
 
 import tailwind from '../../../processTailwindFeatures'
-import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport } from './deps'
+import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport, lightningcss } from './deps'
 import { formatNodes, drainStdin, outputFile } from './utils'
 import { env } from '../shared'
 import resolveConfig from '../../../../resolveConfig'
@@ -331,6 +331,7 @@ export async function createProcessor(args, cliConfigPath) {
 
     return readInput()
       .then((css) => processor.process(css, { ...postcssOptions, from: input, to: output }))
+      .then((result) => lightningcss(!!args['--minify'], result))
       .then((result) => {
         if (!state.watcher) {
           return result
