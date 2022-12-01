@@ -13,11 +13,11 @@
     "tailwindcss": "lib/cli.js"
   },
   "scripts": {
-    "preswcify": "npm run generate && rimraf lib",
-    "swcify": "swc src --out-dir lib --copy-files",
-    "postswcify": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
-    "rebuild-fixtures": "npm run swcify && node -r @swc/register scripts/rebuildFixtures.js",
-    "prepublishOnly": "npm install --force && npm run swcify",
+    "prebuild": "npm run generate && rimraf lib",
+    "build": "swc src --out-dir lib --copy-files",
+    "postbuild": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js",
+    "rebuild-fixtures": "npm run build && node -r @swc/register scripts/rebuildFixtures.js",
+    "prepublishOnly": "npm install --force && npm run build",
     "style": "eslint .",
     "pretest": "npm run generate",
     "test": "jest",
