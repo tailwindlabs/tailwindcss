@@ -1,12 +1,10 @@
-// @ts-check
-
 import chokidar from 'chokidar'
 import fs from 'fs'
 import micromatch from 'micromatch'
 import normalizePath from 'normalize-path'
 import path from 'path'
 
-import { readFileWithRetries } from './utils.js'
+import { readFileWithRetries } from './utils'
 
 /**
  * The core idea of this watcher is:

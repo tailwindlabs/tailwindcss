@@ -1,5 +1,3 @@
-// @ts-check
-
 import fs from 'fs'
 import path from 'path'
 
@@ -12,8 +10,8 @@ export function init(args, configs) {
   } else {
     let stubFile = fs.readFileSync(
       args['--full']
-        ? path.resolve(__dirname, '../../../stubs/defaultConfig.stub.js')
-        : path.resolve(__dirname, '../../../stubs/simpleConfig.stub.js'),
+        ? path.resolve(__dirname, '../../../../stubs/defaultConfig.stub.js')
+        : path.resolve(__dirname, '../../../../stubs/simpleConfig.stub.js'),
       'utf8'
     )
 
@@ -31,7 +29,7 @@ export function init(args, configs) {
       messages.push(`${path.basename(postcssConfigLocation)} already exists.`)
     } else {
       let stubFile = fs.readFileSync(
-        path.resolve(__dirname, '../../../stubs/defaultPostCssConfig.stub.js'),
+        path.resolve(__dirname, '../../../../stubs/defaultPostCssConfig.stub.js'),
         'utf8'
       )
 
