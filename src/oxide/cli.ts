@@ -1,1 +1,1 @@
-require('../cli/index.js')
+require('./cli/index')
