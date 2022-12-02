@@ -1097,7 +1097,7 @@ test('variant functions returning arrays should output correct results when nest
   `)
 })
 
-test.only('arbitrary variant selectors should not re-order scrollbar pseudo classes', async () => {
+test('arbitrary variant selectors should not re-order scrollbar pseudo classes', async () => {
   let config = {
     content: [
       {
