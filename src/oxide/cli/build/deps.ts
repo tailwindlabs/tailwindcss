@@ -13,7 +13,6 @@ import {
   lazyCssnano,
 
   // @ts-ignore
-  lazyAutoprefixer,
 } from '../../../../peers/index'
 
 export function lazyLightningCss() {
@@ -89,24 +88,4 @@ export function loadPostcssImport() {
   } catch {}
 
   return lazyPostcssImport()
-}
-
-export function loadCssNano() {
-  let options = { preset: ['default', { cssDeclarationSorter: false }] }
-
-  // Try to load a local `cssnano` version first
-  try {
-    return require('cssnano')
-  } catch {}
-
-  return lazyCssnano()(options)
-}
-
-export function loadAutoprefixer() {
-  // Try to load a local `autoprefixer` version first
-  try {
-    return require('autoprefixer')
-  } catch {}
-
-  return lazyAutoprefixer()
 }
