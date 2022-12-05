@@ -3,15 +3,13 @@ const os = require('os')
 const fs = require('fs-extra')
 
 const platformMap = {
-  darwin: 'macos',
-  win32: 'windows',
-  linux: 'linux',
+  darwin: `./dist/tailwindcss-macos-${process.arch}`,
+  linux: `./dist/tailwindcss-linux-${process.arch}`,
+  win32: `.\\dist\\tailwindcss-windows-${process.arch}`,
 }
 
 function exec(args) {
-  return execSync(
-    `./dist/tailwindcss-${platformMap[process.platform]}-${process.arch} ${args}`
-  ).toString()
+  return execSync(`${platformMap[process.platform]} ${args}`).toString()
 }
 
 it('works', () => {
