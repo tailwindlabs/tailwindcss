@@ -5,9 +5,7 @@ const fs = require('fs-extra')
 const platformMap = {
   darwin: `./dist/tailwindcss-macos-${process.arch}`,
   linux: `./dist/tailwindcss-linux-${process.arch}`,
-  win32: `.\\dist\\tailwindcss-windows-${(
-    process.env.PROCESSOR_ARCHITEW6432 || process.arch
-  ).toLowerCase()}.exe`,
+  win32: `.\\dist\\tailwindcss-windows-${process.arch}`,
 }
 
 function exec(args) {
