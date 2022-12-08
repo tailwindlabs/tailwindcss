@@ -816,6 +816,7 @@ module.exports = {
       2: '2',
     },
     supports: {},
+    data: {},
     textColor: ({ theme }) => theme('colors'),
     textDecorationColor: ({ theme }) => theme('colors'),
     textDecorationThickness: {
