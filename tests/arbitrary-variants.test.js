@@ -517,11 +517,11 @@ test('allows attribute variants with quotes', () => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
 
-      .\[\&\[data-test\=\'2\'\]\]\:underline[data-test="2"] {
+      .\[\&\[data-test\=\"2\"\]\]\:underline[data-test='2'] {
         text-decoration-line: underline;
       }
 
-      .\[\&\[data-test\=\"2\"\]\]\:underline[data-test='2'] {
+      .\[\&\[data-test\=\'2\'\]\]\:underline[data-test='2'] {
         text-decoration-line: underline;
       }
     `)
@@ -554,12 +554,12 @@ test('classes in arbitrary variants should not be prefixed', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .foo .\[\.foo_\&\]\:tw-text-red-400 {
+      .\[\&_\.foo\]\:tw-text-red-400 .foo {
         --tw-text-opacity: 1;
         color: rgb(248 113 113 / var(--tw-text-opacity));
       }
 
-      .\[\&_\.foo\]\:tw-text-red-400 .foo {
+      .foo .\[\.foo_\&\]\:tw-text-red-400 {
         --tw-text-opacity: 1;
         color: rgb(248 113 113 / var(--tw-text-opacity));
       }
@@ -593,22 +593,22 @@ test('classes in the same arbitrary variant should not be prefixed', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .foo .\[\.foo_\&\]\:tw-bg-white {
-        --tw-bg-opacity: 1;
-        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-      }
-
-      .foo .\[\.foo_\&\]\:tw-text-red-400 {
-        --tw-text-opacity: 1;
-        color: rgb(248 113 113 / var(--tw-text-opacity));
-      }
-
       .\[\&_\.foo\]\:tw-bg-white .foo {
         --tw-bg-opacity: 1;
         background-color: rgb(255 255 255 / var(--tw-bg-opacity));
       }
 
       .\[\&_\.foo\]\:tw-text-red-400 .foo {
+        --tw-text-opacity: 1;
+        color: rgb(248 113 113 / var(--tw-text-opacity));
+      }
+
+      .foo .\[\.foo_\&\]\:tw-bg-white {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+      }
+
+      .foo .\[\.foo_\&\]\:tw-text-red-400 {
         --tw-text-opacity: 1;
         color: rgb(248 113 113 / var(--tw-text-opacity));
       }
@@ -1058,6 +1058,42 @@ it('should be possible to use modifiers and arbitrary peers', () => {
         text-decoration-line: underline;
       }
       .peer\/foo.in-foo ~ .peer-\[\.in-foo\]\/foo\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+it('Arbitrary variants are ordered alphabetically', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="[&::b]:underline"></div>
+            <div class="[&::a]:underline"></div>
+            <div class="[&::c]:underline"></div>
+            <div class="[&::b]:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .\[\&\:\:a\]\:underline::a {
+        text-decoration-line: underline;
+      }
+      .\[\&\:\:b\]\:underline::b {
+        text-decoration-line: underline;
+      }
+      .\[\&\:\:c\]\:underline::c {
         text-decoration-line: underline;
       }
     `)
