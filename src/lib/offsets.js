@@ -255,7 +255,7 @@ export class Offsets {
     // Sort the variants by their name
     let variants = Array.from(this.variantOffsets.entries())
       .filter(([v]) => v.startsWith('['))
-      .sort(([a], [z]) => a.localeCompare(z))
+      .sort(([a], [z]) => fastCompare(a, z))
 
     // Sort the list of offsets
     // This is not necessarily a discrete range of numbers which is why
@@ -325,3 +325,27 @@ function max(nums) {
 
   return max
 }
+
+/**
+ * A fast ASCII order string comparison function.
+ *
+ * Using `.sort()` without a custom compare function is faster
+ * But you can only use that if you're sorting an array of
+ * only strings. If you're sorting strings inside objects
+ * or arrays, you need must use a custom compare function.
+ *
+ * @param {string} a
+ * @param {string} b
+ */
+function fastCompare(a, b) {
+  let aLen = a.length;
+	let bLen = b.length;
+  let minLen = aLen < bLen ? aLen : bLen;
+
+  for (let i = 0; i < minLen; i++) {
+    let cmp = a.charCodeAt(i) - b.charCodeAt(i);
+    if (cmp !== 0) return cmp;
+  }
+
+  return aLen - bLen;
+};
