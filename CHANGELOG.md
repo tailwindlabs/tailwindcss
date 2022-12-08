@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve return value of `resolveConfig`, unwrap `ResolvableTo` ([#9972](https://github.com/tailwindlabs/tailwindcss/pull/9972))
 - Clip unbalanced brackets in arbitrary values ([#9973](https://github.com/tailwindlabs/tailwindcss/pull/9973))
 - Don’t reorder webkit scrollbar pseudo elements ([#9991](https://github.com/tailwindlabs/tailwindcss/pull/9991))
+- Deterministic sorting of arbitrary variants ([#10016](https://github.com/tailwindlabs/tailwindcss/pull/10016))
 
 ### Changed
 
