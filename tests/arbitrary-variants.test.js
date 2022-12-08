@@ -1063,3 +1063,39 @@ it('should be possible to use modifiers and arbitrary peers', () => {
     `)
   })
 })
+
+it('Arbitrary variants are ordered alphabetically', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="[&::b]:underline"></div>
+            <div class="[&::a]:underline"></div>
+            <div class="[&::c]:underline"></div>
+            <div class="[&::b]:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .\[\&\:\:a\]\:underline::a {
+        text-decoration-line: underline;
+      }
+      .\[\&\:\:b\]\:underline::b {
+        text-decoration-line: underline;
+      }
+      .\[\&\:\:c\]\:underline::c {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})

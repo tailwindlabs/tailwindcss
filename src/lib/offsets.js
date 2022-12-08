@@ -1,6 +1,7 @@
 // @ts-check
 
 import bigSign from '../util/bigSign'
+import { remapBitfield } from './remap-bitfield.js'
 
 /**
  * @typedef {'base' | 'defaults' | 'components' | 'utilities' | 'variants' | 'user'} Layer
@@ -244,11 +245,67 @@ export class Offsets {
   }
 
   /**
+   * Arbitrary variants are recorded in the order they're encountered.
+   * This means that the order is not stable between environments and sets of content files.
+   *
+   * In order to make the order stable, we need to remap the arbitrary variant offsets to
+   * be in alphabetical order starting from the offset of the first arbitrary variant.
+   */
+  recalculateVariantOffsets() {
+    // Sort the variants by their name
+    let variants = Array.from(this.variantOffsets.entries())
+      .filter(([v]) => v.startsWith('['))
+      .sort(([a], [z]) => a.localeCompare(z))
+
+    // Sort the list of offsets
+    // This is not necessarily a discrete range of numbers which is why
+    // we're using sort instead of creating a range from min/max
+    let newOffsets = variants.map(([, offset]) => offset).sort((a, z) => bigSign(a - z))
+
+    // Create a map from the old offsets to the new offsets in the new sort order
+    /** @type {[bigint, bigint][]} */
+    let mapping = variants.map(([, oldOffset], i) => [oldOffset, newOffsets[i]])
+
+    // Remove any variants that will not move letting us skip
+    // remapping if everything happens to be in order
+    return mapping.filter(([a, z]) => a !== z)
+  }
+
+  /**
+   * @template T
+   * @param {[RuleOffset, T][]} list
+   * @returns {[RuleOffset, T][]}
+   */
+  remapArbitraryVariantOffsets(list) {
+    let mapping = this.recalculateVariantOffsets()
+
+    // No arbitrary variants? Nothing to do.
+    // Everyhing already in order? Nothing to do.
+    if (mapping.length === 0) {
+      return list
+    }
+
+    // Remap every variant offset in the list
+    return list.map((item) => {
+      let [offset, rule] = item
+
+      offset = {
+        ...offset,
+        variants: remapBitfield(offset.variants, mapping),
+      }
+
+      return [offset, rule]
+    })
+  }
+
+  /**
    * @template T
    * @param {[RuleOffset, T][]} list
    * @returns {[RuleOffset, T][]}
    */
   sort(list) {
+    list = this.remapArbitraryVariantOffsets(list)
+
     return list.sort(([a], [b]) => bigSign(this.compare(a, b)))
   }
 }
