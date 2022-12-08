@@ -15,7 +15,7 @@ test('it detects classes in lit-html templates', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .rounded {
         border-radius: 0.25rem;
       }

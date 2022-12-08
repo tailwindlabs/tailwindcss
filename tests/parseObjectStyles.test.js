@@ -1,5 +1,10 @@
 import parseObjectStyles from '../src/util/parseObjectStyles'
 import postcss from 'postcss'
+import { env } from '../src/lib/sharedState'
+
+// The skipped tests for OXIDE are testing nested structures. In the oxide version we make use of
+// nesting, and parseObjectStyles keeps everything nested insted of unnesting everything.
+let t = env.OXIDE ? test.skip : test
 
 function css(nodes) {
   return postcss.root({ nodes }).toString()
@@ -49,16 +54,16 @@ test('it parses multiple class definitions', () => {
   `)
 })
 
-test('it parses nested pseudo-selectors', () => {
+t('it parses nested pseudo-selectors', () => {
   const result = parseObjectStyles({
     '.foo': {
       backgroundColor: 'red',
       color: 'white',
       padding: '1rem',
-      ':hover': {
+      '&:hover': {
         backgroundColor: 'orange',
       },
-      ':focus': {
+      '&:focus': {
         backgroundColor: 'blue',
       },
     },
@@ -97,7 +102,7 @@ test('it parses top-level media queries', () => {
   `)
 })
 
-test('it parses nested media queries', () => {
+t('it parses nested media queries', () => {
   const result = parseObjectStyles({
     '.foo': {
       backgroundColor: 'red',
@@ -123,7 +128,7 @@ test('it parses nested media queries', () => {
   `)
 })
 
-test('it bubbles nested screen rules', () => {
+t('it bubbles nested screen rules', () => {
   const result = parseObjectStyles({
     '.foo': {
       backgroundColor: 'red',
@@ -149,13 +154,13 @@ test('it bubbles nested screen rules', () => {
   `)
 })
 
-test('it parses pseudo-selectors in nested media queries', () => {
+t('it parses pseudo-selectors in nested media queries', () => {
   const result = parseObjectStyles({
     '.foo': {
       backgroundColor: 'red',
       color: 'white',
       padding: '1rem',
-      ':hover': {
+      '&:hover': {
         '@media (min-width: 200px)': {
           backgroundColor: 'orange',
         },
@@ -177,7 +182,7 @@ test('it parses pseudo-selectors in nested media queries', () => {
   `)
 })
 
-test('it parses descendant selectors', () => {
+t('it parses descendant selectors', () => {
   const result = parseObjectStyles({
     '.foo': {
       backgroundColor: 'red',
@@ -201,7 +206,7 @@ test('it parses descendant selectors', () => {
   `)
 })
 
-test('it parses nested multi-class selectors', () => {
+t('it parses nested multi-class selectors', () => {
   const result = parseObjectStyles({
     '.foo': {
       backgroundColor: 'red',
@@ -225,7 +230,7 @@ test('it parses nested multi-class selectors', () => {
   `)
 })
 
-test('it parses nested multi-class selectors in media queries', () => {
+t('it parses nested multi-class selectors in media queries', () => {
   const result = parseObjectStyles({
     '.foo': {
       backgroundColor: 'red',
@@ -253,7 +258,7 @@ test('it parses nested multi-class selectors in media queries', () => {
   `)
 })
 
-test('it strips empty selectors when nesting', () => {
+t('it strips empty selectors when nesting', () => {
   const result = parseObjectStyles({
     '.foo': {
       '.bar': {

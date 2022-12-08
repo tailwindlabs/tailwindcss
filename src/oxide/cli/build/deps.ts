@@ -48,6 +48,7 @@ export async function lightningcss(shouldMinify: boolean, result: Result) {
       targets: css.browserslistToTargets(browserslist(packageJson.browserslist)),
       drafts: {
         nesting: true,
+        customMedia: true,
       },
     })
 

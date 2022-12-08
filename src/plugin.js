@@ -34,6 +34,47 @@ module.exports = function tailwindcss(configOrPath) {
 
         processTailwindFeatures(context)(root, result)
       },
+      // false &&
+      env.OXIDE &&
+        function (_root, result) {
+          let postcss = require('postcss')
+          let lightningcss = require('lightningcss')
+          let browserslist = require('browserslist')
+
+          try {
+            let transformed = lightningcss.transform({
+              filename: result.opts.from,
+              code: Buffer.from(result.root.toString()),
+              minify: false,
+              sourceMap: !!result.map,
+              inputSourceMap: result.map ? result.map.toString() : undefined,
+              targets:
+                typeof process !== 'undefined' && process.env.JEST_WORKER_ID
+                  ? { chrome: 106 << 16 }
+                  : lightningcss.browserslistToTargets(
+                      browserslist(require('../package.json').browserslist)
+                    ),
+
+              drafts: {
+                nesting: true,
+                customMedia: true,
+              },
+            })
+
+            result.map
+              ? Object.assign(result.map, {
+                  toString() {
+                    return transformed.map.toString()
+                  },
+                })
+              : result.map
+
+            result.root = postcss.parse(transformed.code.toString('utf8'))
+          } catch (err) {
+            console.error('Unable to use Lightning CSS. Using raw version instead.')
+            console.error(err)
+          }
+        },
       env.DEBUG &&
         function (root) {
           console.timeEnd('JIT TOTAL')

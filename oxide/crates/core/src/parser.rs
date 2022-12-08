@@ -43,14 +43,14 @@ impl<'a> Extractor<'a> {
 
     #[cfg(test)]
     pub fn unique_ord(input: &'a [u8], opts: ExtractorOptions) -> Vec<&'a [u8]> {
-      // This is an inefficient way to get an ordered, unique
-      // list as a Vec but it is only meant for testing.
-      let mut candidates = Self::all(input, opts);
-      let mut unique_list = FxHashSet::default();
-      unique_list.reserve(candidates.len());
-      candidates.retain(|c| unique_list.insert(*c));
+        // This is an inefficient way to get an ordered, unique
+        // list as a Vec but it is only meant for testing.
+        let mut candidates = Self::all(input, opts);
+        let mut unique_list = FxHashSet::default();
+        unique_list.reserve(candidates.len());
+        candidates.retain(|c| unique_list.insert(*c));
 
-      candidates
+        candidates
     }
 }
 

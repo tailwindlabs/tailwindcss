@@ -3,8 +3,12 @@ import path from 'path'
 import selectorParser from 'postcss-selector-parser'
 
 import { run, css } from './util/run'
+import { env } from '../src/lib/sharedState'
 
-test('modify selectors', () => {
+// modifySelectors is not supported in the OXIDE version
+let t = env.OXIDE ? test.skip : test
+
+t('modify selectors', () => {
   let config = {
     darkMode: 'class',
     content: [path.resolve(__dirname, './modify-selectors.test.html')],

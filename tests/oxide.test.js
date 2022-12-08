@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { env } from '../src/lib/sharedState'
-import { run, css } from './util/run'
+import { run, html, css } from './util/run'
 
 afterEach(() => {
   env.OXIDE = false
@@ -35,7 +35,8 @@ test.each([[true], [false]])('it works (using Rust: %p)', (useOxide) => {
           'foo',
           ({ container }) => {
             container.walkRules((rule) => {
-              rule.selector = `.foo\\:${rule.selector.slice(1)}`
+              // TODO: Document that this is bad?
+              // rule.selector = `.foo\\:${rule.selector.slice(1)}`
               rule.walkDecls((decl) => {
                 decl.important = true
               })
@@ -170,6 +171,66 @@ test.each([[true], [false]])('it works (using Rust: %p)', (useOxide) => {
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
+  })
+})
+
+xit.each([[true], [false]])(
+  'should use the transformer for svelte files (using Rust: %p)',
+  (useOxide) => {
+    env.OXIDE = useOxide
+
+    let config = {
+      darkMode: 'class',
+      content: [path.resolve(__dirname, './oxide.test.svelte')],
+      corePlugins: { preflight: false },
+      theme: {},
+      plugins: [],
+    }
+
+    let input = css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      let expectedPath = path.resolve(__dirname, './oxide-svelte.test.css')
+      let expected = fs.readFileSync(expectedPath, 'utf8')
+
+      expect(result.css).toMatchFormattedCss(expected)
+    })
+  }
+)
+
+it.each([[true], [false]])('it works as well (using Rust: %p)', (useOxide) => {
+  env.OXIDE = useOxide
+
+  let config = {
+    content: [{ raw: html`<div class="multi:text-left"></div>` }],
+    corePlugins: { preflight: false },
+    theme: {
+      extend: {
+        screens: {
+          range: { min: '1280px', max: '1535px' },
+          multi: [{ min: '640px', max: '767px' }, { max: '868px' }],
+        },
+      },
+    },
+  }
+
+  let input = css`
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 640px) and (max-width: 767px), (max-width: 868px) {
+        .multi\:text-left {
+          text-align: left;
+        }
+      }
+    `)
   })
 })
 

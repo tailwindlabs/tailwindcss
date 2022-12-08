@@ -1,27 +1,58 @@
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
-import parseObjectStyles from '../util/parseObjectStyles'
-import isPlainObject from '../util/isPlainObject'
-import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses, filterSelectorsForClass, getMatchingTypes } from '../util/pluginUtils'
-import log from '../util/log'
-import * as sharedState from './sharedState'
-import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
-import { asClass } from '../util/nameClass'
-import { normalize } from '../util/dataTypes'
-import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
-import isValidArbitraryValue from '../util/isSyntacticallyValidPropertyValue'
-import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
-import { flagEnabled } from '../featureFlags'
-import { resolveMatches as oxideResolveMatches } from '../oxide/core/resolve-matches'
+import type { Node, Container, AtRule } from 'postcss'
+import parseObjectStyles from '../../lib/../util/parseObjectStyles'
+import isPlainObject from '../../lib/../util/isPlainObject'
+import prefixSelector from '../../lib/../util/prefixSelector'
+import {
+  updateAllClasses,
+  filterSelectorsForClass,
+  getMatchingTypes,
+} from '../../lib/../util/pluginUtils'
+import log from '../../lib/../util/log'
+import * as sharedState from '../../lib/./sharedState'
+import { asClass } from '../../lib/../util/nameClass'
+import { normalize } from '../../lib/../util/dataTypes'
+import { isValidVariantFormatString, parseVariant } from '../../lib/./setupContextUtils'
+import isValidArbitraryValue from '../../lib/../util/isSyntacticallyValidPropertyValue'
+import { splitAtTopLevelOnly } from '../../lib/../util/splitAtTopLevelOnly.js'
+import { flagEnabled } from '../../lib/../featureFlags'
+import { formatVariantSelector } from '../../util/formatVariantSelector'
 
-let classNameParser = selectorParser((selectors) => {
-  return selectors.first.filter(({ type }) => type === 'class').pop().value
-})
+type Layer = 'base' | 'defaults' | 'components' | 'utilities' | 'variants' | 'user'
 
-export function getClassNameFromSelector(selector) {
-  return classNameParser.transformSync(selector)
+interface RuleOffset {
+  layer: Layer
+  parentLayer: Layer
+  arbitrary: bigint
+  variants: bigint
+  parallelIndex: bigint
+  index: bigint
+  options: {
+    id: number
+    sort?: Function
+    value: string | null
+    modifier: string | null
+  }[]
 }
+
+type Match = [
+  {
+    sort: RuleOffset
+    layer: Layer
+    options: {
+      preserveSource: boolean
+      respectPrefix: boolean
+      respectImportant: boolean
+      types: { type: string; preferOnConflict?: boolean }[]
+      // collectedFormats?: string[]
+    }
+    important: boolean
+  },
+  Node
+]
+
+type Context = any
 
 // Generate match permutations for a class candidate, like:
 // ['ring-offset-blue', '100']
@@ -30,11 +61,11 @@ export function getClassNameFromSelector(selector) {
 // Example with dynamic classes:
 // ['grid-cols', '[[linename],1fr,auto]']
 // ['grid', 'cols-[[linename],1fr,auto]']
-function* candidatePermutations(candidate) {
+function* candidatePermutations(candidate: string) {
   let lastIndex = Infinity
 
   while (lastIndex >= 0) {
-    let dashIdx
+    let dashIdx: number
     let wasSlash = false
 
     if (lastIndex === Infinity && candidate.endsWith(']')) {
@@ -75,7 +106,7 @@ function* candidatePermutations(candidate) {
   }
 }
 
-function applyPrefix(matches, context) {
+function applyPrefix(matches: Match[], context: Context) {
   if (matches.length === 0 || context.tailwindConfig.prefix === '') {
     return matches
   }
@@ -108,26 +139,44 @@ function applyPrefix(matches, context) {
   return matches
 }
 
-function applyImportant(matches, classCandidate) {
+function applyImportant(matches: Match[]) {
   if (matches.length === 0) {
     return matches
   }
-  let result = []
+
+  let result: Match[] = []
 
   for (let [meta, rule] of matches) {
     let container = postcss.root({ nodes: [rule.clone()] })
-    container.walkRules((r) => {
-      r.selector = updateAllClasses(
-        filterSelectorsForClass(r.selector, classCandidate),
-        (className) => {
-          if (className === classCandidate) {
-            return `!${className}`
-          }
-          return className
-        }
-      )
-      r.walkDecls((d) => (d.important = true))
+
+    container.walkDecls((d) => {
+      d.important = true
     })
+
+    // BUG WORKAROUND: Wrapping the contents of the atRule in an additional rule using
+    // the simple & selector. This allows lightning to properly parse the contents of
+    // a @media rule where a declaration has the !important modifier.
+    //
+    // Expected, but doesn't work:
+    // .foo {
+    //   @media (min-width: 400px) {
+    //     color: red !important;
+    //   }
+    // }
+    //
+    // Workaround produces this, which works:
+    // .foo {
+    //   @media (min-width: 400px) {
+    //     & {
+    //       color: red !important;
+    //     }
+    //   }
+    // }
+    container.walkAtRules((rule) => {
+      rule.nodes = [postcss.rule({ selector: '&', nodes: rule.nodes })]
+    })
+
+    // TODO: What is this `important` doing?
     result.push([{ ...meta, important: true }, container.nodes[0]])
   }
 
@@ -143,13 +192,15 @@ function applyImportant(matches, classCandidate) {
 // and `focus:hover:text-center` in the same project, but it doesn't feel
 // worth the complexity for that case.
 
-function applyVariant(variant, matches, context) {
-  if (matches.length === 0) {
-    return matches
+function applyVariant(variant: string, children: Match[], context: any) {
+  if (children.length === 0) {
+    return children
   }
 
-  /** @type {{modifier: string | null, value: string | null}} */
-  let args = { modifier: null, value: sharedState.NONE }
+  let args: {
+    modifier?: string | null
+    value?: string | null | typeof sharedState.NONE
+  } = { modifier: null, value: sharedState.NONE }
 
   // Retrieve "modifier"
   {
@@ -201,179 +252,176 @@ function applyVariant(variant, matches, context) {
     context.variantMap.set(variant, [[sort, fn]])
   }
 
-  if (context.variantMap.has(variant)) {
-    let isArbitraryVariant = isArbitraryValue(variant)
-    let variantFunctionTuples = context.variantMap.get(variant).slice()
-    let result = []
+  if (!context.variantMap.has(variant)) {
+    return []
+  }
 
-    for (let [meta, rule] of matches) {
-      // Don't generate variants for user css
-      if (meta.layer === 'user') {
+  let variantFunctionTuples = context.variantMap.get(variant).slice()
+  let result: [any, Node][] = []
+
+  for (let [meta, rule] of children) {
+    // Don't generate variants for user css
+    if (meta.layer === 'user') {
+      continue
+    }
+
+    let container = postcss.root({ nodes: [rule.clone()] })
+    let allFormats: string[] = []
+
+    for (let [variantSort, variantFunction, containerFromArray] of variantFunctionTuples) {
+      let clone: Container = (containerFromArray ?? container).clone()
+
+      let collectedFormats: string[] = []
+
+      let ruleWithVariant = variantFunction({
+        // Public API
+        container: clone,
+
+        // Private API for now
+        wrap(wrapper: AtRule) {
+          collectedFormats.push(`@${wrapper.name} ${wrapper.params}`)
+        },
+        format(selectorFormat: string) {
+          collectedFormats.push(selectorFormat)
+        },
+        args,
+      })
+
+      // It can happen that a list of format strings is returned from within the function. In that
+      // case, we have to process them as well. We can use the existing `variantSort`.
+      if (Array.isArray(ruleWithVariant)) {
+        for (let [idx, variantFunction] of ruleWithVariant.entries()) {
+          // This is a little bit scary since we are pushing to an array of items that we are
+          // currently looping over. However, you can also think of it like a processing queue
+          // where you keep handling jobs until everything is done and each job can queue more
+          // jobs if needed.
+          variantFunctionTuples.push([
+            context.offsets.applyParallelOffset(variantSort, idx),
+            variantFunction,
+
+            // If the clone has been modified we have to pass that back
+            // though so each rule can use the modified container
+            clone.clone(),
+          ])
+        }
         continue
       }
 
-      let container = postcss.root({ nodes: [rule.clone()] })
+      if (typeof ruleWithVariant === 'string') {
+        collectedFormats.push(ruleWithVariant)
+      }
 
-      for (let [variantSort, variantFunction, containerFromArray] of variantFunctionTuples) {
-        let clone = (containerFromArray ?? container).clone()
-        let collectedFormats = []
+      if (ruleWithVariant === null) {
+        continue
+      }
 
-        function prepareBackup() {
-          // Already prepared, chicken out
-          if (clone.raws.neededBackup) {
-            return
-          }
-          clone.raws.neededBackup = true
-          clone.walkRules((rule) => (rule.raws.originalSelector = rule.selector))
-        }
+      // This tracks the originating layer for the variant
+      // For example:
+      // .sm:underline {} is a variant of something in the utilities layer
+      // .sm:container {} is a variant of the container component
+      clone.nodes[0].raws.tailwind = { ...clone.nodes[0].raws.tailwind, parentLayer: meta.layer }
 
-        function modifySelectors(modifierFunction) {
-          prepareBackup()
-          clone.each((rule) => {
-            if (rule.type !== 'rule') {
-              return
+      let localClone = clone.clone()
+      allFormats.push(...collectedFormats)
+      if (collectedFormats.length <= 0) {
+        collectedFormats.push('&')
+      }
+
+      for (let format of collectedFormats) {
+        localClone.walkRules((rule) => {
+          let children = rule.clone().nodes
+
+          let wrapper = (function () {
+            /*
+             * Wrap in an atRule
+             */
+            if (format.startsWith('@')) {
+              let matches = /@(.*?)( .+|[({].*)/g.exec(format)
+              if (matches) {
+                let [, name, params] = matches
+                return postcss.atRule({
+                  name: name.trim(),
+                  params: params.trim(),
+                  // BUG WORKAROUND: Wrapping the contents of the atRule in an additional rule using
+                  // the simple & selector. This allows lightning to properly parse the contents of
+                  // a @media rule where a declaration has the !important modifier.
+                  //
+                  // Expected, but doesn't work:
+                  // .foo {
+                  //   @media (min-width: 400px) {
+                  //     color: red !important;
+                  //   }
+                  // }
+                  //
+                  // Workaround produces this, which works:
+                  // .foo {
+                  //   @media (min-width: 400px) {
+                  //     & {
+                  //       color: red !important;
+                  //     }
+                  //   }
+                  // }
+                  nodes: [postcss.rule({ selector: '&', nodes: children })],
+                })
+              }
             }
 
-            rule.selectors = rule.selectors.map((selector) => {
-              return modifierFunction({
-                get className() {
-                  return getClassNameFromSelector(selector)
-                },
-                selector,
+            /*
+             * Wrap in a rule with the new selector
+             */
+            // TODO: Handle the `:merge`
+            if (format.includes(':merge')) {
+              let [, target, rest] = /\:merge\((.*)\)([^ ]*)/g.exec(format)!
+              let found = false
+              let childrenContainer = postcss.root({ nodes: children })
+              childrenContainer.walkRules((rule) => {
+                if (rule.selector.includes(`:merge(${target})`)) {
+                  let [, target, rest] = /\:merge\((.*)\)([^ ]*)/g.exec(rule.selector)!
+                  rule.selector = format.replace(`:merge(${target})`, `:merge(${target})${rest}`)
+                  // rule.selector = rule.selector.replace(
+                  //   `:merge(${target})`,
+                  //   `:merge(${target})${rest}`
+                  // )
+                  found = true
+                }
               })
-            })
-          })
+              // return postcss.root({ nodes: children })
+              return postcss.rule({
+                selector: found ? '&' : format,
+                nodes: childrenContainer.nodes,
+              })
+            }
 
-          return clone
-        }
+            return postcss.rule({ selector: format, nodes: children })
+          })()
 
-        let ruleWithVariant = variantFunction({
-          // Public API
-          get container() {
-            prepareBackup()
-            return clone
-          },
-          separator: context.tailwindConfig.separator,
-          modifySelectors,
-
-          // Private API for now
-          wrap(wrapper) {
-            let nodes = clone.nodes
-            clone.removeAll()
-            wrapper.append(nodes)
-            clone.append(wrapper)
-          },
-          format(selectorFormat) {
-            collectedFormats.push({
-              format: selectorFormat,
-              isArbitraryVariant,
-            })
-          },
-          args,
+          rule.replaceWith(rule.clone({ nodes: [wrapper] }))
+          return false
         })
-
-        // It can happen that a list of format strings is returned from within the function. In that
-        // case, we have to process them as well. We can use the existing `variantSort`.
-        if (Array.isArray(ruleWithVariant)) {
-          for (let [idx, variantFunction] of ruleWithVariant.entries()) {
-            // This is a little bit scary since we are pushing to an array of items that we are
-            // currently looping over. However, you can also think of it like a processing queue
-            // where you keep handling jobs until everything is done and each job can queue more
-            // jobs if needed.
-            variantFunctionTuples.push([
-              context.offsets.applyParallelOffset(variantSort, idx),
-              variantFunction,
-
-              // If the clone has been modified we have to pass that back
-              // though so each rule can use the modified container
-              clone.clone(),
-            ])
-          }
-          continue
-        }
-
-        if (typeof ruleWithVariant === 'string') {
-          collectedFormats.push({
-            format: ruleWithVariant,
-            isArbitraryVariant,
-          })
-        }
-
-        if (ruleWithVariant === null) {
-          continue
-        }
-
-        // We had to backup selectors, therefore we assume that somebody touched
-        // `container` or `modifySelectors`. Let's see if they did, so that we
-        // can restore the selectors, and collect the format strings.
-        if (clone.raws.neededBackup) {
-          delete clone.raws.neededBackup
-          clone.walkRules((rule) => {
-            let before = rule.raws.originalSelector
-            if (!before) return
-            delete rule.raws.originalSelector
-            if (before === rule.selector) return // No mutation happened
-
-            let modified = rule.selector
-
-            // Rebuild the base selector, this is what plugin authors would do
-            // as well. E.g.: `${variant}${separator}${className}`.
-            // However, plugin authors probably also prepend or append certain
-            // classes, pseudos, ids, ...
-            let rebuiltBase = selectorParser((selectors) => {
-              selectors.walkClasses((classNode) => {
-                classNode.value = `${variant}${context.tailwindConfig.separator}${classNode.value}`
-              })
-            }).processSync(before)
-
-            // Now that we know the original selector, the new selector, and
-            // the rebuild part in between, we can replace the part that plugin
-            // authors need to rebuild with `&`, and eventually store it in the
-            // collectedFormats. Similar to what `format('...')` would do.
-            //
-            // E.g.:
-            //                   variant: foo
-            //                  selector: .markdown > p
-            //      modified (by plugin): .foo .foo\\:markdown > p
-            //    rebuiltBase (internal): .foo\\:markdown > p
-            //                    format: .foo &
-            collectedFormats.push({
-              format: modified.replace(rebuiltBase, '&'),
-              isArbitraryVariant,
-            })
-            rule.selector = before
-          })
-        }
-
-        // This tracks the originating layer for the variant
-        // For example:
-        // .sm:underline {} is a variant of something in the utilities layer
-        // .sm:container {} is a variant of the container component
-        clone.nodes[0].raws.tailwind = { ...clone.nodes[0].raws.tailwind, parentLayer: meta.layer }
-
-        let withOffset = [
-          {
-            ...meta,
-            sort: context.offsets.applyVariantOffset(
-              meta.sort,
-              variantSort,
-              Object.assign(args, context.variantOptions.get(variant))
-            ),
-            collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
-          },
-          clone.nodes[0],
-        ]
-        result.push(withOffset)
       }
-    }
 
-    return result
+      // console.log(localClone.toString())
+
+      result.push([
+        {
+          ...meta,
+          sort: context.offsets.applyVariantOffset(
+            meta.sort,
+            variantSort,
+            Object.assign(args, context.variantOptions.get(variant))
+          ),
+          // collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
+          isArbitraryVariant: isArbitraryValue(variant),
+        },
+        localClone.nodes[0],
+      ])
+    }
   }
 
-  return []
+  return result
 }
 
-function parseRules(rule, cache, options = {}) {
+function parseRules(rule: Node, cache, options = {}) {
   // PostCSS node
   if (!isPlainObject(rule) && !Array.isArray(rule)) {
     return [[rule], options]
@@ -418,10 +466,11 @@ function looksLikeUri(declaration) {
   }
 }
 
-function isParsableNode(node) {
+function isParsableNode(node: Node) {
   let isParsable = true
+  let container = postcss.root({ nodes: [node.clone()] })
 
-  node.walkDecls((decl) => {
+  container.walkDecls((decl) => {
     if (!isParsableCssValue(decl.prop, decl.value)) {
       isParsable = false
       return false
@@ -431,7 +480,7 @@ function isParsableNode(node) {
   return isParsable
 }
 
-function isParsableCssValue(property, value) {
+function isParsableCssValue(property: string, value: string) {
   // We don't want to to treat [https://example.com] as a custom property
   // Even though, according to the CSS grammar, it's a totally valid CSS declaration
   // So we short-circuit here by checking if the custom property looks like a url
@@ -447,7 +496,7 @@ function isParsableCssValue(property, value) {
   }
 }
 
-function extractArbitraryProperty(classCandidate, context) {
+function extractArbitraryProperty(classCandidate: string, context: Context) {
   let [, property, value] = classCandidate.match(/^\[([a-zA-Z0-9-_]+):(\S+)\]$/) ?? []
 
   if (value === undefined) {
@@ -482,7 +531,7 @@ function extractArbitraryProperty(classCandidate, context) {
   ]
 }
 
-function* resolveMatchedPlugins(classCandidate, context) {
+function* resolveMatchedPlugins(classCandidate: string, context: Context) {
   if (context.candidateRuleMap.has(classCandidate)) {
     yield [context.candidateRuleMap.get(classCandidate), 'DEFAULT']
   }
@@ -519,16 +568,16 @@ function* resolveMatchedPlugins(classCandidate, context) {
   }
 }
 
-function splitWithSeparator(input, separator) {
+function splitWithSeparator(input: string, separator: string): string[] {
   if (input === sharedState.NOT_ON_DEMAND) {
-    return [sharedState.NOT_ON_DEMAND]
+    return [sharedState.NOT_ON_DEMAND as string]
   }
 
   return splitAtTopLevelOnly(input, separator)
 }
 
-function* recordCandidates(matches, classCandidate) {
-  for (const match of matches) {
+function* recordCandidates(matches: Match[], classCandidate: string) {
+  for (let match of matches) {
     match[1].raws.tailwind = {
       ...match[1].raws.tailwind,
       classCandidate,
@@ -539,9 +588,10 @@ function* recordCandidates(matches, classCandidate) {
   }
 }
 
-export function* resolveMatches(candidate, context, original = candidate) {
+export function* resolveMatches(candidate: string, context: Context, original = candidate) {
   let separator = context.tailwindConfig.separator
-  let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
+  let variants = splitWithSeparator(candidate, separator)
+  let classCandidate = variants.pop()!
   let important = false
 
   if (classCandidate.startsWith('!')) {
@@ -571,14 +621,14 @@ export function* resolveMatches(candidate, context, original = candidate) {
   // }
 
   for (let matchedPlugins of resolveMatchedPlugins(classCandidate, context)) {
-    let matches = []
+    let matches: Match[][] = []
     let typesByMatches = new Map()
 
     let [plugins, modifier] = matchedPlugins
     let isOnlyPlugin = plugins.length === 1
 
     for (let [sort, plugin] of plugins) {
-      let matchesPerPlugin = []
+      let matchesPerPlugin: Match[] = []
 
       if (typeof plugin === 'function') {
         for (let ruleSet of [].concat(plugin(modifier, { isOnlyPlugin }))) {
@@ -632,10 +682,10 @@ export function* resolveMatches(candidate, context, original = candidate) {
             }
             return group
           },
-          [[], []]
+          [[] as Match[][], [] as Match[][]]
         )
 
-        function findFallback(matches) {
+        function findFallback(matches: Match[]) {
           // If only a single plugin matches, let's take that one
           if (matches.length === 1) {
             return matches[0]
@@ -691,7 +741,7 @@ export function* resolveMatches(candidate, context, original = candidate) {
             }
           }
 
-          let messages = []
+          let messages: string[] = []
 
           for (let [idx, group] of typesPerPlugin.entries()) {
             for (let type of group) {
@@ -730,193 +780,50 @@ export function* resolveMatches(candidate, context, original = candidate) {
       matches = matches.map((list) => list.filter((match) => isParsableNode(match[1])))
     }
 
-    matches = matches.flat()
-    matches = Array.from(recordCandidates(matches, classCandidate))
-    matches = applyPrefix(matches, context)
+    let flattenedMatches = matches.flat()
+    flattenedMatches = Array.from(recordCandidates(flattenedMatches, classCandidate))
+    flattenedMatches = applyPrefix(flattenedMatches, context)
+    flattenedMatches = applyNewSelector(flattenedMatches, { from: classCandidate, to: candidate })
 
     if (important) {
-      matches = applyImportant(matches, classCandidate)
+      flattenedMatches = applyImportant(flattenedMatches)
     }
 
     for (let variant of variants) {
-      matches = applyVariant(variant, matches, context)
+      flattenedMatches = applyVariant(variant, flattenedMatches, context)
     }
 
-    for (let match of matches) {
-      match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate }
-
-      // Apply final format selector
-      match = applyFinalFormat(match, { context, candidate, original })
-
-      // Skip rules with invalid selectors
-      // This will cause the candidate to be added to the "not class"
-      // cache skipping it entirely for future builds
-      if (match === null) {
-        continue
-      }
-
-      yield match
-    }
+    yield* flattenedMatches
   }
 }
 
-function applyFinalFormat(match, { context, candidate, original }) {
-  if (!match[0].collectedFormats) {
-    return match
+function applyNewSelector(matches: Match[], info: { from: string; to: string }) {
+  if (typeof info.from !== 'string' && typeof info.to !== 'string') {
+    return matches
   }
 
-  let isValid = true
-  let finalFormat
-
-  try {
-    finalFormat = formatVariantSelector(match[0].collectedFormats, {
-      context,
-      candidate,
-    })
-  } catch {
-    // The format selector we produced is invalid
-    // This could be because:
-    // - A bug exists
-    // - A plugin introduced an invalid variant selector (ex: `addVariant('foo', '&;foo')`)
-    // - The user used an invalid arbitrary variant (ex: `[&;foo]:underline`)
-    // Either way the build will fail because of this
-    // We would rather that the build pass "silently" given that this could
-    // happen because of picking up invalid things when scanning content
-    // So we'll throw out the candidate instead
-
-    return null
+  if (info.from === info.to) {
+    return matches
   }
 
-  let container = postcss.root({ nodes: [match[1].clone()] })
-
-  container.walkRules((rule) => {
-    if (inKeyframes(rule)) {
-      return
-    }
-
-    try {
-      rule.selector = finalizeSelector(rule.selector, finalFormat, {
-        candidate: original,
-        context,
+  for (let match of matches) {
+    let container = postcss.root({ nodes: [match[1].clone()] })
+    container.walkRules((node) => {
+      let ast = selectorParser().astSync(node.selector)
+      ast.walkClasses((node) => {
+        if (node.value === info.from) {
+          node.value = info.to
+        }
       })
-    } catch {
-      // If this selector is invalid we also want to skip it
-      // But it's likely that being invalid here means there's a bug in a plugin rather than too loosely matching content
-      isValid = false
+      node.selector = ast.toString()
       return false
-    }
-  })
-
-  if (!isValid) {
-    return null
+    })
+    match[1] = container.nodes[0]
   }
 
-  match[1] = container.nodes[0]
-
-  return match
+  return matches
 }
 
-function inKeyframes(rule) {
-  return rule.parent && rule.parent.type === 'atrule' && rule.parent.name === 'keyframes'
-}
-
-function getImportantStrategy(important) {
-  if (important === true) {
-    return (rule) => {
-      if (inKeyframes(rule)) {
-        return
-      }
-
-      rule.walkDecls((d) => {
-        if (d.parent.type === 'rule' && !inKeyframes(d.parent)) {
-          d.important = true
-        }
-      })
-    }
-  }
-
-  if (typeof important === 'string') {
-    return (rule) => {
-      if (inKeyframes(rule)) {
-        return
-      }
-
-      if (sharedState.env.OXIDE) {
-        let isLeafRule = true
-        rule.walkRules(() => {
-          isLeafRule = false
-          return false
-        })
-
-        if (isLeafRule) {
-          let current = rule.clone()
-          let wrapper = postcss.rule({
-            selector: `${important} &`,
-            nodes: current.nodes,
-          })
-          current.nodes = [wrapper]
-          console.log(current.toString())
-          rule.replaceWith(current)
-          return false
-        }
-      } else {
-        rule.selectors = rule.selectors.map((selector) => {
-          return `${important} ${selector}`
-        })
-      }
-    }
-  }
-}
-
-export function generateRules(candidates, context) {
-  let allRules = []
-  let strategy = getImportantStrategy(context.tailwindConfig.important)
-
-  for (let candidate of candidates) {
-    if (context.notClassCache.has(candidate)) {
-      continue
-    }
-
-    if (context.candidateRuleCache.has(candidate)) {
-      allRules = allRules.concat(Array.from(context.candidateRuleCache.get(candidate)))
-      continue
-    }
-
-    let matches = Array.from(
-      sharedState.env.OXIDE
-        ? oxideResolveMatches(candidate, context)
-        : resolveMatches(candidate, context)
-    )
-
-    if (matches.length === 0) {
-      context.notClassCache.add(candidate)
-      continue
-    }
-
-    context.classCache.set(candidate, matches)
-
-    let rules = context.candidateRuleCache.get(candidate) ?? new Set()
-    context.candidateRuleCache.set(candidate, rules)
-
-    for (let match of matches) {
-      let [{ sort, options }, rule] = match
-
-      if (options.respectImportant && strategy) {
-        let container = postcss.root({ nodes: [rule.clone()] })
-        container.walkRules(strategy)
-        rule = container.nodes[0]
-      }
-
-      let newEntry = [sort, rule]
-      rules.add(newEntry)
-      context.ruleCache.add(newEntry)
-      allRules.push(newEntry)
-    }
-  }
-
-  return allRules
-}
-
-function isArbitraryValue(input) {
+function isArbitraryValue(input: string) {
   return input.startsWith('[') && input.endsWith(']')
 }

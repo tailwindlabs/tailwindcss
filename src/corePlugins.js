@@ -22,6 +22,7 @@ import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadow
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
 import { normalize } from './util/dataTypes'
+import { env } from './lib/sharedState'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -546,16 +547,36 @@ export let corePlugins = {
         },
       }))
 
-      addComponents([
-        {
-          '.container': Object.assign(
-            { width: '100%' },
-            theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
-            generatePaddingFor(0)
-          ),
-        },
-        ...atRules,
-      ])
+      if (env.OXIDE) {
+        addComponents([
+          {
+            '.container': Object.assign(
+              { width: '100%' },
+              theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
+              generatePaddingFor(0),
+              ...Array.from(
+                new Set(minWidths.slice().sort((a, z) => parseInt(a) - parseInt(z)))
+              ).map((minWidth) => ({
+                [`@media (min-width: ${minWidth})`]: {
+                  'max-width': minWidth,
+                  ...generatePaddingFor(minWidth),
+                },
+              }))
+            ),
+          },
+        ])
+      } else {
+        addComponents([
+          {
+            '.container': Object.assign(
+              { width: '100%' },
+              theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
+              generatePaddingFor(0)
+            ),
+          },
+          ...atRules,
+        ])
+      }
     }
   })(),
 

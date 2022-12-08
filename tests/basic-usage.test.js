@@ -306,7 +306,7 @@ it('can parse box shadows with variables', () => {
     content: [{ raw: html`<div class="shadow-lg"></div>` }],
     theme: {
       boxShadow: {
-        lg: 'var(-a, 0 35px 60px -15px rgba(0, 0, 0)), 0 0 1px rgb(0, 0, 0)',
+        lg: 'var(--a, 0 35px 60px -15px rgba(0, 0, 0)), 0 0 1px rgb(0, 0, 0)',
       },
     },
     corePlugins: { preflight: false },
@@ -319,7 +319,7 @@ it('can parse box shadows with variables', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .shadow-lg {
-        --tw-shadow: var(-a, 0 35px 60px -15px rgba(0, 0, 0)), 0 0 1px rgb(0, 0, 0);
+        --tw-shadow: var(--a, 0 35px 60px -15px rgba(0, 0, 0)), 0 0 1px rgb(0, 0, 0);
         --tw-shadow-colored: 0 35px 60px -15px var(--tw-shadow-color),
           0 0 1px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -372,12 +372,11 @@ it('supports multiple backgrounds as arbitrary values even if only some are quot
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .bg-\[url\(\'\/images\/one-two-three\.png\'\)\2c
-        linear-gradient\(to_right\2c
-        _\#eeeeee\2c
+      .bg-\[url\(\'\/images\/one-two-three\.png\'\)\,
+        linear-gradient\(to_right\,
+        _\#eeeeee\,
         _\#000000\)\] {
-        background-image: url('/images/one-two-three.png'),
-          linear-gradient(to right, #eeeeee, #000000);
+        background-image: url('/images/one-two-three.png'), linear-gradient(to right, #eee, #000);
       }
     `)
   })

@@ -1,4 +1,5 @@
 import { run, html, css } from './util/run'
+import { env } from '../src/lib/sharedState'
 
 it('preflight has a correct border color fallback', () => {
   let config = {
@@ -16,6 +17,12 @@ it('preflight has a correct border color fallback', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toContain(`border-color: currentColor;`)
+    if (env.OXIDE) {
+      // Lightning CSS optimizes this to just `border-color: 0 solid;` based on the browserslist
+      // value.
+      expect(result.css).toContain(`border: 0 solid;`)
+    } else {
+      expect(result.css).toContain(`border-color: currentColor;`)
+    }
   })
 })

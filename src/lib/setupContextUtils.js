@@ -208,6 +208,10 @@ export function parseVariant(variant) {
 
   let fns = parseVariantFormatString(variant)
     .map((str) => {
+      if (env.OXIDE) {
+        return ({ format }) => format(str)
+      }
+
       if (!str.startsWith('@')) {
         return ({ format }) => format(str)
       }
@@ -913,6 +917,7 @@ function registerPlugins(plugins, context) {
     prefix(context, 'peer'),
   ]
   context.getClassOrder = function getClassOrder(classes) {
+    console.log(classes)
     // Non-util classes won't be generated, so we default them to null
     let sortedClassNames = new Map(classes.map((className) => [className, null]))
 

@@ -685,13 +685,7 @@
 .bg-\[image\:var\(--value\)\2c var\(--value\)\] {
   background-image: var(--value), var(--value);
 }
-.bg-\[linear-gradient\(\#eee\2c
-  \#fff\)\2c
-  conic-gradient\(red\2c
-  orange\2c
-  yellow\2c
-  green\2c
-  blue\)\] {
+.bg-\[linear-gradient\(\#eee\, \#fff\)\, conic-gradient\(red\, orange\, yellow\, green\, blue\)\] {
   background-image: linear-gradient(#eee, #fff), conic-gradient(red, orange, yellow, green, blue);
 }
 .bg-\[linear-gradient\(\#eee\2c \#fff\)\] {

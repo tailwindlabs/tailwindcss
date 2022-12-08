@@ -245,14 +245,16 @@ describe('custom advanced variants', () => {
   })
 })
 
-test('stacked peer variants', async () => {
+test.only('stacked peer variants', async () => {
   let config = {
-    content: [{ raw: 'peer-disabled:peer-focus:peer-hover:border-blue-500' }],
+    content: [
+      { raw: 'peer-disabled:peer-focus:peer-hover:border-blue-500' },
+      // { raw: 'group-focus:group-hover:peer-disabled:peer-focus:peer-hover:border-blue-500' },
+    ],
     corePlugins: { preflight: false },
   }
 
   let input = css`
-    @tailwind base;
     @tailwind components;
     @tailwind utilities;
   `
@@ -265,7 +267,7 @@ test('stacked peer variants', async () => {
   `
 
   let result = await run(input, config)
-  expect(result.css).toIncludeCss(expected)
+  expect(result.css).toMatchFormattedCss(expected)
 })
 
 it('should properly handle keyframes with multiple variants', async () => {
@@ -1115,21 +1117,27 @@ test('arbitrary variant selectors should not re-order scrollbar pseudo classes',
     .\[\&\:\:-webkit-resizer\:hover\]\:underline::-webkit-resizer:hover {
       text-decoration-line: underline;
     }
+
     .\[\&\:\:-webkit-scrollbar-button\:hover\]\:underline::-webkit-scrollbar-button:hover {
       text-decoration-line: underline;
     }
+
     .\[\&\:\:-webkit-scrollbar-corner\:hover\]\:underline::-webkit-scrollbar-corner:hover {
       text-decoration-line: underline;
     }
+
     .\[\&\:\:-webkit-scrollbar-thumb\:hover\]\:underline::-webkit-scrollbar-thumb:hover {
       text-decoration-line: underline;
     }
+
     .\[\&\:\:-webkit-scrollbar-track-piece\:hover\]\:underline::-webkit-scrollbar-track-piece:hover {
       text-decoration-line: underline;
     }
+
     .\[\&\:\:-webkit-scrollbar-track\:hover\]\:underline::-webkit-scrollbar-track:hover {
       text-decoration-line: underline;
     }
+
     .\[\&\:\:-webkit-scrollbar\:hover\]\:underline::-webkit-scrollbar:hover {
       text-decoration-line: underline;
     }
