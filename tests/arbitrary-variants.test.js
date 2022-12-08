@@ -521,7 +521,7 @@ test('allows attribute variants with quotes', () => {
         text-decoration-line: underline;
       }
 
-      .\[\&\[data-test\=\'2\'\]\]\:underline[data-test="2"] {
+      .\[\&\[data-test\=\'2\'\]\]\:underline[data-test='2'] {
         text-decoration-line: underline;
       }
     `)

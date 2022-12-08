@@ -338,14 +338,14 @@ function max(nums) {
  * @param {string} b
  */
 function fastCompare(a, b) {
-  let aLen = a.length;
-	let bLen = b.length;
-  let minLen = aLen < bLen ? aLen : bLen;
+  let aLen = a.length
+  let bLen = b.length
+  let minLen = aLen < bLen ? aLen : bLen
 
   for (let i = 0; i < minLen; i++) {
-    let cmp = a.charCodeAt(i) - b.charCodeAt(i);
-    if (cmp !== 0) return cmp;
+    let cmp = a.charCodeAt(i) - b.charCodeAt(i)
+    if (cmp !== 0) return cmp
   }
 
-  return aLen - bLen;
-};
+  return aLen - bLen
+}
