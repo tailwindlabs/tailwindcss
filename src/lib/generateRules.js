@@ -412,7 +412,7 @@ function isParsableNode(node) {
   let isParsable = true
 
   node.walkDecls((decl) => {
-    if (!isParsableCssValue(decl.name, decl.value)) {
+    if (!isParsableCssValue(decl.prop, decl.value)) {
       isParsable = false
       return false
     }
