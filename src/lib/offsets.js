@@ -190,7 +190,7 @@ export class Offsets {
 
     return {
       ...this.create('variants'),
-      variants: 1n << this.reservedVariantBits,
+      variants: this.variantOffsets.get(variant),
     }
   }
 
