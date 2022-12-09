@@ -1915,13 +1915,16 @@ export let corePlugins = {
         font: (value) => {
           let [families, options = {}] =
             Array.isArray(value) && isPlainObject(value[1]) ? value : [value]
-          let { fontFeatureSettings } = options
+          let { fontFeatureSettings, fontVariationSettings } = options
 
           return {
             'font-family': Array.isArray(families) ? families.join(', ') : families,
             ...(fontFeatureSettings === undefined
               ? {}
               : { 'font-feature-settings': fontFeatureSettings }),
+            ...(fontVariationSettings === undefined
+              ? {}
+              : { 'font-variation-settings': fontVariationSettings }),
           }
         },
       },
