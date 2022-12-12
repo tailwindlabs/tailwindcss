@@ -742,7 +742,7 @@ function* resolveMatches(candidate, context, original = candidate) {
         container.walkRules((rule) => {
           if (inKeyframes(rule)) return
 
-          rule.selector = finalizeSelector(finalFormat, {
+          let selectorOptions = {
             selector: rule.selector,
             candidate: original,
             base: candidate
@@ -751,7 +751,9 @@ function* resolveMatches(candidate, context, original = candidate) {
             isArbitraryVariant: match[0].isArbitraryVariant,
 
             context,
-          })
+          }
+
+          rule.selector = finalizeSelector(finalFormat, selectorOptions)
         })
         match[1] = container.nodes[0]
       }
