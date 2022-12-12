@@ -1104,9 +1104,7 @@ it('Arbitrary variants support multiple attribute selectors', () => {
   let config = {
     content: [
       {
-        raw: html`
-          <div class="[[data-foo='bar'][data-baz]_&]:underline"></div>
-        `,
+        raw: html` <div class="[[data-foo='bar'][data-baz]_&]:underline"></div> `,
       },
     ],
     corePlugins: { preflight: false },
