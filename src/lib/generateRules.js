@@ -733,6 +733,8 @@ function* resolveMatches(candidate, context, original = candidate) {
     }
 
     for (let match of matches) {
+      let isValid = true
+
       match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate }
 
       // Apply final format selector
@@ -753,9 +755,27 @@ function* resolveMatches(candidate, context, original = candidate) {
             context,
           }
 
-          rule.selector = finalizeSelector(finalFormat, selectorOptions)
+          try {
+            rule.selector = finalizeSelector(finalFormat, selectorOptions)
+          } catch {
+            // The selector we produced is invalid
+            // This could be because:
+            // - A bug exists
+            // - A plugin introduced an invalid variant selector (ex: `addVariant('foo', '&;foo')`)
+            // - The user used an invalid arbitrary variant (ex: `[&;foo]:underline`)
+            // Either way the build will fail because of this
+            // We would rather that the build pass "silently" given that this could
+            // happen because of picking up invalid things when scanning content
+            // So we'll throw out the candidate instead
+            isValid = false
+            return false
+          }
         })
         match[1] = container.nodes[0]
+      }
+
+      if (!isValid) {
+        continue
       }
 
       yield match
