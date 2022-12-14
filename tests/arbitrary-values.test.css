@@ -191,6 +191,12 @@
 .w-\[\'\}\{\}\'\] {
   width: '}{}';
 }
+.min-w-\[calc\(1-var\(--something\)\*0\.5\)\] {
+  min-width: calc(1 - var(--something) * 0.5);
+}
+.min-w-\[calc\(1-\(var\(--something\)\*0\.5\)\)\] {
+  min-width: calc(1 - (var(--something) * 0.5));
+}
 .min-w-\[3\.23rem\] {
   min-width: 3.23rem;
 }
