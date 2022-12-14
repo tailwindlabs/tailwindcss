@@ -209,7 +209,7 @@ interface ThemeConfig {
   blur: ResolvableTo<KeyValuePair>
   brightness: ResolvableTo<KeyValuePair>
   contrast: ResolvableTo<KeyValuePair>
-  dropShadow: ResolvableTo<KeyValuePair>
+  dropShadow: ResolvableTo<KeyValuePair<string, string | string[]>>
   grayscale: ResolvableTo<KeyValuePair>
   hueRotate: ResolvableTo<KeyValuePair>
   invert: ResolvableTo<KeyValuePair>
