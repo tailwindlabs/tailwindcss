@@ -1099,3 +1099,47 @@ it('Arbitrary variants are ordered alphabetically', () => {
     `)
   })
 })
+
+it('Arbitrary variants support multiple attribute selectors', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="[[data-foo='bar'][data-baz]_&]:underline"></div> `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      [data-foo='bar'][data-baz] .\[\[data-foo\=\'bar\'\]\[data-baz\]_\&\]\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
+it('Invalid arbitrary variants selectors should produce nothing instead of failing', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="[&;foo]:underline"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css``)
+  })
+})

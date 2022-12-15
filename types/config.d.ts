@@ -85,6 +85,7 @@ interface ThemeConfig {
   // Responsiveness
   screens: ResolvableTo<ScreensConfig>
   supports: ResolvableTo<Record<string, string>>
+  data: ResolvableTo<Record<string, string>>
 
   // Reusable base configs
   colors: ResolvableTo<RecursiveKeyValuePair>
@@ -214,7 +215,7 @@ interface ThemeConfig {
   blur: ResolvableTo<KeyValuePair>
   brightness: ResolvableTo<KeyValuePair>
   contrast: ResolvableTo<KeyValuePair>
-  dropShadow: ResolvableTo<KeyValuePair>
+  dropShadow: ResolvableTo<KeyValuePair<string, string | string[]>>
   grayscale: ResolvableTo<KeyValuePair>
   hueRotate: ResolvableTo<KeyValuePair>
   invert: ResolvableTo<KeyValuePair>

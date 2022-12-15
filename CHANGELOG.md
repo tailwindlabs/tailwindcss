@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clip unbalanced brackets in arbitrary values ([#9973](https://github.com/tailwindlabs/tailwindcss/pull/9973))
 - Don’t reorder webkit scrollbar pseudo elements ([#9991](https://github.com/tailwindlabs/tailwindcss/pull/9991))
 - Deterministic sorting of arbitrary variants ([#10016](https://github.com/tailwindlabs/tailwindcss/pull/10016))
+- Add `data` key to theme types ([#10023](https://github.com/tailwindlabs/tailwindcss/pull/10023))
+- Prevent invalid arbitrary variant selectors from failing the build ([#10059](https://github.com/tailwindlabs/tailwindcss/pull/10059))
+- Properly handle subtraction followed by a variable ([#10074](https://github.com/tailwindlabs/tailwindcss/pull/10074))
+- Fix missing `string[]` in the `theme.dropShadow` types ([#10072](https://github.com/tailwindlabs/tailwindcss/pull/10072))
 
 ### Changed
 

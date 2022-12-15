@@ -10,6 +10,9 @@ function isCSSFunction(value) {
   return cssFunctions.some((fn) => new RegExp(`^${fn}\\(.*\\)`).test(value))
 }
 
+const placeholder = '--tw-placeholder'
+const placeholderRe = new RegExp(placeholder, 'g')
+
 // This is not a data type, but rather a function that can normalize the
 // correct values.
 export function normalize(value, isRoot = true) {
@@ -49,10 +52,14 @@ export function normalize(value, isRoot = true) {
   // Add spaces around operators inside math functions like calc() that do not follow an operator
   // or '('.
   value = value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
-    return match.replace(
-      /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
-      '$1 $2 '
-    )
+    let vars = []
+    return match
+      .replace(/var\((--.+?)[,)]/g, (match, g1) => {
+        vars.push(g1)
+        return match.replace(g1, placeholder)
+      })
+      .replace(/(-?\d*\.?\d(?!\b-\d.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g, '$1 $2 ')
+      .replace(placeholderRe, () => vars.shift())
   })
 
   return value
