@@ -77,6 +77,9 @@ export function percentage(value) {
   return (value.endsWith('%') && number(value.slice(0, -1))) || isCSSFunction(value)
 }
 
+// Please refer to MDN when updating this list:
+// https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units
+// https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries#container_query_length_units
 let lengthUnits = [
   'cm',
   'mm',
@@ -90,10 +93,25 @@ let lengthUnits = [
   'ch',
   'rem',
   'lh',
+  'rlh',
   'vw',
   'vh',
   'vmin',
   'vmax',
+  'vb',
+  'vi',
+  'svw',
+  'svh',
+  'lvw',
+  'lvh',
+  'dvw',
+  'dvh',
+  'cqw',
+  'cqh',
+  'cqi',
+  'cqb',
+  'cqmin',
+  'cqmax',
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {

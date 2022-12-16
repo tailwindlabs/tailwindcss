@@ -843,6 +843,9 @@
 .text-\[2\.23rem\] {
   font-size: 2.23rem;
 }
+.text-\[4cqw\] {
+  font-size: 4cqw;
+}
 .text-\[length\:var\(--font-size\)\] {
   font-size: var(--font-size);
 }
