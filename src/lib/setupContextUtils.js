@@ -697,7 +697,35 @@ function collectLayerPlugins(root) {
       }
       layerRule.remove()
     } else if (layerRule.params === 'utilities') {
+      let pattern =
+        /\.(?<namespace>[\w_-]+)-\((?<valueVariable>@[\w_-]+)(?:\: theme\((?<themeKey>\w+)\))?\)/
       for (let node of layerRule.nodes) {
+        let matches
+        if (node.selector.includes('@') && (matches = node.selector.match(pattern))) {
+          let key = matches.groups.namespace
+          let themeKey = matches.groups.themeKey
+
+          layerPlugins.push(function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                [key]: (value) => {
+                  let nodesObj = {}
+                  node.walkDecls((n) => {
+                    nodesObj[n.prop] = n.value.replace(matches.groups.valueVariable, value)
+                  })
+                  return nodesObj
+                },
+              },
+              {
+                values: themeKey ? theme(themeKey) : {},
+                respectPrefix: false,
+                preserveSource: true,
+              }
+            )
+          })
+          continue
+        }
+
         layerPlugins.push(function ({ addUtilities }) {
           addUtilities(node, { respectPrefix: false, preserveSource: true })
         })
