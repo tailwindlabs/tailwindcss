@@ -23,21 +23,6 @@ import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
 import { normalize } from './util/dataTypes'
 
-// Logical properties:
-// - margin
-// - padding
-// - inset
-// - border-width
-// - border-color
-// - border-style?
-// - border-radius
-//   - rounded-tl -> border-start-start -> rounded-ss / rounded-ts?
-//   - rounded-tr -> border-start-end -> rounded-se / rounded-te?
-//   - rounded-br -> border-end-end -> rounded-ee / rounded-be?
-//   - rounded-bl -> border-end-start -> rounded-es / rounded-bs?
-// - clear
-// - float
-
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
     addVariant('first-letter', '&::first-letter')
@@ -638,6 +623,8 @@ export let corePlugins = {
         ['inset-y', ['top', 'bottom']],
       ],
       [
+        ['inset-s', ['inset-inline-start']],
+        ['inset-e', ['inset-inline-end']],
         ['top', ['top']],
         ['right', ['right']],
         ['bottom', ['bottom']],
@@ -689,6 +676,8 @@ export let corePlugins = {
         ['my', ['margin-top', 'margin-bottom']],
       ],
       [
+        ['ms', ['margin-inline-start']],
+        ['me', ['margin-inline-end']],
         ['mt', ['margin-top']],
         ['mr', ['margin-right']],
         ['mb', ['margin-bottom']],
@@ -1450,12 +1439,18 @@ export let corePlugins = {
   borderRadius: createUtilityPlugin('borderRadius', [
     ['rounded', ['border-radius']],
     [
+      ['rounded-s', ['border-start-start-radius', 'border-end-start-radius']],
+      ['rounded-e', ['border-start-end-radius', 'border-end-end-radius']],
       ['rounded-t', ['border-top-left-radius', 'border-top-right-radius']],
       ['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']],
       ['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
       ['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']],
     ],
     [
+      ['rounded-ss', ['border-start-start-radius']],
+      ['rounded-se', ['border-start-end-radius']],
+      ['rounded-ee', ['border-end-end-radius']],
+      ['rounded-es', ['border-end-start-radius']],
       ['rounded-tl', ['border-top-left-radius']],
       ['rounded-tr', ['border-top-right-radius']],
       ['rounded-br', ['border-bottom-right-radius']],
@@ -1472,6 +1467,8 @@ export let corePlugins = {
         ['border-y', [['@defaults border-width', {}], 'border-top-width', 'border-bottom-width']],
       ],
       [
+        ['border-s', [['@defaults border-width', {}], 'border-inline-start-width']],
+        ['border-e', [['@defaults border-width', {}], 'border-inline-end-width']],
         ['border-t', [['@defaults border-width', {}], 'border-top-width']],
         ['border-r', [['@defaults border-width', {}], 'border-right-width']],
         ['border-b', [['@defaults border-width', {}], 'border-bottom-width']],
@@ -1554,6 +1551,32 @@ export let corePlugins = {
 
     matchUtilities(
       {
+        'border-s': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-inline-start-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-inline-start-color',
+            variable: '--tw-border-opacity',
+          })
+        },
+        'border-e': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-inline-end-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-inline-end-color',
+            variable: '--tw-border-opacity',
+          })
+        },
         'border-t': (value) => {
           if (!corePlugins('borderOpacity')) {
             return {
@@ -1790,6 +1813,8 @@ export let corePlugins = {
       ['py', ['padding-top', 'padding-bottom']],
     ],
     [
+      ['ps', ['padding-inline-start']],
+      ['pe', ['padding-inline-end']],
       ['pt', ['padding-top']],
       ['pr', ['padding-right']],
       ['pb', ['padding-bottom']],
