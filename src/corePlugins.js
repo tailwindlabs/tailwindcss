@@ -1026,6 +1026,8 @@ export let corePlugins = {
         ['scroll-my', ['scroll-margin-top', 'scroll-margin-bottom']],
       ],
       [
+        ['scroll-ms', ['scroll-margin-inline-start']],
+        ['scroll-me', ['scroll-margin-inline-end']],
         ['scroll-mt', ['scroll-margin-top']],
         ['scroll-mr', ['scroll-margin-right']],
         ['scroll-mb', ['scroll-margin-bottom']],
@@ -1042,6 +1044,8 @@ export let corePlugins = {
       ['scroll-py', ['scroll-padding-top', 'scroll-padding-bottom']],
     ],
     [
+      ['scroll-ps', ['scroll-padding-inline-start']],
+      ['scroll-pe', ['scroll-padding-inline-end']],
       ['scroll-pt', ['scroll-padding-top']],
       ['scroll-pr', ['scroll-padding-right']],
       ['scroll-pb', ['scroll-padding-bottom']],
