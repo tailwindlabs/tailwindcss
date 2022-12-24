@@ -623,8 +623,8 @@ export let corePlugins = {
         ['inset-y', ['top', 'bottom']],
       ],
       [
-        ['inset-s', ['inset-inline-start']],
-        ['inset-e', ['inset-inline-end']],
+        ['start', ['inset-inline-start']],
+        ['end', ['inset-inline-end']],
         ['top', ['top']],
         ['right', ['right']],
         ['bottom', ['bottom']],

@@ -286,10 +286,10 @@ div {
   left: 0.25rem;
   right: 0.25rem;
 }
-.inset-s-4 {
+.start-4 {
   inset-inline-start: 1rem;
 }
-.inset-e-8 {
+.end-8 {
   inset-inline-end: 2rem;
 }
 .mx-1 {
