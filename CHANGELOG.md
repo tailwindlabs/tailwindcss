@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Alphabetize `theme` keys in default config ([#9953](https://github.com/tailwindlabs/tailwindcss/pull/9953))
+- Update esbuild to v16 ([#10178](https://github.com/tailwindlabs/tailwindcss/pull/10178))
 
 ## [3.2.4] - 2022-11-11
 
