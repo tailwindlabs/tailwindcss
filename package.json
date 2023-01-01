@@ -43,7 +43,7 @@
     "*.js"
   ],
   "devDependencies": {
-    "@swc/cli": "^0.1.57",
+    "@swc/cli": "^0.1.59",
     "@swc/core": "^1.3.24",
     "@swc/jest": "^0.2.24",
     "@swc/register": "^0.1.10",
