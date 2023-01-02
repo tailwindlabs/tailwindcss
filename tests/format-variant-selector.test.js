@@ -1,23 +1,24 @@
-import { formatVariantSelector, finalizeSelector } from '../src/util/formatVariantSelector'
+import { finalizeSelector } from '../src/util/formatVariantSelector'
 
 it('should be possible to add a simple variant to a simple selector', () => {
   let selector = '.text-center'
   let candidate = 'hover:text-center'
 
-  let variants = ['&:hover']
+  let formats = [{ format: '&:hover', isArbitraryVariant: false }]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
-    '.hover\\:text-center:hover'
-  )
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual('.hover\\:text-center:hover')
 })
 
 it('should be possible to add a multiple simple variants to a simple selector', () => {
   let selector = '.text-center'
   let candidate = 'focus:hover:text-center'
 
-  let variants = ['&:hover', '&:focus']
+  let formats = [
+    { format: '&:hover', isArbitraryVariant: false },
+    { format: '&:focus', isArbitraryVariant: false },
+  ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.focus\\:hover\\:text-center:hover:focus'
   )
 })
@@ -26,9 +27,9 @@ it('should be possible to add a simple variant to a selector containing escaped 
   let selector = '.bg-\\[rgba\\(0\\,0\\,0\\)\\]'
   let candidate = 'hover:bg-[rgba(0,0,0)]'
 
-  let variants = ['&:hover']
+  let formats = [{ format: '&:hover', isArbitraryVariant: false }]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.hover\\:bg-\\[rgba\\(0\\2c 0\\2c 0\\)\\]:hover'
   )
 })
@@ -37,9 +38,9 @@ it('should be possible to add a simple variant to a selector containing escaped 
   let selector = '.bg-\\[rgba\\(0\\2c 0\\2c 0\\)\\]'
   let candidate = 'hover:bg-[rgba(0,0,0)]'
 
-  let variants = ['&:hover']
+  let formats = [{ format: '&:hover', isArbitraryVariant: false }]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.hover\\:bg-\\[rgba\\(0\\2c 0\\2c 0\\)\\]:hover'
   )
 })
@@ -48,9 +49,9 @@ it('should be possible to add a simple variant to a more complex selector', () =
   let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
   let candidate = 'hover:space-x-4'
 
-  let variants = ['&:hover']
+  let formats = [{ format: '&:hover', isArbitraryVariant: false }]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.hover\\:space-x-4:hover > :not([hidden]) ~ :not([hidden])'
   )
 })
@@ -59,9 +60,13 @@ it('should be possible to add multiple simple variants to a more complex selecto
   let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
   let candidate = 'disabled:focus:hover:space-x-4'
 
-  let variants = ['&:hover', '&:focus', '&:disabled']
+  let formats = [
+    { format: '&:hover', isArbitraryVariant: false },
+    { format: '&:focus', isArbitraryVariant: false },
+    { format: '&:disabled', isArbitraryVariant: false },
+  ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.disabled\\:focus\\:hover\\:space-x-4:hover:focus:disabled > :not([hidden]) ~ :not([hidden])'
   )
 })
@@ -70,9 +75,9 @@ it('should be possible to add a single merge variant to a simple selector', () =
   let selector = '.text-center'
   let candidate = 'group-hover:text-center'
 
-  let variants = [':merge(.group):hover &']
+  let formats = [{ format: ':merge(.group):hover &', isArbitraryVariant: false }]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.group:hover .group-hover\\:text-center'
   )
 })
@@ -81,9 +86,12 @@ it('should be possible to add multiple merge variants to a simple selector', () 
   let selector = '.text-center'
   let candidate = 'group-focus:group-hover:text-center'
 
-  let variants = [':merge(.group):hover &', ':merge(.group):focus &']
+  let formats = [
+    { format: ':merge(.group):hover &', isArbitraryVariant: false },
+    { format: ':merge(.group):focus &', isArbitraryVariant: false },
+  ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.group:focus:hover .group-focus\\:group-hover\\:text-center'
   )
 })
@@ -92,9 +100,9 @@ it('should be possible to add a single merge variant to a more complex selector'
   let selector = '.space-x-4 ~ :not([hidden]) ~ :not([hidden])'
   let candidate = 'group-hover:space-x-4'
 
-  let variants = [':merge(.group):hover &']
+  let formats = [{ format: ':merge(.group):hover &', isArbitraryVariant: false }]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.group:hover .group-hover\\:space-x-4 ~ :not([hidden]) ~ :not([hidden])'
   )
 })
@@ -103,9 +111,12 @@ it('should be possible to add multiple merge variants to a more complex selector
   let selector = '.space-x-4 ~ :not([hidden]) ~ :not([hidden])'
   let candidate = 'group-focus:group-hover:space-x-4'
 
-  let variants = [':merge(.group):hover &', ':merge(.group):focus &']
+  let formats = [
+    { format: ':merge(.group):hover &', isArbitraryVariant: false },
+    { format: ':merge(.group):focus &', isArbitraryVariant: false },
+  ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.group:focus:hover .group-focus\\:group-hover\\:space-x-4 ~ :not([hidden]) ~ :not([hidden])'
   )
 })
@@ -114,9 +125,12 @@ it('should be possible to add multiple unique merge variants to a simple selecto
   let selector = '.text-center'
   let candidate = 'peer-focus:group-hover:text-center'
 
-  let variants = [':merge(.group):hover &', ':merge(.peer):focus ~ &']
+  let formats = [
+    { format: ':merge(.group):hover &', isArbitraryVariant: false },
+    { format: ':merge(.peer):focus ~ &' },
+  ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.peer:focus ~ .group:hover .peer-focus\\:group-hover\\:text-center'
   )
 })
@@ -125,37 +139,41 @@ it('should be possible to add multiple unique merge variants to a simple selecto
   let selector = '.text-center'
   let candidate = 'group-hover:peer-focus:text-center'
 
-  let variants = [':merge(.peer):focus ~ &', ':merge(.group):hover &']
+  let formats = [
+    { format: ':merge(.peer):focus ~ &', isArbitraryVariant: false },
+    { format: ':merge(.group):hover &', isArbitraryVariant: false },
+  ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.group:hover .peer:focus ~ .group-hover\\:peer-focus\\:text-center'
   )
 })
 
 it('should be possible to use multiple :merge() calls with different "arguments"', () => {
-  let result = '&'
-  result = formatVariantSelector(result, ':merge(.group):hover &')
-  expect(result).toEqual(':merge(.group):hover &')
+  let selector = '.foo'
+  let candidate = 'peer-focus:group-focus:peer-hover:group-hover:foo'
 
-  result = formatVariantSelector(result, ':merge(.peer):hover ~ &')
-  expect(result).toEqual(':merge(.peer):hover ~ :merge(.group):hover &')
+  let formats = [
+    { format: ':merge(.group):hover &', isArbitraryVariant: false },
+    { format: ':merge(.peer):hover ~ &', isArbitraryVariant: false },
+    { format: ':merge(.group):focus &', isArbitraryVariant: false },
+    { format: ':merge(.peer):focus ~ &', isArbitraryVariant: false },
+  ]
 
-  result = formatVariantSelector(result, ':merge(.group):focus &')
-  expect(result).toEqual(':merge(.peer):hover ~ :merge(.group):focus:hover &')
-
-  result = formatVariantSelector(result, ':merge(.peer):focus ~ &')
-  expect(result).toEqual(':merge(.peer):focus:hover ~ :merge(.group):focus:hover &')
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
+    '.peer:focus:hover ~ .group:focus:hover .peer-focus\\:group-focus\\:peer-hover\\:group-hover\\:foo'
+  )
 })
 
 it('group hover and prose headings combination', () => {
   let selector = '.text-center'
   let candidate = 'group-hover:prose-headings:text-center'
-  let variants = [
-    ':where(&) :is(h1, h2, h3, h4)', // Prose Headings
-    ':merge(.group):hover &', // Group Hover
+  let formats = [
+    { format: ':where(&) :is(h1, h2, h3, h4)', isArbitraryVariant: false }, // Prose Headings
+    { format: ':merge(.group):hover &', isArbitraryVariant: false }, // Group Hover
   ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.group:hover :where(.group-hover\\:prose-headings\\:text-center) :is(h1, h2, h3, h4)'
   )
 })
@@ -163,12 +181,12 @@ it('group hover and prose headings combination', () => {
 it('group hover and prose headings combination flipped', () => {
   let selector = '.text-center'
   let candidate = 'prose-headings:group-hover:text-center'
-  let variants = [
-    ':merge(.group):hover &', // Group Hover
-    ':where(&) :is(h1, h2, h3, h4)', // Prose Headings
+  let formats = [
+    { format: ':merge(.group):hover &', isArbitraryVariant: false }, // Group Hover
+    { format: ':where(&) :is(h1, h2, h3, h4)', isArbitraryVariant: false }, // Prose Headings
   ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     ':where(.group:hover .prose-headings\\:group-hover\\:text-center) :is(h1, h2, h3, h4)'
   )
 })
@@ -176,17 +194,63 @@ it('group hover and prose headings combination flipped', () => {
 it('should be possible to handle a complex utility', () => {
   let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
   let candidate = 'peer-disabled:peer-first-child:group-hover:group-focus:focus:hover:space-x-4'
-  let variants = [
-    '&:hover', // Hover
-    '&:focus', // Focus
-    ':merge(.group):focus &', // Group focus
-    ':merge(.group):hover &', // Group hover
-    ':merge(.peer):first-child ~ &', // Peer first-child
-    ':merge(.peer):disabled ~ &', // Peer disabled
+  let formats = [
+    { format: '&:hover', isArbitraryVariant: false }, // Hover
+    { format: '&:focus', isArbitraryVariant: false }, // Focus
+    { format: ':merge(.group):focus &', isArbitraryVariant: false }, // Group focus
+    { format: ':merge(.group):hover &', isArbitraryVariant: false }, // Group hover
+    { format: ':merge(.peer):first-child ~ &', isArbitraryVariant: false }, // Peer first-child
+    { format: ':merge(.peer):disabled ~ &', isArbitraryVariant: false }, // Peer disabled
   ]
 
-  expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
     '.peer:disabled:first-child ~ .group:hover:focus .peer-disabled\\:peer-first-child\\:group-hover\\:group-focus\\:focus\\:hover\\:space-x-4:hover:focus > :not([hidden]) ~ :not([hidden])'
+  )
+})
+
+it('should match base utilities that are prefixed', () => {
+  let context = { tailwindConfig: { prefix: 'tw-' } }
+  let selector = '.tw-text-center'
+  let candidate = 'tw-text-center'
+  let formats = []
+
+  expect(finalizeSelector(selector, formats, { candidate, context })).toEqual('.tw-text-center')
+})
+
+it('should prefix classes from variants', () => {
+  let context = { tailwindConfig: { prefix: 'tw-' } }
+  let selector = '.tw-text-center'
+  let candidate = 'foo:tw-text-center'
+  let formats = [{ format: '.foo &', isArbitraryVariant: false }]
+
+  expect(finalizeSelector(selector, formats, { candidate, context })).toEqual(
+    '.tw-foo .foo\\:tw-text-center'
+  )
+})
+
+it('should not prefix classes from arbitrary variants', () => {
+  let context = { tailwindConfig: { prefix: 'tw-' } }
+  let selector = '.tw-text-center'
+  let candidate = '[.foo_&]:tw-text-center'
+  let formats = [{ format: '.foo &', isArbitraryVariant: true }]
+
+  expect(finalizeSelector(selector, formats, { candidate, context })).toEqual(
+    '.foo .\\[\\.foo_\\&\\]\\:tw-text-center'
+  )
+})
+
+it('Merged selectors with mixed combinators uses the first one', () => {
+  // This isn't explicitly specced behavior but it is how it works today
+
+  let selector = '.text-center'
+  let candidate = 'text-center'
+  let formats = [
+    { format: ':merge(.group):focus > &', isArbitraryVariant: true },
+    { format: ':merge(.group):hover &', isArbitraryVariant: true },
+  ]
+
+  expect(finalizeSelector(selector, formats, { candidate })).toEqual(
+    '.group:hover:focus > .text-center'
   )
 })
 
@@ -195,9 +259,9 @@ describe('real examples', () => {
     let selector = '.placeholder-red-500::placeholder'
     let candidate = 'hover:placeholder-red-500'
 
-    let variants = ['&:hover']
+    let formats = [{ format: '&:hover', isArbitraryVariant: false }]
 
-    expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+    expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.hover\\:placeholder-red-500:hover::placeholder'
     )
   })
@@ -206,9 +270,12 @@ describe('real examples', () => {
     let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
     let candidate = 'group-hover:hover:space-x-4'
 
-    let variants = ['&:hover', ':merge(.group):hover &']
+    let formats = [
+      { format: '&:hover', isArbitraryVariant: false },
+      { format: ':merge(.group):hover &', isArbitraryVariant: false },
+    ]
 
-    expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+    expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.group:hover .group-hover\\:hover\\:space-x-4:hover > :not([hidden]) ~ :not([hidden])'
     )
   })
@@ -217,9 +284,12 @@ describe('real examples', () => {
     let selector = '.text-center'
     let candidate = 'dark:group-hover:text-center'
 
-    let variants = [':merge(.group):hover &', '.dark &']
+    let formats = [
+      { format: ':merge(.group):hover &', isArbitraryVariant: false },
+      { format: '.dark &', isArbitraryVariant: false },
+    ]
 
-    expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+    expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.dark .group:hover .dark\\:group-hover\\:text-center'
     )
   })
@@ -228,9 +298,12 @@ describe('real examples', () => {
     let selector = '.text-center'
     let candidate = 'group-hover:dark:text-center'
 
-    let variants = ['.dark &', ':merge(.group):hover &']
+    let formats = [
+      { format: '.dark &' },
+      { format: ':merge(.group):hover &', isArbitraryVariant: false },
+    ]
 
-    expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+    expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.group:hover .dark .group-hover\\:dark\\:text-center'
     )
   })
@@ -240,9 +313,9 @@ describe('real examples', () => {
       let selector = '.text-center'
       let candidate = 'hover:prose-headings:text-center'
 
-      let variants = [':where(&) :is(h1, h2, h3, h4)', '&:hover']
+      let formats = [{ format: ':where(&) :is(h1, h2, h3, h4)' }, { format: '&:hover' }]
 
-      expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+      expect(finalizeSelector(selector, formats, { candidate })).toEqual(
         ':where(.hover\\:prose-headings\\:text-center) :is(h1, h2, h3, h4):hover'
       )
     })
@@ -251,9 +324,9 @@ describe('real examples', () => {
       let selector = '.text-center'
       let candidate = 'prose-headings:hover:text-center'
 
-      let variants = ['&:hover', ':where(&) :is(h1, h2, h3, h4)']
+      let formats = [{ format: '&:hover' }, { format: ':where(&) :is(h1, h2, h3, h4)' }]
 
-      expect(finalizeSelector(formatVariantSelector(...variants), { selector, candidate })).toEqual(
+      expect(finalizeSelector(selector, formats, { candidate })).toEqual(
         ':where(.prose-headings\\:hover\\:text-center:hover) :is(h1, h2, h3, h4)'
       )
     })
@@ -274,8 +347,7 @@ describe('pseudo elements', () => {
     ${':where(&::before) :is(h1, h2, h3, h4)'}               | ${':where(&) :is(h1, h2, h3, h4)::before'}
     ${':where(&::file-selector-button) :is(h1, h2, h3, h4)'} | ${':where(&::file-selector-button) :is(h1, h2, h3, h4)'}
   `('should translate "$before" into "$after"', ({ before, after }) => {
-    let result = finalizeSelector(formatVariantSelector('&', before), {
-      selector: '.a',
+    let result = finalizeSelector('.a', [{ format: before, isArbitraryVariant: false }], {
       candidate: 'a',
     })
 
