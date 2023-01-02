@@ -488,3 +488,11 @@ test('ruby percent string array', () => {
 
   expect(extractions).toContain(`text-[#bada55]`)
 })
+
+test('arbitrary properties followed by square bracketed stuff', () => {
+  let extractions = defaultExtractor(
+    '<div class="h-16 items-end border border-white [display:inherit]">[foo]</div>'
+  )
+
+  expect(extractions).toContain(`[display:inherit]`)
+})

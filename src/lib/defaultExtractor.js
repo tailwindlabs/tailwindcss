@@ -28,8 +28,14 @@ function* buildRegExps(context) {
       : ''
 
   let utility = regex.any([
-    // Arbitrary properties
-    /\[[^\s:'"`]+:[^\s]+\]/,
+    // Arbitrary properties (without square brackets)
+    /\[[^\s:'"`]+:[^\s\[\]]+\]/,
+
+    // Arbitrary properties with balanced square brackets
+    // This is a targeted fix to continue to allow theme()
+    // with square brackets to work in arbitrary properties
+    // while fixing a problem with the regex matching too much
+    /\[[^\s:'"`]+:[^\s]+?\[[^\s]+?\][^\s]+?\]/,
 
     // Utilities
     regex.pattern([
