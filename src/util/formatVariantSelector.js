@@ -200,32 +200,6 @@ export function finalizeSelector(
     simpleEnd.remove()
   })
 
-  // This will make sure to move pseudo's to the correct spot (the end for
-  // pseudo elements) because otherwise the selector will never work
-  // anyway.
-  //
-  // E.g.:
-  //  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
-  //  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
-  //
-  // `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
-  function collectPseudoElements(selector) {
-    let nodes = []
-
-    for (let node of selector.nodes) {
-      if (isPseudoElement(node)) {
-        nodes.push(node)
-        selector.removeChild(node)
-      }
-
-      if (node?.nodes) {
-        nodes.push(...collectPseudoElements(node))
-      }
-    }
-
-    return nodes
-  }
-
   // Remove unnecessary pseudo selectors that we used as placeholders
   ast.each((selector) => {
     selector.walkPseudos((p) => {
@@ -262,6 +236,32 @@ let pseudoElementExceptions = [
   '::-webkit-scrollbar-corner',
   '::-webkit-resizer',
 ]
+
+// This will make sure to move pseudo's to the correct spot (the end for
+// pseudo elements) because otherwise the selector will never work
+// anyway.
+//
+// E.g.:
+//  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
+//  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
+//
+// `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
+function collectPseudoElements(selector) {
+  let nodes = []
+
+  for (let node of selector.nodes) {
+    if (isPseudoElement(node)) {
+      nodes.push(node)
+      selector.removeChild(node)
+    }
+
+    if (node?.nodes) {
+      nodes.push(...collectPseudoElements(node))
+    }
+  }
+
+  return nodes
+}
 
 // This will make sure to move pseudo's to the correct spot (the end for
 // pseudo elements) because otherwise the selector will never work
