@@ -632,6 +632,7 @@ export function getFileModifiedMap(context) {
 
 function trackModified(files, fileModifiedMap) {
   let changed = false
+  let mtimesToCommit = new Map()
 
   for (let file of files) {
     if (!file) continue
@@ -652,10 +653,10 @@ function trackModified(files, fileModifiedMap) {
       changed = true
     }
 
-    fileModifiedMap.set(file, newModified)
+    mtimesToCommit.set(file, newModified)
   }
 
-  return changed
+  return [changed, mtimesToCommit]
 }
 
 function extractVariantAtRules(node) {
@@ -1230,12 +1231,12 @@ export function getContext(
   // If there's already a context in the cache and we don't need to
   // reset the context, return the cached context.
   if (existingContext) {
-    let contextDependenciesChanged = trackModified(
+    let [contextDependenciesChanged, mtimesToCommit] = trackModified(
       [...contextDependencies],
       getFileModifiedMap(existingContext)
     )
     if (!contextDependenciesChanged && !cssDidChange) {
-      return [existingContext, false]
+      return [existingContext, false, mtimesToCommit]
     }
   }
 
@@ -1270,7 +1271,7 @@ export function getContext(
     userConfigPath,
   })
 
-  trackModified([...contextDependencies], getFileModifiedMap(context))
+  let [, mtimesToCommit] = trackModified([...contextDependencies], getFileModifiedMap(context))
 
   // ---
 
@@ -1285,5 +1286,5 @@ export function getContext(
 
   contextSourcesMap.get(context).add(sourcePath)
 
-  return [context, true]
+  return [context, true, mtimesToCommit]
 }
