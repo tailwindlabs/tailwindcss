@@ -542,6 +542,14 @@ test('classes in arbitrary variants should not be prefixed', () => {
             <div>should not be red</div>
             <div class="foo">should be red</div>
           </div>
+          <div class="hover:[&_.foo]:tw-text-red-400">
+            <div>should not be red</div>
+            <div class="foo">should be red</div>
+          </div>
+          <div class="[&_.foo]:hover:tw-text-red-400">
+            <div>should not be red</div>
+            <div class="foo">should be red</div>
+          </div>
         `,
       },
     ],
@@ -558,7 +566,14 @@ test('classes in arbitrary variants should not be prefixed', () => {
         --tw-text-opacity: 1;
         color: rgb(248 113 113 / var(--tw-text-opacity));
       }
-
+      .hover\:\[\&_\.foo\]\:tw-text-red-400 .foo:hover {
+        --tw-text-opacity: 1;
+        color: rgb(248 113 113 / var(--tw-text-opacity));
+      }
+      .\[\&_\.foo\]\:hover\:tw-text-red-400:hover .foo {
+        --tw-text-opacity: 1;
+        color: rgb(248 113 113 / var(--tw-text-opacity));
+      }
       .foo .\[\.foo_\&\]\:tw-text-red-400 {
         --tw-text-opacity: 1;
         color: rgb(248 113 113 / var(--tw-text-opacity));

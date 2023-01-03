@@ -201,6 +201,7 @@ function applyVariant(variant, matches, context) {
   }
 
   if (context.variantMap.has(variant)) {
+    let isArbitraryVariant = isArbitraryValue(variant)
     let variantFunctionTuples = context.variantMap.get(variant).slice()
     let result = []
 
@@ -262,7 +263,10 @@ function applyVariant(variant, matches, context) {
             clone.append(wrapper)
           },
           format(selectorFormat) {
-            collectedFormats.push(selectorFormat)
+            collectedFormats.push({
+              format: selectorFormat,
+              isArbitraryVariant,
+            })
           },
           args,
         })
@@ -288,7 +292,10 @@ function applyVariant(variant, matches, context) {
         }
 
         if (typeof ruleWithVariant === 'string') {
-          collectedFormats.push(ruleWithVariant)
+          collectedFormats.push({
+            format: ruleWithVariant,
+            isArbitraryVariant,
+          })
         }
 
         if (ruleWithVariant === null) {
@@ -329,7 +336,10 @@ function applyVariant(variant, matches, context) {
             //      modified (by plugin): .foo .foo\\:markdown > p
             //    rebuiltBase (internal): .foo\\:markdown > p
             //                    format: .foo &
-            collectedFormats.push(modified.replace(rebuiltBase, '&'))
+            collectedFormats.push({
+              format: modified.replace(rebuiltBase, '&'),
+              isArbitraryVariant,
+            })
             rule.selector = before
           })
         }
@@ -349,7 +359,6 @@ function applyVariant(variant, matches, context) {
               Object.assign(args, context.variantOptions.get(variant))
             ),
             collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
-            isArbitraryVariant: isArbitraryValue(variant),
           },
           clone.nodes[0],
         ]
@@ -733,54 +742,77 @@ function* resolveMatches(candidate, context, original = candidate) {
     }
 
     for (let match of matches) {
-      let isValid = true
-
       match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate }
 
       // Apply final format selector
-      if (match[0].collectedFormats) {
-        let finalFormat = formatVariantSelector('&', ...match[0].collectedFormats)
-        let container = postcss.root({ nodes: [match[1].clone()] })
-        container.walkRules((rule) => {
-          if (inKeyframes(rule)) return
+      match = applyFinalFormat(match, { context, candidate, original })
 
-          let selectorOptions = {
-            selector: rule.selector,
-            candidate: original,
-            base: candidate
-              .split(new RegExp(`\\${context?.tailwindConfig?.separator ?? ':'}(?![^[]*\\])`))
-              .pop(),
-            isArbitraryVariant: match[0].isArbitraryVariant,
-
-            context,
-          }
-
-          try {
-            rule.selector = finalizeSelector(finalFormat, selectorOptions)
-          } catch {
-            // The selector we produced is invalid
-            // This could be because:
-            // - A bug exists
-            // - A plugin introduced an invalid variant selector (ex: `addVariant('foo', '&;foo')`)
-            // - The user used an invalid arbitrary variant (ex: `[&;foo]:underline`)
-            // Either way the build will fail because of this
-            // We would rather that the build pass "silently" given that this could
-            // happen because of picking up invalid things when scanning content
-            // So we'll throw out the candidate instead
-            isValid = false
-            return false
-          }
-        })
-        match[1] = container.nodes[0]
-      }
-
-      if (!isValid) {
+      // Skip rules with invalid selectors
+      // This will cause the candidate to be added to the "not class"
+      // cache skipping it entirely for future builds
+      if (match === null) {
         continue
       }
 
       yield match
     }
   }
+}
+
+function applyFinalFormat(match, { context, candidate, original }) {
+  if (!match[0].collectedFormats) {
+    return match
+  }
+
+  let isValid = true
+  let finalFormat
+
+  try {
+    finalFormat = formatVariantSelector(match[0].collectedFormats, {
+      context,
+      candidate,
+    })
+  } catch {
+    // The format selector we produced is invalid
+    // This could be because:
+    // - A bug exists
+    // - A plugin introduced an invalid variant selector (ex: `addVariant('foo', '&;foo')`)
+    // - The user used an invalid arbitrary variant (ex: `[&;foo]:underline`)
+    // Either way the build will fail because of this
+    // We would rather that the build pass "silently" given that this could
+    // happen because of picking up invalid things when scanning content
+    // So we'll throw out the candidate instead
+
+    return null
+  }
+
+  let container = postcss.root({ nodes: [match[1].clone()] })
+
+  container.walkRules((rule) => {
+    if (inKeyframes(rule)) {
+      return
+    }
+
+    try {
+      rule.selector = finalizeSelector(rule.selector, finalFormat, {
+        candidate: original,
+        context,
+      })
+    } catch {
+      // If this selector is invalid we also want to skip it
+      // But it's likely that being invalid here means there's a bug in a plugin rather than too loosely matching content
+      isValid = false
+      return false
+    }
+  })
+
+  if (!isValid) {
+    return null
+  }
+
+  match[1] = container.nodes[0]
+
+  return match
 }
 
 function inKeyframes(rule) {

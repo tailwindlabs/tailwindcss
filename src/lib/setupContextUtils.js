@@ -1080,20 +1080,38 @@ function registerPlugins(plugins, context) {
             })
           }
 
-          let result = formatStrings.map((formatString) =>
-            finalizeSelector(formatVariantSelector('&', ...formatString), {
-              selector: `.${candidate}`,
-              candidate,
-              context,
-              isArbitraryVariant: !(value in (options.values ?? {})),
-            })
+          let isArbitraryVariant = !(value in (options.values ?? {}))
+
+          formatStrings = formatStrings.map((format) =>
+            format.map((str) => ({
+              format: str,
+              isArbitraryVariant,
+            }))
+          )
+
+          manualFormatStrings = manualFormatStrings.map((format) => ({
+            format,
+            isArbitraryVariant,
+          }))
+
+          let opts = {
+            candidate,
+            context,
+          }
+
+          let result = formatStrings.map((formats) =>
+            finalizeSelector(`.${candidate}`, formatVariantSelector(formats, opts), opts)
               .replace(`.${candidate}`, '&')
               .replace('{ & }', '')
               .trim()
           )
 
           if (manualFormatStrings.length > 0) {
-            result.push(formatVariantSelector('&', ...manualFormatStrings))
+            result.push(
+              formatVariantSelector(manualFormatStrings, opts)
+                .toString()
+                .replace(`.${candidate}`, '&')
+            )
           }
 
           return result

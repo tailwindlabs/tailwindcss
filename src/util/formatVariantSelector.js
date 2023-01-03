@@ -3,30 +3,57 @@ import unescape from 'postcss-selector-parser/dist/util/unesc'
 import escapeClassName from '../util/escapeClassName'
 import prefixSelector from '../util/prefixSelector'
 
+/** @typedef {import('postcss-selector-parser').Root} Root */
+/** @typedef {import('postcss-selector-parser').Selector} Selector */
+/** @typedef {import('postcss-selector-parser').Pseudo} Pseudo */
+/** @typedef {import('postcss-selector-parser').Node} Node */
+
+/** @typedef {{format: string, isArbitraryVariant: boolean}[]} RawFormats */
+/** @typedef {import('postcss-selector-parser').Root} ParsedFormats */
+/** @typedef {RawFormats | ParsedFormats} AcceptedFormats */
+
 let MERGE = ':merge'
-let PARENT = '&'
 
-export let selectorFunctions = new Set([MERGE])
+/**
+ * @param {RawFormats} formats
+ * @param {{context: any, candidate: string, base: string | null}} options
+ * @returns {ParsedFormats | null}
+ */
+export function formatVariantSelector(formats, { context, candidate }) {
+  let prefix = context?.tailwindConfig.prefix ?? ''
 
-export function formatVariantSelector(current, ...others) {
-  for (let other of others) {
-    let incomingValue = resolveFunctionArgument(other, MERGE)
-    if (incomingValue !== null) {
-      let existingValue = resolveFunctionArgument(current, MERGE, incomingValue)
-      if (existingValue !== null) {
-        let existingTarget = `${MERGE}(${incomingValue})`
-        let splitIdx = other.indexOf(existingTarget)
-        let addition = other.slice(splitIdx + existingTarget.length).split(' ')[0]
+  // Parse the format selector into an AST
+  let parsedFormats = formats.map((format) => {
+    let ast = selectorParser().astSync(format.format)
 
-        current = current.replace(existingTarget, existingTarget + addition)
-        continue
-      }
+    return {
+      ...format,
+      ast: format.isArbitraryVariant ? ast : prefixSelector(prefix, ast),
     }
+  })
 
-    current = other.replace(PARENT, current)
+  // We start with the candidate selector
+  let formatAst = selectorParser.root({
+    nodes: [
+      selectorParser.selector({
+        nodes: [selectorParser.className({ value: escapeClassName(candidate) })],
+      }),
+    ],
+  })
+
+  // And iteratively merge each format selector into the candidate selector
+  for (let { ast } of parsedFormats) {
+    // 1. Handle :merge() special pseudo-class
+    ;[formatAst, ast] = handleMergePseudo(formatAst, ast)
+
+    // 2. Merge the format selector into the current selector AST
+    ast.walkNesting((nesting) => nesting.replaceWith(...formatAst.nodes[0].nodes))
+
+    // 3. Keep going!
+    formatAst = ast
   }
 
-  return current
+  return formatAst
 }
 
 /**
@@ -35,11 +62,11 @@ export function formatVariantSelector(current, ...others) {
  * Technically :is(), :not(), :has(), etc… can have combinators but those are nested
  * inside the relevant node and won't be picked up so they're fine to ignore
  *
- * @param {import('postcss-selector-parser').Node} node
- * @returns {import('postcss-selector-parser').Node[]}
+ * @param {Node} node
+ * @returns {Node[]}
  **/
 function simpleSelectorForNode(node) {
-  /** @type {import('postcss-selector-parser').Node[]} */
+  /** @type {Node[]} */
   let nodes = []
 
   // Walk backwards until we hit a combinator node (or the start)
@@ -60,8 +87,8 @@ function simpleSelectorForNode(node) {
  * Resorts the nodes in a selector to ensure they're in the correct order
  * Tags go before classes, and pseudo classes go after classes
  *
- * @param {import('postcss-selector-parser').Selector} sel
- * @returns {import('postcss-selector-parser').Selector}
+ * @param {Selector} sel
+ * @returns {Selector}
  **/
 function resortSelector(sel) {
   sel.sort((a, b) => {
@@ -81,6 +108,18 @@ function resortSelector(sel) {
   return sel
 }
 
+/**
+ * Remove extraneous selectors that do not include the base class/candidate
+ *
+ * Example:
+ * Given the utility `.a, .b { color: red}`
+ * Given the candidate `sm:b`
+ *
+ * The final selector should be `.sm\:b` and not `.a, .sm\:b`
+ *
+ * @param {Selector} ast
+ * @param {string} base
+ */
 function eliminateIrrelevantSelectors(sel, base) {
   let hasClassesMatchingCandidate = false
 
@@ -104,41 +143,26 @@ function eliminateIrrelevantSelectors(sel, base) {
   // TODO: Can we do this for :matches, :is, and :where?
 }
 
-export function finalizeSelector(
-  format,
-  {
-    selector,
-    candidate,
-    context,
-    isArbitraryVariant,
+/**
+ * @param {string} current
+ * @param {AcceptedFormats} formats
+ * @param {{context: any, candidate: string, base: string | null}} options
+ * @returns {string}
+ */
+export function finalizeSelector(current, formats, { context, candidate, base }) {
+  let separator = context?.tailwindConfig?.separator ?? ':'
 
-    // Split by the separator, but ignore the separator inside square brackets:
-    //
-    // E.g.: dark:lg:hover:[paint-order:markers]
-    //           ┬  ┬     ┬            ┬
-    //           │  │     │            ╰── We will not split here
-    //           ╰──┴─────┴─────────────── We will split here
-    //
-    base = candidate
-      .split(new RegExp(`\\${context?.tailwindConfig?.separator ?? ':'}(?![^[]*\\])`))
-      .pop(),
-  }
-) {
-  let ast = selectorParser().astSync(selector)
+  // Split by the separator, but ignore the separator inside square brackets:
+  //
+  // E.g.: dark:lg:hover:[paint-order:markers]
+  //           ┬  ┬     ┬            ┬
+  //           │  │     │            ╰── We will not split here
+  //           ╰──┴─────┴─────────────── We will split here
+  //
+  base = base ?? candidate.split(new RegExp(`\\${separator}(?![^[]*\\])`)).pop()
 
-  // We explicitly DO NOT prefix classes in arbitrary variants
-  if (context?.tailwindConfig?.prefix && !isArbitraryVariant) {
-    format = prefixSelector(context.tailwindConfig.prefix, format)
-  }
-
-  format = format.replace(PARENT, `.${escapeClassName(candidate)}`)
-
-  let formatAst = selectorParser().astSync(format)
-
-  // Remove extraneous selectors that do not include the base class/candidate being matched against
-  // For example if we have a utility defined `.a, .b { color: red}`
-  // And the formatted variant is sm:b then we want the final selector to be `.sm\:b` and not `.a, .sm\:b`
-  ast.each((sel) => eliminateIrrelevantSelectors(sel, base))
+  // Parse the selector into an AST
+  let selector = selectorParser().astSync(current)
 
   // Normalize escaped classes, e.g.:
   //
@@ -151,18 +175,31 @@ export function finalizeSelector(
   //   base in selector: bg-\\[rgb\\(255\\,0\\,0\\)\\]
   //       escaped base: bg-\\[rgb\\(255\\2c 0\\2c 0\\)\\]
   //
-  ast.walkClasses((node) => {
+  selector.walkClasses((node) => {
     if (node.raws && node.value.includes(base)) {
       node.raws.value = escapeClassName(unescape(node.raws.value))
     }
   })
+
+  // Remove extraneous selectors that do not include the base candidate
+  selector.each((sel) => eliminateIrrelevantSelectors(sel, base))
+
+  // If there are no formats that means there were no variants added to the candidate
+  // so we can just return the selector as-is
+  let formatAst = Array.isArray(formats)
+    ? formatVariantSelector(formats, { context, candidate })
+    : formats
+
+  if (formatAst === null) {
+    return selector.toString()
+  }
 
   let simpleStart = selectorParser.comment({ value: '/*__simple__*/' })
   let simpleEnd = selectorParser.comment({ value: '/*__simple__*/' })
 
   // We can safely replace the escaped base now, since the `base` section is
   // now in a normalized escaped value.
-  ast.walkClasses((node) => {
+  selector.walkClasses((node) => {
     if (node.value !== base) {
       return
     }
@@ -200,47 +237,86 @@ export function finalizeSelector(
     simpleEnd.remove()
   })
 
-  // This will make sure to move pseudo's to the correct spot (the end for
-  // pseudo elements) because otherwise the selector will never work
-  // anyway.
-  //
-  // E.g.:
-  //  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
-  //  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
-  //
-  // `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
-  function collectPseudoElements(selector) {
-    let nodes = []
-
-    for (let node of selector.nodes) {
-      if (isPseudoElement(node)) {
-        nodes.push(node)
-        selector.removeChild(node)
-      }
-
-      if (node?.nodes) {
-        nodes.push(...collectPseudoElements(node))
-      }
-    }
-
-    return nodes
-  }
-
   // Remove unnecessary pseudo selectors that we used as placeholders
-  ast.each((selector) => {
-    selector.walkPseudos((p) => {
-      if (selectorFunctions.has(p.value)) {
-        p.replaceWith(p.nodes)
-      }
-    })
-
-    let pseudoElements = collectPseudoElements(selector)
-    if (pseudoElements.length > 0) {
-      selector.nodes.push(pseudoElements.sort(sortSelector))
+  selector.walkPseudos((p) => {
+    if (p.value === MERGE) {
+      p.replaceWith(p.nodes)
     }
   })
 
-  return ast.toString()
+  // Move pseudo elements to the end of the selector (if necessary)
+  selector.each((sel) => {
+    let pseudoElements = collectPseudoElements(sel)
+    if (pseudoElements.length > 0) {
+      sel.nodes.push(pseudoElements.sort(sortSelector))
+    }
+  })
+
+  return selector.toString()
+}
+
+/**
+ *
+ * @param {Selector} selector
+ * @param {Selector} format
+ */
+export function handleMergePseudo(selector, format) {
+  /** @type {{pseudo: Pseudo, value: string}[]} */
+  let merges = []
+
+  // Find all :merge() pseudo-classes in `selector`
+  selector.walkPseudos((pseudo) => {
+    if (pseudo.value === MERGE) {
+      merges.push({
+        pseudo,
+        value: pseudo.nodes[0].toString(),
+      })
+    }
+  })
+
+  // Find all :merge() "attachments" in `format` and attach them to the matching selector in `selector`
+  format.walkPseudos((pseudo) => {
+    if (pseudo.value !== MERGE) {
+      return
+    }
+
+    let value = pseudo.nodes[0].toString()
+
+    // Does `selector` contain a :merge() pseudo-class with the same value?
+    let existing = merges.find((merge) => merge.value === value)
+
+    // Nope so there's nothing to do
+    if (!existing) {
+      return
+    }
+
+    // Everything after `:merge()` up to the next combinator is what is attached to the merged selector
+    let attachments = []
+    let next = pseudo.next()
+    while (next && next.type !== 'combinator') {
+      attachments.push(next)
+      next = next.next()
+    }
+
+    let combinator = next
+
+    existing.pseudo.parent.insertAfter(
+      existing.pseudo,
+      selectorParser.selector({ nodes: attachments.map((node) => node.clone()) })
+    )
+
+    pseudo.remove()
+    attachments.forEach((node) => node.remove())
+
+    // What about this case:
+    // :merge(.group):focus > &
+    // :merge(.group):hover &
+    if (combinator && combinator.type === 'combinator') {
+      combinator.remove()
+    }
+  })
+
+  return [selector, format]
 }
 
 // Note: As a rule, double colons (::) should be used instead of a single colon
@@ -262,6 +338,37 @@ let pseudoElementExceptions = [
   '::-webkit-scrollbar-corner',
   '::-webkit-resizer',
 ]
+
+/**
+ * This will make sure to move pseudo's to the correct spot (the end for
+ * pseudo elements) because otherwise the selector will never work
+ * anyway.
+ *
+ * E.g.:
+ *  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
+ *  - `hover:before:text-center` would result in `.hover\:before\:text-center:hover::before`
+ *
+ * `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
+ *
+ * @param {Selector} selector
+ **/
+function collectPseudoElements(selector) {
+  /** @type {Node[]} */
+  let nodes = []
+
+  for (let node of selector.nodes) {
+    if (isPseudoElement(node)) {
+      nodes.push(node)
+      selector.removeChild(node)
+    }
+
+    if (node?.nodes) {
+      nodes.push(...collectPseudoElements(node))
+    }
+  }
+
+  return nodes
+}
 
 // This will make sure to move pseudo's to the correct spot (the end for
 // pseudo elements) because otherwise the selector will never work
@@ -302,29 +409,4 @@ function isPseudoElement(node) {
   if (pseudoElementExceptions.includes(node.value)) return false
 
   return node.value.startsWith('::') || pseudoElementsBC.includes(node.value)
-}
-
-function resolveFunctionArgument(haystack, needle, arg) {
-  let startIdx = haystack.indexOf(arg ? `${needle}(${arg})` : needle)
-  if (startIdx === -1) return null
-
-  // Start inside the `(`
-  startIdx += needle.length + 1
-
-  let target = ''
-  let count = 0
-
-  for (let char of haystack.slice(startIdx)) {
-    if (char !== '(' && char !== ')') {
-      target += char
-    } else if (char === '(') {
-      target += char
-      count++
-    } else if (char === ')') {
-      if (--count < 0) break // unbalanced
-      target += char
-    }
-  }
-
-  return target
 }
