@@ -1,3 +1,5 @@
+// @ts-check
+
 import fs from 'fs'
 import LRU from 'quick-lru'
 
@@ -101,7 +103,7 @@ export default function setupTrackingContext(configOrPath) {
         }
       }
 
-      let [context] = getContext(
+      let [context, , mTimesToCommit] = getContext(
         root,
         result,
         tailwindConfig,
@@ -109,6 +111,8 @@ export default function setupTrackingContext(configOrPath) {
         tailwindConfigHash,
         contextDependencies
       )
+
+      let fileModifiedMap = getFileModifiedMap(context)
 
       let candidateFiles = getCandidateFiles(context, tailwindConfig)
 
@@ -118,8 +122,6 @@ export default function setupTrackingContext(configOrPath) {
       // because it's impossible for a layer in one file to end up in the actual @tailwind rule
       // in another file since independent sources are effectively isolated.
       if (tailwindDirectives.size > 0) {
-        let fileModifiedMap = getFileModifiedMap(context)
-
         // Add template paths as postcss dependencies.
         for (let contentPath of candidateFiles) {
           for (let dependency of parseDependency(contentPath)) {
@@ -127,17 +129,40 @@ export default function setupTrackingContext(configOrPath) {
           }
         }
 
-        for (let changedContent of resolvedChangedContent(
+        let [changedContent, contentMTimesToCommit] = resolvedChangedContent(
           context,
           candidateFiles,
           fileModifiedMap
-        )) {
-          context.changedContent.push(changedContent)
+        )
+
+        for (let content of changedContent) {
+          context.changedContent.push(content)
+        }
+
+        // Add the mtimes of the content files to the commit list
+        // We can overwrite the existing values because unconditionally
+        // This is because:
+        // 1. Most of the files here won't be in the map yet
+        // 2. If they are that means it's a context dependency
+        // and we're reading this after the context. This means
+        // that the mtime we just read is strictly >= the context
+        // mtime. Unless the user / os is doing something weird
+        // in which the mtime would be going backwards. If that
+        // happens there's already going to be problems.
+        for (let [path, mtime] of contentMTimesToCommit.entries()) {
+          mTimesToCommit.set(path, mtime)
         }
       }
 
       for (let file of configDependencies) {
         registerDependency({ type: 'dependency', file })
+      }
+
+      // "commit" the new modified time for all context deps
+      // We do this here because we want content tracking to
+      // read the "old" mtime even when it's a context dependency.
+      for (let [path, mtime] of mTimesToCommit.entries()) {
+        fileModifiedMap.set(path, mtime)
       }
 
       return context
