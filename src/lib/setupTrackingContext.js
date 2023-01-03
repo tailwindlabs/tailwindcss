@@ -103,7 +103,7 @@ export default function setupTrackingContext(configOrPath) {
         }
       }
 
-      let [context, _, mTimesToCommit] = getContext(
+      let [context, , mTimesToCommit] = getContext(
         root,
         result,
         tailwindConfig,
