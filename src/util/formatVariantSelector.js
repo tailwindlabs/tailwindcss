@@ -23,8 +23,6 @@ export function formatVariantSelector(formats, { context, candidate }) {
   let prefix = context?.tailwindConfig.prefix ?? ''
 
   // Parse the format selector into an AST
-  // TODO: Cache the ASTs as a given format will always have the same AST -- we'll have to clone it though if we do that
-  // The cache should probably go in `context`
   let parsedFormats = formats.map((format) => {
     let ast = selectorParser().astSync(format.format)
 
@@ -44,9 +42,7 @@ export function formatVariantSelector(formats, { context, candidate }) {
   })
 
   // And iteratively merge each format selector into the candidate selector
-  for (let format of parsedFormats) {
-    let ast = format.ast.clone()
-
+  for (let { ast } of parsedFormats) {
     // 1. Handle :merge() special pseudo-class
     ;[formatAst, ast] = handleMergePseudo(formatAst, ast)
 
