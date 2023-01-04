@@ -53,6 +53,9 @@ type SafelistConfig =
       variants?: string[]
     }[]
 
+// Blocklist related config
+type BlocklistConfig = string[]
+
 // Presets related config
 type PresetsConfig = Config[]
 
@@ -349,6 +352,7 @@ interface OptionalConfig {
   prefix: Partial<PrefixConfig>
   separator: Partial<SeparatorConfig>
   safelist: Partial<SafelistConfig>
+  blocklist: Partial<BlocklistConfig>
   presets: Partial<PresetsConfig>
   future: Partial<FutureConfig>
   experimental: Partial<ExperimentalConfig>
