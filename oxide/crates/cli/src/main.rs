@@ -115,17 +115,8 @@ fn main() -> Result<(), std::io::Error> {
             })
     });
 
-    // let mut x = 0;
-    // for c in candidates.collect::<Vec<Candidate>>() {
-    //     x = x + 1;
-    //     if x == 3 {
-    //         println!("{:#?}", c);
-    //     }
-    // }
-
     println!("Total files: {}", total_paths);
     println!("Total candidates: {}", candidates.count());
-
     println!("Took: {:?}", now.elapsed());
 
     Ok(())

@@ -29,7 +29,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
     );
 
     c.bench_function("parse_candidate_strings (real world)", |b| {
-        b.iter(|| parse(include_bytes!("./fixtures/template-906.html")))
+        b.iter(|| parse(include_bytes!("./fixtures/template-499.html")))
     });
 }
 
