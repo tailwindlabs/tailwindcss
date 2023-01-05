@@ -129,7 +129,7 @@ it('should generate plugin-defined utilities with modifier data', () => {
               return { color: `rgb(${value} / ${modifier ?? 1})` }
             },
           },
-          { values: { red: 'red' }, modifiers: { bar: '0' } }
+          { values: { red: '255 0 0' }, modifiers: { bar: '0' } }
         )
       }),
     ],
