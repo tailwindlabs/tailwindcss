@@ -951,15 +951,24 @@ function registerPlugins(plugins, context) {
         let [utilName, options] = util
         let negativeClasses = []
 
+        let modifiers = Object.keys(options?.modifiers ?? {})
+
+        if (options?.types?.some(({ type }) => type === 'color')) {
+          modifiers.push(...Object.keys(context.tailwindConfig.theme.opacity ?? {}))
+        }
+
         for (let [key, value] of Object.entries(options?.values ?? {})) {
           // Ignore undefined and null values
           if (value == null) {
             continue
           }
 
-          output.push(formatClass(utilName, key))
+          let cls = formatClass(utilName, key)
+          output.push(modifiers.length > 0 ? [cls, { modifiers }] : cls)
+
           if (options?.supportsNegativeValues && negateValue(value)) {
-            negativeClasses.push(formatClass(utilName, `-${key}`))
+            let cls = formatClass(utilName, `-${key}`)
+            negativeClasses.push(modifiers.length > 0 ? [cls, { modifiers }] : cls)
           }
         }
 
