@@ -191,17 +191,17 @@
   width: {
   }
 }
-.min-w-\[calc\(1-var\(--something\)\*0\.5\)\] {
-  min-width: calc(1 - var(--something) * 0.5);
-}
-.min-w-\[calc\(1-\(var\(--something\)\*0\.5\)\)\] {
-  min-width: calc(1 - (var(--something) * 0.5));
+.min-w-\[3\.23rem\] {
+  min-width: 3.23rem;
 }
 .min-w-\[calc\(1-\(\(12-3\)\*0\.5\)\)\] {
   min-width: calc(1 - ((12 - 3) * 0.5));
 }
-.min-w-\[3\.23rem\] {
-  min-width: 3.23rem;
+.min-w-\[calc\(1-\(var\(--something\)\*0\.5\)\)\] {
+  min-width: calc(1 - (var(--something) * 0.5));
+}
+.min-w-\[calc\(1-var\(--something\)\*0\.5\)\] {
+  min-width: calc(1 - var(--something) * 0.5);
 }
 .min-w-\[calc\(100\%\+1rem\)\] {
   min-width: calc(100% + 1rem);
