@@ -144,12 +144,12 @@ it('it handles ignored globs correctly when not relative to the config', async (
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
   expect(result.css).toMatchCss(css`
-    .content-\[real-static-positive\] {
-      --tw-content: real-static-positive;
-      content: var(--tw-content);
-    }
     .content-\[real-dynamic-positive\] {
       --tw-content: real-dynamic-positive;
+      content: var(--tw-content);
+    }
+    .content-\[real-static-positive\] {
+      --tw-content: real-static-positive;
       content: var(--tw-content);
     }
   `)
@@ -183,12 +183,12 @@ it('it handles ignored globs correctly when relative to the config', async () =>
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
   expect(result.css).toMatchCss(css`
-    .content-\[real-static-positive\] {
-      --tw-content: real-static-positive;
-      content: var(--tw-content);
-    }
     .content-\[real-dynamic-positive\] {
       --tw-content: real-dynamic-positive;
+      content: var(--tw-content);
+    }
+    .content-\[real-static-positive\] {
+      --tw-content: real-static-positive;
       content: var(--tw-content);
     }
   `)
@@ -216,20 +216,20 @@ it('it can resolve symlinks for files when not relative to the config', async ()
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
   expect(result.css).toMatchCss(css`
-    .content-\[real-static-positive\] {
-      --tw-content: real-static-positive;
-      content: var(--tw-content);
-    }
-    .content-\[resolved-static-positive\] {
-      --tw-content: resolved-static-positive;
-      content: var(--tw-content);
-    }
     .content-\[real-dynamic-positive\] {
       --tw-content: real-dynamic-positive;
       content: var(--tw-content);
     }
+    .content-\[real-static-positive\] {
+      --tw-content: real-static-positive;
+      content: var(--tw-content);
+    }
     .content-\[resolved-dynamic-positive\] {
       --tw-content: resolved-dynamic-positive;
+      content: var(--tw-content);
+    }
+    .content-\[resolved-static-positive\] {
+      --tw-content: resolved-static-positive;
       content: var(--tw-content);
     }
   `)
@@ -267,20 +267,20 @@ it('it can resolve symlinks for files when relative to the config', async () => 
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
   expect(result.css).toMatchCss(css`
-    .content-\[real-static-positive\] {
-      --tw-content: real-static-positive;
-      content: var(--tw-content);
-    }
-    .content-\[resolved-static-positive\] {
-      --tw-content: resolved-static-positive;
-      content: var(--tw-content);
-    }
     .content-\[real-dynamic-positive\] {
       --tw-content: real-dynamic-positive;
       content: var(--tw-content);
     }
+    .content-\[real-static-positive\] {
+      --tw-content: real-static-positive;
+      content: var(--tw-content);
+    }
     .content-\[resolved-dynamic-positive\] {
       --tw-content: resolved-dynamic-positive;
+      content: var(--tw-content);
+    }
+    .content-\[resolved-static-positive\] {
+      --tw-content: resolved-static-positive;
       content: var(--tw-content);
     }
   `)
