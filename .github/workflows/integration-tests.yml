@@ -49,10 +49,10 @@ jobs:
 
       - name: Install dependencies
         # if: steps.cache-tailwindcss.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm install && npm run oxide:install
 
       - name: Build Tailwind CSS
-        run: npm run prepublishOnly
+        run: npm run oxide:build
 
       - name: Use cached node_modules (integrations)
         id: cache-integrations

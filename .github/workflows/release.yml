@@ -39,7 +39,10 @@ jobs:
 
       - name: Install dependencies
         # if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm install && npm run oxide:install
+
+      - name: Build Tailwind CSS
+        run: npm run oxide:build
 
       - name: Test
         run: npm test
