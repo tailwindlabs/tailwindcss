@@ -54,32 +54,50 @@ function normalizeOptionTypes({ type = 'any', ...options }) {
 }
 
 function parseVariantFormatString(input) {
-  if (input.includes('{')) {
-    if (!isBalanced(input)) throw new Error(`Your { and } are unbalanced.`)
+  /** @type {string[]} */
+  let parts = []
 
-    return input
-      .split(/{(.*)}/gim)
-      .flatMap((line) => parseVariantFormatString(line))
-      .filter(Boolean)
-  }
+  // When parsing whitespace around special characters are insignificant
+  // However, _inside_ of a variant they could be
+  // Because the selector could look like this
+  // @media { &[data-name="foo bar"] }
+  // This is why we do not skip whitespace
 
-  return [input.trim()]
-}
+  let current = ''
+  let depth = 0
 
-function isBalanced(input) {
-  let count = 0
+  for (let idx = 0; idx < input.length; idx++) {
+    let char = input[idx]
 
-  for (let char of input) {
-    if (char === '{') {
-      count++
+    if (char === '\\') {
+      // Escaped characters are not special
+      current += '\\' + input[++idx]
+    } else if (char === '{') {
+      // Nested rule: start
+      ++depth
+      parts.push(current.trim())
+      current = ''
     } else if (char === '}') {
-      if (--count < 0) {
-        return false // unbalanced
+      // Nested rule: end
+      if (--depth < 0) {
+        throw new Error(`Your { and } are unbalanced.`)
       }
+
+      parts.push(current.trim())
+      current = ''
+    } else {
+      // Normal character
+      current += char
     }
   }
 
-  return count === 0
+  if (current.length > 0) {
+    parts.push(current.trim())
+  }
+
+  parts = parts.filter((part) => part !== '')
+
+  return parts
 }
 
 function insertInto(list, value, { before = [] } = {}) {

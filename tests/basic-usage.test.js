@@ -689,3 +689,27 @@ it('Ring color utilities are generated when using respectDefaultRingColorOpacity
     `)
   })
 })
+
+it('should not crash when group names contain special characters', () => {
+  let config = {
+    future: { respectDefaultRingColorOpacity: true },
+    content: [
+      {
+        raw: '<div class="group/${id}"><div class="group-hover/${id}:visible"></div></div>',
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .group\/\$\{id\}:hover .group-hover\/\$\{id\}\:visible {
+        visibility: visible;
+      }
+    `)
+  })
+})
