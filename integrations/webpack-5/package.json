@@ -1,5 +1,5 @@
 {
-  "name": "webpack-5",
+  "name": "@tailwindcss/integrations-webpack-5",
   "private": true,
   "version": "0.0.0",
   "main": "./src/index.js",

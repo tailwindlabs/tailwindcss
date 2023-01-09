@@ -1,5 +1,5 @@
 {
-  "name": "postcss-cli",
+  "name": "@tailwindcss/integrations-postcss-cli",
   "private": true,
   "version": "0.0.0",
   "scripts": {

@@ -1,5 +1,5 @@
 {
-  "name": "rollup.js",
+  "name": "@tailwindcss/integrations-rollup",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -9,7 +9,9 @@
   "jest": {
     "testTimeout": 10000,
     "displayName": "rollup.js",
-    "setupFilesAfterEnv": ["<rootDir>/../../jest/customMatchers.js"]
+    "setupFilesAfterEnv": [
+      "<rootDir>/../../jest/customMatchers.js"
+    ]
   },
   "devDependencies": {
     "rollup": "^2.74.1",
