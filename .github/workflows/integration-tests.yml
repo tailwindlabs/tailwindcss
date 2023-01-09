@@ -49,9 +49,22 @@ jobs:
           restore-keys: |
             nodeModules-
 
-      - name: Install dependencies
+      - name: Install dependencies (main)
         if: steps.cache-tailwindcss.outputs.cache-hit != 'true'
-        run: npm install && npm run oxide:install
+        run: npm install
+
+      - name: Use cached node_modules (tailwindcss)
+        id: cache-tailwindcss-oxide
+        uses: actions/cache@v3
+        with:
+          path: oxide/node_modules
+          key: nodeModules-${{ hashFiles('./package-lock.json') }}-${{ matrix.node-version }}
+          restore-keys: |
+            nodeModules-
+
+      - name: Install dependencies (oxide)
+        if: steps.cache-tailwindcss-oxide.outputs.cache-hit != 'true'
+        run: npm run oxide:install
 
       - name: Build Tailwind CSS
         run: npx turbo run oxide:build
