@@ -2,13 +2,13 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "outputs": ["./lib/**", "./peers/**"]
+      "outputs": ["lib/**", "peers/**"]
     },
     "test": {
       "outputs": []
     },
     "oxide:build": {
-      "outputs": ["./lib/**", "./peers/**", "./oxide/target/**", "./oxide/crates/node/*.node"]
+      "outputs": ["lib/**", "peers/**", "oxide/target/**", "oxide/crates/node/*.node"]
     }
   }
 }

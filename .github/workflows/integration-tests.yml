@@ -11,6 +11,8 @@ permissions:
 
 env:
   CI: true
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
   test:
@@ -52,7 +54,7 @@ jobs:
         run: npm install && npm run oxide:install
 
       - name: Build Tailwind CSS
-        run: npm run oxide:build
+        run: npx turbo run oxide:build
 
       - name: Use cached node_modules (integrations)
         id: cache-integrations
@@ -68,4 +70,4 @@ jobs:
         run: npm run install:integrations
 
       - name: Test ${{ matrix.integration }}
-        run: npm test --prefix ./integrations/${{ matrix.integration }}
+        run: npx turbo run test --filter=./integrations/${{ matrix.integration }}
