@@ -51,7 +51,7 @@
     "cssnano": "^5.1.14",
     "esbuild": "^0.16.10",
     "eslint": "^8.30.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^28.1.3",
     "jest-diff": "^28.1.3",
