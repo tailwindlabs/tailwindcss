@@ -47,10 +47,10 @@ jobs:
         run: npm install && npm run oxide:install
 
       - name: Build Tailwind CSS
-        run: npx turbo run oxide:build
+        run: npx turbo run oxide:build --filter=//
 
       - name: Test
-        run: npx turbo run test
+        run: npx turbo run test --filter=//
 
   lint:
     runs-on: ubuntu-latest
