@@ -33,8 +33,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-      - name: Use cached node_modules
-        id: cache
+      - name: Use cached node_modules (main)
+        id: main-cache
         uses: actions/cache@v3
         with:
           path: node_modules
@@ -43,8 +43,22 @@ jobs:
             nodeModules-
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install && npm run oxide:install
+        if: steps.main-cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Use cached node_modules (oxide)
+        id: oxide-cache
+        uses: actions/cache@v3
+        with:
+          path: ./oxide/node_modules
+          key: oxide-nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+          restore-keys: |
+            nodeModules-
+            oxide-
+
+      - name: Install oxide dependencies
+        if: steps.oxide-cache.outputs.cache-hit != 'true'
+        run: npm run oxide:install
 
       - name: Build Tailwind CSS
         run: npx turbo run oxide:build --filter=//
