@@ -40,30 +40,38 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Use cached node_modules (tailwindcss)
-        id: cache-tailwindcss
+      - name: Cache node_modules (tailwindcss)
+        id: tailwindcss-cache
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: nodeModules-${{ hashFiles('./package-lock.json') }}-${{ matrix.node-version }}-tailwindcss
-          restore-keys: |
-            nodeModules-
+          key: ${{ runner.os }}-nodeModules-main-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Install dependencies (main)
-        if: steps.cache-tailwindcss.outputs.cache-hit != 'true'
-        run: npm install
-
-      - name: Use cached node_modules (tailwindcss)
-        id: cache-tailwindcss-oxide
+      - name: Cache node_modules (oxide)
+        id: tailwindcss-oxide-cache
         uses: actions/cache@v3
         with:
-          path: oxide/node_modules
-          key: nodeModules-${{ hashFiles('./package-lock.json') }}-${{ matrix.node-version }}
-          restore-keys: |
-            nodeModules-
+          path: ./oxide/crates/node/node_modules
+          key: ${{ runner.os }}-nodeModules-oxide-${{ matrix.node-version }}-${{ hashFiles('./oxide/crates/node/**/package-lock.json') }}
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+
+      - name: Install dependencies (main)
+        if: steps.tailwindcss-cache.outputs.cache-hit != 'true'
+        run: npm install
 
       - name: Install dependencies (oxide)
-        if: steps.cache-tailwindcss-oxide.outputs.cache-hit != 'true'
+        if: steps.tailwindcss-oxide-cache.outputs.cache-hit != 'true'
         run: npm run oxide:install
 
       - name: Build Tailwind CSS
@@ -75,8 +83,6 @@ jobs:
         with:
           path: ./integrations/**/node_modules
           key: nodeModules-${{ hashFiles('./integrations/**/package-lock.json') }}-${{ matrix.node-version }}-${{ matrix.integration }}-integrations
-          restore-keys: |
-            nodeModules-
 
       - name: Install shared dependencies
         if: steps.cache-integrations.outputs.cache-hit != 'true'
