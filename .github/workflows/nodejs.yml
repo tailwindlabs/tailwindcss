@@ -38,23 +38,30 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
-          restore-keys: |
-            nodeModules-
-
-      - name: Install dependencies
-        if: steps.main-cache.outputs.cache-hit != 'true'
-        run: npm install
+          key: ${{ runner.os }}-nodeModules-main-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
 
       - name: Use cached node_modules (oxide)
         id: oxide-cache
         uses: actions/cache@v3
         with:
           path: ./oxide/node_modules
-          key: oxide-nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
-          restore-keys: |
-            nodeModules-
-            oxide-
+          key: ${{ runner.os }}-nodeModules-oxide-${{ matrix.node-version }}-${{ hashFiles('./oxide/**/package-lock.json') }}
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+
+      - name: Install dependencies
+        if: steps.main-cache.outputs.cache-hit != 'true'
+        run: npm install
 
       - name: Install oxide dependencies
         if: steps.oxide-cache.outputs.cache-hit != 'true'
@@ -86,9 +93,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
-          restore-keys: |
-            nodeModules-
+          key: ${{ runner.os }}-nodeModules-main-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
