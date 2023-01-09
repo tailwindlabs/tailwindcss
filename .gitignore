@@ -12,6 +12,8 @@ yarn.lock
 yarn-error.log
 types/generated/*.d.ts
 
+.turbo
+
 # Perf related files
 isolate*.log
 
