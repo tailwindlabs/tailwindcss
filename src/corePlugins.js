@@ -150,9 +150,13 @@ export let variantPlugins = {
 
     let variants = {
       group: (_, { modifier }) =>
-        modifier ? [`:merge(.group\\/${modifier})`, ' &'] : [`:merge(.group)`, ' &'],
+        modifier
+          ? [`:merge(.group\\/${escapeClassName(modifier)})`, ' &']
+          : [`:merge(.group)`, ' &'],
       peer: (_, { modifier }) =>
-        modifier ? [`:merge(.peer\\/${modifier})`, ' ~ &'] : [`:merge(.peer)`, ' ~ &'],
+        modifier
+          ? [`:merge(.peer\\/${escapeClassName(modifier)})`, ' ~ &']
+          : [`:merge(.peer)`, ' ~ &'],
     }
 
     for (let [name, fn] of Object.entries(variants)) {
