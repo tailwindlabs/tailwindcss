@@ -33,19 +33,19 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Use cached node_modules (main)
+      - name: Cache node_modules (main)
         id: main-cache
         uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-nodeModules-main-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Use cached node_modules (oxide)
+      - name: Cache node_modules (oxide)
         id: oxide-cache
         uses: actions/cache@v3
         with:
-          path: ./oxide/node_modules
-          key: ${{ runner.os }}-nodeModules-oxide-${{ matrix.node-version }}-${{ hashFiles('./oxide/**/package-lock.json') }}
+          path: ./oxide/crates/node/node_modules
+          key: ${{ runner.os }}-nodeModules-oxide-${{ matrix.node-version }}-${{ hashFiles('./oxide/crates/node/**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
