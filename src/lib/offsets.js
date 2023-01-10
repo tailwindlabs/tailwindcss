@@ -13,6 +13,7 @@ import { remapBitfield } from './remap-bitfield.js'
  * @property {function | undefined} sort The sort function
  * @property {string|null} value The value we want to compare
  * @property {string|null} modifier The modifier that was used (if any)
+ * @property {bigint} variant The variant bitmask
  */
 
 /**
@@ -127,6 +128,8 @@ export class Offsets {
    * @returns {RuleOffset}
    */
   applyVariantOffset(rule, variant, options) {
+    options.variant = variant.variants
+
     return {
       ...rule,
       layer: 'variants',
@@ -211,6 +214,19 @@ export class Offsets {
       for (let bOptions of b.options) {
         if (aOptions.id !== bOptions.id) continue
         if (!aOptions.sort || !bOptions.sort) continue
+
+        let maxFnVariant = max([aOptions.variant, bOptions.variant]) ?? 0n
+
+        // Create a mask of 0s from bits 1..N where N represents the mask of the Nth bit
+        let mask = ~(maxFnVariant | (maxFnVariant - 1n))
+        let aVariantsAfterFn = a.variants & mask
+        let bVariantsAfterFn = b.variants & mask
+
+        // If the variants the same, we _can_ sort them
+        if (aVariantsAfterFn !== bVariantsAfterFn) {
+          continue
+        }
+
         let result = aOptions.sort(
           {
             value: aOptions.value,
