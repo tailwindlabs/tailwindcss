@@ -1158,3 +1158,201 @@ it('Invalid arbitrary variants selectors should produce nothing instead of faili
     expect(result.css).toMatchFormattedCss(css``)
   })
 })
+
+it('should output responsive variants + stacked variants in the right order', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="xl:p-1"></div>
+          <div class="md:[&_ul]:flex-row"></div>
+          <div class="[&_ul]:flex"></div>
+          <div class="[&_ul]:flex-col"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 1280px) {
+        .xl\:p-1 {
+          padding: 0.25rem;
+        }
+      }
+      .\[\&_ul\]\:flex ul {
+        display: flex;
+      }
+      .\[\&_ul\]\:flex-col ul {
+        flex-direction: column;
+      }
+      @media (min-width: 768px) {
+        .md\:\[\&_ul\]\:flex-row ul {
+          flex-direction: row;
+        }
+      }
+    `)
+  })
+})
+
+it('should sort multiple variant fns with normal variants between them', () => {
+  /** @type {string[]} */
+  let lines = []
+
+  for (let a of [1, 2]) {
+    for (let b of [2, 1]) {
+      for (let c of [1, 2]) {
+        for (let d of [2, 1]) {
+          for (let e of [1, 2]) {
+            lines.push(`<div class="fred${a}:qux-[${b}]:baz${c}:bar-[${d}]:foo${e}:p-1"></div>`)
+          }
+        }
+      }
+    }
+  }
+
+  // Fisher-Yates shuffle
+  for (let i = lines.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * i)
+    ;[lines[i], lines[j]] = [lines[j], lines[i]]
+  }
+
+  let config = {
+    content: [
+      {
+        raw: lines.join('\n'),
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      function ({ addVariant, matchVariant }) {
+        addVariant('foo1', '&[data-foo=1]')
+        addVariant('foo2', '&[data-foo=2]')
+
+        matchVariant('bar', (value) => `&[data-bar=${value}]`, {
+          sort: (a, b) => b.value - a.value,
+        })
+
+        addVariant('baz1', '&[data-baz=1]')
+        addVariant('baz2', '&[data-baz=2]')
+
+        matchVariant('qux', (value) => `&[data-qux=${value}]`, {
+          sort: (a, b) => b.value - a.value,
+        })
+
+        addVariant('fred1', '&[data-fred=1]')
+        addVariant('fred2', '&[data-fred=2]')
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .fred1\:qux-\[2\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[2\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[2\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[2\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[2\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[2\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[2\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[2\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[1\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[1\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[1\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[1\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[1\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[1\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[1\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred1\:qux-\[1\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='1'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[2\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[2\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[2\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[2\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[2\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[2\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[2\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[2\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[1\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[1\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[1\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[1\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[1\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[1\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[1\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+      .fred2\:qux-\[1\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='2'] {
+        padding: 0.25rem;
+      }
+    `)
+  })
+})
