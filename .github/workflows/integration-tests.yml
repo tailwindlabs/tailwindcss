@@ -76,7 +76,7 @@ jobs:
         run: npm run oxide:install
 
       - name: Build Tailwind CSS
-        run: npm run oxide:build
+        run: npx turbo run test --filter=//
 
       - name: Install shared dependencies
         run: npm run install:integrations
