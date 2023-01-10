@@ -78,15 +78,7 @@ jobs:
       - name: Build Tailwind CSS
         run: npm run oxide:build
 
-      - name: Use cached node_modules (integrations)
-        id: cache-integrations
-        uses: actions/cache@v3
-        with:
-          path: ./integrations/**/node_modules
-          key: nodeModules-${{ hashFiles('./integrations/**/package-lock.json') }}-${{ matrix.node-version }}-${{ matrix.integration }}-integrations
-
       - name: Install shared dependencies
-        if: steps.cache-integrations.outputs.cache-hit != 'true'
         run: npm run install:integrations
 
       - name: Test ${{ matrix.integration }}
