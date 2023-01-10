@@ -1,7 +1,10 @@
 name: Oxide CI
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 env:
   APP_NAME: tailwindcss-oxide
@@ -255,26 +258,6 @@ jobs:
       - name: Generate entry point
         run: npm run build --prefix ${{ env.OXIDE_LOCATION }}
 
-      - name: Publish to npm
-        run: |
-          for pkg in ${{ env.OXIDE_LOCATION }}/npm/*; do
-            echo "Publishing $pkg..."
-            cd $pkg
-            npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
-            npm publish --tag insiders --access public
-            cd -
-          done
-
-          echo "Publishing ${{ env.APP_NAME }}...";
-          cd ${{ env.OXIDE_LOCATION }}
-          npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
-          sed "s#\"0.0.0\"#\"${{ env.NPM_VERSION }}\"#g" package.json > package_updated.json
-          mv package_updated.json package.json
-          npm publish --tag insiders --access public
-          cd -
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
   tailwind_oxide_release:
     runs-on: ubuntu-latest
     name: Build and release Tailwind CSS
@@ -314,11 +297,3 @@ jobs:
 
       - name: Test
         run: npm test
-
-      - name: 'Version based on commit: 0.0.0-oxide.${{ env.SHA_SHORT }}'
-        run: npm version 0.0.0-oxide.${{ env.SHA_SHORT }} --force --no-git-tag-version
-
-      - name: Publish
-        run: npm publish --tag oxide
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
