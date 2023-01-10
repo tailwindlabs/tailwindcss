@@ -27,7 +27,10 @@ module.exports = function $(command, options = {}) {
     : (() => {
         let args = command.split(' ')
         command = args.shift()
-        command = command === 'node' ? command : path.resolve(root, 'node_modules', '.bin', command)
+        command =
+          command === 'node'
+            ? command
+            : path.resolve(root, '..', '..', 'node_modules', '.bin', command)
         return [command, args]
       })()
 
