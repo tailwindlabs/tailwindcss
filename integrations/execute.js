@@ -30,7 +30,19 @@ module.exports = function $(command, options = {}) {
         command =
           command === 'node'
             ? command
-            : path.resolve(root, '..', '..', 'node_modules', '.bin', command)
+            : (function () {
+                let local = path.resolve(root, 'node_modules', '.bin', command)
+                if (fs.existsSync(local)) {
+                  return local
+                }
+
+                let hoisted = path.resolve(root, '..', '..', 'node_modules', '.bin', command)
+                if (fs.existsSync(hoisted)) {
+                  return hoisted
+                }
+
+                return `npx ${command}`
+              })()
         return [command, args]
       })()
 
