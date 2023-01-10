@@ -943,32 +943,35 @@ function registerPlugins(plugins, context) {
 
   // Generate a list of strings for autocompletion purposes, e.g.
   // ['uppercase', 'lowercase', ...]
-  context.getClassList = function getClassList() {
+  context.getClassList = function getClassList(options = {}) {
     let output = []
 
     for (let util of classList) {
       if (Array.isArray(util)) {
-        let [utilName, options] = util
+        let [utilName, utilOptions] = util
         let negativeClasses = []
 
-        let modifiers = Object.keys(options?.modifiers ?? {})
+        let modifiers = Object.keys(utilOptions?.modifiers ?? {})
 
-        if (options?.types?.some(({ type }) => type === 'color')) {
+        if (utilOptions?.types?.some(({ type }) => type === 'color')) {
           modifiers.push(...Object.keys(context.tailwindConfig.theme.opacity ?? {}))
         }
 
-        for (let [key, value] of Object.entries(options?.values ?? {})) {
+        let metadata = { modifiers }
+        let includeMetadata = options.includeMetadata && modifiers.length > 0
+
+        for (let [key, value] of Object.entries(utilOptions?.values ?? {})) {
           // Ignore undefined and null values
           if (value == null) {
             continue
           }
 
           let cls = formatClass(utilName, key)
-          output.push(modifiers.length > 0 ? [cls, { modifiers }] : cls)
+          output.push(includeMetadata ? [cls, metadata] : cls)
 
-          if (options?.supportsNegativeValues && negateValue(value)) {
+          if (utilOptions?.supportsNegativeValues && negateValue(value)) {
             let cls = formatClass(utilName, `-${key}`)
-            negativeClasses.push(modifiers.length > 0 ? [cls, { modifiers }] : cls)
+            negativeClasses.push(includeMetadata ? [cls, metadata] : cls)
           }
         }
 

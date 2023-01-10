@@ -69,10 +69,24 @@ it('should not generate utilities with opacity by default', () => {
   expect(classes).not.toContain('bg-red-500/50')
 })
 
-it('should generate utilities with modifier data', () => {
+it('should not include metadata by default', () => {
   let config = {}
   let context = createContext(resolveConfig(config))
   let classes = context.getClassList()
+
+  expect(classes.every((cls) => typeof cls === 'string')).toEqual(true)
+
+  expect(classes).toContain('bg-red-500')
+  expect(classes).toContain('text-2xl')
+})
+
+it('should generate utilities with modifier data when requested', () => {
+  let config = {}
+  let context = createContext(resolveConfig(config))
+  let classes = context.getClassList({ includeMetadata: true })
+
+  expect(classes).not.toContain('bg-red-500')
+  expect(classes).not.toContain('text-2xl')
 
   expect(classes).toContainEqual([
     'bg-red-500',
@@ -119,7 +133,7 @@ it('should generate utilities with modifier data', () => {
   ])
 })
 
-it('should generate plugin-defined utilities with modifier data', () => {
+it('should generate plugin-defined utilities with modifier data when requested', () => {
   let config = {
     plugins: [
       plugin(function ({ matchUtilities }) {
@@ -135,7 +149,7 @@ it('should generate plugin-defined utilities with modifier data', () => {
     ],
   }
   let context = createContext(resolveConfig(config))
-  let classes = context.getClassList()
+  let classes = context.getClassList({ includeMetadata: true })
 
   expect(classes).toContainEqual([
     'foo-red',
@@ -191,26 +205,6 @@ it('should not generate utilities that are set to undefined or null to so that t
   expect(classes).not.toContain('bg-blue-100') // Blue.100 is `null`
   expect(classes).not.toContain('bg-blue-200') // Blue.200 is `undefined`
 
-  expect(classes).toContainEqual([
-    'bg-blue-50',
-    {
-      modifiers: [
-        '0',
-        '5',
-        '10',
-        '20',
-        '25',
-        '30',
-        '40',
-        '50',
-        '60',
-        '70',
-        '75',
-        '80',
-        '90',
-        '95',
-        '100',
-      ],
-    },
-  ])
+  expect(classes).toContain('bg-blue-50')
+  expect(classes).toContain('bg-blue-300')
 })
