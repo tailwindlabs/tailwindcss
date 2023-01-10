@@ -1,9 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "build": {
-      "outputs": ["lib/**", "peers/**", "types/generated/**"]
-    },
     "//#build": {
       "outputs": ["lib/**", "peers/**", "types/generated/**"]
     },
