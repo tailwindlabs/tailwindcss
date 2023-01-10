@@ -35,6 +35,18 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -45,17 +57,15 @@ jobs:
       - name: Setup rust target
         run: rustup target add ${{ matrix.target }}
 
-      # - name: Use cached oxide node_modules
-      #   id: cache-oxide
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ${{ env.OXIDE_LOCATION }}/node_modules
-      #     key: nodeModules-${{ hashFiles('${{ env.OXIDE_LOCATION }}/package-lock.json') }}-${{ matrix.os }}-${{ matrix.target }}-${{ env.NODE_VERSION }}
-      #     restore-keys: |
-      #       nodeModules-
+      - name: Cache node_modules (oxide)
+        id: oxide-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.OXIDE_LOCATION }}/node_modules
+          key: ${{ runner.os }}-nodeModules-oxide-${{ matrix.os }}-${{ matrix.target }}-${{ env.NODE_VERSION }}-${{ hashFiles('${{ env.OXIDE_LOCATION }}/**/package-lock.json') }}
 
       - name: Oxide — npm install
-        # if: steps.cache-oxide.outputs.cache-hit != 'true'
+        if: steps.oxide-cache.outputs.cache-hit != 'true'
         run: cd ${{ env.OXIDE_LOCATION }} && npm install
 
       - name: Build release
@@ -93,20 +103,30 @@ jobs:
           profile: minimal
           override: true
 
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+
       - name: Setup rust target
         run: rustup target add aarch64-apple-darwin
 
-      # - name: Use cached oxide node_modules
-      #   id: cache-oxide
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ${{ env.OXIDE_LOCATION }}/node_modules
-      #     key: nodeModules-${{ hashFiles('${{ env.OXIDE_LOCATION }}/package-lock.json') }}-macos-latest-apple-silicon-${{ env.NODE_VERSION }}
-      #     restore-keys: |
-      #       nodeModules-
+      - name: Cache node_modules (oxide)
+        id: oxide-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.OXIDE_LOCATION }}/node_modules
+          key: ${{ runner.os }}-nodeModules-oxide-macos-latest-apple-silicon-${{ env.NODE_VERSION }}-${{ hashFiles('${{ env.OXIDE_LOCATION }}/**/package-lock.json') }}
 
       - name: Oxide — npm install
-        # if: steps.cache-oxide.outputs.cache-hit != 'true'
+        if: steps.oxide-cache.outputs.cache-hit != 'true'
         run: cd ${{ env.OXIDE_LOCATION }} && npm install
 
       - name: Build release
@@ -169,6 +189,18 @@ jobs:
           profile: minimal
           override: true
 
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+
       - name: Setup cross compile toolchain
         if: ${{ matrix.setup }}
         run: ${{ matrix.setup }}
@@ -176,17 +208,15 @@ jobs:
       - name: Setup rust target
         run: rustup target add ${{ matrix.target }}
 
-      # - name: Use cached oxide node_modules
-      #   id: cache-oxide
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ${{ env.OXIDE_LOCATION }}/node_modules
-      #     key: nodeModules-${{ hashFiles('${{ env.OXIDE_LOCATION }}/package-lock.json') }}-linux-${{ matrix.target }}-${{ env.NODE_VERSION }}
-      #     restore-keys: |
-      #       nodeModules-
+      - name: Cache node_modules (oxide)
+        id: oxide-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.OXIDE_LOCATION }}/node_modules
+          key: ${{ runner.os }}-nodeModules-oxide-linux-${{ matrix.target }}-${{ env.NODE_VERSION }}-${{ hashFiles('${{ env.OXIDE_LOCATION }}/**/package-lock.json') }}
 
       - name: Oxide — npm install
-        # if: steps.cache-oxide.outputs.cache-hit != 'true'
+        if: steps.oxide-cache.outputs.cache-hit != 'true'
         run: cd ${{ env.OXIDE_LOCATION }} && npm install
 
       - name: Build release
@@ -216,17 +246,27 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Use cached oxide node_modules
-      #   id: cache-oxide
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ${{ env.OXIDE_LOCATION }}/node_modules
-      #     key: nodeModules-${{ hashFiles('${{ env.OXIDE_LOCATION }}/package-lock.json') }}-ubuntu-latest-${{ env.NODE_VERSION }}
-      #     restore-keys: |
-      #       nodeModules-
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+
+      - name: Cache node_modules (oxide)
+        id: oxide-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.OXIDE_LOCATION }}/node_modules
+          key: ${{ runner.os }}-nodeModules-oxide-ubuntu-latest-${{ env.NODE_VERSION }}-${{ hashFiles('${{ env.OXIDE_LOCATION }}/**/package-lock.json') }}
 
       - name: Oxide — npm install
-        # if: steps.cache-oxide.outputs.cache-hit != 'true'
+        if: steps.oxide-cache.outputs.cache-hit != 'true'
         run: cd ${{ env.OXIDE_LOCATION }} && npm install
 
       - name: Download artifacts
@@ -289,7 +329,15 @@ jobs:
           sed "s#\"@tailwindcss/oxide\": \".*\"#\"@tailwindcss/oxide\": \"${{ env.OXIDE_NPM_VERSION }}\"#" package.json > package_updated.json
           mv package_updated.json package.json
 
+      - name: Cache node_modules (main)
+        id: main-cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-nodeModules-main-${{ env.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install dependencies
+        if: steps.main-cache.outputs.cache-hit != 'true'
         run: npm install
 
       - name: Build Tailwind CSS
