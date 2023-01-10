@@ -70,8 +70,11 @@ jobs:
       - name: Build Tailwind CSS
         run: npx turbo run oxide:build --filter=//
 
-      - name: Test
+      - name: Test (default)
         run: npx turbo run test --filter=//
+
+      - name: Test (oxide)
+        run: OXIDE=1 npx turbo run test --filter=//
 
   lint:
     runs-on: ubuntu-latest
