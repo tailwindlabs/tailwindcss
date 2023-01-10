@@ -1,7 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
+import { env } from '../src/lib/sharedState'
 import { html, run, css, defaults } from './util/run'
+
+let oxideSkip = env.OXIDE ? test.skip : test
 
 test('basic usage', () => {
   let config = {
@@ -690,7 +693,7 @@ it('Ring color utilities are generated when using respectDefaultRingColorOpacity
   })
 })
 
-it('should not crash when group names contain special characters', () => {
+oxideSkip('should not crash when group names contain special characters', () => {
   let config = {
     future: { respectDefaultRingColorOpacity: true },
     content: [
