@@ -1,3 +1,4 @@
+let fs = require('fs')
 let path = require('path')
 let { spawn } = require('child_process')
 let resolveToolRoot = require('./resolve-tool-root')
