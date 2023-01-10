@@ -4,12 +4,22 @@
     "build": {
       "outputs": ["lib/**", "peers/**", "types/generated/**"]
     },
+    "//#build": {
+      "outputs": ["lib/**", "peers/**", "types/generated/**"]
+    },
     "test": {
       "env": ["OXIDE"],
       "outputs": []
     },
-    "oxide:build": {
+    "//#test": {
+      "env": ["OXIDE"],
+      "outputs": []
+    },
+    "//#oxide:build": {
       "outputs": ["lib/**", "peers/**", "oxide/target/**", "oxide/crates/node/*.node"]
+    },
+    "//#style": {
+      "outputs": []
     }
   }
 }

@@ -100,4 +100,4 @@ jobs:
         run: npm install
 
       - name: Lint
-        run: npm run style
+        run: npx turbo run style --filter=//
