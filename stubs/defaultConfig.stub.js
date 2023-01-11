@@ -864,6 +864,7 @@ module.exports = {
     },
     transitionDuration: {
       DEFAULT: '150ms',
+      0: '0s',
       75: '75ms',
       100: '100ms',
       150: '150ms',
