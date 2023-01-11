@@ -76,7 +76,7 @@ jobs:
         run: npm run oxide:install
 
       - name: Build Tailwind CSS
-        run: npx turbo run build --filter=//
+        run: npx turbo run oxide:build --filter=//
 
       - name: Test ${{ matrix.integration }}
         run: npx turbo run test --filter=./integrations/${{ matrix.integration }}
