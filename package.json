@@ -14,7 +14,7 @@
   },
   "workspaces": [
     "integrations/*",
-    "oxide"
+    "oxide/crates/node"
   ],
   "scripts": {
     "prebuild": "npm run generate && rimraf lib",

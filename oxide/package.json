@@ -2,10 +2,12 @@
   "name": "tailwindcss-oxide",
   "private": true,
   "version": "0.1.0",
+  "workspaces": [
+    "node"
+  ],
   "scripts": {
     "test": "cargo test",
-    "install:all": "npm run install:npm && (cargo install cargo-watch cargo-fuzz || true)",
-    "install:npm": "npm install --prefix ./crates/node",
+    "install:cargo": "cargo install cargo-watch cargo-fuzz",
     "build": "cargo build --release",
     "build:node": "npm --prefix ./crates/node run build",
     "dev": "cargo watch --clear --quiet -x 'run --quiet'",
