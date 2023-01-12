@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "test": "cargo test",
-    "install": "npm run install:npm && (cargo install cargo-watch cargo-fuzz || true)",
+    "install:all": "npm run install:npm && (cargo install cargo-watch cargo-fuzz || true)",
     "install:npm": "npm install --prefix ./crates/node",
     "build": "cargo build --release",
     "build:node": "npm --prefix ./crates/node run build",
