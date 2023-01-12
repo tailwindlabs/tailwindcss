@@ -13,7 +13,14 @@
       "outputs": []
     },
     "//#oxide:build": {
-      "outputs": ["lib/**", "peers/**", "oxide/target/**", "oxide/crates/node/*.node"]
+      "outputs": [
+        "lib/**",
+        "peers/**",
+        "oxide/target/**",
+        "oxide/crates/node/*.node",
+        "oxide/crates/node/index.d.ts",
+        "oxide/crates/node/index.js"
+      ]
     },
     "//#style": {
       "outputs": []
