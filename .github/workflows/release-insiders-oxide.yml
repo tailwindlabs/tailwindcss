@@ -350,7 +350,7 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: 'Version based on commit: 0.0.0-oxide.${{ env.SHA_SHORT }}'
+      - name: 'Version based on commit: 0.0.0-oxide-insiders.${{ env.SHA_SHORT }}'
         run: npm version 0.0.0-oxide-insiders.${{ env.SHA_SHORT }} --force --no-git-tag-version
 
       - name: Publish
