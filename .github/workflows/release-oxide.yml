@@ -78,6 +78,24 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+
       - name: Install Node.JS
         uses: actions/setup-node@v3
         with:
@@ -93,18 +111,8 @@ jobs:
       - name: Setup rust target
         run: rustup target add aarch64-apple-darwin
 
-      # - name: Use cached oxide node_modules
-      #   id: cache-oxide
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ${{ env.OXIDE_LOCATION }}/node_modules
-      #     key: nodeModules-${{ hashFiles('${{ env.OXIDE_LOCATION }}/package-lock.json') }}-macos-latest-apple-silicon-${{ env.NODE_VERSION }}
-      #     restore-keys: |
-      #       nodeModules-
-
-      - name: Oxide — npm install
-        # if: steps.cache-oxide.outputs.cache-hit != 'true'
-        run: cd ${{ env.OXIDE_LOCATION }} && npm install
+      - name: Install dependencies
+        run: npm install
 
       - name: Build release
         run: cd ${{ env.OXIDE_LOCATION }} && npm run build
