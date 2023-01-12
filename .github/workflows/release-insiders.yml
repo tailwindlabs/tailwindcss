@@ -31,19 +31,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Cache node_modules (main)
+      - name: Cache node_modules
         id: main-cache
         uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-nodeModules-main-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Cache node_modules (oxide)
-        id: oxide-cache
-        uses: actions/cache@v3
-        with:
-          path: ./oxide/crates/node/node_modules
-          key: ${{ runner.os }}-nodeModules-oxide-${{ matrix.node-version }}-${{ hashFiles('./oxide/crates/node/**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -58,12 +51,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
 
       - name: Install dependencies
-        if: steps.main-cache.outputs.cache-hit != 'true'
         run: npm install
-
-      - name: Install oxide dependencies
-        if: steps.oxide-cache.outputs.cache-hit != 'true'
-        run: npm run oxide:install
 
       - name: Build Tailwind CSS
         run: npx turbo run oxide:build --filter=//
