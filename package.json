@@ -45,6 +45,7 @@
     "stubs/*.stub.js",
     "nesting/*",
     "types/**/*",
+    "oxide-node-api-shim",
     "*.d.ts",
     "*.css",
     "*.js"
