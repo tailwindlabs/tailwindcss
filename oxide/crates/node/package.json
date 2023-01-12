@@ -29,10 +29,10 @@
     "index.d.ts"
   ],
   "scripts": {
-    "artifacts": "napi artifacts",
-    "build": "napi build --platform --release",
-    "build:debug": "napi build --platform",
-    "version": "napi version"
+    "artifacts": "npx napi artifacts",
+    "build": "npx napi build --platform --release",
+    "build:debug": "npx napi build --platform",
+    "version": "npx napi version"
   },
   "optionalDependencies": {
     "@tailwindcss/oxide-darwin-arm64": "0.0.0",
