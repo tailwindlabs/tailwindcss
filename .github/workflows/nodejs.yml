@@ -34,11 +34,10 @@ jobs:
           cache: 'npm'
 
       - name: Cache node_modules
-        id: main-cache
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-nodeModules-main-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
