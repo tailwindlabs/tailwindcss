@@ -3,6 +3,8 @@ name: Release Insiders — Oxide
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
 
 env:
   APP_NAME: tailwindcss-oxide
