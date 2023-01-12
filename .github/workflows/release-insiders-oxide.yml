@@ -8,7 +8,7 @@ on:
 
 env:
   APP_NAME: tailwindcss-oxide
-  NODE_VERSION: 14
+  NODE_VERSION: 18
   OXIDE_LOCATION: ./oxide/crates/node
 
 jobs:
