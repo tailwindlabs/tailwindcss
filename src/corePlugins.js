@@ -1,6 +1,7 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
+import { env } from './lib/sharedState'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
 import escapeClassName from './util/escapeClassName'
@@ -1219,6 +1220,16 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
+          if (env.OXIDE) {
+            return {
+              '& > :not([hidden]) ~ :not([hidden])': {
+                '--tw-space-x-reverse': '0',
+                'margin-inline-end': `calc(${value} * var(--tw-space-x-reverse))`,
+                'margin-inline-start': `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`,
+              },
+            }
+          }
+
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
               '--tw-space-x-reverse': '0',
@@ -1253,6 +1264,17 @@ export let corePlugins = {
       {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
+
+          if (env.OXIDE) {
+            return {
+              '& > :not([hidden]) ~ :not([hidden])': {
+                '@defaults border-width': {},
+                '--tw-divide-x-reverse': '0',
+                'border-inline-end-width': `calc(${value} * var(--tw-divide-x-reverse))`,
+                'border-inline-start-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
+              },
+            }
+          }
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
