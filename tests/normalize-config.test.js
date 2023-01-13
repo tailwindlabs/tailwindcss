@@ -1,6 +1,10 @@
 import { normalizeConfig } from '../src/util/normalizeConfig'
 import { run, css } from './util/run'
 import resolveConfig from '../src/public/resolve-config'
+import { env } from '../src/lib/sharedState'
+import log from '../src/util/log'
+
+let t = env.OXIDE ? test.skip : test
 
 it.each`
   config
@@ -32,12 +36,18 @@ it.each`
   })
 })
 
-it.each`
+t.each`
   config
   ${{ content: [{ raw: 'text-center' }], purge: { extract: () => ['font-bold'] } }}
   ${{ content: [{ raw: 'text-center' }], purge: { extract: { DEFAULT: () => ['font-bold'] } } }}
-  ${{ content: [{ raw: 'text-center' }], purge: { options: { defaultExtractor: () => ['font-bold'] } } }}
-  ${{ content: [{ raw: 'text-center' }], purge: { options: { extractors: [{ extractor: () => ['font-bold'], extensions: ['html'] }] } } }}
+  ${{
+    content: [{ raw: 'text-center' }],
+    purge: { options: { defaultExtractor: () => ['font-bold'] } },
+  }}
+  ${{
+    content: [{ raw: 'text-center' }],
+    purge: { options: { extractors: [{ extractor: () => ['font-bold'], extensions: ['html'] }] } },
+  }}
   ${{ content: [{ raw: 'text-center' }], purge: { extract: { html: () => ['font-bold'] } } }}
 `('should normalize extractors $config', ({ config }) => {
   return run('@tailwind utilities', config).then((result) => {
@@ -49,7 +59,7 @@ it.each`
   })
 })
 
-it('should still be possible to use the "old" v2 config', () => {
+t('should still be possible to use the "old" v2 config', () => {
   let config = {
     purge: {
       content: [
@@ -112,8 +122,7 @@ it('should keep content files with globs', () => {
 })
 
 it('should warn when we detect invalid globs with incorrect brace expansion', () => {
-  let log = require('../src/util/log')
-  let spy = jest.spyOn(log.default, 'warn')
+  let spy = jest.spyOn(log, 'warn')
 
   let config = {
     content: [

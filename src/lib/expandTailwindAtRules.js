@@ -1,9 +1,12 @@
+import fs from 'fs'
 import LRU from 'quick-lru'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import log from '../util/log'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
+
+import oxide from '@tailwindcss/oxide'
 
 let env = sharedState.env
 
@@ -124,15 +127,32 @@ export default function expandTailwindAtRules(context) {
     // ---
 
     // Find potential rules in changed files
-    let candidates = new Set([sharedState.NOT_ON_DEMAND])
+    let candidates = new Set([...(context.candidates ?? []), sharedState.NOT_ON_DEMAND])
     let seen = new Set()
 
     env.DEBUG && console.time('Reading changed files')
 
-    for (let { content, extension } of context.changedContent) {
-      let transformer = getTransformer(context.tailwindConfig, extension)
-      let extractor = getExtractor(context, extension)
-      getClassCandidates(transformer(content), extractor, candidates, seen)
+    if (env.OXIDE) {
+      // TODO: Pass through or implement `extractor`
+      for (let candidate of oxide.parseCandidateStringsFromFiles(
+        context.changedContent
+        // Object.assign({}, builtInTransformers, context.tailwindConfig.content.transform)
+      )) {
+        candidates.add(candidate)
+      }
+
+      // for (let { file, content, extension } of context.changedContent) {
+      //   let transformer = getTransformer(context.tailwindConfig, extension)
+      //   let extractor = getExtractor(context, extension)
+      //   getClassCandidatesOxide(file, transformer(content), extractor, candidates, seen)
+      // }
+    } else {
+      for (let { file, content, extension } of context.changedContent) {
+        let transformer = getTransformer(context.tailwindConfig, extension)
+        let extractor = getExtractor(context, extension)
+        content = file ? fs.readFileSync(file, 'utf8') : content
+        getClassCandidates(transformer(content), extractor, candidates, seen)
+      }
     }
 
     env.DEBUG && console.timeEnd('Reading changed files')
@@ -143,7 +163,21 @@ export default function expandTailwindAtRules(context) {
     let classCacheCount = context.classCache.size
 
     env.DEBUG && console.time('Generate rules')
-    generateRules(candidates, context)
+    // TODO: Sorting is _probably_ slow, but right now it can guarantee the same order. Eventually
+    // we will be able to get rid of this.
+    env.DEBUG && console.time('Sorting candidates')
+    let sortedCandidates =
+      typeof process !== 'undefined' && process.env.JEST_WORKER_ID
+        ? new Set(
+            [...candidates].sort((a, z) => {
+              if (a === z) return 0
+              if (a < z) return -1
+              return 1
+            })
+          )
+        : candidates
+    env.DEBUG && console.timeEnd('Sorting candidates')
+    generateRules(sortedCandidates, context)
     env.DEBUG && console.timeEnd('Generate rules')
 
     // We only ever add to the classCache, so if it didn't grow, there is nothing new.

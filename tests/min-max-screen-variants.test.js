@@ -1,10 +1,10 @@
 import { run, css, html } from './util/run'
+import log from '../src/util/log'
 
 let warn
 
 beforeEach(() => {
-  let log = require('../src/util/log')
-  warn = jest.spyOn(log.default, 'warn')
+  warn = jest.spyOn(log, 'warn')
 })
 
 afterEach(() => {
@@ -436,8 +436,8 @@ it('warns when using min variants with mixed units (with no screens config)', as
     .font-bold {
       font-weight: 700;
     }
-    @media (min-width: 700rem) {
-      .min-\[700rem\]\:font-bold {
+    @media (min-width: 700px) {
+      .min-\[700px\]\:font-bold {
         font-weight: 700;
       }
     }
@@ -612,8 +612,8 @@ it('warns when using max variants with mixed units (with no screens config)', as
     .font-bold {
       font-weight: 700;
     }
-    @media (max-width: 700rem) {
-      .max-\[700rem\]\:font-bold {
+    @media (max-width: 700px) {
+      .max-\[700px\]\:font-bold {
         font-weight: 700;
       }
     }

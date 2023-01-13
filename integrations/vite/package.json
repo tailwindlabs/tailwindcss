@@ -1,5 +1,5 @@
 {
-  "name": "vite",
+  "name": "@tailwindcss/integrations-vite",
   "private": true,
   "version": "0.0.0",
   "main": "./src/index.js",
@@ -16,6 +16,7 @@
     ]
   },
   "devDependencies": {
+    "isomorphic-fetch": "^3.0.0",
     "vite": "^2.9.9"
   }
 }

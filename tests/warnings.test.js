@@ -1,10 +1,10 @@
 import { html, run, css } from './util/run'
+import log from '../src/util/log'
 
 let warn
 
 beforeEach(() => {
-  let log = require('../src/util/log')
-  warn = jest.spyOn(log.default, 'warn')
+  warn = jest.spyOn(log, 'warn')
 })
 
 afterEach(() => {

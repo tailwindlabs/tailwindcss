@@ -3,6 +3,7 @@ import path from 'path'
 import postcss from 'postcss'
 import plugin from '../src/lib/evaluateTailwindFunctions'
 import { run as runFull, css, html } from './util/run'
+import log from '../src/util/log'
 
 function run(input, opts = {}) {
   return postcss([
@@ -1269,7 +1270,7 @@ describe('context dependent', () => {
   let warn
 
   beforeEach(() => {
-    warn = jest.spyOn(require('../src/util/log').default, 'warn')
+    warn = jest.spyOn(log, 'warn')
   })
 
   afterEach(() => warn.mockClear())

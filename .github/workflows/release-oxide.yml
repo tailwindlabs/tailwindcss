@@ -1,0 +1,332 @@
+name: Release Oxide
+
+on:
+  workflow_dispatch:
+
+env:
+  APP_NAME: tailwindcss-oxide
+  NODE_VERSION: 14
+  OXIDE_LOCATION: ./oxide/crates/node
+
+jobs:
+  oxide-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Windows
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+          # Mac OS
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            strip: strip -x # Must use -x on macOS. This produces larger results on linux.
+
+    name: Build ${{ matrix.target }} (OXIDE)
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Node.JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Setup rust target
+        run: rustup target add ${{ matrix.target }}
+
+      # - name: Use cached oxide node_modules
+      #   id: cache-oxide
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ${{ env.OXIDE_LOCATION }}/node_modules
+      #     key: nodeModules-${{ hashFiles('${{ env.OXIDE_LOCATION }}/package-lock.json') }}-${{ matrix.os }}-${{ matrix.target }}-${{ env.NODE_VERSION }}
+      #     restore-keys: |
+      #       nodeModules-
+
+      - name: Oxide — npm install
+        # if: steps.cache-oxide.outputs.cache-hit != 'true'
+        run: cd ${{ env.OXIDE_LOCATION }} && npm install
+
+      - name: Build release
+        run: cd ${{ env.OXIDE_LOCATION }} && npm run build
+        env:
+          RUST_TARGET: ${{ matrix.target }}
+
+      - name: Strip debug symbols # https://github.com/rust-lang/rust/issues/46034
+        if: ${{ matrix.strip }}
+        run: ${{ matrix.strip }} ${{ env.OXIDE_LOCATION }}/*.node
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: bindings-${{ matrix.target }}
+          path: |
+            ${{ env.OXIDE_LOCATION }}/*.node
+            ${{ matrix.binary }}
+
+  oxide-build-apple-silicon:
+    name: Build Apple Silicon (OXIDE)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+
+      - name: Install Node.JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Setup rust target
+        run: rustup target add aarch64-apple-darwin
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build release
+        run: cd ${{ env.OXIDE_LOCATION }} && npm run build
+        env:
+          RUST_TARGET: aarch64-apple-darwin
+          JEMALLOC_SYS_WITH_LG_PAGE: 14
+
+      - name: Strip debug symbols # https://github.com/rust-lang/rust/issues/46034
+        run: strip -x ${{ env.OXIDE_LOCATION }}/*.node
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: bindings-aarch64-apple-darwin
+          path: |
+            ${{ env.OXIDE_LOCATION }}/*.node
+            ${{ env.APP_NAME }}
+
+  oxide-build-linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            strip: strip
+            image: docker.io/centos/nodejs-12-centos7
+          - target: aarch64-unknown-linux-gnu
+            strip: aarch64-linux-gnu-strip
+            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+            setup: apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y
+          - target: armv7-unknown-linux-gnueabihf
+            strip: arm-linux-gnueabihf-strip
+            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+            setup: apt install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
+          - target: aarch64-unknown-linux-musl
+            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            strip: aarch64-linux-musl-strip
+          - target: x86_64-unknown-linux-musl
+            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            strip: strip
+
+    name: Build ${{ matrix.target }} (OXIDE)
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Node.JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Setup cross compile toolchain
+        if: ${{ matrix.setup }}
+        run: ${{ matrix.setup }}
+
+      - name: Setup rust target
+        run: rustup target add ${{ matrix.target }}
+
+      # - name: Use cached oxide node_modules
+      #   id: cache-oxide
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ${{ env.OXIDE_LOCATION }}/node_modules
+      #     key: nodeModules-${{ hashFiles('${{ env.OXIDE_LOCATION }}/package-lock.json') }}-linux-${{ matrix.target }}-${{ env.NODE_VERSION }}
+      #     restore-keys: |
+      #       nodeModules-
+
+      - name: Oxide — npm install
+        # if: steps.cache-oxide.outputs.cache-hit != 'true'
+        run: cd ${{ env.OXIDE_LOCATION }} && npm install
+
+      - name: Build release
+        run: cd ${{ env.OXIDE_LOCATION }} && npm run build
+        env:
+          RUST_TARGET: ${{ matrix.target }}
+
+      - name: Strip debug symbols # https://github.com/rust-lang/rust/issues/46034
+        if: ${{ matrix.strip }}
+        run: ${{ matrix.strip }} ${{ env.OXIDE_LOCATION }}/*.node
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: bindings-${{ matrix.target }}
+          path: |
+            ${{ env.OXIDE_LOCATION }}/*.node
+            ${{ env.APP_NAME }}
+
+  oxide-release:
+    runs-on: ubuntu-latest
+    name: Build and release
+    needs:
+      - oxide-build
+      - oxide-build-linux
+      - oxide-build-apple-silicon
+    steps:
+      - uses: actions/checkout@v3
+
+      # - name: Use cached oxide node_modules
+      #   id: cache-oxide
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ${{ env.OXIDE_LOCATION }}/node_modules
+      #     key: nodeModules-${{ hashFiles('${{ env.OXIDE_LOCATION }}/package-lock.json') }}-ubuntu-latest-${{ env.NODE_VERSION }}
+      #     restore-keys: |
+      #       nodeModules-
+
+      - name: Oxide — npm install
+        # if: steps.cache-oxide.outputs.cache-hit != 'true'
+        run: cd ${{ env.OXIDE_LOCATION }} && npm install
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ${{ env.OXIDE_LOCATION }}
+
+      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Move artifacts
+        run: |
+          cd ${{ env.OXIDE_LOCATION }}
+          cp bindings-aarch64-apple-darwin/oxide/crates/node/* ./npm/darwin-arm64/
+          cp bindings-aarch64-unknown-linux-gnu/oxide/crates/node/* ./npm/linux-arm64-gnu/
+          cp bindings-aarch64-unknown-linux-musl/oxide/crates/node/* ./npm/linux-arm64-musl/
+          cp bindings-armv7-unknown-linux-gnueabihf/oxide/crates/node/* ./npm/linux-arm-gnueabihf/
+          cp bindings-x86_64-apple-darwin/* ./npm/darwin-x64/
+          cp bindings-x86_64-pc-windows-msvc/* ./npm/win32-x64-msvc/
+          cp bindings-x86_64-unknown-linux-gnu/oxide/crates/node/* ./npm/linux-x64-gnu/
+          cp bindings-x86_64-unknown-linux-musl/oxide/crates/node/* ./npm/linux-x64-musl/
+
+      - name: Resolve version
+        id: vars
+        run: |
+          echo "NPM_VERSION=0.0.0-insiders.$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Generate entry point
+        run: npm run build --prefix ${{ env.OXIDE_LOCATION }}
+
+      - name: Publish to npm
+        run: |
+          for pkg in ${{ env.OXIDE_LOCATION }}/npm/*; do
+            echo "Publishing $pkg..."
+            cd $pkg
+            npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
+            npm publish --tag insiders --access public
+            cd -
+          done
+
+          echo "Publishing ${{ env.APP_NAME }}...";
+          cd ${{ env.OXIDE_LOCATION }}
+          npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
+          sed "s#\"0.0.0\"#\"${{ env.NPM_VERSION }}\"#g" package.json > package_updated.json
+          mv package_updated.json package.json
+          npm publish --tag insiders --access public
+          cd -
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  tailwind_oxide_release:
+    runs-on: ubuntu-latest
+    name: Build and release Tailwind CSS
+
+    needs:
+      - oxide-release
+
+    strategy:
+      matrix:
+        node-version: [14]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Resolve version
+        id: vars
+        run: |
+          echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "OXIDE_NPM_VERSION=0.0.0-insiders.$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Setup `@tailwindcss/oxide` version
+        run: |
+          sed "s#\"@tailwindcss/oxide\": \".*\"#\"@tailwindcss/oxide\": \"${{ env.OXIDE_NPM_VERSION }}\"#" package.json > package_updated.json
+          mv package_updated.json package.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Tailwind CSS
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: 'Version based on commit: 0.0.0-oxide.${{ env.SHA_SHORT }}'
+        run: npm version 0.0.0-oxide.${{ env.SHA_SHORT }} --force --no-git-tag-version
+
+      - name: Publish
+        run: npm publish --tag oxide
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

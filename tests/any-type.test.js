@@ -199,17 +199,17 @@ test('any types are set on correct plugins', () => {
         top: var(--any-value);
         bottom: var(--any-value);
       }
-      .top-\[var\(--any-value\)\] {
-        top: var(--any-value);
-      }
-      .right-\[var\(--any-value\)\] {
-        right: var(--any-value);
-      }
       .bottom-\[var\(--any-value\)\] {
         bottom: var(--any-value);
       }
       .left-\[var\(--any-value\)\] {
         left: var(--any-value);
+      }
+      .right-\[var\(--any-value\)\] {
+        right: var(--any-value);
+      }
+      .top-\[var\(--any-value\)\] {
+        top: var(--any-value);
       }
       .z-\[var\(--any-value\)\] {
         z-index: var(--any-value);
@@ -246,17 +246,17 @@ test('any types are set on correct plugins', () => {
         margin-top: var(--any-value);
         margin-bottom: var(--any-value);
       }
-      .mt-\[var\(--any-value\)\] {
-        margin-top: var(--any-value);
-      }
-      .mr-\[var\(--any-value\)\] {
-        margin-right: var(--any-value);
-      }
       .mb-\[var\(--any-value\)\] {
         margin-bottom: var(--any-value);
       }
       .ml-\[var\(--any-value\)\] {
         margin-left: var(--any-value);
+      }
+      .mr-\[var\(--any-value\)\] {
+        margin-right: var(--any-value);
+      }
+      .mt-\[var\(--any-value\)\] {
+        margin-top: var(--any-value);
       }
       .aspect-\[var\(--any-value\)\] {
         aspect-ratio: var(--any-value);
@@ -367,17 +367,17 @@ test('any types are set on correct plugins', () => {
         scroll-margin-top: var(--any-value);
         scroll-margin-bottom: var(--any-value);
       }
-      .scroll-mt-\[var\(--any-value\)\] {
-        scroll-margin-top: var(--any-value);
-      }
-      .scroll-mr-\[var\(--any-value\)\] {
-        scroll-margin-right: var(--any-value);
-      }
       .scroll-mb-\[var\(--any-value\)\] {
         scroll-margin-bottom: var(--any-value);
       }
       .scroll-ml-\[var\(--any-value\)\] {
         scroll-margin-left: var(--any-value);
+      }
+      .scroll-mr-\[var\(--any-value\)\] {
+        scroll-margin-right: var(--any-value);
+      }
+      .scroll-mt-\[var\(--any-value\)\] {
+        scroll-margin-top: var(--any-value);
       }
       .scroll-p-\[var\(--any-value\)\] {
         scroll-padding: var(--any-value);
@@ -390,17 +390,17 @@ test('any types are set on correct plugins', () => {
         scroll-padding-top: var(--any-value);
         scroll-padding-bottom: var(--any-value);
       }
-      .scroll-pt-\[var\(--any-value\)\] {
-        scroll-padding-top: var(--any-value);
-      }
-      .scroll-pr-\[var\(--any-value\)\] {
-        scroll-padding-right: var(--any-value);
-      }
       .scroll-pb-\[var\(--any-value\)\] {
         scroll-padding-bottom: var(--any-value);
       }
       .scroll-pl-\[var\(--any-value\)\] {
         scroll-padding-left: var(--any-value);
+      }
+      .scroll-pr-\[var\(--any-value\)\] {
+        scroll-padding-right: var(--any-value);
+      }
+      .scroll-pt-\[var\(--any-value\)\] {
+        scroll-padding-top: var(--any-value);
       }
       .list-\[var\(--any-value\)\] {
         list-style-type: var(--any-value);
@@ -453,14 +453,6 @@ test('any types are set on correct plugins', () => {
       .rounded-\[var\(--any-value\)\] {
         border-radius: var(--any-value);
       }
-      .rounded-t-\[var\(--any-value\)\] {
-        border-top-left-radius: var(--any-value);
-        border-top-right-radius: var(--any-value);
-      }
-      .rounded-r-\[var\(--any-value\)\] {
-        border-top-right-radius: var(--any-value);
-        border-bottom-right-radius: var(--any-value);
-      }
       .rounded-b-\[var\(--any-value\)\] {
         border-bottom-right-radius: var(--any-value);
         border-bottom-left-radius: var(--any-value);
@@ -469,17 +461,25 @@ test('any types are set on correct plugins', () => {
         border-top-left-radius: var(--any-value);
         border-bottom-left-radius: var(--any-value);
       }
+      .rounded-r-\[var\(--any-value\)\] {
+        border-top-right-radius: var(--any-value);
+        border-bottom-right-radius: var(--any-value);
+      }
+      .rounded-t-\[var\(--any-value\)\] {
+        border-top-left-radius: var(--any-value);
+        border-top-right-radius: var(--any-value);
+      }
+      .rounded-bl-\[var\(--any-value\)\] {
+        border-bottom-left-radius: var(--any-value);
+      }
+      .rounded-br-\[var\(--any-value\)\] {
+        border-bottom-right-radius: var(--any-value);
+      }
       .rounded-tl-\[var\(--any-value\)\] {
         border-top-left-radius: var(--any-value);
       }
       .rounded-tr-\[var\(--any-value\)\] {
         border-top-right-radius: var(--any-value);
-      }
-      .rounded-br-\[var\(--any-value\)\] {
-        border-bottom-right-radius: var(--any-value);
-      }
-      .rounded-bl-\[var\(--any-value\)\] {
-        border-bottom-left-radius: var(--any-value);
       }
       .border-\[var\(--any-value\)\] {
         border-color: var(--any-value);
@@ -492,17 +492,17 @@ test('any types are set on correct plugins', () => {
         border-top-color: var(--any-value);
         border-bottom-color: var(--any-value);
       }
-      .border-t-\[var\(--any-value\)\] {
-        border-top-color: var(--any-value);
-      }
-      .border-r-\[var\(--any-value\)\] {
-        border-right-color: var(--any-value);
-      }
       .border-b-\[var\(--any-value\)\] {
         border-bottom-color: var(--any-value);
       }
       .border-l-\[var\(--any-value\)\] {
         border-left-color: var(--any-value);
+      }
+      .border-r-\[var\(--any-value\)\] {
+        border-right-color: var(--any-value);
+      }
+      .border-t-\[var\(--any-value\)\] {
+        border-top-color: var(--any-value);
       }
       .border-opacity-\[var\(--any-value\)\] {
         --tw-border-opacity: var(--any-value);
@@ -545,17 +545,17 @@ test('any types are set on correct plugins', () => {
         padding-top: var(--any-value);
         padding-bottom: var(--any-value);
       }
-      .pt-\[var\(--any-value\)\] {
-        padding-top: var(--any-value);
-      }
-      .pr-\[var\(--any-value\)\] {
-        padding-right: var(--any-value);
-      }
       .pb-\[var\(--any-value\)\] {
         padding-bottom: var(--any-value);
       }
       .pl-\[var\(--any-value\)\] {
         padding-left: var(--any-value);
+      }
+      .pr-\[var\(--any-value\)\] {
+        padding-right: var(--any-value);
+      }
+      .pt-\[var\(--any-value\)\] {
+        padding-top: var(--any-value);
       }
       .indent-\[var\(--any-value\)\] {
         text-indent: var(--any-value);

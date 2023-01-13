@@ -1,9 +1,16 @@
 import fs from 'fs'
 import path from 'path'
 
+import { env } from '../src/lib/sharedState'
 import { run, css } from './util/run'
 
-test('it works', () => {
+afterEach(() => {
+  env.OXIDE = false
+})
+
+test.each([[true], [false]])('it works (using Rust: %p)', (useOxide) => {
+  env.OXIDE = useOxide
+
   let config = {
     darkMode: 'class',
     content: [path.resolve(__dirname, './kitchen-sink.test.html')],

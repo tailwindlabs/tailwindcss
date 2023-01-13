@@ -11,6 +11,8 @@ permissions:
 
 env:
   CI: true
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
   test:
@@ -29,6 +31,7 @@ jobs:
           - webpack-4
           - webpack-5
         node-version: [16]
+      fail-fast: false
 
     steps:
       - uses: actions/checkout@v3
@@ -36,36 +39,31 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      #     cache: 'npm'
-      #
-      # - name: Use cached node_modules (tailwindcss)
-      #   id: cache-tailwindcss
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: node_modules
-      #     key: nodeModules-${{ hashFiles('./package-lock.json') }}-${{ matrix.node-version }}-tailwindcss
-      #     restore-keys: |
-      #       nodeModules-
+          cache: 'npm'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
 
       - name: Install dependencies
-        # if: steps.cache-tailwindcss.outputs.cache-hit != 'true'
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npm run prepublishOnly
-
-      - name: Use cached node_modules (integrations)
-        id: cache-integrations
-        uses: actions/cache@v3
-        with:
-          path: ./integrations/**/node_modules
-          key: nodeModules-${{ hashFiles('./integrations/**/package-lock.json') }}-${{ matrix.node-version }}-${{ matrix.integration }}-integrations
-          restore-keys: |
-            nodeModules-
-
-      - name: Install shared dependencies
-        if: steps.cache-integrations.outputs.cache-hit != 'true'
-        run: npm run install:integrations
+        run: npx turbo run oxide:build --filter=//
 
       - name: Test ${{ matrix.integration }}
-        run: npm test --prefix ./integrations/${{ matrix.integration }}
+        run: npx turbo run test --filter=./integrations/${{ matrix.integration }}

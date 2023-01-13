@@ -1,7 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
+import { env } from '../src/lib/sharedState'
 import { run, html, css } from './util/run'
+
+let oxideSkip = env.OXIDE ? test.skip : test
 
 test('arbitrary values', () => {
   let config = {
@@ -15,6 +18,23 @@ test('arbitrary values', () => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
+
+oxideSkip(
+  'should only detect classes with arbitrary values that are properly terminated after the arbitrary value',
+  () => {
+    let config = {
+      content: [
+        {
+          raw: html`<div class="w-[do-not-generate-this]w-[it-is-invalid-syntax]"></div>`,
+        },
+      ],
+    }
+
+    return run('@tailwind utilities', config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css``)
+    })
+  }
+)
 
 it('should be possible to differentiate between decoration utilities', () => {
   let config = {
@@ -81,38 +101,31 @@ it('should support arbitrary values for various background utilities', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      .bg-red-500 {
-        --tw-bg-opacity: 1;
-        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-      }
-
       .bg-\[\#ff0000\] {
         --tw-bg-opacity: 1;
         background-color: rgb(255 0 0 / var(--tw-bg-opacity));
       }
-
-      .bg-\[rgb\(var\(--bg-color\)\)\] {
-        background-color: rgb(var(--bg-color));
-      }
-
-      .bg-\[hsl\(var\(--bg-color\)\)\] {
-        background-color: hsl(var(--bg-color));
-      }
-
       .bg-\[color\:var\(--bg-color\)\] {
         background-color: var(--bg-color);
       }
-
-      .bg-gradient-to-r {
-        background-image: linear-gradient(to right, var(--tw-gradient-stops));
+      .bg-\[hsl\(var\(--bg-color\)\)\] {
+        background-color: hsl(var(--bg-color));
       }
-
+      .bg-\[rgb\(var\(--bg-color\)\)\] {
+        background-color: rgb(var(--bg-color));
+      }
+      .bg-red-500 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+      }
       .bg-\[url\(\'\/image-1-0\.png\'\)\] {
         background-image: url('/image-1-0.png');
       }
-
       .bg-\[url\:var\(--image-url\)\] {
         background-image: var(--image-url);
+      }
+      .bg-gradient-to-r {
+        background-image: linear-gradient(to right, var(--tw-gradient-stops));
       }
     `)
   })
@@ -228,8 +241,8 @@ it('should convert _ to spaces', () => {
           var(--tw-drop-shadow);
       }
 
-      .content-\\[_hello_world_\\] {
-        --tw-content: hello world;
+      .content-\\[\\'__hello__world__\\'\\] {
+        --tw-content: '  hello  world  ';
         content: var(--tw-content);
       }
 
@@ -238,8 +251,8 @@ it('should convert _ to spaces', () => {
         content: var(--tw-content);
       }
 
-      .content-\\[\\'__hello__world__\\'\\] {
-        --tw-content: '  hello  world  ';
+      .content-\\[_hello_world_\\] {
+        --tw-content: hello world;
         content: var(--tw-content);
       }
     `)
@@ -497,11 +510,11 @@ it('should correctly validate combination of percentage and length', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .bg-\[50px_10\%\] {
-        background-position: 50px 10%;
-      }
       .bg-\[50\%_10\%\] {
         background-position: 50% 10%;
+      }
+      .bg-\[50px_10\%\] {
+        background-position: 50px 10%;
       }
       .bg-\[50px_10px\] {
         background-position: 50px 10px;
@@ -560,11 +573,11 @@ it('can use CSS variables as arbitrary values without `var()`', () => {
       .w-\[--width-var\] {
         width: var(--width-var);
       }
-      .bg-\[--color-var\] {
-        background-color: var(--color-var);
-      }
       .bg-\[--color-var\2c \#000\] {
         background-color: var(--color-var, #000);
+      }
+      .bg-\[--color-var\] {
+        background-color: var(--color-var);
       }
       .bg-\[length\:--size-var\] {
         background-size: var(--size-var);

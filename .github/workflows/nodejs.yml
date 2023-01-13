@@ -14,6 +14,8 @@ permissions:
 
 env:
   CI: true
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
   build:
@@ -21,7 +23,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12, 14, 16]
+        node-version: [12, 14, 16, 18]
 
     steps:
       - uses: actions/checkout@v3
@@ -29,26 +31,37 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      #   cache: 'npm'
-      #
-      # - name: Use cached node_modules
-      #   id: cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: node_modules
-      #     key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
-      #     restore-keys: |
-      #       nodeModules-
+          # cache: 'npm'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
 
       - name: Install dependencies
-        # if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npm run build
+        run: npx turbo run oxide:build --filter=//
 
-      - name: Test
-        run: npm test
+      - name: Test (default)
+        run: npx turbo run test --filter=//
+
+      - name: Test (oxide)
+        run: OXIDE=1 npx turbo run test --filter=//
 
   lint:
     runs-on: ubuntu-latest
@@ -63,20 +76,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      #   cache: 'npm'
-      #
-      # - name: Use cached node_modules
-      #   id: cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: node_modules
-      #     key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
-      #     restore-keys: |
-      #       nodeModules-
+          cache: 'npm'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
-        # if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
       - name: Lint
-        run: npm run style
+        run: npx turbo run style --filter=//
