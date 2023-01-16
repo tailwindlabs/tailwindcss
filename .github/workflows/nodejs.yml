@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [master]
+    branches: [master, 'feat/improve-ci']
   pull_request:
     branches: [master]
 
