@@ -33,6 +33,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           # cache: 'npm'
 
+      - name: Install newer version of npm on older versions of Node.js
+        if: matrix.node-version < 16
+        run: npm install -g npm@7
+
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
