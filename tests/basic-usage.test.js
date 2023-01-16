@@ -19,7 +19,9 @@ test('basic usage', () => {
   `
 
   return run(input, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './basic-usage.test.css')
+    let expectedPath = env.OXIDE
+      ? path.resolve(__dirname, './basic-usage.oxide.test.css')
+      : path.resolve(__dirname, './basic-usage.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)

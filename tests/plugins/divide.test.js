@@ -1,4 +1,5 @@
 import { run, html, css, defaults } from '../util/run'
+import { env } from '../../src/lib/sharedState'
 
 it('should add the divide styles for divide-y and a default border color', () => {
   let config = {
@@ -25,16 +26,28 @@ it('should add the divide styles for divide-x and a default border color', () =>
     corePlugins: { preflight: false },
   }
 
-  return run('@tailwind base; @tailwind utilities;', config).then((result) => {
-    expect(result.css).toMatchCss(css`
-      ${defaults}
+  let expected = env.OXIDE
+    ? css`
+        ${defaults}
 
-      .divide-x > :not([hidden]) ~ :not([hidden]) {
-        --tw-divide-x-reverse: 0;
-        border-right-width: calc(1px * var(--tw-divide-x-reverse));
-        border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-      }
-    `)
+        .divide-x > :not([hidden]) ~ :not([hidden]) {
+          --tw-divide-x-reverse: 0;
+          border-inline-end-width: calc(1px * var(--tw-divide-x-reverse));
+          border-inline-start-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+        }
+      `
+    : css`
+        ${defaults}
+
+        .divide-x > :not([hidden]) ~ :not([hidden]) {
+          --tw-divide-x-reverse: 0;
+          border-right-width: calc(1px * var(--tw-divide-x-reverse));
+          border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+        }
+      `
+
+  return run('@tailwind base; @tailwind utilities;', config).then((result) => {
+    expect(result.css).toMatchCss(expected)
   })
 })
 

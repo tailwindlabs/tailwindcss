@@ -23,7 +23,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12, 14, 16, 18]
+        node-version: [16]
 
     steps:
       - uses: actions/checkout@v3
@@ -32,6 +32,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           # cache: 'npm'
+
+      - name: Install newer version of npm on older versions of Node.js
+        if: matrix.node-version < 16
+        run: npm install -g npm@7
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -57,11 +61,8 @@ jobs:
       - name: Build Tailwind CSS
         run: npx turbo run oxide:build --filter=//
 
-      - name: Test (default)
+      - name: Test
         run: npx turbo run test --filter=//
-
-      - name: Test (oxide)
-        run: OXIDE=1 npx turbo run test --filter=//
 
   lint:
     runs-on: ubuntu-latest

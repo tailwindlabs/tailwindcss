@@ -141,7 +141,7 @@ test.each([[true], [false]])('it works (using Rust: %p)', (useOxide) => {
       @apply font-bold group-hover:font-normal;
     }
     .list {
-      @apply space-x-4;
+      @apply space-y-4;
     }
     .nested {
       .example {

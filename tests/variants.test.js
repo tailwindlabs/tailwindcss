@@ -3,6 +3,7 @@ import path from 'path'
 import postcss from 'postcss'
 
 import { run, css, html, defaults } from './util/run'
+import { env } from '../src/lib/sharedState'
 
 test('variants', () => {
   let config = {
@@ -18,7 +19,9 @@ test('variants', () => {
   `
 
   return run(input, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './variants.test.css')
+    let expectedPath = env.OXIDE
+      ? path.resolve(__dirname, './variants.oxide.test.css')
+      : path.resolve(__dirname, './variants.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
