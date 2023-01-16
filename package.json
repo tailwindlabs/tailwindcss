@@ -23,7 +23,7 @@
     "rebuild-fixtures": "npm run build && node -r @swc/register scripts/rebuildFixtures.js",
     "style": "eslint .",
     "pretest": "npm run generate",
-    "test": "jest",
+    "test": "jest && OXIDE=1 jest",
     "test:integrations": "npm run test --prefix ./integrations",
     "install:integrations": "node scripts/install-integrations.js",
     "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",

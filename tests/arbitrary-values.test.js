@@ -12,7 +12,9 @@ test('arbitrary values', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './arbitrary-values.test.css')
+    let expectedPath = env.OXIDE
+      ? path.resolve(__dirname, './arbitrary-values.oxide.test.css')
+      : path.resolve(__dirname, './arbitrary-values.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
