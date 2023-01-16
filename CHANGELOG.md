@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix missing `blocklist` member in the `Config` type ([#10239](https://github.com/tailwindlabs/tailwindcss/pull/10239))
 - Escape group names in selectors ([#10276](https://github.com/tailwindlabs/tailwindcss/pull/10276))
 - Consider earlier variants before sorting functions ([#10288](https://github.com/tailwindlabs/tailwindcss/pull/10288))
+- Allow variants with slashes ([#10336](https://github.com/tailwindlabs/tailwindcss/pull/10336))
 
 ### Changed
 

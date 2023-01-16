@@ -1090,6 +1090,76 @@ test('variant functions returning arrays should output correct results when nest
   `)
 })
 
+test('variants with slashes in them work', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="ar-1/10:text-red-500">ar-1/10</div> `,
+      },
+    ],
+    theme: {
+      extend: {
+        screens: {
+          'ar-1/10': { raw: '(min-aspect-ratio: 1/10)' },
+        },
+      },
+    },
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-aspect-ratio: 1/10) {
+        .ar-1\/10\:text-red-500 {
+          --tw-text-opacity: 1;
+          color: rgb(239 68 68 / var(--tw-text-opacity));
+        }
+      }
+    `)
+  })
+})
+
+test('variants with slashes suspport modifiers', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="ar-1/10/20:text-red-500">ar-1/10</div> `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      function ({ matchVariant }) {
+        matchVariant(
+          'ar',
+          (value, { modifier }) => {
+            return [`@media (min-aspect-ratio: ${value}) and (foo: ${modifier})`]
+          },
+          { values: { '1/10': '1/10' } }
+        )
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-aspect-ratio: 1/10) and (foo: 20) {
+        .ar-1\/10\/20\:text-red-500 {
+          --tw-text-opacity: 1;
+          color: rgb(239 68 68 / var(--tw-text-opacity));
+        }
+      }
+    `)
+  })
+})
+
 test('arbitrary variant selectors should not re-order scrollbar pseudo classes', async () => {
   let config = {
     content: [

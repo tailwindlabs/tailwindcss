@@ -153,7 +153,7 @@ function applyVariant(variant, matches, context) {
   // Retrieve "modifier"
   {
     let match = /(.*)\/(.*)$/g.exec(variant)
-    if (match) {
+    if (match && !context.variantMap.has(variant)) {
       variant = match[1]
       args.modifier = match[2]
 
