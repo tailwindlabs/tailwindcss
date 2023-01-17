@@ -17,6 +17,9 @@
     "oxide/crates/node"
   ],
   "scripts": {
+    "prebuild": "npm run generate && rimraf lib",
+    "build": "swc src --out-dir lib --copy-files",
+    "postbuild": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
     "rebuild-fixtures": "npm run build && node -r @swc/register scripts/rebuildFixtures.js",
     "style": "eslint .",
     "pretest": "npm run generate",
@@ -28,12 +31,9 @@
     "generate": "npm run generate:plugin-list && npm run generate:types",
     "release-channel": "node ./scripts/release-channel.js",
     "release-notes": "node ./scripts/release-notes.js",
-    "install": "npm run install:all --prefix ./oxide",
-    "dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run stable:build -- --watch' 'npm run --prefix ./oxide dev:node'",
-    "build": "npm run --prefix ./oxide build:node && npm run stable:build",
-    "prestable:build": "npm run generate && rimraf lib",
-    "stable:build": "swc src --out-dir lib --copy-files",
-    "poststable:build": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
+    "oxide:install": "npm run install:all --prefix ./oxide",
+    "oxide:dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run build -- --watch' 'npm run --prefix ./oxide dev:node'",
+    "oxide:build": "npm run --prefix ./oxide build:node && npm run build",
     "prepublishOnly": "npm install --force && npm run build"
   },
   "files": [
@@ -45,6 +45,7 @@
     "stubs/*.stub.js",
     "nesting/*",
     "types/**/*",
+    "oxide-node-api-shim",
     "*.d.ts",
     "*.css",
     "*.js"
@@ -66,7 +67,7 @@
     "prettier": "^2.8.1",
     "rimraf": "^3.0.0",
     "source-map-js": "^1.0.2",
-    "turbo": "^1.7.0"
+    "turbo": "^1.6.3"
   },
   "peerDependencies": {
     "postcss": "^8.0.9"
