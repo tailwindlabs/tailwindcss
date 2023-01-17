@@ -28,7 +28,6 @@
     "generate": "npm run generate:plugin-list && npm run generate:types",
     "release-channel": "node ./scripts/release-channel.js",
     "release-notes": "node ./scripts/release-notes.js",
-    "install": "npm run install:all --prefix ./oxide",
     "dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run stable:build -- --watch' 'npm run --prefix ./oxide dev:node'",
     "build": "npm run --prefix ./oxide build:node && npm run stable:build",
     "prestable:build": "npm run generate && rimraf lib",
