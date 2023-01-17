@@ -1,7 +1,9 @@
+let OXIDE_DEFAULT_ENABLED = true
+
 export const env = {
   NODE_ENV: process.env.NODE_ENV,
   DEBUG: resolveDebug(process.env.DEBUG),
-  OXIDE: process.env.OXIDE,
+  OXIDE: resovleBoolean(process.env.OXIDE, OXIDE_DEFAULT_ENABLED),
 }
 export const contextMap = new Map()
 export const configContextMap = new Map()
@@ -10,6 +12,18 @@ export const sourceHashMap = new Map()
 export const NOT_ON_DEMAND = new String('*')
 
 export const NONE = Symbol('__NONE__')
+
+function resovleBoolean(value, defaultValue) {
+  if (value === undefined) {
+    return defaultValue
+  }
+
+  if (value === '0' || value === 'false') {
+    return false
+  }
+
+  return true
+}
 
 export function resolveDebug(debug) {
   if (debug === undefined) {

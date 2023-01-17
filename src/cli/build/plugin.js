@@ -10,7 +10,7 @@ import loadOptions from 'postcss-load-config/src/options' // Little bit scary, l
 import tailwind from '../../processTailwindFeatures'
 import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport } from './deps'
 import { formatNodes, drainStdin, outputFile } from './utils'
-import { env } from '../shared'
+import { env } from '../../lib/sharedState'
 import resolveConfig from '../../../resolveConfig.js'
 import getModuleDependencies from '../../lib/getModuleDependencies.js'
 import { parseCandidateFiles } from '../../lib/content.js'

@@ -8,7 +8,7 @@ import loadOptions from 'postcss-load-config/src/options' // Little bit scary, l
 import tailwind from '../../../processTailwindFeatures'
 import { loadPostcss, loadPostcssImport, lightningcss } from './deps'
 import { formatNodes, drainStdin, outputFile } from './utils'
-import { env } from '../shared'
+import { env } from '../../../lib/sharedState'
 import resolveConfig from '../../../../resolveConfig'
 import getModuleDependencies from '../../../lib/getModuleDependencies'
 import { parseCandidateFiles } from '../../../lib/content'
