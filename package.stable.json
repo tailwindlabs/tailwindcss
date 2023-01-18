@@ -27,9 +27,6 @@
     "generate": "npm run generate:plugin-list && npm run generate:types",
     "release-channel": "node ./scripts/release-channel.js",
     "release-notes": "node ./scripts/release-notes.js",
-    "oxide:install": "npm run install:all --prefix ./oxide",
-    "oxide:dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run build -- --watch' 'npm run --prefix ./oxide dev:node'",
-    "oxide:build": "npm run --prefix ./oxide build:node && npm run build",
     "prepublishOnly": "npm install --force && npm run build"
   },
   "files": [
