@@ -12,10 +12,6 @@
     "tailwind": "lib/cli.js",
     "tailwindcss": "lib/cli.js"
   },
-  "workspaces": [
-    "integrations/*",
-    "oxide/crates/node"
-  ],
   "scripts": {
     "prebuild": "npm run generate && rimraf lib",
     "build": "swc src --out-dir lib --copy-files",
