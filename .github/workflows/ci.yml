@@ -1,4 +1,4 @@
-name: CI
+name: Node.js CI
 
 on:
   push:
@@ -14,7 +14,6 @@ env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
   CACHE_PREFIX: oxide
-  NODE_VERSIONS: [16]
 
 jobs:
   build:
@@ -22,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ${{ env.NODE_VERSIONS }}
+        node-version: [16]
 
     steps:
       - uses: actions/checkout@v3
@@ -57,30 +56,6 @@ jobs:
 
       - name: Test
         run: npx turbo run test --filter=//
-
-  lint:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: ${{ env.NODE_VERSIONS }}
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install dependencies
-        run: npm install
 
       - name: Lint
         run: npx turbo run style --filter=//

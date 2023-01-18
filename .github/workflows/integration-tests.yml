@@ -14,7 +14,6 @@ env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
   CACHE_PREFIX: oxide
-  NODE_VERSIONS: [16]
 
 jobs:
   test:
@@ -32,7 +31,7 @@ jobs:
           - vite
           - webpack-4
           - webpack-5
-        node-version: ${{ env.NODE_VERSIONS }}
+        node-version: [16]
       fail-fast: false
 
     steps:
