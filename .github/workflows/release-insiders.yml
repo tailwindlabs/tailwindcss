@@ -11,7 +11,7 @@ env:
   RELEASE_CHANNEL: oxide-insiders
 
 jobs:
-  oxide-build:
+  build:
     strategy:
       fail-fast: false
       matrix:
@@ -82,7 +82,7 @@ jobs:
             ${{ env.OXIDE_LOCATION }}/*.node
             ${{ matrix.binary }}
 
-  oxide-build-apple-silicon:
+  build-apple-silicon:
     name: Build Apple Silicon (OXIDE)
     runs-on: macos-latest
     steps:
@@ -141,7 +141,7 @@ jobs:
             ${{ env.OXIDE_LOCATION }}/*.node
             ${{ env.APP_NAME }}
 
-  oxide-build-linux:
+  build-linux:
     strategy:
       fail-fast: false
       matrix:
@@ -229,13 +229,13 @@ jobs:
             ${{ env.OXIDE_LOCATION }}/*.node
             ${{ env.APP_NAME }}
 
-  oxide-release:
+  release:
     runs-on: ubuntu-latest
     name: Build and release
     needs:
-      - oxide-build
-      - oxide-build-linux
-      - oxide-build-apple-silicon
+      - build
+      - build-linux
+      - build-apple-silicon
     steps:
       - uses: actions/checkout@v3
 
@@ -314,7 +314,7 @@ jobs:
     name: Build and release Tailwind CSS
 
     needs:
-      - oxide-release
+      - release
 
     strategy:
       matrix:
