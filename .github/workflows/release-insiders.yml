@@ -51,7 +51,7 @@ jobs:
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npx turbo run oxide:build --filter=//
+        run: npx turbo run build --filter=//
 
       - name: Test
         run: npx turbo run test --filter=//

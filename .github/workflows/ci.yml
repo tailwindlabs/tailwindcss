@@ -1,7 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: CI
 
 on:
   push:
@@ -16,6 +13,8 @@ env:
   CI: true
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  CACHE_PREFIX: oxide
+  NODE_VERSIONS: [16]
 
 jobs:
   build:
@@ -23,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16]
+        node-version: ${{ env.NODE_VERSIONS }}
 
     steps:
       - uses: actions/checkout@v3
@@ -31,17 +30,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          # cache: 'npm'
-
-      - name: Install newer version of npm on older versions of Node.js
-        if: matrix.node-version < 16
-        run: npm install -g npm@7
 
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -59,7 +53,7 @@ jobs:
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npx turbo run oxide:build --filter=//
+        run: npx turbo run build --filter=//
 
       - name: Test
         run: npx turbo run test --filter=//
@@ -69,7 +63,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16]
+        node-version: ${{ env.NODE_VERSIONS }}
 
     steps:
       - uses: actions/checkout@v3
@@ -83,7 +77,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
         run: npm install

@@ -50,7 +50,7 @@ jobs:
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npm run oxide:build
+        run: npm run build
 
       - name: Test
         run: npm test
