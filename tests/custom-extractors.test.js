@@ -1,7 +1,4 @@
-import fs from 'fs'
-import path from 'path'
-
-import { run, css } from './util/run'
+import { run, html, css } from './util/run'
 import { env } from '../src/lib/sharedState'
 
 function customExtractor(content) {
@@ -9,8 +6,21 @@ function customExtractor(content) {
   return matches ? matches[1].split(/\s+/) : []
 }
 
-let expectedPath = path.resolve(__dirname, './custom-extractors.test.css')
-let expected = fs.readFileSync(expectedPath, 'utf8')
+let sharedHtml = html`
+  <div class="text-indigo-500 bg-white">hello world</div>
+  <span>text-red-500 shouldn't appear in the output</span>
+`
+
+let expected = css`
+  .bg-white {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  }
+  .text-indigo-500 {
+    --tw-text-opacity: 1;
+    color: rgb(99 102 241 / var(--tw-text-opacity));
+  }
+`
 
 let group = env.OXIDE ? describe.skip : describe
 
@@ -18,7 +28,7 @@ group('modern', () => {
   test('extract.DEFAULT', () => {
     let config = {
       content: {
-        files: [path.resolve(__dirname, './custom-extractors.test.html')],
+        files: [{ raw: sharedHtml }],
         extract: {
           DEFAULT: customExtractor,
         },
@@ -33,7 +43,7 @@ group('modern', () => {
   test('extract.{extension}', () => {
     let config = {
       content: {
-        files: [path.resolve(__dirname, './custom-extractors.test.html')],
+        files: [{ raw: sharedHtml }],
         extract: {
           html: customExtractor,
         },
@@ -48,7 +58,7 @@ group('modern', () => {
   test('extract function', () => {
     let config = {
       content: {
-        files: [path.resolve(__dirname, './custom-extractors.test.html')],
+        files: [{ raw: sharedHtml }],
         extract: customExtractor,
       },
     }
@@ -63,7 +73,7 @@ group('modern', () => {
       content: {
         files: [
           {
-            raw: fs.readFileSync(path.resolve(__dirname, './raw-content.test.html'), 'utf8'),
+            raw: sharedHtml,
             extension: 'html',
           },
         ],
@@ -88,7 +98,7 @@ group('legacy', () => {
   test('defaultExtractor', () => {
     let config = {
       content: {
-        files: [path.resolve(__dirname, './custom-extractors.test.html')],
+        files: [{ raw: sharedHtml }],
         options: {
           defaultExtractor: customExtractor,
         },
@@ -103,7 +113,7 @@ group('legacy', () => {
   test('extractors array', () => {
     let config = {
       content: {
-        files: [path.resolve(__dirname, './custom-extractors.test.html')],
+        files: [{ raw: sharedHtml }],
         options: {
           extractors: [
             {

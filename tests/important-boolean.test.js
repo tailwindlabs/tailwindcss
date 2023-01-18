@@ -2,13 +2,30 @@ import fs from 'fs'
 import path from 'path'
 import * as sharedState from '../src/lib/sharedState'
 
-import { run, css, html } from './util/run'
+import { run, css, html, defaults } from './util/run'
 
 test('important boolean', () => {
   let config = {
     important: true,
     darkMode: 'class',
-    content: [path.resolve(__dirname, './important-boolean.test.html')],
+    content: [
+      {
+        raw: html`
+          <div class="container"></div>
+          <div class="btn"></div>
+          <div class="animate-spin"></div>
+          <div class="custom-util"></div>
+          <div class="custom-component"></div>
+          <div class="custom-important-component"></div>
+          <div class="font-bold"></div>
+          <div class="md:hover:text-right"></div>
+          <div class="motion-safe:hover:text-center"></div>
+          <div class="dark:focus:text-left"></div>
+          <div class="group-hover:focus-within:text-left"></div>
+          <div class="rtl:active:text-center"></div>
+        `,
+      },
+    ],
     corePlugins: { preflight: false },
     plugins: [
       function ({ addComponents, addUtilities }) {
@@ -58,10 +75,85 @@ test('important boolean', () => {
   `
 
   return run(input, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './important-boolean.test.css')
-    let expected = fs.readFileSync(expectedPath, 'utf8')
-
-    expect(result.css).toMatchFormattedCss(expected)
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+      .container {
+        width: 100%;
+      }
+      @media (min-width: 640px) {
+        .container {
+          max-width: 640px;
+        }
+      }
+      @media (min-width: 768px) {
+        .container {
+          max-width: 768px;
+        }
+      }
+      @media (min-width: 1024px) {
+        .container {
+          max-width: 1024px;
+        }
+      }
+      @media (min-width: 1280px) {
+        .container {
+          max-width: 1280px;
+        }
+      }
+      @media (min-width: 1536px) {
+        .container {
+          max-width: 1536px;
+        }
+      }
+      .btn {
+        button: yes !important;
+      }
+      @font-face {
+        font-family: Inter;
+      }
+      @page {
+        margin: 1cm;
+      }
+      .custom-component {
+        font-weight: 700;
+      }
+      .custom-important-component {
+        text-align: center !important;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .animate-spin {
+        animation: spin 1s linear infinite !important;
+      }
+      .font-bold {
+        font-weight: 700 !important;
+      }
+      .custom-util {
+        button: no;
+      }
+      .group:hover .group-hover\:focus-within\:text-left:focus-within {
+        text-align: left !important;
+      }
+      [dir='rtl'] .rtl\:active\:text-center:active {
+        text-align: center !important;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .motion-safe\:hover\:text-center:hover {
+          text-align: center !important;
+        }
+      }
+      .dark .dark\:focus\:text-left:focus {
+        text-align: left !important;
+      }
+      @media (min-width: 768px) {
+        .md\:hover\:text-right:hover {
+          text-align: right !important;
+        }
+      }
+    `)
   })
 })
 

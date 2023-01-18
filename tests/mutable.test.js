@@ -1,8 +1,7 @@
-import postcss from 'postcss'
-import fs from 'fs'
 import path from 'path'
+import postcss from 'postcss'
 
-import { run } from './util/run'
+import { run, html, css } from './util/run'
 
 function pluginThatMutatesRules() {
   return (root) => {
@@ -18,9 +17,9 @@ function pluginThatMutatesRules() {
   }
 }
 
-test.only('plugins mutating rules after tailwind doesnt break it', async () => {
+test('plugins mutating rules after tailwind doesnt break it', async () => {
   let config = {
-    content: [path.resolve(__dirname, './mutable.test.html')],
+    content: [{ raw: html`<div class="bg-foo"></div>` }],
     theme: {
       backgroundImage: {
         foo: 'url("./foo.png")',
@@ -30,10 +29,11 @@ test.only('plugins mutating rules after tailwind doesnt break it', async () => {
   }
 
   function checkResult(result) {
-    let expectedPath = path.resolve(__dirname, './mutable.test.css')
-    let expected = fs.readFileSync(expectedPath, 'utf8')
-
-    expect(result.css).toMatchFormattedCss(expected)
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-foo {
+        background-image: url('./foo.png');
+      }
+    `)
   }
 
   // Verify the first run produces the expected result
