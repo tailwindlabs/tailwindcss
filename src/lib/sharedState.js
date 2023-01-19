@@ -1,4 +1,5 @@
-let OXIDE_DEFAULT_ENABLED = true
+import pkg from '../../package.json'
+let OXIDE_DEFAULT_ENABLED = pkg.tailwindcss.engine === 'oxide'
 
 export const env = {
   NODE_ENV: process.env.NODE_ENV,

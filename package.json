@@ -16,6 +16,9 @@
     "integrations/*",
     "oxide/crates/node"
   ],
+  "tailwindcss": {
+    "engine": "oxide"
+  },
   "scripts": {
     "__Public Scripts__": "",
     "dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run stable:build -- --watch' 'npm run --prefix ./oxide dev:node'",
