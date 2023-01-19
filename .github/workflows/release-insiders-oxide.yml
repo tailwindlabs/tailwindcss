@@ -6,7 +6,7 @@ on:
 
 env:
   APP_NAME: tailwindcss-oxide
-  NODE_VERSION: 18
+  NODE_VERSION: 16
   OXIDE_LOCATION: ./oxide/crates/node
   RELEASE_CHANNEL: oxide-insiders
 
