@@ -14,7 +14,7 @@
     ]
   },
   "devDependencies": {
-    "rollup": "^2.74.1",
+    "rollup": "^3.10.0",
     "rollup-plugin-postcss": "^4.0.2"
   }
 }
