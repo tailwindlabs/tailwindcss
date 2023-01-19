@@ -111,6 +111,7 @@
   ],
   "jest": {
     "testTimeout": 30000,
+    "globalSetup": "<rootDir>/jest/global-setup.js",
     "setupFilesAfterEnv": [
       "<rootDir>/jest/customMatchers.js"
     ],
