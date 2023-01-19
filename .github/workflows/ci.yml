@@ -1,4 +1,4 @@
-name: CI
+name: CI — Oxide
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16]
+        node-version: [18]
 
     steps:
       - uses: actions/checkout@v3
