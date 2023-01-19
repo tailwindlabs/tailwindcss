@@ -1,4 +1,4 @@
-name: Integration Tests
+name: Integration Tests — Oxide
 
 on:
   push:
