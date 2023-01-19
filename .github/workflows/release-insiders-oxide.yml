@@ -1,4 +1,4 @@
-name: Release Insiders
+name: Release Insiders — Oxide
 
 on:
   push:
