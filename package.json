@@ -20,20 +20,18 @@
     "engine": "oxide"
   },
   "scripts": {
-    "__Public Scripts__": "",
     "dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run dev:js' 'npm run dev:rust'",
     "build": "npm run build:rust && npm run build:js && npm run build:peers",
     "test": "jest",
     "style": "eslint .",
-    "__Private Scripts__": "",
+    "prepublishOnly": "npm install --force && npm run build && npm run generate:types",
     "dev:rust": "npm run --prefix ./oxide dev:node",
     "dev:js": "npm run build:js -- --watch",
     "build:rust": "npm run --prefix ./oxide build:node",
     "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start",
     "build:peers": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
     "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
-    "generate:types": "node -r @swc/register scripts/generate-types.js",
-    "prepublishOnly": "npm install --force && npm run build && npm run generate:types"
+    "generate:types": "node -r @swc/register scripts/generate-types.js"
   },
   "files": [
     "src/*",
