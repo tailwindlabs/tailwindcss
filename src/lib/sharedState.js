@@ -4,6 +4,7 @@ let OXIDE_DEFAULT_ENABLED = pkg.tailwindcss.engine === 'oxide'
 export const env = {
   NODE_ENV: process.env.NODE_ENV,
   DEBUG: resolveDebug(process.env.DEBUG),
+  ENGINE: pkg.tailwindcss.engine,
   OXIDE: resovleBoolean(process.env.OXIDE, OXIDE_DEFAULT_ENABLED),
 }
 export const contextMap = new Map()

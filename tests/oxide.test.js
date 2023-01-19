@@ -1,6 +1,8 @@
 import { run, html, css, defaults } from './util/run'
 import { env } from '../src/lib/sharedState'
 
+let t = env.ENGINE === 'oxide' ? test : test.skip
+
 beforeEach(() => {
   env.OXIDE = true
 })
@@ -9,7 +11,7 @@ afterEach(() => {
   env.OXIDE = false
 })
 
-test('space-x uses logical properties', () => {
+t('space-x uses logical properties', () => {
   let config = {
     content: [{ raw: html`<div class="space-x-4"></div>` }],
     corePlugins: { preflight: false },
