@@ -5,7 +5,7 @@ export const env = {
   NODE_ENV: process.env.NODE_ENV,
   DEBUG: resolveDebug(process.env.DEBUG),
   ENGINE: pkg.tailwindcss.engine,
-  OXIDE: resovleBoolean(process.env.OXIDE, OXIDE_DEFAULT_ENABLED),
+  OXIDE: resolveBoolean(process.env.OXIDE, OXIDE_DEFAULT_ENABLED),
 }
 export const contextMap = new Map()
 export const configContextMap = new Map()
@@ -15,7 +15,7 @@ export const NOT_ON_DEMAND = new String('*')
 
 export const NONE = Symbol('__NONE__')
 
-function resovleBoolean(value, defaultValue) {
+function resolveBoolean(value, defaultValue) {
   if (value === undefined) {
     return defaultValue
   }
