@@ -6,7 +6,7 @@ on:
 
 env:
   APP_NAME: tailwindcss-oxide
-  NODE_VERSION: 16
+  NODE_VERSION: 18
   OXIDE_LOCATION: ./oxide/crates/node
   RELEASE_CHANNEL: oxide-insiders
 
@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -92,7 +92,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -176,7 +176,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -243,7 +243,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -316,17 +316,13 @@ jobs:
     needs:
       - release
 
-    strategy:
-      matrix:
-        node-version: [14]
-
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
 
       - name: Resolve version
