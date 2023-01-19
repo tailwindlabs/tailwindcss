@@ -1,20 +1,44 @@
-import fs from 'fs'
-import path from 'path'
-
-import { run } from './util/run'
+import { run, html, css } from './util/run'
 
 test('custom separator', () => {
   let config = {
     darkMode: 'class',
-    content: [path.resolve(__dirname, './custom-separator.test.html')],
+    content: [
+      {
+        raw: html`
+          <div class="md_hover_text-right"></div>
+          <div class="motion-safe_hover_text-center"></div>
+          <div class="dark_focus_text-left"></div>
+          <div class="group-hover_focus-within_text-left"></div>
+          <div class="rtl_active_text-center"></div>
+        `,
+      },
+    ],
     separator: '_',
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './custom-separator.test.css')
-    let expected = fs.readFileSync(expectedPath, 'utf8')
-
-    expect(result.css).toMatchFormattedCss(expected)
+    expect(result.css).toMatchFormattedCss(css`
+      .group:hover .group-hover_focus-within_text-left:focus-within {
+        text-align: left;
+      }
+      [dir='rtl'] .rtl_active_text-center:active {
+        text-align: center;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .motion-safe_hover_text-center:hover {
+          text-align: center;
+        }
+      }
+      .dark .dark_focus_text-left:focus {
+        text-align: left;
+      }
+      @media (min-width: 768px) {
+        .md_hover_text-right:hover {
+          text-align: right;
+        }
+      }
+    `)
   })
 })
 

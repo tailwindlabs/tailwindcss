@@ -1,10 +1,8 @@
-import path from 'path'
-
-import { run, css } from './util/run'
+import { run, html, css } from './util/run'
 
 test('using @layer without @tailwind', async () => {
   let config = {
-    content: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
+    content: [{ raw: html`<div class="foo"></div>` }],
   }
 
   let input = css`
@@ -22,7 +20,7 @@ test('using @layer without @tailwind', async () => {
 
 test('using @responsive without @tailwind', async () => {
   let config = {
-    content: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
+    content: [{ raw: html`<div class="foo"></div>` }],
   }
 
   let input = css`
@@ -40,7 +38,7 @@ test('using @responsive without @tailwind', async () => {
 
 test('using @variants without @tailwind', async () => {
   let config = {
-    content: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
+    content: [{ raw: html`<div class="foo"></div>` }],
   }
 
   let input = css`
@@ -58,7 +56,7 @@ test('using @variants without @tailwind', async () => {
 
 test('non-Tailwind @layer rules are okay', async () => {
   let config = {
-    content: [path.resolve(__dirname, './layer-without-tailwind.test.html')],
+    content: [{ raw: html`<div class="foo"></div>` }],
   }
 
   let input = css`

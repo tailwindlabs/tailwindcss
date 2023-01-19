@@ -1,4 +1,3 @@
-import path from 'path'
 import { run, html, css } from './util/run'
 import { env } from '../src/lib/sharedState'
 
@@ -48,8 +47,8 @@ t('transform.{extension}', () => {
   let config = {
     content: {
       files: [
-        path.resolve(__dirname, './custom-transformers.test.html'),
-        path.resolve(__dirname, './custom-transformers.test.php'),
+        { raw: 'blah blah blah', extension: 'html' },
+        { raw: 'blah blah blah', extension: 'php' },
       ],
       transform: {
         html: () => 'uppercase',

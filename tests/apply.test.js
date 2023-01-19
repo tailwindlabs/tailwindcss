@@ -1,12 +1,41 @@
-import fs from 'fs'
-import path from 'path'
-
 import { run, html, css, defaults } from './util/run'
+
+let sharedHtml = html`
+  <div class="basic-example"></div>
+  <div class="class-order"></div>
+  <div class="with-additional-properties"></div>
+  <div class="variants"></div>
+  <div class="only-variants"></div>
+  <div class="apply-group-variant"></div>
+  <div class="apply-dark-variant"></div>
+  <div class="apply-custom-utility"></div>
+  <div class="multiple selectors"></div>
+  <div class="multiple-variants selectors-variants"></div>
+  <div class="multiple-group selectors-group"></div>
+  <div class="complex-utilities"></div>
+  <div class="basic-nesting-parent">
+    <div class="basic-nesting-child"></div>
+  </div>
+  <div class="use-base-only-a"></div>
+  <div class="use-dependant-only-b"></div>
+  <div class="btn"></div>
+  <div class="btn-blue"></div>
+  <div class="recursive-apply-a"></div>
+  <div class="recursive-apply-b"></div>
+  <div class="recursive-apply-c"></div>
+  <div class="use-with-other-properties-base use-with-other-properties-component"></div>
+  <div class="add-sibling-properties"></div>
+  <div class="important-modifier"></div>
+  <div class="important-modifier-variant"></div>
+  <div class="a b"></div>
+  <div class="foo"></div>
+  <div class="bar"></div>
+`
 
 test('@apply', () => {
   let config = {
     darkMode: 'class',
-    content: [path.resolve(__dirname, './apply.test.html')],
+    content: [{ raw: sharedHtml }],
   }
 
   let input = css`
@@ -129,17 +158,340 @@ test('@apply', () => {
   `
 
   return run(input, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './apply.test.css')
-    let expected = fs.readFileSync(expectedPath, 'utf8')
+    expect(result.css).toMatchFormattedCss(css`
+      .basic-example {
+        border-radius: 0.375rem;
+        --tw-bg-opacity: 1;
+        background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .class-order {
+        padding: 2rem;
+        padding-left: 0.75rem;
+        padding-bottom: 1.75rem;
+        padding-top: 1rem;
+        padding-right: 0.25rem;
+      }
+      .with-additional-properties {
+        font-weight: 500;
+        text-align: right;
+      }
+      .variants {
+        font-weight: 600;
+      }
+      .variants:hover {
+        font-weight: 700;
+      }
+      .variants:focus {
+        font-weight: 500;
+      }
+      @media (min-width: 1024px) {
+        .variants {
+          font-weight: 300;
+        }
+      }
+      @media (min-width: 1280px) {
+        .variants:focus {
+          font-weight: 900;
+        }
+      }
+      .only-variants:hover {
+        font-weight: 700;
+      }
+      .only-variants:focus {
+        font-weight: 500;
+      }
+      @media (min-width: 1024px) {
+        .only-variants {
+          font-weight: 300;
+        }
+      }
+      @media (min-width: 1280px) {
+        .only-variants:focus {
+          font-weight: 900;
+        }
+      }
+      .group:hover .apply-group-variant {
+        text-align: center;
+      }
+      @media (min-width: 1024px) {
+        .group:hover .apply-group-variant {
+          text-align: left;
+        }
+      }
+      .dark .apply-dark-variant {
+        text-align: center;
+      }
+      .dark .apply-dark-variant:hover {
+        text-align: right;
+      }
+      @media (min-width: 1024px) {
+        .dark .apply-dark-variant {
+          text-align: left;
+        }
+      }
+      .apply-custom-utility {
+        custom: stuff;
+      }
+      .apply-custom-utility:hover {
+        custom: stuff;
+      }
+      @media (min-width: 1024px) {
+        .apply-custom-utility {
+          custom: stuff;
+        }
+      }
+      @media (min-width: 1280px) {
+        .apply-custom-utility:focus {
+          custom: stuff;
+        }
+      }
+      .multiple,
+      .selectors {
+        border-radius: 0.375rem;
+        --tw-bg-opacity: 1;
+        background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .multiple-variants:hover,
+      .selectors-variants:hover {
+        text-align: center;
+      }
+      .multiple-variants:active,
+      .selectors-variants:active {
+        text-align: right;
+      }
+      @media (min-width: 1024px) {
+        .multiple-variants:focus,
+        .selectors-variants:focus {
+          text-align: left;
+        }
+      }
+      .group:hover .multiple-group,
+      .group:hover .selectors-group {
+        text-align: center;
+      }
+      @media (min-width: 1024px) {
+        .group:hover .multiple-group,
+        .group:hover .selectors-group {
+          text-align: left;
+        }
+      }
+      .complex-utilities {
+        --tw-ordinal: ordinal;
+        --tw-numeric-spacing: tabular-nums;
+        font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+          var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+        --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+          0 4px 6px -4px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+      .complex-utilities:hover {
+        --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color),
+          0 8px 10px -6px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+          var(--tw-shadow);
+      }
+      .complex-utilities:focus {
+        --tw-numeric-fraction: diagonal-fractions;
+        font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+          var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+      }
+      .use-base-only-a {
+        font-weight: 700;
+      }
+      .use-dependant-only-b {
+        font-weight: 400;
+      }
+      .btn {
+        border-radius: 0.25rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-weight: 700;
+      }
+      .btn-blue {
+        border-radius: 0.25rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-weight: 700;
+        --tw-bg-opacity: 1;
+        background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity));
+      }
+      .btn-blue:hover {
+        --tw-bg-opacity: 1;
+        background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+      }
+      .recursive-apply-a {
+        font-weight: 900;
+      }
+      @media (min-width: 640px) {
+        .recursive-apply-a {
+          font-weight: 100;
+        }
+      }
+      .recursive-apply-b {
+        font-weight: 900;
+      }
+      @media (min-width: 640px) {
+        .recursive-apply-b {
+          font-weight: 100;
+        }
+      }
+      .recursive-apply-b {
+        font-weight: 600;
+      }
+      @media (min-width: 768px) {
+        .recursive-apply-b {
+          font-weight: 200;
+        }
+      }
+      .recursive-apply-c {
+        font-weight: 900;
+      }
+      @media (min-width: 640px) {
+        .recursive-apply-c {
+          font-weight: 100;
+        }
+      }
+      .recursive-apply-c {
+        font-weight: 600;
+      }
+      @media (min-width: 768px) {
+        .recursive-apply-c {
+          font-weight: 200;
+        }
+      }
+      .recursive-apply-c {
+        font-weight: 700;
+      }
+      @media (min-width: 1024px) {
+        .recursive-apply-c {
+          font-weight: 300;
+        }
+      }
+      .use-with-other-properties-base {
+        color: green;
+        font-weight: 700;
+      }
+      .use-with-other-properties-component {
+        color: green;
+        font-weight: 700;
+      }
+      .add-sibling-properties {
+        padding: 2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .add-sibling-properties:hover {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      @media (min-width: 1024px) {
+        .add-sibling-properties {
+          padding-left: 2.5rem;
+          padding-right: 2.5rem;
+        }
+      }
+      @media (min-width: 1280px) {
+        .add-sibling-properties:focus {
+          padding-left: 0.25rem;
+          padding-right: 0.25rem;
+        }
+      }
+      .add-sibling-properties {
+        padding-top: 3px;
+        color: green;
+        font-weight: 700;
+      }
 
-    expect(result.css).toMatchFormattedCss(expected)
+      h1 {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+
+      @media (min-width: 640px) {
+        h1 {
+          font-size: 1.875rem;
+          line-height: 2.25rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        h1 {
+          font-size: 1.5rem;
+          line-height: 2rem;
+        }
+      }
+      h2 {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+      @media (min-width: 1024px) {
+        h2 {
+          font-size: 1.5rem;
+          line-height: 2rem;
+        }
+      }
+      @media (min-width: 640px) {
+        h2 {
+          font-size: 1.5rem;
+          line-height: 2rem;
+        }
+      }
+
+      .important-modifier {
+        border-radius: 0.375rem !important;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .important-modifier-variant {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .important-modifier-variant:hover {
+        border-radius: 0.375rem !important;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .foo {
+        animation: spin 1s linear infinite;
+      }
+      @keyframes pulse {
+        50% {
+          opacity: 0.5;
+        }
+      }
+      .bar {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+      }
+    `)
   })
 })
 
 test('@apply error with unknown utility', async () => {
   let config = {
     darkMode: 'class',
-    content: [path.resolve(__dirname, './apply.test.html')],
+    content: [{ raw: sharedHtml }],
   }
 
   let input = css`
@@ -159,7 +511,7 @@ test('@apply error with unknown utility', async () => {
 test('@apply error with nested @screen', async () => {
   let config = {
     darkMode: 'class',
-    content: [path.resolve(__dirname, './apply.test.html')],
+    content: [{ raw: sharedHtml }],
   }
 
   let input = css`
@@ -183,7 +535,7 @@ test('@apply error with nested @screen', async () => {
 test('@apply error with nested @anyatrulehere', async () => {
   let config = {
     darkMode: 'class',
-    content: [path.resolve(__dirname, './apply.test.html')],
+    content: [{ raw: sharedHtml }],
   }
 
   let input = css`

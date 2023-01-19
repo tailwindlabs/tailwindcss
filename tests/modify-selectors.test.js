@@ -1,13 +1,33 @@
-import fs from 'fs'
-import path from 'path'
 import selectorParser from 'postcss-selector-parser'
 
-import { run, css } from './util/run'
+import { run, html, css } from './util/run'
 
 test('modify selectors', () => {
   let config = {
     darkMode: 'class',
-    content: [path.resolve(__dirname, './modify-selectors.test.html')],
+    content: [
+      {
+        raw: html`
+          <div class="font-bold"></div>
+          <div class="foo:font-bold"></div>
+          <div class="foo:hover:font-bold"></div>
+          <div class="sm:foo:font-bold"></div>
+          <div class="md:foo:focus:font-bold"></div>
+          <div class="markdown">
+            <p>Lorem ipsum dolor sit amet...</p>
+          </div>
+          <div class="foo:markdown">
+            <p>Lorem ipsum dolor sit amet...</p>
+          </div>
+          <div class="foo:visited:markdown">
+            <p>Lorem ipsum dolor sit amet...</p>
+          </div>
+          <div class="lg:foo:disabled:markdown">
+            <p>Lorem ipsum dolor sit amet...</p>
+          </div>
+        `,
+      },
+    ],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [
@@ -38,9 +58,40 @@ test('modify selectors', () => {
   `
 
   return run(input, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './modify-selectors.test.css')
-    let expected = fs.readFileSync(expectedPath, 'utf8')
-
-    expect(result.css).toMatchFormattedCss(expected)
+    expect(result.css).toMatchFormattedCss(css`
+      .markdown > p {
+        margin-top: 12px;
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+      .foo .foo\:markdown > p {
+        margin-top: 12px;
+      }
+      .foo .foo\:font-bold {
+        font-weight: 700;
+      }
+      .foo .foo\:visited\:markdown:visited > p {
+        margin-top: 12px;
+      }
+      .foo .foo\:hover\:font-bold:hover {
+        font-weight: 700;
+      }
+      @media (min-width: 640px) {
+        .foo .sm\:foo\:font-bold {
+          font-weight: 700;
+        }
+      }
+      @media (min-width: 768px) {
+        .foo .md\:foo\:focus\:font-bold:focus {
+          font-weight: 700;
+        }
+      }
+      @media (min-width: 1024px) {
+        .foo .lg\:foo\:disabled\:markdown:disabled > p {
+          margin-top: 12px;
+        }
+      }
+    `)
   })
 })

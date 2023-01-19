@@ -1,7 +1,4 @@
-import fs from 'fs'
-import path from 'path'
-
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 import { env } from '../src/lib/sharedState'
 
 let group = env.OXIDE ? describe.skip : describe
@@ -11,7 +8,32 @@ group('prefix', () => {
     let config = {
       prefix: 'tw-',
       darkMode: 'class',
-      content: [path.resolve(__dirname, './prefix.test.html')],
+      content: [
+        {
+          raw: html`
+            <div class="tw--ml-4"></div>
+            <div class="md:tw--ml-5"></div>
+            <div class="md:hover:tw--ml-6"></div>
+            <div class="tw-container"></div>
+            <div class="btn-no-prefix"></div>
+            <div class="tw-btn-prefix"></div>
+            <div class="tw-custom-util-prefix"></div>
+            <div class="custom-util-no-prefix"></div>
+            <div class="custom-component"></div>
+            <div class="tw-custom-component-prefix"></div>
+            <div class="custom-component-no-prefix"></div>
+            <div class="tw-font-bold"></div>
+            <div class="md:hover:tw-text-right"></div>
+            <div class="motion-safe:hover:tw-text-center"></div>
+            <div class="dark:focus:tw-text-left"></div>
+            <div class="dark:tw-bg-[rgb(255,0,0)]"></div>
+            <div class="group-hover:focus-within:tw-text-left"></div>
+            <div class="rtl:active:tw-text-center"></div>
+            <div class="tw-animate-ping"></div>
+            <div class="tw-animate-spin"></div>
+          `,
+        },
+      ],
       corePlugins: { preflight: false },
       theme: {
         animation: {
@@ -71,10 +93,101 @@ group('prefix', () => {
     `
 
     return run(input, config).then((result) => {
-      let expectedPath = path.resolve(__dirname, './prefix.test.css')
-      let expected = fs.readFileSync(expectedPath, 'utf8')
-
-      expect(result.css).toMatchFormattedCss(expected)
+      expect(result.css).toMatchFormattedCss(css`
+        ${defaults}
+        .tw-container {
+          width: 100%;
+        }
+        @media (min-width: 640px) {
+          .tw-container {
+            max-width: 640px;
+          }
+        }
+        @media (min-width: 768px) {
+          .tw-container {
+            max-width: 768px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .tw-container {
+            max-width: 1024px;
+          }
+        }
+        @media (min-width: 1280px) {
+          .tw-container {
+            max-width: 1280px;
+          }
+        }
+        @media (min-width: 1536px) {
+          .tw-container {
+            max-width: 1536px;
+          }
+        }
+        .tw-btn-prefix {
+          button: yes;
+        }
+        .btn-no-prefix {
+          button: yes;
+        }
+        .custom-component {
+          font-weight: 700;
+        }
+        .tw-dark .tw-group:hover .custom-component {
+          font-weight: 400;
+        }
+        .tw--ml-4 {
+          margin-left: -1rem;
+        }
+        .tw-animate-ping {
+          animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes tw-spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        .tw-animate-spin {
+          animation: tw-spin 1s linear infinite;
+        }
+        .tw-font-bold {
+          font-weight: 700;
+        }
+        .tw-custom-util-prefix {
+          button: no;
+        }
+        .custom-util-no-prefix {
+          button: no;
+        }
+        .tw-group:hover .group-hover\:focus-within\:tw-text-left:focus-within {
+          text-align: left;
+        }
+        [dir='rtl'] .rtl\:active\:tw-text-center:active {
+          text-align: center;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+          .motion-safe\:hover\:tw-text-center:hover {
+            text-align: center;
+          }
+        }
+        .tw-dark .dark\:tw-bg-\[rgb\(255\2c 0\2c 0\)\] {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+        }
+        .tw-dark .dark\:focus\:tw-text-left:focus {
+          text-align: left;
+        }
+        @media (min-width: 768px) {
+          .md\:tw--ml-5 {
+            margin-left: -1.25rem;
+          }
+          .md\:hover\:tw--ml-6:hover {
+            margin-left: -1.5rem;
+          }
+          .md\:hover\:tw-text-right:hover {
+            text-align: right;
+          }
+        }
+      `)
     })
   })
 

@@ -1,11 +1,25 @@
-import fs from 'fs'
-import path from 'path'
-
-import { run, html, css } from './util/run'
+import { run, html, css, defaults } from './util/run'
 
 test('collapse adjacent rules', () => {
   let config = {
-    content: [path.resolve(__dirname, './collapse-adjacent-rules.test.html')],
+    content: [
+      {
+        raw: html`
+          <div class="custom-component"></div>
+          <div class="sm:custom-component"></div>
+          <div class="md:custom-component"></div>
+          <div class="lg:custom-component"></div>
+          <div class="font-bold"></div>
+          <div class="sm:font-bold"></div>
+          <div class="sm:text-center"></div>
+          <div class="md:font-bold"></div>
+          <div class="md:text-center"></div>
+          <div class="lg:font-bold"></div>
+          <div class="lg:text-center"></div>
+          <div class="some-apply-thing"></div>
+        `,
+      },
+    ],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [
@@ -55,10 +69,84 @@ test('collapse adjacent rules', () => {
   `
 
   return run(input, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './collapse-adjacent-rules.test.css')
-    let expected = fs.readFileSync(expectedPath, 'utf8')
-
-    expect(result.css).toMatchFormattedCss(expected)
+    expect(result.css).toMatchFormattedCss(css`
+      @font-face {
+        font-family: 'Poppins';
+        src: url('/fonts/Poppins.woff2') format('woff2'), url('/fonts/Poppins.woff') format('woff');
+      }
+      @font-face {
+        font-family: 'Proxima Nova';
+        src: url('/fonts/ProximaNova.woff2') format('woff2'),
+          url('/fonts/ProximaNova.woff') format('woff');
+      }
+      ${defaults}
+      @font-face {
+        font-family: 'Inter';
+        src: url('/fonts/Inter.woff2') format('woff2'), url('/fonts/Inter.woff') format('woff');
+      }
+      @font-face {
+        font-family: 'Gilroy';
+        src: url('/fonts/Gilroy.woff2') format('woff2'), url('/fonts/Gilroy.woff') format('woff');
+      }
+      @page {
+        margin: 1cm;
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+      .foo,
+      .bar {
+        color: black;
+        font-weight: 700;
+      }
+      @supports (foo: bar) {
+        .some-apply-thing {
+          font-weight: 700;
+          --tw-text-opacity: 1;
+          color: rgb(0 0 0 / var(--tw-text-opacity));
+        }
+      }
+      @media (min-width: 768px) {
+        .some-apply-thing {
+          font-weight: 700;
+          --tw-text-opacity: 1;
+          color: rgb(0 0 0 / var(--tw-text-opacity));
+        }
+      }
+      @supports (foo: bar) {
+        @media (min-width: 768px) {
+          .some-apply-thing {
+            font-weight: 700;
+            --tw-text-opacity: 1;
+            color: rgb(0 0 0 / var(--tw-text-opacity));
+          }
+        }
+      }
+      @media (min-width: 640px) {
+        .sm\:text-center {
+          text-align: center;
+        }
+        .sm\:font-bold {
+          font-weight: 700;
+        }
+      }
+      @media (min-width: 768px) {
+        .md\:text-center {
+          text-align: center;
+        }
+        .md\:font-bold {
+          font-weight: 700;
+        }
+      }
+      @media (min-width: 1024px) {
+        .lg\:text-center {
+          text-align: center;
+        }
+        .lg\:font-bold {
+          font-weight: 700;
+        }
+      }
+    `)
   })
 })
 
