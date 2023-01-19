@@ -11,7 +11,7 @@ let { readOutputFile, appendToInputFile, writeInputFile } = require('../../io')(
 let PORT = 1337
 
 async function fetchCSS() {
-  let response = await fetch(`http://0.0.0.0:${PORT}/index.css`, {
+  let response = await fetch(`http://localhost:${PORT}/index.css`, {
     headers: {
       Accept: 'text/css',
     },

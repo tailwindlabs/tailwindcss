@@ -8,9 +8,10 @@ env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 16
   OXIDE_LOCATION: ./oxide/crates/node
+  RELEASE_CHANNEL: oxide-insiders
 
 jobs:
-  oxide-build:
+  build:
     strategy:
       fail-fast: false
       matrix:
@@ -81,7 +82,7 @@ jobs:
             ${{ env.OXIDE_LOCATION }}/*.node
             ${{ matrix.binary }}
 
-  oxide-build-apple-silicon:
+  build-apple-silicon:
     name: Build Apple Silicon (OXIDE)
     runs-on: macos-latest
     steps:
@@ -140,7 +141,7 @@ jobs:
             ${{ env.OXIDE_LOCATION }}/*.node
             ${{ env.APP_NAME }}
 
-  oxide-build-linux:
+  build-linux:
     strategy:
       fail-fast: false
       matrix:
@@ -228,13 +229,13 @@ jobs:
             ${{ env.OXIDE_LOCATION }}/*.node
             ${{ env.APP_NAME }}
 
-  oxide-release:
+  release:
     runs-on: ubuntu-latest
     name: Build and release
     needs:
-      - oxide-build
-      - oxide-build-linux
-      - oxide-build-apple-silicon
+      - build
+      - build-linux
+      - build-apple-silicon
     steps:
       - uses: actions/checkout@v3
 
@@ -283,7 +284,7 @@ jobs:
       - name: Resolve version
         id: vars
         run: |
-          echo "NPM_VERSION=0.0.0-oxide-insiders.$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "NPM_VERSION=0.0.0-${{ env.RELEASE_CHANNEL }}.$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Generate entry point
         run: npm run build --prefix ${{ env.OXIDE_LOCATION }}
@@ -294,7 +295,7 @@ jobs:
             echo "Publishing $pkg..."
             cd $pkg
             npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
-            npm publish --tag oxide-insiders --access public
+            npm publish --tag ${{ env.RELEASE_CHANNEL }} --access public
             cd -
           done
 
@@ -303,7 +304,7 @@ jobs:
           npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
           sed "s#\"0.0.0\"#\"${{ env.NPM_VERSION }}\"#g" package.json > package_updated.json
           mv package_updated.json package.json
-          npm publish --tag oxide-insiders --access public
+          npm publish --tag ${{ env.RELEASE_CHANNEL }} --access public
           cd -
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -313,7 +314,7 @@ jobs:
     name: Build and release Tailwind CSS
 
     needs:
-      - oxide-release
+      - release
 
     strategy:
       matrix:
@@ -332,7 +333,7 @@ jobs:
         id: vars
         run: |
           echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "OXIDE_NPM_VERSION=0.0.0-oxide-insiders.$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "OXIDE_NPM_VERSION=0.0.0-${{ env.RELEASE_CHANNEL }}.$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Setup `@tailwindcss/oxide` version
         run: |
@@ -348,10 +349,27 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: 'Version based on commit: 0.0.0-oxide-insiders.${{ env.SHA_SHORT }}'
-        run: npm version 0.0.0-oxide-insiders.${{ env.SHA_SHORT }} --force --no-git-tag-version
+      - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+        run: npm version 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }} --force --no-git-tag-version
 
       - name: Publish
-        run: npm publish --tag oxide-insiders
+        run: npm publish --tag ${{ env.RELEASE_CHANNEL }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # !! Enable this, once we are cleaning up all the `stable` engine related files.
+      #
+      # - name: Trigger Tailwind Play update
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+      #     script: |
+      #       await github.rest.actions.createWorkflowDispatch({
+      #         owner: 'tailwindlabs',
+      #         repo: 'play.tailwindcss.com',
+      #         ref: 'master',
+      #         workflow_id: 'upgrade-tailwindcss.yml',
+      #         inputs: {
+      #           insidersVersion: '0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+      #         }
+      #       })

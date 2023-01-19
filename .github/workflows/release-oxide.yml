@@ -1,4 +1,4 @@
-name: Release Oxide
+name: Release — Oxide
 
 on:
   workflow_dispatch:

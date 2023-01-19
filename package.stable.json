@@ -12,26 +12,25 @@
     "tailwind": "lib/cli.js",
     "tailwindcss": "lib/cli.js"
   },
-  "workspaces": [
-    "integrations/*",
-    "oxide/crates/node"
-  ],
   "tailwindcss": {
-    "engine": "oxide"
+    "engine": "stable"
   },
   "scripts": {
-    "dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run dev:js' 'npm run dev:rust'",
-    "build": "npm run build:rust && npm run build:js && npm run build:peers",
-    "test": "jest",
+    "prebuild": "npm run generate && rimraf lib",
+    "build": "swc src --out-dir lib --copy-files",
+    "postbuild": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
+    "rebuild-fixtures": "npm run build && node -r @swc/register scripts/rebuildFixtures.js",
     "style": "eslint .",
-    "prepublishOnly": "npm install --force && npm run build && npm run generate:types",
-    "dev:rust": "npm run --prefix ./oxide dev:node",
-    "dev:js": "npm run build:js -- --watch",
-    "build:rust": "npm run --prefix ./oxide build:node",
-    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start",
-    "build:peers": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
+    "pretest": "npm run generate",
+    "test": "jest",
+    "test:integrations": "npm run test --prefix ./integrations",
+    "install:integrations": "node scripts/install-integrations.js",
     "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
-    "generate:types": "node -r @swc/register scripts/generate-types.js"
+    "generate:types": "node -r @swc/register scripts/generate-types.js",
+    "generate": "npm run generate:plugin-list && npm run generate:types",
+    "release-channel": "node ./scripts/release-channel.js",
+    "release-notes": "node ./scripts/release-notes.js",
+    "prepublishOnly": "npm install --force && npm run build"
   },
   "files": [
     "src/*",
@@ -42,6 +41,7 @@
     "stubs/*.stub.js",
     "nesting/*",
     "types/**/*",
+    "oxide-node-api-shim",
     "*.d.ts",
     "*.css",
     "*.js"
@@ -63,15 +63,14 @@
     "prettier": "^2.8.1",
     "rimraf": "^3.0.0",
     "source-map-js": "^1.0.2",
-    "turbo": "^1.7.0"
+    "turbo": "^1.6.3"
   },
   "peerDependencies": {
     "postcss": "^8.0.9"
   },
   "dependencies": {
-    "@tailwindcss/oxide": "file:oxide/crates/node",
+    "@tailwindcss/oxide": "file:./oxide-node-api-shim",
     "arg": "^5.0.2",
-    "browserslist": "^4.21.4",
     "chokidar": "^3.5.3",
     "color-name": "^1.1.4",
     "detective": "^5.2.1",
@@ -80,7 +79,6 @@
     "fast-glob": "^3.2.12",
     "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
-    "lightningcss": "^1.17.1",
     "lilconfig": "^2.0.6",
     "micromatch": "^4.0.5",
     "normalize-path": "^3.0.0",
@@ -96,18 +94,10 @@
     "quick-lru": "^5.1.1",
     "resolve": "^1.22.1"
   },
-  "browserslist": [
-    "> 1%",
-    "not edge <= 18",
-    "not ie 11",
-    "not op_mini all"
-  ],
+  "browserslist": ["> 1%", "not edge <= 18", "not ie 11", "not op_mini all"],
   "jest": {
     "testTimeout": 30000,
-    "globalSetup": "<rootDir>/jest/global-setup.js",
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest/customMatchers.js"
-    ],
+    "setupFilesAfterEnv": ["<rootDir>/jest/customMatchers.js"],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/integrations/",
@@ -120,6 +110,6 @@
     }
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=12.13.0"
   }
 }

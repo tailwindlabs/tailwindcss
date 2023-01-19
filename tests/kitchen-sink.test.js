@@ -5,7 +5,8 @@ afterEach(() => {
   env.OXIDE = false
 })
 
-test.each([[true], [false]])('it works (using Rust: %p)', (useOxide) => {
+let cases = env.ENGINE === 'oxide' ? [[true], [false]] : [[false]]
+test.each(cases)('it works (using Rust: %p)', (useOxide) => {
   env.OXIDE = useOxide
 
   let config = {

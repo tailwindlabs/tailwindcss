@@ -1,4 +1,4 @@
-name: Release
+name: Release — Stable
 
 on:
   release:
@@ -50,14 +50,14 @@ jobs:
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npm run oxide:build
+        run: npm run build
 
       - name: Test
         run: npm test
 
       - name: Calculate environment variables
         run: |
-          echo "RELEASE_CHANNEL=$(npm run release-channel --silent)" >> $GITHUB_ENV
+          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
           echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
 
       - name: Publish

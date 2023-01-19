@@ -1,4 +1,4 @@
-name: Integration Tests
+name: Integration Tests — Oxide
 
 on:
   push:
@@ -13,6 +13,7 @@ env:
   CI: true
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  CACHE_PREFIX: oxide
 
 jobs:
   test:
@@ -30,7 +31,7 @@ jobs:
           - vite
           - webpack-4
           - webpack-5
-        node-version: [16]
+        node-version: [18]
       fail-fast: false
 
     steps:
@@ -45,7 +46,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -63,7 +64,7 @@ jobs:
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npx turbo run oxide:build --filter=//
+        run: npx turbo run build --filter=//
 
       - name: Test ${{ matrix.integration }}
         run: npx turbo run test --filter=./integrations/${{ matrix.integration }}

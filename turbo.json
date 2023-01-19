@@ -2,7 +2,15 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "//#build": {
-      "outputs": ["lib/**", "peers/**", "types/generated/**"]
+      "outputs": [
+        "lib/**",
+        "peers/**",
+        "types/generated/**",
+        "oxide/target/**",
+        "oxide/crates/node/*.node",
+        "oxide/crates/node/index.d.ts",
+        "oxide/crates/node/index.js"
+      ]
     },
     "test": {
       "env": ["OXIDE"],
@@ -11,16 +19,6 @@
     "//#test": {
       "env": ["OXIDE"],
       "outputs": []
-    },
-    "//#oxide:build": {
-      "outputs": [
-        "lib/**",
-        "peers/**",
-        "oxide/target/**",
-        "oxide/crates/node/*.node",
-        "oxide/crates/node/index.d.ts",
-        "oxide/crates/node/index.js"
-      ]
     },
     "//#style": {
       "outputs": []
