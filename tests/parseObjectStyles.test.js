@@ -1,8 +1,8 @@
 import parseObjectStyles from '../src/util/parseObjectStyles'
 import postcss from 'postcss'
-import { crosscheck } from './util/run'
+import { crosscheck, css } from './util/run'
 
-function css(nodes) {
+function toCss(nodes) {
   return postcss.root({ nodes }).toString()
 }
 
@@ -16,13 +16,13 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foobar {
-      background-color: red;
-      color: white;
-      padding: 1rem
-    }
-  `)
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foobar {
+        background-color: red;
+        color: white;
+        padding: 1rem;
+      }
+    `)
   })
 
   test('it parses multiple class definitions', () => {
@@ -38,17 +38,17 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: red;
-      color: white;
-      padding: 1rem
-    }
-    .bar {
-      width: 200px;
-      height: 100px
-    }
-  `)
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foo {
+        background-color: red;
+        color: white;
+        padding: 1rem;
+      }
+      .bar {
+        width: 200px;
+        height: 100px;
+      }
+    `)
   })
 
   test('it parses nested pseudo-selectors', () => {
@@ -57,28 +57,28 @@ crosscheck(() => {
         backgroundColor: 'red',
         color: 'white',
         padding: '1rem',
-        ':hover': {
+        '&:hover': {
           backgroundColor: 'orange',
         },
-        ':focus': {
+        '&:focus': {
           backgroundColor: 'blue',
         },
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: red;
-      color: white;
-      padding: 1rem;
-    }
-    .foo:hover {
-      background-color: orange;
-    }
-    .foo:focus {
-      background-color: blue;
-    }
-  `)
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foo {
+        background-color: red;
+        color: white;
+        padding: 1rem;
+      }
+      .foo:hover {
+        background-color: orange;
+      }
+      .foo:focus {
+        background-color: blue;
+      }
+    `)
   })
 
   test('it parses top-level media queries', () => {
@@ -90,13 +90,13 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    @media (min-width: 200px) {
-      .foo {
-        background-color: orange
+    expect(toCss(result)).toMatchFormattedCss(css`
+      @media (min-width: 200px) {
+        .foo {
+          background-color: orange;
+        }
       }
-    }
-  `)
+    `)
   })
 
   test('it parses nested media queries', () => {
@@ -111,18 +111,18 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: red;
-      color: white;
-      padding: 1rem;
-    }
-    @media (min-width: 200px) {
+    expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
-        background-color: orange;
+        background-color: red;
+        color: white;
+        padding: 1rem;
       }
-    }
-  `)
+      @media (min-width: 200px) {
+        .foo {
+          background-color: orange;
+        }
+      }
+    `)
   })
 
   test('it bubbles nested screen rules', () => {
@@ -137,18 +137,18 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: red;
-      color: white;
-      padding: 1rem;
-    }
-    @screen sm {
+    expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
-        background-color: orange;
+        background-color: red;
+        color: white;
+        padding: 1rem;
       }
-    }
-  `)
+      @screen sm {
+        .foo {
+          background-color: orange;
+        }
+      }
+    `)
   })
 
   test('it parses pseudo-selectors in nested media queries', () => {
@@ -157,7 +157,7 @@ crosscheck(() => {
         backgroundColor: 'red',
         color: 'white',
         padding: '1rem',
-        ':hover': {
+        '&:hover': {
           '@media (min-width: 200px)': {
             backgroundColor: 'orange',
           },
@@ -165,18 +165,18 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: red;
-      color: white;
-      padding: 1rem;
-    }
-    @media (min-width: 200px) {
-      .foo:hover {
-        background-color: orange;
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foo {
+        background-color: red;
+        color: white;
+        padding: 1rem;
       }
-    }
-  `)
+      @media (min-width: 200px) {
+        .foo:hover {
+          background-color: orange;
+        }
+      }
+    `)
   })
 
   test('it parses descendant selectors', () => {
@@ -191,16 +191,16 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: red;
-      color: white;
-      padding: 1rem;
-    }
-    .foo .bar {
-      background-color: orange;
-    }
-  `)
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foo {
+        background-color: red;
+        color: white;
+        padding: 1rem;
+      }
+      .foo .bar {
+        background-color: orange;
+      }
+    `)
   })
 
   test('it parses nested multi-class selectors', () => {
@@ -215,16 +215,16 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: red;
-      color: white;
-      padding: 1rem;
-    }
-    .foo.bar {
-      background-color: orange;
-    }
-  `)
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foo {
+        background-color: red;
+        color: white;
+        padding: 1rem;
+      }
+      .foo.bar {
+        background-color: orange;
+      }
+    `)
   })
 
   test('it parses nested multi-class selectors in media queries', () => {
@@ -241,18 +241,18 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: red;
-      color: white;
-      padding: 1rem;
-    }
-    @media (min-width: 200px) {
-      .foo.bar {
-        background-color: orange;
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foo {
+        background-color: red;
+        color: white;
+        padding: 1rem;
       }
-    }
-  `)
+      @media (min-width: 200px) {
+        .foo.bar {
+          background-color: orange;
+        }
+      }
+    `)
   })
 
   test('it strips empty selectors when nesting', () => {
@@ -264,11 +264,11 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    .foo .bar {
-      background-color: orange
-    }
-  `)
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foo .bar {
+        background-color: orange;
+      }
+    `)
   })
 
   test('it can parse an array of styles', () => {
@@ -290,17 +290,17 @@ crosscheck(() => {
       },
     ])
 
-    expect(css(result)).toMatchCss(`
-    .foo {
-      background-color: orange
-    }
-    .bar {
-      background-color: red
-    }
-    .foo {
-      background-color: blue
-    }
-  `)
+    expect(toCss(result)).toMatchFormattedCss(css`
+      .foo {
+        background-color: orange;
+      }
+      .bar {
+        background-color: red;
+      }
+      .foo {
+        background-color: blue;
+      }
+    `)
   })
 
   test('custom properties preserve their case', () => {
@@ -310,10 +310,10 @@ crosscheck(() => {
       },
     })
 
-    expect(css(result)).toMatchCss(`
-    :root {
-      --colors-aColor-500: 0;
-    }
-  `)
+    expect(toCss(result)).toMatchFormattedCss(css`
+      :root {
+        --colors-aColor-500: 0;
+      }
+    `)
   })
 })

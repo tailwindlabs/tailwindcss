@@ -12,7 +12,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .font-sans {
           font-family: Helvetica, Arial, sans-serif;
         }
@@ -31,7 +31,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .font-sans {
           font-family: Helvetica, Arial, sans-serif;
         }
@@ -50,7 +50,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .font-sans {
           font-family: 'Exo 2', sans-serif;
         }
@@ -69,12 +69,12 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(`
-      .font-sans {
-        font-family: Helvetica, Arial, sans-serif;
-        font-feature-settings: "cv11", "ss01";
-      }
-    `)
+      expect(result.css).toMatchFormattedCss(css`
+        .font-sans {
+          font-family: Helvetica, Arial, sans-serif;
+          font-feature-settings: 'cv11', 'ss01';
+        }
+      `)
     })
   })
 
@@ -89,12 +89,12 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(`
-      .font-sans {
-        font-family: Helvetica, Arial, sans-serif;
-        font-feature-settings: "cv11", "ss01";
-      }
-    `)
+      expect(result.css).toMatchFormattedCss(css`
+        .font-sans {
+          font-family: Helvetica, Arial, sans-serif;
+          font-feature-settings: 'cv11', 'ss01';
+        }
+      `)
     })
   })
 })
