@@ -64,10 +64,10 @@ jobs:
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npx turbo run build --filter=//
+        run: npm run build
 
       - name: Test
-        run: npx turbo run test --filter=//
+        run: npm run test
 
       - name: Lint
-        run: npx turbo run style --filter=//
+        run: npm run style
