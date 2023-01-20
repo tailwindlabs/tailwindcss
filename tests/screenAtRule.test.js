@@ -1,13 +1,13 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteScreenAtRules'
 import config from '../stubs/defaultConfig.stub.js'
-import { crosscheck, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
 function run(input, opts = config) {
   return postcss([plugin({ tailwindConfig: opts })]).process(input, { from: undefined })
 }
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it can generate media queries from configured screen sizes', () => {
     const input = `
     @screen sm {

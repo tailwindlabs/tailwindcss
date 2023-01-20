@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from '../util/run'
+import { crosscheck, run, html, css } from '../util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('opacity variables are given to colors defined as closures', () => {
     let config = {
       content: [

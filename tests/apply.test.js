@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   let sharedHtml = html`
     <div class="basic-example"></div>
     <div class="class-order"></div>

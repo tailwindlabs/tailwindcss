@@ -1,7 +1,7 @@
 import * as path from 'path'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should be possible to use negated content patterns', () => {
     let config = {
       content: [

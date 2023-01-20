@@ -1,7 +1,7 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 import flattenColorPalette from '../src/util/flattenColorPalette'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it flattens nested color objects', () => {
     expect(
       flattenColorPalette({

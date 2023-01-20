@@ -4,7 +4,7 @@ import * as sharedState from '../src/lib/sharedState'
 
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('important boolean', () => {
     let config = {
       important: true,

@@ -1,8 +1,8 @@
 import resolveConfig from '../src/public/resolve-config'
 import { createContext } from '../src/lib/setupContextUtils'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should generate every possible class, without variants', () => {
     let config = {}
 

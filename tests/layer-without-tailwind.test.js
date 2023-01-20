@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('using @layer without @tailwind', async () => {
     let config = {
       content: [{ raw: html`<div class="foo"></div>` }],

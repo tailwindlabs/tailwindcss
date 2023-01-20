@@ -1,7 +1,7 @@
 import { resolveDebug } from '../src/lib/sharedState'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it.each`
     value                     | expected
     ${'true'}                 | ${true}

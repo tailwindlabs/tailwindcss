@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should be possible to use the darkMode "class" mode', () => {
     let config = {
       darkMode: 'class',

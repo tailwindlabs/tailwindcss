@@ -1,9 +1,9 @@
 import { generateRules } from '../src/lib/generateRules'
 import resolveConfig from '../src/public/resolve-config'
 import { createContext } from '../src/lib/setupContextUtils'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should not generate rules that are incorrect', () => {
     let config = {
       plugins: [

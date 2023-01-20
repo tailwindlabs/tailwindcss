@@ -16,7 +16,7 @@ function run(input, opts = {}) {
   ]).process(input, { from: undefined })
 }
 
-crosscheck(({ stable, oxide, engine }) => {
+crosscheck(({ stable, oxide }) => {
   test('it looks up values in the theme using dot notation', () => {
     let input = css`
       .banana {

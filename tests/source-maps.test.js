@@ -1,8 +1,8 @@
 import postcss from 'postcss'
 import { parseSourceMaps } from './util/source-maps'
-import { crosscheck, runWithSourceMaps as run, html, css, defaults, map } from './util/run'
+import { crosscheck, runWithSourceMaps as run, html, css, map } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('apply generates source maps', async () => {
     let config = {
       content: [

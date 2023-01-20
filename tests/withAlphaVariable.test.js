@@ -1,7 +1,7 @@
 import withAlphaVariable from '../src/util/withAlphaVariable'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it adds the right custom property', () => {
     expect(
       withAlphaVariable({ color: '#ff0000', property: 'color', variable: '--tw-text-opacity' })

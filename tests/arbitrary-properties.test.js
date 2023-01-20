@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('basic arbitrary properties', () => {
     let config = {
       content: [

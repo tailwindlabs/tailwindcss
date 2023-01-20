@@ -1,4 +1,4 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
 function customExtractor(content) {
   let matches = content.match(/class="([^"]+)"/)

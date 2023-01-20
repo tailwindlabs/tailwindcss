@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it detects classes in lit-html templates', () => {
     let config = {
       content: [

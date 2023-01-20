@@ -1,7 +1,7 @@
 import prefix from '../src/util/prefixSelector'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it prefixes classes with the provided prefix', () => {
     expect(prefix('tw-', '.foo')).toEqual('.tw-foo')
   })

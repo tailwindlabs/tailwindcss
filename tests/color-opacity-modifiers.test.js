@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('basic color opacity modifier', async () => {
     let config = {
       content: [{ raw: html`<div class="bg-red-500/50"></div>` }],

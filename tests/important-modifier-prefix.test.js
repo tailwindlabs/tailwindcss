@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('important modifier with prefix', () => {
     let config = {
       important: false,

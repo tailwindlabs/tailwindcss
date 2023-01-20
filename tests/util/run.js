@@ -49,7 +49,7 @@ let nullProxy = new Proxy(
     fdescribe: nullTest.only,
   },
   {
-    get(target, prop, receiver) {
+    get(target, prop, _receiver) {
       if (prop in target) {
         return target[prop]
       }

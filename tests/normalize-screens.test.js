@@ -1,7 +1,7 @@
 import { normalizeScreens } from '../src/util/normalizeScreens'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should normalize an array of string values', () => {
     let screens = ['768px', '1200px']
 

@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('basic utilities', async () => {
     let config = {
       content: [{ raw: html`<div class="rotate-3 skew-y-6 scale-x-110"></div>` }],

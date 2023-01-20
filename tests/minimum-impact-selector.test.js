@@ -1,7 +1,7 @@
 import { elementSelectorParser } from '../src/lib/resolveDefaultsAtRules'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it.each`
     before                                                                 | after
     ${'*'}                                                                 | ${'*'}

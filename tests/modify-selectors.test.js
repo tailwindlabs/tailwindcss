@@ -1,8 +1,8 @@
 import selectorParser from 'postcss-selector-parser'
 
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('modify selectors', () => {
     let config = {
       darkMode: 'class',

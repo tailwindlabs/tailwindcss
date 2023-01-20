@@ -1,12 +1,12 @@
 import parseObjectStyles from '../src/util/parseObjectStyles'
 import postcss from 'postcss'
-import { crosscheck, run, html, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
 function css(nodes) {
   return postcss.root({ nodes }).toString()
 }
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it parses simple single class definitions', () => {
     const result = parseObjectStyles({
       '.foobar': {

@@ -1,9 +1,9 @@
 import path from 'path'
 import postcss from 'postcss'
 
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   function pluginThatMutatesRules() {
     return (root) => {
       root.walkRules((rule) => {

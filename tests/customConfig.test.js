@@ -5,7 +5,7 @@ import inTempDirectory from '../jest/runInTempDirectory'
 
 import { crosscheck, run, html, css, javascript } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it uses the values from the custom config file', () => {
     let config = require(path.resolve(`${__dirname}/fixtures/custom-config.js`))
 

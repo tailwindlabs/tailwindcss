@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide, engine }) => {
+crosscheck(({ stable, oxide }) => {
   test('basic arbitrary variants', () => {
     let config = {
       content: [{ raw: html`<div class="[&>*]:underline"></div>` }],

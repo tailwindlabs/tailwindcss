@@ -1,4 +1,4 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
 crosscheck(({ stable, oxide }) => {
   // Hi there, so you are debugging this test because something failed... right? Well we can look into

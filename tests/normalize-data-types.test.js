@@ -1,5 +1,5 @@
 import { normalize } from '../src/util/dataTypes'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
 let table = [
   ['foo', 'foo'],
@@ -47,7 +47,7 @@ let table = [
   ['color(0_0_0_/_1.0)', 'color(0 0 0 / 1.0)'],
 ]
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it.each(table)('normalize data: %s', (input, output) => {
     expect(normalize(input)).toBe(output)
   })

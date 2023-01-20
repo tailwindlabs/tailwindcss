@@ -1,7 +1,7 @@
 import { finalizeSelector } from '../src/util/formatVariantSelector'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should be possible to add a simple variant to a simple selector', () => {
     let selector = '.text-center'
     let candidate = 'hover:text-center'

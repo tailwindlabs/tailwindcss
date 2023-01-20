@@ -1,7 +1,7 @@
 import { normalizeConfig } from '../src/util/normalizeConfig'
 import resolveConfig from '../src/public/resolve-config'
 import log from '../src/util/log'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, css } from './util/run'
 
 crosscheck(({ stable, oxide }) => {
   it.each`

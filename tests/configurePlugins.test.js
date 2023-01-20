@@ -1,7 +1,7 @@
 import configurePlugins from '../src/util/configurePlugins'
 import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('setting a plugin to false removes it', () => {
     const plugins = ['fontSize', 'display', 'backgroundPosition']
 

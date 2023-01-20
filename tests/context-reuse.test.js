@@ -1,4 +1,4 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, css } from './util/run'
 
 const fs = require('fs')
 const path = require('path')
@@ -7,7 +7,7 @@ const tailwind = require('../src/index.js')
 const sharedState = require('../src/lib/sharedState.js')
 const configPath = path.resolve(__dirname, './context-reuse.tailwind.config.js')
 
-crosscheck(({ stable, oxide, engine }) => {
+crosscheck(({ stable, oxide }) => {
   function run(input, config = {}, from = null) {
     let { currentTestName } = expect.getState()
 

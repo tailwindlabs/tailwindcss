@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from '../util/run'
+import { crosscheck, run, html, css } from '../util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('font-size utilities can include a default line-height', () => {
     let config = {
       content: [{ raw: html`<div class="text-md text-sm text-lg"></div>` }],

@@ -1,7 +1,7 @@
 import log from '../src/util/log'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   let warn
 
   beforeEach(() => {

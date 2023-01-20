@@ -1,7 +1,7 @@
 import { toPath } from '../src/util/toPath'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should keep an array as an array', () => {
     let input = ['a', 'b', '0', 'c']
 

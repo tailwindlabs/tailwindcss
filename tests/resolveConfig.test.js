@@ -1,8 +1,8 @@
 import resolveConfig from '../src/util/resolveConfig'
 import corePluginList from '../src/corePluginList'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('prefix key overrides default prefix', () => {
     const userConfig = {
       prefix: 'tw-',

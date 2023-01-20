@@ -1,7 +1,6 @@
-import { env } from '../src/lib/sharedState'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it works', () => {
     let config = {
       darkMode: 'class',

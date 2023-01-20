@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('class variants are inserted at `@tailwind variants`', async () => {
     let config = {
       content: [{ raw: html`<div class="font-bold hover:font-bold md:font-bold"></div>` }],

@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should warn when we detect nested css', () => {
     let config = {
       content: [{ raw: html`<div class="nested"></div>` }],

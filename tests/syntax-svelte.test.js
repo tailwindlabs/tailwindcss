@@ -1,5 +1,5 @@
 import path from 'path'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck, run, css } from './util/run'
 
 crosscheck(({ stable, oxide }) => {
   oxide.test.todo('it detects svelte based on the file extension')

@@ -1,7 +1,7 @@
 import negateValue from '../src/util/negateValue'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('it negates numeric CSS values', () => {
     expect(negateValue('5')).toEqual('-5')
     expect(negateValue('10px')).toEqual('-10px')

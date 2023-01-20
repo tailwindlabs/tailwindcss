@@ -2,9 +2,9 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import resolveConfig from '../src/public/resolve-config'
 import { createContext } from '../src/lib/setupContextUtils'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should return a list of variants with meta information about the variant', () => {
     let config = {}
     let context = createContext(resolveConfig(config))

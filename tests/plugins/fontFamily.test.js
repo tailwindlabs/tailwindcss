@@ -1,6 +1,6 @@
-import { crosscheck, run, html, css, defaults } from '../util/run'
+import { crosscheck, run, html, css } from '../util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('font-family utilities can be defined as a string', () => {
     let config = {
       content: [{ raw: html`<div class="font-sans"></div>` }],

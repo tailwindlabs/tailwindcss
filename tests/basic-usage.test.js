@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide, engine }) => {
+crosscheck(({ stable, oxide }) => {
   test('basic usage', () => {
     let config = {
       content: [

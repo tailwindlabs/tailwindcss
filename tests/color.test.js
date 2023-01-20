@@ -1,7 +1,7 @@
 import { parseColor, formatColor } from '../src/util/color'
 import { crosscheck } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   describe('parseColor', () => {
     it.each`
       color                                        | output

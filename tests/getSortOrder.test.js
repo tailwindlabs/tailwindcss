@@ -1,7 +1,7 @@
 import resolveConfig from '../src/public/resolve-config'
 import { createContext } from '../src/lib/setupContextUtils'
 import bigSign from '../src/util/bigSign'
-import { crosscheck, run, html, css, defaults } from './util/run'
+import { crosscheck } from './util/run'
 
 /**
  * This is a function that the prettier-plugin-tailwindcss would use. It would
@@ -25,7 +25,7 @@ function defaultSort(arrayOfTuples) {
     .join(' ')
 }
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('should return a list of tuples with the sort order', () => {
     let input = 'font-bold underline hover:font-medium unknown'
     let config = {}

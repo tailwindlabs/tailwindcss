@@ -1,7 +1,7 @@
 import createPlugin from '../src/public/create-plugin'
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   test('plugins can create utilities with object syntax', () => {
     let config = {
       content: [
