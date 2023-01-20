@@ -58,7 +58,18 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      # Cache the `oxide` Rust build
+      - name: Cache oxide build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./oxide/target/
+            ./oxide/crates/node/*.node
+            ./oxide/crates/node/index.js
+            ./oxide/crates/node/index.d.ts
+          key: ${{ runner.os }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
 
       - name: Install dependencies
         run: npm install
