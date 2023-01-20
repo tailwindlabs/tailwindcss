@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Escape group names in selectors ([#10276](https://github.com/tailwindlabs/tailwindcss/pull/10276))
 - Consider earlier variants before sorting functions ([#10288](https://github.com/tailwindlabs/tailwindcss/pull/10288))
 - Allow variants with slashes ([#10336](https://github.com/tailwindlabs/tailwindcss/pull/10336))
+- Bump dependencies ([#10368](https://github.com/tailwindlabs/tailwindcss/pull/10368))
 
 ### Changed
 
