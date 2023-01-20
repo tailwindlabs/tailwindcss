@@ -61,7 +61,10 @@ let nullProxy = new Proxy(
 )
 
 export function crosscheck(fn) {
-  describe.each([{ engine: 'Stable' }, { engine: 'Oxide' }])('$engine', ({ engine }) => {
+  let engines =
+    env.ENGINE === 'oxide' ? [{ engine: 'Stable' }, { engine: 'Oxide' }] : [{ engine: 'Stable' }]
+
+  describe.each(engines)('$engine', ({ engine }) => {
     let engines = {
       oxide: engine === 'Oxide' ? globalThis : nullProxy,
       stable: engine === 'Stable' ? globalThis : nullProxy,
