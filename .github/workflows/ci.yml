@@ -53,12 +53,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ./oxide/crates/target
-            ./oxide/crates/node/target
+            ./oxide/target/
             ./oxide/crates/node/*.node
             ./oxide/crates/node/index.js
             ./oxide/crates/node/index.d.ts
-          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/crates/**/*') }}
+          key: ${{ runner.os }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
 
       - name: Install dependencies
         run: npm install
