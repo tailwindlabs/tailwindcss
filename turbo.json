@@ -17,7 +17,7 @@
       "inputs": ["tests/**"]
     },
     "//#style": {
-      "outputs": ["**/*.js", "**/*.ts"]
+      "inputs": ["**/*.js", "**/*.ts"]
     }
   }
 }
