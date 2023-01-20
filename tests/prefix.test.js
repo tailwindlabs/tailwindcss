@@ -1,10 +1,8 @@
-import { run, html, css, defaults } from './util/run'
-import { env } from '../src/lib/sharedState'
+import { crosscheck, run, html, css, defaults } from './util/run'
 
-let group = env.OXIDE ? describe.skip : describe
-
-group('prefix', () => {
-  test('prefix', () => {
+crosscheck(({ stable, oxide }) => {
+  oxide.test.todo('prefix')
+  stable.test('prefix', () => {
     let config = {
       prefix: 'tw-',
       darkMode: 'class',
@@ -191,7 +189,8 @@ group('prefix', () => {
     })
   })
 
-  it('negative values: marker before prefix', async () => {
+  oxide.test.todo('negative values: marker before prefix')
+  stable.test('negative values: marker before prefix', async () => {
     let config = {
       prefix: 'tw-',
       content: [{ raw: html`<div class="-tw-top-1"></div>` }],
@@ -213,7 +212,8 @@ group('prefix', () => {
     `)
   })
 
-  it('negative values: marker after prefix', async () => {
+  oxide.test.todo('negative values: marker after prefix')
+  stable.test('negative values: marker after prefix', async () => {
     let config = {
       prefix: 'tw-',
       content: [{ raw: html`<div class="tw--top-1"></div>` }],
@@ -235,7 +235,8 @@ group('prefix', () => {
     `)
   })
 
-  it('negative values: marker before prefix and arbitrary value', async () => {
+  oxide.test.todo('negative values: marker before prefix and arbitrary value')
+  stable.test('negative values: marker before prefix and arbitrary value', async () => {
     let config = {
       prefix: 'tw-',
       content: [{ raw: html`<div class="-tw-top-[1px]"></div>` }],
@@ -257,7 +258,8 @@ group('prefix', () => {
     `)
   })
 
-  it('negative values: marker after prefix and arbitrary value', async () => {
+  oxide.test.todo('negative values: marker after prefix and arbitrary value')
+  stable.test('negative values: marker after prefix and arbitrary value', async () => {
     let config = {
       prefix: 'tw-',
       content: [{ raw: html`<div class="tw--top-[1px]"></div>` }],
@@ -279,7 +281,8 @@ group('prefix', () => {
     `)
   })
 
-  it('negative values: no marker and arbitrary value', async () => {
+  oxide.test.todo('negative values: no marker and arbitrary value')
+  stable.test('negative values: no marker and arbitrary value', async () => {
     let config = {
       prefix: 'tw-',
       content: [{ raw: html`<div class="tw-top-[-1px]"></div>` }],
@@ -301,7 +304,8 @@ group('prefix', () => {
     `)
   })
 
-  it('negative values: variant versions', async () => {
+  oxide.test.todo('negative values: variant versions')
+  stable.test('negative values: variant versions', async () => {
     let config = {
       prefix: 'tw-',
       content: [
@@ -346,7 +350,8 @@ group('prefix', () => {
     `)
   })
 
-  it('negative values: prefix and apply', async () => {
+  oxide.test.todo('negative values: prefix and apply')
+  stable.test('negative values: prefix and apply', async () => {
     let config = {
       prefix: 'tw-',
       content: [{ raw: html`` }],
@@ -396,7 +401,8 @@ group('prefix', () => {
     `)
   })
 
-  it('negative values: prefix in the safelist', async () => {
+  oxide.test.todo('negative values: prefix in the safelist')
+  stable.test('negative values: prefix in the safelist', async () => {
     let config = {
       prefix: 'tw-',
       safelist: [{ pattern: /-tw-top-1/g }, { pattern: /tw--top-1/g }],
@@ -427,7 +433,8 @@ group('prefix', () => {
     `)
   })
 
-  it('prefix with negative values and variants in the safelist', async () => {
+  oxide.test.todo('prefix with negative values and variants in the safelist')
+  stable.test('prefix with negative values and variants in the safelist', async () => {
     let config = {
       prefix: 'tw-',
       safelist: [
@@ -476,7 +483,8 @@ group('prefix', () => {
     `)
   })
 
-  it('prefix does not detect and generate unnecessary classes', async () => {
+  oxide.test.todo('prefix does not detect and generate unnecessary classes')
+  stable.test('prefix does not detect and generate unnecessary classes', async () => {
     let config = {
       prefix: 'tw-_',
       content: [{ raw: html`-aaa-filter aaaa-table aaaa-hidden` }],
@@ -492,7 +500,8 @@ group('prefix', () => {
     expect(result.css).toMatchFormattedCss(css``)
   })
 
-  it('supports prefixed utilities using arbitrary values', async () => {
+  oxide.test.todo('supports prefixed utilities using arbitrary values')
+  stable.test('supports prefixed utilities using arbitrary values', async () => {
     let config = {
       prefix: 'tw-',
       content: [{ raw: html`foo` }],
@@ -518,7 +527,8 @@ group('prefix', () => {
     `)
   })
 
-  it('supports non-word prefixes (1)', async () => {
+  oxide.test.todo('supports non-word prefixes (1)')
+  stable.test('supports non-word prefixes (1)', async () => {
     let config = {
       prefix: '@',
       content: [
@@ -577,7 +587,8 @@ group('prefix', () => {
     `)
   })
 
-  it('supports non-word prefixes (2)', async () => {
+  oxide.test.todo('supports non-word prefixes (2)')
+  stable.test('supports non-word prefixes (2)', async () => {
     let config = {
       prefix: '@]$',
       content: [
