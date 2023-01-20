@@ -14,14 +14,7 @@
       "env": ["OXIDE"],
       "dependsOn": ["//#build"],
       "outputs": [],
-      "inputs": [
-        "tests/**",
-        "src/**",
-        "oxide/**",
-        "nesting/**",
-        "oxide-node-api-shim/**",
-        "types/**"
-      ]
+      "inputs": ["tests/**"]
     },
     "//#style": {
       "outputs": ["**/*.js", "**/*.ts"]
