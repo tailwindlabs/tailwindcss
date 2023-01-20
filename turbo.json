@@ -7,13 +7,11 @@
     },
     "test": {
       "env": ["OXIDE"],
-      "dependsOn": ["//#build"],
-      "outputs": []
+      "dependsOn": ["//#build"]
     },
     "//#test": {
       "env": ["OXIDE"],
       "dependsOn": ["//#build"],
-      "outputs": [],
       "inputs": ["tests/**"]
     },
     "//#style": {
