@@ -1,6 +1,7 @@
 import path from 'path'
 import postcss from 'postcss'
 import tailwind from '../../src'
+import { env } from '../../src/lib/sharedState'
 
 export * from './strings'
 export * from './defaults'
@@ -29,5 +30,51 @@ export function runWithSourceMaps(input, config, plugin = tailwind) {
     map: {
       prev: map,
     },
+  })
+}
+
+let nullTest = Object.assign(function () {}, {
+  skip: () => {},
+  only: () => {},
+  each: () => () => {},
+  todo: () => {},
+})
+let nullProxy = new Proxy(
+  {
+    test: nullTest,
+    it: nullTest,
+    xit: nullTest.skip,
+    fit: nullTest.only,
+    xdescribe: nullTest.skip,
+    fdescribe: nullTest.only,
+  },
+  {
+    get(target, prop, _receiver) {
+      if (prop in target) {
+        return target[prop]
+      }
+      return Object.assign(() => {
+        return nullProxy
+      }, nullProxy)
+    },
+  }
+)
+
+export function crosscheck(fn) {
+  let engines =
+    env.ENGINE === 'oxide' ? [{ engine: 'Stable' }, { engine: 'Oxide' }] : [{ engine: 'Stable' }]
+
+  describe.each(engines)('$engine', ({ engine }) => {
+    let engines = {
+      oxide: engine === 'Oxide' ? globalThis : nullProxy,
+      stable: engine === 'Stable' ? globalThis : nullProxy,
+      engine: { oxide: engine === 'Oxide', stable: engine === 'Stable' },
+    }
+
+    beforeEach(() => {
+      env.OXIDE = engines.engine.oxide
+    })
+
+    fn(engines)
   })
 }

@@ -1,5 +1,4 @@
-import { run, html, css } from './util/run'
-import { env } from '../src/lib/sharedState'
+import { crosscheck, run, html, css } from './util/run'
 
 function customExtractor(content) {
   let matches = content.match(/class="([^"]+)"/)
@@ -22,111 +21,117 @@ let expected = css`
   }
 `
 
-let group = env.OXIDE ? describe.skip : describe
-
-group('modern', () => {
-  test('extract.DEFAULT', () => {
-    let config = {
-      content: {
-        files: [{ raw: sharedHtml }],
-        extract: {
-          DEFAULT: customExtractor,
-        },
-      },
-    }
-
-    return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(expected)
-    })
-  })
-
-  test('extract.{extension}', () => {
-    let config = {
-      content: {
-        files: [{ raw: sharedHtml }],
-        extract: {
-          html: customExtractor,
-        },
-      },
-    }
-
-    return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(expected)
-    })
-  })
-
-  test('extract function', () => {
-    let config = {
-      content: {
-        files: [{ raw: sharedHtml }],
-        extract: customExtractor,
-      },
-    }
-
-    return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(expected)
-    })
-  })
-
-  test('raw content with extension', () => {
-    let config = {
-      content: {
-        files: [
-          {
-            raw: sharedHtml,
-            extension: 'html',
+crosscheck(({ stable, oxide }) => {
+  describe('modern', () => {
+    oxide.test.todo('extract.DEFAULT')
+    stable.test('extract.DEFAULT', () => {
+      let config = {
+        content: {
+          files: [{ raw: sharedHtml }],
+          extract: {
+            DEFAULT: customExtractor,
           },
-        ],
-        extract: {
-          html: () => ['invisible'],
         },
-      },
-      corePlugins: { preflight: false },
-    }
+      }
 
-    return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
-        .invisible {
-          visibility: hidden;
-        }
-      `)
+      return run('@tailwind utilities', config).then((result) => {
+        expect(result.css).toMatchFormattedCss(expected)
+      })
     })
-  })
-})
 
-group('legacy', () => {
-  test('defaultExtractor', () => {
-    let config = {
-      content: {
-        files: [{ raw: sharedHtml }],
-        options: {
-          defaultExtractor: customExtractor,
+    oxide.test.todo('extract.{extension}')
+    stable.test('extract.{extension}', () => {
+      let config = {
+        content: {
+          files: [{ raw: sharedHtml }],
+          extract: {
+            html: customExtractor,
+          },
         },
-      },
-    }
+      }
 
-    return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(expected)
+      return run('@tailwind utilities', config).then((result) => {
+        expect(result.css).toMatchFormattedCss(expected)
+      })
     })
-  })
 
-  test('extractors array', () => {
-    let config = {
-      content: {
-        files: [{ raw: sharedHtml }],
-        options: {
-          extractors: [
+    oxide.test.todo('extract function')
+    stable.test('extract function', () => {
+      let config = {
+        content: {
+          files: [{ raw: sharedHtml }],
+          extract: customExtractor,
+        },
+      }
+
+      return run('@tailwind utilities', config).then((result) => {
+        expect(result.css).toMatchFormattedCss(expected)
+      })
+    })
+
+    oxide.test.todo('raw content with extension')
+    stable.test('raw content with extension', () => {
+      let config = {
+        content: {
+          files: [
             {
-              extractor: customExtractor,
-              extensions: ['html'],
+              raw: sharedHtml,
+              extension: 'html',
             },
           ],
+          extract: {
+            html: () => ['invisible'],
+          },
         },
-      },
-    }
+        corePlugins: { preflight: false },
+      }
 
-    return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(expected)
+      return run('@tailwind utilities', config).then((result) => {
+        expect(result.css).toMatchFormattedCss(css`
+          .invisible {
+            visibility: hidden;
+          }
+        `)
+      })
+    })
+  })
+
+  describe('legacy', () => {
+    oxide.test.todo('defaultExtractor')
+    stable.test('defaultExtractor', () => {
+      let config = {
+        content: {
+          files: [{ raw: sharedHtml }],
+          options: {
+            defaultExtractor: customExtractor,
+          },
+        },
+      }
+
+      return run('@tailwind utilities', config).then((result) => {
+        expect(result.css).toMatchFormattedCss(expected)
+      })
+    })
+
+    oxide.test.todo('extractors array')
+    stable.test('extractors array', () => {
+      let config = {
+        content: {
+          files: [{ raw: sharedHtml }],
+          options: {
+            extractors: [
+              {
+                extractor: customExtractor,
+                extensions: ['html'],
+              },
+            ],
+          },
+        },
+      }
+
+      return run('@tailwind utilities', config).then((result) => {
+        expect(result.css).toMatchFormattedCss(expected)
+      })
     })
   })
 })
