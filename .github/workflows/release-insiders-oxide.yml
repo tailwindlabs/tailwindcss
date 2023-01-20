@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-${{ env.NODE_VERSION }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -45,7 +45,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
@@ -56,7 +56,7 @@ jobs:
             ./oxide/crates/node/*.node
             ./oxide/crates/node/index.js
             ./oxide/crates/node/index.d.ts
-          key: ${{ runner.os }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
 
       - name: Install Node.JS
         uses: actions/setup-node@v3
@@ -198,7 +198,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-${{ env.NODE_VERSION }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -210,7 +210,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
@@ -221,7 +221,7 @@ jobs:
             ./oxide/crates/node/*.node
             ./oxide/crates/node/index.js
             ./oxide/crates/node/index.d.ts
-          key: ${{ runner.os }}-oxide-${{ matrix.target }}-${{ hashFiles('./oxide/crates/**/*') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
 
       - name: Install Node.JS
         uses: actions/setup-node@v3
