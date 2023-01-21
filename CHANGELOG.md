@@ -39,12 +39,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Escape group names in selectors ([#10276](https://github.com/tailwindlabs/tailwindcss/pull/10276))
 - Consider earlier variants before sorting functions ([#10288](https://github.com/tailwindlabs/tailwindcss/pull/10288))
 - Allow variants with slashes ([#10336](https://github.com/tailwindlabs/tailwindcss/pull/10336))
-- Bump dependencies ([#10368](https://github.com/tailwindlabs/tailwindcss/pull/10368))
+- Ensure generated CSS is always sorted in the same order for a given set of templates ([#10382](https://github.com/tailwindlabs/tailwindcss/pull/10382))
 
 ### Changed
 
 - Alphabetize `theme` keys in default config ([#9953](https://github.com/tailwindlabs/tailwindcss/pull/9953))
-- Update esbuild to v16 ([#10178](https://github.com/tailwindlabs/tailwindcss/pull/10178))
+- Update esbuild to v17 ([#10368](https://github.com/tailwindlabs/tailwindcss/pull/10368))
 
 ## [3.2.4] - 2022-11-11
 
