@@ -163,15 +163,16 @@ export default function expandTailwindAtRules(context) {
     let classCacheCount = context.classCache.size
 
     env.DEBUG && console.time('Generate rules')
-    // TODO: This has a small cost but is needed to make builds deterministic. Move this to Rust eventually.
     env.DEBUG && console.time('Sorting candidates')
-    let sortedCandidates = new Set(
-      [...candidates].sort((a, z) => {
-        if (a === z) return 0
-        if (a < z) return -1
-        return 1
-      })
-    )
+    let sortedCandidates = env.OXIDE
+      ? candidates
+      : new Set(
+          [...candidates].sort((a, z) => {
+            if (a === z) return 0
+            if (a < z) return -1
+            return 1
+          })
+        )
     env.DEBUG && console.timeEnd('Sorting candidates')
     generateRules(sortedCandidates, context)
     env.DEBUG && console.timeEnd('Generate rules')
