@@ -6,6 +6,7 @@
 /example
 .vscode
 .DS_Store
+.parcel-cache
 tailwind.config.js
 index.html
 yarn.lock
