@@ -54,7 +54,7 @@ fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
     let input: Vec<_> = blobs.iter().map(|blob| &blob[..]).collect();
     let input = &input[..];
 
-    input
+    let mut result: Vec<String> = input
         .par_iter()
         .map(|input| Extractor::unique(input, Default::default()))
         .reduce(Default::default, |mut a, b| {
@@ -68,5 +68,7 @@ fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
             // to a string.
             unsafe { String::from_utf8_unchecked(s.to_vec()) }
         })
-        .collect()
+        .collect();
+    result.sort();
+    result
 }

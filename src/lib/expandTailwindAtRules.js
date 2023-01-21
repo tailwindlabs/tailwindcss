@@ -163,19 +163,16 @@ export default function expandTailwindAtRules(context) {
     let classCacheCount = context.classCache.size
 
     env.DEBUG && console.time('Generate rules')
-    // TODO: Sorting is _probably_ slow, but right now it can guarantee the same order. Eventually
-    // we will be able to get rid of this.
     env.DEBUG && console.time('Sorting candidates')
-    let sortedCandidates =
-      typeof process !== 'undefined' && process.env.JEST_WORKER_ID
-        ? new Set(
-            [...candidates].sort((a, z) => {
-              if (a === z) return 0
-              if (a < z) return -1
-              return 1
-            })
-          )
-        : candidates
+    let sortedCandidates = env.OXIDE
+      ? candidates
+      : new Set(
+          [...candidates].sort((a, z) => {
+            if (a === z) return 0
+            if (a < z) return -1
+            return 1
+          })
+        )
     env.DEBUG && console.timeEnd('Sorting candidates')
     generateRules(sortedCandidates, context)
     env.DEBUG && console.timeEnd('Generate rules')
