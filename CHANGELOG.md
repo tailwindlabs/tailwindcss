@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Alphabetize `theme` keys in default config ([#9953](https://github.com/tailwindlabs/tailwindcss/pull/9953))
 - Update esbuild to v17 ([#10368](https://github.com/tailwindlabs/tailwindcss/pull/10368))
+- Include `outline-color` in `transition` and `transition-colors` utilitires ([#10385](https://github.com/tailwindlabs/tailwindcss/pull/10385))
 
 ## [3.2.4] - 2022-11-11
 

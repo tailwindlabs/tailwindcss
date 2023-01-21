@@ -750,8 +750,9 @@ crosscheck(() => {
         }
         @media (prefers-reduced-motion: no-preference) {
           .motion-safe\:transition {
-            transition-property: color, background-color, border-color, text-decoration-color, fill,
-              stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-property: color, background-color, border-color, outline-color,
+              text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+              backdrop-filter;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
             transition-duration: 150ms;
           }
@@ -761,8 +762,9 @@ crosscheck(() => {
         }
         @media (prefers-reduced-motion: reduce) {
           .motion-reduce\:transition {
-            transition-property: color, background-color, border-color, text-decoration-color, fill,
-              stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-property: color, background-color, border-color, outline-color,
+              text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+              backdrop-filter;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
             transition-duration: 150ms;
           }
@@ -865,8 +867,9 @@ crosscheck(() => {
           }
           @media (prefers-reduced-motion: no-preference) {
             .md\:motion-safe\:hover\:transition:hover {
-              transition-property: color, background-color, border-color, text-decoration-color,
-                fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+              transition-property: color, background-color, border-color, outline-color,
+                text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+                backdrop-filter;
               transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
               transition-duration: 150ms;
             }
