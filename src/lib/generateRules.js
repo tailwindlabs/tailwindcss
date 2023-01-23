@@ -152,30 +152,26 @@ function applyVariant(variant, matches, context) {
 
   // Retrieve "modifier"
   {
-    let start = null;
-    let parens = 0;
-    let brackets = 0;
+    let start = null
+    let parens = 0
+    let brackets = 0
 
     for (let i = 0; i < variant.length; i++) {
       let c = variant[i]
       if (c === '[') {
-        brackets++;
+        brackets++
       } else if (c === ']') {
-        brackets--;
+        brackets--
       } else if (c === '(') {
-        parens++;
+        parens++
       } else if (c === ')') {
-        parens--;
+        parens--
       } else if (parens === 0 && brackets === 0 && c === '/') {
-        start = i;
+        start = i
       }
     }
 
-    let match = start === null ? null : [
-      variant,
-      variant.slice(0, start),
-      variant.slice(start + 1),
-    ]
+    let match = start === null ? null : [variant, variant.slice(0, start), variant.slice(start + 1)]
 
     if (match && !context.variantMap.has(variant)) {
       variant = match[1]

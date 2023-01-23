@@ -169,18 +169,18 @@ export let variantPlugins = {
 
           let [a, b] = fn('', extra)
 
-          let start = null;
-          let end = null;
-          let quotes = 0;
+          let start = null
+          let end = null
+          let quotes = 0
 
           for (let i = 0; i < result.length; ++i) {
             let c = result[i]
             if (c === '&') {
-              start = i;
-            } else if (c === '\'' || c === '"') {
-              quotes += 1;
+              start = i
+            } else if (c === "'" || c === '"') {
+              quotes += 1
             } else if (start !== null && c === ' ' && !quotes) {
-              end = i;
+              end = i
             }
           }
 
@@ -191,7 +191,7 @@ export let variantPlugins = {
           // Basically this but can handle quotes:
           // result.replace(/&(\S+)?/g, (_, pseudo = '') => a + pseudo + b)
 
-          result = result.slice(0, start) + a + result.slice(start+1, end) + b + result.slice(end)
+          result = result.slice(0, start) + a + result.slice(start + 1, end) + b + result.slice(end)
 
           return result
         },

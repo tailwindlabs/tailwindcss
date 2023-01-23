@@ -966,7 +966,7 @@ crosscheck(({ stable, oxide }) => {
     let result = await run(input, config)
 
     oxide.expect(result.css).toMatchFormattedCss(css`
-      .group[href^="/"] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
+      .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
         display: none;
       }
     `)
@@ -975,7 +975,7 @@ crosscheck(({ stable, oxide }) => {
       .hidden {
         display: none;
       }
-      .group[href^="/"] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
+      .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
         display: none;
       }
     `)
@@ -997,7 +997,7 @@ crosscheck(({ stable, oxide }) => {
     let result = await run(input, config)
 
     oxide.expect(result.css).toMatchFormattedCss(css`
-      .group[href^=" bar"] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
+      .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
         display: none;
       }
     `)
@@ -1006,7 +1006,7 @@ crosscheck(({ stable, oxide }) => {
       .hidden {
         display: none;
       }
-      .group[href^=" bar"] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
+      .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
         display: none;
       }
     `)
