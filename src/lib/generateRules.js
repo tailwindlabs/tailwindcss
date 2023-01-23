@@ -152,30 +152,18 @@ function applyVariant(variant, matches, context) {
 
   // Retrieve "modifier"
   {
-    let start = null
-    let parens = 0
-    let brackets = 0
+    let [baseVariant, ...modifiers] = splitAtTopLevelOnly(variant, '/', 2)
 
-    for (let i = 0; i < variant.length; i++) {
-      let c = variant[i]
-      if (c === '[') {
-        brackets++
-      } else if (c === ']') {
-        brackets--
-      } else if (c === '(') {
-        parens++
-      } else if (c === ')') {
-        parens--
-      } else if (parens === 0 && brackets === 0 && c === '/') {
-        start = i
-      }
+    // This is a hack to support variants with `/` in them, like `ar-1/10/20:text-red-500`
+    // In this case 1/10 is a value but /20 is a modifier
+    if (modifiers.length > 1) {
+      baseVariant = baseVariant + '/' + modifiers.slice(0, -1).join('/')
+      modifiers = modifiers.slice(-1)
     }
 
-    let match = start === null ? null : [variant, variant.slice(0, start), variant.slice(start + 1)]
-
-    if (match && !context.variantMap.has(variant)) {
-      variant = match[1]
-      args.modifier = match[2]
+    if (modifiers.length && !context.variantMap.has(variant)) {
+      variant = baseVariant
+      args.modifier = modifiers[0]
 
       if (!flagEnabled(context.tailwindConfig, 'generalizedModifiers')) {
         return []
