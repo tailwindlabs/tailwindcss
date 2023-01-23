@@ -44,6 +44,7 @@
         "@swc/jest": "0.2.24",
         "@swc/register": "0.1.10",
         "autoprefixer": "^10.4.13",
+        "browserslist": "^4.21.4",
         "concurrently": "^7.5.0",
         "cssnano": "^5.1.14",
         "esbuild": "^0.16.10",
@@ -52,6 +53,7 @@
         "eslint-plugin-prettier": "^4.2.1",
         "jest": "^28.1.3",
         "jest-diff": "^28.1.3",
+        "lightningcss": "^1.18.0",
         "prettier": "^2.8.1",
         "rimraf": "^3.0.0",
         "source-map-js": "^1.0.2",
@@ -3518,6 +3520,18 @@
       "version": "1.0.0",
       "license": "MIT"
     },
+    "node_modules/detect-libc": {
+      "version": "1.0.3",
+      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-1.0.3.tgz",
+      "integrity": "sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==",
+      "dev": true,
+      "bin": {
+        "detect-libc": "bin/detect-libc.js"
+      },
+      "engines": {
+        "node": ">=0.10"
+      }
+    },
     "node_modules/detect-newline": {
       "version": "3.1.0",
       "dev": true,
@@ -5874,6 +5888,192 @@
       },
       "engines": {
         "node": ">= 0.8.0"
+      }
+    },
+    "node_modules/lightningcss": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss/-/lightningcss-1.18.0.tgz",
+      "integrity": "sha512-uk10tNxi5fhZqU93vtYiQgx/8a9f0Kvtj5AXIm+VlOXY+t/DWDmCZWJEkZJmmALgvbS6aAW8or+Kq85eJ6TDTw==",
+      "dev": true,
+      "dependencies": {
+        "detect-libc": "^1.0.3"
+      },
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
+      },
+      "optionalDependencies": {
+        "lightningcss-darwin-arm64": "1.18.0",
+        "lightningcss-darwin-x64": "1.18.0",
+        "lightningcss-linux-arm-gnueabihf": "1.18.0",
+        "lightningcss-linux-arm64-gnu": "1.18.0",
+        "lightningcss-linux-arm64-musl": "1.18.0",
+        "lightningcss-linux-x64-gnu": "1.18.0",
+        "lightningcss-linux-x64-musl": "1.18.0",
+        "lightningcss-win32-x64-msvc": "1.18.0"
+      }
+    },
+    "node_modules/lightningcss-darwin-arm64": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-darwin-arm64/-/lightningcss-darwin-arm64-1.18.0.tgz",
+      "integrity": "sha512-OqjydwtiNPgdH1ByIjA1YzqvDG/OMR6L3LPN6wRl1729LB0y4Mik7L06kmZaTb+pvUHr+NmDd2KCwnlrQ4zO3w==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
+      }
+    },
+    "node_modules/lightningcss-darwin-x64": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-darwin-x64/-/lightningcss-darwin-x64-1.18.0.tgz",
+      "integrity": "sha512-mNiuPHj89/JHZmJMp+5H8EZSt6EL5DZRWJ31O6k3DrLLnRIQjXuXdDdN8kP7LoIkeWI5xvyD60CsReJm+YWYAw==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
+      }
+    },
+    "node_modules/lightningcss-linux-arm-gnueabihf": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm-gnueabihf/-/lightningcss-linux-arm-gnueabihf-1.18.0.tgz",
+      "integrity": "sha512-S+25JjI6601HiAVoTDXW6SqH+E94a+FHA7WQqseyNHunOgVWKcAkNEc2LJvVxgwTq6z41sDIb9/M3Z9wa9lk4A==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
+      }
+    },
+    "node_modules/lightningcss-linux-arm64-gnu": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm64-gnu/-/lightningcss-linux-arm64-gnu-1.18.0.tgz",
+      "integrity": "sha512-JSqh4+21dCgBecIQUet35dtE4PhhSEMyqe3y0ZNQrAJQ5kyUPSQHiw81WXnPJcOSTTpG0TyMLiC8K//+BsFGQA==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
+      }
+    },
+    "node_modules/lightningcss-linux-arm64-musl": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm64-musl/-/lightningcss-linux-arm64-musl-1.18.0.tgz",
+      "integrity": "sha512-2FWHa8iUhShnZnqhn2wfIcK5adJat9hAAaX7etNsoXJymlliDIOFuBQEsba2KBAZSM4QqfQtvRdR7m8i0I7ybQ==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
+      }
+    },
+    "node_modules/lightningcss-linux-x64-gnu": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.18.0.tgz",
+      "integrity": "sha512-plCPGQJtDZHcLVKVRLnQVF2XRsIC32WvuJhQ7fJ7F6BV98b/VZX0OlX05qUaOESD9dCDHjYSfxsgcvOKgCWh7A==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
+      }
+    },
+    "node_modules/lightningcss-linux-x64-musl": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.18.0.tgz",
+      "integrity": "sha512-na+BGtVU6fpZvOHKhnlA0XHeibkT3/46nj6vLluG3kzdJYoBKU6dIl7DSOk++8jv4ybZyFJ0aOFMMSc8g2h58A==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
+      }
+    },
+    "node_modules/lightningcss-win32-x64-msvc": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.18.0.tgz",
+      "integrity": "sha512-5qeAH4RMNy2yMNEl7e5TI6upt/7xD2ZpHWH4RkT8iJ7/6POS5mjHbXWUO9Q1hhDhqkdzGa76uAdMzEouIeCyNw==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "optional": true,
+      "os": [
+        "win32"
+      ],
+      "engines": {
+        "node": ">= 12.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/parcel"
       }
     },
     "node_modules/lilconfig": {
@@ -10238,6 +10438,12 @@
     "defined": {
       "version": "1.0.0"
     },
+    "detect-libc": {
+      "version": "1.0.3",
+      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-1.0.3.tgz",
+      "integrity": "sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==",
+      "dev": true
+    },
     "detect-newline": {
       "version": "3.1.0",
       "dev": true
@@ -11841,6 +12047,79 @@
           }
         }
       }
+    },
+    "lightningcss": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss/-/lightningcss-1.18.0.tgz",
+      "integrity": "sha512-uk10tNxi5fhZqU93vtYiQgx/8a9f0Kvtj5AXIm+VlOXY+t/DWDmCZWJEkZJmmALgvbS6aAW8or+Kq85eJ6TDTw==",
+      "dev": true,
+      "requires": {
+        "detect-libc": "^1.0.3",
+        "lightningcss-darwin-arm64": "1.18.0",
+        "lightningcss-darwin-x64": "1.18.0",
+        "lightningcss-linux-arm-gnueabihf": "1.18.0",
+        "lightningcss-linux-arm64-gnu": "1.18.0",
+        "lightningcss-linux-arm64-musl": "1.18.0",
+        "lightningcss-linux-x64-gnu": "1.18.0",
+        "lightningcss-linux-x64-musl": "1.18.0",
+        "lightningcss-win32-x64-msvc": "1.18.0"
+      }
+    },
+    "lightningcss-darwin-arm64": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-darwin-arm64/-/lightningcss-darwin-arm64-1.18.0.tgz",
+      "integrity": "sha512-OqjydwtiNPgdH1ByIjA1YzqvDG/OMR6L3LPN6wRl1729LB0y4Mik7L06kmZaTb+pvUHr+NmDd2KCwnlrQ4zO3w==",
+      "dev": true,
+      "optional": true
+    },
+    "lightningcss-darwin-x64": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-darwin-x64/-/lightningcss-darwin-x64-1.18.0.tgz",
+      "integrity": "sha512-mNiuPHj89/JHZmJMp+5H8EZSt6EL5DZRWJ31O6k3DrLLnRIQjXuXdDdN8kP7LoIkeWI5xvyD60CsReJm+YWYAw==",
+      "dev": true,
+      "optional": true
+    },
+    "lightningcss-linux-arm-gnueabihf": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm-gnueabihf/-/lightningcss-linux-arm-gnueabihf-1.18.0.tgz",
+      "integrity": "sha512-S+25JjI6601HiAVoTDXW6SqH+E94a+FHA7WQqseyNHunOgVWKcAkNEc2LJvVxgwTq6z41sDIb9/M3Z9wa9lk4A==",
+      "dev": true,
+      "optional": true
+    },
+    "lightningcss-linux-arm64-gnu": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm64-gnu/-/lightningcss-linux-arm64-gnu-1.18.0.tgz",
+      "integrity": "sha512-JSqh4+21dCgBecIQUet35dtE4PhhSEMyqe3y0ZNQrAJQ5kyUPSQHiw81WXnPJcOSTTpG0TyMLiC8K//+BsFGQA==",
+      "dev": true,
+      "optional": true
+    },
+    "lightningcss-linux-arm64-musl": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm64-musl/-/lightningcss-linux-arm64-musl-1.18.0.tgz",
+      "integrity": "sha512-2FWHa8iUhShnZnqhn2wfIcK5adJat9hAAaX7etNsoXJymlliDIOFuBQEsba2KBAZSM4QqfQtvRdR7m8i0I7ybQ==",
+      "dev": true,
+      "optional": true
+    },
+    "lightningcss-linux-x64-gnu": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.18.0.tgz",
+      "integrity": "sha512-plCPGQJtDZHcLVKVRLnQVF2XRsIC32WvuJhQ7fJ7F6BV98b/VZX0OlX05qUaOESD9dCDHjYSfxsgcvOKgCWh7A==",
+      "dev": true,
+      "optional": true
+    },
+    "lightningcss-linux-x64-musl": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.18.0.tgz",
+      "integrity": "sha512-na+BGtVU6fpZvOHKhnlA0XHeibkT3/46nj6vLluG3kzdJYoBKU6dIl7DSOk++8jv4ybZyFJ0aOFMMSc8g2h58A==",
+      "dev": true,
+      "optional": true
+    },
+    "lightningcss-win32-x64-msvc": {
+      "version": "1.18.0",
+      "resolved": "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.18.0.tgz",
+      "integrity": "sha512-5qeAH4RMNy2yMNEl7e5TI6upt/7xD2ZpHWH4RkT8iJ7/6POS5mjHbXWUO9Q1hhDhqkdzGa76uAdMzEouIeCyNw==",
+      "dev": true,
+      "optional": true
     },
     "lilconfig": {
       "version": "2.0.6"

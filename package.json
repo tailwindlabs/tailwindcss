@@ -81,7 +81,7 @@
     "fast-glob": "^3.2.12",
     "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
-    "lightningcss": "^1.17.1",
+    "lightningcss": "^1.18.0",
     "lilconfig": "^2.0.6",
     "micromatch": "^4.0.5",
     "normalize-path": "^3.0.0",

@@ -644,15 +644,15 @@ crosscheck(({ stable, oxide }) => {
             <div>
               <div class="aria-checked:underline"></div>
               <div class="aria-[sort=ascending]:underline"></div>
-              <div class="aria-[labelledby=a_b]:underline"></div>
+              <div class="aria-[labelledby='a_b']:underline"></div>
               <div class="group-aria-checked:underline"></div>
               <div class="peer-aria-checked:underline"></div>
               <div class="group-aria-checked/foo:underline"></div>
               <div class="peer-aria-checked/foo:underline"></div>
               <div class="group-aria-[sort=ascending]:underline"></div>
               <div class="peer-aria-[sort=ascending]:underline"></div>
-              <div class="group-aria-[labelledby=a_b]:underline"></div>
-              <div class="peer-aria-[labelledby=a_b]:underline"></div>
+              <div class="group-aria-[labelledby='a_b']:underline"></div>
+              <div class="peer-aria-[labelledby='a_b']:underline"></div>
               <div class="group-aria-[sort=ascending]/foo:underline"></div>
               <div class="peer-aria-[sort=ascending]/foo:underline"></div>
             </div>
@@ -667,43 +667,37 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
-        .aria-checked\:underline[aria-checked='true'] {
+      stable.expect(result.css).toMatchFormattedCss(css`
+        .underline,
+        .aria-checked\:underline[aria-checked='true'],
+        .aria-\[labelledby\=\'a_b\'\]\:underline[aria-labelledby='a b'],
+        .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'],
+        .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline,
+        .group[aria-checked='true'] .group-aria-checked\:underline,
+        .group[aria-labelledby='a b'] .group-aria-\[labelledby\=\'a_b\'\]\:underline,
+        .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline,
+        .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline,
+        .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline,
+        .peer[aria-checked='true'] ~ .peer-aria-checked\:underline,
+        .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=\'a_b\'\]\:underline,
+        .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline,
+        .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
           text-decoration-line: underline;
         }
-        .aria-\[labelledby\=a_b\]\:underline[aria-labelledby='a b'] {
-          text-decoration-line: underline;
-        }
-        .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'] {
-          text-decoration-line: underline;
-        }
-        .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group[aria-checked='true'] .group-aria-checked\:underline {
-          text-decoration-line: underline;
-        }
-        .group[aria-labelledby='a b'] .group-aria-\[labelledby\=a_b\]\:underline {
-          text-decoration-line: underline;
-        }
-        .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .peer[aria-checked='true'] ~ .peer-aria-checked\:underline {
-          text-decoration-line: underline;
-        }
-        .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=a_b\]\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .aria-checked\:underline[aria-checked='true'],
+        .aria-\[labelledby\=\'a_b\'\]\:underline[aria-labelledby='a b'],
+        .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'],
+        .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline,
+        .group[aria-checked='true'] .group-aria-checked\:underline,
+        .group[aria-labelledby='a b'] .group-aria-\[labelledby\=\'a_b\'\]\:underline,
+        .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline,
+        .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline,
+        .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline,
+        .peer[aria-checked='true'] ~ .peer-aria-checked\:underline,
+        .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=\'a_b\'\]\:underline,
+        .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline,
         .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
           text-decoration-line: underline;
         }
@@ -724,15 +718,15 @@ crosscheck(({ stable, oxide }) => {
             <div>
               <div class="data-checked:underline"></div>
               <div class="data-[position=top]:underline"></div>
-              <div class="data-[foo=bar_baz]:underline"></div>
+              <div class="data-[foo='bar_baz']:underline"></div>
               <div class="group-data-checked:underline"></div>
               <div class="peer-data-checked:underline"></div>
               <div class="group-data-checked/foo:underline"></div>
               <div class="peer-data-checked/foo:underline"></div>
               <div class="group-data-[position=top]:underline"></div>
               <div class="peer-data-[position=top]:underline"></div>
-              <div class="group-data-[foo=bar_baz]:underline"></div>
-              <div class="peer-data-[foo=bar_baz]:underline"></div>
+              <div class="group-data-[foo='bar_baz']:underline"></div>
+              <div class="peer-data-[foo='bar_baz']:underline"></div>
               <div class="group-data-[position=top]/foo:underline"></div>
               <div class="peer-data-[position=top]/foo:underline"></div>
             </div>
@@ -747,43 +741,37 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
-        .data-checked\:underline[data-ui~='checked'] {
+      stable.expect(result.css).toMatchFormattedCss(css`
+        .underline,
+        .data-checked\:underline[data-ui~='checked'],
+        .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
+        .data-\[position\=top\]\:underline[data-position='top'],
+        .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
+        .group[data-ui~='checked'] .group-data-checked\:underline,
+        .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,
+        .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline,
+        .group[data-position='top'] .group-data-\[position\=top\]\:underline,
+        .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline,
+        .peer[data-ui~='checked'] ~ .peer-data-checked\:underline,
+        .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=\'bar_baz\'\]\:underline,
+        .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline,
+        .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
           text-decoration-line: underline;
         }
-        .data-\[foo\=bar_baz\]\:underline[data-foo='bar baz'] {
-          text-decoration-line: underline;
-        }
-        .data-\[position\=top\]\:underline[data-position='top'] {
-          text-decoration-line: underline;
-        }
-        .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group[data-ui~='checked'] .group-data-checked\:underline {
-          text-decoration-line: underline;
-        }
-        .group[data-foo='bar baz'] .group-data-\[foo\=bar_baz\]\:underline {
-          text-decoration-line: underline;
-        }
-        .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group[data-position='top'] .group-data-\[position\=top\]\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .peer[data-ui~='checked'] ~ .peer-data-checked\:underline {
-          text-decoration-line: underline;
-        }
-        .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=bar_baz\]\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .data-checked\:underline[data-ui~='checked'],
+        .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
+        .data-\[position\=top\]\:underline[data-position='top'],
+        .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
+        .group[data-ui~='checked'] .group-data-checked\:underline,
+        .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,
+        .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline,
+        .group[data-position='top'] .group-data-\[position\=top\]\:underline,
+        .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline,
+        .peer[data-ui~='checked'] ~ .peer-data-checked\:underline,
+        .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=\'bar_baz\'\]\:underline,
+        .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline,
         .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
           text-decoration-line: underline;
         }
@@ -807,7 +795,7 @@ crosscheck(({ stable, oxide }) => {
               <!-- Value with spaces, needs to be normalized -->
               <div class="supports-[transform-origin:5%_5%]:underline"></div>
               <!-- Selectors (raw) -->
-              <div class="supports-[selector(A>B)]:underline"></div>
+              <div class="supports-[selector(A_>_B)]:underline"></div>
               <!-- 'not' check (raw) -->
               <div class="supports-[not(foo:bar)]:underline"></div>
               <!-- 'or' check (raw) -->
@@ -835,37 +823,42 @@ crosscheck(({ stable, oxide }) => {
           .supports-grid\:underline {
             text-decoration-line: underline;
           }
-        }
-        @supports (display: grid) {
+
           .supports-\[display\:grid\]\:grid {
             display: grid;
           }
         }
+
         @supports (foo: bar) and (bar: baz) {
           .supports-\[\(foo\:bar\)and\(bar\:baz\)\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports (foo: bar) or (bar: baz) {
           .supports-\[\(foo\:bar\)or\(bar\:baz\)\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports (container-type: var(--tw)) {
           .supports-\[container-type\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports not (foo: bar) {
           .supports-\[not\(foo\:bar\)\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports selector(A > B) {
-          .supports-\[selector\(A\>B\)\]\:underline {
+          .supports-\[selector\(A_\>_B\)\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports (transform-origin: 5% 5%) {
           .supports-\[transform-origin\:5\%_5\%\]\:underline {
             text-decoration-line: underline;
@@ -1229,22 +1222,22 @@ crosscheck(({ stable, oxide }) => {
       corePlugins: { preflight: false },
       plugins: [
         function ({ addVariant, matchVariant }) {
-          addVariant('foo1', '&[data-foo=1]')
-          addVariant('foo2', '&[data-foo=2]')
+          addVariant('foo1', "&[data-foo='1']")
+          addVariant('foo2', "&[data-foo='2']")
 
-          matchVariant('bar', (value) => `&[data-bar=${value}]`, {
+          matchVariant('bar', (value) => `&[data-bar='${value}']`, {
             sort: (a, b) => b.value - a.value,
           })
 
-          addVariant('baz1', '&[data-baz=1]')
-          addVariant('baz2', '&[data-baz=2]')
+          addVariant('baz1', "&[data-baz='1']")
+          addVariant('baz2', "&[data-baz='2']")
 
-          matchVariant('qux', (value) => `&[data-qux=${value}]`, {
+          matchVariant('qux', (value) => `&[data-qux='${value}']`, {
             sort: (a, b) => b.value - a.value,
           })
 
-          addVariant('fred1', '&[data-fred=1]')
-          addVariant('fred2', '&[data-fred=2]')
+          addVariant('fred1', "&[data-fred='1']")
+          addVariant('fred2', "&[data-fred='2']")
         },
       ],
     }
@@ -1255,99 +1248,37 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .fred1\:qux-\[2\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[2\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[2\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[2\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[2\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[2\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[2\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[2\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[1\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[1\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[1\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[1\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[1\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[1\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[1\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred1\:qux-\[1\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='1'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[2\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[2\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[2\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[2\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[2\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[2\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[2\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[2\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[1\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[1\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[1\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[1\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[1\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[1\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='2'] {
-          padding: 0.25rem;
-        }
-        .fred2\:qux-\[1\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='2'] {
-          padding: 0.25rem;
-        }
+        .fred1\:qux-\[2\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='1'],
+        .fred1\:qux-\[2\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='1'],
+        .fred1\:qux-\[2\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='1'],
+        .fred1\:qux-\[2\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='1'],
+        .fred1\:qux-\[2\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='1'],
+        .fred1\:qux-\[2\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='1'],
+        .fred1\:qux-\[2\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='1'],
+        .fred1\:qux-\[2\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='1'],
+        .fred1\:qux-\[1\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='1'],
+        .fred1\:qux-\[1\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='1'],
+        .fred1\:qux-\[1\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='1'],
+        .fred1\:qux-\[1\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='1'],
+        .fred1\:qux-\[1\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='1'],
+        .fred1\:qux-\[1\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='1'],
+        .fred1\:qux-\[1\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='1'],
+        .fred1\:qux-\[1\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='1'],
+        .fred2\:qux-\[2\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='2'],
+        .fred2\:qux-\[2\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='2'][data-fred='2'],
+        .fred2\:qux-\[2\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='2'],
+        .fred2\:qux-\[2\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='2'][data-fred='2'],
+        .fred2\:qux-\[2\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='2'],
+        .fred2\:qux-\[2\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='2'][data-fred='2'],
+        .fred2\:qux-\[2\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='2'],
+        .fred2\:qux-\[2\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='2'][data-fred='2'],
+        .fred2\:qux-\[1\]\:baz1\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='2'],
+        .fred2\:qux-\[1\]\:baz1\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='1'][data-qux='1'][data-fred='2'],
+        .fred2\:qux-\[1\]\:baz1\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='2'],
+        .fred2\:qux-\[1\]\:baz1\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='1'][data-qux='1'][data-fred='2'],
+        .fred2\:qux-\[1\]\:baz2\:bar-\[2\]\:foo1\:p-1[data-foo='1'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='2'],
+        .fred2\:qux-\[1\]\:baz2\:bar-\[2\]\:foo2\:p-1[data-foo='2'][data-bar='2'][data-baz='2'][data-qux='1'][data-fred='2'],
+        .fred2\:qux-\[1\]\:baz2\:bar-\[1\]\:foo1\:p-1[data-foo='1'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='2'],
         .fred2\:qux-\[1\]\:baz2\:bar-\[1\]\:foo2\:p-1[data-foo='2'][data-bar='1'][data-baz='2'][data-qux='1'][data-fred='2'] {
           padding: 0.25rem;
         }
