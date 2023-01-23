@@ -60,6 +60,18 @@ let nullProxy = new Proxy(
   }
 )
 
+/**
+ * @typedef {object} CrossCheck
+ * @property {typeof import('@jest/globals')} oxide
+ * @property {typeof import('@jest/globals')} stable
+ * @property {object} engine
+ * @property {boolean} engine.oxide
+ * @property {boolean} engine.stable
+ */
+
+/**
+ * @param {(data: CrossCheck) => void} fn
+ */
 export function crosscheck(fn) {
   let engines =
     env.ENGINE === 'oxide' ? [{ engine: 'Stable' }, { engine: 'Oxide' }] : [{ engine: 'Stable' }]

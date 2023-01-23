@@ -949,4 +949,66 @@ crosscheck(({ stable, oxide }) => {
       `)
     })
   })
+
+  test('detects quoted arbitrary values containing a slash', async () => {
+    let config = {
+      content: [
+        {
+          raw: html`<div class="group-[[href^='/']]:hidden"></div>`,
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    let result = await run(input, config)
+
+    oxide.expect(result.css).toMatchFormattedCss(css`
+      .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
+        display: none;
+      }
+    `)
+
+    stable.expect(result.css).toMatchFormattedCss(css`
+      .hidden {
+        display: none;
+      }
+      .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
+        display: none;
+      }
+    `)
+  })
+
+  test('handled quoted arbitrary values containing escaped spaces', async () => {
+    let config = {
+      content: [
+        {
+          raw: html`<div class="group-[[href^='_bar']]:hidden"></div>`,
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    let result = await run(input, config)
+
+    oxide.expect(result.css).toMatchFormattedCss(css`
+      .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
+        display: none;
+      }
+    `)
+
+    stable.expect(result.css).toMatchFormattedCss(css`
+      .hidden {
+        display: none;
+      }
+      .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
+        display: none;
+      }
+    `)
+  })
 })
