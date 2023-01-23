@@ -74,8 +74,8 @@ function toMatchFormattedCss(received = '', argument = '') {
         )
       }
     : () => {
-        let actual = formattedReceived
-        let expected = formattedArgument
+        let actual = formatPrettier(formattedReceived)
+        let expected = formatPrettier(formattedArgument)
 
         let diffString = diff(expected, actual, {
           expand: this.expand,
