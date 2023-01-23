@@ -70,7 +70,7 @@ let nullProxy = new Proxy(
  */
 
 /**
- * @param {(data: CrossCheck) => unknown} fn
+ * @param {(data: CrossCheck) => void} fn
  */
 export function crosscheck(fn) {
   let engines =
