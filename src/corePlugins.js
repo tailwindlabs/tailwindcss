@@ -191,9 +191,7 @@ export let variantPlugins = {
           // Basically this but can handle quotes:
           // result.replace(/&(\S+)?/g, (_, pseudo = '') => a + pseudo + b)
 
-          result = result.slice(0, start) + a + result.slice(start + 1, end) + b + result.slice(end)
-
-          return result
+          return result.slice(0, start) + a + result.slice(start + 1, end) + b + result.slice(end)
         },
         { values: Object.fromEntries(pseudoVariants) }
       )
