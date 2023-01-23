@@ -152,7 +152,7 @@ function applyVariant(variant, matches, context) {
 
   // Retrieve "modifier"
   {
-    let [baseVariant, ...modifiers] = splitAtTopLevelOnly(variant, '/', 2)
+    let [baseVariant, ...modifiers] = splitAtTopLevelOnly(variant, '/')
 
     // This is a hack to support variants with `/` in them, like `ar-1/10/20:text-red-500`
     // In this case 1/10 is a value but /20 is a modifier
