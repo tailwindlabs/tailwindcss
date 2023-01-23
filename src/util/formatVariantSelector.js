@@ -218,7 +218,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
     parent.insertAfter(simpleSelector[simpleSelector.length - 1], simpleEnd)
 
     for (let child of formatNodes) {
-      parent.insertBefore(simpleSelector[0], child)
+      parent.insertBefore(simpleSelector[0], child.clone())
     }
 
     node.remove()

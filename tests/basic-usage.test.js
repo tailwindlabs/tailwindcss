@@ -922,4 +922,31 @@ crosscheck(({ stable, oxide }) => {
       `)
     })
   })
+
+  it('should not crash when matching variants where utility classes are doubled up', () => {
+    let config = {
+      content: [
+        {
+          raw: '<div class="hover:foo"></div>',
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind utilities;
+      @layer utilities {
+        .foo.foo {
+          text-decoration-line: underline;
+        }
+      }
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        .hover\:foo:hover.hover\:foo:hover {
+          text-decoration-line: underline;
+        }
+      `)
+    })
+  })
 })
