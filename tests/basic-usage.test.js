@@ -570,15 +570,7 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      stable.expect(result.css).toMatchFormattedCss(css`
-        .bg-\[url\(\'\/images\/one-two-three\.png\'\)\,
-          linear-gradient\(to_right\,
-          _\#eeeeee\,
-          _\#000000\)\] {
-          background-image: url('/images/one-two-three.png'), linear-gradient(to right, #eee, #000);
-        }
-      `)
-      oxide.expect(result.css).toMatchFormattedCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .bg-\[url\(\'\/images\/one-two-three\.png\'\)\,linear-gradient\(to_right\,_\#eeeeee\,_\#000000\)\] {
           background-image: url('/images/one-two-three.png'), linear-gradient(to right, #eee, #000);
         }

@@ -182,14 +182,10 @@
   width: var(--width, calc(100% + 1rem));
 }
 .w-\[\{\{\}\}\] {
-  width: {
-     {
-    }
-  }
+  width: {{} };
 }
 .w-\[\{\}\] {
-  width: {
-  }
+  width: {};
 }
 .min-w-\[3\.23rem\] {
   min-width: 3.23rem;
@@ -420,7 +416,7 @@
   scroll-padding-top: var(--scroll-padding);
 }
 .list-\[\'\\1f44d\'\] {
-  list-style-type: '\1F44D';
+  list-style-type: '\1f44d';
 }
 .list-\[var\(--value\)\] {
   list-style-type: var(--value);

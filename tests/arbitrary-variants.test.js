@@ -795,7 +795,7 @@ crosscheck(({ stable, oxide }) => {
               <!-- Value with spaces, needs to be normalized -->
               <div class="supports-[transform-origin:5%_5%]:underline"></div>
               <!-- Selectors (raw) -->
-              <div class="supports-[selector(A>B)]:underline"></div>
+              <div class="supports-[selector(A_>_B)]:underline"></div>
               <!-- 'not' check (raw) -->
               <div class="supports-[not(foo:bar)]:underline"></div>
               <!-- 'or' check (raw) -->
@@ -823,37 +823,42 @@ crosscheck(({ stable, oxide }) => {
           .supports-grid\:underline {
             text-decoration-line: underline;
           }
-        }
-        @supports (display: grid) {
+
           .supports-\[display\:grid\]\:grid {
             display: grid;
           }
         }
+
         @supports (foo: bar) and (bar: baz) {
           .supports-\[\(foo\:bar\)and\(bar\:baz\)\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports (foo: bar) or (bar: baz) {
           .supports-\[\(foo\:bar\)or\(bar\:baz\)\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports (container-type: var(--tw)) {
           .supports-\[container-type\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports not (foo: bar) {
           .supports-\[not\(foo\:bar\)\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports selector(A > B) {
-          .supports-\[selector\(A\>B\)\]\:underline {
+          .supports-\[selector\(A_\>_B\)\]\:underline {
             text-decoration-line: underline;
           }
         }
+
         @supports (transform-origin: 5% 5%) {
           .supports-\[transform-origin\:5\%_5\%\]\:underline {
             text-decoration-line: underline;

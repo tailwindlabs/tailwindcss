@@ -182,14 +182,10 @@
   width: var(--width, calc(100% + 1rem));
 }
 .w-\[\{\{\}\}\] {
-  width: {
-     {
-    }
-  }
+  width: {{} };
 }
 .w-\[\{\}\] {
-  width: {
-  }
+  width: {};
 }
 .min-w-\[3\.23rem\] {
   min-width: 3.23rem;
@@ -420,7 +416,7 @@
   scroll-padding-top: var(--scroll-padding);
 }
 .list-\[\'\\1f44d\'\] {
-  list-style-type: '\1F44D';
+  list-style-type: '\1f44d';
 }
 .list-\[var\(--value\)\] {
   list-style-type: var(--value);
@@ -685,13 +681,7 @@
 .bg-\[image\:var\(--value\)\2c var\(--value\)\] {
   background-image: var(--value), var(--value);
 }
-.bg-\[linear-gradient\(\#eee\2c
-  \#fff\)\2c
-  conic-gradient\(red\2c
-  orange\2c
-  yellow\2c
-  green\2c
-  blue\)\] {
+.bg-\[linear-gradient\(\#eee\,\#fff\)\,conic-gradient\(red\,orange\,yellow\,green\,blue\)\] {
   background-image: linear-gradient(#eee, #fff), conic-gradient(red, orange, yellow, green, blue);
 }
 .bg-\[linear-gradient\(\#eee\2c \#fff\)\] {
