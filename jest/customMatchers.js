@@ -12,10 +12,10 @@ function formatPrettier(input) {
 function toMatchFormattedCss(received = '', argument = '') {
   function format(input) {
     try {
-      let output = lightningcss
+      return lightningcss
         .transform({
           filename: 'input.css',
-          code: Buffer.from(formatPrettier(input.replace(/\n/g, ''))),
+          code: Buffer.from(input),
           minify: false,
           targets: { chrome: 106 << 16 },
           drafts: {
@@ -24,8 +24,6 @@ function toMatchFormattedCss(received = '', argument = '') {
           },
         })
         .code.toString('utf8')
-
-      return formatPrettier(output)
     } catch (err) {
       try {
         // Lightning CSS is pretty strict, so it will fail for `@media screen(md) {}` for example,
