@@ -141,11 +141,26 @@ crosscheck(() => {
         plugin(function ({ matchUtilities }) {
           matchUtilities(
             {
-              foo: (value, { modifier }) => {
-                return { color: `rgb(${value} / ${modifier ?? 1})` }
+              foo: (value) => {
+                return { margin: value }
               },
             },
-            { values: { red: '255 0 0' }, modifiers: { bar: '0' } }
+            {
+              values: { xl: '32px' },
+              modifiers: { bar: 'something' },
+            }
+          )
+          matchUtilities(
+            {
+              'foo-negative': (value) => {
+                return { margin: value }
+              },
+            },
+            {
+              values: { xl: '32px' },
+              modifiers: { bar: 'something' },
+              supportsNegativeValues: true,
+            }
           )
         }),
       ],
@@ -153,12 +168,12 @@ crosscheck(() => {
     let context = createContext(resolveConfig(config))
     let classes = context.getClassList({ includeMetadata: true })
 
-    expect(classes).toContainEqual([
-      'foo-red',
-      {
-        modifiers: ['bar'],
-      },
-    ])
+    expect(classes).toContainEqual(['foo-xl', { modifiers: ['bar'] }])
+    expect(classes).toContainEqual(['foo-negative-xl', { modifiers: ['bar'] }])
+    expect(classes).toContainEqual(['-foo-negative-xl', { modifiers: ['bar'] }])
+    expect(classes).not.toContain('foo-xl')
+    expect(classes).not.toContain('-foo-xl')
+    expect(classes).not.toContainEqual(['-foo-xl', { modifiers: ['bar'] }])
   })
 
   it('should not generate utilities with opacity even if safe-listed', () => {
