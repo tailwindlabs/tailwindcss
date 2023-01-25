@@ -6,7 +6,7 @@ import { SourceMapConsumer } from 'source-map-js'
  * @param {import('postcss').Result} result
  */
 export function parseSourceMaps(result) {
-  const map = result.map.toJSON()
+  let map = result.map.toJSON()
 
   return {
     sources: map.sources,

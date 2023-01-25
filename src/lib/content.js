@@ -164,50 +164,45 @@ function resolvePathSymlinks(contentPath) {
  * @param {any} context
  * @param {ContentPath[]} candidateFiles
  * @param {Map<string, number>} fileModifiedMap
- * @returns {{ content: string, extension: string }[]}
+ * @returns {[{ content: string, extension: string }[], Map<string, number>]}
  */
 export function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
   let changedContent = context.tailwindConfig.content.files
     .filter((item) => typeof item.raw === 'string')
     .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
-  for (let changedFile of resolveChangedFiles(candidateFiles, fileModifiedMap)) {
-    let content = fs.readFileSync(changedFile, 'utf8')
+  let [changedFiles, mTimesToCommit] = resolveChangedFiles(candidateFiles, fileModifiedMap)
+
+  for (let changedFile of changedFiles) {
     let extension = path.extname(changedFile).slice(1)
-    changedContent.push({ content, extension })
+    changedContent.push({ file: changedFile, extension })
   }
 
-  return changedContent
+  return [changedContent, mTimesToCommit]
 }
 
 /**
  *
  * @param {ContentPath[]} candidateFiles
  * @param {Map<string, number>} fileModifiedMap
- * @returns {Set<string>}
+ * @returns {[Set<string>, Map<string, number>]}
  */
 function resolveChangedFiles(candidateFiles, fileModifiedMap) {
   let paths = candidateFiles.map((contentPath) => contentPath.pattern)
+  let mTimesToCommit = new Map()
 
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
   let files = fastGlob.sync(paths, { absolute: true })
   for (let file of files) {
-    let prevModified = fileModifiedMap.has(file) ? fileModifiedMap.get(file) : -Infinity
+    let prevModified = fileModifiedMap.get(file) || -Infinity
     let modified = fs.statSync(file).mtimeMs
 
-    // This check is intentionally >= because we track the last modified time of context dependencies
-    // earier in the process and we want to make sure we don't miss any changes that happen
-    // when a context dependency is also a content dependency
-    // Ideally, we'd do all this tracking at one time but that is a larger refactor
-    // than we want to commit to right now, so this is a decent compromise.
-    // This should be sufficient because file modification times will be off by at least
-    // 1ms (the precision of fstat in Node) in most cases if they exist and were changed.
-    if (modified >= prevModified) {
+    if (modified > prevModified) {
       changedFiles.add(file)
-      fileModifiedMap.set(file, modified)
+      mTimesToCommit.set(file, modified)
     }
   }
   env.DEBUG && console.timeEnd('Finding changed files')
-  return changedFiles
+  return [changedFiles, mTimesToCommit]
 }

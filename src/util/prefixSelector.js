@@ -1,14 +1,32 @@
 import parser from 'postcss-selector-parser'
 
+/**
+ * @template {string | import('postcss-selector-parser').Root} T
+ *
+ * Prefix all classes in the selector with the given prefix
+ *
+ * It can take either a string or a selector AST and will return the same type
+ *
+ * @param {string} prefix
+ * @param {T} selector
+ * @param {boolean} prependNegative
+ * @returns {T}
+ */
 export default function (prefix, selector, prependNegative = false) {
-  return parser((selectors) => {
-    selectors.walkClasses((classSelector) => {
-      let baseClass = classSelector.value
-      let shouldPlaceNegativeBeforePrefix = prependNegative && baseClass.startsWith('-')
+  if (prefix === '') {
+    return selector
+  }
 
-      classSelector.value = shouldPlaceNegativeBeforePrefix
-        ? `-${prefix}${baseClass.slice(1)}`
-        : `${prefix}${baseClass}`
-    })
-  }).processSync(selector)
+  let ast = typeof selector === 'string' ? parser().astSync(selector) : selector
+
+  ast.walkClasses((classSelector) => {
+    let baseClass = classSelector.value
+    let shouldPlaceNegativeBeforePrefix = prependNegative && baseClass.startsWith('-')
+
+    classSelector.value = shouldPlaceNegativeBeforePrefix
+      ? `-${prefix}${baseClass.slice(1)}`
+      : `${prefix}${baseClass}`
+  })
+
+  return typeof selector === 'string' ? ast.toString() : ast
 }

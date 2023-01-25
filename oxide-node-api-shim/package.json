@@ -1,0 +1,5 @@
+{
+  "name": "@tailwindcss/oxide-shim",
+  "main": "./index.js",
+  "license": "MIT"
+}

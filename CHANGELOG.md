@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support using variables as arbitrary values without `var(...)` ([#9880](https://github.com/tailwindlabs/tailwindcss/pull/9880), [#9962](https://github.com/tailwindlabs/tailwindcss/pull/9962))
 - Add `--watch=always` option to prevent exit when stdin closes ([#9966](https://github.com/tailwindlabs/tailwindcss/pull/9966))
 - Add standalone CLI build for 64-bit Windows on ARM (`node16-win-arm64`) ([#10001](https://github.com/tailwindlabs/tailwindcss/pull/10001))
+- Add `delay-0` and `duration-0` by default ([#10294](https://github.com/tailwindlabs/tailwindcss/pull/10294))
+- Add logical properties support for inline direction ([#10166](https://github.com/tailwindlabs/tailwindcss/pull/10166))
+- Use `Lightning CSS` in the PostCSS Plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
 
 ### Fixed
 
@@ -30,11 +33,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix missing `string[]` in the `theme.dropShadow` types ([#10072](https://github.com/tailwindlabs/tailwindcss/pull/10072))
 - Update list of length units ([#10100](https://github.com/tailwindlabs/tailwindcss/pull/10100))
 - Fix not matching arbitrary properties when closely followed by square brackets ([#10212](https://github.com/tailwindlabs/tailwindcss/pull/10212))
+- Allow direct nesting in `root` or `@layer` nodes ([#10229](https://github.com/tailwindlabs/tailwindcss/pull/10229))
+- Don't prefix classes in arbitrary variants ([#10214](https://github.com/tailwindlabs/tailwindcss/pull/10214))
+- Fix perf regression when checking for changed content ([#10234](https://github.com/tailwindlabs/tailwindcss/pull/10234))
+- Fix missing `blocklist` member in the `Config` type ([#10239](https://github.com/tailwindlabs/tailwindcss/pull/10239))
+- Escape group names in selectors ([#10276](https://github.com/tailwindlabs/tailwindcss/pull/10276))
+- Consider earlier variants before sorting functions ([#10288](https://github.com/tailwindlabs/tailwindcss/pull/10288))
+- Allow variants with slashes ([#10336](https://github.com/tailwindlabs/tailwindcss/pull/10336))
+- Ensure generated CSS is always sorted in the same order for a given set of templates ([#10382](https://github.com/tailwindlabs/tailwindcss/pull/10382))
+- Handle variants when the same class appears multiple times in a selector ([#10397](https://github.com/tailwindlabs/tailwindcss/pull/10397))
+- Handle group/peer variants with quoted strings ([#10400](https://github.com/tailwindlabs/tailwindcss/pull/10400))
 
 ### Changed
 
 - Alphabetize `theme` keys in default config ([#9953](https://github.com/tailwindlabs/tailwindcss/pull/9953))
-- Update esbuild to v16 ([#10178](https://github.com/tailwindlabs/tailwindcss/pull/10178))
+- Update esbuild to v17 ([#10368](https://github.com/tailwindlabs/tailwindcss/pull/10368))
+- Include `outline-color` in `transition` and `transition-colors` utilitires ([#10385](https://github.com/tailwindlabs/tailwindcss/pull/10385))
 
 ## [3.2.4] - 2022-11-11
 

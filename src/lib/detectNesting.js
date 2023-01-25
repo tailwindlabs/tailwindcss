@@ -1,3 +1,11 @@
+function isRoot(node) {
+  return node.type === 'root'
+}
+
+function isAtLayer(node) {
+  return node.type === 'atrule' && node.name === 'layer'
+}
+
 export default function (_context) {
   return (root, result) => {
     let found = false
@@ -5,7 +13,7 @@ export default function (_context) {
     root.walkAtRules('tailwind', (node) => {
       if (found) return false
 
-      if (node.parent && node.parent.type !== 'root') {
+      if (node.parent && !(isRoot(node.parent) || isAtLayer(node.parent))) {
         found = true
         node.warn(
           result,

@@ -54,32 +54,50 @@ function normalizeOptionTypes({ type = 'any', ...options }) {
 }
 
 function parseVariantFormatString(input) {
-  if (input.includes('{')) {
-    if (!isBalanced(input)) throw new Error(`Your { and } are unbalanced.`)
+  /** @type {string[]} */
+  let parts = []
 
-    return input
-      .split(/{(.*)}/gim)
-      .flatMap((line) => parseVariantFormatString(line))
-      .filter(Boolean)
-  }
+  // When parsing whitespace around special characters are insignificant
+  // However, _inside_ of a variant they could be
+  // Because the selector could look like this
+  // @media { &[data-name="foo bar"] }
+  // This is why we do not skip whitespace
 
-  return [input.trim()]
-}
+  let current = ''
+  let depth = 0
 
-function isBalanced(input) {
-  let count = 0
+  for (let idx = 0; idx < input.length; idx++) {
+    let char = input[idx]
 
-  for (let char of input) {
-    if (char === '{') {
-      count++
+    if (char === '\\') {
+      // Escaped characters are not special
+      current += '\\' + input[++idx]
+    } else if (char === '{') {
+      // Nested rule: start
+      ++depth
+      parts.push(current.trim())
+      current = ''
     } else if (char === '}') {
-      if (--count < 0) {
-        return false // unbalanced
+      // Nested rule: end
+      if (--depth < 0) {
+        throw new Error(`Your { and } are unbalanced.`)
       }
+
+      parts.push(current.trim())
+      current = ''
+    } else {
+      // Normal character
+      current += char
     }
   }
 
-  return count === 0
+  if (current.length > 0) {
+    parts.push(current.trim())
+  }
+
+  parts = parts.filter((part) => part !== '')
+
+  return parts
 }
 
 function insertInto(list, value, { before = [] } = {}) {
@@ -632,6 +650,7 @@ export function getFileModifiedMap(context) {
 
 function trackModified(files, fileModifiedMap) {
   let changed = false
+  let mtimesToCommit = new Map()
 
   for (let file of files) {
     if (!file) continue
@@ -652,10 +671,10 @@ function trackModified(files, fileModifiedMap) {
       changed = true
     }
 
-    fileModifiedMap.set(file, newModified)
+    mtimesToCommit.set(file, newModified)
   }
 
-  return changed
+  return [changed, mtimesToCommit]
 }
 
 function extractVariantAtRules(node) {
@@ -1092,20 +1111,38 @@ function registerPlugins(plugins, context) {
             })
           }
 
-          let result = formatStrings.map((formatString) =>
-            finalizeSelector(formatVariantSelector('&', ...formatString), {
-              selector: `.${candidate}`,
-              candidate,
-              context,
-              isArbitraryVariant: !(value in (options.values ?? {})),
-            })
+          let isArbitraryVariant = !(value in (options.values ?? {}))
+
+          formatStrings = formatStrings.map((format) =>
+            format.map((str) => ({
+              format: str,
+              isArbitraryVariant,
+            }))
+          )
+
+          manualFormatStrings = manualFormatStrings.map((format) => ({
+            format,
+            isArbitraryVariant,
+          }))
+
+          let opts = {
+            candidate,
+            context,
+          }
+
+          let result = formatStrings.map((formats) =>
+            finalizeSelector(`.${candidate}`, formatVariantSelector(formats, opts), opts)
               .replace(`.${candidate}`, '&')
               .replace('{ & }', '')
               .trim()
           )
 
           if (manualFormatStrings.length > 0) {
-            result.push(formatVariantSelector('&', ...manualFormatStrings))
+            result.push(
+              formatVariantSelector(manualFormatStrings, opts)
+                .toString()
+                .replace(`.${candidate}`, '&')
+            )
           }
 
           return result
@@ -1224,12 +1261,12 @@ export function getContext(
   // If there's already a context in the cache and we don't need to
   // reset the context, return the cached context.
   if (existingContext) {
-    let contextDependenciesChanged = trackModified(
+    let [contextDependenciesChanged, mtimesToCommit] = trackModified(
       [...contextDependencies],
       getFileModifiedMap(existingContext)
     )
     if (!contextDependenciesChanged && !cssDidChange) {
-      return [existingContext, false]
+      return [existingContext, false, mtimesToCommit]
     }
   }
 
@@ -1264,7 +1301,7 @@ export function getContext(
     userConfigPath,
   })
 
-  trackModified([...contextDependencies], getFileModifiedMap(context))
+  let [, mtimesToCommit] = trackModified([...contextDependencies], getFileModifiedMap(context))
 
   // ---
 
@@ -1279,5 +1316,5 @@ export function getContext(
 
   contextSourcesMap.get(context).add(sourcePath)
 
-  return [context, true]
+  return [context, true, mtimesToCommit]
 }

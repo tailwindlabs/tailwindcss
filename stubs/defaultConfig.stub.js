@@ -852,6 +852,7 @@ module.exports = {
       'top-left': 'top left',
     },
     transitionDelay: {
+      0: '0s',
       75: '75ms',
       100: '100ms',
       150: '150ms',
@@ -863,6 +864,7 @@ module.exports = {
     },
     transitionDuration: {
       DEFAULT: '150ms',
+      0: '0s',
       75: '75ms',
       100: '100ms',
       150: '150ms',
@@ -876,8 +878,8 @@ module.exports = {
       none: 'none',
       all: 'all',
       DEFAULT:
-        'color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter',
-      colors: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+        'color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter',
+      colors: 'color, background-color, border-color, outline-color, text-decoration-color, fill, stroke',
       opacity: 'opacity',
       shadow: 'box-shadow',
       transform: 'transform',

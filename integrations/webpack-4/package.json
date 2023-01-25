@@ -1,5 +1,5 @@
 {
-  "name": "webpack-4",
+  "name": "@tailwindcss/integrations-webpack-4",
   "private": true,
   "version": "0.0.0",
   "main": "./src/index.js",
@@ -7,7 +7,7 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development --watch",
-    "test": "jest --runInBand --forceExit"
+    "test": "NODE_OPTIONS=--openssl-legacy-provider jest --runInBand --forceExit"
   },
   "jest": {
     "testTimeout": 10000,

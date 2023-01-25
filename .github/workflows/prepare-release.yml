@@ -15,7 +15,7 @@ permissions:
 jobs:
   build:
     permissions:
-      contents: write  # for softprops/action-gh-release to create GitHub release
+      contents: write # for softprops/action-gh-release to create GitHub release
 
     runs-on: macos-11
 
@@ -35,7 +35,7 @@ jobs:
 
       - name: Get release notes
         run: |
-          RELEASE_NOTES=$(npm run release-notes --silent)
+          RELEASE_NOTES=$(node ./scripts/release-notes.js)
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$RELEASE_NOTES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

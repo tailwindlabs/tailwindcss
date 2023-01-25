@@ -6,5 +6,11 @@
     "targets": {
       "node": "12.13.0"
     }
+  },
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false
+    }
   }
 }

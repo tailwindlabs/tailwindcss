@@ -1,3 +1,4 @@
+let fs = require('fs')
 let path = require('path')
 let { spawn } = require('child_process')
 let resolveToolRoot = require('./resolve-tool-root')
@@ -27,7 +28,22 @@ module.exports = function $(command, options = {}) {
     : (() => {
         let args = command.split(' ')
         command = args.shift()
-        command = command === 'node' ? command : path.resolve(root, 'node_modules', '.bin', command)
+        command =
+          command === 'node'
+            ? command
+            : (function () {
+                let local = path.resolve(root, 'node_modules', '.bin', command)
+                if (fs.existsSync(local)) {
+                  return local
+                }
+
+                let hoisted = path.resolve(root, '..', '..', 'node_modules', '.bin', command)
+                if (fs.existsSync(hoisted)) {
+                  return hoisted
+                }
+
+                return `npx ${command}`
+              })()
         return [command, args]
       })()
 

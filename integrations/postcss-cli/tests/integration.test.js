@@ -222,11 +222,9 @@ describe('watcher', () => {
       css`
         .btn {
           border-radius: 0.25rem;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          padding: 0.25rem 0.5rem;
         }
+
         .font-bold {
           font-weight: 700;
         }
