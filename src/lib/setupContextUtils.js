@@ -962,23 +962,35 @@ function registerPlugins(plugins, context) {
 
   // Generate a list of strings for autocompletion purposes, e.g.
   // ['uppercase', 'lowercase', ...]
-  context.getClassList = function getClassList() {
+  context.getClassList = function getClassList(options = {}) {
     let output = []
 
     for (let util of classList) {
       if (Array.isArray(util)) {
-        let [utilName, options] = util
+        let [utilName, utilOptions] = util
         let negativeClasses = []
 
-        for (let [key, value] of Object.entries(options?.values ?? {})) {
+        let modifiers = Object.keys(utilOptions?.modifiers ?? {})
+
+        if (utilOptions?.types?.some(({ type }) => type === 'color')) {
+          modifiers.push(...Object.keys(context.tailwindConfig.theme.opacity ?? {}))
+        }
+
+        let metadata = { modifiers }
+        let includeMetadata = options.includeMetadata && modifiers.length > 0
+
+        for (let [key, value] of Object.entries(utilOptions?.values ?? {})) {
           // Ignore undefined and null values
           if (value == null) {
             continue
           }
 
-          output.push(formatClass(utilName, key))
-          if (options?.supportsNegativeValues && negateValue(value)) {
-            negativeClasses.push(formatClass(utilName, `-${key}`))
+          let cls = formatClass(utilName, key)
+          output.push(includeMetadata ? [cls, metadata] : cls)
+
+          if (utilOptions?.supportsNegativeValues && negateValue(value)) {
+            let cls = formatClass(utilName, `-${key}`)
+            negativeClasses.push(includeMetadata ? [cls, metadata] : cls)
           }
         }
 
