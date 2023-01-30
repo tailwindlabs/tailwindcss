@@ -29,7 +29,6 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind base; @tailwind utilities;', config).then((result) => {
       stable.expect(result.css).toMatchCss(css`
         ${defaults}
-
         .divide-x > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-x-reverse: 0;
           border-right-width: calc(1px * var(--tw-divide-x-reverse));
@@ -39,7 +38,6 @@ crosscheck(({ stable, oxide }) => {
 
       oxide.expect(result.css).toMatchCss(css`
         ${defaults}
-
         .divide-x > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-x-reverse: 0;
           border-inline-end-width: calc(1px * var(--tw-divide-x-reverse));
@@ -58,7 +56,6 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind base; @tailwind utilities;', config).then((result) => {
       expect(result.css).toMatchCss(css`
         ${defaults}
-
         .divide-y-reverse > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-y-reverse: 1;
         }
@@ -75,7 +72,6 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind base; @tailwind utilities;', config).then((result) => {
       expect(result.css).toMatchCss(css`
         ${defaults}
-
         .divide-x-reverse > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-x-reverse: 1;
         }
@@ -92,13 +88,11 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind base; @tailwind utilities;', config).then((result) => {
       expect(result.css).toMatchCss(css`
         ${defaults}
-
         .divide-y > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-y-reverse: 0;
           border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
           border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
         }
-
         .border-r {
           border-right-width: 1px;
         }

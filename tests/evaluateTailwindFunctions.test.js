@@ -575,7 +575,7 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .element {
-        outline: 2px dotted black;
+        outline: 2px dotted #000;
       }
     `
 
@@ -665,8 +665,8 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .heading {
-        font-family: Inter;
         font-feature-settings: 'cv11';
+        font-family: Inter;
       }
     `
 
@@ -691,7 +691,7 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .element {
-        box-shadow: 0 0 2px black, 1px 2px 3px white;
+        box-shadow: 0 0 2px #000, 1px 2px 3px #fff;
       }
     `
 
@@ -761,6 +761,7 @@ crosscheck(({ stable, oxide }) => {
     let input = css`
       @media screen(sm) {
         .foo {
+          color: red;
         }
       }
     `
@@ -768,6 +769,7 @@ crosscheck(({ stable, oxide }) => {
     let output = css`
       @media (min-width: 600px) {
         .foo {
+          color: red;
         }
       }
     `
@@ -784,6 +786,7 @@ crosscheck(({ stable, oxide }) => {
     let input = css`
       @media screen(sm) {
         .foo {
+          color: red;
         }
       }
     `
@@ -791,6 +794,7 @@ crosscheck(({ stable, oxide }) => {
     let output = css`
       @media (max-width: 600px) {
         .foo {
+          color: red;
         }
       }
     `
@@ -807,6 +811,7 @@ crosscheck(({ stable, oxide }) => {
     let input = css`
       @media screen(sm) {
         .foo {
+          color: red;
         }
       }
     `
@@ -814,6 +819,7 @@ crosscheck(({ stable, oxide }) => {
     let output = css`
       @media (min-width: 600px) {
         .foo {
+          color: red;
         }
       }
     `
@@ -830,6 +836,7 @@ crosscheck(({ stable, oxide }) => {
     let input = css`
       @media screen(sm) {
         .foo {
+          color: red;
         }
       }
     `
@@ -837,6 +844,7 @@ crosscheck(({ stable, oxide }) => {
     let output = css`
       @media (min-width: 600px) and (max-width: 700px) {
         .foo {
+          color: red;
         }
       }
     `
@@ -853,6 +861,7 @@ crosscheck(({ stable, oxide }) => {
     let input = css`
       @media screen(mono) {
         .foo {
+          color: red;
         }
       }
     `
@@ -860,6 +869,7 @@ crosscheck(({ stable, oxide }) => {
     let output = css`
       @media monochrome {
         .foo {
+          color: red;
         }
       }
     `
@@ -876,6 +886,7 @@ crosscheck(({ stable, oxide }) => {
     let input = css`
       @media screen('sm') {
         .foo {
+          color: red;
         }
       }
     `
@@ -883,6 +894,7 @@ crosscheck(({ stable, oxide }) => {
     let output = css`
       @media (min-width: 600px) {
         .foo {
+          color: red;
         }
       }
     `
@@ -904,7 +916,7 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .foo {
-        color: rgb(59 130 246 / 50%);
+        color: #3b82f680;
       }
     `
 
@@ -927,7 +939,7 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .foo {
-        color: rgb(59 130 246 / 0.5);
+        color: #3b82f680;
       }
     `
 
@@ -973,7 +985,7 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .foo {
-        color: hsl(217 91% 60% / 50%);
+        color: #3c83f680;
       }
     `
 
@@ -998,7 +1010,7 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .foo {
-        color: hsl(217 91% 60% / 0.5);
+        color: #3c83f680;
       }
     `
 
@@ -1107,8 +1119,8 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .foo {
-        background: rgb(0 0 255 / 1);
         color: rgb(var(--foo) / 1);
+        background: #00f;
       }
     `
 
@@ -1139,10 +1151,10 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .foo1 {
-        color: #000000;
+        color: #000;
       }
       .foo2 {
-        color: rgb(0 0 0 / 50%);
+        color: #00000080;
       }
     `
 
@@ -1167,7 +1179,7 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .foo {
-        color: rgb(247 204 80 / 50%);
+        color: #f7cc5080;
       }
     `
 
@@ -1192,7 +1204,7 @@ crosscheck(({ stable, oxide }) => {
 
     let output = css`
       .foo {
-        color: rgb(247 204 80 / 50%);
+        color: #f7cc5080;
       }
     `
 
@@ -1247,10 +1259,10 @@ crosscheck(({ stable, oxide }) => {
           color: #051025;
         }
         .foo03 {
-          color: rgb(5 0 0 / 10);
+          color: #050000;
         }
         .foo04 {
-          color: rgb(5 16 0 / 25);
+          color: #051000;
         }
       `)
     })

@@ -45,12 +45,12 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchCss(css`
         .text-lg {
-          font-size: 20px;
           letter-spacing: -0.02em;
+          font-size: 20px;
         }
         .text-md {
-          font-size: 16px;
           letter-spacing: -0.01em;
+          font-size: 16px;
         }
         .text-sm {
           font-size: 12px;
@@ -74,14 +74,14 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchCss(css`
         .text-lg {
+          letter-spacing: -0.02em;
           font-size: 20px;
           line-height: 28px;
-          letter-spacing: -0.02em;
         }
         .text-md {
+          letter-spacing: -0.01em;
           font-size: 16px;
           line-height: 24px;
-          letter-spacing: -0.01em;
         }
         .text-sm {
           font-size: 12px;
@@ -106,13 +106,13 @@ crosscheck(() => {
       expect(result.css).toMatchCss(css`
         .text-lg {
           font-size: 20px;
-          line-height: 28px;
           font-weight: bold;
+          line-height: 28px;
         }
         .text-md {
           font-size: 16px;
-          line-height: 24px;
           font-weight: 500;
+          line-height: 24px;
         }
         .text-sm {
           font-size: 12px;

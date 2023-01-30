@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteScreenAtRules'
 import config from '../stubs/defaultConfig.stub.js'
-import { crosscheck } from './util/run'
+import { crosscheck, css } from './util/run'
 
 function run(input, opts = config) {
   return postcss([plugin({ tailwindConfig: opts })]).process(input, { from: undefined })
@@ -9,29 +9,23 @@ function run(input, opts = config) {
 
 crosscheck(() => {
   test('it can generate media queries from configured screen sizes', () => {
-    const input = `
-    @screen sm {
-      .banana { color: yellow; }
-    }
-    @screen md {
-      .banana { color: red; }
-    }
-    @screen lg {
-      .banana { color: green; }
-    }
-  `
-
-    const output = `
-      @media (min-width: 500px) {
-        .banana { color: yellow; }
+    let input = css`
+      @screen sm {
+        .banana {
+          color: yellow;
+        }
       }
-      @media (min-width: 750px) {
-        .banana { color: red; }
+      @screen md {
+        .banana {
+          color: red;
+        }
       }
-      @media (min-width: 1000px) {
-        .banana { color: green; }
+      @screen lg {
+        .banana {
+          color: green;
+        }
       }
-  `
+    `
 
     return run(input, {
       theme: {
@@ -43,7 +37,23 @@ crosscheck(() => {
       },
       separator: ':',
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(css`
+        @media (min-width: 500px) {
+          .banana {
+            color: #ff0;
+          }
+        }
+        @media (min-width: 750px) {
+          .banana {
+            color: red;
+          }
+        }
+        @media (min-width: 1000px) {
+          .banana {
+            color: green;
+          }
+        }
+      `)
       expect(result.warnings().length).toBe(0)
     })
   })

@@ -138,7 +138,7 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .example {
-          color: blue;
+          color: #00f;
           height: var(--value);
         }
       `)

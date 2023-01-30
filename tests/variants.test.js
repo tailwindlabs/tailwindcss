@@ -100,10 +100,7 @@ crosscheck(({ stable, oxide }) => {
 
       return run('@tailwind components;@tailwind utilities', config).then((result) => {
         return expect(result.css).toMatchFormattedCss(css`
-          :where(.hover\:prose-headings\:text-center) :is(h1, h2, h3, h4):hover {
-            text-align: center;
-          }
-
+          :where(.hover\:prose-headings\:text-center) :is(h1, h2, h3, h4):hover,
           :where(.prose-headings\:hover\:text-center:hover) :is(h1, h2, h3, h4) {
             text-align: center;
           }
@@ -130,10 +127,7 @@ crosscheck(({ stable, oxide }) => {
 
       return run('@tailwind utilities', config).then((result) => {
         return expect(result.css).toMatchFormattedCss(css`
-          .group:hover :where(.group-hover\:prose-headings\:text-center) :is(h1, h2, h3, h4) {
-            text-align: center;
-          }
-
+          .group:hover :where(.group-hover\:prose-headings\:text-center) :is(h1, h2, h3, h4),
           :where(.group:hover .prose-headings\:group-hover\:text-center) :is(h1, h2, h3, h4) {
             text-align: center;
           }
@@ -163,9 +157,7 @@ crosscheck(({ stable, oxide }) => {
       return run('@tailwind components;@tailwind utilities', config).then((result) => {
         return expect(result.css).toMatchFormattedCss(css`
           @media screen {
-            .screen\:parent .child {
-              foo: bar;
-            }
+            .screen\:parent .child,
             .parent .screen\:child {
               foo: bar;
             }
@@ -204,7 +196,6 @@ crosscheck(({ stable, oxide }) => {
           .test:where(.one, .two, .three) {
             font-style: italic;
           }
-
           .my-variant\:underline:where(.one, .two, .three) {
             text-decoration-line: underline;
           }
@@ -296,51 +287,30 @@ crosscheck(({ stable, oxide }) => {
         }
       }
       .animate-spin {
-        animation: spin 1s linear infinite;
+        animation: 1s linear infinite spin;
       }
       @keyframes bounce {
         0%,
         100% {
-          transform: translateY(-25%);
           animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+          transform: translateY(-25%);
         }
         50% {
-          transform: none;
           animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+          transform: none;
         }
       }
       .hover\:animate-bounce:hover {
-        animation: bounce 1s infinite;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
+        animation: 1s infinite bounce;
       }
       .hover\:animate-spin:hover {
-        animation: spin 1s linear infinite;
-      }
-      @keyframes bounce {
-        0%,
-        100% {
-          transform: translateY(-25%);
-          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-        }
-        50% {
-          transform: none;
-          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-        }
+        animation: 1s linear infinite spin;
       }
       .focus\:animate-bounce:focus {
-        animation: bounce 1s infinite;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
+        animation: 1s infinite bounce;
       }
       .focus\:animate-spin:focus {
-        animation: spin 1s linear infinite;
+        animation: 1s linear infinite spin;
       }
     `)
   })
@@ -412,12 +382,8 @@ crosscheck(({ stable, oxide }) => {
 
     return run('@tailwind components;@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        .before\:hover\:text-center:hover::before {
-          content: var(--tw-content);
-          text-align: center;
-        }
-
-        .hover\:before\:text-center:hover::before {
+        .before\:hover\:text-center:hover:before,
+        .hover\:before\:text-center:hover:before {
           content: var(--tw-content);
           text-align: center;
         }
@@ -444,12 +410,8 @@ crosscheck(({ stable, oxide }) => {
 
     return run('@tailwind components;@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        :where(.before\:prose-headings\:text-center) :is(h1, h2, h3, h4)::before {
-          content: var(--tw-content);
-          text-align: center;
-        }
-
-        :where(.prose-headings\:before\:text-center) :is(h1, h2, h3, h4)::before {
+        :where(.before\:prose-headings\:text-center) :is(h1, h2, h3, h4):before,
+        :where(.prose-headings\:before\:text-center) :is(h1, h2, h3, h4):before {
           content: var(--tw-content);
           text-align: center;
         }
@@ -497,9 +459,7 @@ crosscheck(({ stable, oxide }) => {
 
     return run('@tailwind components;@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        .peer[aria-expanded='true'] ~ .peer-aria-expanded\:text-center {
-          text-align: center;
-        }
+        .peer[aria-expanded='true'] ~ .peer-aria-expanded\:text-center,
         .peer[aria-expanded='false'] ~ .peer-aria-expanded-2\:text-center {
           text-align: center;
         }
@@ -642,13 +602,13 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         .visited\:border-red-500:visited {
-          border-color: rgb(239 68 68);
+          border-color: #ef4444;
         }
         .visited\:bg-red-500:visited {
-          background-color: rgb(239 68 68);
+          background-color: #ef4444;
         }
         .visited\:text-red-500:visited {
-          color: rgb(239 68 68);
+          color: #ef4444;
         }
       `)
     })
@@ -671,8 +631,6 @@ crosscheck(({ stable, oxide }) => {
 
     return run(result, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        a {
-        }
         ${defaults}
         .underline {
           text-decoration-line: underline;
@@ -681,8 +639,6 @@ crosscheck(({ stable, oxide }) => {
           .sm\:underline {
             text-decoration-line: underline;
           }
-        }
-        b {
         }
       `)
     })
@@ -713,10 +669,7 @@ crosscheck(({ stable, oxide }) => {
       return expect(result.css).toMatchFormattedCss(css`
         @media (min-width: 640px) {
           .sm\:base1 .foo,
-          .sm\:base1 .bar {
-            color: red;
-          }
-
+          .sm\:base1 .bar,
           .sm\:base2 .bar .base2-foo {
             color: red;
           }
@@ -838,14 +791,9 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media (hover: hover) and (pointer: fine) {
-          .hover\:underline:hover {
-            text-decoration-line: underline;
-          }
-          .group:hover .group-hover\:underline {
-            text-decoration-line: underline;
-          }
+          .hover\:underline:hover,
+          .group:hover .group-hover\:underline,
           .peer:hover ~ .peer-hover\:underline {
             text-decoration-line: underline;
           }
@@ -891,81 +839,32 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .after\:foo.bar.baz::after {
+        .after\:foo.bar.baz:after,
+        .after\:bar.foo.baz:after,
+        .after\:baz.foo.bar:after,
+        .after\:foo1 .bar1 .baz1:after,
+        .foo1 .after\:bar1 .baz1:after,
+        .foo1 .bar1 .after\:baz1:after {
           content: var(--tw-content);
           color: red;
         }
-        .after\:bar.foo.baz::after {
-          content: var(--tw-content);
-          color: red;
-        }
-        .after\:baz.foo.bar::after {
-          content: var(--tw-content);
-          color: red;
-        }
-        .after\:foo1 .bar1 .baz1::after {
-          content: var(--tw-content);
-          color: red;
-        }
-        .foo1 .after\:bar1 .baz1::after {
-          content: var(--tw-content);
-          color: red;
-        }
-        .foo1 .bar1 .after\:baz1::after {
-          content: var(--tw-content);
-          color: red;
-        }
-        .hover\:foo:hover.bar.baz {
-          color: red;
-        }
-        .hover\:bar:hover.foo.baz {
-          color: red;
-        }
-        .hover\:baz:hover.foo.bar {
-          color: red;
-        }
-        .hover\:foo1:hover .bar1 .baz1 {
-          color: red;
-        }
-        .foo1 .hover\:bar1:hover .baz1 {
-          color: red;
-        }
-        .foo1 .bar1 .hover\:baz1:hover {
-          color: red;
-        }
-        .group:hover .group-hover\:foo.bar.baz {
-          color: red;
-        }
-        .group:hover .group-hover\:bar.foo.baz {
-          color: red;
-        }
-        .group:hover .group-hover\:baz.foo.bar {
-          color: red;
-        }
-        .group:hover .group-hover\:foo1 .bar1 .baz1 {
-          color: red;
-        }
-        .foo1 .group:hover .group-hover\:bar1 .baz1 {
-          color: red;
-        }
-        .foo1 .bar1 .group:hover .group-hover\:baz1 {
-          color: red;
-        }
-        .peer:checked ~ .peer-checked\:foo.bar.baz {
-          color: red;
-        }
-        .peer:checked ~ .peer-checked\:bar.foo.baz {
-          color: red;
-        }
-        .peer:checked ~ .peer-checked\:baz.foo.bar {
-          color: red;
-        }
-        .peer:checked ~ .peer-checked\:foo1 .bar1 .baz1 {
-          color: red;
-        }
-        .foo1 .peer:checked ~ .peer-checked\:bar1 .baz1 {
-          color: red;
-        }
+        .hover\:foo:hover.bar.baz,
+        .hover\:bar:hover.foo.baz,
+        .hover\:baz:hover.foo.bar,
+        .hover\:foo1:hover .bar1 .baz1,
+        .foo1 .hover\:bar1:hover .baz1,
+        .foo1 .bar1 .hover\:baz1:hover,
+        .group:hover .group-hover\:foo.bar.baz,
+        .group:hover .group-hover\:bar.foo.baz,
+        .group:hover .group-hover\:baz.foo.bar,
+        .group:hover .group-hover\:foo1 .bar1 .baz1,
+        .foo1 .group:hover .group-hover\:bar1 .baz1,
+        .foo1 .bar1 .group:hover .group-hover\:baz1,
+        .peer:checked ~ .peer-checked\:foo.bar.baz,
+        .peer:checked ~ .peer-checked\:bar.foo.baz,
+        .peer:checked ~ .peer-checked\:baz.foo.bar,
+        .peer:checked ~ .peer-checked\:foo1 .bar1 .baz1,
+        .foo1 .peer:checked ~ .peer-checked\:bar1 .baz1,
         .foo1 .bar1 .peer:checked ~ .peer-checked\:baz1 {
           color: red;
         }
@@ -989,7 +888,7 @@ crosscheck(({ stable, oxide }) => {
         :where(.foo) {
           color: red;
         }
-        :matches(.foo, .bar, .baz) {
+        :is(.foo, .bar, .baz) {
           color: orange;
         }
         :is(.foo) {
@@ -1006,30 +905,25 @@ crosscheck(({ stable, oxide }) => {
         :where(.foo) {
           color: red;
         }
-        :matches(.foo, .bar, .baz) {
+        :is(.foo, .bar, .baz) {
           color: orange;
         }
-        :is(.foo) {
-          color: yellow;
+        .foo {
+          color: #ff0;
         }
         html:has(.foo) {
           color: green;
         }
-
         :where(.hover\:foo:hover) {
           color: red;
         }
-        :matches(.hover\:foo:hover, .bar, .baz) {
+        :is(.hover\:foo:hover, .bar, .baz),
+        :is(.foo, .hover\:bar:hover, .baz),
+        :is(.foo, .bar, .hover\:baz:hover) {
           color: orange;
         }
-        :matches(.foo, .hover\:bar:hover, .baz) {
-          color: orange;
-        }
-        :matches(.foo, .bar, .hover\:baz:hover) {
-          color: orange;
-        }
-        :is(.hover\:foo:hover) {
-          color: yellow;
+        .hover\:foo:hover {
+          color: #ff0;
         }
         html:has(.hover\:foo:hover) {
           color: green;
@@ -1038,17 +932,13 @@ crosscheck(({ stable, oxide }) => {
           :where(.sm\:foo) {
             color: red;
           }
-          :matches(.sm\:foo, .bar, .baz) {
+          :is(.sm\:foo, .bar, .baz),
+          :is(.foo, .sm\:bar, .baz),
+          :is(.foo, .bar, .sm\:baz) {
             color: orange;
           }
-          :matches(.foo, .sm\:bar, .baz) {
-            color: orange;
-          }
-          :matches(.foo, .bar, .sm\:baz) {
-            color: orange;
-          }
-          :is(.sm\:foo) {
-            color: yellow;
+          .sm\:foo {
+            color: #ff0;
           }
           html:has(.sm\:foo) {
             color: green;
@@ -1118,7 +1008,7 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        @media (min-aspect-ratio: 1/10) {
+        @media (min-aspect-ratio: 1 / 10) {
           .ar-1\/10\:text-red-500 {
             --tw-text-opacity: 1;
             color: rgb(239 68 68 / var(--tw-text-opacity));
@@ -1155,7 +1045,7 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        @media (min-aspect-ratio: 1/10) and (foo: 20) {
+        @media (min-aspect-ratio: 1 / 10) and (foo: 20) {
           .ar-1\/10\/20\:text-red-500 {
             --tw-text-opacity: 1;
             color: rgb(239 68 68 / var(--tw-text-opacity));

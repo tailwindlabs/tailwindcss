@@ -125,7 +125,7 @@ crosscheck(({ stable, oxide }) => {
 
     expect(result.css).toMatchFormattedCss(css`
       .only\:custom-utility:only-child {
-        color: blue;
+        color: #00f;
       }
     `)
   })

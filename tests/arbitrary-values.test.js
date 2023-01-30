@@ -56,7 +56,6 @@ crosscheck(({ stable, oxide }) => {
         .decoration-\[\#ccc\] {
           text-decoration-color: #ccc;
         }
-
         .decoration-\[3px\] {
           text-decoration-thickness: 3px;
         }
@@ -200,63 +199,50 @@ crosscheck(({ stable, oxide }) => {
         .col-\\[span_3_\\/_span_8\\] {
           grid-column: span 3 / span 8;
         }
-
         .row-\\[span_3_\\/_span_8\\] {
           grid-row: span 3 / span 8;
         }
-
         .m-\\[8px_4px\\] {
           margin: 8px 4px;
         }
-
         .flex-\\[1_1_100\\%\\] {
-          flex: 1 1 100%;
+          flex: 100%;
         }
-
-        .auto-cols-\\[minmax\\(0\\2c _1fr\\)\\] {
+        .auto-cols-\\[minmax\\(0\\,_1fr\\)\\] {
           grid-auto-columns: minmax(0, 1fr);
         }
-
-        .grid-cols-\\[200px_repeat\\(auto-fill\\2c minmax\\(15\\%\\2c 100px\\)\\)_300px\\] {
+        .grid-cols-\\[200px_repeat\\(auto-fill\\,minmax\\(15\\%\\,100px\\)\\)_300px\\] {
           grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
         }
-
-        .grid-rows-\\[200px_repeat\\(auto-fill\\2c minmax\\(15\\%\\2c 100px\\)\\)_300px\\] {
+        .grid-rows-\\[200px_repeat\\(auto-fill\\,minmax\\(15\\%\\,100px\\)\\)_300px\\] {
           grid-template-rows: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
         }
-
         .rounded-\\[0px_4px_4px_0px\\] {
-          border-radius: 0px 4px 4px 0px;
+          border-radius: 0 4px 4px 0;
         }
-
         .p-\\[8px_4px\\] {
           padding: 8px 4px;
         }
-
         .shadow-\\[0px_0px_4px_black\\] {
           --tw-shadow: 0px 0px 4px black;
           --tw-shadow-colored: 0px 0px 4px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
             var(--tw-shadow);
         }
-
         .drop-shadow-\\[0px_1px_3px_black\\] {
           --tw-drop-shadow: drop-shadow(0px 1px 3px black);
           filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale)
             var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia)
             var(--tw-drop-shadow);
         }
-
         .content-\\[\\'__hello__world__\\'\\] {
           --tw-content: '  hello  world  ';
           content: var(--tw-content);
         }
-
         .content-\\[___abc____\\] {
           --tw-content: abc;
           content: var(--tw-content);
         }
-
         .content-\\[_hello_world_\\] {
           --tw-content: hello world;
           content: var(--tw-content);
@@ -302,7 +288,6 @@ crosscheck(({ stable, oxide }) => {
         .bg-\[var\(--unknown\)\] {
           background-color: var(--unknown);
         }
-
         .bg-\[200px_100px\] {
           background-position: 200px 100px;
         }
@@ -367,7 +352,7 @@ crosscheck(({ stable, oxide }) => {
 
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(`
-      .bg-\\[url\\(\\'brown_potato\\.jpg\\'\\)\\2c _url\\(\\'red_tomato\\.png\\'\\)\\] {
+      .bg-\\[url\\(\\'brown_potato\\.jpg\\'\\)\\,_url\\(\\'red_tomato\\.png\\'\\)\\] {
         background-image: url('brown_potato.jpg'), url('red_tomato.png');
       }
     `)
@@ -388,10 +373,10 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         .w-\[theme\(spacing\.1\)\] {
-          width: calc(1 * 0.25rem);
+          width: 0.25rem;
         }
         .w-\[theme\(spacing\[0\.5\]\)\] {
-          width: calc(0.5 * 0.25rem);
+          width: 0.125rem;
         }
       `)
     })
@@ -413,10 +398,10 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         .w-\[theme\(\'spacing\.1\'\)\] {
-          width: calc(1 * 0.25rem);
+          width: 0.25rem;
         }
         .w-\[theme\(\'spacing\[0\.5\]\'\)\] {
-          width: calc(0.5 * 0.25rem);
+          width: 0.125rem;
         }
       `)
     })
@@ -442,10 +427,10 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         .w-\[calc\(100\%-theme\(\'spacing\.1\'\)\)\] {
-          width: calc(100% - calc(1 * 0.25rem));
+          width: calc(100% - 0.25rem);
         }
         .w-\[calc\(100\%-theme\(\'spacing\[0\.5\]\'\)\)\] {
-          width: calc(100% - calc(0.5 * 0.25rem));
+          width: calc(100% - 0.125rem);
         }
       `)
     })
@@ -481,7 +466,7 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .bg-\[top_right_50\%\] {
-          background-position: top right 50%;
+          background-position: right 50% top;
         }
       `)
     })
@@ -500,8 +485,8 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .bg-\[auto_auto\2c cover\2c _contain\2c 10px\2c 10px_10\%\] {
-          background-size: auto auto, cover, contain, 10px, 10px 10%;
+        .bg-\[auto_auto\,cover\,_contain\,10px\,10px_10\%\] {
+          background-size: auto, cover, contain, 10px, 10px 10%;
         }
       `)
     })
@@ -583,7 +568,7 @@ crosscheck(({ stable, oxide }) => {
         .w-\[--width-var\] {
           width: var(--width-var);
         }
-        .bg-\[--color-var\2c \#000\] {
+        .bg-\[--color-var\,\#000\] {
           background-color: var(--color-var, #000);
         }
         .bg-\[--color-var\] {
@@ -592,7 +577,7 @@ crosscheck(({ stable, oxide }) => {
         .bg-\[length\:--size-var\] {
           background-size: var(--size-var);
         }
-        .text-\[length\:--size-var\2c 12px\] {
+        .text-\[length\:--size-var\,12px\] {
           font-size: var(--size-var, 12px);
         }
       `)

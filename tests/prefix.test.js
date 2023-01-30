@@ -121,9 +121,7 @@ crosscheck(({ stable, oxide }) => {
             max-width: 1536px;
           }
         }
-        .tw-btn-prefix {
-          button: yes;
-        }
+        .tw-btn-prefix,
         .btn-no-prefix {
           button: yes;
         }
@@ -137,7 +135,7 @@ crosscheck(({ stable, oxide }) => {
           margin-left: -1rem;
         }
         .tw-animate-ping {
-          animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+          animation: 1s cubic-bezier(0, 0, 0.2, 1) infinite ping;
         }
         @keyframes tw-spin {
           to {
@@ -145,14 +143,12 @@ crosscheck(({ stable, oxide }) => {
           }
         }
         .tw-animate-spin {
-          animation: tw-spin 1s linear infinite;
+          animation: 1s linear infinite tw-spin;
         }
         .tw-font-bold {
           font-weight: 700;
         }
-        .tw-custom-util-prefix {
-          button: no;
-        }
+        .tw-custom-util-prefix,
         .custom-util-no-prefix {
           button: no;
         }
@@ -167,7 +163,7 @@ crosscheck(({ stable, oxide }) => {
             text-align: center;
           }
         }
-        .tw-dark .dark\:tw-bg-\[rgb\(255\2c 0\2c 0\)\] {
+        .tw-dark .dark\:tw-bg-\[rgb\(255\,0\,0\)\] {
           --tw-bg-opacity: 1;
           background-color: rgb(255 0 0 / var(--tw-bg-opacity));
         }
@@ -341,9 +337,7 @@ crosscheck(({ stable, oxide }) => {
       .hover\:tw--top-1:hover {
         top: -0.25rem;
       }
-      .hover\:tw--top-\[1px\]:hover {
-        top: -1px;
-      }
+      .hover\:tw--top-\[1px\]:hover,
       .hover\:tw-top-\[-1px\]:hover {
         top: -1px;
       }
@@ -383,18 +377,12 @@ crosscheck(({ stable, oxide }) => {
     const result = await run(input, config)
 
     expect(result.css).toMatchFormattedCss(css`
-      .a:hover {
-        top: -0.25rem;
-      }
+      .a:hover,
       .b:hover {
         top: -0.25rem;
       }
-      .c:hover {
-        top: -1px;
-      }
-      .d:hover {
-        top: -1px;
-      }
+      .c:hover,
+      .d:hover,
       .e:hover {
         top: -1px;
       }
@@ -424,9 +412,7 @@ crosscheck(({ stable, oxide }) => {
     const result = await run(input, config)
 
     expect(result.css).toMatchFormattedCss(css`
-      .-tw-top-1 {
-        top: -0.25rem;
-      }
+      .-tw-top-1,
       .tw--top-1 {
         top: -0.25rem;
       }
@@ -459,23 +445,14 @@ crosscheck(({ stable, oxide }) => {
     const result = await run(input, config)
 
     expect(result.css).toMatchFormattedCss(css`
-      .-tw-top-1 {
-        top: -0.25rem;
-      }
-      .tw--top-1 {
-        top: -0.25rem;
-      }
-      .hover\:-tw-top-1:hover {
-        top: -0.25rem;
-      }
-
+      .-tw-top-1,
+      .tw--top-1,
+      .hover\:-tw-top-1:hover,
       .hover\:tw--top-1:hover {
         top: -0.25rem;
       }
       @media (min-width: 640px) {
-        .sm\:hover\:-tw-top-1:hover {
-          top: -0.25rem;
-        }
+        .sm\:hover\:-tw-top-1:hover,
         .sm\:hover\:tw--top-1:hover {
           top: -0.25rem;
         }
@@ -521,8 +498,8 @@ crosscheck(({ stable, oxide }) => {
     expect(result.css).toMatchFormattedCss(css`
       .foo {
         color: rgb(var(--button-background, var(--primary-button-background)));
-        transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
         border-radius: min(4px, var(--input-border-radius));
+        transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
       }
     `)
   })
@@ -580,7 +557,7 @@ crosscheck(({ stable, oxide }) => {
         color: rgb(255 255 255 / var(--tw-text-opacity));
         background-color: red;
       }
-      .hover\:before\:\@content-\[\'Hovering\'\]:hover::before {
+      .hover\:before\:\@content-\[\'Hovering\'\]:hover:before {
         --tw-content: 'Hovering';
         content: var(--tw-content);
       }

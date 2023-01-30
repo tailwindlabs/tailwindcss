@@ -29,14 +29,10 @@ crosscheck(() => {
         :root {
           font-weight: bold;
         }
-
-        /* --- */
-
         :root,
         .a {
-          color: black;
+          color: #000;
         }
-
         ${defaults}
       `)
     })
@@ -70,12 +66,9 @@ crosscheck(() => {
         :root {
           font-weight: bold;
         }
-
-        /* --- */
-
         :root,
         .a {
-          color: black;
+          color: #000;
         }
       `)
     })

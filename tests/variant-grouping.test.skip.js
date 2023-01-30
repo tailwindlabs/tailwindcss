@@ -17,7 +17,6 @@ it('should not generate nested selectors if the feature flag is not enabled', ()
       .italic {
         font-style: italic;
       }
-
       .underline {
         text-decoration-line: underline;
       }
@@ -129,7 +128,6 @@ it('should be possible to group nested grouped variants', () => {
           font-style: italic;
           text-decoration-line: underline;
         }
-
         .md\:\(underline\2c italic\2c hover\:\(uppercase\2c font-bold\)\):hover {
           font-weight: 700;
           text-transform: uppercase;
@@ -162,7 +160,6 @@ it('should be possible to use nested multiple grouped variants', () => {
           --tw-text-opacity: 1;
           color: rgb(0 0 0 / var(--tw-text-opacity));
         }
-
         @media (prefers-color-scheme: dark) {
           .md\:\(text-black\2c dark\:\(text-white\2c hover\:focus\:text-gray-100\)\) {
             --tw-text-opacity: 1;
@@ -262,20 +259,17 @@ it('should group with variants defined in external plugins', () => {
         --tw-text-opacity: 1;
         color: rgb(255 255 255 / var(--tw-text-opacity));
       }
-
       [data-ui-state~='active'] .ui-active\:\(bg-black\2c text-white\) {
         --tw-bg-opacity: 1;
         background-color: rgb(0 0 0 / var(--tw-bg-opacity));
         --tw-text-opacity: 1;
         color: rgb(255 255 255 / var(--tw-text-opacity));
       }
-
       .ui-selected\:\(bg-indigo-500\2c underline\)[data-ui-state~='selected'] {
         --tw-bg-opacity: 1;
         background-color: rgb(99 102 241 / var(--tw-bg-opacity));
         text-decoration-line: underline;
       }
-
       [data-ui-state~='selected'] .ui-selected\:\(bg-indigo-500\2c underline\) {
         --tw-bg-opacity: 1;
         background-color: rgb(99 102 241 / var(--tw-bg-opacity));

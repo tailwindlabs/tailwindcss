@@ -138,10 +138,10 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchCss(css`
         .-mt-5 {
-          margin-top: calc(calc(52px * -3) * -1);
+          margin-top: 156px;
         }
         .mt-5 {
-          margin-top: calc(52px * -3);
+          margin-top: -156px;
         }
       `)
     })
@@ -164,13 +164,13 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchCss(css`
         .-mt-clamp {
-          margin-top: calc(clamp(1rem, 100vh, 3rem) * -1);
+          margin-top: calc(-1 * clamp(1rem, 100vh, 3rem));
         }
         .-mt-max {
-          margin-top: calc(max(100vmax, 3rem) * -1);
+          margin-top: calc(-1 * max(100vmax, 3rem));
         }
         .-mt-min {
-          margin-top: calc(min(100vmin, 3rem) * -1);
+          margin-top: calc(-1 * min(100vmin, 3rem));
         }
         .mt-clamp {
           margin-top: clamp(1rem, 100vh, 3rem);
@@ -216,9 +216,7 @@ crosscheck(() => {
 
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchCss(css`
-        .-mt-0 {
-          margin-top: 0;
-        }
+        .-mt-0,
         .mt-0 {
           margin-top: 0;
         }

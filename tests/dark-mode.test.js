@@ -87,7 +87,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media (prefers-color-scheme: dark) {
           .dark\:font-bold {
             font-weight: 700;
@@ -113,7 +112,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media (prefers-color-scheme: dark) {
           .dark\:font-bold {
             font-weight: 700;

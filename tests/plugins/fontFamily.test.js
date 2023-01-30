@@ -71,8 +71,8 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .font-sans {
-          font-family: Helvetica, Arial, sans-serif;
           font-feature-settings: 'cv11', 'ss01';
+          font-family: Helvetica, Arial, sans-serif;
         }
       `)
     })
@@ -91,8 +91,8 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .font-sans {
-          font-family: Helvetica, Arial, sans-serif;
           font-feature-settings: 'cv11', 'ss01';
+          font-family: Helvetica, Arial, sans-serif;
         }
       `)
     })

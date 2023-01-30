@@ -26,18 +26,14 @@ crosscheck(() => {
 
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchCss(css`
-        .divide-black > :not([hidden]) ~ :not([hidden]) {
-          border-color: #000;
-        }
+        .divide-black > :not([hidden]) ~ :not([hidden]),
         .border-black {
           border-color: #000;
         }
         .bg-black {
           background-color: #000;
         }
-        .text-black {
-          color: #000;
-        }
+        .text-black,
         .placeholder-black::placeholder {
           color: #000;
         }
@@ -78,18 +74,14 @@ crosscheck(() => {
 
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchCss(css`
-        .divide-primary > :not([hidden]) ~ :not([hidden]) {
-          border-color: rgb(var(--color-primary));
-        }
+        .divide-primary > :not([hidden]) ~ :not([hidden]),
         .border-primary {
           border-color: rgb(var(--color-primary));
         }
         .bg-primary {
           background-color: rgb(var(--color-primary));
         }
-        .text-primary {
-          color: rgb(var(--color-primary));
-        }
+        .text-primary,
         .placeholder-primary::placeholder {
           color: rgb(var(--color-primary));
         }
@@ -408,7 +400,7 @@ crosscheck(() => {
 
     let output = css`
       .text-foo {
-        color: rgb(59 130 246 / 50%);
+        color: #3b82f680;
       }
     `
 
@@ -436,7 +428,7 @@ crosscheck(() => {
 
     let output = css`
       .text-foo {
-        color: rgb(59 130 246 / 0.5);
+        color: #3b82f680;
       }
     `
 
@@ -492,7 +484,7 @@ crosscheck(() => {
 
     let output = css`
       .text-foo {
-        color: hsl(217 91% 60% / 50%);
+        color: #3c83f680;
       }
     `
 
@@ -520,7 +512,7 @@ crosscheck(() => {
 
     let output = css`
       .text-foo {
-        color: hsl(217 91% 60% / 0.5);
+        color: #3c83f680;
       }
     `
 
@@ -757,7 +749,7 @@ crosscheck(() => {
           background-color: rgb(0 0 0 / var(--tw-bg-opacity));
         }
         .bg-foo2 {
-          background-color: rgb(0 0 0 / 50%);
+          background-color: #00000080;
         }
       `)
     })
@@ -801,30 +793,30 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchCss(css`
         .bg-foo10 {
-          background-color: rgb(255 100 0 / 100%);
+          background-color: #ff6400;
         }
         .bg-foo11 {
-          background-color: rgb(255 100 0 / 50%);
+          background-color: #ff640080;
         }
         .bg-foo20 {
           --tw-bg-opacity: 1;
           background-color: rgb(255 100 0 / var(--tw-bg-opacity));
         }
         .bg-foo21 {
-          background-color: rgb(255 100 0 / 50%);
+          background-color: #ff640080;
         }
         .bg-foo30 {
-          background-color: rgb(255 100 0 / 100%);
+          background-color: #ff6400;
         }
         .bg-foo31 {
-          background-color: rgb(255 100 0 / 50%);
+          background-color: #ff640080;
         }
         .bg-foo40 {
           --tw-bg-opacity: 1;
           background-color: rgb(255 100 0 / var(--tw-bg-opacity));
         }
         .bg-foo41 {
-          background-color: rgb(255 100 0 / 50%);
+          background-color: #ff640080;
         }
       `)
     })
@@ -861,7 +853,7 @@ crosscheck(() => {
           border-color: #93c5fd;
         }
         .divide-blue-300\/50 > :not([hidden]) ~ :not([hidden]) {
-          border-color: rgb(147 197 253 / 0.5);
+          border-color: #93c5fd80;
         }
         .divide-blue-300\/\[var\(--my-opacity\)\] > :not([hidden]) ~ :not([hidden]) {
           border-color: rgb(147 197 253 / var(--my-opacity));
@@ -870,7 +862,7 @@ crosscheck(() => {
           border-color: #93c5fd;
         }
         .border-blue-300\/50 {
-          border-color: rgb(147 197 253 / 0.5);
+          border-color: #93c5fd80;
         }
         .border-blue-300\/\[var\(--my-opacity\)\] {
           border-color: rgb(147 197 253 / var(--my-opacity));
@@ -879,7 +871,7 @@ crosscheck(() => {
           background-color: #93c5fd;
         }
         .bg-blue-300\/50 {
-          background-color: rgb(147 197 253 / 0.5);
+          background-color: #93c5fd80;
         }
         .bg-blue-300\/\[var\(--my-opacity\)\] {
           background-color: rgb(147 197 253 / var(--my-opacity));
@@ -888,7 +880,7 @@ crosscheck(() => {
           color: #93c5fd;
         }
         .text-blue-300\/50 {
-          color: rgb(147 197 253 / 0.5);
+          color: #93c5fd80;
         }
         .text-blue-300\/\[var\(--my-opacity\)\] {
           color: rgb(147 197 253 / var(--my-opacity));
@@ -897,7 +889,7 @@ crosscheck(() => {
           color: #93c5fd;
         }
         .placeholder-blue-300\/50::placeholder {
-          color: rgb(147 197 253 / 0.5);
+          color: #93c5fd80;
         }
         .placeholder-blue-300\/\[var\(--my-opacity\)\]::placeholder {
           color: rgb(147 197 253 / var(--my-opacity));
@@ -906,7 +898,7 @@ crosscheck(() => {
           --tw-ring-color: #93c5fd;
         }
         .ring-blue-300\/50 {
-          --tw-ring-color: rgb(147 197 253 / 0.5);
+          --tw-ring-color: #93c5fd80;
         }
         .ring-blue-300\/\[var\(--my-opacity\)\] {
           --tw-ring-color: rgb(147 197 253 / var(--my-opacity));
@@ -955,7 +947,7 @@ crosscheck(() => {
           border-color: rgb(147 197 253 / var(--tw-divide-opacity));
         }
         .divide-blue-300\/50 > :not([hidden]) ~ :not([hidden]) {
-          border-color: rgb(147 197 253 / 0.5);
+          border-color: #93c5fd80;
         }
         .divide-blue-300\/\[var\(--my-opacity\)\] > :not([hidden]) ~ :not([hidden]) {
           border-color: rgb(147 197 253 / var(--my-opacity));
@@ -968,7 +960,7 @@ crosscheck(() => {
           border-color: rgb(147 197 253 / var(--tw-border-opacity));
         }
         .border-blue-300\/50 {
-          border-color: rgb(147 197 253 / 0.5);
+          border-color: #93c5fd80;
         }
         .border-blue-300\/\[var\(--my-opacity\)\] {
           border-color: rgb(147 197 253 / var(--my-opacity));
@@ -981,7 +973,7 @@ crosscheck(() => {
           background-color: rgb(147 197 253 / var(--tw-bg-opacity));
         }
         .bg-blue-300\/50 {
-          background-color: rgb(147 197 253 / 0.5);
+          background-color: #93c5fd80;
         }
         .bg-blue-300\/\[var\(--my-opacity\)\] {
           background-color: rgb(147 197 253 / var(--my-opacity));
@@ -994,7 +986,7 @@ crosscheck(() => {
           color: rgb(147 197 253 / var(--tw-text-opacity));
         }
         .text-blue-300\/50 {
-          color: rgb(147 197 253 / 0.5);
+          color: #93c5fd80;
         }
         .text-blue-300\/\[var\(--my-opacity\)\] {
           color: rgb(147 197 253 / var(--my-opacity));
@@ -1007,7 +999,7 @@ crosscheck(() => {
           color: rgb(147 197 253 / var(--tw-placeholder-opacity));
         }
         .placeholder-blue-300\/50::placeholder {
-          color: rgb(147 197 253 / 0.5);
+          color: #93c5fd80;
         }
         .placeholder-blue-300\/\[var\(--my-opacity\)\]::placeholder {
           color: rgb(147 197 253 / var(--my-opacity));
@@ -1020,7 +1012,7 @@ crosscheck(() => {
           --tw-ring-color: rgb(147 197 253 / var(--tw-ring-opacity));
         }
         .ring-blue-300\/50 {
-          --tw-ring-color: rgb(147 197 253 / 0.5);
+          --tw-ring-color: #93c5fd80;
         }
         .ring-blue-300\/\[var\(--my-opacity\)\] {
           --tw-ring-color: rgb(147 197 253 / var(--my-opacity));

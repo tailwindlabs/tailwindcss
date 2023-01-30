@@ -16,9 +16,7 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .font-bold {
-          font-weight: 700;
-        }
+        .font-bold,
         .hover\:font-bold:hover {
           font-weight: 700;
         }
@@ -28,7 +26,7 @@ crosscheck(() => {
           }
         }
         .foo {
-          color: black;
+          color: #000;
         }
       `)
     })
@@ -49,9 +47,7 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .font-bold {
-          font-weight: 700;
-        }
+        .font-bold,
         .hover\:font-bold:hover {
           font-weight: 700;
         }
@@ -61,7 +57,7 @@ crosscheck(() => {
           }
         }
         .foo {
-          color: black;
+          color: #000;
         }
       `)
     })

@@ -16,16 +16,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -35,8 +27,6 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-
-        /* --- */
         .rotate-3 {
           --tw-rotate: 3deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -76,16 +66,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -95,8 +77,6 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-
-        /* --- */
         .hover\:scale-x-110:hover {
           --tw-scale-x: 1.1;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -134,16 +114,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -153,16 +125,14 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-
-        /* --- */
-        .before\:scale-x-110::before {
+        .before\:scale-x-110:before {
           content: var(--tw-content);
           --tw-scale-x: 1.1;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
             scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         }
-        .after\:rotate-3::after {
+        .after\:rotate-3:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -188,16 +158,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -207,8 +169,6 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-
-        /* --- */
         .group:hover .group-hover\:scale-x-110 {
           --tw-scale-x: 1.1;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -242,16 +202,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -261,16 +213,14 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-
-        /* --- */
-        .group:hover .group-hover\:before\:scale-x-110::before {
+        .group:hover .group-hover\:before\:scale-x-110:before {
           content: var(--tw-content);
           --tw-scale-x: 1.1;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
             scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         }
-        .peer:focus ~ .peer-focus\:after\:rotate-3::after {
+        .peer:focus ~ .peer-focus\:after\:rotate-3:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -302,16 +252,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -321,16 +263,14 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-
-        /* --- */
-        .group:hover .group-hover\:hover\:before\:scale-x-110:hover::before {
+        .group:hover .group-hover\:hover\:before\:scale-x-110:hover:before {
           content: var(--tw-content);
           --tw-scale-x: 1.1;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
             scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         }
-        .peer:focus ~ .peer-focus\:focus\:after\:rotate-3:focus::after {
+        .peer:focus ~ .peer-focus\:focus\:after\:rotate-3:focus:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -398,16 +338,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -417,15 +349,13 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-
-        /* --- */
         .foo {
           --tw-rotate: 3deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
             scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         }
-        .bar::before {
+        .bar:before {
           content: var(--tw-content);
           --tw-scale-x: 1.1;
           --tw-scale-y: 1.1;
@@ -433,7 +363,7 @@ crosscheck(() => {
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
             scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         }
-        .baz::before {
+        .baz:before {
           --tw-rotate: 45deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
@@ -468,8 +398,8 @@ crosscheck(() => {
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
             scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         }
-        .a::before,
-        .b::after {
+        .a:before,
+        .b:after {
           --tw-rotate: 90deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
@@ -528,7 +458,6 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-        /* --- */
         .a:before {
           --tw-rotate: 45deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -571,7 +500,6 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        /* --- */
         .border {
           border-width: 1px;
         }
@@ -603,31 +531,20 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-ring-inset: ;
-          --tw-ring-offset-width: 0px;
-          --tw-ring-offset-color: #fff;
-          --tw-ring-color: rgb(59 130 246 / 0.5);
-          --tw-ring-offset-shadow: 0 0 #0000;
-          --tw-ring-shadow: 0 0 #0000;
-          --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-ring-inset: ;
           --tw-ring-offset-width: 0px;
           --tw-ring-offset-color: #fff;
-          --tw-ring-color: rgb(59 130 246 / 0.5);
+          --tw-ring-color: #3b82f680;
           --tw-ring-offset-shadow: 0 0 #0000;
           --tw-ring-shadow: 0 0 #0000;
           --tw-shadow: 0 0 #0000;
           --tw-shadow-colored: 0 0 #0000;
         }
-
-        /* --- */
         .shadow {
-          --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
           --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
             0 1px 2px -1px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -642,11 +559,11 @@ crosscheck(() => {
             var(--tw-shadow, 0 0 #0000);
         }
         .ring-black\/25 {
-          --tw-ring-color: rgb(0 0 0 / 0.25);
+          --tw-ring-color: #00000040;
         }
         @media (min-width: 768px) {
           .md\:shadow-xl {
-            --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
             --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color),
               0 8px 10px -6px var(--tw-shadow-color);
             box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -672,16 +589,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         *,
-        ::before,
-        ::after {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
+        :before,
+        :after,
         ::backdrop {
           --tw-translate-x: 0;
           --tw-translate-y: 0;
@@ -691,8 +600,6 @@ crosscheck(() => {
           --tw-scale-x: 1;
           --tw-scale-y: 1;
         }
-
-        /* --- */
       `)
     })
   })
@@ -711,7 +618,6 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        /* --- */
         .rotate-3 {
           --tw-rotate: 3deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -780,37 +686,28 @@ crosscheck(() => {
         [id='other'],
         [data-bar='baz'],
         article,
-        [id='another']::before {
+        [id='another']:before {
           --color: black;
         }
-
-        /* --- */
-
         .foo {
           background-color: var(--color);
         }
-
         #app {
           border-color: var(--color);
         }
-
         span#page {
           color: var(--color);
         }
-
         div[data-foo='bar']#other {
           fill: var(--color);
         }
-
         div[data-bar='baz'] {
           stroke: var(--color);
         }
-
         article {
           --article: var(--color);
         }
-
-        div[data-foo='bar']#another::before {
+        div[data-foo='bar']#another:before {
           fill: var(--color);
         }
       `)

@@ -212,13 +212,13 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .btn-blue {
-          background-color: blue;
-          color: white;
-          padding: 0.5rem 1rem;
+          color: #fff;
+          background-color: #00f;
           border-radius: 0.25rem;
+          padding: 0.5rem 1rem;
         }
         .btn-blue:hover {
-          background-color: darkblue;
+          background-color: #00008b;
         }
       `)
     })
@@ -254,7 +254,6 @@ crosscheck(() => {
         button {
           font-family: inherit;
         }
-
         ${defaults}
       `)
     })
@@ -343,13 +342,13 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .btn-blue {
-          background-color: blue;
-          color: white;
-          padding: 0.5rem 1rem;
+          color: #fff;
+          background-color: #00f;
           border-radius: 0.25rem;
+          padding: 0.5rem 1rem;
         }
         .btn-blue:hover {
-          background-color: darkblue;
+          background-color: #00008b;
         }
       `)
     })
@@ -396,13 +395,13 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .btn-blue {
-          background-color: blue;
-          color: white;
-          padding: 0.5rem 1rem;
+          color: #fff;
+          background-color: #00f;
           border-radius: 0.25rem;
+          padding: 0.5rem 1rem;
         }
         .btn-blue:hover {
-          background-color: darkblue;
+          background-color: #00008b;
         }
       `)
     })
@@ -559,13 +558,13 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .btn-blue {
-          background-color: blue;
-          color: white;
-          padding: 0.5rem 1rem;
+          color: #fff;
+          background-color: #00f;
           border-radius: 0.25rem;
+          padding: 0.5rem 1rem;
         }
         .btn-blue:hover {
-          background-color: darkblue;
+          background-color: #00008b;
         }
         @media (min-width: 500px) {
           .btn-blue:hover {
@@ -793,8 +792,8 @@ crosscheck(() => {
     return run('@tailwind components; @tailwind utilities;', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .card {
-          padding: 1rem;
           border-radius: 0.25rem;
+          padding: 1rem;
         }
         .btn {
           padding: 1rem 0.5rem;
@@ -927,7 +926,7 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .tw-btn-blue {
-          background-color: blue;
+          background-color: #00f;
         }
       `)
     })
@@ -989,7 +988,7 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .btn-blue {
-          background-color: blue;
+          background-color: #00f;
         }
       `)
     })
@@ -1013,7 +1012,7 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .btn-blue {
-          background-color: blue;
+          background-color: #00f;
         }
       `)
     })
@@ -1040,7 +1039,7 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .tw-btn-blue {
-          background-color: blue;
+          background-color: #00f;
         }
       `)
     })
@@ -1121,7 +1120,7 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .tw-btn-blue .tw-w-1\/4 > h1.tw-text-xl + a .tw-bar {
-          background-color: blue;
+          background-color: #00f;
         }
       `)
     })
@@ -1373,7 +1372,6 @@ crosscheck(() => {
           .banana {
             position: absolute;
           }
-
           @media (min-width: 400px) {
             .sm\:banana {
               position: absolute;
@@ -1385,7 +1383,6 @@ crosscheck(() => {
           .apple {
             position: absolute;
           }
-
           @media (min-width: 400px) {
             .sm\:apple {
               position: absolute;
@@ -1547,23 +1544,20 @@ crosscheck(() => {
       expect(result.css).toMatchFormattedCss(css`
         @keyframes abc {
           25.001% {
-            color: black;
+            color: #000;
           }
         }
-
         .foo-\[abc\] {
-          animation: abc 1s infinite;
+          animation: 1s infinite abc;
         }
-
         @media (min-width: 768px) {
           @keyframes def {
             25.001% {
-              color: black;
+              color: #000;
             }
           }
-
           .md\:foo-\[def\] {
-            animation: def 1s infinite;
+            animation: 1s infinite def;
           }
         }
       `)
@@ -1622,7 +1616,7 @@ crosscheck(() => {
     return run('@tailwind components', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .foo {
-          outline: 2px dotted black;
+          outline: 2px dotted #000;
         }
       `)
     })

@@ -72,7 +72,7 @@ crosscheck(() => {
       expect(result.css).toMatchFormattedCss(css`
         @layer custom {
           .foo {
-            color: black;
+            color: #000;
           }
         }
       `)
