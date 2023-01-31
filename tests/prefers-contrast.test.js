@@ -20,19 +20,16 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .bg-white {
           --tw-bg-opacity: 1;
           background-color: rgb(255 255 255 / var(--tw-bg-opacity));
         }
-
         @media (prefers-contrast: more) {
           .contrast-more\:bg-pink-500 {
             --tw-bg-opacity: 1;
             background-color: rgb(236 72 153 / var(--tw-bg-opacity));
           }
         }
-
         @media (prefers-contrast: less) {
           .contrast-less\:bg-black {
             --tw-bg-opacity: 1;
@@ -58,14 +55,12 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media (prefers-contrast: more) {
           .contrast-more\:bg-black {
             --tw-bg-opacity: 1;
             background-color: rgb(0 0 0 / var(--tw-bg-opacity));
           }
         }
-
         @media (prefers-color-scheme: dark) {
           .dark\:bg-white {
             --tw-bg-opacity: 1;

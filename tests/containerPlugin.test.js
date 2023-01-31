@@ -143,8 +143,8 @@ crosscheck(({}) => {
       expect(result.css).toMatchFormattedCss(css`
         .container {
           width: 100%;
-          margin-right: auto;
           margin-left: auto;
+          margin-right: auto;
         }
         @media (min-width: 640px) {
           .container {
@@ -189,8 +189,8 @@ crosscheck(({}) => {
       expect(result.css).toMatchFormattedCss(css`
         .container {
           width: 100%;
-          padding-right: 2rem;
           padding-left: 2rem;
+          padding-right: 2rem;
         }
         @media (min-width: 640px) {
           .container {
@@ -246,14 +246,14 @@ crosscheck(({}) => {
       expect(result.css).toMatchFormattedCss(css`
         .container {
           width: 100%;
-          padding-right: 1rem;
           padding-left: 1rem;
+          padding-right: 1rem;
         }
         @media (min-width: 576px) {
           .container {
             max-width: 576px;
-            padding-right: 2rem;
             padding-left: 2rem;
+            padding-right: 2rem;
           }
         }
         @media (min-width: 768px) {
@@ -264,15 +264,15 @@ crosscheck(({}) => {
         @media (min-width: 992px) {
           .container {
             max-width: 992px;
-            padding-right: 4rem;
             padding-left: 4rem;
+            padding-right: 4rem;
           }
         }
         @media (min-width: 1200px) {
           .container {
             max-width: 1200px;
-            padding-right: 5rem;
             padding-left: 5rem;
+            padding-right: 5rem;
           }
         }
       `)
@@ -295,10 +295,10 @@ crosscheck(({}) => {
       expect(result.css).toMatchFormattedCss(css`
         .container {
           width: 100%;
-          margin-right: auto;
           margin-left: auto;
-          padding-right: 2rem;
+          margin-right: auto;
           padding-left: 2rem;
+          padding-right: 2rem;
         }
         @media (min-width: 400px) {
           .container {

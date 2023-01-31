@@ -22,31 +22,31 @@ crosscheck(() => {
           }
         }
         .animate-spin {
-          animation: spin 1s linear infinite;
+          animation: 1s linear infinite spin;
         }
         @keyframes ping {
           75%,
           100% {
-            transform: scale(2);
             opacity: 0;
+            transform: scale(2);
           }
         }
         .hover\:animate-ping:hover {
-          animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+          animation: 1s cubic-bezier(0, 0, 0.2, 1) infinite ping;
         }
         @keyframes bounce {
           0%,
           100% {
-            transform: translateY(-25%);
             animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            transform: translateY(-25%);
           }
           50% {
-            transform: none;
             animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            transform: none;
           }
         }
         .group:hover .group-hover\:animate-bounce {
-          animation: bounce 1s infinite;
+          animation: 1s infinite bounce;
         }
       `)
     })
@@ -75,7 +75,7 @@ crosscheck(() => {
           }
         }
         .animate-one {
-          animation: one 2s;
+          animation: 2s one;
         }
       `)
     })
@@ -105,7 +105,7 @@ crosscheck(() => {
           }
         }
         .tw-animate-one {
-          animation: tw-one 2s;
+          animation: 2s tw-one;
         }
       `)
     })
@@ -128,12 +128,12 @@ crosscheck(() => {
         @keyframes bounce {
           0%,
           100% {
-            transform: translateY(-25%);
             animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            transform: translateY(-25%);
           }
           50% {
-            transform: none;
             animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            transform: none;
           }
         }
         @keyframes pulse {
@@ -142,7 +142,7 @@ crosscheck(() => {
           }
         }
         .animate-multiple {
-          animation: bounce 2s linear, pulse 3s ease-in;
+          animation: 2s linear bounce, 3s ease-in pulse;
         }
       `)
     })
@@ -177,7 +177,7 @@ crosscheck(() => {
           }
         }
         .animate-multiple {
-          animation: one 2s, two 3s;
+          animation: 2s one, 3s two;
         }
       `)
     })
@@ -215,7 +215,7 @@ crosscheck(() => {
           }
         }
         .animate-zoom-\.5 {
-          animation: zoom-\.5 2s;
+          animation: 2s zoom-\.5;
         }
         @keyframes zoom-1\.5 {
           to {
@@ -223,7 +223,7 @@ crosscheck(() => {
           }
         }
         .animate-zoom-1\.5 {
-          animation: zoom-1\.5 2s;
+          animation: 2s zoom-1\.5;
         }
       `)
     })
@@ -262,7 +262,7 @@ crosscheck(() => {
           }
         }
         .tw-animate-zoom-\.5 {
-          animation: tw-zoom-\.5 2s;
+          animation: 2s tw-zoom-\.5;
         }
         @keyframes tw-zoom-1\.5 {
           to {
@@ -270,7 +270,7 @@ crosscheck(() => {
           }
         }
         .tw-animate-zoom-1\.5 {
-          animation: tw-zoom-1\.5 2s;
+          animation: 2s tw-zoom-1\.5;
         }
       `)
     })

@@ -16,7 +16,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[\&\>\*\]\:underline > * {
           text-decoration-line: underline;
         }
@@ -43,7 +42,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .a.b .\[\.a\.b_\&\]\:underline {
           text-decoration-line: underline;
         }
@@ -66,10 +64,9 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media (prefers-color-scheme: dark) {
           @media (min-width: 1024px) {
-            .dark\:lg\:hover\:\[\&\>\*\]\:underline > *:hover {
+            .dark\:lg\:hover\:\[\&\>\*\]\:underline > :hover {
               text-decoration-line: underline;
             }
           }
@@ -121,17 +118,14 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .underline {
           text-decoration-line: underline;
         }
-
         @media (min-width: 1024px) {
           .lg\:underline {
             text-decoration-line: underline;
           }
         }
-
         .\[\&\>\*\]\:underline > * {
           text-decoration-line: underline;
         }
@@ -154,7 +148,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[\&\>\*\]\:\!underline > * {
           text-decoration-line: underline !important;
         }
@@ -177,7 +170,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @supports (what: ever) {
           .\[\@supports\(what\:ever\)\]\:underline {
             text-decoration-line: underline;
@@ -206,7 +198,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media screen {
           @media (hover: hover) {
             .\[\@media_screen\{\@media\(hover\:hover\)\}\]\:underline {
@@ -233,7 +224,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media (hover: hover) {
           .\[\@media\(hover\:hover\)\{\&\:hover\}\]\:underline:hover {
             text-decoration-line: underline;
@@ -262,7 +252,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media screen {
           @media (hover: hover) {
             .\[\@media_screen\{\@media\(hover\:hover\)\{\&\:hover\}\}\]\:underline:hover {
@@ -289,7 +278,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[\&\[data-open\]\]\:underline[data-open] {
           text-decoration-line: underline;
         }
@@ -314,7 +302,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[\&\[data-foo\]\[data-bar\]\:not\(\[data-baz\]\)\]\:underline[data-foo][data-bar]:not([data-baz]) {
           text-decoration-line: underline;
         }
@@ -341,7 +328,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[\&\[data-foo\]\[data-bar\]\:not\(\[data-baz\]\)\]__underline[data-foo][data-bar]:not([data-baz]) {
           text-decoration-line: underline;
         }
@@ -368,7 +354,6 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[\&\[data-foo\]\[data-bar\]\:not\(\[data-baz\]\)\]_\@underline[data-foo][data-bar]:not([data-baz]) {
           text-decoration-line: underline;
         }
@@ -387,19 +372,18 @@ crosscheck(({ stable, oxide }) => {
     }
 
     let input = `
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
 
-    .foo {
-      @apply [@media_screen{@media(hover:hover){&:hover}}]:underline;
-    }
-  `
+      .foo {
+        @apply [@media_screen{@media(hover:hover){&:hover}}]:underline;
+      }
+    `
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media screen {
           @media (hover: hover) {
             .foo:hover {
@@ -421,16 +405,15 @@ crosscheck(({ stable, oxide }) => {
       corePlugins: { preflight: false },
     }
 
-    let input = `
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-  `
+    let input = css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[\&_\.foo\\_\\_bar\]\:underline .foo__bar {
           text-decoration-line: underline;
         }
@@ -448,16 +431,15 @@ crosscheck(({ stable, oxide }) => {
       corePlugins: { preflight: false },
     }
 
-    let input = `
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-  `
+    let input = css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[\&_\.foo\\_\\_bar\]\:\[\&_\.bar\\_\\_baz\]\:underline .bar__baz .foo__bar {
           text-decoration-line: underline;
         }
@@ -478,20 +460,16 @@ crosscheck(({ stable, oxide }) => {
       corePlugins: { preflight: false },
     }
 
-    let input = `
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-  `
+    let input = css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
-        .\[\&_\.foo\\_\\_bar\]\:hover\:underline:hover .foo__bar {
-          text-decoration-line: underline;
-        }
-
+        .\[\&_\.foo\\_\\_bar\]\:hover\:underline:hover .foo__bar,
         .hover\:\[\&_\.foo\\_\\_bar\]\:underline .foo__bar:hover {
           text-decoration-line: underline;
         }
@@ -512,20 +490,16 @@ crosscheck(({ stable, oxide }) => {
       corePlugins: { preflight: false },
     }
 
-    let input = `
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-  `
+    let input = css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
-        .\[\&\[data-test\=\"2\"\]\]\:underline[data-test='2'] {
-          text-decoration-line: underline;
-        }
-
+        .\[\&\[data-test\=\"2\"\]\]\:underline[data-test='2'],
         .\[\&\[data-test\=\'2\'\]\]\:underline[data-test='2'] {
           text-decoration-line: underline;
         }
@@ -561,24 +535,15 @@ crosscheck(({ stable, oxide }) => {
       corePlugins: { preflight: false },
     }
 
-    let input = `
-    @tailwind utilities;
-  `
+    let input = css`
+      @tailwind utilities;
+    `
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .\[\&_\.foo\]\:tw-text-red-400 .foo {
-          --tw-text-opacity: 1;
-          color: rgb(248 113 113 / var(--tw-text-opacity));
-        }
-        .\[\&_\.foo\]\:hover\:tw-text-red-400:hover .foo {
-          --tw-text-opacity: 1;
-          color: rgb(248 113 113 / var(--tw-text-opacity));
-        }
-        .hover\:\[\&_\.foo\]\:tw-text-red-400 .foo:hover {
-          --tw-text-opacity: 1;
-          color: rgb(248 113 113 / var(--tw-text-opacity));
-        }
+        .\[\&_\.foo\]\:tw-text-red-400 .foo,
+        .\[\&_\.foo\]\:hover\:tw-text-red-400:hover .foo,
+        .hover\:\[\&_\.foo\]\:tw-text-red-400 .foo:hover,
         .foo .\[\.foo_\&\]\:tw-text-red-400 {
           --tw-text-opacity: 1;
           color: rgb(248 113 113 / var(--tw-text-opacity));
@@ -607,9 +572,9 @@ crosscheck(({ stable, oxide }) => {
       corePlugins: { preflight: false },
     }
 
-    let input = `
-    @tailwind utilities;
-  `
+    let input = css`
+      @tailwind utilities;
+    `
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
@@ -617,17 +582,14 @@ crosscheck(({ stable, oxide }) => {
           --tw-bg-opacity: 1;
           background-color: rgb(255 255 255 / var(--tw-bg-opacity));
         }
-
         .\[\&_\.foo\]\:tw-text-red-400 .foo {
           --tw-text-opacity: 1;
           color: rgb(248 113 113 / var(--tw-text-opacity));
         }
-
         .foo .\[\.foo_\&\]\:tw-bg-white {
           --tw-bg-opacity: 1;
           background-color: rgb(255 255 255 / var(--tw-bg-opacity));
         }
-
         .foo .\[\.foo_\&\]\:tw-text-red-400 {
           --tw-text-opacity: 1;
           color: rgb(248 113 113 / var(--tw-text-opacity));
@@ -823,42 +785,35 @@ crosscheck(({ stable, oxide }) => {
           .supports-grid\:underline {
             text-decoration-line: underline;
           }
-
           .supports-\[display\:grid\]\:grid {
             display: grid;
           }
         }
-
         @supports (foo: bar) and (bar: baz) {
           .supports-\[\(foo\:bar\)and\(bar\:baz\)\]\:underline {
             text-decoration-line: underline;
           }
         }
-
         @supports (foo: bar) or (bar: baz) {
           .supports-\[\(foo\:bar\)or\(bar\:baz\)\]\:underline {
             text-decoration-line: underline;
           }
         }
-
         @supports (container-type: var(--tw)) {
           .supports-\[container-type\]\:underline {
             text-decoration-line: underline;
           }
         }
-
         @supports not (foo: bar) {
           .supports-\[not\(foo\:bar\)\]\:underline {
             text-decoration-line: underline;
           }
         }
-
         @supports selector(A > B) {
           .supports-\[selector\(A_\>_B\)\]\:underline {
             text-decoration-line: underline;
           }
         }
-
         @supports (transform-origin: 5% 5%) {
           .supports-\[transform-origin\:5\%_5\%\]\:underline {
             text-decoration-line: underline;
@@ -923,45 +878,19 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .group\/foo:hover .group-hover\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group:hover .group-hover\:underline {
-          text-decoration-line: underline;
-        }
-        .group\/foo:focus .group-\[\&\:focus\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group:focus .group-\[\&\:focus\]\:underline {
-          text-decoration-line: underline;
-        }
-        .group\/foo[data-open] .group-\[\&\[data-open\]\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group[data-open] .group-\[\&\[data-open\]\]\:underline {
-          text-decoration-line: underline;
-        }
-        .group\/foo.in-foo .group-\[\.in-foo\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group.in-foo .group-\[\.in-foo\]\:underline {
-          text-decoration-line: underline;
-        }
-        .in-foo .group\/foo .group-\[\.in-foo_\&\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .in-foo .group .group-\[\.in-foo_\&\]\:underline {
-          text-decoration-line: underline;
-        }
-        .group\/foo:hover .group-\[\:hover\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .group:hover .group-\[\:hover\]\:underline {
-          text-decoration-line: underline;
-        }
-        .group\/foo[data-open] .group-\[\[data-open\]\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
+        .group\/foo:hover .group-hover\/foo\:underline,
+        .group:hover .group-hover\:underline,
+        .group\/foo:focus .group-\[\&\:focus\]\/foo\:underline,
+        .group:focus .group-\[\&\:focus\]\:underline,
+        .group\/foo[data-open] .group-\[\&\[data-open\]\]\/foo\:underline,
+        .group[data-open] .group-\[\&\[data-open\]\]\:underline,
+        .group\/foo.in-foo .group-\[\.in-foo\]\/foo\:underline,
+        .group.in-foo .group-\[\.in-foo\]\:underline,
+        .in-foo .group\/foo .group-\[\.in-foo_\&\]\/foo\:underline,
+        .in-foo .group .group-\[\.in-foo_\&\]\:underline,
+        .group\/foo:hover .group-\[\:hover\]\/foo\:underline,
+        .group:hover .group-\[\:hover\]\:underline,
+        .group\/foo[data-open] .group-\[\[data-open\]\]\/foo\:underline,
         .group[data-open] .group-\[\[data-open\]\]\:underline {
           text-decoration-line: underline;
         }
@@ -1024,45 +953,19 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .peer\/foo:hover ~ .peer-hover\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .peer:hover ~ .peer-hover\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo:focus ~ .peer-\[\&\:focus\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .peer:focus ~ .peer-\[\&\:focus\]\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo[data-open] ~ .peer-\[\&\[data-open\]\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .peer[data-open] ~ .peer-\[\&\[data-open\]\]\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo.in-foo ~ .peer-\[\.in-foo\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .peer.in-foo ~ .peer-\[\.in-foo\]\:underline {
-          text-decoration-line: underline;
-        }
-        .in-foo .peer\/foo ~ .peer-\[\.in-foo_\&\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .in-foo .peer ~ .peer-\[\.in-foo_\&\]\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo:hover ~ .peer-\[\:hover\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
-        .peer:hover ~ .peer-\[\:hover\]\:underline {
-          text-decoration-line: underline;
-        }
-        .peer\/foo[data-open] ~ .peer-\[\[data-open\]\]\/foo\:underline {
-          text-decoration-line: underline;
-        }
+        .peer\/foo:hover ~ .peer-hover\/foo\:underline,
+        .peer:hover ~ .peer-hover\:underline,
+        .peer\/foo:focus ~ .peer-\[\&\:focus\]\/foo\:underline,
+        .peer:focus ~ .peer-\[\&\:focus\]\:underline,
+        .peer\/foo[data-open] ~ .peer-\[\&\[data-open\]\]\/foo\:underline,
+        .peer[data-open] ~ .peer-\[\&\[data-open\]\]\:underline,
+        .peer\/foo.in-foo ~ .peer-\[\.in-foo\]\/foo\:underline,
+        .peer.in-foo ~ .peer-\[\.in-foo\]\:underline,
+        .in-foo .peer\/foo ~ .peer-\[\.in-foo_\&\]\/foo\:underline,
+        .in-foo .peer ~ .peer-\[\.in-foo_\&\]\:underline,
+        .peer\/foo:hover ~ .peer-\[\:hover\]\/foo\:underline,
+        .peer:hover ~ .peer-\[\:hover\]\:underline,
+        .peer\/foo[data-open] ~ .peer-\[\[data-open\]\]\/foo\:underline,
         .peer[data-open] ~ .peer-\[\[data-open\]\]\:underline {
           text-decoration-line: underline;
         }

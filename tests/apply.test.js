@@ -161,24 +161,17 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .basic-example {
-          border-radius: 0.375rem;
           --tw-bg-opacity: 1;
           background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-          padding-left: 1rem;
-          padding-right: 1rem;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
+          border-radius: 0.375rem;
+          padding: 0.5rem 1rem;
         }
         .class-order {
-          padding: 2rem;
-          padding-left: 0.75rem;
-          padding-bottom: 1.75rem;
-          padding-top: 1rem;
-          padding-right: 0.25rem;
+          padding: 1rem 0.25rem 1.75rem 0.75rem;
         }
         .with-additional-properties {
-          font-weight: 500;
           text-align: right;
+          font-weight: 500;
         }
         .variants {
           font-weight: 600;
@@ -234,9 +227,7 @@ crosscheck(() => {
             text-align: left;
           }
         }
-        .apply-custom-utility {
-          custom: stuff;
-        }
+        .apply-custom-utility,
         .apply-custom-utility:hover {
           custom: stuff;
         }
@@ -252,13 +243,10 @@ crosscheck(() => {
         }
         .multiple,
         .selectors {
-          border-radius: 0.375rem;
           --tw-bg-opacity: 1;
           background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-          padding-left: 1rem;
-          padding-right: 1rem;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
+          border-radius: 0.375rem;
+          padding: 0.5rem 1rem;
         }
         .multiple-variants:hover,
         .selectors-variants:hover {
@@ -289,14 +277,14 @@ crosscheck(() => {
           --tw-numeric-spacing: tabular-nums;
           font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
             var(--tw-numeric-spacing) var(--tw-numeric-fraction);
-          --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;
           --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
             0 4px 6px -4px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
             var(--tw-shadow);
         }
         .complex-utilities:hover {
-          --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
           --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color),
             0 8px 10px -6px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -315,23 +303,17 @@ crosscheck(() => {
         }
         .btn {
           border-radius: 0.25rem;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
-          padding-left: 1rem;
-          padding-right: 1rem;
+          padding: 0.5rem 1rem;
           font-weight: 700;
         }
         .btn-blue {
-          border-radius: 0.25rem;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
-          padding-left: 1rem;
-          padding-right: 1rem;
-          font-weight: 700;
           --tw-bg-opacity: 1;
           background-color: rgb(59 130 246 / var(--tw-bg-opacity));
           --tw-text-opacity: 1;
           color: rgb(255 255 255 / var(--tw-text-opacity));
+          border-radius: 0.25rem;
+          padding: 0.5rem 1rem;
+          font-weight: 700;
         }
         .btn-blue:hover {
           --tw-bg-opacity: 1;
@@ -385,18 +367,13 @@ crosscheck(() => {
             font-weight: 300;
           }
         }
-        .use-with-other-properties-base {
-          color: green;
-          font-weight: 700;
-        }
+        .use-with-other-properties-base,
         .use-with-other-properties-component {
           color: green;
           font-weight: 700;
         }
         .add-sibling-properties {
-          padding: 2rem;
-          padding-left: 1rem;
-          padding-right: 1rem;
+          padding: 2rem 1rem;
         }
         .add-sibling-properties:hover {
           padding-left: 0.5rem;
@@ -415,23 +392,20 @@ crosscheck(() => {
           }
         }
         .add-sibling-properties {
-          padding-top: 3px;
           color: green;
+          padding-top: 3px;
           font-weight: 700;
         }
-
         h1 {
           font-size: 1.5rem;
           line-height: 2rem;
         }
-
         @media (min-width: 640px) {
           h1 {
             font-size: 1.875rem;
             line-height: 2.25rem;
           }
         }
-
         @media (min-width: 1024px) {
           h1 {
             font-size: 1.5rem;
@@ -454,18 +428,15 @@ crosscheck(() => {
             line-height: 2rem;
           }
         }
-
         .important-modifier {
-          border-radius: 0.375rem !important;
           padding-left: 1rem;
           padding-right: 1rem;
+          border-radius: 0.375rem !important;
         }
-
         .important-modifier-variant {
           padding-left: 1rem;
           padding-right: 1rem;
         }
-
         .important-modifier-variant:hover {
           border-radius: 0.375rem !important;
         }
@@ -475,7 +446,7 @@ crosscheck(() => {
           }
         }
         .foo {
-          animation: spin 1s linear infinite;
+          animation: 1s linear infinite spin;
         }
         @keyframes pulse {
           50% {
@@ -483,7 +454,7 @@ crosscheck(() => {
           }
         }
         .bar {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+          animation: 2s cubic-bezier(0.4, 0, 0.6, 1) infinite pulse !important;
         }
       `)
     })
@@ -675,37 +646,29 @@ crosscheck(() => {
 
     await run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        .font-bold {
-          font-weight: 700;
-        }
-
+        .font-bold,
         .foo {
           font-weight: 700;
         }
-
         .bar {
           --tw-text-opacity: 1;
           color: rgb(239 68 68 / var(--tw-text-opacity));
           font-weight: 700;
         }
-
         .bar:hover {
           --tw-text-opacity: 1;
           color: rgb(34 197 94 / var(--tw-text-opacity));
         }
-
         .baz {
-          text-decoration-line: underline;
           --tw-text-opacity: 1;
           color: rgb(239 68 68 / var(--tw-text-opacity));
           font-weight: 700;
+          text-decoration-line: underline;
         }
-
         .baz:hover {
           --tw-text-opacity: 1;
           color: rgb(34 197 94 / var(--tw-text-opacity));
         }
-
         .keep-me-even-though-I-am-not-used-in-content {
           color: green;
         }
@@ -743,10 +706,8 @@ crosscheck(() => {
     await run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         .baz {
-          text-decoration-line: underline;
           text-decoration-line: none;
         }
-
         .container {
           width: 100%;
         }
@@ -775,19 +736,13 @@ crosscheck(() => {
             max-width: 1536px;
           }
         }
-
         .keep-me-even-though-I-am-not-used-in-content {
           color: green;
         }
-
-        .font-bold {
-          font-weight: 700;
-        }
-
+        .font-bold,
         .foo {
           font-weight: 700;
         }
-
         .bar {
           text-decoration-line: none;
         }
@@ -811,14 +766,14 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .foo {
-          position: absolute;
-          top: 50%;
-          left: 50%;
           --tw-translate-x: -50%;
           --tw-translate-y: -50%;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
             scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          position: absolute;
+          top: 50%;
+          left: 50%;
         }
       `)
     })
@@ -854,8 +809,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         .foo {
-          position: relative;
           --tw-aspect-w: 1;
+          position: relative;
         }
       `)
     })
@@ -934,11 +889,7 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .bg-gray-500 {
-          --tw-bg-opacity: 1;
-          background-color: rgb(107 114 128 / var(--tw-bg-opacity));
-        }
-
+        .bg-gray-500,
         .focus\:bg-gray-500 {
           --tw-bg-opacity: 1;
           background-color: rgb(107 114 128 / var(--tw-bg-opacity));
@@ -1151,10 +1102,7 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
-        .foo {
-          color: red;
-        }
-
+        .foo,
         .bar {
           color: red;
         }
@@ -1223,25 +1171,21 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .foo {
-          font-weight: bold;
           color: green;
+          font-weight: bold;
         }
-
         @supports (a: b) {
           .foo {
-            color: blue;
+            color: #00f;
           }
         }
-
         .bar {
           color: green;
         }
-
         @supports (a: b) {
           .bar {
-            color: blue;
+            color: #00f;
           }
-
           .something-unrelated {
             color: red;
           }
@@ -1274,12 +1218,12 @@ crosscheck(() => {
           color: red;
         }
         .bar {
-          background-color: blue;
+          background-color: #00f;
         }
         .foo {
-          position: absolute;
           color: red;
-          background-color: blue;
+          background-color: #00f;
+          position: absolute;
         }
       `)
     })
@@ -1338,10 +1282,7 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         span,
-        .b {
-          text-decoration-line: underline;
-        }
-
+        .b,
         .c {
           text-decoration-line: underline;
         }
@@ -1372,10 +1313,7 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         #a,
-        .b {
-          text-decoration-line: underline;
-        }
-
+        .b,
         .c {
           text-decoration-line: underline;
         }
@@ -1407,11 +1345,7 @@ crosscheck(() => {
 
       return run(input, config).then((result) => {
         return expect(result.css).toMatchFormattedCss(css`
-          .a {
-            text-transform: uppercase;
-            color: red;
-          }
-
+          .a,
           .b {
             text-transform: uppercase;
             color: red;
@@ -1440,11 +1374,7 @@ crosscheck(() => {
 
       return run(input, config).then((result) => {
         return expect(result.css).toMatchFormattedCss(css`
-          .a {
-            text-transform: uppercase;
-            color: red;
-          }
-
+          .a,
           .b {
             text-transform: uppercase;
             color: red;
@@ -1477,11 +1407,7 @@ crosscheck(() => {
 
       return run(input, config).then((result) => {
         return expect(result.css).toMatchFormattedCss(css`
-          .a {
-            text-transform: uppercase;
-            color: red;
-          }
-
+          .a,
           .b {
             text-transform: uppercase;
             color: red;
@@ -1520,10 +1446,9 @@ crosscheck(() => {
             color: red;
             --tw-text-opacity: 1;
             color: rgb(34 197 94 / var(--tw-text-opacity));
+            color: #00f;
             text-decoration: underline;
-            color: blue;
           }
-
           .b {
             --tw-text-opacity: 1;
             color: rgb(34 197 94 / var(--tw-text-opacity));
@@ -1554,14 +1479,12 @@ crosscheck(() => {
             font-size: 1.25rem;
             line-height: 1.75rem;
           }
-
           @media (min-width: 1024px) {
             h2 {
               font-size: 1.875rem;
               line-height: 2.25rem;
             }
           }
-
           @media (min-width: 640px) {
             h2 {
               font-size: 1.5rem;
@@ -1724,7 +1647,6 @@ crosscheck(() => {
         color: rgb(22 163 74 / var(--tw-text-opacity));
         font-size: 1rem;
       }
-
       @media print {
         html,
         body {
@@ -1761,10 +1683,9 @@ crosscheck(() => {
         .a {
           color: red;
         }
-
         .b {
           color: red;
-          color: blue;
+          color: #00f;
         }
       `)
     })
@@ -1799,10 +1720,7 @@ crosscheck(() => {
     let result = await run(inputBefore, config)
 
     expect(result.css).toMatchFormattedCss(css`
-      .foo {
-        color: green;
-      }
-
+      .foo,
       .bar {
         color: green;
       }
@@ -1811,10 +1729,7 @@ crosscheck(() => {
     result = await run(inputAfter, config)
 
     expect(result.css).toMatchFormattedCss(css`
-      .foo {
-        color: red;
-      }
-
+      .foo,
       .bar {
         color: red;
       }
@@ -1843,7 +1758,6 @@ crosscheck(() => {
       #myselector .custom-utility {
         font-weight: 400;
       }
-
       #myselector .group:hover .custom-utility {
         text-decoration-line: underline;
       }
@@ -1869,7 +1783,6 @@ crosscheck(() => {
       .custom-utility {
         font-weight: 400;
       }
-
       .group:hover .custom-utility {
         text-decoration-line: underline;
       }
@@ -1895,7 +1808,6 @@ crosscheck(() => {
       #myselector .custom-utility {
         font-weight: 400;
       }
-
       .group:hover #myselector .custom-utility {
         text-decoration-line: underline;
       }
@@ -1929,9 +1841,7 @@ crosscheck(() => {
       .foo-1 {
         margin: 10px;
       }
-      .-foo-1 {
-        margin: -15px;
-      }
+      .-foo-1,
       .new-class {
         margin: -15px;
       }
@@ -1974,28 +1884,15 @@ crosscheck(() => {
       .bar.foo {
         color: green;
       }
-      header:nth-of-type(odd).bar {
+      header:nth-of-type(2n + 1).bar {
         color: red;
       }
-      header.bar:nth-of-type(odd) {
+      header.bar:nth-of-type(2n + 1) {
         color: green;
       }
-      header.bar::after {
-        color: red;
-        color: green;
-      }
-      main.bar {
-        color: red;
-      }
-      main.foo {
-        color: red;
-      }
-      main.bar {
-        color: green;
-      }
-      main.foo {
-        color: green;
-      }
+      header.bar:after,
+      main.bar,
+      main.foo,
       footer.foo {
         color: red;
         color: green;
@@ -2034,22 +1931,18 @@ crosscheck(() => {
 
     expect(result.css).toMatchFormattedCss(css`
       .foo + .foo {
-        color: blue;
+        color: #00f;
       }
       .bar + .bar {
-        color: fuchsia;
+        color: #f0f;
       }
-      header + .foo {
-        color: blue;
-      }
+      header + .foo,
       main + .foo {
-        color: blue;
+        color: #00f;
       }
-      main + .bar {
-        color: fuchsia;
-      }
+      main + .bar,
       footer + .bar {
-        color: fuchsia;
+        color: #f0f;
       }
     `)
   })
@@ -2083,12 +1976,7 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .foo:hover.bar .baz {
-          --tw-bg-opacity: 1;
-          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-          color: red;
-        }
-
+        .foo:hover.bar .baz,
         .foo:hover.bar > .baz {
           --tw-bg-opacity: 1;
           background-color: rgb(0 0 0 / var(--tw-bg-opacity));

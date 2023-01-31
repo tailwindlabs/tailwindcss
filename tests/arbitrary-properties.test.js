@@ -20,7 +20,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[paint-order\:markers\] {
           paint-order: markers;
         }
@@ -47,11 +46,9 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[bar\:baz\] {
           bar: baz;
         }
-
         .\[foo\:bar\] {
           foo: bar;
         }
@@ -78,7 +75,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         @media (prefers-color-scheme: dark) {
           @media (min-width: 1024px) {
             .dark\:lg\:hover\:\[paint-order\:markers\]:hover {
@@ -111,7 +107,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .content-none {
           --tw-content: none;
           content: var(--tw-content);
@@ -145,7 +140,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[--my-var\:auto\] {
           --my-var: auto;
         }
@@ -172,7 +166,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[--my-var\:2px_4px\] {
           --my-var: 2px 4px;
         }
@@ -199,7 +192,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\!\[--my-var\:2px_4px\] {
           --my-var: 2px 4px !important;
         }
@@ -226,7 +218,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[content\:\'foo\:bar\'\] {
           content: 'foo:bar';
         }
@@ -253,9 +244,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[background-image\:url\(http\:\/\/example\.com\/picture\.jpg\)\] {
-          background-image: url(http://example.com/picture.jpg);
+          background-image: url('http://example.com/picture.jpg');
         }
       `)
     })
@@ -351,7 +341,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[border\:_calc\(5vw_-_theme\(spacing\[2\.5\]\)\)_double_theme\(\'colors\.fuchsia\.700\'\)\] {
           border: calc(5vw - 0.625rem) double #a21caf;
         }
@@ -380,9 +369,8 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[box-shadow\:_0_calc\(theme\(spacing\[0\.5\]\)_\*_-1\)_theme\(colors\.red\.400\)_inset\] {
-          box-shadow: 0 calc(0.125rem * -1) #f87171 inset;
+          box-shadow: inset 0 -0.125rem #f87171;
         }
         .\[height\:_calc\(100vh_-_theme\(spacing\[2\.5\]\)\)\] {
           height: calc(100vh - 0.625rem);
@@ -406,7 +394,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[--a\:theme\(colors\.blue\.500\)\] {
           --a: #3b82f6;
         }
@@ -432,7 +419,6 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .\[--a\:theme\(\'colors\.blue\.500\'\)\] {
           --a: #3b82f6;
         }

@@ -123,7 +123,7 @@ crosscheck(() => {
           }
         }
         #app .animate-spin {
-          animation: spin 1s linear infinite;
+          animation: 1s linear infinite spin;
         }
         #app .font-bold {
           font-weight: 700;

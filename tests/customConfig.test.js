@@ -202,7 +202,7 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .min-h-0 {
-          min-height: 0px;
+          min-height: 0;
         }
         .min-h-primary {
           min-height: 48px;
@@ -232,7 +232,7 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .min-h-0 {
-          min-height: 0px;
+          min-height: 0;
         }
         .min-h-primary {
           min-height: 48px;
@@ -314,16 +314,16 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .bg-black {
-          background-color: black;
+          background-color: #000;
         }
         .bg-red {
-          background-color: #ee0000;
+          background-color: #e00;
         }
         .bg-transparent {
-          background-color: transparent;
+          background-color: #0000;
         }
         .bg-white {
-          background-color: white;
+          background-color: #fff;
         }
       `)
     })
@@ -371,16 +371,16 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .bg-black {
-          background-color: black;
+          background-color: #000;
         }
         .bg-red {
-          background-color: #ee0000;
+          background-color: #e00;
         }
         .bg-transparent {
-          background-color: transparent;
+          background-color: #0000;
         }
         .bg-white {
-          background-color: white;
+          background-color: #fff;
         }
       `)
     })

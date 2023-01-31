@@ -36,13 +36,10 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-
         .uppercase {
           text-transform: uppercase;
         }
-        .align-banana {
-          text-align: banana;
-        }
+        .align-banana,
         .hover\:align-banana:hover {
           text-align: banana;
         }
@@ -94,19 +91,11 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        /* Important base */
         div {
           background-color: #bada55;
         }
-
         ${defaults}
-
-        /* Important component */
-      .important-component {
-          text-align: banana;
-        }
-
-        /* Important utility */
+        .important-component,
         .important-utility {
           text-align: banana;
         }
@@ -156,19 +145,13 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        /* Important base */
         div {
           background-color: #bada55;
         }
-
         ${defaults}
-
-        /* Important component */
-      .important-component {
+        .important-component {
           text-align: banana;
         }
-
-        /* Important utility */
         .important-utility {
           text-align: banana !important;
         }
@@ -263,45 +246,34 @@ crosscheck(() => {
             font-weight: medium;
           }
         }
-
         body {
           margin: 0;
         }
-
         h1 {
           font-weight: bold;
         }
-
         p {
           font-weight: normal;
         }
-
         ${defaults}
-
         .input {
-          background: white;
+          background: #fff;
         }
-
         .btn {
-          background: blue;
+          background: #00f;
         }
-
         .card {
           border-radius: 12px;
         }
-
         .float-squirrel {
           float: squirrel;
         }
-
         .align-banana {
           text-align: banana;
         }
-
         .align-sandwich {
           text-align: sandwich;
         }
-
         @layer chocolate {
           a {
             text-decoration: underline;
@@ -338,7 +310,6 @@ crosscheck(() => {
         .test {
           --tw-test: 1;
         }
-
         @supports (backdrop-filter: blur(1px)) {
           .test {
             --tw-test: 0.9;

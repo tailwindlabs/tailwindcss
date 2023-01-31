@@ -21,13 +21,11 @@ crosscheck(() => {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-colored: 0 0 #0000;
         }
-
         .resize {
           resize: both;
         }
-
         .shadow {
-          --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
           --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
             0 1px 2px -1px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -57,13 +55,11 @@ crosscheck(() => {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-colored: 0 0 #0000;
         }
-
         .resize {
           resize: both;
         }
-
         .hover\:shadow:hover {
-          --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
           --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
             0 1px 2px -1px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -93,13 +89,11 @@ crosscheck(() => {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-colored: 0 0 #0000;
         }
-
         .resize {
           resize: both;
         }
-
         .group:hover .group-hover\:shadow {
-          --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
           --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
             0 1px 2px -1px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -126,7 +120,6 @@ crosscheck(() => {
         .resize {
           resize: both;
         }
-
         .divide-y > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-y-reverse: 0;
           border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -153,7 +146,6 @@ crosscheck(() => {
         .resize {
           resize: both;
         }
-
         .hover\:divide-y:hover > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-y-reverse: 0;
           border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -184,19 +176,16 @@ crosscheck(() => {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-colored: 0 0 #0000;
         }
-
         #app .resize {
           resize: both;
         }
-
         #app .divide-y > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-y-reverse: 0;
           border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
           border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
         }
-
         #app .shadow {
-          --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
           --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
             0 1px 2px -1px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),

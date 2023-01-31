@@ -9,7 +9,7 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .bg-red-500\/50 {
-          background-color: rgb(239 68 68 / 0.5);
+          background-color: #ef444480;
         }
       `)
     })
@@ -71,7 +71,7 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .bg-\[wheat\]\/50 {
-          background-color: rgb(245 222 179 / 0.5);
+          background-color: #f5deb380;
         }
       `)
     })
@@ -87,7 +87,7 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .bg-\[\#bada55\]\/\[0\.2\] {
-          background-color: rgb(186 218 85 / 0.2);
+          background-color: #bada5533;
         }
       `)
     })
@@ -167,15 +167,15 @@ crosscheck(() => {
     return run('@tailwind utilities', config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .from-red-500\/50 {
-          --tw-gradient-from: rgb(239 68 68 / 0.5);
-          --tw-gradient-to: rgb(239 68 68 / 0);
+          --tw-gradient-from: #ef444480;
+          --tw-gradient-to: #ef444400;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .fill-red-500\/25 {
-          fill: rgb(239 68 68 / 0.25);
+          fill: #ef444440;
         }
         .placeholder-red-500\/75::placeholder {
-          color: rgb(239 68 68 / 0.75);
+          color: #ef4444bf;
         }
       `)
     })
@@ -206,28 +206,28 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .bg-\[hsl\(123\2c 50\%\2c var\(--foo\)\)\] {
+        .bg-\[hsl\(123\,50\%\,var\(--foo\)\)\] {
           --tw-bg-opacity: 1;
           background-color: hsl(123 50% var(--foo) / var(--tw-bg-opacity));
         }
-        .bg-\[hsl\(123\2c 50\%\2c var\(--foo\)\)\]\/50 {
+        .bg-\[hsl\(123\,50\%\,var\(--foo\)\)\]\/50 {
           background-color: hsl(123 50% var(--foo) / 0.5);
         }
-        .bg-\[hsl\(123\2c var\(--foo\)\2c 50\%\)\] {
+        .bg-\[hsl\(123\,var\(--foo\)\,50\%\)\] {
           --tw-bg-opacity: 1;
           background-color: hsl(123 var(--foo) 50% / var(--tw-bg-opacity));
         }
-        .bg-\[hsl\(123\2c var\(--foo\)\2c 50\%\)\]\/50 {
+        .bg-\[hsl\(123\,var\(--foo\)\,50\%\)\]\/50 {
           background-color: hsl(123 var(--foo) 50% / 0.5);
         }
-        .bg-\[hsl\(var\(--foo\)\2c 50\%\2c 50\%\)\] {
+        .bg-\[hsl\(var\(--foo\)\,50\%\,50\%\)\] {
           --tw-bg-opacity: 1;
           background-color: hsl(var(--foo) 50% 50% / var(--tw-bg-opacity));
         }
-        .bg-\[hsl\(var\(--foo\)\2c 50\%\2c 50\%\)\]\/50 {
+        .bg-\[hsl\(var\(--foo\)\,50\%\,50\%\)\]\/50 {
           background-color: hsl(var(--foo) 50% 50% / 0.5);
         }
-        .bg-\[hsl\(var\(--foo\)\2c var\(--bar\)\2c var\(--baz\)\)\]\/50 {
+        .bg-\[hsl\(var\(--foo\)\,var\(--bar\)\,var\(--baz\)\)\]\/50 {
           background-color: hsl(var(--foo) var(--bar) var(--baz) / 0.5);
         }
       `)

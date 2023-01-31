@@ -96,7 +96,7 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .responsive-in-components {
-          color: blue;
+          color: #00f;
         }
         .variants-in-components {
           color: red;
@@ -105,7 +105,7 @@ crosscheck(() => {
           color: green;
         }
         .responsive-in-utilities {
-          color: blue;
+          color: #00f;
         }
         .variants-in-utilities {
           color: red;
@@ -114,7 +114,7 @@ crosscheck(() => {
           color: green;
         }
         .responsive-at-root {
-          color: white;
+          color: #fff;
         }
         .variants-at-root {
           color: orange;
@@ -124,7 +124,7 @@ crosscheck(() => {
         }
         @media (min-width: 768px) {
           .md\:focus\:responsive-in-components:focus {
-            color: blue;
+            color: #00f;
           }
           .md\:focus\:variants-in-components:focus {
             color: red;
@@ -133,7 +133,7 @@ crosscheck(() => {
             color: green;
           }
           .md\:focus\:responsive-in-utilities:focus {
-            color: blue;
+            color: #00f;
           }
           .md\:focus\:variants-in-utilities:focus {
             color: red;
@@ -142,7 +142,7 @@ crosscheck(() => {
             color: green;
           }
           .md\:focus\:responsive-at-root:focus {
-            color: white;
+            color: #fff;
           }
           .md\:focus\:variants-at-root:focus {
             color: orange;

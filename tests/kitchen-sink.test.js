@@ -1,4 +1,4 @@
-import { crosscheck, run, html, css } from './util/run'
+import { crosscheck, run, html, css, defaults } from './util/run'
 
 crosscheck(() => {
   test('it works', () => {
@@ -236,30 +236,26 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         .theme-test {
-          font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-            Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-            'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
           color: #3b82f6;
+          font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+            Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+            Segoe UI Symbol, Noto Color Emoji;
         }
         @media (min-width: 1024px) {
           .screen-test {
             color: purple;
           }
         }
-        .apply-1 {
-          margin-top: 1.5rem;
-        }
+        .apply-1,
         .apply-2 {
           margin-top: 1.5rem;
         }
         .apply-test {
-          margin-top: 1.5rem;
           --tw-bg-opacity: 1;
           background-color: rgb(236 72 153 / var(--tw-bg-opacity));
+          margin-top: 1.5rem;
         }
-        .apply-test:hover {
-          font-weight: 700;
-        }
+        .apply-test:hover,
         .apply-test:hover:focus {
           font-weight: 700;
         }
@@ -268,7 +264,7 @@ crosscheck(() => {
             --tw-bg-opacity: 1;
             background-color: rgb(34 197 94 / var(--tw-bg-opacity));
           }
-          .apply-test:nth-child(even):focus {
+          .apply-test:nth-child(2n):focus {
             --tw-bg-opacity: 1;
             background-color: rgb(251 207 232 / var(--tw-bg-opacity));
           }
@@ -305,12 +301,8 @@ crosscheck(() => {
           margin-left: auto;
           margin-right: auto;
         }
-        .drop-empty-rules:hover {
-          font-weight: 700;
-        }
-        .group:hover .apply-group {
-          font-weight: 700;
-        }
+        .drop-empty-rules:hover,
+        .group:hover .apply-group,
         .dark .apply-dark-mode {
           font-weight: 700;
         }
@@ -336,21 +328,15 @@ crosscheck(() => {
           margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
           margin-bottom: calc(1rem * var(--tw-space-y-reverse));
         }
-        .nested {
-          .example {
-            font-weight: 700;
-          }
-          .example:hover {
-            font-weight: 400;
-          }
+        .nested .example {
+          font-weight: 700;
         }
-        .apply-order-a {
-          margin: 1.25rem;
-          margin-top: 1.5rem;
+        .nested .example:hover {
+          font-weight: 400;
         }
+        .apply-order-a,
         .apply-order-b {
-          margin: 1.25rem;
-          margin-top: 1.5rem;
+          margin: 1.5rem 1.25rem 1.25rem;
         }
         .dark .group:hover .apply-dark-group-example-a {
           --tw-bg-opacity: 1;
@@ -368,105 +354,12 @@ crosscheck(() => {
           font-weight: 700;
         }
         h1:first-child {
-          margin-top: 0px;
+          margin-top: 0;
         }
         div {
           background: #654321;
         }
-        *,
-        ::before,
-        ::after {
-          --tw-border-spacing-x: 0;
-          --tw-border-spacing-y: 0;
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-          --tw-pan-x: ;
-          --tw-pan-y: ;
-          --tw-pinch-zoom: ;
-          --tw-scroll-snap-strictness: proximity;
-          --tw-ordinal: ;
-          --tw-slashed-zero: ;
-          --tw-numeric-figure: ;
-          --tw-numeric-spacing: ;
-          --tw-numeric-fraction: ;
-          --tw-ring-inset: ;
-          --tw-ring-offset-width: 0px;
-          --tw-ring-offset-color: #fff;
-          --tw-ring-color: rgb(59 130 246 / 0.5);
-          --tw-ring-offset-shadow: 0 0 #0000;
-          --tw-ring-shadow: 0 0 #0000;
-          --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
-          --tw-blur: ;
-          --tw-brightness: ;
-          --tw-contrast: ;
-          --tw-grayscale: ;
-          --tw-hue-rotate: ;
-          --tw-invert: ;
-          --tw-saturate: ;
-          --tw-sepia: ;
-          --tw-drop-shadow: ;
-          --tw-backdrop-blur: ;
-          --tw-backdrop-brightness: ;
-          --tw-backdrop-contrast: ;
-          --tw-backdrop-grayscale: ;
-          --tw-backdrop-hue-rotate: ;
-          --tw-backdrop-invert: ;
-          --tw-backdrop-opacity: ;
-          --tw-backdrop-saturate: ;
-          --tw-backdrop-sepia: ;
-        }
-        ::backdrop {
-          --tw-border-spacing-x: 0;
-          --tw-border-spacing-y: 0;
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-          --tw-pan-x: ;
-          --tw-pan-y: ;
-          --tw-pinch-zoom: ;
-          --tw-scroll-snap-strictness: proximity;
-          --tw-ordinal: ;
-          --tw-slashed-zero: ;
-          --tw-numeric-figure: ;
-          --tw-numeric-spacing: ;
-          --tw-numeric-fraction: ;
-          --tw-ring-inset: ;
-          --tw-ring-offset-width: 0px;
-          --tw-ring-offset-color: #fff;
-          --tw-ring-color: rgb(59 130 246 / 0.5);
-          --tw-ring-offset-shadow: 0 0 #0000;
-          --tw-ring-shadow: 0 0 #0000;
-          --tw-shadow: 0 0 #0000;
-          --tw-shadow-colored: 0 0 #0000;
-          --tw-blur: ;
-          --tw-brightness: ;
-          --tw-contrast: ;
-          --tw-grayscale: ;
-          --tw-hue-rotate: ;
-          --tw-invert: ;
-          --tw-saturate: ;
-          --tw-sepia: ;
-          --tw-drop-shadow: ;
-          --tw-backdrop-blur: ;
-          --tw-backdrop-brightness: ;
-          --tw-backdrop-contrast: ;
-          --tw-backdrop-grayscale: ;
-          --tw-backdrop-hue-rotate: ;
-          --tw-backdrop-invert: ;
-          --tw-backdrop-opacity: ;
-          --tw-backdrop-saturate: ;
-          --tw-backdrop-sepia: ;
-        }
+        ${defaults}
         .container {
           width: 100%;
         }
@@ -505,8 +398,8 @@ crosscheck(() => {
           background: #123456;
         }
         *,
-        ::before,
-        ::after,
+        :before,
+        :after,
         ::backdrop {
           padding: 5px;
         }
@@ -514,10 +407,7 @@ crosscheck(() => {
           appearance: none;
         }
         .inset-6 {
-          top: 1.5rem;
-          right: 1.5rem;
-          bottom: 1.5rem;
-          left: 1.5rem;
+          inset: 1.5rem;
         }
         .inset-x-1 {
           left: 0.25rem;
@@ -554,7 +444,7 @@ crosscheck(() => {
             rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
             scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         }
-        .grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
+        .grid-cols-\[200px\,repeat\(auto-fill\,minmax\(15\%\,100px\)\)\,300px\] {
           grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
         }
         .rounded-e {
@@ -578,7 +468,7 @@ crosscheck(() => {
           border-inline-end-width: 4px;
         }
         .border-s-0 {
-          border-inline-start-width: 0px;
+          border-inline-start-width: 0;
         }
         .border-black {
           --tw-border-opacity: 1;
@@ -611,7 +501,7 @@ crosscheck(() => {
         }
         .from-foo {
           --tw-gradient-from: #bada55;
-          --tw-gradient-to: rgb(186 218 85 / 0);
+          --tw-gradient-to: #bada5500;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .px-1 {
@@ -634,14 +524,14 @@ crosscheck(() => {
           font-weight: 500;
         }
         .shadow-md {
-          --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
           --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
             0 2px 4px -2px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
             var(--tw-shadow);
         }
         .shadow-sm {
-          --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          --tw-shadow: 0 1px 2px 0 #0000000d;
           --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
             var(--tw-shadow);
@@ -656,13 +546,13 @@ crosscheck(() => {
           background: #abcdef;
         }
         *,
-        ::before,
-        ::after,
+        :before,
+        :after,
         ::backdrop {
           margin: 10px;
         }
         .first\:pt-0:first-child {
-          padding-top: 0px;
+          padding-top: 0;
         }
         .hover\:container:hover {
           width: 100%;
@@ -703,7 +593,7 @@ crosscheck(() => {
           font-weight: 700;
         }
         .hover\:shadow-lg:hover {
-          --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+          --tw-shadow: 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;
           --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
             0 4px 6px -4px var(--tw-shadow-color);
           box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -742,9 +632,7 @@ crosscheck(() => {
         .group:active .group-active\:opacity-10 {
           opacity: 0.1;
         }
-        .foo\:custom-util {
-          background: #abcdef !important;
-        }
+        .foo\:custom-util,
         .foo\:hover\:custom-util:hover {
           background: #abcdef !important;
         }
@@ -753,8 +641,8 @@ crosscheck(() => {
             transition-property: color, background-color, border-color, outline-color,
               text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
               backdrop-filter;
+            transition-duration: 0.15s;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 150ms;
           }
           .motion-safe\:custom-util {
             background: #abcdef;
@@ -765,8 +653,8 @@ crosscheck(() => {
             transition-property: color, background-color, border-color, outline-color,
               text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
               backdrop-filter;
+            transition-duration: 0.15s;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 150ms;
           }
         }
         .dark .dark\:custom-util {
@@ -854,13 +742,13 @@ crosscheck(() => {
             opacity: 0.5;
           }
           .md\:shadow-sm {
-            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --tw-shadow: 0 1px 2px 0 #0000000d;
             --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
             box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
               var(--tw-shadow);
           }
           .md\:hover\:border-r-blue-500\/30:hover {
-            border-right-color: rgb(59 130 246 / 0.3);
+            border-right-color: #3b82f64d;
           }
           .md\:hover\:opacity-20:hover {
             opacity: 0.2;
@@ -870,8 +758,8 @@ crosscheck(() => {
               transition-property: color, background-color, border-color, outline-color,
                 text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
                 backdrop-filter;
+              transition-duration: 0.15s;
               transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-              transition-duration: 150ms;
             }
             .dark .md\:dark\:motion-safe\:foo\:active\:custom-util:active {
               background: #abcdef !important;

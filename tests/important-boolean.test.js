@@ -127,7 +127,7 @@ crosscheck(() => {
           }
         }
         .animate-spin {
-          animation: spin 1s linear infinite !important;
+          animation: 1s linear infinite spin !important;
         }
         .font-bold {
           font-weight: 700 !important;

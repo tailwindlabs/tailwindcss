@@ -22,13 +22,13 @@ crosscheck(() => {
         .font-normal {
           font-weight: 400;
         }
-        .test\:font-bold *::test {
+        .test\:font-bold ::test {
           font-weight: 700;
         }
-        .test\:font-medium *::test {
+        .test\:font-medium ::test {
           font-weight: 500;
         }
-        .hover\:test\:font-black *:hover::test {
+        .hover\:test\:font-black :hover::test {
           font-weight: 900;
         }
         .test\:font-bold::test {
@@ -65,10 +65,10 @@ crosscheck(() => {
         .font-normal {
           font-weight: 400;
         }
-        .test\:font-bold *::test {
+        .test\:font-bold ::test {
           font-weight: 700;
         }
-        .test\:font-medium *::test {
+        .test\:font-medium ::test {
           font-weight: 500;
         }
         .test\:font-bold::test {
@@ -77,7 +77,7 @@ crosscheck(() => {
         .test\:font-medium::test {
           font-weight: 500;
         }
-        .hover\:test\:font-black *:hover::test {
+        .hover\:test\:font-black :hover::test {
           font-weight: 900;
         }
         .hover\:test\:font-black:hover::test {
@@ -114,23 +114,23 @@ crosscheck(() => {
         .font-normal {
           font-weight: 400;
         }
-        .test\:font-bold *::test {
-          font-weight: calc(0 + 700);
+        .test\:font-bold ::test {
+          font-weight: 700;
         }
-        .test\:font-medium *::test {
-          font-weight: calc(0 + 500);
+        .test\:font-medium ::test {
+          font-weight: 500;
         }
         .test\:font-bold::test {
-          font-weight: calc(0 + 700);
+          font-weight: 700;
         }
         .test\:font-medium::test {
-          font-weight: calc(0 + 500);
+          font-weight: 500;
         }
-        .hover\:test\:font-black *:hover::test {
-          font-weight: calc(0 + 900);
+        .hover\:test\:font-black :hover::test {
+          font-weight: 900;
         }
         .hover\:test\:font-black:hover::test {
-          font-weight: calc(0 + 900);
+          font-weight: 900;
         }
       `)
     })

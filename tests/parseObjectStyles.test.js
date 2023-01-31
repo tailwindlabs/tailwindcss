@@ -18,8 +18,8 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foobar {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
     `)
@@ -40,8 +40,8 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
       .bar {
@@ -68,15 +68,15 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
       .foo:hover {
         background-color: orange;
       }
       .foo:focus {
-        background-color: blue;
+        background-color: #00f;
       }
     `)
   })
@@ -113,8 +113,8 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
       @media (min-width: 200px) {
@@ -139,8 +139,8 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
       @screen sm {
@@ -167,8 +167,8 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
       @media (min-width: 200px) {
@@ -193,8 +193,8 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
       .foo .bar {
@@ -217,8 +217,8 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
       .foo.bar {
@@ -243,8 +243,8 @@ crosscheck(() => {
 
     expect(toCss(result)).toMatchFormattedCss(css`
       .foo {
+        color: #fff;
         background-color: red;
-        color: white;
         padding: 1rem;
       }
       @media (min-width: 200px) {
@@ -298,7 +298,7 @@ crosscheck(() => {
         background-color: red;
       }
       .foo {
-        background-color: blue;
+        background-color: #00f;
       }
     `)
   })
