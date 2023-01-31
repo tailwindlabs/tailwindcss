@@ -1023,4 +1023,27 @@ crosscheck(() => {
       `)
     })
   })
+
+  it('can replace the potential alpha value in rgba/hsla syntax', async () => {
+    let config = {
+      content: [{ raw: html` <div class="text-primary-rgba/50 text-primary-hsla/50"></div> ` }],
+      theme: {
+        colors: {
+          'primary-rgba': 'rgba(var(--color), 0.1)',
+          'primary-hsla': 'hsla(var(--color), 0.1)',
+        },
+      },
+    }
+
+    let result = await run('@tailwind utilities', config)
+
+    expect(result.css).toMatchCss(css`
+      .text-primary-hsla\/50 {
+        color: hsla(var(--color), 0.5);
+      }
+      .text-primary-rgba\/50 {
+        color: rgba(var(--color), 0.5);
+      }
+    `)
+  })
 })

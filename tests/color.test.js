@@ -11,7 +11,7 @@ crosscheck(() => {
       ${'#0088cc99'}                               | ${{ mode: 'rgb', color: ['0', '136', '204'], alpha: '0.6' }}
       ${'#08c9'}                                   | ${{ mode: 'rgb', color: ['0', '136', '204'], alpha: '0.6' }}
       ${'rgb(0, 30, 60)'}                          | ${{ mode: 'rgb', color: ['0', '30', '60'], alpha: undefined }}
-      ${'rgba(0, 30, 60, 0.5)'}                    | ${{ mode: 'rgb', color: ['0', '30', '60'], alpha: '0.5' }}
+      ${'rgba(0, 30, 60, 0.5)'}                    | ${{ mode: 'rgba', color: ['0', '30', '60'], alpha: '0.5' }}
       ${'rgb(0 30 60)'}                            | ${{ mode: 'rgb', color: ['0', '30', '60'], alpha: undefined }}
       ${'rgb(0 30 60 / 0.5)'}                      | ${{ mode: 'rgb', color: ['0', '30', '60'], alpha: '0.5' }}
       ${'rgb(var(--foo), 30, 60)'}                 | ${{ mode: 'rgb', color: ['var(--foo)', '30', '60'], alpha: undefined }}
@@ -31,11 +31,11 @@ crosscheck(() => {
       ${'hsl(0rad, 30%, 60%)'}                     | ${{ mode: 'hsl', color: ['0rad', '30%', '60%'], alpha: undefined }}
       ${'hsl(0grad, 30%, 60%)'}                    | ${{ mode: 'hsl', color: ['0grad', '30%', '60%'], alpha: undefined }}
       ${'hsl(0turn, 30%, 60%)'}                    | ${{ mode: 'hsl', color: ['0turn', '30%', '60%'], alpha: undefined }}
-      ${'hsla(0, 30%, 60%, 0.5)'}                  | ${{ mode: 'hsl', color: ['0', '30%', '60%'], alpha: '0.5' }}
-      ${'hsla(0deg, 30%, 60%, 0.5)'}               | ${{ mode: 'hsl', color: ['0deg', '30%', '60%'], alpha: '0.5' }}
-      ${'hsla(0rad, 30%, 60%, 0.5)'}               | ${{ mode: 'hsl', color: ['0rad', '30%', '60%'], alpha: '0.5' }}
-      ${'hsla(0grad, 30%, 60%, 0.5)'}              | ${{ mode: 'hsl', color: ['0grad', '30%', '60%'], alpha: '0.5' }}
-      ${'hsla(0turn, 30%, 60%, 0.5)'}              | ${{ mode: 'hsl', color: ['0turn', '30%', '60%'], alpha: '0.5' }}
+      ${'hsla(0, 30%, 60%, 0.5)'}                  | ${{ mode: 'hsla', color: ['0', '30%', '60%'], alpha: '0.5' }}
+      ${'hsla(0deg, 30%, 60%, 0.5)'}               | ${{ mode: 'hsla', color: ['0deg', '30%', '60%'], alpha: '0.5' }}
+      ${'hsla(0rad, 30%, 60%, 0.5)'}               | ${{ mode: 'hsla', color: ['0rad', '30%', '60%'], alpha: '0.5' }}
+      ${'hsla(0grad, 30%, 60%, 0.5)'}              | ${{ mode: 'hsla', color: ['0grad', '30%', '60%'], alpha: '0.5' }}
+      ${'hsla(0turn, 30%, 60%, 0.5)'}              | ${{ mode: 'hsla', color: ['0turn', '30%', '60%'], alpha: '0.5' }}
       ${'hsl(0 30% 60%)'}                          | ${{ mode: 'hsl', color: ['0', '30%', '60%'], alpha: undefined }}
       ${'hsl(0deg 30% 60%)'}                       | ${{ mode: 'hsl', color: ['0deg', '30%', '60%'], alpha: undefined }}
       ${'hsl(0rad 30% 60%)'}                       | ${{ mode: 'hsl', color: ['0rad', '30%', '60%'], alpha: undefined }}
@@ -58,6 +58,10 @@ crosscheck(() => {
       ${'hsl(0 30% var(--foo) / 0.5)'}             | ${{ mode: 'hsl', color: ['0', '30%', 'var(--foo)'], alpha: '0.5' }}
       ${'hsl(var(--foo) 30% var(--bar))'}          | ${{ mode: 'hsl', color: ['var(--foo)', '30%', 'var(--bar)'], alpha: undefined }}
       ${'hsl(var(--foo) var(--bar) var(--baz))'}   | ${{ mode: 'hsl', color: ['var(--foo)', 'var(--bar)', 'var(--baz)'], alpha: undefined }}
+      ${'rgba(var(--foo), 0.1)'}                   | ${{ mode: 'rgba', color: ['var(--foo)'], alpha: '0.1' }}
+      ${'rgba(var(--foo), var(--alpha))'}          | ${{ mode: 'rgba', color: ['var(--foo)'], alpha: 'var(--alpha)' }}
+      ${'hsla(var(--foo), 0.1)'}                   | ${{ mode: 'hsla', color: ['var(--foo)'], alpha: '0.1' }}
+      ${'hsla(var(--foo), var(--alpha))'}          | ${{ mode: 'hsla', color: ['var(--foo)'], alpha: 'var(--alpha)' }}
       ${'transparent'}                             | ${{ mode: 'rgb', color: ['0', '0', '0'], alpha: '0' }}
     `('should parse "$color" to the correct value', ({ color, output }) => {
       expect(parseColor(color)).toEqual(output)

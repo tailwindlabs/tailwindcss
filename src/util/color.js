@@ -8,10 +8,10 @@ let ALPHA_SEP = /\s*[,/]\s*/
 let CUSTOM_PROPERTY = /var\(--(?:[^ )]*?)\)/
 
 let RGB = new RegExp(
-  `^(rgb)a?\\(\\s*(${VALUE.source}|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
+  `^(rgba?)\\(\\s*(${VALUE.source}|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
 )
 let HSL = new RegExp(
-  `^(hsl)a?\\(\\s*((?:${VALUE.source})(?:deg|rad|grad|turn)?|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
+  `^(hsla?)\\(\\s*((?:${VALUE.source})(?:deg|rad|grad|turn)?|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
 )
 
 // In "loose" mode the color may contain fewer than 3 parts, as long as at least
@@ -52,6 +52,16 @@ export function parseColor(value, { loose = false } = {}) {
 
   let color = [match[2], match[3], match[4]].filter(Boolean).map((v) => v.toString())
 
+  // rgba(var(--my-color), 0.1)
+  // hsla(var(--my-color), 0.1)
+  if (color.length === 2 && color[0].startsWith('var(')) {
+    return {
+      mode: match[1],
+      color: [color[0]],
+      alpha: color[1],
+    }
+  }
+
   if (!loose && color.length !== 3) {
     return null
   }
@@ -69,5 +79,10 @@ export function parseColor(value, { loose = false } = {}) {
 
 export function formatColor({ mode, color, alpha }) {
   let hasAlpha = alpha !== undefined
+
+  if (mode === 'rgba' || mode === 'hsla') {
+    return `${mode}(${color.join(', ')}${hasAlpha ? `, ${alpha}` : ''})`
+  }
+
   return `${mode}(${color.join(' ')}${hasAlpha ? ` / ${alpha}` : ''})`
 }
