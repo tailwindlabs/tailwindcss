@@ -462,11 +462,20 @@
 .gap-4 {
   gap: 1rem;
 }
+.gap-normal {
+  gap: normal;
+}
 .gap-x-2 {
   column-gap: 0.5rem;
 }
+.gap-x-normal {
+  column-gap: normal;
+}
 .gap-y-3 {
   row-gap: 0.75rem;
+}
+.gap-y-normal {
+  row-gap: normal;
 }
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;

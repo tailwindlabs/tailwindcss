@@ -354,7 +354,10 @@ module.exports = {
       extrabold: '800',
       black: '900',
     },
-    gap: ({ theme }) => theme('spacing'),
+    gap: ({ theme }) => ({
+      ...theme('spacing'),
+      normal: 'normal',
+    }),
     gradientColorStops: ({ theme }) => theme('colors'),
     grayscale: {
       0: '0',

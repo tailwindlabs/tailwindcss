@@ -60,6 +60,7 @@ crosscheck(({ stable, oxide }) => {
             <div class="tabular-nums ordinal diagonal-fractions"></div>
             <div class="font-medium"></div>
             <div class="gap-x-2 gap-y-3 gap-4"></div>
+            <div class="gap-x-normal gap-y-normal gap-normal"></div>
             <div class="from-red-300 via-purple-200 to-blue-400"></div>
             <div class="auto-cols-min"></div>
             <div class="grid-flow-row"></div>
