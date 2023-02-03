@@ -1480,6 +1480,7 @@ export let corePlugins = {
     addUtilities({
       '.break-normal': { 'overflow-wrap': 'normal', 'word-break': 'normal' },
       '.break-words': { 'overflow-wrap': 'break-word' },
+      '.break-word': { 'word-break': 'break-word' },
       '.break-all': { 'word-break': 'break-all' },
       '.break-keep': { 'word-break': 'keep-all' },
     })
