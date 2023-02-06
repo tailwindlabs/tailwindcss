@@ -60,7 +60,7 @@ crosscheck(() => {
     // Components and utilities with variants
     [
       'focus:hover:container hover:underline hover:container p-1',
-      'p-1 hover:container hover:underline focus:hover:container',
+      'p-1 hover:container focus:hover:container hover:underline',
     ],
 
     // Leave user css order alone, and move to the front
@@ -98,7 +98,7 @@ crosscheck(() => {
     // Components and utilities with variants
     [
       'focus:hover:tw-container hover:tw-underline hover:tw-container tw-p-1',
-      'tw-p-1 hover:tw-container hover:tw-underline focus:hover:tw-container',
+      'tw-p-1 hover:tw-container focus:hover:tw-container hover:tw-underline',
     ],
 
     // Leave user css order alone, and move to the front
