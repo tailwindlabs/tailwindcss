@@ -628,7 +628,6 @@ module.exports = {
       fit: 'fit-content',
     },
     objectPosition: {
-      inherit: 'inherit',
       bottom: 'bottom',
       center: 'center',
       left: 'left',
