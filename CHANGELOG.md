@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle variants when the same class appears multiple times in a selector ([#10397](https://github.com/tailwindlabs/tailwindcss/pull/10397))
 - Handle group/peer variants with quoted strings ([#10400](https://github.com/tailwindlabs/tailwindcss/pull/10400))
 - Parse alpha value from rgba/hsla colors when using variables ([#10429](https://github.com/tailwindlabs/tailwindcss/pull/10429))
+- Sort by `layer` inside `variants` layer ([#10505](https://github.com/tailwindlabs/tailwindcss/pull/10505))
 
 ### Changed
 

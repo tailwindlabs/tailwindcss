@@ -66,15 +66,16 @@ crosscheck(() => {
         .font-bold {
           font-weight: 700;
         }
-        .foo .foo\:markdown > p {
-          margin-top: 12px;
-        }
-        .foo .foo\:font-bold {
-          font-weight: 700;
-        }
+        .foo .foo\:markdown > p,
         .foo .foo\:visited\:markdown:visited > p {
           margin-top: 12px;
         }
+        @media (min-width: 1024px) {
+          .foo .lg\:foo\:disabled\:markdown:disabled > p {
+            margin-top: 12px;
+          }
+        }
+        .foo .foo\:font-bold,
         .foo .foo\:hover\:font-bold:hover {
           font-weight: 700;
         }
@@ -86,11 +87,6 @@ crosscheck(() => {
         @media (min-width: 768px) {
           .foo .md\:foo\:focus\:font-bold:focus {
             font-weight: 700;
-          }
-        }
-        @media (min-width: 1024px) {
-          .foo .lg\:foo\:disabled\:markdown:disabled > p {
-            margin-top: 12px;
           }
         }
       `)
