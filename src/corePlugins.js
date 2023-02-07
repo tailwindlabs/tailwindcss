@@ -772,6 +772,13 @@ export let corePlugins = {
     })
   },
 
+  captionSide: ({ addUtilities }) => {
+    addUtilities({
+      '.caption-top': { 'caption-side': 'top' },
+      '.caption-bottom': { 'caption-side': 'bottom' },
+    })
+  },
+
   borderCollapse: ({ addUtilities }) => {
     addUtilities({
       '.border-collapse': { 'border-collapse': 'collapse' },
