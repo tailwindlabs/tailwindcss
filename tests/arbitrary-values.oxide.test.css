@@ -382,6 +382,9 @@
 .scroll-mt-\[var\(--scroll-margin\)\] {
   scroll-margin-top: var(--scroll-margin);
 }
+.list-\[url\(\'\/path-to-image\.png\'\)\] {
+  list-style-image: url('/path-to-image.png');
+}
 .scroll-p-\[7px\] {
   scroll-padding: 7px;
 }
