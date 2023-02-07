@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add standalone CLI build for 64-bit Windows on ARM (`node16-win-arm64`) ([#10001](https://github.com/tailwindlabs/tailwindcss/pull/10001))
 - Add `delay-0` and `duration-0` by default ([#10294](https://github.com/tailwindlabs/tailwindcss/pull/10294))
 - Add logical properties support for inline direction ([#10166](https://github.com/tailwindlabs/tailwindcss/pull/10166))
-- Use `Lightning CSS` in the PostCSS Plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
+- Add `hyphens` utilities ([#10071](https://github.com/tailwindlabs/tailwindcss/pull/10071))
+- [Oxide] Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
 
 ### Fixed
 
