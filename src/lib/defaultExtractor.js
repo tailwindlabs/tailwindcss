@@ -28,8 +28,14 @@ function* buildRegExps(context) {
       : ''
 
   let utility = regex.any([
-    // Arbitrary properties
-    /\[[^\s:'"`]+:[^\s\]]+\]/,
+    // Arbitrary properties (without square brackets)
+    /\[[^\s:'"`]+:[^\s\[\]]+\]/,
+
+    // Arbitrary properties with balanced square brackets
+    // This is a targeted fix to continue to allow theme()
+    // with square brackets to work in arbitrary properties
+    // while fixing a problem with the regex matching too much
+    /\[[^\s:'"`]+:[^\s]+?\[[^\s]+?\][^\s]+?\]/,
 
     // Utilities
     regex.pattern([
@@ -71,6 +77,9 @@ function* buildRegExps(context) {
   let variantPatterns = [
     // Without quotes
     regex.any([
+      // This is here to provide special support for the `@` variant
+      regex.pattern([/@\[[^\s"'`]+\](\/[^\s"'`]+)?/, separator]),
+
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
       regex.pattern([/[^\s"'`\[\\]+/, separator]),
     ]),
@@ -181,7 +190,7 @@ function clipAtBalancedParens(input) {
     // This means that there was an extra closing `]`
     // We'll clip to just before it
     if (depth < 0) {
-      return input.substring(0, match.index)
+      return input.substring(0, match.index - 1)
     }
 
     // We've finished balancing the brackets but there still may be characters that can be included

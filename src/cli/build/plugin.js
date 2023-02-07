@@ -10,13 +10,14 @@ import loadOptions from 'postcss-load-config/src/options' // Little bit scary, l
 import tailwind from '../../processTailwindFeatures'
 import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport } from './deps'
 import { formatNodes, drainStdin, outputFile } from './utils'
-import { env } from '../shared'
+import { env } from '../../lib/sharedState'
 import resolveConfig from '../../../resolveConfig.js'
 import getModuleDependencies from '../../lib/getModuleDependencies.js'
 import { parseCandidateFiles } from '../../lib/content.js'
 import { createWatcher } from './watching.js'
 import fastGlob from 'fast-glob'
 import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
+import log from '../../util/log'
 
 /**
  *
@@ -139,7 +140,7 @@ let state = {
     }
   },
 
-  loadConfig(configPath) {
+  loadConfig(configPath, content) {
     if (this.watcher && configPath) {
       this.refreshConfigDependencies(configPath)
     }
@@ -148,6 +149,11 @@ let state = {
 
     // @ts-ignore
     config = resolveConfig(config, { content: { files: [] } })
+
+    // Override content files if `--content` has been passed explicitly
+    if (content?.length > 0) {
+      config.content.files = content
+    }
 
     return config
   },
@@ -178,10 +184,17 @@ let state = {
     let files = fastGlob.sync(this.contentPatterns.all)
 
     for (let file of files) {
-      content.push({
-        content: fs.readFileSync(path.resolve(file), 'utf8'),
-        extension: path.extname(file).slice(1),
-      })
+      if (env.OXIDE) {
+        content.push({
+          file,
+          extension: path.extname(file).slice(1),
+        })
+      } else {
+        content.push({
+          content: fs.readFileSync(path.resolve(file), 'utf8'),
+          extension: path.extname(file).slice(1),
+        })
+      }
     }
 
     // Resolve raw content in the tailwind config
@@ -189,14 +202,14 @@ let state = {
       return file !== null && typeof file === 'object'
     })
 
-    for (let { raw: content, extension = 'html' } of rawContent) {
-      content.push({ content, extension })
+    for (let { raw: htmlContent, extension = 'html' } of rawContent) {
+      content.push({ content: htmlContent, extension })
     }
 
     return content
   },
 
-  getContext({ createContext, cliConfigPath, root, result }) {
+  getContext({ createContext, cliConfigPath, root, result, content }) {
     if (this.context) {
       this.context.changedContent = this.changedContent.splice(0)
 
@@ -208,7 +221,7 @@ let state = {
     env.DEBUG && console.timeEnd('Searching for config')
 
     env.DEBUG && console.time('Loading config')
-    let config = this.loadConfig(configPath)
+    let config = this.loadConfig(configPath, content)
     env.DEBUG && console.timeEnd('Loading config')
 
     env.DEBUG && console.time('Creating context')
@@ -228,11 +241,9 @@ let state = {
       env.DEBUG && console.timeEnd('Watch new files')
     }
 
-    env.DEBUG && console.time('Reading content files')
     for (let file of this.readContentPaths()) {
       this.context.changedContent.push(file)
     }
-    env.DEBUG && console.timeEnd('Reading content files')
 
     return this.context
   },
@@ -250,6 +261,19 @@ export async function createProcessor(args, cliConfigPath) {
     ? await loadPostCssPlugins(customPostCssPath)
     : loadBuiltinPostcssPlugins()
 
+  if (args['--purge']) {
+    log.warn('purge-flag-deprecated', [
+      'The `--purge` flag has been deprecated.',
+      'Please use `--content` instead.',
+    ])
+
+    if (!args['--content']) {
+      args['--content'] = args['--purge']
+    }
+  }
+
+  let content = args['--content']?.split(/(?<!{[^}]+),/) ?? []
+
   let tailwindPlugin = () => {
     return {
       postcssPlugin: 'tailwindcss',
@@ -260,7 +284,13 @@ export async function createProcessor(args, cliConfigPath) {
           console.error('Rebuilding...')
 
           return () => {
-            return state.getContext({ createContext, cliConfigPath, root, result })
+            return state.getContext({
+              createContext,
+              cliConfigPath,
+              root,
+              result,
+              content,
+            })
           }
         })(root, result)
         env.DEBUG && console.timeEnd('Compiling CSS')
@@ -304,14 +334,34 @@ export async function createProcessor(args, cliConfigPath) {
     return readInput()
       .then((css) => processor.process(css, { ...postcssOptions, from: input, to: output }))
       .then((result) => {
+        if (!state.watcher) {
+          return result
+        }
+
+        env.DEBUG && console.time('Recording PostCSS dependencies')
+        for (let message of result.messages) {
+          if (message.type === 'dependency') {
+            state.contextDependencies.add(message.file)
+          }
+        }
+        env.DEBUG && console.timeEnd('Recording PostCSS dependencies')
+
+        // TODO: This needs to be in a different spot
+        env.DEBUG && console.time('Watch new files')
+        state.watcher.refreshWatchedFiles()
+        env.DEBUG && console.timeEnd('Watch new files')
+
+        return result
+      })
+      .then((result) => {
         if (!output) {
           process.stdout.write(result.css)
           return
         }
 
         return Promise.all([
-          outputFile(output, result.css),
-          result.map && outputFile(output + '.map', result.map.toString()),
+          outputFile(result.opts.to, result.css),
+          result.map && outputFile(result.opts.to + '.map', result.map.toString()),
         ])
       })
       .then(() => {
@@ -319,6 +369,23 @@ export async function createProcessor(args, cliConfigPath) {
         console.error()
         console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
       })
+      .then(
+        () => {},
+        (err) => {
+          // TODO: If an initial build fails we can't easily pick up any PostCSS dependencies
+          // that were collected before the error occurred
+          // The result is not stored on the error so we have to store it externally
+          // and pull the messages off of it here somehow
+
+          // This results in a less than ideal DX because the watcher will not pick up
+          // changes to imported CSS if one of them caused an error during the initial build
+          // If you fix it and then save the main CSS file so there's no error
+          // The watcher will start watching the imported CSS files and will be
+          // resilient to future errors.
+
+          console.error(err)
+        }
+      )
   }
 
   /**

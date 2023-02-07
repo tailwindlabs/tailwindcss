@@ -1,6 +1,7 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
+import { env } from './lib/sharedState'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
 import escapeClassName from './util/escapeClassName'
@@ -12,7 +13,12 @@ import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
 import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
-import { normalizeScreens } from './util/normalizeScreens'
+import {
+  normalizeScreens,
+  isScreenSortable,
+  compareScreens,
+  toScreen,
+} from './util/normalizeScreens'
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
@@ -144,29 +150,48 @@ export let variantPlugins = {
     }
 
     let variants = {
-      group: ({ label }) =>
-        label ? [`:merge(.group\\<${label}\\>)`, ' &'] : [`:merge(.group)`, ' &'],
-      peer: ({ label }) =>
-        label ? [`:merge(.peer\\<${label}\\>)`, ' ~ &'] : [`:merge(.peer)`, ' ~ &'],
+      group: (_, { modifier }) =>
+        modifier
+          ? [`:merge(.group\\/${escapeClassName(modifier)})`, ' &']
+          : [`:merge(.group)`, ' &'],
+      peer: (_, { modifier }) =>
+        modifier
+          ? [`:merge(.peer\\/${escapeClassName(modifier)})`, ' ~ &']
+          : [`:merge(.peer)`, ' ~ &'],
     }
 
     for (let [name, fn] of Object.entries(variants)) {
       matchVariant(
         name,
-        (ctx = {}) => {
-          let { label, value = '' } = ctx
-          if (label) {
-            log.warn(`labelled-${name}-experimental`, [
-              `The labelled ${name} feature in Tailwind CSS is currently in preview.`,
-              'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
-            ])
-          }
-
-          let result = normalize(typeof value === 'function' ? value(ctx) : value)
+        (value = '', extra) => {
+          let result = normalize(typeof value === 'function' ? value(extra) : value)
           if (!result.includes('&')) result = '&' + result
 
-          let [a, b] = fn({ label })
-          return result.replace(/&(\S+)?/g, (_, pseudo = '') => a + pseudo + b)
+          let [a, b] = fn('', extra)
+
+          let start = null
+          let end = null
+          let quotes = 0
+
+          for (let i = 0; i < result.length; ++i) {
+            let c = result[i]
+            if (c === '&') {
+              start = i
+            } else if (c === "'" || c === '"') {
+              quotes += 1
+            } else if (start !== null && c === ' ' && !quotes) {
+              end = i
+            }
+          }
+
+          if (start !== null && end === null) {
+            end = result.length
+          }
+
+          // Basically this but can handle quotes:
+          // result.replace(/&(\S+)?/g, (_, pseudo = '') => a + pseudo + b)
+
+          return result.slice(0, start) + a + result.slice(start + 1, end) + b + result.slice(end)
         },
         { values: Object.fromEntries(pseudoVariants) }
       )
@@ -221,18 +246,137 @@ export let variantPlugins = {
     addVariant('print', '@media print')
   },
 
-  screenVariants: ({ theme, addVariant }) => {
-    for (let screen of normalizeScreens(theme('screens'))) {
-      let query = buildMediaQuery(screen)
+  screenVariants: ({ theme, addVariant, matchVariant }) => {
+    let rawScreens = theme('screens') ?? {}
+    let areSimpleScreens = Object.values(rawScreens).every((v) => typeof v === 'string')
+    let screens = normalizeScreens(theme('screens'))
 
-      addVariant(screen.name, `@media ${query}`)
+    /** @type {Set<string>} */
+    let unitCache = new Set([])
+
+    /** @param {string} value */
+    function units(value) {
+      return value.match(/(\D+)$/)?.[1] ?? '(none)'
     }
+
+    /** @param {string} value */
+    function recordUnits(value) {
+      if (value !== undefined) {
+        unitCache.add(units(value))
+      }
+    }
+
+    /** @param {string} value */
+    function canUseUnits(value) {
+      recordUnits(value)
+
+      // If the cache was empty it'll become 1 because we've just added the current unit
+      // If the cache was not empty and the units are the same the size doesn't change
+      // Otherwise, if the units are different from what is already known the size will always be > 1
+      return unitCache.size === 1
+    }
+
+    for (const screen of screens) {
+      for (const value of screen.values) {
+        recordUnits(value.min)
+        recordUnits(value.max)
+      }
+    }
+
+    let screensUseConsistentUnits = unitCache.size <= 1
+
+    /**
+     * @typedef {import('./util/normalizeScreens').Screen} Screen
+     */
+
+    /**
+     * @param {'min' | 'max'} type
+     * @returns {Record<string, Screen>}
+     */
+    function buildScreenValues(type) {
+      return Object.fromEntries(
+        screens
+          .filter((screen) => isScreenSortable(screen).result)
+          .map((screen) => {
+            let { min, max } = screen.values[0]
+
+            if (type === 'min' && min !== undefined) {
+              return screen
+            } else if (type === 'min' && max !== undefined) {
+              return { ...screen, not: !screen.not }
+            } else if (type === 'max' && max !== undefined) {
+              return screen
+            } else if (type === 'max' && min !== undefined) {
+              return { ...screen, not: !screen.not }
+            }
+          })
+          .map((screen) => [screen.name, screen])
+      )
+    }
+
+    /**
+     * @param {'min' | 'max'} type
+     * @returns {(a: { value: string | Screen }, z: { value: string | Screen }) => number}
+     */
+    function buildSort(type) {
+      return (a, z) => compareScreens(type, a.value, z.value)
+    }
+
+    let maxSort = buildSort('max')
+    let minSort = buildSort('min')
+
+    /** @param {'min'|'max'} type */
+    function buildScreenVariant(type) {
+      return (value) => {
+        if (!areSimpleScreens) {
+          log.warn('complex-screen-config', [
+            'The `min-*` and `max-*` variants are not supported with a `screens` configuration containing objects.',
+          ])
+
+          return []
+        } else if (!screensUseConsistentUnits) {
+          log.warn('mixed-screen-units', [
+            'The `min-*` and `max-*` variants are not supported with a `screens` configuration containing mixed units.',
+          ])
+
+          return []
+        } else if (typeof value === 'string' && !canUseUnits(value)) {
+          log.warn('minmax-have-mixed-units', [
+            'The `min-*` and `max-*` variants are not supported with a `screens` configuration containing mixed units.',
+          ])
+
+          return []
+        }
+
+        return [`@media ${buildMediaQuery(toScreen(value, type))}`]
+      }
+    }
+
+    matchVariant('max', buildScreenVariant('max'), {
+      sort: maxSort,
+      values: areSimpleScreens ? buildScreenValues('max') : {},
+    })
+
+    // screens and min-* are sorted together when they can be
+    let id = 'min-screens'
+    for (let screen of screens) {
+      addVariant(screen.name, `@media ${buildMediaQuery(screen)}`, {
+        id,
+        sort: areSimpleScreens && screensUseConsistentUnits ? minSort : undefined,
+        value: screen,
+      })
+    }
+
+    matchVariant('min', buildScreenVariant('min'), {
+      id,
+      sort: minSort,
+    })
   },
 
   supportsVariants: ({ matchVariant, theme }) => {
     matchVariant(
       'supports',
-      ({ value = '' }) => {
+      (value = '') => {
         let check = normalize(value)
         let isRaw = /^\w*\s*\(/.test(check)
 
@@ -252,9 +396,49 @@ export let variantPlugins = {
           check = `(${check})`
         }
 
-        return `@supports ${check} `
+        return `@supports ${check}`
       },
       { values: theme('supports') ?? {} }
+    )
+  },
+
+  ariaVariants: ({ matchVariant, theme }) => {
+    matchVariant('aria', (value) => `&[aria-${normalize(value)}]`, { values: theme('aria') ?? {} })
+    matchVariant(
+      'group-aria',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.group\\/${modifier})[aria-${normalize(value)}] &`
+          : `:merge(.group)[aria-${normalize(value)}] &`,
+      { values: theme('aria') ?? {} }
+    )
+    matchVariant(
+      'peer-aria',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.peer\\/${modifier})[aria-${normalize(value)}] ~ &`
+          : `:merge(.peer)[aria-${normalize(value)}] ~ &`,
+      { values: theme('aria') ?? {} }
+    )
+  },
+
+  dataVariants: ({ matchVariant, theme }) => {
+    matchVariant('data', (value) => `&[data-${normalize(value)}]`, { values: theme('data') ?? {} })
+    matchVariant(
+      'group-data',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.group\\/${modifier})[data-${normalize(value)}] &`
+          : `:merge(.group)[data-${normalize(value)}] &`,
+      { values: theme('data') ?? {} }
+    )
+    matchVariant(
+      'peer-data',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.peer\\/${modifier})[data-${normalize(value)}] ~ &`
+          : `:merge(.peer)[data-${normalize(value)}] ~ &`,
+      { values: theme('data') ?? {} }
     )
   },
 
@@ -463,6 +647,8 @@ export let corePlugins = {
         ['inset-y', ['top', 'bottom']],
       ],
       [
+        ['start', ['inset-inline-start']],
+        ['end', ['inset-inline-end']],
         ['top', ['top']],
         ['right', ['right']],
         ['bottom', ['bottom']],
@@ -514,6 +700,8 @@ export let corePlugins = {
         ['my', ['margin-top', 'margin-bottom']],
       ],
       [
+        ['ms', ['margin-inline-start']],
+        ['me', ['margin-inline-end']],
         ['mt', ['margin-top']],
         ['mr', ['margin-right']],
         ['mb', ['margin-bottom']],
@@ -862,6 +1050,8 @@ export let corePlugins = {
         ['scroll-my', ['scroll-margin-top', 'scroll-margin-bottom']],
       ],
       [
+        ['scroll-ms', ['scroll-margin-inline-start']],
+        ['scroll-me', ['scroll-margin-inline-end']],
         ['scroll-mt', ['scroll-margin-top']],
         ['scroll-mr', ['scroll-margin-right']],
         ['scroll-mb', ['scroll-margin-bottom']],
@@ -878,6 +1068,8 @@ export let corePlugins = {
       ['scroll-py', ['scroll-padding-top', 'scroll-padding-bottom']],
     ],
     [
+      ['scroll-ps', ['scroll-padding-inline-start']],
+      ['scroll-pe', ['scroll-padding-inline-end']],
       ['scroll-pt', ['scroll-padding-top']],
       ['scroll-pr', ['scroll-padding-right']],
       ['scroll-pb', ['scroll-padding-bottom']],
@@ -986,6 +1178,7 @@ export let corePlugins = {
       '.place-content-between': { 'place-content': 'space-between' },
       '.place-content-around': { 'place-content': 'space-around' },
       '.place-content-evenly': { 'place-content': 'space-evenly' },
+      '.place-content-baseline': { 'place-content': 'baseline' },
       '.place-content-stretch': { 'place-content': 'stretch' },
     })
   },
@@ -995,6 +1188,7 @@ export let corePlugins = {
       '.place-items-start': { 'place-items': 'start' },
       '.place-items-end': { 'place-items': 'end' },
       '.place-items-center': { 'place-items': 'center' },
+      '.place-items-baseline': { 'place-items': 'baseline' },
       '.place-items-stretch': { 'place-items': 'stretch' },
     })
   },
@@ -1007,6 +1201,7 @@ export let corePlugins = {
       '.content-between': { 'align-content': 'space-between' },
       '.content-around': { 'align-content': 'space-around' },
       '.content-evenly': { 'align-content': 'space-evenly' },
+      '.content-baseline': { 'align-content': 'baseline' },
     })
   },
 
@@ -1054,6 +1249,16 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
+          if (env.OXIDE) {
+            return {
+              '& > :not([hidden]) ~ :not([hidden])': {
+                '--tw-space-x-reverse': '0',
+                'margin-inline-end': `calc(${value} * var(--tw-space-x-reverse))`,
+                'margin-inline-start': `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`,
+              },
+            }
+          }
+
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
               '--tw-space-x-reverse': '0',
@@ -1088,6 +1293,17 @@ export let corePlugins = {
       {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
+
+          if (env.OXIDE) {
+            return {
+              '& > :not([hidden]) ~ :not([hidden])': {
+                '@defaults border-width': {},
+                '--tw-divide-x-reverse': '0',
+                'border-inline-end-width': `calc(${value} * var(--tw-divide-x-reverse))`,
+                'border-inline-start-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
+              },
+            }
+          }
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
@@ -1256,6 +1472,14 @@ export let corePlugins = {
     })
   },
 
+  hyphens: ({ addUtilities }) => {
+    addUtilities({
+      '.hyphens-none': { hyphens: 'none' },
+      '.hyphens-manual': { hyphens: 'manual' },
+      '.hyphens-auto': { hyphens: 'auto' },
+    })
+  },
+
   whitespace: ({ addUtilities }) => {
     addUtilities({
       '.whitespace-normal': { 'white-space': 'normal' },
@@ -1278,12 +1502,18 @@ export let corePlugins = {
   borderRadius: createUtilityPlugin('borderRadius', [
     ['rounded', ['border-radius']],
     [
+      ['rounded-s', ['border-start-start-radius', 'border-end-start-radius']],
+      ['rounded-e', ['border-start-end-radius', 'border-end-end-radius']],
       ['rounded-t', ['border-top-left-radius', 'border-top-right-radius']],
       ['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']],
       ['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
       ['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']],
     ],
     [
+      ['rounded-ss', ['border-start-start-radius']],
+      ['rounded-se', ['border-start-end-radius']],
+      ['rounded-ee', ['border-end-end-radius']],
+      ['rounded-es', ['border-end-start-radius']],
       ['rounded-tl', ['border-top-left-radius']],
       ['rounded-tr', ['border-top-right-radius']],
       ['rounded-br', ['border-bottom-right-radius']],
@@ -1300,6 +1530,8 @@ export let corePlugins = {
         ['border-y', [['@defaults border-width', {}], 'border-top-width', 'border-bottom-width']],
       ],
       [
+        ['border-s', [['@defaults border-width', {}], 'border-inline-start-width']],
+        ['border-e', [['@defaults border-width', {}], 'border-inline-end-width']],
         ['border-t', [['@defaults border-width', {}], 'border-top-width']],
         ['border-r', [['@defaults border-width', {}], 'border-right-width']],
         ['border-b', [['@defaults border-width', {}], 'border-bottom-width']],
@@ -1382,6 +1614,32 @@ export let corePlugins = {
 
     matchUtilities(
       {
+        'border-s': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-inline-start-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-inline-start-color',
+            variable: '--tw-border-opacity',
+          })
+        },
+        'border-e': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-inline-end-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-inline-end-color',
+            variable: '--tw-border-opacity',
+          })
+        },
         'border-t': (value) => {
           if (!corePlugins('borderOpacity')) {
             return {
@@ -1618,6 +1876,8 @@ export let corePlugins = {
       ['py', ['padding-top', 'padding-bottom']],
     ],
     [
+      ['ps', ['padding-inline-start']],
+      ['pe', ['padding-inline-end']],
       ['pt', ['padding-top']],
       ['pr', ['padding-right']],
       ['pb', ['padding-bottom']],
@@ -1661,13 +1921,16 @@ export let corePlugins = {
         font: (value) => {
           let [families, options = {}] =
             Array.isArray(value) && isPlainObject(value[1]) ? value : [value]
-          let { fontFeatureSettings } = options
+          let { fontFeatureSettings, fontVariationSettings } = options
 
           return {
             'font-family': Array.isArray(families) ? families.join(', ') : families,
             ...(fontFeatureSettings === undefined
               ? {}
               : { 'font-feature-settings': fontFeatureSettings }),
+            ...(fontVariationSettings === undefined
+              ? {}
+              : { 'font-variation-settings': fontVariationSettings }),
           }
         },
       },
@@ -1681,8 +1944,16 @@ export let corePlugins = {
   fontSize: ({ matchUtilities, theme }) => {
     matchUtilities(
       {
-        text: (value) => {
+        text: (value, { modifier }) => {
           let [fontSize, options] = Array.isArray(value) ? value : [value]
+
+          if (modifier) {
+            return {
+              'font-size': fontSize,
+              'line-height': modifier,
+            }
+          }
+
           let { lineHeight, letterSpacing, fontWeight } = isPlainObject(options)
             ? options
             : { lineHeight: options }
@@ -1697,6 +1968,7 @@ export let corePlugins = {
       },
       {
         values: theme('fontSize'),
+        modifiers: theme('lineHeight'),
         type: ['absolute-size', 'relative-size', 'length', 'percentage'],
       }
     )

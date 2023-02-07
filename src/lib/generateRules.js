@@ -3,14 +3,14 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses, typeMap } from '../util/pluginUtils'
+import { updateAllClasses, filterSelectorsForClass, getMatchingTypes } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
 import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
-import isValidArbitraryValue from '../util/isValidArbitraryValue'
+import isValidArbitraryValue from '../util/isSyntacticallyValidPropertyValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 import { flagEnabled } from '../featureFlags'
 
@@ -18,7 +18,7 @@ let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
 })
 
-function getClassNameFromSelector(selector) {
+export function getClassNameFromSelector(selector) {
   return classNameParser.transformSync(selector)
 }
 
@@ -34,13 +34,24 @@ function* candidatePermutations(candidate) {
 
   while (lastIndex >= 0) {
     let dashIdx
+    let wasSlash = false
 
     if (lastIndex === Infinity && candidate.endsWith(']')) {
       let bracketIdx = candidate.indexOf('[')
 
       // If character before `[` isn't a dash or a slash, this isn't a dynamic class
       // eg. string[]
-      dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
+      if (candidate[bracketIdx - 1] === '-') {
+        dashIdx = bracketIdx - 1
+      } else if (candidate[bracketIdx - 1] === '/') {
+        dashIdx = bracketIdx - 1
+        wasSlash = true
+      } else {
+        dashIdx = -1
+      }
+    } else if (lastIndex === Infinity && candidate.includes('/')) {
+      dashIdx = candidate.lastIndexOf('/')
+      wasSlash = true
     } else {
       dashIdx = candidate.lastIndexOf('-', lastIndex)
     }
@@ -50,11 +61,16 @@ function* candidatePermutations(candidate) {
     }
 
     let prefix = candidate.slice(0, dashIdx)
-    let modifier = candidate.slice(dashIdx + 1)
-
-    yield [prefix, modifier]
+    let modifier = candidate.slice(wasSlash ? dashIdx : dashIdx + 1)
 
     lastIndex = dashIdx - 1
+
+    // TODO: This feels a bit hacky
+    if (prefix === '' || modifier === '/') {
+      continue
+    }
+
+    yield [prefix, modifier]
   }
 }
 
@@ -100,12 +116,15 @@ function applyImportant(matches, classCandidate) {
   for (let [meta, rule] of matches) {
     let container = postcss.root({ nodes: [rule.clone()] })
     container.walkRules((r) => {
-      r.selector = updateAllClasses(r.selector, (className) => {
-        if (className === classCandidate) {
-          return `!${className}`
+      r.selector = updateAllClasses(
+        filterSelectorsForClass(r.selector, classCandidate),
+        (className) => {
+          if (className === classCandidate) {
+            return `!${className}`
+          }
+          return className
         }
-        return className
-      })
+      )
       r.walkDecls((d) => (d.important = true))
     })
     result.push([{ ...meta, important: true }, container.nodes[0]])
@@ -128,23 +147,49 @@ function applyVariant(variant, matches, context) {
     return matches
   }
 
-  let args = {}
+  /** @type {{modifier: string | null, value: string | null}} */
+  let args = { modifier: null, value: sharedState.NONE }
 
-  // Retrieve "label"
+  // Retrieve "modifier"
   {
-    let match = /^[\w-]+\<(.*)\>-/g.exec(variant)
-    if (match) {
-      variant = variant.replace(`<${match[1]}>`, '')
-      args.label = match[1]
+    let [baseVariant, ...modifiers] = splitAtTopLevelOnly(variant, '/')
+
+    // This is a hack to support variants with `/` in them, like `ar-1/10/20:text-red-500`
+    // In this case 1/10 is a value but /20 is a modifier
+    if (modifiers.length > 1) {
+      baseVariant = baseVariant + '/' + modifiers.slice(0, -1).join('/')
+      modifiers = modifiers.slice(-1)
+    }
+
+    if (modifiers.length && !context.variantMap.has(variant)) {
+      variant = baseVariant
+      args.modifier = modifiers[0]
+
+      if (!flagEnabled(context.tailwindConfig, 'generalizedModifiers')) {
+        return []
+      }
     }
   }
 
   // Retrieve "arbitrary value"
   if (variant.endsWith(']') && !variant.startsWith('[')) {
-    let match = /-?\[(.*)\]/g.exec(variant)
+    // We either have:
+    //   @[200px]
+    //   group-[:hover]
+    //
+    // But we don't want:
+    //   @-[200px]        (`-` is incorrect)
+    //   group[:hover]    (`-` is missing)
+    let match = /(.)(-?)\[(.*)\]/g.exec(variant)
     if (match) {
-      variant = variant.replace(match[0], '')
-      args.value = match[1]
+      let [, char, seperator, value] = match
+      // @-[200px] case
+      if (char === '@' && seperator === '-') return []
+      // group[:hover] case
+      if (char !== '@' && seperator === '') return []
+
+      variant = variant.replace(`${seperator}[${value}]`, '')
+      args.value = value
     }
   }
 
@@ -164,6 +209,7 @@ function applyVariant(variant, matches, context) {
   }
 
   if (context.variantMap.has(variant)) {
+    let isArbitraryVariant = isArbitraryValue(variant)
     let variantFunctionTuples = context.variantMap.get(variant).slice()
     let result = []
 
@@ -176,7 +222,7 @@ function applyVariant(variant, matches, context) {
       let container = postcss.root({ nodes: [rule.clone()] })
 
       for (let [variantSort, variantFunction, containerFromArray] of variantFunctionTuples) {
-        let clone = containerFromArray ?? container.clone()
+        let clone = (containerFromArray ?? container).clone()
         let collectedFormats = []
 
         function prepareBackup() {
@@ -225,7 +271,10 @@ function applyVariant(variant, matches, context) {
             clone.append(wrapper)
           },
           format(selectorFormat) {
-            collectedFormats.push(selectorFormat)
+            collectedFormats.push({
+              format: selectorFormat,
+              isArbitraryVariant,
+            })
           },
           args,
         })
@@ -251,7 +300,10 @@ function applyVariant(variant, matches, context) {
         }
 
         if (typeof ruleWithVariant === 'string') {
-          collectedFormats.push(ruleWithVariant)
+          collectedFormats.push({
+            format: ruleWithVariant,
+            isArbitraryVariant,
+          })
         }
 
         if (ruleWithVariant === null) {
@@ -292,7 +344,10 @@ function applyVariant(variant, matches, context) {
             //      modified (by plugin): .foo .foo\\:markdown > p
             //    rebuiltBase (internal): .foo\\:markdown > p
             //                    format: .foo &
-            collectedFormats.push(modified.replace(rebuiltBase, '&'))
+            collectedFormats.push({
+              format: modified.replace(rebuiltBase, '&'),
+              isArbitraryVariant,
+            })
             rule.selector = before
           })
         }
@@ -312,7 +367,6 @@ function applyVariant(variant, matches, context) {
               Object.assign(args, context.variantOptions.get(variant))
             ),
             collectedFormats: (meta.collectedFormats ?? []).concat(collectedFormats),
-            isArbitraryVariant: isArbitraryValue(variant),
           },
           clone.nodes[0],
         ]
@@ -375,7 +429,7 @@ function isParsableNode(node) {
   let isParsable = true
 
   node.walkDecls((decl) => {
-    if (!isParsableCssValue(decl.name, decl.value)) {
+    if (!isParsableCssValue(decl.prop, decl.value)) {
       isParsable = false
       return false
     }
@@ -551,16 +605,14 @@ function* resolveMatches(candidate, context, original = candidate) {
       }
 
       if (matchesPerPlugin.length > 0) {
-        let matchingTypes = (sort.options?.types ?? [])
-          .map(({ type }) => type)
-          // Only track the types for this plugin that resulted in some result
-          .filter((type) => {
-            return Boolean(
-              typeMap[type](modifier, sort.options, {
-                tailwindConfig: context.tailwindConfig,
-              })
-            )
-          })
+        let matchingTypes = Array.from(
+          getMatchingTypes(
+            sort.options?.types ?? [],
+            modifier,
+            sort.options ?? {},
+            context.tailwindConfig
+          )
+        ).map(([_, type]) => type)
 
         if (matchingTypes.length > 0) {
           typesByMatches.set(matchesPerPlugin, matchingTypes)
@@ -701,29 +753,74 @@ function* resolveMatches(candidate, context, original = candidate) {
       match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate }
 
       // Apply final format selector
-      if (match[0].collectedFormats) {
-        let finalFormat = formatVariantSelector('&', ...match[0].collectedFormats)
-        let container = postcss.root({ nodes: [match[1].clone()] })
-        container.walkRules((rule) => {
-          if (inKeyframes(rule)) return
+      match = applyFinalFormat(match, { context, candidate, original })
 
-          rule.selector = finalizeSelector(finalFormat, {
-            selector: rule.selector,
-            candidate: original,
-            base: candidate
-              .split(new RegExp(`\\${context?.tailwindConfig?.separator ?? ':'}(?![^[]*\\])`))
-              .pop(),
-            isArbitraryVariant: match[0].isArbitraryVariant,
-
-            context,
-          })
-        })
-        match[1] = container.nodes[0]
+      // Skip rules with invalid selectors
+      // This will cause the candidate to be added to the "not class"
+      // cache skipping it entirely for future builds
+      if (match === null) {
+        continue
       }
 
       yield match
     }
   }
+}
+
+function applyFinalFormat(match, { context, candidate, original }) {
+  if (!match[0].collectedFormats) {
+    return match
+  }
+
+  let isValid = true
+  let finalFormat
+
+  try {
+    finalFormat = formatVariantSelector(match[0].collectedFormats, {
+      context,
+      candidate,
+    })
+  } catch {
+    // The format selector we produced is invalid
+    // This could be because:
+    // - A bug exists
+    // - A plugin introduced an invalid variant selector (ex: `addVariant('foo', '&;foo')`)
+    // - The user used an invalid arbitrary variant (ex: `[&;foo]:underline`)
+    // Either way the build will fail because of this
+    // We would rather that the build pass "silently" given that this could
+    // happen because of picking up invalid things when scanning content
+    // So we'll throw out the candidate instead
+
+    return null
+  }
+
+  let container = postcss.root({ nodes: [match[1].clone()] })
+
+  container.walkRules((rule) => {
+    if (inKeyframes(rule)) {
+      return
+    }
+
+    try {
+      rule.selector = finalizeSelector(rule.selector, finalFormat, {
+        candidate: original,
+        context,
+      })
+    } catch {
+      // If this selector is invalid we also want to skip it
+      // But it's likely that being invalid here means there's a bug in a plugin rather than too loosely matching content
+      isValid = false
+      return false
+    }
+  })
+
+  if (!isValid) {
+    return null
+  }
+
+  match[1] = container.nodes[0]
+
+  return match
 }
 
 function inKeyframes(rule) {

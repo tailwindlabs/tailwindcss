@@ -19,6 +19,7 @@ import {
 } from './dataTypes'
 import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
+import { flagEnabled } from '../featureFlags.js'
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
@@ -27,6 +28,23 @@ export function updateAllClasses(selectors, updateClass) {
       sel.value = updatedClass
       if (sel.raws && sel.raws.value) {
         sel.raws.value = escapeCommas(sel.raws.value)
+      }
+    })
+  })
+
+  let result = parser.processSync(selectors)
+
+  return result
+}
+
+export function filterSelectorsForClass(selectors, classCandidate) {
+  let parser = selectorParser((selectors) => {
+    selectors.each((sel) => {
+      const containsClass = sel.nodes.some(
+        (node) => node.type === 'class' && node.value === classCandidate
+      )
+      if (!containsClass) {
+        sel.remove()
       }
     })
   })
@@ -86,11 +104,20 @@ function isArbitraryValue(input) {
   return input.startsWith('[') && input.endsWith(']')
 }
 
-function splitAlpha(modifier) {
+function splitUtilityModifier(modifier) {
   let slashIdx = modifier.lastIndexOf('/')
 
   if (slashIdx === -1 || slashIdx === modifier.length - 1) {
-    return [modifier]
+    return [modifier, undefined]
+  }
+
+  let arbitrary = isArbitraryValue(modifier)
+
+  // The modifier could be of the form `[foo]/[bar]`
+  // We want to handle this case properly
+  // without affecting `[foo/bar]`
+  if (arbitrary && !modifier.includes(']/[')) {
+    return [modifier, undefined]
   }
 
   return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
@@ -106,12 +133,22 @@ export function parseColorFormat(value) {
   return value
 }
 
+function unwrapArbitraryModifier(modifier) {
+  modifier = modifier.slice(1, -1)
+  if (modifier.startsWith('--')) {
+    modifier = `var(${modifier})`
+  }
+  return modifier
+}
+
 export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
   if (options.values?.[modifier] !== undefined) {
     return parseColorFormat(options.values?.[modifier])
   }
 
-  let [color, alpha] = splitAlpha(modifier)
+  // TODO: Hoist this up to getMatchingTypes or something
+  // We do this here because we need the alpha value (if any)
+  let [color, alpha] = splitUtilityModifier(modifier)
 
   if (alpha !== undefined) {
     let normalizedColor =
@@ -124,7 +161,7 @@ export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
     normalizedColor = parseColorFormat(normalizedColor)
 
     if (isArbitraryValue(alpha)) {
-      return withAlphaValue(normalizedColor, alpha.slice(1, -1))
+      return withAlphaValue(normalizedColor, unwrapArbitraryModifier(alpha))
     }
 
     if (tailwindConfig.theme?.opacity?.[alpha] === undefined) {
@@ -175,6 +212,20 @@ function splitAtFirst(input, delim) {
 }
 
 export function coerceValue(types, modifier, options, tailwindConfig) {
+  if (options.values && modifier in options.values) {
+    for (let { type } of types ?? []) {
+      let result = typeMap[type](modifier, options, {
+        tailwindConfig,
+      })
+
+      if (result === undefined) {
+        continue
+      }
+
+      return [result, type, null]
+    }
+  }
+
   if (isArbitraryValue(modifier)) {
     let arbitraryValue = modifier.slice(1, -1)
     let [explicitType, value] = splitAtFirst(arbitraryValue, ':')
@@ -192,15 +243,72 @@ export function coerceValue(types, modifier, options, tailwindConfig) {
     }
 
     if (value.length > 0 && supportedTypes.includes(explicitType)) {
-      return [asValue(`[${value}]`, options), explicitType]
+      return [asValue(`[${value}]`, options), explicitType, null]
     }
   }
 
+  let matches = getMatchingTypes(types, modifier, options, tailwindConfig)
+
   // Find first matching type
-  for (let { type } of types) {
-    let result = typeMap[type](modifier, options, { tailwindConfig })
-    if (result !== undefined) return [result, type]
+  for (let match of matches) {
+    return match
   }
 
   return []
+}
+
+/**
+ *
+ * @param {{type: string}[]} types
+ * @param {string} rawModifier
+ * @param {any} options
+ * @param {any} tailwindConfig
+ * @returns {Iterator<[value: string, type: string, modifier: string | null]>}
+ */
+export function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
+  let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
+
+  let [modifier, utilityModifier] = splitUtilityModifier(rawModifier)
+
+  let canUseUtilityModifier =
+    modifiersEnabled &&
+    options.modifiers != null &&
+    (options.modifiers === 'any' ||
+      (typeof options.modifiers === 'object' &&
+        ((utilityModifier && isArbitraryValue(utilityModifier)) ||
+          utilityModifier in options.modifiers)))
+
+  if (!canUseUtilityModifier) {
+    modifier = rawModifier
+    utilityModifier = undefined
+  }
+
+  if (utilityModifier !== undefined && modifier === '') {
+    modifier = 'DEFAULT'
+  }
+
+  // Check the full value first
+  // TODO: Move to asValue… somehow
+  if (utilityModifier !== undefined) {
+    if (typeof options.modifiers === 'object') {
+      let configValue = options.modifiers?.[utilityModifier] ?? null
+      if (configValue !== null) {
+        utilityModifier = configValue
+      } else if (isArbitraryValue(utilityModifier)) {
+        utilityModifier = unwrapArbitraryModifier(utilityModifier)
+      }
+    }
+  }
+
+  for (let { type } of types ?? []) {
+    let result = typeMap[type](modifier, options, {
+      tailwindConfig,
+    })
+
+    if (result === undefined) {
+      continue
+    }
+
+    yield [result, type, utilityModifier ?? null]
+  }
 }

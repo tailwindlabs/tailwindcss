@@ -5,3 +5,5 @@
 /tests/fixtures/cli-utils.js
 /stubs/*
 /src/corePluginList.js
+/oxide/crates/node/index.js
+/oxide/crates/node/index.d.ts

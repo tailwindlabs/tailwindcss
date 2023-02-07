@@ -1,5 +1,5 @@
 {
-  "name": "parcel",
+  "name": "@tailwindcss/integrations-parcel",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -15,6 +15,6 @@
     ]
   },
   "devDependencies": {
-    "parcel": "^2.5.0"
+    "parcel": "^2.8.3"
   }
 }

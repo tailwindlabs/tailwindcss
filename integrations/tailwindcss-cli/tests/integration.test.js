@@ -191,6 +191,40 @@ describe('static build', () => {
       `
     )
   })
+
+  it('should work with raw content', async () => {
+    await writeInputFile(
+      '../tailwind.config.js',
+      javascript`
+        module.exports = {
+          content: {
+            files: [{ raw: 'bg-red-500'}],
+          },
+          theme: {
+            extend: {
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+          plugins: [],
+        }
+      `
+    )
+
+    await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+      env: { NODE_ENV: 'production' },
+    })
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+      `
+    )
+  })
 })
 
 describe('watcher', () => {
@@ -438,10 +472,7 @@ describe('watcher', () => {
       css`
         .btn {
           border-radius: 0.25rem;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          padding: 0.25rem 0.5rem;
         }
         .font-bold {
           font-weight: 700;
@@ -599,6 +630,107 @@ describe('watcher', () => {
         .bg-yellow {
           --tw-bg-opacity: 1;
           background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+        }
+      `
+    )
+
+    return runningProcess.stop()
+  })
+
+  test('classes are generated (and kept) when the index.html file changes (and removed when css/config files are changed)', async () => {
+    let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
+
+    // Start with a simple single class
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Add another class
+    await writeInputFile('index.html', html`<div class="flex font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .flex {
+          display: flex;
+        }
+
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Remove a class, because of performance reasons both classes will still be in the css file
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .flex {
+          display: flex;
+        }
+
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Save the index.css file, this should trigger a fresh context
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `
+    )
+    await runningProcess.onStderr(ready)
+
+    // Only 1 class should stay, because we started from scratch
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Add another class
+    await writeInputFile('index.html', html`<div class="flex font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .flex {
+          display: flex;
+        }
+
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    // Remove a class, because of performance reasons both classes will still be in the css file
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await runningProcess.onStderr(ready)
+
+    // If everything goes right, then both classes should still be here (because of the performance
+    // improvement). If we didn't solve the bug where from now on every save is a fresh context
+    // then this only has 1 class. So let's hope there are 2!
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .flex {
+          display: flex;
+        }
+
+        .font-bold {
+          font-weight: 700;
         }
       `
     )

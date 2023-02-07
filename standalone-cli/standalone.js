@@ -9,6 +9,7 @@ let localModules = {
   'tailwindcss/plugin': require('tailwindcss/plugin'),
 
   '@tailwindcss/aspect-ratio': require('@tailwindcss/aspect-ratio'),
+  '@tailwindcss/container-queries': require('@tailwindcss/container-queries'),
   '@tailwindcss/forms': require('@tailwindcss/forms'),
   '@tailwindcss/line-clamp': require('@tailwindcss/line-clamp'),
   '@tailwindcss/typography': require('@tailwindcss/typography'),

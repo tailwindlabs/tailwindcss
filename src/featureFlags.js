@@ -3,6 +3,7 @@ import log from './util/log'
 
 let defaults = {
   optimizeUniversalDefaults: false,
+  generalizedModifiers: true,
 }
 
 let featureFlags = {
@@ -14,6 +15,7 @@ let featureFlags = {
   ],
   experimental: [
     'optimizeUniversalDefaults',
+    'generalizedModifiers',
     // 'variantGrouping',
   ],
 }

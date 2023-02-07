@@ -10,9 +10,16 @@ function isCSSFunction(value) {
   return cssFunctions.some((fn) => new RegExp(`^${fn}\\(.*\\)`).test(value))
 }
 
+const placeholder = '--tw-placeholder'
+const placeholderRe = new RegExp(placeholder, 'g')
+
 // This is not a data type, but rather a function that can normalize the
 // correct values.
 export function normalize(value, isRoot = true) {
+  if (value.startsWith('--')) {
+    return `var(${value})`
+  }
+
   // Keep raw strings if it starts with `url(`
   if (value.includes('url(')) {
     return value
@@ -45,10 +52,14 @@ export function normalize(value, isRoot = true) {
   // Add spaces around operators inside math functions like calc() that do not follow an operator
   // or '('.
   value = value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
-    return match.replace(
-      /(-?\d*\.?\d(?!\b-.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g,
-      '$1 $2 '
-    )
+    let vars = []
+    return match
+      .replace(/var\((--.+?)[,)]/g, (match, g1) => {
+        vars.push(g1)
+        return match.replace(g1, placeholder)
+      })
+      .replace(/(-?\d*\.?\d(?!\b-\d.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g, '$1 $2 ')
+      .replace(placeholderRe, () => vars.shift())
   })
 
   return value
@@ -66,6 +77,9 @@ export function percentage(value) {
   return (value.endsWith('%') && number(value.slice(0, -1))) || isCSSFunction(value)
 }
 
+// Please refer to MDN when updating this list:
+// https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units
+// https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries#container_query_length_units
 let lengthUnits = [
   'cm',
   'mm',
@@ -79,10 +93,25 @@ let lengthUnits = [
   'ch',
   'rem',
   'lh',
+  'rlh',
   'vw',
   'vh',
   'vmin',
   'vmax',
+  'vb',
+  'vi',
+  'svw',
+  'svh',
+  'lvw',
+  'lvh',
+  'dvw',
+  'dvh',
+  'cqw',
+  'cqh',
+  'cqi',
+  'cqb',
+  'cqmin',
+  'cqmax',
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
 export function length(value) {

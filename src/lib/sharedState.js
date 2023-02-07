@@ -1,12 +1,31 @@
+import pkg from '../../package.json'
+let OXIDE_DEFAULT_ENABLED = pkg.tailwindcss.engine === 'oxide'
+
 export const env = {
   NODE_ENV: process.env.NODE_ENV,
   DEBUG: resolveDebug(process.env.DEBUG),
+  ENGINE: pkg.tailwindcss.engine,
+  OXIDE: resolveBoolean(process.env.OXIDE, OXIDE_DEFAULT_ENABLED),
 }
 export const contextMap = new Map()
 export const configContextMap = new Map()
 export const contextSourcesMap = new Map()
 export const sourceHashMap = new Map()
 export const NOT_ON_DEMAND = new String('*')
+
+export const NONE = Symbol('__NONE__')
+
+function resolveBoolean(value, defaultValue) {
+  if (value === undefined) {
+    return defaultValue
+  }
+
+  if (value === '0' || value === 'false') {
+    return false
+  }
+
+  return true
+}
 
 export function resolveDebug(debug) {
   if (debug === undefined) {

@@ -94,10 +94,17 @@ function parseFilePath(filePath, ignore) {
  * @returns {ContentPath}
  */
 function resolveGlobPattern(contentPath) {
-  contentPath.pattern = contentPath.glob
-    ? `${contentPath.base}/${contentPath.glob}`
-    : contentPath.base
+  // This is required for Windows support to properly pick up Glob paths.
+  // Afaik, this technically shouldn't be needed but there's probably
+  // some internal, direct path matching with a normalized path in
+  // a package which can't handle mixed directory separators
+  let base = normalizePath(contentPath.base)
 
+  // If the user's file path contains any special characters (like parens) for instance fast-glob
+  // is like "OOOH SHINY" and treats them as such. So we have to escape the base path to fix this
+  base = fastGlob.escapePath(base)
+
+  contentPath.pattern = contentPath.glob ? `${base}/${contentPath.glob}` : base
   contentPath.pattern = contentPath.ignore ? `!${contentPath.pattern}` : contentPath.pattern
 
   return contentPath
@@ -157,43 +164,45 @@ function resolvePathSymlinks(contentPath) {
  * @param {any} context
  * @param {ContentPath[]} candidateFiles
  * @param {Map<string, number>} fileModifiedMap
- * @returns {{ content: string, extension: string }[]}
+ * @returns {[{ content: string, extension: string }[], Map<string, number>]}
  */
 export function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
   let changedContent = context.tailwindConfig.content.files
     .filter((item) => typeof item.raw === 'string')
     .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
-  for (let changedFile of resolveChangedFiles(candidateFiles, fileModifiedMap)) {
-    let content = fs.readFileSync(changedFile, 'utf8')
+  let [changedFiles, mTimesToCommit] = resolveChangedFiles(candidateFiles, fileModifiedMap)
+
+  for (let changedFile of changedFiles) {
     let extension = path.extname(changedFile).slice(1)
-    changedContent.push({ content, extension })
+    changedContent.push({ file: changedFile, extension })
   }
 
-  return changedContent
+  return [changedContent, mTimesToCommit]
 }
 
 /**
  *
  * @param {ContentPath[]} candidateFiles
  * @param {Map<string, number>} fileModifiedMap
- * @returns {Set<string>}
+ * @returns {[Set<string>, Map<string, number>]}
  */
 function resolveChangedFiles(candidateFiles, fileModifiedMap) {
   let paths = candidateFiles.map((contentPath) => contentPath.pattern)
+  let mTimesToCommit = new Map()
 
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
   let files = fastGlob.sync(paths, { absolute: true })
   for (let file of files) {
-    let prevModified = fileModifiedMap.has(file) ? fileModifiedMap.get(file) : -Infinity
+    let prevModified = fileModifiedMap.get(file) || -Infinity
     let modified = fs.statSync(file).mtimeMs
 
     if (modified > prevModified) {
       changedFiles.add(file)
-      fileModifiedMap.set(file, modified)
+      mTimesToCommit.set(file, modified)
     }
   }
   env.DEBUG && console.timeEnd('Finding changed files')
-  return changedFiles
+  return [changedFiles, mTimesToCommit]
 }

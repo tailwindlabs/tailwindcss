@@ -346,22 +346,42 @@ function processApply(root, context, localCache) {
         })
       })
 
-      // Sort tag names before class names
+      // Sort tag names before class names (but only sort each group (separated by a combinator)
+      // separately and not in total)
       // This happens when replacing `.bar` in `.foo.bar` with a tag like `section`
-      for (const sel of replaced) {
-        sel.sort((a, b) => {
-          if (a.type === 'tag' && b.type === 'class') {
-            return -1
-          } else if (a.type === 'class' && b.type === 'tag') {
-            return 1
-          } else if (a.type === 'class' && b.type === 'pseudo') {
-            return -1
-          } else if (a.type === 'pseudo' && b.type === 'class') {
-            return 1
+      for (let sel of replaced) {
+        let groups = [[]]
+        for (let node of sel.nodes) {
+          if (node.type === 'combinator') {
+            groups.push(node)
+            groups.push([])
+          } else {
+            let last = groups[groups.length - 1]
+            last.push(node)
+          }
+        }
+
+        sel.nodes = []
+
+        for (let group of groups) {
+          if (Array.isArray(group)) {
+            group.sort((a, b) => {
+              if (a.type === 'tag' && b.type === 'class') {
+                return -1
+              } else if (a.type === 'class' && b.type === 'tag') {
+                return 1
+              } else if (a.type === 'class' && b.type === 'pseudo' && b.value.startsWith('::')) {
+                return -1
+              } else if (a.type === 'pseudo' && a.value.startsWith('::') && b.type === 'class') {
+                return 1
+              }
+
+              return 0
+            })
           }
 
-          return sel.index(a) - sel.index(b)
-        })
+          sel.nodes = sel.nodes.concat(group)
+        }
       }
 
       sel.replaceWith(...replaced)
@@ -382,7 +402,7 @@ function processApply(root, context, localCache) {
 
     if (apply.parent.type === 'atrule') {
       if (apply.parent.name === 'screen') {
-        const screenType = apply.parent.params
+        let screenType = apply.parent.params
 
         throw apply.error(
           `@apply is not supported within nested at-rules like @screen. We suggest you write this as @apply ${applyCandidates
@@ -414,7 +434,7 @@ function processApply(root, context, localCache) {
     }
   }
 
-  for (const [parent, [candidates, atApplySource]] of perParentApplies) {
+  for (let [parent, [candidates, atApplySource]] of perParentApplies) {
     let siblings = []
 
     for (let [applyCandidate, important, rules] of candidates) {

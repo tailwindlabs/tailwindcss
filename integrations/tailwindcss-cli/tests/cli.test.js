@@ -169,9 +169,9 @@ describe('Build command', () => {
   })
 
   test('--content', async () => {
-    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await writeInputFile('other.html', html`<div class="font-bold"></div>`)
 
-    await $(`${EXECUTABLE} --content ./src/index.html --output ./dist/main.css`)
+    await $(`${EXECUTABLE} --content ./src/other.html --output ./dist/main.css`)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
@@ -406,6 +406,31 @@ describe('Build command', () => {
         @media (min-width: 768px) {
           .md\:something-cool {
             color: red;
+          }
+        }
+      `
+    )
+
+    await writeInputFile(
+      'imported.css',
+      css`
+        @layer utilities {
+          .something-cool {
+            color: blue;
+          }
+        }
+      `
+    )
+
+    await runningProcess.onStderr(function ready(message) {
+      return message.includes('Done in')
+    })
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        @media (min-width: 768px) {
+          .md\:something-cool {
+            color: blue;
           }
         }
       `
