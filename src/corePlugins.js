@@ -1861,15 +1861,8 @@ export let corePlugins = {
   fontSize: ({ matchUtilities, theme }) => {
     matchUtilities(
       {
-        text: (value, { modifier }) => {
+        text: (value) => {
           let [fontSize, options] = Array.isArray(value) ? value : [value]
-
-          if (modifier) {
-            return {
-              'font-size': fontSize,
-              'line-height': modifier,
-            }
-          }
 
           let { lineHeight, letterSpacing, fontWeight } = isPlainObject(options)
             ? options
@@ -1885,7 +1878,6 @@ export let corePlugins = {
       },
       {
         values: theme('fontSize'),
-        modifiers: theme('lineHeight'),
         type: ['absolute-size', 'relative-size', 'length', 'percentage'],
       }
     )
