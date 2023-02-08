@@ -41,7 +41,6 @@
     "stubs/*.stub.js",
     "nesting/*",
     "types/**/*",
-    "oxide-node-api-shim",
     "*.d.ts",
     "*.css",
     "*.js"
@@ -71,7 +70,6 @@
     "postcss": "^8.0.9"
   },
   "dependencies": {
-    "@tailwindcss/oxide": "file:./oxide-node-api-shim",
     "arg": "^5.0.2",
     "chokidar": "^3.5.3",
     "color-name": "^1.1.4",

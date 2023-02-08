@@ -6,8 +6,6 @@ import log from '../util/log'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
 
-import oxide from '@tailwindcss/oxide'
-
 let env = sharedState.env
 
 const builtInExtractors = {
@@ -134,7 +132,7 @@ export default function expandTailwindAtRules(context) {
 
     if (env.OXIDE) {
       // TODO: Pass through or implement `extractor`
-      for (let candidate of oxide.parseCandidateStringsFromFiles(
+      for (let candidate of require('@tailwindcss/oxide').parseCandidateStringsFromFiles(
         context.changedContent
         // Object.assign({}, builtInTransformers, context.tailwindConfig.content.transform)
       )) {
