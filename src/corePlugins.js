@@ -1466,14 +1466,6 @@ export let corePlugins = {
     })
   },
 
-  hyphens: ({ addUtilities }) => {
-    addUtilities({
-      '.hyphens-none': { hyphens: 'none' },
-      '.hyphens-manual': { hyphens: 'manual' },
-      '.hyphens-auto': { hyphens: 'auto' },
-    })
-  },
-
   whitespace: ({ addUtilities }) => {
     addUtilities({
       '.whitespace-normal': { 'white-space': 'normal' },
