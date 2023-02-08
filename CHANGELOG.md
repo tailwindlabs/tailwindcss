@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- drop oxide api shim ([add16364b4b1100e1af23ad1ca6900a0b53cbba0](https://github.com/tailwindlabs/tailwindcss/commit/add16364b4b1100e1af23ad1ca6900a0b53cbba0))
 
 ## [3.2.5] - 2023-02-08
 
