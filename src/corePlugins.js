@@ -1,6 +1,7 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
+import { env } from './lib/sharedState'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
 import escapeClassName from './util/escapeClassName'
@@ -646,6 +647,8 @@ export let corePlugins = {
         ['inset-y', ['top', 'bottom']],
       ],
       [
+        ['start', ['inset-inline-start']],
+        ['end', ['inset-inline-end']],
         ['top', ['top']],
         ['right', ['right']],
         ['bottom', ['bottom']],
@@ -697,6 +700,8 @@ export let corePlugins = {
         ['my', ['margin-top', 'margin-bottom']],
       ],
       [
+        ['ms', ['margin-inline-start']],
+        ['me', ['margin-inline-end']],
         ['mt', ['margin-top']],
         ['mr', ['margin-right']],
         ['mb', ['margin-bottom']],
@@ -764,6 +769,13 @@ export let corePlugins = {
     addUtilities({
       '.table-auto': { 'table-layout': 'auto' },
       '.table-fixed': { 'table-layout': 'fixed' },
+    })
+  },
+
+  captionSide: ({ addUtilities }) => {
+    addUtilities({
+      '.caption-top': { 'caption-side': 'top' },
+      '.caption-bottom': { 'caption-side': 'bottom' },
     })
   },
 
@@ -1045,6 +1057,8 @@ export let corePlugins = {
         ['scroll-my', ['scroll-margin-top', 'scroll-margin-bottom']],
       ],
       [
+        ['scroll-ms', ['scroll-margin-inline-start']],
+        ['scroll-me', ['scroll-margin-inline-end']],
         ['scroll-mt', ['scroll-margin-top']],
         ['scroll-mr', ['scroll-margin-right']],
         ['scroll-mb', ['scroll-margin-bottom']],
@@ -1061,6 +1075,8 @@ export let corePlugins = {
       ['scroll-py', ['scroll-padding-top', 'scroll-padding-bottom']],
     ],
     [
+      ['scroll-ps', ['scroll-padding-inline-start']],
+      ['scroll-pe', ['scroll-padding-inline-end']],
       ['scroll-pt', ['scroll-padding-top']],
       ['scroll-pr', ['scroll-padding-right']],
       ['scroll-pb', ['scroll-padding-bottom']],
@@ -1234,6 +1250,16 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
+          if (env.OXIDE) {
+            return {
+              '& > :not([hidden]) ~ :not([hidden])': {
+                '--tw-space-x-reverse': '0',
+                'margin-inline-end': `calc(${value} * var(--tw-space-x-reverse))`,
+                'margin-inline-start': `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`,
+              },
+            }
+          }
+
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
               '--tw-space-x-reverse': '0',
@@ -1268,6 +1294,17 @@ export let corePlugins = {
       {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
+
+          if (env.OXIDE) {
+            return {
+              '& > :not([hidden]) ~ :not([hidden])': {
+                '@defaults border-width': {},
+                '--tw-divide-x-reverse': '0',
+                'border-inline-end-width': `calc(${value} * var(--tw-divide-x-reverse))`,
+                'border-inline-start-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
+              },
+            }
+          }
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
@@ -1436,6 +1473,14 @@ export let corePlugins = {
     })
   },
 
+  hyphens: ({ addUtilities }) => {
+    addUtilities({
+      '.hyphens-none': { hyphens: 'none' },
+      '.hyphens-manual': { hyphens: 'manual' },
+      '.hyphens-auto': { hyphens: 'auto' },
+    })
+  },
+
   whitespace: ({ addUtilities }) => {
     addUtilities({
       '.whitespace-normal': { 'white-space': 'normal' },
@@ -1458,12 +1503,18 @@ export let corePlugins = {
   borderRadius: createUtilityPlugin('borderRadius', [
     ['rounded', ['border-radius']],
     [
+      ['rounded-s', ['border-start-start-radius', 'border-end-start-radius']],
+      ['rounded-e', ['border-start-end-radius', 'border-end-end-radius']],
       ['rounded-t', ['border-top-left-radius', 'border-top-right-radius']],
       ['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']],
       ['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
       ['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']],
     ],
     [
+      ['rounded-ss', ['border-start-start-radius']],
+      ['rounded-se', ['border-start-end-radius']],
+      ['rounded-ee', ['border-end-end-radius']],
+      ['rounded-es', ['border-end-start-radius']],
       ['rounded-tl', ['border-top-left-radius']],
       ['rounded-tr', ['border-top-right-radius']],
       ['rounded-br', ['border-bottom-right-radius']],
@@ -1480,6 +1531,8 @@ export let corePlugins = {
         ['border-y', [['@defaults border-width', {}], 'border-top-width', 'border-bottom-width']],
       ],
       [
+        ['border-s', [['@defaults border-width', {}], 'border-inline-start-width']],
+        ['border-e', [['@defaults border-width', {}], 'border-inline-end-width']],
         ['border-t', [['@defaults border-width', {}], 'border-top-width']],
         ['border-r', [['@defaults border-width', {}], 'border-right-width']],
         ['border-b', [['@defaults border-width', {}], 'border-bottom-width']],
@@ -1562,6 +1615,32 @@ export let corePlugins = {
 
     matchUtilities(
       {
+        'border-s': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-inline-start-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-inline-start-color',
+            variable: '--tw-border-opacity',
+          })
+        },
+        'border-e': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-inline-end-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-inline-end-color',
+            variable: '--tw-border-opacity',
+          })
+        },
         'border-t': (value) => {
           if (!corePlugins('borderOpacity')) {
             return {
@@ -1798,6 +1877,8 @@ export let corePlugins = {
       ['py', ['padding-top', 'padding-bottom']],
     ],
     [
+      ['ps', ['padding-inline-start']],
+      ['pe', ['padding-inline-end']],
       ['pt', ['padding-top']],
       ['pr', ['padding-right']],
       ['pb', ['padding-bottom']],
@@ -1841,13 +1922,16 @@ export let corePlugins = {
         font: (value) => {
           let [families, options = {}] =
             Array.isArray(value) && isPlainObject(value[1]) ? value : [value]
-          let { fontFeatureSettings } = options
+          let { fontFeatureSettings, fontVariationSettings } = options
 
           return {
             'font-family': Array.isArray(families) ? families.join(', ') : families,
             ...(fontFeatureSettings === undefined
               ? {}
               : { 'font-feature-settings': fontFeatureSettings }),
+            ...(fontVariationSettings === undefined
+              ? {}
+              : { 'font-variation-settings': fontVariationSettings }),
           }
         },
       },
@@ -1861,8 +1945,15 @@ export let corePlugins = {
   fontSize: ({ matchUtilities, theme }) => {
     matchUtilities(
       {
-        text: (value) => {
+        text: (value, { modifier }) => {
           let [fontSize, options] = Array.isArray(value) ? value : [value]
+
+          if (modifier) {
+            return {
+              'font-size': fontSize,
+              'line-height': modifier,
+            }
+          }
 
           let { lineHeight, letterSpacing, fontWeight } = isPlainObject(options)
             ? options
@@ -1878,6 +1969,7 @@ export let corePlugins = {
       },
       {
         values: theme('fontSize'),
+        modifiers: theme('lineHeight'),
         type: ['absolute-size', 'relative-size', 'length', 'percentage'],
       }
     )

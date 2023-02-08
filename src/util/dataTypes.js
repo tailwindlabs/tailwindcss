@@ -16,6 +16,10 @@ const placeholderRe = new RegExp(placeholder, 'g')
 // This is not a data type, but rather a function that can normalize the
 // correct values.
 export function normalize(value, isRoot = true) {
+  if (value.startsWith('--')) {
+    return `var(${value})`
+  }
+
   // Keep raw strings if it starts with `url(`
   if (value.includes('url(')) {
     return value

@@ -6,8 +6,8 @@ crosscheck(() => {
       content: [
         {
           raw: html`<div
-            class="test test/foo test-1/foo test-2/foo test/[foo] test-1/[foo]"
-          ></div>`,
+            class="test test/foo test-1/foo test-2/foo test/[foo] test-1/[foo] test-[8]/[9]"
+          ></div> `,
         },
       ],
       corePlugins: { preflight: false },
@@ -27,6 +27,7 @@ crosscheck(() => {
                 '1': 'one',
                 '2': 'two',
                 '1/foo': 'onefoo',
+                '[8]/[9]': 'eightnine',
               },
               modifiers: 'any',
             }
@@ -53,6 +54,9 @@ crosscheck(() => {
       }
       .test-2\/foo {
         color: two_foo;
+      }
+      .test-\[8\]\/\[9\] {
+        color: eightnine_null;
       }
       .test\/\[foo\] {
         color: default_[foo];
