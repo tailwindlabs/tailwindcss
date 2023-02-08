@@ -252,12 +252,6 @@
 .table-fixed {
   table-layout: fixed;
 }
-.caption-top {
-  caption-side: top;
-}
-.caption-bottom {
-  caption-side: bottom;
-}
 .border-collapse {
   border-collapse: collapse;
 }

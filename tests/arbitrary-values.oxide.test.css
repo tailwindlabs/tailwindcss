@@ -455,13 +455,13 @@
 }
 .space-x-\[20cm\] > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
-  margin-inline-start: calc(20cm * calc(1 - var(--tw-space-x-reverse)));
-  margin-inline-end: calc(20cm * var(--tw-space-x-reverse));
+  margin-right: calc(20cm * var(--tw-space-x-reverse));
+  margin-left: calc(20cm * calc(1 - var(--tw-space-x-reverse)));
 }
 .space-x-\[calc\(20\%-1cm\)\] > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
-  margin-inline-start: calc(calc(20% - 1cm) * calc(1 - var(--tw-space-x-reverse)));
-  margin-inline-end: calc(calc(20% - 1cm) * var(--tw-space-x-reverse));
+  margin-right: calc(calc(20% - 1cm) * var(--tw-space-x-reverse));
+  margin-left: calc(calc(20% - 1cm) * calc(1 - var(--tw-space-x-reverse)));
 }
 .space-y-\[20cm\] > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
@@ -475,13 +475,13 @@
 }
 .divide-x-\[20cm\] > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-x-reverse: 0;
-  border-inline-end-width: calc(20cm * var(--tw-divide-x-reverse));
-  border-inline-start-width: calc(20cm * calc(1 - var(--tw-divide-x-reverse)));
+  border-right-width: calc(20cm * var(--tw-divide-x-reverse));
+  border-left-width: calc(20cm * calc(1 - var(--tw-divide-x-reverse)));
 }
 .divide-x-\[calc\(20\%-1cm\)\] > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-x-reverse: 0;
-  border-inline-end-width: calc(calc(20% - 1cm) * var(--tw-divide-x-reverse));
-  border-inline-start-width: calc(calc(20% - 1cm) * calc(1 - var(--tw-divide-x-reverse)));
+  border-right-width: calc(calc(20% - 1cm) * var(--tw-divide-x-reverse));
+  border-left-width: calc(calc(20% - 1cm) * calc(1 - var(--tw-divide-x-reverse)));
 }
 .divide-y-\[20cm\] > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-y-reverse: 0;

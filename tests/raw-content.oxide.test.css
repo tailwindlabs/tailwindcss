@@ -179,12 +179,6 @@
 .table-fixed {
   table-layout: fixed;
 }
-.caption-top {
-  caption-side: top;
-}
-.caption-bottom {
-  caption-side: bottom;
-}
 .border-collapse {
   border-collapse: collapse;
 }
@@ -329,8 +323,8 @@
 }
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
-  margin-inline-start: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
-  margin-inline-end: calc(1rem * var(--tw-space-x-reverse));
+  margin-right: calc(1rem * var(--tw-space-x-reverse));
+  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .space-y-3 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
@@ -345,13 +339,13 @@
 }
 .divide-x-0 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-x-reverse: 0;
-  border-inline-end-width: calc(0px * var(--tw-divide-x-reverse));
-  border-inline-start-width: calc(0px * calc(1 - var(--tw-divide-x-reverse)));
+  border-right-width: calc(0px * var(--tw-divide-x-reverse));
+  border-left-width: calc(0px * calc(1 - var(--tw-divide-x-reverse)));
 }
 .divide-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-x-reverse: 0;
-  border-inline-end-width: calc(2px * var(--tw-divide-x-reverse));
-  border-inline-start-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
+  border-right-width: calc(2px * var(--tw-divide-x-reverse));
+  border-left-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
 }
 .divide-y-0 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-y-reverse: 0;
