@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add standalone CLI build for 64-bit Windows on ARM (`node16-win-arm64`) ([#10001](https://github.com/tailwindlabs/tailwindcss/pull/10001))
-- [Oxide] Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
 
 ### Fixed
 
