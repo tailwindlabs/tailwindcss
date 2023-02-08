@@ -428,8 +428,8 @@ crosscheck(({ stable, oxide }) => {
         }
         .space-x-\[var\(--any-value\)\] > :not([hidden]) ~ :not([hidden]) {
           --tw-space-x-reverse: 0;
-          margin-inline-start: calc(var(--any-value) * calc(1 - var(--tw-space-x-reverse)));
-          margin-inline-end: calc(var(--any-value) * var(--tw-space-x-reverse));
+          margin-right: calc(var(--any-value) * var(--tw-space-x-reverse));
+          margin-left: calc(var(--any-value) * calc(1 - var(--tw-space-x-reverse)));
         }
         .space-y-\[var\(--any-value\)\] > :not([hidden]) ~ :not([hidden]) {
           --tw-space-y-reverse: 0;

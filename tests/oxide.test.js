@@ -13,8 +13,8 @@ crosscheck(({ stable, oxide }) => {
         ${defaults}
         .space-x-4 > :not([hidden]) ~ :not([hidden]) {
           --tw-space-x-reverse: 0;
-          margin-inline-start: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
-          margin-inline-end: calc(1rem * var(--tw-space-x-reverse));
+          margin-right: calc(1rem * var(--tw-space-x-reverse));
+          margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
         }
       `)
     })
