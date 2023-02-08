@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.2.5] - 2023-02-08
+
 ### Added
 
 - Add standalone CLI build for 64-bit Windows on ARM (`node16-win-arm64`) ([#10001](https://github.com/tailwindlabs/tailwindcss/pull/10001))
@@ -2159,7 +2163,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.5...HEAD
+[3.2.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.4...v3.2.5
 [3.2.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.3...v3.2.4
 [3.2.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.1...v3.2.2

@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -106,9 +106,7 @@
       "/standalone-cli/",
       "\\.test\\.skip\\.js$"
     ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!lightningcss)"
-    ],
+    "transformIgnorePatterns": ["node_modules/(?!lightningcss)"],
     "transform": {
       "\\.js$": "@swc/jest",
       "\\.ts$": "@swc/jest"
