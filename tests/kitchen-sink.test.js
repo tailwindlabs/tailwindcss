@@ -13,7 +13,12 @@ crosscheck(() => {
             ></div>
             <div class="grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
             <div class="test-apply-font-variant"></div>
-            <div class="mt-6"></div>
+            <div class="mt-6 mx-1 ms-4 me-8"></div>
+            <div class="pt-6 px-1 ps-4 pe-8"></div>
+            <div class="inset-6 inset-x-1 start-4 end-8"></div>
+            <div class="border-2 border-s-0 border-e-4"></div>
+            <div class="border-black border-s-green-500 border-e-red-400"></div>
+            <div class="rounded-s rounded-e rounded-ss rounded-es"></div>
             <div class="bg-black"></div>
             <div class="md:hover:border-r-blue-500/30"></div>
             <div class="custom-util"></div>
@@ -204,7 +209,7 @@ crosscheck(() => {
         @apply font-bold group-hover:font-normal;
       }
       .list {
-        @apply space-x-4;
+        @apply space-y-4;
       }
       .nested {
         .example {
@@ -319,9 +324,9 @@ crosscheck(() => {
           font-weight: 400;
         }
         .list > :not([hidden]) ~ :not([hidden]) {
-          --tw-space-x-reverse: 0;
-          margin-right: calc(1rem * var(--tw-space-x-reverse));
-          margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+          --tw-space-y-reverse: 0;
+          margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+          margin-bottom: calc(1rem * var(--tw-space-y-reverse));
         }
         .nested .example {
           font-weight: 700;
@@ -401,6 +406,29 @@ crosscheck(() => {
         .foo .bg-black {
           appearance: none;
         }
+        .inset-6 {
+          inset: 1.5rem;
+        }
+        .inset-x-1 {
+          left: 0.25rem;
+          right: 0.25rem;
+        }
+        .end-8 {
+          inset-inline-end: 2rem;
+        }
+        .start-4 {
+          inset-inline-start: 1rem;
+        }
+        .mx-1 {
+          margin-left: 0.25rem;
+          margin-right: 0.25rem;
+        }
+        .me-8 {
+          margin-inline-end: 2rem;
+        }
+        .ms-4 {
+          margin-inline-start: 1rem;
+        }
         .mt-6 {
           margin-top: 1.5rem;
         }
@@ -418,6 +446,41 @@ crosscheck(() => {
         }
         .grid-cols-\[200px\,repeat\(auto-fill\,minmax\(15\%\,100px\)\)\,300px\] {
           grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
+        }
+        .rounded-e {
+          border-start-end-radius: 0.25rem;
+          border-end-end-radius: 0.25rem;
+        }
+        .rounded-s {
+          border-start-start-radius: 0.25rem;
+          border-end-start-radius: 0.25rem;
+        }
+        .rounded-es {
+          border-end-start-radius: 0.25rem;
+        }
+        .rounded-ss {
+          border-start-start-radius: 0.25rem;
+        }
+        .border-2 {
+          border-width: 2px;
+        }
+        .border-e-4 {
+          border-inline-end-width: 4px;
+        }
+        .border-s-0 {
+          border-inline-start-width: 0;
+        }
+        .border-black {
+          --tw-border-opacity: 1;
+          border-color: rgb(0 0 0 / var(--tw-border-opacity));
+        }
+        .border-e-red-400 {
+          --tw-border-opacity: 1;
+          border-inline-end-color: rgb(248 113 113 / var(--tw-border-opacity));
+        }
+        .border-s-green-500 {
+          --tw-border-opacity: 1;
+          border-inline-start-color: rgb(34 197 94 / var(--tw-border-opacity));
         }
         .bg-black {
           --tw-bg-opacity: 1;
@@ -440,6 +503,19 @@ crosscheck(() => {
           --tw-gradient-from: #bada55;
           --tw-gradient-to: #bada5500;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+        }
+        .px-1 {
+          padding-left: 0.25rem;
+          padding-right: 0.25rem;
+        }
+        .pe-8 {
+          padding-inline-end: 2rem;
+        }
+        .ps-4 {
+          padding-inline-start: 1rem;
+        }
+        .pt-6 {
+          padding-top: 1.5rem;
         }
         .text-center {
           text-align: center;

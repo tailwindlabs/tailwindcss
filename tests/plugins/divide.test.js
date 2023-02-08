@@ -40,8 +40,8 @@ crosscheck(({ stable, oxide }) => {
         ${defaults}
         .divide-x > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-x-reverse: 0;
-          border-right-width: calc(1px * var(--tw-divide-x-reverse));
-          border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+          border-inline-end-width: calc(1px * var(--tw-divide-x-reverse));
+          border-inline-start-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
         }
       `)
     })

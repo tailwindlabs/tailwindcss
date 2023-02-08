@@ -591,6 +591,72 @@ crosscheck(({ stable, oxide }) => {
     })
   })
 
+  test('font-family values are retrieved without font-variation-settings', () => {
+    let input = css`
+      .heading-1 {
+        font-family: theme('fontFamily.sans');
+      }
+      .heading-2 {
+        font-family: theme('fontFamily.serif');
+      }
+      .heading-3 {
+        font-family: theme('fontFamily.mono');
+      }
+    `
+
+    let output = css`
+      .heading-1 {
+        font-family: Inter;
+      }
+      .heading-2 {
+        font-family: Times, serif;
+      }
+      .heading-3 {
+        font-family: Menlo, monospace;
+      }
+    `
+
+    return run(input, {
+      theme: {
+        fontFamily: {
+          sans: ['Inter', { fontVariationSettings: '"opsz" 32' }],
+          serif: [['Times', 'serif'], { fontVariationSettings: '"opsz" 32' }],
+          mono: ['Menlo, monospace', { fontVariationSettings: '"opsz" 32' }],
+        },
+      },
+    }).then((result) => {
+      expect(result.css).toMatchCss(output)
+      expect(result.warnings().length).toBe(0)
+    })
+  })
+
+  test('font-variation-settings values can be retrieved', () => {
+    let input = css`
+      .heading {
+        font-family: theme('fontFamily.sans');
+        font-variation-settings: theme('fontFamily.sans[1].fontVariationSettings');
+      }
+    `
+
+    let output = css`
+      .heading {
+        font-family: Inter;
+        font-variation-settings: 'opsz' 32;
+      }
+    `
+
+    return run(input, {
+      theme: {
+        fontFamily: {
+          sans: ['Inter', { fontVariationSettings: "'opsz' 32" }],
+        },
+      },
+    }).then((result) => {
+      expect(result.css).toMatchCss(output)
+      expect(result.warnings().length).toBe(0)
+    })
+  })
+
   test('font-family values are joined when an array', () => {
     let input = css`
       .element {
