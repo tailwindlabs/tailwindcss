@@ -168,13 +168,7 @@ interface ThemeConfig {
       string,
       | string
       | string[]
-      | [
-          fontFamily: string | string[],
-          configuration: Partial<{
-            fontFeatureSettings: string
-            fontVariationSettings: string
-          }>
-        ]
+      | [fontFamily: string | string[], configuration: Partial<{ fontFeatureSettings: string }>]
     >
   >
   fontSize: ResolvableTo<
