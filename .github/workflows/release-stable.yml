@@ -28,23 +28,21 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
+      - name: Use the `stable` engine
+        run: |
+          node ./scripts/swap-engines.js
+
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
+      - name: Cache node_modules
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('./oxide/**/Cargo.lock') }}
+          path: node_modules
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
         run: npm install
@@ -53,7 +51,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm test
+        run: npm run test
 
       - name: Calculate environment variables
         run: |
