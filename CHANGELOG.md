@@ -64,7 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Alphabetize `theme` keys in default config ([#9953](https://github.com/tailwindlabs/tailwindcss/pull/9953))
 - Update esbuild to v17 ([#10368](https://github.com/tailwindlabs/tailwindcss/pull/10368))
-- Include `outline-color` in `transition` and `transition-colors` utilitires ([#10385](https://github.com/tailwindlabs/tailwindcss/pull/10385))
+- Include `outline-color` in `transition` and `transition-colors` utilities ([#10385](https://github.com/tailwindlabs/tailwindcss/pull/10385))
 
 ## [3.2.4] - 2022-11-11
 
@@ -297,7 +297,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Split box shadows on top-level commas only ([#7479](https://github.com/tailwindlabs/tailwindcss/pull/7479))
 - Use local user CSS cache for `@apply` ([#7524](https://github.com/tailwindlabs/tailwindcss/pull/7524))
 - Invalidate context when main CSS changes ([#7626](https://github.com/tailwindlabs/tailwindcss/pull/7626))
-- Only add `!` to selector class matching template candidate when using important modifier with mutli-class selectors ([#7664](https://github.com/tailwindlabs/tailwindcss/pull/7664))
+- Only add `!` to selector class matching template candidate when using important modifier with multi-class selectors ([#7664](https://github.com/tailwindlabs/tailwindcss/pull/7664))
 - Correctly parse and prefix animation names with dots ([#7163](https://github.com/tailwindlabs/tailwindcss/pull/7163))
 - Fix extraction from template literal/function with array ([#7481](https://github.com/tailwindlabs/tailwindcss/pull/7481))
 - Don't output unparsable arbitrary values ([#7789](https://github.com/tailwindlabs/tailwindcss/pull/7789))
@@ -741,7 +741,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove outdated focus style fix in Preflight ([#4780](https://github.com/tailwindlabs/tailwindcss/pull/4780))
 - Enable `purge` if provided on the CLI ([#4772](https://github.com/tailwindlabs/tailwindcss/pull/4772))
 - JIT: Fix error when not using a config file with postcss-cli ([#4773](https://github.com/tailwindlabs/tailwindcss/pull/4773))
-- Fix issue with `resolveConfig` not being importable in Next.js pags ([#4725](https://github.com/tailwindlabs/tailwindcss/pull/4725))
+- Fix issue with `resolveConfig` not being importable in Next.js pages ([#4725](https://github.com/tailwindlabs/tailwindcss/pull/4725))
 
 ## [2.2.2] - 2021-06-18
 
@@ -876,7 +876,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix issue with `@apply` not working as expected with `!important` inside an atrule ([#2824](https://github.com/tailwindlabs/tailwindcss/pull/2824))
+- Fix issue with `@apply` not working as expected with `!important` inside an at-rule ([#2824](https://github.com/tailwindlabs/tailwindcss/pull/2824))
 - Fix issue with `@apply` not working as expected with defined classes ([#2832](https://github.com/tailwindlabs/tailwindcss/pull/2832))
 - Fix memory leak, and broken `@apply` when splitting up files ([#3032](https://github.com/tailwindlabs/tailwindcss/pull/3032))
 
