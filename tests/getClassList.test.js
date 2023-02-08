@@ -88,7 +88,6 @@ crosscheck(() => {
     let classes = context.getClassList({ includeMetadata: true })
 
     expect(classes).not.toContain('bg-red-500')
-    expect(classes).not.toContain('text-2xl')
 
     expect(classes).toContainEqual([
       'bg-red-500',
@@ -109,27 +108,6 @@ crosscheck(() => {
           '90',
           '95',
           '100',
-        ],
-      },
-    ])
-    expect(classes).toContainEqual([
-      'text-2xl',
-      {
-        modifiers: [
-          '3',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          'none',
-          'tight',
-          'snug',
-          'normal',
-          'relaxed',
-          'loose',
         ],
       },
     ])

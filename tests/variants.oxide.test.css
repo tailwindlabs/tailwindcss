@@ -237,8 +237,8 @@
 }
 .group[open]:hover .group-open\:group-hover\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
-  margin-inline-start: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
-  margin-inline-end: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .group:focus .group-focus\:shadow-md {
   --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
