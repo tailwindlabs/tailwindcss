@@ -291,23 +291,28 @@ crosscheck(({ stable, oxide }) => {
       }
       @keyframes bounce {
         0%,
+        50%,
         100% {
-          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-          transform: translateY(-25%);
-        }
-        50% {
+          transform: translateY(0);
           animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-          transform: none;
+        }
+        25% {
+          transform: translateY(-15%);
+          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+        }
+        75% {
+          transform: translateY(-5%);
+          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
         }
       }
       .hover\:animate-bounce:hover {
-        animation: 1s infinite bounce;
+        animation: 2s infinite bounce;
       }
       .hover\:animate-spin:hover {
         animation: 1s linear infinite spin;
       }
       .focus\:animate-bounce:focus {
-        animation: 1s infinite bounce;
+        animation: 2s infinite bounce;
       }
       .focus\:animate-spin:focus {
         animation: 1s linear infinite spin;

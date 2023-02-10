@@ -25,11 +25,11 @@ crosscheck(() => {
         },
       ],
       [
-        'bounce 1s infinite',
+        'bounce 2s infinite',
         {
-          value: 'bounce 1s infinite',
+          value: 'bounce 2s infinite',
           name: 'bounce',
-          duration: '1s',
+          duration: '2s',
           iterationCount: 'infinite',
         },
       ],

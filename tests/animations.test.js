@@ -36,17 +36,22 @@ crosscheck(() => {
         }
         @keyframes bounce {
           0%,
+          50%,
           100% {
-            animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-            transform: translateY(-25%);
-          }
-          50% {
+            transform: translateY(0);
             animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-            transform: none;
+          }
+          25% {
+            transform: translateY(-15%);
+            animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+          }
+          75% {
+            transform: translateY(-5%);
+            animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
           }
         }
         .group:hover .group-hover\:animate-bounce {
-          animation: 1s infinite bounce;
+          animation: 2s infinite bounce;
         }
       `)
     })
@@ -127,13 +132,18 @@ crosscheck(() => {
       expect(result.css).toMatchFormattedCss(css`
         @keyframes bounce {
           0%,
+          50%,
           100% {
-            animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-            transform: translateY(-25%);
-          }
-          50% {
+            transform: translateY(0);
             animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-            transform: none;
+          }
+          25% {
+            transform: translateY(-15%);
+            animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+          }
+          75% {
+            transform: translateY(-5%);
+            animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
           }
         }
         @keyframes pulse {
