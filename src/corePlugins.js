@@ -1224,6 +1224,7 @@ export let corePlugins = {
       '.justify-between': { 'justify-content': 'space-between' },
       '.justify-around': { 'justify-content': 'space-around' },
       '.justify-evenly': { 'justify-content': 'space-evenly' },
+      '.justify-normal': { 'justify-content': 'normal' },
     })
   },
 
