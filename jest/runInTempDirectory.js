@@ -17,7 +17,7 @@ export default function (callback) {
 
     callback().then(() => {
       process.chdir(currentPath)
-      rimraf(tmpPath, resolve)
+      rimraf(tmpPath).then(resolve)
     })
   })
 }
