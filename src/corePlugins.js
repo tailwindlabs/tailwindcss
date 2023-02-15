@@ -1218,6 +1218,7 @@ export let corePlugins = {
 
   justifyContent: ({ addUtilities }) => {
     addUtilities({
+      '.justify-normal': { 'justify-content': 'normal' },
       '.justify-start': { 'justify-content': 'flex-start' },
       '.justify-end': { 'justify-content': 'flex-end' },
       '.justify-center': { 'justify-content': 'center' },
