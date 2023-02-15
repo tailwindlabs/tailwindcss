@@ -64,7 +64,7 @@
     "prettier": "^2.8.3",
     "rimraf": "^3.0.0",
     "source-map-js": "^1.0.2",
-    "turbo": "^1.7.0"
+    "turbo": "^1.7.4"
   },
   "peerDependencies": {
     "postcss": "^8.0.9"
