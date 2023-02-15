@@ -62,7 +62,7 @@
     "jest": "^29.4.1",
     "jest-diff": "^29.4.1",
     "prettier": "^2.8.4",
-    "rimraf": "^3.0.0",
+    "rimraf": "^4.1.2",
     "source-map-js": "^1.0.2",
     "turbo": "^1.7.4"
   },
