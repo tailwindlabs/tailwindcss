@@ -104,7 +104,7 @@
       "/standalone-cli/",
       "\\.test\\.skip\\.js$"
     ],
-    "transformIgnorePatterns": ["node_modules/(?!lightningcss)"],
+    "transformIgnorePatterns": ["node_modules/(?!lightningcss|rimraf)"],
     "transform": {
       "\\.js$": "@swc/jest",
       "\\.ts$": "@swc/jest"
