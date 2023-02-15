@@ -89,7 +89,7 @@
     "picocolors": "^1.0.0",
     "postcss": "^8.4.21",
     "postcss-import": "^14.1.0",
-    "postcss-js": "^4.0.0",
+    "postcss-js": "^4.0.1",
     "postcss-load-config": "^3.1.4",
     "postcss-nested": "6.0.0",
     "postcss-selector-parser": "^6.0.11",
