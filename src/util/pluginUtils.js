@@ -23,36 +23,18 @@ import { flagEnabled } from '../featureFlags.js'
 import { eliminateIrrelevantSelectors } from './formatVariantSelector.js'
 
 /**
- * @param {string} selectors
+ * @param {import('postcss-selector-parser').Container} selectors
  * @param {(className: string) => string} updateClass
  * @returns {string}
  */
 export function updateAllClasses(selectors, updateClass) {
-  let root = selectorParser().astSync(selectors)
-
-  root.walkClasses((sel) => {
+  selectors.walkClasses((sel) => {
     sel.value = updateClass(sel.value)
 
     if (sel.raws && sel.raws.value) {
       sel.raws.value = escapeCommas(sel.raws.value)
     }
   })
-
-  return root.toString()
-}
-
-/**
- * @param {string} selectors
- * @param {string} classCandidate
- * @returns {string}
- */
-export function filterSelectorsForClass(selectors, classCandidate) {
-  let root = selectorParser().astSync(selectors)
-
-  // Remove extraneous selectors that do not include the base candidate
-  root.each((sel) => eliminateIrrelevantSelectors(sel, classCandidate))
-
-  return root.toString()
 }
 
 function resolveArbitraryValue(modifier, validate) {
