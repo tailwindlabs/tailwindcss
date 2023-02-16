@@ -1,4 +1,3 @@
-import selectorParser from 'postcss-selector-parser'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
 import {
@@ -20,7 +19,6 @@ import {
 import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
 import { flagEnabled } from '../featureFlags.js'
-import { eliminateIrrelevantSelectors } from './formatVariantSelector.js'
 
 /**
  * @param {import('postcss-selector-parser').Container} selectors

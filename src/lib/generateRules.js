@@ -3,7 +3,7 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses, filterSelectorsForClass, getMatchingTypes } from '../util/pluginUtils'
+import { updateAllClasses, getMatchingTypes } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
 import {
