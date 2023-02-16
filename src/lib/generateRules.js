@@ -3,10 +3,14 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses, filterSelectorsForClass, getMatchingTypes } from '../util/pluginUtils'
+import { updateAllClasses, getMatchingTypes } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
-import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
+import {
+  formatVariantSelector,
+  finalizeSelector,
+  eliminateIrrelevantSelectors,
+} from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
@@ -111,22 +115,28 @@ function applyImportant(matches, classCandidate) {
   if (matches.length === 0) {
     return matches
   }
+
   let result = []
 
   for (let [meta, rule] of matches) {
     let container = postcss.root({ nodes: [rule.clone()] })
+
     container.walkRules((r) => {
-      r.selector = updateAllClasses(
-        filterSelectorsForClass(r.selector, classCandidate),
-        (className) => {
-          if (className === classCandidate) {
-            return `!${className}`
-          }
-          return className
-        }
+      let ast = selectorParser().astSync(r.selector)
+
+      // Remove extraneous selectors that do not include the base candidate
+      ast.each((sel) => eliminateIrrelevantSelectors(sel, classCandidate))
+
+      // Update all instances of the base candidate to include the important marker
+      updateAllClasses(ast, (className) =>
+        className === classCandidate ? `!${className}` : className
       )
+
+      r.selector = ast.toString()
+
       r.walkDecls((d) => (d.important = true))
     })
+
     result.push([{ ...meta, important: true }, container.nodes[0]])
   }
 
