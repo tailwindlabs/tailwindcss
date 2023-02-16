@@ -120,7 +120,7 @@ function resortSelector(sel) {
  * @param {Selector} ast
  * @param {string} base
  */
-function eliminateIrrelevantSelectors(sel, base) {
+export function eliminateIrrelevantSelectors(sel, base) {
   let hasClassesMatchingCandidate = false
 
   sel.walk((child) => {

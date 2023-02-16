@@ -20,6 +20,7 @@ import {
 import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
 import { flagEnabled } from '../featureFlags.js'
+import { eliminateIrrelevantSelectors } from './formatVariantSelector.js'
 
 /**
  * @param {string} selectors
@@ -40,21 +41,18 @@ export function updateAllClasses(selectors, updateClass) {
   return root.toString()
 }
 
+/**
+ * @param {string} selectors
+ * @param {string} classCandidate
+ * @returns {string}
+ */
 export function filterSelectorsForClass(selectors, classCandidate) {
-  let parser = selectorParser((selectors) => {
-    selectors.each((sel) => {
-      const containsClass = sel.nodes.some(
-        (node) => node.type === 'class' && node.value === classCandidate
-      )
-      if (!containsClass) {
-        sel.remove()
-      }
-    })
-  })
+  let root = selectorParser().astSync(selectors)
 
-  let result = parser.processSync(selectors)
+  // Remove extraneous selectors that do not include the base candidate
+  root.each((sel) => eliminateIrrelevantSelectors(sel, classCandidate))
 
-  return result
+  return root.toString()
 }
 
 function resolveArbitraryValue(modifier, validate) {
