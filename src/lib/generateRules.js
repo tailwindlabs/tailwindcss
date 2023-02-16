@@ -6,7 +6,11 @@ import prefixSelector from '../util/prefixSelector'
 import { updateAllClasses, filterSelectorsForClass, getMatchingTypes } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
-import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
+import {
+  formatVariantSelector,
+  finalizeSelector,
+  eliminateIrrelevantSelectors,
+} from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
