@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix use of `:where(.btn)` when matching `!btn` ([#10601](https://github.com/tailwindlabs/tailwindcss/pull/10601))
+- Revert including `outline-color` in `transition` and `transition-colors` by default ([#10604](https://github.com/tailwindlabs/tailwindcss/pull/10604))
 
 ## [3.2.6] - 2023-02-08
 
