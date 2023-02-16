@@ -21,20 +21,23 @@ import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
 import { flagEnabled } from '../featureFlags.js'
 
+/**
+ * @param {string} selectors
+ * @param {(className: string) => string} updateClass
+ * @returns {string}
+ */
 export function updateAllClasses(selectors, updateClass) {
-  let parser = selectorParser((selectors) => {
-    selectors.walkClasses((sel) => {
-      let updatedClass = updateClass(sel.value)
-      sel.value = updatedClass
-      if (sel.raws && sel.raws.value) {
-        sel.raws.value = escapeCommas(sel.raws.value)
-      }
-    })
+  let root = selectorParser().astSync(selectors)
+
+  root.walkClasses((sel) => {
+    sel.value = updateClass(sel.value)
+
+    if (sel.raws && sel.raws.value) {
+      sel.raws.value = escapeCommas(sel.raws.value)
+    }
   })
 
-  let result = parser.processSync(selectors)
-
-  return result
+  return root.toString()
 }
 
 export function filterSelectorsForClass(selectors, classCandidate) {
