@@ -1,4 +1,3 @@
-import selectorParser from 'postcss-selector-parser'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
 import {
@@ -21,37 +20,19 @@ import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
 import { flagEnabled } from '../featureFlags.js'
 
+/**
+ * @param {import('postcss-selector-parser').Container} selectors
+ * @param {(className: string) => string} updateClass
+ * @returns {string}
+ */
 export function updateAllClasses(selectors, updateClass) {
-  let parser = selectorParser((selectors) => {
-    selectors.walkClasses((sel) => {
-      let updatedClass = updateClass(sel.value)
-      sel.value = updatedClass
-      if (sel.raws && sel.raws.value) {
-        sel.raws.value = escapeCommas(sel.raws.value)
-      }
-    })
+  selectors.walkClasses((sel) => {
+    sel.value = updateClass(sel.value)
+
+    if (sel.raws && sel.raws.value) {
+      sel.raws.value = escapeCommas(sel.raws.value)
+    }
   })
-
-  let result = parser.processSync(selectors)
-
-  return result
-}
-
-export function filterSelectorsForClass(selectors, classCandidate) {
-  let parser = selectorParser((selectors) => {
-    selectors.each((sel) => {
-      const containsClass = sel.nodes.some(
-        (node) => node.type === 'class' && node.value === classCandidate
-      )
-      if (!containsClass) {
-        sel.remove()
-      }
-    })
-  })
-
-  let result = parser.processSync(selectors)
-
-  return result
 }
 
 function resolveArbitraryValue(modifier, validate) {
