@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.2.7] - 2023-02-16
+
 ### Fixed
 
 - Fix use of `:where(.btn)` when matching `!btn` ([#10601](https://github.com/tailwindlabs/tailwindcss/pull/10601))
@@ -2172,7 +2176,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.6...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.7...HEAD
+[3.2.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.6...v3.2.7
 [3.2.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.5...v3.2.6
 [3.2.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.4...v3.2.5
 [3.2.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.3...v3.2.4
