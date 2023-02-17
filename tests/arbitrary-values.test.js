@@ -105,7 +105,7 @@ crosscheck(({ stable, oxide }) => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-\[\#ff0000\] {
           --tw-bg-opacity: 1;
           background-color: rgb(255 0 0 / var(--tw-bg-opacity));
@@ -122,6 +122,32 @@ crosscheck(({ stable, oxide }) => {
         .bg-red-500 {
           --tw-bg-opacity: 1;
           background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .bg-\[url\(\'\/image-1-0\.png\'\)\] {
+          background-image: url('/image-1-0.png');
+        }
+        .bg-\[url\:var\(--image-url\)\] {
+          background-image: var(--image-url);
+        }
+        .bg-gradient-to-r {
+          background-image: linear-gradient(to right, var(--tw-gradient-stops));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-\[\#ff0000\] {
+          background-color: red;
+        }
+        .bg-\[color\:var\(--bg-color\)\] {
+          background-color: var(--bg-color);
+        }
+        .bg-\[hsl\(var\(--bg-color\)\)\] {
+          background-color: hsl(var(--bg-color));
+        }
+        .bg-\[rgb\(var\(--bg-color\)\)\] {
+          background-color: rgb(var(--bg-color));
+        }
+        .bg-red-500 {
+          background-color: #ef4444;
         }
         .bg-\[url\(\'\/image-1-0\.png\'\)\] {
           background-image: url('/image-1-0.png');

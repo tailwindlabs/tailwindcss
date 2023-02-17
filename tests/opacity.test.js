@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   test('opacity', () => {
     let config = {
       darkMode: 'class',
@@ -25,7 +25,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .divide-black > :not([hidden]) ~ :not([hidden]),
         .border-black {
           border-color: #000;
@@ -73,7 +73,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .divide-primary > :not([hidden]) ~ :not([hidden]),
         .border-primary {
           border-color: rgb(var(--color-primary));
@@ -117,7 +117,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .divide-primary > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-opacity: 1;
           border-color: rgb(var(--color-primary) / var(--tw-divide-opacity));
@@ -159,6 +159,22 @@ crosscheck(() => {
         }
         .ring-opacity-50 {
           --tw-ring-opacity: 0.5;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .divide-primary > :not([hidden]) ~ :not([hidden]),
+        .border-primary {
+          border-color: rgb(var(--color-primary) / 1);
+        }
+        .bg-primary {
+          background-color: rgb(var(--color-primary) / 1);
+        }
+        .text-primary,
+        .placeholder-primary::placeholder {
+          color: rgb(var(--color-primary) / 1);
+        }
+        .ring-primary {
+          --tw-ring-color: rgb(var(--color-primary) / 1);
         }
       `)
     })
@@ -269,7 +285,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .divide-primary > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-opacity: 1;
           border-color: hsl(var(--color-primary) / var(--tw-divide-opacity));
@@ -313,6 +329,22 @@ crosscheck(() => {
           --tw-ring-opacity: 0.5;
         }
       `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .divide-primary > :not([hidden]) ~ :not([hidden]),
+        .border-primary {
+          border-color: hsl(var(--color-primary) / 1);
+        }
+        .bg-primary {
+          background-color: hsl(var(--color-primary) / 1);
+        }
+        .text-primary,
+        .placeholder-primary::placeholder {
+          color: hsl(var(--color-primary) / 1);
+        }
+        .ring-primary {
+          --tw-ring-color: hsl(var(--color-primary) / 1);
+        }
+      `)
     })
   })
 
@@ -352,7 +384,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .divide-primary > :not([hidden]) ~ :not([hidden]) {
           border-color: hsl(var(--color-primary) / 1);
         }
@@ -416,7 +448,7 @@ crosscheck(() => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
@@ -444,7 +476,7 @@ crosscheck(() => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
@@ -472,7 +504,7 @@ crosscheck(() => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
@@ -500,7 +532,7 @@ crosscheck(() => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
@@ -528,7 +560,7 @@ crosscheck(() => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
@@ -556,7 +588,7 @@ crosscheck(() => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
@@ -588,7 +620,7 @@ crosscheck(() => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
@@ -620,7 +652,7 @@ crosscheck(() => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
@@ -641,7 +673,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .bg-primary {
           --tw-bg-opacity: 1;
           background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
@@ -666,7 +698,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .bg-primary\/50 {
           background-color: rgb(var(--color-primary) / 0.5);
         }
@@ -690,7 +722,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .bg-primary {
           background-color: rgb(var(--color-primary) / 1);
         }
@@ -714,7 +746,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .bg-\[rgb\(var\(--color-primary\)\/\<alpha-value\>\)\]\/50 {
           background-color: rgb(var(--color-primary) / 0.5);
         }
@@ -743,10 +775,18 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-foo1 {
           --tw-bg-opacity: 1;
           background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        }
+        .bg-foo2 {
+          background-color: #00000080;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-foo1 {
+          background-color: #000;
         }
         .bg-foo2 {
           background-color: #00000080;
@@ -791,7 +831,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-foo10 {
           background-color: #ff6400;
         }
@@ -814,6 +854,32 @@ crosscheck(() => {
         .bg-foo40 {
           --tw-bg-opacity: 1;
           background-color: rgb(255 100 0 / var(--tw-bg-opacity));
+        }
+        .bg-foo41 {
+          background-color: #ff640080;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-foo10 {
+          background-color: #ff6400;
+        }
+        .bg-foo11 {
+          background-color: #ff640080;
+        }
+        .bg-foo20 {
+          background-color: #ff6400;
+        }
+        .bg-foo21 {
+          background-color: #ff640080;
+        }
+        .bg-foo30 {
+          background-color: #ff6400;
+        }
+        .bg-foo31 {
+          background-color: #ff640080;
+        }
+        .bg-foo40 {
+          background-color: #ff6400;
         }
         .bg-foo41 {
           background-color: #ff640080;
@@ -848,7 +914,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .divide-blue-300 > :not([hidden]) ~ :not([hidden]) {
           border-color: #93c5fd;
         }
@@ -941,7 +1007,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      expect(result.css).toMatchFormattedCss(css`
         .divide-blue-300 > :not([hidden]) ~ :not([hidden]) {
           --tw-divide-opacity: 1;
           border-color: rgb(147 197 253 / var(--tw-divide-opacity));
@@ -1037,7 +1103,7 @@ crosscheck(() => {
 
     let result = await run('@tailwind utilities', config)
 
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .text-primary-hsla\/50 {
         color: hsla(var(--color), 0.5);
       }

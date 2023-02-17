@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   test('basic color opacity modifier', async () => {
     let config = {
       content: [{ raw: html`<div class="bg-red-500/50"></div>` }],
@@ -28,10 +28,15 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-red-500\/50 {
           --tw-bg-opacity: 1;
           background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-red-500\/50 {
+          background-color: red;
         }
       `)
     })
@@ -205,7 +210,7 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-\[hsl\(123\,50\%\,var\(--foo\)\)\] {
           --tw-bg-opacity: 1;
           background-color: hsl(123 50% var(--foo) / var(--tw-bg-opacity));
@@ -223,6 +228,29 @@ crosscheck(() => {
         .bg-\[hsl\(var\(--foo\)\,50\%\,50\%\)\] {
           --tw-bg-opacity: 1;
           background-color: hsl(var(--foo) 50% 50% / var(--tw-bg-opacity));
+        }
+        .bg-\[hsl\(var\(--foo\)\,50\%\,50\%\)\]\/50 {
+          background-color: hsl(var(--foo) 50% 50% / 0.5);
+        }
+        .bg-\[hsl\(var\(--foo\)\,var\(--bar\)\,var\(--baz\)\)\]\/50 {
+          background-color: hsl(var(--foo) var(--bar) var(--baz) / 0.5);
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-\[hsl\(123\,50\%\,var\(--foo\)\)\] {
+          background-color: hsl(123, 50%, var(--foo));
+        }
+        .bg-\[hsl\(123\,50\%\,var\(--foo\)\)\]\/50 {
+          background-color: hsl(123 50% var(--foo) / 0.5);
+        }
+        .bg-\[hsl\(123\,var\(--foo\)\,50\%\)\] {
+          background-color: hsl(123, var(--foo), 50%);
+        }
+        .bg-\[hsl\(123\,var\(--foo\)\,50\%\)\]\/50 {
+          background-color: hsl(123 var(--foo) 50% / 0.5);
+        }
+        .bg-\[hsl\(var\(--foo\)\,50\%\,50\%\)\] {
+          background-color: hsl(var(--foo), 50%, 50%);
         }
         .bg-\[hsl\(var\(--foo\)\,50\%\,50\%\)\]\/50 {
           background-color: hsl(var(--foo) 50% 50% / 0.5);

@@ -3,7 +3,7 @@ import { createContext } from '../src/lib/setupContextUtils'
 
 import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   test('partial arbitrary variants', () => {
     let config = {
       content: [
@@ -24,13 +24,21 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .potato-baked .potato-\[baked\]\:w-3 {
           width: 0.75rem;
         }
         .potato-yellow .potato-\[yellow\]\:bg-yellow-200 {
           --tw-bg-opacity: 1;
           background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .potato-baked .potato-\[baked\]\:w-3 {
+          width: 0.75rem;
+        }
+        .potato-yellow .potato-\[yellow\]\:bg-yellow-200 {
+          background-color: #fef08a;
         }
       `)
     })
@@ -56,7 +64,7 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         @media (potato: baked) {
           .potato-\[baked\]\:w-3 {
             width: 0.75rem;
@@ -66,6 +74,18 @@ crosscheck(() => {
           .potato-\[yellow\]\:bg-yellow-200 {
             --tw-bg-opacity: 1;
             background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+          }
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        @media (potato: baked) {
+          .potato-\[baked\]\:w-3 {
+            width: 0.75rem;
+          }
+        }
+        @media (potato: yellow) {
+          .potato-\[yellow\]\:bg-yellow-200 {
+            background-color: #fef08a;
           }
         }
       `)
@@ -92,7 +112,7 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         @media (potato: baked) {
           .potato-\[baked\]\:w-3:potato {
             width: 0.75rem;
@@ -102,6 +122,18 @@ crosscheck(() => {
           .potato-\[yellow\]\:bg-yellow-200:potato {
             --tw-bg-opacity: 1;
             background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+          }
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        @media (potato: baked) {
+          .potato-\[baked\]\:w-3:potato {
+            width: 0.75rem;
+          }
+        }
+        @media (potato: yellow) {
+          .potato-\[yellow\]\:bg-yellow-200:potato {
+            background-color: #fef08a;
           }
         }
       `)
