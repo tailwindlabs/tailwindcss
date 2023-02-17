@@ -8,6 +8,9 @@ let defaults = {
   get disableColorOpacityUtilitiesByDefault() {
     return env.OXIDE
   },
+  get relativeContentPathsByDefault() {
+    return env.OXIDE
+  },
 }
 
 let featureFlags = {
