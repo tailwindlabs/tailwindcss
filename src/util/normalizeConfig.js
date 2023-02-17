@@ -1,3 +1,4 @@
+import { flagEnabled } from '../featureFlags'
 import log, { dim } from './log'
 
 export function normalizeConfig(config) {
@@ -189,7 +190,7 @@ export function normalizeConfig(config) {
         return content.relative
       }
 
-      return config.future?.relativeContentPathsByDefault ?? false
+      return flagEnabled(config, 'relativeContentPathsByDefault')
     })(),
 
     files: (() => {

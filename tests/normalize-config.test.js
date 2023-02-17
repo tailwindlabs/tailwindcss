@@ -36,19 +36,21 @@ crosscheck(({ stable, oxide }) => {
 
   oxide.test.todo('should normalize extractors')
   stable.test.each`
-  config
-  ${{ content: [{ raw: 'text-center' }], purge: { extract: () => ['font-bold'] } }}
-  ${{ content: [{ raw: 'text-center' }], purge: { extract: { DEFAULT: () => ['font-bold'] } } }}
-  ${{
-    content: [{ raw: 'text-center' }],
-    purge: { options: { defaultExtractor: () => ['font-bold'] } },
-  }}
-  ${{
-    content: [{ raw: 'text-center' }],
-    purge: { options: { extractors: [{ extractor: () => ['font-bold'], extensions: ['html'] }] } },
-  }}
-  ${{ content: [{ raw: 'text-center' }], purge: { extract: { html: () => ['font-bold'] } } }}
-`('should normalize extractors $config', ({ config }) => {
+    config
+    ${{ content: [{ raw: 'text-center' }], purge: { extract: () => ['font-bold'] } }}
+    ${{ content: [{ raw: 'text-center' }], purge: { extract: { DEFAULT: () => ['font-bold'] } } }}
+    ${{
+      content: [{ raw: 'text-center' }],
+      purge: { options: { defaultExtractor: () => ['font-bold'] } },
+    }}
+    ${{
+      content: [{ raw: 'text-center' }],
+      purge: {
+        options: { extractors: [{ extractor: () => ['font-bold'], extensions: ['html'] }] },
+      },
+    }}
+    ${{ content: [{ raw: 'text-center' }], purge: { extract: { html: () => ['font-bold'] } } }}
+  `('should normalize extractors $config', ({ config }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
         .font-bold {
@@ -111,9 +113,15 @@ crosscheck(({ stable, oxide }) => {
       content: ['./example-folder/**/*.{html,js}'],
     }
 
-    expect(normalizeConfig(resolveConfig(config)).content).toEqual({
+    stable.expect(normalizeConfig(resolveConfig(config)).content).toEqual({
       files: ['./example-folder/**/*.{html,js}'],
       relative: false,
+      extract: {},
+      transform: {},
+    })
+    oxide.expect(normalizeConfig(resolveConfig(config)).content).toEqual({
+      files: ['./example-folder/**/*.{html,js}'],
+      relative: true,
       extract: {},
       transform: {},
     })
@@ -130,14 +138,26 @@ crosscheck(({ stable, oxide }) => {
       ],
     }
 
+    let normalizedConfig = normalizeConfig(resolveConfig(config)).content
+
     // No rewrite happens
-    expect(normalizeConfig(resolveConfig(config)).content).toEqual({
+    stable.expect(normalizedConfig).toEqual({
       files: [
         './{example-folder}/**/*.{html,js}',
         './{example-folder}/**/*.{html}',
         './example-folder/**/*.{html}',
       ],
       relative: false,
+      extract: {},
+      transform: {},
+    })
+    oxide.expect(normalizedConfig).toEqual({
+      files: [
+        './{example-folder}/**/*.{html,js}',
+        './{example-folder}/**/*.{html}',
+        './example-folder/**/*.{html}',
+      ],
+      relative: true,
       extract: {},
       transform: {},
     })
