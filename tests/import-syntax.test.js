@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   test('using @import instead of @tailwind', () => {
     let config = {
       content: [
@@ -33,7 +33,7 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         h1 {
           font-size: 32px;
         }
@@ -72,6 +72,51 @@ crosscheck(() => {
         .bg-black {
           --tw-bg-opacity: 1;
           background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        }
+        @media (min-width: 768px) {
+          .md\:hover\:text-center:hover {
+            text-align: center;
+          }
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        h1 {
+          font-size: 32px;
+        }
+        ${defaults}
+        .container {
+          width: 100%;
+        }
+        @media (min-width: 640px) {
+          .container {
+            max-width: 640px;
+          }
+        }
+        @media (min-width: 768px) {
+          .container {
+            max-width: 768px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .container {
+            max-width: 1024px;
+          }
+        }
+        @media (min-width: 1280px) {
+          .container {
+            max-width: 1280px;
+          }
+        }
+        @media (min-width: 1536px) {
+          .container {
+            max-width: 1536px;
+          }
+        }
+        .mt-6 {
+          margin-top: 1.5rem;
+        }
+        .bg-black {
+          background-color: #000;
         }
         @media (min-width: 768px) {
           .md\:hover\:text-center:hover {

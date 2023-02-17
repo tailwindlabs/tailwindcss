@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css } from '../util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   test('opacity variables are given to colors defined as closures', () => {
     let config = {
       content: [
@@ -32,7 +32,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .from-primary {
           --tw-gradient-from: #1f1f1f;
           --tw-gradient-to: #1f1f1f00;
@@ -67,6 +67,38 @@ crosscheck(() => {
         }
         .text-opacity-50 {
           --tw-text-opacity: 0.5;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .from-primary {
+          --tw-gradient-from: #1f1f1f;
+          --tw-gradient-to: #1f1f1f00;
+          --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+        }
+        .from-secondary {
+          --tw-gradient-from: #bf5540;
+          --tw-gradient-to: #bf554000;
+          --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+        }
+        .via-primary {
+          --tw-gradient-to: #1f1f1f00;
+          --tw-gradient-stops: var(--tw-gradient-from), #1f1f1f, var(--tw-gradient-to);
+        }
+        .via-secondary {
+          --tw-gradient-to: #bf554000;
+          --tw-gradient-stops: var(--tw-gradient-from), #bf5540, var(--tw-gradient-to);
+        }
+        .to-primary {
+          --tw-gradient-to: #1f1f1f;
+        }
+        .to-secondary {
+          --tw-gradient-to: #bf5540;
+        }
+        .text-primary {
+          color: #1f1f1f;
+        }
+        .text-secondary {
+          color: #bf5540;
         }
       `)
     })

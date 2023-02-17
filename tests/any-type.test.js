@@ -444,9 +444,6 @@ crosscheck(({ stable, oxide }) => {
         .divide-\[var\(--any-value\)\] > :not([hidden]) ~ :not([hidden]) {
           border-color: var(--any-value);
         }
-        .divide-opacity-\[var\(--any-value\)\] > :not([hidden]) ~ :not([hidden]) {
-          --tw-divide-opacity: var(--any-value);
-        }
         .rounded-\[var\(--any-value\)\] {
           border-radius: var(--any-value);
         }
@@ -501,14 +498,8 @@ crosscheck(({ stable, oxide }) => {
         .border-t-\[var\(--any-value\)\] {
           border-top-color: var(--any-value);
         }
-        .border-opacity-\[var\(--any-value\)\] {
-          --tw-border-opacity: var(--any-value);
-        }
         .bg-\[var\(--any-value\)\] {
           background-color: var(--any-value);
-        }
-        .bg-opacity-\[var\(--any-value\)\] {
-          --tw-bg-opacity: var(--any-value);
         }
         .from-\[var\(--any-value\)\] {
           --tw-gradient-from: var(--any-value);
@@ -572,9 +563,6 @@ crosscheck(({ stable, oxide }) => {
         .text-\[var\(--any-value\)\] {
           color: var(--any-value);
         }
-        .text-opacity-\[var\(--any-value\)\] {
-          --tw-text-opacity: var(--any-value);
-        }
         .decoration-\[var\(--any-value\)\] {
           text-decoration-color: var(--any-value);
         }
@@ -583,9 +571,6 @@ crosscheck(({ stable, oxide }) => {
         }
         .placeholder-\[var\(--any-value\)\]::placeholder {
           color: var(--any-value);
-        }
-        .placeholder-opacity-\[var\(--any-value\)\]::placeholder {
-          --tw-placeholder-opacity: var(--any-value);
         }
         .caret-\[var\(--any-value\)\] {
           caret-color: var(--any-value);
@@ -608,9 +593,6 @@ crosscheck(({ stable, oxide }) => {
         }
         .ring-\[var\(--any-value\)\] {
           --tw-ring-color: var(--any-value);
-        }
-        .ring-opacity-\[var\(--any-value\)\] {
-          --tw-ring-opacity: var(--any-value);
         }
         .ring-offset-\[var\(--any-value\)\] {
           --tw-ring-offset-color: var(--any-value);
@@ -743,15 +725,12 @@ crosscheck(({ stable, oxide }) => {
         .duration-\[var\(--any-value\)\] {
           transition-duration: var(--any-value);
         }
-
         .ease-\[var\(--any-value\)\] {
           transition-timing-function: var(--any-value);
         }
-
         .will-change-\[var\(--any-value\)\] {
           will-change: var(--any-value);
         }
-
         .content-\[var\(--any-value\)\] {
           --tw-content: var(--any-value);
           content: var(--tw-content);

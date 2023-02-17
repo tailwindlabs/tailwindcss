@@ -1,13 +1,13 @@
 import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   it('should not safelist anything', () => {
     let config = {
       content: [{ raw: html`<div class="uppercase"></div>` }],
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      return expect(result.css).toMatchFormattedCss(css`
         .uppercase {
           text-transform: uppercase;
         }
@@ -22,7 +22,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .mt-\[20px\] {
           margin-top: 20px;
         }
@@ -35,6 +35,23 @@ crosscheck(() => {
         .text-gray-200 {
           --tw-text-opacity: 1;
           color: rgb(229 231 235 / var(--tw-text-opacity));
+        }
+        .hover\:underline:hover {
+          text-decoration-line: underline;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .mt-\[20px\] {
+          margin-top: 20px;
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .uppercase {
+          text-transform: uppercase;
+        }
+        .text-gray-200 {
+          color: #e5e7eb;
         }
         .hover\:underline:hover {
           text-decoration-line: underline;
@@ -55,7 +72,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-red-100 {
           --tw-bg-opacity: 1;
           background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -74,6 +91,23 @@ crosscheck(() => {
         .hover\:bg-red-200:hover {
           --tw-bg-opacity: 1;
           background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-red-100 {
+          background-color: #fee2e2;
+        }
+        .bg-red-200 {
+          background-color: #fecaca;
+        }
+        .uppercase {
+          text-transform: uppercase;
+        }
+        .hover\:bg-red-100:hover {
+          background-color: #fee2e2;
+        }
+        .hover\:bg-red-200:hover {
+          background-color: #fecaca;
         }
       `)
     })
@@ -100,7 +134,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-red-100 {
           --tw-bg-opacity: 1;
           background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -121,6 +155,23 @@ crosscheck(() => {
           background-color: rgb(254 202 202 / var(--tw-bg-opacity));
         }
       `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-red-100 {
+          background-color: #fee2e2;
+        }
+        .bg-red-200 {
+          background-color: #fecaca;
+        }
+        .uppercase {
+          text-transform: uppercase;
+        }
+        .hover\:bg-red-100:hover {
+          background-color: #fee2e2;
+        }
+        .hover\:bg-red-200:hover {
+          background-color: #fecaca;
+        }
+      `)
     })
   })
 
@@ -136,7 +187,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .tw-bg-red-100 {
           --tw-bg-opacity: 1;
           background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -144,6 +195,17 @@ crosscheck(() => {
         .tw-bg-red-200 {
           --tw-bg-opacity: 1;
           background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        }
+        .tw-uppercase {
+          text-transform: uppercase;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .tw-bg-red-100 {
+          background-color: #fee2e2;
+        }
+        .tw-bg-red-200 {
+          background-color: #fecaca;
         }
         .tw-uppercase {
           text-transform: uppercase;
@@ -159,7 +221,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      return expect(result.css).toMatchFormattedCss(css`
         .uppercase {
           text-transform: uppercase;
         }
@@ -174,7 +236,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      return expect(result.css).toMatchFormattedCss(css`
         .uppercase {
           text-transform: uppercase;
         }
@@ -194,7 +256,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-red-100 {
           --tw-bg-opacity: 1;
           background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -202,6 +264,17 @@ crosscheck(() => {
         .bg-red-200 {
           --tw-bg-opacity: 1;
           background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+        }
+        .uppercase {
+          text-transform: uppercase;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-red-100 {
+          background-color: #fee2e2;
+        }
+        .bg-red-200 {
+          background-color: #fecaca;
         }
         .uppercase {
           text-transform: uppercase;
@@ -222,7 +295,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      return expect(result.css).toMatchFormattedCss(css`
         .-top-1 {
           top: -0.25rem;
         }
@@ -252,7 +325,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-red-400 {
           --tw-bg-opacity: 1;
           background-color: rgb(248 113 113 / var(--tw-bg-opacity));
@@ -325,7 +398,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      return expect(result.css).toMatchFormattedCss(css`
         .\!grid-cols-4 {
           grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
         }
@@ -350,7 +423,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      return expect(result.css).toMatchFormattedCss(css`
         .\!tw-grid-cols-4 {
           grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
         }
@@ -379,7 +452,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .\!bg-gray-500 {
           --tw-bg-opacity: 1 !important;
           background-color: rgb(107 114 128 / var(--tw-bg-opacity)) !important;
@@ -416,6 +489,35 @@ crosscheck(() => {
           background-color: rgb(31 41 55 / var(--tw-bg-opacity)) !important;
         }
       `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .\!bg-gray-500 {
+          background-color: #6b7280 !important;
+        }
+        .\!bg-gray-600 {
+          background-color: #4b5563 !important;
+        }
+        .\!bg-gray-700 {
+          background-color: #374151 !important;
+        }
+        .\!bg-gray-800 {
+          background-color: #1f2937 !important;
+        }
+        .uppercase {
+          text-transform: uppercase;
+        }
+        .hover\:\!bg-gray-500:hover {
+          background-color: #6b7280 !important;
+        }
+        .hover\:\!bg-gray-600:hover {
+          background-color: #4b5563 !important;
+        }
+        .hover\:\!bg-gray-700:hover {
+          background-color: #374151 !important;
+        }
+        .hover\:\!bg-gray-800:hover {
+          background-color: #1f2937 !important;
+        }
+      `)
     })
   })
 
@@ -435,7 +537,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .\!bg-gray-200 {
           --tw-bg-opacity: 1 !important;
           background-color: rgb(229 231 235 / var(--tw-bg-opacity)) !important;
@@ -486,6 +588,47 @@ crosscheck(() => {
         .hover\:\!text-gray-900:hover {
           --tw-text-opacity: 1 !important;
           color: rgb(17 24 39 / var(--tw-text-opacity)) !important;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .\!bg-gray-200 {
+          background-color: #e5e7eb !important;
+        }
+        .\!bg-gray-300 {
+          background-color: #d1d5db !important;
+        }
+        .\!bg-gray-400 {
+          background-color: #9ca3af !important;
+        }
+        .uppercase {
+          text-transform: uppercase;
+        }
+        .\!text-gray-700 {
+          color: #374151 !important;
+        }
+        .\!text-gray-800 {
+          color: #1f2937 !important;
+        }
+        .\!text-gray-900 {
+          color: #111827 !important;
+        }
+        .hover\:\!bg-gray-200:hover {
+          background-color: #e5e7eb !important;
+        }
+        .hover\:\!bg-gray-300:hover {
+          background-color: #d1d5db !important;
+        }
+        .hover\:\!bg-gray-400:hover {
+          background-color: #9ca3af !important;
+        }
+        .hover\:\!text-gray-700:hover {
+          color: #374151 !important;
+        }
+        .hover\:\!text-gray-800:hover {
+          color: #1f2937 !important;
+        }
+        .hover\:\!text-gray-900:hover {
+          color: #111827 !important;
         }
       `)
     })

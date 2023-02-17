@@ -1,7 +1,7 @@
 import log from '../src/util/log'
 import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   let warn
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      return expect(result.css).toMatchFormattedCss(css`
         .font-bold {
           font-weight: 700;
         }
@@ -67,7 +67,7 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      return expect(result.css).toMatchFormattedCss(css`
         .font-bold {
           font-weight: 700;
         }
@@ -83,10 +83,19 @@ crosscheck(() => {
 
     let result = await run('@tailwind utilities', config)
 
-    expect(result.css).toMatchCss(css`
+    stable.expect(result.css).toMatchFormattedCss(css`
       .bg-\[\#f00d1e\] {
         --tw-bg-opacity: 1;
         background-color: rgb(240 13 30 / var(--tw-bg-opacity));
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+    `)
+
+    oxide.expect(result.css).toMatchFormattedCss(css`
+      .bg-\[\#f00d1e\] {
+        background-color: #f00d1e;
       }
       .font-bold {
         font-weight: 700;
@@ -105,10 +114,18 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-red-400 {
           --tw-bg-opacity: 1;
           background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-red-400 {
+          background-color: #f87171;
         }
         .font-bold {
           font-weight: 700;

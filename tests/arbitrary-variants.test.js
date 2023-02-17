@@ -540,13 +540,21 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .\[\&_\.foo\]\:tw-text-red-400 .foo,
         .\[\&_\.foo\]\:hover\:tw-text-red-400:hover .foo,
         .hover\:\[\&_\.foo\]\:tw-text-red-400 .foo:hover,
         .foo .\[\.foo_\&\]\:tw-text-red-400 {
           --tw-text-opacity: 1;
           color: rgb(248 113 113 / var(--tw-text-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .\[\&_\.foo\]\:tw-text-red-400 .foo,
+        .\[\&_\.foo\]\:hover\:tw-text-red-400:hover .foo,
+        .hover\:\[\&_\.foo\]\:tw-text-red-400 .foo:hover,
+        .foo .\[\.foo_\&\]\:tw-text-red-400 {
+          color: #f87171;
         }
       `)
     })
@@ -577,7 +585,7 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .\[\&_\.foo\]\:tw-bg-white .foo {
           --tw-bg-opacity: 1;
           background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -593,6 +601,20 @@ crosscheck(({ stable, oxide }) => {
         .foo .\[\.foo_\&\]\:tw-text-red-400 {
           --tw-text-opacity: 1;
           color: rgb(248 113 113 / var(--tw-text-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .\[\&_\.foo\]\:tw-bg-white .foo {
+          background-color: #fff;
+        }
+        .\[\&_\.foo\]\:tw-text-red-400 .foo {
+          color: #f87171;
+        }
+        .foo .\[\.foo_\&\]\:tw-bg-white {
+          background-color: #fff;
+        }
+        .foo .\[\.foo_\&\]\:tw-text-red-400 {
+          color: #f87171;
         }
       `)
     })
