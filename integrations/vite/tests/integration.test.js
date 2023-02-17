@@ -2,6 +2,7 @@ require('isomorphic-fetch')
 
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
+let { env } = require('../../../lib/lib/sharedState')
 
 let { readOutputFile, appendToInputFile, writeInputFile } = require('../../io')({
   output: 'dist',
@@ -83,20 +84,38 @@ describe('watcher', () => {
     await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStdout((message) => message.includes('page reload'))
 
-    expect(await fetchCSS()).toIncludeCss(
-      css`
-        .bg-red-500 {
-          --tw-bg-opacity: 1;
-          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-        }
-        .font-bold {
-          font-weight: 700;
-        }
-        .font-normal {
-          font-weight: 400;
-        }
-      `
-    )
+    if (!env.OXIDE) {
+      expect(await fetchCSS()).toIncludeCss(
+        css`
+          .bg-red-500 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+          }
+          .font-bold {
+            font-weight: 700;
+          }
+          .font-normal {
+            font-weight: 400;
+          }
+        `
+      )
+    }
+
+    if (env.OXIDE) {
+      expect(await fetchCSS()).toIncludeCss(
+        css`
+          .bg-red-500 {
+            background-color: #ef4444;
+          }
+          .font-bold {
+            font-weight: 700;
+          }
+          .font-normal {
+            font-weight: 400;
+          }
+        `
+      )
+    }
 
     return runningProcess.stop()
   })
@@ -136,20 +155,38 @@ describe('watcher', () => {
     await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStdout((message) => message.includes('page reload'))
 
-    expect(await fetchCSS()).toIncludeCss(
-      css`
-        .bg-red-500 {
-          --tw-bg-opacity: 1;
-          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-        }
-        .font-bold {
-          font-weight: 700;
-        }
-        .font-normal {
-          font-weight: 400;
-        }
-      `
-    )
+    if (!env.OXIDE) {
+      expect(await fetchCSS()).toIncludeCss(
+        css`
+          .bg-red-500 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+          }
+          .font-bold {
+            font-weight: 700;
+          }
+          .font-normal {
+            font-weight: 400;
+          }
+        `
+      )
+    }
+
+    if (env.OXIDE) {
+      expect(await fetchCSS()).toIncludeCss(
+        css`
+          .bg-red-500 {
+            background-color: #ef4444;
+          }
+          .font-bold {
+            font-weight: 700;
+          }
+          .font-normal {
+            font-weight: 400;
+          }
+        `
+      )
+    }
 
     return runningProcess.stop()
   })
@@ -288,22 +325,42 @@ describe('watcher', () => {
     )
     await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
 
-    expect(await fetchCSS()).toIncludeCss(
-      css`
-        .btn {
-          border-radius: 0.25rem;
-          --tw-bg-opacity: 1;
-          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
-        }
-        .font-bold {
-          font-weight: 700;
-        }
-      `
-    )
+    if (!env.OXIDE) {
+      expect(await fetchCSS()).toIncludeCss(
+        css`
+          .btn {
+            border-radius: 0.25rem;
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+          }
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+    }
+
+    if (env.OXIDE) {
+      expect(await fetchCSS()).toIncludeCss(
+        css`
+          .btn {
+            border-radius: 0.25rem;
+            background-color: #ef4444;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+          }
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+    }
 
     return runningProcess.stop()
   })
