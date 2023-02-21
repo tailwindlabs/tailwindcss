@@ -1203,6 +1203,7 @@ export let corePlugins = {
       '.content-around': { 'align-content': 'space-around' },
       '.content-evenly': { 'align-content': 'space-evenly' },
       '.content-baseline': { 'align-content': 'baseline' },
+      '.content-stretch': { 'align-content': 'stretch' },
     })
   },
 
