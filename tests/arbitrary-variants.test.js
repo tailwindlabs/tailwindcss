@@ -1137,6 +1137,7 @@ crosscheck(({ stable, oxide }) => {
 
             <!-- escaped commas are a-ok -->
             <div class="hover:[.span\,div_&]:p-1"></div>
+            <div class="hover:[:is(span,div)_&]:p-1"></div>
           `,
         },
       ],
@@ -1151,6 +1152,7 @@ crosscheck(({ stable, oxide }) => {
       expect(result.css).toMatchFormattedCss(css`
         .p-1,
         .span\,div .hover\:\[\.span\\\,div_\&\]\:p-1:hover,
+        :is(span, div) .hover\:\[\:is\(span\,div\)_\&\]\:p-1:hover,
         div .\[div_\&\]\:p-1,
         div .hover\:\[div_\&\]\:p-1:hover {
           padding: 0.25rem;
