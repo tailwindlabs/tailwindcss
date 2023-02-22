@@ -385,4 +385,53 @@ crosscheck(() => {
       `)
     })
   })
+
+  // If the user is using an @config directive in their main CSS file
+  // And, for example, also has Vue SFCs with <style> blocks
+  // And that <style> block doesn't have an @config directive
+  // Then we'll end up looking for the default config which
+  // may not exist if the user is using a custom config file
+  // and we want to be sure to handle this situation gracefully
+  test('a missing default config doesnt break the build', async () => {
+    // This is intentionally `undefined`
+    let config = undefined
+
+    // This is like a <style> block in a Vue SFC which doesn't contain an @config directive
+    let input = css`
+      @tailwind utilities;
+      .example {
+        @apply text-red-500/50;
+      }
+    `
+
+    let result = await run(input, config)
+
+    // In this case Tailwind CSS should not be run because there is no config to run it with
+    expect(result.css).toMatchFormattedCss(css`
+      .example {
+        color: #ef444480;
+      }
+    `)
+  })
+
+  test('a missing default config doesnt break the build (object version)', async () => {
+    let config = { config: undefined }
+
+    // This is like a <style> block in a Vue SFC which doesn't contain an @config directive
+    let input = css`
+      @tailwind utilities;
+      .example {
+        @apply text-red-500/50;
+      }
+    `
+
+    let result = await run(input, config)
+
+    // In this case Tailwind CSS should not be run because there is no config to run it with
+    expect(result.css).toMatchFormattedCss(css`
+      .example {
+        color: #ef444480;
+      }
+    `)
+  })
 })

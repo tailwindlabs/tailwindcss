@@ -62,6 +62,13 @@ function getTailwindConfig(configOrPath) {
     return [newConfig, userConfigPath, newHash, newDeps]
   }
 
+  // In this situation we may not have a config
+  // And the `@config` directive is not present
+  // This means we should use the default config
+  if (configOrPath === undefined) {
+    configOrPath = {}
+  }
+
   // It's a plain object, not a path
   let newConfig = resolveConfig(
     configOrPath.config === undefined ? configOrPath : configOrPath.config
