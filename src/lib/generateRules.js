@@ -210,6 +210,11 @@ function applyVariant(variant, matches, context) {
     let selector = normalize(variant.slice(1, -1))
     let selectors = splitAtTopLevelOnly(selector, ',')
 
+    // We do not support multiple selectors for arbitrary variants
+    if (selectors.length > 1) {
+      return []
+    }
+
     if (!selectors.every(isValidVariantFormatString)) {
       return []
     }
