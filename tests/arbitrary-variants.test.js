@@ -1134,11 +1134,13 @@ crosscheck(({ stable, oxide }) => {
             <div class="hover:[div_&,span]:p-1"></div>
             <div class="hover:[div,span_&]:p-1"></div>
             <div class="hover:[div_&,span_&]:p-1"></div>
-
-            <!-- escaped commas are a-ok -->
-            <div class="hover:[.span\,div_&]:p-1"></div>
             <div class="hover:[:is(span,div)_&]:p-1"></div>
           `,
+        },
+        {
+          // escaped commas are a-ok
+          // This is separate because prettier complains about `\,` in the template string
+          raw: '<div class="hover:[.span\\,div_&]:p-1"></div>'
         },
       ],
       corePlugins: { preflight: false },
