@@ -17,15 +17,22 @@ export function splitAtTopLevelOnly(input, separator) {
   let stack = []
   let parts = []
   let lastPos = 0
+  let isEscaped = false
 
   for (let idx = 0; idx < input.length; idx++) {
     let char = input[idx]
 
-    if (stack.length === 0 && char === separator[0]) {
+    if (stack.length === 0 && char === separator[0] && !isEscaped) {
       if (separator.length === 1 || input.slice(idx, idx + separator.length) === separator) {
         parts.push(input.slice(lastPos, idx))
         lastPos = idx + separator.length
       }
+    }
+
+    if (isEscaped) {
+      isEscaped = false
+    } else if (char === '\\') {
+      isEscaped = true
     }
 
     if (char === '(' || char === '[' || char === '{') {

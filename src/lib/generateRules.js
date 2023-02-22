@@ -205,17 +205,26 @@ function applyVariant(variant, matches, context) {
 
   // Register arbitrary variants
   if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
-    let selector = normalize(variant.slice(1, -1))
+    let sort = context.offsets.recordVariant(variant)
 
-    if (!isValidVariantFormatString(selector)) {
+    let selector = normalize(variant.slice(1, -1))
+    let selectors = splitAtTopLevelOnly(selector, ',')
+
+    // We do not support multiple selectors for arbitrary variants
+    if (selectors.length > 1) {
       return []
     }
 
-    let fn = parseVariant(selector)
+    if (!selectors.every(isValidVariantFormatString)) {
+      return []
+    }
 
-    let sort = context.offsets.recordVariant(variant)
+    let records = selectors.map((sel, idx) => [
+      context.offsets.applyParallelOffset(sort, idx),
+      parseVariant(sel.trim()),
+    ])
 
-    context.variantMap.set(variant, [[sort, fn]])
+    context.variantMap.set(variant, records)
   }
 
   if (context.variantMap.has(variant)) {
