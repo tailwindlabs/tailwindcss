@@ -1116,6 +1116,49 @@ crosscheck(({ stable, oxide }) => {
     })
   })
 
+  it('it should discard arbitrary variants with multiple selectors', () => {
+    let config = {
+      content: [
+        {
+          raw: html`
+            <div class="p-1"></div>
+            <div class="[div]:p-1"></div>
+            <div class="[div_&]:p-1"></div>
+            <div class="[div,span]:p-1"></div>
+            <div class="[div_&,span]:p-1"></div>
+            <div class="[div,span_&]:p-1"></div>
+            <div class="[div_&,span_&]:p-1"></div>
+            <div class="hover:[div]:p-1"></div>
+            <div class="hover:[div_&]:p-1"></div>
+            <div class="hover:[div,span]:p-1"></div>
+            <div class="hover:[div_&,span]:p-1"></div>
+            <div class="hover:[div,span_&]:p-1"></div>
+            <div class="hover:[div_&,span_&]:p-1"></div>
+
+            <!-- escaped commas are a-ok -->
+            <div class="hover:[.span\,div_&]:p-1"></div>
+          `,
+        },
+      ],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        .p-1,
+        .span\,div .hover\:\[\.span\\\,div_\&\]\:p-1:hover,
+        div .\[div_\&\]\:p-1,
+        div .hover\:\[div_\&\]\:p-1:hover {
+          padding: 0.25rem;
+        }
+      `)
+    })
+  })
+
   it('should sort multiple variant fns with normal variants between them', () => {
     /** @type {string[]} */
     let lines = []
