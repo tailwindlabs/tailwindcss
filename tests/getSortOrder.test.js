@@ -51,7 +51,7 @@ crosscheck(() => {
     ['px-3 focus:hover:p-3 hover:p-1 py-3', 'px-3 py-3 hover:p-1 focus:hover:p-3'],
 
     // Utitlies with important
-    ['px-3 !py-4', 'px-3 !py-4'],
+    ['px-3 !py-4', '!py-4 px-3'],
     ['!py-4 px-3', '!py-4 px-3'],
 
     // Components with variants
@@ -89,7 +89,7 @@ crosscheck(() => {
     ],
 
     // Utitlies with important
-    ['tw-px-3 !tw-py-4', 'tw-px-3 !tw-py-4'],
+    ['tw-px-3 !tw-py-4', '!tw-py-4 tw-px-3'],
     ['!tw-py-4 tw-px-3', '!tw-py-4 tw-px-3'],
 
     // Components with variants
@@ -115,4 +115,31 @@ crosscheck(() => {
       expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
     }
   )
+
+  it('sorts classes deterministically across multiple class lists', () => {
+    let classes = [
+      [
+        'a-class px-3 p-1 b-class py-3 bg-red-500 bg-blue-500',
+        'a-class b-class bg-blue-500 bg-red-500 p-1 px-3 py-3',
+      ],
+      [
+        'px-3 b-class p-1 py-3 bg-blue-500 a-class bg-red-500',
+        'b-class a-class bg-blue-500 bg-red-500 p-1 px-3 py-3',
+      ],
+    ]
+
+    let config = {}
+
+    // Same context, different class lists
+    let context = createContext(resolveConfig(config))
+    for (const [input, output] of classes) {
+      expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
+    }
+
+    // Different context, different class lists
+    for (const [input, output] of classes) {
+      context = createContext(resolveConfig(config))
+      expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
+    }
+  })
 })

@@ -931,12 +931,19 @@ function registerPlugins(plugins, context) {
     prefix(context, 'peer'),
   ]
   context.getClassOrder = function getClassOrder(classes) {
+    // Sort classes so they're ordered in a deterministic manner
+    let sorted = [...classes].sort((a, z) => {
+      if (a === z) return 0
+      if (a < z) return -1
+      return 1
+    })
+
     // Non-util classes won't be generated, so we default them to null
-    let sortedClassNames = new Map(classes.map((className) => [className, null]))
+    let sortedClassNames = new Map(sorted.map((className) => [className, null]))
 
     // Sort all classes in order
     // Non-tailwind classes won't be generated and will be left as `null`
-    let rules = generateRules(new Set(classes), context)
+    let rules = generateRules(new Set(sorted), context)
     rules = context.offsets.sort(rules)
 
     let idx = BigInt(parasiteUtilities.length)
