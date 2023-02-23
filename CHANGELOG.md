@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Disallow multiple selectors in arbitrary variants ([#10655](https://github.com/tailwindlabs/tailwindcss/pull/10655))
+- Sort class lists deterministically for Prettier plugin ([#10672](https://github.com/tailwindlabs/tailwindcss/pull/10672))
 
 ### Changed
 
