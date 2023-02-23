@@ -267,3 +267,26 @@ export default function (context) {
     })
   }
 }
+
+/**
+ *
+ * @param {import('postcss').Node} node
+ * @returns {boolean}
+ */
+export function hasTailwindFunctions(node) {
+  let property = nodeTypePropertyMap[node.type]
+  if (property === undefined) {
+    return false
+  }
+
+  let hasFunction = false
+
+  parseValue(node[property]).walk((vnode) => {
+    if (vnode.type === 'function' && (vnode.value === 'theme' || vnode.value === 'screen')) {
+      hasFunction = true
+      return false
+    }
+  })
+
+  return hasFunction
+}
