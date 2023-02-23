@@ -34,7 +34,17 @@ function getTailwindConfig(configOrPath) {
     let [prevConfig, prevConfigHash, prevDeps, prevModified] =
       configPathCache.get(userConfigPath) || []
 
-    let newDeps = getModuleDependencies(userConfigPath).map((dep) => dep.file)
+    let newDeps
+
+    try {
+      newDeps = getModuleDependencies(userConfigPath).map((dep) => dep.file)
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        throw new Error(`The config file [${userConfigPath}] could not be found.`)
+      }
+
+      throw err
+    }
 
     let modified = false
     let newModified = new Map()
@@ -55,7 +65,17 @@ function getTailwindConfig(configOrPath) {
     for (let file of newDeps) {
       delete require.cache[file]
     }
-    let newConfig = resolveConfig(require(userConfigPath))
+
+    let newConfig
+    try {
+      newConfig = resolveConfig(require(userConfigPath))
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        throw new Error(`The config file [${userConfigPath}] could not be found.`)
+      }
+
+      throw err
+    }
     newConfig = validateConfig(newConfig)
     let newHash = hash(newConfig)
     configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
@@ -66,7 +86,7 @@ function getTailwindConfig(configOrPath) {
   // And the `@config` directive is not present
   // This means we should use the default config
   if (configOrPath === undefined) {
-    configOrPath = {}
+    throw new Error('You must specify a Tailwind config file path or an object.')
   }
 
   // It's a plain object, not a path

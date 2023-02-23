@@ -386,31 +386,33 @@ crosscheck(() => {
     })
   })
 
-  test.only('a missing config file throws an error (config: default)', async () => {
+  test('a missing config file throws an error (config: default)', async () => {
     let config = undefined
     let result = run(`@tailwind utilities;`, config)
 
-    await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(``)
-  })
-
-  test('a missing config file throws an error (config: object -> default)', async () => {
-    let config = { config: undefined }
-    let result = run(`@tailwind utilities;`, config)
-
-    await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(``)
+    await expect(result).rejects.toThrow(
+      `You must specify a Tailwind config file path or an object.`
+    )
   })
 
   test('a missing config file throws an error (config: named)', async () => {
     let config = './i.do.not.exist.js'
     let result = run(`@tailwind utilities;`, config)
 
-    await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(``)
+    await expect(result).rejects.toThrow(/The config file \[[^[]+\] could not be found/)
   })
 
   test('a missing config file throws an error (config: object -> named)', async () => {
     let config = { config: './i.do.not.exist.js' }
     let result = run(`@tailwind utilities;`, config)
 
-    await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(``)
+    await expect(result).rejects.toThrow(/The config file \[[^[]+\] could not be found/)
+  })
+
+  test('a missing config file does not throw an error if Tailwind does not need to run', async () => {
+    let config = undefined
+    let result = await run(`.example { color: red; }`, config)
+
+    expect(result.css).toMatchFormattedCss(`.example { color: red; }`)
   })
 })
