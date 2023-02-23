@@ -434,4 +434,32 @@ crosscheck(() => {
       }
     `)
   })
+
+  test.only('a missing config file throws an error (config: default)', async () => {
+    let config = undefined
+    let result = run(`@tailwind utilities;`, config)
+
+    await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(``)
+  })
+
+  test('a missing config file throws an error (config: object -> default)', async () => {
+    let config = { config: undefined }
+    let result = run(`@tailwind utilities;`, config)
+
+    await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(``)
+  })
+
+  test('a missing config file throws an error (config: named)', async () => {
+    let config = './i.do.not.exist.js'
+    let result = run(`@tailwind utilities;`, config)
+
+    await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(``)
+  })
+
+  test('a missing config file throws an error (config: object -> named)', async () => {
+    let config = { config: './i.do.not.exist.js' }
+    let result = run(`@tailwind utilities;`, config)
+
+    await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(``)
+  })
 })
