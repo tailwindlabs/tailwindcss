@@ -55,7 +55,7 @@
     "autoprefixer": "^10.4.13",
     "concurrently": "^7.5.0",
     "cssnano": "^5.1.15",
-    "esbuild": "^0.17.4",
+    "esbuild": "^0.17.10",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
