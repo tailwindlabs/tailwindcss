@@ -42,6 +42,9 @@ export async function build(args, configs) {
 
     await processor.watch()
   } else {
-    await processor.build()
+    await processor.build().catch((e) => {
+      console.error(e)
+      process.exit(1)
+    })
   }
 }

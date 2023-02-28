@@ -383,7 +383,11 @@ export async function createProcessor(args, cliConfigPath) {
           // The watcher will start watching the imported CSS files and will be
           // resilient to future errors.
 
-          console.error(err)
+          if (state.watcher) {
+            console.error(err)
+          } else {
+            return Promise.reject(err)
+          }
         }
       )
   }
