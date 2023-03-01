@@ -1196,6 +1196,7 @@ export let corePlugins = {
 
   alignContent: ({ addUtilities }) => {
     addUtilities({
+      '.content-normal': { 'align-content': 'normal' },
       '.content-center': { 'align-content': 'center' },
       '.content-start': { 'align-content': 'flex-start' },
       '.content-end': { 'align-content': 'flex-end' },
@@ -1203,6 +1204,7 @@ export let corePlugins = {
       '.content-around': { 'align-content': 'space-around' },
       '.content-evenly': { 'align-content': 'space-evenly' },
       '.content-baseline': { 'align-content': 'baseline' },
+      '.content-stretch': { 'align-content': 'stretch' },
     })
   },
 
