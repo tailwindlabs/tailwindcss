@@ -1492,6 +1492,7 @@ export let corePlugins = {
       '.whitespace-pre': { 'white-space': 'pre' },
       '.whitespace-pre-line': { 'white-space': 'pre-line' },
       '.whitespace-pre-wrap': { 'white-space': 'pre-wrap' },
+      '.whitespace-break-spaces': { 'white-space': 'break-spaces' },
     })
   },
 
