@@ -46,8 +46,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Build tailwindcss
-        run: npm run prepublishOnly
+      - name: Use the `stable` engine
+        run: |
+          node ./scripts/swap-engines.js
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Tailwind CSS
+        run: npm run build
 
       - name: Install standalone cli dependencies
         run: npm install

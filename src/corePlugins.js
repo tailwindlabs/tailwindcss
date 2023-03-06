@@ -772,6 +772,13 @@ export let corePlugins = {
     })
   },
 
+  captionSide: ({ addUtilities }) => {
+    addUtilities({
+      '.caption-top': { 'caption-side': 'top' },
+      '.caption-bottom': { 'caption-side': 'bottom' },
+    })
+  },
+
   borderCollapse: ({ addUtilities }) => {
     addUtilities({
       '.border-collapse': { 'border-collapse': 'collapse' },
@@ -1189,6 +1196,7 @@ export let corePlugins = {
 
   alignContent: ({ addUtilities }) => {
     addUtilities({
+      '.content-normal': { 'align-content': 'normal' },
       '.content-center': { 'align-content': 'center' },
       '.content-start': { 'align-content': 'flex-start' },
       '.content-end': { 'align-content': 'flex-end' },
@@ -1196,6 +1204,7 @@ export let corePlugins = {
       '.content-around': { 'align-content': 'space-around' },
       '.content-evenly': { 'align-content': 'space-evenly' },
       '.content-baseline': { 'align-content': 'baseline' },
+      '.content-stretch': { 'align-content': 'stretch' },
     })
   },
 
@@ -1211,12 +1220,14 @@ export let corePlugins = {
 
   justifyContent: ({ addUtilities }) => {
     addUtilities({
+      '.justify-normal': { 'justify-content': 'normal' },
       '.justify-start': { 'justify-content': 'flex-start' },
       '.justify-end': { 'justify-content': 'flex-end' },
       '.justify-center': { 'justify-content': 'center' },
       '.justify-between': { 'justify-content': 'space-between' },
       '.justify-around': { 'justify-content': 'space-around' },
       '.justify-evenly': { 'justify-content': 'space-evenly' },
+      '.justify-stretch': { 'justify-content': 'stretch' },
     })
   },
 
@@ -1463,6 +1474,14 @@ export let corePlugins = {
       '.overflow-ellipsis': { 'text-overflow': 'ellipsis' }, // Deprecated
       '.text-ellipsis': { 'text-overflow': 'ellipsis' },
       '.text-clip': { 'text-overflow': 'clip' },
+    })
+  },
+
+  hyphens: ({ addUtilities }) => {
+    addUtilities({
+      '.hyphens-none': { hyphens: 'none' },
+      '.hyphens-manual': { hyphens: 'manual' },
+      '.hyphens-auto': { hyphens: 'auto' },
     })
   },
 
@@ -1907,13 +1926,16 @@ export let corePlugins = {
         font: (value) => {
           let [families, options = {}] =
             Array.isArray(value) && isPlainObject(value[1]) ? value : [value]
-          let { fontFeatureSettings } = options
+          let { fontFeatureSettings, fontVariationSettings } = options
 
           return {
             'font-family': Array.isArray(families) ? families.join(', ') : families,
             ...(fontFeatureSettings === undefined
               ? {}
               : { 'font-feature-settings': fontFeatureSettings }),
+            ...(fontVariationSettings === undefined
+              ? {}
+              : { 'font-variation-settings': fontVariationSettings }),
           }
         },
       },

@@ -3,10 +3,14 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../util/parseObjectStyles'
 import isPlainObject from '../util/isPlainObject'
 import prefixSelector from '../util/prefixSelector'
-import { updateAllClasses, filterSelectorsForClass, getMatchingTypes } from '../util/pluginUtils'
+import { updateAllClasses, getMatchingTypes } from '../util/pluginUtils'
 import log from '../util/log'
 import * as sharedState from './sharedState'
-import { formatVariantSelector, finalizeSelector } from '../util/formatVariantSelector'
+import {
+  formatVariantSelector,
+  finalizeSelector,
+  eliminateIrrelevantSelectors,
+} from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
@@ -111,22 +115,28 @@ function applyImportant(matches, classCandidate) {
   if (matches.length === 0) {
     return matches
   }
+
   let result = []
 
   for (let [meta, rule] of matches) {
     let container = postcss.root({ nodes: [rule.clone()] })
+
     container.walkRules((r) => {
-      r.selector = updateAllClasses(
-        filterSelectorsForClass(r.selector, classCandidate),
-        (className) => {
-          if (className === classCandidate) {
-            return `!${className}`
-          }
-          return className
-        }
+      let ast = selectorParser().astSync(r.selector)
+
+      // Remove extraneous selectors that do not include the base candidate
+      ast.each((sel) => eliminateIrrelevantSelectors(sel, classCandidate))
+
+      // Update all instances of the base candidate to include the important marker
+      updateAllClasses(ast, (className) =>
+        className === classCandidate ? `!${className}` : className
       )
+
+      r.selector = ast.toString()
+
       r.walkDecls((d) => (d.important = true))
     })
+
     result.push([{ ...meta, important: true }, container.nodes[0]])
   }
 
@@ -195,17 +205,26 @@ function applyVariant(variant, matches, context) {
 
   // Register arbitrary variants
   if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
-    let selector = normalize(variant.slice(1, -1))
+    let sort = context.offsets.recordVariant(variant)
 
-    if (!isValidVariantFormatString(selector)) {
+    let selector = normalize(variant.slice(1, -1))
+    let selectors = splitAtTopLevelOnly(selector, ',')
+
+    // We do not support multiple selectors for arbitrary variants
+    if (selectors.length > 1) {
       return []
     }
 
-    let fn = parseVariant(selector)
+    if (!selectors.every(isValidVariantFormatString)) {
+      return []
+    }
 
-    let sort = context.offsets.recordVariant(variant)
+    let records = selectors.map((sel, idx) => [
+      context.offsets.applyParallelOffset(sort, idx),
+      parseVariant(sel.trim()),
+    ])
 
-    context.variantMap.set(variant, [[sort, fn]])
+    context.variantMap.set(variant, records)
   }
 
   if (context.variantMap.has(variant)) {

@@ -1,6 +1,6 @@
 import { crosscheck, run, css } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   test('it detects classes in lit-html templates', () => {
     let config = {
       content: [
@@ -14,7 +14,7 @@ crosscheck(() => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      expect(result.css).toMatchCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .rounded {
           border-radius: 0.25rem;
         }
@@ -40,6 +40,31 @@ crosscheck(() => {
         .hover\:bg-blue-600:hover {
           --tw-bg-opacity: 1;
           background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .rounded {
+          border-radius: 0.25rem;
+        }
+        .bg-blue-400 {
+          background-color: #60a5fa;
+        }
+        .px-4 {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        .py-2 {
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .text-white {
+          color: #fff;
+        }
+        .hover\:bg-blue-600:hover {
+          background-color: #2563eb;
         }
       `)
     })

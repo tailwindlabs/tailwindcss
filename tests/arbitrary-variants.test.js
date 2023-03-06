@@ -540,13 +540,21 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .\[\&_\.foo\]\:tw-text-red-400 .foo,
         .\[\&_\.foo\]\:hover\:tw-text-red-400:hover .foo,
         .hover\:\[\&_\.foo\]\:tw-text-red-400 .foo:hover,
         .foo .\[\.foo_\&\]\:tw-text-red-400 {
           --tw-text-opacity: 1;
           color: rgb(248 113 113 / var(--tw-text-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .\[\&_\.foo\]\:tw-text-red-400 .foo,
+        .\[\&_\.foo\]\:hover\:tw-text-red-400:hover .foo,
+        .hover\:\[\&_\.foo\]\:tw-text-red-400 .foo:hover,
+        .foo .\[\.foo_\&\]\:tw-text-red-400 {
+          color: #f87171;
         }
       `)
     })
@@ -577,7 +585,7 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .\[\&_\.foo\]\:tw-bg-white .foo {
           --tw-bg-opacity: 1;
           background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -593,6 +601,20 @@ crosscheck(({ stable, oxide }) => {
         .foo .\[\.foo_\&\]\:tw-text-red-400 {
           --tw-text-opacity: 1;
           color: rgb(248 113 113 / var(--tw-text-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .\[\&_\.foo\]\:tw-bg-white .foo {
+          background-color: #fff;
+        }
+        .\[\&_\.foo\]\:tw-text-red-400 .foo {
+          color: #f87171;
+        }
+        .foo .\[\.foo_\&\]\:tw-bg-white {
+          background-color: #fff;
+        }
+        .foo .\[\.foo_\&\]\:tw-text-red-400 {
+          color: #f87171;
         }
       `)
     })
@@ -1089,6 +1111,53 @@ crosscheck(({ stable, oxide }) => {
           .md\:\[\&_ul\]\:flex-row ul {
             flex-direction: row;
           }
+        }
+      `)
+    })
+  })
+
+  it('it should discard arbitrary variants with multiple selectors', () => {
+    let config = {
+      content: [
+        {
+          raw: html`
+            <div class="p-1"></div>
+            <div class="[div]:p-1"></div>
+            <div class="[div_&]:p-1"></div>
+            <div class="[div,span]:p-1"></div>
+            <div class="[div_&,span]:p-1"></div>
+            <div class="[div,span_&]:p-1"></div>
+            <div class="[div_&,span_&]:p-1"></div>
+            <div class="hover:[div]:p-1"></div>
+            <div class="hover:[div_&]:p-1"></div>
+            <div class="hover:[div,span]:p-1"></div>
+            <div class="hover:[div_&,span]:p-1"></div>
+            <div class="hover:[div,span_&]:p-1"></div>
+            <div class="hover:[div_&,span_&]:p-1"></div>
+            <div class="hover:[:is(span,div)_&]:p-1"></div>
+          `,
+        },
+        {
+          // escaped commas are a-ok
+          // This is separate because prettier complains about `\,` in the template string
+          raw: '<div class="hover:[.span\\,div_&]:p-1"></div>',
+        },
+      ],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        .p-1,
+        .span\,div .hover\:\[\.span\\\,div_\&\]\:p-1:hover,
+        :is(span, div) .hover\:\[\:is\(span\,div\)_\&\]\:p-1:hover,
+        div .\[div_\&\]\:p-1,
+        div .hover\:\[div_\&\]\:p-1:hover {
+          padding: 0.25rem;
         }
       `)
     })

@@ -108,4 +108,46 @@ crosscheck(() => {
       `)
     })
   })
+
+  test('the important modifier works on utilities using :where()', () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="btn hover:btn !btn hover:focus:disabled:!btn"></div> `,
+        },
+      ],
+      corePlugins: { preflight: false },
+      plugins: [
+        function ({ addComponents }) {
+          addComponents({
+            ':where(.btn)': {
+              backgroundColor: '#00f',
+            },
+          })
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind components;
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        :where(.\!btn) {
+          background-color: #00f !important;
+        }
+        :where(.btn) {
+          background-color: #00f;
+        }
+        :where(.hover\:btn:hover) {
+          background-color: #00f;
+        }
+        :where(.hover\:focus\:disabled\:\!btn:disabled:focus:hover) {
+          background-color: #00f !important;
+        }
+      `)
+    })
+  })
 })

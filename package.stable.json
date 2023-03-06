@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "3.2.4",
+  "version": "3.2.7",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -41,7 +41,6 @@
     "stubs/*.stub.js",
     "nesting/*",
     "types/**/*",
-    "oxide-node-api-shim",
     "*.d.ts",
     "*.css",
     "*.js"
@@ -71,7 +70,6 @@
     "postcss": "^8.0.9"
   },
   "dependencies": {
-    "@tailwindcss/oxide": "file:./oxide-node-api-shim",
     "arg": "^5.0.2",
     "chokidar": "^3.5.3",
     "color-name": "^1.1.4",
@@ -106,9 +104,7 @@
       "/standalone-cli/",
       "\\.test\\.skip\\.js$"
     ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!lightningcss)"
-    ],
+    "transformIgnorePatterns": ["node_modules/(?!lightningcss)"],
     "transform": {
       "\\.js$": "@swc/jest",
       "\\.ts$": "@swc/jest"

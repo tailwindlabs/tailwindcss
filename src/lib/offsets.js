@@ -209,6 +209,12 @@ export class Offsets {
       return this.layerPositions[a.layer] - this.layerPositions[b.layer]
     }
 
+    // When sorting the `variants` layer, we need to sort based on the parent layer as well within
+    // this variants layer.
+    if (a.parentLayer !== b.parentLayer) {
+      return this.layerPositions[a.parentLayer] - this.layerPositions[b.parentLayer]
+    }
+
     // Sort based on the sorting function
     for (let aOptions of a.options) {
       for (let bOptions of b.options) {

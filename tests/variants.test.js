@@ -44,7 +44,7 @@ crosscheck(({ stable, oxide }) => {
     }
 
     return run('@tailwind utilities', config).then((result) => {
-      return expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .file\:hover\:bg-pink-600:hover::file-selector-button {
           --tw-bg-opacity: 1;
           background-color: rgb(219 39 119 / var(--tw-bg-opacity));
@@ -52,6 +52,14 @@ crosscheck(({ stable, oxide }) => {
         .hover\:file\:bg-pink-600::file-selector-button:hover {
           --tw-bg-opacity: 1;
           background-color: rgb(219 39 119 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .file\:hover\:bg-pink-600:hover::file-selector-button {
+          background-color: #db2777;
+        }
+        .hover\:file\:bg-pink-600::file-selector-button:hover {
+          background-color: #db2777;
         }
       `)
     })
@@ -254,15 +262,18 @@ crosscheck(({ stable, oxide }) => {
       @tailwind utilities;
     `
 
-    let expected = css`
+    let result = await run(input, config)
+    stable.expect(result.css).toIncludeCss(css`
       .peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:border-blue-500 {
         --tw-border-opacity: 1;
         border-color: rgb(59 130 246 / var(--tw-border-opacity));
       }
-    `
-
-    let result = await run(input, config)
-    expect(result.css).toIncludeCss(expected)
+    `)
+    oxide.expect(result.css).toIncludeCss(css`
+      .peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:border-blue-500 {
+        border-color: #3b82f6;
+      }
+    `)
   })
 
   it('should properly handle keyframes with multiple variants', async () => {
@@ -1007,11 +1018,18 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         @media (min-aspect-ratio: 1 / 10) {
           .ar-1\/10\:text-red-500 {
             --tw-text-opacity: 1;
             color: rgb(239 68 68 / var(--tw-text-opacity));
+          }
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        @media (min-aspect-ratio: 1 / 10) {
+          .ar-1\/10\:text-red-500 {
+            color: #ef4444;
           }
         }
       `)
@@ -1044,11 +1062,18 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         @media (min-aspect-ratio: 1 / 10) and (foo: 20) {
           .ar-1\/10\/20\:text-red-500 {
             --tw-text-opacity: 1;
             color: rgb(239 68 68 / var(--tw-text-opacity));
+          }
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        @media (min-aspect-ratio: 1 / 10) and (foo: 20) {
+          .ar-1\/10\/20\:text-red-500 {
+            color: #ef4444;
           }
         }
       `)

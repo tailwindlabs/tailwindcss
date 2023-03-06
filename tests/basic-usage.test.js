@@ -162,6 +162,8 @@ crosscheck(({ stable, oxide }) => {
             <div class="stroke-current"></div>
             <div class="stroke-2"></div>
             <div class="table-fixed"></div>
+            <div class="caption-top"></div>
+            <div class="caption-bottom"></div>
             <div class="text-center"></div>
             <div class="indent-6 -indent-12"></div>
             <div class="text-indigo-500"></div>
@@ -244,10 +246,15 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-green-light {
           --tw-bg-opacity: 1;
           background-color: rgb(0 128 0 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-green-light {
+          background-color: green;
         }
       `)
     })
@@ -292,7 +299,7 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-theme {
           --tw-bg-opacity: 1;
           background-color: rgb(255 0 0 / var(--tw-bg-opacity));
@@ -300,6 +307,14 @@ crosscheck(({ stable, oxide }) => {
         .text-theme {
           --tw-text-opacity: 1;
           color: rgb(0 128 0 / var(--tw-text-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-theme {
+          background-color: red;
+        }
+        .text-theme {
+          color: green;
         }
       `)
     })
@@ -824,7 +839,7 @@ crosscheck(({ stable, oxide }) => {
     })
   })
 
-  it('A bare ring-opacity utility is supported when using respectDefaultRingColorOpacity', () => {
+  test('A bare ring-opacity utility is supported when using respectDefaultRingColorOpacity', () => {
     let config = {
       future: { respectDefaultRingColorOpacity: true },
       content: [{ raw: html`<div class="ring-opacity"></div>` }],
@@ -841,11 +856,13 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .ring-opacity {
           --tw-ring-opacity: 0.33;
         }
       `)
+      // The opacity plugins are disabled by default in the `oxide` engine
+      oxide.expect(result.css).toMatchFormattedCss(css``)
     })
   })
 
@@ -861,7 +878,7 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .ring {
           --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
             var(--tw-ring-offset-color);
@@ -873,6 +890,19 @@ crosscheck(({ stable, oxide }) => {
         .ring-blue-500 {
           --tw-ring-opacity: 1;
           --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .ring {
+          --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+            var(--tw-ring-offset-color);
+          --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+            var(--tw-ring-color);
+          box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+            var(--tw-shadow, 0 0 #0000);
+        }
+        .ring-blue-500 {
+          --tw-ring-color: #3b82f6;
         }
       `)
     })

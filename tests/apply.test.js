@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   let sharedHtml = html`
     <div class="basic-example"></div>
     <div class="class-order"></div>
@@ -159,7 +159,7 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .basic-example {
           --tw-bg-opacity: 1;
           background-color: rgb(59 130 246 / var(--tw-bg-opacity));
@@ -318,6 +318,299 @@ crosscheck(() => {
         .btn-blue:hover {
           --tw-bg-opacity: 1;
           background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+        }
+        .recursive-apply-a {
+          font-weight: 900;
+        }
+        @media (min-width: 640px) {
+          .recursive-apply-a {
+            font-weight: 100;
+          }
+        }
+        .recursive-apply-b {
+          font-weight: 900;
+        }
+        @media (min-width: 640px) {
+          .recursive-apply-b {
+            font-weight: 100;
+          }
+        }
+        .recursive-apply-b {
+          font-weight: 600;
+        }
+        @media (min-width: 768px) {
+          .recursive-apply-b {
+            font-weight: 200;
+          }
+        }
+        .recursive-apply-c {
+          font-weight: 900;
+        }
+        @media (min-width: 640px) {
+          .recursive-apply-c {
+            font-weight: 100;
+          }
+        }
+        .recursive-apply-c {
+          font-weight: 600;
+        }
+        @media (min-width: 768px) {
+          .recursive-apply-c {
+            font-weight: 200;
+          }
+        }
+        .recursive-apply-c {
+          font-weight: 700;
+        }
+        @media (min-width: 1024px) {
+          .recursive-apply-c {
+            font-weight: 300;
+          }
+        }
+        .use-with-other-properties-base,
+        .use-with-other-properties-component {
+          color: green;
+          font-weight: 700;
+        }
+        .add-sibling-properties {
+          padding: 2rem 1rem;
+        }
+        .add-sibling-properties:hover {
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+        }
+        @media (min-width: 1024px) {
+          .add-sibling-properties {
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+          }
+        }
+        @media (min-width: 1280px) {
+          .add-sibling-properties:focus {
+            padding-left: 0.25rem;
+            padding-right: 0.25rem;
+          }
+        }
+        .add-sibling-properties {
+          color: green;
+          padding-top: 3px;
+          font-weight: 700;
+        }
+        h1 {
+          font-size: 1.5rem;
+          line-height: 2rem;
+        }
+        @media (min-width: 640px) {
+          h1 {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+          }
+        }
+        @media (min-width: 1024px) {
+          h1 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+          }
+        }
+        h2 {
+          font-size: 1.5rem;
+          line-height: 2rem;
+        }
+        @media (min-width: 1024px) {
+          h2 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+          }
+        }
+        @media (min-width: 640px) {
+          h2 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+          }
+        }
+        .important-modifier {
+          padding-left: 1rem;
+          padding-right: 1rem;
+          border-radius: 0.375rem !important;
+        }
+        .important-modifier-variant {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        .important-modifier-variant:hover {
+          border-radius: 0.375rem !important;
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        .foo {
+          animation: 1s linear infinite spin;
+        }
+        @keyframes pulse {
+          50% {
+            opacity: 0.5;
+          }
+        }
+        .bar {
+          animation: 2s cubic-bezier(0.4, 0, 0.6, 1) infinite pulse !important;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .basic-example {
+          background-color: #3b82f6;
+          border-radius: 0.375rem;
+          padding: 0.5rem 1rem;
+        }
+        .class-order {
+          padding: 1rem 0.25rem 1.75rem 0.75rem;
+        }
+        .with-additional-properties {
+          text-align: right;
+          font-weight: 500;
+        }
+        .variants {
+          font-weight: 600;
+        }
+        .variants:hover {
+          font-weight: 700;
+        }
+        .variants:focus {
+          font-weight: 500;
+        }
+        @media (min-width: 1024px) {
+          .variants {
+            font-weight: 300;
+          }
+        }
+        @media (min-width: 1280px) {
+          .variants:focus {
+            font-weight: 900;
+          }
+        }
+        .only-variants:hover {
+          font-weight: 700;
+        }
+        .only-variants:focus {
+          font-weight: 500;
+        }
+        @media (min-width: 1024px) {
+          .only-variants {
+            font-weight: 300;
+          }
+        }
+        @media (min-width: 1280px) {
+          .only-variants:focus {
+            font-weight: 900;
+          }
+        }
+        .group:hover .apply-group-variant {
+          text-align: center;
+        }
+        @media (min-width: 1024px) {
+          .group:hover .apply-group-variant {
+            text-align: left;
+          }
+        }
+        .dark .apply-dark-variant {
+          text-align: center;
+        }
+        .dark .apply-dark-variant:hover {
+          text-align: right;
+        }
+        @media (min-width: 1024px) {
+          .dark .apply-dark-variant {
+            text-align: left;
+          }
+        }
+        .apply-custom-utility,
+        .apply-custom-utility:hover {
+          custom: stuff;
+        }
+        @media (min-width: 1024px) {
+          .apply-custom-utility {
+            custom: stuff;
+          }
+        }
+        @media (min-width: 1280px) {
+          .apply-custom-utility:focus {
+            custom: stuff;
+          }
+        }
+        .multiple,
+        .selectors {
+          background-color: #3b82f6;
+          border-radius: 0.375rem;
+          padding: 0.5rem 1rem;
+        }
+        .multiple-variants:hover,
+        .selectors-variants:hover {
+          text-align: center;
+        }
+        .multiple-variants:active,
+        .selectors-variants:active {
+          text-align: right;
+        }
+        @media (min-width: 1024px) {
+          .multiple-variants:focus,
+          .selectors-variants:focus {
+            text-align: left;
+          }
+        }
+        .group:hover .multiple-group,
+        .group:hover .selectors-group {
+          text-align: center;
+        }
+        @media (min-width: 1024px) {
+          .group:hover .multiple-group,
+          .group:hover .selectors-group {
+            text-align: left;
+          }
+        }
+        .complex-utilities {
+          --tw-ordinal: ordinal;
+          --tw-numeric-spacing: tabular-nums;
+          font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+            var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+          --tw-shadow: 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;
+          --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+            0 4px 6px -4px var(--tw-shadow-color);
+          box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+            var(--tw-shadow);
+        }
+        .complex-utilities:hover {
+          --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
+          --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color),
+            0 8px 10px -6px var(--tw-shadow-color);
+          box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+            var(--tw-shadow);
+        }
+        .complex-utilities:focus {
+          --tw-numeric-fraction: diagonal-fractions;
+          font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+            var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+        }
+        .use-base-only-a {
+          font-weight: 700;
+        }
+        .use-dependant-only-b {
+          font-weight: 400;
+        }
+        .btn {
+          border-radius: 0.25rem;
+          padding: 0.5rem 1rem;
+          font-weight: 700;
+        }
+        .btn-blue {
+          color: #fff;
+          background-color: #3b82f6;
+          border-radius: 0.25rem;
+          padding: 0.5rem 1rem;
+          font-weight: 700;
+        }
+        .btn-blue:hover {
+          background-color: #1d4ed8;
         }
         .recursive-apply-a {
           font-weight: 900;
@@ -645,7 +938,7 @@ crosscheck(() => {
     `
 
     await run(input, config).then((result) => {
-      return expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .font-bold,
         .foo {
           font-weight: 700;
@@ -668,6 +961,30 @@ crosscheck(() => {
         .baz:hover {
           --tw-text-opacity: 1;
           color: rgb(34 197 94 / var(--tw-text-opacity));
+        }
+        .keep-me-even-though-I-am-not-used-in-content {
+          color: green;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .font-bold,
+        .foo {
+          font-weight: 700;
+        }
+        .bar {
+          color: #ef4444;
+          font-weight: 700;
+        }
+        .bar:hover {
+          color: #22c55e;
+        }
+        .baz {
+          color: #ef4444;
+          font-weight: 700;
+          text-decoration-line: underline;
+        }
+        .baz:hover {
+          color: #22c55e;
         }
         .keep-me-even-though-I-am-not-used-in-content {
           color: green;
@@ -888,11 +1205,17 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .bg-gray-500,
         .focus\:bg-gray-500 {
           --tw-bg-opacity: 1;
           background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .bg-gray-500,
+        .focus\:bg-gray-500 {
+          background-color: #6b7280;
         }
       `)
     })
@@ -1441,7 +1764,7 @@ crosscheck(() => {
       `
 
       return run(input, config).then((result) => {
-        return expect(result.css).toMatchFormattedCss(css`
+        stable.expect(result.css).toMatchFormattedCss(css`
           .a {
             color: red;
             --tw-text-opacity: 1;
@@ -1452,6 +1775,18 @@ crosscheck(() => {
           .b {
             --tw-text-opacity: 1;
             color: rgb(34 197 94 / var(--tw-text-opacity));
+            text-decoration: underline;
+          }
+        `)
+        oxide.expect(result.css).toMatchFormattedCss(css`
+          .a {
+            color: red;
+            color: #22c55e;
+            color: #00f;
+            text-decoration: underline;
+          }
+          .b {
+            color: #22c55e;
             text-decoration: underline;
           }
         `)
@@ -1565,20 +1900,30 @@ crosscheck(() => {
     let result
     result = await run(input, config)
 
-    expect(result.css).toMatchFormattedCss(css`
+    stable.expect(result.css).toMatchFormattedCss(css`
       .input-text {
         --tw-bg-opacity: 1;
         background-color: rgb(255 255 255 / var(--tw-bg-opacity));
         background-color: red;
       }
     `)
+    oxide.expect(result.css).toMatchFormattedCss(css`
+      .input-text {
+        background-color: red;
+      }
+    `)
 
     result = await run(input, config)
 
-    expect(result.css).toMatchFormattedCss(css`
+    stable.expect(result.css).toMatchFormattedCss(css`
       .input-text {
         --tw-bg-opacity: 1;
         background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+        background-color: red;
+      }
+    `)
+    oxide.expect(result.css).toMatchFormattedCss(css`
+      .input-text {
         background-color: red;
       }
     `)
@@ -1603,10 +1948,15 @@ crosscheck(() => {
     await run(input, config)
     const result = await run(input, config)
 
-    expect(result.css).toMatchFormattedCss(css`
+    stable.expect(result.css).toMatchFormattedCss(css`
       .input-text {
         --tw-bg-opacity: 1;
         background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+        background-color: red;
+      }
+    `)
+    oxide.expect(result.css).toMatchFormattedCss(css`
+      .input-text {
         background-color: red;
       }
     `)
@@ -1640,7 +1990,7 @@ crosscheck(() => {
     await run(input, config)
     const result = await run(input, config)
 
-    expect(result.css).toMatchFormattedCss(css`
+    stable.expect(result.css).toMatchFormattedCss(css`
       html,
       body {
         --tw-text-opacity: 1;
@@ -1652,6 +2002,21 @@ crosscheck(() => {
         body {
           --tw-text-opacity: 1;
           color: rgb(220 38 38 / var(--tw-text-opacity));
+          font-size: 2rem;
+        }
+      }
+      ${defaults}
+    `)
+    oxide.expect(result.css).toMatchFormattedCss(css`
+      html,
+      body {
+        color: #16a34a;
+        font-size: 1rem;
+      }
+      @media print {
+        html,
+        body {
+          color: #dc2626;
           font-size: 2rem;
         }
       }
@@ -1975,12 +2340,19 @@ crosscheck(() => {
     `
 
     return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
+      stable.expect(result.css).toMatchFormattedCss(css`
         .foo:hover.bar .baz,
         .foo:hover.bar > .baz {
           --tw-bg-opacity: 1;
           background-color: rgb(0 0 0 / var(--tw-bg-opacity));
           color: red;
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        .foo:hover.bar .baz,
+        .foo:hover.bar > .baz {
+          color: red;
+          background-color: #000;
         }
       `)
     })
