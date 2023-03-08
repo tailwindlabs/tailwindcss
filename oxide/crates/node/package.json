@@ -19,7 +19,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "^2.14.7"
+    "@napi-rs/cli": "^2.14.8"
   },
   "engines": {
     "node": ">= 10"
