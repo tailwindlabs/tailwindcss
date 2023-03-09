@@ -82,7 +82,7 @@
     "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
     "lightningcss": "^1.18.0",
-    "lilconfig": "^2.0.6",
+    "lilconfig": "^2.1.0",
     "micromatch": "^4.0.5",
     "normalize-path": "^3.0.0",
     "object-hash": "^3.0.0",
