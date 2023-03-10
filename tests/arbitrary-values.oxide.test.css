@@ -2,10 +2,7 @@
   inset: 11px;
 }
 .inset-\[var\(--value\)\] {
-  top: var(--value);
-  right: var(--value);
-  bottom: var(--value);
-  left: var(--value);
+  inset: var(--value);
 }
 .inset-x-\[11px\] {
   left: 11px;
