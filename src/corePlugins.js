@@ -199,23 +199,8 @@ export let variantPlugins = {
   },
 
   directionVariants: ({ addVariant }) => {
-    addVariant('ltr', () => {
-      log.warn('rtl-experimental', [
-        'The RTL features in Tailwind CSS are currently in preview.',
-        'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
-      ])
-
-      return '[dir="ltr"] &'
-    })
-
-    addVariant('rtl', () => {
-      log.warn('rtl-experimental', [
-        'The RTL features in Tailwind CSS are currently in preview.',
-        'Preview features are not covered by semver, and may be improved in breaking ways at any time.',
-      ])
-
-      return '[dir="rtl"] &'
-    })
+    addVariant('ltr', '[dir="ltr"] &')
+    addVariant('rtl', '[dir="rtl"] &')
   },
 
   reducedMotionVariants: ({ addVariant }) => {
