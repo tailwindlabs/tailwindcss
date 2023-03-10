@@ -703,6 +703,24 @@ export let corePlugins = {
     })
   },
 
+  lineClamp: ({ matchUtilities, addUtilities, theme }) => {
+    matchUtilities(
+      {
+        'line-clamp': (value) => ({
+          overflow: 'hidden',
+          display: '-webkit-box',
+          '-webkit-box-orient': 'vertical',
+          '-webkit-line-clamp': `${value}`,
+        }),
+      },
+      { values: theme('lineClamp') }
+    )
+
+    addUtilities({
+      '.line-clamp-none': { '-webkit-line-clamp': 'unset' },
+    })
+  },
+
   display: ({ addUtilities }) => {
     addUtilities({
       '.block': { display: 'block' },

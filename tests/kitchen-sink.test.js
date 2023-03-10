@@ -7,6 +7,9 @@ crosscheck(({ stable, oxide }) => {
       content: [
         {
           raw: html`
+            <div
+              class="line-clamp-2 line-clamp-[33] line-clamp-[var(--line-clamp-variable)] line-clamp-none"
+            ></div>
             <div class="range:text-right multi:text-left"></div>
             <div
               class="container hover:container sm:container md:container text-center sm:text-center md:text-center"
@@ -431,6 +434,27 @@ crosscheck(({ stable, oxide }) => {
         }
         .mt-6 {
           margin-top: 1.5rem;
+        }
+        .line-clamp-2 {
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          display: -webkit-box;
+          overflow: hidden;
+        }
+        .line-clamp-\[33\] {
+          -webkit-line-clamp: 33;
+          -webkit-box-orient: vertical;
+          display: -webkit-box;
+          overflow: hidden;
+        }
+        .line-clamp-\[var\(--line-clamp-variable\)\] {
+          -webkit-line-clamp: var(--line-clamp-variable);
+          -webkit-box-orient: vertical;
+          display: -webkit-box;
+          overflow: hidden;
+        }
+        .line-clamp-none {
+          -webkit-line-clamp: unset;
         }
         .scale-50 {
           --tw-scale-x: 0.5;
@@ -975,6 +999,27 @@ crosscheck(({ stable, oxide }) => {
         }
         .mt-6 {
           margin-top: 1.5rem;
+        }
+        .line-clamp-2 {
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          display: -webkit-box;
+          overflow: hidden;
+        }
+        .line-clamp-\[33\] {
+          -webkit-line-clamp: 33;
+          -webkit-box-orient: vertical;
+          display: -webkit-box;
+          overflow: hidden;
+        }
+        .line-clamp-\[var\(--line-clamp-variable\)\] {
+          -webkit-line-clamp: var(--line-clamp-variable);
+          -webkit-box-orient: vertical;
+          display: -webkit-box;
+          overflow: hidden;
+        }
+        .line-clamp-none {
+          -webkit-line-clamp: unset;
         }
         .scale-50 {
           --tw-scale-x: 0.5;
