@@ -1036,7 +1036,7 @@ crosscheck(({ stable, oxide }) => {
     })
   })
 
-  test('variants with slashes suspport modifiers', () => {
+  test('variants with slashes support modifiers', () => {
     let config = {
       content: [
         {
