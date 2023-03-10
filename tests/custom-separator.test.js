@@ -23,7 +23,7 @@ crosscheck(() => {
         .group:hover .group-hover_focus-within_text-left:focus-within {
           text-align: left;
         }
-        [dir='rtl'] .rtl_active_text-center:active {
+        :is([dir='rtl'] .rtl_active_text-center:active) {
           text-align: center;
         }
         @media (prefers-reduced-motion: no-preference) {
@@ -31,7 +31,7 @@ crosscheck(() => {
             text-align: center;
           }
         }
-        .dark .dark_focus_text-left:focus {
+        :is(.dark .dark_focus_text-left:focus) {
           text-align: left;
         }
         @media (min-width: 768px) {

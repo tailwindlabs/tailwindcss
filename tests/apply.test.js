@@ -216,14 +216,14 @@ crosscheck(({ stable, oxide }) => {
             text-align: left;
           }
         }
-        .dark .apply-dark-variant {
+        :is(.dark .apply-dark-variant) {
           text-align: center;
         }
-        .dark .apply-dark-variant:hover {
+        :is(.dark .apply-dark-variant:hover) {
           text-align: right;
         }
         @media (min-width: 1024px) {
-          .dark .apply-dark-variant {
+          :is(.dark .apply-dark-variant) {
             text-align: left;
           }
         }
@@ -513,14 +513,14 @@ crosscheck(({ stable, oxide }) => {
             text-align: left;
           }
         }
-        .dark .apply-dark-variant {
+        :is(.dark .apply-dark-variant) {
           text-align: center;
         }
-        .dark .apply-dark-variant:hover {
+        :is(.dark .apply-dark-variant:hover) {
           text-align: right;
         }
         @media (min-width: 1024px) {
-          .dark .apply-dark-variant {
+          :is(.dark .apply-dark-variant) {
             text-align: left;
           }
         }

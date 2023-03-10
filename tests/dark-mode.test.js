@@ -17,7 +17,7 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-        .dark .dark\:font-bold {
+        :is(.dark .dark\:font-bold) {
           font-weight: 700;
         }
       `)
@@ -40,7 +40,7 @@ crosscheck(() => {
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-        .test-dark .dark\:font-bold {
+        :is(.test-dark .dark\:font-bold) {
           font-weight: 700;
         }
       `)
