@@ -303,7 +303,7 @@ crosscheck(({ stable, oxide }) => {
         }
         .drop-empty-rules:hover,
         .group:hover .apply-group,
-        .dark .apply-dark-mode {
+        :is(.dark .apply-dark-mode) {
           font-weight: 700;
         }
         .apply-with-existing:hover {
@@ -338,7 +338,7 @@ crosscheck(({ stable, oxide }) => {
         .apply-order-b {
           margin: 1.5rem 1.25rem 1.25rem;
         }
-        .dark .group:hover .apply-dark-group-example-a {
+        :is(.dark .group:hover .apply-dark-group-example-a) {
           --tw-bg-opacity: 1;
           background-color: rgb(34 197 94 / var(--tw-bg-opacity));
         }
@@ -715,7 +715,7 @@ crosscheck(({ stable, oxide }) => {
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
           }
         }
-        .dark .dark\:custom-util {
+        :is(.dark .dark\:custom-util) {
           background: #abcdef;
         }
         @media (min-width: 640px) {
@@ -762,7 +762,7 @@ crosscheck(({ stable, oxide }) => {
               transition-duration: 0.15s;
               transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
             }
-            .dark .md\:dark\:motion-safe\:foo\:active\:custom-util:active {
+            :is(.dark .md\:dark\:motion-safe\:foo\:active\:custom-util:active) {
               background: #abcdef !important;
             }
           }
@@ -849,7 +849,7 @@ crosscheck(({ stable, oxide }) => {
         }
         .drop-empty-rules:hover,
         .group:hover .apply-group,
-        .dark .apply-dark-mode {
+        :is(.dark .apply-dark-mode) {
           font-weight: 700;
         }
         .apply-with-existing:hover {
@@ -883,7 +883,7 @@ crosscheck(({ stable, oxide }) => {
         .apply-order-b {
           margin: 1.5rem 1.25rem 1.25rem;
         }
-        .dark .group:hover .apply-dark-group-example-a {
+        :is(.dark .group:hover .apply-dark-group-example-a) {
           background-color: #22c55e;
         }
         @media (min-width: 640px) {
@@ -1250,7 +1250,7 @@ crosscheck(({ stable, oxide }) => {
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
           }
         }
-        .dark .dark\:custom-util {
+        :is(.dark .dark\:custom-util) {
           background: #abcdef;
         }
         @media (min-width: 640px) {
@@ -1297,7 +1297,7 @@ crosscheck(({ stable, oxide }) => {
               transition-duration: 0.15s;
               transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
             }
-            .dark .md\:dark\:motion-safe\:foo\:active\:custom-util:active {
+            :is(.dark .md\:dark\:motion-safe\:foo\:active\:custom-util:active) {
               background: #abcdef !important;
             }
           }

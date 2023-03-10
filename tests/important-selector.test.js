@@ -134,7 +134,7 @@ crosscheck(() => {
         #app .group:hover .group-hover\:focus-within\:text-left:focus-within {
           text-align: left;
         }
-        #app [dir='rtl'] .rtl\:active\:text-center:active {
+        #app :is([dir='rtl'] .rtl\:active\:text-center:active) {
           text-align: center;
         }
         @media (prefers-reduced-motion: no-preference) {
@@ -142,7 +142,7 @@ crosscheck(() => {
             text-align: center;
           }
         }
-        #app .dark .dark\:focus\:text-left:focus {
+        #app :is(.dark .dark\:focus\:text-left:focus) {
           text-align: left;
         }
         @media (min-width: 768px) {

@@ -128,7 +128,7 @@ crosscheck(({ stable, oxide }) => {
         .custom-component {
           font-weight: 700;
         }
-        .tw-dark .tw-group:hover .custom-component {
+        :is(.tw-dark .tw-group:hover .custom-component) {
           font-weight: 400;
         }
         .tw--ml-4 {
@@ -155,7 +155,7 @@ crosscheck(({ stable, oxide }) => {
         .tw-group:hover .group-hover\:focus-within\:tw-text-left:focus-within {
           text-align: left;
         }
-        [dir='rtl'] .rtl\:active\:tw-text-center:active {
+        :is([dir='rtl'] .rtl\:active\:tw-text-center:active) {
           text-align: center;
         }
         @media (prefers-reduced-motion: no-preference) {
@@ -163,11 +163,11 @@ crosscheck(({ stable, oxide }) => {
             text-align: center;
           }
         }
-        .tw-dark .dark\:tw-bg-\[rgb\(255\,0\,0\)\] {
+        :is(.tw-dark .dark\:tw-bg-\[rgb\(255\,0\,0\)\]) {
           --tw-bg-opacity: 1;
           background-color: rgb(255 0 0 / var(--tw-bg-opacity));
         }
-        .tw-dark .dark\:focus\:tw-text-left:focus {
+        :is(.tw-dark .dark\:focus\:tw-text-left:focus) {
           text-align: left;
         }
         @media (min-width: 768px) {

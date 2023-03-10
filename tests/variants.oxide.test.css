@@ -283,8 +283,8 @@
 .peer:disabled ~ .peer-disabled\:shadow-md,
 .peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:shadow-md,
 .peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:first\:shadow-md:first-child,
-[dir="ltr"] .ltr\:shadow-md,
-[dir="rtl"] .rtl\:shadow-md {
+:is([dir='ltr'] .ltr\:shadow-md),
+:is([dir='rtl'] .rtl\:shadow-md) {
   --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -318,9 +318,9 @@
     background-color: #fde047;
   }
 }
-.dark .dark\:shadow-md,
-.dark .group:disabled:focus:hover .dark\:group-disabled\:group-focus\:group-hover\:shadow-md,
-.dark .peer:disabled:focus:hover ~ .dark\:peer-disabled\:peer-focus\:peer-hover\:shadow-md {
+:is(.dark .dark\:shadow-md),
+:is(.dark .group:disabled:focus:hover .dark\:group-disabled\:group-focus\:group-hover\:shadow-md),
+:is(.dark .peer:disabled:focus:hover ~ .dark\:peer-disabled\:peer-focus\:peer-hover\:shadow-md) {
   --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -361,7 +361,7 @@
     animation: 1s linear infinite spin;
   }
   .lg\:shadow-md,
-  .dark .lg\:dark\:shadow-md {
+  :is(.dark .lg\:dark\:shadow-md) {
     --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
     --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
       0 2px 4px -2px var(--tw-shadow-color);
@@ -371,7 +371,7 @@
 }
 @media (min-width: 1280px) {
   .xl\:shadow-md,
-  .dark .xl\:dark\:disabled\:shadow-md:disabled {
+  :is(.dark .xl\:dark\:disabled\:shadow-md:disabled) {
     --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
     --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
       0 2px 4px -2px var(--tw-shadow-color);
@@ -388,7 +388,7 @@
       var(--tw-shadow);
   }
   @media (prefers-reduced-motion: no-preference) {
-    .dark .\32 xl\:dark\:motion-safe\:focus-within\:shadow-md:focus-within {
+    :is(.dark .\32 xl\:dark\:motion-safe\:focus-within\:shadow-md:focus-within) {
       --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
       --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
         0 2px 4px -2px var(--tw-shadow-color);
@@ -407,4 +407,3 @@
     background-color: #fde047;
   }
 }
-
