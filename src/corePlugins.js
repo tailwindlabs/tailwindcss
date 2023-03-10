@@ -626,7 +626,7 @@ export let corePlugins = {
   inset: createUtilityPlugin(
     'inset',
     [
-      ['inset', ['top', 'right', 'bottom', 'left']],
+      ['inset', ['inset']],
       [
         ['inset-x', ['left', 'right']],
         ['inset-y', ['top', 'bottom']],

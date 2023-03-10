@@ -187,10 +187,7 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       let oxideExpected = css`
         .inset-\[var\(--any-value\)\] {
-          top: var(--any-value);
-          right: var(--any-value);
-          bottom: var(--any-value);
-          left: var(--any-value);
+          inset: var(--any-value);
         }
         .inset-x-\[var\(--any-value\)\] {
           left: var(--any-value);
@@ -738,10 +735,7 @@ crosscheck(({ stable, oxide }) => {
       `
       let stableExpected = css`
         .inset-\[var\(--any-value\)\] {
-          top: var(--any-value);
-          right: var(--any-value);
-          bottom: var(--any-value);
-          left: var(--any-value);
+          inset: var(--any-value);
         }
         .inset-x-\[var\(--any-value\)\] {
           left: var(--any-value);
