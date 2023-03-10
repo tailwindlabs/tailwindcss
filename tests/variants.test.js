@@ -1128,4 +1128,28 @@ crosscheck(({ stable, oxide }) => {
       }
     `)
   })
+
+  test('stacking dark and rtl variants', async () => {
+    let config = {
+      darkMode: 'class',
+      content: [
+        {
+          raw: html` <div class="dark:rtl:italic" /> `,
+        },
+      ],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    let result = await run(input, config)
+
+    expect(result.css).toMatchFormattedCss(css`
+      :is(.dark :is([dir='rtl'] .dark\:rtl\:italic)) {
+        font-style: italic;
+      }
+    `)
+  })
 })
