@@ -4,6 +4,7 @@ import postcssrc from 'postcss-load-config'
 import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
+import jitiFactory from 'jiti'
 
 import tailwind from '../../../processTailwindFeatures'
 import { loadPostcss, loadPostcssImport, lightningcss } from './deps'
@@ -16,6 +17,11 @@ import { createWatcher } from './watching'
 import fastGlob from 'fast-glob'
 import { findAtConfigPath } from '../../../lib/findAtConfigPath'
 import log from '../../../util/log'
+
+let jiti: ReturnType<typeof jitiFactory> | null = null
+function lazyJiti() {
+  return jiti ?? (jiti = jitiFactory(__filename, { interopDefault: true }))
+}
 
 /**
  *
@@ -143,7 +149,13 @@ let state = {
       this.refreshConfigDependencies(configPath)
     }
 
-    let config = configPath ? require(configPath) : {}
+    let config = (() => {
+      try {
+        return configPath ? require(configPath) : {}
+      } catch {
+        return lazyJiti()(configPath)
+      }
+    })()
 
     // @ts-ignore
     config = resolveConfig(config, { content: { files: [] } })
