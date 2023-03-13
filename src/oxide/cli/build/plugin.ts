@@ -5,6 +5,7 @@ import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
 import jitiFactory from 'jiti'
+import { transform } from '@swc/core'
 
 import tailwind from '../../../processTailwindFeatures'
 import { loadPostcss, loadPostcssImport, lightningcss } from './deps'
@@ -20,7 +21,8 @@ import log from '../../../util/log'
 
 let jiti: ReturnType<typeof jitiFactory> | null = null
 function lazyJiti() {
-  return jiti ?? (jiti = jitiFactory(__filename, { interopDefault: true }))
+  // @ts-expect-error SWC's transform function should be compatible
+  return jiti ?? (jiti = jitiFactory(__filename, { interopDefault: true, transform }))
 }
 
 /**
