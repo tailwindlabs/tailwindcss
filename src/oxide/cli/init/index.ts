@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 export function init(args, configs) {
-  let messages = []
+  let messages: string[] = []
 
   let tailwindConfigLocation = path.resolve(args['_'][1] ?? `./${configs.tailwind}`)
   if (fs.existsSync(tailwindConfigLocation)) {
