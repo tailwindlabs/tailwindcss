@@ -5,7 +5,7 @@ import path from 'path'
 import { resolveDefaultConfigPath } from '../../util/resolveConfigPath.js'
 import { createProcessor } from './plugin.js'
 
-export async function build(args, configs) {
+export async function build(args, _configs) {
   let input = args['--input']
   let shouldWatch = args['--watch']
 
