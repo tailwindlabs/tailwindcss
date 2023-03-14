@@ -44,6 +44,10 @@ export default function resolveConfigPath(pathOrConfig) {
   }
 
   // require('tailwindcss')
+  return resolveDefaultConfigPath()
+}
+
+export function resolveDefaultConfigPath() {
   for (const configFile of defaultConfigFiles) {
     try {
       const configPath = path.resolve(configFile)
