@@ -577,8 +577,10 @@ describe('Init command', () => {
            tailwindcss init [options]
 
         Options:
-           -f, --full               Initialize a full \`tailwind.config.js\` file
+               --esm                Initialize configuration file as ESM
+               --ts                 Initialize configuration file as TypeScript
            -p, --postcss            Initialize a \`postcss.config.js\` file
+           -f, --full               Include the default values for all options in the generated configuration file
            -h, --help               Display usage information
       `)
     )
@@ -605,8 +607,10 @@ describe('Init command', () => {
            tailwindcss init [options]
 
         Options:
-           -f, --full               Initialize a full \`tailwind.config.cjs\` file
-           -p, --postcss            Initialize a \`postcss.config.cjs\` file
+               --esm                Initialize configuration file as ESM
+               --ts                 Initialize configuration file as TypeScript
+           -p, --postcss            Initialize a \`postcss.config.js\` file
+           -f, --full               Include the default values for all options in the generated configuration file
            -h, --help               Display usage information
       `)
     )
