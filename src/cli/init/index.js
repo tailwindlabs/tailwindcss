@@ -3,22 +3,48 @@
 import fs from 'fs'
 import path from 'path'
 
+function isESM() {
+  const pkgPath = path.resolve('./package.json')
+
+  try {
+    let pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
+    return pkg.type && pkg.type === 'module'
+  } catch (err) {
+    return false
+  }
+}
+
 export function init(args, configs) {
   let messages = []
 
-  let tailwindConfigLocation = path.resolve(args['_'][1] ?? `./${configs.tailwind}`)
+  let syntax = args['--ts'] ? 'ts' : args['--esm'] ? 'js' : isESM() ? 'js' : 'cjs'
+  let extension = args['--ts'] ? 'ts' : 'js'
+
+  let tailwindConfigLocation = path.resolve(args['_'][1] ?? `./tailwind.config.${extension}`)
+
   if (fs.existsSync(tailwindConfigLocation)) {
     messages.push(`${path.basename(tailwindConfigLocation)} already exists.`)
   } else {
-    let stubFile = fs.readFileSync(
+    let stubContentsFile = fs.readFileSync(
       args['--full']
-        ? path.resolve(__dirname, '../../../stubs/defaultConfig.stub.js')
-        : path.resolve(__dirname, '../../../stubs/simpleConfig.stub.js'),
+        ? path.resolve(__dirname, '../../../stubs/full.js')
+        : path.resolve(__dirname, '../../../stubs/simple.js'),
+      'utf8'
+    )
+
+    let stubFile = fs.readFileSync(
+      path.resolve(__dirname, `../../../stubs/tailwind.config.${syntax}`),
       'utf8'
     )
 
     // Change colors import
-    stubFile = stubFile.replace('../colors', 'tailwindcss/colors')
+    stubContentsFile = stubContentsFile.replace('../colors', 'tailwindcss/colors')
+
+    // Replace contents of {ts,js,cjs} file with the stub {simple,full}.
+    stubFile =
+      stubFile
+        .replace('__CONFIG__', stubContentsFile.replace('module.exports =', '').trim())
+        .trim() + '\n\n'
 
     fs.writeFileSync(tailwindConfigLocation, stubFile, 'utf8')
 

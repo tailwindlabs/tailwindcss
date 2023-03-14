@@ -51,8 +51,10 @@ let commands = {
   init: {
     run: init,
     args: {
-      '--full': { type: Boolean, description: `Initialize a full \`${configs.tailwind}\` file` },
+      '--esm': { type: Boolean, description: `Initialize a \`tailwind.config.js\` file` },
+      '--ts': { type: Boolean, description: `Initialize a \`tailwind.config.ts\` file` },
       '--postcss': { type: Boolean, description: `Initialize a \`${configs.postcss}\` file` },
+      '--full': { type: Boolean, description: `Initialize a full \`${configs.tailwind}\` file` },
       '-f': '--full',
       '-p': '--postcss',
     },
