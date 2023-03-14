@@ -220,7 +220,7 @@ export function createWatcher(args, { state, rebuild }) {
 
     refreshWatchedFiles() {
       watcher.add(Array.from(state.contextDependencies))
-      watcher.add(Array.from(state.configDependencies))
+      watcher.add(Array.from(state.configBag.dependencies))
       watcher.add(state.contentPatterns.all)
     },
   }
