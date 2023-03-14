@@ -15,3 +15,10 @@ export const defaultPostCssConfigStubFile = path.resolve(
   __dirname,
   '../stubs/defaultPostCssConfig.stub.js'
 )
+
+export const defaultConfigFiles = [
+  './tailwind.config.js',
+  './tailwind.config.cjs',
+  './tailwind.config.mjs',
+  './tailwind.config.ts',
+]
