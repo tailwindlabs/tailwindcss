@@ -1,6 +1,12 @@
 import fs from 'fs'
 import path from 'path'
-import { defaultConfigFiles } from '../constants'
+
+const defaultConfigFiles = [
+  './tailwind.config.js',
+  './tailwind.config.cjs',
+  './tailwind.config.mjs',
+  './tailwind.config.ts',
+]
 
 function isObject(value) {
   return typeof value === 'object' && value !== null

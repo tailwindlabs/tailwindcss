@@ -14,7 +14,7 @@ function isESM() {
   }
 }
 
-export function init(args, configs) {
+export function init(args) {
   let messages = []
 
   let isProjectESM = args['--ts'] || args['--esm'] || isESM()

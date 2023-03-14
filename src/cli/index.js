@@ -8,29 +8,6 @@ import { build } from './build'
 import { help } from './help'
 import { init } from './init'
 
-function isESM() {
-  const pkgPath = path.resolve('./package.json')
-
-  try {
-    let pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
-    return pkg.type && pkg.type === 'module'
-  } catch (err) {
-    return false
-  }
-}
-
-let configs = isESM()
-  ? {
-      tailwind: 'tailwind.config.cjs',
-      postcss: 'postcss.config.cjs',
-    }
-  : {
-      tailwind: 'tailwind.config.js',
-      postcss: 'postcss.config.js',
-    }
-
-// ---
-
 function oneOf(...options) {
   return Object.assign(
     (value = true) => {
@@ -236,4 +213,4 @@ if (args['--help']) {
   process.exit(0)
 }
 
-run(args, configs)
+run(args)
