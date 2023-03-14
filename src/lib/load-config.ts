@@ -40,6 +40,6 @@ export function load(path: string) {
   }
 }
 
-export function dependencies(path: string) {
+export function dependencies(path: string): Set<string> {
   return new Set(getModuleDependencies(path).map(({ file }) => file))
 }
