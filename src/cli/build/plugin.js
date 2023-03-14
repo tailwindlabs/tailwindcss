@@ -144,7 +144,7 @@ let state = {
 
   loadConfig(configPath, content) {
     if (this.watcher && configPath) {
-      this.refreshConfigDependencies(configPath)
+      this.refreshConfigDependencies()
     }
 
     this.configBag = load(configPath)
@@ -160,7 +160,7 @@ let state = {
     return this.configBag.config
   },
 
-  refreshConfigDependencies(configPath) {
+  refreshConfigDependencies() {
     env.DEBUG && console.time('Module dependencies')
     this.configBag?.dispose()
     env.DEBUG && console.timeEnd('Module dependencies')
