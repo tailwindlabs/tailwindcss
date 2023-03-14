@@ -17,7 +17,8 @@ function isESM() {
 export function init(args, configs) {
   let messages = []
 
-  let syntax = args['--ts'] ? 'ts' : args['--esm'] ? 'js' : isESM() ? 'js' : 'cjs'
+  let isProjectESM = args['--ts'] || args['--esm'] || isESM()
+  let syntax = args['--ts'] ? 'ts' : isProjectESM ? 'js' : 'cjs'
   let extension = args['--ts'] ? 'ts' : 'js'
 
   let tailwindConfigLocation = path.resolve(args['_'][1] ?? `./tailwind.config.${extension}`)
@@ -52,12 +53,14 @@ export function init(args, configs) {
   }
 
   if (args['--postcss']) {
-    let postcssConfigLocation = path.resolve(`./${configs.postcss}`)
+    let postcssConfigLocation = path.resolve('./postcss.config.js')
     if (fs.existsSync(postcssConfigLocation)) {
       messages.push(`${path.basename(postcssConfigLocation)} already exists.`)
     } else {
       let stubFile = fs.readFileSync(
-        path.resolve(__dirname, '../../../stubs/defaultPostCssConfig.stub.js'),
+        isProjectESM
+          ? path.resolve(__dirname, '../../../stubs/postcss.config.js')
+          : path.resolve(__dirname, '../../../stubs/postcss.config.cjs'),
         'utf8'
       )
 
