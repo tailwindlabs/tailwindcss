@@ -28,8 +28,8 @@ export function init(args, configs) {
   } else {
     let stubContentsFile = fs.readFileSync(
       args['--full']
-        ? path.resolve(__dirname, '../../../stubs/full.js')
-        : path.resolve(__dirname, '../../../stubs/simple.js'),
+        ? path.resolve(__dirname, '../../../stubs/config.full.js')
+        : path.resolve(__dirname, '../../../stubs/config.simple.js'),
       'utf8'
     )
 
