@@ -40,7 +40,7 @@
     "lib/*",
     "peers/*",
     "scripts/*.js",
-    "stubs/*.stub.js",
+    "stubs/*.{js,ts,cjs}",
     "nesting/*",
     "types/**/*",
     "*.d.ts",
@@ -75,12 +75,13 @@
     "browserslist": "^4.21.5",
     "chokidar": "^3.5.3",
     "color-name": "^1.1.4",
-    "detective": "^5.2.1",
+    "detective-typescript": "^9.0.0",
     "didyoumean": "^1.2.2",
     "dlv": "^1.1.3",
     "fast-glob": "^3.2.12",
     "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
+    "jiti": "^1.17.2",
     "lightningcss": "^1.18.0",
     "lilconfig": "^2.1.0",
     "micromatch": "^4.0.5",
@@ -95,7 +96,8 @@
     "postcss-selector-parser": "^6.0.11",
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
-    "resolve": "^1.22.1"
+    "resolve": "^1.22.1",
+    "sucrase": "^3.29.0"
   },
   "browserslist": [
     "> 1%",

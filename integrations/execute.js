@@ -26,7 +26,7 @@ module.exports = function $(command, options = {}) {
   let args = options.shell
     ? [command]
     : (() => {
-        let args = command.split(' ')
+        let args = command.trim().split(/\s+/)
         command = args.shift()
         command =
           command === 'node'

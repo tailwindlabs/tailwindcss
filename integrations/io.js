@@ -97,10 +97,12 @@ module.exports = function ({
     },
     async removeFile(file) {
       let filePath = path.resolve(toolRoot, file)
+
       if (!fileCache[filePath]) {
-        fileCache[filePath] = await fs.readFile(filePath, 'utf8')
+        fileCache[filePath] = await fs.readFile(filePath, 'utf8').catch(() => null)
       }
-      await fs.unlink(filePath)
+
+      await fs.unlink(filePath).catch(() => null)
     },
     async readOutputFile(file) {
       file = await resolveFile(file, absoluteOutputFolder)

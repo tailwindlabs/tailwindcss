@@ -8,29 +8,6 @@ import { build } from './build'
 import { help } from './help'
 import { init } from './init'
 
-function isESM() {
-  const pkgPath = path.resolve('./package.json')
-
-  try {
-    let pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
-    return pkg.type && pkg.type === 'module'
-  } catch (err) {
-    return false
-  }
-}
-
-let configs = isESM()
-  ? {
-      tailwind: 'tailwind.config.cjs',
-      postcss: 'postcss.config.cjs',
-    }
-  : {
-      tailwind: 'tailwind.config.js',
-      postcss: 'postcss.config.js',
-    }
-
-// ---
-
 function oneOf(...options) {
   return Object.assign(
     (value = true) => {
@@ -51,8 +28,13 @@ let commands = {
   init: {
     run: init,
     args: {
-      '--full': { type: Boolean, description: `Initialize a full \`${configs.tailwind}\` file` },
-      '--postcss': { type: Boolean, description: `Initialize a \`${configs.postcss}\` file` },
+      '--esm': { type: Boolean, description: `Initialize configuration file as ESM` },
+      '--ts': { type: Boolean, description: `Initialize configuration file as TypeScript` },
+      '--postcss': { type: Boolean, description: `Initialize a \`postcss.config.js\` file` },
+      '--full': {
+        type: Boolean,
+        description: `Include the default values for all options in the generated configuration file`,
+      },
       '-f': '--full',
       '-p': '--postcss',
     },
@@ -231,4 +213,4 @@ if (args['--help']) {
   process.exit(0)
 }
 
-run(args, configs)
+run(args)

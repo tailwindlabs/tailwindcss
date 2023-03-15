@@ -1,5 +1,5 @@
 import theme from '../src/public/default-theme'
-import configStub from '../stubs/defaultConfig.stub.js'
+import configStub from '../stubs/config.full.js'
 
 test.todo('remove mutation from these tests so we can run against both engines')
 

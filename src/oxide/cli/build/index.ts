@@ -1,8 +1,9 @@
 import fs from 'fs'
 import path from 'path'
+import { resolveDefaultConfigPath } from '../../../util/resolveConfigPath'
 import { createProcessor } from './plugin'
 
-export async function build(args, configs) {
+export async function build(args) {
   let input = args['--input']
   let shouldWatch = args['--watch']
 
@@ -23,11 +24,7 @@ export async function build(args, configs) {
   }
 
   // TODO: Reference the @config path here if exists
-  let configPath = args['--config']
-    ? args['--config']
-    : ((defaultPath) => (fs.existsSync(defaultPath) ? defaultPath : null))(
-        path.resolve(`./${configs.tailwind}`)
-      )
+  let configPath = args['--config'] ? args['--config'] : resolveDefaultConfigPath()
 
   let processor = await createProcessor(args, configPath)
 

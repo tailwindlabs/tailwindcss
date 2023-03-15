@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `justify-normal` and `justify-stretch` utilities ([#10560](https://github.com/tailwindlabs/tailwindcss/pull/10560))
 - Add `content-normal` and `content-stretch` utilities ([#10645](https://github.com/tailwindlabs/tailwindcss/pull/10645))
 - Add `line-clamp` utilities from `@tailwindcss/line-clamp` to core ([#10768](https://github.com/tailwindlabs/tailwindcss/pull/10768))
+- Enable ESM and TS based config files ([#10785](https://github.com/tailwindlabs/tailwindcss/pull/10785))
 
 ### Fixed
 

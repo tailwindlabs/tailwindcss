@@ -1,4 +1,4 @@
 import { cloneDeep } from '../util/cloneDeep'
-import defaultConfig from '../../stubs/defaultConfig.stub'
+import defaultConfig from '../../stubs/config.full'
 
 export default cloneDeep(defaultConfig)

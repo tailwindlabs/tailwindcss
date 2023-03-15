@@ -1,39 +1,40 @@
 import fs from 'fs'
 import path from 'path'
 import resolve from 'resolve'
-import detective from 'detective'
+import detective from 'detective-typescript'
 
 function createModule(file) {
-  const source = fs.readFileSync(file, 'utf-8')
-  const requires = detective(source)
-
-  return { file, requires }
+  let source = fs.readFileSync(file, 'utf-8')
+  return { file, requires: detective(source, { mixedImports: true }) }
 }
 
-export default function getModuleDependencies(entryFile) {
-  const rootModule = createModule(entryFile)
-  const modules = [rootModule]
+function* _getModuleDependencies(entryFile) {
+  yield entryFile
+
+  let mod = createModule(entryFile)
+
+  let ext = path.extname(entryFile)
+  let isTypeScript = ext === '.ts' || ext === '.cts' || ext === '.mts'
+  let extensions = [...(isTypeScript ? ['.ts', '.cts', '.mts'] : []), '.js', '.cjs', '.mjs']
 
   // Iterate over the modules, even when new
   // ones are being added
-  for (const mdl of modules) {
-    mdl.requires
-      .filter((dep) => {
-        // Only track local modules, not node_modules
-        return dep.startsWith('./') || dep.startsWith('../')
-      })
-      .forEach((dep) => {
-        try {
-          const basedir = path.dirname(mdl.file)
-          const depPath = resolve.sync(dep, { basedir })
-          const depModule = createModule(depPath)
+  for (let dep of mod.requires) {
+    // Only track local modules, not node_modules
+    if (!dep.startsWith('./') && !dep.startsWith('../')) {
+      continue
+    }
 
-          modules.push(depModule)
-        } catch (_err) {
-          // eslint-disable-next-line no-empty
-        }
-      })
+    try {
+      let basedir = path.dirname(mod.file)
+      let depPath = resolve.sync(dep, { basedir, extensions })
+      yield* _getModuleDependencies(depPath)
+    } catch (_err) {
+      // eslint-disable-next-line no-empty
+    }
   }
+}
 
-  return modules
+export default function getModuleDependencies(entryFile) {
+  return new Set(_getModuleDependencies(entryFile))
 }

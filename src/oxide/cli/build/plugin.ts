@@ -10,12 +10,14 @@ import { loadPostcss, loadPostcssImport, lightningcss } from './deps'
 import { formatNodes, drainStdin, outputFile } from './utils'
 import { env } from '../../../lib/sharedState'
 import resolveConfig from '../../../../resolveConfig'
-import getModuleDependencies from '../../../lib/getModuleDependencies'
 import { parseCandidateFiles } from '../../../lib/content'
 import { createWatcher } from './watching'
 import fastGlob from 'fast-glob'
 import { findAtConfigPath } from '../../../lib/findAtConfigPath'
 import log from '../../../util/log'
+import { loadConfig } from '../../../lib/load-config'
+import getModuleDependencies from '../../../lib/getModuleDependencies'
+import type { Config } from '../../../../types'
 
 /**
  *
@@ -115,7 +117,9 @@ let state = {
   /** @type {{content: string, extension: string}[]} */
   changedContent: [],
 
-  configDependencies: new Set(),
+  /** @type {{config: Config, dependencies: Set<string>, dispose: Function } | null} */
+  configBag: null,
+
   contextDependencies: new Set(),
 
   /** @type {import('../../lib/content.js').ContentPath[]} */
@@ -140,37 +144,35 @@ let state = {
 
   loadConfig(configPath, content) {
     if (this.watcher && configPath) {
-      this.refreshConfigDependencies(configPath)
+      this.refreshConfigDependencies()
     }
 
-    let config = configPath ? require(configPath) : {}
+    let config = loadConfig(configPath)
+    let dependencies = getModuleDependencies(configPath)
+    this.configBag = {
+      config,
+      dependencies,
+      dispose() {
+        for (let file of dependencies) {
+          delete require.cache[require.resolve(file)]
+        }
+      },
+    }
 
     // @ts-ignore
-    config = resolveConfig(config, { content: { files: [] } })
+    this.configBag.config = resolveConfig(this.configBag.config, { content: { files: [] } })
 
     // Override content files if `--content` has been passed explicitly
     if (content?.length > 0) {
-      config.content.files = content
+      this.configBag.config.content.files = content
     }
 
-    return config
+    return this.configBag.config
   },
 
   refreshConfigDependencies(configPath) {
     env.DEBUG && console.time('Module dependencies')
-
-    for (let file of this.configDependencies) {
-      delete require.cache[require.resolve(file)]
-    }
-
-    if (configPath) {
-      let deps = getModuleDependencies(configPath).map(({ file }) => file)
-
-      for (let dependency of deps) {
-        this.configDependencies.add(dependency)
-      }
-    }
-
+    this.configBag?.dispose()
     env.DEBUG && console.timeEnd('Module dependencies')
   },
 
@@ -417,7 +419,7 @@ export async function createProcessor(args, cliConfigPath) {
         async rebuild(changes) {
           let needsNewContext = changes.some((change) => {
             return (
-              state.configDependencies.has(change.file) ||
+              state.configBag?.dependencies.has(change.file) ||
               state.contextDependencies.has(change.file)
             )
           })

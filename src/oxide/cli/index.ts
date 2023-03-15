@@ -8,19 +8,6 @@ import { build } from './build'
 import { help } from './help'
 import { init } from './init'
 
-function isESM() {
-  const pkgPath = path.resolve('./package.json')
-
-  try {
-    let pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
-    return pkg.type && pkg.type === 'module'
-  } catch (err) {
-    return false
-  }
-}
-
-let configs = isESM() ? { tailwind: 'tailwind.config.cjs' } : { tailwind: 'tailwind.config.js' }
-
 // ---
 
 function oneOf(...options) {
@@ -43,7 +30,12 @@ let commands = {
   init: {
     run: init,
     args: {
-      '--full': { type: Boolean, description: `Initialize a full \`${configs.tailwind}\` file` },
+      '--esm': { type: Boolean, description: `Initialize configuration file as ESM` },
+      '--ts': { type: Boolean, description: `Initialize configuration file as TypeScript` },
+      '--full': {
+        type: Boolean,
+        description: `Include the default values for all options in the generated configuration file`,
+      },
       '-f': '--full',
     },
   },
@@ -209,4 +201,4 @@ if (args['--help']) {
   process.exit(0)
 }
 
-run(args, configs)
+run(args)

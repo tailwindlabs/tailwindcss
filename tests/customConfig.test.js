@@ -1,9 +1,11 @@
 import fs from 'fs'
 import path from 'path'
-import { cjsConfigFile, defaultConfigFile } from '../src/constants'
 import inTempDirectory from '../jest/runInTempDirectory'
 
 import { crosscheck, run, html, css, javascript } from './util/run'
+
+const defaultConfigFile = 'tailwind.config.js'
+const cjsConfigFile = 'tailwind.config.cjs'
 
 crosscheck(() => {
   test('it uses the values from the custom config file', () => {

@@ -532,6 +532,46 @@ describe('Build command', () => {
 })
 
 describe('Init command', () => {
+  it.each([
+    { flags: [], name: 'tailwind.config.js' },
+    { flags: ['--ts'], name: 'tailwind.config.ts' },
+    { flags: ['--esm'], name: 'tailwind.config.js' },
+    { flags: ['--full'], name: 'tailwind.config.js' },
+    { flags: ['--ts', '--full'], name: 'tailwind.config.ts' },
+    { flags: ['--esm', '--full'], name: 'tailwind.config.js' },
+  ])('works with all these flags: %j', async ({ flags, name }) => {
+    cleanupFile(name)
+    await removeFile(name)
+
+    let { combined } = await $(`${EXECUTABLE} init ${flags.join(' ')}`)
+
+    expect(combined).toMatchInlineSnapshot(`
+      "
+      Created Tailwind CSS config file: ${name}
+      "
+    `)
+
+    expect(await fileExists(name)).toBe(true)
+
+    let content = await readOutputFile(`../${name}`)
+
+    if (flags.includes('--ts') || flags.includes('--esm')) {
+      expect(content).toContain('export default')
+      expect(content).not.toContain('module.exports =')
+    } else {
+      expect(content).toContain('module.exports =')
+      expect(content).not.toContain('export default')
+    }
+
+    if (flags.includes('--ts')) {
+      expect(content).toContain('satisfies Config')
+    }
+
+    if (flags.includes('--full')) {
+      expect(content.split('\n').length).toBeGreaterThan(50)
+    }
+  })
+
   test('--full', async () => {
     cleanupFile('full.config.js')
 
@@ -577,45 +617,18 @@ describe('Init command', () => {
            tailwindcss init [options]
 
         Options:
-           -f, --full               Initialize a full \`tailwind.config.js\` file
+               --esm                Initialize configuration file as ESM
+               --ts                 Initialize configuration file as TypeScript
            -p, --postcss            Initialize a \`postcss.config.js\` file
+           -f, --full               Include the default values for all options in the generated configuration file
            -h, --help               Display usage information
       `)
     )
   })
 
-  test('--help in ESM package', async () => {
-    let pkg = await readOutputFile('../package.json')
-
-    await writeInputFile(
-      '../package.json',
-      JSON.stringify({
-        ...JSON.parse(pkg),
-        type: 'module',
-      })
-    )
-
-    let { combined } = await $(`${EXECUTABLE} init --help`)
-
-    expect(dedent(combined)).toEqual(
-      dedent(`
-        tailwindcss v${version}
-
-        Usage:
-           tailwindcss init [options]
-
-        Options:
-           -f, --full               Initialize a full \`tailwind.config.cjs\` file
-           -p, --postcss            Initialize a \`postcss.config.cjs\` file
-           -h, --help               Display usage information
-      `)
-    )
-
-    await writeInputFile('../package.json', pkg)
-  })
-
-  test('cjs config created when in ESM package', async () => {
-    cleanupFile('tailwind.config.cjs')
+  test('ESM config is created by default in an ESM project', async () => {
+    cleanupFile('tailwind.config.js')
+    await removeFile('tailwind.config.js')
 
     let pkg = await readOutputFile('../package.json')
 
@@ -631,14 +644,43 @@ describe('Init command', () => {
 
     expect(combined).toMatchInlineSnapshot(`
       "
-      Created Tailwind CSS config file: tailwind.config.cjs
+      Created Tailwind CSS config file: tailwind.config.js
       "
     `)
 
-    expect(await fileExists('./tailwind.config.cjs')).toBe(true)
+    expect(await fileExists('./tailwind.config.js')).toBe(true)
 
     // Not a clean way to test this.
-    expect(await readOutputFile('../tailwind.config.cjs')).toContain('module.exports =')
+    expect(await readOutputFile('../tailwind.config.js')).toContain('export default')
+
+    await writeInputFile('../package.json', pkg)
+  })
+
+  test('CJS config is created by default in a non-ESM project', async () => {
+    cleanupFile('tailwind.config.js')
+    await removeFile('tailwind.config.js')
+
+    let pkg = await readOutputFile('../package.json')
+
+    await writeInputFile(
+      '../package.json',
+      JSON.stringify({
+        ...JSON.parse(pkg),
+      })
+    )
+
+    let { combined } = await $(`${EXECUTABLE} init`)
+
+    expect(combined).toMatchInlineSnapshot(`
+      "
+      Created Tailwind CSS config file: tailwind.config.js
+      "
+    `)
+
+    expect(await fileExists('./tailwind.config.js')).toBe(true)
+
+    // Not a clean way to test this.
+    expect(await readOutputFile('../tailwind.config.js')).toContain('module.exports')
 
     await writeInputFile('../package.json', pkg)
   })

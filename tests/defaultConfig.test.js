@@ -1,5 +1,5 @@
 import config from '../src/public/default-config'
-import configStub from '../stubs/defaultConfig.stub.js'
+import configStub from '../stubs/config.full'
 
 test.todo('remove mutation from these tests so we can run against both engines')
 
