@@ -17,6 +17,7 @@ import { findAtConfigPath } from '../../../lib/findAtConfigPath'
 import log from '../../../util/log'
 import { loadConfig } from '../../../lib/load-config'
 import getModuleDependencies from '../../../lib/getModuleDependencies'
+import type { Config } from '../../../../types'
 
 /**
  *
@@ -116,7 +117,7 @@ let state = {
   /** @type {{content: string, extension: string}[]} */
   changedContent: [],
 
-  /** @type {ReturnType<typeof load> | null} */
+  /** @type {{config: Config, dependencies: Set<string>, dispose: Function } | null} */
   configBag: null,
 
   contextDependencies: new Set(),
