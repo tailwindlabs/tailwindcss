@@ -38,7 +38,7 @@
     "lib/*",
     "peers/*",
     "scripts/*.js",
-    "stubs/*.stub.js",
+    "stubs/*",
     "nesting/*",
     "types/**/*",
     "*.d.ts",
@@ -96,26 +96,17 @@
     "resolve": "^1.22.1",
     "sucrase": "^3.29.0"
   },
-  "browserslist": [
-    "> 1%",
-    "not edge <= 18",
-    "not ie 11",
-    "not op_mini all"
-  ],
+  "browserslist": ["> 1%", "not edge <= 18", "not ie 11", "not op_mini all"],
   "jest": {
     "testTimeout": 30000,
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest/customMatchers.js"
-    ],
+    "setupFilesAfterEnv": ["<rootDir>/jest/customMatchers.js"],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/integrations/",
       "/standalone-cli/",
       "\\.test\\.skip\\.js$"
     ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!lightningcss)"
-    ],
+    "transformIgnorePatterns": ["node_modules/(?!lightningcss)"],
     "transform": {
       "\\.js$": "@swc/jest",
       "\\.ts$": "@swc/jest"
