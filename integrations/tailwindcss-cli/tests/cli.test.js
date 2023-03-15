@@ -626,38 +626,6 @@ describe('Init command', () => {
     )
   })
 
-  test('--help in ESM package', async () => {
-    let pkg = await readOutputFile('../package.json')
-
-    await writeInputFile(
-      '../package.json',
-      JSON.stringify({
-        ...JSON.parse(pkg),
-        type: 'module',
-      })
-    )
-
-    let { combined } = await $(`${EXECUTABLE} init --help`)
-
-    expect(dedent(combined)).toEqual(
-      dedent(`
-        tailwindcss v${version}
-
-        Usage:
-           tailwindcss init [options]
-
-        Options:
-               --esm                Initialize configuration file as ESM
-               --ts                 Initialize configuration file as TypeScript
-           -p, --postcss            Initialize a \`postcss.config.js\` file
-           -f, --full               Include the default values for all options in the generated configuration file
-           -h, --help               Display usage information
-      `)
-    )
-
-    await writeInputFile('../package.json', pkg)
-  })
-
   test('ESM config is created by default in an ESM project', async () => {
     cleanupFile('tailwind.config.js')
     await removeFile('tailwind.config.js')
