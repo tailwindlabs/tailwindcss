@@ -1,4 +1,3 @@
-let fs = require('fs')
 let path = require('path')
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
