@@ -1,3 +1,4 @@
+let fs = require('fs')
 let path = require('path')
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
@@ -533,14 +534,38 @@ describe('Build command', () => {
 
 describe('Init command', () => {
   xit.each([
-    { flags: [] },
-    { flags: ['--ts'] },
-    { flags: ['--esm'] },
-    { flags: ['--full'] },
-    { flags: ['--ts', '--full'] },
-    { flags: ['--esm', '--full'] },
-  ])('works with all these flags: %j', async ({ flags }) => {
+    { flags: [], name: 'tailwind.config.js' },
+    { flags: ['--ts'], name: 'tailwind.config.ts' },
+    { flags: ['--esm'], name: 'tailwind.config.js' },
+    { flags: ['--full'], name: 'tailwind.config.js' },
+    { flags: ['--ts', '--full'], name: 'tailwind.config.ts' },
+    { flags: ['--esm', '--full'], name: 'tailwind.config.js' },
+  ])('works with all these flags: %j', async ({ flags, name }) => {
+    cleanupFile(name)
+
     let { combined } = await $(`${EXECUTABLE} init ${flags.join(' ')}`)
+
+    expect(combined).toMatchInlineSnapshot(`
+      "
+      Created Tailwind CSS config file: ${name}
+      "
+    `)
+
+    expect(await fileExists(name)).toBe(true)
+
+    let content = await readOutputFile(`../${name}`)
+
+    if (flags.includes('--ts') || flags.includes('--esm')) {
+      expect(content).toContain('export default')
+      expect(content).not.toContain('module.exports =')
+    } else {
+      expect(content).toContain('module.exports =')
+      expect(content).not.toContain('export default')
+    }
+
+    if (flags.includes('--full')) {
+      expect(content.split('\n').length).toBeGreaterThan(50)
+    }
   })
 
   test('--full', async () => {
