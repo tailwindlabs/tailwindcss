@@ -540,6 +540,7 @@ describe('Init command', () => {
     { flags: ['--ts', '--full'], name: 'tailwind.config.ts' },
     { flags: ['--esm', '--full'], name: 'tailwind.config.js' },
   ])('works with all these flags: %j', async ({ flags, name }) => {
+    cleanupFile(name)
     await removeFile(name)
 
     let { combined } = await $(`${EXECUTABLE} init ${flags.join(' ')}`)
