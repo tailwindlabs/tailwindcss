@@ -1,7 +1,7 @@
 import jitiFactory from 'jiti'
 import { transform } from 'sucrase'
+
 import { Config } from '../../types/config'
-import getModuleDependencies from './getModuleDependencies'
 
 let jiti: ReturnType<typeof jitiFactory> | null = null
 function lazyJiti() {
@@ -18,28 +18,10 @@ function lazyJiti() {
   )
 }
 
-export function load(path: string) {
-  let config: Config = (() => {
-    try {
-      return path ? require(path) : {}
-    } catch {
-      return lazyJiti()(path)
-    }
-  })()
-
-  let deps = dependencies(path)
-
-  return {
-    config,
-    dependencies: deps,
-    dispose() {
-      for (let file of deps) {
-        delete require.cache[require.resolve(file)]
-      }
-    },
+export function loadConfig(path: string): Config {
+  try {
+    return path ? require(path) : {}
+  } catch {
+    return lazyJiti()(path)
   }
-}
-
-export function dependencies(path: string): Set<string> {
-  return new Set(getModuleDependencies(path).map(({ file }) => file))
 }

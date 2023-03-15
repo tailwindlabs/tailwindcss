@@ -10,7 +10,8 @@ import { getContext, getFileModifiedMap } from './setupContextUtils'
 import parseDependency from '../util/parseDependency'
 import { validateConfig } from '../util/validateConfig.js'
 import { parseCandidateFiles, resolvedChangedContent } from './content.js'
-import { load, dependencies } from '../lib/load-config'
+import { loadConfig } from '../lib/load-config'
+import getModuleDependencies from './getModuleDependencies'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -34,7 +35,7 @@ function getTailwindConfig(configOrPath) {
     let [prevConfig, prevConfigHash, prevDeps, prevModified] =
       configPathCache.get(userConfigPath) || []
 
-    let newDeps = dependencies(userConfigPath)
+    let newDeps = getModuleDependencies(userConfigPath)
 
     let modified = false
     let newModified = new Map()
@@ -55,7 +56,7 @@ function getTailwindConfig(configOrPath) {
     for (let file of newDeps) {
       delete require.cache[file]
     }
-    let newConfig = validateConfig(resolveConfig(load(userConfigPath).config))
+    let newConfig = validateConfig(resolveConfig(loadConfig(userConfigPath)))
     let newHash = hash(newConfig)
     configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
     return [newConfig, userConfigPath, newHash, newDeps]

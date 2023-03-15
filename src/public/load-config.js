@@ -1,2 +1,2 @@
-import { load, dependencies } from '../lib/load-config'
-export { load, dependencies }
+import { loadConfig } from '../lib/load-config'
+export default loadConfig

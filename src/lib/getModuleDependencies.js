@@ -9,9 +9,9 @@ function createModule(file) {
 }
 
 function* _getModuleDependencies(entryFile) {
-  let mod = createModule(entryFile)
+  yield entryFile
 
-  yield mod
+  let mod = createModule(entryFile)
 
   let ext = path.extname(entryFile)
   let isTypeScript = ext === '.ts' || ext === '.cts' || ext === '.mts'
@@ -36,5 +36,5 @@ function* _getModuleDependencies(entryFile) {
 }
 
 export default function getModuleDependencies(entryFile) {
-  return Array.from(_getModuleDependencies(entryFile))
+  return new Set(_getModuleDependencies(entryFile))
 }

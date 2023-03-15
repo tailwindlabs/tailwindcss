@@ -17,7 +17,8 @@ import { createWatcher } from './watching.js'
 import fastGlob from 'fast-glob'
 import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
 import log from '../../util/log'
-import { load } from '../../lib/load-config'
+import { loadConfig } from '../../lib/load-config'
+import getModuleDependencies from '../../lib/getModuleDependencies'
 
 /**
  *
@@ -147,7 +148,17 @@ let state = {
       this.refreshConfigDependencies()
     }
 
-    this.configBag = load(configPath)
+    let config = loadConfig(configPath)
+    let dependencies = getModuleDependencies(configPath)
+    this.configBag = {
+      config,
+      dependencies,
+      dispose() {
+        for (let file of dependencies) {
+          delete require.cache[require.resolve(file)]
+        }
+      },
+    }
 
     // @ts-ignore
     this.configBag.config = resolveConfig(this.configBag.config, { content: { files: [] } })
