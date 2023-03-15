@@ -658,8 +658,9 @@ describe('Init command', () => {
     await writeInputFile('../package.json', pkg)
   })
 
-  xtest('cjs config created when in ESM package', async () => {
+  test('ESM config is created by default in an ESM project', async () => {
     cleanupFile('tailwind.config.js')
+    await removeFile('tailwind.config.js')
 
     let pkg = await readOutputFile('../package.json')
 
@@ -679,10 +680,39 @@ describe('Init command', () => {
       "
     `)
 
-    expect(await fileExists('./tailwind.config.cjs')).toBe(true)
+    expect(await fileExists('./tailwind.config.js')).toBe(true)
 
     // Not a clean way to test this.
-    expect(await readOutputFile('../tailwind.config.js')).toContain('module.exports =')
+    expect(await readOutputFile('../tailwind.config.js')).toContain('export default')
+
+    await writeInputFile('../package.json', pkg)
+  })
+
+  test('CJS config is created by default in a non-ESM project', async () => {
+    cleanupFile('tailwind.config.js')
+    await removeFile('tailwind.config.js')
+
+    let pkg = await readOutputFile('../package.json')
+
+    await writeInputFile(
+      '../package.json',
+      JSON.stringify({
+        ...JSON.parse(pkg),
+      })
+    )
+
+    let { combined } = await $(`${EXECUTABLE} init`)
+
+    expect(combined).toMatchInlineSnapshot(`
+      "
+      Created Tailwind CSS config file: tailwind.config.js
+      "
+    `)
+
+    expect(await fileExists('./tailwind.config.js')).toBe(true)
+
+    // Not a clean way to test this.
+    expect(await readOutputFile('../tailwind.config.js')).toContain('module.exports')
 
     await writeInputFile('../package.json', pkg)
   })
