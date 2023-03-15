@@ -532,7 +532,7 @@ describe('Build command', () => {
 })
 
 describe('Init command', () => {
-  xit.each([
+  it.each([
     { flags: [], name: 'tailwind.config.js' },
     { flags: ['--ts'], name: 'tailwind.config.ts' },
     { flags: ['--esm'], name: 'tailwind.config.js' },
@@ -540,7 +540,7 @@ describe('Init command', () => {
     { flags: ['--ts', '--full'], name: 'tailwind.config.ts' },
     { flags: ['--esm', '--full'], name: 'tailwind.config.js' },
   ])('works with all these flags: %j', async ({ flags, name }) => {
-    cleanupFile(name)
+    await removeFile(name)
 
     let { combined } = await $(`${EXECUTABLE} init ${flags.join(' ')}`)
 
@@ -560,6 +560,10 @@ describe('Init command', () => {
     } else {
       expect(content).toContain('module.exports =')
       expect(content).not.toContain('export default')
+    }
+
+    if (flags.includes('--ts')) {
+      expect(content).toContain('satisfies Config')
     }
 
     if (flags.includes('--full')) {
