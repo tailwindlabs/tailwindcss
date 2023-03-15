@@ -45,6 +45,8 @@ export function init(args) {
         .replace('__CONFIG__', stubContentsFile.replace('module.exports =', '').trim())
         .trim() + '\n\n'
 
+    fs.writeFileSync(tailwindConfigLocation, stubFile, 'utf8')
+
     messages.push(`Created Tailwind CSS config file: ${path.basename(tailwindConfigLocation)}`)
   }
 
