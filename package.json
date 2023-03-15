@@ -40,7 +40,7 @@
     "lib/*",
     "peers/*",
     "scripts/*.js",
-    "stubs/*.stub.js",
+    "stubs/*.{js,ts,cjs}",
     "nesting/*",
     "types/**/*",
     "*.d.ts",
