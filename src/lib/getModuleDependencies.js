@@ -23,7 +23,10 @@ function* _getModuleDependencies(entryFile) {
 
     try {
       let basedir = path.dirname(mod.file)
-      let depPath = resolve.sync(dep, { basedir })
+      let depPath = resolve.sync(dep, {
+        basedir,
+        extensions: ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'],
+      })
       yield* _getModuleDependencies(depPath)
     } catch (_err) {
       // eslint-disable-next-line no-empty
