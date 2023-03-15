@@ -13,6 +13,10 @@ function* _getModuleDependencies(entryFile) {
 
   yield mod
 
+  let ext = path.extname(entryFile)
+  let isTypeScript = ext === '.ts' || ext === '.cts' || ext === '.mts'
+  let extensions = [...(isTypeScript ? ['.ts', '.cts', '.mts'] : []), '.js', '.cjs', '.mjs']
+
   // Iterate over the modules, even when new
   // ones are being added
   for (let dep of mod.requires) {
@@ -23,10 +27,7 @@ function* _getModuleDependencies(entryFile) {
 
     try {
       let basedir = path.dirname(mod.file)
-      let depPath = resolve.sync(dep, {
-        basedir,
-        extensions: ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'],
-      })
+      let depPath = resolve.sync(dep, { basedir, extensions })
       yield* _getModuleDependencies(depPath)
     } catch (_err) {
       // eslint-disable-next-line no-empty
