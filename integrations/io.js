@@ -97,6 +97,17 @@ module.exports = function ({
     },
     async removeFile(file) {
       let filePath = path.resolve(toolRoot, file)
+
+      // File doesn't exist, so we don't need to cache it.
+      if (
+        !(await fs
+          .access(filePath)
+          .then(() => true)
+          .catch(() => false))
+      ) {
+        return
+      }
+
       if (!fileCache[filePath]) {
         fileCache[filePath] = await fs.readFile(filePath, 'utf8')
       }
