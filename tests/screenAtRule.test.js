@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteScreenAtRules'
-import config from '../stubs/defaultConfig.stub.js'
+import config from '../stubs/config.full.js'
 import { crosscheck, css } from './util/run'
 
 function run(input, opts = config) {
