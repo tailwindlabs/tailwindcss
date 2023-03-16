@@ -52,7 +52,7 @@
     "@swc/core": "1.3.35",
     "@swc/jest": "0.2.24",
     "@swc/register": "0.1.10",
-    "autoprefixer": "^10.4.13",
+    "autoprefixer": "^10.4.14",
     "concurrently": "^7.5.0",
     "cssnano": "^5.1.15",
     "esbuild": "^0.17.10",
