@@ -202,16 +202,6 @@ export default function (context) {
 
   let functions = {
     theme: (node, path, ...defaultValue) => {
-      if (path.startsWith('listStyleType')) {
-        log.warn('list-style-type-deprecated', [
-          'As of Tailwind CSS v3.3 `listStyleType` has been renamed to `listStyle`.',
-          `Change \`theme(${path})\` to \`theme(${path.replace(
-            'listStyleType',
-            'listStyle'
-          )})\`, to silence this warning.`,
-        ])
-      }
-
       let { isValid, value, error, alpha } = resolvePath(
         config,
         path,

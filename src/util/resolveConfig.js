@@ -168,16 +168,6 @@ function resolveFunctionKeys(object) {
   // theme('colors.red.500 / 0.5') -> ['colors', 'red', '500 / 0', '5]
 
   const resolvePath = (key, defaultValue) => {
-    if (key.startsWith('listStyleType')) {
-      log.warn('list-style-type-deprecated', [
-        'As of Tailwind CSS v3.3 `listStyleType` has been renamed to `listStyle`.',
-        `Change \`theme(${key})\` to \`theme(${key.replace(
-          'listStyleType',
-          'listStyle'
-        )})\`, to silence this warning.`,
-      ])
-    }
-
     for (const path of toPaths(key)) {
       let index = 0
       let val = object

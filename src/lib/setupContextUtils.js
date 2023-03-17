@@ -272,14 +272,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
   function resolveThemeValue(path, defaultValue, opts = {}) {
     let parts = toPath(path)
-    if (parts[0] === 'listStyleType') {
-      log.warn('list-style-type-deprecated', [
-        'As of Tailwind CSS v3.3 `listStyleType` has been renamed to `listStyle`.',
-        `Change \`theme(${parts.join('.')})\` to \`theme(${['listStyle', ...parts.slice(1)].join(
-          '.'
-        )})\`, to silence this warning.`,
-      ])
-    }
     let value = getConfigValue(['theme', ...parts], defaultValue)
     return transformThemeValue(parts[0])(value, opts)
   }

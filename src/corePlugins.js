@@ -1088,56 +1088,16 @@ export let corePlugins = {
     ],
   ]),
 
-  // @compat Include dummy `listStyleType` plugin so we can check if it's been disabled
-  listStyleType: () => {},
-  listStyle: ({ matchUtilities, config }) => {
-    // @compat If the listStyleType plugin is disabled, assume the user wants to disable listStyle.
-    if (!config('corePlugins').includes('listStyleType')) {
-      return
-    }
-
-    // @compat Intelligently merge `listStyleType` and `listStyle` configurations
-    let defaultValues = defaultConfig.theme.listStyleType
-
-    let listStyleTypeValues = config(['theme', 'listStyleType'], {})
-    let listStyleValues = config(['theme', 'listStyle'], {})
-
-    let defaultValuesTuples = Object.entries(defaultValues)
-    let listStyleTypeValuesTuples = Object.entries(listStyleTypeValues)
-
-    // Check if something changed
-    if (
-      defaultValuesTuples.length !== listStyleTypeValuesTuples.length ||
-      defaultValuesTuples.some(([k, v]) => listStyleTypeValues[k] !== v) ||
-      listStyleTypeValuesTuples.some(([k, v]) => defaultValues[k] !== v)
-    ) {
-      log.warn('list-style-type-deprecated', [
-        'As of Tailwind CSS v3.3 `listStyleType` has been renamed to `listStyle`.',
-        'Update your theme configuration to silence this warning.',
-      ])
-    }
-
-    let values = { ...listStyleTypeValues, ...listStyleValues }
-
-    for (let [key, value] of Object.entries(defaultValues)) {
-      if (listStyleTypeValues[key] !== value) {
-        values[key] = listStyleTypeValues[key]
-      }
-
-      if (listStyleValues[key] !== value) {
-        values[key] = listStyleValues[key]
-      }
-    }
-
-    matchUtilities({ list: (value) => ({ listStyle: value }) }, { values })
-  },
-
   listStylePosition: ({ addUtilities }) => {
     addUtilities({
       '.list-inside': { 'list-style-position': 'inside' },
       '.list-outside': { 'list-style-position': 'outside' },
     })
   },
+  listStyleType: createUtilityPlugin('listStyleType', [['list', ['listStyleType']]]),
+  listStyleImage: createUtilityPlugin('listStyleImage', [['list', ['listStyleImage']]], {
+    type: ['lookup', 'image', 'url'],
+  }),
 
   appearance: ({ addUtilities }) => {
     addUtilities({
