@@ -13,7 +13,11 @@
     "displayName": "vite",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"
-    ]
+    ],
+    "transform": {
+      "\\.js$": "@swc/jest",
+      "\\.ts$": "@swc/jest"
+    }
   },
   "devDependencies": {
     "isomorphic-fetch": "^3.0.0",
