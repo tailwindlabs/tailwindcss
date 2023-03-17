@@ -14,6 +14,10 @@
     "displayName": "Tailwind CSS CLI",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"
-    ]
+    ],
+    "transform": {
+      "\\.js$": "@swc/jest",
+      "\\.ts$": "@swc/jest"
+    }
   }
 }

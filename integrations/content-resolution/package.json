@@ -11,7 +11,11 @@
     "displayName": "Content Resolution",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"
-    ]
+    ],
+    "transform": {
+      "\\.js$": "@swc/jest",
+      "\\.ts$": "@swc/jest"
+    }
   },
   "devDependencies": {
     "postcss": "^8.4.21",

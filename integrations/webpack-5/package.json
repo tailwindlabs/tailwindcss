@@ -14,7 +14,11 @@
     "displayName": "webpack 5",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"
-    ]
+    ],
+    "transform": {
+      "\\.js$": "@swc/jest",
+      "\\.ts$": "@swc/jest"
+    }
   },
   "devDependencies": {
     "css-loader": "^6.7.1",
