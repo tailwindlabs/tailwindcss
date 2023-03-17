@@ -406,10 +406,10 @@
   scroll-padding-top: var(--scroll-padding);
 }
 .list-\[\'\\1f44d\'\] {
-  list-style: "👍";
+  list-style-type: "👍";
 }
 .list-\[var\(--value\)\] {
-  list-style: var(--value);
+  list-style-type: var(--value);
 }
 .columns-\[20\] {
   columns: 20;

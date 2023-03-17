@@ -23,7 +23,6 @@ import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadow
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
 import { normalize } from './util/dataTypes'
-import defaultConfig from '../stubs/config.full'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {

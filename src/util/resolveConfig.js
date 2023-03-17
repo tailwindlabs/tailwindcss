@@ -10,7 +10,6 @@ import { cloneDeep } from './cloneDeep'
 import { parseColorFormat } from './pluginUtils'
 import { withAlphaValue } from './withAlphaVariable'
 import toColorValue from './toColorValue'
-import log from './log'
 
 function isFunction(input) {
   return typeof input === 'function'

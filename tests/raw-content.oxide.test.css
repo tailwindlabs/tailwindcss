@@ -270,11 +270,11 @@
 .resize-none {
   resize: none;
 }
-.list-disc {
-  list-style: disc;
-}
 .list-inside {
   list-style-position: inside;
+}
+.list-disc {
+  list-style-type: disc;
 }
 .appearance-none {
   appearance: none;
