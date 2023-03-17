@@ -1,6 +1,18 @@
 const prettier = require('prettier')
 const { diff } = require('jest-diff')
 const lightningcss = require('lightningcss')
+const log = require('../src/util/log').default
+
+let warn
+
+beforeEach(() => {
+  warn = jest.spyOn(log, 'warn')
+  warn.mockImplementation(() => {})
+})
+
+afterEach(() => {
+  warn.mockRestore()
+})
 
 function formatPrettier(input) {
   return prettier.format(input, {
@@ -136,5 +148,67 @@ expect.extend({
         }
 
     return { actual: received, message, pass }
+  },
+  toHaveBeenWarned() {
+    let passed = warn.mock.calls.length > 0
+    if (passed) {
+      return {
+        pass: true,
+        message: () => {
+          return (
+            this.utils.matcherHint('toHaveBeenWarned') +
+            '\n\n' +
+            `Expected number of calls: >= ${this.utils.printExpected(1)}\n` +
+            `Received number of calls:    ${this.utils.printReceived(actualWarningKeys.length)}`
+          )
+        },
+      }
+    } else {
+      return {
+        pass: false,
+        message: () => {
+          return (
+            this.utils.matcherHint('toHaveBeenWarned') +
+            '\n\n' +
+            `Expected number of calls: >= ${this.utils.printExpected(1)}\n` +
+            `Received number of calls:    ${this.utils.printReceived(warn.mock.calls.length)}`
+          )
+        },
+      }
+    }
+  },
+  toHaveBeenWarnedWith(_received, expectedWarningKeys) {
+    let actualWarningKeys = warn.mock.calls.map((args) => args[0])
+
+    let passed = expectedWarningKeys.every((key) => actualWarningKeys.includes(key))
+    if (passed) {
+      return {
+        pass: true,
+        message: () => {
+          return (
+            this.utils.matcherHint('toHaveBeenWarnedWith') +
+            '\n\n' +
+            `Expected: not ${this.utils.printExpected(expectedWarningKeys)}\n` +
+            `Received: ${this.utils.printReceived(actualWarningKeys)}`
+          )
+        },
+      }
+    } else {
+      let diffString = diff(expectedWarningKeys, actualWarningKeys)
+
+      return {
+        pass: false,
+        message: () => {
+          return (
+            this.utils.matcherHint('toHaveBeenWarnedWith') +
+            '\n\n' +
+            (diffString && diffString.includes('- Expect')
+              ? `Difference:\n\n${diffString}`
+              : `Expected: ${this.utils.printExpected(expectedWarningKeys)}\n` +
+                `Received: ${this.utils.printReceived(actualWarningKeys)}`)
+          )
+        },
+      }
+    }
   },
 })
