@@ -402,11 +402,11 @@
 .scroll-p-6 {
   scroll-padding: 1.5rem;
 }
+.list-disc {
+  list-style: disc;
+}
 .list-inside {
   list-style-position: inside;
-}
-.list-disc {
-  list-style-type: disc;
 }
 .appearance-none {
   appearance: none;

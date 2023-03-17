@@ -23,6 +23,7 @@ import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadow
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
 import { normalize } from './util/dataTypes'
+import defaultConfig from '../stubs/config.full'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -1087,14 +1088,41 @@ export let corePlugins = {
     ],
   ]),
 
+  // @compat Include dummy `listStyleType` plugin so we can check if it's been disabled
+  listStyleType: () => {},
+  listStyle: ({ matchUtilities, config }) => {
+    // @compat If the listStyleType plugin is disabled, assume the user wants to disable listStyle.
+    if (!config('corePlugins').includes('listStyleType')) {
+      return
+    }
+
+    // @compat Intelligently merge `listStyleType` and `listStyle` configurations
+    let defaultValues = defaultConfig.theme.listStyleType
+
+    let listStyleTypeValues = config(['theme', 'listStyleType'], {})
+    let listStyleValues = config(['theme', 'listStyle'], {})
+
+    let values = { ...listStyleTypeValues, ...listStyleValues }
+
+    for (let [key, value] of Object.entries(defaultValues)) {
+      if (listStyleTypeValues[key] !== value) {
+        values[key] = listStyleTypeValues[key]
+      }
+
+      if (listStyleValues[key] !== value) {
+        values[key] = listStyleValues[key]
+      }
+    }
+
+    matchUtilities({ list: (value) => ({ listStyle: value }) }, { values })
+  },
+
   listStylePosition: ({ addUtilities }) => {
     addUtilities({
       '.list-inside': { 'list-style-position': 'inside' },
       '.list-outside': { 'list-style-position': 'outside' },
     })
   },
-
-  listStyleType: createUtilityPlugin('listStyleType', [['list', ['listStyleType']]]),
 
   appearance: ({ addUtilities }) => {
     addUtilities({

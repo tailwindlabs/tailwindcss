@@ -572,7 +572,13 @@ module.exports = {
       9: '2.25rem',
       10: '2.5rem',
     },
+    // Deprecated, included for backwards-compatibility until v4.0
     listStyleType: {
+      none: 'none',
+      disc: 'disc',
+      decimal: 'decimal',
+    },
+    listStyle: {
       none: 'none',
       disc: 'disc',
       decimal: 'decimal',

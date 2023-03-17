@@ -397,7 +397,7 @@ crosscheck(({ stable, oxide }) => {
           scroll-padding-top: var(--any-value);
         }
         .list-\[var\(--any-value\)\] {
-          list-style-type: var(--any-value);
+          list-style: var(--any-value);
         }
         .columns-\[var\(--any-value\)\] {
           columns: var(--any-value);
@@ -945,7 +945,7 @@ crosscheck(({ stable, oxide }) => {
           scroll-padding-top: var(--any-value);
         }
         .list-\[var\(--any-value\)\] {
-          list-style-type: var(--any-value);
+          list-style: var(--any-value);
         }
         .columns-\[var\(--any-value\)\] {
           columns: var(--any-value);
