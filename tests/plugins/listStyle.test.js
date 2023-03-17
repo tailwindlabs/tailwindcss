@@ -282,4 +282,92 @@ crosscheck(() => {
     })
   })
 
+  it('should warn when customizing the `listStyleType` config', async () => {
+    let config = {
+      content: [{ raw: html`<div class="list-foo"></div>` }],
+      corePlugins: { preflight: false },
+      theme: {
+        extend: {
+          listStyleType: {
+            foo: 'bar',
+          },
+        },
+      },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    await run(input, config)
+
+    expect().toHaveBeenWarnedWith(['list-style-type-deprecated'])
+  })
+
+  it('should warn when accesing `listStyleType` via the JS theme function (in the theme config)', async () => {
+    let config = {
+      content: [{ raw: html`<div class="list-[theme(foo.bar)]"></div>` }],
+      corePlugins: { preflight: false },
+      theme: {
+        extend: {
+          foo: ({ theme }) => {
+            return {
+              bar: theme('listStyleType.disc'),
+            }
+          },
+        },
+      },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    await run(input, config)
+
+    expect().toHaveBeenWarnedWith(['list-style-type-deprecated'])
+  })
+
+  it('should warn when accesing `listStyleType` via the JS theme function (in a plugin)', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      corePlugins: { preflight: false },
+      plugins: [
+        ({ addUtilities, theme }) => {
+          addUtilities({
+            '.foo': {
+              'list-style': theme('listStyleType.disc'),
+            },
+          })
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    await run(input, config)
+
+    expect().toHaveBeenWarnedWith(['list-style-type-deprecated'])
+  })
+
+  it('should warn when accesing `listStyleType` via the CSS theme function', async () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind utilities;
+
+      .foo {
+        list-style: theme(listStyleType.disc);
+      }
+    `
+
+    await run(input, config)
+
+    expect().toHaveBeenWarnedWith(['list-style-type-deprecated'])
+  })
 })

@@ -1102,6 +1102,21 @@ export let corePlugins = {
     let listStyleTypeValues = config(['theme', 'listStyleType'], {})
     let listStyleValues = config(['theme', 'listStyle'], {})
 
+    let defaultValuesTuples = Object.entries(defaultValues)
+    let listStyleTypeValuesTuples = Object.entries(listStyleTypeValues)
+
+    // Check if something changed
+    if (
+      defaultValuesTuples.length !== listStyleTypeValuesTuples.length ||
+      defaultValuesTuples.some(([k, v]) => listStyleTypeValues[k] !== v) ||
+      listStyleTypeValuesTuples.some(([k, v]) => defaultValues[k] !== v)
+    ) {
+      log.warn('list-style-type-deprecated', [
+        'As of Tailwind CSS v3.3 `listStyleType` has been renamed to `listStyle`.',
+        'Update your theme configuration to silence this warning.',
+      ])
+    }
+
     let values = { ...listStyleTypeValues, ...listStyleValues }
 
     for (let [key, value] of Object.entries(defaultValues)) {
