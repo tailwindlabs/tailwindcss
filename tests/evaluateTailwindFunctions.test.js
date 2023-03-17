@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import postcss from 'postcss'
 import plugin from '../src/lib/evaluateTailwindFunctions'
-import log from '../src/util/log'
 import { crosscheck, run as runFull, html, css } from './util/run'
 
 function run(input, opts = {}) {
@@ -1348,14 +1347,6 @@ crosscheck(({ stable, oxide }) => {
     )
     afterEach(() => fs.promises.unlink(configPath))
 
-    let warn
-
-    beforeEach(() => {
-      warn = jest.spyOn(log, 'warn')
-    })
-
-    afterEach(() => warn.mockClear())
-
     oxide.test.todo('should not generate when theme fn doesnt resolve')
     stable.test('should not generate when theme fn doesnt resolve', async () => {
       await fs.promises.writeFile(
@@ -1378,11 +1369,7 @@ crosscheck(({ stable, oxide }) => {
       `)
 
       // 2. But we get a warning in the console
-      expect(warn).toHaveBeenCalledTimes(2)
-      expect(warn.mock.calls.map((x) => x[0])).toEqual([
-        'invalid-theme-key-in-class',
-        'invalid-theme-key-in-class',
-      ])
+      expect().toHaveBeenWarnedWith(['invalid-theme-key-in-class'])
 
       // 3. The second run should work fine because it's been removed from the class cache
       result = await runFull('@tailwind utilities', configPath)
@@ -1394,11 +1381,7 @@ crosscheck(({ stable, oxide }) => {
       `)
 
       // 4. But we've not received any further logs about it
-      expect(warn).toHaveBeenCalledTimes(2)
-      expect(warn.mock.calls.map((x) => x[0])).toEqual([
-        'invalid-theme-key-in-class',
-        'invalid-theme-key-in-class',
-      ])
+      expect().toHaveBeenWarnedWith(['invalid-theme-key-in-class'])
     })
   })
 })

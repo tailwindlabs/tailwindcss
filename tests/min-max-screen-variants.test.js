@@ -1,17 +1,6 @@
-import log from '../src/util/log'
 import { crosscheck, run, html, css } from './util/run'
 
 crosscheck(() => {
-  let warn
-
-  beforeEach(() => {
-    warn = jest.spyOn(log, 'warn')
-  })
-
-  afterEach(() => {
-    warn.mockClear()
-  })
-
   let defaultScreens = {
     sm: '640px',
     md: '768px',
@@ -119,7 +108,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(0)
+    expect().not.toHaveBeenWarned()
   })
 
   it('works when using max variants screens config is empty and variants all use the same unit', () => {
@@ -318,8 +307,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['complex-screen-config'])
+    expect().toHaveBeenWarnedWith(['complex-screen-config'])
   })
 
   it('warns when using min variants with simple configs containing mixed units', async () => {
@@ -365,8 +353,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['mixed-screen-units'])
+    expect().toHaveBeenWarnedWith(['mixed-screen-units'])
   })
 
   it('warns when using min variants with mixed units (with screens config)', async () => {
@@ -412,8 +399,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['minmax-have-mixed-units'])
+    expect().toHaveBeenWarnedWith(['minmax-have-mixed-units'])
   })
 
   it('warns when using min variants with mixed units (with no screens config)', async () => {
@@ -450,8 +436,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['minmax-have-mixed-units'])
+    expect().toHaveBeenWarnedWith(['minmax-have-mixed-units'])
   })
 
   it('warns when using max variants with complex screen configs', async () => {
@@ -500,8 +485,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['complex-screen-config'])
+    expect().toHaveBeenWarnedWith(['complex-screen-config'])
   })
 
   it('warns when using max variants with simple configs containing mixed units', async () => {
@@ -547,8 +531,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['mixed-screen-units'])
+    expect().toHaveBeenWarnedWith(['mixed-screen-units'])
   })
 
   it('warns when using max variants with mixed units (with screens config)', async () => {
@@ -594,8 +577,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['minmax-have-mixed-units'])
+    expect().toHaveBeenWarnedWith(['minmax-have-mixed-units'])
   })
 
   it('warns when using max variants with mixed units (with no screens config)', async () => {
@@ -632,8 +614,7 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['minmax-have-mixed-units'])
+    expect().toHaveBeenWarnedWith(['minmax-have-mixed-units'])
   })
 
   it('warns when using min and max variants with mixed units (with no screens config)', async () => {
@@ -670,7 +651,6 @@ crosscheck(() => {
       }
     `)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['minmax-have-mixed-units'])
+    expect().toHaveBeenWarnedWith(['minmax-have-mixed-units'])
   })
 })

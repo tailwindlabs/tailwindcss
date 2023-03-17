@@ -1,6 +1,5 @@
 import { normalizeConfig } from '../src/util/normalizeConfig'
 import resolveConfig from '../src/public/resolve-config'
-import log from '../src/util/log'
 import { crosscheck, run, css } from './util/run'
 
 crosscheck(({ stable, oxide }) => {
@@ -128,8 +127,6 @@ crosscheck(({ stable, oxide }) => {
   })
 
   it('should warn when we detect invalid globs with incorrect brace expansion', () => {
-    let spy = jest.spyOn(log, 'warn')
-
     let config = {
       content: [
         './{example-folder}/**/*.{html,js}',
@@ -162,9 +159,6 @@ crosscheck(({ stable, oxide }) => {
       transform: {},
     })
 
-    // But a warning should happen
-    expect(spy).toHaveBeenCalledTimes(2)
-    expect(spy.mock.calls.map((x) => x[0])).toEqual(['invalid-glob-braces', 'invalid-glob-braces'])
-    spy.mockRestore()
+    expect().toHaveBeenWarnedWith(['invalid-glob-braces'])
   })
 })

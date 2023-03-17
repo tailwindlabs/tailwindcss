@@ -1,17 +1,6 @@
-import log from '../src/util/log'
 import { crosscheck, run, html, css } from './util/run'
 
 crosscheck(() => {
-  let warn
-
-  beforeEach(() => {
-    warn = jest.spyOn(log, 'warn')
-  })
-
-  afterEach(() => {
-    warn.mockClear()
-  })
-
   test('it warns when there is no content key', async () => {
     let config = {
       corePlugins: { preflight: false },
@@ -23,8 +12,7 @@ crosscheck(() => {
 
     await run(input, config)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['content-problems'])
+    expect().toHaveBeenWarnedWith(['content-problems'])
   })
 
   test('it warns when there is an empty content key', async () => {
@@ -39,8 +27,7 @@ crosscheck(() => {
 
     await run(input, config)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['content-problems'])
+    expect().toHaveBeenWarnedWith(['content-problems'])
   })
 
   test('it warns when there are no utilities generated', async () => {
@@ -55,8 +42,7 @@ crosscheck(() => {
 
     await run(input, config)
 
-    expect(warn).toHaveBeenCalledTimes(1)
-    expect(warn.mock.calls.map((x) => x[0])).toEqual(['content-problems'])
+    expect().toHaveBeenWarnedWith(['content-problems'])
   })
 
   it('warnings are not thrown when only variant utilities are generated', async () => {
@@ -71,6 +57,6 @@ crosscheck(() => {
 
     await run(input, config)
 
-    expect(warn).toHaveBeenCalledTimes(0)
+    expect().not.toHaveBeenWarned()
   })
 })
