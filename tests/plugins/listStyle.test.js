@@ -57,4 +57,61 @@ crosscheck(() => {
       `)
     })
   })
+
+  test('`list-none` is always generated before configured listStyleImage values', () => {
+    let config = {
+      content: [{ raw: html`<div class="list-none list-disc list-cupcake"></div>` }],
+      corePlugins: { preflight: false },
+      theme: {
+        listStyleImage: {
+          cupcake: 'url(./cupcake.png)',
+        },
+      },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        .list-none {
+          list-style-type: none;
+        }
+        .list-disc {
+          list-style-type: disc;
+        }
+        .list-none {
+          list-style-image: none;
+        }
+        .list-cupcake {
+          list-style-image: url('./cupcake.png');
+        }
+      `)
+    })
+  })
+
+  test('using `list-none` with `@apply` generates the styles for both `list-none` classes', () => {
+    let config = {
+      content: [{ raw: html`<div class="foo"></div>` }],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind utilities;
+
+      .foo {
+        @apply list-none;
+      }
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        .foo {
+          list-style-type: none;
+          list-style-image: none;
+        }
+      `)
+    })
+  })
 })

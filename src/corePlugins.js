@@ -1093,10 +1093,40 @@ export let corePlugins = {
       '.list-outside': { 'list-style-position': 'outside' },
     })
   },
-  listStyleType: createUtilityPlugin('listStyleType', [['list', ['listStyleType']]]),
-  listStyleImage: createUtilityPlugin('listStyleImage', [['list', ['listStyleImage']]], {
-    type: ['lookup', 'image', 'url'],
-  }),
+  listStyleType: ({ addUtilities, matchUtilities, theme }) => {
+    addUtilities({
+      '.list-none': { 'list-style-type': 'none' },
+    })
+
+    // @compat Need to keep `none` in the default config but don't want to generate two utilities
+    let values = Object.fromEntries(
+      Object.entries(theme('listStyleType')).filter(([key, value]) => {
+        return key !== 'none' && value !== 'none'
+      })
+    )
+
+    matchUtilities(
+      {
+        list: (value) => {
+          return { listStyleType: value }
+        },
+      },
+      { values }
+    )
+  },
+  listStyleImage: ({ addUtilities, matchUtilities, theme }) => {
+    addUtilities({
+      '.list-none': { 'list-style-image': 'none' },
+    })
+    matchUtilities(
+      {
+        list: (value) => {
+          return { listStyleImage: value }
+        },
+      },
+      { values: theme('listStyleImage'), type: ['lookup', 'image', 'url'] }
+    )
+  },
 
   appearance: ({ addUtilities }) => {
     addUtilities({
