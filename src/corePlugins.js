@@ -1093,8 +1093,8 @@ export let corePlugins = {
       '.list-outside': { 'list-style-position': 'outside' },
     })
   },
-
   listStyleType: createUtilityPlugin('listStyleType', [['list', ['listStyleType']]]),
+  listStyleImage: createUtilityPlugin('listStyleImage', [['list-image', ['listStyleImage']]]),
 
   appearance: ({ addUtilities }) => {
     addUtilities({
