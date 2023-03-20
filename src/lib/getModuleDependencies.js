@@ -73,7 +73,7 @@ function* _getModuleDependencies(filename, base, seen) {
 }
 
 export default function getModuleDependencies(absoluteFilePath) {
-  return Array.from(
+  return new Set(
     _getModuleDependencies(absoluteFilePath, path.dirname(absoluteFilePath), new Set())
   )
 }
