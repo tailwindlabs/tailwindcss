@@ -75,7 +75,6 @@
     "browserslist": "^4.21.5",
     "chokidar": "^3.5.3",
     "color-name": "^1.1.4",
-    "detective-typescript": "^9.0.0",
     "didyoumean": "^1.2.2",
     "dlv": "^1.1.3",
     "fast-glob": "^3.2.12",

@@ -89,7 +89,9 @@ export function createWatcher(args, { state, rebuild }) {
     // Resolve the promise even when the rebuild fails
     return rebuild(changes).then(
       () => {},
-      () => {}
+      (e) => {
+        console.error(e.toString())
+      }
     )
   }
 
