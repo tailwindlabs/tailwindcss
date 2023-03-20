@@ -408,6 +408,9 @@
 .list-disc {
   list-style-type: disc;
 }
+.list-image-none {
+  list-style-image: none;
+}
 .appearance-none {
   appearance: none;
 }

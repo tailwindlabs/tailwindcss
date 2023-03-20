@@ -411,6 +411,12 @@
 .list-\[var\(--value\)\] {
   list-style-type: var(--value);
 }
+.list-image-\[url\(\.\/my-image\.png\)\] {
+  list-style-image: url("./my-image.png");
+}
+.list-image-\[var\(--value\)\] {
+  list-style-image: var(--value);
+}
 .columns-\[20\] {
   columns: 20;
 }
