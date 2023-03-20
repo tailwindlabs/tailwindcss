@@ -1100,7 +1100,7 @@ export let corePlugins = {
 
     // @compat Need to keep `none` in the default config but don't want to generate two utilities
     let values = Object.fromEntries(
-      Object.entries(theme('listStyleType')).filter(([key, value]) => {
+      Object.entries(theme('listStyleType') ?? {}).filter(([key, value]) => {
         return key !== 'none' && value !== 'none'
       })
     )
