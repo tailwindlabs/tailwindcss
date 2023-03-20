@@ -37,9 +37,7 @@ function resolveWithExtension(file, extensions) {
   return null
 }
 
-function* _getModuleDependencies(filename, base, seen) {
-  let ext = path.extname(filename)
-
+function* _getModuleDependencies(filename, base, seen, ext = path.extname(filename)) {
   // Try to find the file
   let absoluteFile = resolveWithExtension(
     path.resolve(base, filename),
@@ -56,6 +54,7 @@ function* _getModuleDependencies(filename, base, seen) {
 
   // Resolve new base for new imports/requires
   base = path.dirname(absoluteFile)
+  ext = path.extname(absoluteFile)
 
   let contents = fs.readFileSync(absoluteFile, 'utf-8')
 
@@ -68,7 +67,7 @@ function* _getModuleDependencies(filename, base, seen) {
     // Bail out if it's not a relative file
     if (!match[1].startsWith('.')) continue
 
-    yield* _getModuleDependencies(match[1], base, seen)
+    yield* _getModuleDependencies(match[1], base, seen, ext)
   }
 }
 
