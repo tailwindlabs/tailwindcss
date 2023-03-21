@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   test('important selector', () => {
     let config = {
       important: '#app',
@@ -20,6 +20,7 @@ crosscheck(() => {
             <div class="dark:focus:text-left"></div>
             <div class="group-hover:focus-within:text-left"></div>
             <div class="rtl:active:text-center"></div>
+            <div class="dark:before:underline"></div>
           `,
         },
       ],
@@ -122,33 +123,74 @@ crosscheck(() => {
             transform: rotate(360deg);
           }
         }
-        #app .animate-spin {
+        #app :is(.animate-spin) {
           animation: 1s linear infinite spin;
         }
-        #app .font-bold {
+        #app :is(.font-bold) {
           font-weight: 700;
         }
         .custom-util {
           button: no;
         }
-        #app .group:hover .group-hover\:focus-within\:text-left:focus-within {
+        #app :is(.group:hover .group-hover\:focus-within\:text-left:focus-within) {
           text-align: left;
         }
-        #app :is([dir='rtl'] .rtl\:active\:text-center:active) {
+        #app :is(:is([dir='rtl'] .rtl\:active\:text-center:active)) {
           text-align: center;
         }
         @media (prefers-reduced-motion: no-preference) {
-          #app .motion-safe\:hover\:text-center:hover {
+          #app :is(.motion-safe\:hover\:text-center:hover) {
             text-align: center;
           }
         }
-        #app :is(.dark .dark\:focus\:text-left:focus) {
+        #app :is(.dark .dark\:before\:underline):before {
+          content: var(--tw-content);
+          text-decoration-line: underline;
+        }
+        #app :is(:is(.dark .dark\:focus\:text-left:focus)) {
           text-align: left;
         }
         @media (min-width: 768px) {
-          #app .md\:hover\:text-right:hover {
+          #app :is(.md\:hover\:text-right:hover) {
             text-align: right;
           }
+        }
+      `)
+    })
+  })
+
+  test('pseudo-elements are appended after the `:is()`', () => {
+    let config = {
+      important: '#app',
+      darkMode: 'class',
+      content: [
+        {
+          raw: html` <div class="dark:before:bg-black"></div> `,
+        },
+      ],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      stable.expect(result.css).toMatchFormattedCss(css`
+        ${defaults}
+        #app :is(.dark .dark\:before\:bg-black)::before {
+          content: var(--tw-content);
+          --tw-bg-opacity: 1;
+          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        ${defaults}
+        #app :is(.dark .dark\:before\:bg-black)::before {
+          content: var(--tw-content);
+          background-color: #000;
         }
       `)
     })

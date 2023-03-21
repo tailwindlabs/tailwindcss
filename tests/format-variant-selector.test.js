@@ -348,6 +348,8 @@ crosscheck(() => {
       ${'.parent::before &:hover'}                             | ${'.parent &:hover::before'}
       ${':where(&::before) :is(h1, h2, h3, h4)'}               | ${':where(&) :is(h1, h2, h3, h4)::before'}
       ${':where(&::file-selector-button) :is(h1, h2, h3, h4)'} | ${':where(&::file-selector-button) :is(h1, h2, h3, h4)'}
+      ${'#app :is(.dark &::before)'}                           | ${'#app :is(.dark &)::before'}
+      ${'#app :is(:is(.dark &)::before)'}                      | ${'#app :is(:is(.dark &))::before'}
     `('should translate "$before" into "$after"', ({ before, after }) => {
       let result = finalizeSelector('.a', [{ format: before, isArbitraryVariant: false }], {
         candidate: 'a',

@@ -17,6 +17,7 @@ import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isSyntacticallyValidPropertyValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 import { flagEnabled } from '../featureFlags'
+import { applyImportantSelector } from '../util/applyImportantSelector'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -868,7 +869,7 @@ function getImportantStrategy(important) {
       }
 
       rule.selectors = rule.selectors.map((selector) => {
-        return `${important} ${selector}`
+        return applyImportantSelector(selector, important)
       })
     }
   }
