@@ -548,14 +548,14 @@ function processApply(root, context, localCache) {
 
             let parentSelector =
               isGenerated && importantSelector && parent.selector.indexOf(importantSelector) === 0
-                ? parent.selector.slice(importantSelector.length)
+                ? parent.selector.slice(importantSelector.length + 5 /* ' is:('.length */, -1)
                 : parent.selector
 
             rule.selector = replaceSelector(parentSelector, rule.selector, applyCandidate)
 
             // And then re-add it if it was removed
             if (importantSelector && parentSelector !== parent.selector) {
-              rule.selector = `${importantSelector} ${rule.selector}`
+              rule.selector = `${importantSelector} :is(${rule.selector})`
             }
 
             rule.walkDecls((d) => {

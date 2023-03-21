@@ -2120,10 +2120,10 @@ crosscheck(({ stable, oxide }) => {
     let result = await run(input, config)
 
     expect(result.css).toMatchFormattedCss(css`
-      #myselector .custom-utility {
+      #myselector :is(.custom-utility) {
         font-weight: 400;
       }
-      #myselector .group:hover .custom-utility {
+      #myselector :is(.group:hover .custom-utility) {
         text-decoration-line: underline;
       }
     `)

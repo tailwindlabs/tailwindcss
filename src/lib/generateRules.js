@@ -868,7 +868,7 @@ function getImportantStrategy(important) {
       }
 
       rule.selectors = rule.selectors.map((selector) => {
-        return `${important} ${selector}`
+        return `${important} :is(${selector})`
       })
     }
   }

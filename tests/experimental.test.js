@@ -176,15 +176,15 @@ crosscheck(() => {
           --tw-shadow: 0 0 #0000;
           --tw-shadow-colored: 0 0 #0000;
         }
-        #app .resize {
+        #app :is(.resize) {
           resize: both;
         }
-        #app .divide-y > :not([hidden]) ~ :not([hidden]) {
+        #app :is(.divide-y > :not([hidden]) ~ :not([hidden])) {
           --tw-divide-y-reverse: 0;
           border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
           border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
         }
-        #app .shadow {
+        #app :is(.shadow) {
           --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
           --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
             0 1px 2px -1px var(--tw-shadow-color);
