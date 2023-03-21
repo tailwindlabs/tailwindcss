@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(() => {
+crosscheck(({ stable, oxide }) => {
   test('important selector', () => {
     let config = {
       important: '#app',
@@ -20,6 +20,7 @@ crosscheck(() => {
             <div class="dark:focus:text-left"></div>
             <div class="group-hover:focus-within:text-left"></div>
             <div class="rtl:active:text-center"></div>
+            <div class="dark:before:bg-black"></div>
           `,
         },
       ],
@@ -149,6 +150,44 @@ crosscheck(() => {
           #app :is(.md\:hover\:text-right:hover) {
             text-align: right;
           }
+        }
+      `)
+    })
+  })
+
+  test('pseudo-elements are appended after the `:is()`', () => {
+    let config = {
+      important: '#app',
+      darkMode: 'class',
+      content: [
+        {
+          raw: html` <div class="dark:before:bg-black"></div> `,
+        },
+      ],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      console.log(result.css)
+      stable.expect(result.css).toMatchFormattedCss(css`
+        ${defaults}
+        #app :is(.dark .dark\:before\:bg-black)::before {
+          content: var(--tw-content);
+          --tw-bg-opacity: 1;
+          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        }
+      `)
+      oxide.expect(result.css).toMatchFormattedCss(css`
+        ${defaults}
+        #app :is(.dark .dark\:before\:bg-black)::before {
+          content: var(--tw-content);
+          background-color: #000;
         }
       `)
     })
