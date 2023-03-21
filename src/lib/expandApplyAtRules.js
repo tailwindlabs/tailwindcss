@@ -549,7 +549,7 @@ function processApply(root, context, localCache) {
 
             let parentSelector =
               isGenerated && importantSelector && parent.selector.indexOf(importantSelector) === 0
-                ? parent.selector.slice(importantSelector.length + 5 /* ' is:('.length */, -1)
+                ? parent.selector.slice(importantSelector.length)
                 : parent.selector
 
             rule.selector = replaceSelector(parentSelector, rule.selector, applyCandidate)
