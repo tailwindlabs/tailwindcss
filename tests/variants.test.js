@@ -1134,7 +1134,7 @@ crosscheck(({ stable, oxide }) => {
       darkMode: 'class',
       content: [
         {
-          raw: html` <div class="dark:rtl:italic" /> `,
+          raw: html`<div class="dark:rtl:italic" />`,
         },
       ],
       corePlugins: { preflight: false },
@@ -1148,6 +1148,30 @@ crosscheck(({ stable, oxide }) => {
 
     expect(result.css).toMatchFormattedCss(css`
       :is(.dark :is([dir='rtl'] .dark\:rtl\:italic)) {
+        font-style: italic;
+      }
+    `)
+  })
+
+  test('stacking dark and rtl variants with pseudo elements', async () => {
+    let config = {
+      darkMode: 'class',
+      content: [
+        {
+          raw: html`<div class="dark:rtl:placeholder:italic" />`,
+        },
+      ],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    let result = await run(input, config)
+
+    expect(result.css).toMatchFormattedCss(css`
+      :is(.dark :is([dir='rtl'] .dark\:rtl\:placeholder\:italic))::placeholder {
         font-style: italic;
       }
     `)
