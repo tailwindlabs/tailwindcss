@@ -20,7 +20,7 @@ crosscheck(({ stable, oxide }) => {
             <div class="dark:focus:text-left"></div>
             <div class="group-hover:focus-within:text-left"></div>
             <div class="rtl:active:text-center"></div>
-            <div class="dark:before:bg-black"></div>
+            <div class="dark:before:underline"></div>
           `,
         },
       ],
@@ -143,6 +143,10 @@ crosscheck(({ stable, oxide }) => {
             text-align: center;
           }
         }
+        #app :is(.dark .dark\:before\:underline):before {
+          content: var(--tw-content);
+          text-decoration-line: underline;
+        }
         #app :is(:is(.dark .dark\:focus\:text-left:focus)) {
           text-align: left;
         }
@@ -174,7 +178,6 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      console.log(result.css)
       stable.expect(result.css).toMatchFormattedCss(css`
         ${defaults}
         #app :is(.dark .dark\:before\:bg-black)::before {
