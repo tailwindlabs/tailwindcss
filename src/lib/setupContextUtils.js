@@ -1008,7 +1008,9 @@ function registerPlugins(plugins, context) {
     }
 
     // Exclude utilities that are known non-classes (e.g. from the blocklist)
-    output = output.filter((cls) => !context.notClassCache.has(cls))
+    if (context.notClassCache.size > 0) {
+      output = output.filter((cls) => !context.notClassCache.has(cls))
+    }
 
     return output
   }
