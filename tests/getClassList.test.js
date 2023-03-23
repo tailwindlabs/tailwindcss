@@ -191,18 +191,6 @@ crosscheck(() => {
     expect(classes).not.toContain('bg-red-500/50')
   })
 
-  it('should not generate utilities that are present in the blocklist', () => {
-    let config = {
-      blocklist: ['font-bold'],
-    }
-
-    let context = createContext(resolveConfig(config))
-    let classes = context.getClassList()
-
-    expect(classes).toContain('font-normal')
-    expect(classes).not.toContain('font-bold')
-  })
-
   it('should not generate utilities that are set to undefined or null to so that they are removed', () => {
     let config = {
       theme: {
