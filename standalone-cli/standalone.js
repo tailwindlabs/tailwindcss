@@ -1,6 +1,6 @@
 let Module = require('module')
 let origRequire = Module.prototype.require
-let log = require('tailwindcss/lib/util/log')
+let log = require('tailwindcss/lib/util/log').default
 
 let localModules = {
   'tailwindcss/colors': require('tailwindcss/colors'),
