@@ -306,8 +306,8 @@ export function normalizeConfig(config) {
 
     if (plugin && config.plugins.includes(plugin)) {
       log.warn('line-clamp-in-core', [
-        `The @tailwindcs/line-clamp plugin is now part of Tailwind CSS v3.3`,
-        `Remove it from your config to silence this warning`,
+        'As of Tailwind CSS v3.3, the `@tailwindcss/line-clamp` plugin is now included by default.',
+        'Remove it from the `plugins` array in your configuration to eliminate this warning.',
       ])
 
       config.plugins = config.plugins.filter((p) => p !== plugin)
