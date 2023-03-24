@@ -309,6 +309,8 @@ export function normalizeConfig(config) {
         `The @tailwindcs/line-clamp plugin is now part of Tailwind CSS v3.3`,
         `Remove it from your config to silence this warning`,
       ])
+
+      config.plugins = config.plugins.filter((p) => p !== plugin)
     }
   }
 
