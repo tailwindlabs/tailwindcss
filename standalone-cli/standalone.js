@@ -1,5 +1,6 @@
 let Module = require('module')
 let origRequire = Module.prototype.require
+let log = require('tailwindcss/lib/util/log').default
 
 let localModules = {
   'tailwindcss/colors': require('tailwindcss/colors'),
@@ -11,7 +12,12 @@ let localModules = {
   '@tailwindcss/aspect-ratio': require('@tailwindcss/aspect-ratio'),
   '@tailwindcss/container-queries': require('@tailwindcss/container-queries'),
   '@tailwindcss/forms': require('@tailwindcss/forms'),
-  '@tailwindcss/line-clamp': require('@tailwindcss/line-clamp'),
+  '@tailwindcss/line-clamp': () => {
+    log.warn('line-clamp-in-core', [
+      `The @tailwindcs/line-clamp plugin is now part of Tailwind CSS v3.3`,
+      `Remove it from your config to silence this warning`,
+    ])
+  },
   '@tailwindcss/typography': require('@tailwindcss/typography'),
 
   // These are present to allow them to be specified in the PostCSS config file

@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mark `rtl` and `ltr` variants as stable and remove warnings ([#10764](https://github.com/tailwindlabs/tailwindcss/pull/10764))
 - Use `inset` instead of `top`, `right`, `bottom`, and `left` properties ([#10765](https://github.com/tailwindlabs/tailwindcss/pull/10765))
 - Make `dark` and `rtl`/`ltr` variants insensitive to DOM order ([#10766](https://github.com/tailwindlabs/tailwindcss/pull/10766))
+- Warn when `@tailwindcss/line-clamp` plugin is being used ([#10862](https://github.com/tailwindlabs/tailwindcss/pull/10862))
 
 ## [3.2.7] - 2023-02-16
 
