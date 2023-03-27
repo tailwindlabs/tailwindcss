@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sort class lists deterministically for Prettier plugin ([#10672](https://github.com/tailwindlabs/tailwindcss/pull/10672))
 - Ensure CLI builds have a non-zero exit code on failure ([#10703](https://github.com/tailwindlabs/tailwindcss/pull/10703))
 - Ensure module dependencies for value `null`, is an empty `Set` ([#10877](https://github.com/tailwindlabs/tailwindcss/pull/10877))
+- Fix format assumption when resolving module dependencies ([#10878](https://github.com/tailwindlabs/tailwindcss/pull/10878))
 
 ### Changed
 

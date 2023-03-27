@@ -62,7 +62,7 @@ function* _getModuleDependencies(filename, base, seen, ext = path.extname(filena
   for (let match of [
     ...contents.matchAll(/import[\s\S]*?['"](.{3,}?)['"]/gi),
     ...contents.matchAll(/import[\s\S]*from[\s\S]*?['"](.{3,}?)['"]/gi),
-    ...contents.matchAll(/require\(['"`](.{3,})['"`]\)/gi),
+    ...contents.matchAll(/require\(['"`](.+)['"`]\)/gi),
   ]) {
     // Bail out if it's not a relative file
     if (!match[1].startsWith('.')) continue
