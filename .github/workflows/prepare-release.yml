@@ -51,13 +51,13 @@ jobs:
           node ./scripts/swap-engines.js
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Tailwind CSS
         run: npm run build
 
       - name: Install standalone cli dependencies
-        run: npm install
+        run: npm ci
         working-directory: standalone-cli
 
       - name: Build standalone cli

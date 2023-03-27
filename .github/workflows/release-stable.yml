@@ -33,7 +33,7 @@ jobs:
           node ./scripts/swap-engines.js
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Tailwind CSS
         run: npm run build

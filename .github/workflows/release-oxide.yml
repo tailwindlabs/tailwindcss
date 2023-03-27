@@ -51,9 +51,9 @@ jobs:
       #     restore-keys: |
       #       nodeModules-
 
-      - name: Oxide — npm install
+      - name: Oxide — npm ci
         # if: steps.cache-oxide.outputs.cache-hit != 'true'
-        run: cd ${{ env.OXIDE_LOCATION }} && npm install
+        run: cd ${{ env.OXIDE_LOCATION }} && npm ci
 
       - name: Build release
         run: cd ${{ env.OXIDE_LOCATION }} && npm run build
@@ -112,7 +112,7 @@ jobs:
         run: rustup target add aarch64-apple-darwin
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build release
         run: cd ${{ env.OXIDE_LOCATION }} && npm run build
@@ -190,9 +190,9 @@ jobs:
       #     restore-keys: |
       #       nodeModules-
 
-      - name: Oxide — npm install
+      - name: Oxide — npm ci
         # if: steps.cache-oxide.outputs.cache-hit != 'true'
-        run: cd ${{ env.OXIDE_LOCATION }} && npm install
+        run: cd ${{ env.OXIDE_LOCATION }} && npm ci
 
       - name: Build release
         run: cd ${{ env.OXIDE_LOCATION }} && npm run build
@@ -230,9 +230,9 @@ jobs:
       #     restore-keys: |
       #       nodeModules-
 
-      - name: Oxide — npm install
+      - name: Oxide — npm ci
         # if: steps.cache-oxide.outputs.cache-hit != 'true'
-        run: cd ${{ env.OXIDE_LOCATION }} && npm install
+        run: cd ${{ env.OXIDE_LOCATION }} && npm ci
 
       - name: Download artifacts
         uses: actions/download-artifact@v3
@@ -315,7 +315,7 @@ jobs:
           mv package_updated.json package.json
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Tailwind CSS
         run: npm run build

@@ -30,7 +30,7 @@
     "generate": "npm run generate:plugin-list && npm run generate:types",
     "release-channel": "node ./scripts/release-channel.js",
     "release-notes": "node ./scripts/release-notes.js",
-    "prepublishOnly": "npm install --force && npm run build"
+    "prepublishOnly": "npm ci --force && npm run build"
   },
   "files": [
     "src/*",

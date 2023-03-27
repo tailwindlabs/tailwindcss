@@ -65,13 +65,13 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-integrations-${{ matrix.integration }}-${{ hashFiles('./integrations/${{ matrix.integration }}/package-lock.json') }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install dependencies (shared integrations)
-        run: npm install --prefix ./integrations
+        run: npm ci --prefix ./integrations
 
       - name: Install dependencies (integration)
-        run: npm install --prefix ./integrations/${{ matrix.integration }}
+        run: npm ci --prefix ./integrations/${{ matrix.integration }}
 
       - name: Build Tailwind CSS
         run: npm run build

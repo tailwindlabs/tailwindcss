@@ -38,7 +38,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.NODE_VERSION }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Tailwind CSS
         run: npm run build

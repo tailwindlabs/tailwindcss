@@ -25,7 +25,7 @@
     "test": "jest",
     "test:integrations": "npm run test -w ./integrations",
     "style": "eslint .",
-    "prepublishOnly": "npm install --force && npm run build && npm run generate:types",
+    "prepublishOnly": "npm ci --force && npm run build && npm run generate:types",
     "dev:rust": "npm run --prefix ./oxide dev:node",
     "dev:js": "npm run build:js -- --watch",
     "build:rust": "npm run --prefix ./oxide build:node",

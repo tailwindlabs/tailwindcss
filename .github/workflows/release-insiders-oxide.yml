@@ -74,7 +74,7 @@ jobs:
         run: rustup target add ${{ matrix.target }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build release
         run: cd ${{ env.OXIDE_LOCATION }} && npm run build
@@ -144,7 +144,7 @@ jobs:
         run: rustup target add aarch64-apple-darwin
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build release
         run: cd ${{ env.OXIDE_LOCATION }} && npm run build
@@ -243,7 +243,7 @@ jobs:
         run: rustup target add ${{ matrix.target }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build release
         run: cd ${{ env.OXIDE_LOCATION }} && npm run build
@@ -302,7 +302,7 @@ jobs:
           key: ${{ runner.os }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Download artifacts
         uses: actions/download-artifact@v3
@@ -381,7 +381,7 @@ jobs:
           mv package_updated.json package.json
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Tailwind CSS
         run: npm run build

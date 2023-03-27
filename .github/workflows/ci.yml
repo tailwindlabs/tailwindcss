@@ -60,7 +60,7 @@ jobs:
           key: ${{ runner.os }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Tailwind CSS
         run: npx turbo run build --filter=//

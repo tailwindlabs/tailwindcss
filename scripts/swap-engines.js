@@ -36,5 +36,5 @@ for (let file of engines[otherEngine].files) {
 }
 
 console.log(
-  'Engines have been swapped. Make sure to run `npm install` to update your dependencies.'
+  'Engines have been swapped. Make sure to run `npm ci` to update your dependencies.'
 )
