@@ -72,6 +72,7 @@ function* _getModuleDependencies(filename, base, seen, ext = path.extname(filena
 }
 
 export default function getModuleDependencies(absoluteFilePath) {
+  if (absoluteFilePath === null) return new Set()
   return new Set(
     _getModuleDependencies(absoluteFilePath, path.dirname(absoluteFilePath), new Set())
   )
