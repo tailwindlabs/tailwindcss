@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `list-style-image` utilities ([#10817](https://github.com/tailwindlabs/tailwindcss/pull/10817))
 - Use `:is` to make important selector option insensitive to DOM order ([#10835](https://github.com/tailwindlabs/tailwindcss/pull/10835))
 - Add `whitespace-break-spaces` utility ([#10729](https://github.com/tailwindlabs/tailwindcss/pull/10729))
+- Extend default color palette with new 950 shades ([#10879](https://github.com/tailwindlabs/tailwindcss/pull/10879))
 
 ### Fixed
 
