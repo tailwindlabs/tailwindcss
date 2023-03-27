@@ -717,7 +717,12 @@ export let corePlugins = {
     )
 
     addUtilities({
-      '.line-clamp-none': { '-webkit-line-clamp': 'unset' },
+      '.line-clamp-none': {
+        overflow: 'visible',
+        display: 'block',
+        '-webkit-box-orient': 'horizontal',
+        '-webkit-line-clamp': 'none',
+      },
     })
   },
 
