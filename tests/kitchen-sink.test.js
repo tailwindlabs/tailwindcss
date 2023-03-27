@@ -454,7 +454,10 @@ crosscheck(({ stable, oxide }) => {
           overflow: hidden;
         }
         .line-clamp-none {
-          -webkit-line-clamp: unset;
+          -webkit-line-clamp: none;
+          -webkit-box-orient: horizontal;
+          display: block;
+          overflow: visible;
         }
         .scale-50 {
           --tw-scale-x: 0.5;
@@ -1019,7 +1022,10 @@ crosscheck(({ stable, oxide }) => {
           overflow: hidden;
         }
         .line-clamp-none {
-          -webkit-line-clamp: unset;
+          -webkit-line-clamp: none;
+          -webkit-box-orient: horizontal;
+          display: block;
+          overflow: visible;
         }
         .scale-50 {
           --tw-scale-x: 0.5;
