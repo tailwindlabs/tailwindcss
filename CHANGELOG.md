@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.3.0] - 2023-03-27
+
 ### Added
 
 - Support ESM and TypeScript config files ([#10785](https://github.com/tailwindlabs/tailwindcss/pull/10785))
@@ -15,15 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for using variables as arbitrary values without `var(...)` ([#9880](https://github.com/tailwindlabs/tailwindcss/pull/9880), [#9962](https://github.com/tailwindlabs/tailwindcss/pull/9962))
 - Add logical properties support for inline direction ([#10166](https://github.com/tailwindlabs/tailwindcss/pull/10166))
 - Add `hyphens` utilities ([#10071](https://github.com/tailwindlabs/tailwindcss/pull/10071))
+- Add `from-{position}`, `via-{position}` and `to-{position}` utilities ([#10886](https://github.com/tailwindlabs/tailwindcss/pull/10886))
 - Add `list-style-image` utilities ([#10817](https://github.com/tailwindlabs/tailwindcss/pull/10817))
 - Add `caption-side` utilities ([#10470](https://github.com/tailwindlabs/tailwindcss/pull/10470))
 - Add `line-clamp` utilities from `@tailwindcss/line-clamp` to core ([#10768](https://github.com/tailwindlabs/tailwindcss/pull/10768), [#10876](https://github.com/tailwindlabs/tailwindcss/pull/10876), [#10862](https://github.com/tailwindlabs/tailwindcss/pull/10862))
-- Add `delay-0` and `duration-0` by default ([#10294](https://github.com/tailwindlabs/tailwindcss/pull/10294))
+- Add `delay-0` and `duration-0` utilities ([#10294](https://github.com/tailwindlabs/tailwindcss/pull/10294))
 - Add `justify-normal` and `justify-stretch` utilities ([#10560](https://github.com/tailwindlabs/tailwindcss/pull/10560))
 - Add `content-normal` and `content-stretch` utilities ([#10645](https://github.com/tailwindlabs/tailwindcss/pull/10645))
 - Add `whitespace-break-spaces` utility ([#10729](https://github.com/tailwindlabs/tailwindcss/pull/10729))
 - Add support for configuring default `font-variation-settings` for a `font-family` ([#10034](https://github.com/tailwindlabs/tailwindcss/pull/10034), [#10515](https://github.com/tailwindlabs/tailwindcss/pull/10515))
-- Add gradient color stop position utilities ([#10886](https://github.com/tailwindlabs/tailwindcss/pull/10886))
 
 ### Fixed
 
@@ -2207,7 +2211,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.7...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.0...HEAD
+[3.3.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.7...v3.3.0
 [3.2.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.6...v3.2.7
 [3.2.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.5...v3.2.6
 [3.2.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.4...v3.2.5
