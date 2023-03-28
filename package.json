@@ -96,7 +96,7 @@
     "postcss-value-parser": "^4.2.0",
     "quick-lru": "^5.1.1",
     "resolve": "^1.22.1",
-    "sucrase": "^3.29.0"
+    "sucrase": "^3.31.0"
   },
   "browserslist": [
     "> 1%",
