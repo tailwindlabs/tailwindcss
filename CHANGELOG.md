@@ -7,11 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- [Oxide] Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
+
 ### Fixed
 
 - Try resolving `config.default` before `config` to ensure the config file is resolved correctly ([#10898](https://github.com/tailwindlabs/tailwindcss/pull/10898))
 - Pull pseudo elements outside of `:is` and `:has` when using `@apply` ([#10903](https://github.com/tailwindlabs/tailwindcss/pull/10903))
 - Update the types for the `safelist` config ([#10901](https://github.com/tailwindlabs/tailwindcss/pull/10901))
+
+### Changed
+
+- [Oxide] Disable color opacity plugins by default in the `oxide` engine ([#10618](https://github.com/tailwindlabs/tailwindcss/pull/10618))
+- [Oxide] Enable relative content paths for the `oxide` engine ([#10621](https://github.com/tailwindlabs/tailwindcss/pull/10621))
 
 ## [3.3.0] - 2023-03-27
 
