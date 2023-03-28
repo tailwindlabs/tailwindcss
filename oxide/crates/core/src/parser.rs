@@ -43,14 +43,14 @@ impl<'a> Extractor<'a> {
 
     #[cfg(test)]
     pub fn unique_ord(input: &'a [u8], opts: ExtractorOptions) -> Vec<&'a [u8]> {
-      // This is an inefficient way to get an ordered, unique
-      // list as a Vec but it is only meant for testing.
-      let mut candidates = Self::all(input, opts);
-      let mut unique_list = FxHashSet::default();
-      unique_list.reserve(candidates.len());
-      candidates.retain(|c| unique_list.insert(*c));
+        // This is an inefficient way to get an ordered, unique
+        // list as a Vec but it is only meant for testing.
+        let mut candidates = Self::all(input, opts);
+        let mut unique_list = FxHashSet::default();
+        unique_list.reserve(candidates.len());
+        candidates.retain(|c| unique_list.insert(*c));
 
-      candidates
+        candidates
     }
 }
 
@@ -319,7 +319,16 @@ impl<'a> Extractor<'a> {
 
             // Allowed characters in the candidate itself
             // None of these can come after a closing bracket `]`
-            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'(' | b')' | b'!' | b'@'
+            b'a'..=b'z'
+            | b'A'..=b'Z'
+            | b'0'..=b'9'
+            | b'-'
+            | b'_'
+            | b'('
+            | b')'
+            | b'!'
+            | b'@'
+            | b'%'
                 if prev != b']' =>
             {
                 /* TODO: The `b'@'` is necessary for custom separators like _@, maybe we can handle this in a better way... */

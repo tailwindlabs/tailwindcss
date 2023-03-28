@@ -137,9 +137,9 @@ crosscheck(({ stable, oxide }) => {
               <div
                 class="bg-gradient-to-r from-red-500 from-50 via-pink-500 via-75 to-violet-400 to-80"
               ></div>
-              <div class="from-10 from-[14%]"></div>
-              <div class="via-10 via-[14%]"></div>
-              <div class="to-10 to-[14%]"></div>
+              <div class="from-10% from-[11%]"></div>
+              <div class="via-20% via-[12%]"></div>
+              <div class="to-30% to-[13%]"></div>
             </div>
           `,
         },
@@ -159,14 +159,11 @@ crosscheck(({ stable, oxide }) => {
           --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
-        .from-10 {
+        .from-10\% {
           --tw-gradient-from-position: 10%;
         }
-        .from-50 {
-          --tw-gradient-from-position: 50%;
-        }
-        .from-\[14\%\] {
-          --tw-gradient-from-position: 14%;
+        .from-\[11\%\] {
+          --tw-gradient-from-position: 11%;
         }
         .via-pink-500 {
           --tw-gradient-via-position: ;
@@ -175,27 +172,21 @@ crosscheck(({ stable, oxide }) => {
           --tw-gradient-stops: var(--tw-gradient-from), #ec4899 var(--tw-gradient-via-position),
             var(--tw-gradient-to);
         }
-        .via-10 {
-          --tw-gradient-via-position: 10%;
+        .via-20\% {
+          --tw-gradient-via-position: 20%;
         }
-        .via-75 {
-          --tw-gradient-via-position: 75%;
-        }
-        .via-\[14\%\] {
-          --tw-gradient-via-position: 14%;
+        .via-\[12\%\] {
+          --tw-gradient-via-position: 12%;
         }
         .to-violet-400 {
           --tw-gradient-to: #a78bfa var(--tw-gradient-to-position);
           --tw-gradient-to-position: ;
         }
-        .to-10 {
-          --tw-gradient-to-position: 10%;
+        .to-30\% {
+          --tw-gradient-to-position: 30%;
         }
-        .to-80 {
-          --tw-gradient-to-position: 80%;
-        }
-        .to-\[14\%\] {
-          --tw-gradient-to-position: 14%;
+        .to-\[13\%\] {
+          --tw-gradient-to-position: 13%;
         }
       `)
     })
