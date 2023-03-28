@@ -527,8 +527,10 @@ crosscheck(({ stable, oxide }) => {
           background-image: url('/images/homepage-1.jpg');
         }
         .from-foo {
-          --tw-gradient-from: #bada55;
-          --tw-gradient-to: #bada5500;
+          --tw-gradient-from: #bada55 var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #bada5500 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .px-1 {
@@ -1087,8 +1089,10 @@ crosscheck(({ stable, oxide }) => {
           background-image: url('/images/homepage-1.jpg');
         }
         .from-foo {
-          --tw-gradient-from: #bada55;
-          --tw-gradient-to: #bada5500;
+          --tw-gradient-from: #bada55 var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #bada5500 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .px-1 {

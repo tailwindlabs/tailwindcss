@@ -34,28 +34,40 @@ crosscheck(({ stable, oxide }) => {
     return run('@tailwind utilities', config).then((result) => {
       stable.expect(result.css).toMatchFormattedCss(css`
         .from-primary {
-          --tw-gradient-from: #1f1f1f;
-          --tw-gradient-to: #1f1f1f00;
+          --tw-gradient-from: #1f1f1f var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #1f1f1f00 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .from-secondary {
-          --tw-gradient-from: #bf5540;
-          --tw-gradient-to: #bf554000;
+          --tw-gradient-from: #bf5540 var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #bf554000 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .via-primary {
-          --tw-gradient-to: #1f1f1f00;
-          --tw-gradient-stops: var(--tw-gradient-from), #1f1f1f, var(--tw-gradient-to);
+          --tw-gradient-via-position: ;
+          --tw-gradient-to: #1f1f1f00 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
+          --tw-gradient-stops: var(--tw-gradient-from), #1f1f1f var(--tw-gradient-via-position),
+            var(--tw-gradient-to);
         }
         .via-secondary {
-          --tw-gradient-to: #bf554000;
-          --tw-gradient-stops: var(--tw-gradient-from), #bf5540, var(--tw-gradient-to);
+          --tw-gradient-via-position: ;
+          --tw-gradient-to: #bf554000 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
+          --tw-gradient-stops: var(--tw-gradient-from), #bf5540 var(--tw-gradient-via-position),
+            var(--tw-gradient-to);
         }
         .to-primary {
-          --tw-gradient-to: #1f1f1f;
+          --tw-gradient-to: #1f1f1f var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
         }
         .to-secondary {
-          --tw-gradient-to: #bf5540;
+          --tw-gradient-to: #bf5540 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
         }
         .text-primary {
           --tw-text-opacity: 1;
@@ -71,28 +83,40 @@ crosscheck(({ stable, oxide }) => {
       `)
       oxide.expect(result.css).toMatchFormattedCss(css`
         .from-primary {
-          --tw-gradient-from: #1f1f1f;
-          --tw-gradient-to: #1f1f1f00;
+          --tw-gradient-from: #1f1f1f var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #1f1f1f00 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .from-secondary {
-          --tw-gradient-from: #bf5540;
-          --tw-gradient-to: #bf554000;
+          --tw-gradient-from: #bf5540 var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #bf554000 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .via-primary {
-          --tw-gradient-to: #1f1f1f00;
-          --tw-gradient-stops: var(--tw-gradient-from), #1f1f1f, var(--tw-gradient-to);
+          --tw-gradient-via-position: ;
+          --tw-gradient-to: #1f1f1f00 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
+          --tw-gradient-stops: var(--tw-gradient-from), #1f1f1f var(--tw-gradient-via-position),
+            var(--tw-gradient-to);
         }
         .via-secondary {
-          --tw-gradient-to: #bf554000;
-          --tw-gradient-stops: var(--tw-gradient-from), #bf5540, var(--tw-gradient-to);
+          --tw-gradient-via-position: ;
+          --tw-gradient-to: #bf554000 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
+          --tw-gradient-stops: var(--tw-gradient-from), #bf5540 var(--tw-gradient-via-position),
+            var(--tw-gradient-to);
         }
         .to-primary {
-          --tw-gradient-to: #1f1f1f;
+          --tw-gradient-to: #1f1f1f var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
         }
         .to-secondary {
-          --tw-gradient-to: #bf5540;
+          --tw-gradient-to: #bf5540 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
         }
         .text-primary {
           color: #1f1f1f;

@@ -659,28 +659,40 @@
   background-image: var(--url);
 }
 .from-\[\#da5b66\] {
-  --tw-gradient-from: #da5b66;
-  --tw-gradient-to: #da5b6600;
+  --tw-gradient-from: #da5b66 var(--tw-gradient-from-position);
+  --tw-gradient-from-position: ;
+  --tw-gradient-to: #da5b6600 var(--tw-gradient-from-position);
+  --tw-gradient-to-position: ;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 .from-\[var\(--color\)\] {
-  --tw-gradient-from: var(--color);
-  --tw-gradient-to: #fff0;
+  --tw-gradient-from: var(--color) var(--tw-gradient-from-position);
+  --tw-gradient-from-position: ;
+  --tw-gradient-to: #fff0 var(--tw-gradient-from-position);
+  --tw-gradient-to-position: ;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 .via-\[\#da5b66\] {
-  --tw-gradient-to: #da5b6600;
-  --tw-gradient-stops: var(--tw-gradient-from), #da5b66, var(--tw-gradient-to);
+  --tw-gradient-via-position: ;
+  --tw-gradient-to: #da5b6600 var(--tw-gradient-to-position);
+  --tw-gradient-to-position: ;
+  --tw-gradient-stops: var(--tw-gradient-from), #da5b66 var(--tw-gradient-via-position),
+    var(--tw-gradient-to);
 }
 .via-\[var\(--color\)\] {
-  --tw-gradient-to: #fff0;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--color), var(--tw-gradient-to);
+  --tw-gradient-via-position: ;
+  --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
+  --tw-gradient-to-position: ;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--color) var(--tw-gradient-via-position),
+    var(--tw-gradient-to);
 }
 .to-\[\#da5b66\] {
-  --tw-gradient-to: #da5b66;
+  --tw-gradient-to: #da5b66 var(--tw-gradient-to-position);
+  --tw-gradient-to-position: ;
 }
 .to-\[var\(--color\)\] {
-  --tw-gradient-to: var(--color);
+  --tw-gradient-to: var(--color) var(--tw-gradient-to-position);
+  --tw-gradient-to-position: ;
 }
 .bg-\[length\:200px_100px\] {
   background-size: 200px 100px;
