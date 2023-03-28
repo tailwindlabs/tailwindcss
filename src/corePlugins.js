@@ -1756,39 +1756,91 @@ export let corePlugins = {
         type: ['color', 'any'],
       }
 
+      let positionOptions = {
+        values: theme('gradientColorStopPositions'),
+        type: ['length', 'percentage'],
+      }
+
       matchUtilities(
         {
           from: (value) => {
             let transparentToValue = transparentTo(value)
 
             return {
-              '--tw-gradient-from': toColorValue(value, 'from'),
-              '--tw-gradient-to': transparentToValue,
+              '--tw-gradient-from': `${toColorValue(
+                value,
+                'from'
+              )} var(--tw-gradient-from-position)`,
+              '--tw-gradient-from-position': ' ',
+              '--tw-gradient-to': `${transparentToValue}  var(--tw-gradient-from-position)`,
+              '--tw-gradient-to-position': ' ',
               '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to)`,
             }
           },
         },
         options
       )
+
+      matchUtilities(
+        {
+          from: (value) => {
+            return {
+              '--tw-gradient-from-position': value,
+            }
+          },
+        },
+        positionOptions
+      )
+
       matchUtilities(
         {
           via: (value) => {
             let transparentToValue = transparentTo(value)
 
             return {
-              '--tw-gradient-to': transparentToValue,
+              '--tw-gradient-via-position': ' ',
+              '--tw-gradient-to': `${transparentToValue}  var(--tw-gradient-to-position)`,
+              '--tw-gradient-to-position': ' ',
               '--tw-gradient-stops': `var(--tw-gradient-from), ${toColorValue(
                 value,
                 'via'
-              )}, var(--tw-gradient-to)`,
+              )} var(--tw-gradient-via-position), var(--tw-gradient-to)`,
             }
           },
         },
         options
       )
+
       matchUtilities(
-        { to: (value) => ({ '--tw-gradient-to': toColorValue(value, 'to') }) },
+        {
+          via: (value) => {
+            return {
+              '--tw-gradient-via-position': value,
+            }
+          },
+        },
+        positionOptions
+      )
+
+      matchUtilities(
+        {
+          to: (value) => ({
+            '--tw-gradient-to': `${toColorValue(value, 'to')} var(--tw-gradient-to-position)`,
+            '--tw-gradient-to-position': ' ',
+          }),
+        },
         options
+      )
+
+      matchUtilities(
+        {
+          to: (value) => {
+            return {
+              '--tw-gradient-to-position': value,
+            }
+          },
+        },
+        positionOptions
       )
     }
   })(),
