@@ -137,9 +137,9 @@ crosscheck(({ stable, oxide }) => {
               <div
                 class="bg-gradient-to-r from-red-500 from-50 via-pink-500 via-75 to-violet-400 to-80"
               ></div>
-              <div class="from-10% from-[11%]"></div>
-              <div class="via-20% via-[12%]"></div>
-              <div class="to-30% to-[13%]"></div>
+              <div class="from-10% from-[11%] from-[12px] from-[--from-value]"></div>
+              <div class="via-20% via-[12%] via-[123px] via-[--via-value]"></div>
+              <div class="to-30% to-[13%] to-[14px] to-[--to-value]"></div>
             </div>
           `,
         },
@@ -151,6 +151,13 @@ crosscheck(({ stable, oxide }) => {
       expect(result.css).toMatchFormattedCss(css`
         .bg-gradient-to-r {
           background-image: linear-gradient(to right, var(--tw-gradient-stops));
+        }
+        .from-\[--from-value\] {
+          --tw-gradient-from: var(--from-value) var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
+          --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .from-red-500 {
           --tw-gradient-from: #ef4444 var(--tw-gradient-from-position);
@@ -165,6 +172,16 @@ crosscheck(({ stable, oxide }) => {
         .from-\[11\%\] {
           --tw-gradient-from-position: 11%;
         }
+        .from-\[12px\] {
+          --tw-gradient-from-position: 12px;
+        }
+        .via-\[--via-value\] {
+          --tw-gradient-via-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
+          --tw-gradient-stops: var(--tw-gradient-from),
+            var(--via-value) var(--tw-gradient-via-position), var(--tw-gradient-to);
+        }
         .via-pink-500 {
           --tw-gradient-via-position: ;
           --tw-gradient-to: #ec489900 var(--tw-gradient-to-position);
@@ -178,6 +195,13 @@ crosscheck(({ stable, oxide }) => {
         .via-\[12\%\] {
           --tw-gradient-via-position: 12%;
         }
+        .via-\[123px\] {
+          --tw-gradient-via-position: 123px;
+        }
+        .to-\[--to-value\] {
+          --tw-gradient-to: var(--to-value) var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
+        }
         .to-violet-400 {
           --tw-gradient-to: #a78bfa var(--tw-gradient-to-position);
           --tw-gradient-to-position: ;
@@ -187,6 +211,9 @@ crosscheck(({ stable, oxide }) => {
         }
         .to-\[13\%\] {
           --tw-gradient-to-position: 13%;
+        }
+        .to-\[14px\] {
+          --tw-gradient-to-position: 14px;
         }
       `)
     })
