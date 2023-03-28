@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `content-normal` and `content-stretch` utilities ([#10645](https://github.com/tailwindlabs/tailwindcss/pull/10645))
 - Add `whitespace-break-spaces` utility ([#10729](https://github.com/tailwindlabs/tailwindcss/pull/10729))
 - Add support for configuring default `font-variation-settings` for a `font-family` ([#10034](https://github.com/tailwindlabs/tailwindcss/pull/10034), [#10515](https://github.com/tailwindlabs/tailwindcss/pull/10515))
+- Add gradient color stop position utilities ([#10886](https://github.com/tailwindlabs/tailwindcss/pull/10886))
 
 ### Fixed
 

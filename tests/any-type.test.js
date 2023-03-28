@@ -185,7 +185,7 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      let oxideExpected = css`
+      oxide.expect(result.css).toMatchFormattedCss(css`
         .inset-\[var\(--any-value\)\] {
           inset: var(--any-value);
         }
@@ -499,16 +499,22 @@ crosscheck(({ stable, oxide }) => {
           background-color: var(--any-value);
         }
         .from-\[var\(--any-value\)\] {
-          --tw-gradient-from: var(--any-value);
-          --tw-gradient-to: #fff0;
+          --tw-gradient-from: var(--any-value) var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .via-\[var\(--any-value\)\] {
-          --tw-gradient-to: #fff0;
-          --tw-gradient-stops: var(--tw-gradient-from), var(--any-value), var(--tw-gradient-to);
+          --tw-gradient-via-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
+          --tw-gradient-stops: var(--tw-gradient-from),
+            var(--any-value) var(--tw-gradient-via-position), var(--tw-gradient-to);
         }
         .to-\[var\(--any-value\)\] {
-          --tw-gradient-to: var(--any-value);
+          --tw-gradient-to: var(--any-value) var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
         }
         .fill-\[var\(--any-value\)\] {
           fill: var(--any-value);
@@ -732,8 +738,8 @@ crosscheck(({ stable, oxide }) => {
           --tw-content: var(--any-value);
           content: var(--tw-content);
         }
-      `
-      let stableExpected = css`
+      `)
+      stable.expect(result.css).toMatchFormattedCss(css`
         .inset-\[var\(--any-value\)\] {
           inset: var(--any-value);
         }
@@ -1056,16 +1062,22 @@ crosscheck(({ stable, oxide }) => {
           --tw-bg-opacity: var(--any-value);
         }
         .from-\[var\(--any-value\)\] {
-          --tw-gradient-from: var(--any-value);
-          --tw-gradient-to: #fff0;
+          --tw-gradient-from: var(--any-value) var(--tw-gradient-from-position);
+          --tw-gradient-from-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-from-position);
+          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .via-\[var\(--any-value\)\] {
-          --tw-gradient-to: #fff0;
-          --tw-gradient-stops: var(--tw-gradient-from), var(--any-value), var(--tw-gradient-to);
+          --tw-gradient-via-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
+          --tw-gradient-stops: var(--tw-gradient-from),
+            var(--any-value) var(--tw-gradient-via-position), var(--tw-gradient-to);
         }
         .to-\[var\(--any-value\)\] {
-          --tw-gradient-to: var(--any-value);
+          --tw-gradient-to: var(--any-value) var(--tw-gradient-to-position);
+          --tw-gradient-to-position: ;
         }
         .fill-\[var\(--any-value\)\] {
           fill: var(--any-value);
@@ -1298,9 +1310,7 @@ crosscheck(({ stable, oxide }) => {
           --tw-content: var(--any-value);
           content: var(--tw-content);
         }
-      `
-      oxide.expect(result.css).toMatchFormattedCss(oxideExpected)
-      stable.expect(result.css).toMatchFormattedCss(stableExpected)
+      `)
     })
   })
   test.todo('rewrite the any test to be easier to understand or break it up into multiple tests')
