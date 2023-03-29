@@ -46,12 +46,7 @@ type PrefixConfig = string
 type SeparatorConfig = string
 
 // Safelist related config
-type SafelistConfig =
-  | string[]
-  | {
-      pattern: RegExp
-      variants?: string[]
-    }[]
+type SafelistConfig = (string | { pattern: RegExp; variants?: string[] })[]
 
 // Blocklist related config
 type BlocklistConfig = string[]

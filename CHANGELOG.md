@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Try resolving `config.default` before `config` to ensure the config file is resolved correctly ([#10898](https://github.com/tailwindlabs/tailwindcss/pull/10898))
 - Pull pseudo elements outside of `:is` and `:has` when using `@apply` ([#10903](https://github.com/tailwindlabs/tailwindcss/pull/10903))
+- Update the types for the `safelist` config ([#10901](https://github.com/tailwindlabs/tailwindcss/pull/10901))
 
 ## [3.3.0] - 2023-03-27
 
