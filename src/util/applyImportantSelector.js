@@ -1,4 +1,3 @@
-import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 import parser from 'postcss-selector-parser'
 import { collectPseudoElements, sortSelector } from './formatVariantSelector.js'
 
