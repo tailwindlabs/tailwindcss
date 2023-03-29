@@ -339,17 +339,6 @@ let pseudoElementExceptions = [
   '::-webkit-resizer',
 ]
 
-export function containsNode(selector, values) {
-  let found = false
-  selector.walk((node) => {
-    if (values.includes(node.value)) {
-      found = true
-      return false
-    }
-  })
-  return found
-}
-
 /**
  * This will make sure to move pseudo's to the correct spot (the end for
  * pseudo elements) because otherwise the selector will never work
