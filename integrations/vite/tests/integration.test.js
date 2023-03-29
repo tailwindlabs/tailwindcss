@@ -4,7 +4,7 @@ let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
 let { env } = require('../../../lib/lib/sharedState')
 
-let { readOutputFile, appendToInputFile, writeInputFile } = require('../../io')({
+let { readOutputFile, appendToInputFile, writeInputFile, removeFile } = require('../../io')({
   output: 'dist',
   input: '.',
 })
@@ -41,6 +41,116 @@ describe('static build', () => {
         }
       `
     )
+  })
+
+  it('can use a tailwind.config.js configuration file with ESM syntax', async () => {
+    await writeInputFile(
+      'index.html',
+      html`
+        <link rel="stylesheet" href="./index.css" />
+        <div class="bg-primary"></div>
+      `
+    )
+    await removeFile('tailwind.config.js')
+    await writeInputFile(
+      'tailwind.config.js',
+      javascript`
+        export default {
+          content: ['index.html'],
+          theme: {
+            extend: {
+              colors: {
+                primary: 'black',
+              },
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        }
+      `
+    )
+
+    await $('vite build', {
+      env: { NODE_ENV: 'production', NO_COLOR: '1' },
+    })
+
+    if (!env.OXIDE) {
+      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+        css`
+          .bg-primary {
+            --tw-bg-opacity: 1;
+            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+          }
+        `
+      )
+    }
+
+    if (env.OXIDE) {
+      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+        css`
+          .bg-primary {
+            background-color: black;
+          }
+        `
+      )
+    }
+  })
+
+  it('can use a tailwind.config.ts configuration file', async () => {
+    await writeInputFile(
+      'index.html',
+      html`
+        <link rel="stylesheet" href="./index.css" />
+        <div class="bg-primary"></div>
+      `
+    )
+    await removeFile('tailwind.config.js')
+    await writeInputFile(
+      'tailwind.config.ts',
+      javascript`
+        import type { Config } from 'tailwindcss'
+
+        export default {
+          content: ['index.html'],
+          theme: {
+            extend: {
+              colors: {
+                primary: 'black',
+              },
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        } satisfies Config
+      `
+    )
+
+    await $('vite build', {
+      env: { NODE_ENV: 'production', NO_COLOR: '1' },
+    })
+
+    if (!env.OXIDE) {
+      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+        css`
+          .bg-primary {
+            --tw-bg-opacity: 1;
+            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+          }
+        `
+      )
+    }
+
+    if (env.OXIDE) {
+      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+        css`
+          .bg-primary {
+            background-color: black;
+          }
+        `
+      )
+    }
   })
 })
 
