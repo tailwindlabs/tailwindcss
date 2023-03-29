@@ -246,7 +246,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
 
   // Move pseudo elements to the end of the selector (if necessary)
   selector.each((sel) => {
-    let pseudoElements = collectPseudoElements(sel)
+    let [pseudoElements] = collectPseudoElements(sel)
     if (pseudoElements.length > 0) {
       sel.nodes.push(pseudoElements.sort(sortSelector))
     }
@@ -339,6 +339,17 @@ let pseudoElementExceptions = [
   '::-webkit-resizer',
 ]
 
+export function containsNode(selector, values) {
+  let found = false
+  selector.walk((node) => {
+    if (values.includes(node.value)) {
+      found = true
+      return false
+    }
+  })
+  return found
+}
+
 /**
  * This will make sure to move pseudo's to the correct spot (the end for
  * pseudo elements) because otherwise the selector will never work
@@ -351,23 +362,43 @@ let pseudoElementExceptions = [
  * `::before:hover` doesn't work, which means that we can make it work for you by flipping the order.
  *
  * @param {Selector} selector
+ * @param {boolean} force
+ * @param {string[]|null} safelist
  **/
-function collectPseudoElements(selector) {
+export function collectPseudoElements(selector, force = false, safelist = null) {
   /** @type {Node[]} */
   let nodes = []
+  let seenPseudoElement = null
 
-  for (let node of selector.nodes) {
-    if (isPseudoElement(node)) {
+  if (safelist !== null && !containsNode(selector, safelist)) {
+    return [[], seenPseudoElement]
+  }
+
+  for (let node of [...selector.nodes]) {
+    if (isPseudoElement(node, force)) {
       nodes.push(node)
       selector.removeChild(node)
+      seenPseudoElement = node.value
+    } else if (seenPseudoElement !== null) {
+      if (pseudoElementExceptions.includes(seenPseudoElement) && isPseudoClass(node, force)) {
+        nodes.push(node)
+        selector.removeChild(node)
+      } else {
+        seenPseudoElement = null
+      }
     }
 
     if (node?.nodes) {
-      nodes.push(...collectPseudoElements(node))
+      let [collected, seenPseudoElementInSelector] = collectPseudoElements(node, force)
+      if (seenPseudoElementInSelector) {
+        seenPseudoElement = seenPseudoElementInSelector
+      }
+
+      nodes.push(...collected)
     }
   }
 
-  return nodes
+  return [nodes, seenPseudoElement]
 }
 
 // This will make sure to move pseudo's to the correct spot (the end for
@@ -380,7 +411,7 @@ function collectPseudoElements(selector) {
 //
 // `::before:hover` doesn't work, which means that we can make it work
 // for you by flipping the order.
-function sortSelector(a, z) {
+export function sortSelector(a, z) {
   // Both nodes are non-pseudo's so we can safely ignore them and keep
   // them in the same order.
   if (a.type !== 'pseudo' && z.type !== 'pseudo') {
@@ -404,9 +435,13 @@ function sortSelector(a, z) {
   return isPseudoElement(a) - isPseudoElement(z)
 }
 
-function isPseudoElement(node) {
+function isPseudoElement(node, force = false) {
   if (node.type !== 'pseudo') return false
-  if (pseudoElementExceptions.includes(node.value)) return false
+  if (pseudoElementExceptions.includes(node.value) && !force) return false
 
   return node.value.startsWith('::') || pseudoElementsBC.includes(node.value)
+}
+
+function isPseudoClass(node, force) {
+  return node.type === 'pseudo' && !isPseudoElement(node, force)
 }
