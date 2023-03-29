@@ -2,9 +2,9 @@ name: CI — Oxide
 
 on:
   push:
-    branches: [master]
+    branches: [master, 3.3]
   pull_request:
-    branches: [master]
+    branches: [master, 3.3]
 
 permissions:
   contents: read
