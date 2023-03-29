@@ -3,6 +3,8 @@ let path = require('path')
 let { spawn } = require('child_process')
 let resolveToolRoot = require('./resolve-tool-root')
 
+let SHOW_OUTPUT = false
+
 let runningProcessess = []
 
 afterEach(() => {
@@ -92,6 +94,9 @@ module.exports = function $(command, options = {}) {
     let combined = ''
 
     child.stdout.on('data', (data) => {
+      if (SHOW_OUTPUT) {
+        console.log(data.toString())
+      }
       stdoutMessages.push(data.toString())
       notifyNextStdoutActor()
       stdout += data
@@ -99,6 +104,9 @@ module.exports = function $(command, options = {}) {
     })
 
     child.stderr.on('data', (data) => {
+      if (SHOW_OUTPUT) {
+        console.error(data.toString())
+      }
       stderrMessages.push(data.toString())
       notifyNextStderrActor()
       stderr += data
