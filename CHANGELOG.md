@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Try resolving `config.default` before `config` to ensure the config file is resolved correctly ([#10898](https://github.com/tailwindlabs/tailwindcss/pull/10898))
 
 ## [3.3.0] - 2023-03-27
 
