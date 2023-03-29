@@ -248,7 +248,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
   selector.each((sel) => {
     let [pseudoElements] = collectPseudoElements(sel)
     if (pseudoElements.length > 0) {
-      sel.nodes.push(pseudoElements.sort(sortSelector))
+      sel.nodes.push(...pseudoElements.sort(sortSelector))
     }
   })
 
@@ -365,14 +365,10 @@ export function containsNode(selector, values) {
  * @param {boolean} force
  * @param {string[]|null} safelist
  **/
-export function collectPseudoElements(selector, force = false, safelist = null) {
+export function collectPseudoElements(selector, force = false) {
   /** @type {Node[]} */
   let nodes = []
   let seenPseudoElement = null
-
-  if (safelist !== null && !containsNode(selector, safelist)) {
-    return [[], seenPseudoElement]
-  }
 
   for (let node of [...selector.nodes]) {
     if (isPseudoElement(node, force)) {
@@ -389,7 +385,14 @@ export function collectPseudoElements(selector, force = false, safelist = null) 
     }
 
     if (node?.nodes) {
-      let [collected, seenPseudoElementInSelector] = collectPseudoElements(node, force)
+      let hasPseudoElementRestrictions =
+        node.type === 'pseudo' && (node.value === ':is' || node.value === ':has')
+
+      let [collected, seenPseudoElementInSelector] = collectPseudoElements(
+        node,
+        force || hasPseudoElementRestrictions
+      )
+
       if (seenPseudoElementInSelector) {
         seenPseudoElement = seenPseudoElementInSelector
       }

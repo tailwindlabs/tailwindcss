@@ -567,7 +567,7 @@ function processApply(root, context, localCache) {
             // Move pseudo elements to the end of the selector (if necessary)
             let selector = parser().astSync(rule.selector)
             selector.each((sel) => {
-              let [pseudoElements] = collectPseudoElements(sel, true, [':is', ':has'])
+              let [pseudoElements] = collectPseudoElements(sel)
               if (pseudoElements.length > 0) {
                 sel.nodes.push(...pseudoElements.sort(sortSelector))
               }
