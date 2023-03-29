@@ -4,6 +4,7 @@ import parser from 'postcss-selector-parser'
 import { resolveMatches } from './generateRules'
 import escapeClassName from '../util/escapeClassName'
 import { applyImportantSelector } from '../util/applyImportantSelector'
+import { collectPseudoElements, sortSelector } from '../util/formatVariantSelector.js'
 
 /** @typedef {Map<string, [any, import('postcss').Rule[]]>} ApplyCache */
 
@@ -562,6 +563,17 @@ function processApply(root, context, localCache) {
             rule.walkDecls((d) => {
               d.important = meta.important || important
             })
+
+            // Move pseudo elements to the end of the selector (if necessary)
+            let selector = parser().astSync(rule.selector)
+            selector.each((sel) => {
+              let [pseudoElements] = collectPseudoElements(sel)
+              if (pseudoElements.length > 0) {
+                sel.nodes.push(...pseudoElements.sort(sortSelector))
+              }
+            })
+
+            rule.selector = selector.toString()
           })
         }
 

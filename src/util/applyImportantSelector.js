@@ -1,19 +1,31 @@
 import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
+import parser from 'postcss-selector-parser'
+import { collectPseudoElements, sortSelector } from './formatVariantSelector.js'
 
 export function applyImportantSelector(selector, important) {
-  let matches = /^(.*?)(:before|:after|::[\w-]+)(\)*)$/g.exec(selector)
-  if (!matches) return `${important} ${wrapWithIs(selector)}`
+  let sel = parser().astSync(selector)
 
-  let [, before, pseudo, brackets] = matches
-  return `${important} ${wrapWithIs(before + brackets)}${pseudo}`
-}
+  sel.each((sel) => {
+    // Wrap with :is if it's not already wrapped
+    let isWrapped =
+      sel.nodes[0].type === 'pseudo' &&
+      sel.nodes[0].value === ':is' &&
+      sel.nodes.every((node) => node.type !== 'combinator')
 
-function wrapWithIs(selector) {
-  let parts = splitAtTopLevelOnly(selector, ' ')
+    if (!isWrapped) {
+      sel.nodes = [
+        parser.pseudo({
+          value: ':is',
+          nodes: [sel.clone()],
+        }),
+      ]
+    }
 
-  if (parts.length === 1 && parts[0].startsWith(':is(') && parts[0].endsWith(')')) {
-    return selector
-  }
+    let [pseudoElements] = collectPseudoElements(sel)
+    if (pseudoElements.length > 0) {
+      sel.nodes.push(...pseudoElements.sort(sortSelector))
+    }
+  })
 
-  return `:is(${selector})`
+  return `${important} ${sel.toString()}`
 }

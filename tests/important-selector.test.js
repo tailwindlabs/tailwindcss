@@ -21,6 +21,7 @@ crosscheck(({ stable, oxide }) => {
             <div class="group-hover:focus-within:text-left"></div>
             <div class="rtl:active:text-center"></div>
             <div class="dark:before:underline"></div>
+            <div class="hover:[&::file-selector-button]:rtl:dark:bg-black/100"></div>
           `,
         },
       ],
@@ -154,6 +155,12 @@ crosscheck(({ stable, oxide }) => {
           #app :is(.md\:hover\:text-right:hover) {
             text-align: right;
           }
+        }
+        #app
+          :is(
+            [dir='rtl'] :is(.dark .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100)
+          )::file-selector-button:hover {
+          background-color: #000;
         }
       `)
     })

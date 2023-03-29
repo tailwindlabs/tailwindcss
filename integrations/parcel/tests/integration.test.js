@@ -3,11 +3,12 @@ let { css, html, javascript } = require('../../syntax')
 let { env } = require('../../../lib/lib/sharedState')
 
 let {
-  readOutputFile,
   appendToInputFile,
-  writeInputFile,
-  waitForOutputFileCreation,
+  readOutputFile,
+  removeFile,
   waitForOutputFileChange,
+  waitForOutputFileCreation,
+  writeInputFile,
 } = require('../../io')({ output: 'dist', input: 'src' })
 
 describe('static build', () => {
@@ -31,6 +32,132 @@ describe('static build', () => {
         }
       `
     )
+  })
+
+  it('can use a tailwind.config.js configuration file with ESM syntax', async () => {
+    await removeFile('tailwind.config.js')
+    await writeInputFile(
+      'index.html',
+      html`
+        <link rel="stylesheet" href="./index.css" />
+        <div class="bg-primary"></div>
+      `
+    )
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `
+    )
+    await writeInputFile(
+      '../tailwind.config.js',
+      javascript`
+        export default {
+          content: ['./src/index.html'],
+          theme: {
+            extend: {
+              colors: {
+                primary: 'black',
+              },
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        }
+      `
+    )
+
+    await $('parcel build ./src/index.html --no-cache', {
+      env: { NODE_ENV: 'production' },
+    })
+
+    if (!env.OXIDE) {
+      expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
+        css`
+          .bg-primary {
+            --tw-bg-opacity: 1;
+            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+          }
+        `
+      )
+    }
+
+    if (env.OXIDE) {
+      expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
+        css`
+          .bg-primary {
+            background-color: black;
+          }
+        `
+      )
+    }
+  })
+
+  it('can use a tailwind.config.ts configuration file', async () => {
+    await removeFile('tailwind.config.js')
+    await writeInputFile(
+      'index.html',
+      html`
+        <link rel="stylesheet" href="./index.css" />
+        <div class="bg-primary"></div>
+      `
+    )
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `
+    )
+    await writeInputFile(
+      '../tailwind.config.ts',
+      javascript`
+        import type { Config } from 'tailwindcss'
+
+        export default {
+          content: ['./src/index.html'],
+          theme: {
+            extend: {
+              colors: {
+                primary: 'black',
+              },
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+        } satisfies Config
+      `
+    )
+
+    await $('parcel build ./src/index.html --no-cache', {
+      env: { NODE_ENV: 'production' },
+    })
+
+    if (!env.OXIDE) {
+      expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
+        css`
+          .bg-primary {
+            --tw-bg-opacity: 1;
+            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+          }
+        `
+      )
+    }
+
+    if (env.OXIDE) {
+      expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
+        css`
+          .bg-primary {
+            background-color: black;
+          }
+        `
+      )
+    }
   })
 })
 
