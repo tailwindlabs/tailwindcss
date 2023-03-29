@@ -2357,4 +2357,74 @@ crosscheck(({ stable, oxide }) => {
       `)
     })
   })
+
+  it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
+    let config = {
+      darkMode: 'class',
+      content: [
+        {
+          raw: html` <div class="foo bar baz qux steve bob"></div> `,
+        },
+      ],
+    }
+
+    let input = css`
+      .foo::before {
+        @apply dark:bg-black/100;
+      }
+
+      .bar::before {
+        @apply rtl:dark:bg-black/100;
+      }
+
+      .baz::before {
+        @apply rtl:dark:hover:bg-black/100;
+      }
+
+      .qux::file-selector-button {
+        @apply rtl:dark:hover:bg-black/100;
+      }
+
+      .steve::before {
+        @apply rtl:hover:dark:bg-black/100;
+      }
+
+      .bob::file-selector-button {
+        @apply rtl:hover:dark:bg-black/100;
+      }
+
+      .foo::before {
+        @apply [:has([dir="rtl"]_&)]:hover:bg-black/100;
+      }
+
+      .bar::file-selector-button {
+        @apply [:has([dir="rtl"]_&)]:hover:bg-black/100;
+      }
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        :is(.dark .foo)::before,
+        :is([dir='rtl'] :is(.dark .bar))::before,
+        :is([dir='rtl'] :is(.dark .baz:hover))::before {
+          background-color: #000;
+        }
+        :is([dir='rtl'] :is(.dark .qux))::file-selector-button:hover {
+          background-color: #000;
+        }
+        :is([dir='rtl'] :is(.dark .steve):hover):before {
+          background-color: #000;
+        }
+        :is([dir='rtl'] :is(.dark .bob))::file-selector-button:hover {
+          background-color: #000;
+        }
+        :has([dir='rtl'] .foo:hover):before {
+          background-color: #000;
+        }
+        :has([dir='rtl'] .bar)::file-selector-button:hover {
+          background-color: #000;
+        }
+      `)
+    })
+  })
 })
