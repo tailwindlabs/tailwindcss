@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Update the types for the `safelist` config ([#10901](https://github.com/tailwindlabs/tailwindcss/pull/10901))
 
 ## [3.3.0] - 2023-03-27
 
