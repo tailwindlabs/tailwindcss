@@ -352,7 +352,6 @@ let pseudoElementExceptions = [
  *
  * @param {Selector} selector
  * @param {boolean} force
- * @param {string[]|null} safelist
  **/
 export function collectPseudoElements(selector, force = false) {
   /** @type {Node[]} */
