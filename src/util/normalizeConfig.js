@@ -297,22 +297,5 @@ export function normalizeConfig(config) {
     }
   }
 
-  // Warn if the line-clamp plugin is installed
-  if (config.plugins.length > 0) {
-    let plugin
-    try {
-      plugin = require('@tailwindcss/line-clamp')
-    } catch {}
-
-    if (plugin && config.plugins.includes(plugin)) {
-      log.warn('line-clamp-in-core', [
-        'As of Tailwind CSS v3.3, the `@tailwindcss/line-clamp` plugin is now included by default.',
-        'Remove it from the `plugins` array in your configuration to eliminate this warning.',
-      ])
-
-      config.plugins = config.plugins.filter((p) => p !== plugin)
-    }
-  }
-
   return config
 }
