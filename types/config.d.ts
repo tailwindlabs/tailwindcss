@@ -200,7 +200,7 @@ interface ThemeConfig {
   caretColor: ThemeConfig['colors']
   accentColor: ThemeConfig['colors']
   opacity: ResolvableTo<KeyValuePair>
-  boxShadow: ResolvableTo<KeyValuePair>
+  boxShadow: ResolvableTo<KeyValuePair<string, string | string[]>>
   boxShadowColor: ThemeConfig['colors']
   outlineWidth: ResolvableTo<KeyValuePair>
   outlineOffset: ResolvableTo<KeyValuePair>
