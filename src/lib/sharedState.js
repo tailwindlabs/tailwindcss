@@ -1,17 +1,20 @@
 import pkg from '../../package.json'
 let OXIDE_DEFAULT_ENABLED = pkg.tailwindcss.engine === 'oxide'
 
-export const env = typeof process !== 'undefined' ? {
-  NODE_ENV: process.env.NODE_ENV,
-  DEBUG: resolveDebug(process.env.DEBUG),
-  ENGINE: pkg.tailwindcss.engine,
-  OXIDE: resolveBoolean(process.env.OXIDE, OXIDE_DEFAULT_ENABLED),
-} : {
-  NODE_ENV: 'production',
-  DEBUG: false,
-  ENGINE: pkg.tailwindcss.engine,
-  OXIDE: OXIDE_DEFAULT_ENABLED,
-}
+export const env =
+  typeof process !== 'undefined'
+    ? {
+        NODE_ENV: process.env.NODE_ENV,
+        DEBUG: resolveDebug(process.env.DEBUG),
+        ENGINE: pkg.tailwindcss.engine,
+        OXIDE: resolveBoolean(process.env.OXIDE, OXIDE_DEFAULT_ENABLED),
+      }
+    : {
+        NODE_ENV: 'production',
+        DEBUG: false,
+        ENGINE: pkg.tailwindcss.engine,
+        OXIDE: OXIDE_DEFAULT_ENABLED,
+      }
 
 export const contextMap = new Map()
 export const configContextMap = new Map()
