@@ -11,19 +11,14 @@ export function validateConfig(config) {
 
   // Warn if the line-clamp plugin is installed
   try {
-    let pkg = require(require('path').resolve(process.cwd(), 'package.json'))
-    if (
-      ('tailwindcss' in pkg.dependencies ||
-        'tailwindcss' in pkg.devDependencies ||
-        'tailwindcss' in pkg.peerDependencies) &&
-      ('@tailwindcss/line-clamp' in pkg.dependencies ||
-        '@tailwindcss/line-clamp' in pkg.devDependencies ||
-        '@tailwindcss/line-clamp' in pkg.peerDependencies)
-    ) {
+    let plugin = require("@tailwindcss/line-clamp")
+    if (config.plugins.includes(plugin)) {
       log.warn('line-clamp-in-core', [
         'As of Tailwind CSS v3.3, the `@tailwindcss/line-clamp` plugin is now included by default.',
         'Remove it from the `plugins` array in your configuration to eliminate this warning.',
       ])
+
+      config.plugins = config.plugins.filter((p) => p !== plugin)
     }
   } catch {}
 
