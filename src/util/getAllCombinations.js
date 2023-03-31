@@ -1,7 +1,7 @@
-export function getAllCombinations(arr) {
+const getAllCombinations = (arr) => {
   const result = []
 
-  function permutations(input, prefix = []) {
+  const permutations = (input, prefix = []) => {
     if (input.length === 0) {
       result.push(prefix)
     } else {
@@ -30,3 +30,5 @@ export function getAllCombinations(arr) {
 
   return result
 }
+
+export default getAllCombinations
