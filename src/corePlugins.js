@@ -7,6 +7,7 @@ import buildMediaQuery from './util/buildMediaQuery'
 import escapeClassName from './util/escapeClassName'
 import parseAnimationValue from './util/parseAnimationValue'
 import flattenColorPalette from './util/flattenColorPalette'
+import getAllCombinations from './util/getAllCombinations'
 import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
 import toColorValue from './util/toColorValue'
 import isPlainObject from './util/isPlainObject'
@@ -1923,6 +1924,18 @@ export let corePlugins = {
   strokeWidth: createUtilityPlugin('strokeWidth', [['stroke', ['stroke-width']]], {
     type: ['length', 'number', 'percentage'],
   }),
+
+  paintOrder: ({ addUtilities }) => {
+    const defaultPaintOrder = ['fill', 'stroke', 'markers']
+    const allPaintOrders = [['normal'], ...getAllCombinations(defaultPaintOrder)]
+    for (const paintOrder of allPaintOrders) {
+      addUtilities({
+        [`.paint-order-${paintOrder.join('-')}`]: {
+          'paint-order': paintOrder.join(' '),
+        },
+      })
+    }
+  },
 
   objectFit: ({ addUtilities }) => {
     addUtilities({
