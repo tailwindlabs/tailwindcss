@@ -2427,4 +2427,34 @@ crosscheck(({ stable, oxide }) => {
       `)
     })
   })
+
+  stable.test('::ng-deep pseudo element is left alone', () => {
+    let config = {
+      darkMode: 'class',
+      content: [
+        {
+          raw: html` <div class="foo bar"></div> `,
+        },
+      ],
+    }
+
+    let input = css`
+      ::ng-deep .foo .bar {
+        @apply font-bold;
+      }
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        ::ng-deep .foo .bar {
+          font-weight: 700;
+        }
+      `)
+    })
+  })
+
+  // 1. `::ng-deep` is deprecated
+  // 2. It uses invalid selector syntax that Lightning CSS does not support
+  // It may be enough for Oxide to not support it at all
+  oxide.test.todo('::ng-deep pseudo element is left alone')
 })

@@ -337,6 +337,9 @@ let pseudoElementExceptions = [
   '::-webkit-scrollbar-track-piece',
   '::-webkit-scrollbar-corner',
   '::-webkit-resizer',
+
+  // Old-style Angular Shadow DOM piercing pseudo element
+  '::ng-deep',
 ]
 
 /**
