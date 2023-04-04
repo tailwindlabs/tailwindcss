@@ -20,6 +20,18 @@
   top: var(--value);
   bottom: var(--value);
 }
+.top-\[11px\] {
+  top: 11px;
+}
+.top-\[var\(--value\)\] {
+  top: var(--value);
+}
+.right-\[11px\] {
+  right: 11px;
+}
+.right-\[var\(--value\)\] {
+  right: var(--value);
+}
 .bottom-\[11px\] {
   bottom: 11px;
 }
@@ -31,18 +43,6 @@
 }
 .left-\[var\(--value\)\] {
   left: var(--value);
-}
-.right-\[11px\] {
-  right: 11px;
-}
-.right-\[var\(--value\)\] {
-  right: var(--value);
-}
-.top-\[11px\] {
-  top: 11px;
-}
-.top-\[var\(--value\)\] {
-  top: var(--value);
 }
 .z-\[123\] {
   z-index: 123;
@@ -134,13 +134,13 @@
   min-height: var(--height);
 }
 .w-\[\'\)\(\)\'\] {
-  width: ")()";
+  width: ')()';
 }
 .w-\[\'\]\[\]\'\] {
-  width: "][]";
+  width: '][]';
 }
 .w-\[\'\}\{\}\'\] {
-  width: "}{}";
+  width: '}{}';
 }
 .w-\[\(\(\)\)\] {
   width: (());
@@ -176,10 +176,10 @@
   width: var(--width, calc(100% + 1rem));
 }
 .w-\[\{\{\}\}\] {
-  width: {{} }
+  width: {{}};
 }
 .w-\[\{\}\] {
-  width: {}
+  width: {};
 }
 .min-w-\[3\.23rem\] {
   min-width: 3.23rem;
@@ -345,10 +345,10 @@
   cursor: pointer;
 }
 .cursor-\[url\(\'\.\/path_to_hand\.cur\'\)_2_2\,pointer\] {
-  cursor: url("./path_to_hand.cur") 2 2, pointer;
+  cursor: url('./path_to_hand.cur') 2 2, pointer;
 }
 .cursor-\[url\(hand\.cur\)_2_2\,pointer\] {
-  cursor: url("hand.cur") 2 2, pointer;
+  cursor: url('hand.cur') 2 2, pointer;
 }
 .cursor-\[var\(--value\)\] {
   cursor: var(--value);
@@ -406,13 +406,13 @@
   scroll-padding-top: var(--scroll-padding);
 }
 .list-\[\'\\1f44d\'\] {
-  list-style-type: "👍";
+  list-style-type: '👍';
 }
 .list-\[var\(--value\)\] {
   list-style-type: var(--value);
 }
 .list-image-\[url\(\.\/my-image\.png\)\] {
-  list-style-image: url("./my-image.png");
+  list-style-image: url('./my-image.png');
 }
 .list-image-\[var\(--value\)\] {
   list-style-image: var(--value);
@@ -653,7 +653,7 @@
   background-image: linear-gradient(to left, rgb(var(--green)), blue);
 }
 .bg-\[url\(\'\/path-to-image\.png\'\)\] {
-  background-image: url("/path-to-image.png");
+  background-image: url('/path-to-image.png');
 }
 .bg-\[url\:var\(--url\)\] {
   background-image: var(--url);
@@ -713,7 +713,7 @@
   fill: #da5b66;
 }
 .fill-\[url\(\#icon-gradient\)\] {
-  fill: url("#icon-gradient");
+  fill: url('#icon-gradient');
 }
 .fill-\[var\(--value\)\] {
   fill: var(--value);
@@ -725,7 +725,7 @@
   stroke: var(--value);
 }
 .stroke-\[url\(\#icon-gradient\)\] {
-  stroke: url("#icon-gradient");
+  stroke: url('#icon-gradient');
 }
 .stroke-\[20px\] {
   stroke-width: 20px;
@@ -787,7 +787,7 @@
   font-family: Some Font, sans-serif;
 }
 .font-\[\'Some_Font\'\,var\(--other-font\)\] {
-  font-family: "Some Font", var(--other-font);
+  font-family: 'Some Font', var(--other-font);
 }
 .font-\[Georgia\,serif\] {
   font-family: Georgia, serif;
@@ -1062,11 +1062,11 @@
   will-change: var(--will-change);
 }
 .content-\[\'\>\'\] {
-  --tw-content: ">";
+  --tw-content: '>';
   content: var(--tw-content);
 }
 .content-\[\'hello\'\] {
-  --tw-content: "hello";
+  --tw-content: 'hello';
   content: var(--tw-content);
 }
 .content-\[attr\(content-before\)\] {
@@ -1078,4 +1078,3 @@
     grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
   }
 }
-

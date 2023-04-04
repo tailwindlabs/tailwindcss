@@ -109,17 +109,17 @@
   top: 1rem;
   bottom: 1rem;
 }
+.top-6 {
+  top: 1.5rem;
+}
+.right-8 {
+  right: 2rem;
+}
 .bottom-12 {
   bottom: 3rem;
 }
 .left-16 {
   left: 4rem;
-}
-.right-8 {
-  right: 2rem;
-}
-.top-6 {
-  top: 1.5rem;
 }
 .isolate {
   isolation: isolate;
@@ -1028,4 +1028,3 @@
   --tw-content: none;
   content: var(--tw-content);
 }
-

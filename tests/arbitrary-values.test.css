@@ -20,6 +20,18 @@
   top: var(--value);
   bottom: var(--value);
 }
+.top-\[11px\] {
+  top: 11px;
+}
+.top-\[var\(--value\)\] {
+  top: var(--value);
+}
+.right-\[11px\] {
+  right: 11px;
+}
+.right-\[var\(--value\)\] {
+  right: var(--value);
+}
 .bottom-\[11px\] {
   bottom: 11px;
 }
@@ -31,18 +43,6 @@
 }
 .left-\[var\(--value\)\] {
   left: var(--value);
-}
-.right-\[11px\] {
-  right: 11px;
-}
-.right-\[var\(--value\)\] {
-  right: var(--value);
-}
-.top-\[11px\] {
-  top: 11px;
-}
-.top-\[var\(--value\)\] {
-  top: var(--value);
 }
 .z-\[123\] {
   z-index: 123;
@@ -176,10 +176,10 @@
   width: var(--width, calc(100% + 1rem));
 }
 .w-\[\{\{\}\}\] {
-  width: {{} }
+  width: {{}};
 }
 .w-\[\{\}\] {
-  width: {}
+  width: {};
 }
 .min-w-\[3\.23rem\] {
   min-width: 3.23rem;
@@ -412,7 +412,7 @@
   list-style-type: var(--value);
 }
 .list-image-\[url\(\.\/my-image\.png\)\] {
-  list-style-image: url("./my-image.png");
+  list-style-image: url('./my-image.png');
 }
 .list-image-\[var\(--value\)\] {
   list-style-image: var(--value);

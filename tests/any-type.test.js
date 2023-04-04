@@ -197,17 +197,17 @@ crosscheck(({ stable, oxide }) => {
           top: var(--any-value);
           bottom: var(--any-value);
         }
+        .top-\[var\(--any-value\)\] {
+          top: var(--any-value);
+        }
+        .right-\[var\(--any-value\)\] {
+          right: var(--any-value);
+        }
         .bottom-\[var\(--any-value\)\] {
           bottom: var(--any-value);
         }
         .left-\[var\(--any-value\)\] {
           left: var(--any-value);
-        }
-        .right-\[var\(--any-value\)\] {
-          right: var(--any-value);
-        }
-        .top-\[var\(--any-value\)\] {
-          top: var(--any-value);
         }
         .z-\[var\(--any-value\)\] {
           z-index: var(--any-value);
@@ -751,17 +751,17 @@ crosscheck(({ stable, oxide }) => {
           top: var(--any-value);
           bottom: var(--any-value);
         }
+        .top-\[var\(--any-value\)\] {
+          top: var(--any-value);
+        }
+        .right-\[var\(--any-value\)\] {
+          right: var(--any-value);
+        }
         .bottom-\[var\(--any-value\)\] {
           bottom: var(--any-value);
         }
         .left-\[var\(--any-value\)\] {
           left: var(--any-value);
-        }
-        .right-\[var\(--any-value\)\] {
-          right: var(--any-value);
-        }
-        .top-\[var\(--any-value\)\] {
-          top: var(--any-value);
         }
         .z-\[var\(--any-value\)\] {
           z-index: var(--any-value);
