@@ -85,20 +85,20 @@
   margin-top: 7px;
   margin-bottom: 7px;
 }
-.mb-\[7px\] {
-  margin-bottom: 7px;
-}
-.ml-\[7px\] {
-  margin-left: 7px;
-}
-.mr-\[7px\] {
-  margin-right: 7px;
-}
 .mt-\[7px\] {
   margin-top: 7px;
 }
 .mt-\[clamp\(30px\,100px\)\] {
   margin-top: clamp(30px, 100px);
+}
+.mr-\[7px\] {
+  margin-right: 7px;
+}
+.mb-\[7px\] {
+  margin-bottom: 7px;
+}
+.ml-\[7px\] {
+  margin-left: 7px;
 }
 .aspect-\[16\/9\] {
   aspect-ratio: 16 / 9;
@@ -364,20 +364,20 @@
   scroll-margin-top: 7px;
   scroll-margin-bottom: 7px;
 }
-.scroll-mb-\[7px\] {
-  scroll-margin-bottom: 7px;
-}
-.scroll-ml-\[7px\] {
-  scroll-margin-left: 7px;
-}
-.scroll-mr-\[7px\] {
-  scroll-margin-right: 7px;
-}
 .scroll-mt-\[7px\] {
   scroll-margin-top: 7px;
 }
 .scroll-mt-\[var\(--scroll-margin\)\] {
   scroll-margin-top: var(--scroll-margin);
+}
+.scroll-mr-\[7px\] {
+  scroll-margin-right: 7px;
+}
+.scroll-mb-\[7px\] {
+  scroll-margin-bottom: 7px;
+}
+.scroll-ml-\[7px\] {
+  scroll-margin-left: 7px;
 }
 .scroll-p-\[7px\] {
   scroll-padding: 7px;
@@ -390,20 +390,20 @@
   scroll-padding-top: 7px;
   scroll-padding-bottom: 7px;
 }
-.scroll-pb-\[7px\] {
-  scroll-padding-bottom: 7px;
-}
-.scroll-pl-\[7px\] {
-  scroll-padding-left: 7px;
-}
-.scroll-pr-\[7px\] {
-  scroll-padding-right: 7px;
-}
 .scroll-pt-\[7px\] {
   scroll-padding-top: 7px;
 }
 .scroll-pt-\[var\(--scroll-padding\)\] {
   scroll-padding-top: var(--scroll-padding);
+}
+.scroll-pr-\[7px\] {
+  scroll-padding-right: 7px;
+}
+.scroll-pb-\[7px\] {
+  scroll-padding-bottom: 7px;
+}
+.scroll-pl-\[7px\] {
+  scroll-padding-left: 7px;
 }
 .list-\[\'\\1f44d\'\] {
   list-style-type: '👍';
@@ -505,6 +505,14 @@
 .rounded-\[11px\] {
   border-radius: 11px;
 }
+.rounded-t-\[var\(--radius\)\] {
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+.rounded-r-\[var\(--radius\)\] {
+  border-top-right-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
 .rounded-b-\[var\(--radius\)\] {
   border-bottom-right-radius: var(--radius);
   border-bottom-left-radius: var(--radius);
@@ -513,31 +521,35 @@
   border-top-left-radius: var(--radius);
   border-bottom-left-radius: var(--radius);
 }
-.rounded-r-\[var\(--radius\)\] {
-  border-top-right-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
-}
-.rounded-t-\[var\(--radius\)\] {
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-}
-.rounded-bl-\[var\(--radius\)\] {
-  border-bottom-left-radius: var(--radius);
-}
-.rounded-br-\[var\(--radius\)\] {
-  border-bottom-right-radius: var(--radius);
-}
 .rounded-tl-\[var\(--radius\)\] {
   border-top-left-radius: var(--radius);
 }
 .rounded-tr-\[var\(--radius\)\] {
   border-top-right-radius: var(--radius);
 }
+.rounded-br-\[var\(--radius\)\] {
+  border-bottom-right-radius: var(--radius);
+}
+.rounded-bl-\[var\(--radius\)\] {
+  border-bottom-left-radius: var(--radius);
+}
 .border-\[2\.5px\] {
   border-width: 2.5px;
 }
 .border-\[length\:var\(--value\)\] {
   border-width: var(--value);
+}
+.border-t-\[2\.5px\] {
+  border-top-width: 2.5px;
+}
+.border-t-\[length\:var\(--value\)\] {
+  border-top-width: var(--value);
+}
+.border-r-\[2\.5px\] {
+  border-right-width: 2.5px;
+}
+.border-r-\[length\:var\(--value\)\] {
+  border-right-width: var(--value);
 }
 .border-b-\[2\.5px\] {
   border-bottom-width: 2.5px;
@@ -550,18 +562,6 @@
 }
 .border-l-\[length\:var\(--value\)\] {
   border-left-width: var(--value);
-}
-.border-r-\[2\.5px\] {
-  border-right-width: 2.5px;
-}
-.border-r-\[length\:var\(--value\)\] {
-  border-right-width: var(--value);
-}
-.border-t-\[2\.5px\] {
-  border-top-width: 2.5px;
-}
-.border-t-\[length\:var\(--value\)\] {
-  border-top-width: var(--value);
 }
 .border-\[\#f00\] {
   border-color: red;
@@ -753,20 +753,20 @@
   padding-top: 7px;
   padding-bottom: 7px;
 }
-.pb-\[7px\] {
-  padding-bottom: 7px;
-}
-.pl-\[7px\] {
-  padding-left: 7px;
-}
-.pr-\[7px\] {
-  padding-right: 7px;
-}
 .pt-\[7px\] {
   padding-top: 7px;
 }
 .pt-\[clamp\(30px\,100px\)\] {
   padding-top: clamp(30px, 100px);
+}
+.pr-\[7px\] {
+  padding-right: 7px;
+}
+.pb-\[7px\] {
+  padding-bottom: 7px;
+}
+.pl-\[7px\] {
+  padding-left: 7px;
 }
 .indent-\[50\%\] {
   text-indent: 50%;
