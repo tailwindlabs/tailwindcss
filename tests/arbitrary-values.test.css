@@ -251,27 +251,19 @@
 }
 .rotate-\[1\.5turn\] {
   --tw-rotate: 1.5turn;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: rotate(var(--tw-rotate));
 }
 .rotate-\[2\.3rad\] {
   --tw-rotate: 131.78deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: rotate(var(--tw-rotate));
 }
 .rotate-\[23deg\] {
   --tw-rotate: 23deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: rotate(var(--tw-rotate));
 }
 .rotate-\[401grad\] {
   --tw-rotate: 401grad;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: rotate(var(--tw-rotate));
 }
 .skew-x-\[3px\] {
   --tw-skew-x: 3px;

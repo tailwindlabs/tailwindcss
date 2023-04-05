@@ -1848,9 +1848,7 @@ crosscheck(({ stable, oxide }) => {
       return expect(result.css).toMatchFormattedCss(css`
         .foo:focus {
           --tw-rotate: 90deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })
@@ -1876,9 +1874,7 @@ crosscheck(({ stable, oxide }) => {
         ${defaults}
         .foo:focus {
           --tw-rotate: 90deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })

@@ -321,9 +321,7 @@ crosscheck(({ stable, oxide }) => {
         }
         .rotate-\[var\(--any-value\)\] {
           --tw-rotate: var(--any-value);
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .scale-\[var\(--any-value\)\] {
           --tw-scale-x: var(--any-value);
@@ -875,9 +873,7 @@ crosscheck(({ stable, oxide }) => {
         }
         .rotate-\[var\(--any-value\)\] {
           --tw-rotate: var(--any-value);
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .scale-\[var\(--any-value\)\] {
           --tw-scale-x: var(--any-value);

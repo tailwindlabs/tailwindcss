@@ -29,9 +29,7 @@ crosscheck(() => {
         }
         .rotate-3 {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .skew-y-6 {
           --tw-skew-y: 6deg;
@@ -85,9 +83,7 @@ crosscheck(() => {
         }
         .focus\:rotate-3:focus {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .hover\:focus\:skew-y-6:focus:hover {
           --tw-skew-y: 6deg;
@@ -135,9 +131,7 @@ crosscheck(() => {
         .after\:rotate-3:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })
@@ -177,9 +171,7 @@ crosscheck(() => {
         }
         .peer:focus ~ .peer-focus\:rotate-3 {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })
@@ -223,9 +215,7 @@ crosscheck(() => {
         .peer:focus ~ .peer-focus\:after\:rotate-3:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })
@@ -273,9 +263,7 @@ crosscheck(() => {
         .peer:focus ~ .peer-focus\:focus\:after\:rotate-3:focus:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })
@@ -351,9 +339,7 @@ crosscheck(() => {
         }
         .foo {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .bar:before {
           content: var(--tw-content);
@@ -365,9 +351,7 @@ crosscheck(() => {
         }
         .baz:before {
           --tw-rotate: 45deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .whats ~ .next > span:hover {
           --tw-skew-x: 6deg;
@@ -378,9 +362,7 @@ crosscheck(() => {
         @media (min-width: 768px) {
           .media-queries {
             --tw-rotate: 45deg;
-            transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-              rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-              scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+            transform: rotate(var(--tw-rotate));
           }
         }
         .a,
@@ -394,22 +376,16 @@ crosscheck(() => {
         .a,
         .b {
           --tw-rotate: 45deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .a:before,
         .b:after {
           --tw-rotate: 90deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .recursive {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })
@@ -423,7 +399,7 @@ crosscheck(() => {
     }
 
     let input = css`
-      @tailwind base;
+      /* --- */
       /* --- */
       @tailwind utilities;
 
@@ -446,41 +422,21 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        .a:before,
-        .b:after,
-        .c:first-line,
-        .d:first-letter {
-          --tw-translate-x: 0;
-          --tw-translate-y: 0;
-          --tw-rotate: 0;
-          --tw-skew-x: 0;
-          --tw-skew-y: 0;
-          --tw-scale-x: 1;
-          --tw-scale-y: 1;
-        }
         .a:before {
           --tw-rotate: 45deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .b:after {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .c:first-line {
           --tw-rotate: 1deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
         .d:first-letter {
           --tw-rotate: 6deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })
@@ -620,9 +576,7 @@ crosscheck(() => {
       expect(result.css).toMatchFormattedCss(css`
         .rotate-3 {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: rotate(var(--tw-rotate));
         }
       `)
     })

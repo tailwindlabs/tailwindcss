@@ -848,7 +848,7 @@ export let corePlugins = {
   ),
   rotate: createUtilityPlugin(
     'rotate',
-    [['rotate', [['@defaults transform', {}], '--tw-rotate', ['transform', cssTransformValue]]]],
+    [['rotate', ['--tw-rotate', ['transform', 'rotate(var(--tw-rotate))']]]],
     { supportsNegativeValues: true }
   ),
   skew: createUtilityPlugin(
