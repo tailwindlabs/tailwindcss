@@ -360,40 +360,50 @@ let pseudoElementExceptions = [
 export function collectPseudoElements(selector, force = false) {
   /** @type {Node[]} */
   let nodes = []
+
+  /** @type {Node[]} */
+  let children = []
+
   let seenPseudoElement = null
 
   for (let node of [...selector.nodes]) {
     if (isPseudoElement(node, force)) {
       nodes.push(node)
-      selector.removeChild(node)
+      children.push(node)
       seenPseudoElement = node.value
     } else if (seenPseudoElement !== null) {
       if (pseudoElementExceptions.includes(seenPseudoElement) && isPseudoClass(node, force)) {
         nodes.push(node)
-        selector.removeChild(node)
+        children.push(node)
       } else {
         seenPseudoElement = null
       }
     }
 
-    if (node?.nodes) {
-      let hasPseudoElementRestrictions =
-        node.type === 'pseudo' && (node.value === ':is' || node.value === ':has')
-
-      let [collected, seenPseudoElementInSelector] = collectPseudoElements(
-        node,
-        force || hasPseudoElementRestrictions
-      )
-
-      if (seenPseudoElementInSelector) {
-        seenPseudoElement = seenPseudoElementInSelector
-      }
-
-      nodes.push(...collected)
+    if (!node?.nodes) {
+      continue
     }
+
+    let hasPseudoElementRestrictions =
+      node.type === 'pseudo' && (node.value === ':is' || node.value === ':has')
+
+    let [collected, seenPseudoElementInSelector] = collectPseudoElements(
+      node,
+      force || hasPseudoElementRestrictions
+    )
+
+    if (seenPseudoElementInSelector) {
+      seenPseudoElement = seenPseudoElementInSelector
+    }
+
+    nodes.push(...collected)
   }
 
-  return [nodes, seenPseudoElement]
+  // Only remove direct children, otherwise we might attempt to
+  // remove nodes that are part of a different selector.
+  children.forEach((child) => selector.removeChild(child))
+
+  return [[...nodes], seenPseudoElement]
 }
 
 // This will make sure to move pseudo's to the correct spot (the end for
