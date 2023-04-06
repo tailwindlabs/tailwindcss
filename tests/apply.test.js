@@ -2457,4 +2457,34 @@ crosscheck(({ stable, oxide }) => {
   // 2. It uses invalid selector syntax that Lightning CSS does not support
   // It may be enough for Oxide to not support it at all
   oxide.test.todo('::ng-deep pseudo element is left alone')
+
+  stable.test('::deep pseudo element is left alone', () => {
+    let config = {
+      darkMode: 'class',
+      content: [
+        {
+          raw: html` <div class="foo bar"></div> `,
+        },
+      ],
+    }
+
+    let input = css`
+      ::deep .foo .bar {
+        @apply font-bold;
+      }
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        ::deep .foo .bar {
+          font-weight: 700;
+        }
+      `)
+    })
+  })
+
+  // 1. `::deep` is from Blazor
+  // 2. It uses invalid selector syntax that Lightning CSS does not support
+  // It may be enough for Oxide to not support it at all
+  oxide.test.todo('::deep pseudo element is left alone')
 })
