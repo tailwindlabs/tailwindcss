@@ -143,8 +143,7 @@ function isMovablePseudoElement(node: Pseudo) {
 
 function isAttachablePseudoClass(node: Node, pseudo: Pseudo) {
   if (node.type !== 'pseudo') return false
-  if (node.value.startsWith('::')) return false
-  if (elementProperties[node.value] !== undefined) return false
+  if (isPseudoElement(node)) return false
 
   return propertiesForPseudo(pseudo).includes('actionable')
 }
