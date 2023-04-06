@@ -2428,7 +2428,7 @@ crosscheck(({ stable, oxide }) => {
     })
   })
 
-  stable.test('::ng-deep pseudo element is left alone', () => {
+  stable.test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
     let config = {
       darkMode: 'class',
       content: [
@@ -2442,33 +2442,9 @@ crosscheck(({ stable, oxide }) => {
       ::ng-deep .foo .bar {
         @apply font-bold;
       }
-    `
-
-    return run(input, config).then((result) => {
-      expect(result.css).toMatchFormattedCss(css`
-        ::ng-deep .foo .bar {
-          font-weight: 700;
-        }
-      `)
-    })
-  })
-
-  // 1. `::ng-deep` is deprecated
-  // 2. It uses invalid selector syntax that Lightning CSS does not support
-  // It may be enough for Oxide to not support it at all
-  oxide.test.todo('::ng-deep pseudo element is left alone')
-
-  stable.test('::deep pseudo element is left alone', () => {
-    let config = {
-      darkMode: 'class',
-      content: [
-        {
-          raw: html` <div class="foo bar"></div> `,
-        },
-      ],
-    }
-
-    let input = css`
+      ::v-deep .foo .bar {
+        @apply font-bold;
+      }
       ::deep .foo .bar {
         @apply font-bold;
       }
@@ -2476,6 +2452,12 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
+        ::ng-deep .foo .bar {
+          font-weight: 700;
+        }
+        ::v-deep .foo .bar {
+          font-weight: 700;
+        }
         ::deep .foo .bar {
           font-weight: 700;
         }
@@ -2483,8 +2465,9 @@ crosscheck(({ stable, oxide }) => {
     })
   })
 
-  // 1. `::deep` is from Blazor
-  // 2. It uses invalid selector syntax that Lightning CSS does not support
+  // 1. `::ng-deep` is deprecated
+  // 2. `::deep` and `::v-deep` are non-standard
+  // 3. They all use invalid selector syntax that Lightning CSS does not support
   // It may be enough for Oxide to not support it at all
-  oxide.test.todo('::deep pseudo element is left alone')
+  oxide.test.todo('::ng-deep, ::deep, ::v-deep pseudo elements are left alone')
 })
