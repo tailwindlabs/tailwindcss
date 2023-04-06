@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Don’t move `::ng-deep` pseudo-element to end of selector when using `@apply` ([#10943](https://github.com/tailwindlabs/tailwindcss/pull/10943))
+- Don’t move `::deep` pseudo-element to end of selector when using `@apply` ([#10962](https://github.com/tailwindlabs/tailwindcss/pull/10962))
 
 ## [3.3.1] - 2023-03-30
 
