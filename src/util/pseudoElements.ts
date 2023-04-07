@@ -92,7 +92,7 @@ export function movePseudos(sel: Selector) {
 
         // ::before:hover => :hover::before (:hover is not attached)
         // :hover::before => :hover::before (:hover is not attached)
-        // :hover::file-selector-button:hover => :hover::file-selector-button (:hover is not attached)
+        // :hover::file-selector-button => :hover::file-selector-button (:hover is not attached)
         // ::file-selector-button:hover => ::file-selector-button:hover (:hover is attached)
 
         // When A is a pseudo-element and Z is a pseudo-class, we want to move A to the end
