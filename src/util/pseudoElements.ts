@@ -1,15 +1,22 @@
 import type { Selector, Pseudo, Node } from 'postcss-selector-parser'
 
-// There are some pseudo elements that may or may not be:
+// There are some pseudo-elements that may or may not be:
 
-// - actionable: This means user-action pseudo classes can be attached to them
-//               The spec is not clear on whether this is allowed or not — but in practice it is.
+// **Actionable**
+// Zero or more user-action pseudo-classes may be attached to the pseudo-element itself
+// structural-pseudo-classes are NOT allowed but we don't make
+// The spec is not clear on whether this is allowed or not — but in practice it is.
 
-// - terminal: They MUST be placed at the end of a selector
-//             This is the required in the spec. However, some pseudo elements are not "terminal" because
-//             they represent a "boundary piercing" that is compiled out by a build step.
+// **Terminal**
+// It MUST be placed at the end of a selector
+//
+// This is the required in the spec. However, some pseudo elements are not "terminal" because
+// they represent a "boundary piercing" that is compiled out by a build step.
 
-// - jumpable: This pseudo element may "jump" over a combinator when moving it to the end of the selector
+// **Jumpable**
+// Any terminal element may "jump" over combinators when moving to the end of the selector
+//
+// This is a backwards-compat quirk of :before and :after variants.
 
 type PseudoProperty = 'terminal' | 'actionable' | 'jumpable'
 
