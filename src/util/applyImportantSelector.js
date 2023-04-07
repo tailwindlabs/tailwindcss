@@ -1,5 +1,5 @@
 import parser from 'postcss-selector-parser'
-import { collectPseudoElements, sortSelector } from './formatVariantSelector.js'
+import { movePseudos } from './pseudoElements'
 
 export function applyImportantSelector(selector, important) {
   let sel = parser().astSync(selector)
@@ -20,10 +20,7 @@ export function applyImportantSelector(selector, important) {
       ]
     }
 
-    let [pseudoElements] = collectPseudoElements(sel)
-    if (pseudoElements.length > 0) {
-      sel.nodes.push(...pseudoElements.sort(sortSelector))
-    }
+    movePseudos(sel)
   })
 
   return `${important} ${sel.toString()}`

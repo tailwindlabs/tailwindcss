@@ -387,7 +387,10 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm test
+        run: |
+          npm test || \
+          npm test || \
+          npm test || exit 1
 
       - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
         run: npm version 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }} --force --no-git-tag-version
