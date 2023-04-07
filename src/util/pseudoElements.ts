@@ -42,13 +42,13 @@ let elementProperties: Record<string, PseudoProperty[]> = {
   '::-webkit-progress-bar': ['terminal', 'actionable'],
 
   // Webkit scroll bar pseudo elements can be combined with user-action pseudo classes
-  '::-webkit-scrollbar': ['actionable'],
-  '::-webkit-scrollbar-button': ['actionable'],
-  '::-webkit-scrollbar-thumb': ['actionable'],
-  '::-webkit-scrollbar-track': ['actionable'],
-  '::-webkit-scrollbar-track-piece': ['actionable'],
-  '::-webkit-scrollbar-corner': ['actionable'],
-  '::-webkit-resizer': ['actionable'],
+  '::-webkit-scrollbar': ['terminal', 'actionable'],
+  '::-webkit-scrollbar-button': ['terminal', 'actionable'],
+  '::-webkit-scrollbar-thumb': ['terminal', 'actionable'],
+  '::-webkit-scrollbar-track': ['terminal', 'actionable'],
+  '::-webkit-scrollbar-track-piece': ['terminal', 'actionable'],
+  '::-webkit-scrollbar-corner': ['terminal', 'actionable'],
+  '::-webkit-resizer': ['terminal', 'actionable'],
 
   // Note: As a rule, double colons (::) should be used instead of a single colon
   // (:). This distinguishes pseudo-classes from pseudo-elements. However, since
