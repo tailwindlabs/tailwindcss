@@ -1,4 +1,7 @@
-import type { Selector, Pseudo, Node } from 'postcss-selector-parser'
+/** @typedef {import('postcss-selector-parser').Root} Root */
+/** @typedef {import('postcss-selector-parser').Selector} Selector */
+/** @typedef {import('postcss-selector-parser').Pseudo} Pseudo */
+/** @typedef {import('postcss-selector-parser').Node} Node */
 
 // There are some pseudo-elements that may or may not be:
 
@@ -18,9 +21,10 @@ import type { Selector, Pseudo, Node } from 'postcss-selector-parser'
 //
 // This is a backwards-compat quirk of :before and :after variants.
 
-type PseudoProperty = 'terminal' | 'actionable' | 'jumpable'
+/** @typedef {'terminal' | 'actionable' | 'jumpable'} PseudoProperty */
 
-let elementProperties: Record<string, PseudoProperty[]> = {
+/** @type {Record<string, PseudoProperty[]>} */
+let elementProperties = {
   '::after': ['terminal', 'jumpable'],
   '::backdrop': ['terminal'],
   '::before': ['terminal', 'jumpable'],
@@ -65,7 +69,11 @@ let elementProperties: Record<string, PseudoProperty[]> = {
   __default__: ['actionable'],
 }
 
-export function movePseudos(sel: Selector) {
+/**
+ * @param {Selector} sel
+ * @returns {Selector}
+ */
+export function movePseudos(sel) {
   let [pseudos] = movablePseudos(sel)
 
   // Remove all pseudo elements from their respective selectors
@@ -86,12 +94,19 @@ export function movePseudos(sel: Selector) {
   return sel
 }
 
-type MovablePseudo = [sel: Selector, pseudo: Pseudo, attachedTo: Pseudo | null]
-type MovablePseudosResult = [pseudos: MovablePseudo[], lastSeenElement: Pseudo | null]
+/** @typedef {[sel: Selector, pseudo: Pseudo, attachedTo: Pseudo | null]} MovablePseudo */
+/** @typedef {[pseudos: MovablePseudo[], lastSeenElement: Pseudo | null]} MovablePseudosResult */
 
-function movablePseudos(sel: Selector): MovablePseudosResult {
-  let buffer: MovablePseudo[] = []
-  let lastSeenElement: Pseudo | null = null
+/**
+ * @param {Selector} sel
+ * @returns {MovablePseudosResult}
+ */
+function movablePseudos(sel) {
+  /** @type {MovablePseudo[]} */
+  let buffer = []
+
+  /** @type {Pseudo | null} */
+  let lastSeenElement = null
 
   for (let node of sel.nodes) {
     if (node.type === 'combinator') {
@@ -118,21 +133,38 @@ function movablePseudos(sel: Selector): MovablePseudosResult {
   return [buffer, lastSeenElement]
 }
 
-function isPseudoElement(node: Pseudo): boolean {
+/**
+ * @param {Node} node
+ * @returns {boolean}
+ */
+function isPseudoElement(node) {
   return node.value.startsWith('::') || elementProperties[node.value] !== undefined
 }
 
-function isMovablePseudoElement(node: Pseudo) {
+/**
+ * @param {Node} node
+ * @returns {boolean}
+ */
+function isMovablePseudoElement(node) {
   return isPseudoElement(node) && propertiesForPseudo(node).includes('terminal')
 }
 
-function isAttachablePseudoClass(node: Node, pseudo: Pseudo) {
+/**
+ * @param {Node} node
+ * @param {Pseudo} pseudo
+ * @returns {boolean}
+ */
+function isAttachablePseudoClass(node, pseudo) {
   if (node.type !== 'pseudo') return false
   if (isPseudoElement(node)) return false
 
   return propertiesForPseudo(pseudo).includes('actionable')
 }
 
-function propertiesForPseudo(pseudo: Pseudo) {
+/**
+ * @param {Pseudo} pseudo
+ * @returns {PseudoProperty[]}
+ */
+function propertiesForPseudo(pseudo) {
   return elementProperties[pseudo.value] ?? elementProperties.__default__
 }
