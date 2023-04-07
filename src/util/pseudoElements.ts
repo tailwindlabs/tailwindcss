@@ -59,6 +59,9 @@ let elementProperties: Record<string, PseudoProperty[]> = {
   ':first-letter': ['terminal', 'jumpable'],
   ':first-line': ['terminal', 'jumpable'],
 
+  // The default value is used when the pseudo-element is not recognized
+  // Because it's not recognized, we don't know if it's terminal or not
+  // So we assume it can't be moved AND can have user-action pseudo classes attached to it
   __default__: ['actionable'],
 }
 
