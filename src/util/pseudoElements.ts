@@ -72,8 +72,8 @@ export function movePseudos(sel: Selector) {
   pseudos.forEach(([sel, pseudo]) => sel.removeChild(pseudo))
 
   // Re-add them to the end of the selector in the correct order.
-  // This moves pseudo elements to the end of the selector
-  // because otherwise the selector will never work.
+  // This moves terminal pseudo elements to the end of the
+  // selector otherwise the selector will not be valid.
   //
   // Examples:
   //  - `before:hover:text-center` would result in `.before\:hover\:text-center:hover::before`
@@ -81,32 +81,7 @@ export function movePseudos(sel: Selector) {
   //
   // The selector `::before:hover` does not work but we
   // can make it work for you by flipping the order.
-  sel.nodes.push(
-    ...pseudos
-      .sort(([, a, aAttachedTo], [, z, zAttachedTo]) => {
-        let aIsElement = isPseudoElement(a)
-        let zIsElement = isPseudoElement(z)
-
-        // Moves pseudo elements to the end of the selector
-        // Keeping attached pseudo classes in place
-
-        // ::before:hover => :hover::before (:hover is not attached)
-        // :hover::before => :hover::before (:hover is not attached)
-        // :hover::file-selector-button => :hover::file-selector-button (:hover is not attached)
-        // ::file-selector-button:hover => ::file-selector-button:hover (:hover is attached)
-
-        // When A is a pseudo-element and Z is a pseudo-class, we want to move A to the end
-        // Unless Z is attached to A in which case the order is correct
-        if (aIsElement && !zIsElement) return zAttachedTo !== a ? 1 : 0
-
-        // When Z is a pseudo-element and A is a pseudo-class, we want to move Z to the end
-        // Unless Z is attached to A in which case the order is correct
-        if (!aIsElement && zIsElement) return aAttachedTo !== z ? -1 : 0
-
-        return 0
-      })
-      .map(([, pseudo]) => pseudo)
-  )
+  sel.nodes.push(...pseudos.map(([, pseudo]) => pseudo))
 
   return sel
 }
