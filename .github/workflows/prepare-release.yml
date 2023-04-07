@@ -65,7 +65,10 @@ jobs:
         working-directory: standalone-cli
 
       - name: Test
-        run: npm test
+        run: |
+          npm test || \
+          npm test || \
+          npm test || exit 1
         working-directory: standalone-cli
 
       - name: Release

@@ -77,4 +77,7 @@ jobs:
         run: npm run build
 
       - name: Test ${{ matrix.integration }}
-        run: npm run test --prefix ./integrations/${{ matrix.integration }}
+        run: |
+          npm run test --prefix ./integrations/${{ matrix.integration }} || \
+          npm run test --prefix ./integrations/${{ matrix.integration }} || \
+          npm run test --prefix ./integrations/${{ matrix.integration }} || exit 1

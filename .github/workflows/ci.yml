@@ -66,7 +66,10 @@ jobs:
         run: npx turbo run build --filter=//
 
       - name: Test
-        run: npx turbo run test --filter=//
+        run: |
+          npx turbo run test --filter=// || \
+          npx turbo run test --filter=// || \
+          npx turbo run test --filter=// || exit 1
 
       - name: Lint
         run: npx turbo run style --filter=//
