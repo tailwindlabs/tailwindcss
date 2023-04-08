@@ -15,6 +15,7 @@ module.exports = {
       bounce: 'bounce 1s infinite',
     },
     aria: {
+      busy: 'busy="true"',
       checked: 'checked="true"',
       disabled: 'disabled="true"',
       expanded: 'expanded="true"',
