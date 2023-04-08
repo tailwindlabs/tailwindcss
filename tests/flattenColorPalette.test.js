@@ -78,6 +78,44 @@ crosscheck(() => {
     })
   })
 
+  test('it flattens deeply nested color objects with functions', () => {
+    expect(
+      flattenColorPalette(
+        {
+          primary: function dark(color) {
+            return `dark${color}`
+          },
+          secondary: {
+            DEFAULT: 'blue',
+            hover: 'cyan',
+            focus: 'red',
+          },
+          button: {
+            primary: {
+              DEFAULT: 'magenta',
+              hover: 'green',
+              focus: {
+                DEFAULT: 'yellow',
+                variant: 'orange',
+              },
+            },
+          },
+        },
+        true,
+        'cyan'
+      )
+    ).toEqual({
+      primary: 'darkcyan',
+      secondary: 'blue',
+      'secondary-hover': 'cyan',
+      'secondary-focus': 'red',
+      'button-primary': 'magenta',
+      'button-primary-hover': 'green',
+      'button-primary-focus': 'yellow',
+      'button-primary-focus-variant': 'orange',
+    })
+  })
+
   test('it handles empty objects', () => {
     expect(flattenColorPalette({})).toEqual({})
   })
