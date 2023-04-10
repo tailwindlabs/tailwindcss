@@ -627,16 +627,14 @@ export let corePlugins = {
     'inset',
     [
       ['inset', ['inset']],
-      [
-        ['inset-x', ['left', 'right']],
-        ['inset-y', ['top', 'bottom']],
-      ],
+      [['inset-y', ['top', 'bottom']]],
+      [['inset-x', ['left', 'right']]],
       [['top', ['top']]],
-      [['right', ['right']]],
-      [['end', ['inset-inline-end']]],
       [['bottom', ['bottom']]],
-      [['left', ['left']]],
       [['start', ['inset-inline-start']]],
+      [['left', ['left']]],
+      [['end', ['inset-inline-end']]],
+      [['right', ['right']]],
     ],
     { supportsNegativeValues: true }
   ),
@@ -678,16 +676,14 @@ export let corePlugins = {
     'margin',
     [
       ['m', ['margin']],
-      [
-        ['mx', ['margin-left', 'margin-right']],
-        ['my', ['margin-top', 'margin-bottom']],
-      ],
+      [['my', ['margin-top', 'margin-bottom']]],
+      [['mx', ['margin-left', 'margin-right']]],
       [['mt', ['margin-top']]],
-      [['mr', ['margin-right']]],
-      [['me', ['margin-inline-end']]],
       [['mb', ['margin-bottom']]],
-      [['ml', ['margin-left']]],
       [['ms', ['margin-inline-start']]],
+      [['ml', ['margin-left']]],
+      [['me', ['margin-inline-end']]],
+      [['mr', ['margin-right']]],
     ],
     { supportsNegativeValues: true }
   ),
@@ -955,24 +951,14 @@ export let corePlugins = {
     addUtilities({
       '.touch-auto': { 'touch-action': 'auto' },
       '.touch-none': { 'touch-action': 'none' },
-      '.touch-pan-x': {
-        '@defaults touch-action': {},
-        '--tw-pan-x': 'pan-x',
-        'touch-action': cssTouchActionValue,
-      },
-      '.touch-pan-left': {
-        '@defaults touch-action': {},
-        '--tw-pan-x': 'pan-left',
-        'touch-action': cssTouchActionValue,
-      },
-      '.touch-pan-right': {
-        '@defaults touch-action': {},
-        '--tw-pan-x': 'pan-right',
-        'touch-action': cssTouchActionValue,
-      },
       '.touch-pan-y': {
         '@defaults touch-action': {},
         '--tw-pan-y': 'pan-y',
+        'touch-action': cssTouchActionValue,
+      },
+      '.touch-pan-x': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-x',
         'touch-action': cssTouchActionValue,
       },
       '.touch-pan-up': {
@@ -983,6 +969,16 @@ export let corePlugins = {
       '.touch-pan-down': {
         '@defaults touch-action': {},
         '--tw-pan-y': 'pan-down',
+        'touch-action': cssTouchActionValue,
+      },
+      '.touch-pan-left': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-left',
+        'touch-action': cssTouchActionValue,
+      },
+      '.touch-pan-right': {
+        '@defaults touch-action': {},
+        '--tw-pan-x': 'pan-right',
         'touch-action': cssTouchActionValue,
       },
       '.touch-pinch-zoom': {
@@ -1019,13 +1015,13 @@ export let corePlugins = {
 
     addUtilities({
       '.snap-none': { 'scroll-snap-type': 'none' },
-      '.snap-x': {
-        '@defaults scroll-snap-type': {},
-        'scroll-snap-type': 'x var(--tw-scroll-snap-strictness)',
-      },
       '.snap-y': {
         '@defaults scroll-snap-type': {},
         'scroll-snap-type': 'y var(--tw-scroll-snap-strictness)',
+      },
+      '.snap-x': {
+        '@defaults scroll-snap-type': {},
+        'scroll-snap-type': 'x var(--tw-scroll-snap-strictness)',
       },
       '.snap-both': {
         '@defaults scroll-snap-type': {},
@@ -1056,32 +1052,28 @@ export let corePlugins = {
     'scrollMargin',
     [
       ['scroll-m', ['scroll-margin']],
-      [
-        ['scroll-mx', ['scroll-margin-left', 'scroll-margin-right']],
-        ['scroll-my', ['scroll-margin-top', 'scroll-margin-bottom']],
-      ],
-      [['scroll-mt', ['scroll-margin-top']]],
-      [['scroll-mr', ['scroll-margin-right']]],
-      [['scroll-me', ['scroll-margin-inline-end']]],
-      [['scroll-mb', ['scroll-margin-bottom']]],
-      [['scroll-ml', ['scroll-margin-left']]],
-      [['scroll-ms', ['scroll-margin-inline-start']]],
+      ['scroll-my', ['scroll-margin-top', 'scroll-margin-bottom']],
+      ['scroll-mx', ['scroll-margin-left', 'scroll-margin-right']],
+      ['scroll-mt', ['scroll-margin-top']],
+      ['scroll-mb', ['scroll-margin-bottom']],
+      ['scroll-ms', ['scroll-margin-inline-start']],
+      ['scroll-ml', ['scroll-margin-left']],
+      ['scroll-me', ['scroll-margin-inline-end']],
+      ['scroll-mr', ['scroll-margin-right']],
     ],
     { supportsNegativeValues: true }
   ),
 
   scrollPadding: createUtilityPlugin('scrollPadding', [
     ['scroll-p', ['scroll-padding']],
-    [
-      ['scroll-px', ['scroll-padding-left', 'scroll-padding-right']],
-      ['scroll-py', ['scroll-padding-top', 'scroll-padding-bottom']],
-    ],
-    [['scroll-pt', ['scroll-padding-top']]],
-    [['scroll-pr', ['scroll-padding-right']]],
-    [['scroll-pe', ['scroll-padding-inline-end']]],
-    [['scroll-pb', ['scroll-padding-bottom']]],
-    [['scroll-pl', ['scroll-padding-left']]],
-    [['scroll-ps', ['scroll-padding-inline-start']]],
+    ['scroll-py', ['scroll-padding-top', 'scroll-padding-bottom']],
+    ['scroll-px', ['scroll-padding-left', 'scroll-padding-right']],
+    ['scroll-pt', ['scroll-padding-top']],
+    ['scroll-pb', ['scroll-padding-bottom']],
+    ['scroll-ps', ['scroll-padding-inline-start']],
+    ['scroll-pl', ['scroll-padding-left']],
+    ['scroll-pe', ['scroll-padding-inline-end']],
+    ['scroll-pr', ['scroll-padding-right']],
   ]),
 
   listStylePosition: ({ addUtilities }) => {
@@ -1242,15 +1234,24 @@ export let corePlugins = {
 
   gap: createUtilityPlugin('gap', [
     ['gap', ['gap']],
-    [
-      ['gap-x', ['columnGap']],
-      ['gap-y', ['rowGap']],
-    ],
+    ['gap-y', ['rowGap']],
+    ['gap-x', ['columnGap']],
   ]),
 
   space: ({ matchUtilities, addUtilities, theme }) => {
     matchUtilities(
       {
+        'space-y': (value) => {
+          value = value === '0' ? '0px' : value
+
+          return {
+            '& > :not([hidden]) ~ :not([hidden])': {
+              '--tw-space-y-reverse': '0',
+              'margin-top': `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`,
+              'margin-bottom': `calc(${value} * var(--tw-space-y-reverse))`,
+            },
+          }
+        },
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
@@ -1272,17 +1273,6 @@ export let corePlugins = {
             },
           }
         },
-        'space-y': (value) => {
-          value = value === '0' ? '0px' : value
-
-          return {
-            '& > :not([hidden]) ~ :not([hidden])': {
-              '--tw-space-y-reverse': '0',
-              'margin-top': `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`,
-              'margin-bottom': `calc(${value} * var(--tw-space-y-reverse))`,
-            },
-          }
-        },
       },
       { values: theme('space'), supportsNegativeValues: true }
     )
@@ -1296,6 +1286,18 @@ export let corePlugins = {
   divideWidth: ({ matchUtilities, addUtilities, theme }) => {
     matchUtilities(
       {
+        'divide-y': (value) => {
+          value = value === '0' ? '0px' : value
+
+          return {
+            '& > :not([hidden]) ~ :not([hidden])': {
+              '@defaults border-width': {},
+              '--tw-divide-y-reverse': '0',
+              'border-top-width': `calc(${value} * calc(1 - var(--tw-divide-y-reverse)))`,
+              'border-bottom-width': `calc(${value} * var(--tw-divide-y-reverse))`,
+            },
+          }
+        },
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
 
@@ -1316,18 +1318,6 @@ export let corePlugins = {
               '--tw-divide-x-reverse': '0',
               'border-right-width': `calc(${value} * var(--tw-divide-x-reverse))`,
               'border-left-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
-            },
-          }
-        },
-        'divide-y': (value) => {
-          value = value === '0' ? '0px' : value
-
-          return {
-            '& > :not([hidden]) ~ :not([hidden])': {
-              '@defaults border-width': {},
-              '--tw-divide-y-reverse': '0',
-              'border-top-width': `calc(${value} * calc(1 - var(--tw-divide-y-reverse)))`,
-              'border-bottom-width': `calc(${value} * var(--tw-divide-y-reverse))`,
             },
           }
         },
@@ -1434,16 +1424,16 @@ export let corePlugins = {
       '.overflow-clip': { overflow: 'clip' },
       '.overflow-visible': { overflow: 'visible' },
       '.overflow-scroll': { overflow: 'scroll' },
-      '.overflow-x-auto': { 'overflow-x': 'auto' },
       '.overflow-y-auto': { 'overflow-y': 'auto' },
-      '.overflow-x-hidden': { 'overflow-x': 'hidden' },
+      '.overflow-x-auto': { 'overflow-x': 'auto' },
       '.overflow-y-hidden': { 'overflow-y': 'hidden' },
-      '.overflow-x-clip': { 'overflow-x': 'clip' },
+      '.overflow-x-hidden': { 'overflow-x': 'hidden' },
       '.overflow-y-clip': { 'overflow-y': 'clip' },
-      '.overflow-x-visible': { 'overflow-x': 'visible' },
+      '.overflow-x-clip': { 'overflow-x': 'clip' },
       '.overflow-y-visible': { 'overflow-y': 'visible' },
-      '.overflow-x-scroll': { 'overflow-x': 'scroll' },
+      '.overflow-x-visible': { 'overflow-x': 'visible' },
       '.overflow-y-scroll': { 'overflow-y': 'scroll' },
+      '.overflow-x-scroll': { 'overflow-x': 'scroll' },
     })
   },
 
@@ -1507,36 +1497,38 @@ export let corePlugins = {
 
   borderRadius: createUtilityPlugin('borderRadius', [
     ['rounded', ['border-radius']],
-    [['rounded-t', ['border-top-left-radius', 'border-top-right-radius']]],
-    [['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']]],
-    [['rounded-e', ['border-start-end-radius', 'border-end-end-radius']]],
-    [['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']]],
-    [['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']]],
-    [['rounded-s', ['border-start-start-radius', 'border-end-start-radius']]],
-    [['rounded-tl', ['border-top-left-radius']]],
-    [['rounded-ss', ['border-start-start-radius']]],
-    [['rounded-tr', ['border-top-right-radius']]],
-    [['rounded-se', ['border-start-end-radius']]],
-    [['rounded-br', ['border-bottom-right-radius']]],
-    [['rounded-ee', ['border-end-end-radius']]],
-    [['rounded-bl', ['border-bottom-left-radius']]],
-    [['rounded-es', ['border-end-start-radius']]],
+
+    ['rounded-t', ['border-top-left-radius', 'border-top-right-radius']],
+    ['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
+
+    ['rounded-s', ['border-start-start-radius', 'border-end-start-radius']],
+    ['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']],
+    ['rounded-e', ['border-start-end-radius', 'border-end-end-radius']],
+    ['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']],
+
+    ['rounded-ss', ['border-start-start-radius']],
+    ['rounded-tl', ['border-top-left-radius']],
+    ['rounded-se', ['border-start-end-radius']],
+    ['rounded-tr', ['border-top-right-radius']],
+
+    ['rounded-es', ['border-end-start-radius']],
+    ['rounded-bl', ['border-bottom-left-radius']],
+    ['rounded-ee', ['border-end-end-radius']],
+    ['rounded-br', ['border-bottom-right-radius']],
   ]),
 
   borderWidth: createUtilityPlugin(
     'borderWidth',
     [
       ['border', [['@defaults border-width', {}], 'border-width']],
-      [
-        ['border-x', [['@defaults border-width', {}], 'border-left-width', 'border-right-width']],
-        ['border-y', [['@defaults border-width', {}], 'border-top-width', 'border-bottom-width']],
-      ],
-      [['border-t', [['@defaults border-width', {}], 'border-top-width']]],
-      [['border-r', [['@defaults border-width', {}], 'border-right-width']]],
-      [['border-e', [['@defaults border-width', {}], 'border-inline-end-width']]],
-      [['border-b', [['@defaults border-width', {}], 'border-bottom-width']]],
-      [['border-l', [['@defaults border-width', {}], 'border-left-width']]],
-      [['border-s', [['@defaults border-width', {}], 'border-inline-start-width']]],
+      ['border-y', [['@defaults border-width', {}], 'border-top-width', 'border-bottom-width']],
+      ['border-x', [['@defaults border-width', {}], 'border-left-width', 'border-right-width']],
+      ['border-t', [['@defaults border-width', {}], 'border-top-width']],
+      ['border-b', [['@defaults border-width', {}], 'border-bottom-width']],
+      ['border-s', [['@defaults border-width', {}], 'border-inline-start-width']],
+      ['border-l', [['@defaults border-width', {}], 'border-left-width']],
+      ['border-e', [['@defaults border-width', {}], 'border-inline-end-width']],
+      ['border-r', [['@defaults border-width', {}], 'border-right-width']],
     ],
     { type: ['line-width', 'length'] }
   ),
@@ -1577,20 +1569,6 @@ export let corePlugins = {
 
     matchUtilities(
       {
-        'border-x': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-left-color': toColorValue(value),
-              'border-right-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: ['border-left-color', 'border-right-color'],
-            variable: '--tw-border-opacity',
-          })
-        },
         'border-y': (value) => {
           if (!corePlugins('borderOpacity')) {
             return {
@@ -1605,6 +1583,20 @@ export let corePlugins = {
             variable: '--tw-border-opacity',
           })
         },
+        'border-x': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-left-color': toColorValue(value),
+              'border-right-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: ['border-left-color', 'border-right-color'],
+            variable: '--tw-border-opacity',
+          })
+        },
       },
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
@@ -1614,32 +1606,6 @@ export let corePlugins = {
 
     matchUtilities(
       {
-        'border-s': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-inline-start-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-inline-start-color',
-            variable: '--tw-border-opacity',
-          })
-        },
-        'border-e': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-inline-end-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-inline-end-color',
-            variable: '--tw-border-opacity',
-          })
-        },
         'border-t': (value) => {
           if (!corePlugins('borderOpacity')) {
             return {
@@ -1650,19 +1616,6 @@ export let corePlugins = {
           return withAlphaVariable({
             color: value,
             property: 'border-top-color',
-            variable: '--tw-border-opacity',
-          })
-        },
-        'border-r': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-right-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-right-color',
             variable: '--tw-border-opacity',
           })
         },
@@ -1679,6 +1632,19 @@ export let corePlugins = {
             variable: '--tw-border-opacity',
           })
         },
+        'border-s': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-inline-start-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-inline-start-color',
+            variable: '--tw-border-opacity',
+          })
+        },
         'border-l': (value) => {
           if (!corePlugins('borderOpacity')) {
             return {
@@ -1689,6 +1655,32 @@ export let corePlugins = {
           return withAlphaVariable({
             color: value,
             property: 'border-left-color',
+            variable: '--tw-border-opacity',
+          })
+        },
+        'border-e': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-inline-end-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-inline-end-color',
+            variable: '--tw-border-opacity',
+          })
+        },
+        'border-r': (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-right-color': toColorValue(value),
+            }
+          }
+
+          return withAlphaVariable({
+            color: value,
+            property: 'border-right-color',
             variable: '--tw-border-opacity',
           })
         },
@@ -1869,8 +1861,8 @@ export let corePlugins = {
     addUtilities({
       '.bg-repeat': { 'background-repeat': 'repeat' },
       '.bg-no-repeat': { 'background-repeat': 'no-repeat' },
-      '.bg-repeat-x': { 'background-repeat': 'repeat-x' },
       '.bg-repeat-y': { 'background-repeat': 'repeat-y' },
+      '.bg-repeat-x': { 'background-repeat': 'repeat-x' },
       '.bg-repeat-round': { 'background-repeat': 'round' },
       '.bg-repeat-space': { 'background-repeat': 'space' },
     })
@@ -1923,16 +1915,14 @@ export let corePlugins = {
 
   padding: createUtilityPlugin('padding', [
     ['p', ['padding']],
-    [
-      ['px', ['padding-left', 'padding-right']],
-      ['py', ['padding-top', 'padding-bottom']],
-    ],
-    [['pt', ['padding-top']]],
-    [['pr', ['padding-right']]],
-    [['pe', ['padding-inline-end']]],
-    [['pb', ['padding-bottom']]],
-    [['pl', ['padding-left']]],
-    [['ps', ['padding-inline-start']]],
+    ['py', ['padding-top', 'padding-bottom']],
+    ['px', ['padding-left', 'padding-right']],
+    ['pt', ['padding-top']],
+    ['pb', ['padding-bottom']],
+    ['ps', ['padding-inline-start']],
+    ['pl', ['padding-left']],
+    ['pe', ['padding-inline-end']],
+    ['pr', ['padding-right']],
   ]),
 
   textAlign: ({ addUtilities }) => {
