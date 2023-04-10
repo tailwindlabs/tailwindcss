@@ -627,14 +627,14 @@ export let corePlugins = {
     'inset',
     [
       ['inset', ['inset']],
-      [['inset-y', ['top', 'bottom']]],
-      [['inset-x', ['left', 'right']]],
-      [['top', ['top']]],
-      [['bottom', ['bottom']]],
-      [['start', ['inset-inline-start']]],
-      [['left', ['left']]],
-      [['end', ['inset-inline-end']]],
-      [['right', ['right']]],
+      ['inset-y', ['top', 'bottom']],
+      ['inset-x', ['left', 'right']],
+      ['top', ['top']],
+      ['bottom', ['bottom']],
+      ['start', ['inset-inline-start']],
+      ['left', ['left']],
+      ['end', ['inset-inline-end']],
+      ['right', ['right']],
     ],
     { supportsNegativeValues: true }
   ),
@@ -676,14 +676,14 @@ export let corePlugins = {
     'margin',
     [
       ['m', ['margin']],
-      [['my', ['margin-top', 'margin-bottom']]],
-      [['mx', ['margin-left', 'margin-right']]],
-      [['mt', ['margin-top']]],
-      [['mb', ['margin-bottom']]],
-      [['ms', ['margin-inline-start']]],
-      [['ml', ['margin-left']]],
-      [['me', ['margin-inline-end']]],
-      [['mr', ['margin-right']]],
+      ['my', ['margin-top', 'margin-bottom']],
+      ['mx', ['margin-left', 'margin-right']],
+      ['mt', ['margin-top']],
+      ['mb', ['margin-bottom']],
+      ['ms', ['margin-inline-start']],
+      ['ml', ['margin-left']],
+      ['me', ['margin-inline-end']],
+      ['mr', ['margin-right']],
     ],
     { supportsNegativeValues: true }
   ),
@@ -747,8 +747,8 @@ export let corePlugins = {
   aspectRatio: createUtilityPlugin('aspectRatio', [['aspect', ['aspect-ratio']]]),
 
   height: createUtilityPlugin('height', [['h', ['height']]]),
-  maxHeight: createUtilityPlugin('maxHeight', [['max-h', ['maxHeight']]]),
   minHeight: createUtilityPlugin('minHeight', [['min-h', ['minHeight']]]),
+  maxHeight: createUtilityPlugin('maxHeight', [['max-h', ['maxHeight']]]),
 
   width: createUtilityPlugin('width', [['w', ['width']]]),
   minWidth: createUtilityPlugin('minWidth', [['min-w', ['minWidth']]]),
@@ -802,16 +802,16 @@ export let corePlugins = {
             'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
           }
         },
-        'border-spacing-x': (value) => {
+        'border-spacing-y': (value) => {
           return {
-            '--tw-border-spacing-x': value,
+            '--tw-border-spacing-y': value,
             '@defaults border-spacing': {},
             'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
           }
         },
-        'border-spacing-y': (value) => {
+        'border-spacing-x': (value) => {
           return {
-            '--tw-border-spacing-y': value,
+            '--tw-border-spacing-x': value,
             '@defaults border-spacing': {},
             'border-spacing': 'var(--tw-border-spacing-x) var(--tw-border-spacing-y)',
           }
@@ -826,14 +826,12 @@ export let corePlugins = {
     'translate',
     [
       [
-        [
-          'translate-x',
-          [['@defaults transform', {}], '--tw-translate-x', ['transform', cssTransformValue]],
-        ],
-        [
-          'translate-y',
-          [['@defaults transform', {}], '--tw-translate-y', ['transform', cssTransformValue]],
-        ],
+        'translate-y',
+        [['@defaults transform', {}], '--tw-translate-y', ['transform', cssTransformValue]],
+      ],
+      [
+        'translate-x',
+        [['@defaults transform', {}], '--tw-translate-x', ['transform', cssTransformValue]],
       ],
     ],
     { supportsNegativeValues: true }
@@ -846,10 +844,8 @@ export let corePlugins = {
   skew: createUtilityPlugin(
     'skew',
     [
-      [
-        ['skew-x', [['@defaults transform', {}], '--tw-skew-x', ['transform', cssTransformValue]]],
-        ['skew-y', [['@defaults transform', {}], '--tw-skew-y', ['transform', cssTransformValue]]],
-      ],
+      ['skew-y', [['@defaults transform', {}], '--tw-skew-y', ['transform', cssTransformValue]]],
+      ['skew-x', [['@defaults transform', {}], '--tw-skew-x', ['transform', cssTransformValue]]],
     ],
     { supportsNegativeValues: true }
   ),
@@ -865,16 +861,8 @@ export let corePlugins = {
           ['transform', cssTransformValue],
         ],
       ],
-      [
-        [
-          'scale-x',
-          [['@defaults transform', {}], '--tw-scale-x', ['transform', cssTransformValue]],
-        ],
-        [
-          'scale-y',
-          [['@defaults transform', {}], '--tw-scale-y', ['transform', cssTransformValue]],
-        ],
-      ],
+      ['scale-y', [['@defaults transform', {}], '--tw-scale-y', ['transform', cssTransformValue]]],
+      ['scale-x', [['@defaults transform', {}], '--tw-scale-x', ['transform', cssTransformValue]]],
     ],
     { supportsNegativeValues: true }
   ),
@@ -1132,11 +1120,11 @@ export let corePlugins = {
 
   gridAutoFlow: ({ addUtilities }) => {
     addUtilities({
-      '.grid-flow-row': { gridAutoFlow: 'row' },
       '.grid-flow-col': { gridAutoFlow: 'column' },
+      '.grid-flow-row': { gridAutoFlow: 'row' },
       '.grid-flow-dense': { gridAutoFlow: 'dense' },
-      '.grid-flow-row-dense': { gridAutoFlow: 'row dense' },
       '.grid-flow-col-dense': { gridAutoFlow: 'column dense' },
+      '.grid-flow-row-dense': { gridAutoFlow: 'row dense' },
     })
   },
 
@@ -1148,10 +1136,10 @@ export let corePlugins = {
 
   flexDirection: ({ addUtilities }) => {
     addUtilities({
-      '.flex-row': { 'flex-direction': 'row' },
-      '.flex-row-reverse': { 'flex-direction': 'row-reverse' },
       '.flex-col': { 'flex-direction': 'column' },
       '.flex-col-reverse': { 'flex-direction': 'column-reverse' },
+      '.flex-row': { 'flex-direction': 'row' },
+      '.flex-row-reverse': { 'flex-direction': 'row-reverse' },
     })
   },
 
