@@ -462,14 +462,19 @@ crosscheck(({ stable, oxide }) => {
         .scale-50 {
           --tw-scale-x: 0.5;
           --tw-scale-y: 0.5;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          --tw-scale-z: 0.5;
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .transform {
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .grid-cols-\[200px\,repeat\(auto-fill\,minmax\(15\%\,100px\)\)\,300px\] {
           grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
@@ -672,9 +677,12 @@ crosscheck(({ stable, oxide }) => {
         .hover\:scale-75:hover {
           --tw-scale-x: 0.75;
           --tw-scale-y: 0.75;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          --tw-scale-z: 0.75;
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .hover\:font-bold:hover {
           font-weight: 700;
@@ -1030,14 +1038,19 @@ crosscheck(({ stable, oxide }) => {
         .scale-50 {
           --tw-scale-x: 0.5;
           --tw-scale-y: 0.5;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          --tw-scale-z: 0.5;
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .transform {
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .grid-cols-\[200px\,repeat\(auto-fill\,minmax\(15\%\,100px\)\)\,300px\] {
           grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
@@ -1232,9 +1245,12 @@ crosscheck(({ stable, oxide }) => {
         .hover\:scale-75:hover {
           --tw-scale-x: 0.75;
           --tw-scale-y: 0.75;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          --tw-scale-z: 0.75;
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .hover\:font-bold:hover {
           font-weight: 700;

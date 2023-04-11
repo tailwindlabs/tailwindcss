@@ -19,31 +19,42 @@ crosscheck(() => {
         :before,
         :after,
         ::backdrop {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
         .rotate-3 {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .skew-y-6 {
           --tw-skew-y: 6deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .scale-x-110 {
           --tw-scale-x: 1.1;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -69,31 +80,42 @@ crosscheck(() => {
         :before,
         :after,
         ::backdrop {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
         .hover\:scale-x-110:hover {
           --tw-scale-x: 1.1;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .focus\:rotate-3:focus {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .hover\:focus\:skew-y-6:focus:hover {
           --tw-skew-y: 6deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -117,27 +139,36 @@ crosscheck(() => {
         :before,
         :after,
         ::backdrop {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
         .before\:scale-x-110:before {
           content: var(--tw-content);
           --tw-scale-x: 1.1;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .after\:rotate-3:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -161,25 +192,34 @@ crosscheck(() => {
         :before,
         :after,
         ::backdrop {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
         .group:hover .group-hover\:scale-x-110 {
           --tw-scale-x: 1.1;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .peer:focus ~ .peer-focus\:rotate-3 {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -205,27 +245,36 @@ crosscheck(() => {
         :before,
         :after,
         ::backdrop {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
         .group:hover .group-hover\:before\:scale-x-110:before {
           content: var(--tw-content);
           --tw-scale-x: 1.1;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .peer:focus ~ .peer-focus\:after\:rotate-3:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -255,27 +304,36 @@ crosscheck(() => {
         :before,
         :after,
         ::backdrop {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
         .group:hover .group-hover\:hover\:before\:scale-x-110:hover:before {
           content: var(--tw-content);
           --tw-scale-x: 1.1;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .peer:focus ~ .peer-focus\:focus\:after\:rotate-3:focus:after {
           content: var(--tw-content);
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -341,75 +399,99 @@ crosscheck(() => {
         :before,
         :after,
         ::backdrop {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
         .foo {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .bar:before {
           content: var(--tw-content);
           --tw-scale-x: 1.1;
           --tw-scale-y: 1.1;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          --tw-scale-z: 1.1;
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .baz:before {
           --tw-rotate: 45deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .whats ~ .next > span:hover {
           --tw-skew-x: 6deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         @media (min-width: 768px) {
           .media-queries {
             --tw-rotate: 45deg;
-            transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-              rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-              scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+            transform: perspective(var(--tw-perspective))
+              translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+              rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+              skew(var(--tw-skew-x), var(--tw-skew-y))
+              scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
           }
         }
         .a,
         .b,
         .c {
           --tw-skew-y: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .a,
         .b {
           --tw-rotate: 45deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .a:before,
         .b:after {
           --tw-rotate: 90deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .recursive {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -450,37 +532,50 @@ crosscheck(() => {
         .b:after,
         .c:first-line,
         .d:first-letter {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
         .a:before {
           --tw-rotate: 45deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .b:after {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .c:first-line {
           --tw-rotate: 1deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
         .d:first-letter {
           --tw-rotate: 6deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -592,13 +687,18 @@ crosscheck(() => {
         :before,
         :after,
         ::backdrop {
+          --tw-perspective: none;
           --tw-translate-x: 0;
           --tw-translate-y: 0;
+          --tw-translate-z: 0;
+          --tw-rotate-x: 0;
+          --tw-rotate-y: 0;
           --tw-rotate: 0;
           --tw-skew-x: 0;
           --tw-skew-y: 0;
           --tw-scale-x: 1;
           --tw-scale-y: 1;
+          --tw-scale-z: 1;
         }
       `)
     })
@@ -620,9 +720,11 @@ crosscheck(() => {
       expect(result.css).toMatchFormattedCss(css`
         .rotate-3 {
           --tw-rotate: 3deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -733,9 +835,12 @@ crosscheck(() => {
         .scale-150 {
           --tw-scale-x: 1.5;
           --tw-scale-y: 1.5;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          --tw-scale-z: 1.5;
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -764,9 +869,12 @@ crosscheck(() => {
         .my-card {
           --tw-scale-x: 1.5;
           --tw-scale-y: 1.5;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          --tw-scale-z: 1.5;
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })

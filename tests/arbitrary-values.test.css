@@ -227,113 +227,151 @@
 }
 .translate-x-\[12\%\] {
   --tw-translate-x: 12%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .translate-x-\[var\(--value\)\] {
   --tw-translate-x: var(--value);
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .translate-y-\[12\%\] {
   --tw-translate-y: 12%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .translate-y-\[var\(--value\)\] {
   --tw-translate-y: var(--value);
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .rotate-\[1\.5turn\] {
   --tw-rotate: 1.5turn;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .rotate-\[2\.3rad\] {
   --tw-rotate: 131.78deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .rotate-\[23deg\] {
   --tw-rotate: 23deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .rotate-\[401grad\] {
   --tw-rotate: 401grad;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .skew-x-\[3px\] {
   --tw-skew-x: 3px;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .skew-x-\[var\(--value\)\] {
   --tw-skew-x: var(--value);
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .skew-y-\[3px\] {
   --tw-skew-y: 3px;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .skew-y-\[var\(--value\)\] {
   --tw-skew-y: var(--value);
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .scale-\[0\.7\] {
   --tw-scale-x: 0.7;
   --tw-scale-y: 0.7;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  --tw-scale-z: 0.7;
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .scale-\[var\(--value\)\] {
   --tw-scale-x: var(--value);
   --tw-scale-y: var(--value);
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  --tw-scale-z: var(--value);
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .scale-x-\[0\.7\] {
   --tw-scale-x: 0.7;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .scale-x-\[var\(--value\)\] {
   --tw-scale-x: var(--value);
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .scale-y-\[0\.7\] {
   --tw-scale-y: 0.7;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .scale-y-\[var\(--value\)\] {
   --tw-scale-y: var(--value);
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  transform: perspective(var(--tw-perspective))
+    translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+    rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+    skew(var(--tw-skew-x), var(--tw-skew-y))
+    scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
 }
 .animate-\[pong_1s_cubic-bezier\(0\,0\,0\.2\,1\)_infinite\] {
   animation: 1s cubic-bezier(0, 0, 0.2, 1) infinite pong;

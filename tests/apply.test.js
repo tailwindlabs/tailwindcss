@@ -1085,9 +1085,11 @@ crosscheck(({ stable, oxide }) => {
         .foo {
           --tw-translate-x: -50%;
           --tw-translate-y: -50%;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
           position: absolute;
           top: 50%;
           left: 50%;
@@ -1848,9 +1850,11 @@ crosscheck(({ stable, oxide }) => {
       return expect(result.css).toMatchFormattedCss(css`
         .foo:focus {
           --tw-rotate: 90deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
@@ -1876,9 +1880,11 @@ crosscheck(({ stable, oxide }) => {
         ${defaults}
         .foo:focus {
           --tw-rotate: 90deg;
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-            scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: perspective(var(--tw-perspective))
+            translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))
+            rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate))
+            skew(var(--tw-skew-x), var(--tw-skew-y))
+            scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z));
         }
       `)
     })
