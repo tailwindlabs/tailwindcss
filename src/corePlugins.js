@@ -1,7 +1,6 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
-import { env } from './lib/sharedState'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
 import escapeClassName from './util/escapeClassName'
@@ -1262,7 +1261,7 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (env.OXIDE) {
+          if (__OXIDE__) {
             return {
               '& > :not([hidden]) ~ :not([hidden])': {
                 '--tw-space-x-reverse': '0',
@@ -1307,7 +1306,7 @@ export let corePlugins = {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (env.OXIDE) {
+          if (__OXIDE__) {
             return {
               '& > :not([hidden]) ~ :not([hidden])': {
                 '@defaults border-width': {},

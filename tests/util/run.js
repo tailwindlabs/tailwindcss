@@ -14,6 +14,8 @@ export let map = JSON.stringify({
   mappings: '',
 })
 
+globalThis.__OXIDE__ = env.ENGINE === 'oxide'
+
 export function run(input, config, plugin = tailwind) {
   let { currentTestName } = expect.getState()
 
@@ -84,7 +86,7 @@ export function crosscheck(fn) {
     }
 
     beforeEach(() => {
-      env.OXIDE = engines.engine.oxide
+      globalThis.__OXIDE__ = engines.engine.oxide
     })
 
     fn(engines)

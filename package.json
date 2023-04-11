@@ -29,7 +29,7 @@
     "dev:rust": "npm run --prefix ./oxide dev:node",
     "dev:js": "npm run build:js -- --watch",
     "build:rust": "npm run --prefix ./oxide build:node",
-    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start",
+    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__OXIDE__='\"true\"'",
     "build:peers": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
     "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
     "generate:types": "node -r @swc/register scripts/generate-types.js"
