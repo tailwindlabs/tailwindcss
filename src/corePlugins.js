@@ -437,13 +437,21 @@ export let variantPlugins = {
   },
 }
 
-let cssTransformValue = [
+let cssTransformValueCpu = [
   'translate(var(--tw-translate-x), var(--tw-translate-y))',
   'rotate(var(--tw-rotate))',
-  'skewX(var(--tw-skew-x))',
-  'skewY(var(--tw-skew-y))',
-  'scaleX(var(--tw-scale-x))',
-  'scaleY(var(--tw-scale-y))',
+  'skew(var(--tw-skew-x), var(--tw-skew-y))',
+  'scale(var(--tw-scale-x), var(--tw-scale-y))',
+].join(' ')
+
+let cssTransformValueGpu = [
+  'perspective(var(--tw-perspective))',
+  'translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))',
+  'rotateX(var(--tw-rotate-x))',
+  'rotateY(var(--tw-rotate-y))',
+  'rotateZ(var(--tw-rotate))',
+  'skew(var(--tw-skew-x), var(--tw-skew-y))',
+  'scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z)',
 ].join(' ')
 
 let cssFilterValue = [
@@ -829,33 +837,72 @@ export let corePlugins = {
   },
 
   transformOrigin: createUtilityPlugin('transformOrigin', [['origin', ['transformOrigin']]]),
+  perspectiveOrigin: createUtilityPlugin('perspectiveOrigin', [
+    ['perspective-origin', ['perspectiveOrigin']],
+  ]),
+  perspective: createUtilityPlugin('perspective', [['perspective', ['perspective']]]),
+  perspectiveSelf: createUtilityPlugin('perspective-self', [
+    [
+      'perspective-self',
+      [['@defaults transform', {}], '--tw-perspective', ['perspective', ['perspective']]],
+    ],
+  ]),
   translate: createUtilityPlugin(
     'translate',
     [
       [
-        [
-          'translate-x',
-          [['@defaults transform', {}], '--tw-translate-x', ['transform', cssTransformValue]],
-        ],
-        [
-          'translate-y',
-          [['@defaults transform', {}], '--tw-translate-y', ['transform', cssTransformValue]],
-        ],
+        'translate-x',
+        [['@defaults transform', {}], '--tw-translate-x', ['transform', cssTransformValueGpu]],
+      ],
+      [
+        'translate-y',
+        [['@defaults transform', {}], '--tw-translate-y', ['transform', cssTransformValueGpu]],
+      ],
+      [
+        'translate-z',
+        [['@defaults transform', {}], '--tw-translate-z', ['transform', cssTransformValueGpu]],
       ],
     ],
     { supportsNegativeValues: true }
   ),
   rotate: createUtilityPlugin(
     'rotate',
-    [['rotate', [['@defaults transform', {}], '--tw-rotate', ['transform', cssTransformValue]]]],
+    [
+      [
+        [
+          'rotate-x',
+          [['@defaults transform', {}], '--tw-rotate-x', ['transform', cssTransformValueGpu]],
+        ],
+        [
+          'rotate-y',
+          [['@defaults transform', {}], '--tw-rotate-y', ['transform', cssTransformValueGpu]],
+        ],
+        // rotate and rotate-z, below, perform the same rotation but both are
+        // supported for consistency and clarity when crearting 3d transformation
+        [
+          'rotate',
+          [['@defaults transform', {}], '--tw-rotate', ['transform', cssTransformValueGpu]],
+        ],
+        [
+          'rotate-z',
+          [['@defaults transform', {}], '--tw-rotate', ['transform', cssTransformValueGpu]],
+        ],
+      ],
+    ],
     { supportsNegativeValues: true }
   ),
   skew: createUtilityPlugin(
     'skew',
     [
       [
-        ['skew-x', [['@defaults transform', {}], '--tw-skew-x', ['transform', cssTransformValue]]],
-        ['skew-y', [['@defaults transform', {}], '--tw-skew-y', ['transform', cssTransformValue]]],
+        [
+          'skew-x',
+          [['@defaults transform', {}], '--tw-skew-x', ['transform', cssTransformValueGpu]],
+        ],
+        [
+          'skew-y',
+          [['@defaults transform', {}], '--tw-skew-y', ['transform', cssTransformValueGpu]],
+        ],
       ],
     ],
     { supportsNegativeValues: true }
@@ -869,17 +916,22 @@ export let corePlugins = {
           ['@defaults transform', {}],
           '--tw-scale-x',
           '--tw-scale-y',
-          ['transform', cssTransformValue],
+          '--tw-scale-z',
+          ['transform', cssTransformValueGpu],
         ],
       ],
       [
         [
           'scale-x',
-          [['@defaults transform', {}], '--tw-scale-x', ['transform', cssTransformValue]],
+          [['@defaults transform', {}], '--tw-scale-x', ['transform', cssTransformValueGpu]],
         ],
         [
           'scale-y',
-          [['@defaults transform', {}], '--tw-scale-y', ['transform', cssTransformValue]],
+          [['@defaults transform', {}], '--tw-scale-y', ['transform', cssTransformValueGpu]],
+        ],
+        [
+          'scale-z',
+          [['@defaults transform', {}], '--tw-scale-z', ['transform', cssTransformValueGpu]],
         ],
       ],
     ],
@@ -888,27 +940,44 @@ export let corePlugins = {
 
   transform: ({ addDefaults, addUtilities }) => {
     addDefaults('transform', {
+      '--tw-perspective': 'none',
       '--tw-translate-x': '0',
       '--tw-translate-y': '0',
-      '--tw-rotate': '0',
+      '--tw-translate-z': '0',
+      '--tw-rotate-x': '0',
+      '--tw-rotate-y': '0',
+      '--tw-rotate': '0', // used for rotate and rotate-z
       '--tw-skew-x': '0',
       '--tw-skew-y': '0',
       '--tw-scale-x': '1',
       '--tw-scale-y': '1',
+      '--tw-scale-z': '1',
     })
 
     addUtilities({
-      '.transform': { '@defaults transform': {}, transform: cssTransformValue },
+      '.transform': { '@defaults transform': {}, transform: cssTransformValueCpu },
       '.transform-cpu': {
-        transform: cssTransformValue,
+        transform: cssTransformValueCpu,
       },
       '.transform-gpu': {
-        transform: cssTransformValue.replace(
-          'translate(var(--tw-translate-x), var(--tw-translate-y))',
-          'translate3d(var(--tw-translate-x), var(--tw-translate-y), 0)'
-        ),
+        transform: cssTransformValueGpu,
       },
       '.transform-none': { transform: 'none' },
+
+      // transform-style
+      '.transform-flat': { 'transform-style': 'flat' },
+      '.transform-3d': { 'transform-style': 'preserve-3d' },
+
+      // transform-box
+      '.transform-content': { 'transform-box': 'content-box' },
+      '.transform-border': { 'transform-box': 'border-box' },
+      '.transform-fill': { 'transform-box': 'fill-box' },
+      '.transform-stroke': { 'transform-box': 'stroke-box' },
+      '.transform-view': { 'transform-box': 'view-box' },
+
+      // backface-visibility
+      '.backface-visible': { 'backface-visibility': 'visible' },
+      '.backface-hidden': { 'backface-visibility': 'hidden' },
     })
   },
 

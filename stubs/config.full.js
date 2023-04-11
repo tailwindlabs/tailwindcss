@@ -886,6 +886,34 @@ module.exports = {
       left: 'left',
       'top-left': 'top left',
     },
+    perspectiveOrigin: {
+      center: 'center',
+      top: 'top',
+      'top-right': 'top right',
+      right: 'right',
+      'bottom-right': 'bottom right',
+      bottom: 'bottom',
+      'bottom-left': 'bottom left',
+      left: 'left',
+      'top-left': 'top left',
+    },
+    perspective: {
+      none: 'none',
+      0: '0rem',
+      xs: '6.25rem', // 100px
+      sm: '18.75rem', // 300px
+      md: '31.25rem', // 500px
+      lg: '50rem', // 800px
+      xl: '75rem', // 1200px
+      '2xl': '106.25rem', // 1700px
+      '3xl': '143.75rem', // 2300px
+      '4xl': '187.5rem', // 3000px
+      '5xl': '237.5rem', // 3800px
+      '6xl': '300rem', // 4800px
+      '7xl': '375rem', // 6000px
+      '8xl': '468.75rem', // 7500px
+      '9xl': '625rem', // 10000px
+    },
     transitionDelay: {
       0: '0s',
       75: '75ms',
