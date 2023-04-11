@@ -13,9 +13,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Try resolving `config.default` before `config` to ensure the config file is resolved correctly ([#10898](https://github.com/tailwindlabs/tailwindcss/pull/10898))
-- Pull pseudo elements outside of `:is` and `:has` when using `@apply` ([#10903](https://github.com/tailwindlabs/tailwindcss/pull/10903))
-- Update the types for the `safelist` config ([#10901](https://github.com/tailwindlabs/tailwindcss/pull/10901))
+- Don’t move unknown pseudo-elements to the end of selectors ([#10943](https://github.com/tailwindlabs/tailwindcss/pull/10943), [#10962](https://github.com/tailwindlabs/tailwindcss/pull/10962))
+
+### Changed
+
+- [Oxide] Disable color opacity plugins by default in the `oxide` engine ([#10618](https://github.com/tailwindlabs/tailwindcss/pull/10618))
+- [Oxide] Enable relative content paths for the `oxide` engine ([#10621](https://github.com/tailwindlabs/tailwindcss/pull/10621))
+
+## [3.3.1] - 2023-03-30
+
+### Fixed
+
+- Fix edge case bug when loading a TypeScript config file with webpack ([#10898](https://github.com/tailwindlabs/tailwindcss/pull/10898))
+- Fix variant, `@apply`, and `important` selectors when using `:is()` or `:has()` with pseudo-elements ([#10903](https://github.com/tailwindlabs/tailwindcss/pull/10903))
+- Fix `safelist` config types ([#10901](https://github.com/tailwindlabs/tailwindcss/pull/10901))
+- Fix build errors caused by `@tailwindcss/line-clamp` warning ([#10915](https://github.com/tailwindlabs/tailwindcss/pull/10915), [#10919](https://github.com/tailwindlabs/tailwindcss/pull/10919))
+- Fix "process is not defined" error ([#10919](https://github.com/tailwindlabs/tailwindcss/pull/10919))
 
 ### Changed
 
@@ -2224,7 +2237,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.0...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.1...HEAD
+[3.3.1]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.7...v3.3.0
 [3.2.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.6...v3.2.7
 [3.2.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.5...v3.2.6

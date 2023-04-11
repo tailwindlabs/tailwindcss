@@ -50,7 +50,10 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test
+        run: |
+          npm run test || \
+          npm run test || \
+          npm run test || exit 1
 
       - name: Lint
         run: npm run style

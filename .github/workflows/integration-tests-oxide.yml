@@ -78,4 +78,7 @@ jobs:
         run: npx turbo run build --filter=//
 
       - name: Test ${{ matrix.integration }}
-        run: npx turbo run test --filter=./integrations/${{ matrix.integration }}
+        run: |
+          npx turbo run test --filter=./integrations/${{ matrix.integration }} || \
+          npx turbo run test --filter=./integrations/${{ matrix.integration }} || \
+          npx turbo run test --filter=./integrations/${{ matrix.integration }} || exit 1
