@@ -841,7 +841,7 @@ export let corePlugins = {
     ['perspective-origin', ['perspectiveOrigin']],
   ]),
   perspective: createUtilityPlugin('perspective', [['perspective', ['perspective']]]),
-  perspectiveSelf: createUtilityPlugin('perspective-self', [
+  perspectiveSelf: createUtilityPlugin('perspectiveSelf', [
     [
       'perspective-self',
       [['@defaults transform', {}], '--tw-perspective', ['perspective', ['perspective']]],
