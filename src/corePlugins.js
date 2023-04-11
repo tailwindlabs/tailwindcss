@@ -451,7 +451,7 @@ let cssTransformValueGpu = [
   'rotateY(var(--tw-rotate-y))',
   'rotateZ(var(--tw-rotate))',
   'skew(var(--tw-skew-x), var(--tw-skew-y))',
-  'scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z)',
+  'scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z))',
 ].join(' ')
 
 let cssFilterValue = [
@@ -955,7 +955,7 @@ export let corePlugins = {
     })
 
     addUtilities({
-      '.transform': { '@defaults transform': {}, transform: cssTransformValueCpu },
+      '.transform': { '@defaults transform': {}, transform: cssTransformValueGpu },
       '.transform-cpu': {
         transform: cssTransformValueCpu,
       },
