@@ -11,6 +11,11 @@
     "parser": {
       "syntax": "typescript",
       "tsx": false
+    },
+    "minify": {
+      "compress": {
+        "unused": true
+      }
     }
   }
 }
