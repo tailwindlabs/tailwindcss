@@ -216,7 +216,7 @@ describe('Build command', () => {
 
     await $(`${EXECUTABLE} --output ./dist/main.css --postcss`)
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .font-bold-after {
@@ -235,7 +235,7 @@ describe('Build command', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .font-bold-after {
@@ -287,7 +287,7 @@ describe('Build command', () => {
 
     await $(`${EXECUTABLE} --output ./dist/main.css --postcss ./custom.postcss.config.js`)
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .font-bold-after {
@@ -306,7 +306,7 @@ describe('Build command', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .font-bold-after {
