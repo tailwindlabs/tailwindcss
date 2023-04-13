@@ -134,13 +134,13 @@
   min-height: var(--height);
 }
 .w-\[\'\)\(\)\'\] {
-  width: ")()";
+  width: ')()';
 }
 .w-\[\'\]\[\]\'\] {
-  width: "][]";
+  width: '][]';
 }
 .w-\[\'\}\{\}\'\] {
-  width: "}{}";
+  width: '}{}';
 }
 .w-\[\(\(\)\)\] {
   width: (());
@@ -176,7 +176,7 @@
   width: var(--width, calc(100% + 1rem));
 }
 .w-\[\{\{\}\}\] {
-  width: {{} }
+  width: {{}}
 }
 .w-\[\{\}\] {
   width: {}
@@ -345,10 +345,10 @@
   cursor: pointer;
 }
 .cursor-\[url\(\'\.\/path_to_hand\.cur\'\)_2_2\,pointer\] {
-  cursor: url("./path_to_hand.cur") 2 2, pointer;
+  cursor: url('./path_to_hand.cur') 2 2, pointer;
 }
 .cursor-\[url\(hand\.cur\)_2_2\,pointer\] {
-  cursor: url("hand.cur") 2 2, pointer;
+  cursor: url('hand.cur') 2 2, pointer;
 }
 .cursor-\[var\(--value\)\] {
   cursor: var(--value);
@@ -406,13 +406,13 @@
   scroll-padding-top: var(--scroll-padding);
 }
 .list-\[\'\\1f44d\'\] {
-  list-style-type: "👍";
+  list-style-type: '👍';
 }
 .list-\[var\(--value\)\] {
   list-style-type: var(--value);
 }
 .list-image-\[url\(\.\/my-image\.png\)\] {
-  list-style-image: url("./my-image.png");
+  list-style-image: url('./my-image.png');
 }
 .list-image-\[var\(--value\)\] {
   list-style-image: var(--value);
@@ -653,46 +653,36 @@
   background-image: linear-gradient(to left, rgb(var(--green)), blue);
 }
 .bg-\[url\(\'\/path-to-image\.png\'\)\] {
-  background-image: url("/path-to-image.png");
+  background-image: url('/path-to-image.png');
 }
 .bg-\[url\:var\(--url\)\] {
   background-image: var(--url);
 }
 .from-\[\#da5b66\] {
   --tw-gradient-from: #da5b66 var(--tw-gradient-from-position);
-  --tw-gradient-from-position: ;
-  --tw-gradient-to: #da5b6600 var(--tw-gradient-from-position);
-  --tw-gradient-to-position: ;
+  --tw-gradient-to: #da5b6600 var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 .from-\[var\(--color\)\] {
   --tw-gradient-from: var(--color) var(--tw-gradient-from-position);
-  --tw-gradient-from-position: ;
-  --tw-gradient-to: #fff0 var(--tw-gradient-from-position);
-  --tw-gradient-to-position: ;
+  --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 .via-\[\#da5b66\] {
-  --tw-gradient-via-position: ;
   --tw-gradient-to: #da5b6600 var(--tw-gradient-to-position);
-  --tw-gradient-to-position: ;
   --tw-gradient-stops: var(--tw-gradient-from), #da5b66 var(--tw-gradient-via-position),
     var(--tw-gradient-to);
 }
 .via-\[var\(--color\)\] {
-  --tw-gradient-via-position: ;
   --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
-  --tw-gradient-to-position: ;
   --tw-gradient-stops: var(--tw-gradient-from), var(--color) var(--tw-gradient-via-position),
     var(--tw-gradient-to);
 }
 .to-\[\#da5b66\] {
   --tw-gradient-to: #da5b66 var(--tw-gradient-to-position);
-  --tw-gradient-to-position: ;
 }
 .to-\[var\(--color\)\] {
   --tw-gradient-to: var(--color) var(--tw-gradient-to-position);
-  --tw-gradient-to-position: ;
 }
 .bg-\[length\:200px_100px\] {
   background-size: 200px 100px;
@@ -713,7 +703,7 @@
   fill: #da5b66;
 }
 .fill-\[url\(\#icon-gradient\)\] {
-  fill: url("#icon-gradient");
+  fill: url('#icon-gradient');
 }
 .fill-\[var\(--value\)\] {
   fill: var(--value);
@@ -725,7 +715,7 @@
   stroke: var(--value);
 }
 .stroke-\[url\(\#icon-gradient\)\] {
-  stroke: url("#icon-gradient");
+  stroke: url('#icon-gradient');
 }
 .stroke-\[20px\] {
   stroke-width: 20px;
@@ -787,7 +777,7 @@
   font-family: Some Font, sans-serif;
 }
 .font-\[\'Some_Font\'\,var\(--other-font\)\] {
-  font-family: "Some Font", var(--other-font);
+  font-family: 'Some Font', var(--other-font);
 }
 .font-\[Georgia\,serif\] {
   font-family: Georgia, serif;
@@ -1062,11 +1052,11 @@
   will-change: var(--will-change);
 }
 .content-\[\'\>\'\] {
-  --tw-content: ">";
+  --tw-content: '>';
   content: var(--tw-content);
 }
 .content-\[\'hello\'\] {
-  --tw-content: "hello";
+  --tw-content: 'hello';
   content: var(--tw-content);
 }
 .content-\[attr\(content-before\)\] {
@@ -1078,4 +1068,3 @@
     grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
   }
 }
-

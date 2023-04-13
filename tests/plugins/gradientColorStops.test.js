@@ -35,39 +35,29 @@ crosscheck(({ stable, oxide }) => {
       stable.expect(result.css).toMatchFormattedCss(css`
         .from-primary {
           --tw-gradient-from: #1f1f1f var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #1f1f1f00 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #1f1f1f00 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .from-secondary {
           --tw-gradient-from: #bf5540 var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #bf554000 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #bf554000 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .via-primary {
-          --tw-gradient-via-position: ;
           --tw-gradient-to: #1f1f1f00 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), #1f1f1f var(--tw-gradient-via-position),
             var(--tw-gradient-to);
         }
         .via-secondary {
-          --tw-gradient-via-position: ;
           --tw-gradient-to: #bf554000 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), #bf5540 var(--tw-gradient-via-position),
             var(--tw-gradient-to);
         }
         .to-primary {
           --tw-gradient-to: #1f1f1f var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
         }
         .to-secondary {
           --tw-gradient-to: #bf5540 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
         }
         .text-primary {
           --tw-text-opacity: 1;
@@ -84,39 +74,29 @@ crosscheck(({ stable, oxide }) => {
       oxide.expect(result.css).toMatchFormattedCss(css`
         .from-primary {
           --tw-gradient-from: #1f1f1f var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #1f1f1f00 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #1f1f1f00 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .from-secondary {
           --tw-gradient-from: #bf5540 var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #bf554000 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #bf554000 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .via-primary {
-          --tw-gradient-via-position: ;
           --tw-gradient-to: #1f1f1f00 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), #1f1f1f var(--tw-gradient-via-position),
             var(--tw-gradient-to);
         }
         .via-secondary {
-          --tw-gradient-via-position: ;
           --tw-gradient-to: #bf554000 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), #bf5540 var(--tw-gradient-via-position),
             var(--tw-gradient-to);
         }
         .to-primary {
           --tw-gradient-to: #1f1f1f var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
         }
         .to-secondary {
           --tw-gradient-to: #bf5540 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
         }
         .text-primary {
           color: #1f1f1f;
@@ -154,16 +134,12 @@ crosscheck(({ stable, oxide }) => {
         }
         .from-\[--from-value\] {
           --tw-gradient-from: var(--from-value) var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #fff0 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .from-red-500 {
           --tw-gradient-from: #ef4444 var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #ef444400 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #ef444400 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .from-10\% {
@@ -176,16 +152,12 @@ crosscheck(({ stable, oxide }) => {
           --tw-gradient-from-position: 12px;
         }
         .via-\[--via-value\] {
-          --tw-gradient-via-position: ;
           --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from),
             var(--via-value) var(--tw-gradient-via-position), var(--tw-gradient-to);
         }
         .via-pink-500 {
-          --tw-gradient-via-position: ;
           --tw-gradient-to: #ec489900 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from), #ec4899 var(--tw-gradient-via-position),
             var(--tw-gradient-to);
         }
@@ -200,11 +172,9 @@ crosscheck(({ stable, oxide }) => {
         }
         .to-\[--to-value\] {
           --tw-gradient-to: var(--to-value) var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
         }
         .to-violet-400 {
           --tw-gradient-to: #a78bfa var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
         }
         .to-30\% {
           --tw-gradient-to-position: 30%;
