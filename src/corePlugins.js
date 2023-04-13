@@ -1750,7 +1750,13 @@ export let corePlugins = {
       return withAlphaValue(value, 0, 'rgb(255 255 255 / 0)')
     }
 
-    return function ({ matchUtilities, theme }) {
+    return function ({ matchUtilities, theme, addDefaults }) {
+      addDefaults('gradient-color-stops', {
+        '--tw-gradient-from-position': ' ',
+        '--tw-gradient-via-position': ' ',
+        '--tw-gradient-to-position': ' ',
+      })
+
       let options = {
         values: flattenColorPalette(theme('gradientColorStops')),
         type: ['color', 'any'],
@@ -1767,13 +1773,9 @@ export let corePlugins = {
             let transparentToValue = transparentTo(value)
 
             return {
-              '--tw-gradient-from': `${toColorValue(
-                value,
-                'from'
-              )} var(--tw-gradient-from-position)`,
-              '--tw-gradient-from-position': ' ',
-              '--tw-gradient-to': `${transparentToValue}  var(--tw-gradient-from-position)`,
-              '--tw-gradient-to-position': ' ',
+              '@defaults gradient-color-stops': {},
+              '--tw-gradient-from': `${toColorValue(value)} var(--tw-gradient-from-position)`,
+              '--tw-gradient-to': `${transparentToValue} var(--tw-gradient-to-position)`,
               '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to)`,
             }
           },
@@ -1798,12 +1800,10 @@ export let corePlugins = {
             let transparentToValue = transparentTo(value)
 
             return {
-              '--tw-gradient-via-position': ' ',
+              '@defaults gradient-color-stops': {},
               '--tw-gradient-to': `${transparentToValue}  var(--tw-gradient-to-position)`,
-              '--tw-gradient-to-position': ' ',
               '--tw-gradient-stops': `var(--tw-gradient-from), ${toColorValue(
-                value,
-                'via'
+                value
               )} var(--tw-gradient-via-position), var(--tw-gradient-to)`,
             }
           },
@@ -1825,8 +1825,8 @@ export let corePlugins = {
       matchUtilities(
         {
           to: (value) => ({
-            '--tw-gradient-to': `${toColorValue(value, 'to')} var(--tw-gradient-to-position)`,
-            '--tw-gradient-to-position': ' ',
+            '@defaults gradient-color-stops': {},
+            '--tw-gradient-to': `${toColorValue(value)} var(--tw-gradient-to-position)`,
           }),
         },
         options

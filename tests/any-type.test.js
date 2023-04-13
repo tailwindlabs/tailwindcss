@@ -500,21 +500,16 @@ crosscheck(({ stable, oxide }) => {
         }
         .from-\[var\(--any-value\)\] {
           --tw-gradient-from: var(--any-value) var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #fff0 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .via-\[var\(--any-value\)\] {
-          --tw-gradient-via-position: ;
           --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from),
             var(--any-value) var(--tw-gradient-via-position), var(--tw-gradient-to);
         }
         .to-\[var\(--any-value\)\] {
           --tw-gradient-to: var(--any-value) var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
         }
         .fill-\[var\(--any-value\)\] {
           fill: var(--any-value);
@@ -1063,21 +1058,16 @@ crosscheck(({ stable, oxide }) => {
         }
         .from-\[var\(--any-value\)\] {
           --tw-gradient-from: var(--any-value) var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #fff0 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .via-\[var\(--any-value\)\] {
-          --tw-gradient-via-position: ;
           --tw-gradient-to: #fff0 var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
           --tw-gradient-stops: var(--tw-gradient-from),
             var(--any-value) var(--tw-gradient-via-position), var(--tw-gradient-to);
         }
         .to-\[var\(--any-value\)\] {
           --tw-gradient-to: var(--any-value) var(--tw-gradient-to-position);
-          --tw-gradient-to-position: ;
         }
         .fill-\[var\(--any-value\)\] {
           fill: var(--any-value);
