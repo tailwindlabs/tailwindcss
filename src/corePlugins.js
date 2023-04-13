@@ -1772,7 +1772,7 @@ export let corePlugins = {
                 'from'
               )} var(--tw-gradient-from-position)`,
               '--tw-gradient-from-position': ' ',
-              '--tw-gradient-to': `${transparentToValue}  var(--tw-gradient-from-position)`,
+              '--tw-gradient-to': `${transparentToValue}  var(--tw-gradient-to-position)`,
               '--tw-gradient-to-position': ' ',
               '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to)`,
             }
