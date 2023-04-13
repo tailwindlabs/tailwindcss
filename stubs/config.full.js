@@ -68,8 +68,7 @@ module.exports = {
       contain: 'contain',
     },
     blur: {
-      0: '0',
-      none: '0',
+      none: '0px',
       sm: '4px',
       DEFAULT: '8px',
       md: '12px',
