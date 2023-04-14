@@ -94,9 +94,7 @@ module.exports = {
       '3xl': '1.5rem',
       full: '9999px',
     },
-    borderSpacing: ({ theme }) => ({
-      ...theme('spacing'),
-    }),
+    borderSpacing: ({ theme }) => theme('spacing'),
     borderWidth: {
       DEFAULT: '1px',
       0: '0px',
@@ -784,9 +782,7 @@ module.exports = {
       xl: '1280px',
       '2xl': '1536px',
     },
-    scrollMargin: ({ theme }) => ({
-      ...theme('spacing'),
-    }),
+    scrollMargin: ({ theme }) => theme('spacing'),
     scrollPadding: ({ theme }) => theme('spacing'),
     sepia: {
       0: '0',
@@ -800,9 +796,7 @@ module.exports = {
       6: '6deg',
       12: '12deg',
     },
-    space: ({ theme }) => ({
-      ...theme('spacing'),
-    }),
+    space: ({ theme }) => theme('spacing'),
     spacing: {
       px: '1px',
       0: '0px',
@@ -862,9 +856,7 @@ module.exports = {
       4: '4px',
       8: '8px',
     },
-    textIndent: ({ theme }) => ({
-      ...theme('spacing'),
-    }),
+    textIndent: ({ theme }) => theme('spacing'),
     textOpacity: ({ theme }) => theme('opacity'),
     textUnderlineOffset: {
       auto: 'auto',
