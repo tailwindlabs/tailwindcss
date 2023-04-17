@@ -534,19 +534,19 @@ describe('Build command', () => {
           tailwindcss v${version}
 
           Usage:
-            tailwindcss build [options]
+             tailwindcss build [options]
 
           Options:
-            -i, --input              Input file
-            -o, --output             Output file
-            -w, --watch              Watch for changes and rebuild as needed
-            -p, --poll               Use polling instead of filesystem events when watching
-                --content            Content paths to use for removing unused classes
-                --postcss            Load custom PostCSS configuration
-            -m, --minify             Minify the output
-            -c, --config             Path to a custom config file
-                --no-autoprefixer    Disable autoprefixer
-            -h, --help               Display usage information
+             -i, --input              Input file
+             -o, --output             Output file
+             -w, --watch              Watch for changes and rebuild as needed
+             -p, --poll               Use polling instead of filesystem events when watching
+                 --content            Content paths to use for removing unused classes
+                 --postcss            Load custom PostCSS configuration
+             -m, --minify             Minify the output
+             -c, --config             Path to a custom config file
+                 --no-autoprefixer    Disable autoprefixer
+             -h, --help               Display usage information
         `)
       )
     }
@@ -652,14 +652,14 @@ describe('Init command', () => {
           tailwindcss v${version}
 
           Usage:
-            tailwindcss init [options]
+             tailwindcss init [options]
 
           Options:
-                --esm                Initialize configuration file as ESM
-                --ts                 Initialize configuration file as TypeScript
-            -p, --postcss            Initialize a \`postcss.config.js\` file
-            -f, --full               Include the default values for all options in the generated configuration file
-            -h, --help               Display usage information
+                 --esm                Initialize configuration file as ESM
+                 --ts                 Initialize configuration file as TypeScript
+             -p, --postcss            Initialize a \`postcss.config.js\` file
+             -f, --full               Include the default values for all options in the generated configuration file
+             -h, --help               Display usage information
         `)
       )
     }
