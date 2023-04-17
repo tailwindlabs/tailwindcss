@@ -901,18 +901,18 @@ module.exports = {
       none: 'none',
       0: '0rem',
       xs: '6.25rem', // 100px
-      sm: '18.75rem', // 300px
+      sm: '15.625rem', // 250px
       md: '31.25rem', // 500px
-      lg: '50rem', // 800px
-      xl: '75rem', // 1200px
-      '2xl': '106.25rem', // 1700px
-      '3xl': '143.75rem', // 2300px
-      '4xl': '187.5rem', // 3000px
-      '5xl': '237.5rem', // 3800px
-      '6xl': '300rem', // 4800px
-      '7xl': '375rem', // 6000px
-      '8xl': '468.75rem', // 7500px
-      '9xl': '625rem', // 10000px
+      lg: '56.25rem', // 900px
+      xl: '90.625rem', // 1450px
+      '2xl': '137.5rem', // 2200px
+      '3xl': '196.875rem', // 3150px
+      '4xl': '268.75rem', // 4300px
+      '5xl': '353.125rem', // 5650px
+      '6xl': '450rem', // 7200px
+      '7xl': '559.375rem', // 8950px
+      '8xl': '681.25rem', // 10900px
+      '9xl': '815.625rem', // 13050px
     },
     transitionDelay: {
       0: '0s',

@@ -446,7 +446,7 @@ let cssTransformValueCpu = [
 
 let cssTransformValueGpu = [
   'perspective(var(--tw-perspective))',
-  'translate(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))',
+  'translate3d(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))',
   'rotateX(var(--tw-rotate-x))',
   'rotateY(var(--tw-rotate-y))',
   'rotateZ(var(--tw-rotate))',
