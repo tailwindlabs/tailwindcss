@@ -24,6 +24,9 @@ export function defaults({ defaultRingColor = `#3b82f680` } = {}) {
       --tw-pan-y: ;
       --tw-pinch-zoom: ;
       --tw-scroll-snap-strictness: proximity;
+      --tw-gradient-from-position: ;
+      --tw-gradient-via-position: ;
+      --tw-gradient-to-position: ;
       --tw-ordinal: ;
       --tw-slashed-zero: ;
       --tw-numeric-figure: ;

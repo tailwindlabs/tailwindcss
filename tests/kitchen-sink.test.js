@@ -528,9 +528,7 @@ crosscheck(({ stable, oxide }) => {
         }
         .from-foo {
           --tw-gradient-from: #bada55 var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #bada5500 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #bada5500 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .px-1 {
@@ -1090,9 +1088,7 @@ crosscheck(({ stable, oxide }) => {
         }
         .from-foo {
           --tw-gradient-from: #bada55 var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #bada5500 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #bada5500 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .px-1 {
