@@ -438,18 +438,18 @@ export let variantPlugins = {
 }
 
 let cssTransformValueCpu = [
-  'rotate(var(--tw-rotate))',
   'translate(var(--tw-translate-x), var(--tw-translate-y))',
+  'rotate(var(--tw-rotate))',
   'skew(var(--tw-skew-x), var(--tw-skew-y))',
   'scale(var(--tw-scale-x), var(--tw-scale-y))',
 ].join(' ')
 
 let cssTransformValueGpu = [
   'perspective(var(--tw-perspective))',
+  'translate3d(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))',
   'rotateX(var(--tw-rotate-x))',
   'rotateY(var(--tw-rotate-y))',
   'rotateZ(var(--tw-rotate))',
-  'translate3d(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z))',
   'skew(var(--tw-skew-x), var(--tw-skew-y))',
   'scale3d(var(--tw-scale-x), var(--tw-scale-y), var(--tw-scale-z))',
 ].join(' ')
