@@ -146,6 +146,8 @@ function resolveVNode(node, vNode, functions) {
 }
 
 function resolveFunctions(node, input, functions) {
+  let hasAnyFn = Object.keys(functions).some((fn) => input.includes(`${fn}(`))
+  if (!hasAnyFn) return input
   return parseValue(input)
     .walk((vNode) => {
       resolveVNode(node, vNode, functions)
