@@ -1,7 +1,7 @@
 import dlv from 'dlv'
 import didYouMean from 'didyoumean'
 import transformThemeValue from '../util/transformThemeValue'
-import parseValue from 'postcss-value-parser'
+import parseValue from '../value-parser/index'
 import { normalizeScreens } from '../util/normalizeScreens'
 import buildMediaQuery from '../util/buildMediaQuery'
 import { toPath } from '../util/toPath'
