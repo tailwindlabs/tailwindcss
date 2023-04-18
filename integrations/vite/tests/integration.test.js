@@ -75,7 +75,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
         css`
           .bg-primary {
@@ -86,7 +86,7 @@ describe('static build', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
         css`
           .bg-primary {
@@ -131,7 +131,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
         css`
           .bg-primary {
@@ -142,7 +142,7 @@ describe('static build', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
         css`
           .bg-primary {
@@ -194,7 +194,7 @@ describe('watcher', () => {
     await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStdout((message) => message.includes('page reload'))
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await fetchCSS()).toIncludeCss(
         css`
           .bg-red-500 {
@@ -211,7 +211,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await fetchCSS()).toIncludeCss(
         css`
           .bg-red-500 {
@@ -265,7 +265,7 @@ describe('watcher', () => {
     await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStdout((message) => message.includes('page reload'))
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await fetchCSS()).toIncludeCss(
         css`
           .bg-red-500 {
@@ -282,7 +282,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await fetchCSS()).toIncludeCss(
         css`
           .bg-red-500 {
@@ -435,7 +435,7 @@ describe('watcher', () => {
     )
     await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await fetchCSS()).toIncludeCss(
         css`
           .btn {
@@ -454,7 +454,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await fetchCSS()).toIncludeCss(
         css`
           .btn {

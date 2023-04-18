@@ -173,9 +173,7 @@ crosscheck(({ stable, oxide }) => {
       expect(result.css).toMatchFormattedCss(css`
         .from-red-500\/50 {
           --tw-gradient-from: #ef444480 var(--tw-gradient-from-position);
-          --tw-gradient-from-position: ;
-          --tw-gradient-to: #ef444400 var(--tw-gradient-from-position);
-          --tw-gradient-to-position: ;
+          --tw-gradient-to: #ef444400 var(--tw-gradient-to-position);
           --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
         }
         .fill-red-500\/25 {

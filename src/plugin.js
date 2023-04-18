@@ -34,7 +34,7 @@ module.exports = function tailwindcss(configOrPath) {
 
         processTailwindFeatures(context)(root, result)
       },
-      env.OXIDE &&
+      __OXIDE__ &&
         function lightningCssPlugin(_root, result) {
           let postcss = require('postcss')
           let lightningcss = require('lightningcss')

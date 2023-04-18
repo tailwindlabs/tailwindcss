@@ -1,15 +1,14 @@
 import colors from 'picocolors'
 import log from './util/log'
-import { env } from './lib/sharedState'
 
 let defaults = {
   optimizeUniversalDefaults: false,
   generalizedModifiers: true,
   get disableColorOpacityUtilitiesByDefault() {
-    return env.OXIDE
+    return __OXIDE__
   },
   get relativeContentPathsByDefault() {
-    return env.OXIDE
+    return __OXIDE__
   },
 }
 

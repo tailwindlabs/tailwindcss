@@ -1,7 +1,6 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
-import { env } from './lib/sharedState'
 import createUtilityPlugin from './util/createUtilityPlugin'
 import buildMediaQuery from './util/buildMediaQuery'
 import escapeClassName from './util/escapeClassName'
@@ -1262,7 +1261,7 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (env.OXIDE) {
+          if (__OXIDE__) {
             return {
               '& > :not([hidden]) ~ :not([hidden])': {
                 '--tw-space-x-reverse': '0',
@@ -1307,7 +1306,7 @@ export let corePlugins = {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (env.OXIDE) {
+          if (__OXIDE__) {
             return {
               '& > :not([hidden]) ~ :not([hidden])': {
                 '@defaults border-width': {},
@@ -1750,7 +1749,13 @@ export let corePlugins = {
       return withAlphaValue(value, 0, 'rgb(255 255 255 / 0)')
     }
 
-    return function ({ matchUtilities, theme }) {
+    return function ({ matchUtilities, theme, addDefaults }) {
+      addDefaults('gradient-color-stops', {
+        '--tw-gradient-from-position': ' ',
+        '--tw-gradient-via-position': ' ',
+        '--tw-gradient-to-position': ' ',
+      })
+
       let options = {
         values: flattenColorPalette(theme('gradientColorStops')),
         type: ['color', 'any'],
@@ -1767,13 +1772,9 @@ export let corePlugins = {
             let transparentToValue = transparentTo(value)
 
             return {
-              '--tw-gradient-from': `${toColorValue(
-                value,
-                'from'
-              )} var(--tw-gradient-from-position)`,
-              '--tw-gradient-from-position': ' ',
-              '--tw-gradient-to': `${transparentToValue}  var(--tw-gradient-from-position)`,
-              '--tw-gradient-to-position': ' ',
+              '@defaults gradient-color-stops': {},
+              '--tw-gradient-from': `${toColorValue(value)} var(--tw-gradient-from-position)`,
+              '--tw-gradient-to': `${transparentToValue} var(--tw-gradient-to-position)`,
               '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to)`,
             }
           },
@@ -1798,12 +1799,10 @@ export let corePlugins = {
             let transparentToValue = transparentTo(value)
 
             return {
-              '--tw-gradient-via-position': ' ',
+              '@defaults gradient-color-stops': {},
               '--tw-gradient-to': `${transparentToValue}  var(--tw-gradient-to-position)`,
-              '--tw-gradient-to-position': ' ',
               '--tw-gradient-stops': `var(--tw-gradient-from), ${toColorValue(
-                value,
-                'via'
+                value
               )} var(--tw-gradient-via-position), var(--tw-gradient-to)`,
             }
           },
@@ -1825,8 +1824,8 @@ export let corePlugins = {
       matchUtilities(
         {
           to: (value) => ({
-            '--tw-gradient-to': `${toColorValue(value, 'to')} var(--tw-gradient-to-position)`,
-            '--tw-gradient-to-position': ' ',
+            '@defaults gradient-color-stops': {},
+            '--tw-gradient-to': `${toColorValue(value)} var(--tw-gradient-to-position)`,
           }),
         },
         options

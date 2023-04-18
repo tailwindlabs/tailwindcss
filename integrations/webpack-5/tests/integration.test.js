@@ -58,7 +58,7 @@ describe('static build', () => {
 
     await $('webpack --mode=production')
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-primary {
@@ -69,7 +69,7 @@ describe('static build', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-primary {
@@ -114,7 +114,7 @@ describe('static build', () => {
 
     await $('webpack --mode=production')
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-primary {
@@ -125,7 +125,7 @@ describe('static build', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-primary {
@@ -172,7 +172,7 @@ describe('watcher', () => {
       await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
     })
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -189,7 +189,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -242,7 +242,7 @@ describe('watcher', () => {
       await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
     })
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -259,7 +259,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -401,7 +401,7 @@ describe('watcher', () => {
       )
     })
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .btn {
@@ -420,7 +420,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .btn {
@@ -464,7 +464,7 @@ describe('watcher', () => {
 
     await waitForOutputFileCreation('main.css')
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -484,7 +484,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
