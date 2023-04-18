@@ -61,7 +61,7 @@ describe('watcher', () => {
     await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStderr(ready)
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -78,7 +78,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -128,7 +128,7 @@ describe('watcher', () => {
     await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStderr(ready)
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -145,7 +145,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .bg-red-500 {
@@ -284,7 +284,7 @@ describe('watcher', () => {
     )
     await runningProcess.onStderr(ready)
 
-    if (!env.OXIDE) {
+    if (env.ENGINE === 'stable') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .btn {
@@ -303,7 +303,7 @@ describe('watcher', () => {
       )
     }
 
-    if (env.OXIDE) {
+    if (env.ENGINE === 'oxide') {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           /* prettier-ignore */

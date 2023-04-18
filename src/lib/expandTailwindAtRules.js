@@ -130,7 +130,7 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Reading changed files')
 
-    if (env.OXIDE) {
+    if (__OXIDE__) {
       // TODO: Pass through or implement `extractor`
       for (let candidate of require('@tailwindcss/oxide').parseCandidateStringsFromFiles(
         context.changedContent
@@ -162,7 +162,7 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Generate rules')
     env.DEBUG && console.time('Sorting candidates')
-    let sortedCandidates = env.OXIDE
+    let sortedCandidates = __OXIDE__
       ? candidates
       : new Set(
           [...candidates].sort((a, z) => {
