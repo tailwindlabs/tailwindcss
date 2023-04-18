@@ -7,6 +7,7 @@ import buildMediaQuery from '../util/buildMediaQuery'
 import { toPath } from '../util/toPath'
 import { withAlphaValue } from '../util/withAlphaVariable'
 import { parseColorFormat } from '../util/pluginUtils'
+import { normalizeMathOperatorSpacing } from '../util/dataTypes'
 import log from '../util/log'
 
 function isObject(input) {
@@ -148,6 +149,11 @@ function resolveVNode(node, vNode, functions) {
 function resolveFunctions(node, input, functions) {
   let hasAnyFn = Object.keys(functions).some((fn) => input.includes(`${fn}(`))
   if (!hasAnyFn) return input
+
+  // We only have to do this because of a bug in postcss-value-parser
+  // See: https://github.com/TrySound/postcss-value-parser/issues/86
+  input = normalizeMathOperatorSpacing(input)
+
   return parseValue(input)
     .walk((vNode) => {
       resolveVNode(node, vNode, functions)
