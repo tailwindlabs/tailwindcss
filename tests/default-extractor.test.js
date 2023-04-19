@@ -41,6 +41,9 @@ const htmlExamples = html`
   <div class="[--y:theme(colors.blue.500)]">
   <div class="w-[calc(100%-theme('spacing.1'))]">
   <div class='w-[calc(100%-theme("spacing.2"))]'>
+  <div class='w-[calc(100%-theme("spacing[2]"))]'>
+  <div class='w-[calc(100%-theme(spacing[2]))]'>
+  <div class='[width:calc(theme(spacing[2])_+_theme(spacing[3])_+_theme(spacing[4]))]'>
 
   <script>
     let classes01 = ["text-[10px]"]
@@ -146,6 +149,10 @@ const includes = [
   `[--y:theme(colors.blue.500)]`,
   `w-[calc(100%-theme('spacing.1'))]`,
   `w-[calc(100%-theme("spacing.2"))]`,
+  `w-[calc(100%-theme("spacing.2"))]`,
+  `w-[calc(100%-theme("spacing[2]"))]`,
+  `w-[calc(100%-theme(spacing[2]))]`,
+  `[width:calc(theme(spacing[2])_+_theme(spacing[3])_+_theme(spacing[4]))]`,
   `border-[color:var(--color,theme(colors.cyan.500))]`,
   `translate-x-[var(--scroll-offset)]`,
   `font-[arbitrary,'arbitrary_with_space']`,
