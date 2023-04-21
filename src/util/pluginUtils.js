@@ -115,11 +115,7 @@ export function parseColorFormat(value) {
 }
 
 function unwrapArbitraryModifier(modifier) {
-  modifier = modifier.slice(1, -1)
-  if (modifier.startsWith('--')) {
-    modifier = `var(${modifier})`
-  }
-  return modifier
+  return normalize(modifier.slice(1, -1))
 }
 
 export function asColor(modifier, options = {}, { tailwindConfig = {} } = {}) {
