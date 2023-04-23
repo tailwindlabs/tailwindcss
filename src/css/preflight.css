@@ -313,7 +313,6 @@ dialog {
   color: inherit;
 }
 
-
 /*
 Prevent resizing textareas horizontally by default.
 */
@@ -381,4 +380,3 @@ video {
 [hidden] {
   display: none;
 }
-
