@@ -303,6 +303,18 @@ menu {
 }
 
 /*
+Reset default styling for dialogs.
+*/
+dialog {
+  margin: 0;
+  border: none;
+  padding: 0;
+  background:  transparent;
+  color: inherit;
+}
+
+
+/*
 Prevent resizing textareas horizontally by default.
 */
 
@@ -369,3 +381,4 @@ video {
 [hidden] {
   display: none;
 }
+
