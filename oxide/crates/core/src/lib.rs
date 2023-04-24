@@ -1,6 +1,7 @@
 use crate::parser::Extractor;
 use fxhash::FxHashSet;
 use rayon::prelude::*;
+use std::path::Path;
 use std::path::PathBuf;
 use tracing::event;
 
@@ -89,7 +90,13 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
     changed_content
         .into_par_iter()
         .map(|c| match (c.file, c.content) {
-            (Some(file), None) => std::fs::read(file).unwrap(),
+            (Some(file), None) => match std::fs::read(file) {
+                Ok(content) => content,
+                Err(e) => {
+                    event!(tracing::Level::ERROR, "Failed to read file: {:?}", e);
+                    Default::default()
+                }
+            },
             (None, Some(content)) => content.into_bytes(),
             _ => Default::default(),
         })

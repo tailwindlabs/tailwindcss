@@ -183,6 +183,7 @@ export function normalizeConfig(config) {
 
   // Normalize the `content`
   config.content = {
+    auto: config.content === 'auto',
     relative: (() => {
       let { content } = config
 

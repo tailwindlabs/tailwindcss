@@ -11,6 +11,22 @@ import { env } from './sharedState'
 /** @typedef {import('../../types/config.js').RawFile} RawFile */
 /** @typedef {import('../../types/config.js').FilePath} FilePath */
 
+/*
+ * @param {import('tailwindcss').Config} tailwindConfig
+ * @returns {ContentPath[]}
+ */
+function resolveContentFiles(tailwindConfig) {
+  if (tailwindConfig.content.auto && __OXIDE__) {
+    env.DEBUG && console.time('Calculating resolve content paths')
+    tailwindConfig.content.files = require('@tailwindcss/oxide').resolveContentPaths({
+      base: process.cwd(),
+    })
+    env.DEBUG && console.timeEnd('Calculating resolve content paths')
+  }
+
+  return tailwindConfig.content.files
+}
+
 /**
  * @typedef {object} ContentPath
  * @property {string} original
@@ -32,7 +48,7 @@ import { env } from './sharedState'
  * @returns {ContentPath[]}
  */
 export function parseCandidateFiles(context, tailwindConfig) {
-  let files = tailwindConfig.content.files
+  let files = resolveContentFiles(tailwindConfig)
 
   // Normalize the file globs
   files = files.filter((filePath) => typeof filePath === 'string')
@@ -167,7 +183,7 @@ function resolvePathSymlinks(contentPath) {
  * @returns {[{ content: string, extension: string }[], Map<string, number>]}
  */
 export function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
-  let changedContent = context.tailwindConfig.content.files
+  let changedContent = resolveContentFiles(context.tailwindConfig)
     .filter((item) => typeof item.raw === 'string')
     .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
