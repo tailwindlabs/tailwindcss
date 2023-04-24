@@ -2328,7 +2328,7 @@ export let corePlugins = {
                 continue
               }
 
-              shadow.color = 'var(--tw-shadow-color)'
+              shadow.color = shadow.color ?? 'var(--tw-shadow-color)'
             }
 
             return {
