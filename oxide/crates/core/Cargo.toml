@@ -12,6 +12,8 @@ fxhash = "0.2.1"
 crossbeam = "0.8.2"
 tracing = { version = "0.1.37", features = [] }
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+walkdir = "2.3.3"
+ignore = "0.4.20"
 
 [dev-dependencies]
 criterion = { version = "0.3", features = ['html_reports'] }
