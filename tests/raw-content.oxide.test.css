@@ -143,15 +143,6 @@
 .hidden {
   display: none;
 }
-.h-16 {
-  height: 4rem;
-}
-.max-h-screen {
-  max-height: 100vh;
-}
-.min-h-0 {
-  min-height: 0;
-}
 .w-12 {
   width: 3rem;
 }
@@ -160,6 +151,15 @@
 }
 .max-w-full {
   max-width: 100%;
+}
+.h-16 {
+  height: 4rem;
+}
+.max-h-screen {
+  max-height: 100vh;
+}
+.min-h-0 {
+  min-height: 0;
 }
 .flex-1 {
   flex: 1;

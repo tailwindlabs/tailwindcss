@@ -44,12 +44,12 @@ crosscheck(({ stable, oxide }) => {
             <div class="mb-[var(--any-value)]"></div>
             <div class="ml-[var(--any-value)]"></div>
             <div class="aspect-[var(--any-value)]"></div>
-            <div class="h-[var(--any-value)]"></div>
-            <div class="max-h-[var(--any-value)]"></div>
-            <div class="min-h-[var(--any-value)]"></div>
             <div class="w-[var(--any-value)]"></div>
             <div class="max-w-[var(--any-value)]"></div>
             <div class="min-w-[var(--any-value)]"></div>
+            <div class="h-[var(--any-value)]"></div>
+            <div class="max-h-[var(--any-value)]"></div>
+            <div class="min-h-[var(--any-value)]"></div>
             <div class="flex-[var(--any-value)]"></div>
             <div class="flex-shrink-[var(--any-value)]"></div>
             <div class="shrink-[var(--any-value)]"></div>
@@ -259,15 +259,6 @@ crosscheck(({ stable, oxide }) => {
         .aspect-\[var\(--any-value\)\] {
           aspect-ratio: var(--any-value);
         }
-        .h-\[var\(--any-value\)\] {
-          height: var(--any-value);
-        }
-        .max-h-\[var\(--any-value\)\] {
-          max-height: var(--any-value);
-        }
-        .min-h-\[var\(--any-value\)\] {
-          min-height: var(--any-value);
-        }
         .w-\[var\(--any-value\)\] {
           width: var(--any-value);
         }
@@ -276,6 +267,15 @@ crosscheck(({ stable, oxide }) => {
         }
         .max-w-\[var\(--any-value\)\] {
           max-width: var(--any-value);
+        }
+        .h-\[var\(--any-value\)\] {
+          height: var(--any-value);
+        }
+        .max-h-\[var\(--any-value\)\] {
+          max-height: var(--any-value);
+        }
+        .min-h-\[var\(--any-value\)\] {
+          min-height: var(--any-value);
         }
         .flex-\[var\(--any-value\)\] {
           flex: var(--any-value);
@@ -808,15 +808,6 @@ crosscheck(({ stable, oxide }) => {
         .aspect-\[var\(--any-value\)\] {
           aspect-ratio: var(--any-value);
         }
-        .h-\[var\(--any-value\)\] {
-          height: var(--any-value);
-        }
-        .max-h-\[var\(--any-value\)\] {
-          max-height: var(--any-value);
-        }
-        .min-h-\[var\(--any-value\)\] {
-          min-height: var(--any-value);
-        }
         .w-\[var\(--any-value\)\] {
           width: var(--any-value);
         }
@@ -825,6 +816,15 @@ crosscheck(({ stable, oxide }) => {
         }
         .max-w-\[var\(--any-value\)\] {
           max-width: var(--any-value);
+        }
+        .h-\[var\(--any-value\)\] {
+          height: var(--any-value);
+        }
+        .max-h-\[var\(--any-value\)\] {
+          max-height: var(--any-value);
+        }
+        .min-h-\[var\(--any-value\)\] {
+          min-height: var(--any-value);
         }
         .flex-\[var\(--any-value\)\] {
           flex: var(--any-value);

@@ -106,33 +106,6 @@
 .aspect-\[var\(--aspect\)\] {
   aspect-ratio: var(--aspect);
 }
-.h-\[3\.23rem\] {
-  height: 3.23rem;
-}
-.h-\[calc\(100\%\+1rem\)\] {
-  height: calc(100% + 1rem);
-}
-.h-\[var\(--height\)\] {
-  height: var(--height);
-}
-.max-h-\[3\.23rem\] {
-  max-height: 3.23rem;
-}
-.max-h-\[calc\(100\%\+1rem\)\] {
-  max-height: calc(100% + 1rem);
-}
-.max-h-\[var\(--height\)\] {
-  max-height: var(--height);
-}
-.min-h-\[3\.23rem\] {
-  min-height: 3.23rem;
-}
-.min-h-\[calc\(100\%\+1rem\)\] {
-  min-height: calc(100% + 1rem);
-}
-.min-h-\[var\(--height\)\] {
-  min-height: var(--height);
-}
 .w-\[\'\)\(\)\'\] {
   width: ')()';
 }
@@ -207,6 +180,33 @@
 }
 .max-w-\[var\(--width\)\] {
   max-width: var(--width);
+}
+.h-\[3\.23rem\] {
+  height: 3.23rem;
+}
+.h-\[calc\(100\%\+1rem\)\] {
+  height: calc(100% + 1rem);
+}
+.h-\[var\(--height\)\] {
+  height: var(--height);
+}
+.max-h-\[3\.23rem\] {
+  max-height: 3.23rem;
+}
+.max-h-\[calc\(100\%\+1rem\)\] {
+  max-height: calc(100% + 1rem);
+}
+.max-h-\[var\(--height\)\] {
+  max-height: var(--height);
+}
+.min-h-\[3\.23rem\] {
+  min-height: 3.23rem;
+}
+.min-h-\[calc\(100\%\+1rem\)\] {
+  min-height: calc(100% + 1rem);
+}
+.min-h-\[var\(--height\)\] {
+  min-height: var(--height);
 }
 .flex-\[var\(--flex\)\] {
   flex: var(--flex);
