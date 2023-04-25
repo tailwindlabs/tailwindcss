@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.3.2] - 2023-04-25
+
 ### Fixed
 
 - Don’t move unknown pseudo-elements to the end of selectors ([#10943](https://github.com/tailwindlabs/tailwindcss/pull/10943), [#10962](https://github.com/tailwindlabs/tailwindcss/pull/10962))
@@ -2232,7 +2236,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.2...HEAD
+[3.3.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.1...v3.3.2
 [3.3.1]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.7...v3.3.0
 [3.2.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.2.6...v3.2.7
