@@ -1,5 +1,5 @@
 import fs from 'fs'
-import LRU from 'quick-lru'
+import LRU from '@alloc/quick-lru'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import log from '../util/log'
