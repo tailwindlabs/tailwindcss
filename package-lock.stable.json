@@ -9,6 +9,7 @@
       "version": "3.3.1",
       "license": "MIT",
       "dependencies": {
+        "@alloc/quick-lru": "^5.2.0",
         "arg": "^5.0.2",
         "chokidar": "^3.5.3",
         "didyoumean": "^1.2.2",
@@ -29,7 +30,6 @@
         "postcss-nested": "^6.0.1",
         "postcss-selector-parser": "^6.0.11",
         "postcss-value-parser": "^4.2.0",
-        "quick-lru": "^5.1.1",
         "resolve": "^1.22.2",
         "sucrase": "^3.32.0"
       },
@@ -146,6 +146,17 @@
         "postcss-loader": "^6.2.1",
         "webpack": "^5.75.0",
         "webpack-cli": "^5.0.1"
+      }
+    },
+    "node_modules/@alloc/quick-lru": {
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/@alloc/quick-lru/-/quick-lru-5.2.0.tgz",
+      "integrity": "sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==",
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
       }
     },
     "node_modules/@ampproject/remapping": {
@@ -7260,6 +7271,7 @@
     },
     "node_modules/quick-lru": {
       "version": "5.1.1",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=10"
@@ -8349,6 +8361,11 @@
     }
   },
   "dependencies": {
+    "@alloc/quick-lru": {
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/@alloc/quick-lru/-/quick-lru-5.2.0.tgz",
+      "integrity": "sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw=="
+    },
     "@ampproject/remapping": {
       "version": "2.2.1",
       "resolved": "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.2.1.tgz",
@@ -13284,7 +13301,8 @@
       "version": "1.2.3"
     },
     "quick-lru": {
-      "version": "5.1.1"
+      "version": "5.1.1",
+      "dev": true
     },
     "react-is": {
       "version": "18.2.0",
