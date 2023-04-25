@@ -1,7 +1,7 @@
 // @ts-check
 
 import fs from 'fs'
-import LRU from 'quick-lru'
+import LRU from '@alloc/quick-lru'
 
 import hash from '../util/hashConfig'
 import resolveConfig from '../public/resolve-config'

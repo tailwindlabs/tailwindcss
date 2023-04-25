@@ -58,7 +58,7 @@ async function inIsolatedContext(fn) {
   let dest = `${os.tmpdir()}/tailwindcss-cli`
 
   // Recursively copy the dist and tests folders
-  let dirs = ['dist', 'tests']
+  let dirs = ['dist', 'tests', 'tailwind.config.js']
 
   await Promise.all(
     dirs.map((dir) =>

@@ -1,25 +1,26 @@
-import fs from 'fs'
+import fs from 'fs/promises'
 import path from 'path'
-
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 
 let id = 0
 
-export default function (callback) {
-  return new Promise((resolve) => {
-    const workerId = `${process.env.JEST_WORKER_ID}-${id++}`
-    const tmpPath = path.resolve(__dirname, `../__tmp_${workerId}`)
-    const currentPath = process.cwd()
+/**
+ * @template T
+ * @param {() => Promise<T>} callback
+ * @returns {Promise<T>}
+ */
+export default async function (callback) {
+  const workerId = `${process.env.JEST_WORKER_ID}-${id++}`
+  const tmpPath = path.resolve(__dirname, `../__tmp_${workerId}`)
+  const currentPath = process.cwd()
 
-    rimraf.sync(tmpPath)
-    fs.mkdirSync(tmpPath)
-    process.chdir(tmpPath)
+  await rimraf(tmpPath)
+  await fs.mkdir(tmpPath)
 
-    callback().then(() => {
-      process.chdir(currentPath)
+  process.chdir(tmpPath)
+  let result = await callback()
+  process.chdir(currentPath)
 
-      rimraf.sync(tmpPath)
-      resolve()
-    })
-  })
+  await rimraf(tmpPath)
+  return result
 }

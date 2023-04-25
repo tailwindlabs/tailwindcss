@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure multiple `theme(spacing[5])` calls with bracket notation in arbitrary properties work ([#11039](https://github.com/tailwindlabs/tailwindcss/pull/11039))
 - Normalize arbitrary modifiers ([#11057](https://github.com/tailwindlabs/tailwindcss/pull/11057))
 
+### Changed
+
+- Drop support for Node.js v12 ([#11089](https://github.com/tailwindlabs/tailwindcss/pull/11089))
+
 ## [3.3.1] - 2023-03-30
 
 ### Fixed
