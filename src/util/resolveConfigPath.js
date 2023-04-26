@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import log from './log'
 
 const defaultConfigFiles = [
   './tailwind.config.js',
@@ -59,7 +60,12 @@ export function resolveDefaultConfigPath() {
       const configPath = path.resolve(configFile)
       fs.accessSync(configPath)
       return configPath
-    } catch (err) {}
+    } catch (err) {
+      log.warn(
+        'default-config-not-found',
+        `Default config file not found. Path resolved to: ${err.path}. If you need to specify a custom config path use --config <path>`
+      )
+    }
   }
 
   return null
