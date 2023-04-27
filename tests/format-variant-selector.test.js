@@ -352,6 +352,10 @@ crosscheck(() => {
       ${'#app :is(:is(.dark &)::before)'}                      | ${'#app :is(:is(.dark &))::before'}
       ${'#app :is(.foo::file-selector-button)'}                | ${'#app :is(.foo)::file-selector-button'}
       ${'#app :is(.foo::-webkit-progress-bar)'}                | ${'#app :is(.foo)::-webkit-progress-bar'}
+      ${'.parent::marker li'}                                  | ${'.parent li::marker'}
+      ${'.parent::selection li'}                               | ${'.parent li::selection'}
+      ${'.parent::placeholder input'}                          | ${'.parent input::placeholder'}
+      ${'.parent::backdrop dialog'}                            | ${'.parent dialog::backdrop'}
     `('should translate "$before" into "$after"', ({ before, after }) => {
       let result = finalizeSelector('.a', [{ format: before, isArbitraryVariant: false }], {
         candidate: 'a',
