@@ -30,45 +30,44 @@ pub struct ChangedContent {
     pub extension: String,
 }
 
+#[derive(Debug)]
+pub enum IO {
+    Sequential = 0b00000001,
+    Parallel = 0b00000010,
+}
+
+#[derive(Debug)]
+pub enum Parsing {
+    Sequential = 0b00000100,
+    Parallel = 0b00001000,
+}
+
 pub fn parse_candidate_strings_from_files(changed_content: Vec<ChangedContent>) -> Vec<String> {
     init_tracing();
     parse_all_blobs(read_all_files(changed_content))
 }
 
-#[derive(Debug, Clone)]
-pub struct Options {
-    pub input: Vec<ChangedContent>,
-    pub strategy: Strategy,
-}
-
-#[derive(Debug, Clone)]
-pub struct Strategy {
-    pub io: IOStrategy,
-    pub parsing: ParsingStrategy,
-}
-
-#[derive(Debug, Clone)]
-pub enum IOStrategy {
-    Sequential,
-    Parallel,
-}
-
-#[derive(Debug, Clone)]
-pub enum ParsingStrategy {
-    Sequential,
-    Parallel,
-}
-
-pub fn parse_candidate_strings(options: Options) -> Vec<String> {
+pub fn parse_candidate_strings(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
     init_tracing();
-    let blobs = match options.strategy.io {
-        IOStrategy::Sequential => read_all_files_sync(options.input),
-        IOStrategy::Parallel => read_all_files(options.input),
-    };
 
-    match options.strategy.parsing {
-        ParsingStrategy::Sequential => parse_all_blobs_sync(blobs),
-        ParsingStrategy::Parallel => parse_all_blobs(blobs),
+    if options & (IO::Sequential as u8 | Parsing::Sequential as u8)
+        == (IO::Sequential as u8 | Parsing::Sequential as u8)
+    {
+        parse_all_blobs_sync(read_all_files_sync(input))
+    } else if options & (IO::Sequential as u8 | Parsing::Parallel as u8)
+        == (IO::Sequential as u8 | Parsing::Parallel as u8)
+    {
+        parse_all_blobs(read_all_files_sync(input))
+    } else if options & (IO::Parallel as u8 | Parsing::Sequential as u8)
+        == (IO::Parallel as u8 | Parsing::Sequential as u8)
+    {
+        parse_all_blobs_sync(read_all_files(input))
+    } else if options & (IO::Parallel as u8 | Parsing::Parallel as u8)
+        == (IO::Parallel as u8 | Parsing::Parallel as u8)
+    {
+        parse_all_blobs(read_all_files(input))
+    } else {
+        unimplemented!("Unknown strategy");
     }
 }
 

@@ -29,71 +29,21 @@ pub fn parse_candidate_strings_from_files(changed_content: Vec<ChangedContent>) 
   )
 }
 
-#[derive(Debug, Clone)]
-#[napi(object)]
-pub struct Options {
-  pub input: Vec<ChangedContent>,
-  pub strategy: Strategy,
-}
-
-impl From<Options> for tailwindcss_core::Options {
-  fn from(options: Options) -> Self {
-    tailwindcss_core::Options {
-      input: options.input.into_iter().map(Into::into).collect(),
-      strategy: options.strategy.into(),
-    }
-  }
-}
-
-#[derive(Debug, Clone)]
-#[napi(object)]
-pub struct Strategy {
-  pub io: IOStrategy,
-  pub parsing: ParsingStrategy,
-}
-
-impl From<Strategy> for tailwindcss_core::Strategy {
-  fn from(strategy: Strategy) -> Self {
-    tailwindcss_core::Strategy {
-      io: strategy.io.into(),
-      parsing: strategy.parsing.into(),
-    }
-  }
+#[derive(Debug)]
+#[napi]
+pub enum IO {
+  Sequential = 0b0001,
+  Parallel = 0b0010,
 }
 
 #[derive(Debug)]
 #[napi]
-pub enum IOStrategy {
-  Sequential,
-  Parallel,
-}
-
-impl From<IOStrategy> for tailwindcss_core::IOStrategy {
-  fn from(io_strategy: IOStrategy) -> Self {
-    match io_strategy {
-      IOStrategy::Sequential => tailwindcss_core::IOStrategy::Sequential,
-      IOStrategy::Parallel => tailwindcss_core::IOStrategy::Parallel,
-    }
-  }
-}
-
-#[derive(Debug)]
-#[napi]
-pub enum ParsingStrategy {
-  Sequential,
-  Parallel,
-}
-
-impl From<ParsingStrategy> for tailwindcss_core::ParsingStrategy {
-  fn from(parsing_strategy: ParsingStrategy) -> Self {
-    match parsing_strategy {
-      ParsingStrategy::Sequential => tailwindcss_core::ParsingStrategy::Sequential,
-      ParsingStrategy::Parallel => tailwindcss_core::ParsingStrategy::Parallel,
-    }
-  }
+pub enum Parsing {
+  Sequential = 0b0100,
+  Parallel = 0b1000,
 }
 
 #[napi]
-pub fn parse_candidate_strings(options: Options) -> Vec<String> {
-  tailwindcss_core::parse_candidate_strings(options.into())
+pub fn parse_candidate_strings(input: Vec<ChangedContent>, strategy: u8) -> Vec<String> {
+  tailwindcss_core::parse_candidate_strings(input.into_iter().map(Into::into).collect(), strategy)
 }
