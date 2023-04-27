@@ -32,14 +32,34 @@ pub struct ChangedContent {
 
 #[derive(Debug)]
 pub enum IO {
-    Sequential = 0b00000001,
-    Parallel = 0b00000010,
+    Sequential = 0b0001,
+    Parallel = 0b0010,
+}
+
+impl From<u8> for IO {
+    fn from(item: u8) -> Self {
+        match item & 0b0011 {
+            0b0001 => IO::Sequential,
+            0b0010 => IO::Parallel,
+            _ => unimplemented!("Unknown 'IO' strategy"),
+        }
+    }
 }
 
 #[derive(Debug)]
 pub enum Parsing {
-    Sequential = 0b00000100,
-    Parallel = 0b00001000,
+    Sequential = 0b0100,
+    Parallel = 0b1000,
+}
+
+impl From<u8> for Parsing {
+    fn from(item: u8) -> Self {
+        match item & 0b1100 {
+            0b0100 => Parsing::Sequential,
+            0b1000 => Parsing::Parallel,
+            _ => unimplemented!("Unknown 'Parsing' strategy"),
+        }
+    }
 }
 
 pub fn parse_candidate_strings_from_files(changed_content: Vec<ChangedContent>) -> Vec<String> {
@@ -50,24 +70,11 @@ pub fn parse_candidate_strings_from_files(changed_content: Vec<ChangedContent>) 
 pub fn parse_candidate_strings(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
     init_tracing();
 
-    if options & (IO::Sequential as u8 | Parsing::Sequential as u8)
-        == (IO::Sequential as u8 | Parsing::Sequential as u8)
-    {
-        parse_all_blobs_sync(read_all_files_sync(input))
-    } else if options & (IO::Sequential as u8 | Parsing::Parallel as u8)
-        == (IO::Sequential as u8 | Parsing::Parallel as u8)
-    {
-        parse_all_blobs(read_all_files_sync(input))
-    } else if options & (IO::Parallel as u8 | Parsing::Sequential as u8)
-        == (IO::Parallel as u8 | Parsing::Sequential as u8)
-    {
-        parse_all_blobs_sync(read_all_files(input))
-    } else if options & (IO::Parallel as u8 | Parsing::Parallel as u8)
-        == (IO::Parallel as u8 | Parsing::Parallel as u8)
-    {
-        parse_all_blobs(read_all_files(input))
-    } else {
-        unimplemented!("Unknown strategy");
+    match (IO::from(options), Parsing::from(options)) {
+        (IO::Sequential, Parsing::Sequential) => parse_all_blobs_sync(read_all_files_sync(input)),
+        (IO::Sequential, Parsing::Parallel) => parse_all_blobs_sync(read_all_files(input)),
+        (IO::Parallel, Parsing::Sequential) => parse_all_blobs(read_all_files_sync(input)),
+        (IO::Parallel, Parsing::Parallel) => parse_all_blobs(read_all_files(input)),
     }
 }
 
