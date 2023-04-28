@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move unknown pseudo-elements outside of `:is` by default ([#11345](https://github.com/tailwindlabs/tailwindcss/pull/11345))
 - Escape animation names when prefixes contain special characters ([#11470](https://github.com/tailwindlabs/tailwindcss/pull/11470))
 
+### Added
+
+- Add `aria-busy` utility ([#10966](https://github.com/tailwindlabs/tailwindcss/pull/10966))
+
 ## [3.3.2] - 2023-04-25
 
 ### Fixed
