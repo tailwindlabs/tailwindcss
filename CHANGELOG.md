@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix issue where some pseudo-element variants generated the wrong selector ([#10943](https://github.com/tailwindlabs/tailwindcss/pull/10943), [#10962](https://github.com/tailwindlabs/tailwindcss/pull/10962), [#11111](https://github.com/tailwindlabs/tailwindcss/pull/11111))
+- Make font settings propagate into buttons, inputs, etc. ([#10940](https://github.com/tailwindlabs/tailwindcss/pull/10940))
 - Fix parsing of `theme()` inside `calc()` when there are no spaces around operators ([#11157](https://github.com/tailwindlabs/tailwindcss/pull/11157))
 - Ensure `repeating-conic-gradient` is detected as an image ([#11180](https://github.com/tailwindlabs/tailwindcss/pull/11180))
 - Move unknown pseudo-elements outside of `:is` by default ([#11345](https://github.com/tailwindlabs/tailwindcss/pull/11345))
