@@ -25,6 +25,6 @@
     "mini-css-extract-plugin": "^1.6.2",
     "postcss-loader": "^4.3.0",
     "webpack": "^4.46.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^5.0.2"
   }
 }
