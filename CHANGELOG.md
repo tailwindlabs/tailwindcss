@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `aria-busy` utility ([#10966](https://github.com/tailwindlabs/tailwindcss/pull/10966))
 
+### Changed
+
+- Reset padding for `<dialog>` elements in preflight ([#11069](https://github.com/tailwindlabs/tailwindcss/pull/11069))
+
 ## [3.3.2] - 2023-04-25
 
 ### Fixed
