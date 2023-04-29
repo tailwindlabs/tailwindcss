@@ -266,7 +266,7 @@ summary {
 }
 
 /*
-Removes the default spacing and border for appropriate elements.
+Removes the default spacing for appropriate elements.
 */
 
 blockquote,
@@ -302,9 +302,6 @@ menu {
   padding: 0;
 }
 
-/*
-Reset default styling for dialogs.
-*/
 dialog {
   padding: 0;
 }
