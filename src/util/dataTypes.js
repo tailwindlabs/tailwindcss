@@ -61,7 +61,7 @@ export function normalize(value, isRoot = true) {
  * @param {string} value
  * @returns {string}
  */
-export function normalizeMathOperatorSpacing(value) {
+function normalizeMathOperatorSpacing(value) {
   return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
     let vars = []
 
