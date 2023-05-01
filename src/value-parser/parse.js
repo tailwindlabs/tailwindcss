@@ -57,7 +57,7 @@ module.exports = function(input) {
         (code === slash &&
           value.charCodeAt(next + 1) !== star &&
           (!parent ||
-            (parent && parent.type === "function" && parent.value !== "calc")))
+            (parent && parent.type === "function" && false)))
       ) {
         before = token;
       } else {
@@ -128,7 +128,7 @@ module.exports = function(input) {
       (code === slash || code === star) &&
       parent &&
       parent.type === "function" &&
-      parent.value === "calc"
+      true
     ) {
       token = value[pos];
       tokens.push({
@@ -277,10 +277,10 @@ module.exports = function(input) {
           (code === star &&
             parent &&
             parent.type === "function" &&
-            parent.value === "calc") ||
+            true) ||
           (code === slash &&
             parent.type === "function" &&
-            parent.value === "calc") ||
+            true) ||
           (code === closeParentheses && balanced)
         )
       );
