@@ -21,6 +21,7 @@ function resolveContentFiles(tailwindConfig) {
     tailwindConfig.content.files = require('@tailwindcss/oxide').resolveContentPaths({
       base: process.cwd(),
     })
+    console.log(tailwindConfig.content.files)
     env.DEBUG && console.timeEnd('Calculating resolve content paths')
   }
 
