@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "isomorphic-fetch": "^3.0.0",
-    "vite": "^4.3.2"
+    "vite": "^4.3.4"
   }
 }
