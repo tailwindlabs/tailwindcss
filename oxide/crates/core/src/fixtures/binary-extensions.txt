@@ -3,6 +3,7 @@
 3g2
 3gp
 7z
+DS_Store
 a
 aac
 adp
@@ -49,7 +50,6 @@ docx
 dot
 dotm
 dra
-DS_Store
 dsk
 dts
 dtshd
@@ -100,6 +100,7 @@ key
 ktx
 lha
 lib
+lockb
 lvp
 lz
 lzh
@@ -186,16 +187,16 @@ s7z
 scpt
 sgi
 shar
-snap
 sil
 sketch
 slk
 smv
+snap
 snk
 so
 stl
-suo
 sub
+suo
 swf
 tar
 tbz
