@@ -1,4 +1,5 @@
 let fs = require('fs')
+let path = require('path')
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
 let { env } = require('../../../lib/lib/sharedState')
@@ -999,5 +1000,332 @@ describe('watcher', () => {
     )
 
     return runningProcess.stop()
+  })
+
+  describe('auto content', () => {
+    let { readOutputFile, writeInputFile } = require('../../io')({
+      output: 'fixtures/example-app/dist',
+      input: 'fixtures/example-app/src',
+    })
+    let options = {
+      cwd: path.resolve(__dirname, '..', 'fixtures', 'example-app'),
+    }
+
+    it('should detect classes in existing files', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+
+      await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
+
+    it('should detect changes in existing files', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+
+      await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .underline {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline;
+          }
+        `
+      )
+
+      // Make a change
+
+      await writeInputFile('index.html', html`<div class="underline"></div>`)
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .underline {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
+
+    it('should detect changes in new files in existing folders with a known extension', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+
+      await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .underline {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline;
+          }
+        `
+      )
+
+      // Make a change to a new file in an existing folder with a known extension.
+
+      await writeInputFile('other.html', html`<div class="underline"></div>`)
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .underline {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
+
+    it('should not scan ignored files', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+      await writeInputFile('../.gitignore', 'generated-folder/')
+      await writeInputFile('../generated-folder/bad.html', html`<div class="italic"></div>`)
+      await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .italic {
+            font-style: italic;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
+
+    it('should not scan for known binary files', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+      await writeInputFile('example-1.png', html`<div class="italic"></div>`)
+      await writeInputFile('example-2.mp4', html`<div class="underline"></div>`)
+      await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .italic {
+            font-style: italic;
+          }
+
+          .underline {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
+
+    it('should not scan for explicitly ignored extensions (such as css/scss/less/...)', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+      await writeInputFile('example.css', html`<div class="italic"></div>`)
+      await writeInputFile('example.less', html`<div class="underline"></div>`)
+      await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .italic {
+            font-style: italic;
+          }
+
+          .underline {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
+
+    it('should not scan for explicitly ignored files (such as package-lock.json)', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+      await writeInputFile('package-lock.json', html`<div class="italic"></div>`)
+      await writeInputFile('yarn.lock', html`<div class="italic"></div>`)
+      await writeInputFile('pnpm-lock.yaml', html`<div class="italic"></div>`)
+      await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .italic {
+            font-style: italic;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
   })
 })
