@@ -1,0 +1,15 @@
+js
+ts
+jsx
+tsx
+mjs
+mts
+cjs
+cts
+html
+php
+vue
+svelte
+astro
+md
+mdx
