@@ -54,10 +54,11 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
     let static_direct_folder_indentifiers = vec!["public"];
 
     // A list of known extensions + a list of extensions we found in the project.
-    let mut found_extensions = FxHashSet::from_iter(vec![
-        "js", "ts", "jsx", "tsx", "mjs", "mts", "cjs", "cts", "html", "php", "vue", "svelte",
-        "astro", "md", "mdx",
-    ]);
+    let mut found_extensions = FxHashSet::from_iter(
+        include_str!("fixtures/wanted-extensions.txt")
+            .trim()
+            .lines(),
+    );
 
     // A list of direct folders, from the root, where we can use globs to watch all files.
     let mut direct_folders = FxHashSet::default();
