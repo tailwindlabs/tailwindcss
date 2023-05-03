@@ -1,5 +1,6 @@
 css
-scss
-sass
 less
+lock
+sass
+scss
 styl
