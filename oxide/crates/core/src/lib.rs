@@ -55,9 +55,11 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
 
     // A list of known extensions + a list of extensions we found in the project.
     let mut found_extensions = FxHashSet::from_iter(
-        include_str!("fixtures/wanted-extensions.txt")
+        include_str!("fixtures/template-extensions.txt")
             .trim()
-            .lines(),
+            .lines()
+            .filter(|x| !x.starts_with('#'))
+            .filter(|x| *x != ""),
     );
 
     // A list of direct folders, from the root, where we can use globs to watch all files.
