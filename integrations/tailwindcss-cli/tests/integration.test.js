@@ -1016,7 +1016,6 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            content: 'auto',
             corePlugins: {
               preflight: false,
             },
@@ -1048,7 +1047,6 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            content: 'auto',
             corePlugins: {
               preflight: false,
             },
@@ -1103,7 +1101,6 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            content: 'auto',
             corePlugins: {
               preflight: false,
             },
@@ -1158,7 +1155,6 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            content: 'auto',
             corePlugins: {
               preflight: false,
             },
@@ -1199,7 +1195,6 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            content: 'auto',
             corePlugins: {
               preflight: false,
             },
@@ -1245,7 +1240,6 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            content: 'auto',
             corePlugins: {
               preflight: false,
             },
@@ -1291,7 +1285,6 @@ describe('watcher', () => {
         '../tailwind.config.js',
         javascript`
           module.exports = {
-            content: 'auto',
             corePlugins: {
               preflight: false,
             },
@@ -1334,7 +1327,6 @@ describe('watcher', () => {
         javascript`
           // Example class that should not be included: flex italic
           module.exports = {
-            content: 'auto',
             corePlugins: {
               preflight: false,
             },
