@@ -9,6 +9,13 @@ export function validateConfig(config) {
     ])
   }
 
+  if (config.content.files === 'auto') {
+    log.warn('auto-content-experimental', [
+      'Automatic content detection in Tailwind CSS is currently in experimental preview.',
+      'Preview features are not covered by semver, and may change at any time.',
+    ])
+  }
+
   // Warn if the line-clamp plugin is installed
   try {
     let plugin = require('@tailwindcss/line-clamp')
