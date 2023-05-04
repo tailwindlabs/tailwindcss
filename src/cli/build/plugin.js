@@ -19,6 +19,7 @@ import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
 import log from '../../util/log'
 import { loadConfig } from '../../lib/load-config'
 import getModuleDependencies from '../../lib/getModuleDependencies'
+import { validateConfig } from '../../util/validateConfig'
 
 /**
  *
@@ -162,9 +163,11 @@ let state = {
 
     // @ts-ignore
     if (__OXIDE__) {
-      this.configBag.config = resolveConfig(this.configBag.config)
+      this.configBag.config = validateConfig(resolveConfig(this.configBag.config))
     } else {
-      this.configBag.config = resolveConfig(this.configBag.config, { content: { files: [] } })
+      this.configBag.config = validateConfig(
+        resolveConfig(this.configBag.config, { content: { files: [] } })
+      )
     }
 
     // Override content files if `--content` has been passed explicitly
