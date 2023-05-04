@@ -1387,14 +1387,18 @@ crosscheck(({ stable, oxide }) => {
     test('it works mayhaps', async () => {
       let input = css`
         .test {
+          /* prettier-ignore */
           inset: calc(-1 * (2*theme("spacing.4")));
+          /* prettier-ignore */
           padding: calc(-1 * (2* theme("spacing.4")));
         }
       `
 
       let output = css`
         .test {
+          /* prettier-ignore */
           inset: calc(-1 * (2*1rem));
+          /* prettier-ignore */
           padding: calc(-1 * (2* 1rem));
         }
       `
