@@ -7,7 +7,7 @@ crosscheck(({ stable, oxide }) => {
     config
     ${{ purge: [{ raw: 'text-center' }] }}
     ${{ purge: { content: [{ raw: 'text-center' }] } }}
-    ${{ content: { content: [{ raw: 'text-center' }] } }}
+    ${{ content: { files: [], content: [{ raw: 'text-center' }] } }}
   `('should normalize content $config', ({ config }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
@@ -22,7 +22,7 @@ crosscheck(({ stable, oxide }) => {
     config
     ${{ purge: { safelist: ['text-center'] } }}
     ${{ purge: { options: { safelist: ['text-center'] } } }}
-    ${{ content: { safelist: ['text-center'] } }}
+    ${{ content: { files: [], safelist: ['text-center'] } }}
   `('should normalize safelist $config', ({ config }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
@@ -114,12 +114,14 @@ crosscheck(({ stable, oxide }) => {
 
     stable.expect(normalizeConfig(resolveConfig(config)).content).toEqual({
       files: ['./example-folder/**/*.{html,js}'],
+      auto: false,
       relative: false,
       extract: {},
       transform: {},
     })
     oxide.expect(normalizeConfig(resolveConfig(config)).content).toEqual({
       files: ['./example-folder/**/*.{html,js}'],
+      auto: false,
       relative: true,
       extract: {},
       transform: {},
@@ -144,6 +146,7 @@ crosscheck(({ stable, oxide }) => {
         './{example-folder}/**/*.{html}',
         './example-folder/**/*.{html}',
       ],
+      auto: false,
       relative: false,
       extract: {},
       transform: {},
@@ -154,6 +157,7 @@ crosscheck(({ stable, oxide }) => {
         './{example-folder}/**/*.{html}',
         './example-folder/**/*.{html}',
       ],
+      auto: false,
       relative: true,
       extract: {},
       transform: {},

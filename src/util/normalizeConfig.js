@@ -183,7 +183,27 @@ export function normalizeConfig(config) {
 
   // Normalize the `content`
   config.content = {
-    auto: config.content === 'auto',
+    auto: (() => {
+      // Config still has a `purge` option (for backwards compatibility), auto content should not be
+      // used
+      if (config.purge) return false
+
+      // We don't have content at all, auto content should be used
+      if (config.content === undefined) return true
+
+      // We do have content as an object, but we don't have any files defined, auto content should
+      // be used
+      if (
+        typeof config.content === 'object' &&
+        config.content !== null &&
+        !Array.isArray(config.content)
+      ) {
+        return config.content.files === undefined
+      }
+
+      // We do have content defined, auto content should not be used
+      return false
+    })(),
     relative: (() => {
       let { content } = config
 

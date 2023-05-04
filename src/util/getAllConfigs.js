@@ -2,6 +2,11 @@ import defaultFullConfig from '../../stubs/config.full.js'
 import { flagEnabled } from '../featureFlags'
 
 export default function getAllConfigs(config) {
+  // Drop `content` in the oxide engine to promote auto content
+  if (__OXIDE__) {
+    delete defaultFullConfig.content
+  }
+
   const configs = (config?.presets ?? [defaultFullConfig])
     .slice()
     .reverse()
