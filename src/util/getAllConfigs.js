@@ -2,12 +2,14 @@ import defaultFullConfig from '../../stubs/config.full.js'
 import { flagEnabled } from '../featureFlags'
 
 export default function getAllConfigs(config) {
-  // Drop `content` in the oxide engine to promote auto content
-  if (__OXIDE__) {
-    delete defaultFullConfig.content
-  }
-
-  const configs = (config?.presets ?? [defaultFullConfig])
+  const configs = (
+    config?.presets ?? [
+      __OXIDE__
+        ? // Drop `content` in the oxide engine to promote auto content
+          Object.assign({}, defaultFullConfig, { content: 'auto' })
+        : defaultFullConfig,
+    ]
+  )
     .slice()
     .reverse()
     .flatMap((preset) => getAllConfigs(preset instanceof Function ? preset() : preset))

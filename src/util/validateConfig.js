@@ -1,7 +1,7 @@
 import log from './log'
 
 export function validateConfig(config) {
-  if (config.content.auto === false && config.content.files.length === 0) {
+  if (config.content.files !== 'auto' && config.content.files.length === 0) {
     log.warn('content-problems', [
       'The `content` option in your Tailwind CSS configuration is missing or empty.',
       'Configure your content sources or your generated CSS will be missing styles.',

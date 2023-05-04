@@ -17,7 +17,7 @@ import { env } from './sharedState'
  * @returns {ContentPath[]}
  */
 function resolveContentFiles(tailwindConfig, { skip = [] } = {}) {
-  if (tailwindConfig.content.auto && __OXIDE__) {
+  if (tailwindConfig.content.files === 'auto' && __OXIDE__) {
     env.DEBUG && console.time('Calculating resolve content paths')
     tailwindConfig.content.files = require('@tailwindcss/oxide').resolveContentPaths({
       base: process.cwd(),
@@ -193,7 +193,7 @@ function resolvePathSymlinks(contentPath) {
  */
 export function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
   let changedContent =
-    context.tailwindConfig.content.auto && __OXIDE__
+    context.tailwindConfig.content.files === 'auto' && __OXIDE__
       ? []
       : context.tailwindConfig.content.files
           .filter((item) => typeof item.raw === 'string')
