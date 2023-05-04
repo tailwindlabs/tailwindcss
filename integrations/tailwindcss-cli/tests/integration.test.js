@@ -1327,5 +1327,52 @@ describe('watcher', () => {
 
       return runningProcess.stop()
     })
+
+    it('should not include the tailwind.config.js file as a template file', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          // Example class that should not be included: flex italic
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+      await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .font-bold {
+            font-weight: 700;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .flex {
+            display: flex;
+          }
+        `
+      )
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .italic {
+            font-style: italic;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
   })
 })
