@@ -18,10 +18,6 @@ let configPathCache = new LRU({ maxSize: 100 })
 let candidateFilesCache = new WeakMap()
 
 function getCandidateFiles(context, tailwindConfig) {
-  if (tailwindConfig.content.files === 'auto' && __OXIDE__) {
-    return parseCandidateFiles(context, tailwindConfig)
-  }
-
   if (candidateFilesCache.has(context)) {
     return candidateFilesCache.get(context)
   }
