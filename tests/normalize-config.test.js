@@ -114,14 +114,12 @@ crosscheck(({ stable, oxide }) => {
 
     stable.expect(normalizeConfig(resolveConfig(config)).content).toEqual({
       files: ['./example-folder/**/*.{html,js}'],
-      auto: false,
       relative: false,
       extract: {},
       transform: {},
     })
     oxide.expect(normalizeConfig(resolveConfig(config)).content).toEqual({
       files: ['./example-folder/**/*.{html,js}'],
-      auto: false,
       relative: true,
       extract: {},
       transform: {},
@@ -146,7 +144,6 @@ crosscheck(({ stable, oxide }) => {
         './{example-folder}/**/*.{html}',
         './example-folder/**/*.{html}',
       ],
-      auto: false,
       relative: false,
       extract: {},
       transform: {},
@@ -157,7 +154,6 @@ crosscheck(({ stable, oxide }) => {
         './{example-folder}/**/*.{html}',
         './example-folder/**/*.{html}',
       ],
-      auto: false,
       relative: true,
       extract: {},
       transform: {},

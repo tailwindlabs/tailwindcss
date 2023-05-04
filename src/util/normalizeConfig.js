@@ -18,6 +18,10 @@ export function normalizeConfig(config) {
    *   }
    */
   let valid = (() => {
+    if (config.content === 'auto') {
+      return true
+    }
+
     // `config.purge` should not exist anymore
     if (config.purge) {
       return false
@@ -181,29 +185,33 @@ export function normalizeConfig(config) {
     config.prefix = config.prefix ?? ''
   }
 
+  let auto = (() => {
+    // Config still has a `purge` option (for backwards compatibility), auto content should not be
+    // used
+    if (config.purge) return false
+
+    //
+    if (config.content === 'auto') return true
+
+    // We don't have content at all, auto content should be used
+    if (config.content === undefined) return true
+
+    // We do have content as an object, but we don't have any files defined, auto content should
+    // be used
+    if (
+      typeof config.content === 'object' &&
+      config.content !== null &&
+      !Array.isArray(config.content)
+    ) {
+      return config.content.files === undefined
+    }
+
+    // We do have content defined, auto content should not be used
+    return false
+  })()
+
   // Normalize the `content`
   config.content = {
-    auto: (() => {
-      // Config still has a `purge` option (for backwards compatibility), auto content should not be
-      // used
-      if (config.purge) return false
-
-      // We don't have content at all, auto content should be used
-      if (config.content === undefined) return true
-
-      // We do have content as an object, but we don't have any files defined, auto content should
-      // be used
-      if (
-        typeof config.content === 'object' &&
-        config.content !== null &&
-        !Array.isArray(config.content)
-      ) {
-        return config.content.files === undefined
-      }
-
-      // We do have content defined, auto content should not be used
-      return false
-    })(),
     relative: (() => {
       let { content } = config
 
@@ -214,17 +222,19 @@ export function normalizeConfig(config) {
       return flagEnabled(config, 'relativeContentPathsByDefault')
     })(),
 
-    files: (() => {
-      let { content, purge } = config
+    files: auto
+      ? 'auto'
+      : (() => {
+          let { content, purge } = config
 
-      if (Array.isArray(purge)) return purge
-      if (Array.isArray(purge?.content)) return purge.content
-      if (Array.isArray(content)) return content
-      if (Array.isArray(content?.content)) return content.content
-      if (Array.isArray(content?.files)) return content.files
+          if (Array.isArray(purge)) return purge
+          if (Array.isArray(purge?.content)) return purge.content
+          if (Array.isArray(content)) return content
+          if (Array.isArray(content?.content)) return content.content
+          if (Array.isArray(content?.files)) return content.files
 
-      return []
-    })(),
+          return []
+        })(),
 
     extract: (() => {
       let extract = (() => {
@@ -307,14 +317,16 @@ export function normalizeConfig(config) {
 
   // Validate globs to prevent bogus globs.
   // E.g.: `./src/*.{html}` is invalid, the `{html}` should just be `html`
-  for (let file of config.content.files) {
-    if (typeof file === 'string' && /{([^,]*?)}/g.test(file)) {
-      log.warn('invalid-glob-braces', [
-        `The glob pattern ${dim(file)} in your Tailwind CSS configuration is invalid.`,
-        `Update it to ${dim(file.replace(/{([^,]*?)}/g, '$1'))} to silence this warning.`,
-        // TODO: Add https://tw.wtf/invalid-glob-braces
-      ])
-      break
+  if (config.content.files !== 'auto') {
+    for (let file of config.content.files) {
+      if (typeof file === 'string' && /{([^,]*?)}/g.test(file)) {
+        log.warn('invalid-glob-braces', [
+          `The glob pattern ${dim(file)} in your Tailwind CSS configuration is invalid.`,
+          `Update it to ${dim(file.replace(/{([^,]*?)}/g, '$1'))} to silence this warning.`,
+          // TODO: Add https://tw.wtf/invalid-glob-braces
+        ])
+        break
+      }
     }
   }
 
