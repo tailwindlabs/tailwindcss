@@ -13,14 +13,20 @@ import { env } from './sharedState'
 
 /*
  * @param {import('tailwindcss').Config} tailwindConfig
+ * @param {{skip:string[]}} options
  * @returns {ContentPath[]}
  */
-function resolveContentFiles(tailwindConfig) {
+function resolveContentFiles(tailwindConfig, { skip = [] } = {}) {
   if (tailwindConfig.content.auto && __OXIDE__) {
     env.DEBUG && console.time('Calculating resolve content paths')
     tailwindConfig.content.files = require('@tailwindcss/oxide').resolveContentPaths({
       base: process.cwd(),
     })
+    if (skip.length > 0) {
+      tailwindConfig.content.files = tailwindConfig.content.files.filter(
+        (filePath) => !skip.includes(filePath)
+      )
+    }
     console.log(tailwindConfig.content.files)
     env.DEBUG && console.timeEnd('Calculating resolve content paths')
   }
@@ -49,7 +55,9 @@ function resolveContentFiles(tailwindConfig) {
  * @returns {ContentPath[]}
  */
 export function parseCandidateFiles(context, tailwindConfig) {
-  let files = resolveContentFiles(tailwindConfig)
+  let files = resolveContentFiles(tailwindConfig, {
+    skip: [context.userConfigPath],
+  })
 
   // Normalize the file globs
   files = files.filter((filePath) => typeof filePath === 'string')
