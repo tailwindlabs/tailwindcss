@@ -27,7 +27,6 @@ function resolveContentFiles(tailwindConfig, { skip = [] } = {}) {
         (filePath) => !skip.includes(filePath)
       )
     }
-    console.log(tailwindConfig.content.files)
     env.DEBUG && console.timeEnd('Calculating resolve content paths')
   }
 
