@@ -1,7 +1,7 @@
 import dlv from 'dlv'
 import didYouMean from 'didyoumean'
 import transformThemeValue from '../util/transformThemeValue'
-import parseValue from 'postcss-value-parser'
+import parseValue from '../value-parser/index'
 import { normalizeScreens } from '../util/normalizeScreens'
 import buildMediaQuery from '../util/buildMediaQuery'
 import { toPath } from '../util/toPath'
@@ -146,6 +146,9 @@ function resolveVNode(node, vNode, functions) {
 }
 
 function resolveFunctions(node, input, functions) {
+  let hasAnyFn = Object.keys(functions).some((fn) => input.includes(`${fn}(`))
+  if (!hasAnyFn) return input
+
   return parseValue(input)
     .walk((vNode) => {
       resolveVNode(node, vNode, functions)

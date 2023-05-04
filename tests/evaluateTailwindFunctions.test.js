@@ -1383,5 +1383,36 @@ crosscheck(({ stable, oxide }) => {
       // 4. But we've not received any further logs about it
       expect().toHaveBeenWarnedWith(['invalid-theme-key-in-class'])
     })
+
+    test('it works mayhaps', async () => {
+      let input = css`
+        .test {
+          /* prettier-ignore */
+          inset: calc(-1 * (2*theme("spacing.4")));
+          /* prettier-ignore */
+          padding: calc(-1 * (2* theme("spacing.4")));
+        }
+      `
+
+      let output = css`
+        .test {
+          /* prettier-ignore */
+          inset: calc(-1 * (2*1rem));
+          /* prettier-ignore */
+          padding: calc(-1 * (2* 1rem));
+        }
+      `
+
+      return run(input, {
+        theme: {
+          spacing: {
+            4: '1rem',
+          },
+        },
+      }).then((result) => {
+        expect(result.css).toMatchCss(output)
+        expect(result.warnings().length).toBe(0)
+      })
+    })
   })
 })

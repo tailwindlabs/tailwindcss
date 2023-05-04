@@ -49,10 +49,22 @@ export function normalize(value, isRoot = true) {
     value = value.trim()
   }
 
-  // Add spaces around operators inside math functions like calc() that do not follow an operator
-  // or '('.
-  value = value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
+  value = normalizeMathOperatorSpacing(value)
+
+  return value
+}
+
+/**
+ * Add spaces around operators inside math functions
+ * like calc() that do not follow an operator or '('.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+function normalizeMathOperatorSpacing(value) {
+  return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
     let vars = []
+
     return match
       .replace(/var\((--.+?)[,)]/g, (match, g1) => {
         vars.push(g1)
@@ -61,8 +73,6 @@ export function normalize(value, isRoot = true) {
       .replace(/(-?\d*\.?\d(?!\b-\d.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g, '$1 $2 ')
       .replace(placeholderRe, () => vars.shift())
   })
-
-  return value
 }
 
 export function url(value) {
