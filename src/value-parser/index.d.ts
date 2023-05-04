@@ -3,74 +3,74 @@ declare namespace postcssValueParser {
     /**
      * The offset, inclusive, inside the CSS value at which the node starts.
      */
-    sourceIndex: number;
+    sourceIndex: number
 
     /**
      * The offset, exclusive, inside the CSS value at which the node ends.
      */
-    sourceEndIndex: number;
+    sourceEndIndex: number
 
     /**
      * The node's characteristic value
      */
-    value: string;
+    value: string
   }
 
   interface ClosableNode {
     /**
      * Whether the parsed CSS value ended before the node was properly closed
      */
-    unclosed?: true;
+    unclosed?: true
   }
 
   interface AdjacentAwareNode {
     /**
      * The token at the start of the node
      */
-    before: string;
+    before: string
 
     /**
      * The token at the end of the node
      */
-    after: string;
+    after: string
   }
 
   interface CommentNode extends BaseNode, ClosableNode {
-    type: "comment";
+    type: 'comment'
   }
 
   interface DivNode extends BaseNode, AdjacentAwareNode {
-    type: "div";
+    type: 'div'
   }
 
   interface FunctionNode extends BaseNode, ClosableNode, AdjacentAwareNode {
-    type: "function";
+    type: 'function'
 
     /**
      * Nodes inside the function
      */
-    nodes: Node[];
+    nodes: Node[]
   }
 
   interface SpaceNode extends BaseNode {
-    type: "space";
+    type: 'space'
   }
 
   interface StringNode extends BaseNode, ClosableNode {
-    type: "string";
+    type: 'string'
 
     /**
      * The quote type delimiting the string
      */
-    quote: '"' | "'";
+    quote: '"' | "'"
   }
 
   interface UnicodeRangeNode extends BaseNode {
-    type: "unicode-range";
+    type: 'unicode-range'
   }
 
   interface WordNode extends BaseNode {
-    type: "word";
+    type: 'word'
   }
 
   /**
@@ -83,14 +83,14 @@ declare namespace postcssValueParser {
     | SpaceNode
     | StringNode
     | UnicodeRangeNode
-    | WordNode;
+    | WordNode
 
   interface CustomStringifierCallback {
     /**
      * @param node The node to stringify
      * @returns The serialized CSS representation of the node
      */
-    (nodes: Node): string | undefined;
+    (nodes: Node): string | undefined
   }
 
   interface WalkCallback {
@@ -100,15 +100,15 @@ declare namespace postcssValueParser {
      * @param nodes The series of parsed nodes
      * @returns Returning `false` will prevent traversal of descendant nodes (only applies if `bubble` was set to `true` in the `walk()` call)
      */
-    (node: Node, index: number, nodes: Node[]): void | boolean;
+    (node: Node, index: number, nodes: Node[]): void | boolean
   }
 
   /**
    * A CSS dimension, decomposed into its numeric and unit parts
    */
   interface Dimension {
-    number: string;
-    unit: string;
+    number: string
+    unit: string
   }
 
   /**
@@ -118,7 +118,7 @@ declare namespace postcssValueParser {
     /**
      * The series of parsed nodes
      */
-    nodes: Node[];
+    nodes: Node[]
 
     /**
      * Walk all parsed nodes, applying a callback
@@ -126,7 +126,7 @@ declare namespace postcssValueParser {
      * @param callback A visitor callback that will be executed for each node
      * @param bubble   When set to `true`, walking will be done inside-out instead of outside-in
      */
-    walk(callback: WalkCallback, bubble?: boolean): this;
+    walk(callback: WalkCallback, bubble?: boolean): this
   }
 
   interface ValueParser {
@@ -136,7 +136,7 @@ declare namespace postcssValueParser {
      * @param value The dimension to decompose
      * @returns An object representing `number` and `unit` part of the dimension or `false` if the decomposing fails
      */
-    unit(value: string): Dimension | false;
+    unit(value: string): Dimension | false
 
     /**
      * Serialize a series of nodes into a CSS value
@@ -145,7 +145,7 @@ declare namespace postcssValueParser {
      * @param custom A custom stringifier callback
      * @returns The generated CSS value
      */
-    stringify(nodes: Node | Node[], custom?: CustomStringifierCallback): string;
+    stringify(nodes: Node | Node[], custom?: CustomStringifierCallback): string
 
     /**
      * Walk a series of nodes, applying a callback
@@ -154,24 +154,24 @@ declare namespace postcssValueParser {
      * @param callback A visitor callback that will be executed for each node
      * @param bubble   When set to `true`, walking will be done inside-out instead of outside-in
      */
-    walk(nodes: Node[], callback: WalkCallback, bubble?: boolean): void;
+    walk(nodes: Node[], callback: WalkCallback, bubble?: boolean): void
 
     /**
      * Parse a CSS value into a series of nodes to operate on
      *
      * @param value The value to parse
      */
-    new (value: string): ParsedValue;
+    new (value: string): ParsedValue
 
     /**
      * Parse a CSS value into a series of nodes to operate on
      *
      * @param value The value to parse
      */
-    (value: string): ParsedValue;
+    (value: string): ParsedValue
   }
 }
 
-declare const postcssValueParser: postcssValueParser.ValueParser;
+declare const postcssValueParser: postcssValueParser.ValueParser
 
-export = postcssValueParser;
+export = postcssValueParser
