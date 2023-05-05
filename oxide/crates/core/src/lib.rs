@@ -59,7 +59,7 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
             .trim()
             .lines()
             .filter(|x| !x.starts_with('#'))
-            .filter(|x| *x != ""),
+            .filter(|x| !x.is_empty()),
     );
 
     // A list of direct folders, from the root, where we can use globs to watch all files.
