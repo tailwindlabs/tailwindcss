@@ -42,20 +42,21 @@ pub struct ContentPathInfo {
 pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
     let root = Path::new(&args.base);
 
-    let allowed_paths = WalkBuilder::new(&root)
-        .hidden(false)
-        .filter_entry(|entry| match entry.file_type() {
-            Some(file_type) if file_type.is_dir() => entry
-                .file_name()
-                .to_str()
-                .map(|s| s != ".git")
-                .unwrap_or(false),
-            _ => true,
-        })
-        .build()
-        .filter_map(Result::ok)
-        .map(|x| x.into_path())
-        .collect::<Vec<_>>();
+    let allowed_paths = FxHashSet::from_iter(
+        WalkBuilder::new(&root)
+            .hidden(false)
+            .filter_entry(|entry| match entry.file_type() {
+                Some(file_type) if file_type.is_dir() => entry
+                    .file_name()
+                    .to_str()
+                    .map(|s| s != ".git")
+                    .unwrap_or(false),
+                _ => true,
+            })
+            .build()
+            .filter_map(Result::ok)
+            .map(|x| x.into_path()),
+    );
 
     // A list of directory names where we can't use globs, but we should track each file
     // individually instead. This is because these directories are often used for both source and
