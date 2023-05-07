@@ -227,6 +227,7 @@ export function normalizeConfig(config) {
       : (() => {
           let { content, purge } = config
 
+          if (content === undefined && purge === undefined) return []
           if (Array.isArray(purge)) return purge
           if (Array.isArray(purge?.content)) return purge.content
           if (Array.isArray(content)) return content
