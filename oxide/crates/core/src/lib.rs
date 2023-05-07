@@ -2,9 +2,11 @@ use crate::parser::Extractor;
 use fxhash::FxHashSet;
 use ignore::WalkBuilder;
 use rayon::prelude::*;
+use std::cmp::Ordering;
 use std::path::Path;
 use std::path::PathBuf;
 use tracing::event;
+use walkdir::WalkDir;
 
 pub mod candidate;
 pub mod glob;
@@ -37,118 +39,188 @@ pub struct ContentPathInfo {
     pub base: String,
 }
 
-// Goals:
-//
-// 1. Recursively watch all top-level folders but not the root folders.
-// 2. Watch files in root directly.
-// 3. Watch files in the `public` folder directly (and don't watch the `public` folder itself).
-// 4. Always watch a common set of known file extensions
-//    (js,jsx,ts,tsx,html,php,vue,svelte,astro,md,mdx,...).
-// 5. Merge known list of file extensions with discovered file extensions in the project (marko).
-
 pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
     let root = Path::new(&args.base);
 
-    // A list of direct folder names where we can't use globs, but we should track each file individually instead.
-    // This is because these folders are often used for "src" and also "dist" like files.
-    let static_direct_folder_indentifiers = vec!["public"];
+    // A list of directory names where we can't use globs, but we should track each file
+    // individually instead. This is because these directories are often used for both source and
+    // destination files.
+    let forced_static_directories = vec!["public"];
 
     // A list of known extensions + a list of extensions we found in the project.
     let mut found_extensions = FxHashSet::from_iter(
         include_str!("fixtures/template-extensions.txt")
             .trim()
             .lines()
-            .filter(|x| !x.starts_with('#'))
-            .filter(|x| !x.is_empty()),
+            .filter(|x| !x.starts_with('#')) // Drop commented lines
+            .filter(|x| !x.is_empty()) // Drop empty lines
+            .map(|x| x.to_string()),
     );
-
-    // A list of direct folders, from the root, where we can use globs to watch all files.
-    let mut direct_folders = FxHashSet::default();
 
     // A list of static files that we should track directly.
     let mut static_files = vec![];
 
+    // All root directories.
+    let mut root_directories = FxHashSet::from_iter(vec![root.to_path_buf()]);
+
+    // All directories where we can safely use deeply nested globs to watch all files.
+    // In other comments we refer to these as "deep glob directories" or similar.
+    //
+    // E.g.: **/*.{html,js}
+    let mut deep_globable_directories: FxHashSet<PathBuf> = FxHashSet::default();
+
+    // All directories where we can only use shallow globs to watch all direct files but not
+    // folders.
+    // In other comments we refer to these as "shallow glob directories" or similar.
+    //
+    // E.g.: (*/*.{html,js})
+    let mut shallow_globable_directories: FxHashSet<PathBuf> = FxHashSet::default();
+
     // Collect all valid paths from the root. This will already filter out ignored files, unknown
     // extensions and binary files.
-    let paths: Vec<_> = WalkBuilder::new(&root)
-        .hidden(false)
-        .filter_entry(move |entry| {
-            // Skip known ignored folders
-            if entry.file_type().unwrap().is_dir() {
-                return entry
-                    .file_name()
-                    .to_str()
-                    .map(|s| s != ".git")
-                    .unwrap_or(false);
-            }
+    let mut it = WalkDir::new(&root)
+        // Sorting to make sure that we always see the directories before the files. Also sorting
+        // alphabetically by default.
+        .sort_by(
+            |a, z| match (a.file_type().is_dir(), z.file_type().is_dir()) {
+                (true, false) => Ordering::Less,
+                (false, true) => Ordering::Greater,
+                _ => a.file_name().cmp(z.file_name()),
+            },
+        )
+        .into_iter();
 
-            is_allowed_content_path(entry.path())
-        })
-        .build()
-        .filter_map(Result::ok)
-        .collect();
+    loop {
+        // We are only interested in valid entries
+        let entry = match it.next() {
+            Some(Ok(entry)) => entry,
+            _ => break,
+        };
 
-    for path in &paths {
-        let path = path.path();
-
-        // If the `path` is a directory, and a direct child of the root and most importantly not a
-        // special cased direct folder (like `public`), then we can track the current folder and
-        // setup globs later.
-        if path.is_dir()
-            && path.parent().map(|parent| parent == root).unwrap_or(false)
-            && !static_direct_folder_indentifiers
-                .iter()
-                .any(|p| root.join(p) == path)
-        {
-            direct_folders.insert(path);
+        // Ignore known directories that we don't want to traverse into.
+        if entry.file_type().is_dir() && entry.file_name() == ".git" {
+            it.skip_current_dir();
+            continue;
         }
 
-        if let Some(parent) = path.parent() {
-            // Collect the extension for future use when building globs.
-            if let Some(extension) = path.extension() {
-                found_extensions.insert(extension.to_str().unwrap_or_default());
+        if entry.file_type().is_dir() {
+            // If we are in a directory where we know that we can't use any globs, then we have to
+            // track each file individually.
+            if forced_static_directories
+                .iter()
+                .any(|p| root.join(p) == entry.path())
+            {
+                root_directories.insert(entry.path().to_path_buf());
+                continue;
             }
 
-            if path.is_file() {
-                // If the parent of the current file is the root folder, then we have to track the
-                // current file directly.
-                if parent == root {
-                    static_files.push(format!("{}", path.display()));
-                    continue;
+            // If we are in a directory, and the directory is git ignored, then we don't have to
+            // descent into the directory. However, we have to make sure that we mark the _parent_
+            // directory as a shallow glob directory because using deep globs from any of the
+            // parent directories will include this ignored directory which should not be the case.
+            //
+            // Another important part is that if one of the ignored directories is a deep glob
+            // directory, then all of its parents (until the root) should be marked as shallow glob
+            // directories as well.
+            if is_git_ignored_content_path(root, entry.path()) {
+                let mut parent = entry.path().parent();
+                while let Some(parent_path) = parent {
+                    // If the parent is already marked as a valid deep glob directory, then we have
+                    // to mark it as a shallow glob directory instead, because we won't be able to
+                    // use deep globs for this directory anymore.
+                    if deep_globable_directories.contains(parent_path) {
+                        deep_globable_directories.remove(parent_path);
+                        shallow_globable_directories.insert(parent_path.to_path_buf());
+                    }
+
+                    // If we reached the root, then we can stop.
+                    if parent_path == root {
+                        break;
+                    }
+
+                    // Mark the parent directory as a shallow glob directory and continue with its
+                    // parent.
+                    shallow_globable_directories.insert(parent_path.to_path_buf());
+                    parent = parent_path.parent();
                 }
 
-                // If the current file is located in one of the direct folders seen from the root,
-                // then we have to track the current file directly.
-                if static_direct_folder_indentifiers
-                    .iter()
-                    .any(|p| parent.starts_with(root.join(p)))
-                {
+                it.skip_current_dir();
+                continue;
+            }
+            // If we are in a directory that is not git ignored, then we can mark this directory as
+            // a valid deep glob directory. This is only necessary if any of its parents aren't
+            // marked as deep glob directories already.
+            else {
+                let mut found_deep_glob_parent = false;
+                let mut parent = entry.path().parent();
+                while let Some(parent_path) = parent {
+                    // If we reached the root, then we can stop.
+                    if parent_path == root {
+                        break;
+                    }
+
+                    // If the parent is already marked as a deep glob directory, then we can stop
+                    // because this glob will match the current directory already.
+                    if deep_globable_directories.contains(parent_path) {
+                        found_deep_glob_parent = true;
+                        break;
+                    }
+
+                    parent = parent_path.parent();
+                }
+
+                // If we didn't find a deep glob directory parent, then we can mark this directory
+                // as a deep glob directory (unless it is the root).
+                if !found_deep_glob_parent && entry.path() != root {
+                    deep_globable_directories.insert(entry.path().to_path_buf());
+                }
+            }
+        }
+
+        // Handle allowed content paths
+        if is_allowed_content_path(entry.path()) {
+            let path = entry.path();
+
+            // Collect the extension for future use when building globs.
+            if let Some(extension) = path.extension().and_then(|x| x.to_str()) {
+                found_extensions.insert(extension.to_string());
+            }
+
+            // If the current path is a file inside any of the root directories, then we have to
+            // track it directly as a static file.
+            if let Some(parent_path) = path.parent() {
+                if root_directories.contains(parent_path) {
                     static_files.push(format!("{}", path.display()));
                 }
             }
         }
     }
 
-    let globs = direct_folders
+    // Build the globs for all globable directories.
+    let shallow_globs = shallow_globable_directories
         .iter()
-        .flat_map(|path| {
-            match found_extensions.len() {
-                0 => None, // This should never happen
-                1 => Some(format!(
-                    "{}/**/*.{}",
-                    path.display(),
-                    found_extensions.iter().next().unwrap()
-                )),
-                _ => Some(format!(
-                    "{}/**/*.{{{}}}",
-                    path.display(),
-                    found_extensions
-                        .iter()
-                        .map(|x| x.to_string())
-                        .collect::<Vec<_>>()
-                        .join(",")
-                )),
-            }
+        .map(|path| format!("{}", path.display()));
+    let deep_globs = deep_globable_directories
+        .iter()
+        .map(|path| format!("{}/**", path.display()));
+    let globs = shallow_globs
+        .chain(deep_globs)
+        .flat_map(|path| match found_extensions.len() {
+            0 => None, // This should never happen
+            1 => Some(format!(
+                "{}/*.{}",
+                path,
+                found_extensions.iter().next().unwrap()
+            )),
+            _ => Some(format!(
+                "{}/*.{{{}}}",
+                path,
+                found_extensions
+                    .iter()
+                    .map(|x| x.to_string())
+                    .collect::<Vec<_>>()
+                    .join(","),
+            )),
         })
         .collect::<Vec<_>>();
 
@@ -159,6 +231,14 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
 pub fn is_git_ignored_content_path(base: &Path, path: &Path) -> bool {
     !WalkBuilder::new(base)
         .hidden(false)
+        .filter_entry(|entry| match entry.file_type() {
+            Some(file_type) if file_type.is_dir() => entry
+                .file_name()
+                .to_str()
+                .map(|s| s != ".git")
+                .unwrap_or(false),
+            _ => true,
+        })
         .build()
         .filter_map(Result::ok)
         .any(|e| e.path() == path)
