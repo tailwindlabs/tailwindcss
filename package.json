@@ -54,7 +54,7 @@
     "@swc/register": "^0.1.10",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.0.1",
-    "cssnano": "^6.0.0",
+    "cssnano": "^6.0.1",
     "esbuild": "^0.17.18",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
