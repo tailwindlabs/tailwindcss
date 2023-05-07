@@ -66,14 +66,14 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
     // All directories where we can safely use deeply nested globs to watch all files.
     // In other comments we refer to these as "deep glob directories" or similar.
     //
-    // E.g.: **/*.{html,js}
+    // E.g.: ./src/**/*.{html,js}
     let mut deep_globable_directories: FxHashSet<PathBuf> = FxHashSet::default();
 
     // All directories where we can only use shallow globs to watch all direct files but not
     // folders.
     // In other comments we refer to these as "shallow glob directories" or similar.
     //
-    // E.g.: (*/*.{html,js})
+    // E.g.: ./src/*/*.{html,js}
     let mut shallow_globable_directories: FxHashSet<PathBuf> = FxHashSet::default();
 
     // Collect all valid paths from the root. This will already filter out ignored files, unknown
