@@ -85,6 +85,35 @@ mod auto_content {
     }
 
     #[test]
+    fn it_should_list_nested_folders_explicitly_in_the_public_folder() {
+        let globs = test(&[
+            ("index.html", None),
+            ("public/a.html", None),
+            ("public/b.html", None),
+            ("public/c.html", None),
+            ("public/nested/a.html", None),
+            ("public/nested/b.html", None),
+            ("public/nested/c.html", None),
+            ("public/nested/again/a.html", None),
+            ("public/very/deeply/nested/a.html", None),
+        ]);
+        assert_eq!(
+            globs,
+            vec![
+                "index.html",
+                "public/a.html",
+                "public/b.html",
+                "public/c.html",
+                "public/nested/a.html",
+                "public/nested/again/a.html",
+                "public/nested/b.html",
+                "public/nested/c.html",
+                "public/very/deeply/nested/a.html",
+            ]
+        );
+    }
+
+    #[test]
     fn it_should_list_all_files_in_the_public_folder_explicitly_except_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("public/b.html\na.html")),

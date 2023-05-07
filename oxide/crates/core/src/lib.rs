@@ -61,7 +61,7 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
     // A list of directory names where we can't use globs, but we should track each file
     // individually instead. This is because these directories are often used for both source and
     // destination files.
-    let forced_static_directories = vec!["public"];
+    let mut forced_static_directories = vec![root.join("public")];
 
     // A list of known extensions + a list of extensions we found in the project.
     let mut found_extensions = FxHashSet::from_iter(
@@ -122,10 +122,16 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
         if entry.file_type().is_dir() {
             // If we are in a directory where we know that we can't use any globs, then we have to
             // track each file individually.
-            if forced_static_directories
-                .iter()
-                .any(|p| root.join(p) == entry.path())
-            {
+            if forced_static_directories.contains(&entry.path().to_path_buf()) {
+                forced_static_directories.push(entry.path().to_path_buf());
+                root_directories.insert(entry.path().to_path_buf());
+                continue;
+            }
+
+            // If we are in a directory where the parent is a forced static directory, then this
+            // will become a forced static directory as well.
+            if forced_static_directories.contains(&entry.path().parent().unwrap().to_path_buf()) {
+                forced_static_directories.push(entry.path().to_path_buf());
                 root_directories.insert(entry.path().to_path_buf());
                 continue;
             }
