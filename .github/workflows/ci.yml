@@ -65,11 +65,19 @@ jobs:
       - name: Build Tailwind CSS
         run: npx turbo run build --filter=//
 
-      - name: Test
+      - name: Test (Node.js)
         run: |
           npx turbo run test --filter=// || \
           npx turbo run test --filter=// || \
           npx turbo run test --filter=// || exit 1
+
+      - name: Test (Rust)
+        run: |
+          cd ./oxide
+          cargo test || \
+          cargo test || \
+          cargo test || exit 1
+          cd -
 
       - name: Lint
         run: npx turbo run style --filter=//
