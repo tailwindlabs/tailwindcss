@@ -42,6 +42,21 @@ pub struct ContentPathInfo {
 pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
     let root = Path::new(&args.base);
 
+    let allowed_paths = WalkBuilder::new(&root)
+        .hidden(false)
+        .filter_entry(|entry| match entry.file_type() {
+            Some(file_type) if file_type.is_dir() => entry
+                .file_name()
+                .to_str()
+                .map(|s| s != ".git")
+                .unwrap_or(false),
+            _ => true,
+        })
+        .build()
+        .filter_map(Result::ok)
+        .map(|x| x.into_path())
+        .collect::<Vec<_>>();
+
     // A list of directory names where we can't use globs, but we should track each file
     // individually instead. This is because these directories are often used for both source and
     // destination files.
@@ -122,7 +137,7 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
             // Another important part is that if one of the ignored directories is a deep glob
             // directory, then all of its parents (until the root) should be marked as shallow glob
             // directories as well.
-            if is_git_ignored_content_path(root, entry.path()) {
+            if !allowed_paths.contains(&entry.path().to_path_buf()) {
                 let mut parent = entry.path().parent();
                 while let Some(parent_path) = parent {
                     // If the parent is already marked as a valid deep glob directory, then we have
@@ -178,7 +193,8 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
         }
 
         // Handle allowed content paths
-        if is_allowed_content_path(entry.path()) && !is_git_ignored_content_path(root, entry.path())
+        if is_allowed_content_path(entry.path())
+            && allowed_paths.contains(&entry.path().to_path_buf())
         {
             let path = entry.path();
 
