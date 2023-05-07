@@ -178,7 +178,8 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
         }
 
         // Handle allowed content paths
-        if is_allowed_content_path(entry.path()) {
+        if is_allowed_content_path(entry.path()) && !is_git_ignored_content_path(root, entry.path())
+        {
             let path = entry.path();
 
             // Collect the extension for future use when building globs.

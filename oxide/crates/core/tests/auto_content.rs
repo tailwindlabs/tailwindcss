@@ -54,6 +54,18 @@ mod auto_content {
     }
 
     #[test]
+    fn it_should_work_with_a_set_of_root_files_and_ignore_ignored_files() {
+        let globs = test(&[
+            (".gitignore", Some("b.html")),
+            ("index.html", None),
+            ("a.html", None),
+            ("b.html", None),
+            ("c.html", None),
+        ]);
+        assert_eq!(globs, vec!["a.html", "c.html", "index.html"]);
+    }
+
+    #[test]
     fn it_should_list_all_files_in_the_public_folder_explicitly() {
         let globs = test(&[
             ("index.html", None),
@@ -70,6 +82,18 @@ mod auto_content {
                 "public/c.html",
             ]
         );
+    }
+
+    #[test]
+    fn it_should_list_all_files_in_the_public_folder_explicitly_except_ignored_files() {
+        let globs = test(&[
+            (".gitignore", Some("public/b.html\na.html")),
+            ("index.html", None),
+            ("public/a.html", None),
+            ("public/b.html", None),
+            ("public/c.html", None),
+        ]);
+        assert_eq!(globs, vec!["index.html", "public/c.html",]);
     }
 
     #[test]
