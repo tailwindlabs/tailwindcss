@@ -188,11 +188,12 @@ export function image(value) {
 }
 
 let gradientTypes = new Set([
+  'conic-gradient',
   'linear-gradient',
   'radial-gradient',
+  'repeating-conic-gradient',
   'repeating-linear-gradient',
   'repeating-radial-gradient',
-  'conic-gradient',
 ])
 export function gradient(value) {
   value = normalize(value)
