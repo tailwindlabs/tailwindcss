@@ -637,4 +637,19 @@ crosscheck(({ stable, oxide }) => {
       `)
     })
   })
+
+  it('should support underscores in arbitrary modifiers', () => {
+    let config = {
+      content: [{ raw: html`<div class="text-lg/[calc(50px_*_2)]"></div>` }],
+    }
+
+    return run('@tailwind utilities', config).then((result) => {
+      return expect(result.css).toMatchFormattedCss(css`
+        .text-lg\/\[calc\(50px_\*_2\)\] {
+          font-size: 1.125rem;
+          line-height: calc(50px * 2);
+        }
+      `)
+    })
+  })
 })
