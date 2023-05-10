@@ -1568,19 +1568,7 @@ export let corePlugins = {
   borderColor: ({ matchUtilities, theme, corePlugins }) => {
     matchUtilities(
       {
-        border: (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-color',
-            variable: '--tw-border-opacity',
-          })
-        },
+        border: (value) => createBorderPlugin('border-color', value),
       },
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
@@ -1590,34 +1578,10 @@ export let corePlugins = {
 
     matchUtilities(
       {
-        'border-x': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-left-color': toColorValue(value),
-              'border-right-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: ['border-left-color', 'border-right-color'],
-            variable: '--tw-border-opacity',
-          })
-        },
-        'border-y': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-top-color': toColorValue(value),
-              'border-bottom-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: ['border-top-color', 'border-bottom-color'],
-            variable: '--tw-border-opacity',
-          })
-        },
+        'border-x': (value) =>
+          createBorderPlugin(['border-left-color', 'border-right-color'], value),
+        'border-y': (value) =>
+          createBorderPlugin(['border-top-color', 'border-bottom-color'], value),
       },
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
@@ -1627,90 +1591,34 @@ export let corePlugins = {
 
     matchUtilities(
       {
-        'border-s': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-inline-start-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-inline-start-color',
-            variable: '--tw-border-opacity',
-          })
-        },
-        'border-e': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-inline-end-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-inline-end-color',
-            variable: '--tw-border-opacity',
-          })
-        },
-        'border-t': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-top-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-top-color',
-            variable: '--tw-border-opacity',
-          })
-        },
-        'border-r': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-right-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-right-color',
-            variable: '--tw-border-opacity',
-          })
-        },
-        'border-b': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-bottom-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-bottom-color',
-            variable: '--tw-border-opacity',
-          })
-        },
-        'border-l': (value) => {
-          if (!corePlugins('borderOpacity')) {
-            return {
-              'border-left-color': toColorValue(value),
-            }
-          }
-
-          return withAlphaVariable({
-            color: value,
-            property: 'border-left-color',
-            variable: '--tw-border-opacity',
-          })
-        },
+        'border-s': (value) => createBorderPlugin('border-inline-start-color', value),
+        'border-e': (value) => createBorderPlugin('border-inline-end-color', value),
+        'border-t': (value) => createBorderPlugin('border-top-color', value),
+        'border-r': (value) => createBorderPlugin('border-right-color', value),
+        'border-b': (value) => createBorderPlugin('border-bottom-color', value),
+        'border-l': (value) => createBorderPlugin('border-left-color', value),
       },
       {
         values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
         type: ['color', 'any'],
       }
     )
+
+    function createBorderPlugin(property, value) {
+      if (!corePlugins('borderOpacity')) {
+        if (typeof property === 'string') property = [property]
+        return property.reduce((result, cur) => {
+          result[cur] = toColorValue(value)
+          return result
+        }, {})
+      }
+
+      return withAlphaVariable({
+        color: value,
+        property,
+        variable: '--tw-border-opacity',
+      })
+    }
   },
 
   borderOpacity: createUtilityPlugin('borderOpacity', [
