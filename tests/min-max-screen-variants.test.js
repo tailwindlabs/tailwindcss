@@ -261,6 +261,108 @@ crosscheck(() => {
     })
   })
 
+  it('supports min-* and max-* variants with or without arbitrary dimension prefixes', () => {
+    let config = {
+      content: [
+        {
+          raw: html`
+            <div
+              class="font-bold min-[100px]:font-bold max-[100px]:font-bold min-[w:100px]:font-bold max-[w:100px]:font-bold min-[h:100px]:font-bold max-[h:100px]:font-bold"
+            ></div>
+          `,
+        },
+      ],
+      corePlugins: { preflight: false },
+      theme: {
+        screens: defaultScreens,
+      },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        .font-bold {
+          font-weight: 700;
+        }
+        @media (max-width: 100px) {
+          .max-\[100px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (max-height: 100px) {
+          .max-\[h\:100px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (max-width: 100px) {
+          .max-\[w\:100px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-width: 100px) {
+          .min-\[100px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-height: 100px) {
+          .min-\[h\:100px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-width: 100px) {
+          .min-\[w\:100px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+      `)
+    })
+  })
+
+  it('supports min-* and max-* variants being used together with or without arbitrary dimension prefixes', () => {
+    let config = {
+      content: [
+        {
+          raw: html`
+            <div
+              class="min-[100px]:min-[w:100px]:min-[h:100px]:max-[100px]:max-[w:100px]:max-[h:100px]:font-bold"
+            ></div>
+          `,
+        },
+      ],
+      corePlugins: { preflight: false },
+      theme: {
+        screens: defaultScreens,
+      },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        @media (min-width: 100px) {
+          @media (min-width: 100px) {
+            @media (min-height: 100px) {
+              @media (max-width: 100px) {
+                @media (max-width: 100px) {
+                  @media (max-height: 100px) {
+                    .min-\[100px\]\:min-\[w\:100px\]\:min-\[h\:100px\]\:max-\[100px\]\:max-\[w\:100px\]\:max-\[h\:100px\]\:font-bold {
+                      font-weight: 700;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `)
+    })
+  })
+
   it('warns when using min variants with complex screen configs', async () => {
     let config = {
       content: [
