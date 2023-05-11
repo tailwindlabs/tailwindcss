@@ -1,3 +1,23 @@
+/**
+ * @param {string} value
+ * @returns {[string, string]}
+ */
+export function splitVariantPrefix(value) {
+  if (typeof value !== 'string') return ['', value]
+  let parts = value.split(':')
+  return ['', ...parts].slice(-2)
+}
+
+/**
+ * @param {string} value
+ * @returns {[string, string]}
+ */
+function splitDimensionPrefix(value) {
+  const [prefix, extractedValue] = splitVariantPrefix(value)
+  const dimension = prefix === 'h' ? 'height' : 'width'
+  return [dimension, extractedValue]
+}
+
 export default function buildMediaQuery(screens) {
   screens = Array.isArray(screens) ? screens : [screens]
 
@@ -8,9 +28,12 @@ export default function buildMediaQuery(screens) {
           return screen.raw
         }
 
+        let [minDimension, minValue] = splitDimensionPrefix(screen.min)
+        let [maxDimension, maxValue] = splitDimensionPrefix(screen.max)
+
         return [
-          screen.min && `(min-width: ${screen.min})`,
-          screen.max && `(max-width: ${screen.max})`,
+          minValue && `(min-${minDimension}: ${minValue})`,
+          maxValue && `(max-${maxDimension}: ${maxValue})`,
         ]
           .filter(Boolean)
           .join(' and ')
