@@ -352,7 +352,7 @@ impl<'a> Extractor<'a> {
         self.in_candidate
             && !self.in_arbitrary
             && (0..=127).contains(&c)
-            && (self.idx_start == 0 || self.input[(self.idx_start - 1)] <= 127)
+            && (self.idx_start == 0 || self.input[self.idx_start - 1] <= 127)
     }
 
     #[inline(always)]
@@ -470,7 +470,7 @@ impl<'a> Iterator for Extractor<'a> {
 mod test {
     use super::*;
 
-    fn please_trace() {
+    fn _please_trace() {
         tracing_subscriber::fmt()
             .with_max_level(tracing::Level::TRACE)
             .with_span_events(tracing_subscriber::fmt::format::FmtSpan::ACTIVE)

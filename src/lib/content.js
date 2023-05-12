@@ -11,6 +11,28 @@ import { env } from './sharedState'
 /** @typedef {import('../../types/config.js').RawFile} RawFile */
 /** @typedef {import('../../types/config.js').FilePath} FilePath */
 
+/*
+ * @param {import('tailwindcss').Config} tailwindConfig
+ * @param {{skip:string[]}} options
+ * @returns {ContentPath[]}
+ */
+function resolveContentFiles(tailwindConfig, { skip = [] } = {}) {
+  if (tailwindConfig.content.files === 'auto' && __OXIDE__) {
+    env.DEBUG && console.time('Calculating resolve content paths')
+    tailwindConfig.content.files = require('@tailwindcss/oxide').resolveContentPaths({
+      base: process.cwd(),
+    })
+    if (skip.length > 0) {
+      tailwindConfig.content.files = tailwindConfig.content.files.filter(
+        (filePath) => !skip.includes(filePath)
+      )
+    }
+    env.DEBUG && console.timeEnd('Calculating resolve content paths')
+  }
+
+  return tailwindConfig.content.files
+}
+
 /**
  * @typedef {object} ContentPath
  * @property {string} original
@@ -32,7 +54,9 @@ import { env } from './sharedState'
  * @returns {ContentPath[]}
  */
 export function parseCandidateFiles(context, tailwindConfig) {
-  let files = tailwindConfig.content.files
+  let files = resolveContentFiles(tailwindConfig, {
+    skip: [context.userConfigPath],
+  })
 
   // Normalize the file globs
   files = files.filter((filePath) => typeof filePath === 'string')
@@ -167,9 +191,12 @@ function resolvePathSymlinks(contentPath) {
  * @returns {[{ content: string, extension: string }[], Map<string, number>]}
  */
 export function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
-  let changedContent = context.tailwindConfig.content.files
-    .filter((item) => typeof item.raw === 'string')
-    .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
+  let changedContent =
+    context.tailwindConfig.content.files === 'auto' && __OXIDE__
+      ? []
+      : context.tailwindConfig.content.files
+          .filter((item) => typeof item.raw === 'string')
+          .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
   let [changedFiles, mTimesToCommit] = resolveChangedFiles(candidateFiles, fileModifiedMap)
 

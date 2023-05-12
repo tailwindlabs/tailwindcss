@@ -122,6 +122,17 @@ module.exports = function ({
     },
     async writeInputFile(file, contents) {
       let filePath = path.resolve(absoluteInputFolder, file)
+
+      // Ensure the parent folder of the file exists
+      if (
+        !(await fs
+          .stat(filePath)
+          .then(() => true)
+          .catch(() => false))
+      ) {
+        await fs.mkdir(path.dirname(filePath), { recursive: true })
+      }
+
       if (!fileCache[filePath]) {
         try {
           fileCache[filePath] = await fs.readFile(filePath, 'utf8')

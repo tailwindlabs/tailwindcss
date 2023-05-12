@@ -36,6 +36,11 @@ export function init(args) {
       'utf8'
     )
 
+    // Drop `content` in the oxide engine to promote auto content
+    if (__OXIDE__) {
+      stubContentsFile = stubContentsFile.replace(/\s*content: \[\],\n/, '')
+    }
+
     // Change colors import
     stubContentsFile = stubContentsFile.replace('../colors', 'tailwindcss/colors')
 
