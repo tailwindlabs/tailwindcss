@@ -1,7 +1,41 @@
+import postcss from 'postcss'
+import postcssImport from 'postcss-import'
 import setupTrackingContext from './lib/setupTrackingContext'
 import processTailwindFeatures from './processTailwindFeatures'
 import { env } from './lib/sharedState'
 import { findAtConfigPath } from './lib/findAtConfigPath'
+
+const TAILWIND = Symbol()
+
+function handleImportAtRules() {
+  let RESTORE_ATRULE_COMMENT = '__TAILWIND_RESTORE__'
+  let atRulesToRestore = ['tailwind', 'config']
+
+  return [
+    (root) => {
+      root.walkAtRules((rule) => {
+        if (!atRulesToRestore.includes(rule.name)) return rule
+
+        rule.after(
+          postcss.comment({
+            text: RESTORE_ATRULE_COMMENT,
+            raws: { [TAILWIND]: { rule } },
+          })
+        )
+        rule.remove()
+      })
+    },
+    postcssImport(),
+    (root) => {
+      root.walkComments((rule) => {
+        if (rule.text.startsWith(RESTORE_ATRULE_COMMENT)) {
+          rule.after(rule.raws[TAILWIND].rule)
+          rule.remove()
+        }
+      })
+    },
+  ]
+}
 
 module.exports = function tailwindcss(configOrPath) {
   return {
@@ -13,6 +47,7 @@ module.exports = function tailwindcss(configOrPath) {
           console.time('JIT TOTAL')
           return root
         },
+      ...(__OXIDE__ ? handleImportAtRules() : []),
       function (root, result) {
         // Use the path for the `@config` directive if it exists, otherwise use the
         // path for the file being processed
