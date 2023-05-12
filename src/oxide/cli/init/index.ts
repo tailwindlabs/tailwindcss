@@ -38,7 +38,7 @@ export function init(args) {
 
     // Drop `content` in the oxide engine to promote auto content
     if (__OXIDE__) {
-      stubContentsFile = stubContentsFile.replace(/\s*content: \[\],\n/, '')
+      stubContentsFile = stubContentsFile.replace(/ *content: \[\],\n/, '')
     }
 
     // Change colors import
