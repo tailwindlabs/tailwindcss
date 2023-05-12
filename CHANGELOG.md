@@ -17,19 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `aria-busy` utility ([#10966](https://github.com/tailwindlabs/tailwindcss/pull/10966))
-
-### Changed
-
-- Reset padding for `<dialog>` elements in preflight ([#11069](https://github.com/tailwindlabs/tailwindcss/pull/11069))
-
-### Added
-
 - [Oxide] Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
 - Support `@import "tailwindcss"` using top-level `index.css` file ([#11205](https://github.com/tailwindlabs/tailwindcss/pull/11205))
 - [Oxide] Automatically detect content paths when no `content` configuration is provided ([#11173](https://github.com/tailwindlabs/tailwindcss/pull/11173))
 
 ### Changed
 
+- Reset padding for `<dialog>` elements in preflight ([#11069](https://github.com/tailwindlabs/tailwindcss/pull/11069))
 - [Oxide] Disable color opacity plugins by default in the `oxide` engine ([#10618](https://github.com/tailwindlabs/tailwindcss/pull/10618))
 - [Oxide] Enable relative content paths for the `oxide` engine ([#10621](https://github.com/tailwindlabs/tailwindcss/pull/10621))
 
