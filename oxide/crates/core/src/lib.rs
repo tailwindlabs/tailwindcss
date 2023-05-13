@@ -294,7 +294,6 @@ pub fn is_allowed_content_path(path: &Path) -> bool {
     {
         return false;
     }
-}
 
     // Skip known ignored extensions
     return path
@@ -370,24 +369,6 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
                     Default::default()
                 }
             },
-            (None, Some(content)) => content.into_bytes(),
-            _ => Default::default(),
-        })
-        .collect()
-}
-
-#[tracing::instrument(skip(changed_content))]
-fn read_all_files_sync(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
-    event!(
-        tracing::Level::INFO,
-        "Reading {:?} file(s)",
-        changed_content.len()
-    );
-
-    changed_content
-        .into_iter()
-        .map(|c| match (c.file, c.content) {
-            (Some(file), None) => std::fs::read(file).unwrap(),
             (None, Some(content)) => content.into_bytes(),
             _ => Default::default(),
         })
