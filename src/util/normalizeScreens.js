@@ -115,14 +115,14 @@ export function compareScreens(type, a, z) {
     type === 'min' ? [aMin, zMin] : [zMax, aMax]
   ).map((value) => splitDimensionPrefix(value))
 
-  // Sort by dimension first (e.g. width vs height)
-  let dimensionComparison = aDimension.localeCompare(zDimension)
-  if (dimensionComparison !== 0) {
-    return dimensionComparison
-  }
+  // Compare dimensions (e.g. "height" or "width" alphabetically)
+  const dimensionComparison = aDimension.localeCompare(zDimension)
 
-  // Sort by value second (e.g. "100px" -> `100` vs "200px" -> `200`)
-  return parseFloat(aValue) - parseFloat(zValue)
+  // Compare dimensions (e.g. "100px" and "200px" -> `100 - 200`)
+  const valueComparison = parseFloat(aValue) - parseFloat(zValue)
+
+  // Sort by dimension first, then by value (if dimensions are the same)
+  return dimensionComparison || valueComparison
 }
 
 /**
