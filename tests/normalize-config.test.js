@@ -7,7 +7,7 @@ crosscheck(({ stable, oxide }) => {
     config
     ${{ purge: [{ raw: 'text-center' }] }}
     ${{ purge: { content: [{ raw: 'text-center' }] } }}
-    ${{ content: { content: [{ raw: 'text-center' }] } }}
+    ${{ content: { files: [], content: [{ raw: 'text-center' }] } }}
   `('should normalize content $config', ({ config }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
@@ -22,7 +22,7 @@ crosscheck(({ stable, oxide }) => {
     config
     ${{ purge: { safelist: ['text-center'] } }}
     ${{ purge: { options: { safelist: ['text-center'] } } }}
-    ${{ content: { safelist: ['text-center'] } }}
+    ${{ content: { files: [], safelist: ['text-center'] } }}
   `('should normalize safelist $config', ({ config }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`

@@ -163,6 +163,8 @@ optgroup,
 select,
 textarea {
   font-family: inherit; /* 1 */
+  font-feature-settings: inherit; /* 1 */
+  font-variation-settings: inherit; /* 1 */
   font-size: 100%; /* 1 */
   font-weight: inherit; /* 1 */
   line-height: inherit; /* 1 */
@@ -264,7 +266,7 @@ summary {
 }
 
 /*
-Removes the default spacing and border for appropriate elements.
+Removes the default spacing for appropriate elements.
 */
 
 blockquote,
@@ -297,6 +299,10 @@ ul,
 menu {
   list-style: none;
   margin: 0;
+  padding: 0;
+}
+
+dialog {
   padding: 0;
 }
 

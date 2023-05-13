@@ -681,6 +681,9 @@
 .bg-\[linear-gradient\(to_left\,rgb\(var\(--green\)\)\,blue\)\] {
   background-image: linear-gradient(to left, rgb(var(--green)), blue);
 }
+.bg-\[repeating-conic-gradient\(\#F8F9FA_0\%_25\%\,_white_0\%_50\%\)\] {
+  background-image: repeating-conic-gradient(#f8f9fa 0% 25%, white 0% 50%);
+}
 .bg-\[url\(\'\/path-to-image\.png\'\)\] {
   background-image: url('/path-to-image.png');
 }

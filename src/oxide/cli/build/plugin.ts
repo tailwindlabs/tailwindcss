@@ -18,6 +18,7 @@ import log from '../../../util/log'
 import { loadConfig } from '../../../lib/load-config'
 import getModuleDependencies from '../../../lib/getModuleDependencies'
 import type { Config } from '../../../../types'
+import { validateConfig } from '../../../util/validateConfig'
 
 /**
  *
@@ -160,7 +161,13 @@ let state = {
     }
 
     // @ts-ignore
-    this.configBag.config = resolveConfig(this.configBag.config, { content: { files: [] } })
+    if (__OXIDE__) {
+      this.configBag.config = validateConfig(resolveConfig(this.configBag.config))
+    } else {
+      this.configBag.config = validateConfig(
+        resolveConfig(this.configBag.config, { content: { files: [] } })
+      )
+    }
 
     // Override content files if `--content` has been passed explicitly
     if (content?.length > 0) {

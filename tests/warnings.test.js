@@ -1,7 +1,9 @@
 import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(() => {
-  test('it warns when there is no content key', async () => {
+crosscheck(({ oxide, stable }) => {
+  // The oxide engine will use auto content if no `content` is given
+  oxide.test.todo('it warns when there is no content key')
+  stable.test('it warns when there is no content key', async () => {
     let config = {
       corePlugins: { preflight: false },
     }

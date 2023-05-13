@@ -29,6 +29,17 @@ pub fn parse_candidate_strings_from_files(changed_content: Vec<ChangedContent>) 
   )
 }
 
+#[derive(Debug, Clone)]
+#[napi(object)]
+pub struct ContentPathInfo {
+  pub base: String,
+}
+
+#[napi]
+pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
+  tailwindcss_core::resolve_content_paths(tailwindcss_core::ContentPathInfo { base: args.base })
+}
+
 #[derive(Debug)]
 #[napi]
 pub enum IO {
