@@ -1,3 +1,5 @@
+import { splitDimensionPrefix } from './splitDimensionPrefix'
+
 /**
  * @typedef {object} ScreenValue
  * @property {number|undefined} min
@@ -108,10 +110,10 @@ export function compareScreens(type, a, z) {
   if (a.not) [aMin, aMax] = [aMax, aMin]
   if (z.not) [zMin, zMax] = [zMax, zMin]
 
-  aMin = aMin === undefined ? aMin : parseFloat(aMin)
-  aMax = aMax === undefined ? aMax : parseFloat(aMax)
-  zMin = zMin === undefined ? zMin : parseFloat(zMin)
-  zMax = zMax === undefined ? zMax : parseFloat(zMax)
+  aMin = aMin === undefined ? aMin : parseFloat(splitDimensionPrefix(aMin)[1])
+  aMax = aMax === undefined ? aMax : parseFloat(splitDimensionPrefix(aMax)[1])
+  zMin = zMin === undefined ? zMin : parseFloat(splitDimensionPrefix(zMin)[1])
+  zMax = zMax === undefined ? zMax : parseFloat(splitDimensionPrefix(zMax)[1])
 
   let [aValue, zValue] = type === 'min' ? [aMin, zMin] : [zMax, aMax]
 

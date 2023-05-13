@@ -1,22 +1,4 @@
-/**
- * @param {string} value
- * @returns {[string, string]}
- */
-export function splitVariantPrefix(value) {
-  if (typeof value !== 'string') return ['', value]
-  let parts = value.split(':')
-  return ['', ...parts].slice(-2)
-}
-
-/**
- * @param {string} value
- * @returns {[string, string]}
- */
-function splitDimensionPrefix(value) {
-  const [prefix, extractedValue] = splitVariantPrefix(value)
-  const dimension = prefix === 'h' ? 'height' : 'width'
-  return [dimension, extractedValue]
-}
+import { splitDimensionPrefix } from './splitDimensionPrefix'
 
 export default function buildMediaQuery(screens) {
   screens = Array.isArray(screens) ? screens : [screens]

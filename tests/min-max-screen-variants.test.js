@@ -321,7 +321,7 @@ crosscheck(() => {
     })
   })
 
-  it('supports min-* and max-* variants being used together with or without arbitrary dimension prefixes', () => {
+  it('supports min-* and max-* variants being chained together with or without arbitrary dimension prefixes', () => {
     let config = {
       content: [
         {
@@ -357,6 +357,48 @@ crosscheck(() => {
                 }
               }
             }
+          }
+        }
+      `)
+    })
+  })
+
+  it('supports proper sorting of min-* and max-* variants with arbitrary dimension prefixes', () => {
+    let config = {
+      content: [
+        {
+          raw: html`
+            <div
+              class="min-[h:50px]:font-bold min-[h:200px]:font-bold min-[h:100px]:font-bold"
+            ></div>
+          `,
+        },
+      ],
+      corePlugins: { preflight: false },
+      theme: {
+        screens: defaultScreens,
+      },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        @media (min-height: 50px) {
+          .min-\[h\:50px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-height: 100px) {
+          .min-\[h\:100px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-height: 200px) {
+          .min-\[h\:200px\]\:font-bold {
+            font-weight: 700;
           }
         }
       `)
