@@ -362,12 +362,12 @@ crosscheck(() => {
           raw: html`
             <div
               class="
-                max-[3px]:font-bold max-[1px]:font-bold max-[2px]:font-bold
-                max-[w:3px]:font-bold max-[w:1px]:font-bold max-[w:2px]:font-bold
-                max-[h:3px]:font-bold max-[h:1px]:font-bold max-[h:2px]:font-bold
                 min-[3px]:font-bold min-[1px]:font-bold min-[2px]:font-bold
-                min-[w:3px]:font-bold min-[w:1px]:font-bold min-[w:2px]:font-bold
                 min-[h:3px]:font-bold min-[h:1px]:font-bold min-[h:2px]:font-bold
+                min-[w:3px]:font-bold min-[w:1px]:font-bold min-[w:2px]:font-bold
+                max-[3px]:font-bold max-[1px]:font-bold max-[2px]:font-bold
+                max-[h:3px]:font-bold max-[h:1px]:font-bold max-[h:2px]:font-bold
+                max-[w:3px]:font-bold max-[w:1px]:font-bold max-[w:2px]:font-bold
               "
             ></div>
           `,
