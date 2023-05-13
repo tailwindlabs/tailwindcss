@@ -110,16 +110,17 @@ export function compareScreens(type, a, z) {
   if (a.not) [aMin, aMax] = [aMax, aMin]
   if (z.not) [zMin, zMax] = [zMax, zMin]
 
-  // We store the dimension/value set for media query (e.g. `width` and `100px`)
-  let [
-    [aMinDimension, aMinValue],
-    [aMaxDimension, aMaxValue],
-    [zMinDimension, zMinValue],
-    [zMaxDimension, zMaxValue],
-  ] = [aMin, aMax, zMin, zMax].map((value) => splitDimensionPrefix(value))
+  // Split each mediq query value into its respective dimension and value (e.g. `width` and `100px`)
+  let [aMinDimension, aMinValue] = splitDimensionPrefix(aMin)
+  let [aMaxDimension, aMaxValue] = splitDimensionPrefix(aMax)
+  let [zMinDimension, zMinValue] = splitDimensionPrefix(zMin)
+  let [zMaxDimension, zMaxValue] = splitDimensionPrefix(zMax)
 
+  // Determine which dimension to compare (e.g. `min-width/height` vs. `max-width/height`)
   let [aDimension, zDimension] =
     type === 'min' ? [aMinDimension, zMinDimension] : [aMaxDimension, zMaxDimension]
+
+  // Invert the values if we're comparing max values to use descending order
   let [aValue, zValue] = type === 'min' ? [aMinValue, zMinValue] : [zMaxValue, aMaxValue]
 
   // Compare dimensions (e.g. "height" or "width" alphabetically)
