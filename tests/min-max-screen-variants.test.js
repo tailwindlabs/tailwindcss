@@ -287,14 +287,14 @@ crosscheck(() => {
         .font-bold {
           font-weight: 700;
         }
-        @media (max-width: 100px) {
-          .max-\[100px\]\:font-bold,
-          .max-\[w\:100px\]\:font-bold {
+        @media (max-height: 100px) {
+          .max-\[h\:100px\]\:font-bold {
             font-weight: 700;
           }
         }
-        @media (max-height: 100px) {
-          .max-\[h\:100px\]\:font-bold {
+        @media (max-width: 100px) {
+          .max-\[100px\]\:font-bold,
+          .max-\[w\:100px\]\:font-bold {
             font-weight: 700;
           }
         }
@@ -361,7 +361,14 @@ crosscheck(() => {
         {
           raw: html`
             <div
-              class="min-[h:50px]:font-bold min-[75px]:font-bold min-[h:200px]:font-bold max-[150px]:font-bold min-[h:100px]:font-bold max-[h:125px]:font-bold"
+              class="
+                max-[3px]:font-bold max-[1px]:font-bold max-[2px]:font-bold
+                max-[w:3px]:font-bold max-[w:1px]:font-bold max-[w:2px]:font-bold
+                max-[h:3px]:font-bold max-[h:1px]:font-bold max-[h:2px]:font-bold
+                min-[3px]:font-bold min-[1px]:font-bold min-[2px]:font-bold
+                min-[w:3px]:font-bold min-[w:1px]:font-bold min-[w:2px]:font-bold
+                min-[h:3px]:font-bold min-[h:1px]:font-bold min-[h:2px]:font-bold
+              "
             ></div>
           `,
         },
@@ -378,33 +385,69 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        @media (max-width: 150px) {
-          .max-\[150px\]\:font-bold {
+        @media (max-height: 3px) {
+          .max-\[h\:3px\]\:font-bold {
             font-weight: 700;
           }
         }
-        @media (max-height: 125px) {
-          .max-\[h\:125px\]\:font-bold {
+        @media (max-height: 2px) {
+          .max-\[h\:2px\]\:font-bold {
             font-weight: 700;
           }
         }
-        @media (min-height: 50px) {
-          .min-\[h\:50px\]\:font-bold {
+        @media (max-height: 1px) {
+          .max-\[h\:1px\]\:font-bold {
             font-weight: 700;
           }
         }
-        @media (min-height: 100px) {
-          .min-\[h\:100px\]\:font-bold {
+        @media (max-width: 3px) {
+          .max-\[3px\]\:font-bold,
+          .max-\[w\:3px\]\:font-bold {
             font-weight: 700;
           }
         }
-        @media (min-height: 200px) {
-          .min-\[h\:200px\]\:font-bold {
+        @media (max-width: 2px) {
+          .max-\[2px\]\:font-bold,
+          .max-\[w\:2px\]\:font-bold {
             font-weight: 700;
           }
         }
-        @media (min-width: 75px) {
-          .min-\[75px\]\:font-bold {
+        @media (max-width: 1px) {
+          .max-\[1px\]\:font-bold,
+          .max-\[w\:1px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-height: 1px) {
+          .min-\[h\:1px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-height: 2px) {
+          .min-\[h\:2px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-height: 3px) {
+          .min-\[h\:3px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-width: 1px) {
+          .min-\[1px\]\:font-bold,
+          .min-\[w\:1px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-width: 2px) {
+          .min-\[2px\]\:font-bold,
+          .min-\[w\:2px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-width: 3px) {
+          .min-\[3px\]\:font-bold,
+          .min-\[w\:3px\]\:font-bold {
             font-weight: 700;
           }
         }

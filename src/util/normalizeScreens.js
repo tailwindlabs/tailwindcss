@@ -110,10 +110,17 @@ export function compareScreens(type, a, z) {
   if (a.not) [aMin, aMax] = [aMax, aMin]
   if (z.not) [zMin, zMax] = [zMax, zMin]
 
-  // We compare the values associated with the current type (`min` or `max`)
-  let [[aDimension, aValue], [zDimension, zValue]] = (
-    type === 'min' ? [aMin, zMin] : [zMax, aMax]
-  ).map((value) => splitDimensionPrefix(value))
+  // We store the dimension/value set for media query (e.g. `width` and `100px`)
+  let [
+    [aMinDimension, aMinValue],
+    [aMaxDimension, aMaxValue],
+    [zMinDimension, zMinValue],
+    [zMaxDimension, zMaxValue],
+  ] = [aMin, aMax, zMin, zMax].map((value) => splitDimensionPrefix(value))
+
+  let [aDimension, zDimension] =
+    type === 'min' ? [aMinDimension, zMinDimension] : [aMaxDimension, zMaxDimension]
+  let [aValue, zValue] = type === 'min' ? [aMinValue, zMinValue] : [zMaxValue, aMaxValue]
 
   // Compare dimensions (e.g. "height" or "width" alphabetically)
   const dimensionComparison = aDimension.localeCompare(zDimension)
