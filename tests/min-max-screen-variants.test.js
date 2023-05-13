@@ -288,22 +288,13 @@ crosscheck(() => {
           font-weight: 700;
         }
         @media (max-width: 100px) {
-          .max-\[100px\]\:font-bold {
+          .max-\[100px\]\:font-bold,
+          .max-\[w\:100px\]\:font-bold {
             font-weight: 700;
           }
         }
         @media (max-height: 100px) {
           .max-\[h\:100px\]\:font-bold {
-            font-weight: 700;
-          }
-        }
-        @media (max-width: 100px) {
-          .max-\[w\:100px\]\:font-bold {
-            font-weight: 700;
-          }
-        }
-        @media (min-width: 100px) {
-          .min-\[100px\]\:font-bold {
             font-weight: 700;
           }
         }
@@ -313,6 +304,7 @@ crosscheck(() => {
           }
         }
         @media (min-width: 100px) {
+          .min-\[100px\]\:font-bold,
           .min-\[w\:100px\]\:font-bold {
             font-weight: 700;
           }
@@ -369,7 +361,7 @@ crosscheck(() => {
         {
           raw: html`
             <div
-              class="min-[h:50px]:font-bold min-[h:200px]:font-bold min-[h:100px]:font-bold"
+              class="min-[h:50px]:font-bold min-[75px]:font-bold min-[h:200px]:font-bold max-[150px]:font-bold min-[h:100px]:font-bold max-[h:125px]:font-bold"
             ></div>
           `,
         },
@@ -386,6 +378,16 @@ crosscheck(() => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
+        @media (max-width: 150px) {
+          .max-\[150px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (max-height: 125px) {
+          .max-\[h\:125px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
         @media (min-height: 50px) {
           .min-\[h\:50px\]\:font-bold {
             font-weight: 700;
@@ -398,6 +400,11 @@ crosscheck(() => {
         }
         @media (min-height: 200px) {
           .min-\[h\:200px\]\:font-bold {
+            font-weight: 700;
+          }
+        }
+        @media (min-width: 75px) {
+          .min-\[75px\]\:font-bold {
             font-weight: 700;
           }
         }
