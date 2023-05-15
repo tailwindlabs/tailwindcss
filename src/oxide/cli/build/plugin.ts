@@ -19,6 +19,7 @@ import { loadConfig } from '../../../lib/load-config'
 import getModuleDependencies from '../../../lib/getModuleDependencies'
 import type { Config } from '../../../../types'
 import { validateConfig } from '../../../util/validateConfig'
+import { handleImportAtRules } from '../../../lib/handleImportAtRules'
 
 /**
  *
@@ -73,39 +74,6 @@ async function loadPostCssPlugins(customPostCssPath) {
       : configPlugins.slice(configPluginTailwindIdx + 1)
 
   return [beforePlugins, afterPlugins, config.options]
-}
-
-function loadBuiltinPostcssPlugins() {
-  let postcss = loadPostcss()
-  let IMPORT_COMMENT = '__TAILWIND_RESTORE_IMPORT__: '
-  return [
-    [
-      (root) => {
-        root.walkAtRules('import', (rule) => {
-          if (rule.params.slice(1).startsWith('tailwindcss/')) {
-            rule.after(postcss.comment({ text: IMPORT_COMMENT + rule.params }))
-            rule.remove()
-          }
-        })
-      },
-      loadPostcssImport(),
-      (root) => {
-        root.walkComments((rule) => {
-          if (rule.text.startsWith(IMPORT_COMMENT)) {
-            rule.after(
-              postcss.atRule({
-                name: 'import',
-                params: rule.text.replace(IMPORT_COMMENT, ''),
-              })
-            )
-            rule.remove()
-          }
-        })
-      },
-    ],
-    [],
-    {},
-  ]
 }
 
 let state = {
@@ -266,7 +234,9 @@ export async function createProcessor(args, cliConfigPath) {
 
   let [beforePlugins, afterPlugins, postcssOptions] = includePostCss
     ? await loadPostCssPlugins(customPostCssPath)
-    : loadBuiltinPostcssPlugins()
+    : [[], [], {}]
+
+  beforePlugins.unshift(...handleImportAtRules(loadPostcssImport()))
 
   if (args['--purge']) {
     log.warn('purge-flag-deprecated', [

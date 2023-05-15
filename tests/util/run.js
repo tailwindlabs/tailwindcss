@@ -17,18 +17,18 @@ export let map = JSON.stringify({
 globalThis.__OXIDE__ = env.ENGINE === 'oxide'
 
 export function run(input, config, plugin = tailwind) {
-  let { currentTestName } = expect.getState()
+  let { currentTestName, testPath } = expect.getState()
 
   return postcss(plugin(config)).process(input, {
-    from: `${path.resolve(__filename)}?test=${currentTestName}`,
+    from: `${path.resolve(testPath)}?test=${currentTestName}`,
   })
 }
 
 export function runWithSourceMaps(input, config, plugin = tailwind) {
-  let { currentTestName } = expect.getState()
+  let { currentTestName, testPath } = expect.getState()
 
   return postcss(plugin(config)).process(input, {
-    from: `${path.resolve(__filename)}?test=${currentTestName}`,
+    from: `${path.resolve(testPath)}?test=${currentTestName}`,
     map: {
       prev: map,
     },
