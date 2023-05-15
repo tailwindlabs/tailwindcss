@@ -23,7 +23,7 @@ export function handleImportAtRules(postcssImport = require('postcss-import')) {
     postcssImport(),
     (root) => {
       root.walkComments((rule) => {
-        if (rule.text.startsWith(RESTORE_ATRULE_COMMENT)) {
+        if (rule.text === RESTORE_ATRULE_COMMENT) {
           rule.after(rule.raws[TAILWIND].rule)
           rule.remove()
         }
