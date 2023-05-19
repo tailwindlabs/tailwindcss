@@ -42,8 +42,13 @@
     "nesting/*",
     "types/**/*",
     "*.d.ts",
-    "*.css",
-    "*.js"
+    "*.js",
+    "base.css",
+    "components.css",
+    "screens.css",
+    "tailwind.css",
+    "utilities.css",
+    "variants.css"
   ],
   "devDependencies": {
     "@swc/cli": "^0.1.62",
