@@ -184,7 +184,7 @@ describe('Build command', () => {
     )
   })
 
-  testStable('--postcss (postcss.config.js)', async () => {
+  test('--postcss (postcss.config.js)', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let customConfig = javascript`
@@ -255,7 +255,7 @@ describe('Build command', () => {
     }
   })
 
-  testStable('--postcss (custom.postcss.config.js)', async () => {
+  test('--postcss (custom.postcss.config.js)', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let customConfig = javascript`
@@ -326,7 +326,7 @@ describe('Build command', () => {
     }
   })
 
-  testStable('--postcss supports process options', async () => {
+  test('--postcss supports process options', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let customConfig = javascript`
@@ -360,7 +360,7 @@ describe('Build command', () => {
     expect(contents).toContain(`/*# sourceMappingURL`)
   })
 
-  testStable('--postcss supports process options with custom config', async () => {
+  test('--postcss supports process options with custom config', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let customConfig = javascript`
@@ -481,7 +481,7 @@ describe('Build command', () => {
     return runningProcess.stop()
   })
 
-  testStable('postcss-import is included when using a custom postcss configuration', async () => {
+  test('postcss-import is included when using a custom postcss configuration', async () => {
     cleanupFile('src/test.css')
 
     await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
@@ -509,28 +509,8 @@ describe('Build command', () => {
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} --help`)
 
-    if (env.ENGINE === 'oxide') {
-      expect(dedent(combined)).toEqual(
-        dedent(`
-          tailwindcss v${version}
-
-          Usage:
-             tailwindcss build [options]
-
-          Options:
-             -i, --input              Input file
-             -o, --output             Output file
-             -w, --watch              Watch for changes and rebuild as needed
-             -p, --poll               Use polling instead of filesystem events when watching
-                 --content            Content paths to use for removing unused classes
-             -m, --minify             Minify the output
-             -c, --config             Path to a custom config file
-             -h, --help               Display usage information
-        `)
-      )
-    } else if (env.ENGINE === 'stable') {
-      expect(dedent(combined)).toEqual(
-        dedent(`
+    expect(dedent(combined)).toEqual(
+      dedent(`
           tailwindcss v${version}
 
           Usage:
@@ -548,8 +528,7 @@ describe('Build command', () => {
                  --no-autoprefixer    Disable autoprefixer
              -h, --help               Display usage information
         `)
-      )
-    }
+    )
   })
 })
 
@@ -611,7 +590,7 @@ describe('Init command', () => {
     expect((await readOutputFile('../full.config.js')).split('\n').length).toBeGreaterThan(50)
   })
 
-  testStable('--postcss', async () => {
+  test('--postcss', async () => {
     expect(await fileExists('postcss.config.js')).toBe(true)
     await removeFile('postcss.config.js')
     expect(await fileExists('postcss.config.js')).toBe(false)
@@ -631,24 +610,8 @@ describe('Init command', () => {
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} init --help`)
 
-    if (env.ENGINE === 'oxide') {
-      expect(dedent(combined)).toEqual(
-        dedent(`
-          tailwindcss v${version}
-
-          Usage:
-             tailwindcss init [options]
-
-          Options:
-                 --esm                Initialize configuration file as ESM
-                 --ts                 Initialize configuration file as TypeScript
-             -f, --full               Include the default values for all options in the generated configuration file
-             -h, --help               Display usage information
-        `)
-      )
-    } else if (env.ENGINE === 'stable') {
-      expect(dedent(combined)).toEqual(
-        dedent(`
+    expect(dedent(combined)).toEqual(
+      dedent(`
           tailwindcss v${version}
 
           Usage:
@@ -661,8 +624,7 @@ describe('Init command', () => {
              -f, --full               Include the default values for all options in the generated configuration file
              -h, --help               Display usage information
         `)
-      )
-    }
+    )
   })
 
   test('ESM config is created by default in an ESM project', async () => {
