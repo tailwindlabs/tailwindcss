@@ -1,11 +1,12 @@
 // @ts-check
 
+import pkg from '../../../package.json'
 import path from 'path'
 import fs from 'fs'
 import postcss from 'postcss'
 import postcssrc from 'postcss-load-config'
-import autoprefixer from 'autoprefixer'
-import cssnano from 'cssnano'
+import browserslist from 'browserslist'
+import lightning from 'lightningcss'
 import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
@@ -23,6 +24,39 @@ import { loadConfig } from '../../lib/load-config'
 import getModuleDependencies from '../../lib/getModuleDependencies'
 import { validateConfig } from '../../util/validateConfig'
 import { handleImportAtRules } from '../../lib/handleImportAtRules'
+
+async function lightningcss(shouldMinify, result) {
+  // TODO: handle --no-autoprefixer option if possible
+  try {
+    let transformed = lightning.transform({
+      filename: result.opts.from || 'input.css',
+      code: Buffer.from(result.css, 'utf-8'),
+      minify: shouldMinify,
+      sourceMap: !!result.map,
+      inputSourceMap: result.map ? result.map.toString() : undefined,
+      targets: lightning.browserslistToTargets(browserslist(pkg.browserslist)),
+      drafts: {
+        nesting: true,
+      },
+    })
+
+    return Object.assign(result, {
+      css: transformed.code.toString('utf8'),
+      map: result.map
+        ? Object.assign(result.map, {
+            toString() {
+              return transformed.map.toString()
+            },
+          })
+        : result.map,
+    })
+  } catch (err) {
+    console.error('Unable to use Lightning CSS. Using raw version instead.')
+    console.error(err)
+
+    return result
+  }
+}
 
 /**
  *
@@ -283,8 +317,6 @@ export async function createProcessor(args, cliConfigPath) {
     tailwindPlugin,
     !args['--minify'] && formatNodes,
     ...afterPlugins,
-    !args['--no-autoprefixer'] && autoprefixer(),
-    args['--minify'] && cssnano(),
   ].filter(Boolean)
 
   /** @type {import('postcss').Processor} */
@@ -311,6 +343,7 @@ export async function createProcessor(args, cliConfigPath) {
 
     return readInput()
       .then((css) => processor.process(css, { ...postcssOptions, from: input, to: output }))
+      .then((result) => lightningcss(!!args['--minify'], result))
       .then((result) => {
         if (!state.watcher) {
           return result
