@@ -10,35 +10,6 @@ export default function normalizeTailwindDirectives(root) {
       applyDirectives.add(atRule)
     }
 
-    if (!__OXIDE__) {
-      if (atRule.name === 'import') {
-        if (atRule.params === '"tailwindcss/base"' || atRule.params === "'tailwindcss/base'") {
-          atRule.name = 'tailwind'
-          atRule.params = 'base'
-        } else if (
-          atRule.params === '"tailwindcss/components"' ||
-          atRule.params === "'tailwindcss/components'"
-        ) {
-          atRule.name = 'tailwind'
-          atRule.params = 'components'
-        } else if (
-          atRule.params === '"tailwindcss/utilities"' ||
-          atRule.params === "'tailwindcss/utilities'"
-        ) {
-          atRule.name = 'tailwind'
-          atRule.params = 'utilities'
-        } else if (
-          atRule.params === '"tailwindcss/screens"' ||
-          atRule.params === "'tailwindcss/screens'" ||
-          atRule.params === '"tailwindcss/variants"' ||
-          atRule.params === "'tailwindcss/variants'"
-        ) {
-          atRule.name = 'tailwind'
-          atRule.params = 'variants'
-        }
-      }
-    }
-
     if (atRule.name === 'tailwind') {
       if (atRule.params === 'screens') {
         atRule.params = 'variants'
