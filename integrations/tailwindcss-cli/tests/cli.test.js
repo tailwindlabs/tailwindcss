@@ -486,6 +486,14 @@ describe('Build command', () => {
 
     await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
     await writeInputFile(
+      'imported.css',
+      css`
+        .foo {
+          color: white;
+        }
+      `
+    )
+    await writeInputFile(
       'test.css',
       css`
         @import 'tailwindcss/base';
@@ -501,7 +509,9 @@ describe('Build command', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        @import './imported.css';
+        .foo {
+          color: #fff;
+        }
       `
     )
   })
