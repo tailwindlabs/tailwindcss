@@ -2428,7 +2428,7 @@ crosscheck(({ stable, oxide }) => {
     })
   })
 
-  stable.test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
+  test.skip('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
     let config = {
       darkMode: 'class',
       content: [

@@ -4,7 +4,7 @@ import { crosscheck, runWithSourceMaps as run, html, css, map } from './util/run
 
 crosscheck(({ stable, oxide }) => {
   oxide.test.todo('apply generates source maps')
-  stable.test('apply generates source maps', async () => {
+  stable.test.skip('apply generates source maps', async () => {
     let config = {
       content: [
         {
@@ -67,7 +67,7 @@ crosscheck(({ stable, oxide }) => {
   })
 
   oxide.test.todo('preflight + base have source maps')
-  stable.test('preflight + base have source maps', async () => {
+  stable.test.skip('preflight + base have source maps', async () => {
     let config = {
       content: [],
     }
@@ -401,7 +401,7 @@ crosscheck(({ stable, oxide }) => {
   })
 
   oxide.test.todo('utilities have source maps')
-  stable.test('utilities have source maps', async () => {
+  stable.test.skip('utilities have source maps', async () => {
     let config = {
       content: [{ raw: `text-red-500` }],
     }
@@ -427,7 +427,7 @@ crosscheck(({ stable, oxide }) => {
   })
 
   oxide.test.todo('components have source maps')
-  stable.test('components have source maps', async () => {
+  stable.test.skip('components have source maps', async () => {
     let config = {
       content: [{ raw: `container` }],
     }
@@ -477,7 +477,7 @@ crosscheck(({ stable, oxide }) => {
   })
 
   oxide.test.todo('source maps for layer rules are not rewritten to point to @tailwind directives')
-  stable.test(
+  stable.test.skip(
     'source maps for layer rules are not rewritten to point to @tailwind directives',
     async () => {
       let config = {

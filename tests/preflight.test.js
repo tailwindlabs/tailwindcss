@@ -17,9 +17,9 @@ crosscheck(({ stable, oxide }) => {
     `
 
     return run(input, config).then((result) => {
-      stable.expect(result.css).toContain(`border-color: currentColor;`)
-      // Lightning CSS optimizes this to just `border-color: 0 solid;` based on the br value.
-      oxide.expect(result.css).toContain(`border: 0 solid;`)
+      // Lightning CSS optimizes this to just `border-color: 0 solid;` because `currentcolor` is the default user-agent stylesheet value.
+      // https://drafts.csswg.org/css-backgrounds/#border-color
+      expect(result.css).toContain(`border: 0 solid;`)
     })
   })
 })
