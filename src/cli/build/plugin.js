@@ -89,7 +89,7 @@ let state = {
   /** @type {{content: string, extension: string}[]} */
   changedContent: [],
 
-  /** @type {ReturnType<typeof load> | null} */
+  /** @type {{config: import('../../../types').Config, dependencies: Set<string>, dispose: Function } | null} */
   configBag: null,
 
   contextDependencies: new Set(),
