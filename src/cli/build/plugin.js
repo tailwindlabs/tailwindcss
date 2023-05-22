@@ -25,14 +25,14 @@ import getModuleDependencies from '../../lib/getModuleDependencies'
 import { validateConfig } from '../../util/validateConfig'
 import { handleImportAtRules } from '../../lib/handleImportAtRules'
 
-async function lightningcss(shouldMinify, result) {
+async function lightningcss(shouldMinify, result, options = {}) {
   // TODO: handle --no-autoprefixer option if possible
   try {
     let transformed = lightning.transform({
       filename: result.opts.from || 'input.css',
       code: Buffer.from(result.css, 'utf-8'),
       minify: shouldMinify,
-      sourceMap: !!result.map,
+      sourceMap: result.map === undefined ? options.map : !!result.map,
       inputSourceMap: result.map ? result.map.toString() : undefined,
       targets: lightning.browserslistToTargets(browserslist(pkg.browserslist)),
       drafts: {
@@ -340,10 +340,15 @@ export async function createProcessor(args, cliConfigPath) {
 
   async function build() {
     let start = process.hrtime.bigint()
+    let options = {
+      ...postcssOptions,
+      from: input,
+      to: output,
+    }
 
     return readInput()
-      .then((css) => processor.process(css, { ...postcssOptions, from: input, to: output }))
-      .then((result) => lightningcss(!!args['--minify'], result))
+      .then((css) => processor.process(css, options))
+      .then((result) => lightningcss(!!args['--minify'], result, options))
       .then((result) => {
         if (!state.watcher) {
           return result
