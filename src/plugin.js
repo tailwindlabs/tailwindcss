@@ -14,7 +14,7 @@ module.exports = function tailwindcss(configOrPath) {
           console.time('JIT TOTAL')
           return root
         },
-      ...(__OXIDE__ ? handleImportAtRules() : []),
+      ...handleImportAtRules(),
       function (root, result) {
         // Use the path for the `@config` directive if it exists, otherwise use the
         // path for the file being processed
