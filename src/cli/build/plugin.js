@@ -2,13 +2,15 @@
 
 import path from 'path'
 import fs from 'fs'
+import postcss from 'postcss'
 import postcssrc from 'postcss-load-config'
+import autoprefixer from 'autoprefixer'
+import cssnano from 'cssnano'
 import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
 
 import tailwind from '../../processTailwindFeatures'
-import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport } from './deps'
 import { formatNodes, drainStdin, outputFile } from './utils'
 import { env } from '../../lib/sharedState'
 import resolveConfig from '../../../resolveConfig.js'
@@ -226,8 +228,6 @@ let state = {
 }
 
 export async function createProcessor(args, cliConfigPath) {
-  let postcss = loadPostcss()
-
   let input = args['--input']
   let output = args['--output']
   let includePostCss = args['--postcss']
@@ -283,8 +283,8 @@ export async function createProcessor(args, cliConfigPath) {
     tailwindPlugin,
     !args['--minify'] && formatNodes,
     ...afterPlugins,
-    !args['--no-autoprefixer'] && loadAutoprefixer(),
-    args['--minify'] && loadCssNano(),
+    !args['--no-autoprefixer'] && autoprefixer(),
+    args['--minify'] && cssnano(),
   ].filter(Boolean)
 
   /** @type {import('postcss').Processor} */
