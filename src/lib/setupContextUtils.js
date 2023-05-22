@@ -434,10 +434,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             },
           }
 
-          let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
-
           let ruleSets = []
-            .concat(modifiersEnabled ? rule(value, extras) : rule(value))
+            .concat(rule(value, extras))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
@@ -514,10 +512,8 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
             },
           }
 
-          let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
-
           let ruleSets = []
-            .concat(modifiersEnabled ? rule(value, extras) : rule(value))
+            .concat(rule(value, extras))
             .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
@@ -585,18 +581,13 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       let id = options?.id ?? ++variantIdentifier
       let isSpecial = variant === '@'
 
-      let modifiersEnabled = flagEnabled(tailwindConfig, 'generalizedModifiers')
-
       for (let [key, value] of Object.entries(options?.values ?? {})) {
         if (key === 'DEFAULT') continue
 
         api.addVariant(
           isSpecial ? `${variant}${key}` : `${variant}-${key}`,
           ({ args, container }) => {
-            return variantFn(
-              value,
-              modifiersEnabled ? { modifier: args?.modifier, container } : { container }
-            )
+            return variantFn(value, { modifier: args?.modifier, container })
           },
 
           {
@@ -624,7 +615,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
               : // Falling back to args if it is a string, otherwise '' for older intellisense
                 // (JetBrains) plugins.
                 args?.value ?? (typeof args === 'string' ? args : ''),
-            modifiersEnabled ? { modifier: args?.modifier, container } : { container }
+            { modifier: args?.modifier, container }
           )
         },
         {

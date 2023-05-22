@@ -3,7 +3,6 @@ import log from './util/log'
 
 let defaults = {
   optimizeUniversalDefaults: false,
-  generalizedModifiers: true,
   get disableColorOpacityUtilitiesByDefault() {
     return __OXIDE__
   },
@@ -21,7 +20,6 @@ let featureFlags = {
   ],
   experimental: [
     'optimizeUniversalDefaults',
-    'generalizedModifiers',
     // 'variantGrouping',
   ],
 }

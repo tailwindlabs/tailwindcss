@@ -175,10 +175,6 @@ function applyVariant(variant, matches, context) {
     if (modifiers.length && !context.variantMap.has(variant)) {
       variant = baseVariant
       args.modifier = modifiers[0]
-
-      if (!flagEnabled(context.tailwindConfig, 'generalizedModifiers')) {
-        return []
-      }
     }
   }
 
