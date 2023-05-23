@@ -21,7 +21,6 @@ import isSyntacticallyValidPropertyValue from '../util/isSyntacticallyValidPrope
 import { generateRules, getClassNameFromSelector } from './generateRules'
 import { hasContentChanged } from './cacheInvalidation.js'
 import { Offsets } from './offsets.js'
-import { flagEnabled } from '../featureFlags.js'
 import { finalizeSelector, formatVariantSelector } from '../util/formatVariantSelector'
 
 const VARIANT_TYPES = {

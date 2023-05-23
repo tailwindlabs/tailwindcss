@@ -1,6 +1,6 @@
 import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(() => {
   it('preflight has a correct border color fallback', () => {
     let config = {
       content: [{ raw: html`<div class="border-black"></div>` }],

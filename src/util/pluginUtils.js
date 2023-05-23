@@ -18,7 +18,6 @@ import {
 } from './dataTypes'
 import negateValue from './negateValue'
 import { backgroundSize } from './validateFormalSyntax'
-import { flagEnabled } from '../featureFlags.js'
 
 /**
  * @param {import('postcss-selector-parser').Container} selectors
