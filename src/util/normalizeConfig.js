@@ -210,6 +210,7 @@ export function normalizeConfig(config) {
       if (Array.isArray(content)) return content
       if (Array.isArray(content?.content)) return content.content
       if (Array.isArray(content?.files)) return content.files
+      if (content === 'auto') return ['auto']
 
       return []
     })(),

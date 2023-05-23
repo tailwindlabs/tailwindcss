@@ -1242,6 +1242,68 @@ describe('watcher', () => {
       return runningProcess.stop()
     })
 
+    it("should use auto content when content is explicitly set to 'auto'", async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: 'auto',
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+
+      await writeInputFile('../.gitignore', 'node_modules')
+      await writeInputFile('../node_modules/a.html', html`<div class="text-red-100"></div>`)
+      await writeInputFile('index.html', html`<div class="text-red-200"></div>`)
+      await writeInputFile('nested/index.html', html`<div class="text-red-300"></div>`)
+      await writeInputFile('nested/node_modules/index.html', html`<div class="text-red-400"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      // Root node_modules
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .text-red-100 {
+            color: #fee2e2;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .text-red-200 {
+            color: #fecaca;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .text-red-300 {
+            color: #fca5a5;
+          }
+        `
+      )
+
+      // Nested node_modules
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .text-red-400 {
+            color: #f87171;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
+
     it('should be possible to merge "auto" and custom defined paths', async () => {
       await writeInputFile(
         '../tailwind.config.js',
