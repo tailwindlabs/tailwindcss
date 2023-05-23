@@ -2,7 +2,6 @@ let path = require('path')
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
 let resolveToolRoot = require('../../resolve-tool-root')
-let { env } = require('../../../lib/lib/sharedState')
 
 let version = require('../../../package.json').version
 
@@ -19,7 +18,6 @@ let {
 })
 
 let EXECUTABLE = 'node ../../lib/cli.js'
-let testStable = env.ENGINE === 'stable' ? test : test.skip
 
 function dedent(input) {
   let lines = input.split('\n')
@@ -98,7 +96,8 @@ describe('Build command', () => {
     expect(withoutMinify.length).toBeGreaterThan(withMinify.length)
   })
 
-  testStable('--no-autoprefixer', async () => {
+  // TODO: Handle --no-autoprefixer
+  test.skip('--no-autoprefixer', async () => {
     await writeInputFile('index.html', html`<div class="select-none"></div>`)
 
     await $(`${EXECUTABLE} --output ./dist/main.css`)
@@ -217,42 +216,21 @@ describe('Build command', () => {
 
     await $(`${EXECUTABLE} --output ./dist/main.css --postcss`)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .font-bold-after {
-            font-weight: 700;
-          }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold-after {
+          font-weight: 700;
+        }
 
-          .btn-after {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .font-bold-after {
-            font-weight: 700;
-          }
-
-          .btn-after {
-            background-color: #ef4444;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-        `
-      )
-    }
+        .btn-after {
+          background-color: #ef4444;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+      `
+    )
   })
 
   test('--postcss (custom.postcss.config.js)', async () => {
@@ -288,42 +266,21 @@ describe('Build command', () => {
 
     await $(`${EXECUTABLE} --output ./dist/main.css --postcss ./custom.postcss.config.js`)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .font-bold-after {
-            font-weight: 700;
-          }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold-after {
+          font-weight: 700;
+        }
 
-          .btn-after {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .font-bold-after {
-            font-weight: 700;
-          }
-
-          .btn-after {
-            background-color: #ef4444;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-        `
-      )
-    }
+        .btn-after {
+          background-color: #ef4444;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+      `
+    )
   })
 
   test('--postcss supports process options', async () => {
