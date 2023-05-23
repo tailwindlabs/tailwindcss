@@ -223,7 +223,7 @@ export function normalizeConfig(config) {
     })(),
 
     files: auto
-      ? 'auto'
+      ? ['auto']
       : (() => {
           let { content, purge } = config
 

@@ -2,7 +2,7 @@ import pc from 'picocolors'
 import log from './log'
 
 export function validateConfig(config) {
-  if (config.content.files !== 'auto' && config.content.files.length === 0) {
+  if (config.content.files.length === 0) {
     log.warn('content-problems', [
       'The `content` option in your Tailwind CSS configuration is missing or empty.',
       'Configure your content sources or your generated CSS will be missing styles.',
@@ -10,7 +10,7 @@ export function validateConfig(config) {
     ])
   }
 
-  if (config.content.files === 'auto') {
+  if (config.content.files.includes('auto')) {
     log.group('auto-content-experimental', (log) => {
       log.info([pc.bold('Automatically detecting Tailwind CSS content sources...')])
       log.warn([

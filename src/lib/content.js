@@ -18,15 +18,7 @@ import { resolveContentPaths } from '@tailwindcss/oxide'
  * @returns {ContentPath[]}
  */
 function resolveContentFiles(tailwindConfig, { skip = [] } = {}) {
-  // Content is "auto"
-  if (tailwindConfig.content.files === 'auto') {
-    env.DEBUG && console.time('Calculating resolve content paths')
-    tailwindConfig.content.files = resolveContentPaths({ base: process.cwd() })
-    env.DEBUG && console.timeEnd('Calculating resolve content paths')
-  }
-
-  // Content contains "auto"
-  else if (
+  if (
     Array.isArray(tailwindConfig.content.files) &&
     tailwindConfig.content.files.includes('auto')
   ) {
