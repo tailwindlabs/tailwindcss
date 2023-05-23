@@ -165,14 +165,7 @@ let state = {
       },
     }
 
-    // @ts-ignore
-    if (__OXIDE__) {
-      this.configBag.config = validateConfig(resolveConfig(this.configBag.config))
-    } else {
-      this.configBag.config = validateConfig(
-        resolveConfig(this.configBag.config, { content: { files: [] } })
-      )
-    }
+    this.configBag.config = validateConfig(resolveConfig(this.configBag.config))
 
     // Override content files if `--content` has been passed explicitly
     if (content?.length > 0) {
