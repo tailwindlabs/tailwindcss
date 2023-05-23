@@ -5,6 +5,7 @@ crosscheck(({ oxide, stable }) => {
   oxide.test.todo('it warns when there is no content key')
   stable.test('it warns when there is no content key', async () => {
     let config = {
+      presets: [], // Prevents the default config from being merged in and therefore `content: ['auto']` is not used.
       corePlugins: { preflight: false },
     }
 
