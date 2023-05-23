@@ -1241,5 +1241,81 @@ describe('watcher', () => {
 
       return runningProcess.stop()
     })
+
+    it('should be possible to merge "auto" and custom defined paths', async () => {
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: ['auto'], // Ignoring the library-example.html file for now
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+
+      await writeInputFile('../.gitignore', 'node_modules')
+      await writeInputFile(
+        '../node_modules/library-example.html',
+        html`<div class="text-red-100"></div>`
+      )
+      await writeInputFile('index.html', html`<div class="text-red-200"></div>`)
+
+      let runningProcess = $(
+        'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
+        options
+      )
+      await runningProcess.onStderr(ready)
+
+      // example.html should be ignored right now
+      expect(await readOutputFile('main.css')).not.toIncludeCss(
+        css`
+          .text-red-100 {
+            color: #fee2e2;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .text-red-200 {
+            color: #fecaca;
+          }
+        `
+      )
+
+      await writeInputFile(
+        '../tailwind.config.js',
+        javascript`
+          module.exports = {
+            content: ['auto', 'node_modules/library-example.html'], // Explicitly adding the library-example.html file
+            corePlugins: {
+              preflight: false,
+            },
+          }
+        `
+      )
+      await runningProcess.onStderr(ready)
+
+      // text-red-100 from `example.html` should be available now
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .text-red-100 {
+            color: #fee2e2;
+          }
+        `
+      )
+
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .text-red-200 {
+            color: #fecaca;
+          }
+        `
+      )
+
+      return runningProcess.stop()
+    })
   })
 })

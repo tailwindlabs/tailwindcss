@@ -36,19 +36,30 @@ crosscheck(({ stable, oxide }) => {
   oxide.test.todo('should normalize extractors')
   stable.test.each`
     config
-    ${{ content: [{ raw: 'text-center' }], purge: { extract: () => ['font-bold'] } }}
-    ${{ content: [{ raw: 'text-center' }], purge: { extract: { DEFAULT: () => ['font-bold'] } } }}
     ${{
-      content: [{ raw: 'text-center' }],
-      purge: { options: { defaultExtractor: () => ['font-bold'] } },
+      purge: { content: [{ raw: 'text-center' }], extract: () => ['font-bold'] },
     }}
     ${{
-      content: [{ raw: 'text-center' }],
+      purge: { content: [{ raw: 'text-center' }], extract: { DEFAULT: () => ['font-bold'] } },
+    }}
+    ${{
       purge: {
+        content: [{ raw: 'text-center' }],
+        options: { defaultExtractor: () => ['font-bold'] },
+      },
+    }}
+    ${{
+      purge: {
+        content: [{ raw: 'text-center' }],
         options: { extractors: [{ extractor: () => ['font-bold'], extensions: ['html'] }] },
       },
     }}
-    ${{ content: [{ raw: 'text-center' }], purge: { extract: { html: () => ['font-bold'] } } }}
+    ${{
+      purge: {
+        content: [{ raw: 'text-center' }],
+        extract: { html: () => ['font-bold'] },
+      },
+    }}
   `('should normalize extractors $config', ({ config }) => {
     return run('@tailwind utilities', config).then((result) => {
       return expect(result.css).toMatchFormattedCss(css`
