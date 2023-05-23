@@ -508,7 +508,6 @@ describe('Init command', () => {
     { flags: ['--ts', '--full'], name: 'tailwind.config.ts' },
     { flags: ['--esm', '--full'], name: 'tailwind.config.js' },
   ])('works with all these flags: %j', async ({ flags, name }) => {
-    cleanupFile(name)
     await removeFile(name)
 
     let { combined } = await $(`${EXECUTABLE} init ${flags.join(' ')}`)
@@ -595,7 +594,6 @@ describe('Init command', () => {
   })
 
   test('ESM config is created by default in an ESM project', async () => {
-    cleanupFile('tailwind.config.js')
     await removeFile('tailwind.config.js')
 
     let pkg = await readOutputFile('../package.json')
@@ -625,7 +623,6 @@ describe('Init command', () => {
   })
 
   test('CJS config is created by default in a non-ESM project', async () => {
-    cleanupFile('tailwind.config.js')
     await removeFile('tailwind.config.js')
 
     let pkg = await readOutputFile('../package.json')
