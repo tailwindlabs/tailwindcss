@@ -1,3 +1,4 @@
+import pc from 'picocolors'
 import log from './log'
 
 export function validateConfig(config) {
@@ -10,10 +11,12 @@ export function validateConfig(config) {
   }
 
   if (config.content.files === 'auto') {
-    log.warn('auto-content-experimental', [
-      'Automatic content detection in Tailwind CSS is currently in experimental preview.',
-      'Preview features are not covered by semver, and may change at any time.',
-    ])
+    log.group('auto-content-experimental', (log) => {
+      log.info([pc.bold('Automatically detecting Tailwind CSS content sources...')])
+      log.warn([
+        'Automatic content detection is experimental, and the behavior may change at any time.',
+      ])
+    })
   }
 
   // Warn if the line-clamp plugin is installed
