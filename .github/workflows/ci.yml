@@ -1,10 +1,10 @@
-name: CI — Oxide
+name: CI
 
 on:
   push:
-    branches: [master, 3.3]
+    branches: [master]
   pull_request:
-    branches: [master, 3.3]
+    branches: [master]
 
 permissions:
   contents: read
@@ -13,7 +13,6 @@ env:
   CI: true
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-  CACHE_PREFIX: oxide
 
 jobs:
   build:
@@ -34,7 +33,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ matrix.node-version }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
