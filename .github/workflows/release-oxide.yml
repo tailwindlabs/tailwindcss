@@ -18,7 +18,7 @@ jobs:
       - name: Calculate environment variables
         run: |
           echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
-          echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
+          echo "VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
 
   build:
     strategy:
@@ -275,6 +275,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and release
     needs:
+      - prepare
       - build
       - build-linux
       - build-apple-silicon
@@ -334,11 +335,6 @@ jobs:
           cp bindings-x86_64-unknown-linux-gnu/oxide/crates/node/* ./npm/linux-x64-gnu/
           cp bindings-x86_64-unknown-linux-musl/oxide/crates/node/* ./npm/linux-x64-musl/
 
-      - name: Resolve version
-        id: vars
-        run: |
-          echo "NPM_VERSION=0.0.0.$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
       - name: Generate entry point
         run: npm run build --prefix ${{ env.OXIDE_LOCATION }}
 
@@ -347,15 +343,15 @@ jobs:
           for pkg in ${{ env.OXIDE_LOCATION }}/npm/*; do
             echo "Publishing $pkg..."
             cd $pkg
-            npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
+            npm version ${{ env.VERSION }} --force --no-git-tag-version
             npm publish --tag ${{ env.RELEASE_CHANNEL }} --access public
             cd -
           done
 
           echo "Publishing ${{ env.APP_NAME }}...";
           cd ${{ env.OXIDE_LOCATION }}
-          npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
-          sed "s#\"0.0.0\"#\"${{ env.NPM_VERSION }}\"#g" package.json > package_updated.json
+          npm version ${{ env.VERSION }} --force --no-git-tag-version
+          sed "s#\"0.0.0\"#\"${{ env.VERSION }}\"#g" package.json > package_updated.json
           mv package_updated.json package.json
           npm publish --tag ${{ env.RELEASE_CHANNEL }} --access public
           cd -
@@ -367,6 +363,7 @@ jobs:
     name: Build and release Tailwind CSS
 
     needs:
+      - prepare
       - release
 
     steps:
@@ -378,15 +375,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Resolve version
-        id: vars
-        run: |
-          echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "OXIDE_NPM_VERSION=0.0.0-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
       - name: Setup `@tailwindcss/oxide` version
         run: |
-          sed "s#\"@tailwindcss/oxide\": \".*\"#\"@tailwindcss/oxide\": \"${{ env.OXIDE_NPM_VERSION }}\"#" package.json > package_updated.json
+          sed "s#\"@tailwindcss/oxide\": \".*\"#\"@tailwindcss/oxide\": \"${{ env.VERSION }}\"#" package.json > package_updated.json
           mv package_updated.json package.json
 
       - name: Install dependencies
@@ -401,8 +392,8 @@ jobs:
           npm test || \
           npm test || exit 1
 
-      - name: 'Version based on commit: 0.0.0-${{ env.SHA_SHORT }}'
-        run: npm version 0.0.0-${{ env.SHA_SHORT }} --force --no-git-tag-version
+      - name: 'Version: ${{ env.VERSION }}'
+        run: npm version ${{ env.VERSION }} --force --no-git-tag-version
 
       - name: Publish
         run: npm publish --tag ${{ env.RELEASE_CHANNEL }}
