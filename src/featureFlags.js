@@ -3,18 +3,10 @@ import log from './util/log'
 
 let defaults = {
   optimizeUniversalDefaults: false,
-  get disableColorOpacityUtilitiesByDefault() {
-    return globalThis.__OXIDE__ ?? false
-  },
-  get relativeContentPathsByDefault() {
-    return globalThis.__OXIDE__ ?? false
-  },
-  get oxideParser() {
-    return globalThis.__OXIDE__ ?? false
-  },
-  get logicalSiblingUtilities() {
-    return globalThis.__OXIDE__ ?? false
-  },
+  disableColorOpacityUtilitiesByDefault: false,
+  relativeContentPathsByDefault: false,
+  oxideParser: false,
+  logicalSiblingUtilities: false,
 }
 
 let featureFlags = {
