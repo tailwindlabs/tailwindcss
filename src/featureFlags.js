@@ -9,6 +9,9 @@ let defaults = {
   get relativeContentPathsByDefault() {
     return __OXIDE__
   },
+  get oxideParser() {
+    return __OXIDE__
+  },
 }
 
 let featureFlags = {
@@ -20,6 +23,7 @@ let featureFlags = {
   ],
   experimental: [
     'optimizeUniversalDefaults',
+    'oxideParser',
     // 'variantGrouping',
   ],
 }
