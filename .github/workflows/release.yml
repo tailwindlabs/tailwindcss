@@ -13,13 +13,6 @@ env:
   OXIDE_LOCATION: ./oxide/crates/node
 
 jobs:
-  prepare:
-    steps:
-      - name: Calculate environment variables
-        run: |
-          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
-          echo "VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
-
   build:
     strategy:
       fail-fast: false
@@ -275,7 +268,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and release
     needs:
-      - prepare
       - build
       - build-linux
       - build-apple-silicon
@@ -313,6 +305,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Calculate environment variables
+        run: |
+          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
+          echo "VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
 
       - name: Download artifacts
         uses: actions/download-artifact@v3
@@ -363,7 +360,6 @@ jobs:
     name: Build and release Tailwind CSS
 
     needs:
-      - prepare
       - release
 
     steps:
@@ -374,6 +370,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Calculate environment variables
+        run: |
+          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
+          echo "VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
 
       - name: Setup `@tailwindcss/oxide` version
         run: |
