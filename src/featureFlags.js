@@ -4,16 +4,16 @@ import log from './util/log'
 let defaults = {
   optimizeUniversalDefaults: false,
   get disableColorOpacityUtilitiesByDefault() {
-    return __OXIDE__
+    return globalThis.__OXIDE__ ?? false
   },
   get relativeContentPathsByDefault() {
-    return __OXIDE__
+    return globalThis.__OXIDE__ ?? false
   },
   get oxideParser() {
-    return __OXIDE__
+    return globalThis.__OXIDE__ ?? false
   },
   get logicalSiblingUtilities() {
-    return __OXIDE__
+    return globalThis.__OXIDE__ ?? false
   },
 }
 
