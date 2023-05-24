@@ -199,12 +199,9 @@ function resolvePathSymlinks(contentPath) {
  * @returns {[{ content: string, extension: string }[], Map<string, number>]}
  */
 export function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
-  let changedContent =
-    context.tailwindConfig.content.files === 'auto' && __OXIDE__
-      ? []
-      : context.tailwindConfig.content.files
-          .filter((item) => typeof item.raw === 'string')
-          .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
+  let changedContent = context.tailwindConfig.content.files
+    .filter((item) => typeof item.raw === 'string')
+    .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
   let [changedFiles, mTimesToCommit] = resolveChangedFiles(candidateFiles, fileModifiedMap)
 
