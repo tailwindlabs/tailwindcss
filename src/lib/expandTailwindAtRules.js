@@ -164,7 +164,7 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Generate rules')
     env.DEBUG && console.time('Sorting candidates')
-    let sortedCandidates = __OXIDE__
+    let sortedCandidates = flagEnabled(context.tailwindConfig, 'oxideParser')
       ? candidates
       : new Set(
           [...candidates].sort((a, z) => {
