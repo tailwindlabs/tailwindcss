@@ -55,7 +55,7 @@ describe('static build', () => {
           content: {
             files: ['./src/index.html'],
           },
-          safelist: ['bg-red-500','bg-red-600'],
+          safelist: ['flex','block'],
           theme: {
             extend: {
             },
@@ -74,12 +74,12 @@ describe('static build', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-red-500 {
-          background-color: #ef4444;
+        .block {
+          display: block;
         }
 
-        .bg-red-600 {
-          background-color: #dc2626;
+        .flex {
+          display: flex;
         }
 
         .font-bold {
@@ -91,7 +91,7 @@ describe('static build', () => {
 
   it('can use a tailwind.config.js configuration file with ESM syntax', async () => {
     await removeFile('tailwind.config.js')
-    await writeInputFile('index.html', html`<div class="bg-primary"></div>`)
+    await writeInputFile('index.html', html`<div class="z-primary"></div>`)
     await writeInputFile(
       'index.css',
       css`
@@ -107,8 +107,8 @@ describe('static build', () => {
           content: ['./src/index.html'],
           theme: {
             extend: {
-              colors: {
-                primary: 'black',
+              zIndex: {
+                primary: 0
               },
             },
           },
@@ -125,8 +125,8 @@ describe('static build', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-primary {
-          background-color: black;
+        .z-primary {
+          z-index: 0;
         }
       `
     )
@@ -134,7 +134,7 @@ describe('static build', () => {
 
   it('can use a tailwind.config.ts configuration file', async () => {
     await removeFile('tailwind.config.js')
-    await writeInputFile('index.html', html`<div class="bg-primary"></div>`)
+    await writeInputFile('index.html', html`<div class="z-primary"></div>`)
     await writeInputFile(
       'index.css',
       css`
@@ -152,8 +152,8 @@ describe('static build', () => {
           content: ['./src/index.html'],
           theme: {
             extend: {
-              colors: {
-                primary: 'black',
+              zIndex: {
+                primary: 0
               },
             },
           },
@@ -170,15 +170,15 @@ describe('static build', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-primary {
-          background-color: black;
+        .z-primary {
+          z-index: 0;
         }
       `
     )
   })
 
   it('can read from a config file from an @config directive', async () => {
-    await writeInputFile('index.html', html`<div class="bg-yellow"></div>`)
+    await writeInputFile('index.html', html`<div class="z-primary"></div>`)
     await writeInputFile(
       'index.css',
       css`
@@ -198,8 +198,8 @@ describe('static build', () => {
           },
           theme: {
             extend: {
-              colors: {
-                yellow: '#ff0',
+              zIndex: {
+                primary: 0
               }
             },
           },
@@ -216,8 +216,8 @@ describe('static build', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-yellow {
-          background-color: #ff0;
+        .z-primary {
+          z-index: 0;
         }
       `
     )
@@ -226,7 +226,7 @@ describe('static build', () => {
   it('can read from a config file from an @config directive inside an @import from postcss-import', async () => {
     await fs.promises.mkdir('./src/config', { recursive: true })
 
-    await writeInputFile('index.html', html`<div class="bg-yellow"></div>`)
+    await writeInputFile('index.html', html`<div class="z-primary"></div>`)
     await writeInputFile(
       'config/myconfig.css',
       css`
@@ -252,8 +252,8 @@ describe('static build', () => {
           },
           theme: {
             extend: {
-              colors: {
-                yellow: '#ff0',
+              zIndex: {
+                primary: 0
               }
             },
           },
@@ -270,8 +270,8 @@ describe('static build', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-yellow {
-          background-color: #ff0;
+        .z-primary {
+          z-index: 0;
         }
       `
     )
@@ -283,7 +283,7 @@ describe('static build', () => {
       javascript`
         module.exports = {
           content: {
-            files: [{ raw: 'bg-red-500'}],
+            files: [{ raw: 'flex'}],
           },
           theme: {
             extend: {
@@ -303,8 +303,8 @@ describe('static build', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-red-500 {
-          background-color: #ef4444;
+        .flex {
+          display: flex;
         }
       `
     )
@@ -340,13 +340,13 @@ describe('watcher', () => {
       `
     )
 
-    await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
+    await appendToInputFile('index.html', html`<div class="flex"></div>`)
     await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-red-500 {
-          background-color: #ef4444;
+        .flex {
+          display: flex;
         }
         .font-bold {
           font-weight: 700;
@@ -388,13 +388,13 @@ describe('watcher', () => {
       `
     )
 
-    await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
+    await appendToInputFile('glob/index.html', html`<div class="flex"></div>`)
     await runningProcess.onStderr(ready)
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-red-500 {
-          background-color: #ef4444;
+        .flex {
+          display: flex;
         }
         .font-bold {
           font-weight: 700;
@@ -571,7 +571,7 @@ describe('watcher', () => {
 
         @layer components {
           .btn {
-            @apply rounded bg-red-500 px-2 py-1;
+            @apply rounded flex px-2 py-1;
           }
         }
       `
@@ -582,11 +582,8 @@ describe('watcher', () => {
       css`
         .btn {
           border-radius: 0.25rem;
-          background-color: #ef4444;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          padding: 0.25rem 0.5rem;
+          display: flex;
         }
         .font-bold {
           font-weight: 700;
@@ -598,7 +595,7 @@ describe('watcher', () => {
   })
 
   test('listens for changes to the @config directive', async () => {
-    await writeInputFile('index.html', html`<div class="bg-yellow"></div>`)
+    await writeInputFile('index.html', html`<div class="z-primary"></div>`)
     await writeInputFile(
       'index.css',
       css`
@@ -618,8 +615,8 @@ describe('watcher', () => {
           },
           theme: {
             extend: {
-              colors: {
-                yellow: '#ff0',
+              zIndex: {
+                primary: 0
               }
             },
           },
@@ -639,8 +636,8 @@ describe('watcher', () => {
           },
           theme: {
             extend: {
-              colors: {
-                yellow: '#ff7',
+              zIndex: {
+                primary: 10
               }
             },
           },
@@ -656,8 +653,8 @@ describe('watcher', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-yellow {
-          background-color: #ff0;
+        .z-primary {
+          z-index: 0;
         }
       `
     )
@@ -675,8 +672,8 @@ describe('watcher', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-yellow {
-          background-color: #ff7;
+        .z-primary {
+          z-index: 10;
         }
       `
     )
@@ -691,8 +688,8 @@ describe('watcher', () => {
           },
           theme: {
             extend: {
-              colors: {
-                yellow: '#fff',
+              zIndex: {
+                primary: 20
               }
             },
           },
@@ -706,8 +703,8 @@ describe('watcher', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        .bg-yellow {
-          background-color: #fff;
+        .z-primary {
+          z-index: 20;
         }
       `
     )
@@ -1194,10 +1191,10 @@ describe('watcher', () => {
       )
 
       await writeInputFile('../.gitignore', 'node_modules')
-      await writeInputFile('../node_modules/a.html', html`<div class="text-red-100"></div>`)
-      await writeInputFile('index.html', html`<div class="text-red-200"></div>`)
-      await writeInputFile('nested/index.html', html`<div class="text-red-300"></div>`)
-      await writeInputFile('nested/node_modules/index.html', html`<div class="text-red-400"></div>`)
+      await writeInputFile('../node_modules/a.html', html`<div class="z-10"></div>`)
+      await writeInputFile('index.html', html`<div class="z-20"></div>`)
+      await writeInputFile('nested/index.html', html`<div class="z-30"></div>`)
+      await writeInputFile('nested/node_modules/index.html', html`<div class="z-40"></div>`)
 
       let runningProcess = $(
         'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
@@ -1208,24 +1205,24 @@ describe('watcher', () => {
       // Root node_modules
       expect(await readOutputFile('main.css')).not.toIncludeCss(
         css`
-          .text-red-100 {
-            color: #fee2e2;
+          .z-10 {
+            z-index: 10;
           }
         `
       )
 
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
-          .text-red-200 {
-            color: #fecaca;
+          .z-20 {
+            z-index: 20;
           }
         `
       )
 
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
-          .text-red-300 {
-            color: #fca5a5;
+          .z-30 {
+            z-index: 30;
           }
         `
       )
@@ -1233,8 +1230,8 @@ describe('watcher', () => {
       // Nested node_modules
       expect(await readOutputFile('main.css')).not.toIncludeCss(
         css`
-          .text-red-400 {
-            color: #f87171;
+          .z-40 {
+            z-index: 40;
           }
         `
       )
@@ -1256,10 +1253,10 @@ describe('watcher', () => {
       )
 
       await writeInputFile('../.gitignore', 'node_modules')
-      await writeInputFile('../node_modules/a.html', html`<div class="text-red-100"></div>`)
-      await writeInputFile('index.html', html`<div class="text-red-200"></div>`)
-      await writeInputFile('nested/index.html', html`<div class="text-red-300"></div>`)
-      await writeInputFile('nested/node_modules/index.html', html`<div class="text-red-400"></div>`)
+      await writeInputFile('../node_modules/a.html', html`<div class="z-10"></div>`)
+      await writeInputFile('index.html', html`<div class="z-20"></div>`)
+      await writeInputFile('nested/index.html', html`<div class="z-30"></div>`)
+      await writeInputFile('nested/node_modules/index.html', html`<div class="z-40"></div>`)
 
       let runningProcess = $(
         'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
@@ -1270,24 +1267,24 @@ describe('watcher', () => {
       // Root node_modules
       expect(await readOutputFile('main.css')).not.toIncludeCss(
         css`
-          .text-red-100 {
-            color: #fee2e2;
+          .z-10 {
+            z-index: 10;
           }
         `
       )
 
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
-          .text-red-200 {
-            color: #fecaca;
+          .z-20 {
+            z-index: 20;
           }
         `
       )
 
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
-          .text-red-300 {
-            color: #fca5a5;
+          .z-30 {
+            z-index: 30;
           }
         `
       )
@@ -1295,8 +1292,8 @@ describe('watcher', () => {
       // Nested node_modules
       expect(await readOutputFile('main.css')).not.toIncludeCss(
         css`
-          .text-red-400 {
-            color: #f87171;
+          .z-40 {
+            z-index: 40;
           }
         `
       )
@@ -1318,11 +1315,8 @@ describe('watcher', () => {
       )
 
       await writeInputFile('../.gitignore', 'node_modules')
-      await writeInputFile(
-        '../node_modules/library-example.html',
-        html`<div class="text-red-100"></div>`
-      )
-      await writeInputFile('index.html', html`<div class="text-red-200"></div>`)
+      await writeInputFile('../node_modules/library-example.html', html`<div class="z-10"></div>`)
+      await writeInputFile('index.html', html`<div class="z-20"></div>`)
 
       let runningProcess = $(
         'node ../../../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w',
@@ -1333,16 +1327,16 @@ describe('watcher', () => {
       // example.html should be ignored right now
       expect(await readOutputFile('main.css')).not.toIncludeCss(
         css`
-          .text-red-100 {
-            color: #fee2e2;
+          .z-10 {
+            z-index: 10;
           }
         `
       )
 
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
-          .text-red-200 {
-            color: #fecaca;
+          .z-20 {
+            z-index: 20;
           }
         `
       )
@@ -1360,19 +1354,19 @@ describe('watcher', () => {
       )
       await runningProcess.onStderr(ready)
 
-      // text-red-100 from `example.html` should be available now
+      // z-10 from `example.html` should be available now
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
-          .text-red-100 {
-            color: #fee2e2;
+          .z-10 {
+            z-index: 10;
           }
         `
       )
 
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
-          .text-red-200 {
-            color: #fecaca;
+          .z-20 {
+            z-index: 20;
           }
         `
       )

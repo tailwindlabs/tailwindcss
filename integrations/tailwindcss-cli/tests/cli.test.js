@@ -195,7 +195,7 @@ describe('Build command', () => {
           function before(root, result) {
             // Inject a custom component with @apply rules to prove that we run
             // this _before_ the actual tailwind plugin.
-            let btn = postcss.parse('.btn { @apply bg-red-500 px-2 py-1 }')
+            let btn = postcss.parse('.btn { @apply flex px-2 py-1 }')
             root.append(btn.nodes)
           },
           function tailwindcss() {
@@ -223,7 +223,7 @@ describe('Build command', () => {
         }
 
         .btn-after {
-          background-color: #ef4444;
+          display: flex;
           padding-left: 0.5rem;
           padding-right: 0.5rem;
           padding-top: 0.25rem;
@@ -245,7 +245,7 @@ describe('Build command', () => {
           function before(root, result) {
             // Inject a custom component with @apply rules to prove that we run
             // this _before_ the actual tailwind plugin.
-            let btn = postcss.parse('.btn { @apply bg-red-500 px-2 py-1 }')
+            let btn = postcss.parse('.btn { @apply flex px-2 py-1 }')
             root.append(btn.nodes)
           },
           function tailwindcss() {
@@ -273,7 +273,7 @@ describe('Build command', () => {
         }
 
         .btn-after {
-          background-color: #ef4444;
+          display: flex;
           padding-left: 0.5rem;
           padding-right: 0.5rem;
           padding-top: 0.25rem;

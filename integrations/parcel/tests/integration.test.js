@@ -39,7 +39,7 @@ describe('static build', () => {
       'index.html',
       html`
         <link rel="stylesheet" href="./index.css" />
-        <div class="bg-primary"></div>
+        <div class="z-primary"></div>
       `
     )
     await writeInputFile(
@@ -57,8 +57,8 @@ describe('static build', () => {
           content: ['./src/index.html'],
           theme: {
             extend: {
-              colors: {
-                primary: 'black',
+              zIndex: {
+                primary: 0,
               },
             },
           },
@@ -75,8 +75,8 @@ describe('static build', () => {
 
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
-        .bg-primary {
-          background-color: black;
+        .z-primary {
+          z-index: 0;
         }
       `
     )
@@ -88,7 +88,7 @@ describe('static build', () => {
       'index.html',
       html`
         <link rel="stylesheet" href="./index.css" />
-        <div class="bg-primary"></div>
+        <div class="z-primary"></div>
       `
     )
     await writeInputFile(
@@ -108,8 +108,8 @@ describe('static build', () => {
           content: ['./src/index.html'],
           theme: {
             extend: {
-              colors: {
-                primary: 'black',
+              zIndex: {
+                primary: 0,
               },
             },
           },
@@ -126,8 +126,8 @@ describe('static build', () => {
 
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
-        .bg-primary {
-          background-color: black;
+        .z-primary {
+          z-index: 0;
         }
       `
     )
@@ -172,13 +172,13 @@ describe('watcher', () => {
     )
 
     await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
-      await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
+      await appendToInputFile('index.html', html`<div class="z-0"></div>`)
     })
 
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
-        .bg-red-500 {
-          background-color: #ef4444;
+        .z-0 {
+          z-index: 0;
         }
         .font-bold {
           font-weight: 700;
@@ -225,13 +225,13 @@ describe('watcher', () => {
     )
 
     await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
-      await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
+      await appendToInputFile('glob/index.html', html`<div class="z-0"></div>`)
     })
 
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
-        .bg-red-500 {
-          background-color: #ef4444;
+        .z-0 {
+          z-index: 0;
         }
         .font-bold {
           font-weight: 700;
@@ -373,7 +373,7 @@ describe('watcher', () => {
 
           @layer components {
             .btn {
-              @apply rounded bg-red-500 px-2 py-1;
+              @apply rounded z-0 px-2 py-1;
             }
           }
         `
@@ -383,7 +383,7 @@ describe('watcher', () => {
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
         .btn {
-          background-color: #ef4444;
+          z-index: 0;
           border-radius: 0.25rem;
           padding: 0.25rem 0.5rem;
         }
