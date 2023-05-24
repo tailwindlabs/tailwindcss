@@ -16,9 +16,6 @@
     "integrations/*",
     "oxide/crates/node"
   ],
-  "tailwindcss": {
-    "engine": "oxide"
-  },
   "scripts": {
     "dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run dev:js' 'npm run dev:rust'",
     "build": "npm run build:rust && npm run build:js",

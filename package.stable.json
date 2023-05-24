@@ -12,9 +12,6 @@
     "tailwind": "lib/cli.js",
     "tailwindcss": "lib/cli.js"
   },
-  "tailwindcss": {
-    "engine": "stable"
-  },
   "scripts": {
     "prebuild": "npm run generate && rimraf lib",
     "build": "swc src --out-dir lib --copy-files",
