@@ -96,8 +96,7 @@ describe('Build command', () => {
     expect(withoutMinify.length).toBeGreaterThan(withMinify.length)
   })
 
-  // TODO: Handle --no-autoprefixer
-  test.skip('--no-autoprefixer', async () => {
+  test('--no-autoprefixer', async () => {
     await writeInputFile('index.html', html`<div class="select-none"></div>`)
 
     await $(`${EXECUTABLE} --output ./dist/main.css`)
