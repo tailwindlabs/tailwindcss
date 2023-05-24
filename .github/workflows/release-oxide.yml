@@ -408,3 +408,19 @@ jobs:
         run: npm publish --tag ${{ env.RELEASE_CHANNEL }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # - name: Trigger Tailwind Play update
+      #   if: env.RELEASE_CHANNEL == 'latest'
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+      #     script: |
+      #       await github.rest.actions.createWorkflowDispatch({
+      #         owner: 'tailwindlabs',
+      #         repo: 'play.tailwindcss.com',
+      #         ref: 'master',
+      #         workflow_id: 'upgrade-tailwindcss.yml',
+      #         inputs: {
+      #           version: '${{ env.TAILWINDCSS_VERSION }}'
+      #         }
+      #       })
