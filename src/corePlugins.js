@@ -1255,13 +1255,13 @@ export let corePlugins = {
     ],
   ]),
 
-  space: ({ matchUtilities, addUtilities, theme }) => {
+  space: ({ matchUtilities, addUtilities, theme, config }) => {
     matchUtilities(
       {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (__OXIDE__) {
+          if (flagEnabled(config(), 'logicalSiblingUtilities')) {
             return {
               '& > :not([hidden]) ~ :not([hidden])': {
                 '--tw-space-x-reverse': '0',
@@ -1300,13 +1300,13 @@ export let corePlugins = {
     })
   },
 
-  divideWidth: ({ matchUtilities, addUtilities, theme }) => {
+  divideWidth: ({ matchUtilities, addUtilities, theme, config }) => {
     matchUtilities(
       {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (__OXIDE__) {
+          if (flagEnabled(config(), 'logicalSiblingUtilities')) {
             return {
               '& > :not([hidden]) ~ :not([hidden])': {
                 '@defaults border-width': {},

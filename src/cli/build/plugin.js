@@ -24,6 +24,7 @@ import { loadConfig } from '../../lib/load-config'
 import getModuleDependencies from '../../lib/getModuleDependencies'
 import { validateConfig } from '../../util/validateConfig'
 import { handleImportAtRules } from '../../lib/handleImportAtRules'
+import { flagEnabled } from '../../featureFlags'
 
 async function lightningcss(shouldMinify, result, options = {}) {
   // TODO: handle --no-autoprefixer option if possible
@@ -189,7 +190,7 @@ let state = {
     let files = fastGlob.sync(this.contentPatterns.all)
 
     for (let file of files) {
-      if (__OXIDE__) {
+      if (flagEnabled(this.config, 'oxideParser')) {
         content.push({
           file,
           extension: path.extname(file).slice(1),

@@ -12,6 +12,9 @@ let defaults = {
   get oxideParser() {
     return __OXIDE__
   },
+  get logicalSiblingUtilities() {
+    return __OXIDE__
+  },
 }
 
 let featureFlags = {
@@ -20,6 +23,7 @@ let featureFlags = {
     'respectDefaultRingColorOpacity',
     'disableColorOpacityUtilitiesByDefault',
     'relativeContentPathsByDefault',
+    'logicalSiblingUtilities',
   ],
   experimental: [
     'optimizeUniversalDefaults',
