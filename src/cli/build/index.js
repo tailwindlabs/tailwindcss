@@ -25,6 +25,10 @@ export async function build(args) {
     process.exit(9)
   }
 
+  if (args['--no-autoprefixer']) {
+    console.error('[deprecation] The --no-autoprefixer flag is deprecated and has no effect.')
+  }
+
   // TODO: Reference the @config path here if exists
   let configPath = args['--config'] ? args['--config'] : resolveDefaultConfigPath()
 

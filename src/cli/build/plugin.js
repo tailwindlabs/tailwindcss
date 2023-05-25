@@ -26,14 +26,13 @@ import { validateConfig } from '../../util/validateConfig'
 import { handleImportAtRules } from '../../lib/handleImportAtRules'
 import { flagEnabled } from '../../featureFlags'
 
-async function lightningcss(shouldMinify, result, options = {}) {
-  // TODO: handle --no-autoprefixer option if possible
+async function lightningcss(result, { map = true, minify = true } = {}) {
   try {
     let transformed = lightning.transform({
       filename: result.opts.from || 'input.css',
       code: Buffer.from(result.css, 'utf-8'),
-      minify: shouldMinify,
-      sourceMap: result.map === undefined ? options.map : !!result.map,
+      minify,
+      sourceMap: result.map === undefined ? map : !!result.map,
       inputSourceMap: result.map ? result.map.toString() : undefined,
       targets: lightning.browserslistToTargets(browserslist(pkg.browserslist)),
       drafts: {
@@ -46,7 +45,7 @@ async function lightningcss(shouldMinify, result, options = {}) {
       map: result.map
         ? Object.assign(result.map, {
             toString() {
-              return transformed.map.toString()
+              return transformed.map?.toString()
             },
           })
         : result.map,
@@ -342,7 +341,12 @@ export async function createProcessor(args, cliConfigPath) {
 
     return readInput()
       .then((css) => processor.process(css, options))
-      .then((result) => lightningcss(!!args['--minify'], result, options))
+      .then((result) =>
+        lightningcss(result, {
+          ...options,
+          minify: !!args['--minify'],
+        })
+      )
       .then((result) => {
         if (!state.watcher) {
           return result

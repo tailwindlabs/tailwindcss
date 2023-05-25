@@ -49,7 +49,7 @@ module.exports = function tailwindcss(configOrPath) {
             inputSourceMap: result.map ? result.map.toString() : undefined,
             targets:
               typeof process !== 'undefined' && process.env.JEST_WORKER_ID
-                ? { chrome: 106 << 16 }
+                ? { chrome: 111 << 16 }
                 : lightningcss.browserslistToTargets(
                     browserslist(require('../package.json').browserslist)
                   ),

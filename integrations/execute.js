@@ -64,7 +64,7 @@ module.exports = function $(command, options = {}) {
         messages.splice(0, idx + 1)
         let actorIdx = actors.indexOf(next)
         actors.splice(actorIdx, 1)
-        next.resolve()
+        next.resolve(message)
         break
       }
     }
