@@ -172,15 +172,13 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             strip: strip
-            image: docker.io/centos/nodejs-14-centos7
+            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
           - target: aarch64-unknown-linux-gnu
-            strip: aarch64-linux-gnu-strip
-            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
-            setup: apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y
+            strip: llvm-strip
+            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
           - target: armv7-unknown-linux-gnueabihf
-            strip: arm-linux-gnueabihf-strip
-            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
-            setup: apt install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
+            strip: llvm-strip
+            image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-zig
           - target: aarch64-unknown-linux-musl
             image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             strip: aarch64-linux-musl-strip
