@@ -10,7 +10,7 @@ function regexParser(str) {
 function oxideParser(str) {
   return parseCandidateStrings(
     [{ content: str, extension: 'html' }],
-    IO.Sequential | Parsing.Sequential
+    IO.Sequential | Parsing.Parallel
   )
 }
 
