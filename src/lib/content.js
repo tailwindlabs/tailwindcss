@@ -7,6 +7,7 @@ import fastGlob from 'fast-glob'
 import normalizePath from 'normalize-path'
 import { parseGlob } from '../util/parseGlob'
 import { env } from './sharedState'
+import { resolveContentPaths } from '@tailwindcss/oxide'
 
 /** @typedef {import('../../types/config.js').RawFile} RawFile */
 /** @typedef {import('../../types/config.js').FilePath} FilePath */
@@ -17,17 +18,24 @@ import { env } from './sharedState'
  * @returns {ContentPath[]}
  */
 function resolveContentFiles(tailwindConfig, { skip = [] } = {}) {
-  if (tailwindConfig.content.files === 'auto' && __OXIDE__) {
-    env.DEBUG && console.time('Calculating resolve content paths')
-    tailwindConfig.content.files = require('@tailwindcss/oxide').resolveContentPaths({
-      base: process.cwd(),
-    })
-    if (skip.length > 0) {
-      tailwindConfig.content.files = tailwindConfig.content.files.filter(
-        (filePath) => !skip.includes(filePath)
-      )
+  if (
+    Array.isArray(tailwindConfig.content.files) &&
+    tailwindConfig.content.files.includes('auto')
+  ) {
+    let idx = tailwindConfig.content.files.indexOf('auto')
+    if (idx !== -1) {
+      env.DEBUG && console.time('Calculating resolve content paths')
+      let resolved = resolveContentPaths({ base: process.cwd() })
+      env.DEBUG && console.timeEnd('Calculating resolve content paths')
+
+      tailwindConfig.content.files.splice(idx, 1, ...resolved)
     }
-    env.DEBUG && console.timeEnd('Calculating resolve content paths')
+  }
+
+  if (skip.length > 0) {
+    tailwindConfig.content.files = tailwindConfig.content.files.filter(
+      (filePath) => !skip.includes(filePath)
+    )
   }
 
   return tailwindConfig.content.files
@@ -191,12 +199,9 @@ function resolvePathSymlinks(contentPath) {
  * @returns {[{ content: string, extension: string }[], Map<string, number>]}
  */
 export function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
-  let changedContent =
-    context.tailwindConfig.content.files === 'auto' && __OXIDE__
-      ? []
-      : context.tailwindConfig.content.files
-          .filter((item) => typeof item.raw === 'string')
-          .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
+  let changedContent = context.tailwindConfig.content.files
+    .filter((item) => typeof item.raw === 'string')
+    .map(({ raw, extension = 'html' }) => ({ content: raw, extension }))
 
   let [changedFiles, mTimesToCommit] = resolveChangedFiles(candidateFiles, fileModifiedMap)
 

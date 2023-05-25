@@ -1,10 +1,12 @@
 import fs from 'fs'
 import LRU from '@alloc/quick-lru'
+import { parseCandidateStringsFromFiles } from '@tailwindcss/oxide'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import log from '../util/log'
 import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
+import { flagEnabled } from '../featureFlags'
 
 let env = sharedState.env
 
@@ -130,9 +132,9 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Reading changed files')
 
-    if (__OXIDE__) {
+    if (flagEnabled(context.tailwindConfig, 'oxideParser')) {
       // TODO: Pass through or implement `extractor`
-      for (let candidate of require('@tailwindcss/oxide').parseCandidateStringsFromFiles(
+      for (let candidate of parseCandidateStringsFromFiles(
         context.changedContent
         // Object.assign({}, builtInTransformers, context.tailwindConfig.content.transform)
       )) {
@@ -162,7 +164,7 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Generate rules')
     env.DEBUG && console.time('Sorting candidates')
-    let sortedCandidates = __OXIDE__
+    let sortedCandidates = flagEnabled(context.tailwindConfig, 'oxideParser')
       ? candidates
       : new Set(
           [...candidates].sort((a, z) => {

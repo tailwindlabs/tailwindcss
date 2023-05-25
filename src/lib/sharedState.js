@@ -1,16 +1,12 @@
-import pkg from '../../package.json'
-
 export const env =
   typeof process !== 'undefined'
     ? {
         NODE_ENV: process.env.NODE_ENV,
         DEBUG: resolveDebug(process.env.DEBUG),
-        ENGINE: pkg.tailwindcss.engine,
       }
     : {
         NODE_ENV: 'production',
         DEBUG: false,
-        ENGINE: pkg.tailwindcss.engine,
       }
 
 export const contextMap = new Map()

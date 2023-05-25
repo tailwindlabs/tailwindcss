@@ -16,12 +16,9 @@
     "integrations/*",
     "oxide/crates/node"
   ],
-  "tailwindcss": {
-    "engine": "oxide"
-  },
   "scripts": {
     "dev": "concurrently -n tailwind,oxide-node -c green,yellow 'npm run dev:js' 'npm run dev:rust'",
-    "build": "npm run build:rust && npm run build:js && npm run build:peers",
+    "build": "npm run build:rust && npm run build:js",
     "test": "jest",
     "test:integrations": "npm run test -w ./integrations",
     "style": "eslint .",
@@ -29,8 +26,7 @@
     "dev:rust": "npm run --prefix ./oxide dev:node",
     "dev:js": "npm run build:js -- --watch",
     "build:rust": "npm run --prefix ./oxide build:node",
-    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__OXIDE__='\"true\"'",
-    "build:peers": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
+    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start",
     "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
     "generate:types": "node -r @swc/register scripts/generate-types.js"
   },
@@ -38,7 +34,6 @@
     "src/*",
     "cli/*",
     "lib/*",
-    "peers/*",
     "scripts/*.js",
     "stubs/*",
     "nesting/*",
@@ -54,8 +49,6 @@
     "@swc/register": "^0.1.10",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.0.1",
-    "cssnano": "^6.0.1",
-    "esbuild": "^0.17.18",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",

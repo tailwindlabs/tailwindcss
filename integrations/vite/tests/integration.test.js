@@ -2,7 +2,6 @@ require('isomorphic-fetch')
 
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
-let { env } = require('../../../lib/lib/sharedState')
 
 let { readOutputFile, appendToInputFile, writeInputFile, removeFile } = require('../../io')({
   output: 'dist',
@@ -48,7 +47,7 @@ describe('static build', () => {
       'index.html',
       html`
         <link rel="stylesheet" href="./index.css" />
-        <div class="bg-primary"></div>
+        <div class="z-primary"></div>
       `
     )
     await removeFile('tailwind.config.js')
@@ -59,8 +58,8 @@ describe('static build', () => {
           content: ['index.html'],
           theme: {
             extend: {
-              colors: {
-                primary: 'black',
+              zIndex: {
+                primary: 0,
               },
             },
           },
@@ -75,26 +74,13 @@ describe('static build', () => {
       env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
-        css`
-          .bg-primary {
-            --tw-bg-opacity: 1;
-            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
-        css`
-          .bg-primary {
-            background-color: black;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+      css`
+        .z-primary {
+          z-index: 0;
+        }
+      `
+    )
   })
 
   it('can use a tailwind.config.ts configuration file', async () => {
@@ -102,7 +88,7 @@ describe('static build', () => {
       'index.html',
       html`
         <link rel="stylesheet" href="./index.css" />
-        <div class="bg-primary"></div>
+        <div class="z-primary"></div>
       `
     )
     await removeFile('tailwind.config.js')
@@ -115,8 +101,8 @@ describe('static build', () => {
           content: ['index.html'],
           theme: {
             extend: {
-              colors: {
-                primary: 'black',
+              zIndex: {
+                primary: 0,
               },
             },
           },
@@ -131,26 +117,13 @@ describe('static build', () => {
       env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
-        css`
-          .bg-primary {
-            --tw-bg-opacity: 1;
-            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
-        css`
-          .bg-primary {
-            background-color: black;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+      css`
+        .z-primary {
+          z-index: 0;
+        }
+      `
+    )
   })
 })
 
@@ -191,41 +164,22 @@ describe('watcher', () => {
       `
     )
 
-    await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
+    await appendToInputFile('index.html', html`<div class="z-0"></div>`)
     await runningProcess.onStdout((message) => message.includes('page reload'))
 
-    if (env.ENGINE === 'stable') {
-      expect(await fetchCSS()).toIncludeCss(
-        css`
-          .bg-red-500 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await fetchCSS()).toIncludeCss(
-        css`
-          .bg-red-500 {
-            background-color: #ef4444;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .z-0 {
+          z-index: 0;
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })
@@ -262,41 +216,22 @@ describe('watcher', () => {
       `
     )
 
-    await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
+    await appendToInputFile('glob/index.html', html`<div class="z-0"></div>`)
     await runningProcess.onStdout((message) => message.includes('page reload'))
 
-    if (env.ENGINE === 'stable') {
-      expect(await fetchCSS()).toIncludeCss(
-        css`
-          .bg-red-500 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await fetchCSS()).toIncludeCss(
-        css`
-          .bg-red-500 {
-            background-color: #ef4444;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .z-0 {
+          z-index: 0;
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })
@@ -428,49 +363,28 @@ describe('watcher', () => {
 
         @layer components {
           .btn {
-            @apply rounded bg-red-500 px-2 py-1;
+            @apply rounded z-0 px-2 py-1;
           }
         }
       `
     )
     await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
 
-    if (env.ENGINE === 'stable') {
-      expect(await fetchCSS()).toIncludeCss(
-        css`
-          .btn {
-            border-radius: 0.25rem;
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await fetchCSS()).toIncludeCss(
-        css`
-          .btn {
-            border-radius: 0.25rem;
-            background-color: #ef4444;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-        `
-      )
-    }
+    expect(await fetchCSS()).toIncludeCss(
+      css`
+        .btn {
+          border-radius: 0.25rem;
+          z-index: 0;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })

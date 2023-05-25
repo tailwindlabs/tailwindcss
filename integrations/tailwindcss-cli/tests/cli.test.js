@@ -2,7 +2,6 @@ let path = require('path')
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
 let resolveToolRoot = require('../../resolve-tool-root')
-let { env } = require('../../../lib/lib/sharedState')
 
 let version = require('../../../package.json').version
 
@@ -19,7 +18,6 @@ let {
 })
 
 let EXECUTABLE = 'node ../../lib/cli.js'
-let testStable = env.ENGINE === 'stable' ? test : test.skip
 
 function dedent(input) {
   let lines = input.split('\n')
@@ -98,7 +96,8 @@ describe('Build command', () => {
     expect(withoutMinify.length).toBeGreaterThan(withMinify.length)
   })
 
-  testStable('--no-autoprefixer', async () => {
+  // TODO: Handle --no-autoprefixer
+  test.skip('--no-autoprefixer', async () => {
     await writeInputFile('index.html', html`<div class="select-none"></div>`)
 
     await $(`${EXECUTABLE} --output ./dist/main.css`)
@@ -184,7 +183,7 @@ describe('Build command', () => {
     )
   })
 
-  testStable('--postcss (postcss.config.js)', async () => {
+  test('--postcss (postcss.config.js)', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let customConfig = javascript`
@@ -196,7 +195,7 @@ describe('Build command', () => {
           function before(root, result) {
             // Inject a custom component with @apply rules to prove that we run
             // this _before_ the actual tailwind plugin.
-            let btn = postcss.parse('.btn { @apply bg-red-500 px-2 py-1 }')
+            let btn = postcss.parse('.btn { @apply flex px-2 py-1 }')
             root.append(btn.nodes)
           },
           function tailwindcss() {
@@ -217,45 +216,24 @@ describe('Build command', () => {
 
     await $(`${EXECUTABLE} --output ./dist/main.css --postcss`)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .font-bold-after {
-            font-weight: 700;
-          }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold-after {
+          font-weight: 700;
+        }
 
-          .btn-after {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .font-bold-after {
-            font-weight: 700;
-          }
-
-          .btn-after {
-            background-color: #ef4444;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-        `
-      )
-    }
+        .btn-after {
+          display: flex;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+      `
+    )
   })
 
-  testStable('--postcss (custom.postcss.config.js)', async () => {
+  test('--postcss (custom.postcss.config.js)', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let customConfig = javascript`
@@ -267,7 +245,7 @@ describe('Build command', () => {
           function before(root, result) {
             // Inject a custom component with @apply rules to prove that we run
             // this _before_ the actual tailwind plugin.
-            let btn = postcss.parse('.btn { @apply bg-red-500 px-2 py-1 }')
+            let btn = postcss.parse('.btn { @apply flex px-2 py-1 }')
             root.append(btn.nodes)
           },
           function tailwindcss() {
@@ -288,45 +266,24 @@ describe('Build command', () => {
 
     await $(`${EXECUTABLE} --output ./dist/main.css --postcss ./custom.postcss.config.js`)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .font-bold-after {
-            font-weight: 700;
-          }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold-after {
+          font-weight: 700;
+        }
 
-          .btn-after {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .font-bold-after {
-            font-weight: 700;
-          }
-
-          .btn-after {
-            background-color: #ef4444;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-        `
-      )
-    }
+        .btn-after {
+          display: flex;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+      `
+    )
   })
 
-  testStable('--postcss supports process options', async () => {
+  test('--postcss supports process options', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let customConfig = javascript`
@@ -360,7 +317,7 @@ describe('Build command', () => {
     expect(contents).toContain(`/*# sourceMappingURL`)
   })
 
-  testStable('--postcss supports process options with custom config', async () => {
+  test('--postcss supports process options with custom config', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let customConfig = javascript`
@@ -481,10 +438,18 @@ describe('Build command', () => {
     return runningProcess.stop()
   })
 
-  testStable('postcss-import is included when using a custom postcss configuration', async () => {
+  test('postcss-import is included when using a custom postcss configuration', async () => {
     cleanupFile('src/test.css')
 
     await writeInputFile('index.html', html`<div class="md:something-cool"></div>`)
+    await writeInputFile(
+      'imported.css',
+      css`
+        .foo {
+          color: white;
+        }
+      `
+    )
     await writeInputFile(
       'test.css',
       css`
@@ -501,7 +466,9 @@ describe('Build command', () => {
 
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
-        @import './imported.css';
+        .foo {
+          color: #fff;
+        }
       `
     )
   })
@@ -509,28 +476,8 @@ describe('Build command', () => {
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} --help`)
 
-    if (env.ENGINE === 'oxide') {
-      expect(dedent(combined)).toEqual(
-        dedent(`
-          tailwindcss v${version}
-
-          Usage:
-             tailwindcss build [options]
-
-          Options:
-             -i, --input              Input file
-             -o, --output             Output file
-             -w, --watch              Watch for changes and rebuild as needed
-             -p, --poll               Use polling instead of filesystem events when watching
-                 --content            Content paths to use for removing unused classes
-             -m, --minify             Minify the output
-             -c, --config             Path to a custom config file
-             -h, --help               Display usage information
-        `)
-      )
-    } else if (env.ENGINE === 'stable') {
-      expect(dedent(combined)).toEqual(
-        dedent(`
+    expect(dedent(combined)).toEqual(
+      dedent(`
           tailwindcss v${version}
 
           Usage:
@@ -548,8 +495,7 @@ describe('Build command', () => {
                  --no-autoprefixer    Disable autoprefixer
              -h, --help               Display usage information
         `)
-      )
-    }
+    )
   })
 })
 
@@ -562,7 +508,6 @@ describe('Init command', () => {
     { flags: ['--ts', '--full'], name: 'tailwind.config.ts' },
     { flags: ['--esm', '--full'], name: 'tailwind.config.js' },
   ])('works with all these flags: %j', async ({ flags, name }) => {
-    cleanupFile(name)
     await removeFile(name)
 
     let { combined } = await $(`${EXECUTABLE} init ${flags.join(' ')}`)
@@ -611,7 +556,7 @@ describe('Init command', () => {
     expect((await readOutputFile('../full.config.js')).split('\n').length).toBeGreaterThan(50)
   })
 
-  testStable('--postcss', async () => {
+  test('--postcss', async () => {
     expect(await fileExists('postcss.config.js')).toBe(true)
     await removeFile('postcss.config.js')
     expect(await fileExists('postcss.config.js')).toBe(false)
@@ -631,24 +576,8 @@ describe('Init command', () => {
   test('--help', async () => {
     let { combined } = await $(`${EXECUTABLE} init --help`)
 
-    if (env.ENGINE === 'oxide') {
-      expect(dedent(combined)).toEqual(
-        dedent(`
-          tailwindcss v${version}
-
-          Usage:
-             tailwindcss init [options]
-
-          Options:
-                 --esm                Initialize configuration file as ESM
-                 --ts                 Initialize configuration file as TypeScript
-             -f, --full               Include the default values for all options in the generated configuration file
-             -h, --help               Display usage information
-        `)
-      )
-    } else if (env.ENGINE === 'stable') {
-      expect(dedent(combined)).toEqual(
-        dedent(`
+    expect(dedent(combined)).toEqual(
+      dedent(`
           tailwindcss v${version}
 
           Usage:
@@ -661,12 +590,10 @@ describe('Init command', () => {
              -f, --full               Include the default values for all options in the generated configuration file
              -h, --help               Display usage information
         `)
-      )
-    }
+    )
   })
 
   test('ESM config is created by default in an ESM project', async () => {
-    cleanupFile('tailwind.config.js')
     await removeFile('tailwind.config.js')
 
     let pkg = await readOutputFile('../package.json')
@@ -696,7 +623,6 @@ describe('Init command', () => {
   })
 
   test('CJS config is created by default in a non-ESM project', async () => {
-    cleanupFile('tailwind.config.js')
     await removeFile('tailwind.config.js')
 
     let pkg = await readOutputFile('../package.json')

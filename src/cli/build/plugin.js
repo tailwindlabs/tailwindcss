@@ -1,14 +1,17 @@
 // @ts-check
 
+import pkg from '../../../package.json'
 import path from 'path'
 import fs from 'fs'
+import postcss from 'postcss'
 import postcssrc from 'postcss-load-config'
+import browserslist from 'browserslist'
+import lightning from 'lightningcss'
 import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
 
 import tailwind from '../../processTailwindFeatures'
-import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport } from './deps'
 import { formatNodes, drainStdin, outputFile } from './utils'
 import { env } from '../../lib/sharedState'
 import resolveConfig from '../../../resolveConfig.js'
@@ -20,6 +23,41 @@ import log from '../../util/log'
 import { loadConfig } from '../../lib/load-config'
 import getModuleDependencies from '../../lib/getModuleDependencies'
 import { validateConfig } from '../../util/validateConfig'
+import { handleImportAtRules } from '../../lib/handleImportAtRules'
+import { flagEnabled } from '../../featureFlags'
+
+async function lightningcss(shouldMinify, result, options = {}) {
+  // TODO: handle --no-autoprefixer option if possible
+  try {
+    let transformed = lightning.transform({
+      filename: result.opts.from || 'input.css',
+      code: Buffer.from(result.css, 'utf-8'),
+      minify: shouldMinify,
+      sourceMap: result.map === undefined ? options.map : !!result.map,
+      inputSourceMap: result.map ? result.map.toString() : undefined,
+      targets: lightning.browserslistToTargets(browserslist(pkg.browserslist)),
+      drafts: {
+        nesting: true,
+      },
+    })
+
+    return Object.assign(result, {
+      css: transformed.code.toString('utf8'),
+      map: result.map
+        ? Object.assign(result.map, {
+            toString() {
+              return transformed.map.toString()
+            },
+          })
+        : result.map,
+    })
+  } catch (err) {
+    console.error('Unable to use Lightning CSS. Using raw version instead.')
+    console.error(err)
+
+    return result
+  }
+}
 
 /**
  *
@@ -76,39 +114,6 @@ async function loadPostCssPlugins(customPostCssPath) {
   return [beforePlugins, afterPlugins, config.options]
 }
 
-function loadBuiltinPostcssPlugins() {
-  let postcss = loadPostcss()
-  let IMPORT_COMMENT = '__TAILWIND_RESTORE_IMPORT__: '
-  return [
-    [
-      (root) => {
-        root.walkAtRules('import', (rule) => {
-          if (rule.params.slice(1).startsWith('tailwindcss/')) {
-            rule.after(postcss.comment({ text: IMPORT_COMMENT + rule.params }))
-            rule.remove()
-          }
-        })
-      },
-      loadPostcssImport(),
-      (root) => {
-        root.walkComments((rule) => {
-          if (rule.text.startsWith(IMPORT_COMMENT)) {
-            rule.after(
-              postcss.atRule({
-                name: 'import',
-                params: rule.text.replace(IMPORT_COMMENT, ''),
-              })
-            )
-            rule.remove()
-          }
-        })
-      },
-    ],
-    [],
-    {},
-  ]
-}
-
 let state = {
   /** @type {any} */
   context: null,
@@ -119,7 +124,7 @@ let state = {
   /** @type {{content: string, extension: string}[]} */
   changedContent: [],
 
-  /** @type {ReturnType<typeof load> | null} */
+  /** @type {{config: import('../../../types').Config, dependencies: Set<string>, dispose: Function } | null} */
   configBag: null,
 
   contextDependencies: new Set(),
@@ -161,14 +166,7 @@ let state = {
       },
     }
 
-    // @ts-ignore
-    if (__OXIDE__) {
-      this.configBag.config = validateConfig(resolveConfig(this.configBag.config))
-    } else {
-      this.configBag.config = validateConfig(
-        resolveConfig(this.configBag.config, { content: { files: [] } })
-      )
-    }
+    this.configBag.config = validateConfig(resolveConfig(this.configBag.config))
 
     // Override content files if `--content` has been passed explicitly
     if (content?.length > 0) {
@@ -192,7 +190,7 @@ let state = {
     let files = fastGlob.sync(this.contentPatterns.all)
 
     for (let file of files) {
-      if (__OXIDE__) {
+      if (flagEnabled(this.config, 'oxideParser')) {
         content.push({
           file,
           extension: path.extname(file).slice(1),
@@ -258,8 +256,6 @@ let state = {
 }
 
 export async function createProcessor(args, cliConfigPath) {
-  let postcss = loadPostcss()
-
   let input = args['--input']
   let output = args['--output']
   let includePostCss = args['--postcss']
@@ -267,7 +263,9 @@ export async function createProcessor(args, cliConfigPath) {
 
   let [beforePlugins, afterPlugins, postcssOptions] = includePostCss
     ? await loadPostCssPlugins(customPostCssPath)
-    : loadBuiltinPostcssPlugins()
+    : [[], [], {}]
+
+  beforePlugins.unshift(...handleImportAtRules())
 
   if (args['--purge']) {
     log.warn('purge-flag-deprecated', [
@@ -313,8 +311,6 @@ export async function createProcessor(args, cliConfigPath) {
     tailwindPlugin,
     !args['--minify'] && formatNodes,
     ...afterPlugins,
-    !args['--no-autoprefixer'] && loadAutoprefixer(),
-    args['--minify'] && loadCssNano(),
   ].filter(Boolean)
 
   /** @type {import('postcss').Processor} */
@@ -338,9 +334,15 @@ export async function createProcessor(args, cliConfigPath) {
 
   async function build() {
     let start = process.hrtime.bigint()
+    let options = {
+      ...postcssOptions,
+      from: input,
+      to: output,
+    }
 
     return readInput()
-      .then((css) => processor.process(css, { ...postcssOptions, from: input, to: output }))
+      .then((css) => processor.process(css, options))
+      .then((result) => lightningcss(!!args['--minify'], result, options))
       .then((result) => {
         if (!state.watcher) {
           return result
