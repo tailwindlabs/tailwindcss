@@ -47,7 +47,7 @@ async function lightningcss(result, { map = true, minify = true, autoprefixer = 
       map: result.map
         ? Object.assign(result.map, {
             toString() {
-              return transformed.map.toString()
+              return transformed.map?.toString()
             },
           })
         : result.map,
