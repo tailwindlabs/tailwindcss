@@ -711,4 +711,35 @@ mod test {
         let candidates = run(r"[𕤵:]", false);
         assert!(candidates.is_empty());
     }
+
+    #[test]
+    fn classes_in_js_arrays() {
+        let candidates = run(
+            r#"let classes = ['bg-black', 'hover:px-0.5', 'text-[13px]', '[--my-var:1_/_2]']">"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_as_object_keys() {
+        let candidates = run(
+            r#"<div :class="{ underline: isActive, 'px-1.5': isOnline }"></div>"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["class", "underline", "isActive", "px-1.5", "isOnline"]
+        );
+    }
 }
