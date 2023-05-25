@@ -70,6 +70,7 @@ let commands = {
         description: 'Path to a custom config file',
       },
       '--no-autoprefixer': {
+        deprecated: true,
         type: Boolean,
         description: 'Disable autoprefixer',
       },

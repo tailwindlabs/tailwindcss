@@ -26,7 +26,7 @@ import { validateConfig } from '../../util/validateConfig'
 import { handleImportAtRules } from '../../lib/handleImportAtRules'
 import { flagEnabled } from '../../featureFlags'
 
-async function lightningcss(result, { map = true, minify = true, autoprefixer = true } = {}) {
+async function lightningcss(result, { map = true, minify = true } = {}) {
   try {
     let transformed = lightning.transform({
       filename: result.opts.from || 'input.css',
@@ -34,9 +34,7 @@ async function lightningcss(result, { map = true, minify = true, autoprefixer = 
       minify,
       sourceMap: result.map === undefined ? map : !!result.map,
       inputSourceMap: result.map ? result.map.toString() : undefined,
-      targets: autoprefixer
-        ? lightning.browserslistToTargets(browserslist(pkg.browserslist))
-        : { chrome: 111 << 16 },
+      targets: lightning.browserslistToTargets(browserslist(pkg.browserslist)),
       drafts: {
         nesting: true,
       },
@@ -347,7 +345,6 @@ export async function createProcessor(args, cliConfigPath) {
         lightningcss(result, {
           ...options,
           minify: !!args['--minify'],
-          autoprefixer: !args['--no-autoprefixer'],
         })
       )
       .then((result) => {

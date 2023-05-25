@@ -96,75 +96,35 @@ describe('Build command', () => {
     expect(withoutMinify.length).toBeGreaterThan(withMinify.length)
   })
 
-  test('--no-autoprefixer', async () => {
-    await writeInputFile('index.html', html`<div class="select-none"></div>`)
-
-    await $(`${EXECUTABLE} --output ./dist/main.css`)
-    let withAutoprefixer = await readOutputFile('main.css')
-
-    expect(withAutoprefixer).toIncludeCss(css`
-      .select-none {
-        -webkit-user-select: none;
-        user-select: none;
-      }
-    `)
-
-    await $(`${EXECUTABLE} --output ./dist/main.css --no-autoprefixer`)
-    let withoutAutoprefixer = await readOutputFile('main.css')
-
-    expect(withoutAutoprefixer).toIncludeCss(css`
-      .select-none {
-        user-select: none;
-      }
-    `)
-  })
-
-  test('--no-autoprefixer (with nesting handling)', async () => {
-    // This test mainly checks that we configured Lightning CSS correctly such that we can _still_
-    // use nesting.
+  // Deprecated
+  test('--no-autoprefixer (should produce a warning)', async () => {
     await writeInputFile('index.html', html`<div class="select-none"></div>`)
     await writeInputFile(
       'index.css',
       css`
         @tailwind utilities;
-
-        .foo {
-          & .bar {
-            display: flex;
-          }
-        }
       `
     )
 
-    await $(`${EXECUTABLE} --input ./src/index.css --output ./dist/main.css`)
-    let withAutoprefixer = await readOutputFile('main.css')
+    let runningProcess = $(
+      `${EXECUTABLE} --input ./src/index.css --output ./dist/main.css --no-autoprefixer`
+    )
+    let warning = runningProcess.onStderr((message) => message.includes('--no-autoprefixer'))
+    await runningProcess
+    expect(await warning).toMatchInlineSnapshot(`
+      "[deprecation] The --no-autoprefixer flag is deprecated and has no effect.
+      "
+    `)
+    let withoutAutoprefixer = await readOutputFile('main.css')
 
-    expect(withAutoprefixer).toIncludeCss(css`
-      .select-none {
+    // This contains --webkit-user-select which may be strange, but it is expected because we are
+    // not handling the `--no-autoprefixer` flag anymore at all.
+    expect(withoutAutoprefixer).toMatchInlineSnapshot(`
+      ".select-none {
         -webkit-user-select: none;
         user-select: none;
       }
-    `)
-
-    expect(withAutoprefixer).toIncludeCss(css`
-      .foo .bar {
-        display: flex;
-      }
-    `)
-
-    await $(`${EXECUTABLE} --input ./src/index.css --output ./dist/main.css --no-autoprefixer`)
-    let withoutAutoprefixer = await readOutputFile('main.css')
-
-    expect(withoutAutoprefixer).toIncludeCss(css`
-      .select-none {
-        user-select: none;
-      }
-    `)
-
-    expect(withoutAutoprefixer).toIncludeCss(css`
-      .foo .bar {
-        display: flex;
-      }
+      "
     `)
   })
 
@@ -540,7 +500,6 @@ describe('Build command', () => {
                  --postcss            Load custom PostCSS configuration
              -m, --minify             Minify the output
              -c, --config             Path to a custom config file
-                 --no-autoprefixer    Disable autoprefixer
              -h, --help               Display usage information
         `)
     )
