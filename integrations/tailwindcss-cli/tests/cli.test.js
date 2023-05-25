@@ -119,6 +119,55 @@ describe('Build command', () => {
     `)
   })
 
+  test('--no-autoprefixer (with nesting handling)', async () => {
+    // This test mainly checks that we configured Lightning CSS correctly such that we can _still_
+    // use nesting.
+    await writeInputFile('index.html', html`<div class="select-none"></div>`)
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind utilities;
+
+        .foo {
+          & .bar {
+            display: flex;
+          }
+        }
+      `
+    )
+
+    await $(`${EXECUTABLE} --input ./src/index.css --output ./dist/main.css`)
+    let withAutoprefixer = await readOutputFile('main.css')
+
+    expect(withAutoprefixer).toIncludeCss(css`
+      .select-none {
+        -webkit-user-select: none;
+        user-select: none;
+      }
+    `)
+
+    expect(withAutoprefixer).toIncludeCss(css`
+      .foo .bar {
+        display: flex;
+      }
+    `)
+
+    await $(`${EXECUTABLE} --input ./src/index.css --output ./dist/main.css --no-autoprefixer`)
+    let withoutAutoprefixer = await readOutputFile('main.css')
+
+    expect(withoutAutoprefixer).toIncludeCss(css`
+      .select-none {
+        user-select: none;
+      }
+    `)
+
+    expect(withoutAutoprefixer).toIncludeCss(css`
+      .foo .bar {
+        display: flex;
+      }
+    `)
+  })
+
   test('--config (non-existing config file)', async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
