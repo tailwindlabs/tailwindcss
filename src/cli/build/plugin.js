@@ -36,7 +36,7 @@ async function lightningcss(result, { map = true, minify = true, autoprefixer = 
       inputSourceMap: result.map ? result.map.toString() : undefined,
       targets: autoprefixer
         ? lightning.browserslistToTargets(browserslist(pkg.browserslist))
-        : undefined,
+        : { chrome: 111 << 16 },
       drafts: {
         nesting: true,
       },
