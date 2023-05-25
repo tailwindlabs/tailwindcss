@@ -527,8 +527,8 @@ describe.each([
     expect(extractions).toContain(c)
   })
 
-  describe.skip('Vue', () => {
-    test('Class object syntax', () => {
+  describe('Vue', () => {
+    test.skip('Class object syntax', () => {
       let extractions = parse(
         `<div :class="{ underline: myCondition, 'font-bold': myCondition }">[foo]</div>`
       )
@@ -537,7 +537,15 @@ describe.each([
     })
 
     test('Class array syntax', () => {
+      // With leading space
       let extractions = parse(
+        `<div :class="[ 'underline', myCondition && 'font-bold', myCondition ? 'flex' : 'block' ]">[foo]</div>`
+      )
+
+      expect(extractions).toContain(`underline`, `font-bold`, `flex`, `block`)
+
+      // Without leading space
+      extractions = parse(
         `<div :class="['underline', myCondition && 'font-bold', myCondition ? 'flex' : 'block']">[foo]</div>`
       )
 
