@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reset padding for `<dialog>` elements in preflight ([#11069](https://github.com/tailwindlabs/tailwindcss/pull/11069))
 - [Oxide] Disable color opacity plugins by default in the `oxide` engine ([#10618](https://github.com/tailwindlabs/tailwindcss/pull/10618))
 - [Oxide] Enable relative content paths for the `oxide` engine ([#10621](https://github.com/tailwindlabs/tailwindcss/pull/10621))
+- Deprecate `--no-autoprefixer` flag in the CLI ([#11280](https://github.com/tailwindlabs/tailwindcss/pull/11280))
 
 ## [3.3.2] - 2023-04-25
 
