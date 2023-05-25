@@ -503,15 +503,16 @@ describe.each([
     expect(extractions).toContain(`[display:inherit]`)
   })
 
-  describe('Vue', () => {
-    test.skip('Class object syntax', () => {
+  describe.skip('Vue', () => {
+    test('Class object syntax', () => {
       let extractions = parse(
         `<div :class="{ underline: myCondition, 'font-bold': myCondition }">[foo]</div>`
       )
 
       expect(extractions).toContain(`underline`, `font-bold`)
     })
-    test.skip('Class array syntax', () => {
+
+    test('Class array syntax', () => {
       let extractions = parse(
         `<div :class="['underline', myCondition && 'font-bold', myCondition ? 'flex' : 'block']">[foo]</div>`
       )
