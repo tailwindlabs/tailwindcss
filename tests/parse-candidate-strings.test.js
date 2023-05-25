@@ -408,6 +408,19 @@ describe.each([
     expect(extractions).toContain(`[color:var(--y)]`)
   })
 
+  test.each([
+    ['w-[calc(100%_-_theme("spacing[1.5]))"]'],
+    ['fill-[oklab(59.69%_0.1007_0.1191_/_0.5)]/[33.7%]'],
+    ['fill-[color:oklab(59.69%_0.1007_0.1191_/_0.5)]/[33.7%]'],
+    [
+      'shadow-[inset_0_-3em_3em_rgba(0,_0,_0,_0.1),_0_0_0_2px_rgb(255,_255,_255),_0.3em_0.3em_1em_rgba(0,_0,_0,_0.3)]',
+    ],
+  ])('arbitrary values: %s', (c) => {
+    let extractions = parse(`<div class="${c}"></div>`)
+
+    expect(extractions).toContain(c)
+  })
+
   test.skip('special characters', async () => {
     let extractions = parse(`
       <div class="<sm:underline md>:font-bold"></div>
@@ -501,6 +514,17 @@ describe.each([
     )
 
     expect(extractions).toContain(`[display:inherit]`)
+  })
+
+  test.each([
+    ['[--my-variable:var(--my-other-variable,var(--my-fallback,initial))]'],
+    [
+      '[box-shadow:inset_0_-3em_3em_rgba(0,_0,_0,_0.1),_0_0_0_2px_rgb(255,_255,_255),_0.3em_0.3em_1em_rgba(0,_0,_0,_0.3)]',
+    ],
+  ])('arbitrary properties with %s', (c) => {
+    let extractions = parse(`<div class="${c}">[foo]</div>`)
+
+    expect(extractions).toContain(c)
   })
 
   describe.skip('Vue', () => {
