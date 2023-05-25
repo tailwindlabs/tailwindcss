@@ -209,9 +209,8 @@ describe.each([
   ['Regex', regexParser],
   ['Oxide', oxideParser],
 ])('%s parser', (_, parse) => {
-  const defaultExtractor = parse
   test('basic utility classes', async () => {
-    const extractions = parse(`
+    let extractions = parse(`
       <div class="text-center font-bold px-4 pointer-events-none"></div>
     `)
 
@@ -222,7 +221,7 @@ describe.each([
   })
 
   test('modifiers with basic utilities', async () => {
-    const extractions = parse(`
+    let extractions = parse(`
       <div class="hover:text-center hover:focus:font-bold"></div>
     `)
 
@@ -231,7 +230,7 @@ describe.each([
   })
 
   test('utilities with dot characters', async () => {
-    const extractions = parse(`
+    let extractions = parse(`
       <div class="px-1.5 active:px-2.5 hover:focus:px-3.5"></div>
     `)
 
@@ -241,7 +240,7 @@ describe.each([
   })
 
   test('basic utilities with color opacity modifier', async () => {
-    const extractions = parse(`
+    let extractions = parse(`
       <div class="text-red-500/25 hover:text-red-500/50 hover:active:text-red-500/75"></div>
     `)
 
@@ -251,7 +250,7 @@ describe.each([
   })
 
   test('basic arbitrary values', async () => {
-    const extractions = parse(`
+    let extractions = parse(`
     <div class="px-[25px] hover:px-[40rem] hover:focus:px-[23vh]"></div>
   `)
 
@@ -261,7 +260,7 @@ describe.each([
   })
 
   test('arbitrary values with color opacity modifier', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
     <div class="text-[#bada55]/25 hover:text-[#bada55]/50 hover:active:text-[#bada55]/75"></div>
   `)
 
@@ -271,7 +270,7 @@ describe.each([
   })
 
   test('arbitrary values with spaces', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="grid-cols-[1fr_200px_3fr] md:grid-cols-[2fr_100px_1fr] open:lg:grid-cols-[3fr_300px_1fr]"></div>
     `)
 
@@ -281,7 +280,7 @@ describe.each([
   })
 
   test('arbitrary values with CSS variables', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="fill-[var(--my-color)] hover:fill-[var(--my-color-2)] hover:focus:fill-[var(--my-color-3)]"></div>
     `)
 
@@ -291,7 +290,7 @@ describe.each([
   })
 
   test('arbitrary values with type hints', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="text-[color:var(--my-color)] hover:text-[color:var(--my-color-2)] hover:focus:text-[color:var(--my-color-3)]"></div>
     `)
 
@@ -301,7 +300,7 @@ describe.each([
   })
 
   test('arbitrary values with single quotes', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="content-['hello_world'] hover:content-['hello_world_2'] hover:focus:content-['hello_world_3']"></div>
     `)
 
@@ -311,7 +310,7 @@ describe.each([
   })
 
   test('arbitrary values with double quotes', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class='content-["hello_world"] hover:content-["hello_world_2"] hover:focus:content-["hello_world_3"]'></div>
     `)
 
@@ -321,7 +320,7 @@ describe.each([
   })
 
   test('arbitrary values with some single quoted values', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="font-['Open_Sans',_system-ui,_sans-serif] hover:font-['Proxima_Nova',_system-ui,_sans-serif] hover:focus:font-['Inter_var',_system-ui,_sans-serif]"></div>
     `)
 
@@ -331,7 +330,7 @@ describe.each([
   })
 
   test('arbitrary values with some double quoted values', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class='font-["Open_Sans",_system-ui,_sans-serif] hover:font-["Proxima_Nova",_system-ui,_sans-serif] hover:focus:font-["Inter_var",_system-ui,_sans-serif]'></div>
     `)
 
@@ -341,7 +340,7 @@ describe.each([
   })
 
   test('arbitrary values with escaped underscores', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="content-['hello\\_world'] hover:content-['hello\\_world\\_2'] hover:focus:content-['hello\\_world\\_3']"></div>
     `)
 
@@ -351,7 +350,7 @@ describe.each([
   })
 
   test('basic utilities with arbitrary color opacity modifier', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="text-red-500/[.25] hover:text-red-500/[.5] hover:active:text-red-500/[.75]"></div>
     `)
 
@@ -361,7 +360,7 @@ describe.each([
   })
 
   test('arbitrary values with arbitrary color opacity modifier', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="text-[#bada55]/[.25] hover:text-[#bada55]/[.5] hover:active:text-[#bada55]/[.75]"></div>
     `)
 
@@ -371,7 +370,7 @@ describe.each([
   })
 
   test('arbitrary values with angle brackets', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="content-[>] hover:content-[<] hover:focus:content-[>]"></div>
     `)
 
@@ -381,7 +380,7 @@ describe.each([
   })
 
   test('arbitrary values with angle brackets in single quotes', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="content-['>'] hover:content-['<'] hover:focus:content-['>']"></div>
     `)
 
@@ -391,7 +390,7 @@ describe.each([
   })
 
   test('arbitrary values with angle brackets in double quotes', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="content-[">"] hover:content-["<"] hover:focus:content-[">"]"></div>
     `)
 
@@ -401,7 +400,7 @@ describe.each([
   })
 
   test('arbitrary values with theme lookup using quotes', () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <p class="[--y:theme('colors.blue.500')] [color:var(--y)]"></p>
     `)
 
@@ -410,7 +409,7 @@ describe.each([
   })
 
   test.skip('special characters', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       <div class="<sm:underline md>:font-bold"></div>
     `)
 
@@ -419,31 +418,31 @@ describe.each([
   })
 
   test.skip('with single quotes array within template literal', async () => {
-    const extractions = defaultExtractor(`<div class=\`\${['pr-1.5']}\`></div>`)
+    let extractions = parse(`<div class=\`\${['pr-1.5']}\`></div>`)
 
     expect(extractions).toContain('pr-1.5')
   })
 
   test.skip('with double quotes array within template literal', async () => {
-    const extractions = defaultExtractor(`<div class=\`\${["pr-1.5"]}\`></div>`)
+    let extractions = parse(`<div class=\`\${["pr-1.5"]}\`></div>`)
 
     expect(extractions).toContain('pr-1.5')
   })
 
   test('with single quotes array within function', async () => {
-    const extractions = defaultExtractor(`document.body.classList.add(['pl-1.5'].join(" "));`)
+    let extractions = parse(`document.body.classList.add(['pl-1.5'].join(" "));`)
 
     expect(extractions).toContain('pl-1.5')
   })
 
   test('with double quotes array within function', async () => {
-    const extractions = defaultExtractor(`document.body.classList.add(["pl-1.5"].join(" "));`)
+    let extractions = parse(`document.body.classList.add(["pl-1.5"].join(" "));`)
 
     expect(extractions).toContain('pl-1.5')
   })
 
   test('with angle brackets', async () => {
-    const extractions = defaultExtractor(
+    let extractions = parse(
       `<div class="bg-blue-200 <% if (useShadow) { %>shadow-xl<% } %>">test</div>`
     )
 
@@ -454,7 +453,7 @@ describe.each([
   })
 
   test('markdown code fences', async () => {
-    const extractions = defaultExtractor('<!-- this should work: `.font-bold`, `.font-normal` -->')
+    let extractions = parse('<!-- this should work: `.font-bold`, `.font-normal` -->')
 
     expect(extractions).toContain('font-bold')
     expect(extractions).toContain('font-normal')
@@ -463,7 +462,7 @@ describe.each([
   })
 
   test.skip('classes in slim templates', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       p.bg-red-500.text-sm
         'This is a paragraph
           small.italic.text-gray-500
@@ -477,7 +476,7 @@ describe.each([
   })
 
   test('multi-word + arbitrary values + quotes', async () => {
-    const extractions = defaultExtractor(`
+    let extractions = parse(`
       grid-cols-['repeat(2)']
     `)
 
@@ -485,19 +484,19 @@ describe.each([
   })
 
   test('a lot of data', () => {
-    let extractions = defaultExtractor('underline '.repeat(2 ** 17))
+    let extractions = parse('underline '.repeat(2 ** 17))
 
     expect(extractions).toContain(`underline`)
   })
 
   test('ruby percent string array', () => {
-    let extractions = defaultExtractor('%w[text-[#bada55]]')
+    let extractions = parse('%w[text-[#bada55]]')
 
     expect(extractions).toContain(`text-[#bada55]`)
   })
 
   test('arbitrary properties followed by square bracketed stuff', () => {
-    let extractions = defaultExtractor(
+    let extractions = parse(
       '<div class="h-16 items-end border border-white [display:inherit]">[foo]</div>'
     )
 
@@ -506,14 +505,14 @@ describe.each([
 
   describe('Vue', () => {
     test.skip('Class object syntax', () => {
-      let extractions = defaultExtractor(
+      let extractions = parse(
         `<div :class="{ underline: myCondition, 'font-bold': myCondition }">[foo]</div>`
       )
 
       expect(extractions).toContain(`underline`, `font-bold`)
     })
     test.skip('Class array syntax', () => {
-      let extractions = defaultExtractor(
+      let extractions = parse(
         `<div :class="['underline', myCondition && 'font-bold', myCondition ? 'flex' : 'block']">[foo]</div>`
       )
 
