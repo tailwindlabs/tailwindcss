@@ -207,7 +207,6 @@ impl<'a> Extractor<'a> {
         // In case of an arbitrary property, we should have at least this structure: [a:b]
         if utility.starts_with(b"[") && utility.ends_with(b"]") {
             // [a:b] is at least 5 characters long
-            if candidate.len() < 5 {
             if utility.len() < 5 {
                 return false;
             }
