@@ -139,6 +139,27 @@ impl<'a> Extractor<'a> {
         utility: &candidate[idx_end..],
       }
     }
+
+    #[inline(always)]
+    fn contains_in_constrained(candidate: &'a [u8], bytes: Vec<u8>) -> bool {
+      let mut brackets = 0;
+
+      for n in 0..candidate.len() {
+        let c = candidate[n];
+
+        match c {
+          b'[' => brackets+=1,
+          b']' if brackets > 0 => brackets-=1,
+          _ if brackets == 0 => {
+            if bytes.contains(&c) {
+              return true
+            }
+          },
+          _ => {},
+        }
+      }
+
+      false
     }
 
     #[inline(always)]
@@ -154,6 +175,11 @@ impl<'a> Extractor<'a> {
             offset += 2;
         } else if utility.starts_with(b"!") || utility.starts_with(b"-") {
             offset += 1;
+        }
+
+        // These are allowed in arbitrary values and in variants but nowhere else
+        if Extractor::contains_in_constrained(utility, vec![b'<', b'>']) {
+          return false
         }
 
         // Pluck out the part that we are interested in.
@@ -330,7 +356,7 @@ impl<'a> Extractor<'a> {
             }
 
             // Allowed first characters.
-            b'@' | b'!' | b'-' | b'<' | b'0'..=b'9' | b'a'..=b'z' | b'A'..=b'Z' => {
+            b'@' | b'!' | b'-' | b'<' | b'>' | b'0'..=b'9' | b'a'..=b'z' | b'A'..=b'Z' => {
                 // TODO: A bunch of characters that we currently support but maybe we only want it behind
                 // a flag. E.g.: '<sm'
                 // | '<' | '>' | '$' | '^' | '_'
@@ -378,6 +404,8 @@ impl<'a> Extractor<'a> {
             | b'_'
             | b'('
             | b')'
+            | b'<'
+            | b'>'
             | b'!'
             | b'@'
             | b'%'
