@@ -100,13 +100,19 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn get_current_candidate(&mut self) -> Option<&'a [u8]> {
-        let candidate = &self.input[self.idx_start..=self.idx_end];
+        let mut candidate = &self.input[self.idx_start..=self.idx_end];
 
-        if Extractor::is_valid_candidate_string(candidate) {
-            Some(candidate)
-        } else {
-            None
+        while !candidate.is_empty() {
+          if Extractor::is_valid_candidate_string(candidate) {
+            return Some(candidate)
+          }
+
+          candidate = &candidate[0..candidate.len()-1];
         }
+
+        None
+    }
+
     #[inline(always)]
     fn split_candidate(candidate: &'a [u8]) -> SplitCandidate {
       // [foo:bar]
