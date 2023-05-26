@@ -9,6 +9,12 @@ pub enum ParseAction {
   RestartAt(usize),
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub struct SplitCandidate<'a> {
+  variant: &'a [u8],
+  utility: &'a [u8],
+}
+
 #[derive(Default)]
 pub struct ExtractorOptions {
     pub preserve_spaces_in_arbitrary: bool,
@@ -101,64 +107,94 @@ impl<'a> Extractor<'a> {
         } else {
             None
         }
+    #[inline(always)]
+    fn split_candidate(candidate: &'a [u8]) -> SplitCandidate {
+      // [foo:bar]
+      // [foo:bar]
+      // [.foo_&]:[bar_&]:px-[1]
+      // [.foo_&]:md:[bar_&]:px-[1]
+
+      let mut brackets = 0;
+      let mut idx_end = 0;
+
+      for n in 0..candidate.len() {
+        let c = candidate[n];
+
+        match c {
+          b'[' => brackets+=1,
+          b']' if brackets > 0 => brackets-=1,
+          b':' if brackets == 0 => idx_end = n+1,
+          _ => {}
+        }
+      }
+
+      SplitCandidate {
+        variant: &candidate[0..idx_end],
+        utility: &candidate[idx_end..],
+      }
+    }
     }
 
     #[inline(always)]
     fn is_valid_candidate_string(candidate: &'a [u8]) -> bool {
-        let original_candidate = &candidate;
+        let split_candidate = Extractor::split_candidate(candidate);
+
         let mut offset = 0;
+        let utility = &split_candidate.utility;
+        let original_utility = &utility;
 
         // Some special cases that we can ignore while testing the validations.
-        if candidate.starts_with(b"!-") {
+        if utility.starts_with(b"!-") {
             offset += 2;
-        } else if candidate.starts_with(b"!") || candidate.starts_with(b"-") {
+        } else if utility.starts_with(b"!") || utility.starts_with(b"-") {
             offset += 1;
         }
 
         // Pluck out the part that we are interested in.
-        let candidate = &candidate[offset..];
+        let utility = &utility[offset..];
 
         // Validations
         // We should have _something_
-        if candidate.is_empty() {
+        if utility.is_empty() {
             return false;
         }
 
         // <sm is fine, but only as a variant
         // TODO: We probably have to ensure that this `:` is not inside the arbitrary values...
-        if candidate.starts_with(b"<") && !candidate.contains(&b':') {
+        if utility.starts_with(b"<") && !utility.contains(&b':') {
             return false;
         }
 
         // Only variants can start with a number. E.g.: 2xl is fine, but only as a variant.
         // TODO: Adjust this if we run into issues with actual utilities starting with a number?
         // TODO: We probably have to ensure that this `:` is not inside the arbitrary values...
-        if candidate[0] >= b'0' && candidate[0] <= b'9' && !candidate.contains(&b':') {
+        if utility[0] >= b'0' && utility[0] <= b'9' && !utility.contains(&b':') {
             return false;
         }
 
         // In case of an arbitrary property, we should have at least this structure: [a:b]
-        if candidate.starts_with(b"[") && candidate.ends_with(b"]") {
+        if utility.starts_with(b"[") && utility.ends_with(b"]") {
             // [a:b] is at least 5 characters long
             if candidate.len() < 5 {
+            if utility.len() < 5 {
                 return false;
             }
 
             // Should contain a `:`
-            if !candidate.contains(&b':') {
+            if !utility.contains(&b':') {
                 return false;
             }
 
             // Now that we validated that the candidate is technically fine, let's ensure that it
             // doesn't start with a `-` because that would make it invalid for arbitrary properties.
-            if original_candidate.starts_with(b"-") || original_candidate.starts_with(b"!-") {
+            if original_utility.starts_with(b"-") || original_utility.starts_with(b"!-") {
                 return false;
             }
 
             // The ':` must be preceded by a-Z0-9 because it represents a property name.
-            let colon = candidate.find(":").unwrap();
+            let colon = utility.find(":").unwrap();
 
-            if !candidate
+            if !utility
                 .chars()
                 .nth(colon - 1)
                 .map_or_else(|| false, |c| c.is_ascii_alphanumeric())
@@ -168,17 +204,17 @@ impl<'a> Extractor<'a> {
         }
 
         // In case of an arbitrary property, we should not have a modifier of any kind
-        if candidate.starts_with(b"[") {
+        if utility.starts_with(b"[") {
             if let Some(first_non_escaped_closing_bracket_idx) =
-                candidate.char_indices().position(|(s, _, other)| {
+                utility.char_indices().position(|(s, _, other)| {
                     other == ']'
-                        && candidate
+                        && utility
                             .get((s - 1)..s)
                             .map(|c| !c.eq(b"\\"))
                             .unwrap_or(false)
                 })
             {
-                if let Some(next) = candidate
+                if let Some(next) = utility
                     .chars()
                     .nth(first_non_escaped_closing_bracket_idx + 1)
                 {
@@ -752,7 +788,7 @@ mod test {
     #[test]
     fn classes_in_js_arrays() {
         let candidates = run(
-            r#"let classes = ['bg-black', 'hover:px-0.5', 'text-[13px]', '[--my-var:1_/_2]']">"#,
+            r#"let classes = ['bg-black', 'hover:px-0.5', 'text-[13px]', '[--my-var:1_/_2]', '[.foo_&]:px-[0]', '[.foo_&]:[color:red]']">"#,
             false,
         );
         assert_eq!(
@@ -764,6 +800,8 @@ mod test {
                 "hover:px-0.5",
                 "text-[13px]",
                 "[--my-var:1_/_2]",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
             ]
         );
     }
