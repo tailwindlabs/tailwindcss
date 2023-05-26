@@ -1,5 +1,6 @@
 use bstr::ByteSlice;
 use fxhash::FxHashSet;
+use std::ops::ControlFlow;
 use tracing::trace;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -13,6 +14,24 @@ pub enum ParseAction {
 pub struct SplitCandidate<'a> {
     variant: &'a [u8],
     utility: &'a [u8],
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum YieldResult<'a> {
+    Candidate(&'a [u8]),
+    Continue,
+    Done,
+}
+
+// Control flow for YieldResult
+impl<'a> From<YieldResult<'a>> for ControlFlow<()> {
+    fn from(result: YieldResult<'a>) -> Self {
+        match result {
+            YieldResult::Candidate(_) => ControlFlow::Continue(()),
+            YieldResult::Continue => ControlFlow::Continue(()),
+            YieldResult::Done => ControlFlow::Break(()),
+        }
+    }
 }
 
 #[derive(Default)]
@@ -513,14 +532,14 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_and_yield(&mut self) -> Option<Option<&'a [u8]>> {
+    fn parse_and_yield(&mut self) -> YieldResult<'a> {
         let (pos, curr) = self.read();
         let action = self.parse_char(self.prev, curr, pos);
 
         match action {
             ParseAction::RestartAt(pos) => {
                 self.restart(pos);
-                return Some(None);
+                return YieldResult::Continue;
             }
             ParseAction::Consume => {
                 self.idx_end = pos;
@@ -532,10 +551,10 @@ impl<'a> Extractor<'a> {
 
         self.prev = curr;
 
-        if curr == 0x00 {
-            None
-        } else {
-            Some(candidate)
+        match (candidate, curr) {
+            (_, 0x00) => YieldResult::Done,
+            (Some(candidate), _) => YieldResult::Candidate(candidate),
+            _ => YieldResult::Continue,
         }
     }
 }
@@ -549,24 +568,10 @@ impl<'a> Iterator for Extractor<'a> {
         }
 
         loop {
-            let candidate = self.parse_and_yield()?;
-            if candidate.is_some() {
-                return candidate;
-            }
-
-            let candidate = self.parse_and_yield()?;
-            if candidate.is_some() {
-                return candidate;
-            }
-
-            let candidate = self.parse_and_yield()?;
-            if candidate.is_some() {
-                return candidate;
-            }
-
-            let candidate = self.parse_and_yield()?;
-            if candidate.is_some() {
-                return candidate;
+            match self.parse_and_yield() {
+                YieldResult::Continue => continue,
+                YieldResult::Candidate(candidate) => return Some(candidate),
+                YieldResult::Done => return None,
             }
         }
     }
