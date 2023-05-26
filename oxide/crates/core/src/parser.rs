@@ -4,15 +4,15 @@ use tracing::trace;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum ParseAction {
-  Consume,
-  Skip,
-  RestartAt(usize),
+    Consume,
+    Skip,
+    RestartAt(usize),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct SplitCandidate<'a> {
-  variant: &'a [u8],
-  utility: &'a [u8],
+    variant: &'a [u8],
+    utility: &'a [u8],
 }
 
 #[derive(Default)]
@@ -103,11 +103,11 @@ impl<'a> Extractor<'a> {
         let mut candidate = &self.input[self.idx_start..=self.idx_end];
 
         while !candidate.is_empty() {
-          if Extractor::is_valid_candidate_string(candidate) {
-            return Some(candidate)
-          }
+            if Extractor::is_valid_candidate_string(candidate) {
+                return Some(candidate);
+            }
 
-          candidate = &candidate[0..candidate.len()-1];
+            candidate = &candidate[0..candidate.len() - 1];
         }
 
         None
@@ -115,51 +115,51 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn split_candidate(candidate: &'a [u8]) -> SplitCandidate {
-      // [foo:bar]
-      // [foo:bar]
-      // [.foo_&]:[bar_&]:px-[1]
-      // [.foo_&]:md:[bar_&]:px-[1]
+        // [foo:bar]
+        // [foo:bar]
+        // [.foo_&]:[bar_&]:px-[1]
+        // [.foo_&]:md:[bar_&]:px-[1]
 
-      let mut brackets = 0;
-      let mut idx_end = 0;
+        let mut brackets = 0;
+        let mut idx_end = 0;
 
-      for n in 0..candidate.len() {
-        let c = candidate[n];
+        for n in 0..candidate.len() {
+            let c = candidate[n];
 
-        match c {
-          b'[' => brackets+=1,
-          b']' if brackets > 0 => brackets-=1,
-          b':' if brackets == 0 => idx_end = n+1,
-          _ => {}
+            match c {
+                b'[' => brackets += 1,
+                b']' if brackets > 0 => brackets -= 1,
+                b':' if brackets == 0 => idx_end = n + 1,
+                _ => {}
+            }
         }
-      }
 
-      SplitCandidate {
-        variant: &candidate[0..idx_end],
-        utility: &candidate[idx_end..],
-      }
+        SplitCandidate {
+            variant: &candidate[0..idx_end],
+            utility: &candidate[idx_end..],
+        }
     }
 
     #[inline(always)]
     fn contains_in_constrained(candidate: &'a [u8], bytes: Vec<u8>) -> bool {
-      let mut brackets = 0;
+        let mut brackets = 0;
 
-      for n in 0..candidate.len() {
-        let c = candidate[n];
+        for n in 0..candidate.len() {
+            let c = candidate[n];
 
-        match c {
-          b'[' => brackets+=1,
-          b']' if brackets > 0 => brackets-=1,
-          _ if brackets == 0 => {
-            if bytes.contains(&c) {
-              return true
+            match c {
+                b'[' => brackets += 1,
+                b']' if brackets > 0 => brackets -= 1,
+                _ if brackets == 0 => {
+                    if bytes.contains(&c) {
+                        return true;
+                    }
+                }
+                _ => {}
             }
-          },
-          _ => {},
         }
-      }
 
-      false
+        false
     }
 
     #[inline(always)]
@@ -179,7 +179,7 @@ impl<'a> Extractor<'a> {
 
         // These are allowed in arbitrary values and in variants but nowhere else
         if Extractor::contains_in_constrained(utility, vec![b'<', b'>']) {
-          return false
+            return false;
         }
 
         // Pluck out the part that we are interested in.
@@ -495,21 +495,21 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn restart(&mut self, pos: usize) {
-      trace!("Parser::Restart\t{}", pos);
+        trace!("Parser::Restart\t{}", pos);
 
-      self.idx_start = pos;
-      self.idx_end = pos;
-      self.idx_arbitrary_start = 0;
+        self.idx_start = pos;
+        self.idx_end = pos;
+        self.idx_arbitrary_start = 0;
 
-      self.in_arbitrary = false;
-      self.in_candidate = false;
-      self.in_escape = false;
+        self.in_arbitrary = false;
+        self.in_candidate = false;
+        self.in_escape = false;
 
-      self.quote_stack.clear();
-      self.bracket_stack.clear();
+        self.quote_stack.clear();
+        self.bracket_stack.clear();
 
-      self.pos = pos;
-      self.prev = *self.input.get(pos-1).unwrap_or(&0x00);
+        self.pos = pos;
+        self.prev = *self.input.get(pos - 1).unwrap_or(&0x00);
     }
 
     #[inline(always)]
@@ -518,14 +518,14 @@ impl<'a> Extractor<'a> {
         let action = self.parse_char(self.prev, curr, pos);
 
         match action {
-          ParseAction::RestartAt(pos) => {
-            self.restart(pos);
-            return Some(None);
-          },
-          ParseAction::Consume => {
-            self.idx_end = pos;
-          },
-          _ => {},
+            ParseAction::RestartAt(pos) => {
+                self.restart(pos);
+                return Some(None);
+            }
+            ParseAction::Consume => {
+                self.idx_end = pos;
+            }
+            _ => {}
         }
 
         let candidate = self.yield_candidate(pos, curr, action == ParseAction::Consume);
