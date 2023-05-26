@@ -74,7 +74,7 @@ describe.each([
 ])('%s parser', (_, parse) => {
   describe('basic utility classes', () => {
     let classes = [
-      // one word classes
+      // One word classes
       'underline',
 
       // With dashes
@@ -161,10 +161,19 @@ describe.each([
 
       // With spces (replaced by `_`)
       'bg-red-500/[var(--opacity,_50%)]',
-
-      // With important modifiers
-      '!bg-red-500',
     ]
+
+    test.each(templateTable(classes))('%# — %s', (_, template, classes) => {
+      let extractions = parse(template)
+
+      for (let c of classes) {
+        expect(extractions).toContain(c)
+      }
+    })
+  })
+
+  describe('utility classes with important modifier', () => {
+    let classes = ['!bg-red-500', '!bg-[#bada55]', '![display:flex]', '!-translate-x-1/2']
 
     test.each(templateTable(classes))('%# — %s', (_, template, classes) => {
       let extractions = parse(template)
