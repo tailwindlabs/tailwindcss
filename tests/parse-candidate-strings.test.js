@@ -400,4 +400,21 @@ describe.each([
       expect(extractions).toContain(`underline`, `font-bold`, `flex`, `block`)
     })
   })
+
+  describe('anti-test', () => {
+    it('should not parse candidates without spaces in object-like syntax', () => {
+      let extractions = parse(html`<div class="{underline:isActive,flex:isOnline,md:bold}"></div>`)
+
+      expect(extractions).not.toContain(`underline:isActive`)
+      expect(extractions).not.toContain(`flex:isOnline`)
+      expect(extractions).not.toContain(`md:bold`)
+
+      expect(extractions).not.toContain(`underline`)
+      expect(extractions).not.toContain(`isActive`)
+      expect(extractions).not.toContain(`flex`)
+      expect(extractions).not.toContain(`isOnline`)
+      expect(extractions).not.toContain(`md`)
+      expect(extractions).not.toContain(`bold`)
+    })
+  })
 })
