@@ -65,7 +65,7 @@ function templateTable(classes) {
     ['Vue object (single quote)', html`<div :class="{'${classString}': true}"></div>`],
 
     ['Markdown code fences', `<!-- This should work \`${classString}\` -->`],
-  ]
+  ].map(([name, template]) => [name, template, classes])
 }
 
 describe.each([
@@ -84,11 +84,10 @@ describe.each([
       // With numbers
       'px-4',
 
-      // With floating numbers
+      // With special characters
       'px-1.5',
-
-      // With halves
       'translate-x-1/2',
+      'from-50%',
 
       // With negative signs
       '-translate-x-full',
@@ -97,7 +96,7 @@ describe.each([
       '-translate-x-1/2',
     ]
 
-    test.each(templateTable(classes))('%# — %s', (_, template) => {
+    test.each(templateTable(classes))('%# — %s', (_, template, classes) => {
       let extractions = parse(template)
 
       for (let c of classes) {
@@ -141,7 +140,7 @@ describe.each([
       'shadow-[inset_0_-3em_3em_rgba(0,_0,_0,_0.1),_0_0_0_2px_rgb(255,_255,_255),_0.3em_0.3em_1em_rgba(0,_0,_0,_0.3)]',
     ]
 
-    test.each(templateTable(classes))('%# — %s', (_, template) => {
+    test.each(templateTable(classes))('%# — %s', (_, template, classes) => {
       let extractions = parse(template)
 
       for (let c of classes) {
@@ -167,7 +166,7 @@ describe.each([
       '!bg-red-500',
     ]
 
-    test.each(templateTable(classes))('%# — %s', (_, template) => {
+    test.each(templateTable(classes))('%# — %s', (_, template, classes) => {
       let extractions = parse(template)
 
       for (let c of classes) {
@@ -182,7 +181,7 @@ describe.each([
       '[display:flex]',
     ]
 
-    test.each(templateTable(classes))('%# — %s', (_, template) => {
+    test.each(templateTable(classes))('%# — %s', (_, template, classes) => {
       let extractions = parse(template)
 
       for (let c of classes) {
