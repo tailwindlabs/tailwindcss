@@ -2,6 +2,12 @@ use bstr::ByteSlice;
 use fxhash::FxHashSet;
 use tracing::trace;
 
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum ParseAction {
+  Consume,
+  Skip,
+}
+
 #[derive(Default)]
 pub struct ExtractorOptions {
     pub preserve_spaces_in_arbitrary: bool,
@@ -188,18 +194,18 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_escaped(&mut self) -> bool {
+    fn parse_escaped(&mut self) -> ParseAction {
         // If this character is escaped, we don't care about it.
         // It gets consumed.
         trace!("Escape::Consume");
 
         self.in_escape = false;
 
-        true
+        ParseAction::Consume
     }
 
     #[inline(always)]
-    fn parse_arbitrary(&mut self, curr: u8, pos: usize) -> bool {
+    fn parse_arbitrary(&mut self, curr: u8, pos: usize) -> ParseAction {
         // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary valuesq
         if self.in_escape {
             return self.parse_escaped();
@@ -227,7 +233,7 @@ impl<'a> Extractor<'a> {
 
                     if pos - self.idx_arbitrary_start == 1 {
                         // We have an empty arbitrary value, which is not allowed
-                        return false;
+                        return ParseAction::Skip;
                     }
                 }
 
@@ -251,7 +257,7 @@ impl<'a> Extractor<'a> {
 
             b' ' if !self.opts.preserve_spaces_in_arbitrary => {
                 trace!("Arbitrary::SkipAndEndEarly\t");
-                return false;
+                return ParseAction::Skip;
             }
 
             // Arbitrary values allow any character inside them
@@ -262,11 +268,11 @@ impl<'a> Extractor<'a> {
             }
         }
 
-        true
+        ParseAction::Consume
     }
 
     #[inline(always)]
-    fn parse_start(&mut self, curr: u8, pos: usize) -> bool {
+    fn parse_start(&mut self, curr: u8, pos: usize) -> ParseAction {
         match curr {
             // Enter arbitrary value mode
             b'[' => {
@@ -274,7 +280,7 @@ impl<'a> Extractor<'a> {
                 self.in_arbitrary = true;
                 self.idx_arbitrary_start = pos;
 
-                true
+                ParseAction::Consume
             }
 
             // Allowed first characters.
@@ -285,15 +291,15 @@ impl<'a> Extractor<'a> {
 
                 trace!("Candidate::Start\t");
 
-                true
+                ParseAction::Consume
             }
 
-            _ => false,
+            _ => ParseAction::Skip,
         }
     }
 
     #[inline(always)]
-    fn parse_continue(&mut self, prev: u8, curr: u8, pos: usize) -> bool {
+    fn parse_continue(&mut self, prev: u8, curr: u8, pos: usize) -> ParseAction {
         match curr {
             // Enter arbitrary value mode
             b'[' if prev == b'@'
@@ -314,7 +320,7 @@ impl<'a> Extractor<'a> {
             b'[' => {
                 trace!("Arbitrary::Skip_Start\t");
 
-                return false;
+                return ParseAction::Skip;
             }
 
             // Allowed characters in the candidate itself
@@ -341,10 +347,10 @@ impl<'a> Extractor<'a> {
                 trace!("Candidate::Consume\t");
             }
 
-            _ => return false,
+            _ => return ParseAction::Skip,
         }
 
-        true
+        ParseAction::Consume
     }
 
     #[inline(always)]
@@ -367,19 +373,19 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_char(&mut self, prev: u8, curr: u8, pos: usize) -> bool {
+    fn parse_char(&mut self, prev: u8, curr: u8, pos: usize) -> ParseAction {
         if self.in_arbitrary {
             self.parse_arbitrary(curr, pos)
         } else if self.in_candidate {
             self.parse_continue(prev, curr, pos)
-        } else if self.parse_start(curr, pos) {
+        } else if self.parse_start(curr, pos) == ParseAction::Consume {
             self.in_candidate = true;
             self.idx_start = pos;
             self.idx_end = pos;
 
-            true
+            ParseAction::Consume
         } else {
-            false
+            ParseAction::Skip
         }
     }
 
@@ -417,7 +423,7 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn parse_and_yield(&mut self) -> Option<Option<&'a [u8]>> {
         let (pos, curr) = self.read();
-        let did_consume = self.parse_char(self.prev, curr, pos);
+        let did_consume = self.parse_char(self.prev, curr, pos) == ParseAction::Consume;
 
         if did_consume {
             self.idx_end = pos;
