@@ -6,6 +6,7 @@ use tracing::trace;
 pub enum ParseAction {
   Consume,
   Skip,
+  RestartAt(usize),
 }
 
 #[derive(Default)]
@@ -257,7 +258,10 @@ impl<'a> Extractor<'a> {
 
             b' ' if !self.opts.preserve_spaces_in_arbitrary => {
                 trace!("Arbitrary::SkipAndEndEarly\t");
-                return ParseAction::Skip;
+
+                // Restart the parser ahead of the arbitrary value
+                // It may pick up more candidates
+                return ParseAction::RestartAt(self.idx_arbitrary_start + 1);
             }
 
             // Arbitrary values allow any character inside them
@@ -421,18 +425,45 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
+    fn restart(&mut self, pos: usize) {
+      trace!("Parser::Restart\t{}", pos);
+
+      self.idx_start = pos;
+      self.idx_end = pos;
+      self.idx_arbitrary_start = 0;
+
+      self.in_arbitrary = false;
+      self.in_candidate = false;
+      self.in_escape = false;
+
+      self.quote_stack.clear();
+      self.bracket_stack.clear();
+
+      self.pos = pos;
+      self.prev = *self.input.get(pos-1).unwrap_or(&0x00);
+    }
+
+    #[inline(always)]
     fn parse_and_yield(&mut self) -> Option<Option<&'a [u8]>> {
         let (pos, curr) = self.read();
-        let did_consume = self.parse_char(self.prev, curr, pos) == ParseAction::Consume;
+        let action = self.parse_char(self.prev, curr, pos);
 
-        if did_consume {
+        match action {
+          ParseAction::RestartAt(pos) => {
+            self.restart(pos);
+            return Some(None);
+          },
+          ParseAction::Consume => {
             self.idx_end = pos;
+          },
+          _ => {},
         }
 
-        let candidate = self.yield_candidate(pos, curr, did_consume);
+        let candidate = self.yield_candidate(pos, curr, action == ParseAction::Consume);
+
         self.prev = curr;
 
-        if curr == 0 {
+        if curr == 0x00 {
             None
         } else {
             Some(candidate)
