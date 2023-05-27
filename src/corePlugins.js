@@ -127,12 +127,7 @@ export let variantPlugins = {
 
       // Interactive
       'focus-within',
-      [
-        'hover',
-        !flagEnabled(config(), 'hoverOnlyWhenSupported')
-          ? '&:hover'
-          : '@media (hover: hover) and (pointer: fine) { &:hover }',
-      ],
+      ['hover', config('shittyHover') ? '&:hover' : '@media (hover: hover) { &:hover }'],
       'focus',
       'focus-visible',
       'active',
@@ -196,6 +191,11 @@ export let variantPlugins = {
       )
     }
   },
+
+  // directionVariants: ({ addVariant }) => {
+  //   addVariant('ltr', ':is([dir="ltr"] &)')
+  //   addVariant('rtl', ':is([dir="rtl"] &)')
+  // },
 
   directionVariants: ({ addVariant }) => {
     addVariant('ltr', ':is([dir="ltr"] &)')

@@ -719,6 +719,7 @@ function collectLayerPlugins(root) {
 }
 
 function resolvePlugins(context, root) {
+  console.log(Object.entries(variantPlugins))
   let corePluginList = Object.entries(corePlugins)
     .map(([name, plugin]) => {
       if (!context.tailwindConfig.corePlugins.includes(name)) {

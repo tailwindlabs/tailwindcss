@@ -756,11 +756,8 @@ it('variants only picks the used selectors in a group (apply)', () => {
   })
 })
 
-test('hoverOnlyWhenSupported adds hover and pointer media features by default', () => {
+test('hover includes hover media feature by default', () => {
   let config = {
-    future: {
-      hoverOnlyWhenSupported: true,
-    },
     content: [
       {
         raw: html`<div class="hover:underline group-hover:underline peer-hover:underline"></div>`,
@@ -778,12 +775,68 @@ test('hoverOnlyWhenSupported adds hover and pointer media features by default', 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      @media (hover: hover) and (pointer: fine) {
+      @media (hover: hover) {
         .hover\:underline:hover,
         .group:hover .group-hover\:underline,
         .peer:hover ~ .peer-hover\:underline {
           text-decoration-line: underline;
         }
+      }
+    `)
+  })
+})
+
+// Options:
+// - Boolean of some kind, negative connotation (legacyHover, classicHover)
+// - String-based option (hoverStrategy or something, 'classic/legacy', 'any', 'primary')
+//   - Maybe literally just "hover: 'primary'"
+//     - plain, legacy, classic, "all"?
+// - Boolean, factual/unbiased (hoverOnTouchDevices: true)
+
+// hover: 'all' | 'primary' | 'any' => config option
+// hover:underline => @media (hover: hover) and (pointer: fine) (based on 'primary' default)
+// hover/any:underline => @media (any-hover: hover) and (pointer: fine)
+// hover/primary:underline => @media (hover: hover) and (pointer: fine)
+// hover/all:underline => &:hover
+
+// legacyHover: true => config option
+// hover:underline => @media (hover: hover) and (pointer: fine)
+// hover/any:underline => @media (any-hover: hover) and (pointer: fine)
+// [&:hover]:underline
+
+test('legacy hover behavior using the config option', () => {
+  let config = {
+    hover: 'any',
+    content: [
+      {
+        raw: html`<div class="hover:underline group-hover:underline peer-hover:underline"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+    variants: {
+      hover: '&:hover',
+    },
+    plugins: [
+      // require('tailwindcss/hover-compat'),
+      // function ({ addVariant }) {
+      //   addVariant('hover', '&:hover')
+      // },
+    ],
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+      .hover\:underline:hover,
+        .group:hover .group-hover\:underline,
+        .peer:hover ~ .peer-hover\:underline {
+        text-decoration-line: underline;
       }
     `)
   })
