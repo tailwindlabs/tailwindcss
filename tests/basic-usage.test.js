@@ -193,6 +193,7 @@ crosscheck(({ stable, oxide, engine }) => {
             <div class="invisible"></div>
             <div class="collapse"></div>
             <div class="whitespace-nowrap"></div>
+            <div class="text-wrap text-balance text-nowrap"></div>
             <div class="w-12"></div>
             <div class="break-words"></div>
             <div class="z-30"></div>
