@@ -14,17 +14,21 @@ export let map = JSON.stringify({
 
 export function run(input, config, plugin = tailwind) {
   let { currentTestName, testPath } = expect.getState()
+  let path = `${testPath}?test=${currentTestName}`
 
   return postcss(plugin(config)).process(input, {
-    from: `${testPath}?test=${currentTestName}`,
+    from: path,
+    to: path,
   })
 }
 
 export function runWithSourceMaps(input, config, plugin = tailwind) {
   let { currentTestName, testPath } = expect.getState()
+  let path = `${testPath}?test=${currentTestName}`
 
   return postcss(plugin(config)).process(input, {
-    from: `${testPath}?test=${currentTestName}`,
+    from: path,
+    to: path,
     map: {
       prev: map,
     },
