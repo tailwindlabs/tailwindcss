@@ -1,4 +1,3 @@
-import path from 'path'
 import postcss from 'postcss'
 import tailwind from '../../src'
 
@@ -17,7 +16,7 @@ export function run(input, config, plugin = tailwind) {
   let { currentTestName, testPath } = expect.getState()
 
   return postcss(plugin(config)).process(input, {
-    from: `${path.resolve(testPath)}?test=${currentTestName}`,
+    from: `${testPath}?test=${currentTestName}`,
   })
 }
 
@@ -25,7 +24,7 @@ export function runWithSourceMaps(input, config, plugin = tailwind) {
   let { currentTestName, testPath } = expect.getState()
 
   return postcss(plugin(config)).process(input, {
-    from: `${path.resolve(testPath)}?test=${currentTestName}`,
+    from: `${testPath}?test=${currentTestName}`,
     map: {
       prev: map,
     },
