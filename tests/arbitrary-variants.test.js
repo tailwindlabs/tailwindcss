@@ -779,7 +779,7 @@ test('has-* variants with arbitrary values', () => {
       {
         raw: html`
           <div>
-            <figure class="has-[figcaption]:underline"></figure>
+            <figure class="has-[figcaption]:inline-block"></figure>
             <div class="has-[.foo]:flex"></div>
             <div class="has-[.foo:hover]:block"></div>
             <div class="has-[[data-active]]:inline"></div>
@@ -800,11 +800,11 @@ test('has-* variants with arbitrary values', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .has-\[figcaption\]:has(figcaption) {
-        text-decoration: underline;
-      }
       .has-\[\.foo\:hover\]\:block:has(.foo:hover) {
         display: block;
+      }
+      .has-\[figcaption\]\:inline-block:has(figcaption) {
+        display: inline-block;
       }
       .has-\[\[data-active\]\]\:inline:has([data-active]) {
         display: inline;
@@ -823,9 +823,6 @@ test('has-* variants with arbitrary values', () => {
       }
       .has-\[h2\]\:has-\[\.banana\]\:hidden:has(.banana):has(h2) {
         display: none;
-      }
-      .has-\[figcaption\]\:underline:has(figcaption) {
-        text-decoration-line: underline;
       }
     `)
   })
