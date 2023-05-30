@@ -71,7 +71,7 @@ module.exports = function tailwindcss(configOrPath) {
 
           result.root = postcss.parse(transformed.code.toString('utf8'))
         } catch (err) {
-          if (typeof process !== 'undefined' && process.env.JEST_WORKER_ID) {
+          if (err.source && typeof process !== 'undefined' && process.env.JEST_WORKER_ID) {
             let lines = err.source.split('\n')
             err = new Error(
               [
