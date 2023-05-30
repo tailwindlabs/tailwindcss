@@ -201,14 +201,59 @@
 .aspect-video {
   aspect-ratio: 16 / 9;
 }
+.h-0 {
+  height: 0;
+}
 .h-16 {
   height: 4rem;
+}
+.h-dvh {
+  height: 100dvh;
+}
+.h-full {
+  height: 100%;
+}
+.h-lvh {
+  height: 100lvh;
+}
+.h-screen {
+  height: 100vh;
+}
+.h-svh {
+  height: 100svh;
+}
+.max-h-0 {
+  max-height: 0;
+}
+.max-h-dvh {
+  max-height: 100dvh;
+}
+.max-h-full {
+  max-height: 100%;
+}
+.max-h-lvh {
+  max-height: 100lvh;
 }
 .max-h-screen {
   max-height: 100vh;
 }
+.max-h-svh {
+  max-height: 100svh;
+}
 .min-h-0 {
   min-height: 0;
+}
+.min-h-dvh {
+  min-height: 100dvh;
+}
+.min-h-full {
+  min-height: 100%;
+}
+.min-h-lvh {
+  min-height: 100lvh;
+}
+.min-h-svh {
+  min-height: 100svh;
 }
 .w-12 {
   width: 3rem;
