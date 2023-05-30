@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Process and inline `@import` at-rules natively ([#11239](https://github.com/tailwindlabs/tailwindcss/pull/11239))
 - Add `svh`, `lvh`, and `dvh` values to default `height`/`min-height`/`max-height` theme ([#11317](https://github.com/tailwindlabs/tailwindcss/pull/11317))
 - Add `has-*` variants for `:has(...)` pseudo-class ([#11318](https://github.com/tailwindlabs/tailwindcss/pull/11318))
+- Add `text-wrap` utilities including `text-balance` ([#11320](https://github.com/tailwindlabs/tailwindcss/pull/11320))
 
 ### Changed
 

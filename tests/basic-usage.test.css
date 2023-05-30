@@ -597,6 +597,15 @@
 .whitespace-nowrap {
   white-space: nowrap;
 }
+.text-wrap {
+  text-wrap: wrap;
+}
+.text-nowrap {
+  text-wrap: nowrap;
+}
+.text-balance {
+  text-wrap: balance;
+}
 .break-words {
   overflow-wrap: break-word;
 }
