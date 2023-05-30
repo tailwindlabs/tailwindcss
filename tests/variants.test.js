@@ -786,24 +786,6 @@ test('hover includes hover media feature by default', () => {
   })
 })
 
-// Options:
-// - Boolean of some kind, negative connotation (legacyHover, classicHover)
-// - String-based option (hoverStrategy or something, 'classic/legacy', 'any', 'primary')
-//   - Maybe literally just "hover: 'primary'"
-//     - plain, legacy, classic, "all"?
-// - Boolean, factual/unbiased (hoverOnTouchDevices: true)
-
-// hover: 'all' | 'primary' | 'any' => config option
-// hover:underline => @media (hover: hover) and (pointer: fine) (based on 'primary' default)
-// hover/any:underline => @media (any-hover: hover) and (pointer: fine)
-// hover/primary:underline => @media (hover: hover) and (pointer: fine)
-// hover/all:underline => &:hover
-
-// legacyHover: true => config option
-// hover:underline => @media (hover: hover) and (pointer: fine)
-// hover/any:underline => @media (any-hover: hover) and (pointer: fine)
-// [&:hover]:underline
-
 test('legacy hover behavior using the config option', () => {
   let config = {
     hover: 'any',
