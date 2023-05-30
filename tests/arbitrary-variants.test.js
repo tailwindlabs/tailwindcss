@@ -772,6 +772,132 @@ it('should support supports', () => {
   })
 })
 
+test('has-* variants with arbitrary values', () => {
+  let config = {
+    theme: {},
+    content: [
+      {
+        raw: html`
+          <div>
+            <figure class="has-[figcaption]:inline-block"></figure>
+            <div class="has-[.foo]:flex"></div>
+            <div class="has-[.foo:hover]:block"></div>
+            <div class="has-[[data-active]]:inline"></div>
+            <div class="has-[>_.potato]:table"></div>
+            <div class="has-[+_h2]:grid"></div>
+            <div class="has-[>_h1_+_h2]:contents"></div>
+            <div class="has-[h2]:has-[.banana]:hidden"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .has-\[\.foo\:hover\]\:block:has(.foo:hover) {
+        display: block;
+      }
+      .has-\[figcaption\]\:inline-block:has(figcaption) {
+        display: inline-block;
+      }
+      .has-\[\[data-active\]\]\:inline:has([data-active]) {
+        display: inline;
+      }
+      .has-\[\.foo\]\:flex:has(.foo) {
+        display: flex;
+      }
+      .has-\[\>_\.potato\]\:table:has(> .potato) {
+        display: table;
+      }
+      .has-\[\+_h2\]\:grid:has(+ h2) {
+        display: grid;
+      }
+      .has-\[\>_h1_\+_h2\]\:contents:has(> h1 + h2) {
+        display: contents;
+      }
+      .has-\[h2\]\:has-\[\.banana\]\:hidden:has(.banana):has(h2) {
+        display: none;
+      }
+    `)
+  })
+})
+
+test('group-has-* variants with arbitrary values', () => {
+  let config = {
+    theme: {},
+    content: [
+      {
+        raw: html`
+          <div class="group">
+            <div class="group-has-[>_h1_+_.foo]:block"></div>
+          </div>
+          <div class="group/two">
+            <div class="group-has-[>_h1_+_.foo]/two:flex"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .group:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\:block {
+        display: block;
+      }
+      .group\/two:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\/two\:flex {
+        display: flex;
+      }
+    `)
+  })
+})
+
+test('peer-has-* variants with arbitrary values', () => {
+  let config = {
+    theme: {},
+    content: [
+      {
+        raw: html`
+          <div>
+            <div className="peer"></div>
+            <div class="peer-has-[>_h1_+_.foo]:block"></div>
+          </div>
+          <div>
+            <div className="peer"></div>
+            <div class="peer-has-[>_h1_+_.foo]/two:flex"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .peer:has(> h1 + .foo) ~ .peer-has-\[\>_h1_\+_\.foo\]\:block {
+        display: block;
+      }
+      .peer\/two:has(> h1 + .foo) ~ .peer-has-\[\>_h1_\+_\.foo\]\/two\:flex {
+        display: flex;
+      }
+    `)
+  })
+})
+
 it('should be possible to use modifiers and arbitrary groups', () => {
   let config = {
     content: [
