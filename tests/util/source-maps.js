@@ -15,7 +15,7 @@ export function parseSourceMaps(result) {
 }
 
 /**
- * An string annotation that represents a source map
+ * A string annotation that represents a source map
  *
  * It's not meant to be exhaustive just enough to
  * verify that the source map is working and that
