@@ -126,7 +126,12 @@ impl<'a> Extractor<'a> {
                 return Some(candidate);
             }
 
-            candidate = &candidate[0..candidate.len() - 1];
+            match candidate.split_last() {
+                Some((b':' | b'/' | b'.', head)) => {
+                    candidate = head;
+                }
+                _ => break,
+            }
         }
 
         None
