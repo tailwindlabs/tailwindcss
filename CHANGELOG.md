@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix parsing of `theme()` inside `calc()` when there are no spaces around operators ([#11157](https://github.com/tailwindlabs/tailwindcss/pull/11157))
 - Ensure `repeating-conic-gradient` is detected as an image ([#11180](https://github.com/tailwindlabs/tailwindcss/pull/11180))
 - Remove `autoprefixer` dependency ([#11315](https://github.com/tailwindlabs/tailwindcss/pull/11315))
-- Add `has-*` variants for `:has(...)` pseudo-class ([#11318](https://github.com/tailwindlabs/tailwindcss/pull/11318))
 
 ### Added
 
@@ -24,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automatically detect content paths when no `content` configuration is provided ([#11173](https://github.com/tailwindlabs/tailwindcss/pull/11173), [#11221](https://github.com/tailwindlabs/tailwindcss/pull/11221))
 - Process and inline `@import` at-rules natively ([#11239](https://github.com/tailwindlabs/tailwindcss/pull/11239))
 - Add `svh`, `lvh`, and `dvh` values to default `height`/`min-height`/`max-height` theme ([#11317](https://github.com/tailwindlabs/tailwindcss/pull/11317))
+- Add `has-*` variants for `:has(...)` pseudo-class ([#11318](https://github.com/tailwindlabs/tailwindcss/pull/11318))
 
 ### Changed
 
