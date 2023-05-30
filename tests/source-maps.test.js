@@ -2,7 +2,7 @@ import postcss from 'postcss'
 import { parseSourceMaps } from './util/source-maps'
 import { runWithSourceMaps as run, html, css, map } from './util/run'
 
-test.skip('apply generates source maps', async () => {
+test('apply generates source maps', async () => {
   let config = {
     content: [
       {
@@ -64,7 +64,7 @@ test.skip('apply generates source maps', async () => {
   ])
 })
 
-test.skip('preflight + base have source maps', async () => {
+test('preflight + base have source maps', async () => {
   let config = {
     content: [],
   }
@@ -397,7 +397,7 @@ test.skip('preflight + base have source maps', async () => {
   ])
 })
 
-test.skip('utilities have source maps', async () => {
+test('utilities have source maps', async () => {
   let config = {
     content: [{ raw: `text-red-500` }],
   }
@@ -417,7 +417,7 @@ test.skip('utilities have source maps', async () => {
   expect(annotations).toStrictEqual(['2:6 -> 1:0', '2:6-25 -> 2:4-24', '2:6 -> 3:4', '2:25 -> 4:0'])
 })
 
-test.skip('components have source maps', async () => {
+test('components have source maps', async () => {
   let config = {
     content: [{ raw: `container` }],
   }
@@ -466,7 +466,7 @@ test.skip('components have source maps', async () => {
   ])
 })
 
-test.skip('source maps for layer rules are not rewritten to point to @tailwind directives', async () => {
+test('source maps for layer rules are not rewritten to point to @tailwind directives', async () => {
   let config = {
     content: [{ raw: `font-normal foo hover:foo` }],
   }
