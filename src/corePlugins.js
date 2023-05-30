@@ -1523,6 +1523,14 @@ export let corePlugins = {
     })
   },
 
+  textWrap: ({ addUtilities }) => {
+    addUtilities({
+      '.text-wrap': { 'text-wrap': 'wrap' },
+      '.text-nowrap': { 'text-wrap': 'nowrap' },
+      '.text-balance': { 'text-wrap': 'balance' },
+    })
+  },
+
   wordBreak: ({ addUtilities }) => {
     addUtilities({
       '.break-normal': { 'overflow-wrap': 'normal', 'word-break': 'normal' },
