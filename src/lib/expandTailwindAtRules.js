@@ -246,11 +246,21 @@ export default function expandTailwindAtRules(context) {
       )
       layerNodes.variants.remove()
     } else if (variantNodes.length > 0) {
-      root.append(
-        cloneNodes(variantNodes, root.source, {
-          layer: 'variants',
+      let cloned = cloneNodes(variantNodes, undefined, {
+        layer: 'variants',
+      })
+
+      cloned.forEach((node) => {
+        let parentLayer = node.raws.tailwind?.parentLayer ?? null
+
+        node.walk((n) => {
+          if (!n.source) {
+            n.source = layerNodes[parentLayer].source
+          }
         })
-      )
+      })
+
+      root.append(cloned)
     }
 
     // If we've got a utility layer and no utilities are generated there's likely something wrong
