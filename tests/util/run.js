@@ -14,7 +14,7 @@ export let map = JSON.stringify({
 
 export function run(input, config, plugin = tailwind) {
   let { currentTestName, testPath } = expect.getState()
-  let path = `${testPath}?test=${currentTestName}`
+  let path = `${testPath}?test=${Buffer.from(currentTestName).toString('base64')}`
 
   return postcss(plugin(config)).process(input, {
     from: path,
@@ -29,7 +29,7 @@ export function runWithSourceMaps(
   plugin = tailwind
 ) {
   let { currentTestName, testPath } = expect.getState()
-  let path = `${testPath}?test=${currentTestName}`
+  let path = `${testPath}?test=${Buffer.from(currentTestName).toString('base64')}`
 
   return postcss(plugin(config)).process(input, {
     from: path,

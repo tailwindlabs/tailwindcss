@@ -407,7 +407,7 @@ test('source maps for layer rules are not rewritten to point to @tailwind direct
   expect(sources).toMatchInlineSnapshot(`
     [
       "components.css",
-      "source-maps.test.js%3Ftest=source%20maps%20for%20layer%20rules%20are%20not%20rewritten%20to%20point%20to%20@tailwind%20directives",
+      "source-maps.test.js%3Ftest=c291cmNlIG1hcHMgZm9yIGxheWVyIHJ1bGVzIGFyZSBub3QgcmV3cml0dGVuIHRvIHBvaW50IHRvIEB0YWlsd2luZCBkaXJlY3RpdmVz",
       "input.css",
     ]
   `)
