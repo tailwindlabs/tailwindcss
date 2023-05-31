@@ -6,7 +6,16 @@ import { SourceMapConsumer } from 'source-map-js'
  * @param {import('postcss').Result} result
  */
 export function parseSourceMaps(result) {
-  let map = result.map.toJSON()
+  let map = result.map
+    ? result.map.toJSON()
+    : (() => {
+        let css = result.toString()
+        let sourceMappingURL = css.match(/\/\*# sourceMappingURL=(.*) \*\//)?.[1]
+        let raw = sourceMappingURL
+          ? Buffer.from(sourceMappingURL.split(',')[1], 'base64').toString()
+          : null
+        return JSON.parse(raw ?? '{}')
+      })()
 
   return {
     sources: map.sources,

@@ -51,7 +51,12 @@ module.exports = function tailwindcss(configOrPath) {
             code: Buffer.from(intermediateResult.css),
             minify: false,
             sourceMap: !!intermediateMap,
-            inputSourceMap: JSON.stringify(intermediateMap),
+            inputSourceMap:
+              typeof intermediateMap === 'object'
+                ? JSON.stringify(intermediateMap)
+                : typeof intermediateMap === 'string'
+                ? intermediateMap
+                : undefined,
             targets:
               typeof process !== 'undefined' && process.env.JEST_WORKER_ID
                 ? { chrome: 111 << 16 }
@@ -69,7 +74,14 @@ module.exports = function tailwindcss(configOrPath) {
           // https://postcss.org/api/#sourcemapoptions
           if (intermediateMap && transformed.map != null) {
             let prev = transformed.map.toString()
-            intermediateMap.prev = prev
+
+            if (typeof intermediateMap === 'object') {
+              intermediateMap.prev = prev
+            } else {
+              code = `${code}\n/*# sourceMappingURL=data:application/json;base64,${Buffer.from(
+                prev
+              ).toString('base64')} */`
+            }
           }
 
           result.root = postcss.parse(code, {

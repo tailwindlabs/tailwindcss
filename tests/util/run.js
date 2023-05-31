@@ -22,15 +22,18 @@ export function run(input, config, plugin = tailwind) {
   })
 }
 
-export function runWithSourceMaps(input, config, plugin = tailwind) {
+export function runWithSourceMaps(
+  input,
+  config,
+  options = { map: { prev: map } },
+  plugin = tailwind
+) {
   let { currentTestName, testPath } = expect.getState()
   let path = `${testPath}?test=${currentTestName}`
 
   return postcss(plugin(config)).process(input, {
     from: path,
     to: path,
-    map: {
-      prev: map,
-    },
+    ...options,
   })
 }
