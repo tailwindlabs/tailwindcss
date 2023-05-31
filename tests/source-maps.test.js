@@ -445,7 +445,7 @@ test('it handles `map: true` correctly', async () => {
 
   expect(annotations).toMatchInlineSnapshot(`
     [
-      "1:0 -> 1:0",
+      "2:4 -> 1:0",
       "2:2-22 -> 2:2-22",
       "3:2-48 -> 3:2-48",
       "4:0 -> 4:0",
@@ -476,7 +476,7 @@ test('it handles `map: { inline: true }` correctly', async () => {
 
   expect(annotations).toMatchInlineSnapshot(`
     [
-      "1:0 -> 1:0",
+      "2:4 -> 1:0",
       "2:2-22 -> 2:2-22",
       "3:2-48 -> 3:2-48",
       "4:0 -> 4:0",

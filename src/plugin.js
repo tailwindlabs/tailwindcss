@@ -42,7 +42,9 @@ module.exports = function tailwindcss(configOrPath) {
       function lightningCssPlugin(_root, result) {
         let map = result.map ?? result.opts.map
 
-        let intermediateResult = result.root.toResult()
+        let intermediateResult = result.root.toResult({
+          map: map ? { inline: true } : false,
+        })
         let intermediateMap = intermediateResult.map?.toJSON?.() ?? map
 
         try {
@@ -51,12 +53,6 @@ module.exports = function tailwindcss(configOrPath) {
             code: Buffer.from(intermediateResult.css),
             minify: false,
             sourceMap: !!intermediateMap,
-            inputSourceMap:
-              typeof intermediateMap === 'object'
-                ? JSON.stringify(intermediateMap)
-                : typeof intermediateMap === 'string'
-                ? intermediateMap
-                : undefined,
             targets:
               typeof process !== 'undefined' && process.env.JEST_WORKER_ID
                 ? { chrome: 111 << 16 }
