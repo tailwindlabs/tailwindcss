@@ -40,38 +40,52 @@ module.exports = function tailwindcss(configOrPath) {
         processTailwindFeatures(context)(root, result)
       },
       function lightningCssPlugin(_root, result) {
+        let map = result.map ?? result.opts.map
+
+        let intermediateResult = result.root.toResult({
+          map: map ? { inline: true } : false,
+        })
+        let intermediateMap = intermediateResult.map?.toJSON?.() ?? map
+
         try {
           let transformed = lightningcss.transform({
             filename: result.opts.from,
-            code: Buffer.from(result.root.toString()),
+            code: Buffer.from(intermediateResult.css),
             minify: false,
-            sourceMap: !!result.map,
-            inputSourceMap: result.map ? result.map.toString() : undefined,
+            sourceMap: !!intermediateMap,
             targets:
               typeof process !== 'undefined' && process.env.JEST_WORKER_ID
                 ? { chrome: 111 << 16 }
                 : lightningcss.browserslistToTargets(
                     browserslist(require('../package.json').browserslist)
                   ),
-
             drafts: {
               nesting: true,
               customMedia: true,
             },
           })
 
-          result.map = Object.assign(result.map ?? {}, {
-            toJSON() {
-              return transformed.map.toJSON()
-            },
-            toString() {
-              return transformed.map.toString()
-            },
-          })
+          let code = transformed.code.toString()
 
-          result.root = postcss.parse(transformed.code.toString('utf8'))
+          // https://postcss.org/api/#sourcemapoptions
+          if (intermediateMap && transformed.map != null) {
+            let prev = transformed.map.toString()
+
+            if (typeof intermediateMap === 'object') {
+              intermediateMap.prev = prev
+            } else {
+              code = `${code}\n/*# sourceMappingURL=data:application/json;base64,${Buffer.from(
+                prev
+              ).toString('base64')} */`
+            }
+          }
+
+          result.root = postcss.parse(code, {
+            ...result.opts,
+            map: intermediateMap,
+          })
         } catch (err) {
-          if (typeof process !== 'undefined' && process.env.JEST_WORKER_ID) {
+          if (err.source && typeof process !== 'undefined' && process.env.JEST_WORKER_ID) {
             let lines = err.source.split('\n')
             err = new Error(
               [
