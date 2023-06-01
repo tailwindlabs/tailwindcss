@@ -3,25 +3,22 @@ use fxhash::FxHashSet;
 use std::{iter::zip, ascii::escape_default};
 use tracing::trace;
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
-pub enum ParseAction {
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub enum ParseAction<'a> {
     Consume,
     Skip,
     RestartAt(usize),
+
+    SingleCandidate(&'a [u8]),
+    MultipleCandidates(Vec<&'a [u8]>),
+    Continue,
+    Done,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct SplitCandidate<'a> {
     variant: &'a [u8],
     utility: &'a [u8],
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub enum YieldResult<'a> {
-    SingleCandidate(&'a [u8]),
-    MultipleCandidates(Vec<&'a [u8]>),
-    Continue,
-    Done,
 }
 
 #[derive(Default)]
@@ -283,7 +280,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_escaped(&mut self) -> ParseAction {
+    fn parse_escaped(&mut self) -> ParseAction<'a> {
         // If this character is escaped, we don't care about it.
         // It gets consumed.
         trace!("Escape::Consume");
@@ -294,7 +291,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_arbitrary(&mut self, curr: u8, pos: usize) -> ParseAction {
+    fn parse_arbitrary(&mut self, curr: u8, pos: usize) -> ParseAction<'a> {
         // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary valuesq
         if self.in_escape {
             return self.parse_escaped();
@@ -364,7 +361,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_start(&mut self, curr: u8, pos: usize) -> ParseAction {
+    fn parse_start(&mut self, curr: u8, pos: usize) -> ParseAction<'a> {
         match curr {
             // Enter arbitrary value mode
             b'[' => {
@@ -391,7 +388,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_continue(&mut self, prev: u8, curr: u8, pos: usize) -> ParseAction {
+    fn parse_continue(&mut self, prev: u8, curr: u8, pos: usize) -> ParseAction<'a> {
         match curr {
             // Enter arbitrary value mode
             b'[' if prev == b'@'
@@ -467,7 +464,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_char(&mut self, prev: u8, curr: u8, pos: usize) -> ParseAction {
+    fn parse_char(&mut self, prev: u8, curr: u8, pos: usize) -> ParseAction<'a> {
         if self.in_arbitrary {
             self.parse_arbitrary(curr, pos)
         } else if self.in_candidate {
@@ -534,14 +531,14 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_and_yield(&mut self) -> YieldResult<'a> {
+    fn parse_and_yield(&mut self) -> ParseAction<'a> {
         let (pos, curr) = self.read();
         let action = self.parse_char(self.prev, curr, pos);
 
         match action {
             ParseAction::RestartAt(pos) => {
                 self.restart(pos);
-                return YieldResult::Continue;
+                return ParseAction::Continue;
             }
             ParseAction::Consume => {
                 self.idx_end = pos;
@@ -554,7 +551,7 @@ impl<'a> Extractor<'a> {
         match restart_pos {
             Some(pos) => {
                 self.restart(pos);
-                return YieldResult::Continue;
+                return ParseAction::Continue;
             }
             _ => {}
         }
@@ -562,12 +559,12 @@ impl<'a> Extractor<'a> {
         self.prev = curr;
 
         match (candidate, curr) {
-            (_, 0x00) => YieldResult::Done,
+            (_, 0x00) => ParseAction::Done,
             (Some(candidate), _) if self.needs_slices() => {
-                YieldResult::MultipleCandidates(self.generate_slices(candidate))
+                ParseAction::MultipleCandidates(self.generate_slices(candidate))
             }
-            (Some(candidate), _) => YieldResult::SingleCandidate(candidate),
-            _ => YieldResult::Continue,
+            (Some(candidate), _) => ParseAction::SingleCandidate(candidate),
+            _ => ParseAction::Continue,
         }
     }
 
@@ -621,10 +618,14 @@ impl<'a> Iterator for Extractor<'a> {
 
         loop {
             match self.parse_and_yield() {
-                YieldResult::Continue => continue,
-                YieldResult::SingleCandidate(candidate) => return Some(vec![candidate]),
-                YieldResult::MultipleCandidates(candidates) => return Some(candidates),
-                YieldResult::Done => return None,
+                ParseAction::Continue => continue,
+                ParseAction::SingleCandidate(candidate) => return Some(vec![candidate]),
+                ParseAction::MultipleCandidates(candidates) => return Some(candidates),
+                ParseAction::Done => return None,
+
+                ParseAction::Skip => continue,
+                ParseAction::Consume => continue,
+                ParseAction::RestartAt(_) => continue,
             }
         }
     }
