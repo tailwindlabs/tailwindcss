@@ -1,6 +1,6 @@
 use bstr::ByteSlice;
 use fxhash::FxHashSet;
-use std::ops::ControlFlow;
+use std::{iter::zip, ascii::escape_default};
 use tracing::trace;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -16,22 +16,12 @@ pub struct SplitCandidate<'a> {
     utility: &'a [u8],
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum YieldResult<'a> {
-    Candidate(&'a [u8]),
+    SingleCandidate(&'a [u8]),
+    MultipleCandidates(Vec<&'a [u8]>),
     Continue,
     Done,
-}
-
-// Control flow for YieldResult
-impl<'a> From<YieldResult<'a>> for ControlFlow<()> {
-    fn from(result: YieldResult<'a>) -> Self {
-        match result {
-            YieldResult::Candidate(_) => ControlFlow::Continue(()),
-            YieldResult::Continue => ControlFlow::Continue(()),
-            YieldResult::Done => ControlFlow::Break(()),
-        }
-    }
 }
 
 #[derive(Default)]
@@ -63,17 +53,16 @@ pub struct Extractor<'a> {
 
 impl<'a> Extractor<'a> {
     pub fn all(input: &'a [u8], opts: ExtractorOptions) -> Vec<&'a [u8]> {
-        Self::new(input, opts).collect()
+        Self::new(input, opts).into_iter().flatten().collect()
     }
 
     pub fn unique(input: &'a [u8], opts: ExtractorOptions) -> FxHashSet<&'a [u8]> {
         let mut candidates: FxHashSet<&[u8]> = Default::default();
         candidates.reserve(100);
-        candidates.extend(Self::new(input, opts));
+        candidates.extend(Self::new(input, opts).into_iter().flatten());
         candidates
     }
 
-    #[cfg(test)]
     pub fn unique_ord(input: &'a [u8], opts: ExtractorOptions) -> Vec<&'a [u8]> {
         // This is an inefficient way to get an ordered, unique
         // list as a Vec but it is only meant for testing.
@@ -118,12 +107,20 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn get_current_candidate(&mut self) -> Option<&'a [u8]> {
+    fn get_current_candidate(&mut self) -> (Option<&'a [u8]>, Option<usize>) {
         let mut candidate = &self.input[self.idx_start..=self.idx_end];
 
         while !candidate.is_empty() {
-            if Extractor::is_valid_candidate_string(candidate) {
-                return Some(candidate);
+            let can_str = std::str::from_utf8(candidate).ok().unwrap();
+
+            let (is_valid, needs_restart) = Extractor::is_valid_candidate_string(candidate);
+
+            if is_valid {
+                return (Some(candidate), None);
+            }
+
+            if needs_restart {
+                return (None, Some(self.idx_start+1));
             }
 
             match candidate.split_last() {
@@ -134,7 +131,7 @@ impl<'a> Extractor<'a> {
             }
         }
 
-        None
+        (None, None)
     }
 
     #[inline(always)]
@@ -187,7 +184,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn is_valid_candidate_string(candidate: &'a [u8]) -> bool {
+    fn is_valid_candidate_string(candidate: &'a [u8]) -> (bool, bool) {
         let split_candidate = Extractor::split_candidate(candidate);
 
         let mut offset = 0;
@@ -203,7 +200,7 @@ impl<'a> Extractor<'a> {
 
         // These are allowed in arbitrary values and in variants but nowhere else
         if Extractor::contains_in_constrained(utility, vec![b'<', b'>']) {
-            return false;
+            return (false, true);
         }
 
         // Pluck out the part that we are interested in.
@@ -212,38 +209,38 @@ impl<'a> Extractor<'a> {
         // Validations
         // We should have _something_
         if utility.is_empty() {
-            return false;
+            return (false, false);
         }
 
         // <sm is fine, but only as a variant
         // TODO: We probably have to ensure that this `:` is not inside the arbitrary values...
         if utility.starts_with(b"<") && !utility.contains(&b':') {
-            return false;
+            return (false, false);
         }
 
         // Only variants can start with a number. E.g.: 2xl is fine, but only as a variant.
         // TODO: Adjust this if we run into issues with actual utilities starting with a number?
         // TODO: We probably have to ensure that this `:` is not inside the arbitrary values...
         if utility[0] >= b'0' && utility[0] <= b'9' && !utility.contains(&b':') {
-            return false;
+            return (false, false);
         }
 
         // In case of an arbitrary property, we should have at least this structure: [a:b]
         if utility.starts_with(b"[") && utility.ends_with(b"]") {
             // [a:b] is at least 5 characters long
             if utility.len() < 5 {
-                return false;
+                return (false, false);
             }
 
             // Should contain a `:`
             if !utility.contains(&b':') {
-                return false;
+                return (false, false);
             }
 
             // Now that we validated that the candidate is technically fine, let's ensure that it
             // doesn't start with a `-` because that would make it invalid for arbitrary properties.
             if original_utility.starts_with(b"-") || original_utility.starts_with(b"!-") {
-                return false;
+                return (false, false);
             }
 
             // The ':` must be preceded by a-Z0-9 because it represents a property name.
@@ -254,7 +251,7 @@ impl<'a> Extractor<'a> {
                 .nth(colon - 1)
                 .map_or_else(|| false, |c| c.is_ascii_alphanumeric())
             {
-                return false;
+                return (false, false);
             }
         }
 
@@ -276,13 +273,13 @@ impl<'a> Extractor<'a> {
                     // `/` is the indicator for a modifier, this is not allowed after arbitrary
                     // properties
                     if next == '/' {
-                        return false;
+                        return (false, false);
                     }
                 }
             }
         }
 
-        true
+        (true, false)
     }
 
     #[inline(always)]
@@ -425,8 +422,8 @@ impl<'a> Extractor<'a> {
             | b'0'..=b'9'
             | b'-'
             | b'_'
-            | b'('
-            | b')'
+            // | b'('
+            // | b')'
             | b'<'
             | b'>'
             | b'!'
@@ -487,22 +484,22 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn yield_candidate(&mut self, pos: usize, curr: u8, did_consume: bool) -> Option<&'a [u8]> {
+    fn yield_candidate(&mut self, pos: usize, curr: u8, did_consume: bool) -> (Option<&'a [u8]>, Option<usize>) {
         // If we're still consuming characters, we keep going
         // Only exception is if we've hit the end of the input
         if did_consume && pos + 1 < self.idx_last {
-            return None;
+            return (None, None);
         }
 
-        let candidate = if self.can_be_candidate(curr) {
+        let result = if self.can_be_candidate(curr) {
             self.get_current_candidate()
         } else {
-            None
+            (None, None)
         };
 
         self.handle_skip(pos);
 
-        candidate
+        result
     }
 
     #[inline(always)]
@@ -552,20 +549,70 @@ impl<'a> Extractor<'a> {
             _ => {}
         }
 
-        let candidate = self.yield_candidate(pos, curr, action == ParseAction::Consume);
+        let (candidate, restart_pos) = self.yield_candidate(pos, curr, action == ParseAction::Consume);
+
+        match restart_pos {
+            Some(pos) => {
+                self.restart(pos);
+                return YieldResult::Continue;
+            }
+            _ => {}
+        }
 
         self.prev = curr;
 
         match (candidate, curr) {
             (_, 0x00) => YieldResult::Done,
-            (Some(candidate), _) => YieldResult::Candidate(candidate),
+            (Some(candidate), _) if self.needs_slices() => {
+                YieldResult::MultipleCandidates(self.generate_slices(candidate))
+            }
+            (Some(candidate), _) => YieldResult::SingleCandidate(candidate),
             _ => YieldResult::Continue,
         }
+    }
+
+    #[inline(always)]
+    fn needs_slices(&mut self) -> bool {
+        let (leading, trailing) = (
+            self.input.get(self.idx_start - 1),
+            self.input.get(self.idx_end),
+        );
+
+        dbg!(&leading.map(|c| escape_default(*c).to_string()), &trailing.map(|c| escape_default(*c).to_string()));
+
+        return match (leading, trailing) {
+            (Some(b'{'), Some(b'}'))
+            | (Some(b'['), Some(b']'))
+            | (Some(b'"'), Some(b'"'))
+            | (Some(b'`'), Some(b'`'))
+            | (Some(b'\''), Some(b'\'')) => true,
+            _ => false,
+        };
+    }
+
+    #[inline(always)]
+    fn generate_slices(&mut self, candidate: &'a [u8]) -> Vec<&'a [u8]> {
+        let mut parts = vec![];
+        let mut indexes = vec![];
+
+        // Find all the indexes of the separators
+        for n in 0..candidate.len() {
+            match candidate[n] {
+                b':' | b'/' => indexes.push(n),
+                _ => {}
+            }
+        }
+
+        for (idx1, idx2) in zip(&indexes, &indexes[1..]) {
+            parts.push(&candidate[*idx1..*idx2]);
+        }
+
+        parts
     }
 }
 
 impl<'a> Iterator for Extractor<'a> {
-    type Item = &'a [u8];
+    type Item = Vec<&'a [u8]>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.pos == self.idx_last {
@@ -575,7 +622,8 @@ impl<'a> Iterator for Extractor<'a> {
         loop {
             match self.parse_and_yield() {
                 YieldResult::Continue => continue,
-                YieldResult::Candidate(candidate) => return Some(candidate),
+                YieldResult::SingleCandidate(candidate) => return Some(vec![candidate]),
+                YieldResult::MultipleCandidates(candidates) => return Some(candidates),
                 YieldResult::Done => return None,
             }
         }
@@ -658,8 +706,7 @@ mod test {
     fn it_should_not_keep_spaces() {
         let candidates = run("bg-[rgba(0, 0, 0)]", false);
 
-        // TODO: This should be empty, because the arbitrary value is unbalanced.
-        assert!(candidates.is_empty());
+        assert_eq!(candidates, vec!["rgba"]);
     }
 
     #[test]
@@ -748,6 +795,7 @@ mod test {
         assert_eq!(
             candidates,
             vec![
+                "div",
                 "class",
                 r#"dark:lg:hover:[&>*]:underline"#,
                 r#"[&_.foo\_\_bar]:hover:underline"#,
@@ -762,7 +810,7 @@ mod test {
         assert_eq!(
             candidates,
             vec![
-                // "p", // TODO: This is missing. Maybe?
+                "p",
                 "class",
                 "text-sm",
                 "text-blue-700",
@@ -778,7 +826,6 @@ mod test {
                 // "new", // Already seen
                 "in",
                 "version",
-                "p", // Hmm, becuse "</p>"
             ]
         );
     }
@@ -857,7 +904,20 @@ mod test {
         );
         assert_eq!(
             candidates,
-            vec!["class", "underline", "isActive", "px-1.5", "isOnline"]
+            vec!["div", "class", "underline", "isActive", "px-1.5", "isOnline"]
+        );
+    }
+
+
+    #[test]
+    fn mupltiple_nested_candidates() {
+        let candidates = run(
+            r#"{color:red}"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["color:red", "color", "red"]
         );
     }
 }
