@@ -26,7 +26,10 @@ function getExtractor(context, fileExtension) {
     extractors[fileExtension] ||
     extractors.DEFAULT ||
     builtInExtractors[fileExtension] ||
-    builtInExtractors.DEFAULT(context)
+    // Because we call `DEFAULT(context)`, the returning function is always a new function without a
+    // stable identity. Marking it with `DEFAULT_EXTRACTOR` allows us to check if it is the default
+    // extractor without relying on the function identity.
+    Object.assign(builtInExtractors.DEFAULT(context), { DEFAULT_EXTRACTOR: true })
   )
 }
 
@@ -133,20 +136,35 @@ export default function expandTailwindAtRules(context) {
     env.DEBUG && console.time('Reading changed files')
 
     if (flagEnabled(context.tailwindConfig, 'oxideParser')) {
-      // TODO: Pass through or implement `extractor`
-      for (let candidate of parseCandidateStrings(
-        context.changedContent,
-        IO.Parallel | Parsing.Parallel
-        // Object.assign({}, builtInTransformers, context.tailwindConfig.content.transform)
-      )) {
-        candidates.add(candidate)
+      let rustParserContent = []
+      let regexParserContent = []
+
+      for (let item of context.changedContent) {
+        let transformer = getTransformer(context.tailwindConfig, item.extension)
+        let extractor = getExtractor(context, item.extension)
+
+        if (transformer === builtInTransformers.DEFAULT && extractor?.DEFAULT_EXTRACTOR === true) {
+          rustParserContent.push(item)
+        } else {
+          regexParserContent.push([item, { transformer, extractor }])
+        }
       }
 
-      // for (let { file, content, extension } of context.changedContent) {
-      //   let transformer = getTransformer(context.tailwindConfig, extension)
-      //   let extractor = getExtractor(context, extension)
-      //   getClassCandidatesOxide(file, transformer(content), extractor, candidates, seen)
-      // }
+      if (rustParserContent.length > 0) {
+        for (let candidate of parseCandidateStrings(
+          rustParserContent,
+          IO.Parallel | Parsing.Parallel
+        )) {
+          candidates.add(candidate)
+        }
+      }
+
+      if (regexParserContent.length > 0) {
+        for (let [{ file, content }, { transformer, extractor }] of regexParserContent) {
+          content = file ? fs.readFileSync(file, 'utf8') : content
+          getClassCandidates(transformer(content), extractor, candidates, seen)
+        }
+      }
     } else {
       for (let { file, content, extension } of context.changedContent) {
         let transformer = getTransformer(context.tailwindConfig, extension)
@@ -165,15 +183,16 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Generate rules')
     env.DEBUG && console.time('Sorting candidates')
-    let sortedCandidates = flagEnabled(context.tailwindConfig, 'oxideParser')
-      ? candidates
-      : new Set(
-          [...candidates].sort((a, z) => {
-            if (a === z) return 0
-            if (a < z) return -1
-            return 1
-          })
-        )
+    // TODO: only sort if we are not using the oxide parser (flagEnabled(context.tailwindConfig,
+    // 'oxideParser')) AND if we got all the candidates form the oxideParser alone. This will not
+    // be the case currently if you have custom transformers / extractors.
+    let sortedCandidates = new Set(
+      [...candidates].sort((a, z) => {
+        if (a === z) return 0
+        if (a < z) return -1
+        return 1
+      })
+    )
     env.DEBUG && console.timeEnd('Sorting candidates')
     generateRules(sortedCandidates, context)
     env.DEBUG && console.timeEnd('Generate rules')
