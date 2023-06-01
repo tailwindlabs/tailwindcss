@@ -335,11 +335,6 @@ impl From<u8> for Parsing {
     }
 }
 
-pub fn parse_candidate_strings_from_files(changed_content: Vec<ChangedContent>) -> Vec<String> {
-    init_tracing();
-    parse_all_blobs(read_all_files(changed_content))
-}
-
 pub fn parse_candidate_strings(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
     init_tracing();
 

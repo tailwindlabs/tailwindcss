@@ -1,6 +1,6 @@
 import fs from 'fs'
 import LRU from '@alloc/quick-lru'
-import { parseCandidateStringsFromFiles } from '@tailwindcss/oxide'
+import { parseCandidateStrings, IO, Parsing } from '@tailwindcss/oxide'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import log from '../util/log'
@@ -134,8 +134,9 @@ export default function expandTailwindAtRules(context) {
 
     if (flagEnabled(context.tailwindConfig, 'oxideParser')) {
       // TODO: Pass through or implement `extractor`
-      for (let candidate of parseCandidateStringsFromFiles(
-        context.changedContent
+      for (let candidate of parseCandidateStrings(
+        context.changedContent,
+        IO.Parallel | Parsing.Parallel
         // Object.assign({}, builtInTransformers, context.tailwindConfig.content.transform)
       )) {
         candidates.add(candidate)

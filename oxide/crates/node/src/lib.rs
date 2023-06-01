@@ -22,13 +22,6 @@ impl From<ChangedContent> for tailwindcss_core::ChangedContent {
   }
 }
 
-#[napi]
-pub fn parse_candidate_strings_from_files(changed_content: Vec<ChangedContent>) -> Vec<String> {
-  tailwindcss_core::parse_candidate_strings_from_files(
-    changed_content.into_iter().map(Into::into).collect(),
-  )
-}
-
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ContentPathInfo {
