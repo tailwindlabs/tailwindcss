@@ -123,7 +123,7 @@ impl<'a> Extractor<'a> {
             }
 
             if needs_restart {
-                return ParseAction::RestartAt(self.idx_start+1);
+                return ParseAction::RestartAt(self.idx_start + 1);
             }
 
             match candidate.split_last() {
@@ -533,20 +533,17 @@ impl<'a> Extractor<'a> {
 
         Self::slice_surrounding(clipped)
             .map(Bracketing::Included)
-            .or_else(
-                || {
-                    if self.idx_start == 0 || self.idx_end+1 == self.idx_last {
-                        return None
-                    }
-
-                    let range = self.idx_start-1..=self.idx_end+1;
-                    let clipped = &self.input[range];
-                    Self::slice_surrounding(clipped).map(Bracketing::Wrapped)
+            .or_else(|| {
+                if self.idx_start == 0 || self.idx_end + 1 == self.idx_last {
+                    return None;
                 }
-            )
+
+                let range = self.idx_start - 1..=self.idx_end + 1;
+                let clipped = &self.input[range];
+                Self::slice_surrounding(clipped).map(Bracketing::Wrapped)
+            })
             .unwrap_or(Bracketing::None)
     }
-
 
     #[inline(always)]
     fn is_balanced(input: &[u8]) -> bool {
@@ -554,13 +551,13 @@ impl<'a> Extractor<'a> {
 
         for n in input {
             match n {
-                b'[' | b'{' | b'(' => depth+=1,
-                b']' | b'}' | b')' => depth-=1,
+                b'[' | b'{' | b'(' => depth += 1,
+                b']' | b'}' | b')' => depth -= 1,
                 _ => continue,
             }
 
             if depth < 0 {
-                return false
+                return false;
             }
         }
 
@@ -568,9 +565,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn slice_surrounding<'b>(
-        input: &[u8]
-    ) -> Option<&[u8]> {
+    fn slice_surrounding<'b>(input: &[u8]) -> Option<&[u8]> {
         let mut prev = None;
         let mut input = input;
 
@@ -593,12 +588,12 @@ impl<'a> Extractor<'a> {
 
             if needed {
                 prev = Some(input);
-                input = &input[1..input.len()-1];
-                continue
+                input = &input[1..input.len() - 1];
+                continue;
             } else if Self::is_balanced(input) && prev.is_some() {
-                return Some(input)
+                return Some(input);
             } else {
-                return prev
+                return prev;
             }
         }
     }
@@ -617,9 +612,9 @@ impl<'a> Extractor<'a> {
                 // If we're still consuming characters, we keep going
                 // Only exception is if we've hit the end of the input
                 if pos + 1 < self.idx_last {
-                    return action
+                    return action;
                 }
-            },
+            }
             _ => {}
         }
 
@@ -629,7 +624,7 @@ impl<'a> Extractor<'a> {
             (ParseAction::RestartAt(_), _) => action,
             (_, 0x00) => ParseAction::Done,
             (ParseAction::SingleCandidate(candidate, _), _) => self.generate_slices(candidate, pos),
-            _ => ParseAction::RestartAt(pos+1),
+            _ => ParseAction::RestartAt(pos + 1),
         }
     }
 
@@ -642,20 +637,21 @@ impl<'a> Extractor<'a> {
         // Why is this causing tests to fail when it's not even used?
         // And not mutating anything?
         match self.without_surrounding() {
-            Bracketing::None => {
-                ParseAction::SingleCandidate(candidate, Some(pos))
-            },
+            Bracketing::None => ParseAction::SingleCandidate(candidate, Some(pos)),
 
             Bracketing::Included(slicable) if slicable == candidate => {
                 ParseAction::SingleCandidate(candidate, Some(pos))
-            },
+            }
 
             Bracketing::Included(slicable) | Bracketing::Wrapped(slicable) => {
                 let parts = vec![candidate, slicable];
-                let parts = parts.into_iter().filter(|v| !v.is_empty()).collect::<Vec<_>>();
+                let parts = parts
+                    .into_iter()
+                    .filter(|v| !v.is_empty())
+                    .collect::<Vec<_>>();
 
                 ParseAction::MultipleCandidates(parts, Some(pos))
-            },
+            }
         }
     }
 }
@@ -676,14 +672,14 @@ impl<'a> Iterator for Extractor<'a> {
                         self.handle_skip(pos);
                     }
 
-                    return Some(vec![candidate])
-                },
+                    return Some(vec![candidate]);
+                }
                 ParseAction::MultipleCandidates(candidates, pos) => {
                     if let Some(pos) = pos {
                         self.handle_skip(pos);
                     }
-                    return Some(candidates)
-                },
+                    return Some(candidates);
+                }
                 ParseAction::Done => return None,
 
                 ParseAction::Skip => continue,
@@ -971,56 +967,69 @@ mod test {
         );
         assert_eq!(
             candidates,
-            vec!["div", "class", "underline", "isActive", "px-1.5", "isOnline"]
+            vec![
+                "div",
+                "class",
+                "underline",
+                "isActive",
+                "px-1.5",
+                "isOnline"
+            ]
         );
     }
 
     #[test]
     fn multiple_nested_candidates() {
-        let candidates = run(
-            r#"{color:red}"#,
-            false,
-        );
-        assert_eq!(
-            candidates,
-            vec!["color:red", "color", "red"]
-        );
+        let candidates = run(r#"{color:red}"#, false);
+        assert_eq!(candidates, vec!["color:red", "color", "red"]);
     }
 
     #[test]
     fn doesitwipit() {
-        let candidates = run(
-            r#"%w[hover:flex]"#,
-            false,
-        );
-        assert_eq!(
-            candidates,
-            vec!["hover:flex"]
-        );
+        let candidates = run(r#"%w[hover:flex]"#, false);
+        assert_eq!(candidates, vec!["hover:flex"]);
     }
 
     #[test]
     fn wipit_wipit_good() {
-        let result = Extractor::slice_surrounding(&b".foo_&]:px-[0"[..]).map(std::str::from_utf8).transpose().unwrap();
+        let result = Extractor::slice_surrounding(&b".foo_&]:px-[0"[..])
+            .map(std::str::from_utf8)
+            .transpose()
+            .unwrap();
         assert_eq!(result, None);
 
-        let result = Extractor::slice_surrounding(&b"[.foo_&]:px-[0]"[..]).map(std::str::from_utf8).transpose().unwrap();
+        let result = Extractor::slice_surrounding(&b"[.foo_&]:px-[0]"[..])
+            .map(std::str::from_utf8)
+            .transpose()
+            .unwrap();
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
 
-        let result = Extractor::slice_surrounding(&b"{[.foo_&]:px-[0]}"[..]).map(std::str::from_utf8).transpose().unwrap();
+        let result = Extractor::slice_surrounding(&b"{[.foo_&]:px-[0]}"[..])
+            .map(std::str::from_utf8)
+            .transpose()
+            .unwrap();
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
 
-        let result = Extractor::slice_surrounding(&b"![foo:bar]"[..]).map(std::str::from_utf8).transpose().unwrap();
+        let result = Extractor::slice_surrounding(&b"![foo:bar]"[..])
+            .map(std::str::from_utf8)
+            .transpose()
+            .unwrap();
         assert_eq!(result, None);
 
-        let result = Extractor::slice_surrounding(&b"[\"pt-1.5\"]"[..]).map(std::str::from_utf8).transpose().unwrap();
+        let result = Extractor::slice_surrounding(&b"[\"pt-1.5\"]"[..])
+            .map(std::str::from_utf8)
+            .transpose()
+            .unwrap();
         assert_eq!(result, None);
 
         // 0.19s in a release build:
         let count = 1_000;
         let crazy = format!("{}[.foo_&]:px-[0]{}", "[".repeat(count), "]".repeat(count));
 
-        let result = Extractor::slice_surrounding(crazy.as_bytes()).map(std::str::from_utf8).transpose().unwrap();
+        let result = Extractor::slice_surrounding(crazy.as_bytes())
+            .map(std::str::from_utf8)
+            .transpose()
+            .unwrap();
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
     }
 }
