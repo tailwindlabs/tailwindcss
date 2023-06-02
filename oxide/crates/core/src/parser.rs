@@ -147,9 +147,7 @@ impl<'a> Extractor<'a> {
         let mut brackets = 0;
         let mut idx_end = 0;
 
-        for n in 0..candidate.len() {
-            let c = candidate[n];
-
+        for (n, c) in candidate.iter().enumerate() {
             match c {
                 b'[' => brackets += 1,
                 b']' if brackets > 0 => brackets -= 1,
@@ -168,14 +166,12 @@ impl<'a> Extractor<'a> {
     fn contains_in_constrained(candidate: &'a [u8], bytes: Vec<u8>) -> bool {
         let mut brackets = 0;
 
-        for n in 0..candidate.len() {
-            let c = candidate[n];
-
+        for c in candidate {
             match c {
                 b'[' => brackets += 1,
                 b']' if brackets > 0 => brackets -= 1,
                 _ if brackets == 0 => {
-                    if bytes.contains(&c) {
+                    if bytes.contains(c) {
                         return true;
                     }
                 }
@@ -565,7 +561,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn slice_surrounding<'b>(input: &[u8]) -> Option<&[u8]> {
+    fn slice_surrounding(input: &[u8]) -> Option<&[u8]> {
         let mut prev = None;
         let mut input = input;
 
@@ -576,15 +572,15 @@ impl<'a> Extractor<'a> {
             let leading = input.first().unwrap_or(&0x00);
             let trailing = input.last().unwrap_or(&0x00);
 
-            let needed = match (leading, trailing) {
-                (b'(', b')') => true,
-                (b'{', b'}') => true,
-                (b'[', b']') => true,
-                (b'"', b'"') => true,
-                (b'`', b'`') => true,
-                (b'\'', b'\'') => true,
-                _ => false,
-            };
+            let needed = matches!(
+                (leading, trailing),
+                (b'(', b')')
+                    | (b'{', b'}')
+                    | (b'[', b']')
+                    | (b'"', b'"')
+                    | (b'`', b'`')
+                    | (b'\'', b'\'')
+            );
 
             if needed {
                 prev = Some(input);
