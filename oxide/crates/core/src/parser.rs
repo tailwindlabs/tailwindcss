@@ -531,6 +531,39 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
+    fn without_surrounding(&mut self, pairs: Vec<[u8; 2]>) -> Option<&'a [u8]> {
+        let mut start = self.idx_start;
+        let mut end = self.idx_end;
+        let mut did_slice = false;
+
+        for pair in pairs {
+            let leading_out = self.input.get(start-1);
+            let leading_in = self.input.get(start);
+            let trailing_in = self.input.get(end);
+            let trailing_out = self.input.get(end-1);
+
+            let mut offset = 0;
+
+            if leading_in == Some(&pair[0]) && trailing_in == Some(&pair[1]) {
+                did_slice = true;
+                offset = 1;
+            } else if leading_out == Some(&pair[0]) && trailing_out == Some(&pair[1]) {
+                did_slice = true;
+                offset = 0;
+            };
+
+            start += offset;
+            end -= offset;
+        }
+
+        if did_slice {
+            Some(&self.input[start..=end])
+        } else {
+            None
+        }
+    }
+
+    #[inline(always)]
     fn parse_and_yield(&mut self) -> ParseAction<'a> {
         let (pos, curr) = self.read();
         let action = self.parse_char(self.prev, curr, pos);
@@ -552,39 +585,28 @@ impl<'a> Extractor<'a> {
 
         match (action, curr) {
             (_, 0x00) => ParseAction::Done,
-            (ParseAction::SingleCandidate(candidate), _) if self.needs_slices() => {
-                ParseAction::MultipleCandidates(self.generate_slices(candidate))
-            }
-            (ParseAction::SingleCandidate(candidate), _) => ParseAction::SingleCandidate(candidate),
+            (ParseAction::SingleCandidate(candidate), _) => self.generate_slices(candidate),
             _ => ParseAction::Continue,
         }
     }
 
     #[inline(always)]
-    fn needs_slices(&mut self) -> bool {
-        let (leading, trailing) = (
-            self.input.get(self.idx_start - 1),
-            self.input.get(self.idx_end),
-        );
+    fn generate_slices(&mut self, candidate: &'a [u8]) -> ParseAction<'a> {
+        return ParseAction::SingleCandidate(candidate);
+        let slicable = self.without_surrounding(vec![
+            [b'(', b')'],
+            [b'{', b'}'],
+            [b'[', b']'],
 
-        dbg!(&leading.map(|c| escape_default(*c).to_string()), &trailing.map(|c| escape_default(*c).to_string()));
+            [b'"', b'"'],
+            [b'`', b'`'],
+            [b'\'', b'\''],
+        ]);
 
-        return match (leading, trailing) {
-            (Some(b'{'), Some(b'}'))
-            | (Some(b'['), Some(b']'))
-            | (Some(b'"'), Some(b'"'))
-            | (Some(b'`'), Some(b'`'))
-            | (Some(b'\''), Some(b'\'')) => true,
-            _ => false,
-        };
-    }
-
-    #[inline(always)]
-    fn generate_slices(&mut self, candidate: &'a [u8]) -> Vec<&'a [u8]> {
-        let mut parts = vec![];
-        let mut indexes = vec![];
+        let mut parts = vec![candidate];
 
         // Find all the indexes of the separators
+        let mut indexes = vec![];
         for n in 0..candidate.len() {
             match candidate[n] {
                 b':' | b'/' => indexes.push(n),
@@ -596,7 +618,7 @@ impl<'a> Extractor<'a> {
             parts.push(&candidate[*idx1..*idx2]);
         }
 
-        parts
+        return ParseAction::MultipleCandidates(parts);
     }
 }
 
