@@ -58,6 +58,13 @@ jobs:
             ./oxide/crates/node/index.d.ts
           key: ${{ runner.os }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
 
+      - name: Check versions
+        run: |
+          echo "Node:" `node --version`
+          echo "NPM:" `npm --version`
+          echo "Rust:" `rustc --version`
+          echo "Cargo:" `cargo --version`
+
       - name: Install dependencies
         run: npm install
 
