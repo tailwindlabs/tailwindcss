@@ -43,7 +43,7 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
     let root = Path::new(&args.base);
 
     let allowed_paths = FxHashSet::from_iter(
-        WalkBuilder::new(&root)
+        WalkBuilder::new(root)
             .hidden(false)
             .filter_entry(|entry| match entry.file_type() {
                 Some(file_type) if file_type.is_dir() => entry
@@ -94,7 +94,7 @@ pub fn resolve_content_paths(args: ContentPathInfo) -> Vec<String> {
 
     // Collect all valid paths from the root. This will already filter out ignored files, unknown
     // extensions and binary files.
-    let mut it = WalkDir::new(&root)
+    let mut it = WalkDir::new(root)
         // Sorting to make sure that we always see the directories before the files. Also sorting
         // alphabetically by default.
         .sort_by(

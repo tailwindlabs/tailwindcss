@@ -22,7 +22,6 @@ impl Candidate {
                     x == ':' && !in_arbitrary
                 }
             })
-            .into_iter()
             .collect::<Vec<_>>();
 
         let utility = match parts.pop() {

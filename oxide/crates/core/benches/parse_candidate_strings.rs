@@ -11,7 +11,6 @@ pub fn criterion_benchmark(c: &mut Criterion) {
 
     let mut all_files: Vec<(u64, PathBuf)> = std::fs::read_dir(fixtures_path)
         .unwrap()
-        .into_iter()
         .filter_map(Result::ok)
         .map(|dir_entry| dir_entry.path())
         .filter(|path| path.is_file())
