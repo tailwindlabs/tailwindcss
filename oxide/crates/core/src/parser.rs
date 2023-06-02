@@ -481,22 +481,12 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn yield_candidate(&mut self, pos: usize, curr: u8, did_consume: bool) -> ParseAction<'a> {
-        // If we're still consuming characters, we keep going
-        // Only exception is if we've hit the end of the input
-        if did_consume && pos + 1 < self.idx_last {
-            return ParseAction::Continue;
-        }
-
-        let result = if self.can_be_candidate(curr) {
+    fn yield_candidate(&mut self, pos: usize, curr: u8) -> ParseAction<'a> {
+        if self.can_be_candidate(curr) {
             self.get_current_candidate()
         } else {
             ParseAction::Continue
-        };
-
-        self.handle_skip(pos);
-
-        result
+        }
     }
 
     #[inline(always)]
@@ -575,14 +565,21 @@ impl<'a> Extractor<'a> {
             _ => {}
         }
 
-        let action = self.yield_candidate(pos, curr, action == ParseAction::Consume);
+        // If we're still consuming characters, we keep going
+        // Only exception is if we've hit the end of the input
+        if action == ParseAction::Consume && pos + 1 < self.idx_last {
+            self.prev = curr;
+            return ParseAction::Continue
+        }
+
+        let action = self.yield_candidate(pos, curr);
 
         match action {
             ParseAction::RestartAt(_) => return action,
             _ => {}
         }
 
-        self.prev = curr;
+        self.handle_skip(pos);
 
         match (action, curr) {
             (_, 0x00) => ParseAction::Done,
