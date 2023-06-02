@@ -536,23 +536,15 @@ impl<'a> Extractor<'a> {
         let action = self.parse_char(self.prev, curr, pos);
 
         match action {
-            ParseAction::RestartAt(pos) => {
-                self.restart(pos);
-                return ParseAction::Continue;
-            }
-            ParseAction::Consume => {
-                self.idx_end = pos;
-            }
+            ParseAction::Consume => self.idx_end = pos,
+            ParseAction::RestartAt(_) => return action,
             _ => {}
         }
 
         let action = self.yield_candidate(pos, curr, action == ParseAction::Consume);
 
         match action {
-            ParseAction::RestartAt(pos) => {
-                self.restart(pos);
-                return ParseAction::Continue;
-            }
+            ParseAction::RestartAt(_) => return action,
             _ => {}
         }
 
@@ -625,7 +617,7 @@ impl<'a> Iterator for Extractor<'a> {
 
                 ParseAction::Skip => continue,
                 ParseAction::Consume => continue,
-                ParseAction::RestartAt(_) => continue,
+                ParseAction::RestartAt(pos) => self.restart(pos),
             }
         }
     }
