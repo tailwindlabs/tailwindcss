@@ -531,7 +531,8 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn without_surrounding(&mut self, pairs: Vec<[u8; 2]>) -> Option<&'a [u8]> {
+    fn without_surrounding(&self, pairs: Vec<[u8; 2]>) -> Option<&'a [u8]> {
+        let mut range = self.idx_start..=self.idx_end;
         let mut start = self.idx_start;
         let mut end = self.idx_end;
         let mut did_slice = false;
@@ -540,7 +541,7 @@ impl<'a> Extractor<'a> {
             let leading_out = self.input.get(start-1);
             let leading_in = self.input.get(start);
             let trailing_in = self.input.get(end);
-            let trailing_out = self.input.get(end-1);
+            let trailing_out = self.input.get(end+1);
 
             let mut offset = 0;
 
@@ -556,7 +557,7 @@ impl<'a> Extractor<'a> {
             end -= offset;
         }
 
-        if did_slice {
+        if did_slice && end > start {
             Some(&self.input[start..=end])
         } else {
             None
@@ -592,7 +593,8 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn generate_slices(&mut self, candidate: &'a [u8]) -> ParseAction<'a> {
-        return ParseAction::SingleCandidate(candidate);
+        // Why is this causing tests to fail when it's not even used?
+        // And not mutating anything?
         let slicable = self.without_surrounding(vec![
             [b'(', b')'],
             [b'{', b'}'],
@@ -603,19 +605,24 @@ impl<'a> Extractor<'a> {
             [b'\'', b'\''],
         ]);
 
+        if slicable.is_none() {
+            return ParseAction::SingleCandidate(candidate);
+        }
+
+        let slicable = slicable.unwrap();
         let mut parts = vec![candidate];
 
         // Find all the indexes of the separators
         let mut indexes = vec![];
-        for n in 0..candidate.len() {
-            match candidate[n] {
+        for n in 0..slicable.len() {
+            match slicable[n] {
                 b':' | b'/' => indexes.push(n),
                 _ => {}
             }
         }
 
         for (idx1, idx2) in zip(&indexes, &indexes[1..]) {
-            parts.push(&candidate[*idx1..*idx2]);
+            parts.push(&slicable[*idx1..*idx2]);
         }
 
         return ParseAction::MultipleCandidates(parts);
