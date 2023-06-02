@@ -1,6 +1,5 @@
 use bstr::ByteSlice;
 use fxhash::FxHashSet;
-use std::{iter::zip};
 use tracing::trace;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -9,8 +8,8 @@ pub enum ParseAction<'a> {
     Skip,
     RestartAt(usize),
 
-    SingleCandidate(&'a [u8]),
-    MultipleCandidates(Vec<&'a [u8]>),
+    SingleCandidate(&'a [u8], Option<usize>),
+    MultipleCandidates(Vec<&'a [u8]>, Option<usize>),
     Continue,
     Done,
 }
@@ -108,12 +107,12 @@ impl<'a> Extractor<'a> {
         let mut candidate = &self.input[self.idx_start..=self.idx_end];
 
         while !candidate.is_empty() {
-            let can_str = std::str::from_utf8(candidate).ok().unwrap();
+            // let can_str = std::str::from_utf8(candidate).ok().unwrap();
 
             let (is_valid, needs_restart) = Extractor::is_valid_candidate_string(candidate);
 
             if is_valid {
-                return ParseAction::SingleCandidate(candidate);
+                return ParseAction::SingleCandidate(candidate, None);
             }
 
             if needs_restart {
@@ -481,7 +480,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn yield_candidate(&mut self, pos: usize, curr: u8) -> ParseAction<'a> {
+    fn yield_candidate(&mut self, _: usize, curr: u8) -> ParseAction<'a> {
         if self.can_be_candidate(curr) {
             self.get_current_candidate()
         } else {
@@ -521,36 +520,72 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn without_surrounding(&self, pairs: Vec<[u8; 2]>) -> Option<&'a [u8]> {
-        let mut range = self.idx_start..=self.idx_end;
-        let mut start = self.idx_start;
-        let mut end = self.idx_end;
-        let mut did_slice = false;
+    fn without_surrounding(&self) -> Option<&'a [u8]> {
+        let range = self.idx_start..=self.idx_end;
+        let clipped = &self.input[range];
 
-        for pair in pairs {
-            let leading_out = self.input.get(start-1);
-            let leading_in = self.input.get(start);
-            let trailing_in = self.input.get(end);
-            let trailing_out = self.input.get(end+1);
+        Self::slice_surrounding(clipped).or_else(
+            || {
+                if self.idx_start == 0 || self.idx_end+1 == self.idx_last {
+                    return None
+                }
 
-            let mut offset = 0;
+                let range = self.idx_start-1..=self.idx_end+1;
+                let clipped = &self.input[range];
+                Self::slice_surrounding(clipped)
+            }
+        )
+    }
 
-            if leading_in == Some(&pair[0]) && trailing_in == Some(&pair[1]) {
-                did_slice = true;
-                offset = 1;
-            } else if leading_out == Some(&pair[0]) && trailing_out == Some(&pair[1]) {
-                did_slice = true;
-                offset = 0;
-            };
 
-            start += offset;
-            end -= offset;
+    #[inline(always)]
+    fn is_balanced(input: &[u8]) -> bool {
+        let mut depth = 0isize;
+
+        for n in input {
+            match n {
+                b'[' | b'{' | b'(' => depth+=1,
+                b']' | b'}' | b')' => depth-=1,
+                _ => continue,
+            }
+
+            if depth < 0 {
+                return false
+            }
         }
 
-        if did_slice && end > start {
-            Some(&self.input[start..=end])
-        } else {
-            None
+        depth == 0
+    }
+
+    #[inline(always)]
+    fn slice_surrounding<'i, 'b>(
+        input: &'i [u8]
+    ) -> Option<&'i [u8]> {
+        let mut prev = None;
+        let mut input = input;
+
+        // ![foo:bar]
+
+        loop {
+            let leading = input.get(0).unwrap_or(&0x00);
+            let trailing = input.get(input.len()-1).unwrap_or(&0x00);
+
+            let needed = match (leading, trailing) {
+                (b'(', b')') => true,
+                (b'{', b'}') => true,
+                (b'[', b']') => true,
+                _ => false,
+            };
+
+            if needed {
+                prev = Some(input);
+                input = &input[1..input.len()-1];
+                continue
+            } else if Self::is_balanced(input) && prev.is_some() {
+                return Some(input)
+            } else {
+                return prev
+            }
         }
     }
 
@@ -579,54 +614,38 @@ impl<'a> Extractor<'a> {
         match (&action, curr) {
             (ParseAction::RestartAt(_), _) => action,
             (_, 0x00) => ParseAction::Done,
-
-            (ParseAction::SingleCandidate(candidate), _) => {
-                self.handle_skip(pos);
-                self.generate_slices(candidate)
-            },
-
-            _ => {
-                self.handle_skip(pos);
-                ParseAction::Continue
-            },
+            (ParseAction::SingleCandidate(candidate, _), _) => self.generate_slices(candidate, pos),
+            _ => ParseAction::RestartAt(pos+1),
         }
     }
 
     #[inline(always)]
-    fn generate_slices(&mut self, candidate: &'a [u8]) -> ParseAction<'a> {
+    fn generate_slices(&mut self, candidate: &'a [u8], pos: usize) -> ParseAction<'a> {
+        // Find all []{}() and `:` positions
+        // We also don't split when the []{}() are not at the start/end
+        // If the `:` is not inside a []{}() pair we don't split
+
         // Why is this causing tests to fail when it's not even used?
         // And not mutating anything?
-        let slicable = self.without_surrounding(vec![
-            [b'(', b')'],
-            [b'{', b'}'],
-            [b'[', b']'],
-
-            [b'"', b'"'],
-            [b'`', b'`'],
-            [b'\'', b'\''],
-        ]);
+        let slicable = self.without_surrounding();
 
         if slicable.is_none() {
-            return ParseAction::SingleCandidate(candidate);
+            return ParseAction::SingleCandidate(candidate, Some(pos));
         }
 
         let slicable = slicable.unwrap();
-        let mut parts = vec![candidate];
+        let is_same = slicable == candidate;
 
-        // Find all the indexes of the separators
-        let mut indexes = vec![];
-        for n in 0..slicable.len() {
-            match slicable[n] {
-                b':' | b'/' => indexes.push(n),
-                _ => {}
-            }
+        if  is_same {
+            return ParseAction::SingleCandidate(candidate, Some(pos));
         }
 
-        for (idx1, idx2) in zip(&indexes, &indexes[1..]) {
-            parts.push(&slicable[*idx1..*idx2]);
-        }
+        let mut parts = vec![candidate, slicable];
+        parts.extend(slicable.split(|v| v == &b':'));
 
-        return ParseAction::MultipleCandidates(parts);
+        let parts = parts.into_iter().filter(|v| !v.is_empty()).collect::<Vec<_>>();
+
+        return ParseAction::MultipleCandidates(parts, Some(pos));
     }
 }
 
@@ -641,8 +660,19 @@ impl<'a> Iterator for Extractor<'a> {
         loop {
             match self.parse_and_yield() {
                 ParseAction::Continue => continue,
-                ParseAction::SingleCandidate(candidate) => return Some(vec![candidate]),
-                ParseAction::MultipleCandidates(candidates) => return Some(candidates),
+                ParseAction::SingleCandidate(candidate, pos) => {
+                    if let Some(pos) = pos {
+                        self.handle_skip(pos);
+                    }
+
+                    return Some(vec![candidate])
+                },
+                ParseAction::MultipleCandidates(candidates, pos) => {
+                    if let Some(pos) = pos {
+                        self.handle_skip(pos);
+                    }
+                    return Some(candidates)
+                },
                 ParseAction::Done => return None,
 
                 ParseAction::Skip => continue,
@@ -913,6 +943,9 @@ mod test {
                 "hover:px-0.5",
                 "text-[13px]",
                 "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "--my-var",
+                "1_/_2",
                 "[.foo_&]:px-[0]",
                 "[.foo_&]:[color:red]",
             ]
@@ -931,9 +964,8 @@ mod test {
         );
     }
 
-
     #[test]
-    fn mupltiple_nested_candidates() {
+    fn multiple_nested_candidates() {
         let candidates = run(
             r#"{color:red}"#,
             false,
@@ -942,5 +974,27 @@ mod test {
             candidates,
             vec!["color:red", "color", "red"]
         );
+    }
+
+    #[test]
+    fn wipit_wipit_good() {
+        let result = Extractor::slice_surrounding(&b".foo_&]:px-[0"[..]).map(std::str::from_utf8).transpose().unwrap();
+        assert_eq!(result, None);
+
+        let result = Extractor::slice_surrounding(&b"[.foo_&]:px-[0]"[..]).map(std::str::from_utf8).transpose().unwrap();
+        assert_eq!(result, Some("[.foo_&]:px-[0]"));
+
+        let result = Extractor::slice_surrounding(&b"{[.foo_&]:px-[0]}"[..]).map(std::str::from_utf8).transpose().unwrap();
+        assert_eq!(result, Some("[.foo_&]:px-[0]"));
+
+        let result = Extractor::slice_surrounding(&b"![foo:bar]"[..]).map(std::str::from_utf8).transpose().unwrap();
+        assert_eq!(result, None);
+
+        // 0.19s in a release build:
+        let count = 1_000;
+        let crazy = format!("{}[.foo_&]:px-[0]{}", "[".repeat(count), "]".repeat(count));
+
+        let result = Extractor::slice_surrounding(&crazy.as_bytes()).map(std::str::from_utf8).transpose().unwrap();
+        assert_eq!(result, Some("[.foo_&]:px-[0]"));
     }
 }
