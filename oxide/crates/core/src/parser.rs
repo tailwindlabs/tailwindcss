@@ -1,6 +1,6 @@
 use bstr::ByteSlice;
 use fxhash::FxHashSet;
-use std::{iter::zip, ascii::escape_default};
+use std::{iter::zip};
 use tracing::trace;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -558,33 +558,37 @@ impl<'a> Extractor<'a> {
     fn parse_and_yield(&mut self) -> ParseAction<'a> {
         let (pos, curr) = self.read();
         let action = self.parse_char(self.prev, curr, pos);
+        self.prev = curr;
 
         match action {
-            ParseAction::Consume => self.idx_end = pos,
             ParseAction::RestartAt(_) => return action,
-            _ => {}
-        }
+            ParseAction::Consume => {
+                self.idx_end = pos;
 
-        // If we're still consuming characters, we keep going
-        // Only exception is if we've hit the end of the input
-        if action == ParseAction::Consume && pos + 1 < self.idx_last {
-            self.prev = curr;
-            return ParseAction::Continue
+                // If we're still consuming characters, we keep going
+                // Only exception is if we've hit the end of the input
+                if pos + 1 < self.idx_last {
+                    return action
+                }
+            },
+            _ => {}
         }
 
         let action = self.yield_candidate(pos, curr);
 
-        match action {
-            ParseAction::RestartAt(_) => return action,
-            _ => {}
-        }
-
-        self.handle_skip(pos);
-
-        match (action, curr) {
+        match (&action, curr) {
+            (ParseAction::RestartAt(_), _) => action,
             (_, 0x00) => ParseAction::Done,
-            (ParseAction::SingleCandidate(candidate), _) => self.generate_slices(candidate),
-            _ => ParseAction::Continue,
+
+            (ParseAction::SingleCandidate(candidate), _) => {
+                self.handle_skip(pos);
+                self.generate_slices(candidate)
+            },
+
+            _ => {
+                self.handle_skip(pos);
+                ParseAction::Continue
+            },
         }
     }
 
