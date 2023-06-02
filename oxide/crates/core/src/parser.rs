@@ -104,7 +104,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn get_current_candidate(&mut self) -> (Option<&'a [u8]>, Option<usize>) {
+    fn get_current_candidate(&mut self) -> ParseAction<'a> {
         let mut candidate = &self.input[self.idx_start..=self.idx_end];
 
         while !candidate.is_empty() {
@@ -113,11 +113,11 @@ impl<'a> Extractor<'a> {
             let (is_valid, needs_restart) = Extractor::is_valid_candidate_string(candidate);
 
             if is_valid {
-                return (Some(candidate), None);
+                return ParseAction::SingleCandidate(candidate);
             }
 
             if needs_restart {
-                return (None, Some(self.idx_start+1));
+                return ParseAction::RestartAt(self.idx_start+1);
             }
 
             match candidate.split_last() {
@@ -128,7 +128,7 @@ impl<'a> Extractor<'a> {
             }
         }
 
-        (None, None)
+        return ParseAction::Continue;
     }
 
     #[inline(always)]
@@ -481,17 +481,17 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn yield_candidate(&mut self, pos: usize, curr: u8, did_consume: bool) -> (Option<&'a [u8]>, Option<usize>) {
+    fn yield_candidate(&mut self, pos: usize, curr: u8, did_consume: bool) -> ParseAction<'a> {
         // If we're still consuming characters, we keep going
         // Only exception is if we've hit the end of the input
         if did_consume && pos + 1 < self.idx_last {
-            return (None, None);
+            return ParseAction::Continue;
         }
 
         let result = if self.can_be_candidate(curr) {
             self.get_current_candidate()
         } else {
-            (None, None)
+            ParseAction::Continue
         };
 
         self.handle_skip(pos);
@@ -546,10 +546,10 @@ impl<'a> Extractor<'a> {
             _ => {}
         }
 
-        let (candidate, restart_pos) = self.yield_candidate(pos, curr, action == ParseAction::Consume);
+        let action = self.yield_candidate(pos, curr, action == ParseAction::Consume);
 
-        match restart_pos {
-            Some(pos) => {
+        match action {
+            ParseAction::RestartAt(pos) => {
                 self.restart(pos);
                 return ParseAction::Continue;
             }
@@ -558,12 +558,12 @@ impl<'a> Extractor<'a> {
 
         self.prev = curr;
 
-        match (candidate, curr) {
+        match (action, curr) {
             (_, 0x00) => ParseAction::Done,
-            (Some(candidate), _) if self.needs_slices() => {
+            (ParseAction::SingleCandidate(candidate), _) if self.needs_slices() => {
                 ParseAction::MultipleCandidates(self.generate_slices(candidate))
             }
-            (Some(candidate), _) => ParseAction::SingleCandidate(candidate),
+            (ParseAction::SingleCandidate(candidate), _) => ParseAction::SingleCandidate(candidate),
             _ => ParseAction::Continue,
         }
     }
