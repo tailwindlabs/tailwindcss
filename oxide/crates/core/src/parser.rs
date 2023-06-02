@@ -14,6 +14,13 @@ pub enum ParseAction<'a> {
     Done,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub enum Bracketing<'a> {
+    Included(&'a [u8]),
+    Wrapped(&'a [u8]),
+    None,
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct SplitCandidate<'a> {
     variant: &'a [u8],
@@ -520,21 +527,24 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn without_surrounding(&self) -> Option<&'a [u8]> {
+    fn without_surrounding(&self) -> Bracketing<'a> {
         let range = self.idx_start..=self.idx_end;
         let clipped = &self.input[range];
 
-        Self::slice_surrounding(clipped).or_else(
-            || {
-                if self.idx_start == 0 || self.idx_end+1 == self.idx_last {
-                    return None
-                }
+        Self::slice_surrounding(clipped)
+            .map(|v| Bracketing::Included(v))
+            .or_else(
+                || {
+                    if self.idx_start == 0 || self.idx_end+1 == self.idx_last {
+                        return None
+                    }
 
-                let range = self.idx_start-1..=self.idx_end+1;
-                let clipped = &self.input[range];
-                Self::slice_surrounding(clipped)
-            }
-        )
+                    let range = self.idx_start-1..=self.idx_end+1;
+                    let clipped = &self.input[range];
+                    Self::slice_surrounding(clipped).map(|v| Bracketing::Wrapped(v))
+                }
+            )
+            .unwrap_or(Bracketing::None)
     }
 
 
@@ -627,25 +637,24 @@ impl<'a> Extractor<'a> {
 
         // Why is this causing tests to fail when it's not even used?
         // And not mutating anything?
-        let slicable = self.without_surrounding();
+        match self.without_surrounding() {
+            Bracketing::None => {
+                ParseAction::SingleCandidate(candidate, Some(pos))
+            },
 
-        if slicable.is_none() {
-            return ParseAction::SingleCandidate(candidate, Some(pos));
+            Bracketing::Included(slicable) if slicable == candidate => {
+                ParseAction::SingleCandidate(candidate, Some(pos))
+            },
+
+            Bracketing::Included(slicable) | Bracketing::Wrapped(slicable) => {
+                let mut parts = vec![candidate, slicable];
+                parts.extend(slicable.split(|v| v == &b':'));
+
+                let parts = parts.into_iter().filter(|v| !v.is_empty()).collect::<Vec<_>>();
+
+                ParseAction::MultipleCandidates(parts, Some(pos))
+            },
         }
-
-        let slicable = slicable.unwrap();
-        let is_same = slicable == candidate;
-
-        if  is_same {
-            return ParseAction::SingleCandidate(candidate, Some(pos));
-        }
-
-        let mut parts = vec![candidate, slicable];
-        parts.extend(slicable.split(|v| v == &b':'));
-
-        let parts = parts.into_iter().filter(|v| !v.is_empty()).collect::<Vec<_>>();
-
-        return ParseAction::MultipleCandidates(parts, Some(pos));
     }
 }
 
