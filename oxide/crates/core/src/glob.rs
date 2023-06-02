@@ -12,7 +12,6 @@ pub fn fast_glob(
                 .follow_links(true)
                 .build()
                 .unwrap()
-                .into_iter()
                 .filter_map(Result::ok)
                 .map(|file| file.path().to_path_buf())
         }))

@@ -31,13 +31,13 @@ pub struct Extractor<'a> {
 
 impl<'a> Extractor<'a> {
     pub fn all(input: &'a [u8], opts: ExtractorOptions) -> Vec<&'a [u8]> {
-        Self::new(input, opts).into_iter().collect()
+        Self::new(input, opts).collect()
     }
 
     pub fn unique(input: &'a [u8], opts: ExtractorOptions) -> FxHashSet<&'a [u8]> {
         let mut candidates: FxHashSet<&[u8]> = Default::default();
         candidates.reserve(100);
-        candidates.extend(Self::new(input, opts).into_iter());
+        candidates.extend(Self::new(input, opts));
         candidates
     }
 

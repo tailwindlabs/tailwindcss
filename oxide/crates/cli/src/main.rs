@@ -105,7 +105,7 @@ fn main() -> Result<(), std::io::Error> {
     let candidates = content_paths.par_bridge().flat_map(|path| {
         read_lines(path)
             .unwrap()
-            .filter_map(Result::ok)
+            .map_while(Result::ok)
             .par_bridge()
             .flat_map_iter(|line| {
                 Extractor::unique(line.as_bytes(), Default::default())

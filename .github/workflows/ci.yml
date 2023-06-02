@@ -61,6 +61,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Check versions
+        run: |
+          echo "Node:" `node --version`
+          echo "NPM:" `npm --version`
+          echo "Rust:" `rustc --version`
+          echo "Cargo:" `cargo --version`
+
       - name: Build Tailwind CSS
         run: npx turbo run build --filter=//
 
