@@ -574,7 +574,8 @@ impl<'a> Extractor<'a> {
         let mut prev = None;
         let mut input = input;
 
-        // ![foo:bar]
+        // dark:lg:hover:[&>*]:underline
+        // "dark:lg:hover:[&>*]:underline"
 
         loop {
             let leading = input.get(0).unwrap_or(&0x00);
@@ -584,6 +585,9 @@ impl<'a> Extractor<'a> {
                 (b'(', b')') => true,
                 (b'{', b'}') => true,
                 (b'[', b']') => true,
+                (b'"', b'"') => true,
+                (b'`', b'`') => true,
+                (b'\'', b'\'') => true,
                 _ => false,
             };
 
@@ -647,9 +651,7 @@ impl<'a> Extractor<'a> {
             },
 
             Bracketing::Included(slicable) | Bracketing::Wrapped(slicable) => {
-                let mut parts = vec![candidate, slicable];
-                parts.extend(slicable.split(|v| v == &b':'));
-
+                let parts = vec![candidate, slicable];
                 let parts = parts.into_iter().filter(|v| !v.is_empty()).collect::<Vec<_>>();
 
                 ParseAction::MultipleCandidates(parts, Some(pos))
@@ -986,6 +988,18 @@ mod test {
     }
 
     #[test]
+    fn doesitwipit() {
+        let candidates = run(
+            r#"%w[hover:flex]"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec!["hover:flex"]
+        );
+    }
+
+    #[test]
     fn wipit_wipit_good() {
         let result = Extractor::slice_surrounding(&b".foo_&]:px-[0"[..]).map(std::str::from_utf8).transpose().unwrap();
         assert_eq!(result, None);
@@ -997,6 +1011,9 @@ mod test {
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
 
         let result = Extractor::slice_surrounding(&b"![foo:bar]"[..]).map(std::str::from_utf8).transpose().unwrap();
+        assert_eq!(result, None);
+
+        let result = Extractor::slice_surrounding(&b"[\"pt-1.5\"]"[..]).map(std::str::from_utf8).transpose().unwrap();
         assert_eq!(result, None);
 
         // 0.19s in a release build:
