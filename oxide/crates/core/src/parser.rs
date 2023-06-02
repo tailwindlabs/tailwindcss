@@ -56,13 +56,13 @@ pub struct Extractor<'a> {
 
 impl<'a> Extractor<'a> {
     pub fn all(input: &'a [u8], opts: ExtractorOptions) -> Vec<&'a [u8]> {
-        Self::new(input, opts).into_iter().flatten().collect()
+        Self::new(input, opts).flatten().collect()
     }
 
     pub fn unique(input: &'a [u8], opts: ExtractorOptions) -> FxHashSet<&'a [u8]> {
         let mut candidates: FxHashSet<&[u8]> = Default::default();
         candidates.reserve(100);
-        candidates.extend(Self::new(input, opts).into_iter().flatten());
+        candidates.extend(Self::new(input, opts).flatten());
         candidates
     }
 
@@ -134,7 +134,7 @@ impl<'a> Extractor<'a> {
             }
         }
 
-        return ParseAction::Continue;
+        ParseAction::Continue
     }
 
     #[inline(always)]
@@ -532,7 +532,7 @@ impl<'a> Extractor<'a> {
         let clipped = &self.input[range];
 
         Self::slice_surrounding(clipped)
-            .map(|v| Bracketing::Included(v))
+            .map(Bracketing::Included)
             .or_else(
                 || {
                     if self.idx_start == 0 || self.idx_end+1 == self.idx_last {
@@ -541,7 +541,7 @@ impl<'a> Extractor<'a> {
 
                     let range = self.idx_start-1..=self.idx_end+1;
                     let clipped = &self.input[range];
-                    Self::slice_surrounding(clipped).map(|v| Bracketing::Wrapped(v))
+                    Self::slice_surrounding(clipped).map(Bracketing::Wrapped)
                 }
             )
             .unwrap_or(Bracketing::None)
@@ -568,9 +568,9 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn slice_surrounding<'i, 'b>(
-        input: &'i [u8]
-    ) -> Option<&'i [u8]> {
+    fn slice_surrounding<'b>(
+        input: &[u8]
+    ) -> Option<&[u8]> {
         let mut prev = None;
         let mut input = input;
 
@@ -578,8 +578,8 @@ impl<'a> Extractor<'a> {
         // "dark:lg:hover:[&>*]:underline"
 
         loop {
-            let leading = input.get(0).unwrap_or(&0x00);
-            let trailing = input.get(input.len()-1).unwrap_or(&0x00);
+            let leading = input.first().unwrap_or(&0x00);
+            let trailing = input.last().unwrap_or(&0x00);
 
             let needed = match (leading, trailing) {
                 (b'(', b')') => true,
@@ -1020,7 +1020,7 @@ mod test {
         let count = 1_000;
         let crazy = format!("{}[.foo_&]:px-[0]{}", "[".repeat(count), "]".repeat(count));
 
-        let result = Extractor::slice_surrounding(&crazy.as_bytes()).map(std::str::from_utf8).transpose().unwrap();
+        let result = Extractor::slice_surrounding(crazy.as_bytes()).map(std::str::from_utf8).transpose().unwrap();
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
     }
 }
