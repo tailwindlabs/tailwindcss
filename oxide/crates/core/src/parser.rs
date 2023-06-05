@@ -434,9 +434,19 @@ impl<'a> Extractor<'a> {
                 trace!("Candidate::Consume\t");
             }
 
+            // A dot (.) can only appear in the candidate itself (not the arbitrary part), if the previous
+            // and next characters are both digits. This covers the following cases:
+            // - p-1.5
+            b'.' if prev.is_ascii_digit() => match self.input.get(pos + 1) {
+                Some(&next) if next.is_ascii_digit() => {
+                    trace!("Candidate::Consume\t");
+                }
+                _ => return ParseAction::Skip,
+            },
+
             // Allowed characters in the candidate itself
             // These MUST NOT appear at the end of the candidate
-            b'/' | b':' | b'.' if pos + 1 < self.idx_last => {
+            b'/' | b':' if pos + 1 < self.idx_last => {
                 trace!("Candidate::Consume\t");
             }
 
