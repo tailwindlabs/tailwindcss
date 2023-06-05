@@ -443,11 +443,7 @@ impl<'a> Extractor<'a> {
             // A % can only appear at the end of the candidate itself. It can also only be after a
             // digit 0-9. This covers the following cases:
             // - from-15%
-            b'%' => {
-                if !self.cursor.prev.is_ascii_digit()  {
-                    return ParseAction::Skip;
-                }
-
+            b'%' if self.cursor.prev.is_ascii_digit() => {
                 return match (self.cursor.at_end, self.cursor.next) {
                     // End of string == end of candidate == okay
                     (true, _) => ParseAction::Consume,
@@ -459,6 +455,7 @@ impl<'a> Extractor<'a> {
                     _ => ParseAction::Skip,
                 };
             }
+            b'%' => return ParseAction::Skip,
 
             // < and > can only be part of a variant and only be the first or last character
             b'<' | b'>' => {
