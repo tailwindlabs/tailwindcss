@@ -651,8 +651,6 @@ impl<'a> Extractor<'a> {
                 // If we're still consuming characters, we keep going
                 // Only exception is if we've hit the end of the input
                 if !self.cursor.at_end {
-                    self.cursor.advance_by(1);
-
                     return action;
                 }
             }
@@ -661,14 +659,12 @@ impl<'a> Extractor<'a> {
 
         let action = self.yield_candidate();
 
-        let result = match (&action, self.cursor.curr) {
+        match (&action, self.cursor.curr) {
             (ParseAction::RestartAt(_), _) => action,
             (_, 0x00) => ParseAction::Done,
             (ParseAction::SingleCandidate(candidate, _), _) => self.generate_slices(candidate, self.cursor.pos),
             _ => ParseAction::RestartAt(self.cursor.pos + 1),
-        };
-        self.cursor.advance_by(1);
-        result
+        }
     }
 
     #[inline(always)]
@@ -708,7 +704,10 @@ impl<'a> Iterator for Extractor<'a> {
         }
 
         loop {
-            match self.parse_and_yield() {
+            let result = self.parse_and_yield();
+            self.cursor.advance_by(1);
+
+            match result {
                 ParseAction::Continue => continue,
                 ParseAction::SingleCandidate(candidate, pos) => {
                     if let Some(pos) = pos {
@@ -721,6 +720,7 @@ impl<'a> Iterator for Extractor<'a> {
                     if let Some(pos) = pos {
                         self.handle_skip(pos);
                     }
+
                     return Some(candidates);
                 }
                 ParseAction::Done => return None,
