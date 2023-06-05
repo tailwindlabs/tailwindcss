@@ -414,20 +414,20 @@ impl<'a> Extractor<'a> {
                 return ParseAction::Skip;
             }
 
+            // A % can only appear at the end of the candidate itself. It can also only be after a
+            // digit 0-9. This covers the following cases:
+            // - from-15%
+            b'%' => {
+                if prev.is_ascii_digit() && pos + 1 < self.idx_last {
+                    trace!("Candidate::Consume\t");
+                } else {
+                    return ParseAction::Skip;
+                }
+            }
+
             // Allowed characters in the candidate itself
             // None of these can come after a closing bracket `]`
-            b'a'..=b'z'
-            | b'A'..=b'Z'
-            | b'0'..=b'9'
-            | b'-'
-            | b'_'
-            // | b'('
-            // | b')'
-            | b'<'
-            | b'>'
-            | b'!'
-            | b'@'
-            | b'%'
+            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'<' | b'>' | b'!' | b'@'
                 if prev != b']' =>
             {
                 /* TODO: The `b'@'` is necessary for custom separators like _@, maybe we can handle this in a better way... */
