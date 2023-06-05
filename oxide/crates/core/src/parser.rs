@@ -1030,8 +1030,23 @@ mod test {
 
     #[test]
     fn percent_ended_candidates() {
-        let candidates = run(r#"<!-- This should work `underline from-50% flex` -->"#, false);
-        assert_eq!(candidates, vec!["!--", "This", "should", "work", "underline", "from-50%", "flex", "--"]);
+        let candidates = run(
+            r#"<!-- This should work `underline from-50% flex` -->"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "!--",
+                "This",
+                "should",
+                "work",
+                "underline",
+                "from-50%",
+                "flex",
+                "--"
+            ]
+        );
     }
 
     #[test]
