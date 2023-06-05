@@ -721,16 +721,12 @@ impl<'a> Iterator for Extractor<'a> {
                 _ => {},
             }
 
-            // Ierator results
-            match result {
-                ParseAction::SingleCandidate(candidate, _) => return Some(vec![candidate]),
-                ParseAction::MultipleCandidates(candidates, _) => return Some(candidates),
-                ParseAction::Done => return None,
-
-                ParseAction::Continue => continue,
-                ParseAction::Skip => continue,
-                ParseAction::Consume => continue,
-                ParseAction::RestartAt(_) => continue,
+            // Iterator results
+            return match result {
+                ParseAction::SingleCandidate(candidate, _) => Some(vec![candidate]),
+                ParseAction::MultipleCandidates(candidates, _) => Some(candidates),
+                ParseAction::Done => None,
+                _ => continue,
             }
         }
     }
