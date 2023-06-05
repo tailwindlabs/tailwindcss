@@ -322,14 +322,12 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_arbitrary(&mut self) -> ParseAction<'a> {
-        let cursor = &self.cursor;
-
         // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary valuesq
         if self.in_escape {
             return self.parse_escaped();
         }
 
-        match cursor.curr {
+        match self.cursor.curr {
             b'\\' => {
                 // The `\` character is used to escape characters in arbitrary content _and_ to prevent the starting of arbitrary content
                 trace!("Arbitrary::Escape");
@@ -337,7 +335,7 @@ impl<'a> Extractor<'a> {
             }
 
             // Make sure the brackets are balanced
-            b'[' => self.bracket_stack.push(cursor.curr),
+            b'[' => self.bracket_stack.push(self.cursor.curr),
             b']' => match self.bracket_stack.last() {
                 // We've ended a nested bracket
                 Some(&last_bracket) if last_bracket == b'[' => {
@@ -349,7 +347,7 @@ impl<'a> Extractor<'a> {
                     trace!("Arbitrary::End\t");
                     self.in_arbitrary = false;
 
-                    if cursor.pos - self.idx_arbitrary_start == 1 {
+                    if self.cursor.pos - self.idx_arbitrary_start == 1 {
                         // We have an empty arbitrary value, which is not allowed
                         return ParseAction::Skip;
                     }
@@ -363,13 +361,13 @@ impl<'a> Extractor<'a> {
             // These can "escape" the arbitrary value mode
             // switching of `[` and `]` characters
             b'"' | b'\'' | b'`' => match self.quote_stack.last() {
-                Some(&last_quote) if last_quote == cursor.curr => {
+                Some(&last_quote) if last_quote == self.cursor.curr => {
                     trace!("Quote::End\t");
                     self.quote_stack.pop();
                 }
                 _ => {
                     trace!("Quote::Start\t");
-                    self.quote_stack.push(cursor.curr);
+                    self.quote_stack.push(self.cursor.curr);
                 }
             },
 
@@ -394,14 +392,12 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_start(&mut self) -> ParseAction<'a> {
-        let cursor = &self.cursor;
-
-        match cursor.curr {
+        match self.cursor.curr {
             // Enter arbitrary value mode
             b'[' => {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
-                self.idx_arbitrary_start = cursor.pos;
+                self.idx_arbitrary_start = self.cursor.pos;
 
                 ParseAction::Consume
             }
@@ -423,21 +419,19 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_continue(&mut self) -> ParseAction<'a> {
-        let cursor = &self.cursor;
-
-        match cursor.curr {
+        match self.cursor.curr {
             // Enter arbitrary value mode
-            b'[' if cursor.prev == b'@'
-                || cursor.prev == b'-'
-                || cursor.prev == b' '
-                || cursor.prev == b':' // Variant separator
-                || cursor.prev == b'/' // Modifier separator
-                || cursor.prev == b'!'
-                || cursor.prev == b'\0' =>
+            b'[' if self.cursor.prev == b'@'
+                || self.cursor.prev == b'-'
+                || self.cursor.prev == b' '
+                || self.cursor.prev == b':' // Variant separator
+                || self.cursor.prev == b'/' // Modifier separator
+                || self.cursor.prev == b'!'
+                || self.cursor.prev == b'\0' =>
             {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
-                self.idx_arbitrary_start = cursor.pos;
+                self.idx_arbitrary_start = self.cursor.pos;
             }
 
             // Can't enter arbitrary value mode
@@ -452,7 +446,7 @@ impl<'a> Extractor<'a> {
             // digit 0-9. This covers the following cases:
             // - from-15%
             b'%' => {
-                if cursor.prev.is_ascii_digit() && cursor.at_end {
+                if self.cursor.prev.is_ascii_digit() && self.cursor.at_end {
                     trace!("Candidate::Consume\t");
                 } else {
                     return ParseAction::Skip;
@@ -467,7 +461,7 @@ impl<'a> Extractor<'a> {
                 //   ^
                 // - md>:underline
                 //     ^
-                if cursor.pos == self.idx_start || cursor.pos == self.idx_last {
+                if self.cursor.pos == self.idx_start || self.cursor.pos == self.idx_last {
                     trace!("Candidate::Consume\t");
                 }
                 // If it is in the middle, it can only be part of a stacked variant
@@ -475,7 +469,7 @@ impl<'a> Extractor<'a> {
                 //        ^
                 // - dark:md>:underline
                 //          ^
-                else if cursor.prev == b':' || cursor.next == b':' {
+                else if self.cursor.prev == b':' || self.cursor.next == b':' {
                     trace!("Candidate::Consume\t");
                 } else {
                     return ParseAction::Skip;
@@ -484,7 +478,7 @@ impl<'a> Extractor<'a> {
 
             // Allowed characters in the candidate itself
             // None of these can come after a closing bracket `]`
-            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'!' | b'@' if cursor.prev != b']' => {
+            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'!' | b'@' if self.cursor.prev != b']' => {
                 /* TODO: The `b'@'` is necessary for custom separators like _@, maybe we can handle this in a better way... */
                 trace!("Candidate::Consume\t");
             }
@@ -492,7 +486,7 @@ impl<'a> Extractor<'a> {
             // A dot (.) can only appear in the candidate itself (not the arbitrary part), if the previous
             // and next characters are both digits. This covers the following cases:
             // - p-1.5
-            b'.' if cursor.prev.is_ascii_digit() => match cursor.next {
+            b'.' if self.cursor.prev.is_ascii_digit() => match self.cursor.next {
                 next if next.is_ascii_digit() => {
                     trace!("Candidate::Consume\t");
                 }
@@ -501,7 +495,7 @@ impl<'a> Extractor<'a> {
 
             // Allowed characters in the candidate itself
             // These MUST NOT appear at the end of the candidate
-            b'/' | b':' if !cursor.at_end => {
+            b'/' | b':' if !self.cursor.at_end => {
                 trace!("Candidate::Consume\t");
             }
 
