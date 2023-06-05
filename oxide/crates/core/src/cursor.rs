@@ -93,16 +93,16 @@ mod test {
     fn test_cursor() {
         let mut cursor = Cursor::new(b"hello world");
         assert_eq!(cursor.pos, 0);
-        assert_eq!(cursor.at_start, true);
-        assert_eq!(cursor.at_end, false);
+        assert!(cursor.at_start);
+        assert!(!cursor.at_end);
         assert_eq!(cursor.prev, 0x00);
         assert_eq!(cursor.curr, b'h');
         assert_eq!(cursor.next, b'e');
 
         cursor.advance_by(1);
         assert_eq!(cursor.pos, 1);
-        assert_eq!(cursor.at_start, false);
-        assert_eq!(cursor.at_end, false);
+        assert!(!cursor.at_start);
+        assert!(!cursor.at_end);
         assert_eq!(cursor.prev, b'h');
         assert_eq!(cursor.curr, b'e');
         assert_eq!(cursor.next, b'l');
@@ -110,8 +110,8 @@ mod test {
         // Advancing too far should stop at the end
         cursor.advance_by(10);
         assert_eq!(cursor.pos, 11);
-        assert_eq!(cursor.at_start, false);
-        assert_eq!(cursor.at_end, true);
+        assert!(!cursor.at_start);
+        assert!(cursor.at_end);
         assert_eq!(cursor.prev, b'd');
         assert_eq!(cursor.curr, 0x00);
         assert_eq!(cursor.next, 0x00);
@@ -119,24 +119,24 @@ mod test {
         // Can't advance past the end
         cursor.advance_by(1);
         assert_eq!(cursor.pos, 11);
-        assert_eq!(cursor.at_start, false);
-        assert_eq!(cursor.at_end, true);
+        assert!(!cursor.at_start);
+        assert!(cursor.at_end);
         assert_eq!(cursor.prev, b'd');
         assert_eq!(cursor.curr, 0x00);
         assert_eq!(cursor.next, 0x00);
 
         cursor.rewind_by(1);
         assert_eq!(cursor.pos, 10);
-        assert_eq!(cursor.at_start, false);
-        assert_eq!(cursor.at_end, true);
+        assert!(!cursor.at_start);
+        assert!(cursor.at_end);
         assert_eq!(cursor.prev, b'l');
         assert_eq!(cursor.curr, b'd');
         assert_eq!(cursor.next, 0x00);
 
         cursor.rewind_by(10);
         assert_eq!(cursor.pos, 0);
-        assert_eq!(cursor.at_start, true);
-        assert_eq!(cursor.at_end, false);
+        assert!(cursor.at_start);
+        assert!(!cursor.at_end);
         assert_eq!(cursor.prev, 0x00);
         assert_eq!(cursor.curr, b'h');
         assert_eq!(cursor.next, b'e');
