@@ -38,6 +38,7 @@ pub struct Extractor<'a> {
     opts: ExtractorOptions,
 
     input: &'a [u8],
+    cursor: Cursor<'a>,
     pos: usize,
 
     idx_start: usize,
@@ -83,6 +84,7 @@ impl<'a> Extractor<'a> {
         Self {
             opts,
             input,
+            cursor: Cursor::new(input),
             pos: 0,
 
             idx_start: 0,
@@ -321,7 +323,9 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_arbitrary(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
+    fn parse_arbitrary(&mut self) -> ParseAction<'a> {
+        let cursor = &self.cursor;
+
         // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary valuesq
         if self.in_escape {
             return self.parse_escaped();
@@ -391,7 +395,9 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_start(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
+    fn parse_start(&mut self) -> ParseAction<'a> {
+        let cursor = &self.cursor;
+
         match cursor.curr {
             // Enter arbitrary value mode
             b'[' => {
@@ -418,7 +424,9 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_continue(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
+    fn parse_continue(&mut self) -> ParseAction<'a> {
+        let cursor = &self.cursor;
+
         match cursor.curr {
             // Enter arbitrary value mode
             b'[' if cursor.prev == b'@'
@@ -508,10 +516,10 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn can_be_candidate(&mut self, cursor: &Cursor<'a>) -> bool {
+    fn can_be_candidate(&mut self) -> bool {
         self.in_candidate
             && !self.in_arbitrary
-            && (0..=127).contains(&cursor.curr)
+            && (0..=127).contains(&self.cursor.curr)
             && (self.idx_start == 0 || self.input[self.idx_start - 1] <= 127)
     }
 
@@ -527,15 +535,15 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_char(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
+    fn parse_char(&mut self) -> ParseAction<'a> {
         if self.in_arbitrary {
-            self.parse_arbitrary(cursor)
+            self.parse_arbitrary()
         } else if self.in_candidate {
-            self.parse_continue(cursor)
-        } else if self.parse_start(cursor) == ParseAction::Consume {
+            self.parse_continue()
+        } else if self.parse_start() == ParseAction::Consume {
             self.in_candidate = true;
-            self.idx_start = cursor.pos;
-            self.idx_end = cursor.pos;
+            self.idx_start = self.cursor.pos;
+            self.idx_end = self.cursor.pos;
 
             ParseAction::Consume
         } else {
@@ -544,24 +552,12 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn yield_candidate(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
-        if self.can_be_candidate(cursor) {
+    fn yield_candidate(&mut self) -> ParseAction<'a> {
+        if self.can_be_candidate() {
             self.get_current_candidate()
         } else {
             ParseAction::Continue
         }
-    }
-
-    #[inline(always)]
-    fn read(&mut self) -> (usize, u8) {
-        if self.pos == self.idx_last {
-            return (usize::MAX, 0);
-        }
-
-        let r = (self.pos, self.input[self.pos]);
-        self.pos += 1;
-
-        r
     }
 
     #[inline(always)]
@@ -578,7 +574,7 @@ impl<'a> Extractor<'a> {
 
         self.quote_stack.clear();
         self.bracket_stack.clear();
-        self.pos = pos;
+        self.cursor.move_to(pos);
     }
 
     #[inline(always)]
@@ -655,33 +651,34 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_and_yield(&mut self) -> ParseAction<'a> {
-        let (pos, curr) = self.read();
-        let mut cursor = Cursor::new(self.input);
-        cursor.move_to(pos);
-        let action = self.parse_char(&cursor);
+        let action = self.parse_char();
 
         match action {
             ParseAction::RestartAt(_) => return action,
             ParseAction::Consume => {
-                self.idx_end = pos;
+                self.idx_end = self.cursor.pos;
 
                 // If we're still consuming characters, we keep going
                 // Only exception is if we've hit the end of the input
-                if pos + 1 < self.idx_last {
+                if self.cursor.pos + 1 < self.idx_last {
+                    self.cursor.advance_by(1);
+
                     return action;
                 }
             }
             _ => {}
         }
 
-        let action = self.yield_candidate(&cursor);
+        let action = self.yield_candidate();
 
-        match (&action, curr) {
+        let result = match (&action, self.cursor.curr) {
             (ParseAction::RestartAt(_), _) => action,
             (_, 0x00) => ParseAction::Done,
-            (ParseAction::SingleCandidate(candidate, _), _) => self.generate_slices(candidate, pos),
-            _ => ParseAction::RestartAt(pos + 1),
-        }
+            (ParseAction::SingleCandidate(candidate, _), _) => self.generate_slices(candidate, self.cursor.pos),
+            _ => ParseAction::RestartAt(self.cursor.pos + 1),
+        };
+        self.cursor.advance_by(1);
+        result
     }
 
     #[inline(always)]
@@ -716,7 +713,7 @@ impl<'a> Iterator for Extractor<'a> {
     type Item = Vec<&'a [u8]>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.pos == self.idx_last {
+        if self.cursor.at_end {
             return None;
         }
 
