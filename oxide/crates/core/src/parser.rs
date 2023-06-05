@@ -12,7 +12,6 @@ pub enum ParseAction<'a> {
 
     SingleCandidate(&'a [u8]),
     MultipleCandidates(Vec<&'a [u8]>),
-    Continue,
     Done,
 }
 
@@ -160,7 +159,7 @@ impl<'a> Extractor<'a> {
             }
         }
 
-        ParseAction::Continue
+        ParseAction::Consume
     }
 
     #[inline(always)]
@@ -552,7 +551,7 @@ impl<'a> Extractor<'a> {
         if self.can_be_candidate() {
             self.get_current_candidate()
         } else {
-            ParseAction::Continue
+            ParseAction::Consume
         }
     }
 
