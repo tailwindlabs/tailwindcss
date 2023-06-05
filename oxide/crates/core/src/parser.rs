@@ -716,20 +716,20 @@ impl<'a> Iterator for Extractor<'a> {
                 _ => self.cursor.advance_by(1),
             }
 
+            // Candidate state control
             match result {
-                ParseAction::SingleCandidate(candidate, pos) => {
-                    self.handle_skip(pos);
-                    return Some(vec![candidate]);
-                }
+                ParseAction::SingleCandidate(_, pos) => self.handle_skip(pos),
+                ParseAction::MultipleCandidates(_, pos) => self.handle_skip(pos),
+                _ => {},
+            }
 
-                ParseAction::MultipleCandidates(candidates, pos) => {
-                    self.handle_skip(pos);
-                    return Some(candidates);
-                }
-
-                ParseAction::Continue => continue,
+            // Ierator results
+            match result {
+                ParseAction::SingleCandidate(candidate, _) => return Some(vec![candidate]),
+                ParseAction::MultipleCandidates(candidates, _) => return Some(candidates),
                 ParseAction::Done => return None,
 
+                ParseAction::Continue => continue,
                 ParseAction::Skip => continue,
                 ParseAction::Consume => continue,
                 ParseAction::RestartAt(_) => continue,
