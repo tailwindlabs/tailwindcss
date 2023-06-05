@@ -10,8 +10,8 @@ pub enum ParseAction<'a> {
     Skip,
     RestartAt(usize),
 
-    SingleCandidate(&'a [u8], Option<usize>),
-    MultipleCandidates(Vec<&'a [u8]>, Option<usize>),
+    SingleCandidate(&'a [u8]),
+    MultipleCandidates(Vec<&'a [u8]>),
     Continue,
     Done,
 }
@@ -118,7 +118,7 @@ impl<'a> Extractor<'a> {
             let (is_valid, needs_restart) = Extractor::is_valid_candidate_string(candidate);
 
             if is_valid {
-                return ParseAction::SingleCandidate(candidate, None);
+                return ParseAction::SingleCandidate(candidate);
             }
 
             if needs_restart {
@@ -514,11 +514,11 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn handle_skip(&mut self, pos: usize) {
+    fn handle_skip(&mut self) {
         // In all other cases, we skip characters and reset everything so we can make new candidates
         trace!("Characters::Skip\t");
-        self.idx_start = pos;
-        self.idx_end = pos;
+        self.idx_start = self.cursor.pos;
+        self.idx_end = self.cursor.pos;
         self.in_candidate = false;
         self.in_arbitrary = false;
         self.in_escape = false;
@@ -662,15 +662,13 @@ impl<'a> Extractor<'a> {
         match (&action, self.cursor.curr) {
             (ParseAction::RestartAt(_), _) => action,
             (_, 0x00) => ParseAction::Done,
-            (ParseAction::SingleCandidate(candidate, _), _) => {
-                self.generate_slices(candidate, self.cursor.pos)
-            }
+            (ParseAction::SingleCandidate(candidate), _) => self.generate_slices(candidate),
             _ => ParseAction::RestartAt(self.cursor.pos + 1),
         }
     }
 
     #[inline(always)]
-    fn generate_slices(&mut self, candidate: &'a [u8], pos: usize) -> ParseAction<'a> {
+    fn generate_slices(&mut self, candidate: &'a [u8]) -> ParseAction<'a> {
         // Find all []{}() and `:` positions
         // We also don't split when the []{}() are not at the start/end
         // If the `:` is not inside a []{}() pair we don't split
@@ -678,12 +676,10 @@ impl<'a> Extractor<'a> {
         // Why is this causing tests to fail when it's not even used?
         // And not mutating anything?
         match self.without_surrounding() {
-            Bracketing::None => ParseAction::SingleCandidate(candidate, Some(pos)),
-
+            Bracketing::None => ParseAction::SingleCandidate(candidate),
             Bracketing::Included(slicable) if slicable == candidate => {
-                ParseAction::SingleCandidate(candidate, Some(pos))
+                ParseAction::SingleCandidate(candidate)
             }
-
             Bracketing::Included(slicable) | Bracketing::Wrapped(slicable) => {
                 let parts = vec![candidate, slicable];
                 let parts = parts
@@ -691,7 +687,7 @@ impl<'a> Extractor<'a> {
                     .filter(|v| !v.is_empty())
                     .collect::<Vec<_>>();
 
-                ParseAction::MultipleCandidates(parts, Some(pos))
+                ParseAction::MultipleCandidates(parts)
             }
         }
     }
@@ -716,18 +712,18 @@ impl<'a> Iterator for Extractor<'a> {
 
             // Candidate state control
             match result {
-                ParseAction::SingleCandidate(_, Some(pos)) => self.handle_skip(pos),
-                ParseAction::MultipleCandidates(_, Some(pos)) => self.handle_skip(pos),
-                _ => {},
+                ParseAction::SingleCandidate(_) => self.handle_skip(),
+                ParseAction::MultipleCandidates(_) => self.handle_skip(),
+                _ => {}
             }
 
             // Iterator results
             return match result {
-                ParseAction::SingleCandidate(candidate, _) => Some(vec![candidate]),
-                ParseAction::MultipleCandidates(candidates, _) => Some(candidates),
+                ParseAction::SingleCandidate(candidate) => Some(vec![candidate]),
+                ParseAction::MultipleCandidates(candidates) => Some(candidates),
                 ParseAction::Done => None,
                 _ => continue,
-            }
+            };
         }
     }
 }
