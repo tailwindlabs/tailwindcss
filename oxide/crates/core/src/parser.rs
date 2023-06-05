@@ -425,11 +425,34 @@ impl<'a> Extractor<'a> {
                 }
             }
 
+            // < and > can only be part of a variant and only be the first or last character
+            b'<' | b'>' => {
+                let next = self.input.get(pos + 1);
+
+                // Can only be the first or last character
+                // E.g.:
+                // - <sm:underline
+                //   ^
+                // - md>:underline
+                //     ^
+                if pos == self.idx_start || pos == self.idx_last {
+                    trace!("Candidate::Consume\t");
+                }
+                // If it is in the middle, it can only be part of a stacked variant
+                // - dark:<sm:underline
+                //        ^
+                // - dark:md>:underline
+                //          ^
+                else if prev == b':' || next == Some(&b':') {
+                    trace!("Candidate::Consume\t");
+                } else {
+                    return ParseAction::Skip;
+                }
+            }
+
             // Allowed characters in the candidate itself
             // None of these can come after a closing bracket `]`
-            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'<' | b'>' | b'!' | b'@'
-                if prev != b']' =>
-            {
+            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'!' | b'@' if prev != b']' => {
                 /* TODO: The `b'@'` is necessary for custom separators like _@, maybe we can handle this in a better way... */
                 trace!("Candidate::Consume\t");
             }
