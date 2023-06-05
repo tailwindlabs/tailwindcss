@@ -2,6 +2,8 @@ use bstr::ByteSlice;
 use fxhash::FxHashSet;
 use tracing::trace;
 
+use crate::cursor::Cursor;
+
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum ParseAction<'a> {
     Consume,
@@ -37,8 +39,6 @@ pub struct Extractor<'a> {
 
     input: &'a [u8],
     pos: usize,
-
-    prev: u8,
 
     idx_start: usize,
     idx_end: usize,
@@ -84,7 +84,6 @@ impl<'a> Extractor<'a> {
             opts,
             input,
             pos: 0,
-            prev: 0,
 
             idx_start: 0,
             idx_end: 0,
@@ -322,13 +321,13 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_arbitrary(&mut self, curr: u8, pos: usize) -> ParseAction<'a> {
+    fn parse_arbitrary(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
         // In this we could technically use memchr 6 times (then looped) to find the indexes / bounds of arbitrary valuesq
         if self.in_escape {
             return self.parse_escaped();
         }
 
-        match curr {
+        match cursor.curr {
             b'\\' => {
                 // The `\` character is used to escape characters in arbitrary content _and_ to prevent the starting of arbitrary content
                 trace!("Arbitrary::Escape");
@@ -336,7 +335,7 @@ impl<'a> Extractor<'a> {
             }
 
             // Make sure the brackets are balanced
-            b'[' => self.bracket_stack.push(curr),
+            b'[' => self.bracket_stack.push(cursor.curr),
             b']' => match self.bracket_stack.last() {
                 // We've ended a nested bracket
                 Some(&last_bracket) if last_bracket == b'[' => {
@@ -348,7 +347,7 @@ impl<'a> Extractor<'a> {
                     trace!("Arbitrary::End\t");
                     self.in_arbitrary = false;
 
-                    if pos - self.idx_arbitrary_start == 1 {
+                    if cursor.pos - self.idx_arbitrary_start == 1 {
                         // We have an empty arbitrary value, which is not allowed
                         return ParseAction::Skip;
                     }
@@ -362,13 +361,13 @@ impl<'a> Extractor<'a> {
             // These can "escape" the arbitrary value mode
             // switching of `[` and `]` characters
             b'"' | b'\'' | b'`' => match self.quote_stack.last() {
-                Some(&last_quote) if last_quote == curr => {
+                Some(&last_quote) if last_quote == cursor.curr => {
                     trace!("Quote::End\t");
                     self.quote_stack.pop();
                 }
                 _ => {
                     trace!("Quote::Start\t");
-                    self.quote_stack.push(curr);
+                    self.quote_stack.push(cursor.curr);
                 }
             },
 
@@ -392,13 +391,13 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_start(&mut self, curr: u8, pos: usize) -> ParseAction<'a> {
-        match curr {
+    fn parse_start(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
+        match cursor.curr {
             // Enter arbitrary value mode
             b'[' => {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
-                self.idx_arbitrary_start = pos;
+                self.idx_arbitrary_start = cursor.pos;
 
                 ParseAction::Consume
             }
@@ -419,20 +418,20 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_continue(&mut self, prev: u8, curr: u8, pos: usize) -> ParseAction<'a> {
-        match curr {
+    fn parse_continue(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
+        match cursor.curr {
             // Enter arbitrary value mode
-            b'[' if prev == b'@'
-                || prev == b'-'
-                || prev == b' '
-                || prev == b':' // Variant separator
-                || prev == b'/' // Modifier separator
-                || prev == b'!'
-                || prev == b'\0' =>
+            b'[' if cursor.prev == b'@'
+                || cursor.prev == b'-'
+                || cursor.prev == b' '
+                || cursor.prev == b':' // Variant separator
+                || cursor.prev == b'/' // Modifier separator
+                || cursor.prev == b'!'
+                || cursor.prev == b'\0' =>
             {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
-                self.idx_arbitrary_start = pos;
+                self.idx_arbitrary_start = cursor.pos;
             }
 
             // Can't enter arbitrary value mode
@@ -447,7 +446,7 @@ impl<'a> Extractor<'a> {
             // digit 0-9. This covers the following cases:
             // - from-15%
             b'%' => {
-                if prev.is_ascii_digit() && pos + 1 < self.idx_last {
+                if cursor.prev.is_ascii_digit() && cursor.pos + 1 < self.idx_last {
                     trace!("Candidate::Consume\t");
                 } else {
                     return ParseAction::Skip;
@@ -456,7 +455,7 @@ impl<'a> Extractor<'a> {
 
             // < and > can only be part of a variant and only be the first or last character
             b'<' | b'>' => {
-                let next = self.input.get(pos + 1);
+                let next = self.input.get(cursor.pos + 1);
 
                 // Can only be the first or last character
                 // E.g.:
@@ -464,7 +463,7 @@ impl<'a> Extractor<'a> {
                 //   ^
                 // - md>:underline
                 //     ^
-                if pos == self.idx_start || pos == self.idx_last {
+                if cursor.pos == self.idx_start || cursor.pos == self.idx_last {
                     trace!("Candidate::Consume\t");
                 }
                 // If it is in the middle, it can only be part of a stacked variant
@@ -472,7 +471,7 @@ impl<'a> Extractor<'a> {
                 //        ^
                 // - dark:md>:underline
                 //          ^
-                else if prev == b':' || next == Some(&b':') {
+                else if cursor.prev == b':' || next == Some(&b':') {
                     trace!("Candidate::Consume\t");
                 } else {
                     return ParseAction::Skip;
@@ -481,7 +480,7 @@ impl<'a> Extractor<'a> {
 
             // Allowed characters in the candidate itself
             // None of these can come after a closing bracket `]`
-            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'!' | b'@' if prev != b']' => {
+            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'!' | b'@' if cursor.prev != b']' => {
                 /* TODO: The `b'@'` is necessary for custom separators like _@, maybe we can handle this in a better way... */
                 trace!("Candidate::Consume\t");
             }
@@ -489,7 +488,7 @@ impl<'a> Extractor<'a> {
             // A dot (.) can only appear in the candidate itself (not the arbitrary part), if the previous
             // and next characters are both digits. This covers the following cases:
             // - p-1.5
-            b'.' if prev.is_ascii_digit() => match self.input.get(pos + 1) {
+            b'.' if cursor.prev.is_ascii_digit() => match self.input.get(cursor.pos + 1) {
                 Some(&next) if next.is_ascii_digit() => {
                     trace!("Candidate::Consume\t");
                 }
@@ -498,7 +497,7 @@ impl<'a> Extractor<'a> {
 
             // Allowed characters in the candidate itself
             // These MUST NOT appear at the end of the candidate
-            b'/' | b':' if pos + 1 < self.idx_last => {
+            b'/' | b':' if cursor.pos + 1 < self.idx_last => {
                 trace!("Candidate::Consume\t");
             }
 
@@ -509,10 +508,10 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn can_be_candidate(&mut self, c: u8) -> bool {
+    fn can_be_candidate(&mut self, cursor: &Cursor<'a>) -> bool {
         self.in_candidate
             && !self.in_arbitrary
-            && (0..=127).contains(&c)
+            && (0..=127).contains(&cursor.curr)
             && (self.idx_start == 0 || self.input[self.idx_start - 1] <= 127)
     }
 
@@ -528,15 +527,15 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn parse_char(&mut self, prev: u8, curr: u8, pos: usize) -> ParseAction<'a> {
+    fn parse_char(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
         if self.in_arbitrary {
-            self.parse_arbitrary(curr, pos)
+            self.parse_arbitrary(cursor)
         } else if self.in_candidate {
-            self.parse_continue(prev, curr, pos)
-        } else if self.parse_start(curr, pos) == ParseAction::Consume {
+            self.parse_continue(cursor)
+        } else if self.parse_start(cursor) == ParseAction::Consume {
             self.in_candidate = true;
-            self.idx_start = pos;
-            self.idx_end = pos;
+            self.idx_start = cursor.pos;
+            self.idx_end = cursor.pos;
 
             ParseAction::Consume
         } else {
@@ -545,8 +544,8 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn yield_candidate(&mut self, _: usize, curr: u8) -> ParseAction<'a> {
-        if self.can_be_candidate(curr) {
+    fn yield_candidate(&mut self, cursor: &Cursor<'a>) -> ParseAction<'a> {
+        if self.can_be_candidate(cursor) {
             self.get_current_candidate()
         } else {
             ParseAction::Continue
@@ -579,9 +578,7 @@ impl<'a> Extractor<'a> {
 
         self.quote_stack.clear();
         self.bracket_stack.clear();
-
         self.pos = pos;
-        self.prev = *self.input.get(pos - 1).unwrap_or(&0x00);
     }
 
     #[inline(always)]
@@ -659,8 +656,9 @@ impl<'a> Extractor<'a> {
     #[inline(always)]
     fn parse_and_yield(&mut self) -> ParseAction<'a> {
         let (pos, curr) = self.read();
-        let action = self.parse_char(self.prev, curr, pos);
-        self.prev = curr;
+        let mut cursor = Cursor::new(self.input);
+        cursor.move_to(pos);
+        let action = self.parse_char(&cursor);
 
         match action {
             ParseAction::RestartAt(_) => return action,
@@ -676,7 +674,7 @@ impl<'a> Extractor<'a> {
             _ => {}
         }
 
-        let action = self.yield_candidate(pos, curr);
+        let action = self.yield_candidate(&cursor);
 
         match (&action, curr) {
             (ParseAction::RestartAt(_), _) => action,
