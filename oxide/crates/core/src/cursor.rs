@@ -55,7 +55,7 @@ impl<'a> Cursor<'a> {
 
         self.pos = pos;
         self.at_start = pos == 0;
-        self.at_end = pos >= len;
+        self.at_end = pos+1 >= len;
 
         self.prev = if pos > 0 { self.input[pos-1] } else { 0x00 };
         self.curr = if pos < len { self.input[pos] } else { 0x00 };
@@ -124,7 +124,7 @@ mod test {
         cursor.rewind_by(1);
         assert_eq!(cursor.pos, 10);
         assert_eq!(cursor.at_start, false);
-        assert_eq!(cursor.at_end, false);
+        assert_eq!(cursor.at_end, true);
         assert_eq!(cursor.prev, b'l');
         assert_eq!(cursor.curr, b'd');
         assert_eq!(cursor.next, 0x00);

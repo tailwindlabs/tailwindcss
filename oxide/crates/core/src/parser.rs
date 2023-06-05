@@ -39,7 +39,6 @@ pub struct Extractor<'a> {
 
     input: &'a [u8],
     cursor: Cursor<'a>,
-    pos: usize,
 
     idx_start: usize,
     idx_end: usize,
@@ -85,7 +84,6 @@ impl<'a> Extractor<'a> {
             opts,
             input,
             cursor: Cursor::new(input),
-            pos: 0,
 
             idx_start: 0,
             idx_end: 0,
@@ -454,7 +452,7 @@ impl<'a> Extractor<'a> {
             // digit 0-9. This covers the following cases:
             // - from-15%
             b'%' => {
-                if cursor.prev.is_ascii_digit() && cursor.pos + 1 < self.idx_last {
+                if cursor.prev.is_ascii_digit() && cursor.at_end {
                     trace!("Candidate::Consume\t");
                 } else {
                     return ParseAction::Skip;
@@ -463,8 +461,6 @@ impl<'a> Extractor<'a> {
 
             // < and > can only be part of a variant and only be the first or last character
             b'<' | b'>' => {
-                let next = self.input.get(cursor.pos + 1);
-
                 // Can only be the first or last character
                 // E.g.:
                 // - <sm:underline
@@ -479,7 +475,7 @@ impl<'a> Extractor<'a> {
                 //        ^
                 // - dark:md>:underline
                 //          ^
-                else if cursor.prev == b':' || next == Some(&b':') {
+                else if cursor.prev == b':' || cursor.next == b':' {
                     trace!("Candidate::Consume\t");
                 } else {
                     return ParseAction::Skip;
@@ -496,8 +492,8 @@ impl<'a> Extractor<'a> {
             // A dot (.) can only appear in the candidate itself (not the arbitrary part), if the previous
             // and next characters are both digits. This covers the following cases:
             // - p-1.5
-            b'.' if cursor.prev.is_ascii_digit() => match self.input.get(cursor.pos + 1) {
-                Some(&next) if next.is_ascii_digit() => {
+            b'.' if cursor.prev.is_ascii_digit() => match cursor.next {
+                next if next.is_ascii_digit() => {
                     trace!("Candidate::Consume\t");
                 }
                 _ => return ParseAction::Skip,
@@ -505,7 +501,7 @@ impl<'a> Extractor<'a> {
 
             // Allowed characters in the candidate itself
             // These MUST NOT appear at the end of the candidate
-            b'/' | b':' if cursor.pos + 1 < self.idx_last => {
+            b'/' | b':' if !cursor.at_end => {
                 trace!("Candidate::Consume\t");
             }
 
@@ -660,7 +656,7 @@ impl<'a> Extractor<'a> {
 
                 // If we're still consuming characters, we keep going
                 // Only exception is if we've hit the end of the input
-                if self.cursor.pos + 1 < self.idx_last {
+                if !self.cursor.at_end {
                     self.cursor.advance_by(1);
 
                     return action;
