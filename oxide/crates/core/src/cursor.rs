@@ -55,11 +55,15 @@ impl<'a> Cursor<'a> {
 
         self.pos = pos;
         self.at_start = pos == 0;
-        self.at_end = pos+1 >= len;
+        self.at_end = pos + 1 >= len;
 
-        self.prev = if pos > 0 { self.input[pos-1] } else { 0x00 };
+        self.prev = if pos > 0 { self.input[pos - 1] } else { 0x00 };
         self.curr = if pos < len { self.input[pos] } else { 0x00 };
-        self.next = if pos+1 < len { self.input[pos+1] } else { 0x00 };
+        self.next = if pos + 1 < len {
+            self.input[pos + 1]
+        } else {
+            0x00
+        };
     }
 }
 

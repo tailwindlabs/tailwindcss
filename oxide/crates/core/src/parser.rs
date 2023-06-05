@@ -151,14 +151,12 @@ impl<'a> Extractor<'a> {
                 //
                 // The `underline` is nested inside of quotes and in square brackets. Let's try to
                 // get the inner part and validate that instead.
-                _ => {
-                    match Self::slice_surrounding(candidate) {
-                        Some(shorter) if shorter != candidate => {
-                            candidate = shorter;
-                        },
-                        _ => break,
+                _ => match Self::slice_surrounding(candidate) {
+                    Some(shorter) if shorter != candidate => {
+                        candidate = shorter;
                     }
-                }
+                    _ => break,
+                },
             }
         }
 
@@ -478,7 +476,9 @@ impl<'a> Extractor<'a> {
 
             // Allowed characters in the candidate itself
             // None of these can come after a closing bracket `]`
-            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'!' | b'@' if self.cursor.prev != b']' => {
+            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'!' | b'@'
+                if self.cursor.prev != b']' =>
+            {
                 /* TODO: The `b'@'` is necessary for custom separators like _@, maybe we can handle this in a better way... */
                 trace!("Candidate::Consume\t");
             }
@@ -514,7 +514,9 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn handle_skip(&mut self, pos: usize) {
+    fn handle_skip(&mut self, pos: Option<usize>) {
+        let Some(pos) = pos else { return };
+
         // In all other cases, we skip characters and reset everything so we can make new candidates
         trace!("Characters::Skip\t");
         self.idx_start = pos;
@@ -662,7 +664,9 @@ impl<'a> Extractor<'a> {
         match (&action, self.cursor.curr) {
             (ParseAction::RestartAt(_), _) => action,
             (_, 0x00) => ParseAction::Done,
-            (ParseAction::SingleCandidate(candidate, _), _) => self.generate_slices(candidate, self.cursor.pos),
+            (ParseAction::SingleCandidate(candidate, _), _) => {
+                self.generate_slices(candidate, self.cursor.pos)
+            }
             _ => ParseAction::RestartAt(self.cursor.pos + 1),
         }
     }
@@ -705,29 +709,30 @@ impl<'a> Iterator for Extractor<'a> {
 
         loop {
             let result = self.parse_and_yield();
-            self.cursor.advance_by(1);
+
+            // Cursor control
+            match result {
+                ParseAction::RestartAt(pos) => self.restart(pos),
+                _ => self.cursor.advance_by(1),
+            }
 
             match result {
-                ParseAction::Continue => continue,
                 ParseAction::SingleCandidate(candidate, pos) => {
-                    if let Some(pos) = pos {
-                        self.handle_skip(pos);
-                    }
-
+                    self.handle_skip(pos);
                     return Some(vec![candidate]);
                 }
-                ParseAction::MultipleCandidates(candidates, pos) => {
-                    if let Some(pos) = pos {
-                        self.handle_skip(pos);
-                    }
 
+                ParseAction::MultipleCandidates(candidates, pos) => {
+                    self.handle_skip(pos);
                     return Some(candidates);
                 }
+
+                ParseAction::Continue => continue,
                 ParseAction::Done => return None,
 
                 ParseAction::Skip => continue,
                 ParseAction::Consume => continue,
-                ParseAction::RestartAt(pos) => self.restart(pos),
+                ParseAction::RestartAt(_) => continue,
             }
         }
     }
@@ -937,12 +942,7 @@ mod test {
     fn ignores_arbitrary_property_ish_things() {
         // FIXME: () are only valid in an arbitrary
         let candidates = run(" [feature(slice_as_chunks)]", false);
-        assert_eq!(
-            candidates,
-            vec![
-                "feature(slice_as_chunks)",
-            ]
-        );
+        assert_eq!(candidates, vec!["feature(slice_as_chunks)",]);
     }
 
     #[test]
