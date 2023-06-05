@@ -646,6 +646,8 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn parse_and_yield(&mut self) -> ParseAction<'a> {
+        trace!("Cursor {}", self.cursor);
+
         let action = self.parse_char();
 
         match action {

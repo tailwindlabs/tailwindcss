@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub};
+use std::{fmt::Display, ascii::escape_default};
 
 #[derive(Debug, Clone)]
 pub struct Cursor<'a> {
@@ -67,21 +67,30 @@ impl<'a> Cursor<'a> {
     }
 }
 
-impl<'a> Add<usize> for Cursor<'a> {
-    type Output = Self;
+impl<'a> Display for Cursor<'a> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let len = self.input.len().to_string();
 
-    fn add(mut self, rhs: usize) -> Self::Output {
-        self.advance_by(rhs);
-        self
-    }
-}
+        let pos = format!("{: >len_count$}", self.pos, len_count = len.len());
+        write!(f, "{}/{} ", pos, len)?;
 
-impl<'a> Sub<usize> for Cursor<'a> {
-    type Output = Self;
+        if self.at_start {
+            write!(f, "S ")?;
+        } else if self.at_end {
+            write!(f, "E ")?;
+        } else {
+            write!(f, "M ")?;
+        }
 
-    fn sub(mut self, rhs: usize) -> Self::Output {
-        self.rewind_by(rhs);
-        self
+        fn to_str(c: u8) -> String  {
+            if c == 0x00 {
+                "NUL".into()
+            } else {
+                format!("{:?}", escape_default(c).to_string())
+            }
+        }
+
+        write!(f, "[{} {} {}]", to_str(self.prev), to_str(self.curr), to_str(self.next))
     }
 }
 
