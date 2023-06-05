@@ -9,6 +9,7 @@ use tracing::event;
 use walkdir::WalkDir;
 
 pub mod candidate;
+pub mod cursor;
 pub mod glob;
 pub mod location;
 pub mod modifier;
