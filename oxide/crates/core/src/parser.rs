@@ -444,11 +444,17 @@ impl<'a> Extractor<'a> {
             // digit 0-9. This covers the following cases:
             // - from-15%
             b'%' => {
-                if self.cursor.prev.is_ascii_digit() && self.cursor.at_end {
-                    trace!("Candidate::Consume\t");
-                } else {
+                if !self.cursor.prev.is_ascii_digit()  {
                     return ParseAction::Skip;
                 }
+
+                return match (self.cursor.at_end, self.cursor.next) {
+                    // End of string == end of candidate == okay
+                    (true, _) => ParseAction::Consume,
+
+                    // Otherwise, not a valid character in a candidate
+                    _ => ParseAction::Skip,
+                };
             }
 
             // < and > can only be part of a variant and only be the first or last character
