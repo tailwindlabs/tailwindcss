@@ -1077,7 +1077,7 @@ mod test {
             .map(std::str::from_utf8)
             .transpose()
             .unwrap();
-        assert_eq!(result, None);
+        assert_eq!(result, Some("pt-1.5"));
 
         // 0.19s in a release build:
         let count = 1_000;
