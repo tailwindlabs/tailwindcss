@@ -452,6 +452,9 @@ impl<'a> Extractor<'a> {
                     // End of string == end of candidate == okay
                     (true, _) => ParseAction::Consume,
 
+                    // Looks like the end of a candidate == okay
+                    (_, b' ' | b'\'' | b'"' | b'`') => ParseAction::Consume,
+
                     // Otherwise, not a valid character in a candidate
                     _ => ParseAction::Skip,
                 };
@@ -1026,6 +1029,12 @@ mod test {
     fn multiple_nested_candidates() {
         let candidates = run(r#"{color:red}"#, false);
         assert_eq!(candidates, vec!["color:red"]);
+    }
+
+    #[test]
+    fn percent_ended_candidates() {
+        let candidates = run(r#"<!-- This should work `underline from-50% flex` -->"#, false);
+        assert_eq!(candidates, vec!["!--", "This", "should", "work", "underline", "from-50%", "flex", "--"]);
     }
 
     #[test]
