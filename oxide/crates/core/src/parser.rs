@@ -514,9 +514,7 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn handle_skip(&mut self, pos: Option<usize>) {
-        let Some(pos) = pos else { return };
-
+    fn handle_skip(&mut self, pos: usize) {
         // In all other cases, we skip characters and reset everything so we can make new candidates
         trace!("Characters::Skip\t");
         self.idx_start = pos;
@@ -718,8 +716,8 @@ impl<'a> Iterator for Extractor<'a> {
 
             // Candidate state control
             match result {
-                ParseAction::SingleCandidate(_, pos) => self.handle_skip(pos),
-                ParseAction::MultipleCandidates(_, pos) => self.handle_skip(pos),
+                ParseAction::SingleCandidate(_, Some(pos)) => self.handle_skip(pos),
+                ParseAction::MultipleCandidates(_, Some(pos)) => self.handle_skip(pos),
                 _ => {},
             }
 
