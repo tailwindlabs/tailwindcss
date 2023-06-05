@@ -127,10 +127,38 @@ impl<'a> Extractor<'a> {
             }
 
             match candidate.split_last() {
+                // At this point the candidate is technically invalid, however it can be that it
+                // has a few dangling characters attached to it. For example, think about a
+                // JavaScript object:
+                //
+                // ```js
+                // { underline: true }
+                // ```
+                //
+                // The candidate at this point will be `underline:`, which is invalid. However, we
+                // can assume in this case that the `:` should not be there, and therefore we can
+                // try to slice it off and retry the validation.
                 Some((b':' | b'/' | b'.', head)) => {
                     candidate = head;
                 }
-                _ => break,
+
+                // It could also be that we have the candidate is nested inside of bracket or quote
+                // pairs. In this case we want to retrieve the inner part and try to validate that
+                // inner part instead. For example, in a JavaScript array:
+                //
+                // ```js
+                // let myClasses = ["underline"]
+                // ```
+                //
+                // The `underline` is nested inside of quotes and in square brackets. Let's try to
+                // get the inner part and validate that instead.
+                _ => {
+                    if let Some(shorter) = Self::slice_surrounding(candidate) {
+                        candidate = shorter;
+                    } else {
+                        break;
+                    }
+                }
             }
         }
 
