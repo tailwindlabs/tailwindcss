@@ -9,7 +9,7 @@ let defaults = {
   logicalSiblingUtilities: false,
 }
 
-let featureFlags = {
+export let featureFlags = {
   future: [
     'hoverOnlyWhenSupported',
     'respectDefaultRingColorOpacity',
