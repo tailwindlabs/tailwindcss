@@ -10,16 +10,10 @@ pub fn fast_skip(cursor: &Cursor) -> Option<usize> {
         return None;
     }
 
-    // Ensure that we have to skip at least 1 byte
-    if !cursor.curr.is_ascii_whitespace() {
-        return None;
-    }
+    let mut offset = 0;
 
     // SAFETY: We've already checked (indirectly) that this index is valid
     let remaining = unsafe { cursor.input.get_unchecked(cursor.pos..) };
-
-    // Now we're guaranteed that we need to skip at least 1 byte
-    let mut offset = 1;
 
     // NOTE: This loop uses primitives designed to be auto-vectorized
     // Do not change this loop without benchmarking the results
@@ -36,7 +30,16 @@ pub fn fast_skip(cursor: &Cursor) -> Option<usize> {
         }
     }
 
-    return Some(cursor.pos + offset);
+    // Ensure we skip at least one byte of whitespace (if any)
+    if offset == 0 && cursor.curr.is_ascii_whitespace() {
+        offset = 1;
+    }
+
+    if offset == 0 {
+        None
+    } else {
+        Some(cursor.pos + offset)
+    }
 }
 
 #[inline(always)]
