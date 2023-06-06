@@ -48,6 +48,8 @@ pub struct Extractor<'a> {
     in_candidate: bool,
     in_escape: bool,
 
+    discard_next: bool,
+
     quote_stack: Vec<u8>,
     bracket_stack: Vec<u8>,
     // buffer: [Option<&'a [u8]>; 8],
@@ -92,6 +94,8 @@ impl<'a> Extractor<'a> {
             in_candidate: false,
             in_escape: false,
 
+            discard_next: false,
+
             idx_last: input.len(),
             quote_stack: Vec::with_capacity(8),
             bracket_stack: Vec::with_capacity(8),
@@ -109,6 +113,10 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn get_current_candidate(&mut self) -> ParseAction<'a> {
+        if self.discard_next {
+            return ParseAction::Skip;
+        }
+
         let mut candidate = &self.input[self.idx_start..=self.idx_end];
 
         while !candidate.is_empty() {
@@ -409,6 +417,13 @@ impl<'a> Extractor<'a> {
                 // a flag. E.g.: '<sm'
                 // | '<' | '>' | '$' | '^' | '_'
 
+                // When the new candidate is preceeded by a `:`, then we want to keep parsing, but
+                // throw away the full candidate because it can not be a valid candidate at the end
+                // of the day.
+                if self.cursor.prev == b':' {
+                    self.discard_next = true;
+                }
+
                 trace!("Candidate::Start\t");
 
                 ParseAction::Consume
@@ -570,6 +585,8 @@ impl<'a> Extractor<'a> {
         self.in_arbitrary = false;
         self.in_candidate = false;
         self.in_escape = false;
+
+        self.discard_next = false;
 
         self.quote_stack.clear();
         self.bracket_stack.clear();
@@ -1016,14 +1033,7 @@ mod test {
         );
         assert_eq!(
             candidates,
-            vec![
-                "div",
-                "class",
-                "underline",
-                "isActive",
-                "px-1.5",
-                "isOnline"
-            ]
+            vec!["div", "underline", "isActive", "px-1.5", "isOnline"]
         );
     }
 
