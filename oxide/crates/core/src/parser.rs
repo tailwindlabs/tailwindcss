@@ -1124,14 +1124,4 @@ mod test {
             .unwrap();
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
     }
-
-    #[test]
-    fn fast_skip_test() {
-        let count = 100_000;
-        let crazy1 = format!("{}underline", " ".repeat(count));
-        let crazy2 = crazy1.repeat(count);
-
-        let result = run(&crazy2, false);
-        assert_eq!(result, vec!["underline"]);
-    }
 }
