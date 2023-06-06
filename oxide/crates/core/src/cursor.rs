@@ -1,4 +1,4 @@
-use std::{fmt::Display, ascii::escape_default};
+use std::{ascii::escape_default, fmt::Display};
 
 #[derive(Debug, Clone)]
 pub struct Cursor<'a> {
@@ -82,7 +82,7 @@ impl<'a> Display for Cursor<'a> {
             write!(f, "M ")?;
         }
 
-        fn to_str(c: u8) -> String  {
+        fn to_str(c: u8) -> String {
             if c == 0x00 {
                 "NUL".into()
             } else {
@@ -90,7 +90,13 @@ impl<'a> Display for Cursor<'a> {
             }
         }
 
-        write!(f, "[{} {} {}]", to_str(self.prev), to_str(self.curr), to_str(self.next))
+        write!(
+            f,
+            "[{} {} {}]",
+            to_str(self.prev),
+            to_str(self.curr),
+            to_str(self.next)
+        )
     }
 }
 
