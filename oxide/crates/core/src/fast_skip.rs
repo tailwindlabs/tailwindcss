@@ -10,7 +10,11 @@ pub fn fast_skip(cursor: &Cursor) -> Option<usize> {
         return None;
     }
 
-    let mut offset = 0;
+    if !cursor.curr.is_ascii_whitespace() {
+        return None;
+    }
+
+    let mut offset = 1;
 
     // SAFETY: We've already checked (indirectly) that this index is valid
     let remaining = unsafe { cursor.input.get_unchecked(cursor.pos..) };
@@ -30,16 +34,7 @@ pub fn fast_skip(cursor: &Cursor) -> Option<usize> {
         }
     }
 
-    // Ensure we skip at least one byte of whitespace (if any)
-    if offset == 0 && cursor.curr.is_ascii_whitespace() {
-        offset = 1;
-    }
-
-    if offset == 0 {
-        None
-    } else {
-        Some(cursor.pos + offset)
-    }
+    Some(cursor.pos + offset)
 }
 
 #[inline(always)]
