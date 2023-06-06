@@ -341,6 +341,10 @@ impl<'a> Extractor<'a> {
 
                 // This is the last bracket meaning the end of arbitrary content
                 _ if !self.in_quotes() => {
+                    if matches!(self.cursor.next, b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9') {
+                        return ParseAction::Consume;
+                    }
+
                     trace!("Arbitrary::End\t");
                     self.in_arbitrary = false;
 
