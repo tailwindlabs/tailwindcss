@@ -2,7 +2,7 @@ use bstr::ByteSlice;
 use fxhash::FxHashSet;
 use tracing::trace;
 
-use crate::cursor::Cursor;
+use crate::{cursor::Cursor, fast_skip::fast_skip};
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum ParseAction<'a> {
@@ -669,6 +669,17 @@ impl<'a> Extractor<'a> {
     fn parse_and_yield(&mut self) -> ParseAction<'a> {
         trace!("Cursor {}", self.cursor);
 
+        // Fast skipping of invalid characters
+        if !self.in_candidate {
+            match fast_skip(&self.cursor, |c| c.is_ascii_whitespace()) {
+                Some(pos) => {
+                    trace!("FastSkip::Restart\t{}", pos);
+                    return ParseAction::RestartAt(pos);
+                },
+                _ => {},
+            }
+        }
+
         let action = self.parse_char();
 
         match action {
@@ -1111,5 +1122,15 @@ mod test {
             .transpose()
             .unwrap();
         assert_eq!(result, Some("[.foo_&]:px-[0]"));
+    }
+
+    #[test]
+    fn fast_skip_test() {
+        let count = 100_000;
+        let crazy1 = format!("{}underline", " ".repeat(count));
+        let crazy2 = crazy1.repeat(count);
+
+        let result = run(&crazy2, false);
+        assert_eq!(result, vec!["underline"]);
     }
 }
