@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { run, html, css, defaults } from './util/run'
+import { flagEnabled } from '../src/featureFlags'
 
 test('basic usage', () => {
   let config = {
@@ -927,12 +928,20 @@ test('detects quoted arbitrary values containing a slash', async () => {
 
   let result = await run(input, config)
 
-  expect(result.css).toMatchFormattedCss(css`
-    .hidden,
-    .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
-      display: none;
-    }
-  `)
+  expect(result.css).toMatchFormattedCss(
+    flagEnabled(config, 'oxideParser')
+      ? css`
+          .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
+            display: none;
+          }
+        `
+      : css`
+          .hidden,
+          .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
+            display: none;
+          }
+        `
+  )
 })
 
 test('handled quoted arbitrary values containing escaped spaces', async () => {
@@ -950,10 +959,18 @@ test('handled quoted arbitrary values containing escaped spaces', async () => {
 
   let result = await run(input, config)
 
-  expect(result.css).toMatchFormattedCss(css`
-    .hidden,
-    .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
-      display: none;
-    }
-  `)
+  expect(result.css).toMatchFormattedCss(
+    flagEnabled(config, 'oxideParser')
+      ? css`
+          .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
+            display: none;
+          }
+        `
+      : css`
+          .hidden,
+          .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
+            display: none;
+          }
+        `
+  )
 })

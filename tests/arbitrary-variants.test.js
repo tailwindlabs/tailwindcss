@@ -1,4 +1,5 @@
 import { run, html, css, defaults } from './util/run'
+import { flagEnabled } from '../src/featureFlags'
 
 test('basic arbitrary variants', () => {
   let config = {
@@ -612,24 +613,44 @@ it('should support aria variants', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
-      .underline,
-      .aria-checked\:underline[aria-checked='true'],
-      .aria-\[labelledby\=\'a_b\'\]\:underline[aria-labelledby='a b'],
-      .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'],
-      .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline,
-      .group[aria-checked='true'] .group-aria-checked\:underline,
-      .group[aria-labelledby='a b'] .group-aria-\[labelledby\=\'a_b\'\]\:underline,
-      .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline,
-      .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline,
-      .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline,
-      .peer[aria-checked='true'] ~ .peer-aria-checked\:underline,
-      .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=\'a_b\'\]\:underline,
-      .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline,
-      .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
-        text-decoration-line: underline;
-      }
-    `)
+    expect(result.css).toMatchFormattedCss(
+      flagEnabled(config, 'oxideParser')
+        ? css`
+            .aria-checked\:underline[aria-checked='true'],
+            .aria-\[labelledby\=\'a_b\'\]\:underline[aria-labelledby='a b'],
+            .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'],
+            .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline,
+            .group[aria-checked='true'] .group-aria-checked\:underline,
+            .group[aria-labelledby='a b'] .group-aria-\[labelledby\=\'a_b\'\]\:underline,
+            .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline,
+            .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline,
+            .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline,
+            .peer[aria-checked='true'] ~ .peer-aria-checked\:underline,
+            .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=\'a_b\'\]\:underline,
+            .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline,
+            .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
+              text-decoration-line: underline;
+            }
+          `
+        : css`
+            .underline,
+            .aria-checked\:underline[aria-checked='true'],
+            .aria-\[labelledby\=\'a_b\'\]\:underline[aria-labelledby='a b'],
+            .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'],
+            .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline,
+            .group[aria-checked='true'] .group-aria-checked\:underline,
+            .group[aria-labelledby='a b'] .group-aria-\[labelledby\=\'a_b\'\]\:underline,
+            .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline,
+            .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline,
+            .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline,
+            .peer[aria-checked='true'] ~ .peer-aria-checked\:underline,
+            .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=\'a_b\'\]\:underline,
+            .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline,
+            .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
+              text-decoration-line: underline;
+            }
+          `
+    )
   })
 })
 
@@ -669,24 +690,44 @@ it('should support data variants', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
-      .underline,
-      .data-checked\:underline[data-ui~='checked'],
-      .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
-      .data-\[position\=top\]\:underline[data-position='top'],
-      .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
-      .group[data-ui~='checked'] .group-data-checked\:underline,
-      .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,
-      .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline,
-      .group[data-position='top'] .group-data-\[position\=top\]\:underline,
-      .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline,
-      .peer[data-ui~='checked'] ~ .peer-data-checked\:underline,
-      .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=\'bar_baz\'\]\:underline,
-      .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline,
-      .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
-        text-decoration-line: underline;
-      }
-    `)
+    expect(result.css).toMatchFormattedCss(
+      flagEnabled(config, 'oxideParser')
+        ? css`
+            .data-checked\:underline[data-ui~='checked'],
+            .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
+            .data-\[position\=top\]\:underline[data-position='top'],
+            .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
+            .group[data-ui~='checked'] .group-data-checked\:underline,
+            .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,
+            .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline,
+            .group[data-position='top'] .group-data-\[position\=top\]\:underline,
+            .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline,
+            .peer[data-ui~='checked'] ~ .peer-data-checked\:underline,
+            .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=\'bar_baz\'\]\:underline,
+            .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline,
+            .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
+              text-decoration-line: underline;
+            }
+          `
+        : css`
+            .underline,
+            .data-checked\:underline[data-ui~='checked'],
+            .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
+            .data-\[position\=top\]\:underline[data-position='top'],
+            .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
+            .group[data-ui~='checked'] .group-data-checked\:underline,
+            .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,
+            .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline,
+            .group[data-position='top'] .group-data-\[position\=top\]\:underline,
+            .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline,
+            .peer[data-ui~='checked'] ~ .peer-data-checked\:underline,
+            .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=\'bar_baz\'\]\:underline,
+            .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline,
+            .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
+              text-decoration-line: underline;
+            }
+          `
+    )
   })
 })
 
