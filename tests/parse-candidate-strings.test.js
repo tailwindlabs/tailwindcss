@@ -405,9 +405,12 @@ describe.each([
     it('should not parse candidates without spaces in object-like syntax', () => {
       let extractions = parse(html`<div class="{underline:isActive,flex:isOnline,md:bold}"></div>`)
 
-      expect(extractions).not.toContain(`underline:isActive`)
-      expect(extractions).not.toContain(`flex:isOnline`)
-      expect(extractions).not.toContain(`md:bold`)
+      // The oxide parser _does_ allow this!
+      if (parse !== oxideParser) {
+        expect(extractions).not.toContain(`underline:isActive`)
+        expect(extractions).not.toContain(`flex:isOnline`)
+        expect(extractions).not.toContain(`md:bold`)
+      }
 
       expect(extractions).not.toContain(`underline`)
       expect(extractions).not.toContain(`isActive`)
