@@ -670,8 +670,9 @@ impl<'a> Extractor<'a> {
         trace!("Cursor {}", self.cursor);
 
         // Fast skipping of invalid characters
-        if !self.in_candidate {
-            match fast_skip(&self.cursor, |c| c.is_ascii_whitespace()) {
+        let can_skip_whitespace = if self.opts.preserve_spaces_in_arbitrary { !self.in_arbitrary } else { true };
+        if can_skip_whitespace {
+            match fast_skip(&self.cursor) {
                 Some(pos) => {
                     trace!("FastSkip::Restart\t{}", pos);
                     return ParseAction::RestartAt(pos);
