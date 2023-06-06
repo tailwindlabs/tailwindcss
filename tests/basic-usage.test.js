@@ -878,11 +878,15 @@ test('should not crash when group names contain special characters', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
-      .group\/\$\{id\}:hover .group-hover\/\$\{id\}\:visible {
-        visibility: visible;
-      }
-    `)
+    if (flagEnabled(config, 'oxideParser')) {
+      expect(result.css).toMatchFormattedCss(css``)
+    } else {
+      expect(result.css).toMatchFormattedCss(css`
+        .group\/\$\{id\}:hover .group-hover\/\$\{id\}\:visible {
+          visibility: visible;
+        }
+      `)
+    }
   })
 })
 
