@@ -1,49 +1,86 @@
 use crate::cursor::Cursor;
 
+const STRIDE: usize = 16;
+type Mask = [bool; STRIDE];
+
 #[inline(always)]
-pub fn fast_skip<F>(cursor: &Cursor, is_skippable: F) -> Option<usize> where F: Fn(u8) -> bool {
-    const STRIDE: usize = 16;
-
-    if !is_skippable(cursor.curr) || !is_skippable(cursor.next) {
+pub fn fast_skip(cursor: &Cursor) -> Option<usize> {
+    // If we don't have enough bytes left to check then bail early
+    if cursor.pos + STRIDE >= cursor.input.len() {
         return None;
     }
 
-    if cursor.at_end {
+    // Ensure that we have to skip at least 1 byte
+    if !cursor.curr.is_ascii_whitespace() {
         return None;
     }
 
-    // We're guaranteed that the current and next bytes are skippable
+    // SAFETY: We've already checked (indirectly) that this index is valid
     let remaining = unsafe { cursor.input.get_unchecked(cursor.pos..) };
 
-    // This loop is auto-vectorized by the compiler
-    let mut skip_to_offset = 1;
+    // Now we're guaranteed that we need to skip at least 1 byte
+    let mut offset = 1;
+
+    // NOTE: This loop uses primitives designed to be auto-vectorized
+    // Do not change this loop without benchmarking the results
+    // And checking the generated assembly using godbolt.org
     for (i, chunk) in remaining.chunks_exact(STRIDE).enumerate() {
-        let mut value = [0u8; STRIDE];
-        value.copy_from_slice(&chunk);
+        let value = load(chunk);
+        let is_whitespace = is_ascii_whitespace(value);
+        let is_all_whitespace = all_true(is_whitespace);
 
-        // PERF:
-        // These separate loops are required because they are written to
-        // be auto-vectorized by the compiler. Combining them results
-        // in a loop that can't be thus sacrificing performance.
-
-        // Check all 16 bytes in the chunk at once
-        let mut can_skip = [false; STRIDE];
-        for n in 0..STRIDE {
-            can_skip[n] = is_skippable(value[n]);
-        }
-
-        // Merge the results of all 16 bytes at once
-        let mut all_can_skip = true;
-        for n in 0..STRIDE {
-            all_can_skip &= can_skip[n];
-        }
-
-        if !all_can_skip {
+        if is_all_whitespace {
+            offset = (i+1)*STRIDE;
+        } else {
             break;
         }
-
-        skip_to_offset = i*STRIDE;
     }
 
-    return Some(cursor.pos + skip_to_offset + 1);
+    return Some(cursor.pos + offset);
+}
+
+#[inline(always)]
+fn load(input: &[u8]) -> [u8; STRIDE] {
+    let mut value = [0u8; STRIDE];
+    value.copy_from_slice(&input);
+    value
+}
+
+
+#[inline(always)]
+fn eq(input: [u8; STRIDE], val: u8) -> Mask {
+    let mut res = [false; STRIDE];
+    for n in 0..STRIDE {
+        res[n] = input[n] == val
+    }
+    res
+}
+
+#[inline(always)]
+fn or(a: [bool; STRIDE], b: [bool; STRIDE]) -> [bool; STRIDE] {
+    let mut res = [false; STRIDE];
+    for n in 0..STRIDE {
+        res[n] = a[n] | b[n];
+    }
+    res
+}
+
+#[inline(always)]
+fn all_true(a: [bool; STRIDE]) -> bool {
+    let mut res = true;
+    for n in 0..STRIDE {
+        res &= a[n];
+    }
+    res
+}
+
+#[inline(always)]
+fn is_ascii_whitespace(value: [u8; STRIDE]) -> [bool; STRIDE] {
+    let whitespace_1 = eq(value, b'\t');
+    let whitespace_2 = eq(value, b'\n');
+    let whitespace_3 = eq(value, b'\x0C');
+    let whitespace_4 = eq(value, b'\r');
+    let whitespace_5 = eq(value, b' ');
+
+    or(or(or(or(whitespace_1, whitespace_2), whitespace_3), whitespace_4), whitespace_5)
 }
