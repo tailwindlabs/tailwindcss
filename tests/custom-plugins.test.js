@@ -1374,8 +1374,8 @@ test('plugins should cache correctly', () => {
         }
       `
 
-      expect(result1.css).toMatchCss(expected1)
-      expect(result2.css).toMatchCss(expected2)
+      expect(result1.css).toMatchFormattedCss(expected1)
+      expect(result2.css).toMatchFormattedCss(expected2)
     }
   )
 })

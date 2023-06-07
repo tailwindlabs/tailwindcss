@@ -194,7 +194,7 @@ test('matching utilities with a basic configured value', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-foo {
         value: value_foo;
       }
@@ -224,7 +224,7 @@ test('matching utilities with an arbitrary value and configured modifier', () =>
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-\[foo\]\/bar {
         value: foo;
         modifier: configured_bar;
@@ -256,7 +256,7 @@ test('matching utilities with an configured value and an arbitrary modifier (raw
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-foo\/\[bar\] {
         value: configured_foo;
         modifier: [bar];
@@ -288,7 +288,7 @@ test('matching utilities with an configured value and an arbitrary modifier (non
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-foo\/\[bar\] {
         value: configured_foo;
         modifier: bar;
@@ -322,7 +322,7 @@ test('matching utilities with an configured value and a configured modifier', ()
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-foo\/bar {
         value: configured_foo;
         modifier: configured_bar;
@@ -351,7 +351,7 @@ test('matching utilities with an arbitrary value and an arbitrary modifier (raw)
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-\[foo\]\/\[bar\] {
         value: foo;
         modifier: [bar];
@@ -380,7 +380,7 @@ test('matching utilities with an arbitrary value and an arbitrary modifier (non-
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-\[foo\]\/\[bar\] {
         value: foo;
         modifier: bar;
@@ -411,7 +411,7 @@ test('matching utilities with a lookup value that looks like an arbitrary value 
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-\[foo\]\/\[bar\] {
         value: hello;
       }
@@ -442,7 +442,7 @@ test('matching utilities with a lookup value that looks like an arbitrary value 
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-\[foo\]\/\[bar\] {
         value: hello;
       }
@@ -473,7 +473,7 @@ test('matching utilities with a lookup value that looks like an arbitrary value 
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-\[foo\]\/\[bar\] {
         value: hello;
       }
@@ -503,7 +503,7 @@ test('matching utilities with a lookup value that looks like an arbitrary value 
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-\[foo\]\/bar {
         value: hello;
       }
@@ -533,7 +533,7 @@ test('matching utilities with a lookup value that looks like a configured value 
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-foo\/\[bar\] {
         value: hello;
       }
@@ -564,7 +564,7 @@ test('matching utilities with a lookup value that does not match the configured 
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .test-foo {
         value: not-a-percentage;
       }

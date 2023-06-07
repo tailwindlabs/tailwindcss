@@ -13,7 +13,7 @@ test('font-size utilities can include a default line-height', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .text-lg {
         font-size: 20px;
         line-height: 28px;
@@ -42,7 +42,7 @@ test('font-size utilities can include a default letter-spacing', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .text-lg {
         letter-spacing: -0.02em;
         font-size: 20px;
@@ -71,7 +71,7 @@ test('font-size utilities can include a default line-height and letter-spacing',
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .text-lg {
         letter-spacing: -0.02em;
         font-size: 20px;
@@ -102,7 +102,7 @@ test('font-size utilities can include a font-weight', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .text-lg {
         font-size: 20px;
         font-weight: bold;
@@ -147,7 +147,7 @@ test('font-size utilities can include a line-height modifier', () => {
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .text-\[13px\]\/6 {
         font-size: 13px;
         line-height: 24px;

@@ -13,7 +13,7 @@ test('experimental universal selector improvements (box-shadow)', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
@@ -47,7 +47,7 @@ test('experimental universal selector improvements (pseudo hover)', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .hover\:shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
@@ -81,7 +81,7 @@ test('experimental universal selector improvements (multiple classes: group)', (
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .group-hover\:shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
@@ -115,7 +115,7 @@ test('experimental universal selector improvements (child selectors: divide-y)',
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .resize {
         resize: both;
       }
@@ -141,7 +141,7 @@ test('experimental universal selector improvements (hover:divide-y)', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .resize {
         resize: both;
       }
@@ -168,7 +168,7 @@ test('experimental universal selector improvements (#app important)', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;

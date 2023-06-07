@@ -21,7 +21,7 @@ function formatPrettier(input) {
 }
 
 function format(input) {
-  return formatPrettier(input.replace(/\n{2,}/g, '\n'))
+  return formatPrettier(input).replace(/\n{2,}/g, '\n')
 }
 
 function toMatchFormattedCss(received = '', argument = '') {
@@ -46,10 +46,7 @@ function toMatchFormattedCss(received = '', argument = '') {
         )
       }
     : () => {
-        let actual = formattedReceived.replace(/\n{2,}/g, '\n')
-        let expected = formattedArgument.replace(/\n{2,}/g, '\n')
-
-        let diffString = diff(expected, actual, {
+        let diffString = diff(formattedArgument, formattedArgument, {
           expand: this.expand,
         })
 
@@ -58,8 +55,8 @@ function toMatchFormattedCss(received = '', argument = '') {
           '\n\n' +
           (diffString && diffString.includes('- Expect')
             ? `Difference:\n\n${diffString}`
-            : `Expected: ${this.utils.printExpected(expected)}\n` +
-              `Received: ${this.utils.printReceived(actual)}`)
+            : `Expected: ${this.utils.printExpected(formattedArgument)}\n` +
+              `Received: ${this.utils.printReceived(formattedReceived)}`)
         )
       }
 
@@ -67,13 +64,10 @@ function toMatchFormattedCss(received = '', argument = '') {
 }
 
 expect.extend({
-  // Compare two CSS strings with all whitespace removed
-  // This is probably naive but it's fast and works well enough.
-  toMatchCss: toMatchFormattedCss,
   toMatchFormattedCss: toMatchFormattedCss,
   toIncludeCss(received, argument) {
     let options = {
-      comment: 'stripped(received).includes(stripped(argument))',
+      comment: 'formatCSS(received).includes(formatCSS(argument))',
       isNot: this.isNot,
       promise: this.promise,
     }

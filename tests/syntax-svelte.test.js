@@ -15,7 +15,7 @@ test('it detects svelte based on the file extension', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .bg-red-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity));
@@ -61,7 +61,7 @@ test('using raw with svelte extension', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .bg-red-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity));

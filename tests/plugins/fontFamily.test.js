@@ -108,7 +108,7 @@ test('font-variation-settings can be provided when families are defined as a str
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .font-sans {
         font-variation-settings: 'opsz' 32;
         font-family: Inter, sans-serif;
@@ -128,7 +128,7 @@ test('font-variation-settings can be provided when families are defined as an ar
   }
 
   return run('@tailwind utilities', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .font-sans {
         font-variation-settings: 'opsz' 32;
         font-family: Inter, sans-serif;

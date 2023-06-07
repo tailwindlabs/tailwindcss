@@ -10,7 +10,7 @@ test('space-x uses non-logical properties', () => {
   }
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       ${defaults}
       .space-x-4 > :not([hidden]) ~ :not([hidden]) {
         --tw-space-x-reverse: 0;
@@ -31,7 +31,7 @@ test('space-x uses logical properties', () => {
   }
 
   return run('@tailwind base; @tailwind utilities;', config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       ${defaults}
       .space-x-4 > :not([hidden]) ~ :not([hidden]) {
         --tw-space-x-reverse: 0;
