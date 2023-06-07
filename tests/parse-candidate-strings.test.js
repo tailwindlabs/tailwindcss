@@ -47,7 +47,8 @@ function templateTable(classes) {
   )
 
   let classString = classes.join(' ')
-  let singleQuoteArraySyntax = `'${classes.join("', '")}'`
+  let singleQuoteArraySyntaxWithSpace = `'${classes.join("', '")}'`
+  let singleQuoteArraySyntaxWithoutSpace = `'${classes.join("','")}'`
 
   return [
     ['Plain', classString],
@@ -61,7 +62,14 @@ function templateTable(classes) {
     ['JSX with JavaScript expression', html`<div className={"${classString}"}></div>`],
 
     ['Vue basic', html`<div :class="${classString}"></div>`],
-    ['Vue array (single quote)', html`<div :class="[${singleQuoteArraySyntax}]"></div>`],
+    [
+      'Vue array (single quote, with space)',
+      html`<div :class="[${singleQuoteArraySyntaxWithSpace}]"></div>`,
+    ],
+    [
+      'Vue array (single quote, without space)',
+      html`<div :class="[${singleQuoteArraySyntaxWithoutSpace}]"></div>`,
+    ],
     ['Vue object (single quote)', html`<div :class="{'${classString}': true}"></div>`],
 
     ['Markdown code fences', `<!-- This should work \`${classString}\` -->`],
