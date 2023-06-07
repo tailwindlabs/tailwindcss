@@ -28,7 +28,7 @@ pub fn fast_skip(cursor: &Cursor) -> Option<usize> {
         let is_all_whitespace = all_true(is_whitespace);
 
         if is_all_whitespace {
-            offset = (i+1)*STRIDE;
+            offset = (i + 1) * STRIDE;
         } else {
             break;
         }
@@ -43,7 +43,6 @@ fn load(input: &[u8]) -> [u8; STRIDE] {
     value.copy_from_slice(&input);
     value
 }
-
 
 #[inline(always)]
 fn eq(input: [u8; STRIDE], val: u8) -> Mask {
@@ -80,5 +79,11 @@ fn is_ascii_whitespace(value: [u8; STRIDE]) -> [bool; STRIDE] {
     let whitespace_4 = eq(value, b'\r');
     let whitespace_5 = eq(value, b' ');
 
-    or(or(or(or(whitespace_1, whitespace_2), whitespace_3), whitespace_4), whitespace_5)
+    or(
+        or(
+            or(or(whitespace_1, whitespace_2), whitespace_3),
+            whitespace_4,
+        ),
+        whitespace_5,
+    )
 }

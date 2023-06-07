@@ -41,9 +41,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
         let crazy2 = crazy1.repeat(count);
         let crazy3 = crazy2.as_bytes();
 
-        b.iter(|| {
-            parse(black_box(crazy3))
-        })
+        b.iter(|| parse(black_box(crazy3)))
     });
 }
 

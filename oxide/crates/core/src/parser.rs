@@ -128,7 +128,7 @@ impl<'a> Extractor<'a> {
             match Extractor::is_valid_candidate_string(candidate) {
                 ValidationResult::Valid => return ParseAction::SingleCandidate(candidate),
                 ValidationResult::Restart => return ParseAction::RestartAt(self.idx_start + 1),
-                _ => {},
+                _ => {}
             }
 
             match candidate.split_last() {
@@ -427,7 +427,11 @@ impl<'a> Extractor<'a> {
     fn parse_continue(&mut self) -> ParseAction<'a> {
         match self.cursor.curr {
             // Enter arbitrary value mode
-            b'[' if matches!(self.cursor.prev, b'@' | b'-' | b' ' | b':' | b'/' | b'!' | b'\0') => {
+            b'[' if matches!(
+                self.cursor.prev,
+                b'@' | b'-' | b' ' | b':' | b'/' | b'!' | b'\0'
+            ) =>
+            {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
                 self.idx_arbitrary_start = self.cursor.pos;
@@ -656,8 +660,8 @@ impl<'a> Extractor<'a> {
                 Some(pos) => {
                     trace!("FastSkip::Restart\t{}", pos);
                     return ParseAction::RestartAt(pos);
-                },
-                _ => {},
+                }
+                _ => {}
             }
         }
 
