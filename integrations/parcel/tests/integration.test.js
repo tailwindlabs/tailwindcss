@@ -263,7 +263,7 @@ describe('watcher', () => {
         .font-bold {
           font-weight: 700;
         }
-        @media (min-width: 768px) {
+        @media (width >= 768px) {
           .md\:font-medium {
             font-weight: 500;
           }
@@ -301,7 +301,7 @@ describe('watcher', () => {
         .font-bold {
           font-weight: bold;
         }
-        @media (min-width: 800px) {
+        @media (width >= 800px) {
           .md\:font-medium {
             font-weight: 500;
           }
@@ -352,11 +352,11 @@ describe('watcher', () => {
 
     expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(
       css`
-        /* prettier-ignore */
         .btn {
-          border-radius: .25rem;
-          padding: .25rem .5rem;
+          border-radius: 0.25rem;
+          padding: 0.25rem 0.5rem;
         }
+
         .font-bold {
           font-weight: 700;
         }
