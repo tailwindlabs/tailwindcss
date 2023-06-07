@@ -185,7 +185,7 @@
   min-width: 3.23rem;
 }
 .min-w-\[calc\(1-\(\(12-3\)\*0\.5\)\)\] {
-  min-width: -3.5px;
+  min-width: -3.5;
 }
 .min-w-\[calc\(1-\(var\(--something\)\*0\.5\)\)\] {
   min-width: calc(1 - (var(--something) * 0.5));
@@ -682,7 +682,7 @@
   background-image: linear-gradient(to left, rgb(var(--green)), blue);
 }
 .bg-\[repeating-conic-gradient\(\#F8F9FA_0\%_25\%\,_white_0\%_50\%\)\] {
-  background-image: repeating-conic-gradient(#f8f9fa 0% 25%, white 0% 50%);
+  background-image: repeating-conic-gradient(#f8f9fa 0% 25%, #fff 0% 50%);
 }
 .bg-\[url\(\'\/path-to-image\.png\'\)\] {
   background-image: url('/path-to-image.png');
@@ -1110,7 +1110,7 @@
   --tw-content: attr(content-before);
   content: var(--tw-content);
 }
-@media (min-width: 1024px) {
+@media (width >= 1024px) {
   .lg\:grid-cols-\[200px\,repeat\(auto-fill\,minmax\(15\%\,100px\)\)\,300px\] {
     grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
   }

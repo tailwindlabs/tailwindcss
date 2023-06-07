@@ -605,7 +605,7 @@ it('should support underscores in arbitrary modifiers', () => {
     return expect(result.css).toMatchFormattedCss(css`
       .text-lg\/\[calc\(50px_\*_2\)\] {
         font-size: 1.125rem;
-        line-height: calc(50px * 2);
+        line-height: 100px;
       }
     `)
   })

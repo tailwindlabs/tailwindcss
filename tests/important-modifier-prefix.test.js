@@ -31,27 +31,27 @@ test('important modifier with prefix', () => {
       .\!tw-container {
         width: 100% !important;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .\!tw-container {
           max-width: 640px !important;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .\!tw-container {
           max-width: 768px !important;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .\!tw-container {
           max-width: 1024px !important;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .\!tw-container {
           max-width: 1280px !important;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .\!tw-container {
           max-width: 1536px !important;
         }
@@ -62,12 +62,12 @@ test('important modifier with prefix', () => {
       .hover\:\!tw-text-center:hover {
         text-align: center !important;
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .lg\:\!tw-opacity-50 {
           opacity: 0.5 !important;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .xl\:focus\:disabled\:\!tw-float-right:disabled:focus {
           float: right !important;
         }

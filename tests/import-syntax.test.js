@@ -40,27 +40,27 @@ test('using @import instead of @tailwind', () => {
       .container {
         width: 100%;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -72,7 +72,7 @@ test('using @import instead of @tailwind', () => {
         --tw-bg-opacity: 1;
         background-color: rgb(0 0 0 / var(--tw-bg-opacity));
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:hover\:text-center:hover {
           text-align: center;
         }

@@ -78,27 +78,27 @@ test('important selector', () => {
       .container {
         width: 100%;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -123,10 +123,10 @@ test('important selector', () => {
           transform: rotate(360deg);
         }
       }
-      #app :is(.animate-spin) {
+      #app .animate-spin {
         animation: 1s linear infinite spin;
       }
-      #app :is(.font-bold) {
+      #app .font-bold {
         font-weight: 700;
       }
       .custom-util {
@@ -135,11 +135,11 @@ test('important selector', () => {
       #app :is(.group:hover .group-hover\:focus-within\:text-left:focus-within) {
         text-align: left;
       }
-      #app :is(:is([dir='rtl'] .rtl\:active\:text-center:active)) {
+      #app :is([dir='rtl'] .rtl\:active\:text-center:active) {
         text-align: center;
       }
       @media (prefers-reduced-motion: no-preference) {
-        #app :is(.motion-safe\:hover\:text-center:hover) {
+        #app .motion-safe\:hover\:text-center:hover {
           text-align: center;
         }
       }
@@ -147,11 +147,11 @@ test('important selector', () => {
         content: var(--tw-content);
         text-decoration-line: underline;
       }
-      #app :is(:is(.dark .dark\:focus\:text-left:focus)) {
+      #app :is(.dark .dark\:focus\:text-left:focus) {
         text-align: left;
       }
-      @media (min-width: 768px) {
-        #app :is(.md\:hover\:text-right:hover) {
+      @media (width >= 768px) {
+        #app .md\:hover\:text-right:hover {
           text-align: right;
         }
       }
@@ -186,7 +186,7 @@ test('pseudo-elements are appended after the `:is()`', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      #app :is(.dark .dark\:before\:flex)::before {
+      #app :is(.dark .dark\:before\:flex):before {
         content: var(--tw-content);
         display: flex;
       }

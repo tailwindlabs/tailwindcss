@@ -80,27 +80,27 @@ test('important boolean', () => {
       .container {
         width: 100%;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -148,7 +148,7 @@ test('important boolean', () => {
       :is(.dark .dark\:focus\:text-left:focus) {
         text-align: left !important;
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:hover\:text-right:hover {
           text-align: right !important;
         }

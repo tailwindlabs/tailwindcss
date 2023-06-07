@@ -571,12 +571,6 @@ test('outlines are retrieved without default outline-offset', () => {
     }
   `
 
-  let output = css`
-    .element {
-      outline: 2px dotted #000;
-    }
-  `
-
   return run(input, {
     theme: {
       outline: {
@@ -584,7 +578,11 @@ test('outlines are retrieved without default outline-offset', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      .element {
+        outline: 2px dotted black;
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -727,13 +725,6 @@ test('font-feature-settings values can be retrieved', () => {
     }
   `
 
-  let output = css`
-    .heading {
-      font-feature-settings: 'cv11';
-      font-family: Inter;
-    }
-  `
-
   return run(input, {
     theme: {
       fontFamily: {
@@ -741,7 +732,12 @@ test('font-feature-settings values can be retrieved', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      .heading {
+        font-family: Inter;
+        font-feature-settings: 'cv11';
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -753,12 +749,6 @@ test('box-shadow values are joined when an array', () => {
     }
   `
 
-  let output = css`
-    .element {
-      box-shadow: 0 0 2px #000, 1px 2px 3px #fff;
-    }
-  `
-
   return run(input, {
     theme: {
       boxShadow: {
@@ -766,7 +756,11 @@ test('box-shadow values are joined when an array', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      .element {
+        box-shadow: 0 0 2px black, 1px 2px 3px white;
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -830,18 +824,16 @@ test('basic screen function calls are expanded', () => {
     }
   `
 
-  let output = css`
-    @media (min-width: 600px) {
-      .foo {
-        color: red;
-      }
-    }
-  `
-
   return run(input, {
     theme: { screens: { sm: '600px' } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      @media (min-width: 600px) {
+        .foo {
+          color: red;
+        }
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -880,18 +872,16 @@ test('screen function supports min-width screens', () => {
     }
   `
 
-  let output = css`
-    @media (min-width: 600px) {
-      .foo {
-        color: red;
-      }
-    }
-  `
-
   return run(input, {
     theme: { screens: { sm: { min: '600px' } } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      @media (min-width: 600px) {
+        .foo {
+          color: red;
+        }
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -905,18 +895,16 @@ test('screen function supports min-width and max-width screens', () => {
     }
   `
 
-  let output = css`
-    @media (min-width: 600px) and (max-width: 700px) {
-      .foo {
-        color: red;
-      }
-    }
-  `
-
   return run(input, {
     theme: { screens: { sm: { min: '600px', max: '700px' } } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      @media (min-width: 600px) and (max-width: 700px) {
+        .foo {
+          color: red;
+        }
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -955,18 +943,16 @@ test('screen arguments can be quoted', () => {
     }
   `
 
-  let output = css`
-    @media (min-width: 600px) {
-      .foo {
-        color: red;
-      }
-    }
-  `
-
   return run(input, {
     theme: { screens: { sm: '600px' } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      @media (min-width: 600px) {
+        .foo {
+          color: red;
+        }
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -978,18 +964,16 @@ test('Theme function can extract alpha values for colors (1)', () => {
     }
   `
 
-  let output = css`
-    .foo {
-      color: #3b82f680;
-    }
-  `
-
   return run(input, {
     theme: {
       colors: { blue: { 500: '#3b82f6' } },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      .foo {
+        color: rgb(59 130 246 / 50%);
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1001,18 +985,16 @@ test('Theme function can extract alpha values for colors (2)', () => {
     }
   `
 
-  let output = css`
-    .foo {
-      color: #3b82f680;
-    }
-  `
-
   return run(input, {
     theme: {
       colors: { blue: { 500: '#3b82f6' } },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      .foo {
+        color: rgb(59 130 246 / 0.5);
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1047,12 +1029,6 @@ test('Theme function can extract alpha values for colors (4)', () => {
     }
   `
 
-  let output = css`
-    .foo {
-      color: #3c83f680;
-    }
-  `
-
   return run(input, {
     theme: {
       colors: {
@@ -1060,7 +1036,11 @@ test('Theme function can extract alpha values for colors (4)', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      .foo {
+        color: hsl(217 91% 60% / 50%);
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1072,12 +1052,6 @@ test('Theme function can extract alpha values for colors (5)', () => {
     }
   `
 
-  let output = css`
-    .foo {
-      color: #3c83f680;
-    }
-  `
-
   return run(input, {
     theme: {
       colors: {
@@ -1085,7 +1059,11 @@ test('Theme function can extract alpha values for colors (5)', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchCss(css`
+      .foo {
+        color: hsl(217 91% 60% / 0.5);
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })

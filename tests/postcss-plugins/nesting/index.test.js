@@ -172,7 +172,7 @@ test('nesting does not break downstream plugin visitors', async () => {
     .foo {
       color: black;
     }
-    @suppoerts (color: blue) {
+    @supports (color: blue) {
       .foo {
         color: blue;
       }
@@ -188,13 +188,14 @@ test('nesting does not break downstream plugin visitors', async () => {
 
   expect(result).toMatchCss(css`
     .foo {
-      color: #000;
+      color: black;
     }
-    @suppoerts (color: blue) {
+    @supports (color: blue) {
       .foo {
         color: blue;
       }
     }
+    /* Comment */
   `)
 
   expect(spyPlugin.spies.Once).toHaveBeenCalled()

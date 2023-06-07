@@ -27,7 +27,7 @@ it('can block classes matched literally', () => {
       .my-custom-class {
         color: red;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:hover\:text-sm:hover {
           font-size: 0.875rem;
           line-height: 1.25rem;

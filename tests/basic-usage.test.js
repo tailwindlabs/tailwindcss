@@ -457,9 +457,6 @@ it('does not produce duplicate output when seeing variants preceding a wildcard 
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      * {
-        color: #00f;
-      }
       .combined,
       * {
         color: red;

@@ -121,7 +121,7 @@ test('responsive and variants atrules', () => {
       .both-at-root {
         color: pink;
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:focus\:responsive-in-components:focus {
           color: #00f;
         }

@@ -53,27 +53,27 @@ test('important modifier', () => {
       .\!container {
         width: 100% !important;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .\!container {
           max-width: 640px !important;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .\!container {
           max-width: 768px !important;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .\!container {
           max-width: 1024px !important;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .\!container {
           max-width: 1280px !important;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .\!container {
           max-width: 1536px !important;
         }
@@ -94,12 +94,12 @@ test('important modifier', () => {
       .hover\:\!text-center:hover {
         text-align: center !important;
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .lg\:\!opacity-50 {
           opacity: 0.5 !important;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .xl\:focus\:disabled\:\!float-right:disabled:focus {
           float: right !important;
         }
@@ -137,9 +137,7 @@ test('the important modifier works on utilities using :where()', () => {
       :where(.\!btn) {
         background-color: #00f !important;
       }
-      :where(.btn) {
-        background-color: #00f;
-      }
+      :where(.btn),
       :where(.hover\:btn:hover) {
         background-color: #00f;
       }
