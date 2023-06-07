@@ -1077,13 +1077,13 @@ mod test {
     }
 
     #[test]
-    fn doesitwipit() {
+    fn ruby_percent_formatted_strings() {
         let candidates = run(r#"%w[hover:flex]"#, false);
         assert_eq!(candidates, vec!["w", "hover:flex"]);
     }
 
     #[test]
-    fn wipit_wipit_good() {
+    fn candidate_slicing() {
         let result = Extractor::slice_surrounding(&b".foo_&]:px-[0"[..])
             .map(std::str::from_utf8)
             .transpose()
