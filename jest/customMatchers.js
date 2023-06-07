@@ -1,6 +1,5 @@
 const prettier = require('prettier')
 const { diff } = require('jest-diff')
-const lightningcss = require('lightningcss')
 const log = require('../src/util/log').default
 
 let warn
@@ -22,46 +21,7 @@ function formatPrettier(input) {
 }
 
 function format(input) {
-  try {
-    return lightningcss
-      .transform({
-        filename: 'input.css',
-        code: Buffer.from(input),
-        minify: false,
-        targets: { chrome: 106 << 16 },
-        drafts: {
-          nesting: true,
-          customMedia: true,
-        },
-      })
-      .code.toString('utf8')
-  } catch (err) {
-    try {
-      // Lightning CSS is pretty strict, so it will fail for `@media screen(md) {}` for example,
-      // in that case we can fallback to prettier since it doesn't really care. However if an
-      // actual syntax error is made, then we still want to show the proper error.
-      return formatPrettier(input.replace(/\n/g, ''))
-    } catch {
-      let lines = err.source.split('\n')
-      let e = new Error(
-        [
-          'Error formatting using Lightning CSS:',
-          '',
-          ...[
-            '```css',
-            ...lines.slice(Math.max(err.loc.line - 3, 0), err.loc.line),
-            ' '.repeat(err.loc.column - 1) + '^-- ' + err.toString(),
-            ...lines.slice(err.loc.line, err.loc.line + 2),
-            '```',
-          ],
-        ].join('\n')
-      )
-      if (Error.captureStackTrace) {
-        Error.captureStackTrace(e, toMatchFormattedCss)
-      }
-      throw e
-    }
-  }
+  return formatPrettier(input.replace(/\n{2,}/g, '\n'))
 }
 
 function toMatchFormattedCss(received = '', argument = '') {
@@ -86,8 +46,8 @@ function toMatchFormattedCss(received = '', argument = '') {
         )
       }
     : () => {
-        let actual = formatPrettier(formattedReceived).replace(/\n\n/g, '\n')
-        let expected = formatPrettier(formattedArgument).replace(/\n\n/g, '\n')
+        let actual = formattedReceived.replace(/\n{2,}/g, '\n')
+        let expected = formattedArgument.replace(/\n{2,}/g, '\n')
 
         let diffString = diff(expected, actual, {
           expand: this.expand,
