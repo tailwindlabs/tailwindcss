@@ -197,11 +197,7 @@ impl<'a> Extractor<'a> {
             match c {
                 b'[' => brackets += 1,
                 b']' if brackets > 0 => brackets -= 1,
-                _ if brackets == 0 => {
-                    if bytes.contains(c) {
-                        return true;
-                    }
-                }
+                _ if brackets == 0 && bytes.contains(c) => return true,
                 _ => {}
             }
         }
@@ -431,14 +427,7 @@ impl<'a> Extractor<'a> {
     fn parse_continue(&mut self) -> ParseAction<'a> {
         match self.cursor.curr {
             // Enter arbitrary value mode
-            b'[' if self.cursor.prev == b'@'
-                || self.cursor.prev == b'-'
-                || self.cursor.prev == b' '
-                || self.cursor.prev == b':' // Variant separator
-                || self.cursor.prev == b'/' // Modifier separator
-                || self.cursor.prev == b'!'
-                || self.cursor.prev == b'\0' =>
-            {
+            b'[' if matches!(self.cursor.prev, b'@' | b'-' | b' ' | b':' | b'/' | b'!' | b'\0') => {
                 trace!("Arbitrary::Start\t");
                 self.in_arbitrary = true;
                 self.idx_arbitrary_start = self.cursor.pos;
