@@ -630,9 +630,6 @@ impl<'a> Extractor<'a> {
         let mut prev = None;
         let mut input = input;
 
-        // dark:lg:hover:[&>*]:underline
-        // "dark:lg:hover:[&>*]:underline"
-
         loop {
             let leading = input.first().unwrap_or(&0x00);
             let trailing = input.last().unwrap_or(&0x00);
@@ -701,14 +698,10 @@ impl<'a> Extractor<'a> {
         }
     }
 
+    /// Peek inside `[]`, `{}`, and `()` pairs
+    /// to look for an additional candidate
     #[inline(always)]
     fn generate_slices(&mut self, candidate: &'a [u8]) -> ParseAction<'a> {
-        // Find all []{}() and `:` positions
-        // We also don't split when the []{}() are not at the start/end
-        // If the `:` is not inside a []{}() pair we don't split
-
-        // Why is this causing tests to fail when it's not even used?
-        // And not mutating anything?
         match self.without_surrounding() {
             Bracketing::None => ParseAction::SingleCandidate(candidate),
             Bracketing::Included(slicable) if slicable == candidate => {
