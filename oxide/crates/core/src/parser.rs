@@ -52,7 +52,6 @@ pub struct Extractor<'a> {
 
     quote_stack: Vec<u8>,
     bracket_stack: Vec<u8>,
-    // buffer: [Option<&'a [u8]>; 8],
 }
 
 impl<'a> Extractor<'a> {
@@ -99,7 +98,6 @@ impl<'a> Extractor<'a> {
             idx_last: input.len(),
             quote_stack: Vec::with_capacity(8),
             bracket_stack: Vec::with_capacity(8),
-            // buffer: [None; 8],
         }
     }
 }
@@ -415,7 +413,7 @@ impl<'a> Extractor<'a> {
             b'@' | b'!' | b'-' | b'<' | b'>' | b'0'..=b'9' | b'a'..=b'z' | b'A'..=b'Z' => {
                 // TODO: A bunch of characters that we currently support but maybe we only want it behind
                 // a flag. E.g.: '<sm'
-                // | '<' | '>' | '$' | '^' | '_'
+                // | '$' | '^' | '_'
 
                 // When the new candidate is preceeded by a `:`, then we want to keep parsing, but
                 // throw away the full candidate because it can not be a valid candidate at the end
@@ -1114,7 +1112,6 @@ mod test {
             .unwrap();
         assert_eq!(result, Some("pt-1.5"));
 
-        // 0.19s in a release build:
         let count = 1_000;
         let crazy = format!("{}[.foo_&]:px-[0]{}", "[".repeat(count), "]".repeat(count));
 
