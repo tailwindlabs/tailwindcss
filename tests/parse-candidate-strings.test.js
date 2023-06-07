@@ -32,7 +32,7 @@ function templateTable(classes) {
 
         // With special characters
         `<sm:${c}`,
-        `md:${c}`,
+        `md>:${c}`,
 
         // With arbitrary values
         `min-[300px]:${c}`,
