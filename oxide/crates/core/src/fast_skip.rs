@@ -65,8 +65,8 @@ fn or(a: [bool; STRIDE], b: [bool; STRIDE]) -> [bool; STRIDE] {
 #[inline(always)]
 fn all_true(a: [bool; STRIDE]) -> bool {
     let mut res = true;
-    for n in 0..STRIDE {
-        res &= a[n];
+    for item in a.iter().take(STRIDE) {
+        res &= item;
     }
     res
 }
