@@ -2055,7 +2055,7 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
   })
 })
 
-test.skip('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
+test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
   let config = {
     darkMode: 'class',
     content: [
@@ -2079,22 +2079,11 @@ test.skip('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ::ng-deep .foo .bar {
-        font-weight: 700;
-      }
-      ::v-deep .foo .bar {
-        font-weight: 700;
-      }
+      ::ng-deep .foo .bar,
+      ::v-deep .foo .bar,
       ::deep .foo .bar {
         font-weight: 700;
       }
     `)
   })
 })
-
-// TODO: Oxide
-// 1. `::ng-deep` is deprecated
-// 2. `::deep` and `::v-deep` are non-standard
-// 3. They all use invalid selector syntax that Lightning CSS does not support
-// It may be enough for Oxide to not support it at all
-test.todo('::ng-deep, ::deep, ::v-deep pseudo elements are left alone')
