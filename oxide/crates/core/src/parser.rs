@@ -170,11 +170,6 @@ impl<'a> Extractor<'a> {
 
     #[inline(always)]
     fn split_candidate(candidate: &'a [u8]) -> SplitCandidate {
-        // [foo:bar]
-        // [foo:bar]
-        // [.foo_&]:[bar_&]:px-[1]
-        // [.foo_&]:md:[bar_&]:px-[1]
-
         let mut brackets = 0;
         let mut idx_end = 0;
 
@@ -877,16 +872,16 @@ mod test {
         let candidates = run("![feature(slice_as_chunks)]", false);
         assert!(candidates.is_empty());
 
-        // let candidates = run("-[feature(slice_as_chunks)]", false);
+        let candidates = run("-[feature(slice_as_chunks)]", false);
         assert!(candidates.is_empty());
 
-        // let candidates = run("!-[feature(slice_as_chunks)]", false);
+        let candidates = run("!-[feature(slice_as_chunks)]", false);
         assert!(candidates.is_empty());
 
-        // let candidates = run("-[foo:bar]", false);
+        let candidates = run("-[foo:bar]", false);
         assert!(candidates.is_empty());
 
-        // let candidates = run("!-[foo:bar]", false);
+        let candidates = run("!-[foo:bar]", false);
         assert!(candidates.is_empty());
     }
 
