@@ -31,6 +31,18 @@ pub fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("parse_candidate_strings (real world)", |b| {
         b.iter(|| parse(include_bytes!("./fixtures/template-499.html")))
     });
+
+    let mut group = c.benchmark_group("sample-size-example");
+    group.sample_size(10);
+
+    group.bench_function("parse_candidate_strings (fast space skipping)", |b| {
+        let count = 10_000;
+        let crazy1 = format!("{}underline", " ".repeat(count));
+        let crazy2 = crazy1.repeat(count);
+        let crazy3 = crazy2.as_bytes();
+
+        b.iter(|| parse(black_box(crazy3)))
+    });
 }
 
 criterion_group!(benches, criterion_benchmark);

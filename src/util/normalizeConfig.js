@@ -1,4 +1,4 @@
-import { flagEnabled } from '../featureFlags'
+import { flagEnabled, featureFlags } from '../featureFlags'
 import log, { dim } from './log'
 
 export function normalizeConfig(config) {
@@ -292,6 +292,21 @@ export function normalizeConfig(config) {
 
       return transformers
     })(),
+  }
+
+  // Force disable the `oxideParser` feature flag when using unsupported features.
+  // TODO: Remove once we have prefix or separator support in the oxide parser.
+  if (config.prefix !== '' || config.separator !== ':') {
+    if (config.experimental === 'all') {
+      config.experimental = {}
+      for (let key in featureFlags.experimental) {
+        config.experimental[key] = true
+      }
+    } else {
+      config.experimental = config.experimental ?? {}
+    }
+
+    config.experimental.oxideParser = false
   }
 
   // Validate globs to prevent bogus globs.
