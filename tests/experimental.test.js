@@ -13,7 +13,7 @@ test('experimental universal selector improvements (box-shadow)', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
@@ -47,7 +47,7 @@ test('experimental universal selector improvements (pseudo hover)', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .hover\:shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
@@ -81,7 +81,7 @@ test('experimental universal selector improvements (multiple classes: group)', (
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .group-hover\:shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
@@ -115,7 +115,7 @@ test('experimental universal selector improvements (child selectors: divide-y)',
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .resize {
         resize: both;
       }
@@ -141,7 +141,7 @@ test('experimental universal selector improvements (hover:divide-y)', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .resize {
         resize: both;
       }
@@ -168,14 +168,14 @@ test('experimental universal selector improvements (#app important)', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .shadow {
         --tw-ring-offset-shadow: 0 0 #0000;
         --tw-ring-shadow: 0 0 #0000;
         --tw-shadow: 0 0 #0000;
         --tw-shadow-colored: 0 0 #0000;
       }
-      #app :is(.resize) {
+      #app .resize {
         resize: both;
       }
       #app :is(.divide-y > :not([hidden]) ~ :not([hidden])) {
@@ -183,7 +183,7 @@ test('experimental universal selector improvements (#app important)', () => {
         border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
         border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
       }
-      #app :is(.shadow) {
+      #app .shadow {
         --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
         --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
           0 1px 2px -1px var(--tw-shadow-color);

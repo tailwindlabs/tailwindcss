@@ -243,7 +243,7 @@ test('it works', () => {
           Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji,
           Segoe UI Symbol, Noto Color Emoji;
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .screen-test {
           color: purple;
         }
@@ -261,7 +261,7 @@ test('it works', () => {
       .apply-test:hover:focus {
         font-weight: 700;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .apply-test {
           --tw-bg-opacity: 1;
           background-color: rgb(34 197 94 / var(--tw-bg-opacity));
@@ -274,27 +274,27 @@ test('it works', () => {
       .apply-components {
         width: 100%;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .apply-components {
           max-width: 640px;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .apply-components {
           max-width: 768px;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .apply-components {
           max-width: 1024px;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .apply-components {
           max-width: 1280px;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .apply-components {
           max-width: 1536px;
         }
@@ -311,7 +311,7 @@ test('it works', () => {
       .apply-with-existing:hover {
         font-weight: 400;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .apply-with-existing:hover {
           --tw-bg-opacity: 1;
           background-color: rgb(34 197 94 / var(--tw-bg-opacity));
@@ -344,7 +344,7 @@ test('it works', () => {
         --tw-bg-opacity: 1;
         background-color: rgb(34 197 94 / var(--tw-bg-opacity));
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         @media (prefers-reduced-motion: no-preference) {
           .group:active .crazy-example:focus {
             opacity: 0.1;
@@ -365,27 +365,27 @@ test('it works', () => {
       .container {
         width: 100%;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -580,86 +580,86 @@ test('it works', () => {
       .hover\:container:hover {
         width: 100%;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .hover\:container:hover {
           max-width: 640px;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .hover\:container:hover {
           max-width: 768px;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .hover\:container:hover {
           max-width: 1024px;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .hover\:container:hover {
           max-width: 1280px;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .hover\:container:hover {
           max-width: 1536px;
         }
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:container {
           width: 100%;
         }
-        @media (min-width: 640px) {
+        @media (width >= 640px) {
           .sm\:container {
             max-width: 640px;
           }
         }
-        @media (min-width: 768px) {
+        @media (width >= 768px) {
           .sm\:container {
             max-width: 768px;
           }
         }
-        @media (min-width: 1024px) {
+        @media (width >= 1024px) {
           .sm\:container {
             max-width: 1024px;
           }
         }
-        @media (min-width: 1280px) {
+        @media (width >= 1280px) {
           .sm\:container {
             max-width: 1280px;
           }
         }
-        @media (min-width: 1536px) {
+        @media (width >= 1536px) {
           .sm\:container {
             max-width: 1536px;
           }
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:container {
           width: 100%;
         }
-        @media (min-width: 640px) {
+        @media (width >= 640px) {
           .md\:container {
             max-width: 640px;
           }
         }
-        @media (min-width: 768px) {
+        @media (width >= 768px) {
           .md\:container {
             max-width: 768px;
           }
         }
-        @media (min-width: 1024px) {
+        @media (width >= 1024px) {
           .md\:container {
             max-width: 1024px;
           }
         }
-        @media (min-width: 1280px) {
+        @media (width >= 1280px) {
           .md\:container {
             max-width: 1280px;
           }
         }
-        @media (min-width: 1536px) {
+        @media (width >= 1536px) {
           .md\:container {
             max-width: 1536px;
           }
@@ -743,7 +743,7 @@ test('it works', () => {
       :is(.dark .dark\:custom-util) {
         background: #abcdef;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:text-center {
           text-align: center;
         }
@@ -761,7 +761,7 @@ test('it works', () => {
           }
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:text-center {
           text-align: center;
         }
@@ -791,18 +791,18 @@ test('it works', () => {
             background: #abcdef !important;
           }
         }
-        @media (min-width: 640px) {
+        @media (width >= 640px) {
           .md\:sm\:text-center {
             text-align: center;
           }
         }
       }
-      @media (min-width: 1280px) and (max-width: 1535px) {
+      @media (width >= 1280px) and (width <= 1535px) {
         .range\:text-right {
           text-align: right;
         }
       }
-      @media (min-width: 640px) and (max-width: 767px), (max-width: 868px) {
+      @media (width >= 640px) and (width <= 767px), (width <= 868px) {
         .multi\:text-left {
           text-align: left;
         }

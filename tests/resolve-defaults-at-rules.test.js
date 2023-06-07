@@ -374,7 +374,7 @@ test('with apply', async () => {
           skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
           scaleY(var(--tw-scale-y));
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .media-queries {
           --tw-rotate: 45deg;
           transform: translate(var(--tw-translate-x), var(--tw-translate-y))
@@ -506,7 +506,7 @@ test('with borders', async () => {
         --tw-border-opacity: 1;
         border-color: rgb(239 68 68 / var(--tw-border-opacity));
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:border-2 {
           border-width: 2px;
         }
@@ -559,7 +559,7 @@ test('with shadows', async () => {
       .ring-black\/25 {
         --tw-ring-color: #00000040;
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:shadow-xl {
           --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
           --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color),

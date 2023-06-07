@@ -28,8 +28,8 @@ test('order matters and produces different behaviour', () => {
     content: [
       {
         raw: html`
-          <div class="hover:file:flex"></div>
-          <div class="file:hover:flex"></div>
+          <div class="hover:file:[--value:1]"></div>
+          <div class="file:hover:[--value:2]"></div>
         `,
       },
     ],
@@ -37,11 +37,11 @@ test('order matters and produces different behaviour', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .file\:hover\:flex:hover::file-selector-button {
-        display: flex;
+      .file\:hover\:\[--value\:2\]:hover::file-selector-button {
+        --value: 2;
       }
-      .hover\:file\:flex::file-selector-button:hover {
-        display: flex;
+      .hover\:file\:\[--value\:1\]::file-selector-button:hover {
+        --value: 1;
       }
     `)
   })
@@ -318,7 +318,7 @@ test('custom addVariant with more complex media query params', () => {
 
   return run('@tailwind components;@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media screen and (max-width: 600px) {
+      @media screen and (width <= 600px) {
         .magic\:text-center {
           text-align: center;
         }
@@ -491,7 +491,7 @@ it('should be possible to use responsive modifiers that are defined with special
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media (max-width: 399px) {
+      @media (width <= 399px) {
         .\<sm\:underline {
           text-decoration-line: underline;
         }
@@ -522,7 +522,7 @@ it('variants for components should not be produced in a file without a component
 
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:underline {
           text-decoration-line: underline;
         }
@@ -538,31 +538,31 @@ it('variants for utilities should not be produced in a file without a utilities 
 
   return run('@tailwind components', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:container {
           width: 100%;
         }
-        @media (min-width: 640px) {
+        @media (width >= 640px) {
           .sm\:container {
             max-width: 640px;
           }
         }
-        @media (min-width: 768px) {
+        @media (width >= 768px) {
           .sm\:container {
             max-width: 768px;
           }
         }
-        @media (min-width: 1024px) {
+        @media (width >= 1024px) {
           .sm\:container {
             max-width: 1024px;
           }
         }
-        @media (min-width: 1280px) {
+        @media (width >= 1280px) {
           .sm\:container {
             max-width: 1280px;
           }
         }
-        @media (min-width: 1536px) {
+        @media (width >= 1536px) {
           .sm\:container {
             max-width: 1536px;
           }
@@ -622,7 +622,7 @@ it('appends variants to the correct place when using postcss documents', () => {
       .underline {
         text-decoration-line: underline;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:underline {
           text-decoration-line: underline;
         }
@@ -654,7 +654,7 @@ it('variants support multiple, grouped selectors (html)', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:base1 .foo,
         .sm\:base1 .bar,
         .sm\:base2 .bar .base2-foo {
@@ -687,7 +687,7 @@ it('variants support multiple, grouped selectors (apply)', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .baz .foo,
         .baz .bar {
           color: red;
@@ -716,7 +716,7 @@ it('variants only picks the used selectors in a group (html)', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:b {
           color: red;
         }
@@ -747,7 +747,7 @@ it('variants only picks the used selectors in a group (apply)', () => {
 
   return run(input, config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .baz {
           color: red;
         }
@@ -915,7 +915,7 @@ test('class inside pseudo-class function :has', () => {
       html:has(.hover\:foo:hover) {
         color: green;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         :where(.sm\:foo) {
           color: red;
         }
@@ -995,7 +995,7 @@ test('variants with slashes in them work', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (min-aspect-ratio: 1 / 10) {
+      @media (aspect-ratio >= 1 / 10) {
         .ar-1\/10\:flex {
           display: flex;
         }
@@ -1031,7 +1031,7 @@ test('variants with slashes support modifiers', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (min-aspect-ratio: 1 / 10) and (foo: 20) {
+      @media (aspect-ratio >= 1 / 10) and (foo: 20) {
         .ar-1\/10\/20\:flex {
           display: flex;
         }

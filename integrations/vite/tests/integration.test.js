@@ -255,7 +255,7 @@ describe('watcher', () => {
         .font-bold {
           font-weight: 700;
         }
-        @media (min-width: 768px) {
+        @media (width >= 768px) {
           .md\:font-medium {
             font-weight: 500;
           }
@@ -292,7 +292,7 @@ describe('watcher', () => {
         .font-bold {
           font-weight: bold;
         }
-        @media (min-width: 800px) {
+        @media (width >= 800px) {
           .md\:font-medium {
             font-weight: 500;
           }
@@ -373,12 +373,9 @@ describe('watcher', () => {
     expect(await fetchCSS()).toIncludeCss(
       css`
         .btn {
-          border-radius: 0.25rem;
           z-index: 0;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          border-radius: 0.25rem;
+          padding: 0.25rem 0.5rem;
         }
         .font-bold {
           font-weight: 700;

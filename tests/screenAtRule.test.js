@@ -39,7 +39,7 @@ test('it can generate media queries from configured screen sizes', () => {
     expect(result.css).toMatchFormattedCss(css`
       @media (min-width: 500px) {
         .banana {
-          color: #ff0;
+          color: yellow;
         }
       }
       @media (min-width: 750px) {

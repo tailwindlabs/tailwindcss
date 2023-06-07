@@ -88,7 +88,7 @@ it('should not warn when nesting a single rule inside a media query', () => {
   let input = css`
     @tailwind utilities;
 
-    @media (min-width: 768px) {
+    @media (width >= 768px) {
       .nested {
       }
     }

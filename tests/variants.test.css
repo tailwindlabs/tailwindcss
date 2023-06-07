@@ -73,7 +73,7 @@
 .first\:flex:first-child,
 .last\:flex:last-child,
 .only\:flex:only-child,
-.odd\:flex:nth-child(2n + 1),
+.odd\:flex:nth-child(odd),
 .even\:flex:nth-child(2n),
 .first-of-type\:flex:first-of-type,
 .last-of-type\:flex:last-of-type,
@@ -84,8 +84,15 @@
 .default\:flex:default,
 .checked\:flex:checked,
 .indeterminate\:flex:indeterminate,
-.placeholder-shown\:flex:placeholder-shown,
-.autofill\:flex:autofill,
+.placeholder-shown\:flex:placeholder-shown {
+  display: flex;
+}
+.autofill\:flex:-webkit-autofill {
+  display: flex;
+}
+.autofill\:flex:autofill {
+  display: flex;
+}
 .optional\:flex:optional,
 .required\:flex:required,
 .valid\:flex:valid,
@@ -111,7 +118,88 @@
 .group:first-child .group-first\:flex,
 .group:last-child .group-last\:flex,
 .group:only-child .group-only\:flex,
-.group:nth-child(2n + 1) .group-odd\:flex,
+.group:nth-child(odd) .group-odd\:flex,
+.group:nth-child(2n) .group-even\:flex,
+.group:first-of-type .group-first-of-type\:flex,
+.group:last-of-type .group-last-of-type\:flex,
+.group:only-of-type .group-only-of-type\:flex,
+.group:visited .group-visited\:flex,
+.group:target .group-target\:flex,
+.group[open] .group-open\:flex,
+.group:default .group-default\:flex,
+.group:checked .group-checked\:flex,
+.group:indeterminate .group-indeterminate\:flex,
+.group:placeholder-shown .group-placeholder-shown\:flex,
+.group:-webkit-autofill .group-autofill\:flex,
+.group:optional .group-optional\:flex,
+.group:required .group-required\:flex,
+.group:valid .group-valid\:flex,
+.group:invalid .group-invalid\:flex,
+.group:in-range .group-in-range\:flex,
+.group:out-of-range .group-out-of-range\:flex,
+.group:read-only .group-read-only\:flex,
+.group:empty .group-empty\:flex,
+.group:focus-within .group-focus-within\:flex,
+.group:hover .group-hover\:flex,
+.group[open]:hover .group-open\:group-hover\:flex,
+.group:focus .group-focus\:flex,
+.group[open]:focus .group-open\:group-focus\:flex,
+.group:focus:hover .group-focus\:group-hover\:flex,
+.group:focus-visible .group-focus-visible\:flex,
+.group:active .group-active\:flex,
+.group:enabled .group-enabled\:flex,
+.group:disabled .group-disabled\:flex,
+.group:disabled:focus:hover .group-disabled\:group-focus\:group-hover\:flex,
+.group:disabled:focus:hover .group-disabled\:group-focus\:group-hover\:first\:flex:first-child,
+.peer:first-child ~ .peer-first\:flex,
+.peer:last-child ~ .peer-last\:flex,
+.peer:only-child ~ .peer-only\:flex,
+.peer:nth-child(odd) ~ .peer-odd\:flex,
+.peer:nth-child(2n) ~ .peer-even\:flex,
+.peer:first-of-type ~ .peer-first-of-type\:flex,
+.peer:last-of-type ~ .peer-last-of-type\:flex,
+.peer:only-of-type ~ .peer-only-of-type\:flex,
+.peer:visited ~ .peer-visited\:flex,
+.peer:target ~ .peer-target\:flex,
+.peer[open] ~ .peer-open\:flex,
+.peer:default ~ .peer-default\:flex,
+.peer:checked ~ .peer-checked\:flex,
+.peer:indeterminate ~ .peer-indeterminate\:flex,
+.peer:placeholder-shown ~ .peer-placeholder-shown\:flex,
+.peer:-webkit-autofill ~ .peer-autofill\:flex,
+.peer:optional ~ .peer-optional\:flex,
+.peer:required ~ .peer-required\:flex,
+.peer:valid ~ .peer-valid\:flex,
+.peer:invalid ~ .peer-invalid\:flex,
+.peer:in-range ~ .peer-in-range\:flex,
+.peer:out-of-range ~ .peer-out-of-range\:flex,
+.peer:read-only ~ .peer-read-only\:flex,
+.peer:empty ~ .peer-empty\:flex,
+.peer:focus-within ~ .peer-focus-within\:flex,
+.peer:hover ~ .peer-hover\:flex,
+.peer:focus ~ .peer-focus\:flex,
+.peer:focus:hover ~ .peer-focus\:peer-hover\:flex,
+.peer:focus-visible ~ .peer-focus-visible\:flex,
+.peer:active ~ .peer-active\:flex,
+.peer:enabled ~ .peer-enabled\:flex,
+.peer:disabled ~ .peer-disabled\:flex,
+.peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:flex,
+.peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:first\:flex:first-child,
+:-webkit-any([dir='ltr'] .ltr\:flex),
+:-webkit-any([dir='rtl'] .rtl\:flex) {
+  display: flex;
+}
+.open\:hover\:flex:hover[open],
+.focus\:flex:focus,
+.focus\:hover\:flex:hover:focus,
+.focus-visible\:flex:focus-visible,
+.active\:flex:active,
+.enabled\:flex:enabled,
+.disabled\:flex:disabled,
+.group:first-child .group-first\:flex,
+.group:last-child .group-last\:flex,
+.group:only-child .group-only\:flex,
+.group:nth-child(odd) .group-odd\:flex,
 .group:nth-child(2n) .group-even\:flex,
 .group:first-of-type .group-first-of-type\:flex,
 .group:last-of-type .group-last-of-type\:flex,
@@ -147,7 +235,7 @@
 .peer:first-child ~ .peer-first\:flex,
 .peer:last-child ~ .peer-last\:flex,
 .peer:only-child ~ .peer-only\:flex,
-.peer:nth-child(2n + 1) ~ .peer-odd\:flex,
+.peer:nth-child(odd) ~ .peer-odd\:flex,
 .peer:nth-child(2n) ~ .peer-even\:flex,
 .peer:first-of-type ~ .peer-first-of-type\:flex,
 .peer:last-of-type ~ .peer-last-of-type\:flex,
@@ -212,31 +300,31 @@
     display: flex;
   }
 }
-@media (min-width: 640px) {
+@media (width >= 640px) {
   .sm\:flex,
   .sm\:active\:flex:active {
     display: flex;
   }
 }
-@media (min-width: 768px) {
+@media (width >= 768px) {
   .md\:flex,
   .group:focus .md\:group-focus\:flex {
     display: flex;
   }
 }
-@media (min-width: 1024px) {
+@media (width >= 1024px) {
   .lg\:flex,
   :is(.dark .lg\:dark\:flex) {
     display: flex;
   }
 }
-@media (min-width: 1280px) {
+@media (width >= 1280px) {
   .xl\:flex,
   :is(.dark .xl\:dark\:disabled\:flex:disabled) {
     display: flex;
   }
 }
-@media (min-width: 1536px) {
+@media (width >= 1536px) {
   .\32 xl\:flex {
     display: flex;
   }

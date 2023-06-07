@@ -94,27 +94,27 @@ test('prefix', () => {
       .tw-container {
         width: 100%;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .tw-container {
           max-width: 640px;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .tw-container {
           max-width: 768px;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .tw-container {
           max-width: 1024px;
         }
       }
-      @media (min-width: 1280px) {
+      @media (width >= 1280px) {
         .tw-container {
           max-width: 1280px;
         }
       }
-      @media (min-width: 1536px) {
+      @media (width >= 1536px) {
         .tw-container {
           max-width: 1536px;
         }
@@ -168,7 +168,7 @@ test('prefix', () => {
       :is(.tw-dark .dark\:focus\:tw-text-left:focus) {
         text-align: left;
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:tw--ml-5 {
           margin-left: -1.25rem;
         }
@@ -440,7 +440,7 @@ test('prefix with negative values and variants in the safelist', async () => {
     .hover\:tw--top-1:hover {
       top: -0.25rem;
     }
-    @media (min-width: 640px) {
+    @media (width >= 640px) {
       .sm\:hover\:-tw-top-1:hover,
       .sm\:hover\:tw--top-1:hover {
         top: -0.25rem;

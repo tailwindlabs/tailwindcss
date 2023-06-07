@@ -63,6 +63,9 @@ module.exports = function tailwindcss(configOrPath) {
               nesting: true,
               customMedia: true,
             },
+            nonStandard: {
+              deepSelectorCombinator: true,
+            },
           })
 
           let code = transformed.code.toString()

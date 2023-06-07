@@ -436,17 +436,17 @@ test('plugins can create components with media queries with object syntax', () =
       .custom-container {
         width: 100%;
       }
-      @media (min-width: 100px) {
+      @media (width >= 100px) {
         .custom-container {
           max-width: 100px;
         }
       }
-      @media (min-width: 200px) {
+      @media (width >= 200px) {
         .custom-container {
           max-width: 200px;
         }
       }
-      @media (min-width: 300px) {
+      @media (width >= 300px) {
         .custom-container {
           max-width: 300px;
         }
@@ -497,7 +497,7 @@ test('media queries can be defined multiple times using objects-in-array syntax'
       .custom-container {
         width: 100%;
       }
-      @media (min-width: 100px) {
+      @media (width >= 100px) {
         .custom-container {
           max-width: 100px;
         }
@@ -506,7 +506,7 @@ test('media queries can be defined multiple times using objects-in-array syntax'
         padding: 1rem 0.5rem;
         display: block;
       }
-      @media (min-width: 100px) {
+      @media (width >= 100px) {
         .btn {
           display: inline-block;
         }
@@ -557,7 +557,7 @@ test('plugins can create nested rules', () => {
       .btn-blue:hover {
         background-color: #00008b;
       }
-      @media (min-width: 500px) {
+      @media (width >= 500px) {
         .btn-blue:hover {
           background-color: orange;
         }
@@ -634,22 +634,22 @@ test('plugins can access the current config', () => {
       .custom-container {
         width: 100%;
       }
-      @media (min-width: 576px) {
+      @media (width >= 576px) {
         .custom-container {
           max-width: 576px;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .custom-container {
           max-width: 768px;
         }
       }
-      @media (min-width: 992px) {
+      @media (width >= 992px) {
         .custom-container {
           max-width: 992px;
         }
       }
-      @media (min-width: 1200px) {
+      @media (width >= 1200px) {
         .custom-container {
           max-width: 1200px;
         }
@@ -1254,7 +1254,7 @@ test('plugins can be created using the `createPlugin` function', () => {
       .hover\:test-sm:hover {
         test-property: 1rem;
       }
-      @media (min-width: 400px) {
+      @media (width >= 400px) {
         .sm\:test-sm {
           test-property: 1rem;
         }
@@ -1319,7 +1319,7 @@ test('plugins with extra options can be created using the `createPlugin.withOpti
       .hover\:banana-sm:hover {
         test-property: 1rem;
       }
-      @media (min-width: 400px) {
+      @media (width >= 400px) {
         .sm\:banana-sm {
           test-property: 1rem;
         }
@@ -1356,7 +1356,7 @@ test('plugins should cache correctly', () => {
         .banana {
           position: absolute;
         }
-        @media (min-width: 400px) {
+        @media (width >= 400px) {
           .sm\:banana {
             position: absolute;
           }
@@ -1367,15 +1367,15 @@ test('plugins should cache correctly', () => {
         .apple {
           position: absolute;
         }
-        @media (min-width: 400px) {
+        @media (width >= 400px) {
           .sm\:apple {
             position: absolute;
           }
         }
       `
 
-      expect(result1.css).toMatchCss(expected1)
-      expect(result2.css).toMatchCss(expected2)
+      expect(result1.css).toMatchFormattedCss(expected1)
+      expect(result2.css).toMatchFormattedCss(expected2)
     }
   )
 })
@@ -1436,7 +1436,7 @@ test('plugins created using `createPlugin.withOptions` do not need to be invoked
       .hover\:banana-sm:hover {
         test-property: 1rem;
       }
-      @media (min-width: 400px) {
+      @media (width >= 400px) {
         .sm\:banana-sm {
           test-property: 1rem;
         }
@@ -1493,7 +1493,7 @@ test('the configFunction parameter is optional when using the `createPlugin.with
       .hover\:banana-sm:hover {
         test-property: 1px;
       }
-      @media (min-width: 400px) {
+      @media (width >= 400px) {
         .sm\:banana-sm {
           test-property: 1px;
         }
@@ -1534,7 +1534,7 @@ test('keyframes are not escaped', () => {
       .foo-\[abc\] {
         animation: 1s infinite abc;
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         @keyframes def {
           25.001% {
             color: #000;

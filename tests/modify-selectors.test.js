@@ -69,7 +69,7 @@ test('modify selectors', () => {
       .foo .foo\:visited\:markdown:visited > p {
         margin-top: 12px;
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .foo .lg\:foo\:disabled\:markdown:disabled > p {
           margin-top: 12px;
         }
@@ -78,12 +78,12 @@ test('modify selectors', () => {
       .foo .foo\:hover\:font-bold:hover {
         font-weight: 700;
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .foo .sm\:foo\:font-bold {
           font-weight: 700;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .foo .md\:foo\:focus\:font-bold:focus {
           font-weight: 700;
         }

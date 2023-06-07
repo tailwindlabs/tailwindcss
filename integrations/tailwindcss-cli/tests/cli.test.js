@@ -150,7 +150,7 @@ describe('Build command', () => {
         theme: {
           extend: {
             fontWeight: {
-              bold: 'BOLD',
+              bold: 'bold',
             },
           },
         },
@@ -171,7 +171,7 @@ describe('Build command', () => {
     expect(await readOutputFile('main.css')).toIncludeCss(
       css`
         .font-bold {
-          font-weight: BOLD;
+          font-weight: bold;
         }
       `
     )
@@ -231,11 +231,8 @@ describe('Build command', () => {
         }
 
         .btn-after {
+          padding: 0.25rem 0.5rem;
           display: flex;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
         }
       `
     )
@@ -281,11 +278,8 @@ describe('Build command', () => {
         }
 
         .btn-after {
+          padding: 0.25rem 0.5rem;
           display: flex;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
         }
       `
     )
@@ -437,7 +431,7 @@ describe('Build command', () => {
       css`
         @media (min-width: 768px) {
           .md\:something-cool {
-            color: blue;
+            color: #00f;
           }
         }
       `

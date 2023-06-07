@@ -38,7 +38,7 @@ it('should be possible to group variants', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:\(underline\2c italic\) {
           font-style: italic;
           text-decoration-line: underline;
@@ -97,7 +97,7 @@ it('should be possible to group multiple variants', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         @media (prefers-color-scheme: dark) {
           .md\:dark\:\(underline\2c italic\) {
             font-style: italic;
@@ -123,7 +123,7 @@ it('should be possible to group nested grouped variants', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:\(underline\2c italic\2c hover\:\(uppercase\2c font-bold\)\) {
           font-style: italic;
           text-decoration-line: underline;
@@ -155,7 +155,7 @@ it('should be possible to use nested multiple grouped variants', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:\(text-black\2c dark\:\(text-white\2c hover\:focus\:text-gray-100\)\) {
           --tw-text-opacity: 1;
           color: rgb(0 0 0 / var(--tw-text-opacity));
@@ -195,7 +195,7 @@ it('should be possible to mix and match nesting and different variant combinatio
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:\[\&\>\*\]\:\(text-black\2c
           dark\:\(text-white\2c
           hover\:\[\@supports\(color\:green\)\]\:\[\&\:nth-child\(2n\=1\)\]\:text-gray-100\)\)

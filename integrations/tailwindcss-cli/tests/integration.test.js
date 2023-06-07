@@ -884,7 +884,6 @@ describe('watcher', () => {
       expect(await readOutputFile('main.css')).not.toIncludeCss(
         css`
           .underline {
-            -webkit-text-decoration-line: underline;
             text-decoration-line: underline;
           }
         `
@@ -898,7 +897,6 @@ describe('watcher', () => {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .underline {
-            -webkit-text-decoration-line: underline;
             text-decoration-line: underline;
           }
         `
@@ -938,7 +936,6 @@ describe('watcher', () => {
       expect(await readOutputFile('main.css')).not.toIncludeCss(
         css`
           .underline {
-            -webkit-text-decoration-line: underline;
             text-decoration-line: underline;
           }
         `
@@ -952,7 +949,6 @@ describe('watcher', () => {
       expect(await readOutputFile('main.css')).toIncludeCss(
         css`
           .underline {
-            -webkit-text-decoration-line: underline;
             text-decoration-line: underline;
           }
         `
@@ -1037,7 +1033,6 @@ describe('watcher', () => {
           }
 
           .underline {
-            -webkit-text-decoration-line: underline;
             text-decoration-line: underline;
           }
         `
@@ -1082,7 +1077,6 @@ describe('watcher', () => {
           }
 
           .underline {
-            -webkit-text-decoration-line: underline;
             text-decoration-line: underline;
           }
         `

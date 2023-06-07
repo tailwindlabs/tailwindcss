@@ -19,7 +19,7 @@ it('should be possible to load a custom nesting plugin', async () => {
         rule.selector += '-modified'
       })
     })
-  ).toMatchCss(css`
+  ).toMatchFormattedCss(css`
     .foo-modified {
       color: black;
       @media screen(md) {
@@ -39,7 +39,7 @@ it('should be possible to load a custom nesting plugin by name (string) instead'
     }
   `
 
-  expect(await run(input, 'postcss-nested')).toMatchCss(css`
+  expect(await run(input, 'postcss-nested')).toMatchFormattedCss(css`
     .foo {
       color: black;
     }
@@ -62,7 +62,7 @@ it('should default to the bundled postcss-nested plugin (no options)', async () 
     }
   `
 
-  expect(await run(input)).toMatchCss(css`
+  expect(await run(input)).toMatchFormattedCss(css`
     .foo {
       color: black;
     }
@@ -85,7 +85,7 @@ it('should default to the bundled postcss-nested plugin (empty options)', async 
     }
   `
 
-  expect(await run(input, {})).toMatchCss(css`
+  expect(await run(input, {})).toMatchFormattedCss(css`
     .foo {
       color: black;
     }
@@ -108,7 +108,7 @@ it('should be possible to use postcss-nested plugin with options', async () => {
     }
   `
 
-  expect(await run(input, postcssNested({ noIsPseudoSelector: true }))).toMatchCss(css`
+  expect(await run(input, postcssNested({ noIsPseudoSelector: true }))).toMatchFormattedCss(css`
     .foo {
       color: black;
     }
@@ -131,7 +131,7 @@ test('@screen rules are replaced with media queries', async () => {
     }
   `
 
-  expect(await run(input, postcssNested)).toMatchCss(css`
+  expect(await run(input, postcssNested)).toMatchFormattedCss(css`
     .foo {
       color: black;
     }
@@ -154,7 +154,7 @@ test('@screen rules can work with `@apply`', async () => {
     }
   `
 
-  expect(await run(input, postcssNested)).toMatchCss(css`
+  expect(await run(input, postcssNested)).toMatchFormattedCss(css`
     .foo {
       @apply bg-black;
     }
@@ -172,7 +172,7 @@ test('nesting does not break downstream plugin visitors', async () => {
     .foo {
       color: black;
     }
-    @suppoerts (color: blue) {
+    @supports (color: blue) {
       .foo {
         color: blue;
       }
@@ -186,15 +186,16 @@ test('nesting does not break downstream plugin visitors', async () => {
 
   let result = await run(input, plugins)
 
-  expect(result).toMatchCss(css`
+  expect(result).toMatchFormattedCss(css`
     .foo {
-      color: #000;
+      color: black;
     }
-    @suppoerts (color: blue) {
+    @supports (color: blue) {
       .foo {
         color: blue;
       }
     }
+    /* Comment */
   `)
 
   expect(spyPlugin.spies.Once).toHaveBeenCalled()

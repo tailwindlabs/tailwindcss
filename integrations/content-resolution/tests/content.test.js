@@ -60,7 +60,7 @@ it('looks in the CWD by default', async () => {
 
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
-  expect(result.css).toMatchCss(css`
+  expect(result.css).toMatchFormattedCss(css`
     .content-\[real-static-positive\] {
       --tw-content: real-static-positive;
       content: var(--tw-content);
@@ -69,7 +69,7 @@ it('looks in the CWD by default', async () => {
 
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
-  expect(result.css).toMatchCss(``)
+  expect(result.css).toMatchFormattedCss(``)
 })
 
 it('looks in the CWD for non-config-relative paths', async () => {
@@ -88,7 +88,7 @@ it('looks in the CWD for non-config-relative paths', async () => {
 
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
-  expect(result.css).toMatchCss(css`
+  expect(result.css).toMatchFormattedCss(css`
     .content-\[real-static-positive\] {
       --tw-content: real-static-positive;
       content: var(--tw-content);
@@ -97,7 +97,7 @@ it('looks in the CWD for non-config-relative paths', async () => {
 
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
-  expect(result.css).toMatchCss(``)
+  expect(result.css).toMatchFormattedCss(``)
 })
 
 it('can look for content files relative to the config', async () => {
@@ -113,12 +113,12 @@ it('can look for content files relative to the config', async () => {
   // Here `./real` doesn't exist next to the config in the root directory
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
-  expect(result.css).toMatchCss(css``)
+  expect(result.css).toMatchFormattedCss(css``)
 
   // But here it `./real` does exist next to the config in the `./src` directory!
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
-  expect(result.css).toMatchCss(css`
+  expect(result.css).toMatchFormattedCss(css`
     .content-\[real-static-positive\] {
       --tw-content: real-static-positive;
       content: var(--tw-content);
@@ -143,7 +143,7 @@ it('it handles ignored globs correctly when not relative to the config', async (
 
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
-  expect(result.css).toMatchCss(css`
+  expect(result.css).toMatchFormattedCss(css`
     .content-\[real-dynamic-positive\] {
       --tw-content: real-dynamic-positive;
       content: var(--tw-content);
@@ -157,7 +157,7 @@ it('it handles ignored globs correctly when not relative to the config', async (
   // But here it `./real` does exist next to the config in the `./src` directory!
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
-  expect(result.css).toMatchCss(``)
+  expect(result.css).toMatchFormattedCss(``)
 })
 
 it('it handles ignored globs correctly when relative to the config', async () => {
@@ -177,12 +177,12 @@ it('it handles ignored globs correctly when relative to the config', async () =>
 
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
-  expect(result.css).toMatchCss(``)
+  expect(result.css).toMatchFormattedCss(``)
 
   // But here it `./real` does exist next to the config in the `./src` directory!
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
-  expect(result.css).toMatchCss(css`
+  expect(result.css).toMatchFormattedCss(css`
     .content-\[real-dynamic-positive\] {
       --tw-content: real-dynamic-positive;
       content: var(--tw-content);
@@ -215,7 +215,7 @@ it('it can resolve symlinks for files when not relative to the config', async ()
 
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
-  expect(result.css).toMatchCss(css`
+  expect(result.css).toMatchFormattedCss(css`
     .content-\[real-dynamic-positive\] {
       --tw-content: real-dynamic-positive;
       content: var(--tw-content);
@@ -237,7 +237,7 @@ it('it can resolve symlinks for files when not relative to the config', async ()
   // But here it `./real` does exist next to the config in the `./src` directory!
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
-  expect(result.css).toMatchCss(``)
+  expect(result.css).toMatchFormattedCss(``)
 })
 
 it('it can resolve symlinks for files when relative to the config', async () => {
@@ -261,12 +261,12 @@ it('it can resolve symlinks for files when relative to the config', async () => 
 
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
-  expect(result.css).toMatchCss(``)
+  expect(result.css).toMatchFormattedCss(``)
 
   // But here it `./real` does exist next to the config in the `./src` directory!
   result = await build({ cwd: path.resolve(__dirname, '../src') })
 
-  expect(result.css).toMatchCss(css`
+  expect(result.css).toMatchFormattedCss(css`
     .content-\[real-dynamic-positive\] {
       --tw-content: real-dynamic-positive;
       content: var(--tw-content);

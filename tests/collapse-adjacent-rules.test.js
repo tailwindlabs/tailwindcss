@@ -106,7 +106,7 @@ test('collapse adjacent rules', () => {
           font-weight: 700;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .some-apply-thing {
           --tw-text-opacity: 1;
           color: rgb(0 0 0 / var(--tw-text-opacity));
@@ -114,7 +114,7 @@ test('collapse adjacent rules', () => {
         }
       }
       @supports (foo: bar) {
-        @media (min-width: 768px) {
+        @media (width >= 768px) {
           .some-apply-thing {
             --tw-text-opacity: 1;
             color: rgb(0 0 0 / var(--tw-text-opacity));
@@ -122,7 +122,7 @@ test('collapse adjacent rules', () => {
           }
         }
       }
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         .sm\:text-center {
           text-align: center;
         }
@@ -130,7 +130,7 @@ test('collapse adjacent rules', () => {
           font-weight: 700;
         }
       }
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .md\:text-center {
           text-align: center;
         }
@@ -138,7 +138,7 @@ test('collapse adjacent rules', () => {
           font-weight: 700;
         }
       }
-      @media (min-width: 1024px) {
+      @media (width >= 1024px) {
         .lg\:text-center {
           text-align: center;
         }

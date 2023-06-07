@@ -559,7 +559,7 @@ test('font sizes are retrieved without default line-heights or letter-spacing', 
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -571,12 +571,6 @@ test('outlines are retrieved without default outline-offset', () => {
     }
   `
 
-  let output = css`
-    .element {
-      outline: 2px dotted #000;
-    }
-  `
-
   return run(input, {
     theme: {
       outline: {
@@ -584,7 +578,11 @@ test('outlines are retrieved without default outline-offset', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      .element {
+        outline: 2px dotted black;
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -623,7 +621,7 @@ test('font-family values are retrieved without font-variation-settings', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -650,7 +648,7 @@ test('font-variation-settings values can be retrieved', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -675,7 +673,7 @@ test('font-family values are joined when an array', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -714,7 +712,7 @@ test('font-family values are retrieved without font-feature-settings', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -727,13 +725,6 @@ test('font-feature-settings values can be retrieved', () => {
     }
   `
 
-  let output = css`
-    .heading {
-      font-feature-settings: 'cv11';
-      font-family: Inter;
-    }
-  `
-
   return run(input, {
     theme: {
       fontFamily: {
@@ -741,7 +732,12 @@ test('font-feature-settings values can be retrieved', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      .heading {
+        font-family: Inter;
+        font-feature-settings: 'cv11';
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -753,12 +749,6 @@ test('box-shadow values are joined when an array', () => {
     }
   `
 
-  let output = css`
-    .element {
-      box-shadow: 0 0 2px #000, 1px 2px 3px #fff;
-    }
-  `
-
   return run(input, {
     theme: {
       boxShadow: {
@@ -766,7 +756,11 @@ test('box-shadow values are joined when an array', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      .element {
+        box-shadow: 0 0 2px black, 1px 2px 3px white;
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -791,7 +785,7 @@ test('transition-property values are joined when an array', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -816,7 +810,7 @@ test('transition-duration values are joined when an array', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -830,18 +824,16 @@ test('basic screen function calls are expanded', () => {
     }
   `
 
-  let output = css`
-    @media (min-width: 600px) {
-      .foo {
-        color: red;
-      }
-    }
-  `
-
   return run(input, {
     theme: { screens: { sm: '600px' } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 600px) {
+        .foo {
+          color: red;
+        }
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -866,7 +858,7 @@ test('screen function supports max-width screens', () => {
   return run(input, {
     theme: { screens: { sm: { max: '600px' } } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -880,18 +872,16 @@ test('screen function supports min-width screens', () => {
     }
   `
 
-  let output = css`
-    @media (min-width: 600px) {
-      .foo {
-        color: red;
-      }
-    }
-  `
-
   return run(input, {
     theme: { screens: { sm: { min: '600px' } } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 600px) {
+        .foo {
+          color: red;
+        }
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -905,18 +895,16 @@ test('screen function supports min-width and max-width screens', () => {
     }
   `
 
-  let output = css`
-    @media (min-width: 600px) and (max-width: 700px) {
-      .foo {
-        color: red;
-      }
-    }
-  `
-
   return run(input, {
     theme: { screens: { sm: { min: '600px', max: '700px' } } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 600px) and (max-width: 700px) {
+        .foo {
+          color: red;
+        }
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -941,7 +929,7 @@ test('screen function supports raw screens', () => {
   return run(input, {
     theme: { screens: { mono: { raw: 'monochrome' } } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -955,18 +943,16 @@ test('screen arguments can be quoted', () => {
     }
   `
 
-  let output = css`
-    @media (min-width: 600px) {
-      .foo {
-        color: red;
-      }
-    }
-  `
-
   return run(input, {
     theme: { screens: { sm: '600px' } },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      @media (min-width: 600px) {
+        .foo {
+          color: red;
+        }
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -978,18 +964,16 @@ test('Theme function can extract alpha values for colors (1)', () => {
     }
   `
 
-  let output = css`
-    .foo {
-      color: #3b82f680;
-    }
-  `
-
   return run(input, {
     theme: {
       colors: { blue: { 500: '#3b82f6' } },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        color: rgb(59 130 246 / 50%);
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1001,18 +985,16 @@ test('Theme function can extract alpha values for colors (2)', () => {
     }
   `
 
-  let output = css`
-    .foo {
-      color: #3b82f680;
-    }
-  `
-
   return run(input, {
     theme: {
       colors: { blue: { 500: '#3b82f6' } },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        color: rgb(59 130 246 / 0.5);
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1035,7 +1017,7 @@ test('Theme function can extract alpha values for colors (3)', () => {
       colors: { blue: { 500: '#3b82f6' } },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1047,12 +1029,6 @@ test('Theme function can extract alpha values for colors (4)', () => {
     }
   `
 
-  let output = css`
-    .foo {
-      color: #3c83f680;
-    }
-  `
-
   return run(input, {
     theme: {
       colors: {
@@ -1060,7 +1036,11 @@ test('Theme function can extract alpha values for colors (4)', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        color: hsl(217 91% 60% / 50%);
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1072,12 +1052,6 @@ test('Theme function can extract alpha values for colors (5)', () => {
     }
   `
 
-  let output = css`
-    .foo {
-      color: #3c83f680;
-    }
-  `
-
   return run(input, {
     theme: {
       colors: {
@@ -1085,7 +1059,11 @@ test('Theme function can extract alpha values for colors (5)', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(css`
+      .foo {
+        color: hsl(217 91% 60% / 0.5);
+      }
+    `)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1110,7 +1088,7 @@ test('Theme function can extract alpha values for colors (6)', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1137,7 +1115,7 @@ test('Theme function can extract alpha values for colors (7)', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1168,7 +1146,7 @@ test('Theme function can extract alpha values for colors (8)', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1198,7 +1176,7 @@ test('Theme functions replace the alpha value placeholder even with no alpha pro
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1229,7 +1207,7 @@ test('Theme functions can reference values with slashes in brackets', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1254,7 +1232,7 @@ test('Theme functions with alpha value inside quotes', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1279,7 +1257,7 @@ test('Theme functions with alpha with quotes value around color only', () => {
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(output)
+    expect(result.css).toMatchFormattedCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -1312,7 +1290,7 @@ it('can find values with slashes in the theme key while still allowing for alpha
       },
     },
   }).then((result) => {
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .foo00 {
         color: #050000;
       }
@@ -1358,7 +1336,7 @@ describe('context dependent', () => {
     let result = await runFull('@tailwind utilities', configPath)
 
     // 1. On first run it should work because it's been removed from the class cache
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .underline {
         text-decoration-line: underline;
       }
@@ -1370,7 +1348,7 @@ describe('context dependent', () => {
     // 3. The second run should work fine because it's been removed from the class cache
     result = await runFull('@tailwind utilities', configPath)
 
-    expect(result.css).toMatchCss(css`
+    expect(result.css).toMatchFormattedCss(css`
       .underline {
         text-decoration-line: underline;
       }
@@ -1406,7 +1384,7 @@ describe('context dependent', () => {
         },
       },
     }).then((result) => {
-      expect(result.css).toMatchCss(output)
+      expect(result.css).toMatchFormattedCss(output)
       expect(result.warnings().length).toBe(0)
     })
   })
