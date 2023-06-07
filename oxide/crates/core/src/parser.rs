@@ -670,7 +670,7 @@ impl<'a> Extractor<'a> {
         trace!("Cursor {}", self.cursor);
 
         // Fast skipping of invalid characters
-        let can_skip_whitespace = if self.opts.preserve_spaces_in_arbitrary { !self.in_arbitrary } else { true };
+        let can_skip_whitespace = false; // if self.opts.preserve_spaces_in_arbitrary { !self.in_arbitrary } else { true };
         if can_skip_whitespace {
             match fast_skip(&self.cursor) {
                 Some(pos) => {
