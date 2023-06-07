@@ -300,7 +300,7 @@ export function normalizeConfig(config) {
     if (config.experimental === 'all') {
       config.experimental = {}
       for (let key in featureFlags.experimental) {
-        config[key] = true
+        config.experimental[key] = true
       }
     } else {
       config.experimental = config.experimental ?? {}
