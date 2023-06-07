@@ -40,7 +40,7 @@ pub fn fast_skip(cursor: &Cursor) -> Option<usize> {
 #[inline(always)]
 fn load(input: &[u8]) -> [u8; STRIDE] {
     let mut value = [0u8; STRIDE];
-    value.copy_from_slice(&input);
+    value.copy_from_slice(input);
     value
 }
 
