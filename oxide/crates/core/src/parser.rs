@@ -28,6 +28,13 @@ pub struct SplitCandidate<'a> {
     utility: &'a [u8],
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum ValidationResult {
+    Invalid,
+    Valid,
+    Restart,
+}
+
 #[derive(Default)]
 pub struct ExtractorOptions {
     pub preserve_spaces_in_arbitrary: bool,
@@ -118,16 +125,10 @@ impl<'a> Extractor<'a> {
         let mut candidate = &self.input[self.idx_start..=self.idx_end];
 
         while !candidate.is_empty() {
-            // let can_str = std::str::from_utf8(candidate).ok().unwrap();
-
-            let (is_valid, needs_restart) = Extractor::is_valid_candidate_string(candidate);
-
-            if is_valid {
-                return ParseAction::SingleCandidate(candidate);
-            }
-
-            if needs_restart {
-                return ParseAction::RestartAt(self.idx_start + 1);
+            match Extractor::is_valid_candidate_string(candidate) {
+                ValidationResult::Valid => return ParseAction::SingleCandidate(candidate),
+                ValidationResult::Restart => return ParseAction::RestartAt(self.idx_start + 1),
+                _ => {},
             }
 
             match candidate.split_last() {
@@ -209,14 +210,14 @@ impl<'a> Extractor<'a> {
     }
 
     #[inline(always)]
-    fn is_valid_candidate_string(candidate: &'a [u8]) -> (bool, bool) {
+    fn is_valid_candidate_string(candidate: &'a [u8]) -> ValidationResult {
         let split_candidate = Extractor::split_candidate(candidate);
 
         let mut offset = 0;
         let utility = &split_candidate.utility;
         let original_utility = &utility;
 
-        // Some special cases that we can ignore while testing the validations.
+        // Some special cases that we can ignore while validating
         if utility.starts_with(b"!-") {
             offset += 2;
         } else if utility.starts_with(b"!") || utility.starts_with(b"-") {
@@ -225,7 +226,7 @@ impl<'a> Extractor<'a> {
 
         // These are allowed in arbitrary values and in variants but nowhere else
         if Extractor::contains_in_constrained(utility, vec![b'<', b'>']) {
-            return (false, true);
+            return ValidationResult::Restart;
         }
 
         // Pluck out the part that we are interested in.
@@ -234,38 +235,38 @@ impl<'a> Extractor<'a> {
         // Validations
         // We should have _something_
         if utility.is_empty() {
-            return (false, false);
+            return ValidationResult::Invalid;
         }
 
         // <sm is fine, but only as a variant
         // TODO: We probably have to ensure that this `:` is not inside the arbitrary values...
         if utility.starts_with(b"<") && !utility.contains(&b':') {
-            return (false, false);
+            return ValidationResult::Invalid;
         }
 
         // Only variants can start with a number. E.g.: 2xl is fine, but only as a variant.
         // TODO: Adjust this if we run into issues with actual utilities starting with a number?
         // TODO: We probably have to ensure that this `:` is not inside the arbitrary values...
         if utility[0] >= b'0' && utility[0] <= b'9' && !utility.contains(&b':') {
-            return (false, false);
+            return ValidationResult::Invalid;
         }
 
         // In case of an arbitrary property, we should have at least this structure: [a:b]
         if utility.starts_with(b"[") && utility.ends_with(b"]") {
             // [a:b] is at least 5 characters long
             if utility.len() < 5 {
-                return (false, false);
+                return ValidationResult::Invalid;
             }
 
             // Should contain a `:`
             if !utility.contains(&b':') {
-                return (false, false);
+                return ValidationResult::Invalid;
             }
 
             // Now that we validated that the candidate is technically fine, let's ensure that it
             // doesn't start with a `-` because that would make it invalid for arbitrary properties.
             if original_utility.starts_with(b"-") || original_utility.starts_with(b"!-") {
-                return (false, false);
+                return ValidationResult::Invalid;
             }
 
             // The ':` must be preceded by a-Z0-9 because it represents a property name.
@@ -276,7 +277,7 @@ impl<'a> Extractor<'a> {
                 .nth(colon - 1)
                 .map_or_else(|| false, |c| c.is_ascii_alphanumeric())
             {
-                return (false, false);
+                return ValidationResult::Invalid;
             }
         }
 
@@ -298,13 +299,13 @@ impl<'a> Extractor<'a> {
                     // `/` is the indicator for a modifier, this is not allowed after arbitrary
                     // properties
                     if next == '/' {
-                        return (false, false);
+                        return ValidationResult::Invalid;
                     }
                 }
             }
         }
 
-        (true, false)
+        ValidationResult::Valid
     }
 
     #[inline(always)]
