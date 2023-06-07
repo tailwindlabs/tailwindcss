@@ -1015,6 +1015,28 @@ mod test {
     }
 
     #[test]
+    fn classes_in_js_arrays_without_spaces() {
+        let candidates = run(
+            r#"let classes = ['bg-black','hover:px-0.5','text-[13px]','[--my-var:1_/_2]','[.foo_&]:px-[0]','[.foo_&]:[color:red]']">"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
     fn classes_as_object_keys() {
         let candidates = run(
             r#"<div :class="{ underline: isActive, 'px-1.5': isOnline }"></div>"#,
