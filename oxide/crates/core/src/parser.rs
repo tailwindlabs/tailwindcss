@@ -226,14 +226,13 @@ impl<'a> Extractor<'a> {
         }
 
         // It's an arbitrary property
-        if utility.starts_with(b"[") && utility.ends_with(b"]") {
-            if utility.starts_with(b"['") {
-                return ValidationResult::Restart;
-            } else if utility.starts_with(b"[\"") {
-                return ValidationResult::Restart;
-            } else if utility.starts_with(b"[`") {
-                return ValidationResult::Restart;
-            }
+        if utility.starts_with(b"[")
+            && utility.ends_with(b"]")
+            && (utility.starts_with(b"['")
+                || utility.starts_with(b"[\"")
+                || utility.starts_with(b"[`"))
+        {
+            return ValidationResult::Restart;
         }
 
         // Pluck out the part that we are interested in.
