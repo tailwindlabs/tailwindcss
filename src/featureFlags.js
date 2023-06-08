@@ -5,7 +5,7 @@ let defaults = {
   optimizeUniversalDefaults: false,
   disableColorOpacityUtilitiesByDefault: false,
   relativeContentPathsByDefault: false,
-  oxideParser: false,
+  oxideParser: true,
   logicalSiblingUtilities: false,
 }
 

@@ -225,6 +225,16 @@ impl<'a> Extractor<'a> {
             return ValidationResult::Restart;
         }
 
+        // It's an arbitrary property
+        if utility.starts_with(b"[")
+            && utility.ends_with(b"]")
+            && (utility.starts_with(b"['")
+                || utility.starts_with(b"[\"")
+                || utility.starts_with(b"[`"))
+        {
+            return ValidationResult::Restart;
+        }
+
         // Pluck out the part that we are interested in.
         let utility = &utility[offset..];
 
@@ -996,6 +1006,28 @@ mod test {
     fn classes_in_js_arrays() {
         let candidates = run(
             r#"let classes = ['bg-black', 'hover:px-0.5', 'text-[13px]', '[--my-var:1_/_2]', '[.foo_&]:px-[0]', '[.foo_&]:[color:red]']">"#,
+            false,
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "let",
+                "classes",
+                "bg-black",
+                "hover:px-0.5",
+                "text-[13px]",
+                "[--my-var:1_/_2]",
+                "--my-var:1_/_2",
+                "[.foo_&]:px-[0]",
+                "[.foo_&]:[color:red]",
+            ]
+        );
+    }
+
+    #[test]
+    fn classes_in_js_arrays_without_spaces() {
+        let candidates = run(
+            r#"let classes = ['bg-black','hover:px-0.5','text-[13px]','[--my-var:1_/_2]','[.foo_&]:px-[0]','[.foo_&]:[color:red]']">"#,
             false,
         );
         assert_eq!(
