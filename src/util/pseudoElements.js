@@ -19,12 +19,13 @@
 // **Jumpable**
 // Any terminal element may "jump" over combinators when moving to the end of the selector
 //
-// This is a backwards-compat quirk of :before and :after variants.
+// This is a backwards-compat quirk of pseudo element variants from earlier versions of Tailwind CSS.
 
 /** @typedef {'terminal' | 'actionable' | 'jumpable'} PseudoProperty */
 
 /** @type {Record<string, PseudoProperty[]>} */
 let elementProperties = {
+  // Pseudo elements from the spec
   '::after': ['terminal', 'jumpable'],
   '::backdrop': ['terminal', 'jumpable'],
   '::before': ['terminal', 'jumpable'],
@@ -41,18 +42,14 @@ let elementProperties = {
   '::spelling-error': ['terminal'],
   '::target-text': ['terminal'],
 
-  // other
+  // Pseudo elements from the spec with special rules
   '::file-selector-button': ['terminal', 'actionable'],
-  '::-webkit-progress-bar': ['terminal', 'actionable'],
 
-  // Webkit scroll bar pseudo elements can be combined with user-action pseudo classes
-  '::-webkit-scrollbar': ['terminal', 'actionable'],
-  '::-webkit-scrollbar-button': ['terminal', 'actionable'],
-  '::-webkit-scrollbar-thumb': ['terminal', 'actionable'],
-  '::-webkit-scrollbar-track': ['terminal', 'actionable'],
-  '::-webkit-scrollbar-track-piece': ['terminal', 'actionable'],
-  '::-webkit-scrollbar-corner': ['terminal', 'actionable'],
-  '::-webkit-resizer': ['terminal', 'actionable'],
+  // Library-specific pseudo elements used by component libraries
+  // These are Shadow DOM-like
+  '::deep': ['actionable'],
+  '::v-deep': ['actionable'],
+  '::ng-deep': ['actionable'],
 
   // Note: As a rule, double colons (::) should be used instead of a single colon
   // (:). This distinguishes pseudo-classes from pseudo-elements. However, since
@@ -65,8 +62,8 @@ let elementProperties = {
 
   // The default value is used when the pseudo-element is not recognized
   // Because it's not recognized, we don't know if it's terminal or not
-  // So we assume it can't be moved AND can have user-action pseudo classes attached to it
-  __default__: ['actionable'],
+  // So we assume it can be moved AND can have user-action pseudo classes attached to it
+  __default__: ['terminal', 'actionable'],
 }
 
 /**
