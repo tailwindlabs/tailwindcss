@@ -1,5 +1,5 @@
 import postcss from 'postcss'
-import lightningcss from 'lightningcss'
+import lightningcss, { Features } from 'lightningcss'
 import browserslist from 'browserslist'
 import setupTrackingContext from './lib/setupTrackingContext'
 import processTailwindFeatures from './processTailwindFeatures'
@@ -66,6 +66,7 @@ module.exports = function tailwindcss(configOrPath) {
             nonStandard: {
               deepSelectorCombinator: true,
             },
+            exclude: Features.LogicalProperties,
           })
 
           let code = transformed.code.toString()

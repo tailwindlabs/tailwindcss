@@ -6,7 +6,7 @@ import fs from 'fs'
 import postcss from 'postcss'
 import postcssrc from 'postcss-load-config'
 import browserslist from 'browserslist'
-import lightning from 'lightningcss'
+import lightning, { Features } from 'lightningcss'
 import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
@@ -38,6 +38,7 @@ async function lightningcss(result, { map = true, minify = true } = {}) {
       drafts: {
         nesting: true,
       },
+      exclude: Features.LogicalProperties,
     })
 
     return Object.assign(result, {
