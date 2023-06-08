@@ -124,9 +124,9 @@ describe.each([
       'px-[123.45px]',
 
       // With special symbols
-      'px-[#bada55]',
+      'bg-[#bada55]',
       //   ^
-      'px-[color:#bada55]',
+      'bg-[color:#bada55]',
       //        ^^
       'content-[>]',
       //        ^
