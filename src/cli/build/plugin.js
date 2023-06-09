@@ -28,28 +28,33 @@ import { flagEnabled } from '../../featureFlags'
 
 async function lightningcss(result, { map = true, minify = true } = {}) {
   try {
+    let includeFeatures = Features.Nesting
+    let excludeFeatures = 0
+
+    let resolvedBrowsersListConfig = browserslist.findConfig(result.opts.from)?.defaults
+    let defaultBrowsersListConfig = pkg.browserslist
+    let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
+
+    if (browsersListConfig.join(',') === defaultBrowsersListConfig.join(',')) {
+      includeFeatures |=
+        Features.ColorFunction | Features.OklabColors | Features.LabColors | Features.P3Colors
+
+      excludeFeatures |=
+        Features.HexAlphaColors | Features.LogicalProperties | Features.SpaceSeparatedColorNotation
+    }
+
     let transformed = lightning.transform({
       filename: result.opts.from || 'input.css',
       code: Buffer.from(result.css, 'utf-8'),
       minify,
       sourceMap: result.map === undefined ? map : !!result.map,
       inputSourceMap: result.map ? result.map.toString() : undefined,
-      targets: lightning.browserslistToTargets(
-        browserslist(
-          browserslist.findConfig(result.opts.from || process.cwd())?.defaults ?? pkg.browserslist
-        )
-      ),
+      targets: lightning.browserslistToTargets(browserslist(browsersListConfig)),
       drafts: {
         nesting: true,
       },
-      include:
-        Features.Nesting |
-        Features.ColorFunction |
-        Features.OklabColors |
-        Features.LabColors |
-        Features.P3Colors,
-      exclude:
-        Features.HexAlphaColors | Features.LogicalProperties | Features.SpaceSeparatedColorNotation,
+      include: includeFeatures,
+      exclude: excludeFeatures,
     })
 
     return Object.assign(result, {

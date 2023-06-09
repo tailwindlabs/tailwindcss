@@ -45,20 +45,33 @@ module.exports = function tailwindcss(configOrPath) {
         let intermediateResult = result.root.toResult({
           map: map ? { inline: true } : false,
         })
+
         let intermediateMap = intermediateResult.map?.toJSON?.() ?? map
 
         try {
+          let includeFeatures = Features.Nesting
+          let excludeFeatures = 0
+
+          let resolvedBrowsersListConfig = browserslist.findConfig(result.opts.from)?.defaults
+          let defaultBrowsersListConfig = require('../package.json').browserslist
+          let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
+
+          if (browsersListConfig.join(',') === defaultBrowsersListConfig.join(',')) {
+            includeFeatures |=
+              Features.ColorFunction | Features.OklabColors | Features.LabColors | Features.P3Colors
+
+            excludeFeatures |=
+              Features.HexAlphaColors |
+              Features.LogicalProperties |
+              Features.SpaceSeparatedColorNotation
+          }
+
           let transformed = lightningcss.transform({
             filename: result.opts.from,
             code: Buffer.from(intermediateResult.css),
             minify: false,
             sourceMap: !!intermediateMap,
-            targets: lightningcss.browserslistToTargets(
-              browserslist(
-                browserslist.findConfig(result.opts.from)?.defaults ??
-                  require('../package.json').browserslist
-              )
-            ),
+            targets: lightningcss.browserslistToTargets(browserslist(browsersListConfig)),
             drafts: {
               nesting: true,
               customMedia: true,
@@ -66,16 +79,8 @@ module.exports = function tailwindcss(configOrPath) {
             nonStandard: {
               deepSelectorCombinator: true,
             },
-            include:
-              Features.Nesting |
-              Features.ColorFunction |
-              Features.OklabColors |
-              Features.LabColors |
-              Features.P3Colors,
-            exclude:
-              Features.HexAlphaColors |
-              Features.LogicalProperties |
-              Features.SpaceSeparatedColorNotation,
+            include: includeFeatures,
+            exclude: excludeFeatures,
           })
 
           let code = transformed.code.toString()
