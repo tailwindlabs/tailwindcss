@@ -34,7 +34,11 @@ async function lightningcss(result, { map = true, minify = true } = {}) {
       minify,
       sourceMap: result.map === undefined ? map : !!result.map,
       inputSourceMap: result.map ? result.map.toString() : undefined,
-      targets: lightning.browserslistToTargets(browserslist(pkg.browserslist)),
+      targets: lightning.browserslistToTargets(
+        browserslist(
+          browserslist.findConfig(result.opts.from || process.cwd())?.defaults ?? pkg.browserslist
+        )
+      ),
       drafts: {
         nesting: true,
       },

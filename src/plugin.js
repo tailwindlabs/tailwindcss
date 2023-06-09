@@ -54,7 +54,10 @@ module.exports = function tailwindcss(configOrPath) {
             minify: false,
             sourceMap: !!intermediateMap,
             targets: lightningcss.browserslistToTargets(
-              browserslist(require('../package.json').browserslist)
+              browserslist(
+                browserslist.findConfig(result.opts.from)?.defaults ??
+                  require('../package.json').browserslist
+              )
             ),
             drafts: {
               nesting: true,
