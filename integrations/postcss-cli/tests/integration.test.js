@@ -137,7 +137,7 @@ describe('watcher', () => {
         .font-bold {
           font-weight: 700;
         }
-        @media (width >= 768px) {
+        @media (min-width: 768px) {
           .md\:font-medium {
             font-weight: 500;
           }
@@ -148,23 +148,23 @@ describe('watcher', () => {
     await writeInputFile(
       '../tailwind.config.js',
       javascript`
-          module.exports = {
-            content: ['./src/index.html'],
-            theme: {
-              extend: {
-                screens: {
-                  md: '800px'
-                },
-                fontWeight: {
-                  bold: 'bold'
-                }
+        module.exports = {
+          content: ['./src/index.html'],
+          theme: {
+            extend: {
+              screens: {
+                md: '800px'
               },
+              fontWeight: {
+                bold: 'bold'
+              }
             },
-            corePlugins: {
-              preflight: false,
-            },
-            plugins: [],
-          }
+          },
+          corePlugins: {
+            preflight: false,
+          },
+          plugins: [],
+        }
       `
     )
     await runningProcess.onStderr(ready)
@@ -174,7 +174,7 @@ describe('watcher', () => {
         .font-bold {
           font-weight: bold;
         }
-        @media (width >= 800px) {
+        @media (min-width: 800px) {
           .md\:font-medium {
             font-weight: 500;
           }
