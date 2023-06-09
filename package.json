@@ -87,10 +87,9 @@
     "sucrase": "^3.32.0"
   },
   "browserslist": [
-    "> 1%",
-    "not edge <= 18",
-    "not ie 11",
-    "not op_mini all"
+    "chrome >= 103",
+    "firefox >= 102",
+    "safari >= 14"
   ],
   "jest": {
     "testTimeout": 30000,
