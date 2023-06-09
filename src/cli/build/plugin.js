@@ -31,7 +31,9 @@ async function lightningcss(result, { map = true, minify = true } = {}) {
     let includeFeatures = Features.Nesting
     let excludeFeatures = 0
 
-    let resolvedBrowsersListConfig = browserslist.findConfig(result.opts.from)?.defaults
+    let resolvedBrowsersListConfig = browserslist.findConfig(
+      result.opts.from ?? process.cwd()
+    )?.defaults
     let defaultBrowsersListConfig = pkg.browserslist
     let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
 

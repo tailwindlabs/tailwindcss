@@ -52,7 +52,9 @@ module.exports = function tailwindcss(configOrPath) {
           let includeFeatures = Features.Nesting
           let excludeFeatures = 0
 
-          let resolvedBrowsersListConfig = browserslist.findConfig(result.opts.from)?.defaults
+          let resolvedBrowsersListConfig = browserslist.findConfig(
+            result.opts.from ?? process.cwd()
+          )?.defaults
           let defaultBrowsersListConfig = require('../package.json').browserslist
           let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
 
