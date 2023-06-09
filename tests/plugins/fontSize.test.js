@@ -168,7 +168,7 @@ test('font-size utilities can include a line-height modifier', () => {
         font-size: 12px;
         line-height: 21px;
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .md\:text-\[19px\]\/8 {
           font-size: 19px;
           line-height: 32px;

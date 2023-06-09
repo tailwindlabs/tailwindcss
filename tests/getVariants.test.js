@@ -86,7 +86,7 @@ it('should provide selectors for custom plugins that do a combination of paralle
           return [
             `
               @supports (foo: ${modifier}) {
-                @media (width <= 400px) {
+                @media (max-width: 400px) {
                    &:hover
                 }
               }
@@ -103,7 +103,7 @@ it('should provide selectors for custom plugins that do a combination of paralle
 
   let variant = variants.find((v) => v.name === 'foo')
   expect(variant.selectors({ modifier: 'bar', value: 'baz' })).toEqual([
-    '@supports (foo: bar) { @media (width <= 400px) { &:hover } }',
+    '@supports (foo: bar) { @media (max-width: 400px) { &:hover } }',
     '.bar\\/baz &:focus',
   ])
 })

@@ -65,7 +65,7 @@ test('arbitrary variants with modifiers', () => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
       @media (prefers-color-scheme: dark) {
-        @media (width >= 1024px) {
+        @media (min-width: 1024px) {
           .dark\:lg\:hover\:\[\&\>\*\]\:underline > :hover {
             text-decoration-line: underline;
           }
@@ -121,7 +121,7 @@ test('arbitrary variants are sorted after other variants', () => {
       .underline {
         text-decoration-line: underline;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .lg\:underline {
           text-decoration-line: underline;
         }
@@ -1190,7 +1190,7 @@ it('should output responsive variants + stacked variants in the right order', ()
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .xl\:p-1 {
           padding: 0.25rem;
         }
@@ -1201,7 +1201,7 @@ it('should output responsive variants + stacked variants in the right order', ()
       .\[\&_ul\]\:flex-col ul {
         flex-direction: column;
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .md\:\[\&_ul\]\:flex-row ul {
           flex-direction: row;
         }

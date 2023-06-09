@@ -244,12 +244,12 @@ it('should be possible to sort variants', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width >= 500px) {
+      @media (min-width: 500px) {
         .testmin-\[500px\]\:underline {
           text-decoration-line: underline;
         }
       }
-      @media (width >= 700px) {
+      @media (min-width: 700px) {
         .testmin-\[700px\]\:italic {
           font-style: italic;
         }
@@ -290,17 +290,17 @@ it('should be possible to compare arbitrary variants and hardcoded variants', ()
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width >= 500px) {
+      @media (min-width: 500px) {
         .testmin-\[500px\]\:italic {
           font-style: italic;
         }
       }
-      @media (width >= 600px) {
+      @media (min-width: 600px) {
         .testmin-example\:italic {
           font-style: italic;
         }
       }
-      @media (width >= 700px) {
+      @media (min-width: 700px) {
         .testmin-\[700px\]\:italic {
           font-style: italic;
         }
@@ -351,25 +351,25 @@ it('should be possible to sort stacked arbitrary variants correctly', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width >= 100px) {
-        @media (width <= 400px) {
+      @media (min-width: 100px) {
+        @media (max-width: 400px) {
           .testmin-\[100px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
-        @media (width <= 350px) {
+        @media (max-width: 350px) {
           .testmin-\[100px\]\:testmax-\[350px\]\:underline {
             text-decoration-line: underline;
           }
         }
-        @media (width <= 300px) {
+        @media (max-width: 300px) {
           .testmin-\[100px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
         }
       }
-      @media (width >= 150px) {
-        @media (width <= 400px) {
+      @media (min-width: 150px) {
+        @media (max-width: 400px) {
           .testmin-\[150px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
@@ -415,8 +415,8 @@ it('should maintain sort from other variants, if sort functions of arbitrary var
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width >= 100px) {
-        @media (width <= 200px) {
+      @media (min-width: 100px) {
+        @media (max-width: 200px) {
           .testmin-\[100px\]\:testmax-\[200px\]\:hover\:underline:hover,
           .testmin-\[100px\]\:testmax-\[200px\]\:focus\:underline:focus {
             text-decoration-line: underline;
@@ -464,25 +464,25 @@ it('should sort arbitrary variants left to right (1)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width >= 100px) {
-        @media (width <= 400px) {
+      @media (min-width: 100px) {
+        @media (max-width: 400px) {
           .testmin-\[100px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
-        @media (width <= 300px) {
+        @media (max-width: 300px) {
           .testmin-\[100px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
         }
       }
-      @media (width >= 200px) {
-        @media (width <= 400px) {
+      @media (min-width: 200px) {
+        @media (max-width: 400px) {
           .testmin-\[200px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
-        @media (width <= 300px) {
+        @media (max-width: 300px) {
           .testmin-\[200px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
@@ -529,26 +529,26 @@ it('should sort arbitrary variants left to right (2)', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width <= 400px) {
-        @media (width >= 100px) {
+      @media (max-width: 400px) {
+        @media (min-width: 100px) {
           .testmax-\[400px\]\:testmin-\[100px\]\:underline {
             text-decoration-line: underline;
           }
         }
-        @media (width >= 200px) {
+        @media (min-width: 200px) {
           .testmax-\[400px\]\:testmin-\[200px\]\:underline {
             text-decoration-line: underline;
           }
         }
       }
 
-      @media (width <= 300px) {
-        @media (width >= 100px) {
+      @media (max-width: 300px) {
+        @media (min-width: 100px) {
           .testmax-\[300px\]\:testmin-\[100px\]\:underline {
             text-decoration-line: underline;
           }
         }
-        @media (width >= 200px) {
+        @media (min-width: 200px) {
           .testmax-\[300px\]\:testmin-\[200px\]\:underline {
             text-decoration-line: underline;
           }
@@ -603,28 +603,28 @@ it('should guarantee that we are not passing values from other variants to the w
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width >= 100px) {
-        @media (width <= 400px) {
+      @media (min-width: 100px) {
+        @media (max-width: 400px) {
           .testmin-\[100px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
 
-        @media (width <= 300px) {
+        @media (max-width: 300px) {
           .testmin-\[100px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }
         }
       }
 
-      @media (width >= 200px) {
-        @media (width <= 400px) {
+      @media (min-width: 200px) {
+        @media (max-width: 400px) {
           .testmin-\[200px\]\:testmax-\[400px\]\:underline {
             text-decoration-line: underline;
           }
         }
 
-        @media (width <= 300px) {
+        @media (max-width: 300px) {
           .testmin-\[200px\]\:testmax-\[300px\]\:underline {
             text-decoration-line: underline;
           }

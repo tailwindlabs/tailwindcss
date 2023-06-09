@@ -6,7 +6,7 @@ import fs from 'fs'
 import postcss from 'postcss'
 import postcssrc from 'postcss-load-config'
 import browserslist from 'browserslist'
-import lightning from 'lightningcss'
+import lightning, { Features } from 'lightningcss'
 import { lilconfig } from 'lilconfig'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
@@ -28,16 +28,35 @@ import { flagEnabled } from '../../featureFlags'
 
 async function lightningcss(result, { map = true, minify = true } = {}) {
   try {
+    let includeFeatures = Features.Nesting
+    let excludeFeatures = 0
+
+    let resolvedBrowsersListConfig = browserslist.findConfig(
+      result.opts.from ?? process.cwd()
+    )?.defaults
+    let defaultBrowsersListConfig = pkg.browserslist
+    let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
+
+    if (browsersListConfig.join(',') === defaultBrowsersListConfig.join(',')) {
+      includeFeatures |=
+        Features.ColorFunction | Features.OklabColors | Features.LabColors | Features.P3Colors
+
+      excludeFeatures |=
+        Features.HexAlphaColors | Features.LogicalProperties | Features.SpaceSeparatedColorNotation
+    }
+
     let transformed = lightning.transform({
       filename: result.opts.from || 'input.css',
       code: Buffer.from(result.css, 'utf-8'),
       minify,
       sourceMap: result.map === undefined ? map : !!result.map,
       inputSourceMap: result.map ? result.map.toString() : undefined,
-      targets: lightning.browserslistToTargets(browserslist(pkg.browserslist)),
+      targets: lightning.browserslistToTargets(browserslist(browsersListConfig)),
       drafts: {
         nesting: true,
       },
+      include: includeFeatures,
+      exclude: excludeFeatures,
     })
 
     return Object.assign(result, {

@@ -309,7 +309,7 @@ it('should keep `@supports` rules inside `@layer`s', () => {
       .test {
         --tw-test: 1;
       }
-      @supports (backdrop-filter: blur(1px)) {
+      @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
         .test {
           --tw-test: 0.9;
         }

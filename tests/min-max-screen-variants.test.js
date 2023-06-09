@@ -34,32 +34,32 @@ it('sorts min and max correctly relative to screens and each other', async () =>
       .font-bold {
         font-weight: 700;
       }
-      @media (width <= 800px) {
+      @media (max-width: 800px) {
         .max-\[800px\]\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width <= 700px) {
+      @media (max-width: 700px) {
         .max-\[700px\]\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .sm\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 700px) {
+      @media (min-width: 700px) {
         .min-\[700px\]\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .md\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 800px) {
+      @media (min-width: 800px) {
         .min-\[800px\]\:font-bold {
           font-weight: 700;
         }
@@ -95,12 +95,12 @@ it('works when using min variants screens config is empty and variants all use t
     .font-bold {
       font-weight: 700;
     }
-    @media (width >= 700px) {
+    @media (min-width: 700px) {
       .min-\[700px\]\:font-bold {
         font-weight: 700;
       }
     }
-    @media (width >= 800px) {
+    @media (min-width: 800px) {
       .min-\[800px\]\:font-bold {
         font-weight: 700;
       }
@@ -136,12 +136,12 @@ it('works when using max variants screens config is empty and variants all use t
       .font-bold {
         font-weight: 700;
       }
-      @media (width <= 800px) {
+      @media (max-width: 800px) {
         .max-\[800px\]\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width <= 700px) {
+      @media (max-width: 700px) {
         .max-\[700px\]\:font-bold {
           font-weight: 700;
         }
@@ -176,32 +176,32 @@ it('converts simple min-width screens for max variant', () => {
       .font-bold {
         font-weight: 700;
       }
-      @media not all and (width >= 1024px) {
+      @media not all and (min-width: 1024px) {
         .max-lg\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width <= 700px) {
+      @media (max-width: 700px) {
         .max-\[700px\]\:font-bold {
           font-weight: 700;
         }
       }
-      @media not all and (width >= 640px) {
+      @media not all and (min-width: 640px) {
         .max-sm\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width <= 300px) {
+      @media (max-width: 300px) {
         .max-\[300px\]\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .sm\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .md\:font-bold {
           font-weight: 700;
         }
@@ -236,22 +236,22 @@ it('does not have keyed screens for min variant', () => {
       .font-bold {
         font-weight: 700;
       }
-      @media (width >= 300px) {
+      @media (min-width: 300px) {
         .min-\[300px\]\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .sm\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 700px) {
+      @media (min-width: 700px) {
         .min-\[700px\]\:font-bold {
           font-weight: 700;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .md\:font-bold {
           font-weight: 700;
         }
@@ -292,12 +292,12 @@ it('warns when using min variants with complex screen configs', async () => {
     .font-bold {
       font-weight: 700;
     }
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .sm\:font-bold {
         font-weight: 700;
       }
     }
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .md\:font-bold {
         font-weight: 700;
       }
@@ -336,12 +336,12 @@ it('warns when using min variants with simple configs containing mixed units', a
     .font-bold {
       font-weight: 700;
     }
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .sm\:font-bold {
         font-weight: 700;
       }
     }
-    @media (width >= 48rem) {
+    @media (min-width: 48rem) {
       .md\:font-bold {
         font-weight: 700;
       }
@@ -380,12 +380,12 @@ it('warns when using min variants with mixed units (with screens config)', async
     .font-bold {
       font-weight: 700;
     }
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .sm\:font-bold {
         font-weight: 700;
       }
     }
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .md\:font-bold {
         font-weight: 700;
       }
@@ -422,7 +422,7 @@ it('warns when using min variants with mixed units (with no screens config)', as
     .font-bold {
       font-weight: 700;
     }
-    @media (width >= 700px) {
+    @media (min-width: 700px) {
       .min-\[700px\]\:font-bold {
         font-weight: 700;
       }
@@ -464,12 +464,12 @@ it('warns when using max variants with complex screen configs', async () => {
     .font-bold {
       font-weight: 700;
     }
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .sm\:font-bold {
         font-weight: 700;
       }
     }
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .md\:font-bold {
         font-weight: 700;
       }
@@ -508,12 +508,12 @@ it('warns when using max variants with simple configs containing mixed units', a
     .font-bold {
       font-weight: 700;
     }
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .sm\:font-bold {
         font-weight: 700;
       }
     }
-    @media (width >= 48rem) {
+    @media (min-width: 48rem) {
       .md\:font-bold {
         font-weight: 700;
       }
@@ -552,12 +552,12 @@ it('warns when using max variants with mixed units (with screens config)', async
     .font-bold {
       font-weight: 700;
     }
-    @media (width >= 640px) {
+    @media (min-width: 640px) {
       .sm\:font-bold {
         font-weight: 700;
       }
     }
-    @media (width >= 768px) {
+    @media (min-width: 768px) {
       .md\:font-bold {
         font-weight: 700;
       }
@@ -594,7 +594,7 @@ it('warns when using max variants with mixed units (with no screens config)', as
     .font-bold {
       font-weight: 700;
     }
-    @media (width <= 700px) {
+    @media (max-width: 700px) {
       .max-\[700px\]\:font-bold {
         font-weight: 700;
       }
@@ -631,7 +631,7 @@ it('warns when using min and max variants with mixed units (with no screens conf
     .font-bold {
       font-weight: 700;
     }
-    @media (width <= 700rem) {
+    @media (max-width: 700rem) {
       .max-\[700rem\]\:font-bold {
         font-weight: 700;
       }

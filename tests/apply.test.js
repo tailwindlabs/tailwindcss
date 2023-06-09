@@ -181,12 +181,12 @@ test('@apply', () => {
       .variants:focus {
         font-weight: 500;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .variants {
           font-weight: 300;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .variants:focus {
           font-weight: 900;
         }
@@ -197,12 +197,12 @@ test('@apply', () => {
       .only-variants:focus {
         font-weight: 500;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .only-variants {
           font-weight: 300;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .only-variants:focus {
           font-weight: 900;
         }
@@ -210,7 +210,7 @@ test('@apply', () => {
       .group:hover .apply-group-variant {
         text-align: center;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .group:hover .apply-group-variant {
           text-align: left;
         }
@@ -221,7 +221,7 @@ test('@apply', () => {
       :is(.dark .apply-dark-variant:hover) {
         text-align: right;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         :is(.dark .apply-dark-variant) {
           text-align: left;
         }
@@ -230,12 +230,12 @@ test('@apply', () => {
       .apply-custom-utility:hover {
         custom: stuff;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .apply-custom-utility {
           custom: stuff;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .apply-custom-utility:focus {
           custom: stuff;
         }
@@ -255,7 +255,7 @@ test('@apply', () => {
       .selectors-variants:active {
         text-align: right;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .multiple-variants:focus,
         .selectors-variants:focus {
           text-align: left;
@@ -265,7 +265,7 @@ test('@apply', () => {
       .group:hover .selectors-group {
         text-align: center;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .group:hover .multiple-group,
         .group:hover .selectors-group {
           text-align: left;
@@ -321,12 +321,12 @@ test('@apply', () => {
       .recursive-apply-a {
         font-weight: 900;
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .recursive-apply-a {
           font-weight: 100;
         }
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .recursive-apply-b {
           font-weight: 100;
         }
@@ -334,17 +334,17 @@ test('@apply', () => {
       .recursive-apply-b {
         font-weight: 600;
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .recursive-apply-b {
           font-weight: 200;
         }
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .recursive-apply-c {
           font-weight: 100;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .recursive-apply-c {
           font-weight: 200;
         }
@@ -352,7 +352,7 @@ test('@apply', () => {
       .recursive-apply-c {
         font-weight: 700;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .recursive-apply-c {
           font-weight: 300;
         }
@@ -369,13 +369,13 @@ test('@apply', () => {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .add-sibling-properties {
           padding-left: 2.5rem;
           padding-right: 2.5rem;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .add-sibling-properties:focus {
           padding-left: 0.25rem;
           padding-right: 0.25rem;
@@ -390,13 +390,13 @@ test('@apply', () => {
         font-size: 1.5rem;
         line-height: 2rem;
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         h1 {
           font-size: 1.875rem;
           line-height: 2.25rem;
         }
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         h1 {
           font-size: 1.5rem;
           line-height: 2rem;
@@ -406,13 +406,13 @@ test('@apply', () => {
         font-size: 1.5rem;
         line-height: 2rem;
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         h2 {
           font-size: 1.5rem;
           line-height: 2rem;
         }
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         h2 {
           font-size: 1.5rem;
           line-height: 2rem;
@@ -701,27 +701,27 @@ test('@applying classes from outside a @layer respects the source order', async 
       .container {
         width: 100%;
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (width >= 1536px) {
+      @media (min-width: 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -1467,13 +1467,13 @@ describe('multiple instances', () => {
           font-size: 1.25rem;
           line-height: 1.75rem;
         }
-        @media (width >= 1024px) {
+        @media (min-width: 1024px) {
           h2 {
             font-size: 1.875rem;
             line-height: 2.25rem;
           }
         }
-        @media (width >= 640px) {
+        @media (min-width: 640px) {
           h2 {
             font-size: 1.5rem;
             line-height: 2rem;
@@ -2021,16 +2021,25 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
       :is([dir='rtl'] :is(.dark .baz:hover)):before {
         background-color: #000;
       }
+      :-webkit-any([dir='rtl'] :-webkit-any(.dark .qux))::-webkit-file-upload-button:hover {
+        background-color: #000;
+      }
       :is([dir='rtl'] :is(.dark .qux))::file-selector-button:hover {
         background-color: #000;
       }
       :is([dir='rtl'] :is(.dark .steve):hover):before {
         background-color: #000;
       }
+      :-webkit-any([dir='rtl'] :-webkit-any(.dark .bob))::-webkit-file-upload-button:hover {
+        background-color: #000;
+      }
       :is([dir='rtl'] :is(.dark .bob))::file-selector-button:hover {
         background-color: #000;
       }
       :has([dir='rtl'] .foo:hover):before {
+        background-color: #000;
+      }
+      :has([dir='rtl'] .bar)::-webkit-file-upload-button:hover {
         background-color: #000;
       }
       :has([dir='rtl'] .bar)::file-selector-button:hover {

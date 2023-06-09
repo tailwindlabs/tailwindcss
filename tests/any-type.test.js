@@ -577,6 +577,7 @@ test('any types are set on correct plugins', () => {
         --tw-text-opacity: var(--any-value);
       }
       .decoration-\[var\(--any-value\)\] {
+        -webkit-text-decoration-color: var(--any-value);
         text-decoration-color: var(--any-value);
       }
       .underline-offset-\[var\(--any-value\)\] {
@@ -672,6 +673,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-blur-\[var\(--any-value\)\] {
         --tw-backdrop-blur: blur(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
@@ -679,6 +684,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-brightness-\[var\(--any-value\)\] {
         --tw-backdrop-brightness: brightness(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
@@ -686,6 +695,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-contrast-\[var\(--any-value\)\] {
         --tw-backdrop-contrast: contrast(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
@@ -693,6 +706,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-grayscale-\[var\(--any-value\)\] {
         --tw-backdrop-grayscale: grayscale(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
@@ -700,6 +717,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-hue-rotate-\[var\(--any-value\)\] {
         --tw-backdrop-hue-rotate: hue-rotate(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
@@ -707,6 +728,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-invert-\[var\(--any-value\)\] {
         --tw-backdrop-invert: invert(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
@@ -714,6 +739,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-opacity-\[var\(--any-value\)\] {
         --tw-backdrop-opacity: opacity(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
@@ -721,6 +750,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-saturate-\[var\(--any-value\)\] {
         --tw-backdrop-saturate: saturate(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
@@ -728,6 +761,10 @@ test('any types are set on correct plugins', () => {
       }
       .backdrop-sepia-\[var\(--any-value\)\] {
         --tw-backdrop-sepia: sepia(var(--any-value));
+        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+          var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+          var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+          var(--tw-backdrop-sepia);
         backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
           var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
           var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)

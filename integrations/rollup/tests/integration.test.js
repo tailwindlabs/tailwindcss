@@ -224,7 +224,7 @@ describe('watcher', () => {
         .font-bold {
           font-weight: 700;
         }
-        @media (width >= 768px) {
+        @media (min-width: 768px) {
           .md\:font-medium {
             font-weight: 500;
           }
@@ -261,7 +261,7 @@ describe('watcher', () => {
         .font-bold {
           font-weight: bold;
         }
-        @media (width >= 800px) {
+        @media (min-width: 800px) {
           .md\:font-medium {
             font-weight: 500;
           }

@@ -163,6 +163,7 @@ it('should work on a real world example', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       .h-available {
+        height: 100vh;
         height: -webkit-fill-available;
       }
     `)

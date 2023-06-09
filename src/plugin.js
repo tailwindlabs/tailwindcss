@@ -1,5 +1,5 @@
 import postcss from 'postcss'
-import lightningcss from 'lightningcss'
+import lightningcss, { Features } from 'lightningcss'
 import browserslist from 'browserslist'
 import setupTrackingContext from './lib/setupTrackingContext'
 import processTailwindFeatures from './processTailwindFeatures'
@@ -45,20 +45,35 @@ module.exports = function tailwindcss(configOrPath) {
         let intermediateResult = result.root.toResult({
           map: map ? { inline: true } : false,
         })
+
         let intermediateMap = intermediateResult.map?.toJSON?.() ?? map
 
         try {
+          let includeFeatures = Features.Nesting
+          let excludeFeatures = 0
+
+          let resolvedBrowsersListConfig = browserslist.findConfig(
+            result.opts.from ?? process.cwd()
+          )?.defaults
+          let defaultBrowsersListConfig = require('../package.json').browserslist
+          let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
+
+          if (browsersListConfig.join(',') === defaultBrowsersListConfig.join(',')) {
+            includeFeatures |=
+              Features.ColorFunction | Features.OklabColors | Features.LabColors | Features.P3Colors
+
+            excludeFeatures |=
+              Features.HexAlphaColors |
+              Features.LogicalProperties |
+              Features.SpaceSeparatedColorNotation
+          }
+
           let transformed = lightningcss.transform({
             filename: result.opts.from,
             code: Buffer.from(intermediateResult.css),
             minify: false,
             sourceMap: !!intermediateMap,
-            targets:
-              typeof process !== 'undefined' && process.env.JEST_WORKER_ID
-                ? { chrome: 111 << 16 }
-                : lightningcss.browserslistToTargets(
-                    browserslist(require('../package.json').browserslist)
-                  ),
+            targets: lightningcss.browserslistToTargets(browserslist(browsersListConfig)),
             drafts: {
               nesting: true,
               customMedia: true,
@@ -66,6 +81,8 @@ module.exports = function tailwindcss(configOrPath) {
             nonStandard: {
               deepSelectorCombinator: true,
             },
+            include: includeFeatures,
+            exclude: excludeFeatures,
           })
 
           let code = transformed.code.toString()

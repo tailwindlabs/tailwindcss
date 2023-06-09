@@ -82,7 +82,7 @@ test('it parses nested pseudo-selectors', () => {
 
 test('it parses top-level media queries', () => {
   let result = parseObjectStyles({
-    '@media (width >= 200px)': {
+    '@media (min-width: 200px)': {
       '.foo': {
         backgroundColor: 'orange',
       },
@@ -90,7 +90,7 @@ test('it parses top-level media queries', () => {
   })
 
   expect(toCss(result)).toMatchFormattedCss(css`
-    @media (width >= 200px) {
+    @media (min-width: 200px) {
       .foo {
         background-color: orange;
       }
@@ -104,7 +104,7 @@ test('it parses nested media queries', () => {
       backgroundColor: 'red',
       color: 'white',
       padding: '1rem',
-      '@media (width >= 200px)': {
+      '@media (min-width: 200px)': {
         backgroundColor: 'orange',
       },
     },
@@ -116,7 +116,7 @@ test('it parses nested media queries', () => {
       color: white;
       padding: 1rem;
     }
-    @media (width >= 200px) {
+    @media (min-width: 200px) {
       .foo {
         background-color: orange;
       }
@@ -157,7 +157,7 @@ test('it parses pseudo-selectors in nested media queries', () => {
       color: 'white',
       padding: '1rem',
       '&:hover': {
-        '@media (width >= 200px)': {
+        '@media (min-width: 200px)': {
           backgroundColor: 'orange',
         },
       },
@@ -170,7 +170,7 @@ test('it parses pseudo-selectors in nested media queries', () => {
       color: white;
       padding: 1rem;
     }
-    @media (width >= 200px) {
+    @media (min-width: 200px) {
       .foo:hover {
         background-color: orange;
       }
@@ -232,7 +232,7 @@ test('it parses nested multi-class selectors in media queries', () => {
       backgroundColor: 'red',
       color: 'white',
       padding: '1rem',
-      '@media (width >= 200px)': {
+      '@media (min-width: 200px)': {
         '&.bar': {
           backgroundColor: 'orange',
         },
@@ -246,7 +246,7 @@ test('it parses nested multi-class selectors in media queries', () => {
       color: white;
       padding: 1rem;
     }
-    @media (width >= 200px) {
+    @media (min-width: 200px) {
       .foo.bar {
         background-color: orange;
       }

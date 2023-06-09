@@ -75,7 +75,7 @@ test('arbitrary properties with modifiers', () => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
       @media (prefers-color-scheme: dark) {
-        @media (width >= 1024px) {
+        @media (min-width: 1024px) {
           .dark\:lg\:hover\:\[paint-order\:markers\]:hover {
             paint-order: markers;
           }
