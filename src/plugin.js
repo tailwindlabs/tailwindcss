@@ -53,12 +53,9 @@ module.exports = function tailwindcss(configOrPath) {
             code: Buffer.from(intermediateResult.css),
             minify: false,
             sourceMap: !!intermediateMap,
-            targets:
-              typeof process !== 'undefined' && process.env.JEST_WORKER_ID
-                ? { chrome: 111 << 16 }
-                : lightningcss.browserslistToTargets(
-                    browserslist(require('../package.json').browserslist)
-                  ),
+            targets: lightningcss.browserslistToTargets(
+              browserslist(require('../package.json').browserslist)
+            ),
             drafts: {
               nesting: true,
               customMedia: true,
@@ -66,7 +63,16 @@ module.exports = function tailwindcss(configOrPath) {
             nonStandard: {
               deepSelectorCombinator: true,
             },
-            exclude: Features.LogicalProperties,
+            include:
+              Features.Nesting |
+              Features.ColorFunction |
+              Features.OklabColors |
+              Features.LabColors |
+              Features.P3Colors,
+            exclude:
+              Features.HexAlphaColors |
+              Features.LogicalProperties |
+              Features.SpaceSeparatedColorNotation,
           })
 
           let code = transformed.code.toString()

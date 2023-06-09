@@ -38,7 +38,14 @@ async function lightningcss(result, { map = true, minify = true } = {}) {
       drafts: {
         nesting: true,
       },
-      exclude: Features.LogicalProperties,
+      include:
+        Features.Nesting |
+        Features.ColorFunction |
+        Features.OklabColors |
+        Features.LabColors |
+        Features.P3Colors,
+      exclude:
+        Features.HexAlphaColors | Features.LogicalProperties | Features.SpaceSeparatedColorNotation,
     })
 
     return Object.assign(result, {
