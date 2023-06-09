@@ -8,27 +8,27 @@ test('options are not required', () => {
       .container {
         width: 100%;
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (width >= 1536px) {
+      @media (min-width: 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -52,12 +52,12 @@ test('screens can be passed explicitly', () => {
       .container {
         width: 100%;
       }
-      @media (width >= 400px) {
+      @media (min-width: 400px) {
         .container {
           max-width: 400px;
         }
       }
-      @media (width >= 500px) {
+      @media (min-width: 500px) {
         .container {
           max-width: 500px;
         }
@@ -81,12 +81,12 @@ test('screens are ordered ascending by min-width', () => {
       .container {
         width: 100%;
       }
-      @media (width >= 400px) {
+      @media (min-width: 400px) {
         .container {
           max-width: 400px;
         }
       }
-      @media (width >= 500px) {
+      @media (min-width: 500px) {
         .container {
           max-width: 500px;
         }
@@ -114,12 +114,12 @@ test('screens are deduplicated by min-width', () => {
       .container {
         width: 100%;
       }
-      @media (width >= 576px) {
+      @media (min-width: 576px) {
         .container {
           max-width: 576px;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .container {
           max-width: 768px;
         }
@@ -145,27 +145,27 @@ test('the container can be centered by default', () => {
         margin-left: auto;
         margin-right: auto;
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (width >= 1536px) {
+      @media (min-width: 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -191,27 +191,27 @@ test('horizontal padding can be included by default', () => {
         padding-left: 2rem;
         padding-right: 2rem;
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (width >= 1536px) {
+      @media (min-width: 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -248,26 +248,26 @@ test('responsive horizontal padding can be included by default', () => {
         padding-left: 1rem;
         padding-right: 1rem;
       }
-      @media (width >= 576px) {
+      @media (min-width: 576px) {
         .container {
           max-width: 576px;
           padding-left: 2rem;
           padding-right: 2rem;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (width >= 992px) {
+      @media (min-width: 992px) {
         .container {
           max-width: 992px;
           padding-left: 4rem;
           padding-right: 4rem;
         }
       }
-      @media (width >= 1200px) {
+      @media (min-width: 1200px) {
         .container {
           max-width: 1200px;
           padding-left: 5rem;
@@ -299,12 +299,12 @@ test('setting all options at once', () => {
         padding-left: 2rem;
         padding-right: 2rem;
       }
-      @media (width >= 400px) {
+      @media (min-width: 400px) {
         .container {
           max-width: 400px;
         }
       }
-      @media (width >= 500px) {
+      @media (min-width: 500px) {
         .container {
           max-width: 500px;
         }
@@ -325,16 +325,16 @@ test('container can use variants', () => {
 
   return run('@tailwind components', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .lg\:hover\:container:hover {
           width: 100%;
         }
-        @media (width >= 400px) {
+        @media (min-width: 400px) {
           .lg\:hover\:container:hover {
             max-width: 400px;
           }
         }
-        @media (width >= 500px) {
+        @media (min-width: 500px) {
           .lg\:hover\:container:hover {
             max-width: 500px;
           }

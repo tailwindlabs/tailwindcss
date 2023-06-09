@@ -20,7 +20,7 @@ test('it detects svelte based on the file extension', () => {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity));
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .lg\:hover\:bg-blue-500:hover {
           --tw-bg-opacity: 1;
           background-color: rgb(59 130 246 / var(--tw-bg-opacity));
@@ -66,7 +66,7 @@ test('using raw with svelte extension', () => {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity));
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .lg\:hover\:bg-blue-500:hover {
           --tw-bg-opacity: 1;
           background-color: rgb(59 130 246 / var(--tw-bg-opacity));

@@ -78,27 +78,27 @@ test('important selector', () => {
       .container {
         width: 100%;
       }
-      @media (width >= 640px) {
+      @media (min-width: 640px) {
         .container {
           max-width: 640px;
         }
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .container {
           max-width: 768px;
         }
       }
-      @media (width >= 1024px) {
+      @media (min-width: 1024px) {
         .container {
           max-width: 1024px;
         }
       }
-      @media (width >= 1280px) {
+      @media (min-width: 1280px) {
         .container {
           max-width: 1280px;
         }
       }
-      @media (width >= 1536px) {
+      @media (min-width: 1536px) {
         .container {
           max-width: 1536px;
         }
@@ -150,10 +150,17 @@ test('important selector', () => {
       #app :is(.dark .dark\:focus\:text-left:focus) {
         text-align: left;
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         #app .md\:hover\:text-right:hover {
           text-align: right;
         }
+      }
+      #app
+        :-webkit-any(
+          [dir='rtl']
+            :-webkit-any(.dark .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100)
+        )::-webkit-file-upload-button:hover {
+        background-color: #000;
       }
       #app
         :is(
@@ -165,7 +172,7 @@ test('important selector', () => {
   })
 })
 
-test('pseudo-elements are appended after the `:is()`', () => {
+test('pseudo-elements are appended after the `:-webkit-any()`', () => {
   let config = {
     important: '#app',
     darkMode: 'class',

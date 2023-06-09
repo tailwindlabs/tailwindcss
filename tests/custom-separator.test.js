@@ -33,7 +33,7 @@ test('custom separator', () => {
       :is(.dark .dark_focus_text-left:focus) {
         text-align: left;
       }
-      @media (width >= 768px) {
+      @media (min-width: 768px) {
         .md_hover_text-right:hover {
           text-align: right;
         }
