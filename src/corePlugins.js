@@ -127,7 +127,9 @@ export let variantPlugins = {
 
       // Interactive
       'focus-within',
-      ['hover', config('shittyHover') ? '&:hover' : '@media (hover: hover) { &:hover }'],
+      'hover',
+      ['@hover', '@media (hover: hover) { &:hover }'],
+      ['@hover-any', '@media (any-hover: hover) { &:hover }'],
       'focus',
       'focus-visible',
       'active',

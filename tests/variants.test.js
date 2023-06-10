@@ -756,11 +756,16 @@ it('variants only picks the used selectors in a group (apply)', () => {
   })
 })
 
-test('hover includes hover media feature by default', () => {
+test('hover media feature variants', () => {
   let config = {
     content: [
       {
-        raw: html`<div class="hover:underline group-hover:underline peer-hover:underline"></div>`,
+        raw: html`
+          <div class="can-hover:block"></div>
+          <div class="any-hover:flex"></div>
+          <div class="can-hover-none:grid"></div>
+          <div class="any-hover-none:hidden"></div>
+        `,
       },
     ],
     corePlugins: { preflight: false },
@@ -776,34 +781,37 @@ test('hover includes hover media feature by default', () => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
       @media (hover: hover) {
-        .hover\:underline:hover,
-        .group:hover .group-hover\:underline,
-        .peer:hover ~ .peer-hover\:underline {
-          text-decoration-line: underline;
+        .can-hover\:block {
+          display: block;
+        }
+      }
+      @media (any-hover: hover) {
+        .any-hover\:flex {
+          display: flex;
+        }
+      }
+      @media (hover: none) {
+        .can-hover-none\:grid {
+          display: grid;
+        }
+      }
+      @media (any-hover: none) {
+        .any-hover-none\:hidden {
+          display: none;
         }
       }
     `)
   })
 })
 
-test('legacy hover behavior using the config option', () => {
+test('@hover includes hover media feature', () => {
   let config = {
-    hover: 'any',
     content: [
       {
-        raw: html`<div class="hover:underline group-hover:underline peer-hover:underline"></div>`,
+        raw: html`<div class="@hover:block group-@hover:flex peer-@hover:grid"></div>`,
       },
     ],
     corePlugins: { preflight: false },
-    variants: {
-      hover: '&:hover',
-    },
-    plugins: [
-      // require('tailwindcss/hover-compat'),
-      // function ({ addVariant }) {
-      //   addVariant('hover', '&:hover')
-      // },
-    ],
   }
 
   let input = css`
@@ -815,10 +823,58 @@ test('legacy hover behavior using the config option', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      .hover\:underline:hover,
-        .group:hover .group-hover\:underline,
-        .peer:hover ~ .peer-hover\:underline {
-        text-decoration-line: underline;
+      @media (hover: hover) {
+        .\@hover\:block:hover {
+          display: block;
+        }
+      }
+      @media (hover: hover) {
+        .group:hover .group-\@hover\:flex {
+          display: flex;
+        }
+      }
+      @media (hover: hover) {
+        .peer:hover ~ .peer-\@hover\:grid {
+          display: grid;
+        }
+      }
+    `)
+  })
+})
+
+test('@hover-any includes any-hover media feature', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="@hover-any:block group-@hover-any:flex peer-@hover-any:grid"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+      @media (any-hover: hover) {
+        .\@hover-any\:block:hover {
+          display: block;
+        }
+      }
+      @media (any-hover: hover) {
+        .group:hover .group-\@hover-any\:flex {
+          display: flex;
+        }
+      }
+      @media (any-hover: hover) {
+        .peer:hover ~ .peer-\@hover-any\:grid {
+          display: grid;
+        }
       }
     `)
   })
