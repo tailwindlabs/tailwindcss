@@ -23,7 +23,7 @@ import { remapBitfield } from './remap-bitfield.js'
  * @property {bigint} arbitrary 0n if false, 1n if true
  * @property {bigint} variants Dynamic size. 1 bit per registered variant. 0n means no variants
  * @property {bigint} parallelIndex Rule index for the parallel variant. 0 if not applicable.
- * @property {bigint} index Index of the rule / utility in it's given *parent* layer. Monotonically increasing.
+ * @property {bigint} index Index of the rule / utility in its given *parent* layer. Monotonically increasing.
  * @property {VariantOption[]} options Some information on how we can sort arbitrary variants
  */
 
@@ -302,7 +302,7 @@ export class Offsets {
     let mapping = this.recalculateVariantOffsets()
 
     // No arbitrary variants? Nothing to do.
-    // Everyhing already in order? Nothing to do.
+    // Everything already in order? Nothing to do.
     if (mapping.length === 0) {
       return list
     }
@@ -354,7 +354,7 @@ function max(nums) {
  * Using `.sort()` without a custom compare function is faster
  * But you can only use that if you're sorting an array of
  * only strings. If you're sorting strings inside objects
- * or arrays, you need must use a custom compare function.
+ * or arrays, you need to use a custom compare function.
  *
  * @param {string} a
  * @param {string} b
