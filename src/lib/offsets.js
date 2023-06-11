@@ -354,7 +354,7 @@ function max(nums) {
  * Using `.sort()` without a custom compare function is faster
  * But you can only use that if you're sorting an array of
  * only strings. If you're sorting strings inside objects
- * or arrays, you need must use a custom compare function.
+ * or arrays, your need must use a custom compare function.
  *
  * @param {string} a
  * @param {string} b
