@@ -23,7 +23,7 @@ import { remapBitfield } from './remap-bitfield.js'
  * @property {bigint} arbitrary 0n if false, 1n if true
  * @property {bigint} variants Dynamic size. 1 bit per registered variant. 0n means no variants
  * @property {bigint} parallelIndex Rule index for the parallel variant. 0 if not applicable.
- * @property {bigint} index Index of the rule / utility in it's given *parent* layer. Monotonically increasing.
+ * @property {bigint} index Index of the rule / utility in its given *parent* layer. Monotonically increasing.
  * @property {VariantOption[]} options Some information on how we can sort arbitrary variants
  */
 
