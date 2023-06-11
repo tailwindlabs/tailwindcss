@@ -302,7 +302,7 @@ export class Offsets {
     let mapping = this.recalculateVariantOffsets()
 
     // No arbitrary variants? Nothing to do.
-    // Everyhing already in order? Nothing to do.
+    // Everything already in order? Nothing to do.
     if (mapping.length === 0) {
       return list
     }
