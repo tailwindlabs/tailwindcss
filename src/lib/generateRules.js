@@ -45,7 +45,7 @@ function* candidatePermutations(candidate) {
       let bracketIdx = candidate.indexOf('[')
 
       // If character before `[` isn't a dash or a slash, this isn't a dynamic class
-      // eg. string[]
+      // e.g. string[]
       if (candidate[bracketIdx - 1] === '-') {
         dashIdx = bracketIdx - 1
       } else if (candidate[bracketIdx - 1] === '/') {
