@@ -457,7 +457,7 @@ function isParsableNode(node) {
 function isParsableCssValue(property, value) {
   // We don't want to treat [https://example.com] as a custom property
   // Even though, according to the CSS grammar, it's a totally valid CSS declaration
-  // So we short-circuit here by checking if the custom property looks like an url
+  // So we short-circuit here by checking if the custom property looks like a URL
   if (looksLikeUri(`${property}:${value}`)) {
     return false
   }
