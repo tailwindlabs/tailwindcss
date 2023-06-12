@@ -157,7 +157,9 @@
 .marker\:flex::marker {
   display: flex;
 }
-.selection\:flex ::selection,
+.selection\:flex ::selection {
+  display: flex;
+}
 .selection\:flex::selection {
   display: flex;
 }

@@ -28,22 +28,11 @@ import { flagEnabled } from '../../featureFlags'
 
 async function lightningcss(result, { map = true, minify = true } = {}) {
   try {
-    let includeFeatures = Features.Nesting
-    let excludeFeatures = 0
-
     let resolvedBrowsersListConfig = browserslist.findConfig(
       result.opts.from ?? process.cwd()
     )?.defaults
     let defaultBrowsersListConfig = pkg.browserslist
     let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
-
-    if (browsersListConfig.join(',') === defaultBrowsersListConfig.join(',')) {
-      includeFeatures |=
-        Features.ColorFunction | Features.OklabColors | Features.LabColors | Features.P3Colors
-
-      excludeFeatures |=
-        Features.HexAlphaColors | Features.LogicalProperties | Features.SpaceSeparatedColorNotation
-    }
 
     let transformed = lightning.transform({
       filename: result.opts.from || 'input.css',
@@ -55,8 +44,8 @@ async function lightningcss(result, { map = true, minify = true } = {}) {
       drafts: {
         nesting: true,
       },
-      include: includeFeatures,
-      exclude: excludeFeatures,
+      include: Features.Nesting,
+      exclude: Features.LogicalProperties,
     })
 
     return Object.assign(result, {
