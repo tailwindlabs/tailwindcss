@@ -49,24 +49,11 @@ module.exports = function tailwindcss(configOrPath) {
         let intermediateMap = intermediateResult.map?.toJSON?.() ?? map
 
         try {
-          let includeFeatures = Features.Nesting
-          let excludeFeatures = 0
-
           let resolvedBrowsersListConfig = browserslist.findConfig(
             result.opts.from ?? process.cwd()
           )?.defaults
           let defaultBrowsersListConfig = require('../package.json').browserslist
           let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
-
-          if (browsersListConfig.join(',') === defaultBrowsersListConfig.join(',')) {
-            includeFeatures |=
-              Features.ColorFunction | Features.OklabColors | Features.LabColors | Features.P3Colors
-
-            excludeFeatures |=
-              Features.HexAlphaColors |
-              Features.LogicalProperties |
-              Features.SpaceSeparatedColorNotation
-          }
 
           let transformed = lightningcss.transform({
             filename: result.opts.from,
@@ -81,8 +68,8 @@ module.exports = function tailwindcss(configOrPath) {
             nonStandard: {
               deepSelectorCombinator: true,
             },
-            include: includeFeatures,
-            exclude: excludeFeatures,
+            include: Features.Nesting,
+            exclude: Features.LogicalProperties,
           })
 
           let code = transformed.code.toString()
