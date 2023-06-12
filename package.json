@@ -87,8 +87,7 @@
     "sucrase": "^3.32.0"
   },
   "browserslist": [
-    "chrome >= 103",
-    "firefox >= 102",
+    "defaults and supports css-variables and supports css-matches-pseudo",
     "safari >= 14"
   ],
   "jest": {
