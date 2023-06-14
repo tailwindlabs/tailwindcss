@@ -6,7 +6,7 @@ import processTailwindFeatures from './processTailwindFeatures'
 import { env } from './lib/sharedState'
 import { findAtConfigPath } from './lib/findAtConfigPath'
 import { handleImportAtRules } from './lib/handleImportAtRules'
-import { parseCssConfig } from './lib/parseCssConfig'
+import { CssBasedConfig } from './lib/parseCssConfig'
 
 module.exports = function tailwindcss(configOrPath) {
   return {
@@ -25,7 +25,7 @@ module.exports = function tailwindcss(configOrPath) {
         configOrPath = findAtConfigPath(root, result) ?? configOrPath
 
         // Parse any CSS-based config values from `:theme` rules
-        let themeValues = parseCssConfig(root)
+        let themeValues = new CssBasedConfig().parse(root)
 
         let context = setupTrackingContext(configOrPath, themeValues)
 
