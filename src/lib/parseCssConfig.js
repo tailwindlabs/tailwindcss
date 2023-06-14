@@ -24,11 +24,11 @@ export class CssBasedConfig {
 
     rules.forEach(rule => {
       rule.walkDecls((decl) => {
-        if (decl.prop.startsWith('--')) {
-          this.parseVariable(decl)
-        } else {
+        if (!decl.prop.startsWith('--')) {
           throw decl.error('Only CSS variables are allowed in `:theme`')
         }
+
+        this.parseVariable(decl)
       })
 
       // Allow the variables to be used with var() anywhere in CSS
@@ -45,13 +45,8 @@ export class CssBasedConfig {
    * @returns {import('postcss').Rule[]}
    */
   getThemeRules(root) {
-    let rules = []
-
-    root.each(node => {
-      if (node.type === 'rule' && node.selector === ':theme') {
-        rules.push(node)
-      }
-    })
+    /** @type {any[]} */
+    let rules = root.nodes.filter(node => node.type === 'rule' && node.selector === ':theme')
 
     return rules
   }
