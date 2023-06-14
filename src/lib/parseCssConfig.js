@@ -15,7 +15,7 @@ export function parseCssConfig(root) {
 
   theme.walkDecls((decl) => {
     if (decl.prop.startsWith('--')) {
-      parseVariable(config, decl.prop.slice(2), decl.value)
+      parseVariable(config, decl)
     } else {
       // Only CSS variables are allowed in the theme rule
       // TODO: Maybe turn this into an error?
@@ -41,14 +41,12 @@ let prefixPluginMap = {
  * Parse a key into one or more actions that modify the config and/or CSS
  *
  * @param {*} config
- * @param {string} name
- * @param {string} value
+ * @param {import('postcss').Declaration} decl
  */
-function parseVariable(config, name, value) {
+function parseVariable(config, decl) {
   // Parse the variable name into a config plugin and keypath
-  let [plugin, keypath] = parseVariableName(name, value)
-
-  console.log({ name, plugin, keypath, value })
+  let [name, value] = [decl.prop.slice(2), decl.value]
+  let [plugin, keypath, option] = parseVariableName(name)
 
   // We couldn't find a plugin for this variable, so we can't do anything with it
   if (plugin === null) return
@@ -75,29 +73,78 @@ function parseVariable(config, name, value) {
     return
   }
 
+  // TODO: Can this happen
+  if (keypath === null) {
+    return
+  }
+
   // All other cases are config keys in a plugin
   config.extend[plugin] ??= {}
-  config.extend[plugin][keypath] = value
+
+  if (!option) {
+    config.extend[plugin][keypath] = value
+    return
+  }
+
+  if (!Array.isArray(config.extend[plugin][keypath])) {
+    config.extend[plugin][keypath] = [
+      config.extend[plugin][keypath],
+      {}
+    ]
+  }
+
+  config.extend[plugin][keypath][1][option] = value
 }
 
 /**
  * Parse a key into one or more actions that modify the config and/or CSS
  *
  * @param {string} name
- * @param {string} value
- * @returns {[plugin: string|null, keypath: string|null]}
+ * @returns {[plugin: string|null, keypath: string|null, option: string|null]}
  */
-function parseVariableName(name, value) {
+function parseVariableName(name) {
+  // Unescape the name if needed
+  // This is needed for CSS variables that contain special characters
+  name = name.replace(/\\/g, '')
+
   for (const [prefix, plugin] of Object.entries(prefixPluginMap)) {
     if (!name.startsWith(prefix)) continue
 
     // The keypath is the part of the variable name after the prefix
     let keypath = name.slice(prefix.length)
-    if (keypath.startsWith('-')) keypath = keypath.slice(1)
-    if (keypath === '') keypath = null
+    let option = null
 
-    return [plugin, keypath]
+    let optionStart = keypath.indexOf('--')
+    if (optionStart !== -1) {
+      option = keypath.slice(optionStart+2)
+      keypath = keypath.slice(0, optionStart)
+    }
+
+    if (keypath == '' && option === 'default') {
+      keypath = 'DEFAULT'
+      option = null
+    } else if (keypath.startsWith('-')) {
+      keypath = keypath.slice(1)
+    }
+
+    if (keypath === '') {
+      return [plugin, null, null]
+    }
+
+    console.log({
+      opt: option ? camelize(option) : option,
+    })
+
+    return [plugin, keypath, option === null ? null : camelize(option)]
   }
 
-  return [null, null]
+  return [null, null, null]
+}
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+function camelize(str) {
+  return str.replace(/-([a-zA-Z])/g, (v) => v.slice(1).toUpperCase())
 }
