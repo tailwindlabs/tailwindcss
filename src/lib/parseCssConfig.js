@@ -67,8 +67,12 @@ export class CssBasedConfig {
     let [name, value] = [decl.prop.slice(2), decl.value]
     let [plugin, keypath, option] = this.parseVariableName(name)
 
-    // We couldn't find a plugin for this variable, so we can't do anything with it
-    if (plugin === null) return
+    if (plugin === null) {
+      // We couldn't find a plugin for this variable, so we can't do anything with it
+      // This also means there is no reason to keep the variable in the CSS
+      decl.remove()
+      return
+    }
 
     if (keypath === null && value === 'unset') {
       // when using `--some-plugin: unset` we want to reset whatever the default value is
@@ -78,21 +82,11 @@ export class CssBasedConfig {
       decl.remove()
 
       return
-    } else if (keypath !== null && value === 'unset') {
-      // when using `--plugin-key: unset` we want to remove that from the config
-      throw new Error("Not implemented yet")
     }
 
-    // When using `--some-plugin: initial` it should reset to the default value for that key
-    // This effectively means removing it
-    if (keypath === null && value === 'initial') {
-      delete config[plugin]
-      delete config.extend[plugin]
-
-      // This also means there is no reason to keep the variable in the CSS
-      decl.remove()
-
-      return
+    if (keypath !== null && value === 'unset') {
+      // when using `--plugin-key: unset` we want to remove that from the config
+      throw decl.error("Not implemented yet");
     }
 
     // TODO: Can this happen
