@@ -1,7 +1,5 @@
 // @ts-check
 
-import { toPath } from '../util/toPath.js'
-
 /**
  * Find and convert the `:theme` rule to a configuration object
  * This is merged with the user's JS config
