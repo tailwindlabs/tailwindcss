@@ -28,7 +28,7 @@ function getCandidateFiles(context, tailwindConfig) {
 }
 
 // Get the config object based on a path
-function getTailwindConfig(configOrPath) {
+function getTailwindConfig(configOrPath, cssThemeValues) {
   let userConfigPath = resolveConfigPath(configOrPath)
 
   if (userConfigPath !== null) {
@@ -56,14 +56,19 @@ function getTailwindConfig(configOrPath) {
     for (let file of newDeps) {
       delete require.cache[file]
     }
-    let newConfig = validateConfig(resolveConfig(loadConfig(userConfigPath)))
+    let newConfig = validateConfig(
+      resolveConfig({ theme: cssThemeValues }, loadConfig(userConfigPath))
+    )
     let newHash = hash(newConfig)
     configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
     return [newConfig, userConfigPath, newHash, newDeps]
   }
 
   // It's a plain object, not a path
-  let newConfig = resolveConfig(configOrPath?.config ?? configOrPath ?? {})
+  let newConfig = resolveConfig(
+    { theme: cssThemeValues },
+    configOrPath?.config ?? configOrPath ?? {}
+  )
 
   newConfig = validateConfig(newConfig)
 
@@ -75,11 +80,11 @@ function getTailwindConfig(configOrPath) {
 // Retrieve an existing context from cache if possible (since contexts are unique per
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
-export default function setupTrackingContext(configOrPath) {
+export default function setupTrackingContext(configOrPath, cssThemeValues) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
       let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-        getTailwindConfig(configOrPath)
+        getTailwindConfig(configOrPath, cssThemeValues)
 
       let contextDependencies = new Set(configDependencies)
 

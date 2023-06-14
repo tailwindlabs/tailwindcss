@@ -23,7 +23,26 @@ module.exports = function tailwindcss(configOrPath) {
         // path for the file being processed
         configOrPath = findAtConfigPath(root, result) ?? configOrPath
 
-        let context = setupTrackingContext(configOrPath)
+        // Begin CSS-first theme configuration proof-of-concept
+        let themeValues = { extend: { colors: {} } }
+
+        root.each((node) => {
+          if (node.type === 'rule' && node.selector === ':theme') {
+            // Walk :theme pseudo and extract values
+            node.walkDecls((decl) => {
+              if (decl.prop.startsWith('--colors-')) {
+                themeValues.extend.colors[decl.prop.slice(9)] = decl.value
+              }
+            })
+
+            node.remove()
+          }
+        })
+
+        // context.tailwindConfig.theme
+        // End CSS-first theme configuration proof-of-concept
+
+        let context = setupTrackingContext(configOrPath, themeValues)
 
         if (root.type === 'document') {
           let roots = root.nodes.filter((node) => node.type === 'root')
