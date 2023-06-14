@@ -80,7 +80,7 @@ function getTailwindConfig(configOrPath, cssThemeValues) {
 // Retrieve an existing context from cache if possible (since contexts are unique per
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
-export default function setupTrackingContext(configOrPath, cssThemeValues) {
+export default function setupTrackingContext(configOrPath, cssThemeValues = {}) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
       let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
