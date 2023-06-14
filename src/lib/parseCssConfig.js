@@ -1,10 +1,5 @@
 // @ts-check
 
-// config[plugin] = null // Remomve from base config
-// config[plugin][key] = null // not supported
-// config[plugin] = "anything" // not supported
-// config[plugin][key] = "foo" // not supported
-
 /**
  * @typedef {[plugin: string|null, key: string[]|null, option: string|null]} ConfigPath
  */
@@ -172,6 +167,8 @@ export class CssBasedConfig {
   }
 
   get prefixPluginMap() {
+    // TODO: Maybe build this based on a list of registered plugins
+    // Or maybe a plugin can register namespaces themselves?
     return {
       'colors': 'colors',
       'spacing': 'spacing',
