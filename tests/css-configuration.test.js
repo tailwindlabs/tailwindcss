@@ -40,7 +40,7 @@ test('it does something', () => {
         --colors-mint-900: #043820;
         --colors-plum-50: #f8f6fe;
         --colors-plum-900: #120c64;
-        --colors-primary: theme(colors.mint-50);
+        --colors-primary: theme(colors.mint.50);
 
         --font-family-display: Graphik, sans-serif;
         --font-family-display--font-feature-settings: "cv11", "ss01";

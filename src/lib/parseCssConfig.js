@@ -1,5 +1,7 @@
 // @ts-check
 
+import { toPath } from '../util/toPath.js'
+
 /**
  * Find and convert the `:theme` rule to a configuration object
  * This is merged with the user's JS config
@@ -77,26 +79,35 @@ function parseVariable(config, decl) {
   // All other cases are config keys in a plugin
   config.extend[plugin] ??= {}
 
-  if (!option) {
-    config.extend[plugin][keypath] = value
-    return
+  let [path, key] = [
+    keypath.slice(0, -1),
+    keypath[keypath.length-1],
+  ]
+
+  let obj = config.extend[plugin]
+  let segment
+  while (segment = path.shift()) {
+    obj[segment] ??= {}
+    obj = obj[segment]
   }
 
-  if (!Array.isArray(config.extend[plugin][keypath])) {
-    config.extend[plugin][keypath] = [
-      config.extend[plugin][keypath],
-      {}
-    ]
-  }
+  if (option) {
+    // TODO: This is weird
+    if (!Array.isArray(obj[key])) {
+      obj[key] = [obj[key], {}]
+    }
 
-  config.extend[plugin][keypath][1][option] = value
+    obj[key][1][option] = value
+  } else {
+    obj[key] = value
+  }
 }
 
 /**
  * Parse a key into one or more actions that modify the config and/or CSS
  *
  * @param {string} name
- * @returns {[plugin: string|null, keypath: string|null, option: string|null]}
+ * @returns {[plugin: string|null, keypath: string[]|null, option: string|null]}
  */
 function parseVariableName(name) {
   const prefixPluginMap = {
@@ -136,7 +147,13 @@ function parseVariableName(name) {
       return [plugin, null, null]
     }
 
-    return [plugin, keypath, option === null ? null : camelize(option)]
+    option = option === null ? null : camelize(option);
+
+    if (plugin === 'colors') {
+      return [plugin, keypath.split('-'), option]
+    }
+
+    return [plugin, [keypath], option]
   }
 
   return [null, null, null]
