@@ -23,7 +23,8 @@ export function parseCssConfig(root) {
     }
   })
 
-  theme.remove()
+  // Allow the variables to be used with var() anywhere in CSS
+  theme.selector = ':root'
 
   return config
 }

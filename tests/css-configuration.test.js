@@ -32,6 +32,9 @@ test('it does something', () => {
         --tw-text-opacity: 1;
         color: rgb(250 202 222 / var(--tw-text-opacity));
       }
+      :root {
+        --colors-potato: #facade;
+      }
     `)
   })
 })
