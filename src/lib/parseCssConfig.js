@@ -5,6 +5,10 @@
 // config[plugin] = "anything" // not supported
 // config[plugin][key] = "foo" // not supported
 
+/**
+ * @typedef {[plugin: string|null, key: string[]|null, option: string|null]} ConfigPath
+ */
+
 export class CssBasedConfig {
   /** @type {*} */
   config = {};
@@ -130,7 +134,7 @@ export class CssBasedConfig {
    * - An "option" which is a key into the "options" object when a Tuple-like value is used
    *
    * @param {string} name
-   * @returns {[plugin: string|null, keypath: string[]|null, option: string|null]}
+   * @returns {ConfigPath}
    */
   parseVariableName(name) {
     // Unescape the name if needed
