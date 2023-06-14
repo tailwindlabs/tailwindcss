@@ -10,31 +10,24 @@
 export function parseCssConfig(root) {
   let config = { extend: { colors: {} } }
 
-  let theme = root.nodes.find(node => node.type === 'rule' && node.selector === ':theme')
-  if (!theme) return config
+  root.each(node => {
+    if (node.type !== 'rule' || node.selector !== ':theme') return
 
-  theme.walkDecls((decl) => {
-    if (decl.prop.startsWith('--')) {
-      parseVariable(config, decl)
-    } else {
-      // Only CSS variables are allowed in the theme rule
-      // TODO: Maybe turn this into an error?
-      decl.remove()
-    }
+    node.walkDecls((decl) => {
+      if (decl.prop.startsWith('--')) {
+        parseVariable(config, decl)
+      } else {
+        // Only CSS variables are allowed in the theme rule
+        // TODO: Maybe turn this into an error?
+        decl.remove()
+      }
+    })
+
+    // Allow the variables to be used with var() anywhere in CSS
+    node.selector = ':root'
   })
 
-  // Allow the variables to be used with var() anywhere in CSS
-  theme.selector = ':root'
-
   return config
-}
-
-let prefixPluginMap = {
-  'colors': 'colors',
-  'spacing': 'spacing',
-  'font-family': 'fontFamily',
-  'font-size': 'fontSize',
-  'shadow': 'boxShadow',
 }
 
 /**
@@ -103,6 +96,14 @@ function parseVariable(config, decl) {
  * @returns {[plugin: string|null, keypath: string|null, option: string|null]}
  */
 function parseVariableName(name) {
+  const prefixPluginMap = {
+    'colors': 'colors',
+    'spacing': 'spacing',
+    'font-family': 'fontFamily',
+    'font-size': 'fontSize',
+    'shadow': 'boxShadow',
+  }
+
   // Unescape the name if needed
   // This is needed for CSS variables that contain special characters
   name = name.replace(/\\/g, '')
@@ -130,10 +131,6 @@ function parseVariableName(name) {
     if (keypath === '') {
       return [plugin, null, null]
     }
-
-    console.log({
-      opt: option ? camelize(option) : option,
-    })
 
     return [plugin, keypath, option === null ? null : camelize(option)]
   }
