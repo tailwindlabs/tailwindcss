@@ -52,6 +52,9 @@ function parseVariable(config, decl) {
     decl.remove()
 
     return
+  } else if (keypath !== null && value === 'unset') {
+    // when using `--plugin-key: unset` we want to remove that from the config
+    throw new Error("Not implemented yet")
   }
 
   // When using `--some-plugin: initial` it should reset to the default value for that key
@@ -102,6 +105,7 @@ function parseVariableName(name) {
     'font-family': 'fontFamily',
     'font-size': 'fontSize',
     'shadow': 'boxShadow',
+    'blur': 'blur',
   }
 
   // Unescape the name if needed
