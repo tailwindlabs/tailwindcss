@@ -28,7 +28,7 @@ function getCandidateFiles(context, tailwindConfig) {
 }
 
 // Get the config object based on a path
-function getTailwindConfig(configOrPath, cssThemeValues) {
+function getTailwindConfig(configOrPath, cssThemeValues = {}) {
   let userConfigPath = resolveConfigPath(configOrPath)
 
   if (userConfigPath !== null) {
@@ -57,7 +57,7 @@ function getTailwindConfig(configOrPath, cssThemeValues) {
       delete require.cache[file]
     }
     let newConfig = validateConfig(
-      resolveConfig({ theme: cssThemeValues }, loadConfig(userConfigPath))
+      resolveConfig(loadConfig(userConfigPath), { theme: cssThemeValues })
     )
     let newHash = hash(newConfig)
     configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
@@ -66,8 +66,8 @@ function getTailwindConfig(configOrPath, cssThemeValues) {
 
   // It's a plain object, not a path
   let newConfig = resolveConfig(
-    { theme: cssThemeValues },
-    configOrPath?.config ?? configOrPath ?? {}
+    configOrPath?.config ?? configOrPath ?? {},
+    { theme: cssThemeValues }
   )
 
   newConfig = validateConfig(newConfig)
