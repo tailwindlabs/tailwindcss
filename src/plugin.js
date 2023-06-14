@@ -6,6 +6,7 @@ import processTailwindFeatures from './processTailwindFeatures'
 import { env } from './lib/sharedState'
 import { findAtConfigPath } from './lib/findAtConfigPath'
 import { handleImportAtRules } from './lib/handleImportAtRules'
+import { parseCssConfig } from './lib/parseCssConfig'
 
 module.exports = function tailwindcss(configOrPath) {
   return {
@@ -23,24 +24,8 @@ module.exports = function tailwindcss(configOrPath) {
         // path for the file being processed
         configOrPath = findAtConfigPath(root, result) ?? configOrPath
 
-        // Begin CSS-first theme configuration proof-of-concept
-        let themeValues = { extend: { colors: {} } }
-
-        root.each((node) => {
-          if (node.type === 'rule' && node.selector === ':theme') {
-            // Walk :theme pseudo and extract values
-            node.walkDecls((decl) => {
-              if (decl.prop.startsWith('--colors-')) {
-                themeValues.extend.colors[decl.prop.slice(9)] = decl.value
-              }
-            })
-
-            node.remove()
-          }
-        })
-
-        // context.tailwindConfig.theme
-        // End CSS-first theme configuration proof-of-concept
+        // Parse any CSS-based config values from `:theme` rules
+        let themeValues = parseCssConfig(root)
 
         let context = setupTrackingContext(configOrPath, themeValues)
 
