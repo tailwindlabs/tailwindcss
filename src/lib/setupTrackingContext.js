@@ -12,6 +12,7 @@ import { validateConfig } from '../util/validateConfig.js'
 import { parseCandidateFiles, resolvedChangedContent } from './content.js'
 import { loadConfig } from '../lib/load-config'
 import getModuleDependencies from './getModuleDependencies'
+import { CssBasedConfig } from './parseCssConfig.js'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -80,9 +81,12 @@ function getTailwindConfig(configOrPath, cssThemeValues = {}) {
 // Retrieve an existing context from cache if possible (since contexts are unique per
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
-export default function setupTrackingContext(configOrPath, cssThemeValues = {}) {
+export default function setupTrackingContext(configOrPath) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
+      // Parse any CSS-based config values from `:theme` rules
+      let cssThemeValues = new CssBasedConfig().parse(root)
+
       let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
         getTailwindConfig(configOrPath, cssThemeValues)
 

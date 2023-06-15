@@ -5,8 +5,9 @@
  */
 
 export class CssBasedConfig {
-  /** @type {*} */
-  config = {};
+  constructor() {
+    this.config = {}
+  }
 
   /**
    * Find and convert the `:theme` rule to a configuration object
