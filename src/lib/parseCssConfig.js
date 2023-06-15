@@ -170,6 +170,7 @@ export class CssBasedConfig {
     // TODO: Maybe build this based on a list of registered plugins
     // Or maybe a plugin can register namespaces themselves?
     return {
+      'animation': 'animation',
       'colors': 'colors',
       'spacing': 'spacing',
       'font-family': 'fontFamily',

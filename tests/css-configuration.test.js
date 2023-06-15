@@ -61,6 +61,9 @@ test('it does something', () => {
     config
   ).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .animate-flash {
+        animation: 1s flash;
+      }
       .px-1\/2 {
         padding-left: 50%;
         padding-right: 50%;
