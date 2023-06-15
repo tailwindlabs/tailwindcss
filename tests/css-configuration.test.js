@@ -23,6 +23,7 @@ test('it does something', () => {
           <div class="px-1/4"></div>
           <div class="px-1/2"></div>
           <div class="px-3/4"></div>
+          <div class="px-2xl"></div>
           <div class="shadow"></div>
           <div class="animate-flash"></div>
         `,
@@ -51,6 +52,7 @@ test('it does something', () => {
         --spacing-1\/4: 25%;
         --spacing-1\/2: 50%;
         --spacing-3\/4: 75%;
+        --spacing-\32 xl: 20rem;
 
         --shadow--default: 0 3px 5px -2px hsl(220 3% 15% / 4%), 0 7px 14px -5px hsl(220
                 3% 15% / 6%);
@@ -71,6 +73,10 @@ test('it does something', () => {
       .px-1\/4 {
         padding-left: 25%;
         padding-right: 25%;
+      }
+      .px-2xl {
+        padding-left: 20rem;
+        padding-right: 20rem;
       }
       .px-3\/4 {
         padding-left: 75%;
@@ -122,6 +128,7 @@ test('it does something', () => {
         --spacing-1\/4: 25%;
         --spacing-1\/2: 50%;
         --spacing-3\/4: 75%;
+        --spacing-2xl: 20rem;
         --shadow--default: 0 3px 5px -2px #2526270a, 0 7px 14px -5px #2526270f;
         --animation-flash: flash 1s;
       }

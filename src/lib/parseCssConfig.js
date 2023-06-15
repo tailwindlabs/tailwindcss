@@ -128,7 +128,7 @@ export class CssBasedConfig {
   parseVariableName(name) {
     // Unescape the name if needed
     // This is needed for CSS variables that contain special characters
-    name = name.replace(/\\/g, '')
+    name = unescape(name)
 
     for (const [prefix, plugin] of Object.entries(this.prefixPluginMap)) {
       if (!name.startsWith(prefix)) continue
@@ -187,4 +187,18 @@ export class CssBasedConfig {
  */
 function camelize(str) {
   return str.replace(/-([a-zA-Z])/g, (v) => v.slice(1).toUpperCase())
+}
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+function unescape(str) {
+  let pattern = /\\([0-9a-fA-F]{1,6}[\t\n\f\r ]?|[\S\s])/g
+
+  return str.replace(pattern, (match) =>
+    match.length > 2
+      ? String.fromCodePoint(parseInt(match.slice(1).trimEnd(), 16))
+      : match[1]
+  )
 }
