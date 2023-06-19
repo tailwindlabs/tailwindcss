@@ -176,7 +176,7 @@ export class CssBasedConfig {
       'spacing': 'spacing',
       'font-family': 'fontFamily',
       'font-size': 'fontSize',
-      'shadow': 'boxShadow',
+      // 'shadow': 'boxShadow',
       'blur': 'blur',
     }
   }
