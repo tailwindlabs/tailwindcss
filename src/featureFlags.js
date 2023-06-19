@@ -3,7 +3,7 @@ import log from './util/log'
 
 let defaults = {
   optimizeUniversalDefaults: false,
-  disableColorOpacityUtilitiesByDefault: false,
+  disableColorOpacityUtilitiesByDefault: true,
   relativeContentPathsByDefault: false,
   oxideParser: true,
   logicalSiblingUtilities: false,
