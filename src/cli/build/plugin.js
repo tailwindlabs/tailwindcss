@@ -25,6 +25,7 @@ import getModuleDependencies from '../../lib/getModuleDependencies'
 import { validateConfig } from '../../util/validateConfig'
 import { handleImportAtRules } from '../../lib/handleImportAtRules'
 import { flagEnabled } from '../../featureFlags'
+import { CssBasedConfig } from '../../lib/parseCssConfig.js'
 
 async function lightningcss(result, { map = true, minify = true } = {}) {
   try {
@@ -156,7 +157,7 @@ let state = {
     }
   },
 
-  loadConfig(configPath, content) {
+  loadConfig(configPath, content, cssThemeValues) {
     if (this.watcher && configPath) {
       this.refreshConfigDependencies()
     }
@@ -173,7 +174,7 @@ let state = {
       },
     }
 
-    this.configBag.config = validateConfig(resolveConfig(this.configBag.config))
+    this.configBag.config = validateConfig(resolveConfig(this.configBag.config, { theme: cssThemeValues }))
 
     // Override content files if `--content` has been passed explicitly
     if (content?.length > 0) {
@@ -222,7 +223,7 @@ let state = {
     return content
   },
 
-  getContext({ createContext, cliConfigPath, root, result, content }) {
+  getContext({ createContext, cliConfigPath, root, result, content, cssThemeValues }) {
     if (this.context) {
       this.context.changedContent = this.changedContent.splice(0)
 
@@ -234,7 +235,7 @@ let state = {
     env.DEBUG && console.timeEnd('Searching for config')
 
     env.DEBUG && console.time('Loading config')
-    let config = this.loadConfig(configPath, content)
+    let config = this.loadConfig(configPath, content, cssThemeValues)
     env.DEBUG && console.timeEnd('Loading config')
 
     env.DEBUG && console.time('Creating context')
@@ -291,6 +292,9 @@ export async function createProcessor(args, cliConfigPath) {
     return {
       postcssPlugin: 'tailwindcss',
       Once(root, { result }) {
+        // Parse any CSS-based config values from `:theme` rules
+        let cssThemeValues = new CssBasedConfig().parse(root)
+
         env.DEBUG && console.time('Compiling CSS')
         tailwind(({ createContext }) => {
           console.error()
@@ -303,6 +307,7 @@ export async function createProcessor(args, cliConfigPath) {
               root,
               result,
               content,
+              cssThemeValues,
             })
           }
         })(root, result)
