@@ -17,16 +17,29 @@ export default function (prefix, selector, prependNegative = false) {
     return selector
   }
 
+  /** @type {import('postcss-selector-parser').Root} */
   let ast = typeof selector === 'string' ? parser().astSync(selector) : selector
 
-  ast.walkClasses((classSelector) => {
-    let baseClass = classSelector.value
-    let shouldPlaceNegativeBeforePrefix = prependNegative && baseClass.startsWith('-')
+  // ast.walk bails too early when returning so it's not usable here
+  function prefixClasses(node) {
+    // Prefix any classes we find
+    if (node.type === 'class') {
+      let baseClass = node.value
+      let shouldPlaceNegativeBeforePrefix = prependNegative && baseClass.startsWith('-')
 
-    classSelector.value = shouldPlaceNegativeBeforePrefix
-      ? `-${prefix}${baseClass.slice(1)}`
-      : `${prefix}${baseClass}`
-  })
+      node.value = shouldPlaceNegativeBeforePrefix
+        ? `-${prefix}${baseClass.slice(1)}`
+        : `${prefix}${baseClass}`
+      return
+    }
+
+    // Keep looking for classes
+    if (node.length) {
+      node.each(prefixClasses)
+    }
+  }
+
+  ast.each(prefixClasses)
 
   return typeof selector === 'string' ? ast.toString() : ast
 }
