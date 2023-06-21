@@ -277,3 +277,33 @@ test('with dots in the name and prefix', () => {
     `)
   })
 })
+
+test('special character prefixes are escaped in animation names', () => {
+  let config = {
+    prefix: '@',
+    content: [{ raw: `<div class="@animate-one"></div>` }],
+    theme: {
+      extend: {
+        keyframes: {
+          one: { to: { transform: 'rotate(360deg)' } },
+        },
+        animation: {
+          one: 'one 2s',
+        },
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      @keyframes \@one {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .\@animate-one {
+        animation: 2s \@one;
+      }
+    `)
+  })
+})
