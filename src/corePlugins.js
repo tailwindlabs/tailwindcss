@@ -933,7 +933,7 @@ export let corePlugins = {
   },
 
   animation: ({ matchUtilities, theme, config }) => {
-    let prefixName = (name) => `${config('prefix')}${escapeClassName(name)}`
+    let prefixName = (name) => escapeClassName(config('prefix') + name)
     let keyframes = Object.fromEntries(
       Object.entries(theme('keyframes') ?? {}).map(([key, value]) => {
         return [key, { [`@keyframes ${prefixName(key)}`]: value }]
