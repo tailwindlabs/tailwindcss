@@ -120,7 +120,8 @@ describe('Build command', () => {
     // This contains --webkit-user-select which may be strange, but it is expected because we are
     // not handling the `--no-autoprefixer` flag anymore at all.
     expect(withoutAutoprefixer).toMatchInlineSnapshot(`
-      ".select-none {
+      "/* ! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com */
+      .select-none {
         -webkit-user-select: none;
         user-select: none;
       }
