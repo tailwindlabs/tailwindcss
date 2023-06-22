@@ -26,6 +26,10 @@ import { validateConfig } from '../../util/validateConfig'
 import { handleImportAtRules } from '../../lib/handleImportAtRules'
 import { flagEnabled } from '../../featureFlags'
 
+function license() {
+  return `/* ! tailwindcss v${pkg.version} | MIT License | https://tailwindcss.com */\n`
+}
+
 async function lightningcss(result, { map = true, minify = true } = {}) {
   try {
     let resolvedBrowsersListConfig = browserslist.findConfig(
@@ -377,12 +381,12 @@ export async function createProcessor(args, cliConfigPath) {
       })
       .then((result) => {
         if (!output) {
-          process.stdout.write(result.css)
+          process.stdout.write(license() + result.css)
           return
         }
 
         return Promise.all([
-          outputFile(result.opts.to, result.css),
+          outputFile(result.opts.to, license() + result.css),
           result.map && outputFile(result.opts.to + '.map', result.map.toString()),
         ])
       })

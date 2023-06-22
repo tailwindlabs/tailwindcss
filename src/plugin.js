@@ -6,6 +6,11 @@ import processTailwindFeatures from './processTailwindFeatures'
 import { env } from './lib/sharedState'
 import { findAtConfigPath } from './lib/findAtConfigPath'
 import { handleImportAtRules } from './lib/handleImportAtRules'
+import { version as tailwindVersion } from '../package.json'
+
+function license() {
+  return `/* ! tailwindcss v${tailwindVersion} | MIT License | https://tailwindcss.com */\n`
+}
 
 module.exports = function tailwindcss(configOrPath) {
   return {
@@ -87,7 +92,7 @@ module.exports = function tailwindcss(configOrPath) {
             }
           }
 
-          result.root = postcss.parse(code, {
+          result.root = postcss.parse(license() + code, {
             ...result.opts,
             map: intermediateMap,
           })
