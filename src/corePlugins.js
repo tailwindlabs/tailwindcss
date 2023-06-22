@@ -10,7 +10,6 @@ import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
 import toColorValue from './util/toColorValue'
 import isPlainObject from './util/isPlainObject'
 import transformThemeValue from './util/transformThemeValue'
-import { version as tailwindVersion } from '../package.json'
 import log from './util/log'
 import {
   normalizeScreens,
@@ -496,12 +495,7 @@ export let corePlugins = {
       fs.readFileSync(path.join(__dirname, './css/preflight.css'), 'utf8')
     )
 
-    addBase([
-      postcss.comment({
-        text: `! tailwindcss v${tailwindVersion} | MIT License | https://tailwindcss.com`,
-      }),
-      ...preflightStyles.nodes,
-    ])
+    addBase(preflightStyles.nodes)
   },
 
   container: (() => {
