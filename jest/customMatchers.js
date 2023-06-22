@@ -1,6 +1,11 @@
 const prettier = require('prettier')
 const { diff } = require('jest-diff')
 const log = require('../src/util/log').default
+const { version } = require('../package.json')
+
+function license() {
+  return `/* ! tailwindcss v${version} | MIT License | https://tailwindcss.com */\n`
+}
 
 let warn
 
@@ -30,6 +35,11 @@ function toMatchFormattedCss(received = '', argument = '') {
     isNot: this.isNot,
     promise: this.promise,
   }
+
+  // Drop the license from the tests such that we can purely focus on the actual CSS being
+  // generated.
+  received = received.replace(license(), '')
+  argument = argument.replace(license(), '')
 
   let formattedReceived = format(received)
   let formattedArgument = format(argument)
