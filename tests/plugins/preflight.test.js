@@ -1,4 +1,4 @@
-import { run, html, css } from './util/run'
+import { run, html, css } from '../util/run'
 
 it('preflight has a correct border color fallback', () => {
   let config = {
