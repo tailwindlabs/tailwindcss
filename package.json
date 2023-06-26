@@ -62,7 +62,7 @@
     "@alloc/quick-lru": "^5.2.0",
     "@tailwindcss/oxide": "file:oxide/crates/node",
     "arg": "^5.0.2",
-    "browserslist": "^4.21.7",
+    "browserslist": "^4.21.9",
     "chokidar": "^3.5.3",
     "didyoumean": "^1.2.2",
     "dlv": "^1.1.3",
