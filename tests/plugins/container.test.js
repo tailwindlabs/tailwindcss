@@ -1,4 +1,4 @@
-import { run, html, css } from './util/run'
+import { run, html, css } from '../util/run'
 
 test('options are not required', () => {
   let config = { content: [{ raw: html`<div class="container"></div>` }] }
