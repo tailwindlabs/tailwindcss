@@ -1,0 +1,294 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'width' plugin 1`] = `
+"
+.w-0 {
+  width: 0;
+}
+
+.w-0\\.5 {
+  width: .125rem;
+}
+
+.w-1 {
+  width: .25rem;
+}
+
+.w-1\\.5 {
+  width: .375rem;
+}
+
+.w-1\\/12 {
+  width: 8.33333%;
+}
+
+.w-1\\/2 {
+  width: 50%;
+}
+
+.w-1\\/3 {
+  width: 33.3333%;
+}
+
+.w-1\\/4 {
+  width: 25%;
+}
+
+.w-1\\/5 {
+  width: 20%;
+}
+
+.w-1\\/6 {
+  width: 16.6667%;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.w-10\\/12 {
+  width: 83.3333%;
+}
+
+.w-11 {
+  width: 2.75rem;
+}
+
+.w-11\\/12 {
+  width: 91.6667%;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.w-14 {
+  width: 3.5rem;
+}
+
+.w-16 {
+  width: 4rem;
+}
+
+.w-2 {
+  width: .5rem;
+}
+
+.w-2\\.5 {
+  width: .625rem;
+}
+
+.w-2\\/12 {
+  width: 16.6667%;
+}
+
+.w-2\\/3 {
+  width: 66.6667%;
+}
+
+.w-2\\/4 {
+  width: 50%;
+}
+
+.w-2\\/5 {
+  width: 40%;
+}
+
+.w-2\\/6 {
+  width: 33.3333%;
+}
+
+.w-20 {
+  width: 5rem;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.w-28 {
+  width: 7rem;
+}
+
+.w-3 {
+  width: .75rem;
+}
+
+.w-3\\.5 {
+  width: .875rem;
+}
+
+.w-3\\/12 {
+  width: 25%;
+}
+
+.w-3\\/4 {
+  width: 75%;
+}
+
+.w-3\\/5 {
+  width: 60%;
+}
+
+.w-3\\/6 {
+  width: 50%;
+}
+
+.w-32 {
+  width: 8rem;
+}
+
+.w-36 {
+  width: 9rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.w-4\\/12 {
+  width: 33.3333%;
+}
+
+.w-4\\/5 {
+  width: 80%;
+}
+
+.w-4\\/6 {
+  width: 66.6667%;
+}
+
+.w-40 {
+  width: 10rem;
+}
+
+.w-44 {
+  width: 11rem;
+}
+
+.w-48 {
+  width: 12rem;
+}
+
+.w-5 {
+  width: 1.25rem;
+}
+
+.w-5\\/12 {
+  width: 41.6667%;
+}
+
+.w-5\\/6 {
+  width: 83.3333%;
+}
+
+.w-52 {
+  width: 13rem;
+}
+
+.w-56 {
+  width: 14rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-6\\/12 {
+  width: 50%;
+}
+
+.w-60 {
+  width: 15rem;
+}
+
+.w-64 {
+  width: 16rem;
+}
+
+.w-7 {
+  width: 1.75rem;
+}
+
+.w-7\\/12 {
+  width: 58.3333%;
+}
+
+.w-72 {
+  width: 18rem;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-8\\/12 {
+  width: 66.6667%;
+}
+
+.w-80 {
+  width: 20rem;
+}
+
+.w-9 {
+  width: 2.25rem;
+}
+
+.w-9\\/12 {
+  width: 75%;
+}
+
+.w-96 {
+  width: 24rem;
+}
+
+.w-\\[12px\\] {
+  width: 12px;
+}
+
+.w-\\[var\\(--my-value\\)\\] {
+  width: var(--my-value);
+}
+
+.w-auto {
+  width: auto;
+}
+
+.w-dvw {
+  width: 100dvw;
+}
+
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-lvw {
+  width: 100lvw;
+}
+
+.w-max {
+  width: max-content;
+}
+
+.w-min {
+  width: min-content;
+}
+
+.w-px {
+  width: 1px;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.w-svw {
+  width: 100svw;
+}
+"
+`;

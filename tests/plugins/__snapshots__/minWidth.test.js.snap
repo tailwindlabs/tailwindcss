@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'minWidth' plugin 1`] = `
+"
+.min-w-0 {
+  min-width: 0;
+}
+
+.min-w-\\[12px\\] {
+  min-width: 12px;
+}
+
+.min-w-\\[var\\(--my-value\\)\\] {
+  min-width: var(--my-value);
+}
+
+.min-w-fit {
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+}
+
+.min-w-full {
+  min-width: 100%;
+}
+
+.min-w-max {
+  min-width: max-content;
+}
+
+.min-w-min {
+  min-width: min-content;
+}
+"
+`;

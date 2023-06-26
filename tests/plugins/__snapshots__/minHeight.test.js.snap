@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'minHeight' plugin 1`] = `
+"
+.min-h-0 {
+  min-height: 0;
+}
+
+.min-h-\\[12px\\] {
+  min-height: 12px;
+}
+
+.min-h-\\[var\\(--my-value\\)\\] {
+  min-height: var(--my-value);
+}
+
+.min-h-dvh {
+  min-height: 100dvh;
+}
+
+.min-h-fit {
+  min-height: -moz-fit-content;
+  min-height: fit-content;
+}
+
+.min-h-full {
+  min-height: 100%;
+}
+
+.min-h-lvh {
+  min-height: 100lvh;
+}
+
+.min-h-max {
+  min-height: max-content;
+}
+
+.min-h-min {
+  min-height: min-content;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.min-h-svh {
+  min-height: 100svh;
+}
+"
+`;
