@@ -26,6 +26,7 @@ jobs:
 
     name: Build ${{ matrix.target }} (OXIDE)
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v3
 
