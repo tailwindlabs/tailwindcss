@@ -26,6 +26,7 @@ jobs:
 
     name: Build ${{ matrix.target }} (OXIDE)
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v3
 
@@ -96,6 +97,7 @@ jobs:
   build-apple-silicon:
     name: Build Apple Silicon (OXIDE)
     runs-on: macos-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v3
 
@@ -186,6 +188,7 @@ jobs:
 
     name: Build ${{ matrix.target }} (OXIDE)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     container:
       image: ${{ matrix.image }}
 
@@ -262,6 +265,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     name: Build and release
     needs:
       - build
@@ -353,6 +357,7 @@ jobs:
 
   tailwind-release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     name: Build and release Tailwind CSS
 
     needs:
