@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `repeating-conic-gradient` is detected as an image ([#11180](https://github.com/tailwindlabs/tailwindcss/pull/11180))
 - Move unknown pseudo-elements outside of `:is` by default ([#11345](https://github.com/tailwindlabs/tailwindcss/pull/11345))
 - Escape animation names when prefixes contain special characters ([#11470](https://github.com/tailwindlabs/tailwindcss/pull/11470))
+- Don't prefix arbitrary classes in `group` and `peer` variants ([#11454](https://github.com/tailwindlabs/tailwindcss/pull/11454))
 - Sort classes using position of first matching rule ([#11504](https://github.com/tailwindlabs/tailwindcss/pull/11504))
 - Allow variant to be an at-rule without a prelude ([#11589](https://github.com/tailwindlabs/tailwindcss/pull/11589))
 - Make PostCSS plugin async to improve performance ([#11548](https://github.com/tailwindlabs/tailwindcss/pull/11548))

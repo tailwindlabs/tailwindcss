@@ -6,7 +6,7 @@ crosscheck(() => {
     let selector = '.text-center'
     let candidate = 'hover:text-center'
 
-    let formats = [{ format: '&:hover', isArbitraryVariant: false }]
+    let formats = [{ format: '&:hover', respectPrefix: true }]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual('.hover\\:text-center:hover')
   })
@@ -16,8 +16,8 @@ crosscheck(() => {
     let candidate = 'focus:hover:text-center'
 
     let formats = [
-      { format: '&:hover', isArbitraryVariant: false },
-      { format: '&:focus', isArbitraryVariant: false },
+      { format: '&:hover', respectPrefix: true },
+      { format: '&:focus', respectPrefix: true },
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -29,7 +29,7 @@ crosscheck(() => {
     let selector = '.bg-\\[rgba\\(0\\,0\\,0\\)\\]'
     let candidate = 'hover:bg-[rgba(0,0,0)]'
 
-    let formats = [{ format: '&:hover', isArbitraryVariant: false }]
+    let formats = [{ format: '&:hover', respectPrefix: true }]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.hover\\:bg-\\[rgba\\(0\\2c 0\\2c 0\\)\\]:hover'
@@ -40,7 +40,7 @@ crosscheck(() => {
     let selector = '.bg-\\[rgba\\(0\\2c 0\\2c 0\\)\\]'
     let candidate = 'hover:bg-[rgba(0,0,0)]'
 
-    let formats = [{ format: '&:hover', isArbitraryVariant: false }]
+    let formats = [{ format: '&:hover', respectPrefix: true }]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.hover\\:bg-\\[rgba\\(0\\2c 0\\2c 0\\)\\]:hover'
@@ -51,7 +51,7 @@ crosscheck(() => {
     let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
     let candidate = 'hover:space-x-4'
 
-    let formats = [{ format: '&:hover', isArbitraryVariant: false }]
+    let formats = [{ format: '&:hover', respectPrefix: true }]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.hover\\:space-x-4:hover > :not([hidden]) ~ :not([hidden])'
@@ -63,9 +63,9 @@ crosscheck(() => {
     let candidate = 'disabled:focus:hover:space-x-4'
 
     let formats = [
-      { format: '&:hover', isArbitraryVariant: false },
-      { format: '&:focus', isArbitraryVariant: false },
-      { format: '&:disabled', isArbitraryVariant: false },
+      { format: '&:hover', respectPrefix: true },
+      { format: '&:focus', respectPrefix: true },
+      { format: '&:disabled', respectPrefix: true },
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -77,7 +77,7 @@ crosscheck(() => {
     let selector = '.text-center'
     let candidate = 'group-hover:text-center'
 
-    let formats = [{ format: ':merge(.group):hover &', isArbitraryVariant: false }]
+    let formats = [{ format: ':merge(.group):hover &', respectPrefix: true }]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.group:hover .group-hover\\:text-center'
@@ -89,8 +89,8 @@ crosscheck(() => {
     let candidate = 'group-focus:group-hover:text-center'
 
     let formats = [
-      { format: ':merge(.group):hover &', isArbitraryVariant: false },
-      { format: ':merge(.group):focus &', isArbitraryVariant: false },
+      { format: ':merge(.group):hover &', respectPrefix: true },
+      { format: ':merge(.group):focus &', respectPrefix: true },
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -102,7 +102,7 @@ crosscheck(() => {
     let selector = '.space-x-4 ~ :not([hidden]) ~ :not([hidden])'
     let candidate = 'group-hover:space-x-4'
 
-    let formats = [{ format: ':merge(.group):hover &', isArbitraryVariant: false }]
+    let formats = [{ format: ':merge(.group):hover &', respectPrefix: true }]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
       '.group:hover .group-hover\\:space-x-4 ~ :not([hidden]) ~ :not([hidden])'
@@ -114,8 +114,8 @@ crosscheck(() => {
     let candidate = 'group-focus:group-hover:space-x-4'
 
     let formats = [
-      { format: ':merge(.group):hover &', isArbitraryVariant: false },
-      { format: ':merge(.group):focus &', isArbitraryVariant: false },
+      { format: ':merge(.group):hover &', respectPrefix: true },
+      { format: ':merge(.group):focus &', respectPrefix: true },
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -128,7 +128,7 @@ crosscheck(() => {
     let candidate = 'peer-focus:group-hover:text-center'
 
     let formats = [
-      { format: ':merge(.group):hover &', isArbitraryVariant: false },
+      { format: ':merge(.group):hover &', respectPrefix: true },
       { format: ':merge(.peer):focus ~ &' },
     ]
 
@@ -142,8 +142,8 @@ crosscheck(() => {
     let candidate = 'group-hover:peer-focus:text-center'
 
     let formats = [
-      { format: ':merge(.peer):focus ~ &', isArbitraryVariant: false },
-      { format: ':merge(.group):hover &', isArbitraryVariant: false },
+      { format: ':merge(.peer):focus ~ &', respectPrefix: true },
+      { format: ':merge(.group):hover &', respectPrefix: true },
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -156,10 +156,10 @@ crosscheck(() => {
     let candidate = 'peer-focus:group-focus:peer-hover:group-hover:foo'
 
     let formats = [
-      { format: ':merge(.group):hover &', isArbitraryVariant: false },
-      { format: ':merge(.peer):hover ~ &', isArbitraryVariant: false },
-      { format: ':merge(.group):focus &', isArbitraryVariant: false },
-      { format: ':merge(.peer):focus ~ &', isArbitraryVariant: false },
+      { format: ':merge(.group):hover &', respectPrefix: true },
+      { format: ':merge(.peer):hover ~ &', respectPrefix: true },
+      { format: ':merge(.group):focus &', respectPrefix: true },
+      { format: ':merge(.peer):focus ~ &', respectPrefix: true },
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -171,8 +171,8 @@ crosscheck(() => {
     let selector = '.text-center'
     let candidate = 'group-hover:prose-headings:text-center'
     let formats = [
-      { format: ':where(&) :is(h1, h2, h3, h4)', isArbitraryVariant: false }, // Prose Headings
-      { format: ':merge(.group):hover &', isArbitraryVariant: false }, // Group Hover
+      { format: ':where(&) :is(h1, h2, h3, h4)', respectPrefix: true }, // Prose Headings
+      { format: ':merge(.group):hover &', respectPrefix: true }, // Group Hover
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -184,8 +184,8 @@ crosscheck(() => {
     let selector = '.text-center'
     let candidate = 'prose-headings:group-hover:text-center'
     let formats = [
-      { format: ':merge(.group):hover &', isArbitraryVariant: false }, // Group Hover
-      { format: ':where(&) :is(h1, h2, h3, h4)', isArbitraryVariant: false }, // Prose Headings
+      { format: ':merge(.group):hover &', respectPrefix: true }, // Group Hover
+      { format: ':where(&) :is(h1, h2, h3, h4)', respectPrefix: true }, // Prose Headings
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -197,12 +197,12 @@ crosscheck(() => {
     let selector = '.space-x-4 > :not([hidden]) ~ :not([hidden])'
     let candidate = 'peer-disabled:peer-first-child:group-hover:group-focus:focus:hover:space-x-4'
     let formats = [
-      { format: '&:hover', isArbitraryVariant: false }, // Hover
-      { format: '&:focus', isArbitraryVariant: false }, // Focus
-      { format: ':merge(.group):focus &', isArbitraryVariant: false }, // Group focus
-      { format: ':merge(.group):hover &', isArbitraryVariant: false }, // Group hover
-      { format: ':merge(.peer):first-child ~ &', isArbitraryVariant: false }, // Peer first-child
-      { format: ':merge(.peer):disabled ~ &', isArbitraryVariant: false }, // Peer disabled
+      { format: '&:hover', respectPrefix: true }, // Hover
+      { format: '&:focus', respectPrefix: true }, // Focus
+      { format: ':merge(.group):focus &', respectPrefix: true }, // Group focus
+      { format: ':merge(.group):hover &', respectPrefix: true }, // Group hover
+      { format: ':merge(.peer):first-child ~ &', respectPrefix: true }, // Peer first-child
+      { format: ':merge(.peer):disabled ~ &', respectPrefix: true }, // Peer disabled
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -223,7 +223,7 @@ crosscheck(() => {
     let context = { tailwindConfig: { prefix: 'tw-' } }
     let selector = '.tw-text-center'
     let candidate = 'foo:tw-text-center'
-    let formats = [{ format: '.foo &', isArbitraryVariant: false }]
+    let formats = [{ format: '.foo &', respectPrefix: true }]
 
     expect(finalizeSelector(selector, formats, { candidate, context })).toEqual(
       '.tw-foo .foo\\:tw-text-center'
@@ -234,7 +234,7 @@ crosscheck(() => {
     let context = { tailwindConfig: { prefix: 'tw-' } }
     let selector = '.tw-text-center'
     let candidate = '[.foo_&]:tw-text-center'
-    let formats = [{ format: '.foo &', isArbitraryVariant: true }]
+    let formats = [{ format: '.foo &', respectPrefix: false }]
 
     expect(finalizeSelector(selector, formats, { candidate, context })).toEqual(
       '.foo .\\[\\.foo_\\&\\]\\:tw-text-center'
@@ -247,8 +247,8 @@ crosscheck(() => {
     let selector = '.text-center'
     let candidate = 'text-center'
     let formats = [
-      { format: ':merge(.group):focus > &', isArbitraryVariant: true },
-      { format: ':merge(.group):hover &', isArbitraryVariant: true },
+      { format: ':merge(.group):focus > &', respectPrefix: false },
+      { format: ':merge(.group):hover &', respectPrefix: false },
     ]
 
     expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -261,7 +261,7 @@ crosscheck(() => {
       let selector = '.placeholder-red-500::placeholder'
       let candidate = 'hover:placeholder-red-500'
 
-      let formats = [{ format: '&:hover', isArbitraryVariant: false }]
+      let formats = [{ format: '&:hover', respectPrefix: true }]
 
       expect(finalizeSelector(selector, formats, { candidate })).toEqual(
         '.hover\\:placeholder-red-500:hover::placeholder'
@@ -273,8 +273,8 @@ crosscheck(() => {
       let candidate = 'group-hover:hover:space-x-4'
 
       let formats = [
-        { format: '&:hover', isArbitraryVariant: false },
-        { format: ':merge(.group):hover &', isArbitraryVariant: false },
+        { format: '&:hover', respectPrefix: true },
+        { format: ':merge(.group):hover &', respectPrefix: true },
       ]
 
       expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -287,8 +287,8 @@ crosscheck(() => {
       let candidate = 'dark:group-hover:text-center'
 
       let formats = [
-        { format: ':merge(.group):hover &', isArbitraryVariant: false },
-        { format: '.dark &', isArbitraryVariant: false },
+        { format: ':merge(.group):hover &', respectPrefix: true },
+        { format: '.dark &', respectPrefix: true },
       ]
 
       expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -302,7 +302,7 @@ crosscheck(() => {
 
       let formats = [
         { format: '.dark &' },
-        { format: ':merge(.group):hover &', isArbitraryVariant: false },
+        { format: ':merge(.group):hover &', respectPrefix: true },
       ]
 
       expect(finalizeSelector(selector, formats, { candidate })).toEqual(
@@ -357,7 +357,7 @@ crosscheck(() => {
       ${'.parent::placeholder input'}                          | ${'.parent input::placeholder'}
       ${'.parent::backdrop dialog'}                            | ${'.parent dialog::backdrop'}
     `('should translate "$before" into "$after"', ({ before, after }) => {
-      let result = finalizeSelector('.a', [{ format: before, isArbitraryVariant: false }], {
+      let result = finalizeSelector('.a', [{ format: before, respectPrefix: true }], {
         candidate: 'a',
       })
 
