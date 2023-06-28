@@ -1,4 +1,3 @@
-import prefixSelector from '../src/util/prefixSelector'
 import { run, html, css, defaults } from './util/run'
 
 test('prefix', () => {
@@ -637,13 +636,4 @@ test('does not prefix arbitrary group/peer classes', async () => {
       display: flex;
     }
   `)
-})
-
-// Unit tests for prefixSelector
-describe('prefixSelector', () => {
-  it('works', () => {
-    expect(prefixSelector('tw-', '.foo', false)).toBe('.tw-foo')
-    expect(prefixSelector('tw-', '.foo.bar.baz', false)).toBe('.tw-foo.tw-bar.tw-baz')
-    expect(prefixSelector('tw-', '.foo:tw-no-prefix(.bar).baz', false)).toBe('.tw-foo.bar.tw-baz')
-  })
 })
