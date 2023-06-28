@@ -155,7 +155,6 @@ it('sorts based on first occurence of a candidate / rule', () => {
         addComponents({
           '.foo': { display: 'block' },
           '.foo-1': { display: 'block' },
-          '.foo-2': { display: 'block' },
           '.bar': { display: 'block' },
 
           // This rule matches both the candidate `foo` and `bar`
