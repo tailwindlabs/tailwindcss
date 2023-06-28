@@ -1,3 +1,4 @@
+import prefixSelector from '../src/util/prefixSelector'
 import { run, html, css, defaults } from './util/run'
 
 test('prefix', () => {
@@ -606,4 +607,43 @@ test('supports non-word prefixes (2)', async () => {
       background-color: red;
     }
   `)
+})
+
+test('does not prefix arbitrary group/peer classes', async () => {
+  let config = {
+    prefix: 'tw-',
+    content: [
+      {
+        raw: html`
+          <div class="tw-group tw-peer lol">
+            <div class="group-[&.lol]:tw-flex"></div>
+          </div>
+          <div class="peer-[&.lol]:tw-flex"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  const result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .tw-group.lol .group-\[\&\.lol\]\:tw-flex,
+    .tw-peer.lol ~ .peer-\[\&\.lol\]\:tw-flex {
+      display: flex;
+    }
+  `)
+})
+
+// Unit tests for prefixSelector
+describe('prefixSelector', () => {
+  it('works', () => {
+    expect(prefixSelector('tw-', '.foo', false)).toBe('.tw-foo')
+    expect(prefixSelector('tw-', '.foo.bar.baz', false)).toBe('.tw-foo.tw-bar.tw-baz')
+    expect(prefixSelector('tw-', '.foo:tw-no-prefix(.bar).baz', false)).toBe('.tw-foo.bar.tw-baz')
+  })
 })

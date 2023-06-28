@@ -22,6 +22,13 @@ export default function (prefix, selector, prependNegative = false) {
 
   // ast.walk bails too early when returning so it's not usable here
   function prefixClasses(node) {
+    // Here we look for `:tw-no-prefix` which is an *internal-use-only* marker
+    // used to stop traversal so we don't replace any classes inside it
+    if (node.type === 'pseudo' && node.value === ':tw-no-prefix') {
+      node.replaceWith(...node.nodes)
+      return
+    }
+
     // Prefix any classes we find
     if (node.type === 'class') {
       let baseClass = node.value

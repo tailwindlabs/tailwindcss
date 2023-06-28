@@ -187,9 +187,13 @@ export let variantPlugins = {
           }
 
           // Basically this but can handle quotes:
-          // result.replace(/&(\S+)?/g, (_, pseudo = '') => a + pseudo + b)
+          // result.replace(/&(\S+)?/g, (_, pseudo = '') => a + `:tw-no-prefix(${pseudo})` + b)
 
-          return result.slice(0, start) + a + result.slice(start + 1, end) + b + result.slice(end)
+          let pseudo = result.slice(start + 1, end)
+
+          pseudo = config('prefix') ? `:tw-no-prefix(${pseudo})` : pseudo
+
+          return result.slice(0, start) + a + pseudo + b + result.slice(end)
         },
         { values: Object.fromEntries(pseudoVariants) }
       )
