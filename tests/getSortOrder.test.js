@@ -162,7 +162,7 @@ it('sorts based on first occurence of a candidate / rule', () => {
           // position for `foo` so we should use it
           '.bar .foo': { display: 'block' },
         })
-      }
+      },
     ],
   }
 
