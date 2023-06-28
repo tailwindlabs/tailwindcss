@@ -944,7 +944,9 @@ function registerPlugins(plugins, context) {
     for (const [, rule] of rules) {
       let candidate = rule.raws.tailwind.candidate
 
-      sortedClassNames.set(candidate, idx++)
+      // When multiple rules match a candidate
+      // always take the position of the first one
+      sortedClassNames.set(candidate, sortedClassNames.get(candidate) ?? idx++)
     }
 
     return classes.map((className) => {
