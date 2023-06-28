@@ -615,10 +615,10 @@ test('does not prefix arbitrary group/peer classes', async () => {
     content: [
       {
         raw: html`
-          <div class="tw-group tw-peer lol">
-            <div class="group-[&.lol]:tw-flex"></div>
+          <div class="tw-group tw-peer foo">
+            <div class="group-[&.foo]:tw-flex"></div>
           </div>
-          <div class="peer-[&.lol]:tw-flex"></div>
+          <div class="peer-[&.foo]:tw-flex"></div>
         `,
       },
     ],
@@ -632,8 +632,8 @@ test('does not prefix arbitrary group/peer classes', async () => {
   const result = await run(input, config)
 
   expect(result.css).toMatchFormattedCss(css`
-    .tw-group.lol .group-\[\&\.lol\]\:tw-flex,
-    .tw-peer.lol ~ .peer-\[\&\.lol\]\:tw-flex {
+    .tw-group.foo .group-\[\&\.foo\]\:tw-flex,
+    .tw-peer.foo ~ .peer-\[\&\.foo\]\:tw-flex {
       display: flex;
     }
   `)
