@@ -9,7 +9,7 @@ import { movePseudos } from './pseudoElements'
 /** @typedef {import('postcss-selector-parser').Pseudo} Pseudo */
 /** @typedef {import('postcss-selector-parser').Node} Node */
 
-/** @typedef {{format: string, isArbitraryVariant: boolean}[]} RawFormats */
+/** @typedef {{format: string, respectPrefix: boolean}[]} RawFormats */
 /** @typedef {import('postcss-selector-parser').Root} ParsedFormats */
 /** @typedef {RawFormats | ParsedFormats} AcceptedFormats */
 
@@ -29,7 +29,7 @@ export function formatVariantSelector(formats, { context, candidate }) {
 
     return {
       ...format,
-      ast: format.isArbitraryVariant ? ast : prefixSelector(prefix, ast),
+      ast: format.respectPrefix ? prefixSelector(prefix, ast) : ast,
     }
   })
 

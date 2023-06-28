@@ -13,7 +13,7 @@ import {
 } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
-import { isValidVariantFormatString, parseVariant } from './setupContextUtils'
+import { isValidVariantFormatString, parseVariant, INTERNAL_FEATURES } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isSyntacticallyValidPropertyValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 import { flagEnabled } from '../featureFlags'
@@ -226,8 +226,15 @@ function applyVariant(variant, matches, context) {
 
   if (context.variantMap.has(variant)) {
     let isArbitraryVariant = isArbitraryValue(variant)
+    let internalFeatures = context.variantOptions.get(variant)?.[INTERNAL_FEATURES] ?? {}
     let variantFunctionTuples = context.variantMap.get(variant).slice()
     let result = []
+
+    let respectPrefix = (() => {
+      if (isArbitraryVariant) return false
+      if (internalFeatures.respectPrefix === false) return false
+      return true
+    })()
 
     for (let [meta, rule] of matches) {
       // Don't generate variants for user css
@@ -289,7 +296,7 @@ function applyVariant(variant, matches, context) {
           format(selectorFormat) {
             collectedFormats.push({
               format: selectorFormat,
-              isArbitraryVariant,
+              respectPrefix,
             })
           },
           args,
@@ -318,7 +325,7 @@ function applyVariant(variant, matches, context) {
         if (typeof ruleWithVariant === 'string') {
           collectedFormats.push({
             format: ruleWithVariant,
-            isArbitraryVariant,
+            respectPrefix,
           })
         }
 
@@ -362,7 +369,7 @@ function applyVariant(variant, matches, context) {
             //                    format: .foo &
             collectedFormats.push({
               format: modified.replace(rebuiltBase, '&'),
-              isArbitraryVariant,
+              respectPrefix,
             })
             rule.selector = before
           })

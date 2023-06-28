@@ -65,6 +65,25 @@ it('should provide selectors for complex matchVariant variants like `group`', ()
   expect(variant.selectors({ modifier: 'foo', value: '.foo_&' })).toEqual(['.foo .group\\/foo &'])
 })
 
+it('should provide selectors for complex matchVariant variants like `group` (when using a prefix)', () => {
+  let config = { prefix: 'tw-' }
+  let context = createContext(resolveConfig(config))
+
+  let variants = context.getVariants()
+
+  let variant = variants.find((v) => v.name === 'group')
+  expect(variant.selectors()).toEqual(['.tw-group &'])
+  expect(variant.selectors({})).toEqual(['.tw-group &'])
+  expect(variant.selectors({ value: 'hover' })).toEqual(['.tw-group:hover &'])
+  expect(variant.selectors({ value: '.foo_&' })).toEqual(['.foo .tw-group &'])
+  expect(variant.selectors({ modifier: 'foo', value: 'hover' })).toEqual([
+    '.tw-group\\/foo:hover &',
+  ])
+  expect(variant.selectors({ modifier: 'foo', value: '.foo_&' })).toEqual([
+    '.foo .tw-group\\/foo &',
+  ])
+})
+
 it('should provide selectors for variants with atrules', () => {
   let config = {}
   let context = createContext(resolveConfig(config))

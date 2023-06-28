@@ -23,6 +23,8 @@ import { hasContentChanged } from './cacheInvalidation.js'
 import { Offsets } from './offsets.js'
 import { finalizeSelector, formatVariantSelector } from '../util/formatVariantSelector'
 
+export const INTERNAL_FEATURES = Symbol()
+
 const VARIANT_TYPES = {
   AddVariant: Symbol.for('ADD_VARIANT'),
   MatchVariant: Symbol.for('MATCH_VARIANT'),
@@ -1110,17 +1112,24 @@ function registerPlugins(plugins, context) {
           }
 
           let isArbitraryVariant = !(value in (options.values ?? {}))
+          let internalFeatures = options[INTERNAL_FEATURES] ?? {}
+
+          let respectPrefix = (() => {
+            if (isArbitraryVariant) return false
+            if (internalFeatures.respectPrefix === false) return false
+            return true
+          })()
 
           formatStrings = formatStrings.map((format) =>
             format.map((str) => ({
               format: str,
-              isArbitraryVariant,
+              respectPrefix,
             }))
           )
 
           manualFormatStrings = manualFormatStrings.map((format) => ({
             format,
-            isArbitraryVariant,
+            respectPrefix,
           }))
 
           let opts = {

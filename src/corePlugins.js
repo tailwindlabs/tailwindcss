@@ -21,6 +21,7 @@ import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadow
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
 import { normalize } from './util/dataTypes'
+import { INTERNAL_FEATURES } from './lib/setupContextUtils'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -79,7 +80,7 @@ export let variantPlugins = {
     })
   },
 
-  pseudoClassVariants: ({ addVariant, matchVariant, config }) => {
+  pseudoClassVariants: ({ addVariant, matchVariant, config, prefix }) => {
     let pseudoVariants = [
       // Positional
       ['first', '&:first-child'],
@@ -150,12 +151,12 @@ export let variantPlugins = {
     let variants = {
       group: (_, { modifier }) =>
         modifier
-          ? [`:merge(.group\\/${escapeClassName(modifier)})`, ' &']
-          : [`:merge(.group)`, ' &'],
+          ? [`:merge(${prefix('.group')}\\/${escapeClassName(modifier)})`, ' &']
+          : [`:merge(${prefix('.group')})`, ' &'],
       peer: (_, { modifier }) =>
         modifier
-          ? [`:merge(.peer\\/${escapeClassName(modifier)})`, ' ~ &']
-          : [`:merge(.peer)`, ' ~ &'],
+          ? [`:merge(${prefix('.peer')}\\/${escapeClassName(modifier)})`, ' ~ &']
+          : [`:merge(${prefix('.peer')})`, ' ~ &'],
     }
 
     for (let [name, fn] of Object.entries(variants)) {
@@ -191,7 +192,12 @@ export let variantPlugins = {
 
           return result.slice(0, start) + a + result.slice(start + 1, end) + b + result.slice(end)
         },
-        { values: Object.fromEntries(pseudoVariants) }
+        {
+          values: Object.fromEntries(pseudoVariants),
+          [INTERNAL_FEATURES]: {
+            respectPrefix: false,
+          },
+        }
       )
     }
   },

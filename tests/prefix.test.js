@@ -607,3 +607,33 @@ test('supports non-word prefixes (2)', async () => {
     }
   `)
 })
+
+test('does not prefix arbitrary group/peer classes', async () => {
+  let config = {
+    prefix: 'tw-',
+    content: [
+      {
+        raw: html`
+          <div class="tw-group tw-peer foo">
+            <div class="group-[&.foo]:tw-flex"></div>
+          </div>
+          <div class="peer-[&.foo]:tw-flex"></div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  const result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .tw-group.foo .group-\[\&\.foo\]\:tw-flex,
+    .tw-peer.foo ~ .peer-\[\&\.foo\]\:tw-flex {
+      display: flex;
+    }
+  `)
+})
