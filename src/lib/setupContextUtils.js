@@ -23,13 +23,7 @@ import { hasContentChanged } from './cacheInvalidation.js'
 import { Offsets } from './offsets.js'
 import { finalizeSelector, formatVariantSelector } from '../util/formatVariantSelector'
 
-export const Features = Object.assign(Symbol(), {
-  // No features are enabled
-  None: 0,
-
-  // Whether or not we should respect the prefix
-  NoPrefix: 1 << 0,
-})
+export const INTERNAL_FEATURES = Symbol()
 
 const VARIANT_TYPES = {
   AddVariant: Symbol.for('ADD_VARIANT'),
@@ -1118,11 +1112,11 @@ function registerPlugins(plugins, context) {
           }
 
           let isArbitraryVariant = !(value in (options.values ?? {}))
-          let features = options[Features] ?? Features.None
+          let internalFeatures = options[INTERNAL_FEATURES] ?? {}
 
           let respectPrefix = (() => {
             if (isArbitraryVariant) return false
-            if ((features & Features.NoPrefix) === Features.NoPrefix) return false
+            if (internalFeatures.respectPrefix === false) return false
             return true
           })()
 

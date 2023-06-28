@@ -21,7 +21,7 @@ import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadow
 import { removeAlphaVariables } from './util/removeAlphaVariables'
 import { flagEnabled } from './featureFlags'
 import { normalize } from './util/dataTypes'
-import { Features } from './lib/setupContextUtils'
+import { INTERNAL_FEATURES } from './lib/setupContextUtils'
 
 export let variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
@@ -192,7 +192,12 @@ export let variantPlugins = {
 
           return result.slice(0, start) + a + result.slice(start + 1, end) + b + result.slice(end)
         },
-        { values: Object.fromEntries(pseudoVariants), [Features]: Features.NoPrefix }
+        {
+          values: Object.fromEntries(pseudoVariants),
+          [INTERNAL_FEATURES]: {
+            respectPrefix: false,
+          },
+        }
       )
     }
   },

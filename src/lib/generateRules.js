@@ -13,7 +13,7 @@ import {
 } from '../util/formatVariantSelector'
 import { asClass } from '../util/nameClass'
 import { normalize } from '../util/dataTypes'
-import { isValidVariantFormatString, parseVariant, Features } from './setupContextUtils'
+import { isValidVariantFormatString, parseVariant, INTERNAL_FEATURES } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isSyntacticallyValidPropertyValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 import { flagEnabled } from '../featureFlags'
@@ -226,13 +226,13 @@ function applyVariant(variant, matches, context) {
 
   if (context.variantMap.has(variant)) {
     let isArbitraryVariant = isArbitraryValue(variant)
-    let features = context.variantOptions.get(variant)?.[Features] ?? Features.None
+    let internalFeatures = context.variantOptions.get(variant)?.[INTERNAL_FEATURES] ?? {}
     let variantFunctionTuples = context.variantMap.get(variant).slice()
     let result = []
 
     let respectPrefix = (() => {
       if (isArbitraryVariant) return false
-      if ((features & Features.NoPrefix) === Features.NoPrefix) return false
+      if (internalFeatures.respectPrefix === false) return false
       return true
     })()
 
