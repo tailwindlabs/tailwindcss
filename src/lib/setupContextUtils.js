@@ -942,7 +942,11 @@ function registerPlugins(plugins, context) {
     let idx = BigInt(parasiteUtilities.length)
 
     for (const [, rule] of rules) {
-      sortedClassNames.set(rule.raws.tailwind.candidate, idx++)
+      let candidate = rule.raws.tailwind.candidate
+
+      // When multiple rules match a candidate
+      // always take the position of the first one
+      sortedClassNames.set(candidate, sortedClassNames.get(candidate) ?? idx++)
     }
 
     return classes.map((className) => {

@@ -140,3 +140,41 @@ it('sorts classes deterministically across multiple class lists', () => {
     expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
   }
 })
+
+it('sorts based on first occurence of a candidate / rule', () => {
+  let classes = [
+    ['foo-1 foo', 'foo foo-1'],
+    ['bar', 'bar'],
+    ['foo-1 foo', 'foo foo-1'],
+  ]
+
+  let config = {
+    theme: {},
+    plugins: [
+      function ({ addComponents }) {
+        addComponents({
+          '.foo': { display: 'block' },
+          '.foo-1': { display: 'block' },
+          '.bar': { display: 'block' },
+
+          // This rule matches both the candidate `foo` and `bar`
+          // But when sorting `foo` — we've already got a
+          // position for `foo` so we should use it
+          '.bar .foo': { display: 'block' },
+        })
+      },
+    ],
+  }
+
+  // Same context, different class lists
+  let context = createContext(resolveConfig(config))
+  for (const [input, output] of classes) {
+    expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
+  }
+
+  // Different context, different class lists
+  for (const [input, output] of classes) {
+    context = createContext(resolveConfig(config))
+    expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
+  }
+})
