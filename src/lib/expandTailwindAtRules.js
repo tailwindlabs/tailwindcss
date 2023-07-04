@@ -103,7 +103,7 @@ function buildStylesheet(rules, context) {
 }
 
 export default function expandTailwindAtRules(context) {
-  return (root) => {
+  return async (root) => {
     let layerNodes = {
       base: null,
       components: null,
@@ -160,18 +160,22 @@ export default function expandTailwindAtRules(context) {
       }
 
       if (regexParserContent.length > 0) {
-        for (let [{ file, content }, { transformer, extractor }] of regexParserContent) {
-          content = file ? fs.readFileSync(file, 'utf8') : content
-          getClassCandidates(transformer(content), extractor, candidates, seen)
-        }
+        await Promise.all(
+          regexParserContent.map(async ([{ file, content }, { transformer, extractor }]) => {
+            content = file ? await fs.promises.readFile(file, 'utf8') : content
+            getClassCandidates(transformer(content), extractor, candidates, seen)
+          })
+        )
       }
     } else {
-      for (let { file, content, extension } of context.changedContent) {
-        let transformer = getTransformer(context.tailwindConfig, extension)
-        let extractor = getExtractor(context, extension)
-        content = file ? fs.readFileSync(file, 'utf8') : content
-        getClassCandidates(transformer(content), extractor, candidates, seen)
-      }
+      await Promise.all(
+        context.changedContent.map(async ({ file, content, extension }) => {
+          let transformer = getTransformer(context.tailwindConfig, extension)
+          let extractor = getExtractor(context, extension)
+          content = file ? await fs.promises.readFile(file, 'utf8') : content
+          getClassCandidates(transformer(content), extractor, candidates, seen)
+        })
+      )
     }
 
     env.DEBUG && console.timeEnd('Reading changed files')
