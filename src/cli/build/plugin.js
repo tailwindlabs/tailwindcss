@@ -278,9 +278,9 @@ export async function createProcessor(args, cliConfigPath) {
   let tailwindPlugin = () => {
     return {
       postcssPlugin: 'tailwindcss',
-      Once(root, { result }) {
+      async Once(root, { result }) {
         env.DEBUG && console.time('Compiling CSS')
-        tailwind(({ createContext }) => {
+        await tailwind(({ createContext }) => {
           console.error()
           console.error('Rebuilding...')
 

@@ -13,7 +13,7 @@ module.exports = function tailwindcss(configOrPath) {
           console.time('JIT TOTAL')
           return root
         },
-      function (root, result) {
+      async function (root, result) {
         // Use the path for the `@config` directive if it exists, otherwise use the
         // path for the file being processed
         configOrPath = findAtConfigPath(root, result) ?? configOrPath
@@ -25,14 +25,14 @@ module.exports = function tailwindcss(configOrPath) {
 
           for (const root of roots) {
             if (root.type === 'root') {
-              processTailwindFeatures(context)(root, result)
+              await processTailwindFeatures(context)(root, result)
             }
           }
 
           return
         }
 
-        processTailwindFeatures(context)(root, result)
+        await processTailwindFeatures(context)(root, result)
       },
       __OXIDE__ &&
         function lightningCssPlugin(_root, result) {
