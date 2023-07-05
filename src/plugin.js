@@ -23,7 +23,7 @@ module.exports = function tailwindcss(configOrPath) {
           return root
         },
       ...handleImportAtRules(),
-      function (root, result) {
+      async function (root, result) {
         // Use the path for the `@config` directive if it exists, otherwise use the
         // path for the file being processed
         configOrPath = findAtConfigPath(root, result) ?? configOrPath
@@ -42,7 +42,7 @@ module.exports = function tailwindcss(configOrPath) {
           return
         }
 
-        processTailwindFeatures(context)(root, result)
+        await processTailwindFeatures(context)(root, result)
       },
       function lightningCssPlugin(_root, result) {
         let map = result.map ?? result.opts.map
