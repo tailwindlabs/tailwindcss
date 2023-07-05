@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Escape animation names when prefixes contain special characters ([#11470](https://github.com/tailwindlabs/tailwindcss/pull/11470))
 - Don't prefix arbitrary classes in `group` and `peer` variants ([#11454](https://github.com/tailwindlabs/tailwindcss/pull/11454))
 - Sort classes using position of first matching rule ([#11504](https://github.com/tailwindlabs/tailwindcss/pull/11504))
+- Bump `jiti`, `lightningcss`, `fast-glob` and `browserlist` dependencies and reflect `lightningcss` related improvements in tests ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
 
 ### Added
 
