@@ -148,12 +148,8 @@
   --tw-backdrop-sepia: ;
 }
 .first-letter\:flex:first-letter,
-.first-line\:flex:first-line {
-  display: flex;
-}
-.marker\:flex ::marker {
-  display: flex;
-}
+.first-line\:flex:first-line,
+.marker\:flex ::marker,
 .marker\:flex::marker {
   display: flex;
 }

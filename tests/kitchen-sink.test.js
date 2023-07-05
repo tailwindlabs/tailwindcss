@@ -404,11 +404,6 @@ test('it works', () => {
       :after {
         padding: 5px;
       }
-      *,
-      :before,
-      :after {
-        padding: 5px;
-      }
       ::-webkit-backdrop {
         padding: 5px;
       }
@@ -581,11 +576,6 @@ test('it works', () => {
       }
       .custom-util {
         background: #abcdef;
-      }
-      *,
-      :before,
-      :after {
-        margin: 10px;
       }
       *,
       :before,
