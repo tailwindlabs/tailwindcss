@@ -19,6 +19,6 @@
     }
   },
   "devDependencies": {
-    "parcel": "^2.9.2"
+    "parcel": "^2.9.3"
   }
 }
