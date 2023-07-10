@@ -299,7 +299,7 @@ export function normalizeConfig(config) {
   if (config.prefix !== '' || config.separator !== ':') {
     if (config.experimental === 'all') {
       config.experimental = {}
-      for (let key in featureFlags.experimental) {
+      for (let key of featureFlags.experimental) {
         config.experimental[key] = true
       }
     } else {
