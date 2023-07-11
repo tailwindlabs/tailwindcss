@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sort classes using position of first matching rule ([#11504](https://github.com/tailwindlabs/tailwindcss/pull/11504))
 - Bump `jiti`, `lightningcss`, `fast-glob` and `browserlist` dependencies and reflect `lightningcss` related improvements in tests ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
 - Make PostCSS plugin async to improve performance ([#11548](https://github.com/tailwindlabs/tailwindcss/pull/11548))
+- Allow variant to be an at-rule without a prelude ([#11589](https://github.com/tailwindlabs/tailwindcss/pull/11589))
 
 ### Added
 
