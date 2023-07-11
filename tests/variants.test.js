@@ -66,6 +66,31 @@ crosscheck(({ stable, oxide }) => {
   })
 
   describe('custom advanced variants', () => {
+    test('at-rules without params', () => {
+      let config = {
+        content: [
+          {
+            raw: html` <div class="ogre:text-center"></div> `,
+          },
+        ],
+        plugins: [
+          function ({ addVariant }) {
+            addVariant('ogre', '@layer')
+          },
+        ],
+      }
+
+      return run('@tailwind components; @tailwind utilities', config).then((result) => {
+        return expect(result.css).toMatchFormattedCss(css`
+          @layer {
+            .ogre\:text-center {
+              text-align: center;
+            }
+          }
+        `)
+      })
+    })
+
     test('prose-headings usage on its own', () => {
       let config = {
         content: [
