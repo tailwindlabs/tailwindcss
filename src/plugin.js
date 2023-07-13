@@ -35,7 +35,7 @@ module.exports = function tailwindcss(configOrPath) {
 
           for (const root of roots) {
             if (root.type === 'root') {
-              processTailwindFeatures(context)(root, result)
+              await processTailwindFeatures(context)(root, result)
             }
           }
 
