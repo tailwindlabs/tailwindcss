@@ -63,9 +63,7 @@ function getTailwindConfig(configOrPath) {
   }
 
   // It's a plain object, not a path
-  let newConfig = resolveConfig(
-    configOrPath.config === undefined ? configOrPath : configOrPath.config
-  )
+  let newConfig = resolveConfig(configOrPath?.config ?? configOrPath ?? {})
 
   newConfig = validateConfig(newConfig)
 
