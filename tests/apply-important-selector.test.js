@@ -1,4 +1,4 @@
-import { applyImportantSelector } from '../../src/util/applyImportantSelector'
+import { applyImportantSelector } from '../src/util/applyImportantSelector'
 
 it.each`
   before                                        | after
