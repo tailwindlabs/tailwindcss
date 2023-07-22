@@ -84,7 +84,7 @@
     "postcss-selector-parser": "^6.0.12",
     "postcss-value-parser": "^4.2.0",
     "resolve": "^1.22.3",
-    "sucrase": "^3.32.0"
+    "sucrase": "^3.34.0"
   },
   "browserslist": [
     "defaults and supports css-variables and supports css-matches-pseudo",
