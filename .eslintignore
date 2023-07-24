@@ -7,3 +7,4 @@
 /src/corePluginList.js
 /oxide/crates/node/index.js
 /oxide/crates/node/index.d.ts
+.github/actions/minus-one/index.mjs

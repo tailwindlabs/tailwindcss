@@ -1,4 +1,5 @@
 /node_modules
+.github/**/node_modules
 /coverage
 /cli
 /lib
