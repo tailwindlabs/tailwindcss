@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'columns' plugin 1`] = `
+"
+.columns-1 {
+  columns: 1;
+}
+
+.columns-10 {
+  columns: 10;
+}
+
+.columns-11 {
+  columns: 11;
+}
+
+.columns-12 {
+  columns: 12;
+}
+
+.columns-2 {
+  columns: 2;
+}
+
+.columns-2xl {
+  columns: 42rem;
+}
+
+.columns-2xs {
+  columns: 18rem;
+}
+
+.columns-3 {
+  columns: 3;
+}
+
+.columns-3xl {
+  columns: 48rem;
+}
+
+.columns-3xs {
+  columns: 16rem;
+}
+
+.columns-4 {
+  columns: 4;
+}
+
+.columns-4xl {
+  columns: 56rem;
+}
+
+.columns-5 {
+  columns: 5;
+}
+
+.columns-5xl {
+  columns: 64rem;
+}
+
+.columns-6 {
+  columns: 6;
+}
+
+.columns-6xl {
+  columns: 72rem;
+}
+
+.columns-7 {
+  columns: 7;
+}
+
+.columns-7xl {
+  columns: 80rem;
+}
+
+.columns-8 {
+  columns: 8;
+}
+
+.columns-9 {
+  columns: 9;
+}
+
+.columns-\\[12\\] {
+  columns: 12;
+}
+
+.columns-\\[var\\(--my-value\\)\\] {
+  columns: var(--my-value);
+}
+
+.columns-auto {
+  columns: auto;
+}
+
+.columns-lg {
+  columns: 32rem;
+}
+
+.columns-md {
+  columns: 28rem;
+}
+
+.columns-sm {
+  columns: 24rem;
+}
+
+.columns-xl {
+  columns: 36rem;
+}
+
+.columns-xs {
+  columns: 20rem;
+}
+"
+`;

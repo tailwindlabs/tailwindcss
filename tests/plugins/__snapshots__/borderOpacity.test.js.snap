@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'borderOpacity' plugin 1`] = `
+"
+.border-opacity-0 {
+  --tw-border-opacity: 0;
+}
+
+.border-opacity-10 {
+  --tw-border-opacity: .1;
+}
+
+.border-opacity-100 {
+  --tw-border-opacity: 1;
+}
+
+.border-opacity-20 {
+  --tw-border-opacity: .2;
+}
+
+.border-opacity-25 {
+  --tw-border-opacity: .25;
+}
+
+.border-opacity-30 {
+  --tw-border-opacity: .3;
+}
+
+.border-opacity-40 {
+  --tw-border-opacity: .4;
+}
+
+.border-opacity-5 {
+  --tw-border-opacity: .05;
+}
+
+.border-opacity-50 {
+  --tw-border-opacity: .5;
+}
+
+.border-opacity-60 {
+  --tw-border-opacity: .6;
+}
+
+.border-opacity-70 {
+  --tw-border-opacity: .7;
+}
+
+.border-opacity-75 {
+  --tw-border-opacity: .75;
+}
+
+.border-opacity-80 {
+  --tw-border-opacity: .8;
+}
+
+.border-opacity-90 {
+  --tw-border-opacity: .9;
+}
+
+.border-opacity-95 {
+  --tw-border-opacity: .95;
+}
+
+.border-opacity-\\[12\\%\\] {
+  --tw-border-opacity: 12%;
+}
+
+.border-opacity-\\[var\\(--my-value\\)\\] {
+  --tw-border-opacity: var(--my-value);
+}
+"
+`;
