@@ -2,6 +2,7 @@ import { corePlugins } from '../src/corePlugins'
 import fs from 'fs'
 import path from 'path'
 
+
 let corePluginList = Object.keys(corePlugins)
 
 fs.writeFileSync(
