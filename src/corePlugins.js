@@ -464,6 +464,11 @@ export let variantPlugins = {
   forcedColorsVariants: ({ addVariant }) => {
     addVariant('forced-colors', '@media (forced-colors: active)')
   },
+
+  reducedTransparencyVariants: ({ addVariant }) => {
+    addVariant('transparency-safe', '@media (prefers-reduced-transparency: no-preference)')
+    addVariant('transparency-reduce', '@media (prefers-reduced-transparency: reduce)')
+  },
 }
 
 let cssTransformValue = [
