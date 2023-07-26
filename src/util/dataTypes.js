@@ -10,9 +10,6 @@ function isCSSFunction(value) {
   return cssFunctions.some((fn) => new RegExp(`^${fn}\\(.*\\)`).test(value))
 }
 
-const placeholder = '--tw-placeholder'
-const placeholderRe = new RegExp(placeholder, 'g')
-
 // This is not a data type, but rather a function that can normalize the
 // correct values.
 export function normalize(value, isRoot = true) {
@@ -63,15 +60,59 @@ export function normalize(value, isRoot = true) {
  */
 function normalizeMathOperatorSpacing(value) {
   return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
-    let vars = []
+    let result = ''
 
-    return match
-      .replace(/var\((--.+?)[,)]/g, (match, g1) => {
-        vars.push(g1)
-        return match.replace(g1, placeholder)
-      })
-      .replace(/(-?\d*\.?\d(?!\b-\d.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g, '$1 $2 ')
-      .replace(placeholderRe, () => vars.shift())
+    function lastChar() {
+      let char = result.trimEnd()
+      return char[char.length - 1]
+    }
+
+    for (let i = 0; i < match.length; i++) {
+      function peek(word) {
+        return word.split('').every((char, j) => match[i + j] === char)
+      }
+
+      function consumeUntil(chars) {
+        let minIndex = Infinity
+        for (let char of chars) {
+          let index = match.indexOf(char, i)
+          if (index !== -1 && index < minIndex) {
+            minIndex = index
+          }
+        }
+
+        let result = match.slice(i, minIndex)
+        i += result.length - 1
+        return result
+      }
+
+      let char = match[i]
+
+      // Handle `var(--variable)`
+      if (peek('var')) {
+        // When we consume until `)`, then we are dealing with this scenario:
+        //   `var(--example)`
+        //
+        // When we consume until `,`, then we are dealing with this scenario:
+        //   `var(--example, 1rem)`
+        //
+        //   In this case we do want to "format", the default value as well
+        result += consumeUntil([')', ','])
+      }
+
+      // Handle operators
+      else if (
+        ['+', '-', '*', '/'].includes(char) &&
+        !['(', '+', '-', '*', '/'].includes(lastChar())
+      ) {
+        result += ` ${char} `
+      } else {
+        result += char
+      }
+    }
+
+    // Simplify multiple spaces
+    return result.replace(/\s+/g, ' ')
   })
 }
 
