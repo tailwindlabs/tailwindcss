@@ -41,6 +41,7 @@ let table = [
   ['var(--my-var-with-more-than-3-words)', 'var(--my-var-with-more-than-3-words)'],
   ['var(--width, calc(100%+1rem))', 'var(--width, calc(100% + 1rem))'],
 
+  ['calc(1px*(7--12/24))', 'calc(1px * (7 - -12 / 24))'],
   ['calc((7-32)/(1400-782))', 'calc((7 - 32) / (1400 - 782))'],
   ['calc((7-3)/(1400-782))', 'calc((7 - 3) / (1400 - 782))'],
   ['calc((7-32)/(1400-782))', 'calc((7 - 32) / (1400 - 782))'],
