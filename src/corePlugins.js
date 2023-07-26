@@ -459,6 +459,11 @@ export let variantPlugins = {
   prefersContrastVariants: ({ addVariant }) => {
     addVariant('contrast-more', '@media (prefers-contrast: more)')
     addVariant('contrast-less', '@media (prefers-contrast: less)')
+    addVariant('contrast-custom', '@media (prefers-contrast: custom)')
+  },
+
+  forcedColorsVariants: ({ addVariant }) => {
+    addVariant('forced-colors', '@media (forced-colors: active)')
   },
 }
 
