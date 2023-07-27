@@ -59,6 +59,8 @@ export function normalize(value, isRoot = true) {
  * @returns {string}
  */
 function normalizeMathOperatorSpacing(value) {
+  let preventFormattingInFunctions = ['theme']
+
   return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
     let result = ''
 
@@ -98,6 +100,11 @@ function normalizeMathOperatorSpacing(value) {
         //
         //   In this case we do want to "format", the default value as well
         result += consumeUntil([')', ','])
+      }
+
+      // Skip formatting inside known functions
+      else if (preventFormattingInFunctions.some((fn) => peek(fn))) {
+        result += consumeUntil([')'])
       }
 
       // Handle operators
