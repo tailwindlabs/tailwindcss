@@ -60,6 +60,12 @@ let table = [
     'calc(var(--10-10px,calc(-20px-(-30px--40px)-50px)',
     'calc(var(--10-10px,calc(-20px - (-30px - -40px) - 50px)',
   ],
+  ['calc(theme(spacing.1-bar))', 'calc(theme(spacing.1-bar))'],
+  ['theme(spacing.1-bar)', 'theme(spacing.1-bar)'],
+  ['calc(theme(spacing.1-bar))', 'calc(theme(spacing.1-bar))'],
+  ['calc(1rem-theme(spacing.1-bar))', 'calc(1rem - theme(spacing.1-bar))'],
+  ['calc(theme(spacing.foo-2))', 'calc(theme(spacing.foo-2))'],
+  ['calc(theme(spacing.foo-bar))', 'calc(theme(spacing.foo-bar))'],
 
   // Misc
   ['color(0_0_0/1.0)', 'color(0 0 0/1.0)'],
