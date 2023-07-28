@@ -3,6 +3,7 @@ import unescape from 'postcss-selector-parser/dist/util/unesc'
 import escapeClassName from '../util/escapeClassName'
 import prefixSelector from '../util/prefixSelector'
 import { movePseudos } from './pseudoElements'
+import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 
 /** @typedef {import('postcss-selector-parser').Root} Root */
 /** @typedef {import('postcss-selector-parser').Selector} Selector */
@@ -160,7 +161,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
   //           │  │     │            ╰── We will not split here
   //           ╰──┴─────┴─────────────── We will split here
   //
-  base = base ?? candidate.split(new RegExp(`\\${separator}(?![^[]*\\])`)).pop()
+  base = base ?? splitAtTopLevelOnly(candidate, separator).pop()
 
   // Parse the selector into an AST
   let selector = selectorParser().astSync(current)

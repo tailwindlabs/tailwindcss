@@ -1416,3 +1416,30 @@ crosscheck(({ stable, oxide }) => {
     })
   })
 })
+
+test('it should handle square brackets inside `theme`, inside arbitrary properties', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="bg-[--color] sm:[--color:_theme(colors.green[400])]"></div> `,
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return runFull(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-\[--color\] {
+        background-color: var(--color);
+      }
+      @media (min-width: 640px) {
+        .sm\:\[--color\:_theme\(colors\.green\[400\]\)\] {
+          --color: #4ade80;
+        }
+      }
+    `)
+  })
+})
