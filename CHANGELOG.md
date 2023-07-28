@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow variant to be an at-rule without a prelude ([#11589](https://github.com/tailwindlabs/tailwindcss/pull/11589))
 - Improve normalisation of `calc()`-like functions ([#11686](https://github.com/tailwindlabs/tailwindcss/pull/11686))
 - Skip `calc()` normalisation in nested `theme()` calls ([#11705](https://github.com/tailwindlabs/tailwindcss/pull/11705))
+- Fix incorrectly generated CSS when using square brackets inside arbitrary properties ([#11709](https://github.com/tailwindlabs/tailwindcss/pull/11709))
 
 ### Added
 
