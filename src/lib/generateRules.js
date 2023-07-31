@@ -801,7 +801,7 @@ function applyFinalFormat(match, { context, candidate, original }) {
   try {
     finalFormat = formatVariantSelector(match[0].collectedFormats, {
       context,
-      candidate,
+      candidate: original,
     })
   } catch {
     // The format selector we produced is invalid
@@ -826,7 +826,7 @@ function applyFinalFormat(match, { context, candidate, original }) {
 
     try {
       rule.selector = finalizeSelector(rule.selector, finalFormat, {
-        candidate: original,
+        candidate,
         context,
       })
     } catch {
