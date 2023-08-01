@@ -46,13 +46,13 @@ type PrefixConfig = string
 type SeparatorConfig = string
 
 // Safelist related config
-type SafelistConfig = (string | { pattern: RegExp; variants?: string[] })[]
+type SafelistConfig = string | { pattern: RegExp; variants?: string[] }
 
 // Blocklist related config
-type BlocklistConfig = string[]
+type BlocklistConfig = string
 
 // Presets related config
-type PresetsConfig = Config[]
+type PresetsConfig = Partial<Config>
 
 // Future related config
 type FutureConfigValues =
@@ -352,9 +352,9 @@ interface OptionalConfig {
   important: Partial<ImportantConfig>
   prefix: Partial<PrefixConfig>
   separator: Partial<SeparatorConfig>
-  safelist: Partial<SafelistConfig>
-  blocklist: Partial<BlocklistConfig>
-  presets: Partial<PresetsConfig>
+  safelist: Array<SafelistConfig>
+  blocklist: Array<BlocklistConfig>
+  presets: Array<PresetsConfig>
   future: Partial<FutureConfig>
   experimental: Partial<ExperimentalConfig>
   darkMode: Partial<DarkModeConfig>
