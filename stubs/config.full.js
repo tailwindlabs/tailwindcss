@@ -303,8 +303,6 @@ module.exports = {
       sans: [
         'ui-sans-serif',
         'system-ui',
-        '-apple-system',
-        'BlinkMacSystemFont',
         '"Segoe UI"',
         'Roboto',
         '"Helvetica Neue"',
