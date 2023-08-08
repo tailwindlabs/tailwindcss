@@ -148,7 +148,7 @@ test('theme key is merged instead of replaced', () => {
         'grey-lighter': '#f1f5f8',
       },
       fonts: {
-        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        sans: ['system-ui', 'Roboto', 'sans-serif'],
         serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
       },
       screens: {
@@ -174,7 +174,7 @@ test('theme key is merged instead of replaced', () => {
         'grey-lighter': '#f1f5f8',
       },
       fonts: {
-        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        sans: ['system-ui', 'Roboto', 'sans-serif'],
         serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
       },
       screens: {

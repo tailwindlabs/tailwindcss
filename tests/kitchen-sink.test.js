@@ -239,8 +239,7 @@ test('it works', () => {
     expect(result.css).toMatchFormattedCss(css`
       .theme-test {
         color: #3b82f6;
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-          Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+        font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
           Segoe UI Symbol, Noto Color Emoji;
       }
       @media (min-width: 1024px) {
