@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reset padding for `<dialog>` elements in preflight ([#11069](https://github.com/tailwindlabs/tailwindcss/pull/11069))
 - Deprecate `--no-autoprefixer` flag in the CLI ([#11280](https://github.com/tailwindlabs/tailwindcss/pull/11280))
 - Make the Rust based parser the default ([#11394](https://github.com/tailwindlabs/tailwindcss/pull/11394))
+- Simplify the `sans` font-family stack ([#11748](https://github.com/tailwindlabs/tailwindcss/pull/11748))
 
 ## [3.3.2] - 2023-04-25
 
