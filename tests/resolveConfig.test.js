@@ -150,7 +150,7 @@ crosscheck(() => {
           'grey-lighter': '#f1f5f8',
         },
         fonts: {
-          sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+          sans: ['system-ui', 'Roboto', 'sans-serif'],
           serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
         },
         screens: {
@@ -176,7 +176,7 @@ crosscheck(() => {
           'grey-lighter': '#f1f5f8',
         },
         fonts: {
-          sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+          sans: ['system-ui', 'Roboto', 'sans-serif'],
           serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
         },
         screens: {
