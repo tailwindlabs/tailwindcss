@@ -371,7 +371,7 @@ video {
 }
 
 /*
-Make elements with the HTML hidden attribute stay hidden by default
+Make elements with the HTML hidden attribute stay hidden by default.
 */
 
 [hidden] {
