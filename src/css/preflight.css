@@ -337,6 +337,7 @@ button,
 /*
 Make sure disabled buttons don't get the pointer cursor.
 */
+
 :disabled {
   cursor: default;
 }
@@ -369,7 +370,10 @@ video {
   height: auto;
 }
 
-/* Make elements with the HTML hidden attribute stay hidden by default */
+/*
+Make elements with the HTML hidden attribute stay hidden by default.
+*/
+
 [hidden] {
   display: none;
 }
