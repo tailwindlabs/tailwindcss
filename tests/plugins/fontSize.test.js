@@ -248,3 +248,59 @@ test('font-size utilities can include a line-height modifier', () => {
     `)
   })
 })
+
+test('font-size utilities can use rpx', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="text-sm/[21rpx] md:text-base/[33rpx]"></div>
+          <div class="text-[13rpx]/6 md:text-[19rpx]/8"></div>
+          <div class="text-[17rpx]/[23rpx] md:text-[21rpx]/[29rpx]"></div>
+        `,
+      },
+    ],
+    theme: {
+      fontSize: {
+        sm: ['12px', '20px'],
+        base: ['16px', '24px'],
+      },
+      lineHeight: {
+        6: '24px',
+        7: '28px',
+        8: '32px',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .text-\[13rpx\]\/6 {
+        font-size: 13rpx;
+        line-height: 24px;
+      }
+      .text-\[17rpx\]\/\[23rpx\] {
+        font-size: 17rpx;
+        line-height: 23rpx;
+      }
+      .text-sm\/\[21rpx\] {
+        font-size: 12px;
+        line-height: 21rpx;
+      }
+      @media (min-width: 768px) {
+        .md\:text-\[19rpx\]\/8 {
+          font-size: 19rpx;
+          line-height: 32px;
+        }
+        .md\:text-\[21rpx\]\/\[29rpx\] {
+          font-size: 21rpx;
+          line-height: 29rpx;
+        }
+        .md\:text-base\/\[33rpx\] {
+          font-size: 16px;
+          line-height: 33rpx;
+        }
+      }
+    `)
+  })
+})

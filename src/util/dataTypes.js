@@ -146,6 +146,7 @@ let lengthUnits = [
   'pc',
   'pt',
   'px',
+  'rpx',
   'em',
   'ex',
   'ch',
