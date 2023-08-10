@@ -2,12 +2,8 @@
   "module": {
     "type": "commonjs"
   },
-  "env": {
-    "targets": {
-      "node": "12.13.0"
-    }
-  },
   "jsc": {
+    "target": "es2018",
     "parser": {
       "syntax": "typescript",
       "tsx": false
