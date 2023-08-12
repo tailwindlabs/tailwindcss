@@ -7,11 +7,17 @@ end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
+block_comment_start = /*
+block_comment = *
+block_comment_end = */
 
 [*.rs]
-indent_style = space
 indent_size = 4
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
+#max_line_length = 120
+
+[.github/actions/minus-one/licenses.txt]
+indent_size = unset
+[Cargo.lock]
+indent_size = unset
+[*.svg]
+insert_final_newline = unset

@@ -106,7 +106,7 @@ it('should provide selectors for custom plugins that do a combination of paralle
             `
               @supports (foo: ${modifier}) {
                 @media (max-width: 400px) {
-                   &:hover
+                  &:hover
                 }
               }
             `,
