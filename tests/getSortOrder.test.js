@@ -141,7 +141,7 @@ it('sorts classes deterministically across multiple class lists', () => {
   }
 })
 
-it('sorts based on first occurence of a candidate / rule', () => {
+it('sorts based on first occurrence of a candidate / rule', () => {
   let classes = [
     ['foo-1 foo', 'foo foo-1'],
     ['bar', 'bar'],

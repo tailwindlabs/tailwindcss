@@ -417,7 +417,7 @@ impl<'a> Extractor<'a> {
                 // a flag. E.g.: '<sm'
                 // | '$' | '^' | '_'
 
-                // When the new candidate is preceeded by a `:`, then we want to keep parsing, but
+                // When the new candidate is preceded by a `:`, then we want to keep parsing, but
                 // throw away the full candidate because it can not be a valid candidate at the end
                 // of the day.
                 if self.cursor.prev == b':' {
@@ -704,11 +704,11 @@ impl<'a> Extractor<'a> {
     fn generate_slices(&mut self, candidate: &'a [u8]) -> ParseAction<'a> {
         match self.without_surrounding() {
             Bracketing::None => ParseAction::SingleCandidate(candidate),
-            Bracketing::Included(slicable) if slicable == candidate => {
+            Bracketing::Included(sliceable) if sliceable == candidate => {
                 ParseAction::SingleCandidate(candidate)
             }
-            Bracketing::Included(slicable) | Bracketing::Wrapped(slicable) => {
-                let parts = vec![candidate, slicable];
+            Bracketing::Included(sliceable) | Bracketing::Wrapped(sliceable) => {
+                let parts = vec![candidate, sliceable];
                 let parts = parts
                     .into_iter()
                     .filter(|v| !v.is_empty())
@@ -947,7 +947,7 @@ mod test {
                 "available",
                 "See",
                 // "what", // what is dropped because it is followed by the fancy: ’
-                // "s",    // s is dropped because it is preceeded by the fancy: ’
+                // "s",    // s is dropped because it is preceded by the fancy: ’
                 // "new", // Already seen
                 "in",
                 "version",
