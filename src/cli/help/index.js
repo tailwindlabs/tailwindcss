@@ -52,15 +52,19 @@ export function help({ message, usage, commands, options }) {
 
       if (flags.length === 1) {
         console.log(
-          ' '.repeat(indent + 4 /* 4 = "-i, ".length */)
-          + flags.slice().reverse().join(', ').padEnd(20, ' ')
-          + description
+          [
+            ' '.repeat(indent + 4 /* 4 = "-i, ".length */),
+            flags.slice().reverse().join(', ').padEnd(20, ' '),
+            description,
+          ].join('')
         )
       } else {
         console.log(
-          ' '.repeat(indent)
-          + flags.slice().reverse().join(', ').padEnd(24, ' ')
-          + description
+          [
+            ' '.repeat(indent),
+            flags.slice().reverse().join(', ').padEnd(24, ' '),
+            description,
+          ].join('')
         )
       }
     }
