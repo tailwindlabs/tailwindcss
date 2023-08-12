@@ -134,7 +134,7 @@ describe('iteration count', () => {
     ['spin 200s 100s infinite linear', 'infinite'],
     ['spin 200s 100s linear infinite', 'infinite'],
   ])(
-    'should be possible to parse "%s" with an iteraction count of "%s"',
+    'should be possible to parse "%s" with an iteration count of "%s"',
     (input, iterationCount) => {
       const parsed = parseAnimationValue(input)
       expect(parsed).toHaveLength(1)

@@ -73,7 +73,7 @@ describe('parseColor', () => {
     ${'initial'}
     ${'revert'}
     ${'unset'}
-  `('should return `null` for unparseable color "$color"', ({ color }) => {
+  `('should return `null` for unparsable color "$color"', ({ color }) => {
     expect(parseColor(color)).toBe(null)
   })
 })

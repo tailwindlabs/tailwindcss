@@ -369,7 +369,7 @@ export let variantPlugins = {
         let check = normalize(value)
         let isRaw = /^\w*\s*\(/.test(check)
 
-        // Chrome has a bug where `(condtion1)or(condition2)` is not valid
+        // Chrome has a bug where `(condition1)or(condition2)` is not valid
         // But `(condition1) or (condition2)` is supported.
         check = isRaw ? check.replace(/\b(and|or|not)\b/g, ' $1 ') : check
 

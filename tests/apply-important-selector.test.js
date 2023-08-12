@@ -16,10 +16,10 @@ it.each`
   ${':is(.foo) :is(.bar)'}                      | ${'#app :is(:is(.foo) :is(.bar))'}
   ${':is(.foo)::before'}                        | ${'#app :is(.foo)::before'}
   ${'.foo:before'}                              | ${'#app :is(.foo):before'}
-  ${'.foo::some-uknown-pseudo'}                 | ${'#app :is(.foo)::some-uknown-pseudo'}
-  ${'.foo::some-uknown-pseudo:hover'}           | ${'#app :is(.foo)::some-uknown-pseudo:hover'}
-  ${'.foo:focus::some-uknown-pseudo:hover'}     | ${'#app :is(.foo:focus)::some-uknown-pseudo:hover'}
-  ${'.foo:hover::some-uknown-pseudo:focus'}     | ${'#app :is(.foo:hover)::some-uknown-pseudo:focus'}
+  ${'.foo::some-unknown-pseudo'}                | ${'#app :is(.foo)::some-unknown-pseudo'}
+  ${'.foo::some-unknown-pseudo:hover'}          | ${'#app :is(.foo)::some-unknown-pseudo:hover'}
+  ${'.foo:focus::some-unknown-pseudo:hover'}    | ${'#app :is(.foo:focus)::some-unknown-pseudo:hover'}
+  ${'.foo:hover::some-unknown-pseudo:focus'}    | ${'#app :is(.foo:hover)::some-unknown-pseudo:focus'}
 `('should generate "$after" from "$before"', ({ before, after }) => {
   expect(applyImportantSelector(before, '#app')).toEqual(after)
 })

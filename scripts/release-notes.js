@@ -1,5 +1,5 @@
 // Given a version, figure out what the release notes are so that we can use this to pre-fill the
-// relase notes on a GitHub release for the current version.
+// release notes on a GitHub release for the current version.
 
 let path = require('path')
 let fs = require('fs')
