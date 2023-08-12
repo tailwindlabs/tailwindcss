@@ -586,11 +586,11 @@ describe('Init command', () => {
             tailwindcss init [options]
 
           Options:
-                --esm                Initialize configuration file as ESM
-                --ts                 Initialize configuration file as TypeScript
-            -p, --postcss            Initialize a \`postcss.config.js\` file
-            -f, --full               Include the default values for all options in the generated configuration file
-            -h, --help               Display usage information
+                --esm               Initialize configuration file as ESM
+                --ts                Initialize configuration file as TypeScript
+            -p, --postcss           Initialize a \`postcss.config.js\` file
+            -f, --full              Include the default values for all options in the generated configuration file
+            -h, --help              Display usage information
         `)
     )
   })
