@@ -52,8 +52,8 @@ export function help({ message, usage, commands, options }) {
 
       if (flags.length === 1) {
         console.log(
-          ' '.repeat(indent + 4 /* 4 = "-i, ".length */),
-          + flags.slice().reverse().join(', ').padEnd(20, ' '),
+          ' '.repeat(indent + 4 /* 4 = "-i, ".length */)
+          + flags.slice().reverse().join(', ').padEnd(20, ' ')
           + description
         )
       } else {
