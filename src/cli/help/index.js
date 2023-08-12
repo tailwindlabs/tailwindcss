@@ -21,7 +21,7 @@ export function help({ message, usage, commands, options }) {
     console.log()
     console.log('Usage:')
     for (let example of usage) {
-      console.log(' '.repeat(indent), example)
+      console.log(' '.repeat(indent) + example)
     }
   }
 
@@ -30,7 +30,7 @@ export function help({ message, usage, commands, options }) {
     console.log()
     console.log('Commands:')
     for (let command of commands) {
-      console.log(' '.repeat(indent), command)
+      console.log(' '.repeat(indent) + command)
     }
   }
 
@@ -53,14 +53,14 @@ export function help({ message, usage, commands, options }) {
       if (flags.length === 1) {
         console.log(
           ' '.repeat(indent + 4 /* 4 = "-i, ".length */),
-          flags.slice().reverse().join(', ').padEnd(20, ' '),
-          description
+          + flags.slice().reverse().join(', ').padEnd(20, ' '),
+          + description
         )
       } else {
         console.log(
-          ' '.repeat(indent),
-          flags.slice().reverse().join(', ').padEnd(24, ' '),
-          description
+          ' '.repeat(indent)
+          + flags.slice().reverse().join(', ').padEnd(24, ' ')
+          + description
         )
       }
     }
