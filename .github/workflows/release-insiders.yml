@@ -159,18 +159,23 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             strip: strip
             image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+            download: false
           - target: aarch64-unknown-linux-gnu
             strip: llvm-strip
             image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
+            download: false
           - target: armv7-unknown-linux-gnueabihf
             strip: llvm-strip
             image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-zig
+            download: false
           - target: aarch64-unknown-linux-musl
             image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             strip: aarch64-linux-musl-strip
+            download: true
           - target: x86_64-unknown-linux-musl
             image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             strip: strip
+            download: true
 
     name: Build ${{ matrix.target }} (OXIDE)
     runs-on: ubuntu-latest
@@ -214,6 +219,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Rust (Stable)
+        if: ${{ matrix.download }}
+        run: |
+          rustup default stable
 
       - name: Setup cross compile toolchain
         if: ${{ matrix.setup }}
