@@ -54,13 +54,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-
       - name: Check versions
         run: |
           echo "Node:" `node --version`
