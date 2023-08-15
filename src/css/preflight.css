@@ -39,11 +39,15 @@ html {
 /*
 1. Remove the margin in all browsers.
 2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+3. Smooth the font on the level of the pixel, as opposed to the subpixel. Switching from subpixel rendering to anti-aliasing for light text on dark backgrounds makes it look lighter.
+4. Render text with grayscale anti-aliasing, as opposed to the subpixel. Switching from subpixel rendering to anti-aliasing for light text on dark backgrounds makes it look lighter.
 */
 
 body {
   margin: 0; /* 1 */
   line-height: inherit; /* 2 */
+  -webkit-font-smoothing: antialiased; /* 3 */
+  -moz-osx-font-smoothing: grayscale; /* 4 */
 }
 
 /*
