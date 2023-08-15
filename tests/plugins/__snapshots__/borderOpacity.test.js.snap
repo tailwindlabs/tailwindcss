@@ -14,6 +14,10 @@ exports[`should test the 'borderOpacity' plugin 1`] = `
   --tw-border-opacity: 1;
 }
 
+.border-opacity-15 {
+  --tw-border-opacity: .15;
+}
+
 .border-opacity-20 {
   --tw-border-opacity: .2;
 }
@@ -26,8 +30,16 @@ exports[`should test the 'borderOpacity' plugin 1`] = `
   --tw-border-opacity: .3;
 }
 
+.border-opacity-35 {
+  --tw-border-opacity: .35;
+}
+
 .border-opacity-40 {
   --tw-border-opacity: .4;
+}
+
+.border-opacity-45 {
+  --tw-border-opacity: .45;
 }
 
 .border-opacity-5 {
@@ -38,8 +50,16 @@ exports[`should test the 'borderOpacity' plugin 1`] = `
   --tw-border-opacity: .5;
 }
 
+.border-opacity-55 {
+  --tw-border-opacity: .55;
+}
+
 .border-opacity-60 {
   --tw-border-opacity: .6;
+}
+
+.border-opacity-65 {
+  --tw-border-opacity: .65;
 }
 
 .border-opacity-70 {
@@ -52,6 +72,10 @@ exports[`should test the 'borderOpacity' plugin 1`] = `
 
 .border-opacity-80 {
   --tw-border-opacity: .8;
+}
+
+.border-opacity-85 {
+  --tw-border-opacity: .85;
 }
 
 .border-opacity-90 {

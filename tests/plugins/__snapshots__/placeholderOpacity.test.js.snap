@@ -14,6 +14,10 @@ exports[`should test the 'placeholderOpacity' plugin 1`] = `
   --tw-placeholder-opacity: 1;
 }
 
+.placeholder-opacity-15::placeholder {
+  --tw-placeholder-opacity: .15;
+}
+
 .placeholder-opacity-20::placeholder {
   --tw-placeholder-opacity: .2;
 }
@@ -26,8 +30,16 @@ exports[`should test the 'placeholderOpacity' plugin 1`] = `
   --tw-placeholder-opacity: .3;
 }
 
+.placeholder-opacity-35::placeholder {
+  --tw-placeholder-opacity: .35;
+}
+
 .placeholder-opacity-40::placeholder {
   --tw-placeholder-opacity: .4;
+}
+
+.placeholder-opacity-45::placeholder {
+  --tw-placeholder-opacity: .45;
 }
 
 .placeholder-opacity-5::placeholder {
@@ -38,8 +50,16 @@ exports[`should test the 'placeholderOpacity' plugin 1`] = `
   --tw-placeholder-opacity: .5;
 }
 
+.placeholder-opacity-55::placeholder {
+  --tw-placeholder-opacity: .55;
+}
+
 .placeholder-opacity-60::placeholder {
   --tw-placeholder-opacity: .6;
+}
+
+.placeholder-opacity-65::placeholder {
+  --tw-placeholder-opacity: .65;
 }
 
 .placeholder-opacity-70::placeholder {
@@ -52,6 +72,10 @@ exports[`should test the 'placeholderOpacity' plugin 1`] = `
 
 .placeholder-opacity-80::placeholder {
   --tw-placeholder-opacity: .8;
+}
+
+.placeholder-opacity-85::placeholder {
+  --tw-placeholder-opacity: .85;
 }
 
 .placeholder-opacity-90::placeholder {

@@ -14,6 +14,10 @@ exports[`should test the 'backgroundOpacity' plugin 1`] = `
   --tw-bg-opacity: 1;
 }
 
+.bg-opacity-15 {
+  --tw-bg-opacity: .15;
+}
+
 .bg-opacity-20 {
   --tw-bg-opacity: .2;
 }
@@ -26,8 +30,16 @@ exports[`should test the 'backgroundOpacity' plugin 1`] = `
   --tw-bg-opacity: .3;
 }
 
+.bg-opacity-35 {
+  --tw-bg-opacity: .35;
+}
+
 .bg-opacity-40 {
   --tw-bg-opacity: .4;
+}
+
+.bg-opacity-45 {
+  --tw-bg-opacity: .45;
 }
 
 .bg-opacity-5 {
@@ -38,8 +50,16 @@ exports[`should test the 'backgroundOpacity' plugin 1`] = `
   --tw-bg-opacity: .5;
 }
 
+.bg-opacity-55 {
+  --tw-bg-opacity: .55;
+}
+
 .bg-opacity-60 {
   --tw-bg-opacity: .6;
+}
+
+.bg-opacity-65 {
+  --tw-bg-opacity: .65;
 }
 
 .bg-opacity-70 {
@@ -52,6 +72,10 @@ exports[`should test the 'backgroundOpacity' plugin 1`] = `
 
 .bg-opacity-80 {
   --tw-bg-opacity: .8;
+}
+
+.bg-opacity-85 {
+  --tw-bg-opacity: .85;
 }
 
 .bg-opacity-90 {
