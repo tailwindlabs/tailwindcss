@@ -14,6 +14,10 @@ exports[`should test the 'ringOpacity' plugin 1`] = `
   --tw-ring-opacity: 1;
 }
 
+.ring-opacity-15 {
+  --tw-ring-opacity: .15;
+}
+
 .ring-opacity-20 {
   --tw-ring-opacity: .2;
 }
@@ -26,8 +30,16 @@ exports[`should test the 'ringOpacity' plugin 1`] = `
   --tw-ring-opacity: .3;
 }
 
+.ring-opacity-35 {
+  --tw-ring-opacity: .35;
+}
+
 .ring-opacity-40 {
   --tw-ring-opacity: .4;
+}
+
+.ring-opacity-45 {
+  --tw-ring-opacity: .45;
 }
 
 .ring-opacity-5 {
@@ -38,8 +50,16 @@ exports[`should test the 'ringOpacity' plugin 1`] = `
   --tw-ring-opacity: .5;
 }
 
+.ring-opacity-55 {
+  --tw-ring-opacity: .55;
+}
+
 .ring-opacity-60 {
   --tw-ring-opacity: .6;
+}
+
+.ring-opacity-65 {
+  --tw-ring-opacity: .65;
 }
 
 .ring-opacity-70 {
@@ -52,6 +72,10 @@ exports[`should test the 'ringOpacity' plugin 1`] = `
 
 .ring-opacity-80 {
   --tw-ring-opacity: .8;
+}
+
+.ring-opacity-85 {
+  --tw-ring-opacity: .85;
 }
 
 .ring-opacity-90 {
@@ -90,6 +114,10 @@ exports[`should test the 'ringOpacity' plugin 2`] = `
   --tw-ring-opacity: 1;
 }
 
+.ring-opacity-15 {
+  --tw-ring-opacity: .15;
+}
+
 .ring-opacity-20 {
   --tw-ring-opacity: .2;
 }
@@ -102,8 +130,16 @@ exports[`should test the 'ringOpacity' plugin 2`] = `
   --tw-ring-opacity: .3;
 }
 
+.ring-opacity-35 {
+  --tw-ring-opacity: .35;
+}
+
 .ring-opacity-40 {
   --tw-ring-opacity: .4;
+}
+
+.ring-opacity-45 {
+  --tw-ring-opacity: .45;
 }
 
 .ring-opacity-5 {
@@ -114,8 +150,16 @@ exports[`should test the 'ringOpacity' plugin 2`] = `
   --tw-ring-opacity: .5;
 }
 
+.ring-opacity-55 {
+  --tw-ring-opacity: .55;
+}
+
 .ring-opacity-60 {
   --tw-ring-opacity: .6;
+}
+
+.ring-opacity-65 {
+  --tw-ring-opacity: .65;
 }
 
 .ring-opacity-70 {
@@ -128,6 +172,10 @@ exports[`should test the 'ringOpacity' plugin 2`] = `
 
 .ring-opacity-80 {
   --tw-ring-opacity: .8;
+}
+
+.ring-opacity-85 {
+  --tw-ring-opacity: .85;
 }
 
 .ring-opacity-90 {

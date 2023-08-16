@@ -16,6 +16,9 @@ quickPluginTest('divideOpacity', {
   .divide-opacity-100 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 1;
   }
+  .divide-opacity-15 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-opacity: 0.15;
+  }
   .divide-opacity-20 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.2;
   }
@@ -25,8 +28,14 @@ quickPluginTest('divideOpacity', {
   .divide-opacity-30 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.3;
   }
+  .divide-opacity-35 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-opacity: 0.35;
+  }
   .divide-opacity-40 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.4;
+  }
+  .divide-opacity-45 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-opacity: 0.45;
   }
   .divide-opacity-5 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.05;
@@ -34,8 +43,14 @@ quickPluginTest('divideOpacity', {
   .divide-opacity-50 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.5;
   }
+  .divide-opacity-55 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-opacity: 0.55;
+  }
   .divide-opacity-60 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.6;
+  }
+  .divide-opacity-65 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-opacity: 0.65;
   }
   .divide-opacity-70 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.7;
@@ -45,6 +60,9 @@ quickPluginTest('divideOpacity', {
   }
   .divide-opacity-80 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.8;
+  }
+  .divide-opacity-85 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-opacity: 0.85;
   }
   .divide-opacity-90 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.9;

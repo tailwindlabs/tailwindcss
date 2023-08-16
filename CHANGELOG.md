@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `has-*` variants for `:has(...)` pseudo-class ([#11318](https://github.com/tailwindlabs/tailwindcss/pull/11318))
 - Add `text-wrap` utilities including `text-balance` ([#11320](https://github.com/tailwindlabs/tailwindcss/pull/11320))
 - Explicitly configure Lightning CSS features, and prefer user browserslist over default browserslist ([#11402](https://github.com/tailwindlabs/tailwindcss/pull/11402), [#11412](https://github.com/tailwindlabs/tailwindcss/pull/11412))
+- Extend default `opacity` scale to include all steps of 5 ([#11832](https://github.com/tailwindlabs/tailwindcss/pull/11832))
 
 ### Changed
 
