@@ -569,7 +569,7 @@ function* recordCandidates(matches, classCandidate) {
   }
 }
 
-function* resolveMatches(candidate, context, original = candidate) {
+function* resolveMatches(candidate, context) {
   let separator = context.tailwindConfig.separator
   let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
   let important = false
@@ -577,15 +577,6 @@ function* resolveMatches(candidate, context, original = candidate) {
   if (classCandidate.startsWith('!')) {
     important = true
     classCandidate = classCandidate.slice(1)
-  }
-
-  if (flagEnabled(context.tailwindConfig, 'variantGrouping')) {
-    if (classCandidate.startsWith('(') && classCandidate.endsWith(')')) {
-      let base = variants.slice().reverse().join(separator)
-      for (let part of splitAtTopLevelOnly(classCandidate.slice(1, -1), ',')) {
-        yield* resolveMatches(base + separator + part, context, original)
-      }
-    }
   }
 
   // TODO: Reintroduce this in ways that doesn't break on false positives
@@ -776,7 +767,7 @@ function* resolveMatches(candidate, context, original = candidate) {
       match[1].raws.tailwind = { ...match[1].raws.tailwind, candidate }
 
       // Apply final format selector
-      match = applyFinalFormat(match, { context, candidate, original })
+      match = applyFinalFormat(match, { context, candidate })
 
       // Skip rules with invalid selectors
       // This will cause the candidate to be added to the "not class"
@@ -790,7 +781,7 @@ function* resolveMatches(candidate, context, original = candidate) {
   }
 }
 
-function applyFinalFormat(match, { context, candidate, original }) {
+function applyFinalFormat(match, { context, candidate }) {
   if (!match[0].collectedFormats) {
     return match
   }
@@ -801,7 +792,7 @@ function applyFinalFormat(match, { context, candidate, original }) {
   try {
     finalFormat = formatVariantSelector(match[0].collectedFormats, {
       context,
-      candidate: original,
+      candidate,
     })
   } catch {
     // The format selector we produced is invalid

@@ -21,7 +21,6 @@ export function defaultExtractor(context) {
 
 function* buildRegExps(context) {
   let separator = context.tailwindConfig.separator
-  let variantGroupingEnabled = flagEnabled(context.tailwindConfig, 'variantGrouping')
   let prefix =
     context.tailwindConfig.prefix !== ''
       ? regex.optional(regex.pattern([/-?/, regex.escape(context.tailwindConfig.prefix)]))
@@ -103,15 +102,7 @@ function* buildRegExps(context) {
 
       prefix,
 
-      variantGroupingEnabled
-        ? regex.any([
-            // Or any of those things but grouped separated by commas
-            regex.pattern([/\(/, utility, regex.zeroOrMore([/,/, utility]), /\)/]),
-
-            // Arbitrary properties, constrained utilities, arbitrary values, etc…
-            utility,
-          ])
-        : utility,
+      utility,
     ])
   }
 

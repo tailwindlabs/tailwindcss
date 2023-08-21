@@ -17,11 +17,7 @@ export let featureFlags = {
     'relativeContentPathsByDefault',
     'logicalSiblingUtilities',
   ],
-  experimental: [
-    'optimizeUniversalDefaults',
-    'oxideParser',
-    // 'variantGrouping',
-  ],
+  experimental: ['optimizeUniversalDefaults', 'oxideParser'],
 }
 
 export function flagEnabled(config, flag) {
