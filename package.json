@@ -76,7 +76,7 @@
     "normalize-path": "^3.0.0",
     "object-hash": "^3.0.0",
     "picocolors": "^1.0.0",
-    "postcss": "^8.4.27",
+    "postcss": "^8.4.28",
     "postcss-import": "^15.1.0",
     "postcss-js": "^4.0.1",
     "postcss-load-config": "^4.0.1",
