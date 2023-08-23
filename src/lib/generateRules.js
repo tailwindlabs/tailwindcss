@@ -16,7 +16,6 @@ import { normalize } from '../util/dataTypes'
 import { isValidVariantFormatString, parseVariant, INTERNAL_FEATURES } from './setupContextUtils'
 import isValidArbitraryValue from '../util/isSyntacticallyValidPropertyValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
-import { flagEnabled } from '../featureFlags'
 import { applyImportantSelector } from '../util/applyImportantSelector'
 
 let classNameParser = selectorParser((selectors) => {
