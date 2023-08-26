@@ -98,7 +98,7 @@ test('matching components with variants', () => {
           {
             values: {
               foo: 'foo',
-            }
+            },
           }
         )
       },

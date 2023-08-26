@@ -580,16 +580,19 @@ test('matching utilities with variants', () => {
       function ({ matchUtilities }) {
         matchUtilities(
           {
-            test: (value, { modifier, variants }) => ({
-              value,
-              variants: variants.sort().join('_'),
-              modifier,
-            }),
+            test: (value, { modifier, variants }) => {
+              variants.push('sm') // test that the original array isn't overwritten
+              return {
+                value,
+                variants: variants.slice(0, -1).join('_'),
+                modifier,
+              }
+            },
           },
           {
             values: {
               foo: 'foo',
-            }
+            },
           }
         )
       },
