@@ -393,7 +393,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         classList.add([prefixedIdentifier, options])
 
-        function wrapped(modifier, { isOnlyPlugin }) {
+        function wrapped(modifier, variants, { isOnlyPlugin }) {
           let [value, coercedType, utilityModifier] = coerceValue(
             options.types,
             modifier,
@@ -433,6 +433,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
               return utilityModifier
             },
+            variants,
           }
 
           let ruleSets = []
@@ -471,7 +472,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         classList.add([prefixedIdentifier, options])
 
-        function wrapped(modifier, { isOnlyPlugin }) {
+        function wrapped(modifier, variants, { isOnlyPlugin }) {
           let [value, coercedType, utilityModifier] = coerceValue(
             options.types,
             modifier,
@@ -511,6 +512,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
               return utilityModifier
             },
+            variants,
           }
 
           let ruleSets = []

@@ -601,7 +601,7 @@ function* resolveMatches(candidate, context) {
       let matchesPerPlugin = []
 
       if (typeof plugin === 'function') {
-        for (let ruleSet of [].concat(plugin(modifier, { isOnlyPlugin }))) {
+        for (let ruleSet of [].concat(plugin(modifier, variants.slice(), { isOnlyPlugin }))) {
           let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
           for (let rule of rules) {
             matchesPerPlugin.push([{ ...sort, options: { ...sort.options, ...options } }, rule])

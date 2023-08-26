@@ -273,7 +273,7 @@ export interface PluginAPI {
   matchUtilities<T = string, U = string>(
     utilities: KeyValuePair<
       string,
-      (value: T | string, extra: { modifier: U | string | null }) => CSSRuleObject | null
+      (value: T | string, extra: { modifier: U | string | null, variants: string[] }) => CSSRuleObject | null
     >,
     options?: Partial<{
       respectPrefix: boolean
@@ -296,7 +296,7 @@ export interface PluginAPI {
   matchComponents<T = string, U = string>(
     components: KeyValuePair<
       string,
-      (value: T | string, extra: { modifier: U | string | null }) => CSSRuleObject | null
+      (value: T | string, extra: { modifier: U | string | null, variants: string[] }) => CSSRuleObject | null
     >,
     options?: Partial<{
       respectPrefix: boolean

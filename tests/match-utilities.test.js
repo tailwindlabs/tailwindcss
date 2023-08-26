@@ -571,3 +571,38 @@ test('matching utilities with a lookup value that does not match the configured 
     `)
   })
 })
+
+test('matching utilities with variants', () => {
+  let config = {
+    content: [{ raw: html`<div class="hover:group-focus:test-foo"></div>` }],
+    theme: {},
+    plugins: [
+      function ({ matchUtilities }) {
+        matchUtilities(
+          {
+            test: (value, { modifier, variants }) => ({
+              value,
+              variants: variants.sort().join('_'),
+              modifier,
+            }),
+          },
+          {
+            values: {
+              foo: 'foo',
+            }
+          }
+        )
+      },
+    ],
+    corePlugins: [],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .group:focus .hover\:group-focus\:test-foo:hover {
+        value: foo;
+        variants: group-focus_hover;
+      }
+    `)
+  })
+})
