@@ -115,7 +115,11 @@ progress {
   vertical-align: baseline;
 }
 
-:is(::-webkit-inner-spin-button, ::-webkit-outer-spin-button) {
+::-webkit-inner-spin-button {
+  height: auto;
+}
+
+::-webkit-outer-spin-button {
   height: auto;
 }
 
@@ -308,7 +312,11 @@ progress {
   vertical-align: baseline;
 }
 
-:is(::-webkit-inner-spin-button, ::-webkit-outer-spin-button) {
+::-webkit-inner-spin-button {
+  height: auto;
+}
+
+::-webkit-outer-spin-button {
   height: auto;
 }
 
