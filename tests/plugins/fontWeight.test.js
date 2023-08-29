@@ -6,7 +6,7 @@ quickPluginTest('fontWeight', {
     'font-[bold]',
     'font-[650]',
     'font-[var(--my-value)]',
-    'font-[inherit],
+    'font-[inherit]' ,
   ],
 }).toMatchFormattedCss(css`
   .font-\[650\] {
