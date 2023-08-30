@@ -464,6 +464,11 @@ export let variantPlugins = {
   forcedColorsVariants: ({ addVariant }) => {
     addVariant('forced-colors', '@media (forced-colors: active)')
   },
+
+  scriptingVariants: ({ addVariant }) => {
+    addVariant('noscript', '@media (scripting: none)')
+    addVariant('scripting', '@media (scripting: enabled)')
+  },
 }
 
 let cssTransformValue = [
