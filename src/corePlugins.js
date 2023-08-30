@@ -2877,4 +2877,10 @@ export let corePlugins = {
   content: createUtilityPlugin('content', [
     ['content', ['--tw-content', ['content', 'var(--tw-content)']]],
   ]),
+  forcedColorsAdjust: ({ addUtilities }) => {
+    addUtilities({
+      '.forced-colors-auto': { 'forced-colors-adjust': 'auto' },
+      '.forced-colors-none': { 'forced-colors-adjust': 'none' },
+    })
+  },
 }
