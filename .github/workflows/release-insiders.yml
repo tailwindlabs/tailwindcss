@@ -225,10 +225,6 @@ jobs:
         run: |
           rustup default stable
 
-      - name: Setup cross compile toolchain
-        if: ${{ matrix.setup }}
-        run: ${{ matrix.setup }}
-
       - name: Setup rust target
         run: rustup target add ${{ matrix.target }}
 
