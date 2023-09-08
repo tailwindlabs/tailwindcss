@@ -11,7 +11,7 @@ exports[`should test the 'preflight' plugin 1`] = `
   --tw-content: "";
 }
 
-html {
+html, :host {
   -webkit-text-size-adjust: 100%;
   tab-size: 4;
   font-feature-settings: normal;
@@ -208,7 +208,7 @@ exports[`should test the 'preflight' plugin 2`] = `
   --tw-content: "";
 }
 
-html {
+html, :host {
   -webkit-text-size-adjust: 100%;
   tab-size: 4;
   font-feature-settings: normal;
