@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `has-*` variants for `:has(...)` pseudo-class ([#11318](https://github.com/tailwindlabs/tailwindcss/pull/11318))
 - Add `text-wrap` utilities including `text-balance` and `text-pretty` ([#11320](https://github.com/tailwindlabs/tailwindcss/pull/11320), [#12031](https://github.com/tailwindlabs/tailwindcss/pull/12031))
 - Extend default `opacity` scale to include all steps of 5 ([#11832](https://github.com/tailwindlabs/tailwindcss/pull/11832))
+- Update Preflight `html` styles to include shadow DOM `:host` pseudo-class ([#11200](https://github.com/tailwindlabs/tailwindcss/pull/11200))
 
 ## [3.3.6] - 2023-12-04
 
