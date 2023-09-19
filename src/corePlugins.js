@@ -460,6 +460,10 @@ export let variantPlugins = {
     addVariant('contrast-more', '@media (prefers-contrast: more)')
     addVariant('contrast-less', '@media (prefers-contrast: less)')
   },
+
+  startingStyleVariant: ({ addVariant }) => {
+    addVariant('starting', '@starting-style')
+  },
 }
 
 let cssTransformValue = [

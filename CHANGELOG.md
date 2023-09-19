@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extend default `opacity` scale to include all steps of 5 ([#11832](https://github.com/tailwindlabs/tailwindcss/pull/11832))
 - Update Preflight `html` styles to include shadow DOM `:host` pseudo-class ([#11200](https://github.com/tailwindlabs/tailwindcss/pull/11200))
 - Support loading plugins by package / file name ([#12087](https://github.com/tailwindlabs/tailwindcss/pull/12087))
+- Add `@starting-style` variant ([#12040](https://github.com/tailwindlabs/tailwindcss/pull/12040))
 
 ### Changed
 
