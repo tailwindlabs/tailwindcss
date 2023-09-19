@@ -10,4 +10,7 @@ quickPluginTest('textWrap').toMatchFormattedCss(css`
   .text-balance {
     text-wrap: balance;
   }
+  .text-pretty {
+    text-wrap: pretty;
+  }
 `)
