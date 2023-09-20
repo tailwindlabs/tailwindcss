@@ -1045,3 +1045,21 @@ it('can replace the potential alpha value in rgba/hsla syntax', async () => {
     }
   `)
 })
+
+it('variables with variable fallback values can use opacity modifier', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="bg-[rgb(var(--some-var,var(--some-other-var)))]/50"></div>`,
+      },
+    ],
+  }
+
+  let result = await run(`@tailwind utilities;`, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .bg-\[rgb\(var\(--some-var\,var\(--some-other-var\)\)\)\]\/50 {
+      background-color: rgb(var(--some-var, var(--some-other-var)) / 0.5);
+    }
+  `)
+})
