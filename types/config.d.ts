@@ -75,6 +75,8 @@ type DarkModeConfig =
   | 'class'
   // Use the `class` strategy with a custom class instead of `.dark`.
   | ['class', string]
+  // Use the `custom` strategy with a fully custom `addVariant()` definition.
+  | ['custom', Parameters<PluginAPI['addVariant']>[1]]
 
 type Screen = { raw: string } | { min: string } | { max: string } | { min: string; max: string }
 type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>
