@@ -51,7 +51,7 @@ it('should be possible to use the darkMode "custom" mode to fully customize the 
     darkMode: [
       'custom',
       [
-        '@media (prefers-color-scheme: dark) { &:not(:root[data-mode="light"] &) }',
+        '@media (prefers-color-scheme: dark) { &:not(:root[data-mode="light"] *) }',
         '&:is(:root[data-mode="dark"] *)',
       ],
     ],
@@ -69,7 +69,7 @@ it('should be possible to use the darkMode "custom" mode to fully customize the 
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
       @media (prefers-color-scheme: dark) {
-        .dark\:font-bold:not(:root[data-mode='light'] .dark\:font-bold) {
+        .dark\:font-bold:not(:root[data-mode='light'] *) {
           font-weight: 700;
         }
       }
