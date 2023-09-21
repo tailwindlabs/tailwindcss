@@ -898,21 +898,13 @@ module.exports = {
       'top-left': 'top left',
     },
     perspective: {
+      DEFAULT: '500px',
       none: 'none',
-      0: '0rem',
-      xs: '6.25rem', // 100px
-      sm: '15.625rem', // 250px
-      md: '31.25rem', // 500px
-      lg: '56.25rem', // 900px
-      xl: '90.625rem', // 1450px
-      '2xl': '137.5rem', // 2200px
-      '3xl': '196.875rem', // 3150px
-      '4xl': '268.75rem', // 4300px
-      '5xl': '353.125rem', // 5650px
-      '6xl': '450rem', // 7200px
-      '7xl': '559.375rem', // 8950px
-      '8xl': '681.25rem', // 10900px
-      '9xl': '815.625rem', // 13050px
+      dramatic: '100px',
+      near: '300px',
+      normal: '500px',
+      midrange: '800px',
+      distant: '1200px',
     },
     transitionDelay: {
       0: '0s',
