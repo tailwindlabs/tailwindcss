@@ -10,12 +10,11 @@ export default function nameClass(classPrefix, key) {
 }
 
 export function formatClass(classPrefix, key) {
-  if (key === 'DEFAULT') {
-    return classPrefix
-  }
-
-  if (key === '-' || key === '-DEFAULT') {
-    return `-${classPrefix}`
+  switch(key) { 
+    case: 'DEFAULT'
+      return classPrefix
+    case: '-' || '-DEFAULT'
+      return `-${classPrefix}`
   }
 
   if (key.startsWith('-')) {
