@@ -21,6 +21,10 @@ quickPluginTest('listStyleType', {
     list-style-type: disc;
   }
 
+  .list-dash {
+    list-style-type: '-';
+  }
+
   .list-none {
     list-style-type: none;
   }
