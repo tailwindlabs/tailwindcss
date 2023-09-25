@@ -169,12 +169,18 @@ export default function expandTailwindAtRules(context) {
     }
 
     // Otherwise, read any files in node and parse with regexes
-    await Promise.all(
-      regexParserContent.map(async ([{ file, content }, { transformer, extractor }]) => {
-        content = file ? await fs.promises.readFile(file, 'utf8') : content
-        getClassCandidates(transformer(content), extractor, candidates, seen)
-      })
-    )
+    const BATCH_SIZE = 500
+
+    for (let i = 0; i < regexParserContent.length; i += BATCH_SIZE) {
+      let batch = regexParserContent.slice(i, i + BATCH_SIZE)
+
+      await Promise.all(
+        batch.map(async ([{ file, content }, { transformer, extractor }]) => {
+          content = file ? await fs.promises.readFile(file, 'utf8') : content
+          getClassCandidates(transformer(content), extractor, candidates, seen)
+        })
+      )
+    }
 
     env.DEBUG && console.timeEnd('Reading changed files')
 
