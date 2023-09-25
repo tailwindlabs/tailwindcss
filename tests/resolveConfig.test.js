@@ -1680,16 +1680,20 @@ test('core plugin configurations stack', () => {
 })
 
 test('plugins are merged', () => {
+  let p1 = { config: { order: '1' } }
+  let p2 = { config: { order: '2' } }
+  let p3 = { config: { order: '3' } }
+
   const userConfig = {
-    plugins: ['3'],
+    plugins: [p3],
   }
 
   const otherConfig = {
-    plugins: ['2'],
+    plugins: [p2],
   }
 
   const defaultConfig = {
-    plugins: ['1'],
+    plugins: [p1],
     prefix: '',
     important: false,
     separator: ':',
@@ -1704,7 +1708,7 @@ test('plugins are merged', () => {
     important: false,
     separator: ':',
     theme: {},
-    plugins: ['1', '2', '3'],
+    plugins: [p1, p2, p3],
   })
 })
 
