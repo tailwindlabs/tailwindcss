@@ -45,15 +45,12 @@ async function lightningcss(result, { map = true, minify = true } = {}) {
       sourceMap: result.map === undefined ? map : !!result.map,
       inputSourceMap: result.map ? result.map.toString() : undefined,
       targets: lightning.browserslistToTargets(browserslist(browsersListConfig)),
-      drafts: {
-        nesting: true,
-      },
       include: Features.Nesting,
       exclude: Features.LogicalProperties,
     })
 
     return Object.assign(result, {
-      css: transformed.code.toString('utf8'),
+      css: transformed.code.toString(),
       map: result.map
         ? Object.assign(result.map, {
             toString() {

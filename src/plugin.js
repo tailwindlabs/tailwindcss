@@ -67,7 +67,6 @@ module.exports = function tailwindcss(configOrPath) {
             sourceMap: !!intermediateMap,
             targets: lightningcss.browserslistToTargets(browserslist(browsersListConfig)),
             drafts: {
-              nesting: true,
               customMedia: true,
             },
             nonStandard: {
