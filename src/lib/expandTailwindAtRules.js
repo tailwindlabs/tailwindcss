@@ -135,43 +135,47 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Reading changed files')
 
-    if (flagEnabled(context.tailwindConfig, 'oxideParser')) {
-      let rustParserContent = []
-      let regexParserContent = []
+    /** @type {[item: {file?: string, content?: string}, meta: {transformer: any, extractor: any}][]} */
+    let regexParserContent = []
 
-      for (let item of context.changedContent) {
-        let transformer = getTransformer(context.tailwindConfig, item.extension)
-        let extractor = getExtractor(context, item.extension)
+    /** @type {{file?: string, content?: string}[]} */
+    let rustParserContent = []
 
-        if (transformer === builtInTransformers.DEFAULT && extractor?.DEFAULT_EXTRACTOR === true) {
-          rustParserContent.push(item)
-        } else {
-          regexParserContent.push([item, { transformer, extractor }])
-        }
+    for (let item of context.changedContent) {
+      let transformer = getTransformer(context.tailwindConfig, item.extension)
+      let extractor = getExtractor(context, item.extension)
+
+      if (
+        flagEnabled(context.tailwindConfig, 'oxideParser') &&
+        transformer === builtInTransformers.DEFAULT &&
+        extractor?.DEFAULT_EXTRACTOR === true
+      ) {
+        rustParserContent.push(item)
+      } else {
+        regexParserContent.push([item, { transformer, extractor }])
       }
+    }
 
-      if (rustParserContent.length > 0) {
-        for (let candidate of parseCandidateStrings(
-          rustParserContent,
-          IO.Parallel | Parsing.Parallel
-        )) {
-          candidates.add(candidate)
-        }
+    // Read files using our newer, faster parser when:
+    // - Oxide is enabled; AND
+    // - The file is using default transfomers and extractors
+    if (rustParserContent.length > 0) {
+      for (let candidate of parseCandidateStrings(
+        rustParserContent,
+        IO.Parallel | Parsing.Parallel
+      )) {
+        candidates.add(candidate)
       }
+    }
 
-      if (regexParserContent.length > 0) {
-        await Promise.all(
-          regexParserContent.map(async ([{ file, content }, { transformer, extractor }]) => {
-            content = file ? await fs.promises.readFile(file, 'utf8') : content
-            getClassCandidates(transformer(content), extractor, candidates, seen)
-          })
-        )
-      }
-    } else {
+    // Otherwise, read any files in node and parse with regexes
+    const BATCH_SIZE = 500
+
+    for (let i = 0; i < regexParserContent.length; i += BATCH_SIZE) {
+      let batch = regexParserContent.slice(i, i + BATCH_SIZE)
+
       await Promise.all(
-        context.changedContent.map(async ({ file, content, extension }) => {
-          let transformer = getTransformer(context.tailwindConfig, extension)
-          let extractor = getExtractor(context, extension)
+        batch.map(async ([{ file, content }, { transformer, extractor }]) => {
           content = file ? await fs.promises.readFile(file, 'utf8') : content
           getClassCandidates(transformer(content), extractor, candidates, seen)
         })
