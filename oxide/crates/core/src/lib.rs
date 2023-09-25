@@ -342,8 +342,8 @@ pub fn parse_candidate_strings(input: Vec<ChangedContent>, options: u8) -> Vec<S
 
     match (IO::from(options), Parsing::from(options)) {
         (IO::Sequential, Parsing::Sequential) => parse_all_blobs_sync(read_all_files_sync(input)),
-        (IO::Sequential, Parsing::Parallel) => parse_all_blobs_sync(read_all_files(input)),
-        (IO::Parallel, Parsing::Sequential) => parse_all_blobs(read_all_files_sync(input)),
+        (IO::Sequential, Parsing::Parallel) => parse_all_blobs(read_all_files_sync(input)),
+        (IO::Parallel, Parsing::Sequential) => parse_all_blobs_sync(read_all_files(input)),
         (IO::Parallel, Parsing::Parallel) => parse_all_blobs(read_all_files(input)),
     }
 }
