@@ -145,14 +145,26 @@ export default function expandTailwindAtRules(context) {
       //   getClassCandidatesOxide(file, transformer(content), extractor, candidates, seen)
       // }
     } else {
-      await Promise.all(
-        context.changedContent.map(async ({ file, content, extension }) => {
-          let transformer = getTransformer(context.tailwindConfig, extension)
-          let extractor = getExtractor(context, extension)
-          content = file ? await fs.promises.readFile(file, 'utf8') : content
-          getClassCandidates(transformer(content), extractor, candidates, seen)
-        })
-      )
+      /** @type {[item: {file?: string, content?: string}, meta: {transformer: any, extractor: any}][]} */
+      let regexParserContent = []
+
+      for (let item of context.changedContent) {
+        let transformer = getTransformer(context.tailwindConfig, item.extension)
+        let extractor = getExtractor(context, item.extension)
+        regexParserContent.push([item, { transformer, extractor }])
+      }
+
+      const BATCH_SIZE = 500
+
+      for (let i = 0; i < regexParserContent.length; i += BATCH_SIZE) {
+        let batch = regexParserContent.slice(i, i + BATCH_SIZE)
+        await Promise.all(
+          batch.map(async ([{ file, content }, { transformer, extractor }]) => {
+            content = file ? await fs.promises.readFile(file, 'utf8') : content
+            getClassCandidates(transformer(content), extractor, candidates, seen)
+          })
+        )
+      }
     }
 
     env.DEBUG && console.timeEnd('Reading changed files')
