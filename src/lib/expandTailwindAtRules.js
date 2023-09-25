@@ -138,36 +138,37 @@ export default function expandTailwindAtRules(context) {
     /** @type {[item: {file?: string, content?: string}, meta: {transformer: any, extractor: any}][]} */
     let regexParserContent = []
 
-    if (flagEnabled(context.tailwindConfig, 'oxideParser')) {
-      let rustParserContent = []
+    /** @type {{file?: string, content?: string}[]} */
+    let rustParserContent = []
 
-      for (let item of context.changedContent) {
-        let transformer = getTransformer(context.tailwindConfig, item.extension)
-        let extractor = getExtractor(context, item.extension)
+    for (let item of context.changedContent) {
+      let transformer = getTransformer(context.tailwindConfig, item.extension)
+      let extractor = getExtractor(context, item.extension)
 
-        if (transformer === builtInTransformers.DEFAULT && extractor?.DEFAULT_EXTRACTOR === true) {
-          rustParserContent.push(item)
-        } else {
-          regexParserContent.push([item, { transformer, extractor }])
-        }
-      }
-
-      if (rustParserContent.length > 0) {
-        for (let candidate of parseCandidateStrings(
-          rustParserContent,
-          IO.Parallel | Parsing.Parallel
-        )) {
-          candidates.add(candidate)
-        }
-      }
-    } else {
-      for (let item of context.changedContent) {
-        let transformer = getTransformer(context.tailwindConfig, item.extension)
-        let extractor = getExtractor(context, item.extension)
+      if (
+        flagEnabled(context.tailwindConfig, 'oxideParser') &&
+        transformer === builtInTransformers.DEFAULT &&
+        extractor?.DEFAULT_EXTRACTOR === true
+      ) {
+        rustParserContent.push(item)
+      } else {
         regexParserContent.push([item, { transformer, extractor }])
       }
     }
 
+    // Read files using our newer, faster parser when:
+    // - Oxide is enabled; AND
+    // - The file is using default transfomers and extractors
+    if (rustParserContent.length > 0) {
+      for (let candidate of parseCandidateStrings(
+        rustParserContent,
+        IO.Parallel | Parsing.Parallel
+      )) {
+        candidates.add(candidate)
+      }
+    }
+
+    // Otherwise, read any files in node and parse with regexes
     await Promise.all(
       regexParserContent.map(async ([{ file, content }, { transformer, extractor }]) => {
         content = file ? await fs.promises.readFile(file, 'utf8') : content
