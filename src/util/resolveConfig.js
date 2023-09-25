@@ -220,6 +220,20 @@ function resolvePlugins(configs) {
     let plugins = []
 
     for (let plugin of config?.plugins ?? []) {
+      // TODO: If we want to support ESM plugins then a handful of things will have to become async
+      if (typeof plugin === 'string') {
+        // If the plugin is specified as a string then it's just the package name
+        plugin = require(plugin)
+        plugin = plugin.default ?? plugin
+      } else if (Array.isArray(plugin)) {
+        // If the plugin is specified as an array then it's a package name and optional options object
+        // [name] or [name, options]
+        let [pkg, options = undefined] = plugin
+        plugin = require(pkg)
+        plugin = plugin.default ?? plugin
+        plugin = plugin(options)
+      }
+
       if (plugin.__isOptionsFunction) {
         plugin = plugin()
       }
