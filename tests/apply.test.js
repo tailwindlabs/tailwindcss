@@ -2073,8 +2073,12 @@ test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      ::ng-deep .foo .bar,
-      ::v-deep .foo .bar,
+      ::ng-deep .foo .bar {
+        font-weight: 700;
+      }
+      ::v-deep .foo .bar {
+        font-weight: 700;
+      }
       ::deep .foo .bar {
         font-weight: 700;
       }

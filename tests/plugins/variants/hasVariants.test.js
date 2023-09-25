@@ -15,9 +15,15 @@ quickVariantPluginTest('hasVariants', {
     .has-\[\.foo\]\:flex:has(.foo) {
       display: flex;
     }
-    .group\/foo:has(.bar) .group-has-\[\.bar\]\/foo\:flex,
-    .group:has(.foo) .group-has-\[\.foo\]\:flex,
-    .peer\/foo:has(.bar) ~ .peer-has-\[\.bar\]\/foo\:flex,
+    .group\/foo:has(.bar) .group-has-\[\.bar\]\/foo\:flex {
+      display: flex;
+    }
+    .group:has(.foo) .group-has-\[\.foo\]\:flex {
+      display: flex;
+    }
+    .peer\/foo:has(.bar) ~ .peer-has-\[\.bar\]\/foo\:flex {
+      display: flex;
+    }
     .peer:has(.foo) ~ .peer-has-\[\.foo\]\:flex {
       display: flex;
     }
