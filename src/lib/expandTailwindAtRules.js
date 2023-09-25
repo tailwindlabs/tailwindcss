@@ -135,9 +135,11 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Reading changed files')
 
+    /** @type {[item: {file?: string, content?: string}, meta: {transformer: any, extractor: any}][]} */
+    let regexParserContent = []
+
     if (flagEnabled(context.tailwindConfig, 'oxideParser')) {
       let rustParserContent = []
-      let regexParserContent = []
 
       for (let item of context.changedContent) {
         let transformer = getTransformer(context.tailwindConfig, item.extension)
@@ -158,25 +160,20 @@ export default function expandTailwindAtRules(context) {
           candidates.add(candidate)
         }
       }
-
-      if (regexParserContent.length > 0) {
-        await Promise.all(
-          regexParserContent.map(async ([{ file, content }, { transformer, extractor }]) => {
-            content = file ? await fs.promises.readFile(file, 'utf8') : content
-            getClassCandidates(transformer(content), extractor, candidates, seen)
-          })
-        )
-      }
     } else {
-      await Promise.all(
-        context.changedContent.map(async ({ file, content, extension }) => {
-          let transformer = getTransformer(context.tailwindConfig, extension)
-          let extractor = getExtractor(context, extension)
-          content = file ? await fs.promises.readFile(file, 'utf8') : content
-          getClassCandidates(transformer(content), extractor, candidates, seen)
-        })
-      )
+      for (let item of context.changedContent) {
+        let transformer = getTransformer(context.tailwindConfig, item.extension)
+        let extractor = getExtractor(context, item.extension)
+        regexParserContent.push([item, { transformer, extractor }])
+      }
     }
+
+    await Promise.all(
+      regexParserContent.map(async ([{ file, content }, { transformer, extractor }]) => {
+        content = file ? await fs.promises.readFile(file, 'utf8') : content
+        getClassCandidates(transformer(content), extractor, candidates, seen)
+      })
+    )
 
     env.DEBUG && console.timeEnd('Reading changed files')
 
