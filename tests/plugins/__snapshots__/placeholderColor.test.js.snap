@@ -18498,7 +18498,7 @@ exports[`should test the 'placeholderColor' plugin 1`] = `
   color: #042f2ef2;
 }
 
-.placeholder-transparent::placeholder {
+.placeholder-transparent::placeholder, .placeholder-transparent\\/0::placeholder {
   color: #0000;
 }
 
@@ -40285,7 +40285,7 @@ exports[`should test the 'placeholderColor' plugin 2`] = `
   color: #042f2ef2;
 }
 
-.placeholder-transparent::placeholder {
+.placeholder-transparent::placeholder, .placeholder-transparent\\/0::placeholder {
   color: #0000;
 }
 
