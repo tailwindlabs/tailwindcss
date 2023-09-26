@@ -342,6 +342,8 @@ export type PluginsConfig = (
       (options: any): { handler: PluginCreator; config?: Partial<Config> }
       __isOptionsFunction: true
     }
+  | string
+  | [string, Record<string, any>]
 )[]
 
 // Top level config related
