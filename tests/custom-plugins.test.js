@@ -1914,3 +1914,63 @@ test('custom properties are not converted to kebab-case when added to base layer
     expect(result.css).toContain(`--colors-primaryThing-500: 0, 0, 255;`)
   })
 })
+
+test('plugins can loaded by package name / path', async () => {
+  let config = {
+    content: [{ raw: 'example-1' }],
+    plugins: [`${__dirname}/fixtures/plugins/example.cjs`],
+  }
+
+  let result = await run('@tailwind utilities', config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .example-1 {
+      color: red;
+    }
+  `)
+})
+
+test('named plugins can specify options', async () => {
+  let config = {
+    content: [{ raw: 'ex-example-1 example-1' }],
+    plugins: [[`${__dirname}/fixtures/plugins/example.cjs`, { prefix: 'ex-' }]],
+  }
+
+  let result = await run('@tailwind utilities', config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .ex-example-1 {
+      color: red;
+    }
+  `)
+})
+
+test('named plugins resolve default export', async () => {
+  let config = {
+    content: [{ raw: 'example-1' }],
+    plugins: [`${__dirname}/fixtures/plugins/example.default.cjs`],
+  }
+
+  let result = await run('@tailwind utilities', config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .example-1 {
+      color: red;
+    }
+  `)
+})
+
+test('named plugins resolve default export when using options', async () => {
+  let config = {
+    content: [{ raw: 'example-1 ex-example-1' }],
+    plugins: [[`${__dirname}/fixtures/plugins/example.default.cjs`, { prefix: 'ex-' }]],
+  }
+
+  let result = await run('@tailwind utilities', config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .ex-example-1 {
+      color: red;
+    }
+  `)
+})

@@ -210,27 +210,51 @@ function resolveFunctionKeys(object) {
   }, {})
 }
 
-function extractPluginConfigs(configs) {
+function resolvePlugins(configs) {
+  let pluginGroups = []
   let allConfigs = []
 
-  configs.forEach((config) => {
-    allConfigs = [...allConfigs, config]
+  for (let config of configs) {
+    allConfigs.push(config)
 
-    const plugins = config?.plugins ?? []
+    let plugins = []
 
-    if (plugins.length === 0) {
-      return
-    }
+    for (let plugin of config?.plugins ?? []) {
+      // TODO: If we want to support ESM plugins then a handful of things will have to become async
+      if (typeof plugin === 'string') {
+        // If the plugin is specified as a string then it's just the package name
+        plugin = require(plugin)
+        plugin = plugin.default ?? plugin
+      } else if (Array.isArray(plugin)) {
+        // If the plugin is specified as an array then it's a package name and optional options object
+        // [name] or [name, options]
+        let [pkg, options = undefined] = plugin
+        plugin = require(pkg)
+        plugin = plugin.default ?? plugin
+        plugin = plugin(options)
+      }
 
-    plugins.forEach((plugin) => {
       if (plugin.__isOptionsFunction) {
         plugin = plugin()
       }
-      allConfigs = [...allConfigs, ...extractPluginConfigs([plugin?.config ?? {}])]
-    })
-  })
 
-  return allConfigs
+      // We're explicitly skipping registering child plugins
+      // This will change in v4
+      let [, childConfigs] = resolvePlugins([plugin?.config ?? {}])
+
+      plugins.push(plugin)
+      allConfigs.push(...childConfigs)
+    }
+
+    pluginGroups.push(plugins)
+  }
+
+  // Reverse the order of the plugin groups
+  // This matches the old `reduceRight` behavior of the old `resolvePluginLists`
+  // Why? No idea.
+  let plugins = pluginGroups.reverse().flat()
+
+  return [plugins, allConfigs]
 }
 
 function resolveCorePlugins(corePluginConfigs) {
@@ -244,17 +268,11 @@ function resolveCorePlugins(corePluginConfigs) {
   return result
 }
 
-function resolvePluginLists(pluginLists) {
-  const result = [...pluginLists].reduceRight((resolved, pluginList) => {
-    return [...resolved, ...pluginList]
-  }, [])
-
-  return result
-}
-
 export default function resolveConfig(configs) {
+  let [plugins, pluginConfigs] = resolvePlugins(configs)
+
   let allConfigs = [
-    ...extractPluginConfigs(configs),
+    ...pluginConfigs,
     {
       prefix: '',
       important: false,
@@ -269,7 +287,7 @@ export default function resolveConfig(configs) {
           mergeExtensions(mergeThemes(allConfigs.map((t) => t?.theme ?? {})))
         ),
         corePlugins: resolveCorePlugins(allConfigs.map((c) => c.corePlugins)),
-        plugins: resolvePluginLists(configs.map((c) => c?.plugins ?? [])),
+        plugins,
       },
       ...allConfigs
     )
