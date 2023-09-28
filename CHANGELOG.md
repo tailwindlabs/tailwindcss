@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle variable colors that have variable fallback values ([#12049](https://github.com/tailwindlabs/tailwindcss/pull/12049))
 - Batch reading content files to prevent `too many open files` error ([#12079](https://github.com/tailwindlabs/tailwindcss/pull/12079))
 - Skip over classes inside `:not(…)` when nested in an at-rule ([#12105](https://github.com/tailwindlabs/tailwindcss/pull/12105))
+- Update types to work with `Node16` module resolution ([#12097](https://github.com/tailwindlabs/tailwindcss/pull/12097))
 
 ### Added
 
