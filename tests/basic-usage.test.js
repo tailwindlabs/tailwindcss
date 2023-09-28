@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { crosscheck, run, html, css, defaults } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(({ stable, oxide, engine }) => {
   test('basic usage', () => {
     let config = {
       content: [
@@ -1016,5 +1016,99 @@ crosscheck(({ stable, oxide }) => {
         display: none;
       }
     `)
+  })
+
+  test('detects quoted arbitrary values containing a slash', async () => {
+    let config = {
+      content: [
+        {
+          raw: html`<div class="group-[[href^='/']]:hidden"></div>`,
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    let result = await run(input, config)
+
+    expect(result.css).toMatchFormattedCss(
+      engine.oxide
+        ? css`
+            .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
+              display: none;
+            }
+          `
+        : css`
+            .hidden,
+            .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
+              display: none;
+            }
+          `
+    )
+  })
+
+  test('handled quoted arbitrary values containing escaped spaces', async () => {
+    let config = {
+      content: [
+        {
+          raw: html`<div class="group-[[href^='_bar']]:hidden"></div>`,
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    let result = await run(input, config)
+
+    expect(result.css).toMatchFormattedCss(
+      engine.oxide
+        ? css`
+            .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
+              display: none;
+            }
+          `
+        : css`
+            .hidden,
+            .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
+              display: none;
+            }
+          `
+    )
+  })
+
+  test('Skips classes inside :not() when nested inside an at-rule', async () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="disabled !disabled"></div> `,
+        },
+      ],
+      corePlugins: { preflight: false },
+      plugins: [
+        function ({ addUtilities }) {
+          addUtilities({
+            '.hand:not(.disabled)': {
+              '@supports (cursor: pointer)': {
+                cursor: 'pointer',
+              },
+            },
+          })
+        },
+      ],
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    // We didn't find the hand class therefore
+    // nothing should be generated
+    let result = await run(input, config)
+
+    expect(result.css).toMatchFormattedCss(css``)
   })
 })
