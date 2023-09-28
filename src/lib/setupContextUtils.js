@@ -147,43 +147,45 @@ function getClasses(selector, mutate) {
   return parser.transformSync(selector)
 }
 
+/**
+ * Ignore everything inside a :not(...). This allows you to write code like
+ * `div:not(.foo)`. If `.foo` is never found in your code, then we used to
+ * not generated it. But now we will ignore everything inside a `:not`, so
+ * that it still gets generated.
+ *
+ * @param {selectorParser.Root} selectors
+ */
+function ignoreNot(selectors) {
+  selectors.walkPseudos((pseudo) => {
+    if (pseudo.value === ':not') {
+      pseudo.remove()
+    }
+  })
+}
+
 function extractCandidates(node, state = { containsNonOnDemandable: false }, depth = 0) {
   let classes = []
+  let selectors = []
 
-  // Handle normal rules
   if (node.type === 'rule') {
-    // Ignore everything inside a :not(...). This allows you to write code like
-    // `div:not(.foo)`. If `.foo` is never found in your code, then we used to
-    // not generated it. But now we will ignore everything inside a `:not`, so
-    // that it still gets generated.
-    function ignoreNot(selectors) {
-      selectors.walkPseudos((pseudo) => {
-        if (pseudo.value === ':not') {
-          pseudo.remove()
-        }
-      })
-    }
-
-    for (let selector of node.selectors) {
-      let classCandidates = getClasses(selector, ignoreNot)
-      // At least one of the selectors contains non-"on-demandable" candidates.
-      if (classCandidates.length === 0) {
-        state.containsNonOnDemandable = true
-      }
-
-      for (let classCandidate of classCandidates) {
-        classes.push(classCandidate)
-      }
-    }
+    // Handle normal rules
+    selectors.push(...node.selectors)
+  } else if (node.type === 'atrule') {
+    // Handle at-rules (which contains nested rules)
+    node.walkRules((rule) => selectors.push(...rule.selectors))
   }
 
-  // Handle at-rules (which contains nested rules)
-  else if (node.type === 'atrule') {
-    node.walkRules((rule) => {
-      for (let classCandidate of rule.selectors.flatMap((selector) => getClasses(selector))) {
-        classes.push(classCandidate)
-      }
-    })
+  for (let selector of selectors) {
+    let classCandidates = getClasses(selector, ignoreNot)
+
+    // At least one of the selectors contains non-"on-demandable" candidates.
+    if (classCandidates.length === 0) {
+      state.containsNonOnDemandable = true
+    }
+
+    for (let classCandidate of classCandidates) {
+      classes.push(classCandidate)
+    }
   }
 
   if (depth === 0) {

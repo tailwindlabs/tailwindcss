@@ -760,3 +760,35 @@ test('handled quoted arbitrary values containing escaped spaces', async () => {
         `
   )
 })
+
+test('Skips classes inside :not() when nested inside an at-rule', async () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="disabled !disabled"></div> `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      function ({ addUtilities }) {
+        addUtilities({
+          '.hand:not(.disabled)': {
+            '@supports (cursor: pointer)': {
+              cursor: 'pointer',
+            },
+          },
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  // We didn't find the hand class therefore
+  // nothing should be generated
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css``)
+})
