@@ -186,6 +186,13 @@ export function finalizeSelector(current, formats, { context, candidate, base })
   // Remove extraneous selectors that do not include the base candidate
   selector.each((sel) => eliminateIrrelevantSelectors(sel, base))
 
+  // If ffter eliminating irrelevant selectors, we end up with nothing
+  // Then the whole "rule" this is associated with does not need to exist
+  // We use `null` as a marker value for that case
+  if (selector.length === 0) {
+    return null
+  }
+
   // If there are no formats that means there were no variants added to the candidate
   // so we can just return the selector as-is
   let formatAst = Array.isArray(formats)

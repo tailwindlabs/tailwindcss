@@ -815,10 +815,19 @@ function applyFinalFormat(match, { context, candidate }) {
     }
 
     try {
-      rule.selector = finalizeSelector(rule.selector, finalFormat, {
+      let selector = finalizeSelector(rule.selector, finalFormat, {
         candidate,
         context,
       })
+
+      // Finalize Selector determined that this candidate is irrelevant
+      // TODO: This elimination should happen earlier so this never happens
+      if (selector === null) {
+        rule.remove()
+        return
+      }
+
+      rule.selector = selector
     } catch {
       // If this selector is invalid we also want to skip it
       // But it's likely that being invalid here means there's a bug in a plugin rather than too loosely matching content
