@@ -2081,3 +2081,55 @@ test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
     `)
   })
 })
+
+test('should not break replacing important selector when the same as the parent selector (pseudo)', async () => {
+  let config = {
+    important: ':root',
+    content: [],
+  }
+
+  let input = css`
+    @tailwind components;
+    @layer components {
+      :root {
+        @apply flex;
+      }
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    :root {
+      display: flex;
+    }
+  `)
+})
+
+test('should not break replacing important selector when the same as the parent selector (class)', async () => {
+  let config = {
+    important: '.foo',
+    content: [
+      {
+        raw: html` <div class="foo"></div> `,
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind components;
+    @layer components {
+      .foo {
+        @apply flex;
+      }
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .foo {
+      display: flex;
+    }
+  `)
+})
