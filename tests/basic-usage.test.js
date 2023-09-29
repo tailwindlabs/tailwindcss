@@ -1112,3 +1112,46 @@ crosscheck(({ stable, oxide, engine }) => {
     expect(result.css).toMatchFormattedCss(css``)
   })
 })
+
+test('Irrelevant rules are removed when applying variants', async () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="md:w-full"></div> `,
+      },
+    ],
+    corePlugins: { preflight: false },
+    plugins: [
+      function ({ addUtilities }) {
+        addUtilities({
+          '@supports (foo: bar)': {
+            // This doesn't contain `w-full` so it should not exist in the output
+            '.outer': { color: 'red' },
+            '.outer:is(.w-full)': { color: 'green' },
+          },
+        })
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  // We didn't find the hand class therefore
+  // nothing should be generated
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    @media (min-width: 768px) {
+      .md\:w-full {
+        width: 100%;
+      }
+      @supports (foo: bar) {
+        .outer.md\:w-full {
+          color: green;
+        }
+      }
+    }
+  `)
+})
