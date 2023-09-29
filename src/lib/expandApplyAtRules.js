@@ -553,6 +553,13 @@ function processApply(root, context, localCache) {
                 ? parent.selector.slice(importantSelector.length)
                 : parent.selector
 
+            // If the selector becomes empty after replacing the important selector
+            // This means that it's the same as the parent selector and we don't want to replace it
+            // Otherwise we'll crash
+            if (parentSelector === '') {
+              parentSelector = parent.selector
+            }
+
             rule.selector = replaceSelector(parentSelector, rule.selector, applyCandidate)
 
             // And then re-add it if it was removed
