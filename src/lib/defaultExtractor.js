@@ -11,10 +11,12 @@ export function defaultExtractor(context) {
     let results = []
 
     for (let pattern of patterns) {
-      results = [...results, ...(content.match(pattern) ?? [])]
+      for (let result of content.match(pattern) ?? []) {
+        results.push(clipAtBalancedParens(result))
+      }
     }
 
-    return results.filter((v) => v !== undefined).map(clipAtBalancedParens)
+    return results
   }
 }
 
