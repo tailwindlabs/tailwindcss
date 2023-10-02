@@ -32,7 +32,7 @@ it('should be possible to differentiate between decoration utilities', () => {
   let config = {
     content: [
       {
-        raw: html` <div class="decoration-[#ccc] decoration-[3px]"></div> `,
+        raw: html`<div class="decoration-[#ccc] decoration-[3px]"></div>`,
       },
     ],
   }
@@ -53,7 +53,7 @@ it('should support modifiers for arbitrary values that contain the separator', (
   let config = {
     content: [
       {
-        raw: html` <div class="hover:bg-[url('https://github.com/tailwindlabs.png')]"></div> `,
+        raw: html`<div class="hover:bg-[url('https://github.com/tailwindlabs.png')]"></div>`,
       },
     ],
   }
