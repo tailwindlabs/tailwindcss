@@ -175,16 +175,6 @@
 .w-\[var\(--width\,calc\(100\%\+1rem\)\)\] {
   width: var(--width, calc(100% + 1rem));
 }
-.w-\[\{\{\}\}\] {
-  width: {
-     {
-    }
-  }
-}
-.w-\[\{\}\] {
-  width: {
-  }
-}
 .min-w-\[3\.23rem\] {
   min-width: 3.23rem;
 }
