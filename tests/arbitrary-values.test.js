@@ -14,6 +14,35 @@ test('arbitrary values', () => {
   })
 })
 
+// TODO: Currently Lightning CSS will throw an error when trying to print the invalid CSS, whereas
+// before it generated invalid CSS without throwing an error.
+//
+// In  perfect world, we would not generate anything, and potentially show a warning.
+test.skip('arbitrary values that result in invalid CSS should not be generated', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="w-[{}] w-[{{}}]"></div>`,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .w-\[\{\{\}\}\] {
+        width: {
+           {
+          }
+        }
+      }
+      .w-\[\{\}\] {
+        width: {
+        }
+      }
+    `)
+  })
+})
+
 test('should only detect classes with arbitrary values that are properly terminated after the arbitrary value', () => {
   let config = {
     content: [
