@@ -11,10 +11,12 @@ export function defaultExtractor(context) {
     let results = []
 
     for (let pattern of patterns) {
-      results = [...results, ...(content.match(pattern) ?? [])]
+      for (let result of content.match(pattern) ?? []) {
+        results.push(clipAtBalancedParens(result))
+      }
     }
 
-    return results.filter((v) => v !== undefined).map(clipAtBalancedParens)
+    return results
   }
 }
 
@@ -33,7 +35,7 @@ function* buildRegExps(context) {
     // This is a targeted fix to continue to allow theme()
     // with square brackets to work in arbitrary properties
     // while fixing a problem with the regex matching too much
-    /\[[^\s:'"`]+:[^\s]+?\[[^\s]+\][^\s]+?\]/,
+    /\[[^\s:'"`\]]+:[^\s]+?\[[^\s]+\][^\s]+?\]/,
 
     // Utilities
     regex.pattern([
