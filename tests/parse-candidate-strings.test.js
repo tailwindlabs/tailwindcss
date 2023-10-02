@@ -438,4 +438,25 @@ describe.each([
       expect(extractions).not.toContain(`bold`)
     })
   })
+
+  describe('real world', () => {
+    it.each([
+      [
+        'const myCVAComponent = cva([],{defaultVariants:{size:"md"},variants:{size:{sm:["p-1"],md:["p-1.5"],lg:["p-2"],xl:["p-2.5"]}}});',
+      ],
+      [
+        'const myCVAComponent = cva([],{defaultVariants:{size:"md"}, variants:{size:{sm:["p-1"],md:["p-1.5"],lg:["p-2"],xl:["p-2.5"]}}});',
+      ],
+      [
+        'const myCVAComponent = cva("",{defaultVariants:{size:"md"},variants:{size:{sm:["p-1"],md:["p-1.5"],lg:["p-2"],xl:["p-2.5"]}}});',
+      ],
+    ])('should work for issue #12109 (%#)', async (content) => {
+      let extractions = parse(content)
+
+      expect(extractions).toContain('p-1')
+      expect(extractions).toContain('p-1.5')
+      expect(extractions).toContain('p-2')
+      expect(extractions).toContain('p-2.5')
+    })
+  })
 })
