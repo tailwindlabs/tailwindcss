@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update types to work with `Node16` module resolution ([#12097](https://github.com/tailwindlabs/tailwindcss/pull/12097))
 - Don’t crash when important and parent selectors are equal in `@apply` ([#12112](https://github.com/tailwindlabs/tailwindcss/pull/12112))
 - Eliminate irrelevant rules when applying variants ([#12113](https://github.com/tailwindlabs/tailwindcss/pull/12113))
+- Improve RegEx parser, reduce possibilities as the key for arbitrary properties ([#12121](https://github.com/tailwindlabs/tailwindcss/pull/12121))
 
 ### Added
 
