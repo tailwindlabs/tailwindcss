@@ -18,26 +18,25 @@ test('arbitrary values', () => {
 // before it generated invalid CSS without throwing an error.
 //
 // In  perfect world, we would not generate anything, and potentially show a warning.
-test.skip('arbitrary values that result in invalid CSS should not be generated', () => {
+test('arbitrary values that result in invalid CSS should not be generated', () => {
   let config = {
     content: [
       {
-        raw: html`<div class="w-[{}] w-[{{}}]"></div>`,
+        raw: html`<div class="w-full w-[{}] w-[{{}}] [--custom:{}]"></div>`,
       },
     ],
   }
 
+  // NOTE: The version with braces are invalid and therefore produce nothing
   return run('@tailwind utilities', config).then((result) => {
+    // Required because it tries to reformat the {}
+    // prettier-ignore
     return expect(result.css).toMatchFormattedCss(css`
-      .w-\[\{\{\}\}\] {
-        width: {
-           {
-          }
-        }
+      .w-full {
+        width: 100%;
       }
-      .w-\[\{\}\] {
-        width: {
-        }
+      .\[--custom\:\{\}\] {
+        --custom: {}
       }
     `)
   })

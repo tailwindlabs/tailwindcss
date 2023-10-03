@@ -66,6 +66,7 @@ module.exports = function tailwindcss(configOrPath) {
             minify: false,
             sourceMap: !!intermediateMap,
             targets: lightningcss.browserslistToTargets(browserslist(browsersListConfig)),
+            errorRecovery: true,
             drafts: {
               customMedia: true,
             },
