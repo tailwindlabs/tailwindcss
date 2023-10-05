@@ -2860,6 +2860,12 @@ export let corePlugins = {
     )
   },
 
+  transitionBehavior: ({ addUtilities }) => {
+    addUtilities({
+      '.transition-allow-discrete': { 'transition-behavior': 'allow-discrete' },
+      '.transition-behavior-normal': { 'transition-behavior': 'normal' },
+    })
+  },
   transitionDelay: createUtilityPlugin('transitionDelay', [['delay', ['transitionDelay']]]),
   transitionDuration: createUtilityPlugin(
     'transitionDuration',
