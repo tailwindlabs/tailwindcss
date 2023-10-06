@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'divideOpacity' plugin 1`] = `
+"
+.divide-opacity-0 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: 0;
+}
+
+.divide-opacity-50 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: .5;
+}
+
+.divide-opacity-\\[0\\.12\\] > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: .12;
+}
+
+.divide-opacity-\\[var\\(--my-value\\)\\] > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: var(--my-value);
+}
+"
+`;

@@ -6,6 +6,12 @@ quickPluginTest('ringOpacity', {
     'ring-opacity-[0.12]',
     'ring-opacity-[var(--my-value)]',
   ],
+  theme: {
+    opacity: {
+      0: '0',
+      50: '.5',
+    },
+  },
 }).toMatchSnapshot()
 
 // With `respectDefaultRingColorOpacity` enabled
@@ -17,5 +23,11 @@ quickPluginTest('ringOpacity', {
   ],
   future: {
     respectDefaultRingColorOpacity: true,
+  },
+  theme: {
+    opacity: {
+      0: '0',
+      50: '.5',
+    },
   },
 }).toMatchSnapshot()

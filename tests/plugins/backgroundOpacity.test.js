@@ -6,4 +6,10 @@ quickPluginTest('backgroundOpacity', {
     'bg-opacity-[0.12]',
     'bg-opacity-[var(--my-value)]',
   ],
+  theme: {
+    opacity: {
+      0: '0',
+      50: '.5',
+    },
+  },
 }).toMatchSnapshot()

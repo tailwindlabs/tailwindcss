@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'textOpacity' plugin 1`] = `
+"
+.text-opacity-0 {
+  --tw-text-opacity: 0;
+}
+
+.text-opacity-50 {
+  --tw-text-opacity: .5;
+}
+
+.text-opacity-\\[12\\%\\] {
+  --tw-text-opacity: 12%;
+}
+
+.text-opacity-\\[var\\(--my-value\\)\\] {
+  --tw-text-opacity: var(--my-value);
+}
+"
+`;

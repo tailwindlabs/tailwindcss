@@ -6,4 +6,10 @@ quickPluginTest('borderOpacity', {
     'border-opacity-[12%]',
     'border-opacity-[var(--my-value)]',
   ],
+  theme: {
+    opacity: {
+      0: '0',
+      50: '.5',
+    },
+  },
 }).toMatchSnapshot()
