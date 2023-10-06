@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'willChange' plugin 1`] = `
+"
+.will-change-\\[left\\,top\\] {
+  will-change: left, top;
+}
+
+.will-change-\\[var\\(--my-value\\)\\] {
+  will-change: var(--my-value);
+}
+
+.will-change-auto {
+  will-change: auto;
+}
+
+.will-change-contents {
+  will-change: contents;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+"
+`;

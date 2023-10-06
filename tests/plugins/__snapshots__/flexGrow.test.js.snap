@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'flexGrow' plugin 1`] = `
+"
+.flex-grow {
+  flex-grow: 1;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.grow-0 {
+  flex-grow: 0;
+}
+
+.grow-\\[12\\] {
+  flex-grow: 12;
+}
+
+.grow-\\[var\\(--my-value\\)\\] {
+  flex-grow: var(--my-value);
+}
+"
+`;

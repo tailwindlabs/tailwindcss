@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'textUnderlineOffset' plugin 1`] = `
+"
+.underline-offset-0 {
+  text-underline-offset: 0px;
+}
+
+.underline-offset-1 {
+  text-underline-offset: 1px;
+}
+
+.underline-offset-2 {
+  text-underline-offset: 2px;
+}
+
+.underline-offset-4 {
+  text-underline-offset: 4px;
+}
+
+.underline-offset-8 {
+  text-underline-offset: 8px;
+}
+
+.underline-offset-\\[12px\\] {
+  text-underline-offset: 12px;
+}
+
+.underline-offset-\\[20\\%\\] {
+  text-underline-offset: 20%;
+}
+
+.underline-offset-\\[var\\(--my-value\\)\\] {
+  text-underline-offset: var(--my-value);
+}
+
+.underline-offset-auto {
+  text-underline-offset: auto;
+}
+"
+`;

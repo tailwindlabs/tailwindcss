@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'gridAutoRows' plugin 1`] = `
+"
+.auto-rows-\\[12px\\] {
+  grid-auto-rows: 12px;
+}
+
+.auto-rows-\\[var\\(--my-value\\)\\] {
+  grid-auto-rows: var(--my-value);
+}
+
+.auto-rows-auto {
+  grid-auto-rows: auto;
+}
+
+.auto-rows-fr {
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+.auto-rows-max {
+  grid-auto-rows: max-content;
+}
+
+.auto-rows-min {
+  grid-auto-rows: min-content;
+}
+"
+`;

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'fontStyle' plugin 1`] = `
+"
+.italic {
+  font-style: italic;
+}
+
+.not-italic {
+  font-style: normal;
+}
+"
+`;

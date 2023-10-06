@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'captionSide' plugin 1`] = `
+"
+.caption-top {
+  caption-side: top;
+}
+
+.caption-bottom {
+  caption-side: bottom;
+}
+"
+`;

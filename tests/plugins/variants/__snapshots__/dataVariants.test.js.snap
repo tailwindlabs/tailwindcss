@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'dataVariants' plugin 1`] = `
+"
+.data-\\[describedby\\]\\:flex[data-describedby], .group\\/foo[data-describedby] .group-data-\\[describedby\\]\\/foo\\:flex, .group[data-describedby] .group-data-\\[describedby\\]\\:flex, .peer\\/foo[data-describedby] ~ .peer-data-\\[describedby\\]\\/foo\\:flex, .peer[data-describedby] ~ .peer-data-\\[describedby\\]\\:flex {
+  display: flex;
+}
+"
+`;

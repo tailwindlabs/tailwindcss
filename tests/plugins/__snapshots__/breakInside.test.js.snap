@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'breakInside' plugin 1`] = `
+"
+.break-inside-auto {
+  break-inside: auto;
+}
+
+.break-inside-avoid {
+  break-inside: avoid;
+}
+
+.break-inside-avoid-page {
+  break-inside: avoid-page;
+}
+
+.break-inside-avoid-column {
+  break-inside: avoid-column;
+}
+"
+`;

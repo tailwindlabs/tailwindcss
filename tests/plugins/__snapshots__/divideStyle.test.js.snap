@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'divideStyle' plugin 1`] = `
+"
+.divide-solid > :not([hidden]) ~ :not([hidden]) {
+  border-style: solid;
+}
+
+.divide-dashed > :not([hidden]) ~ :not([hidden]) {
+  border-style: dashed;
+}
+
+.divide-dotted > :not([hidden]) ~ :not([hidden]) {
+  border-style: dotted;
+}
+
+.divide-double > :not([hidden]) ~ :not([hidden]) {
+  border-style: double;
+}
+
+.divide-none > :not([hidden]) ~ :not([hidden]) {
+  border-style: none;
+}
+"
+`;

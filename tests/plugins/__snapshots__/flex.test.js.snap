@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'flex' plugin 1`] = `
+"
+.flex-1 {
+  flex: 1;
+}
+
+.flex-\\[12_auto\\] {
+  flex: 12 auto;
+}
+
+.flex-\\[var\\(--my-value\\)\\] {
+  flex: var(--my-value);
+}
+
+.flex-auto {
+  flex: auto;
+}
+
+.flex-initial {
+  flex: 0 auto;
+}
+
+.flex-none {
+  flex: none;
+}
+"
+`;

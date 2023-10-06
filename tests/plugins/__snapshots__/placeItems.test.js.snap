@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'placeItems' plugin 1`] = `
+"
+.place-items-start {
+  place-items: start;
+}
+
+.place-items-end {
+  place-items: end;
+}
+
+.place-items-center {
+  place-items: center;
+}
+
+.place-items-baseline {
+  place-items: baseline;
+}
+
+.place-items-stretch {
+  place-items: stretch stretch;
+}
+"
+`;

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'darkVariants' plugin 1`] = `
+"
+@media (prefers-color-scheme: dark) {
+  .dark\\:flex {
+    display: flex;
+  }
+}
+"
+`;
+
+exports[`should test the 'darkVariants' plugin 2`] = `
+"
+:is(.dark .dark\\:flex) {
+  display: flex;
+}
+"
+`;
+
+exports[`should test the 'darkVariants' plugin 3`] = `
+"
+:is(.my-dark-mode .dark\\:flex) {
+  display: flex;
+}
+"
+`;

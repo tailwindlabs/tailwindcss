@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'breakAfter' plugin 1`] = `
+"
+.break-after-auto {
+  break-after: auto;
+}
+
+.break-after-avoid {
+  break-after: avoid;
+}
+
+.break-after-all {
+  break-after: all;
+}
+
+.break-after-avoid-page {
+  break-after: avoid-page;
+}
+
+.break-after-page {
+  break-after: page;
+}
+
+.break-after-left {
+  break-after: left;
+}
+
+.break-after-right {
+  break-after: right;
+}
+
+.break-after-column {
+  break-after: column;
+}
+"
+`;
