@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'backgroundOrigin' plugin 1`] = `
+"
+.bg-origin-border {
+  background-origin: border-box;
+}
+
+.bg-origin-padding {
+  background-origin: padding-box;
+}
+
+.bg-origin-content {
+  background-origin: content-box;
+}
+"
+`;

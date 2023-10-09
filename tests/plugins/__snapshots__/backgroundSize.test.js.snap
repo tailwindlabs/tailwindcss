@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'backgroundSize' plugin 1`] = `
+"
+.bg-\\[50\\%\\] {
+  background-size: 50%;
+}
+
+.bg-auto {
+  background-size: auto;
+}
+
+.bg-contain {
+  background-size: contain;
+}
+
+.bg-cover {
+  background-size: cover;
+}
+"
+`;

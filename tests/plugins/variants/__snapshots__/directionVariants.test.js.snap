@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'directionVariants' plugin 1`] = `
+"
+:is([dir="ltr"] .ltr\\:flex), :is([dir="rtl"] .rtl\\:flex) {
+  display: flex;
+}
+"
+`;

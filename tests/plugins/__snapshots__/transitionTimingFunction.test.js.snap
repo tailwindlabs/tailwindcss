@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'transitionTimingFunction' plugin 1`] = `
+"
+.ease-\\[cubiz-bezier\\(0\\.1\\,1\\,1\\,4\\)\\] {
+  transition-timing-function: cubiz-bezier(.1, 1, 1, 4);
+}
+
+.ease-\\[var\\(--my-value\\)\\] {
+  transition-timing-function: var(--my-value);
+}
+
+.ease-in {
+  transition-timing-function: cubic-bezier(.4, 0, 1, 1);
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+}
+
+.ease-linear {
+  transition-timing-function: linear;
+}
+
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, .2, 1);
+}
+"
+`;

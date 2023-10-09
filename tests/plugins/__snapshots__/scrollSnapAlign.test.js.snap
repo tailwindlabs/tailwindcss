@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'scrollSnapAlign' plugin 1`] = `
+"
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-end {
+  scroll-snap-align: end;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+.snap-align-none {
+  scroll-snap-align: none;
+}
+"
+`;

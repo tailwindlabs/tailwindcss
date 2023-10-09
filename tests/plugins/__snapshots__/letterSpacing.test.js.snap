@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'letterSpacing' plugin 1`] = `
+"
+.-tracking-normal {
+  letter-spacing: 0;
+}
+
+.-tracking-tight {
+  letter-spacing: .025em;
+}
+
+.-tracking-tighter {
+  letter-spacing: .05em;
+}
+
+.-tracking-wide {
+  letter-spacing: -.025em;
+}
+
+.-tracking-wider {
+  letter-spacing: -.05em;
+}
+
+.-tracking-widest {
+  letter-spacing: -.1em;
+}
+
+.tracking-\\[12px\\] {
+  letter-spacing: 12px;
+}
+
+.tracking-\\[var\\(--my-value\\)\\] {
+  letter-spacing: var(--my-value);
+}
+
+.tracking-normal {
+  letter-spacing: 0;
+}
+
+.tracking-tight {
+  letter-spacing: -.025em;
+}
+
+.tracking-tighter {
+  letter-spacing: -.05em;
+}
+
+.tracking-wide {
+  letter-spacing: .025em;
+}
+
+.tracking-wider {
+  letter-spacing: .05em;
+}
+
+.tracking-widest {
+  letter-spacing: .1em;
+}
+"
+`;

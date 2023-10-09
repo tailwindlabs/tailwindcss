@@ -1,35 +1,6 @@
 import { run, html, css, quickPluginTest } from '../util/run'
 
-quickPluginTest('container').toMatchFormattedCss(css`
-  .container {
-    width: 100%;
-  }
-  @media (min-width: 640px) {
-    .container {
-      max-width: 640px;
-    }
-  }
-  @media (min-width: 768px) {
-    .container {
-      max-width: 768px;
-    }
-  }
-  @media (min-width: 1024px) {
-    .container {
-      max-width: 1024px;
-    }
-  }
-  @media (min-width: 1280px) {
-    .container {
-      max-width: 1280px;
-    }
-  }
-  @media (min-width: 1536px) {
-    .container {
-      max-width: 1536px;
-    }
-  }
-`)
+quickPluginTest('container').toMatchSnapshot()
 
 test('options are not required', () => {
   let config = { content: [{ raw: html`<div class="container"></div>` }] }

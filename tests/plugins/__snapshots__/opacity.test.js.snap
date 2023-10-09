@@ -6,84 +6,8 @@ exports[`should test the 'opacity' plugin 1`] = `
   opacity: 0;
 }
 
-.opacity-10 {
-  opacity: .1;
-}
-
-.opacity-100 {
-  opacity: 1;
-}
-
-.opacity-15 {
-  opacity: .15;
-}
-
-.opacity-20 {
-  opacity: .2;
-}
-
-.opacity-25 {
-  opacity: .25;
-}
-
-.opacity-30 {
-  opacity: .3;
-}
-
-.opacity-35 {
-  opacity: .35;
-}
-
-.opacity-40 {
-  opacity: .4;
-}
-
-.opacity-45 {
-  opacity: .45;
-}
-
-.opacity-5 {
-  opacity: .05;
-}
-
 .opacity-50 {
   opacity: .5;
-}
-
-.opacity-55 {
-  opacity: .55;
-}
-
-.opacity-60 {
-  opacity: .6;
-}
-
-.opacity-65 {
-  opacity: .65;
-}
-
-.opacity-70 {
-  opacity: .7;
-}
-
-.opacity-75 {
-  opacity: .75;
-}
-
-.opacity-80 {
-  opacity: .8;
-}
-
-.opacity-85 {
-  opacity: .85;
-}
-
-.opacity-90 {
-  opacity: .9;
-}
-
-.opacity-95 {
-  opacity: .95;
 }
 
 .opacity-\\[12\\%\\] {

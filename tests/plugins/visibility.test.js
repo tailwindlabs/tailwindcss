@@ -1,13 +1,3 @@
-import { css, quickPluginTest } from '../util/run'
+import { quickPluginTest } from '../util/run'
 
-quickPluginTest('visibility').toMatchFormattedCss(css`
-  .visible {
-    visibility: visible;
-  }
-  .invisible {
-    visibility: hidden;
-  }
-  .collapse {
-    visibility: collapse;
-  }
-`)
+quickPluginTest('visibility').toMatchSnapshot()

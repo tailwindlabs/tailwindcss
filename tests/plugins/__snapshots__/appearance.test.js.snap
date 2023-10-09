@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'appearance' plugin 1`] = `
+"
+.appearance-none {
+  -webkit-appearance: none;
+  appearance: none;
+}
+"
+`;

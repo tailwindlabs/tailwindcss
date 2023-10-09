@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'outlineStyle' plugin 1`] = `
+"
+.outline-none {
+  outline-offset: 2px;
+  outline: 2px solid #0000;
+}
+
+.outline {
+  outline-style: solid;
+}
+
+.outline-dashed {
+  outline-style: dashed;
+}
+
+.outline-dotted {
+  outline-style: dotted;
+}
+
+.outline-double {
+  outline-style: double;
+}
+"
+`;

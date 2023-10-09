@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'hyphens' plugin 1`] = `
+"
+.hyphens-none {
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
+.hyphens-manual {
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+
+.hyphens-auto {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+"
+`;

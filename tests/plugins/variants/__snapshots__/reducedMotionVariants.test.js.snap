@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'reducedMotionVariants' plugin 1`] = `
+"
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe\\:flex {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce\\:flex {
+    display: flex;
+  }
+}
+"
+`;

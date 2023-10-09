@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'backgroundAttachment' plugin 1`] = `
+"
+.bg-fixed {
+  background-attachment: fixed;
+}
+
+.bg-local {
+  background-attachment: local;
+}
+
+.bg-scroll {
+  background-attachment: scroll;
+}
+"
+`;

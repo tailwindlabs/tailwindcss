@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'backgroundClip' plugin 1`] = `
+"
+.bg-clip-border {
+  background-clip: border-box;
+}
+
+.bg-clip-padding {
+  background-clip: padding-box;
+}
+
+.bg-clip-content {
+  background-clip: content-box;
+}
+
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+"
+`;

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'listStyleImage' plugin 1`] = `
+"
+.list-image-\\[url\\(https\\:\\/\\/example\\.com\\/image\\.png\\)\\] {
+  list-style-image: url("https://example.com/image.png");
+}
+
+.list-image-\\[var\\(--my-value\\)\\] {
+  list-style-image: var(--my-value);
+}
+
+.list-image-none {
+  list-style-image: none;
+}
+"
+`;

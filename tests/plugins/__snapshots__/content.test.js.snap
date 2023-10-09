@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'content' plugin 1`] = `
+"
+.content-\\[\\"hello_world\\"\\] {
+  --tw-content: "hello world";
+  content: var(--tw-content);
+}
+
+.content-\\[var\\(--my-value\\)\\] {
+  --tw-content: var(--my-value);
+  content: var(--tw-content);
+}
+
+.content-none {
+  --tw-content: none;
+  content: var(--tw-content);
+}
+"
+`;

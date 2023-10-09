@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'supportsVariants' plugin 1`] = `
+"
+@supports (display: grid) {
+  .supports-\\[display\\:grid\\]\\:flex {
+    display: flex;
+  }
+}
+
+@supports (display: var(--tw)) {
+  .supports-\\[display\\]\\:flex {
+    display: flex;
+  }
+}
+
+@supports (foo or bar: var(--tw)) {
+  .supports-\\[foo_or_bar\\]\\:flex {
+    display: flex;
+  }
+}
+
+@supports (foo or bar and not baz: var(--tw)) {
+  .supports-\\[foo_or_bar_and_not_baz\\]\\:flex {
+    display: flex;
+  }
+}
+"
+`;

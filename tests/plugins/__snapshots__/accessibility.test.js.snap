@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'accessibility' plugin 1`] = `
+"
+.sr-only {
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  position: absolute;
+  overflow: hidden;
+}
+
+.not-sr-only {
+  clip: auto;
+  white-space: normal;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  position: static;
+  overflow: visible;
+}
+"
+`;

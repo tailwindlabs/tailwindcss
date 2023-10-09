@@ -1,10 +1,3 @@
-import { css, quickPluginTest } from '../util/run'
+import { quickPluginTest } from '../util/run'
 
-quickPluginTest('isolation').toMatchFormattedCss(css`
-  .isolate {
-    isolation: isolate;
-  }
-  .isolation-auto {
-    isolation: auto;
-  }
-`)
+quickPluginTest('isolation').toMatchSnapshot()
