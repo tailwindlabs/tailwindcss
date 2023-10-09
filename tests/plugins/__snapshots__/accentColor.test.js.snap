@@ -27,27 +27,27 @@ exports[`should test the 'accentColor' plugin 1`] = `
 }
 
 .accent-red-100 {
-  accent-color: red;
+  accent-color: #fee2e2;
 }
 
 .accent-red-100\\/0 {
-  accent-color: #f000;
+  accent-color: #fee2e200;
 }
 
 .accent-red-100\\/50 {
-  accent-color: #ff000080;
+  accent-color: #fee2e280;
 }
 
 .accent-red-200 {
-  accent-color: red;
+  accent-color: #fecaca;
 }
 
 .accent-red-200\\/0 {
-  accent-color: #f000;
+  accent-color: #fecaca00;
 }
 
 .accent-red-200\\/50 {
-  accent-color: #ff000080;
+  accent-color: #fecaca80;
 }
 
 .accent-transparent, .accent-transparent\\/0 {

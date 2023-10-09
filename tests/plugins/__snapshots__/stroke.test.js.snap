@@ -27,27 +27,27 @@ exports[`should test the 'stroke' plugin 1`] = `
 }
 
 .stroke-red-100 {
-  stroke: red;
+  stroke: #fee2e2;
 }
 
 .stroke-red-100\\/0 {
-  stroke: #f000;
+  stroke: #fee2e200;
 }
 
 .stroke-red-100\\/50 {
-  stroke: #ff000080;
+  stroke: #fee2e280;
 }
 
 .stroke-red-200 {
-  stroke: red;
+  stroke: #fecaca;
 }
 
 .stroke-red-200\\/0 {
-  stroke: #f000;
+  stroke: #fecaca00;
 }
 
 .stroke-red-200\\/50 {
-  stroke: #ff000080;
+  stroke: #fecaca80;
 }
 
 .stroke-transparent, .stroke-transparent\\/0 {

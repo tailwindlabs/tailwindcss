@@ -27,27 +27,27 @@ exports[`should test the 'fill' plugin 1`] = `
 }
 
 .fill-red-100 {
-  fill: red;
+  fill: #fee2e2;
 }
 
 .fill-red-100\\/0 {
-  fill: #f000;
+  fill: #fee2e200;
 }
 
 .fill-red-100\\/50 {
-  fill: #ff000080;
+  fill: #fee2e280;
 }
 
 .fill-red-200 {
-  fill: red;
+  fill: #fecaca;
 }
 
 .fill-red-200\\/0 {
-  fill: #f000;
+  fill: #fecaca00;
 }
 
 .fill-red-200\\/50 {
-  fill: #ff000080;
+  fill: #fecaca80;
 }
 
 .fill-transparent, .fill-transparent\\/0 {

@@ -23,27 +23,27 @@ exports[`should test the 'backgroundColor' plugin 1`] = `
 }
 
 .bg-red-100 {
-  background-color: red;
+  background-color: #fee2e2;
 }
 
 .bg-red-100\\/0 {
-  background-color: #f000;
+  background-color: #fee2e200;
 }
 
 .bg-red-100\\/50 {
-  background-color: #ff000080;
+  background-color: #fee2e280;
 }
 
 .bg-red-200 {
-  background-color: red;
+  background-color: #fecaca;
 }
 
 .bg-red-200\\/0 {
-  background-color: #f000;
+  background-color: #fecaca00;
 }
 
 .bg-red-200\\/50 {
-  background-color: #ff000080;
+  background-color: #fecaca80;
 }
 
 .bg-transparent, .bg-transparent\\/0 {
@@ -82,28 +82,28 @@ exports[`should test the 'backgroundColor' plugin 2`] = `
 
 .bg-red-100 {
   --tw-bg-opacity: 1;
-  background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+  background-color: rgb(254 226 226 / var(--tw-bg-opacity));
 }
 
 .bg-red-100\\/0 {
-  background-color: #f000;
+  background-color: #fee2e200;
 }
 
 .bg-red-100\\/50 {
-  background-color: #ff000080;
+  background-color: #fee2e280;
 }
 
 .bg-red-200 {
   --tw-bg-opacity: 1;
-  background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }
 
 .bg-red-200\\/0 {
-  background-color: #f000;
+  background-color: #fecaca00;
 }
 
 .bg-red-200\\/50 {
-  background-color: #ff000080;
+  background-color: #fecaca80;
 }
 
 .bg-transparent, .bg-transparent\\/0 {

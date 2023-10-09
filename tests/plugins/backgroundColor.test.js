@@ -11,8 +11,8 @@ quickPluginTest('backgroundColor', {
       transparent: 'transparent',
       black: '#000',
       red: {
-        100: '#f00',
-        200: '#f00',
+        100: '#fee2e2',
+        200: '#fecaca',
       },
     },
     opacity: {
@@ -35,8 +35,8 @@ quickPluginTest('backgroundColor', {
       transparent: 'transparent',
       black: '#000',
       red: {
-        100: '#f00',
-        200: '#f00',
+        100: '#fee2e2',
+        200: '#fecaca',
       },
     },
     opacity: {

@@ -15,27 +15,27 @@ exports[`should test the 'textDecorationColor' plugin 1`] = `
 }
 
 .decoration-red-100 {
-  text-decoration-color: red;
+  text-decoration-color: #fee2e2;
 }
 
 .decoration-red-100\\/0 {
-  text-decoration-color: #f000;
+  text-decoration-color: #fee2e200;
 }
 
 .decoration-red-100\\/50 {
-  text-decoration-color: #ff000080;
+  text-decoration-color: #fee2e280;
 }
 
 .decoration-red-200 {
-  text-decoration-color: red;
+  text-decoration-color: #fecaca;
 }
 
 .decoration-red-200\\/0 {
-  text-decoration-color: #f000;
+  text-decoration-color: #fecaca00;
 }
 
 .decoration-red-200\\/50 {
-  text-decoration-color: #ff000080;
+  text-decoration-color: #fecaca80;
 }
 
 .decoration-transparent, .decoration-transparent\\/0 {

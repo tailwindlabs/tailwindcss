@@ -19,27 +19,27 @@ exports[`should test the 'ringOffsetColor' plugin 1`] = `
 }
 
 .ring-offset-red-100 {
-  --tw-ring-offset-color: red;
+  --tw-ring-offset-color: #fee2e2;
 }
 
 .ring-offset-red-100\\/0 {
-  --tw-ring-offset-color: #f000;
+  --tw-ring-offset-color: #fee2e200;
 }
 
 .ring-offset-red-100\\/50 {
-  --tw-ring-offset-color: #ff000080;
+  --tw-ring-offset-color: #fee2e280;
 }
 
 .ring-offset-red-200 {
-  --tw-ring-offset-color: red;
+  --tw-ring-offset-color: #fecaca;
 }
 
 .ring-offset-red-200\\/0 {
-  --tw-ring-offset-color: #f000;
+  --tw-ring-offset-color: #fecaca00;
 }
 
 .ring-offset-red-200\\/50 {
-  --tw-ring-offset-color: #ff000080;
+  --tw-ring-offset-color: #fecaca80;
 }
 
 .ring-offset-transparent {

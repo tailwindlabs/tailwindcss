@@ -23,27 +23,27 @@ exports[`should test the 'outlineColor' plugin 1`] = `
 }
 
 .outline-red-100 {
-  outline-color: red;
+  outline-color: #fee2e2;
 }
 
 .outline-red-100\\/0 {
-  outline-color: #f000;
+  outline-color: #fee2e200;
 }
 
 .outline-red-100\\/50 {
-  outline-color: #ff000080;
+  outline-color: #fee2e280;
 }
 
 .outline-red-200 {
-  outline-color: red;
+  outline-color: #fecaca;
 }
 
 .outline-red-200\\/0 {
-  outline-color: #f000;
+  outline-color: #fecaca00;
 }
 
 .outline-red-200\\/50 {
-  outline-color: #ff000080;
+  outline-color: #fecaca80;
 }
 
 .outline-transparent, .outline-transparent\\/0 {

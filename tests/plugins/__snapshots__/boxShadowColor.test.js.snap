@@ -28,32 +28,32 @@ exports[`should test the 'boxShadowColor' plugin 1`] = `
 }
 
 .shadow-red-100 {
-  --tw-shadow-color: red;
+  --tw-shadow-color: #fee2e2;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
 .shadow-red-100\\/0 {
-  --tw-shadow-color: #f000;
+  --tw-shadow-color: #fee2e200;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
 .shadow-red-100\\/50 {
-  --tw-shadow-color: #ff000080;
+  --tw-shadow-color: #fee2e280;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
 .shadow-red-200 {
-  --tw-shadow-color: red;
+  --tw-shadow-color: #fecaca;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
 .shadow-red-200\\/0 {
-  --tw-shadow-color: #f000;
+  --tw-shadow-color: #fecaca00;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
 .shadow-red-200\\/50 {
-  --tw-shadow-color: #ff000080;
+  --tw-shadow-color: #fecaca80;
   --tw-shadow: var(--tw-shadow-colored);
 }
 

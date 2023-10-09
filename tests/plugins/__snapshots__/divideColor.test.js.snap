@@ -99,179 +99,179 @@ exports[`should test the 'divideColor' plugin 1`] = `
 }
 
 .divide-red-100 > :not([hidden]) ~ :not([hidden]) {
-  border-color: red;
+  border-color: #fee2e2;
 }
 
 .divide-red-100\\/0 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f000;
+  border-color: #fee2e200;
 }
 
 .divide-red-100\\/10 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff00001a;
+  border-color: #fee2e21a;
 }
 
 .divide-red-100\\/100 > :not([hidden]) ~ :not([hidden]) {
-  border-color: red;
+  border-color: #fee2e2;
 }
 
 .divide-red-100\\/15 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000026;
+  border-color: #fee2e226;
 }
 
 .divide-red-100\\/20 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f003;
+  border-color: #fee2e233;
 }
 
 .divide-red-100\\/25 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000040;
+  border-color: #fee2e240;
 }
 
 .divide-red-100\\/30 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff00004d;
+  border-color: #fee2e24d;
 }
 
 .divide-red-100\\/35 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000059;
+  border-color: #fee2e259;
 }
 
 .divide-red-100\\/40 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f006;
+  border-color: #fee2e266;
 }
 
 .divide-red-100\\/45 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000073;
+  border-color: #fee2e273;
 }
 
 .divide-red-100\\/5 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff00000d;
+  border-color: #fee2e20d;
 }
 
 .divide-red-100\\/50 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000080;
+  border-color: #fee2e280;
 }
 
 .divide-red-100\\/55 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff00008c;
+  border-color: #fee2e28c;
 }
 
 .divide-red-100\\/60 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f009;
+  border-color: #fee2e299;
 }
 
 .divide-red-100\\/65 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000a6;
+  border-color: #fee2e2a6;
 }
 
 .divide-red-100\\/70 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000b3;
+  border-color: #fee2e2b3;
 }
 
 .divide-red-100\\/75 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000bf;
+  border-color: #fee2e2bf;
 }
 
 .divide-red-100\\/80 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f00c;
+  border-color: #fee2e2cc;
 }
 
 .divide-red-100\\/85 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000d9;
+  border-color: #fee2e2d9;
 }
 
 .divide-red-100\\/90 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000e6;
+  border-color: #fee2e2e6;
 }
 
 .divide-red-100\\/95 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000f2;
+  border-color: #fee2e2f2;
 }
 
 .divide-red-200 > :not([hidden]) ~ :not([hidden]) {
-  border-color: red;
+  border-color: #fecaca;
 }
 
 .divide-red-200\\/0 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f000;
+  border-color: #fecaca00;
 }
 
 .divide-red-200\\/10 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff00001a;
+  border-color: #fecaca1a;
 }
 
 .divide-red-200\\/100 > :not([hidden]) ~ :not([hidden]) {
-  border-color: red;
+  border-color: #fecaca;
 }
 
 .divide-red-200\\/15 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000026;
+  border-color: #fecaca26;
 }
 
 .divide-red-200\\/20 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f003;
+  border-color: #fecaca33;
 }
 
 .divide-red-200\\/25 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000040;
+  border-color: #fecaca40;
 }
 
 .divide-red-200\\/30 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff00004d;
+  border-color: #fecaca4d;
 }
 
 .divide-red-200\\/35 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000059;
+  border-color: #fecaca59;
 }
 
 .divide-red-200\\/40 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f006;
+  border-color: #fecaca66;
 }
 
 .divide-red-200\\/45 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000073;
+  border-color: #fecaca73;
 }
 
 .divide-red-200\\/5 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff00000d;
+  border-color: #fecaca0d;
 }
 
 .divide-red-200\\/50 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000080;
+  border-color: #fecaca80;
 }
 
 .divide-red-200\\/55 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff00008c;
+  border-color: #fecaca8c;
 }
 
 .divide-red-200\\/60 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f009;
+  border-color: #fecaca99;
 }
 
 .divide-red-200\\/65 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000a6;
+  border-color: #fecacaa6;
 }
 
 .divide-red-200\\/70 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000b3;
+  border-color: #fecacab3;
 }
 
 .divide-red-200\\/75 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000bf;
+  border-color: #fecacabf;
 }
 
 .divide-red-200\\/80 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f00c;
+  border-color: #fecacacc;
 }
 
 .divide-red-200\\/85 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000d9;
+  border-color: #fecacad9;
 }
 
 .divide-red-200\\/90 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000e6;
+  border-color: #fecacae6;
 }
 
 .divide-red-200\\/95 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff0000f2;
+  border-color: #fecacaf2;
 }
 
 .divide-transparent > :not([hidden]) ~ :not([hidden]), .divide-transparent\\/0 > :not([hidden]) ~ :not([hidden]) {
@@ -386,28 +386,28 @@ exports[`should test the 'divideColor' plugin 2`] = `
 
 .divide-red-100 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 1;
-  border-color: rgb(255 0 0 / var(--tw-divide-opacity));
+  border-color: rgb(254 226 226 / var(--tw-divide-opacity));
 }
 
 .divide-red-100\\/0 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f000;
+  border-color: #fee2e200;
 }
 
 .divide-red-100\\/50 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000080;
+  border-color: #fee2e280;
 }
 
 .divide-red-200 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 1;
-  border-color: rgb(255 0 0 / var(--tw-divide-opacity));
+  border-color: rgb(254 202 202 / var(--tw-divide-opacity));
 }
 
 .divide-red-200\\/0 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #f000;
+  border-color: #fecaca00;
 }
 
 .divide-red-200\\/50 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #ff000080;
+  border-color: #fecaca80;
 }
 
 .divide-transparent > :not([hidden]) ~ :not([hidden]), .divide-transparent\\/0 > :not([hidden]) ~ :not([hidden]) {

@@ -99,179 +99,179 @@ exports[`should test the 'placeholderColor' plugin 1`] = `
 }
 
 .placeholder-red-100::placeholder {
-  color: red;
+  color: #fee2e2;
 }
 
 .placeholder-red-100\\/0::placeholder {
-  color: #f000;
+  color: #fee2e200;
 }
 
 .placeholder-red-100\\/10::placeholder {
-  color: #ff00001a;
+  color: #fee2e21a;
 }
 
 .placeholder-red-100\\/100::placeholder {
-  color: red;
+  color: #fee2e2;
 }
 
 .placeholder-red-100\\/15::placeholder {
-  color: #ff000026;
+  color: #fee2e226;
 }
 
 .placeholder-red-100\\/20::placeholder {
-  color: #f003;
+  color: #fee2e233;
 }
 
 .placeholder-red-100\\/25::placeholder {
-  color: #ff000040;
+  color: #fee2e240;
 }
 
 .placeholder-red-100\\/30::placeholder {
-  color: #ff00004d;
+  color: #fee2e24d;
 }
 
 .placeholder-red-100\\/35::placeholder {
-  color: #ff000059;
+  color: #fee2e259;
 }
 
 .placeholder-red-100\\/40::placeholder {
-  color: #f006;
+  color: #fee2e266;
 }
 
 .placeholder-red-100\\/45::placeholder {
-  color: #ff000073;
+  color: #fee2e273;
 }
 
 .placeholder-red-100\\/5::placeholder {
-  color: #ff00000d;
+  color: #fee2e20d;
 }
 
 .placeholder-red-100\\/50::placeholder {
-  color: #ff000080;
+  color: #fee2e280;
 }
 
 .placeholder-red-100\\/55::placeholder {
-  color: #ff00008c;
+  color: #fee2e28c;
 }
 
 .placeholder-red-100\\/60::placeholder {
-  color: #f009;
+  color: #fee2e299;
 }
 
 .placeholder-red-100\\/65::placeholder {
-  color: #ff0000a6;
+  color: #fee2e2a6;
 }
 
 .placeholder-red-100\\/70::placeholder {
-  color: #ff0000b3;
+  color: #fee2e2b3;
 }
 
 .placeholder-red-100\\/75::placeholder {
-  color: #ff0000bf;
+  color: #fee2e2bf;
 }
 
 .placeholder-red-100\\/80::placeholder {
-  color: #f00c;
+  color: #fee2e2cc;
 }
 
 .placeholder-red-100\\/85::placeholder {
-  color: #ff0000d9;
+  color: #fee2e2d9;
 }
 
 .placeholder-red-100\\/90::placeholder {
-  color: #ff0000e6;
+  color: #fee2e2e6;
 }
 
 .placeholder-red-100\\/95::placeholder {
-  color: #ff0000f2;
+  color: #fee2e2f2;
 }
 
 .placeholder-red-200::placeholder {
-  color: red;
+  color: #fecaca;
 }
 
 .placeholder-red-200\\/0::placeholder {
-  color: #f000;
+  color: #fecaca00;
 }
 
 .placeholder-red-200\\/10::placeholder {
-  color: #ff00001a;
+  color: #fecaca1a;
 }
 
 .placeholder-red-200\\/100::placeholder {
-  color: red;
+  color: #fecaca;
 }
 
 .placeholder-red-200\\/15::placeholder {
-  color: #ff000026;
+  color: #fecaca26;
 }
 
 .placeholder-red-200\\/20::placeholder {
-  color: #f003;
+  color: #fecaca33;
 }
 
 .placeholder-red-200\\/25::placeholder {
-  color: #ff000040;
+  color: #fecaca40;
 }
 
 .placeholder-red-200\\/30::placeholder {
-  color: #ff00004d;
+  color: #fecaca4d;
 }
 
 .placeholder-red-200\\/35::placeholder {
-  color: #ff000059;
+  color: #fecaca59;
 }
 
 .placeholder-red-200\\/40::placeholder {
-  color: #f006;
+  color: #fecaca66;
 }
 
 .placeholder-red-200\\/45::placeholder {
-  color: #ff000073;
+  color: #fecaca73;
 }
 
 .placeholder-red-200\\/5::placeholder {
-  color: #ff00000d;
+  color: #fecaca0d;
 }
 
 .placeholder-red-200\\/50::placeholder {
-  color: #ff000080;
+  color: #fecaca80;
 }
 
 .placeholder-red-200\\/55::placeholder {
-  color: #ff00008c;
+  color: #fecaca8c;
 }
 
 .placeholder-red-200\\/60::placeholder {
-  color: #f009;
+  color: #fecaca99;
 }
 
 .placeholder-red-200\\/65::placeholder {
-  color: #ff0000a6;
+  color: #fecacaa6;
 }
 
 .placeholder-red-200\\/70::placeholder {
-  color: #ff0000b3;
+  color: #fecacab3;
 }
 
 .placeholder-red-200\\/75::placeholder {
-  color: #ff0000bf;
+  color: #fecacabf;
 }
 
 .placeholder-red-200\\/80::placeholder {
-  color: #f00c;
+  color: #fecacacc;
 }
 
 .placeholder-red-200\\/85::placeholder {
-  color: #ff0000d9;
+  color: #fecacad9;
 }
 
 .placeholder-red-200\\/90::placeholder {
-  color: #ff0000e6;
+  color: #fecacae6;
 }
 
 .placeholder-red-200\\/95::placeholder {
-  color: #ff0000f2;
+  color: #fecacaf2;
 }
 
 .placeholder-transparent::placeholder, .placeholder-transparent\\/0::placeholder {
@@ -386,28 +386,28 @@ exports[`should test the 'placeholderColor' plugin 2`] = `
 
 .placeholder-red-100::placeholder {
   --tw-placeholder-opacity: 1;
-  color: rgb(255 0 0 / var(--tw-placeholder-opacity));
+  color: rgb(254 226 226 / var(--tw-placeholder-opacity));
 }
 
 .placeholder-red-100\\/0::placeholder {
-  color: #f000;
+  color: #fee2e200;
 }
 
 .placeholder-red-100\\/50::placeholder {
-  color: #ff000080;
+  color: #fee2e280;
 }
 
 .placeholder-red-200::placeholder {
   --tw-placeholder-opacity: 1;
-  color: rgb(255 0 0 / var(--tw-placeholder-opacity));
+  color: rgb(254 202 202 / var(--tw-placeholder-opacity));
 }
 
 .placeholder-red-200\\/0::placeholder {
-  color: #f000;
+  color: #fecaca00;
 }
 
 .placeholder-red-200\\/50::placeholder {
-  color: #ff000080;
+  color: #fecaca80;
 }
 
 .placeholder-transparent::placeholder, .placeholder-transparent\\/0::placeholder {

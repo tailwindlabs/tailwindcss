@@ -23,27 +23,27 @@ exports[`should test the 'caretColor' plugin 1`] = `
 }
 
 .caret-red-100 {
-  caret-color: red;
+  caret-color: #fee2e2;
 }
 
 .caret-red-100\\/0 {
-  caret-color: #f000;
+  caret-color: #fee2e200;
 }
 
 .caret-red-100\\/50 {
-  caret-color: #ff000080;
+  caret-color: #fee2e280;
 }
 
 .caret-red-200 {
-  caret-color: red;
+  caret-color: #fecaca;
 }
 
 .caret-red-200\\/0 {
-  caret-color: #f000;
+  caret-color: #fecaca00;
 }
 
 .caret-red-200\\/50 {
-  caret-color: #ff000080;
+  caret-color: #fecaca80;
 }
 
 .caret-transparent, .caret-transparent\\/0 {

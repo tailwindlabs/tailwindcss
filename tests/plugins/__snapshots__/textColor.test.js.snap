@@ -99,179 +99,179 @@ exports[`should test the 'textColor' plugin 1`] = `
 }
 
 .text-red-100 {
-  color: red;
+  color: #fee2e2;
 }
 
 .text-red-100\\/0 {
-  color: #f000;
+  color: #fee2e200;
 }
 
 .text-red-100\\/10 {
-  color: #ff00001a;
+  color: #fee2e21a;
 }
 
 .text-red-100\\/100 {
-  color: red;
+  color: #fee2e2;
 }
 
 .text-red-100\\/15 {
-  color: #ff000026;
+  color: #fee2e226;
 }
 
 .text-red-100\\/20 {
-  color: #f003;
+  color: #fee2e233;
 }
 
 .text-red-100\\/25 {
-  color: #ff000040;
+  color: #fee2e240;
 }
 
 .text-red-100\\/30 {
-  color: #ff00004d;
+  color: #fee2e24d;
 }
 
 .text-red-100\\/35 {
-  color: #ff000059;
+  color: #fee2e259;
 }
 
 .text-red-100\\/40 {
-  color: #f006;
+  color: #fee2e266;
 }
 
 .text-red-100\\/45 {
-  color: #ff000073;
+  color: #fee2e273;
 }
 
 .text-red-100\\/5 {
-  color: #ff00000d;
+  color: #fee2e20d;
 }
 
 .text-red-100\\/50 {
-  color: #ff000080;
+  color: #fee2e280;
 }
 
 .text-red-100\\/55 {
-  color: #ff00008c;
+  color: #fee2e28c;
 }
 
 .text-red-100\\/60 {
-  color: #f009;
+  color: #fee2e299;
 }
 
 .text-red-100\\/65 {
-  color: #ff0000a6;
+  color: #fee2e2a6;
 }
 
 .text-red-100\\/70 {
-  color: #ff0000b3;
+  color: #fee2e2b3;
 }
 
 .text-red-100\\/75 {
-  color: #ff0000bf;
+  color: #fee2e2bf;
 }
 
 .text-red-100\\/80 {
-  color: #f00c;
+  color: #fee2e2cc;
 }
 
 .text-red-100\\/85 {
-  color: #ff0000d9;
+  color: #fee2e2d9;
 }
 
 .text-red-100\\/90 {
-  color: #ff0000e6;
+  color: #fee2e2e6;
 }
 
 .text-red-100\\/95 {
-  color: #ff0000f2;
+  color: #fee2e2f2;
 }
 
 .text-red-200 {
-  color: red;
+  color: #fecaca;
 }
 
 .text-red-200\\/0 {
-  color: #f000;
+  color: #fecaca00;
 }
 
 .text-red-200\\/10 {
-  color: #ff00001a;
+  color: #fecaca1a;
 }
 
 .text-red-200\\/100 {
-  color: red;
+  color: #fecaca;
 }
 
 .text-red-200\\/15 {
-  color: #ff000026;
+  color: #fecaca26;
 }
 
 .text-red-200\\/20 {
-  color: #f003;
+  color: #fecaca33;
 }
 
 .text-red-200\\/25 {
-  color: #ff000040;
+  color: #fecaca40;
 }
 
 .text-red-200\\/30 {
-  color: #ff00004d;
+  color: #fecaca4d;
 }
 
 .text-red-200\\/35 {
-  color: #ff000059;
+  color: #fecaca59;
 }
 
 .text-red-200\\/40 {
-  color: #f006;
+  color: #fecaca66;
 }
 
 .text-red-200\\/45 {
-  color: #ff000073;
+  color: #fecaca73;
 }
 
 .text-red-200\\/5 {
-  color: #ff00000d;
+  color: #fecaca0d;
 }
 
 .text-red-200\\/50 {
-  color: #ff000080;
+  color: #fecaca80;
 }
 
 .text-red-200\\/55 {
-  color: #ff00008c;
+  color: #fecaca8c;
 }
 
 .text-red-200\\/60 {
-  color: #f009;
+  color: #fecaca99;
 }
 
 .text-red-200\\/65 {
-  color: #ff0000a6;
+  color: #fecacaa6;
 }
 
 .text-red-200\\/70 {
-  color: #ff0000b3;
+  color: #fecacab3;
 }
 
 .text-red-200\\/75 {
-  color: #ff0000bf;
+  color: #fecacabf;
 }
 
 .text-red-200\\/80 {
-  color: #f00c;
+  color: #fecacacc;
 }
 
 .text-red-200\\/85 {
-  color: #ff0000d9;
+  color: #fecacad9;
 }
 
 .text-red-200\\/90 {
-  color: #ff0000e6;
+  color: #fecacae6;
 }
 
 .text-red-200\\/95 {
-  color: #ff0000f2;
+  color: #fecacaf2;
 }
 
 .text-transparent, .text-transparent\\/0 {
@@ -386,28 +386,28 @@ exports[`should test the 'textColor' plugin 2`] = `
 
 .text-red-100 {
   --tw-text-opacity: 1;
-  color: rgb(255 0 0 / var(--tw-text-opacity));
+  color: rgb(254 226 226 / var(--tw-text-opacity));
 }
 
 .text-red-100\\/0 {
-  color: #f000;
+  color: #fee2e200;
 }
 
 .text-red-100\\/50 {
-  color: #ff000080;
+  color: #fee2e280;
 }
 
 .text-red-200 {
   --tw-text-opacity: 1;
-  color: rgb(255 0 0 / var(--tw-text-opacity));
+  color: rgb(254 202 202 / var(--tw-text-opacity));
 }
 
 .text-red-200\\/0 {
-  color: #f000;
+  color: #fecaca00;
 }
 
 .text-red-200\\/50 {
-  color: #ff000080;
+  color: #fecaca80;
 }
 
 .text-transparent, .text-transparent\\/0 {

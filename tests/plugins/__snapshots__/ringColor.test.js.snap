@@ -99,179 +99,179 @@ exports[`should test the 'ringColor' plugin 1`] = `
 }
 
 .ring-red-100 {
-  --tw-ring-color: red;
+  --tw-ring-color: #fee2e2;
 }
 
 .ring-red-100\\/0 {
-  --tw-ring-color: #f000;
+  --tw-ring-color: #fee2e200;
 }
 
 .ring-red-100\\/10 {
-  --tw-ring-color: #ff00001a;
+  --tw-ring-color: #fee2e21a;
 }
 
 .ring-red-100\\/100 {
-  --tw-ring-color: red;
+  --tw-ring-color: #fee2e2;
 }
 
 .ring-red-100\\/15 {
-  --tw-ring-color: #ff000026;
+  --tw-ring-color: #fee2e226;
 }
 
 .ring-red-100\\/20 {
-  --tw-ring-color: #f003;
+  --tw-ring-color: #fee2e233;
 }
 
 .ring-red-100\\/25 {
-  --tw-ring-color: #ff000040;
+  --tw-ring-color: #fee2e240;
 }
 
 .ring-red-100\\/30 {
-  --tw-ring-color: #ff00004d;
+  --tw-ring-color: #fee2e24d;
 }
 
 .ring-red-100\\/35 {
-  --tw-ring-color: #ff000059;
+  --tw-ring-color: #fee2e259;
 }
 
 .ring-red-100\\/40 {
-  --tw-ring-color: #f006;
+  --tw-ring-color: #fee2e266;
 }
 
 .ring-red-100\\/45 {
-  --tw-ring-color: #ff000073;
+  --tw-ring-color: #fee2e273;
 }
 
 .ring-red-100\\/5 {
-  --tw-ring-color: #ff00000d;
+  --tw-ring-color: #fee2e20d;
 }
 
 .ring-red-100\\/50 {
-  --tw-ring-color: #ff000080;
+  --tw-ring-color: #fee2e280;
 }
 
 .ring-red-100\\/55 {
-  --tw-ring-color: #ff00008c;
+  --tw-ring-color: #fee2e28c;
 }
 
 .ring-red-100\\/60 {
-  --tw-ring-color: #f009;
+  --tw-ring-color: #fee2e299;
 }
 
 .ring-red-100\\/65 {
-  --tw-ring-color: #ff0000a6;
+  --tw-ring-color: #fee2e2a6;
 }
 
 .ring-red-100\\/70 {
-  --tw-ring-color: #ff0000b3;
+  --tw-ring-color: #fee2e2b3;
 }
 
 .ring-red-100\\/75 {
-  --tw-ring-color: #ff0000bf;
+  --tw-ring-color: #fee2e2bf;
 }
 
 .ring-red-100\\/80 {
-  --tw-ring-color: #f00c;
+  --tw-ring-color: #fee2e2cc;
 }
 
 .ring-red-100\\/85 {
-  --tw-ring-color: #ff0000d9;
+  --tw-ring-color: #fee2e2d9;
 }
 
 .ring-red-100\\/90 {
-  --tw-ring-color: #ff0000e6;
+  --tw-ring-color: #fee2e2e6;
 }
 
 .ring-red-100\\/95 {
-  --tw-ring-color: #ff0000f2;
+  --tw-ring-color: #fee2e2f2;
 }
 
 .ring-red-200 {
-  --tw-ring-color: red;
+  --tw-ring-color: #fecaca;
 }
 
 .ring-red-200\\/0 {
-  --tw-ring-color: #f000;
+  --tw-ring-color: #fecaca00;
 }
 
 .ring-red-200\\/10 {
-  --tw-ring-color: #ff00001a;
+  --tw-ring-color: #fecaca1a;
 }
 
 .ring-red-200\\/100 {
-  --tw-ring-color: red;
+  --tw-ring-color: #fecaca;
 }
 
 .ring-red-200\\/15 {
-  --tw-ring-color: #ff000026;
+  --tw-ring-color: #fecaca26;
 }
 
 .ring-red-200\\/20 {
-  --tw-ring-color: #f003;
+  --tw-ring-color: #fecaca33;
 }
 
 .ring-red-200\\/25 {
-  --tw-ring-color: #ff000040;
+  --tw-ring-color: #fecaca40;
 }
 
 .ring-red-200\\/30 {
-  --tw-ring-color: #ff00004d;
+  --tw-ring-color: #fecaca4d;
 }
 
 .ring-red-200\\/35 {
-  --tw-ring-color: #ff000059;
+  --tw-ring-color: #fecaca59;
 }
 
 .ring-red-200\\/40 {
-  --tw-ring-color: #f006;
+  --tw-ring-color: #fecaca66;
 }
 
 .ring-red-200\\/45 {
-  --tw-ring-color: #ff000073;
+  --tw-ring-color: #fecaca73;
 }
 
 .ring-red-200\\/5 {
-  --tw-ring-color: #ff00000d;
+  --tw-ring-color: #fecaca0d;
 }
 
 .ring-red-200\\/50 {
-  --tw-ring-color: #ff000080;
+  --tw-ring-color: #fecaca80;
 }
 
 .ring-red-200\\/55 {
-  --tw-ring-color: #ff00008c;
+  --tw-ring-color: #fecaca8c;
 }
 
 .ring-red-200\\/60 {
-  --tw-ring-color: #f009;
+  --tw-ring-color: #fecaca99;
 }
 
 .ring-red-200\\/65 {
-  --tw-ring-color: #ff0000a6;
+  --tw-ring-color: #fecacaa6;
 }
 
 .ring-red-200\\/70 {
-  --tw-ring-color: #ff0000b3;
+  --tw-ring-color: #fecacab3;
 }
 
 .ring-red-200\\/75 {
-  --tw-ring-color: #ff0000bf;
+  --tw-ring-color: #fecacabf;
 }
 
 .ring-red-200\\/80 {
-  --tw-ring-color: #f00c;
+  --tw-ring-color: #fecacacc;
 }
 
 .ring-red-200\\/85 {
-  --tw-ring-color: #ff0000d9;
+  --tw-ring-color: #fecacad9;
 }
 
 .ring-red-200\\/90 {
-  --tw-ring-color: #ff0000e6;
+  --tw-ring-color: #fecacae6;
 }
 
 .ring-red-200\\/95 {
-  --tw-ring-color: #ff0000f2;
+  --tw-ring-color: #fecacaf2;
 }
 
 .ring-transparent {
@@ -390,28 +390,28 @@ exports[`should test the 'ringColor' plugin 2`] = `
 
 .ring-red-100 {
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(255 0 0 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(254 226 226 / var(--tw-ring-opacity));
 }
 
 .ring-red-100\\/0 {
-  --tw-ring-color: #f000;
+  --tw-ring-color: #fee2e200;
 }
 
 .ring-red-100\\/50 {
-  --tw-ring-color: #ff000080;
+  --tw-ring-color: #fee2e280;
 }
 
 .ring-red-200 {
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(255 0 0 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(254 202 202 / var(--tw-ring-opacity));
 }
 
 .ring-red-200\\/0 {
-  --tw-ring-color: #f000;
+  --tw-ring-color: #fecaca00;
 }
 
 .ring-red-200\\/50 {
-  --tw-ring-color: #ff000080;
+  --tw-ring-color: #fecaca80;
 }
 
 .ring-transparent {
