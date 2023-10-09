@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'forcedColorsVariants' plugin 1`] = `
+"
+@media (forced-colors: active) {
+  .forced-colors\\:flex {
+    display: flex;
+  }
+}
+"
+`;
