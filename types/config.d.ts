@@ -189,6 +189,7 @@ interface ThemeConfig {
     >
   >
   fontWeight: ResolvableTo<KeyValuePair>
+  fontStretch: ResolvableTo<KeyValuePair>
   lineHeight: ResolvableTo<KeyValuePair>
   letterSpacing: ResolvableTo<KeyValuePair>
   textColor: ThemeConfig['colors']

@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'fontStretch' plugin 1`] = `
+"
+.stretch-\\[100\\%\\] {
+  font-stretch: 100%;
+}
+
+.stretch-\\[var\\(--my-value\\)\\] {
+  font-stretch: var(--my-value);
+}
+
+.stretch-condensed {
+  font-stretch: condensed;
+}
+
+.stretch-expanded {
+  font-stretch: expanded;
+}
+
+.stretch-extra-condensed {
+  font-stretch: extra-condensed;
+}
+
+.stretch-extra-expanded {
+  font-stretch: extra-expanded;
+}
+
+.stretch-normal {
+  font-stretch: normal;
+}
+
+.stretch-semi-condensed {
+  font-stretch: semi-condensed;
+}
+
+.stretch-semi-expanded {
+  font-stretch: semi-expanded;
+}
+
+.stretch-ultra-condensed {
+  font-stretch: ultra-condensed;
+}
+
+.stretch-ultra-expanded {
+  font-stretch: ultra-expanded;
+}
+"
+`;

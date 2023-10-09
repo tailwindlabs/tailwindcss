@@ -347,6 +347,17 @@ module.exports = {
       extrabold: '800',
       black: '900',
     },
+    fontStretch: {
+      normal: 'normal',
+      'ultra-condensed': 'ultra-condensed',
+      'extra-condensed': 'extra-condensed',
+      condensed: 'condensed',
+      'semi-condensed': 'semi-condensed',
+      'semi-expanded': 'semi-expanded',
+      expanded: 'expanded',
+      'extra-expanded': 'extra-expanded',
+      'ultra-expanded': 'ultra-expanded',
+    },
     gap: ({ theme }) => theme('spacing'),
     gradientColorStops: ({ theme }) => theme('colors'),
     gradientColorStopPositions: {

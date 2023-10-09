@@ -2072,6 +2072,10 @@ export let corePlugins = {
     type: ['lookup', 'number', 'any'],
   }),
 
+  fontStretch: createUtilityPlugin('fontStretch', [['stretch', ['fontStretch']]], {
+    type: ['lookup', 'percentage', 'any'],
+  }),
+
   textTransform: ({ addUtilities }) => {
     addUtilities({
       '.uppercase': { 'text-transform': 'uppercase' },
