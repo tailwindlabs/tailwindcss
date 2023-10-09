@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'forcedColorsAdjust' plugin 1`] = `
+"
+.forced-colors-auto {
+  forced-colors-adjust: auto;
+}
+
+.forced-colors-none {
+  forced-colors-adjust: none;
+}
+"
+`;
