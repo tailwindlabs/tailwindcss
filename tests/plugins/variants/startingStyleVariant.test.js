@@ -1,9 +1,3 @@
-import { css, quickVariantPluginTest } from '../../util/run'
+import { quickVariantPluginTest } from '../../util/run'
 
-quickVariantPluginTest('startingStyleVariant').toMatchFormattedCss(css`
-  @starting-style {
-    .starting\:flex {
-      display: flex;
-    }
-  }
-`)
+quickVariantPluginTest('startingStyleVariant').toMatchSnapshot()
