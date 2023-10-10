@@ -743,27 +743,7 @@ function resolvePlugins(context, root) {
 
   let layerPlugins = collectLayerPlugins(root)
 
-  // TODO: This is a workaround for backwards compatibility, since custom variants
-  // were historically sorted before screen/stackable variants.
-  let beforeVariants = [
-    variantPlugins['pseudoElementVariants'],
-    variantPlugins['pseudoClassVariants'],
-    variantPlugins['hasVariants'],
-    variantPlugins['ariaVariants'],
-    variantPlugins['dataVariants'],
-  ]
-  let afterVariants = [
-    variantPlugins['supportsVariants'],
-    variantPlugins['directionVariants'],
-    variantPlugins['reducedMotionVariants'],
-    variantPlugins['prefersContrastVariants'],
-    variantPlugins['darkVariants'],
-    variantPlugins['printVariant'],
-    variantPlugins['screenVariants'],
-    variantPlugins['orientationVariants'],
-  ]
-
-  return [...corePluginList, ...beforeVariants, ...userPlugins, ...afterVariants, ...layerPlugins]
+  return [...corePluginList, ...Object.values(variantPlugins), ...userPlugins, ...layerPlugins]
 }
 
 function registerPlugins(plugins, context) {
