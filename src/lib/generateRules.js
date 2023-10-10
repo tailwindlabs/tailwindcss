@@ -877,7 +877,7 @@ function getImportantStrategy(important) {
   }
 }
 
-function generateRules(candidates, context) {
+function generateRules(candidates, context, isSorting = false) {
   let allRules = []
   let strategy = getImportantStrategy(context.tailwindConfig.important)
 
@@ -912,7 +912,9 @@ function generateRules(candidates, context) {
         rule = container.nodes[0]
       }
 
-      let newEntry = [sort, rule]
+      // Note: We have to clone rules during sorting
+      // so we eliminate some shared mutable state
+      let newEntry = [sort, isSorting ? rule.clone() : rule]
       rules.add(newEntry)
       context.ruleCache.add(newEntry)
       allRules.push(newEntry)
