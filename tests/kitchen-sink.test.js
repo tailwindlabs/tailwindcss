@@ -727,10 +727,6 @@ test('it works', () => {
       .group:active .group-active\:opacity-10 {
         opacity: 0.1;
       }
-      .foo\:custom-util,
-      .foo\:hover\:custom-util:hover {
-        background: #abcdef !important;
-      }
       @media (prefers-reduced-motion: no-preference) {
         .motion-safe\:transition {
           transition-property: color, background-color, border-color, text-decoration-color, fill,
@@ -752,6 +748,10 @@ test('it works', () => {
       }
       :is(.dark .dark\:custom-util) {
         background: #abcdef;
+      }
+      .foo\:custom-util,
+      .foo\:hover\:custom-util:hover {
+        background: #abcdef !important;
       }
       @media (min-width: 640px) {
         .sm\:text-center {

@@ -99,13 +99,6 @@ test('collapse adjacent rules', () => {
         color: #000;
         font-weight: 700;
       }
-      @supports (foo: bar) {
-        .some-apply-thing {
-          --tw-text-opacity: 1;
-          color: rgb(0 0 0 / var(--tw-text-opacity));
-          font-weight: 700;
-        }
-      }
       @media (min-width: 768px) {
         .some-apply-thing {
           --tw-text-opacity: 1;
@@ -114,6 +107,11 @@ test('collapse adjacent rules', () => {
         }
       }
       @supports (foo: bar) {
+        .some-apply-thing {
+          --tw-text-opacity: 1;
+          color: rgb(0 0 0 / var(--tw-text-opacity));
+          font-weight: 700;
+        }
         @media (min-width: 768px) {
           .some-apply-thing {
             --tw-text-opacity: 1;
