@@ -186,7 +186,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
   // Remove extraneous selectors that do not include the base candidate
   selector.each((sel) => eliminateIrrelevantSelectors(sel, base))
 
-  // If ffter eliminating irrelevant selectors, we end up with nothing
+  // If after eliminating irrelevant selectors, we end up with nothing
   // Then the whole "rule" this is associated with does not need to exist
   // We use `null` as a marker value for that case
   if (selector.length === 0) {
