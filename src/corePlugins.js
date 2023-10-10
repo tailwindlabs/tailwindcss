@@ -202,6 +202,95 @@ export let variantPlugins = {
     }
   },
 
+  hasVariants: ({ matchVariant }) => {
+    matchVariant('has', (value) => `&:has(${normalize(value)})`, { values: {} })
+    matchVariant(
+      'group-has',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.group\\/${modifier}):has(${normalize(value)}) &`
+          : `:merge(.group):has(${normalize(value)}) &`,
+      { values: {} }
+    )
+    matchVariant(
+      'peer-has',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.peer\\/${modifier}):has(${normalize(value)}) ~ &`
+          : `:merge(.peer):has(${normalize(value)}) ~ &`,
+      { values: {} }
+    )
+  },
+
+  ariaVariants: ({ matchVariant, theme }) => {
+    matchVariant('aria', (value) => `&[aria-${normalize(value)}]`, { values: theme('aria') ?? {} })
+    matchVariant(
+      'group-aria',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.group\\/${modifier})[aria-${normalize(value)}] &`
+          : `:merge(.group)[aria-${normalize(value)}] &`,
+      { values: theme('aria') ?? {} }
+    )
+    matchVariant(
+      'peer-aria',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.peer\\/${modifier})[aria-${normalize(value)}] ~ &`
+          : `:merge(.peer)[aria-${normalize(value)}] ~ &`,
+      { values: theme('aria') ?? {} }
+    )
+  },
+
+  dataVariants: ({ matchVariant, theme }) => {
+    matchVariant('data', (value) => `&[data-${normalize(value)}]`, { values: theme('data') ?? {} })
+    matchVariant(
+      'group-data',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.group\\/${modifier})[data-${normalize(value)}] &`
+          : `:merge(.group)[data-${normalize(value)}] &`,
+      { values: theme('data') ?? {} }
+    )
+    matchVariant(
+      'peer-data',
+      (value, { modifier }) =>
+        modifier
+          ? `:merge(.peer\\/${modifier})[data-${normalize(value)}] ~ &`
+          : `:merge(.peer)[data-${normalize(value)}] ~ &`,
+      { values: theme('data') ?? {} }
+    )
+  },
+
+  supportsVariants: ({ matchVariant, theme }) => {
+    matchVariant(
+      'supports',
+      (value = '') => {
+        let check = normalize(value)
+        let isRaw = /^\w*\s*\(/.test(check)
+
+        // Chrome has a bug where `(condition1)or(condition2)` is not valid
+        // But `(condition1) or (condition2)` is supported.
+        check = isRaw ? check.replace(/\b(and|or|not)\b/g, ' $1 ') : check
+
+        if (isRaw) {
+          return `@supports ${check}`
+        }
+
+        if (!check.includes(':')) {
+          check = `${check}: var(--tw)`
+        }
+
+        if (!(check.startsWith('(') && check.endsWith(')'))) {
+          check = `(${check})`
+        }
+
+        return `@supports ${check}`
+      },
+      { values: theme('supports') ?? {} }
+    )
+  },
+
   directionVariants: ({ addVariant }) => {
     addVariant('ltr', ':is([dir="ltr"] &)')
     addVariant('rtl', ':is([dir="rtl"] &)')
@@ -210,6 +299,11 @@ export let variantPlugins = {
   reducedMotionVariants: ({ addVariant }) => {
     addVariant('motion-safe', '@media (prefers-reduced-motion: no-preference)')
     addVariant('motion-reduce', '@media (prefers-reduced-motion: reduce)')
+  },
+
+  prefersContrastVariants: ({ addVariant }) => {
+    addVariant('contrast-more', '@media (prefers-contrast: more)')
+    addVariant('contrast-less', '@media (prefers-contrast: less)')
   },
 
   darkVariants: ({ config, addVariant }) => {
@@ -362,103 +456,9 @@ export let variantPlugins = {
     })
   },
 
-  supportsVariants: ({ matchVariant, theme }) => {
-    matchVariant(
-      'supports',
-      (value = '') => {
-        let check = normalize(value)
-        let isRaw = /^\w*\s*\(/.test(check)
-
-        // Chrome has a bug where `(condition1)or(condition2)` is not valid
-        // But `(condition1) or (condition2)` is supported.
-        check = isRaw ? check.replace(/\b(and|or|not)\b/g, ' $1 ') : check
-
-        if (isRaw) {
-          return `@supports ${check}`
-        }
-
-        if (!check.includes(':')) {
-          check = `${check}: var(--tw)`
-        }
-
-        if (!(check.startsWith('(') && check.endsWith(')'))) {
-          check = `(${check})`
-        }
-
-        return `@supports ${check}`
-      },
-      { values: theme('supports') ?? {} }
-    )
-  },
-
-  hasVariants: ({ matchVariant }) => {
-    matchVariant('has', (value) => `&:has(${normalize(value)})`, { values: {} })
-    matchVariant(
-      'group-has',
-      (value, { modifier }) =>
-        modifier
-          ? `:merge(.group\\/${modifier}):has(${normalize(value)}) &`
-          : `:merge(.group):has(${normalize(value)}) &`,
-      { values: {} }
-    )
-    matchVariant(
-      'peer-has',
-      (value, { modifier }) =>
-        modifier
-          ? `:merge(.peer\\/${modifier}):has(${normalize(value)}) ~ &`
-          : `:merge(.peer):has(${normalize(value)}) ~ &`,
-      { values: {} }
-    )
-  },
-
-  ariaVariants: ({ matchVariant, theme }) => {
-    matchVariant('aria', (value) => `&[aria-${normalize(value)}]`, { values: theme('aria') ?? {} })
-    matchVariant(
-      'group-aria',
-      (value, { modifier }) =>
-        modifier
-          ? `:merge(.group\\/${modifier})[aria-${normalize(value)}] &`
-          : `:merge(.group)[aria-${normalize(value)}] &`,
-      { values: theme('aria') ?? {} }
-    )
-    matchVariant(
-      'peer-aria',
-      (value, { modifier }) =>
-        modifier
-          ? `:merge(.peer\\/${modifier})[aria-${normalize(value)}] ~ &`
-          : `:merge(.peer)[aria-${normalize(value)}] ~ &`,
-      { values: theme('aria') ?? {} }
-    )
-  },
-
-  dataVariants: ({ matchVariant, theme }) => {
-    matchVariant('data', (value) => `&[data-${normalize(value)}]`, { values: theme('data') ?? {} })
-    matchVariant(
-      'group-data',
-      (value, { modifier }) =>
-        modifier
-          ? `:merge(.group\\/${modifier})[data-${normalize(value)}] &`
-          : `:merge(.group)[data-${normalize(value)}] &`,
-      { values: theme('data') ?? {} }
-    )
-    matchVariant(
-      'peer-data',
-      (value, { modifier }) =>
-        modifier
-          ? `:merge(.peer\\/${modifier})[data-${normalize(value)}] ~ &`
-          : `:merge(.peer)[data-${normalize(value)}] ~ &`,
-      { values: theme('data') ?? {} }
-    )
-  },
-
   orientationVariants: ({ addVariant }) => {
     addVariant('portrait', '@media (orientation: portrait)')
     addVariant('landscape', '@media (orientation: landscape)')
-  },
-
-  prefersContrastVariants: ({ addVariant }) => {
-    addVariant('contrast-more', '@media (prefers-contrast: more)')
-    addVariant('contrast-less', '@media (prefers-contrast: less)')
   },
 }
 
