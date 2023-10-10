@@ -1167,3 +1167,26 @@ test('stacking dark and rtl variants with pseudo elements', async () => {
     }
   `)
 })
+
+test('users can override built-in variants', () => {
+  let config = {
+    content: [{ raw: html`<div class="dark:flex"></div>` }],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('dark', '[data-theme="dark"] &')
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      [data-theme='dark'] .dark\:flex {
+        display: flex;
+      }
+    `)
+  })
+})
