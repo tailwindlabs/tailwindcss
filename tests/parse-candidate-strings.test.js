@@ -458,5 +458,29 @@ describe.each([
       expect(extractions).toContain('p-2')
       expect(extractions).toContain('p-2.5')
     })
+
+    it.each([
+      // With group name modifier
+      [
+        '<div class="bg-blue-300 group-[[data-can-play]:not([data-playing])]/parent:bg-red-300 p-4 w-60" ></div>',
+        [
+          'bg-blue-300',
+          'group-[[data-can-play]:not([data-playing])]/parent:bg-red-300',
+          'p-4',
+          'w-60',
+        ],
+      ],
+      // Without group name modifier
+      [
+        '<div class="bg-blue-300 group-[[data-can-play]:not([data-playing])]:bg-red-300 p-4 w-60">',
+        ['bg-blue-300', 'group-[[data-can-play]:not([data-playing])]:bg-red-300', 'p-4', 'w-60'],
+      ],
+    ])('should work for issue #12169 (%#)', async (content, expectations) => {
+      let extractions = parse(content)
+
+      for (let value of expectations) {
+        expect(extractions).toContain(value)
+      }
+    })
   })
 })
