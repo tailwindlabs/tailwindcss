@@ -6,6 +6,22 @@ exports[`should test the 'gridRowEnd' plugin 1`] = `
   grid-row-end: 1;
 }
 
+.row-end-10 {
+  grid-row-end: 10;
+}
+
+.row-end-11 {
+  grid-row-end: 11;
+}
+
+.row-end-12 {
+  grid-row-end: 12;
+}
+
+.row-end-13 {
+  grid-row-end: 13;
+}
+
 .row-end-2 {
   grid-row-end: 2;
 }
@@ -28,6 +44,14 @@ exports[`should test the 'gridRowEnd' plugin 1`] = `
 
 .row-end-7 {
   grid-row-end: 7;
+}
+
+.row-end-8 {
+  grid-row-end: 8;
+}
+
+.row-end-9 {
+  grid-row-end: 9;
 }
 
 .row-end-\\[123\\] {

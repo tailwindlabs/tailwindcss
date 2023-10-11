@@ -6,6 +6,22 @@ exports[`should test the 'gridRowStart' plugin 1`] = `
   grid-row-start: 1;
 }
 
+.row-start-10 {
+  grid-row-start: 10;
+}
+
+.row-start-11 {
+  grid-row-start: 11;
+}
+
+.row-start-12 {
+  grid-row-start: 12;
+}
+
+.row-start-13 {
+  grid-row-start: 13;
+}
+
 .row-start-2 {
   grid-row-start: 2;
 }
@@ -28,6 +44,14 @@ exports[`should test the 'gridRowStart' plugin 1`] = `
 
 .row-start-7 {
   grid-row-start: 7;
+}
+
+.row-start-8 {
+  grid-row-start: 8;
+}
+
+.row-start-9 {
+  grid-row-start: 9;
 }
 
 .row-start-\\[123\\] {
