@@ -80,12 +80,18 @@ function* buildRegExps(context) {
       // This is here to provide special support for the `@` variant
       regex.pattern([/@\[[^\s"'`]+\](\/[^\s"'`]+)?/, separator]),
 
+      // With variant modifier (e.g.: group-[..]/modifier)
+      regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]\/\w+/, separator]),
+
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
       regex.pattern([/[^\s"'`\[\\]+/, separator]),
     ]),
 
     // With quotes allowed
     regex.any([
+      // With variant modifier (e.g.: group-[..]/modifier)
+      regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s`]+\]\/\w+/, separator]),
+
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s`]+\]/, separator]),
       regex.pattern([/[^\s`\[\\]+/, separator]),
     ]),
