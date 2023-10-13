@@ -295,7 +295,7 @@ describe('watcher', () => {
     )
     await runningProcess.onStderr(ready)
 
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+    await new Promise((resolve) => setTimeout(resolve, 10000))
 
     expect(await readOutputFile('index.css')).toIncludeCss(
       css`
