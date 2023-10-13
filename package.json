@@ -56,7 +56,7 @@
     "prettier": "^2.8.8",
     "rimraf": "^5.0.0",
     "source-map-js": "^1.0.2",
-    "turbo": "^1.10.14"
+    "turbo": "^1.10.15"
   },
   "dependencies": {
     "@alloc/quick-lru": "^5.2.0",
