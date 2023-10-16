@@ -2,12 +2,12 @@ import { parseColor } from './color'
 import { parseBoxShadowValue } from './parseBoxShadowValue'
 import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 
-let cssFunctions = ['min', 'max', 'clamp', 'calc']
+const cssMathFnRE = new RegExp(`^(${['min', 'max', 'clamp', 'calc'].join('|')})\\(.*\\)`)
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
-function isCSSFunction(value) {
-  return cssFunctions.some((fn) => new RegExp(`^${fn}\\(.*\\)`).test(value))
+function isCSSMathFn(value) {
+  return cssMathFnRE.test(value)
 }
 
 // This is not a data type, but rather a function that can normalize the
@@ -128,11 +128,11 @@ export function url(value) {
 }
 
 export function number(value) {
-  return !isNaN(Number(value)) || isCSSFunction(value)
+  return !isNaN(Number(value)) || isCSSMathFn(value)
 }
 
 export function percentage(value) {
-  return (value.endsWith('%') && number(value.slice(0, -1))) || isCSSFunction(value)
+  return (value.endsWith('%') && number(value.slice(0, -1))) || isCSSMathFn(value)
 }
 
 // Please refer to MDN when updating this list:
@@ -176,7 +176,7 @@ export function length(value) {
   return (
     value === '0' ||
     new RegExp(`^[+-]?[0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?${lengthUnitsPattern}$`).test(value) ||
-    isCSSFunction(value)
+    isCSSMathFn(value)
   )
 }
 
