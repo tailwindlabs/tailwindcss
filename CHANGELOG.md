@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix sorting of utilities that share multiple candidates ([#12173](https://github.com/tailwindlabs/tailwindcss/pull/12173))
 - Ensure variants with arbitrary values and a modifier are correctly matched in the RegEx based parser ([#12179](https://github.com/tailwindlabs/tailwindcss/pull/12179))
 - Fix crash when watching renamed files on FreeBSD ([#12193](https://github.com/tailwindlabs/tailwindcss/pull/12193))
+- Allow plugins from a parent document to be used in an iframe ([#12208](https://github.com/tailwindlabs/tailwindcss/pull/12208))
 
 ### Added
 
