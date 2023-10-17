@@ -3,11 +3,12 @@ import { parseBoxShadowValue } from './parseBoxShadowValue'
 import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 
 let cssFunctions = ['min', 'max', 'clamp', 'calc']
+let IS_CSS_FN = new RegExp(`^(${cssFunctions.join('|')})\\(.*\\)`)
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
 function isCSSFunction(value) {
-  return cssFunctions.some((fn) => new RegExp(`^${fn}\\(.*\\)`).test(value))
+  return IS_CSS_FN.test(value)
 }
 
 // This is not a data type, but rather a function that can normalize the

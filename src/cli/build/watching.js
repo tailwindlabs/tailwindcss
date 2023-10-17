@@ -164,7 +164,7 @@ export function createWatcher(args, { state, rebuild }) {
   // This is very likely a chokidar bug but it's one we need to work around
   // We treat this as a change event and rebuild the CSS
   watcher.on('raw', (evt, filePath, meta) => {
-    if (evt !== 'rename') {
+    if (evt !== 'rename' || filePath === null) {
       return
     }
 
