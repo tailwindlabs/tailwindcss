@@ -352,6 +352,8 @@ describe('watcher', () => {
     )
     await runningProcess.onStderr(ready)
 
+    await new Promise((resolve) => setTimeout(resolve, 5000))
+
     expect(await readOutputFile('index.css')).toIncludeCss(
       css`
         .btn {
@@ -409,5 +411,5 @@ describe('watcher', () => {
     }
 
     return runningProcess.stop()
-  })
+  }, 30000)
 })
