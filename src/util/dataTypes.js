@@ -37,10 +37,8 @@ const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
 // This is not a data type, but rather a function that can normalize the
 // correct values.
 export function normalize(value, context = null, isRoot = true) {
-  if (
-    (context ? !AUTO_VAR_INJECTION_EXCEPTIONS.has(context.property) : true) &&
-    value.startsWith('--')
-  ) {
+  let isVarException = context && AUTO_VAR_INJECTION_EXCEPTIONS.has(context.property)
+  if (value.startsWith('--') && !isVarException) {
     return `var(${value})`
   }
 
