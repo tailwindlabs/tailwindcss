@@ -1,3 +1,4 @@
+import { css, run } from './util/run'
 import { normalize } from '../src/util/dataTypes'
 
 let table = [
@@ -74,4 +75,32 @@ let table = [
 
 it.each(table)('normalize data: %s', (input, output) => {
   expect(normalize(input)).toBe(output)
+})
+
+it('should not automatically inject the `var()` for properties that accept `<dashed-ident>` as the value', () => {
+  let config = {
+    content: [
+      // Automatic var injection
+      { raw: '[color:--foo]' },
+
+      // Automatic var injection is skipped
+      { raw: '[timeline-scope:--foo]' },
+    ],
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .\[color\:--foo\] {
+        color: var(--foo);
+      }
+
+      .\[timeline-scope\:--foo\] {
+        timeline-scope: --foo;
+      }
+    `)
+  })
 })
