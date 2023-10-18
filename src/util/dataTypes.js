@@ -26,6 +26,7 @@ const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
   'scroll-timeline-name',
   'timeline-scope',
   'view-timeline-name',
+  'font-palette',
 
   // Shorthand properties
   'scroll-timeline',
