@@ -491,7 +491,7 @@ function extractArbitraryProperty(classCandidate, context) {
     return null
   }
 
-  let normalized = normalize(value)
+  let normalized = normalize(value, { property })
 
   if (!isParsableCssValue(property, normalized)) {
     return null
