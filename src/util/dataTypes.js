@@ -173,10 +173,11 @@ let lengthUnits = [
   'cqmax',
 ]
 let lengthUnitsPattern = `(?:${lengthUnits.join('|')})`
+let lengthRegExp = new RegExp(`^[+-]?[0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?${lengthUnitsPattern}$`);
 export function length(value) {
   return (
     value === '0' ||
-    new RegExp(`^[+-]?[0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?${lengthUnitsPattern}$`).test(value) ||
+    lengthRegExp.test(value) ||
     isCSSFunction(value)
   )
 }
