@@ -10,7 +10,7 @@ type UnwrapResolvables<T> = {
   [K in keyof T]: T[K] extends ResolvableTo<infer R> ? R : T[K]
 }
 
-type DefaultThemeFull = DefaultTheme & { colors: DefaultColors }
+type DefaultThemeFull = Omit<DefaultTheme, 'extend'> & { colors: DefaultColors }
 
 type MergeThemes<T extends Config['theme'], E extends Config['theme']['extend']> = {
   [K in keyof DefaultThemeFull]: (K extends keyof T ? T[K] : DefaultThemeFull[K])
