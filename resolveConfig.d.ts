@@ -13,11 +13,8 @@ type UnwrapResolvables<T> = {
 type DefaultThemeFull = DefaultTheme & { colors: DefaultColors }
 
 type MergeThemes<T extends Config['theme'], E extends Config['theme']['extend']> = {
-  [K in keyof DefaultThemeFull]: K extends keyof T
-    ? T[K]
-    : K extends keyof E
-    ? DefaultThemeFull[K] & E[K]
-    : DefaultThemeFull[K]
+  [K in keyof DefaultThemeFull]: (K extends keyof T ? T[K] : DefaultThemeFull[K])
+    & (K extends keyof E ? E[K] : {})
 }
 
 declare function resolveConfig<T extends Config>(config: T): ResolvedConfig<T>
