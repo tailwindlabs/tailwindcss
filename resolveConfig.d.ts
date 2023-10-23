@@ -1,4 +1,4 @@
-import { Config, ResolvableTo } from './types/config'
+import { Config, ResolvableTo, ThemeConfig } from "./types/config";
 import { DefaultTheme } from './types/generated/default-theme'
 import { DefaultColors } from './types/generated/colors'
 
@@ -10,12 +10,17 @@ type UnwrapResolvables<T> = {
   [K in keyof T]: T[K] extends ResolvableTo<infer R> ? R : T[K]
 }
 
-type DefaultThemeFull = Omit<DefaultTheme, 'extend'> & { colors: DefaultColors }
+type ThemeConfigResolved = UnwrapResolvables<ThemeConfig>
+type DefaultThemeFull = DefaultTheme & { colors: DefaultColors }
 
 type MergeThemes<Overrides extends object, Extensions extends object> = {
-  [K in keyof DefaultThemeFull]:
-    (K extends keyof Overrides ? Overrides[K] : DefaultThemeFull[K])
-    & (K extends keyof Extensions ? Extensions[K] : {})
+  [K in keyof ThemeConfig]: (
+    K extends keyof Overrides
+      ? Overrides[K]
+      : K extends keyof DefaultThemeFull
+      ? DefaultThemeFull[K]
+      : ThemeConfigResolved[K]
+  ) & (K extends keyof Extensions ? Extensions[K] : {})
 }
 
 declare function resolveConfig<T extends Config>(config: T): ResolvedConfig<T>

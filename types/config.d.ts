@@ -80,7 +80,7 @@ type Screen = { raw: string } | { min: string } | { max: string } | { min: strin
 type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>
 
 // Theme related config
-interface ThemeConfig {
+export interface ThemeConfig {
   // Responsiveness
   screens: ResolvableTo<ScreensConfig>
   supports: ResolvableTo<Record<string, string>>
