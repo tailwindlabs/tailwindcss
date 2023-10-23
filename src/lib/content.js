@@ -1,13 +1,13 @@
 // @ts-check
 
-import fs from 'fs'
-import path from 'path'
-import isGlob from 'is-glob'
+import { resolveContentPaths } from '@tailwindcss/oxide'
 import fastGlob from 'fast-glob'
+import fs from 'fs'
+import isGlob from 'is-glob'
 import normalizePath from 'normalize-path'
+import path from 'path'
 import { parseGlob } from '../util/parseGlob'
 import { env } from './sharedState'
-import { resolveContentPaths } from '@tailwindcss/oxide'
 
 /** @typedef {import('../../types/config.js').RawFile} RawFile */
 /** @typedef {import('../../types/config.js').FilePath} FilePath */
@@ -71,13 +71,13 @@ export function parseCandidateFiles(context, tailwindConfig) {
   files = files.map(normalizePath)
 
   // Split into included and excluded globs
-  let tasks = fastGlob.generateTasks(files)
+  const tasks = fastGlob.generateTasks(files)
 
   /** @type {ContentPath[]} */
-  let included = []
+  const included = []
 
   /** @type {ContentPath[]} */
-  let excluded = []
+  const excluded = []
 
   for (const task of tasks) {
     included.push(...task.positive.map((filePath) => parseFilePath(filePath, false)))

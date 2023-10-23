@@ -1,30 +1,30 @@
 // @ts-check
 
-import pkg from '../../../package.json'
-import path from 'path'
-import fs from 'fs'
-import postcss from 'postcss'
-import postcssrc from 'postcss-load-config'
 import browserslist from 'browserslist'
+import fs from 'fs'
 import lightning, { Features } from 'lightningcss'
 import { lilconfig } from 'lilconfig'
-import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
+import path from 'path'
+import postcss from 'postcss'
+import postcssrc from 'postcss-load-config'
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
+import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
+import pkg from '../../../package.json'
 
-import tailwind from '../../processTailwindFeatures'
-import { formatNodes, drainStdin, outputFile } from './utils'
-import { env } from '../../lib/sharedState'
-import resolveConfig from '../../../resolveConfig.js'
-import { parseCandidateFiles } from '../../lib/content.js'
-import { createWatcher } from './watching.js'
 import fastGlob from 'fast-glob'
-import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
-import log from '../../util/log'
-import { loadConfig } from '../../lib/load-config'
-import getModuleDependencies from '../../lib/getModuleDependencies'
-import { validateConfig } from '../../util/validateConfig'
-import { handleImportAtRules } from '../../lib/handleImportAtRules'
+import resolveConfig from '../../../resolveConfig.js'
 import { flagEnabled } from '../../featureFlags'
+import { parseCandidateFiles } from '../../lib/content.js'
+import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
+import getModuleDependencies from '../../lib/getModuleDependencies'
+import { handleImportAtRules } from '../../lib/handleImportAtRules'
+import { loadConfig } from '../../lib/load-config'
+import { env } from '../../lib/sharedState'
+import tailwind from '../../processTailwindFeatures'
+import log from '../../util/log'
+import { validateConfig } from '../../util/validateConfig'
+import { drainStdin, formatNodes, outputFile } from './utils'
+import { createWatcher } from './watching.js'
 
 function license() {
   return `/* ! tailwindcss v${pkg.version} | MIT License | https://tailwindcss.com */\n`
@@ -32,13 +32,13 @@ function license() {
 
 async function lightningcss(result, { map = true, minify = true } = {}) {
   try {
-    let resolvedBrowsersListConfig = browserslist.findConfig(
+    const resolvedBrowsersListConfig = browserslist.findConfig(
       result.opts.from ?? process.cwd()
     )?.defaults
-    let defaultBrowsersListConfig = pkg.browserslist
-    let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
+    const defaultBrowsersListConfig = pkg.browserslist
+    const browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
 
-    let transformed = lightning.transform({
+    const transformed = lightning.transform({
       filename: result.opts.from || 'input.css',
       code: Buffer.from(result.css, 'utf-8'),
       minify,

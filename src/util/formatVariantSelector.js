@@ -14,7 +14,7 @@ import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 /** @typedef {import('postcss-selector-parser').Root} ParsedFormats */
 /** @typedef {RawFormats | ParsedFormats} AcceptedFormats */
 
-let MERGE = ':merge'
+const MERGE = ':merge'
 
 /**
  * @param {RawFormats} formats
@@ -22,11 +22,11 @@ let MERGE = ':merge'
  * @returns {ParsedFormats | null}
  */
 export function formatVariantSelector(formats, { context, candidate }) {
-  let prefix = context?.tailwindConfig.prefix ?? ''
+  const prefix = context?.tailwindConfig.prefix ?? ''
 
   // Parse the format selector into an AST
-  let parsedFormats = formats.map((format) => {
-    let ast = selectorParser().astSync(format.format)
+  const parsedFormats = formats.map((format) => {
+    const ast = selectorParser().astSync(format.format)
 
     return {
       ...format,
@@ -69,7 +69,7 @@ export function formatVariantSelector(formats, { context, candidate }) {
  **/
 function simpleSelectorForNode(node) {
   /** @type {Node[]} */
-  let nodes = []
+  const nodes = []
 
   // Walk backwards until we hit a combinator node (or the start)
   while (node.prev() && node.prev().type !== 'combinator') {
@@ -152,7 +152,7 @@ export function eliminateIrrelevantSelectors(sel, base) {
  * @returns {string}
  */
 export function finalizeSelector(current, formats, { context, candidate, base }) {
-  let separator = context?.tailwindConfig?.separator ?? ':'
+  const separator = context?.tailwindConfig?.separator ?? ':'
 
   // Split by the separator, but ignore the separator inside square brackets:
   //
@@ -164,7 +164,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
   base = base ?? splitAtTopLevelOnly(candidate, separator).pop()
 
   // Parse the selector into an AST
-  let selector = selectorParser().astSync(current)
+  const selector = selectorParser().astSync(current)
 
   // Normalize escaped classes, e.g.:
   //
@@ -195,7 +195,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
 
   // If there are no formats that means there were no variants added to the candidate
   // so we can just return the selector as-is
-  let formatAst = Array.isArray(formats)
+  const formatAst = Array.isArray(formats)
     ? formatVariantSelector(formats, { context, candidate })
     : formats
 
@@ -203,8 +203,8 @@ export function finalizeSelector(current, formats, { context, candidate, base })
     return selector.toString()
   }
 
-  let simpleStart = selectorParser.comment({ value: '/*__simple__*/' })
-  let simpleEnd = selectorParser.comment({ value: '/*__simple__*/' })
+  const simpleStart = selectorParser.comment({ value: '/*__simple__*/' })
+  const simpleEnd = selectorParser.comment({ value: '/*__simple__*/' })
 
   // We can safely replace the escaped base now, since the `base` section is
   // now in a normalized escaped value.
@@ -213,8 +213,8 @@ export function finalizeSelector(current, formats, { context, candidate, base })
       return
     }
 
-    let parent = node.parent
-    let formatNodes = formatAst.nodes[0].nodes
+    const parent = node.parent
+    const formatNodes = formatAst.nodes[0].nodes
 
     // Perf optimization: if the parent is a single class we can just replace it and be done
     if (parent.nodes.length === 1) {
@@ -226,7 +226,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
     parent.insertBefore(simpleSelector[0], simpleStart)
     parent.insertAfter(simpleSelector[simpleSelector.length - 1], simpleEnd)
 
-    for (let child of formatNodes) {
+    for (const child of formatNodes) {
       parent.insertBefore(simpleSelector[0], child.clone())
     }
 
@@ -234,7 +234,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
 
     // Re-sort the simple selector to ensure it's in the correct order
     simpleSelector = simpleSelectorForNode(simpleStart)
-    let firstNode = parent.index(simpleStart)
+    const firstNode = parent.index(simpleStart)
 
     parent.nodes.splice(
       firstNode,
@@ -266,7 +266,7 @@ export function finalizeSelector(current, formats, { context, candidate, base })
  */
 export function handleMergePseudo(selector, format) {
   /** @type {{pseudo: Pseudo, value: string}[]} */
-  let merges = []
+  const merges = []
 
   // Find all :merge() pseudo-classes in `selector`
   selector.walkPseudos((pseudo) => {
@@ -284,10 +284,10 @@ export function handleMergePseudo(selector, format) {
       return
     }
 
-    let value = pseudo.nodes[0].toString()
+    const value = pseudo.nodes[0].toString()
 
     // Does `selector` contain a :merge() pseudo-class with the same value?
-    let existing = merges.find((merge) => merge.value === value)
+    const existing = merges.find((merge) => merge.value === value)
 
     // Nope so there's nothing to do
     if (!existing) {
@@ -295,14 +295,14 @@ export function handleMergePseudo(selector, format) {
     }
 
     // Everything after `:merge()` up to the next combinator is what is attached to the merged selector
-    let attachments = []
+    const attachments = []
     let next = pseudo.next()
     while (next && next.type !== 'combinator') {
       attachments.push(next)
       next = next.next()
     }
 
-    let combinator = next
+    const combinator = next
 
     existing.pseudo.parent.insertAfter(
       existing.pseudo,

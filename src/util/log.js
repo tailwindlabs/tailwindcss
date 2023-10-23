@@ -1,6 +1,6 @@
 import colors from 'picocolors'
 
-let alreadyShown = new Set()
+const alreadyShown = new Set()
 
 function log(type, messages, key) {
   if (typeof process !== 'undefined' && process.env.JEST_WORKER_ID) return

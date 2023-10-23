@@ -34,7 +34,7 @@ function getHash(str) {
  * @param {import('postcss').Node} root
  */
 export function hasContentChanged(sourcePath, root) {
-  let css = root.toString()
+  const css = root.toString()
 
   // We only care about files with @tailwind directives
   // Other files use an existing context
@@ -42,9 +42,9 @@ export function hasContentChanged(sourcePath, root) {
     return false
   }
 
-  let existingHash = sharedState.sourceHashMap.get(sourcePath)
-  let rootHash = getHash(css)
-  let didChange = existingHash !== rootHash
+  const existingHash = sharedState.sourceHashMap.get(sourcePath)
+  const rootHash = getHash(css)
+  const didChange = existingHash !== rootHash
 
   sharedState.sourceHashMap.set(sourcePath, rootHash)
 

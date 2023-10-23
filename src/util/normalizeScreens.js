@@ -79,11 +79,11 @@ export function isScreenSortable(screen) {
  * @returns {number}
  */
 export function compareScreens(type, a, z) {
-  let aScreen = toScreen(a, type)
-  let zScreen = toScreen(z, type)
+  const aScreen = toScreen(a, type)
+  const zScreen = toScreen(z, type)
 
-  let aSorting = isScreenSortable(aScreen)
-  let bSorting = isScreenSortable(zScreen)
+  const aSorting = isScreenSortable(aScreen)
+  const bSorting = isScreenSortable(zScreen)
 
   // These cases should never happen and indicate a bug in Tailwind CSS itself
   if (aSorting.reason === 'multiple-values' || bSorting.reason === 'multiple-values') {
@@ -113,7 +113,7 @@ export function compareScreens(type, a, z) {
   zMin = zMin === undefined ? zMin : parseFloat(zMin)
   zMax = zMax === undefined ? zMax : parseFloat(zMax)
 
-  let [aValue, zValue] = type === 'min' ? [aMin, zMin] : [zMax, aMax]
+  const [aValue, zValue] = type === 'min' ? [aMin, zMin] : [zMax, aMax]
 
   return aValue - zValue
 }

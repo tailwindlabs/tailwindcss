@@ -1,8 +1,8 @@
 function stringifyNode(node, custom) {
-  var type = node.type
-  var value = node.value
-  var buf
-  var customResult
+  const type = node.type
+  const value = node.value
+  let buf
+  let customResult
 
   if (custom && (customResult = custom(node)) !== undefined) {
     return customResult
@@ -26,7 +26,7 @@ function stringifyNode(node, custom) {
 }
 
 function stringify(nodes, custom) {
-  var result, i
+  let result, i
 
   if (Array.isArray(nodes)) {
     result = ''

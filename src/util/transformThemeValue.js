@@ -14,7 +14,7 @@ export default function transformThemeValue(themeSection) {
   if (themeSection === 'fontFamily') {
     return (value) => {
       if (typeof value === 'function') value = value({})
-      let families = Array.isArray(value) && isPlainObject(value[1]) ? value[0] : value
+      const families = Array.isArray(value) && isPlainObject(value[1]) ? value[0] : value
       return Array.isArray(families) ? families.join(', ') : families
     }
   }

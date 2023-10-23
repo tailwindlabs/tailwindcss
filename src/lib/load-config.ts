@@ -19,7 +19,7 @@ function lazyJiti() {
 }
 
 export function loadConfig(path: string): Config {
-  let config = (function () {
+  const config = (function () {
     try {
       return path ? require(path) : {}
     } catch {

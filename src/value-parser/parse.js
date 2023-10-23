@@ -1,32 +1,32 @@
-var openParentheses = '('.charCodeAt(0)
-var closeParentheses = ')'.charCodeAt(0)
-var singleQuote = "'".charCodeAt(0)
-var doubleQuote = '"'.charCodeAt(0)
-var backslash = '\\'.charCodeAt(0)
-var slash = '/'.charCodeAt(0)
-var comma = ','.charCodeAt(0)
-var colon = ':'.charCodeAt(0)
-var star = '*'.charCodeAt(0)
-var uLower = 'u'.charCodeAt(0)
-var uUpper = 'U'.charCodeAt(0)
-var plus = '+'.charCodeAt(0)
-var isUnicodeRange = /^[a-f0-9?-]+$/i
+const openParentheses = '('.charCodeAt(0)
+const closeParentheses = ')'.charCodeAt(0)
+const singleQuote = "'".charCodeAt(0)
+const doubleQuote = '"'.charCodeAt(0)
+const backslash = '\\'.charCodeAt(0)
+const slash = '/'.charCodeAt(0)
+const comma = ','.charCodeAt(0)
+const colon = ':'.charCodeAt(0)
+const star = '*'.charCodeAt(0)
+const uLower = 'u'.charCodeAt(0)
+const uUpper = 'U'.charCodeAt(0)
+const plus = '+'.charCodeAt(0)
+const isUnicodeRange = /^[a-f0-9?-]+$/i
 
 module.exports = function (input) {
-  var tokens = []
-  var value = input
+  let tokens = []
+  const max = value.length
+  const stack = [{ nodes: tokens }]
 
-  var next, quote, prev, token, escape, escapePos, whitespacePos, parenthesesOpenPos
-  var pos = 0
-  var code = value.charCodeAt(pos)
-  var max = value.length
-  var stack = [{ nodes: tokens }]
-  var balanced = 0
-  var parent
+  let value = input
+  let next, quote, prev, token, escape, escapePos, whitespacePos, parenthesesOpenPos
+  let pos = 0
+  let code = value.charCodeAt(pos)
+  let balanced = 0
+  let parent
 
-  var name = ''
-  var before = ''
-  var after = ''
+  let name = ''
+  let before = ''
+  let after = ''
 
   while (pos < max) {
     // Whitespaces

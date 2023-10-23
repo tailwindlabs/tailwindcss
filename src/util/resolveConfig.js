@@ -16,11 +16,11 @@ function isFunction(input) {
 }
 
 function mergeWith(target, ...sources) {
-  let customizer = sources.pop()
+  const customizer = sources.pop()
 
-  for (let source of sources) {
-    for (let k in source) {
-      let merged = customizer(target[k], source[k])
+  for (const source of sources) {
+    for (const k in source) {
+      const merged = customizer(target[k], source[k])
 
       if (merged === undefined) {
         if (isPlainObject(target[k]) && isPlainObject(source[k])) {
@@ -44,7 +44,7 @@ const configUtils = {
     return Object.keys(scale)
       .filter((key) => scale[key] !== '0')
       .reduce((negativeScale, key) => {
-        let negativeValue = negateValue(scale[key])
+        const negativeValue = negateValue(scale[key])
 
         if (negativeValue !== undefined) {
           negativeScale[`-${key}`] = negativeValue
@@ -138,7 +138,7 @@ function mergeExtensions({ extend, ...theme }) {
  * @return {Iterable<string[] & {alpha: string | undefined}>}
  */
 function* toPaths(key) {
-  let path = toPath(key)
+  const path = toPath(key)
 
   if (path.length === 0) {
     return
@@ -150,13 +150,13 @@ function* toPaths(key) {
     return
   }
 
-  let pattern = /^(.*?)\s*\/\s*([^/]+)$/
-  let matches = key.match(pattern)
+  const pattern = /^(.*?)\s*\/\s*([^/]+)$/
+  const matches = key.match(pattern)
 
   if (matches !== null) {
-    let [, prefix, alpha] = matches
+    const [, prefix, alpha] = matches
 
-    let newPath = toPath(prefix)
+    const newPath = toPath(prefix)
     newPath.alpha = alpha
 
     yield newPath
@@ -211,13 +211,13 @@ function resolveFunctionKeys(object) {
 }
 
 function resolvePlugins(configs) {
-  let pluginGroups = []
-  let allConfigs = []
+  const pluginGroups = []
+  const allConfigs = []
 
-  for (let config of configs) {
+  for (const config of configs) {
     allConfigs.push(config)
 
-    let plugins = []
+    const plugins = []
 
     for (let plugin of config?.plugins ?? []) {
       // TODO: If we want to support ESM plugins then a handful of things will have to become async
@@ -240,7 +240,7 @@ function resolvePlugins(configs) {
 
       // We're explicitly skipping registering child plugins
       // This will change in v4
-      let [, childConfigs] = resolvePlugins([plugin?.config ?? {}])
+      const [, childConfigs] = resolvePlugins([plugin?.config ?? {}])
 
       plugins.push(plugin)
       allConfigs.push(...childConfigs)
@@ -252,7 +252,7 @@ function resolvePlugins(configs) {
   // Reverse the order of the plugin groups
   // This matches the old `reduceRight` behavior of the old `resolvePluginLists`
   // Why? No idea.
-  let plugins = pluginGroups.reverse().flat()
+  const plugins = pluginGroups.reverse().flat()
 
   return [plugins, allConfigs]
 }
@@ -269,9 +269,9 @@ function resolveCorePlugins(corePluginConfigs) {
 }
 
 export default function resolveConfig(configs) {
-  let [plugins, pluginConfigs] = resolvePlugins(configs)
+  const [plugins, pluginConfigs] = resolvePlugins(configs)
 
-  let allConfigs = [
+  const allConfigs = [
     ...pluginConfigs,
     {
       prefix: '',

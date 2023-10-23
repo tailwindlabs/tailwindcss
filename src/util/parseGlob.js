@@ -4,7 +4,7 @@ import globParent from 'glob-parent'
 // https://github.com/micromatch/glob-base/blob/master/index.js
 export function parseGlob(pattern) {
   let glob = pattern
-  let base = globParent(pattern)
+  const base = globParent(pattern)
 
   if (base !== '.') {
     glob = pattern.substr(base.length)

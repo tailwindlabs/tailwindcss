@@ -18,7 +18,7 @@ import isValidArbitraryValue from '../util/isSyntacticallyValidPropertyValue'
 import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly.js'
 import { applyImportantSelector } from '../util/applyImportantSelector'
 
-let classNameParser = selectorParser((selectors) => {
+const classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
 })
 
@@ -41,7 +41,7 @@ function* candidatePermutations(candidate) {
     let wasSlash = false
 
     if (lastIndex === Infinity && candidate.endsWith(']')) {
-      let bracketIdx = candidate.indexOf('[')
+      const bracketIdx = candidate.indexOf('[')
 
       // If character before `[` isn't a dash or a slash, this isn't a dynamic class
       // e.g. string[]
@@ -64,8 +64,8 @@ function* candidatePermutations(candidate) {
       break
     }
 
-    let prefix = candidate.slice(0, dashIdx)
-    let modifier = candidate.slice(wasSlash ? dashIdx : dashIdx + 1)
+    const prefix = candidate.slice(0, dashIdx)
+    const modifier = candidate.slice(wasSlash ? dashIdx : dashIdx + 1)
 
     lastIndex = dashIdx - 1
 
@@ -83,11 +83,11 @@ function applyPrefix(matches, context) {
     return matches
   }
 
-  for (let match of matches) {
-    let [meta] = match
+  for (const match of matches) {
+    const [meta] = match
     if (meta.options.respectPrefix) {
-      let container = postcss.root({ nodes: [match[1].clone()] })
-      let classCandidate = match[1].raws.tailwind.classCandidate
+      const container = postcss.root({ nodes: [match[1].clone()] })
+      const classCandidate = match[1].raws.tailwind.classCandidate
 
       container.walkRules((r) => {
         // If this is a negative utility with a dash *before* the prefix we
@@ -95,7 +95,7 @@ function applyPrefix(matches, context) {
 
         // Not doing this will cause `-tw-top-1` to generate the class `.tw--top-1`
         // The disconnect between candidate <-> class can cause @apply to hard crash.
-        let shouldPrependNegative = classCandidate.startsWith('-')
+        const shouldPrependNegative = classCandidate.startsWith('-')
 
         r.selector = prefixSelector(
           context.tailwindConfig.prefix,
@@ -116,13 +116,13 @@ function applyImportant(matches, classCandidate) {
     return matches
   }
 
-  let result = []
+  const result = []
 
-  for (let [meta, rule] of matches) {
-    let container = postcss.root({ nodes: [rule.clone()] })
+  for (const [meta, rule] of matches) {
+    const container = postcss.root({ nodes: [rule.clone()] })
 
     container.walkRules((r) => {
-      let ast = selectorParser().astSync(r.selector)
+      const ast = selectorParser().astSync(r.selector)
 
       // Remove extraneous selectors that do not include the base candidate
       ast.each((sel) => eliminateIrrelevantSelectors(sel, classCandidate))
@@ -158,7 +158,7 @@ function applyVariant(variant, matches, context) {
   }
 
   /** @type {{modifier: string | null, value: string | null}} */
-  let args = { modifier: null, value: sharedState.NONE }
+  const args = { modifier: null, value: sharedState.NONE }
 
   // Retrieve "modifier"
   {
@@ -186,9 +186,9 @@ function applyVariant(variant, matches, context) {
     // But we don't want:
     //   @-[200px]        (`-` is incorrect)
     //   group[:hover]    (`-` is missing)
-    let match = /(.)(-?)\[(.*)\]/g.exec(variant)
+    const match = /(.)(-?)\[(.*)\]/g.exec(variant)
     if (match) {
-      let [, char, separator, value] = match
+      const [, char, separator, value] = match
       // @-[200px] case
       if (char === '@' && separator === '-') return []
       // group[:hover] case
@@ -201,10 +201,10 @@ function applyVariant(variant, matches, context) {
 
   // Register arbitrary variants
   if (isArbitraryValue(variant) && !context.variantMap.has(variant)) {
-    let sort = context.offsets.recordVariant(variant)
+    const sort = context.offsets.recordVariant(variant)
 
-    let selector = normalize(variant.slice(1, -1))
-    let selectors = splitAtTopLevelOnly(selector, ',')
+    const selector = normalize(variant.slice(1, -1))
+    const selectors = splitAtTopLevelOnly(selector, ',')
 
     // We do not support multiple selectors for arbitrary variants
     if (selectors.length > 1) {
@@ -215,7 +215,7 @@ function applyVariant(variant, matches, context) {
       return []
     }
 
-    let records = selectors.map((sel, idx) => [
+    const records = selectors.map((sel, idx) => [
       context.offsets.applyParallelOffset(sort, idx),
       parseVariant(sel.trim()),
     ])
@@ -224,28 +224,28 @@ function applyVariant(variant, matches, context) {
   }
 
   if (context.variantMap.has(variant)) {
-    let isArbitraryVariant = isArbitraryValue(variant)
-    let internalFeatures = context.variantOptions.get(variant)?.[INTERNAL_FEATURES] ?? {}
-    let variantFunctionTuples = context.variantMap.get(variant).slice()
-    let result = []
+    const isArbitraryVariant = isArbitraryValue(variant)
+    const internalFeatures = context.variantOptions.get(variant)?.[INTERNAL_FEATURES] ?? {}
+    const variantFunctionTuples = context.variantMap.get(variant).slice()
+    const result = []
 
-    let respectPrefix = (() => {
+    const respectPrefix = (() => {
       if (isArbitraryVariant) return false
       if (internalFeatures.respectPrefix === false) return false
       return true
     })()
 
-    for (let [meta, rule] of matches) {
+    for (const [meta, rule] of matches) {
       // Don't generate variants for user css
       if (meta.layer === 'user') {
         continue
       }
 
-      let container = postcss.root({ nodes: [rule.clone()] })
+      const container = postcss.root({ nodes: [rule.clone()] })
 
-      for (let [variantSort, variantFunction, containerFromArray] of variantFunctionTuples) {
-        let clone = (containerFromArray ?? container).clone()
-        let collectedFormats = []
+      for (const [variantSort, variantFunction, containerFromArray] of variantFunctionTuples) {
+        const clone = (containerFromArray ?? container).clone()
+        const collectedFormats = []
 
         function prepareBackup() {
           // Already prepared, chicken out
@@ -276,7 +276,7 @@ function applyVariant(variant, matches, context) {
           return clone
         }
 
-        let ruleWithVariant = variantFunction({
+        const ruleWithVariant = variantFunction({
           // Public API
           get container() {
             prepareBackup()
@@ -287,7 +287,7 @@ function applyVariant(variant, matches, context) {
 
           // Private API for now
           wrap(wrapper) {
-            let nodes = clone.nodes
+            const nodes = clone.nodes
             clone.removeAll()
             wrapper.append(nodes)
             clone.append(wrapper)
@@ -304,7 +304,7 @@ function applyVariant(variant, matches, context) {
         // It can happen that a list of format strings is returned from within the function. In that
         // case, we have to process them as well. We can use the existing `variantSort`.
         if (Array.isArray(ruleWithVariant)) {
-          for (let [idx, variantFunction] of ruleWithVariant.entries()) {
+          for (const [idx, variantFunction] of ruleWithVariant.entries()) {
             // This is a little bit scary since we are pushing to an array of items that we are
             // currently looping over. However, you can also think of it like a processing queue
             // where you keep handling jobs until everything is done and each job can queue more
@@ -338,18 +338,18 @@ function applyVariant(variant, matches, context) {
         if (clone.raws.neededBackup) {
           delete clone.raws.neededBackup
           clone.walkRules((rule) => {
-            let before = rule.raws.originalSelector
+            const before = rule.raws.originalSelector
             if (!before) return
             delete rule.raws.originalSelector
             if (before === rule.selector) return // No mutation happened
 
-            let modified = rule.selector
+            const modified = rule.selector
 
             // Rebuild the base selector, this is what plugin authors would do
             // as well. E.g.: `${variant}${separator}${className}`.
             // However, plugin authors probably also prepend or append certain
             // classes, pseudos, ids, ...
-            let rebuiltBase = selectorParser((selectors) => {
+            const rebuiltBase = selectorParser((selectors) => {
               selectors.walkClasses((classNode) => {
                 classNode.value = `${variant}${context.tailwindConfig.separator}${classNode.value}`
               })
@@ -380,7 +380,7 @@ function applyVariant(variant, matches, context) {
         // .sm:container {} is a variant of the container component
         clone.nodes[0].raws.tailwind = { ...clone.nodes[0].raws.tailwind, parentLayer: meta.layer }
 
-        let withOffset = [
+        const withOffset = [
           {
             ...meta,
             sort: context.offsets.applyVariantOffset(
@@ -477,7 +477,7 @@ function isParsableCssValue(property, value) {
 }
 
 function extractArbitraryProperty(classCandidate, context) {
-  let [, property, value] = classCandidate.match(/^\[([a-zA-Z0-9-_]+):(\S+)\]$/) ?? []
+  const [, property, value] = classCandidate.match(/^\[([a-zA-Z0-9-_]+):(\S+)\]$/) ?? []
 
   if (value === undefined) {
     return null
@@ -491,13 +491,13 @@ function extractArbitraryProperty(classCandidate, context) {
     return null
   }
 
-  let normalized = normalize(value)
+  const normalized = normalize(value)
 
   if (!isParsableCssValue(property, normalized)) {
     return null
   }
 
-  let sort = context.offsets.arbitraryProperty()
+  const sort = context.offsets.arbitraryProperty()
 
   return [
     [
@@ -541,7 +541,7 @@ function* resolveMatchedPlugins(classCandidate, context) {
     yield [context.candidateRuleMap.get(candidatePrefix), '-DEFAULT']
   }
 
-  for (let [prefix, modifier] of candidatePermutations(candidatePrefix)) {
+  for (const [prefix, modifier] of candidatePermutations(candidatePrefix)) {
     if (context.candidateRuleMap.has(prefix)) {
       yield [context.candidateRuleMap.get(prefix), negative ? `-${modifier}` : modifier]
     }
@@ -569,7 +569,7 @@ function* recordCandidates(matches, classCandidate) {
 }
 
 function* resolveMatches(candidate, context) {
-  let separator = context.tailwindConfig.separator
+  const separator = context.tailwindConfig.separator
   let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
   let important = false
 
@@ -584,41 +584,41 @@ function* resolveMatches(candidate, context) {
   //     return bigSign(against.get(a)[0] - against.get(z)[0])
   //   })
   // }
-  // let sorted = sortAgainst(variants, context.variantMap)
+  // const sorted = sortAgainst(variants, context.variantMap)
   // if (sorted.toString() !== variants.toString()) {
-  //   let corrected = sorted.reverse().concat(classCandidate).join(':')
+  //   const corrected = sorted.reverse().concat(classCandidate).join(':')
   //   throw new Error(`Class ${candidate} should be written as ${corrected}`)
   // }
 
-  for (let matchedPlugins of resolveMatchedPlugins(classCandidate, context)) {
+  for (const matchedPlugins of resolveMatchedPlugins(classCandidate, context)) {
     let matches = []
-    let typesByMatches = new Map()
+    const typesByMatches = new Map()
 
-    let [plugins, modifier] = matchedPlugins
-    let isOnlyPlugin = plugins.length === 1
+    const [plugins, modifier] = matchedPlugins
+    const isOnlyPlugin = plugins.length === 1
 
-    for (let [sort, plugin] of plugins) {
-      let matchesPerPlugin = []
+    for (const [sort, plugin] of plugins) {
+      const matchesPerPlugin = []
 
       if (typeof plugin === 'function') {
-        for (let ruleSet of [].concat(plugin(modifier, { isOnlyPlugin }))) {
-          let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
-          for (let rule of rules) {
+        for (const ruleSet of [].concat(plugin(modifier, { isOnlyPlugin }))) {
+          const [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
+          for (const rule of rules) {
             matchesPerPlugin.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
           }
         }
       }
       // Only process static plugins on exact matches
       else if (modifier === 'DEFAULT' || modifier === '-DEFAULT') {
-        let ruleSet = plugin
-        let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
-        for (let rule of rules) {
+        const ruleSet = plugin
+        const [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
+        for (const rule of rules) {
           matchesPerPlugin.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
         }
       }
 
       if (matchesPerPlugin.length > 0) {
-        let matchingTypes = Array.from(
+        const matchingTypes = Array.from(
           getMatchingTypes(
             sort.options?.types ?? [],
             modifier,
@@ -639,9 +639,9 @@ function* resolveMatches(candidate, context) {
       if (matches.length > 1) {
         // Partition plugins in 2 categories so that we can start searching in the plugins that
         // don't have `any` as a type first.
-        let [withAny, withoutAny] = matches.reduce(
+        const [withAny, withoutAny] = matches.reduce(
           (group, plugin) => {
-            let hasAnyType = plugin.some(([{ options }]) =>
+            const hasAnyType = plugin.some(([{ options }]) =>
               options.types.some(({ type }) => type === 'any')
             )
 
@@ -664,7 +664,7 @@ function* resolveMatches(candidate, context) {
           // Otherwise, find the plugin that creates a valid rule given the arbitrary value, and
           // also has the correct type which preferOnConflicts the plugin in case of clashes.
           return matches.find((rules) => {
-            let matchingTypes = typesByMatches.get(rules)
+            const matchingTypes = typesByMatches.get(rules)
             return rules.some(([{ options }, rule]) => {
               if (!isParsableNode(rule)) {
                 return false
@@ -679,7 +679,7 @@ function* resolveMatches(candidate, context) {
 
         // Try to find a fallback plugin, because we already know that multiple plugins matched for
         // the given arbitrary value.
-        let fallback = findFallback(withoutAny) ?? findFallback(withAny)
+        const fallback = findFallback(withoutAny) ?? findFallback(withAny)
         if (fallback) {
           matches = [fallback]
         }
@@ -689,16 +689,16 @@ function* resolveMatches(candidate, context) {
         // should not happen. We won't generate anything right now, so let's report this to the user
         // by logging some options about what they can do.
         else {
-          let typesPerPlugin = matches.map(
+          const typesPerPlugin = matches.map(
             (match) => new Set([...(typesByMatches.get(match) ?? [])])
           )
 
           // Remove duplicates, so that we can detect proper unique types for each plugin.
-          for (let pluginTypes of typesPerPlugin) {
-            for (let type of pluginTypes) {
+          for (const pluginTypes of typesPerPlugin) {
+            for (const type of pluginTypes) {
               let removeFromOwnGroup = false
 
-              for (let otherGroup of typesPerPlugin) {
+              for (const otherGroup of typesPerPlugin) {
                 if (pluginTypes === otherGroup) continue
 
                 if (otherGroup.has(type)) {
@@ -711,11 +711,11 @@ function* resolveMatches(candidate, context) {
             }
           }
 
-          let messages = []
+          const messages = []
 
-          for (let [idx, group] of typesPerPlugin.entries()) {
-            for (let type of group) {
-              let rules = matches[idx]
+          for (const [idx, group] of typesPerPlugin.entries()) {
+            for (const type of group) {
+              const rules = matches[idx]
                 .map(([, rule]) => rule)
                 .flat()
                 .map((rule) =>
@@ -758,7 +758,7 @@ function* resolveMatches(candidate, context) {
       matches = applyImportant(matches, classCandidate)
     }
 
-    for (let variant of variants) {
+    for (const variant of variants) {
       matches = applyVariant(variant, matches, context)
     }
 
@@ -807,7 +807,7 @@ function applyFinalFormat(match, { context, candidate }) {
     return null
   }
 
-  let container = postcss.root({ nodes: [match[1].clone()] })
+  const container = postcss.root({ nodes: [match[1].clone()] })
 
   container.walkRules((rule) => {
     if (inKeyframes(rule)) {
@@ -815,7 +815,7 @@ function applyFinalFormat(match, { context, candidate }) {
     }
 
     try {
-      let selector = finalizeSelector(rule.selector, finalFormat, {
+      const selector = finalizeSelector(rule.selector, finalFormat, {
         candidate,
         context,
       })
@@ -879,9 +879,9 @@ function getImportantStrategy(important) {
 
 function generateRules(candidates, context, isSorting = false) {
   let allRules = []
-  let strategy = getImportantStrategy(context.tailwindConfig.important)
+  const strategy = getImportantStrategy(context.tailwindConfig.important)
 
-  for (let candidate of candidates) {
+  for (const candidate of candidates) {
     if (context.notClassCache.has(candidate)) {
       continue
     }
@@ -891,7 +891,7 @@ function generateRules(candidates, context, isSorting = false) {
       continue
     }
 
-    let matches = Array.from(resolveMatches(candidate, context))
+    const matches = Array.from(resolveMatches(candidate, context))
 
     if (matches.length === 0) {
       context.notClassCache.add(candidate)
@@ -900,21 +900,21 @@ function generateRules(candidates, context, isSorting = false) {
 
     context.classCache.set(candidate, matches)
 
-    let rules = context.candidateRuleCache.get(candidate) ?? new Set()
+    const rules = context.candidateRuleCache.get(candidate) ?? new Set()
     context.candidateRuleCache.set(candidate, rules)
 
     for (const match of matches) {
       let [{ sort, options }, rule] = match
 
       if (options.respectImportant && strategy) {
-        let container = postcss.root({ nodes: [rule.clone()] })
+        const container = postcss.root({ nodes: [rule.clone()] })
         container.walkRules(strategy)
         rule = container.nodes[0]
       }
 
       // Note: We have to clone rules during sorting
       // so we eliminate some shared mutable state
-      let newEntry = [sort, isSorting ? rule.clone() : rule]
+      const newEntry = [sort, isSorting ? rule.clone() : rule]
       rules.add(newEntry)
       context.ruleCache.add(newEntry)
       allRules.push(newEntry)

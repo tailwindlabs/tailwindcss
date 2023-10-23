@@ -1,29 +1,29 @@
 import fs from 'fs'
 import * as path from 'path'
 import postcss from 'postcss'
-import createUtilityPlugin from './util/createUtilityPlugin'
+import { flagEnabled } from './featureFlags'
+import { INTERNAL_FEATURES } from './lib/setupContextUtils'
 import buildMediaQuery from './util/buildMediaQuery'
+import createUtilityPlugin from './util/createUtilityPlugin'
+import { normalize } from './util/dataTypes'
 import escapeClassName from './util/escapeClassName'
-import parseAnimationValue from './util/parseAnimationValue'
 import flattenColorPalette from './util/flattenColorPalette'
-import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
-import toColorValue from './util/toColorValue'
 import isPlainObject from './util/isPlainObject'
-import transformThemeValue from './util/transformThemeValue'
 import log from './util/log'
 import {
-  normalizeScreens,
-  isScreenSortable,
   compareScreens,
+  isScreenSortable,
+  normalizeScreens,
   toScreen,
 } from './util/normalizeScreens'
+import parseAnimationValue from './util/parseAnimationValue'
 import { formatBoxShadowValue, parseBoxShadowValue } from './util/parseBoxShadowValue'
 import { removeAlphaVariables } from './util/removeAlphaVariables'
-import { flagEnabled } from './featureFlags'
-import { normalize } from './util/dataTypes'
-import { INTERNAL_FEATURES } from './lib/setupContextUtils'
+import toColorValue from './util/toColorValue'
+import transformThemeValue from './util/transformThemeValue'
+import withAlphaVariable, { withAlphaValue } from './util/withAlphaVariable'
 
-export let variantPlugins = {
+export const variantPlugins = {
   pseudoElementVariants: ({ addVariant }) => {
     addVariant('first-letter', '&::first-letter')
     addVariant('first-line', '&::first-line')
@@ -81,7 +81,7 @@ export let variantPlugins = {
   },
 
   pseudoClassVariants: ({ addVariant, matchVariant, config, prefix }) => {
-    let pseudoVariants = [
+    const pseudoVariants = [
       // Positional
       ['first', '&:first-child'],
       ['last', '&:last-child'],
@@ -140,15 +140,15 @@ export let variantPlugins = {
       'disabled',
     ].map((variant) => (Array.isArray(variant) ? variant : [variant, `&:${variant}`]))
 
-    for (let [variantName, state] of pseudoVariants) {
+    for (const [variantName, state] of pseudoVariants) {
       addVariant(variantName, (ctx) => {
-        let result = typeof state === 'function' ? state(ctx) : state
+        const result = typeof state === 'function' ? state(ctx) : state
 
         return result
       })
     }
 
-    let variants = {
+    const variants = {
       group: (_, { modifier }) =>
         modifier
           ? [`:merge(${prefix('.group')}\\/${escapeClassName(modifier)})`, ' &']
@@ -159,21 +159,21 @@ export let variantPlugins = {
           : [`:merge(${prefix('.peer')})`, ' ~ &'],
     }
 
-    for (let [name, fn] of Object.entries(variants)) {
+    for (const [name, fn] of Object.entries(variants)) {
       matchVariant(
         name,
         (value = '', extra) => {
           let result = normalize(typeof value === 'function' ? value(extra) : value)
           if (!result.includes('&')) result = '&' + result
 
-          let [a, b] = fn('', extra)
+          const [a, b] = fn('', extra)
 
           let start = null
           let end = null
           let quotes = 0
 
           for (let i = 0; i < result.length; ++i) {
-            let c = result[i]
+            const c = result[i]
             if (c === '&') {
               start = i
             } else if (c === "'" || c === '"') {
@@ -236,12 +236,12 @@ export let variantPlugins = {
   },
 
   screenVariants: ({ theme, addVariant, matchVariant }) => {
-    let rawScreens = theme('screens') ?? {}
-    let areSimpleScreens = Object.values(rawScreens).every((v) => typeof v === 'string')
-    let screens = normalizeScreens(theme('screens'))
+    const rawScreens = theme('screens') ?? {}
+    const areSimpleScreens = Object.values(rawScreens).every((v) => typeof v === 'string')
+    const screens = normalizeScreens(theme('screens'))
 
     /** @type {Set<string>} */
-    let unitCache = new Set([])
+    const unitCache = new Set([])
 
     /** @param {string} value */
     function units(value) {
@@ -272,7 +272,7 @@ export let variantPlugins = {
       }
     }
 
-    let screensUseConsistentUnits = unitCache.size <= 1
+    const screensUseConsistentUnits = unitCache.size <= 1
 
     /**
      * @typedef {import('./util/normalizeScreens').Screen} Screen
@@ -287,7 +287,7 @@ export let variantPlugins = {
         screens
           .filter((screen) => isScreenSortable(screen).result)
           .map((screen) => {
-            let { min, max } = screen.values[0]
+            const { min, max } = screen.values[0]
 
             if (type === 'min' && min !== undefined) {
               return screen
@@ -311,8 +311,8 @@ export let variantPlugins = {
       return (a, z) => compareScreens(type, a.value, z.value)
     }
 
-    let maxSort = buildSort('max')
-    let minSort = buildSort('min')
+    const maxSort = buildSort('max')
+    const minSort = buildSort('min')
 
     /** @param {'min'|'max'} type */
     function buildScreenVariant(type) {
@@ -347,8 +347,8 @@ export let variantPlugins = {
     })
 
     // screens and min-* are sorted together when they can be
-    let id = 'min-screens'
-    for (let screen of screens) {
+    const id = 'min-screens'
+    for (const screen of screens) {
       addVariant(screen.name, `@media ${buildMediaQuery(screen)}`, {
         id,
         sort: areSimpleScreens && screensUseConsistentUnits ? minSort : undefined,
@@ -367,7 +367,7 @@ export let variantPlugins = {
       'supports',
       (value = '') => {
         let check = normalize(value)
-        let isRaw = /^\w*\s*\(/.test(check)
+        const isRaw = /^\w*\s*\(/.test(check)
 
         // Chrome has a bug where `(condition1)or(condition2)` is not valid
         // But `(condition1) or (condition2)` is supported.
@@ -462,7 +462,7 @@ export let variantPlugins = {
   },
 }
 
-let cssTransformValue = [
+const cssTransformValue = [
   'translate(var(--tw-translate-x), var(--tw-translate-y))',
   'rotate(var(--tw-rotate))',
   'skewX(var(--tw-skew-x))',
@@ -471,7 +471,7 @@ let cssTransformValue = [
   'scaleY(var(--tw-scale-y))',
 ].join(' ')
 
-let cssFilterValue = [
+const cssFilterValue = [
   'var(--tw-blur)',
   'var(--tw-brightness)',
   'var(--tw-contrast)',
@@ -483,7 +483,7 @@ let cssFilterValue = [
   'var(--tw-drop-shadow)',
 ].join(' ')
 
-let cssBackdropFilterValue = [
+const cssBackdropFilterValue = [
   'var(--tw-backdrop-blur)',
   'var(--tw-backdrop-brightness)',
   'var(--tw-backdrop-contrast)',
@@ -495,9 +495,9 @@ let cssBackdropFilterValue = [
   'var(--tw-backdrop-sepia)',
 ].join(' ')
 
-export let corePlugins = {
+export const corePlugins = {
   preflight: ({ addBase }) => {
-    let preflightStyles = postcss.parse(
+    const preflightStyles = postcss.parse(
       fs.readFileSync(path.join(__dirname, './css/preflight.css'), 'utf8')
     )
 
@@ -526,7 +526,7 @@ export let corePlugins = {
         ]
       }
 
-      let mapping = []
+      const mapping = []
 
       if (paddings.DEFAULT) {
         mapping.push({
@@ -536,9 +536,9 @@ export let corePlugins = {
         })
       }
 
-      for (let minWidth of minWidths) {
-        for (let screen of screens) {
-          for (let { min } of screen.values) {
+      for (const minWidth of minWidths) {
+        for (const screen of screens) {
+          for (const { min } of screen.values) {
             if (min === minWidth) {
               mapping.push({ minWidth, padding: paddings[screen.name] })
             }
@@ -550,12 +550,12 @@ export let corePlugins = {
     }
 
     return function ({ addComponents, theme }) {
-      let screens = normalizeScreens(theme('container.screens', theme('screens')))
-      let minWidths = extractMinWidths(screens)
-      let paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
+      const screens = normalizeScreens(theme('container.screens', theme('screens')))
+      const minWidths = extractMinWidths(screens)
+      const paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
 
-      let generatePaddingFor = (minWidth) => {
-        let paddingConfig = paddings.find((padding) => padding.minWidth === minWidth)
+      const generatePaddingFor = (minWidth) => {
+        const paddingConfig = paddings.find((padding) => padding.minWidth === minWidth)
 
         if (!paddingConfig) {
           return {}
@@ -567,7 +567,7 @@ export let corePlugins = {
         }
       }
 
-      let atRules = Array.from(
+      const atRules = Array.from(
         new Set(minWidths.slice().sort((a, z) => parseInt(a) - parseInt(z)))
       ).map((minWidth) => ({
         [`@media (min-width: ${minWidth})`]: {
@@ -933,8 +933,8 @@ export let corePlugins = {
   },
 
   animation: ({ matchUtilities, theme, config }) => {
-    let prefixName = (name) => escapeClassName(config('prefix') + name)
-    let keyframes = Object.fromEntries(
+    const prefixName = (name) => escapeClassName(config('prefix') + name)
+    const keyframes = Object.fromEntries(
       Object.entries(theme('keyframes') ?? {}).map(([key, value]) => {
         return [key, { [`@keyframes ${prefixName(key)}`]: value }]
       })
@@ -943,7 +943,7 @@ export let corePlugins = {
     matchUtilities(
       {
         animate: (value) => {
-          let animations = parseAnimationValue(value)
+          const animations = parseAnimationValue(value)
 
           return [
             ...animations.flatMap((animation) => keyframes[animation.name]),
@@ -973,7 +973,7 @@ export let corePlugins = {
       '--tw-pinch-zoom': ' ',
     })
 
-    let cssTouchActionValue = 'var(--tw-pan-x) var(--tw-pan-y) var(--tw-pinch-zoom)'
+    const cssTouchActionValue = 'var(--tw-pan-x) var(--tw-pan-y) var(--tw-pinch-zoom)'
 
     addUtilities({
       '.touch-auto': { 'touch-action': 'auto' },
@@ -1785,12 +1785,12 @@ export let corePlugins = {
         '--tw-gradient-to-position': ' ',
       })
 
-      let options = {
+      const options = {
         values: flattenColorPalette(theme('gradientColorStops')),
         type: ['color', 'any'],
       }
 
-      let positionOptions = {
+      const positionOptions = {
         values: theme('gradientColorStopPositions'),
         type: ['length', 'percentage'],
       }
@@ -1798,7 +1798,7 @@ export let corePlugins = {
       matchUtilities(
         {
           from: (value) => {
-            let transparentToValue = transparentTo(value)
+            const transparentToValue = transparentTo(value)
 
             return {
               '@defaults gradient-color-stops': {},
@@ -1825,7 +1825,7 @@ export let corePlugins = {
       matchUtilities(
         {
           via: (value) => {
-            let transparentToValue = transparentTo(value)
+            const transparentToValue = transparentTo(value)
 
             return {
               '@defaults gradient-color-stops': {},
@@ -2013,9 +2013,9 @@ export let corePlugins = {
     matchUtilities(
       {
         font: (value) => {
-          let [families, options = {}] =
+          const [families, options = {}] =
             Array.isArray(value) && isPlainObject(value[1]) ? value : [value]
-          let { fontFeatureSettings, fontVariationSettings } = options
+          const { fontFeatureSettings, fontVariationSettings } = options
 
           return {
             'font-family': Array.isArray(families) ? families.join(', ') : families,
@@ -2039,7 +2039,7 @@ export let corePlugins = {
     matchUtilities(
       {
         text: (value, { modifier }) => {
-          let [fontSize, options] = Array.isArray(value) ? value : [value]
+          const [fontSize, options] = Array.isArray(value) ? value : [value]
 
           if (modifier) {
             return {
@@ -2048,7 +2048,7 @@ export let corePlugins = {
             }
           }
 
-          let { lineHeight, letterSpacing, fontWeight } = isPlainObject(options)
+          const { lineHeight, letterSpacing, fontWeight } = isPlainObject(options)
             ? options
             : { lineHeight: options }
 
@@ -2089,7 +2089,7 @@ export let corePlugins = {
   },
 
   fontVariantNumeric: ({ addDefaults, addUtilities }) => {
-    let cssFontVariantNumericValue =
+    const cssFontVariantNumericValue =
       'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)'
 
     addDefaults('font-variant-numeric', {
@@ -2330,8 +2330,8 @@ export let corePlugins = {
   },
 
   boxShadow: (() => {
-    let transformValue = transformThemeValue('boxShadow')
-    let defaultBoxShadow = [
+    const transformValue = transformThemeValue('boxShadow')
+    const defaultBoxShadow = [
       `var(--tw-ring-offset-shadow, 0 0 #0000)`,
       `var(--tw-ring-shadow, 0 0 #0000)`,
       `var(--tw-shadow)`,
@@ -2350,8 +2350,8 @@ export let corePlugins = {
           shadow: (value) => {
             value = transformValue(value)
 
-            let ast = parseBoxShadowValue(value)
-            for (let shadow of ast) {
+            const ast = parseBoxShadowValue(value)
+            for (const shadow of ast) {
               // Don't override color if the whole shadow is a variable
               if (!shadow.valid) {
                 continue
@@ -2421,12 +2421,12 @@ export let corePlugins = {
   },
 
   ringWidth: ({ matchUtilities, addDefaults, addUtilities, theme, config }) => {
-    let ringColorDefault = (() => {
+    const ringColorDefault = (() => {
       if (flagEnabled(config(), 'respectDefaultRingColorOpacity')) {
         return theme('ringColor.DEFAULT')
       }
 
-      let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
+      const ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
 
       if (!theme('ringColor')?.DEFAULT) {
         return `rgb(147 197 253 / ${ringOpacityDefault})`
@@ -2502,7 +2502,7 @@ export let corePlugins = {
   },
 
   ringOpacity: (helpers) => {
-    let { config } = helpers
+    const { config } = helpers
 
     return createUtilityPlugin('ringOpacity', [['ring-opacity', ['--tw-ring-opacity']]], {
       filterDefault: !flagEnabled(config(), 'respectDefaultRingColorOpacity'),
@@ -2839,8 +2839,8 @@ export let corePlugins = {
   },
 
   transitionProperty: ({ matchUtilities, theme }) => {
-    let defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
-    let defaultDuration = theme('transitionDuration.DEFAULT')
+    const defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
+    const defaultDuration = theme('transitionDuration.DEFAULT')
 
     matchUtilities(
       {

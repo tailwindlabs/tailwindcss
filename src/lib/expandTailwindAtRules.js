@@ -8,7 +8,7 @@ import cloneNodes from '../util/cloneNodes'
 import { defaultExtractor } from './defaultExtractor'
 import { flagEnabled } from '../featureFlags'
 
-let env = sharedState.env
+const env = sharedState.env
 
 const builtInExtractors = {
   DEFAULT: defaultExtractor,
@@ -20,7 +20,7 @@ const builtInTransformers = {
 }
 
 function getExtractor(context, fileExtension) {
-  let extractors = context.tailwindConfig.content.extract
+  const extractors = context.tailwindConfig.content.extract
 
   return (
     extractors[fileExtension] ||
@@ -34,7 +34,7 @@ function getExtractor(context, fileExtension) {
 }
 
 function getTransformer(tailwindConfig, fileExtension) {
-  let transformers = tailwindConfig.content.transform
+  const transformers = tailwindConfig.content.transform
 
   return (
     transformers[fileExtension] ||
@@ -44,7 +44,7 @@ function getTransformer(tailwindConfig, fileExtension) {
   )
 }
 
-let extractorCache = new WeakMap()
+const extractorCache = new WeakMap()
 
 // Scans template contents for possible classes. This is a hot path on initial build but
 // not too important for subsequent builds. The faster the better though — if we can speed
@@ -63,14 +63,14 @@ function getClassCandidates(content, extractor, candidates, seen) {
     seen.add(line)
 
     if (extractorCache.get(extractor).has(line)) {
-      for (let match of extractorCache.get(extractor).get(line)) {
+      for (const match of extractorCache.get(extractor).get(line)) {
         candidates.add(match)
       }
     } else {
-      let extractorMatches = extractor(line).filter((s) => s !== '!*')
-      let lineMatchesSet = new Set(extractorMatches)
+      const extractorMatches = extractor(line).filter((s) => s !== '!*')
+      const lineMatchesSet = new Set(extractorMatches)
 
-      for (let match of lineMatchesSet) {
+      for (const match of lineMatchesSet) {
         candidates.add(match)
       }
 
@@ -85,9 +85,9 @@ function getClassCandidates(content, extractor, candidates, seen) {
  * @param {*} context
  */
 function buildStylesheet(rules, context) {
-  let sortedRules = context.offsets.sort(rules)
+  const sortedRules = context.offsets.sort(rules)
 
-  let returnValue = {
+  const returnValue = {
     base: new Set(),
     defaults: new Set(),
     components: new Set(),
@@ -95,7 +95,7 @@ function buildStylesheet(rules, context) {
     variants: new Set(),
   }
 
-  for (let [sort, rule] of sortedRules) {
+  for (const [sort, rule] of sortedRules) {
     returnValue[sort.layer].add(rule)
   }
 
@@ -104,7 +104,7 @@ function buildStylesheet(rules, context) {
 
 export default function expandTailwindAtRules(context) {
   return async (root) => {
-    let layerNodes = {
+    const layerNodes = {
       base: null,
       components: null,
       utilities: null,
@@ -130,20 +130,20 @@ export default function expandTailwindAtRules(context) {
     // ---
 
     // Find potential rules in changed files
-    let candidates = new Set([...(context.candidates ?? []), sharedState.NOT_ON_DEMAND])
-    let seen = new Set()
+    const candidates = new Set([...(context.candidates ?? []), sharedState.NOT_ON_DEMAND])
+    const seen = new Set()
 
     env.DEBUG && console.time('Reading changed files')
 
     /** @type {[item: {file?: string, content?: string}, meta: {transformer: any, extractor: any}][]} */
-    let regexParserContent = []
+    const regexParserContent = []
 
     /** @type {{file?: string, content?: string}[]} */
-    let rustParserContent = []
+    const rustParserContent = []
 
-    for (let item of context.changedContent) {
-      let transformer = getTransformer(context.tailwindConfig, item.extension)
-      let extractor = getExtractor(context, item.extension)
+    for (const item of context.changedContent) {
+      const transformer = getTransformer(context.tailwindConfig, item.extension)
+      const extractor = getExtractor(context, item.extension)
 
       if (
         flagEnabled(context.tailwindConfig, 'oxideParser') &&
@@ -160,7 +160,7 @@ export default function expandTailwindAtRules(context) {
     // - Oxide is enabled; AND
     // - The file is using default transfomers and extractors
     if (rustParserContent.length > 0) {
-      for (let candidate of parseCandidateStrings(
+      for (const candidate of parseCandidateStrings(
         rustParserContent,
         IO.Parallel | Parsing.Parallel
       )) {
@@ -172,7 +172,7 @@ export default function expandTailwindAtRules(context) {
     const BATCH_SIZE = 500
 
     for (let i = 0; i < regexParserContent.length; i += BATCH_SIZE) {
-      let batch = regexParserContent.slice(i, i + BATCH_SIZE)
+      const batch = regexParserContent.slice(i, i + BATCH_SIZE)
 
       await Promise.all(
         batch.map(async ([{ file, content }, { transformer, extractor }]) => {
@@ -187,14 +187,14 @@ export default function expandTailwindAtRules(context) {
     // ---
 
     // Generate the actual CSS
-    let classCacheCount = context.classCache.size
+    const classCacheCount = context.classCache.size
 
     env.DEBUG && console.time('Generate rules')
     env.DEBUG && console.time('Sorting candidates')
     // TODO: only sort if we are not using the oxide parser (flagEnabled(context.tailwindConfig,
     // 'oxideParser')) AND if we got all the candidates form the oxideParser alone. This will not
     // be the case currently if you have custom transformers / extractors.
-    let sortedCandidates = new Set(
+    const sortedCandidates = new Set(
       [...candidates].sort((a, z) => {
         if (a === z) return 0
         if (a < z) return -1
@@ -212,7 +212,7 @@ export default function expandTailwindAtRules(context) {
     }
     env.DEBUG && console.timeEnd('Build stylesheet')
 
-    let {
+    const {
       defaults: defaultNodes,
       base: baseNodes,
       components: componentNodes,
@@ -274,12 +274,12 @@ export default function expandTailwindAtRules(context) {
       )
       layerNodes.variants.remove()
     } else if (variantNodes.length > 0) {
-      let cloned = cloneNodes(variantNodes, undefined, {
+      const cloned = cloneNodes(variantNodes, undefined, {
         layer: 'variants',
       })
 
       cloned.forEach((node) => {
-        let parentLayer = node.raws.tailwind?.parentLayer ?? null
+        const parentLayer = node.raws.tailwind?.parentLayer ?? null
 
         node.walk((n) => {
           if (!n.source) {

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-let jsExtensions = ['.js', '.cjs', '.mjs']
+const jsExtensions = ['.js', '.cjs', '.mjs']
 
 // Given the current file `a.ts`, we want to make sure that when importing `b` that we resolve
 // `b.ts` before `b.js`
@@ -14,21 +14,21 @@ let jsExtensions = ['.js', '.cjs', '.mjs']
 // a.js
 //   b // .js or .ts
 
-let jsResolutionOrder = ['', '.js', '.cjs', '.mjs', '.ts', '.cts', '.mts', '.jsx', '.tsx']
-let tsResolutionOrder = ['', '.ts', '.cts', '.mts', '.tsx', '.js', '.cjs', '.mjs', '.jsx']
+const jsResolutionOrder = ['', '.js', '.cjs', '.mjs', '.ts', '.cts', '.mts', '.jsx', '.tsx']
+const tsResolutionOrder = ['', '.ts', '.cts', '.mts', '.tsx', '.js', '.cjs', '.mjs', '.jsx']
 
 function resolveWithExtension(file, extensions) {
   // Try to find `./a.ts`, `./a.ts`, ... from `./a`
-  for (let ext of extensions) {
-    let full = `${file}${ext}`
+  for (const ext of extensions) {
+    const full = `${file}${ext}`
     if (fs.existsSync(full) && fs.statSync(full).isFile()) {
       return full
     }
   }
 
   // Try to find `./a/index.js` from `./a`
-  for (let ext of extensions) {
-    let full = `${file}/index${ext}`
+  for (const ext of extensions) {
+    const full = `${file}/index${ext}`
     if (fs.existsSync(full)) {
       return full
     }
@@ -39,7 +39,7 @@ function resolveWithExtension(file, extensions) {
 
 function* _getModuleDependencies(filename, base, seen, ext = path.extname(filename)) {
   // Try to find the file
-  let absoluteFile = resolveWithExtension(
+  const absoluteFile = resolveWithExtension(
     path.resolve(base, filename),
     jsExtensions.includes(ext) ? jsResolutionOrder : tsResolutionOrder
   )
@@ -56,10 +56,10 @@ function* _getModuleDependencies(filename, base, seen, ext = path.extname(filena
   base = path.dirname(absoluteFile)
   ext = path.extname(absoluteFile)
 
-  let contents = fs.readFileSync(absoluteFile, 'utf-8')
+  const contents = fs.readFileSync(absoluteFile, 'utf-8')
 
   // Find imports/requires
-  for (let match of [
+  for (const match of [
     ...contents.matchAll(/import[\s\S]*?['"](.{3,}?)['"]/gi),
     ...contents.matchAll(/import[\s\S]*from[\s\S]*?['"](.{3,}?)['"]/gi),
     ...contents.matchAll(/require\(['"`](.+)['"`]\)/gi),

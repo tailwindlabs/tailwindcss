@@ -14,7 +14,7 @@ export default function negateValue(value) {
   // var() isn't inherently a numeric function but we support it anyway
   // The trigonometric functions are omitted because you'll need to use calc(…) with them _anyway_
   // to produce generally useful results and that will be covered already
-  let numericFunctions = ['var', 'calc', 'min', 'max', 'clamp']
+  const numericFunctions = ['var', 'calc', 'min', 'max', 'clamp']
 
   for (const fn of numericFunctions) {
     if (value.includes(`${fn}(`)) {

@@ -14,7 +14,7 @@ function isObject(input) {
 }
 
 function findClosestExistingPath(theme, path) {
-  let parts = toPath(path)
+  const parts = toPath(path)
   do {
     parts.pop()
 
@@ -97,7 +97,7 @@ function validatePath(config, path, defaultValue, themeOpts = {}) {
     let error = `'${pathString}' was found but does not resolve to a string.`
 
     if (isObject(value)) {
-      let validKeys = Object.keys(value).filter(
+      const validKeys = Object.keys(value).filter(
         (key) => validatePath(config, [...pathSegments, key]).isValid
       )
       if (validKeys.length) {
@@ -122,9 +122,9 @@ function validatePath(config, path, defaultValue, themeOpts = {}) {
 function extractArgs(node, vNodes, functions) {
   vNodes = vNodes.map((vNode) => resolveVNode(node, vNode, functions))
 
-  let args = ['']
+  const args = ['']
 
-  for (let vNode of vNodes) {
+  for (const vNode of vNodes) {
     if (vNode.type === 'div' && vNode.value === ',') {
       args.push('')
     } else {
@@ -137,7 +137,7 @@ function extractArgs(node, vNodes, functions) {
 
 function resolveVNode(node, vNode, functions) {
   if (vNode.type === 'function' && functions[vNode.value] !== undefined) {
-    let args = extractArgs(node, vNode.nodes, functions)
+    const args = extractArgs(node, vNode.nodes, functions)
     vNode.type = 'word'
     vNode.value = functions[vNode.value](node, ...args)
   }
@@ -146,7 +146,7 @@ function resolveVNode(node, vNode, functions) {
 }
 
 function resolveFunctions(node, input, functions) {
-  let hasAnyFn = Object.keys(functions).some((fn) => input.includes(`${fn}(`))
+  const hasAnyFn = Object.keys(functions).some((fn) => input.includes(`${fn}(`))
   if (!hasAnyFn) return input
 
   return parseValue(input)
@@ -156,7 +156,7 @@ function resolveFunctions(node, input, functions) {
     .toString()
 }
 
-let nodeTypePropertyMap = {
+const nodeTypePropertyMap = {
   atrule: 'params',
   decl: 'value',
 }
@@ -170,7 +170,7 @@ function* toPaths(path) {
   // This allows the alpha value to be present inside of quotes
   path = path.replace(/^['"]+|['"]+$/g, '')
 
-  let matches = path.match(/^([^\s]+)(?![^\[]*\])(?:\s*\/\s*([^\/\s]+))$/)
+  const matches = path.match(/^([^\s]+)(?![^\[]*\])(?:\s*\/\s*([^\/\s]+))$/)
   let alpha = undefined
 
   yield [path, undefined]
@@ -201,9 +201,9 @@ function resolvePath(config, path, defaultValue) {
 }
 
 export default function (context) {
-  let config = context.tailwindConfig
+  const config = context.tailwindConfig
 
-  let functions = {
+  const functions = {
     theme: (node, path, ...defaultValue) => {
       let { isValid, value, error, alpha } = resolvePath(
         config,
@@ -212,8 +212,8 @@ export default function (context) {
       )
 
       if (!isValid) {
-        let parentNode = node.parent
-        let candidate = parentNode?.raws.tailwind?.candidate
+        const parentNode = node.parent
+        const candidate = parentNode?.raws.tailwind?.candidate
 
         if (parentNode && candidate !== undefined) {
           // Remove this utility from any caches
@@ -233,8 +233,8 @@ export default function (context) {
         throw node.error(error)
       }
 
-      let maybeColor = parseColorFormat(value)
-      let isColorFunction = maybeColor !== undefined && typeof maybeColor === 'function'
+      const maybeColor = parseColorFormat(value)
+      const isColorFunction = maybeColor !== undefined && typeof maybeColor === 'function'
 
       if (alpha !== undefined || isColorFunction) {
         if (alpha === undefined) {
@@ -248,8 +248,8 @@ export default function (context) {
     },
     screen: (node, screen) => {
       screen = screen.replace(/^['"]+/g, '').replace(/['"]+$/g, '')
-      let screens = normalizeScreens(config.theme.screens)
-      let screenDefinition = screens.find(({ name }) => name === screen)
+      const screens = normalizeScreens(config.theme.screens)
+      const screenDefinition = screens.find(({ name }) => name === screen)
 
       if (!screenDefinition) {
         throw node.error(`The '${screen}' screen does not exist in your theme.`)
@@ -260,7 +260,7 @@ export default function (context) {
   }
   return (root) => {
     root.walk((node) => {
-      let property = nodeTypePropertyMap[node.type]
+      const property = nodeTypePropertyMap[node.type]
 
       if (property === undefined) {
         return

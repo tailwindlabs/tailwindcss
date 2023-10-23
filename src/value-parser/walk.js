@@ -1,5 +1,5 @@
 module.exports = function walk(nodes, cb, bubble) {
-  var i, max, node, result
+  let i, max, node, result
 
   for (i = 0, max = nodes.length; i < max; i += 1) {
     node = nodes[i]

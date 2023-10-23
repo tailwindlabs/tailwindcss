@@ -1,12 +1,12 @@
-import postcss from 'postcss'
-import lightningcss, { Features } from 'lightningcss'
 import browserslist from 'browserslist'
-import setupTrackingContext from './lib/setupTrackingContext'
-import processTailwindFeatures from './processTailwindFeatures'
-import { env } from './lib/sharedState'
+import lightningcss, { Features } from 'lightningcss'
+import postcss from 'postcss'
+import { version as tailwindVersion } from '../package.json'
 import { findAtConfigPath } from './lib/findAtConfigPath'
 import { handleImportAtRules } from './lib/handleImportAtRules'
-import { version as tailwindVersion } from '../package.json'
+import setupTrackingContext from './lib/setupTrackingContext'
+import { env } from './lib/sharedState'
+import processTailwindFeatures from './processTailwindFeatures'
 
 function license() {
   return `/* ! tailwindcss v${tailwindVersion} | MIT License | https://tailwindcss.com */\n`
@@ -28,10 +28,10 @@ module.exports = function tailwindcss(configOrPath) {
         // path for the file being processed
         configOrPath = findAtConfigPath(root, result) ?? configOrPath
 
-        let context = setupTrackingContext(configOrPath)
+        const context = setupTrackingContext(configOrPath)
 
         if (root.type === 'document') {
-          let roots = root.nodes.filter((node) => node.type === 'root')
+          const roots = root.nodes.filter((node) => node.type === 'root')
 
           for (const root of roots) {
             if (root.type === 'root') {
@@ -45,22 +45,22 @@ module.exports = function tailwindcss(configOrPath) {
         await processTailwindFeatures(context)(root, result)
       },
       function lightningCssPlugin(_root, result) {
-        let map = result.map ?? result.opts.map
+        const map = result.map ?? result.opts.map
 
-        let intermediateResult = result.root.toResult({
+        const intermediateResult = result.root.toResult({
           map: map ? { inline: true } : false,
         })
 
-        let intermediateMap = intermediateResult.map?.toJSON?.() ?? map
+        const intermediateMap = intermediateResult.map?.toJSON?.() ?? map
 
         try {
-          let resolvedBrowsersListConfig = browserslist.findConfig(
+          const resolvedBrowsersListConfig = browserslist.findConfig(
             result.opts.from ?? process.cwd()
           )?.defaults
-          let defaultBrowsersListConfig = require('../package.json').browserslist
-          let browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
+          const defaultBrowsersListConfig = require('../package.json').browserslist
+          const browsersListConfig = resolvedBrowsersListConfig ?? defaultBrowsersListConfig
 
-          let transformed = lightningcss.transform({
+          const transformed = lightningcss.transform({
             filename: result.opts.from,
             code: Buffer.from(intermediateResult.css),
             minify: false,
@@ -81,7 +81,7 @@ module.exports = function tailwindcss(configOrPath) {
 
           // https://postcss.org/api/#sourcemapoptions
           if (intermediateMap && transformed.map != null) {
-            let prev = transformed.map.toString()
+            const prev = transformed.map.toString()
 
             if (typeof intermediateMap === 'object') {
               intermediateMap.prev = prev
@@ -98,7 +98,7 @@ module.exports = function tailwindcss(configOrPath) {
           })
         } catch (err) {
           if (err.source && typeof process !== 'undefined' && process.env.JEST_WORKER_ID) {
-            let lines = err.source.split('\n')
+            const lines = err.source.split('\n')
             err = new Error(
               [
                 'Error formatting using Lightning CSS:',

@@ -69,7 +69,7 @@ export function remapBitfield(num, mapping) {
   // Create masks for the old and new bits that are set
   let oldMask = 0n
   let newMask = 0n
-  for (let [oldBit, newBit] of mapping) {
+  for (const [oldBit, newBit] of mapping) {
     if (num & oldBit) {
       oldMask = oldMask | oldBit
       newMask = newMask | newBit

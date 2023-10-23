@@ -7,7 +7,7 @@ import { createProcessor } from './plugin.js'
 
 export async function build(args) {
   let input = args['--input']
-  let shouldWatch = args['--watch']
+  const shouldWatch = args['--watch']
 
   // TODO: Deprecate this in future versions
   if (!input && args['_'][1]) {
@@ -30,9 +30,9 @@ export async function build(args) {
   }
 
   // TODO: Reference the @config path here if exists
-  let configPath = args['--config'] ? args['--config'] : resolveDefaultConfigPath()
+  const configPath = args['--config'] ? args['--config'] : resolveDefaultConfigPath()
 
-  let processor = await createProcessor(args, configPath)
+  const processor = await createProcessor(args, configPath)
 
   if (shouldWatch) {
     // Abort the watcher if stdin is closed to avoid zombie processes

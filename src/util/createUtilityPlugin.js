@@ -5,10 +5,10 @@ export default function createUtilityPlugin(
   utilityVariations = [[themeKey, [themeKey]]],
   { filterDefault = false, ...options } = {}
 ) {
-  let transformValue = transformThemeValue(themeKey)
+  const transformValue = transformThemeValue(themeKey)
   return function ({ matchUtilities, theme }) {
-    for (let utilityVariation of utilityVariations) {
-      let group = Array.isArray(utilityVariation[0]) ? utilityVariation : [utilityVariation]
+    for (const utilityVariation of utilityVariations) {
+      const group = Array.isArray(utilityVariation[0]) ? utilityVariation : [utilityVariation]
 
       matchUtilities(
         group.reduce((obj, [classPrefix, properties]) => {

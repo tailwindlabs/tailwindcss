@@ -2,7 +2,7 @@ import parser from 'postcss-selector-parser'
 import { movePseudos } from './pseudoElements'
 
 export function applyImportantSelector(selector, important) {
-  let sel = parser().astSync(selector)
+  const sel = parser().astSync(selector)
 
   sel.each((sel) => {
     // Wrap with :is if it's not already wrapped

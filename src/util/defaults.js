@@ -1,12 +1,12 @@
 export function defaults(target, ...sources) {
-  for (let source of sources) {
-    for (let k in source) {
+  for (const source of sources) {
+    for (const k in source) {
       if (!target?.hasOwnProperty?.(k)) {
         target[k] = source[k]
       }
     }
 
-    for (let k of Object.getOwnPropertySymbols(source)) {
+    for (const k of Object.getOwnPropertySymbols(source)) {
       if (!target?.hasOwnProperty?.(k)) {
         target[k] = source[k]
       }

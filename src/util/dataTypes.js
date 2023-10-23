@@ -2,8 +2,8 @@ import { parseColor } from './color'
 import { parseBoxShadowValue } from './parseBoxShadowValue'
 import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 
-let cssFunctions = ['min', 'max', 'clamp', 'calc']
-let IS_CSS_FN = new RegExp(`^(${cssFunctions.join('|')})\\(.*\\)`)
+const cssFunctions = ['min', 'max', 'clamp', 'calc']
+const IS_CSS_FN = new RegExp(`^(${cssFunctions.join('|')})\\(.*\\)`)
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 

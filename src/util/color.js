@@ -1,16 +1,16 @@
 import namedColors from './colorNames'
 
-let HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
-let SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
-let VALUE = /(?:\d+|\d*\.\d+)%?/
-let SEP = /(?:\s*,\s*|\s+)/
-let ALPHA_SEP = /\s*[,/]\s*/
-let CUSTOM_PROPERTY = /var\(--(?:[^ )]*?)(?:,(?:[^ )]*?|var\(--[^ )]*?\)))?\)/
+const HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
+const SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
+const VALUE = /(?:\d+|\d*\.\d+)%?/
+const SEP = /(?:\s*,\s*|\s+)/
+const ALPHA_SEP = /\s*[,/]\s*/
+const CUSTOM_PROPERTY = /var\(--(?:[^ )]*?)(?:,(?:[^ )]*?|var\(--[^ )]*?\)))?\)/
 
-let RGB = new RegExp(
+const RGB = new RegExp(
   `^(rgba?)\\(\\s*(${VALUE.source}|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
 )
-let HSL = new RegExp(
+const HSL = new RegExp(
   `^(hsla?)\\(\\s*((?:${VALUE.source})(?:deg|rad|grad|turn)?|${CUSTOM_PROPERTY.source})(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?(?:${ALPHA_SEP.source}(${VALUE.source}|${CUSTOM_PROPERTY.source}))?\\s*\\)$`
 )
 
@@ -30,7 +30,7 @@ export function parseColor(value, { loose = false } = {}) {
     return { mode: 'rgb', color: namedColors[value].map((v) => v.toString()) }
   }
 
-  let hex = value
+  const hex = value
     .replace(SHORT_HEX, (_, r, g, b, a) => ['#', r, r, g, g, b, b, a ? a + a : ''].join(''))
     .match(HEX)
 
@@ -44,13 +44,13 @@ export function parseColor(value, { loose = false } = {}) {
     }
   }
 
-  let match = value.match(RGB) ?? value.match(HSL)
+  const match = value.match(RGB) ?? value.match(HSL)
 
   if (match === null) {
     return null
   }
 
-  let color = [match[2], match[3], match[4]].filter(Boolean).map((v) => v.toString())
+  const color = [match[2], match[3], match[4]].filter(Boolean).map((v) => v.toString())
 
   // rgba(var(--my-color), 0.1)
   // hsla(var(--my-color), 0.1)
@@ -78,7 +78,7 @@ export function parseColor(value, { loose = false } = {}) {
 }
 
 export function formatColor({ mode, color, alpha }) {
-  let hasAlpha = alpha !== undefined
+  const hasAlpha = alpha !== undefined
 
   if (mode === 'rgba' || mode === 'hsla') {
     return `${mode}(${color.join(', ')}${hasAlpha ? `, ${alpha}` : ''})`

@@ -20,11 +20,11 @@ import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
  * @param {string} value
  */
 export function backgroundSize(value) {
-  let keywordValues = ['cover', 'contain']
+  const keywordValues = ['cover', 'contain']
   // the <length-percentage> type will probably be a css function
   // so we have to use `splitAtTopLevelOnly`
   return splitAtTopLevelOnly(value, ',').every((part) => {
-    let sizes = splitAtTopLevelOnly(part, '_').filter(Boolean)
+    const sizes = splitAtTopLevelOnly(part, '_').filter(Boolean)
     if (sizes.length === 1 && keywordValues.includes(sizes[0])) return true
 
     if (sizes.length !== 1 && sizes.length !== 2) return false

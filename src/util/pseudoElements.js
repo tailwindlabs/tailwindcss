@@ -24,7 +24,7 @@
 /** @typedef {'terminal' | 'actionable' | 'jumpable'} PseudoProperty */
 
 /** @type {Record<string, PseudoProperty[]>} */
-let elementProperties = {
+const elementProperties = {
   // Pseudo elements from the spec
   '::after': ['terminal', 'jumpable'],
   '::backdrop': ['terminal', 'jumpable'],
@@ -71,7 +71,7 @@ let elementProperties = {
  * @returns {Selector}
  */
 export function movePseudos(sel) {
-  let [pseudos] = movablePseudos(sel)
+  const [pseudos] = movablePseudos(sel)
 
   // Remove all pseudo elements from their respective selectors
   pseudos.forEach(([sel, pseudo]) => sel.removeChild(pseudo))
@@ -105,7 +105,7 @@ function movablePseudos(sel) {
   /** @type {Pseudo | null} */
   let lastSeenElement = null
 
-  for (let node of sel.nodes) {
+  for (const node of sel.nodes) {
     if (node.type === 'combinator') {
       buffer = buffer.filter(([, node]) => propertiesForPseudo(node).includes('jumpable'))
       lastSeenElement = null
@@ -119,8 +119,8 @@ function movablePseudos(sel) {
         lastSeenElement = null
       }
 
-      for (let sub of node.nodes ?? []) {
-        let [movable, lastSeenElementInSub] = movablePseudos(sub)
+      for (const sub of node.nodes ?? []) {
+        const [movable, lastSeenElementInSub] = movablePseudos(sub)
         lastSeenElement = lastSeenElementInSub || lastSeenElement
         buffer.push(...movable)
       }

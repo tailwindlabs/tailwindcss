@@ -17,7 +17,7 @@ export function normalizeConfig(config) {
    *       transform?: TransformerFn | { [extension: string]: TransformerFn }
    *   }
    */
-  let valid = (() => {
+  const valid = (() => {
     if (config.content === 'auto') {
       return true
     }
@@ -94,7 +94,7 @@ export function normalizeConfig(config) {
 
         // `config.content.extract` is optional, and can be a Function or a Record<String, Function>
         if (typeof config.content.extract === 'object') {
-          for (let value of Object.values(config.content.extract)) {
+          for (const value of Object.values(config.content.extract)) {
             if (typeof value !== 'function') {
               return false
             }
@@ -107,7 +107,7 @@ export function normalizeConfig(config) {
 
         // `config.content.transform` is optional, and can be a Function or a Record<String, Function>
         if (typeof config.content.transform === 'object') {
-          for (let value of Object.values(config.content.transform)) {
+          for (const value of Object.values(config.content.transform)) {
             if (typeof value !== 'function') {
               return false
             }
@@ -145,7 +145,7 @@ export function normalizeConfig(config) {
 
   // Normalize the `safelist`
   config.safelist = (() => {
-    let { content, purge, safelist } = config
+    const { content, purge, safelist } = config
 
     if (Array.isArray(safelist)) return safelist
     if (Array.isArray(content?.safelist)) return content.safelist
@@ -157,7 +157,7 @@ export function normalizeConfig(config) {
 
   // Normalize the `blocklist`
   config.blocklist = (() => {
-    let { blocklist } = config
+    const { blocklist } = config
 
     if (Array.isArray(blocklist)) {
       if (blocklist.every((item) => typeof item === 'string')) {
@@ -188,7 +188,7 @@ export function normalizeConfig(config) {
   // Normalize the `content`
   config.content = {
     relative: (() => {
-      let { content } = config
+      const { content } = config
 
       if (content?.relative) {
         return content.relative
@@ -198,7 +198,7 @@ export function normalizeConfig(config) {
     })(),
 
     files: (() => {
-      let { content, purge } = config
+      const { content, purge } = config
 
       if (content === undefined && purge === undefined) return []
       if (purge) {
@@ -216,7 +216,7 @@ export function normalizeConfig(config) {
     })(),
 
     extract: (() => {
-      let extract = (() => {
+      const extract = (() => {
         if (config.purge?.extract) return config.purge.extract
         if (config.content?.extract) return config.content.extract
 
@@ -229,9 +229,9 @@ export function normalizeConfig(config) {
         return {}
       })()
 
-      let extractors = {}
+      const extractors = {}
 
-      let defaultExtractor = (() => {
+      const defaultExtractor = (() => {
         if (config.purge?.options?.defaultExtractor) {
           return config.purge.options.defaultExtractor
         }
@@ -254,8 +254,8 @@ export function normalizeConfig(config) {
 
       // Arrays
       else if (Array.isArray(extract)) {
-        for (let { extensions, extractor } of extract ?? []) {
-          for (let extension of extensions) {
+        for (const { extensions, extractor } of extract ?? []) {
+          for (const extension of extensions) {
             extractors[extension] = extractor
           }
         }
@@ -270,7 +270,7 @@ export function normalizeConfig(config) {
     })(),
 
     transform: (() => {
-      let transform = (() => {
+      const transform = (() => {
         if (config.purge?.transform) return config.purge.transform
         if (config.content?.transform) return config.content.transform
 
@@ -280,7 +280,7 @@ export function normalizeConfig(config) {
         return {}
       })()
 
-      let transformers = {}
+      const transformers = {}
 
       if (typeof transform === 'function') {
         transformers.DEFAULT = transform
@@ -299,7 +299,7 @@ export function normalizeConfig(config) {
   if (config.prefix !== '' || config.separator !== ':') {
     if (config.experimental === 'all') {
       config.experimental = {}
-      for (let key of featureFlags.experimental) {
+      for (const key of featureFlags.experimental) {
         config.experimental[key] = true
       }
     } else {
@@ -312,7 +312,7 @@ export function normalizeConfig(config) {
   // Validate globs to prevent bogus globs.
   // E.g.: `./src/*.{html}` is invalid, the `{html}` should just be `html`
   if (config.content.files !== 'auto') {
-    for (let file of config.content.files) {
+    for (const file of config.content.files) {
       if (typeof file === 'string' && /{([^,]*?)}/g.test(file)) {
         log.warn('invalid-glob-braces', [
           `The glob pattern ${dim(file)} in your Tailwind CSS configuration is invalid.`,

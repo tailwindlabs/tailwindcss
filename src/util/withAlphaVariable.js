@@ -1,11 +1,11 @@
-import { parseColor, formatColor } from './color'
+import { formatColor, parseColor } from './color'
 
 export function withAlphaValue(color, alphaValue, defaultValue) {
   if (typeof color === 'function') {
     return color({ opacityValue: alphaValue })
   }
 
-  let parsed = parseColor(color, { loose: true })
+  const parsed = parseColor(color, { loose: true })
 
   if (parsed === null) {
     return defaultValue
@@ -15,7 +15,7 @@ export function withAlphaValue(color, alphaValue, defaultValue) {
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
-  let properties = [].concat(property)
+  const properties = [].concat(property)
   if (typeof color === 'function') {
     return {
       [variable]: '1',

@@ -110,7 +110,7 @@ export class Offsets {
    * @returns {RuleOffset}
    */
   forVariant(variant, index = 0) {
-    let offset = this.variantOffsets.get(variant)
+    const offset = this.variantOffsets.get(variant)
     if (offset === undefined) {
       throw new Error(`Cannot find offset for unknown variant ${variant}`)
     }
@@ -167,7 +167,7 @@ export class Offsets {
    * @param {(name: string) => number} getLength
    */
   recordVariants(variants, getLength) {
-    for (let variant of variants) {
+    for (const variant of variants) {
       this.recordVariant(variant, getLength(variant))
     }
   }
@@ -216,24 +216,24 @@ export class Offsets {
     }
 
     // Sort based on the sorting function
-    for (let aOptions of a.options) {
-      for (let bOptions of b.options) {
+    for (const aOptions of a.options) {
+      for (const bOptions of b.options) {
         if (aOptions.id !== bOptions.id) continue
         if (!aOptions.sort || !bOptions.sort) continue
 
-        let maxFnVariant = max([aOptions.variant, bOptions.variant]) ?? 0n
+        const maxFnVariant = max([aOptions.variant, bOptions.variant]) ?? 0n
 
         // Create a mask of 0s from bits 1..N where N represents the mask of the Nth bit
-        let mask = ~(maxFnVariant | (maxFnVariant - 1n))
-        let aVariantsAfterFn = a.variants & mask
-        let bVariantsAfterFn = b.variants & mask
+        const mask = ~(maxFnVariant | (maxFnVariant - 1n))
+        const aVariantsAfterFn = a.variants & mask
+        const bVariantsAfterFn = b.variants & mask
 
         // If the variants the same, we _can_ sort them
         if (aVariantsAfterFn !== bVariantsAfterFn) {
           continue
         }
 
-        let result = aOptions.sort(
+        const result = aOptions.sort(
           {
             value: aOptions.value,
             modifier: aOptions.modifier,
@@ -275,18 +275,18 @@ export class Offsets {
    */
   recalculateVariantOffsets() {
     // Sort the variants by their name
-    let variants = Array.from(this.variantOffsets.entries())
+    const variants = Array.from(this.variantOffsets.entries())
       .filter(([v]) => v.startsWith('['))
       .sort(([a], [z]) => fastCompare(a, z))
 
     // Sort the list of offsets
     // This is not necessarily a discrete range of numbers which is why
     // we're using sort instead of creating a range from min/max
-    let newOffsets = variants.map(([, offset]) => offset).sort((a, z) => bigSign(a - z))
+    const newOffsets = variants.map(([, offset]) => offset).sort((a, z) => bigSign(a - z))
 
     // Create a map from the old offsets to the new offsets in the new sort order
     /** @type {[bigint, bigint][]} */
-    let mapping = variants.map(([, oldOffset], i) => [oldOffset, newOffsets[i]])
+    const mapping = variants.map(([, oldOffset], i) => [oldOffset, newOffsets[i]])
 
     // Remove any variants that will not move letting us skip
     // remapping if everything happens to be in order
@@ -299,7 +299,7 @@ export class Offsets {
    * @returns {[RuleOffset, T][]}
    */
   remapArbitraryVariantOffsets(list) {
-    let mapping = this.recalculateVariantOffsets()
+    const mapping = this.recalculateVariantOffsets()
 
     // No arbitrary variants? Nothing to do.
     // Everything already in order? Nothing to do.
@@ -360,12 +360,12 @@ function max(nums) {
  * @param {string} b
  */
 function fastCompare(a, b) {
-  let aLen = a.length
-  let bLen = b.length
-  let minLen = aLen < bLen ? aLen : bLen
+  const aLen = a.length
+  const bLen = b.length
+  const minLen = aLen < bLen ? aLen : bLen
 
   for (let i = 0; i < minLen; i++) {
-    let cmp = a.charCodeAt(i) - b.charCodeAt(i)
+    const cmp = a.charCodeAt(i) - b.charCodeAt(i)
     if (cmp !== 0) return cmp
   }
 

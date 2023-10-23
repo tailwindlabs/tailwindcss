@@ -1,9 +1,9 @@
 export default function collapseDuplicateDeclarations() {
   return (root) => {
     root.walkRules((node) => {
-      let seen = new Map()
-      let droppable = new Set([])
-      let byProperty = new Map()
+      const seen = new Map()
+      const droppable = new Set([])
+      const byProperty = new Map()
 
       node.walkDecls((decl) => {
         // This could happen if we have nested selectors. In that case the
@@ -42,17 +42,17 @@ export default function collapseDuplicateDeclarations() {
 
       // Drop all the duplicate declarations with the exact same value we've
       // already seen so far.
-      for (let decl of droppable) {
+      for (const decl of droppable) {
         decl.remove()
       }
 
       // Analyze the declarations based on its unit, drop all the declarations
       // with the same unit but the last one in the list.
-      for (let declarations of byProperty.values()) {
-        let byUnit = new Map()
+      for (const declarations of byProperty.values()) {
+        const byUnit = new Map()
 
-        for (let decl of declarations) {
-          let unit = resolveUnit(decl.value)
+        for (const decl of declarations) {
+          const unit = resolveUnit(decl.value)
           if (unit === null) {
             // We don't have a unit, so should never try and collapse this
             // value. This is because we can't know how to do it in a correct
@@ -67,11 +67,11 @@ export default function collapseDuplicateDeclarations() {
           byUnit.get(unit).add(decl)
         }
 
-        for (let declarations of byUnit.values()) {
+        for (const declarations of byUnit.values()) {
           // Get all but the last one
-          let removableDeclarations = Array.from(declarations).slice(0, -1)
+          const removableDeclarations = Array.from(declarations).slice(0, -1)
 
-          for (let decl of removableDeclarations) {
+          for (const decl of removableDeclarations) {
             decl.remove()
           }
         }
@@ -80,10 +80,10 @@ export default function collapseDuplicateDeclarations() {
   }
 }
 
-let UNITLESS_NUMBER = Symbol('unitless-number')
+const UNITLESS_NUMBER = Symbol('unitless-number')
 
 function resolveUnit(input) {
-  let result = /^-?\d*.?\d+([\w%]+)?$/g.exec(input)
+  const result = /^-?\d*.?\d+([\w%]+)?$/g.exec(input)
 
   if (result) {
     return result[1] ?? UNITLESS_NUMBER

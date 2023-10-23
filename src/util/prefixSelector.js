@@ -18,11 +18,11 @@ export default function (prefix, selector, prependNegative = false) {
   }
 
   /** @type {import('postcss-selector-parser').Root} */
-  let ast = typeof selector === 'string' ? parser().astSync(selector) : selector
+  const ast = typeof selector === 'string' ? parser().astSync(selector) : selector
 
   ast.walkClasses((classSelector) => {
-    let baseClass = classSelector.value
-    let shouldPlaceNegativeBeforePrefix = prependNegative && baseClass.startsWith('-')
+    const baseClass = classSelector.value
+    const shouldPlaceNegativeBeforePrefix = prependNegative && baseClass.startsWith('-')
 
     classSelector.value = shouldPlaceNegativeBeforePrefix
       ? `-${prefix}${baseClass.slice(1)}`

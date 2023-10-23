@@ -1,18 +1,18 @@
 import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 
-let KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
-let SPACE = /\ +(?![^(]*\))/g // Similar to the one above, but with spaces instead.
-let LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
+const KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
+const SPACE = /\ +(?![^(]*\))/g // Similar to the one above, but with spaces instead.
+const LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
 
 export function parseBoxShadowValue(input) {
-  let shadows = splitAtTopLevelOnly(input, ',')
+  const shadows = splitAtTopLevelOnly(input, ',')
   return shadows.map((shadow) => {
-    let value = shadow.trim()
-    let result = { raw: value }
-    let parts = value.split(SPACE)
-    let seen = new Set()
+    const value = shadow.trim()
+    const result = { raw: value }
+    const parts = value.split(SPACE)
+    const seen = new Set()
 
-    for (let part of parts) {
+    for (const part of parts) {
       // Reset index, since the regex is stateful.
       LENGTH.lastIndex = 0
 

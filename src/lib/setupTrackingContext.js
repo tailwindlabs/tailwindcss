@@ -13,34 +13,34 @@ import { parseCandidateFiles, resolvedChangedContent } from './content.js'
 import { loadConfig } from '../lib/load-config'
 import getModuleDependencies from './getModuleDependencies'
 
-let configPathCache = new LRU({ maxSize: 100 })
+const configPathCache = new LRU({ maxSize: 100 })
 
-let candidateFilesCache = new WeakMap()
+const candidateFilesCache = new WeakMap()
 
 function getCandidateFiles(context, tailwindConfig) {
   if (candidateFilesCache.has(context)) {
     return candidateFilesCache.get(context)
   }
 
-  let candidateFiles = parseCandidateFiles(context, tailwindConfig)
+  const candidateFiles = parseCandidateFiles(context, tailwindConfig)
 
   return candidateFilesCache.set(context, candidateFiles).get(context)
 }
 
 // Get the config object based on a path
 function getTailwindConfig(configOrPath) {
-  let userConfigPath = resolveConfigPath(configOrPath)
+  const userConfigPath = resolveConfigPath(configOrPath)
 
   if (userConfigPath !== null) {
-    let [prevConfig, prevConfigHash, prevDeps, prevModified] =
+    const [prevConfig, prevConfigHash, prevDeps, prevModified] =
       configPathCache.get(userConfigPath) || []
 
-    let newDeps = getModuleDependencies(userConfigPath)
+    const newDeps = getModuleDependencies(userConfigPath)
 
     let modified = false
-    let newModified = new Map()
-    for (let file of newDeps) {
-      let time = fs.statSync(file).mtimeMs
+    const newModified = new Map()
+    for (const file of newDeps) {
+      const time = fs.statSync(file).mtimeMs
       newModified.set(file, time)
       if (!prevModified || !prevModified.has(file) || time > prevModified.get(file)) {
         modified = true
@@ -53,11 +53,11 @@ function getTailwindConfig(configOrPath) {
     }
 
     // It has changed (based on timestamps), or first run
-    for (let file of newDeps) {
+    for (const file of newDeps) {
       delete require.cache[file]
     }
-    let newConfig = validateConfig(resolveConfig(loadConfig(userConfigPath)))
-    let newHash = hash(newConfig)
+    const newConfig = validateConfig(resolveConfig(loadConfig(userConfigPath)))
+    const newHash = hash(newConfig)
     configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
     return [newConfig, userConfigPath, newHash, newDeps]
   }
@@ -78,10 +78,10 @@ function getTailwindConfig(configOrPath) {
 export default function setupTrackingContext(configOrPath) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
-      let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+      const [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
         getTailwindConfig(configOrPath)
 
-      let contextDependencies = new Set(configDependencies)
+      const contextDependencies = new Set(configDependencies)
 
       // If there are no @tailwind or @apply rules, we don't consider this CSS
       // file or its dependencies to be dependencies of the context. Can reuse
@@ -94,14 +94,14 @@ export default function setupTrackingContext(configOrPath) {
         contextDependencies.add(result.opts.from)
 
         // Add all css @import dependencies as context dependencies.
-        for (let message of result.messages) {
+        for (const message of result.messages) {
           if (message.type === 'dependency') {
             contextDependencies.add(message.file)
           }
         }
       }
 
-      let [context, , mTimesToCommit] = getContext(
+      const [context, , mTimesToCommit] = getContext(
         root,
         result,
         tailwindConfig,
@@ -110,9 +110,9 @@ export default function setupTrackingContext(configOrPath) {
         contextDependencies
       )
 
-      let fileModifiedMap = getFileModifiedMap(context)
+      const fileModifiedMap = getFileModifiedMap(context)
 
-      let candidateFiles = getCandidateFiles(context, tailwindConfig)
+      const candidateFiles = getCandidateFiles(context, tailwindConfig)
 
       // If there are no @tailwind or @apply rules, we don't consider this CSS file or it's
       // dependencies to be dependencies of the context. Can reuse the context even if they change.
@@ -121,19 +121,19 @@ export default function setupTrackingContext(configOrPath) {
       // in another file since independent sources are effectively isolated.
       if (tailwindDirectives.size > 0) {
         // Add template paths as postcss dependencies.
-        for (let contentPath of candidateFiles) {
-          for (let dependency of parseDependency(contentPath)) {
+        for (const contentPath of candidateFiles) {
+          for (const dependency of parseDependency(contentPath)) {
             registerDependency(dependency)
           }
         }
 
-        let [changedContent, contentMTimesToCommit] = resolvedChangedContent(
+        const [changedContent, contentMTimesToCommit] = resolvedChangedContent(
           context,
           candidateFiles,
           fileModifiedMap
         )
 
-        for (let content of changedContent) {
+        for (const content of changedContent) {
           context.changedContent.push(content)
         }
 
@@ -147,19 +147,19 @@ export default function setupTrackingContext(configOrPath) {
         // mtime. Unless the user / os is doing something weird
         // in which the mtime would be going backwards. If that
         // happens there's already going to be problems.
-        for (let [path, mtime] of contentMTimesToCommit.entries()) {
+        for (const [path, mtime] of contentMTimesToCommit.entries()) {
           mTimesToCommit.set(path, mtime)
         }
       }
 
-      for (let file of configDependencies) {
+      for (const file of configDependencies) {
         registerDependency({ type: 'dependency', file })
       }
 
       // "commit" the new modified time for all context deps
       // We do this here because we want content tracking to
       // read the "old" mtime even when it's a context dependency.
-      for (let [path, mtime] of mTimesToCommit.entries()) {
+      for (const [path, mtime] of mTimesToCommit.entries()) {
         fileModifiedMap.set(path, mtime)
       }
 

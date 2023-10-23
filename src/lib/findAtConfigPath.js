@@ -24,12 +24,12 @@ export function findAtConfigPath(root, result) {
       throw rule.error('Only one `@config` directive is allowed per file.')
     }
 
-    let matches = rule.params.match(/(['"])(.*?)\1/)
+    const matches = rule.params.match(/(['"])(.*?)\1/)
     if (!matches) {
       throw rule.error('A path is required when using the `@config` directive.')
     }
 
-    let inputPath = matches[2]
+    const inputPath = matches[2]
     if (path.isAbsolute(inputPath)) {
       throw rule.error('The `@config` directive cannot be used with an absolute path.')
     }

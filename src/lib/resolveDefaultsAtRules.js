@@ -2,7 +2,7 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import { flagEnabled } from '../featureFlags'
 
-let getNode = {
+const getNode = {
   id(node) {
     return selectorParser.attribute({
       attribute: 'id',
@@ -32,17 +32,17 @@ function minimumImpactSelector(nodes) {
     })
     .reverse()
 
-  let searchFor = new Set(['tag', 'class', 'id', 'attribute'])
+  const searchFor = new Set(['tag', 'class', 'id', 'attribute'])
 
-  let splitPointIdx = rest.findIndex((n) => searchFor.has(n.type))
+  const splitPointIdx = rest.findIndex((n) => searchFor.has(n.type))
   if (splitPointIdx === -1) return rest.reverse().join('').trim()
 
-  let node = rest[splitPointIdx]
-  let bestNode = getNode[node.type] ? getNode[node.type](node) : node
+  const node = rest[splitPointIdx]
+  const bestNode = getNode[node.type] ? getNode[node.type](node) : node
 
   rest = rest.slice(0, splitPointIdx)
 
-  let combinatorIdx = rest.findIndex((n) => n.type === 'combinator' && n.value === '>')
+  const combinatorIdx = rest.findIndex((n) => n.type === 'combinator' && n.value === '>')
   if (combinatorIdx !== -1) {
     rest.splice(0, combinatorIdx)
     rest.unshift(selectorParser.universal())
@@ -51,14 +51,14 @@ function minimumImpactSelector(nodes) {
   return [bestNode, ...rest.reverse()].join('').trim()
 }
 
-export let elementSelectorParser = selectorParser((selectors) => {
+export const elementSelectorParser = selectorParser((selectors) => {
   return selectors.map((s) => {
-    let nodes = s.split((n) => n.type === 'combinator' && n.value === ' ').pop()
+    const nodes = s.split((n) => n.type === 'combinator' && n.value === ' ').pop()
     return minimumImpactSelector(nodes)
   })
 })
 
-let cache = new Map()
+const cache = new Map()
 
 function extractElementSelector(selector) {
   if (!cache.has(selector)) {
@@ -70,10 +70,10 @@ function extractElementSelector(selector) {
 
 export default function resolveDefaultsAtRules({ tailwindConfig }) {
   return (root) => {
-    let variableNodeMap = new Map()
+    const variableNodeMap = new Map()
 
     /** @type {Set<import('postcss').AtRule>} */
-    let universals = new Set()
+    const universals = new Set()
 
     root.walkAtRules('defaults', (rule) => {
       if (rule.nodes && rule.nodes.length > 0) {
@@ -81,7 +81,7 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
         return
       }
 
-      let variable = rule.params
+      const variable = rule.params
       if (!variableNodeMap.has(variable)) {
         variableNodeMap.set(variable, new Set())
       }
@@ -92,22 +92,22 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
     })
 
     if (flagEnabled(tailwindConfig, 'optimizeUniversalDefaults')) {
-      for (let universal of universals) {
+      for (const universal of universals) {
         /** @type {Map<string, Set<string>>} */
-        let selectorGroups = new Map()
+        const selectorGroups = new Map()
 
-        let rules = variableNodeMap.get(universal.params) ?? []
+        const rules = variableNodeMap.get(universal.params) ?? []
 
-        for (let rule of rules) {
-          for (let selector of extractElementSelector(rule.selector)) {
+        for (const rule of rules) {
+          for (const selector of extractElementSelector(rule.selector)) {
             // If selector contains a vendor prefix after a pseudo element or class,
             // we consider them separately because merging the declarations into
             // a single rule will cause browsers that do not understand the
             // vendor prefix to throw out the whole rule
-            let selectorGroupName =
+            const selectorGroupName =
               selector.includes(':-') || selector.includes('::-') ? selector : '__DEFAULT__'
 
-            let selectors = selectorGroups.get(selectorGroupName) ?? new Set()
+            const selectors = selectorGroups.get(selectorGroupName) ?? new Set()
             selectorGroups.set(selectorGroupName, selectors)
 
             selectors.add(selector)
@@ -120,8 +120,8 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
             continue
           }
 
-          for (let [, selectors] of selectorGroups) {
-            let universalRule = postcss.rule({
+          for (const [, selectors] of selectorGroups) {
+            const universalRule = postcss.rule({
               source: universal.source,
             })
 
@@ -135,11 +135,11 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
         universal.remove()
       }
     } else if (universals.size) {
-      let universalRule = postcss.rule({
+      const universalRule = postcss.rule({
         selectors: ['*', '::before', '::after'],
       })
 
-      for (let universal of universals) {
+      for (const universal of universals) {
         universalRule.append(universal.nodes)
 
         if (!universalRule.parent) {
@@ -153,7 +153,7 @@ export default function resolveDefaultsAtRules({ tailwindConfig }) {
         universal.remove()
       }
 
-      let backdropRule = universalRule.clone({
+      const backdropRule = universalRule.clone({
         selectors: ['::backdrop'],
       })
 

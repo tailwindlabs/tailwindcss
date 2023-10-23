@@ -3,7 +3,7 @@ export default function buildMediaQuery(screens) {
 
   return screens
     .map((screen) => {
-      let values = screen.values.map((screen) => {
+      const values = screen.values.map((screen) => {
         if (screen.raw !== undefined) {
           return screen.raw
         }

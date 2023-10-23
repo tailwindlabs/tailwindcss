@@ -1,13 +1,13 @@
-let matchingBrackets = new Map([
+const matchingBrackets = new Map([
   ['{', '}'],
   ['[', ']'],
   ['(', ')'],
 ])
-let inverseMatchingBrackets = new Map(
+const inverseMatchingBrackets = new Map(
   Array.from(matchingBrackets.entries()).map(([k, v]) => [v, k])
 )
 
-let quotes = new Set(['"', "'", '`'])
+const quotes = new Set(['"', "'", '`'])
 
 // Arbitrary values must contain balanced brackets (), [] and {}. Escaped
 // values don't count, and brackets inside quotes also don't count.
@@ -16,11 +16,11 @@ let quotes = new Set(['"', "'", '`'])
 // E.g.: w-[this-is\\]w-\\[weird-but-valid]
 // E.g.: content-['this-is-also-valid]-weirdly-enough']
 export default function isSyntacticallyValidPropertyValue(value) {
-  let stack = []
+  const stack = []
   let inQuotes = false
 
   for (let i = 0; i < value.length; i++) {
-    let char = value[i]
+    const char = value[i]
 
     if (char === ':' && !inQuotes && stack.length === 0) {
       return false
@@ -37,7 +37,7 @@ export default function isSyntacticallyValidPropertyValue(value) {
     if (matchingBrackets.has(char)) {
       stack.push(char)
     } else if (inverseMatchingBrackets.has(char)) {
-      let inverse = inverseMatchingBrackets.get(char)
+      const inverse = inverseMatchingBrackets.get(char)
 
       // Nothing to pop from, therefore it is unbalanced
       if (stack.length <= 0) {

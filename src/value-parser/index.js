@@ -1,6 +1,6 @@
-var parse = require('./parse')
-var walk = require('./walk')
-var stringify = require('./stringify')
+const parse = require('./parse')
+const walk = require('./walk')
+const stringify = require('./stringify')
 
 function ValueParser(value) {
   if (this instanceof ValueParser) {

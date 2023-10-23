@@ -1,7 +1,7 @@
 import colors from 'picocolors'
 import log from './util/log'
 
-let defaults = {
+const defaults = {
   optimizeUniversalDefaults: false,
   disableColorOpacityUtilitiesByDefault: false,
   relativeContentPathsByDefault: false,
@@ -9,7 +9,7 @@ let defaults = {
   logicalSiblingUtilities: false,
 }
 
-export let featureFlags = {
+export const featureFlags = {
   future: [
     'hoverOnlyWhenSupported',
     'respectDefaultRingColorOpacity',
@@ -50,7 +50,7 @@ export function issueFlagNotices(config) {
   }
 
   if (experimentalFlagsEnabled(config).length > 0) {
-    let changes = experimentalFlagsEnabled(config)
+    const changes = experimentalFlagsEnabled(config)
       .map((s) => colors.yellow(s))
       .join(', ')
 

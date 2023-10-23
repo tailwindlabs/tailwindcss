@@ -4,8 +4,8 @@ import postcssImport from 'postcss-import'
 const TAILWIND = Symbol()
 
 export function handleImportAtRules() {
-  let RESTORE_ATRULE_COMMENT = '__TAILWIND_RESTORE__'
-  let atRulesToRestore = ['tailwind', 'config']
+  const RESTORE_ATRULE_COMMENT = '__TAILWIND_RESTORE__'
+  const atRulesToRestore = ['tailwind', 'config']
 
   return [
     (root) => {

@@ -1,17 +1,17 @@
 import * as regex from './regex'
 
 export function defaultExtractor(context) {
-  let patterns = Array.from(buildRegExps(context))
+  const patterns = Array.from(buildRegExps(context))
 
   /**
    * @param {string} content
    */
   return (content) => {
     /** @type {(string|string)[]} */
-    let results = []
+    const results = []
 
-    for (let pattern of patterns) {
-      for (let result of content.match(pattern) ?? []) {
+    for (const pattern of patterns) {
+      for (const result of content.match(pattern) ?? []) {
         results.push(clipAtBalancedParens(result))
       }
     }
@@ -21,13 +21,13 @@ export function defaultExtractor(context) {
 }
 
 function* buildRegExps(context) {
-  let separator = context.tailwindConfig.separator
-  let prefix =
+  const separator = context.tailwindConfig.separator
+  const prefix =
     context.tailwindConfig.prefix !== ''
       ? regex.optional(regex.pattern([/-?/, regex.escape(context.tailwindConfig.prefix)]))
       : ''
 
-  let utility = regex.any([
+  const utility = regex.any([
     // Arbitrary properties (without square brackets)
     /\[[^\s:'"`]+:[^\s\[\]]+\]/,
 
@@ -74,7 +74,7 @@ function* buildRegExps(context) {
     ]),
   ])
 
-  let variantPatterns = [
+  const variantPatterns = [
     // Without quotes
     regex.any([
       // This is here to provide special support for the `@` variant
@@ -119,8 +119,8 @@ function* buildRegExps(context) {
 
 // We want to capture any "special" characters
 // AND the characters immediately following them (if there is one)
-let SPECIALS = /([\[\]'"`])([^\[\]'"`])?/g
-let ALLOWED_CLASS_CHARACTERS = /[^"'`\s<>\]]+/
+const SPECIALS = /([\[\]'"`])([^\[\]'"`])?/g
+const ALLOWED_CLASS_CHARACTERS = /[^"'`\s<>\]]+/
 
 /**
  * Clips a string ensuring that parentheses, quotes, etc… are balanced
@@ -143,7 +143,7 @@ function clipAtBalancedParens(input) {
   }
 
   let depth = 0
-  let openStringTypes = []
+  const openStringTypes = []
 
   // Find all parens, brackets, quotes, etc
   // Stop when we end at a balanced pair
@@ -164,9 +164,9 @@ function clipAtBalancedParens(input) {
     )
   })
 
-  for (let match of matches) {
-    let char = match[0]
-    let inStringType = openStringTypes[openStringTypes.length - 1]
+  for (const match of matches) {
+    const char = match[0]
+    const inStringType = openStringTypes[openStringTypes.length - 1]
 
     if (char === inStringType) {
       openStringTypes.pop()

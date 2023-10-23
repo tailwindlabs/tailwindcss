@@ -13,7 +13,7 @@ export function nesting(opts = postcssNested) {
       rule.remove()
     })
 
-    let plugin = (() => {
+    const plugin = (() => {
       if (
         typeof opts === 'function' ||
         (typeof opts === 'object' && opts?.hasOwnProperty?.('postcssPlugin'))
