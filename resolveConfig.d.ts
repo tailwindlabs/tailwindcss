@@ -3,7 +3,10 @@ import { DefaultTheme } from './types/generated/default-theme'
 import { DefaultColors } from './types/generated/colors'
 
 type ResolvedConfig<T extends Config> = Omit<T, 'theme'> & {
-  theme: MergeThemes<UnwrapResolvables<T['theme']>, UnwrapResolvables<T['theme']['extend']>>
+  theme: MergeThemes<
+    UnwrapResolvables<Omit<T['theme'], 'extend'>>,
+    UnwrapResolvables<T['theme']['extend']>
+  >
 }
 
 type UnwrapResolvables<T> = {
@@ -14,7 +17,7 @@ type ThemeConfigResolved = UnwrapResolvables<ThemeConfig>
 type DefaultThemeFull = DefaultTheme & { colors: DefaultColors }
 
 type MergeThemes<Overrides extends object, Extensions extends object> = {
-  [K in keyof ThemeConfig]: (
+  [K in keyof ThemeConfigResolved]: (
     K extends keyof Overrides
       ? Overrides[K]
       : K extends keyof DefaultThemeFull

@@ -235,8 +235,9 @@ export interface ThemeConfig {
   transitionDuration: ResolvableTo<KeyValuePair>
   willChange: ResolvableTo<KeyValuePair>
   content: ResolvableTo<KeyValuePair>
+}
 
-  // Custom
+interface ThemeConfigCustomizable extends ThemeConfig {
   [key: string]: any
 }
 
@@ -361,7 +362,7 @@ interface OptionalConfig {
   future: Partial<FutureConfig>
   experimental: Partial<ExperimentalConfig>
   darkMode: Partial<DarkModeConfig>
-  theme: Partial<ThemeConfig & { extend: Partial<ThemeConfig> }>
+  theme: Partial<ThemeConfigCustomizable & { extend: Partial<ThemeConfigCustomizable> }>
   corePlugins: Partial<CorePluginsConfig>
   plugins: Partial<PluginsConfig>
   // Custom
