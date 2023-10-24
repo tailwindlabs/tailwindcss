@@ -12,24 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove `autoprefixer` dependency ([#11315](https://github.com/tailwindlabs/tailwindcss/pull/11315))
 - Fix source maps issue resulting in a crash ([#11319](https://github.com/tailwindlabs/tailwindcss/pull/11319))
 - Fallback to RegEx based parser when using custom transformers or extractors ([#11335](https://github.com/tailwindlabs/tailwindcss/pull/11335))
-- Bump `jiti`, `lightningcss`, `fast-glob` and `browserlist` dependencies and reflect `lightningcss` related improvements in tests ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
-- Improve normalisation of `calc()`-like functions ([#11686](https://github.com/tailwindlabs/tailwindcss/pull/11686))
-- Skip `calc()` normalisation in nested `theme()` calls ([#11705](https://github.com/tailwindlabs/tailwindcss/pull/11705))
-- Fix incorrectly generated CSS when using square brackets inside arbitrary properties ([#11709](https://github.com/tailwindlabs/tailwindcss/pull/11709))
-- Make `content` optional for presets in TypeScript types ([#11730](https://github.com/tailwindlabs/tailwindcss/pull/11730))
-- Handle variable colors that have variable fallback values ([#12049](https://github.com/tailwindlabs/tailwindcss/pull/12049))
-- Batch reading content files to prevent `too many open files` error ([#12079](https://github.com/tailwindlabs/tailwindcss/pull/12079))
-- Skip over classes inside `:not(…)` when nested in an at-rule ([#12105](https://github.com/tailwindlabs/tailwindcss/pull/12105))
-- Update types to work with `Node16` module resolution ([#12097](https://github.com/tailwindlabs/tailwindcss/pull/12097))
-- Don’t crash when important and parent selectors are equal in `@apply` ([#12112](https://github.com/tailwindlabs/tailwindcss/pull/12112))
-- Eliminate irrelevant rules when applying variants ([#12113](https://github.com/tailwindlabs/tailwindcss/pull/12113))
-- Improve RegEx parser, reduce possibilities as the key for arbitrary properties ([#12121](https://github.com/tailwindlabs/tailwindcss/pull/12121))
-- Fix sorting of utilities that share multiple candidates ([#12173](https://github.com/tailwindlabs/tailwindcss/pull/12173))
-- Ensure variants with arbitrary values and a modifier are correctly matched in the RegEx based parser ([#12179](https://github.com/tailwindlabs/tailwindcss/pull/12179))
-- Fix crash when watching renamed files on FreeBSD ([#12193](https://github.com/tailwindlabs/tailwindcss/pull/12193))
-- Allow plugins from a parent document to be used in an iframe ([#12208](https://github.com/tailwindlabs/tailwindcss/pull/12208))
-- Add types for `tailwindcss/nesting` ([#12269](https://github.com/tailwindlabs/tailwindcss/pull/12269))
-- Improve automatic `var` injection for properties that accept a `<dashed-ident>` ([#12236](https://github.com/tailwindlabs/tailwindcss/pull/12236))
+- Bump `lightningcss` and reflect related improvements in tests ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
 
 ### Added
 
@@ -51,6 +34,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deprecate `--no-autoprefixer` flag in the CLI ([#11280](https://github.com/tailwindlabs/tailwindcss/pull/11280))
 - Make the Rust based parser the default ([#11394](https://github.com/tailwindlabs/tailwindcss/pull/11394))
 - Simplify the `sans` font-family stack ([#11748](https://github.com/tailwindlabs/tailwindcss/pull/11748))
+
+## [3.3.4] - 2023-10-24
+
+### Fixed
+
+- Improve normalisation of `calc()`-like functions ([#11686](https://github.com/tailwindlabs/tailwindcss/pull/11686))
+- Skip `calc()` normalisation in nested `theme()` calls ([#11705](https://github.com/tailwindlabs/tailwindcss/pull/11705))
+- Fix incorrectly generated CSS when using square brackets inside arbitrary properties ([#11709](https://github.com/tailwindlabs/tailwindcss/pull/11709))
+- Make `content` optional for presets in TypeScript types ([#11730](https://github.com/tailwindlabs/tailwindcss/pull/11730))
+- Handle variable colors that have variable fallback values ([#12049](https://github.com/tailwindlabs/tailwindcss/pull/12049))
+- Batch reading content files to prevent `too many open files` error ([#12079](https://github.com/tailwindlabs/tailwindcss/pull/12079))
+- Skip over classes inside `:not(…)` when nested in an at-rule ([#12105](https://github.com/tailwindlabs/tailwindcss/pull/12105))
+- Update types to work with `Node16` module resolution ([#12097](https://github.com/tailwindlabs/tailwindcss/pull/12097))
+- Don’t crash when important and parent selectors are equal in `@apply` ([#12112](https://github.com/tailwindlabs/tailwindcss/pull/12112))
+- Eliminate irrelevant rules when applying variants ([#12113](https://github.com/tailwindlabs/tailwindcss/pull/12113))
+- Improve RegEx parser, reduce possibilities as the key for arbitrary properties ([#12121](https://github.com/tailwindlabs/tailwindcss/pull/12121))
+- Fix sorting of utilities that share multiple candidates ([#12173](https://github.com/tailwindlabs/tailwindcss/pull/12173))
+- Ensure variants with arbitrary values and a modifier are correctly matched in the RegEx based parser ([#12179](https://github.com/tailwindlabs/tailwindcss/pull/12179))
+- Fix crash when watching renamed files on FreeBSD ([#12193](https://github.com/tailwindlabs/tailwindcss/pull/12193))
+- Allow plugins from a parent document to be used in an iframe ([#12208](https://github.com/tailwindlabs/tailwindcss/pull/12208))
+- Add types for `tailwindcss/nesting` ([#12269](https://github.com/tailwindlabs/tailwindcss/pull/12269))
+- Bump `jiti`, `fast-glob`, and `browserlist` dependencies ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
+- Improve automatic `var` injection for properties that accept a `<dashed-ident>` ([#12236](https://github.com/tailwindlabs/tailwindcss/pull/12236))
 
 ## [3.3.3] - 2023-07-13
 
@@ -2303,7 +2309,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.3...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.4...HEAD
+[3.3.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.3...v3.3.4
 [3.3.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.2...v3.3.3
 [3.3.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.1...v3.3.2
 [3.3.1]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.0...v3.3.1
