@@ -5,7 +5,7 @@ import { DefaultColors } from './types/generated/colors'
 type ResolvedConfig<T extends Config> = Omit<T, 'theme'> & {
   theme: MergeThemes<
     UnwrapResolvables<Omit<T['theme'], 'extend'>>,
-    UnwrapResolvables<T['theme']['extend']>
+    T['theme'] extends { extend: infer TExtend } ? UnwrapResolvables<TExtend> : {}
   >
 }
 
