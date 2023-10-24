@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow plugins from a parent document to be used in an iframe ([#12208](https://github.com/tailwindlabs/tailwindcss/pull/12208))
 - Add types for `tailwindcss/nesting` ([#12269](https://github.com/tailwindlabs/tailwindcss/pull/12269))
 - Bump `jiti`, `fast-glob`, and `browserlist` dependencies ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
+- Improve automatic `var` injection for properties that accept a `<dashed-ident>` ([#12236](https://github.com/tailwindlabs/tailwindcss/pull/12236))
 
 ## [3.3.3] - 2023-07-13
 
