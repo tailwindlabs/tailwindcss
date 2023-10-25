@@ -69,6 +69,21 @@ let table = [
   ['calc(theme(spacing.foo-2))', 'calc(theme(spacing.foo-2))'],
   ['calc(theme(spacing.foo-bar))', 'calc(theme(spacing.foo-bar))'],
 
+  // Prevent formatting inside `var()` functions
+  ['calc(var(--foo-bar-bar)*2)', 'calc(var(--foo-bar-bar) * 2)'],
+
+  // Prevent formatting inside `env()` functions
+  ['calc(env(safe-area-inset-bottom)*2)', 'calc(env(safe-area-inset-bottom) * 2)'],
+  // Should format inside `calc()` nested in `env()`
+  ['env(safe-area-inset-bottom,calc(10px+20px))', 'env(safe-area-inset-bottom,calc(10px + 20px))'],
+  [
+    'calc(env(safe-area-inset-bottom,calc(10px+20px))+5px)',
+    'calc(env(safe-area-inset-bottom,calc(10px + 20px)) + 5px)',
+  ],
+
+  // Prevent formatting keywords
+  ['minmax(min-content,25%)', 'minmax(min-content,25%)'],
+
   // Misc
   ['color(0_0_0/1.0)', 'color(0 0 0/1.0)'],
   ['color(0_0_0_/_1.0)', 'color(0 0 0 / 1.0)'],
