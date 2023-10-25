@@ -85,6 +85,7 @@ export function normalize(value, context = null, isRoot = true) {
  */
 function normalizeMathOperatorSpacing(value) {
   let preventFormattingInFunctions = ['theme', 'env']
+  let preventFormattingKeywords = ['min-content', 'max-content', 'fit-content']
 
   return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
     let result = ''
@@ -125,6 +126,13 @@ function normalizeMathOperatorSpacing(value) {
         //
         //   In this case we do want to "format", the default value as well
         result += consumeUntil([')', ','])
+      }
+
+      // Skip formatting of known keywords
+      else if (preventFormattingKeywords.some((keyword) => peek(keyword))) {
+        let keyword = preventFormattingKeywords.find((keyword) => peek(keyword))
+        result += keyword
+        i += keyword.length - 1
       }
 
       // Skip formatting inside known functions

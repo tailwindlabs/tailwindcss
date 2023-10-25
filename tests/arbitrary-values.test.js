@@ -652,3 +652,17 @@ it('should not insert spaces around operators inside `env()`', () => {
     `)
   })
 })
+
+it('should not insert spaces around `-` in arbitrary values that use `max-content`', () => {
+  let config = {
+    content: [{ raw: html`<div class="grid-cols-[repeat(3,_minmax(0,_max-content))]"></div>` }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .grid-cols-\[repeat\(3\,_minmax\(0\,_max-content\)\)\] {
+        grid-template-columns: repeat(3, minmax(0, max-content));
+      }
+    `)
+  })
+})
