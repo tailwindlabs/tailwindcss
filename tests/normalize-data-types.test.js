@@ -73,6 +73,12 @@ let table = [
 
   // Prevent formatting inside `env()` functions
   ['calc(env(safe-area-inset-bottom)*2)', 'calc(env(safe-area-inset-bottom) * 2)'],
+  // Should format inside `calc()` nested in `env()`
+  ['env(safe-area-inset-bottom,calc(10px+20px))', 'env(safe-area-inset-bottom,calc(10px + 20px))'],
+  [
+    'calc(env(safe-area-inset-bottom,calc(10px+20px))+5px)',
+    'calc(env(safe-area-inset-bottom,calc(10px + 20px)) + 5px)',
+  ],
 
   // Prevent formatting keywords
   ['minmax(min-content,25%)', 'minmax(min-content,25%)'],
