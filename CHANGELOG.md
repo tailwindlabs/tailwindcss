@@ -36,6 +36,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make the Rust based parser the default ([#11394](https://github.com/tailwindlabs/tailwindcss/pull/11394))
 - Simplify the `sans` font-family stack ([#11748](https://github.com/tailwindlabs/tailwindcss/pull/11748))
 
+## [3.3.5] - 2023-10-25
+
+### Fixed
+
+- Fix incorrect spaces around `-` in `calc()` expression ([#12283](https://github.com/tailwindlabs/tailwindcss/pull/12283))
+
 ## [3.3.4] - 2023-10-24
 
 ### Fixed
@@ -2310,7 +2316,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.5...HEAD
+[3.3.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.4...v3.3.5
 [3.3.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.3...v3.3.4
 [3.3.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.2...v3.3.3
 [3.3.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.1...v3.3.2
