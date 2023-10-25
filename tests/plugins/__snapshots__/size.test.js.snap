@@ -343,5 +343,10 @@ exports[`should test the 'size' plugin 1`] = `
   width: 1px;
   height: 1px;
 }
+
+.size-text {
+  width: 1em;
+  height: 1em;
+}
 "
 `;

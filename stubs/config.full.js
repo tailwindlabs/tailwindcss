@@ -1001,6 +1001,7 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
+      text: '1em',
     }),
     width: ({ theme }) => ({
       auto: 'auto',
