@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix source maps issue resulting in a crash ([#11319](https://github.com/tailwindlabs/tailwindcss/pull/11319))
 - Fallback to RegEx based parser when using custom transformers or extractors ([#11335](https://github.com/tailwindlabs/tailwindcss/pull/11335))
 - Bump `lightningcss` and reflect related improvements in tests ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
+- Fix incorrect spaces around `-` in `calc()` expression ([#12283](https://github.com/tailwindlabs/tailwindcss/pull/12283))
 
 ### Added
 
