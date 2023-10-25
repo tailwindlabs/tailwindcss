@@ -638,3 +638,31 @@ it('should support underscores in arbitrary modifiers', () => {
     `)
   })
 })
+
+it('should not insert spaces around operators inside `env()`', () => {
+  let config = {
+    content: [{ raw: html`<div class="grid-cols-[calc(env(safe-area-inset-bottom)+1px)]"></div>` }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .grid-cols-\[calc\(env\(safe-area-inset-bottom\)\+1px\)\] {
+        grid-template-columns: calc(env(safe-area-inset-bottom) + 1px);
+      }
+    `)
+  })
+})
+
+it('should not insert spaces around `-` in arbitrary values that use `max-content`', () => {
+  let config = {
+    content: [{ raw: html`<div class="grid-cols-[repeat(3,_minmax(0,_max-content))]"></div>` }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .grid-cols-\[repeat\(3\,_minmax\(0\,_max-content\)\)\] {
+        grid-template-columns: repeat(3, minmax(0, max-content));
+      }
+    `)
+  })
+})
