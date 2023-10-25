@@ -84,7 +84,7 @@ export function normalize(value, context = null, isRoot = true) {
  * @returns {string}
  */
 function normalizeMathOperatorSpacing(value) {
-  let preventFormattingInFunctions = ['theme']
+  let preventFormattingInFunctions = ['theme', 'env']
 
   return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
     let result = ''
