@@ -302,6 +302,16 @@ exports[`should test the 'size' plugin 1`] = `
   height: 24rem;
 }
 
+.size-\\[12px\\] {
+  width: 12px;
+  height: 12px;
+}
+
+.size-\\[var\\(--my-value\\)\\] {
+  width: var(--my-value);
+  height: var(--my-value);
+}
+
 .size-auto {
   width: auto;
   height: auto;
