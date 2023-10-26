@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Preflight `html` styles to include shadow DOM `:host` pseudo-class ([#11200](https://github.com/tailwindlabs/tailwindcss/pull/11200))
 - Increase default values for `grid-rows-*` utilities from 1–6 to 1–12 ([#12180](https://github.com/tailwindlabs/tailwindcss/pull/12180))
 - Add `size-*` utilities ([#12287](https://github.com/tailwindlabs/tailwindcss/pull/12287))
+- Add utilities for CSS subgrid ([#12298](https://github.com/tailwindlabs/tailwindcss/pull/12298))
 
 ## [3.3.7] - 2023-12-18
 
