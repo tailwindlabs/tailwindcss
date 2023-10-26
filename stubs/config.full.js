@@ -658,8 +658,8 @@ module.exports = {
       fit: 'fit-content',
     }),
     maxWidth: ({ theme, breakpoints }) => ({
+      ...theme('spacing'),
       none: 'none',
-      0: '0rem',
       xs: '20rem',
       sm: '24rem',
       md: '28rem',
@@ -678,8 +678,8 @@ module.exports = {
       prose: '65ch',
       ...breakpoints(theme('screens')),
     }),
-    minHeight: {
-      0: '0px',
+    minHeight: ({ theme }) => ({
+      ...theme('spacing'),
       full: '100%',
       screen: '100vh',
       svh: '100svh',
@@ -688,14 +688,14 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
-    },
-    minWidth: {
-      0: '0px',
+    }),
+    minWidth: ({ theme }) => ({
+      ...theme('spacing'),
       full: '100%',
       min: 'min-content',
       max: 'max-content',
       fit: 'fit-content',
-    },
+    }),
     objectPosition: {
       bottom: 'bottom',
       center: 'center',
