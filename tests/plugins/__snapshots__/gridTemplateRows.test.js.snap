@@ -61,5 +61,9 @@ exports[`should test the 'gridTemplateRows' plugin 1`] = `
 .grid-rows-none {
   grid-template-rows: none;
 }
+
+.grid-rows-subgrid {
+  grid-template-rows: subgrid;
+}
 "
 `;
