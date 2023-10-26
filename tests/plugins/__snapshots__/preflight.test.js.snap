@@ -16,6 +16,7 @@ html, :host {
   tab-size: 4;
   font-feature-settings: normal;
   font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
   font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   line-height: 1.5;
 }
@@ -213,6 +214,7 @@ html, :host {
   tab-size: 4;
   font-feature-settings: normal;
   font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
   font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   line-height: 1.5;
 }
