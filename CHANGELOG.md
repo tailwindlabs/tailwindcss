@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Don’t add spaces to negative numbers following a comma ([#12324](https://github.com/tailwindlabs/tailwindcss/pull/12324))
 - Don't emit `@config` in CSS when watching via the CLI ([#12327](https://github.com/tailwindlabs/tailwindcss/pull/12327))
+- Improve types for `resolveConfig` ([#12272](https://github.com/tailwindlabs/tailwindcss/pull/12272))
 
 ## [3.3.5] - 2023-10-25
 

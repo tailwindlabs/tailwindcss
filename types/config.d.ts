@@ -79,7 +79,7 @@ type Screen = { raw: string } | { min: string } | { max: string } | { min: strin
 type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>
 
 // Theme related config
-interface ThemeConfig {
+export interface ThemeConfig {
   // Responsiveness
   screens: ResolvableTo<ScreensConfig>
   supports: ResolvableTo<Record<string, string>>
@@ -234,8 +234,9 @@ interface ThemeConfig {
   transitionDuration: ResolvableTo<KeyValuePair>
   willChange: ResolvableTo<KeyValuePair>
   content: ResolvableTo<KeyValuePair>
+}
 
-  // Custom
+interface CustomThemeConfig extends ThemeConfig {
   [key: string]: any
 }
 
@@ -358,7 +359,7 @@ interface OptionalConfig {
   future: Partial<FutureConfig>
   experimental: Partial<ExperimentalConfig>
   darkMode: Partial<DarkModeConfig>
-  theme: Partial<ThemeConfig & { extend: Partial<ThemeConfig> }>
+  theme: Partial<CustomThemeConfig & { extend: Partial<CustomThemeConfig> }>
   corePlugins: Partial<CorePluginsConfig>
   plugins: Partial<PluginsConfig>
   // Custom

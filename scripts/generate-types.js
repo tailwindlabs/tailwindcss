@@ -91,9 +91,8 @@ fs.writeFileSync(
   path.join(process.cwd(), 'types', 'generated', 'default-theme.d.ts'),
   prettier.format(
     `
-    import { Config } from '../../types'
     type CSSDeclarationList = Record<string, string>
-    export type DefaultTheme = Config['theme'] & { ${defaultThemeTypes} }
+    export type DefaultTheme = { ${defaultThemeTypes} }
   `,
     {
       semi: false,
