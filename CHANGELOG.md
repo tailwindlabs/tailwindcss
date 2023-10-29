@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- New Rust template parsing engine ([#10252](https://github.com/tailwindlabs/tailwindcss/pull/10252))
 - Support `@import "tailwindcss"` using top-level `index.css` file ([#11205](https://github.com/tailwindlabs/tailwindcss/pull/11205), ([#11260](https://github.com/tailwindlabs/tailwindcss/pull/11260)))
 - Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
 - Automatically detect content paths when no `content` configuration is provided ([#11173](https://github.com/tailwindlabs/tailwindcss/pull/11173), [#11221](https://github.com/tailwindlabs/tailwindcss/pull/11221))
