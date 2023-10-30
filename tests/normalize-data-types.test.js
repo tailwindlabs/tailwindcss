@@ -68,6 +68,9 @@ let table = [
   ['calc(theme(spacing.foo-2))', 'calc(theme(spacing.foo-2))'],
   ['calc(theme(spacing.foo-bar))', 'calc(theme(spacing.foo-bar))'],
 
+  // A negative number immediately after a `,` should not have spaces inserted
+  ['clamp(-3px+4px,-3px+4px,-3px+4px)', 'clamp(-3px + 4px,-3px + 4px,-3px + 4px)'],
+
   // Prevent formatting inside `var()` functions
   ['calc(var(--foo-bar-bar)*2)', 'calc(var(--foo-bar-bar) * 2)'],
 

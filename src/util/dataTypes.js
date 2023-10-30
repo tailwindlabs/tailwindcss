@@ -78,7 +78,7 @@ export function normalize(value, context = null, isRoot = true) {
 
 /**
  * Add spaces around operators inside math functions
- * like calc() that do not follow an operator or '('.
+ * like calc() that do not follow an operator, '(', or `,`.
  *
  * @param {string} value
  * @returns {string}
@@ -165,7 +165,7 @@ function normalizeMathOperatorSpacing(value) {
       // Handle operators
       else if (
         ['+', '-', '*', '/'].includes(char) &&
-        !['(', '+', '-', '*', '/'].includes(lastChar())
+        !['(', '+', '-', '*', '/', ','].includes(lastChar())
       ) {
         result += ` ${char} `
       } else {
