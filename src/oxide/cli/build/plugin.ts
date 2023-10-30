@@ -210,15 +210,15 @@ let state = {
   },
 
   getContext({ createContext, cliConfigPath, root, result, content }) {
+    env.DEBUG && console.time('Searching for config')
+    let configPath = findAtConfigPath(root, result) ?? cliConfigPath
+    env.DEBUG && console.timeEnd('Searching for config')
+
     if (this.context) {
       this.context.changedContent = this.changedContent.splice(0)
 
       return this.context
     }
-
-    env.DEBUG && console.time('Searching for config')
-    let configPath = findAtConfigPath(root, result) ?? cliConfigPath
-    env.DEBUG && console.timeEnd('Searching for config')
 
     env.DEBUG && console.time('Loading config')
     let config = this.loadConfig(configPath, content)
