@@ -9,38 +9,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Remove `autoprefixer` dependency ([#11315](https://github.com/tailwindlabs/tailwindcss/pull/11315))
-- Fix source maps issue resulting in a crash ([#11319](https://github.com/tailwindlabs/tailwindcss/pull/11319))
-- Fallback to RegEx based parser when using custom transformers or extractors ([#11335](https://github.com/tailwindlabs/tailwindcss/pull/11335))
-- Bump `lightningcss` and reflect related improvements in tests ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
-- Fix incorrect spaces around `-` in `calc()` expression ([#12283](https://github.com/tailwindlabs/tailwindcss/pull/12283))
 - Improve types for `resolveConfig` ([#12272](https://github.com/tailwindlabs/tailwindcss/pull/12272))
+- [Oxide] Remove `autoprefixer` dependency ([#11315](https://github.com/tailwindlabs/tailwindcss/pull/11315))
+- [Oxide] Fix source maps issue resulting in a crash ([#11319](https://github.com/tailwindlabs/tailwindcss/pull/11319))
+- [Oxide] Fallback to RegEx based parser when using custom transformers or extractors ([#11335](https://github.com/tailwindlabs/tailwindcss/pull/11335))
+- [Oxide] Bump `lightningcss` and reflect related improvements in tests ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
 
 ### Added
 
-- New Rust template parsing engine ([#10252](https://github.com/tailwindlabs/tailwindcss/pull/10252))
-- Support `@import "tailwindcss"` using top-level `index.css` file ([#11205](https://github.com/tailwindlabs/tailwindcss/pull/11205), ([#11260](https://github.com/tailwindlabs/tailwindcss/pull/11260)))
-- Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
-- Automatically detect content paths when no `content` configuration is provided ([#11173](https://github.com/tailwindlabs/tailwindcss/pull/11173), [#11221](https://github.com/tailwindlabs/tailwindcss/pull/11221))
-- Process and inline `@import` at-rules natively ([#11239](https://github.com/tailwindlabs/tailwindcss/pull/11239))
 - Add `svh`, `lvh`, and `dvh` values to default `height`/`min-height`/`max-height` theme ([#11317](https://github.com/tailwindlabs/tailwindcss/pull/11317))
 - Add `has-*` variants for `:has(...)` pseudo-class ([#11318](https://github.com/tailwindlabs/tailwindcss/pull/11318))
 - Add `text-wrap` utilities including `text-balance` and `text-pretty` ([#11320](https://github.com/tailwindlabs/tailwindcss/pull/11320), [#12031](https://github.com/tailwindlabs/tailwindcss/pull/12031))
-- Explicitly configure Lightning CSS features, and prefer user browserslist over default browserslist ([#11402](https://github.com/tailwindlabs/tailwindcss/pull/11402), [#11412](https://github.com/tailwindlabs/tailwindcss/pull/11412))
 - Extend default `opacity` scale to include all steps of 5 ([#11832](https://github.com/tailwindlabs/tailwindcss/pull/11832))
 - Update Preflight `html` styles to include shadow DOM `:host` pseudo-class ([#11200](https://github.com/tailwindlabs/tailwindcss/pull/11200))
-- Support loading plugins by package / file name ([#12087](https://github.com/tailwindlabs/tailwindcss/pull/12087))
 - Increase default values for `grid-rows-*` utilities from 1–6 to 1–12 ([#12180](https://github.com/tailwindlabs/tailwindcss/pull/12180))
 - Add `size-*` utilities ([#12287](https://github.com/tailwindlabs/tailwindcss/pull/12287))
 - Add utilities for CSS subgrid ([#12298](https://github.com/tailwindlabs/tailwindcss/pull/12298))
 - Add spacing scale to `min-w-*`, `min-h-*`, and `max-w-*` utilities ([#12300](https://github.com/tailwindlabs/tailwindcss/pull/12300))
+- [Oxide] New Rust template parsing engine ([#10252](https://github.com/tailwindlabs/tailwindcss/pull/10252))
+- [Oxide] Support `@import "tailwindcss"` using top-level `index.css` file ([#11205](https://github.com/tailwindlabs/tailwindcss/pull/11205), ([#11260](https://github.com/tailwindlabs/tailwindcss/pull/11260)))
+- [Oxide] Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
+- [Oxide] Automatically detect content paths when no `content` configuration is provided ([#11173](https://github.com/tailwindlabs/tailwindcss/pull/11173), [#11221](https://github.com/tailwindlabs/tailwindcss/pull/11221))
+- [Oxide] Process and inline `@import` at-rules natively ([#11239](https://github.com/tailwindlabs/tailwindcss/pull/11239))
+- [Oxide] Explicitly configure Lightning CSS features, and prefer user browserslist over default browserslist ([#11402](https://github.com/tailwindlabs/tailwindcss/pull/11402), [#11412](https://github.com/tailwindlabs/tailwindcss/pull/11412))
+- [Oxide] Support loading plugins by package / file name ([#12087](https://github.com/tailwindlabs/tailwindcss/pull/12087))
 
 ### Changed
 
-- Deprecate `--no-autoprefixer` flag in the CLI ([#11280](https://github.com/tailwindlabs/tailwindcss/pull/11280))
-- Make the Rust based parser the default ([#11394](https://github.com/tailwindlabs/tailwindcss/pull/11394))
 - Simplify the `sans` font-family stack ([#11748](https://github.com/tailwindlabs/tailwindcss/pull/11748))
 - Disable the tap highlight overlay on iOS ([#12299](https://github.com/tailwindlabs/tailwindcss/pull/12299))
+- [Oxide] Deprecate `--no-autoprefixer` flag in the CLI ([#11280](https://github.com/tailwindlabs/tailwindcss/pull/11280))
+- [Oxide] Make the Rust based parser the default ([#11394](https://github.com/tailwindlabs/tailwindcss/pull/11394))
 
 ## [3.3.5] - 2023-10-25
 
