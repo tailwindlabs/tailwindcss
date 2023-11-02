@@ -13,11 +13,5 @@ exports[`should test the 'prefersContrastVariants' plugin 1`] = `
     display: flex;
   }
 }
-
-@media (prefers-contrast: custom) {
-  .contrast-custom\\:flex {
-    display: flex;
-  }
-}
 "
 `;
