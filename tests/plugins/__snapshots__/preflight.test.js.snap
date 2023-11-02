@@ -53,6 +53,8 @@ b, strong {
 }
 
 code, kbd, samp, pre {
+  font-feature-settings: normal;
+  font-variation-settings: normal;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
   font-size: 1em;
 }
@@ -251,6 +253,8 @@ b, strong {
 }
 
 code, kbd, samp, pre {
+  font-feature-settings: normal;
+  font-variation-settings: normal;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
   font-size: 1em;
 }
