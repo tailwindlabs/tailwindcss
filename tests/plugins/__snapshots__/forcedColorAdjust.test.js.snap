@@ -2,11 +2,11 @@
 
 exports[`should test the 'forcedColorAdjust' plugin 1`] = `
 "
-.forced-color-auto {
+.forced-color-adjust-auto {
   forced-color-adjust: auto;
 }
 
-.forced-color-none {
+.forced-color-adjust-none {
   forced-color-adjust: none;
 }
 "

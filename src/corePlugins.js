@@ -2879,8 +2879,8 @@ export let corePlugins = {
   ]),
   forcedColorAdjust: ({ addUtilities }) => {
     addUtilities({
-      '.forced-color-auto': { 'forced-color-adjust': 'auto' },
-      '.forced-color-none': { 'forced-color-adjust': 'none' },
+      '.forced-color-adjust-auto': { 'forced-color-adjust': 'auto' },
+      '.forced-color-adjust-none': { 'forced-color-adjust': 'none' },
     })
   },
 }
