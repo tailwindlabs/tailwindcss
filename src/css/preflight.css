@@ -99,8 +99,10 @@ strong {
 }
 
 /*
-1. Use the user's configured `mono` font family by default.
-2. Correct the odd `em` font sizing in all browsers.
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
 */
 
 code,
@@ -108,7 +110,9 @@ kbd,
 samp,
 pre {
   font-family: theme('fontFamily.mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace); /* 1 */
-  font-size: 1em; /* 2 */
+  font-feature-settings: theme('fontFamily.mono[1].fontFeatureSettings', normal); /* 2 */
+  font-variation-settings: theme('fontFamily.mono[1].fontVariationSettings', normal); /* 3 */
+  font-size: 1em; /* 4 */
 }
 
 /*
