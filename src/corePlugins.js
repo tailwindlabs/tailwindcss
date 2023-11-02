@@ -2877,4 +2877,13 @@ export let corePlugins = {
   content: createUtilityPlugin('content', [
     ['content', ['--tw-content', ['content', 'var(--tw-content)']]],
   ]),
+  colorScheme: ({ addUtilities }) => {
+    addUtilities({
+      '.color-scheme-dark': { 'color-scheme': 'dark' },
+      '.color-scheme-light': { 'color-scheme': 'light' },
+      '.color-scheme-light-dark': { 'color-scheme': 'light dark' },
+      '.color-scheme-dark-only': { 'color-scheme': 'dark only' },
+      '.color-scheme-light-only': { 'color-scheme': 'light only' },
+    })
+  },
 }
