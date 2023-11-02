@@ -460,6 +460,10 @@ export let variantPlugins = {
     addVariant('contrast-more', '@media (prefers-contrast: more)')
     addVariant('contrast-less', '@media (prefers-contrast: less)')
   },
+
+  forcedColorsVariants: ({ addVariant }) => {
+    addVariant('forced-colors', '@media (forced-colors: active)')
+  },
 }
 
 let cssTransformValue = [
