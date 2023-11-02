@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Oxide] Process and inline `@import` at-rules natively ([#11239](https://github.com/tailwindlabs/tailwindcss/pull/11239))
 - [Oxide] Explicitly configure Lightning CSS features, and prefer user browserslist over default browserslist ([#11402](https://github.com/tailwindlabs/tailwindcss/pull/11402), [#11412](https://github.com/tailwindlabs/tailwindcss/pull/11412))
 - [Oxide] Support loading plugins by package / file name ([#12087](https://github.com/tailwindlabs/tailwindcss/pull/12087))
+- Add `forced-colors-adjust` utilities ([#11931](https://github.com/tailwindlabs/tailwindcss/pull/11931))
 
 ### Changed
 
