@@ -118,6 +118,8 @@ export let variantPlugins = {
       'required',
       'valid',
       'invalid',
+      'user-valid',
+      'user-invalid',
       'in-range',
       'out-of-range',
       'read-only',
