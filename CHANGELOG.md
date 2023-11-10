@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't emit `@config` in CSS when watching via the CLI ([#12327](https://github.com/tailwindlabs/tailwindcss/pull/12327))
 - Improve types for `resolveConfig` ([#12272](https://github.com/tailwindlabs/tailwindcss/pull/12272))
 - Ensure configured `font-feature-settings` for `mono` are included in Preflight ([#12342](https://github.com/tailwindlabs/tailwindcss/pull/12342))
+- Improve candidate detection in minified JS arrays (without spaces) ([#12396](https://github.com/tailwindlabs/tailwindcss/pull/12396))
 - Don't crash when given applying a variant to a negated version of a simple utility ([#12514](https://github.com/tailwindlabs/tailwindcss/pull/12514))
 - Fix support for slashes in arbitrary modifiers ([#12515](https://github.com/tailwindlabs/tailwindcss/pull/12515))
 - Fix source maps of variant utilities that come from an `@layer` rule ([#12508](https://github.com/tailwindlabs/tailwindcss/pull/12508))
