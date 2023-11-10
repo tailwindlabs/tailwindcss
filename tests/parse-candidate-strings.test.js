@@ -483,15 +483,18 @@ describe.each([
       }
     })
 
-    it.each([['["min-w-[17rem]","max-w-[17rem]"]', ['min-w-[17rem]', 'max-w-[17rem]']]])(
-      'should work for issue #12371 (%#)',
-      async (content, expectations) => {
-        let extractions = parse(content)
+    it.each([
+      ['["min-w-[17rem]","max-w-[17rem]"]', ['min-w-[17rem]', 'max-w-[17rem]']],
+      [
+        '["w-[calc(theme(spacing[2]*-1px))]","h-[calc(theme(spacing[2]*-1px))]"]',
+        ['w-[calc(theme(spacing[2]*-1px))]', 'h-[calc(theme(spacing[2]*-1px))]'],
+      ],
+    ])('should work for issue #12371 (%#)', async (content, expectations) => {
+      let extractions = parse(content)
 
-        for (let value of expectations) {
-          expect(extractions).toContain(value)
-        }
+      for (let value of expectations) {
+        expect(extractions).toContain(value)
       }
-    )
+    })
   })
 })
