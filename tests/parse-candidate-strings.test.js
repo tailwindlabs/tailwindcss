@@ -482,5 +482,16 @@ describe.each([
         expect(extractions).toContain(value)
       }
     })
+
+    it.each([['["min-w-[17rem]","max-w-[17rem]"]', ['min-w-[17rem]', 'max-w-[17rem]']]])(
+      'should work for issue #12371 (%#)',
+      async (content, expectations) => {
+        let extractions = parse(content)
+
+        for (let value of expectations) {
+          expect(extractions).toContain(value)
+        }
+      }
+    )
   })
 })
