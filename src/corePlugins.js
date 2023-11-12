@@ -1135,6 +1135,7 @@ export let corePlugins = {
   appearance: ({ addUtilities }) => {
     addUtilities({
       '.appearance-none': { appearance: 'none' },
+      '.appearance-auto': { appearance: 'auto' },
     })
   },
 
