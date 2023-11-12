@@ -6,5 +6,10 @@ exports[`should test the 'appearance' plugin 1`] = `
   -webkit-appearance: none;
   appearance: none;
 }
+
+.appearance-auto {
+  -webkit-appearance: auto;
+  appearance: auto;
+}
 "
 `;
