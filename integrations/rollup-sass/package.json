@@ -20,6 +20,6 @@
   "devDependencies": {
     "rollup": "^4.1.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "sass": "^1.69.4"
+    "sass": "^1.69.5"
   }
 }
