@@ -8,12 +8,6 @@ exports[`should test the 'touchAction' plugin 1`] = `
   --tw-pinch-zoom: ;
 }
 
-::-webkit-backdrop {
-  --tw-pan-x: ;
-  --tw-pan-y: ;
-  --tw-pinch-zoom: ;
-}
-
 ::backdrop {
   --tw-pan-x: ;
   --tw-pan-y: ;

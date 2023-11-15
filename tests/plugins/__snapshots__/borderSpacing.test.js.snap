@@ -7,11 +7,6 @@ exports[`should test the 'borderSpacing' plugin 1`] = `
   --tw-border-spacing-y: 0;
 }
 
-::-webkit-backdrop {
-  --tw-border-spacing-x: 0;
-  --tw-border-spacing-y: 0;
-}
-
 ::backdrop {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;

@@ -25,15 +25,6 @@ test('basic utilities', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
-      ::-webkit-backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -84,15 +75,6 @@ test('with pseudo-class variants', async () => {
       *,
       :before,
       :after {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
-      ::-webkit-backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -157,15 +139,6 @@ test('with pseudo-element variants', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
-      ::-webkit-backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -210,15 +183,6 @@ test('with multi-class variants', async () => {
       *,
       :before,
       :after {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
-      ::-webkit-backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -279,15 +243,6 @@ test('with multi-class pseudo-element variants', async () => {
         --tw-scale-x: 1;
         --tw-scale-y: 1;
       }
-      ::-webkit-backdrop {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
       ::backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
@@ -338,15 +293,6 @@ test('with multi-class pseudo-element and pseudo-class variants', async () => {
       *,
       :before,
       :after {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
-      ::-webkit-backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -441,15 +387,6 @@ test('with apply', async () => {
       *,
       :before,
       :after {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
-      ::-webkit-backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;
@@ -660,16 +597,6 @@ test('with shadows', async () => {
         --tw-shadow: 0 0 #0000;
         --tw-shadow-colored: 0 0 #0000;
       }
-      ::-webkit-backdrop {
-        --tw-ring-inset: ;
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-color: #3b82f680;
-        --tw-ring-offset-shadow: 0 0 #0000;
-        --tw-ring-shadow: 0 0 #0000;
-        --tw-shadow: 0 0 #0000;
-        --tw-shadow-colored: 0 0 #0000;
-      }
       ::backdrop {
         --tw-ring-inset: ;
         --tw-ring-offset-width: 0px;
@@ -727,15 +654,6 @@ test('when no utilities that need the defaults are used', async () => {
       *,
       :before,
       :after {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-      }
-      ::-webkit-backdrop {
         --tw-translate-x: 0;
         --tw-translate-y: 0;
         --tw-rotate: 0;

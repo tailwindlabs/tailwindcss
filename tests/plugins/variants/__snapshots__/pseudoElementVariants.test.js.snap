@@ -26,10 +26,6 @@ exports[`should test the 'pseudoElementVariants' plugin 1`] = `
   display: flex;
 }
 
-.backdrop\\:flex::-webkit-backdrop {
-  display: flex;
-}
-
 .backdrop\\:flex::backdrop {
   display: flex;
 }
