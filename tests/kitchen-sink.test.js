@@ -403,9 +403,6 @@ test('it works', () => {
       :after {
         padding: 5px;
       }
-      ::-webkit-backdrop {
-        padding: 5px;
-      }
       ::backdrop {
         padding: 5px;
       }
@@ -579,9 +576,6 @@ test('it works', () => {
       *,
       :before,
       :after {
-        margin: 10px;
-      }
-      ::-webkit-backdrop {
         margin: 10px;
       }
       ::backdrop {

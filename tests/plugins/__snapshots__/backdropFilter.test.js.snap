@@ -14,18 +14,6 @@ exports[`should test the 'backdropFilter' plugin 1`] = `
   --tw-backdrop-sepia: ;
 }
 
-::-webkit-backdrop {
-  --tw-backdrop-blur: ;
-  --tw-backdrop-brightness: ;
-  --tw-backdrop-contrast: ;
-  --tw-backdrop-grayscale: ;
-  --tw-backdrop-hue-rotate: ;
-  --tw-backdrop-invert: ;
-  --tw-backdrop-opacity: ;
-  --tw-backdrop-saturate: ;
-  --tw-backdrop-sepia: ;
-}
-
 ::backdrop {
   --tw-backdrop-blur: ;
   --tw-backdrop-brightness: ;

@@ -10,14 +10,6 @@ exports[`should test the 'fontVariantNumeric' plugin 1`] = `
   --tw-numeric-fraction: ;
 }
 
-::-webkit-backdrop {
-  --tw-ordinal: ;
-  --tw-slashed-zero: ;
-  --tw-numeric-figure: ;
-  --tw-numeric-spacing: ;
-  --tw-numeric-fraction: ;
-}
-
 ::backdrop {
   --tw-ordinal: ;
   --tw-slashed-zero: ;
