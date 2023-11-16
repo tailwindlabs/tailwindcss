@@ -88,6 +88,7 @@
   },
   "browserslist": [
     "defaults and supports css-variables and supports css-matches-pseudo",
+    "not android <= 117",
     "safari >= 14"
   ],
   "jest": {
