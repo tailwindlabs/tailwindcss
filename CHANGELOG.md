@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add spacing scale to `min-w-*`, `min-h-*`, and `max-w-*` utilities ([#12300](https://github.com/tailwindlabs/tailwindcss/pull/12300))
 - Add `forced-color-adjust` utilities ([#11931](https://github.com/tailwindlabs/tailwindcss/pull/11931))
 - Add `forced-colors` variant ([#11694](https://github.com/tailwindlabs/tailwindcss/pull/11694))
-- Add `appearance-none` utility ([#12404](https://github.com/tailwindlabs/tailwindcss/pull/12404))
+- Add `appearance-auto` utility ([#12404](https://github.com/tailwindlabs/tailwindcss/pull/12404))
 - [Oxide] New Rust template parsing engine ([#10252](https://github.com/tailwindlabs/tailwindcss/pull/10252))
 - [Oxide] Support `@import "tailwindcss"` using top-level `index.css` file ([#11205](https://github.com/tailwindlabs/tailwindcss/pull/11205), ([#11260](https://github.com/tailwindlabs/tailwindcss/pull/11260)))
 - [Oxide] Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
