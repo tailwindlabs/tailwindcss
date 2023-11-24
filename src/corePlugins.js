@@ -684,6 +684,8 @@ export let corePlugins = {
 
   float: ({ addUtilities }) => {
     addUtilities({
+      '.float-start': { float: 'inline-start' },
+      '.float-end': { float: 'inline-end' },
       '.float-right': { float: 'right' },
       '.float-left': { float: 'left' },
       '.float-none': { float: 'none' },
@@ -692,6 +694,8 @@ export let corePlugins = {
 
   clear: ({ addUtilities }) => {
     addUtilities({
+      '.clear-start': { clear: 'inline-start' },
+      '.clear-end': { clear: 'inline-end' },
       '.clear-left': { clear: 'left' },
       '.clear-right': { clear: 'right' },
       '.clear-both': { clear: 'both' },
