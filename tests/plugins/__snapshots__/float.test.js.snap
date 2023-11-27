@@ -2,6 +2,14 @@
 
 exports[`should test the 'float' plugin 1`] = `
 "
+.float-start {
+  float: inline-start;
+}
+
+.float-end {
+  float: inline-end;
+}
+
 .float-right {
   float: right;
 }
