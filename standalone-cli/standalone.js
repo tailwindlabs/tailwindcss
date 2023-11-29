@@ -1,5 +1,3 @@
-let Module = require('module')
-let origRequire = Module.prototype.require
 let log = require('tailwindcss/lib/util/log').default
 
 let localModules = {
@@ -25,11 +23,38 @@ let localModules = {
   tailwindcss: require('tailwindcss'),
 }
 
-Module.prototype.require = function (id) {
-  if (localModules.hasOwnProperty(id)) {
-    return localModules[id]
-  }
-  return origRequire.apply(this, arguments)
-}
+// Swap out the default JITI implementation with one that has the built-in modules above preloaded as "native modules"
+// NOTE: This uses a private, internal API of Tailwind CSS and is subject to change at any time
+let { useCustomJiti } = require('tailwindcss/lib/lib/load-config')
+let { transform } = require('sucrase')
+
+useCustomJiti(() =>
+  require('jiti')(__filename, {
+    interopDefault: true,
+    nativeModules: Object.keys(localModules),
+    transform: (opts) => {
+      return transform(opts.source, {
+        transforms: ['typescript', 'imports'],
+      })
+    },
+  })
+)
+
+let { patchRequire } = require('./patch-require.js')
+patchRequire(
+  // Patch require(…) to return the bundled modules above so they don't need to be installed
+  localModules,
+
+  // Create a require cache that maps module IDs to module objects
+  // This MUST be done before require is patched to handle caching
+  Object.fromEntries(
+    Object.keys(localModules).map((id) => [
+      id,
+      id === '@tailwindcss/line-clamp'
+        ? `node_modules/@tailwindcss/line-clamp/`
+        : require.cache[require.resolve(id)],
+    ])
+  )
+)
 
 require('tailwindcss/lib/cli')
