@@ -43,9 +43,7 @@ export default function cloneNodes(nodes, source = undefined, raws = undefined) 
  * @param {(node: import('postcss').Container) => boolean} onNode
  */
 function traverse(node, onNode) {
-  onNode(node)
-
-  node.walk((child) => {
-    return onNode(child)
-  })
+  if (onNode(node) !== false) {
+    node.each?.((child) => traverse(child, onNode))
+  }
 }
