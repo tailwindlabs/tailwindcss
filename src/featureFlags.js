@@ -19,10 +19,7 @@ let featureFlags = {
     'disableColorOpacityUtilitiesByDefault',
     'relativeContentPathsByDefault',
   ],
-  experimental: [
-    'optimizeUniversalDefaults',
-    'generalizedModifiers',
-  ],
+  experimental: ['optimizeUniversalDefaults', 'generalizedModifiers'],
 }
 
 export function flagEnabled(config, flag) {
