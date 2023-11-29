@@ -1,4 +1,3 @@
-import { flagEnabled } from '../featureFlags'
 import * as regex from './regex'
 
 export function defaultExtractor(context) {
