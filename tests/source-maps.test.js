@@ -427,7 +427,7 @@ test('components have source maps', async () => {
 
 test('source maps for layer rules are not rewritten to point to @tailwind directives', async () => {
   let config = {
-    content: [{ raw: `font-normal foo hover:foo` }],
+    content: [{ raw: `font-normal foo hover:foo lg:foo` }],
   }
 
   let utilitiesFile = postcss.parse(
@@ -481,6 +481,11 @@ test('source maps for layer rules are not rewritten to point to @tailwind direct
       "6:0 -> 6:0",
       "7:2-23 -> 7:2-23",
       "8:0 -> 8:0",
+      "10:0 -> 10:0",
+      "11:2 -> 11:2",
+      "12:4-25 -> 12:4-25",
+      "13:2 -> 13:2",
+      "14:0 -> 14:0",
     ]
   `)
 })
