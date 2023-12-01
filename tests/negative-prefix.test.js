@@ -339,4 +339,24 @@ test('arbitrary value keywords should be ignored', () => {
   return run('@tailwind utilities', config).then((result) => {
     return expect(result.css).toMatchFormattedCss(css``)
   })
+
+  // This is a weird test but it used to crash because the negative prefix + variant used to cause an undefined utility to be generated
+  test('addUtilities without negative prefix + variant + negative prefix in content should not crash', async () => {
+    let config = {
+      content: [{ raw: html`<div class="hover:-top-lg"></div>` }],
+      plugins: [
+        ({ addUtilities }) => {
+          addUtilities({
+            '.top-lg': {
+              top: '6rem',
+            },
+          })
+        },
+      ],
+    }
+
+    let result = await run('@tailwind utilities', config)
+
+    expect(result.css).toMatchCss(css``)
+  })
 })
