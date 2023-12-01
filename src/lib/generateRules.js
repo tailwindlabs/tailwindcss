@@ -845,6 +845,11 @@ function applyFinalFormat(match, { context, candidate }) {
     return null
   }
 
+  // If all rules have been eliminated we can skip this candidate entirely
+  if (container.nodes.length === 0) {
+    return null
+  }
+
   match[1] = container.nodes[0]
 
   return match
