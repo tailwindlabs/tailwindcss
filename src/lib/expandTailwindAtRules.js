@@ -265,6 +265,9 @@ export default function expandTailwindAtRules(context) {
       )
     }
 
+    // TODO: Why is the root node having no source location for `end` possible?
+    root.source.end = root.source.end ?? root.source.start
+
     // If we've got a utility layer and no utilities are generated there's likely something wrong
     const hasUtilityVariants = variantNodes.some(
       (node) => node.raws.tailwind?.parentLayer === 'utilities'

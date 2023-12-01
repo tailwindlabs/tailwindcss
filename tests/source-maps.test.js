@@ -485,7 +485,7 @@ crosscheck(({ stable, oxide }) => {
     'source maps for layer rules are not rewritten to point to @tailwind directives',
     async () => {
       let config = {
-        content: [{ raw: `font-normal foo hover:foo` }],
+        content: [{ raw: `font-normal foo hover:foo lg:foo` }],
       }
 
       let utilitiesFile = postcss.parse(
@@ -535,6 +535,11 @@ crosscheck(({ stable, oxide }) => {
         '3:12 -> 7:12',
         '4:14-35 -> 8:14-35',
         '5:12 -> 9:12',
+        '1:0 -> 10:12',
+        '3:12 -> 11:12',
+        '4:14-35 -> 12:14-35',
+        '5:12 -> 13:12',
+        '1:0 -> 14:0',
       ])
     }
   )

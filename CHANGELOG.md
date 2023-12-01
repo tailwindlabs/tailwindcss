@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure configured `font-feature-settings` for `mono` are included in Preflight ([#12342](https://github.com/tailwindlabs/tailwindcss/pull/12342))
 - Don't crash when given applying a variant to a negated version of a simple utility ([#12514](https://github.com/tailwindlabs/tailwindcss/pull/12514))
 - Fix support for slashes in arbitrary modifiers ([#12515](https://github.com/tailwindlabs/tailwindcss/pull/12515))
+- Fix source maps of variant utilities that come from an `@layer` rule ([#12508](https://github.com/tailwindlabs/tailwindcss/pull/12508))
 
 ## [3.3.5] - 2023-10-25
 
