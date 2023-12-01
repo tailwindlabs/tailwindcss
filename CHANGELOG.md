@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't crash when given applying a variant to a negated version of a simple utility ([#12514](https://github.com/tailwindlabs/tailwindcss/pull/12514))
 - Fix support for slashes in arbitrary modifiers ([#12515](https://github.com/tailwindlabs/tailwindcss/pull/12515))
 - Fix source maps of variant utilities that come from an `@layer` rule ([#12508](https://github.com/tailwindlabs/tailwindcss/pull/12508))
+- Fix loading of built-in plugins when using an ESM or TypeScript config with the Standalone CLI ([#12506](https://github.com/tailwindlabs/tailwindcss/pull/12506))
 - [Oxide] Remove `autoprefixer` dependency ([#11315](https://github.com/tailwindlabs/tailwindcss/pull/11315))
 - [Oxide] Fix source maps issue resulting in a crash ([#11319](https://github.com/tailwindlabs/tailwindcss/pull/11319))
 - [Oxide] Fallback to RegEx based parser when using custom transformers or extractors ([#11335](https://github.com/tailwindlabs/tailwindcss/pull/11335))
