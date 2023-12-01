@@ -4,6 +4,14 @@ import { transform } from 'sucrase'
 import { Config } from '../../types/config'
 
 let jiti: ReturnType<typeof jitiFactory> | null = null
+
+// @internal
+// This WILL be removed in some future release
+// If you rely on this your stuff WILL break
+export function useCustomJiti(_jiti: ReturnType<typeof jitiFactory>) {
+  jiti = _jiti
+}
+
 function lazyJiti() {
   return (
     jiti ??
