@@ -88,6 +88,22 @@ function isArbitraryValue(input) {
 function splitUtilityModifier(modifier) {
   let slashIdx = modifier.lastIndexOf('/')
 
+  // If the `/` is inside an arbitrary, we want to find the previous one if any
+  // This logic probably isn't perfect but it should work for most cases
+  let arbitraryStartIdx = modifier.lastIndexOf('[', slashIdx)
+  let arbitraryEndIdx = modifier.indexOf(']', slashIdx)
+
+  let isNextToArbitrary = modifier[slashIdx - 1] === ']' || modifier[slashIdx + 1] === '['
+
+  // Backtrack to the previous `/` if the one we found was inside an arbitrary
+  if (!isNextToArbitrary) {
+    if (arbitraryStartIdx !== -1 && arbitraryEndIdx !== -1) {
+      if (arbitraryStartIdx < slashIdx && slashIdx < arbitraryEndIdx) {
+        slashIdx = modifier.lastIndexOf('/', arbitraryStartIdx)
+      }
+    }
+  }
+
   if (slashIdx === -1 || slashIdx === modifier.length - 1) {
     return [modifier, undefined]
   }

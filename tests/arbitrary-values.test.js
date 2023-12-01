@@ -654,6 +654,21 @@ crosscheck(({ stable, oxide }) => {
   })
 })
 
+it('should support slashes in arbitrary modifiers', () => {
+  let config = {
+    content: [{ raw: html`<div class="text-lg/[calc(50px/1rem)]"></div>` }],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .text-lg\/\[calc\(50px\/1rem\)\] {
+        font-size: 1.125rem;
+        line-height: calc(50px / 1rem);
+      }
+    `)
+  })
+})
+
 it('should not insert spaces around operators inside `env()`', () => {
   let config = {
     content: [{ raw: html`<div class="grid-cols-[calc(env(safe-area-inset-bottom)+1px)]"></div>` }],
