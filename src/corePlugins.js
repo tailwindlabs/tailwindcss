@@ -467,12 +467,13 @@ export let variantPlugins = {
 }
 
 let cssTransformValue = [
-  'translate(var(--tw-translate-x), var(--tw-translate-y))',
-  'rotate(var(--tw-rotate))',
-  'skewX(var(--tw-skew-x))',
-  'skewY(var(--tw-skew-y))',
-  'scaleX(var(--tw-scale-x))',
-  'scaleY(var(--tw-scale-y))',
+  'var(--tw-translate-x)',
+  'var(--tw-translate-y)',
+  'var(--tw-rotate)',
+  'var(--tw-skew-x)',
+  'var(--tw-skew-y)',
+  'var(--tw-scale-x)',
+  'var(--tw-scale-y)',
 ].join(' ')
 
 let cssFilterValue = [
@@ -859,72 +860,97 @@ export let corePlugins = {
   },
 
   transformOrigin: createUtilityPlugin('transformOrigin', [['origin', ['transformOrigin']]]),
-  translate: createUtilityPlugin(
-    'translate',
-    [
-      [
-        [
-          'translate-x',
-          [['@defaults transform', {}], '--tw-translate-x', ['transform', cssTransformValue]],
-        ],
-        [
-          'translate-y',
-          [['@defaults transform', {}], '--tw-translate-y', ['transform', cssTransformValue]],
-        ],
-      ],
-    ],
-    { supportsNegativeValues: true }
-  ),
-  rotate: createUtilityPlugin(
-    'rotate',
-    [['rotate', [['@defaults transform', {}], '--tw-rotate', ['transform', cssTransformValue]]]],
-    { supportsNegativeValues: true }
-  ),
-  skew: createUtilityPlugin(
-    'skew',
-    [
-      [
-        ['skew-x', [['@defaults transform', {}], '--tw-skew-x', ['transform', cssTransformValue]]],
-        ['skew-y', [['@defaults transform', {}], '--tw-skew-y', ['transform', cssTransformValue]]],
-      ],
-    ],
-    { supportsNegativeValues: true }
-  ),
-  scale: createUtilityPlugin(
-    'scale',
-    [
-      [
-        'scale',
-        [
-          ['@defaults transform', {}],
-          '--tw-scale-x',
-          '--tw-scale-y',
-          ['transform', cssTransformValue],
-        ],
-      ],
-      [
-        [
-          'scale-x',
-          [['@defaults transform', {}], '--tw-scale-x', ['transform', cssTransformValue]],
-        ],
-        [
-          'scale-y',
-          [['@defaults transform', {}], '--tw-scale-y', ['transform', cssTransformValue]],
-        ],
-      ],
-    ],
-    { supportsNegativeValues: true }
-  ),
+
+  translate: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        'translate-x': (value) => {
+          return {
+            '@defaults transform': {},
+            '--tw-translate-x': `translateX(${value})`,
+            transform: cssTransformValue,
+          }
+        },
+        'translate-y': (value) => {
+          return {
+            '@defaults transform': {},
+            '--tw-translate-y': `translateY(${value})`,
+            transform: cssTransformValue,
+          }
+        },
+      },
+      { values: theme('translate'), supportsNegativeValues: true }
+    )
+  },
+
+  rotate: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        rotate: (value) => {
+          return {
+            '@defaults transform': {},
+            '--tw-rotate': `rotate(${value})`,
+            transform: cssTransformValue,
+          }
+        },
+      },
+      { values: theme('rotate'), supportsNegativeValues: true }
+    )
+  },
+
+  skew: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        'skew-x': (value) => {
+          return {
+            '@defaults transform': {},
+            '--tw-skew-x': `skewX(${value})`,
+            transform: cssTransformValue,
+          }
+        },
+        'skew-y': (value) => {
+          return {
+            '@defaults transform': {},
+            '--tw-skew-y': `skewY(${value})`,
+            transform: cssTransformValue,
+          }
+        },
+      },
+      { values: theme('skew'), supportsNegativeValues: true }
+    )
+  },
+
+  scale: ({ matchUtilities, theme }) => {
+    matchUtilities(
+      {
+        'scale-x': (value) => {
+          return {
+            '@defaults transform': {},
+            '--tw-scale-x': `scaleX(${value})`,
+            transform: cssTransformValue,
+          }
+        },
+        'scale-y': (value) => {
+          return {
+            '@defaults transform': {},
+            '--tw-scale-y': `scaleY(${value})`,
+            transform: cssTransformValue,
+          }
+        },
+      },
+      { values: theme('scale'), supportsNegativeValues: true }
+    )
+  },
 
   transform: ({ addDefaults, addUtilities }) => {
     addDefaults('transform', {
-      '--tw-translate-x': '0',
-      '--tw-translate-y': '0',
-      '--tw-rotate': '0',
-      '--tw-skew-x': '0',
-      '--tw-skew-y': '0',
-      '--tw-scale-x': '1',
-      '--tw-scale-y': '1',
+      '--tw-translate-x': ' ',
+      '--tw-translate-y': ' ',
+      '--tw-rotate': ' ',
+      '--tw-skew-x': ' ',
+      '--tw-skew-y': ' ',
+      '--tw-scale-x': ' ',
+      '--tw-scale-y': ' ',
     })
 
     addUtilities({
