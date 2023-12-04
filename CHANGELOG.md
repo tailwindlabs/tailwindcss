@@ -7,22 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- Improve types for `resolveConfig` ([#12272](https://github.com/tailwindlabs/tailwindcss/pull/12272))
-- Don’t add spaces to negative numbers following a comma ([#12324](https://github.com/tailwindlabs/tailwindcss/pull/12324))
-- Don't emit `@config` in CSS when watching via the CLI ([#12327](https://github.com/tailwindlabs/tailwindcss/pull/12327))
-- Ensure configured `font-feature-settings` for `mono` are included in Preflight ([#12342](https://github.com/tailwindlabs/tailwindcss/pull/12342))
-- Improve candidate detection in minified JS arrays (without spaces) ([#12396](https://github.com/tailwindlabs/tailwindcss/pull/12396))
-- Don't crash when given applying a variant to a negated version of a simple utility ([#12514](https://github.com/tailwindlabs/tailwindcss/pull/12514))
-- Fix support for slashes in arbitrary modifiers ([#12515](https://github.com/tailwindlabs/tailwindcss/pull/12515))
-- Fix source maps of variant utilities that come from an `@layer` rule ([#12508](https://github.com/tailwindlabs/tailwindcss/pull/12508))
-- Fix loading of built-in plugins when using an ESM or TypeScript config with the Standalone CLI ([#12506](https://github.com/tailwindlabs/tailwindcss/pull/12506))
-- [Oxide] Remove `autoprefixer` dependency ([#11315](https://github.com/tailwindlabs/tailwindcss/pull/11315))
-- [Oxide] Fix source maps issue resulting in a crash ([#11319](https://github.com/tailwindlabs/tailwindcss/pull/11319))
-- [Oxide] Fallback to RegEx based parser when using custom transformers or extractors ([#11335](https://github.com/tailwindlabs/tailwindcss/pull/11335))
-- [Oxide] Bump `lightningcss` and reflect related improvements in tests ([#11550](https://github.com/tailwindlabs/tailwindcss/pull/11550))
-
 ### Added
 
 - Add `svh`, `lvh`, and `dvh` values to default `height`/`min-height`/`max-height` theme ([#11317](https://github.com/tailwindlabs/tailwindcss/pull/11317))
@@ -52,6 +36,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disable the tap highlight overlay on iOS ([#12299](https://github.com/tailwindlabs/tailwindcss/pull/12299))
 - [Oxide] Deprecate `--no-autoprefixer` flag in the CLI ([#11280](https://github.com/tailwindlabs/tailwindcss/pull/11280))
 - [Oxide] Make the Rust based parser the default ([#11394](https://github.com/tailwindlabs/tailwindcss/pull/11394))
+
+## [3.3.6] - 2023-12-04
+
+### Fixed
+
+- Improve types for `resolveConfig` ([#12272](https://github.com/tailwindlabs/tailwindcss/pull/12272))
+- Don’t add spaces to negative numbers following a comma ([#12324](https://github.com/tailwindlabs/tailwindcss/pull/12324))
+- Don't emit `@config` in CSS when watching via the CLI ([#12327](https://github.com/tailwindlabs/tailwindcss/pull/12327))
+- Ensure configured `font-feature-settings` for `mono` are included in Preflight ([#12342](https://github.com/tailwindlabs/tailwindcss/pull/12342))
+- Improve candidate detection in minified JS arrays (without spaces) ([#12396](https://github.com/tailwindlabs/tailwindcss/pull/12396))
+- Don't crash when given applying a variant to a negated version of a simple utility ([#12514](https://github.com/tailwindlabs/tailwindcss/pull/12514))
+- Fix support for slashes in arbitrary modifiers ([#12515](https://github.com/tailwindlabs/tailwindcss/pull/12515))
+- Fix source maps of variant utilities that come from an `@layer` rule ([#12508](https://github.com/tailwindlabs/tailwindcss/pull/12508))
+- Fix loading of built-in plugins when using an ESM or TypeScript config with the Standalone CLI ([#12506](https://github.com/tailwindlabs/tailwindcss/pull/12506))
 
 ## [3.3.5] - 2023-10-25
 
@@ -2333,7 +2331,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.5...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.6...HEAD
+[3.3.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.5...v3.3.6
 [3.3.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.4...v3.3.5
 [3.3.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.3...v3.3.4
 [3.3.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.3.2...v3.3.3
