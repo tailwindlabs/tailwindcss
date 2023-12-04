@@ -982,7 +982,6 @@ crosscheck(({ stable, oxide, engine }) => {
     `)
 
     stable.expect(result.css).toMatchFormattedCss(css`
-      .hidden,
       .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
         display: none;
       }
@@ -1011,7 +1010,6 @@ crosscheck(({ stable, oxide, engine }) => {
     `)
 
     stable.expect(result.css).toMatchFormattedCss(css`
-      .hidden,
       .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
         display: none;
       }
@@ -1041,7 +1039,6 @@ crosscheck(({ stable, oxide, engine }) => {
             }
           `
         : css`
-            .hidden,
             .group[href^='/'] .group-\[\[href\^\=\'\/\'\]\]\:hidden {
               display: none;
             }
@@ -1072,7 +1069,6 @@ crosscheck(({ stable, oxide, engine }) => {
             }
           `
         : css`
-            .hidden,
             .group[href^=' bar'] .group-\[\[href\^\=\'_bar\'\]\]\:hidden {
               display: none;
             }

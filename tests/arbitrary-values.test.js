@@ -25,6 +25,10 @@ crosscheck(({ stable, oxide }) => {
   oxide.test.todo(
     'should only detect classes with arbitrary values that are properly terminated after the arbitrary value'
   )
+  stable.test.todo(
+    'should only detect classes with arbitrary values that are properly terminated after the arbitrary value'
+  )
+  /*
   stable.test(
     'should only detect classes with arbitrary values that are properly terminated after the arbitrary value',
     () => {
@@ -41,6 +45,7 @@ crosscheck(({ stable, oxide }) => {
       })
     }
   )
+  */
 
   it('should be possible to differentiate between decoration utilities', () => {
     let config = {

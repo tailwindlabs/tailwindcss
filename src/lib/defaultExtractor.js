@@ -47,7 +47,12 @@ function* buildRegExps(context) {
         regex.any([
           regex.pattern([
             // Arbitrary values
-            /-(?:\w+-)*\[(?:[^\s\[\]]+\[[^\s\[\]]+\])*[^\s:\[\]]+\]/,
+            regex.any([
+              /-(?:\w+-)*\['[^\s]+'\]/,
+              /-(?:\w+-)*\["[^\s]+"\]/,
+              /-(?:\w+-)*\[`[^\s]+`\]/,
+              /-(?:\w+-)*\[(?:[^\s\[\]]+\[[^\s\[\]]+\])*[^\s:\[\]]+\]/,
+            ]),
 
             // Not immediately followed by an `{[(`
             /(?![{([]])/,
@@ -58,7 +63,12 @@ function* buildRegExps(context) {
 
           regex.pattern([
             // Arbitrary values
-            /-(?:\w+-)*\[(?:[^\s\[\]]+\[[^\s\[\]]+\])*[^\s:\[\]]+\]/,
+            regex.any([
+              /-(?:\w+-)*\['[^\s]+'\]/,
+              /-(?:\w+-)*\["[^\s]+"\]/,
+              /-(?:\w+-)*\[`[^\s]+`\]/,
+              /-(?:\w+-)*\[(?:[^\s\[\]]+\[[^\s\[\]]+\])*[^\s\[\]]+\]/,
+            ]),
 
             // Not immediately followed by an `{[(`
             /(?![{([]])/,
