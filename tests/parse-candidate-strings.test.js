@@ -496,5 +496,21 @@ describe.each([
         expect(extractions).toContain(value)
       }
     })
+
+    it.each([
+      ['@container', ['@container']],
+      ['@container/sidebar', ['@container/sidebar']],
+      ['@container/[sidebar]', ['@container/[sidebar]']],
+      ['@container-size', ['@container-size']],
+      ['@container-size/sidebar', ['@container-size/sidebar']],
+      ['@container-[size]/sidebar', ['@container-[size]/sidebar']],
+      ['@container-[size]/[sidebar]', ['@container-[size]/[sidebar]']],
+    ])('should support utilities starting with @ (%#)', async (content, expectations) => {
+      let extractions = defaultExtractor(content)
+
+      for (let value of expectations) {
+        expect(extractions).toContain(value)
+      }
+    })
   })
 })
