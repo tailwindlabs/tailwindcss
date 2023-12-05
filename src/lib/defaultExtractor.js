@@ -40,7 +40,12 @@ function* buildRegExps(context) {
     // Utilities
     regex.pattern([
       // Utility Name / Group Name
-      /-?(?:\w+)/,
+      regex.any([
+        /-?(?:\w+)/,
+
+        // This is here to make sure @container supports everything that other utilities do
+        /@(?:\w+)/,
+      ]),
 
       // Normal/Arbitrary values
       regex.optional(
