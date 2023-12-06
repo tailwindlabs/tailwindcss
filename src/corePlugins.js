@@ -643,6 +643,7 @@ export let corePlugins = {
       '.absolute': { position: 'absolute' },
       '.relative': { position: 'relative' },
       '.sticky': { position: 'sticky' },
+      '.unset': { position: 'unset' },
     })
   },
 
