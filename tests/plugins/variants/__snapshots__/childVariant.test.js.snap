@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'childVariant' plugin 1`] = `
+"
+.\\*\\:flex > * {
+  display: flex;
+}
+"
+`;
