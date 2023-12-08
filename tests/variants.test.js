@@ -1191,19 +1191,11 @@ test('* is matched by the parser as the children variant', async () => {
   let result = await run(input, config)
 
   expect(result.css).toMatchFormattedCss(css`
-    .\*\:italic > * {
-      font-style: italic;
-    }
-    .\*\:hover\:italic:hover > * {
-      font-style: italic;
-    }
-    .hover\:\*\:italic > *:hover {
-      font-style: italic;
-    }
-    .data-\[slot\=label\]\:\*\:hover\:italic:hover > *[data-slot='label'] {
-      font-style: italic;
-    }
-    .\[\&\_p\]\:\*\:hover\:italic:hover > * p {
+    .\*\:italic > *,
+    .\*\:hover\:italic:hover > *,
+    .hover\:\*\:italic > :hover,
+    .data-\[slot\=label\]\:\*\:hover\:italic:hover > [data-slot='label'],
+    .\[\&_p\]\:\*\:hover\:italic:hover > * p {
       font-style: italic;
     }
   `)
