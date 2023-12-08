@@ -1167,3 +1167,44 @@ test('stacking dark and rtl variants with pseudo elements', async () => {
     }
   `)
 })
+
+test('* is matched by the parser as the children variant', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div class="*:italic" />
+          <div class="*:hover:italic" />
+          <div class="hover:*:italic" />
+          <div class="data-[slot=label]:*:hover:italic" />
+          <div class="[&_p]:*:hover:italic" />
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .\*\:italic > * {
+      font-style: italic;
+    }
+    .\*\:hover\:italic:hover > * {
+      font-style: italic;
+    }
+    .hover\:\*\:italic > *:hover {
+      font-style: italic;
+    }
+    .data-\[slot\=label\]\:\*\:hover\:italic:hover > *[data-slot='label'] {
+      font-style: italic;
+    }
+    .\[\&\_p\]\:\*\:hover\:italic:hover > * p {
+      font-style: italic;
+    }
+  `)
+})
