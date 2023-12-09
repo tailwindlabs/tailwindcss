@@ -25,6 +25,9 @@ import { normalize } from './util/dataTypes'
 import { INTERNAL_FEATURES } from './lib/setupContextUtils'
 
 export let variantPlugins = {
+  childVariant: ({ addVariant }) => {
+    addVariant('*', '& > *')
+  },
   pseudoElementVariants: ({ addVariant }) => {
     addVariant('first-letter', '&::first-letter')
     addVariant('first-line', '&::first-line')

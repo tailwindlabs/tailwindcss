@@ -756,6 +756,7 @@ function resolvePlugins(context, root) {
   // TODO: This is a workaround for backwards compatibility, since custom variants
   // were historically sorted before screen/stackable variants.
   let beforeVariants = [
+    variantPlugins['childVariant'],
     variantPlugins['pseudoElementVariants'],
     variantPlugins['pseudoClassVariants'],
     variantPlugins['hasVariants'],
