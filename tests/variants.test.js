@@ -1201,4 +1201,37 @@ crosscheck(({ stable, oxide }) => {
       }
     `)
   })
+
+  test('* is matched by the parser as the children variant', async () => {
+    let config = {
+      content: [
+        {
+          raw: html`
+            <div class="*:italic" />
+            <div class="*:hover:italic" />
+            <div class="hover:*:italic" />
+            <div class="data-[slot=label]:*:hover:italic" />
+            <div class="[&_p]:*:hover:italic" />
+          `,
+        },
+      ],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    let result = await run(input, config)
+
+    expect(result.css).toMatchFormattedCss(css`
+      .\*\:italic > *,
+      .\*\:hover\:italic:hover > *,
+      .hover\:\*\:italic > :hover,
+      .data-\[slot\=label\]\:\*\:hover\:italic:hover > [data-slot='label'],
+      .\[\&_p\]\:\*\:hover\:italic:hover > * p {
+        font-style: italic;
+      }
+    `)
+  })
 })

@@ -278,7 +278,7 @@ impl<'a> Extractor<'a> {
             }
 
             // Allowed first characters.
-            b'@' | b'!' | b'-' | b'<' | b'0'..=b'9' | b'a'..=b'z' | b'A'..=b'Z' => {
+            b'@' | b'!' | b'-' | b'<' | b'0'..=b'9' | b'a'..=b'z' | b'A'..=b'Z' | b'*' => {
                 // TODO: A bunch of characters that we currently support but maybe we only want it behind
                 // a flag. E.g.: '<sm'
                 // | '<' | '>' | '$' | '^' | '_'
@@ -329,6 +329,7 @@ impl<'a> Extractor<'a> {
             | b'!'
             | b'@'
             | b'%'
+            | b'*'
                 if prev != b']' =>
             {
                 /* TODO: The `b'@'` is necessary for custom separators like _@, maybe we can handle this in a better way... */
@@ -506,6 +507,15 @@ mod test {
     fn it_can_parse_simple_candidates_with_variants() {
         let candidates = run("hover:underline", false);
         assert_eq!(candidates, vec!["hover:underline"]);
+    }
+
+    #[test]
+    fn it_can_parse_start_variants() {
+        let candidates = run("*:underline", false);
+        assert_eq!(candidates, vec!["*:underline"]);
+
+        let candidates = run("hover:*:underline", false);
+        assert_eq!(candidates, vec!["hover:*:underline"]);
     }
 
     #[test]
