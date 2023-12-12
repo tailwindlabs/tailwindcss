@@ -300,6 +300,11 @@
 :is(.dark .peer:disabled:focus:hover ~ .dark\:peer-disabled\:peer-focus\:peer-hover\:flex) {
   display: flex;
 }
+@media (forced-colors: active) {
+  .forced-colors\:flex {
+    display: flex;
+  }
+}
 @media print {
   .print\:flex {
     display: flex;
