@@ -270,9 +270,7 @@
 .peer:enabled ~ .peer-enabled\:flex,
 .peer:disabled ~ .peer-disabled\:flex,
 .peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:flex,
-.peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:first\:flex:first-child,
-:is([dir='ltr'] .ltr\:flex),
-:is([dir='rtl'] .rtl\:flex) {
+.peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:first\:flex:first-child {
   display: flex;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -295,16 +293,6 @@
     display: flex;
   }
 }
-:is(.dark .dark\:flex),
-:is(.dark .group:disabled:focus:hover .dark\:group-disabled\:group-focus\:group-hover\:flex),
-:is(.dark .peer:disabled:focus:hover ~ .dark\:peer-disabled\:peer-focus\:peer-hover\:flex) {
-  display: flex;
-}
-@media (forced-colors: active) {
-  .forced-colors\:flex {
-    display: flex;
-  }
-}
 @media print {
   .print\:flex {
     display: flex;
@@ -323,25 +311,18 @@
   }
 }
 @media (min-width: 1024px) {
-  .lg\:flex,
-  :is(.dark .lg\:dark\:flex) {
+  .lg\:flex {
     display: flex;
   }
 }
 @media (min-width: 1280px) {
-  .xl\:flex,
-  :is(.dark .xl\:dark\:disabled\:flex:disabled) {
+  .xl\:flex {
     display: flex;
   }
 }
 @media (min-width: 1536px) {
   .\32 xl\:flex {
     display: flex;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    :is(.dark .\32 xl\:dark\:motion-safe\:focus-within\:flex:focus-within) {
-      display: flex;
-    }
   }
 }
 @media (orientation: portrait) {
@@ -351,6 +332,37 @@
 }
 @media (orientation: landscape) {
   .landscape\:flex {
+    display: flex;
+  }
+}
+:is(:where([dir='ltr']) .ltr\:flex),
+:is(:where([dir='rtl']) .rtl\:flex),
+:is(:where(.dark) .dark\:flex),
+:is(
+    :where(.dark) .group:disabled:focus:hover .dark\:group-disabled\:group-focus\:group-hover\:flex
+  ),
+:is(:where(.dark) .peer:disabled:focus:hover ~ .dark\:peer-disabled\:peer-focus\:peer-hover\:flex) {
+  display: flex;
+}
+@media (min-width: 1024px) {
+  :is(:where(.dark) .lg\:dark\:flex) {
+    display: flex;
+  }
+}
+@media (min-width: 1280px) {
+  :is(:where(.dark) .xl\:dark\:disabled\:flex:disabled) {
+    display: flex;
+  }
+}
+@media (min-width: 1536px) {
+  @media (prefers-reduced-motion: no-preference) {
+    :is(:where(.dark) .\32 xl\:dark\:motion-safe\:focus-within\:flex:focus-within) {
+      display: flex;
+    }
+  }
+}
+@media (forced-colors: active) {
+  .forced-colors\:flex {
     display: flex;
   }
 }

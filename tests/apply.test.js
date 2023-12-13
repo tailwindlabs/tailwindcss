@@ -215,14 +215,14 @@ test('@apply', () => {
           text-align: left;
         }
       }
-      :is(.dark .apply-dark-variant) {
+      :is(:where(.dark) .apply-dark-variant) {
         text-align: center;
       }
-      :is(.dark .apply-dark-variant:hover) {
+      :is(:where(.dark) .apply-dark-variant:hover) {
         text-align: right;
       }
       @media (min-width: 1024px) {
-        :is(.dark .apply-dark-variant) {
+        :is(:where(.dark) .apply-dark-variant) {
           text-align: left;
         }
       }
@@ -2016,24 +2016,28 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      :is(.dark .foo):before,
-      :is([dir='rtl'] :is(.dark .bar)):before,
-      :is([dir='rtl'] :is(.dark .baz:hover)):before {
+      :is(:where(.dark) .foo):before,
+      :is(:where([dir='rtl']) :is(:where(.dark) .bar)):before,
+      :is(:where([dir='rtl']) :is(:where(.dark) .baz:hover)):before {
         background-color: #000;
       }
-      :-webkit-any([dir='rtl'] :-webkit-any(.dark .qux))::-webkit-file-upload-button:hover {
+      :-webkit-any(
+          :where([dir='rtl']) :-webkit-any(:where(.dark) .qux)
+        )::-webkit-file-upload-button:hover {
         background-color: #000;
       }
-      :is([dir='rtl'] :is(.dark .qux))::file-selector-button:hover {
+      :is(:where([dir='rtl']) :is(:where(.dark) .qux))::file-selector-button:hover {
         background-color: #000;
       }
-      :is([dir='rtl'] :is(.dark .steve):hover):before {
+      :is(:where([dir='rtl']) :is(:where(.dark) .steve):hover):before {
         background-color: #000;
       }
-      :-webkit-any([dir='rtl'] :-webkit-any(.dark .bob))::-webkit-file-upload-button:hover {
+      :-webkit-any(
+          :where([dir='rtl']) :-webkit-any(:where(.dark) .bob)
+        )::-webkit-file-upload-button:hover {
         background-color: #000;
       }
-      :is([dir='rtl'] :is(.dark .bob))::file-selector-button:hover {
+      :is(:where([dir='rtl']) :is(:where(.dark) .bob))::file-selector-button:hover {
         background-color: #000;
       }
       :has([dir='rtl'] .foo:hover):before {

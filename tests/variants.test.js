@@ -1138,7 +1138,7 @@ test('stacking dark and rtl variants', async () => {
   let result = await run(input, config)
 
   expect(result.css).toMatchFormattedCss(css`
-    :is(.dark :is([dir='rtl'] .dark\:rtl\:italic)) {
+    :is(:where(.dark) :is(:where([dir='rtl']) .dark\:rtl\:italic)) {
       font-style: italic;
     }
   `)
@@ -1162,7 +1162,7 @@ test('stacking dark and rtl variants with pseudo elements', async () => {
   let result = await run(input, config)
 
   expect(result.css).toMatchFormattedCss(css`
-    :is(.dark :is([dir='rtl'] .dark\:rtl\:placeholder\:italic))::placeholder {
+    :is(:where(.dark) :is(:where([dir='rtl']) .dark\:rtl\:placeholder\:italic))::placeholder {
       font-style: italic;
     }
   `)

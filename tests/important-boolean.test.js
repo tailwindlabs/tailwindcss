@@ -137,21 +137,21 @@ test('important boolean', () => {
       .group:hover .group-hover\:focus-within\:text-left:focus-within {
         text-align: left !important;
       }
-      :is([dir='rtl'] .rtl\:active\:text-center:active) {
-        text-align: center !important;
-      }
       @media (prefers-reduced-motion: no-preference) {
         .motion-safe\:hover\:text-center:hover {
           text-align: center !important;
         }
       }
-      :is(.dark .dark\:focus\:text-left:focus) {
-        text-align: left !important;
-      }
       @media (min-width: 768px) {
         .md\:hover\:text-right:hover {
           text-align: right !important;
         }
+      }
+      :is(:where([dir='rtl']) .rtl\:active\:text-center:active) {
+        text-align: center !important;
+      }
+      :is(:where(.dark) .dark\:focus\:text-left:focus) {
+        text-align: left !important;
       }
     `)
   })

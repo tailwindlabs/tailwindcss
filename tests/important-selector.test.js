@@ -135,36 +135,39 @@ test('important selector', () => {
       #app :is(.group:hover .group-hover\:focus-within\:text-left:focus-within) {
         text-align: left;
       }
-      #app :is([dir='rtl'] .rtl\:active\:text-center:active) {
-        text-align: center;
-      }
       @media (prefers-reduced-motion: no-preference) {
         #app .motion-safe\:hover\:text-center:hover {
           text-align: center;
         }
-      }
-      #app :is(.dark .dark\:before\:underline):before {
-        content: var(--tw-content);
-        text-decoration-line: underline;
-      }
-      #app :is(.dark .dark\:focus\:text-left:focus) {
-        text-align: left;
       }
       @media (min-width: 768px) {
         #app .md\:hover\:text-right:hover {
           text-align: right;
         }
       }
+      #app :is(:where([dir='rtl']) .rtl\:active\:text-center:active) {
+        text-align: center;
+      }
+      #app :is(:where(.dark) .dark\:before\:underline):before {
+        content: var(--tw-content);
+        text-decoration-line: underline;
+      }
+      #app :is(:where(.dark) .dark\:focus\:text-left:focus) {
+        text-align: left;
+      }
       #app
         :-webkit-any(
-          [dir='rtl']
-            :-webkit-any(.dark .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100)
+          :where([dir='rtl'])
+            :-webkit-any(
+              :where(.dark) .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100
+            )
         )::-webkit-file-upload-button:hover {
         background-color: #000;
       }
       #app
         :is(
-          [dir='rtl'] :is(.dark .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100)
+          :where([dir='rtl'])
+            :is(:where(.dark) .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100)
         )::file-selector-button:hover {
         background-color: #000;
       }
@@ -193,7 +196,7 @@ test('pseudo-elements are appended after the `:-webkit-any()`', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      #app :is(.dark .dark\:before\:flex):before {
+      #app :is(:where(.dark) .dark\:before\:flex):before {
         content: var(--tw-content);
         display: flex;
       }

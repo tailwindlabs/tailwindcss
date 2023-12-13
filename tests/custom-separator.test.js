@@ -22,21 +22,21 @@ test('custom separator', () => {
       .group:hover .group-hover_focus-within_text-left:focus-within {
         text-align: left;
       }
-      :is([dir='rtl'] .rtl_active_text-center:active) {
-        text-align: center;
-      }
       @media (prefers-reduced-motion: no-preference) {
         .motion-safe_hover_text-center:hover {
           text-align: center;
         }
       }
-      :is(.dark .dark_focus_text-left:focus) {
-        text-align: left;
-      }
       @media (min-width: 768px) {
         .md_hover_text-right:hover {
           text-align: right;
         }
+      }
+      :is(:where([dir='rtl']) .rtl_active_text-center:active) {
+        text-align: center;
+      }
+      :is(:where(.dark) .dark_focus_text-left:focus) {
+        text-align: left;
       }
     `)
   })
