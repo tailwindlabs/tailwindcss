@@ -347,6 +347,11 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
+@media (forced-colors: active) {
+  .forced-colors\:flex {
+    display: flex;
+  }
+}
 @media print {
   .print\:bg-yellow-300 {
     --tw-bg-opacity: 1;
