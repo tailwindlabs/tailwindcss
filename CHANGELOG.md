@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add utilities for CSS subgrid ([#12298](https://github.com/tailwindlabs/tailwindcss/pull/12298))
 - Add spacing scale to `min-w-*`, `min-h-*`, and `max-w-*` utilities ([#12300](https://github.com/tailwindlabs/tailwindcss/pull/12300))
 - Add `forced-color-adjust` utilities ([#11931](https://github.com/tailwindlabs/tailwindcss/pull/11931))
-- Add `forced-colors` variant ([#11694](https://github.com/tailwindlabs/tailwindcss/pull/11694))
+- Add `forced-colors` variant ([#11694](https://github.com/tailwindlabs/tailwindcss/pull/11694), [#12582](https://github.com/tailwindlabs/tailwindcss/pull/12582))
 - Add `appearance-auto` utility ([#12404](https://github.com/tailwindlabs/tailwindcss/pull/12404))
 - Add logical property values for `float` and `clear` utilities ([#12480](https://github.com/tailwindlabs/tailwindcss/pull/12480))
 - Add `*` variant for targeting direct children ([#12551](https://github.com/tailwindlabs/tailwindcss/pull/12551))
