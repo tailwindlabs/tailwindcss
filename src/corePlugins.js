@@ -467,6 +467,10 @@ export let variantPlugins = {
   forcedColorsVariants: ({ addVariant }) => {
     addVariant('forced-colors', '@media (forced-colors: active)')
   },
+
+  invertedColorsVariants: ({ addVariant }) => {
+    addVariant('inverted-colors', '@media (inverted-colors: inverted)')
+  },
 }
 
 let cssTransformValue = [
