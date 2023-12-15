@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'scriptingVariants' plugin 1`] = `
+"
+@media (scripting: none) {
+  .noscript\\:flex {
+    display: flex;
+  }
+}
+
+@media (scripting: enabled) {
+  .scripting\\:flex {
+    display: flex;
+  }
+}
+"
+`;
