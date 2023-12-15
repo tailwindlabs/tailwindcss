@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'reducedTransparencyVariants' plugin 1`] = `
+"
+@media (prefers-reduced-transparency: no-preference) {
+  .transparency-safe\\:flex {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .transparency-reduce\\:flex {
+    display: flex;
+  }
+}
+"
+`;
