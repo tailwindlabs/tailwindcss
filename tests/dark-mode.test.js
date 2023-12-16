@@ -16,7 +16,7 @@ it('should be possible to use the darkMode "class" mode', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      :is(.dark .dark\:font-bold) {
+      :is(:where(.dark) .dark\:font-bold) {
         font-weight: 700;
       }
     `)
@@ -39,7 +39,7 @@ it('should be possible to change the class name', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      :is(.test-dark .dark\:font-bold) {
+      :is(:where(.test-dark) .dark\:font-bold) {
         font-weight: 700;
       }
     `)

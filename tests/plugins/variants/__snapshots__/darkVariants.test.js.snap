@@ -12,7 +12,7 @@ exports[`should test the 'darkVariants' plugin 1`] = `
 
 exports[`should test the 'darkVariants' plugin 2`] = `
 "
-:is(.dark .dark\\:flex) {
+:is(:where(.dark) .dark\\:flex) {
   display: flex;
 }
 "
@@ -20,7 +20,7 @@ exports[`should test the 'darkVariants' plugin 2`] = `
 
 exports[`should test the 'darkVariants' plugin 3`] = `
 "
-:is(.my-dark-mode .dark\\:flex) {
+:is(:where(.my-dark-mode) .dark\\:flex) {
   display: flex;
 }
 "

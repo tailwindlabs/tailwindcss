@@ -304,7 +304,7 @@ test('it works', () => {
       }
       .drop-empty-rules:hover,
       .group:hover .apply-group,
-      :is(.dark .apply-dark-mode) {
+      :is(:where(.dark) .apply-dark-mode) {
         font-weight: 700;
       }
       .apply-with-existing:hover {
@@ -339,7 +339,7 @@ test('it works', () => {
       .apply-order-b {
         margin: 1.5rem 1.25rem 1.25rem;
       }
-      :is(.dark .group:hover .apply-dark-group-example-a) {
+      :is(:where(.dark) .group:hover .apply-dark-group-example-a) {
         --tw-bg-opacity: 1;
         background-color: rgb(34 197 94 / var(--tw-bg-opacity));
       }
@@ -744,9 +744,6 @@ test('it works', () => {
           transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         }
       }
-      :is(.dark .dark\:custom-util) {
-        background: #abcdef;
-      }
       @media (min-width: 640px) {
         .sm\:text-center {
           text-align: center;
@@ -792,9 +789,6 @@ test('it works', () => {
             transition-duration: 0.15s;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
           }
-          :is(.dark .md\:dark\:motion-safe\:foo\:active\:custom-util:active) {
-            background: #abcdef !important;
-          }
         }
         @media (min-width: 640px) {
           .md\:sm\:text-center {
@@ -810,6 +804,16 @@ test('it works', () => {
       @media (min-width: 640px) and (max-width: 767px), (max-width: 868px) {
         .multi\:text-left {
           text-align: left;
+        }
+      }
+      :is(:where(.dark) .dark\:custom-util) {
+        background: #abcdef;
+      }
+      @media (min-width: 768px) {
+        @media (prefers-reduced-motion: no-preference) {
+          :is(:where(.dark) .md\:dark\:motion-safe\:foo\:active\:custom-util:active) {
+            background: #abcdef !important;
+          }
         }
       }
     `)
