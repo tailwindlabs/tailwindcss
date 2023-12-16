@@ -128,7 +128,7 @@ crosscheck(({ stable, oxide }) => {
         .custom-component {
           font-weight: 700;
         }
-        :is(.tw-dark .tw-group:hover .custom-component) {
+        :is(:where(.tw-dark) .tw-group:hover .custom-component) {
           font-weight: 400;
         }
         .tw--ml-4 {
@@ -155,20 +155,10 @@ crosscheck(({ stable, oxide }) => {
         .tw-group:hover .group-hover\:focus-within\:tw-text-left:focus-within {
           text-align: left;
         }
-        :is([dir='rtl'] .rtl\:active\:tw-text-center:active) {
-          text-align: center;
-        }
         @media (prefers-reduced-motion: no-preference) {
           .motion-safe\:hover\:tw-text-center:hover {
             text-align: center;
           }
-        }
-        :is(.tw-dark .dark\:tw-bg-\[rgb\(255\,0\,0\)\]) {
-          --tw-bg-opacity: 1;
-          background-color: rgb(255 0 0 / var(--tw-bg-opacity));
-        }
-        :is(.tw-dark .dark\:focus\:tw-text-left:focus) {
-          text-align: left;
         }
         @media (min-width: 768px) {
           .md\:tw--ml-5 {
@@ -180,6 +170,16 @@ crosscheck(({ stable, oxide }) => {
           .md\:hover\:tw-text-right:hover {
             text-align: right;
           }
+        }
+        :is(:where([dir='rtl']) .rtl\:active\:tw-text-center:active) {
+          text-align: center;
+        }
+        :is(:where(.tw-dark) .dark\:tw-bg-\[rgb\(255\,0\,0\)\]) {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 0 0 / var(--tw-bg-opacity));
+        }
+        :is(:where(.tw-dark) .dark\:focus\:tw-text-left:focus) {
+          text-align: left;
         }
       `)
     })

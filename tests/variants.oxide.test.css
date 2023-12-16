@@ -285,9 +285,7 @@
 .peer:enabled ~ .peer-enabled\:shadow-md,
 .peer:disabled ~ .peer-disabled\:shadow-md,
 .peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:shadow-md,
-.peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:first\:shadow-md:first-child,
-:is([dir='ltr'] .ltr\:shadow-md),
-:is([dir='rtl'] .rtl\:shadow-md) {
+.peer:disabled:focus:hover ~ .peer-disabled\:peer-focus\:peer-hover\:first\:shadow-md:first-child {
   --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -320,14 +318,6 @@
   .contrast-less\:bg-yellow-300 {
     background-color: #fde047;
   }
-}
-:is(.dark .dark\:shadow-md),
-:is(.dark .group:disabled:focus:hover .dark\:group-disabled\:group-focus\:group-hover\:shadow-md),
-:is(.dark .peer:disabled:focus:hover ~ .dark\:peer-disabled\:peer-focus\:peer-hover\:shadow-md) {
-  --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
-  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-    var(--tw-shadow);
 }
 @media print {
   .print\:bg-yellow-300 {
@@ -363,8 +353,7 @@
   .lg\:animate-spin {
     animation: 1s linear infinite spin;
   }
-  .lg\:shadow-md,
-  :is(.dark .lg\:dark\:shadow-md) {
+  .lg\:shadow-md {
     --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
     --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
       0 2px 4px -2px var(--tw-shadow-color);
@@ -373,8 +362,7 @@
   }
 }
 @media (min-width: 1280px) {
-  .xl\:shadow-md,
-  :is(.dark .xl\:dark\:disabled\:shadow-md:disabled) {
+  .xl\:shadow-md {
     --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
     --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
       0 2px 4px -2px var(--tw-shadow-color);
@@ -390,15 +378,6 @@
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
       var(--tw-shadow);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    :is(.dark .\32 xl\:dark\:motion-safe\:focus-within\:shadow-md:focus-within) {
-      --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
-      --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
-        0 2px 4px -2px var(--tw-shadow-color);
-      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-        var(--tw-shadow);
-    }
-  }
 }
 @media (orientation: portrait) {
   .portrait\:bg-yellow-300 {
@@ -408,5 +387,57 @@
 @media (orientation: landscape) {
   .landscape\:bg-yellow-300 {
     background-color: #fde047;
+  }
+}
+:is(:where([dir="ltr"]) .ltr\:shadow-md),
+:is(:where([dir="rtl"]) .rtl\:shadow-md),
+:is(:where(.dark) .dark\:shadow-md),
+:is(
+    :where(.dark)
+      .group:disabled:focus:hover
+      .dark\:group-disabled\:group-focus\:group-hover\:shadow-md
+  ),
+:is(
+    :where(.dark)
+      .peer:disabled:focus:hover
+      ~ .dark\:peer-disabled\:peer-focus\:peer-hover\:shadow-md
+  ) {
+  --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
+}
+@media (min-width: 1024px) {
+  :is(:where(.dark) .lg\:dark\:shadow-md) {
+    --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
+      0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
+  }
+}
+@media (min-width: 1280px) {
+  :is(:where(.dark) .xl\:dark\:disabled\:shadow-md:disabled) {
+    --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
+      0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
+  }
+}
+@media (min-width: 1536px) {
+  @media (prefers-reduced-motion: no-preference) {
+    :is(:where(.dark) .\32 xl\:dark\:motion-safe\:focus-within\:shadow-md:focus-within) {
+      --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
+      --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
+        0 2px 4px -2px var(--tw-shadow-color);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+        var(--tw-shadow);
+    }
+  }
+}
+@media (forced-colors: active) {
+  .forced-colors\:flex {
+    display: flex;
   }
 }

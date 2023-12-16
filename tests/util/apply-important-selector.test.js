@@ -13,8 +13,8 @@ crosscheck(() => {
     ${'.foo::file-selector-button'}               | ${'#app :is(.foo)::file-selector-button'}
     ${'.foo::-webkit-progress-bar'}               | ${'#app :is(.foo)::-webkit-progress-bar'}
     ${'.foo:hover::before'}                       | ${'#app :is(.foo:hover)::before'}
-    ${':is(.dark :is([dir="rtl"] .foo::before))'} | ${'#app :is(.dark :is([dir="rtl"] .foo))::before'}
-    ${':is(.dark .foo) .bar'}                     | ${'#app :is(:is(.dark .foo) .bar)'}
+    ${':is(:where(.dark) :is(:where([dir="rtl"]) .foo::before))'} | ${'#app :is(:where(.dark) :is(:where([dir="rtl"]) .foo))::before'}
+    ${':is(:where(.dark) .foo) .bar'}                     | ${'#app :is(:is(:where(.dark) .foo) .bar)'}
     ${':is(.foo) :is(.bar)'}                      | ${'#app :is(:is(.foo) :is(.bar))'}
     ${':is(.foo)::before'}                        | ${'#app :is(.foo)::before'}
     ${'.foo:before'}                              | ${'#app :is(.foo):before'}

@@ -207,8 +207,8 @@ export let variantPlugins = {
   },
 
   directionVariants: ({ addVariant }) => {
-    addVariant('ltr', ':is([dir="ltr"] &)')
-    addVariant('rtl', ':is([dir="rtl"] &)')
+    addVariant('ltr', ':is(:where([dir="ltr"]) &)')
+    addVariant('rtl', ':is(:where([dir="rtl"]) &)')
   },
 
   reducedMotionVariants: ({ addVariant }) => {
@@ -229,7 +229,7 @@ export let variantPlugins = {
     }
 
     if (mode === 'class') {
-      addVariant('dark', `:is(${className} &)`)
+      addVariant('dark', `:is(:where(${className}) &)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     }
