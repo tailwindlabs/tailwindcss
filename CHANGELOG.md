@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Add `svh`, `lvh`, and `dvh` values to default `height`/`min-height`/`max-height` theme ([#11317](https://github.com/tailwindlabs/tailwindcss/pull/11317))
 
 ## [3.3.7] - 2023-12-18
 
