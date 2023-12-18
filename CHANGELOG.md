@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix support for container query utilities with arbitrary values ([#12534](https://github.com/tailwindlabs/tailwindcss/pull/12534))
+- Fix custom config loading in Standalone CLI ([#12616](https://github.com/tailwindlabs/tailwindcss/pull/12616))
 
 ## [3.3.6] - 2023-12-04
 
