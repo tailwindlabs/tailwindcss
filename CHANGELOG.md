@@ -7,10 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-- Fix support for container query utilities with arbitrary values ([#12534](https://github.com/tailwindlabs/tailwindcss/pull/12534))
-- Fix custom config loading in Standalone CLI ([#12616](https://github.com/tailwindlabs/tailwindcss/pull/12616))
+- [Oxide] New Rust template parsing engine ([#10252](https://github.com/tailwindlabs/tailwindcss/pull/10252))
+- [Oxide] Support `@import "tailwindcss"` using top-level `index.css` file ([#11205](https://github.com/tailwindlabs/tailwindcss/pull/11205), ([#11260](https://github.com/tailwindlabs/tailwindcss/pull/11260)))
+- [Oxide] Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
+- [Oxide] Automatically detect content paths when no `content` configuration is provided ([#11173](https://github.com/tailwindlabs/tailwindcss/pull/11173), [#11221](https://github.com/tailwindlabs/tailwindcss/pull/11221))
+- [Oxide] Process and inline `@import` at-rules natively ([#11239](https://github.com/tailwindlabs/tailwindcss/pull/11239))
+- [Oxide] Explicitly configure Lightning CSS features, and prefer user browserslist over default browserslist ([#11402](https://github.com/tailwindlabs/tailwindcss/pull/11402), [#11412](https://github.com/tailwindlabs/tailwindcss/pull/11412))
+- [Oxide] Support loading plugins by package / file name ([#12087](https://github.com/tailwindlabs/tailwindcss/pull/12087))
+
+### Changed
+
+- [Oxide] Deprecate `--no-autoprefixer` flag in the CLI ([#11280](https://github.com/tailwindlabs/tailwindcss/pull/11280))
+- [Oxide] Make the Rust based parser the default ([#11394](https://github.com/tailwindlabs/tailwindcss/pull/11394))
+
+## [3.4.0] - 2023-12-19
 
 ### Added
 
@@ -28,21 +40,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `appearance-auto` utility ([#12404](https://github.com/tailwindlabs/tailwindcss/pull/12404))
 - Add logical property values for `float` and `clear` utilities ([#12480](https://github.com/tailwindlabs/tailwindcss/pull/12480))
 - Add `*` variant for targeting direct children ([#12551](https://github.com/tailwindlabs/tailwindcss/pull/12551))
-- [Oxide] New Rust template parsing engine ([#10252](https://github.com/tailwindlabs/tailwindcss/pull/10252))
-- [Oxide] Support `@import "tailwindcss"` using top-level `index.css` file ([#11205](https://github.com/tailwindlabs/tailwindcss/pull/11205), ([#11260](https://github.com/tailwindlabs/tailwindcss/pull/11260)))
-- [Oxide] Use `lightningcss` for nesting and vendor prefixes in PostCSS plugin ([#10399](https://github.com/tailwindlabs/tailwindcss/pull/10399))
-- [Oxide] Automatically detect content paths when no `content` configuration is provided ([#11173](https://github.com/tailwindlabs/tailwindcss/pull/11173), [#11221](https://github.com/tailwindlabs/tailwindcss/pull/11221))
-- [Oxide] Process and inline `@import` at-rules natively ([#11239](https://github.com/tailwindlabs/tailwindcss/pull/11239))
-- [Oxide] Explicitly configure Lightning CSS features, and prefer user browserslist over default browserslist ([#11402](https://github.com/tailwindlabs/tailwindcss/pull/11402), [#11412](https://github.com/tailwindlabs/tailwindcss/pull/11412))
-- [Oxide] Support loading plugins by package / file name ([#12087](https://github.com/tailwindlabs/tailwindcss/pull/12087))
 
 ### Changed
 
 - Simplify the `sans` font-family stack ([#11748](https://github.com/tailwindlabs/tailwindcss/pull/11748))
 - Disable the tap highlight overlay on iOS ([#12299](https://github.com/tailwindlabs/tailwindcss/pull/12299))
 - Improve relative precedence of `rtl`, `ltr`, `forced-colors`, and `dark` variants ([#12584](https://github.com/tailwindlabs/tailwindcss/pull/12584))
-- [Oxide] Deprecate `--no-autoprefixer` flag in the CLI ([#11280](https://github.com/tailwindlabs/tailwindcss/pull/11280))
-- [Oxide] Make the Rust based parser the default ([#11394](https://github.com/tailwindlabs/tailwindcss/pull/11394))
+
+## [3.3.7] - 2023-12-18
+
+### Fixed
+
+- Fix support for container query utilities with arbitrary values ([#12534](https://github.com/tailwindlabs/tailwindcss/pull/12534))
+- Fix custom config loading in Standalone CLI ([#12616](https://github.com/tailwindlabs/tailwindcss/pull/12616))
 
 ## [3.3.6] - 2023-12-04
 
