@@ -54,6 +54,41 @@ it('should not warn when we detect nested css inside css @layer rules', () => {
   })
 })
 
+it('should not warn when we detect global @layer rules', () => {
+  let config = {
+    content: [{ raw: html`<div class="underline"></div>` }],
+  }
+
+  let input = css`
+    :global {
+      @layer tw-base, tw-components, tw-utilities;
+      @layer tw-utilities {
+        @tailwind utilities;
+      }
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.messages).toHaveLength(0)
+  })
+})
+
+it('should not warn when we detect global @tailwind at rules', () => {
+  let config = {
+    content: [{ raw: html`<div class="text-center"></div>` }],
+  }
+
+  let input = css`
+    :global {
+      @tailwind utilities;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.messages).toHaveLength(0)
+  })
+})
+
 it('should warn when we detect namespaced @tailwind at rules', () => {
   let config = {
     content: [{ raw: html`<div class="text-center"></div>` }],

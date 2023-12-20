@@ -6,6 +6,12 @@ function isAtLayer(node) {
   return node.type === 'atrule' && node.name === 'layer'
 }
 
+function isGlobalRoot(node) {
+  if (node.selector !== ':global') return false
+
+  return node.parent && isRoot(node.parent)
+}
+
 export default function (_context) {
   return (root, result) => {
     let found = false
@@ -13,7 +19,10 @@ export default function (_context) {
     root.walkAtRules('tailwind', (node) => {
       if (found) return false
 
-      if (node.parent && !(isRoot(node.parent) || isAtLayer(node.parent))) {
+      if (
+        node.parent &&
+        !(isRoot(node.parent) || isAtLayer(node.parent) || isGlobalRoot(node.parent))
+      ) {
         found = true
         node.warn(
           result,
