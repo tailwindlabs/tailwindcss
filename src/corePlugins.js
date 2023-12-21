@@ -225,19 +225,40 @@ export let variantPlugins = {
         'Change `darkMode` to `media` or remove it entirely.',
         'https://tailwindcss.com/docs/upgrade-guide#remove-dark-mode-configuration',
       ])
-    } else if (mode === 'variant' && className === '.dark') {
-      mode = false
-      log.warn('darkmode-variant-without-selector', [
-        'darkMode: "variant" was used without a provided selector.',
-        'When using `variant` for `darkMode`, you must provide a selector.',
-        'Example: `darkMode: ["variant", ".your-selector &"]`',
-      ])
-    } else if (mode === 'variant' && !className.includes('&')) {
-      mode = false
-      log.warn('darkmode-variant-without-ampersand', [
-        'When using `variant` for `darkMode`, your selector must contain `&`.',
-        'Example `darkMode: ["variant", ".your-selector &"]`',
-      ])
+    }
+
+    if (mode === 'variant') {
+      let formats
+      if (Array.isArray(className)) {
+        formats = className
+      } else if (typeof className === 'function') {
+        formats = className
+      } else if (typeof className === 'string') {
+        formats = [className]
+      }
+
+      // TODO: We could also add these warnings if the user passes a function that returns string | string[]
+      // But this is an advanced enough use case that it's probably not necessary
+      if (Array.isArray(formats)) {
+        for (let format of formats) {
+          if (format === '.dark') {
+            mode = false
+            log.warn('darkmode-variant-without-selector', [
+              'darkMode: "variant" was used without a provided selector.',
+              'When using `variant` for `darkMode`, you must provide a selector.',
+              'Example: `darkMode: ["variant", ".your-selector &"]`',
+            ])
+          } else if (!format.includes('&')) {
+            mode = false
+            log.warn('darkmode-variant-without-ampersand', [
+              'When using `variant` for `darkMode`, your selector must contain `&`.',
+              'Example `darkMode: ["variant", ".your-selector &"]`',
+            ])
+          }
+        }
+      }
+
+      className = formats
     }
 
     if (mode === 'class') {
