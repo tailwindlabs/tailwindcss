@@ -242,6 +242,9 @@ export let variantPlugins = {
 
     if (mode === 'class') {
       addVariant('dark', `:is(:where(${className}) &)`)
+    } else if (mode === 'legacy') {
+      // Exists for pre v3.4 compatibility
+      addVariant('dark', `:is(${className} &)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     } else if (mode === 'variant') {

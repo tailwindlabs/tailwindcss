@@ -75,8 +75,13 @@ type DarkModeConfig =
   | 'class'
   // Use the `class` strategy with a custom class instead of `.dark`.
   | ['class', string]
+  // Use the `legacy` strategy — same as `class` but restores pre-v3.4 behavior
+  | 'legacy'
+  // Use the `legacy` strategy with a custom class instead of `.dark`
+  | ['legacy', string]
   // Use the `variant` strategy, which allows you to completely customize the selector
-  | ['variant', string]
+  // It takes a string or an array of strings, which are passed directly to `addVariant()`
+  | ['variant', string | string[]]
 
 type Screen = { raw: string } | { min: string } | { max: string } | { min: string; max: string }
 type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>

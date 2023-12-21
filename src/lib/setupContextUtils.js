@@ -765,6 +765,27 @@ function resolvePlugins(context, root) {
     variantPlugins['forcedColorsVariants'],
   ]
 
+  // This is a compatibility fix for the pre 3.4 dark mode behavior
+  // You can enable the old behavior by setting `darkMode: ['legacy', selector]`
+  let isLegacyDarkMode = context.tailwindConfig.darkMode === 'legacy'
+    || (Array.isArray(context.tailwindConfig.darkMode) && context.tailwindConfig.darkMode[0] === 'legacy')
+
+  if (isLegacyDarkMode) {
+    afterVariants = [
+      variantPlugins['supportsVariants'],
+      variantPlugins['directionVariants'],
+      variantPlugins['reducedMotionVariants'],
+      variantPlugins['prefersContrastVariants'],
+      variantPlugins['printVariant'],
+      variantPlugins['darkVariants'],
+      variantPlugins['screenVariants'],
+      variantPlugins['orientationVariants'],
+
+      // Forced colors didn't exist before 3.4 so it can keep its position at the end
+      variantPlugins['forcedColorsVariants'],
+    ]
+  }
+
   return [...corePluginList, ...beforeVariants, ...userPlugins, ...afterVariants, ...layerPlugins]
 }
 
