@@ -225,12 +225,26 @@ export let variantPlugins = {
         'Change `darkMode` to `media` or remove it entirely.',
         'https://tailwindcss.com/docs/upgrade-guide#remove-dark-mode-configuration',
       ])
+    } else if (mode === 'variant' && className === '.dark') {
+      mode = false
+      log.warn('darkmode-variant-without-selector', [
+        'darkMode: "variant" was used without a provided selector.',
+        'Change to `darkMode: ["variant", ".your-selector &"]` ',
+      ])
+    } else if (mode === 'variant' && !className.includes('&')) {
+      mode = false
+      log.warn('darkmode-variant-without-ampersand', [
+        'A custom dark mode selector was used without an `&` — a `&` is required to correctly scope the custom selector.',
+        'Change to `darkMode: ["variant", ".your-selector &"]` ',
+      ])
     }
 
     if (mode === 'class') {
       addVariant('dark', `:is(:where(${className}) &)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
+    } else if (mode === 'variant') {
+      addVariant('dark', className)
     }
   },
 
