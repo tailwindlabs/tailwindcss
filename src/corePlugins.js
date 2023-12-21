@@ -229,13 +229,14 @@ export let variantPlugins = {
       mode = false
       log.warn('darkmode-variant-without-selector', [
         'darkMode: "variant" was used without a provided selector.',
-        'Change to `darkMode: ["variant", ".your-selector &"]` ',
+        'When using `variant` for `darkMode`, you must provide a selector.',
+        'Example: `darkMode: ["variant", ".your-selector &"]`',
       ])
     } else if (mode === 'variant' && !className.includes('&')) {
       mode = false
       log.warn('darkmode-variant-without-ampersand', [
-        'A custom dark mode selector was used without an `&` — a `&` is required to correctly scope the custom selector.',
-        'Change to `darkMode: ["variant", ".your-selector &"]` ',
+        'When using `variant` for `darkMode`, your selector must contain `&`.',
+        'Example `darkMode: ["variant", ".your-selector &"]`',
       ])
     }
 
