@@ -166,7 +166,7 @@ test('the important modifier does not break keyframes', () => {
     expect(result.css).toMatchFormattedCss(css`
       @keyframes pulse {
         50% {
-          opacity: .5;
+          opacity: 0.5;
         }
       }
 
