@@ -171,7 +171,7 @@ test('the important modifier does not break keyframes', () => {
       }
 
       .\!animate-pulse {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+        animation: 2s cubic-bezier(0.4, 0, 0.6, 1) infinite pulse !important;
       }
     `)
   })
