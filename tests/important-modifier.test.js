@@ -150,4 +150,34 @@ crosscheck(() => {
       `)
     })
   })
+
+  test('the important modifier does not break keyframes', () => {
+    let config = {
+      content: [
+        {
+          raw: html` <div class="!animate-pulse"></div> `,
+        },
+      ],
+      corePlugins: { preflight: false },
+    }
+
+    let input = css`
+      @tailwind utilities;
+    `
+
+    return run(input, config).then((result) => {
+      expect(result.css).toMatchFormattedCss(css`
+        @keyframes pulse {
+          50% {
+            opacity: 0.5;
+          }
+        }
+
+        .\!animate-pulse {
+          animation: 2s cubic-bezier(0.4, 0, 0.6, 1) infinite pulse !important;
+        }
+      `)
+    })
+  })
 })
+

@@ -119,10 +119,20 @@ function applyImportant(matches, classCandidate) {
 
   let result = []
 
+  function isInKeyframes(rule) {
+    return rule.parent && rule.parent.type === 'atrule' && rule.parent.name === 'keyframes'
+  }
+
   for (let [meta, rule] of matches) {
     let container = postcss.root({ nodes: [rule.clone()] })
 
     container.walkRules((r) => {
+      // Declarations inside keyframes cannot be marked as important
+      // They will be ignored by the browser
+      if (isInKeyframes(r)) {
+        return
+      }
+
       let ast = selectorParser().astSync(r.selector)
 
       // Remove extraneous selectors that do not include the base candidate
