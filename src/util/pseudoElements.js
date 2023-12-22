@@ -60,6 +60,10 @@ let elementProperties = {
   ':first-letter': ['terminal', 'jumpable'],
   ':first-line': ['terminal', 'jumpable'],
 
+  ':where': [],
+  ':is': [],
+  ':has': [],
+
   // The default value is used when the pseudo-element is not recognized
   // Because it's not recognized, we don't know if it's terminal or not
   // So we assume it can be moved AND can have user-action pseudo classes attached to it
