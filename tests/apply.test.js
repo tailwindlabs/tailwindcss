@@ -2063,6 +2063,39 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
   })
 })
 
+it('for some reason this produces empty where clauses', () => {
+  let config = {
+    darkMode: 'selector',
+    content: [
+      {
+        raw: html` <div class="foo bar baz qux steve bob"></div> `,
+      },
+    ],
+    plugins: [
+      function ({ addVariant }) {
+        addVariant('wut', `&:where(.wut)`)
+      },
+    ],
+  }
+
+  let input = css`
+    .bob::file-selector-button {
+      @apply wut:bg-black/100;
+    }
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bob::-webkit-file-upload-button:where(.wut) {
+        background-color: #000;
+      }
+      .bob::file-selector-button:where(.wut) {
+        background-color: #000;
+      }
+    `)
+  })
+})
+
 test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
   let config = {
     darkMode: 'class',
