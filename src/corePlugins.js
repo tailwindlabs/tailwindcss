@@ -206,8 +206,8 @@ export let variantPlugins = {
   },
 
   directionVariants: ({ addVariant }) => {
-    addVariant('ltr', ':is(:where([dir="ltr"]) &)')
-    addVariant('rtl', ':is(:where([dir="rtl"]) &)')
+    addVariant('ltr', '&:where([dir="ltr"], [dir="ltr"] *)')
+    addVariant('rtl', '&:where([dir="rtl"], [dir="rtl"] *)')
   },
 
   reducedMotionVariants: ({ addVariant }) => {
@@ -261,7 +261,7 @@ export let variantPlugins = {
     }
 
     if (mode === 'selector') {
-      addVariant('dark', [`:is(:where(${className}) &)`, `&:where(${className})`])
+      addVariant('dark', `&:where(${className}), ${className}) *)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     } else if (mode === 'variant') {
