@@ -34,7 +34,7 @@ let sharedHtml = html`
 
 test('@apply', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: sharedHtml }],
   }
 
@@ -215,14 +215,14 @@ test('@apply', () => {
           text-align: left;
         }
       }
-      :is(:where(.dark) .apply-dark-variant) {
+      .apply-dark-variant:where(.dark, .dark *) {
         text-align: center;
       }
-      :is(:where(.dark) .apply-dark-variant:hover) {
+      .apply-dark-variant:hover:where(.dark, .dark *) {
         text-align: right;
       }
       @media (min-width: 1024px) {
-        :is(:where(.dark) .apply-dark-variant) {
+        .apply-dark-variant:where(.dark, .dark *) {
           text-align: left;
         }
       }
@@ -2016,38 +2016,30 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      :is(:where(.dark) .foo):before,
-      .foo:where(.dark):before,
-      :is(:where([dir='rtl']) :is(:where(.dark) .bar)):before,
-      :is(:where([dir='rtl']) .bar:where(.dark)):before,
-      :is(:where([dir='rtl']) :is(:where(.dark) .baz:hover)):before,
-      :is(:where([dir='rtl']) .baz:hover:where(.dark)):before {
+      .foo:where(.dark, .dark *):before,
+      .bar:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *):before,
+      .baz:hover:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *):before {
         background-color: #000;
       }
-      :-webkit-any(
-          :where([dir='rtl']) :-webkit-any(:where(.dark) .qux)
+      .qux:where(.dark, .dark *):where(
+          [dir='rtl'],
+          [dir='rtl'] *
         )::-webkit-file-upload-button:hover {
         background-color: #000;
       }
-      :is(:where([dir='rtl']) :is(:where(.dark) .qux))::file-selector-button:hover {
+      .qux:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *)::file-selector-button:hover {
         background-color: #000;
       }
-      :-webkit-any(:where([dir='rtl']) .qux)::-webkit-file-upload-button:hover:where() {
+      .steve:where(.dark, .dark *):hover:where([dir='rtl'], [dir='rtl'] *):before {
         background-color: #000;
       }
-      :is(:where([dir='rtl']) .qux)::file-selector-button:hover:where() {
+      .bob:where(.dark, .dark *):hover:where(
+          [dir='rtl'],
+          [dir='rtl'] *
+        )::-webkit-file-upload-button {
         background-color: #000;
       }
-      :is(:where([dir='rtl']) :is(:where(.dark) .steve):hover):before,
-      :is(:where([dir='rtl']) .steve:where(.dark):hover):before {
-        background-color: #000;
-      }
-      :-webkit-any(
-          :where([dir='rtl']) :-webkit-any(:where(.dark) .bob)
-        )::-webkit-file-upload-button:hover {
-        background-color: #000;
-      }
-      :is(:where([dir='rtl']) :is(:where(.dark) .bob))::file-selector-button:hover {
+      .bob:where(.dark, .dark *):hover:where([dir='rtl'], [dir='rtl'] *)::file-selector-button {
         background-color: #000;
       }
       :has([dir='rtl'] .foo:hover):before {
@@ -2057,39 +2049,6 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
         background-color: #000;
       }
       :has([dir='rtl'] .bar)::file-selector-button:hover {
-        background-color: #000;
-      }
-    `)
-  })
-})
-
-it('for some reason this produces empty where clauses', () => {
-  let config = {
-    darkMode: 'selector',
-    content: [
-      {
-        raw: html` <div class="foo bar baz qux steve bob"></div> `,
-      },
-    ],
-    plugins: [
-      function ({ addVariant }) {
-        addVariant('wut', `&:where(.wut)`)
-      },
-    ],
-  }
-
-  let input = css`
-    .bob::file-selector-button {
-      @apply wut:bg-black/100;
-    }
-  `
-
-  return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
-      .bob::-webkit-file-upload-button:where(.wut) {
-        background-color: #000;
-      }
-      .bob::file-selector-button:where(.wut) {
         background-color: #000;
       }
     `)

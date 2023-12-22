@@ -2,7 +2,7 @@
 
 exports[`should test the 'directionVariants' plugin 1`] = `
 "
-:is(:where([dir="ltr"]) .ltr\\:flex), :is(:where([dir="rtl"]) .rtl\\:flex) {
+.ltr\\:flex:where([dir="ltr"], [dir="ltr"] *), .rtl\\:flex:where([dir="rtl"], [dir="rtl"] *) {
   display: flex;
 }
 "

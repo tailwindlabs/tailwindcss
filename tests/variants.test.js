@@ -5,7 +5,7 @@ import { run, html, css, defaults } from './util/run'
 
 test('variants', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [path.resolve(__dirname, './variants.test.html')],
     corePlugins: { preflight: false },
   }
@@ -1122,7 +1122,7 @@ test('arbitrary variant selectors should not re-order scrollbar pseudo classes',
 
 test('stacking dark and rtl variants', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`<div class="dark:rtl:italic" />`,
@@ -1138,7 +1138,7 @@ test('stacking dark and rtl variants', async () => {
   let result = await run(input, config)
 
   expect(result.css).toMatchFormattedCss(css`
-    :is(:where(.dark) :is(:where([dir='rtl']) .dark\:rtl\:italic)) {
+    .dark\:rtl\:italic:where([dir='rtl'], [dir='rtl'] *):where(.dark, .dark *) {
       font-style: italic;
     }
   `)
@@ -1146,7 +1146,7 @@ test('stacking dark and rtl variants', async () => {
 
 test('stacking dark and rtl variants with pseudo elements', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`<div class="dark:rtl:placeholder:italic" />`,
@@ -1162,7 +1162,10 @@ test('stacking dark and rtl variants with pseudo elements', async () => {
   let result = await run(input, config)
 
   expect(result.css).toMatchFormattedCss(css`
-    :is(:where(.dark) :is(:where([dir='rtl']) .dark\:rtl\:placeholder\:italic))::placeholder {
+    .dark\:rtl\:placeholder\:italic:where([dir='rtl'], [dir='rtl'] *):where(
+        .dark,
+        .dark *
+      )::placeholder {
       font-style: italic;
     }
   `)

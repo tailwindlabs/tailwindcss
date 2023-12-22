@@ -2,7 +2,7 @@ import { run, html, css } from './util/run'
 
 test('custom separator', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`
@@ -32,10 +32,10 @@ test('custom separator', () => {
           text-align: right;
         }
       }
-      :is(:where([dir='rtl']) .rtl_active_text-center:active) {
+      .rtl_active_text-center:active:where([dir='rtl'], [dir='rtl'] *) {
         text-align: center;
       }
-      :is(:where(.dark) .dark_focus_text-left:focus) {
+      .dark_focus_text-left:focus:where(.dark, .dark *) {
         text-align: left;
       }
     `)
@@ -44,7 +44,7 @@ test('custom separator', () => {
 
 test('dash is not supported', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: 'lg-hover-font-bold' }],
     separator: '-',
   }

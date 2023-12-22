@@ -261,7 +261,7 @@ export let variantPlugins = {
     }
 
     if (mode === 'selector') {
-      addVariant('dark', `&:where(${className}), ${className}) *)`)
+      addVariant('dark', `&:where(${className}, ${className} *)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     } else if (mode === 'variant') {

@@ -1,6 +1,6 @@
 import { run, html, css, defaults } from './util/run'
 
-it('should be possible to use the darkMode "class" mode', () => {
+it('should be possible to use the darkMode "selector" mode', () => {
   let config = {
     darkMode: 'selector',
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
@@ -16,15 +16,14 @@ it('should be possible to use the darkMode "class" mode', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      :is(:where(.dark) .dark\:font-bold),
-      .dark\:font-bold:where(.dark) {
+      .dark\:font-bold:where(.dark, .dark *) {
         font-weight: 700;
       }
     `)
   })
 })
 
-it('should be possible to change the class name', () => {
+it('should be possible to change the selector', () => {
   let config = {
     darkMode: ['selector', '.test-dark'],
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
@@ -40,8 +39,7 @@ it('should be possible to change the class name', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      :is(:where(.test-dark) .dark\:font-bold),
-      .dark\:font-bold:where(.test-dark) {
+      .dark\:font-bold:where(.test-dark, .test-dark *) {
         font-weight: 700;
       }
     `)
@@ -224,8 +222,7 @@ it('should use modern sorting otherwise', () => {
           color: rgb(134 239 172 / var(--tw-text-opacity));
         }
       }
-      :is(:where(.dark) .dark\:text-green-100),
-      .dark\:text-green-100:where(.dark) {
+      .dark\:text-green-100:where(.dark, .dark *) {
         --tw-text-opacity: 1;
         color: rgb(220 252 231 / var(--tw-text-opacity));
       }
