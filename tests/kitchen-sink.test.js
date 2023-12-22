@@ -2,7 +2,7 @@ import { run, html, css, defaults } from './util/run'
 
 test('it works', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`
@@ -304,7 +304,7 @@ test('it works', () => {
       }
       .drop-empty-rules:hover,
       .group:hover .apply-group,
-      :is(:where(.dark) .apply-dark-mode) {
+      .apply-dark-mode:where(.dark, .dark *) {
         font-weight: 700;
       }
       .apply-with-existing:hover {
@@ -339,7 +339,7 @@ test('it works', () => {
       .apply-order-b {
         margin: 1.5rem 1.25rem 1.25rem;
       }
-      :is(:where(.dark) .group:hover .apply-dark-group-example-a) {
+      .group:hover .apply-dark-group-example-a:where(.dark, .dark *) {
         --tw-bg-opacity: 1;
         background-color: rgb(34 197 94 / var(--tw-bg-opacity));
       }
@@ -806,12 +806,12 @@ test('it works', () => {
           text-align: left;
         }
       }
-      :is(:where(.dark) .dark\:custom-util) {
+      .dark\:custom-util:where(.dark, .dark *) {
         background: #abcdef;
       }
       @media (min-width: 768px) {
         @media (prefers-reduced-motion: no-preference) {
-          :is(:where(.dark) .md\:dark\:motion-safe\:foo\:active\:custom-util:active) {
+          .md\:dark\:motion-safe\:foo\:active\:custom-util:active:where(.dark, .dark *) {
             background: #abcdef !important;
           }
         }
