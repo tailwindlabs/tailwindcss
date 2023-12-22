@@ -2,7 +2,7 @@ import { run, html, css, defaults } from './util/run'
 
 it('should be possible to use the darkMode "class" mode', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
   }
@@ -16,7 +16,8 @@ it('should be possible to use the darkMode "class" mode', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      :is(:where(.dark) .dark\:font-bold) {
+      :is(:where(.dark) .dark\:font-bold),
+      .dark\:font-bold:where(.dark) {
         font-weight: 700;
       }
     `)
@@ -25,7 +26,7 @@ it('should be possible to use the darkMode "class" mode', () => {
 
 it('should be possible to change the class name', () => {
   let config = {
-    darkMode: ['class', '.test-dark'],
+    darkMode: ['selector', '.test-dark'],
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
   }
@@ -39,7 +40,8 @@ it('should be possible to change the class name', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      :is(:where(.test-dark) .dark\:font-bold) {
+      :is(:where(.test-dark) .dark\:font-bold),
+      .dark\:font-bold:where(.test-dark) {
         font-weight: 700;
       }
     `)
@@ -120,9 +122,9 @@ it('should default to the `media` mode when mode is set to `false`', () => {
   })
 })
 
-it('should support legacy dark mode behavior', () => {
+it('should support the deprecated `class` dark mode behavior', () => {
   let config = {
-    darkMode: 'legacy',
+    darkMode: 'class',
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
   }
@@ -140,9 +142,9 @@ it('should support legacy dark mode behavior', () => {
   })
 })
 
-it('should support custom classes with legacy dark mode', () => {
+it('should support custom classes with  deprecated `class` dark mode', () => {
   let config = {
-    darkMode: ['legacy', '.my-dark'],
+    darkMode: ['class', '.my-dark'],
     content: [{ raw: html`<div class="dark:font-bold"></div>` }],
     corePlugins: { preflight: false },
   }
@@ -160,10 +162,14 @@ it('should support custom classes with legacy dark mode', () => {
   })
 })
 
-it('should use legacy sorting when using darkMode: legacy', () => {
+it('should use legacy sorting when using `darkMode: class`', () => {
   let config = {
-    darkMode: 'legacy',
-    content: [{ raw: html`<div class="dark:text-green-100  hover:text-green-200 lg:text-green-300"></div>` }],
+    darkMode: 'class',
+    content: [
+      {
+        raw: html`<div class="dark:text-green-100  hover:text-green-200 lg:text-green-300"></div>`,
+      },
+    ],
     corePlugins: { preflight: false },
   }
 
@@ -193,8 +199,12 @@ it('should use legacy sorting when using darkMode: legacy', () => {
 
 it('should use modern sorting otherwise', () => {
   let config = {
-    darkMode: 'class',
-    content: [{ raw: html`<div class="dark:text-green-100  hover:text-green-200 lg:text-green-300"></div>` }],
+    darkMode: 'selector',
+    content: [
+      {
+        raw: html`<div class="dark:text-green-100  hover:text-green-200 lg:text-green-300"></div>`,
+      },
+    ],
     corePlugins: { preflight: false },
   }
 
@@ -214,7 +224,8 @@ it('should use modern sorting otherwise', () => {
           color: rgb(134 239 172 / var(--tw-text-opacity));
         }
       }
-      :is(:where(.dark) .dark\:text-green-100) {
+      :is(:where(.dark) .dark\:text-green-100),
+      .dark\:text-green-100:where(.dark) {
         --tw-text-opacity: 1;
         color: rgb(220 252 231 / var(--tw-text-opacity));
       }

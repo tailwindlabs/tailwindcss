@@ -244,7 +244,6 @@ export let variantPlugins = {
           if (format === '.dark') {
             mode = false
             log.warn('darkmode-variant-without-selector', [
-              'darkMode: "variant" was used without a provided selector.',
               'When using `variant` for `darkMode`, you must provide a selector.',
               'Example: `darkMode: ["variant", ".your-selector &"]`',
             ])
@@ -261,15 +260,15 @@ export let variantPlugins = {
       className = formats
     }
 
-    if (mode === 'class') {
-      addVariant('dark', `:is(:where(${className}) &)`)
-    } else if (mode === 'legacy') {
-      // Exists for pre v3.4 compatibility
-      addVariant('dark', `:is(${className} &)`)
+    if (mode === 'selector') {
+      addVariant('dark', [`:is(:where(${className}) &)`, `&:where(${className})`])
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     } else if (mode === 'variant') {
       addVariant('dark', className)
+    } else if (mode === 'class') {
+      // Exists for pre v3.4 compatibility
+      addVariant('dark', `:is(${className} &)`)
     }
   },
 

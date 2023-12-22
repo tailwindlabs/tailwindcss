@@ -1972,7 +1972,7 @@ it('should maintain the correct selector when applying other utilities', () => {
 
 it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html` <div class="foo bar baz qux steve bob"></div> `,
@@ -2017,8 +2017,11 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       :is(:where(.dark) .foo):before,
+      .foo:where(.dark):before,
       :is(:where([dir='rtl']) :is(:where(.dark) .bar)):before,
-      :is(:where([dir='rtl']) :is(:where(.dark) .baz:hover)):before {
+      :is(:where([dir='rtl']) .bar:where(.dark)):before,
+      :is(:where([dir='rtl']) :is(:where(.dark) .baz:hover)):before,
+      :is(:where([dir='rtl']) .baz:hover:where(.dark)):before {
         background-color: #000;
       }
       :-webkit-any(
@@ -2029,7 +2032,14 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
       :is(:where([dir='rtl']) :is(:where(.dark) .qux))::file-selector-button:hover {
         background-color: #000;
       }
-      :is(:where([dir='rtl']) :is(:where(.dark) .steve):hover):before {
+      :-webkit-any(:where([dir='rtl']) .qux)::-webkit-file-upload-button:hover:where() {
+        background-color: #000;
+      }
+      :is(:where([dir='rtl']) .qux)::file-selector-button:hover:where() {
+        background-color: #000;
+      }
+      :is(:where([dir='rtl']) :is(:where(.dark) .steve):hover):before,
+      :is(:where([dir='rtl']) .steve:where(.dark):hover):before {
         background-color: #000;
       }
       :-webkit-any(
