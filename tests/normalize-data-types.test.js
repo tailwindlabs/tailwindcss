@@ -86,6 +86,16 @@ let table = [
   // Prevent formatting keywords
   ['minmax(min-content,25%)', 'minmax(min-content,25%)'],
 
+  // Prevent formatting keywords
+  [
+    'radial-gradient(calc(1+2)),radial-gradient(calc(1+2))',
+    'radial-gradient(calc(1 + 2)),radial-gradient(calc(1 + 2))',
+  ],
+  [
+    '[content-start]_calc(100%-1px)_[content-end]_minmax(1rem,1fr)',
+    '[content-start] calc(100% - 1px) [content-end] minmax(1rem,1fr)',
+  ],
+
   // Misc
   ['color(0_0_0/1.0)', 'color(0 0 0/1.0)'],
   ['color(0_0_0_/_1.0)', 'color(0 0 0 / 1.0)'],
