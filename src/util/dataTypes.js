@@ -106,6 +106,13 @@ function normalizeMathOperatorSpacing(value) {
     'keyboard-inset-left',
     'keyboard-inset-width',
     'keyboard-inset-height',
+
+    'radial-gradient',
+    'linear-gradient',
+    'conic-gradient',
+    'repeating-radial-gradient',
+    'repeating-linear-gradient',
+    'repeating-conic-gradient',
   ]
 
   return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
@@ -159,6 +166,11 @@ function normalizeMathOperatorSpacing(value) {
       // Skip formatting inside known functions
       else if (preventFormattingInFunctions.some((fn) => peek(fn))) {
         result += consumeUntil([')'])
+      }
+
+      // Don't break CSS grid track names
+      else if (peek('[')) {
+        result += consumeUntil([']'])
       }
 
       // Handle operators
