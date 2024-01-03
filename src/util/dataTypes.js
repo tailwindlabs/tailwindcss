@@ -107,6 +107,13 @@ function normalizeMathOperatorSpacing(value) {
     'keyboard-inset-left',
     'keyboard-inset-width',
     'keyboard-inset-height',
+
+    'radial-gradient',
+    'linear-gradient',
+    'conic-gradient',
+    'repeating-radial-gradient',
+    'repeating-linear-gradient',
+    'repeating-conic-gradient',
   ]
 
   return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
