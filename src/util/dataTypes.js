@@ -169,6 +169,11 @@ function normalizeMathOperatorSpacing(value) {
         result += consumeUntil([')'])
       }
 
+      // Don't break CSS grid track names
+      else if (peek('[')) {
+        result += consumeUntil([']'])
+      }
+
       // Handle operators
       else if (
         ['+', '-', '*', '/'].includes(char) &&
