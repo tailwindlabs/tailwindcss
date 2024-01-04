@@ -427,3 +427,16 @@ jobs:
                 version: '${{ env.TAILWINDCSS_VERSION }}'
               }
             })
+
+      - name: Trigger CDN Update
+        if: env.RELEASE_CHANNEL == 'latest'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.CDN_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'tailwindlabs',
+              repo: 'jit-cdn',
+              ref: 'main',
+              workflow_id: 'update-versions.yml',
+            })
