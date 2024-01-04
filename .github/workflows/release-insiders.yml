@@ -388,19 +388,17 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # !! Enable this, once we are cleaning up all the `stable` engine related files.
-      #
-      # - name: Trigger Tailwind Play update
-      #   uses: actions/github-script@v6
-      #   with:
-      #     github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
-      #     script: |
-      #       await github.rest.actions.createWorkflowDispatch({
-      #         owner: 'tailwindlabs',
-      #         repo: 'play.tailwindcss.com',
-      #         ref: 'master',
-      #         workflow_id: 'upgrade-tailwindcss.yml',
-      #         inputs: {
-      #           insidersVersion: '0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
-      #         }
-      #       })
+      - name: Trigger Tailwind Play update
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'tailwindlabs',
+              repo: 'play.tailwindcss.com',
+              ref: 'master',
+              workflow_id: 'upgrade-tailwindcss.yml',
+              inputs: {
+                insidersVersion: '0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+              }
+            })
