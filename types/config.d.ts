@@ -74,6 +74,13 @@ type DarkModeConfig =
   | 'class'
   // Use the `class` strategy with a custom class instead of `.dark`.
   | ['class', string]
+  // Use the `selector` strategy — same as `class` but uses `:where()` for more predicable behavior
+  | 'selector'
+  // Use the `selector` strategy with a custom selector instead of `.dark`.
+  | ['selector', string]
+  // Use the `variant` strategy, which allows you to completely customize the selector
+  // It takes a string or an array of strings, which are passed directly to `addVariant()`
+  | ['variant', string | string[]]
 
 type Screen = { raw: string } | { min: string } | { max: string } | { min: string; max: string }
 type ScreensConfig = string[] | KeyValuePair<string, string | Screen | Screen[]>

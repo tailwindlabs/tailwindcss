@@ -3,7 +3,7 @@ import { crosscheck, run, html, css } from './util/run'
 crosscheck(() => {
   test('custom separator', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`
@@ -33,10 +33,10 @@ crosscheck(() => {
             text-align: right;
           }
         }
-        :is(:where([dir='rtl']) .rtl_active_text-center:active) {
+        .rtl_active_text-center:active:where([dir='rtl'], [dir='rtl'] *) {
           text-align: center;
         }
-        :is(:where(.dark) .dark_focus_text-left:focus) {
+        .dark_focus_text-left:focus:where(.dark, .dark *) {
           text-align: left;
         }
       `)
@@ -45,7 +45,7 @@ crosscheck(() => {
 
   test('dash is not supported', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: 'lg-hover-font-bold' }],
       separator: '-',
     }

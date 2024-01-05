@@ -3,7 +3,7 @@ import { crosscheck, run, html, css } from './util/run'
 crosscheck(({ stable, oxide }) => {
   test('opacity', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`
@@ -43,7 +43,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('colors defined as functions work when opacity plugins are disabled', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`

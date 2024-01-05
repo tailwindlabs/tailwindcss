@@ -5,7 +5,7 @@ import { crosscheck, run, html, css } from './util/run'
 crosscheck(() => {
   test('modify selectors', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`

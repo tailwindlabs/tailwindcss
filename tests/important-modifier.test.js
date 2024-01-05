@@ -4,7 +4,7 @@ crosscheck(() => {
   test('important modifier', () => {
     let config = {
       important: false,
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`

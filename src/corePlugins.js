@@ -207,8 +207,8 @@ export let variantPlugins = {
   },
 
   directionVariants: ({ addVariant }) => {
-    addVariant('ltr', ':is(:where([dir="ltr"]) &)')
-    addVariant('rtl', ':is(:where([dir="rtl"]) &)')
+    addVariant('ltr', '&:where([dir="ltr"], [dir="ltr"] *)')
+    addVariant('rtl', '&:where([dir="rtl"], [dir="rtl"] *)')
   },
 
   reducedMotionVariants: ({ addVariant }) => {
@@ -217,7 +217,7 @@ export let variantPlugins = {
   },
 
   darkVariants: ({ config, addVariant }) => {
-    let [mode, className = '.dark'] = [].concat(config('darkMode', 'media'))
+    let [mode, selector = '.dark'] = [].concat(config('darkMode', 'media'))
 
     if (mode === false) {
       mode = 'media'
@@ -228,10 +228,49 @@ export let variantPlugins = {
       ])
     }
 
-    if (mode === 'class') {
-      addVariant('dark', `:is(:where(${className}) &)`)
+    if (mode === 'variant') {
+      let formats
+      if (Array.isArray(selector)) {
+        formats = selector
+      } else if (typeof selector === 'function') {
+        formats = selector
+      } else if (typeof selector === 'string') {
+        formats = [selector]
+      }
+
+      // TODO: We could also add these warnings if the user passes a function that returns string | string[]
+      // But this is an advanced enough use case that it's probably not necessary
+      if (Array.isArray(formats)) {
+        for (let format of formats) {
+          if (format === '.dark') {
+            mode = false
+            log.warn('darkmode-variant-without-selector', [
+              'When using `variant` for `darkMode`, you must provide a selector.',
+              'Example: `darkMode: ["variant", ".your-selector &"]`',
+            ])
+          } else if (!format.includes('&')) {
+            mode = false
+            log.warn('darkmode-variant-without-ampersand', [
+              'When using `variant` for `darkMode`, your selector must contain `&`.',
+              'Example `darkMode: ["variant", ".your-selector &"]`',
+            ])
+          }
+        }
+      }
+
+      selector = formats
+    }
+
+    if (mode === 'selector') {
+      // New preferred behavior
+      addVariant('dark', `&:where(${selector}, ${selector} *)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
+    } else if (mode === 'variant') {
+      addVariant('dark', selector)
+    } else if (mode === 'class') {
+      // Old behavior
+      addVariant('dark', `:is(${selector} &)`)
     }
   },
 

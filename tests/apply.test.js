@@ -35,7 +35,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('@apply', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: sharedHtml }],
     }
 
@@ -216,14 +216,14 @@ crosscheck(({ stable, oxide }) => {
             text-align: left;
           }
         }
-        :is(:where(.dark) .apply-dark-variant) {
+        .apply-dark-variant:where(.dark, .dark *) {
           text-align: center;
         }
-        :is(:where(.dark) .apply-dark-variant:hover) {
+        .apply-dark-variant:hover:where(.dark, .dark *) {
           text-align: right;
         }
         @media (min-width: 1024px) {
-          :is(:where(.dark) .apply-dark-variant) {
+          .apply-dark-variant:where(.dark, .dark *) {
             text-align: left;
           }
         }
@@ -513,14 +513,14 @@ crosscheck(({ stable, oxide }) => {
             text-align: left;
           }
         }
-        :is(:where(.dark) .apply-dark-variant) {
+        .apply-dark-variant:where(.dark, .dark *) {
           text-align: center;
         }
-        :is(:where(.dark) .apply-dark-variant:hover) {
+        .apply-dark-variant:hover:where(.dark, .dark *) {
           text-align: right;
         }
         @media (min-width: 1024px) {
-          :is(:where(.dark) .apply-dark-variant) {
+          .apply-dark-variant:where(.dark, .dark *) {
             text-align: left;
           }
         }
@@ -755,7 +755,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('@apply error with unknown utility', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: sharedHtml }],
     }
 
@@ -775,7 +775,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('@apply error with nested @screen', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: sharedHtml }],
     }
 
@@ -799,7 +799,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('@apply error with nested @anyatrulehere', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: sharedHtml }],
     }
 
@@ -823,7 +823,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('@apply error when using .group utility', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: '<div class="foo"></div>' }],
     }
 
@@ -846,7 +846,7 @@ crosscheck(({ stable, oxide }) => {
   test('@apply error when using a prefixed .group utility', async () => {
     let config = {
       prefix: 'tw-',
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: html`<div class="foo"></div>` }],
     }
 
@@ -868,7 +868,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('@apply error when using .peer utility', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: '<div class="foo"></div>' }],
     }
 
@@ -891,7 +891,7 @@ crosscheck(({ stable, oxide }) => {
   test('@apply error when using a prefixed .peer utility', async () => {
     let config = {
       prefix: 'tw-',
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [{ raw: html`<div class="foo"></div>` }],
     }
 
@@ -2360,7 +2360,7 @@ crosscheck(({ stable, oxide }) => {
 
   it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html` <div class="foo bar baz qux steve bob"></div> `,
@@ -2404,18 +2404,18 @@ crosscheck(({ stable, oxide }) => {
 
     return run(input, config).then((result) => {
       expect(result.css).toMatchFormattedCss(css`
-        :is(:where(.dark) .foo)::before,
-        :is(:where([dir='rtl']) :is(:where(.dark) .bar))::before,
-        :is(:where([dir='rtl']) :is(:where(.dark) .baz:hover))::before {
+        .foo:where(.dark, .dark *)::before,
+        .bar:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *)::before,
+        .baz:hover:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *)::before {
           background-color: #000;
         }
-        :is(:where([dir='rtl']) :is(:where(.dark) .qux))::file-selector-button:hover {
+        .qux:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *)::file-selector-button:hover {
           background-color: #000;
         }
-        :is(:where([dir='rtl']) :is(:where(.dark) .steve):hover):before {
+        .steve:where(.dark, .dark *):hover:where([dir='rtl'], [dir='rtl'] *):before {
           background-color: #000;
         }
-        :is(:where([dir='rtl']) :is(:where(.dark) .bob))::file-selector-button:hover {
+        .bob:where(.dark, .dark *):hover:where([dir='rtl'], [dir='rtl'] *)::file-selector-button {
           background-color: #000;
         }
         :has([dir='rtl'] .foo:hover):before {
@@ -2430,7 +2430,7 @@ crosscheck(({ stable, oxide }) => {
 
   stable.test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html` <div class="foo bar"></div> `,

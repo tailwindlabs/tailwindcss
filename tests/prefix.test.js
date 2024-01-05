@@ -5,7 +5,7 @@ crosscheck(({ stable, oxide }) => {
   stable.test('prefix', () => {
     let config = {
       prefix: 'tw-',
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`
@@ -128,7 +128,7 @@ crosscheck(({ stable, oxide }) => {
         .custom-component {
           font-weight: 700;
         }
-        :is(:where(.tw-dark) .tw-group:hover .custom-component) {
+        .tw-group:hover .custom-component:where(.tw-dark, .tw-dark *) {
           font-weight: 400;
         }
         .tw--ml-4 {
@@ -171,14 +171,14 @@ crosscheck(({ stable, oxide }) => {
             text-align: right;
           }
         }
-        :is(:where([dir='rtl']) .rtl\:active\:tw-text-center:active) {
+        .rtl\:active\:tw-text-center:active:where([dir='rtl'], [dir='rtl'] *) {
           text-align: center;
         }
-        :is(:where(.tw-dark) .dark\:tw-bg-\[rgb\(255\,0\,0\)\]) {
+        .dark\:tw-bg-\[rgb\(255\,0\,0\)\]:where(.tw-dark, .tw-dark *) {
           --tw-bg-opacity: 1;
           background-color: rgb(255 0 0 / var(--tw-bg-opacity));
         }
-        :is(:where(.tw-dark) .dark\:focus\:tw-text-left:focus) {
+        .dark\:focus\:tw-text-left:focus:where(.tw-dark, .tw-dark *) {
           text-align: left;
         }
       `)

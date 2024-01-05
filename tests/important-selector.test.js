@@ -4,7 +4,7 @@ crosscheck(({ stable, oxide }) => {
   test('important selector', () => {
     let config = {
       important: '#app',
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`
@@ -146,19 +146,22 @@ crosscheck(({ stable, oxide }) => {
             text-align: right;
           }
         }
-        #app :is(:is(:where([dir='rtl']) .rtl\:active\:text-center:active)) {
+        #app :is(.rtl\:active\:text-center:active:where([dir='rtl'], [dir='rtl'] *)) {
           text-align: center;
         }
-        #app :is(:where(.dark) .dark\:before\:underline):before {
+        #app :is(.dark\:before\:underline:where(.dark, .dark *)):before {
           content: var(--tw-content);
           text-decoration-line: underline;
         }
-        #app :is(:is(:where(.dark) .dark\:focus\:text-left:focus)) {
+        #app :is(.dark\:focus\:text-left:focus:where(.dark, .dark *)) {
           text-align: left;
         }
         #app
           :is(
-            :where([dir='rtl']) :is(:where(.dark) .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100)
+            .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100:where(
+                .dark,
+                .dark *
+              ):where([dir='rtl'], [dir='rtl'] *)
           )::file-selector-button:hover {
           background-color: #000;
         }
@@ -169,7 +172,7 @@ crosscheck(({ stable, oxide }) => {
   test('pseudo-elements are appended after the `:is()`', () => {
     let config = {
       important: '#app',
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html` <div class="dark:before:bg-black"></div> `,
@@ -187,7 +190,7 @@ crosscheck(({ stable, oxide }) => {
     return run(input, config).then((result) => {
       stable.expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-        #app :is(:where(.dark) .dark\:before\:bg-black)::before {
+        #app .dark\:before\:bg-black:where(.dark, .dark *)::before {
           content: var(--tw-content);
           --tw-bg-opacity: 1;
           background-color: rgb(0 0 0 / var(--tw-bg-opacity));
@@ -195,7 +198,7 @@ crosscheck(({ stable, oxide }) => {
       `)
       oxide.expect(result.css).toMatchFormattedCss(css`
         ${defaults}
-        #app :is(:where(.dark) .dark\:before\:bg-black)::before {
+        #app .dark\:before\:bg-black:where(.dark, .dark *)::before {
           content: var(--tw-content);
           background-color: #000;
         }

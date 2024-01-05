@@ -6,7 +6,7 @@ import { crosscheck, run, html, css, defaults } from './util/run'
 crosscheck(({ stable, oxide }) => {
   test('variants', () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [path.resolve(__dirname, './variants.test.html')],
       corePlugins: { preflight: false },
     }
@@ -1156,7 +1156,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('stacking dark and rtl variants', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`<div class="dark:rtl:italic" />`,
@@ -1172,7 +1172,7 @@ crosscheck(({ stable, oxide }) => {
     let result = await run(input, config)
 
     expect(result.css).toMatchFormattedCss(css`
-      :is(:where(.dark) :is(:where([dir='rtl']) .dark\:rtl\:italic)) {
+      .dark\:rtl\:italic:where([dir='rtl'], [dir='rtl'] *):where(.dark, .dark *) {
         font-style: italic;
       }
     `)
@@ -1180,7 +1180,7 @@ crosscheck(({ stable, oxide }) => {
 
   test('stacking dark and rtl variants with pseudo elements', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`<div class="dark:rtl:placeholder:italic" />`,
@@ -1196,7 +1196,10 @@ crosscheck(({ stable, oxide }) => {
     let result = await run(input, config)
 
     expect(result.css).toMatchFormattedCss(css`
-      :is(:where(.dark) :is(:where([dir='rtl']) .dark\:rtl\:placeholder\:italic))::placeholder {
+      .dark\:rtl\:placeholder\:italic:where([dir='rtl'], [dir='rtl'] *):where(
+          .dark,
+          .dark *
+        )::placeholder {
         font-style: italic;
       }
     `)
