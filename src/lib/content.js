@@ -142,6 +142,10 @@ export function parseCandidateFiles(context, tailwindConfig) {
  * @returns {ContentPath}
  */
 function parseFilePath(filePath, ignore) {
+  // Escape special characters in the file path such as: ()[]
+  // But only if the special character isn't already escaped
+  filePath = filePath.replace(/(?<!\\)([\[\]\(\)])/g, '\\$1')
+
   let contentPath = {
     original: filePath,
     base: filePath,
