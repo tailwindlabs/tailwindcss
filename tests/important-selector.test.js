@@ -3,7 +3,7 @@ import { run, html, css, defaults } from './util/run'
 test('important selector', () => {
   let config = {
     important: '#app',
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`
@@ -145,30 +145,28 @@ test('important selector', () => {
           text-align: right;
         }
       }
-      #app :is(:where([dir='rtl']) .rtl\:active\:text-center:active) {
+      #app .rtl\:active\:text-center:active:where([dir='rtl'], [dir='rtl'] *) {
         text-align: center;
       }
-      #app :is(:where(.dark) .dark\:before\:underline):before {
+      #app .dark\:before\:underline:where(.dark, .dark *):before {
         content: var(--tw-content);
         text-decoration-line: underline;
       }
-      #app :is(:where(.dark) .dark\:focus\:text-left:focus) {
+      #app .dark\:focus\:text-left:focus:where(.dark, .dark *) {
         text-align: left;
       }
       #app
-        :-webkit-any(
-          :where([dir='rtl'])
-            :-webkit-any(
-              :where(.dark) .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100
-            )
-        )::-webkit-file-upload-button:hover {
+        .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100:where(
+          .dark,
+          .dark *
+        ):where([dir='rtl'], [dir='rtl'] *)::-webkit-file-upload-button:hover {
         background-color: #000;
       }
       #app
-        :is(
-          :where([dir='rtl'])
-            :is(:where(.dark) .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100)
-        )::file-selector-button:hover {
+        .hover\:\[\&\:\:file-selector-button\]\:rtl\:dark\:bg-black\/100:where(
+          .dark,
+          .dark *
+        ):where([dir='rtl'], [dir='rtl'] *)::file-selector-button:hover {
         background-color: #000;
       }
     `)
@@ -178,7 +176,7 @@ test('important selector', () => {
 test('pseudo-elements are appended after the `:-webkit-any()`', () => {
   let config = {
     important: '#app',
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html` <div class="dark:before:flex"></div> `,
@@ -196,7 +194,7 @@ test('pseudo-elements are appended after the `:-webkit-any()`', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      #app :is(:where(.dark) .dark\:before\:flex):before {
+      #app .dark\:before\:flex:where(.dark, .dark *):before {
         content: var(--tw-content);
         display: flex;
       }

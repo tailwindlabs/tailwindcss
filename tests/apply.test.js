@@ -34,7 +34,7 @@ let sharedHtml = html`
 
 test('@apply', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: sharedHtml }],
   }
 
@@ -215,14 +215,14 @@ test('@apply', () => {
           text-align: left;
         }
       }
-      :is(:where(.dark) .apply-dark-variant) {
+      .apply-dark-variant:where(.dark, .dark *) {
         text-align: center;
       }
-      :is(:where(.dark) .apply-dark-variant:hover) {
+      .apply-dark-variant:hover:where(.dark, .dark *) {
         text-align: right;
       }
       @media (min-width: 1024px) {
-        :is(:where(.dark) .apply-dark-variant) {
+        .apply-dark-variant:where(.dark, .dark *) {
           text-align: left;
         }
       }
@@ -452,7 +452,7 @@ test('@apply', () => {
 
 test('@apply error with unknown utility', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: sharedHtml }],
   }
 
@@ -472,7 +472,7 @@ test('@apply error with unknown utility', async () => {
 
 test('@apply error with nested @screen', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: sharedHtml }],
   }
 
@@ -496,7 +496,7 @@ test('@apply error with nested @screen', async () => {
 
 test('@apply error with nested @anyatrulehere', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: sharedHtml }],
   }
 
@@ -520,7 +520,7 @@ test('@apply error with nested @anyatrulehere', async () => {
 
 test('@apply error when using .group utility', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: '<div class="foo"></div>' }],
   }
 
@@ -543,7 +543,7 @@ test('@apply error when using .group utility', async () => {
 test('@apply error when using a prefixed .group utility', async () => {
   let config = {
     prefix: 'tw-',
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: html`<div class="foo"></div>` }],
   }
 
@@ -565,7 +565,7 @@ test('@apply error when using a prefixed .group utility', async () => {
 
 test('@apply error when using .peer utility', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: '<div class="foo"></div>' }],
   }
 
@@ -588,7 +588,7 @@ test('@apply error when using .peer utility', async () => {
 test('@apply error when using a prefixed .peer utility', async () => {
   let config = {
     prefix: 'tw-',
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: html`<div class="foo"></div>` }],
   }
 
@@ -1972,7 +1972,7 @@ it('should maintain the correct selector when applying other utilities', () => {
 
 it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html` <div class="foo bar baz qux steve bob"></div> `,
@@ -2016,28 +2016,30 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      :is(:where(.dark) .foo):before,
-      :is(:where([dir='rtl']) :is(:where(.dark) .bar)):before,
-      :is(:where([dir='rtl']) :is(:where(.dark) .baz:hover)):before {
+      .foo:where(.dark, .dark *):before,
+      .bar:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *):before,
+      .baz:hover:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *):before {
         background-color: #000;
       }
-      :-webkit-any(
-          :where([dir='rtl']) :-webkit-any(:where(.dark) .qux)
+      .qux:where(.dark, .dark *):where(
+          [dir='rtl'],
+          [dir='rtl'] *
         )::-webkit-file-upload-button:hover {
         background-color: #000;
       }
-      :is(:where([dir='rtl']) :is(:where(.dark) .qux))::file-selector-button:hover {
+      .qux:where(.dark, .dark *):where([dir='rtl'], [dir='rtl'] *)::file-selector-button:hover {
         background-color: #000;
       }
-      :is(:where([dir='rtl']) :is(:where(.dark) .steve):hover):before {
+      .steve:where(.dark, .dark *):hover:where([dir='rtl'], [dir='rtl'] *):before {
         background-color: #000;
       }
-      :-webkit-any(
-          :where([dir='rtl']) :-webkit-any(:where(.dark) .bob)
-        )::-webkit-file-upload-button:hover {
+      .bob:where(.dark, .dark *):hover:where(
+          [dir='rtl'],
+          [dir='rtl'] *
+        )::-webkit-file-upload-button {
         background-color: #000;
       }
-      :is(:where([dir='rtl']) :is(:where(.dark) .bob))::file-selector-button:hover {
+      .bob:where(.dark, .dark *):hover:where([dir='rtl'], [dir='rtl'] *)::file-selector-button {
         background-color: #000;
       }
       :has([dir='rtl'] .foo:hover):before {
@@ -2055,7 +2057,7 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
 
 test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html` <div class="foo bar"></div> `,

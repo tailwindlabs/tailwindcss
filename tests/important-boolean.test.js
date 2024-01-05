@@ -7,7 +7,7 @@ import { run, html, css, defaults } from './util/run'
 test('important boolean', () => {
   let config = {
     important: true,
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`
@@ -147,10 +147,10 @@ test('important boolean', () => {
           text-align: right !important;
         }
       }
-      :is(:where([dir='rtl']) .rtl\:active\:text-center:active) {
+      .rtl\:active\:text-center:active:where([dir='rtl'], [dir='rtl'] *) {
         text-align: center !important;
       }
-      :is(:where(.dark) .dark\:focus\:text-left:focus) {
+      .dark\:focus\:text-left:focus:where(.dark, .dark *) {
         text-align: left !important;
       }
     `)

@@ -3,7 +3,7 @@ import { run, html, css } from './util/run'
 test('important modifier', () => {
   let config = {
     important: false,
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`

@@ -3,7 +3,7 @@ import { html, css, run } from './util/run'
 describe('import processing', () => {
   it('should be possible to import another css file', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`<div class="underline" />`,
@@ -27,7 +27,7 @@ describe('import processing', () => {
 
   it('should be possible to import another css file after @tailwind directive', async () => {
     let config = {
-      darkMode: 'class',
+      darkMode: 'selector',
       content: [
         {
           raw: html`<div class="foo underline" />`,

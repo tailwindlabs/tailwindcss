@@ -4,7 +4,7 @@ test('important modifier with prefix', () => {
   let config = {
     important: false,
     prefix: 'tw-',
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`<!-- The string "!*" can cause problems if we don't handle it, let's include it -->

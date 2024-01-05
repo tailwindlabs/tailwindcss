@@ -4,7 +4,7 @@ import { run, html, css } from './util/run'
 
 test('modify selectors', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`
