@@ -216,7 +216,7 @@ export let variantPlugins = {
   },
 
   darkVariants: ({ config, addVariant }) => {
-    let [mode, className = '.dark'] = [].concat(config('darkMode', 'media'))
+    let [mode, selector = '.dark'] = [].concat(config('darkMode', 'media'))
 
     if (mode === false) {
       mode = 'media'
@@ -229,12 +229,12 @@ export let variantPlugins = {
 
     if (mode === 'variant') {
       let formats
-      if (Array.isArray(className)) {
-        formats = className
-      } else if (typeof className === 'function') {
-        formats = className
-      } else if (typeof className === 'string') {
-        formats = [className]
+      if (Array.isArray(selector)) {
+        formats = selector
+      } else if (typeof selector === 'function') {
+        formats = selector
+      } else if (typeof selector === 'string') {
+        formats = [selector]
       }
 
       // TODO: We could also add these warnings if the user passes a function that returns string | string[]
@@ -257,19 +257,19 @@ export let variantPlugins = {
         }
       }
 
-      className = formats
+      selector = formats
     }
 
     if (mode === 'selector') {
       // New preferred behavior
-      addVariant('dark', `&:where(${className}, ${className} *)`)
+      addVariant('dark', `&:where(${selector}, ${selector} *)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     } else if (mode === 'variant') {
-      addVariant('dark', className)
+      addVariant('dark', selector)
     } else if (mode === 'class') {
       // Old behavior
-      addVariant('dark', `:is(${className} &)`)
+      addVariant('dark', `:is(${selector} &)`)
     }
   },
 
