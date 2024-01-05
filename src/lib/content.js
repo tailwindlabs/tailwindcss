@@ -39,7 +39,14 @@ function normalizePath(path) {
     }
   }
 
-  // Modified part: instead of purely splitting on `\\` and `/`, we split on
+  // Modified part:
+
+  // Assumption: `\\\\[` or `\\\\(` means that the first `\\` is the path separator, and the second
+  // `\\` is the escape for the special `[]` and `()` characters and therefore we want to rewrite
+  // it as `/` and then the escape `\\` which will result in `/\\`.
+  path = path.replace(/\\\\([\[\]\(\)])/g, '/\\$1')
+
+  // Instead of purely splitting on `\\` and `/`, we split on
   // `/` and `\\` that is _not_ followed by any of the following characters: ()[]
   // This is to ensure that we keep the escaping of brackets and parentheses
   let segs = path.split(/[/\\]+(?![\(\)\[\]])/)
@@ -105,7 +112,6 @@ export function parseCandidateFiles(context, tailwindConfig) {
 
   // Normalize the file globs
   files = files.filter((filePath) => typeof filePath === 'string')
-  files = files.map(normalizePath)
 
   // Split into included and excluded globs
   let tasks = fastGlob.generateTasks(files)
@@ -143,8 +149,21 @@ export function parseCandidateFiles(context, tailwindConfig) {
  */
 function parseFilePath(filePath, ignore) {
   // Escape special characters in the file path such as: ()[]
-  // But only if the special character isn't already escaped
-  filePath = filePath.replace(/(?<!\\)([\[\]\(\)])/g, '\\$1')
+  // But only if the special character isn't already escaped (and balanced)
+  filePath = filePath
+    .replace(/(\\)?\[(.*?)\]/g, (match, prefix, contents) => {
+      return match.startsWith('\\[') && match.endsWith('\\]')
+        ? match
+        : `${prefix || ''}\\[${contents}\\]`
+    })
+    .replace(/(\\)?\((.*?)\)/g, (match, prefix, contents) => {
+      return match.startsWith('\\(') && match.endsWith('\\)')
+        ? match
+        : `${prefix || ''}\\(${contents}\\)`
+    })
+
+  // Normalize the file path for Windows
+  filePath = normalizePath(filePath)
 
   let contentPath = {
     original: filePath,
