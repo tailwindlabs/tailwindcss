@@ -394,15 +394,15 @@ export let variantPlugins = {
     )
   },
 
-  hasVariants: ({ matchVariant }) => {
-    matchVariant('has', (value) => `&:has(${normalize(value)})`, { values: {} })
+  hasVariants: ({ matchVariant, theme }) => {
+    matchVariant('has', (value) => `&:has(${normalize(value)})`, { values: theme('has') ?? {} })
     matchVariant(
       'group-has',
       (value, { modifier }) =>
         modifier
           ? `:merge(.group\\/${modifier}):has(${normalize(value)}) &`
           : `:merge(.group):has(${normalize(value)}) &`,
-      { values: {} }
+      { values: theme('has') ?? {} }
     )
     matchVariant(
       'peer-has',
@@ -410,7 +410,7 @@ export let variantPlugins = {
         modifier
           ? `:merge(.peer\\/${modifier}):has(${normalize(value)}) ~ &`
           : `:merge(.peer):has(${normalize(value)}) ~ &`,
-      { values: {} }
+      { values: theme('has') ?? {} }
     )
   },
 

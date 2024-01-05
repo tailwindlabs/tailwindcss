@@ -111,6 +111,7 @@ export interface ThemeConfig {
   gridRowEnd: ResolvableTo<KeyValuePair>
   margin: ThemeConfig['spacing']
   aspectRatio: ResolvableTo<KeyValuePair>
+  has: ResolvableTo<KeyValuePair>
   height: ThemeConfig['spacing']
   maxHeight: ThemeConfig['spacing']
   minHeight: ResolvableTo<KeyValuePair>

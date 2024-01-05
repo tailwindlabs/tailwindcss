@@ -815,7 +815,11 @@ it('should support supports', () => {
 
 test('has-* variants with arbitrary values', () => {
   let config = {
-    theme: {},
+    theme: {
+      has: {
+        valid: ':valid',
+      },
+    },
     content: [
       {
         raw: html`
@@ -828,6 +832,7 @@ test('has-* variants with arbitrary values', () => {
             <div class="has-[+_h2]:grid"></div>
             <div class="has-[>_h1_+_h2]:contents"></div>
             <div class="has-[h2]:has-[.banana]:hidden"></div>
+            <div class="has-valid:grid"></div>
           </div>
         `,
       },
@@ -841,6 +846,9 @@ test('has-* variants with arbitrary values', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .has-valid\:grid:has(:valid) {
+        display: grid;
+      }
       .has-\[\.foo\:hover\]\:block:has(.foo:hover) {
         display: block;
       }
@@ -871,7 +879,11 @@ test('has-* variants with arbitrary values', () => {
 
 test('group-has-* variants with arbitrary values', () => {
   let config = {
-    theme: {},
+    theme: {
+      has: {
+        valid: ':valid',
+      },
+    },
     content: [
       {
         raw: html`
@@ -880,6 +892,9 @@ test('group-has-* variants with arbitrary values', () => {
           </div>
           <div class="group/two">
             <div class="group-has-[>_h1_+_.foo]/two:flex"></div>
+          </div>
+          <div class="group">
+            <div class="group-has-valid:grid"></div>
           </div>
         `,
       },
@@ -893,6 +908,9 @@ test('group-has-* variants with arbitrary values', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .group:has(:valid) .group-has-valid\:grid {
+        display: grid;
+      }
       .group:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\:block {
         display: block;
       }
@@ -905,7 +923,11 @@ test('group-has-* variants with arbitrary values', () => {
 
 test('peer-has-* variants with arbitrary values', () => {
   let config = {
-    theme: {},
+    theme: {
+      has: {
+        valid: ':valid',
+      },
+    },
     content: [
       {
         raw: html`
@@ -916,6 +938,10 @@ test('peer-has-* variants with arbitrary values', () => {
           <div>
             <div className="peer"></div>
             <div class="peer-has-[>_h1_+_.foo]/two:flex"></div>
+          </div>
+          <div>
+            <div className="peer"></div>
+            <div class="peer-has-valid:flex"></div>
           </div>
         `,
       },
@@ -929,6 +955,9 @@ test('peer-has-* variants with arbitrary values', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .peer:has(:valid) ~ .peer-has-valid\:flex {
+        display: flex;
+      }
       .peer:has(> h1 + .foo) ~ .peer-has-\[\>_h1_\+_\.foo\]\:block {
         display: block;
       }
