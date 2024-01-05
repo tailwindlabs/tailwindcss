@@ -227,45 +227,10 @@ export let variantPlugins = {
       ])
     }
 
-    if (mode === 'variant') {
-      let formats
-      if (Array.isArray(className)) {
-        formats = className
-      } else if (typeof className === 'function') {
-        formats = className
-      } else if (typeof className === 'string') {
-        formats = [className]
-      }
-
-      // TODO: We could also add these warnings if the user passes a function that returns string | string[]
-      // But this is an advanced enough use case that it's probably not necessary
-      if (Array.isArray(formats)) {
-        for (let format of formats) {
-          if (format === '.dark') {
-            mode = false
-            log.warn('darkmode-variant-without-selector', [
-              'When using `variant` for `darkMode`, you must provide a selector.',
-              'Example: `darkMode: ["variant", ".your-selector &"]`',
-            ])
-          } else if (!format.includes('&')) {
-            mode = false
-            log.warn('darkmode-variant-without-ampersand', [
-              'When using `variant` for `darkMode`, your selector must contain `&`.',
-              'Example `darkMode: ["variant", ".your-selector &"]`',
-            ])
-          }
-        }
-      }
-
-      className = formats
-    }
-
     if (mode === 'selector') {
       addVariant('dark', `&:where(${className}, ${className} *)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
-    } else if (mode === 'variant') {
-      addVariant('dark', className)
     } else if (mode === 'class') {
       // Exists for pre v3.4 compatibility
       addVariant('dark', `:is(${className} &)`)
