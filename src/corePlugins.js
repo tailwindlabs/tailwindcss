@@ -228,11 +228,12 @@ export let variantPlugins = {
     }
 
     if (mode === 'selector') {
+      // New preferred behavior
       addVariant('dark', `&:where(${className}, ${className} *)`)
     } else if (mode === 'media') {
       addVariant('dark', '@media (prefers-color-scheme: dark)')
     } else if (mode === 'class') {
-      // Exists for pre v3.4 compatibility
+      // Old behavior
       addVariant('dark', `:is(${className} &)`)
     }
   },
