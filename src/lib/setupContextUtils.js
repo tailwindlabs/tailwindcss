@@ -776,16 +776,16 @@ function resolvePlugins(context, root) {
   if (isLegacyDarkMode) {
     afterVariants = [
       variantPlugins['supportsVariants'],
-      variantPlugins['directionVariants'],
       variantPlugins['reducedMotionVariants'],
       variantPlugins['prefersContrastVariants'],
       variantPlugins['darkVariants'],
-      variantPlugins['printVariant'],
       variantPlugins['screenVariants'],
       variantPlugins['orientationVariants'],
+      variantPlugins['directionVariants'],
 
       // Forced colors didn't exist before 3.4 so it can keep its position at the end
       variantPlugins['forcedColorsVariants'],
+      variantPlugins['printVariant'],
     ]
   }
 
