@@ -22,4 +22,3 @@ quickVariantPluginTest('darkVariants', {
 quickVariantPluginTest('darkVariants', {
   darkMode: ['selector', '.my-dark-mode'],
 }).toMatchSnapshot()
-
