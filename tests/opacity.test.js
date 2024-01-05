@@ -2,7 +2,7 @@ import { run, html, css } from './util/run'
 
 test('opacity', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`
@@ -42,7 +42,7 @@ test('opacity', () => {
 
 test('colors defined as functions work when opacity plugins are disabled', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html`

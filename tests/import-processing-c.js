@@ -1,5 +1,5 @@
 module.exports = {
-  darkMode: 'class',
+  darkMode: 'selector',
   content: [
     {
       raw: `<div class="foo underline" />`,

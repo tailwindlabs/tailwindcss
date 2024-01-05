@@ -12,3 +12,14 @@ quickVariantPluginTest('darkVariants', {
 quickVariantPluginTest('darkVariants', {
   darkMode: ['class', '.my-dark-mode'],
 }).toMatchSnapshot()
+
+// Selector dark mode
+quickVariantPluginTest('darkVariants', {
+  darkMode: 'selector',
+}).toMatchSnapshot()
+
+// Selector dark mode with custom selector
+quickVariantPluginTest('darkVariants', {
+  darkMode: ['selector', '.my-dark-mode'],
+}).toMatchSnapshot()
+

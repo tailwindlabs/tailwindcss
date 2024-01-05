@@ -452,7 +452,7 @@ test('@apply', () => {
 
 test('@apply error with unknown utility', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: sharedHtml }],
   }
 
@@ -472,7 +472,7 @@ test('@apply error with unknown utility', async () => {
 
 test('@apply error with nested @screen', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: sharedHtml }],
   }
 
@@ -496,7 +496,7 @@ test('@apply error with nested @screen', async () => {
 
 test('@apply error with nested @anyatrulehere', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: sharedHtml }],
   }
 
@@ -520,7 +520,7 @@ test('@apply error with nested @anyatrulehere', async () => {
 
 test('@apply error when using .group utility', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: '<div class="foo"></div>' }],
   }
 
@@ -543,7 +543,7 @@ test('@apply error when using .group utility', async () => {
 test('@apply error when using a prefixed .group utility', async () => {
   let config = {
     prefix: 'tw-',
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: html`<div class="foo"></div>` }],
   }
 
@@ -565,7 +565,7 @@ test('@apply error when using a prefixed .group utility', async () => {
 
 test('@apply error when using .peer utility', async () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: '<div class="foo"></div>' }],
   }
 
@@ -588,7 +588,7 @@ test('@apply error when using .peer utility', async () => {
 test('@apply error when using a prefixed .peer utility', async () => {
   let config = {
     prefix: 'tw-',
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [{ raw: html`<div class="foo"></div>` }],
   }
 
@@ -2057,7 +2057,7 @@ it('pseudo elements inside apply are moved outside of :is() or :has()', () => {
 
 test('::ng-deep, ::deep, ::v-deep pseudo elements are left alone', () => {
   let config = {
-    darkMode: 'class',
+    darkMode: 'selector',
     content: [
       {
         raw: html` <div class="foo bar"></div> `,

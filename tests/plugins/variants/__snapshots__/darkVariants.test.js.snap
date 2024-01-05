@@ -25,3 +25,19 @@ exports[`should test the 'darkVariants' plugin 3`] = `
 }
 "
 `;
+
+exports[`should test the 'darkVariants' plugin 4`] = `
+"
+.dark\\:flex:where(.dark, .dark *) {
+  display: flex;
+}
+"
+`;
+
+exports[`should test the 'darkVariants' plugin 5`] = `
+"
+.dark\\:flex:where(.my-dark-mode, .my-dark-mode *) {
+  display: flex;
+}
+"
+`;
