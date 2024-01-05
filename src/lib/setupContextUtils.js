@@ -766,8 +766,7 @@ function resolvePlugins(context, root) {
   ]
 
   // This is a compatibility fix for the pre 3.4 dark mode behavior
-  // The `class` strategy is deprecated in favor of `selector` which has the new behavior
-  // You can enable the old behavior by setting `darkMode: ['legacy', selector]`
+  // `class` retains the old behavior, but `selector` keeps the new behavior
   let isLegacyDarkMode =
     context.tailwindConfig.darkMode === 'class' ||
     (Array.isArray(context.tailwindConfig.darkMode) &&
@@ -782,8 +781,6 @@ function resolvePlugins(context, root) {
       variantPlugins['screenVariants'],
       variantPlugins['orientationVariants'],
       variantPlugins['directionVariants'],
-
-      // Forced colors didn't exist before 3.4 so it can keep its position at the end
       variantPlugins['forcedColorsVariants'],
       variantPlugins['printVariant'],
     ]
