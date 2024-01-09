@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure max specificity of `0,0,1` for button and input Preflight rules  ([#12735](https://github.com/tailwindlabs/tailwindcss/pull/12735))
+- Split `:has` rules when using `experimental.optimizeUniversalDefaults` ([#12736](https://github.com/tailwindlabs/tailwindcss/pull/12736))
 
 ## [3.4.1] - 2014-01-05
 
