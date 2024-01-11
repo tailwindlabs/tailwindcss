@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'contain' plugin 1`] = `
+"
+.contain-content {
+  contain: content;
+}
+
+.contain-inline-size {
+  contain: inline-size;
+}
+
+.contain-layout {
+  contain: layout;
+}
+
+.contain-none {
+  contain: none;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+.contain-size {
+  contain: size;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+.contain-style {
+  contain: style;
+}
+
+.contain-unset {
+  contain: unset;
+}
+"
+`;
