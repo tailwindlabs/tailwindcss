@@ -2946,5 +2946,5 @@ export let corePlugins = {
       '.contain-style': { contain: 'style' },
       '.contain-unset': { contain: 'unset' },
     })
-  }
+  },
 }
