@@ -53,10 +53,7 @@ module.exports = function $(command, options = {}) {
     : (() => {
         let args = command.trim().split(/\s+/)
         command = args.shift()
-        command =
-          command === 'node'
-            ? command
-            : resolveCommandPath(root, command)
+        command = command === 'node' ? command : resolveCommandPath(root, command)
         return [command, args]
       })()
 

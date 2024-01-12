@@ -132,22 +132,22 @@ export function parseCandidateFiles(context, tailwindConfig) {
 
   let paths = [...included, ...excluded]
 
-  console.log("parseCandidateFiles 0", { paths })
+  console.log('parseCandidateFiles 0', { paths })
 
   // Resolve paths relative to the config file or cwd
   paths = resolveRelativePaths(context, paths)
 
-  console.log("parseCandidateFiles 1", { paths })
+  console.log('parseCandidateFiles 1', { paths })
 
   // Resolve symlinks if possible
   paths = paths.flatMap(resolvePathSymlinks)
 
-  console.log("parseCandidateFiles 2", { paths })
+  console.log('parseCandidateFiles 2', { paths })
 
   // Update cached patterns
   paths = paths.map(resolveGlobPattern)
 
-  console.log("parseCandidateFiles 3", { paths })
+  console.log('parseCandidateFiles 3', { paths })
 
   return paths
 }
@@ -201,9 +201,7 @@ function resolveGlobPattern(contentPath) {
     ? `${contentPath.base}/${contentPath.glob}`
     : contentPath.base
 
-  contentPath.pattern = contentPath.ignore
-    ? `!${contentPath.pattern}`
-    : contentPath.pattern
+  contentPath.pattern = contentPath.ignore ? `!${contentPath.pattern}` : contentPath.pattern
 
   return contentPath
 }
@@ -227,7 +225,11 @@ function resolveRelativePaths(context, contentPaths) {
   return contentPaths.map((contentPath) => {
     contentPath.base = path.posix.resolve(...resolveFrom, contentPath.base)
 
-    if (path.sep === '\\' && contentPath.base.startsWith('/') && !contentPath.base.startsWith('//?/')) {
+    if (
+      path.sep === '\\' &&
+      contentPath.base.startsWith('/') &&
+      !contentPath.base.startsWith('//?/')
+    ) {
       contentPath.base = `C:${contentPath.base}`
     }
 

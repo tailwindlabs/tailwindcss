@@ -305,10 +305,20 @@ it('handles some special glob characters in paths', async () => {
   let result = await build({ cwd: path.resolve(__dirname, '..') })
 
   expect(result.css).toMatchFormattedCss(css`
-    .mr-1 { margin-right: 0.25rem; }
-    .mr-2 { margin-right: 0.5rem; }
-    .mr-3 { margin-right: 0.75rem; }
-    .mr-4 { margin-right: 1rem; }
-    .mr-5 { margin-right: 1.25rem; }
+    .mr-1 {
+      margin-right: 0.25rem;
+    }
+    .mr-2 {
+      margin-right: 0.5rem;
+    }
+    .mr-3 {
+      margin-right: 0.75rem;
+    }
+    .mr-4 {
+      margin-right: 1rem;
+    }
+    .mr-5 {
+      margin-right: 1.25rem;
+    }
   `)
 })
