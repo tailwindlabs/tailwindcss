@@ -285,3 +285,30 @@ it('it can resolve symlinks for files when relative to the config', async () => 
     }
   `)
 })
+
+it('handles some special glob characters in paths', async () => {
+  await writeConfigs({
+    both: {
+      content: {
+        relative: true,
+        files: [
+          './src/escapes/1.html',
+          './src/escapes/(test)/2.html',
+          './src/escapes/(test)/[test]/3.html',
+          './src/escapes/[test]/4.html',
+          './src/escapes/[test]/(test)/5.html',
+        ],
+      },
+    },
+  })
+
+  let result = await build({ cwd: path.resolve(__dirname, '..') })
+
+  expect(result.css).toMatchFormattedCss(css`
+    .mr-1 { margin-right: 0.25rem; }
+    .mr-2 { margin-right: 0.5rem; }
+    .mr-3 { margin-right: 0.75rem; }
+    .mr-4 { margin-right: 1rem; }
+    .mr-5 { margin-right: 1.25rem; }
+  `)
+})

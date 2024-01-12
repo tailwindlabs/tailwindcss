@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "build": "NODE_ENV=production postcss ./src/index.css -o ./dist/main.css --verbose",
-    "test": "jest --runInBand --forceExit"
+    "test": "jest --runInBand --forceExit",
+    "prewip": "npm run --prefix=../../ build",
+    "wip": "npx postcss ./src/index.css -o ./dist/main.css"
   },
   "jest": {
     "testTimeout": 10000,

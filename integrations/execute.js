@@ -20,6 +20,29 @@ function debounce(fn, ms) {
   }
 }
 
+function resolveCommandPath(root, command) {
+  let paths = [
+    path.resolve(root, 'node_modules', '.bin', command),
+    path.resolve(root, '..', '..', 'node_modules', '.bin', command),
+  ]
+
+  if (path.sep === '\\') {
+    paths = [
+      path.resolve(root, 'node_modules', '.bin', `${command}.cmd`),
+      path.resolve(root, '..', '..', 'node_modules', '.bin', `${command}.cmd`),
+      ...paths,
+    ]
+  }
+
+  for (let filepath of paths) {
+    if (fs.existsSync(filepath)) {
+      return filepath
+    }
+  }
+
+  return `npx ${command}`
+}
+
 module.exports = function $(command, options = {}) {
   let abortController = new AbortController()
   let root = resolveToolRoot()
@@ -33,19 +56,7 @@ module.exports = function $(command, options = {}) {
         command =
           command === 'node'
             ? command
-            : (function () {
-                let local = path.resolve(root, 'node_modules', '.bin', command)
-                if (fs.existsSync(local)) {
-                  return local
-                }
-
-                let hoisted = path.resolve(root, '..', '..', 'node_modules', '.bin', command)
-                if (fs.existsSync(hoisted)) {
-                  return hoisted
-                }
-
-                return `npx ${command}`
-              })()
+            : resolveCommandPath(root, command)
         return [command, args]
       })()
 
