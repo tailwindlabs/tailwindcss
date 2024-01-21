@@ -2101,7 +2101,7 @@ export let corePlugins = {
             }
           }
 
-          let { lineHeight, letterSpacing, fontWeight } = isPlainObject(options)
+          let { lineHeight, letterSpacing, fontWeight, fontFamily, fontStyle, textDecoration } = isPlainObject(options)
             ? options
             : { lineHeight: options }
 
@@ -2110,6 +2110,9 @@ export let corePlugins = {
             ...(lineHeight === undefined ? {} : { 'line-height': lineHeight }),
             ...(letterSpacing === undefined ? {} : { 'letter-spacing': letterSpacing }),
             ...(fontWeight === undefined ? {} : { 'font-weight': fontWeight }),
+            ...(fontFamily === undefined ? {} : { 'font-family': fontFamily }),
+            ...(fontStyle === undefined ? {} : { 'font-style': fontStyle }),
+            ...(textDecoration === undefined ? {} : { 'text-decoration': textDecoration }),
           }
         },
       },

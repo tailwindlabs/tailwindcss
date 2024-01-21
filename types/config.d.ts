@@ -191,6 +191,9 @@ export interface ThemeConfig {
             lineHeight: string
             letterSpacing: string
             fontWeight: string | number
+            fontFamily: string
+            fontStyle: string
+            textDecoration: string
           }>
         ]
     >
