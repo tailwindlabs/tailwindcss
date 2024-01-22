@@ -35,7 +35,7 @@ it('should not warn when we detect nested css inside css @layer rules', () => {
   }
 
   let input = css`
-    @layer tw-base, tw-components, tw-utilities;
+    @layer tw-base, tw-components;
     @layer tw-utilities {
       @tailwind utilities;
     }
@@ -43,7 +43,7 @@ it('should not warn when we detect nested css inside css @layer rules', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      @layer tw-base, tw-components, tw-utilities;
+      @layer tw-base, tw-components;
       @layer tw-utilities {
         .underline {
           text-decoration-line: underline;
