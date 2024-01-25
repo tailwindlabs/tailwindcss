@@ -255,6 +255,13 @@ Remove the inner padding in Chrome and Safari on macOS.
 }
 
 /*
+Remove x on Chrome and Safari.
+*/
+::-webkit-search-cancel-button {
+  display: none;
+}
+
+/*
 1. Correct the inability to style clickable types in iOS and Safari.
 2. Change font properties to `inherit` in Safari.
 */
