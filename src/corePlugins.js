@@ -206,8 +206,8 @@ export let variantPlugins = {
   },
 
   directionVariants: ({ addVariant }) => {
-    addVariant('ltr', '&:where([dir="ltr"], [dir="ltr"] *)')
-    addVariant('rtl', '&:where([dir="rtl"], [dir="rtl"] *)')
+    addVariant('ltr', ['[dir="ltr"] &', '&[dir="ltr"]'])
+    addVariant('rtl', ['[dir="rtl"] &', '&[dir="rtl"]'])
   },
 
   reducedMotionVariants: ({ addVariant }) => {
