@@ -37,17 +37,17 @@ test('order matters and produces different behaviour', () => {
 
   return run('@tailwind utilities', config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .file\:hover\:\[--value\:2\]:hover::-webkit-file-upload-button {
-        --value: 2;
-      }
-      .file\:hover\:\[--value\:2\]:hover::file-selector-button {
-        --value: 2;
-      }
       .hover\:file\:\[--value\:1\]::-webkit-file-upload-button:hover {
         --value: 1;
       }
       .hover\:file\:\[--value\:1\]::file-selector-button:hover {
         --value: 1;
+      }
+      .file\:hover\:\[--value\:2\]:hover::-webkit-file-upload-button {
+        --value: 2;
+      }
+      .file\:hover\:\[--value\:2\]:hover::file-selector-button {
+        --value: 2;
       }
     `)
   })
