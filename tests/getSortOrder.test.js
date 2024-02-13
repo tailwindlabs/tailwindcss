@@ -220,3 +220,26 @@ it('Sorting is unchanged when multiple candidates share the same rule / object',
     expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
   }
 })
+
+it('sorts arbitrary values across one or more class lists consistently', () => {
+  let classes = [
+    ['[--fg:#fff]', '[--fg:#fff]'],
+    ['[--bg:#111] [--bg_hover:#000] [--fg:#fff]', '[--bg:#111] [--bg_hover:#000] [--fg:#fff]'],
+  ]
+
+  let config = {
+    theme: {},
+  }
+
+  // Same context, different class lists
+  let context = createContext(resolveConfig(config))
+  for (const [input, output] of classes) {
+    expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
+  }
+
+  // Different context, different class lists
+  for (const [input, output] of classes) {
+    context = createContext(resolveConfig(config))
+    expect(defaultSort(context.getClassOrder(input.split(' ')))).toEqual(output)
+  }
+})

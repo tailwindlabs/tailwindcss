@@ -36,8 +36,8 @@ crosscheck(({ stable, oxide }) => {
       content: [
         {
           raw: html`
-            <div class="hover:file:bg-pink-600"></div>
-            <div class="file:hover:bg-pink-600"></div>
+            <div class="hover:file:[--value:1]"></div>
+            <div class="file:hover:[--value:2]"></div>
           `,
         },
       ],
@@ -45,21 +45,31 @@ crosscheck(({ stable, oxide }) => {
 
     return run('@tailwind utilities', config).then((result) => {
       stable.expect(result.css).toMatchFormattedCss(css`
-        .file\:hover\:bg-pink-600:hover::file-selector-button {
-          --tw-bg-opacity: 1;
-          background-color: rgb(219 39 119 / var(--tw-bg-opacity));
+        .hover\:file\:\[--value\:1\]::-webkit-file-upload-button:hover {
+          --value: 1;
         }
-        .hover\:file\:bg-pink-600::file-selector-button:hover {
-          --tw-bg-opacity: 1;
-          background-color: rgb(219 39 119 / var(--tw-bg-opacity));
+        .hover\:file\:\[--value\:1\]::file-selector-button:hover {
+          --value: 1;
+        }
+        .file\:hover\:\[--value\:2\]:hover::-webkit-file-upload-button {
+          --value: 2;
+        }
+        .file\:hover\:\[--value\:2\]:hover::file-selector-button {
+          --value: 2;
         }
       `)
       oxide.expect(result.css).toMatchFormattedCss(css`
-        .file\:hover\:bg-pink-600:hover::file-selector-button {
-          background-color: #db2777;
+        .hover\:file\:\[--value\:1\]::-webkit-file-upload-button:hover {
+          --value: 1;
         }
-        .hover\:file\:bg-pink-600::file-selector-button:hover {
-          background-color: #db2777;
+        .hover\:file\:\[--value\:1\]::file-selector-button:hover {
+          --value: 1;
+        }
+        .file\:hover\:\[--value\:2\]:hover::-webkit-file-upload-button {
+          --value: 2;
+        }
+        .file\:hover\:\[--value\:2\]:hover::file-selector-button {
+          --value: 2;
         }
       `)
     })
