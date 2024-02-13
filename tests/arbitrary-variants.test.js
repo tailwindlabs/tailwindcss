@@ -731,6 +731,35 @@ it('should support data variants', () => {
   })
 })
 
+it('should support data variants with non-spec values', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <div class="data-[value=1]:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(
+      css`
+        .data-\[value\=1\]\:underline[data-value='1'] {
+          text-decoration-line: underline;
+        }
+      `
+    )
+  })
+})
+
 it('should support supports', () => {
   let config = {
     theme: {

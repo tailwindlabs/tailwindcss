@@ -55,6 +55,13 @@ export function formatVariantSelector(formats, { context, candidate }) {
     formatAst = ast
   }
 
+  // 4. Replace unquoted attributes
+  formatAst.walkAttributes((attribute) => {
+    if (attribute.quoteMark == null && attribute.value != null) {
+      attribute.setValue(attribute.value)
+    }
+  })
+
   return formatAst
 }
 
