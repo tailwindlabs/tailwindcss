@@ -63,7 +63,7 @@
     "@tailwindcss/oxide": "file:oxide/crates/node",
     "arg": "^5.0.2",
     "browserslist": "^4.22.3",
-    "chokidar": "^3.5.3",
+    "chokidar": "^3.6.0",
     "didyoumean": "^1.2.2",
     "dlv": "^1.1.3",
     "fast-glob": "^3.3.2",
