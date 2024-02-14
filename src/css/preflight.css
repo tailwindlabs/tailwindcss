@@ -12,6 +12,11 @@
   border-color: theme('borderColor.DEFAULT', currentColor); /* 2 */
 }
 
+*::selection {
+    color: #fff;
+    background-color: #000000;
+}
+
 ::before,
 ::after {
   --tw-content: '';
