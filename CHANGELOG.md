@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure max specificity of `0,0,1` for button and input Preflight rules ([#12735](https://github.com/tailwindlabs/tailwindcss/pull/12735))
 - Improve glob handling for folders with `(`, `)`, `[` or `]` in the file path ([#12715](https://github.com/tailwindlabs/tailwindcss/pull/12715))
 - Split `:has` rules when using `experimental.optimizeUniversalDefaults` ([#12736](https://github.com/tailwindlabs/tailwindcss/pull/12736))
+- Sort arbitrary properties alphabetically across multiple class lists ([#12911](https://github.com/tailwindlabs/tailwindcss/pull/12911))
 - Add `mix-blend-plus-darker` utility ([#12923](https://github.com/tailwindlabs/tailwindcss/pull/12923))
 
 ### Added
