@@ -57,6 +57,10 @@ export function defaults({ defaultRingColor = `#3b82f680` } = {}) {
       --tw-backdrop-opacity: ;
       --tw-backdrop-saturate: ;
       --tw-backdrop-sepia: ;
+      --tw-contain-size: ;
+      --tw-contain-layout: ;
+      --tw-contain-paint: ;
+      --tw-contain-style: ;
     }
 
     ::backdrop {
@@ -107,6 +111,10 @@ export function defaults({ defaultRingColor = `#3b82f680` } = {}) {
       --tw-backdrop-opacity: ;
       --tw-backdrop-saturate: ;
       --tw-backdrop-sepia: ;
+      --tw-contain-size: ;
+      --tw-contain-layout: ;
+      --tw-contain-paint: ;
+      --tw-contain-style: ;
     }
   `
 }
