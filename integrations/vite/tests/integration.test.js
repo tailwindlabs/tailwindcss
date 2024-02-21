@@ -9,6 +9,7 @@ let { readOutputFile, appendToInputFile, writeInputFile, removeFile } = require(
 })
 
 let PORT = 1337
+let OUTPUT_REGEX = /index[.-][\w-]+\.css$/
 
 async function fetchCSS() {
   let response = await fetch(`http://localhost:${PORT}/index.css`, {
@@ -33,7 +34,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
-    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+    expect(await readOutputFile(OUTPUT_REGEX)).toIncludeCss(
       css`
         .font-bold {
           font-weight: 700;
@@ -74,7 +75,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
-    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+    expect(await readOutputFile(OUTPUT_REGEX)).toIncludeCss(
       css`
         .z-primary {
           z-index: 0;
@@ -117,7 +118,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
-    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+    expect(await readOutputFile(OUTPUT_REGEX)).toIncludeCss(
       css`
         .z-primary {
           z-index: 0;
