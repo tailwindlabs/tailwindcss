@@ -369,7 +369,7 @@ audio,
 iframe,
 embed,
 object {
-  display: block; /* 1 */
+  display: inline-block; /* 1 */
   vertical-align: middle; /* 2 */
 }
 
