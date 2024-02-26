@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sort arbitrary properties alphabetically across multiple class lists ([#12911](https://github.com/tailwindlabs/tailwindcss/pull/12911))
 - Add `mix-blend-plus-darker` utility ([#12923](https://github.com/tailwindlabs/tailwindcss/pull/12923))
 
-## [3.4.1] - 2014-01-05
+## [3.4.1] - 2024-01-05
 
 ### Fixed
 
