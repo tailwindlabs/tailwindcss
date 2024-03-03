@@ -1651,6 +1651,20 @@ export let corePlugins = {
       '.border-hidden': { 'border-style': 'hidden' },
       '.border-none': { 'border-style': 'none' },
 
+      '.border-s-solid': { 'border-inline-start-style': 'solid' },
+      '.border-s-dashed': { 'border-inline-start-style': 'dashed' },
+      '.border-s-dotted': { 'border-inline-start-style': 'dotted' },
+      '.border-s-double': { 'border-inline-start-style': 'double' },
+      '.border-s-hidden': { 'border-inline-start-style': 'hidden' },
+      '.border-s-none': { 'border-inline-start-style': 'none' },
+
+      '.border-e-solid': { 'border-inline-end-style': 'solid' },
+      '.border-e-dashed': { 'border-inline-end-style': 'dashed' },
+      '.border-e-dotted': { 'border-inline-end-style': 'dotted' },
+      '.border-e-double': { 'border-inline-end-style': 'double' },
+      '.border-e-hidden': { 'border-inline-end-style': 'hidden' },
+      '.border-e-none': { 'border-inline-end-style': 'none' },
+
       '.border-x-solid': { 'border-left-style': 'solid', 'border-right-style': 'solid' },
       '.border-x-dashed': { 'border-left-style': 'dashed', 'border-right-style': 'dashed' },
       '.border-x-dotted': { 'border-left-style': 'dotted', 'border-right-style': 'dotted' },
