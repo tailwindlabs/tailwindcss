@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test the 'transitionBehavior' plugin 1`] = `
+"
+.transition-allow-discrete {
+  transition-behavior: allow-discrete;
+}
+
+.transition-behavior-normal {
+  transition-behavior: normal;
+}
+"
+`;
