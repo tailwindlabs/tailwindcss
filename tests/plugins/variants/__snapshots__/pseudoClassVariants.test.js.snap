@@ -14,7 +14,19 @@ exports[`should test the 'pseudoClassVariants' plugin 1`] = `
   display: flex;
 }
 
-.optional\\:flex:optional, .required\\:flex:required, .valid\\:flex:valid, .invalid\\:flex:invalid, .in-range\\:flex:in-range, .out-of-range\\:flex:out-of-range, .read-only\\:flex:read-only, .empty\\:flex:empty, .focus-within\\:flex:focus-within, .hover\\:flex:hover, .focus\\:flex:focus {
+.optional\\:flex:optional, .required\\:flex:required, .valid\\:flex:valid, .invalid\\:flex:invalid {
+  display: flex;
+}
+
+.user-valid\\:flex:user-valid {
+  display: flex;
+}
+
+.user-invalid\\:flex:user-invalid {
+  display: flex;
+}
+
+.in-range\\:flex:in-range, .out-of-range\\:flex:out-of-range, .read-only\\:flex:read-only, .empty\\:flex:empty, .focus-within\\:flex:focus-within, .hover\\:flex:hover, .focus\\:flex:focus {
   display: flex;
 }
 
@@ -34,7 +46,19 @@ exports[`should test the 'pseudoClassVariants' plugin 1`] = `
   display: flex;
 }
 
-.group:optional .group-optional\\:flex, .group:required .group-required\\:flex, .group:valid .group-valid\\:flex, .group:invalid .group-invalid\\:flex, .group:in-range .group-in-range\\:flex, .group:out-of-range .group-out-of-range\\:flex, .group:read-only .group-read-only\\:flex, .group:empty .group-empty\\:flex, .group:focus-within .group-focus-within\\:flex, .group:hover .group-hover\\:flex, .group:focus .group-focus\\:flex {
+.group:optional .group-optional\\:flex, .group:required .group-required\\:flex, .group:valid .group-valid\\:flex, .group:invalid .group-invalid\\:flex {
+  display: flex;
+}
+
+.group:user-valid .group-user-valid\\:flex {
+  display: flex;
+}
+
+.group:user-invalid .group-user-invalid\\:flex {
+  display: flex;
+}
+
+.group:in-range .group-in-range\\:flex, .group:out-of-range .group-out-of-range\\:flex, .group:read-only .group-read-only\\:flex, .group:empty .group-empty\\:flex, .group:focus-within .group-focus-within\\:flex, .group:hover .group-hover\\:flex, .group:focus .group-focus\\:flex {
   display: flex;
 }
 
@@ -54,7 +78,19 @@ exports[`should test the 'pseudoClassVariants' plugin 1`] = `
   display: flex;
 }
 
-.peer:optional ~ .peer-optional\\:flex, .peer:required ~ .peer-required\\:flex, .peer:valid ~ .peer-valid\\:flex, .peer:invalid ~ .peer-invalid\\:flex, .peer:in-range ~ .peer-in-range\\:flex, .peer:out-of-range ~ .peer-out-of-range\\:flex, .peer:read-only ~ .peer-read-only\\:flex, .peer:empty ~ .peer-empty\\:flex, .peer:focus-within ~ .peer-focus-within\\:flex, .peer:hover ~ .peer-hover\\:flex, .peer:focus ~ .peer-focus\\:flex {
+.peer:optional ~ .peer-optional\\:flex, .peer:required ~ .peer-required\\:flex, .peer:valid ~ .peer-valid\\:flex, .peer:invalid ~ .peer-invalid\\:flex {
+  display: flex;
+}
+
+.peer:user-valid ~ .peer-user-valid\\:flex {
+  display: flex;
+}
+
+.peer:user-invalid ~ .peer-user-invalid\\:flex {
+  display: flex;
+}
+
+.peer:in-range ~ .peer-in-range\\:flex, .peer:out-of-range ~ .peer-out-of-range\\:flex, .peer:read-only ~ .peer-read-only\\:flex, .peer:empty ~ .peer-empty\\:flex, .peer:focus-within ~ .peer-focus-within\\:flex, .peer:hover ~ .peer-hover\\:flex, .peer:focus ~ .peer-focus\\:flex {
   display: flex;
 }
 
