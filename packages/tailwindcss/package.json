@@ -1,0 +1,67 @@
+{
+  "name": "tailwindcss",
+  "version": "0.0.0-oxide.4",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup-node --env.NODE_ENV production",
+    "dev": "tsup-node --env.NODE_ENV development --watch",
+    "test:ui": "playwright test"
+  },
+  "bin": {
+    "tailwindcss": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "style": "./index.css",
+      "types": "./src/index.ts",
+      "require": "./dist/lib.js",
+      "import": "./src/index.ts"
+    },
+    "./package.json": "./package.json",
+    "./index.css": "./index.css",
+    "./preflight.css": "./preflight.css",
+    "./theme.css": "./theme.css",
+    "./utilities.css": "./utilities.css"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/lib.d.mts",
+        "style": "./index.css",
+        "require": "./dist/lib.js",
+        "import": "./dist/lib.mjs"
+      },
+      "./package.json": "./package.json",
+      "./index.css": "./index.css",
+      "./preflight.css": "./preflight.css",
+      "./theme.css": "./theme.css",
+      "./utilities.css": "./utilities.css"
+    }
+  },
+  "style": "index.css",
+  "files": [
+    "dist",
+    "index.css",
+    "preflight.css",
+    "theme.css",
+    "utilities.css"
+  ],
+  "dependencies": {
+    "@parcel/watcher": "^2.4.1",
+    "lightningcss": "^1.24.0",
+    "mri": "^1.2.0",
+    "picocolors": "^1.0.0",
+    "postcss": "8.4.24",
+    "postcss-import": "^16.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/oxide": "workspace:^",
+    "@types/node": "^20.10.8",
+    "@types/postcss-import": "^14.0.3"
+  }
+}

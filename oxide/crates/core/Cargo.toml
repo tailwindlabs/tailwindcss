@@ -1,0 +1,29 @@
+[package]
+name = "tailwindcss-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bstr = "1.0.1"
+globwalk = "0.8.1"
+log = "0.4"
+rayon = "1.5.3"
+fxhash = "0.2.1"
+crossbeam = "0.8.2"
+tracing = { version = "0.1.37", features = [] }
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+walkdir = "2.3.3"
+ignore = "0.4.20"
+lazy_static = "1.4.0"
+
+[dev-dependencies]
+criterion = { version = "0.3", features = ['html_reports'] }
+tempfile = "3.5.0"
+
+[[bench]]
+name = "parse_candidates"
+harness = false
+
+[[bench]]
+name = "scan_files"
+harness = false

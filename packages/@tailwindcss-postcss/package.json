@@ -1,0 +1,33 @@
+{
+  "name": "@tailwindcss/postcss",
+  "version": "0.0.0-oxide.4",
+  "description": "PostCSS plugin for Tailwind CSS, a utility-first CSS framework for rapidly building custom user interfaces",
+  "license": "MIT",
+  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup-node ./src/index.ts --format cjs --dts --cjsInterop --splitting",
+    "dev": "pnpm run build -- --watch"
+  },
+  "files": [
+    "dist/"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@tailwindcss/oxide": "workspace:^",
+    "postcss-import": "^16.0.0",
+    "tailwindcss": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "@types/postcss-import": "^14.0.3",
+    "postcss": "8.4.24"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@tailwindcss/vite",
+  "version": "0.0.0-oxide.4",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "build": "tsup-node ./src/index.ts --format esm --dts",
+    "dev": "pnpm run build -- --watch"
+  },
+  "files": [
+    "dist/"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "dependencies": {
+    "@tailwindcss/oxide": "workspace:^",
+    "tailwindcss": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "vite": "^5.0.11"
+  }
+}

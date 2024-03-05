@@ -1,0 +1,5 @@
+packages:
+  - 'oxide/crates/node'
+  - 'oxide/crates/node/npm/*'
+  - 'packages/*'
+  - 'playgrounds/*'

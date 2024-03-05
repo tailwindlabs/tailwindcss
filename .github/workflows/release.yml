@@ -1,0 +1,214 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_channel:
+        description: 'Release channel'
+        required: false
+        default: 'internal'
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  APP_NAME: tailwindcss-oxide
+  NODE_VERSION: 20
+  PNPM_VERSION: ^8.15.0
+  OXIDE_LOCATION: ./oxide/crates/node
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          # Windows
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+          # macOS
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            strip: strip -x # Must use -x on macOS. This produces larger results on linux.
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            page-size: 14
+            strip: strip -x # Must use -x on macOS. This produces larger results on linux.
+          # Linux
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            strip: strip
+            container:
+              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            strip: llvm-strip
+            container:
+              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
+          - os: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+            strip: llvm-strip
+            container:
+              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-zig
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            strip: aarch64-linux-musl-strip
+            download: true
+            container:
+              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            strip: strip
+            download: true
+            container:
+              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+
+    name: Build ${{ matrix.target }} (OXIDE)
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      # Cache the `oxide` Rust build
+      - name: Cache oxide build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./oxide/target/
+            ./oxide/crates/node/*.node
+            ./oxide/crates/node/index.js
+            ./oxide/crates/node/index.d.ts
+          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
+
+      - name: Install Node.JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup cross compile toolchain
+        if: ${{ matrix.setup }}
+        run: ${{ matrix.setup }}
+
+      - name: Install Rust (Stable)
+        if: ${{ matrix.download }}
+        run: |
+          rustup default stable
+
+      - name: Setup rust target
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts --filter=!./playgrounds/*
+
+      - name: Build release
+        run: pnpm run build --filter ${{ env.OXIDE_LOCATION }}
+        env:
+          RUST_TARGET: ${{ matrix.target }}
+          JEMALLOC_SYS_WITH_LG_PAGE: ${{ matrix.page-size }}
+
+      - name: Strip debug symbols # https://github.com/rust-lang/rust/issues/46034
+        if: ${{ matrix.strip }}
+        run: ${{ matrix.strip }} ${{ env.OXIDE_LOCATION }}/*.node
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: bindings-${{ matrix.target }}
+          path: ${{ env.OXIDE_LOCATION }}/*.node
+
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: Build and release Tailwind CSS
+
+    needs:
+      - build
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      # Cache the `oxide` Rust build
+      - name: Cache oxide build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./oxide/target/
+            ./oxide/crates/node/*.node
+            ./oxide/crates/node/index.js
+            ./oxide/crates/node/index.d.ts
+          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts --filter=!./playgrounds/*
+
+      - name: Build Tailwind CSS
+        run: pnpm run build
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ${{ env.OXIDE_LOCATION }}
+
+      - name: Move artifacts
+        run: |
+          cd ${{ env.OXIDE_LOCATION }}
+          cp bindings-x86_64-pc-windows-msvc/* ./npm/win32-x64-msvc/
+          cp bindings-x86_64-apple-darwin/* ./npm/darwin-x64/
+          cp bindings-aarch64-apple-darwin/* ./npm/darwin-arm64/
+          cp bindings-aarch64-unknown-linux-gnu/* ./npm/linux-arm64-gnu/
+          cp bindings-aarch64-unknown-linux-musl/* ./npm/linux-arm64-musl/
+          cp bindings-armv7-unknown-linux-gnueabihf/* ./npm/linux-arm-gnueabihf/
+          cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
+          cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
+
+      - name: Lock pre-release versions
+        run: node ./scripts/lock-pre-release-versions.mjs
+
+      - name: Publish
+        run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

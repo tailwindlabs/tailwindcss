@@ -1,0 +1,44 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "@tailwindcss/oxide#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["./index.d.ts", "./index.js", "./*.node"],
+      "inputs": [
+        "./src/**/*",
+        "./build.rs",
+        "./package.json",
+        "./Cargo.toml",
+        "../core/src/**/*",
+        "../core/Cargo.toml",
+        "../Cargo.toml",
+        "../package.json"
+      ]
+    },
+    "@tailwindcss/oxide#dev": {
+      "dependsOn": ["^dev"],
+      "outputs": ["./index.d.ts", "./index.js", "./*.node"],
+      "inputs": [
+        "./src/**/*",
+        "./build.rs",
+        "./package.json",
+        "./Cargo.toml",
+        "../core/src/**/*",
+        "../core/Cargo.toml",
+        "../Cargo.toml",
+        "../package.json"
+      ],
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "@tailwindcss/root",
+  "private": true,
+  "version": "1.0.0",
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 100,
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "tsconfig.json"
+        ],
+        "options": {
+          "parser": "jsonc"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "prettier --check . && turbo lint",
+    "build": "turbo build --filter=!./playgrounds/*",
+    "dev": "turbo dev --filter=!./playgrounds/*",
+    "test": "pnpm test --prefix=oxide && vitest run",
+    "test:ui": "pnpm run --filter=tailwindcss test:ui",
+    "tdd": "vitest",
+    "bench": "vitest bench",
+    "version-packages": "node ./scripts/version-packages.mjs",
+    "vite": "pnpm run --filter=vite-playground dev",
+    "nextjs": "pnpm run --filter=nextjs-playground dev"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.41.2",
+    "@types/node": "^20.11.19",
+    "@vitest/coverage-v8": "^1.2.1",
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "tsup": "^8.0.1",
+    "turbo": "^1.12.4",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.3"
+  }
+}
