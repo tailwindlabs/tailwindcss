@@ -74,6 +74,8 @@ export function walk(
 export function toCss(ast: AstNode[]) {
   let atRoots: string[] = []
 
+  let seenAtProperties = new Set<string>()
+
   function stringify(node: AstNode, depth = 0): string {
     let css = ''
 
@@ -96,6 +98,15 @@ export function toCss(ast: AstNode[]) {
       // ```
       if (node.selector[0] === '@' && node.nodes.length === 0) {
         return `${'  '.repeat(depth)}${node.selector};\n`
+      }
+
+      if (node.selector[0] === '@' && node.selector.startsWith('@property ') && depth === 0) {
+        // Don't output duplicate `@property` rules
+        if (seenAtProperties.has(node.selector)) {
+          return ''
+        }
+
+        seenAtProperties.add(node.selector)
       }
 
       css += `${'  '.repeat(depth)}${node.selector} {\n`
@@ -121,5 +132,5 @@ export function toCss(ast: AstNode[]) {
   return ast
     .map((node) => stringify(node))
     .concat(atRoots)
-    .join('\n')
+    .join('')
 }
