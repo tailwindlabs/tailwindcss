@@ -6,7 +6,7 @@ on:
       release_channel:
         description: 'Release channel'
         required: false
-        default: 'oxide'
+        default: 'next'
         type: string
 
 permissions:
