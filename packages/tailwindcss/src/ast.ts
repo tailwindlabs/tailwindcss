@@ -72,7 +72,7 @@ export function walk(
 }
 
 export function toCss(ast: AstNode[]) {
-  let atRoots: string[] = []
+  let atRoots: string = ''
 
   let seenAtProperties = new Set<string>()
 
@@ -85,7 +85,7 @@ export function toCss(ast: AstNode[]) {
       // Pull out `@at-root` rules to append later
       if (node.selector === '@at-root') {
         for (let child of node.nodes) {
-          atRoots.push(stringify(child, 0))
+          atRoots += stringify(child, 0)
         }
         return css
       }
@@ -130,8 +130,13 @@ export function toCss(ast: AstNode[]) {
     return css
   }
 
-  return ast
-    .map((node) => stringify(node))
-    .concat(atRoots)
-    .join('')
+  let css = ''
+  for (let node of ast) {
+    let result = stringify(node)
+    if (result !== '') {
+      css += result
+    }
+  }
+
+  return `${css}${atRoots}`
 }
