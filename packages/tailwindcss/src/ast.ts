@@ -73,50 +73,53 @@ export function walk(
 
 export function toCss(ast: AstNode[]) {
   let atRoots: string[] = []
-  return ast
-    .map(function stringify(node: AstNode): string {
-      let css = ''
 
-      // Rule
-      if (node.kind === 'rule') {
-        // Pull out `@at-root` rules to append later
-        if (node.selector === '@at-root') {
-          for (let child of node.nodes) {
-            atRoots.push(stringify(child))
-          }
-          return css
-        }
+  function stringify(node: AstNode, depth = 0): string {
+    let css = ''
 
-        // Print at-rules without nodes with a `;` instead of an empty block.
-        //
-        // E.g.:
-        //
-        // ```css
-        // @layer base, components, utilities;
-        // ```
-        if (node.selector[0] === '@' && node.nodes.length === 0) {
-          return `${node.selector};`
-        }
-
-        css += `${node.selector}{`
+    // Rule
+    if (node.kind === 'rule') {
+      // Pull out `@at-root` rules to append later
+      if (node.selector === '@at-root') {
         for (let child of node.nodes) {
-          css += stringify(child)
+          atRoots.push(stringify(child, 0))
         }
-        css += '}'
+        return css
       }
 
-      // Comment
-      else if (node.kind === 'comment') {
-        css += `/*${node.value}*/\n`
+      // Print at-rules without nodes with a `;` instead of an empty block.
+      //
+      // E.g.:
+      //
+      // ```css
+      // @layer base, components, utilities;
+      // ```
+      if (node.selector[0] === '@' && node.nodes.length === 0) {
+        return `${'  '.repeat(depth)}${node.selector};\n`
       }
 
-      // Declaration
-      else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
-        css += `${node.property}:${node.value}${node.important ? '!important' : ''};`
+      css += `${'  '.repeat(depth)}${node.selector} {\n`
+      for (let child of node.nodes) {
+        css += stringify(child, depth + 1)
       }
+      css += `${'  '.repeat(depth)}}\n`
+    }
 
-      return css
-    })
+    // Comment
+    else if (node.kind === 'comment') {
+      css += `${'  '.repeat(depth)}/*${node.value}*/\n`
+    }
+
+    // Declaration
+    else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
+      css += `${'  '.repeat(depth)}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
+    }
+
+    return css
+  }
+
+  return ast
+    .map((node) => stringify(node))
     .concat(atRoots)
     .join('\n')
 }
