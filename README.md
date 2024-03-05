@@ -12,7 +12,6 @@
   A utility-first CSS framework for rapidly building custom user interfaces.
 </p>
 
-
 <p align="center">
     <a href="https://github.com/tailwindlabs/tailwindcss/actions"><img src="https://img.shields.io/github/actions/workflow/status/tailwindlabs/tailwindcss/ci-stable.yml?branch=next" alt="Build Status"></a>
     <a href="https://www.npmjs.com/package/tailwindcss"><img src="https://img.shields.io/npm/dt/tailwindcss.svg" alt="Total Downloads"></a>
@@ -20,11 +19,11 @@
     <a href="https://github.com/tailwindcss/tailwindcss/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/tailwindcss.svg" alt="License"></a>
 </p>
 
-------
+---
 
 ## Documentation
 
-For full documentation, visit [tailwindcss.com](https://tailwindcss.com/).
+For full documentation, visit [tailwindcss.com](https://tailwindcss.com).
 
 ## Community
 
@@ -32,7 +31,7 @@ For help, discussion about best practices, or any other conversation that would 
 
 [Discuss Tailwind CSS on GitHub](https://github.com/tailwindcss/tailwindcss/discussions)
 
-For casual chit-chat with others using the framework:
+For chatting with others using the framework:
 
 [Join the Tailwind CSS Discord Server](https://discord.gg/7NF8GNe)
 
