@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "0.0.0-oxide.4",
+  "version": "4.0.0-alpha.1",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": "https://github.com/tailwindlabs/tailwindcss.git",

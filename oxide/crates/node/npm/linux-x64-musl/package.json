@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-linux-x64-musl",
-  "version": "0.0.0-oxide.4",
+  "version": "4.0.0-alpha.1",
   "os": [
     "linux"
   ],
