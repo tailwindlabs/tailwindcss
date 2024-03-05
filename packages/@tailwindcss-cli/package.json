@@ -8,11 +8,11 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsup-node --env.NODE_ENV production",
-    "dev": "tsup-node --env.NODE_ENV development --watch"
+    "build": "tsup-node ./src/index.ts --format esm,cjs --minify",
+    "dev": "pnpm run build -- --watch"
   },
   "bin": {
-    "tailwindcss": "./dist/cli.js"
+    "tailwindcss": "./dist/index.js"
   },
   "exports": {
     "./package.json": "./package.json"
