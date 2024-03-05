@@ -8,7 +8,7 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsup-node ./src/index.ts --format cjs --dts --cjsInterop --splitting",
+    "build": "tsup-node ./src/index.ts --format cjs --dts --cjsInterop --splitting --minify",
     "dev": "pnpm run build -- --watch"
   },
   "files": [

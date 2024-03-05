@@ -7,7 +7,7 @@
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
   "scripts": {
-    "build": "tsup-node ./src/index.ts --format esm --dts",
+    "build": "tsup-node ./src/index.ts --format esm --dts --minify",
     "dev": "pnpm run build -- --watch"
   },
   "files": [
