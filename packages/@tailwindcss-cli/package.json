@@ -8,7 +8,7 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsup-node ./src/index.ts --format esm,cjs --minify",
+    "build": "tsup-node ./src/index.ts --format esm,cjs --minify --clean",
     "dev": "pnpm run build -- --watch"
   },
   "bin": {
