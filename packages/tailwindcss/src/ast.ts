@@ -73,7 +73,6 @@ export function walk(
 
 export function toCss(ast: AstNode[]) {
   let atRoots: string = ''
-
   let seenAtProperties = new Set<string>()
 
   function stringify(node: AstNode, depth = 0): string {
