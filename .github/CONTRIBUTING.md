@@ -1,7 +1,5 @@
 # Contributing
 
-Thanks for your interest in contributing to Tailwind CSS! Please take a moment to review this document **before submitting a pull request**.
-
 ## Bug fixes
 
 If you've found a bug in Tailwind that you'd like to fix, [submit a pull request](https://github.com/tailwindlabs/tailwindcss/pulls) with your changes. Include a helpful description of the problem and how your changes address it, and provide tests so we can verify the fix works as expected.
