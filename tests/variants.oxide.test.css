@@ -145,6 +145,9 @@
 .open\:bg-red-200[open] {
   background-color: #fecaca;
 }
+.popover-open\:bg-red-200:popover-open {
+  background-color: #fecaca;
+}
 .default\:shadow-md:default,
 .checked\:shadow-md:checked,
 .indeterminate\:shadow-md:indeterminate,
@@ -184,6 +187,9 @@
 .open\:hover\:bg-red-200:hover[open] {
   background-color: #fecaca;
 }
+.popover-open\:hover\:bg-red-200:hover:popover-open {
+  background-color: #fecaca;
+}
 .focus\:shadow-md:focus,
 .focus\:hover\:shadow-md:hover:focus,
 .focus-visible\:shadow-md:focus-visible,
@@ -206,6 +212,9 @@
     var(--tw-shadow);
 }
 .group[open] .group-open\:bg-red-200 {
+  background-color: #fecaca;
+}
+.group:popover-open .group-popover-open\:bg-red-200 {
   background-color: #fecaca;
 }
 .group:default .group-default\:shadow-md,
@@ -265,6 +274,9 @@
     var(--tw-shadow);
 }
 .peer[open] ~ .peer-open\:bg-red-200 {
+  background-color: #fecaca;
+}
+.peer:popover-open ~ .peer-popover-open\:bg-red-200 {
   background-color: #fecaca;
 }
 .peer:default ~ .peer-default\:shadow-md,

@@ -208,6 +208,10 @@
   --tw-bg-opacity: 1;
   background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }
+.popover-open\:bg-red-200:popover-open {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+}
 .default\:shadow-md:default,
 .checked\:shadow-md:checked,
 .indeterminate\:shadow-md:indeterminate,
@@ -249,6 +253,10 @@
   --tw-bg-opacity: 1;
   background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }
+.popover-open\:hover\:bg-red-200:hover:popover-open {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+}
 .focus\:shadow-md:focus,
 .focus\:hover\:shadow-md:hover:focus,
 .focus-visible\:shadow-md:focus-visible,
@@ -271,6 +279,10 @@
     var(--tw-shadow);
 }
 .group[open] .group-open\:bg-red-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+}
+.group:popover-open .group-popover-open\:bg-red-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }
@@ -332,6 +344,10 @@
     var(--tw-shadow);
 }
 .peer[open] ~ .peer-open\:bg-red-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+}
+.peer:popover-open ~ .peer-popover-open\:bg-red-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }

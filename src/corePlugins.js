@@ -111,6 +111,7 @@ export let variantPlugins = {
       ],
       'target',
       ['open', '&[open]'],
+      'popover-open',
 
       // Forms
       'default',
