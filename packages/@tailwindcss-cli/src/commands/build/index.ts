@@ -12,7 +12,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
-import { compile, optimizeCss } from '../../..'
+import { compile, optimizeCss } from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
 import {
   eprintln,

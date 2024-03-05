@@ -12,9 +12,6 @@
     "dev": "tsup-node --env.NODE_ENV development --watch",
     "test:ui": "playwright test"
   },
-  "bin": {
-    "tailwindcss": "./dist/cli.js"
-  },
   "exports": {
     ".": {
       "style": "./index.css",
@@ -52,16 +49,10 @@
     "utilities.css"
   ],
   "dependencies": {
-    "@parcel/watcher": "^2.4.1",
-    "lightningcss": "^1.24.0",
-    "mri": "^1.2.0",
-    "picocolors": "^1.0.0",
-    "postcss": "8.4.24",
-    "postcss-import": "^16.0.0"
+    "lightningcss": "^1.24.0"
   },
   "devDependencies": {
     "@tailwindcss/oxide": "workspace:^",
-    "@types/node": "^20.10.8",
-    "@types/postcss-import": "^14.0.3"
+    "@types/node": "^20.10.8"
   }
 }

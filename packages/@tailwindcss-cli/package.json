@@ -1,0 +1,35 @@
+{
+  "name": "@tailwindcss/cli",
+  "version": "4.0.0-alpha.1",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup-node --env.NODE_ENV production",
+    "dev": "tsup-node --env.NODE_ENV development --watch"
+  },
+  "bin": {
+    "tailwindcss": "./dist/cli.js"
+  },
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@parcel/watcher": "^2.4.1",
+    "@tailwindcss/oxide": "workspace:^",
+    "mri": "^1.2.0",
+    "picocolors": "^1.0.0",
+    "postcss": "8.4.24",
+    "postcss-import": "^16.0.0",
+    "tailwindcss": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/postcss-import": "^14.0.3"
+  }
+}
