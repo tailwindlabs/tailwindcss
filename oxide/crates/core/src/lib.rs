@@ -293,6 +293,7 @@ fn resolve_files(root: &Path) -> (Vec<PathBuf>, Vec<PathBuf>) {
 pub fn resolve_allowed_paths(root: &Path) -> impl Iterator<Item = DirEntry> {
     WalkBuilder::new(root)
         .hidden(false)
+        .require_git(false)
         .filter_entry(|entry| match entry.file_type() {
             Some(file_type) if file_type.is_dir() => match entry.file_name().to_str() {
                 Some(dir) => !IGNORED_CONTENT_DIRS.contains(&dir),
