@@ -98,7 +98,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   )
 
   // Compile the input
-  let result = optimizeCss(compile(input, candidates, { cache }), {
+  let result = optimizeCss(compile(input, candidates, cache), {
     file: args['--input'] ?? 'input.css',
     minify: args['--minify'],
   })
