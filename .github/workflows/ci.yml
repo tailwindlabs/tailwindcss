@@ -23,6 +23,7 @@ jobs:
       - uses: pnpm/action-setup@v3
         with:
           version: ^8.15.0
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -55,9 +56,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
       - name: Build
         run: pnpm run build
 
@@ -66,6 +64,9 @@ jobs:
 
       - name: Test
         run: pnpm run test
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
       - name: Run Playwright tests
         run: npm run test:ui
