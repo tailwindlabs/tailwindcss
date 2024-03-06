@@ -38,6 +38,9 @@ importers:
 
   oxide/crates/node:
     optionalDependencies:
+      '@tailwindcss/oxide-android-arm64':
+        specifier: workspace:*
+        version: link:npm/android-arm64
       '@tailwindcss/oxide-darwin-arm64':
         specifier: workspace:*
         version: link:npm/darwin-arm64
@@ -69,6 +72,8 @@ importers:
       '@napi-rs/cli':
         specifier: ^2.17.0
         version: 2.18.0
+
+  oxide/crates/node/npm/android-arm64: {}
 
   oxide/crates/node/npm/darwin-arm64: {}
 
