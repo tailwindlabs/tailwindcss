@@ -21,9 +21,13 @@
     },
     "./package.json": "./package.json",
     "./index.css": "./index.css",
+    "./index": "./index.css",
     "./preflight.css": "./preflight.css",
+    "./preflight": "./preflight.css",
     "./theme.css": "./theme.css",
-    "./utilities.css": "./utilities.css"
+    "./theme": "./theme.css",
+    "./utilities.css": "./utilities.css",
+    "./utilities": "./utilities.css"
   },
   "publishConfig": {
     "exports": {
@@ -35,9 +39,13 @@
       },
       "./package.json": "./package.json",
       "./index.css": "./index.css",
+      "./index": "./index.css",
       "./preflight.css": "./preflight.css",
+      "./preflight": "./preflight.css",
       "./theme.css": "./theme.css",
-      "./utilities.css": "./utilities.css"
+      "./theme": "./theme.css",
+      "./utilities.css": "./utilities.css",
+      "./utilities": "./utilities.css"
     }
   },
   "style": "index.css",
