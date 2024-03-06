@@ -7698,22 +7698,6 @@ test('to', () => {
   ).toEqual('')
 })
 
-// @deprecated
-test('decoration-slice', () => {
-  expect(run(['decoration-slice', 'decoration-clone'])).toMatchInlineSnapshot(`
-    ".decoration-clone {
-      -webkit-box-decoration-break: clone;
-      box-decoration-break: clone;
-    }
-
-    .decoration-slice {
-      -webkit-box-decoration-break: slice;
-      box-decoration-break: slice;
-    }"
-  `)
-  expect(run(['decoration', '-decoration-slice', '-decoration-clone'])).toEqual('')
-})
-
 test('box-decoration', () => {
   expect(run(['box-decoration-slice', 'box-decoration-clone'])).toMatchInlineSnapshot(`
     ".box-decoration-clone {
