@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       release_channel:
-        description: 'Release channel'
+        description: "Release channel"
         required: false
-        default: 'next'
+        default: "next"
         type: string
 
 permissions:
@@ -34,6 +34,10 @@ jobs:
             target: aarch64-apple-darwin
             page-size: 14
             strip: strip -x # Must use -x on macOS. This produces larger results on linux.
+          # Android
+          - os: ubuntu-latest
+            target: aarch64-linux-android
+            strip: ${ANDROID_NDK_LATEST_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip
           # Linux
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
@@ -77,7 +81,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: "pnpm"
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -156,8 +160,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -199,6 +203,7 @@ jobs:
           cp bindings-x86_64-pc-windows-msvc/* ./npm/win32-x64-msvc/
           cp bindings-x86_64-apple-darwin/* ./npm/darwin-x64/
           cp bindings-aarch64-apple-darwin/* ./npm/darwin-arm64/
+          cp bindings-aarch64-linux-android/* ./npm/android-arm64/
           cp bindings-aarch64-unknown-linux-gnu/* ./npm/linux-arm64-gnu/
           cp bindings-aarch64-unknown-linux-musl/* ./npm/linux-arm64-musl/
           cp bindings-armv7-unknown-linux-gnueabihf/* ./npm/linux-arm-gnueabihf/
