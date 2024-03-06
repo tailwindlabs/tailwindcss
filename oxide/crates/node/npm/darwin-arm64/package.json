@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-darwin-arm64",
-  "version": "4.0.0-alpha.3",
+  "version": "4.0.0-alpha.4",
   "os": [
     "darwin"
   ],
