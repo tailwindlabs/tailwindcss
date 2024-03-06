@@ -1,6 +1,7 @@
+import fs from 'node:fs'
 import path from 'node:path'
 import pc from 'picocolors'
-import { version } from 'tailwindcss/package.json'
+import { resolve } from '../utils/resolve'
 import { formatNanoseconds } from './format-ns'
 
 export const UI = {
@@ -8,6 +9,7 @@ export const UI = {
 }
 
 export function header() {
+  let { version } = JSON.parse(fs.readFileSync(resolve('tailwindcss/package.json'), 'utf-8'))
   return `${pc.italic(pc.bold(pc.blue('\u2248')))} tailwindcss ${pc.blue(`v${version}`)}`
 }
 
