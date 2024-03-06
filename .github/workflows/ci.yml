@@ -23,6 +23,7 @@ jobs:
       - uses: pnpm/action-setup@v3
         with:
           version: ^8.15.0
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -55,11 +56,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Lint
-        run: pnpm run lint
-
       - name: Build
         run: pnpm run build
+
+      - name: Lint
+        run: pnpm run lint
 
       - name: Test
         run: pnpm run test
