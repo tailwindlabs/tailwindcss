@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { stripVTControlCharacters } from 'node:util'
 import pc from 'picocolors'
 import { resolve } from '../utils/resolve'
 import { formatNanoseconds } from './format-ns'
@@ -48,7 +49,7 @@ export function wordWrap(text: string, width: number) {
   let line = ''
   let lineLength = 0
   for (let word of words) {
-    let wordLength = clearAnsiEscapes(word).length
+    let wordLength = stripVTControlCharacters(word).length
 
     if (lineLength + wordLength + 1 > width) {
       lines.push(line)
@@ -65,11 +66,6 @@ export function wordWrap(text: string, width: number) {
   }
 
   return lines
-}
-
-const ESCAPE = /((?:\x9B|\x1B\[)[0-?]*[ -\/]*[@-~])/g
-function clearAnsiEscapes(input: string) {
-  return input.replace(ESCAPE, '')
 }
 
 /**
