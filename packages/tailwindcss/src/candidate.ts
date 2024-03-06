@@ -264,14 +264,15 @@ export function parseCandidate(
 
   // Candidates that end with an exclamation mark are the important version with
   // higher specificity of the non-important candidate, e.g. `mx-4!`.
-  if (base[0] === '!') {
-    state.important = true
-    base = base.slice(1)
-  }
-  // Legacy syntax with leading `!`, e.g. `!mx-4`.
-  else if (base[base.length - 1] === '!') {
+  if (base[base.length - 1] === '!') {
     state.important = true
     base = base.slice(0, -1)
+  }
+
+  // Legacy syntax with leading `!`, e.g. `!mx-4`.
+  else if (base[0] === '!') {
+    state.important = true
+    base = base.slice(1)
   }
 
   // Arbitrary properties
