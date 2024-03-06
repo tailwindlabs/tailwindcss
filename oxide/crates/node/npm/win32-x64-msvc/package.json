@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-win32-x64-msvc",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.3",
   "os": [
     "win32"
   ],
