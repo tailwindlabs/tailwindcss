@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 env:
   CI: true
@@ -47,7 +48,7 @@ jobs:
           echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
 
       - name: Publish
-        run: npm publish --tag ${{ env.RELEASE_CHANNEL }}
+        run: npm publish --provenance --tag ${{ env.RELEASE_CHANNEL }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
