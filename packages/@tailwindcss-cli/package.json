@@ -1,33 +1,35 @@
 {
-  "name": "@tailwindcss/postcss",
+  "name": "@tailwindcss/cli",
   "version": "4.0.0-alpha.1",
-  "description": "PostCSS plugin for Tailwind CSS, a utility-first CSS framework for rapidly building custom user interfaces",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": "https://github.com/tailwindlabs/tailwindcss.git",
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsup-node ./src/index.ts --format cjs --dts --cjsInterop --splitting --minify --clean",
+    "build": "tsup-node ./src/index.ts --format esm --minify --clean",
     "dev": "pnpm run build -- --watch"
   },
-  "files": [
-    "dist/"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js"
-    }
+  "bin": {
+    "tailwindcss": "./dist/index.mjs"
   },
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
+    "@parcel/watcher": "^2.4.1",
     "@tailwindcss/oxide": "workspace:^",
+    "mri": "^1.2.0",
+    "picocolors": "^1.0.0",
+    "postcss": "8.4.24",
     "postcss-import": "^16.0.0",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "@types/postcss-import": "^14.0.3",
-    "postcss": "8.4.24"
+    "@types/postcss-import": "^14.0.3"
   }
 }

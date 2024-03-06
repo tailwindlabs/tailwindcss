@@ -1,6 +1,6 @@
 import path from 'node:path'
 import pc from 'picocolors'
-import { version } from '../../../package.json'
+import { version } from 'tailwindcss/package.json'
 import { formatNanoseconds } from './format-ns'
 
 export const UI = {
