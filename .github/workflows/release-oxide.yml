@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       release_channel:
-        description: "Release channel"
+        description: 'Release channel'
         required: false
-        default: "next"
+        default: 'next'
         type: string
 
 permissions:
@@ -81,7 +81,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
+          cache: 'pnpm'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -160,8 +160,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
