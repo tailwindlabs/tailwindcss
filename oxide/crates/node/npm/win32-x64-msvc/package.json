@@ -1,6 +1,11 @@
 {
   "name": "@tailwindcss/oxide-win32-x64-msvc",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "oxide/crates/node/npm/win32-x64-msvc"
+  },
   "os": [
     "win32"
   ],

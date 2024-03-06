@@ -1,6 +1,11 @@
 {
   "name": "tailwindcss-standalone",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "standalone-cli"
+  },
   "bin": "standalone.js",
   "scripts": {
     "build": "pkg . --compress Brotli --no-bytecode --public-packages \"*\" --public",

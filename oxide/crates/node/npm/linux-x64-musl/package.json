@@ -1,6 +1,11 @@
 {
   "name": "@tailwindcss/oxide-linux-x64-musl",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "oxide/crates/node/npm/linux-x64-musl"
+  },
   "os": [
     "linux"
   ],

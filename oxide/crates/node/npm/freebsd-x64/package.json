@@ -1,6 +1,11 @@
 {
   "name": "@tailwindcss/oxide-freebsd-x64",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "oxide/crates/node/npm/freebsd-x64"
+  },
   "os": [
     "freebsd"
   ],
