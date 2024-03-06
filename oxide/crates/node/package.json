@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-alpha.2",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
