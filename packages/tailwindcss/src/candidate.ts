@@ -269,6 +269,12 @@ export function parseCandidate(
     base = base.slice(0, -1)
   }
 
+  // Legacy syntax with leading `!`, e.g. `!mx-4`.
+  else if (base[0] === '!') {
+    state.important = true
+    base = base.slice(1)
+  }
+
   // Arbitrary properties
   if (base[0] === '[') {
     let [baseWithoutModifier, modifierSegment = null] = segment(base, '/')

@@ -341,6 +341,14 @@ describe('important', () => {
     `)
   })
 
+  it('should generate an important utility with legacy syntax', () => {
+    expect(run(['!underline'])).toMatchInlineSnapshot(`
+      ".\\!underline {
+        text-decoration-line: underline !important;
+      }"
+    `)
+  })
+
   it('should not mark declarations inside of @keyframes as important', () => {
     expect(
       compileCss(
