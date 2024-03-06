@@ -6,18 +6,27 @@ import { DefaultMap } from './utils/default-map'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
 
+type SortDetails = {
+  properties: number[]
+  variants: bigint
+  candidate: string
+}
+
+type CompileOptions = {
+  throwOnInvalidCandidate?: boolean
+  cache?: Map<string, [Candidate, AstNode, SortDetails]>
+}
+
 export function compileCandidates(
   rawCandidates: string[],
   designSystem: DesignSystem,
-  { throwOnInvalidCandidate = false } = {},
+  { throwOnInvalidCandidate = false, cache }: CompileOptions = {},
 ) {
   // Ensure the candidates are sorted alphabetically
   rawCandidates.sort()
 
-  let nodeSorting = new Map<
-    AstNode,
-    { properties: number[]; variants: bigint; candidate: string }
-  >()
+  let nodeSorting = new Map<AstNode, SortDetails>()
+
   let astNodes: AstNode[] = []
 
   // A lazy map implementation that will return the variant if it exists. If it
@@ -31,6 +40,14 @@ export function compileCandidates(
 
   // Parse candidates and variants
   for (let rawCandidate of rawCandidates) {
+    let existing = cache?.get(rawCandidate)
+    if (existing) {
+      candidates.set(existing[0], rawCandidate)
+      astNodes.push(existing[1])
+      nodeSorting.set(existing[1], existing[2])
+      continue
+    }
+
     let candidate = parseCandidate(rawCandidate, designSystem.utilities, parsedVariants)
     if (candidate === null) {
       if (throwOnInvalidCandidate) {
@@ -48,6 +65,9 @@ export function compileCandidates(
 
   // Create the AST
   next: for (let [candidate, rawCandidate] of candidates) {
+    let existing = cache?.get(rawCandidate)
+    if (existing) continue
+
     let nodes: AstNode[] = []
 
     // Handle arbitrary properties
@@ -124,6 +144,8 @@ export function compileCandidates(
       candidate: rawCandidate,
     })
     astNodes.push(node)
+
+    cache?.set(rawCandidate, [candidate, node, nodeSorting.get(node)!])
   }
 
   astNodes.sort((a, z) => {

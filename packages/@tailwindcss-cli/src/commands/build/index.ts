@@ -57,6 +57,8 @@ export function options() {
   } satisfies Arg
 }
 
+let cache: Map<string, unknown> = new Map()
+
 export async function handle(args: Result<ReturnType<typeof options>>) {
   let base = path.resolve(args['--cwd'])
 
@@ -96,7 +98,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   )
 
   // Compile the input
-  let result = optimizeCss(compile(input, candidates), {
+  let result = optimizeCss(compile(input, candidates, { cache }), {
     file: args['--input'] ?? 'input.css',
     minify: args['--minify'],
   })

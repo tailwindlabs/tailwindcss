@@ -6,7 +6,11 @@ import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 
-export function compile(css: string, rawCandidates: string[]) {
+export function compile(
+  css: string,
+  rawCandidates: string[],
+  cache: Map<string, unknown> = new Map(),
+) {
   let ast = CSS.parse(css)
 
   if (process.env.NODE_ENV !== 'test') {
@@ -90,7 +94,7 @@ export function compile(css: string, rawCandidates: string[]) {
   // class CSS.
   walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
-      replaceWith(compileCandidates(rawCandidates, designSystem).astNodes)
+      replaceWith(compileCandidates(rawCandidates, designSystem, { cache: cache as any }).astNodes)
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
       // once per file but that's the intended usage at this point in time.
@@ -110,6 +114,7 @@ export function compile(css: string, rawCandidates: string[]) {
         {
           // Parse the candidates to an AST that we can replace the `@apply` rule with.
           let candidateAst = compileCandidates(candidates, designSystem, {
+            cache: cache as any,
             throwOnInvalidCandidate: true,
           }).astNodes
 
