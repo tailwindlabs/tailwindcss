@@ -40,7 +40,7 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
     }
   }
 
-  list.sort((a, b) => a[0].localeCompare(b[0]))
+  list.sort((a, b) => (a[0] === b[0] ? 0 : a[0] < b[0] ? -1 : 1))
 
   return list
 }
