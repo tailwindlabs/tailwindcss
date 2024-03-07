@@ -94,7 +94,7 @@ export class Variants {
     if (z === null) return 1
 
     if (a.kind === 'arbitrary' && z.kind === 'arbitrary') {
-      return a.selector.localeCompare(z.selector)
+      return a.selector < z.selector ? -1 : 1
     } else if (a.kind === 'arbitrary') {
       return 1
     } else if (z.kind === 'arbitrary') {
@@ -114,7 +114,7 @@ export class Variants {
     let compareFn = this.compareFns.get(aOrder)
     if (compareFn === undefined) return 0
 
-    return compareFn(a, z)
+    return compareFn(a, z) || (a.root < z.root ? -1 : 1)
   }
 
   keys() {
