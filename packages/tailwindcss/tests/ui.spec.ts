@@ -243,7 +243,7 @@ async function render(page: Page, content: string) {
           }
         `,
         scanFiles([{ content, extension: 'html' }], IO.Sequential | Parsing.Sequential),
-      ),
+      ).css,
     ),
   })
 

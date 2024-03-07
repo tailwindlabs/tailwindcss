@@ -6,7 +6,13 @@ import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 
-export function compile(css: string, rawCandidates: string[]) {
+export function compile(
+  css: string,
+  rawCandidates: string[],
+): {
+  rebuild(candidates: string[]): string
+  css: string
+} {
   let ast = CSS.parse(css)
 
   if (process.env.NODE_ENV !== 'test') {
@@ -162,7 +168,12 @@ export function compile(css: string, rawCandidates: string[]) {
     })
   }
 
-  return toCss(ast)
+  return {
+    rebuild(rawCandidates: string[]) {
+      return toCss(ast)
+    },
+    css: toCss(ast),
+  }
 }
 
 export function optimizeCss(

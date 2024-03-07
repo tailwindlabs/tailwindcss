@@ -101,10 +101,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Compile the input
   let result = compile(input, candidates)
+  let compiledCss = result.css
 
   // Optimize the output
   if (args['--minify'] || args['--optimize']) {
-    result = optimizeCss(result, {
+    compiledCss = optimizeCss(compiledCss, {
       file: args['--input'] ?? 'input.css',
       minify: args['--minify'] ?? false,
     })
@@ -112,9 +113,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Write the output
   if (args['--output']) {
-    await outputFile(args['--output'], result)
+    await outputFile(args['--output'], compiledCss)
   } else {
-    println(result)
+    println(compiledCss)
   }
 
   let end = process.hrtime.bigint()
@@ -168,19 +169,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Re-scan the directory to get the new `candidates`.
           candidates = scanDir({ base }).candidates
-        }
 
-        // Scan changed files only for incremental rebuilds.
-        else if (rebuildStrategy === 'incremental') {
-          let uniqueCandidates = new Set(candidates)
-          for (let candidate of scanFiles(changedFiles, IO.Sequential | Parsing.Sequential)) {
-            uniqueCandidates.add(candidate)
-          }
-          candidates = Array.from(uniqueCandidates)
-        }
-
-        // Resolve the input
-        if (rebuildStrategy === 'full') {
           // Collect the new `input` and `cssImportPaths`.
           ;[input, cssImportPaths] = await handleImports(
             args['--input']
@@ -190,14 +179,19 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                 `,
             args['--input'] ?? base,
           )
+
+          result = compile(input, candidates)
+          compiledCss = result.css
         }
 
-        // Compile the input
-        let result = compile(input, candidates)
+        // Scan changed files only for incremental rebuilds.
+        else if (rebuildStrategy === 'incremental') {
+          compiledCss = result.rebuild(scanFiles(changedFiles, IO.Sequential | Parsing.Sequential))
+        }
 
         // Optimize the output
         if (args['--minify'] || args['--optimize']) {
-          result = optimizeCss(result, {
+          compiledCss = optimizeCss(compiledCss, {
             file: args['--input'] ?? 'input.css',
             minify: args['--minify'] ?? false,
           })
@@ -205,9 +199,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         // Write the output
         if (args['--output']) {
-          await outputFile(args['--output'], result)
+          await outputFile(args['--output'], compiledCss)
         } else {
-          println(result)
+          println(compiledCss)
         }
 
         let end = process.hrtime.bigint()

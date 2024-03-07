@@ -53,7 +53,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
         // No `@tailwind` means we don't have to look for candidates
         if (!hasTailwind) {
-          replaceCss(compile(root.toString(), []))
+          replaceCss(compile(root.toString(), []).css)
           return
         }
 
@@ -83,7 +83,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           })
         }
 
-        replaceCss(compile(root.toString(), candidates))
+        replaceCss(compile(root.toString(), candidates).css)
       },
     ],
   }
