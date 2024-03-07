@@ -1,6 +1,6 @@
 import { Features, transform } from 'lightningcss'
 import { version } from '../package.json'
-import { comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
+import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
@@ -23,19 +23,29 @@ export function compile(css: string, rawCandidates: string[]) {
     if (node.selector !== '@theme') return
 
     // Record all custom properties in the `@theme` declaration
-    walk([node], (node, { replaceWith }) => {
+    walk(node.nodes, (node, { replaceWith }) => {
       // Collect `@keyframes` rules to re-insert with theme variables later,
       // since the `@theme` rule itself will be removed.
       if (node.kind === 'rule' && node.selector.startsWith('@keyframes ')) {
         keyframesRules.push(node)
         replaceWith([])
+        return WalkAction.Skip
+      }
+
+      if (node.kind === 'comment') return
+      if (node.kind === 'declaration' && node.property.startsWith('--')) {
+        theme.add(node.property, node.value)
         return
       }
 
-      if (node.kind !== 'declaration') return
-      if (!node.property.startsWith('--')) return
+      let snippet = toCss([rule('@theme', [node])])
+        .split('\n')
+        .map((line, idx, all) => `${idx === 0 || idx >= all.length - 2 ? ' ' : '>'} ${line}`)
+        .join('\n')
 
-      theme.add(node.property, node.value)
+      throw new Error(
+        `\`@theme\` blocks must only contain custom properties or \`@keyframes\`.\n\n${snippet}`,
+      )
     })
 
     // Keep a reference to the first `@theme` rule to update with the full theme
@@ -45,6 +55,7 @@ export function compile(css: string, rawCandidates: string[]) {
     } else {
       replaceWith([])
     }
+    return WalkAction.Skip
   })
 
   // Output final set of theme variables at the position of the first `@theme`
@@ -94,7 +105,7 @@ export function compile(css: string, rawCandidates: string[]) {
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
       // once per file but that's the intended usage at this point in time.
-      return false
+      return WalkAction.Stop
     }
   })
 
@@ -145,6 +156,7 @@ export function compile(css: string, rawCandidates: string[]) {
     walk(ast, (node, { replaceWith }) => {
       if (node.kind === 'rule' && node.selector === '@media reference') {
         replaceWith([])
+        return WalkAction.Skip
       }
     })
   }

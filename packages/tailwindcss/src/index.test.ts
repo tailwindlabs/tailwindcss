@@ -51,6 +51,32 @@ describe('compiling CSS', () => {
     `)
   })
 
+  test('that only CSS variables are allowed', () => {
+    expect(() =>
+      compileCss(
+        css`
+          @theme {
+            --color-primary: red;
+            .foo {
+              --color-primary: blue;
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['bg-primary'],
+      ),
+    ).toThrowErrorMatchingInlineSnapshot(`
+      [Error: \`@theme\` blocks must only contain custom properties or \`@keyframes\`.
+
+        @theme {
+      >   .foo {
+      >     --color-primary: blue;
+      >   }
+        }
+        ]
+    `)
+  })
+
   test('`@tailwind utilities` is only processed once', () => {
     expect(
       compileCss(
