@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Only set border-style for appropriate border side ([#13124](https://github.com/tailwindlabs/tailwindcss/pull/13124))
+- Only set `border-style` for appropriate border side ([#13124](https://github.com/tailwindlabs/tailwindcss/pull/13124))
 
 ### Changed
 
@@ -41,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
-- Drop deprecated decoration-slice and decoration-clone utilities ([#13107](https://github.com/tailwindlabs/tailwindcss/pull/13107))
+- Drop deprecated `decoration-slice` and `decoration-clone` utilities ([#13107](https://github.com/tailwindlabs/tailwindcss/pull/13107))
 
 ## [4.0.0-alpha.2] - 2024-03-06
 
