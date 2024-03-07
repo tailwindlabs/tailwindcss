@@ -1,3 +1,4 @@
+import type { DesignSystem } from './design-system'
 import { decodeArbitraryValue } from './utils/decode-arbitrary-value'
 import { segment } from './utils/segment'
 
@@ -206,14 +207,7 @@ export type Candidate =
       important: boolean
     }
 
-export function parseCandidate(
-  input: string,
-  utilities: {
-    has: (value: string) => boolean
-    kind: (root: string) => Omit<Candidate['kind'], 'arbitrary'>
-  },
-  parsedVariants: { get: (value: string) => Variant | null },
-): Candidate | null {
+export function parseCandidate(input: string, designSystem: DesignSystem): Candidate | null {
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
   //             ^^^^^^^^^  -> Base
@@ -228,7 +222,7 @@ export function parseCandidate(
   let parsedCandidateVariants: Variant[] = []
 
   for (let variant of rawVariants) {
-    let parsedVariant = parsedVariants.get(variant)
+    let parsedVariant = designSystem.parseVariant(variant)
     if (parsedVariant === null) return null
 
     // Variants are applied left-to-right meaning that any representing pseudo-
@@ -320,7 +314,7 @@ export function parseCandidate(
     base = base.slice(1)
   }
 
-  let [root, value] = findRoot(base, utilities)
+  let [root, value] = findRoot(base, designSystem.utilities)
 
   let modifierSegment: string | null = null
 
@@ -335,13 +329,13 @@ export function parseCandidate(
     modifierSegment = rootModifierSegment
 
     // Try to find the root and value, without the modifier present
-    ;[root, value] = findRoot(rootWithoutModifier, utilities)
+    ;[root, value] = findRoot(rootWithoutModifier, designSystem.utilities)
   }
 
   // If there's no root, the candidate isn't a valid class and can be discarded.
   if (root === null) return null
 
-  let kind = utilities.kind(root)
+  let kind = designSystem.utilities.kind(root)
 
   if (kind === 'static') {
     if (value !== null) return null
@@ -475,15 +469,7 @@ function parseModifier(modifier: string): CandidateModifier {
   }
 }
 
-export function parseVariant(
-  variant: string,
-  variants: {
-    has: (value: string) => boolean
-    kind: (root: string) => Omit<Variant['kind'], 'arbitrary'>
-    compounds: (root: string) => boolean
-  },
-  parsedVariants: { get: (value: string) => Variant | null },
-): Variant | null {
+export function parseVariant(variant: string, designSystem: DesignSystem): Variant | null {
   // Arbitrary variants
   if (variant[0] === '[' && variant[variant.length - 1] === ']') {
     /**
@@ -535,20 +521,20 @@ export function parseVariant(
     // - `group-hover/foo/bar`
     if (additionalModifier) return null
 
-    let [root, value] = findRoot(variantWithoutModifier, variants)
+    let [root, value] = findRoot(variantWithoutModifier, designSystem.variants)
 
     // Variant is invalid, therefore the candidate is invalid and we can skip
     // continue parsing it.
     if (root === null) return null
 
-    switch (variants.kind(root)) {
+    switch (designSystem.variants.kind(root)) {
       case 'static': {
         if (value !== null) return null
 
         return {
           kind: 'static',
           root,
-          compounds: variants.compounds(root),
+          compounds: designSystem.variants.compounds(root),
         }
       }
 
@@ -564,7 +550,7 @@ export function parseVariant(
               kind: 'arbitrary',
               value: decodeArbitraryValue(value.slice(1, -1)),
             },
-            compounds: variants.compounds(root),
+            compounds: designSystem.variants.compounds(root),
           }
         }
 
@@ -573,14 +559,14 @@ export function parseVariant(
           root,
           modifier: modifier === null ? null : parseModifier(modifier),
           value: { kind: 'named', value },
-          compounds: variants.compounds(root),
+          compounds: designSystem.variants.compounds(root),
         }
       }
 
       case 'compound': {
         if (value === null) return null
 
-        let subVariant = parsedVariants.get(value)
+        let subVariant = designSystem.parseVariant(value)
         if (subVariant === null) return null
         if (subVariant.compounds === false) return null
 
@@ -589,7 +575,7 @@ export function parseVariant(
           root,
           modifier: modifier === null ? null : { kind: 'named', value: modifier },
           variant: subVariant,
-          compounds: variants.compounds(root),
+          compounds: designSystem.variants.compounds(root),
         }
       }
     }

@@ -1,102 +1,14 @@
 import { rule, type AstNode, type Rule } from './ast'
-import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
+import { type Candidate, type Variant } from './candidate'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
-import { DefaultMap } from './utils/default-map'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
-
-export function createParsedVariants(
-  designSystem: DesignSystem,
-): DefaultMap<string, Variant | null> {
-  return new DefaultMap((variant, map) => {
-    return parseVariant(variant, designSystem.variants, map)
-  })
-}
-
-export function createParsedCandidates(
-  designSystem: DesignSystem,
-  parsedVariants: DefaultMap<string, Variant | null>,
-) {
-  return new DefaultMap((candidate) => {
-    return parseCandidate(candidate, designSystem.utilities, parsedVariants)
-  })
-}
-
-export function createParsedAstNodes(
-  designSystem: DesignSystem,
-  parsedCandidates: DefaultMap<string, Candidate | null>,
-) {
-  return new DefaultMap((rawCandidate: string) => {
-    let candidate = parsedCandidates.get(rawCandidate)
-    if (candidate === null) return null
-
-    let nodes: AstNode[] = []
-
-    // Handle arbitrary properties
-    if (candidate.kind === 'arbitrary') {
-      let compileFn = designSystem.utilities.getArbitrary()
-
-      // Build the node
-      let compiledNodes = compileFn(candidate)
-      if (compiledNodes === undefined) return null
-
-      nodes = compiledNodes
-    }
-
-    // Handle named utilities
-    else if (candidate.kind === 'static' || candidate.kind === 'functional') {
-      // Safety: At this point it is safe to use TypeScript's non-null assertion
-      // operator because if the `candidate.root` didn't exist, `parseCandidate`
-      // would have returned `null` and we would have returned early resulting
-      // in not hitting this code path.
-      let { compileFn } = designSystem.utilities.get(candidate.root)!
-
-      // Build the node
-      let compiledNodes = compileFn(candidate)
-      if (compiledNodes === undefined) return null
-
-      nodes = compiledNodes
-    }
-
-    let propertySort = getPropertySort(nodes)
-
-    if (candidate.important) {
-      applyImportant(nodes)
-    }
-
-    let node: Rule = {
-      kind: 'rule',
-      selector: `.${escape(rawCandidate)}`,
-      nodes,
-    }
-
-    for (let variant of candidate.variants) {
-      let result = applyVariant(node, variant, designSystem.variants)
-
-      // When the variant results in `null`, it means that the variant cannot be
-      // applied to the rule. Discard the candidate and continue to the next
-      // one.
-      if (result === null) return null
-    }
-
-    return {
-      node,
-      propertySort,
-    }
-  })
-}
 
 export function compileCandidates(
   rawCandidates: Iterable<string>,
   designSystem: DesignSystem,
-  {
-    parsedVariants = createParsedVariants(designSystem),
-    parsedCandidates = createParsedCandidates(designSystem, parsedVariants),
-    parsedAstNodes = createParsedAstNodes(designSystem, parsedCandidates),
-    invalidRawCandidates = new Set<string>(),
-    throwOnInvalidCandidate = false,
-  } = {},
+  { throwOnInvalidCandidate = false } = {},
 ) {
   let nodeSorting = new Map<
     AstNode,
@@ -107,30 +19,30 @@ export function compileCandidates(
 
   // Parse candidates and variants
   for (let rawCandidate of rawCandidates) {
-    let candidate = parsedCandidates.get(rawCandidate)
+    let candidate = designSystem.parseCandidate(rawCandidate)
     if (candidate === null) {
       if (throwOnInvalidCandidate) {
         throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
       }
-      invalidRawCandidates.add(rawCandidate)
+      designSystem.invalidRawCandidates.add(rawCandidate)
       continue // Bail, invalid candidate
     }
     candidates.set(candidate, rawCandidate)
   }
 
   // Sort the variants
-  let variants = Array.from(parsedVariants.values()).sort((a, z) => {
+  let variants = Array.from(designSystem.parsedVariants.values()).sort((a, z) => {
     return designSystem.variants.compare(a, z)
   })
 
   // Create the AST
   next: for (let [candidate, rawCandidate] of candidates) {
-    let astNode = parsedAstNodes.get(rawCandidate)
+    let astNode = designSystem.parseAstNode(rawCandidate)
     if (astNode === null) {
       if (throwOnInvalidCandidate) {
         throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
       }
-      invalidRawCandidates.add(rawCandidate)
+      designSystem.invalidRawCandidates.add(rawCandidate)
       continue next
     }
 
@@ -188,6 +100,65 @@ export function compileCandidates(
   return {
     astNodes,
     nodeSorting,
+  }
+}
+
+export function parseAstNodes(rawCandidate: string, designSystem: DesignSystem) {
+  let candidate = designSystem.parseCandidate(rawCandidate)
+  if (candidate === null) return null
+
+  let nodes: AstNode[] = []
+
+  // Handle arbitrary properties
+  if (candidate.kind === 'arbitrary') {
+    let compileFn = designSystem.utilities.getArbitrary()
+
+    // Build the node
+    let compiledNodes = compileFn(candidate)
+    if (compiledNodes === undefined) return null
+
+    nodes = compiledNodes
+  }
+
+  // Handle named utilities
+  else if (candidate.kind === 'static' || candidate.kind === 'functional') {
+    // Safety: At this point it is safe to use TypeScript's non-null assertion
+    // operator because if the `candidate.root` didn't exist, `parseCandidate`
+    // would have returned `null` and we would have returned early resulting
+    // in not hitting this code path.
+    let { compileFn } = designSystem.utilities.get(candidate.root)!
+
+    // Build the node
+    let compiledNodes = compileFn(candidate)
+    if (compiledNodes === undefined) return null
+
+    nodes = compiledNodes
+  }
+
+  let propertySort = getPropertySort(nodes)
+
+  if (candidate.important) {
+    applyImportant(nodes)
+  }
+
+  let node: Rule = {
+    kind: 'rule',
+    selector: `.${escape(rawCandidate)}`,
+    nodes,
+  }
+
+  for (let variant of candidate.variants) {
+    let result = applyVariant(node, variant, designSystem.variants)
+
+    // When the variant results in `null`, it means that the variant cannot be
+    // applied to the rule. Discard the candidate and continue to the next
+    // one.
+    if (result === null) return null
+  }
+
+  return {
+    node,
+    propertySort,
   }
 }
 

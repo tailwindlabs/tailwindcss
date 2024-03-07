@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest'
-import { parseCandidate, parseVariant } from './candidate'
+import { buildDesignSystem } from './design-system'
+import { Theme } from './theme'
 import { Utilities } from './utilities'
-import { DefaultMap } from './utils/default-map'
 import { Variants } from './variants'
 
 function run(
@@ -11,11 +11,12 @@ function run(
   utilities ??= new Utilities()
   variants ??= new Variants()
 
-  let parsedVariants = new DefaultMap((variant, map) => {
-    return parseVariant(variant, variants!, map)
-  })
+  let designSystem = buildDesignSystem(new Theme())
 
-  return parseCandidate(candidate, utilities, parsedVariants)
+  designSystem.utilities = utilities
+  designSystem.variants = variants
+
+  return designSystem.parseCandidate(candidate)
 }
 
 it('should skip unknown utilities', () => {

@@ -1,12 +1,7 @@
 import { Features, transform } from 'lightningcss'
 import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
-import {
-  compileCandidates,
-  createParsedAstNodes,
-  createParsedCandidates,
-  createParsedVariants,
-} from './compile'
+import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
@@ -107,10 +102,6 @@ export function compile(
   }
 
   let designSystem = buildDesignSystem(theme)
-  let invalidRawCandidates = new Set<string>()
-  let parsedVariants = createParsedVariants(designSystem)
-  let parsedCandidates = createParsedCandidates(designSystem, parsedVariants)
-  let parsedAstNodes = createParsedAstNodes(designSystem, parsedCandidates)
 
   let tailwindUtilitiesNode: Rule | null = null
 
@@ -121,12 +112,7 @@ export function compile(
       tailwindUtilitiesNode = node
 
       // Set the `@tailwind utilities` nodes, to the actual generated CSS
-      node.nodes = compileCandidates(rawCandidates, designSystem, {
-        parsedVariants,
-        parsedCandidates,
-        parsedAstNodes,
-        invalidRawCandidates,
-      }).astNodes
+      node.nodes = compileCandidates(rawCandidates, designSystem).astNodes
 
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
@@ -148,10 +134,6 @@ export function compile(
         {
           // Parse the candidates to an AST that we can replace the `@apply` rule with.
           let candidateAst = compileCandidates(candidates, designSystem, {
-            parsedVariants,
-            parsedCandidates,
-            parsedAstNodes,
-            invalidRawCandidates,
             throwOnInvalidCandidate: true,
           }).astNodes
 
@@ -194,7 +176,7 @@ export function compile(
 
   let allValidCandidates = new Set<string>()
   for (let rawCandidate of rawCandidates) {
-    if (!invalidRawCandidates.has(rawCandidate)) {
+    if (!designSystem.invalidRawCandidates.has(rawCandidate)) {
       allValidCandidates.add(rawCandidate)
     }
   }
@@ -205,7 +187,7 @@ export function compile(
       // Add all new candidates unless we know that they are invalid.
       let previousSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
-        if (!invalidRawCandidates.has(candidate)) {
+        if (!designSystem.invalidRawCandidates.has(candidate)) {
           allValidCandidates.add(candidate)
         }
       }
@@ -217,18 +199,13 @@ export function compile(
       }
 
       if (tailwindUtilitiesNode) {
-        let previousAstNodeCount = parsedAstNodes.size
-        let newNodes = compileCandidates(allValidCandidates, designSystem, {
-          parsedVariants,
-          parsedCandidates,
-          parsedAstNodes,
-          invalidRawCandidates,
-        }).astNodes
+        let previousAstNodeCount = designSystem.parsedAstNodes.size
+        let newNodes = compileCandidates(allValidCandidates, designSystem).astNodes
 
         // If no new ast nodes were generated, then we can return the original
         // CSS. This currently assumes that we only add new ast nodes and never
         // remove any.
-        if (previousAstNodeCount === parsedAstNodes.size) {
+        if (previousAstNodeCount === designSystem.parsedAstNodes.size) {
           return compiledCss
         }
 

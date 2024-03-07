@@ -1,9 +1,11 @@
 import { toCss } from './ast'
-import { compileCandidates } from './compile'
+import { parseCandidate, parseVariant } from './candidate'
+import { compileCandidates, parseAstNodes as parseAstNode } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
 import type { Theme } from './theme'
 import { Utilities, createUtilities } from './utilities'
+import { DefaultMap } from './utils/default-map'
 import { Variants, createVariants } from './variants'
 
 export type DesignSystem = {
@@ -15,13 +17,35 @@ export type DesignSystem = {
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
+
+  parseCandidate(candidate: string): ReturnType<typeof parseCandidate>
+  parseVariant(variant: string): ReturnType<typeof parseVariant>
+  parseAstNode(candidate: string): ReturnType<typeof parseAstNode>
+
+  parsedCandidates: DefaultMap<string, ReturnType<typeof parseCandidate>>
+  parsedVariants: DefaultMap<string, ReturnType<typeof parseVariant>>
+  parsedAstNodes: DefaultMap<string, ReturnType<typeof parseAstNode>>
+
+  invalidRawCandidates: Set<string>
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
-  return {
+  let utilities = createUtilities(theme)
+  let variants = createVariants(theme)
+  let invalidRawCandidates = new Set<string>()
+
+  let parsedVariants = new DefaultMap((variant) => parseVariant(variant, designSystem))
+  let parsedCandidates = new DefaultMap((candidate) => parseCandidate(candidate, designSystem))
+  let parsedAstNodes = new DefaultMap((candidate) => parseAstNode(candidate, designSystem))
+
+  let designSystem: DesignSystem = {
     theme,
-    utilities: createUtilities(theme),
-    variants: createVariants(theme),
+    utilities,
+    variants,
+    parsedCandidates,
+    parsedVariants,
+    parsedAstNodes,
+    invalidRawCandidates,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []
@@ -47,5 +71,17 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     getVariants() {
       return getVariants(this)
     },
+
+    parseCandidate(candidate: string) {
+      return parsedCandidates.get(candidate)
+    },
+    parseVariant(variant: string) {
+      return parsedVariants.get(variant)
+    },
+    parseAstNode(candidate: string) {
+      return parsedAstNodes.get(candidate)
+    },
   }
+
+  return designSystem
 }
