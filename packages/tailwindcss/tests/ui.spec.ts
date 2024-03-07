@@ -192,7 +192,7 @@ test('borders can be added without a border-style utility', async ({ page }) => 
   expect(await getPropertyValue('#x', 'border')).toEqual('2px solid rgb(0, 0, 0)')
 })
 
-test('borders can be added to a single side a border-style utility', async ({ page }) => {
+test('borders can be added to a single side withou a border-style utility', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
     html`<div id="x" class="text-black border-r-2 border-dashed hover:border-r-4">
@@ -206,7 +206,7 @@ test('borders can be added to a single side a border-style utility', async ({ pa
   expect(await getPropertyValue('#x', 'border-right')).toEqual('4px dashed rgb(0, 0, 0)')
 })
 
-test('dividers can be added without a setting border-style', async ({ page }) => {
+test('dividers can be added without setting border-style', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
     html`<div id="a" class="divide-y-2 divide-dashed hover:divide-y-4">
