@@ -207,6 +207,7 @@ jobs:
           cp bindings-x86_64-apple-darwin/* ./npm/darwin-x64/
           cp bindings-aarch64-apple-darwin/* ./npm/darwin-arm64/
           cp bindings-aarch64-linux-android/* ./npm/android-arm64/
+          cp bindings-armv7-linux-androideabi/* ./npm/android-arm-eabi/
           cp bindings-aarch64-unknown-linux-gnu/* ./npm/linux-arm64-gnu/
           cp bindings-aarch64-unknown-linux-musl/* ./npm/linux-arm64-musl/
           cp bindings-armv7-unknown-linux-gnueabihf/* ./npm/linux-arm-gnueabihf/
