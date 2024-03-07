@@ -49,6 +49,10 @@ export function options() {
       description: 'Minify the output',
       alias: '-m',
     },
+    '--optimize': {
+      type: 'boolean',
+      description: 'Optimize the output without minifying',
+    },
     '--cwd': {
       type: 'string',
       description: 'The current working directory',
@@ -99,10 +103,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let result = compile(input, candidates)
 
   // Optimize the output
-  if (args['--minify']) {
+  if (args['--minify'] || args['--optimize']) {
     result = optimizeCss(result, {
       file: args['--input'] ?? 'input.css',
-      minify: true,
+      minify: args['--minify'] ?? false,
     })
   }
 
@@ -192,10 +196,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         let result = compile(input, candidates)
 
         // Optimize the output
-        if (args['--minify']) {
+        if (args['--minify'] || args['--optimize']) {
           result = optimizeCss(result, {
             file: args['--input'] ?? 'input.css',
-            minify: true,
+            minify: args['--minify'] ?? false,
           })
         }
 
