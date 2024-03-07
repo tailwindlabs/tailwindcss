@@ -42,6 +42,17 @@ export function comment(value: string): Comment {
   }
 }
 
+export enum WalkAction {
+  /** Continue walking, which is the default */
+  Continue,
+
+  /** Skip visiting the children of this node */
+  Skip,
+
+  /** Stop the walk entirely */
+  Stop,
+}
+
 export function walk(
   ast: AstNode[],
   visit: (
@@ -49,21 +60,26 @@ export function walk(
     utils: {
       replaceWith(newNode: AstNode | AstNode[]): void
     },
-  ) => void | false,
+  ) => void | WalkAction,
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
-    let shouldContinue = visit(node, {
-      replaceWith(newNode) {
-        ast.splice(i, 1, ...(Array.isArray(newNode) ? newNode : [newNode]))
-        // We want to visit the newly replaced node(s), which start at the current
-        // index (i). By decrementing the index here, the next loop will process
-        // this position (containing the replaced node) again.
-        i--
-      },
-    })
+    let status =
+      visit(node, {
+        replaceWith(newNode) {
+          ast.splice(i, 1, ...(Array.isArray(newNode) ? newNode : [newNode]))
+          // We want to visit the newly replaced node(s), which start at the
+          // current index (i). By decrementing the index here, the next loop
+          // will process this position (containing the replaced node) again.
+          i--
+        },
+      }) ?? WalkAction.Continue
 
-    if (shouldContinue === false) return
+    // Stop the walk entirely
+    if (status === WalkAction.Stop) return
+
+    // Skip visiting the children of this node
+    if (status === WalkAction.Skip) continue
 
     if (node.kind === 'rule') {
       walk(node.nodes, visit)

@@ -1,6 +1,6 @@
 import { Features, transform } from 'lightningcss'
 import { version } from '../package.json'
-import { comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
+import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
@@ -29,7 +29,7 @@ export function compile(css: string, rawCandidates: string[]) {
       if (node.kind === 'rule' && node.selector.startsWith('@keyframes ')) {
         keyframesRules.push(node)
         replaceWith([])
-        return
+        return WalkAction.Skip
       }
 
       if (node.kind !== 'declaration') return
@@ -94,7 +94,7 @@ export function compile(css: string, rawCandidates: string[]) {
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
       // once per file but that's the intended usage at this point in time.
-      return false
+      return WalkAction.Stop
     }
   })
 
