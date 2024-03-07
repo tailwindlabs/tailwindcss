@@ -45,6 +45,7 @@ export function compile(css: string, rawCandidates: string[]) {
     } else {
       replaceWith([])
     }
+    return WalkAction.Skip
   })
 
   // Output final set of theme variables at the position of the first `@theme`
@@ -145,6 +146,7 @@ export function compile(css: string, rawCandidates: string[]) {
     walk(ast, (node, { replaceWith }) => {
       if (node.kind === 'rule' && node.selector === '@media reference') {
         replaceWith([])
+        return WalkAction.Skip
       }
     })
   }
