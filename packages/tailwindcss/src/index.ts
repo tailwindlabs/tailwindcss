@@ -23,7 +23,7 @@ export function compile(css: string, rawCandidates: string[]) {
     if (node.selector !== '@theme') return
 
     // Record all custom properties in the `@theme` declaration
-    walk([node], (node, { replaceWith }) => {
+    walk(node.nodes, (node, { replaceWith }) => {
       // Collect `@keyframes` rules to re-insert with theme variables later,
       // since the `@theme` rule itself will be removed.
       if (node.kind === 'rule' && node.selector.startsWith('@keyframes ')) {
