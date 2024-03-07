@@ -61,7 +61,11 @@ export default function tailwindcss(): Plugin[] {
   }
 
   function generateCss(css: string) {
-    return optimizeCss(compile(css, Array.from(candidates)), { minify })
+    return compile(css, Array.from(candidates))
+  }
+
+  function generateOptimizedCss(css: string) {
+    return optimizeCss(generateCss(css), { minify })
   }
 
   // In dev mode, there isn't a hook to signal that we've seen all files. We use
@@ -168,7 +172,7 @@ export default function tailwindcss(): Plugin[] {
             rawSource instanceof Uint8Array ? new TextDecoder().decode(rawSource) : rawSource
 
           if (source.includes('@tailwind')) {
-            item.source = generateCss(source)
+            item.source = generateOptimizedCss(source)
           }
         }
       },
