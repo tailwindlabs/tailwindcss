@@ -192,7 +192,6 @@ export function compile(
     })
   }
 
-  // TODO: Don't do this unless rebuilding?
   let allCandidates = new Set(rawCandidates)
   let compiledCss = toCss(ast)
 
