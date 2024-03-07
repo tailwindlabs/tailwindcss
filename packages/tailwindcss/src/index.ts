@@ -32,10 +32,17 @@ export function compile(css: string, rawCandidates: string[]) {
         return WalkAction.Skip
       }
 
-      if (node.kind !== 'declaration') return
-      if (!node.property.startsWith('--')) return
+      if (node.kind === 'comment') return
+      if (node.kind === 'declaration' && node.property.startsWith('--')) {
+        theme.add(node.property, node.value)
+        return
+      }
 
-      theme.add(node.property, node.value)
+      let tree = rule('@theme', [
+        comment(' Only CSS variables are allowed, this is not allowed: '),
+        node,
+      ])
+      throw new Error(`Invalid \`@theme\` detected:\n\n${toCss([tree])}`)
     })
 
     // Keep a reference to the first `@theme` rule to update with the full theme

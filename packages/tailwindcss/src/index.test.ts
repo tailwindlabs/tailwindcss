@@ -51,6 +51,33 @@ describe('compiling CSS', () => {
     `)
   })
 
+  test('that only CSS variables are allowed', () => {
+    expect(() =>
+      compileCss(
+        css`
+          @theme {
+            --color-primary: red;
+            .foo {
+              --color-primary: blue;
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['bg-primary'],
+      ),
+    ).toThrowErrorMatchingInlineSnapshot(`
+      [Error: Invalid \`@theme\` detected:
+
+      @theme {
+        /* Only CSS variables are allowed, this is not allowed: */
+        .foo {
+          --color-primary: blue;
+        }
+      }
+      ]
+    `)
+  })
+
   test('`@tailwind utilities` is only processed once', () => {
     expect(
       compileCss(
