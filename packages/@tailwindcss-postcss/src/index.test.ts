@@ -18,7 +18,9 @@ beforeEach(async () => {
 })
 
 test("`@import 'tailwindcss'` is replaced with the generated CSS", async () => {
-  let processor = postcss([tailwindcss({ base: `${__dirname}/fixtures/example-project` })])
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
 
   let result = await processor.process(`@import 'tailwindcss'`, { from: INPUT_CSS_PATH })
 
@@ -47,7 +49,9 @@ test("`@import 'tailwindcss'` is replaced with the generated CSS", async () => {
 })
 
 test('output is optimized by Lightning CSS', async () => {
-  let processor = postcss([tailwindcss({ base: `${__dirname}/fixtures/example-project` })])
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
 
   // `@apply` is used because Lightning is skipped if neither `@tailwind` nor
   // `@apply` is used.
@@ -82,7 +86,9 @@ test('output is optimized by Lightning CSS', async () => {
 })
 
 test('@apply can be used without emitting the theme in the CSS file', async () => {
-  let processor = postcss([tailwindcss({ base: `${__dirname}/fixtures/example-project` })])
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
 
   // `@apply` is used because Lightning is skipped if neither `@tailwind` nor
   // `@apply` is used.
@@ -112,7 +118,7 @@ describe('processing without specifying a base path', () => {
   afterEach(() => unlink(filepath))
 
   test('the current working directory is used by default', async () => {
-    let processor = postcss([tailwindcss()])
+    let processor = postcss([tailwindcss({ optimize: { minify: false } })])
 
     let result = await processor.process(`@import "tailwindcss"`, { from: INPUT_CSS_PATH })
 
