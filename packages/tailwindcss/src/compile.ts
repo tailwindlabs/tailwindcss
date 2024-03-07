@@ -9,9 +9,6 @@ import type { Variants } from './variants'
 export function createParsedVariants(
   designSystem: DesignSystem,
 ): DefaultMap<string, Variant | null> {
-  // A lazy map implementation that will return the variant if it exists. If it
-  // doesn't exist yet, the raw string variant will be parsed and added to the
-  // map.
   return new DefaultMap((variant, map) => {
     return parseVariant(variant, designSystem.variants, map)
   })
