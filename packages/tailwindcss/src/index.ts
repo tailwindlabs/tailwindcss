@@ -193,26 +193,43 @@ export function compile(
   let allCandidates = new Set(rawCandidates)
   let invalidRawCandidates = new Set<string>()
 
+  let compiledCss = toCss(ast)
+
   return {
     rebuild(newRawCandidates: string[]) {
+      // Detect all new candidates
+      let previousSize = allCandidates.size
       for (let candidate of newRawCandidates) {
         if (!invalidRawCandidates.has(candidate)) {
           allCandidates.add(candidate)
         }
       }
 
+      // If no new candidates were added, we can return the original CSS
+      if (previousSize === allCandidates.size) {
+        return compiledCss
+      }
+
       if (tailwindUtilitiesNode) {
+        let previousAstNodeCount = parsedAstNodes.size
         let newNodes = compileCandidates(Array.from(allCandidates), designSystem, {
           parsedVariants,
           parsedCandidates,
           parsedAstNodes,
           invalidRawCandidates,
         }).astNodes
+
+        if (previousAstNodeCount === parsedAstNodes.size) {
+          return compiledCss
+        }
+
         tailwindUtilitiesNode.nodes = newNodes
+        compiledCss = toCss(ast)
       }
-      return toCss(ast)
+
+      return compiledCss
     },
-    css: toCss(ast),
+    css: compiledCss,
   }
 }
 
