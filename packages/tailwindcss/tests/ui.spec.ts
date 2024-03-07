@@ -192,6 +192,35 @@ test('borders can be added without a border-style utility', async ({ page }) => 
   expect(await getPropertyValue('#x', 'border')).toEqual('2px solid rgb(0, 0, 0)')
 })
 
+test('borders can be added to a single side a border-style utility', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`<div id="x" class="text-black border-r-2 border-dashed hover:border-r-4">
+      Hello world
+    </div>`,
+  )
+  expect(await getPropertyValue('#x', 'border-right')).toEqual('2px dashed rgb(0, 0, 0)')
+
+  await page.locator('#x').hover()
+
+  expect(await getPropertyValue('#x', 'border-right')).toEqual('4px dashed rgb(0, 0, 0)')
+})
+
+test('dividers can be added without a setting border-style', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`<div id="a" class="divide-y-2 divide-dashed hover:divide-y-4">
+      <div>First</div>
+      <div id="b">Second</div>
+    </div>`,
+  )
+  expect(await getPropertyValue('#b', 'border-top')).toEqual('2px dashed rgb(0, 0, 0)')
+
+  await page.locator('#a').hover()
+
+  expect(await getPropertyValue('#b', 'border-top')).toEqual('4px dashed rgb(0, 0, 0)')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')

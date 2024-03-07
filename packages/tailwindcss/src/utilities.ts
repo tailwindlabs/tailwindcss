@@ -2089,7 +2089,7 @@ export function createUtilities(theme: Theme) {
           let value = theme.get(['--default-border-width']) ?? '1px'
           let decls = desc.width(value)
           if (!decls) return
-          return [borderProperties(), decl('border-style', 'var(--tw-border-style)'), ...decls]
+          return [borderProperties(), ...decls]
         }
 
         if (candidate.value.kind === 'arbitrary') {
@@ -2102,7 +2102,7 @@ export function createUtilities(theme: Theme) {
             case 'length': {
               let decls = desc.width(value)
               if (!decls) return
-              return [borderProperties(), decl('border-style', 'var(--tw-border-style)'), ...decls]
+              return [borderProperties(), ...decls]
             }
             default: {
               value = asColor(value, candidate.modifier, theme)
@@ -2127,13 +2127,13 @@ export function createUtilities(theme: Theme) {
           if (value) {
             let decls = desc.width(value)
             if (!decls) return
-            return [borderProperties(), decl('border-style', 'var(--tw-border-style)'), ...decls]
+            return [borderProperties(), ...decls]
           }
 
           if (!Number.isNaN(Number(candidate.value.value))) {
             let decls = desc.width(`${candidate.value.value}px`)
             if (!decls) return
-            return [borderProperties(), decl('border-style', 'var(--tw-border-style)'), ...decls]
+            return [borderProperties(), ...decls]
           }
         }
       })
@@ -2154,47 +2154,78 @@ export function createUtilities(theme: Theme) {
     }
 
     borderSideUtility('border', {
-      width: (value) => [decl('border-width', value)],
+      width: (value) => [
+        decl('border-style', 'var(--tw-border-style)'),
+        decl('border-width', value),
+      ],
       color: (value) => [decl('border-color', value)],
     })
 
     borderSideUtility('border-x', {
-      width: (value) => [decl('border-left-width', value), decl('border-right-width', value)],
+      width: (value) => [
+        decl('border-left-style', 'var(--tw-border-style)'),
+        decl('border-right-style', 'var(--tw-border-style)'),
+        decl('border-left-width', value),
+        decl('border-right-width', value),
+      ],
       color: (value) => [decl('border-left-color', value), decl('border-right-color', value)],
     })
 
     borderSideUtility('border-y', {
-      width: (value) => [decl('border-top-width', value), decl('border-bottom-width', value)],
+      width: (value) => [
+        decl('border-top-style', 'var(--tw-border-style)'),
+        decl('border-bottom-style', 'var(--tw-border-style)'),
+        decl('border-top-width', value),
+        decl('border-bottom-width', value),
+      ],
       color: (value) => [decl('border-top-color', value), decl('border-bottom-color', value)],
     })
 
     borderSideUtility('border-s', {
-      width: (value) => [decl('border-inline-start-width', value)],
+      width: (value) => [
+        decl('border-inline-start-style', 'var(--tw-border-style)'),
+        decl('border-inline-start-width', value),
+      ],
       color: (value) => [decl('border-inline-start-color', value)],
     })
 
     borderSideUtility('border-e', {
-      width: (value) => [decl('border-inline-end-width', value)],
+      width: (value) => [
+        decl('border-inline-end-style', 'var(--tw-border-style)'),
+        decl('border-inline-end-width', value),
+      ],
       color: (value) => [decl('border-inline-end-color', value)],
     })
 
     borderSideUtility('border-t', {
-      width: (value) => [decl('border-top-width', value)],
+      width: (value) => [
+        decl('border-top-style', 'var(--tw-border-style)'),
+        decl('border-top-width', value),
+      ],
       color: (value) => [decl('border-top-color', value)],
     })
 
     borderSideUtility('border-r', {
-      width: (value) => [decl('border-right-width', value)],
+      width: (value) => [
+        decl('border-right-style', 'var(--tw-border-style)'),
+        decl('border-right-width', value),
+      ],
       color: (value) => [decl('border-right-color', value)],
     })
 
     borderSideUtility('border-b', {
-      width: (value) => [decl('border-bottom-width', value)],
+      width: (value) => [
+        decl('border-bottom-style', 'var(--tw-border-style)'),
+        decl('border-bottom-width', value),
+      ],
       color: (value) => [decl('border-bottom-color', value)],
     })
 
     borderSideUtility('border-l', {
-      width: (value) => [decl('border-left-width', value)],
+      width: (value) => [
+        decl('border-left-style', 'var(--tw-border-style)'),
+        decl('border-left-width', value),
+      ],
       color: (value) => [decl('border-left-color', value)],
     })
 
@@ -2208,7 +2239,7 @@ export function createUtilities(theme: Theme) {
         rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
           decl('--tw-sort', 'divide-x-width'),
           borderProperties(),
-          decl('border-style', 'var(--tw-border-style)'),
+          decl('border-inline-style', 'var(--tw-border-style)'),
           decl('border-inline-end-width', `calc(${value} * var(--tw-divide-x-reverse))`),
           decl(
             'border-inline-start-width',
@@ -2228,7 +2259,8 @@ export function createUtilities(theme: Theme) {
         rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
           decl('--tw-sort', 'divide-y-width'),
           borderProperties(),
-          decl('border-style', 'var(--tw-border-style)'),
+          decl('border-top-style', 'var(--tw-border-style)'),
+          decl('border-bottom-style', 'var(--tw-border-style)'),
           decl('border-bottom-width', `calc(${value} * var(--tw-divide-y-reverse))`),
           decl('border-top-width', `calc(${value} * calc(1 - var(--tw-divide-y-reverse)))`),
         ]),

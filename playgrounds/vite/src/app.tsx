@@ -1,10 +1,10 @@
-import { Foo } from './foo'
-
 export function App() {
   return (
-    <div className="m-3 p-3 border">
+    <div className="m-3 p-3 divide-y">
       <h1 className="text-blue-500">Hello World</h1>
-      <Foo />
+      <h1 className="text-blue-500">Hello World</h1>
+      <h1 className="text-blue-500">Hello World</h1>
+      <h1 className="text-blue-500">Hello World</h1>
     </div>
   )
 }
