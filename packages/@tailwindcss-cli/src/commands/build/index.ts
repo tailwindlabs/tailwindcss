@@ -1,12 +1,5 @@
 import watcher from '@parcel/watcher'
-import {
-  IO,
-  Parsing,
-  clearCache,
-  scanDir,
-  scanFiles,
-  type ChangedContent,
-} from '@tailwindcss/oxide'
+import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindcss/oxide'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -164,9 +157,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         // Scan the entire `base` directory for full rebuilds.
         if (rebuildStrategy === 'full') {
-          // Clear the cache because we need to re-scan the entire directory.
-          clearCache()
-
           // Re-scan the directory to get the new `candidates`.
           candidates = scanDir({ base }).candidates
 
