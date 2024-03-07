@@ -38,11 +38,14 @@ export function compile(css: string, rawCandidates: string[]) {
         return
       }
 
-      let tree = rule('@theme', [
-        comment(' Only CSS variables are allowed, this is not allowed: '),
-        node,
-      ])
-      throw new Error(`Invalid \`@theme\` detected:\n\n${toCss([tree])}`)
+      let snippet = toCss([rule('@theme', [node])])
+        .split('\n')
+        .map((line, idx, all) => `${idx === 0 || idx >= all.length - 2 ? ' ' : '>'} ${line}`)
+        .join('\n')
+
+      throw new Error(
+        `\`@theme\` blocks must only contain custom properties or \`@keyframes\`.\n\n${snippet}`,
+      )
     })
 
     // Keep a reference to the first `@theme` rule to update with the full theme

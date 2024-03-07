@@ -66,15 +66,14 @@ describe('compiling CSS', () => {
         ['bg-primary'],
       ),
     ).toThrowErrorMatchingInlineSnapshot(`
-      [Error: Invalid \`@theme\` detected:
+      [Error: \`@theme\` blocks must only contain custom properties or \`@keyframes\`.
 
-      @theme {
-        /* Only CSS variables are allowed, this is not allowed: */
-        .foo {
-          --color-primary: blue;
+        @theme {
+      >   .foo {
+      >     --color-primary: blue;
+      >   }
         }
-      }
-      ]
+        ]
     `)
   })
 
