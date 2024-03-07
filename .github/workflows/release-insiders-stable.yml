@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 env:
   CI: true
@@ -58,7 +59,7 @@ jobs:
         run: npm version 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }} --force --no-git-tag-version
 
       - name: Publish
-        run: npm publish --tag ${{ env.RELEASE_CHANNEL }}
+        run: npm publish --provenance --tag ${{ env.RELEASE_CHANNEL }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

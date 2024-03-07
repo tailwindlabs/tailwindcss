@@ -218,6 +218,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     name: Build and release
+    permissions:
+      contents: read
+      id-token: write
     needs:
       - oxide-build
       - oxide-build-linux
@@ -273,7 +276,7 @@ jobs:
             echo "Publishing $pkg..."
             cd $pkg
             npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
-            npm publish --tag insiders --access public
+            npm publish --provenance --tag insiders --access public
             cd -
           done
 
@@ -282,7 +285,7 @@ jobs:
           npm version ${{ env.NPM_VERSION }} --force --no-git-tag-version
           sed "s#\"0.0.0\"#\"${{ env.NPM_VERSION }}\"#g" package.json > package_updated.json
           mv package_updated.json package.json
-          npm publish --tag insiders --access public
+          npm publish --provenance --tag insiders --access public
           cd -
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -291,6 +294,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     name: Build and release Tailwind CSS
+    permissions:
+      contents: read
+      id-token: write
 
     needs:
       - oxide-release
@@ -332,6 +338,6 @@ jobs:
         run: npm version 0.0.0-oxide.${{ env.SHA_SHORT }} --force --no-git-tag-version
 
       - name: Publish
-        run: npm publish --tag oxide
+        run: npm publish --provenance --tag oxide
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

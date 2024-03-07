@@ -18,6 +18,11 @@
     }
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "oxide/crates/node"
+  },
   "devDependencies": {
     "@napi-rs/cli": "^2.15.2"
   },
