@@ -92,24 +92,41 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     args['--input'] ?? base,
   )
 
+  let previous = {
+    css: '',
+    optimizedCss: '',
+  }
+
+  async function write(css: string, args: Result<ReturnType<typeof options>>) {
+    let output = css
+
+    // Optimize the output
+    if (args['--minify'] || args['--optimize']) {
+      if (css !== previous.css) {
+        let optimizedCss = optimizeCss(css, {
+          file: args['--input'] ?? 'input.css',
+          minify: args['--minify'] ?? false,
+        })
+        previous.css = css
+        previous.optimizedCss = optimizedCss
+        output = optimizedCss
+      } else {
+        output = previous.optimizedCss
+      }
+    }
+
+    // Write the output
+    if (args['--output']) {
+      await outputFile(args['--output'], output)
+    } else {
+      println(output)
+    }
+  }
+
   // Compile the input
   let result = compile(input, candidates)
-  let compiledCss = result.css
 
-  // Optimize the output
-  if (args['--minify'] || args['--optimize']) {
-    compiledCss = optimizeCss(compiledCss, {
-      file: args['--input'] ?? 'input.css',
-      minify: args['--minify'] ?? false,
-    })
-  }
-
-  // Write the output
-  if (args['--output']) {
-    await outputFile(args['--output'], compiledCss)
-  } else {
-    println(compiledCss)
-  }
+  await write(result.css, args)
 
   let end = process.hrtime.bigint()
   eprintln(header())
@@ -155,6 +172,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         // Re-compile the input
         let start = process.hrtime.bigint()
 
+        // Track the compiled CSS
+        let compiledCss = ''
+
         // Scan the entire `base` directory for full rebuilds.
         if (rebuildStrategy === 'full') {
           // Re-scan the directory to get the new `candidates`.
@@ -179,20 +199,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           compiledCss = result.rebuild(scanFiles(changedFiles, IO.Sequential | Parsing.Sequential))
         }
 
-        // Optimize the output
-        if (args['--minify'] || args['--optimize']) {
-          compiledCss = optimizeCss(compiledCss, {
-            file: args['--input'] ?? 'input.css',
-            minify: args['--minify'] ?? false,
-          })
-        }
-
-        // Write the output
-        if (args['--output']) {
-          await outputFile(args['--output'], compiledCss)
-        } else {
-          println(compiledCss)
-        }
+        await write(compiledCss, args)
 
         let end = process.hrtime.bigint()
         eprintln(`Done in ${formatDuration(end - start)}`)
