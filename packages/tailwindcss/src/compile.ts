@@ -91,7 +91,7 @@ export function createParsedAstNodes(
 }
 
 export function compileCandidates(
-  rawCandidates: string[],
+  rawCandidates: Iterable<string>,
   designSystem: DesignSystem,
   {
     parsedVariants = createParsedVariants(designSystem),

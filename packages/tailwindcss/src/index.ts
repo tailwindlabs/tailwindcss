@@ -212,7 +212,7 @@ export function compile(
 
       if (tailwindUtilitiesNode) {
         let previousAstNodeCount = parsedAstNodes.size
-        let newNodes = compileCandidates(Array.from(allCandidates), designSystem, {
+        let newNodes = compileCandidates(allCandidates, designSystem, {
           parsedVariants,
           parsedCandidates,
           parsedAstNodes,
