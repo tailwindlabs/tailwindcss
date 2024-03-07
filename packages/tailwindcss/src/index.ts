@@ -107,6 +107,7 @@ export function compile(
   }
 
   let designSystem = buildDesignSystem(theme)
+  let invalidRawCandidates = new Set<string>()
   let parsedVariants = createParsedVariants(designSystem)
   let parsedCandidates = createParsedCandidates(designSystem, parsedVariants)
   let parsedAstNodes = createParsedAstNodes(designSystem, parsedCandidates)
@@ -124,6 +125,7 @@ export function compile(
         parsedVariants,
         parsedCandidates,
         parsedAstNodes,
+        invalidRawCandidates,
       }).astNodes
 
       // Stop walking after finding `@tailwind utilities` to avoid walking all
@@ -149,6 +151,7 @@ export function compile(
             parsedVariants,
             parsedCandidates,
             parsedAstNodes,
+            invalidRawCandidates,
             throwOnInvalidCandidate: true,
           }).astNodes
 
@@ -191,8 +194,6 @@ export function compile(
 
   // TODO: Don't do this unless rebuilding?
   let allCandidates = new Set(rawCandidates)
-  let invalidRawCandidates = new Set<string>()
-
   let compiledCss = toCss(ast)
 
   return {
