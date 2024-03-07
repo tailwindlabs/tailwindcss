@@ -192,33 +192,42 @@ export function compile(
     })
   }
 
-  let allCandidates = new Set(rawCandidates)
+  let allValidCandidates = new Set<string>()
+  for (let rawCandidate of rawCandidates) {
+    if (!invalidRawCandidates.has(rawCandidate)) {
+      allValidCandidates.add(rawCandidate)
+    }
+  }
   let compiledCss = toCss(ast)
 
   return {
     rebuild(newRawCandidates: string[]) {
-      // Detect all new candidates
-      let previousSize = allCandidates.size
+      // Add all new candidates unless we know that they are invalid.
+      let previousSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
         if (!invalidRawCandidates.has(candidate)) {
-          allCandidates.add(candidate)
+          allValidCandidates.add(candidate)
         }
       }
 
-      // If no new candidates were added, we can return the original CSS
-      if (previousSize === allCandidates.size) {
+      // If no new candidates were added, we can return the original CSS. This
+      // currently assumes that we only add new candidates and never remove any.
+      if (previousSize === allValidCandidates.size) {
         return compiledCss
       }
 
       if (tailwindUtilitiesNode) {
         let previousAstNodeCount = parsedAstNodes.size
-        let newNodes = compileCandidates(allCandidates, designSystem, {
+        let newNodes = compileCandidates(allValidCandidates, designSystem, {
           parsedVariants,
           parsedCandidates,
           parsedAstNodes,
           invalidRawCandidates,
         }).astNodes
 
+        // If no new ast nodes were generated, then we can return the original
+        // CSS. This currently assumes that we only add new ast nodes and never
+        // remove any.
         if (previousAstNodeCount === parsedAstNodes.size) {
           return compiledCss
         }
