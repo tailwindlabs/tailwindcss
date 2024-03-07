@@ -10,7 +10,7 @@ If there's a new feature you'd like to see added to Tailwind, [share your idea w
 
 **Please note that we don't often accept pull requests for new features.** Adding a new feature to Tailwind requires us to think through the entire problem ourselves to make sure we agree with the proposed API, which means the feature needs to be high on our own priority list for us to be able to give it the attention it needs.
 
-If you open a pull request for a new feature, we're likely to close it not because it's a bad idea, but because we aren't ready to prioritize the feature and we don't want to the PR to sit open for months or even years.
+If you open a pull request for a new feature, we're likely to close it not because it's a bad idea, but because we aren't ready to prioritize the feature and don't want the PR to sit open for months or even years.
 
 ## Coding standards
 
