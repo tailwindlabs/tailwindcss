@@ -15,25 +15,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Only allow CSS variables in `@theme` ([#13125](https://github.com/tailwindlabs/tailwindcss/pull/13125))
+- Error when `@theme` contains unsupported rules/declarations ([#13125](https://github.com/tailwindlabs/tailwindcss/pull/13125))
 
 ## [4.0.0-alpha.5] - 2024-03-06
 
 ### Fixed
 
-- Always honor git ignore files ([#13119](https://github.com/tailwindlabs/tailwindcss/pull/13119))
+- Don't scan ignored files even if a `.git` folder is not present ([#13119](https://github.com/tailwindlabs/tailwindcss/pull/13119))
 
 ## [4.0.0-alpha.4] - 2024-03-06
 
 ### Fixed
 
-- Add extension-less exports for all exported CSS files ([#13110](https://github.com/tailwindlabs/tailwindcss/pull/13110))
+- Support importing framework CSS files without including a `.css` extension ([#13110](https://github.com/tailwindlabs/tailwindcss/pull/13110))
 
 ## [4.0.0-alpha.3] - 2024-03-06
 
 ### Added
 
-- Support old important modifier position ([#13103](https://github.com/tailwindlabs/tailwindcss/pull/13103))
+- Support putting the important modifier at the beginning of a utility ([#13103](https://github.com/tailwindlabs/tailwindcss/pull/13103))
 
 ### Fixed
 
