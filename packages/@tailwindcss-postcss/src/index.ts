@@ -13,6 +13,7 @@ type PluginOptions = {
 
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
+  let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
 
   return {
     postcssPlugin: 'tailwindcss-v4',
@@ -42,9 +43,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         function replaceCss(css: string) {
           root.removeAll()
           let output = css
-          if (opts.optimize) {
+          if (optimize) {
             output = optimizeCss(output, {
-              minify: typeof opts.optimize === 'object' ? opts.optimize.minify : false,
+              minify: typeof optimize === 'object' ? optimize.minify : false,
             })
           }
           root.append(postcss.parse(output, result.opts))
