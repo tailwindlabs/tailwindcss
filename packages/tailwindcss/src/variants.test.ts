@@ -1280,7 +1280,13 @@ test('supports', () => {
   expect(
     run(['supports-gap:grid', 'supports-[display:grid]:flex', 'supports-[selector(A_>_B)]:flex']),
   ).toMatchInlineSnapshot(`
-    "@supports (display: grid) {
+    "@supports (gap: var(--tw)) {
+      .supports-gap\\:grid {
+        display: grid;
+      }
+    }
+
+    @supports (display: grid) {
       .supports-\\[display\\:grid\\]\\:flex {
         display: flex;
       }
@@ -1289,12 +1295,6 @@ test('supports', () => {
     @supports selector(A > B) {
       .supports-\\[selector\\(A_\\>_B\\)\\]\\:flex {
         display: flex;
-      }
-    }
-
-    @supports (gap: var(--tw)) {
-      .supports-gap\\:grid {
-        display: grid;
       }
     }"
   `)
@@ -1322,11 +1322,11 @@ test('not', () => {
       display: flex;
     }
 
-    .group-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:checked) *) {
+    .group-not-\\[\\:checked\\]\\:flex:is(:where(.group):not(:checked) *) {
       display: flex;
     }
 
-    .group-not-\\[\\:checked\\]\\:flex:is(:where(.group):not(:checked) *) {
+    .group-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:checked) *) {
       display: flex;
     }
 
@@ -1334,11 +1334,11 @@ test('not', () => {
       display: flex;
     }
 
-    .peer-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name):not(:checked) ~ *) {
+    .peer-not-\\[\\:checked\\]\\:flex:is(:where(.peer):not(:checked) ~ *) {
       display: flex;
     }
 
-    .peer-not-\\[\\:checked\\]\\:flex:is(:where(.peer):not(:checked) ~ *) {
+    .peer-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name):not(:checked) ~ *) {
       display: flex;
     }"
   `)
@@ -1362,11 +1362,11 @@ test('has', () => {
       display: flex;
     }
 
-    .group-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *) {
+    .group-has-\\[\\:checked\\]\\:flex:is(:where(.group):has(:checked) *) {
       display: flex;
     }
 
-    .group-has-\\[\\:checked\\]\\:flex:is(:where(.group):has(:checked) *) {
+    .group-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *) {
       display: flex;
     }
 
@@ -1374,11 +1374,11 @@ test('has', () => {
       display: flex;
     }
 
-    .peer-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name):has(:checked) ~ *) {
+    .peer-has-\\[\\:checked\\]\\:flex:is(:where(.peer):has(:checked) ~ *) {
       display: flex;
     }
 
-    .peer-has-\\[\\:checked\\]\\:flex:is(:where(.peer):has(:checked) ~ *) {
+    .peer-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name):has(:checked) ~ *) {
       display: flex;
     }
 
@@ -1405,15 +1405,7 @@ test('aria', () => {
       'peer-aria-checked/parent-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".group-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-modal] *) {
-      display: flex;
-    }
-
-    .group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *) {
-      display: flex;
-    }
-
-    .group-aria-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-checked="true"] *) {
+    ".group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *) {
       display: flex;
     }
 
@@ -1421,7 +1413,11 @@ test('aria', () => {
       display: flex;
     }
 
-    .peer-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-modal] ~ *) {
+    .group-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-modal] *) {
+      display: flex;
+    }
+
+    .group-aria-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-checked="true"] *) {
       display: flex;
     }
 
@@ -1429,19 +1425,23 @@ test('aria', () => {
       display: flex;
     }
 
-    .peer-aria-checked\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-checked="true"] ~ *) {
-      display: flex;
-    }
-
     .peer-aria-checked\\:flex:is(:where(.peer)[aria-checked="true"] ~ *) {
       display: flex;
     }
 
-    .aria-\\[invalid\\=spelling\\]\\:flex[aria-invalid="spelling"] {
+    .peer-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-modal] ~ *) {
+      display: flex;
+    }
+
+    .peer-aria-checked\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-checked="true"] ~ *) {
       display: flex;
     }
 
     .aria-checked\\:flex[aria-checked="true"] {
+      display: flex;
+    }
+
+    .aria-\\[invalid\\=spelling\\]\\:flex[aria-invalid="spelling"] {
       display: flex;
     }"
   `)
@@ -1460,15 +1460,11 @@ test('data', () => {
       'peer-data-[disabled]/parent-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".group-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-disabled] *) {
+    ".group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *) {
       display: flex;
     }
 
-    .group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *) {
-      display: flex;
-    }
-
-    .peer-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-disabled] ~ *) {
+    .group-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-disabled] *) {
       display: flex;
     }
 
@@ -1476,11 +1472,15 @@ test('data', () => {
       display: flex;
     }
 
-    .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
+    .peer-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-disabled] ~ *) {
       display: flex;
     }
 
     .data-disabled\\:flex[data-disabled] {
+      display: flex;
+    }
+
+    .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
       display: flex;
     }"
   `)
@@ -1567,14 +1567,14 @@ test('container queries', () => {
       --width-lg: 1024px;
     }
 
-    @container name (width < 1024px) {
-      .\\@max-lg\\/name\\:flex {
+    @container (width < 1024px) {
+      .\\@max-lg\\:flex {
         display: flex;
       }
     }
 
-    @container (width < 1024px) {
-      .\\@max-lg\\:flex {
+    @container name (width < 1024px) {
+      .\\@max-lg\\/name\\:flex {
         display: flex;
       }
     }
@@ -1615,12 +1615,6 @@ test('container queries', () => {
       }
     }
 
-    @container name (width >= 1024px) {
-      .\\@lg\\/name\\:flex {
-        display: flex;
-      }
-    }
-
     @container (width >= 1024px) {
       .\\@lg\\:flex {
         display: flex;
@@ -1628,13 +1622,19 @@ test('container queries', () => {
     }
 
     @container name (width >= 1024px) {
-      .\\@min-lg\\/name\\:flex {
+      .\\@lg\\/name\\:flex {
         display: flex;
       }
     }
 
     @container (width >= 1024px) {
       .\\@min-lg\\:flex {
+        display: flex;
+      }
+    }
+
+    @container name (width >= 1024px) {
+      .\\@min-lg\\/name\\:flex {
         display: flex;
       }
     }"
