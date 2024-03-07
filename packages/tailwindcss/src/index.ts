@@ -1,7 +1,12 @@
 import { Features, transform } from 'lightningcss'
 import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
-import { compileCandidates } from './compile'
+import {
+  compileCandidates,
+  createParsedAstNodes,
+  createParsedCandidates,
+  createParsedVariants,
+} from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
@@ -102,6 +107,9 @@ export function compile(
   }
 
   let designSystem = buildDesignSystem(theme)
+  let parsedVariants = createParsedVariants(designSystem)
+  let parsedCandidates = createParsedCandidates(designSystem, parsedVariants)
+  let parsedAstNodes = createParsedAstNodes(designSystem, parsedCandidates)
 
   let tailwindUtilitiesNode: Rule | null = null
 
@@ -112,7 +120,11 @@ export function compile(
       tailwindUtilitiesNode = node
 
       // Set the `@tailwind utilities` nodes, to the actual generated CSS
-      node.nodes = compileCandidates(rawCandidates, designSystem).astNodes
+      node.nodes = compileCandidates(rawCandidates, designSystem, {
+        parsedVariants,
+        parsedCandidates,
+        parsedAstNodes,
+      }).astNodes
 
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
@@ -134,6 +146,9 @@ export function compile(
         {
           // Parse the candidates to an AST that we can replace the `@apply` rule with.
           let candidateAst = compileCandidates(candidates, designSystem, {
+            parsedVariants,
+            parsedCandidates,
+            parsedAstNodes,
             throwOnInvalidCandidate: true,
           }).astNodes
 
@@ -176,15 +191,23 @@ export function compile(
 
   // TODO: Don't do this unless rebuilding?
   let allCandidates = new Set(rawCandidates)
+  let invalidRawCandidates = new Set<string>()
 
   return {
     rebuild(newRawCandidates: string[]) {
       for (let candidate of newRawCandidates) {
-        allCandidates.add(candidate)
+        if (!invalidRawCandidates.has(candidate)) {
+          allCandidates.add(candidate)
+        }
       }
 
       if (tailwindUtilitiesNode) {
-        let newNodes = compileCandidates(Array.from(allCandidates), designSystem).astNodes
+        let newNodes = compileCandidates(Array.from(allCandidates), designSystem, {
+          parsedVariants,
+          parsedCandidates,
+          parsedAstNodes,
+          invalidRawCandidates,
+        }).astNodes
         tailwindUtilitiesNode.nodes = newNodes
       }
       return toCss(ast)

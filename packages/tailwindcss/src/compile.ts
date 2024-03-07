@@ -6,45 +6,34 @@ import { DefaultMap } from './utils/default-map'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
 
-export function compileCandidates(
-  rawCandidates: string[],
+export function createParsedVariants(
   designSystem: DesignSystem,
-  { throwOnInvalidCandidate = false } = {},
-) {
-  let nodeSorting = new Map<
-    AstNode,
-    { properties: number[]; variants: bigint; candidate: string }
-  >()
-  let astNodes: AstNode[] = []
-
+): DefaultMap<string, Variant | null> {
   // A lazy map implementation that will return the variant if it exists. If it
   // doesn't exist yet, the raw string variant will be parsed and added to the
   // map.
-  let parsedVariants: DefaultMap<string, Variant | null> = new DefaultMap((variant, map) => {
+  return new DefaultMap((variant, map) => {
     return parseVariant(variant, designSystem.variants, map)
   })
+}
 
-  let candidates = new Map<Candidate, string>()
-
-  // Parse candidates and variants
-  for (let rawCandidate of rawCandidates) {
-    let candidate = parseCandidate(rawCandidate, designSystem.utilities, parsedVariants)
-    if (candidate === null) {
-      if (throwOnInvalidCandidate) {
-        throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
-      }
-      continue // Bail, invalid candidate
-    }
-    candidates.set(candidate, rawCandidate)
-  }
-
-  // Sort the variants
-  let variants = Array.from(parsedVariants.values()).sort((a, z) => {
-    return designSystem.variants.compare(a, z)
+export function createParsedCandidates(
+  designSystem: DesignSystem,
+  parsedVariants: DefaultMap<string, Variant | null>,
+) {
+  return new DefaultMap((candidate) => {
+    return parseCandidate(candidate, designSystem.utilities, parsedVariants)
   })
+}
 
-  // Create the AST
-  next: for (let [candidate, rawCandidate] of candidates) {
+export function createParsedAstNodes(
+  designSystem: DesignSystem,
+  parsedCandidates: DefaultMap<string, Candidate | null>,
+) {
+  return new DefaultMap((rawCandidate: string) => {
+    let candidate = parsedCandidates.get(rawCandidate)
+    if (candidate === null) return null
+
     let nodes: AstNode[] = []
 
     // Handle arbitrary properties
@@ -53,12 +42,7 @@ export function compileCandidates(
 
       // Build the node
       let compiledNodes = compileFn(candidate)
-      if (compiledNodes === undefined) {
-        if (throwOnInvalidCandidate) {
-          throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
-        }
-        continue next
-      }
+      if (compiledNodes === undefined) return null
 
       nodes = compiledNodes
     }
@@ -73,12 +57,7 @@ export function compileCandidates(
 
       // Build the node
       let compiledNodes = compileFn(candidate)
-      if (compiledNodes === undefined) {
-        if (throwOnInvalidCandidate) {
-          throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
-        }
-        continue next
-      }
+      if (compiledNodes === undefined) return null
 
       nodes = compiledNodes
     }
@@ -95,23 +74,76 @@ export function compileCandidates(
       nodes,
     }
 
-    let variantOrder = 0n
     for (let variant of candidate.variants) {
       let result = applyVariant(node, variant, designSystem.variants)
 
       // When the variant results in `null`, it means that the variant cannot be
       // applied to the rule. Discard the candidate and continue to the next
       // one.
-      if (result === null) {
-        if (throwOnInvalidCandidate) {
-          throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
-        }
-        continue next
-      }
+      if (result === null) return null
+    }
 
-      // Track the variant order which is a number with each bit representing a
-      // variant. This allows us to sort the rules based on the order of
-      // variants used.
+    return {
+      node,
+      propertySort,
+    }
+  })
+}
+
+export function compileCandidates(
+  rawCandidates: string[],
+  designSystem: DesignSystem,
+  {
+    parsedVariants = createParsedVariants(designSystem),
+    parsedCandidates = createParsedCandidates(designSystem, parsedVariants),
+    parsedAstNodes = createParsedAstNodes(designSystem, parsedCandidates),
+    invalidRawCandidates = new Set<string>(),
+    throwOnInvalidCandidate = false,
+  } = {},
+) {
+  let nodeSorting = new Map<
+    AstNode,
+    { properties: number[]; variants: bigint; candidate: string }
+  >()
+  let astNodes: AstNode[] = []
+  let candidates = new Map<Candidate, string>()
+
+  // Parse candidates and variants
+  for (let rawCandidate of rawCandidates) {
+    let candidate = parsedCandidates.get(rawCandidate)
+    if (candidate === null) {
+      if (throwOnInvalidCandidate) {
+        throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
+      }
+      invalidRawCandidates.add(rawCandidate)
+      continue // Bail, invalid candidate
+    }
+    candidates.set(candidate, rawCandidate)
+  }
+
+  // Sort the variants
+  let variants = Array.from(parsedVariants.values()).sort((a, z) => {
+    return designSystem.variants.compare(a, z)
+  })
+
+  // Create the AST
+  next: for (let [candidate, rawCandidate] of candidates) {
+    let astNode = parsedAstNodes.get(rawCandidate)
+    if (astNode === null) {
+      if (throwOnInvalidCandidate) {
+        throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
+      }
+      invalidRawCandidates.add(rawCandidate)
+      continue next
+    }
+
+    let { node, propertySort } = astNode
+
+    // Track the variant order which is a number with each bit representing a
+    // variant. This allows us to sort the rules based on the order of
+    // variants used.
+    let variantOrder = 0n
+    for (let variant of candidate.variants) {
       variantOrder |= 1n << BigInt(variants.indexOf(variant))
     }
 
