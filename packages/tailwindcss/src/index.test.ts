@@ -93,9 +93,7 @@ describe('compiling CSS', () => {
 
       .grid {
         display: grid;
-      }
-
-      @tailwind utilities;"
+      }"
     `)
   })
 
