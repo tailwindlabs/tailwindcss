@@ -17,6 +17,8 @@ const syncedWorkspaces = new Map([
   [
     '@tailwindcss/oxide',
     [
+      'oxide/crates/node/npm/android-arm-eabi',
+      'oxide/crates/node/npm/android-arm64',
       'oxide/crates/node/npm/darwin-arm64',
       'oxide/crates/node/npm/darwin-x64',
       'oxide/crates/node/npm/freebsd-x64',
