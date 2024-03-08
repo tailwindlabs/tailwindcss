@@ -105,9 +105,11 @@ export function compile(
 
   // Find `@tailwind utilities` and replace it with the actual generated utility
   // class CSS.
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node) => {
     if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
-      replaceWith(compileCandidates(rawCandidates, designSystem).astNodes)
+      // Set the `@tailwind utilities` nodes, to the actual generated CSS
+      node.nodes = compileCandidates(rawCandidates, designSystem).astNodes
+
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
       // once per file but that's the intended usage at this point in time.
