@@ -6,10 +6,14 @@ import { compile, optimizeCss } from 'tailwindcss'
 type PluginOptions = {
   // The base directory to scan for class candidates.
   base?: string
+
+  // Optimize the output CSS.
+  optimize?: boolean | { minify?: boolean }
 }
 
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
+  let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
 
   return {
     postcssPlugin: 'tailwindcss-v4',
@@ -38,7 +42,13 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
         function replaceCss(css: string) {
           root.removeAll()
-          root.append(postcss.parse(optimizeCss(css), result.opts))
+          let output = css
+          if (optimize) {
+            output = optimizeCss(output, {
+              minify: typeof optimize === 'object' ? optimize.minify : false,
+            })
+          }
+          root.append(postcss.parse(output, result.opts))
         }
 
         // No `@tailwind` means we don't have to look for candidates

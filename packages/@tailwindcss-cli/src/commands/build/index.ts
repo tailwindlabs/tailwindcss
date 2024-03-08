@@ -46,8 +46,12 @@ export function options() {
     },
     '--minify': {
       type: 'boolean',
-      description: 'Minify the output',
+      description: 'Optimize and minify the output',
       alias: '-m',
+    },
+    '--optimize': {
+      type: 'boolean',
+      description: 'Optimize the output without minifying',
     },
     '--cwd': {
       type: 'string',
@@ -96,10 +100,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   )
 
   // Compile the input
-  let result = optimizeCss(compile(input, candidates), {
-    file: args['--input'] ?? 'input.css',
-    minify: args['--minify'],
-  })
+  let result = compile(input, candidates)
+
+  // Optimize the output
+  if (args['--minify'] || args['--optimize']) {
+    result = optimizeCss(result, {
+      file: args['--input'] ?? 'input.css',
+      minify: args['--minify'] ?? false,
+    })
+  }
 
   // Write the output
   if (args['--output']) {
@@ -184,10 +193,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         }
 
         // Compile the input
-        let result = optimizeCss(compile(input, candidates), {
-          file: args['--input'] ?? 'input.css',
-          minify: args['--minify'],
-        })
+        let result = compile(input, candidates)
+
+        // Optimize the output
+        if (args['--minify'] || args['--optimize']) {
+          result = optimizeCss(result, {
+            file: args['--input'] ?? 'input.css',
+            minify: args['--minify'] ?? false,
+          })
+        }
 
         // Write the output
         if (args['--output']) {

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add Android builds ([#13115](https://github.com/tailwindlabs/tailwindcss/pull/13115))
+- Make CSS optimization and minification configurable ([#13130](https://github.com/tailwindlabs/tailwindcss/pull/13130))
 
 ## [4.0.0-alpha.6] - 2024-03-07
 
