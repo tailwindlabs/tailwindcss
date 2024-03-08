@@ -1,0 +1,31 @@
+{
+  "name": "@tailwindcss/astro",
+  "version": "4.0.0-alpha.6",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "build": "tsup-node ./src/index.ts --format esm --dts --minify --clean",
+    "dev": "pnpm run build -- --watch"
+  },
+  "files": [
+    "dist/"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "workspace:^",
+    "tailwindcss": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "astro": "^4.4.15",
+    "astro-integration-kit": "^0.5.1"
+  }
+}
