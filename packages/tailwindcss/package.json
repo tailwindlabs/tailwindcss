@@ -30,6 +30,8 @@
     "./utilities": "./utilities.css"
   },
   "publishConfig": {
+    "provenance": true,
+    "access": "public",
     "exports": {
       ".": {
         "types": "./dist/lib.d.mts",

@@ -36,7 +36,8 @@
     "index.d.ts"
   ],
   "publishConfig": {
-    "provenance": true
+    "provenance": true,
+    "access": "public"
   },
   "scripts": {
     "artifacts": "npx napi artifacts",

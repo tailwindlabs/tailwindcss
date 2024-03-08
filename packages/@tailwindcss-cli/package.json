@@ -25,7 +25,8 @@
     "dist"
   ],
   "publishConfig": {
-    "provenance": true
+    "provenance": true,
+    "access": "public"
   },
   "dependencies": {
     "@parcel/watcher": "^2.4.1",
