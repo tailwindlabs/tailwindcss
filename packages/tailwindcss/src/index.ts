@@ -177,14 +177,21 @@ export function compile(
   // Track all valid candidates, these are the incoming `rawCandidate` that
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
-  let allValidCandidates = new Set(rawCandidates)
+  let allValidCandidates = new Set<string>()
+  for (let rawCandidate of rawCandidates) {
+    if (!designSystem.isInvalidCandidate(rawCandidate)) {
+      allValidCandidates.add(rawCandidate)
+    }
+  }
   let compiledCss = toCss(ast)
 
   return {
     rebuild(newRawCandidates: string[]) {
       // Add all new candidates unless we know that they are invalid.
       for (let candidate of newRawCandidates) {
-        allValidCandidates.add(candidate)
+        if (!designSystem.isInvalidCandidate(candidate)) {
+          allValidCandidates.add(candidate)
+        }
       }
 
       if (tailwindUtilitiesNode) {
