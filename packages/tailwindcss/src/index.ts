@@ -187,11 +187,21 @@ export function compile(
 
   return {
     rebuild(newRawCandidates: string[]) {
+      let didChange = false
+
       // Add all new candidates unless we know that they are invalid.
+      let prevSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
         if (!designSystem.isInvalidCandidate(candidate)) {
           allValidCandidates.add(candidate)
+          didChange ||= allValidCandidates.size !== prevSize
         }
+      }
+
+      // If no new candidates were added, we can return the original CSS. This
+      // currently assumes that we only add new candidates and never remove any.
+      if (!didChange) {
+        return compiledCss
       }
 
       if (tailwindUtilitiesNode) {
