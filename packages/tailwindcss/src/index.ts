@@ -195,7 +195,15 @@ export function compile(
       }
 
       if (tailwindUtilitiesNode) {
+        let previousAstNodeCount = designSystem.getAstNodeSize()
         let newNodes = compileCandidates(allValidCandidates, designSystem).astNodes
+
+        // If no new ast nodes were generated, then we can return the original
+        // CSS. This currently assumes that we only add new ast nodes and never
+        // remove any.
+        if (previousAstNodeCount === designSystem.getAstNodeSize()) {
+          return compiledCss
+        }
 
         tailwindUtilitiesNode.nodes = newNodes
         compiledCss = toCss(ast)
