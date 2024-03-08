@@ -2877,17 +2877,18 @@ export function createUtilities(theme: Theme) {
   functionalUtility('font-stretch', {
     themeKeys: [],
     handleBareValue: ({ value }) => {
-      let num = Number(value)
+      if (!value.endsWith('%')) return null
+      let num = Number(value.slice(0, -1))
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
       if (Number.isNaN(num) || num < 50 || num > 200) return null
-      return `${value}%`
+      return value
     },
     handle: (value) => [decl('font-stretch', value)],
   })
   suggest('font-stretch', () => [
     {
-      values: ['50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
+      values: ['50%', '75%', '90%', '95%', '100%', '105%', '110%', '125%', '150%', '200%'],
     },
   ])
 

@@ -47,7 +47,7 @@ test('pointer-events', () => {
     }"
   `)
   expect(run(['-pointer-events-none', '-pointer-events-auto', 'pointer-events-[--value]'])).toEqual(
-    '',
+    ''
   )
 })
 
@@ -102,16 +102,8 @@ test('inset', () => {
         }
         @tailwind utilities;
       `,
-      [
-        'inset-auto',
-        '-inset-full',
-        'inset-full',
-        'inset-3/4',
-        'inset-4',
-        '-inset-4',
-        'inset-[4px]',
-      ],
-    ),
+      ['inset-auto', '-inset-full', 'inset-full', 'inset-3/4', 'inset-4', '-inset-4', 'inset-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -165,8 +157,8 @@ test('inset-x', () => {
         'inset-x-4',
         '-inset-x-4',
         'inset-x-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -227,8 +219,8 @@ test('inset-y', () => {
         'inset-y-4',
         '-inset-y-4',
         'inset-y-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -281,16 +273,8 @@ test('start', () => {
         }
         @tailwind utilities;
       `,
-      [
-        'start-auto',
-        '-start-full',
-        'start-full',
-        'start-3/4',
-        'start-4',
-        '-start-4',
-        'start-[4px]',
-      ],
-    ),
+      ['start-auto', '-start-full', 'start-full', 'start-3/4', 'start-4', '-start-4', 'start-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -336,8 +320,8 @@ test('end', () => {
         }
         @tailwind utilities;
       `,
-      ['end-auto', '-end-full', 'end-full', 'end-3/4', 'end-4', '-end-4', 'end-[4px]'],
-    ),
+      ['end-auto', '-end-full', 'end-full', 'end-3/4', 'end-4', '-end-4', 'end-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -384,8 +368,8 @@ test('top', () => {
         @tailwind utilities;
       `,
 
-      ['top-auto', '-top-full', 'top-full', 'top-3/4', 'top-4', '-top-4', 'top-[4px]'],
-    ),
+      ['top-auto', '-top-full', 'top-full', 'top-3/4', 'top-4', '-top-4', 'top-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -431,16 +415,8 @@ test('right', () => {
         }
         @tailwind utilities;
       `,
-      [
-        'right-auto',
-        '-right-full',
-        'right-full',
-        'right-3/4',
-        'right-4',
-        '-right-4',
-        'right-[4px]',
-      ],
-    ),
+      ['right-auto', '-right-full', 'right-full', 'right-3/4', 'right-4', '-right-4', 'right-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -494,8 +470,8 @@ test('bottom', () => {
         'bottom-4',
         '-bottom-4',
         'bottom-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -541,8 +517,8 @@ test('left', () => {
         }
         @tailwind utilities;
       `,
-      ['left-auto', '-left-full', 'left-full', 'left-3/4', 'left-4', '-left-4', 'left-[4px]'],
-    ),
+      ['left-auto', '-left-full', 'left-full', 'left-3/4', 'left-4', '-left-4', 'left-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -627,7 +603,7 @@ test('order', () => {
       'order-first',
       'order-last',
       'order-none',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".-order-4 {
       order: calc(4 * -1);
@@ -669,7 +645,7 @@ test('col', () => {
       'col-span-full',
       'col-[span_123/span_123]',
       'col-span-[--my-variable]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".col-\\[span_123\\/span_123\\] {
       grid-column: span 123 / span 123;
@@ -750,7 +726,7 @@ test('row', () => {
       'row-span-full',
       'row-[span_123/span_123]',
       'row-span-[--my-variable]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".row-\\[span_123\\/span_123\\] {
       grid-row: span 123 / span 123;
@@ -846,7 +822,7 @@ test('float', () => {
     }"
   `)
   expect(
-    run(['float', '-float-start', '-float-end', '-float-right', '-float-left', '-float-none']),
+    run(['float', '-float-start', '-float-end', '-float-right', '-float-left', '-float-none'])
   ).toEqual('')
 })
 
@@ -886,7 +862,7 @@ test('clear', () => {
       '-clear-left',
       '-clear-both',
       '-clear-none',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -899,8 +875,8 @@ test('margin', () => {
         }
         @tailwind utilities;
       `,
-      ['m-auto', 'm-4', 'm-[4px]', '-m-4', '-m-[--value]'],
-    ),
+      ['m-auto', 'm-4', 'm-[4px]', '-m-4', '-m-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -938,8 +914,8 @@ test('margin-x', () => {
         }
         @tailwind utilities;
       `,
-      ['mx-auto', 'mx-4', 'mx-[4px]', '-mx-4', '-mx-[--value]'],
-    ),
+      ['mx-auto', 'mx-4', 'mx-[4px]', '-mx-4', '-mx-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -982,8 +958,8 @@ test('margin-y', () => {
         }
         @tailwind utilities;
       `,
-      ['my-auto', 'my-4', 'my-[4px]', '-my-4', '-my-[--value]'],
-    ),
+      ['my-auto', 'my-4', 'my-[4px]', '-my-4', '-my-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1026,8 +1002,8 @@ test('margin-top', () => {
         }
         @tailwind utilities;
       `,
-      ['mt-auto', 'mt-4', 'mt-[4px]', '-mt-4', '-mt-[--value]'],
-    ),
+      ['mt-auto', 'mt-4', 'mt-[4px]', '-mt-4', '-mt-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1065,8 +1041,8 @@ test('margin-inline-start', () => {
         }
         @tailwind utilities;
       `,
-      ['ms-auto', 'ms-4', 'ms-[4px]', '-ms-4', '-ms-[--value]'],
-    ),
+      ['ms-auto', 'ms-4', 'ms-[4px]', '-ms-4', '-ms-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1104,8 +1080,8 @@ test('margin-inline-end', () => {
         }
         @tailwind utilities;
       `,
-      ['me-auto', 'me-4', 'me-[4px]', '-me-4', '-me-[--value]'],
-    ),
+      ['me-auto', 'me-4', 'me-[4px]', '-me-4', '-me-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1143,8 +1119,8 @@ test('margin-right', () => {
         }
         @tailwind utilities;
       `,
-      ['mr-auto', 'mr-4', 'mr-[4px]', '-mr-4', '-mr-[--value]'],
-    ),
+      ['mr-auto', 'mr-4', 'mr-[4px]', '-mr-4', '-mr-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1182,8 +1158,8 @@ test('margin-bottom', () => {
         }
         @tailwind utilities;
       `,
-      ['mb-auto', 'mb-4', 'mb-[4px]', '-mb-4', '-mb-[--value]'],
-    ),
+      ['mb-auto', 'mb-4', 'mb-[4px]', '-mb-4', '-mb-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1221,8 +1197,8 @@ test('margin-left', () => {
         }
         @tailwind utilities;
       `,
-      ['ml-auto', 'ml-4', 'ml-[4px]', '-ml-4', '-ml-[--value]'],
-    ),
+      ['ml-auto', 'ml-4', 'ml-[4px]', '-ml-4', '-ml-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1260,8 +1236,8 @@ test('margin sort order', () => {
         }
         @tailwind utilities;
       `,
-      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4'],
-    ),
+      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1379,7 +1355,7 @@ test('display', () => {
       'contents',
       'list-item',
       'hidden',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".block {
       display: block;
@@ -1488,7 +1464,7 @@ test('display', () => {
       '-contents',
       '-list-item',
       '-hidden',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -1527,8 +1503,8 @@ test('size', () => {
         'size-4',
         'size-1/2',
         'size-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1601,8 +1577,8 @@ test('width', () => {
         'w-xl',
         'w-1/2',
         'w-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1683,8 +1659,8 @@ test('min-width', () => {
         'min-w-4',
         'min-w-xl',
         'min-w-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1745,8 +1721,8 @@ test('max-width', () => {
         'max-w-4',
         'max-w-xl',
         'max-w-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1806,8 +1782,8 @@ test('height', () => {
         'h-4',
         'h-1/2',
         'h-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1885,8 +1861,8 @@ test('min-height', () => {
         'min-h-fit',
         'min-h-4',
         'min-h-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -1960,8 +1936,8 @@ test('max-height', () => {
         'max-h-fit',
         'max-h-4',
         'max-h-[4px]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -2016,7 +1992,7 @@ test('max-height', () => {
 
 test('flex', () => {
   expect(
-    run(['flex-1', 'flex-99', 'flex-1/2', 'flex-auto', 'flex-initial', 'flex-none', 'flex-[123]']),
+    run(['flex-1', 'flex-99', 'flex-1/2', 'flex-auto', 'flex-initial', 'flex-none', 'flex-[123]'])
   ).toMatchInlineSnapshot(`
     ".flex-1 {
       flex: 1;
@@ -2092,8 +2068,8 @@ test('flex-basis', () => {
         }
         @tailwind utilities;
       `,
-      ['basis-auto', 'basis-full', 'basis-xl', 'basis-11/12', 'basis-[123px]'],
-    ),
+      ['basis-auto', 'basis-full', 'basis-xl', 'basis-11/12', 'basis-[123px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --width-xl: 36rem;
@@ -2170,8 +2146,8 @@ test('border-spacing', () => {
         }
         @tailwind utilities;
       `,
-      ['border-spacing-1', 'border-spacing-[123px]'],
-    ),
+      ['border-spacing-1', 'border-spacing-[123px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-1: .25rem;
@@ -2213,8 +2189,8 @@ test('border-spacing-x', () => {
         }
         @tailwind utilities;
       `,
-      ['border-spacing-x-1', 'border-spacing-x-[123px]'],
-    ),
+      ['border-spacing-x-1', 'border-spacing-x-[123px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-1: .25rem;
@@ -2254,8 +2230,8 @@ test('border-spacing-y', () => {
         }
         @tailwind utilities;
       `,
-      ['border-spacing-y-1', 'border-spacing-y-[123px]'],
-    ),
+      ['border-spacing-y-1', 'border-spacing-y-[123px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-1: .25rem;
@@ -2300,7 +2276,7 @@ test('origin', () => {
       'origin-top-left',
       'origin-[50px_100px]',
       'origin-[--value]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".origin-\\[--value\\] {
       transform-origin: var(--value);
@@ -2357,7 +2333,7 @@ test('translate', () => {
       '-translate-full',
       'translate-[123px]',
       '-translate-[--value]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".-translate-\\[--value\\] {
       --tw-translate-x: calc(var(--value) * -1);
@@ -2767,8 +2743,8 @@ test('cursor', () => {
         'cursor-zoom-out',
         'cursor-[--value]',
         'cursor-custom',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --cursor-custom: url("/my-cursor.png");
@@ -2967,7 +2943,7 @@ test('cursor', () => {
       '-cursor-zoom-out',
       '-cursor-[--value]',
       '-cursor-custom',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -2997,7 +2973,7 @@ test('touch-pan', () => {
       'touch-pan-y',
       'touch-pan-up',
       'touch-pan-down',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".touch-pan-down {
       --tw-pan-y: pan-down;
@@ -3052,7 +3028,7 @@ test('touch-pan', () => {
       '-touch-pan-y',
       '-touch-pan-up',
       '-touch-pan-down',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -3216,8 +3192,8 @@ test('scroll-m', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-m-4', 'scroll-m-[4px]', '-scroll-m-4', '-scroll-m-[--value]'],
-    ),
+      ['scroll-m-4', 'scroll-m-[4px]', '-scroll-m-4', '-scroll-m-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3251,8 +3227,8 @@ test('scroll-mx', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-mx-4', 'scroll-mx-[4px]', '-scroll-mx-4', '-scroll-mx-[--value]'],
-    ),
+      ['scroll-mx-4', 'scroll-mx-[4px]', '-scroll-mx-4', '-scroll-mx-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3290,8 +3266,8 @@ test('scroll-my', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-my-4', 'scroll-my-[4px]', '-scroll-my-4', '-scroll-my-[--value]'],
-    ),
+      ['scroll-my-4', 'scroll-my-[4px]', '-scroll-my-4', '-scroll-my-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3329,8 +3305,8 @@ test('scroll-ms', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-ms-4', 'scroll-ms-[4px]', '-scroll-ms-4', '-scroll-ms-[--value]'],
-    ),
+      ['scroll-ms-4', 'scroll-ms-[4px]', '-scroll-ms-4', '-scroll-ms-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3364,8 +3340,8 @@ test('scroll-me', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-me-4', 'scroll-me-[4px]', '-scroll-me-4', '-scroll-me-[--value]'],
-    ),
+      ['scroll-me-4', 'scroll-me-[4px]', '-scroll-me-4', '-scroll-me-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3399,8 +3375,8 @@ test('scroll-mt', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-mt-4', 'scroll-mt-[4px]', '-scroll-mt-4', '-scroll-mt-[--value]'],
-    ),
+      ['scroll-mt-4', 'scroll-mt-[4px]', '-scroll-mt-4', '-scroll-mt-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3434,8 +3410,8 @@ test('scroll-mr', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-mr-4', 'scroll-mr-[4px]', '-scroll-mr-4', '-scroll-mr-[--value]'],
-    ),
+      ['scroll-mr-4', 'scroll-mr-[4px]', '-scroll-mr-4', '-scroll-mr-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3469,8 +3445,8 @@ test('scroll-mb', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-mb-4', 'scroll-mb-[4px]', '-scroll-mb-4', '-scroll-mb-[--value]'],
-    ),
+      ['scroll-mb-4', 'scroll-mb-[4px]', '-scroll-mb-4', '-scroll-mb-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3504,8 +3480,8 @@ test('scroll-ml', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-ml-4', 'scroll-ml-[4px]', '-scroll-ml-4', '-scroll-ml-[--value]'],
-    ),
+      ['scroll-ml-4', 'scroll-ml-[4px]', '-scroll-ml-4', '-scroll-ml-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3539,8 +3515,8 @@ test('scroll-p', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-p-4', 'scroll-p-[4px]', '-scroll-p-4', '-scroll-p-[--value]'],
-    ),
+      ['scroll-p-4', 'scroll-p-[4px]', '-scroll-p-4', '-scroll-p-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3574,8 +3550,8 @@ test('scroll-px', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-px-4', 'scroll-px-[4px]', '-scroll-px-4', '-scroll-px-[--value]'],
-    ),
+      ['scroll-px-4', 'scroll-px-[4px]', '-scroll-px-4', '-scroll-px-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3613,8 +3589,8 @@ test('scroll-py', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-py-4', 'scroll-py-[4px]', '-scroll-py-4', '-scroll-py-[--value]'],
-    ),
+      ['scroll-py-4', 'scroll-py-[4px]', '-scroll-py-4', '-scroll-py-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3652,8 +3628,8 @@ test('scroll-ps', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-ps-4', 'scroll-ps-[4px]', '-scroll-ps-4', '-scroll-ps-[--value]'],
-    ),
+      ['scroll-ps-4', 'scroll-ps-[4px]', '-scroll-ps-4', '-scroll-ps-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3687,8 +3663,8 @@ test('scroll-pe', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-pe-4', 'scroll-pe-[4px]', '-scroll-pe-4', '-scroll-pe-[--value]'],
-    ),
+      ['scroll-pe-4', 'scroll-pe-[4px]', '-scroll-pe-4', '-scroll-pe-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3722,8 +3698,8 @@ test('scroll-pt', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-pt-4', 'scroll-pt-[4px]', '-scroll-pt-4', '-scroll-pt-[--value]'],
-    ),
+      ['scroll-pt-4', 'scroll-pt-[4px]', '-scroll-pt-4', '-scroll-pt-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3757,8 +3733,8 @@ test('scroll-pr', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-pr-4', 'scroll-pr-[4px]', '-scroll-pr-4', '-scroll-pr-[--value]'],
-    ),
+      ['scroll-pr-4', 'scroll-pr-[4px]', '-scroll-pr-4', '-scroll-pr-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3792,8 +3768,8 @@ test('scroll-pb', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-pb-4', 'scroll-pb-[4px]', '-scroll-pb-4', '-scroll-pb-[--value]'],
-    ),
+      ['scroll-pb-4', 'scroll-pb-[4px]', '-scroll-pb-4', '-scroll-pb-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3827,8 +3803,8 @@ test('scroll-pl', () => {
         }
         @tailwind utilities;
       `,
-      ['scroll-pl-4', 'scroll-pl-[4px]', '-scroll-pl-4', '-scroll-pl-[--value]'],
-    ),
+      ['scroll-pl-4', 'scroll-pl-[4px]', '-scroll-pl-4', '-scroll-pl-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -3931,8 +3907,8 @@ test('columns', () => {
         'columns-99',
         'columns-[123]',
         'columns-[--value]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --width-3xs: 16rem;
@@ -3981,7 +3957,7 @@ test('break-before', () => {
       'break-before-left',
       'break-before-right',
       'break-before-column',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".break-before-all {
       break-before: all;
@@ -4026,7 +4002,7 @@ test('break-before', () => {
       '-break-before-left',
       '-break-before-right',
       '-break-before-column',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -4037,7 +4013,7 @@ test('break-inside', () => {
       'break-inside-avoid',
       'break-inside-avoid-page',
       'break-inside-avoid-column',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".break-inside-auto {
       break-inside: auto;
@@ -4062,7 +4038,7 @@ test('break-inside', () => {
       '-break-inside-avoid',
       '-break-inside-avoid-page',
       '-break-inside-avoid-column',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -4077,7 +4053,7 @@ test('break-after', () => {
       'break-after-left',
       'break-after-right',
       'break-after-column',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".break-after-all {
       break-after: all;
@@ -4122,13 +4098,13 @@ test('break-after', () => {
       '-break-after-left',
       '-break-after-right',
       '-break-after-column',
-    ]),
+    ])
   ).toEqual('')
 })
 
 test('auto-cols', () => {
   expect(
-    run(['auto-cols-auto', 'auto-cols-min', 'auto-cols-max', 'auto-cols-fr', 'auto-cols-[2fr]']),
+    run(['auto-cols-auto', 'auto-cols-min', 'auto-cols-max', 'auto-cols-fr', 'auto-cols-[2fr]'])
   ).toMatchInlineSnapshot(`
     ".auto-cols-\\[2fr\\] {
       grid-auto-columns: 2fr;
@@ -4161,7 +4137,7 @@ test('grid-flow', () => {
       'grid-flow-dense',
       'grid-flow-row-dense',
       'grid-flow-col-dense',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".grid-flow-col {
       grid-auto-flow: column;
@@ -4191,13 +4167,13 @@ test('grid-flow', () => {
       '-grid-flow-dense',
       '-grid-flow-row-dense',
       '-grid-flow-col-dense',
-    ]),
+    ])
   ).toEqual('')
 })
 
 test('auto-rows', () => {
   expect(
-    run(['auto-rows-auto', 'auto-rows-min', 'auto-rows-max', 'auto-rows-fr', 'auto-rows-[2fr]']),
+    run(['auto-rows-auto', 'auto-rows-min', 'auto-rows-max', 'auto-rows-fr', 'auto-rows-[2fr]'])
   ).toMatchInlineSnapshot(`
     ".auto-rows-\\[2fr\\] {
       grid-auto-rows: 2fr;
@@ -4224,7 +4200,7 @@ test('auto-rows', () => {
 
 test('grid-cols', () => {
   expect(
-    run(['grid-cols-none', 'grid-cols-subgrid', 'grid-cols-12', 'grid-cols-99', 'grid-cols-[123]']),
+    run(['grid-cols-none', 'grid-cols-subgrid', 'grid-cols-12', 'grid-cols-99', 'grid-cols-[123]'])
   ).toMatchInlineSnapshot(`
     ".grid-cols-12 {
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -4247,19 +4223,13 @@ test('grid-cols', () => {
     }"
   `)
   expect(
-    run([
-      'grid-cols',
-      '-grid-cols-none',
-      '-grid-cols-subgrid',
-      '-grid-cols-12',
-      '-grid-cols-[123]',
-    ]),
+    run(['grid-cols', '-grid-cols-none', '-grid-cols-subgrid', '-grid-cols-12', '-grid-cols-[123]'])
   ).toEqual('')
 })
 
 test('grid-rows', () => {
   expect(
-    run(['grid-rows-none', 'grid-rows-subgrid', 'grid-rows-12', 'grid-rows-99', 'grid-rows-[123]']),
+    run(['grid-rows-none', 'grid-rows-subgrid', 'grid-rows-12', 'grid-rows-99', 'grid-rows-[123]'])
   ).toMatchInlineSnapshot(`
     ".grid-rows-12 {
       grid-template-rows: repeat(12, minmax(0, 1fr));
@@ -4282,13 +4252,7 @@ test('grid-rows', () => {
     }"
   `)
   expect(
-    run([
-      'grid-rows',
-      '-grid-rows-none',
-      '-grid-rows-subgrid',
-      '-grid-rows-12',
-      '-grid-rows-[123]',
-    ]),
+    run(['grid-rows', '-grid-rows-none', '-grid-rows-subgrid', '-grid-rows-12', '-grid-rows-[123]'])
   ).toEqual('')
 })
 
@@ -4342,7 +4306,7 @@ test('place-content', () => {
       'place-content-evenly',
       'place-content-baseline',
       'place-content-stretch',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".place-content-around {
       place-content: around;
@@ -4387,7 +4351,7 @@ test('place-content', () => {
       '-place-content-evenly',
       '-place-content-baseline',
       '-place-content-stretch',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -4399,7 +4363,7 @@ test('place-items', () => {
       'place-items-center',
       'place-items-baseline',
       'place-items-stretch',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".place-items-baseline {
       place-items: baseline;
@@ -4429,7 +4393,7 @@ test('place-items', () => {
       '-place-items-center',
       '-place-items-baseline',
       '-place-items-stretch',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -4445,7 +4409,7 @@ test('align-content', () => {
       'content-evenly',
       'content-baseline',
       'content-stretch',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".content-around {
       align-content: space-around;
@@ -4495,7 +4459,7 @@ test('align-content', () => {
       '-content-evenly',
       '-content-baseline',
       '-content-stretch',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -4530,7 +4494,7 @@ test('items', () => {
       '-items-center',
       '-items-baseline',
       '-items-stretch',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -4545,7 +4509,7 @@ test('justify', () => {
       'justify-around',
       'justify-evenly',
       'justify-stretch',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".justify-around {
       justify-content: space-around;
@@ -4590,7 +4554,7 @@ test('justify', () => {
       '-justify-around',
       '-justify-evenly',
       '-justify-stretch',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -4601,7 +4565,7 @@ test('justify-items', () => {
       'justify-items-end',
       'justify-items-center',
       'justify-items-stretch',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".justify-items-center {
       justify-items: center;
@@ -4626,7 +4590,7 @@ test('justify-items', () => {
       '-justify-items-end',
       '-justify-items-center',
       '-justify-items-stretch',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -4639,8 +4603,8 @@ test('gap', () => {
         }
         @tailwind utilities;
       `,
-      ['gap-4', 'gap-[4px]'],
-    ),
+      ['gap-4', 'gap-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -4666,8 +4630,8 @@ test('gap-x', () => {
         }
         @tailwind utilities;
       `,
-      ['gap-x-4', 'gap-x-[4px]'],
-    ),
+      ['gap-x-4', 'gap-x-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -4693,8 +4657,8 @@ test('gap-y', () => {
         }
         @tailwind utilities;
       `,
-      ['gap-y-4', 'gap-y-[4px]'],
-    ),
+      ['gap-y-4', 'gap-y-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -4720,8 +4684,8 @@ test('space-x', () => {
         }
         @tailwind utilities;
       `,
-      ['space-x-4', 'space-x-[4px]', '-space-x-4'],
-    ),
+      ['space-x-4', 'space-x-[4px]', '-space-x-4']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -4760,8 +4724,8 @@ test('space-y', () => {
         }
         @tailwind utilities;
       `,
-      ['space-y-4', 'space-y-[4px]', '-space-y-4'],
-    ),
+      ['space-y-4', 'space-y-[4px]', '-space-y-4']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -4827,8 +4791,8 @@ test('divide-x', () => {
       css`
         @tailwind utilities;
       `,
-      ['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]'],
-    ),
+      ['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":where(.divide-x > :not([hidden]) ~ :not([hidden])) {
       border-inline-style: var(--tw-border-style);
@@ -4878,8 +4842,8 @@ test('divide-x with custom default border width', () => {
         }
         @tailwind utilities;
       `,
-      ['divide-x'],
-    ),
+      ['divide-x']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --default-border-width: 2px;
@@ -4911,8 +4875,8 @@ test('divide-y', () => {
       css`
         @tailwind utilities;
       `,
-      ['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]'],
-    ),
+      ['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":where(.divide-y > :not([hidden]) ~ :not([hidden])) {
       border-top-style: var(--tw-border-style);
@@ -4966,8 +4930,8 @@ test('divide-y with custom default border width', () => {
         }
         @tailwind utilities;
       `,
-      ['divide-y'],
-    ),
+      ['divide-y']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --default-border-width: 2px;
@@ -5060,7 +5024,7 @@ test('divide-style', () => {
       '-divide-dotted',
       '-divide-double',
       '-divide-none',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5087,8 +5051,8 @@ test('accent', () => {
         'accent-[#0088cc]/50',
         'accent-[#0088cc]/[0.5]',
         'accent-[#0088cc]/[50%]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -5138,7 +5102,7 @@ test('accent', () => {
       '-accent-[#0088cc]/50',
       '-accent-[#0088cc]/[0.5]',
       '-accent-[#0088cc]/[50%]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5165,8 +5129,8 @@ test('caret', () => {
         'caret-[#0088cc]/50',
         'caret-[#0088cc]/[0.5]',
         'caret-[#0088cc]/[50%]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -5216,7 +5180,7 @@ test('caret', () => {
       '-caret-[#0088cc]/50',
       '-caret-[#0088cc]/[0.5]',
       '-caret-[#0088cc]/[50%]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5243,8 +5207,8 @@ test('divide-color', () => {
         'divide-[#0088cc]/50',
         'divide-[#0088cc]/[0.5]',
         'divide-[#0088cc]/[50%]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -5318,7 +5282,7 @@ test('divide-color', () => {
       '-divide-[#0088cc]/50',
       '-divide-[#0088cc]/[0.5]',
       '-divide-[#0088cc]/[50%]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`""`)
 })
 
@@ -5330,7 +5294,7 @@ test('place-self', () => {
       'place-self-end',
       'place-self-center',
       'place-self-stretch',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".place-self-auto {
       place-self: auto;
@@ -5360,13 +5324,13 @@ test('place-self', () => {
       '-place-self-end',
       '-place-self-center',
       '-place-self-stretch',
-    ]),
+    ])
   ).toEqual('')
 })
 
 test('self', () => {
   expect(
-    run(['self-auto', 'self-start', 'self-end', 'self-center', 'self-stretch', 'self-baseline']),
+    run(['self-auto', 'self-start', 'self-end', 'self-center', 'self-stretch', 'self-baseline'])
   ).toMatchInlineSnapshot(`
     ".self-auto {
       align-self: auto;
@@ -5401,7 +5365,7 @@ test('self', () => {
       '-self-center',
       '-self-stretch',
       '-self-baseline',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5414,7 +5378,7 @@ test('justify-self', () => {
       'justify-self-center',
       'justify-self-stretch',
       'justify-self-baseline',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".justify-self-auto {
       justify-self: auto;
@@ -5445,7 +5409,7 @@ test('justify-self', () => {
       '-justify-self-center',
       '-justify-self-stretch',
       '-justify-self-baseline',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5457,7 +5421,7 @@ test('overflow', () => {
       'overflow-clip',
       'overflow-visible',
       'overflow-scroll',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".overflow-auto {
       overflow: auto;
@@ -5487,7 +5451,7 @@ test('overflow', () => {
       '-overflow-clip',
       '-overflow-visible',
       '-overflow-scroll',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5499,7 +5463,7 @@ test('overflow-x', () => {
       'overflow-x-clip',
       'overflow-x-visible',
       'overflow-x-scroll',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".overflow-x-auto {
       overflow-x: auto;
@@ -5529,7 +5493,7 @@ test('overflow-x', () => {
       '-overflow-x-clip',
       '-overflow-x-visible',
       '-overflow-x-scroll',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5541,7 +5505,7 @@ test('overflow-y', () => {
       'overflow-y-clip',
       'overflow-y-visible',
       'overflow-y-scroll',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".overflow-y-auto {
       overflow-y: auto;
@@ -5571,7 +5535,7 @@ test('overflow-y', () => {
       '-overflow-y-clip',
       '-overflow-y-visible',
       '-overflow-y-scroll',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5590,7 +5554,7 @@ test('overscroll', () => {
     }"
   `)
   expect(
-    run(['overscroll', '-overscroll-auto', '-overscroll-contain', '-overscroll-none']),
+    run(['overscroll', '-overscroll-auto', '-overscroll-contain', '-overscroll-none'])
   ).toEqual('')
 })
 
@@ -5610,7 +5574,7 @@ test('overscroll-x', () => {
     }"
   `)
   expect(
-    run(['overscroll-x', '-overscroll-x-auto', '-overscroll-x-contain', '-overscroll-x-none']),
+    run(['overscroll-x', '-overscroll-x-auto', '-overscroll-x-contain', '-overscroll-x-none'])
   ).toEqual('')
 })
 
@@ -5630,7 +5594,7 @@ test('overscroll-y', () => {
     }"
   `)
   expect(
-    run(['overscroll-y', '-overscroll-y-auto', '-overscroll-y-contain', '-overscroll-y-none']),
+    run(['overscroll-y', '-overscroll-y-auto', '-overscroll-y-contain', '-overscroll-y-none'])
   ).toEqual('')
 })
 
@@ -5700,7 +5664,7 @@ test('whitespace', () => {
       'whitespace-pre-line',
       'whitespace-pre-wrap',
       'whitespace-break-spaces',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".whitespace-break-spaces {
       white-space: break-spaces;
@@ -5735,7 +5699,7 @@ test('whitespace', () => {
       '-whitespace-pre-line',
       '-whitespace-pre-wrap',
       '-whitespace-break-spaces',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -5794,8 +5758,8 @@ test('rounded', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]'],
-    ),
+      ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -5825,7 +5789,7 @@ test('rounded', () => {
     }"
   `)
   expect(
-    run(['-rounded', '-rounded-full', '-rounded-none', '-rounded-sm', '-rounded-[4px]']),
+    run(['-rounded', '-rounded-full', '-rounded-none', '-rounded-sm', '-rounded-[4px]'])
   ).toEqual('')
 })
 
@@ -5841,8 +5805,8 @@ test('rounded-s', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]'],
-    ),
+      ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -5877,7 +5841,7 @@ test('rounded-s', () => {
     }"
   `)
   expect(
-    run(['-rounded-s', '-rounded-s-full', '-rounded-s-none', '-rounded-s-sm', '-rounded-s-[4px]']),
+    run(['-rounded-s', '-rounded-s-full', '-rounded-s-none', '-rounded-s-sm', '-rounded-s-[4px]'])
   ).toEqual('')
 })
 
@@ -5893,8 +5857,8 @@ test('rounded-e', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-e', 'rounded-e-full', 'rounded-e-none', 'rounded-e-sm', 'rounded-e-[4px]'],
-    ),
+      ['rounded-e', 'rounded-e-full', 'rounded-e-none', 'rounded-e-sm', 'rounded-e-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -5929,7 +5893,7 @@ test('rounded-e', () => {
     }"
   `)
   expect(
-    run(['-rounded-e', '-rounded-e-full', '-rounded-e-none', '-rounded-e-sm', '-rounded-e-[4px]']),
+    run(['-rounded-e', '-rounded-e-full', '-rounded-e-none', '-rounded-e-sm', '-rounded-e-[4px]'])
   ).toEqual('')
 })
 
@@ -5945,8 +5909,8 @@ test('rounded-t', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-t', 'rounded-t-full', 'rounded-t-none', 'rounded-t-sm', 'rounded-t-[4px]'],
-    ),
+      ['rounded-t', 'rounded-t-full', 'rounded-t-none', 'rounded-t-sm', 'rounded-t-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -5981,7 +5945,7 @@ test('rounded-t', () => {
     }"
   `)
   expect(
-    run(['-rounded-t', '-rounded-t-full', '-rounded-t-none', '-rounded-t-sm', '-rounded-t-[4px]']),
+    run(['-rounded-t', '-rounded-t-full', '-rounded-t-none', '-rounded-t-sm', '-rounded-t-[4px]'])
   ).toEqual('')
 })
 
@@ -5997,8 +5961,8 @@ test('rounded-r', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-r', 'rounded-r-full', 'rounded-r-none', 'rounded-r-sm', 'rounded-r-[4px]'],
-    ),
+      ['rounded-r', 'rounded-r-full', 'rounded-r-none', 'rounded-r-sm', 'rounded-r-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6033,7 +5997,7 @@ test('rounded-r', () => {
     }"
   `)
   expect(
-    run(['-rounded-r', '-rounded-r-full', '-rounded-r-none', '-rounded-r-sm', '-rounded-r-[4px]']),
+    run(['-rounded-r', '-rounded-r-full', '-rounded-r-none', '-rounded-r-sm', '-rounded-r-[4px]'])
   ).toEqual('')
 })
 
@@ -6049,8 +6013,8 @@ test('rounded-b', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-b', 'rounded-b-full', 'rounded-b-none', 'rounded-b-sm', 'rounded-b-[4px]'],
-    ),
+      ['rounded-b', 'rounded-b-full', 'rounded-b-none', 'rounded-b-sm', 'rounded-b-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6085,7 +6049,7 @@ test('rounded-b', () => {
     }"
   `)
   expect(
-    run(['-rounded-b', '-rounded-b-full', '-rounded-b-none', '-rounded-b-sm', '-rounded-b-[4px]']),
+    run(['-rounded-b', '-rounded-b-full', '-rounded-b-none', '-rounded-b-sm', '-rounded-b-[4px]'])
   ).toEqual('')
 })
 
@@ -6101,8 +6065,8 @@ test('rounded-l', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-l', 'rounded-l-full', 'rounded-l-none', 'rounded-l-sm', 'rounded-l-[4px]'],
-    ),
+      ['rounded-l', 'rounded-l-full', 'rounded-l-none', 'rounded-l-sm', 'rounded-l-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6137,7 +6101,7 @@ test('rounded-l', () => {
     }"
   `)
   expect(
-    run(['-rounded-l', '-rounded-l-full', '-rounded-l-none', '-rounded-l-sm', '-rounded-l-[4px]']),
+    run(['-rounded-l', '-rounded-l-full', '-rounded-l-none', '-rounded-l-sm', '-rounded-l-[4px]'])
   ).toEqual('')
 })
 
@@ -6153,8 +6117,8 @@ test('rounded-ss', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-ss', 'rounded-ss-full', 'rounded-ss-none', 'rounded-ss-sm', 'rounded-ss-[4px]'],
-    ),
+      ['rounded-ss', 'rounded-ss-full', 'rounded-ss-none', 'rounded-ss-sm', 'rounded-ss-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6190,7 +6154,7 @@ test('rounded-ss', () => {
       '-rounded-ss-none',
       '-rounded-ss-sm',
       '-rounded-ss-[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6206,8 +6170,8 @@ test('rounded-se', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-se', 'rounded-se-full', 'rounded-se-none', 'rounded-se-sm', 'rounded-se-[4px]'],
-    ),
+      ['rounded-se', 'rounded-se-full', 'rounded-se-none', 'rounded-se-sm', 'rounded-se-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6243,7 +6207,7 @@ test('rounded-se', () => {
       '-rounded-se-none',
       '-rounded-se-sm',
       '-rounded-se-[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6259,8 +6223,8 @@ test('rounded-ee', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-ee', 'rounded-ee-full', 'rounded-ee-none', 'rounded-ee-sm', 'rounded-ee-[4px]'],
-    ),
+      ['rounded-ee', 'rounded-ee-full', 'rounded-ee-none', 'rounded-ee-sm', 'rounded-ee-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6296,7 +6260,7 @@ test('rounded-ee', () => {
       '-rounded-ee-none',
       '-rounded-ee-sm',
       '-rounded-ee-[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6312,8 +6276,8 @@ test('rounded-es', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-es', 'rounded-es-full', 'rounded-es-none', 'rounded-es-sm', 'rounded-es-[4px]'],
-    ),
+      ['rounded-es', 'rounded-es-full', 'rounded-es-none', 'rounded-es-sm', 'rounded-es-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6349,7 +6313,7 @@ test('rounded-es', () => {
       '-rounded-es-none',
       '-rounded-es-sm',
       '-rounded-es-[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6365,8 +6329,8 @@ test('rounded-tl', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]'],
-    ),
+      ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6402,7 +6366,7 @@ test('rounded-tl', () => {
       '-rounded-tl-none',
       '-rounded-tl-sm',
       '-rounded-tl-[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6418,8 +6382,8 @@ test('rounded-tr', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-tr', 'rounded-tr-full', 'rounded-tr-none', 'rounded-tr-sm', 'rounded-tr-[4px]'],
-    ),
+      ['rounded-tr', 'rounded-tr-full', 'rounded-tr-none', 'rounded-tr-sm', 'rounded-tr-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6455,7 +6419,7 @@ test('rounded-tr', () => {
       '-rounded-tr-none',
       '-rounded-tr-sm',
       '-rounded-tr-[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6471,8 +6435,8 @@ test('rounded-br', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-br', 'rounded-br-full', 'rounded-br-none', 'rounded-br-sm', 'rounded-br-[4px]'],
-    ),
+      ['rounded-br', 'rounded-br-full', 'rounded-br-none', 'rounded-br-sm', 'rounded-br-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6508,7 +6472,7 @@ test('rounded-br', () => {
       '-rounded-br-none',
       '-rounded-br-sm',
       '-rounded-br-[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6524,8 +6488,8 @@ test('rounded-bl', () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-bl', 'rounded-bl-full', 'rounded-bl-none', 'rounded-bl-sm', 'rounded-bl-[4px]'],
-    ),
+      ['rounded-bl', 'rounded-bl-full', 'rounded-bl-none', 'rounded-bl-sm', 'rounded-bl-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --radius-none: 0px;
@@ -6561,7 +6525,7 @@ test('rounded-bl', () => {
       '-rounded-bl-none',
       '-rounded-bl-sm',
       '-rounded-bl-[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6574,7 +6538,7 @@ test('border-style', () => {
       'border-double',
       'border-hidden',
       'border-none',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".border-dashed {
       --tw-border-style: dashed;
@@ -6614,7 +6578,7 @@ test('border-style', () => {
       '-border-double',
       '-border-hidden',
       '-border-none',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -6677,8 +6641,8 @@ for (let prefix of prefixes) {
           }
           @tailwind utilities;
         `,
-        classes,
-      ),
+        classes
+      )
     ).toMatchSnapshot()
 
     // No border utilities can ever be negative
@@ -6695,8 +6659,8 @@ test('border with custom default border width', () => {
         }
         @tailwind utilities;
       `,
-      ['border'],
-    ),
+      ['border']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --default-border-width: 2px;
@@ -6798,8 +6762,8 @@ test('bg', () => {
         'bg-repeat-y',
         'bg-round',
         'bg-space',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -7063,7 +7027,7 @@ test('bg', () => {
       '-bg-repeat-y',
       '-bg-round',
       '-bg-space',
-    ]),
+    ])
   ).toEqual('')
 
   expect(
@@ -7075,8 +7039,8 @@ test('bg', () => {
         }
         @tailwind utilities;
       `,
-      ['bg-current/half', 'bg-current/custom'],
-    ),
+      ['bg-current/half', 'bg-current/custom']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --opacity-half: .5;
@@ -7134,8 +7098,8 @@ test('from', () => {
         'from-[50px]',
         'from-[length:--my-position]',
         'from-[percentage:--my-position]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -7290,7 +7254,7 @@ test('from', () => {
       '-from-0%',
       '-from-5%',
       '-from-100%',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -7335,8 +7299,8 @@ test('via', () => {
         'via-[50px]',
         'via-[length:--my-position]',
         'via-[percentage:--my-position]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -7500,7 +7464,7 @@ test('via', () => {
       '-via-0%',
       '-via-5%',
       '-via-100%',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -7545,8 +7509,8 @@ test('to', () => {
         'to-[50px]',
         'to-[length:--my-position]',
         'to-[percentage:--my-position]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -7699,7 +7663,7 @@ test('to', () => {
       '-to-0%',
       '-to-5%',
       '-to-100%',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -7716,7 +7680,7 @@ test('box-decoration', () => {
     }"
   `)
   expect(run(['box', 'box-decoration', '-box-decoration-slice', '-box-decoration-clone'])).toEqual(
-    '',
+    ''
   )
 })
 
@@ -7740,7 +7704,7 @@ test('bg-clip', () => {
     }"
   `)
   expect(
-    run(['bg-clip', '-bg-clip-border', '-bg-clip-padding', '-bg-clip-content', '-bg-clip-text']),
+    run(['bg-clip', '-bg-clip-border', '-bg-clip-padding', '-bg-clip-content', '-bg-clip-text'])
   ).toEqual('')
 })
 
@@ -7760,7 +7724,7 @@ test('bg-origin', () => {
     }"
   `)
   expect(
-    run(['bg-origin', '-bg-origin-border', '-bg-origin-padding', '-bg-origin-content']),
+    run(['bg-origin', '-bg-origin-border', '-bg-origin-padding', '-bg-origin-content'])
   ).toEqual('')
 })
 
@@ -7783,7 +7747,7 @@ test('bg-blend', () => {
       'bg-blend-saturation',
       'bg-blend-color',
       'bg-blend-luminosity',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".bg-blend-color {
       background-blend-mode: color;
@@ -7868,7 +7832,7 @@ test('bg-blend', () => {
       '-bg-blend-saturation',
       '-bg-blend-color',
       '-bg-blend-luminosity',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -7893,7 +7857,7 @@ test('mix-blend', () => {
       'mix-blend-luminosity',
       'mix-blend-plus-darker',
       'mix-blend-plus-lighter',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".mix-blend-color {
       mix-blend-mode: color;
@@ -7987,7 +7951,7 @@ test('mix-blend', () => {
       '-mix-blend-color',
       '-mix-blend-luminosity',
       '-mix-blend-plus-lighter',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -8014,8 +7978,8 @@ test('fill', () => {
         'fill-[#0088cc]/50',
         'fill-[#0088cc]/[0.5]',
         'fill-[#0088cc]/[50%]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -8065,7 +8029,7 @@ test('fill', () => {
       '-fill-[#0088cc]/50',
       '-fill-[#0088cc]/[0.5]',
       '-fill-[#0088cc]/[50%]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -8113,8 +8077,8 @@ test('stroke', () => {
         'stroke-[number:--my-width]',
         'stroke-[length:--my-width]',
         'stroke-[percentage:--my-width]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -8216,7 +8180,7 @@ test('stroke', () => {
 
       // Width
       '-stroke-0',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -8241,7 +8205,7 @@ test('object', () => {
       'object-right-bottom',
       'object-right-top',
       'object-top',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".object-contain {
       object-fit: contain;
@@ -8316,7 +8280,7 @@ test('object', () => {
       // object-position
       '-object-[--value]',
       '-object-bottom',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -8329,8 +8293,8 @@ test('p', () => {
         }
         @tailwind utilities;
       `,
-      ['p-4', 'p-[4px]'],
-    ),
+      ['p-4', 'p-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8356,8 +8320,8 @@ test('px', () => {
         }
         @tailwind utilities;
       `,
-      ['px-4', 'px-[4px]'],
-    ),
+      ['px-4', 'px-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8385,8 +8349,8 @@ test('py', () => {
         }
         @tailwind utilities;
       `,
-      ['py-4', 'py-[4px]'],
-    ),
+      ['py-4', 'py-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8414,8 +8378,8 @@ test('pt', () => {
         }
         @tailwind utilities;
       `,
-      ['pt-4', 'pt-[4px]'],
-    ),
+      ['pt-4', 'pt-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8441,8 +8405,8 @@ test('ps', () => {
         }
         @tailwind utilities;
       `,
-      ['ps-4', 'ps-[4px]'],
-    ),
+      ['ps-4', 'ps-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8468,8 +8432,8 @@ test('pe', () => {
         }
         @tailwind utilities;
       `,
-      ['pe-4', 'pe-[4px]'],
-    ),
+      ['pe-4', 'pe-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8495,8 +8459,8 @@ test('pr', () => {
         }
         @tailwind utilities;
       `,
-      ['pr-4', 'pr-[4px]'],
-    ),
+      ['pr-4', 'pr-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8522,8 +8486,8 @@ test('pb', () => {
         }
         @tailwind utilities;
       `,
-      ['pb-4', 'pb-[4px]'],
-    ),
+      ['pb-4', 'pb-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8549,8 +8513,8 @@ test('pl', () => {
         }
         @tailwind utilities;
       `,
-      ['pl-4', 'pl-[4px]'],
-    ),
+      ['pl-4', 'pl-[4px]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --spacing-4: 1rem;
@@ -8595,7 +8559,7 @@ test('text-align', () => {
     }"
   `)
   expect(
-    run(['-text-left', '-text-center', '-text-right', '-text-justify', '-text-start', '-text-end']),
+    run(['-text-left', '-text-center', '-text-right', '-text-justify', '-text-start', '-text-end'])
   ).toEqual('')
 })
 
@@ -8625,7 +8589,7 @@ test('align', () => {
       'align-super',
 
       'align-[--value]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".align-\\[--value\\] {
       vertical-align: var(--value);
@@ -8676,7 +8640,7 @@ test('align', () => {
       '-align-super',
 
       '-align-[--value]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -8703,8 +8667,8 @@ test('font', () => {
         'font-bold',
         'font-[100]',
         'font-[number:--my-weight]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -8750,7 +8714,7 @@ test('font', () => {
 
       // font-weight
       '-font-bold',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -8789,13 +8753,13 @@ test('font-style', () => {
 })
 
 test('font-stretch', () => {
-  expect(run(['font-stretch-ultra-expanded', 'font-stretch-50', 'font-stretch-200']))
+  expect(run(['font-stretch-ultra-expanded', 'font-stretch-50%', 'font-stretch-200%']))
     .toMatchInlineSnapshot(`
-      ".font-stretch-200 {
+      ".font-stretch-200\\% {
         font-stretch: 200%;
       }
 
-      .font-stretch-50 {
+      .font-stretch-50\\% {
         font-stretch: 50%;
       }
 
@@ -8804,7 +8768,13 @@ test('font-stretch', () => {
       }"
     `)
   expect(
-    run(['font-stretch', 'font-stretch-20', 'font-stretch-400', 'font-stretch-potato']),
+    run([
+      'font-stretch',
+      'font-stretch-20%',
+      'font-stretch-50',
+      'font-stretch-400%',
+      'font-stretch-potato',
+    ])
   ).toEqual('')
 })
 
@@ -8852,8 +8822,8 @@ test('placeholder', () => {
         'placeholder-[#0088cc]/50',
         'placeholder-[#0088cc]/[0.5]',
         'placeholder-[#0088cc]/[50%]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -8927,7 +8897,7 @@ test('placeholder', () => {
       '-placeholder-[#0088cc]/50',
       '-placeholder-[#0088cc]/[0.5]',
       '-placeholder-[#0088cc]/[50%]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -8983,8 +8953,8 @@ test('decoration', () => {
         'decoration-[50%]',
         'decoration-[length:--my-thickness]',
         'decoration-[percentage:--my-thickness]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -9132,7 +9102,7 @@ test('decoration', () => {
       '-decoration-2',
       '-decoration-4',
       '-decoration-123',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -9145,8 +9115,8 @@ test('animate', () => {
         }
         @tailwind utilities;
       `,
-      ['animate-spin', 'animate-none', 'animate-[bounce_1s_infinite]', 'animate-not-found'],
-    ),
+      ['animate-spin', 'animate-none', 'animate-[bounce_1s_infinite]', 'animate-not-found']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --animate-spin: spin 1s linear infinite;
@@ -9171,7 +9141,7 @@ test('animate', () => {
       '-animate-none',
       '-animate-[bounce_1s_infinite]',
       '-animate-not-found',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -9213,8 +9183,8 @@ test('filter', () => {
         'sepia-0',
         'sepia-[50%]',
         'sepia-[--value]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --blur-xl: 24px;
@@ -9422,7 +9392,7 @@ test('filter', () => {
       '-sepia-0',
       '-sepia-[50%]',
       '-sepia-[--value]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -9463,8 +9433,8 @@ test('backdrop-filter', () => {
         'backdrop-sepia-0',
         'backdrop-sepia-[50%]',
         'backdrop-sepia-[--value]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --blur-xl: 24px;
@@ -9702,7 +9672,7 @@ test('backdrop-filter', () => {
       '-backdrop-sepia-0',
       '-backdrop-sepia-[50%]',
       '-backdrop-sepia-[--value]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -9726,8 +9696,8 @@ test('transition', () => {
         'transition-colors',
         'transition-opacity',
         'transition-[--value]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -9787,7 +9757,7 @@ test('transition', () => {
       '-transition-all',
       '-transition-opacity',
       '-transition-[--value]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -9835,8 +9805,8 @@ test('ease', () => {
         }
         @tailwind utilities;
       `,
-      ['ease-in', 'ease-out', 'ease-[--value]'],
-    ),
+      ['ease-in', 'ease-out', 'ease-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --transition-timing-function-in: cubic-bezier(.4, 0, 1, 1);
@@ -9866,7 +9836,7 @@ test('will-change', () => {
       'will-change-transform',
       'will-change-scroll',
       'will-change-[--value]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".will-change-\\[--value\\] {
       will-change: var(--value);
@@ -9896,7 +9866,7 @@ test('will-change', () => {
       '-will-change-transform',
       '-will-change-scroll',
       '-will-change-[--value]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -9912,7 +9882,7 @@ test('contain', () => {
       'contain-paint',
       'contain-style',
       'contain-[unset]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".contain-\\[unset\\] {
       contain: unset;
@@ -10010,7 +9980,7 @@ test('forced-color-adjust', () => {
       'forced-color-adjust',
       '-forced-color-adjust-none',
       '-forced-color-adjust-auto',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -10024,8 +9994,8 @@ test('leading', () => {
         }
         @tailwind utilities;
       `,
-      ['leading-none', 'leading-6', 'leading-[--value]'],
-    ),
+      ['leading-none', 'leading-6', 'leading-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --line-height-none: 1;
@@ -10057,8 +10027,8 @@ test('tracking', () => {
         }
         @tailwind utilities;
       `,
-      ['tracking-normal', 'tracking-wide', 'tracking-[--value]', '-tracking-[--value]'],
-    ),
+      ['tracking-normal', 'tracking-wide', 'tracking-[--value]', '-tracking-[--value]']
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --letter-spacing-normal: 0em;
@@ -10111,7 +10081,7 @@ test('font-variant-numeric', () => {
       'tabular-nums',
       'diagonal-fractions',
       'stacked-fractions',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".diagonal-fractions {
       --tw-numeric-fraction: diagonal-fractions;
@@ -10193,7 +10163,7 @@ test('font-variant-numeric', () => {
       '-tabular-nums',
       '-diagonal-fractions',
       '-stacked-fractions',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -10251,8 +10221,8 @@ test('outline', () => {
         'outline-[number:--my-width]',
         'outline-[length:--my-width]',
         'outline-[percentage:--my-width]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -10399,7 +10369,7 @@ test('outline', () => {
 
       // outline-width
       '-outline-0',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -10410,7 +10380,7 @@ test('outline-offset', () => {
       '-outline-offset-4',
       'outline-offset-[--value]',
       '-outline-offset-[--value]',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".-outline-offset-4 {
       outline-offset: calc(4px * -1);
@@ -10460,8 +10430,8 @@ test('underline-offset', () => {
         '-underline-offset-123',
         'underline-offset-[--value]',
         '-underline-offset-[--value]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ".-underline-offset-123 {
       text-underline-offset: calc(123px * -1);
@@ -10551,8 +10521,8 @@ test('text', () => {
         'text-[clamp(1rem,2rem,3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]/9',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -10700,7 +10670,7 @@ test('text', () => {
       '-text-sm',
       '-text-sm/6',
       '-text-sm/[4px]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -10743,8 +10713,8 @@ test('shadow', () => {
         'shadow-[color:--value]/50',
         'shadow-[color:--value]/[0.5]',
         'shadow-[color:--value]/[50%]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -10926,7 +10896,7 @@ test('shadow', () => {
       '-shadow-[#0088cc]/[0.5]',
       '-shadow-[#0088cc]/[50%]',
       '-shadow-[--value]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -10969,8 +10939,8 @@ test('inset-shadow', () => {
         'inset-shadow-[color:--value]/50',
         'inset-shadow-[color:--value]/[0.5]',
         'inset-shadow-[color:--value]/[50%]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -11152,7 +11122,7 @@ test('inset-shadow', () => {
       '-inset-shadow-[#0088cc]/[0.5]',
       '-inset-shadow-[#0088cc]/[50%]',
       '-inset-shadow-[--value]',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -11198,8 +11168,8 @@ test('ring', () => {
         'ring-4',
         'ring-[12px]',
         'ring-[length:--my-width]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -11381,7 +11351,7 @@ test('ring', () => {
       '-ring-1',
       '-ring-2',
       '-ring-4',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -11426,8 +11396,8 @@ test('inset-ring', () => {
         'inset-ring-4',
         'inset-ring-[12px]',
         'inset-ring-[length:--my-width]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -11604,7 +11574,7 @@ test('inset-ring', () => {
       '-inset-ring-1',
       '-inset-ring-2',
       '-inset-ring-4',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -11650,8 +11620,8 @@ test('ring-offset', () => {
         'ring-offset-4',
         'ring-offset-[12px]',
         'ring-offset-[length:--my-width]',
-      ],
-    ),
+      ]
+    )
   ).toMatchInlineSnapshot(`
     ":root {
       --color-red-500: #ef4444;
@@ -11755,7 +11725,7 @@ test('ring-offset', () => {
       '-ring-offset-1',
       '-ring-offset-2',
       '-ring-offset-4',
-    ]),
+    ])
   ).toEqual('')
 })
 
@@ -11768,7 +11738,7 @@ test('@container', () => {
       '@container-normal/sidebar',
       '@container-[size]',
       '@container-[size]/sidebar',
-    ]),
+    ])
   ).toMatchInlineSnapshot(`
     ".\\@container {
       container-type: inline-size;
@@ -11802,6 +11772,6 @@ test('@container', () => {
       '-@container-normal/sidebar',
       '-@container-[size]',
       '-@container-[size]/sidebar',
-    ]),
+    ])
   ).toEqual('')
 })
