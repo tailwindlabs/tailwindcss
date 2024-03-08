@@ -3,7 +3,11 @@
   "version": "4.0.0-alpha.6",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
-  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "packages/@tailwindcss-cli"
+  },
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
   "scripts": {
@@ -20,6 +24,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "provenance": true
+  },
   "dependencies": {
     "@parcel/watcher": "^2.4.1",
     "@tailwindcss/oxide": "workspace:^",

@@ -1,6 +1,11 @@
 {
   "name": "@tailwindcss/oxide",
   "version": "4.0.0-alpha.6",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "oxide/crates/node"
+  },
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
@@ -30,6 +35,9 @@
     "index.js",
     "index.d.ts"
   ],
+  "publishConfig": {
+    "provenance": true
+  },
   "scripts": {
     "artifacts": "npx napi artifacts",
     "build": "npx napi build --platform --release --no-const-enum",

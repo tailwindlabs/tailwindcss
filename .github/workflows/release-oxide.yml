@@ -150,6 +150,10 @@ jobs:
     timeout-minutes: 15
     name: Build and release Tailwind CSS
 
+    permissions:
+      contents: read
+      id-token: write
+
     needs:
       - build
 
