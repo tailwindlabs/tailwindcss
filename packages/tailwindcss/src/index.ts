@@ -174,6 +174,9 @@ export function compile(
     })
   }
 
+  // Track all valid candidates, these are the incoming `rawCandidate` that
+  // resulted in a generated AST Node. All the other `rawCandidates` are invalid
+  // and should be ignored.
   let allValidCandidates = new Set<string>()
   for (let rawCandidate of rawCandidates) {
     if (!designSystem.invalidRawCandidates.has(rawCandidate)) {
@@ -199,13 +202,13 @@ export function compile(
       }
 
       if (tailwindUtilitiesNode) {
-        let previousAstNodeCount = designSystem.parsedAstNodes.size
+        let previousAstNodeCount = designSystem.getAstNodeSize()
         let newNodes = compileCandidates(allValidCandidates, designSystem).astNodes
 
         // If no new ast nodes were generated, then we can return the original
         // CSS. This currently assumes that we only add new ast nodes and never
         // remove any.
-        if (previousAstNodeCount === designSystem.parsedAstNodes.size) {
+        if (previousAstNodeCount === designSystem.getAstNodeSize()) {
           return compiledCss
         }
 

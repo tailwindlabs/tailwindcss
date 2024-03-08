@@ -31,7 +31,7 @@ export function compileCandidates(
   }
 
   // Sort the variants
-  let variants = Array.from(designSystem.parsedVariants.values()).sort((a, z) => {
+  let variants = designSystem.getUsedVariants().sort((a, z) => {
     return designSystem.variants.compare(a, z)
   })
 

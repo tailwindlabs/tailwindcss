@@ -22,9 +22,8 @@ export type DesignSystem = {
   parseVariant(variant: string): ReturnType<typeof parseVariant>
   parseAstNode(candidate: string): ReturnType<typeof parseAstNode>
 
-  parsedCandidates: DefaultMap<string, ReturnType<typeof parseCandidate>>
-  parsedVariants: DefaultMap<string, ReturnType<typeof parseVariant>>
-  parsedAstNodes: DefaultMap<string, ReturnType<typeof parseAstNode>>
+  getUsedVariants(): ReturnType<typeof parseVariant>[]
+  getAstNodeSize(): number
 
   invalidRawCandidates: Set<string>
 }
@@ -42,9 +41,6 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     theme,
     utilities,
     variants,
-    parsedCandidates,
-    parsedVariants,
-    parsedAstNodes,
     invalidRawCandidates,
 
     candidatesToCss(classes: string[]) {
@@ -80,6 +76,12 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     },
     parseAstNode(candidate: string) {
       return parsedAstNodes.get(candidate)
+    },
+    getUsedVariants() {
+      return Array.from(parsedVariants.values())
+    },
+    getAstNodeSize() {
+      return parsedAstNodes.size
     },
   }
 
