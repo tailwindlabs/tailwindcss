@@ -114,7 +114,7 @@ export class Variants {
     let compareFn = this.compareFns.get(aOrder)
     if (compareFn === undefined) return 0
 
-    return compareFn(a, z)
+    return compareFn(a, z) || a.root.localeCompare(z.root)
   }
 
   keys() {

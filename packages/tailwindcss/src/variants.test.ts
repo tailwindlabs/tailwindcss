@@ -1116,13 +1116,13 @@ test('min, max and unprefixed breakpoints', () => {
     }
 
     @media (width >= 1024px) {
-      .min-lg\\:flex {
+      .lg\\:flex {
         display: flex;
       }
     }
 
     @media (width >= 1024px) {
-      .lg\\:flex {
+      .min-lg\\:flex {
         display: flex;
       }
     }"
