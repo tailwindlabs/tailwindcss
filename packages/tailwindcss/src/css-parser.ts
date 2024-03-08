@@ -1,6 +1,8 @@
 import { comment, rule, type AstNode, type Comment, type Declaration, type Rule } from './ast'
 
 export function parse(input: string) {
+  input = input.replaceAll('\r\n', '\n')
+
   let ast: AstNode[] = []
   let licenseComments: Comment[] = []
 
