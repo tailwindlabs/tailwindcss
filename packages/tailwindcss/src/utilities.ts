@@ -2865,6 +2865,30 @@ export function createUtilities(theme: Theme) {
   staticUtility('line-through', [['text-decoration-line', 'line-through']])
   staticUtility('no-underline', [['text-decoration-line', 'none']])
 
+  staticUtility('font-stretch-normal', [['font-stretch', 'normal']])
+  staticUtility('font-stretch-ultra-condensed', [['font-stretch', 'ultra-condensed']])
+  staticUtility('font-stretch-extra-condensed', [['font-stretch', 'extra-condensed']])
+  staticUtility('font-stretch-condensed', [['font-stretch', 'condensed']])
+  staticUtility('font-stretch-semi-condensed', [['font-stretch', 'semi-condensed']])
+  staticUtility('font-stretch-semi-expanded', [['font-stretch', 'semi-expanded']])
+  staticUtility('font-stretch-expanded', [['font-stretch', 'expanded']])
+  staticUtility('font-stretch-extra-expanded', [['font-stretch', 'extra-expanded']])
+  staticUtility('font-stretch-ultra-expanded', [['font-stretch', 'ultra-expanded']])
+  functionalUtility('font-stretch', {
+    themeKeys: [],
+    handleBareValue: ({ value }) => {
+      let num = Number(value)
+      if (Number.isNaN(num) || num < 50 || num > 200) return null
+      return `${value}%`
+    },
+    handle: (value) => [decl('font-stretch', value)],
+  })
+  suggest('font-stretch', () => [
+    {
+      values: ['50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
+    },
+  ])
+
   colorUtility('placeholder', {
     themeKeys: ['--background-color', '--color'],
     handle: (value) => [

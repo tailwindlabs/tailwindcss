@@ -257,6 +257,7 @@ export default [
   'font-weight',
   'text-transform',
   'font-style',
+  'font-stretch',
   'font-variant-numeric',
   'line-height',
   'letter-spacing',
