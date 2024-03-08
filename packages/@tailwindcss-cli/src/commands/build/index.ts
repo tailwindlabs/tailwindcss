@@ -1,12 +1,5 @@
 import watcher from '@parcel/watcher'
-import {
-  IO,
-  Parsing,
-  clearCache,
-  scanDir,
-  scanFiles,
-  type ChangedContent,
-} from '@tailwindcss/oxide'
+import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindcss/oxide'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -99,24 +92,41 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     args['--input'] ?? base,
   )
 
+  let previous = {
+    css: '',
+    optimizedCss: '',
+  }
+
+  async function write(css: string, args: Result<ReturnType<typeof options>>) {
+    let output = css
+
+    // Optimize the output
+    if (args['--minify'] || args['--optimize']) {
+      if (css !== previous.css) {
+        let optimizedCss = optimizeCss(css, {
+          file: args['--input'] ?? 'input.css',
+          minify: args['--minify'] ?? false,
+        })
+        previous.css = css
+        previous.optimizedCss = optimizedCss
+        output = optimizedCss
+      } else {
+        output = previous.optimizedCss
+      }
+    }
+
+    // Write the output
+    if (args['--output']) {
+      await outputFile(args['--output'], output)
+    } else {
+      println(output)
+    }
+  }
+
   // Compile the input
   let { build } = compile(input)
-  let result = build(candidates)
 
-  // Optimize the output
-  if (args['--minify'] || args['--optimize']) {
-    result = optimizeCss(result, {
-      file: args['--input'] ?? 'input.css',
-      minify: args['--minify'] ?? false,
-    })
-  }
-
-  // Write the output
-  if (args['--output']) {
-    await outputFile(args['--output'], result)
-  } else {
-    println(result)
-  }
+  await write(build(candidates), args)
 
   let end = process.hrtime.bigint()
   eprintln(header())
@@ -162,26 +172,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         // Re-compile the input
         let start = process.hrtime.bigint()
 
+        // Track the compiled CSS
+        let compiledCss = ''
+
         // Scan the entire `base` directory for full rebuilds.
         if (rebuildStrategy === 'full') {
-          // Clear the cache because we need to re-scan the entire directory.
-          clearCache()
-
           // Re-scan the directory to get the new `candidates`.
           candidates = scanDir({ base }).candidates
-        }
 
-        // Scan changed files only for incremental rebuilds.
-        else if (rebuildStrategy === 'incremental') {
-          let uniqueCandidates = new Set(candidates)
-          for (let candidate of scanFiles(changedFiles, IO.Sequential | Parsing.Sequential)) {
-            uniqueCandidates.add(candidate)
-          }
-          candidates = Array.from(uniqueCandidates)
-        }
-
-        // Resolve the input
-        if (rebuildStrategy === 'full') {
           // Collect the new `input` and `cssImportPaths`.
           ;[input, cssImportPaths] = await handleImports(
             args['--input']
@@ -191,25 +189,19 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                 `,
             args['--input'] ?? base,
           )
+
+          build = compile(input).build
+          compiledCss = build(candidates)
         }
 
-        // Compile the input
-        result = compile(input).build(candidates)
+        // Scan changed files only for incremental rebuilds.
+        else if (rebuildStrategy === 'incremental') {
+          let newCandidates = scanFiles(changedFiles, IO.Sequential | Parsing.Sequential)
 
-        // Optimize the output
-        if (args['--minify'] || args['--optimize']) {
-          result = optimizeCss(result, {
-            file: args['--input'] ?? 'input.css',
-            minify: args['--minify'] ?? false,
-          })
+          compiledCss = build(newCandidates)
         }
 
-        // Write the output
-        if (args['--output']) {
-          await outputFile(args['--output'], result)
-        } else {
-          println(result)
-        }
+        await write(compiledCss, args)
 
         let end = process.hrtime.bigint()
         eprintln(`Done in ${formatDuration(end - start)}`)
