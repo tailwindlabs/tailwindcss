@@ -103,10 +103,14 @@ export function compile(
 
   let designSystem = buildDesignSystem(theme)
 
+  let tailwindUtilitiesNode: Rule | null = null
+
   // Find `@tailwind utilities` and replace it with the actual generated utility
   // class CSS.
   walk(ast, (node) => {
     if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
+      tailwindUtilitiesNode = node
+
       // Set the `@tailwind utilities` nodes, to the actual generated CSS
       node.nodes = compileCandidates(rawCandidates, designSystem).astNodes
 
@@ -170,10 +174,26 @@ export function compile(
     })
   }
 
+  // Track all valid candidates, these are the incoming `rawCandidate` that
+  // resulted in a generated AST Node. All the other `rawCandidates` are invalid
+  // and should be ignored.
+  let allValidCandidates = new Set(rawCandidates)
   let compiledCss = toCss(ast)
 
   return {
     rebuild(newRawCandidates: string[]) {
+      // Add all new candidates unless we know that they are invalid.
+      for (let candidate of newRawCandidates) {
+        allValidCandidates.add(candidate)
+      }
+
+      if (tailwindUtilitiesNode) {
+        let newNodes = compileCandidates(allValidCandidates, designSystem).astNodes
+
+        tailwindUtilitiesNode.nodes = newNodes
+        compiledCss = toCss(ast)
+      }
+
       return compiledCss
     },
     css: compiledCss,

@@ -6,7 +6,7 @@ import { escape } from './utils/escape'
 import type { Variants } from './variants'
 
 export function compileCandidates(
-  rawCandidates: string[],
+  rawCandidates: Iterable<string>,
   designSystem: DesignSystem,
   { throwOnInvalidCandidate = false } = {},
 ) {
