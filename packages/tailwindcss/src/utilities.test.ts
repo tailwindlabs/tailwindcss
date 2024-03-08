@@ -8788,6 +8788,26 @@ test('font-style', () => {
   expect(run(['-italic', '-not-italic'])).toEqual('')
 })
 
+test('font-stretch', () => {
+  expect(run(['font-stretch-ultra-expanded', 'font-stretch-50', 'font-stretch-200']))
+    .toMatchInlineSnapshot(`
+      ".font-stretch-200 {
+        font-stretch: 200%;
+      }
+
+      .font-stretch-50 {
+        font-stretch: 50%;
+      }
+
+      .font-stretch-ultra-expanded {
+        font-stretch: ultra-expanded;
+      }"
+    `)
+  expect(
+    run(['font-stretch', 'font-stretch-20', 'font-stretch-400', 'font-stretch-potato']),
+  ).toEqual('')
+})
+
 test('text-decoration-line', () => {
   expect(run(['underline', 'overline', 'line-through', 'no-underline'])).toMatchInlineSnapshot(`
     ".line-through {
