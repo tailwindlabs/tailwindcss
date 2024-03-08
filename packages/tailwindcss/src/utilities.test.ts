@@ -8789,13 +8789,13 @@ test('font-style', () => {
 })
 
 test('font-stretch', () => {
-  expect(run(['font-stretch-ultra-expanded', 'font-stretch-50', 'font-stretch-200']))
+  expect(run(['font-stretch-ultra-expanded', 'font-stretch-50%', 'font-stretch-200%']))
     .toMatchInlineSnapshot(`
-      ".font-stretch-200 {
+      ".font-stretch-200\\% {
         font-stretch: 200%;
       }
 
-      .font-stretch-50 {
+      .font-stretch-50\\% {
         font-stretch: 50%;
       }
 
@@ -8804,7 +8804,13 @@ test('font-stretch', () => {
       }"
     `)
   expect(
-    run(['font-stretch', 'font-stretch-20', 'font-stretch-400', 'font-stretch-potato']),
+    run([
+      'font-stretch',
+      'font-stretch-20%',
+      'font-stretch-50',
+      'font-stretch-400%',
+      'font-stretch-potato',
+    ]),
   ).toEqual('')
 })
 
