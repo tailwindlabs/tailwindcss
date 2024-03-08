@@ -25,7 +25,8 @@ export type DesignSystem = {
   getUsedVariants(): ReturnType<typeof parseVariant>[]
   getAstNodeSize(): number
 
-  invalidRawCandidates: Set<string>
+  markInvalidCandidate(candidate: string): void
+  isInvalidCandidate(candidate: string): boolean
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
@@ -41,7 +42,6 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     theme,
     utilities,
     variants,
-    invalidRawCandidates,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []
@@ -82,6 +82,13 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     },
     getAstNodeSize() {
       return compiledAstNodes.size
+    },
+
+    markInvalidCandidate(candidate: string) {
+      invalidRawCandidates.add(candidate)
+    },
+    isInvalidCandidate(candidate: string) {
+      return invalidRawCandidates.has(candidate)
     },
   }
 

@@ -24,7 +24,7 @@ export function compileCandidates(
       if (throwOnInvalidCandidate) {
         throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
       }
-      designSystem.invalidRawCandidates.add(rawCandidate)
+      designSystem.markInvalidCandidate(rawCandidate)
       continue // Bail, invalid candidate
     }
     candidates.set(candidate, rawCandidate)
@@ -42,7 +42,7 @@ export function compileCandidates(
       if (throwOnInvalidCandidate) {
         throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
       }
-      designSystem.invalidRawCandidates.add(rawCandidate)
+      designSystem.markInvalidCandidate(rawCandidate)
       continue next
     }
 

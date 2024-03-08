@@ -179,7 +179,7 @@ export function compile(
   // and should be ignored.
   let allValidCandidates = new Set<string>()
   for (let rawCandidate of rawCandidates) {
-    if (!designSystem.invalidRawCandidates.has(rawCandidate)) {
+    if (!designSystem.isInvalidCandidate(rawCandidate)) {
       allValidCandidates.add(rawCandidate)
     }
   }
@@ -190,7 +190,7 @@ export function compile(
       // Add all new candidates unless we know that they are invalid.
       let previousSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
-        if (!designSystem.invalidRawCandidates.has(candidate)) {
+        if (!designSystem.isInvalidCandidate(candidate)) {
           allValidCandidates.add(candidate)
         }
       }
