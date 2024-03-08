@@ -7,6 +7,8 @@
     "name": "tailwindcss-oxide",
     "triples": {
       "additional": [
+        "armv7-linux-androideabi",
+        "aarch64-linux-android",
         "aarch64-apple-darwin",
         "aarch64-unknown-linux-gnu",
         "aarch64-unknown-linux-musl",
@@ -36,6 +38,7 @@
     "version": "npx napi version"
   },
   "optionalDependencies": {
+    "@tailwindcss/oxide-android-arm64": "workspace:*",
     "@tailwindcss/oxide-darwin-arm64": "workspace:*",
     "@tailwindcss/oxide-darwin-x64": "workspace:*",
     "@tailwindcss/oxide-freebsd-x64": "workspace:*",
