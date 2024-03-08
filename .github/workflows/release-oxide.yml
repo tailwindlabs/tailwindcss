@@ -152,6 +152,7 @@ jobs:
 
     permissions:
       contents: read
+      # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
       id-token: write
 
     needs:
