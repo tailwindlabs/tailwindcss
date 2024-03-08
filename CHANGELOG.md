@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Don't error on `@apply` with leading/trailing whitespace ([#13144](https://github.com/tailwindlabs/tailwindcss/pull/13144))
 
+### Added
+
+- Add Android builds ([#13115](https://github.com/tailwindlabs/tailwindcss/pull/13115))
+
 ## [4.0.0-alpha.6] - 2024-03-07
 
 ### Fixed
