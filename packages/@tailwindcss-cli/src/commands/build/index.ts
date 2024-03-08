@@ -196,7 +196,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         // Scan changed files only for incremental rebuilds.
         else if (rebuildStrategy === 'incremental') {
-          compiledCss = result.rebuild(scanFiles(changedFiles, IO.Sequential | Parsing.Sequential))
+          let newCandidates = scanFiles(changedFiles, IO.Sequential | Parsing.Sequential)
+
+          compiledCss = result.rebuild(newCandidates)
         }
 
         await write(compiledCss, args)

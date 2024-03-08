@@ -32,8 +32,8 @@ export type DesignSystem = {
 export function buildDesignSystem(theme: Theme): DesignSystem {
   let utilities = createUtilities(theme)
   let variants = createVariants(theme)
-  let invalidRawCandidates = new Set<string>()
 
+  let invalidRawCandidates = new Set<string>()
   let parsedVariants = new DefaultMap((variant) => parseVariant(variant, designSystem))
   let parsedCandidates = new DefaultMap((candidate) => parseCandidate(candidate, designSystem))
   let compiledAstNodes = new DefaultMap((candidate) => compileAstNodes(candidate, designSystem))
