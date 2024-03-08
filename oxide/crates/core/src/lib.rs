@@ -433,9 +433,9 @@ fn read_all_files_sync(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 
     changed_content
         .into_iter()
-        .map(|c| match (c.file, c.content) {
-            (Some(file), None) => std::fs::read(file).unwrap(),
-            (None, Some(content)) => content.into_bytes(),
+        .filter_map(|c| match (c.file, c.content) {
+            (Some(file), None) => std::fs::read(file).ok(),
+            (None, Some(content)) => Some(content.into_bytes()),
             _ => Default::default(),
         })
         .collect()
