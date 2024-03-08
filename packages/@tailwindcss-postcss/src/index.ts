@@ -16,7 +16,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
 
   return {
-    postcssPlugin: 'tailwindcss-v4',
+    postcssPlugin: '@tailwindcss/postcss',
     plugins: [
       // We need to run `postcss-import` first to handle `@import` rules.
       postcssImport(),
@@ -64,7 +64,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         for (let file of files) {
           result.messages.push({
             type: 'dependency',
-            plugin: 'tailwindcss-v4',
+            plugin: '@tailwindcss/postcss',
             file,
             parent: result.opts.from,
           })
@@ -76,7 +76,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         for (let { base, glob } of globs) {
           result.messages.push({
             type: 'dir-dependency',
-            plugin: 'tailwindcss-v4',
+            plugin: '@tailwindcss/postcss',
             dir: base,
             glob,
             parent: result.opts.from,
