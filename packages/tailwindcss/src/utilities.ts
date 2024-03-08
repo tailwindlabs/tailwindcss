@@ -2878,6 +2878,8 @@ export function createUtilities(theme: Theme) {
     themeKeys: [],
     handleBareValue: ({ value }) => {
       let num = Number(value)
+      // Only 50-200% (inclusive) are valid:
+      // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
       if (Number.isNaN(num) || num < 50 || num > 200) return null
       return `${value}%`
     },
