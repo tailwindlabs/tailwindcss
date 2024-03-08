@@ -288,6 +288,22 @@ describe('@apply', () => {
       `[Error: Cannot apply unknown utility class: hocus:bg-red-500]`,
     )
   })
+
+  it('should not error with trailing whitespace', () => {
+    expect(
+      compileCss(`
+        @tailwind utilities;
+
+        .foo {
+          @apply flex ;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        display: flex;
+      }"
+    `)
+  })
 })
 
 describe('arbitrary variants', () => {
