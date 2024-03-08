@@ -11,9 +11,6 @@ export function compileCandidates(
   designSystem: DesignSystem,
   { throwOnInvalidCandidate = false } = {},
 ) {
-  // Ensure the candidates are sorted alphabetically
-  rawCandidates.sort()
-
   let nodeSorting = new Map<
     AstNode,
     { properties: number[]; variants: bigint; candidate: string }
@@ -153,7 +150,9 @@ export function compileCandidates(
       // Sort by lowest property index first
       (aSorting.properties[offset] ?? Infinity) - (zSorting.properties[offset] ?? Infinity) ||
       // Sort by most properties first, then by least properties
-      zSorting.properties.length - aSorting.properties.length
+      zSorting.properties.length - aSorting.properties.length ||
+      // Sort alphabetically
+      aSorting.candidate.localeCompare(zSorting.candidate)
     )
   })
 
