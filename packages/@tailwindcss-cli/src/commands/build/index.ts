@@ -46,7 +46,7 @@ export function options() {
     },
     '--minify': {
       type: 'boolean',
-      description: 'Minify the output',
+      description: 'Optimize and minify the output',
       alias: '-m',
     },
     '--optimize': {
