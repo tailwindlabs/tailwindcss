@@ -1,6 +1,11 @@
 {
   "name": "@tailwindcss/oxide-linux-arm64-gnu",
   "version": "4.0.0-alpha.6",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "oxide/crates/node/npm/linux-arm64-gnu"
+  },
   "os": [
     "linux"
   ],
@@ -11,6 +16,9 @@
   "files": [
     "tailwindcss-oxide.linux-arm64-gnu.node"
   ],
+  "publishConfig": {
+    "provenance": true
+  },
   "license": "MIT",
   "engines": {
     "node": ">= 10"
