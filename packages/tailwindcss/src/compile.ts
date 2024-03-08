@@ -91,7 +91,7 @@ export function compileCandidates(
       // Sort by most properties first, then by least properties
       zSorting.properties.length - aSorting.properties.length ||
       // Sort alphabetically
-      aSorting.candidate.localeCompare(zSorting.candidate)
+      (aSorting.candidate < zSorting.candidate ? -1 : 1)
     )
   })
 
