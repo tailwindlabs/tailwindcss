@@ -115,6 +115,7 @@ export function compile(css: string, rawCandidates: string[]) {
       if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@apply')) {
         let candidates = node.selector
           .slice(7 /* Ignore `@apply ` when parsing the selector */)
+          .trim()
           .split(/\s+/g)
 
         // Replace the `@apply` rule with the actual utility classes
