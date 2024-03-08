@@ -1,9 +1,11 @@
 import { toCss } from './ast'
-import { compileCandidates } from './compile'
+import { parseCandidate, parseVariant } from './candidate'
+import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
 import type { Theme } from './theme'
 import { Utilities, createUtilities } from './utilities'
+import { DefaultMap } from './utils/default-map'
 import { Variants, createVariants } from './variants'
 
 export type DesignSystem = {
@@ -15,13 +17,27 @@ export type DesignSystem = {
   getClassOrder(classes: string[]): [string, bigint | null][]
   getClassList(): ClassEntry[]
   getVariants(): VariantEntry[]
+
+  parseCandidate(candidate: string): ReturnType<typeof parseCandidate>
+  parseVariant(variant: string): ReturnType<typeof parseVariant>
+  compileAstNodes(candidate: string): ReturnType<typeof compileAstNodes>
+
+  getUsedVariants(): ReturnType<typeof parseVariant>[]
+  getAstNodeSize(): number
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
-  return {
+  let utilities = createUtilities(theme)
+  let variants = createVariants(theme)
+
+  let parsedVariants = new DefaultMap((variant) => parseVariant(variant, designSystem))
+  let parsedCandidates = new DefaultMap((candidate) => parseCandidate(candidate, designSystem))
+  let compiledAstNodes = new DefaultMap((candidate) => compileAstNodes(candidate, designSystem))
+
+  let designSystem: DesignSystem = {
     theme,
-    utilities: createUtilities(theme),
-    variants: createVariants(theme),
+    utilities,
+    variants,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []
@@ -47,5 +63,23 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     getVariants() {
       return getVariants(this)
     },
+
+    parseCandidate(candidate: string) {
+      return parsedCandidates.get(candidate)
+    },
+    parseVariant(variant: string) {
+      return parsedVariants.get(variant)
+    },
+    compileAstNodes(candidate: string) {
+      return compiledAstNodes.get(candidate)
+    },
+    getUsedVariants() {
+      return Array.from(parsedVariants.values())
+    },
+    getAstNodeSize() {
+      return compiledAstNodes.size
+    },
   }
+
+  return designSystem
 }

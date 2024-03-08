@@ -1,8 +1,6 @@
 import { decl, rule } from './ast'
-import { parseVariant, type Variant } from './candidate'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
-import { DefaultMap } from './utils/default-map'
 
 interface ClassMetadata {
   modifiers: string[]
@@ -40,7 +38,7 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
     }
   }
 
-  list.sort((a, b) => a[0].localeCompare(b[0]))
+  list.sort((a, b) => (a[0] === b[0] ? 0 : a[0] < b[0] ? -1 : 1))
 
   return list
 }
@@ -60,9 +58,6 @@ export interface VariantEntry {
 
 export function getVariants(design: DesignSystem) {
   let list: VariantEntry[] = []
-  let parsedVariants = new DefaultMap<string, Variant | null>((variant, map) =>
-    parseVariant(variant, design.variants, map),
-  )
 
   for (let [root, variant] of design.variants.entries()) {
     if (variant.kind === 'arbitrary') continue
@@ -74,7 +69,7 @@ export function getVariants(design: DesignSystem) {
       if (value) name += `-${value}`
       if (modifier) name += `/${modifier}`
 
-      let variant = parsedVariants.get(name)
+      let variant = design.parseVariant(name)
 
       if (!variant) return []
 
