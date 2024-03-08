@@ -51,9 +51,11 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           root.append(postcss.parse(output, result.opts))
         }
 
+        let compileResult = compile(root.toString(), [])
+
         // No `@tailwind` means we don't have to look for candidates
         if (!hasTailwind) {
-          replaceCss(compile(root.toString(), []).css)
+          replaceCss(compileResult.css)
           return
         }
 
@@ -83,7 +85,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           })
         }
 
-        replaceCss(compile(root.toString(), candidates).css)
+        console.time('Compile')
+        replaceCss(compileResult.rebuild(candidates))
+        console.timeEnd('Compile')
       },
     ],
   }
