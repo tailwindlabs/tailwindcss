@@ -17,7 +17,8 @@
     "tailwindcss-oxide.darwin-arm64.node"
   ],
   "publishConfig": {
-    "provenance": true
+    "provenance": true,
+    "access": "public"
   },
   "license": "MIT",
   "engines": {

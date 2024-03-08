@@ -17,7 +17,8 @@
     "tailwindcss-oxide.linux-arm64-gnu.node"
   ],
   "publishConfig": {
-    "provenance": true
+    "provenance": true,
+    "access": "public"
   },
   "license": "MIT",
   "engines": {
