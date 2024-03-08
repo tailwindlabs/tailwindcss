@@ -1,6 +1,6 @@
 import { toCss } from './ast'
 import { parseCandidate, parseVariant } from './candidate'
-import { compileCandidates, parseAstNodes as parseAstNode } from './compile'
+import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
 import { getClassOrder } from './sort'
 import type { Theme } from './theme'
@@ -20,7 +20,7 @@ export type DesignSystem = {
 
   parseCandidate(candidate: string): ReturnType<typeof parseCandidate>
   parseVariant(variant: string): ReturnType<typeof parseVariant>
-  parseAstNode(candidate: string): ReturnType<typeof parseAstNode>
+  compileAstNodes(candidate: string): ReturnType<typeof compileAstNodes>
 
   getUsedVariants(): ReturnType<typeof parseVariant>[]
   getAstNodeSize(): number
@@ -35,7 +35,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
 
   let parsedVariants = new DefaultMap((variant) => parseVariant(variant, designSystem))
   let parsedCandidates = new DefaultMap((candidate) => parseCandidate(candidate, designSystem))
-  let parsedAstNodes = new DefaultMap((candidate) => parseAstNode(candidate, designSystem))
+  let compiledAstNodes = new DefaultMap((candidate) => compileAstNodes(candidate, designSystem))
 
   let designSystem: DesignSystem = {
     theme,
@@ -74,14 +74,14 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     parseVariant(variant: string) {
       return parsedVariants.get(variant)
     },
-    parseAstNode(candidate: string) {
-      return parsedAstNodes.get(candidate)
+    compileAstNodes(candidate: string) {
+      return compiledAstNodes.get(candidate)
     },
     getUsedVariants() {
       return Array.from(parsedVariants.values())
     },
     getAstNodeSize() {
-      return parsedAstNodes.size
+      return compiledAstNodes.size
     },
   }
 

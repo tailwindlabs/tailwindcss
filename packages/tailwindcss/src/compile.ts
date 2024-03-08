@@ -37,7 +37,7 @@ export function compileCandidates(
 
   // Create the AST
   next: for (let [candidate, rawCandidate] of candidates) {
-    let astNode = designSystem.parseAstNode(rawCandidate)
+    let astNode = designSystem.compileAstNodes(rawCandidate)
     if (astNode === null) {
       if (throwOnInvalidCandidate) {
         throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
@@ -103,7 +103,7 @@ export function compileCandidates(
   }
 }
 
-export function parseAstNodes(rawCandidate: string, designSystem: DesignSystem) {
+export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem) {
   let candidate = designSystem.parseCandidate(rawCandidate)
   if (candidate === null) return null
 
