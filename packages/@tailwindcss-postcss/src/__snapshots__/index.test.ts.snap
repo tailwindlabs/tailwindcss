@@ -581,12 +581,12 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
 @layer utilities {
   .text-2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
+    font-size: var(--font-size-2xl, 1.5rem);
+    line-height: var(--font-size-2xl--line-height, 2rem);
   }
 
   .text-black\\/50 {
-    color: #00000080;
+    color: color-mix(in srgb, var(--color-black, #000) 50%, transparent);
   }
 
   .underline {

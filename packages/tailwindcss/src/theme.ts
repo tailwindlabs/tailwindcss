@@ -77,7 +77,23 @@ export class Theme {
     return null
   }
 
+  var(themeKey: string) {
+    if (!this.values.has(themeKey)) {
+      return null
+    }
+
+    return `var(${themeKey}, ${this.values.get(themeKey)})`
+  }
+
   resolve(candidateValue: string, themeKeys: ThemeKey[]): string | null {
+    let themeKey = this.resolveKey(candidateValue, themeKeys)
+
+    if (!themeKey) return null
+
+    return this.var(themeKey)
+  }
+
+  resolveBare(candidateValue: string, themeKeys: ThemeKey[]): string | null {
     let themeKey = this.resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
@@ -96,13 +112,13 @@ export class Theme {
 
     let extra = {} as Record<string, string>
     for (let name of nestedKeys) {
-      let nestedValue = this.values.get(`${themeKey}${name}`)
+      let nestedValue = this.var(`${themeKey}${name}`)
       if (nestedValue) {
         extra[name] = nestedValue
       }
     }
 
-    return [this.values.get(themeKey)!, extra]
+    return [this.var(themeKey)!, extra]
   }
 
   namespace(namespace: string) {

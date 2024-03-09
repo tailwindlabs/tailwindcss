@@ -91,11 +91,11 @@ exports[`border-* 1`] = `
 }
 
 .border-red-500 {
-  border-color: #ef4444;
+  border-color: var(--color-red-500, #ef4444);
 }
 
 .border-red-500\\/50 {
-  border-color: #ef444480;
+  border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-transparent {
@@ -200,11 +200,11 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b-red-500 {
-  border-bottom-color: #ef4444;
+  border-bottom-color: var(--color-red-500, #ef4444);
 }
 
 .border-b-red-500\\/50 {
-  border-bottom-color: #ef444480;
+  border-bottom-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-b-transparent {
@@ -309,11 +309,11 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e-red-500 {
-  border-inline-end-color: #ef4444;
+  border-inline-end-color: var(--color-red-500, #ef4444);
 }
 
 .border-e-red-500\\/50 {
-  border-inline-end-color: #ef444480;
+  border-inline-end-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-e-transparent {
@@ -418,11 +418,11 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l-red-500 {
-  border-left-color: #ef4444;
+  border-left-color: var(--color-red-500, #ef4444);
 }
 
 .border-l-red-500\\/50 {
-  border-left-color: #ef444480;
+  border-left-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-l-transparent {
@@ -527,11 +527,11 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r-red-500 {
-  border-right-color: #ef4444;
+  border-right-color: var(--color-red-500, #ef4444);
 }
 
 .border-r-red-500\\/50 {
-  border-right-color: #ef444480;
+  border-right-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-r-transparent {
@@ -636,11 +636,11 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s-red-500 {
-  border-inline-start-color: #ef4444;
+  border-inline-start-color: var(--color-red-500, #ef4444);
 }
 
 .border-s-red-500\\/50 {
-  border-inline-start-color: #ef444480;
+  border-inline-start-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-s-transparent {
@@ -745,11 +745,11 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t-red-500 {
-  border-top-color: #ef4444;
+  border-top-color: var(--color-red-500, #ef4444);
 }
 
 .border-t-red-500\\/50 {
-  border-top-color: #ef444480;
+  border-top-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-t-transparent {
@@ -882,13 +882,13 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x-red-500 {
-  border-left-color: #ef4444;
-  border-right-color: #ef4444;
+  border-left-color: var(--color-red-500, #ef4444);
+  border-right-color: var(--color-red-500, #ef4444);
 }
 
 .border-x-red-500\\/50 {
-  border-left-color: #ef444480;
-  border-right-color: #ef444480;
+  border-left-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-right-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-x-transparent {
@@ -1022,13 +1022,13 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y-red-500 {
-  border-top-color: #ef4444;
-  border-bottom-color: #ef4444;
+  border-top-color: var(--color-red-500, #ef4444);
+  border-bottom-color: var(--color-red-500, #ef4444);
 }
 
 .border-y-red-500\\/50 {
-  border-top-color: #ef444480;
-  border-bottom-color: #ef444480;
+  border-top-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
 }
 
 .border-y-transparent {

@@ -118,7 +118,7 @@ test('inset', () => {
     }
 
     .-inset-4 {
-      inset: -1rem;
+      inset: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-inset-full {
@@ -130,7 +130,7 @@ test('inset', () => {
     }
 
     .inset-4 {
-      inset: 1rem;
+      inset: var(--spacing-4, 1rem);
     }
 
     .inset-\\[4px\\] {
@@ -173,8 +173,8 @@ test('inset-x', () => {
     }
 
     .-inset-x-4 {
-      left: -1rem;
-      right: -1rem;
+      right: calc(var(--spacing-4, 1rem) * -1);
+      left: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-inset-x-full {
@@ -188,8 +188,8 @@ test('inset-x', () => {
     }
 
     .inset-x-4 {
-      left: 1rem;
-      right: 1rem;
+      right: var(--spacing-4, 1rem);
+      left: var(--spacing-4, 1rem);
     }
 
     .inset-x-\\[4px\\] {
@@ -235,8 +235,8 @@ test('inset-y', () => {
     }
 
     .-inset-y-4 {
-      top: -1rem;
-      bottom: -1rem;
+      top: calc(var(--spacing-4, 1rem) * -1);
+      bottom: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-inset-y-full {
@@ -250,8 +250,8 @@ test('inset-y', () => {
     }
 
     .inset-y-4 {
-      top: 1rem;
-      bottom: 1rem;
+      top: var(--spacing-4, 1rem);
+      bottom: var(--spacing-4, 1rem);
     }
 
     .inset-y-\\[4px\\] {
@@ -297,7 +297,7 @@ test('start', () => {
     }
 
     .-start-4 {
-      inset-inline-start: -1rem;
+      inset-inline-start: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-start-full {
@@ -309,7 +309,7 @@ test('start', () => {
     }
 
     .start-4 {
-      inset-inline-start: 1rem;
+      inset-inline-start: var(--spacing-4, 1rem);
     }
 
     .start-\\[4px\\] {
@@ -344,7 +344,7 @@ test('end', () => {
     }
 
     .-end-4 {
-      inset-inline-end: -1rem;
+      inset-inline-end: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-end-full {
@@ -356,7 +356,7 @@ test('end', () => {
     }
 
     .end-4 {
-      inset-inline-end: 1rem;
+      inset-inline-end: var(--spacing-4, 1rem);
     }
 
     .end-\\[4px\\] {
@@ -392,7 +392,7 @@ test('top', () => {
     }
 
     .-top-4 {
-      top: -1rem;
+      top: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-top-full {
@@ -404,7 +404,7 @@ test('top', () => {
     }
 
     .top-4 {
-      top: 1rem;
+      top: var(--spacing-4, 1rem);
     }
 
     .top-\\[4px\\] {
@@ -447,7 +447,7 @@ test('right', () => {
     }
 
     .-right-4 {
-      right: -1rem;
+      right: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-right-full {
@@ -459,7 +459,7 @@ test('right', () => {
     }
 
     .right-4 {
-      right: 1rem;
+      right: var(--spacing-4, 1rem);
     }
 
     .right-\\[4px\\] {
@@ -502,7 +502,7 @@ test('bottom', () => {
     }
 
     .-bottom-4 {
-      bottom: -1rem;
+      bottom: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-bottom-full {
@@ -514,7 +514,7 @@ test('bottom', () => {
     }
 
     .bottom-4 {
-      bottom: 1rem;
+      bottom: var(--spacing-4, 1rem);
     }
 
     .bottom-\\[4px\\] {
@@ -549,7 +549,7 @@ test('left', () => {
     }
 
     .-left-4 {
-      left: -1rem;
+      left: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-left-full {
@@ -561,7 +561,7 @@ test('left', () => {
     }
 
     .left-4 {
-      left: 1rem;
+      left: var(--spacing-4, 1rem);
     }
 
     .left-\\[4px\\] {
@@ -907,7 +907,7 @@ test('margin', () => {
     }
 
     .-m-4 {
-      margin: -1rem;
+      margin: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-m-\\[--value\\] {
@@ -915,7 +915,7 @@ test('margin', () => {
     }
 
     .m-4 {
-      margin: 1rem;
+      margin: var(--spacing-4, 1rem);
     }
 
     .m-\\[4px\\] {
@@ -946,8 +946,8 @@ test('margin-x', () => {
     }
 
     .-mx-4 {
-      margin-left: -1rem;
-      margin-right: -1rem;
+      margin-left: calc(var(--spacing-4, 1rem) * -1);
+      margin-right: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-mx-\\[--value\\] {
@@ -956,8 +956,8 @@ test('margin-x', () => {
     }
 
     .mx-4 {
-      margin-left: 1rem;
-      margin-right: 1rem;
+      margin-left: var(--spacing-4, 1rem);
+      margin-right: var(--spacing-4, 1rem);
     }
 
     .mx-\\[4px\\] {
@@ -990,8 +990,8 @@ test('margin-y', () => {
     }
 
     .-my-4 {
-      margin-top: -1rem;
-      margin-bottom: -1rem;
+      margin-top: calc(var(--spacing-4, 1rem) * -1);
+      margin-bottom: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-my-\\[--value\\] {
@@ -1000,8 +1000,8 @@ test('margin-y', () => {
     }
 
     .my-4 {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      margin-top: var(--spacing-4, 1rem);
+      margin-bottom: var(--spacing-4, 1rem);
     }
 
     .my-\\[4px\\] {
@@ -1034,7 +1034,7 @@ test('margin-top', () => {
     }
 
     .-mt-4 {
-      margin-top: -1rem;
+      margin-top: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-mt-\\[--value\\] {
@@ -1042,7 +1042,7 @@ test('margin-top', () => {
     }
 
     .mt-4 {
-      margin-top: 1rem;
+      margin-top: var(--spacing-4, 1rem);
     }
 
     .mt-\\[4px\\] {
@@ -1073,7 +1073,7 @@ test('margin-inline-start', () => {
     }
 
     .-ms-4 {
-      margin-inline-start: -1rem;
+      margin-inline-start: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-ms-\\[--value\\] {
@@ -1081,7 +1081,7 @@ test('margin-inline-start', () => {
     }
 
     .ms-4 {
-      margin-inline-start: 1rem;
+      margin-inline-start: var(--spacing-4, 1rem);
     }
 
     .ms-\\[4px\\] {
@@ -1112,7 +1112,7 @@ test('margin-inline-end', () => {
     }
 
     .-me-4 {
-      margin-inline-end: -1rem;
+      margin-inline-end: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-me-\\[--value\\] {
@@ -1120,7 +1120,7 @@ test('margin-inline-end', () => {
     }
 
     .me-4 {
-      margin-inline-end: 1rem;
+      margin-inline-end: var(--spacing-4, 1rem);
     }
 
     .me-\\[4px\\] {
@@ -1151,7 +1151,7 @@ test('margin-right', () => {
     }
 
     .-mr-4 {
-      margin-right: -1rem;
+      margin-right: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-mr-\\[--value\\] {
@@ -1159,7 +1159,7 @@ test('margin-right', () => {
     }
 
     .mr-4 {
-      margin-right: 1rem;
+      margin-right: var(--spacing-4, 1rem);
     }
 
     .mr-\\[4px\\] {
@@ -1190,7 +1190,7 @@ test('margin-bottom', () => {
     }
 
     .-mb-4 {
-      margin-bottom: -1rem;
+      margin-bottom: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-mb-\\[--value\\] {
@@ -1198,7 +1198,7 @@ test('margin-bottom', () => {
     }
 
     .mb-4 {
-      margin-bottom: 1rem;
+      margin-bottom: var(--spacing-4, 1rem);
     }
 
     .mb-\\[4px\\] {
@@ -1229,7 +1229,7 @@ test('margin-left', () => {
     }
 
     .-ml-4 {
-      margin-left: -1rem;
+      margin-left: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-ml-\\[--value\\] {
@@ -1237,7 +1237,7 @@ test('margin-left', () => {
     }
 
     .ml-4 {
-      margin-left: 1rem;
+      margin-left: var(--spacing-4, 1rem);
     }
 
     .ml-\\[4px\\] {
@@ -1268,41 +1268,41 @@ test('margin sort order', () => {
     }
 
     .m-4 {
-      margin: 1rem;
+      margin: var(--spacing-4, 1rem);
     }
 
     .mx-4 {
-      margin-left: 1rem;
-      margin-right: 1rem;
+      margin-left: var(--spacing-4, 1rem);
+      margin-right: var(--spacing-4, 1rem);
     }
 
     .my-4 {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      margin-top: var(--spacing-4, 1rem);
+      margin-bottom: var(--spacing-4, 1rem);
     }
 
     .ms-4 {
-      margin-inline-start: 1rem;
+      margin-inline-start: var(--spacing-4, 1rem);
     }
 
     .me-4 {
-      margin-inline-end: 1rem;
+      margin-inline-end: var(--spacing-4, 1rem);
     }
 
     .mt-4 {
-      margin-top: 1rem;
+      margin-top: var(--spacing-4, 1rem);
     }
 
     .mr-4 {
-      margin-right: 1rem;
+      margin-right: var(--spacing-4, 1rem);
     }
 
     .mb-4 {
-      margin-bottom: 1rem;
+      margin-bottom: var(--spacing-4, 1rem);
     }
 
     .ml-4 {
-      margin-left: 1rem;
+      margin-left: var(--spacing-4, 1rem);
     }"
   `)
   expect(run(['m'])).toEqual('')
@@ -1540,8 +1540,8 @@ test('size', () => {
     }
 
     .size-4 {
-      width: 1rem;
-      height: 1rem;
+      width: var(--spacing-4, 1rem);
+      height: var(--spacing-4, 1rem);
     }
 
     .size-\\[4px\\] {
@@ -1614,7 +1614,7 @@ test('width', () => {
     }
 
     .w-4 {
-      width: 1rem;
+      width: var(--spacing-4, 1rem);
     }
 
     .w-\\[4px\\] {
@@ -1658,7 +1658,7 @@ test('width', () => {
     }
 
     .w-xl {
-      width: 36rem;
+      width: var(--width-xl, 36rem);
     }"
   `)
   expect(run(['w', '-w-4', '-w-1/2', '-w-[4px]'])).toEqual('')
@@ -1692,7 +1692,7 @@ test('min-width', () => {
     }
 
     .min-w-4 {
-      min-width: 1rem;
+      min-width: var(--spacing-4, 1rem);
     }
 
     .min-w-\\[4px\\] {
@@ -1720,7 +1720,7 @@ test('min-width', () => {
     }
 
     .min-w-xl {
-      min-width: 36rem;
+      min-width: var(--width-xl, 36rem);
     }"
   `)
   expect(run(['min-w', '-min-w-4', '-min-w-[4px]'])).toEqual('')
@@ -1754,7 +1754,7 @@ test('max-width', () => {
     }
 
     .max-w-4 {
-      max-width: 1rem;
+      max-width: var(--spacing-4, 1rem);
     }
 
     .max-w-\\[4px\\] {
@@ -1778,7 +1778,7 @@ test('max-width', () => {
     }
 
     .max-w-xl {
-      max-width: 36rem;
+      max-width: var(--width-xl, 36rem);
     }"
   `)
   expect(run(['max-w', '-max-w-4', '-max-w-[4px]'])).toEqual('')
@@ -1818,7 +1818,7 @@ test('height', () => {
     }
 
     .h-4 {
-      height: 1rem;
+      height: var(--spacing-4, 1rem);
     }
 
     .h-\\[4px\\] {
@@ -1893,7 +1893,7 @@ test('min-height', () => {
     }
 
     .min-h-4 {
-      min-height: 1rem;
+      min-height: var(--spacing-4, 1rem);
     }
 
     .min-h-\\[4px\\] {
@@ -1968,7 +1968,7 @@ test('max-height', () => {
     }
 
     .max-h-4 {
-      max-height: 1rem;
+      max-height: var(--spacing-4, 1rem);
     }
 
     .max-h-\\[4px\\] {
@@ -2116,7 +2116,7 @@ test('flex-basis', () => {
     }
 
     .basis-xl {
-      flex-basis: 36rem;
+      flex-basis: var(--width-xl, 36rem);
     }"
   `)
   expect(run(['basis', '-basis-full', '-basis-[123px]'])).toEqual('')
@@ -2178,8 +2178,8 @@ test('border-spacing', () => {
     }
 
     .border-spacing-1 {
-      --tw-border-spacing-x: .25rem;
-      --tw-border-spacing-y: .25rem;
+      --tw-border-spacing-x: var(--spacing-1, .25rem);
+      --tw-border-spacing-y: var(--spacing-1, .25rem);
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
     }
 
@@ -2221,7 +2221,7 @@ test('border-spacing-x', () => {
     }
 
     .border-spacing-x-1 {
-      --tw-border-spacing-x: .25rem;
+      --tw-border-spacing-x: var(--spacing-1, .25rem);
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
     }
 
@@ -2262,7 +2262,7 @@ test('border-spacing-y', () => {
     }
 
     .border-spacing-y-1 {
-      --tw-border-spacing-y: .25rem;
+      --tw-border-spacing-y: var(--spacing-1, .25rem);
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
     }
 
@@ -2811,7 +2811,7 @@ test('cursor', () => {
     }
 
     .cursor-custom {
-      cursor: url("/my-cursor.png");
+      cursor: var(--cursor-custom, url("/my-cursor.png"));
     }
 
     .cursor-default {
@@ -3224,7 +3224,7 @@ test('scroll-m', () => {
     }
 
     .-scroll-m-4 {
-      scroll-margin: -1rem;
+      scroll-margin: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-m-\\[--value\\] {
@@ -3232,7 +3232,7 @@ test('scroll-m', () => {
     }
 
     .scroll-m-4 {
-      scroll-margin: 1rem;
+      scroll-margin: var(--spacing-4, 1rem);
     }
 
     .scroll-m-\\[4px\\] {
@@ -3259,8 +3259,8 @@ test('scroll-mx', () => {
     }
 
     .-scroll-mx-4 {
-      scroll-margin-left: -1rem;
-      scroll-margin-right: -1rem;
+      scroll-margin-left: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-right: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-mx-\\[--value\\] {
@@ -3269,8 +3269,8 @@ test('scroll-mx', () => {
     }
 
     .scroll-mx-4 {
-      scroll-margin-left: 1rem;
-      scroll-margin-right: 1rem;
+      scroll-margin-left: var(--spacing-4, 1rem);
+      scroll-margin-right: var(--spacing-4, 1rem);
     }
 
     .scroll-mx-\\[4px\\] {
@@ -3298,8 +3298,8 @@ test('scroll-my', () => {
     }
 
     .-scroll-my-4 {
-      scroll-margin-top: -1rem;
-      scroll-margin-bottom: -1rem;
+      scroll-margin-top: calc(var(--spacing-4, 1rem) * -1);
+      scroll-margin-bottom: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-my-\\[--value\\] {
@@ -3308,8 +3308,8 @@ test('scroll-my', () => {
     }
 
     .scroll-my-4 {
-      scroll-margin-top: 1rem;
-      scroll-margin-bottom: 1rem;
+      scroll-margin-top: var(--spacing-4, 1rem);
+      scroll-margin-bottom: var(--spacing-4, 1rem);
     }
 
     .scroll-my-\\[4px\\] {
@@ -3337,7 +3337,7 @@ test('scroll-ms', () => {
     }
 
     .-scroll-ms-4 {
-      scroll-margin-inline-start: -1rem;
+      scroll-margin-inline-start: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-ms-\\[--value\\] {
@@ -3345,7 +3345,7 @@ test('scroll-ms', () => {
     }
 
     .scroll-ms-4 {
-      scroll-margin-inline-start: 1rem;
+      scroll-margin-inline-start: var(--spacing-4, 1rem);
     }
 
     .scroll-ms-\\[4px\\] {
@@ -3372,7 +3372,7 @@ test('scroll-me', () => {
     }
 
     .-scroll-me-4 {
-      scroll-margin-inline-end: -1rem;
+      scroll-margin-inline-end: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-me-\\[--value\\] {
@@ -3380,7 +3380,7 @@ test('scroll-me', () => {
     }
 
     .scroll-me-4 {
-      scroll-margin-inline-end: 1rem;
+      scroll-margin-inline-end: var(--spacing-4, 1rem);
     }
 
     .scroll-me-\\[4px\\] {
@@ -3407,7 +3407,7 @@ test('scroll-mt', () => {
     }
 
     .-scroll-mt-4 {
-      scroll-margin-top: -1rem;
+      scroll-margin-top: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-mt-\\[--value\\] {
@@ -3415,7 +3415,7 @@ test('scroll-mt', () => {
     }
 
     .scroll-mt-4 {
-      scroll-margin-top: 1rem;
+      scroll-margin-top: var(--spacing-4, 1rem);
     }
 
     .scroll-mt-\\[4px\\] {
@@ -3442,7 +3442,7 @@ test('scroll-mr', () => {
     }
 
     .-scroll-mr-4 {
-      scroll-margin-right: -1rem;
+      scroll-margin-right: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-mr-\\[--value\\] {
@@ -3450,7 +3450,7 @@ test('scroll-mr', () => {
     }
 
     .scroll-mr-4 {
-      scroll-margin-right: 1rem;
+      scroll-margin-right: var(--spacing-4, 1rem);
     }
 
     .scroll-mr-\\[4px\\] {
@@ -3477,7 +3477,7 @@ test('scroll-mb', () => {
     }
 
     .-scroll-mb-4 {
-      scroll-margin-bottom: -1rem;
+      scroll-margin-bottom: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-mb-\\[--value\\] {
@@ -3485,7 +3485,7 @@ test('scroll-mb', () => {
     }
 
     .scroll-mb-4 {
-      scroll-margin-bottom: 1rem;
+      scroll-margin-bottom: var(--spacing-4, 1rem);
     }
 
     .scroll-mb-\\[4px\\] {
@@ -3512,7 +3512,7 @@ test('scroll-ml', () => {
     }
 
     .-scroll-ml-4 {
-      scroll-margin-left: -1rem;
+      scroll-margin-left: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-ml-\\[--value\\] {
@@ -3520,7 +3520,7 @@ test('scroll-ml', () => {
     }
 
     .scroll-ml-4 {
-      scroll-margin-left: 1rem;
+      scroll-margin-left: var(--spacing-4, 1rem);
     }
 
     .scroll-ml-\\[4px\\] {
@@ -3547,7 +3547,7 @@ test('scroll-p', () => {
     }
 
     .-scroll-p-4 {
-      scroll-padding: -1rem;
+      scroll-padding: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-p-\\[--value\\] {
@@ -3555,7 +3555,7 @@ test('scroll-p', () => {
     }
 
     .scroll-p-4 {
-      scroll-padding: 1rem;
+      scroll-padding: var(--spacing-4, 1rem);
     }
 
     .scroll-p-\\[4px\\] {
@@ -3582,8 +3582,8 @@ test('scroll-px', () => {
     }
 
     .-scroll-px-4 {
-      scroll-padding-left: -1rem;
-      scroll-padding-right: -1rem;
+      scroll-padding-left: calc(var(--spacing-4, 1rem) * -1);
+      scroll-padding-right: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-px-\\[--value\\] {
@@ -3592,8 +3592,8 @@ test('scroll-px', () => {
     }
 
     .scroll-px-4 {
-      scroll-padding-left: 1rem;
-      scroll-padding-right: 1rem;
+      scroll-padding-left: var(--spacing-4, 1rem);
+      scroll-padding-right: var(--spacing-4, 1rem);
     }
 
     .scroll-px-\\[4px\\] {
@@ -3621,8 +3621,8 @@ test('scroll-py', () => {
     }
 
     .-scroll-py-4 {
-      scroll-padding-top: -1rem;
-      scroll-padding-bottom: -1rem;
+      scroll-padding-top: calc(var(--spacing-4, 1rem) * -1);
+      scroll-padding-bottom: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-py-\\[--value\\] {
@@ -3631,8 +3631,8 @@ test('scroll-py', () => {
     }
 
     .scroll-py-4 {
-      scroll-padding-top: 1rem;
-      scroll-padding-bottom: 1rem;
+      scroll-padding-top: var(--spacing-4, 1rem);
+      scroll-padding-bottom: var(--spacing-4, 1rem);
     }
 
     .scroll-py-\\[4px\\] {
@@ -3660,7 +3660,7 @@ test('scroll-ps', () => {
     }
 
     .-scroll-ps-4 {
-      scroll-padding-inline-start: -1rem;
+      scroll-padding-inline-start: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-ps-\\[--value\\] {
@@ -3668,7 +3668,7 @@ test('scroll-ps', () => {
     }
 
     .scroll-ps-4 {
-      scroll-padding-inline-start: 1rem;
+      scroll-padding-inline-start: var(--spacing-4, 1rem);
     }
 
     .scroll-ps-\\[4px\\] {
@@ -3695,7 +3695,7 @@ test('scroll-pe', () => {
     }
 
     .-scroll-pe-4 {
-      scroll-padding-inline-end: -1rem;
+      scroll-padding-inline-end: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-pe-\\[--value\\] {
@@ -3703,7 +3703,7 @@ test('scroll-pe', () => {
     }
 
     .scroll-pe-4 {
-      scroll-padding-inline-end: 1rem;
+      scroll-padding-inline-end: var(--spacing-4, 1rem);
     }
 
     .scroll-pe-\\[4px\\] {
@@ -3730,7 +3730,7 @@ test('scroll-pt', () => {
     }
 
     .-scroll-pt-4 {
-      scroll-padding-top: -1rem;
+      scroll-padding-top: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-pt-\\[--value\\] {
@@ -3738,7 +3738,7 @@ test('scroll-pt', () => {
     }
 
     .scroll-pt-4 {
-      scroll-padding-top: 1rem;
+      scroll-padding-top: var(--spacing-4, 1rem);
     }
 
     .scroll-pt-\\[4px\\] {
@@ -3765,7 +3765,7 @@ test('scroll-pr', () => {
     }
 
     .-scroll-pr-4 {
-      scroll-padding-right: -1rem;
+      scroll-padding-right: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-pr-\\[--value\\] {
@@ -3773,7 +3773,7 @@ test('scroll-pr', () => {
     }
 
     .scroll-pr-4 {
-      scroll-padding-right: 1rem;
+      scroll-padding-right: var(--spacing-4, 1rem);
     }
 
     .scroll-pr-\\[4px\\] {
@@ -3800,7 +3800,7 @@ test('scroll-pb', () => {
     }
 
     .-scroll-pb-4 {
-      scroll-padding-bottom: -1rem;
+      scroll-padding-bottom: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-pb-\\[--value\\] {
@@ -3808,7 +3808,7 @@ test('scroll-pb', () => {
     }
 
     .scroll-pb-4 {
-      scroll-padding-bottom: 1rem;
+      scroll-padding-bottom: var(--spacing-4, 1rem);
     }
 
     .scroll-pb-\\[4px\\] {
@@ -3835,7 +3835,7 @@ test('scroll-pl', () => {
     }
 
     .-scroll-pl-4 {
-      scroll-padding-left: -1rem;
+      scroll-padding-left: calc(var(--spacing-4, 1rem) * -1);
     }
 
     .-scroll-pl-\\[--value\\] {
@@ -3843,7 +3843,7 @@ test('scroll-pl', () => {
     }
 
     .scroll-pl-4 {
-      scroll-padding-left: 1rem;
+      scroll-padding-left: var(--spacing-4, 1rem);
     }
 
     .scroll-pl-\\[4px\\] {
@@ -3940,7 +3940,7 @@ test('columns', () => {
     }
 
     .columns-3xs {
-      columns: 16rem;
+      columns: var(--width-3xs, 16rem);
     }
 
     .columns-4 {
@@ -3948,7 +3948,7 @@ test('columns', () => {
     }
 
     .columns-7xl {
-      columns: 80rem;
+      columns: var(--width-7xl, 80rem);
     }
 
     .columns-99 {
@@ -4647,7 +4647,7 @@ test('gap', () => {
     }
 
     .gap-4 {
-      gap: 1rem;
+      gap: var(--spacing-4, 1rem);
     }
 
     .gap-\\[4px\\] {
@@ -4674,7 +4674,7 @@ test('gap-x', () => {
     }
 
     .gap-x-4 {
-      column-gap: 1rem;
+      column-gap: var(--spacing-4, 1rem);
     }
 
     .gap-x-\\[4px\\] {
@@ -4701,7 +4701,7 @@ test('gap-y', () => {
     }
 
     .gap-y-4 {
-      row-gap: 1rem;
+      row-gap: var(--spacing-4, 1rem);
     }
 
     .gap-y-\\[4px\\] {
@@ -4728,13 +4728,13 @@ test('space-x', () => {
     }
 
     :where(.-space-x-4 > :not([hidden]) ~ :not([hidden])) {
-      margin-inline-start: calc(calc(1rem * -1) * calc(1 - var(--tw-space-x-reverse)));
-      margin-inline-end: calc(calc(1rem * -1) * var(--tw-space-x-reverse));
+      margin-inline-start: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-x-reverse)));
+      margin-inline-end: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-x-reverse));
     }
 
     :where(.space-x-4 > :not([hidden]) ~ :not([hidden])) {
-      margin-inline-start: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
-      margin-inline-end: calc(1rem * var(--tw-space-x-reverse));
+      margin-inline-start: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-x-reverse)));
+      margin-inline-end: calc(var(--spacing-4, 1rem) * var(--tw-space-x-reverse));
     }
 
     :where(.space-x-\\[4px\\] > :not([hidden]) ~ :not([hidden])) {
@@ -4768,13 +4768,13 @@ test('space-y', () => {
     }
 
     :where(.-space-y-4 > :not([hidden]) ~ :not([hidden])) {
-      margin-bottom: calc(calc(1rem * -1) * var(--tw-space-y-reverse));
-      margin-top: calc(calc(1rem * -1) * calc(1 - var(--tw-space-y-reverse)));
+      margin-bottom: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-y-reverse));
+      margin-top: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-4 > :not([hidden]) ~ :not([hidden])) {
-      margin-bottom: calc(1rem * var(--tw-space-y-reverse));
-      margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+      margin-bottom: calc(var(--spacing-4, 1rem) * var(--tw-space-y-reverse));
+      margin-top: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.space-y-\\[4px\\] > :not([hidden]) ~ :not([hidden])) {
@@ -5111,11 +5111,11 @@ test('accent', () => {
     }
 
     .accent-red-500 {
-      accent-color: #ef4444;
+      accent-color: var(--color-red-500, #ef4444);
     }
 
     .accent-red-500\\/50, .accent-red-500\\/\\[0\\.5\\], .accent-red-500\\/\\[50\\%\\] {
-      accent-color: #ef444480;
+      accent-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .accent-transparent {
@@ -5189,11 +5189,11 @@ test('caret', () => {
     }
 
     .caret-red-500 {
-      caret-color: #ef4444;
+      caret-color: var(--color-red-500, #ef4444);
     }
 
     .caret-red-500\\/50, .caret-red-500\\/\\[0\\.5\\], .caret-red-500\\/\\[50\\%\\] {
-      caret-color: #ef444480;
+      caret-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .caret-transparent {
@@ -5283,19 +5283,19 @@ test('divide-color', () => {
     }
 
     :where(.divide-red-500 > :not([hidden]) ~ :not([hidden])) {
-      border-color: #ef4444;
+      border-color: var(--color-red-500, #ef4444);
     }
 
     :where(.divide-red-500\\/50 > :not([hidden]) ~ :not([hidden])) {
-      border-color: #ef444480;
+      border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     :where(.divide-red-500\\/\\[0\\.5\\] > :not([hidden]) ~ :not([hidden])) {
-      border-color: #ef444480;
+      border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     :where(.divide-red-500\\/\\[50\\%\\] > :not([hidden]) ~ :not([hidden])) {
-      border-color: #ef444480;
+      border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     :where(.divide-transparent > :not([hidden]) ~ :not([hidden])) {
@@ -5817,7 +5817,7 @@ test('rounded', () => {
     }
 
     .rounded-sm {
-      border-radius: .125rem;
+      border-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -5868,8 +5868,8 @@ test('rounded-s', () => {
     }
 
     .rounded-s-sm {
-      border-start-start-radius: .125rem;
-      border-end-start-radius: .125rem;
+      border-start-start-radius: var(--radius-sm, .125rem);
+      border-end-start-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -5920,8 +5920,8 @@ test('rounded-e', () => {
     }
 
     .rounded-e-sm {
-      border-start-end-radius: .125rem;
-      border-end-end-radius: .125rem;
+      border-start-end-radius: var(--radius-sm, .125rem);
+      border-end-end-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -5972,8 +5972,8 @@ test('rounded-t', () => {
     }
 
     .rounded-t-sm {
-      border-top-left-radius: .125rem;
-      border-top-right-radius: .125rem;
+      border-top-left-radius: var(--radius-sm, .125rem);
+      border-top-right-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6024,8 +6024,8 @@ test('rounded-r', () => {
     }
 
     .rounded-r-sm {
-      border-top-right-radius: .125rem;
-      border-bottom-right-radius: .125rem;
+      border-top-right-radius: var(--radius-sm, .125rem);
+      border-bottom-right-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6076,8 +6076,8 @@ test('rounded-b', () => {
     }
 
     .rounded-b-sm {
-      border-bottom-right-radius: .125rem;
-      border-bottom-left-radius: .125rem;
+      border-bottom-right-radius: var(--radius-sm, .125rem);
+      border-bottom-left-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6128,8 +6128,8 @@ test('rounded-l', () => {
     }
 
     .rounded-l-sm {
-      border-top-left-radius: .125rem;
-      border-bottom-left-radius: .125rem;
+      border-top-left-radius: var(--radius-sm, .125rem);
+      border-bottom-left-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6176,7 +6176,7 @@ test('rounded-ss', () => {
     }
 
     .rounded-ss-sm {
-      border-start-start-radius: .125rem;
+      border-start-start-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6229,7 +6229,7 @@ test('rounded-se', () => {
     }
 
     .rounded-se-sm {
-      border-start-end-radius: .125rem;
+      border-start-end-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6282,7 +6282,7 @@ test('rounded-ee', () => {
     }
 
     .rounded-ee-sm {
-      border-end-end-radius: .125rem;
+      border-end-end-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6335,7 +6335,7 @@ test('rounded-es', () => {
     }
 
     .rounded-es-sm {
-      border-end-start-radius: .125rem;
+      border-end-start-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6388,7 +6388,7 @@ test('rounded-tl', () => {
     }
 
     .rounded-tl-sm {
-      border-top-left-radius: .125rem;
+      border-top-left-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6441,7 +6441,7 @@ test('rounded-tr', () => {
     }
 
     .rounded-tr-sm {
-      border-top-right-radius: .125rem;
+      border-top-right-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6494,7 +6494,7 @@ test('rounded-br', () => {
     }
 
     .rounded-br-sm {
-      border-bottom-right-radius: .125rem;
+      border-bottom-right-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6547,7 +6547,7 @@ test('rounded-bl', () => {
     }
 
     .rounded-bl-sm {
-      border-bottom-left-radius: .125rem;
+      border-bottom-left-radius: var(--radius-sm, .125rem);
     }"
   `)
   expect(
@@ -6838,11 +6838,11 @@ test('bg', () => {
     }
 
     .bg-red-500 {
-      background-color: #ef4444;
+      background-color: var(--color-red-500, #ef4444);
     }
 
     .bg-red-500\\/50, .bg-red-500\\/\\[0\\.5\\], .bg-red-500\\/\\[50\\%\\] {
-      background-color: #ef444480;
+      background-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .bg-transparent {
@@ -7080,11 +7080,11 @@ test('bg', () => {
     }
 
     .bg-current\\/custom {
-      background-color: color-mix(in srgb, currentColor var(--custom-opacity), transparent);
+      background-color: color-mix(in srgb, currentColor var(--opacity-custom, var(--custom-opacity)), transparent);
     }
 
     .bg-current\\/half {
-      background-color: color-mix(in srgb, currentColor 50%, transparent);
+      background-color: color-mix(in srgb, currentColor var(--opacity-half, .5), transparent);
     }"
   `)
 })
@@ -7178,12 +7178,12 @@ test('from', () => {
     }
 
     .from-red-500 {
-      --tw-gradient-from: #ef4444;
+      --tw-gradient-from: var(--color-red-500, #ef4444);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .from-red-500\\/50, .from-red-500\\/\\[0\\.5\\], .from-red-500\\/\\[50\\%\\] {
-      --tw-gradient-from: #ef444480;
+      --tw-gradient-from: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -7387,13 +7387,13 @@ test('via', () => {
     }
 
     .via-red-500 {
-      --tw-gradient-via: #ef4444;
+      --tw-gradient-via: var(--color-red-500, #ef4444);
       --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
 
     .via-red-500\\/50, .via-red-500\\/\\[0\\.5\\], .via-red-500\\/\\[50\\%\\] {
-      --tw-gradient-via: #ef444480;
+      --tw-gradient-via: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
       --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -7589,12 +7589,12 @@ test('to', () => {
     }
 
     .to-red-500 {
-      --tw-gradient-to: #ef4444;
+      --tw-gradient-to: var(--color-red-500, #ef4444);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
     .to-red-500\\/50, .to-red-500\\/\\[0\\.5\\], .to-red-500\\/\\[50\\%\\] {
-      --tw-gradient-to: #ef444480;
+      --tw-gradient-to: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -8034,11 +8034,11 @@ test('fill', () => {
     }
 
     .fill-red-500 {
-      fill: #ef4444;
+      fill: var(--color-red-500, #ef4444);
     }
 
     .fill-red-500\\/50, .fill-red-500\\/\\[0\\.5\\], .fill-red-500\\/\\[50\\%\\] {
-      fill: #ef444480;
+      fill: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .fill-transparent {
@@ -8153,11 +8153,11 @@ test('stroke', () => {
     }
 
     .stroke-red-500 {
-      stroke: #ef4444;
+      stroke: var(--color-red-500, #ef4444);
     }
 
     .stroke-red-500\\/50, .stroke-red-500\\/\\[0\\.5\\], .stroke-red-500\\/\\[50\\%\\] {
-      stroke: #ef444480;
+      stroke: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .stroke-transparent {
@@ -8333,7 +8333,7 @@ test('p', () => {
     }
 
     .p-4 {
-      padding: 1rem;
+      padding: var(--spacing-4, 1rem);
     }
 
     .p-\\[4px\\] {
@@ -8360,8 +8360,8 @@ test('px', () => {
     }
 
     .px-4 {
-      padding-left: 1rem;
-      padding-right: 1rem;
+      padding-left: var(--spacing-4, 1rem);
+      padding-right: var(--spacing-4, 1rem);
     }
 
     .px-\\[4px\\] {
@@ -8389,8 +8389,8 @@ test('py', () => {
     }
 
     .py-4 {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+      padding-top: var(--spacing-4, 1rem);
+      padding-bottom: var(--spacing-4, 1rem);
     }
 
     .py-\\[4px\\] {
@@ -8418,7 +8418,7 @@ test('pt', () => {
     }
 
     .pt-4 {
-      padding-top: 1rem;
+      padding-top: var(--spacing-4, 1rem);
     }
 
     .pt-\\[4px\\] {
@@ -8445,7 +8445,7 @@ test('ps', () => {
     }
 
     .ps-4 {
-      padding-inline-start: 1rem;
+      padding-inline-start: var(--spacing-4, 1rem);
     }
 
     .ps-\\[4px\\] {
@@ -8472,7 +8472,7 @@ test('pe', () => {
     }
 
     .pe-4 {
-      padding-inline-end: 1rem;
+      padding-inline-end: var(--spacing-4, 1rem);
     }
 
     .pe-\\[4px\\] {
@@ -8499,7 +8499,7 @@ test('pr', () => {
     }
 
     .pr-4 {
-      padding-right: 1rem;
+      padding-right: var(--spacing-4, 1rem);
     }
 
     .pr-\\[4px\\] {
@@ -8526,7 +8526,7 @@ test('pb', () => {
     }
 
     .pb-4 {
-      padding-bottom: 1rem;
+      padding-bottom: var(--spacing-4, 1rem);
     }
 
     .pb-\\[4px\\] {
@@ -8553,7 +8553,7 @@ test('pl', () => {
     }
 
     .pl-4 {
-      padding-left: 1rem;
+      padding-left: var(--spacing-4, 1rem);
     }
 
     .pl-\\[4px\\] {
@@ -8719,7 +8719,7 @@ test('font', () => {
     }
 
     .font-sans {
-      font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+      font-family: var(--font-family-sans, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
     }
 
     .font-\\[--my-family\\] {
@@ -8894,19 +8894,19 @@ test('placeholder', () => {
     }
 
     .placeholder-red-500::placeholder {
-      color: #ef4444;
+      color: var(--color-red-500, #ef4444);
     }
 
     .placeholder-red-500\\/50::placeholder {
-      color: #ef444480;
+      color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .placeholder-red-500\\/\\[0\\.5\\]::placeholder {
-      color: #ef444480;
+      color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .placeholder-red-500\\/\\[50\\%\\]::placeholder {
-      color: #ef444480;
+      color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .placeholder-transparent::placeholder {
@@ -9030,11 +9030,13 @@ test('decoration', () => {
     }
 
     .decoration-red-500 {
-      text-decoration-color: #ef4444;
+      -webkit-text-decoration-color: var(--color-red-500, #ef4444);
+      text-decoration-color: var(--color-red-500, #ef4444);
     }
 
     .decoration-red-500\\/50, .decoration-red-500\\/\\[0\\.5\\], .decoration-red-500\\/\\[50\\%\\] {
-      text-decoration-color: #ef444480;
+      -webkit-text-decoration-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
+      text-decoration-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .decoration-transparent {
@@ -9163,7 +9165,7 @@ test('animate', () => {
     }
 
     .animate-spin {
-      animation: 1s linear infinite spin;
+      animation: var(--animate-spin, spin 1s linear infinite);
     }"
   `)
   expect(
@@ -9230,7 +9232,7 @@ test('filter', () => {
     }
 
     .blur-xl {
-      --tw-blur: blur(24px);
+      --tw-blur: blur(var(--blur-xl, 24px));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
@@ -9250,7 +9252,7 @@ test('filter', () => {
     }
 
     .drop-shadow-xl {
-      --tw-drop-shadow: drop-shadow(0 20px 13px #00000008) drop-shadow(0 8px 5px #00000014);
+      --tw-drop-shadow: drop-shadow(var(--drop-shadow-xl, 0 20px 13px #00000008, 0 8px 5px #00000014));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
@@ -9479,7 +9481,7 @@ test('backdrop-filter', () => {
     }
 
     .backdrop-blur-xl {
-      --tw-backdrop-blur: blur(24px);
+      --tw-backdrop-blur: blur(var(--blur-xl, 24px));
       -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
       backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
     }
@@ -9850,11 +9852,11 @@ test('ease', () => {
     }
 
     .ease-in {
-      transition-timing-function: cubic-bezier(.4, 0, 1, 1);
+      transition-timing-function: var(--transition-timing-function-in, cubic-bezier(.4, 0, 1, 1));
     }
 
     .ease-out {
-      transition-timing-function: cubic-bezier(0, 0, .2, 1);
+      transition-timing-function: var(--transition-timing-function-out, cubic-bezier(0, 0, .2, 1));
     }"
   `)
   expect(run(['-ease-in', '-ease-out', '-ease-[--value]'])).toEqual('')
@@ -10035,7 +10037,7 @@ test('leading', () => {
     }
 
     .leading-6 {
-      line-height: 1.5rem;
+      line-height: var(--line-height-6, 1.5rem);
     }
 
     .leading-\\[--value\\] {
@@ -10043,7 +10045,7 @@ test('leading', () => {
     }
 
     .leading-none {
-      line-height: 1;
+      line-height: var(--line-height-none, 1);
     }"
   `)
   expect(run(['leading', '-leading-none', '-leading-6', '-leading-[--value]'])).toEqual('')
@@ -10076,11 +10078,11 @@ test('tracking', () => {
     }
 
     .tracking-normal {
-      letter-spacing: 0;
+      letter-spacing: var(--letter-spacing-normal, 0em);
     }
 
     .tracking-wide {
-      letter-spacing: .025em;
+      letter-spacing: var(--letter-spacing-wide, .025em);
     }"
   `)
   expect(run(['tracking'])).toEqual('')
@@ -10336,11 +10338,11 @@ test('outline', () => {
     }
 
     .outline-red-500 {
-      outline-color: #ef4444;
+      outline-color: var(--color-red-500, #ef4444);
     }
 
     .outline-red-500\\/50, .outline-red-500\\/\\[0\\.5\\], .outline-red-500\\/\\[50\\%\\] {
-      outline-color: #ef444480;
+      outline-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .outline-transparent {
@@ -10565,42 +10567,42 @@ test('text', () => {
     }
 
     .text-sm {
-      font-size: .875rem;
-      line-height: 1.25rem;
+      font-size: var(--font-size-sm, .875rem);
+      line-height: var(--font-size-sm--line-height, 1.25rem);
     }
 
     .text-\\[12px\\]\\/6 {
       font-size: 12px;
-      line-height: 1.5rem;
+      line-height: var(--line-height-6, 1.5rem);
     }
 
     .text-\\[50\\%\\]\\/6 {
       font-size: 50%;
-      line-height: 1.5rem;
+      line-height: var(--line-height-6, 1.5rem);
     }
 
     .text-\\[clamp\\(1rem\\,var\\(--size\\)\\,3rem\\)\\]\\/9 {
       font-size: clamp(1rem, var(--size), 3rem);
-      line-height: 2.25rem;
+      line-height: var(--line-height-9, 2.25rem);
     }
 
     .text-\\[larger\\]\\/6 {
       font-size: larger;
-      line-height: 1.5rem;
+      line-height: var(--line-height-6, 1.5rem);
     }
 
     .text-\\[xx-large\\]\\/6 {
       font-size: xx-large;
-      line-height: 1.5rem;
+      line-height: var(--line-height-6, 1.5rem);
     }
 
     .text-sm\\/6 {
-      font-size: .875rem;
-      line-height: 1.5rem;
+      font-size: var(--font-size-sm, .875rem);
+      line-height: var(--line-height-6, 1.5rem);
     }
 
     .text-sm\\/\\[4px\\] {
-      font-size: .875rem;
+      font-size: var(--font-size-sm, .875rem);
       line-height: 4px;
     }
 
@@ -10669,11 +10671,11 @@ test('text', () => {
     }
 
     .text-red-500 {
-      color: #ef4444;
+      color: var(--color-red-500, #ef4444);
     }
 
     .text-red-500\\/50, .text-red-500\\/\\[0\\.5\\], .text-red-500\\/\\[50\\%\\] {
-      color: #ef444480;
+      color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .text-transparent {
@@ -10791,8 +10793,8 @@ test('shadow', () => {
     }
 
     .shadow-xl {
-      --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
-      --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+      --tw-shadow: var(--shadow-xl, 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a);
+      --tw-shadow-colored: var(--shadow-xl, 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -10827,12 +10829,12 @@ test('shadow', () => {
     }
 
     .shadow-red-500 {
-      --tw-shadow-color: #ef4444;
+      --tw-shadow-color: var(--color-red-500, #ef4444);
       --tw-shadow: var(--tw-shadow-colored);
     }
 
     .shadow-red-500\\/50, .shadow-red-500\\/\\[0\\.5\\], .shadow-red-500\\/\\[50\\%\\] {
-      --tw-shadow-color: #ef444480;
+      --tw-shadow-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
       --tw-shadow: var(--tw-shadow-colored);
     }
 
@@ -11017,8 +11019,8 @@ test('inset-shadow', () => {
     }
 
     .inset-shadow-sm {
-      --tw-inset-shadow: inset 0 1px 1px #0000000d;
-      --tw-inset-shadow-colored: inset 0 1px 1px var(--tw-inset-shadow-color);
+      --tw-inset-shadow: var(--inset-shadow-sm, inset 0 1px 1px #0000000d);
+      --tw-inset-shadow-colored: var(--inset-shadow-sm, inset 0 1px 1px #0000000d);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -11053,12 +11055,12 @@ test('inset-shadow', () => {
     }
 
     .inset-shadow-red-500 {
-      --tw-inset-shadow-color: #ef4444;
+      --tw-inset-shadow-color: var(--color-red-500, #ef4444);
       --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
     .inset-shadow-red-500\\/50, .inset-shadow-red-500\\/\\[0\\.5\\], .inset-shadow-red-500\\/\\[50\\%\\] {
-      --tw-inset-shadow-color: #ef444480;
+      --tw-inset-shadow-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
       --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
@@ -11275,11 +11277,11 @@ test('ring', () => {
     }
 
     .ring-red-500 {
-      --tw-ring-color: #ef4444;
+      --tw-ring-color: var(--color-red-500, #ef4444);
     }
 
     .ring-red-500\\/50, .ring-red-500\\/\\[0\\.5\\], .ring-red-500\\/\\[50\\%\\] {
-      --tw-ring-color: #ef444480;
+      --tw-ring-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .ring-transparent {
@@ -11503,11 +11505,11 @@ test('inset-ring', () => {
     }
 
     .inset-ring-red-500 {
-      --tw-inset-ring-color: #ef4444;
+      --tw-inset-ring-color: var(--color-red-500, #ef4444);
     }
 
     .inset-ring-red-500\\/50, .inset-ring-red-500\\/\\[0\\.5\\], .inset-ring-red-500\\/\\[50\\%\\] {
-      --tw-inset-ring-color: #ef444480;
+      --tw-inset-ring-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .inset-ring-transparent {
@@ -11722,11 +11724,11 @@ test('ring-offset', () => {
     }
 
     .ring-offset-red-500 {
-      --tw-ring-offset-color: #ef4444;
+      --tw-ring-offset-color: var(--color-red-500, #ef4444);
     }
 
     .ring-offset-red-500\\/50, .ring-offset-red-500\\/\\[0\\.5\\], .ring-offset-red-500\\/\\[50\\%\\] {
-      --tw-ring-offset-color: #ef444480;
+      --tw-ring-offset-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
     .ring-offset-transparent {
