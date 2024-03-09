@@ -44,7 +44,7 @@ describe('compiling CSS', () => {
 
         @media (prefers-color-scheme: dark) {
           .dark\\:bg-black {
-            background-color: #000;
+            background-color: var(--color-black, #000);
           }
         }
       }"
@@ -186,28 +186,28 @@ describe('@apply', () => {
       .foo {
         --tw-translate-x: 100%;
         translate: var(--tw-translate-x) var(--tw-translate-y);
-        background-color: #ef4444;
+        animation: var(--animate-spin, spin 1s linear infinite);
+        background-color: var(--color-red-500, #ef4444);
         text-decoration-line: underline;
-        animation: 1s linear infinite spin;
       }
 
       .foo:hover {
-        background-color: #3b82f6;
+        background-color: var(--color-blue-500, #3b82f6);
       }
 
       @media (width >= 768px) {
         .foo {
-          background-color: #22c55e;
+          background-color: var(--color-green-500, #22c55e);
         }
       }
 
       .foo:hover:focus {
-        background-color: #fecaca;
+        background-color: var(--color-red-200, #fecaca);
       }
 
       @media (width >= 768px) {
         .foo:hover:focus {
-          background-color: #bbf7d0;
+          background-color: var(--color-green-200, #bbf7d0);
         }
       }
 
@@ -418,7 +418,7 @@ describe('important', () => {
       }
 
       .animate-spin\\! {
-        animation: 1s linear infinite spin !important;
+        animation: var(--animate-spin, spin 1s linear infinite) !important;
       }
 
       @keyframes spin {
@@ -464,16 +464,16 @@ describe('sorting', () => {
       }
 
       .p-1 {
-        padding: .25rem;
+        padding: var(--spacing-1, .25rem);
       }
 
       .px-1 {
-        padding-left: .25rem;
-        padding-right: .25rem;
+        padding-left: var(--spacing-1, .25rem);
+        padding-right: var(--spacing-1, .25rem);
       }
 
       .pl-1 {
-        padding-left: .25rem;
+        padding-left: var(--spacing-1, .25rem);
       }"
     `)
   })
@@ -522,17 +522,17 @@ describe('sorting', () => {
       }
 
       .mx-0 {
-        margin-left: 0;
-        margin-right: 0;
+        margin-left: var(--spacing-0, 0px);
+        margin-right: var(--spacing-0, 0px);
       }
 
       .gap-4 {
-        gap: 1rem;
+        gap: var(--spacing-4, 1rem);
       }
 
       :where(.space-x-2 > :not([hidden]) ~ :not([hidden])) {
-        margin-inline-start: calc(.5rem * calc(1 - var(--tw-space-x-reverse)));
-        margin-inline-end: calc(.5rem * var(--tw-space-x-reverse));
+        margin-inline-start: calc(var(--spacing-2, .5rem) * calc(1 - var(--tw-space-x-reverse)));
+        margin-inline-end: calc(var(--spacing-2, .5rem) * var(--tw-space-x-reverse));
       }
 
       @property --tw-space-x-reverse {
@@ -713,7 +713,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .accent-red-500 {
-        accent-color: red;
+        accent-color: var(--color-red-500, red);
       }"
     `)
   })
@@ -736,7 +736,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .accent-red-500 {
-        accent-color: #f10;
+        accent-color: var(--color-red-500, #f10);
       }"
     `)
   })
@@ -762,11 +762,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .accent-blue-500 {
-        accent-color: #00f;
+        accent-color: var(--color-blue-500, #00f);
       }
 
       .accent-red-500 {
-        accent-color: red;
+        accent-color: var(--color-red-500, red);
       }"
     `)
   })
@@ -791,11 +791,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .w-1\\/2 {
-        width: 75%;
+        width: var(--width-1\\/2, 75%);
       }
 
       .w-75\\% {
-        width: 50%;
+        width: var(--width-75\\%, 50%);
       }"
     `)
   })
@@ -828,11 +828,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .text-lg {
-        font-size: 20px;
+        font-size: var(--font-size-lg, 20px);
       }
 
       .accent-red {
-        accent-color: red;
+        accent-color: var(--color-red, red);
       }
 
       @keyframes foo {
@@ -871,11 +871,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .text-sm {
-        font-size: 13px;
+        font-size: var(--font-size-sm, 13px);
       }
 
       .accent-green {
-        accent-color: #0f0;
+        accent-color: var(--color-green, #0f0);
       }"
     `)
   })
@@ -906,7 +906,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .accent-green {
-        accent-color: #0f0;
+        accent-color: var(--color-green, #0f0);
       }"
     `)
   })
@@ -944,7 +944,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .animate-foobar {
-        animation: 1s infinite foobar;
+        animation: var(--animate-foobar, foobar 1s infinite);
       }
 
       @keyframes foobar {
@@ -975,11 +975,11 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-potato {
-        background-color: #ac855b;
+        background-color: var(--color-potato, #ac855b);
       }
 
       .bg-tomato {
-        background-color: #e10c04;
+        background-color: var(--color-tomato, #e10c04);
       }"
     `)
   })
@@ -1000,7 +1000,7 @@ describe('Parsing themes values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ".bg-potato {
-        background-color: #c794aa;
+        background-color: var(--color-potato, #c794aa);
       }"
     `)
   })
@@ -1025,7 +1025,7 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-potato {
-        background-color: #c794aa;
+        background-color: var(--color-potato, #c794aa);
       }"
     `)
   })
@@ -1055,15 +1055,15 @@ describe('Parsing themes values from CSS', () => {
       }
 
       .bg-avocado {
-        background-color: #c0cc6d;
+        background-color: var(--color-avocado, #c0cc6d);
       }
 
       .bg-potato {
-        background-color: #ac855b;
+        background-color: var(--color-potato, #ac855b);
       }
 
       .bg-tomato {
-        background-color: #e10c04;
+        background-color: var(--color-tomato, #e10c04);
       }"
     `)
   })
