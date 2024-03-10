@@ -5809,7 +5809,7 @@ test('rounded', () => {
     }
 
     .rounded-full {
-      border-radius: 9999px;
+      border-radius: 3.40282e38px;
     }
 
     .rounded-none {
