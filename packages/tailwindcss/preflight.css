@@ -8,6 +8,7 @@
 ::after,
 ::before,
 ::backdrop,
+::first-letter,
 ::file-selector-button {
   box-sizing: border-box; /* 1 */
   margin: 0; /* 2 */
