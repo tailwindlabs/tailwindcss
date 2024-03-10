@@ -2607,13 +2607,13 @@ test('scale', () => {
     }
 
     @property --tw-scale-x {
-      syntax: "<number>";
+      syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-y {
-      syntax: "<number>";
+      syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
     }"
@@ -2639,13 +2639,13 @@ test('scale-x', () => {
     }
 
     @property --tw-scale-x {
-      syntax: "<number>";
+      syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-y {
-      syntax: "<number>";
+      syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
     }"
@@ -2671,13 +2671,13 @@ test('scale-y', () => {
     }
 
     @property --tw-scale-x {
-      syntax: "<number>";
+      syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
     }
 
     @property --tw-scale-y {
-      syntax: "<number>";
+      syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
     }"
