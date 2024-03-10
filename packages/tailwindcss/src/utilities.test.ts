@@ -5787,8 +5787,6 @@ test('rounded', () => {
     compileCss(
       css`
         @theme {
-          --radius-none: 0px;
-          --radius-full: 9999px;
           --radius-sm: 0.125rem;
           --radius: 0.25rem;
         }
@@ -5798,8 +5796,6 @@ test('rounded', () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --radius-none: 0px;
-      --radius-full: 9999px;
       --radius-sm: .125rem;
       --radius: .25rem;
     }
