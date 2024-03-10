@@ -145,7 +145,7 @@ test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) =>
     page,
     html`<div
       id="x"
-      class="shadow shadow-[#f00]/50 inset-shadow inset-shadow-[#0f0]/50 ring ring-white/50 inset-ring inset-ring-[#00f]/50"
+      class="shadow shadow-[#f00]/50 inset-shadow inset-shadow-[#0f0]/50 ring ring-[#fff]/50 inset-ring inset-ring-[#00f]/50"
     ></div>`,
   )
 
