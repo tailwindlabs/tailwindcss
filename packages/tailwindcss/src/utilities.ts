@@ -3430,7 +3430,10 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [decl('will-change', value)],
   })
 
-  staticUtility('content-none', [['content', 'none']])
+  staticUtility('content-none', [
+    ['--tw-content', 'none'],
+    ['content', 'none'],
+  ])
   functionalUtility('content', {
     themeKeys: [],
     handle: (value) => [
