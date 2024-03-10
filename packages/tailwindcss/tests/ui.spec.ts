@@ -221,6 +221,18 @@ test('dividers can be added without setting border-style', async ({ page }) => {
   expect(await getPropertyValue('#b', 'border-top')).toEqual('4px dashed rgb(0, 0, 0)')
 })
 
+test('scale can be a number or percentage', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`<div id="x" class="scale-[50%] hover:scale-[1.5]">Hello world</div>`,
+  )
+  expect(await getPropertyValue('#x', 'scale')).toEqual('0.5')
+
+  await page.locator('#x').hover()
+
+  expect(await getPropertyValue('#x', 'scale')).toEqual('1.5')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
