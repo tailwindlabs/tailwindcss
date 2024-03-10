@@ -1,5 +1,7 @@
 /*
-  Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+  1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+  2. Remove default margins and padding
+  3. Reset all borders.
 */
 
 *,
@@ -7,15 +9,10 @@
 ::before,
 ::backdrop,
 ::file-selector-button {
-  box-sizing: border-box;
-}
-
-/*
-  Remove any default margins.
-*/
-
-* {
-  margin: 0;
+  box-sizing: border-box; /* 1 */
+  margin: 0; /* 2 */
+  padding: 0; /* 2 */
+  border: 0 solid; /* 3 */
 }
 
 /*
@@ -65,7 +62,6 @@ body {
 hr {
   height: 0; /* 1 */
   color: inherit; /* 2 */
-  border: 0 solid; /* 3 */
   border-top-width: 1px; /* 3 */
 }
 
@@ -180,9 +176,7 @@ table {
 
 /*
   1. Inherit the font styles in all browsers.
-  2. Reset the default inset border style to solid.
-  3. Remove the default background color.
-  4. Remove default padding.
+  2. Remove the default background color.
 */
 
 button,
@@ -195,20 +189,26 @@ textarea,
   font-feature-settings: inherit; /* 1 */
   font-variation-settings: inherit; /* 1 */
   color: inherit; /* 1 */
-  border: 1px solid; /* 2 */
-  background: transparent; /* 3 */
-  padding: 0; /* 4 */
+  background: transparent; /* 2 */
 }
 
 /*
-  1. Correct the inability to style the border radius in iOS Safari.
-  2. Make borders opt-in.
+  Reset the default inset border style for form controls to solid.
+*/
+
+input:where(:not([type='button'], [type='reset'], [type='submit'])),
+select,
+textarea {
+  border: 1px solid;
+}
+
+/*
+  Correct the inability to style the border radius in iOS Safari.
 */
 button,
 input:where([type='button'], [type='reset'], [type='submit']),
 ::file-selector-button {
-  appearance: button; /* 1 */
-  border: 0; /* 2 */
+  appearance: button;
 }
 
 /*
@@ -261,19 +261,6 @@ summary {
 }
 
 /*
-  Remove the default border and spacing for fieldset and legend elements.
-*/
-
-fieldset {
-  border: 0;
-  padding: 0;
-}
-
-legend {
-  padding: 0;
-}
-
-/*
   Make lists unstyled by default.
 */
 
@@ -281,15 +268,6 @@ ol,
 ul,
 menu {
   list-style: none;
-  padding: 0;
-}
-
-/*
-  Remove the default padding from dialog elements.
-*/
-
-dialog {
-  padding: 0;
 }
 
 /*

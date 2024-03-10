@@ -404,14 +404,16 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 @layer base {
   *, :after, :before, ::backdrop {
     box-sizing: border-box;
+    border: 0 solid;
+    margin: 0;
+    padding: 0;
   }
 
   ::file-selector-button {
     box-sizing: border-box;
-  }
-
-  * {
+    border: 0 solid;
     margin: 0;
+    padding: 0;
   }
 
   html, :host {
@@ -430,7 +432,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   hr {
     color: inherit;
-    border: 0 solid;
     border-top-width: 1px;
     height: 0;
   }
@@ -494,8 +495,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     color: inherit;
     background: none;
-    border: 1px solid;
-    padding: 0;
   }
 
   ::file-selector-button {
@@ -504,18 +503,18 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font-variation-settings: inherit;
     color: inherit;
     background: none;
+  }
+
+  input:where(:not([type="button"], [type="reset"], [type="submit"])), select, textarea {
     border: 1px solid;
-    padding: 0;
   }
 
   button, input:where([type="button"], [type="reset"], [type="submit"]) {
     appearance: button;
-    border: 0;
   }
 
   ::file-selector-button {
     appearance: button;
-    border: 0;
   }
 
   :-moz-focusring {
@@ -546,22 +545,8 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     display: list-item;
   }
 
-  fieldset {
-    border: 0;
-    padding: 0;
-  }
-
-  legend {
-    padding: 0;
-  }
-
   ol, ul, menu {
-    padding: 0;
     list-style: none;
-  }
-
-  dialog {
-    padding: 0;
   }
 
   textarea {
