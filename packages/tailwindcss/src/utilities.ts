@@ -1312,7 +1312,10 @@ export function createUtilities(theme: Theme) {
   ])
 
   let scaleProperties = () =>
-    atRoot([property('--tw-scale-x', '1', '<number>'), property('--tw-scale-y', '1', '<number>')])
+    atRoot([
+      property('--tw-scale-x', '1', '<number> | <percentage>'),
+      property('--tw-scale-y', '1', '<number> | <percentage>'),
+    ])
 
   /**
    * @css `scale`
