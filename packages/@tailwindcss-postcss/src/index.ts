@@ -53,35 +53,32 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       postcssImport(),
 
       (root, result) => {
-        let from = result.opts.from ?? ''
-        let context = cache.get(from)
+        let inputFile = result.opts.from ?? ''
+        let context = cache.get(inputFile)
 
         let rebuildStrategy: 'full' | 'incremental' = 'incremental'
 
         // Track file modification times to CSS files
         {
-          let changedTime = fs.statSync(from, { throwIfNoEntry: false })?.mtimeMs ?? null
-          if (changedTime !== null) {
-            let prevTime = context.mtimes.get(from)
-            if (prevTime !== changedTime) {
-              rebuildStrategy = 'full'
-              context.mtimes.set(from, changedTime)
-            }
-          } else {
-            rebuildStrategy = 'full'
-          }
-          for (let message of result.messages) {
-            if (message.type === 'dependency') {
-              let file = message.file as string
-              let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
-              if (changedTime !== null) {
-                let prevTime = context.mtimes.get(file)
-                if (prevTime !== changedTime) {
-                  rebuildStrategy = 'full'
-                  context.mtimes.set(file, changedTime)
-                }
+          let files = result.messages.flatMap((message) => {
+            if (message.type !== 'dependency') return []
+            return message.file
+          })
+          files.push(inputFile)
+          for (let file of files) {
+            let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
+            if (changedTime === null) {
+              if (file === inputFile) {
+                rebuildStrategy = 'full'
               }
+              continue
             }
+
+            let prevTime = context.mtimes.get(file)
+            if (prevTime === changedTime) continue
+
+            rebuildStrategy = 'full'
+            context.mtimes.set(file, changedTime)
           }
         }
 
