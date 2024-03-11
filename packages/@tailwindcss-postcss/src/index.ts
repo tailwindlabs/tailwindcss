@@ -58,7 +58,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
         let rebuildStrategy: 'full' | 'incremental' = 'incremental'
 
-        // Bookkeeping — track file modification times to CSS files
+        // Track file modification times to CSS files
         {
           let changedTime = fs.statSync(from, { throwIfNoEntry: false })?.mtimeMs ?? null
           if (changedTime !== null) {
