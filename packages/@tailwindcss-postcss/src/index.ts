@@ -132,20 +132,11 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         }
 
         if (rebuildStrategy === 'full') {
-          if (hasTailwind) {
-            let { build } = compile(root.toString())
-            css = build(candidates)
-            context.build = build
-          } else {
-            css = compile(root.toString()).build([])
-          }
+          let { build } = compile(root.toString())
+          context.build = build
+          css = build(hasTailwind ? candidates : [])
         } else if (rebuildStrategy === 'incremental') {
           css = context.build!(candidates)
-        }
-
-        function replaceCss(css: string) {
-          root.removeAll()
-          root.append(postcss.parse(css, result.opts))
         }
 
         // Replace CSS
@@ -155,7 +146,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           })
         }
         context.css = css
-        replaceCss(optimize ? context.optimizedCss : context.css)
+        root.removeAll()
+        root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
       },
     ],
   }
