@@ -21,10 +21,12 @@ export default function tailwindcss(): Plugin[] {
     if (!server) return
 
     let updates: Update[] = []
-    for (let id of cssModules) {
+    for (let id of cssModules.values()) {
       let cssModule = server.moduleGraph.getModuleById(id)
       if (!cssModule) {
-        console.log('Could not find css module', id)
+        // It is safe to remove the item here since we're iterating on a copy of
+        // the values.
+        cssModules.delete(id)
         continue
       }
 
