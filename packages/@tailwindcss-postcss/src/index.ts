@@ -41,8 +41,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
     return {
       mtimes: new Map<string, number>(),
       build: null as null | ReturnType<typeof compile>['build'],
-      previousCss: '',
-      previousOptimizedCss: '',
+      css: '',
+      optimizedCss: '',
     }
   })
 
@@ -149,24 +149,13 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         }
 
         // Replace CSS
-        if (css === context.previousCss) {
-          if (optimize) {
-            replaceCss(context.previousOptimizedCss)
-          } else {
-            replaceCss(css)
-          }
-        } else {
-          if (optimize) {
-            let optimizedCss = optimizeCss(css, {
-              minify: typeof optimize === 'object' ? optimize.minify : true,
-            })
-            replaceCss(optimizedCss)
-            context.previousOptimizedCss = optimizedCss
-          } else {
-            replaceCss(css)
-          }
-          context.previousCss = css
+        if (css !== context.css && optimize) {
+          context.optimizedCss = optimizeCss(css, {
+            minify: typeof optimize === 'object' ? optimize.minify : true,
+          })
         }
+        context.css = css
+        replaceCss(optimize ? context.optimizedCss : context.css)
       },
     ],
   }
