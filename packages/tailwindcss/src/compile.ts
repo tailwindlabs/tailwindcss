@@ -8,7 +8,10 @@ import type { Variants } from './variants'
 export function compileCandidates(
   rawCandidates: Iterable<string>,
   designSystem: DesignSystem,
-  { throwOnInvalidCandidate = false } = {},
+  {
+    throwOnInvalidCandidate = false,
+    onInvalidCanidate,
+  }: { throwOnInvalidCandidate?: boolean; onInvalidCanidate?: (candidate: string) => void } = {},
 ) {
   let nodeSorting = new Map<
     AstNode,
@@ -24,7 +27,7 @@ export function compileCandidates(
       if (throwOnInvalidCandidate) {
         throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
       }
-      designSystem.markInvalidCandidate(rawCandidate)
+      onInvalidCanidate?.(rawCandidate)
       continue // Bail, invalid candidate
     }
     candidates.set(candidate, rawCandidate)
@@ -42,7 +45,7 @@ export function compileCandidates(
       if (throwOnInvalidCandidate) {
         throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
       }
-      designSystem.markInvalidCandidate(rawCandidate)
+      onInvalidCanidate?.(rawCandidate)
       continue next
     }
 

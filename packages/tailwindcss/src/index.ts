@@ -19,6 +19,12 @@ export function compile(
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
   }
 
+  // Track all invalid candidates
+  let invalidCandidates = new Set<string>()
+  function onInvalidCanidate(candidate: string) {
+    invalidCandidates.add(candidate)
+  }
+
   // Find all `@theme` declarations
   let theme = new Theme()
   let firstThemeRule: Rule | null = null
@@ -112,7 +118,7 @@ export function compile(
       tailwindUtilitiesNode = node
 
       // Set the `@tailwind utilities` nodes, to the actual generated CSS
-      node.nodes = compileCandidates(rawCandidates, designSystem).astNodes
+      node.nodes = compileCandidates(rawCandidates, designSystem, { onInvalidCanidate }).astNodes
 
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
@@ -135,6 +141,7 @@ export function compile(
           // Parse the candidates to an AST that we can replace the `@apply` rule with.
           let candidateAst = compileCandidates(candidates, designSystem, {
             throwOnInvalidCandidate: true,
+            onInvalidCanidate,
           }).astNodes
 
           // Collect the nodes to insert in place of the `@apply` rule. When a
@@ -179,7 +186,7 @@ export function compile(
   // and should be ignored.
   let allValidCandidates = new Set<string>()
   for (let rawCandidate of rawCandidates) {
-    if (!designSystem.isInvalidCandidate(rawCandidate)) {
+    if (!invalidCandidates.has(rawCandidate)) {
       allValidCandidates.add(rawCandidate)
     }
   }
@@ -193,7 +200,7 @@ export function compile(
       // Add all new candidates unless we know that they are invalid.
       let prevSize = allValidCandidates.size
       for (let candidate of newRawCandidates) {
-        if (!designSystem.isInvalidCandidate(candidate)) {
+        if (!invalidCandidates.has(candidate)) {
           allValidCandidates.add(candidate)
           didChange ||= allValidCandidates.size !== prevSize
         }
@@ -206,7 +213,9 @@ export function compile(
       }
 
       if (tailwindUtilitiesNode) {
-        let newNodes = compileCandidates(allValidCandidates, designSystem).astNodes
+        let newNodes = compileCandidates(allValidCandidates, designSystem, {
+          onInvalidCanidate,
+        }).astNodes
 
         // If no new ast nodes were generated, then we can return the original
         // CSS. This currently assumes that we only add new ast nodes and never
