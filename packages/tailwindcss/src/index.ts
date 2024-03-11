@@ -140,8 +140,9 @@ export function compile(
         {
           // Parse the candidates to an AST that we can replace the `@apply` rule with.
           let candidateAst = compileCandidates(candidates, designSystem, {
-            throwOnInvalidCandidate: true,
-            onInvalidCanidate,
+            onInvalidCanidate: (candidate) => {
+              throw new Error(`Cannot apply unknown utility class: ${candidate}`)
+            },
           }).astNodes
 
           // Collect the nodes to insert in place of the `@apply` rule. When a

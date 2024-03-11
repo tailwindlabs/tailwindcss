@@ -42,7 +42,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       let result: (string | null)[] = []
 
       for (let className of classes) {
-        let { astNodes } = compileCandidates([className], this, { throwOnInvalidCandidate: false })
+        let { astNodes } = compileCandidates([className], this)
         if (astNodes.length === 0) {
           result.push(null)
         } else {
