@@ -8,7 +8,7 @@ import type { Variants } from './variants'
 export function compileCandidates(
   rawCandidates: Iterable<string>,
   designSystem: DesignSystem,
-  { onInvalidCanidate }: { onInvalidCanidate?: (candidate: string) => void } = {},
+  { onInvalidCandidate }: { onInvalidCandidate?: (candidate: string) => void } = {},
 ) {
   let nodeSorting = new Map<
     AstNode,
@@ -21,7 +21,7 @@ export function compileCandidates(
   for (let rawCandidate of rawCandidates) {
     let candidate = designSystem.parseCandidate(rawCandidate)
     if (candidate === null) {
-      onInvalidCanidate?.(rawCandidate)
+      onInvalidCandidate?.(rawCandidate)
       continue // Bail, invalid candidate
     }
     candidates.set(candidate, rawCandidate)
@@ -36,7 +36,7 @@ export function compileCandidates(
   next: for (let [candidate, rawCandidate] of candidates) {
     let astNode = designSystem.compileAstNodes(rawCandidate)
     if (astNode === null) {
-      onInvalidCanidate?.(rawCandidate)
+      onInvalidCandidate?.(rawCandidate)
       continue next
     }
 

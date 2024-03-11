@@ -17,7 +17,7 @@ export function compile(css: string): {
 
   // Track all invalid candidates
   let invalidCandidates = new Set<string>()
-  function onInvalidCanidate(candidate: string) {
+  function onInvalidCandidate(candidate: string) {
     invalidCandidates.add(candidate)
   }
 
@@ -133,7 +133,7 @@ export function compile(css: string): {
         {
           // Parse the candidates to an AST that we can replace the `@apply` rule with.
           let candidateAst = compileCandidates(candidates, designSystem, {
-            onInvalidCanidate: (candidate) => {
+            onInvalidCandidate: (candidate) => {
               throw new Error(`Cannot apply unknown utility class: ${candidate}`)
             },
           }).astNodes
@@ -203,7 +203,7 @@ export function compile(css: string): {
 
       if (tailwindUtilitiesNode) {
         let newNodes = compileCandidates(allValidCandidates, designSystem, {
-          onInvalidCanidate,
+          onInvalidCandidate,
         }).astNodes
 
         // If no new ast nodes were generated, then we can return the original
