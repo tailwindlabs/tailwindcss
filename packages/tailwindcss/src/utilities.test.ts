@@ -5787,8 +5787,6 @@ test('rounded', () => {
     compileCss(
       css`
         @theme {
-          --radius-none: 0px;
-          --radius-full: 9999px;
           --radius-sm: 0.125rem;
           --radius: 0.25rem;
         }
@@ -5798,8 +5796,6 @@ test('rounded', () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
-      --radius-none: 0px;
-      --radius-full: 9999px;
       --radius-sm: .125rem;
       --radius: .25rem;
     }
@@ -5813,7 +5809,7 @@ test('rounded', () => {
     }
 
     .rounded-full {
-      border-radius: 9999px;
+      border-radius: 3.40282e38px;
     }
 
     .rounded-none {
@@ -5862,8 +5858,8 @@ test('rounded-s', () => {
     }
 
     .rounded-s-full {
-      border-start-start-radius: 9999px;
-      border-end-start-radius: 9999px;
+      border-start-start-radius: 3.40282e38px;
+      border-end-start-radius: 3.40282e38px;
     }
 
     .rounded-s-none {
@@ -5914,8 +5910,8 @@ test('rounded-e', () => {
     }
 
     .rounded-e-full {
-      border-start-end-radius: 9999px;
-      border-end-end-radius: 9999px;
+      border-start-end-radius: 3.40282e38px;
+      border-end-end-radius: 3.40282e38px;
     }
 
     .rounded-e-none {
@@ -5966,8 +5962,8 @@ test('rounded-t', () => {
     }
 
     .rounded-t-full {
-      border-top-left-radius: 9999px;
-      border-top-right-radius: 9999px;
+      border-top-left-radius: 3.40282e38px;
+      border-top-right-radius: 3.40282e38px;
     }
 
     .rounded-t-none {
@@ -6018,8 +6014,8 @@ test('rounded-r', () => {
     }
 
     .rounded-r-full {
-      border-top-right-radius: 9999px;
-      border-bottom-right-radius: 9999px;
+      border-top-right-radius: 3.40282e38px;
+      border-bottom-right-radius: 3.40282e38px;
     }
 
     .rounded-r-none {
@@ -6070,8 +6066,8 @@ test('rounded-b', () => {
     }
 
     .rounded-b-full {
-      border-bottom-right-radius: 9999px;
-      border-bottom-left-radius: 9999px;
+      border-bottom-right-radius: 3.40282e38px;
+      border-bottom-left-radius: 3.40282e38px;
     }
 
     .rounded-b-none {
@@ -6122,8 +6118,8 @@ test('rounded-l', () => {
     }
 
     .rounded-l-full {
-      border-top-left-radius: 9999px;
-      border-bottom-left-radius: 9999px;
+      border-top-left-radius: 3.40282e38px;
+      border-bottom-left-radius: 3.40282e38px;
     }
 
     .rounded-l-none {
@@ -6172,7 +6168,7 @@ test('rounded-ss', () => {
     }
 
     .rounded-ss-full {
-      border-start-start-radius: 9999px;
+      border-start-start-radius: 3.40282e38px;
     }
 
     .rounded-ss-none {
@@ -6225,7 +6221,7 @@ test('rounded-se', () => {
     }
 
     .rounded-se-full {
-      border-start-end-radius: 9999px;
+      border-start-end-radius: 3.40282e38px;
     }
 
     .rounded-se-none {
@@ -6278,7 +6274,7 @@ test('rounded-ee', () => {
     }
 
     .rounded-ee-full {
-      border-end-end-radius: 9999px;
+      border-end-end-radius: 3.40282e38px;
     }
 
     .rounded-ee-none {
@@ -6331,7 +6327,7 @@ test('rounded-es', () => {
     }
 
     .rounded-es-full {
-      border-end-start-radius: 9999px;
+      border-end-start-radius: 3.40282e38px;
     }
 
     .rounded-es-none {
@@ -6384,7 +6380,7 @@ test('rounded-tl', () => {
     }
 
     .rounded-tl-full {
-      border-top-left-radius: 9999px;
+      border-top-left-radius: 3.40282e38px;
     }
 
     .rounded-tl-none {
@@ -6437,7 +6433,7 @@ test('rounded-tr', () => {
     }
 
     .rounded-tr-full {
-      border-top-right-radius: 9999px;
+      border-top-right-radius: 3.40282e38px;
     }
 
     .rounded-tr-none {
@@ -6490,7 +6486,7 @@ test('rounded-br', () => {
     }
 
     .rounded-br-full {
-      border-bottom-right-radius: 9999px;
+      border-bottom-right-radius: 3.40282e38px;
     }
 
     .rounded-br-none {
@@ -6543,7 +6539,7 @@ test('rounded-bl', () => {
     }
 
     .rounded-bl-full {
-      border-bottom-left-radius: 9999px;
+      border-bottom-left-radius: 3.40282e38px;
     }
 
     .rounded-bl-none {

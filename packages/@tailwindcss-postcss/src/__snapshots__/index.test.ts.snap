@@ -271,10 +271,8 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --blur-xl: 24px;
     --blur-2xl: 40px;
     --blur-3xl: 64px;
-    --radius-none: 0px;
-    --radius-full: 9999px;
-    --radius-sm: .125rem;
     --radius: .25rem;
+    --radius-sm: .125rem;
     --radius-md: .375rem;
     --radius-lg: .5rem;
     --radius-xl: .75rem;

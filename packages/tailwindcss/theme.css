@@ -278,10 +278,8 @@
   --blur-3xl: 64px;
 
   /* Radii */
-  --radius-none: 0px;
-  --radius-full: 9999px;
-  --radius-sm: 0.125rem;
   --radius: 0.25rem;
+  --radius-sm: 0.125rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;

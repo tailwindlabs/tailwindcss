@@ -1954,99 +1954,39 @@ export function createUtilities(theme: Theme) {
   staticUtility('break-all', [['word-break', 'break-all']])
   staticUtility('break-keep', [['word-break', 'break-keep']])
 
-  // rounded-*
-  functionalUtility('rounded', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-radius', value)],
-  })
-
-  functionalUtility('rounded-s', {
-    themeKeys: ['--radius'],
-    handle: (value) => [
-      decl('border-start-start-radius', value),
-      decl('border-end-start-radius', value),
-    ],
-  })
-
-  functionalUtility('rounded-e', {
-    themeKeys: ['--radius'],
-    handle: (value) => [
-      decl('border-start-end-radius', value),
-      decl('border-end-end-radius', value),
-    ],
-  })
-
-  functionalUtility('rounded-t', {
-    themeKeys: ['--radius'],
-    handle: (value) => [
-      decl('border-top-left-radius', value),
-      decl('border-top-right-radius', value),
-    ],
-  })
-
-  functionalUtility('rounded-r', {
-    themeKeys: ['--radius'],
-    handle: (value) => [
-      decl('border-top-right-radius', value),
-      decl('border-bottom-right-radius', value),
-    ],
-  })
-
-  functionalUtility('rounded-b', {
-    themeKeys: ['--radius'],
-    handle: (value) => [
-      decl('border-bottom-right-radius', value),
-      decl('border-bottom-left-radius', value),
-    ],
-  })
-
-  functionalUtility('rounded-l', {
-    themeKeys: ['--radius'],
-    handle: (value) => [
-      decl('border-top-left-radius', value),
-      decl('border-bottom-left-radius', value),
-    ],
-  })
-
-  functionalUtility('rounded-ss', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-start-start-radius', value)],
-  })
-
-  functionalUtility('rounded-se', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-start-end-radius', value)],
-  })
-
-  functionalUtility('rounded-ee', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-end-end-radius', value)],
-  })
-
-  functionalUtility('rounded-es', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-end-start-radius', value)],
-  })
-
-  functionalUtility('rounded-tl', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-top-left-radius', value)],
-  })
-
-  functionalUtility('rounded-tr', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-top-right-radius', value)],
-  })
-
-  functionalUtility('rounded-br', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-bottom-right-radius', value)],
-  })
-
-  functionalUtility('rounded-bl', {
-    themeKeys: ['--radius'],
-    handle: (value) => [decl('border-bottom-left-radius', value)],
-  })
+  {
+    // border-radius
+    for (let [root, properties] of [
+      ['rounded', ['border-radius']],
+      ['rounded-s', ['border-start-start-radius', 'border-end-start-radius']],
+      ['rounded-e', ['border-start-end-radius', 'border-end-end-radius']],
+      ['rounded-t', ['border-top-left-radius', 'border-top-right-radius']],
+      ['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']],
+      ['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
+      ['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']],
+      ['rounded-ss', ['border-start-start-radius']],
+      ['rounded-se', ['border-start-end-radius']],
+      ['rounded-ee', ['border-end-end-radius']],
+      ['rounded-es', ['border-end-start-radius']],
+      ['rounded-tl', ['border-top-left-radius']],
+      ['rounded-tr', ['border-top-right-radius']],
+      ['rounded-br', ['border-bottom-right-radius']],
+      ['rounded-bl', ['border-bottom-left-radius']],
+    ] as const) {
+      staticUtility(
+        `${root}-none`,
+        properties.map((property) => [property, '0']),
+      )
+      staticUtility(
+        `${root}-full`,
+        properties.map((property) => [property, 'calc(infinity * 1px)']),
+      )
+      functionalUtility(root, {
+        themeKeys: ['--radius'],
+        handle: (value) => properties.map((property) => decl(property, value)),
+      })
+    }
+  }
 
   staticUtility('border-solid', [
     ['--tw-border-style', 'solid'],
