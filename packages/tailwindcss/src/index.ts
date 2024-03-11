@@ -6,12 +6,8 @@ import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 
-export function compile(
-  css: string,
-  rawCandidates: string[],
-): {
-  rebuild(candidates: string[]): string
-  css: string
+export function compile(css: string): {
+  build(candidates: string[]): string
 } {
   let ast = CSS.parse(css)
 
@@ -117,9 +113,6 @@ export function compile(
     if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
       tailwindUtilitiesNode = node
 
-      // Set the `@tailwind utilities` nodes, to the actual generated CSS
-      node.nodes = compileCandidates(rawCandidates, designSystem, { onInvalidCanidate }).astNodes
-
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
       // once per file but that's the intended usage at this point in time.
@@ -186,16 +179,11 @@ export function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  for (let rawCandidate of rawCandidates) {
-    if (!invalidCandidates.has(rawCandidate)) {
-      allValidCandidates.add(rawCandidate)
-    }
-  }
   let compiledCss = toCss(ast)
   let previousAstNodeCount = 0
 
   return {
-    rebuild(newRawCandidates: string[]) {
+    build(newRawCandidates: string[]) {
       let didChange = false
 
       // Add all new candidates unless we know that they are invalid.
@@ -233,7 +221,6 @@ export function compile(
 
       return compiledCss
     },
-    css: compiledCss,
   }
 }
 
