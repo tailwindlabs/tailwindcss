@@ -1,7 +1,29 @@
 import { scanDir } from '@tailwindcss/oxide'
+import fs from 'fs'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
 import { compile, optimizeCss } from 'tailwindcss'
+
+/**
+ * A Map that can generate default values for keys that don't exist.
+ * Generated default values are added to the map to avoid recomputation.
+ */
+class DefaultMap<T = string, V = any> extends Map<T, V> {
+  constructor(private factory: (key: T, self: DefaultMap<T, V>) => V) {
+    super()
+  }
+
+  get(key: T): V {
+    let value = super.get(key)
+
+    if (value === undefined) {
+      value = this.factory(key, this)
+      this.set(key, value)
+    }
+
+    return value
+  }
+}
 
 type PluginOptions = {
   // The base directory to scan for class candidates.
@@ -15,13 +37,51 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
 
+  let cache = new DefaultMap(() => {
+    return {
+      mtimes: new Map<string, number>(),
+      build: null as null | ReturnType<typeof compile>['build'],
+      css: '',
+      optimizedCss: '',
+    }
+  })
+
   return {
-    postcssPlugin: 'tailwindcss-v4',
+    postcssPlugin: '@tailwindcss/postcss',
     plugins: [
       // We need to run `postcss-import` first to handle `@import` rules.
       postcssImport(),
 
       (root, result) => {
+        let inputFile = result.opts.from ?? ''
+        let context = cache.get(inputFile)
+
+        let rebuildStrategy: 'full' | 'incremental' = 'incremental'
+
+        // Track file modification times to CSS files
+        {
+          let files = result.messages.flatMap((message) => {
+            if (message.type !== 'dependency') return []
+            return message.file
+          })
+          files.push(inputFile)
+          for (let file of files) {
+            let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
+            if (changedTime === null) {
+              if (file === inputFile) {
+                rebuildStrategy = 'full'
+              }
+              continue
+            }
+
+            let prevTime = context.mtimes.get(file)
+            if (prevTime === changedTime) continue
+
+            rebuildStrategy = 'full'
+            context.mtimes.set(file, changedTime)
+          }
+        }
+
         let hasApply = false
         let hasTailwind = false
 
@@ -40,22 +100,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         // Do nothing if neither `@tailwind` nor `@apply` is used
         if (!hasTailwind && !hasApply) return
 
-        function replaceCss(css: string) {
-          root.removeAll()
-          let output = css
-          if (optimize) {
-            output = optimizeCss(output, {
-              minify: typeof optimize === 'object' ? optimize.minify : true,
-            })
-          }
-          root.append(postcss.parse(output, result.opts))
-        }
-
-        // No `@tailwind` means we don't have to look for candidates
-        if (!hasTailwind) {
-          replaceCss(compile(root.toString()).build([]))
-          return
-        }
+        let css = ''
 
         // Look for candidates used to generate the CSS
         let { candidates, files, globs } = scanDir({ base, globs: true })
@@ -64,7 +109,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         for (let file of files) {
           result.messages.push({
             type: 'dependency',
-            plugin: 'tailwindcss-v4',
+            plugin: '@tailwindcss/postcss',
             file,
             parent: result.opts.from,
           })
@@ -76,14 +121,30 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         for (let { base, glob } of globs) {
           result.messages.push({
             type: 'dir-dependency',
-            plugin: 'tailwindcss-v4',
+            plugin: '@tailwindcss/postcss',
             dir: base,
             glob,
             parent: result.opts.from,
           })
         }
 
-        replaceCss(compile(root.toString()).build(candidates))
+        if (rebuildStrategy === 'full') {
+          let { build } = compile(root.toString())
+          context.build = build
+          css = build(hasTailwind ? candidates : [])
+        } else if (rebuildStrategy === 'incremental') {
+          css = context.build!(candidates)
+        }
+
+        // Replace CSS
+        if (css !== context.css && optimize) {
+          context.optimizedCss = optimizeCss(css, {
+            minify: typeof optimize === 'object' ? optimize.minify : true,
+          })
+        }
+        context.css = css
+        root.removeAll()
+        root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
       },
     ],
   }
