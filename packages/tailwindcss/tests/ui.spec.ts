@@ -233,6 +233,20 @@ test('scale can be a number or percentage', async ({ page }) => {
   expect(await getPropertyValue('#x', 'scale')).toEqual('1.5')
 })
 
+// https://github.com/tailwindlabs/tailwindcss/issues/13185
+test('content-none persists when conditionally styling a pseudo-element', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`<div id="x" class="after:content-none after:hover:underline">Hello world</div>`,
+  )
+
+  expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
+
+  await page.locator('#x').hover()
+
+  expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
