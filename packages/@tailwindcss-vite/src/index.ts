@@ -63,7 +63,7 @@ export default function tailwindcss(): Plugin[] {
   }
 
   function generateCss(css: string) {
-    return compile(css, Array.from(candidates)).css
+    return compile(css).build(Array.from(candidates))
   }
 
   function generateOptimizedCss(css: string) {

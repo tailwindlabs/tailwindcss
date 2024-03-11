@@ -100,7 +100,8 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   )
 
   // Compile the input
-  let result = compile(input, candidates).css
+  let { build } = compile(input)
+  let result = build(candidates)
 
   // Optimize the output
   if (args['--minify'] || args['--optimize']) {
@@ -193,7 +194,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         }
 
         // Compile the input
-        let result = compile(input, candidates).css
+        result = compile(input).build(candidates)
 
         // Optimize the output
         if (args['--minify'] || args['--optimize']) {
