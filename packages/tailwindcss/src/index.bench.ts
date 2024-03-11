@@ -9,10 +9,7 @@ const css = String.raw
 bench('compile', async () => {
   let { candidates } = scanDir({ base: root, globs: true })
 
-  compile(
-    css`
-      @tailwind utilities;
-    `,
-    candidates,
-  )
+  compile(css`
+    @tailwind utilities;
+  `).build(candidates)
 })

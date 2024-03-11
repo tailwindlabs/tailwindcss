@@ -6,11 +6,19 @@ import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 
-export function compile(css: string, rawCandidates: string[]) {
+export function compile(css: string): {
+  build(candidates: string[]): string
+} {
   let ast = CSS.parse(css)
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
+  }
+
+  // Track all invalid candidates
+  let invalidCandidates = new Set<string>()
+  function onInvalidCandidate(candidate: string) {
+    invalidCandidates.add(candidate)
   }
 
   // Find all `@theme` declarations
@@ -97,11 +105,14 @@ export function compile(css: string, rawCandidates: string[]) {
 
   let designSystem = buildDesignSystem(theme)
 
+  let tailwindUtilitiesNode: Rule | null = null
+
   // Find `@tailwind utilities` and replace it with the actual generated utility
   // class CSS.
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node) => {
     if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
-      replaceWith(compileCandidates(rawCandidates, designSystem).astNodes)
+      tailwindUtilitiesNode = node
+
       // Stop walking after finding `@tailwind utilities` to avoid walking all
       // of the generated CSS. This means `@tailwind utilities` can only appear
       // once per file but that's the intended usage at this point in time.
@@ -122,7 +133,9 @@ export function compile(css: string, rawCandidates: string[]) {
         {
           // Parse the candidates to an AST that we can replace the `@apply` rule with.
           let candidateAst = compileCandidates(candidates, designSystem, {
-            throwOnInvalidCandidate: true,
+            onInvalidCandidate: (candidate) => {
+              throw new Error(`Cannot apply unknown utility class: ${candidate}`)
+            },
           }).astNodes
 
           // Collect the nodes to insert in place of the `@apply` rule. When a
@@ -162,7 +175,53 @@ export function compile(css: string, rawCandidates: string[]) {
     })
   }
 
-  return toCss(ast)
+  // Track all valid candidates, these are the incoming `rawCandidate` that
+  // resulted in a generated AST Node. All the other `rawCandidates` are invalid
+  // and should be ignored.
+  let allValidCandidates = new Set<string>()
+  let compiledCss = toCss(ast)
+  let previousAstNodeCount = 0
+
+  return {
+    build(newRawCandidates: string[]) {
+      let didChange = false
+
+      // Add all new candidates unless we know that they are invalid.
+      let prevSize = allValidCandidates.size
+      for (let candidate of newRawCandidates) {
+        if (!invalidCandidates.has(candidate)) {
+          allValidCandidates.add(candidate)
+          didChange ||= allValidCandidates.size !== prevSize
+        }
+      }
+
+      // If no new candidates were added, we can return the original CSS. This
+      // currently assumes that we only add new candidates and never remove any.
+      if (!didChange) {
+        return compiledCss
+      }
+
+      if (tailwindUtilitiesNode) {
+        let newNodes = compileCandidates(allValidCandidates, designSystem, {
+          onInvalidCandidate,
+        }).astNodes
+
+        // If no new ast nodes were generated, then we can return the original
+        // CSS. This currently assumes that we only add new ast nodes and never
+        // remove any.
+        if (previousAstNodeCount === newNodes.length) {
+          return compiledCss
+        }
+
+        previousAstNodeCount = newNodes.length
+
+        tailwindUtilitiesNode.nodes = newNodes
+        compiledCss = toCss(ast)
+      }
+
+      return compiledCss
+    },
+  }
 }
 
 export function optimizeCss(

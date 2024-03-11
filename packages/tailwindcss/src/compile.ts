@@ -1,120 +1,52 @@
 import { rule, type AstNode, type Rule } from './ast'
-import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
+import { type Candidate, type Variant } from './candidate'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
-import { DefaultMap } from './utils/default-map'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
 
 export function compileCandidates(
-  rawCandidates: string[],
+  rawCandidates: Iterable<string>,
   designSystem: DesignSystem,
-  { throwOnInvalidCandidate = false } = {},
+  { onInvalidCandidate }: { onInvalidCandidate?: (candidate: string) => void } = {},
 ) {
-  // Ensure the candidates are sorted alphabetically
-  rawCandidates.sort()
-
   let nodeSorting = new Map<
     AstNode,
     { properties: number[]; variants: bigint; candidate: string }
   >()
   let astNodes: AstNode[] = []
-
-  // A lazy map implementation that will return the variant if it exists. If it
-  // doesn't exist yet, the raw string variant will be parsed and added to the
-  // map.
-  let parsedVariants: DefaultMap<string, Variant | null> = new DefaultMap((variant, map) => {
-    return parseVariant(variant, designSystem.variants, map)
-  })
-
   let candidates = new Map<Candidate, string>()
 
   // Parse candidates and variants
   for (let rawCandidate of rawCandidates) {
-    let candidate = parseCandidate(rawCandidate, designSystem.utilities, parsedVariants)
+    let candidate = designSystem.parseCandidate(rawCandidate)
     if (candidate === null) {
-      if (throwOnInvalidCandidate) {
-        throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
-      }
+      onInvalidCandidate?.(rawCandidate)
       continue // Bail, invalid candidate
     }
     candidates.set(candidate, rawCandidate)
   }
 
   // Sort the variants
-  let variants = Array.from(parsedVariants.values()).sort((a, z) => {
+  let variants = designSystem.getUsedVariants().sort((a, z) => {
     return designSystem.variants.compare(a, z)
   })
 
   // Create the AST
   next: for (let [candidate, rawCandidate] of candidates) {
-    let nodes: AstNode[] = []
-
-    // Handle arbitrary properties
-    if (candidate.kind === 'arbitrary') {
-      let compileFn = designSystem.utilities.getArbitrary()
-
-      // Build the node
-      let compiledNodes = compileFn(candidate)
-      if (compiledNodes === undefined) {
-        if (throwOnInvalidCandidate) {
-          throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
-        }
-        continue next
-      }
-
-      nodes = compiledNodes
+    let astNode = designSystem.compileAstNodes(rawCandidate)
+    if (astNode === null) {
+      onInvalidCandidate?.(rawCandidate)
+      continue next
     }
 
-    // Handle named utilities
-    else if (candidate.kind === 'static' || candidate.kind === 'functional') {
-      // Safety: At this point it is safe to use TypeScript's non-null assertion
-      // operator because if the `candidate.root` didn't exist, `parseCandidate`
-      // would have returned `null` and we would have returned early resulting
-      // in not hitting this code path.
-      let { compileFn } = designSystem.utilities.get(candidate.root)!
+    let { node, propertySort } = astNode
 
-      // Build the node
-      let compiledNodes = compileFn(candidate)
-      if (compiledNodes === undefined) {
-        if (throwOnInvalidCandidate) {
-          throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
-        }
-        continue next
-      }
-
-      nodes = compiledNodes
-    }
-
-    let propertySort = getPropertySort(nodes)
-
-    if (candidate.important) {
-      applyImportant(nodes)
-    }
-
-    let node: Rule = {
-      kind: 'rule',
-      selector: `.${escape(rawCandidate)}`,
-      nodes,
-    }
-
+    // Track the variant order which is a number with each bit representing a
+    // variant. This allows us to sort the rules based on the order of
+    // variants used.
     let variantOrder = 0n
     for (let variant of candidate.variants) {
-      let result = applyVariant(node, variant, designSystem.variants)
-
-      // When the variant results in `null`, it means that the variant cannot be
-      // applied to the rule. Discard the candidate and continue to the next
-      // one.
-      if (result === null) {
-        if (throwOnInvalidCandidate) {
-          throw new Error(`Cannot apply unknown utility class: ${rawCandidate}`)
-        }
-        continue next
-      }
-
-      // Track the variant order which is a number with each bit representing a
-      // variant. This allows us to sort the rules based on the order of
-      // variants used.
       variantOrder |= 1n << BigInt(variants.indexOf(variant))
     }
 
@@ -153,13 +85,74 @@ export function compileCandidates(
       // Sort by lowest property index first
       (aSorting.properties[offset] ?? Infinity) - (zSorting.properties[offset] ?? Infinity) ||
       // Sort by most properties first, then by least properties
-      zSorting.properties.length - aSorting.properties.length
+      zSorting.properties.length - aSorting.properties.length ||
+      // Sort alphabetically
+      (aSorting.candidate < zSorting.candidate ? -1 : 1)
     )
   })
 
   return {
     astNodes,
     nodeSorting,
+  }
+}
+
+export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem) {
+  let candidate = designSystem.parseCandidate(rawCandidate)
+  if (candidate === null) return null
+
+  let nodes: AstNode[] = []
+
+  // Handle arbitrary properties
+  if (candidate.kind === 'arbitrary') {
+    let compileFn = designSystem.utilities.getArbitrary()
+
+    // Build the node
+    let compiledNodes = compileFn(candidate)
+    if (compiledNodes === undefined) return null
+
+    nodes = compiledNodes
+  }
+
+  // Handle named utilities
+  else if (candidate.kind === 'static' || candidate.kind === 'functional') {
+    // Safety: At this point it is safe to use TypeScript's non-null assertion
+    // operator because if the `candidate.root` didn't exist, `parseCandidate`
+    // would have returned `null` and we would have returned early resulting
+    // in not hitting this code path.
+    let { compileFn } = designSystem.utilities.get(candidate.root)!
+
+    // Build the node
+    let compiledNodes = compileFn(candidate)
+    if (compiledNodes === undefined) return null
+
+    nodes = compiledNodes
+  }
+
+  let propertySort = getPropertySort(nodes)
+
+  if (candidate.important) {
+    applyImportant(nodes)
+  }
+
+  let node: Rule = {
+    kind: 'rule',
+    selector: `.${escape(rawCandidate)}`,
+    nodes,
+  }
+
+  for (let variant of candidate.variants) {
+    let result = applyVariant(node, variant, designSystem.variants)
+
+    // When the variant results in `null`, it means that the variant cannot be
+    // applied to the rule. Discard the candidate and continue to the next
+    // one.
+    if (result === null) return null
+  }
+
+  return {
+    node,
+    propertySort,
   }
 }
 

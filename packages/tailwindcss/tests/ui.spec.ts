@@ -255,21 +255,18 @@ async function render(page: Page, content: string) {
   await page.setContent(content)
   await page.addStyleTag({
     content: optimizeCss(
-      compile(
-        css`
-          @layer theme, base, components, utilities;
-          @layer theme {
-            ${defaultTheme}
-          }
-          @layer base {
-            ${preflight}
-          }
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
-        scanFiles([{ content, extension: 'html' }], IO.Sequential | Parsing.Sequential),
-      ),
+      compile(css`
+        @layer theme, base, components, utilities;
+        @layer theme {
+          ${defaultTheme}
+        }
+        @layer base {
+          ${preflight}
+        }
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(scanFiles([{ content, extension: 'html' }], IO.Sequential | Parsing.Sequential)),
     ),
   })
 

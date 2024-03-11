@@ -94,7 +94,7 @@ export class Variants {
     if (z === null) return 1
 
     if (a.kind === 'arbitrary' && z.kind === 'arbitrary') {
-      return a.selector.localeCompare(z.selector)
+      return a.selector < z.selector ? -1 : 1
     } else if (a.kind === 'arbitrary') {
       return 1
     } else if (z.kind === 'arbitrary') {
@@ -114,7 +114,7 @@ export class Variants {
     let compareFn = this.compareFns.get(aOrder)
     if (compareFn === undefined) return 0
 
-    return compareFn(a, z)
+    return compareFn(a, z) || (a.root < z.root ? -1 : 1)
   }
 
   keys() {
@@ -469,7 +469,7 @@ export function createVariants(theme: Theme): Variants {
 
       let order =
         // Compare by bucket name
-        aBucket.localeCompare(zBucket) ||
+        (aBucket === zBucket ? 0 : aBucket < zBucket ? -1 : 1) ||
         // If bucket names are the same, compare by value
         (direction === 'asc'
           ? parseInt(aValue) - parseInt(zValue)
@@ -489,7 +489,7 @@ export function createVariants(theme: Theme): Variants {
       // In this scenario, we want to alphabetically sort `calc(100%-1rem)` and
       // `calc(100%-2rem)` to make it deterministic.
       if (Number.isNaN(order)) {
-        return aValue.localeCompare(zValue)
+        return aValue < zValue ? -1 : 1
       }
 
       return order

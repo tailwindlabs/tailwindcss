@@ -105,6 +105,13 @@ export function toCss(ast: AstNode[]) {
         return css
       }
 
+      if (node.selector === '@tailwind utilities') {
+        for (let child of node.nodes) {
+          css += stringify(child, depth)
+        }
+        return css
+      }
+
       // Print at-rules without nodes with a `;` instead of an empty block.
       //
       // E.g.:

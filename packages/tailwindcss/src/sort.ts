@@ -3,9 +3,7 @@ import type { DesignSystem } from './design-system'
 
 export function getClassOrder(design: DesignSystem, classes: string[]): [string, bigint | null][] {
   // Generate a sorted AST
-  let { astNodes, nodeSorting } = compileCandidates(Array.from(classes), design, {
-    throwOnInvalidCandidate: false,
-  })
+  let { astNodes, nodeSorting } = compileCandidates(Array.from(classes), design)
 
   // Map class names to their order in the AST
   // `null` indicates a non-Tailwind class
