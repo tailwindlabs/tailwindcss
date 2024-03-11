@@ -23,7 +23,6 @@ export type DesignSystem = {
   compileAstNodes(candidate: string): ReturnType<typeof compileAstNodes>
 
   getUsedVariants(): ReturnType<typeof parseVariant>[]
-  getAstNodeSize(): number
 
   markInvalidCandidate(candidate: string): void
   isInvalidCandidate(candidate: string): boolean
@@ -79,9 +78,6 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     },
     getUsedVariants() {
       return Array.from(parsedVariants.values())
-    },
-    getAstNodeSize() {
-      return compiledAstNodes.size
     },
 
     markInvalidCandidate(candidate: string) {
