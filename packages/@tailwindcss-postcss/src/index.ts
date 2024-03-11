@@ -7,7 +7,7 @@ type PluginOptions = {
   // The base directory to scan for class candidates.
   base?: string
 
-  // Optimize the output CSS.
+  // Optimize and minify the output CSS.
   optimize?: boolean | { minify?: boolean }
 }
 
@@ -45,7 +45,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let output = css
           if (optimize) {
             output = optimizeCss(output, {
-              minify: typeof optimize === 'object' ? optimize.minify : false,
+              minify: typeof optimize === 'object' ? optimize.minify : true,
             })
           }
           root.append(postcss.parse(output, result.opts))
