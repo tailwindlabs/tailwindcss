@@ -3,22 +3,18 @@ import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 
 function loadDesignSystem() {
-  return buildDesignSystem(
-    new Theme(
-      new Map([
-        ['--spacing-0_5', { value: '0.125rem', isReference: true }],
-        ['--spacing-1', { value: '0.25rem', isReference: true }],
-        ['--spacing-3', { value: '0.75rem', isReference: true }],
-        ['--spacing-4', { value: '1rem', isReference: true }],
-        ['--width-4', { value: '1rem', isReference: true }],
-        ['--colors-red-500', { value: 'red', isReference: true }],
-        ['--colors-blue-500', { value: 'blue', isReference: true }],
-        ['--breakpoint-sm', { value: '640px', isReference: true }],
-        ['--font-size-xs', { value: '0.75rem', isReference: true }],
-        ['--font-size-xs--line-height', { value: '1rem', isReference: true }],
-      ]),
-    ),
-  )
+  let theme = new Theme()
+  theme.add('--spacing-0_5', '0.125rem')
+  theme.add('--spacing-1', '0.25rem')
+  theme.add('--spacing-3', '0.75rem')
+  theme.add('--spacing-4', '1rem')
+  theme.add('--width-4', '1rem')
+  theme.add('--colors-red-500', 'red')
+  theme.add('--colors-blue-500', 'blue')
+  theme.add('--breakpoint-sm', '640px')
+  theme.add('--font-size-xs', '0.75rem')
+  theme.add('--font-size-xs--line-height', '1rem')
+  return buildDesignSystem(theme)
 }
 
 test('getClassList', () => {

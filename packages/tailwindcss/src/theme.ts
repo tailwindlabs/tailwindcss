@@ -3,7 +3,7 @@ import { escape } from './utils/escape'
 export class Theme {
   constructor(private values = new Map<string, { value: string; isReference: boolean }>()) {}
 
-  add(key: string, value: string, isReference: boolean): void {
+  add(key: string, value: string, isReference = false): void {
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
         throw new Error(`Invalid theme value \`${value}\` for namespace \`${key}\``)
