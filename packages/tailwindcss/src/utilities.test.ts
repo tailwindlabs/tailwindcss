@@ -1325,28 +1325,28 @@ test('line-clamp', () => {
   expect(run(['line-clamp-4', 'line-clamp-99', 'line-clamp-[123]', 'line-clamp-none']))
     .toMatchInlineSnapshot(`
       ".line-clamp-4 {
-        overlow: hidden;
+        overflow: hidden;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         display: -webkit-box;
       }
 
       .line-clamp-99 {
-        overlow: hidden;
+        overflow: hidden;
         -webkit-line-clamp: 99;
         -webkit-box-orient: vertical;
         display: -webkit-box;
       }
 
       .line-clamp-\\[123\\] {
-        overlow: hidden;
+        overflow: hidden;
         -webkit-line-clamp: 123;
         -webkit-box-orient: vertical;
         display: -webkit-box;
       }
 
       .line-clamp-none {
-        overlow: visible;
+        overflow: visible;
         -webkit-box-orient: horizonal;
         -webkit-line-clamp: none;
         display: block;

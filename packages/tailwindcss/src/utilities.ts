@@ -786,7 +786,7 @@ export function createUtilities(theme: Theme) {
    * @css `line-clamp`
    */
   staticUtility('line-clamp-none', [
-    ['overlow', 'visible'],
+    ['overflow', 'visible'],
     ['display', 'block'],
     ['-webkit-box-orient', 'horizonal'],
     ['-webkit-line-clamp', 'none'],
@@ -795,7 +795,7 @@ export function createUtilities(theme: Theme) {
     themeKeys: ['--line-clamp'],
     handleBareValue: ({ value }) => value,
     handle: (value) => [
-      decl('overlow', 'hidden'),
+      decl('overflow', 'hidden'),
       decl('display', '-webkit-box'),
       decl('-webkit-box-orient', 'vertical'),
       decl('-webkit-line-clamp', value),
