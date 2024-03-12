@@ -6,16 +6,16 @@ function loadDesignSystem() {
   return buildDesignSystem(
     new Theme(
       new Map([
-        ['--spacing-0_5', '0.125rem'],
-        ['--spacing-1', '0.25rem'],
-        ['--spacing-3', '0.75rem'],
-        ['--spacing-4', '1rem'],
-        ['--width-4', '1rem'],
-        ['--colors-red-500', 'red'],
-        ['--colors-blue-500', 'blue'],
-        ['--breakpoint-sm', '640px'],
-        ['--font-size-xs', '0.75rem'],
-        ['--font-size-xs--line-height', '1rem'],
+        ['--spacing-0_5', { value: '0.125rem', isReference: true }],
+        ['--spacing-1', { value: '0.25rem', isReference: true }],
+        ['--spacing-3', { value: '0.75rem', isReference: true }],
+        ['--spacing-4', { value: '1rem', isReference: true }],
+        ['--width-4', { value: '1rem', isReference: true }],
+        ['--colors-red-500', { value: 'red', isReference: true }],
+        ['--colors-blue-500', { value: 'blue', isReference: true }],
+        ['--breakpoint-sm', { value: '640px', isReference: true }],
+        ['--font-size-xs', { value: '0.75rem', isReference: true }],
+        ['--font-size-xs--line-height', { value: '1rem', isReference: true }],
       ]),
     ),
   )
