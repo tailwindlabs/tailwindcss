@@ -788,8 +788,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('line-clamp-none', [
     ['overflow', 'visible'],
     ['display', 'block'],
-    ['-webkit-box-orient', 'horizonal'],
-    ['-webkit-line-clamp', 'none'],
+    ['-webkit-box-orient', 'horizontal'],
+    ['-webkit-line-clamp', 'unset'],
   ])
   functionalUtility('line-clamp', {
     themeKeys: ['--line-clamp'],

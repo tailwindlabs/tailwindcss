@@ -1347,8 +1347,8 @@ test('line-clamp', () => {
 
       .line-clamp-none {
         overflow: visible;
-        -webkit-box-orient: horizonal;
-        -webkit-line-clamp: none;
+        -webkit-box-orient: horizontal;
+        -webkit-line-clamp: unset;
         display: block;
       }"
     `)
