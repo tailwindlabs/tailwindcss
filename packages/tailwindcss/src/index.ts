@@ -28,25 +28,47 @@ export function compile(css: string): {
 
   walk(ast, (node, { replaceWith }) => {
     if (node.kind !== 'rule') return
-    if (node.selector !== '@theme') return
+
+    // Drop instances of `@media reference`
+    //
+    // We support `@import "tailwindcss/theme" reference` as a way to import an external theme file
+    // as a reference, which becomes `@media reference { … }` when the `@import` is processed.
+    if (node.selector === '@media reference') {
+      walk(node.nodes, (child) => {
+        if (child.kind !== 'rule') {
+          throw new Error(
+            'Files imported with `@import "…" reference` must only contain `@theme` blocks.',
+          )
+        }
+        if (child.selector === '@theme') {
+          child.selector = '@theme reference'
+          return WalkAction.Skip
+        }
+      })
+      replaceWith(node.nodes)
+    }
+
+    if (node.selector !== '@theme' && node.selector !== '@theme reference') return
+
+    let isReference = node.selector === '@theme reference'
 
     // Record all custom properties in the `@theme` declaration
-    walk(node.nodes, (node, { replaceWith }) => {
+    walk(node.nodes, (child, { replaceWith }) => {
       // Collect `@keyframes` rules to re-insert with theme variables later,
       // since the `@theme` rule itself will be removed.
-      if (node.kind === 'rule' && node.selector.startsWith('@keyframes ')) {
-        keyframesRules.push(node)
+      if (child.kind === 'rule' && child.selector.startsWith('@keyframes ')) {
+        keyframesRules.push(child)
         replaceWith([])
         return WalkAction.Skip
       }
 
-      if (node.kind === 'comment') return
-      if (node.kind === 'declaration' && node.property.startsWith('--')) {
-        theme.add(node.property, node.value)
+      if (child.kind === 'comment') return
+      if (child.kind === 'declaration' && child.property.startsWith('--')) {
+        theme.add(child.property, child.value, isReference)
         return
       }
 
-      let snippet = toCss([rule('@theme', [node])])
+      let snippet = toCss([rule(node.selector, [child])])
         .split('\n')
         .map((line, idx, all) => `${idx === 0 || idx >= all.length - 2 ? ' ' : '>'} ${line}`)
         .join('\n')
@@ -58,7 +80,7 @@ export function compile(css: string): {
 
     // Keep a reference to the first `@theme` rule to update with the full theme
     // later, and delete any other `@theme` rules.
-    if (!firstThemeRule) {
+    if (!firstThemeRule && !isReference) {
       firstThemeRule = node
     } else {
       replaceWith([])
@@ -75,7 +97,8 @@ export function compile(css: string): {
     let nodes = []
 
     for (let [key, value] of theme.entries()) {
-      nodes.push(decl(key, value))
+      if (value.isReference) continue
+      nodes.push(decl(key, value.value))
     }
 
     if (keyframesRules.length > 0) {
@@ -154,23 +177,6 @@ export function compile(css: string): {
 
           replaceWith(newNodes)
         }
-      }
-    })
-  }
-
-  // Drop instances of `@media reference`
-  //
-  // We allow importing a theme as a reference so users can define the theme for
-  // the current CSS file without duplicating the theme vars in the final CSS.
-  // This is useful for users who use `@apply` in Vue SFCs and in CSS modules.
-  //
-  // The syntax is derived from `@import "tailwindcss/theme" reference` which
-  // turns into `@media reference { … }` in the final CSS.
-  if (css.includes('@media reference')) {
-    walk(ast, (node, { replaceWith }) => {
-      if (node.kind === 'rule' && node.selector === '@media reference') {
-        replaceWith([])
-        return WalkAction.Skip
       }
     })
   }
@@ -255,14 +261,15 @@ export function __unstable__loadDesignSystem(css: string) {
 
   walk(ast, (node) => {
     if (node.kind !== 'rule') return
-    if (node.selector !== '@theme') return
+    if (node.selector !== '@theme' && node.selector !== '@theme reference') return
+    let isReference = node.selector === '@theme reference'
 
     // Record all custom properties in the `@theme` declaration
     walk([node], (node) => {
       if (node.kind !== 'declaration') return
       if (!node.property.startsWith('--')) return
 
-      theme.add(node.property, node.value)
+      theme.add(node.property, node.value, isReference)
     })
   })
 
