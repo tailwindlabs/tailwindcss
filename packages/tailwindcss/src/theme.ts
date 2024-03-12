@@ -1,9 +1,9 @@
 import { escape } from './utils/escape'
 
 export class Theme {
-  constructor(private values: Map<string, string> = new Map<string, string>()) {}
+  constructor(private values = new Map<string, { value: string; isReference: boolean }>()) {}
 
-  add(key: string, value: string): void {
+  add(key: string, value: string, isReference = false): void {
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
         throw new Error(`Invalid theme value \`${value}\` for namespace \`${key}\``)
@@ -18,7 +18,7 @@ export class Theme {
     if (value === 'initial') {
       this.values.delete(key)
     } else {
-      this.values.set(key, value)
+      this.values.set(key, { value, isReference })
     }
   }
 
@@ -46,7 +46,7 @@ export class Theme {
     for (let key of themeKeys) {
       let value = this.values.get(key)
       if (value) {
-        return value
+        return value.value
       }
     }
 
@@ -82,7 +82,7 @@ export class Theme {
 
     if (!themeKey) return null
 
-    return this.values.get(themeKey)!
+    return this.values.get(themeKey)!.value
   }
 
   resolveWith(
@@ -98,11 +98,11 @@ export class Theme {
     for (let name of nestedKeys) {
       let nestedValue = this.values.get(`${themeKey}${name}`)
       if (nestedValue) {
-        extra[name] = nestedValue
+        extra[name] = nestedValue.value
       }
     }
 
-    return [this.values.get(themeKey)!, extra]
+    return [this.values.get(themeKey)!.value, extra]
   }
 
   namespace(namespace: string) {
@@ -111,9 +111,9 @@ export class Theme {
 
     for (let [key, value] of this.values) {
       if (key === namespace) {
-        values.set(null, value)
+        values.set(null, value.value)
       } else if (key.startsWith(prefix)) {
-        values.set(key.slice(prefix.length), value)
+        values.set(key.slice(prefix.length), value.value)
       }
     }
 

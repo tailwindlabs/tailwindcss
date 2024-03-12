@@ -948,4 +948,135 @@ describe('Parsing themes values from CSS', () => {
       }"
     `)
   })
+
+  test('theme values added as reference are not included in the output as variables', () => {
+    expect(
+      compileCss(
+        css`
+          @theme {
+            --color-tomato: #e10c04;
+          }
+          @theme reference {
+            --color-potato: #ac855b;
+          }
+          @tailwind utilities;
+        `,
+        ['bg-tomato', 'bg-potato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-tomato: #e10c04;
+      }
+
+      .bg-potato {
+        background-color: #ac855b;
+      }
+
+      .bg-tomato {
+        background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('theme values added as reference that override existing theme value suppress the output of the original theme value as a variable', () => {
+    expect(
+      compileCss(
+        css`
+          @theme {
+            --color-potato: #ac855b;
+          }
+          @theme reference {
+            --color-potato: #c794aa;
+          }
+          @tailwind utilities;
+        `,
+        ['bg-potato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bg-potato {
+        background-color: #c794aa;
+      }"
+    `)
+  })
+
+  test('overriding a reference theme value with a non-reference theme value includes it in the output as a variable', () => {
+    expect(
+      compileCss(
+        css`
+          @theme reference {
+            --color-potato: #ac855b;
+          }
+          @theme {
+            --color-potato: #c794aa;
+          }
+          @tailwind utilities;
+        `,
+        ['bg-potato'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-potato: #c794aa;
+      }
+
+      .bg-potato {
+        background-color: #c794aa;
+      }"
+    `)
+  })
+
+  test('wrapping `@theme` with `@media reference` behaves like `@theme reference` to support `@import` statements', () => {
+    expect(
+      compileCss(
+        css`
+          @theme {
+            --color-tomato: #e10c04;
+          }
+          @media reference {
+            @theme {
+              --color-potato: #ac855b;
+            }
+            @theme {
+              --color-avocado: #c0cc6d;
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['bg-tomato', 'bg-potato', 'bg-avocado'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-tomato: #e10c04;
+      }
+
+      .bg-avocado {
+        background-color: #c0cc6d;
+      }
+
+      .bg-potato {
+        background-color: #ac855b;
+      }
+
+      .bg-tomato {
+        background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('`@media reference` can only contain `@theme` rules', () => {
+    expect(() =>
+      compileCss(
+        css`
+          @media reference {
+            .not-a-theme-rule {
+              color: cursed;
+            }
+          }
+          @tailwind utilities;
+        `,
+        ['bg-tomato', 'bg-potato', 'bg-avocado'],
+      ),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Files imported with \`@import "…" reference\` must only contain \`@theme\` blocks.]`,
+    )
+  })
 })
