@@ -116,35 +116,6 @@ export default function tailwindcss(): Plugin[] {
     return css
   }
 
-  // In dev mode, there isn't a hook to signal that we've seen all files. We use
-  // a timer, resetting it on each file seen, and trigger CSS generation when we
-  // haven't seen any new files after a timeout. If this triggers too early,
-  // there will be a FOOC and but CSS will regenerate after we've seen more files.
-  let initialScan = (() => {
-    // If too short, we're more likely to trigger a FOOC and generate CSS
-    // multiple times. If too long, we delay dev builds.
-    let delayInMs = 50
-
-    let timer: ReturnType<typeof setTimeout>
-    let resolve: () => void
-    let resolved = false
-
-    return {
-      tick() {
-        if (resolved) return
-        timer && clearTimeout(timer)
-        timer = setTimeout(resolve, delayInMs)
-      },
-
-      complete: new Promise<void>((_resolve) => {
-        resolve = () => {
-          resolved = true
-          _resolve()
-        }
-      }),
-    }
-  })()
-
   return [
     {
       // Step 1: Scan source files for candidates
