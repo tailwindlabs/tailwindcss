@@ -2,13 +2,14 @@ import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import { compile } from 'tailwindcss'
-import type { Plugin, Update, ViteDevServer } from 'vite'
+import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
   let candidates = new Set<string>()
   let cssModules = new Set<string>()
   let minify = false
+  let plugins: readonly Plugin[] = []
 
   function isCssFile(id: string) {
     let [filename] = id.split('?', 2)
@@ -71,6 +72,79 @@ export default function tailwindcss(): Plugin[] {
     return optimizeCss(generateCss(css), { minify })
   }
 
+  // Transform the CSS by manually run the transform functions of non-Tailwind plugins on the given
+  // CSS.
+  async function transformWithPlugins(context: Rollup.PluginContext, css: string) {
+    let transformPluginContext = {
+      ...context,
+      getCombinedSourcemap: () => {
+        throw new Error('getCombinedSourcemap not implemented')
+      },
+    }
+    let fakeCssId = `__tailwind_utilities.css`
+
+    for (let plugin of plugins) {
+      if (
+        // Skip our own plugins
+        plugin.name.startsWith('@tailwindcss/') ||
+        // Skip vite:css-post because it transforms CSS into JS for the dev
+        // server too late in the pipeline.
+        plugin.name === 'vite:css-post' ||
+        // Skip vite:import-analysis and vite:build-import-analysis because they try
+        // to process CSS as JS and fail.
+        plugin.name.includes('import-analysis')
+      )
+        continue
+
+      if (!plugin.transform) continue
+      const transformHandler =
+        'handler' in plugin.transform! ? plugin.transform.handler : plugin.transform!
+
+      try {
+        // Based on https://github.com/unocss/unocss/blob/main/packages/vite/src/modes/global/build.ts#L43
+        let result = await transformHandler.call(transformPluginContext, css, fakeCssId)
+        if (!result) continue
+        if (typeof result === 'string') {
+          css = result
+        } else if (result.code) {
+          css = result.code
+        }
+      } catch (e) {
+        console.error(`Error running ${plugin.name} on Tailwind CSS output. Skipping.`)
+      }
+    }
+    return css
+  }
+
+  // In dev mode, there isn't a hook to signal that we've seen all files. We use
+  // a timer, resetting it on each file seen, and trigger CSS generation when we
+  // haven't seen any new files after a timeout. If this triggers too early,
+  // there will be a FOOC and but CSS will regenerate after we've seen more files.
+  let initialScan = (() => {
+    // If too short, we're more likely to trigger a FOOC and generate CSS
+    // multiple times. If too long, we delay dev builds.
+    let delayInMs = 50
+
+    let timer: ReturnType<typeof setTimeout>
+    let resolve: () => void
+    let resolved = false
+
+    return {
+      tick() {
+        if (resolved) return
+        timer && clearTimeout(timer)
+        timer = setTimeout(resolve, delayInMs)
+      },
+
+      complete: new Promise<void>((_resolve) => {
+        resolve = () => {
+          resolved = true
+          _resolve()
+        }
+      }),
+    }
+  })()
+
   return [
     {
       // Step 1: Scan source files for candidates
@@ -83,6 +157,7 @@ export default function tailwindcss(): Plugin[] {
 
       async configResolved(config) {
         minify = config.build.cssMinify !== false
+        plugins = config.plugins
       },
 
       // Scan index.html for candidates
@@ -127,7 +202,9 @@ export default function tailwindcss(): Plugin[] {
         // candidates before generating CSS.
         await server?.waitForRequestsIdle(id)
 
-        return { code: generateCss(src) }
+        let css = generateCss(src)
+        css = await transformWithPlugins(this, css)
+        return { code: css }
       },
     },
 
@@ -136,7 +213,7 @@ export default function tailwindcss(): Plugin[] {
       name: '@tailwindcss/vite:generate:build',
       enforce: 'post',
       apply: 'build',
-      generateBundle(_options, bundle) {
+      async generateBundle(_options, bundle) {
         for (let id in bundle) {
           let item = bundle[id]
           if (item.type !== 'asset') continue
@@ -144,10 +221,11 @@ export default function tailwindcss(): Plugin[] {
           let rawSource = item.source
           let source =
             rawSource instanceof Uint8Array ? new TextDecoder().decode(rawSource) : rawSource
+          if (!source.includes('@tailwind')) continue
 
-          if (source.includes('@tailwind')) {
-            item.source = generateOptimizedCss(source)
-          }
+          let css = generateOptimizedCss(source)
+          css = await transformWithPlugins(this, css)
+          item.source = css
         }
       },
     },
