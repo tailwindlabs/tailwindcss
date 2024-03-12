@@ -9786,6 +9786,22 @@ test('transition', () => {
       transition-property: none;
     }"
   `)
+
+  expect(
+    compileCss(
+      css`
+        @tailwind utilities;
+      `,
+      ['transition-all'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".transition-all {
+      transition-property: all;
+      transition-duration: 0s;
+      transition-timing-function: ease;
+    }"
+  `)
+
   expect(
     run([
       '-transition',
