@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@parcel/watcher": "^2.4.1",
+    "@tailwindcss/optimize": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "mri": "^1.2.0",
     "picocolors": "^1.0.0",

@@ -100,6 +100,9 @@ importers:
       '@parcel/watcher':
         specifier: ^2.4.1
         version: 2.4.1
+      '@tailwindcss/optimize':
+        specifier: workspace:^
+        version: link:../@tailwindcss-optimize
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../oxide/crates/node
@@ -131,6 +134,9 @@ importers:
 
   packages/@tailwindcss-postcss:
     dependencies:
+      '@tailwindcss/optimize':
+        specifier: workspace:^
+        version: link:../@tailwindcss-optimize
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../oxide/crates/node
@@ -153,6 +159,9 @@ importers:
 
   packages/@tailwindcss-vite:
     dependencies:
+      '@tailwindcss/optimize':
+        specifier: workspace:^
+        version: link:../@tailwindcss-optimize
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../oxide/crates/node
@@ -169,6 +178,9 @@ importers:
 
   packages/tailwindcss:
     devDependencies:
+      '@tailwindcss/optimize':
+        specifier: workspace:^
+        version: link:../@tailwindcss-optimize
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../oxide/crates/node

@@ -1,6 +1,7 @@
+import { optimizeCss } from '@tailwindcss/optimize'
 import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import path from 'path'
-import { compile, optimizeCss } from 'tailwindcss'
+import { compile } from 'tailwindcss'
 import type { Plugin, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {

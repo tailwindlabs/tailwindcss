@@ -29,6 +29,7 @@
     }
   },
   "dependencies": {
+    "@tailwindcss/optimize": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "postcss-import": "^16.0.0",
     "tailwindcss": "workspace:^"

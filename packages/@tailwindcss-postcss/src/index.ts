@@ -1,8 +1,9 @@
+import { optimizeCss } from '@tailwindcss/optimize'
 import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
-import { compile, optimizeCss } from 'tailwindcss'
+import { compile } from 'tailwindcss'
 
 /**
  * A Map that can generate default values for keys that don't exist.

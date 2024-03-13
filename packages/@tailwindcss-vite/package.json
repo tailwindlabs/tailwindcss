@@ -28,6 +28,7 @@
     }
   },
   "dependencies": {
+    "@tailwindcss/optimize": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
     "tailwindcss": "workspace:^"
   },

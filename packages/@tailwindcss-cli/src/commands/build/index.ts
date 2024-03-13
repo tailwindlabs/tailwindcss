@@ -1,11 +1,12 @@
 import watcher from '@parcel/watcher'
+import { optimizeCss } from '@tailwindcss/optimize'
 import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindcss/oxide'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
-import { compile, optimizeCss } from 'tailwindcss'
+import { compile } from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
 import {
   eprintln,
