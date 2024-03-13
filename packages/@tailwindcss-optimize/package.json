@@ -11,20 +11,26 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsup-node ./src/index.ts --format cjs --dts --cjsInterop --splitting --minify --clean",
+    "build": "tsup-node ./src/index.ts --format esm,cjs --dts --cjsInterop --splitting --minify --clean",
     "dev": "pnpm run build -- --watch"
   },
   "files": [
     "dist/"
   ],
-  "publishConfig": {
-    "provenance": true,
-    "access": "public"
-  },
   "exports": {
     ".": {
+      "types": "./src/index.ts",
+      "require": "./dist/index.js",
+      "import": "./src/index.ts"
+    }
+  },
+  "publishConfig": {
+    "provenance": true,
+    "access": "public",
+    ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     }
   },
   "dependencies": {
