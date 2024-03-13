@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import prettier from 'prettier'
 
 // 1. Performance optimization: Inline the contents of the
 //    `tailwindcss/index.css` file so that we don't require to handle imports at
@@ -7,7 +8,7 @@ import path from 'node:path'
 {
   let __dirname = path.dirname(new URL(import.meta.url).pathname)
   let file = path.resolve(__dirname, '../packages/tailwindcss/index.css')
-  let inlined = inline(file)
+  let inlined = await prettier.format(inline(file), { filepath: file })
   fs.writeFileSync(file, inlined, 'utf-8')
 
   // Recursively inlines `@import` statements in the given file.
