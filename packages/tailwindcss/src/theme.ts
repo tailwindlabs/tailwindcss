@@ -151,6 +151,8 @@ export type ThemeKey =
   | '--default-border-width'
   | '--default-ring-color'
   | '--default-ring-width'
+  | '--default-transition-timing-function'
+  | '--default-transition-duration'
   | '--divide-width'
   | '--divide-color'
   | '--drop-shadow'

@@ -1,7 +1,7 @@
 @theme {
   /* Defaults */
   --default-transition-duration: 150ms;
-  --default-transition-timing-function: var(--transition-timing-function-in-out);
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   --default-font-family: var(--font-family-sans);
   --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
   --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
@@ -422,7 +422,6 @@
   --line-height-10: 2.5rem;
 
   /* Transition timing functions */
-  --transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   --transition-timing-function-linear: linear;
   --transition-timing-function-in: cubic-bezier(0.4, 0, 1, 1);
   --transition-timing-function-out: cubic-bezier(0, 0, 0.2, 1);

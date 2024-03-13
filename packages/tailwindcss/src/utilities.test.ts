@@ -9713,6 +9713,8 @@ test('transition', () => {
     compileCss(
       css`
         @theme {
+          --default-transition-timing-function: ease;
+          --default-transition-duration: 100ms;
           --transition-property: color, background-color, border-color, text-decoration-color, fill,
             stroke, opacity, box-shadow, transform, filter, backdrop-filter;
           --transition-property-opacity: opacity;
@@ -9732,56 +9734,74 @@ test('transition', () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root {
+      --default-transition-timing-function: ease;
+      --default-transition-duration: .1s;
       --transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
       --transition-property-opacity: opacity;
     }
 
     .transition {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, -webkit-backdrop-filter, backdrop-filter;
-      transition-timing-function: var(--default-transition-timing-function);
-      transition-duration: var(--default-transition-duration);
+      transition-duration: .1s;
+      transition-timing-function: ease;
     }
 
     .transition-\\[--value\\] {
       transition-property: var(--value);
-      transition-timing-function: var(--default-transition-timing-function);
-      transition-duration: var(--default-transition-duration);
+      transition-duration: .1s;
+      transition-timing-function: ease;
     }
 
     .transition-all {
       transition-property: all;
-      transition-timing-function: var(--default-transition-timing-function);
-      transition-duration: var(--default-transition-duration);
+      transition-duration: .1s;
+      transition-timing-function: ease;
     }
 
     .transition-colors {
       transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-      transition-timing-function: var(--default-transition-timing-function);
-      transition-duration: var(--default-transition-duration);
+      transition-duration: .1s;
+      transition-timing-function: ease;
     }
 
     .transition-opacity {
       transition-property: opacity;
-      transition-timing-function: var(--default-transition-timing-function);
-      transition-duration: var(--default-transition-duration);
+      transition-duration: .1s;
+      transition-timing-function: ease;
     }
 
     .transition-shadow {
       transition-property: box-shadow;
-      transition-timing-function: var(--default-transition-timing-function);
-      transition-duration: var(--default-transition-duration);
+      transition-duration: .1s;
+      transition-timing-function: ease;
     }
 
     .transition-transform {
       transition-property: transform, translate, scale, rotate;
-      transition-timing-function: var(--default-transition-timing-function);
-      transition-duration: var(--default-transition-duration);
+      transition-duration: .1s;
+      transition-timing-function: ease;
     }
 
     .transition-none {
       transition-property: none;
     }"
   `)
+
+  expect(
+    compileCss(
+      css`
+        @tailwind utilities;
+      `,
+      ['transition-all'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".transition-all {
+      transition-property: all;
+      transition-duration: 0s;
+      transition-timing-function: ease;
+    }"
+  `)
+
   expect(
     run([
       '-transition',
