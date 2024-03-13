@@ -4,9 +4,8 @@ import postcss from 'postcss'
 import atImport from 'postcss-import'
 import prettier from 'prettier'
 
-// 1. Performance optimization: Inline the contents of the
-//    `tailwindcss/index.css` file so that we don't require to handle imports at
-//    runtime.
+// Performance optimization: Inline the contents of the `tailwindcss/index.css`
+// file so that we don't require to handle imports at runtime.
 {
   let __dirname = path.dirname(new URL(import.meta.url).pathname)
   let file = path.resolve(__dirname, '../packages/tailwindcss/index.css')
