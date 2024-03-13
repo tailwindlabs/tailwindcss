@@ -1,0 +1,33 @@
+{
+  "name": "@tailwindcss/optimize",
+  "version": "4.0.0-alpha.8",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "packages/@tailwindcss-optimize"
+  },
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup-node ./src/index.ts --format cjs --dts --cjsInterop --splitting --minify --clean",
+    "dev": "pnpm run build -- --watch"
+  },
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "lightningcss": "^1.24.0"
+  }
+}
