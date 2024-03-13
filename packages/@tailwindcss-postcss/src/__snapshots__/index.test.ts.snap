@@ -4,7 +4,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 "@layer theme {
   :root {
     --default-transition-duration: .15s;
-    --default-transition-timing-function: var(--transition-timing-function-in-out);
+    --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --default-font-family: var(--font-family-sans);
     --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
     --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
@@ -393,7 +393,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --line-height-8: 2rem;
     --line-height-9: 2.25rem;
     --line-height-10: 2.5rem;
-    --transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --transition-timing-function-linear: linear;
     --transition-timing-function-in: cubic-bezier(.4, 0, 1, 1);
     --transition-timing-function-out: cubic-bezier(0, 0, .2, 1);
