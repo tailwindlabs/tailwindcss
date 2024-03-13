@@ -58,9 +58,6 @@
     "theme.css",
     "utilities.css"
   ],
-  "dependencies": {
-    "lightningcss": "^1.24.0"
-  },
   "devDependencies": {
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "^20.10.8"
