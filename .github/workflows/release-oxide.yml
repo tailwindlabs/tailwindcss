@@ -219,6 +219,9 @@ jobs:
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
 
+      - name: Run pre-publish optimizations scripts
+        run: node ./scripts/pre-publish-optimizations.mjs
+
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
