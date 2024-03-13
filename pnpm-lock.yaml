@@ -100,12 +100,12 @@ importers:
       '@parcel/watcher':
         specifier: ^2.4.1
         version: 2.4.1
-      '@tailwindcss/optimize':
-        specifier: workspace:^
-        version: link:../@tailwindcss-optimize
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../oxide/crates/node
+      lightningcss:
+        specifier: ^1.24.0
+        version: 1.24.0
       mri:
         specifier: ^1.2.0
         version: 1.2.0
@@ -134,12 +134,12 @@ importers:
 
   packages/@tailwindcss-postcss:
     dependencies:
-      '@tailwindcss/optimize':
-        specifier: workspace:^
-        version: link:../@tailwindcss-optimize
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../oxide/crates/node
+      lightningcss:
+        specifier: ^1.24.0
+        version: 1.24.0
       postcss-import:
         specifier: ^16.0.0
         version: 16.0.0(postcss@8.4.24)
@@ -159,12 +159,12 @@ importers:
 
   packages/@tailwindcss-vite:
     dependencies:
-      '@tailwindcss/optimize':
-        specifier: workspace:^
-        version: link:../@tailwindcss-optimize
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../oxide/crates/node
+      lightningcss:
+        specifier: ^1.24.0
+        version: 1.24.0
       tailwindcss:
         specifier: workspace:^
         version: link:../tailwindcss
@@ -174,19 +174,19 @@ importers:
         version: 20.11.17
       vite:
         specifier: ^5.0.11
-        version: 5.1.1(@types/node@20.11.17)
+        version: 5.1.1(@types/node@20.11.17)(lightningcss@1.24.0)
 
   packages/tailwindcss:
     devDependencies:
-      '@tailwindcss/optimize':
-        specifier: workspace:^
-        version: link:../@tailwindcss-optimize
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../oxide/crates/node
       '@types/node':
         specifier: ^20.10.8
         version: 20.11.17
+      lightningcss:
+        specifier: ^1.24.0
+        version: 1.24.0
 
   playgrounds/nextjs:
     dependencies:
@@ -1892,7 +1892,6 @@ packages:
     resolution: {integrity: sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==}
     engines: {node: '>=0.10'}
     hasBin: true
-    dev: false
 
   /diff-sequences@29.6.3:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
@@ -3066,7 +3065,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss-darwin-x64@1.24.0:
@@ -3075,7 +3073,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss-freebsd-x64@1.24.0:
@@ -3084,7 +3081,6 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss-linux-arm-gnueabihf@1.24.0:
@@ -3093,7 +3089,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss-linux-arm64-gnu@1.24.0:
@@ -3102,7 +3097,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss-linux-arm64-musl@1.24.0:
@@ -3111,7 +3105,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss-linux-x64-gnu@1.24.0:
@@ -3120,7 +3113,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss-linux-x64-musl@1.24.0:
@@ -3129,7 +3121,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss-win32-x64-msvc@1.24.0:
@@ -3138,7 +3129,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: false
     optional: true
 
   /lightningcss@1.24.0:
@@ -3156,7 +3146,6 @@ packages:
       lightningcss-linux-x64-gnu: 1.24.0
       lightningcss-linux-x64-musl: 1.24.0
       lightningcss-win32-x64-msvc: 1.24.0
-    dev: false
 
   /lilconfig@3.0.0:
     resolution: {integrity: sha512-K2U4W2Ff5ibV7j7ydLr+zLAkIg5JJ4lPn1Ltsdt+Tz/IjQ8buJ55pZAxoP34lqIiwtF9iAvtLv3JGv7CAyAg+g==}
@@ -4473,7 +4462,7 @@ packages:
       - terser
     dev: true
 
-  /vite@5.1.1(@types/node@20.11.17):
+  /vite@5.1.1(@types/node@20.11.17)(lightningcss@1.24.0):
     resolution: {integrity: sha512-wclpAgY3F1tR7t9LL5CcHC41YPkQIpKUGeIuT8MdNwNZr6OqOTLs7JX5vIHAtzqLWXts0T+GDrh9pN2arneKqg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -4503,6 +4492,7 @@ packages:
     dependencies:
       '@types/node': 20.11.17
       esbuild: 0.19.12
+      lightningcss: 1.24.0
       postcss: 8.4.35
       rollup: 4.9.6
     optionalDependencies:

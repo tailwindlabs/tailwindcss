@@ -28,8 +28,8 @@
     }
   },
   "dependencies": {
-    "@tailwindcss/optimize": "workspace:^",
     "@tailwindcss/oxide": "workspace:^",
+    "lightningcss": "^1.24.0",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
