@@ -2,7 +2,8 @@ import { expect, test, type Page } from '@playwright/test'
 import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import fs from 'fs'
 import path from 'path'
-import { compile, optimizeCss } from '../src'
+import { compile } from '../src'
+import { optimizeCss } from '../src/test-utils/run'
 
 const html = String.raw
 const css = String.raw

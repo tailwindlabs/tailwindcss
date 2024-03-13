@@ -31,6 +31,7 @@
   "dependencies": {
     "@parcel/watcher": "^2.4.1",
     "@tailwindcss/oxide": "workspace:^",
+    "lightningcss": "^1.24.0",
     "mri": "^1.2.0",
     "picocolors": "^1.0.0",
     "postcss": "8.4.24",

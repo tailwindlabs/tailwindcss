@@ -1,4 +1,3 @@
-import { Features, transform } from 'lightningcss'
 import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
@@ -228,30 +227,6 @@ export function compile(css: string): {
       return compiledCss
     },
   }
-}
-
-export function optimizeCss(
-  input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
-) {
-  return transform({
-    filename: file,
-    code: Buffer.from(input),
-    minify,
-    sourceMap: false,
-    drafts: {
-      customMedia: true,
-    },
-    nonStandard: {
-      deepSelectorCombinator: true,
-    },
-    include: Features.Nesting,
-    exclude: Features.LogicalProperties,
-    targets: {
-      safari: (16 << 16) | (4 << 8),
-    },
-    errorRecovery: true,
-  }).code.toString()
 }
 
 export function __unstable__loadDesignSystem(css: string) {

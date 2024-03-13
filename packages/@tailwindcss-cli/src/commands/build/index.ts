@@ -1,11 +1,12 @@
 import watcher from '@parcel/watcher'
 import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindcss/oxide'
+import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
-import { compile, optimizeCss } from 'tailwindcss'
+import { compile } from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
 import {
   eprintln,
@@ -252,4 +253,28 @@ function handleImports(
         result.messages.filter((msg) => msg.type === 'dependency').map((msg) => msg.file),
       ),
     ])
+}
+
+function optimizeCss(
+  input: string,
+  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
+) {
+  return transform({
+    filename: file,
+    code: Buffer.from(input),
+    minify,
+    sourceMap: false,
+    drafts: {
+      customMedia: true,
+    },
+    nonStandard: {
+      deepSelectorCombinator: true,
+    },
+    include: Features.Nesting,
+    exclude: Features.LogicalProperties,
+    targets: {
+      safari: (16 << 16) | (4 << 8),
+    },
+    errorRecovery: true,
+  }).code.toString()
 }

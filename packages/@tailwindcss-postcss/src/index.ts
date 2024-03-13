@@ -1,8 +1,9 @@
 import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
+import { Features, transform } from 'lightningcss'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
-import { compile, optimizeCss } from 'tailwindcss'
+import { compile } from 'tailwindcss'
 
 /**
  * A Map that can generate default values for keys that don't exist.
@@ -148,6 +149,30 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       },
     ],
   }
+}
+
+function optimizeCss(
+  input: string,
+  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
+) {
+  return transform({
+    filename: file,
+    code: Buffer.from(input),
+    minify,
+    sourceMap: false,
+    drafts: {
+      customMedia: true,
+    },
+    nonStandard: {
+      deepSelectorCombinator: true,
+    },
+    include: Features.Nesting,
+    exclude: Features.LogicalProperties,
+    targets: {
+      safari: (16 << 16) | (4 << 8),
+    },
+    errorRecovery: true,
+  }).code.toString()
 }
 
 export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
