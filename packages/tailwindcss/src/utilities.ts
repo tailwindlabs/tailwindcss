@@ -1481,6 +1481,21 @@ export function createUtilities(theme: Theme) {
   ])
 
   /**
+   * @css `perspective`
+   */
+  staticUtility('perspective-none', [['perspective', 'none']])
+  functionalUtility('perspective', {
+    themeKeys: ['--perspective'],
+    handle: (value) => [decl('perspective', value)],
+  })
+  suggest('perspective', () => [
+    {
+      values: [],
+      valueThemeKeys: ['--perspective'],
+    },
+  ])
+
+  /**
    * @css `transform`
    */
   staticUtility('transform', [

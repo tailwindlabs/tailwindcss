@@ -3036,8 +3036,19 @@ test('transform', () => {
       initial-value: 0deg;
     }"
   `)
-  expect(run(['transform-flat', 'transform-3d', 'transform-content', 'transform-border', 'transform-fill', 'transform-stroke', 'transform-view', 'backface-visible', 'backface-hidden']))
-    .toMatchInlineSnapshot(`
+  expect(
+    run([
+      'transform-flat',
+      'transform-3d',
+      'transform-content',
+      'transform-border',
+      'transform-fill',
+      'transform-stroke',
+      'transform-view',
+      'backface-visible',
+      'backface-hidden',
+    ]),
+  ).toMatchInlineSnapshot(`
       ".backface-hidden {
         backface-visibility: hidden;
       }
@@ -3075,6 +3086,43 @@ test('transform', () => {
       }"
     `)
   expect(run(['-transform', '-transform-cpu', '-transform-gpu', '-transform-none'])).toEqual('')
+})
+
+test('perspective', () => {
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --perspective-dramatic: 100px;
+          --perspective-distant: 1200px;
+        }
+        @tailwind utilities;
+      `,
+      ['perspective-distant', 'perspective-dramatic', 'perspective-none', 'perspective-[123px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --perspective-dramatic: 100px;
+      --perspective-distant: 1200px;
+    }
+
+    .perspective-\\[123px\\] {
+      perspective: 123px;
+    }
+
+    .perspective-distant {
+      perspective: 1200px;
+    }
+
+    .perspective-dramatic {
+      perspective: 100px;
+    }
+
+    .perspective-none {
+      perspective: none;
+    }"
+  `)
+  expect(run(['perspective', '-perspective'])).toEqual('')
 })
 
 test('cursor', () => {
