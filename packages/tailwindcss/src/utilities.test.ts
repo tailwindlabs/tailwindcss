@@ -697,7 +697,7 @@ test('col', () => {
       grid-column: 1 / -1;
     }"
   `)
-  expect(run(['col', 'col-span', '-col-span-4'])).toEqual('')
+  expect(run(['col', 'col-span', '-col-span-4', 'col-span-unknown'])).toEqual('')
 })
 
 test('col-start', () => {
@@ -719,7 +719,7 @@ test('col-start', () => {
         grid-column-start: auto;
       }"
     `)
-  expect(run(['col-start', '-col-start-4'])).toEqual('')
+  expect(run(['col-start', '-col-start-4', 'col-start-unknown'])).toEqual('')
 })
 
 test('col-end', () => {
@@ -740,7 +740,7 @@ test('col-end', () => {
       grid-column-end: auto;
     }"
   `)
-  expect(run(['col-end', '-col-end-4'])).toEqual('')
+  expect(run(['col-end', '-col-end-4', 'col-end-unknown'])).toEqual('')
 })
 
 test('row', () => {
@@ -778,7 +778,7 @@ test('row', () => {
       grid-row: 1 / -1;
     }"
   `)
-  expect(run(['row', 'row-span', '-row-span-4'])).toEqual('')
+  expect(run(['row', 'row-span', '-row-span-4', 'row-span-unknown'])).toEqual('')
 })
 
 test('row-start', () => {
@@ -800,7 +800,7 @@ test('row-start', () => {
         grid-row-start: auto;
       }"
     `)
-  expect(run(['row-start', '-row-start-4'])).toEqual('')
+  expect(run(['row-start', '-row-start-4', 'row-start-unknown'])).toEqual('')
 })
 
 test('row-end', () => {
@@ -821,7 +821,7 @@ test('row-end', () => {
       grid-row-end: auto;
     }"
   `)
-  expect(run(['row-end', '-row-end-4'])).toEqual('')
+  expect(run(['row-end', '-row-end-4', 'row-end-unknown'])).toEqual('')
 })
 
 test('float', () => {

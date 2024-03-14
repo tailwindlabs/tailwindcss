@@ -634,7 +634,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('col-span-full', [['grid-column', '1 / -1']])
   functionalUtility('col-span', {
     themeKeys: [],
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     handle: (value) => [decl('grid-column', `span ${value} / span ${value}`)],
   })
 
@@ -643,7 +646,10 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('col-start-auto', [['grid-column-start', 'auto']])
   functionalUtility('col-start', {
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     themeKeys: ['--grid-column-start'],
     handle: (value) => [decl('grid-column-start', value)],
   })
@@ -653,7 +659,10 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('col-end-auto', [['grid-column-end', 'auto']])
   functionalUtility('col-end', {
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     themeKeys: ['--grid-column-end'],
     handle: (value) => [decl('grid-column-end', value)],
   })
@@ -690,7 +699,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('row-span-full', [['grid-row', '1 / -1']])
   functionalUtility('row-span', {
     themeKeys: [],
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     handle: (value) => [decl('grid-row', `span ${value} / span ${value}`)],
   })
 
@@ -699,7 +711,10 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('row-start-auto', [['grid-row-start', 'auto']])
   functionalUtility('row-start', {
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     themeKeys: ['--grid-row-start'],
     handle: (value) => [decl('grid-row-start', value)],
   })
@@ -709,7 +724,10 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('row-end-auto', [['grid-row-end', 'auto']])
   functionalUtility('row-end', {
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     themeKeys: ['--grid-row-end'],
     handle: (value) => [decl('grid-row-end', value)],
   })
