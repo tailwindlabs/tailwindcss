@@ -392,6 +392,11 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --line-height-8: 2rem;
   --line-height-9: 2.25rem;
   --line-height-10: 2.5rem;
+  --perspective-dramatic: 100px;
+  --perspective-near: 300px;
+  --perspective-normal: 500px;
+  --perspective-midrange: 800px;
+  --perspective-distant: 1200px;
   --transition-timing-function-linear: linear;
   --transition-timing-function-in: cubic-bezier(.4, 0, 1, 1);
   --transition-timing-function-out: cubic-bezier(0, 0, .2, 1);

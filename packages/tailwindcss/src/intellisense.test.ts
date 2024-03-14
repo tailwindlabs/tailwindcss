@@ -14,6 +14,8 @@ function loadDesignSystem() {
   theme.add('--breakpoint-sm', '640px')
   theme.add('--font-size-xs', '0.75rem')
   theme.add('--font-size-xs--line-height', '1rem')
+  theme.add('--perspective-dramatic', '100px')
+  theme.add('--perspective-normal', '500px')
   return buildDesignSystem(theme)
 }
 

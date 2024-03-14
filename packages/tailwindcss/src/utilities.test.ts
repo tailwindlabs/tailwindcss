@@ -3094,24 +3094,20 @@ test('perspective', () => {
       css`
         @theme {
           --perspective-dramatic: 100px;
-          --perspective-distant: 1200px;
+          --perspective-normal: 500px;
         }
         @tailwind utilities;
       `,
-      ['perspective-distant', 'perspective-dramatic', 'perspective-none', 'perspective-[123px]'],
+      ['perspective-normal', 'perspective-dramatic', 'perspective-none', 'perspective-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
       --perspective-dramatic: 100px;
-      --perspective-distant: 1200px;
+      --perspective-normal: 500px;
     }
 
     .perspective-\\[123px\\] {
       perspective: 123px;
-    }
-
-    .perspective-distant {
-      perspective: 1200px;
     }
 
     .perspective-dramatic {
@@ -3120,6 +3116,10 @@ test('perspective', () => {
 
     .perspective-none {
       perspective: none;
+    }
+
+    .perspective-normal {
+      perspective: 500px;
     }"
   `)
   expect(run(['perspective', '-perspective'])).toEqual('')

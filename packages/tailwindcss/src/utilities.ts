@@ -1490,7 +1490,6 @@ export function createUtilities(theme: Theme) {
   })
   suggest('perspective', () => [
     {
-      values: [],
       valueThemeKeys: ['--perspective'],
     },
   ])
