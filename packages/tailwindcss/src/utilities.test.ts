@@ -614,7 +614,7 @@ test('z-index', () => {
       z-index: auto;
     }"
   `)
-  expect(run(['z', '-z-auto'])).toEqual('')
+  expect(run(['z', '-z-auto', 'z-unknown', 'z-123.5'])).toEqual('')
 })
 
 test('order', () => {
@@ -657,7 +657,9 @@ test('order', () => {
       order: 0;
     }"
   `)
-  expect(run(['order', '-order-first', '-order-last', '-order-none'])).toEqual('')
+  expect(
+    run(['order', '-order-first', '-order-last', '-order-none', 'order-unknown', 'order-123.5']),
+  ).toEqual('')
 })
 
 test('col', () => {
@@ -1352,7 +1354,16 @@ test('line-clamp', () => {
         overflow: visible;
       }"
     `)
-  expect(run(['line-clamp', '-line-clamp-4', '-line-clamp-[123]', '-line-clamp-none'])).toEqual('')
+  expect(
+    run([
+      'line-clamp',
+      '-line-clamp-4',
+      '-line-clamp-[123]',
+      '-line-clamp-none',
+      'line-clamp-unknown',
+      'line-clamp-123.5',
+    ]),
+  ).toEqual('')
 })
 
 test('display', () => {
@@ -1506,7 +1517,9 @@ test('aspect-ratio', () => {
       aspect-ratio: 16 / 9;
     }"
   `)
-  expect(run(['aspect', 'aspect-potato', '-aspect-video', '-aspect-[10/9]'])).toEqual('')
+  expect(
+    run(['aspect', 'aspect-potato', '-aspect-video', '-aspect-[10/9]', 'aspect-foo/bar']),
+  ).toEqual('')
 })
 
 test('size', () => {
@@ -2063,7 +2076,7 @@ test('flex-shrink', () => {
       flex-shrink: 123;
     }"
   `)
-  expect(run(['-shrink', '-shrink-0', '-shrink-[123]'])).toEqual('')
+  expect(run(['-shrink', '-shrink-0', '-shrink-[123]', 'shrink-unknown'])).toEqual('')
 })
 
 test('flex-grow', () => {
@@ -2080,7 +2093,7 @@ test('flex-grow', () => {
       flex-grow: 123;
     }"
   `)
-  expect(run(['-grow', '-grow-0', '-grow-[123]'])).toEqual('')
+  expect(run(['-grow', '-grow-0', '-grow-[123]', 'grow-unknown'])).toEqual('')
 })
 
 test('flex-basis', () => {
@@ -2484,7 +2497,7 @@ test('rotate', () => {
       rotate: 123deg;
     }"
   `)
-  expect(run(['rotate'])).toEqual('')
+  expect(run(['rotate', 'rotate-unknown'])).toEqual('')
 })
 
 test('skew', () => {
@@ -2519,7 +2532,7 @@ test('skew', () => {
       initial-value: 0deg;
     }"
   `)
-  expect(run(['skew'])).toEqual('')
+  expect(run(['skew', 'skew-unknown'])).toEqual('')
 })
 
 test('skew-x', () => {
@@ -2551,7 +2564,7 @@ test('skew-x', () => {
       initial-value: 0deg;
     }"
   `)
-  expect(run(['skew-x'])).toEqual('')
+  expect(run(['skew-x', 'skew-x-unknown'])).toEqual('')
 })
 
 test('skew-y', () => {
@@ -2583,7 +2596,7 @@ test('skew-y', () => {
       initial-value: 0deg;
     }"
   `)
-  expect(run(['skew-y'])).toEqual('')
+  expect(run(['skew-y', 'skew-y-unknown'])).toEqual('')
 })
 
 test('scale', () => {
@@ -2618,7 +2631,7 @@ test('scale', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale'])).toEqual('')
+  expect(run(['scale', 'scale-unknown'])).toEqual('')
 })
 
 test('scale-x', () => {
@@ -2650,7 +2663,7 @@ test('scale-x', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale-x'])).toEqual('')
+  expect(run(['scale-x', 'scale-x-unknown'])).toEqual('')
 })
 
 test('scale-y', () => {
@@ -2682,7 +2695,7 @@ test('scale-y', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale-y'])).toEqual('')
+  expect(run(['scale-y', 'scale-y-unknown'])).toEqual('')
 })
 
 test('transform', () => {
@@ -3967,7 +3980,9 @@ test('columns', () => {
       columns: auto;
     }"
   `)
-  expect(run(['columns', '-columns-4', '-columns-[123]', '-columns-[--value]'])).toEqual('')
+  expect(
+    run(['columns', '-columns-4', '-columns-[123]', '-columns-[--value]', 'columns-unknown']),
+  ).toEqual('')
 })
 
 test('break-before', () => {
@@ -4253,6 +4268,7 @@ test('grid-cols', () => {
       '-grid-cols-subgrid',
       '-grid-cols-12',
       '-grid-cols-[123]',
+      'grid-cols-unknown',
     ]),
   ).toEqual('')
 })
@@ -4288,6 +4304,7 @@ test('grid-rows', () => {
       '-grid-rows-subgrid',
       '-grid-rows-12',
       '-grid-rows-[123]',
+      'grid-rows-unknown',
     ]),
   ).toEqual('')
 })
@@ -4866,7 +4883,7 @@ test('divide-x', () => {
       initial-value: solid;
     }"
   `)
-  expect(run(['-divide-x', '-divide-x-4', '-divide-x-123'])).toEqual('')
+  expect(run(['-divide-x', '-divide-x-4', '-divide-x-123', 'divide-x-unknown'])).toEqual('')
 })
 
 test('divide-x with custom default border width', () => {
@@ -4954,7 +4971,7 @@ test('divide-y', () => {
       initial-value: solid;
     }"
   `)
-  expect(run(['-divide-y', '-divide-y-4', '-divide-y-123'])).toEqual('')
+  expect(run(['-divide-y', '-divide-y-4', '-divide-y-123', 'divide-y-unknown'])).toEqual('')
 })
 
 test('divide-y with custom default border width', () => {
@@ -9405,25 +9422,32 @@ test('filter', () => {
       '-blur-[4px]',
       '-brightness-50',
       '-brightness-[1.23]',
+      'brightness-unknown',
       '-contrast-50',
       '-contrast-[1.23]',
+      'contrast-unknown',
       '-grayscale',
       '-grayscale-0',
       '-grayscale-[--value]',
+      'grayscale-unknown',
       '-hue-rotate-15',
       '-hue-rotate-[45deg]',
+      'hue-rotate-unknown',
       '-invert',
       '-invert-0',
       '-invert-[--value]',
+      'invert-unknown',
       '-drop-shadow-xl',
       '-drop-shadow-[0_0_red]',
       '-saturate-0',
       '-saturate-[1.75]',
       '-saturate-[--value]',
+      'saturate-saturate',
       '-sepia',
       '-sepia-0',
       '-sepia-[50%]',
       '-sepia-[--value]',
+      'sepia-unknown',
     ]),
   ).toEqual('')
 })
@@ -9685,25 +9709,33 @@ test('backdrop-filter', () => {
       '-backdrop-blur-[4px]',
       '-backdrop-brightness-50',
       '-backdrop-brightness-[1.23]',
+      'backdrop-brightness-unknown',
       '-backdrop-contrast-50',
       '-backdrop-contrast-[1.23]',
+      'backdrop-contrast-unknown',
       '-backdrop-grayscale',
       '-backdrop-grayscale-0',
       '-backdrop-grayscale-[--value]',
+      'backdrop-grayscale-unknown',
       '-backdrop-hue-rotate-15',
       '-backdrop-hue-rotate-[45deg]',
+      'backdrop-hue-rotate-unknown',
       '-backdrop-invert',
       '-backdrop-invert-0',
       '-backdrop-invert-[--value]',
+      'backdrop-invert-unknown',
       '-backdrop-opacity-50',
       '-backdrop-opacity-[0.5]',
+      'backdrop-opacity-unknown',
       '-backdrop-saturate-0',
       '-backdrop-saturate-[1.75]',
       '-backdrop-saturate-[--value]',
+      'backdrop-saturate-unknown',
       '-backdrop-sepia',
       '-backdrop-sepia-0',
       '-backdrop-sepia-[50%]',
       '-backdrop-sepia-[--value]',
+      'backdrop-sepia-unknown',
     ]),
   ).toEqual('')
 })
@@ -9827,7 +9859,7 @@ test('delay', () => {
       transition-delay: .3s;
     }"
   `)
-  expect(run(['delay', '-delay-200', '-delay-[300ms]'])).toEqual('')
+  expect(run(['delay', '-delay-200', '-delay-[300ms]', 'delay-unknown'])).toEqual('')
 })
 
 test('duration', () => {
@@ -10450,7 +10482,7 @@ test('outline-offset', () => {
       outline-offset: var(--value);
     }"
   `)
-  expect(run(['outline-offset'])).toEqual('')
+  expect(run(['outline-offset', 'outline-offset-unknown'])).toEqual('')
 })
 
 test('opacity', () => {
@@ -10463,7 +10495,7 @@ test('opacity', () => {
       opacity: var(--value);
     }"
   `)
-  expect(run(['opacity', '-opacity-15', '-opacity-[--value]'])).toEqual('')
+  expect(run(['opacity', '-opacity-15', '-opacity-[--value]', 'opacity-unknown'])).toEqual('')
 })
 
 test('underline-offset', () => {
@@ -10513,7 +10545,9 @@ test('underline-offset', () => {
       text-underline-offset: auto;
     }"
   `)
-  expect(run(['underline-offset', '-underline-offset-auto'])).toEqual('')
+  expect(run(['underline-offset', '-underline-offset-auto', 'underline-offset-unknown'])).toEqual(
+    '',
+  )
 })
 
 test('text', () => {

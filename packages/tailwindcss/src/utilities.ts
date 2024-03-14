@@ -583,7 +583,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('z-auto', [['z-index', 'auto']])
   functionalUtility('z', {
     supportsNegative: true,
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     themeKeys: ['--z-index'],
     handle: (value) => [decl('z-index', value)],
   })
@@ -604,7 +607,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('order-none', [['order', '0']])
   functionalUtility('order', {
     supportsNegative: true,
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     themeKeys: ['--order'],
     handle: (value) => [decl('order', value)],
   })
@@ -793,7 +799,10 @@ export function createUtilities(theme: Theme) {
   ])
   functionalUtility('line-clamp', {
     themeKeys: ['--line-clamp'],
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     handle: (value) => [
       decl('overflow', 'hidden'),
       decl('display', '-webkit-box'),
@@ -842,7 +851,13 @@ export function createUtilities(theme: Theme) {
   staticUtility('aspect-video', [['aspect-ratio', '16 / 9']])
   functionalUtility('aspect', {
     themeKeys: ['--aspect-ratio'],
-    handleBareValue: ({ fraction }) => fraction,
+    handleBareValue: ({ fraction }) => {
+      if (fraction === null) return null
+      let [lhs, rhs] = segment(fraction, '/')
+      if (!Number.isInteger(Number(lhs))) return null
+      if (!Number.isInteger(Number(rhs))) return null
+      return fraction
+    },
     handle: (value) => [decl('aspect-ratio', value)],
   })
 
@@ -1024,7 +1039,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('shrink', {
     defaultValue: '1',
     themeKeys: [],
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return value
+    },
     handle: (value) => [decl('flex-shrink', value)],
   })
 
@@ -1034,7 +1052,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('grow', {
     defaultValue: '1',
     themeKeys: [],
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return value
+    },
     handle: (value) => [decl('flex-grow', value)],
   })
 
@@ -1226,7 +1247,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('rotate', {
     supportsNegative: true,
     themeKeys: ['--rotate'],
-    handleBareValue: ({ value }) => `${value}deg`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}deg`
+    },
     handle: (value) => [decl('rotate', value)],
   })
 
@@ -1248,7 +1272,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('skew', {
     supportsNegative: true,
     themeKeys: ['--skew'],
-    handleBareValue: ({ value }) => `${value}deg`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}deg`
+    },
     handle: (value) => [
       skewProperties(),
       decl('--tw-skew-x', value),
@@ -1264,7 +1291,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('skew-x', {
     supportsNegative: true,
     themeKeys: ['--skew'],
-    handleBareValue: ({ value }) => `${value}deg`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}deg`
+    },
     handle: (value) => [
       skewProperties(),
       decl('--tw-skew-x', value),
@@ -1279,7 +1309,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('skew-y', {
     supportsNegative: true,
     themeKeys: ['--skew'],
-    handleBareValue: ({ value }) => `${value}deg`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}deg`
+    },
     handle: (value) => [
       skewProperties(),
       decl('--tw-skew-y', value),
@@ -1323,7 +1356,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('scale', {
     supportsNegative: true,
     themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => `${value}%`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}%`
+    },
     handle: (value) => [
       scaleProperties(),
       decl('--tw-scale-x', value),
@@ -1338,7 +1374,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('scale-x', {
     supportsNegative: true,
     themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => `${value}%`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}%`
+    },
     handle: (value) => [
       scaleProperties(),
       decl('--tw-scale-x', value),
@@ -1352,7 +1391,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('scale-y', {
     supportsNegative: true,
     themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => `${value}%`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}%`
+    },
     handle: (value) => [
       scaleProperties(),
       decl('--tw-scale-y', value),
@@ -1665,7 +1707,10 @@ export function createUtilities(theme: Theme) {
 
   functionalUtility('columns', {
     themeKeys: ['--columns', '--width'],
-    handleBareValue: ({ value }) => value,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return value
+    },
     handle: (value) => [decl('columns', value)],
   })
 
@@ -1716,7 +1761,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('grid-cols-subgrid', [['grid-template-columns', 'subgrid']])
   functionalUtility('grid-cols', {
     themeKeys: ['--grid-template-columns'],
-    handleBareValue: ({ value }) => `repeat(${value}, minmax(0, 1fr))`,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return `repeat(${value}, minmax(0, 1fr))`
+    },
     handle: (value) => [decl('grid-template-columns', value)],
   })
 
@@ -1724,7 +1772,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('grid-rows-subgrid', [['grid-template-rows', 'subgrid']])
   functionalUtility('grid-rows', {
     themeKeys: ['--grid-template-rows'],
-    handleBareValue: ({ value }) => `repeat(${value}, minmax(0, 1fr))`,
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return `repeat(${value}, minmax(0, 1fr))`
+    },
     handle: (value) => [decl('grid-template-rows', value)],
   })
 
@@ -2175,7 +2226,10 @@ export function createUtilities(theme: Theme) {
     functionalUtility('divide-x', {
       defaultValue: theme.get(['--default-border-width']) ?? '1px',
       themeKeys: ['--divide-width', '--border-width'],
-      handleBareValue: ({ value }) => `${value}px`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}px`
+      },
       handle: (value) => [
         atRoot([property('--tw-divide-x-reverse', '0', '<number>')]),
 
@@ -2195,7 +2249,10 @@ export function createUtilities(theme: Theme) {
     functionalUtility('divide-y', {
       defaultValue: theme.get(['--default-border-width']) ?? '1px',
       themeKeys: ['--divide-width', '--border-width'],
-      handleBareValue: ({ value }) => `${value}px`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}px`
+      },
       handle: (value) => [
         atRoot([property('--tw-divide-y-reverse', '0', '<number>')]),
 
@@ -3033,7 +3090,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('brightness', {
       themeKeys: ['--brightness'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       handle: (value) => [
         filterProperties(),
         decl('--tw-brightness', `brightness(${value})`),
@@ -3043,7 +3103,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('backdrop-brightness', {
       themeKeys: ['--backdrop-brightness', '--brightness'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       handle: (value) => [
         backdropFilterProperties(),
         decl('--tw-backdrop-brightness', `brightness(${value})`),
@@ -3068,7 +3131,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('contrast', {
       themeKeys: ['--contrast'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       handle: (value) => [
         filterProperties(),
         decl('--tw-contrast', `contrast(${value})`),
@@ -3078,7 +3144,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('backdrop-contrast', {
       themeKeys: ['--backdrop-contrast', '--contrast'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       handle: (value) => [
         backdropFilterProperties(),
         decl('--tw-backdrop-contrast', `contrast(${value})`),
@@ -3103,7 +3172,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('grayscale', {
       themeKeys: ['--grayscale'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       defaultValue: '100%',
       handle: (value) => [
         filterProperties(),
@@ -3114,7 +3186,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('backdrop-grayscale', {
       themeKeys: ['--backdrop-grayscale', '--grayscale'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       defaultValue: '100%',
       handle: (value) => [
         backdropFilterProperties(),
@@ -3142,7 +3217,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('hue-rotate', {
       themeKeys: ['--hue-rotate'],
-      handleBareValue: ({ value }) => `${value}deg`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}deg`
+      },
       handle: (value) => [
         filterProperties(),
         decl('--tw-hue-rotate', `hue-rotate(${value})`),
@@ -3152,7 +3230,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('backdrop-hue-rotate', {
       themeKeys: ['--backdrop-hue-rotate', '--hue-rotate'],
-      handleBareValue: ({ value }) => `${value}deg`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}deg`
+      },
       handle: (value) => [
         backdropFilterProperties(),
         decl('--tw-backdrop-hue-rotate', `hue-rotate(${value})`),
@@ -3177,7 +3258,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('invert', {
       themeKeys: ['--invert'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       defaultValue: '100%',
       handle: (value) => [
         filterProperties(),
@@ -3188,7 +3272,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('backdrop-invert', {
       themeKeys: ['--backdrop-invert', '--invert'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       defaultValue: '100%',
       handle: (value) => [
         backdropFilterProperties(),
@@ -3216,7 +3303,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('saturate', {
       themeKeys: ['--saturate'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       handle: (value) => [
         filterProperties(),
         decl('--tw-saturate', `saturate(${value})`),
@@ -3226,7 +3316,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('backdrop-saturate', {
       themeKeys: ['--backdrop-saturate', '--saturate'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       handle: (value) => [
         backdropFilterProperties(),
         decl('--tw-backdrop-saturate', `saturate(${value})`),
@@ -3251,7 +3344,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('sepia', {
       themeKeys: ['--sepia'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       defaultValue: '100%',
       handle: (value) => [
         filterProperties(),
@@ -3262,7 +3358,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('backdrop-sepia', {
       themeKeys: ['--backdrop-sepia', '--sepia'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       defaultValue: '100%',
       handle: (value) => [
         backdropFilterProperties(),
@@ -3304,7 +3403,10 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('backdrop-opacity', {
       themeKeys: ['--backdrop-opacity', '--opacity'],
-      handleBareValue: ({ value }) => `${value}%`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
       handle: (value) => [
         backdropFilterProperties(),
         decl('--tw-backdrop-opacity', `opacity(${value})`),
@@ -3367,7 +3469,10 @@ export function createUtilities(theme: Theme) {
     })
 
     functionalUtility('delay', {
-      handleBareValue: ({ value }) => `${value}ms`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}ms`
+      },
       themeKeys: ['--transition-delay'],
       handle: (value) => [decl('transition-delay', value)],
     })
@@ -3693,7 +3798,10 @@ export function createUtilities(theme: Theme) {
     functionalUtility('outline-offset', {
       supportsNegative: true,
       themeKeys: ['--outline-offset'],
-      handleBareValue: ({ value }) => `${value}px`,
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}px`
+      },
       handle: (value) => [decl('outline-offset', value)],
     })
 
@@ -3707,7 +3815,10 @@ export function createUtilities(theme: Theme) {
 
   functionalUtility('opacity', {
     themeKeys: ['--opacity'],
-    handleBareValue: ({ value }) => `${value}%`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}%`
+    },
     handle: (value) => [decl('opacity', value)],
   })
 
@@ -3722,7 +3833,10 @@ export function createUtilities(theme: Theme) {
   functionalUtility('underline-offset', {
     supportsNegative: true,
     themeKeys: ['--text-underline-offset'],
-    handleBareValue: ({ value }) => `${value}px`,
+    handleBareValue: ({ value }) => {
+      if (Number.isNaN(Number(value))) return null
+      return `${value}px`
+    },
     handle: (value) => [decl('text-underline-offset', value)],
   })
 
