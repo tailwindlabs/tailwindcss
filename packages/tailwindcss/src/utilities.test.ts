@@ -2059,7 +2059,9 @@ test('flex', () => {
       flex: none;
     }"
   `)
-  expect(run(['-flex-1', '-flex-auto', '-flex-initial', '-flex-none', '-flex-[123]'])).toEqual('')
+  expect(
+    run(['-flex-1', '-flex-auto', '-flex-initial', '-flex-none', '-flex-[123]', 'flex-unknown']),
+  ).toEqual('')
 })
 
 test('flex-shrink', () => {
@@ -7029,6 +7031,8 @@ test('bg', () => {
   expect(
     run([
       'bg',
+      'bg-unknown',
+
       // background-color
       '-bg-inherit',
       '-bg-red-500',
@@ -8065,6 +8069,7 @@ test('fill', () => {
   expect(
     run([
       'fill',
+      'fill-unknown',
       '-fill-red-500',
       '-fill-red-500/50',
       '-fill-red-500/[0.5]',
@@ -8212,6 +8217,8 @@ test('stroke', () => {
   expect(
     run([
       'stroke',
+      'stroke-unknown',
+
       // Color
       '-stroke-red-500',
       '-stroke-red-500/50',

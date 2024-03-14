@@ -1048,7 +1048,9 @@ export function createUtilities(theme: Theme) {
       return [decl('flex', `calc(${candidate.value.fraction} * 100%)`)]
     }
 
-    return [decl('flex', candidate.value.value)]
+    if (Number.isInteger(Number(candidate.value.value))) {
+      return [decl('flex', candidate.value.value)]
+    }
   })
 
   /**
