@@ -1308,13 +1308,13 @@ export function createUtilities(theme: Theme) {
   ])
   // rotate-x, rotate-y, and rotate-z change the axis of rotation from the default z-axis.
   // Arbitrary vector values are implemented in the functional variant.
-  ;['x', 'y', 'z'].forEach((axis) => {
+  for (let axis of ['x', 'y', 'z']) {
     staticUtility(`rotate-${axis}`, [
       rotateProperties,
       [`--tw-rotate-${axis}`, '1'],
       ['rotate', `var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate)`],
     ])
-  })
+  }
 
   let skewProperties = () =>
     atRoot([property('--tw-skew-x', '0deg', '<angle>'), property('--tw-skew-y', '0deg', '<angle>')])
