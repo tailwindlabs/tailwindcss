@@ -16,6 +16,8 @@ type DataType =
   | 'generic-name'
   | 'absolute-size'
   | 'relative-size'
+  | 'angle'
+  | 'vector'
 
 const checks: Record<DataType, (value: string) => boolean> = {
   color: isColor,
@@ -31,6 +33,8 @@ const checks: Record<DataType, (value: string) => boolean> = {
   'generic-name': isGenericName,
   'absolute-size': isAbsoluteSize,
   'relative-size': isRelativeSize,
+  angle: isAngle,
+  vector: isVector,
 }
 
 /**
@@ -282,4 +286,39 @@ function isBackgroundSize(value: string) {
   }
 
   return count > 0
+}
+
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Determine if `value` is valid angle
+ *
+ * <angle> = <number><units>
+ * <units> = deg | rad | grad | turn
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/angle
+ */
+
+const ANGLE_UNITS = ['deg', 'rad', 'grad', 'turn']
+
+const IS_ANGLE = new RegExp(`^${HAS_NUMBER.source}(${ANGLE_UNITS.join('|')})$`)
+
+function isAngle(value: string) {
+  return IS_ANGLE.test(value)
+}
+
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Determine if `value` is valid for the vector component of `rotate`
+ *
+ * <vector> = <number> <number> <number>
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/rotate#vector_plus_angle_value
+ */
+
+const IS_VECTOR = new RegExp(`^${HAS_NUMBER.source} +${HAS_NUMBER.source} +${HAS_NUMBER.source}$`)
+
+function isVector(value: string) {
+  return IS_VECTOR.test(value)
 }

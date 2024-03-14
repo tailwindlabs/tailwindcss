@@ -2488,18 +2488,323 @@ test('translate-y', () => {
 test('rotate', () => {
   expect(run(['rotate-45', '-rotate-45', 'rotate-[123deg]'])).toMatchInlineSnapshot(`
     ".-rotate-45 {
+      --tw-rotate: calc(45deg * -1);
       rotate: -45deg;
     }
 
     .rotate-45 {
+      --tw-rotate: 45deg;
       rotate: 45deg;
     }
 
     .rotate-\\[123deg\\] {
+      --tw-rotate: 123deg;
       rotate: 123deg;
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(run(['rotate-45', 'rotate-[0.3_0.7_1]'])).toMatchInlineSnapshot(`
+    ".rotate-45 {
+      --tw-rotate: 45deg;
+      rotate: 45deg;
+    }
+
+    .rotate-\\[0\\.3_0\\.7_1\\] {
+      rotate: .3 .7 1 var(--tw-rotate);
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
     }"
   `)
   expect(run(['rotate', 'rotate-unknown'])).toEqual('')
+})
+
+test('rotate-x', () => {
+  expect(run(['rotate-45', 'rotate-x'])).toMatchInlineSnapshot(`
+    ".rotate-45 {
+      --tw-rotate: 45deg;
+      rotate: 45deg;
+    }
+
+    .rotate-x {
+      --tw-rotate-x: 1;
+      rotate: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate);
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(run(['rotate-45', 'rotate-x', 'rotate-y'])).toMatchInlineSnapshot(`
+    ".rotate-45 {
+      --tw-rotate: 45deg;
+      rotate: 45deg;
+    }
+
+    .rotate-x {
+      --tw-rotate-x: 1;
+      rotate: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate);
+    }
+
+    .rotate-y {
+      --tw-rotate-y: 1;
+      rotate: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate);
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(run(['rotate-x'])).toMatchInlineSnapshot(`
+    ".rotate-x {
+      --tw-rotate-x: 1;
+      rotate: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate);
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+})
+
+test('rotate-y', () => {
+  expect(run(['rotate-45', 'rotate-y'])).toMatchInlineSnapshot(`
+    ".rotate-45 {
+      --tw-rotate: 45deg;
+      rotate: 45deg;
+    }
+
+    .rotate-y {
+      --tw-rotate-y: 1;
+      rotate: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate);
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(run(['rotate-y'])).toMatchInlineSnapshot(`
+    ".rotate-y {
+      --tw-rotate-y: 1;
+      rotate: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate);
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+})
+
+test('rotate-z', () => {
+  expect(run(['rotate-45', 'rotate-z'])).toMatchInlineSnapshot(`
+    ".rotate-45 {
+      --tw-rotate: 45deg;
+      rotate: 45deg;
+    }
+
+    .rotate-z {
+      --tw-rotate-z: 1;
+      rotate: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate);
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(run(['rotate-z'])).toMatchInlineSnapshot(`
+    ".rotate-z {
+      --tw-rotate-z: 1;
+      rotate: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate);
+    }
+
+    @property --tw-rotate {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @property --tw-rotate-x {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-y {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-rotate-z {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
 })
 
 test('skew', () => {
