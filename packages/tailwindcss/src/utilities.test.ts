@@ -3036,6 +3036,44 @@ test('transform', () => {
       initial-value: 0deg;
     }"
   `)
+  expect(run(['transform-flat', 'transform-3d', 'transform-content', 'transform-border', 'transform-fill', 'transform-stroke', 'transform-view', 'backface-visible', 'backface-hidden']))
+    .toMatchInlineSnapshot(`
+      ".backface-hidden {
+        backface-visibility: hidden;
+      }
+
+      .backface-visible {
+        backface-visibility: visible;
+      }
+
+      .transform-3d {
+        transform-style: preserve-3d;
+      }
+
+      .transform-border {
+        transform-box: border-box;
+      }
+
+      .transform-content {
+        transform-box: content-box;
+      }
+
+      .transform-fill {
+        transform-box: fill-box;
+      }
+
+      .transform-flat {
+        transform-style: flat;
+      }
+
+      .transform-stroke {
+        transform-box: stroke-box;
+      }
+
+      .transform-view {
+        transform-box: view-box;
+      }"
+    `)
   expect(run(['-transform', '-transform-cpu', '-transform-gpu', '-transform-none'])).toEqual('')
 })
 
