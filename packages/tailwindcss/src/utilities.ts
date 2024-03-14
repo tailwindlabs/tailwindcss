@@ -1498,6 +1498,27 @@ export function createUtilities(theme: Theme) {
   ])
 
   /**
+   * @css `transform-style`
+   */
+  staticUtility('transform-flat', [['transform-style', 'flat']])
+  staticUtility('transform-3d', [['transform-style', 'preserve-3d']])
+
+  /**
+   * @css `transform-box`
+   */
+  staticUtility('transform-content', [['transform-box', 'content-box']])
+  staticUtility('transform-border', [['transform-box', 'border-box']])
+  staticUtility('transform-fill', [['transform-box', 'fill-box']])
+  staticUtility('transform-stroke', [['transform-box', 'stroke-box']])
+  staticUtility('transform-view', [['transform-box', 'view-box']])
+
+  /**
+   * @css `backface-visibility`
+   */
+  staticUtility('backface-visible', [['backface-visibility', 'visible']])
+  staticUtility('backface-hidden', [['backface-visibility', 'hidden']])
+
+  /**
    * @css `cursor`
    */
   for (let value of [
