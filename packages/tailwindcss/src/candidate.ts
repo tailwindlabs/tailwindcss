@@ -426,6 +426,13 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
           ? null
           : value.slice(valueWithoutModifier.lastIndexOf('-') + 1)
 
+      // If the leftover value is an empty string, it means that the value is an
+      // invalid named value. This makes the candidate invalid and we can
+      // skip continue parsing it.
+      if (valueWithoutModifier === '') {
+        return null
+      }
+
       candidate.value = {
         kind: 'named',
         value: valueWithoutModifier,
