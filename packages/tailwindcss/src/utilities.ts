@@ -1285,9 +1285,15 @@ export function createUtilities(theme: Theme) {
       let type = candidate.value.dataType ?? inferDataType(value, ['angle', 'vector'])
       if (type === 'vector') {
         return [decl('rotate', `${value} var(--tw-rotate)`)]
+      } else if (type !== 'angle') {
+        return [decl('rotate', value)]
       }
     } else {
-      value = theme.resolve(candidate.value.value, ['--rotate']) ?? `${candidate.value.value}deg`
+      value = theme.resolve(candidate.value.value, ['--rotate'])
+      if (!value && !Number.isNaN(Number(candidate.value.value))) {
+        value = `${candidate.value.value}deg`
+      }
+      if (!value) return
     }
     if (Number.isNaN(Number(value))) return null
     value = withNegative(value, candidate)
