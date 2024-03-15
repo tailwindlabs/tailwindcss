@@ -1488,11 +1488,6 @@ export function createUtilities(theme: Theme) {
     themeKeys: ['--perspective'],
     handle: (value) => [decl('perspective', value)],
   })
-  suggest('perspective', () => [
-    {
-      valueThemeKeys: ['--perspective'],
-    },
-  ])
 
   /**
    * @css `transform`

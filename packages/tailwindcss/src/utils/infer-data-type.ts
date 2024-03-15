@@ -290,6 +290,10 @@ function isBackgroundSize(value: string) {
 
 /* -------------------------------------------------------------------------- */
 
+const ANGLE_UNITS = ['deg', 'rad', 'grad', 'turn']
+
+const IS_ANGLE = new RegExp(`^${HAS_NUMBER.source}(${ANGLE_UNITS.join('|')})$`)
+
 /**
  * Determine if `value` is valid angle
  *
@@ -298,16 +302,13 @@ function isBackgroundSize(value: string) {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/angle
  */
-
-const ANGLE_UNITS = ['deg', 'rad', 'grad', 'turn']
-
-const IS_ANGLE = new RegExp(`^${HAS_NUMBER.source}(${ANGLE_UNITS.join('|')})$`)
-
 function isAngle(value: string) {
   return IS_ANGLE.test(value)
 }
 
 /* -------------------------------------------------------------------------- */
+
+const IS_VECTOR = new RegExp(`^${HAS_NUMBER.source} +${HAS_NUMBER.source} +${HAS_NUMBER.source}$`)
 
 /**
  * Determine if `value` is valid for the vector component of `rotate`
@@ -316,9 +317,6 @@ function isAngle(value: string) {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/rotate#vector_plus_angle_value
  */
-
-const IS_VECTOR = new RegExp(`^${HAS_NUMBER.source} +${HAS_NUMBER.source} +${HAS_NUMBER.source}$`)
-
 function isVector(value: string) {
   return IS_VECTOR.test(value)
 }
