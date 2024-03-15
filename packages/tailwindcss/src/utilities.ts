@@ -1418,12 +1418,14 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  let scaleProperties = () =>
+  let scaleProperties = () => [
     atRoot([
       property('--tw-scale-x', '1', '<number> | <percentage>'),
       property('--tw-scale-y', '1', '<number> | <percentage>'),
       property('--tw-scale-z', '1', '<number> | <percentage>'),
-    ])
+    ]),
+    decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
+  ]
 
   /**
    * @css `scale`
@@ -1436,10 +1438,9 @@ export function createUtilities(theme: Theme) {
       return `${value}%`
     },
     handle: (value) => [
-      scaleProperties(),
+      ...scaleProperties(),
       decl('--tw-scale-x', value),
       decl('--tw-scale-y', value),
-      decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
     ],
   })
 
@@ -1485,6 +1486,29 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
+  /**
+   * @css `scale`
+   */
+  functionalUtility('scale-3d', {
+    supportsNegative: true,
+    themeKeys: ['--scale'],
+    handleBareValue: ({ value }) => `${value}%`,
+    handle: (value) => [
+      ...scaleProperties(),
+      decl('--tw-scale-x', value),
+      decl('--tw-scale-y', value),
+      decl('--tw-scale-z', value),
+    ],
+  })
+
+  suggest('scale-3d', () => [
+    {
+      supportsNegative: true,
+      values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
+      valueThemeKeys: ['--scale'],
+    },
+  ])
+
   for (let axis of ['x', 'y', 'z']) {
     /**
      * @css `scale`
@@ -1493,11 +1517,7 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       themeKeys: ['--scale'],
       handleBareValue: ({ value }) => `${value}%`,
-      handle: (value) => [
-        scaleProperties(),
-        decl(`--tw-scale-${axis}`, value),
-        decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
-      ],
+      handle: (value) => [...scaleProperties(), decl(`--tw-scale-${axis}`, value)],
     })
 
     suggest(`scale-${axis}`, () => [

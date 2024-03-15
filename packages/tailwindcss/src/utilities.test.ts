@@ -2364,6 +2364,69 @@ test('origin', () => {
   expect(run(['-origin-center', '-origin-[--value]'])).toEqual('')
 })
 
+test('perspective-origin', () => {
+  expect(
+    run([
+      'perspective-origin-center',
+      'perspective-origin-top',
+      'perspective-origin-top-right',
+      'perspective-origin-right',
+      'perspective-origin-bottom-right',
+      'perspective-origin-bottom',
+      'perspective-origin-bottom-left',
+      'perspective-origin-left',
+      'perspective-origin-top-left',
+      'perspective-origin-[50px_100px]',
+      'perspective-origin-[--value]',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".perspective-origin-\\[--value\\] {
+      perspective-origin: var(--value);
+    }
+
+    .perspective-origin-\\[50px_100px\\] {
+      perspective-origin: 50px 100px;
+    }
+
+    .perspective-origin-bottom {
+      perspective-origin: bottom;
+    }
+
+    .perspective-origin-bottom-left {
+      perspective-origin: 0 100%;
+    }
+
+    .perspective-origin-bottom-right {
+      perspective-origin: 100% 100%;
+    }
+
+    .perspective-origin-center {
+      perspective-origin: center;
+    }
+
+    .perspective-origin-left {
+      perspective-origin: 0;
+    }
+
+    .perspective-origin-right {
+      perspective-origin: 100%;
+    }
+
+    .perspective-origin-top {
+      perspective-origin: top;
+    }
+
+    .perspective-origin-top-left {
+      perspective-origin: 0 0;
+    }
+
+    .perspective-origin-top-right {
+      perspective-origin: 100% 0;
+    }"
+  `)
+  expect(run(['-origin-center', '-origin-[--value]'])).toEqual('')
+})
+
 test('translate', () => {
   expect(
     run([
@@ -2909,21 +2972,21 @@ test('skew-y', () => {
 test('scale', () => {
   expect(run(['scale-50', '-scale-50', 'scale-[123deg]'])).toMatchInlineSnapshot(`
     ".-scale-50 {
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
       --tw-scale-x: calc(50% * -1);
       --tw-scale-y: calc(50% * -1);
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
     }
 
     .scale-50 {
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
       --tw-scale-x: 50%;
       --tw-scale-y: 50%;
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
     }
 
     .scale-\\[123deg\\] {
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
       --tw-scale-x: 123deg;
       --tw-scale-y: 123deg;
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
     }
 
     @property --tw-scale-x {
@@ -2950,18 +3013,18 @@ test('scale', () => {
 test('scale-x', () => {
   expect(run(['scale-x-50', '-scale-x-50', 'scale-x-[123deg]'])).toMatchInlineSnapshot(`
     ".-scale-x-50 {
-      --tw-scale-x: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-x: calc(50% * -1);
     }
 
     .scale-x-50 {
-      --tw-scale-x: 50%;
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-x: 50%;
     }
 
     .scale-x-\\[123deg\\] {
-      --tw-scale-x: 123deg;
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-x: 123deg;
     }
 
     @property --tw-scale-x {
@@ -2988,18 +3051,18 @@ test('scale-x', () => {
 test('scale-y', () => {
   expect(run(['scale-y-50', '-scale-y-50', 'scale-y-[123deg]'])).toMatchInlineSnapshot(`
     ".-scale-y-50 {
-      --tw-scale-y: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-y: calc(50% * -1);
     }
 
     .scale-y-50 {
-      --tw-scale-y: 50%;
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-y: 50%;
     }
 
     .scale-y-\\[123deg\\] {
-      --tw-scale-y: 123deg;
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-y: 123deg;
     }
 
     @property --tw-scale-x {
@@ -3026,18 +3089,18 @@ test('scale-y', () => {
 test('scale-z', () => {
   expect(run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
     ".-scale-z-50 {
-      --tw-scale-z: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-z: calc(50% * -1);
     }
 
     .scale-z-50 {
-      --tw-scale-z: 50%;
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-z: 50%;
     }
 
     .scale-z-\\[123deg\\] {
-      --tw-scale-z: 123deg;
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+      --tw-scale-z: 123deg;
     }
 
     @property --tw-scale-x {
