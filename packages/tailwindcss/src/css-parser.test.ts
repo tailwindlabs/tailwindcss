@@ -480,7 +480,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ])
     })
 
-    it('should parse mutlti-line declarations', () => {
+    it('should parse multi-line declarations', () => {
       expect(
         parse(css`
           .foo {
