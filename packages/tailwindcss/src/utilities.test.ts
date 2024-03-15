@@ -2623,6 +2623,11 @@ test('rotate', () => {
       initial-value: 0;
     }"
   `)
+  expect(run(['rotate-[0.3_0.7_1_45deg]'])).toMatchInlineSnapshot(`
+    ".rotate-\\[0\\.3_0\\.7_1_45deg\\] {
+      rotate: .3 .7 1 45deg;
+    }"
+  `)
   expect(run(['rotate', 'rotate-unknown'])).toEqual('')
 })
 
