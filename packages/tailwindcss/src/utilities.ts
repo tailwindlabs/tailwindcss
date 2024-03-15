@@ -1261,14 +1261,6 @@ export function createUtilities(theme: Theme) {
     ],
   })
 
-  /**
-   * @css `rotate`
-   *
-   * `rotate-45` => `rotate: 45deg`
-   * `rotate-45 rotate-x` => `rotate: 1 0 0 45deg`
-   * `rotate-45 rotate-x rotate-y` => `rotate: 1 1 0 45deg`
-   * `rotate-45 rotate-[1_2_3]` => `rotate: 1 2 3 45deg`
-   */
   let rotateProperties = () =>
     atRoot([
       property('--tw-rotate', '0deg', '<angle>'),
@@ -1277,6 +1269,15 @@ export function createUtilities(theme: Theme) {
       property('--tw-rotate-y', '0', '<number>'),
       property('--tw-rotate-z', '0', '<number>'),
     ])
+
+  /**
+   * @css `rotate`
+   *
+   * `rotate-45` => `rotate: 45deg`
+   * `rotate-45 rotate-x` => `rotate: 1 0 0 45deg`
+   * `rotate-45 rotate-x rotate-y` => `rotate: 1 1 0 45deg`
+   * `rotate-45 rotate-[1_2_3]` => `rotate: 1 2 3 45deg`
+   */
   utilities.functional('rotate', (candidate) => {
     if (!candidate.value) return
     let value
@@ -1306,9 +1307,14 @@ export function createUtilities(theme: Theme) {
       valueThemeKeys: ['--rotate'],
     },
   ])
-  // rotate-x, rotate-y, and rotate-z change the axis of rotation from the default z-axis.
-  // Arbitrary vector values are implemented in the functional variant.
+
   for (let axis of ['x', 'y', 'z']) {
+    /**
+     * @css `rotate`
+     *
+     * rotate-x, rotate-y, and rotate-z change the axis of rotation from the default z-axis.
+     * Arbitrary vector values are implemented in the functional variant.
+     */
     staticUtility(`rotate-${axis}`, [
       rotateProperties,
       [`--tw-rotate-${axis}`, '1'],
@@ -1402,6 +1408,7 @@ export function createUtilities(theme: Theme) {
     atRoot([
       property('--tw-scale-x', '1', '<number> | <percentage>'),
       property('--tw-scale-y', '1', '<number> | <percentage>'),
+      property('--tw-scale-z', '1', '<number> | <percentage>'),
     ])
 
   /**
@@ -1418,7 +1425,7 @@ export function createUtilities(theme: Theme) {
       scaleProperties(),
       decl('--tw-scale-x', value),
       decl('--tw-scale-y', value),
-      decl('scale', 'var(--tw-scale-x) var(--tw-scale-y)'),
+      decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
     ],
   })
 
@@ -1435,7 +1442,7 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [
       scaleProperties(),
       decl('--tw-scale-x', value),
-      decl('scale', 'var(--tw-scale-x) var(--tw-scale-y)'),
+      decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
     ],
   })
 
@@ -1452,7 +1459,7 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [
       scaleProperties(),
       decl('--tw-scale-y', value),
-      decl('scale', 'var(--tw-scale-x) var(--tw-scale-y)'),
+      decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
     ],
   })
 
@@ -1464,21 +1471,29 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  suggest('scale-x', () => [
-    {
+  for (let axis of ['x', 'y', 'z']) {
+    /**
+     * @css `scale`
+     */
+    functionalUtility(`scale-${axis}`, {
       supportsNegative: true,
-      values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-      valueThemeKeys: ['--scale'],
-    },
-  ])
+      themeKeys: ['--scale'],
+      handleBareValue: ({ value }) => `${value}%`,
+      handle: (value) => [
+        scaleProperties(),
+        decl(`--tw-scale-${axis}`, value),
+        decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
+      ],
+    })
 
-  suggest('scale-y', () => [
-    {
-      supportsNegative: true,
-      values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-      valueThemeKeys: ['--scale'],
-    },
-  ])
+    suggest(`scale-${axis}`, () => [
+      {
+        supportsNegative: true,
+        values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
+        valueThemeKeys: ['--scale'],
+      },
+    ])
+  }
 
   /**
    * @css `perspective`
