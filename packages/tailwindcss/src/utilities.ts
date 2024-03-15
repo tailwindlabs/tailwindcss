@@ -1312,6 +1312,8 @@ export function createUtilities(theme: Theme) {
     }
     if (Number.isNaN(Number(value))) return null
     value = withNegative(value, candidate)
+    // Set --tw-rotate even though we don't use it here. If the user also uses
+    // rotate-x, rotate-y, or rotate-z, the angle is needed in that declaration.
     return [rotateProperties(), decl('--tw-rotate', value), decl('rotate', value)]
   })
   suggest('rotate', () => [
