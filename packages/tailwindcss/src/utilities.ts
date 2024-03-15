@@ -1422,9 +1422,10 @@ export function createUtilities(theme: Theme) {
     atRoot([
       property('--tw-scale-x', '1', '<number> | <percentage>'),
       property('--tw-scale-y', '1', '<number> | <percentage>'),
-      property('--tw-scale-z', '1', '<number> | <percentage>'),
+      property('--tw-scale-z', undefined, '<number> | <percentage>'),
     ]),
-    decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
+    // Only include the z component if it's defined to avoid triggering unnecessary 3D transformations.
+    decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z,)`),
   ]
 
   /**
