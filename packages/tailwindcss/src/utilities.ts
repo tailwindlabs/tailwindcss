@@ -176,10 +176,11 @@ function withNegative(
 }
 
 /**
- * Finds a color in the theme under one of the given theme keys that matches `candidateValue`.
+ * Finds a color in the theme under one of the given theme keys that matches
+ * `candidateValue`.
  *
- * The values `transparent` and `current` are special-cased as they are universal and don't need to
- * be resolved from the theme.
+ * The values `inherit`, `transparent` and `current` are special-cased as they
+ * are universal and don't need to be resolved from the theme.
  */
 function resolveThemeColor<T extends ColorThemeKey>(
   candidate: Extract<Candidate, { kind: 'functional' }>,
@@ -199,6 +200,10 @@ function resolveThemeColor<T extends ColorThemeKey>(
   let value: string | null = null
 
   switch (candidate.value!.value) {
+    case 'inherit': {
+      value = 'inherit'
+      break
+    }
     case 'transparent': {
       value = 'transparent'
       break

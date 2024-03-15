@@ -5101,6 +5101,7 @@ test('accent', () => {
         'accent-current/50',
         'accent-current/[0.5]',
         'accent-current/[50%]',
+        'accent-inherit',
         'accent-transparent',
         'accent-[#0088cc]',
         'accent-[#0088cc]/50',
@@ -5129,6 +5130,10 @@ test('accent', () => {
       accent-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .accent-inherit {
+      accent-color: inherit;
+    }
+
     .accent-red-500 {
       accent-color: #ef4444;
     }
@@ -5152,6 +5157,7 @@ test('accent', () => {
       '-accent-current/50',
       '-accent-current/[0.5]',
       '-accent-current/[50%]',
+      '-accent-inherit',
       '-accent-transparent',
       '-accent-[#0088cc]',
       '-accent-[#0088cc]/50',
@@ -5179,6 +5185,7 @@ test('caret', () => {
         'caret-current/50',
         'caret-current/[0.5]',
         'caret-current/[50%]',
+        'caret-inherit',
         'caret-transparent',
         'caret-[#0088cc]',
         'caret-[#0088cc]/50',
@@ -5207,6 +5214,10 @@ test('caret', () => {
       caret-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .caret-inherit {
+      caret-color: inherit;
+    }
+
     .caret-red-500 {
       caret-color: #ef4444;
     }
@@ -5230,6 +5241,7 @@ test('caret', () => {
       '-caret-current/50',
       '-caret-current/[0.5]',
       '-caret-current/[50%]',
+      '-caret-inherit',
       '-caret-transparent',
       '-caret-[#0088cc]',
       '-caret-[#0088cc]/50',
@@ -5257,6 +5269,7 @@ test('divide-color', () => {
         'divide-current/50',
         'divide-current/[0.5]',
         'divide-current/[50%]',
+        'divide-inherit',
         'divide-transparent',
         'divide-[#0088cc]',
         'divide-[#0088cc]/50',
@@ -5301,6 +5314,10 @@ test('divide-color', () => {
       border-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    :where(.divide-inherit > :not([hidden]) ~ :not([hidden])) {
+      border-color: inherit;
+    }
+
     :where(.divide-red-500 > :not([hidden]) ~ :not([hidden])) {
       border-color: #ef4444;
     }
@@ -5332,6 +5349,7 @@ test('divide-color', () => {
       '-divide-current/50',
       '-divide-current/[0.5]',
       '-divide-current/[50%]',
+      '-divide-inherit',
       '-divide-transparent',
       '-divide-[#0088cc]',
       '-divide-[#0088cc]/50',
@@ -6673,6 +6691,7 @@ for (let prefix of prefixes) {
     classes.push(`${prefix}-[#0088cc]/50`)
     classes.push(`${prefix}-current`)
     classes.push(`${prefix}-current/50`)
+    classes.push(`${prefix}-inherit`)
     classes.push(`${prefix}-transparent`)
 
     // Inference: Color
@@ -6741,7 +6760,6 @@ test('bg', () => {
       `,
       [
         // background-color
-        'bg-inherit',
         'bg-red-500',
         'bg-red-500/50',
         'bg-red-500/[0.5]',
@@ -6750,6 +6768,7 @@ test('bg', () => {
         'bg-current/50',
         'bg-current/[0.5]',
         'bg-current/[50%]',
+        'bg-inherit',
         'bg-transparent',
         'bg-[#0088cc]',
         'bg-[#0088cc]/50',
@@ -7034,7 +7053,6 @@ test('bg', () => {
       'bg-unknown',
 
       // background-color
-      '-bg-inherit',
       '-bg-red-500',
       '-bg-red-500/50',
       '-bg-red-500/[0.5]',
@@ -7043,6 +7061,7 @@ test('bg', () => {
       '-bg-current/50',
       '-bg-current/[0.5]',
       '-bg-current/[50%]',
+      '-bg-inherit',
       '-bg-transparent',
       '-bg-[#0088cc]',
       '-bg-[#0088cc]/50',
@@ -7129,6 +7148,7 @@ test('from', () => {
         'from-current/50',
         'from-current/[0.5]',
         'from-current/[50%]',
+        'from-inherit',
         'from-transparent',
         'from-[#0088cc]',
         'from-[#0088cc]/50',
@@ -7195,6 +7215,11 @@ test('from', () => {
 
     .from-current\\/50, .from-current\\/\\[0\\.5\\], .from-current\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in srgb, currentColor 50%, transparent);
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+    }
+
+    .from-inherit {
+      --tw-gradient-from: inherit;
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -7299,6 +7324,7 @@ test('from', () => {
       '-from-current/50',
       '-from-current/[0.5]',
       '-from-current/[50%]',
+      '-from-inherit',
       '-from-transparent',
       '-from-[#0088cc]',
       '-from-[#0088cc]/50',
@@ -7332,6 +7358,7 @@ test('via', () => {
         'via-current/50',
         'via-current/[0.5]',
         'via-current/[50%]',
+        'via-inherit',
         'via-transparent',
         'via-[#0088cc]',
         'via-[#0088cc]/50',
@@ -7405,6 +7432,12 @@ test('via', () => {
 
     .via-current\\/50, .via-current\\/\\[0\\.5\\], .via-current\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in srgb, currentColor 50%, transparent);
+      --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-stops: var(--tw-gradient-via-stops);
+    }
+
+    .via-inherit {
+      --tw-gradient-via: inherit;
       --tw-gradient-via-stops: var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -7513,6 +7546,7 @@ test('via', () => {
       '-via-current/50',
       '-via-current/[0.5]',
       '-via-current/[50%]',
+      '-via-inherit',
       '-via-transparent',
       '-via-[#0088cc]',
       '-via-[#0088cc]/50',
@@ -7546,6 +7580,7 @@ test('to', () => {
         'to-current/50',
         'to-current/[0.5]',
         'to-current/[50%]',
+        'to-inherit',
         'to-transparent',
         'to-[#0088cc]',
         'to-[#0088cc]/50',
@@ -7612,6 +7647,11 @@ test('to', () => {
 
     .to-current\\/50, .to-current\\/\\[0\\.5\\], .to-current\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in srgb, currentColor 50%, transparent);
+      --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+    }
+
+    .to-inherit {
+      --tw-gradient-to: inherit;
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
 
@@ -7716,6 +7756,7 @@ test('to', () => {
       '-to-current/50',
       '-to-current/[0.5]',
       '-to-current/[50%]',
+      '-to-inherit',
       '-to-transparent',
       '-to-[#0088cc]',
       '-to-[#0088cc]/50',
@@ -8036,6 +8077,7 @@ test('fill', () => {
         'fill-current/50',
         'fill-current/[0.5]',
         'fill-current/[50%]',
+        'fill-inherit',
         'fill-transparent',
         'fill-[#0088cc]',
         'fill-[#0088cc]/50',
@@ -8064,6 +8106,10 @@ test('fill', () => {
       fill: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .fill-inherit {
+      fill: inherit;
+    }
+
     .fill-red-500 {
       fill: #ef4444;
     }
@@ -8088,6 +8134,7 @@ test('fill', () => {
       '-fill-current/50',
       '-fill-current/[0.5]',
       '-fill-current/[50%]',
+      '-fill-inherit',
       '-fill-transparent',
       '-fill-[#0088cc]',
       '-fill-[#0088cc]/50',
@@ -8116,6 +8163,7 @@ test('stroke', () => {
         'stroke-current/50',
         'stroke-current/[0.5]',
         'stroke-current/[50%]',
+        'stroke-inherit',
         'stroke-transparent',
         'stroke-[#0088cc]',
         'stroke-[#0088cc]/50',
@@ -8180,6 +8228,10 @@ test('stroke', () => {
       stroke: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .stroke-inherit {
+      stroke: inherit;
+    }
+
     .stroke-none {
       stroke: none;
     }
@@ -8238,6 +8290,7 @@ test('stroke', () => {
       '-stroke-current/50',
       '-stroke-current/[0.5]',
       '-stroke-current/[50%]',
+      '-stroke-inherit',
       '-stroke-transparent',
       '-stroke-[#0088cc]',
       '-stroke-[#0088cc]/50',
@@ -8883,6 +8936,7 @@ test('placeholder', () => {
         'placeholder-current/50',
         'placeholder-current/[0.5]',
         'placeholder-current/[50%]',
+        'placeholder-inherit',
         'placeholder-transparent',
         'placeholder-[#0088cc]',
         'placeholder-[#0088cc]/50',
@@ -8927,6 +8981,10 @@ test('placeholder', () => {
       color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .placeholder-inherit::placeholder {
+      color: inherit;
+    }
+
     .placeholder-red-500::placeholder {
       color: #ef4444;
     }
@@ -8958,6 +9016,7 @@ test('placeholder', () => {
       '-placeholder-current/50',
       '-placeholder-current/[0.5]',
       '-placeholder-current/[50%]',
+      '-placeholder-inherit',
       '-placeholder-transparent',
       '-placeholder-[#0088cc]',
       '-placeholder-[#0088cc]/50',
@@ -8986,6 +9045,7 @@ test('decoration', () => {
         'decoration-current/50',
         'decoration-current/[0.5]',
         'decoration-current/[50%]',
+        'decoration-inherit',
         'decoration-transparent',
         'decoration-[#0088cc]',
         'decoration-[#0088cc]/50',
@@ -9061,6 +9121,11 @@ test('decoration', () => {
     .decoration-current\\/50, .decoration-current\\/\\[0\\.5\\], .decoration-current\\/\\[50\\%\\] {
       -webkit-text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
       text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+    }
+
+    .decoration-inherit {
+      -webkit-text-decoration-color: inherit;
+      text-decoration-color: inherit;
     }
 
     .decoration-red-500 {
@@ -10296,6 +10361,7 @@ test('outline', () => {
         'outline-current/50',
         'outline-current/[0.5]',
         'outline-current/[50%]',
+        'outline-inherit',
         'outline-transparent',
         'outline-[#0088cc]',
         'outline-[#0088cc]/50',
@@ -10404,6 +10470,10 @@ test('outline', () => {
       outline-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .outline-inherit {
+      outline-color: inherit;
+    }
+
     .outline-red-500 {
       outline-color: #ef4444;
     }
@@ -10461,6 +10531,7 @@ test('outline', () => {
       '-outline-current/50',
       '-outline-current/[0.5]',
       '-outline-current/[50%]',
+      '-outline-inherit',
       '-outline-transparent',
       '-outline-[#0088cc]',
       '-outline-[#0088cc]/50',
@@ -10590,6 +10661,7 @@ test('text', () => {
         'text-current/50',
         'text-current/[0.5]',
         'text-current/[50%]',
+        'text-inherit',
         'text-transparent',
         'text-[#0088cc]',
         'text-[#0088cc]/50',
@@ -10739,6 +10811,10 @@ test('text', () => {
       color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .text-inherit {
+      color: inherit;
+    }
+
     .text-red-500 {
       color: #ef4444;
     }
@@ -10763,6 +10839,7 @@ test('text', () => {
       '-text-current/50',
       '-text-current/[0.5]',
       '-text-current/[50%]',
+      '-text-inherit',
       '-text-transparent',
       '-text-[#0088cc]',
       '-text-[#0088cc]/50',
@@ -10807,6 +10884,7 @@ test('shadow', () => {
         'shadow-current/50',
         'shadow-current/[0.5]',
         'shadow-current/[50%]',
+        'shadow-inherit',
         'shadow-transparent',
         'shadow-[#0088cc]',
         'shadow-[#0088cc]/50',
@@ -10894,6 +10972,11 @@ test('shadow', () => {
 
     .shadow-current\\/50, .shadow-current\\/\\[0\\.5\\], .shadow-current\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, currentColor 50%, transparent);
+      --tw-shadow: var(--tw-shadow-colored);
+    }
+
+    .shadow-inherit {
+      --tw-shadow-color: inherit;
       --tw-shadow: var(--tw-shadow-colored);
     }
 
@@ -10993,6 +11076,7 @@ test('shadow', () => {
       '-shadow-current/50',
       '-shadow-current/[0.5]',
       '-shadow-current/[50%]',
+      '-shadow-inherit',
       '-shadow-transparent',
       '-shadow-[#0088cc]',
       '-shadow-[#0088cc]/50',
@@ -11033,6 +11117,7 @@ test('inset-shadow', () => {
         'inset-shadow-current/50',
         'inset-shadow-current/[0.5]',
         'inset-shadow-current/[50%]',
+        'inset-shadow-inherit',
         'inset-shadow-transparent',
         'inset-shadow-[#0088cc]',
         'inset-shadow-[#0088cc]/50',
@@ -11120,6 +11205,11 @@ test('inset-shadow', () => {
 
     .inset-shadow-current\\/50, .inset-shadow-current\\/\\[0\\.5\\], .inset-shadow-current\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, currentColor 50%, transparent);
+      --tw-inset-shadow: var(--tw-inset-shadow-colored);
+    }
+
+    .inset-shadow-inherit {
+      --tw-inset-shadow-color: inherit;
       --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
@@ -11219,6 +11309,7 @@ test('inset-shadow', () => {
       '-inset-shadow-current/50',
       '-inset-shadow-current/[0.5]',
       '-inset-shadow-current/[50%]',
+      '-inset-shadow-inherit',
       '-inset-shadow-transparent',
       '-inset-shadow-[#0088cc]',
       '-inset-shadow-[#0088cc]/50',
@@ -11249,6 +11340,7 @@ test('ring', () => {
         'ring-current/50',
         'ring-current/[0.5]',
         'ring-current/[50%]',
+        'ring-inherit',
         'ring-transparent',
         'ring-[#0088cc]',
         'ring-[#0088cc]/50',
@@ -11343,6 +11435,10 @@ test('ring', () => {
 
     .ring-current\\/50, .ring-current\\/\\[0\\.5\\], .ring-current\\/\\[50\\%\\] {
       --tw-ring-color: color-mix(in srgb, currentColor 50%, transparent);
+    }
+
+    .ring-inherit {
+      --tw-ring-color: inherit;
     }
 
     .ring-red-500 {
@@ -11442,6 +11538,7 @@ test('ring', () => {
       '-ring-current/50',
       '-ring-current/[0.5]',
       '-ring-current/[50%]',
+      '-ring-inherit',
       '-ring-transparent',
       '-ring-[#0088cc]',
       '-ring-[#0088cc]/50',
@@ -11477,6 +11574,7 @@ test('inset-ring', () => {
         'inset-ring-current/50',
         'inset-ring-current/[0.5]',
         'inset-ring-current/[50%]',
+        'inset-ring-inherit',
         'inset-ring-transparent',
         'inset-ring-[#0088cc]',
         'inset-ring-[#0088cc]/50',
@@ -11573,6 +11671,10 @@ test('inset-ring', () => {
       --tw-inset-ring-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .inset-ring-inherit {
+      --tw-inset-ring-color: inherit;
+    }
+
     .inset-ring-red-500 {
       --tw-inset-ring-color: #ef4444;
     }
@@ -11665,6 +11767,7 @@ test('inset-ring', () => {
       '-inset-ring-current/50',
       '-inset-ring-current/[0.5]',
       '-inset-ring-current/[50%]',
+      '-inset-ring-inherit',
       '-inset-ring-transparent',
       '-inset-ring-[#0088cc]',
       '-inset-ring-[#0088cc]/50',
@@ -11701,6 +11804,7 @@ test('ring-offset', () => {
         'ring-offset-current/50',
         'ring-offset-current/[0.5]',
         'ring-offset-current/[50%]',
+        'ring-offset-inherit',
         'ring-offset-transparent',
         'ring-offset-[#0088cc]',
         'ring-offset-[#0088cc]/50',
@@ -11792,6 +11896,10 @@ test('ring-offset', () => {
       --tw-ring-offset-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
+    .ring-offset-inherit {
+      --tw-ring-offset-color: inherit;
+    }
+
     .ring-offset-red-500 {
       --tw-ring-offset-color: #ef4444;
     }
@@ -11817,6 +11925,7 @@ test('ring-offset', () => {
       '-ring-offset-current/50',
       '-ring-offset-current/[0.5]',
       '-ring-offset-current/[50%]',
+      '-ring-offset-inherit',
       '-ring-offset-transparent',
       '-ring-offset-[#0088cc]',
       '-ring-offset-[#0088cc]/50',

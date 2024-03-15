@@ -90,6 +90,10 @@ exports[`border-* 1`] = `
   border-color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
+.border-inherit {
+  border-color: inherit;
+}
+
 .border-red-500 {
   border-color: #ef4444;
 }
@@ -197,6 +201,10 @@ exports[`border-b-* 1`] = `
 
 .border-b-current\\/50 {
   border-bottom-color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+.border-b-inherit {
+  border-bottom-color: inherit;
 }
 
 .border-b-red-500 {
@@ -308,6 +316,10 @@ exports[`border-e-* 1`] = `
   border-inline-end-color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
+.border-e-inherit {
+  border-inline-end-color: inherit;
+}
+
 .border-e-red-500 {
   border-inline-end-color: #ef4444;
 }
@@ -415,6 +427,10 @@ exports[`border-l-* 1`] = `
 
 .border-l-current\\/50 {
   border-left-color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+.border-l-inherit {
+  border-left-color: inherit;
 }
 
 .border-l-red-500 {
@@ -526,6 +542,10 @@ exports[`border-r-* 1`] = `
   border-right-color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
+.border-r-inherit {
+  border-right-color: inherit;
+}
+
 .border-r-red-500 {
   border-right-color: #ef4444;
 }
@@ -635,6 +655,10 @@ exports[`border-s-* 1`] = `
   border-inline-start-color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
+.border-s-inherit {
+  border-inline-start-color: inherit;
+}
+
 .border-s-red-500 {
   border-inline-start-color: #ef4444;
 }
@@ -742,6 +766,10 @@ exports[`border-t-* 1`] = `
 
 .border-t-current\\/50 {
   border-top-color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+.border-t-inherit {
+  border-top-color: inherit;
 }
 
 .border-t-red-500 {
@@ -879,6 +907,11 @@ exports[`border-x-* 1`] = `
 .border-x-current\\/50 {
   border-left-color: color-mix(in srgb, currentColor 50%, transparent);
   border-right-color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+.border-x-inherit {
+  border-left-color: inherit;
+  border-right-color: inherit;
 }
 
 .border-x-red-500 {
@@ -1019,6 +1052,11 @@ exports[`border-y-* 1`] = `
 .border-y-current\\/50 {
   border-top-color: color-mix(in srgb, currentColor 50%, transparent);
   border-bottom-color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+.border-y-inherit {
+  border-top-color: inherit;
+  border-bottom-color: inherit;
 }
 
 .border-y-red-500 {
