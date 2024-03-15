@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Validate bare values ([#13245](https://github.com/tailwindlabs/tailwindcss/pull/13245))
 
+### Added
+
+- Add `inherit` as universal color ([#13258](https://github.com/tailwindlabs/tailwindcss/pull/13258))
+
 ## [4.0.0-alpha.9] - 2024-03-13
 
 ### Added
@@ -104,3 +108,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move the CLI into a separate `@tailwindcss/cli` package ([#13095](https://github.com/tailwindlabs/tailwindcss/pull/13095))
 
 ## [4.0.0-alpha.1] - 2024-03-06
+
