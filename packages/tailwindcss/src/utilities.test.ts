@@ -7287,6 +7287,8 @@ test('from', () => {
     run([
       'from',
       'from-123',
+      'from-unknown',
+      'from-unknown%',
 
       // --tw-gradient-from
       '-from-red-500',
@@ -7498,6 +7500,10 @@ test('via', () => {
   expect(
     run([
       'via',
+      'via-123',
+      'via-unknown',
+      'via-unknown%',
+
       // --tw-gradient-stops
       '-via-red-500',
       '-via-red-500/50',
@@ -7697,6 +7703,10 @@ test('to', () => {
   expect(
     run([
       'to',
+      'to-123',
+      'to-unknown',
+      'to-unknown%',
+
       // --tw-gradient-to
       '-to-red-500',
       '-to-red-500/50',

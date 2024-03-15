@@ -2500,7 +2500,10 @@ export function createUtilities(theme: Theme) {
         let value = theme.resolve(candidate.value.value, ['--gradient-color-stop-positions'])
         if (value) {
           return desc.position(value)
-        } else if (candidate.value.value[candidate.value.value.length - 1] === '%') {
+        } else if (
+          candidate.value.value[candidate.value.value.length - 1] === '%' &&
+          !Number.isNaN(Number(candidate.value.value.slice(0, -1)))
+        ) {
           return desc.position(candidate.value.value)
         }
       }
