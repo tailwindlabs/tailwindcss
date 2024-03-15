@@ -1291,6 +1291,7 @@ export function createUtilities(theme: Theme) {
    * `rotate-45 rotate-x` => `rotate: 1 0 0 45deg`
    * `rotate-45 rotate-x rotate-y` => `rotate: 1 1 0 45deg`
    * `rotate-45 rotate-[1_2_3]` => `rotate: 1 2 3 45deg`
+   * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
   utilities.functional('rotate', (candidate) => {
     if (!candidate.value) return
