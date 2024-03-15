@@ -176,10 +176,11 @@ function withNegative(
 }
 
 /**
- * Finds a color in the theme under one of the given theme keys that matches `candidateValue`.
+ * Finds a color in the theme under one of the given theme keys that matches
+ * `candidateValue`.
  *
- * The values `transparent` and `current` are special-cased as they are universal and don't need to
- * be resolved from the theme.
+ * The values `inherit`, `transparent` and `current` are special-cased as they
+ * are universal and don't need to be resolved from the theme.
  */
 function resolveThemeColor<T extends ColorThemeKey>(
   candidate: Extract<Candidate, { kind: 'functional' }>,
@@ -199,6 +200,10 @@ function resolveThemeColor<T extends ColorThemeKey>(
   let value: string | null = null
 
   switch (candidate.value!.value) {
+    case 'inherit': {
+      value = 'inherit'
+      break
+    }
     case 'transparent': {
       value = 'transparent'
       break
@@ -385,7 +390,7 @@ export function createUtilities(theme: Theme) {
 
     suggest(classRoot, () => [
       {
-        values: ['current', 'transparent'],
+        values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: desc.themeKeys,
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         modifierThemeKeys: ['--opacity'],
@@ -2154,7 +2159,7 @@ export function createUtilities(theme: Theme) {
 
       suggest(classRoot, () => [
         {
-          values: ['current', 'transparent'],
+          values: ['current', 'inherit', 'transparent'],
           valueThemeKeys: ['--border-color', '--color'],
           modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
           modifierThemeKeys: ['--opacity'],
@@ -2432,7 +2437,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('bg', () => [
     {
-      values: ['current', 'transparent'],
+      values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--background-color', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       modifierThemeKeys: ['--opacity'],
@@ -2511,7 +2516,7 @@ export function createUtilities(theme: Theme) {
 
     suggest(classRoot, () => [
       {
-        values: ['current', 'transparent'],
+        values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--background-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         modifierThemeKeys: ['--opacity'],
@@ -2628,7 +2633,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('fill', () => [
     {
-      values: ['current', 'transparent'],
+      values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--fill', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       modifierThemeKeys: ['--opacity'],
@@ -2679,7 +2684,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('stroke', () => [
     {
-      values: ['current', 'transparent'],
+      values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--stroke', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       modifierThemeKeys: ['--opacity'],
@@ -2981,7 +2986,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('decoration', () => [
     {
-      values: ['current', 'transparent'],
+      values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--text-decoration-color', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       modifierThemeKeys: ['--opacity'],
@@ -3806,7 +3811,7 @@ export function createUtilities(theme: Theme) {
 
     suggest('outline', () => [
       {
-        values: ['current', 'transparent'],
+        values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--outline-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         modifierThemeKeys: ['--opacity'],
@@ -3953,7 +3958,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('text', () => [
     {
-      values: ['current', 'transparent'],
+      values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--text-color', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       modifierThemeKeys: ['--opacity'],
@@ -4074,7 +4079,7 @@ export function createUtilities(theme: Theme) {
 
     suggest('shadow', () => [
       {
-        values: ['current', 'transparent'],
+        values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--box-shadow-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         modifierThemeKeys: ['--opacity'],
@@ -4174,7 +4179,7 @@ export function createUtilities(theme: Theme) {
 
     suggest('inset-shadow', () => [
       {
-        values: ['current', 'transparent'],
+        values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--box-shadow-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         modifierThemeKeys: ['--opacity'],
@@ -4251,7 +4256,7 @@ export function createUtilities(theme: Theme) {
 
     suggest('ring', () => [
       {
-        values: ['current', 'transparent'],
+        values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--ring-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         modifierThemeKeys: ['--opacity'],
@@ -4324,7 +4329,7 @@ export function createUtilities(theme: Theme) {
 
     suggest('inset-ring', () => [
       {
-        values: ['current', 'transparent'],
+        values: ['current', 'inherit', 'transparent'],
         valueThemeKeys: ['--ring-color', '--color'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
         modifierThemeKeys: ['--opacity'],
@@ -4389,7 +4394,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('ring-offset', () => [
     {
-      values: ['current', 'transparent'],
+      values: ['current', 'inherit', 'transparent'],
       valueThemeKeys: ['--ring-offset-color', '--color'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
       modifierThemeKeys: ['--opacity'],
