@@ -301,7 +301,7 @@ export default [
 
   '--tw-blur',
   '--tw-brightness',
-  '--tw-contast',
+  '--tw-contrast',
   '--tw-drop-shadow',
   '--tw-grayscale',
   '--tw-hue-rotate',
@@ -312,7 +312,7 @@ export default [
 
   '--tw-backdrop-blur',
   '--tw-backdrop-brightness',
-  '--tw-backdrop-contast',
+  '--tw-backdrop-contrast',
   '--tw-backdrop-grayscale',
   '--tw-backdrop-hue-rotate',
   '--tw-backdrop-invert',

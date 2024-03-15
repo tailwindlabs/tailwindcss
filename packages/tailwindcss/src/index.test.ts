@@ -112,7 +112,7 @@ describe('compiling CSS', () => {
   })
 })
 
-describe('arbitrary prpoerties', () => {
+describe('arbitrary properties', () => {
   it('should generate arbitrary properties', () => {
     expect(run(['[color:red]'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\] {

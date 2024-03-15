@@ -15,13 +15,13 @@ function loadDesign() {
 }
 
 const table = [
-  // Utitlies
+  // Utilities
   ['px-3 p-1 py-3', 'p-1 py-3 px-3'],
 
   // Utilities with variants
   ['px-3 focus:hover:p-3 hover:p-1 py-3', 'py-3 px-3 hover:p-1 focus:hover:p-3'],
 
-  // Utitlies with important
+  // Utilities with important
   ['px-3 py-4! p-1', 'p-1 py-4! px-3'],
   ['py-4! px-3 p-1', 'p-1 py-4! px-3'],
 

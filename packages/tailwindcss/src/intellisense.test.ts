@@ -25,7 +25,7 @@ test('getClassList', () => {
   expect(classNames).toMatchSnapshot()
 })
 
-test('Theme values with underscores are converted back to deciaml points', () => {
+test('Theme values with underscores are converted back to decimal points', () => {
   let design = loadDesignSystem()
   let classes = design.getClassList()
 

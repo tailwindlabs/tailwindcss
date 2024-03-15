@@ -379,7 +379,7 @@ export function parse(input: string) {
       // in the stack.
       let grandParent = stack.pop() ?? null
 
-      // We are the root node which means we are done and contine with the next
+      // We are the root node which means we are done and continue with the next
       // node.
       if (grandParent === null && parent) {
         ast.push(parent)

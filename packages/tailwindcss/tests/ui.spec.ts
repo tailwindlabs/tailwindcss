@@ -193,7 +193,7 @@ test('borders can be added without a border-style utility', async ({ page }) => 
   expect(await getPropertyValue('#x', 'border')).toEqual('2px solid rgb(0, 0, 0)')
 })
 
-test('borders can be added to a single side withou a border-style utility', async ({ page }) => {
+test('borders can be added to a single side without a border-style utility', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
     html`<div id="x" class="text-black border-r-2 border-dashed hover:border-r-4">
