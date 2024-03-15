@@ -198,6 +198,7 @@ export type ThemeKey =
   | '--padding'
   | '--placeholder-color'
   | '--perspective'
+  | '--perspective-origin'
   | '--radius'
   | '--ring-color'
   | '--ring-offset-color'

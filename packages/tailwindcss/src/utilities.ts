@@ -1184,6 +1184,20 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [decl('transform-origin', value)],
   })
 
+  staticUtility('perspective-origin-center', [['perspective-origin', 'center']])
+  staticUtility('perspective-origin-top', [['perspective-origin', 'top']])
+  staticUtility('perspective-origin-top-right', [['perspective-origin', 'top right']])
+  staticUtility('perspective-origin-right', [['perspective-origin', 'right']])
+  staticUtility('perspective-origin-bottom-right', [['perspective-origin', 'bottom right']])
+  staticUtility('perspective-origin-bottom', [['perspective-origin', 'bottom']])
+  staticUtility('perspective-origin-bottom-left', [['perspective-origin', 'bottom left']])
+  staticUtility('perspective-origin-left', [['perspective-origin', 'left']])
+  staticUtility('perspective-origin-top-left', [['perspective-origin', 'top left']])
+  functionalUtility('perspective-origin', {
+    themeKeys: ['--perspective-origin'],
+    handle: (value) => [decl('perspective-origin', value)],
+  })
+
   let translateProperties = () =>
     atRoot([
       property('--tw-translate-x', '0', '<length-percentage>'),
