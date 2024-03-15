@@ -1310,7 +1310,6 @@ export function createUtilities(theme: Theme) {
       }
       if (!value) return
     }
-    if (Number.isNaN(Number(value))) return null
     value = withNegative(value, candidate)
     // Set --tw-rotate even though we don't use it here. If the user also uses
     // rotate-x, rotate-y, or rotate-z, the angle is needed in that declaration.
@@ -1447,40 +1446,6 @@ export function createUtilities(theme: Theme) {
     ],
   })
 
-  /**
-   * @css `scale`
-   */
-  functionalUtility('scale-x', {
-    supportsNegative: true,
-    themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}%`
-    },
-    handle: (value) => [
-      scaleProperties(),
-      decl('--tw-scale-x', value),
-      decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
-    ],
-  })
-
-  /**
-   * @css `scale`
-   */
-  functionalUtility('scale-y', {
-    supportsNegative: true,
-    themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}%`
-    },
-    handle: (value) => [
-      scaleProperties(),
-      decl('--tw-scale-y', value),
-      decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)`),
-    ],
-  })
-
   suggest('scale', () => [
     {
       supportsNegative: true,
@@ -1488,6 +1453,29 @@ export function createUtilities(theme: Theme) {
       valueThemeKeys: ['--scale'],
     },
   ])
+
+  for (let axis of ['x', 'y', 'z']) {
+    /**
+     * @css `scale`
+     */
+    functionalUtility(`scale-${axis}`, {
+      supportsNegative: true,
+      themeKeys: ['--scale'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
+      handle: (value) => [...scaleProperties(), decl(`--tw-scale-${axis}`, value)],
+    })
+
+    suggest(`scale-${axis}`, () => [
+      {
+        supportsNegative: true,
+        values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
+        valueThemeKeys: ['--scale'],
+      },
+    ])
+  }
 
   /**
    * @css `scale`
@@ -1511,26 +1499,6 @@ export function createUtilities(theme: Theme) {
       valueThemeKeys: ['--scale'],
     },
   ])
-
-  for (let axis of ['x', 'y', 'z']) {
-    /**
-     * @css `scale`
-     */
-    functionalUtility(`scale-${axis}`, {
-      supportsNegative: true,
-      themeKeys: ['--scale'],
-      handleBareValue: ({ value }) => `${value}%`,
-      handle: (value) => [...scaleProperties(), decl(`--tw-scale-${axis}`, value)],
-    })
-
-    suggest(`scale-${axis}`, () => [
-      {
-        supportsNegative: true,
-        values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-        valueThemeKeys: ['--scale'],
-      },
-    ])
-  }
 
   /**
    * @css `perspective`
