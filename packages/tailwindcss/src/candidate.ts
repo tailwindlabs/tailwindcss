@@ -428,7 +428,7 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
 
       // If the leftover value is an empty string, it means that the value is an
       // invalid named value. This makes the candidate invalid and we can
-      // skip continue parsing it.
+      // skip any further parsing.
       if (valueWithoutModifier === '') {
         return null
       }
