@@ -600,6 +600,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
+
+    it('should parse a multi-line selector', () => {
+      expect(parse(['.foo,', '.bar,', '.baz', '{', 'color:red;', '}'].join('\n'))).toEqual([
+        {
+          kind: 'rule',
+          selector: '.foo, .bar, .baz',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+        },
+      ])
+    })
   })
 
   describe('at-rules', () => {
