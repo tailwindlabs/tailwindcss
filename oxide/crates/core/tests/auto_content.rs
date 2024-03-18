@@ -302,4 +302,11 @@ mod auto_content {
 
         assert_eq!(candidates, vec!["font-bold", "md:flex"]);
     }
+
+    #[test]
+    fn it_should_scan_for_utilities_in_svelte_files() {
+        let candidates = scan(&[("index.svelte", Some("<div class:px-4='condition'></div>"))]).1;
+
+        assert_eq!(candidates, vec!["condition", "div", "px-4"]);
+    }
 }
