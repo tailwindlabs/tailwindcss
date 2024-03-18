@@ -3086,6 +3086,37 @@ test('scale-x', () => {
       initial-value: 1;
     }"
   `)
+  expect(run(['scale-200', 'scale-x-400'])).toMatchInlineSnapshot(`
+    ".scale-200 {
+      --tw-scale-x: 200%;
+      --tw-scale-y: 200%;
+      --tw-scale-z: 200%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
+    .scale-x-400 {
+      --tw-scale-x: 400%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
+    @property --tw-scale-x {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }"
+  `)
   expect(run(['scale-x', 'scale-x-unknown'])).toEqual('')
 })
 
