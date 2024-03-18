@@ -297,9 +297,14 @@ mod auto_content {
             ("foo.jpg", Some("xl:font-bold")),
             // A file that is ignored
             ("foo.html", Some("lg:font-bold")),
+            // A svelte file with `class:foo="bar"` syntax
+            ("index.svelte", Some("<div class:px-4='condition'></div>")),
         ])
         .1;
 
-        assert_eq!(candidates, vec!["font-bold", "md:flex"]);
+        assert_eq!(
+            candidates,
+            vec!["condition", "div", "font-bold", "md:flex", "px-4"]
+        );
     }
 }

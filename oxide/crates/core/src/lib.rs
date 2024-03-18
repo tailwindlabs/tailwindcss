@@ -1,4 +1,5 @@
 use crate::parser::Extractor;
+use bstr::ByteSlice;
 use cache::Cache;
 use fxhash::FxHashSet;
 use ignore::DirEntry;
@@ -399,6 +400,32 @@ pub fn scan_files(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
     }
 }
 
+fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
+    if let Some(content) = c.content {
+        return Some(content.into_bytes());
+    }
+
+    let Some(file) = c.file else {
+        return Default::default();
+    };
+
+    let Ok(content) = std::fs::read(&file).map_err(|e| {
+        event!(tracing::Level::ERROR, "Failed to read file: {:?}", e);
+        e
+    }) else {
+        return Default::default();
+    };
+
+    let Some(extension) = file.extension().map(|x| x.to_str()) else {
+        return Some(content);
+    };
+
+    match extension {
+        Some("svelte") => Some(content.replace(" class:", " ")),
+        _ => Some(content),
+    }
+}
+
 #[tracing::instrument(skip(changed_content))]
 fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
     event!(
@@ -409,17 +436,7 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 
     changed_content
         .into_par_iter()
-        .map(|c| match (c.file, c.content) {
-            (Some(file), None) => match std::fs::read(file) {
-                Ok(content) => content,
-                Err(e) => {
-                    event!(tracing::Level::ERROR, "Failed to read file: {:?}", e);
-                    Default::default()
-                }
-            },
-            (None, Some(content)) => content.into_bytes(),
-            _ => Default::default(),
-        })
+        .filter_map(read_changed_content)
         .collect()
 }
 
@@ -433,11 +450,7 @@ fn read_all_files_sync(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 
     changed_content
         .into_iter()
-        .filter_map(|c| match (c.file, c.content) {
-            (Some(file), None) => std::fs::read(file).ok(),
-            (None, Some(content)) => Some(content.into_bytes()),
-            _ => Default::default(),
-        })
+        .filter_map(read_changed_content)
         .collect()
 }
 
