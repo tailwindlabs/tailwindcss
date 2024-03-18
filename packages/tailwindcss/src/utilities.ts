@@ -1507,6 +1507,10 @@ export function createUtilities(theme: Theme) {
   staticUtility('perspective-none', [['perspective', 'none']])
   functionalUtility('perspective', {
     themeKeys: ['--perspective'],
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return `${value}px`
+    },
     handle: (value) => [decl('perspective', value)],
   })
 
