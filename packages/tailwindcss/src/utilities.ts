@@ -1275,22 +1275,13 @@ export function createUtilities(theme: Theme) {
     ],
   })
 
-  let rotateProperties = () =>
-    atRoot([
-      property('--tw-rotate', '0deg', '<angle>'),
-      // Vector components for the axis of rotation
-      property('--tw-rotate-x', '0', '<number>'),
-      property('--tw-rotate-y', '0', '<number>'),
-      property('--tw-rotate-z', '0', '<number>'),
-    ])
-
   /**
    * @css `rotate`
    *
    * `rotate-45` => `rotate: 45deg`
-   * `rotate-45 rotate-x` => `rotate: 1 0 0 45deg`
-   * `rotate-45 rotate-x rotate-y` => `rotate: 1 1 0 45deg`
-   * `rotate-45 rotate-[1_2_3]` => `rotate: 1 2 3 45deg`
+   * `rotate-[x_45deg]` => `rotate: x 45deg`
+   * `rotate-45/x` => `rotate: 45deg x`
+   * `rotate-45/[1_2_3]` => `rotate: 45deg 1 2 3`
    * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
   utilities.functional('rotate', (candidate) => {
@@ -1312,31 +1303,20 @@ export function createUtilities(theme: Theme) {
       if (!value) return
     }
     value = withNegative(value, candidate)
-    // Set --tw-rotate even though we don't use it here. If the user also uses
-    // rotate-x, rotate-y, or rotate-z, the angle is needed in that declaration.
-    return [rotateProperties(), decl('--tw-rotate', value), decl('rotate', value)]
+    if (candidate.modifier) {
+      return [decl('rotate', `${candidate.modifier.value} ${value}`)]
+    } else {
+      return [decl('rotate', value)]
+    }
   })
   suggest('rotate', () => [
     {
       supportsNegative: true,
       values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
       valueThemeKeys: ['--rotate'],
+      modifiers: ['x', 'y'],
     },
   ])
-
-  for (let axis of ['x', 'y', 'z']) {
-    /**
-     * @css `rotate`
-     *
-     * rotate-x, rotate-y, and rotate-z change the axis of rotation from the default z-axis.
-     * Arbitrary vector values are implemented in the functional variant.
-     */
-    staticUtility(`rotate-${axis}`, [
-      rotateProperties,
-      [`--tw-rotate-${axis}`, '1'],
-      ['rotate', `var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-rotate)`],
-    ])
-  }
 
   let skewProperties = () =>
     atRoot([property('--tw-skew-x', '0deg', '<angle>'), property('--tw-skew-y', '0deg', '<angle>')])
