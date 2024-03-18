@@ -401,20 +401,23 @@ pub fn scan_files(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
-    match (c.file, c.content) {
-        (Some(file), None) => match std::fs::read(&file) {
-            Ok(content) => match file.extension().map(|x| x.to_str()) {
-                Some(Some("svelte")) => Some(content.replace(" class:", " ")),
-                _ => Some(content),
-            },
-            Err(e) => {
-                event!(tracing::Level::ERROR, "Failed to read file: {:?}", e);
-                Default::default()
-            }
-        },
-        (None, Some(content)) => Some(content.into_bytes()),
-        _ => Default::default(),
-    }
+  if let Some(content) = c.content {
+    return Some(content.into_bytes())
+  }
+
+  let Some(file) = c.file else {
+    return Default::default()
+  }
+  
+  let Ok(content) = std::fs::read(&file) else {
+    event!(tracing::Level::ERROR, "Failed to read file: {:?}", e);
+    return Default::default()
+  }
+  
+   match file.extension().map(|x| x.to_str()) {
+    Some(Some("svelte")) => Some(content.replace(" class:", " ")),
+    _ => Some(content),
+  }
 }
 
 #[tracing::instrument(skip(changed_content))]
