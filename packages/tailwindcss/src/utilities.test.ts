@@ -2977,21 +2977,24 @@ test('skew-y', () => {
 test('scale', () => {
   expect(run(['scale-50', '-scale-50', 'scale-[123deg]'])).toMatchInlineSnapshot(`
     ".-scale-50 {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-x: calc(50% * -1);
       --tw-scale-y: calc(50% * -1);
+      --tw-scale-z: calc(50% * -1);
+      scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
     .scale-50 {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-x: 50%;
       --tw-scale-y: 50%;
+      --tw-scale-z: 50%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
     .scale-\\[123deg\\] {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-x: 123deg;
       --tw-scale-y: 123deg;
+      --tw-scale-z: 123deg;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
     @property --tw-scale-x {
@@ -3001,6 +3004,12 @@ test('scale', () => {
     }
 
     @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
       syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
@@ -3009,21 +3018,17 @@ test('scale', () => {
   expect(run(['scale', 'scale-unknown'])).toEqual('')
 })
 
-test('scale-x', () => {
-  expect(run(['scale-x-50', '-scale-x-50', 'scale-x-[123deg]'])).toMatchInlineSnapshot(`
-    ".-scale-x-50 {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
-      --tw-scale-x: calc(50% * -1);
-    }
-
-    .scale-x-50 {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
+test('scale-3d', () => {
+  expect(run(['scale-50', 'scale-3d'])).toMatchInlineSnapshot(`
+    ".scale-50 {
       --tw-scale-x: 50%;
+      --tw-scale-y: 50%;
+      --tw-scale-z: 50%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
-    .scale-x-\\[123deg\\] {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
-      --tw-scale-x: 123deg;
+    .scale-3d {
+      scale: var(--tw-scale-x, 1) var(--tw-scale-y, 1) var(--tw-scale-z, 1);
     }
 
     @property --tw-scale-x {
@@ -3033,6 +3038,49 @@ test('scale-x', () => {
     }
 
     @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }"
+  `)
+})
+
+test('scale-x', () => {
+  expect(run(['scale-x-50', '-scale-x-50', 'scale-x-[123deg]'])).toMatchInlineSnapshot(`
+    ".-scale-x-50 {
+      --tw-scale-x: calc(50% * -1);
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
+    .scale-x-50 {
+      --tw-scale-x: 50%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
+    .scale-x-\\[123deg\\] {
+      --tw-scale-x: 123deg;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
+    @property --tw-scale-x {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
       syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
@@ -3044,18 +3092,18 @@ test('scale-x', () => {
 test('scale-y', () => {
   expect(run(['scale-y-50', '-scale-y-50', 'scale-y-[123deg]'])).toMatchInlineSnapshot(`
     ".-scale-y-50 {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-y: calc(50% * -1);
+      scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
     .scale-y-50 {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-y: 50%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
     .scale-y-\\[123deg\\] {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-y: 123deg;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
     @property --tw-scale-x {
@@ -3065,6 +3113,12 @@ test('scale-y', () => {
     }
 
     @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
       syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
@@ -3076,18 +3130,18 @@ test('scale-y', () => {
 test('scale-z', () => {
   expect(run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
     ".-scale-z-50 {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-z: calc(50% * -1);
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
     }
 
     .scale-z-50 {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-z: 50%;
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
     }
 
     .scale-z-\\[123deg\\] {
-      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z, );
       --tw-scale-z: 123deg;
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
     }
 
     @property --tw-scale-x {
@@ -3097,6 +3151,12 @@ test('scale-z', () => {
     }
 
     @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
       syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;

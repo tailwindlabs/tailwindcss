@@ -1420,15 +1420,12 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  let scaleProperties = () => [
+  let scaleProperties = () =>
     atRoot([
       property('--tw-scale-x', '1', '<number> | <percentage>'),
       property('--tw-scale-y', '1', '<number> | <percentage>'),
-      property('--tw-scale-z', undefined, '<number> | <percentage>'),
-    ]),
-    // Only include the z component if it's defined to avoid triggering unnecessary 3D transformations.
-    decl('scale', `var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z,)`),
-  ]
+      property('--tw-scale-z', '1', '<number> | <percentage>'),
+    ])
 
   /**
    * @css `scale`
@@ -1441,9 +1438,11 @@ export function createUtilities(theme: Theme) {
       return `${value}%`
     },
     handle: (value) => [
-      ...scaleProperties(),
+      scaleProperties(),
       decl('--tw-scale-x', value),
       decl('--tw-scale-y', value),
+      decl('--tw-scale-z', value),
+      decl('scale', `var(--tw-scale-x) var(--tw-scale-y)`),
     ],
   })
 
@@ -1466,7 +1465,14 @@ export function createUtilities(theme: Theme) {
         if (Number.isNaN(Number(value))) return null
         return `${value}%`
       },
-      handle: (value) => [...scaleProperties(), decl(`--tw-scale-${axis}`, value)],
+      handle: (value) => [
+        scaleProperties(),
+        decl(`--tw-scale-${axis}`, value),
+        decl(
+          'scale',
+          `var(--tw-scale-x) var(--tw-scale-y) ${axis === 'z' ? 'var(--tw-scale-z)' : ''}`,
+        ),
+      ],
     })
 
     suggest(`scale-${axis}`, () => [
@@ -1481,17 +1487,9 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `scale`
    */
-  functionalUtility('scale-3d', {
-    supportsNegative: true,
-    themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => `${value}%`,
-    handle: (value) => [
-      ...scaleProperties(),
-      decl('--tw-scale-x', value),
-      decl('--tw-scale-y', value),
-      decl('--tw-scale-z', value),
-    ],
-  })
+  staticUtility('scale-3d', [
+    ['scale', 'var(--tw-scale-x,1) var(--tw-scale-y,1) var(--tw-scale-z,1)'],
+  ])
 
   suggest('scale-3d', () => [
     {
