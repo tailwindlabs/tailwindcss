@@ -1475,7 +1475,8 @@ export function createUtilities(theme: Theme) {
    * @css `scale`
    */
   staticUtility('scale-3d', [
-    ['scale', 'var(--tw-scale-x,1) var(--tw-scale-y,1) var(--tw-scale-z,1)'],
+    scaleProperties,
+    ['scale', 'var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)'],
   ])
 
   suggest('scale-3d', () => [

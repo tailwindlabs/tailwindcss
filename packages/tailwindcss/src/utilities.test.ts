@@ -2733,16 +2733,9 @@ test('scale', () => {
 })
 
 test('scale-3d', () => {
-  expect(run(['scale-50', 'scale-3d'])).toMatchInlineSnapshot(`
-    ".scale-50 {
-      --tw-scale-x: 50%;
-      --tw-scale-y: 50%;
-      --tw-scale-z: 50%;
-      scale: var(--tw-scale-x) var(--tw-scale-y);
-    }
-
-    .scale-3d {
-      scale: var(--tw-scale-x, 1) var(--tw-scale-y, 1) var(--tw-scale-z, 1);
+  expect(run(['scale-3d'])).toMatchInlineSnapshot(`
+    ".scale-3d {
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
     }
 
     @property --tw-scale-x {
