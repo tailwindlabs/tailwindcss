@@ -403,11 +403,8 @@ pub fn scan_files(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
     match (c.file, c.content) {
         (Some(file), None) => match std::fs::read(&file) {
-            Ok(content) => match file.extension() {
-                Some(extension) => match extension.to_str() {
-                    Some("svelte") => Some(content.replace(" class:", " ")),
-                    _ => Some(content),
-                },
+            Ok(content) => match file.extension().map(|x| x.to_str()) {
+                Some(Some("svelte")) => Some(content.replace(" class:", " ")),
                 _ => Some(content),
             },
             Err(e) => {
