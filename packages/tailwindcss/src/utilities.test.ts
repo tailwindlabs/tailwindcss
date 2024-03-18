@@ -2904,14 +2904,25 @@ test('scale-z', () => {
 })
 
 test('transform', () => {
-  expect(run(['transform', 'transform-cpu', 'transform-gpu', 'transform-none']))
-    .toMatchInlineSnapshot(`
+  expect(
+    run([
+      'transform',
+      'transform-cpu',
+      'transform-gpu',
+      'transform-none',
+      'transform-[scaleZ(2)_rotateY(45deg)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".transform-none {
       transform: none;
     }
 
     .transform {
       transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+    }
+
+    .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
+      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleZ(2) rotateY(45deg);
     }
 
     .transform-cpu {

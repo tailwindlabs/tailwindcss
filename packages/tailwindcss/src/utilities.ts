@@ -1503,9 +1503,24 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `transform`
    */
-  staticUtility('transform', [
-    skewProperties,
-    ['transform', 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'],
+  utilities.functional('transform', (candidate) => {
+    if (candidate.negative) return
+
+    let value = 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'
+    if (!candidate.value) {
+      // Supported as a legacy value for its stacking context
+    } else if (candidate.value.kind === 'arbitrary') {
+      value += ` ${candidate.value.value}`
+    } else {
+      return
+    }
+
+    return [skewProperties(), decl('transform', value)]
+  })
+  suggest('transform', () => [
+    {
+      hasDefaultValue: true,
+    },
   ])
 
   staticUtility('transform-cpu', [['transform', 'translate(0,0)']])
