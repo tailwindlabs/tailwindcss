@@ -1430,20 +1430,27 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `scale`
    */
-  functionalUtility('scale', {
-    supportsNegative: true,
-    themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}%`
-    },
-    handle: (value) => [
+  utilities.functional('scale', (candidate) => {
+    if (!candidate.value) return
+    let value
+    if (candidate.value.kind === 'arbitrary') {
+      value = candidate.value.value
+      return [decl('scale', value)]
+    } else {
+      value = theme.resolve(candidate.value.value, ['--scale'])
+      if (!value && !Number.isNaN(Number(candidate.value.value))) {
+        value = `${candidate.value.value}%`
+      }
+      if (!value) return
+    }
+    value = withNegative(value, candidate)
+    return [
       scaleProperties(),
       decl('--tw-scale-x', value),
       decl('--tw-scale-y', value),
       decl('--tw-scale-z', value),
       decl('scale', `var(--tw-scale-x) var(--tw-scale-y)`),
-    ],
+    ]
   })
 
   suggest('scale', () => [

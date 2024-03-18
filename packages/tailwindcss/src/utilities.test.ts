@@ -2975,7 +2975,7 @@ test('skew-y', () => {
 })
 
 test('scale', () => {
-  expect(run(['scale-50', '-scale-50', 'scale-[123deg]'])).toMatchInlineSnapshot(`
+  expect(run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]'])).toMatchInlineSnapshot(`
     ".-scale-50 {
       --tw-scale-x: calc(50% * -1);
       --tw-scale-y: calc(50% * -1);
@@ -2990,11 +2990,12 @@ test('scale', () => {
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
-    .scale-\\[123deg\\] {
-      --tw-scale-x: 123deg;
-      --tw-scale-y: 123deg;
-      --tw-scale-z: 123deg;
-      scale: var(--tw-scale-x) var(--tw-scale-y);
+    .scale-\\[2\\] {
+      scale: 2;
+    }
+
+    .scale-\\[2_1\\.5_3\\] {
+      scale: 2 1.5 3;
     }
 
     @property --tw-scale-x {
@@ -3052,7 +3053,7 @@ test('scale-3d', () => {
 })
 
 test('scale-x', () => {
-  expect(run(['scale-x-50', '-scale-x-50', 'scale-x-[123deg]'])).toMatchInlineSnapshot(`
+  expect(run(['scale-x-50', '-scale-x-50', 'scale-x-[2]'])).toMatchInlineSnapshot(`
     ".-scale-x-50 {
       --tw-scale-x: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y);
@@ -3063,8 +3064,8 @@ test('scale-x', () => {
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
-    .scale-x-\\[123deg\\] {
-      --tw-scale-x: 123deg;
+    .scale-x-\\[2\\] {
+      --tw-scale-x: 2;
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
@@ -3121,7 +3122,7 @@ test('scale-x', () => {
 })
 
 test('scale-y', () => {
-  expect(run(['scale-y-50', '-scale-y-50', 'scale-y-[123deg]'])).toMatchInlineSnapshot(`
+  expect(run(['scale-y-50', '-scale-y-50', 'scale-y-[2]'])).toMatchInlineSnapshot(`
     ".-scale-y-50 {
       --tw-scale-y: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y);
@@ -3132,8 +3133,8 @@ test('scale-y', () => {
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
-    .scale-y-\\[123deg\\] {
-      --tw-scale-y: 123deg;
+    .scale-y-\\[2\\] {
+      --tw-scale-y: 2;
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
