@@ -297,24 +297,14 @@ mod auto_content {
             ("foo.jpg", Some("xl:font-bold")),
             // A file that is ignored
             ("foo.html", Some("lg:font-bold")),
-        ])
-        .1;
-
-        assert_eq!(candidates, vec!["font-bold", "md:flex"]);
-    }
-
-    #[test]
-    fn it_should_scan_for_utilities_in_svelte_files() {
-        let mut ignores = String::new();
-        ignores.push_str("*\n");
-        ignores.push_str("!*.svelte\n");
-
-        let candidates = scan(&[
-            (".gitignore", Some(&ignores)),
+            // A svelte file with `class:foo="bar"` syntax
             ("index.svelte", Some("<div class:px-4='condition'></div>")),
         ])
         .1;
 
-        assert_eq!(candidates, vec!["condition", "div", "px-4"]);
+        assert_eq!(
+            candidates,
+            vec!["condition", "div", "font-bold", "md:flex", "px-4"]
+        );
     }
 }
