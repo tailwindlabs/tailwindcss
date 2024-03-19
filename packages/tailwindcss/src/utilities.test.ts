@@ -2494,9 +2494,8 @@ test('translate', () => {
 })
 
 test('translate-x', () => {
-  expect(
-    run(['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[--value]']),
-  ).toMatchInlineSnapshot(`
+  expect(run(['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[--value]']))
+    .toMatchInlineSnapshot(`
     ".-translate-x-\\[--value\\] {
       --tw-translate-x: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -2539,9 +2538,8 @@ test('translate-x', () => {
 })
 
 test('translate-y', () => {
-  expect(
-    run(['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[--value]']),
-  ).toMatchInlineSnapshot(`
+  expect(run(['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[--value]']))
+    .toMatchInlineSnapshot(`
     ".-translate-y-\\[--value\\] {
       --tw-translate-y: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -2584,9 +2582,8 @@ test('translate-y', () => {
 })
 
 test('translate-z', () => {
-  expect(
-    run(['translate-z-full', '-translate-z-full', 'translate-y-px', '-translate-z-[--value]']),
-  ).toMatchInlineSnapshot(`
+  expect(run(['translate-z-full', '-translate-z-full', 'translate-y-px', '-translate-z-[--value]']))
+    .toMatchInlineSnapshot(`
     ".-translate-z-\\[--value\\] {
       --tw-translate-z: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
@@ -3028,7 +3025,7 @@ test('transform', () => {
     }
 
     .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleZ(2) rotateY(45deg);
+      transform: scaleZ(2) rotateY(45deg) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
     }
 
     .transform-cpu {

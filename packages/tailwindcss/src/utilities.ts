@@ -1525,9 +1525,14 @@ export function createUtilities(theme: Theme) {
     if (!candidate.value) {
       // Supported as a legacy value for its stacking context
     } else if (candidate.value.kind === 'arbitrary') {
-      value += ` ${candidate.value.value}`
-    } else {
-      return
+      // Since skew-x and skew-y are implemented using `transform`, we preserve
+      // them even if an arbitrary transform is provided. Transform functions
+      // are applied right to left, so we put them at the end so they are
+      // applied before other transforms, similar to other specific transform
+      // properties.
+      //
+      // https://developer.mozilla.org/en-US/docs/Web/CSS/transform#values
+      value = `${candidate.value.value} ${value}`
     }
 
     return [skewProperties(), decl('transform', value)]
