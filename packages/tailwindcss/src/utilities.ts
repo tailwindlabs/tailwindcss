@@ -1276,9 +1276,9 @@ export function createUtilities(theme: Theme) {
    * @css `rotate`
    *
    * `rotate-45` => `rotate: 45deg`
+   * `rotate-45/x` => `rotate: x 45deg`
    * `rotate-[x_45deg]` => `rotate: x 45deg`
-   * `rotate-45/x` => `rotate: 45deg x`
-   * `rotate-45/[1_2_3]` => `rotate: 45deg 1 2 3`
+   * `rotate-45/[1_2_3]` => `rotate: 1 2 3 45deg`
    * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
   utilities.functional('rotate', (candidate) => {
