@@ -1234,6 +1234,15 @@ export function createUtilities(theme: Theme) {
   })
 
   for (let axis of ['x', 'y', 'z']) {
+    let handle = (value: string) => [
+      translateProperties(),
+      decl(`--tw-translate-${axis}`, value),
+      decl(
+        'translate',
+        `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
+      ),
+    ]
+
     /**
      * @css `translate`
      */
@@ -1245,40 +1254,13 @@ export function createUtilities(theme: Theme) {
         if (Number.isNaN(Number(value))) return null
         return `${value}%`
       },
-      handle: (value) => [
-        translateProperties(),
-        decl(`--tw-translate-${axis}`, value),
-        decl(
-          'translate',
-          `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
-        ),
-      ],
+      handle,
     })
-
     utilities.static(`translate-${axis}-px`, (candidate) => {
-      let value = candidate.negative ? '-1px' : '1px'
-
-      return [
-        translateProperties(),
-        decl(`--tw-translate-${axis}`, value),
-        decl(
-          'translate',
-          `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
-        ),
-      ]
+      return handle(candidate.negative ? '-1px' : '1px')
     })
-
     utilities.static(`translate-${axis}-full`, (candidate) => {
-      let value = candidate.negative ? '-100%' : '100%'
-
-      return [
-        translateProperties(),
-        decl(`--tw-translate-${axis}`, value),
-        decl(
-          'translate',
-          `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
-        ),
-      ]
+      return handle(candidate.negative ? '-100%' : '100%')
     })
   }
 
