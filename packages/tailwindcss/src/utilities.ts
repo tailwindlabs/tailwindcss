@@ -1276,9 +1276,7 @@ export function createUtilities(theme: Theme) {
    * @css `rotate`
    *
    * `rotate-45` => `rotate: 45deg`
-   * `rotate-45/x` => `rotate: x 45deg`
    * `rotate-[x_45deg]` => `rotate: x 45deg`
-   * `rotate-45/[1_2_3]` => `rotate: 1 2 3 45deg`
    * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
   utilities.functional('rotate', (candidate) => {
@@ -1300,20 +1298,37 @@ export function createUtilities(theme: Theme) {
       if (!value) return
     }
     value = withNegative(value, candidate)
-    if (candidate.modifier) {
-      return [decl('rotate', `${candidate.modifier.value} ${value}`)]
-    } else {
-      return [decl('rotate', value)]
-    }
+    return [decl('rotate', value)]
   })
+
   suggest('rotate', () => [
     {
       supportsNegative: true,
       values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
       valueThemeKeys: ['--rotate'],
-      modifiers: ['x', 'y'],
     },
   ])
+
+  for (let axis of ['x', 'y']) {
+    functionalUtility(`rotate-${axis}`, {
+      supportsNegative: true,
+      supportsFractions: true,
+      themeKeys: ['--rotate'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}deg`
+      },
+      handle: (value) => [decl('rotate', `${axis} ${value}`)],
+    })
+
+    suggest(`rotate-${axis}`, () => [
+      {
+        supportsNegative: true,
+        values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+        valueThemeKeys: ['--rotate'],
+      },
+    ])
+  }
 
   let skewProperties = () =>
     atRoot([property('--tw-skew-x', '0deg', '<angle>'), property('--tw-skew-y', '0deg', '<angle>')])

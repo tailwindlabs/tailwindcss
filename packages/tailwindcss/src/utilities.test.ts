@@ -2670,25 +2670,41 @@ test('rotate', () => {
       rotate: 123deg;
     }"
   `)
-  expect(run(['rotate-45/x', 'rotate-45/y', 'rotate-45/[1_2_3]', 'rotate-[123deg]/[0.3_0.7_1]']))
-    .toMatchInlineSnapshot(`
-    ".rotate-45\\/\\[1_2_3\\] {
-      rotate: 1 2 3 45deg;
+  expect(run(['rotate', 'rotate-z', 'rotate-unknown'])).toEqual('')
+})
+
+test('rotate-x', () => {
+  expect(run(['rotate-x-45', '-rotate-x-45', 'rotate-x-[123deg]'])).toMatchInlineSnapshot(`
+    ".-rotate-x-45 {
+      rotate: x -45deg;
     }
 
-    .rotate-45\\/x {
+    .rotate-x-45 {
       rotate: x 45deg;
     }
 
-    .rotate-45\\/y {
+    .rotate-x-\\[123deg\\] {
+      rotate: x 123deg;
+    }"
+  `)
+  expect(run(['rotate-x', '-rotate-x', 'rotate-x-potato'])).toEqual('')
+})
+
+test('rotate-y', () => {
+  expect(run(['rotate-y-45', '-rotate-y-45', 'rotate-y-[123deg]'])).toMatchInlineSnapshot(`
+    ".-rotate-y-45 {
+      rotate: y -45deg;
+    }
+
+    .rotate-y-45 {
       rotate: y 45deg;
     }
 
-    .rotate-\\[123deg\\]\\/\\[0\\.3_0\\.7_1\\] {
-      rotate: .3 .7 1 123deg;
+    .rotate-y-\\[123deg\\] {
+      rotate: y 123deg;
     }"
   `)
-  expect(run(['rotate', 'rotate-x', 'rotate-y', 'rotate-z', 'rotate-unknown'])).toEqual('')
+  expect(run(['rotate-y', '-rotate-y', 'rotate-y-potato'])).toEqual('')
 })
 
 test('skew', () => {
