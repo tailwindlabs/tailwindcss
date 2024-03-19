@@ -142,6 +142,16 @@ export function parse(input: string) {
       continue
     }
 
+    // Replace new lines with spaces.
+    else if (char === '\n') {
+      if (current.length === 0) continue
+
+      let last = current[current.length - 1]
+      if (last !== ' ' && last !== '\n' && last !== '\t') {
+        current += ' '
+      }
+    }
+
     // Start of a custom property.
     //
     // Custom properties are very permissive and can contain almost any
