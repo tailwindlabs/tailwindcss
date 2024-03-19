@@ -1233,14 +1233,6 @@ export function createUtilities(theme: Theme) {
     ],
   })
 
-  suggest('translate', () => [
-    {
-      supportsNegative: true,
-      supportsFractions: true,
-      valueThemeKeys: ['--translate', '--spacing'],
-    },
-  ])
-
   for (let axis of ['x', 'y', 'z']) {
     /**
      * @css `translate`
