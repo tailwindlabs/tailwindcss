@@ -1312,7 +1312,6 @@ export function createUtilities(theme: Theme) {
   for (let axis of ['x', 'y']) {
     functionalUtility(`rotate-${axis}`, {
       supportsNegative: true,
-      supportsFractions: true,
       themeKeys: ['--rotate'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null

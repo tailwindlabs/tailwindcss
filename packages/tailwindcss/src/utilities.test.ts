@@ -2424,7 +2424,7 @@ test('perspective-origin', () => {
       perspective-origin: 100% 0;
     }"
   `)
-  expect(run(['-origin-center', '-origin-[--value]'])).toEqual('')
+  expect(run(['-perspective-origin-center', '-perspective-origin-[--value]'])).toEqual('')
 })
 
 test('translate', () => {
@@ -2622,7 +2622,7 @@ test('translate-z', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['translate-y'])).toEqual('')
+  expect(run(['translate-z'])).toEqual('')
 })
 
 test('translate-3d', () => {
@@ -2649,6 +2649,7 @@ test('translate-3d', () => {
       initial-value: 0;
     }"
   `)
+  expect(run(['-translate-3d'])).toEqual('')
 })
 
 test('rotate', () => {
@@ -2875,6 +2876,7 @@ test('scale-3d', () => {
       initial-value: 1;
     }"
   `)
+  expect(run(['-scale-3d'])).toEqual('')
 })
 
 test('scale-x', () => {
