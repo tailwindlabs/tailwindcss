@@ -610,6 +610,18 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
+
+    it('should parse a multi-line selector and preserves important whitespace', () => {
+      expect(
+        parse(['.foo,', '.bar,', '.baz\t\n \n .qux', '{', 'color:red;', '}'].join('\n')),
+      ).toEqual([
+        {
+          kind: 'rule',
+          selector: '.foo, .bar, .baz .qux',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+        },
+      ])
+    })
   })
 
   describe('at-rules', () => {
