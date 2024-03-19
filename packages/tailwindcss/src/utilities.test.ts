@@ -2364,6 +2364,69 @@ test('origin', () => {
   expect(run(['-origin-center', '-origin-[--value]'])).toEqual('')
 })
 
+test('perspective-origin', () => {
+  expect(
+    run([
+      'perspective-origin-center',
+      'perspective-origin-top',
+      'perspective-origin-top-right',
+      'perspective-origin-right',
+      'perspective-origin-bottom-right',
+      'perspective-origin-bottom',
+      'perspective-origin-bottom-left',
+      'perspective-origin-left',
+      'perspective-origin-top-left',
+      'perspective-origin-[50px_100px]',
+      'perspective-origin-[--value]',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".perspective-origin-\\[--value\\] {
+      perspective-origin: var(--value);
+    }
+
+    .perspective-origin-\\[50px_100px\\] {
+      perspective-origin: 50px 100px;
+    }
+
+    .perspective-origin-bottom {
+      perspective-origin: bottom;
+    }
+
+    .perspective-origin-bottom-left {
+      perspective-origin: 0 100%;
+    }
+
+    .perspective-origin-bottom-right {
+      perspective-origin: 100% 100%;
+    }
+
+    .perspective-origin-center {
+      perspective-origin: center;
+    }
+
+    .perspective-origin-left {
+      perspective-origin: 0;
+    }
+
+    .perspective-origin-right {
+      perspective-origin: 100%;
+    }
+
+    .perspective-origin-top {
+      perspective-origin: top;
+    }
+
+    .perspective-origin-top-left {
+      perspective-origin: 0 0;
+    }
+
+    .perspective-origin-top-right {
+      perspective-origin: 100% 0;
+    }"
+  `)
+  expect(run(['-perspective-origin-center', '-perspective-origin-[--value]'])).toEqual('')
+})
+
 test('translate', () => {
   expect(
     run([
@@ -2377,30 +2440,35 @@ test('translate', () => {
     ".-translate-\\[--value\\] {
       --tw-translate-x: calc(var(--value) * -1);
       --tw-translate-y: calc(var(--value) * -1);
+      --tw-translate-z: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .-translate-full {
       --tw-translate-x: -100%;
       --tw-translate-y: -100%;
+      --tw-translate-z: -100%;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-1\\/2 {
       --tw-translate-x: calc(1 / 2 * 100%);
       --tw-translate-y: calc(1 / 2 * 100%);
+      --tw-translate-z: calc(1 / 2 * 100%);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-\\[123px\\] {
       --tw-translate-x: 123px;
       --tw-translate-y: 123px;
+      --tw-translate-z: 123px;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-full {
       --tw-translate-x: 100%;
       --tw-translate-y: 100%;
+      --tw-translate-z: 100%;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
@@ -2414,79 +2482,179 @@ test('translate', () => {
       syntax: "<length-percentage>";
       inherits: false;
       initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
     }"
   `)
   expect(run(['translate'])).toEqual('')
 })
 
 test('translate-x', () => {
-  expect(run(['translate-x-full', '-translate-x-full', '-translate-x-[--value]']))
+  expect(run(['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[--value]']))
     .toMatchInlineSnapshot(`
-      ".-translate-x-\\[--value\\] {
-        --tw-translate-x: calc(var(--value) * -1);
-        translate: var(--tw-translate-x) var(--tw-translate-y);
-      }
+    ".-translate-x-\\[--value\\] {
+      --tw-translate-x: calc(var(--value) * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
 
-      .-translate-x-full {
-        --tw-translate-x: -100%;
-        translate: var(--tw-translate-x) var(--tw-translate-y);
-      }
+    .-translate-x-full {
+      --tw-translate-x: -100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
 
-      .translate-x-full {
-        --tw-translate-x: 100%;
-        translate: var(--tw-translate-x) var(--tw-translate-y);
-      }
+    .translate-x-full {
+      --tw-translate-x: 100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
 
-      @property --tw-translate-x {
-        syntax: "<length-percentage>";
-        inherits: false;
-        initial-value: 0;
-      }
+    .translate-x-px {
+      --tw-translate-x: 1px;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
 
-      @property --tw-translate-y {
-        syntax: "<length-percentage>";
-        inherits: false;
-        initial-value: 0;
-      }"
-    `)
+    @property --tw-translate-x {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-y {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
   expect(run(['translate-x'])).toEqual('')
 })
 
 test('translate-y', () => {
-  expect(run(['translate-y-full', '-translate-y-full', '-translate-y-[--value]']))
+  expect(run(['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[--value]']))
     .toMatchInlineSnapshot(`
-      ".-translate-y-\\[--value\\] {
-        --tw-translate-y: calc(var(--value) * -1);
-        translate: var(--tw-translate-x) var(--tw-translate-y);
-      }
+    ".-translate-y-\\[--value\\] {
+      --tw-translate-y: calc(var(--value) * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
 
-      .-translate-y-full {
-        --tw-translate-y: -100%;
-        translate: var(--tw-translate-x) var(--tw-translate-y);
-      }
+    .-translate-y-full {
+      --tw-translate-y: -100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
 
-      .translate-y-full {
-        --tw-translate-y: 100%;
-        translate: var(--tw-translate-x) var(--tw-translate-y);
-      }
+    .translate-y-full {
+      --tw-translate-y: 100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
 
-      @property --tw-translate-x {
-        syntax: "<length-percentage>";
-        inherits: false;
-        initial-value: 0;
-      }
+    .translate-y-px {
+      --tw-translate-y: 1px;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
 
-      @property --tw-translate-y {
-        syntax: "<length-percentage>";
-        inherits: false;
-        initial-value: 0;
-      }"
-    `)
+    @property --tw-translate-x {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-y {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
   expect(run(['translate-y'])).toEqual('')
 })
 
+test('translate-z', () => {
+  expect(run(['translate-z-full', '-translate-z-full', 'translate-y-px', '-translate-z-[--value]']))
+    .toMatchInlineSnapshot(`
+    ".-translate-z-\\[--value\\] {
+      --tw-translate-z: calc(var(--value) * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
+    .-translate-z-full {
+      --tw-translate-z: -100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
+    .translate-y-px {
+      --tw-translate-y: 1px;
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+
+    .translate-z-full {
+      --tw-translate-z: 100%;
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
+    @property --tw-translate-x {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-y {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(run(['translate-z'])).toEqual('')
+})
+
+test('translate-3d', () => {
+  expect(run(['translate-3d'])).toMatchInlineSnapshot(`
+    ".translate-3d {
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
+    @property --tw-translate-x {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-y {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
+  expect(run(['-translate-3d'])).toEqual('')
+})
+
 test('rotate', () => {
-  expect(run(['rotate-45', '-rotate-45', 'rotate-[123deg]'])).toMatchInlineSnapshot(`
+  expect(run(['rotate-45', '-rotate-45', 'rotate-[123deg]', 'rotate-[0.3_0.7_1_45deg]']))
+    .toMatchInlineSnapshot(`
     ".-rotate-45 {
       rotate: -45deg;
     }
@@ -2495,11 +2663,49 @@ test('rotate', () => {
       rotate: 45deg;
     }
 
+    .rotate-\\[0\\.3_0\\.7_1_45deg\\] {
+      rotate: .3 .7 1 45deg;
+    }
+
     .rotate-\\[123deg\\] {
       rotate: 123deg;
     }"
   `)
-  expect(run(['rotate', 'rotate-unknown'])).toEqual('')
+  expect(run(['rotate', 'rotate-z', 'rotate-unknown'])).toEqual('')
+})
+
+test('rotate-x', () => {
+  expect(run(['rotate-x-45', '-rotate-x-45', 'rotate-x-[123deg]'])).toMatchInlineSnapshot(`
+    ".-rotate-x-45 {
+      rotate: x -45deg;
+    }
+
+    .rotate-x-45 {
+      rotate: x 45deg;
+    }
+
+    .rotate-x-\\[123deg\\] {
+      rotate: x 123deg;
+    }"
+  `)
+  expect(run(['rotate-x', '-rotate-x', 'rotate-x-potato'])).toEqual('')
+})
+
+test('rotate-y', () => {
+  expect(run(['rotate-y-45', '-rotate-y-45', 'rotate-y-[123deg]'])).toMatchInlineSnapshot(`
+    ".-rotate-y-45 {
+      rotate: y -45deg;
+    }
+
+    .rotate-y-45 {
+      rotate: y 45deg;
+    }
+
+    .rotate-y-\\[123deg\\] {
+      rotate: y 123deg;
+    }"
+  `)
+  expect(run(['rotate-y', '-rotate-y', 'rotate-y-potato'])).toEqual('')
 })
 
 test('skew', () => {
@@ -2602,23 +2808,27 @@ test('skew-y', () => {
 })
 
 test('scale', () => {
-  expect(run(['scale-50', '-scale-50', 'scale-[123deg]'])).toMatchInlineSnapshot(`
+  expect(run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]'])).toMatchInlineSnapshot(`
     ".-scale-50 {
       --tw-scale-x: calc(50% * -1);
       --tw-scale-y: calc(50% * -1);
+      --tw-scale-z: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
     .scale-50 {
       --tw-scale-x: 50%;
       --tw-scale-y: 50%;
+      --tw-scale-z: 50%;
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
-    .scale-\\[123deg\\] {
-      --tw-scale-x: 123deg;
-      --tw-scale-y: 123deg;
-      scale: var(--tw-scale-x) var(--tw-scale-y);
+    .scale-\\[2\\] {
+      scale: 2;
+    }
+
+    .scale-\\[2_1\\.5_3\\] {
+      scale: 2 1.5 3;
     }
 
     @property --tw-scale-x {
@@ -2631,13 +2841,46 @@ test('scale', () => {
       syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
+    }
+
+    @property --tw-scale-z {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
     }"
   `)
   expect(run(['scale', 'scale-unknown'])).toEqual('')
 })
 
+test('scale-3d', () => {
+  expect(run(['scale-3d'])).toMatchInlineSnapshot(`
+    ".scale-3d {
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+    }
+
+    @property --tw-scale-x {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }"
+  `)
+  expect(run(['-scale-3d'])).toEqual('')
+})
+
 test('scale-x', () => {
-  expect(run(['scale-x-50', '-scale-x-50', 'scale-x-[123deg]'])).toMatchInlineSnapshot(`
+  expect(run(['scale-x-50', '-scale-x-50', 'scale-x-[2]'])).toMatchInlineSnapshot(`
     ".-scale-x-50 {
       --tw-scale-x: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y);
@@ -2648,8 +2891,8 @@ test('scale-x', () => {
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
-    .scale-x-\\[123deg\\] {
-      --tw-scale-x: 123deg;
+    .scale-x-\\[2\\] {
+      --tw-scale-x: 2;
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
@@ -2663,13 +2906,50 @@ test('scale-x', () => {
       syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
+    }
+
+    @property --tw-scale-z {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }"
+  `)
+  expect(run(['scale-200', 'scale-x-400'])).toMatchInlineSnapshot(`
+    ".scale-200 {
+      --tw-scale-x: 200%;
+      --tw-scale-y: 200%;
+      --tw-scale-z: 200%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
+    .scale-x-400 {
+      --tw-scale-x: 400%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
+    @property --tw-scale-x {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
     }"
   `)
   expect(run(['scale-x', 'scale-x-unknown'])).toEqual('')
 })
 
 test('scale-y', () => {
-  expect(run(['scale-y-50', '-scale-y-50', 'scale-y-[123deg]'])).toMatchInlineSnapshot(`
+  expect(run(['scale-y-50', '-scale-y-50', 'scale-y-[2]'])).toMatchInlineSnapshot(`
     ".-scale-y-50 {
       --tw-scale-y: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y);
@@ -2680,8 +2960,8 @@ test('scale-y', () => {
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
-    .scale-y-\\[123deg\\] {
-      --tw-scale-y: 123deg;
+    .scale-y-\\[2\\] {
+      --tw-scale-y: 2;
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
@@ -2695,20 +2975,75 @@ test('scale-y', () => {
       syntax: "<number> | <percentage>";
       inherits: false;
       initial-value: 1;
+    }
+
+    @property --tw-scale-z {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
     }"
   `)
   expect(run(['scale-y', 'scale-y-unknown'])).toEqual('')
 })
 
+test('scale-z', () => {
+  expect(run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
+    ".-scale-z-50 {
+      --tw-scale-z: calc(50% * -1);
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+    }
+
+    .scale-z-50 {
+      --tw-scale-z: 50%;
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+    }
+
+    .scale-z-\\[123deg\\] {
+      --tw-scale-z: 123deg;
+      scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+    }
+
+    @property --tw-scale-x {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-y {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }
+
+    @property --tw-scale-z {
+      syntax: "<number> | <percentage>";
+      inherits: false;
+      initial-value: 1;
+    }"
+  `)
+  expect(run(['scale-z'])).toEqual('')
+})
+
 test('transform', () => {
-  expect(run(['transform', 'transform-cpu', 'transform-gpu', 'transform-none']))
-    .toMatchInlineSnapshot(`
+  expect(
+    run([
+      'transform',
+      'transform-cpu',
+      'transform-gpu',
+      'transform-none',
+      'transform-[scaleZ(2)_rotateY(45deg)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".transform-none {
       transform: none;
     }
 
     .transform {
       transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+    }
+
+    .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
+      transform: scaleZ(2) rotateY(45deg) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
     }
 
     .transform-cpu {
@@ -2731,7 +3066,103 @@ test('transform', () => {
       initial-value: 0deg;
     }"
   `)
+  expect(
+    run([
+      'transform-flat',
+      'transform-3d',
+      'transform-content',
+      'transform-border',
+      'transform-fill',
+      'transform-stroke',
+      'transform-view',
+      'backface-visible',
+      'backface-hidden',
+    ]),
+  ).toMatchInlineSnapshot(`
+      ".backface-hidden {
+        backface-visibility: hidden;
+      }
+
+      .backface-visible {
+        backface-visibility: visible;
+      }
+
+      .transform-3d {
+        transform-style: preserve-3d;
+      }
+
+      .transform-border {
+        transform-box: border-box;
+      }
+
+      .transform-content {
+        transform-box: content-box;
+      }
+
+      .transform-fill {
+        transform-box: fill-box;
+      }
+
+      .transform-flat {
+        transform-style: flat;
+      }
+
+      .transform-stroke {
+        transform-box: stroke-box;
+      }
+
+      .transform-view {
+        transform-box: view-box;
+      }"
+    `)
   expect(run(['-transform', '-transform-cpu', '-transform-gpu', '-transform-none'])).toEqual('')
+})
+
+test('perspective', () => {
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --perspective-dramatic: 100px;
+          --perspective-normal: 500px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'perspective-normal',
+        'perspective-dramatic',
+        'perspective-none',
+        'perspective-123',
+        'perspective-[456px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --perspective-dramatic: 100px;
+      --perspective-normal: 500px;
+    }
+
+    .perspective-123 {
+      perspective: 123px;
+    }
+
+    .perspective-\\[456px\\] {
+      perspective: 456px;
+    }
+
+    .perspective-dramatic {
+      perspective: 100px;
+    }
+
+    .perspective-none {
+      perspective: none;
+    }
+
+    .perspective-normal {
+      perspective: 500px;
+    }"
+  `)
+  expect(run(['perspective', '-perspective', 'perspective-potato'])).toEqual('')
 })
 
 test('cursor', () => {

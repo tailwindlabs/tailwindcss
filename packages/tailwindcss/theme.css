@@ -421,6 +421,13 @@
   --line-height-9: 2.25rem;
   --line-height-10: 2.5rem;
 
+  /* 3D perspectives */
+  --perspective-dramatic: 100px;
+  --perspective-near: 300px;
+  --perspective-normal: 500px;
+  --perspective-midrange: 800px;
+  --perspective-distant: 1200px;
+
   /* Transition timing functions */
   --transition-timing-function-linear: linear;
   --transition-timing-function-in: cubic-bezier(0.4, 0, 1, 1);

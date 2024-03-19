@@ -74,9 +74,10 @@ export default [
   // '--tw-rotate',
   '--tw-skew-x',
   '--tw-skew-y',
+  '--tw-scale-x',
+  '--tw-scale-y',
+  '--tw-scale-z',
   'scale',
-  // '--tw-scale-x',
-  // '--tw-scale-y',
   'transform',
 
   'animation',

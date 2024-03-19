@@ -1189,10 +1189,25 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [decl('transform-origin', value)],
   })
 
+  staticUtility('perspective-origin-center', [['perspective-origin', 'center']])
+  staticUtility('perspective-origin-top', [['perspective-origin', 'top']])
+  staticUtility('perspective-origin-top-right', [['perspective-origin', 'top right']])
+  staticUtility('perspective-origin-right', [['perspective-origin', 'right']])
+  staticUtility('perspective-origin-bottom-right', [['perspective-origin', 'bottom right']])
+  staticUtility('perspective-origin-bottom', [['perspective-origin', 'bottom']])
+  staticUtility('perspective-origin-bottom-left', [['perspective-origin', 'bottom left']])
+  staticUtility('perspective-origin-left', [['perspective-origin', 'left']])
+  staticUtility('perspective-origin-top-left', [['perspective-origin', 'top left']])
+  functionalUtility('perspective-origin', {
+    themeKeys: ['--perspective-origin'],
+    handle: (value) => [decl('perspective-origin', value)],
+  })
+
   let translateProperties = () =>
     atRoot([
       property('--tw-translate-x', '0', '<length-percentage>'),
       property('--tw-translate-y', '0', '<length-percentage>'),
+      property('--tw-translate-z', '0', '<length-percentage>'),
     ])
 
   /**
@@ -1205,9 +1220,11 @@ export function createUtilities(theme: Theme) {
       translateProperties(),
       decl('--tw-translate-x', value),
       decl('--tw-translate-y', value),
+      decl('--tw-translate-z', value),
       decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
     ]
   })
+
   functionalUtility('translate', {
     supportsNegative: true,
     supportsFractions: true,
@@ -1216,67 +1233,77 @@ export function createUtilities(theme: Theme) {
       translateProperties(),
       decl('--tw-translate-x', value),
       decl('--tw-translate-y', value),
+      decl('--tw-translate-z', value),
       decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
     ],
   })
+
+  for (let axis of ['x', 'y', 'z']) {
+    let handle = (value: string) => [
+      translateProperties(),
+      decl(`--tw-translate-${axis}`, value),
+      decl(
+        'translate',
+        `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
+      ),
+    ]
+
+    /**
+     * @css `translate`
+     */
+    functionalUtility(`translate-${axis}`, {
+      supportsNegative: true,
+      supportsFractions: true,
+      themeKeys: ['--translate', '--spacing'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
+      handle,
+    })
+    utilities.static(`translate-${axis}-px`, (candidate) => {
+      return handle(candidate.negative ? '-1px' : '1px')
+    })
+    utilities.static(`translate-${axis}-full`, (candidate) => {
+      return handle(candidate.negative ? '-100%' : '100%')
+    })
+  }
 
   /**
    * @css `translate`
    */
-  utilities.static('translate-x-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-
-    return [
-      translateProperties(),
-      decl('--tw-translate-x', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ]
-  })
-  functionalUtility('translate-x', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--translate', '--spacing'],
-    handle: (value) => [
-      translateProperties(),
-      decl('--tw-translate-x', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ],
-  })
-
-  /**
-   * @css `translate`
-   */
-  utilities.static('translate-y-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-
-    return [
-      translateProperties(),
-      decl('--tw-translate-y', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ]
-  })
-  functionalUtility('translate-y', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--translate', '--spacing'],
-    handle: (value) => [
-      translateProperties(),
-      decl('--tw-translate-y', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ],
-  })
+  staticUtility('translate-3d', [
+    translateProperties,
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
+  ])
 
   /**
    * @css `rotate`
+   *
+   * `rotate-45` => `rotate: 45deg`
+   * `rotate-[x_45deg]` => `rotate: x 45deg`
+   * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
-  functionalUtility('rotate', {
-    supportsNegative: true,
-    themeKeys: ['--rotate'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}deg`
-    },
-    handle: (value) => [decl('rotate', value)],
+  utilities.functional('rotate', (candidate) => {
+    if (!candidate.value) return
+    let value
+    if (candidate.value.kind === 'arbitrary') {
+      value = candidate.value.value
+      let type = candidate.value.dataType ?? inferDataType(value, ['angle', 'vector'])
+      if (type === 'vector') {
+        return [decl('rotate', `${value} var(--tw-rotate)`)]
+      } else if (type !== 'angle') {
+        return [decl('rotate', value)]
+      }
+    } else {
+      value = theme.resolve(candidate.value.value, ['--rotate'])
+      if (!value && !Number.isNaN(Number(candidate.value.value))) {
+        value = `${candidate.value.value}deg`
+      }
+      if (!value) return
+    }
+    value = withNegative(value, candidate)
+    return [decl('rotate', value)]
   })
 
   suggest('rotate', () => [
@@ -1286,6 +1313,26 @@ export function createUtilities(theme: Theme) {
       valueThemeKeys: ['--rotate'],
     },
   ])
+
+  for (let axis of ['x', 'y']) {
+    functionalUtility(`rotate-${axis}`, {
+      supportsNegative: true,
+      themeKeys: ['--rotate'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}deg`
+      },
+      handle: (value) => [decl('rotate', `${axis} ${value}`)],
+    })
+
+    suggest(`rotate-${axis}`, () => [
+      {
+        supportsNegative: true,
+        values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+        valueThemeKeys: ['--rotate'],
+      },
+    ])
+  }
 
   let skewProperties = () =>
     atRoot([property('--tw-skew-x', '0deg', '<angle>'), property('--tw-skew-y', '0deg', '<angle>')])
@@ -1373,58 +1420,33 @@ export function createUtilities(theme: Theme) {
     atRoot([
       property('--tw-scale-x', '1', '<number> | <percentage>'),
       property('--tw-scale-y', '1', '<number> | <percentage>'),
+      property('--tw-scale-z', '1', '<number> | <percentage>'),
     ])
 
   /**
    * @css `scale`
    */
-  functionalUtility('scale', {
-    supportsNegative: true,
-    themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}%`
-    },
-    handle: (value) => [
+  utilities.functional('scale', (candidate) => {
+    if (!candidate.value) return
+    let value
+    if (candidate.value.kind === 'arbitrary') {
+      value = candidate.value.value
+      return [decl('scale', value)]
+    } else {
+      value = theme.resolve(candidate.value.value, ['--scale'])
+      if (!value && !Number.isNaN(Number(candidate.value.value))) {
+        value = `${candidate.value.value}%`
+      }
+      if (!value) return
+    }
+    value = withNegative(value, candidate)
+    return [
       scaleProperties(),
       decl('--tw-scale-x', value),
       decl('--tw-scale-y', value),
-      decl('scale', 'var(--tw-scale-x) var(--tw-scale-y)'),
-    ],
-  })
-
-  /**
-   * @css `scale`
-   */
-  functionalUtility('scale-x', {
-    supportsNegative: true,
-    themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}%`
-    },
-    handle: (value) => [
-      scaleProperties(),
-      decl('--tw-scale-x', value),
-      decl('scale', 'var(--tw-scale-x) var(--tw-scale-y)'),
-    ],
-  })
-
-  /**
-   * @css `scale`
-   */
-  functionalUtility('scale-y', {
-    supportsNegative: true,
-    themeKeys: ['--scale'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}%`
-    },
-    handle: (value) => [
-      scaleProperties(),
-      decl('--tw-scale-y', value),
-      decl('scale', 'var(--tw-scale-x) var(--tw-scale-y)'),
-    ],
+      decl('--tw-scale-z', value),
+      decl('scale', `var(--tw-scale-x) var(--tw-scale-y)`),
+    ]
   })
 
   suggest('scale', () => [
@@ -1435,28 +1457,83 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  suggest('scale-x', () => [
-    {
+  for (let axis of ['x', 'y', 'z']) {
+    /**
+     * @css `scale`
+     */
+    functionalUtility(`scale-${axis}`, {
       supportsNegative: true,
-      values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-      valueThemeKeys: ['--scale'],
-    },
+      themeKeys: ['--scale'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
+      handle: (value) => [
+        scaleProperties(),
+        decl(`--tw-scale-${axis}`, value),
+        decl(
+          'scale',
+          `var(--tw-scale-x) var(--tw-scale-y)${axis === 'z' ? ' var(--tw-scale-z)' : ''}`,
+        ),
+      ],
+    })
+
+    suggest(`scale-${axis}`, () => [
+      {
+        supportsNegative: true,
+        values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
+        valueThemeKeys: ['--scale'],
+      },
+    ])
+  }
+
+  /**
+   * @css `scale`
+   */
+  staticUtility('scale-3d', [
+    scaleProperties,
+    ['scale', 'var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)'],
   ])
 
-  suggest('scale-y', () => [
-    {
-      supportsNegative: true,
-      values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-      valueThemeKeys: ['--scale'],
+  /**
+   * @css `perspective`
+   */
+  staticUtility('perspective-none', [['perspective', 'none']])
+  functionalUtility('perspective', {
+    themeKeys: ['--perspective'],
+    handleBareValue: ({ value }) => {
+      if (!Number.isInteger(Number(value))) return null
+      return `${value}px`
     },
-  ])
+    handle: (value) => [decl('perspective', value)],
+  })
 
   /**
    * @css `transform`
    */
-  staticUtility('transform', [
-    skewProperties,
-    ['transform', 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'],
+  utilities.functional('transform', (candidate) => {
+    if (candidate.negative) return
+
+    let value = 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'
+    if (!candidate.value) {
+      // Supported as a legacy value for its stacking context
+    } else if (candidate.value.kind === 'arbitrary') {
+      // Since skew-x and skew-y are implemented using `transform`, we preserve
+      // them even if an arbitrary transform is provided. Transform functions
+      // are applied right to left, so we put them at the end so they are
+      // applied before other transforms, similar to other specific transform
+      // properties.
+      //
+      // https://developer.mozilla.org/en-US/docs/Web/CSS/transform#values
+      value = `${candidate.value.value} ${value}`
+    }
+
+    return [skewProperties(), decl('transform', value)]
+  })
+  suggest('transform', () => [
+    {
+      hasDefaultValue: true,
+    },
   ])
 
   staticUtility('transform-cpu', [['transform', 'translate(0,0)']])
@@ -1467,6 +1544,27 @@ export function createUtilities(theme: Theme) {
     ['scale', 'none'],
     ['transform', 'none'],
   ])
+
+  /**
+   * @css `transform-style`
+   */
+  staticUtility('transform-flat', [['transform-style', 'flat']])
+  staticUtility('transform-3d', [['transform-style', 'preserve-3d']])
+
+  /**
+   * @css `transform-box`
+   */
+  staticUtility('transform-content', [['transform-box', 'content-box']])
+  staticUtility('transform-border', [['transform-box', 'border-box']])
+  staticUtility('transform-fill', [['transform-box', 'fill-box']])
+  staticUtility('transform-stroke', [['transform-box', 'stroke-box']])
+  staticUtility('transform-view', [['transform-box', 'view-box']])
+
+  /**
+   * @css `backface-visibility`
+   */
+  staticUtility('backface-visible', [['backface-visibility', 'visible']])
+  staticUtility('backface-hidden', [['backface-visibility', 'hidden']])
 
   /**
    * @css `cursor`
