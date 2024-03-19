@@ -2440,30 +2440,35 @@ test('translate', () => {
     ".-translate-\\[--value\\] {
       --tw-translate-x: calc(var(--value) * -1);
       --tw-translate-y: calc(var(--value) * -1);
+      --tw-translate-z: calc(var(--value) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .-translate-full {
       --tw-translate-x: -100%;
       --tw-translate-y: -100%;
+      --tw-translate-z: -100%;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-1\\/2 {
       --tw-translate-x: calc(1 / 2 * 100%);
       --tw-translate-y: calc(1 / 2 * 100%);
+      --tw-translate-z: calc(1 / 2 * 100%);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-\\[123px\\] {
       --tw-translate-x: 123px;
       --tw-translate-y: 123px;
+      --tw-translate-z: 123px;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
     .translate-full {
       --tw-translate-x: 100%;
       --tw-translate-y: 100%;
+      --tw-translate-z: 100%;
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
@@ -2474,6 +2479,12 @@ test('translate', () => {
     }
 
     @property --tw-translate-y {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
       syntax: "<length-percentage>";
       inherits: false;
       initial-value: 0;
@@ -2510,6 +2521,12 @@ test('translate-x', () => {
         syntax: "<length-percentage>";
         inherits: false;
         initial-value: 0;
+      }
+
+      @property --tw-translate-z {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
       }"
     `)
   expect(run(['translate-x'])).toEqual('')
@@ -2543,9 +2560,80 @@ test('translate-y', () => {
         syntax: "<length-percentage>";
         inherits: false;
         initial-value: 0;
+      }
+
+      @property --tw-translate-z {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
       }"
     `)
   expect(run(['translate-y'])).toEqual('')
+})
+
+test('translate-z', () => {
+  expect(run(['translate-z-full', '-translate-z-full', '-translate-z-[--value]']))
+    .toMatchInlineSnapshot(`
+      ".-translate-z-\\[--value\\] {
+        --tw-translate-z: calc(var(--value) * -1);
+        translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+      }
+
+      .-translate-z-full {
+        --tw-translate-z: -100%;
+        translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+      }
+
+      .translate-z-full {
+        --tw-translate-z: 100%;
+        translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+      }
+
+      @property --tw-translate-x {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
+      }
+
+      @property --tw-translate-y {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
+      }
+
+      @property --tw-translate-z {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
+      }"
+    `)
+  expect(run(['translate-y'])).toEqual('')
+})
+
+test('translate-3d', () => {
+  expect(run(['translate-3d'])).toMatchInlineSnapshot(`
+    ".translate-3d {
+      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
+    @property --tw-translate-x {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-y {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }
+
+    @property --tw-translate-z {
+      syntax: "<length-percentage>";
+      inherits: false;
+      initial-value: 0;
+    }"
+  `)
 })
 
 test('rotate', () => {

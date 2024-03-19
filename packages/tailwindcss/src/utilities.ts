@@ -1202,6 +1202,7 @@ export function createUtilities(theme: Theme) {
     atRoot([
       property('--tw-translate-x', '0', '<length-percentage>'),
       property('--tw-translate-y', '0', '<length-percentage>'),
+      property('--tw-translate-z', '0', '<length-percentage>'),
     ])
 
   /**
@@ -1214,9 +1215,11 @@ export function createUtilities(theme: Theme) {
       translateProperties(),
       decl('--tw-translate-x', value),
       decl('--tw-translate-y', value),
+      decl('--tw-translate-z', value),
       decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
     ]
   })
+
   functionalUtility('translate', {
     supportsNegative: true,
     supportsFractions: true,
@@ -1225,55 +1228,62 @@ export function createUtilities(theme: Theme) {
       translateProperties(),
       decl('--tw-translate-x', value),
       decl('--tw-translate-y', value),
+      decl('--tw-translate-z', value),
       decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
     ],
   })
+
+  suggest('translate', () => [
+    {
+      supportsNegative: true,
+      supportsFractions: true,
+      valueThemeKeys: ['--translate', '--spacing'],
+    },
+  ])
+
+  for (let axis of ['x', 'y', 'z']) {
+    /**
+     * @css `translate`
+     */
+    functionalUtility(`translate-${axis}`, {
+      supportsNegative: true,
+      supportsFractions: true,
+      themeKeys: ['--translate', '--spacing'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
+      handle: (value) => [
+        translateProperties(),
+        decl(`--tw-translate-${axis}`, value),
+        decl(
+          'translate',
+          `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
+        ),
+      ],
+    })
+
+    utilities.static(`translate-${axis}-full`, (candidate) => {
+      let value = candidate.negative ? '-100%' : '100%'
+
+      return [
+        translateProperties(),
+        decl(`--tw-translate-${axis}`, value),
+        decl(
+          'translate',
+          `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
+        ),
+      ]
+    })
+  }
 
   /**
    * @css `translate`
    */
-  utilities.static('translate-x-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-
-    return [
-      translateProperties(),
-      decl('--tw-translate-x', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ]
-  })
-  functionalUtility('translate-x', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--translate', '--spacing'],
-    handle: (value) => [
-      translateProperties(),
-      decl('--tw-translate-x', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ],
-  })
-
-  /**
-   * @css `translate`
-   */
-  utilities.static('translate-y-full', (candidate) => {
-    let value = candidate.negative ? '-100%' : '100%'
-
-    return [
-      translateProperties(),
-      decl('--tw-translate-y', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ]
-  })
-  functionalUtility('translate-y', {
-    supportsNegative: true,
-    supportsFractions: true,
-    themeKeys: ['--translate', '--spacing'],
-    handle: (value) => [
-      translateProperties(),
-      decl('--tw-translate-y', value),
-      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y)'),
-    ],
-  })
+  staticUtility('translate-3d', [
+    translateProperties,
+    ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
+  ])
 
   /**
    * @css `rotate`
@@ -1457,7 +1467,7 @@ export function createUtilities(theme: Theme) {
         decl(`--tw-scale-${axis}`, value),
         decl(
           'scale',
-          `var(--tw-scale-x) var(--tw-scale-y) ${axis === 'z' ? 'var(--tw-scale-z)' : ''}`,
+          `var(--tw-scale-x) var(--tw-scale-y)${axis === 'z' ? ' var(--tw-scale-z)' : ''}`,
         ),
       ],
     })
@@ -1477,14 +1487,6 @@ export function createUtilities(theme: Theme) {
   staticUtility('scale-3d', [
     scaleProperties,
     ['scale', 'var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)'],
-  ])
-
-  suggest('scale-3d', () => [
-    {
-      supportsNegative: true,
-      values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-      valueThemeKeys: ['--scale'],
-    },
   ])
 
   /**

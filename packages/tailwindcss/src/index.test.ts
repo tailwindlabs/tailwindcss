@@ -227,6 +227,12 @@ describe('@apply', () => {
         syntax: "<length-percentage>";
         inherits: false;
         initial-value: 0;
+      }
+
+      @property --tw-translate-z {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
       }"
     `)
   })
