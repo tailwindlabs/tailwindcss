@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `inherit` as a universal color ([#13258](https://github.com/tailwindlabs/tailwindcss/pull/13258))
+- Add 3D transform utilities ([#13248](https://github.com/tailwindlabs/tailwindcss/pull/13248))
 
 ### Fixed
 
