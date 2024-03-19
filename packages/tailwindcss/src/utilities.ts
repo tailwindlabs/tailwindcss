@@ -1263,6 +1263,19 @@ export function createUtilities(theme: Theme) {
       ],
     })
 
+    utilities.static(`translate-${axis}-px`, (candidate) => {
+      let value = candidate.negative ? '-1px' : '1px'
+
+      return [
+        translateProperties(),
+        decl(`--tw-translate-${axis}`, value),
+        decl(
+          'translate',
+          `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
+        ),
+      ]
+    })
+
     utilities.static(`translate-${axis}-full`, (candidate) => {
       let value = candidate.negative ? '-100%' : '100%'
 
