@@ -3046,14 +3046,6 @@ test('transform', () => {
       transform: scaleZ(2)rotateY(45deg);
     }
 
-    .transform-cpu {
-      transform: translate(0, 0) var(--tw-skew-x, ) var(--tw-skew-y, );
-    }
-
-    .transform-gpu {
-      transform: translate3d(0, 0, 0) var(--tw-skew-x, ) var(--tw-skew-y, );
-    }
-
     @property --tw-skew-x {
       syntax: "<angle>";
       inherits: false;
