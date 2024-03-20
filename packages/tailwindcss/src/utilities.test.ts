@@ -3042,6 +3042,10 @@ test('transform', () => {
       transform: scaleZ(2)rotateY(45deg);
     }
 
+    .transform-gpu {
+      transform: translateZ(0);
+    }
+
     .transform-none {
       transform: none;
     }

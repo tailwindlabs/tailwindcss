@@ -1529,6 +1529,7 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
+  staticUtility('transform-gpu', [['transform', 'translateZ(0)']])
   staticUtility('transform-none', [['transform', 'none']])
 
   /**

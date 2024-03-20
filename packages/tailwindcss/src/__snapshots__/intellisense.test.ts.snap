@@ -1692,6 +1692,7 @@ exports[`getClassList 1`] = `
   "transform-content",
   "transform-fill",
   "transform-flat",
+  "transform-gpu",
   "transform-none",
   "transform-stroke",
   "transform-view",
