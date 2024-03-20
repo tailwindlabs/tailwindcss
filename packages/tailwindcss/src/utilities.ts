@@ -1506,19 +1506,14 @@ export function createUtilities(theme: Theme) {
   utilities.functional('transform', (candidate) => {
     if (candidate.negative) return
 
-    let value = 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'
+    let value: string | null = null
     if (!candidate.value) {
-      // Supported as a legacy value for its stacking context
+      value = 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'
     } else if (candidate.value.kind === 'arbitrary') {
-      // Since skew-x and skew-y are implemented using `transform`, we preserve
-      // them even if an arbitrary transform is provided. Transform functions
-      // are applied right to left, so we put them at the end so they are
-      // applied before other transforms, similar to other specific transform
-      // properties.
-      //
-      // https://developer.mozilla.org/en-US/docs/Web/CSS/transform#values
-      value = `${candidate.value.value} ${value}`
+      value = candidate.value.value
     }
+
+    if (value === null) return
 
     return [skewProperties(), decl('transform', value)]
   })
