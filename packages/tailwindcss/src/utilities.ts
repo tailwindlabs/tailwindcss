@@ -1523,8 +1523,12 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  staticUtility('transform-cpu', [['transform', 'translate(0,0)']])
-  staticUtility('transform-gpu', [['transform', 'translate3d(0,0,0)']])
+  staticUtility('transform-cpu', [
+    ['transform', 'translate(0, 0) var(--tw-skew-x,) var(--tw-skew-y,)'],
+  ])
+  staticUtility('transform-gpu', [
+    ['transform', 'translate3d(0, 0, 0) var(--tw-skew-x,) var(--tw-skew-y,)'],
+  ])
   staticUtility('transform-none', [
     ['translate', 'none'],
     ['rotate', 'none'],
