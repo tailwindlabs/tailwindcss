@@ -3035,7 +3035,7 @@ test('transform', () => {
     ]),
   ).toMatchInlineSnapshot(`
     ".transform {
-      transform: translate(0) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
