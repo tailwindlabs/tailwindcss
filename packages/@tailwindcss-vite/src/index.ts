@@ -71,35 +71,6 @@ export default function tailwindcss(): Plugin[] {
     return optimizeCss(generateCss(css), { minify })
   }
 
-  // In dev mode, there isn't a hook to signal that we've seen all files. We use
-  // a timer, resetting it on each file seen, and trigger CSS generation when we
-  // haven't seen any new files after a timeout. If this triggers too early,
-  // there will be a FOOC and but CSS will regenerate after we've seen more files.
-  let initialScan = (() => {
-    // If too short, we're more likely to trigger a FOOC and generate CSS
-    // multiple times. If too long, we delay dev builds.
-    let delayInMs = 50
-
-    let timer: ReturnType<typeof setTimeout>
-    let resolve: () => void
-    let resolved = false
-
-    return {
-      tick() {
-        if (resolved) return
-        timer && clearTimeout(timer)
-        timer = setTimeout(resolve, delayInMs)
-      },
-
-      complete: new Promise<void>((_resolve) => {
-        resolve = () => {
-          resolved = true
-          _resolve()
-        }
-      }),
-    }
-  })()
-
   return [
     {
       // Step 1: Scan source files for candidates
@@ -116,7 +87,6 @@ export default function tailwindcss(): Plugin[] {
 
       // Scan index.html for candidates
       transformIndexHtml(html) {
-        initialScan.tick()
         let updated = scan(html, 'html')
 
         // In dev mode, if the generated CSS contains a URL that causes the
@@ -130,7 +100,6 @@ export default function tailwindcss(): Plugin[] {
 
       // Scan all other files for candidates
       transform(src, id) {
-        initialScan.tick()
         if (id.includes('/.vite/')) return
         let [filename] = id.split('?', 2)
         let extension = path.extname(filename).slice(1)
@@ -148,13 +117,15 @@ export default function tailwindcss(): Plugin[] {
       // Step 2 (dev mode): Generate CSS
       name: '@tailwindcss/vite:generate:serve',
       apply: 'serve',
+
       async transform(src, id) {
         if (!isCssFile(id) || !src.includes('@tailwind')) return
 
         cssModules.add(id)
 
-        // For the initial load we must wait for all source files to be scanned
-        await initialScan.complete
+        // Wait until all other files have been processed, so we can extract all
+        // candidates before generating CSS.
+        await server?.waitForRequestsIdle(id)
 
         return { code: generateCss(src) }
       },
