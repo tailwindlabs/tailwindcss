@@ -1213,6 +1213,7 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `translate`
    */
+  staticUtility('translate-none', [['translate', 'none']])
   utilities.static('translate-full', (candidate) => {
     let value = candidate.negative ? '-100%' : '100%'
 
@@ -1280,6 +1281,7 @@ export function createUtilities(theme: Theme) {
    * `rotate-[x_45deg]` => `rotate: x 45deg`
    * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
+  staticUtility('rotate-none', [['rotate', 'none']])
   utilities.functional('rotate', (candidate) => {
     if (!candidate.value) return
     let value
@@ -1422,6 +1424,7 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `scale`
    */
+  staticUtility('scale-none', [['scale', 'none']])
   utilities.functional('scale', (candidate) => {
     if (!candidate.value) return
     let value
@@ -1523,12 +1526,7 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  staticUtility('transform-none', [
-    ['translate', 'none'],
-    ['rotate', 'none'],
-    ['scale', 'none'],
-    ['transform', 'none'],
-  ])
+  staticUtility('transform-none', [['transform', 'none']])
 
   /**
    * @css `transform-style`

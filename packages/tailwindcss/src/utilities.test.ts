@@ -3034,16 +3034,16 @@ test('transform', () => {
       'transform-[scaleZ(2)_rotateY(45deg)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".transform-none {
-      transform: none;
-    }
-
-    .transform {
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+    ".transform {
+      transform: translate(0) var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
       transform: scaleZ(2)rotateY(45deg);
+    }
+
+    .transform-none {
+      transform: none;
     }
 
     @property --tw-skew-x {
