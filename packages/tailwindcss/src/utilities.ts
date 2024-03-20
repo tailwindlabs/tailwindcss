@@ -1333,7 +1333,10 @@ export function createUtilities(theme: Theme) {
   }
 
   let skewProperties = () =>
-    atRoot([property('--tw-skew-x', '0deg', '<angle>'), property('--tw-skew-y', '0deg', '<angle>')])
+    atRoot([
+      property('--tw-skew-x', 'skewX(0)', '<transform-function>'),
+      property('--tw-skew-y', 'skewY(0)', '<transform-function>'),
+    ])
 
   /**
    * @css `transform`

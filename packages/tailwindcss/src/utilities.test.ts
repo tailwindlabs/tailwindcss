@@ -2729,15 +2729,15 @@ test('skew', () => {
     }
 
     @property --tw-skew-x {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewY(0);
     }"
   `)
   expect(run(['skew', 'skew-unknown'])).toEqual('')
@@ -2761,15 +2761,15 @@ test('skew-x', () => {
     }
 
     @property --tw-skew-x {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewY(0);
     }"
   `)
   expect(run(['skew-x', 'skew-x-unknown'])).toEqual('')
@@ -2793,15 +2793,15 @@ test('skew-y', () => {
     }
 
     @property --tw-skew-x {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewY(0);
     }"
   `)
   expect(run(['skew-y', 'skew-y-unknown'])).toEqual('')
@@ -3047,15 +3047,15 @@ test('transform', () => {
     }
 
     @property --tw-skew-x {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewY(0);
     }"
   `)
   expect(
