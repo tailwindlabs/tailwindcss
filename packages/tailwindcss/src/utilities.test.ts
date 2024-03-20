@@ -2713,19 +2713,19 @@ test('skew', () => {
     ".-skew-6 {
       --tw-skew-x: skewX(calc(6deg * -1));
       --tw-skew-y: skewY(calc(6deg * -1));
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-6 {
       --tw-skew-x: skewX(6deg);
       --tw-skew-y: skewY(6deg);
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-\\[123deg\\] {
       --tw-skew-x: skewX(123deg);
       --tw-skew-y: skewY(123deg);
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     @property --tw-skew-x {
@@ -2747,17 +2747,17 @@ test('skew-x', () => {
   expect(run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
     ".-skew-x-6 {
       --tw-skew-x: skewX(calc(6deg * -1));
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-x-6 {
       --tw-skew-x: skewX(6deg);
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-x-\\[123deg\\] {
       --tw-skew-x: skewX(123deg);
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     @property --tw-skew-x {
@@ -2779,17 +2779,17 @@ test('skew-y', () => {
   expect(run(['skew-y-6', '-skew-y-6', 'skew-y-[123deg]'])).toMatchInlineSnapshot(`
     ".-skew-y-6 {
       --tw-skew-y: skewY(calc(6deg * -1));
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-y-6 {
       --tw-skew-y: skewY(6deg);
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-y-\\[123deg\\] {
       --tw-skew-y: skewY(123deg);
-      transform: var(--tw-skew-x, ) var(--tw-skew-y, );
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     @property --tw-skew-x {

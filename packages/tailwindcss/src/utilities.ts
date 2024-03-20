@@ -1353,7 +1353,7 @@ export function createUtilities(theme: Theme) {
       skewProperties(),
       decl('--tw-skew-x', `skewX(${value})`),
       decl('--tw-skew-y', `skewY(${value})`),
-      decl('transform', 'var(--tw-skew-x,) var(--tw-skew-y,)'),
+      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
     ],
   })
 
@@ -1371,7 +1371,7 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [
       skewProperties(),
       decl('--tw-skew-x', `skewX(${value})`),
-      decl('transform', 'var(--tw-skew-x,) var(--tw-skew-y,)'),
+      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
     ],
   })
 
@@ -1389,7 +1389,7 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [
       skewProperties(),
       decl('--tw-skew-y', `skewY(${value})`),
-      decl('transform', 'var(--tw-skew-x,) var(--tw-skew-y,)'),
+      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
     ],
   })
 
