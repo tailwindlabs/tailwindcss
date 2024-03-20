@@ -3128,13 +3128,7 @@ test('perspective', () => {
         }
         @tailwind utilities;
       `,
-      [
-        'perspective-normal',
-        'perspective-dramatic',
-        'perspective-none',
-        'perspective-123',
-        'perspective-[456px]',
-      ],
+      ['perspective-normal', 'perspective-dramatic', 'perspective-none', 'perspective-[456px]'],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
@@ -3158,7 +3152,7 @@ test('perspective', () => {
       perspective: 500px;
     }"
   `)
-  expect(run(['perspective', '-perspective', 'perspective-potato'])).toEqual('')
+  expect(run(['perspective', '-perspective', 'perspective-potato', 'perspective-123'])).toEqual('')
 })
 
 test('cursor', () => {
