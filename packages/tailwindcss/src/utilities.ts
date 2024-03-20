@@ -626,7 +626,6 @@ export function createUtilities(theme: Theme) {
     {
       supportsNegative: true,
       values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
-      valueThemeKeys: ['--order'],
     },
   ])
 
@@ -837,7 +836,6 @@ export function createUtilities(theme: Theme) {
   suggest('line-clamp', () => [
     {
       values: ['1', '2', '3', '4', '5', '6'],
-      valueThemeKeys: ['--line-clamp'],
     },
   ])
 
@@ -1307,7 +1305,6 @@ export function createUtilities(theme: Theme) {
     {
       supportsNegative: true,
       values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
-      valueThemeKeys: ['--rotate'],
     },
   ])
 
@@ -1325,7 +1322,6 @@ export function createUtilities(theme: Theme) {
       {
         supportsNegative: true,
         values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
-        valueThemeKeys: ['--rotate'],
       },
     ])
   }
@@ -1389,7 +1385,6 @@ export function createUtilities(theme: Theme) {
     {
       supportsNegative: true,
       values: ['0', '1', '2', '3', '6', '12'],
-      valueThemeKeys: ['--skew'],
     },
   ])
 
@@ -1397,7 +1392,6 @@ export function createUtilities(theme: Theme) {
     {
       supportsNegative: true,
       values: ['0', '1', '2', '3', '6', '12'],
-      valueThemeKeys: ['--skew'],
     },
   ])
 
@@ -1405,7 +1399,6 @@ export function createUtilities(theme: Theme) {
     {
       supportsNegative: true,
       values: ['0', '1', '2', '3', '6', '12'],
-      valueThemeKeys: ['--skew'],
     },
   ])
 
@@ -1445,7 +1438,6 @@ export function createUtilities(theme: Theme) {
     {
       supportsNegative: true,
       values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-      valueThemeKeys: ['--scale'],
     },
   ])
 
@@ -1473,7 +1465,6 @@ export function createUtilities(theme: Theme) {
       {
         supportsNegative: true,
         values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-        valueThemeKeys: ['--scale'],
       },
     ])
   }
@@ -1891,14 +1882,12 @@ export function createUtilities(theme: Theme) {
   suggest('grid-cols', () => [
     {
       values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
-      valueThemeKeys: ['--grid-template-columns'],
     },
   ])
 
   suggest('grid-rows', () => [
     {
       values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
-      valueThemeKeys: ['--grid-template-rows'],
     },
   ])
 
