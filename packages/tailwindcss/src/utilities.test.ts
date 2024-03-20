@@ -3051,7 +3051,7 @@ test('transform', () => {
     }
 
     .transform-gpu {
-      transform: translate(0, 0, 0);
+      transform: translate3d(0, 0, 0);
     }
 
     @property --tw-skew-x {
