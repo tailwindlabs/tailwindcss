@@ -1251,10 +1251,6 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       supportsFractions: true,
       themeKeys: ['--translate', '--spacing'],
-      handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
-        return `${value}%`
-      },
       handle,
     })
     utilities.static(`translate-${axis}-px`, (candidate) => {
