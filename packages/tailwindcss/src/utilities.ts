@@ -1290,7 +1290,8 @@ export function createUtilities(theme: Theme) {
         return [decl('rotate', value)]
       }
     } else {
-      if (!Number.isNaN(Number(candidate.value.value))) {
+      value = theme.resolve(candidate.value.value, ['--rotate'])
+      if (!value && !Number.isNaN(Number(candidate.value.value))) {
         value = `${candidate.value.value}deg`
       }
       if (!value) return
@@ -1421,7 +1422,8 @@ export function createUtilities(theme: Theme) {
       value = candidate.value.value
       return [decl('scale', value)]
     } else {
-      if (!Number.isNaN(Number(candidate.value.value))) {
+      value = theme.resolve(candidate.value.value, ['--scale'])
+      if (!value && !Number.isNaN(Number(candidate.value.value))) {
         value = `${candidate.value.value}%`
       }
       if (!value) return
@@ -1810,8 +1812,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('columns-auto', [['columns', 'auto']])
 
   functionalUtility('columns', {
-    // TODO: Do we want to remove the `--columns` or not?
-    themeKeys: ['--width'],
+    themeKeys: ['--columns', '--width'],
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return value
@@ -2328,8 +2329,7 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('divide-x', {
       defaultValue: theme.get(['--default-border-width']) ?? '1px',
-      // TODO: Do we want to remove `--divide-width` or not?
-      themeKeys: ['--border-width'],
+      themeKeys: ['--divide-width', '--border-width'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
         return `${value}px`
@@ -2352,8 +2352,7 @@ export function createUtilities(theme: Theme) {
 
     functionalUtility('divide-y', {
       defaultValue: theme.get(['--default-border-width']) ?? '1px',
-      // TODO: Do we want to remove `--divide-width` or not?
-      themeKeys: ['--border-width'],
+      themeKeys: ['--divide-width', '--border-width'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
         return `${value}px`
@@ -2375,7 +2374,7 @@ export function createUtilities(theme: Theme) {
     suggest('divide-x', () => [
       {
         values: ['0', '2', '4', '8'],
-        valueThemeKeys: ['--border-width'],
+        valueThemeKeys: ['--divide-width', '--border-width'],
         hasDefaultValue: true,
       },
     ])
@@ -2383,7 +2382,7 @@ export function createUtilities(theme: Theme) {
     suggest('divide-y', () => [
       {
         values: ['0', '2', '4', '8'],
-        valueThemeKeys: ['--border-width'],
+        valueThemeKeys: ['--divide-width', '--border-width'],
         hasDefaultValue: true,
       },
     ])
