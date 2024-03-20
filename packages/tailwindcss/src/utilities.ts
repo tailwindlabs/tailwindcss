@@ -1508,7 +1508,7 @@ export function createUtilities(theme: Theme) {
 
     let value: string | null = null
     if (!candidate.value) {
-      value = 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'
+      value = 'var(--tw-skew-x) var(--tw-skew-y)'
     } else if (candidate.value.kind === 'arbitrary') {
       value = candidate.value.value
     }
