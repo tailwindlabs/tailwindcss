@@ -3142,10 +3142,6 @@ test('perspective', () => {
       --perspective-normal: 500px;
     }
 
-    .perspective-123 {
-      perspective: 123px;
-    }
-
     .perspective-\\[456px\\] {
       perspective: 456px;
     }
