@@ -619,7 +619,6 @@ export function createUtilities(theme: Theme) {
       if (!Number.isInteger(Number(value))) return null
       return value
     },
-    themeKeys: ['--order'],
     handle: (value) => [decl('order', value)],
   })
 
@@ -823,7 +822,6 @@ export function createUtilities(theme: Theme) {
     ['-webkit-line-clamp', 'unset'],
   ])
   functionalUtility('line-clamp', {
-    themeKeys: ['--line-clamp'],
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return value
@@ -1317,7 +1315,6 @@ export function createUtilities(theme: Theme) {
   for (let axis of ['x', 'y']) {
     functionalUtility(`rotate-${axis}`, {
       supportsNegative: true,
-      themeKeys: ['--rotate'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
         return `${value}deg`
@@ -1343,7 +1340,6 @@ export function createUtilities(theme: Theme) {
    */
   functionalUtility('skew', {
     supportsNegative: true,
-    themeKeys: ['--skew'],
     handleBareValue: ({ value }) => {
       if (Number.isNaN(Number(value))) return null
       return `${value}deg`
@@ -1362,7 +1358,6 @@ export function createUtilities(theme: Theme) {
    */
   functionalUtility('skew-x', {
     supportsNegative: true,
-    themeKeys: ['--skew'],
     handleBareValue: ({ value }) => {
       if (Number.isNaN(Number(value))) return null
       return `${value}deg`
@@ -1380,7 +1375,6 @@ export function createUtilities(theme: Theme) {
    */
   functionalUtility('skew-y', {
     supportsNegative: true,
-    themeKeys: ['--skew'],
     handleBareValue: ({ value }) => {
       if (Number.isNaN(Number(value))) return null
       return `${value}deg`
@@ -1463,7 +1457,6 @@ export function createUtilities(theme: Theme) {
      */
     functionalUtility(`scale-${axis}`, {
       supportsNegative: true,
-      themeKeys: ['--scale'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
         return `${value}%`
@@ -1879,7 +1872,6 @@ export function createUtilities(theme: Theme) {
   staticUtility('grid-cols-none', [['grid-template-columns', 'none']])
   staticUtility('grid-cols-subgrid', [['grid-template-columns', 'subgrid']])
   functionalUtility('grid-cols', {
-    themeKeys: ['--grid-template-columns'],
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return `repeat(${value}, minmax(0, 1fr))`
@@ -1890,7 +1882,6 @@ export function createUtilities(theme: Theme) {
   staticUtility('grid-rows-none', [['grid-template-rows', 'none']])
   staticUtility('grid-rows-subgrid', [['grid-template-rows', 'subgrid']])
   functionalUtility('grid-rows', {
-    themeKeys: ['--grid-template-rows'],
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return `repeat(${value}, minmax(0, 1fr))`
