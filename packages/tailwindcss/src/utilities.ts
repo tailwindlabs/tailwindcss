@@ -3519,9 +3519,6 @@ export function createUtilities(theme: Theme) {
     })
 
     functionalUtility('backdrop-opacity', {
-      // TODO: Do we want to remove this or not? Named opacity utilities (apart
-      // form like `opacity-disabled` do not make a lot of sense). Just bare
-      // values make more sense.
       themeKeys: ['--backdrop-opacity', '--opacity'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
