@@ -3043,7 +3043,7 @@ test('transform', () => {
     }
 
     .transform-gpu {
-      transform: translateZ(0);
+      transform: translateZ(0) var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .transform-none {
