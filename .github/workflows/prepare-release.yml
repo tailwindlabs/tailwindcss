@@ -47,10 +47,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Use the `stable` engine
-        run: |
-          node ./scripts/swap-engines.js
-
       - name: Install dependencies
         run: npm install
 
