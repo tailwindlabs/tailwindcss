@@ -290,7 +290,7 @@ export function createUtilities(theme: Theme) {
   type UtilityDescription = {
     supportsNegative?: boolean
     supportsFractions?: boolean
-    themeKeys: ThemeKey[]
+    themeKeys?: ThemeKey[]
     defaultValue?: string | null
     handleBareValue?: (value: NamedUtilityValue) => string | null
     handle: (value: string) => AstNode[] | undefined
@@ -315,11 +315,14 @@ export function createUtilities(theme: Theme) {
         // ever support both of these — `defaultValue` is for things like
         // `grayscale` whereas the `DEFAULT` in theme is for things like
         // `shadow` or `blur`.
-        value = desc.defaultValue ?? theme.get(desc.themeKeys)
+        value = desc.defaultValue ?? theme.get(desc.themeKeys ?? [])
       } else if (candidate.value.kind === 'arbitrary') {
         value = candidate.value.value
       } else {
-        value = theme.resolve(candidate.value.fraction ?? candidate.value.value, desc.themeKeys)
+        value = theme.resolve(
+          candidate.value.fraction ?? candidate.value.value,
+          desc.themeKeys ?? [],
+        )
 
         // Automatically handle things like `w-1/2` without requiring `1/2` to
         // exist as a theme value.
@@ -344,7 +347,7 @@ export function createUtilities(theme: Theme) {
     suggest(classRoot, () => [
       {
         supportsNegative: desc.supportsNegative,
-        valueThemeKeys: desc.themeKeys,
+        valueThemeKeys: desc.themeKeys ?? [],
         hasDefaultValue: desc.defaultValue !== undefined && desc.defaultValue !== null,
       },
     ])
@@ -638,7 +641,6 @@ export function createUtilities(theme: Theme) {
   })
   staticUtility('col-span-full', [['grid-column', '1 / -1']])
   functionalUtility('col-span', {
-    themeKeys: [],
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return value
@@ -1063,7 +1065,6 @@ export function createUtilities(theme: Theme) {
    */
   functionalUtility('shrink', {
     defaultValue: '1',
-    themeKeys: [],
     handleBareValue: ({ value }) => {
       if (Number.isNaN(Number(value))) return null
       return value
@@ -1076,7 +1077,6 @@ export function createUtilities(theme: Theme) {
    */
   functionalUtility('grow', {
     defaultValue: '1',
-    themeKeys: [],
     handleBareValue: ({ value }) => {
       if (Number.isNaN(Number(value))) return null
       return value
@@ -1255,10 +1255,6 @@ export function createUtilities(theme: Theme) {
       supportsNegative: true,
       supportsFractions: true,
       themeKeys: ['--translate', '--spacing'],
-      handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
-        return `${value}%`
-      },
       handle,
     })
     utilities.static(`translate-${axis}-px`, (candidate) => {
@@ -2997,7 +2993,6 @@ export function createUtilities(theme: Theme) {
   staticUtility('font-stretch-extra-expanded', [['font-stretch', 'extra-expanded']])
   staticUtility('font-stretch-ultra-expanded', [['font-stretch', 'ultra-expanded']])
   functionalUtility('font-stretch', {
-    themeKeys: [],
     handleBareValue: ({ value }) => {
       if (!value.endsWith('%')) return null
       let num = Number(value.slice(0, -1))
