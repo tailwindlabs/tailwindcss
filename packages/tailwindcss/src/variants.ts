@@ -512,7 +512,7 @@ export function createVariants(theme: Theme): Variants {
             if (variant.value.kind === 'arbitrary') {
               value = variant.value.value
             } else if (variant.value.kind === 'named') {
-              value = theme.resolveBare(variant.value.value, ['--breakpoint'])
+              value = theme.resolveValue(variant.value.value, ['--breakpoint'])
             }
 
             if (!value) return null
@@ -597,7 +597,7 @@ export function createVariants(theme: Theme): Variants {
             if (variant.value.kind === 'arbitrary') {
               value = variant.value.value
             } else if (variant.value.kind === 'named') {
-              value = theme.resolveBare(variant.value.value, ['--width'])
+              value = theme.resolveValue(variant.value.value, ['--width'])
             }
 
             if (!value) return null

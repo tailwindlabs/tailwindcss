@@ -93,7 +93,7 @@ export class Theme {
     return this.var(themeKey)
   }
 
-  resolveBare(candidateValue: string, themeKeys: ThemeKey[]): string | null {
+  resolveValue(candidateValue: string, themeKeys: ThemeKey[]): string | null {
     let themeKey = this.resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
