@@ -1213,6 +1213,7 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `translate`
    */
+  staticUtility('translate-none', [['translate', 'none']])
   utilities.static('translate-full', (candidate) => {
     let value = candidate.negative ? '-100%' : '100%'
 
@@ -1280,6 +1281,7 @@ export function createUtilities(theme: Theme) {
    * `rotate-[x_45deg]` => `rotate: x 45deg`
    * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
+  staticUtility('rotate-none', [['rotate', 'none']])
   utilities.functional('rotate', (candidate) => {
     if (!candidate.value) return
     let value
@@ -1331,7 +1333,10 @@ export function createUtilities(theme: Theme) {
   }
 
   let skewProperties = () =>
-    atRoot([property('--tw-skew-x', '0deg', '<angle>'), property('--tw-skew-y', '0deg', '<angle>')])
+    atRoot([
+      property('--tw-skew-x', 'skewX(0)', '<transform-function>'),
+      property('--tw-skew-y', 'skewY(0)', '<transform-function>'),
+    ])
 
   /**
    * @css `transform`
@@ -1346,9 +1351,9 @@ export function createUtilities(theme: Theme) {
     },
     handle: (value) => [
       skewProperties(),
-      decl('--tw-skew-x', value),
-      decl('--tw-skew-y', value),
-      decl('transform', 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'),
+      decl('--tw-skew-x', `skewX(${value})`),
+      decl('--tw-skew-y', `skewY(${value})`),
+      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
     ],
   })
 
@@ -1365,8 +1370,8 @@ export function createUtilities(theme: Theme) {
     },
     handle: (value) => [
       skewProperties(),
-      decl('--tw-skew-x', value),
-      decl('transform', 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'),
+      decl('--tw-skew-x', `skewX(${value})`),
+      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
     ],
   })
 
@@ -1383,8 +1388,8 @@ export function createUtilities(theme: Theme) {
     },
     handle: (value) => [
       skewProperties(),
-      decl('--tw-skew-y', value),
-      decl('transform', 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'),
+      decl('--tw-skew-y', `skewY(${value})`),
+      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
     ],
   })
 
@@ -1422,6 +1427,7 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `scale`
    */
+  staticUtility('scale-none', [['scale', 'none']])
   utilities.functional('scale', (candidate) => {
     if (!candidate.value) return
     let value
@@ -1506,19 +1512,14 @@ export function createUtilities(theme: Theme) {
   utilities.functional('transform', (candidate) => {
     if (candidate.negative) return
 
-    let value = 'skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))'
+    let value: string | null = null
     if (!candidate.value) {
-      // Supported as a legacy value for its stacking context
+      value = 'var(--tw-skew-x) var(--tw-skew-y)'
     } else if (candidate.value.kind === 'arbitrary') {
-      // Since skew-x and skew-y are implemented using `transform`, we preserve
-      // them even if an arbitrary transform is provided. Transform functions
-      // are applied right to left, so we put them at the end so they are
-      // applied before other transforms, similar to other specific transform
-      // properties.
-      //
-      // https://developer.mozilla.org/en-US/docs/Web/CSS/transform#values
-      value = `${candidate.value.value} ${value}`
+      value = candidate.value.value
     }
+
+    if (value === null) return
 
     return [skewProperties(), decl('transform', value)]
   })
@@ -1528,14 +1529,9 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
-  staticUtility('transform-cpu', [['transform', 'translate(0,0)']])
-  staticUtility('transform-gpu', [['transform', 'translate(0,0,0)']])
-  staticUtility('transform-none', [
-    ['translate', 'none'],
-    ['rotate', 'none'],
-    ['scale', 'none'],
-    ['transform', 'none'],
-  ])
+  staticUtility('transform-cpu', [['transform', 'var(--tw-skew-x) var(--tw-skew-y)']])
+  staticUtility('transform-gpu', [['transform', 'translateZ(0) var(--tw-skew-x) var(--tw-skew-y)']])
+  staticUtility('transform-none', [['transform', 'none']])
 
   /**
    * @css `transform-style`

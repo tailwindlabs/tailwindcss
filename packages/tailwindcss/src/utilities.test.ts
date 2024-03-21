@@ -2711,33 +2711,33 @@ test('rotate-y', () => {
 test('skew', () => {
   expect(run(['skew-6', '-skew-6', 'skew-[123deg]'])).toMatchInlineSnapshot(`
     ".-skew-6 {
-      --tw-skew-x: calc(6deg * -1);
-      --tw-skew-y: calc(6deg * -1);
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-x: skewX(calc(6deg * -1));
+      --tw-skew-y: skewY(calc(6deg * -1));
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-6 {
-      --tw-skew-x: 6deg;
-      --tw-skew-y: 6deg;
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-x: skewX(6deg);
+      --tw-skew-y: skewY(6deg);
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-\\[123deg\\] {
-      --tw-skew-x: 123deg;
-      --tw-skew-y: 123deg;
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-x: skewX(123deg);
+      --tw-skew-y: skewY(123deg);
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     @property --tw-skew-x {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewY(0);
     }"
   `)
   expect(run(['skew', 'skew-unknown'])).toEqual('')
@@ -2746,30 +2746,30 @@ test('skew', () => {
 test('skew-x', () => {
   expect(run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
     ".-skew-x-6 {
-      --tw-skew-x: calc(6deg * -1);
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-x: skewX(calc(6deg * -1));
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-x-6 {
-      --tw-skew-x: 6deg;
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-x: skewX(6deg);
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-x-\\[123deg\\] {
-      --tw-skew-x: 123deg;
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-x: skewX(123deg);
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     @property --tw-skew-x {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewY(0);
     }"
   `)
   expect(run(['skew-x', 'skew-x-unknown'])).toEqual('')
@@ -2778,30 +2778,30 @@ test('skew-x', () => {
 test('skew-y', () => {
   expect(run(['skew-y-6', '-skew-y-6', 'skew-y-[123deg]'])).toMatchInlineSnapshot(`
     ".-skew-y-6 {
-      --tw-skew-y: calc(6deg * -1);
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-y: skewY(calc(6deg * -1));
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-y-6 {
-      --tw-skew-y: 6deg;
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-y: skewY(6deg);
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .skew-y-\\[123deg\\] {
-      --tw-skew-y: 123deg;
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      --tw-skew-y: skewY(123deg);
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     @property --tw-skew-x {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewY(0);
     }"
   `)
   expect(run(['skew-y', 'skew-y-unknown'])).toEqual('')
@@ -3034,36 +3034,36 @@ test('transform', () => {
       'transform-[scaleZ(2)_rotateY(45deg)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".transform-none {
-      transform: none;
-    }
-
-    .transform {
-      transform: skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+    ".transform {
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
-      transform: scaleZ(2) rotateY(45deg) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y));
+      transform: scaleZ(2)rotateY(45deg);
     }
 
     .transform-cpu {
-      transform: translate(0);
+      transform: var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .transform-gpu {
-      transform: translate(0, 0, 0);
+      transform: translateZ(0) var(--tw-skew-x) var(--tw-skew-y);
+    }
+
+    .transform-none {
+      transform: none;
     }
 
     @property --tw-skew-x {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewX(0);
     }
 
     @property --tw-skew-y {
-      syntax: "<angle>";
+      syntax: "<transform-function>";
       inherits: false;
-      initial-value: 0deg;
+      initial-value: skewY(0);
     }"
   `)
   expect(
