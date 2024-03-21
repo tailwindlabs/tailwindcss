@@ -34,7 +34,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production', NO_COLOR: '1' },
     })
 
-    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+    expect(await readOutputFile(/index.[a-z0-9_-]+\.css$/i)).toIncludeCss(
       css`
         .font-bold {
           font-weight: 700;
@@ -76,7 +76,7 @@ describe('static build', () => {
     })
 
     if (env.ENGINE === 'stable') {
-      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+      expect(await readOutputFile(/index.[a-z0-9_-]+\.css$/i)).toIncludeCss(
         css`
           .bg-primary {
             --tw-bg-opacity: 1;
@@ -87,7 +87,7 @@ describe('static build', () => {
     }
 
     if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+      expect(await readOutputFile(/index.[a-z0-9_-]+\.css$/i)).toIncludeCss(
         css`
           .bg-primary {
             background-color: black;
@@ -132,7 +132,7 @@ describe('static build', () => {
     })
 
     if (env.ENGINE === 'stable') {
-      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+      expect(await readOutputFile(/index.[a-z0-9_-]+\.css$/i)).toIncludeCss(
         css`
           .bg-primary {
             --tw-bg-opacity: 1;
@@ -143,7 +143,7 @@ describe('static build', () => {
     }
 
     if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+      expect(await readOutputFile(/index.[a-z0-9_-]+\.css$/i)).toIncludeCss(
         css`
           .bg-primary {
             background-color: black;
