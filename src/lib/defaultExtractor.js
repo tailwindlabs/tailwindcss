@@ -96,7 +96,7 @@ function* buildRegExps(context) {
       regex.pattern([/@\[[^\s"'`]+\](\/[^\s"'`]+)?/, separator]),
 
       // With variant modifier (e.g.: group-[..]/modifier)
-      regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]\/\w+/, separator]),
+      regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]\/[\w_-]+/, separator]),
 
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s"'`]+\]/, separator]),
       regex.pattern([/[^\s"'`\[\\]+/, separator]),
@@ -105,7 +105,7 @@ function* buildRegExps(context) {
     // With quotes allowed
     regex.any([
       // With variant modifier (e.g.: group-[..]/modifier)
-      regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s`]+\]\/\w+/, separator]),
+      regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s`]+\]\/[\w_-]+/, separator]),
 
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s`]+\]/, separator]),
       regex.pattern([/[^\s`\[\\]+/, separator]),
