@@ -404,11 +404,11 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
 }
 
 .w-4 {
-  width: 1rem;
+  width: var(--spacing-4, 1rem);
 }
 
 .bg-red-500 {
-  background-color: #ef4444;
+  background-color: var(--color-red-500, #ef4444);
 }
 
 .shadow {

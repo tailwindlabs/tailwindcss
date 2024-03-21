@@ -104,7 +104,7 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
 
   expect(result.css.trim()).toMatchInlineSnapshot(`
     ".foo {
-      color: #ef4444;
+      color: var(--color-red-500, #ef4444);
     }"
   `)
 })

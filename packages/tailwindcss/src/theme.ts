@@ -11,7 +11,7 @@ export class Theme {
       if (key === '--*') {
         this.values.clear()
       } else {
-        this.clearNamespace(key.slice(0, -2))
+        this.#clearNamespace(key.slice(0, -2))
       }
     }
 
@@ -57,7 +57,7 @@ export class Theme {
     return this.values.entries()
   }
 
-  clearNamespace(namespace: string) {
+  #clearNamespace(namespace: string) {
     for (let key of this.values.keys()) {
       if (key.startsWith(namespace)) {
         this.values.delete(key)
@@ -65,7 +65,7 @@ export class Theme {
     }
   }
 
-  resolveKey(candidateValue: string, themeKeys: ThemeKey[]): string | null {
+  #resolveKey(candidateValue: string, themeKeys: ThemeKey[]): string | null {
     for (let key of themeKeys) {
       let themeKey = escape(`${key}-${candidateValue.replaceAll('.', '_')}`)
 
@@ -77,8 +77,24 @@ export class Theme {
     return null
   }
 
+  #var(themeKey: string) {
+    if (!this.values.has(themeKey)) {
+      return null
+    }
+
+    return `var(${themeKey}, ${this.values.get(themeKey)?.value})`
+  }
+
   resolve(candidateValue: string, themeKeys: ThemeKey[]): string | null {
-    let themeKey = this.resolveKey(candidateValue, themeKeys)
+    let themeKey = this.#resolveKey(candidateValue, themeKeys)
+
+    if (!themeKey) return null
+
+    return this.#var(themeKey)
+  }
+
+  resolveValue(candidateValue: string, themeKeys: ThemeKey[]): string | null {
+    let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
 
@@ -90,19 +106,19 @@ export class Theme {
     themeKeys: ThemeKey[],
     nestedKeys: `--${string}`[] = [],
   ): [string, Record<string, string>] | null {
-    let themeKey = this.resolveKey(candidateValue, themeKeys)
+    let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
 
     let extra = {} as Record<string, string>
     for (let name of nestedKeys) {
-      let nestedValue = this.values.get(`${themeKey}${name}`)
+      let nestedValue = this.#var(`${themeKey}${name}`)
       if (nestedValue) {
-        extra[name] = nestedValue.value
+        extra[name] = nestedValue
       }
     }
 
-    return [this.values.get(themeKey)!.value, extra]
+    return [this.#var(themeKey)!, extra]
   }
 
   namespace(namespace: string) {
