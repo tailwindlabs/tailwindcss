@@ -3042,6 +3042,10 @@ test('transform', () => {
       transform: scaleZ(2)rotateY(45deg);
     }
 
+    .transform-cpu {
+      transform: var(--tw-skew-x) var(--tw-skew-y);
+    }
+
     .transform-gpu {
       transform: translateZ(0) var(--tw-skew-x) var(--tw-skew-y);
     }

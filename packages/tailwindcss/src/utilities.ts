@@ -1529,6 +1529,7 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
+  staticUtility('transform-cpu', [['transform', 'var(--tw-skew-x) var(--tw-skew-y)']])
   staticUtility('transform-gpu', [['transform', 'translateZ(0) var(--tw-skew-x) var(--tw-skew-y)']])
   staticUtility('transform-none', [['transform', 'none']])
 

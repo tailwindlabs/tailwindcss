@@ -1690,6 +1690,7 @@ exports[`getClassList 1`] = `
   "transform-3d",
   "transform-border",
   "transform-content",
+  "transform-cpu",
   "transform-fill",
   "transform-flat",
   "transform-gpu",
