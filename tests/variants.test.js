@@ -283,6 +283,26 @@ crosscheck(({ stable, oxide }) => {
         "Your custom variant `wtf-bbq` has an invalid format string. Make sure it's an at-rule or contains a `&` placeholder."
       )
     })
+
+    it('should allow modifiers with dashes', () => {
+      let config = {
+        content: [
+          {
+            raw: html`<div class="group-has-[[data-test=test]]/test-modifier:block"></div>`,
+          },
+        ],
+        plugins: [],
+      }
+
+      return run('@tailwind utilities', config).then((result) => {
+        return expect(result.css).toMatchFormattedCss(css`
+          .group\/test-modifier:has([data-test='test'])
+            .group-has-\[\[data-test\=test\]\]\/test-modifier\:block {
+            display: block;
+          }
+        `)
+      })
+    })
   })
 
   test('stacked peer variants', async () => {
