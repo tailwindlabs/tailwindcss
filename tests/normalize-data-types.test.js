@@ -1,6 +1,5 @@
 import { css, run } from './util/run'
 import { normalize } from '../src/util/dataTypes'
-import { crosscheck } from './util/run'
 
 let table = [
   ['foo', 'foo'],
@@ -102,10 +101,8 @@ let table = [
   ['color(0_0_0_/_1.0)', 'color(0 0 0 / 1.0)'],
 ]
 
-crosscheck(() => {
-  it.each(table)('normalize data: %s', (input, output) => {
-    expect(normalize(input)).toBe(output)
-  })
+it.each(table)('normalize data: %s', (input, output) => {
+  expect(normalize(input)).toBe(output)
 })
 
 it('should not automatically inject the `var()` for properties that accept `<dashed-ident>` as the value', () => {
