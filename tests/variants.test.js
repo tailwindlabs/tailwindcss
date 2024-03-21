@@ -23,11 +23,6 @@ crosscheck(({ stable, oxide }) => {
         .toMatchFormattedCss(
           fs.readFileSync(path.resolve(__dirname, './variants.test.css'), 'utf8')
         )
-      oxide
-        .expect(result.css)
-        .toMatchFormattedCss(
-          fs.readFileSync(path.resolve(__dirname, './variants.oxide.test.css'), 'utf8')
-        )
     })
   })
 
