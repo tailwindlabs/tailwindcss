@@ -30,10 +30,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
-      - name: Use the `stable` engine
-        run: |
-          node ./scripts/swap-engines.js
-
       - name: Install dependencies
         run: npm install
 

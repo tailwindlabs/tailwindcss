@@ -1,9 +1,0 @@
-[package]
-name = "tailwindcss-oxide"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-clap = { version = "4.0.18", features = ["derive"] }
-rayon = "1.5.3"
-tailwindcss-core = { path = "../core" }

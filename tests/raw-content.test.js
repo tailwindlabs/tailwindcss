@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { crosscheck, run, html, css } from './util/run'
 
-crosscheck(({ stable, oxide }) => {
+crosscheck(({ stable }) => {
   it('raw content', () => {
     let config = {
       content: [
@@ -162,11 +162,6 @@ crosscheck(({ stable, oxide }) => {
         .expect(result.css)
         .toMatchFormattedCss(
           fs.readFileSync(path.resolve(__dirname, './raw-content.test.css'), 'utf8')
-        )
-      oxide
-        .expect(result.css)
-        .toMatchFormattedCss(
-          fs.readFileSync(path.resolve(__dirname, './raw-content.oxide.test.css'), 'utf8')
         )
     })
   })

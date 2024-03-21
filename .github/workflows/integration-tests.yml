@@ -42,10 +42,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Use the `stable` engine
-        run: |
-          node ./scripts/swap-engines.js
-
       - name: Cache node_modules (tailwindcss)
         uses: actions/cache@v3
         with:

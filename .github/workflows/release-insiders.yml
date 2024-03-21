@@ -28,10 +28,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Use the `stable` engine
-        run: |
-          node ./scripts/swap-engines.js
-
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
