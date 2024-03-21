@@ -7,7 +7,7 @@ import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
   let candidates = new Set<string>()
-  let cssModules = new Set<string>()
+  let cssModules: Record<string, string> = {}
   let minify = false
   let plugins: readonly Plugin[] = []
 
@@ -23,12 +23,12 @@ export default function tailwindcss(): Plugin[] {
     if (!server) return
 
     let updates: Update[] = []
-    for (let id of cssModules.values()) {
+    for (let id of Object.keys(cssModules)) {
       let cssModule = server.moduleGraph.getModuleById(id)
       if (!cssModule) {
         // It is safe to remove the item here since we're iterating on a copy of
         // the values.
-        cssModules.delete(id)
+        delete cssModules[id]
         continue
       }
 
@@ -74,22 +74,18 @@ export default function tailwindcss(): Plugin[] {
 
   // Transform the CSS by manually run the transform functions of non-Tailwind plugins on the given
   // CSS.
-  async function transformWithPlugins(context: Rollup.PluginContext, css: string) {
+  async function transformWithPlugins(id: string, context: Rollup.PluginContext, css: string) {
     let transformPluginContext = {
       ...context,
       getCombinedSourcemap: () => {
         throw new Error('getCombinedSourcemap not implemented')
       },
     }
-    let fakeCssId = `__tailwind_utilities.css`
 
     for (let plugin of plugins) {
       if (
         // Skip our own plugins
         plugin.name.startsWith('@tailwindcss/') ||
-        // Skip vite:css-post because it transforms CSS into JS for the dev
-        // server too late in the pipeline.
-        plugin.name === 'vite:css-post' ||
         // Skip vite:import-analysis and vite:build-import-analysis because they try
         // to process CSS as JS and fail.
         plugin.name.includes('import-analysis')
@@ -102,7 +98,7 @@ export default function tailwindcss(): Plugin[] {
 
       try {
         // Based on https://github.com/unocss/unocss/blob/main/packages/vite/src/modes/global/build.ts#L43
-        let result = await transformHandler.call(transformPluginContext, css, fakeCssId)
+        let result = await transformHandler.call(transformPluginContext, css, id)
         if (!result) continue
         if (typeof result === 'string') {
           css = result
@@ -165,16 +161,17 @@ export default function tailwindcss(): Plugin[] {
       apply: 'serve',
 
       async transform(src, id) {
+        if (!isCssFile(id)) return
         if (!isCssFile(id) || !src.includes('@tailwind')) return
 
-        cssModules.add(id)
+        cssModules[id] = src
 
         // Wait until all other files have been processed, so we can extract all
         // candidates before generating CSS.
         await server?.waitForRequestsIdle(id)
 
         let css = generateCss(src)
-        css = await transformWithPlugins(this, css)
+        css = await transformWithPlugins(id, this, css)
         return { code: css }
       },
     },
@@ -182,21 +179,26 @@ export default function tailwindcss(): Plugin[] {
     {
       // Step 2 (full build): Generate CSS
       name: '@tailwindcss/vite:generate:build',
-      enforce: 'post',
       apply: 'build',
-      async generateBundle(_options, bundle) {
-        for (let id in bundle) {
-          let item = bundle[id]
-          if (item.type !== 'asset') continue
-          if (!isCssFile(id)) continue
-          let rawSource = item.source
-          let source =
-            rawSource instanceof Uint8Array ? new TextDecoder().decode(rawSource) : rawSource
-          if (!source.includes('@tailwind')) continue
 
-          let css = generateOptimizedCss(source)
-          css = await transformWithPlugins(this, css)
-          item.source = css
+      transform(src, id) {
+        if (id.includes('/.vite/')) return
+        let [filename] = id.split('?', 2)
+        let extension = path.extname(filename).slice(1)
+        if (extension !== 'css') return
+        if (!src.includes('@tailwind')) return
+        cssModules[id] = src
+        return
+      },
+
+      async renderChunk(_code, chunk) {
+        let cssFiles = Object.keys(chunk.modules).filter((k) => k.endsWith('.css'))
+        for (let cssFile of cssFiles) {
+          let css = cssModules[cssFile]
+          if (css === null) continue
+          css = generateCss(css)
+          css = generateOptimizedCss(css)
+          await transformWithPlugins(cssFile, this, css)
         }
       },
     },
