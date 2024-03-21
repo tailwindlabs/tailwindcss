@@ -1,8 +1,8 @@
-name: Release — Stable
+name: Release Insiders
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [master]
 
 permissions:
   contents: read
@@ -10,28 +10,33 @@ permissions:
 
 env:
   CI: true
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  CACHE_PREFIX: stable
+  NODE_VERSION: 16
+  RELEASE_CHANNEL: insiders
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14]
-
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
 
       - name: Use the `stable` engine
         run: |
           node ./scripts/swap-engines.js
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
         run: npm install
@@ -40,12 +45,18 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test
-
-      - name: Calculate environment variables
         run: |
-          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
-          echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./package.json`).version);')" >> $GITHUB_ENV
+          npm run test || \
+          npm run test || \
+          npm run test || exit 1
+
+      - name: Resolve version
+        id: vars
+        run: |
+          echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: 'Version based on commit: 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
+        run: npm version 0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }} --force --no-git-tag-version
 
       - name: Publish
         run: npm publish --provenance --tag ${{ env.RELEASE_CHANNEL }}
@@ -53,7 +64,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Trigger Tailwind Play update
-        if: env.RELEASE_CHANNEL == 'latest'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
@@ -64,6 +74,6 @@ jobs:
               ref: 'master',
               workflow_id: 'upgrade-tailwindcss.yml',
               inputs: {
-                version: '${{ env.TAILWINDCSS_VERSION }}'
+                insidersVersion: '0.0.0-${{ env.RELEASE_CHANNEL }}.${{ env.SHA_SHORT }}'
               }
             })
