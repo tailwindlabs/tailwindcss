@@ -11,7 +11,7 @@ export default function tailwindcss(): Plugin[] {
   // In build mode, we store file contents to use them in renderChunk.
   let cssModules: Record<string, string> = {}
   let minify = false
-  let plugins: readonly Plugin[] = []
+  let cssPlugins: readonly Plugin[] = []
 
   // Trigger update to all css modules
   function updateCssModules() {
@@ -78,16 +78,7 @@ export default function tailwindcss(): Plugin[] {
       },
     }
 
-    for (let plugin of plugins) {
-      if (
-        // Skip our own plugins
-        plugin.name.startsWith('@tailwindcss/') ||
-        // Skip vite:import-analysis and vite:build-import-analysis because they try
-        // to process CSS as JS and fail.
-        plugin.name.includes('import-analysis')
-      )
-        continue
-
+    for (let plugin of cssPlugins) {
       if (!plugin.transform) continue
       const transformHandler =
         'handler' in plugin.transform! ? plugin.transform.handler : plugin.transform!
@@ -120,7 +111,9 @@ export default function tailwindcss(): Plugin[] {
 
       async configResolved(config) {
         minify = config.build.cssMinify !== false
-        plugins = config.plugins
+        cssPlugins = config.plugins.filter((plugin) =>
+          ['vite:css', 'vite:css-post'].includes(plugin.name),
+        )
       },
 
       // Scan index.html for candidates
