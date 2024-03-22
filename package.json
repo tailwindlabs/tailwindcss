@@ -9,6 +9,7 @@
     "plugins": [
       "prettier-plugin-organize-imports"
     ],
+    "organizeImportsSkipDestructiveCodeActions": true,
     "overrides": [
       {
         "files": [
