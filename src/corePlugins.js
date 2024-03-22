@@ -1340,16 +1340,6 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (__OXIDE__) {
-            return {
-              '& > :not([hidden]) ~ :not([hidden])': {
-                '--tw-space-x-reverse': '0',
-                'margin-inline-end': `calc(${value} * var(--tw-space-x-reverse))`,
-                'margin-inline-start': `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`,
-              },
-            }
-          }
-
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
               '--tw-space-x-reverse': '0',
@@ -1384,17 +1374,6 @@ export let corePlugins = {
       {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
-
-          if (__OXIDE__) {
-            return {
-              '& > :not([hidden]) ~ :not([hidden])': {
-                '@defaults border-width': {},
-                '--tw-divide-x-reverse': '0',
-                'border-inline-end-width': `calc(${value} * var(--tw-divide-x-reverse))`,
-                'border-inline-start-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
-              },
-            }
-          }
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {

@@ -1,28 +1,25 @@
 import configurePlugins from '../src/util/configurePlugins'
-import { crosscheck } from './util/run'
 
-crosscheck(() => {
-  test('setting a plugin to false removes it', () => {
-    const plugins = ['fontSize', 'display', 'backgroundPosition']
+test('setting a plugin to false removes it', () => {
+  const plugins = ['fontSize', 'display', 'backgroundPosition']
 
-    const configuredPlugins = configurePlugins({ display: false }, plugins)
+  const configuredPlugins = configurePlugins({ display: false }, plugins)
 
-    expect(configuredPlugins).toEqual(['fontSize', 'backgroundPosition'])
-  })
+  expect(configuredPlugins).toEqual(['fontSize', 'backgroundPosition'])
+})
 
-  test('passing only false removes all plugins', () => {
-    const plugins = ['fontSize', 'display', 'backgroundPosition']
+test('passing only false removes all plugins', () => {
+  const plugins = ['fontSize', 'display', 'backgroundPosition']
 
-    const configuredPlugins = configurePlugins(false, plugins)
+  const configuredPlugins = configurePlugins(false, plugins)
 
-    expect(configuredPlugins).toEqual([])
-  })
+  expect(configuredPlugins).toEqual([])
+})
 
-  test('passing an array safelists plugins', () => {
-    const plugins = ['fontSize', 'display', 'backgroundPosition']
+test('passing an array safelists plugins', () => {
+  const plugins = ['fontSize', 'display', 'backgroundPosition']
 
-    const configuredPlugins = configurePlugins(['display'], plugins)
+  const configuredPlugins = configurePlugins(['display'], plugins)
 
-    expect(configuredPlugins).toEqual(['display'])
-  })
+  expect(configuredPlugins).toEqual(['display'])
 })
