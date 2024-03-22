@@ -292,7 +292,7 @@ export function createVariants(theme: Theme): Variants {
     ['visited', '&:visited'],
 
     ['target', '&:target'],
-    ['open', '&[open]'],
+    ['open', '&:is([open], :popover-open)'],
 
     // Forms
     ['default', '&:default'],

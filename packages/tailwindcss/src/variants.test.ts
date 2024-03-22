@@ -270,15 +270,15 @@ test('target', () => {
 
 test('open', () => {
   expect(run(['open:flex', 'group-open:flex', 'peer-open:flex'])).toMatchInlineSnapshot(`
-    ".group-open\\:flex:is(:where(.group)[open] *) {
+    ".group-open\\:flex:is(:where(.group):is([open], :popover-open) *) {
       display: flex;
     }
 
-    .peer-open\\:flex:is(:where(.peer)[open] ~ *) {
+    .peer-open\\:flex:is(:where(.peer):is([open], :popover-open) ~ *) {
       display: flex;
     }
 
-    .open\\:flex[open] {
+    .open\\:flex:is([open], :popover-open) {
       display: flex;
     }"
   `)
@@ -1834,7 +1834,7 @@ test('variant order', () => {
       display: flex;
     }
 
-    .open\\:flex[open] {
+    .open\\:flex:is([open], :popover-open) {
       display: flex;
     }
 
