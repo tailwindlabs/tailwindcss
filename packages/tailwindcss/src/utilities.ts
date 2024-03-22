@@ -1203,6 +1203,15 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [decl('perspective-origin', value)],
   })
 
+  /**
+   * @css `perspective`
+   */
+  staticUtility('perspective-none', [['perspective', 'none']])
+  functionalUtility('perspective', {
+    themeKeys: ['--perspective'],
+    handle: (value) => [decl('perspective', value)],
+  })
+
   let translateProperties = () =>
     atRoot([
       property('--tw-translate-x', '0', '<length-percentage>'),
@@ -1288,6 +1297,86 @@ export function createUtilities(theme: Theme) {
   staticUtility('translate-3d', [
     translateProperties,
     ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
+  ])
+
+  let scaleProperties = () =>
+    atRoot([
+      property('--tw-scale-x', '1', '<number> | <percentage>'),
+      property('--tw-scale-y', '1', '<number> | <percentage>'),
+      property('--tw-scale-z', '1', '<number> | <percentage>'),
+    ])
+
+  /**
+   * @css `scale`
+   */
+  staticUtility('scale-none', [['scale', 'none']])
+  utilities.functional('scale', (candidate) => {
+    if (!candidate.value) return
+    let value
+    if (candidate.value.kind === 'arbitrary') {
+      value = candidate.value.value
+      return [decl('scale', value)]
+    } else {
+      value = theme.resolve(candidate.value.value, ['--scale'])
+      if (!value && !Number.isNaN(Number(candidate.value.value))) {
+        value = `${candidate.value.value}%`
+      }
+      if (!value) return
+    }
+    value = withNegative(value, candidate)
+    return [
+      scaleProperties(),
+      decl('--tw-scale-x', value),
+      decl('--tw-scale-y', value),
+      decl('--tw-scale-z', value),
+      decl('scale', `var(--tw-scale-x) var(--tw-scale-y)`),
+    ]
+  })
+
+  suggest('scale', () => [
+    {
+      supportsNegative: true,
+      values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
+      valueThemeKeys: ['--scale'],
+    },
+  ])
+
+  for (let axis of ['x', 'y', 'z']) {
+    /**
+     * @css `scale`
+     */
+    functionalUtility(`scale-${axis}`, {
+      supportsNegative: true,
+      themeKeys: ['--scale'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}%`
+      },
+      handle: (value) => [
+        scaleProperties(),
+        decl(`--tw-scale-${axis}`, value),
+        decl(
+          'scale',
+          `var(--tw-scale-x) var(--tw-scale-y)${axis === 'z' ? ' var(--tw-scale-z)' : ''}`,
+        ),
+      ],
+    })
+
+    suggest(`scale-${axis}`, () => [
+      {
+        supportsNegative: true,
+        values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
+        valueThemeKeys: ['--scale'],
+      },
+    ])
+  }
+
+  /**
+   * @css `scale`
+   */
+  staticUtility('scale-3d', [
+    scaleProperties,
+    ['scale', 'var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)'],
   ])
 
   /**
@@ -1432,95 +1521,6 @@ export function createUtilities(theme: Theme) {
       valueThemeKeys: ['--skew'],
     },
   ])
-
-  let scaleProperties = () =>
-    atRoot([
-      property('--tw-scale-x', '1', '<number> | <percentage>'),
-      property('--tw-scale-y', '1', '<number> | <percentage>'),
-      property('--tw-scale-z', '1', '<number> | <percentage>'),
-    ])
-
-  /**
-   * @css `scale`
-   */
-  staticUtility('scale-none', [['scale', 'none']])
-  utilities.functional('scale', (candidate) => {
-    if (!candidate.value) return
-    let value
-    if (candidate.value.kind === 'arbitrary') {
-      value = candidate.value.value
-      return [decl('scale', value)]
-    } else {
-      value = theme.resolve(candidate.value.value, ['--scale'])
-      if (!value && !Number.isNaN(Number(candidate.value.value))) {
-        value = `${candidate.value.value}%`
-      }
-      if (!value) return
-    }
-    value = withNegative(value, candidate)
-    return [
-      scaleProperties(),
-      decl('--tw-scale-x', value),
-      decl('--tw-scale-y', value),
-      decl('--tw-scale-z', value),
-      decl('scale', `var(--tw-scale-x) var(--tw-scale-y)`),
-    ]
-  })
-
-  suggest('scale', () => [
-    {
-      supportsNegative: true,
-      values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-      valueThemeKeys: ['--scale'],
-    },
-  ])
-
-  for (let axis of ['x', 'y', 'z']) {
-    /**
-     * @css `scale`
-     */
-    functionalUtility(`scale-${axis}`, {
-      supportsNegative: true,
-      themeKeys: ['--scale'],
-      handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
-        return `${value}%`
-      },
-      handle: (value) => [
-        scaleProperties(),
-        decl(`--tw-scale-${axis}`, value),
-        decl(
-          'scale',
-          `var(--tw-scale-x) var(--tw-scale-y)${axis === 'z' ? ' var(--tw-scale-z)' : ''}`,
-        ),
-      ],
-    })
-
-    suggest(`scale-${axis}`, () => [
-      {
-        supportsNegative: true,
-        values: ['0', '50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-        valueThemeKeys: ['--scale'],
-      },
-    ])
-  }
-
-  /**
-   * @css `scale`
-   */
-  staticUtility('scale-3d', [
-    scaleProperties,
-    ['scale', 'var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z)'],
-  ])
-
-  /**
-   * @css `perspective`
-   */
-  staticUtility('perspective-none', [['perspective', 'none']])
-  functionalUtility('perspective', {
-    themeKeys: ['--perspective'],
-    handle: (value) => [decl('perspective', value)],
-  })
 
   /**
    * @css `transform`
