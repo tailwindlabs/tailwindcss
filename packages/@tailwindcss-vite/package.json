@@ -35,5 +35,8 @@
   "devDependencies": {
     "@types/node": "^20.11.17",
     "vite": "^5.2.0"
+  },
+  "peerDependencies": {
+    "vite": "^5.2.0"
   }
 }
