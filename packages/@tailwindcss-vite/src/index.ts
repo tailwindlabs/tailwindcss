@@ -7,15 +7,11 @@ import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
   let candidates = new Set<string>()
+  // In serve mode, we treat this as a set, storing storing empty strings.
+  // In build mode, we store file contents to use them in renderChunk.
   let cssModules: Record<string, string> = {}
   let minify = false
   let plugins: readonly Plugin[] = []
-
-  function isCssFile(id: string) {
-    let [filename] = id.split('?', 2)
-    let extension = path.extname(filename).slice(1)
-    return extension === 'css'
-  }
 
   // Trigger update to all css modules
   function updateCssModules() {
@@ -74,7 +70,7 @@ export default function tailwindcss(): Plugin[] {
 
   // Transform the CSS by manually run the transform functions of non-Tailwind plugins on the given
   // CSS.
-  async function transformWithPlugins(id: string, context: Rollup.PluginContext, css: string) {
+  async function transformWithPlugins(context: Rollup.PluginContext, id: string, css: string) {
     let transformPluginContext = {
       ...context,
       getCombinedSourcemap: () => {
@@ -131,7 +127,7 @@ export default function tailwindcss(): Plugin[] {
       transformIndexHtml(html) {
         let updated = scan(html, 'html')
 
-        // In dev mode, if the generated CSS contains a URL that causes the
+        // In serve mode, if the generated CSS contains a URL that causes the
         // browser to load a page (e.g. an URL to a missing image), triggering a
         // CSS update will cause an infinite loop. We only trigger if the
         // candidates have been updated.
@@ -156,53 +152,55 @@ export default function tailwindcss(): Plugin[] {
     },
 
     {
-      // Step 2 (dev mode): Generate CSS
+      // Step 2 (dev server mode): Generate CSS
       name: '@tailwindcss/vite:generate:serve',
       apply: 'serve',
 
       async transform(src, id) {
-        if (!isCssFile(id)) return
-        if (!isCssFile(id) || !src.includes('@tailwind')) return
+        if (!isTailwindCssFile(id, src)) return
 
-        cssModules[id] = src
+        // In serve mode, we treat cssModules as a set, ignoring the value.
+        cssModules[id] = ''
 
         // Wait until all other files have been processed, so we can extract all
         // candidates before generating CSS.
-        await server?.waitForRequestsIdle(id)
+        await server?.waitForRequestsIdle?.(id)
 
-        let css = generateCss(src)
-        css = await transformWithPlugins(id, this, css)
-        return { code: css }
+        let code = await transformWithPlugins(this, id, generateCss(src))
+        return { code }
       },
     },
 
     {
       // Step 2 (full build): Generate CSS
+      //
+      // This must run after 'enforce: pre' so @imports are expanded in transform, and before 'enforce: post'
+      // so the transformed chunks are applied.
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
 
       transform(src, id) {
         if (id.includes('/.vite/')) return
-        let [filename] = id.split('?', 2)
-        let extension = path.extname(filename).slice(1)
-        if (extension !== 'css') return
-        if (!src.includes('@tailwind')) return
+        if (!isTailwindCssFile(id, src)) return
         cssModules[id] = src
         return
       },
 
-      async renderChunk(_code, chunk) {
-        let cssFiles = Object.keys(chunk.modules).filter((k) => k.endsWith('.css'))
-        for (let cssFile of cssFiles) {
-          let css = cssModules[cssFile]
-          if (css === null) continue
-          css = generateCss(css)
-          css = generateOptimizedCss(css)
-          await transformWithPlugins(cssFile, this, css)
+      // renderChunk runs in the bundle generation stage after all transforms.
+      async renderChunk(_code, _chunk) {
+        for (let [cssFile, css] of Object.entries(cssModules)) {
+          // Running transform updates the chunk directly inside Rollup.
+          await transformWithPlugins(this, cssFile, generateOptimizedCss(css))
         }
       },
     },
   ] satisfies Plugin[]
+}
+
+function isTailwindCssFile(id: string, src: string) {
+  let [filename] = id.split('?', 2)
+  let extension = path.extname(filename).slice(1)
+  return extension === 'css' && src.includes('@tailwind')
 }
 
 function optimizeCss(
