@@ -84,7 +84,10 @@ export default function tailwindcss(): Plugin[] {
         'handler' in plugin.transform! ? plugin.transform.handler : plugin.transform!
 
       try {
-        // Based on https://github.com/unocss/unocss/blob/main/packages/vite/src/modes/global/build.ts#L43
+        // Directly call the plugin's transform function to process the
+        // generated CSS. In build mode, this updates the chunks later used to
+        // generate the bundle. In serve mode, the transformed souce should be
+        // applied in transform.
         let result = await transformHandler.call(transformPluginContext, css, id)
         if (!result) continue
         if (typeof result === 'string') {
