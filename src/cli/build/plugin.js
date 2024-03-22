@@ -185,17 +185,10 @@ let state = {
     let files = fastGlob.sync(this.contentPatterns.all)
 
     for (let file of files) {
-      if (__OXIDE__) {
-        content.push({
-          file,
-          extension: path.extname(file).slice(1),
-        })
-      } else {
-        content.push({
-          content: fs.readFileSync(path.resolve(file), 'utf8'),
-          extension: path.extname(file).slice(1),
-        })
-      }
+      content.push({
+        content: fs.readFileSync(path.resolve(file), 'utf8'),
+        extension: path.extname(file).slice(1),
+      })
     }
 
     // Resolve raw content in the tailwind config

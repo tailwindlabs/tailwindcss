@@ -1,7 +1,6 @@
 let fs = require('fs')
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
-let { env } = require('../../../lib/lib/sharedState')
 
 let { readOutputFile, appendToInputFile, writeInputFile, removeFile } = require('../../io')({
   output: 'dist',
@@ -72,43 +71,23 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
 
-          .bg-red-600 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(220 38 38 / var(--tw-bg-opacity));
-          }
+        .bg-red-600 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(220 38 38 / var(--tw-bg-opacity));
+        }
 
-          .font-bold {
-            font-weight: 700;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            background-color: #ef4444;
-          }
-
-          .bg-red-600 {
-            background-color: #dc2626;
-          }
-
-          .font-bold {
-            font-weight: 700;
-          }
-        `
-      )
-    }
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
   })
 
   it('can use a tailwind.config.js configuration file with ESM syntax', async () => {
@@ -145,26 +124,14 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-primary {
-            --tw-bg-opacity: 1;
-            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-primary {
-            background-color: black;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-primary {
+          --tw-bg-opacity: 1;
+          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
   })
 
   it('can use a tailwind.config.ts configuration file', async () => {
@@ -203,26 +170,14 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-primary {
-            --tw-bg-opacity: 1;
-            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-primary {
-            background-color: black;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-primary {
+          --tw-bg-opacity: 1;
+          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
   })
 
   it('can read from a config file from an @config directive', async () => {
@@ -262,26 +217,14 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 255 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            background-color: #ff0;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
   })
 
   it('can read from a config file from an @config directive inside an @import from postcss-import', async () => {
@@ -329,26 +272,14 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 255 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            background-color: #ff0;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
   })
 
   it('should work with raw content', async () => {
@@ -375,26 +306,14 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            background-color: #ef4444;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+      `
+    )
   })
 })
 
@@ -430,38 +349,20 @@ describe('watcher', () => {
     await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStderr(ready)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            background-color: #ef4444;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })
@@ -497,38 +398,20 @@ describe('watcher', () => {
     await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
     await runningProcess.onStderr(ready)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-red-500 {
-            background-color: #ef4444;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-          .font-normal {
-            font-weight: 400;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+        .font-normal {
+          font-weight: 400;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })
@@ -703,42 +586,22 @@ describe('watcher', () => {
     )
     await runningProcess.onStderr(ready)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .btn {
-            border-radius: 0.25rem;
-            --tw-bg-opacity: 1;
-            background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .btn {
-            border-radius: 0.25rem;
-            background-color: #ef4444;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-          }
-          .font-bold {
-            font-weight: 700;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .btn {
+          border-radius: 0.25rem;
+          --tw-bg-opacity: 1;
+          background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
 
     return runningProcess.stop()
   })
@@ -800,26 +663,14 @@ describe('watcher', () => {
     let runningProcess = $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css -w')
     await runningProcess.onStderr(ready)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 255 0 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            background-color: #ff0;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 0 / var(--tw-bg-opacity));
+        }
+      `
+    )
 
     await writeInputFile(
       'index.css',
@@ -832,26 +683,14 @@ describe('watcher', () => {
     )
     await runningProcess.onStderr(ready)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 255 119 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            background-color: #ff7;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 119 / var(--tw-bg-opacity));
+        }
+      `
+    )
 
     await writeInputFile(
       'tailwind.2.config.js',
@@ -876,26 +715,14 @@ describe('watcher', () => {
     )
     await runningProcess.onStderr(ready)
 
-    if (env.ENGINE === 'stable') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-          }
-        `
-      )
-    }
-
-    if (env.ENGINE === 'oxide') {
-      expect(await readOutputFile('main.css')).toIncludeCss(
-        css`
-          .bg-yellow {
-            background-color: #fff;
-          }
-        `
-      )
-    }
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-yellow {
+          --tw-bg-opacity: 1;
+          background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+        }
+      `
+    )
 
     return runningProcess.stop()
   })

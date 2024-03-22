@@ -1,8 +1,11 @@
-name: CI — Oxide
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: CI — Stable
 
 on:
   push:
-    branches: [master, 3.3, 3.4]
+    branches: [master]
   pull_request:
     branches: [master, 3.3, 3.4]
 
@@ -13,16 +16,15 @@ env:
   CI: true
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-  CACHE_PREFIX: oxide
+  CACHE_PREFIX: stable
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
 
     strategy:
       matrix:
-        node-version: [18]
+        node-version: [14, 18]
 
     steps:
       - uses: actions/checkout@v3
@@ -37,40 +39,17 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      # Cache the `oxide` Rust build
-      - name: Cache oxide build
-        uses: actions/cache@v3
-        with:
-          path: |
-            ./oxide/target/
-            ./oxide/crates/node/*.node
-            ./oxide/crates/node/index.js
-            ./oxide/crates/node/index.d.ts
-          key: ${{ runner.os }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
-
       - name: Install dependencies
         run: npm install
 
       - name: Build Tailwind CSS
-        run: npx turbo run build --filter=//
+        run: npm run build
 
       - name: Test
         run: |
-          npx turbo run test --filter=// || \
-          npx turbo run test --filter=// || \
-          npx turbo run test --filter=// || exit 1
+          npm run test || \
+          npm run test || \
+          npm run test || exit 1
 
       - name: Lint
-        run: npx turbo run style --filter=//
+        run: npm run style
