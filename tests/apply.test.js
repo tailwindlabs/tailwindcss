@@ -2143,3 +2143,33 @@ test('should not break replacing important selector when the same as the parent 
     }
   `)
 })
+
+test('applying classes with nested CSS should result in an error', async () => {
+  let config = {
+    important: '.foo',
+    content: [
+      {
+        raw: html`<div class="foo"></div>`,
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind components;
+    @layer components {
+      .bar .baz {
+        color: red;
+
+        &:hover {
+          color: red;
+        }
+      }
+
+      .foo {
+        @apply flex baz;
+      }
+    }
+  `
+
+  return expect(() => run(input, config)).rejects.toThrowError()
+})

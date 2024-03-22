@@ -432,6 +432,23 @@ function processApply(root, context, localCache) {
 
       let rules = applyClassCache.get(applyCandidate)
 
+      // Verify that we can apply the class
+      for (let [, rule] of rules) {
+        if (rule.type === 'atrule') {
+          continue
+        }
+
+        rule.walkRules(() => {
+          throw apply.error(
+            [
+              `The \`${applyCandidate}\` class cannot be applied because it uses nested CSS.`,
+              'Please enable a CSS nesting plugin *before* Tailwind in your configuration.',
+              'See how here: https://tailwindcss.com/docs/using-with-preprocessors#nesting',
+            ].join('\n')
+          )
+        })
+      }
+
       candidates.push([applyCandidate, important, rules])
     }
   }
