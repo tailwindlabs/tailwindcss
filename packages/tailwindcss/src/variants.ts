@@ -695,6 +695,8 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('dark', ['@media (prefers-color-scheme: dark)'], { compounds: false })
 
+  staticVariant('starting', ['@starting-style'], { compounds: false })
+
   staticVariant('print', ['@media print'], { compounds: false })
 
   staticVariant('forced-colors', ['@media (forced-colors: active)'], { compounds: false })

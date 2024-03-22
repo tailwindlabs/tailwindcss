@@ -2406,6 +2406,13 @@ exports[`getVariants 1`] = `
   {
     "hasDash": true,
     "isArbitrary": false,
+    "name": "starting",
+    "selectors": [Function],
+    "values": [],
+  },
+  {
+    "hasDash": true,
+    "isArbitrary": false,
     "name": "print",
     "selectors": [Function],
     "values": [],
