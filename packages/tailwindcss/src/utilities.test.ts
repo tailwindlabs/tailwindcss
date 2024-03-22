@@ -2582,47 +2582,38 @@ test('translate-y', () => {
 })
 
 test('translate-z', () => {
-  expect(run(['translate-z-full', '-translate-z-full', 'translate-y-px', '-translate-z-[--value]']))
-    .toMatchInlineSnapshot(`
-    ".-translate-z-\\[--value\\] {
-      --tw-translate-z: calc(var(--value) * -1);
-      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
-    }
+  expect(run(['translate-y-px', '-translate-z-[--value]'])).toMatchInlineSnapshot(`
+      ".-translate-z-\\[--value\\] {
+        --tw-translate-z: calc(var(--value) * -1);
+        translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+      }
 
-    .-translate-z-full {
-      --tw-translate-z: -100%;
-      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
-    }
+      .translate-y-px {
+        --tw-translate-y: 1px;
+        translate: var(--tw-translate-x) var(--tw-translate-y);
+      }
 
-    .translate-y-px {
-      --tw-translate-y: 1px;
-      translate: var(--tw-translate-x) var(--tw-translate-y);
-    }
+      @property --tw-translate-x {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
+      }
 
-    .translate-z-full {
-      --tw-translate-z: 100%;
-      translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
-    }
+      @property --tw-translate-y {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
+      }
 
-    @property --tw-translate-x {
-      syntax: "<length-percentage>";
-      inherits: false;
-      initial-value: 0;
-    }
-
-    @property --tw-translate-y {
-      syntax: "<length-percentage>";
-      inherits: false;
-      initial-value: 0;
-    }
-
-    @property --tw-translate-z {
-      syntax: "<length-percentage>";
-      inherits: false;
-      initial-value: 0;
-    }"
-  `)
-  expect(run(['translate-z'])).toEqual('')
+      @property --tw-translate-z {
+        syntax: "<length-percentage>";
+        inherits: false;
+        initial-value: 0;
+      }"
+    `)
+  expect(run(['translate-z', 'translate-z-full', '-translate-z-full', 'translate-z-1/2'])).toEqual(
+    '',
+  )
 })
 
 test('translate-3d', () => {

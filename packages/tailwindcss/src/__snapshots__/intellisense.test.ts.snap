@@ -1727,7 +1727,6 @@ exports[`getClassList 1`] = `
   "translate-z-1",
   "translate-z-3",
   "translate-z-4",
-  "translate-z-full",
   "translate-z-px",
   "truncate",
   "underline",
