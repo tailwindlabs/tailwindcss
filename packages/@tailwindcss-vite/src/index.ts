@@ -13,7 +13,7 @@ export default function tailwindcss(): Plugin[] {
   let minify = false
   let cssPlugins: readonly Plugin[] = []
 
-  // Trigger update to all css modules
+  // Trigger update to all CSS modules
   function updateCssModules() {
     // If we're building then we don't need to update anything
     if (!server) return
@@ -23,7 +23,7 @@ export default function tailwindcss(): Plugin[] {
       let cssModule = server.moduleGraph.getModuleById(id)
       if (!cssModule) {
         // It is safe to remove the item here since we're iterating on a copy of
-        // the values.
+        // the keys.
         delete cssModules[id]
         continue
       }
@@ -124,25 +124,26 @@ export default function tailwindcss(): Plugin[] {
         // browser to load a page (e.g. an URL to a missing image), triggering a
         // CSS update will cause an infinite loop. We only trigger if the
         // candidates have been updated.
-        if (server && updated) {
+        if (updated) {
           updateCssModules()
         }
       },
 
-      // Scan all other files for candidates
+      // Scan all non-CSS files for candidates
       transform(src, id) {
         if (id.includes('/.vite/')) return
-        let [filename] = id.split('?', 2)
-        let extension = path.extname(filename).slice(1)
+        let extension = getExtension(id)
         if (extension === '' || extension === 'css') return
 
         scan(src, extension)
-
-        if (server) {
-          updateCssModules()
-        }
+        updateCssModules()
       },
     },
+
+    /*
+     * The plugins that generate CSS must run after 'enforce: pre' so @imports
+     * are expanded in transform.
+     */
 
     {
       // Step 2 (dev server mode): Generate CSS
@@ -166,23 +167,19 @@ export default function tailwindcss(): Plugin[] {
 
     {
       // Step 2 (full build): Generate CSS
-      //
-      // This must run after 'enforce: pre' so @imports are expanded in transform, and before 'enforce: post'
-      // so the transformed chunks are applied.
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
 
       transform(src, id) {
-        if (id.includes('/.vite/')) return
         if (!isTailwindCssFile(id, src)) return
         cssModules[id] = src
-        return
       },
 
       // renderChunk runs in the bundle generation stage after all transforms.
+      // We must run before `enforce: post` so the updated chunks are picked up
+      // by vite:css-post.
       async renderChunk(_code, _chunk) {
         for (let [cssFile, css] of Object.entries(cssModules)) {
-          // Running transform updates the chunk directly inside Rollup.
           await transformWithPlugins(this, cssFile, generateOptimizedCss(css))
         }
       },
@@ -190,10 +187,14 @@ export default function tailwindcss(): Plugin[] {
   ] satisfies Plugin[]
 }
 
-function isTailwindCssFile(id: string, src: string) {
+function getExtension(id: string) {
   let [filename] = id.split('?', 2)
-  let extension = path.extname(filename).slice(1)
-  return extension === 'css' && src.includes('@tailwind')
+  return path.extname(filename).slice(1)
+}
+
+function isTailwindCssFile(id: string, src: string) {
+  if (id.includes('/.vite/')) return
+  return getExtension(id) === 'css' && src.includes('@tailwind')
 }
 
 function optimizeCss(
