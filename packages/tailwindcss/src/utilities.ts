@@ -1239,14 +1239,11 @@ export function createUtilities(theme: Theme) {
     ],
   })
 
-  for (let axis of ['x', 'y', 'z']) {
+  for (let axis of ['x', 'y']) {
     let handle = (value: string) => [
       translateProperties(),
       decl(`--tw-translate-${axis}`, value),
-      decl(
-        'translate',
-        `var(--tw-translate-x) var(--tw-translate-y)${axis === 'z' ? ' var(--tw-translate-z)' : ''}`,
-      ),
+      decl('translate', `var(--tw-translate-x) var(--tw-translate-y)`),
     ]
 
     /**
@@ -1265,6 +1262,25 @@ export function createUtilities(theme: Theme) {
       return handle(candidate.negative ? '-100%' : '100%')
     })
   }
+  functionalUtility(`translate-z`, {
+    supportsNegative: true,
+    supportsFractions: false,
+    themeKeys: ['--translate', '--spacing'],
+    handle: (value) => {
+      return [
+        translateProperties(),
+        decl(`--tw-translate-z`, value),
+        decl('translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'),
+      ]
+    },
+  })
+  utilities.static(`translate-z-px`, (candidate) => {
+    return [
+      translateProperties(),
+      decl(`--tw-translate-z`, candidate.negative ? '-1px' : '1px'),
+      decl('translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'),
+    ]
+  })
 
   /**
    * @css `translate`
