@@ -1441,7 +1441,7 @@ export function createUtilities(theme: Theme) {
         themeKeys: ['--rotate'],
         handleBareValue: ({ value }) => {
           if (Number.isNaN(Number(value))) return null
-          return `rotate${axis}(${value}deg)`
+          return `rotate${axis.toUpperCase()}(${value}deg)`
         },
         handle: (value) => [
           transformProperties(),

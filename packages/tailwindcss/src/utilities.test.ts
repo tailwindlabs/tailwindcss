@@ -2668,12 +2668,12 @@ test('rotate', () => {
 test('rotate-x', () => {
   expect(run(['rotate-x-45', '-rotate-x-45', 'rotate-x-[123deg]'])).toMatchInlineSnapshot(`
     ".-rotate-x-45 {
-      --tw-rotate-x: calc(rotatex(45deg) * -1);
+      --tw-rotate-x: calc(rotateX(45deg) * -1);
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .rotate-x-45 {
-      --tw-rotate-x: rotatex(45deg);
+      --tw-rotate-x: rotateX(45deg);
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
     }
 
@@ -2718,12 +2718,12 @@ test('rotate-x', () => {
 test('rotate-y', () => {
   expect(run(['rotate-y-45', '-rotate-y-45', 'rotate-y-[123deg]'])).toMatchInlineSnapshot(`
     ".-rotate-y-45 {
-      --tw-rotate-y: calc(rotatey(45deg) * -1);
+      --tw-rotate-y: calc(rotateY(45deg) * -1);
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
     }
 
     .rotate-y-45 {
-      --tw-rotate-y: rotatey(45deg);
+      --tw-rotate-y: rotateY(45deg);
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
     }
 
