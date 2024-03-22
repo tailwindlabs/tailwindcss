@@ -189,6 +189,7 @@ textarea,
   font: inherit; /* 1 */
   font-feature-settings: inherit; /* 1 */
   font-variation-settings: inherit; /* 1 */
+  letter-spacing: inherit; /* 1 */
   color: inherit; /* 1 */
   background: transparent; /* 2 */
 }
