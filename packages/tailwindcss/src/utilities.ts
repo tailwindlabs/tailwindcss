@@ -1264,7 +1264,7 @@ export function createUtilities(theme: Theme) {
   }
   functionalUtility(`translate-z`, {
     supportsNegative: true,
-    supportsFractions: true,
+    supportsFractions: false,
     themeKeys: ['--translate', '--spacing'],
     handle: (value) => {
       return [
