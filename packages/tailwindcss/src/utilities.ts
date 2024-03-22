@@ -1216,7 +1216,7 @@ export function createUtilities(theme: Theme) {
     atRoot([
       property('--tw-translate-x', '0', '<length-percentage>'),
       property('--tw-translate-y', '0', '<length-percentage>'),
-      property('--tw-translate-z', '0', '<length-percentage>'),
+      property('--tw-translate-z', '0', '<length>'),
     ])
 
   /**

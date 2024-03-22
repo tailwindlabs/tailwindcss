@@ -230,7 +230,7 @@ describe('@apply', () => {
       }
 
       @property --tw-translate-z {
-        syntax: "<length-percentage>";
+        syntax: "<length>";
         inherits: false;
         initial-value: 0;
       }"
