@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Make `rotate-x/y/z-*` utilities composable ([#13319](https://github.com/tailwindlabs/tailwindcss/pull/13319))
 - `@tailwind/vite` applies the Vite CSS plugin to transform Tailwind-generated CSS (e.g. inlining images) ([#13218](https://github.com/tailwindlabs/tailwindcss/pull/13218))
 
 ### Fixed
