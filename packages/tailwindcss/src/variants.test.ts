@@ -801,6 +801,16 @@ test('dark', () => {
   `)
 })
 
+test('starting', () => {
+  expect(run(['starting:opacity-0'])).toMatchInlineSnapshot(`
+    "@starting-style {
+      .starting\\:opacity-0 {
+        opacity: 0;
+      }
+    }"
+  `)
+})
+
 test('print', () => {
   expect(run(['print:flex'])).toMatchInlineSnapshot(`
     "@media print {
