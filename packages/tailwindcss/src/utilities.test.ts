@@ -5429,7 +5429,25 @@ test('divide-x', () => {
       initial-value: 0;
     }
 
-    @property --tw-border-style {
+    @property --tw-border-t-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-r-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-b-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-l-style {
       syntax: "<custom-ident>";
       inherits: false;
       initial-value: solid;
@@ -5466,7 +5484,25 @@ test('divide-x with custom default border width', () => {
       initial-value: 0;
     }
 
-    @property --tw-border-style {
+    @property --tw-border-t-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-r-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-b-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-l-style {
       syntax: "<custom-ident>";
       inherits: false;
       initial-value: solid;
@@ -5517,7 +5553,25 @@ test('divide-y', () => {
       initial-value: 0;
     }
 
-    @property --tw-border-style {
+    @property --tw-border-t-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-r-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-b-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-l-style {
       syntax: "<custom-ident>";
       inherits: false;
       initial-value: solid;
@@ -5555,7 +5609,25 @@ test('divide-y with custom default border width', () => {
       initial-value: 0;
     }
 
-    @property --tw-border-style {
+    @property --tw-border-t-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-r-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-b-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-l-style {
       syntax: "<custom-ident>";
       inherits: false;
       initial-value: solid;
@@ -7148,59 +7220,6 @@ test('rounded-bl', () => {
   ).toEqual('')
 })
 
-test('border-style', () => {
-  expect(
-    run([
-      'border-solid',
-      'border-dashed',
-      'border-dotted',
-      'border-double',
-      'border-hidden',
-      'border-none',
-    ]),
-  ).toMatchInlineSnapshot(`
-    ".border-dashed {
-      --tw-border-style: dashed;
-      border-style: dashed;
-    }
-
-    .border-dotted {
-      --tw-border-style: dotted;
-      border-style: dotted;
-    }
-
-    .border-double {
-      --tw-border-style: double;
-      border-style: double;
-    }
-
-    .border-hidden {
-      --tw-border-style: hidden;
-      border-style: hidden;
-    }
-
-    .border-none {
-      --tw-border-style: none;
-      border-style: none;
-    }
-
-    .border-solid {
-      --tw-border-style: solid;
-      border-style: solid;
-    }"
-  `)
-  expect(
-    run([
-      '-border-solid',
-      '-border-dashed',
-      '-border-dotted',
-      '-border-double',
-      '-border-hidden',
-      '-border-none',
-    ]),
-  ).toEqual('')
-})
-
 // All border utilities are generated in the same way
 // so we can test them all at once with a loop
 const prefixes = [
@@ -7218,6 +7237,14 @@ const prefixes = [
 for (let prefix of prefixes) {
   test(`${prefix}-*`, () => {
     let classes = []
+
+    // Style
+    classes.push(`${prefix}-solid`)
+    classes.push(`${prefix}-dashed`)
+    classes.push(`${prefix}-dotted`)
+    classes.push(`${prefix}-double`)
+    classes.push(`${prefix}-hidden`)
+    classes.push(`${prefix}-none`)
 
     // Width
     classes.push(prefix)
@@ -7287,11 +7314,29 @@ test('border with custom default border width', () => {
     }
 
     .border {
-      border-style: var(--tw-border-style);
+      border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
       border-width: 2px;
     }
 
-    @property --tw-border-style {
+    @property --tw-border-t-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-r-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-b-style {
+      syntax: "<custom-ident>";
+      inherits: false;
+      initial-value: solid;
+    }
+
+    @property --tw-border-l-style {
       syntax: "<custom-ident>";
       inherits: false;
       initial-value: solid;

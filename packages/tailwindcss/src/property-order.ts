@@ -200,6 +200,13 @@ export default [
   'border-left-width',
 
   'border-style',
+  'border-inline-start-style',
+  'border-inline-end-style',
+  'border-top-style',
+  'border-right-style',
+  'border-bottom-style',
+  'border-left-style',
+
   'border-color',
   'border-x-color', // Not real
   'border-y-color', // Not real

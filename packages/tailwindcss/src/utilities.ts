@@ -2183,30 +2183,73 @@ export function createUtilities(theme: Theme) {
     }
   }
 
-  staticUtility('border-solid', [
-    ['--tw-border-style', 'solid'],
-    ['border-style', 'solid'],
-  ])
-  staticUtility('border-dashed', [
-    ['--tw-border-style', 'dashed'],
-    ['border-style', 'dashed'],
-  ])
-  staticUtility('border-dotted', [
-    ['--tw-border-style', 'dotted'],
-    ['border-style', 'dotted'],
-  ])
-  staticUtility('border-double', [
-    ['--tw-border-style', 'double'],
-    ['border-style', 'double'],
-  ])
-  staticUtility('border-hidden', [
-    ['--tw-border-style', 'hidden'],
-    ['border-style', 'hidden'],
-  ])
-  staticUtility('border-none', [
-    ['--tw-border-style', 'none'],
-    ['border-style', 'none'],
-  ])
+  for (let style of ['solid', 'dashed', 'dotted', 'double', 'hidden', 'none']) {
+    staticUtility(`border-${style}`, [
+      ['--tw-border-t-style', style],
+      ['--tw-border-r-style', style],
+      ['--tw-border-b-style', style],
+      ['--tw-border-l-style', style],
+      ['border-style', style],
+    ])
+
+    staticUtility(`border-x-${style}`, [
+      ['--tw-border-r-style', style],
+      ['--tw-border-l-style', style],
+      ['border-right-style', style],
+      ['border-left-style', style],
+    ])
+
+    staticUtility(`border-y-${style}`, [
+      ['--tw-border-t-style', style],
+      ['--tw-border-b-style', style],
+      ['border-top-style', style],
+      ['border-bottom-style', style],
+    ])
+
+    staticUtility(`border-s-${style}`, [
+      () => rule('&', [
+        rule('&:dir(ltr)', [
+          decl('--tw-border-l-style', style)
+        ]),
+        rule('&:dir(rtl)', [
+          decl('--tw-border-r-style', style)
+        ])
+      ]),
+      ['border-inline-start-style', style],
+    ])
+
+    staticUtility(`border-e-${style}`, [
+      () => rule('&', [
+        rule('&:dir(ltr)', [
+          decl('--tw-border-r-style', style)
+        ]),
+        rule('&:dir(rtl)', [
+          decl('--tw-border-l-style', style)
+        ])
+      ]),
+      ['border-inline-end-style', style],
+    ])
+
+    staticUtility(`border-t-${style}`, [
+      ['--tw-border-t-style', style],
+      ['border-top-style', style],
+    ])
+
+    staticUtility(`border-r-${style}`, [
+      ['--tw-border-r-style', style],
+      ['border-right-style', style],
+    ])
+
+    staticUtility(`border-b-${style}`, [
+      ['--tw-border-b-style', style],
+      ['border-bottom-style', style],
+    ])
+
+    staticUtility(`border-l-${style}`, [
+      ['--tw-border-l-style', style],
+      ['border-left-style', style],
+    ])
+  }
 
   {
     // border-* (color)
@@ -2216,7 +2259,12 @@ export function createUtilities(theme: Theme) {
     }
 
     let borderProperties = () => {
-      return atRoot([property('--tw-border-style', 'solid', '<custom-ident>')])
+      return atRoot([
+        property('--tw-border-t-style', 'solid', '<custom-ident>'),
+        property('--tw-border-r-style', 'solid', '<custom-ident>'),
+        property('--tw-border-b-style', 'solid', '<custom-ident>'),
+        property('--tw-border-l-style', 'solid', '<custom-ident>'),
+      ])
     }
 
     function borderSideUtility(classRoot: string, desc: BorderDescription) {
@@ -2293,7 +2341,7 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border', {
       width: (value) => [
-        decl('border-style', 'var(--tw-border-style)'),
+        decl('border-style', 'var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style)'),
         decl('border-width', value),
       ],
       color: (value) => [decl('border-color', value)],
@@ -2301,8 +2349,8 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border-x', {
       width: (value) => [
-        decl('border-left-style', 'var(--tw-border-style)'),
-        decl('border-right-style', 'var(--tw-border-style)'),
+        decl('border-left-style', 'var(--tw-border-l-style)'),
+        decl('border-right-style', 'var(--tw-border-r-style)'),
         decl('border-left-width', value),
         decl('border-right-width', value),
       ],
@@ -2311,8 +2359,8 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border-y', {
       width: (value) => [
-        decl('border-top-style', 'var(--tw-border-style)'),
-        decl('border-bottom-style', 'var(--tw-border-style)'),
+        decl('border-top-style', 'var(--tw-border-t-style)'),
+        decl('border-bottom-style', 'var(--tw-border-b-style)'),
         decl('border-top-width', value),
         decl('border-bottom-width', value),
       ],
@@ -2321,7 +2369,7 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border-s', {
       width: (value) => [
-        decl('border-inline-start-style', 'var(--tw-border-style)'),
+        decl('border-inline-start-style', 'var(--tw-border-l-style)'),
         decl('border-inline-start-width', value),
       ],
       color: (value) => [decl('border-inline-start-color', value)],
@@ -2329,7 +2377,7 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border-e', {
       width: (value) => [
-        decl('border-inline-end-style', 'var(--tw-border-style)'),
+        decl('border-inline-end-style', 'var(--tw-border-r-style)'),
         decl('border-inline-end-width', value),
       ],
       color: (value) => [decl('border-inline-end-color', value)],
@@ -2337,7 +2385,7 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border-t', {
       width: (value) => [
-        decl('border-top-style', 'var(--tw-border-style)'),
+        decl('border-top-style', 'var(--tw-border-t-style)'),
         decl('border-top-width', value),
       ],
       color: (value) => [decl('border-top-color', value)],
@@ -2345,7 +2393,7 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border-r', {
       width: (value) => [
-        decl('border-right-style', 'var(--tw-border-style)'),
+        decl('border-right-style', 'var(--tw-border-r-style)'),
         decl('border-right-width', value),
       ],
       color: (value) => [decl('border-right-color', value)],
@@ -2353,7 +2401,7 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border-b', {
       width: (value) => [
-        decl('border-bottom-style', 'var(--tw-border-style)'),
+        decl('border-bottom-style', 'var(--tw-border-b-style)'),
         decl('border-bottom-width', value),
       ],
       color: (value) => [decl('border-bottom-color', value)],
@@ -2361,7 +2409,7 @@ export function createUtilities(theme: Theme) {
 
     borderSideUtility('border-l', {
       width: (value) => [
-        decl('border-left-style', 'var(--tw-border-style)'),
+        decl('border-left-style', 'var(--tw-border-l-style)'),
         decl('border-left-width', value),
       ],
       color: (value) => [decl('border-left-color', value)],

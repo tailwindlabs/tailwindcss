@@ -9,53 +9,101 @@ exports[`border-* 1`] = `
 }
 
 .border {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: 1px;
 }
 
 .border-0 {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: 0;
 }
 
 .border-123 {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: 123px;
 }
 
 .border-2 {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: 2px;
 }
 
 .border-4 {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: 4px;
 }
 
 .border-\\[12px\\] {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: 12px;
 }
 
 .border-\\[length\\:--my-width\\], .border-\\[line-width\\:--my-width\\] {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: var(--my-width);
 }
 
 .border-\\[medium\\] {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: medium;
 }
 
 .border-\\[thick\\] {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: thick;
 }
 
 .border-\\[thin\\] {
-  border-style: var(--tw-border-style);
+  border-style: var(--tw-border-t-style) var(--tw-border-r-style) var(--tw-border-b-style) var(--tw-border-l-style);
   border-width: thin;
+}
+
+.border-dashed {
+  --tw-border-t-style: dashed;
+  --tw-border-r-style: dashed;
+  --tw-border-b-style: dashed;
+  --tw-border-l-style: dashed;
+  border-style: dashed;
+}
+
+.border-dotted {
+  --tw-border-t-style: dotted;
+  --tw-border-r-style: dotted;
+  --tw-border-b-style: dotted;
+  --tw-border-l-style: dotted;
+  border-style: dotted;
+}
+
+.border-double {
+  --tw-border-t-style: double;
+  --tw-border-r-style: double;
+  --tw-border-b-style: double;
+  --tw-border-l-style: double;
+  border-style: double;
+}
+
+.border-hidden {
+  --tw-border-t-style: hidden;
+  --tw-border-r-style: hidden;
+  --tw-border-b-style: hidden;
+  --tw-border-l-style: hidden;
+  border-style: hidden;
+}
+
+.border-none {
+  --tw-border-t-style: none;
+  --tw-border-r-style: none;
+  --tw-border-b-style: none;
+  --tw-border-l-style: none;
+  border-style: none;
+}
+
+.border-solid {
+  --tw-border-t-style: solid;
+  --tw-border-r-style: solid;
+  --tw-border-b-style: solid;
+  --tw-border-l-style: solid;
+  border-style: solid;
 }
 
 .border-\\[\\#0088cc\\] {
@@ -106,7 +154,25 @@ exports[`border-* 1`] = `
   border-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
@@ -122,53 +188,83 @@ exports[`border-b-* 1`] = `
 }
 
 .border-b {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: 1px;
 }
 
 .border-b-0 {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: 0;
 }
 
 .border-b-123 {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: 123px;
 }
 
 .border-b-2 {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: 2px;
 }
 
 .border-b-4 {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: 4px;
 }
 
 .border-b-\\[12px\\] {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: 12px;
 }
 
 .border-b-\\[length\\:--my-width\\], .border-b-\\[line-width\\:--my-width\\] {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: var(--my-width);
 }
 
 .border-b-\\[medium\\] {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: medium;
 }
 
 .border-b-\\[thick\\] {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: thick;
 }
 
 .border-b-\\[thin\\] {
-  border-bottom-style: var(--tw-border-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-bottom-width: thin;
+}
+
+.border-b-dashed {
+  --tw-border-b-style: dashed;
+  border-bottom-style: dashed;
+}
+
+.border-b-dotted {
+  --tw-border-b-style: dotted;
+  border-bottom-style: dotted;
+}
+
+.border-b-double {
+  --tw-border-b-style: double;
+  border-bottom-style: double;
+}
+
+.border-b-hidden {
+  --tw-border-b-style: hidden;
+  border-bottom-style: hidden;
+}
+
+.border-b-none {
+  --tw-border-b-style: none;
+  border-bottom-style: none;
+}
+
+.border-b-solid {
+  --tw-border-b-style: solid;
+  border-bottom-style: solid;
 }
 
 .border-b-\\[\\#0088cc\\] {
@@ -219,7 +315,25 @@ exports[`border-b-* 1`] = `
   border-bottom-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
@@ -235,53 +349,125 @@ exports[`border-e-* 1`] = `
 }
 
 .border-e {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: 1px;
 }
 
 .border-e-0 {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: 0;
 }
 
 .border-e-123 {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: 123px;
 }
 
 .border-e-2 {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: 2px;
 }
 
 .border-e-4 {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: 4px;
 }
 
 .border-e-\\[12px\\] {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: 12px;
 }
 
 .border-e-\\[length\\:--my-width\\], .border-e-\\[line-width\\:--my-width\\] {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: var(--my-width);
 }
 
 .border-e-\\[medium\\] {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: medium;
 }
 
 .border-e-\\[thick\\] {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: thick;
 }
 
 .border-e-\\[thin\\] {
-  border-inline-end-style: var(--tw-border-style);
+  border-inline-end-style: var(--tw-border-r-style);
   border-inline-end-width: thin;
+}
+
+.border-e-dashed {
+  border-inline-end-style: dashed;
+}
+
+.border-e-dashed:dir(ltr) {
+  --tw-border-r-style: dashed;
+}
+
+.border-e-dashed:dir(rtl) {
+  --tw-border-l-style: dashed;
+}
+
+.border-e-dotted {
+  border-inline-end-style: dotted;
+}
+
+.border-e-dotted:dir(ltr) {
+  --tw-border-r-style: dotted;
+}
+
+.border-e-dotted:dir(rtl) {
+  --tw-border-l-style: dotted;
+}
+
+.border-e-double {
+  border-inline-end-style: double;
+}
+
+.border-e-double:dir(ltr) {
+  --tw-border-r-style: double;
+}
+
+.border-e-double:dir(rtl) {
+  --tw-border-l-style: double;
+}
+
+.border-e-hidden {
+  border-inline-end-style: hidden;
+}
+
+.border-e-hidden:dir(ltr) {
+  --tw-border-r-style: hidden;
+}
+
+.border-e-hidden:dir(rtl) {
+  --tw-border-l-style: hidden;
+}
+
+.border-e-none {
+  border-inline-end-style: none;
+}
+
+.border-e-none:dir(ltr) {
+  --tw-border-r-style: none;
+}
+
+.border-e-none:dir(rtl) {
+  --tw-border-l-style: none;
+}
+
+.border-e-solid {
+  border-inline-end-style: solid;
+}
+
+.border-e-solid:dir(ltr) {
+  --tw-border-r-style: solid;
+}
+
+.border-e-solid:dir(rtl) {
+  --tw-border-l-style: solid;
 }
 
 .border-e-\\[\\#0088cc\\] {
@@ -332,7 +518,25 @@ exports[`border-e-* 1`] = `
   border-inline-end-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
@@ -348,53 +552,83 @@ exports[`border-l-* 1`] = `
 }
 
 .border-l {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: 1px;
 }
 
 .border-l-0 {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: 0;
 }
 
 .border-l-123 {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: 123px;
 }
 
 .border-l-2 {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: 2px;
 }
 
 .border-l-4 {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: 4px;
 }
 
 .border-l-\\[12px\\] {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: 12px;
 }
 
 .border-l-\\[length\\:--my-width\\], .border-l-\\[line-width\\:--my-width\\] {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: var(--my-width);
 }
 
 .border-l-\\[medium\\] {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: medium;
 }
 
 .border-l-\\[thick\\] {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: thick;
 }
 
 .border-l-\\[thin\\] {
-  border-left-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
   border-left-width: thin;
+}
+
+.border-l-dashed {
+  --tw-border-l-style: dashed;
+  border-left-style: dashed;
+}
+
+.border-l-dotted {
+  --tw-border-l-style: dotted;
+  border-left-style: dotted;
+}
+
+.border-l-double {
+  --tw-border-l-style: double;
+  border-left-style: double;
+}
+
+.border-l-hidden {
+  --tw-border-l-style: hidden;
+  border-left-style: hidden;
+}
+
+.border-l-none {
+  --tw-border-l-style: none;
+  border-left-style: none;
+}
+
+.border-l-solid {
+  --tw-border-l-style: solid;
+  border-left-style: solid;
 }
 
 .border-l-\\[\\#0088cc\\] {
@@ -445,7 +679,25 @@ exports[`border-l-* 1`] = `
   border-left-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
@@ -461,53 +713,83 @@ exports[`border-r-* 1`] = `
 }
 
 .border-r {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: 1px;
 }
 
 .border-r-0 {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: 0;
 }
 
 .border-r-123 {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: 123px;
 }
 
 .border-r-2 {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: 2px;
 }
 
 .border-r-4 {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: 4px;
 }
 
 .border-r-\\[12px\\] {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: 12px;
 }
 
 .border-r-\\[length\\:--my-width\\], .border-r-\\[line-width\\:--my-width\\] {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: var(--my-width);
 }
 
 .border-r-\\[medium\\] {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: medium;
 }
 
 .border-r-\\[thick\\] {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: thick;
 }
 
 .border-r-\\[thin\\] {
-  border-right-style: var(--tw-border-style);
+  border-right-style: var(--tw-border-r-style);
   border-right-width: thin;
+}
+
+.border-r-dashed {
+  --tw-border-r-style: dashed;
+  border-right-style: dashed;
+}
+
+.border-r-dotted {
+  --tw-border-r-style: dotted;
+  border-right-style: dotted;
+}
+
+.border-r-double {
+  --tw-border-r-style: double;
+  border-right-style: double;
+}
+
+.border-r-hidden {
+  --tw-border-r-style: hidden;
+  border-right-style: hidden;
+}
+
+.border-r-none {
+  --tw-border-r-style: none;
+  border-right-style: none;
+}
+
+.border-r-solid {
+  --tw-border-r-style: solid;
+  border-right-style: solid;
 }
 
 .border-r-\\[\\#0088cc\\] {
@@ -558,7 +840,25 @@ exports[`border-r-* 1`] = `
   border-right-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
@@ -574,53 +874,125 @@ exports[`border-s-* 1`] = `
 }
 
 .border-s {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: 1px;
 }
 
 .border-s-0 {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: 0;
 }
 
 .border-s-123 {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: 123px;
 }
 
 .border-s-2 {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: 2px;
 }
 
 .border-s-4 {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: 4px;
 }
 
 .border-s-\\[12px\\] {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: 12px;
 }
 
 .border-s-\\[length\\:--my-width\\], .border-s-\\[line-width\\:--my-width\\] {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: var(--my-width);
 }
 
 .border-s-\\[medium\\] {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: medium;
 }
 
 .border-s-\\[thick\\] {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: thick;
 }
 
 .border-s-\\[thin\\] {
-  border-inline-start-style: var(--tw-border-style);
+  border-inline-start-style: var(--tw-border-l-style);
   border-inline-start-width: thin;
+}
+
+.border-s-dashed {
+  border-inline-start-style: dashed;
+}
+
+.border-s-dashed:dir(ltr) {
+  --tw-border-l-style: dashed;
+}
+
+.border-s-dashed:dir(rtl) {
+  --tw-border-r-style: dashed;
+}
+
+.border-s-dotted {
+  border-inline-start-style: dotted;
+}
+
+.border-s-dotted:dir(ltr) {
+  --tw-border-l-style: dotted;
+}
+
+.border-s-dotted:dir(rtl) {
+  --tw-border-r-style: dotted;
+}
+
+.border-s-double {
+  border-inline-start-style: double;
+}
+
+.border-s-double:dir(ltr) {
+  --tw-border-l-style: double;
+}
+
+.border-s-double:dir(rtl) {
+  --tw-border-r-style: double;
+}
+
+.border-s-hidden {
+  border-inline-start-style: hidden;
+}
+
+.border-s-hidden:dir(ltr) {
+  --tw-border-l-style: hidden;
+}
+
+.border-s-hidden:dir(rtl) {
+  --tw-border-r-style: hidden;
+}
+
+.border-s-none {
+  border-inline-start-style: none;
+}
+
+.border-s-none:dir(ltr) {
+  --tw-border-l-style: none;
+}
+
+.border-s-none:dir(rtl) {
+  --tw-border-r-style: none;
+}
+
+.border-s-solid {
+  border-inline-start-style: solid;
+}
+
+.border-s-solid:dir(ltr) {
+  --tw-border-l-style: solid;
+}
+
+.border-s-solid:dir(rtl) {
+  --tw-border-r-style: solid;
 }
 
 .border-s-\\[\\#0088cc\\] {
@@ -671,7 +1043,25 @@ exports[`border-s-* 1`] = `
   border-inline-start-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
@@ -687,53 +1077,83 @@ exports[`border-t-* 1`] = `
 }
 
 .border-t {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: 1px;
 }
 
 .border-t-0 {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: 0;
 }
 
 .border-t-123 {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: 123px;
 }
 
 .border-t-2 {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: 2px;
 }
 
 .border-t-4 {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: 4px;
 }
 
 .border-t-\\[12px\\] {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: 12px;
 }
 
 .border-t-\\[length\\:--my-width\\], .border-t-\\[line-width\\:--my-width\\] {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: var(--my-width);
 }
 
 .border-t-\\[medium\\] {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: medium;
 }
 
 .border-t-\\[thick\\] {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: thick;
 }
 
 .border-t-\\[thin\\] {
-  border-top-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
   border-top-width: thin;
+}
+
+.border-t-dashed {
+  --tw-border-t-style: dashed;
+  border-top-style: dashed;
+}
+
+.border-t-dotted {
+  --tw-border-t-style: dotted;
+  border-top-style: dotted;
+}
+
+.border-t-double {
+  --tw-border-t-style: double;
+  border-top-style: double;
+}
+
+.border-t-hidden {
+  --tw-border-t-style: hidden;
+  border-top-style: hidden;
+}
+
+.border-t-none {
+  --tw-border-t-style: none;
+  border-top-style: none;
+}
+
+.border-t-solid {
+  --tw-border-t-style: solid;
+  border-top-style: solid;
 }
 
 .border-t-\\[\\#0088cc\\] {
@@ -784,7 +1204,25 @@ exports[`border-t-* 1`] = `
   border-top-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
@@ -800,73 +1238,115 @@ exports[`border-x-* 1`] = `
 }
 
 .border-x {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: 1px;
   border-right-width: 1px;
 }
 
 .border-x-0 {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: 0;
   border-right-width: 0;
 }
 
 .border-x-123 {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: 123px;
   border-right-width: 123px;
 }
 
 .border-x-2 {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: 2px;
   border-right-width: 2px;
 }
 
 .border-x-4 {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: 4px;
   border-right-width: 4px;
 }
 
 .border-x-\\[12px\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: 12px;
   border-right-width: 12px;
 }
 
 .border-x-\\[length\\:--my-width\\], .border-x-\\[line-width\\:--my-width\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: var(--my-width);
   border-right-width: var(--my-width);
 }
 
 .border-x-\\[medium\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: medium;
   border-right-width: medium;
 }
 
 .border-x-\\[thick\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: thick;
   border-right-width: thick;
 }
 
 .border-x-\\[thin\\] {
-  border-left-style: var(--tw-border-style);
-  border-right-style: var(--tw-border-style);
+  border-left-style: var(--tw-border-l-style);
+  border-right-style: var(--tw-border-r-style);
   border-left-width: thin;
   border-right-width: thin;
+}
+
+.border-x-dashed {
+  --tw-border-r-style: dashed;
+  --tw-border-l-style: dashed;
+  border-left-style: dashed;
+  border-right-style: dashed;
+}
+
+.border-x-dotted {
+  --tw-border-r-style: dotted;
+  --tw-border-l-style: dotted;
+  border-left-style: dotted;
+  border-right-style: dotted;
+}
+
+.border-x-double {
+  --tw-border-r-style: double;
+  --tw-border-l-style: double;
+  border-left-style: double;
+  border-right-style: double;
+}
+
+.border-x-hidden {
+  --tw-border-r-style: hidden;
+  --tw-border-l-style: hidden;
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+
+.border-x-none {
+  --tw-border-r-style: none;
+  --tw-border-l-style: none;
+  border-left-style: none;
+  border-right-style: none;
+}
+
+.border-x-solid {
+  --tw-border-r-style: solid;
+  --tw-border-l-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
 }
 
 .border-x-\\[\\#0088cc\\] {
@@ -929,7 +1409,25 @@ exports[`border-x-* 1`] = `
   border-right-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
@@ -945,73 +1443,115 @@ exports[`border-y-* 1`] = `
 }
 
 .border-y {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: 1px;
   border-bottom-width: 1px;
 }
 
 .border-y-0 {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: 0;
   border-bottom-width: 0;
 }
 
 .border-y-123 {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: 123px;
   border-bottom-width: 123px;
 }
 
 .border-y-2 {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: 2px;
   border-bottom-width: 2px;
 }
 
 .border-y-4 {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: 4px;
   border-bottom-width: 4px;
 }
 
 .border-y-\\[12px\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: 12px;
   border-bottom-width: 12px;
 }
 
 .border-y-\\[length\\:--my-width\\], .border-y-\\[line-width\\:--my-width\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: var(--my-width);
   border-bottom-width: var(--my-width);
 }
 
 .border-y-\\[medium\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: medium;
   border-bottom-width: medium;
 }
 
 .border-y-\\[thick\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: thick;
   border-bottom-width: thick;
 }
 
 .border-y-\\[thin\\] {
-  border-top-style: var(--tw-border-style);
-  border-bottom-style: var(--tw-border-style);
+  border-top-style: var(--tw-border-t-style);
+  border-bottom-style: var(--tw-border-b-style);
   border-top-width: thin;
   border-bottom-width: thin;
+}
+
+.border-y-dashed {
+  --tw-border-t-style: dashed;
+  --tw-border-b-style: dashed;
+  border-top-style: dashed;
+  border-bottom-style: dashed;
+}
+
+.border-y-dotted {
+  --tw-border-t-style: dotted;
+  --tw-border-b-style: dotted;
+  border-top-style: dotted;
+  border-bottom-style: dotted;
+}
+
+.border-y-double {
+  --tw-border-t-style: double;
+  --tw-border-b-style: double;
+  border-top-style: double;
+  border-bottom-style: double;
+}
+
+.border-y-hidden {
+  --tw-border-t-style: hidden;
+  --tw-border-b-style: hidden;
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+
+.border-y-none {
+  --tw-border-t-style: none;
+  --tw-border-b-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+.border-y-solid {
+  --tw-border-t-style: solid;
+  --tw-border-b-style: solid;
+  border-top-style: solid;
+  border-bottom-style: solid;
 }
 
 .border-y-\\[\\#0088cc\\] {
@@ -1074,7 +1614,25 @@ exports[`border-y-* 1`] = `
   border-bottom-color: #0000;
 }
 
-@property --tw-border-style {
+@property --tw-border-t-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-r-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-b-style {
+  syntax: "<custom-ident>";
+  inherits: false;
+  initial-value: solid;
+}
+
+@property --tw-border-l-style {
   syntax: "<custom-ident>";
   inherits: false;
   initial-value: solid;
