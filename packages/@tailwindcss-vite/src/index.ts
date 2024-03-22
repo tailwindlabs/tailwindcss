@@ -68,8 +68,7 @@ export default function tailwindcss(): Plugin[] {
     return optimizeCss(generateCss(css), { minify })
   }
 
-  // Transform the CSS by manually run the transform functions of non-Tailwind plugins on the given
-  // CSS.
+  // Manually run the transform functions of non-Tailwind plugins on the given CSS
   async function transformWithPlugins(context: Rollup.PluginContext, id: string, css: string) {
     let transformPluginContext = {
       ...context,
