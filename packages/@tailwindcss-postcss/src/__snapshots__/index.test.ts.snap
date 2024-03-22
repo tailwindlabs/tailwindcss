@@ -497,6 +497,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font: inherit;
     font-feature-settings: inherit;
     font-variation-settings: inherit;
+    letter-spacing: inherit;
     color: inherit;
     background: none;
   }
@@ -505,6 +506,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     font: inherit;
     font-feature-settings: inherit;
     font-variation-settings: inherit;
+    letter-spacing: inherit;
     color: inherit;
     background: none;
   }
