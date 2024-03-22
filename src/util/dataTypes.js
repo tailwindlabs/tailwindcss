@@ -393,7 +393,7 @@ let absoluteSizes = new Set([
   'medium',
   'large',
   'x-large',
-  'x-large',
+  'xx-large',
   'xxx-large',
 ])
 export function absoluteSize(value) {
