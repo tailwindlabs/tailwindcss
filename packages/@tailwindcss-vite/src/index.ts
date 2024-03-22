@@ -148,7 +148,7 @@ export default function tailwindcss(): Plugin[] {
      */
 
     {
-      // Step 2 (dev server mode): Generate CSS
+      // Step 2 (serve mode): Generate CSS
       name: '@tailwindcss/vite:generate:serve',
       apply: 'serve',
 
