@@ -72,7 +72,7 @@
     "fast-glob": "^3.3.0",
     "glob-parent": "^6.0.2",
     "is-glob": "^4.0.3",
-    "jiti": "^1.19.1",
+    "jiti": "^1.21.0",
     "lilconfig": "^2.1.0",
     "micromatch": "^4.0.5",
     "normalize-path": "^3.0.0",

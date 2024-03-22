@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `mix-blend-plus-darker` utility ([#12923](https://github.com/tailwindlabs/tailwindcss/pull/12923))
 - Ensure dashes are allowed in variant modifiers ([#13303](https://github.com/tailwindlabs/tailwindcss/pull/13303))
 - Fix crash showing completions in Intellisense when using a custom separator ([#13306](https://github.com/tailwindlabs/tailwindcss/pull/13306))
+- Transpile `import.meta.url` in config files ([#13322](https://github.com/tailwindlabs/tailwindcss/pull/13322))
 
 ## [3.4.1] - 2024-01-05
 
