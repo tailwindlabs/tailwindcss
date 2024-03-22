@@ -1203,6 +1203,15 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [decl('perspective-origin', value)],
   })
 
+  /**
+   * @css `perspective`
+   */
+  staticUtility('perspective-none', [['perspective', 'none']])
+  functionalUtility('perspective', {
+    themeKeys: ['--perspective'],
+    handle: (value) => [decl('perspective', value)],
+  })
+
   let translateProperties = () =>
     atRoot([
       property('--tw-translate-x', '0', '<length-percentage>'),
@@ -1290,149 +1299,6 @@ export function createUtilities(theme: Theme) {
     ['translate', 'var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z)'],
   ])
 
-  /**
-   * @css `rotate`
-   *
-   * `rotate-45` => `rotate: 45deg`
-   * `rotate-[x_45deg]` => `rotate: x 45deg`
-   * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
-   */
-  staticUtility('rotate-none', [['rotate', 'none']])
-  utilities.functional('rotate', (candidate) => {
-    if (!candidate.value) return
-    let value
-    if (candidate.value.kind === 'arbitrary') {
-      value = candidate.value.value
-      let type = candidate.value.dataType ?? inferDataType(value, ['angle', 'vector'])
-      if (type === 'vector') {
-        return [decl('rotate', `${value} var(--tw-rotate)`)]
-      } else if (type !== 'angle') {
-        return [decl('rotate', value)]
-      }
-    } else {
-      value = theme.resolve(candidate.value.value, ['--rotate'])
-      if (!value && !Number.isNaN(Number(candidate.value.value))) {
-        value = `${candidate.value.value}deg`
-      }
-      if (!value) return
-    }
-    value = withNegative(value, candidate)
-    return [decl('rotate', value)]
-  })
-
-  suggest('rotate', () => [
-    {
-      supportsNegative: true,
-      values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
-      valueThemeKeys: ['--rotate'],
-    },
-  ])
-
-  for (let axis of ['x', 'y']) {
-    functionalUtility(`rotate-${axis}`, {
-      supportsNegative: true,
-      themeKeys: ['--rotate'],
-      handleBareValue: ({ value }) => {
-        if (Number.isNaN(Number(value))) return null
-        return `${value}deg`
-      },
-      handle: (value) => [decl('rotate', `${axis} ${value}`)],
-    })
-
-    suggest(`rotate-${axis}`, () => [
-      {
-        supportsNegative: true,
-        values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
-        valueThemeKeys: ['--rotate'],
-      },
-    ])
-  }
-
-  let skewProperties = () =>
-    atRoot([
-      property('--tw-skew-x', 'skewX(0)', '<transform-function>'),
-      property('--tw-skew-y', 'skewY(0)', '<transform-function>'),
-    ])
-
-  /**
-   * @css `transform`
-   * @css `skew()`
-   */
-  functionalUtility('skew', {
-    supportsNegative: true,
-    themeKeys: ['--skew'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}deg`
-    },
-    handle: (value) => [
-      skewProperties(),
-      decl('--tw-skew-x', `skewX(${value})`),
-      decl('--tw-skew-y', `skewY(${value})`),
-      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
-    ],
-  })
-
-  /**
-   * @css `transform`
-   * @css `skew()`
-   */
-  functionalUtility('skew-x', {
-    supportsNegative: true,
-    themeKeys: ['--skew'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}deg`
-    },
-    handle: (value) => [
-      skewProperties(),
-      decl('--tw-skew-x', `skewX(${value})`),
-      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
-    ],
-  })
-
-  /**
-   * @css `transform`
-   * @css `skew()`
-   */
-  functionalUtility('skew-y', {
-    supportsNegative: true,
-    themeKeys: ['--skew'],
-    handleBareValue: ({ value }) => {
-      if (Number.isNaN(Number(value))) return null
-      return `${value}deg`
-    },
-    handle: (value) => [
-      skewProperties(),
-      decl('--tw-skew-y', `skewY(${value})`),
-      decl('transform', 'var(--tw-skew-x) var(--tw-skew-y)'),
-    ],
-  })
-
-  suggest('skew', () => [
-    {
-      supportsNegative: true,
-      values: ['0', '1', '2', '3', '6', '12'],
-      valueThemeKeys: ['--skew'],
-    },
-  ])
-
-  suggest('skew-x', () => [
-    {
-      supportsNegative: true,
-      values: ['0', '1', '2', '3', '6', '12'],
-      valueThemeKeys: ['--skew'],
-    },
-  ])
-
-  suggest('skew-y', () => [
-    {
-      supportsNegative: true,
-      values: ['0', '1', '2', '3', '6', '12'],
-      valueThemeKeys: ['--skew'],
-    },
-  ])
-
   let scaleProperties = () =>
     atRoot([
       property('--tw-scale-x', '1', '<number> | <percentage>'),
@@ -1514,40 +1380,191 @@ export function createUtilities(theme: Theme) {
   ])
 
   /**
-   * @css `perspective`
+   * @css `rotate`
+   *
+   * `rotate-45` => `rotate: 45deg`
+   * `rotate-[x_45deg]` => `rotate: x 45deg`
+   * `rotate-[1_2_3_45deg]` => `rotate: 1 2 3 45deg`
    */
-  staticUtility('perspective-none', [['perspective', 'none']])
-  functionalUtility('perspective', {
-    themeKeys: ['--perspective'],
-    handle: (value) => [decl('perspective', value)],
-  })
-
-  /**
-   * @css `transform`
-   */
-  utilities.functional('transform', (candidate) => {
-    if (candidate.negative) return
-
-    let value: string | null = null
-    if (!candidate.value) {
-      value = 'var(--tw-skew-x) var(--tw-skew-y)'
-    } else if (candidate.value.kind === 'arbitrary') {
+  staticUtility('rotate-none', [['rotate', 'none']])
+  utilities.functional('rotate', (candidate) => {
+    if (!candidate.value) return
+    let value
+    if (candidate.value.kind === 'arbitrary') {
       value = candidate.value.value
+      let type = candidate.value.dataType ?? inferDataType(value, ['angle', 'vector'])
+      if (type === 'vector') {
+        return [decl('rotate', `${value} var(--tw-rotate)`)]
+      } else if (type !== 'angle') {
+        return [decl('rotate', value)]
+      }
+    } else {
+      value = theme.resolve(candidate.value.value, ['--rotate'])
+      if (!value && !Number.isNaN(Number(candidate.value.value))) {
+        value = `${candidate.value.value}deg`
+      }
+      if (!value) return
     }
-
-    if (value === null) return
-
-    return [skewProperties(), decl('transform', value)]
+    value = withNegative(value, candidate)
+    return [decl('rotate', value)]
   })
-  suggest('transform', () => [
+
+  suggest('rotate', () => [
     {
-      hasDefaultValue: true,
+      supportsNegative: true,
+      values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+      valueThemeKeys: ['--rotate'],
     },
   ])
 
-  staticUtility('transform-cpu', [['transform', 'var(--tw-skew-x) var(--tw-skew-y)']])
-  staticUtility('transform-gpu', [['transform', 'translateZ(0) var(--tw-skew-x) var(--tw-skew-y)']])
-  staticUtility('transform-none', [['transform', 'none']])
+  {
+    let transformValue = [
+      'var(--tw-rotate-x)',
+      'var(--tw-rotate-y)',
+      'var(--tw-rotate-z)',
+      'var(--tw-skew-x)',
+      'var(--tw-skew-y)',
+    ].join(' ')
+
+    let transformProperties = () =>
+      atRoot([
+        property('--tw-rotate-x', 'rotateX(0)', '<transform-function>'),
+        property('--tw-rotate-y', 'rotateY(0)', '<transform-function>'),
+        property('--tw-rotate-z', 'rotateZ(0)', '<transform-function>'),
+        property('--tw-skew-x', 'skewX(0)', '<transform-function>'),
+        property('--tw-skew-y', 'skewY(0)', '<transform-function>'),
+      ])
+
+    for (let axis of ['x', 'y', 'z']) {
+      functionalUtility(`rotate-${axis}`, {
+        supportsNegative: true,
+        themeKeys: ['--rotate'],
+        handleBareValue: ({ value }) => {
+          if (Number.isNaN(Number(value))) return null
+          return `rotate${axis.toUpperCase()}(${value}deg)`
+        },
+        handle: (value) => [
+          transformProperties(),
+          decl(`--tw-rotate-${axis}`, value),
+          decl('transform', transformValue),
+        ],
+      })
+
+      suggest(`rotate-${axis}`, () => [
+        {
+          supportsNegative: true,
+          values: ['0', '1', '2', '3', '6', '12', '45', '90', '180'],
+          valueThemeKeys: ['--rotate'],
+        },
+      ])
+    }
+
+    /**
+     * @css `transform`
+     * @css `skew()`
+     */
+    functionalUtility('skew', {
+      supportsNegative: true,
+      themeKeys: ['--skew'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}deg`
+      },
+      handle: (value) => [
+        transformProperties(),
+        decl('--tw-skew-x', `skewX(${value})`),
+        decl('--tw-skew-y', `skewY(${value})`),
+        decl('transform', transformValue),
+      ],
+    })
+
+    /**
+     * @css `transform`
+     * @css `skew()`
+     */
+    functionalUtility('skew-x', {
+      supportsNegative: true,
+      themeKeys: ['--skew'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}deg`
+      },
+      handle: (value) => [
+        transformProperties(),
+        decl('--tw-skew-x', `skewX(${value})`),
+        decl('transform', transformValue),
+      ],
+    })
+
+    /**
+     * @css `transform`
+     * @css `skew()`
+     */
+    functionalUtility('skew-y', {
+      supportsNegative: true,
+      themeKeys: ['--skew'],
+      handleBareValue: ({ value }) => {
+        if (Number.isNaN(Number(value))) return null
+        return `${value}deg`
+      },
+      handle: (value) => [
+        transformProperties(),
+        decl('--tw-skew-y', `skewY(${value})`),
+        decl('transform', transformValue),
+      ],
+    })
+
+    suggest('skew', () => [
+      {
+        supportsNegative: true,
+        values: ['0', '1', '2', '3', '6', '12'],
+        valueThemeKeys: ['--skew'],
+      },
+    ])
+
+    suggest('skew-x', () => [
+      {
+        supportsNegative: true,
+        values: ['0', '1', '2', '3', '6', '12'],
+        valueThemeKeys: ['--skew'],
+      },
+    ])
+
+    suggest('skew-y', () => [
+      {
+        supportsNegative: true,
+        values: ['0', '1', '2', '3', '6', '12'],
+        valueThemeKeys: ['--skew'],
+      },
+    ])
+
+    /**
+     * @css `transform`
+     */
+    utilities.functional('transform', (candidate) => {
+      if (candidate.negative) return
+
+      let value: string | null = null
+      if (!candidate.value) {
+        value = transformValue
+      } else if (candidate.value.kind === 'arbitrary') {
+        value = candidate.value.value
+      }
+
+      if (value === null) return
+
+      return [transformProperties(), decl('transform', value)]
+    })
+    suggest('transform', () => [
+      {
+        hasDefaultValue: true,
+      },
+    ])
+
+    staticUtility('transform-cpu', [['transform', transformValue]])
+    staticUtility('transform-gpu', [['transform', `translateZ(0) ${transformValue}`]])
+    staticUtility('transform-none', [['transform', 'none']])
+  }
 
   /**
    * @css `transform-style`
