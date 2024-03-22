@@ -2146,7 +2146,6 @@ test('should not break replacing important selector when the same as the parent 
 
 test('applying classes with nested CSS should result in an error', async () => {
   let config = {
-    important: '.foo',
     content: [
       {
         raw: html`<div class="foo"></div>`,
