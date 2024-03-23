@@ -10,24 +10,24 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
 
 // The known workspace is: @tailwindcss/oxide
-// All the workspaces in `oxide/crates/node/npm/*` should always be in sync with
+// All the workspaces in `crates/node/npm/*` should always be in sync with
 // `@tailwindcss/oxide`. You can think of them as one big package, but they are
 // split into multiple packages because they are OS specific.
 const syncedWorkspaces = new Map([
   [
     '@tailwindcss/oxide',
     [
-      'oxide/crates/node/npm/android-arm-eabi',
-      'oxide/crates/node/npm/android-arm64',
-      'oxide/crates/node/npm/darwin-arm64',
-      'oxide/crates/node/npm/darwin-x64',
-      'oxide/crates/node/npm/freebsd-x64',
-      'oxide/crates/node/npm/linux-arm-gnueabihf',
-      'oxide/crates/node/npm/linux-arm64-gnu',
-      'oxide/crates/node/npm/linux-arm64-musl',
-      'oxide/crates/node/npm/linux-x64-gnu',
-      'oxide/crates/node/npm/linux-x64-musl',
-      'oxide/crates/node/npm/win32-x64-msvc',
+      'crates/node/npm/android-arm-eabi',
+      'crates/node/npm/android-arm64',
+      'crates/node/npm/darwin-arm64',
+      'crates/node/npm/darwin-x64',
+      'crates/node/npm/freebsd-x64',
+      'crates/node/npm/linux-arm-gnueabihf',
+      'crates/node/npm/linux-arm64-gnu',
+      'crates/node/npm/linux-arm64-musl',
+      'crates/node/npm/linux-x64-gnu',
+      'crates/node/npm/linux-x64-musl',
+      'crates/node/npm/win32-x64-msvc',
     ],
   ],
 ])
