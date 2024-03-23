@@ -2143,3 +2143,72 @@ test('should not break replacing important selector when the same as the parent 
     }
   `)
 })
+
+test('applying classes with nested CSS should result in an error', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="foo"></div>`,
+      },
+    ],
+  }
+
+  let input = css`
+    @tailwind components;
+    @layer components {
+      .bar .baz {
+        color: red;
+
+        &:hover {
+          color: red;
+        }
+      }
+
+      .foo {
+        @apply flex baz;
+      }
+    }
+  `
+
+  expect.assertions(1)
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toMatchInlineSnapshot(`
+      "The \`baz\` class cannot be used with \`@apply\` because \`@apply\` does not currently support nested CSS.
+      Rewrite the selector without nesting or configure the \`tailwindcss/nesting\` plugin:
+      https://tailwindcss.com/docs/using-with-preprocessors#nesting"
+    `)
+  })
+})
+
+test('applying user defined classes with nested CSS should result in an error', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="example"></div>`,
+      },
+    ],
+  }
+
+  let input = css`
+    .foo {
+      .bar {
+        color: red;
+      }
+    }
+
+    .example {
+      @apply bar;
+    }
+  `
+
+  expect.assertions(1)
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toMatchInlineSnapshot(`
+      "The \`bar\` class cannot be used with \`@apply\` because \`@apply\` does not currently support nested CSS.
+      Rewrite the selector without nesting or configure the \`tailwindcss/nesting\` plugin:
+      https://tailwindcss.com/docs/using-with-preprocessors#nesting"
+    `)
+  })
+})
