@@ -17,13 +17,5 @@ ignore = "0.4.20"
 lazy_static = "1.4.0"
 
 [dev-dependencies]
-criterion = { version = "0.3", features = ['html_reports'] }
 tempfile = "3.5.0"
 
-[[bench]]
-name = "parse_candidates"
-harness = false
-
-[[bench]]
-name = "scan_files"
-harness = false
