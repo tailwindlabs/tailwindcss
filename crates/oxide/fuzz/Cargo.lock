@@ -382,7 +382,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tailwindcss-core"
+name = "tailwindcss-oxide"
 version = "0.1.0"
 dependencies = [
  "bstr",
@@ -399,11 +399,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "tailwindcss-core-fuzz"
+name = "tailwindcss-oxide-fuzz"
 version = "0.0.0"
 dependencies = [
  "libfuzzer-sys",
- "tailwindcss-core",
+ "tailwindcss-oxide",
 ]
 
 [[package]]

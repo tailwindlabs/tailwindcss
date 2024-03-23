@@ -12,9 +12,9 @@ pub struct ChangedContent {
   pub extension: String,
 }
 
-impl From<ChangedContent> for tailwindcss_core::ChangedContent {
+impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
   fn from(changed_content: ChangedContent) -> Self {
-    tailwindcss_core::ChangedContent {
+    tailwindcss_oxide::ChangedContent {
       file: changed_content.file.map(PathBuf::from),
       content: changed_content.content,
     }
@@ -45,12 +45,12 @@ pub struct ScanOptions {
 
 #[napi]
 pub fn clear_cache() {
-    tailwindcss_core::clear_cache();
+    tailwindcss_oxide::clear_cache();
 }
 
 #[napi]
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
-  let result = tailwindcss_core::scan_dir(tailwindcss_core::ScanOptions {
+  let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
     base: args.base,
     globs: args.globs.unwrap_or(false),
   });
@@ -85,5 +85,5 @@ pub enum Parsing {
 
 #[napi]
 pub fn scan_files(input: Vec<ChangedContent>, strategy: u8) -> Vec<String> {
-  tailwindcss_core::scan_files(input.into_iter().map(Into::into).collect(), strategy)
+  tailwindcss_oxide::scan_files(input.into_iter().map(Into::into).collect(), strategy)
 }

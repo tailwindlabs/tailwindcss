@@ -1,6 +1,6 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use std::path::PathBuf;
-use tailwindcss_core::{scan_files, ChangedContent, Parsing, IO};
+use tailwindcss_oxide::{scan_files, ChangedContent, Parsing, IO};
 
 pub fn criterion_benchmark(c: &mut Criterion) {
     // current_dir will be set to ./crates/core

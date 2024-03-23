@@ -3,7 +3,7 @@ mod auto_content {
     use std::fs;
     use std::process::Command;
 
-    use tailwindcss_core::*;
+    use tailwindcss_oxide::*;
     use tempfile::tempdir;
 
     fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {

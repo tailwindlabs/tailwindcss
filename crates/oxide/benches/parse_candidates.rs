@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use tailwindcss_core::parser::Extractor;
+use tailwindcss_oxide::parser::Extractor;
 
 pub fn criterion_benchmark(c: &mut Criterion) {
     fn parse(input: &[u8]) {

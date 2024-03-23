@@ -2,9 +2,9 @@
 
 use libfuzzer_sys::fuzz_target;
 use std::path::PathBuf;
-use tailwindcss_core::candidate::scan_files;
-use tailwindcss_core::candidate::Candidate;
-use tailwindcss_core::location::Location;
+use tailwindcss_oxide::candidate::scan_files;
+use tailwindcss_oxide::candidate::Candidate;
+use tailwindcss_oxide::location::Location;
 
 // fuzz_target!(|data: &[u8]| {
 //     if let Ok(s) = std::str::from_utf8(data) {

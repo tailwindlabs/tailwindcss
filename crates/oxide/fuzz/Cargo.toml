@@ -1,5 +1,5 @@
 [package]
-name = "tailwindcss-core-fuzz"
+name = "tailwindcss-oxide-fuzz"
 version = "0.0.0"
 publish = false
 edition = "2021"
@@ -10,7 +10,7 @@ cargo-fuzz = true
 [dependencies]
 libfuzzer-sys = "0.4"
 
-[dependencies.tailwindcss-core]
+[dependencies.tailwindcss-oxide]
 path = ".."
 
 # Prevent this from interfering with workspaces

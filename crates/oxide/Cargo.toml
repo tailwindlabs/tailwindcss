@@ -1,5 +1,5 @@
 [package]
-name = "tailwindcss-core"
+name = "tailwindcss-oxide"
 version = "0.1.0"
 edition = "2021"
 
