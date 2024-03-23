@@ -3,14 +3,12 @@
   "pipeline": {
     "//#build": {
       "outputs": ["lib/**", "peers/**", "types/generated/**"],
-      "inputs": ["src/**", "oxide/**", "nesting/**", "oxide-node-api-shim/**", "types/**"]
+      "inputs": ["src/**", "nesting/**", "types/**"]
     },
     "test": {
-      "env": ["OXIDE"],
       "dependsOn": ["//#build"]
     },
     "//#test": {
-      "env": ["OXIDE"],
       "dependsOn": ["//#build"],
       "inputs": ["tests/**"]
     },

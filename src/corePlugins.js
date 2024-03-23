@@ -1340,16 +1340,6 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (__OXIDE__) {
-            return {
-              '& > :not([hidden]) ~ :not([hidden])': {
-                '--tw-space-x-reverse': '0',
-                'margin-inline-end': `calc(${value} * var(--tw-space-x-reverse))`,
-                'margin-inline-start': `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`,
-              },
-            }
-          }
-
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
               '--tw-space-x-reverse': '0',
@@ -1384,17 +1374,6 @@ export let corePlugins = {
       {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
-
-          if (__OXIDE__) {
-            return {
-              '& > :not([hidden]) ~ :not([hidden])': {
-                '@defaults border-width': {},
-                '--tw-divide-x-reverse': '0',
-                'border-inline-end-width': `calc(${value} * var(--tw-divide-x-reverse))`,
-                'border-inline-start-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
-              },
-            }
-          }
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
@@ -2384,6 +2363,7 @@ export let corePlugins = {
       '.mix-blend-saturation': { 'mix-blend-mode': 'saturation' },
       '.mix-blend-color': { 'mix-blend-mode': 'color' },
       '.mix-blend-luminosity': { 'mix-blend-mode': 'luminosity' },
+      '.mix-blend-plus-darker': { 'mix-blend-mode': 'plus-darker' },
       '.mix-blend-plus-lighter': { 'mix-blend-mode': 'plus-lighter' },
     })
   },
@@ -2931,6 +2911,48 @@ export let corePlugins = {
     { filterDefault: true }
   ),
   willChange: createUtilityPlugin('willChange', [['will-change', ['will-change']]]),
+  contain: ({ addDefaults, addUtilities }) => {
+    let cssContainValue =
+      'var(--tw-contain-size) var(--tw-contain-layout) var(--tw-contain-paint) var(--tw-contain-style)'
+
+    addDefaults('contain', {
+      '--tw-contain-size': ' ',
+      '--tw-contain-layout': ' ',
+      '--tw-contain-paint': ' ',
+      '--tw-contain-style': ' ',
+    })
+
+    addUtilities({
+      '.contain-none': { contain: 'none' },
+      '.contain-content': { contain: 'content' },
+      '.contain-strict': { contain: 'strict' },
+      '.contain-size': {
+        '@defaults contain': {},
+        '--tw-contain-size': 'size',
+        contain: cssContainValue,
+      },
+      '.contain-inline-size': {
+        '@defaults contain': {},
+        '--tw-contain-size': 'inline-size',
+        contain: cssContainValue,
+      },
+      '.contain-layout': {
+        '@defaults contain': {},
+        '--tw-contain-layout': 'layout',
+        contain: cssContainValue,
+      },
+      '.contain-paint': {
+        '@defaults contain': {},
+        '--tw-contain-paint': 'paint',
+        contain: cssContainValue,
+      },
+      '.contain-style': {
+        '@defaults contain': {},
+        '--tw-contain-style': 'style',
+        contain: cssContainValue,
+      },
+    })
+  },
   content: createUtilityPlugin('content', [
     ['content', ['--tw-content', ['content', 'var(--tw-content)']]],
   ]),

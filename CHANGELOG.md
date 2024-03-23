@@ -9,17 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Ensure max specificity of `0,0,1` for button and input Preflight rules  ([#12735](https://github.com/tailwindlabs/tailwindcss/pull/12735))
+- Ensure max specificity of `0,0,1` for button and input Preflight rules ([#12735](https://github.com/tailwindlabs/tailwindcss/pull/12735))
+- Improve glob handling for folders with `(`, `)`, `[` or `]` in the file path ([#12715](https://github.com/tailwindlabs/tailwindcss/pull/12715))
 - Split `:has` rules when using `experimental.optimizeUniversalDefaults` ([#12736](https://github.com/tailwindlabs/tailwindcss/pull/12736))
 - Sort arbitrary properties alphabetically across multiple class lists ([#12911](https://github.com/tailwindlabs/tailwindcss/pull/12911))
+- Add `mix-blend-plus-darker` utility ([#12923](https://github.com/tailwindlabs/tailwindcss/pull/12923))
+- Ensure dashes are allowed in variant modifiers ([#13303](https://github.com/tailwindlabs/tailwindcss/pull/13303))
+- Fix crash showing completions in Intellisense when using a custom separator ([#13306](https://github.com/tailwindlabs/tailwindcss/pull/13306))
+- Transpile `import.meta.url` in config files ([#13322](https://github.com/tailwindlabs/tailwindcss/pull/13322))
+- Reset letter spacing for form elements ([#13150](https://github.com/tailwindlabs/tailwindcss/pull/13150))
+- Fix missing `xx-large` and remove double `x-large` absolute size ([#13324](https://github.com/tailwindlabs/tailwindcss/pull/13324))
 
-## [3.4.1] - 2014-01-05
+## [3.4.1] - 2024-01-05
 
 ### Fixed
 
 - Don't remove keyframe stops when using important utilities ([#12639](https://github.com/tailwindlabs/tailwindcss/pull/12639))
 - Don't add spaces to gradients and grid track names when followed by `calc()` ([#12704](https://github.com/tailwindlabs/tailwindcss/pull/12704))
 - Restore old behavior for `class` dark mode strategy ([#12717](https://github.com/tailwindlabs/tailwindcss/pull/12717))
+- Improve glob handling for folders with `(`, `)`, `[` or `]` in the file path ([#12715](https://github.com/tailwindlabs/tailwindcss/pull/12715))
 
 ### Added
 
