@@ -441,9 +441,9 @@ function processApply(root, context, localCache) {
         rule.walkRules(() => {
           throw apply.error(
             [
-              `The \`${applyCandidate}\` class cannot be applied because it uses nested CSS.`,
-              'Please enable a CSS nesting plugin *before* Tailwind in your configuration.',
-              'See how here: https://tailwindcss.com/docs/using-with-preprocessors#nesting',
+              `The \`${applyCandidate}\` class cannot be used with \`@apply\` because \`@apply\` does not currently support nested CSS.`,
+              'Rewrite the selector without nesting or configure the `tailwindcss/nesting` plugin:',
+              'https://tailwindcss.com/docs/using-with-preprocessors#nesting',
             ].join('\n')
           )
         })
