@@ -1,0 +1,27 @@
+{
+  "name": "@tailwindcss/oxide-win32-x64-msvc",
+  "version": "4.0.0-alpha.10",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/node/npm/win32-x64-msvc"
+  },
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "tailwindcss-oxide.win32-x64-msvc.node",
+  "files": [
+    "tailwindcss-oxide.win32-x64-msvc.node"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  }
+}

@@ -1,0 +1,18 @@
+[package]
+edition = "2021"
+name = "tailwind-oxide"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
+napi = { version = "2.13.1", default-features = false, features = ["napi4"] }
+napi-derive = "2.13.0"
+tailwindcss-oxide = { path = "../oxide" }
+rayon = "1.5.3"
+
+[build-dependencies]
+napi-build = "2.0.1"
+

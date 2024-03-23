@@ -1,0 +1,27 @@
+{
+  "name": "@tailwindcss/oxide-android-arm-eabi",
+  "version": "4.0.0-alpha.10",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/node/npm/android-arm-eabi"
+  },
+  "os": [
+    "android"
+  ],
+  "cpu": [
+    "arm"
+  ],
+  "main": "tailwindcss-oxide.android-arm-eabi.node",
+  "files": [
+    "tailwindcss-oxide.android-arm-eabi.node"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  }
+}

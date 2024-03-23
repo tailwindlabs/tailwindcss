@@ -42,7 +42,7 @@ importers:
         specifier: ^1.1.3
         version: 1.2.2(@types/node@20.11.20)
 
-  oxide/crates/node:
+  crates/node:
     optionalDependencies:
       '@tailwindcss/oxide-android-arm64':
         specifier: workspace:*
@@ -79,27 +79,27 @@ importers:
         specifier: ^2.17.0
         version: 2.18.0
 
-  oxide/crates/node/npm/android-arm-eabi: {}
+  crates/node/npm/android-arm-eabi: {}
 
-  oxide/crates/node/npm/android-arm64: {}
+  crates/node/npm/android-arm64: {}
 
-  oxide/crates/node/npm/darwin-arm64: {}
+  crates/node/npm/darwin-arm64: {}
 
-  oxide/crates/node/npm/darwin-x64: {}
+  crates/node/npm/darwin-x64: {}
 
-  oxide/crates/node/npm/freebsd-x64: {}
+  crates/node/npm/freebsd-x64: {}
 
-  oxide/crates/node/npm/linux-arm-gnueabihf: {}
+  crates/node/npm/linux-arm-gnueabihf: {}
 
-  oxide/crates/node/npm/linux-arm64-gnu: {}
+  crates/node/npm/linux-arm64-gnu: {}
 
-  oxide/crates/node/npm/linux-arm64-musl: {}
+  crates/node/npm/linux-arm64-musl: {}
 
-  oxide/crates/node/npm/linux-x64-gnu: {}
+  crates/node/npm/linux-x64-gnu: {}
 
-  oxide/crates/node/npm/linux-x64-musl: {}
+  crates/node/npm/linux-x64-musl: {}
 
-  oxide/crates/node/npm/win32-x64-msvc: {}
+  crates/node/npm/win32-x64-msvc: {}
 
   packages/@tailwindcss-cli:
     dependencies:
@@ -108,7 +108,7 @@ importers:
         version: 2.4.1
       '@tailwindcss/oxide':
         specifier: workspace:^
-        version: link:../../oxide/crates/node
+        version: link:../../crates/node
       lightningcss:
         specifier: ^1.24.0
         version: 1.24.0
@@ -136,7 +136,7 @@ importers:
     dependencies:
       '@tailwindcss/oxide':
         specifier: workspace:^
-        version: link:../../oxide/crates/node
+        version: link:../../crates/node
       lightningcss:
         specifier: ^1.24.0
         version: 1.24.0
@@ -161,7 +161,7 @@ importers:
     dependencies:
       '@tailwindcss/oxide':
         specifier: workspace:^
-        version: link:../../oxide/crates/node
+        version: link:../../crates/node
       lightningcss:
         specifier: ^1.24.0
         version: 1.24.0
@@ -180,7 +180,7 @@ importers:
     devDependencies:
       '@tailwindcss/oxide':
         specifier: workspace:^
-        version: link:../../oxide/crates/node
+        version: link:../../crates/node
       '@types/node':
         specifier: ^20.10.8
         version: 20.11.17

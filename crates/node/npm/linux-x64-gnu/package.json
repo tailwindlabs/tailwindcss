@@ -1,0 +1,30 @@
+{
+  "name": "@tailwindcss/oxide-linux-x64-gnu",
+  "version": "4.0.0-alpha.10",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/node/npm/linux-x64-gnu"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "tailwindcss-oxide.linux-x64-gnu.node",
+  "files": [
+    "tailwindcss-oxide.linux-x64-gnu.node"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "libc": [
+    "glibc"
+  ]
+}

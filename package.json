@@ -25,7 +25,7 @@
     "lint": "prettier --check . && turbo lint",
     "build": "turbo build --filter=!./playgrounds/*",
     "dev": "turbo dev --filter=!./playgrounds/*",
-    "test": "pnpm test --prefix=oxide && vitest run",
+    "test": "cargo test && vitest run",
     "test:ui": "pnpm run --filter=tailwindcss test:ui",
     "tdd": "vitest",
     "bench": "vitest bench",

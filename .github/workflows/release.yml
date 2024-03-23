@@ -16,7 +16,7 @@ env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 20
   PNPM_VERSION: ^8.15.0
-  OXIDE_LOCATION: ./oxide/crates/node
+  OXIDE_LOCATION: ./crates/node
 
 jobs:
   build:
@@ -104,10 +104,10 @@ jobs:
         with:
           path: |
             ./oxide/target/
-            ./oxide/crates/node/*.node
-            ./oxide/crates/node/index.js
-            ./oxide/crates/node/index.d.ts
-          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
+            ./crates/node/*.node
+            ./crates/node/index.js
+            ./crates/node/index.d.ts
+          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install Node.JS
         uses: actions/setup-node@v3
@@ -189,10 +189,10 @@ jobs:
         with:
           path: |
             ./oxide/target/
-            ./oxide/crates/node/*.node
-            ./oxide/crates/node/index.js
-            ./oxide/crates/node/index.d.ts
-          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./oxide/crates/**/*') }}
+            ./crates/node/*.node
+            ./crates/node/index.js
+            ./crates/node/index.d.ts
+          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install dependencies
         run: pnpm install --ignore-scripts --filter=!./playgrounds/*
