@@ -1,8 +1,8 @@
 coverage/
 node_modules/
 pnpm-lock.yaml
-oxide/target/
-oxide/crates/node/index.d.ts
-oxide/crates/node/index.js
+target/
+crates/node/index.d.ts
+crates/node/index.js
 .next
 .fingerprint
