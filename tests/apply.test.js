@@ -2172,3 +2172,27 @@ test('applying classes with nested CSS should result in an error', async () => {
 
   return expect(() => run(input, config)).rejects.toThrowError()
 })
+
+test('applying user defined classes with nested CSS should result in an error', async () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div class="example"></div>`,
+      },
+    ],
+  }
+
+  let input = css`
+    .foo {
+      .bar {
+        color: red;
+      }
+    }
+
+    .example {
+      @apply bar;
+    }
+  `
+
+  return expect(() => run(input, config)).rejects.toThrowError()
+})
