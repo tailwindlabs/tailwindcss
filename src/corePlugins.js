@@ -2377,7 +2377,7 @@ export let corePlugins = {
     ].join(', ')
 
     return function ({ matchUtilities, addDefaults, theme }) {
-      addDefaults(' box-shadow', {
+      addDefaults('box-shadow', {
         '--tw-ring-offset-shadow': '0 0 #0000',
         '--tw-ring-shadow': '0 0 #0000',
         '--tw-shadow': '0 0 #0000',
