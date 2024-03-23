@@ -2170,7 +2170,15 @@ test('applying classes with nested CSS should result in an error', async () => {
     }
   `
 
-  return expect(() => run(input, config)).rejects.toThrowError()
+  expect.assertions(1)
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toMatchInlineSnapshot(`
+      "The \`baz\` class cannot be applied because it uses nested CSS.
+      Please enable a CSS nesting plugin *before* Tailwind in your configuration.
+      See how here: https://tailwindcss.com/docs/using-with-preprocessors#nesting"
+    `)
+  })
 })
 
 test('applying user defined classes with nested CSS should result in an error', async () => {
@@ -2194,5 +2202,13 @@ test('applying user defined classes with nested CSS should result in an error', 
     }
   `
 
-  return expect(() => run(input, config)).rejects.toThrowError()
+  expect.assertions(1)
+
+  return run(input, config).catch((err) => {
+    expect(err.reason).toMatchInlineSnapshot(`
+      "The \`bar\` class cannot be applied because it uses nested CSS.
+      Please enable a CSS nesting plugin *before* Tailwind in your configuration.
+      See how here: https://tailwindcss.com/docs/using-with-preprocessors#nesting"
+    `)
+  })
 })
