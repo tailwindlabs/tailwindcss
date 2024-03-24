@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Transpile `import.meta.url` in config files ([#13322](https://github.com/tailwindlabs/tailwindcss/pull/13322))
 - Reset letter spacing for form elements ([#13150](https://github.com/tailwindlabs/tailwindcss/pull/13150))
 - Fix missing `xx-large` and remove double `x-large` absolute size ([#13324](https://github.com/tailwindlabs/tailwindcss/pull/13324))
+- Don't error when encountering nested CSS unless trying to `@apply` a class that uses nesting ([#13325](https://github.com/tailwindlabs/tailwindcss/pull/13325))
 
 ## [3.4.1] - 2024-01-05
 
