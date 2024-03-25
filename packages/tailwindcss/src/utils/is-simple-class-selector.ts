@@ -1,3 +1,10 @@
+/**
+ * Check if a selector is a simple class selector.
+ *
+ * A simple class selector is a class selector that doesn't contain any other
+ * selector types, such as ID selectors, element selectors, attribute selectors,
+ * pseudo-classes, combinators, or selector lists.
+ */
 export function isSimpleClassSelector(selector: string): boolean {
   // The selector must start with a dot, otherwise it's not a class selector.
   if (selector[0] !== '.') return false
