@@ -209,7 +209,9 @@ export function compile(css: string): {
               // If the candidate is the same as the current node we are
               // processing, we have a circular dependency.
               if (candidate === rootAsCandidate) {
-                throw new Error(`Detected circular \`@apply\`: ${candidate}`)
+                throw new Error(
+                  `You cannot \`@apply\` the \`${candidate}\` utility here because it creates a circular dependency.`,
+                )
               }
 
               let nodes = userDefinedApplyables.get(candidate)
