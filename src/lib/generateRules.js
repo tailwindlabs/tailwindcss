@@ -516,7 +516,7 @@ function extractArbitraryProperty(classCandidate, context) {
 
   return [
     [
-      { sort, layer: 'utilities' },
+      { sort, layer: 'utilities', options: { respectImportant: true } },
       () => ({
         [asClass(classCandidate)]: {
           [property]: normalized,

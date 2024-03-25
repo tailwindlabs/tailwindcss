@@ -21,6 +21,7 @@ test('important selector', () => {
           <div class="rtl:active:text-center"></div>
           <div class="dark:before:underline"></div>
           <div class="hover:[&::file-selector-button]:rtl:dark:bg-black/100"></div>
+          <div class="[color:red]"></div>
         `,
       },
     ],
@@ -131,6 +132,9 @@ test('important selector', () => {
       }
       .custom-util {
         button: no;
+      }
+      #app .\[color\:red\] {
+        color: red;
       }
       #app :is(.group:hover .group-hover\:focus-within\:text-left:focus-within) {
         text-align: left;
