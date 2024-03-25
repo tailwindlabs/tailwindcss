@@ -179,6 +179,13 @@ export function compile(css: string): {
     walk(ast, (root) => {
       if (root.kind !== 'rule') return WalkAction.Continue
 
+      // It's possible to `@apply` user-defined classes. We need to make sure
+      // that we never run into a situation where we are eventually applying
+      // the same class that we are currently processing otherwise we will end
+      // up in an infinite loop (circular dependency).
+      //
+      // This means that we need to track the current node as a candidate and
+      // error when we encounter it again.
       let rootAsCandidate = root.selector.slice(1)
 
       walk(root.nodes, (node, { replaceWith }) => {
@@ -199,6 +206,8 @@ export function compile(css: string): {
             // Collect all user-defined classes for the current candidates that
             // we need to apply.
             for (let candidate of candidates) {
+              // If the candidate is the same as the current node we are
+              // processing, we have a circular dependency.
               if (candidate === rootAsCandidate) {
                 throw new Error(`Detected circular \`@apply\`: ${candidate}`)
               }
