@@ -437,7 +437,9 @@ describe('@apply', () => {
           @apply foo;
         }
       `),
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`,
+    )
   })
 
   it('should error when circular @apply is used but nested', () => {
@@ -461,7 +463,9 @@ describe('@apply', () => {
           }
         }
       `),
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`,
+    )
   })
 })
 
