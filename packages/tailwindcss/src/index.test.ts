@@ -372,6 +372,55 @@ describe('@apply', () => {
       }"
     `)
   })
+
+  it('should apply user-defined CSS that is defined after where the `@apply` is used', () => {
+    expect(
+      compileCss(css`
+        .example {
+          @apply foo;
+        }
+
+        .foo {
+          color: red;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".example, .foo {
+        color: red;
+      }"
+    `)
+  })
+
+  it('should apply user-defined CSS that is defined multiple times', () => {
+    expect(
+      compileCss(css`
+        .foo {
+          color: red;
+        }
+
+        .example {
+          @apply foo;
+        }
+
+        .foo {
+          background-color: blue;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        color: red;
+      }
+
+      .example {
+        color: red;
+        background-color: #00f;
+      }
+
+      .foo {
+        background-color: #00f;
+      }"
+    `)
+  })
 })
 
 describe('arbitrary variants', () => {
