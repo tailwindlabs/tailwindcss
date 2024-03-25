@@ -20,6 +20,10 @@ export function compile(css: string): {
     invalidCandidates.add(candidate)
   }
 
+  // Track `@apply` information
+  let containsAtApply = css.includes('@apply')
+  let applyables = new Map<string, AstNode[]>()
+
   // Find all `@theme` declarations
   let theme = new Theme()
   let firstThemeRule: Rule | null = null
@@ -27,6 +31,25 @@ export function compile(css: string): {
 
   walk(ast, (node, { replaceWith }) => {
     if (node.kind !== 'rule') return
+
+    // Track all user-defined classes for `@apply` support
+    if (containsAtApply && node.selector[0] === '.' && !node.selector.includes(' ')) {
+      // Convert the class `.foo` into a candidate `foo`
+      let candidate = node.selector.slice(1)
+
+      // It could be that multiple definitions exist for the same class, so we
+      // need to track all of them.
+      let nodes = applyables.get(candidate) ?? []
+
+      // Add all children of the current rule to the list of nodes for the
+      // current candidate.
+      for (let child of node.nodes) {
+        nodes.push(child)
+      }
+
+      // Store the list of nodes for the current candidate
+      applyables.set(candidate, nodes)
+    }
 
     // Drop instances of `@media reference`
     //
@@ -143,7 +166,7 @@ export function compile(css: string): {
   })
 
   // Replace `@apply` rules with the actual utility classes.
-  if (css.includes('@apply')) {
+  if (containsAtApply) {
     walk(ast, (node, { replaceWith }) => {
       if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@apply')) {
         let candidates = node.selector
@@ -153,9 +176,41 @@ export function compile(css: string): {
 
         // Replace the `@apply` rule with the actual utility classes
         {
+          let newNodes: AstNode[] = []
+
+          // Collect all user-defined classes for the current candidates that we
+          // need to apply.
+          for (let candidate of candidates) {
+            let nodes = applyables.get(candidate)
+            if (!nodes) continue
+
+            for (let child of nodes) {
+              newNodes.push(structuredClone(child))
+            }
+          }
+
           // Parse the candidates to an AST that we can replace the `@apply` rule with.
           let candidateAst = compileCandidates(candidates, designSystem, {
             onInvalidCandidate: (candidate) => {
+              // When a candidate is invalid, we want to first verify that the
+              // candidate is a user-defined class or not. If it is, then we can
+              // safely ignore this. If it's not, then we throw an error because
+              // the candidate is unknown.
+              //
+              // The reason we even have to check user-defined classes is
+              // because it could be that the user defined CSS like that is also
+              // a known utility class. For example, the following CSS would be:
+              //
+              // ```css
+              // .flex {
+              //   --display-mode: flex;
+              // }
+              // ```
+              //
+              // When the user then uses `@apply flex`, we want to both apply
+              // the user-defined class and the utility class.
+              if (applyables.has(candidate)) return
+
               throw new Error(`Cannot apply unknown utility class: ${candidate}`)
             },
           }).astNodes
@@ -163,7 +218,6 @@ export function compile(css: string): {
           // Collect the nodes to insert in place of the `@apply` rule. When a
           // rule was used, we want to insert its children instead of the rule
           // because we don't want the wrapping selector.
-          let newNodes: AstNode[] = []
           for (let candidateNode of candidateAst) {
             if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
               for (let child of candidateNode.nodes) {
