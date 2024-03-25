@@ -305,8 +305,12 @@ export function parse(input: string) {
         parent.nodes.push(node)
       }
 
-      // Push the current node to the stack and make it the new parent.
+      // Push the parent node to the stack, so that we can go back once the
+      // nested nodes are done.
       stack.push(parent)
+
+      // Make the current node the new parent, so that nested nodes can be
+      // attached to it.
       parent = node
 
       // Reset the state for the next node.
