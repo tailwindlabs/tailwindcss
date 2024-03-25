@@ -421,6 +421,48 @@ describe('@apply', () => {
       }"
     `)
   })
+
+  it('should error when circular @apply is used', () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          @apply bar;
+        }
+
+        .bar {
+          @apply baz;
+        }
+
+        .baz {
+          @apply foo;
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot(`[Error: Detected circular \`@apply\`: foo]`)
+  })
+
+  it('should error when circular @apply is used but nested', () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          &:hover {
+            @apply bar;
+          }
+        }
+
+        .bar {
+          &:hover {
+            @apply baz;
+          }
+        }
+
+        .baz {
+          &:hover {
+            @apply foo;
+          }
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot(`[Error: Detected circular \`@apply\`: foo]`)
+  })
 })
 
 describe('arbitrary variants', () => {

@@ -176,70 +176,88 @@ export function compile(css: string): {
 
   // Replace `@apply` rules with the actual utility classes.
   if (containsAtApply) {
-    walk(ast, (node, { replaceWith }) => {
-      if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@apply')) {
-        let candidates = node.selector
-          .slice(7 /* Ignore `@apply ` when parsing the selector */)
-          .trim()
-          .split(/\s+/g)
+    walk(ast, (root) => {
+      if (root.kind !== 'rule') return WalkAction.Continue
 
-        // Replace the `@apply` rule with the actual utility classes
-        {
-          let newNodes: AstNode[] = []
+      let rootAsCandidate = root.selector.slice(1)
 
-          // Collect all user-defined classes for the current candidates that we
-          // need to apply.
-          for (let candidate of candidates) {
-            let nodes = userDefinedApplyables.get(candidate)
-            if (!nodes) continue
+      walk(root.nodes, (node, { replaceWith }) => {
+        if (
+          node.kind === 'rule' &&
+          node.selector[0] === '@' &&
+          node.selector.startsWith('@apply')
+        ) {
+          let candidates = node.selector
+            .slice(7 /* Ignore `@apply ` when parsing the selector */)
+            .trim()
+            .split(/\s+/g)
 
-            for (let child of nodes) {
-              newNodes.push(structuredClone(child))
-            }
-          }
+          // Replace the `@apply` rule with the actual utility classes
+          {
+            let newNodes: AstNode[] = []
 
-          // Parse the candidates to an AST that we can replace the `@apply` rule with.
-          let candidateAst = compileCandidates(candidates, designSystem, {
-            onInvalidCandidate: (candidate) => {
-              // When a candidate is invalid, we want to first verify that the
-              // candidate is a user-defined class or not. If it is, then we can
-              // safely ignore this. If it's not, then we throw an error because
-              // the candidate is unknown.
-              //
-              // The reason we even have to check user-defined classes is
-              // because it could be that the user defined CSS like that is also
-              // a known utility class. For example, the following CSS would be:
-              //
-              // ```css
-              // .flex {
-              //   --display-mode: flex;
-              // }
-              // ```
-              //
-              // When the user then uses `@apply flex`, we want to both apply
-              // the user-defined class and the utility class.
-              if (userDefinedApplyables.has(candidate)) return
-
-              throw new Error(`Cannot apply unknown utility class: ${candidate}`)
-            },
-          }).astNodes
-
-          // Collect the nodes to insert in place of the `@apply` rule. When a
-          // rule was used, we want to insert its children instead of the rule
-          // because we don't want the wrapping selector.
-          for (let candidateNode of candidateAst) {
-            if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
-              for (let child of candidateNode.nodes) {
-                newNodes.push(child)
+            // Collect all user-defined classes for the current candidates that
+            // we need to apply.
+            for (let candidate of candidates) {
+              if (candidate === rootAsCandidate) {
+                throw new Error(`Detected circular \`@apply\`: ${candidate}`)
               }
-            } else {
-              newNodes.push(candidateNode)
-            }
-          }
 
-          replaceWith(newNodes)
+              let nodes = userDefinedApplyables.get(candidate)
+              if (!nodes) continue
+
+              for (let child of nodes) {
+                newNodes.push(structuredClone(child))
+              }
+            }
+
+            // Parse the candidates to an AST that we can replace the `@apply`
+            // rule with.
+            let candidateAst = compileCandidates(candidates, designSystem, {
+              onInvalidCandidate: (candidate) => {
+                // When a candidate is invalid, we want to first verify that the
+                // candidate is a user-defined class or not. If it is, then we
+                // can safely ignore this. If it's not, then we throw an error
+                // because the candidate is unknown.
+                //
+                // The reason we even have to check user-defined classes is
+                // because it could be that the user defined CSS like that is
+                // also a known utility class. For example, the following CSS
+                // would be:
+                //
+                // ```css
+                // .flex {
+                //   --display-mode: flex;
+                // }
+                // ```
+                //
+                // When the user then uses `@apply flex`, we want to both apply
+                // the user-defined class and the utility class.
+                if (userDefinedApplyables.has(candidate)) return
+
+                throw new Error(`Cannot apply unknown utility class: ${candidate}`)
+              },
+            }).astNodes
+
+            // Collect the nodes to insert in place of the `@apply` rule. When a
+            // rule was used, we want to insert its children instead of the rule
+            // because we don't want the wrapping selector.
+            for (let candidateNode of candidateAst) {
+              if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
+                for (let child of candidateNode.nodes) {
+                  newNodes.push(child)
+                }
+              } else {
+                newNodes.push(candidateNode)
+              }
+            }
+
+            replaceWith(newNodes)
+          }
         }
-      }
+      })
+
+      return WalkAction.Skip
     })
   }
 
