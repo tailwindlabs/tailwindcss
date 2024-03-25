@@ -4,6 +4,7 @@ import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
+import { isSimpleClassSelector } from './utils/is-simple-class-selector'
 
 export function compile(css: string): {
   build(candidates: string[]): string
@@ -33,7 +34,15 @@ export function compile(css: string): {
     if (node.kind !== 'rule') return
 
     // Track all user-defined classes for `@apply` support
-    if (containsAtApply && node.selector[0] === '.' && !node.selector.includes(' ')) {
+    if (
+      containsAtApply &&
+      // Verify that it is a valid applyable-class. An applyable class is a
+      // class that is a very simple selector, like `.foo` or `.bar`, but doesn't
+      // contain any spaces, combinators, pseudo-selectors, pseudo-elements, or
+      // attribute selectors.
+      node.selector[0] === '.' &&
+      isSimpleClassSelector(node.selector)
+    ) {
       // Convert the class `.foo` into a candidate `foo`
       let candidate = node.selector.slice(1)
 
