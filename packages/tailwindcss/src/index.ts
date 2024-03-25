@@ -215,15 +215,13 @@ export function compile(css: string): {
             // rule with.
             let candidateAst = compileCandidates(candidates, designSystem, {
               onInvalidCandidate: (candidate) => {
-                // When a candidate is invalid, we want to first verify that the
-                // candidate is a user-defined class or not. If it is, then we
-                // can safely ignore this. If it's not, then we throw an error
-                // because the candidate is unknown.
+                // We must pass in user-defined classes and then filter them out
+                // here because, while they are usually not known utilities, the
+                // user can define a class that happens to *also* be a known
+                // utility.
                 //
-                // The reason we even have to check user-defined classes is
-                // because it could be that the user defined CSS like that is
-                // also a known utility class. For example, the following CSS
-                // would be:
+                // For example, given the following, `flex` counts as both a
+                // user-defined class and a known utility:
                 //
                 // ```css
                 // .flex {
