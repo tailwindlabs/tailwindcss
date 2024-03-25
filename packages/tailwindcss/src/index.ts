@@ -22,7 +22,7 @@ export function compile(css: string): {
 
   // Track `@apply` information
   let containsAtApply = css.includes('@apply')
-  let applyables = new Map<string, AstNode[]>()
+  let userDefinedApplyables = new Map<string, AstNode[]>()
 
   // Find all `@theme` declarations
   let theme = new Theme()
@@ -39,7 +39,7 @@ export function compile(css: string): {
 
       // It could be that multiple definitions exist for the same class, so we
       // need to track all of them.
-      let nodes = applyables.get(candidate) ?? []
+      let nodes = userDefinedApplyables.get(candidate) ?? []
 
       // Add all children of the current rule to the list of nodes for the
       // current candidate.
@@ -48,7 +48,7 @@ export function compile(css: string): {
       }
 
       // Store the list of nodes for the current candidate
-      applyables.set(candidate, nodes)
+      userDefinedApplyables.set(candidate, nodes)
     }
 
     // Drop instances of `@media reference`
@@ -181,7 +181,7 @@ export function compile(css: string): {
           // Collect all user-defined classes for the current candidates that we
           // need to apply.
           for (let candidate of candidates) {
-            let nodes = applyables.get(candidate)
+            let nodes = userDefinedApplyables.get(candidate)
             if (!nodes) continue
 
             for (let child of nodes) {
@@ -209,7 +209,7 @@ export function compile(css: string): {
               //
               // When the user then uses `@apply flex`, we want to both apply
               // the user-defined class and the utility class.
-              if (applyables.has(candidate)) return
+              if (userDefinedApplyables.has(candidate)) return
 
               throw new Error(`Cannot apply unknown utility class: ${candidate}`)
             },
