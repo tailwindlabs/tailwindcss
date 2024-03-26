@@ -33,7 +33,11 @@ if (command) {
 //
 //   - `tailwindcss -o output.css`  // should run the build command, not show the help message
 //   - `tailwindcss > output.css`   // should run the build command, not show the help message
-if ((process.stdout.isTTY && !process.argv.slice(2).includes('-o')) || shared['--help']) {
+if (
+  (process.stdout.isTTY &&
+    !process.argv.slice(2).some((flag) => flag === '-o' || flag === '--output')) ||
+  shared['--help']
+) {
   help({
     usage: ['tailwindcss [--input input.css] [--output output.css] [--watch] [options…]'],
     options: { ...build.options(), ...sharedOptions },
