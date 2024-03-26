@@ -1,4 +1,8 @@
-import { type RawSourceMap as SourceMap } from 'source-map'
+import {
+  SourceMapConsumer,
+  SourceMapGenerator,
+  type RawSourceMap as SourceMap,
+} from 'source-map-js'
 
 import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
@@ -11,10 +15,11 @@ export type { SourceMap }
 
 export function compile(
   css: string,
-  { map }: { map?: SourceMap } = {},
+  { map: rawMap }: { map?: SourceMap } = {},
 ): {
   build(candidates: string[]): { css: string; map?: SourceMap }
 } {
+  let map = rawMap ? new SourceMapConsumer(rawMap) : null
   let ast = CSS.parse(css)
 
   if (process.env.NODE_ENV !== 'test') {
@@ -194,6 +199,11 @@ export function compile(
   let compiledCss = toCss(ast)
   let previousAstNodeCount = 0
 
+  let newMap = map ? SourceMapGenerator.fromSourceMap(map) : null
+  function getRawMap() {
+    if (!newMap) return undefined
+    return JSON.parse(newMap.toString()) as SourceMap
+  }
   return {
     build(newRawCandidates: string[]) {
       let didChange = false
@@ -210,7 +220,7 @@ export function compile(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        return { css: compiledCss, map }
+        return { css: compiledCss, map: getRawMap() }
       }
 
       if (tailwindUtilitiesNode) {
@@ -222,7 +232,7 @@ export function compile(
         // CSS. This currently assumes that we only add new ast nodes and never
         // remove any.
         if (previousAstNodeCount === newNodes.length) {
-          return { css: compiledCss, map }
+          return { css: compiledCss, map: getRawMap() }
         }
 
         previousAstNodeCount = newNodes.length
@@ -231,7 +241,7 @@ export function compile(
         compiledCss = toCss(ast)
       }
 
-      return { css: compiledCss, map }
+      return { css: compiledCss, map: getRawMap() }
     },
   }
 }

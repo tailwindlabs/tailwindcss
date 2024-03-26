@@ -1,7 +1,8 @@
 import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
-import { compile, type SourceMap } from 'tailwindcss'
+import { type SourceMap as RollupSourceMap } from 'rollup'
+import { compile, type SourceMap as TailwindSourceMap } from 'tailwindcss'
 import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -74,13 +75,30 @@ export default function tailwindcss(): Plugin[] {
 
   function generateCss(
     css: string,
-    { optimize, map }: { optimize?: boolean; map?: SourceMap } = {},
+    { optimize, map }: { optimize?: boolean; map?: RollupSourceMap } = {},
   ) {
-    ;({ css, map } = compile(css, { map }).build(Array.from(candidates)))
+    // Rollup (source-map) source maps and Tailwind (source-map-js) have
+    // different types for the version field.
+    let tailwindMap: TailwindSourceMap | undefined = map
+      ? {
+          ...map,
+          version: map.version.toString(),
+        }
+      : undefined
+
+    ;({ css, map: tailwindMap } = compile(css, { map: tailwindMap }).build(Array.from(candidates)))
     if (optimize) {
       css = optimizeCss(css, { minify })
     }
-    return { css, map }
+    return {
+      css,
+      map: tailwindMap
+        ? {
+            ...tailwindMap,
+            version: Number(tailwindMap.version),
+          }
+        : undefined,
+    }
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS

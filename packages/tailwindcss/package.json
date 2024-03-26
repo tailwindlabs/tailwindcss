@@ -68,6 +68,6 @@
     "lightningcss": "^1.24.0"
   },
   "dependencies": {
-    "source-map": "^0.7.4"
+    "source-map-js": "^1.2.0"
   }
 }
