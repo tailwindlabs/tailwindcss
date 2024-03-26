@@ -66,5 +66,8 @@
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "^20.10.8",
     "lightningcss": "^1.24.0"
+  },
+  "dependencies": {
+    "source-map": "^0.7.4"
   }
 }

@@ -1,7 +1,7 @@
 import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
-import { compile } from 'tailwindcss'
+import { compile, type SourceMap } from 'tailwindcss'
 import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -72,12 +72,15 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
-  function generateCss(css: string) {
-    return compile(css).build(Array.from(candidates))
-  }
-
-  function generateOptimizedCss(css: string) {
-    return optimizeCss(generateCss(css), { minify })
+  function generateCss(
+    css: string,
+    { optimize, map }: { optimize?: boolean; map?: SourceMap } = {},
+  ) {
+    ;({ css, map } = compile(css, { map }).build(Array.from(candidates)))
+    if (optimize) {
+      css = optimizeCss(css, { minify })
+    }
+    return { css, map }
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -189,8 +192,12 @@ export default function tailwindcss(): Plugin[] {
           await server?.waitForRequestsIdle?.(id)
         }
 
-        let code = await transformWithPlugins(this, id, generateCss(src))
-        return { code }
+        let { css, map } = generateCss(src, { map: this.getCombinedSourcemap() })
+        css = await transformWithPlugins(this, id, css)
+        return {
+          code: css,
+          map,
+        }
       },
     },
 
@@ -213,7 +220,7 @@ export default function tailwindcss(): Plugin[] {
             continue
           }
 
-          let css = generateOptimizedCss(file.content)
+          let { css } = generateCss(file.content, { optimize: true })
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure

@@ -1,3 +1,5 @@
+import { type RawSourceMap as SourceMap } from 'source-map'
+
 import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
@@ -5,8 +7,13 @@ import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 
-export function compile(css: string): {
-  build(candidates: string[]): string
+export type { SourceMap }
+
+export function compile(
+  css: string,
+  { map }: { map?: SourceMap } = {},
+): {
+  build(candidates: string[]): { css: string; map?: SourceMap }
 } {
   let ast = CSS.parse(css)
 
@@ -203,7 +210,7 @@ export function compile(css: string): {
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        return compiledCss
+        return { css: compiledCss, map }
       }
 
       if (tailwindUtilitiesNode) {
@@ -215,7 +222,7 @@ export function compile(css: string): {
         // CSS. This currently assumes that we only add new ast nodes and never
         // remove any.
         if (previousAstNodeCount === newNodes.length) {
-          return compiledCss
+          return { css: compiledCss, map }
         }
 
         previousAstNodeCount = newNodes.length
@@ -224,7 +231,7 @@ export function compile(css: string): {
         compiledCss = toCss(ast)
       }
 
-      return compiledCss
+      return { css: compiledCss, map }
     },
   }
 }
