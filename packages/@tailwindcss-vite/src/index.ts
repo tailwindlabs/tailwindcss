@@ -113,8 +113,15 @@ export default function tailwindcss(): Plugin[] {
 
       async configResolved(config) {
         minify = config.build.cssMinify !== false
+        // Apply the vite:css plugin to generated CSS for transformations like
+        // URL path rewriting and image inlining.
+        //
+        // In build mode, since renderChunk runs after all transformations, we
+        // need to also apply vite:css-post.
         cssPlugins = config.plugins.filter((plugin) =>
-          ['vite:css', 'vite:css-post'].includes(plugin.name),
+          ['vite:css', ...(config.command === 'build' ? ['vite:css-post'] : [])].includes(
+            plugin.name,
+          ),
         )
       },
 
@@ -158,9 +165,13 @@ export default function tailwindcss(): Plugin[] {
         // In serve mode, we treat cssModules as a set, ignoring the value.
         cssModules[id] = ''
 
+        // TODO: Re-enable waitForRequestsIdle once issues with it hanging are
+        // fixed. Until then, this transformation may run multiple times in
+        // serve mode, possibly giving a FOUC.
+        //
         // Wait until all other files have been processed, so we can extract all
         // candidates before generating CSS.
-        await server?.waitForRequestsIdle?.(id)
+        // await server?.waitForRequestsIdle?.(id)
 
         let code = await transformWithPlugins(this, id, generateCss(src))
         return { code }
