@@ -4,46 +4,9 @@ import fs from 'fs'
 import path from 'path'
 import isGlob from 'is-glob'
 import fastGlob from 'fast-glob'
+import normalizePath from 'normalize-path'
 import { parseGlob } from '../util/parseGlob'
 import { env } from './sharedState'
-
-/*!
- * Modified version of normalize-path, original license below
- *
- * normalize-path <https://github.com/jonschlinkert/normalize-path>
- *
- * Copyright (c) 2014-2018, Jon Schlinkert.
- * Released under the MIT License.
- */
-
-function normalizePath(path) {
-  if (typeof path !== 'string') {
-    throw new TypeError('expected path to be a string')
-  }
-
-  if (path === '\\' || path === '/') return '/'
-
-  var len = path.length
-  if (len <= 1) return path
-
-  // ensure that win32 namespaces has two leading slashes, so that the path is
-  // handled properly by the win32 version of path.parse() after being normalized
-  // https://msdn.microsoft.com/library/windows/desktop/aa365247(v=vs.85).aspx#namespaces
-  var prefix = ''
-  if (len > 4 && path[3] === '\\') {
-    var ch = path[2]
-    if ((ch === '?' || ch === '.') && path.slice(0, 2) === '\\\\') {
-      path = path.slice(2)
-      prefix = '//'
-    }
-  }
-
-  // Modified part: instead of purely splitting on `\\` and `/`, we split on
-  // `/` and `\\` that is _not_ followed by any of the following characters: ()[]
-  // This is to ensure that we keep the escaping of brackets and parentheses
-  let segs = path.split(/[/\\]+(?![\(\)\[\]])/)
-  return prefix + segs.join('/')
-}
 
 /** @typedef {import('../../types/config.js').RawFile} RawFile */
 /** @typedef {import('../../types/config.js').FilePath} FilePath */
@@ -110,10 +73,6 @@ export function parseCandidateFiles(context, tailwindConfig) {
  * @returns {ContentPath}
  */
 function parseFilePath(filePath, ignore) {
-  // Escape special characters in the file path such as: ()[]
-  // But only if the special character isn't already escaped
-  filePath = filePath.replace(/(?<!\\)([\[\]\(\)])/g, '\\$1')
-
   let contentPath = {
     original: filePath,
     base: filePath,

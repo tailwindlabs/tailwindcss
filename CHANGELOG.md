@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Revert changes to glob handling ([#13384](https://github.com/tailwindlabs/tailwindcss/pull/13384))
 
 ## [3.4.2] - 2024-03-27
 
