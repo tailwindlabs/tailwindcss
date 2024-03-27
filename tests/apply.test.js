@@ -2212,3 +2212,40 @@ test('applying user defined classes with nested CSS should result in an error', 
     `)
   })
 })
+
+test('applying classes with class-based dark variant to pseudo elements', async () => {
+  let config = {
+    darkMode: 'class',
+    content: [],
+  }
+
+  let input = css`
+    ::-webkit-scrollbar-track {
+      @apply bg-white dark:bg-black;
+    }
+    ::-webkit-scrollbar-track:hover {
+      @apply bg-blue-600 dark:bg-blue-500;
+    }
+  `
+
+  let result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    ::-webkit-scrollbar-track {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    }
+    :is(.dark *)::-webkit-scrollbar-track {
+      --tw-bg-opacity: 1;
+      background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+    }
+    ::-webkit-scrollbar-track:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+    }
+    :is(.dark *)::-webkit-scrollbar-track:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+    }
+  `)
+})

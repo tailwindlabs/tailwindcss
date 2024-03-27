@@ -270,7 +270,7 @@ export let variantPlugins = {
       addVariant('dark', selector)
     } else if (mode === 'class') {
       // Old behavior
-      addVariant('dark', `:is(${selector} &)`)
+      addVariant('dark', `&:is(${selector} *)`)
     }
   },
 
