@@ -9,8 +9,11 @@ const sharedOptions = {
   '--help': { type: 'boolean', description: 'Display usage information', alias: '-h' },
 } satisfies Arg
 
-const shared = args(sharedOptions)
-const command = shared._[0]
+const flags = args({
+  ...build.options(),
+  ...sharedOptions,
+})
+const command = flags._[0]
 
 // Right now we don't support any sub-commands. Let's show the help message
 // instead.
@@ -33,7 +36,7 @@ if (command) {
 //
 //   - `tailwindcss -o output.css`  // should run the build command, not show the help message
 //   - `tailwindcss > output.css`   // should run the build command, not show the help message
-if ((process.stdout.isTTY && !process.argv.slice(2).includes('-o')) || shared['--help']) {
+if ((process.stdout.isTTY && !flags['--output']) || flags['--help']) {
   help({
     usage: ['tailwindcss [--input input.css] [--output output.css] [--watch] [options…]'],
     options: { ...build.options(), ...sharedOptions },
@@ -42,4 +45,4 @@ if ((process.stdout.isTTY && !process.argv.slice(2).includes('-o')) || shared['-
 }
 
 // Handle the build command
-build.handle(args(build.options()))
+build.handle(flags)
