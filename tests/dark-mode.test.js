@@ -16,7 +16,7 @@ it('should be possible to use the darkMode "class" mode', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      :is(.dark .dark\:font-bold) {
+      .dark\:font-bold:is(.dark *) {
         font-weight: 700;
       }
     `)
@@ -39,7 +39,7 @@ it('should be possible to change the class name', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
-      :is(.test-dark .dark\:font-bold) {
+      .dark\:font-bold:is(.test-dark *) {
         font-weight: 700;
       }
     `)
@@ -133,7 +133,7 @@ it('should support the deprecated `class` dark mode behavior', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      :is(.dark .dark\:font-bold) {
+      .dark\:font-bold:is(.dark *) {
         font-weight: 700;
       }
     `)
@@ -153,7 +153,7 @@ it('should support custom classes with  deprecated `class` dark mode', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      :is(.my-dark .dark\:font-bold) {
+      .dark\:font-bold:is(.my-dark *) {
         font-weight: 700;
       }
     `)
@@ -181,7 +181,7 @@ it('should use legacy sorting when using `darkMode: class`', () => {
         --tw-text-opacity: 1;
         color: rgb(187 247 208 / var(--tw-text-opacity));
       }
-      :is(.dark .dark\:text-green-100) {
+      .dark\:text-green-100:is(.dark *) {
         --tw-text-opacity: 1;
         color: rgb(220 252 231 / var(--tw-text-opacity));
       }
