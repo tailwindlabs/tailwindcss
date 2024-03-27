@@ -113,8 +113,15 @@ export default function tailwindcss(): Plugin[] {
 
       async configResolved(config) {
         minify = config.build.cssMinify !== false
+        // Apply the vite:css plugin to generated CSS for transformations like
+        // URL path rewriting and image inlining.
+        //
+        // In build mode, since renderChunk runs after all transformations, we
+        // need to also apply vite:css-post.
         cssPlugins = config.plugins.filter((plugin) =>
-          ['vite:css', 'vite:css-post'].includes(plugin.name),
+          ['vite:css', ...(config.command === 'build' ? ['vite:css-post'] : [])].includes(
+            plugin.name,
+          ),
         )
       },
 
