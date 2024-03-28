@@ -548,6 +548,27 @@ export function createVariants(theme: Theme): Variants {
         () => Array.from(breakpoints.keys()).filter((key) => key !== null) as string[],
       )
 
+      variants.group(
+        () => {
+          variants.functional(
+            'max-h',
+            (ruleNode, variant) => {
+              let value = resolvedBreakpoints.get(variant)
+              if (value === null) return null
+
+              ruleNode.nodes = [rule(`@media (height < ${value})`, ruleNode.nodes)]
+            },
+            { compounds: false },
+          )
+        },
+        (a, z) => compareBreakpoints(a, z, 'desc', resolvedBreakpoints),
+      )
+
+      variants.suggest(
+        'max-h',
+        () => Array.from(breakpoints.keys()).filter((key) => key !== null) as string[],
+      )
+
       // Min
       variants.group(
         () => {
@@ -579,6 +600,39 @@ export function createVariants(theme: Theme): Variants {
 
       variants.suggest(
         'min',
+        () => Array.from(breakpoints.keys()).filter((key) => key !== null) as string[],
+      )
+
+      variants.group(
+        () => {
+          // Registers breakpoint variants like `h-sm`, `h-md`, `h-lg`, etc.
+          for (let [key, value] of theme.namespace('--breakpoint')) {
+            if (key === null) continue
+            variants.static(
+              `h-${key}`,
+              (ruleNode) => {
+                ruleNode.nodes = [rule(`@media (height >= ${value})`, ruleNode.nodes)]
+              },
+              { compounds: false },
+            )
+          }
+
+          variants.functional(
+            'min-h',
+            (ruleNode, variant) => {
+              let value = resolvedBreakpoints.get(variant)
+              if (value === null) return null
+
+              ruleNode.nodes = [rule(`@media (height >= ${value})`, ruleNode.nodes)]
+            },
+            { compounds: false },
+          )
+        },
+        (a, z) => compareBreakpoints(a, z, 'asc', resolvedBreakpoints),
+      )
+
+      variants.suggest(
+        'min-h',
         () => Array.from(breakpoints.keys()).filter((key) => key !== null) as string[],
       )
     }
@@ -685,6 +739,109 @@ export function createVariants(theme: Theme): Variants {
         () => Array.from(widths.keys()).filter((key) => key !== null) as string[],
       )
     }
+
+    {
+      let heights = theme.namespace('--height')
+
+      // Container queries
+      let resolvedHeights = new DefaultMap((variant: Variant) => {
+        switch (variant.kind) {
+          case 'functional': {
+            if (variant.value === null) return null
+
+            let value: string | null = null
+
+            if (variant.value.kind === 'arbitrary') {
+              value = variant.value.value
+            } else if (variant.value.kind === 'named') {
+              value = theme.resolveValue(variant.value.value, ['--height'])
+            }
+
+            if (!value) return null
+            if (value.includes('var(')) return null
+
+            return value
+          }
+          case 'static':
+          case 'arbitrary':
+          case 'compound':
+            return null
+        }
+      })
+
+      variants.group(
+        () => {
+          variants.functional(
+            '@max-h',
+            (ruleNode, variant) => {
+              let value = resolvedHeights.get(variant)
+              if (value === null) return null
+
+              ruleNode.nodes = [
+                rule(
+                  variant.modifier
+                    ? `@container ${variant.modifier.value} (height < ${value})`
+                    : `@container (height < ${value})`,
+                  ruleNode.nodes,
+                ),
+              ]
+            },
+            { compounds: false },
+          )
+        },
+        (a, z) => compareBreakpoints(a, z, 'desc', resolvedHeights),
+      )
+
+      variants.suggest(
+        '@max-h',
+        () => Array.from(heights.keys()).filter((key) => key !== null) as string[],
+      )
+
+      variants.group(
+        () => {
+          variants.functional(
+            '@-h',
+            (ruleNode, variant) => {
+              let value = resolvedHeights.get(variant)
+              if (value === null) return null
+
+              ruleNode.nodes = [
+                rule(
+                  variant.modifier
+                    ? `@container ${variant.modifier.value} (height >= ${value})`
+                    : `@container (height >= ${value})`,
+                  ruleNode.nodes,
+                ),
+              ]
+            },
+            { compounds: false },
+          )
+          variants.functional(
+            '@min-h',
+            (ruleNode, variant) => {
+              let value = resolvedHeights.get(variant)
+              if (value === null) return null
+
+              ruleNode.nodes = [
+                rule(
+                  variant.modifier
+                    ? `@container ${variant.modifier.value} (height >= ${value})`
+                    : `@container (height >= ${value})`,
+                  ruleNode.nodes,
+                ),
+              ]
+            },
+            { compounds: false },
+          )
+        },
+        (a, z) => compareBreakpoints(a, z, 'asc', resolvedHeights),
+      )
+
+      variants.suggest(
+        '@min-h',
+        () => Array.from(heights.keys()).filter((key) => key !== null) as string[],
+      )
+    }  
   }
 
   staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: false })

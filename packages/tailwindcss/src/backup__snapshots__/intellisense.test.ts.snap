@@ -2329,15 +2329,6 @@ exports[`getVariants 1`] = `
   },
   {
     "hasDash": true,
-    "isArbitrary": true,
-    "name": "max-h",
-    "selectors": [Function],
-    "values": [
-      "sm",
-    ],
-  },
-  {
-    "hasDash": true,
     "isArbitrary": false,
     "name": "sm",
     "selectors": [Function],
@@ -2347,22 +2338,6 @@ exports[`getVariants 1`] = `
     "hasDash": true,
     "isArbitrary": true,
     "name": "min",
-    "selectors": [Function],
-    "values": [
-      "sm",
-    ],
-  },
-  {
-    "hasDash": true,
-    "isArbitrary": false,
-    "name": "h-sm",
-    "selectors": [Function],
-    "values": [],
-  },
-  {
-    "hasDash": true,
-    "isArbitrary": true,
-    "name": "min-h",
     "selectors": [Function],
     "values": [
       "sm",
@@ -2392,27 +2367,6 @@ exports[`getVariants 1`] = `
     "values": [
       "4",
     ],
-  },
-  {
-    "hasDash": true,
-    "isArbitrary": true,
-    "name": "@max-h",
-    "selectors": [Function],
-    "values": [],
-  },
-  {
-    "hasDash": true,
-    "isArbitrary": true,
-    "name": "@-h",
-    "selectors": [Function],
-    "values": [],
-  },
-  {
-    "hasDash": true,
-    "isArbitrary": true,
-    "name": "@min-h",
-    "selectors": [Function],
-    "values": [],
   },
   {
     "hasDash": true,
