@@ -1,7 +1,8 @@
 import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
-import { compile } from 'tailwindcss'
+import { type SourceMap as RollupSourceMap } from 'rollup'
+import { compile, type SourceMap as TailwindSourceMap } from 'tailwindcss'
 import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -60,12 +61,28 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
-  function generateCss(css: string) {
-    return compile(css).build(Array.from(candidates))
+  function generateCssWithMap(css: string, map: RollupSourceMap) {
+    // Rollup (source-map) source maps and Tailwind (source-map-js) have
+    // different types for the version field.
+    let tailwindMap: TailwindSourceMap = {
+      ...map,
+      version: map.version.toString(),
+    }
+
+    let { build, buildSourceMap } = compile(css, { map: tailwindMap })
+    css = build(Array.from(candidates))
+    tailwindMap = buildSourceMap()
+    return {
+      css,
+      map: {
+        ...tailwindMap,
+        version: Number(tailwindMap.version),
+      },
+    }
   }
 
   function generateOptimizedCss(css: string) {
-    return optimizeCss(generateCss(css), { minify })
+    return optimizeCss(compile(css).build(Array.from(candidates)), { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -173,8 +190,12 @@ export default function tailwindcss(): Plugin[] {
         // candidates before generating CSS.
         // await server?.waitForRequestsIdle?.(id)
 
-        let code = await transformWithPlugins(this, id, generateCss(src))
-        return { code }
+        let { css, map } = generateCssWithMap(src, this.getCombinedSourcemap())
+        css = await transformWithPlugins(this, id, css)
+        return {
+          code: css,
+          map,
+        }
       },
     },
 
@@ -193,7 +214,8 @@ export default function tailwindcss(): Plugin[] {
       // by vite:css-post.
       async renderChunk(_code, _chunk) {
         for (let [cssFile, css] of Object.entries(cssModules)) {
-          await transformWithPlugins(this, cssFile, generateOptimizedCss(css))
+          css = generateOptimizedCss(css)
+          await transformWithPlugins(this, cssFile, css)
         }
       },
     },

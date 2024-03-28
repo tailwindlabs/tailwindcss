@@ -1,3 +1,9 @@
+import {
+  SourceMapConsumer,
+  SourceMapGenerator,
+  type RawSourceMap as SourceMap,
+} from 'source-map-js'
+
 import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
@@ -5,10 +11,16 @@ import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 
-export function compile(css: string): {
+export type { SourceMap }
+
+export function compile(
+  css: string,
+  { map: rawMap }: { map?: SourceMap } = {},
+): {
   build(candidates: string[]): string
+  buildSourceMap(): SourceMap
 } {
-  let ast = CSS.parse(css)
+  let ast = CSS.parse(css, { trackSource: !!rawMap })
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -97,7 +109,7 @@ export function compile(css: string): {
 
     for (let [key, value] of theme.entries()) {
       if (value.isReference) continue
-      nodes.push(decl(key, value.value))
+      nodes.push(decl(key, value.value, firstThemeRule.source))
     }
 
     if (keyframesRules.length > 0) {
@@ -117,7 +129,7 @@ export function compile(css: string): {
         nodes.push(
           Object.assign(keyframesRule, {
             selector: '@at-root',
-            nodes: [rule(keyframesRule.selector, keyframesRule.nodes)],
+            nodes: [rule(keyframesRule.selector, keyframesRule.nodes, keyframesRule.source)],
           }),
         )
       }
@@ -167,9 +179,11 @@ export function compile(css: string): {
           for (let candidateNode of candidateAst) {
             if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
               for (let child of candidateNode.nodes) {
+                // TODO FIXME child.source = node.source
                 newNodes.push(child)
               }
             } else {
+              // TODO FIXME candidateNode.source = node.source
               newNodes.push(candidateNode)
             }
           }
@@ -180,11 +194,35 @@ export function compile(css: string): {
     })
   }
 
+  let originalMap = rawMap ? new SourceMapConsumer(rawMap) : undefined
+  function toSourceMap(ast: AstNode[]) {
+    if (!originalMap) return undefined
+    let map = new SourceMapGenerator()
+    walk(ast, (node) => {
+      // Associate any newly created nodes with the @tailwind utilities directive
+      let source = node.source ?? tailwindUtilitiesNode?.source
+      if (source === undefined) return
+      if (node.destination === undefined) return
+      let original = originalMap!.originalPositionFor({
+        line: source.line,
+        column: source.column,
+      })
+      if (!original?.source) return
+      map.addMapping({
+        generated: { line: node.destination.line, column: node.destination.column },
+        original,
+        source: original?.source,
+      })
+    })
+    return JSON.parse(map.toString()) as SourceMap
+  }
+
   // Track all valid candidates, these are the incoming `rawCandidate` that
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = toCss(ast)
+  let compiledCss = toCss(ast, { trackDestination: !!rawMap })
+  let map = toSourceMap(ast)
   let previousAstNodeCount = 0
 
   return {
@@ -221,10 +259,17 @@ export function compile(css: string): {
         previousAstNodeCount = newNodes.length
 
         tailwindUtilitiesNode.nodes = newNodes
-        compiledCss = toCss(ast)
+        compiledCss = toCss(ast, { trackDestination: !!rawMap })
       }
 
       return compiledCss
+    },
+    buildSourceMap() {
+      if (!originalMap) {
+        throw new Error('buildSourceMap called without passing a source map to compile')
+      }
+      map = toSourceMap(ast)
+      return map!
     },
   }
 }

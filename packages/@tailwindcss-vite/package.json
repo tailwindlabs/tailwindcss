@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "rollup": "^4.13.0",
     "vite": "^5.2.0"
   },
   "peerDependencies": {
