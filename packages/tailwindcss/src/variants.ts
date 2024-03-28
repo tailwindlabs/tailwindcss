@@ -841,7 +841,7 @@ export function createVariants(theme: Theme): Variants {
         '@min-h',
         () => Array.from(heights.keys()).filter((key) => key !== null) as string[],
       )
-    }  
+    }
   }
 
   staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: false })
