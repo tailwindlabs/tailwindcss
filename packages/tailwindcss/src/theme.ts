@@ -162,6 +162,8 @@ export type ThemeKey =
   | '--caret-color'
   | '--color'
   | '--columns'
+  | '--container-center'
+  | '--container-padding'
   | '--contrast'
   | '--cursor'
   | '--default-border-width'

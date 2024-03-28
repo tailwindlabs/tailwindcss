@@ -886,6 +886,31 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [decl('aspect-ratio', value)],
   })
 
+  {
+    // container
+    const containerNodes: ([string, string] | (() => AstNode))[] = [['width', '100%']]
+    if (theme.get(['--container-center']) === '1') {
+      containerNodes.push(['margin-right', 'auto'])
+      containerNodes.push(['margin-left', 'auto'])
+    }
+    const defaultPadding = theme.get(['--container-padding'])
+    if (defaultPadding !== null) {
+      containerNodes.push(['padding-right', defaultPadding])
+      containerNodes.push(['padding-left', defaultPadding])
+    }
+    const containerPaddings = theme.namespace('--container-padding')
+    Array.from(theme.namespace('--breakpoint'), ([name, width]) => {
+      const breakpointNodes: AstNode[] = [decl('max-width', width)]
+      if (containerPaddings.has(name)) {
+        const padding = containerPaddings.get(name)!
+        breakpointNodes.push(decl('padding-right', padding))
+        breakpointNodes.push(decl('padding-left', padding))
+      }
+      containerNodes.push(() => rule(`@media (width >= ${width})`, breakpointNodes))
+    })
+    staticUtility('container', containerNodes)
+  }
+
   /**
    * @css `size`
    * @css `width`

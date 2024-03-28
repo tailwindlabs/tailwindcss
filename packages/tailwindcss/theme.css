@@ -16,6 +16,18 @@
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
 
+  /* Container */
+  /* Uncomment if you'd like to center your containers by default */
+  /* --container-center: 1;  */
+  /* Uncomment to add horizontal padding by default */
+  /* --container-padding: 1rem; */
+  /* Uncomment to specify a different padding amount for each breakpoint */
+  /* --container-padding-sm: 2rem; */
+  /* --container-padding-md: 3rem; */
+  /* --container-padding-lg: 4rem; */
+  /* --container-padding-xl: 5rem; */
+  /* --container-padding-2xl: 6rem; */
+
   /* Colors */
   --color-black: #000;
   --color-white: #fff;

@@ -1522,6 +1522,109 @@ test('aspect-ratio', () => {
   ).toEqual('')
 })
 
+test('container', () => {
+  expect(run(['container'])).toMatchInlineSnapshot(`
+    ".container {
+      width: 100%;
+    }"
+  `)
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --breakpoint-sm: 640px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'container',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 640px;
+    }
+
+    .container {
+      width: 100%;
+    }
+
+    @media (width >= 640px) {
+      .container {
+        max-width: 640px;
+      }
+    }"
+  `)
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --breakpoint-sm: 640px;
+          --container-center: 1;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'container',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 640px;
+      --container-center: 1;
+    }
+
+    .container {
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (width >= 640px) {
+      .container {
+        max-width: 640px;
+      }
+    }"
+  `)
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --breakpoint-sm: 640px;
+          --container-center: 0;
+          --container-padding: 1rem;
+          --container-padding-sm: 2rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'container',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-sm: 640px;
+      --container-center: 0;
+      --container-padding: 1rem;
+      --container-padding-sm: 2rem;
+    }
+
+    .container {
+      width: 100%;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    @media (width >= 640px) {
+      .container {
+        max-width: 640px;
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+    }"
+  `)
+})
+
 test('size', () => {
   expect(
     compileCss(

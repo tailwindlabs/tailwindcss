@@ -635,6 +635,7 @@ exports[`getClassList 1`] = `
   "contain-size",
   "contain-strict",
   "contain-style",
+  "container",
   "content-around",
   "content-baseline",
   "content-between",
