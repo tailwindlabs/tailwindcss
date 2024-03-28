@@ -88,7 +88,7 @@ export default function tailwindcss(): Plugin[] {
 
     let { build, buildSourceMap } = compile(css, { map: tailwindMap })
     css = build(Array.from(candidates))
-    tailwindMap = buildSourceMap()
+    tailwindMap &&= buildSourceMap()
     if (optimize) {
       css = optimizeCss(css, { minify })
     }
