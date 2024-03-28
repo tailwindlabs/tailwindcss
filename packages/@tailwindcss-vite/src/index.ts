@@ -73,34 +73,28 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
-  function generateCss(
-    css: string,
-    { optimize, map }: { optimize?: boolean; map?: RollupSourceMap } = {},
-  ) {
+  function generateCssWithMap(css: string, map: RollupSourceMap) {
     // Rollup (source-map) source maps and Tailwind (source-map-js) have
     // different types for the version field.
-    let tailwindMap: TailwindSourceMap | undefined = map
-      ? {
-          ...map,
-          version: map.version.toString(),
-        }
-      : undefined
+    let tailwindMap: TailwindSourceMap = {
+      ...map,
+      version: map.version.toString(),
+    }
 
     let { build, buildSourceMap } = compile(css, { map: tailwindMap })
     css = build(Array.from(candidates))
-    tailwindMap &&= buildSourceMap()
-    if (optimize) {
-      css = optimizeCss(css, { minify })
-    }
+    tailwindMap = buildSourceMap()
     return {
       css,
-      map: tailwindMap
-        ? {
-            ...tailwindMap,
-            version: Number(tailwindMap.version),
-          }
-        : undefined,
+      map: {
+        ...tailwindMap,
+        version: Number(tailwindMap.version),
+      },
     }
+  }
+
+  function generateOptimizedCss(css: string) {
+    return optimizeCss(compile(css).build(Array.from(candidates)), { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -212,7 +206,7 @@ export default function tailwindcss(): Plugin[] {
           await server?.waitForRequestsIdle?.(id)
         }
 
-        let { css, map } = generateCss(src, { map: this.getCombinedSourcemap() })
+        let { css, map } = generateCssWithMap(src, this.getCombinedSourcemap())
         css = await transformWithPlugins(this, id, css)
         return {
           code: css,
@@ -240,7 +234,7 @@ export default function tailwindcss(): Plugin[] {
             continue
           }
 
-          let { css } = generateCss(file.content, { optimize: true })
+          let css = generateOptimizedCss(file.content)
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure
