@@ -109,7 +109,7 @@ export function compile(
 
     for (let [key, value] of theme.entries()) {
       if (value.isReference) continue
-      nodes.push(decl(key, value.value))
+      nodes.push(decl(key, value.value, firstThemeRule.source))
     }
 
     if (keyframesRules.length > 0) {
@@ -179,9 +179,11 @@ export function compile(
           for (let candidateNode of candidateAst) {
             if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
               for (let child of candidateNode.nodes) {
+                // TODO FIXME child.source = node.source
                 newNodes.push(child)
               }
             } else {
+              // TODO FIXME candidateNode.source = node.source
               newNodes.push(candidateNode)
             }
           }
@@ -197,11 +199,11 @@ export function compile(
     if (!originalMap) return undefined
     let map = new SourceMapGenerator()
     walk(ast, (node) => {
+      // Associate any newly created nodes with the @tailwind utilities directive
       let source = node.source ?? tailwindUtilitiesNode?.source
       if (source === undefined) return
       if (node.destination === undefined) return
-      let original = null
-      original = originalMap!.originalPositionFor({
+      let original = originalMap!.originalPositionFor({
         line: source.line,
         column: source.column,
       })
