@@ -20,7 +20,7 @@ export function compile(
   build(candidates: string[]): string
   buildSourceMap(): SourceMap
 } {
-  let ast = CSS.parse(css)
+  let ast = CSS.parse(css, { trackSource: !!rawMap })
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -221,7 +221,7 @@ export function compile(
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
-  let compiledCss = toCss(ast)
+  let compiledCss = toCss(ast, { trackDestination: !!rawMap })
   let map = toSourceMap(ast)
   let previousAstNodeCount = 0
 
@@ -259,7 +259,7 @@ export function compile(
         previousAstNodeCount = newNodes.length
 
         tailwindUtilitiesNode.nodes = newNodes
-        compiledCss = toCss(ast)
+        compiledCss = toCss(ast, { trackDestination: !!rawMap })
       }
 
       return compiledCss

@@ -101,13 +101,13 @@ export function walk(
   }
 }
 
-export function toCss(ast: AstNode[]) {
+export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?: boolean } = {}) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
 
   function stringifyAll(
     nodes: AstNode[],
-    { depth, location }: { depth: number; location: Location },
+    { depth, location }: { depth: number; location?: Location },
   ): string {
     let css = ''
     for (let child of nodes) {
@@ -118,7 +118,7 @@ export function toCss(ast: AstNode[]) {
 
   function stringify(
     node: AstNode,
-    { depth, location }: { depth: number; location: Location },
+    { depth, location }: { depth: number; location?: Location },
   ): string {
     let indent = '  '.repeat(depth)
 
@@ -142,8 +142,8 @@ export function toCss(ast: AstNode[]) {
       // @layer base, components, utilities;
       // ```
       if (node.selector[0] === '@' && node.nodes.length === 0) {
-        node.destination = { line: location.line, column: indent.length }
-        location.line += 1
+        node.destination = location && { line: location.line, column: indent.length }
+        if (location) location.line += 1
         return `${indent}${node.selector};\n`
       }
 
@@ -156,33 +156,39 @@ export function toCss(ast: AstNode[]) {
         seenAtProperties.add(node.selector)
       }
 
-      node.destination = { line: location.line, column: indent.length }
       let css = `${indent}${node.selector} {\n`
-      location.line += 1
+      if (location) {
+        node.destination = { line: location.line, column: indent.length }
+        location.line += 1
+      }
       css += stringifyAll(node.nodes, { depth: depth + 1, location })
       css += `${indent}}\n`
-      location.line += 1
+      if (location) location.line += 1
       return css
     }
 
     // Comment
     else if (node.kind === 'comment') {
-      node.destination = { line: location.line, column: indent.length }
-      location.line += 1 + node.value.split('\n').length - 1
+      if (location) {
+        node.destination = { line: location.line, column: indent.length }
+        location.line += 1 + node.value.split('\n').length - 1
+      }
       return `${indent}/*${node.value}*/\n`
     }
 
     // Declaration
     else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
-      node.destination = { line: location.line, column: indent.length }
-      location.line += 1 + node.value.split('\n').length - 1
+      if (location) {
+        node.destination = { line: location.line, column: indent.length }
+        location.line += 1 + node.value.split('\n').length - 1
+      }
       return `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
     }
 
     return ''
   }
 
-  let location = { line: 1, column: 0 }
+  let location = trackDestination ? { line: 1, column: 0 } : undefined
   let css = stringifyAll(ast, { depth: 0, location })
   css += stringifyAll(atRoots, { depth: 0, location })
 
