@@ -343,6 +343,11 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --width-6xl: 72rem;
   --width-7xl: 80rem;
   --width-prose: 65ch;
+  --width-screen-sm: var(--breakpoint-sm);
+  --width-screen-md: var(--breakpoint-md);
+  --width-screen-lg: var(--breakpoint-lg);
+  --width-screen-xl: var(--breakpoint-xl);
+  --width-screen-2xl: var(--breakpoint-2xl);
   --font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;

@@ -1744,8 +1744,10 @@ test('max-width', () => {
     compileCss(
       css`
         @theme {
+          --breakpoint-lg: 1024px;
           --spacing-4: 1rem;
           --width-xl: 36rem;
+          --width-screen-lg: var(--breakpoint-lg);
         }
         @tailwind utilities;
       `,
@@ -1758,12 +1760,15 @@ test('max-width', () => {
         'max-w-4',
         'max-w-xl',
         'max-w-[4px]',
+        'max-w-screen-lg',
       ],
     ),
   ).toMatchInlineSnapshot(`
     ":root {
+      --breakpoint-lg: 1024px;
       --spacing-4: 1rem;
       --width-xl: 36rem;
+      --width-screen-lg: var(--breakpoint-lg);
     }
 
     .max-w-4 {
@@ -1788,6 +1793,10 @@ test('max-width', () => {
 
     .max-w-none {
       max-width: none;
+    }
+
+    .max-w-screen-lg {
+      max-width: var(--width-screen-lg, var(--breakpoint-lg));
     }
 
     .max-w-xl {
