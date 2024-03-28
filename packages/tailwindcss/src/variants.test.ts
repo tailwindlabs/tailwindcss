@@ -1705,6 +1705,21 @@ test('container queries', () => {
         '@max-lg/name:flex',
         '@max-[123px]:flex',
         '@max-[456px]/name:flex',
+
+        '@h-lg:flex',
+        '@h-lg/name:flex',
+        '@h-[123px]:flex',
+        '@h-[456px]/name:flex',
+
+        '@min-h-lg:flex',
+        '@min-h-lg/name:flex',
+        '@min-h-[123px]:flex',
+        '@min-h-[456px]/name:flex',
+
+        '@max-h-lg:flex',
+        '@max-h-lg/name:flex',
+        '@max-h-[123px]:flex',
+        '@max-h-[456px]/name:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -1780,6 +1795,30 @@ test('container queries', () => {
 
     @container name (width >= 1024px) {
       .\\@min-lg\\/name\\:flex {
+        display: flex;
+      }
+    }
+
+    @container name (height < 456px) {
+      .\\@max-h-\\[456px\\]\\/name\\:flex {
+        display: flex;
+      }
+    }
+
+    @container (height < 123px) {
+      .\\@max-h-\\[123px\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @container (height >= 123px) {
+      .\\@min-h-\\[123px\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @container name (height >= 456px) {
+      .\\@min-h-\\[456px\\]\\/name\\:flex {
         display: flex;
       }
     }"
