@@ -129,7 +129,7 @@ export function compile(
         nodes.push(
           Object.assign(keyframesRule, {
             selector: '@at-root',
-            nodes: [rule(keyframesRule.selector, keyframesRule.nodes)],
+            nodes: [rule(keyframesRule.selector, keyframesRule.nodes, keyframesRule.source)],
           }),
         )
       }
