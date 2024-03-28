@@ -142,7 +142,7 @@ export function toCss(ast: AstNode[]) {
       // @layer base, components, utilities;
       // ```
       if (node.selector[0] === '@' && node.nodes.length === 0) {
-        node.destination = { ...location }
+        node.destination = { line: location.line, column: indent.length }
         location.line += 1
         return `${indent}${node.selector};\n`
       }
@@ -156,7 +156,7 @@ export function toCss(ast: AstNode[]) {
         seenAtProperties.add(node.selector)
       }
 
-      node.destination = { ...location }
+      node.destination = { line: location.line, column: indent.length }
       let css = `${indent}${node.selector} {\n`
       location.line += 1
       css += stringifyAll(node.nodes, { depth: depth + 1, location })
@@ -167,14 +167,14 @@ export function toCss(ast: AstNode[]) {
 
     // Comment
     else if (node.kind === 'comment') {
-      node.destination = { ...location }
+      node.destination = { line: location.line, column: indent.length }
       location.line += 1 + node.value.split('\n').length - 1
       return `${indent}/*${node.value}*/\n`
     }
 
     // Declaration
     else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
-      node.destination = { ...location }
+      node.destination = { line: location.line, column: indent.length }
       location.line += 1 + node.value.split('\n').length - 1
       return `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
     }
