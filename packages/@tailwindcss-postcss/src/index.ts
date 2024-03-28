@@ -132,9 +132,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         if (rebuildStrategy === 'full') {
           let { build } = compile(root.toString())
           context.build = build
-          ;({ css } = build(hasTailwind ? candidates : []))
+          css = build(hasTailwind ? candidates : [])
         } else if (rebuildStrategy === 'incremental') {
-          ;({ css } = context.build!(candidates))
+          css = context.build!(candidates)
         }
 
         // Replace CSS

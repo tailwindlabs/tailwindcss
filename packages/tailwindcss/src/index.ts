@@ -17,7 +17,8 @@ export function compile(
   css: string,
   { map: rawMap }: { map?: SourceMap } = {},
 ): {
-  build(candidates: string[]): { css: string; map?: SourceMap }
+  build(candidates: string[]): string
+  buildSourceMap(): SourceMap
 } {
   let ast = CSS.parse(css)
 
@@ -238,7 +239,7 @@ export function compile(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        return { css: compiledCss, map }
+        return compiledCss
       }
 
       if (tailwindUtilitiesNode) {
@@ -250,17 +251,23 @@ export function compile(
         // CSS. This currently assumes that we only add new ast nodes and never
         // remove any.
         if (previousAstNodeCount === newNodes.length) {
-          return { css: compiledCss, map }
+          return compiledCss
         }
 
         previousAstNodeCount = newNodes.length
 
         tailwindUtilitiesNode.nodes = newNodes
         compiledCss = toCss(ast)
-        map = toSourceMap(ast)
       }
 
-      return { css: compiledCss, map }
+      return compiledCss
+    },
+    buildSourceMap() {
+      if (!originalMap) {
+        throw new Error('buildSourceMap called without passing a source map to compile')
+      }
+      map = toSourceMap(ast)
+      return map!
     },
   }
 }
