@@ -1071,7 +1071,6 @@ export function createUtilities(theme: Theme) {
     },
     handle: (value) => [decl('flex-shrink', value)],
   })
-
   /**
    * @css `flex-grow`
    */
@@ -4551,6 +4550,33 @@ export function createUtilities(theme: Theme) {
       hasDefaultValue: false,
     },
   ])
+
+  /**
+   * @css `container`
+   */
+  const containerBreakpoints: AstNode[] = [
+    {
+      kind: 'declaration',
+      property: 'width',
+      value: '100%',
+      important: false,
+    },
+  ]
+  for (let breakpoint of ['640px', '768px', '1024px', '1280px', '1536px']) {
+    containerBreakpoints.push({
+      kind: 'rule',
+      selector: `@media (min-width: ${breakpoint})`,
+      nodes: [
+        {
+          kind: 'declaration',
+          property: 'max-width',
+          value: breakpoint,
+          important: false,
+        },
+      ],
+    })
+  }
+  utilities.static('container', (_val) => containerBreakpoints)
 
   return utilities
 }

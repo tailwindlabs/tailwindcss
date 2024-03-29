@@ -12539,3 +12539,41 @@ test('@container', () => {
     ]),
   ).toEqual('')
 })
+
+test('container', () => {
+  expect(run(['container'])).toMatchInlineSnapshot(`
+    ".container {
+      width: 100%;
+    }
+    
+    @media (width >= 640px) {
+      .container {
+        max-width: 640px;
+      }
+    }
+    
+    @media (width >= 768px) {
+      .container {
+        max-width: 768px;
+      }
+    }
+    
+    @media (width >= 1024px) {
+      .container {
+        max-width: 1024px;
+      }
+    }
+    
+    @media (width >= 1280px) {
+      .container {
+        max-width: 1280px;
+      }
+    }
+    
+    @media (width >= 1536px) {
+      .container {
+        max-width: 1536px;
+      }
+    }"
+    `)
+})
