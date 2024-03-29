@@ -3,6 +3,8 @@ import { inferDataType } from './infer-data-type'
 
 const colors = [
   'slateblue',
+  'black',
+  'orange',
   'rgb(255, 255, 255)',
   'rgba(255, 255, 255, 1)',
   'hsl(0, 0%, 100%)',
