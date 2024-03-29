@@ -1,4 +1,4 @@
-const NAMED_COLORS = [
+const NAMED_COLORS = new Set([
   // CSS Level 1 colors
   'black',
   'silver',
@@ -191,7 +191,7 @@ const NAMED_COLORS = [
   'graytext',
   'accentcolor',
   'accentcolortext',
-]
+])
 
 const IS_COLOR_FN = /^(rgba?|hsla?|hwb|color|(ok)?(lab|lch)|light-dark|color-mix)\(/i
 
@@ -199,6 +199,6 @@ export function isColor(value: string): boolean {
   return (
     value.charCodeAt(0) === 35 /* "#" */ ||
     IS_COLOR_FN.test(value) ||
-    NAMED_COLORS.includes(value.toLowerCase())
+    NAMED_COLORS.has(value.toLowerCase())
   )
 }
