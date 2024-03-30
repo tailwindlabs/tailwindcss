@@ -406,7 +406,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 }
 
 @layer base {
-  *, :after, :before, ::backdrop, :first-letter {
+  *, :after, :before, ::backdrop {
     box-sizing: border-box;
     border: 0 solid;
     margin: 0;
