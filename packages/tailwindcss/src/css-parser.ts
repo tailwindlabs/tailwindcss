@@ -1,24 +1,24 @@
 import { comment, rule, type AstNode, type Comment, type Declaration, type Rule } from './ast'
 
-const BACK_SLASH = '\\'.charCodeAt(0);
-const SLASH = '/'.charCodeAt(0);
-const STAR = '*'.charCodeAt(0);
-const SINGLE_QUOTE = '"'.charCodeAt(0);
-const DOUBLE_QUOTE = '\''.charCodeAt(0);
-const COLON = ':'.charCodeAt(0);
-const SEMICOLON = ';'.charCodeAt(0);
-const BREAK_LINE = '\n'.charCodeAt(0);
-const SPACE = ' '.charCodeAt(0);
-const BACK_SLASH_T = '\t'.charCodeAt(0);
-const START_CURLY_BRACKET = '{'.charCodeAt(0);
-const END_CURLY_BRACKET = '}'.charCodeAt(0);
-const START_PARENTHESIS = '('.charCodeAt(0);
-const END_PARENTHESIS = ')'.charCodeAt(0);
-const START_BRACKET = '['.charCodeAt(0);
-const END_BRACKET = ']'.charCodeAt(0);
-const SINGLE_DASH = '-'.charCodeAt(0);
-const AT_CHAR = '@'.charCodeAt(0);
-const EXCLAMATION_MARK = '!'.charCodeAt(0);
+const BACK_SLASH = '\\'.charCodeAt(0)
+const SLASH = '/'.charCodeAt(0)
+const ASTERISK = '*'.charCodeAt(0)
+const DOUBLE_QUOTE = '"'.charCodeAt(0)
+const SINGLE_QUOTE = "'".charCodeAt(0)
+const COLON = ':'.charCodeAt(0)
+const SEMICOLON = ';'.charCodeAt(0)
+const LINE_BREAK = '\n'.charCodeAt(0)
+const SPACE = ' '.charCodeAt(0)
+const TAB = '\t'.charCodeAt(0)
+const OPEN_CURLY_BRACKET = '{'.charCodeAt(0)
+const CLOSE_CURLY_BRACKET = '}'.charCodeAt(0)
+const OPEN_PARENTHESIS = '('.charCodeAt(0)
+const CLOSE_PARENTHESIS = ')'.charCodeAt(0)
+const OPEN_BRACKET = '['.charCodeAt(0)
+const CLOSE_BRACKET = ']'.charCodeAt(0)
+const DASH = '-'.charCodeAt(0)
+const AT_SIGN = '@'.charCodeAt(0)
+const EXCLAMATION_MARK = '!'.charCodeAt(0)
 
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
@@ -31,13 +31,13 @@ export function parse(input: string) {
   let parent = null as Rule | null
   let node = null as AstNode | null
 
-  let current = ''
+  let buffer = ''
   let closingBracketStack = ''
 
-  let tmpCharCode;
+  let peekChar
 
   for (let i = 0; i < input.length; i++) {
-    let char = input.charCodeAt(i);
+    let currentChar = input.charCodeAt(i)
 
     // Current character is a `\` therefore the next character is escaped,
     // consume it together with the next character and continue.
@@ -49,8 +49,8 @@ export function parse(input: string) {
     //       ^
     // ```
     //
-    if (char === BACK_SLASH) {
-      current += input.slice(i, i + 2)
+    if (currentChar === BACK_SLASH) {
+      buffer += input.slice(i, i + 2)
       i += 1
     }
 
@@ -70,19 +70,19 @@ export function parse(input: string) {
     //         ^^^^^^^^^^^^^
     // }
     // ```
-    else if (char === SLASH && input.charCodeAt(i + 1) === STAR) {
+    else if (currentChar === SLASH && input.charCodeAt(i + 1) === ASTERISK) {
       let start = i
 
       for (let j = i + 2; j < input.length; j++) {
-        tmpCharCode = input.charCodeAt(j);
+        peekChar = input.charCodeAt(j)
 
         // Current character is a `\` therefore the next character is escaped.
-        if (tmpCharCode === BACK_SLASH) {
+        if (peekChar === BACK_SLASH) {
           j += 1
         }
 
         // End of the comment
-        else if (tmpCharCode === STAR && input.charCodeAt(j + 1) === SLASH) {
+        else if (peekChar === ASTERISK && input.charCodeAt(j + 1) === SLASH) {
           i = j + 1
           break
         }
@@ -98,7 +98,7 @@ export function parse(input: string) {
     }
 
     // Start of a string.
-    else if (char === DOUBLE_QUOTE || char === SINGLE_QUOTE) {
+    else if (currentChar === SINGLE_QUOTE || currentChar === DOUBLE_QUOTE) {
       let start = i
 
       // We need to ensure that the closing quote is the same as the opening
@@ -113,14 +113,14 @@ export function parse(input: string) {
       // }
       // ```
       for (let j = i + 1; j < input.length; j++) {
-        tmpCharCode = input.charCodeAt(j);
+        peekChar = input.charCodeAt(j)
         // Current character is a `\` therefore the next character is escaped.
-        if (tmpCharCode === BACK_SLASH) {
+        if (peekChar === BACK_SLASH) {
           j += 1
         }
 
         // End of the string.
-        else if (tmpCharCode === char) {
+        else if (peekChar === currentChar) {
           i = j
           break
         }
@@ -135,8 +135,10 @@ export function parse(input: string) {
         //                                    ^ Missing "
         // }
         // ```
-        else if (tmpCharCode === SEMICOLON && input.charCodeAt(j + 1) === BREAK_LINE) {
-          throw new Error(`Unterminated string: ${input.slice(start, j + 1) + String.fromCharCode(char)}`)
+        else if (peekChar === SEMICOLON && input.charCodeAt(j + 1) === LINE_BREAK) {
+          throw new Error(
+            `Unterminated string: ${input.slice(start, j + 1) + String.fromCharCode(currentChar)}`,
+          )
         }
 
         // End of the line without ending the string.
@@ -149,31 +151,34 @@ export function parse(input: string) {
         //                                    ^ Missing "
         // }
         // ```
-        else if (tmpCharCode === BREAK_LINE) {
-          throw new Error(`Unterminated string: ${input.slice(start, j) + String.fromCharCode(char)}`)
+        else if (peekChar === LINE_BREAK) {
+          throw new Error(
+            `Unterminated string: ${input.slice(start, j) + String.fromCharCode(currentChar)}`,
+          )
         }
       }
 
-      // Adjust `current` to include the string.
-      current += input.slice(start, i + 1)
+      // Adjust `buffer` to include the string.
+      buffer += input.slice(start, i + 1)
     }
 
     // Skip whitespace if the next character is also whitespace. This allows us
     // to reduce the amount of whitespace in the AST.
     else if (
-      (char === SPACE || char === BREAK_LINE || char === BACK_SLASH_T) &&
-      (tmpCharCode = input.charCodeAt(i + 1)) && (tmpCharCode === SPACE || tmpCharCode === BREAK_LINE || tmpCharCode === BACK_SLASH_T)
+      (currentChar === SPACE || currentChar === LINE_BREAK || currentChar === TAB) &&
+      (peekChar = input.charCodeAt(i + 1)) &&
+      (peekChar === SPACE || peekChar === LINE_BREAK || peekChar === TAB)
     ) {
       continue
     }
 
     // Replace new lines with spaces.
-    else if (char === BREAK_LINE) {
-      if (current.length === 0) continue
+    else if (currentChar === LINE_BREAK) {
+      if (buffer.length === 0) continue
 
-      tmpCharCode = current.charCodeAt(current.length - 1)
-      if (tmpCharCode !== SPACE && tmpCharCode !== BREAK_LINE && tmpCharCode !== BACK_SLASH_T) {
-        current += ' '
+      peekChar = buffer.charCodeAt(buffer.length - 1)
+      if (peekChar !== SPACE && peekChar !== LINE_BREAK && peekChar !== TAB) {
+        buffer += ' '
       }
     }
 
@@ -183,31 +188,31 @@ export function parse(input: string) {
     // character, even `;` and `}`. Therefore we have to make sure that we are
     // at the correct "end" of the custom property by making sure everything is
     // balanced.
-    else if (char === SINGLE_DASH && input.charCodeAt(i + 1) === SINGLE_DASH && current.length === 0) {
+    else if (currentChar === DASH && input.charCodeAt(i + 1) === DASH && buffer.length === 0) {
       let closingBracketStack = ''
 
       let start = i
       let colonIdx = -1
 
       for (let j = i + 2; j < input.length; j++) {
-        tmpCharCode = input.charCodeAt(j)
+        peekChar = input.charCodeAt(j)
 
         // Current character is a `\` therefore the next character is escaped.
-        if (tmpCharCode === BACK_SLASH) {
+        if (peekChar === BACK_SLASH) {
           j += 1
         }
 
         // Start of a comment.
-        else if (tmpCharCode === SLASH && input.charCodeAt(j + 1) === STAR) {
+        else if (peekChar === SLASH && input.charCodeAt(j + 1) === ASTERISK) {
           for (let k = j + 2; k < input.length; k++) {
-            tmpCharCode = input.charCodeAt(k)
+            peekChar = input.charCodeAt(k)
             // Current character is a `\` therefore the next character is escaped.
-            if (tmpCharCode === BACK_SLASH) {
+            if (peekChar === BACK_SLASH) {
               k += 1
             }
 
             // End of the comment
-            else if (tmpCharCode === STAR && input.charCodeAt(k + 1) === SLASH) {
+            else if (peekChar === ASTERISK && input.charCodeAt(k + 1) === SLASH) {
               j = k + 1
               break
             }
@@ -215,23 +220,23 @@ export function parse(input: string) {
         }
 
         // End of the "property" of the property-value pair.
-        else if (colonIdx === -1 && tmpCharCode === COLON) {
-          colonIdx = current.length + j - start
+        else if (colonIdx === -1 && peekChar === COLON) {
+          colonIdx = buffer.length + j - start
         }
 
         // End of the custom property.
-        else if (tmpCharCode === SEMICOLON && closingBracketStack.length === 0) {
-          current += input.slice(start, j)
+        else if (peekChar === SEMICOLON && closingBracketStack.length === 0) {
+          buffer += input.slice(start, j)
           i = j
           break
         }
 
         // Start of a block.
-        else if (tmpCharCode === START_PARENTHESIS) {
+        else if (peekChar === OPEN_PARENTHESIS) {
           closingBracketStack += ')'
-        } else if (tmpCharCode === START_BRACKET) {
+        } else if (peekChar === OPEN_BRACKET) {
           closingBracketStack += ']'
-        } else if (tmpCharCode === START_CURLY_BRACKET) {
+        } else if (peekChar === OPEN_CURLY_BRACKET) {
           closingBracketStack += '}'
         }
 
@@ -246,14 +251,21 @@ export function parse(input: string) {
         //                  ^
         // }
         // ```
-        else if ((tmpCharCode === END_CURLY_BRACKET || input.length - 1 === j) && closingBracketStack.length === 0) {
+        else if (
+          (peekChar === CLOSE_CURLY_BRACKET || input.length - 1 === j) &&
+          closingBracketStack.length === 0
+        ) {
           i = j - 1
-          current += input.slice(start, j)
+          buffer += input.slice(start, j)
           break
         }
 
         // End of a block.
-        else if (tmpCharCode === END_PARENTHESIS || tmpCharCode === END_BRACKET || tmpCharCode === END_CURLY_BRACKET) {
+        else if (
+          peekChar === CLOSE_PARENTHESIS ||
+          peekChar === CLOSE_BRACKET ||
+          peekChar === CLOSE_CURLY_BRACKET
+        ) {
           if (
             closingBracketStack.length > 0 &&
             input[j] === closingBracketStack[closingBracketStack.length - 1]
@@ -263,14 +275,14 @@ export function parse(input: string) {
         }
       }
 
-      let declaration = parseDeclaration(current, colonIdx)
+      let declaration = parseDeclaration(buffer, colonIdx)
       if (parent) {
         parent.nodes.push(declaration)
       } else {
         ast.push(declaration)
       }
 
-      current = ''
+      buffer = ''
     }
 
     // End of a body-less at-rule.
@@ -281,8 +293,8 @@ export function parse(input: string) {
     // @charset "UTF-8";
     //                 ^
     // ```
-    else if (char === SEMICOLON && current.charCodeAt(0) === AT_CHAR) {
-      node = rule(current, [])
+    else if (currentChar === SEMICOLON && buffer.charCodeAt(0) === AT_SIGN) {
+      node = rule(buffer, [])
 
       // At-rule is nested inside of a rule, attach it to the parent.
       if (parent) {
@@ -295,7 +307,7 @@ export function parse(input: string) {
       }
 
       // Reset the state for the next node.
-      current = ''
+      buffer = ''
       node = null
     }
 
@@ -310,23 +322,23 @@ export function parse(input: string) {
     // }
     // ```
     //
-    else if (char === SEMICOLON) {
-      let declaration = parseDeclaration(current)
+    else if (currentChar === SEMICOLON) {
+      let declaration = parseDeclaration(buffer)
       if (parent) {
         parent.nodes.push(declaration)
       } else {
         ast.push(declaration)
       }
 
-      current = ''
+      buffer = ''
     }
 
     // Start of a block.
-    else if (char === START_CURLY_BRACKET) {
+    else if (currentChar === OPEN_CURLY_BRACKET) {
       closingBracketStack += '}'
 
-      // At this point `current` should resemble a selector or an at-rule.
-      node = rule(current.trim(), [])
+      // At this point `buffer` should resemble a selector or an at-rule.
+      node = rule(buffer.trim(), [])
 
       // Attach the rule to the parent in case it's nested.
       if (parent) {
@@ -342,22 +354,22 @@ export function parse(input: string) {
       parent = node
 
       // Reset the state for the next node.
-      current = ''
+      buffer = ''
       node = null
     }
 
     // End of a block.
-    else if (char === END_CURLY_BRACKET) {
+    else if (currentChar === CLOSE_CURLY_BRACKET) {
       if (closingBracketStack === '') {
         throw new Error('Missing opening {')
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
 
-      // When we hit a `}` and `current` is filled in, then it means that we did
+      // When we hit a `}` and `buffer` is filled in, then it means that we did
       // not complete the previous node yet. This means that we hit a
       // declaration without a `;` at the end.
-      if (current.length > 0) {
+      if (buffer.length > 0) {
         // This can happen for nested at-rules.
         //
         // E.g.:
@@ -368,8 +380,8 @@ export function parse(input: string) {
         //                      ^
         // }
         // ```
-        if (current.charCodeAt(0) === AT_CHAR) {
-          node = rule(current.trim(), [])
+        if (buffer.charCodeAt(0) === AT_SIGN) {
+          node = rule(buffer.trim(), [])
 
           // At-rule is nested inside of a rule, attach it to the parent.
           if (parent) {
@@ -382,7 +394,7 @@ export function parse(input: string) {
           }
 
           // Reset the state for the next node.
-          current = ''
+          buffer = ''
           node = null
         }
 
@@ -397,19 +409,19 @@ export function parse(input: string) {
         // }
         // ```
         else {
-          // Split `current` into a `property` and a `value`. At this point the
+          // Split `buffer` into a `property` and a `value`. At this point the
           // comments are already removed which means that we don't have to worry
           // about `:` inside of comments.
-          let colonIdx = current.indexOf(':')
+          let colonIdx = buffer.indexOf(':')
 
           // Attach the declaration to the parent.
           if (parent) {
-            let importantIdx = current.indexOf('!important', colonIdx + 1)
+            let importantIdx = buffer.indexOf('!important', colonIdx + 1)
             parent.nodes.push({
               kind: 'declaration',
-              property: current.slice(0, colonIdx).trim(),
-              value: current
-                .slice(colonIdx + 1, importantIdx === -1 ? current.length : importantIdx)
+              property: buffer.slice(0, colonIdx).trim(),
+              value: buffer
+                .slice(colonIdx + 1, importantIdx === -1 ? buffer.length : importantIdx)
                 .trim(),
               important: importantIdx !== -1,
             } satisfies Declaration)
@@ -431,18 +443,21 @@ export function parse(input: string) {
       parent = grandParent
 
       // Reset the state for the next node.
-      current = ''
+      buffer = ''
       node = null
     }
 
     // Any other character is part of the current node.
     else {
       // Skip whitespace at the start of a new node.
-      if (current.length === 0 && (char === SPACE || char === BREAK_LINE || char === BACK_SLASH_T)) {
+      if (
+        buffer.length === 0 &&
+        (currentChar === SPACE || currentChar === LINE_BREAK || currentChar === TAB)
+      ) {
         continue
       }
 
-      current += String.fromCharCode(char)
+      buffer += String.fromCharCode(currentChar)
     }
   }
 
@@ -459,12 +474,12 @@ export function parse(input: string) {
   return ast
 }
 
-function parseDeclaration(current: string, colonIdx: number = current.indexOf(':')): Declaration {
-  let importantIdx = current.indexOf('!important', colonIdx + 1)
+function parseDeclaration(buffer: string, colonIdx: number = buffer.indexOf(':')): Declaration {
+  let importantIdx = buffer.indexOf('!important', colonIdx + 1)
   return {
     kind: 'declaration',
-    property: current.slice(0, colonIdx).trim(),
-    value: current.slice(colonIdx + 1, importantIdx === -1 ? current.length : importantIdx).trim(),
+    property: buffer.slice(0, colonIdx).trim(),
+    value: buffer.slice(colonIdx + 1, importantIdx === -1 ? buffer.length : importantIdx).trim(),
     important: importantIdx !== -1,
   }
 }
