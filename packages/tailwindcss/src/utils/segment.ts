@@ -1,3 +1,13 @@
+/* Supports up to 256 levels of nesting. This should be more than enough for any reasonable usage */
+const closingBracketStack = new Uint8Array(256)
+const OPEN_PAREN = '('.charCodeAt(0)
+const OPEN_BRACKET = '['.charCodeAt(0)
+const OPEN_BRACE = '{'.charCodeAt(0)
+const CLOSE_PAREN = ')'.charCodeAt(0)
+const CLOSE_BRACKET = ']'.charCodeAt(0)
+const CLOSE_BRACE = '}'.charCodeAt(0)
+const BACKSLASH = '\\'.charCodeAt(0)
+
 /**
  * This splits a string on a top-level character.
  *
@@ -10,15 +20,6 @@
  *        x              x  x    ╰──────── Split because top-level
  *        ╰──────────────┴──┴───────────── Ignored b/c inside >= 1 levels of parens
  */
-const closingBracketStack = new Uint8Array(256)
-const OPEN_PAREN = '('.charCodeAt(0)
-const OPEN_BRACKET = '['.charCodeAt(0)
-const OPEN_BRACE = '{'.charCodeAt(0)
-const CLOSE_PAREN = ')'.charCodeAt(0)
-const CLOSE_BRACKET = ']'.charCodeAt(0)
-const CLOSE_BRACE = '}'.charCodeAt(0)
-const BACKSLASH = '\\'.charCodeAt(0)
-
 export function segment(input: string, separator: string) {
   // Since JavaScript is single-threaded, using a shared buffer
   // is more efficient and should still be safe.
