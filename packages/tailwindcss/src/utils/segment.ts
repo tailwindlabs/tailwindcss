@@ -10,44 +10,56 @@
  *        x              x  x    ╰──────── Split because top-level
  *        ╰──────────────┴──┴───────────── Ignored b/c inside >= 1 levels of parens
  */
+const closingBracketStack = new Uint8Array(256)
+const OPEN_PAREN = '('.charCodeAt(0)
+const OPEN_BRACKET = '['.charCodeAt(0)
+const OPEN_BRACE = '{'.charCodeAt(0)
+const CLOSE_PAREN = ')'.charCodeAt(0)
+const CLOSE_BRACKET = ']'.charCodeAt(0)
+const CLOSE_BRACE = '}'.charCodeAt(0)
+const BACKSLASH = '\\'.charCodeAt(0)
+
 export function segment(input: string, separator: string) {
-  // Stack of characters to close open brackets. Appending to a string because
-  // it's faster than an array of strings.
-  let closingBracketStack = ''
+  // Since JavaScript is single-threaded, using a shared buffer
+  // is more efficient and should still be safe.
+  let stackPointer = 0
   let parts: string[] = []
   let lastPos = 0
 
-  for (let idx = 0; idx < input.length; idx++) {
-    let char = input[idx]
+  let separatorCode = separator.charCodeAt(0)
 
-    if (closingBracketStack.length === 0 && char === separator) {
+  for (let idx = 0; idx < input.length; idx++) {
+    let char = input.charCodeAt(idx)
+
+    if (stackPointer === 0 && char === separatorCode) {
       parts.push(input.slice(lastPos, idx))
       lastPos = idx + 1
       continue
     }
 
     switch (char) {
-      case '\\':
+      case BACKSLASH:
         // The next character is escaped, so we skip it.
         idx += 1
         break
-      case '(':
-        closingBracketStack += ')'
+      case OPEN_PAREN:
+        closingBracketStack[stackPointer] = CLOSE_PAREN
+        stackPointer++
         break
-      case '[':
-        closingBracketStack += ']'
+      case OPEN_BRACKET:
+        closingBracketStack[stackPointer] = CLOSE_BRACKET
+        stackPointer++
         break
-      case '{':
-        closingBracketStack += '}'
+      case OPEN_BRACE:
+        closingBracketStack[stackPointer] = CLOSE_BRACE
+        stackPointer++
         break
-      case ')':
-      case ']':
-      case '}':
-        if (
-          closingBracketStack.length > 0 &&
-          char === closingBracketStack[closingBracketStack.length - 1]
-        ) {
-          closingBracketStack = closingBracketStack.slice(0, closingBracketStack.length - 1)
+      case CLOSE_BRACKET:
+      case CLOSE_BRACE:
+      case CLOSE_PAREN:
+        if (stackPointer > 0 && char === closingBracketStack[stackPointer - 1]) {
+          // No need to mutate the buffer here, as it can stay dirty for the next use
+          stackPointer--
         }
         break
     }
