@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "url": "https://github.com/tailwindlabs/tailwindcss.git",
     "directory": "packages/@tailwindcss-cli"
   },
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
