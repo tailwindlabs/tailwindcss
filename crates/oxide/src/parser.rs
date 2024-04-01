@@ -1383,37 +1383,23 @@ mod test {
             .any(|candidate| candidate == &"[--foo:{bar}]"));
     }
 
+    macro_rules! candidate_slicing_test {
+        ($input:expr, $expected:expr) => {
+            let result = Extractor::slice_surrounding($input)
+                .map(std::str::from_utf8)
+                .transpose()
+                .unwrap();
+            assert_eq!(result, $expected);
+        };
+    }
+
     #[test]
     fn candidate_slicing() {
-        let result = Extractor::slice_surrounding(&b".foo_&]:px-[0"[..])
-            .map(std::str::from_utf8)
-            .transpose()
-            .unwrap();
-        assert_eq!(result, None);
-
-        let result = Extractor::slice_surrounding(&b"[.foo_&]:px-[0]"[..])
-            .map(std::str::from_utf8)
-            .transpose()
-            .unwrap();
-        assert_eq!(result, Some("[.foo_&]:px-[0]"));
-
-        let result = Extractor::slice_surrounding(&b"{[.foo_&]:px-[0]}"[..])
-            .map(std::str::from_utf8)
-            .transpose()
-            .unwrap();
-        assert_eq!(result, Some("[.foo_&]:px-[0]"));
-
-        let result = Extractor::slice_surrounding(&b"![foo:bar]"[..])
-            .map(std::str::from_utf8)
-            .transpose()
-            .unwrap();
-        assert_eq!(result, None);
-
-        let result = Extractor::slice_surrounding(&b"[\"pt-1.5\"]"[..])
-            .map(std::str::from_utf8)
-            .transpose()
-            .unwrap();
-        assert_eq!(result, Some("pt-1.5"));
+        candidate_slicing_test!(&b".foo_&]:px-[0"[..], None);
+        candidate_slicing_test!(&b"[.foo_&]:px-[0]"[..], Some("[.foo_&]:px-[0]"));
+        candidate_slicing_test!(&b"{[.foo_&]:px-[0]}"[..], Some("[.foo_&]:px-[0]"));
+        candidate_slicing_test!(&b"![foo:bar]"[..], None);
+        candidate_slicing_test!(&b"[\"pt-1.5\"]"[..], Some("pt-1.5"));
 
         let count = 1_000;
         let crazy = format!("{}[.foo_&]:px-[0]{}", "[".repeat(count), "]".repeat(count));
