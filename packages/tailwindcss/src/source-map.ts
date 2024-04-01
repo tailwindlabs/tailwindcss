@@ -8,6 +8,7 @@ export function toSourceMap(originalMap: SourceMapConsumer, ast: AstNode[]): Raw
     let source = node.source
     if (source === undefined) return
     if (node.destination === undefined) return
+
     let original = originalMap!.originalPositionFor({
       line: source.line,
       column: source.column,
@@ -18,7 +19,7 @@ export function toSourceMap(originalMap: SourceMapConsumer, ast: AstNode[]): Raw
     map.addMapping({
       generated: { line: node.destination.line, column: node.destination.column },
       original,
-      source: original?.source,
+      source: original.source,
     })
   })
 

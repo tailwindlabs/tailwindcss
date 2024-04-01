@@ -3,6 +3,11 @@ export type Location = {
   column: number
 }
 
+export type Range = {
+  start: Location
+  end: Location
+}
+
 export type Rule = {
   kind: 'rule'
   selector: string

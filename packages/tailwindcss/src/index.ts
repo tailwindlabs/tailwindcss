@@ -222,6 +222,10 @@ export function compile(
           onInvalidCandidate,
         }).astNodes
 
+        walk(newNodes, (node) => {
+          node.source ??= tailwindUtilitiesNode!.source
+        })
+
         // If no new ast nodes were generated, then we can return the original
         // CSS. This currently assumes that we only add new ast nodes and never
         // remove any.
