@@ -12,8 +12,8 @@ export type Rule = {
   kind: 'rule'
   selector: string
   nodes: AstNode[]
-  source: Location | null
-  destination: Location | null
+  source: Range | null
+  destination: Range | null
 }
 
 export type Declaration = {
@@ -21,20 +21,20 @@ export type Declaration = {
   property: string
   value: string
   important: boolean
-  source: Location | null
-  destination: Location | null
+  source: Range | null
+  destination: Range | null
 }
 
 export type Comment = {
   kind: 'comment'
   value: string
-  source: Location | null
-  destination: Location | null
+  source: Range | null
+  destination: Range | null
 }
 
 export type AstNode = Rule | Declaration | Comment
 
-export function rule(selector: string, nodes: AstNode[], source?: Location | null): Rule {
+export function rule(selector: string, nodes: AstNode[], source?: Range | null): Rule {
   return {
     kind: 'rule',
     selector,
@@ -44,7 +44,7 @@ export function rule(selector: string, nodes: AstNode[], source?: Location | nul
   }
 }
 
-export function decl(property: string, value: string, source?: Location | null): Declaration {
+export function decl(property: string, value: string, source?: Range | null): Declaration {
   return {
     kind: 'declaration',
     property,
@@ -55,7 +55,7 @@ export function decl(property: string, value: string, source?: Location | null):
   }
 }
 
-export function comment(value: string, source?: Location | null): Comment {
+export function comment(value: string, source?: Range | null): Comment {
   return {
     kind: 'comment',
     value: value,
@@ -150,7 +150,12 @@ export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?:
       // @layer base, components, utilities;
       // ```
       if (node.selector[0] === '@' && node.nodes.length === 0) {
-        node.destination = location && { line: location.line, column: indent.length }
+        node.destination = location
+          ? {
+              start: { line: location.line, column: indent.length },
+              end: { line: location.line, column: indent.length },
+            }
+          : null
         if (location) location.line += 1
         return `${indent}${node.selector};\n`
       }
@@ -166,7 +171,10 @@ export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?:
 
       let css = `${indent}${node.selector} {\n`
       if (location) {
-        node.destination = { line: location.line, column: indent.length }
+        node.destination = {
+          start: { line: location.line, column: indent.length },
+          end: { line: location.line, column: indent.length },
+        }
         location.line += 1
       }
       css += stringifyAll(node.nodes, { depth: depth + 1, location })
@@ -178,7 +186,10 @@ export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?:
     // Comment
     else if (node.kind === 'comment') {
       if (location) {
-        node.destination = { line: location.line, column: indent.length }
+        node.destination = {
+          start: { line: location.line, column: indent.length },
+          end: { line: location.line, column: indent.length },
+        }
         location.line += 1 + node.value.split('\n').length - 1
       }
       return `${indent}/*${node.value}*/\n`
@@ -187,7 +198,10 @@ export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?:
     // Declaration
     else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
       if (location) {
-        node.destination = { line: location.line, column: indent.length }
+        node.destination = {
+          start: { line: location.line, column: indent.length },
+          end: { line: location.line, column: indent.length },
+        }
         location.line += 1 + node.value.split('\n').length - 1
       }
       return `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
