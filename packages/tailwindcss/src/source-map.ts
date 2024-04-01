@@ -6,8 +6,8 @@ export function toSourceMap(originalMap: SourceMapConsumer, ast: AstNode[]): Raw
 
   walk(ast, (node) => {
     let source = node.source
-    if (source === undefined) return
-    if (node.destination === undefined) return
+    if (!source) return
+    if (!node.destination) return
 
     let original = originalMap!.originalPositionFor({
       line: source.line,

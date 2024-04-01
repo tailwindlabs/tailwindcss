@@ -12,8 +12,8 @@ export type Rule = {
   kind: 'rule'
   selector: string
   nodes: AstNode[]
-  source?: Location
-  destination?: Location
+  source: Location | null
+  destination: Location | null
 }
 
 export type Declaration = {
@@ -21,43 +21,46 @@ export type Declaration = {
   property: string
   value: string
   important: boolean
-  source?: Location
-  destination?: Location
+  source: Location | null
+  destination: Location | null
 }
 
 export type Comment = {
   kind: 'comment'
   value: string
-  source?: Location
-  destination?: Location
+  source: Location | null
+  destination: Location | null
 }
 
 export type AstNode = Rule | Declaration | Comment
 
-export function rule(selector: string, nodes: AstNode[], source?: Location): Rule {
+export function rule(selector: string, nodes: AstNode[], source?: Location | null): Rule {
   return {
     kind: 'rule',
     selector,
     nodes,
-    source,
+    source: source ?? null,
+    destination: null,
   }
 }
 
-export function decl(property: string, value: string, source?: Location): Declaration {
+export function decl(property: string, value: string, source?: Location | null): Declaration {
   return {
     kind: 'declaration',
     property,
     value,
     important: false,
-    source,
+    source: source ?? null,
+    destination: null,
   }
 }
 
-export function comment(value: string, source?: Location): Comment {
+export function comment(value: string, source?: Location | null): Comment {
   return {
     kind: 'comment',
     value: value,
-    source,
+    source: source ?? null,
+    destination: null,
   }
 }
 
