@@ -1,24 +1,19 @@
-import {
-  SourceMapConsumer,
-  SourceMapGenerator,
-  type RawSourceMap as SourceMap,
-} from 'source-map-js'
+import { SourceMapConsumer, type RawSourceMap } from 'source-map-js'
 
 import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
+import { toSourceMap } from './source-map'
 import { Theme } from './theme'
-
-export type { SourceMap }
 
 export function compile(
   css: string,
-  { map: rawMap }: { map?: SourceMap } = {},
+  { map: rawMap }: { map?: RawSourceMap } = {},
 ): {
   build(candidates: string[]): string
-  buildSourceMap(): SourceMap
+  buildSourceMap(): RawSourceMap
 } {
   let ast = CSS.parse(css, { trackSource: !!rawMap })
 
@@ -194,35 +189,13 @@ export function compile(
     })
   }
 
-  let originalMap = rawMap ? new SourceMapConsumer(rawMap) : undefined
-  function toSourceMap(ast: AstNode[]) {
-    if (!originalMap) return undefined
-    let map = new SourceMapGenerator()
-    walk(ast, (node) => {
-      // Associate any newly created nodes with the @tailwind utilities directive
-      let source = node.source ?? tailwindUtilitiesNode?.source
-      if (source === undefined) return
-      if (node.destination === undefined) return
-      let original = originalMap!.originalPositionFor({
-        line: source.line,
-        column: source.column,
-      })
-      if (!original?.source) return
-      map.addMapping({
-        generated: { line: node.destination.line, column: node.destination.column },
-        original,
-        source: original?.source,
-      })
-    })
-    return JSON.parse(map.toString()) as SourceMap
-  }
+  let originalMap: SourceMapConsumer | undefined
 
   // Track all valid candidates, these are the incoming `rawCandidate` that
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
   // and should be ignored.
   let allValidCandidates = new Set<string>()
   let compiledCss = toCss(ast, { trackDestination: !!rawMap })
-  let map = toSourceMap(ast)
   let previousAstNodeCount = 0
 
   return {
@@ -265,11 +238,13 @@ export function compile(
       return compiledCss
     },
     buildSourceMap() {
-      if (!originalMap) {
+      if (!rawMap) {
         throw new Error('buildSourceMap called without passing a source map to compile')
       }
-      map = toSourceMap(ast)
-      return map!
+
+      originalMap ??= new SourceMapConsumer(rawMap)
+
+      return toSourceMap(originalMap, ast)!
     },
   }
 }

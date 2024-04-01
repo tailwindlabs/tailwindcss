@@ -2,7 +2,7 @@ import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import { type SourceMap as RollupSourceMap } from 'rollup'
-import { compile, type SourceMap as TailwindSourceMap } from 'tailwindcss'
+import { compile } from 'tailwindcss'
 import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -74,22 +74,16 @@ export default function tailwindcss(): Plugin[] {
   }
 
   function generateCssWithMap(css: string, map: RollupSourceMap) {
-    // Rollup (source-map) source maps and Tailwind (source-map-js) have
-    // different types for the version field.
-    let tailwindMap: TailwindSourceMap = {
-      ...map,
-      version: map.version.toString(),
-    }
+    let { build, buildSourceMap } = compile(css, {
+      // @ts-ignore: The types are wrong
+      map,
+    })
 
-    let { build, buildSourceMap } = compile(css, { map: tailwindMap })
     css = build(Array.from(candidates))
-    tailwindMap = buildSourceMap()
+
     return {
       css,
-      map: {
-        ...tailwindMap,
-        version: Number(tailwindMap.version),
-      },
+      map: buildSourceMap(),
     }
   }
 
