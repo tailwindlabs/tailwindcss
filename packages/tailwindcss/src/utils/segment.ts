@@ -7,10 +7,10 @@ const closingBracketStack = new Uint8Array(256)
 const BACKSLASH = '\\'.charCodeAt(0)
 const OPEN_PAREN = '('.charCodeAt(0)
 const OPEN_BRACKET = '['.charCodeAt(0)
-const OPEN_BRACE = '{'.charCodeAt(0)
+const OPEN_CURLY = '{'.charCodeAt(0)
 const CLOSE_PAREN = ')'.charCodeAt(0)
 const CLOSE_BRACKET = ']'.charCodeAt(0)
-const CLOSE_BRACE = '}'.charCodeAt(0)
+const CLOSE_CURLY = '}'.charCodeAt(0)
 
 /**
  * This splits a string on a top-level character.
@@ -55,12 +55,12 @@ export function segment(input: string, separator: string) {
         closingBracketStack[stackPos] = CLOSE_BRACKET
         stackPos++
         break
-      case OPEN_BRACE:
-        closingBracketStack[stackPos] = CLOSE_BRACE
+      case OPEN_CURLY:
+        closingBracketStack[stackPos] = CLOSE_CURLY
         stackPos++
         break
       case CLOSE_BRACKET:
-      case CLOSE_BRACE:
+      case CLOSE_CURLY:
       case CLOSE_PAREN:
         if (stackPos > 0 && char === closingBracketStack[stackPos - 1]) {
           // SAFETY: The buffer does not need to be mutated because the stack is
