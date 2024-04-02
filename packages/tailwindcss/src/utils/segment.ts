@@ -1,7 +1,7 @@
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
 // the top-level of a string. This is a performance optimization to avoid memory
-// allocations on ever call to `segment`.
+// allocations on every call to `segment`.
 const closingBracketStack = new Uint8Array(256)
 
 const BACKSLASH = '\\'.charCodeAt(0)
@@ -15,8 +15,8 @@ const CLOSE_BRACE = '}'.charCodeAt(0)
 /**
  * This splits a string on a top-level character.
  *
- * Regex doesn't support recursion (at least not the JS-flavored version).
- * So we have to use a tiny state machine to keep track of paren placement.
+ * Regex doesn't support recursion (at least not the JS-flavored version),
+ * so we have to use a tiny state machine to keep track of paren placement.
  *
  * Expected behavior using commas:
  * var(--a, 0 0 1px rgb(0, 0, 0)), 0 0 1px rgb(0, 0, 0)
@@ -63,10 +63,11 @@ export function segment(input: string, separator: string) {
       case CLOSE_BRACE:
       case CLOSE_PAREN:
         if (stackPos > 0 && char === closingBracketStack[stackPos - 1]) {
-          // SAFETY: The buffer does not need to be mutated because the stack
-          // only ever read to or written from it's current position. This means
-          // that the buffer can be dirty for the next use and still be correct
-          // since reading will start at position `0`.
+          // SAFETY: The buffer does not need to be mutated because the stack is
+          // only ever read from or written to its current position. Its current
+          // position is only ever incremented after writing to it. Meaning that
+          // the buffer can be dirty for the next use and still be correct since
+          // reading/writing always starts at position `0`.
           stackPos--
         }
         break
