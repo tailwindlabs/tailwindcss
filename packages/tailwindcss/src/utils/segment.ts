@@ -1,12 +1,16 @@
-/* Supports up to 256 levels of nesting. This should be more than enough for any reasonable usage */
+// This is a shared buffer that is used to keep track of the current nesting level
+// of parens, brackets, and braces. It is used to determine if a character is at
+// the top-level of a string. This is a performance optimization to avoid memory
+// allocations on ever call to `segment`.
 const closingBracketStack = new Uint8Array(256)
+
+const BACKSLASH = '\\'.charCodeAt(0)
 const OPEN_PAREN = '('.charCodeAt(0)
 const OPEN_BRACKET = '['.charCodeAt(0)
 const OPEN_BRACE = '{'.charCodeAt(0)
 const CLOSE_PAREN = ')'.charCodeAt(0)
 const CLOSE_BRACKET = ']'.charCodeAt(0)
 const CLOSE_BRACE = '}'.charCodeAt(0)
-const BACKSLASH = '\\'.charCodeAt(0)
 
 /**
  * This splits a string on a top-level character.
@@ -21,9 +25,9 @@ const BACKSLASH = '\\'.charCodeAt(0)
  *        ╰──────────────┴──┴───────────── Ignored b/c inside >= 1 levels of parens
  */
 export function segment(input: string, separator: string) {
-  // Since JavaScript is single-threaded, using a shared buffer
-  // is more efficient and should still be safe.
-  let stackPointer = 0
+  // SAFETY: We can use an index into a shared buffer because this function is
+  // synchronous, non-recursive, and runs in a single-threaded envionment.
+  let stackPos = 0
   let parts: string[] = []
   let lastPos = 0
 
@@ -32,7 +36,7 @@ export function segment(input: string, separator: string) {
   for (let idx = 0; idx < input.length; idx++) {
     let char = input.charCodeAt(idx)
 
-    if (stackPointer === 0 && char === separatorCode) {
+    if (stackPos === 0 && char === separatorCode) {
       parts.push(input.slice(lastPos, idx))
       lastPos = idx + 1
       continue
@@ -44,23 +48,26 @@ export function segment(input: string, separator: string) {
         idx += 1
         break
       case OPEN_PAREN:
-        closingBracketStack[stackPointer] = CLOSE_PAREN
-        stackPointer++
+        closingBracketStack[stackPos] = CLOSE_PAREN
+        stackPos++
         break
       case OPEN_BRACKET:
-        closingBracketStack[stackPointer] = CLOSE_BRACKET
-        stackPointer++
+        closingBracketStack[stackPos] = CLOSE_BRACKET
+        stackPos++
         break
       case OPEN_BRACE:
-        closingBracketStack[stackPointer] = CLOSE_BRACE
-        stackPointer++
+        closingBracketStack[stackPos] = CLOSE_BRACE
+        stackPos++
         break
       case CLOSE_BRACKET:
       case CLOSE_BRACE:
       case CLOSE_PAREN:
-        if (stackPointer > 0 && char === closingBracketStack[stackPointer - 1]) {
-          // No need to mutate the buffer here, as it can stay dirty for the next use
-          stackPointer--
+        if (stackPos > 0 && char === closingBracketStack[stackPos - 1]) {
+          // SAFETY: The buffer does not need to be mutated because the stack
+          // only ever read to or written from it's current position. This means
+          // that the buffer can be dirty for the next use and still be correct
+          // since reading will start at position `0`.
+          stackPos--
         }
         break
     }
