@@ -1,19 +1,23 @@
-export type Location = {
+export interface Location {
   line: number
   column: number
 }
 
-export type Range = {
+export interface Range {
   start: Location
   end: Location
+}
+
+export interface Mapping {
+  source: Range | null
+  destination: Range | null
 }
 
 export type Rule = {
   kind: 'rule'
   selector: string
   nodes: AstNode[]
-  source: Range | null
-  destination: Range | null
+  mappings: Mapping[]
 }
 
 export type Declaration = {
@@ -21,46 +25,41 @@ export type Declaration = {
   property: string
   value: string
   important: boolean
-  source: Range | null
-  destination: Range | null
+  mappings: Mapping[]
 }
 
 export type Comment = {
   kind: 'comment'
   value: string
-  source: Range | null
-  destination: Range | null
+  mappings: Mapping[]
 }
 
 export type AstNode = Rule | Declaration | Comment
 
-export function rule(selector: string, nodes: AstNode[], source?: Range | null): Rule {
+export function rule(selector: string, nodes: AstNode[], mappings: Mapping[] = []): Rule {
   return {
     kind: 'rule',
     selector,
     nodes,
-    source: source ?? null,
-    destination: null,
+    mappings,
   }
 }
 
-export function decl(property: string, value: string, source?: Range | null): Declaration {
+export function decl(property: string, value: string, mappings: Mapping[] = []): Declaration {
   return {
     kind: 'declaration',
     property,
     value,
     important: false,
-    source: source ?? null,
-    destination: null,
+    mappings,
   }
 }
 
-export function comment(value: string, source?: Range | null): Comment {
+export function comment(value: string, mappings: Mapping[] = []): Comment {
   return {
     kind: 'comment',
     value: value,
-    source: source ?? null,
-    destination: null,
+    mappings,
   }
 }
 
@@ -150,13 +149,16 @@ export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?:
       // @layer base, components, utilities;
       // ```
       if (node.selector[0] === '@' && node.nodes.length === 0) {
-        node.destination = location
-          ? {
+        if (location) {
+          node.mappings.push({
+            source: null,
+            destination: {
               start: { line: location.line, column: indent.length },
               end: { line: location.line, column: indent.length },
-            }
-          : null
-        if (location) location.line += 1
+            },
+          })
+          location.line += 1
+        }
         return `${indent}${node.selector};\n`
       }
 
@@ -171,10 +173,13 @@ export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?:
 
       let css = `${indent}${node.selector} {\n`
       if (location) {
-        node.destination = {
-          start: { line: location.line, column: indent.length },
-          end: { line: location.line, column: indent.length },
-        }
+        node.mappings.push({
+          source: null,
+          destination: {
+            start: { line: location.line, column: indent.length },
+            end: { line: location.line, column: indent.length },
+          },
+        })
         location.line += 1
       }
       css += stringifyAll(node.nodes, { depth: depth + 1, location })
@@ -186,10 +191,13 @@ export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?:
     // Comment
     else if (node.kind === 'comment') {
       if (location) {
-        node.destination = {
-          start: { line: location.line, column: indent.length },
-          end: { line: location.line, column: indent.length },
-        }
+        node.mappings.push({
+          source: null,
+          destination: {
+            start: { line: location.line, column: indent.length },
+            end: { line: location.line, column: indent.length },
+          },
+        })
         location.line += 1 + node.value.split('\n').length - 1
       }
       return `${indent}/*${node.value}*/\n`
@@ -198,10 +206,13 @@ export function toCss(ast: AstNode[], { trackDestination }: { trackDestination?:
     // Declaration
     else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
       if (location) {
-        node.destination = {
-          start: { line: location.line, column: indent.length },
-          end: { line: location.line, column: indent.length },
-        }
+        node.mappings.push({
+          source: null,
+          destination: {
+            start: { line: location.line, column: indent.length },
+            end: { line: location.line, column: indent.length },
+          },
+        })
         location.line += 1 + node.value.split('\n').length - 1
       }
       return `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
