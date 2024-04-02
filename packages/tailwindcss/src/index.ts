@@ -5,7 +5,7 @@ import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule }
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
-import { toSourceMap } from './source-maps'
+import { toSourceMap } from './source-map'
 import { Theme } from './theme'
 
 export function compile(
