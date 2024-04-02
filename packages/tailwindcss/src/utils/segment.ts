@@ -4,13 +4,14 @@
 // allocations on every call to `segment`.
 const closingBracketStack = new Uint8Array(256)
 
-const BACKSLASH = '\\'.charCodeAt(0)
-const OPEN_PAREN = '('.charCodeAt(0)
-const OPEN_BRACKET = '['.charCodeAt(0)
-const OPEN_CURLY = '{'.charCodeAt(0)
-const CLOSE_PAREN = ')'.charCodeAt(0)
-const CLOSE_BRACKET = ']'.charCodeAt(0)
-const CLOSE_CURLY = '}'.charCodeAt(0)
+// All numbers are equivalent to the value returned by `String#charCodeAt(0)`
+const BACKSLASH = 0x5c
+const OPEN_PAREN = 0x28
+const OPEN_BRACKET = 0x5b
+const OPEN_CURLY = 0x7b
+const CLOSE_PAREN = 0x29
+const CLOSE_BRACKET = 0x5d
+const CLOSE_CURLY = 0x7d
 
 /**
  * This splits a string on a top-level character.
