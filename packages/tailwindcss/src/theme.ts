@@ -42,7 +42,7 @@ export class Theme {
     return keys
   }
 
-  get(themeKeys: ThemeKey[]): string | null {
+  get(themeKeys: (ThemeKey | `${ThemeKey}-${string}`)[]): string | null {
     for (let key of themeKeys) {
       let value = this.values.get(key)
       if (value) {

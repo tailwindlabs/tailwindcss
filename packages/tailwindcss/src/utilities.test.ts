@@ -11492,8 +11492,8 @@ test('shadow', () => {
     }
 
     .shadow-xl {
-      --tw-shadow: var(--shadow-xl, 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a);
-      --tw-shadow-colored: var(--shadow-xl, 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a);
+      --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
+      --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -11725,8 +11725,8 @@ test('inset-shadow', () => {
     }
 
     .inset-shadow-sm {
-      --tw-inset-shadow: var(--inset-shadow-sm, inset 0 1px 1px #0000000d);
-      --tw-inset-shadow-colored: var(--inset-shadow-sm, inset 0 1px 1px #0000000d);
+      --tw-inset-shadow: inset 0 1px 1px #0000000d;
+      --tw-inset-shadow-colored: inset 0 1px 1px var(--tw-inset-shadow-color);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 

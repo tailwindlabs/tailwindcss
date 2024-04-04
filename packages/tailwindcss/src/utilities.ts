@@ -4171,7 +4171,7 @@ export function createUtilities(theme: Theme) {
 
       // Shadow size
       {
-        let value = theme.resolve(candidate.value.value, ['--shadow'])
+        let value = theme.get([`--shadow-${candidate.value.value}`])
         if (value) {
           return [
             boxShadowProperties(),
@@ -4268,7 +4268,8 @@ export function createUtilities(theme: Theme) {
 
       // Shadow size
       {
-        let value = theme.resolve(candidate.value.value, ['--inset-shadow'])
+        let value = theme.get([`--inset-shadow-${candidate.value.value}`])
+
         if (value) {
           return [
             boxShadowProperties(),
