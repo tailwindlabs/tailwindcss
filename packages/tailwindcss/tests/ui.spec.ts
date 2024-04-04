@@ -163,8 +163,10 @@ test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) =>
 test('shadow colors', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
-    html`<div id="x" class="shadow shadow-red-500"></div>
-      <div id="y" class="shadow-xl shadow-red-500"></div>`,
+    html`
+      <div id="x" class="shadow shadow-red-500"></div>
+      <div id="y" class="shadow-xl shadow-red-500"></div>
+    `,
   )
 
   expect(await getPropertyValue('#x', 'box-shadow')).toEqual(
