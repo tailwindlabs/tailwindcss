@@ -42,7 +42,7 @@ export class Theme {
     return keys
   }
 
-  get(themeKeys: ThemeKey[]): string | null {
+  get(themeKeys: (ThemeKey | `${ThemeKey}-${string}`)[]): string | null {
     for (let key of themeKeys) {
       let value = this.values.get(key)
       if (value) {
@@ -194,7 +194,7 @@ export type ThemeKey =
   | '--hue-rotate'
   | '--inset'
   | '--inset-shadow'
-  | `--inset-shadow-${string}`
+  | `--inset-shadow`
   | '--invert'
   | '--letter-spacing'
   | '--line-height'
@@ -228,7 +228,7 @@ export type ThemeKey =
   | '--scroll-padding'
   | '--sepia'
   | '--shadow'
-  | `--shadow-${string}`
+  | `--shadow`
   | '--size'
   | '--skew'
   | '--space'
