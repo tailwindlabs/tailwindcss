@@ -194,6 +194,7 @@ export type ThemeKey =
   | '--hue-rotate'
   | '--inset'
   | '--inset-shadow'
+  | `--inset-shadow-${string}`
   | '--invert'
   | '--letter-spacing'
   | '--line-height'
@@ -227,6 +228,7 @@ export type ThemeKey =
   | '--scroll-padding'
   | '--sepia'
   | '--shadow'
+  | `--shadow-${string}`
   | '--size'
   | '--skew'
   | '--space'
