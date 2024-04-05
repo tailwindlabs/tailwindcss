@@ -187,6 +187,9 @@ export default function tailwindcss(): Plugin[] {
         cssModules[id] = src
 
         if (!options?.ssr) {
+          // Wait until all other files have been processed, so we can extract
+          // all candidates before generating CSS. This must not be called
+          // during SSR or it will block the server.
           await server?.waitForRequestsIdle?.(id)
         }
 
