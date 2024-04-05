@@ -182,9 +182,16 @@ export default function tailwindcss(): Plugin[] {
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
 
-      transform(src, id) {
+      async transform(src, id, options) {
         if (!isTailwindCssFile(id, src)) return
         cssModules[id] = src
+
+        if (!options?.ssr) {
+          await server?.waitForRequestsIdle?.(id)
+        }
+
+        let code = await transformWithPlugins(this, id, generateCss(src))
+        return { code }
       },
 
       // renderChunk runs in the bundle generation stage after all transforms.
