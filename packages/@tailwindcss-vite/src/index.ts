@@ -85,7 +85,7 @@ export default function tailwindcss(): Plugin[] {
       try {
         // Directly call the plugin's transform function to process the
         // generated CSS. In build mode, this updates the chunks later used to
-        // generate the bundle. In serve mode, the transformed souce should be
+        // generate the bundle. In serve mode, the transformed source should be
         // applied in transform.
         let result = await transformHandler.call(transformPluginContext, css, id)
         if (!result) continue
