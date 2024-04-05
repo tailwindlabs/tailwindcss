@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure `@tailwindcss/vite#build` waits for all files before generating the CSS ([#13457](https://github.com/tailwindlabs/tailwindcss/pull/13457))
 
 ## [4.0.0-alpha.13] - 2024-04-04
 
