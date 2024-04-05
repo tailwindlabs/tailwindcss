@@ -533,9 +533,9 @@ describe('sorting', () => {
         gap: var(--spacing-4, 1rem);
       }
 
-      :where(.space-x-2 > :not([hidden]) ~ :not([hidden])) {
-        margin-inline-start: calc(var(--spacing-2, .5rem) * calc(1 - var(--tw-space-x-reverse)));
-        margin-inline-end: calc(var(--spacing-2, .5rem) * var(--tw-space-x-reverse));
+      :where(.space-x-2 > :not(:last-child)) {
+        margin-inline-start: calc(var(--spacing-2, .5rem) * var(--tw-space-x-reverse));
+        margin-inline-end: calc(var(--spacing-2, .5rem) * calc(1 - var(--tw-space-x-reverse)));
       }
 
       @property --tw-space-x-reverse {

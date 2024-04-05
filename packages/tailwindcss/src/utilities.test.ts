@@ -5296,19 +5296,19 @@ test('space-x', () => {
       --spacing-4: 1rem;
     }
 
-    :where(.-space-x-4 > :not([hidden]) ~ :not([hidden])) {
-      margin-inline-start: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-x-reverse)));
-      margin-inline-end: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-x-reverse));
+    :where(.-space-x-4 > :not(:last-child)) {
+      margin-inline-start: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-x-reverse)));
     }
 
-    :where(.space-x-4 > :not([hidden]) ~ :not([hidden])) {
-      margin-inline-start: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-x-reverse)));
-      margin-inline-end: calc(var(--spacing-4, 1rem) * var(--tw-space-x-reverse));
+    :where(.space-x-4 > :not(:last-child)) {
+      margin-inline-start: calc(var(--spacing-4, 1rem) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-x-reverse)));
     }
 
-    :where(.space-x-\\[4px\\] > :not([hidden]) ~ :not([hidden])) {
-      margin-inline-start: calc(4px * calc(1 - var(--tw-space-x-reverse)));
-      margin-inline-end: calc(4px * var(--tw-space-x-reverse));
+    :where(.space-x-\\[4px\\] > :not(:last-child)) {
+      margin-inline-start: calc(4px * var(--tw-space-x-reverse));
+      margin-inline-end: calc(4px * calc(1 - var(--tw-space-x-reverse)));
     }
 
     @property --tw-space-x-reverse {
@@ -5336,19 +5336,19 @@ test('space-y', () => {
       --spacing-4: 1rem;
     }
 
-    :where(.-space-y-4 > :not([hidden]) ~ :not([hidden])) {
-      margin-bottom: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-y-reverse));
-      margin-top: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-y-reverse)));
+    :where(.-space-y-4 > :not(:last-child)) {
+      margin-top: calc(calc(var(--spacing-4, 1rem) * -1) * var(--tw-space-y-reverse));
+      margin-bottom: calc(calc(var(--spacing-4, 1rem) * -1) * calc(1 - var(--tw-space-y-reverse)));
     }
 
-    :where(.space-y-4 > :not([hidden]) ~ :not([hidden])) {
-      margin-bottom: calc(var(--spacing-4, 1rem) * var(--tw-space-y-reverse));
-      margin-top: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-y-reverse)));
+    :where(.space-y-4 > :not(:last-child)) {
+      margin-top: calc(var(--spacing-4, 1rem) * var(--tw-space-y-reverse));
+      margin-bottom: calc(var(--spacing-4, 1rem) * calc(1 - var(--tw-space-y-reverse)));
     }
 
-    :where(.space-y-\\[4px\\] > :not([hidden]) ~ :not([hidden])) {
-      margin-bottom: calc(4px * var(--tw-space-y-reverse));
-      margin-top: calc(4px * calc(1 - var(--tw-space-y-reverse)));
+    :where(.space-y-\\[4px\\] > :not(:last-child)) {
+      margin-top: calc(4px * var(--tw-space-y-reverse));
+      margin-bottom: calc(4px * calc(1 - var(--tw-space-y-reverse)));
     }
 
     @property --tw-space-y-reverse {
@@ -5362,7 +5362,7 @@ test('space-y', () => {
 
 test('space-x-reverse', () => {
   expect(run(['space-x-reverse'])).toMatchInlineSnapshot(`
-    ":where(.space-x-reverse > :not([hidden]) ~ :not([hidden])) {
+    ":where(.space-x-reverse > :not(:last-child)) {
       --tw-space-x-reverse: 1;
     }
 
@@ -5377,7 +5377,7 @@ test('space-x-reverse', () => {
 
 test('space-y-reverse', () => {
   expect(run(['space-y-reverse'])).toMatchInlineSnapshot(`
-    ":where(.space-y-reverse > :not([hidden]) ~ :not([hidden])) {
+    ":where(.space-y-reverse > :not(:last-child)) {
       --tw-space-y-reverse: 1;
     }
 
@@ -5399,25 +5399,25 @@ test('divide-x', () => {
       ['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":where(.divide-x > :not([hidden]) ~ :not([hidden])) {
+    ":where(.divide-x > :not(:last-child)) {
       border-inline-style: var(--tw-border-style);
       border-inline-end-width: calc(1px * var(--tw-divide-x-reverse));
       border-inline-start-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
     }
 
-    :where(.divide-x-123 > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-x-123 > :not(:last-child)) {
       border-inline-style: var(--tw-border-style);
       border-inline-end-width: calc(123px * var(--tw-divide-x-reverse));
       border-inline-start-width: calc(123px * calc(1 - var(--tw-divide-x-reverse)));
     }
 
-    :where(.divide-x-4 > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-x-4 > :not(:last-child)) {
       border-inline-style: var(--tw-border-style);
       border-inline-end-width: calc(4px * var(--tw-divide-x-reverse));
       border-inline-start-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
     }
 
-    :where(.divide-x-\\[4px\\] > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-x-\\[4px\\] > :not(:last-child)) {
       border-inline-style: var(--tw-border-style);
       border-inline-end-width: calc(4px * var(--tw-divide-x-reverse));
       border-inline-start-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
@@ -5454,7 +5454,7 @@ test('divide-x with custom default border width', () => {
       --default-border-width: 2px;
     }
 
-    :where(.divide-x > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-x > :not(:last-child)) {
       border-inline-style: var(--tw-border-style);
       border-inline-end-width: calc(2px * var(--tw-divide-x-reverse));
       border-inline-start-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
@@ -5483,32 +5483,32 @@ test('divide-y', () => {
       ['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":where(.divide-y > :not([hidden]) ~ :not([hidden])) {
-      border-top-style: var(--tw-border-style);
+    ":where(.divide-y > :not(:last-child)) {
       border-bottom-style: var(--tw-border-style);
-      border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
-      border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+      border-top-style: var(--tw-border-style);
+      border-top-width: calc(1px * var(--tw-divide-y-reverse));
+      border-bottom-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
-    :where(.divide-y-123 > :not([hidden]) ~ :not([hidden])) {
-      border-top-style: var(--tw-border-style);
+    :where(.divide-y-123 > :not(:last-child)) {
       border-bottom-style: var(--tw-border-style);
-      border-bottom-width: calc(123px * var(--tw-divide-y-reverse));
-      border-top-width: calc(123px * calc(1 - var(--tw-divide-y-reverse)));
+      border-top-style: var(--tw-border-style);
+      border-top-width: calc(123px * var(--tw-divide-y-reverse));
+      border-bottom-width: calc(123px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
-    :where(.divide-y-4 > :not([hidden]) ~ :not([hidden])) {
-      border-top-style: var(--tw-border-style);
+    :where(.divide-y-4 > :not(:last-child)) {
       border-bottom-style: var(--tw-border-style);
-      border-bottom-width: calc(4px * var(--tw-divide-y-reverse));
-      border-top-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
+      border-top-style: var(--tw-border-style);
+      border-top-width: calc(4px * var(--tw-divide-y-reverse));
+      border-bottom-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
-    :where(.divide-y-\\[4px\\] > :not([hidden]) ~ :not([hidden])) {
-      border-top-style: var(--tw-border-style);
+    :where(.divide-y-\\[4px\\] > :not(:last-child)) {
       border-bottom-style: var(--tw-border-style);
-      border-bottom-width: calc(4px * var(--tw-divide-y-reverse));
-      border-top-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
+      border-top-style: var(--tw-border-style);
+      border-top-width: calc(4px * var(--tw-divide-y-reverse));
+      border-bottom-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
     @property --tw-divide-y-reverse {
@@ -5542,11 +5542,11 @@ test('divide-y with custom default border width', () => {
       --default-border-width: 2px;
     }
 
-    :where(.divide-y > :not([hidden]) ~ :not([hidden])) {
-      border-top-style: var(--tw-border-style);
+    :where(.divide-y > :not(:last-child)) {
       border-bottom-style: var(--tw-border-style);
-      border-bottom-width: calc(2px * var(--tw-divide-y-reverse));
-      border-top-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
+      border-top-style: var(--tw-border-style);
+      border-top-width: calc(2px * var(--tw-divide-y-reverse));
+      border-bottom-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
     @property --tw-divide-y-reverse {
@@ -5565,7 +5565,7 @@ test('divide-y with custom default border width', () => {
 
 test('divide-x-reverse', () => {
   expect(run(['divide-x-reverse'])).toMatchInlineSnapshot(`
-    ":where(.divide-x-reverse > :not([hidden]) ~ :not([hidden])) {
+    ":where(.divide-x-reverse > :not(:last-child)) {
       --tw-divide-x-reverse: 1;
     }
 
@@ -5580,7 +5580,7 @@ test('divide-x-reverse', () => {
 
 test('divide-y-reverse', () => {
   expect(run(['divide-y-reverse'])).toMatchInlineSnapshot(`
-    ":where(.divide-y-reverse > :not([hidden]) ~ :not([hidden])) {
+    ":where(.divide-y-reverse > :not(:last-child)) {
       --tw-divide-y-reverse: 1;
     }
 
@@ -5596,27 +5596,27 @@ test('divide-y-reverse', () => {
 test('divide-style', () => {
   expect(run(['divide-solid', 'divide-dashed', 'divide-dotted', 'divide-double', 'divide-none']))
     .toMatchInlineSnapshot(`
-      ":where(.divide-dashed > :not([hidden]) ~ :not([hidden])) {
+      ":where(.divide-dashed > :not(:last-child)) {
         --tw-border-style: dashed;
         border-style: dashed;
       }
 
-      :where(.divide-dotted > :not([hidden]) ~ :not([hidden])) {
+      :where(.divide-dotted > :not(:last-child)) {
         --tw-border-style: dotted;
         border-style: dotted;
       }
 
-      :where(.divide-double > :not([hidden]) ~ :not([hidden])) {
+      :where(.divide-double > :not(:last-child)) {
         --tw-border-style: double;
         border-style: double;
       }
 
-      :where(.divide-none > :not([hidden]) ~ :not([hidden])) {
+      :where(.divide-none > :not(:last-child)) {
         --tw-border-style: none;
         border-style: none;
       }
 
-      :where(.divide-solid > :not([hidden]) ~ :not([hidden])) {
+      :where(.divide-solid > :not(:last-child)) {
         --tw-border-style: solid;
         border-style: solid;
       }"
@@ -5832,59 +5832,59 @@ test('divide-color', () => {
       --color-red-500: #ef4444;
     }
 
-    :where(.divide-\\[\\#0088cc\\] > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-\\[\\#0088cc\\] > :not(:last-child)) {
       border-color: #08c;
     }
 
-    :where(.divide-\\[\\#0088cc\\]\\/50 > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)) {
       border-color: #0088cc80;
     }
 
-    :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)) {
       border-color: #0088cc80;
     }
 
-    :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: #0088cc80;
     }
 
-    :where(.divide-current > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-current > :not(:last-child)) {
       border-color: currentColor;
     }
 
-    :where(.divide-current\\/50 > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-current\\/50 > :not(:last-child)) {
       border-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
-    :where(.divide-current\\/\\[0\\.5\\] > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)) {
       border-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
-    :where(.divide-current\\/\\[50\\%\\] > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
-    :where(.divide-inherit > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-inherit > :not(:last-child)) {
       border-color: inherit;
     }
 
-    :where(.divide-red-500 > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-red-500 > :not(:last-child)) {
       border-color: var(--color-red-500, #ef4444);
     }
 
-    :where(.divide-red-500\\/50 > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-red-500\\/50 > :not(:last-child)) {
       border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
-    :where(.divide-red-500\\/\\[0\\.5\\] > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)) {
       border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
-    :where(.divide-red-500\\/\\[50\\%\\] > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: color-mix(in srgb, var(--color-red-500, #ef4444) 50%, transparent);
     }
 
-    :where(.divide-transparent > :not([hidden]) ~ :not([hidden])) {
+    :where(.divide-transparent > :not(:last-child)) {
       border-color: #0000;
     }"
   `)
