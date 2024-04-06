@@ -651,15 +651,15 @@ test('group-[...]', () => {
       display: flex;
     }
 
-    .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex:is(:where(.group) p *):is(:where(.group):hover *) {
+    .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex:is(:where(.group):hover *):is(:where(.group) p *) {
       display: flex;
     }
 
-    .group-\\[\\&_p\\]\\:hover\\:flex:hover:is(:where(.group) p *) {
+    .group-\\[\\&_p\\]\\:hover\\:flex:is(:where(.group) p *):hover {
       display: flex;
     }
 
-    .hover\\:group-\\[\\&_p\\]\\:flex:is(:where(.group) p *):hover {
+    .hover\\:group-\\[\\&_p\\]\\:flex:hover:is(:where(.group) p *) {
       display: flex;
     }
 
@@ -686,11 +686,11 @@ test('group-*', () => {
       display: flex;
     }
 
-    .group-focus\\:group-hover\\:flex:is(:where(.group):hover *):is(:where(.group):focus *) {
+    .group-focus\\:group-hover\\:flex:is(:where(.group):focus *):is(:where(.group):hover *) {
       display: flex;
     }
 
-    .group-hover\\:group-focus\\:flex:is(:where(.group):focus *):is(:where(.group):hover *) {
+    .group-hover\\:group-focus\\:flex:is(:where(.group):hover *):is(:where(.group):focus *) {
       display: flex;
     }"
   `)
@@ -710,19 +710,19 @@ test('peer-[...]', () => {
       display: flex;
     }
 
-    .peer-\\[\\&\\:hover\\]\\:peer-\\[\\&_p\\]\\:flex:is(:where(.peer) p ~ *):is(:where(.peer):hover ~ *) {
+    .peer-\\[\\&\\:hover\\]\\:peer-\\[\\&_p\\]\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer) p ~ *) {
       display: flex;
     }
 
-    .hover\\:peer-\\[\\&_p\\]\\:flex:is(:where(.peer) p ~ *):hover {
+    .hover\\:peer-\\[\\&_p\\]\\:flex:hover:is(:where(.peer) p ~ *) {
       display: flex;
     }
 
-    .peer-\\[\\&_p\\]\\:hover\\:flex:hover:is(:where(.peer) p ~ *) {
+    .peer-\\[\\&_p\\]\\:hover\\:flex:is(:where(.peer) p ~ *):hover {
       display: flex;
     }
 
-    .hover\\:peer-\\[\\&_p\\]\\:focus\\:flex:focus:is(:where(.peer) p ~ *):hover {
+    .hover\\:peer-\\[\\&_p\\]\\:focus\\:flex:hover:is(:where(.peer) p ~ *):focus {
       display: flex;
     }"
   `)
@@ -745,11 +745,11 @@ test('peer-*', () => {
       display: flex;
     }
 
-    .peer-focus\\:peer-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer):focus ~ *) {
+    .peer-focus\\:peer-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.peer):hover ~ *) {
       display: flex;
     }
 
-    .peer-hover\\:peer-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.peer):hover ~ *) {
+    .peer-hover\\:peer-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer):focus ~ *) {
       display: flex;
     }"
   `)
@@ -1009,24 +1009,24 @@ test('sorting stacked min-* and max-* variants', () => {
       --breakpoint-xs: 280px;
     }
 
-    @media (width < 1280px) {
-      @media (width >= 280px) {
+    @media (width >= 280px) {
+      @media (width < 1280px) {
         .min-xs\\:max-xl\\:flex {
           display: flex;
         }
       }
     }
 
-    @media (width < 1280px) {
-      @media (width >= 640px) {
+    @media (width >= 640px) {
+      @media (width < 1280px) {
         .min-sm\\:max-xl\\:flex {
           display: flex;
         }
       }
     }
 
-    @media (width < 1280px) {
-      @media (width >= 768px) {
+    @media (width >= 768px) {
+      @media (width < 1280px) {
         .min-md\\:max-xl\\:flex {
           display: flex;
         }

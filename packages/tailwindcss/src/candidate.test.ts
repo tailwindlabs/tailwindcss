@@ -120,12 +120,12 @@ it('should parse a simple utility with stacked variants', () => {
         {
           "compounds": true,
           "kind": "static",
-          "root": "focus",
+          "root": "hover",
         },
         {
           "compounds": true,
           "kind": "static",
-          "root": "hover",
+          "root": "focus",
         },
       ],
     }
@@ -1012,12 +1012,12 @@ it('should parse arbitrary properties with stacked variants', () => {
         {
           "compounds": true,
           "kind": "static",
-          "root": "focus",
+          "root": "hover",
         },
         {
           "compounds": true,
           "kind": "static",
-          "root": "hover",
+          "root": "focus",
         },
       ],
     }
@@ -1036,12 +1036,12 @@ it('should parse arbitrary properties that are important and using stacked arbit
         {
           "compounds": true,
           "kind": "arbitrary",
-          "selector": "@media(width>=123px)",
+          "selector": "& p",
         },
         {
           "compounds": true,
           "kind": "arbitrary",
-          "selector": "& p",
+          "selector": "@media(width>=123px)",
         },
       ],
     }
