@@ -333,7 +333,7 @@ describe('arbitrary variants', () => {
 describe('variant stacking', () => {
   it('should stack simple variants', () => {
     expect(run(['focus:hover:flex'])).toMatchInlineSnapshot(`
-      ".focus\\:hover\\:flex:hover:focus {
+      ".focus\\:hover\\:flex:focus:hover {
         display: flex;
       }"
     `)
@@ -341,7 +341,7 @@ describe('variant stacking', () => {
 
   it('should stack arbitrary variants and simple variants', () => {
     expect(run(['[&_p]:hover:flex'])).toMatchInlineSnapshot(`
-      ".\\[\\&_p\\]\\:hover\\:flex:hover p {
+      ".\\[\\&_p\\]\\:hover\\:flex p:hover {
         display: flex;
       }"
     `)
@@ -359,8 +359,11 @@ describe('variant stacking', () => {
 
   it('pseudo element variants are re-ordered', () => {
     expect(run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
-      ".before\\:hover\\:flex:hover:before {
+      ".before\\:hover\\:flex:before {
         content: var(--tw-content);
+      }
+
+      .before\\:hover\\:flex:before:hover {
         display: flex;
       }
 
@@ -592,26 +595,26 @@ describe('sorting', () => {
         ),
       ),
     ).toMatchInlineSnapshot(`
-        ".flex {
-          display: flex;
-        }
+      ".flex {
+        display: flex;
+      }
 
-        .hover\\:flex:hover {
-          display: flex;
-        }
+      .hover\\:flex:hover {
+        display: flex;
+      }
 
-        .focus\\:flex:focus {
-          display: flex;
-        }
+      .focus\\:flex:focus {
+        display: flex;
+      }
 
-        .hover\\:focus\\:flex:focus:hover {
-          display: flex;
-        }
+      .hover\\:focus\\:flex:hover:focus {
+        display: flex;
+      }
 
-        .disabled\\:flex:disabled {
-          display: flex;
-        }"
-      `)
+      .disabled\\:flex:disabled {
+        display: flex;
+      }"
+    `)
   })
 
   // TODO: Extend this test with user-defined variants to ensure they are sorted
@@ -651,19 +654,19 @@ describe('sorting', () => {
         display: flex;
       }
 
-      .group-hover\\:peer-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
+      .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *) {
         display: flex;
       }
 
-      .peer-hover\\:group-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *) {
+      .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
         display: flex;
       }
 
-      .group-focus\\:peer-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
+      .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *) {
         display: flex;
       }
 
-      .peer-hover\\:group-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *) {
+      .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
         display: flex;
       }
 
@@ -671,19 +674,19 @@ describe('sorting', () => {
         display: flex;
       }
 
-      .group-hover\\:peer-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
+      .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *) {
         display: flex;
       }
 
-      .peer-focus\\:group-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *) {
+      .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
         display: flex;
       }
 
-      .group-focus\\:peer-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
+      .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *) {
         display: flex;
       }
 
-      .peer-focus\\:group-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *) {
+      .peer-focus\\:group-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
         display: flex;
       }
 
