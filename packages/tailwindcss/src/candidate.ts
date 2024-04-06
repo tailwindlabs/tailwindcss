@@ -221,34 +221,11 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
 
   let parsedCandidateVariants: Variant[] = []
 
-  for (let variant of rawVariants) {
-    let parsedVariant = designSystem.parseVariant(variant)
+  for (let i = rawVariants.length - 1; i >= 0; --i) {
+    let parsedVariant = designSystem.parseVariant(rawVariants[i])
     if (parsedVariant === null) return null
 
-    // Variants are applied left-to-right meaning that any representing pseudo-
-    // elements must come first. This is because they cannot have anything
-    // after them in a selector. The problem with this is that it's common for
-    // users to write them in the wrong order, for example:
-    //
-    // `dark:before:underline` (wrong)
-    // `before:dark:underline` (right)
-    //
-    // Add pseudo-element variants to the front, making both examples above
-    // function identically which allows users to not care about the order.
-    switch (variant) {
-      case 'after':
-      case 'backdrop':
-      case 'before':
-      case 'first-letter':
-      case 'first-line':
-      case 'marker':
-      case 'placeholder':
-      case 'selection':
-        parsedCandidateVariants.unshift(parsedVariant)
-        break
-      default:
-        parsedCandidateVariants.push(parsedVariant)
-    }
+    parsedCandidateVariants.push(parsedVariant)
   }
 
   let state = {
