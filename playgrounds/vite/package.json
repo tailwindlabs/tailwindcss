@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "tsc --noEmit",
     "dev": "bun --bun vite ./src --config ./vite.config.ts",
-    "build": "bun --bun vite build ./src --outDir ../dist --config ./vite.config.ts --emptyOutDir"
+    "build": "bun --bun vite build ./src --outDir ../dist --config ./vite.config.ts --emptyOutDir",
+    "preview": "bun --bun vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "workspace:^",
