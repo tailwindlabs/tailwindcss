@@ -9,7 +9,13 @@ export default function tailwindcss(): Plugin[] {
   let candidates = new Set<string>()
   // In serve mode, we treat this as a set, storing storing empty strings.
   // In build mode, we store file contents to use them in renderChunk.
-  let cssModules: Record<string, string> = {}
+  let cssModules: Record<
+    string,
+    {
+      content: string
+      handled: boolean
+    }
+  > = {}
   let minify = false
   let cssPlugins: readonly Plugin[] = []
 
@@ -163,7 +169,7 @@ export default function tailwindcss(): Plugin[] {
         if (!isTailwindCssFile(id, src)) return
 
         // In serve mode, we treat cssModules as a set, ignoring the value.
-        cssModules[id] = ''
+        cssModules[id] = { content: '', handled: true }
 
         if (!options?.ssr) {
           // Wait until all other files have been processed, so we can extract
@@ -201,8 +207,19 @@ export default function tailwindcss(): Plugin[] {
       // We must run before `enforce: post` so the updated chunks are picked up
       // by vite:css-post.
       async renderChunk(_code, _chunk) {
-        for (let [cssFile, css] of Object.entries(cssModules)) {
-          await transformWithPlugins(this, cssFile, generateOptimizedCss(css))
+        for (let [id, file] of Object.entries(cssModules)) {
+          if (file.handled) {
+            continue
+          }
+
+          let css = generateOptimizedCss(file.content)
+
+          // These plugins have side effects which, during build, results in CSS
+          // being written to the output dir. We need to run them here to ensure
+          // the CSS is written before the bundle is generated.
+          await transformWithPlugins(this, id, css)
+
+          file.handled = true
         }
       },
     },
