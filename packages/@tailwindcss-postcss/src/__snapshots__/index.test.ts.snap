@@ -11,11 +11,11 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --default-mono-font-family: var(--font-family-mono);
     --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
     --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
-    --breakpoint-sm: 640px;
-    --breakpoint-md: 768px;
-    --breakpoint-lg: 1024px;
-    --breakpoint-xl: 1280px;
-    --breakpoint-2xl: 1536px;
+    --breakpoint-sm: 40rem;
+    --breakpoint-md: 48rem;
+    --breakpoint-lg: 64rem;
+    --breakpoint-xl: 80rem;
+    --breakpoint-2xl: 96rem;
     --color-black: #000;
     --color-white: #fff;
     --color-slate-50: #f8fafc;
