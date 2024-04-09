@@ -240,15 +240,15 @@ test('dividers can be added without setting border-style', async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
     html`<div id="a" class="divide-y-2 divide-dashed hover:divide-y-4">
-      <div>First</div>
-      <div id="b">Second</div>
+      <div id="b">First</div>
+      <div>Second</div>
     </div>`,
   )
-  expect(await getPropertyValue('#b', 'border-top')).toEqual('2px dashed rgb(0, 0, 0)')
+  expect(await getPropertyValue('#b', 'border-bottom')).toEqual('2px dashed rgb(0, 0, 0)')
 
   await page.locator('#a').hover()
 
-  expect(await getPropertyValue('#b', 'border-top')).toEqual('4px dashed rgb(0, 0, 0)')
+  expect(await getPropertyValue('#b', 'border-bottom')).toEqual('4px dashed rgb(0, 0, 0)')
 })
 
 test('scale can be a number or percentage', async ({ page }) => {

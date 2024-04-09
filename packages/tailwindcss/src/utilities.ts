@@ -2014,10 +2014,10 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [
       atRoot([property('--tw-space-x-reverse', '0', '<number>')]),
 
-      rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
+      rule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'row-gap'),
-        decl('margin-inline-end', `calc(${value} * var(--tw-space-x-reverse))`),
-        decl('margin-inline-start', `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`),
+        decl('margin-inline-start', `calc(${value} * var(--tw-space-x-reverse))`),
+        decl('margin-inline-end', `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`),
       ]),
     ],
   })
@@ -2028,10 +2028,10 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [
       atRoot([property('--tw-space-y-reverse', '0', '<number>')]),
 
-      rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
+      rule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
-        decl('margin-bottom', `calc(${value} * var(--tw-space-y-reverse))`),
-        decl('margin-top', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
+        decl('margin-top', `calc(${value} * var(--tw-space-y-reverse))`),
+        decl('margin-bottom', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
       ]),
     ],
   })
@@ -2039,7 +2039,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('space-x-reverse', [
     () => atRoot([property('--tw-space-x-reverse', '0', '<number>')]),
     () =>
-      rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
+      rule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'row-gap'),
         decl('--tw-space-x-reverse', '1'),
       ]),
@@ -2048,7 +2048,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('space-y-reverse', [
     () => atRoot([property('--tw-space-y-reverse', '0', '<number>')]),
     () =>
-      rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
+      rule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'column-gap'),
         decl('--tw-space-y-reverse', '1'),
       ]),
@@ -2067,7 +2067,7 @@ export function createUtilities(theme: Theme) {
   colorUtility('divide', {
     themeKeys: ['--divide-color', '--color'],
     handle: (value) => [
-      rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
+      rule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'divide-color'),
         decl('border-color', value),
       ]),
@@ -2377,15 +2377,12 @@ export function createUtilities(theme: Theme) {
       handle: (value) => [
         atRoot([property('--tw-divide-x-reverse', '0', '<number>')]),
 
-        rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
+        rule(':where(& > :not(:last-child))', [
           decl('--tw-sort', 'divide-x-width'),
           borderProperties(),
           decl('border-inline-style', 'var(--tw-border-style)'),
-          decl('border-inline-end-width', `calc(${value} * var(--tw-divide-x-reverse))`),
-          decl(
-            'border-inline-start-width',
-            `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
-          ),
+          decl('border-inline-start-width', `calc(${value} * var(--tw-divide-x-reverse))`),
+          decl('border-inline-end-width', `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`),
         ]),
       ],
     })
@@ -2400,13 +2397,13 @@ export function createUtilities(theme: Theme) {
       handle: (value) => [
         atRoot([property('--tw-divide-y-reverse', '0', '<number>')]),
 
-        rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
+        rule(':where(& > :not(:last-child))', [
           decl('--tw-sort', 'divide-y-width'),
           borderProperties(),
-          decl('border-top-style', 'var(--tw-border-style)'),
           decl('border-bottom-style', 'var(--tw-border-style)'),
-          decl('border-bottom-width', `calc(${value} * var(--tw-divide-y-reverse))`),
-          decl('border-top-width', `calc(${value} * calc(1 - var(--tw-divide-y-reverse)))`),
+          decl('border-top-style', 'var(--tw-border-style)'),
+          decl('border-top-width', `calc(${value} * var(--tw-divide-y-reverse))`),
+          decl('border-bottom-width', `calc(${value} * calc(1 - var(--tw-divide-y-reverse)))`),
         ]),
       ],
     })
@@ -2429,20 +2426,18 @@ export function createUtilities(theme: Theme) {
 
     staticUtility('divide-x-reverse', [
       () => atRoot([property('--tw-divide-x-reverse', '0', '<number>')]),
-      () =>
-        rule(':where(& > :not([hidden]) ~ :not([hidden]))', [decl('--tw-divide-x-reverse', '1')]),
+      () => rule(':where(& > :not(:last-child))', [decl('--tw-divide-x-reverse', '1')]),
     ])
 
     staticUtility('divide-y-reverse', [
       () => atRoot([property('--tw-divide-y-reverse', '0', '<number>')]),
-      () =>
-        rule(':where(& > :not([hidden]) ~ :not([hidden]))', [decl('--tw-divide-y-reverse', '1')]),
+      () => rule(':where(& > :not(:last-child))', [decl('--tw-divide-y-reverse', '1')]),
     ])
 
     for (let value of ['solid', 'dashed', 'dotted', 'double', 'none']) {
       staticUtility(`divide-${value}`, [
         () =>
-          rule(':where(& > :not([hidden]) ~ :not([hidden]))', [
+          rule(':where(& > :not(:last-child))', [
             decl('--tw-sort', 'divide-style'),
             decl('--tw-border-style', value),
             decl('border-style', value),
