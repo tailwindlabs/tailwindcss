@@ -599,7 +599,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     text-decoration-line: underline;
   }
 
-  @media (width >= 1536px) {
+  @media (width >= 96rem) {
     .\\32 xl\\:font-bold {
       font-weight: 700;
     }
