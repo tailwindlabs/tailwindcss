@@ -1,24 +1,5 @@
 import { comment, rule, type AstNode, type Comment, type Declaration, type Rule } from './ast'
-
-const BACK_SLASH = '\\'.charCodeAt(0)
-const SLASH = '/'.charCodeAt(0)
-const ASTERISK = '*'.charCodeAt(0)
-const DOUBLE_QUOTE = '"'.charCodeAt(0)
-const SINGLE_QUOTE = "'".charCodeAt(0)
-const COLON = ':'.charCodeAt(0)
-const SEMICOLON = ';'.charCodeAt(0)
-const LINE_BREAK = '\n'.charCodeAt(0)
-const SPACE = ' '.charCodeAt(0)
-const TAB = '\t'.charCodeAt(0)
-const OPEN_CURLY_BRACKET = '{'.charCodeAt(0)
-const CLOSE_CURLY_BRACKET = '}'.charCodeAt(0)
-const OPEN_PARENTHESIS = '('.charCodeAt(0)
-const CLOSE_PARENTHESIS = ')'.charCodeAt(0)
-const OPEN_BRACKET = '['.charCodeAt(0)
-const CLOSE_BRACKET = ']'.charCodeAt(0)
-const DASH = '-'.charCodeAt(0)
-const AT_SIGN = '@'.charCodeAt(0)
-const EXCLAMATION_MARK = '!'.charCodeAt(0)
+import * as Token from './tokens'
 
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
@@ -49,7 +30,7 @@ export function parse(input: string) {
     //       ^
     // ```
     //
-    if (currentChar === BACK_SLASH) {
+    if (currentChar === Token.BACKSLASH) {
       buffer += input.slice(i, i + 2)
       i += 1
     }
@@ -70,19 +51,19 @@ export function parse(input: string) {
     //         ^^^^^^^^^^^^^
     // }
     // ```
-    else if (currentChar === SLASH && input.charCodeAt(i + 1) === ASTERISK) {
+    else if (currentChar === Token.SLASH && input.charCodeAt(i + 1) === Token.ASTERISK) {
       let start = i
 
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
 
         // Current character is a `\` therefore the next character is escaped.
-        if (peekChar === BACK_SLASH) {
+        if (peekChar === Token.BACKSLASH) {
           j += 1
         }
 
         // End of the comment
-        else if (peekChar === ASTERISK && input.charCodeAt(j + 1) === SLASH) {
+        else if (peekChar === Token.ASTERISK && input.charCodeAt(j + 1) === Token.SLASH) {
           i = j + 1
           break
         }
@@ -92,13 +73,13 @@ export function parse(input: string) {
 
       // Collect all license comments so that we can hoist them to the top of
       // the AST.
-      if (commentString.charCodeAt(2) === EXCLAMATION_MARK) {
+      if (commentString.charCodeAt(2) === Token.EXCLAMATION_MARK) {
         licenseComments.push(comment(commentString.slice(2, -2)))
       }
     }
 
     // Start of a string.
-    else if (currentChar === SINGLE_QUOTE || currentChar === DOUBLE_QUOTE) {
+    else if (currentChar === Token.SINGLE_QUOTE || currentChar === Token.DOUBLE_QUOTE) {
       let start = i
 
       // We need to ensure that the closing quote is the same as the opening
@@ -115,7 +96,7 @@ export function parse(input: string) {
       for (let j = i + 1; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
         // Current character is a `\` therefore the next character is escaped.
-        if (peekChar === BACK_SLASH) {
+        if (peekChar === Token.BACKSLASH) {
           j += 1
         }
 
@@ -135,7 +116,7 @@ export function parse(input: string) {
         //                                    ^ Missing "
         // }
         // ```
-        else if (peekChar === SEMICOLON && input.charCodeAt(j + 1) === LINE_BREAK) {
+        else if (peekChar === Token.SEMICOLON && input.charCodeAt(j + 1) === Token.LINE_BREAK) {
           throw new Error(
             `Unterminated string: ${input.slice(start, j + 1) + String.fromCharCode(currentChar)}`,
           )
@@ -151,7 +132,7 @@ export function parse(input: string) {
         //                                    ^ Missing "
         // }
         // ```
-        else if (peekChar === LINE_BREAK) {
+        else if (peekChar === Token.LINE_BREAK) {
           throw new Error(
             `Unterminated string: ${input.slice(start, j) + String.fromCharCode(currentChar)}`,
           )
@@ -165,19 +146,21 @@ export function parse(input: string) {
     // Skip whitespace if the next character is also whitespace. This allows us
     // to reduce the amount of whitespace in the AST.
     else if (
-      (currentChar === SPACE || currentChar === LINE_BREAK || currentChar === TAB) &&
+      (currentChar === Token.SPACE ||
+        currentChar === Token.LINE_BREAK ||
+        currentChar === Token.TAB) &&
       (peekChar = input.charCodeAt(i + 1)) &&
-      (peekChar === SPACE || peekChar === LINE_BREAK || peekChar === TAB)
+      (peekChar === Token.SPACE || peekChar === Token.LINE_BREAK || peekChar === Token.TAB)
     ) {
       continue
     }
 
     // Replace new lines with spaces.
-    else if (currentChar === LINE_BREAK) {
+    else if (currentChar === Token.LINE_BREAK) {
       if (buffer.length === 0) continue
 
       peekChar = buffer.charCodeAt(buffer.length - 1)
-      if (peekChar !== SPACE && peekChar !== LINE_BREAK && peekChar !== TAB) {
+      if (peekChar !== Token.SPACE && peekChar !== Token.LINE_BREAK && peekChar !== Token.TAB) {
         buffer += ' '
       }
     }
@@ -188,7 +171,11 @@ export function parse(input: string) {
     // character, even `;` and `}`. Therefore we have to make sure that we are
     // at the correct "end" of the custom property by making sure everything is
     // balanced.
-    else if (currentChar === DASH && input.charCodeAt(i + 1) === DASH && buffer.length === 0) {
+    else if (
+      currentChar === Token.DASH &&
+      input.charCodeAt(i + 1) === Token.DASH &&
+      buffer.length === 0
+    ) {
       let closingBracketStack = ''
 
       let start = i
@@ -198,21 +185,21 @@ export function parse(input: string) {
         peekChar = input.charCodeAt(j)
 
         // Current character is a `\` therefore the next character is escaped.
-        if (peekChar === BACK_SLASH) {
+        if (peekChar === Token.BACKSLASH) {
           j += 1
         }
 
         // Start of a comment.
-        else if (peekChar === SLASH && input.charCodeAt(j + 1) === ASTERISK) {
+        else if (peekChar === Token.SLASH && input.charCodeAt(j + 1) === Token.ASTERISK) {
           for (let k = j + 2; k < input.length; k++) {
             peekChar = input.charCodeAt(k)
             // Current character is a `\` therefore the next character is escaped.
-            if (peekChar === BACK_SLASH) {
+            if (peekChar === Token.BACKSLASH) {
               k += 1
             }
 
             // End of the comment
-            else if (peekChar === ASTERISK && input.charCodeAt(k + 1) === SLASH) {
+            else if (peekChar === Token.ASTERISK && input.charCodeAt(k + 1) === Token.SLASH) {
               j = k + 1
               break
             }
@@ -220,23 +207,23 @@ export function parse(input: string) {
         }
 
         // End of the "property" of the property-value pair.
-        else if (colonIdx === -1 && peekChar === COLON) {
+        else if (colonIdx === -1 && peekChar === Token.COLON) {
           colonIdx = buffer.length + j - start
         }
 
         // End of the custom property.
-        else if (peekChar === SEMICOLON && closingBracketStack.length === 0) {
+        else if (peekChar === Token.SEMICOLON && closingBracketStack.length === 0) {
           buffer += input.slice(start, j)
           i = j
           break
         }
 
         // Start of a block.
-        else if (peekChar === OPEN_PARENTHESIS) {
+        else if (peekChar === Token.OPEN_PAREN) {
           closingBracketStack += ')'
-        } else if (peekChar === OPEN_BRACKET) {
+        } else if (peekChar === Token.OPEN_BRACKET) {
           closingBracketStack += ']'
-        } else if (peekChar === OPEN_CURLY_BRACKET) {
+        } else if (peekChar === Token.OPEN_CURLY) {
           closingBracketStack += '}'
         }
 
@@ -252,7 +239,7 @@ export function parse(input: string) {
         // }
         // ```
         else if (
-          (peekChar === CLOSE_CURLY_BRACKET || input.length - 1 === j) &&
+          (peekChar === Token.CLOSE_CURLY || input.length - 1 === j) &&
           closingBracketStack.length === 0
         ) {
           i = j - 1
@@ -262,9 +249,9 @@ export function parse(input: string) {
 
         // End of a block.
         else if (
-          peekChar === CLOSE_PARENTHESIS ||
-          peekChar === CLOSE_BRACKET ||
-          peekChar === CLOSE_CURLY_BRACKET
+          peekChar === Token.CLOSE_PAREN ||
+          peekChar === Token.CLOSE_BRACKET ||
+          peekChar === Token.CLOSE_CURLY
         ) {
           if (
             closingBracketStack.length > 0 &&
@@ -293,7 +280,7 @@ export function parse(input: string) {
     // @charset "UTF-8";
     //                 ^
     // ```
-    else if (currentChar === SEMICOLON && buffer.charCodeAt(0) === AT_SIGN) {
+    else if (currentChar === Token.SEMICOLON && buffer.charCodeAt(0) === Token.AT_SIGN) {
       node = rule(buffer, [])
 
       // At-rule is nested inside of a rule, attach it to the parent.
@@ -322,7 +309,7 @@ export function parse(input: string) {
     // }
     // ```
     //
-    else if (currentChar === SEMICOLON) {
+    else if (currentChar === Token.SEMICOLON) {
       let declaration = parseDeclaration(buffer)
       if (parent) {
         parent.nodes.push(declaration)
@@ -334,7 +321,7 @@ export function parse(input: string) {
     }
 
     // Start of a block.
-    else if (currentChar === OPEN_CURLY_BRACKET) {
+    else if (currentChar === Token.OPEN_CURLY) {
       closingBracketStack += '}'
 
       // At this point `buffer` should resemble a selector or an at-rule.
@@ -359,7 +346,7 @@ export function parse(input: string) {
     }
 
     // End of a block.
-    else if (currentChar === CLOSE_CURLY_BRACKET) {
+    else if (currentChar === Token.CLOSE_CURLY) {
       if (closingBracketStack === '') {
         throw new Error('Missing opening {')
       }
@@ -380,7 +367,7 @@ export function parse(input: string) {
         //                      ^
         // }
         // ```
-        if (buffer.charCodeAt(0) === AT_SIGN) {
+        if (buffer.charCodeAt(0) === Token.AT_SIGN) {
           node = rule(buffer.trim(), [])
 
           // At-rule is nested inside of a rule, attach it to the parent.
@@ -452,7 +439,9 @@ export function parse(input: string) {
       // Skip whitespace at the start of a new node.
       if (
         buffer.length === 0 &&
-        (currentChar === SPACE || currentChar === LINE_BREAK || currentChar === TAB)
+        (currentChar === Token.SPACE ||
+          currentChar === Token.LINE_BREAK ||
+          currentChar === Token.TAB)
       ) {
         continue
       }

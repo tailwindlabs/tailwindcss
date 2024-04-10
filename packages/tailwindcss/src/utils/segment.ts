@@ -1,17 +1,10 @@
+import * as Token from '../tokens'
+
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
 // the top-level of a string. This is a performance optimization to avoid memory
 // allocations on every call to `segment`.
 const closingBracketStack = new Uint8Array(256)
-
-// All numbers are equivalent to the value returned by `String#charCodeAt(0)`
-const BACKSLASH = 0x5c
-const OPEN_PAREN = 0x28
-const OPEN_BRACKET = 0x5b
-const OPEN_CURLY = 0x7b
-const CLOSE_PAREN = 0x29
-const CLOSE_BRACKET = 0x5d
-const CLOSE_CURLY = 0x7d
 
 /**
  * This splits a string on a top-level character.
@@ -44,25 +37,25 @@ export function segment(input: string, separator: string) {
     }
 
     switch (char) {
-      case BACKSLASH:
+      case Token.BACKSLASH:
         // The next character is escaped, so we skip it.
         idx += 1
         break
-      case OPEN_PAREN:
-        closingBracketStack[stackPos] = CLOSE_PAREN
+      case Token.OPEN_PAREN:
+        closingBracketStack[stackPos] = Token.CLOSE_PAREN
         stackPos++
         break
-      case OPEN_BRACKET:
-        closingBracketStack[stackPos] = CLOSE_BRACKET
+      case Token.OPEN_BRACKET:
+        closingBracketStack[stackPos] = Token.CLOSE_BRACKET
         stackPos++
         break
-      case OPEN_CURLY:
-        closingBracketStack[stackPos] = CLOSE_CURLY
+      case Token.OPEN_CURLY:
+        closingBracketStack[stackPos] = Token.CLOSE_CURLY
         stackPos++
         break
-      case CLOSE_BRACKET:
-      case CLOSE_CURLY:
-      case CLOSE_PAREN:
+      case Token.CLOSE_BRACKET:
+      case Token.CLOSE_CURLY:
+      case Token.CLOSE_PAREN:
         if (stackPos > 0 && char === closingBracketStack[stackPos - 1]) {
           // SAFETY: The buffer does not need to be mutated because the stack is
           // only ever read from or written to its current position. Its current
