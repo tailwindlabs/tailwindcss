@@ -258,8 +258,9 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     //
     // Otherwise, it is an invalid candidate, and skip continue parsing.
     let charCode = baseWithoutModifier.charCodeAt(1)
-    if (charCode !== Token.DASH && !(charCode >= Token.LOWER_A && charCode <= Token.LOWER_Z))
+    if (charCode !== Token.DASH && !(charCode >= Token.LOWER_A && charCode <= Token.LOWER_Z)) {
       return null
+    }
 
     baseWithoutModifier = baseWithoutModifier.slice(1, -1)
 
