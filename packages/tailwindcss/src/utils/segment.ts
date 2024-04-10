@@ -27,7 +27,7 @@ const CLOSE_CURLY = 0x7d
  */
 export function segment(input: string, separator: string) {
   // SAFETY: We can use an index into a shared buffer because this function is
-  // synchronous, non-recursive, and runs in a single-threaded envionment.
+  // synchronous, non-recursive, and runs in a single-threaded environment.
   let stackPos = 0
   let parts: string[] = []
   let lastPos = 0
