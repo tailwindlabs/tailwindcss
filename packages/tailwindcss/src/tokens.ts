@@ -20,3 +20,4 @@ export const AT_SIGN = 0x40
 export const EXCLAMATION_MARK = 0x21
 export const LOWER_A = 0x61
 export const LOWER_Z = 0x7a
+export const HASH = 0x23
