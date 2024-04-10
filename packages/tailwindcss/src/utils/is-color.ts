@@ -1,3 +1,5 @@
+import * as Token from '../tokens'
+
 const NAMED_COLORS = new Set([
   // CSS Level 1 colors
   'black',
@@ -197,7 +199,7 @@ const IS_COLOR_FN = /^(rgba?|hsla?|hwb|color|(ok)?(lab|lch)|light-dark|color-mix
 
 export function isColor(value: string): boolean {
   return (
-    value.charCodeAt(0) === 35 /* "#" */ ||
+    value.charCodeAt(0) === Token.HASH ||
     IS_COLOR_FN.test(value) ||
     NAMED_COLORS.has(value.toLowerCase())
   )
