@@ -270,7 +270,7 @@ export let variantPlugins = {
       addVariant('dark', selector)
     } else if (mode === 'class') {
       // Old behavior
-      addVariant('dark', `:is(${selector} &)`)
+      addVariant('dark', `&:is(${selector} *)`)
     }
   },
 
@@ -1340,16 +1340,6 @@ export let corePlugins = {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
 
-          if (__OXIDE__) {
-            return {
-              '& > :not([hidden]) ~ :not([hidden])': {
-                '--tw-space-x-reverse': '0',
-                'margin-inline-end': `calc(${value} * var(--tw-space-x-reverse))`,
-                'margin-inline-start': `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`,
-              },
-            }
-          }
-
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
               '--tw-space-x-reverse': '0',
@@ -1384,17 +1374,6 @@ export let corePlugins = {
       {
         'divide-x': (value) => {
           value = value === '0' ? '0px' : value
-
-          if (__OXIDE__) {
-            return {
-              '& > :not([hidden]) ~ :not([hidden])': {
-                '@defaults border-width': {},
-                '--tw-divide-x-reverse': '0',
-                'border-inline-end-width': `calc(${value} * var(--tw-divide-x-reverse))`,
-                'border-inline-start-width': `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
-              },
-            }
-          }
 
           return {
             '& > :not([hidden]) ~ :not([hidden])': {
@@ -2454,7 +2433,7 @@ export let corePlugins = {
     ].join(', ')
 
     return function ({ matchUtilities, addDefaults, theme }) {
-      addDefaults(' box-shadow', {
+      addDefaults('box-shadow', {
         '--tw-ring-offset-shadow': '0 0 #0000',
         '--tw-ring-shadow': '0 0 #0000',
         '--tw-shadow': '0 0 #0000',

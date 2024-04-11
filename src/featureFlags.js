@@ -4,12 +4,8 @@ import log from './util/log'
 let defaults = {
   optimizeUniversalDefaults: false,
   generalizedModifiers: true,
-  get disableColorOpacityUtilitiesByDefault() {
-    return __OXIDE__
-  },
-  get relativeContentPathsByDefault() {
-    return __OXIDE__
-  },
+  disableColorOpacityUtilitiesByDefault: false,
+  relativeContentPathsByDefault: false,
 }
 
 let featureFlags = {
