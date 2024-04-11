@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use `rem` units for breakpoints by default instead of `px` ([#13469](https://github.com/tailwindlabs/tailwindcss/pull/13469))
 
+### Fixed
+
+- Improve sorting candidates containing numbers ([#13507](https://github.com/tailwindlabs/tailwindcss/pull/13507))
+
 ## [4.0.0-alpha.14] - 2024-04-09
 
 ### Fixed
