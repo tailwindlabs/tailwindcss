@@ -1,7 +1,11 @@
 import type { DesignSystem } from './design-system'
-import * as Token from './tokens'
 import { decodeArbitraryValue } from './utils/decode-arbitrary-value'
 import { segment } from './utils/segment'
+
+const COLON = 0x3a
+const DASH = 0x2d
+const LOWER_A = 0x61
+const LOWER_Z = 0x7a
 
 type ArbitraryUtilityValue = {
   kind: 'arbitrary'
@@ -258,7 +262,7 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     //
     // Otherwise, it is an invalid candidate, and skip continue parsing.
     let charCode = baseWithoutModifier.charCodeAt(1)
-    if (charCode !== Token.DASH && !(charCode >= Token.LOWER_A && charCode <= Token.LOWER_Z)) {
+    if (charCode !== DASH && !(charCode >= LOWER_A && charCode <= LOWER_Z)) {
       return null
     }
 
@@ -361,14 +365,14 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
         let code = arbitraryValue.charCodeAt(i)
 
         // If we hit a ":", we're at the end of a typehint.
-        if (code === Token.COLON) {
+        if (code === COLON) {
           typehint = arbitraryValue.slice(0, i)
           arbitraryValue = arbitraryValue.slice(i + 1)
           break
         }
 
         // Keep iterating as long as we've only seen valid typehint characters.
-        if (code === Token.DASH || (code >= Token.LOWER_A && code <= Token.LOWER_Z)) {
+        if (code === DASH || (code >= LOWER_A && code <= LOWER_Z)) {
           continue
         }
 

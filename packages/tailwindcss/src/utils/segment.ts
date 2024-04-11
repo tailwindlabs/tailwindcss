@@ -1,4 +1,10 @@
-import * as Token from '../tokens'
+const BACKSLASH = 0x5c
+const OPEN_CURLY = 0x7b
+const CLOSE_CURLY = 0x7d
+const OPEN_PAREN = 0x28
+const CLOSE_PAREN = 0x29
+const OPEN_BRACKET = 0x5b
+const CLOSE_BRACKET = 0x5d
 
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
@@ -37,25 +43,25 @@ export function segment(input: string, separator: string) {
     }
 
     switch (char) {
-      case Token.BACKSLASH:
+      case BACKSLASH:
         // The next character is escaped, so we skip it.
         idx += 1
         break
-      case Token.OPEN_PAREN:
-        closingBracketStack[stackPos] = Token.CLOSE_PAREN
+      case OPEN_PAREN:
+        closingBracketStack[stackPos] = CLOSE_PAREN
         stackPos++
         break
-      case Token.OPEN_BRACKET:
-        closingBracketStack[stackPos] = Token.CLOSE_BRACKET
+      case OPEN_BRACKET:
+        closingBracketStack[stackPos] = CLOSE_BRACKET
         stackPos++
         break
-      case Token.OPEN_CURLY:
-        closingBracketStack[stackPos] = Token.CLOSE_CURLY
+      case OPEN_CURLY:
+        closingBracketStack[stackPos] = CLOSE_CURLY
         stackPos++
         break
-      case Token.CLOSE_BRACKET:
-      case Token.CLOSE_CURLY:
-      case Token.CLOSE_PAREN:
+      case CLOSE_BRACKET:
+      case CLOSE_CURLY:
+      case CLOSE_PAREN:
         if (stackPos > 0 && char === closingBracketStack[stackPos - 1]) {
           // SAFETY: The buffer does not need to be mutated because the stack is
           // only ever read from or written to its current position. Its current
