@@ -19,12 +19,20 @@ export function compare(a: string, z: string) {
 
     // If both are numbers, compare them as numbers instead of strings.
     if (aCode >= ZERO && aCode <= NINE && zCode >= ZERO && zCode <= NINE) {
+      let initialI = i
       let aStart = i
       let zStart = i
 
       // Consume the number
       while (a.charCodeAt(i) >= ZERO && a.charCodeAt(i) <= NINE) i++
       let aEnd = i
+
+      // Reset `i` to its initial value, this way we can find the end of number
+      // in `z`. If we don't do this, and use `i` as is it could be that we go
+      // past the number in `z`. A side effect of this is that the `Number()`
+      // call will be much slower than it needs to be because it will receive
+      // non-number like values.
+      i = initialI
 
       // Consume the number
       while (z.charCodeAt(i) >= ZERO && z.charCodeAt(i) <= NINE) i++
