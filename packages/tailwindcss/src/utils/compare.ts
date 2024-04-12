@@ -27,11 +27,13 @@ export function compare(a: string, z: string) {
       while (a.charCodeAt(i) >= ZERO && a.charCodeAt(i) <= NINE) i++
       let aEnd = i
 
-      // Reset `i` to its initial value, this way we can find the end of number
-      // in `z`. If we don't do this, and use `i` as is it could be that we go
-      // past the number in `z`. A side effect of this is that the `Number()`
-      // call will be much slower than it needs to be because it will receive
-      // non-number like values.
+      // Reset `i` to its initial value, this way we can find the end of the
+      // number in `z`. If we don't do this, and use `i` as is it could be
+      // that we go past the number in `z` if `a` contains more digits.
+      //
+      // A side effect of re-setting `i` is that the `Number()` call will be
+      // much faster because if we didn't it could be that number for `z`
+      // looked like `50%` which is slower to parse than `50`.
       i = initialI
 
       // Consume the number
