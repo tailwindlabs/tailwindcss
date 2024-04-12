@@ -41,7 +41,12 @@ export function compare(a: string, z: string) {
       let aNumber = a.slice(aStart, aEnd)
       let zNumber = z.slice(zStart, zEnd)
 
-      return Number(aNumber) - Number(zNumber)
+      return (
+        Number(aNumber) - Number(zNumber) ||
+        // Fallback case if numbers are the same but the string representation
+        // is not. Fallback to string sorting. E.g.: `0123` vs `123`
+        (aNumber < zNumber ? -1 : 1)
+      )
     }
 
     // Otherwise, compare them as strings
