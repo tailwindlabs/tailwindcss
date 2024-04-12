@@ -41,12 +41,7 @@ export function compare(a: string, z: string) {
       let aNumber = a.slice(aStart, aEnd)
       let zNumber = z.slice(zStart, zEnd)
 
-      if (aNumber !== zNumber) return Number(aNumber) - Number(zNumber)
-
-      // Numbers are equal, skip to the end of the number and continue comparing
-      // the rest of the string.
-      i--
-      continue
+      return Number(aNumber) - Number(zNumber)
     }
 
     // Otherwise, compare them as strings
