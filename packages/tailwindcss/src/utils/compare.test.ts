@@ -44,3 +44,83 @@ it('should sort strings with numbers consistently using the `compare` function',
     ]
   `)
 })
+
+it('should sort strings with modifiers consistently using the `compare` function', () => {
+  expect(
+    [
+      'text-5xl',
+      'text-6xl',
+      'text-6xl/loose',
+      'text-6xl/wide',
+      'bg-red-500',
+      'bg-red-500/50',
+      'bg-red-500/70',
+      'bg-red-500/60',
+      'bg-red-50',
+      'bg-red-50/50',
+      'bg-red-50/70',
+      'bg-red-50/60',
+    ]
+      .sort(() => Math.random() - 0.5) // Shuffle the array
+      .sort(compare), // Sort the array
+  ).toMatchInlineSnapshot(`
+    [
+      "bg-red-50",
+      "bg-red-50/50",
+      "bg-red-50/60",
+      "bg-red-50/70",
+      "bg-red-500",
+      "bg-red-500/50",
+      "bg-red-500/60",
+      "bg-red-500/70",
+      "text-5xl",
+      "text-6xl",
+      "text-6xl/loose",
+      "text-6xl/wide",
+    ]
+  `)
+})
+
+it('should sort strings with multiple numbers consistently using the `compare` function', () => {
+  expect(
+    [
+      'foo-123-bar-456-baz-789',
+      'foo-123-bar-456-baz-788',
+      'foo-123-bar-456-baz-790',
+      'foo-123-bar-455-baz-789',
+      'foo-123-bar-456-baz-789',
+      'foo-123-bar-457-baz-789',
+      'foo-123-bar-456-baz-789',
+      'foo-124-bar-456-baz-788',
+      'foo-125-bar-456-baz-790',
+      'foo-126-bar-455-baz-789',
+      'foo-127-bar-456-baz-789',
+      'foo-128-bar-457-baz-789',
+      'foo-1-bar-2-baz-3',
+      'foo-12-bar-34-baz-45',
+      'foo-12-bar-34-baz-4',
+      'foo-12-bar-34-baz-456',
+    ]
+      .sort(() => Math.random() - 0.5) // Shuffle the array
+      .sort(compare), // Sort the array
+  ).toMatchInlineSnapshot(`
+    [
+      "foo-1-bar-2-baz-3",
+      "foo-12-bar-34-baz-4",
+      "foo-12-bar-34-baz-45",
+      "foo-12-bar-34-baz-456",
+      "foo-123-bar-455-baz-789",
+      "foo-123-bar-456-baz-788",
+      "foo-123-bar-456-baz-789",
+      "foo-123-bar-456-baz-789",
+      "foo-123-bar-456-baz-789",
+      "foo-123-bar-456-baz-790",
+      "foo-123-bar-457-baz-789",
+      "foo-124-bar-456-baz-788",
+      "foo-125-bar-456-baz-790",
+      "foo-126-bar-455-baz-789",
+      "foo-127-bar-456-baz-789",
+      "foo-128-bar-457-baz-789",
+    ]
+  `)
+})
