@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix `contain-*` utilities ([#13521](https://github.com/tailwindlabs/tailwindcss/pull/13521))
+- Make sure `contain-*` utility variables resolve to a valid value ([#13521](https://github.com/tailwindlabs/tailwindcss/pull/13521))
 
 ## Changed
 
