@@ -3691,7 +3691,7 @@ export function createUtilities(theme: Theme) {
 
   {
     let cssContainValue =
-      'var(--tw-contain-size) var(--tw-contain-layout) var(--tw-contain-paint) var(--tw-contain-style)'
+      'var(--tw-contain-size,) var(--tw-contain-layout,) var(--tw-contain-paint,) var(--tw-contain-style,)'
     let cssContainProperties = () => {
       return atRoot([
         property('--tw-contain-size'),
