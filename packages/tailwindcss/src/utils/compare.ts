@@ -19,26 +19,16 @@ export function compare(a: string, z: string) {
 
     // If both are numbers, compare them as numbers instead of strings.
     if (aCode >= ZERO && aCode <= NINE && zCode >= ZERO && zCode <= NINE) {
-      let initialI = i
       let aStart = i
-      let zStart = i
-
-      // Consume the number
-      while (a.charCodeAt(i) >= ZERO && a.charCodeAt(i) <= NINE) i++
       let aEnd = i
-
-      // Reset `i` to its initial value, this way we can find the end of the
-      // number in `z`. If we don't do this, and use `i` as is it could be
-      // that we go past the number in `z` if `a` contains more digits.
-      //
-      // A side effect of re-setting `i` is that the `Number()` call will be
-      // much faster because if we didn't it could be that number for `z`
-      // looked like `50%` which is slower to parse than `50`.
-      i = initialI
+      let zStart = i
+      let zEnd = i
 
       // Consume the number
-      while (z.charCodeAt(i) >= ZERO && z.charCodeAt(i) <= NINE) i++
-      let zEnd = i
+      while (a.charCodeAt(aEnd) >= ZERO && a.charCodeAt(aEnd) <= NINE) aEnd++
+
+      // Consume the number
+      while (z.charCodeAt(zEnd) >= ZERO && z.charCodeAt(zEnd) <= NINE) zEnd++
 
       let aNumber = a.slice(aStart, aEnd)
       let zNumber = z.slice(zStart, zEnd)
