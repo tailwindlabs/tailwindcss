@@ -2,6 +2,7 @@ import { rule, type AstNode, type Rule } from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
+import { compare } from './utils/compare'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
 
@@ -87,7 +88,7 @@ export function compileCandidates(
       // Sort by most properties first, then by least properties
       zSorting.properties.length - aSorting.properties.length ||
       // Sort alphabetically
-      (aSorting.candidate < zSorting.candidate ? -1 : 1)
+      compare(aSorting.candidate, zSorting.candidate)
     )
   })
 

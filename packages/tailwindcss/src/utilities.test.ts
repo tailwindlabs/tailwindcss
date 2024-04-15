@@ -681,12 +681,12 @@ test('col', () => {
       grid-column: auto;
     }
 
-    .col-span-17 {
-      grid-column: span 17 / span 17;
-    }
-
     .col-span-4 {
       grid-column: span 4 / span 4;
+    }
+
+    .col-span-17 {
+      grid-column: span 17 / span 17;
     }
 
     .col-span-\\[--my-variable\\] {
@@ -762,12 +762,12 @@ test('row', () => {
       grid-row: auto;
     }
 
-    .row-span-17 {
-      grid-row: span 17 / span 17;
-    }
-
     .row-span-4 {
       grid-row: span 4 / span 4;
+    }
+
+    .row-span-17 {
+      grid-row: span 17 / span 17;
     }
 
     .row-span-\\[--my-variable\\] {
@@ -5405,16 +5405,16 @@ test('divide-x', () => {
       border-inline-end-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
     }
 
-    :where(.divide-x-123 > :not(:last-child)) {
-      border-inline-style: var(--tw-border-style);
-      border-inline-start-width: calc(123px * var(--tw-divide-x-reverse));
-      border-inline-end-width: calc(123px * calc(1 - var(--tw-divide-x-reverse)));
-    }
-
     :where(.divide-x-4 > :not(:last-child)) {
       border-inline-style: var(--tw-border-style);
       border-inline-start-width: calc(4px * var(--tw-divide-x-reverse));
       border-inline-end-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
+    }
+
+    :where(.divide-x-123 > :not(:last-child)) {
+      border-inline-style: var(--tw-border-style);
+      border-inline-start-width: calc(123px * var(--tw-divide-x-reverse));
+      border-inline-end-width: calc(123px * calc(1 - var(--tw-divide-x-reverse)));
     }
 
     :where(.divide-x-\\[4px\\] > :not(:last-child)) {
@@ -5490,18 +5490,18 @@ test('divide-y', () => {
       border-bottom-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
-    :where(.divide-y-123 > :not(:last-child)) {
-      border-bottom-style: var(--tw-border-style);
-      border-top-style: var(--tw-border-style);
-      border-top-width: calc(123px * var(--tw-divide-y-reverse));
-      border-bottom-width: calc(123px * calc(1 - var(--tw-divide-y-reverse)));
-    }
-
     :where(.divide-y-4 > :not(:last-child)) {
       border-bottom-style: var(--tw-border-style);
       border-top-style: var(--tw-border-style);
       border-top-width: calc(4px * var(--tw-divide-y-reverse));
       border-bottom-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
+    }
+
+    :where(.divide-y-123 > :not(:last-child)) {
+      border-bottom-style: var(--tw-border-style);
+      border-top-style: var(--tw-border-style);
+      border-top-width: calc(123px * var(--tw-divide-y-reverse));
+      border-bottom-width: calc(123px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
     :where(.divide-y-\\[4px\\] > :not(:last-child)) {
@@ -7525,19 +7525,15 @@ test('bg', () => {
       background-attachment: scroll;
     }
 
-    .bg-\\[120px\\] {
-      background-position: 120px;
-    }
-
-    .bg-\\[120px_120px\\] {
-      background-position: 120px 120px;
-    }
-
     .bg-\\[50\\%\\] {
       background-position: 50%;
     }
 
-    .bg-\\[position\\:120px_120px\\] {
+    .bg-\\[120px\\] {
+      background-position: 120px;
+    }
+
+    .bg-\\[120px_120px\\], .bg-\\[position\\:120px_120px\\] {
       background-position: 120px 120px;
     }
 
@@ -7792,12 +7788,12 @@ test('from', () => {
       --tw-gradient-from-position: 0%;
     }
 
-    .from-100\\% {
-      --tw-gradient-from-position: 100%;
-    }
-
     .from-5\\% {
       --tw-gradient-from-position: 5%;
+    }
+
+    .from-100\\% {
+      --tw-gradient-from-position: 100%;
     }
 
     .from-\\[50\\%\\] {
@@ -8014,12 +8010,12 @@ test('via', () => {
       --tw-gradient-via-position: 0%;
     }
 
-    .via-100\\% {
-      --tw-gradient-via-position: 100%;
-    }
-
     .via-5\\% {
       --tw-gradient-via-position: 5%;
+    }
+
+    .via-100\\% {
+      --tw-gradient-via-position: 100%;
     }
 
     .via-\\[50\\%\\] {
@@ -8224,12 +8220,12 @@ test('to', () => {
       --tw-gradient-to-position: 0%;
     }
 
-    .to-100\\% {
-      --tw-gradient-to-position: 100%;
-    }
-
     .to-5\\% {
       --tw-gradient-to-position: 5%;
+    }
+
+    .to-100\\% {
+      --tw-gradient-to-position: 100%;
     }
 
     .to-\\[50\\%\\] {
@@ -9424,12 +9420,12 @@ test('font-style', () => {
 test('font-stretch', () => {
   expect(run(['font-stretch-ultra-expanded', 'font-stretch-50%', 'font-stretch-200%']))
     .toMatchInlineSnapshot(`
-      ".font-stretch-200\\% {
-        font-stretch: 200%;
+      ".font-stretch-50\\% {
+        font-stretch: 50%;
       }
 
-      .font-stretch-50\\% {
-        font-stretch: 50%;
+      .font-stretch-200\\% {
+        font-stretch: 200%;
       }
 
       .font-stretch-ultra-expanded {
@@ -9720,16 +9716,16 @@ test('decoration', () => {
       text-decoration-thickness: 1px;
     }
 
-    .decoration-123 {
-      text-decoration-thickness: 123px;
-    }
-
     .decoration-2 {
       text-decoration-thickness: 2px;
     }
 
     .decoration-4 {
       text-decoration-thickness: 4px;
+    }
+
+    .decoration-123 {
+      text-decoration-thickness: 123px;
     }
 
     .decoration-\\[12px\\] {
@@ -11157,24 +11153,24 @@ test('underline-offset', () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".-underline-offset-123 {
-      text-underline-offset: calc(123px * -1);
+    ".-underline-offset-4 {
+      text-underline-offset: calc(4px * -1);
     }
 
-    .-underline-offset-4 {
-      text-underline-offset: calc(4px * -1);
+    .-underline-offset-123 {
+      text-underline-offset: calc(123px * -1);
     }
 
     .-underline-offset-\\[--value\\] {
       text-underline-offset: calc(var(--value) * -1);
     }
 
-    .underline-offset-123 {
-      text-underline-offset: 123px;
-    }
-
     .underline-offset-4 {
       text-underline-offset: 4px;
+    }
+
+    .underline-offset-123 {
+      text-underline-offset: 123px;
     }
 
     .underline-offset-\\[--value\\] {
