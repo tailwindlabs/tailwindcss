@@ -25,10 +25,12 @@ export function compare(a: string, z: string) {
       let zEnd = i + 1
 
       // Consume the number
-      while (a.charCodeAt(aEnd) >= ZERO && a.charCodeAt(aEnd) <= NINE) aEnd++
+      aCode = a.charCodeAt(aEnd)
+      while (aCode >= ZERO && aCode <= NINE) aCode = a.charCodeAt(++aEnd)
 
       // Consume the number
-      while (z.charCodeAt(zEnd) >= ZERO && z.charCodeAt(zEnd) <= NINE) zEnd++
+      zCode = z.charCodeAt(zEnd)
+      while (zCode >= ZERO && zCode <= NINE) zCode = z.charCodeAt(++zEnd)
 
       let aNumber = a.slice(aStart, aEnd)
       let zNumber = z.slice(zStart, zEnd)
