@@ -20,15 +20,17 @@ export function compare(a: string, z: string) {
     // If both are numbers, compare them as numbers instead of strings.
     if (aCode >= ZERO && aCode <= NINE && zCode >= ZERO && zCode <= NINE) {
       let aStart = i
-      let aEnd = i
+      let aEnd = i + 1
       let zStart = i
-      let zEnd = i
+      let zEnd = i + 1
 
       // Consume the number
-      while (a.charCodeAt(aEnd) >= ZERO && a.charCodeAt(aEnd) <= NINE) aEnd++
+      aCode = a.charCodeAt(aEnd)
+      while (aCode >= ZERO && aCode <= NINE) aCode = a.charCodeAt(++aEnd)
 
       // Consume the number
-      while (z.charCodeAt(zEnd) >= ZERO && z.charCodeAt(zEnd) <= NINE) zEnd++
+      zCode = z.charCodeAt(zEnd)
+      while (zCode >= ZERO && zCode <= NINE) zCode = z.charCodeAt(++zEnd)
 
       let aNumber = a.slice(aStart, aEnd)
       let zNumber = z.slice(zStart, zEnd)
