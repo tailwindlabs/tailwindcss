@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Support any spaces inside calc ([#13529](https://github.com/tailwindlabs/tailwindcss/pull/13529))
 
 ## [3.4.3] - 2024-03-27
 
