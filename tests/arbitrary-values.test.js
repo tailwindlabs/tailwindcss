@@ -639,3 +639,30 @@ it('should not insert spaces around `-` in arbitrary values that use `max-conten
     `)
   })
 })
+
+it('should support arbitrary calc values with spaces`', () => {
+  let config = {
+    content: [
+      {
+        raw: html`<div
+          class="w-[calc(100px + 200px)] h-[calc(3rem - 1rem)] text-lg/[calc(50px / 1rem)]"
+        ></div>`,
+      },
+    ],
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .h-\[calc\(3rem-1rem\)\] {
+        height: 2rem;
+      }
+      .w-\[calc\(100px\+200px\)\] {
+        width: 300px;
+      }
+      .text-lg\/\[calc\(50px\/1rem\)\] {
+        font-size: 1.125rem;
+        line-height: calc(50px / 1rem);
+      }
+    `)
+  })
+})

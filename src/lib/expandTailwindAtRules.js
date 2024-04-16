@@ -39,6 +39,10 @@ function getTransformer(tailwindConfig, fileExtension) {
   )
 }
 
+function removeSpacesInsideCalc(content) {
+  return content.replace(/calc\(([^)]*)\)/g, (_, p1) => `calc(${p1.replace(/\s+/g, '')})`)
+}
+
 let extractorCache = new WeakMap()
 
 // Scans template contents for possible classes. This is a hot path on initial build but
@@ -51,6 +55,7 @@ function getClassCandidates(content, extractor, candidates, seen) {
 
   for (let line of content.split('\n')) {
     line = line.trim()
+    line = removeSpacesInsideCalc(line)
 
     if (seen.has(line)) {
       continue
