@@ -2,11 +2,11 @@ import { Features, transform } from 'lightningcss'
 import { compile } from '..'
 
 export function compileCss(css: string, candidates: string[] = []) {
-  return optimizeCss(compile(css).build(candidates)).trim()
+  return optimizeCss(compile(css).build(candidates)).css.trim()
 }
 
 export function run(candidates: string[]) {
-  return optimizeCss(compile('@tailwind utilities;').build(candidates)).trim()
+  return optimizeCss(compile('@tailwind utilities;').build(candidates)).css.trim()
 }
 
 export function optimizeCss(
