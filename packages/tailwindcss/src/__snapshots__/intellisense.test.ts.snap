@@ -8448,6 +8448,7 @@ exports[`getVariants 1`] = `
       "dark",
       "print",
       "forced-colors",
+      "inverted-colors",
     ],
   },
   {
@@ -9166,6 +9167,13 @@ exports[`getVariants 1`] = `
     "hasDash": true,
     "isArbitrary": false,
     "name": "forced-colors",
+    "selectors": [Function],
+    "values": [],
+  },
+  {
+    "hasDash": true,
+    "isArbitrary": false,
+    "name": "inverted-colors",
     "selectors": [Function],
     "values": [],
   },

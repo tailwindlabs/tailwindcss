@@ -1143,6 +1143,8 @@ export function createVariants(theme: Theme): Variants {
 
   staticVariant('forced-colors', ['@media (forced-colors: active)'])
 
+  staticVariant('inverted-colors', ['@media (inverted-colors: inverted)'])
+
   return variants
 }
 
