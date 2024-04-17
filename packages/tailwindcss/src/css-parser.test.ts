@@ -35,6 +35,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [],
         },
@@ -63,12 +65,12 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toEqual([
-        { kind: 'rule', selector: '.foo.baz', nodes: [] },
-        { kind: 'rule', selector: '.foo.qux', nodes: [] },
-        { kind: 'rule', selector: '.foo .qux', nodes: [] },
-        { kind: 'rule', selector: '.foo .baz', nodes: [] },
-        { kind: 'rule', selector: '.foo .baz', nodes: [] },
-        { kind: 'rule', selector: '.foo .baz', nodes: [] },
+        { kind: 'rule', source: null, destination: null, selector: '.foo.baz', nodes: [] },
+        { kind: 'rule', source: null, destination: null, selector: '.foo.qux', nodes: [] },
+        { kind: 'rule', source: null, destination: null, selector: '.foo .qux', nodes: [] },
+        { kind: 'rule', source: null, destination: null, selector: '.foo .baz', nodes: [] },
+        { kind: 'rule', source: null, destination: null, selector: '.foo .baz', nodes: [] },
+        { kind: 'rule', source: null, destination: null, selector: '.foo .baz', nodes: [] },
       ])
     })
 
@@ -81,9 +83,11 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
             */
         `),
       ).toEqual([
-        { kind: 'comment', value: '! License #1 ' },
+        { kind: 'comment', source: null, destination: null, value: '! License #1 ' },
         {
           kind: 'comment',
+          source: null,
+          destination: null,
           value: `!
             * License #2
             `,
@@ -106,20 +110,42 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           /*! License #3 */
         `),
       ).toEqual([
-        { kind: 'comment', value: '! License #1 ' },
-        { kind: 'comment', value: '! License #1.5 ' },
-        { kind: 'comment', value: '! License #2 ' },
-        { kind: 'comment', value: '! License #2.5 ' },
-        { kind: 'comment', value: '! License #3 ' },
+        { kind: 'comment', source: null, destination: null, value: '! License #1 ' },
+        { kind: 'comment', source: null, destination: null, value: '! License #1.5 ' },
+        { kind: 'comment', source: null, destination: null, value: '! License #2 ' },
+        { kind: 'comment', source: null, destination: null, value: '! License #2.5 ' },
+        { kind: 'comment', source: null, destination: null, value: '! License #3 ' },
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
-          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+          nodes: [
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
+          ],
         },
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.bar',
-          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+          nodes: [
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'blue',
+              important: false,
+            },
+          ],
         },
       ])
     })
@@ -134,10 +160,14 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.dark p',
           nodes: [
             {
               kind: 'declaration',
+              source: null,
+              destination: null,
               property: 'color',
               value: 'black',
               important: false,
@@ -154,7 +184,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         parse(css`
           color: red;
         `),
-      ).toEqual([{ kind: 'declaration', property: 'color', value: 'red', important: false }])
+      ).toEqual([
+        {
+          kind: 'declaration',
+          source: null,
+          destination: null,
+          property: 'color',
+          value: 'red',
+          important: false,
+        },
+      ])
     })
 
     it('should parse declarations with strings', () => {
@@ -163,7 +202,14 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           content: 'Hello, world!';
         `),
       ).toEqual([
-        { kind: 'declaration', property: 'content', value: "'Hello, world!'", important: false },
+        {
+          kind: 'declaration',
+          source: null,
+          destination: null,
+          property: 'content',
+          value: "'Hello, world!'",
+          important: false,
+        },
       ])
     })
 
@@ -175,6 +221,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'declaration',
+          source: null,
+          destination: null,
           property: 'content',
           value: `'Good, "monday", morning!'`,
           important: false,
@@ -190,6 +238,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'declaration',
+          source: null,
+          destination: null,
           property: 'content',
           value: `"It's a beautiful day!"`,
           important: false,
@@ -205,6 +255,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'declaration',
+          source: null,
+          destination: null,
           property: 'content',
           value: `'These are not the end \"\\' of the string'`,
           important: false,
@@ -221,6 +273,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ).toEqual([
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: 'width',
             value: '123px',
             important: true,
@@ -236,6 +290,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ).toEqual([
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: 'width',
             value: '123px',
             important: true,
@@ -250,17 +306,30 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           parse(css`
             --foo: bar;
           `),
-        ).toEqual([{ kind: 'declaration', property: '--foo', value: 'bar', important: false }])
+        ).toEqual([
+          {
+            kind: 'declaration',
+            source: null,
+            destination: null,
+            property: '--foo',
+            value: 'bar',
+            important: false,
+          },
+        ])
       })
 
       it('should parse a minified custom property', () => {
         expect(parse(':root{--foo:bar;}')).toEqual([
           {
             kind: 'rule',
+            source: null,
+            destination: null,
             selector: ':root',
             nodes: [
               {
                 kind: 'declaration',
+                source: null,
+                destination: null,
                 property: '--foo',
                 value: 'bar',
                 important: false,
@@ -274,10 +343,14 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         expect(parse(':root{--foo:bar}')).toEqual([
           {
             kind: 'rule',
+            source: null,
+            destination: null,
             selector: ':root',
             nodes: [
               {
                 kind: 'declaration',
+                source: null,
+                destination: null,
                 property: '--foo',
                 value: 'bar',
                 important: false,
@@ -292,7 +365,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           parse(`
             --foo: bar
           `),
-        ).toEqual([{ kind: 'declaration', property: '--foo', value: 'bar', important: false }])
+        ).toEqual([
+          {
+            kind: 'declaration',
+            source: null,
+            destination: null,
+            property: '--foo',
+            value: 'bar',
+            important: false,
+          },
+        ])
       })
 
       it('should parse a custom property with a missing ending `;` and `!important`', () => {
@@ -300,7 +382,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           parse(`
             --foo: bar !important
           `),
-        ).toEqual([{ kind: 'declaration', property: '--foo', value: 'bar', important: true }])
+        ).toEqual([
+          {
+            kind: 'declaration',
+            source: null,
+            destination: null,
+            property: '--foo',
+            value: 'bar',
+            important: true,
+          },
+        ])
       })
 
       it('should parse a custom property with an embedded programming language', () => {
@@ -311,6 +402,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ).toEqual([
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: '--foo',
             value: 'if(x > 5) this.width = 10',
             important: false,
@@ -322,6 +415,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         expect(parse('--foo: {};')).toEqual([
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: '--foo',
             value: '{}',
             important: false,
@@ -341,6 +436,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ).toEqual([
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: '--foo',
             value: `{
               background-color: red;
@@ -369,6 +466,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ).toEqual([
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: '--foo',
             value: `{
               background-color: red;
@@ -379,6 +478,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           },
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: '--bar',
             value: `{
               background-color: red;
@@ -398,6 +499,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ).toEqual([
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: '--foo',
             value: 'This is not the end \\;, but this is',
             important: false,
@@ -413,6 +516,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ).toEqual([
           {
             kind: 'declaration',
+            source: null,
+            destination: null,
             property: '--foo',
             value: '/* This is not the end \\; this is also not the end ; */ but this is',
             important: false,
@@ -425,7 +530,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           parse(css`
             --foo: ;
           `),
-        ).toEqual([{ kind: 'declaration', property: '--foo', value: '', important: false }])
+        ).toEqual([
+          {
+            kind: 'declaration',
+            source: null,
+            destination: null,
+            property: '--foo',
+            value: '',
+            important: false,
+          },
+        ])
       })
 
       it('should parse custom properties with `!important`', () => {
@@ -433,7 +547,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           parse(css`
             --foo: bar !important;
           `),
-        ).toEqual([{ kind: 'declaration', property: '--foo', value: 'bar', important: true }])
+        ).toEqual([
+          {
+            kind: 'declaration',
+            source: null,
+            destination: null,
+            property: '--foo',
+            value: 'bar',
+            important: true,
+          },
+        ])
       })
     })
 
@@ -444,8 +567,22 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           background-color: blue;
         `),
       ).toEqual([
-        { kind: 'declaration', property: 'color', value: 'red', important: false },
-        { kind: 'declaration', property: 'background-color', value: 'blue', important: false },
+        {
+          kind: 'declaration',
+          source: null,
+          destination: null,
+          property: 'color',
+          value: 'red',
+          important: false,
+        },
+        {
+          kind: 'declaration',
+          source: null,
+          destination: null,
+          property: 'background-color',
+          value: 'blue',
+          important: false,
+        },
       ])
     })
 
@@ -463,14 +600,32 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toEqual([
-        { kind: 'declaration', property: 'color', value: 'red', important: false },
-        { kind: 'declaration', property: 'font-weight', value: 'bold', important: false },
+        {
+          kind: 'declaration',
+          source: null,
+          destination: null,
+          property: 'color',
+          value: 'red',
+          important: false,
+        },
+        {
+          kind: 'declaration',
+          source: null,
+          destination: null,
+          property: 'font-weight',
+          value: 'bold',
+          important: false,
+        },
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
             {
               kind: 'declaration',
+              source: null,
+              destination: null,
               property: 'background-color',
               value: 'red',
               important: false,
@@ -493,10 +648,14 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
             {
               kind: 'declaration',
+              source: null,
+              destination: null,
               property: 'grid-template-areas',
               value: "'header header header' 'sidebar main main' 'footer footer footer'",
               important: false,
@@ -514,7 +673,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           .foo {
           }
         `),
-      ).toEqual([{ kind: 'rule', selector: '.foo', nodes: [] }])
+      ).toEqual([{ kind: 'rule', source: null, destination: null, selector: '.foo', nodes: [] }])
     })
 
     it('should parse selectors with escaped characters', () => {
@@ -526,8 +685,14 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toEqual([
-        { kind: 'rule', selector: '.hover\\:foo:hover', nodes: [] },
-        { kind: 'rule', selector: '.\\32 xl\\:foo', nodes: [] },
+        {
+          kind: 'rule',
+          source: null,
+          destination: null,
+          selector: '.hover\\:foo:hover',
+          nodes: [],
+        },
+        { kind: 'rule', source: null, destination: null, selector: '.\\32 xl\\:foo', nodes: [] },
       ])
     })
 
@@ -538,7 +703,9 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           .bar {
           }
         `),
-      ).toEqual([{ kind: 'rule', selector: '.foo, .bar', nodes: [] }])
+      ).toEqual([
+        { kind: 'rule', source: null, destination: null, selector: '.foo, .bar', nodes: [] },
+      ])
     })
 
     it('should parse multiple declarations inside of a selector', () => {
@@ -552,10 +719,26 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
-            { kind: 'declaration', property: 'color', value: 'red', important: false },
-            { kind: 'declaration', property: 'font-size', value: '16px', important: false },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'font-size',
+              value: '16px',
+              important: false,
+            },
           ],
         },
       ])
@@ -572,10 +755,26 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
-            { kind: 'declaration', property: 'color', value: 'red', important: false },
-            { kind: 'declaration', property: 'font-size', value: '16px', important: false },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'font-size',
+              value: '16px',
+              important: false,
+            },
           ],
         },
       ])
@@ -592,10 +791,26 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
-            { kind: 'declaration', property: 'color', value: 'red', important: false },
-            { kind: 'declaration', property: 'font-size', value: '16px', important: true },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'font-size',
+              value: '16px',
+              important: true,
+            },
           ],
         },
       ])
@@ -605,8 +820,19 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       expect(parse(['.foo,', '.bar,', '.baz', '{', 'color:red;', '}'].join('\n'))).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo, .bar, .baz',
-          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+          nodes: [
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
+          ],
         },
       ])
     })
@@ -617,8 +843,19 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo, .bar, .baz .qux',
-          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+          nodes: [
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
+          ],
         },
       ])
     })
@@ -630,7 +867,9 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         parse(css`
           @charset "UTF-8";
         `),
-      ).toEqual([{ kind: 'rule', selector: '@charset "UTF-8"', nodes: [] }])
+      ).toEqual([
+        { kind: 'rule', source: null, destination: null, selector: '@charset "UTF-8"', nodes: [] },
+      ])
     })
 
     it("should parse an at-rule without a block or semicolon when it's the last rule in a block", () => {
@@ -643,8 +882,18 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '@layer utilities',
-          nodes: [{ kind: 'rule', selector: '@tailwind utilities', nodes: [] }],
+          nodes: [
+            {
+              kind: 'rule',
+              source: null,
+              destination: null,
+              selector: '@tailwind utilities',
+              nodes: [],
+            },
+          ],
         },
       ])
     })
@@ -663,13 +912,33 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '@layer utilities',
-          nodes: [{ kind: 'rule', selector: '@charset "UTF-8"', nodes: [] }],
+          nodes: [
+            {
+              kind: 'rule',
+              source: null,
+              destination: null,
+              selector: '@charset "UTF-8"',
+              nodes: [],
+            },
+          ],
         },
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
-          nodes: [{ kind: 'rule', selector: '@apply font-bold hover:text-red-500', nodes: [] }],
+          nodes: [
+            {
+              kind: 'rule',
+              source: null,
+              destination: null,
+              selector: '@apply font-bold hover:text-red-500',
+              nodes: [],
+            },
+          ],
         },
       ])
     })
@@ -681,8 +950,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           @tailwind base;
         `),
       ).toEqual([
-        { kind: 'rule', selector: '@tailwind', nodes: [] },
-        { kind: 'rule', selector: '@tailwind base', nodes: [] },
+        { kind: 'rule', source: null, destination: null, selector: '@tailwind', nodes: [] },
+        { kind: 'rule', source: null, destination: null, selector: '@tailwind base', nodes: [] },
       ])
     })
 
@@ -704,25 +973,54 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '@media (width >= 600px)',
           nodes: [
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               selector: '.foo',
               nodes: [
-                { kind: 'declaration', property: 'color', value: 'red', important: false },
+                {
+                  kind: 'declaration',
+                  source: null,
+                  destination: null,
+                  property: 'color',
+                  value: 'red',
+                  important: false,
+                },
                 {
                   kind: 'rule',
+                  source: null,
+                  destination: null,
                   selector: '@media (width >= 800px)',
                   nodes: [
-                    { kind: 'declaration', property: 'color', value: 'blue', important: false },
+                    {
+                      kind: 'declaration',
+                      source: null,
+                      destination: null,
+                      property: 'color',
+                      value: 'blue',
+                      important: false,
+                    },
                   ],
                 },
                 {
                   kind: 'rule',
+                  source: null,
+                  destination: null,
                   selector: '@media (width >= 1000px)',
                   nodes: [
-                    { kind: 'declaration', property: 'color', value: 'green', important: false },
+                    {
+                      kind: 'declaration',
+                      source: null,
+                      destination: null,
+                      property: 'color',
+                      value: 'green',
+                      important: false,
+                    },
                   ],
                 },
               ],
@@ -746,9 +1044,13 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           nodes: [
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               nodes: [],
               selector:
                 '@apply hover:text-red-100 sm:hover:text-red-200 md:hover:text-red-300 lg:hover:text-red-400 xl:hover:text-red-500',
@@ -775,17 +1077,30 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               selector: '.bar',
               nodes: [
                 {
                   kind: 'rule',
+                  source: null,
+                  destination: null,
                   selector: '.baz',
                   nodes: [
-                    { kind: 'declaration', property: 'color', value: 'red', important: false },
+                    {
+                      kind: 'declaration',
+                      source: null,
+                      destination: null,
+                      property: 'color',
+                      value: 'red',
+                      important: false,
+                    },
                   ],
                 },
               ],
@@ -809,13 +1124,33 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
-            { kind: 'declaration', property: 'color', value: 'red', important: false },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               selector: '&:hover',
-              nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+              nodes: [
+                {
+                  kind: 'declaration',
+                  source: null,
+                  destination: null,
+                  property: 'color',
+                  value: 'blue',
+                  important: false,
+                },
+              ],
             },
           ],
         },
@@ -838,17 +1173,41 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               selector: '.bar',
-              nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+              nodes: [
+                {
+                  kind: 'declaration',
+                  source: null,
+                  destination: null,
+                  property: 'color',
+                  value: 'red',
+                  important: false,
+                },
+              ],
             },
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               selector: '.baz',
-              nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+              nodes: [
+                {
+                  kind: 'declaration',
+                  source: null,
+                  destination: null,
+                  property: 'color',
+                  value: 'blue',
+                  important: false,
+                },
+              ],
             },
           ],
         },
@@ -878,27 +1237,74 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
-            { kind: 'declaration', property: 'font-weight', value: 'bold', important: false },
             {
               kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'font-weight',
+              value: 'bold',
+              important: false,
+            },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
               property: 'text-declaration-line',
               value: 'underline',
               important: false,
             },
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               selector: '.bar',
-              nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+              nodes: [
+                {
+                  kind: 'declaration',
+                  source: null,
+                  destination: null,
+                  property: 'color',
+                  value: 'red',
+                  important: false,
+                },
+              ],
             },
-            { kind: 'declaration', property: '--in-between', value: '1', important: false },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: '--in-between',
+              value: '1',
+              important: false,
+            },
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               selector: '.baz',
-              nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+              nodes: [
+                {
+                  kind: 'declaration',
+                  source: null,
+                  destination: null,
+                  property: 'color',
+                  value: 'blue',
+                  important: false,
+                },
+              ],
             },
-            { kind: 'declaration', property: '--at-the-end', value: '2', important: false },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: '--at-the-end',
+              value: '2',
+              important: false,
+            },
           ],
         },
       ])
@@ -916,8 +1322,19 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '@custom \\{',
-          nodes: [{ kind: 'declaration', property: 'foo', value: 'bar', important: false }],
+          nodes: [
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'foo',
+              value: 'bar',
+              important: false,
+            },
+          ],
         },
       ])
     })
@@ -928,20 +1345,42 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo',
           nodes: [
-            { kind: 'declaration', property: 'color', value: 'red', important: false },
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
             {
               kind: 'rule',
+              source: null,
+              destination: null,
               selector: '@media(width>=600px)',
               nodes: [
                 {
                   kind: 'rule',
+                  source: null,
+                  destination: null,
                   selector: '.bar',
                   nodes: [
-                    { kind: 'declaration', property: 'color', value: 'blue', important: false },
                     {
                       kind: 'declaration',
+                      source: null,
+                      destination: null,
+                      property: 'color',
+                      value: 'blue',
+                      important: false,
+                    },
+                    {
+                      kind: 'declaration',
+                      source: null,
+                      destination: null,
                       property: 'font-weight',
                       value: 'bold',
                       important: false,
@@ -965,8 +1404,19 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([
         {
           kind: 'rule',
+          source: null,
+          destination: null,
           selector: '.foo:has(.bar )',
-          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+          nodes: [
+            {
+              kind: 'declaration',
+              source: null,
+              destination: null,
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
+          ],
         },
       ])
     })
