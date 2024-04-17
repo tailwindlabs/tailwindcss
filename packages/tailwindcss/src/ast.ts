@@ -88,19 +88,33 @@ export function walk(
 }
 
 export function toCss(ast: AstNode[]) {
-  let atRoots: string = ''
+  let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
+  let location = { line: 1, column: 0 }
 
   function stringify(node: AstNode, depth = 0): string {
     let css = ''
     let indent = '  '.repeat(depth)
+
+    function write(node: AstNode, str: string) {
+      // Make sure the CSS is indented correctly
+      css += indent
+
+      // Write the line of CSS (comment, declaration, selector, etc…)
+      css += str
+
+      // Add another line after the end
+      css += `\n`
+      location.line += 1
+      location.column = 0
+    }
 
     // Rule
     if (node.kind === 'rule') {
       // Pull out `@at-root` rules to append later
       if (node.selector === '@at-root') {
         for (let child of node.nodes) {
-          atRoots += stringify(child, 0)
+          atRoots.push(child)
         }
         return css
       }
@@ -132,33 +146,44 @@ export function toCss(ast: AstNode[]) {
         seenAtProperties.add(node.selector)
       }
 
-      css += `${indent}${node.selector} {\n`
+      write(node, `${node.selector} {`)
+
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
       }
-      css += `${indent}}\n`
+
+      write(node, `}`)
     }
 
     // Comment
     else if (node.kind === 'comment') {
-      css += `${indent}/*${node.value}*/\n`
+      write(node, `/*${node.value}*/`)
     }
 
     // Declaration
     else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
-      css += `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
+      write(node, `${node.property}: ${node.value}${node.important ? '!important' : ''};`)
+    }
+
+    return css
+  }
+
+  function stringifyAst(nodes: AstNode[]) {
+    let css = ''
+    for (let node of nodes) {
+      let result = stringify(node)
+      if (result !== '') {
+        css += result
+      }
     }
 
     return css
   }
 
   let css = ''
-  for (let node of ast) {
-    let result = stringify(node)
-    if (result !== '') {
-      css += result
-    }
-  }
 
-  return `${css}${atRoots}`
+  css += stringifyAst(ast)
+  css += stringifyAst(atRoots)
+
+  return css
 }
