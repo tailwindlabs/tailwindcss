@@ -44,6 +44,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
       build: null as null | ReturnType<typeof compile>['build'],
       css: '',
       optimizedCss: '',
+      optimizedMap: '',
     }
   })
 
@@ -139,9 +140,12 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
         // Replace CSS
         if (css !== context.css && optimize) {
-          context.optimizedCss = optimizeCss(css, {
+          let optimized = optimizeCss(css, {
             minify: typeof optimize === 'object' ? optimize.minify : true,
           })
+
+          context.optimizedCss = optimized.css
+          context.optimizedMap = optimized.map
         }
         context.css = css
         root.removeAll()
@@ -153,13 +157,18 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
 function optimizeCss(
   input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
+  {
+    file = 'input.css',
+    minify = false,
+    map = null,
+  }: { file?: string; minify?: boolean; map?: any } = {},
 ) {
-  return transform({
+  let result = transform({
     filename: file,
     code: Buffer.from(input),
     minify,
-    sourceMap: false,
+    sourceMap: map ? true : false,
+    inputSourceMap: map ? JSON.stringify(map) : undefined,
     drafts: {
       customMedia: true,
     },
@@ -172,7 +181,12 @@ function optimizeCss(
       safari: (16 << 16) | (4 << 8),
     },
     errorRecovery: true,
-  }).code.toString()
+  })
+
+  return {
+    css: result.code.toString(),
+    map: result.map ? JSON.parse(result.map.toString()) : null,
+  }
 }
 
 export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
