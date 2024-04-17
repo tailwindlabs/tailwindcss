@@ -22,13 +22,13 @@ const UNDERSCORE = 0x5f
  */
 function convertUnderscoresToWhitespace(input: string) {
   let output = ''
-  for (let i = 0; i < input.length; i++) {
-    let char = input.charCodeAt(i)
+  for (let idx = 0; idx < input.length; idx++) {
+    let char = input.charCodeAt(idx)
 
     // Escaped underscore
-    if (char === BACKSLASH && input.charCodeAt(i + 1) === UNDERSCORE) {
+    if (char === BACKSLASH && input.charCodeAt(idx + 1) === UNDERSCORE) {
       output += '_'
-      i += 1
+      idx += 1
     }
 
     // Unescaped underscore
@@ -38,7 +38,7 @@ function convertUnderscoresToWhitespace(input: string) {
 
     // All other characters
     else {
-      output += input[i]
+      output += input[idx]
     }
   }
 
