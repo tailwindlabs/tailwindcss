@@ -1,1 +1,6 @@
 @import 'tailwindcss';
+
+.thing {
+  @apply bg-red-500 hover:underline;
+  @apply text-orange-100;
+}

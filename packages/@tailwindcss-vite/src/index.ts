@@ -81,9 +81,12 @@ export default function tailwindcss(): Plugin[] {
 
     css = build(Array.from(candidates))
 
+    // @ts-ignore: The types are wrong
+    map = buildSourceMap()
+
     return {
       css,
-      map: buildSourceMap(),
+      map,
     }
   }
 
@@ -200,8 +203,12 @@ export default function tailwindcss(): Plugin[] {
           await server?.waitForRequestsIdle?.(id)
         }
 
-        let { css, map } = generateCssWithMap(src, this.getCombinedSourcemap())
+        let inputMap = this.getCombinedSourcemap()
+
+        let { css, map } = generateCssWithMap(src, inputMap)
+
         css = await transformWithPlugins(this, id, css)
+
         return {
           code: css,
 
