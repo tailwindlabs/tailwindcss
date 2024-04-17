@@ -814,6 +814,15 @@ export function createUtilities(theme: Theme) {
   staticUtility('box-content', [['box-sizing', 'content-box']])
 
   /**
+   * @css `color-scheme`
+   */
+  staticUtility('color-scheme-dark', [['color-scheme', 'dark']])
+  staticUtility('color-scheme-light', [['color-scheme', 'light']])
+  staticUtility('color-scheme-light-dark', [['color-scheme', 'light dark']])
+  staticUtility('color-scheme-dark-only', [['color-scheme', 'dark only']])
+  staticUtility('color-scheme-light-only', [['color-scheme', 'light only']])
+
+  /**
    * @css `line-clamp`
    */
   staticUtility('line-clamp-none', [

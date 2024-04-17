@@ -10677,6 +10677,65 @@ test('content', () => {
   expect(run(['content', '-content-["hello_world"]'])).toEqual('')
 })
 
+test('color-scheme', () => {
+  expect(
+    run([
+      'color-scheme-dark',
+      'color-scheme-light',
+      'color-scheme-light-dark',
+      'color-scheme-dark-only',
+      'color-scheme-light-only',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".color-scheme-dark {
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
+      color-scheme: dark;
+    }
+
+    .color-scheme-dark-only {
+      --lightningcss-light: ;
+      --lightningcss-dark: initial;
+      color-scheme: dark only;
+    }
+
+    .color-scheme-light {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
+      color-scheme: light;
+    }
+
+    .color-scheme-light-dark {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
+      color-scheme: light dark;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .color-scheme-light-dark {
+        --lightningcss-light: ;
+        --lightningcss-dark: initial;
+      }
+    }
+
+    .color-scheme-light-only {
+      --lightningcss-light: initial;
+      --lightningcss-dark: ;
+      color-scheme: light only;
+    }"
+  `)
+  expect(
+    run([
+      'color-scheme',
+      '-color-scheme-dark',
+      '-color-scheme-light',
+      '-color-scheme-light-dark',
+      '-color-scheme-dark-only',
+      '-color-scheme-light-only',
+    ]),
+  ).toEqual('')
+})
+
 test('forced-color-adjust', () => {
   expect(run(['forced-color-adjust-none', 'forced-color-adjust-auto'])).toMatchInlineSnapshot(`
     ".forced-color-adjust-auto {
