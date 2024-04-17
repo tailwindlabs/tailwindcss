@@ -1,55 +1,40 @@
-import { SourceMapConsumer, SourceMapGenerator, type RawSourceMap } from 'source-map-js'
+import { SourceMapGenerator, type RawSourceMap } from 'source-map-js'
 import { walk, type AstNode } from './ast'
 
-export function toSourceMap(original: SourceMapConsumer, ast: AstNode[]): RawSourceMap {
-  // Record all existing sources
-  let existingSources = new Set<string>()
-
-  original.eachMapping((mapping) => {
-    if (mapping.source === null) return
-    existingSources.add(mapping.source)
-  })
-
-  // Add the source content from the existing sources
+/**
+ * Build a source map from the given AST.
+ *
+ *
+ * Our AST is built from a flat CSS string so we only ever have a single source
+ *
+ * Rather than take an input source map we require the use of other tools that
+ * can combine source maps. This simmplifies the implementation and allows us to
+ * focus on generating mappings for the AST without having to worry about
+ * referencing a previous source map.
+ *
+ * Additionally, other tools might expect a source map to be "local" to the
+ * passed in source rather than be combined as they handle that themselves.
+ **/
+export function toSourceMap(source: string, ast: AstNode[]): RawSourceMap {
   let map = new SourceMapGenerator()
-  for (let source of existingSources) {
-    let sourceContent = original.sourceContentFor(source, true)
-    if (sourceContent == null) continue
-    map.setSourceContent(source, sourceContent)
-  }
+  map.setSourceContent('input.css', source)
 
   walk(ast, (node) => {
     let { source, destination } = node
 
     if (!source || !destination) return
 
-    let start = original.originalPositionFor({
-      line: source.start.line,
-      column: source.start.column,
-      bias: SourceMapConsumer.GREATEST_LOWER_BOUND,
+    map.addMapping({
+      source: 'input.css',
+      original: { line: source.start.line, column: source.start.column },
+      generated: { line: destination.start.line, column: destination.start.column },
     })
 
-    let end = original.originalPositionFor({
-      line: source.end.line,
-      column: source.end.column,
-      bias: SourceMapConsumer.LEAST_UPPER_BOUND,
+    map.addMapping({
+      source: 'input.css',
+      original: { line: source.end.line, column: source.end.column },
+      generated: { line: destination.end.line, column: destination.end.column },
     })
-
-    if (start.line !== null && start.column !== null) {
-      map.addMapping({
-        source: start.source,
-        original: start,
-        generated: { line: destination.start.line, column: destination.start.column },
-      })
-    }
-
-    if (end.line !== null && end.column !== null) {
-      map.addMapping({
-        source: end.source,
-        original: end,
-        generated: { line: destination.end.line, column: destination.end.column },
-      })
-    }
   })
 
   return JSON.parse(map.toString()) as RawSourceMap

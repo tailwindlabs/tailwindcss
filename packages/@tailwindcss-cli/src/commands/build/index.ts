@@ -1,3 +1,4 @@
+import remapping from '@ampproject/remapping'
 import watcher from '@parcel/watcher'
 import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
@@ -117,21 +118,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         @import '${resolve('tailwindcss/index.css')}';
       `
 
-  let magic = new MagicString(source)
-
-  let inputMap = sourcemapType
-    ? (JSON.parse(
-        magic
-          .generateMap({ source: 'input.css', hires: 'boundary', includeContent: true })
-          .toString(),
-      ) as RawSourceMap)
-    : null
+  let magic = new MagicString(source, {
+    filename: 'source.css',
+  })
 
   // Resolve the input
-  let [input, cssImportPaths, intermediateMap] = await handleImports(
+  let [input, cssImportPaths, importedMap] = await handleImports(
     source,
     args['--input'] ?? base,
-    inputMap,
+    sourcemapType ? true : false,
   )
 
   let previous = {
@@ -142,11 +137,35 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   async function write(
     css: string,
-    map: RawSourceMap | null,
+    tailwindMap: RawSourceMap | null,
     args: Result<ReturnType<typeof options>>,
   ) {
     let output = css
-    let outputMap = map
+
+    let combinedMap = tailwindMap
+      ? remapping(tailwindMap as any, (file) => {
+          if (file === 'input.css') {
+            return importedMap
+          }
+
+          if (file === 'imported.css') {
+            return Object.assign(
+              magic.generateDecodedMap({
+                source: 'source.css',
+                hires: 'boundary',
+                includeContent: true,
+              }),
+              {
+                version: 3 as const,
+              },
+            ) as any
+          }
+
+          return null
+        })
+      : null
+
+    let outputMap = combinedMap
 
     // Optimize the output
     if (args['--minify'] || args['--optimize']) {
@@ -154,7 +173,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         let { css: optimizedCss, map: optimizedMap } = optimizeCss(css, {
           file: args['--input'] ?? 'input.css',
           minify: args['--minify'] ?? false,
-          map,
+          map: combinedMap,
         })
         previous.css = css
         previous.optimizedCss = optimizedCss
@@ -183,7 +202,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Compile the input
   let { build, buildSourceMap } = compile(input, {
-    map: intermediateMap ?? undefined,
+    map: sourcemapType ? true : false,
   })
 
   let outputCss = build(candidates)
@@ -252,10 +271,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   @import '${resolve('tailwindcss/index.css')}';
                 `,
             args['--input'] ?? base,
-            null,
+            sourcemapType ? true : false,
           )
 
-          build = compile(input).build
+          let compiler = compile(input, { map: sourcemapType ? true : false })
+          ;[build, buildSourceMap] = [compiler.build, compiler.buildSourceMap]
           compiledCss = build(candidates)
           compiledMap = sourcemapType ? buildSourceMap() : null
         }
@@ -294,33 +314,33 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 }
 
+type ImportResult = [css: string, paths: string[], map: RawSourceMap | null]
+
 function handleImports(
   input: string,
   file: string,
-  inputMap: RawSourceMap | null,
-):
-  | [css: string, paths: string[], map: RawSourceMap | null]
-  | Promise<[css: string, paths: string[], map: RawSourceMap | null]> {
+  map: boolean,
+): ImportResult | Promise<ImportResult> {
   // TODO: Should we implement this ourselves instead of relying on PostCSS?
   //
   // Relevant specification:
   //   - CSS Import Resolve: https://csstools.github.io/css-import-resolve/
 
   if (!input.includes('@import')) {
-    return [input, [file], inputMap ?? null]
+    return [input, [file], null]
   }
 
   return postcss()
     .use(atImport())
     .process(input, {
       from: file,
-      map: inputMap
+      map: map
         ? {
             // We do not want an inline source map because we'll have to parse it back out
             inline: false,
 
             // Pass in the map we generated earlier using MagicString
-            prev: inputMap,
+            prev: false,
 
             // We want source data to be included in the resulting map
             sourcesContent: true,

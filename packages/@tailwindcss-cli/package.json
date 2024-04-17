@@ -29,6 +29,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@ampproject/remapping": "^2.3.0",
     "@parcel/watcher": "^2.4.1",
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "^1.24.0",
