@@ -1,3 +1,5 @@
+import type { Location, TrackLocations } from './track-locations'
+
 export type Rule = {
   kind: 'rule'
   selector: string
@@ -87,21 +89,50 @@ export function walk(
   }
 }
 
-export function toCss(ast: AstNode[]) {
+function span(value: string, location: Location) {
+  let line = location.line
+  let column = location.column
+
+  let start = { line, column }
+
+  for (let i = 0; i < value.length; ++i) {
+    if (value.charCodeAt(i) === 0x0a) {
+      // Add the number of lines the comment spans
+      line += 1
+      column = 0
+    } else {
+      // Keep track of the column for accurate end locations
+      column += 1
+    }
+  }
+
+  let end = { line, column }
+
+  location.line = line
+  location.column = column
+
+  return { start, end }
+}
+
+export function toCss(ast: AstNode[], track?: TrackLocations) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
   let location = { line: 1, column: 0 }
 
-  function stringify(node: AstNode, depth = 0): string {
+  function stringify(node: AstNode, depth = 0, location: Location): string {
     let css = ''
     let indent = '  '.repeat(depth)
 
     function write(node: AstNode, str: string) {
       // Make sure the CSS is indented correctly
       css += indent
+      location.column += indent.length
 
       // Write the line of CSS (comment, declaration, selector, etc…)
       css += str
+
+      // Track the start and end of the CSS
+      track?.dst(node, span(str, location))
 
       // Add another line after the end
       css += `\n`
@@ -121,7 +152,7 @@ export function toCss(ast: AstNode[]) {
 
       if (node.selector === '@tailwind utilities') {
         for (let child of node.nodes) {
-          css += stringify(child, depth)
+          css += stringify(child, depth, location)
         }
         return css
       }
@@ -134,6 +165,16 @@ export function toCss(ast: AstNode[]) {
       // @layer base, components, utilities;
       // ```
       if (node.selector[0] === '@' && node.nodes.length === 0) {
+        // Make sure the CSS is indented correctly
+        location.column += indent.length
+
+        // Track the start and end of the CSS
+        track?.dst(node, span(`${node.selector};`, location))
+
+        // Track new line at the end
+        location.line += 1
+        location.column = 0
+
         return `${indent}${node.selector};\n`
       }
 
@@ -149,7 +190,7 @@ export function toCss(ast: AstNode[]) {
       write(node, `${node.selector} {`)
 
       for (let child of node.nodes) {
-        css += stringify(child, depth + 1)
+        css += stringify(child, depth + 1, location)
       }
 
       write(node, `}`)
@@ -168,10 +209,10 @@ export function toCss(ast: AstNode[]) {
     return css
   }
 
-  function stringifyAst(nodes: AstNode[]) {
+  function stringifyAst(nodes: AstNode[], location: Location) {
     let css = ''
     for (let node of nodes) {
-      let result = stringify(node)
+      let result = stringify(node, 0, location)
       if (result !== '') {
         css += result
       }
@@ -182,8 +223,8 @@ export function toCss(ast: AstNode[]) {
 
   let css = ''
 
-  css += stringifyAst(ast)
-  css += stringifyAst(atRoots)
+  css += stringifyAst(ast, location)
+  css += stringifyAst(atRoots, location)
 
   return css
 }

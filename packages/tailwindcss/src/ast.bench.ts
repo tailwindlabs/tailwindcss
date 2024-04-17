@@ -1,6 +1,7 @@
 import { bench } from 'vitest'
 import { toCss } from './ast'
 import * as CSS from './css-parser'
+import { TrackLocations } from './track-locations'
 
 const css = String.raw
 const input = css`
@@ -21,4 +22,8 @@ const ast = CSS.parse(input)
 
 bench('toCss', () => {
   toCss(ast)
+})
+
+bench('toCss with source maps', () => {
+  toCss(ast, new TrackLocations())
 })
