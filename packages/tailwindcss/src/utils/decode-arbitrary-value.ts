@@ -13,6 +13,9 @@ export function decodeArbitraryValue(input: string): string {
   return input
 }
 
+const BACKSLASH = 0x5c
+const UNDERSCORE = 0x5f
+
 /**
  * Convert `_` to ` `, except for escaped underscores `\_` they should be
  * converted to `_` instead.
@@ -20,22 +23,22 @@ export function decodeArbitraryValue(input: string): string {
 function convertUnderscoresToWhitespace(input: string) {
   let output = ''
   for (let i = 0; i < input.length; i++) {
-    let char = input[i]
+    let char = input.charCodeAt(i)
 
     // Escaped underscore
-    if (char === '\\' && input[i + 1] === '_') {
+    if (char === BACKSLASH && input.charCodeAt(i + 1) === UNDERSCORE) {
       output += '_'
       i += 1
     }
 
     // Unescaped underscore
-    else if (char === '_') {
+    else if (char === UNDERSCORE) {
       output += ' '
     }
 
     // All other characters
     else {
-      output += char
+      output += input[i]
     }
   }
 
