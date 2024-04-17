@@ -10475,6 +10475,19 @@ test('transition', () => {
   ).toEqual('')
 })
 
+test('transition-behavior', () => {
+  expect(run(['transition-allow-discrete', 'transition-behavior-normal'])).toMatchInlineSnapshot(`
+    ".transition-allow-discrete {
+      transition-behavior: allow-discrete;
+    }
+
+    .transition-behavior-normal {
+      transition-behavior: normal;
+    }"
+  `)
+  expect(run(['-transition-allow-discrete', '-transition-behavior-normal'])).toEqual('')
+})
+
 test('delay', () => {
   expect(run(['delay-123', 'delay-200', 'delay-[300ms]'])).toMatchInlineSnapshot(`
     ".delay-123 {

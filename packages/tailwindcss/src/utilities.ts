@@ -3609,6 +3609,9 @@ export function createUtilities(theme: Theme) {
       ],
     })
 
+    staticUtility('transition-allow-discrete', [['transition-behavior', 'allow-discrete']])
+    staticUtility('transition-behavior-normal', [['transition-behavior', 'normal']])
+
     functionalUtility('delay', {
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
