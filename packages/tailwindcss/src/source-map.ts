@@ -2,7 +2,7 @@ import { SourceMapConsumer, SourceMapGenerator, type RawSourceMap } from 'source
 import { walk, type AstNode } from './ast'
 
 export function toSourceMap(original: SourceMapConsumer, ast: AstNode[]): RawSourceMap {
-  let map = new SourceMapGenerator()
+  let map = SourceMapGenerator.fromSourceMap(original)
 
   walk(ast, (node) => {
     let { source, destination } = node
@@ -21,17 +21,21 @@ export function toSourceMap(original: SourceMapConsumer, ast: AstNode[]): RawSou
       bias: SourceMapConsumer.LEAST_UPPER_BOUND,
     })
 
-    map.addMapping({
-      generated: { line: destination.start.line, column: destination.start.column },
-      original: start,
-      source: start.source,
-    })
+    if (start.line !== null && start.column !== null) {
+      map.addMapping({
+        source: start.source,
+        original: start,
+        generated: { line: destination.start.line, column: destination.start.column },
+      })
+    }
 
-    map.addMapping({
-      generated: { line: destination.end.line, column: destination.end.column },
-      original: end,
-      source: end.source,
-    })
+    if (end.line !== null && end.column !== null) {
+      map.addMapping({
+        source: end.source,
+        original: end,
+        generated: { line: destination.end.line, column: destination.end.column },
+      })
+    }
   })
 
   return JSON.parse(map.toString()) as RawSourceMap

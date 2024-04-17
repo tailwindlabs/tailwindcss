@@ -8,7 +8,7 @@ function run(rawCss: string, candidates: string[] = []) {
   let originalMap: RawSourceMap = JSON.parse(
     str
       .generateMap({
-        hires: true,
+        hires: 'boundary',
         source: 'input.css',
         includeContent: true,
       })
