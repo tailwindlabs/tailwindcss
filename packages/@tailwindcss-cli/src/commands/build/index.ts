@@ -62,8 +62,14 @@ export function options() {
   } satisfies Arg
 }
 
-// tailwindcss build --map (inline)
-// tailwindcss build --map=./file.css.map (write to file)
+function attachInlineMap(source: string, map: any) {
+  return (
+    source +
+    `\n/*# sourceMappingURL=data:application/json;base64,` +
+    Buffer.from(JSON.stringify(map)).toString('base64') +
+    ' */'
+  )
+}
 
 export async function handle(args: Result<ReturnType<typeof options>>) {
   type SourceMapType = null | { kind: 'inline' } | { kind: 'file'; path: string }
@@ -168,9 +174,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let outputMap = sourcemapType ? buildSourceMap() : undefined
 
   if (sourcemapType?.kind === 'inline') {
-    outputCss += `\n/*# sourceMappingURL=data:application/json;base64,${Buffer.from(
-      JSON.stringify(outputMap),
-    ).toString('base64')} */`
+    outputCss = attachInlineMap(outputCss, outputMap)
   } else if (sourcemapType?.kind === 'file') {
     await outputFile(sourcemapType.path, JSON.stringify(outputMap))
   }

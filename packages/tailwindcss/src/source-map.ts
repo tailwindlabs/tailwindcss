@@ -2,7 +2,21 @@ import { SourceMapConsumer, SourceMapGenerator, type RawSourceMap } from 'source
 import { walk, type AstNode } from './ast'
 
 export function toSourceMap(original: SourceMapConsumer, ast: AstNode[]): RawSourceMap {
-  let map = SourceMapGenerator.fromSourceMap(original)
+  // Record all existing sources
+  let existingSources = new Set<string>()
+
+  original.eachMapping((mapping) => {
+    if (mapping.source === null) return
+    existingSources.add(mapping.source)
+  })
+
+  // Add the source content from the existing sources
+  let map = new SourceMapGenerator()
+  for (let source of existingSources) {
+    let sourceContent = original.sourceContentFor(source, true)
+    if (sourceContent == null) continue
+    map.setSourceContent(source, sourceContent)
+  }
 
   walk(ast, (node) => {
     let { source, destination } = node
