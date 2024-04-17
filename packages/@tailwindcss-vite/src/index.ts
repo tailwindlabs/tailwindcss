@@ -204,7 +204,9 @@ export default function tailwindcss(): Plugin[] {
         css = await transformWithPlugins(this, id, css)
         return {
           code: css,
-          map,
+
+          // Rollup has incorrect types
+          map: map as any,
         }
       },
     },

@@ -137,24 +137,40 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let previous = {
     css: '',
     optimizedCss: '',
+    optimizedMap: null,
   }
 
-  async function write(css: string, args: Result<ReturnType<typeof options>>) {
+  async function write(
+    css: string,
+    map: RawSourceMap | null,
+    args: Result<ReturnType<typeof options>>,
+  ) {
     let output = css
+    let outputMap = map
 
     // Optimize the output
     if (args['--minify'] || args['--optimize']) {
       if (css !== previous.css) {
-        let optimizedCss = optimizeCss(css, {
+        let { css: optimizedCss, map: optimizedMap } = optimizeCss(css, {
           file: args['--input'] ?? 'input.css',
           minify: args['--minify'] ?? false,
+          map,
         })
         previous.css = css
         previous.optimizedCss = optimizedCss
+        previous.optimizedMap = optimizedMap
         output = optimizedCss
+        outputMap = optimizedMap
       } else {
         output = previous.optimizedCss
+        outputMap = previous.optimizedMap
       }
+    }
+
+    if (outputMap && sourcemapType?.kind === 'inline') {
+      output = attachInlineMap(output, outputMap)
+    } else if (outputMap && sourcemapType?.kind === 'file') {
+      await outputFile(sourcemapType.path, JSON.stringify(outputMap))
     }
 
     // Write the output
@@ -171,15 +187,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   })
 
   let outputCss = build(candidates)
-  let outputMap = sourcemapType ? buildSourceMap() : undefined
+  let outputMap = sourcemapType ? buildSourceMap() : null
 
-  if (sourcemapType?.kind === 'inline') {
-    outputCss = attachInlineMap(outputCss, outputMap)
-  } else if (sourcemapType?.kind === 'file') {
-    await outputFile(sourcemapType.path, JSON.stringify(outputMap))
-  }
-
-  await write(outputCss, args)
+  await write(outputCss, outputMap, args)
 
   let end = process.hrtime.bigint()
   eprintln(header())
@@ -227,6 +237,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         // Track the compiled CSS
         let compiledCss = ''
+        let compiledMap = null
 
         // Scan the entire `base` directory for full rebuilds.
         if (rebuildStrategy === 'full') {
@@ -246,6 +257,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           build = compile(input).build
           compiledCss = build(candidates)
+          compiledMap = sourcemapType ? buildSourceMap() : null
         }
 
         // Scan changed files only for incremental rebuilds.
@@ -253,9 +265,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           let newCandidates = scanFiles(changedFiles, IO.Sequential | Parsing.Sequential)
 
           compiledCss = build(newCandidates)
+          compiledMap = sourcemapType ? buildSourceMap() : null
         }
 
-        await write(compiledCss, args)
+        await write(compiledCss, compiledMap, args)
 
         let end = process.hrtime.bigint()
         eprintln(`Done in ${formatDuration(end - start)}`)
@@ -337,13 +350,18 @@ function handleImports(
 
 function optimizeCss(
   input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
+  {
+    file = 'input.css',
+    minify = false,
+    map = null,
+  }: { file?: string; minify?: boolean; map?: any } = {},
 ) {
-  return transform({
+  let result = transform({
     filename: file,
     code: Buffer.from(input),
     minify,
-    sourceMap: false,
+    sourceMap: map ? true : false,
+    inputSourceMap: map ? JSON.stringify(map) : undefined,
     drafts: {
       customMedia: true,
     },
@@ -356,5 +374,10 @@ function optimizeCss(
       safari: (16 << 16) | (4 << 8),
     },
     errorRecovery: true,
-  }).code.toString()
+  })
+
+  return {
+    css: result.code.toString(),
+    map: result.map ? JSON.parse(result.map.toString()) : null,
+  }
 }
