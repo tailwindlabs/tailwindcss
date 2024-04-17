@@ -174,14 +174,16 @@ export function compile(
           for (let candidateNode of candidateAst) {
             if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
               for (let child of candidateNode.nodes) {
-                // TODO FIXME child.source = node.source
                 newNodes.push(child)
               }
             } else {
-              // TODO FIXME candidateNode.source = node.source
               newNodes.push(candidateNode)
             }
           }
+
+          walk(newNodes, (child) => {
+            child.source = node.source
+          })
 
           replaceWith(newNodes)
         }

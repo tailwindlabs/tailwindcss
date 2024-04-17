@@ -47,6 +47,7 @@ test('@apply generates source maps', async () => {
   let { sources, annotations } = run(`.foo {
   color: blue;
   @apply text-[#000] hover:text-[#f00];
+  @apply underline;
   color: red;
 }`)
 
@@ -59,7 +60,11 @@ test('@apply generates source maps', async () => {
     //
     '1:0 <- 1:0',
     '2:2 <- 2:2',
+    '3:2 <- 3:2',
+    '4:2 <- 3:2',
+    '5:4 <- 3:2',
     '7:2 <- 4:2',
+    '8:2 <- 5:2',
   ])
 })
 
