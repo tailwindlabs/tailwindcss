@@ -14,13 +14,40 @@ describe('decoding arbitrary values', () => {
     expect(decodeArbitraryValue('foo\\_bar')).toBe('foo_bar')
   })
 
-  it('should not replace underscores in url()', () => {
+  it('should not replace underscores in url(…)', () => {
     expect(decodeArbitraryValue('url(./my_file.jpg)')).toBe('url(./my_file.jpg)')
   })
 
-  it('should leave var(…) as is', () => {
-    expect(decodeArbitraryValue('var(--foo)')).toBe('var(--foo)')
-    expect(decodeArbitraryValue('var(--headings-h1-size)')).toBe('var(--headings-h1-size)')
+  it('should not replace underscores in var(…)', () => {
+    expect(decodeArbitraryValue('var(--foo_bar)')).toBe('var(--foo_bar)')
+  })
+
+  it('should replace underscores in the fallback value of var(…)', () => {
+    expect(decodeArbitraryValue('var(--foo_bar, "my_content")')).toBe(
+      'var(--foo_bar, "my content")',
+    )
+  })
+
+  it('should not replace underscores in nested var(…)', () => {
+    expect(decodeArbitraryValue('var(--foo_bar, var(--bar_baz))')).toBe(
+      'var(--foo_bar, var(--bar_baz))',
+    )
+  })
+
+  it('should replace underscores in the fallback value of nested var(…)', () => {
+    expect(decodeArbitraryValue('var(--foo_bar, var(--bar_baz, "my_content"))')).toBe(
+      'var(--foo_bar, var(--bar_baz, "my content"))',
+    )
+  })
+
+  it('should not replace underscores in dashed idents', () => {
+    expect(decodeArbitraryValue('--foo_bar')).toBe('--foo_bar')
+  })
+
+  it('should replace underscores in strings that look like dashed idents', () => {
+    expect(decodeArbitraryValue('content-["some--thing_here"]')).toBe(
+      'content-["some--thing here"]',
+    )
   })
 })
 
