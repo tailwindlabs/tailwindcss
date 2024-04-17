@@ -207,20 +207,6 @@ export default function tailwindcss(): Plugin[] {
 
         let { css, map } = generateCssWithMap(src, inputMap)
 
-        await import('fs/promises').then(async ({ writeFile }) => {
-          function attachInlineMap(source: string, map: any) {
-            return (
-              source +
-              `\n/*# sourceMappingURL=data:application/json;base64,` +
-              Buffer.from(JSON.stringify(map)).toString('base64') +
-              ' */'
-            )
-          }
-
-          await writeFile(`input.css`, attachInlineMap(src, inputMap))
-          await writeFile(`generated.css`, attachInlineMap(css, map))
-        })
-
         css = await transformWithPlugins(this, id, css)
 
         return {
