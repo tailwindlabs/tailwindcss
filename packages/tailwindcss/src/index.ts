@@ -223,7 +223,8 @@ export function compile(
         }).astNodes
 
         walk(newNodes, (node) => {
-          node.source ??= tailwindUtilitiesNode!.source
+          if (node.source.length) return
+          node.source = tailwindUtilitiesNode!.source
         })
 
         // If no new ast nodes were generated, then we can return the original

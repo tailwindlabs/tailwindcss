@@ -22,19 +22,27 @@ export function toSourceMap(source: string, ast: AstNode[]): RawSourceMap {
   walk(ast, (node) => {
     let { source, destination } = node
 
-    if (!source || !destination) return
+    if (!source.length || !destination.length) return
+    if (source.length !== destination.length) {
+      throw new Error('Source and destination ranges must be the same length')
+    }
 
-    map.addMapping({
-      source: 'input.css',
-      original: { line: source.start.line, column: source.start.column },
-      generated: { line: destination.start.line, column: destination.start.column },
-    })
+    for (let i = 0; i < source.length; ++i) {
+      let src = source[i]
+      let dst = destination[i]
 
-    map.addMapping({
-      source: 'input.css',
-      original: { line: source.end.line, column: source.end.column },
-      generated: { line: destination.end.line, column: destination.end.column },
-    })
+      map.addMapping({
+        source: 'input.css',
+        original: { line: src.start.line, column: src.start.column },
+        generated: { line: dst.start.line, column: dst.start.column },
+      })
+
+      map.addMapping({
+        source: 'input.css',
+        original: { line: src.end.line, column: src.end.column },
+        generated: { line: dst.end.line, column: dst.end.column },
+      })
+    }
   })
 
   return JSON.parse(map.toString()) as RawSourceMap

@@ -1,4 +1,5 @@
 import { comment, rule, type AstNode, type Comment, type Declaration, type Rule } from './ast'
+import type { TrackLocations } from './track-locations'
 
 const BACKSLASH = 0x5c
 const SLASH = 0x2f
@@ -20,7 +21,7 @@ const DASH = 0x2d
 const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
 
-export function parse(input: string) {
+export function parse(input: string, track?: TrackLocations) {
   input = input.replaceAll('\r\n', '\n')
 
   let ast: AstNode[] = []
@@ -36,8 +37,49 @@ export function parse(input: string) {
 
   let peekChar
 
+  // The current line number
+  let line = 1
+
+  // The index of the first non-whitespace character on the current line
+  let lineStart = 0
+
+  // Source location tracking
+  let sourceStartLine = 1
+  let sourceStartColumn = 0
+  let sourceEndLine = 1
+  let sourceEndColumn = 0
+
+  function sourceRange() {
+    if (!track) return []
+
+    return [
+      {
+        start: {
+          line: sourceStartLine,
+          column: sourceStartColumn,
+        },
+        end: {
+          line: sourceEndLine,
+          column: sourceEndColumn,
+        },
+      },
+    ]
+  }
+
   for (let i = 0; i < input.length; i++) {
     let currentChar = input.charCodeAt(i)
+
+    if (currentChar === LINE_BREAK) {
+      line += 1
+      lineStart = i + 1
+
+      if (buffer.length === 0) {
+        sourceStartLine = line
+        sourceStartColumn = 0
+        sourceEndLine = line
+        sourceEndColumn = 0
+      }
+    }
 
     // Current character is a `\` therefore the next character is escaped,
     // consume it together with the next character and continue.
@@ -81,6 +123,19 @@ export function parse(input: string) {
           j += 1
         }
 
+        // Count newline within comments
+        else if (peekChar === LINE_BREAK) {
+          line += 1
+          lineStart = j + 1
+
+          if (buffer.length === 0) {
+            sourceStartLine = line
+            sourceStartColumn = 0
+            sourceEndLine = line
+            sourceEndColumn = 0
+          }
+        }
+
         // End of the comment
         else if (peekChar === ASTERISK && input.charCodeAt(j + 1) === SLASH) {
           i = j + 1
@@ -93,7 +148,9 @@ export function parse(input: string) {
       // Collect all license comments so that we can hoist them to the top of
       // the AST.
       if (commentString.charCodeAt(2) === EXCLAMATION_MARK) {
-        licenseComments.push(comment(commentString.slice(2, -2)))
+        let node = comment(commentString.slice(2, -2))
+        licenseComments.push(node)
+        node.source = sourceRange()!
       }
     }
 
@@ -211,6 +268,19 @@ export function parse(input: string) {
               k += 1
             }
 
+            // Count newline within comments
+            else if (peekChar === LINE_BREAK) {
+              line += 1
+              lineStart = j + 1
+
+              if (buffer.length === 0) {
+                sourceStartLine = line
+                sourceStartColumn = 0
+                sourceEndLine = line
+                sourceEndColumn = 0
+              }
+            }
+
             // End of the comment
             else if (peekChar === ASTERISK && input.charCodeAt(k + 1) === SLASH) {
               j = k + 1
@@ -273,6 +343,19 @@ export function parse(input: string) {
             closingBracketStack = closingBracketStack.slice(0, -1)
           }
         }
+
+        // Count newlines
+        else if (peekChar === LINE_BREAK) {
+          line += 1
+          lineStart = j + 1
+
+          if (buffer.length === 0) {
+            sourceStartLine = line
+            sourceStartColumn = 0
+            sourceEndLine = line
+            sourceEndColumn = 0
+          }
+        }
       }
 
       let declaration = parseDeclaration(buffer, colonIdx)
@@ -281,8 +364,13 @@ export function parse(input: string) {
       } else {
         ast.push(declaration)
       }
+      declaration.source = sourceRange()!
 
       buffer = ''
+      sourceStartLine = line
+      sourceStartColumn = i - lineStart
+      sourceEndLine = line
+      sourceEndColumn = i - lineStart
     }
 
     // End of a body-less at-rule.
@@ -306,9 +394,16 @@ export function parse(input: string) {
         ast.push(node)
       }
 
+      // Track the source location for source maps
+      node.source = sourceRange()!
+
       // Reset the state for the next node.
       buffer = ''
       node = null
+      sourceStartLine = line
+      sourceStartColumn = i - lineStart
+      sourceEndLine = line
+      sourceEndColumn = i - lineStart
     }
 
     // End of a declaration.
@@ -330,7 +425,14 @@ export function parse(input: string) {
         ast.push(declaration)
       }
 
+      // Track the source location for source maps
+      declaration.source = sourceRange()!
+
       buffer = ''
+      sourceStartLine = line
+      sourceStartColumn = i - lineStart
+      sourceEndLine = line
+      sourceEndColumn = i - lineStart
     }
 
     // Start of a block.
@@ -353,9 +455,16 @@ export function parse(input: string) {
       // attached to it.
       parent = node
 
+      // Track the source location for source maps
+      node.source = sourceRange()!
+
       // Reset the state for the next node.
       buffer = ''
       node = null
+      sourceStartLine = line
+      sourceStartColumn = i - lineStart
+      sourceEndLine = line
+      sourceEndColumn = i - lineStart
     }
 
     // End of a block.
@@ -393,9 +502,16 @@ export function parse(input: string) {
             ast.push(node)
           }
 
+          // Track the source location for source maps
+          node.source = sourceRange()!
+
           // Reset the state for the next node.
           buffer = ''
           node = null
+          sourceStartLine = line
+          sourceStartColumn = i - lineStart
+          sourceEndLine = line
+          sourceEndColumn = i - lineStart
         }
 
         // But it can also happen for declarations.
@@ -417,14 +533,17 @@ export function parse(input: string) {
           // Attach the declaration to the parent.
           if (parent) {
             let importantIdx = buffer.indexOf('!important', colonIdx + 1)
-            parent.nodes.push({
+            let node = {
               kind: 'declaration',
               property: buffer.slice(0, colonIdx).trim(),
               value: buffer
                 .slice(colonIdx + 1, importantIdx === -1 ? buffer.length : importantIdx)
                 .trim(),
               important: importantIdx !== -1,
-            } satisfies Declaration)
+              source: sourceRange()!,
+              destination: [],
+            } satisfies Declaration
+            parent.nodes.push(node)
           }
         }
       }
@@ -437,6 +556,9 @@ export function parse(input: string) {
       // node.
       if (grandParent === null && parent) {
         ast.push(parent)
+
+        // TODO: We want to track the closing `}` as part of the parent node.
+        // parent.source.push(...sourceRange()!)
       }
 
       // Go up one level in the stack.
@@ -445,6 +567,10 @@ export function parse(input: string) {
       // Reset the state for the next node.
       buffer = ''
       node = null
+      sourceStartLine = line
+      sourceStartColumn = i - lineStart
+      sourceEndLine = line
+      sourceEndColumn = i - lineStart
     }
 
     // Any other character is part of the current node.
@@ -454,6 +580,10 @@ export function parse(input: string) {
         buffer.length === 0 &&
         (currentChar === SPACE || currentChar === LINE_BREAK || currentChar === TAB)
       ) {
+        sourceStartLine = line
+        sourceStartColumn = i + 1 - lineStart
+        sourceEndLine = line
+        sourceEndColumn = i + 1 - lineStart
         continue
       }
 
@@ -481,5 +611,7 @@ function parseDeclaration(buffer: string, colonIdx: number = buffer.indexOf(':')
     property: buffer.slice(0, colonIdx).trim(),
     value: buffer.slice(colonIdx + 1, importantIdx === -1 ? buffer.length : importantIdx).trim(),
     important: importantIdx !== -1,
+    source: [],
+    destination: [],
   }
 }
