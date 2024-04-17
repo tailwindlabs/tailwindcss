@@ -1150,6 +1150,9 @@ export function createVariants(theme: Theme): Variants {
     staticVariant('inverted-colors', ['@media (inverted-colors: inverted)'])
   }
 
+  staticVariant('noscript', ['@media (scripting: none)'])
+  staticVariant('scripting', ['@media (scripting: enabled)'])
+
   return variants
 }
 
