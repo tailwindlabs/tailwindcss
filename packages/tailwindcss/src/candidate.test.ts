@@ -359,24 +359,23 @@ it('should parse a utility with an arbitrary modifier', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[50%]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": {
-          "dashedIdent": null,
-          "kind": "arbitrary",
-          "value": "50%",
-        },
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "fraction": null,
-          "kind": "named",
-          "value": "red-500",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": {
+        "kind": "arbitrary",
+        "value": "50%",
+      },
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "fraction": null,
+        "kind": "named",
+        "value": "red-500",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with a modifier that is important', () => {
@@ -441,21 +440,20 @@ it('should parse a utility with an arbitrary value', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "#0088cc",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": "#0088cc",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an arbitrary value including a typehint', () => {
@@ -463,21 +461,20 @@ it('should parse a utility with an arbitrary value including a typehint', () => 
   utilities.functional('bg', () => [])
 
   expect(run('bg-[color:var(--value)]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": "color",
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": "color",
+        "kind": "arbitrary",
+        "value": "var(--value)",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an arbitrary value with a modifier', () => {
@@ -485,24 +482,23 @@ it('should parse a utility with an arbitrary value with a modifier', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]/50', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": {
-          "kind": "named",
-          "value": "50",
-        },
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "#0088cc",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": {
+        "kind": "named",
+        "value": "50",
+      },
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": "#0088cc",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an arbitrary value with an arbitrary modifier', () => {
@@ -510,25 +506,23 @@ it('should parse a utility with an arbitrary value with an arbitrary modifier', 
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]/[50%]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": {
-          "dashedIdent": null,
-          "kind": "arbitrary",
-          "value": "50%",
-        },
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "#0088cc",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": {
+        "kind": "arbitrary",
+        "value": "50%",
+      },
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": "#0088cc",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an arbitrary value that is important', () => {
@@ -536,65 +530,62 @@ it('should parse a utility with an arbitrary value that is important', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]!', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": true,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "#0088cc",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": true,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": "#0088cc",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an implicit variable as the arbitrary value', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-[--value]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": "--value",
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "variants": [],
-      }
-    `)
+  expect(run('bg-[var(--value)]', { utilities })).toMatchInlineSnapshot(`
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": "var(--value)",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an implicit variable as the arbitrary value that is important', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-[--value]!', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": true,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": "--value",
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "variants": [],
-      }
-    `)
+  expect(run('bg-[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
+    {
+      "important": true,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": "var(--value)",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an explicit variable as the arbitrary value', () => {
@@ -602,21 +593,20 @@ it('should parse a utility with an explicit variable as the arbitrary value', ()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[var(--value)]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": "var(--value)",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an explicit variable as the arbitrary value that is important', () => {
@@ -624,71 +614,68 @@ it('should parse a utility with an explicit variable as the arbitrary value that
   utilities.functional('bg', () => [])
 
   expect(run('bg-[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": true,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": true,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": "var(--value)",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an implicit variable as the modifier', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-red-500/[--value]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": {
-          "dashedIdent": "--value",
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "fraction": null,
-          "kind": "named",
-          "value": "red-500",
-        },
-        "variants": [],
-      }
-    `)
+  expect(run('bg-red-500/[var(--value)]', { utilities })).toMatchInlineSnapshot(`
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": {
+        "kind": "arbitrary",
+        "value": "var(--value)",
+      },
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "fraction": null,
+        "kind": "named",
+        "value": "red-500",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an implicit variable as the modifier that is important', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-red-500/[--value]!', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": true,
-        "kind": "functional",
-        "modifier": {
-          "dashedIdent": "--value",
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "fraction": null,
-          "kind": "named",
-          "value": "red-500",
-        },
-        "variants": [],
-      }
-    `)
+  expect(run('bg-red-500/[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
+    {
+      "important": true,
+      "kind": "functional",
+      "modifier": {
+        "kind": "arbitrary",
+        "value": "var(--value)",
+      },
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "fraction": null,
+        "kind": "named",
+        "value": "red-500",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an explicit variable as the modifier', () => {
@@ -696,24 +683,23 @@ it('should parse a utility with an explicit variable as the modifier', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[var(--value)]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": {
-          "dashedIdent": null,
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "negative": false,
-        "root": "bg",
-        "value": {
-          "fraction": null,
-          "kind": "named",
-          "value": "red-500",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": {
+        "kind": "arbitrary",
+        "value": "var(--value)",
+      },
+      "negative": false,
+      "root": "bg",
+      "value": {
+        "fraction": null,
+        "kind": "named",
+        "value": "red-500",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should parse a utility with an explicit variable as the modifier that is important', () => {
@@ -725,7 +711,6 @@ it('should parse a utility with an explicit variable as the modifier that is imp
       "important": true,
       "kind": "functional",
       "modifier": {
-        "dashedIdent": null,
         "kind": "arbitrary",
         "value": "var(--value)",
       },
@@ -863,21 +848,20 @@ it('should replace `_` with ` `', () => {
   utilities.functional('content', () => [])
 
   expect(run('content-["hello_world"]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "content",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": ""hello world"",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "content",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": ""hello world"",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should not replace `\\_` with ` ` (when it is escaped)', () => {
@@ -885,21 +869,20 @@ it('should not replace `\\_` with ` ` (when it is escaped)', () => {
   utilities.functional('content', () => [])
 
   expect(run('content-["hello\\_world"]', { utilities })).toMatchInlineSnapshot(`
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "negative": false,
-        "root": "content",
-        "value": {
-          "dashedIdent": null,
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": ""hello_world"",
-        },
-        "variants": [],
-      }
-    `)
+    {
+      "important": false,
+      "kind": "functional",
+      "modifier": null,
+      "negative": false,
+      "root": "content",
+      "value": {
+        "dataType": null,
+        "kind": "arbitrary",
+        "value": ""hello_world"",
+      },
+      "variants": [],
+    }
+  `)
 })
 
 it('should not replace `_` inside of `url()`', () => {
@@ -914,7 +897,6 @@ it('should not replace `_` inside of `url()`', () => {
       "negative": false,
       "root": "bg",
       "value": {
-        "dashedIdent": null,
         "dataType": null,
         "kind": "arbitrary",
         "value": "url(https://example.com/some_page)",
