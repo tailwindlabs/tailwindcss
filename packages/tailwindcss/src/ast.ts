@@ -112,6 +112,7 @@ export function walk(
 export function toCss(ast: AstNode[], track?: boolean) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
+  let indents: Record<number, string> = {}
 
   function stringifyAll(nodes: AstNode[], location: Location): string {
     let css = ''
@@ -122,7 +123,7 @@ export function toCss(ast: AstNode[], track?: boolean) {
   }
 
   function stringify(node: AstNode, location: Location, depth: number): string {
-    let indent = '  '.repeat(depth)
+    let indent = (indents[depth] ??= '  '.repeat(depth))
 
     // Rule
     if (node.kind === 'rule') {
@@ -152,15 +153,20 @@ export function toCss(ast: AstNode[], track?: boolean) {
       // @layer base, components, utilities;
       // ```
       if (node.selector[0] === '@' && node.nodes.length === 0) {
+        location.column += indent.length
+
         node.destination = track
           ? [
               {
-                start: { line: location.line, column: indent.length },
-                end: { line: location.line, column: indent.length },
+                start: { ...location },
+                end: { ...location },
               },
             ]
           : []
-        if (track) location.line += 1
+        if (track) {
+          location.line += 1
+          location.column = 0
+        }
         return `${indent}${node.selector};\n`
       }
 
@@ -174,14 +180,19 @@ export function toCss(ast: AstNode[], track?: boolean) {
       }
 
       let css = `${indent}${node.selector} {\n`
+      location.column += indent.length
+      node.destination = track
+        ? [
+            {
+              start: { ...location },
+              end: { ...location },
+            },
+          ]
+        : []
+
       if (track) {
-        node.destination = [
-          {
-            start: { line: location.line, column: indent.length },
-            end: { line: location.line, column: indent.length },
-          },
-        ]
         location.line += 1
+        location.column = 0
       }
 
       for (let child of node.nodes) {
@@ -189,35 +200,52 @@ export function toCss(ast: AstNode[], track?: boolean) {
       }
 
       css += `${indent}}\n`
-      if (track) location.line += 1
+
+      if (track) {
+        location.line += 1
+        location.column = 0
+      }
+
       return css
     }
 
     // Comment
     else if (node.kind === 'comment') {
+      location.column += indent.length
+      node.destination = track
+        ? [
+            {
+              start: { ...location },
+              end: { ...location },
+            },
+          ]
+        : []
+
       if (track) {
-        node.destination = [
-          {
-            start: { line: location.line, column: indent.length },
-            end: { line: location.line, column: indent.length },
-          },
-        ]
         location.line += 1 + node.value.split('\n').length - 1
+        location.column = 0
       }
+
       return `${indent}/*${node.value}*/\n`
     }
 
     // Declaration
     else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
+      location.column += indent.length
+      node.destination = track
+        ? [
+            {
+              start: { line: location.line, column: indent.length },
+              end: { line: location.line, column: indent.length },
+            },
+          ]
+        : []
+
       if (track) {
-        node.destination = [
-          {
-            start: { line: location.line, column: indent.length },
-            end: { line: location.line, column: indent.length },
-          },
-        ]
         location.line += 1 + node.value.split('\n').length - 1
+        location.column = 0
       }
+
       return `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
     }
 
