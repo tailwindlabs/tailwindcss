@@ -1,5 +1,4 @@
 import { comment, rule, type AstNode, type Comment, type Declaration, type Rule } from './ast'
-import type { TrackLocations } from './track-locations'
 
 const BACKSLASH = 0x5c
 const SLASH = 0x2f
@@ -21,7 +20,7 @@ const DASH = 0x2d
 const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
 
-export function parse(input: string, track?: TrackLocations) {
+export function parse(input: string, track?: boolean) {
   input = input.replaceAll('\r\n', '\n')
 
   let ast: AstNode[] = []
