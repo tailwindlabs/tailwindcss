@@ -1,5 +1,8 @@
 export type Location = {
+  /** The line number for this location, one-based */
   line: number
+
+  /** The column number for this location, one-based */
   column: number
 }
 
@@ -113,7 +116,7 @@ function span(value: string, location: Location) {
   let line = location.line
   let column = location.column
 
-  let start = { line, column }
+  let start = { line: line + 1, column: column + 1 }
 
   for (let i = 0; i < value.length; ++i) {
     if (value.charCodeAt(i) === 0x0a) {
@@ -126,7 +129,7 @@ function span(value: string, location: Location) {
     }
   }
 
-  let end = { line, column }
+  let end = { line: line + 1, column: column + 1 }
 
   location.line = line
   location.column = column
@@ -213,11 +216,13 @@ export function toCss(ast: AstNode[], track?: boolean) {
 
       let head = ''
       head += node.selector
-      head += ' {'
+      head += ' '
 
       css += head
+
       node.destination = track ? [span(head, location)] : []
 
+      css += '{'
       css += '\n'
       location.line += 1
       location.column = 0
@@ -291,7 +296,7 @@ export function toCss(ast: AstNode[], track?: boolean) {
     return ''
   }
 
-  let location = { line: 1, column: 0 }
+  let location = { line: 0, column: 0 }
   let css = ''
 
   css += stringifyAll(ast, location)

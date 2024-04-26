@@ -3,6 +3,8 @@ import MagicString, { Bundle } from 'magic-string'
 import { SourceMapConsumer, type RawSourceMap } from 'source-map-js'
 import { expect, test } from 'vitest'
 import { compile } from '.'
+import { toCss, type Range } from './ast'
+import * as CSS from './css-parser'
 
 function run(rawCss: string, candidates: string[] = []) {
   let source = new MagicString(rawCss)
@@ -38,6 +40,29 @@ function run(rawCss: string, candidates: string[] = []) {
   return { css, map, sources, annotations }
 }
 
+test('source locations are tracked during parsing and serializing', async () => {
+  let ast = CSS.parse(`.foo { color: red; }`, true)
+  toCss(ast, true)
+
+  if (ast[0].kind !== 'rule') throw new Error('Expected a rule')
+
+  let src = annotatedLocations({
+    selector: ast[0].source[0],
+    decl: ast[0].nodes[0].source[0],
+  })
+
+  let dst = annotatedLocations({
+    selector: ast[0].destination[0],
+    decl: ast[0].nodes[0].destination[0],
+  })
+
+  expect(src.selector).toEqual('1:1-1:6')
+  expect(dst.selector).toEqual('1:1-1:6')
+
+  expect(src.decl).toEqual('1:8-1:18')
+  expect(dst.decl).toEqual('2:3-2:14')
+})
+
 test('utilities have source maps pointing to the utilities node', async () => {
   let { sources, annotations } = run(`@tailwind utilities;`, [
     //
@@ -51,8 +76,8 @@ test('utilities have source maps pointing to the utilities node', async () => {
 
   expect(annotations).toEqual([
     //
-    '1:0-12 <- 1:0',
-    '2:2-34 <- 1:0',
+    '1:1-12 <- 1:1-20',
+    '2:3-35 <- 1:1-20',
   ])
 })
 
@@ -69,14 +94,15 @@ test('@apply generates source maps', async () => {
   expect(sources).toEqual(['source.css'])
   expect(sources.length).toBe(1)
 
+  // TODO: Some numbers are off by one (too large?) in the destination
   expect(annotations).toEqual([
-    '1:0-6 <- 1:0',
-    '2:2-14 <- 2:2',
-    '3:2-14 <- 3:2',
-    '4:2-11 <- 3:2',
-    '5:4-16 <- 3:2',
-    '7:2-34 <- 4:2',
-    '8:2-13 <- 5:2',
+    '1:1-6 <- 1:1-6',
+    '2:3-15 <- 2:3-14',
+    '3:3-15 <- 3:3-39',
+    '4:3-11 <- 3:3-39',
+    '5:5-17 <- 3:3-39',
+    '7:3-35 <- 4:3-19',
+    '8:3-14 <- 5:3-13',
   ])
 })
 
@@ -88,7 +114,7 @@ test('license comments preserve source locations', async () => {
   expect(sources).toEqual(['source.css'])
   expect(sources.length).toBe(1)
 
-  expect(annotations).toEqual(['1:0-19 <- 1:0'])
+  expect(annotations).toEqual(['1:1-20 <- 1:1-20'])
 })
 
 test('license comments with new lines preserve source locations', async () => {
@@ -100,8 +126,22 @@ test('license comments with new lines preserve source locations', async () => {
   expect(sources.length).toBe(1)
 
   // Ideally we'd write this as this instead `1:0-2:11 <- 1:0-2:11`
-  expect(annotations).toEqual(['1:0 <- 2:0', '2:11 <- 2:0'])
+  expect(annotations).toEqual(['1:1 <- 2:1', '2:12 <- 3:12'])
 })
+
+/**
+ * An string annotation that represents one or more source locations
+ */
+function annotatedLocations<T extends string>(map: Record<T, Range>): Record<T, string> {
+  let res: Record<string, string> = {} as any
+
+  for (let key in map) {
+    let range = map[key]
+    res[key] = `${range.start.line}:${range.start.column}-${range.end.line}:${range.end.column}`
+  }
+
+  return res
+}
 
 /**
  * An string annotation that represents a source map

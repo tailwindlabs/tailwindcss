@@ -37,15 +37,16 @@ export function parse(input: string, track?: boolean) {
   let peekChar
 
   // The current line number
-  let line = 1
+  let line = 0
 
   // The index of the first non-whitespace character on the current line
   let lineStart = 0
 
   // Source location tracking
-  let sourceStartLine = 1
+  // The are 0-indexed instead of 1-indexed to simplify the math
+  let sourceStartLine = 0
   let sourceStartColumn = 0
-  let sourceEndLine = 1
+  let sourceEndLine = 0
   let sourceEndColumn = 0
 
   function sourceRange() {
@@ -54,12 +55,12 @@ export function parse(input: string, track?: boolean) {
     return [
       {
         start: {
-          line: sourceStartLine,
-          column: sourceStartColumn,
+          line: sourceStartLine + 1,
+          column: sourceStartColumn + 1,
         },
         end: {
-          line: sourceEndLine,
-          column: sourceEndColumn,
+          line: sourceEndLine + 1,
+          column: sourceEndColumn + 1,
         },
       },
     ]
@@ -114,6 +115,8 @@ export function parse(input: string, track?: boolean) {
     else if (currentChar === SLASH && input.charCodeAt(i + 1) === ASTERISK) {
       let start = i
 
+      // TODO: Track source ranges
+
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
 
@@ -149,6 +152,16 @@ export function parse(input: string, track?: boolean) {
       if (commentString.charCodeAt(2) === EXCLAMATION_MARK) {
         let node = comment(commentString.slice(2, -2))
         licenseComments.push(node)
+
+        for (let i = 0; i < commentString.length; ++i) {
+          if (commentString.charCodeAt(i) === LINE_BREAK) {
+            sourceEndLine += 1
+            sourceEndColumn = 0
+          } else {
+            sourceEndColumn += 1
+          }
+        }
+
         node.source = sourceRange()!
       }
     }
@@ -394,6 +407,8 @@ export function parse(input: string, track?: boolean) {
       }
 
       // Track the source location for source maps
+      sourceEndLine = line
+      sourceEndColumn = i - lineStart
       node.source = sourceRange()!
 
       // Reset the state for the next node.
@@ -401,8 +416,6 @@ export function parse(input: string, track?: boolean) {
       node = null
       sourceStartLine = line
       sourceStartColumn = i - lineStart
-      sourceEndLine = line
-      sourceEndColumn = i - lineStart
     }
 
     // End of a declaration.
@@ -425,13 +438,13 @@ export function parse(input: string, track?: boolean) {
       }
 
       // Track the source location for source maps
+      sourceEndLine = line
+      sourceEndColumn = i - lineStart
       declaration.source = sourceRange()!
 
       buffer = ''
       sourceStartLine = line
       sourceStartColumn = i - lineStart
-      sourceEndLine = line
-      sourceEndColumn = i - lineStart
     }
 
     // Start of a block.
@@ -455,6 +468,8 @@ export function parse(input: string, track?: boolean) {
       parent = node
 
       // Track the source location for source maps
+      sourceEndLine = line
+      sourceEndColumn = i - lineStart
       node.source = sourceRange()!
 
       // Reset the state for the next node.
