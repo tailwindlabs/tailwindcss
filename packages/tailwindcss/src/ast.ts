@@ -109,6 +109,31 @@ export function walk(
   }
 }
 
+function span(value: string, location: Location) {
+  let line = location.line
+  let column = location.column
+
+  let start = { line, column }
+
+  for (let i = 0; i < value.length; ++i) {
+    if (value.charCodeAt(i) === 0x0a) {
+      // Add the number of lines the comment spans
+      line += 1
+      column = 0
+    } else {
+      // Keep track of the column for accurate end locations
+      column += 1
+    }
+  }
+
+  let end = { line, column }
+
+  location.line = line
+  location.column = column
+
+  return { start, end }
+}
+
 export function toCss(ast: AstNode[], track?: boolean) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
@@ -153,21 +178,23 @@ export function toCss(ast: AstNode[], track?: boolean) {
       // @layer base, components, utilities;
       // ```
       if (node.selector[0] === '@' && node.nodes.length === 0) {
+        let css = ''
+
+        css += indent
         location.column += indent.length
 
-        node.destination = track
-          ? [
-              {
-                start: { ...location },
-                end: { ...location },
-              },
-            ]
-          : []
-        if (track) {
-          location.line += 1
-          location.column = 0
-        }
-        return `${indent}${node.selector};\n`
+        let str = ''
+        str += node.selector
+        str += ';'
+
+        css += str
+        node.destination = track ? [span(str, location)] : []
+
+        css += '\n'
+        location.line += 1
+        location.column = 0
+
+        return css
       }
 
       if (node.selector[0] === '@' && node.selector.startsWith('@property ') && depth === 0) {
@@ -179,74 +206,86 @@ export function toCss(ast: AstNode[], track?: boolean) {
         seenAtProperties.add(node.selector)
       }
 
-      let css = `${indent}${node.selector} {\n`
-      location.column += indent.length
-      node.destination = track
-        ? [
-            {
-              start: { ...location },
-              end: { ...location },
-            },
-          ]
-        : []
+      let css = ''
 
-      if (track) {
-        location.line += 1
-        location.column = 0
-      }
+      css += indent
+      location.column += indent.length
+
+      let head = ''
+      head += node.selector
+      head += ' {'
+
+      css += head
+      node.destination = track ? [span(head, location)] : []
+
+      css += '\n'
+      location.line += 1
+      location.column = 0
 
       for (let child of node.nodes) {
         css += stringify(child, location, depth + 1)
       }
 
-      css += `${indent}}\n`
+      css += indent
+      location.column += indent.length
 
-      if (track) {
-        location.line += 1
-        location.column = 0
-      }
+      let tail = ''
+      tail += '}'
+
+      css += tail
+      // node.destination = track ? [...node.destination, span(tail, location)] : []
+
+      css += '\n'
+      location.line += 1
+      location.column = 0
 
       return css
     }
 
     // Comment
     else if (node.kind === 'comment') {
+      let css = ''
+
+      css += indent
       location.column += indent.length
-      node.destination = track
-        ? [
-            {
-              start: { ...location },
-              end: { ...location },
-            },
-          ]
-        : []
 
-      if (track) {
-        location.line += 1 + node.value.split('\n').length - 1
-        location.column = 0
-      }
+      let str = ''
+      str += '/*'
+      str += node.value
+      str += '*/'
 
-      return `${indent}/*${node.value}*/\n`
+      css += str
+      node.destination = track ? [span(str, location)] : []
+
+      css += '\n'
+      location.line += 1
+      location.column = 0
+
+      return css
     }
 
     // Declaration
     else if (node.property !== '--tw-sort' && node.value !== undefined && node.value !== null) {
+      let css = ''
+
+      css += indent
       location.column += indent.length
-      node.destination = track
-        ? [
-            {
-              start: { line: location.line, column: indent.length },
-              end: { line: location.line, column: indent.length },
-            },
-          ]
-        : []
 
-      if (track) {
-        location.line += 1 + node.value.split('\n').length - 1
-        location.column = 0
-      }
+      let str = ''
+      str += node.property
+      str += ': '
+      str += node.value
+      str += node.important ? ' !important' : ''
+      str += ';'
+      css += str
 
-      return `${indent}${node.property}: ${node.value}${node.important ? '!important' : ''};\n`
+      node.destination = track ? [span(str, location)] : []
+
+      css += '\n'
+      location.line += 1
+      location.column = 0
+
+      return css
     }
 
     return ''
