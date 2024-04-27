@@ -384,7 +384,7 @@ export function createVariants(theme: Theme): Variants {
       // When `supports-[...]:flex` is used, with `not()`, `and()` or
       // `selector()`, then we know that want to use this directly as the
       // supports condition as-is.
-      if (/^\w*\s*\(/.test(value)) {
+      if (/^[\w-]*\s*\(/.test(value)) {
         // Chrome has a bug where `(condition1)or(condition2)` is not valid, but
         // `(condition1) or (condition2)` is supported.
         let query = value.replace(/\b(and|or|not)\b/g, ' $1 ')

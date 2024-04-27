@@ -1288,7 +1288,15 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
 
 test('supports', () => {
   expect(
-    run(['supports-gap:grid', 'supports-[display:grid]:flex', 'supports-[selector(A_>_B)]:flex']),
+    run([
+      'supports-gap:grid',
+      'supports-[display:grid]:flex',
+      'supports-[selector(A_>_B)]:flex',
+      'supports-[font-format(opentype)]:grid',
+      'supports-[(display:grid)_and_font-format(opentype)]:grid',
+      'supports-[font-tech(color-COLRv1)]:flex',
+      'supports-[--test]:flex',
+    ]),
   ).toMatchInlineSnapshot(`
     "@supports (gap: var(--tw)) {
       .supports-gap\\:grid {
@@ -1304,6 +1312,30 @@ test('supports', () => {
 
     @supports selector(A > B) {
       .supports-\\[selector\\(A_\\>_B\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports font-format(opentype) {
+      .supports-\\[font-format\\(opentype\\)\\]\\:grid {
+        display: grid;
+      }
+    }
+
+    @supports (display: grid) and font-format(opentype) {
+      .supports-\\[\\(display\\:grid\\)_and_font-format\\(opentype\\)\\]\\:grid {
+        display: grid;
+      }
+    }
+
+    @supports font-tech(color-COLRv1) {
+      .supports-\\[font-tech\\(color-COLRv1\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports (--test: var(--tw)) {
+      .supports-\\[--test\\]\\:flex {
         display: flex;
       }
     }"
