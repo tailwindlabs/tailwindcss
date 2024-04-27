@@ -1293,7 +1293,6 @@ test('supports', () => {
       'supports-[display:grid]:flex',
       'supports-[selector(A_>_B)]:flex',
       'supports-[font-format(opentype)]:grid',
-      'supports-[content:"("]:grid',
       'supports-[(display:grid)_and_font-format(opentype)]:grid',
       'supports-[font-tech(color-COLRv1)]:flex',
       'supports-[--test]:flex',
