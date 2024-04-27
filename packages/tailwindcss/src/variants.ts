@@ -381,9 +381,8 @@ export function createVariants(theme: Theme): Variants {
       let value = variant.value.value
       if (value === null) return null
 
-      // When `supports-[...]:flex` is used, with `not()`, `and()` or
-      // `selector()`, then we know that want to use this directly as the
-      // supports condition as-is.
+      // When the value starts with `not()`, `selector()`, `font-tech()`, or
+      // other functions, we can use the value as-is.
       if (/^[\w-]*\s*\(/.test(value)) {
         // Chrome has a bug where `(condition1)or(condition2)` is not valid, but
         // `(condition1) or (condition2)` is supported.
