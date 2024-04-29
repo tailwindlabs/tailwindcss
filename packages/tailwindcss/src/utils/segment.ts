@@ -5,6 +5,8 @@ const OPEN_PAREN = 0x28
 const CLOSE_PAREN = 0x29
 const OPEN_BRACKET = 0x5b
 const CLOSE_BRACKET = 0x5d
+const DOUBLE_QUOTE = 0x22
+const SINGLE_QUOTE = 0x27
 
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
@@ -30,10 +32,11 @@ export function segment(input: string, separator: string) {
   let stackPos = 0
   let parts: string[] = []
   let lastPos = 0
+  let len = input.length
 
   let separatorCode = separator.charCodeAt(0)
 
-  for (let idx = 0; idx < input.length; idx++) {
+  for (let idx = 0; idx < len; idx++) {
     let char = input.charCodeAt(idx)
 
     if (stackPos === 0 && char === separatorCode) {
@@ -46,6 +49,27 @@ export function segment(input: string, separator: string) {
       case BACKSLASH:
         // The next character is escaped, so we skip it.
         idx += 1
+        break
+      // Strings should be handled as-is until the end of the string. No need to
+      // worry about balancing parens, brackets, or curlies inside a string.
+      case SINGLE_QUOTE:
+      case DOUBLE_QUOTE:
+        while (
+          // Ensure we don't go out of bounds.
+          ++idx < len
+        ) {
+          let nextChar = input.charCodeAt(idx)
+
+          // The next character is escaped, so we skip it.
+          if (nextChar === BACKSLASH) {
+            idx += 1
+            continue
+          }
+
+          if (nextChar === char) {
+            break
+          }
+        }
         break
       case OPEN_PAREN:
         closingBracketStack[stackPos] = CLOSE_PAREN
