@@ -1031,5 +1031,11 @@ it('should parse arbitrary properties that are important and using stacked arbit
 })
 
 it('should not parse compound group with a non-compoundable variant', () => {
-  expect(run('group-*:flex')).toMatchInlineSnapshot(`null`)
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.compound('group', () => {})
+
+  expect(run('group-*:flex', { utilities, variants })).toMatchInlineSnapshot(`null`)
 })
