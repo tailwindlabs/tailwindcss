@@ -54,10 +54,8 @@ export function segment(input: string, separator: string) {
       // worry about balancing parens, brackets, or curlies inside a string.
       case SINGLE_QUOTE:
       case DOUBLE_QUOTE:
-        while (
-          // Ensure we don't go out of bounds.
-          ++idx < len
-        ) {
+        // Ensure we don't go out of bounds.
+        while (++idx < len) {
           let nextChar = input.charCodeAt(idx)
 
           // The next character is escaped, so we skip it.
