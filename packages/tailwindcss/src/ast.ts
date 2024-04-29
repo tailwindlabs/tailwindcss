@@ -118,11 +118,14 @@ function span(value: string, location: Location) {
 
   let start = { line: line + 1, column: column + 1 }
 
-  for (let i = 0; i < value.length; ++i) {
+  // Skip the first character as it's already accounted for by the current value
+  // of `location`
+  for (let i = 1; i < value.length; ++i) {
     if (value.charCodeAt(i) === 0x0a) {
       // Add the number of lines the comment spans
       line += 1
       column = 0
+      i += 1 // Skip the first character of the next line
     } else {
       // Keep track of the column for accurate end locations
       column += 1

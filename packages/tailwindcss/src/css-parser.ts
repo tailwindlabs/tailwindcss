@@ -115,8 +115,6 @@ export function parse(input: string, track?: boolean) {
     else if (currentChar === SLASH && input.charCodeAt(i + 1) === ASTERISK) {
       let start = i
 
-      // TODO: Track source ranges
-
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
 
@@ -129,13 +127,6 @@ export function parse(input: string, track?: boolean) {
         else if (peekChar === LINE_BREAK) {
           line += 1
           lineStart = j + 1
-
-          if (buffer.length === 0) {
-            sourceStartLine = line
-            sourceStartColumn = 0
-            sourceEndLine = line
-            sourceEndColumn = 0
-          }
         }
 
         // End of the comment
@@ -153,10 +144,13 @@ export function parse(input: string, track?: boolean) {
         let node = comment(commentString.slice(2, -2))
         licenseComments.push(node)
 
-        for (let i = 0; i < commentString.length; ++i) {
+        // Skip the first character of the comment as it's already included in
+        // the source range.
+        for (let i = 1; i < commentString.length; ++i) {
           if (commentString.charCodeAt(i) === LINE_BREAK) {
             sourceEndLine += 1
             sourceEndColumn = 0
+            i += 1 // Skip the first character of the next line
           } else {
             sourceEndColumn += 1
           }
@@ -284,13 +278,6 @@ export function parse(input: string, track?: boolean) {
             else if (peekChar === LINE_BREAK) {
               line += 1
               lineStart = j + 1
-
-              if (buffer.length === 0) {
-                sourceStartLine = line
-                sourceStartColumn = 0
-                sourceEndLine = line
-                sourceEndColumn = 0
-              }
             }
 
             // End of the comment
@@ -469,7 +456,7 @@ export function parse(input: string, track?: boolean) {
 
       // Track the source location for source maps
       sourceEndLine = line
-      sourceEndColumn = i - lineStart
+      sourceEndColumn = i - lineStart - 1
       node.source = sourceRange()!
 
       // Reset the state for the next node.
