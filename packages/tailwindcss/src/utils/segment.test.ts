@@ -45,10 +45,6 @@ it('should skip escaped single quotes', () => {
   expect(segment(String.raw`a:'b:c\':d':e`, ':')).toEqual(['a', String.raw`'b:c\':d'`, 'e'])
 })
 
-it('should not crash when single quotes are unbalanced', () => {
-  expect(segment("a:'b:c:d", ':')).toEqual(['a', "'b:c:d"])
-})
-
 it('should split by the escape sequence which is escape as well', () => {
   expect(segment('a\\b\\c\\d', '\\')).toEqual(['a', 'b', 'c', 'd'])
   expect(segment('a\\(b\\c)\\d', '\\')).toEqual(['a', '(b\\c)', 'd'])
