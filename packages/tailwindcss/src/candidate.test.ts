@@ -1031,5 +1031,40 @@ it('should parse arbitrary properties that are important and using stacked arbit
 })
 
 it('should not parse compound group with a non-compoundable variant', () => {
-  expect(run('group-*:flex')).toMatchInlineSnapshot(`null`)
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.compound('group', () => {})
+
+  expect(run('group-*:flex', { utilities, variants })).toMatchInlineSnapshot(`null`)
+})
+
+it('should parse a variant containing an arbitrary string with unbalanced parens, brackets, curlies and other quotes', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.functional('string', () => {})
+
+  expect(run(`string-['}[("\\'']:flex`, { utilities, variants })).toMatchInlineSnapshot(`
+    {
+      "important": false,
+      "kind": "static",
+      "negative": false,
+      "root": "flex",
+      "variants": [
+        {
+          "compounds": true,
+          "kind": "functional",
+          "modifier": null,
+          "root": "string",
+          "value": {
+            "kind": "arbitrary",
+            "value": "'}[("\\''",
+          },
+        },
+      ],
+    }
+  `)
 })
