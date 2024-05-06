@@ -3,4 +3,7 @@ resolver = "2"
 members = ["crates/*"]
 
 [profile.release]
+opt-level = 3
+codegen-units = 1
 lto = true
+strip = "symbols"
