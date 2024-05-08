@@ -43,9 +43,20 @@ function convertUnderscoresToWhitespace(input: string) {
   for (let idx = 0; idx < len; idx++) {
     let char = input.charCodeAt(idx)
 
-    // Escaped character, consume the next character as-is
-    if (char === BACKSLASH) {
-      output += input[++idx]
+    // Escaped values
+    if (input.charCodeAt(idx) === BACKSLASH) {
+      // An escaped underscore (e.g.: `\_`) is converted to a non-escaped
+      // underscore, but without converting the `_` to a space.
+      if (input.charCodeAt(idx + 1) === UNDERSCORE) {
+        output += '_'
+        idx += 1
+      }
+
+      // Consume the backslash and the next character as-is
+      else {
+        output += input.slice(idx, idx + 2)
+        idx += 1
+      }
     }
 
     // Underscores are converted to whitespace
@@ -99,9 +110,20 @@ function convertUnderscoresToWhitespace(input: string) {
       // Consume to the end of the string, but replace any non-escaped
       // underscores with spaces.
       while (idx < len && input.charCodeAt(idx) !== char) {
-        // Escaped character, consume the next character as-is
+        // Escaped values
         if (input.charCodeAt(idx) === BACKSLASH) {
-          output += input[++idx]
+          // An escaped underscore (e.g.: `\_`) is converted to a non-escaped
+          // underscore, but without converting the `_` to a space.
+          if (input.charCodeAt(idx + 1) === UNDERSCORE) {
+            output += '_'
+            idx += 1
+          }
+
+          // Consume the backslash and the next character as-is
+          else {
+            output += input.slice(idx, idx + 2)
+            idx += 1
+          }
         }
 
         // Unescaped underscore
