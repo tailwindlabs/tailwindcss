@@ -1652,7 +1652,7 @@ test('nth', () => {
 
   expect(
     run(['nth-foo:flex', 'nth-of-type-foo:flex', 'nth-last-foo:flex', 'nth-last-of-type-foo:flex']),
-  ).toMatchInlineSnapshot(`""`)
+  ).toEqual(``)
 })
 
 test('container queries', () => {
