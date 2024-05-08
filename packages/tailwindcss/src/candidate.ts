@@ -11,7 +11,7 @@ type ArbitraryUtilityValue = {
   kind: 'arbitrary'
 
   /**
-   * bg-[color:var(--my-color)]
+   * bg-[color:--my-color]
    *     ^^^^^
    */
   dataType: string | null
@@ -19,8 +19,16 @@ type ArbitraryUtilityValue = {
   /**
    * bg-[#0088cc]
    *     ^^^^^^^
+   * bg-[--my_variable]
+   * var(^^^^^^^^^^^^^)
    */
   value: string
+
+  /**
+   * bg-[--my_variable]
+   *     ^^^^^^^^^^^^^
+   */
+  dashedIdent: string | null
 }
 
 export type NamedUtilityValue = {
@@ -50,6 +58,12 @@ type ArbitraryModifier = {
    *             ^^^
    */
   value: string
+
+  /**
+   * bg-red-500/[--my_variable]
+   *             ^^^^^^^^^^^^^
+   */
+  dashedIdent: string | null
 }
 
 type NamedModifier = {
@@ -366,10 +380,26 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
         break
       }
 
+      // If an arbitrary value looks like a CSS variable, we automatically wrap
+      // it with `var(...)`.
+      //
+      // But since some CSS properties accept a `<dashed-ident>` as a value
+      // directly (e.g. `scroll-timeline-name`), we also store the original
+      // value in case the utility matcher is interested in it without
+      // `var(...)`.
+      let dashedIdent: string | null = null
+      if (arbitraryValue[0] === '-' && arbitraryValue[1] === '-') {
+        dashedIdent = arbitraryValue
+        arbitraryValue = `var(${arbitraryValue})`
+      } else {
+        arbitraryValue = decodeArbitraryValue(arbitraryValue)
+      }
+
       candidate.value = {
         kind: 'arbitrary',
         dataType: typehint || null,
-        value: decodeArbitraryValue(arbitraryValue),
+        value: arbitraryValue,
+        dashedIdent,
       }
     } else {
       // Some utilities support fractions as values, e.g. `w-1/2`. Since it's
@@ -402,9 +432,25 @@ function parseModifier(modifier: string): CandidateModifier {
   if (modifier[0] === '[' && modifier[modifier.length - 1] === ']') {
     let arbitraryValue = modifier.slice(1, -1)
 
+    // If an arbitrary value looks like a CSS variable, we automatically wrap
+    // it with `var(...)`.
+    //
+    // But since some CSS properties accept a `<dashed-ident>` as a value
+    // directly (e.g. `scroll-timeline-name`), we also store the original
+    // value in case the utility matcher is interested in it without
+    // `var(...)`.
+    let dashedIdent: string | null = null
+    if (arbitraryValue[0] === '-' && arbitraryValue[1] === '-') {
+      dashedIdent = arbitraryValue
+      arbitraryValue = `var(${arbitraryValue})`
+    } else {
+      arbitraryValue = decodeArbitraryValue(arbitraryValue)
+    }
+
     return {
       kind: 'arbitrary',
-      value: decodeArbitraryValue(arbitraryValue),
+      value: arbitraryValue,
+      dashedIdent,
     }
   }
 
