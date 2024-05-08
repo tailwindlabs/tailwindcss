@@ -2204,6 +2204,15 @@ test('border-spacing', () => {
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-border-spacing-x: 0;
+          --tw-border-spacing-y: 0;
+        }
+      }
+    }
+
     @property --tw-border-spacing-x {
       syntax: "<length>";
       inherits: false;
@@ -2245,6 +2254,15 @@ test('border-spacing-x', () => {
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-border-spacing-x: 0;
+          --tw-border-spacing-y: 0;
+        }
+      }
+    }
+
     @property --tw-border-spacing-x {
       syntax: "<length>";
       inherits: false;
@@ -2284,6 +2302,15 @@ test('border-spacing-y', () => {
     .border-spacing-y-\\[123px\\] {
       --tw-border-spacing-y: 123px;
       border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-border-spacing-x: 0;
+          --tw-border-spacing-y: 0;
+        }
+      }
     }
 
     @property --tw-border-spacing-x {
@@ -2472,6 +2499,16 @@ test('translate', () => {
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
+      }
+    }
+
     @property --tw-translate-x {
       syntax: "<length-percentage>";
       inherits: false;
@@ -2514,6 +2551,16 @@ test('translate-x', () => {
       .translate-x-px {
         --tw-translate-x: 1px;
         translate: var(--tw-translate-x) var(--tw-translate-y);
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+          }
+        }
       }
 
       @property --tw-translate-x {
@@ -2560,6 +2607,16 @@ test('translate-y', () => {
         translate: var(--tw-translate-x) var(--tw-translate-y);
       }
 
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+          }
+        }
+      }
+
       @property --tw-translate-x {
         syntax: "<length-percentage>";
         inherits: false;
@@ -2593,6 +2650,16 @@ test('translate-z', () => {
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
+      }
+    }
+
     @property --tw-translate-x {
       syntax: "<length-percentage>";
       inherits: false;
@@ -2620,6 +2687,16 @@ test('translate-3d', () => {
   expect(run(['translate-3d'])).toMatchInlineSnapshot(`
     ".translate-3d {
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-translate-x: 0;
+          --tw-translate-y: 0;
+          --tw-translate-z: 0;
+        }
+      }
     }
 
     @property --tw-translate-x {
@@ -2682,6 +2759,18 @@ test('rotate-x', () => {
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
+      }
+    }
+
     @property --tw-rotate-x {
       syntax: "<transform-function>";
       inherits: false;
@@ -2730,6 +2819,18 @@ test('rotate-y', () => {
     .rotate-y-\\[123deg\\] {
       --tw-rotate-y: 123deg;
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
+      }
     }
 
     @property --tw-rotate-x {
@@ -2785,6 +2886,18 @@ test('skew', () => {
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
+      }
+    }
+
     @property --tw-rotate-x {
       syntax: "<transform-function>";
       inherits: false;
@@ -2835,6 +2948,18 @@ test('skew-x', () => {
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
+      }
+    }
+
     @property --tw-rotate-x {
       syntax: "<transform-function>";
       inherits: false;
@@ -2883,6 +3008,18 @@ test('skew-y', () => {
     .skew-y-\\[123deg\\] {
       --tw-skew-y: skewY(123deg);
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
+      }
     }
 
     @property --tw-rotate-x {
@@ -2942,6 +3079,16 @@ test('scale', () => {
       scale: 2 1.5 3;
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
+      }
+    }
+
     @property --tw-scale-x {
       syntax: "<number> | <percentage>";
       inherits: false;
@@ -2967,6 +3114,16 @@ test('scale-3d', () => {
   expect(run(['scale-3d'])).toMatchInlineSnapshot(`
     ".scale-3d {
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
+      }
     }
 
     @property --tw-scale-x {
@@ -3007,6 +3164,16 @@ test('scale-x', () => {
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
+      }
+    }
+
     @property --tw-scale-x {
       syntax: "<number> | <percentage>";
       inherits: false;
@@ -3036,6 +3203,16 @@ test('scale-x', () => {
     .scale-x-400 {
       --tw-scale-x: 400%;
       scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
+      }
     }
 
     @property --tw-scale-x {
@@ -3076,6 +3253,16 @@ test('scale-y', () => {
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
+      }
+    }
+
     @property --tw-scale-x {
       syntax: "<number> | <percentage>";
       inherits: false;
@@ -3112,6 +3299,16 @@ test('scale-z', () => {
     .scale-z-\\[123deg\\] {
       --tw-scale-z: 123deg;
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scale-x: 1;
+          --tw-scale-y: 1;
+          --tw-scale-z: 1;
+        }
+      }
     }
 
     @property --tw-scale-x {
@@ -3163,6 +3360,18 @@ test('transform', () => {
 
     .transform-none {
       transform: none;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: rotateX(0);
+          --tw-rotate-y: rotateY(0);
+          --tw-rotate-z: rotateZ(0);
+          --tw-skew-x: skewX(0);
+          --tw-skew-y: skewY(0);
+        }
+      }
     }
 
     @property --tw-rotate-x {
@@ -3594,6 +3803,16 @@ test('touch-pan', () => {
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-pan-x: ;
+          --tw-pan-y: ;
+          --tw-pinch-zoom: ;
+        }
+      }
+    }
+
     @property --tw-pan-x {
       syntax: "*";
       inherits: false
@@ -3626,6 +3845,16 @@ test('touch-pinch-zoom', () => {
     ".touch-pinch-zoom {
       --tw-pinch-zoom: pinch-zoom;
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-pan-x: ;
+          --tw-pan-y: ;
+          --tw-pinch-zoom: ;
+        }
+      }
     }
 
     @property --tw-pan-x {
@@ -3710,6 +3939,14 @@ test('scroll-snap-type', () => {
       scroll-snap-type: y var(--tw-scroll-snap-strictness);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scroll-snap-strictness: proximity;
+        }
+      }
+    }
+
     @property --tw-scroll-snap-strictness {
       syntax: "*";
       inherits: false;
@@ -3727,6 +3964,14 @@ test('--tw-scroll-snap-strictness', () => {
 
     .snap-proximity {
       --tw-scroll-snap-strictness: proximity;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-scroll-snap-strictness: proximity;
+        }
+      }
     }
 
     @property --tw-scroll-snap-strictness {
@@ -5311,6 +5556,14 @@ test('space-x', () => {
       margin-inline-end: calc(4px * calc(1 - var(--tw-space-x-reverse)));
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-space-x-reverse: 0;
+        }
+      }
+    }
+
     @property --tw-space-x-reverse {
       syntax: "<number>";
       inherits: false;
@@ -5351,6 +5604,14 @@ test('space-y', () => {
       margin-bottom: calc(4px * calc(1 - var(--tw-space-y-reverse)));
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-space-y-reverse: 0;
+        }
+      }
+    }
+
     @property --tw-space-y-reverse {
       syntax: "<number>";
       inherits: false;
@@ -5366,6 +5627,14 @@ test('space-x-reverse', () => {
       --tw-space-x-reverse: 1;
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-space-x-reverse: 0;
+        }
+      }
+    }
+
     @property --tw-space-x-reverse {
       syntax: "<number>";
       inherits: false;
@@ -5379,6 +5648,14 @@ test('space-y-reverse', () => {
   expect(run(['space-y-reverse'])).toMatchInlineSnapshot(`
     ":where(.space-y-reverse > :not(:last-child)) {
       --tw-space-y-reverse: 1;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-space-y-reverse: 0;
+        }
+      }
     }
 
     @property --tw-space-y-reverse {
@@ -5423,6 +5700,15 @@ test('divide-x', () => {
       border-inline-end-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-x-reverse: 0;
+          --tw-border-style: solid;
+        }
+      }
+    }
+
     @property --tw-divide-x-reverse {
       syntax: "<number>";
       inherits: false;
@@ -5458,6 +5744,15 @@ test('divide-x with custom default border width', () => {
       border-inline-style: var(--tw-border-style);
       border-inline-start-width: calc(2px * var(--tw-divide-x-reverse));
       border-inline-end-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-x-reverse: 0;
+          --tw-border-style: solid;
+        }
+      }
     }
 
     @property --tw-divide-x-reverse {
@@ -5511,6 +5806,15 @@ test('divide-y', () => {
       border-bottom-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-y-reverse: 0;
+          --tw-border-style: solid;
+        }
+      }
+    }
+
     @property --tw-divide-y-reverse {
       syntax: "<number>";
       inherits: false;
@@ -5549,6 +5853,15 @@ test('divide-y with custom default border width', () => {
       border-bottom-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-y-reverse: 0;
+          --tw-border-style: solid;
+        }
+      }
+    }
+
     @property --tw-divide-y-reverse {
       syntax: "<number>";
       inherits: false;
@@ -5569,6 +5882,14 @@ test('divide-x-reverse', () => {
       --tw-divide-x-reverse: 1;
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-x-reverse: 0;
+        }
+      }
+    }
+
     @property --tw-divide-x-reverse {
       syntax: "<number>";
       inherits: false;
@@ -5582,6 +5903,14 @@ test('divide-y-reverse', () => {
   expect(run(['divide-y-reverse'])).toMatchInlineSnapshot(`
     ":where(.divide-y-reverse > :not(:last-child)) {
       --tw-divide-y-reverse: 1;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-divide-y-reverse: 0;
+        }
+      }
     }
 
     @property --tw-divide-y-reverse {
@@ -7291,6 +7620,14 @@ test('border with custom default border width', () => {
       border-width: 2px;
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-border-style: solid;
+        }
+      }
+    }
+
     @property --tw-border-style {
       syntax: "<custom-ident>";
       inherits: false;
@@ -7808,6 +8145,21 @@ test('from', () => {
       --tw-gradient-from-position: var(--my-position);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-gradient-from: #0000;
+          --tw-gradient-to: #0000;
+          --tw-gradient-via: transparent;
+          --tw-gradient-stops: ;
+          --tw-gradient-via-stops: ;
+          --tw-gradient-from-position: 0%;
+          --tw-gradient-via-position: 50%;
+          --tw-gradient-to-position: 100%;
+        }
+      }
+    }
+
     @property --tw-gradient-from {
       syntax: "<color>";
       inherits: false;
@@ -8030,6 +8382,21 @@ test('via', () => {
       --tw-gradient-via-position: var(--my-position);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-gradient-from: #0000;
+          --tw-gradient-to: #0000;
+          --tw-gradient-via: transparent;
+          --tw-gradient-stops: ;
+          --tw-gradient-via-stops: ;
+          --tw-gradient-from-position: 0%;
+          --tw-gradient-via-position: 50%;
+          --tw-gradient-to-position: 100%;
+        }
+      }
+    }
+
     @property --tw-gradient-from {
       syntax: "<color>";
       inherits: false;
@@ -8238,6 +8605,21 @@ test('to', () => {
 
     .to-\\[length\\:--my-position\\], .to-\\[percentage\\:--my-position\\] {
       --tw-gradient-to-position: var(--my-position);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-gradient-from: #0000;
+          --tw-gradient-to: #0000;
+          --tw-gradient-via: transparent;
+          --tw-gradient-stops: ;
+          --tw-gradient-via-stops: ;
+          --tw-gradient-from-position: 0%;
+          --tw-gradient-via-position: 50%;
+          --tw-gradient-to-position: 100%;
+        }
+      }
     }
 
     @property --tw-gradient-from {
@@ -9998,6 +10380,22 @@ test('filter', () => {
       filter: none;
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-blur: ;
+          --tw-brightness: ;
+          --tw-contrast: ;
+          --tw-grayscale: ;
+          --tw-hue-rotate: ;
+          --tw-invert: ;
+          --tw-opacity: ;
+          --tw-saturate: ;
+          --tw-sepia: ;
+        }
+      }
+    }
+
     @property --tw-blur {
       syntax: "*";
       inherits: false
@@ -10283,6 +10681,22 @@ test('backdrop-filter', () => {
     .backdrop-filter-none {
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-backdrop-blur: ;
+          --tw-backdrop-brightness: ;
+          --tw-backdrop-contrast: ;
+          --tw-backdrop-grayscale: ;
+          --tw-backdrop-hue-rotate: ;
+          --tw-backdrop-invert: ;
+          --tw-backdrop-opacity: ;
+          --tw-backdrop-saturate: ;
+          --tw-backdrop-sepia: ;
+        }
+      }
     }
 
     @property --tw-backdrop-blur {
@@ -10639,6 +11053,17 @@ test('contain', () => {
       contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-contain-size: ;
+          --tw-contain-layout: ;
+          --tw-contain-paint: ;
+          --tw-contain-style: ;
+        }
+      }
+    }
+
     @property --tw-contain-size {
       syntax: "*";
       inherits: false
@@ -10666,6 +11091,14 @@ test('content', () => {
     ".content-\\[\\"hello_world\\"\\] {
       --tw-content: "hello world";
       content: var(--tw-content);
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-content: "";
+        }
+      }
     }
 
     @property --tw-content {
@@ -10839,6 +11272,18 @@ test('font-variant-numeric', () => {
     .tabular-nums {
       --tw-numeric-spacing: tabular-nums;
       font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-ordinal: ;
+          --tw-slashed-zero: ;
+          --tw-numeric-figure: ;
+          --tw-numeric-spacing: ;
+          --tw-numeric-fraction: ;
+        }
+      }
     }
 
     @property --tw-ordinal {
@@ -11052,6 +11497,14 @@ test('outline', () => {
     .outline-solid {
       --tw-outline-style: solid;
       outline-style: solid;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-outline-style: solid;
+        }
+      }
     }
 
     @property --tw-outline-style {
@@ -11543,6 +11996,25 @@ test('shadow', () => {
       --tw-shadow: var(--tw-shadow-colored);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-ring-color: ;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: ;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: ;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
+      }
+    }
+
     @property --tw-shadow {
       syntax: "*";
       inherits: false;
@@ -11776,6 +12248,25 @@ test('inset-shadow', () => {
       --tw-inset-shadow: var(--tw-inset-shadow-colored);
     }
 
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-ring-color: ;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: ;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: ;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
+      }
+    }
+
     @property --tw-shadow {
       syntax: "*";
       inherits: false;
@@ -12003,6 +12494,25 @@ test('ring', () => {
 
     .ring-inset {
       --tw-ring-inset: inset;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-ring-color: ;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: ;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: ;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
+      }
     }
 
     @property --tw-shadow {
@@ -12233,6 +12743,25 @@ test('inset-ring', () => {
 
     .inset-ring-transparent {
       --tw-inset-ring-color: transparent;
+    }
+
+    @supports (-moz-orient: inline) {
+      @layer base {
+        *, :before, :after, ::backdrop {
+          --tw-shadow: 0 0 #0000;
+          --tw-shadow-colored: 0 0 #0000;
+          --tw-inset-shadow: 0 0 #0000;
+          --tw-inset-shadow-colored: 0 0 #0000;
+          --tw-ring-color: ;
+          --tw-ring-shadow: 0 0 #0000;
+          --tw-inset-ring-color: ;
+          --tw-inset-ring-shadow: 0 0 #0000;
+          --tw-ring-inset: ;
+          --tw-ring-offset-width: 0px;
+          --tw-ring-offset-color: #fff;
+          --tw-ring-offset-shadow: 0 0 #0000;
+        }
+      }
     }
 
     @property --tw-shadow {

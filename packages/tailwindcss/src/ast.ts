@@ -90,6 +90,8 @@ export function walk(
 export function toCss(ast: AstNode[]) {
   let atRoots: string = ''
   let seenAtProperties = new Set<string>()
+  let propertyFallbacksRoot: Declaration[] = []
+  let propertyFallbacksUniversal: Declaration[] = []
 
   function stringify(node: AstNode, depth = 0): string {
     let css = ''
@@ -129,6 +131,28 @@ export function toCss(ast: AstNode[]) {
           return ''
         }
 
+        // Collect fallbacks for `@property` rules for Firefox support
+        // We turn these into rules on `:root` or `*` and some pseudo-elements
+        // based on the value of `inherits``
+        let property = node.selector.replace(/@property\s*/g, '')
+        let initialValue = null
+        let inherits = false
+
+        for (let prop of node.nodes) {
+          if (prop.kind !== 'declaration') continue
+          if (prop.property === 'initial-value') {
+            initialValue = prop.value
+          } else if (prop.property === 'inherits') {
+            inherits = prop.value === 'true'
+          }
+        }
+
+        if (inherits) {
+          propertyFallbacksRoot.push(decl(property, initialValue ?? ' '))
+        } else {
+          propertyFallbacksUniversal.push(decl(property, initialValue ?? ' '))
+        }
+
         seenAtProperties.add(node.selector)
       }
 
@@ -153,6 +177,7 @@ export function toCss(ast: AstNode[]) {
   }
 
   let css = ''
+
   for (let node of ast) {
     let result = stringify(node)
     if (result !== '') {
@@ -160,5 +185,23 @@ export function toCss(ast: AstNode[]) {
     }
   }
 
-  return `${css}${atRoots}`
+  let fallbackAst = []
+
+  if (propertyFallbacksRoot.length) {
+    fallbackAst.push(rule(':root', propertyFallbacksRoot))
+  }
+
+  if (propertyFallbacksUniversal.length) {
+    fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+  }
+
+  let fallback = ''
+
+  if (fallbackAst.length) {
+    fallback = stringify(
+      rule('@supports (-moz-orient: inline)', [rule('@layer base', fallbackAst)]),
+    )
+  }
+
+  return `${css}${fallback}${atRoots}`
 }

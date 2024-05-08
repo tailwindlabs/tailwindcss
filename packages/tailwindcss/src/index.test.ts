@@ -211,6 +211,16 @@ describe('@apply', () => {
         }
       }
 
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+          }
+        }
+      }
+
       @keyframes spin {
         to {
           transform: rotate(360deg);
@@ -255,6 +265,14 @@ describe('@apply', () => {
         --tw-content: "b";
         content: var(--tw-content);
         content: var(--tw-content);
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
 
       @property --tw-content {
@@ -370,6 +388,14 @@ describe('variant stacking', () => {
       .hover\\:before\\:flex:hover:before {
         content: var(--tw-content);
         display: flex;
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
 
       @property --tw-content {
@@ -536,6 +562,14 @@ describe('sorting', () => {
       :where(.space-x-2 > :not(:last-child)) {
         margin-inline-start: calc(var(--spacing-2, .5rem) * var(--tw-space-x-reverse));
         margin-inline-end: calc(var(--spacing-2, .5rem) * calc(1 - var(--tw-space-x-reverse)));
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-space-x-reverse: 0;
+          }
+        }
       }
 
       @property --tw-space-x-reverse {
