@@ -12,7 +12,7 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsup-node ./src/index.ts --format cjs --dts --cjsInterop --splitting --minify --clean",
+    "build": "tsup-node ./src/index.ts --format cjs,esm --dts --cjsInterop --splitting --minify --clean",
     "dev": "pnpm run build -- --watch"
   },
   "files": [
@@ -25,7 +25,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     }
   },
