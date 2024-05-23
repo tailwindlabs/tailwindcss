@@ -2696,7 +2696,7 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `background-clip`
    */
-  staticUtility('bg-clip-text', [['background-clip', 'text']])
+  staticUtility('bg-clip-text', [['-webkit-background-clip', 'text'], ['background-clip', 'text']])
   staticUtility('bg-clip-border', [['background-clip', 'border-box']])
   staticUtility('bg-clip-padding', [['background-clip', 'padding-box']])
   staticUtility('bg-clip-content', [['background-clip', 'content-box']])

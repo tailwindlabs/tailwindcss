@@ -8732,6 +8732,7 @@ test('bg-clip', () => {
     }
 
     .bg-clip-text {
+      -webkit-background-clip: text;
       background-clip: text;
     }"
   `)
