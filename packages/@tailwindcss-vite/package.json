@@ -29,12 +29,12 @@
   },
   "dependencies": {
     "@tailwindcss/oxide": "workspace:^",
-    "lightningcss": "^1.24.0",
+    "lightningcss": "^1.25.0",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "vite": "^5.2.0"
+    "@types/node": "^20.12.12",
+    "vite": "^5.2.11"
   },
   "peerDependencies": {
     "vite": "^5.2.0"

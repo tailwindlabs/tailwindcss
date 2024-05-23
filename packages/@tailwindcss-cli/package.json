@@ -31,11 +31,11 @@
   "dependencies": {
     "@parcel/watcher": "^2.4.1",
     "@tailwindcss/oxide": "workspace:^",
-    "lightningcss": "^1.24.0",
+    "lightningcss": "^1.25.0",
     "mri": "^1.2.0",
-    "picocolors": "^1.0.0",
+    "picocolors": "^1.0.1",
     "postcss": "8.4.24",
-    "postcss-import": "^16.0.0",
+    "postcss-import": "^16.1.0",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
