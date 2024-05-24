@@ -10,16 +10,16 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "workspace:^",
-    "tailwindcss": "workspace:^",
-    "@vitejs/plugin-react": "^4.2.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@vitejs/plugin-react": "^4.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
-    "bun": "^1.0.26",
-    "vite": "^5.2.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "bun": "^1.1.9",
+    "vite": "^5.2.11",
     "vite-plugin-handlebars": "^2.0.0"
   }
 }
