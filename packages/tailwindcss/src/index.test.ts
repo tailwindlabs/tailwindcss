@@ -184,10 +184,10 @@ describe('@apply', () => {
       }
 
       .foo {
+        --tw-translate-x: 100%;
         translate: var(--tw-translate-x) var(--tw-translate-y);
         animation: var(--animate-spin, spin 1s linear infinite);
         background-color: var(--color-red-500, #ef4444);
-        --tw-translate-x: 100%;
         text-decoration-line: underline;
       }
 
@@ -262,9 +262,9 @@ describe('@apply', () => {
       `),
     ).toMatchInlineSnapshot(`
       ".foo, .bar {
-        content: var(--tw-content);
-        content: var(--tw-content);
         --tw-content: "b";
+        content: var(--tw-content);
+        content: var(--tw-content);
       }
 
       @supports (-moz-orient: inline) {
