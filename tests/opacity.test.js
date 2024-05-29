@@ -673,6 +673,30 @@ it('should be possible to use an <alpha-value> as part of the color definition w
   })
 })
 
+it('should be possible to use multiple <alpha-value>s as part of the color definition with an opacity modifiers', () => {
+  let config = {
+    content: [
+      {
+        raw: html` <div class="bg-primary/50"></div> `,
+      },
+    ],
+    corePlugins: ['backgroundColor'],
+    theme: {
+      colors: {
+        primary: 'light-dark(rgb(0 0 0 / <alpha-value>), rgb(255 255 255 / <alpha-value>))',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .bg-primary\/50 {
+        background-color: light-dark(rgb(0 0 0 / 0.5), rgb(255 255 255 / 0.5));
+      }
+    `)
+  })
+})
+
 it('should be possible to use an <alpha-value> as part of the color definition with an opacity modifiers', () => {
   let config = {
     content: [
