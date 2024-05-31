@@ -2514,9 +2514,9 @@ export function createUtilities(theme: Theme) {
         case 'position': {
           return [decl('background-position', value)]
         }
+        case 'bg-size':
         case 'length':
-        case 'size':
-        case 'bg-size': {
+        case 'size': {
           return [decl('background-size', value)]
         }
         case 'image':
