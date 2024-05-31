@@ -2510,11 +2510,11 @@ export function createUtilities(theme: Theme) {
         ])
 
       switch (type) {
-        case 'length':
         case 'percentage':
         case 'position': {
           return [decl('background-position', value)]
         }
+        case 'length':
         case 'size':
         case 'bg-size': {
           return [decl('background-size', value)]
