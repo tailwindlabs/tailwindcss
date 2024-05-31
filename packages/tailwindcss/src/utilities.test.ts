@@ -7710,7 +7710,9 @@ test('bg', () => {
         'bg-[50%]',
         'bg-[120px]',
         'bg-[120px_120px]',
+        'bg-[length:120px_120px]',
         'bg-[position:120px_120px]',
+        'bg-[size:120px_120px]',
 
         // background-repeat
         'bg-repeat',
@@ -7834,7 +7836,7 @@ test('bg', () => {
       background-size: cover;
     }
 
-    .bg-\\[size\\:120px_120px\\] {
+    .bg-\\[length\\:120px_120px\\], .bg-\\[size\\:120px_120px\\] {
       background-size: 120px 120px;
     }
 
