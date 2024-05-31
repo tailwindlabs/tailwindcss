@@ -2502,10 +2502,10 @@ export function createUtilities(theme: Theme) {
         inferDataType(value, [
           'image',
           'color',
-          'length',
           'percentage',
           'position',
           'bg-size',
+          'length',
           'url',
         ])
 
