@@ -720,10 +720,10 @@ test('does not prefix group-has-* variants with arbitrary values', () => {
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
-      .tw-group:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\:block {
+      .tw-group:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\:tw-block {
         display: block;
       }
-      .tw-group\/two:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\/two\:flex {
+      .tw-group\/two:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\/two\:tw-flex {
         display: flex;
       }
     `)
