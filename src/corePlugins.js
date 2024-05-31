@@ -434,23 +434,40 @@ export let variantPlugins = {
     )
   },
 
-  hasVariants: ({ matchVariant }) => {
-    matchVariant('has', (value) => `&:has(${normalize(value)})`, { values: {} })
+  hasVariants: ({ matchVariant, prefix }) => {
+    matchVariant('has', (value) => `&:has(${normalize(value)})`, {
+      values: {},
+      [INTERNAL_FEATURES]: {
+        respectPrefix: false,
+      },
+    })
+
     matchVariant(
       'group-has',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.group\\/${modifier}):has(${normalize(value)}) &`
-          : `:merge(.group):has(${normalize(value)}) &`,
-      { values: {} }
+          ? `:merge(${prefix('.group')}\\/${modifier}):has(${normalize(value)}) &`
+          : `:merge(${prefix('.group')}):has(${normalize(value)}) &`,
+      {
+        values: {},
+        [INTERNAL_FEATURES]: {
+          respectPrefix: false,
+        },
+      }
     )
+
     matchVariant(
       'peer-has',
       (value, { modifier }) =>
         modifier
-          ? `:merge(.peer\\/${modifier}):has(${normalize(value)}) ~ &`
-          : `:merge(.peer):has(${normalize(value)}) ~ &`,
-      { values: {} }
+          ? `:merge(${prefix('.peer')}\\/${modifier}):has(${normalize(value)}) ~ &`
+          : `:merge(${prefix('.peer')}):has(${normalize(value)}) ~ &`,
+      {
+        values: {},
+        [INTERNAL_FEATURES]: {
+          respectPrefix: false,
+        },
+      }
     )
   },
 
