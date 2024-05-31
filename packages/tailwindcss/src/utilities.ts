@@ -2502,21 +2502,21 @@ export function createUtilities(theme: Theme) {
         inferDataType(value, [
           'image',
           'color',
-          'length',
           'percentage',
           'position',
           'bg-size',
+          'length',
           'url',
         ])
 
       switch (type) {
-        case 'length':
         case 'percentage':
         case 'position': {
           return [decl('background-position', value)]
         }
-        case 'size':
-        case 'bg-size': {
+        case 'bg-size':
+        case 'length':
+        case 'size': {
           return [decl('background-size', value)]
         }
         case 'image':
