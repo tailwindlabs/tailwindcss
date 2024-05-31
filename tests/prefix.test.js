@@ -637,3 +637,132 @@ test('does not prefix arbitrary group/peer classes', async () => {
     }
   `)
 })
+
+test('does not prefix has-* variants with arbitrary values', async () => {
+  let config = {
+    prefix: 'tw-',
+    content: [
+      {
+        raw: html`
+          <div class="has-[.active]:tw-flex foo">
+            <figure class="has-[figcaption]:tw-inline-block"></figure>
+            <div class="has-[.foo]:tw-flex"></div>
+            <div class="has-[.foo:hover]:tw-block"></div>
+            <div class="has-[[data-active]]:tw-inline"></div>
+            <div class="has-[>_.potato]:tw-table"></div>
+            <div class="has-[+_h2]:tw-grid"></div>
+            <div class="has-[>_h1_+_h2]:tw-contents"></div>
+            <div class="has-[h2]:has-[.banana]:tw-hidden"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  const result = await run(input, config)
+
+  expect(result.css).toMatchFormattedCss(css`
+    .has-\[\.foo\:hover\]\:tw-block:has(.foo:hover) {
+      display: block;
+    }
+    .has-\[figcaption\]\:tw-inline-block:has(figcaption) {
+      display: inline-block;
+    }
+    .has-\[\[data-active\]\]\:tw-inline:has([data-active]) {
+      display: inline;
+    }
+    .has-\[\.active\]\:tw-flex:has(.active),
+    .has-\[\.foo\]\:tw-flex:has(.foo) {
+      display: flex;
+    }
+    .has-\[\>_\.potato\]\:tw-table:has(> .potato) {
+      display: table;
+    }
+    .has-\[\+_h2\]\:tw-grid:has(+ h2) {
+      display: grid;
+    }
+    .has-\[\>_h1_\+_h2\]\:tw-contents:has(> h1 + h2) {
+      display: contents;
+    }
+    .has-\[h2\]\:has-\[\.banana\]\:tw-hidden:has(.banana):has(h2) {
+      display: none;
+    }
+  `)
+})
+
+test('does not prefix group-has-* variants with arbitrary values', () => {
+  let config = {
+    prefix: 'tw-',
+    theme: {},
+    content: [
+      {
+        raw: html`
+          <div class="tw-group">
+            <div class="group-has-[>_h1_+_.foo]:tw-block"></div>
+          </div>
+          <div class="tw-group/two">
+            <div class="group-has-[>_h1_+_.foo]/two:tw-flex"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .tw-group:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\:block {
+        display: block;
+      }
+      .tw-group\/two:has(> h1 + .foo) .group-has-\[\>_h1_\+_\.foo\]\/two\:flex {
+        display: flex;
+      }
+    `)
+  })
+})
+
+test('does not prefix peer-has-* variants with arbitrary values', () => {
+  let config = {
+    prefix: 'tw-',
+    theme: {},
+    content: [
+      {
+        raw: html`
+          <div>
+            <div className="tw-peer"></div>
+            <div class="peer-has-[>_h1_+_.foo]:tw-block"></div>
+          </div>
+          <div>
+            <div className="tw-peer"></div>
+            <div class="peer-has-[>_h1_+_.foo]/two:tw-flex"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      .tw-peer:has(> h1 + .foo) ~ .peer-has-\[\>_h1_\+_\.foo\]\:tw-block {
+        display: block;
+      }
+      .tw-peer\/two:has(> h1 + .foo) ~ .peer-has-\[\>_h1_\+_\.foo\]\/two\:tw-flex {
+        display: flex;
+      }
+    `)
+  })
+})
