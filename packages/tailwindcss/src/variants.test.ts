@@ -1594,6 +1594,26 @@ test('forced-colors', () => {
   `)
 })
 
+test('noscript', () => {
+  expect(run(['noscript:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: none) {
+      .noscript\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('scripting', () => {
+  expect(run(['scripting:flex'])).toMatchInlineSnapshot(`
+    "@media (scripting: enabled) {
+      .scripting\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
 test('container queries', () => {
   expect(
     compileCss(

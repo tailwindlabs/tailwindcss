@@ -2424,5 +2424,19 @@ exports[`getVariants 1`] = `
     "selectors": [Function],
     "values": [],
   },
+  {
+    "hasDash": true,
+    "isArbitrary": false,
+    "name": "noscript",
+    "selectors": [Function],
+    "values": [],
+  },
+  {
+    "hasDash": true,
+    "isArbitrary": false,
+    "name": "scripting",
+    "selectors": [Function],
+    "values": [],
+  },
 ]
 `;
