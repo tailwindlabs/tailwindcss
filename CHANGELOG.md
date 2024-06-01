@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Make it possible to use multiple `<alpha-value>` placeholders in a single color definition ([#13740](https://github.com/tailwindlabs/tailwindcss/pull/13740))
+- Don't prefix classes in arbitrary values of `has-*`, `group-has-*`, and `peer-has-*` variants ([#13770](https://github.com/tailwindlabs/tailwindcss/pull/13770))
 
 ## [3.4.3] - 2024-03-27
 
