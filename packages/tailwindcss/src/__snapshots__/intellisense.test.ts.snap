@@ -2424,5 +2424,12 @@ exports[`getVariants 1`] = `
     "selectors": [Function],
     "values": [],
   },
+  {
+    "hasDash": true,
+    "isArbitrary": false,
+    "name": "inverted-colors",
+    "selectors": [Function],
+    "values": [],
+  },
 ]
 `;
