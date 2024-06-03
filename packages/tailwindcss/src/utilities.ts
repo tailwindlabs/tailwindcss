@@ -653,6 +653,7 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('col-start-auto', [['grid-column-start', 'auto']])
   functionalUtility('col-start', {
+    supportsNegative: true,
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return value
@@ -666,6 +667,7 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('col-end-auto', [['grid-column-end', 'auto']])
   functionalUtility('col-end', {
+    supportsNegative: true,
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return value
@@ -683,6 +685,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('col-start', () => [
     {
+      supportsNegative: true,
       values: Array.from({ length: 13 }, (_, i) => `${i + 1}`),
       valueThemeKeys: ['--grid-column-start'],
     },
@@ -690,6 +693,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('col-end', () => [
     {
+      supportsNegative: true,
       values: Array.from({ length: 13 }, (_, i) => `${i + 1}`),
       valueThemeKeys: ['--grid-column-end'],
     },
@@ -718,6 +722,7 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('row-start-auto', [['grid-row-start', 'auto']])
   functionalUtility('row-start', {
+    supportsNegative: true,
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return value
@@ -731,6 +736,7 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('row-end-auto', [['grid-row-end', 'auto']])
   functionalUtility('row-end', {
+    supportsNegative: true,
     handleBareValue: ({ value }) => {
       if (!Number.isInteger(Number(value))) return null
       return value
@@ -748,6 +754,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('row-start', () => [
     {
+      supportsNegative: true,
       values: Array.from({ length: 13 }, (_, i) => `${i + 1}`),
       valueThemeKeys: ['--grid-row-start'],
     },
@@ -755,6 +762,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('row-end', () => [
     {
+      supportsNegative: true,
       values: Array.from({ length: 13 }, (_, i) => `${i + 1}`),
       valueThemeKeys: ['--grid-row-end'],
     },

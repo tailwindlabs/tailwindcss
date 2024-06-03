@@ -701,9 +701,13 @@ test('col', () => {
 })
 
 test('col-start', () => {
-  expect(run(['col-start-auto', 'col-start-4', 'col-start-99', 'col-start-[123]']))
+  expect(run(['col-start-auto', 'col-start-4', 'col-start-99', 'col-start-[123]', '-col-start-4']))
     .toMatchInlineSnapshot(`
-      ".col-start-4 {
+      ".-col-start-4 {
+        grid-column-start: calc(4 * -1);
+      }
+
+      .col-start-4 {
         grid-column-start: 4;
       }
 
@@ -719,28 +723,33 @@ test('col-start', () => {
         grid-column-start: auto;
       }"
     `)
-  expect(run(['col-start', '-col-start-4', 'col-start-unknown'])).toEqual('')
+  expect(run(['col-start', 'col-start-unknown'])).toEqual('')
 })
 
 test('col-end', () => {
-  expect(run(['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]'])).toMatchInlineSnapshot(`
-    ".col-end-4 {
-      grid-column-end: 4;
-    }
+  expect(run(['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4']))
+    .toMatchInlineSnapshot(`
+      ".-col-end-4 {
+        grid-column-end: calc(4 * -1);
+      }
 
-    .col-end-99 {
-      grid-column-end: 99;
-    }
+      .col-end-4 {
+        grid-column-end: 4;
+      }
 
-    .col-end-\\[123\\] {
-      grid-column-end: 123;
-    }
+      .col-end-99 {
+        grid-column-end: 99;
+      }
 
-    .col-end-auto {
-      grid-column-end: auto;
-    }"
-  `)
-  expect(run(['col-end', '-col-end-4', 'col-end-unknown'])).toEqual('')
+      .col-end-\\[123\\] {
+        grid-column-end: 123;
+      }
+
+      .col-end-auto {
+        grid-column-end: auto;
+      }"
+    `)
+  expect(run(['col-end', 'col-end-unknown'])).toEqual('')
 })
 
 test('row', () => {
@@ -782,9 +791,13 @@ test('row', () => {
 })
 
 test('row-start', () => {
-  expect(run(['row-start-auto', 'row-start-4', 'row-start-99', 'row-start-[123]']))
+  expect(run(['row-start-auto', 'row-start-4', 'row-start-99', 'row-start-[123]', '-row-start-4']))
     .toMatchInlineSnapshot(`
-      ".row-start-4 {
+      ".-row-start-4 {
+        grid-row-start: calc(4 * -1);
+      }
+
+      .row-start-4 {
         grid-row-start: 4;
       }
 
@@ -800,28 +813,33 @@ test('row-start', () => {
         grid-row-start: auto;
       }"
     `)
-  expect(run(['row-start', '-row-start-4', 'row-start-unknown'])).toEqual('')
+  expect(run(['row-start', 'row-start-unknown'])).toEqual('')
 })
 
 test('row-end', () => {
-  expect(run(['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]'])).toMatchInlineSnapshot(`
-    ".row-end-4 {
-      grid-row-end: 4;
-    }
+  expect(run(['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4']))
+    .toMatchInlineSnapshot(`
+      ".-row-end-4 {
+        grid-row-end: calc(4 * -1);
+      }
 
-    .row-end-99 {
-      grid-row-end: 99;
-    }
+      .row-end-4 {
+        grid-row-end: 4;
+      }
 
-    .row-end-\\[123\\] {
-      grid-row-end: 123;
-    }
+      .row-end-99 {
+        grid-row-end: 99;
+      }
 
-    .row-end-auto {
-      grid-row-end: auto;
-    }"
-  `)
-  expect(run(['row-end', '-row-end-4', 'row-end-unknown'])).toEqual('')
+      .row-end-\\[123\\] {
+        grid-row-end: 123;
+      }
+
+      .row-end-auto {
+        grid-row-end: auto;
+      }"
+    `)
+  expect(run(['row-end', 'row-end-unknown'])).toEqual('')
 })
 
 test('float', () => {
