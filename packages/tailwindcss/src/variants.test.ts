@@ -1594,6 +1594,67 @@ test('forced-colors', () => {
   `)
 })
 
+test('nth', () => {
+  expect(
+    run([
+      'nth-3:flex',
+      'nth-[2n+1]:flex',
+      'nth-[2n+1_of_.foo]:flex',
+      'nth-last-3:flex',
+      'nth-last-[2n+1]:flex',
+      'nth-last-[2n+1_of_.foo]:flex',
+      'nth-of-type-3:flex',
+      'nth-of-type-[2n+1]:flex',
+      'nth-last-of-type-3:flex',
+      'nth-last-of-type-[2n+1]:flex',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".nth-3\\:flex:nth-child(3) {
+      display: flex;
+    }
+
+    .nth-\\[2n\\+1\\]\\:flex:nth-child(odd) {
+      display: flex;
+    }
+
+    .nth-\\[2n\\+1_of_\\.foo\\]\\:flex:nth-child(odd of .foo) {
+      display: flex;
+    }
+
+    .nth-last-3\\:flex:nth-last-child(3) {
+      display: flex;
+    }
+
+    .nth-last-\\[2n\\+1\\]\\:flex:nth-last-child(odd) {
+      display: flex;
+    }
+
+    .nth-last-\\[2n\\+1_of_\\.foo\\]\\:flex:nth-last-child(odd of .foo) {
+      display: flex;
+    }
+
+    .nth-of-type-3\\:flex:nth-of-type(3) {
+      display: flex;
+    }
+
+    .nth-of-type-\\[2n\\+1\\]\\:flex:nth-of-type(odd) {
+      display: flex;
+    }
+
+    .nth-last-of-type-3\\:flex:nth-last-of-type(3) {
+      display: flex;
+    }
+
+    .nth-last-of-type-\\[2n\\+1\\]\\:flex:nth-last-of-type(odd) {
+      display: flex;
+    }"
+  `)
+
+  expect(
+    run(['nth-foo:flex', 'nth-of-type-foo:flex', 'nth-last-foo:flex', 'nth-last-of-type-foo:flex']),
+  ).toEqual('')
+})
+
 test('container queries', () => {
   expect(
     compileCss(

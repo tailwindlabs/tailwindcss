@@ -373,6 +373,42 @@ export function createVariants(theme: Theme): Variants {
     ruleNode.nodes = [rule(`&[data-${variant.value.value}]`, ruleNode.nodes)]
   })
 
+  variants.functional('nth', (ruleNode, variant) => {
+    if (variant.value === null) return null
+
+    // Only numeric bare values are allowed
+    if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
+
+    ruleNode.nodes = [rule(`&:nth-child(${variant.value.value})`, ruleNode.nodes)]
+  })
+
+  variants.functional('nth-last', (ruleNode, variant) => {
+    if (variant.value === null) return null
+
+    // Only numeric bare values are allowed
+    if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
+
+    ruleNode.nodes = [rule(`&:nth-last-child(${variant.value.value})`, ruleNode.nodes)]
+  })
+
+  variants.functional('nth-of-type', (ruleNode, variant) => {
+    if (variant.value === null) return null
+
+    // Only numeric bare values are allowed
+    if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
+
+    ruleNode.nodes = [rule(`&:nth-of-type(${variant.value.value})`, ruleNode.nodes)]
+  })
+
+  variants.functional('nth-last-of-type', (ruleNode, variant) => {
+    if (variant.value === null) return null
+
+    // Only numeric bare values are allowed
+    if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
+
+    ruleNode.nodes = [rule(`&:nth-last-of-type(${variant.value.value})`, ruleNode.nodes)]
+  })
+
   variants.functional(
     'supports',
     (ruleNode, variant) => {
