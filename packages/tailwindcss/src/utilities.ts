@@ -2497,9 +2497,13 @@ export function createUtilities(theme: Theme) {
     staticUtility(`bg-gradient-to-${value}`, [
       ['background-image', `linear-gradient(to ${direction}, var(--tw-gradient-stops,))`],
     ])
+
+    staticUtility(`bg-linear-to-${value}`, [
+      ['background-image', `linear-gradient(to ${direction}, var(--tw-gradient-stops,))`],
+    ])
   }
 
-  utilities.functional('bg-gradient', (candidate) => {
+  utilities.functional('bg-linear', (candidate) => {
     if (candidate.negative || !candidate.value) return
 
     if (candidate.value.kind === 'arbitrary') {
