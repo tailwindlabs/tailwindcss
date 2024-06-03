@@ -228,13 +228,13 @@ describe('@apply', () => {
       }
 
       @property --tw-translate-x {
-        syntax: "<length-percentage>";
+        syntax: "<length> | <percentage>";
         inherits: false;
         initial-value: 0;
       }
 
       @property --tw-translate-y {
-        syntax: "<length-percentage>";
+        syntax: "<length> | <percentage>";
         inherits: false;
         initial-value: 0;
       }

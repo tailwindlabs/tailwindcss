@@ -2528,13 +2528,13 @@ test('translate', () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0;
     }
@@ -2582,13 +2582,13 @@ test('translate-x', () => {
       }
 
       @property --tw-translate-x {
-        syntax: "<length-percentage>";
+        syntax: "<length> | <percentage>";
         inherits: false;
         initial-value: 0;
       }
 
       @property --tw-translate-y {
-        syntax: "<length-percentage>";
+        syntax: "<length> | <percentage>";
         inherits: false;
         initial-value: 0;
       }
@@ -2636,13 +2636,13 @@ test('translate-y', () => {
       }
 
       @property --tw-translate-x {
-        syntax: "<length-percentage>";
+        syntax: "<length> | <percentage>";
         inherits: false;
         initial-value: 0;
       }
 
       @property --tw-translate-y {
-        syntax: "<length-percentage>";
+        syntax: "<length> | <percentage>";
         inherits: false;
         initial-value: 0;
       }
@@ -2679,13 +2679,13 @@ test('translate-z', () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0;
     }
@@ -2718,13 +2718,13 @@ test('translate-3d', () => {
     }
 
     @property --tw-translate-x {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0;
     }
 
     @property --tw-translate-y {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0;
     }
@@ -8209,19 +8209,19 @@ test('from', () => {
     }
 
     @property --tw-gradient-from-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0%;
     }
 
     @property --tw-gradient-via-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 50%;
     }
 
     @property --tw-gradient-to-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 100%;
     }"
@@ -8446,19 +8446,19 @@ test('via', () => {
     }
 
     @property --tw-gradient-from-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0%;
     }
 
     @property --tw-gradient-via-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 50%;
     }
 
     @property --tw-gradient-to-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 100%;
     }"
@@ -8671,19 +8671,19 @@ test('to', () => {
     }
 
     @property --tw-gradient-from-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 0%;
     }
 
     @property --tw-gradient-via-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 50%;
     }
 
     @property --tw-gradient-to-position {
-      syntax: "<length-percentage>";
+      syntax: "<length> | <percentage>";
       inherits: false;
       initial-value: 100%;
     }"

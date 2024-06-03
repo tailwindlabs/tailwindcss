@@ -1222,8 +1222,8 @@ export function createUtilities(theme: Theme) {
 
   let translateProperties = () =>
     atRoot([
-      property('--tw-translate-x', '0', '<length-percentage>'),
-      property('--tw-translate-y', '0', '<length-percentage>'),
+      property('--tw-translate-x', '0', '<length> | <percentage>'),
+      property('--tw-translate-y', '0', '<length> | <percentage>'),
       property('--tw-translate-z', '0', '<length>'),
     ])
 
@@ -2579,9 +2579,9 @@ export function createUtilities(theme: Theme) {
       property('--tw-gradient-to', 'transparent', '<color>'),
       property('--tw-gradient-stops'),
       property('--tw-gradient-via-stops'),
-      property('--tw-gradient-from-position', '0%', '<length-percentage>'),
-      property('--tw-gradient-via-position', '50%', '<length-percentage>'),
-      property('--tw-gradient-to-position', '100%', '<length-percentage>'),
+      property('--tw-gradient-from-position', '0%', '<length> | <percentage>'),
+      property('--tw-gradient-via-position', '50%', '<length> | <percentage>'),
+      property('--tw-gradient-to-position', '100%', '<length> | <percentage>'),
     ])
   }
 
