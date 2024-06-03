@@ -2499,6 +2499,19 @@ export function createUtilities(theme: Theme) {
     ])
   }
 
+  utilities.functional('bg-gradient', (candidate) => {
+    if (candidate.negative || !candidate.value) return
+
+    if (candidate.value.kind === 'arbitrary') {
+      return [
+        decl(
+          'background-image',
+          `linear-gradient(${candidate.value.value}, var(--tw-gradient-stops,))`,
+        ),
+      ]
+    }
+  })
+
   utilities.functional('bg', (candidate) => {
     if (candidate.negative || !candidate.value) return
 

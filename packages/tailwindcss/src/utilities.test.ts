@@ -7702,6 +7702,9 @@ test('bg', () => {
         'bg-[url:--my-url]',
         'bg-[linear-gradient(to_bottom,red,blue)]',
         'bg-[image:--my-gradient]',
+        'bg-gradient-[125deg]',
+        'bg-gradient-[1.3rad]',
+        'bg-gradient-[to_bottom]',
 
         // background-size
         'bg-auto',
@@ -7810,7 +7813,15 @@ test('bg', () => {
       background-image: var(--my-url);
     }
 
-    .bg-gradient-to-b {
+    .bg-gradient-\\[1\\.3rad\\] {
+      background-image: linear-gradient(74.4845deg, var(--tw-gradient-stops, ));
+    }
+
+    .bg-gradient-\\[125deg\\] {
+      background-image: linear-gradient(125deg, var(--tw-gradient-stops, ));
+    }
+
+    .bg-gradient-\\[to_bottom\\], .bg-gradient-to-b {
       background-image: linear-gradient(to bottom, var(--tw-gradient-stops, ));
     }
 
@@ -7974,6 +7985,9 @@ test('bg', () => {
       // background-image
       '-bg-none',
       '-bg-gradient-to-br',
+      '-bg-gradient-[125deg]', // This could be made valid maybe
+      '-bg-gradient-[1.3rad]', // This could be made valid maybe
+      '-bg-gradient-[to_bottom]',
 
       // background-size
       '-bg-auto',
