@@ -741,11 +741,19 @@ export let corePlugins = {
   zIndex: createUtilityPlugin('zIndex', [['z', ['zIndex']]], { supportsNegativeValues: true }),
   order: createUtilityPlugin('order', undefined, { supportsNegativeValues: true }),
   gridColumn: createUtilityPlugin('gridColumn', [['col', ['gridColumn']]]),
-  gridColumnStart: createUtilityPlugin('gridColumnStart', [['col-start', ['gridColumnStart']]]),
-  gridColumnEnd: createUtilityPlugin('gridColumnEnd', [['col-end', ['gridColumnEnd']]]),
+  gridColumnStart: createUtilityPlugin('gridColumnStart', [['col-start', ['gridColumnStart']]], {
+    supportsNegativeValues: true,
+  }),
+  gridColumnEnd: createUtilityPlugin('gridColumnEnd', [['col-end', ['gridColumnEnd']]], {
+    supportsNegativeValues: true,
+  }),
   gridRow: createUtilityPlugin('gridRow', [['row', ['gridRow']]]),
-  gridRowStart: createUtilityPlugin('gridRowStart', [['row-start', ['gridRowStart']]]),
-  gridRowEnd: createUtilityPlugin('gridRowEnd', [['row-end', ['gridRowEnd']]]),
+  gridRowStart: createUtilityPlugin('gridRowStart', [['row-start', ['gridRowStart']]], {
+    supportsNegativeValues: true,
+  }),
+  gridRowEnd: createUtilityPlugin('gridRowEnd', [['row-end', ['gridRowEnd']]], {
+    supportsNegativeValues: true,
+  }),
 
   float: ({ addUtilities }) => {
     addUtilities({
