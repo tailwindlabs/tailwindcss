@@ -360,3 +360,27 @@ test('addUtilities without negative prefix + variant + negative prefix in conten
 
   expect(result.css).toMatchCss(css``)
 })
+
+test('negative col/row-start/end utilities', () => {
+  let config = {
+    content: [{ raw: html`<div class="-col-start-4 -col-end-4 -row-start-4 -row-end-4"></div>` }],
+    corePlugins: { preflight: false },
+  }
+
+  return run('@tailwind utilities;', config).then((result) => {
+    expect(result.css).toMatchCss(css`
+      .-col-start-4 {
+        grid-column-start: -4;
+      }
+      .-col-end-4 {
+        grid-column-end: -4;
+      }
+      .-row-start-4 {
+        grid-row-start: -4;
+      }
+      .-row-end-4 {
+        grid-row-end: -4;
+      }
+    `)
+  })
+})
