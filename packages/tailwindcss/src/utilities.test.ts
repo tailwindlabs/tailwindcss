@@ -7690,6 +7690,8 @@ test('bg', () => {
 
         // background-image
         'bg-none',
+
+        // Legacy linear-gradient API
         'bg-gradient-to-t',
         'bg-gradient-to-tr',
         'bg-gradient-to-r',
@@ -7698,10 +7700,26 @@ test('bg', () => {
         'bg-gradient-to-bl',
         'bg-gradient-to-l',
         'bg-gradient-to-tl',
+
+        // Modern linear-gradient API
+        'bg-linear-to-t',
+        'bg-linear-to-tr',
+        'bg-linear-to-r',
+        'bg-linear-to-br',
+        'bg-linear-to-b',
+        'bg-linear-to-bl',
+        'bg-linear-to-l',
+        'bg-linear-to-tl',
+
         'bg-[url(/image.png)]',
         'bg-[url:--my-url]',
         'bg-[linear-gradient(to_bottom,red,blue)]',
         'bg-[image:--my-gradient]',
+        'bg-linear-[125deg]',
+        'bg-linear-[1.3rad]',
+        'bg-linear-[to_bottom]',
+        '-bg-linear-[125deg]',
+        '-bg-linear-[1.3rad]',
 
         // background-size
         'bg-auto',
@@ -7794,6 +7812,14 @@ test('bg', () => {
       background-color: #0000;
     }
 
+    .-bg-linear-\\[1\\.3rad\\] {
+      background-image: linear-gradient(calc(74.4845deg * -1), var(--tw-gradient-stops, ));
+    }
+
+    .-bg-linear-\\[125deg\\] {
+      background-image: linear-gradient(calc(125deg * -1), var(--tw-gradient-stops, ));
+    }
+
     .bg-\\[image\\:--my-gradient\\] {
       background-image: var(--my-gradient);
     }
@@ -7839,6 +7865,46 @@ test('bg', () => {
     }
 
     .bg-gradient-to-tr {
+      background-image: linear-gradient(to top right, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-\\[1\\.3rad\\] {
+      background-image: linear-gradient(74.4845deg, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-\\[125deg\\] {
+      background-image: linear-gradient(125deg, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-\\[to_bottom\\], .bg-linear-to-b {
+      background-image: linear-gradient(to bottom, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-to-bl {
+      background-image: linear-gradient(to bottom left, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-to-br {
+      background-image: linear-gradient(to bottom right, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-to-l {
+      background-image: linear-gradient(to left, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-to-r {
+      background-image: linear-gradient(to right, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-to-t {
+      background-image: linear-gradient(to top, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-to-tl {
+      background-image: linear-gradient(to top left, var(--tw-gradient-stops, ));
+    }
+
+    .bg-linear-to-tr {
       background-image: linear-gradient(to top right, var(--tw-gradient-stops, ));
     }
 
@@ -7974,6 +8040,8 @@ test('bg', () => {
       // background-image
       '-bg-none',
       '-bg-gradient-to-br',
+      '-bg-linear-to-br',
+      '-bg-linear-[to_bottom]',
 
       // background-size
       '-bg-auto',

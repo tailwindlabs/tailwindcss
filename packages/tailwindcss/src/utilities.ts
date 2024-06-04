@@ -2497,7 +2497,33 @@ export function createUtilities(theme: Theme) {
     staticUtility(`bg-gradient-to-${value}`, [
       ['background-image', `linear-gradient(to ${direction}, var(--tw-gradient-stops,))`],
     ])
+
+    staticUtility(`bg-linear-to-${value}`, [
+      ['background-image', `linear-gradient(to ${direction}, var(--tw-gradient-stops,))`],
+    ])
   }
+
+  utilities.functional('bg-linear', (candidate) => {
+    if (!candidate.value) return
+
+    if (candidate.value.kind === 'arbitrary') {
+      let value: string | null = candidate.value.value
+      let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
+
+      switch (type) {
+        case 'angle': {
+          value = withNegative(value, candidate)
+
+          return [decl('background-image', `linear-gradient(${value}, var(--tw-gradient-stops,))`)]
+        }
+        default: {
+          if (candidate.negative) return
+
+          return [decl('background-image', `linear-gradient(${value}, var(--tw-gradient-stops,))`)]
+        }
+      }
+    }
+  })
 
   utilities.functional('bg', (candidate) => {
     if (candidate.negative || !candidate.value) return
