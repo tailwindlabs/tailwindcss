@@ -7691,7 +7691,7 @@ test('bg', () => {
         // background-image
         'bg-none',
 
-        // Legacy linear gradient version
+        // Legacy linear-gradient API
         'bg-gradient-to-t',
         'bg-gradient-to-tr',
         'bg-gradient-to-r',
@@ -7701,7 +7701,7 @@ test('bg', () => {
         'bg-gradient-to-l',
         'bg-gradient-to-tl',
 
-        // Modern linear-gradient version
+        // Modern linear-gradient API
         'bg-linear-to-t',
         'bg-linear-to-tr',
         'bg-linear-to-r',
