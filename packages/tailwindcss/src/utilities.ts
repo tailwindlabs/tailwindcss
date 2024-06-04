@@ -2501,7 +2501,38 @@ export function createUtilities(theme: Theme) {
     staticUtility(`bg-linear-to-${value}`, [
       ['background-image', `linear-gradient(to ${direction}, var(--tw-gradient-stops,))`],
     ])
+
+    staticUtility(`mask-linear-to-${value}`, [
+      ['mask-image', `linear-gradient(to ${direction}, var(--tw-mask-stops,))`],
+    ])
   }
+
+  staticUtility('mask-none', [['mask-image', 'none']])
+  staticUtility('mask-alpha', [['mask-mode', 'alpha']])
+  staticUtility('mask-luminance', [['mask-mode', 'luminance']])
+  staticUtility('mask-match-source', [['mask-mode', 'match-source']])
+
+  utilities.functional('mask-linear', (candidate) => {
+    if (!candidate.value) return
+
+    if (candidate.value.kind === 'arbitrary') {
+      let value: string | null = candidate.value.value
+      let type = candidate.value.dataType ?? inferDataType(value, ['angle'])
+
+      switch (type) {
+        case 'angle': {
+          value = withNegative(value, candidate)
+
+          return [decl('mask-image', `linear-gradient(${value}, var(--tw-mask-stops,))`)]
+        }
+        default: {
+          if (candidate.negative) return
+
+          return [decl('mask-image', `linear-gradient(${value}, var(--tw-mask-stops,))`)]
+        }
+      }
+    }
+  })
 
   utilities.functional('bg-linear', (candidate) => {
     if (!candidate.value) return
@@ -2524,6 +2555,41 @@ export function createUtilities(theme: Theme) {
       }
     }
   })
+
+  utilities.functional('mask', (candidate) => {
+    if (candidate.negative || !candidate.value) return
+
+    // Arbitrary values
+    if (candidate.value.kind === 'arbitrary') {
+      let value: string | null = candidate.value.value
+      let type = candidate.value.dataType ?? inferDataType(value, ['image', 'url'])
+
+      switch (type) {
+        case 'image':
+        case 'url': {
+          return [decl('background-image', value)]
+        }
+        default: {
+          return
+        }
+      }
+    }
+
+    // `background-image` property
+    {
+      let value = theme.resolve(candidate.value.value, ['--background-image'])
+      if (value) {
+        return [decl('mask-image', value)]
+      }
+    }
+  })
+
+  suggest('mask', () => [
+    {
+      values: [],
+      valueThemeKeys: ['--background-image'],
+    },
+  ])
 
   utilities.functional('bg', (candidate) => {
     if (candidate.negative || !candidate.value) return
@@ -2611,12 +2677,92 @@ export function createUtilities(theme: Theme) {
     ])
   }
 
+  let maskStopProperties = () => {
+    return atRoot([
+      property('--tw-mask-from', '#0000', '<color>'),
+      property('--tw-mask-to', '#0000', '<color>'),
+      property('--tw-mask-from', 'transparent', '<color>'),
+      property('--tw-mask-via', 'transparent', '<color>'),
+      property('--tw-mask-to', 'transparent', '<color>'),
+      property('--tw-mask-stops'),
+      property('--tw-mask-via-stops'),
+      property('--tw-mask-from-position', '0%', '<length> | <percentage>'),
+      property('--tw-mask-via-position', '50%', '<length> | <percentage>'),
+      property('--tw-mask-to-position', '100%', '<length> | <percentage>'),
+    ])
+  }
+
   type GradientStopDescription = {
     color: (value: string) => AstNode[] | undefined
     position: (value: string) => AstNode[] | undefined
   }
 
+  type MaskStopDescription = {
+    color: (value: string) => AstNode[] | undefined
+    position: (value: string) => AstNode[] | undefined
+  }
+
   function gradientStopUtility(classRoot: string, desc: GradientStopDescription) {
+    utilities.functional(classRoot, (candidate) => {
+      if (candidate.negative || !candidate.value) return
+
+      // Arbitrary values
+      if (candidate.value.kind === 'arbitrary') {
+        let value: string | null = candidate.value.value
+        let type =
+          candidate.value.dataType ?? inferDataType(value, ['color', 'length', 'percentage'])
+
+        switch (type) {
+          case 'length':
+          case 'percentage': {
+            return desc.position(value)
+          }
+          default: {
+            value = asColor(value, candidate.modifier, theme)
+            if (value === null) return
+
+            return desc.color(value)
+          }
+        }
+      }
+
+      // Known values: Color Stops
+      {
+        let value = resolveThemeColor(candidate, theme, ['--background-color', '--color'])
+        if (value) {
+          return desc.color(value)
+        }
+      }
+
+      // Known values: Positions
+      {
+        let value = theme.resolve(candidate.value.value, ['--gradient-color-stop-positions'])
+        if (value) {
+          return desc.position(value)
+        } else if (
+          candidate.value.value[candidate.value.value.length - 1] === '%' &&
+          !Number.isNaN(Number(candidate.value.value.slice(0, -1)))
+        ) {
+          return desc.position(candidate.value.value)
+        }
+      }
+    })
+
+    suggest(classRoot, () => [
+      {
+        values: ['current', 'inherit', 'transparent'],
+        valueThemeKeys: ['--background-color', '--color'],
+        modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
+        modifierThemeKeys: ['--opacity'],
+      },
+      {
+        values: Array.from({ length: 21 }, (_, index) => `${index * 5}%`),
+        valueThemeKeys: ['--gradient-color-stop-positions'],
+      },
+    ])
+  }
+
+  function maskStopUtility(classRoot: string, desc: MaskStopDescription) {
     utilities.functional(classRoot, (candidate) => {
       if (candidate.negative || !candidate.value) return
 
@@ -2713,6 +2859,45 @@ export function createUtilities(theme: Theme) {
       ),
     ],
     position: (value) => [gradientStopProperties(), decl('--tw-gradient-to-position', value)],
+  })
+
+  maskStopUtility('mask-from', {
+    color: (value) => [
+      maskStopProperties(),
+      decl('--tw-sort', '--tw-mask-from'),
+      decl('--tw-mask-from', value),
+      decl(
+        '--tw-mask-stops',
+        'var(--tw-mask-via-stops, var(--tw-mask-from) var(--tw-mask-from-position), var(--tw-mask-to) var(--tw-mask-to-position))',
+      ),
+    ],
+    position: (value) => [maskStopProperties(), decl('--tw-mask-from-position', value)],
+  })
+  staticUtility('mask-via-none', [['--tw-mask-via-stops', 'initial']])
+  maskStopUtility('mask-via', {
+    color: (value) => [
+      maskStopProperties(),
+      decl('--tw-sort', '--tw-mask-via'),
+      decl('--tw-mask-via', value),
+      decl(
+        '--tw-mask-via-stops',
+        'var(--tw-mask-from) var(--tw-mask-from-position), var(--tw-mask-via) var(--tw-mask-via-position), var(--tw-mask-to) var(--tw-mask-to-position)',
+      ),
+      decl('--tw-mask-stops', 'var(--tw-mask-via-stops)'),
+    ],
+    position: (value) => [maskStopProperties(), decl('--tw-mask-via-position', value)],
+  })
+  maskStopUtility('mask-to', {
+    color: (value) => [
+      maskStopProperties(),
+      decl('--tw-sort', '--tw-mask-to'),
+      decl('--tw-mask-to', value),
+      decl(
+        '--tw-mask-stops',
+        'var(--tw-mask-via-stops, var(--tw-mask-from) var(--tw-mask-from-position), var(--tw-mask-to) var(--tw-mask-to-position))',
+      ),
+    ],
+    position: (value) => [maskStopProperties(), decl('--tw-mask-to-position', value)],
   })
 
   /**

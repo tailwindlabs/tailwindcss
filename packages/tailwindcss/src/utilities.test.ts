@@ -8100,6 +8100,186 @@ test('bg', () => {
   `)
 })
 
+test('mask', () => {
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+      [
+        // mask-mode
+        'mask-alpha',
+        'mask-luminance',
+        'mask-match-source',
+
+        // mask-image
+        'mask-none',
+
+        'mask-linear-to-t',
+        'mask-linear-to-tr',
+        'mask-linear-to-r',
+        'mask-linear-to-br',
+        'mask-linear-to-b',
+        'mask-linear-to-bl',
+        'mask-linear-to-l',
+        'mask-linear-to-tl',
+
+        'mask-[url(/image.png)]',
+        'mask-[url:--my-url]',
+        'mask-[linear-gradient(to_bottom,red,blue)]',
+        'mask-[image:--my-gradient]',
+        'mask-linear-[125deg]',
+        'mask-linear-[1.3rad]',
+        'mask-linear-[to_bottom]',
+        '-mask-linear-[125deg]',
+        '-mask-linear-[1.3rad]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --color-red-500: #ef4444;
+    }
+
+    .mask-\\[image\\:--my-gradient\\] {
+      background-image: var(--my-gradient);
+    }
+
+    .mask-\\[linear-gradient\\(to_bottom\\,red\\,blue\\)\\] {
+      background-image: linear-gradient(red, #00f);
+    }
+
+    .mask-\\[url\\(\\/image\\.png\\)\\] {
+      background-image: url("/image.png");
+    }
+
+    .mask-\\[url\\:--my-url\\] {
+      background-image: var(--my-url);
+    }
+
+    .-mask-linear-\\[1\\.3rad\\] {
+      mask-image: linear-gradient(calc(74.4845deg * -1), var(--tw-mask-stops, ));
+    }
+
+    .-mask-linear-\\[125deg\\] {
+      mask-image: linear-gradient(calc(125deg * -1), var(--tw-mask-stops, ));
+    }
+
+    .mask-alpha {
+      mask-mode: alpha;
+    }
+
+    .mask-linear-\\[1\\.3rad\\] {
+      mask-image: linear-gradient(74.4845deg, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-\\[125deg\\] {
+      mask-image: linear-gradient(125deg, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-\\[to_bottom\\], .mask-linear-to-b {
+      mask-image: linear-gradient(to bottom, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-to-bl {
+      mask-image: linear-gradient(to bottom left, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-to-br {
+      mask-image: linear-gradient(to bottom right, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-to-l {
+      mask-image: linear-gradient(to left, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-to-r {
+      mask-image: linear-gradient(to right, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-to-t {
+      mask-image: linear-gradient(to top, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-to-tl {
+      mask-image: linear-gradient(to top left, var(--tw-mask-stops, ));
+    }
+
+    .mask-linear-to-tr {
+      mask-image: linear-gradient(to top right, var(--tw-mask-stops, ));
+    }
+
+    .mask-luminance {
+      mask-mode: luminance;
+    }
+
+    .mask-match-source {
+      mask-mode: match-source;
+    }
+
+    .mask-none {
+      mask-image: none;
+    }"
+  `)
+  expect(
+    run([
+      'mask',
+      'mask-unknown',
+
+      // mask-mode
+      '-mask-alpha',
+      '-mask-luminance',
+      '-mask-match-source',
+
+      // mask-image
+      '-mask-none',
+
+      '-mask-linear-to-t',
+      '-mask-linear-to-tr',
+      '-mask-linear-to-r',
+      '-mask-linear-to-br',
+      '-mask-linear-to-b',
+      '-mask-linear-to-bl',
+      '-mask-linear-to-l',
+      '-mask-linear-to-tl',
+
+      '-mask-[url(/image.png)]',
+      '-mask-[url:--my-url]',
+      '-mask-[linear-gradient(to_bottom,red,blue)]',
+      '-mask-[image:--my-gradient]',
+      '-mask-linear-[to_bottom]',
+    ]),
+  ).toEqual('')
+
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --opacity-half: 0.5;
+          --opacity-custom: var(--custom-opacity);
+        }
+        @tailwind utilities;
+      `,
+      ['bg-current/half', 'bg-current/custom'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --opacity-half: .5;
+      --opacity-custom: var(--custom-opacity);
+    }
+
+    .bg-current\\/custom {
+      background-color: color-mix(in srgb, currentColor var(--opacity-custom, var(--custom-opacity)), transparent);
+    }
+
+    .bg-current\\/half {
+      background-color: color-mix(in srgb, currentColor var(--opacity-half, .5), transparent);
+    }"
+  `)
+})
+
 test('from', () => {
   expect(
     compileCss(
