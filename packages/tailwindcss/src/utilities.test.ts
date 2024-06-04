@@ -7718,6 +7718,8 @@ test('bg', () => {
         'bg-linear-[125deg]',
         'bg-linear-[1.3rad]',
         'bg-linear-[to_bottom]',
+        '-bg-linear-[125deg]',
+        '-bg-linear-[1.3rad]',
 
         // background-size
         'bg-auto',
@@ -7808,6 +7810,14 @@ test('bg', () => {
 
     .bg-transparent {
       background-color: #0000;
+    }
+
+    .-bg-linear-\\[1\\.3rad\\] {
+      background-image: linear-gradient(calc(74.4845deg * -1), var(--tw-gradient-stops, ));
+    }
+
+    .-bg-linear-\\[125deg\\] {
+      background-image: linear-gradient(calc(125deg * -1), var(--tw-gradient-stops, ));
     }
 
     .bg-\\[image\\:--my-gradient\\] {
@@ -8031,8 +8041,6 @@ test('bg', () => {
       '-bg-none',
       '-bg-gradient-to-br',
       '-bg-linear-to-br',
-      '-bg-linear-[125deg]', // This could be made valid maybe
-      '-bg-linear-[1.3rad]', // This could be made valid maybe
       '-bg-linear-[to_bottom]',
 
       // background-size
