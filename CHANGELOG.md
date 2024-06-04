@@ -17,11 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `nth-*` variants ([#13661](https://github.com/tailwindlabs/tailwindcss/pull/13661))
-
-### Changed
-
-- Introduce `bg-linear-*` for linear gradient backgrounds ([#13783](https://github.com/tailwindlabs/tailwindcss/pull/13783))
-- Deprecate `bg-gradient-*` ([#13783](https://github.com/tailwindlabs/tailwindcss/pull/13783))
+- Add `bg-linear-*` utilities as an alias for the existing `bg-gradient-*` utilities ([#13783](https://github.com/tailwindlabs/tailwindcss/pull/13783))
 
 ## [4.0.0-alpha.15] - 2024-05-08
 
