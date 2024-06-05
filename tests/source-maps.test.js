@@ -536,6 +536,6 @@ test('source maps for layer rules are not rewritten to point to @tailwind direct
     '3:8 -> 11:8',
     '4:10-31 -> 12:10-31',
     '5:8 -> 13:8',
-    '1:0 -> 14:0',
+    '7:4 -> 14:0',
   ])
 })
