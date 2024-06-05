@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.4] - 2024-06-05
+
 ### Fixed
 
 - Make it possible to use multiple `<alpha-value>` placeholders in a single color definition ([#13740](https://github.com/tailwindlabs/tailwindcss/pull/13740))
@@ -2381,7 +2385,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.3...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.4...HEAD
+[3.4.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.3...v3.4.4
 [3.4.3]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.2...v3.4.3
 [3.4.2]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.1...v3.4.2
 [3.4.1]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.0...v3.4.1
