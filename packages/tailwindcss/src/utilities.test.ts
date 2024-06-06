@@ -7973,19 +7973,19 @@ test('bg', () => {
     }
 
     .bg-left-bottom {
-      background-position: left-bottom;
+      background-position: 0 100%;
     }
 
     .bg-left-top {
-      background-position: left-top;
+      background-position: 0 0;
     }
 
     .bg-right-bottom {
-      background-position: right-bottom;
+      background-position: 100% 100%;
     }
 
     .bg-right-top {
-      background-position: right-top;
+      background-position: 100% 0;
     }
 
     .bg-top {

@@ -2467,13 +2467,13 @@ export function createUtilities(theme: Theme) {
 
   staticUtility('bg-center', [['background-position', 'center']])
   staticUtility('bg-top', [['background-position', 'top']])
-  staticUtility('bg-right-top', [['background-position', 'right-top']])
+  staticUtility('bg-right-top', [['background-position', 'right top']])
   staticUtility('bg-right', [['background-position', 'right']])
-  staticUtility('bg-right-bottom', [['background-position', 'right-bottom']])
+  staticUtility('bg-right-bottom', [['background-position', 'right bottom']])
   staticUtility('bg-bottom', [['background-position', 'bottom']])
-  staticUtility('bg-left-bottom', [['background-position', 'left-bottom']])
+  staticUtility('bg-left-bottom', [['background-position', 'left bottom']])
   staticUtility('bg-left', [['background-position', 'left']])
-  staticUtility('bg-left-top', [['background-position', 'left-top']])
+  staticUtility('bg-left-top', [['background-position', 'left top']])
 
   staticUtility('bg-repeat', [['background-repeat', 'repeat']])
   staticUtility('bg-no-repeat', [['background-repeat', 'no-repeat']])
