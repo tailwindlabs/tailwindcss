@@ -262,13 +262,13 @@ summary {
 }
 
 /*
-  Make lists unstyled by default.
+  Make lists unstyled by default, without affecting semantics. (https://www.matuzo.at/blog/2023/removing-list-styles-without-affecting-semantics)
 */
 
 ol,
 ul,
 menu {
-  list-style: none;
+  list-style-type: '';
 }
 
 /*
