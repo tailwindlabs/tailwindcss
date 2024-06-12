@@ -43,7 +43,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
     "tsup": "^8.0.2",
-    "turbo": "^1.13.3",
+    "turbo": "^2.0.3",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   }
