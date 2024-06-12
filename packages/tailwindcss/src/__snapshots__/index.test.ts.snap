@@ -277,6 +277,7 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   --radius-xl: .75rem;
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
   --shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
   --shadow-xs: 0 1px #0000000d;
   --shadow-sm: 0 1px 2px 0 #0000000d;
