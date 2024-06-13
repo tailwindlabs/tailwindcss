@@ -3253,6 +3253,8 @@ export function createUtilities(theme: Theme) {
       ],
     })
 
+    staticUtility('blur-none', [filterProperties, ['--tw-blur', ' '], ['filter', cssFilterValue]])
+
     functionalUtility('backdrop-blur', {
       themeKeys: ['--backdrop-blur', '--blur'],
       handle: (value) => [
@@ -3262,6 +3264,13 @@ export function createUtilities(theme: Theme) {
         decl('backdrop-filter', cssBackdropFilterValue),
       ],
     })
+
+    staticUtility('backdrop-blur-none', [
+      backdropFilterProperties,
+      ['--tw-backdrop-blur', ' '],
+      ['-webkit-backdrop-filter', cssBackdropFilterValue],
+      ['backdrop-filter', cssBackdropFilterValue],
+    ])
 
     functionalUtility('brightness', {
       themeKeys: ['--brightness'],
