@@ -129,7 +129,7 @@ test('basic usage', () => {
           <div
             class="
               filter filter-none
-              blur-md
+              blur-md blur-none
               brightness-150
               contrast-50
               drop-shadow-md
@@ -144,7 +144,7 @@ test('basic usage', () => {
             class="
               backdrop-filter
               backdrop-filter-none
-              backdrop-blur-lg
+              backdrop-blur-lg backdrop-blur-none
               backdrop-brightness-50
               backdrop-contrast-0
               backdrop-grayscale

@@ -2596,7 +2596,7 @@ export let corePlugins = {
       {
         blur: (value) => {
           return {
-            '--tw-blur': `blur(${value})`,
+            '--tw-blur': value.trim() === '' ? ' ' : `blur(${value})`,
             '@defaults filter': {},
             filter: cssFilterValue,
           }
@@ -2751,7 +2751,7 @@ export let corePlugins = {
       {
         'backdrop-blur': (value) => {
           return {
-            '--tw-backdrop-blur': `blur(${value})`,
+            '--tw-backdrop-blur': value.trim() === '' ? ' ' : `blur(${value})`,
             '@defaults backdrop-filter': {},
             'backdrop-filter': cssBackdropFilterValue,
           }
