@@ -19,6 +19,7 @@ function isCSSFunction(value) {
 // More info:
 // - https://drafts.csswg.org/scroll-animations/#propdef-timeline-scope
 // - https://developer.mozilla.org/en-US/docs/Web/CSS/timeline-scope#dashed-ident
+// - https://www.w3.org/TR/css-anchor-position-1
 //
 const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
   // Concrete properties
@@ -26,11 +27,16 @@ const AUTO_VAR_INJECTION_EXCEPTIONS = new Set([
   'timeline-scope',
   'view-timeline-name',
   'font-palette',
+  'anchor-name',
+  'anchor-scope',
+  'position-anchor',
+  'position-try-options',
 
   // Shorthand properties
   'scroll-timeline',
   'animation-timeline',
   'view-timeline',
+  'position-try',
 ])
 
 // This is not a data type, but rather a function that can normalize the

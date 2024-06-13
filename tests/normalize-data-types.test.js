@@ -112,7 +112,18 @@ it('should not automatically inject the `var()` for properties that accept `<das
       { raw: '[color:--foo]' },
 
       // Automatic var injection is skipped
+      { raw: '[scroll-timeline-name:--foo]' },
       { raw: '[timeline-scope:--foo]' },
+      { raw: '[view-timeline-name:--foo]' },
+      { raw: '[font-palette:--foo]' },
+      { raw: '[anchor-name:--foo]' },
+      { raw: '[anchor-scope:--foo]' },
+      { raw: '[position-anchor:--foo]' },
+      { raw: '[position-try-options:--foo]' },
+      { raw: '[scroll-timeline:--foo]' },
+      { raw: '[animation-timeline:--foo]' },
+      { raw: '[view-timeline:--foo]' },
+      { raw: '[position-try:--foo]' },
     ],
   }
 
@@ -122,12 +133,44 @@ it('should not automatically inject the `var()` for properties that accept `<das
 
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
+      .\[anchor-name\:--foo\] {
+        anchor-name: --foo;
+      }
+      .\[anchor-scope\:--foo\] {
+        anchor-scope: --foo;
+      }
+      .\[animation-timeline\:--foo\] {
+        animation-timeline: --foo;
+      }
       .\[color\:--foo\] {
         color: var(--foo);
       }
-
+      .\[font-palette\:--foo\] {
+        font-palette: --foo;
+      }
+      .\[position-anchor\:--foo\] {
+        position-anchor: --foo;
+      }
+      .\[position-try-options\:--foo\] {
+        position-try-options: --foo;
+      }
+      .\[position-try\:--foo\] {
+        position-try: --foo;
+      }
+      .\[scroll-timeline-name\:--foo\] {
+        scroll-timeline-name: --foo;
+      }
+      .\[scroll-timeline\:--foo\] {
+        scroll-timeline: --foo;
+      }
       .\[timeline-scope\:--foo\] {
         timeline-scope: --foo;
+      }
+      .\[view-timeline-name\:--foo\] {
+        view-timeline-name: --foo;
+      }
+      .\[view-timeline\:--foo\] {
+        view-timeline: --foo;
       }
     `)
   })
