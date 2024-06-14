@@ -65,9 +65,10 @@ export class Theme {
     }
   }
 
-  #resolveKey(candidateValue: string, themeKeys: ThemeKey[]): string | null {
+  #resolveKey(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
     for (let key of themeKeys) {
-      let themeKey = escape(`${key}-${candidateValue.replaceAll('.', '_')}`)
+      let themeKey =
+        candidateValue !== null ? escape(`${key}-${candidateValue.replaceAll('.', '_')}`) : key
 
       if (this.values.has(themeKey)) {
         return themeKey
@@ -85,7 +86,7 @@ export class Theme {
     return `var(${themeKey}, ${this.values.get(themeKey)?.value})`
   }
 
-  resolve(candidateValue: string, themeKeys: ThemeKey[]): string | null {
+  resolve(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
     let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
@@ -93,7 +94,7 @@ export class Theme {
     return this.#var(themeKey)
   }
 
-  resolveValue(candidateValue: string, themeKeys: ThemeKey[]): string | null {
+  resolveValue(candidateValue: string | null, themeKeys: ThemeKey[]): string | null {
     let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null

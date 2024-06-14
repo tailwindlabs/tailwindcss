@@ -310,12 +310,11 @@ export function createUtilities(theme: Theme) {
       let value: string | null = null
 
       if (!candidate.value) {
-        // If the candidate has no value segment (like `shadow`), use the
-        // `defaultValue` or the `DEFAULT` value in the theme. No utility will
-        // ever support both of these — `defaultValue` is for things like
-        // `grayscale` whereas the `DEFAULT` in theme is for things like
-        // `shadow` or `blur`.
-        value = desc.defaultValue ?? theme.get(desc.themeKeys ?? [])
+        // If the candidate has no value segment (like `rounded`), use the
+        // `defaultValue` (for candidates like `grow` that have no theme values)
+        // or a bare theme value (like `--radius` for `rounded`). No utility
+        // will ever support both of these.
+        value = desc.defaultValue ?? theme.resolve(null, desc.themeKeys ?? [])
       } else if (candidate.value.kind === 'arbitrary') {
         value = candidate.value.value
       } else {
@@ -3253,6 +3252,8 @@ export function createUtilities(theme: Theme) {
       ],
     })
 
+    staticUtility('blur-none', [filterProperties, ['--tw-blur', ' '], ['filter', cssFilterValue]])
+
     functionalUtility('backdrop-blur', {
       themeKeys: ['--backdrop-blur', '--blur'],
       handle: (value) => [
@@ -3262,6 +3263,13 @@ export function createUtilities(theme: Theme) {
         decl('backdrop-filter', cssBackdropFilterValue),
       ],
     })
+
+    staticUtility('backdrop-blur-none', [
+      backdropFilterProperties,
+      ['--tw-backdrop-blur', ' '],
+      ['-webkit-backdrop-filter', cssBackdropFilterValue],
+      ['backdrop-filter', cssBackdropFilterValue],
+    ])
 
     functionalUtility('brightness', {
       themeKeys: ['--brightness'],
