@@ -268,7 +268,7 @@ summary {
 ol,
 ul,
 menu {
-  list-style-type: '';
+  list-style: '';
 }
 
 /*
