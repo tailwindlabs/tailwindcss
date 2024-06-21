@@ -166,6 +166,7 @@ test('shadow colors', async ({ page }) => {
     html`
       <div id="x" class="shadow shadow-red-500"></div>
       <div id="y" class="shadow-xl shadow-red-500"></div>
+      <div id="z" class="shadow-[0px_2px_4px] shadow-red-500"></div>
     `,
   )
 
@@ -185,6 +186,15 @@ test('shadow colors', async ({ page }) => {
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
       'rgb(239, 68, 68) 0px 20px 25px -5px, rgb(239, 68, 68) 0px 8px 10px -6px',
+    ].join(', '),
+  )
+  expect(await getPropertyValue('#z', 'box-shadow')).toEqual(
+    [
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+      'rgb(239, 68, 68) 0px 2px 4px 0px',
     ].join(', '),
   )
 })

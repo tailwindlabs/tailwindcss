@@ -12019,7 +12019,7 @@ test('shadow', () => {
 
     .shadow-\\[10px_10px\\] {
       --tw-shadow: 10px 10px;
-      --tw-shadow-colored: 10px 10px;
+      --tw-shadow-colored: 10px 10px var(--tw-shadow-color);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -12271,7 +12271,7 @@ test('inset-shadow', () => {
 
     .inset-shadow-\\[10px_10px\\] {
       --tw-inset-shadow: inset 10px 10px;
-      --tw-inset-shadow-colored: inset 10px 10px;
+      --tw-inset-shadow-colored: inset 10px 10px var(--tw-inset-shadow-color);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
