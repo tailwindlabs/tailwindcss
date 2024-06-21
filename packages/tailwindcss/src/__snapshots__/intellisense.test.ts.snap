@@ -1779,6 +1779,8 @@ exports[`getClassList 1`] = `
   "transform-view",
   "transition",
   "transition-all",
+  "transition-allow-discrete",
+  "transition-behavior-normal",
   "transition-colors",
   "transition-none",
   "transition-opacity",
