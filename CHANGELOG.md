@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Include variable in output for bare utilities like `rounded` ([#13836](https://github.com/tailwindlabs/tailwindcss/pull/13836))
 - Preserve list semantics for `ul`, `li`, and `menu` by default ([#13815](https://github.com/tailwindlabs/tailwindcss/pull/13815))
 
+### Fixed
+
+- Support combining arbitrary shadows without a color with shadow color utilities ([#13876](https://github.com/tailwindlabs/tailwindcss/pull/13876))
+
 ## [4.0.0-alpha.16] - 2024-06-07
 
 ### Fixed
