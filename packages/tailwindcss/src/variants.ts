@@ -304,6 +304,8 @@ export function createVariants(theme: Theme): Variants {
     ['required', '&:required'],
     ['valid', '&:valid'],
     ['invalid', '&:invalid'],
+    ['user-valid', '&:user-valid'],
+    ['user-invalid', '&:user-invalid'],
     ['in-range', '&:in-range'],
     ['out-of-range', '&:out-of-range'],
     ['read-only', '&:read-only'],
