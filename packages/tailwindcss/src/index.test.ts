@@ -326,6 +326,165 @@ describe('@apply', () => {
       }"
     `)
   })
+
+  it('should be possible to apply user-defined CSS', () => {
+    expect(
+      compileCss(css`
+        @theme {
+          --spacing-2: 0.5rem;
+          --spacing-3: 0.75rem;
+          --color-red-600: #e53e3e;
+        }
+
+        .btn {
+          @apply py-2 px-3;
+        }
+
+        .btn-red {
+          @apply btn bg-red-600;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --spacing-2: .5rem;
+        --spacing-3: .75rem;
+        --color-red-600: #e53e3e;
+      }
+
+      .btn {
+        padding-top: var(--spacing-2, .5rem);
+        padding-bottom: var(--spacing-2, .5rem);
+        padding-left: var(--spacing-3, .75rem);
+        padding-right: var(--spacing-3, .75rem);
+      }
+
+      .btn-red {
+        padding-top: var(--spacing-2, .5rem);
+        padding-bottom: var(--spacing-2, .5rem);
+        padding-left: var(--spacing-3, .75rem);
+        padding-right: var(--spacing-3, .75rem);
+        background-color: var(--color-red-600, #e53e3e);
+      }"
+    `)
+  })
+
+  it('should apply user-defined CSS that happens to be a utility class', () => {
+    expect(
+      compileCss(css`
+        .flex {
+          --display-mode: flex;
+        }
+
+        .example {
+          @apply flex;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".flex {
+        --display-mode: flex;
+      }
+
+      .example {
+        --display-mode: flex;
+        display: flex;
+      }"
+    `)
+  })
+
+  it('should apply user-defined CSS that is defined after where the `@apply` is used', () => {
+    expect(
+      compileCss(css`
+        .example {
+          @apply foo;
+        }
+
+        .foo {
+          color: red;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".example, .foo {
+        color: red;
+      }"
+    `)
+  })
+
+  it('should apply user-defined CSS that is defined multiple times', () => {
+    expect(
+      compileCss(css`
+        .foo {
+          color: red;
+        }
+
+        .example {
+          @apply foo;
+        }
+
+        .foo {
+          background-color: blue;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        color: red;
+      }
+
+      .example {
+        color: red;
+        background-color: #00f;
+      }
+
+      .foo {
+        background-color: #00f;
+      }"
+    `)
+  })
+
+  it('should error when circular @apply is used', () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          @apply bar;
+        }
+
+        .bar {
+          @apply baz;
+        }
+
+        .baz {
+          @apply foo;
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`,
+    )
+  })
+
+  it('should error when circular @apply is used but nested', () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          &:hover {
+            @apply bar;
+          }
+        }
+
+        .bar {
+          &:hover {
+            @apply baz;
+          }
+        }
+
+        .baz {
+          &:hover {
+            @apply foo;
+          }
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`,
+    )
+  })
 })
 
 describe('arbitrary variants', () => {
