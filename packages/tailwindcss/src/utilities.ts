@@ -1875,6 +1875,8 @@ export function createUtilities(theme: Theme) {
   staticUtility('items-start', [['align-items', 'flex-start']])
   staticUtility('items-end', [['align-items', 'flex-end']])
   staticUtility('items-baseline', [['align-items', 'baseline']])
+  staticUtility('items-first-baseline', [['align-items', 'first baseline']])
+  staticUtility('items-last-baseline', [['align-items', 'last baseline']])
   staticUtility('items-stretch', [['align-items', 'stretch']])
 
   staticUtility('justify-normal', [['justify-content', 'normal']])
