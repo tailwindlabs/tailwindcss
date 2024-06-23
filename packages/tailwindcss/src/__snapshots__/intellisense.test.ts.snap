@@ -2487,6 +2487,20 @@ exports[`getVariants 1`] = `
   {
     "hasDash": true,
     "isArbitrary": false,
+    "name": "transparency-safe",
+    "selectors": [Function],
+    "values": [],
+  },
+  {
+    "hasDash": true,
+    "isArbitrary": false,
+    "name": "transparency-reduce",
+    "selectors": [Function],
+    "values": [],
+  },
+  {
+    "hasDash": true,
+    "isArbitrary": false,
     "name": "ltr",
     "selectors": [Function],
     "values": [],

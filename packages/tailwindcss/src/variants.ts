@@ -725,6 +725,13 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: false })
   staticVariant('landscape', ['@media (orientation: landscape)'], { compounds: false })
 
+  staticVariant('transparency-safe', ['@media (prefers-reduced-transparency: no-preference)'], {
+    compounds: false,
+  })
+  staticVariant('transparency-reduce', ['@media (prefers-reduced-transparency: reduce)'], {
+    compounds: false,
+  })
+
   staticVariant('ltr', ['&:where([dir="ltr"], [dir="ltr"] *)'])
   staticVariant('rtl', ['&:where([dir="rtl"], [dir="rtl"] *)'])
 
