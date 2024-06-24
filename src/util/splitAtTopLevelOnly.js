@@ -29,11 +29,7 @@ export function splitAtTopLevelOnly(input, separator) {
       }
     }
 
-    if (isEscaped) {
-      isEscaped = false
-    } else if (char === '\\') {
-      isEscaped = true
-    }
+    isEscaped = isEscaped ? false : char === '\\'
 
     if (char === '(' || char === '[' || char === '{') {
       stack.push(char)
