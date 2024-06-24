@@ -717,18 +717,28 @@ it('should support supports', () => {
             <div class="supports-[display:grid]:grid"></div>
             <!-- Value with spaces, needs to be normalized -->
             <div class="supports-[transform-origin:5%_5%]:underline"></div>
-            <!-- Selectors (raw) -->
-            <div class="supports-[selector(A_>_B)]:underline"></div>
             <!-- 'not' check (raw) -->
             <div class="supports-[not(foo:bar)]:underline"></div>
             <!-- 'or' check (raw) -->
             <div class="supports-[(foo:bar)or(bar:baz)]:underline"></div>
             <!-- 'and' check (raw) -->
             <div class="supports-[(foo:bar)and(bar:baz)]:underline"></div>
+            <!-- 'and' check with spaces (raw) -->
+            <div class="supports-[(foo:bar)_and_(bar:baz)]:grid"></div>
+            <!-- 'and' + 'or' check (raw) -->
+            <div class="supports-[(foo:bar)_and_(bar:baz)_or(baz:qux)]:grid"></div>
             <!-- No value give for the property, defaulting to prop: var(--tw) -->
             <div class="supports-[container-type]:underline"></div>
             <!-- Named supports usage -->
             <div class="supports-grid:underline"></div>
+            <!-- Custom properties -->
+            <div class="supports-[--test]:flex"></div>
+            <!-- Function syntax: selector (raw) -->
+            <div class="supports-[selector(A_>_B)]:underline"></div>
+            <!-- Function syntax: font-format (raw) -->
+            <div class="supports-[font-format(opentype)]:grid"></div>
+            <!-- Function syntax: font-tech (raw) -->
+            <div class="supports-[font-tech(color-COLRv1)]:flex"></div>
           </div>
         `,
       },
@@ -741,45 +751,73 @@ it('should support supports', () => {
   `
 
   return run(input, config).then((result) => {
-    expect(result.css).toMatchFormattedCss(css`
-      @supports (display: grid) {
-        .supports-grid\:underline {
-          text-decoration-line: underline;
-        }
-        .supports-\[display\:grid\]\:grid {
-          display: grid;
-        }
+    expect(result.css).toMatchInlineSnapshot(`
+      "@supports (display: grid) {
+          .supports-grid\\:underline {
+              text-decoration-line: underline
+          }
       }
-      @supports (foo: bar) and (bar: baz) {
-        .supports-\[\(foo\:bar\)and\(bar\:baz\)\]\:underline {
-          text-decoration-line: underline;
-        }
+      @supports (--test: var(--tw)) {
+          .supports-\\[--test\\]\\:flex {
+              display: flex
+          }
       }
-      @supports (foo: bar) or (bar: baz) {
-        .supports-\[\(foo\:bar\)or\(bar\:baz\)\]\:underline {
-          text-decoration-line: underline;
-        }
+      @supports font-tech(color-COLRv1) {
+          .supports-\\[font-tech\\(color-COLRv1\\)\\]\\:flex {
+              display: flex
+          }
+      }
+      @supports (foo:bar) and (bar:baz) {
+          .supports-\\[\\(foo\\:bar\\)_and_\\(bar\\:baz\\)\\]\\:grid {
+              display: grid
+          }
+      }
+      @supports (foo:bar) and (bar:baz) or (baz:qux) {
+          .supports-\\[\\(foo\\:bar\\)_and_\\(bar\\:baz\\)_or\\(baz\\:qux\\)\\]\\:grid {
+              display: grid
+          }
+      }
+      @supports (display:grid) {
+          .supports-\\[display\\:grid\\]\\:grid {
+              display: grid
+          }
+      }
+      @supports font-format(opentype) {
+          .supports-\\[font-format\\(opentype\\)\\]\\:grid {
+              display: grid
+          }
+      }
+      @supports (foo:bar) and (bar:baz) {
+          .supports-\\[\\(foo\\:bar\\)and\\(bar\\:baz\\)\\]\\:underline {
+              text-decoration-line: underline
+          }
+      }
+      @supports (foo:bar) or (bar:baz) {
+          .supports-\\[\\(foo\\:bar\\)or\\(bar\\:baz\\)\\]\\:underline {
+              text-decoration-line: underline
+          }
       }
       @supports (container-type: var(--tw)) {
-        .supports-\[container-type\]\:underline {
-          text-decoration-line: underline;
-        }
+          .supports-\\[container-type\\]\\:underline {
+              text-decoration-line: underline
+          }
       }
-      @supports not (foo: bar) {
-        .supports-\[not\(foo\:bar\)\]\:underline {
-          text-decoration-line: underline;
-        }
+      @supports not (foo:bar) {
+          .supports-\\[not\\(foo\\:bar\\)\\]\\:underline {
+              text-decoration-line: underline
+          }
       }
       @supports selector(A > B) {
-        .supports-\[selector\(A_\>_B\)\]\:underline {
-          text-decoration-line: underline;
-        }
+          .supports-\\[selector\\(A_\\>_B\\)\\]\\:underline {
+              text-decoration-line: underline
+          }
       }
-      @supports (transform-origin: 5% 5%) {
-        .supports-\[transform-origin\:5\%_5\%\]\:underline {
-          text-decoration-line: underline;
-        }
+      @supports (transform-origin:5% 5%) {
+          .supports-\\[transform-origin\\:5\\%_5\\%\\]\\:underline {
+              text-decoration-line: underline
+          }
       }
+        "
     `)
   })
 })
