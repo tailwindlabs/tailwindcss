@@ -553,7 +553,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
   }
 
   ol, ul, menu {
-    list-style: "";
+    list-style: none;
   }
 
   textarea {
