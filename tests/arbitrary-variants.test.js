@@ -659,10 +659,12 @@ it('should support data variants', () => {
             <div class="data-checked:underline"></div>
             <div class="data-[position=top]:underline"></div>
             <div class="data-[foo='bar_baz']:underline"></div>
+            <div class="in-data-checked:underline"></div>
             <div class="group-data-checked:underline"></div>
             <div class="peer-data-checked:underline"></div>
             <div class="group-data-checked/foo:underline"></div>
             <div class="peer-data-checked/foo:underline"></div>
+            <div class="in-data-[position=top]:underline"></div>
             <div class="group-data-[position=top]:underline"></div>
             <div class="peer-data-[position=top]:underline"></div>
             <div class="group-data-[foo='bar_baz']:underline"></div>
@@ -686,6 +688,8 @@ it('should support data variants', () => {
       .data-checked\:underline[data-ui~='checked'],
       .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
       .data-\[position\=top\]\:underline[data-position='top'],
+      [data-ui~='checked'] .in-data-checked\:underline,
+      [data-position='top'] .in-data-\[position\=top\]\:underline,
       .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
       .group[data-ui~='checked'] .group-data-checked\:underline,
       .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,

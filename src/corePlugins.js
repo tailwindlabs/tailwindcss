@@ -494,6 +494,9 @@ export let variantPlugins = {
 
   dataVariants: ({ matchVariant, theme }) => {
     matchVariant('data', (value) => `&[data-${normalize(value)}]`, { values: theme('data') ?? {} })
+    matchVariant('in-data', (value) => `[data-${normalize(value)}] &`, {
+      values: theme('data') ?? {},
+    })
     matchVariant(
       'group-data',
       (value, { modifier }) =>
