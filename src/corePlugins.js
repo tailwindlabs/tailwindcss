@@ -443,6 +443,13 @@ export let variantPlugins = {
       },
     })
 
+    matchVariant('in-has', (value) => `:has(${normalize(value)}) &`, {
+      values: {},
+      [INTERNAL_FEATURES]: {
+        respectPrefix: false,
+      },
+    })
+
     matchVariant(
       'group-has',
       (value, { modifier }) =>

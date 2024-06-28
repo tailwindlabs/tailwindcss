@@ -850,6 +850,30 @@ test('has-* variants with arbitrary values', () => {
   })
 })
 
+test('in-has-* variants with arbitrary values', () => {
+  let config = {
+    theme: {},
+    content: [
+      {
+        raw: html`<div class="in-has-[>_h1_+_.foo]:block"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      :has(> h1 + .foo) .in-has-\[\>_h1_\+_\.foo\]\:block {
+        display: block;
+      }
+    `)
+  })
+})
+
 test('group-has-* variants with arbitrary values', () => {
   let config = {
     theme: {},
