@@ -602,12 +602,15 @@ it('should support aria variants', () => {
             <div class="aria-checked:underline"></div>
             <div class="aria-[sort=ascending]:underline"></div>
             <div class="aria-[labelledby='a_b']:underline"></div>
+            <div class="in-aria-checked:underline"></div>
             <div class="group-aria-checked:underline"></div>
             <div class="peer-aria-checked:underline"></div>
             <div class="group-aria-checked/foo:underline"></div>
             <div class="peer-aria-checked/foo:underline"></div>
+            <div class="in-aria-[sort=ascending]:underline"></div>
             <div class="group-aria-[sort=ascending]:underline"></div>
             <div class="peer-aria-[sort=ascending]:underline"></div>
+            <div class="in-aria-[labelledby='a_b']:underline"></div>
             <div class="group-aria-[labelledby='a_b']:underline"></div>
             <div class="peer-aria-[labelledby='a_b']:underline"></div>
             <div class="group-aria-[sort=ascending]/foo:underline"></div>
@@ -629,6 +632,9 @@ it('should support aria variants', () => {
       .aria-checked\:underline[aria-checked='true'],
       .aria-\[labelledby\=\'a_b\'\]\:underline[aria-labelledby='a b'],
       .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'],
+      [aria-checked='true'] .in-aria-checked\:underline,
+      [aria-labelledby='a b'] .in-aria-\[labelledby\=\'a_b\'\]\:underline,
+      [aria-sort='ascending'] .in-aria-\[sort\=ascending\]\:underline,
       .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline,
       .group[aria-checked='true'] .group-aria-checked\:underline,
       .group[aria-labelledby='a b'] .group-aria-\[labelledby\=\'a_b\'\]\:underline,
@@ -659,10 +665,12 @@ it('should support data variants', () => {
             <div class="data-checked:underline"></div>
             <div class="data-[position=top]:underline"></div>
             <div class="data-[foo='bar_baz']:underline"></div>
+            <div class="in-data-checked:underline"></div>
             <div class="group-data-checked:underline"></div>
             <div class="peer-data-checked:underline"></div>
             <div class="group-data-checked/foo:underline"></div>
             <div class="peer-data-checked/foo:underline"></div>
+            <div class="in-data-[position=top]:underline"></div>
             <div class="group-data-[position=top]:underline"></div>
             <div class="peer-data-[position=top]:underline"></div>
             <div class="group-data-[foo='bar_baz']:underline"></div>
@@ -686,6 +694,8 @@ it('should support data variants', () => {
       .data-checked\:underline[data-ui~='checked'],
       .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
       .data-\[position\=top\]\:underline[data-position='top'],
+      [data-ui~='checked'] .in-data-checked\:underline,
+      [data-position='top'] .in-data-\[position\=top\]\:underline,
       .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
       .group[data-ui~='checked'] .group-data-checked\:underline,
       .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,
@@ -840,6 +850,30 @@ test('has-* variants with arbitrary values', () => {
   })
 })
 
+test('in-has-* variants with arbitrary values', () => {
+  let config = {
+    theme: {},
+    content: [
+      {
+        raw: html`<div class="in-has-[>_h1_+_.foo]:block"></div>`,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      :has(> h1 + .foo) .in-has-\[\>_h1_\+_\.foo\]\:block {
+        display: block;
+      }
+    `)
+  })
+})
+
 test('group-has-* variants with arbitrary values', () => {
   let config = {
     theme: {},
@@ -905,6 +939,58 @@ test('peer-has-* variants with arbitrary values', () => {
       }
       .peer\/two:has(> h1 + .foo) ~ .peer-has-\[\>_h1_\+_\.foo\]\/two\:flex {
         display: flex;
+      }
+    `)
+  })
+})
+
+it('should be possible to use modifiers with in', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <!-- Default in usage -->
+            <div class="in-hover:underline"></div>
+
+            <!-- Arbitrary variants with pseudo class for in -->
+            <!-- With & -->
+            <div class="in-[&:focus]:underline"></div>
+            <!-- Without & -->
+            <div class="in-[:hover]:underline"></div>
+
+            <!-- Arbitrary variants with attributes selectors for in -->
+            <!-- With & -->
+            <div class="in-[&[data-open]]:underline"></div>
+            <!-- Without & -->
+            <div class="in-[[data-open]]:underline"></div>
+
+            <!-- Arbitrary variants with other selectors -->
+            <!-- With & -->
+            <div class="in-[.foo_&]:underline"></div>
+            <!-- Without & -->
+            <div class="in-[.foo]:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      :hover .in-hover\:underline,
+      :focus .in-\[\&\:focus\]\:underline,
+      [data-open] .in-\[\&\[data-open\]\]\:underline,
+      .foo .in-\[\.foo\]\:underline,
+      .foo .in-\[\.foo_\&\]\:underline,
+      :hover .in-\[\:hover\]\:underline,
+      [data-open] .in-\[\[data-open\]\]\:underline {
+        text-decoration-line: underline;
       }
     `)
   })

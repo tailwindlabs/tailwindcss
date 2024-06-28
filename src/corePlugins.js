@@ -153,6 +153,7 @@ export let variantPlugins = {
     }
 
     let variants = {
+      in: (_) => ['', ' &'],
       group: (_, { modifier }) =>
         modifier
           ? [`:merge(${prefix('.group')}\\/${escapeClassName(modifier)})`, ' &']
@@ -442,6 +443,13 @@ export let variantPlugins = {
       },
     })
 
+    matchVariant('in-has', (value) => `:has(${normalize(value)}) &`, {
+      values: {},
+      [INTERNAL_FEATURES]: {
+        respectPrefix: false,
+      },
+    })
+
     matchVariant(
       'group-has',
       (value, { modifier }) =>
@@ -473,6 +481,9 @@ export let variantPlugins = {
 
   ariaVariants: ({ matchVariant, theme }) => {
     matchVariant('aria', (value) => `&[aria-${normalize(value)}]`, { values: theme('aria') ?? {} })
+    matchVariant('in-aria', (value) => `[aria-${normalize(value)}] &`, {
+      values: theme('aria') ?? {},
+    })
     matchVariant(
       'group-aria',
       (value, { modifier }) =>
@@ -493,6 +504,9 @@ export let variantPlugins = {
 
   dataVariants: ({ matchVariant, theme }) => {
     matchVariant('data', (value) => `&[data-${normalize(value)}]`, { values: theme('data') ?? {} })
+    matchVariant('in-data', (value) => `[data-${normalize(value)}] &`, {
+      values: theme('data') ?? {},
+    })
     matchVariant(
       'group-data',
       (value, { modifier }) =>
