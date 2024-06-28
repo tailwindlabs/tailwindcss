@@ -474,6 +474,9 @@ export let variantPlugins = {
 
   ariaVariants: ({ matchVariant, theme }) => {
     matchVariant('aria', (value) => `&[aria-${normalize(value)}]`, { values: theme('aria') ?? {} })
+    matchVariant('in-aria', (value) => `[aria-${normalize(value)}] &`, {
+      values: theme('aria') ?? {},
+    })
     matchVariant(
       'group-aria',
       (value, { modifier }) =>

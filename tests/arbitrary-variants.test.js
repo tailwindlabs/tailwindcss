@@ -602,12 +602,15 @@ it('should support aria variants', () => {
             <div class="aria-checked:underline"></div>
             <div class="aria-[sort=ascending]:underline"></div>
             <div class="aria-[labelledby='a_b']:underline"></div>
+            <div class="in-aria-checked:underline"></div>
             <div class="group-aria-checked:underline"></div>
             <div class="peer-aria-checked:underline"></div>
             <div class="group-aria-checked/foo:underline"></div>
             <div class="peer-aria-checked/foo:underline"></div>
+            <div class="in-aria-[sort=ascending]:underline"></div>
             <div class="group-aria-[sort=ascending]:underline"></div>
             <div class="peer-aria-[sort=ascending]:underline"></div>
+            <div class="in-aria-[labelledby='a_b']:underline"></div>
             <div class="group-aria-[labelledby='a_b']:underline"></div>
             <div class="peer-aria-[labelledby='a_b']:underline"></div>
             <div class="group-aria-[sort=ascending]/foo:underline"></div>
@@ -629,6 +632,9 @@ it('should support aria variants', () => {
       .aria-checked\:underline[aria-checked='true'],
       .aria-\[labelledby\=\'a_b\'\]\:underline[aria-labelledby='a b'],
       .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'],
+      [aria-checked='true'] .in-aria-checked\:underline,
+      [aria-labelledby='a b'] .in-aria-\[labelledby\=\'a_b\'\]\:underline,
+      [aria-sort='ascending'] .in-aria-\[sort\=ascending\]\:underline,
       .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline,
       .group[aria-checked='true'] .group-aria-checked\:underline,
       .group[aria-labelledby='a b'] .group-aria-\[labelledby\=\'a_b\'\]\:underline,
