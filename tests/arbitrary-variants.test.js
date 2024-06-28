@@ -910,6 +910,58 @@ test('peer-has-* variants with arbitrary values', () => {
   })
 })
 
+it('should be possible to use modifiers with in', () => {
+  let config = {
+    content: [
+      {
+        raw: html`
+          <div>
+            <!-- Default in usage -->
+            <div class="in-hover:underline"></div>
+
+            <!-- Arbitrary variants with pseudo class for in -->
+            <!-- With & -->
+            <div class="in-[&:focus]:underline"></div>
+            <!-- Without & -->
+            <div class="in-[:hover]:underline"></div>
+
+            <!-- Arbitrary variants with attributes selectors for in -->
+            <!-- With & -->
+            <div class="in-[&[data-open]]:underline"></div>
+            <!-- Without & -->
+            <div class="in-[[data-open]]:underline"></div>
+
+            <!-- Arbitrary variants with other selectors -->
+            <!-- With & -->
+            <div class="in-[.foo_&]:underline"></div>
+            <!-- Without & -->
+            <div class="in-[.foo]:underline"></div>
+          </div>
+        `,
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      :hover .in-hover\:underline,
+      :focus .in-\[\&\:focus\]\:underline,
+      [data-open] .in-\[\&\[data-open\]\]\:underline,
+      .foo .in-\[\.foo\]\:underline,
+      .foo .in-\[\.foo_\&\]\:underline,
+      :hover .in-\[\:hover\]\:underline,
+      [data-open] .in-\[\[data-open\]\]\:underline {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
 it('should be possible to use modifiers and arbitrary groups', () => {
   let config = {
     content: [

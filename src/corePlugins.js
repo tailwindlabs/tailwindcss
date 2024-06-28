@@ -153,6 +153,7 @@ export let variantPlugins = {
     }
 
     let variants = {
+      in: (_) => ['', ' &'],
       group: (_, { modifier }) =>
         modifier
           ? [`:merge(${prefix('.group')}\\/${escapeClassName(modifier)})`, ' &']
