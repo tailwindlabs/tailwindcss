@@ -134,51 +134,54 @@ describe('static build', () => {
     )
   })
 
-  it('can use a tailwind.config.ts configuration file', async () => {
-    await removeFile('tailwind.config.js')
-    await writeInputFile('index.html', html`<div class="bg-primary"></div>`)
-    await writeInputFile(
-      'index.css',
-      css`
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-      `
-    )
-    await writeInputFile(
-      '../tailwind.config.ts',
-      javascript`
-        import type { Config } from 'tailwindcss'
+  it.each([['../tailwind.config.ts'], ['../tailwind.config.cts'], ['../tailwind.config.mts']])(
+    'can use a %s configuration file',
+    async (path) => {
+      await removeFile('tailwind.config.js')
+      await writeInputFile('index.html', html`<div class="bg-primary"></div>`)
+      await writeInputFile(
+        'index.css',
+        css`
+          @tailwind base;
+          @tailwind components;
+          @tailwind utilities;
+        `
+      )
+      await writeInputFile(
+        path,
+        javascript`
+          import type { Config } from 'tailwindcss'
 
-        export default {
-          content: ['./src/index.html'],
-          theme: {
-            extend: {
-              colors: {
-                primary: 'black',
+          export default {
+            content: ['./src/index.html'],
+            theme: {
+              extend: {
+                colors: {
+                  primary: 'black',
+                },
               },
             },
-          },
-          corePlugins: {
-            preflight: false,
-          },
-        } satisfies Config
-      `
-    )
+            corePlugins: {
+              preflight: false,
+            },
+          } satisfies Config
+        `
+      )
 
-    await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
-      env: { NODE_ENV: 'production' },
-    })
+      await $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+        env: { NODE_ENV: 'production' },
+      })
 
-    expect(await readOutputFile('main.css')).toIncludeCss(
-      css`
-        .bg-primary {
-          --tw-bg-opacity: 1;
-          background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-        }
-      `
-    )
-  })
+      expect(await readOutputFile('main.css')).toIncludeCss(
+        css`
+          .bg-primary {
+            --tw-bg-opacity: 1;
+            background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+          }
+        `
+      )
+    }
+  )
 
   it('can read from a config file from an @config directive', async () => {
     await writeInputFile('index.html', html`<div class="bg-yellow"></div>`)

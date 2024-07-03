@@ -33,6 +33,17 @@ function lazyJiti() {
 
 export function loadConfig(path: string): Config {
   let config = (function () {
+    // Always use jiti for ESM or TS files
+    if (
+      path &&
+      (path.endsWith('.mjs') ||
+        path.endsWith('.ts') ||
+        path.endsWith('.cts') ||
+        path.endsWith('.mts'))
+    ) {
+      return lazyJiti()(path)
+    }
+
     try {
       return path ? require(path) : {}
     } catch {
