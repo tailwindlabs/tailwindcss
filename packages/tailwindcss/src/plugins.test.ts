@@ -1,14 +1,64 @@
-import { expect, test } from 'vitest'
+import { test, vi } from 'vitest'
 import type { UserConfig } from './config'
 import { run } from './test-utils/run'
 
-test('Custom static utilities', () => {
+test('Plugins are called', ({ expect }) => {
+  let fn = vi.fn()
+  let handler = vi.fn()
+  let config: UserConfig = {
+    plugins: [fn, { handler }],
+  }
+
+  run([], config)
+
+  expect(fn).toHaveBeenCalledWith(
+    expect.objectContaining({
+      addUtility: expect.any(Function),
+      addUtilities: expect.any(Function),
+      addVariant: expect.any(Function),
+      addVariants: expect.any(Function),
+    }),
+  )
+
+  expect(handler).toHaveBeenCalledWith(
+    expect.objectContaining({
+      addUtility: expect.any(Function),
+      addUtilities: expect.any(Function),
+      addVariant: expect.any(Function),
+      addVariants: expect.any(Function),
+    }),
+  )
+})
+
+test('Asynchronous plugins are waited on', async ({ expect }) => {
+  let before = vi.fn()
+  let after = vi.fn()
+  let config: UserConfig = {
+    plugins: [
+      async () => {
+        before()
+        await new Promise((resolve) => setTimeout(resolve))
+        after()
+      },
+    ],
+  }
+
+  await run([], config)
+
+  expect(before).toHaveBeenCalled()
+  expect(after).toHaveBeenCalled()
+})
+
+test('Custom static utilities', ({ expect }) => {
   let config: UserConfig = {
     plugins: [
       ({ addUtilities }) => {
         addUtilities({
           '.my-red': {
             color: 'red',
+            '& > *': {
+              color: 'lightred',
+            },
           },
           '.my-blue': {
             color: 'red',
@@ -26,7 +76,7 @@ test('Custom static utilities', () => {
   expect(run(['-my-red', 'my-red-[--value]'], config)).toEqual('')
 })
 
-test('Custom functional utilities', () => {
+test('Custom functional utilities', ({ expect }) => {
   let config: UserConfig = {
     plugins: [
       ({ addUtilities }) => {
@@ -54,7 +104,7 @@ test('Custom functional utilities', () => {
   `)
 })
 
-test('Custom static variants', () => {
+test('Custom static variants', ({ expect }) => {
   let config: UserConfig = {
     plugins: [
       ({ addVariant }) => {
@@ -72,7 +122,7 @@ test('Custom static variants', () => {
   expect(run(['hover/foo:underline', 'hover-[123]:underline'], config)).toEqual('')
 })
 
-test('Custom functional variants', () => {
+test('Custom functional variants', ({ expect }) => {
   let config: UserConfig = {
     plugins: [
       ({ addVariant }) => {

@@ -2,25 +2,33 @@ import { decl, rule, type AstNode, type Rule } from './ast'
 import type { Candidate } from './candidate'
 import type { DesignSystem } from './design-system'
 
-type MatchData = {
+export type MatchData = {
   value: string | null
   modifier: string | null
 }
 
-type CssSelectors = string | string[]
+export type SelectorFormat = CssSelectors | ((candidate: MatchData) => CssSelectors)
+export type UtilityFormat = CssTree | ((value: string | null, candidate: MatchData) => CssTree)
 
+export type CssSelectors = string | string[]
 export interface CssTree extends Record<string, string | CssTree> {}
 
-type SelectorFormat = CssSelectors | ((candidate: MatchData) => CssSelectors)
-type UtilityFormat = CssTree | ((value: string | null, candidate: MatchData) => CssTree)
-
 export interface PluginAPI {
-  addVariant(name: string, selector: SelectorFormat): void
+  addVariant(name: string, format: SelectorFormat): void
+  addVariants(variants: Record<string, SelectorFormat>): void
+
+  addUtility(name: string, format: UtilityFormat): void
   addUtilities(utilities: Record<string, UtilityFormat>): void
 }
 
-export interface Plugin {
+export type Plugin = FunctionalPlugin | ConfigurablePlugin
+
+export interface FunctionalPlugin {
   (api: PluginAPI): void | Promise<void>
+}
+
+export interface ConfigurablePlugin {
+  handler(api: PluginAPI): void | Promise<void>
 }
 
 /**
@@ -141,11 +149,21 @@ export function registerPlugins(design: DesignSystem) {
     )
   }
 
+  function addVariants(list: Record<string, SelectorFormat>) {
+    for (let [name, format] of Object.entries(list)) {
+      addVariant(name, format)
+    }
+  }
+
   for (let plugin of design.plugins) {
-    plugin({
+    let handler = typeof plugin === 'function' ? plugin : plugin.handler
+
+    handler({
       // v3 compatible legacy API
+      addUtility,
       addUtilities,
       addVariant,
+      addVariants,
     })
   }
 }
