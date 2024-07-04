@@ -1,12 +1,13 @@
 import { Features, transform } from 'lightningcss'
 import { compile } from '..'
+import { type UserConfig } from '../config'
 
-export function compileCss(css: string, candidates: string[] = []) {
-  return optimizeCss(compile(css).build(candidates)).trim()
+export function compileCss(css: string, candidates: string[] = [], config: UserConfig = {}) {
+  return optimizeCss(compile(css, config).build(candidates)).trim()
 }
 
-export function run(candidates: string[]) {
-  return optimizeCss(compile('@tailwind utilities;').build(candidates)).trim()
+export function run(candidates: string[], config: UserConfig = {}) {
+  return optimizeCss(compile('@tailwind utilities;', config).build(candidates)).trim()
 }
 
 export function optimizeCss(

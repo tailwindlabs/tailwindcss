@@ -1,7 +1,9 @@
 import { toCss } from './ast'
 import { parseCandidate, parseVariant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
+import type { ResolvedConfig } from './config'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
+import { registerPlugins, type Plugin } from './plugins'
 import { getClassOrder } from './sort'
 import type { Theme } from './theme'
 import { Utilities, createUtilities } from './utilities'
@@ -12,6 +14,7 @@ export type DesignSystem = {
   theme: Theme
   utilities: Utilities
   variants: Variants
+  plugins: Plugin[]
 
   candidatesToCss(classes: string[]): (string | null)[]
   getClassOrder(classes: string[]): [string, bigint | null][]
@@ -25,7 +28,7 @@ export type DesignSystem = {
   getUsedVariants(): ReturnType<typeof parseVariant>[]
 }
 
-export function buildDesignSystem(theme: Theme): DesignSystem {
+export function buildDesignSystem(theme: Theme, config: ResolvedConfig): DesignSystem {
   let utilities = createUtilities(theme)
   let variants = createVariants(theme)
 
@@ -37,6 +40,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     theme,
     utilities,
     variants,
+    plugins: config.plugins,
 
     candidatesToCss(classes: string[]) {
       let result: (string | null)[] = []
@@ -76,6 +80,8 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       return Array.from(parsedVariants.values())
     },
   }
+
+  registerPlugins(designSystem)
 
   return designSystem
 }

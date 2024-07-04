@@ -1,13 +1,19 @@
 import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
+import { resolve, type UserConfig } from './config'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { Theme } from './theme'
 
-export function compile(css: string): {
+export function compile(
+  css: string,
+  config?: UserConfig,
+): {
   build(candidates: string[]): string
 } {
+  let resolved = resolve(config ?? {})
+
   let ast = CSS.parse(css)
 
   if (process.env.NODE_ENV !== 'test') {
@@ -125,7 +131,7 @@ export function compile(css: string): {
     firstThemeRule.nodes = nodes
   }
 
-  let designSystem = buildDesignSystem(theme)
+  let designSystem = buildDesignSystem(theme, resolved)
 
   let tailwindUtilitiesNode: Rule | null = null
 
