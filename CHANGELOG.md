@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.0.0-alpha.17] - 2024-07-04
+
 ### Added
 
 - Add `rounded-4xl` utility ([#13827](https://github.com/tailwindlabs/tailwindcss/pull/13827))
@@ -180,7 +184,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Node compatability fix ([#13104](https://github.com/tailwindlabs/tailwindcss/pull/13104))
+- Node compatibility fix ([#13104](https://github.com/tailwindlabs/tailwindcss/pull/13104))
 
 ### Changes
 
