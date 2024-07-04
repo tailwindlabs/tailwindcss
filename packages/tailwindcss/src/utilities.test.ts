@@ -3824,9 +3824,9 @@ test('touch-pan', () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
-          --tw-pan-x: ;
-          --tw-pan-y: ;
-          --tw-pinch-zoom: ;
+          --tw-pan-x: initial;
+          --tw-pan-y: initial;
+          --tw-pinch-zoom: initial;
         }
       }
     }
@@ -3868,9 +3868,9 @@ test('touch-pinch-zoom', () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
-          --tw-pan-x: ;
-          --tw-pan-y: ;
-          --tw-pinch-zoom: ;
+          --tw-pan-x: initial;
+          --tw-pan-y: initial;
+          --tw-pinch-zoom: initial;
         }
       }
     }
@@ -8239,8 +8239,8 @@ test('from', () => {
           --tw-gradient-from: #0000;
           --tw-gradient-to: #0000;
           --tw-gradient-via: transparent;
-          --tw-gradient-stops: ;
-          --tw-gradient-via-stops: ;
+          --tw-gradient-stops: initial;
+          --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;
           --tw-gradient-via-position: 50%;
           --tw-gradient-to-position: 100%;
@@ -8476,8 +8476,8 @@ test('via', () => {
           --tw-gradient-from: #0000;
           --tw-gradient-to: #0000;
           --tw-gradient-via: transparent;
-          --tw-gradient-stops: ;
-          --tw-gradient-via-stops: ;
+          --tw-gradient-stops: initial;
+          --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;
           --tw-gradient-via-position: 50%;
           --tw-gradient-to-position: 100%;
@@ -8701,8 +8701,8 @@ test('to', () => {
           --tw-gradient-from: #0000;
           --tw-gradient-to: #0000;
           --tw-gradient-via: transparent;
-          --tw-gradient-stops: ;
-          --tw-gradient-via-stops: ;
+          --tw-gradient-stops: initial;
+          --tw-gradient-via-stops: initial;
           --tw-gradient-from-position: 0%;
           --tw-gradient-via-position: 50%;
           --tw-gradient-to-position: 100%;
@@ -10477,15 +10477,15 @@ test('filter', () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
-          --tw-blur: ;
-          --tw-brightness: ;
-          --tw-contrast: ;
-          --tw-grayscale: ;
-          --tw-hue-rotate: ;
-          --tw-invert: ;
-          --tw-opacity: ;
-          --tw-saturate: ;
-          --tw-sepia: ;
+          --tw-blur: initial;
+          --tw-brightness: initial;
+          --tw-contrast: initial;
+          --tw-grayscale: initial;
+          --tw-hue-rotate: initial;
+          --tw-invert: initial;
+          --tw-opacity: initial;
+          --tw-saturate: initial;
+          --tw-sepia: initial;
         }
       }
     }
@@ -10787,15 +10787,15 @@ test('backdrop-filter', () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
-          --tw-backdrop-blur: ;
-          --tw-backdrop-brightness: ;
-          --tw-backdrop-contrast: ;
-          --tw-backdrop-grayscale: ;
-          --tw-backdrop-hue-rotate: ;
-          --tw-backdrop-invert: ;
-          --tw-backdrop-opacity: ;
-          --tw-backdrop-saturate: ;
-          --tw-backdrop-sepia: ;
+          --tw-backdrop-blur: initial;
+          --tw-backdrop-brightness: initial;
+          --tw-backdrop-contrast: initial;
+          --tw-backdrop-grayscale: initial;
+          --tw-backdrop-hue-rotate: initial;
+          --tw-backdrop-invert: initial;
+          --tw-backdrop-opacity: initial;
+          --tw-backdrop-saturate: initial;
+          --tw-backdrop-sepia: initial;
         }
       }
     }
@@ -11157,10 +11157,10 @@ test('contain', () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
-          --tw-contain-size: ;
-          --tw-contain-layout: ;
-          --tw-contain-paint: ;
-          --tw-contain-style: ;
+          --tw-contain-size: initial;
+          --tw-contain-layout: initial;
+          --tw-contain-paint: initial;
+          --tw-contain-style: initial;
         }
       }
     }
@@ -11378,11 +11378,11 @@ test('font-variant-numeric', () => {
     @supports (-moz-orient: inline) {
       @layer base {
         *, :before, :after, ::backdrop {
-          --tw-ordinal: ;
-          --tw-slashed-zero: ;
-          --tw-numeric-figure: ;
-          --tw-numeric-spacing: ;
-          --tw-numeric-fraction: ;
+          --tw-ordinal: initial;
+          --tw-slashed-zero: initial;
+          --tw-numeric-figure: initial;
+          --tw-numeric-spacing: initial;
+          --tw-numeric-fraction: initial;
         }
       }
     }
@@ -12104,11 +12104,11 @@ test('shadow', () => {
           --tw-shadow-colored: 0 0 #0000;
           --tw-inset-shadow: 0 0 #0000;
           --tw-inset-shadow-colored: 0 0 #0000;
-          --tw-ring-color: ;
+          --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
-          --tw-inset-ring-color: ;
+          --tw-inset-ring-color: initial;
           --tw-inset-ring-shadow: 0 0 #0000;
-          --tw-ring-inset: ;
+          --tw-ring-inset: initial;
           --tw-ring-offset-width: 0px;
           --tw-ring-offset-color: #fff;
           --tw-ring-offset-shadow: 0 0 #0000;
@@ -12356,11 +12356,11 @@ test('inset-shadow', () => {
           --tw-shadow-colored: 0 0 #0000;
           --tw-inset-shadow: 0 0 #0000;
           --tw-inset-shadow-colored: 0 0 #0000;
-          --tw-ring-color: ;
+          --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
-          --tw-inset-ring-color: ;
+          --tw-inset-ring-color: initial;
           --tw-inset-ring-shadow: 0 0 #0000;
-          --tw-ring-inset: ;
+          --tw-ring-inset: initial;
           --tw-ring-offset-width: 0px;
           --tw-ring-offset-color: #fff;
           --tw-ring-offset-shadow: 0 0 #0000;
@@ -12604,11 +12604,11 @@ test('ring', () => {
           --tw-shadow-colored: 0 0 #0000;
           --tw-inset-shadow: 0 0 #0000;
           --tw-inset-shadow-colored: 0 0 #0000;
-          --tw-ring-color: ;
+          --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
-          --tw-inset-ring-color: ;
+          --tw-inset-ring-color: initial;
           --tw-inset-ring-shadow: 0 0 #0000;
-          --tw-ring-inset: ;
+          --tw-ring-inset: initial;
           --tw-ring-offset-width: 0px;
           --tw-ring-offset-color: #fff;
           --tw-ring-offset-shadow: 0 0 #0000;
@@ -12853,11 +12853,11 @@ test('inset-ring', () => {
           --tw-shadow-colored: 0 0 #0000;
           --tw-inset-shadow: 0 0 #0000;
           --tw-inset-shadow-colored: 0 0 #0000;
-          --tw-ring-color: ;
+          --tw-ring-color: initial;
           --tw-ring-shadow: 0 0 #0000;
-          --tw-inset-ring-color: ;
+          --tw-inset-ring-color: initial;
           --tw-inset-ring-shadow: 0 0 #0000;
-          --tw-ring-inset: ;
+          --tw-ring-inset: initial;
           --tw-ring-offset-width: 0px;
           --tw-ring-offset-color: #fff;
           --tw-ring-offset-shadow: 0 0 #0000;

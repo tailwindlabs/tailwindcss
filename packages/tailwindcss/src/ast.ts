@@ -148,9 +148,9 @@ export function toCss(ast: AstNode[]) {
         }
 
         if (inherits) {
-          propertyFallbacksRoot.push(decl(property, initialValue ?? ' '))
+          propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
         } else {
-          propertyFallbacksUniversal.push(decl(property, initialValue ?? ' '))
+          propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
         }
 
         seenAtProperties.add(node.selector)
