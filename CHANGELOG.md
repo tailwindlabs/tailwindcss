@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disable automatic `var()` injection for anchor properties ([#13826](https://github.com/tailwindlabs/tailwindcss/pull/13826))
 - Use no value instead of `blur(0px)` for `backdrop-blur-none` and `blur-none` utilities ([#13830](https://github.com/tailwindlabs/tailwindcss/pull/13830))
 - Add `.mts` and `.cts` config file detection ([#13940](https://github.com/tailwindlabs/tailwindcss/pull/13940))
+- Don't generate utilities like `px-1` unnecessarily when using utilities like `px-1.5` ([#13959](https://github.com/tailwindlabs/tailwindcss/pull/13959))
 
 ## [3.4.4] - 2024-06-05
 

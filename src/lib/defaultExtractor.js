@@ -1,4 +1,5 @@
 import * as regex from './regex'
+import { splitAtTopLevelOnly } from '../util/splitAtTopLevelOnly'
 
 export function defaultExtractor(context) {
   let patterns = Array.from(buildRegExps(context))
@@ -13,6 +14,30 @@ export function defaultExtractor(context) {
     for (let pattern of patterns) {
       for (let result of content.match(pattern) ?? []) {
         results.push(clipAtBalancedParens(result))
+      }
+    }
+
+    // Extract any subclasses from languages like Slim and Pug, eg:
+    // div.flex.px-5.underline
+    for (let result of results.slice()) {
+      let segments = splitAtTopLevelOnly(result, '.')
+
+      for (let idx = 0; idx < segments.length; idx++) {
+        let segment = segments[idx]
+        if (idx >= segments.length - 1) {
+          results.push(segment)
+          continue
+        }
+
+        // If the next segment is a number, discard both, for example seeing
+        // `px-1` and `5` means the real candidate was `px-1.5` which is already
+        // captured.
+        let next = parseInt(segments[idx + 1])
+        if (isNaN(next)) {
+          results.push(segment)
+        } else {
+          idx++
+        }
       }
     }
 
@@ -127,9 +152,6 @@ function* buildRegExps(context) {
       utility,
     ])
   }
-
-  // 5. Inner matches
-  yield /[^<>"'`\s.(){}[\]#=%$]*[^<>"'`\s.(){}[\]#=%:$]/g
 }
 
 // We want to capture any "special" characters
