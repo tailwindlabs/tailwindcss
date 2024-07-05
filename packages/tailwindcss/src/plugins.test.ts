@@ -1,7 +1,8 @@
 import { test, vi } from 'vitest'
 import { compile } from '.'
 import type { UserConfig } from './config'
-import { run } from './test-utils/run'
+import type { Plugin } from './plugins'
+import { compileWithPlugins, run } from './test-utils/run'
 
 const css = String.raw
 
@@ -151,4 +152,26 @@ test('Plugins registered in CSS can be returned', ({ expect }) => {
   `)
 
   expect(builder.plugins).toEqual(['my-plugin', './my-plugin'])
+})
+
+test.only('Plugins registered in CSS can be used', async ({ expect }) => {
+  vi.doMock('my-plugin', () => {
+    let plugin: Plugin = ({ addVariant }) => {
+      addVariant('hocus', ['&:hover', '&:focus'])
+    }
+
+    return {
+      default: plugin,
+    }
+  })
+
+  let result = await compileWithPlugins('@plugin "my-plugin"; @tailwind utilities;', [
+    'hocus:underline',
+  ])
+
+  expect(result).toMatchInlineSnapshot(`
+    ".hocus\\:underline:hover, .hocus\\:underline:focus {
+      text-decoration-line: underline;
+    }"
+  `)
 })

@@ -1,6 +1,7 @@
 import { Features, transform } from 'lightningcss'
 import { compile } from '..'
 import { type UserConfig } from '../config'
+import type { Plugin } from '../plugins'
 
 export function compileCss(css: string, candidates: string[] = [], config: UserConfig = {}) {
   return optimizeCss(compile(css, config).build(candidates)).trim()
@@ -8,6 +9,22 @@ export function compileCss(css: string, candidates: string[] = [], config: UserC
 
 export function run(candidates: string[], config: UserConfig = {}) {
   return optimizeCss(compile('@tailwind utilities;', config).build(candidates)).trim()
+}
+
+export async function compileWithPlugins(
+  css: string,
+  candidates: string[],
+  config: UserConfig = {},
+) {
+  let builder = compile(css, config)
+
+  let plugins: Plugin[] = await Promise.all(
+    builder.plugins.map((pluginPath) => import(pluginPath).then((mod) => mod.default)),
+  )
+
+  config.plugins = [...(config.plugins ?? []), ...plugins]
+
+  return optimizeCss(builder.build(candidates)).trim()
 }
 
 export function optimizeCss(
