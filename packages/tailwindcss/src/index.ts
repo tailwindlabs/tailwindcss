@@ -11,8 +11,10 @@ export function compile(
   config?: UserConfig,
 ): {
   build(candidates: string[]): string
+  readonly plugins: string[]
 } {
   let resolved = resolve(config ?? {})
+  let plugins: string[] = []
 
   let ast = CSS.parse(css)
 
@@ -51,6 +53,20 @@ export function compile(
         }
       })
       replaceWith(node.nodes)
+    }
+
+    if (node.selector.startsWith('@plugin')) {
+      let path = node.selector
+        // Ignore `@plugin` when parsing the selector
+        .slice(7)
+        // Remove any surrounding spaces
+        .trim()
+        // Remove the surrounding quotes
+        .slice(1, -1)
+
+      plugins.push(path)
+      replaceWith([])
+      return WalkAction.Skip
     }
 
     if (node.selector !== '@theme' && node.selector !== '@theme reference') return
@@ -194,6 +210,7 @@ export function compile(
   let previousAstNodeCount = 0
 
   return {
+    plugins,
     build(newRawCandidates: string[]) {
       let didChange = false
 
@@ -254,5 +271,5 @@ export function __unstable__loadDesignSystem(css: string) {
     })
   })
 
-  return buildDesignSystem(theme)
+  return buildDesignSystem(theme, resolve({}))
 }

@@ -1,6 +1,9 @@
 import { test, vi } from 'vitest'
+import { compile } from '.'
 import type { UserConfig } from './config'
 import { run } from './test-utils/run'
+
+const css = String.raw
 
 test('Plugins are called', ({ expect }) => {
   let fn = vi.fn()
@@ -139,4 +142,13 @@ test('Custom functional variants', ({ expect }) => {
     }"
   `)
   expect(run(['in-[:checked]/foo:underline'], config)).toEqual('')
+})
+
+test('Plugins registered in CSS can be returned', ({ expect }) => {
+  let builder = compile(css`
+    @plugin "my-plugin";
+    @plugin "./my-plugin";
+  `)
+
+  expect(builder.plugins).toEqual(['my-plugin', './my-plugin'])
 })
