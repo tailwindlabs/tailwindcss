@@ -38,7 +38,7 @@
     "@playwright/test": "^1.44.1",
     "@types/node": "^20.12.12",
     "@vitest/coverage-v8": "^1.6.0",
-    "postcss": "8.4.24",
+    "postcss": "8.4.39",
     "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
