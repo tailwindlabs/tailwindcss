@@ -436,6 +436,15 @@ it('should parse a utility with a modifier and a variant', () => {
   `)
 })
 
+it('should not parse a partial utility', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+
+  expect(run('flex-', { utilities })).toMatchInlineSnapshot(`null`)
+  expect(run('bg-', { utilities })).toMatchInlineSnapshot(`null`)
+})
+
 it('should parse a utility with an arbitrary value', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
