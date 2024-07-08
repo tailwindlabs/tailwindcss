@@ -1,7 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
-import { compileCss, run } from './test-utils/run'
+import { compile } from '.'
+import { compileCss, optimizeCss, run } from './test-utils/run'
 
 const css = String.raw
 
@@ -1121,5 +1122,59 @@ describe('Parsing themes values from CSS', () => {
     ).toThrowErrorMatchingInlineSnapshot(
       `[Error: Files imported with \`@import "…" reference\` must only contain \`@theme\` blocks.]`,
     )
+  })
+})
+
+describe('plugins', () => {
+  test('addVariant with string selector', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('hocus', '&:hover, &:focus')
+          }
+        },
+      },
+    ).build(['hocus:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('addVariant with array of selectors', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('hocus', ['&:hover', '&:focus'])
+          }
+        },
+      },
+    ).build(['hocus:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
   })
 })
