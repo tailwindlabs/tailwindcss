@@ -44,6 +44,7 @@ export function compile(
     if (node.selector.startsWith('@plugin ')) {
       pluginPaths.push(node.selector.slice(9, -1))
       replaceWith([])
+      return
     }
 
     // Drop instances of `@media reference`
