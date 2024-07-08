@@ -1,11 +1,46 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
-import { compileCss, run } from './test-utils/run'
+import { compile } from '.'
+import { compileCss, optimizeCss, run } from './test-utils/run'
 
 const css = String.raw
 
 describe('compiling CSS', () => {
+  test('compiling CSS with a prefix', () => {
+    expect(
+      optimizeCss(
+        compile(css`
+          @theme prefix {
+            --color-black: #000;
+            --breakpoint-md: 768px;
+          }
+
+          @import '@acme/design-system/theme';
+
+          .foo {
+            background-color: var(--tw-color-black);
+          }
+
+          @layer utilities {
+            @tailwind utilities prefix;
+          }
+        `).build(['flex']),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-black: #000;
+        --breakpoint-md: 768px;
+      }
+
+      @layer utilities {
+        .flex {
+          display: flex;
+        }
+      }"
+    `)
+  })
+
   test('`@tailwind utilities` is replaced with the generated utility classes', () => {
     expect(
       compileCss(
