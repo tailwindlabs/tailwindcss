@@ -365,6 +365,11 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // If there's no root, the candidate isn't a valid class and can be discarded.
   if (root === null) return null
 
+  // If the leftover value is an empty string, it means that the value is an
+  // invalid named value. This makes the candidate invalid and we can skip any
+  // further parsing.
+  if (value === '') return null
+
   let kind = designSystem.utilities.kind(root)
 
   if (kind === 'static') {
@@ -448,11 +453,6 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
         modifierSegment === null || candidate.modifier?.kind === 'arbitrary'
           ? null
           : `${value.slice(value.lastIndexOf('-') + 1)}/${modifierSegment}`
-
-      // If the leftover value is an empty string, it means that the value is an
-      // invalid named value. This makes the candidate invalid and we can
-      // skip any further parsing.
-      if (value === '') return null
 
       candidate.value = {
         kind: 'named',
