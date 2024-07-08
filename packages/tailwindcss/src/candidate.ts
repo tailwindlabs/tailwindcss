@@ -233,21 +233,19 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     parsedCandidateVariants.push(parsedVariant)
   }
 
-  let state = {
-    important: false,
-    negative: false,
-  }
+  let important = false
+  let negative = false
 
   // Candidates that end with an exclamation mark are the important version with
   // higher specificity of the non-important candidate, e.g. `mx-4!`.
   if (base[base.length - 1] === '!') {
-    state.important = true
+    important = true
     base = base.slice(0, -1)
   }
 
   // Legacy syntax with leading `!`, e.g. `!mx-4`.
   else if (base[0] === '!') {
-    state.important = true
+    important = true
     base = base.slice(1)
   }
 
@@ -298,14 +296,14 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
       value,
       modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
       variants: parsedCandidateVariants,
-      important: state.important,
+      important,
     }
   }
 
   // Candidates that start with a dash are the negative versions of another
   // candidate, e.g. `-mx-4`.
   if (baseWithoutModifier[0] === '-') {
-    state.negative = true
+    negative = true
     baseWithoutModifier = baseWithoutModifier.slice(1)
   }
 
@@ -376,8 +374,8 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
       kind: 'static',
       root,
       variants: parsedCandidateVariants,
-      negative: state.negative,
-      important: state.important,
+      negative,
+      important,
     }
   }
 
@@ -387,8 +385,8 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
     value: null,
     variants: parsedCandidateVariants,
-    negative: state.negative,
-    important: state.important,
+    negative,
+    important,
   }
 
   if (value === null) return candidate
