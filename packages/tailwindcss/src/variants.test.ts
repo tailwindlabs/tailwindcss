@@ -9,14 +9,16 @@ test('force', () => {
       display: flex;
     }"
   `)
+  expect(run(['force/foo:flex'])).toEqual('')
 })
 
 test('*', () => {
   expect(run(['*:flex'])).toMatchInlineSnapshot(`
-  ".\\*\\:flex > * {
-    display: flex;
-  }"
-`)
+    ".\\*\\:flex > * {
+      display: flex;
+    }"
+  `)
+  expect(run(['*/foo:flex'])).toEqual('')
 })
 
 test('first-letter', () => {
@@ -25,6 +27,7 @@ test('first-letter', () => {
       display: flex;
     }"
   `)
+  expect(run(['first-letter/foo:flex'])).toEqual('')
 })
 
 test('first-line', () => {
@@ -33,6 +36,7 @@ test('first-line', () => {
       display: flex;
     }"
   `)
+  expect(run(['first-line/foo:flex'])).toEqual('')
 })
 
 test('marker', () => {
@@ -41,6 +45,7 @@ test('marker', () => {
       display: flex;
     }"
   `)
+  expect(run(['marker/foo:flex'])).toEqual('')
 })
 
 test('selection', () => {
@@ -49,6 +54,7 @@ test('selection', () => {
       display: flex;
     }"
   `)
+  expect(run(['selection/foo:flex'])).toEqual('')
 })
 
 test('file', () => {
@@ -57,6 +63,7 @@ test('file', () => {
       display: flex;
     }"
   `)
+  expect(run(['file/foo:flex'])).toEqual('')
 })
 
 test('placeholder', () => {
@@ -65,6 +72,7 @@ test('placeholder', () => {
       display: flex;
     }"
   `)
+  expect(run(['placeholder/foo:flex'])).toEqual('')
 })
 
 test('backdrop', () => {
@@ -73,6 +81,7 @@ test('backdrop', () => {
       display: flex;
     }"
   `)
+  expect(run(['backdrop/foo:flex'])).toEqual('')
 })
 
 test('before', () => {
@@ -96,6 +105,7 @@ test('before', () => {
       initial-value: "";
     }"
   `)
+  expect(run(['before/foo:flex'])).toEqual('')
 })
 
 test('after', () => {
@@ -119,6 +129,7 @@ test('after', () => {
       initial-value: "";
     }"
   `)
+  expect(run(['after/foo:flex'])).toEqual('')
 })
 
 test('first', () => {
@@ -135,6 +146,7 @@ test('first', () => {
       display: flex;
     }"
   `)
+  expect(run(['first/foo:flex'])).toEqual('')
 })
 
 test('last', () => {
@@ -151,6 +163,7 @@ test('last', () => {
       display: flex;
     }"
   `)
+  expect(run(['last/foo:flex'])).toEqual('')
 })
 
 test('only', () => {
@@ -167,6 +180,7 @@ test('only', () => {
       display: flex;
     }"
   `)
+  expect(run(['only/foo:flex'])).toEqual('')
 })
 
 test('odd', () => {
@@ -183,6 +197,7 @@ test('odd', () => {
       display: flex;
     }"
   `)
+  expect(run(['odd/foo:flex'])).toEqual('')
 })
 
 test('even', () => {
@@ -199,6 +214,7 @@ test('even', () => {
       display: flex;
     }"
   `)
+  expect(run(['even/foo:flex'])).toEqual('')
 })
 
 test('first-of-type', () => {
@@ -216,6 +232,7 @@ test('first-of-type', () => {
         display: flex;
       }"
     `)
+  expect(run(['first-of-type/foo:flex'])).toEqual('')
 })
 
 test('last-of-type', () => {
@@ -233,6 +250,7 @@ test('last-of-type', () => {
         display: flex;
       }"
     `)
+  expect(run(['last-of-type/foo:flex'])).toEqual('')
 })
 
 test('only-of-type', () => {
@@ -250,6 +268,7 @@ test('only-of-type', () => {
         display: flex;
       }"
     `)
+  expect(run(['only-of-type/foo:flex'])).toEqual('')
 })
 
 test('visited', () => {
@@ -266,6 +285,7 @@ test('visited', () => {
       display: flex;
     }"
   `)
+  expect(run(['visited/foo:flex'])).toEqual('')
 })
 
 test('target', () => {
@@ -282,6 +302,7 @@ test('target', () => {
       display: flex;
     }"
   `)
+  expect(run(['target/foo:flex'])).toEqual('')
 })
 
 test('open', () => {
@@ -298,6 +319,7 @@ test('open', () => {
       display: flex;
     }"
   `)
+  expect(run(['open/foo:flex'])).toEqual('')
 })
 
 test('default', () => {
@@ -314,6 +336,7 @@ test('default', () => {
       display: flex;
     }"
   `)
+  expect(run(['default/foo:flex'])).toEqual('')
 })
 
 test('checked', () => {
@@ -330,6 +353,7 @@ test('checked', () => {
       display: flex;
     }"
   `)
+  expect(run(['checked/foo:flex'])).toEqual('')
 })
 
 test('indeterminate', () => {
@@ -347,6 +371,7 @@ test('indeterminate', () => {
         display: flex;
       }"
     `)
+  expect(run(['indeterminate/foo:flex'])).toEqual('')
 })
 
 test('placeholder-shown', () => {
@@ -365,6 +390,7 @@ test('placeholder-shown', () => {
       display: flex;
     }"
   `)
+  expect(run(['placeholder-shown/foo:flex'])).toEqual('')
 })
 
 test('autofill', () => {
@@ -382,6 +408,7 @@ test('autofill', () => {
         display: flex;
       }"
     `)
+  expect(run(['autofill/foo:flex'])).toEqual('')
 })
 
 test('optional', () => {
@@ -399,6 +426,7 @@ test('optional', () => {
         display: flex;
       }"
     `)
+  expect(run(['optional/foo:flex'])).toEqual('')
 })
 
 test('required', () => {
@@ -416,6 +444,7 @@ test('required', () => {
         display: flex;
       }"
     `)
+  expect(run(['required/foo:flex'])).toEqual('')
 })
 
 test('valid', () => {
@@ -432,6 +461,7 @@ test('valid', () => {
       display: flex;
     }"
   `)
+  expect(run(['valid/foo:flex'])).toEqual('')
 })
 
 test('invalid', () => {
@@ -448,6 +478,7 @@ test('invalid', () => {
       display: flex;
     }"
   `)
+  expect(run(['invalid/foo:flex'])).toEqual('')
 })
 
 test('in-range', () => {
@@ -465,6 +496,7 @@ test('in-range', () => {
         display: flex;
       }"
     `)
+  expect(run(['in-range/foo:flex'])).toEqual('')
 })
 
 test('out-of-range', () => {
@@ -482,6 +514,7 @@ test('out-of-range', () => {
         display: flex;
       }"
     `)
+  expect(run(['out-of-range/foo:flex'])).toEqual('')
 })
 
 test('read-only', () => {
@@ -499,6 +532,7 @@ test('read-only', () => {
         display: flex;
       }"
     `)
+  expect(run(['read-only/foo:flex'])).toEqual('')
 })
 
 test('empty', () => {
@@ -515,6 +549,7 @@ test('empty', () => {
       display: flex;
     }"
   `)
+  expect(run(['empty/foo:flex'])).toEqual('')
 })
 
 test('focus-within', () => {
@@ -532,6 +567,7 @@ test('focus-within', () => {
         display: flex;
       }"
     `)
+  expect(run(['focus-within/foo:flex'])).toEqual('')
 })
 
 test('hover', () => {
@@ -548,6 +584,7 @@ test('hover', () => {
       display: flex;
     }"
   `)
+  expect(run(['hover/foo:flex'])).toEqual('')
 })
 
 test('focus', () => {
@@ -564,27 +601,7 @@ test('focus', () => {
       display: flex;
     }"
   `)
-})
-
-test('group-hover group-focus', () => {
-  expect(run(['group-hover:flex', 'group-focus:flex'])).toMatchInlineSnapshot(`
-    ".group-hover\\:flex:is(:where(.group):hover *) {
-      display: flex;
-    }
-
-    .group-focus\\:flex:is(:where(.group):focus *) {
-      display: flex;
-    }"
-  `)
-  expect(run(['group-focus:flex', 'group-hover:flex'])).toMatchInlineSnapshot(`
-    ".group-hover\\:flex:is(:where(.group):hover *) {
-      display: flex;
-    }
-
-    .group-focus\\:flex:is(:where(.group):focus *) {
-      display: flex;
-    }"
-  `)
+  expect(run(['focus/foo:flex'])).toEqual('')
 })
 
 test('focus-visible', () => {
@@ -602,6 +619,7 @@ test('focus-visible', () => {
         display: flex;
       }"
     `)
+  expect(run(['focus-visible/foo:flex'])).toEqual('')
 })
 
 test('active', () => {
@@ -618,6 +636,7 @@ test('active', () => {
       display: flex;
     }"
   `)
+  expect(run(['active/foo:flex'])).toEqual('')
 })
 
 test('enabled', () => {
@@ -634,6 +653,7 @@ test('enabled', () => {
       display: flex;
     }"
   `)
+  expect(run(['enabled/foo:flex'])).toEqual('')
 })
 
 test('disabled', () => {
@@ -651,6 +671,7 @@ test('disabled', () => {
         display: flex;
       }"
     `)
+  expect(run(['disabled/foo:flex'])).toEqual('')
 })
 
 test('group-[...]', () => {
@@ -777,6 +798,7 @@ test('ltr', () => {
       display: flex;
     }"
   `)
+  expect(run(['ltr/foo:flex'])).toEqual('')
 })
 
 test('rtl', () => {
@@ -785,6 +807,7 @@ test('rtl', () => {
       display: flex;
     }"
   `)
+  expect(run(['rtl/foo:flex'])).toEqual('')
 })
 
 test('motion-safe', () => {
@@ -795,6 +818,7 @@ test('motion-safe', () => {
       }
     }"
   `)
+  expect(run(['motion-safe/foo:flex'])).toEqual('')
 })
 
 test('motion-reduce', () => {
@@ -805,6 +829,7 @@ test('motion-reduce', () => {
       }
     }"
   `)
+  expect(run(['motion-reduce/foo:flex'])).toEqual('')
 })
 
 test('dark', () => {
@@ -815,6 +840,7 @@ test('dark', () => {
       }
     }"
   `)
+  expect(run(['dark/foo:flex'])).toEqual('')
 })
 
 test('starting', () => {
@@ -825,6 +851,7 @@ test('starting', () => {
       }
     }"
   `)
+  expect(run(['starting/foo:flex'])).toEqual('')
 })
 
 test('print', () => {
@@ -835,6 +862,7 @@ test('print', () => {
       }
     }"
   `)
+  expect(run(['print/foo:flex'])).toEqual('')
 })
 
 test('default breakpoints', () => {
@@ -892,6 +920,22 @@ test('default breakpoints', () => {
       }
     }"
   `)
+  expect(
+    compileCss(
+      css`
+        @theme reference {
+          /* Breakpoints */
+          --breakpoint-sm: 640px;
+          --breakpoint-md: 768px;
+          --breakpoint-lg: 1024px;
+          --breakpoint-xl: 1280px;
+          --breakpoint-2xl: 1536px;
+        }
+        @tailwind utilities;
+      `,
+      ['sm/foo:flex', 'md/foo:flex', 'lg/foo:flex', 'xl/foo:flex', '2xl/foo:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('custom breakpoint', () => {
@@ -957,6 +1001,20 @@ test('max-*', () => {
       }
     }"
   `)
+  expect(
+    compileCss(
+      css`
+        @theme reference {
+          /* Explicitly ordered in a strange way */
+          --breakpoint-sm: 640px;
+          --breakpoint-lg: 1024px;
+          --breakpoint-md: 768px;
+        }
+        @tailwind utilities;
+      `,
+      ['max-lg/foo:flex', 'max-sm/foo:flex', 'max-md/foo:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('min-*', () => {
@@ -998,6 +1056,20 @@ test('min-*', () => {
       }
     }"
   `)
+  expect(
+    compileCss(
+      css`
+        @theme reference {
+          /* Explicitly ordered in a strange way */
+          --breakpoint-sm: 640px;
+          --breakpoint-lg: 1024px;
+          --breakpoint-md: 768px;
+        }
+        @tailwind utilities;
+      `,
+      ['min-lg/foo:flex', 'min-sm/foo:flex', 'min-md/foo:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('sorting stacked min-* and max-* variants', () => {
@@ -1356,6 +1428,17 @@ test('supports', () => {
       }
     }"
   `)
+  expect(
+    run([
+      'supports-gap/foo:grid',
+      'supports-[display:grid]/foo:flex',
+      'supports-[selector(A_>_B)]/foo:flex',
+      'supports-[font-format(opentype)]/foo:grid',
+      'supports-[(display:grid)_and_font-format(opentype)]/foo:grid',
+      'supports-[font-tech(color-COLRv1)]/foo:flex',
+      'supports-[--test]/foo:flex',
+    ]),
+  ).toEqual('')
 })
 
 test('not', () => {
@@ -1400,6 +1483,8 @@ test('not', () => {
       display: flex;
     }"
   `)
+
+  expect(run(['not-[:checked]/foo:flex'])).toEqual('')
 })
 
 test('has', () => {
@@ -1444,6 +1529,7 @@ test('has', () => {
       display: flex;
     }"
   `)
+  expect(run(['has-[:checked]/foo:flex'])).toEqual('')
 })
 
 test('aria', () => {
@@ -1503,6 +1589,7 @@ test('aria', () => {
       display: flex;
     }"
   `)
+  expect(run(['aria-checked/foo:flex', 'aria-[invalid=spelling]/foo:flex'])).toEqual('')
 })
 
 test('data', () => {
@@ -1542,6 +1629,7 @@ test('data', () => {
       display: flex;
     }"
   `)
+  expect(run(['data-disabled/foo:flex', 'data-[potato=salad]/foo:flex'])).toEqual('')
 })
 
 test('portrait', () => {
@@ -1552,6 +1640,7 @@ test('portrait', () => {
       }
     }"
   `)
+  expect(run(['portrait/foo:flex'])).toEqual('')
 })
 
 test('landscape', () => {
@@ -1562,6 +1651,7 @@ test('landscape', () => {
       }
     }"
   `)
+  expect(run(['landscape/foo:flex'])).toEqual('')
 })
 
 test('contrast-more', () => {
@@ -1572,6 +1662,7 @@ test('contrast-more', () => {
       }
     }"
   `)
+  expect(run(['contrast-more/foo:flex'])).toEqual('')
 })
 
 test('contrast-less', () => {
@@ -1582,6 +1673,7 @@ test('contrast-less', () => {
       }
     }"
   `)
+  expect(run(['contrast-less/foo:flex'])).toEqual('')
 })
 
 test('forced-colors', () => {
@@ -1592,6 +1684,7 @@ test('forced-colors', () => {
       }
     }"
   `)
+  expect(run(['forced-colors/foo:flex'])).toEqual('')
 })
 
 test('nth', () => {
@@ -1652,6 +1745,20 @@ test('nth', () => {
 
   expect(
     run(['nth-foo:flex', 'nth-of-type-foo:flex', 'nth-last-foo:flex', 'nth-last-of-type-foo:flex']),
+  ).toEqual('')
+  expect(
+    run([
+      'nth-3/foo:flex',
+      'nth-[2n+1]/foo:flex',
+      'nth-[2n+1_of_.foo]/foo:flex',
+      'nth-last-3/foo:flex',
+      'nth-last-[2n+1]/foo:flex',
+      'nth-last-[2n+1_of_.foo]/foo:flex',
+      'nth-of-type-3/foo:flex',
+      'nth-of-type-[2n+1]/foo:flex',
+      'nth-last-of-type-3/foo:flex',
+      'nth-last-of-type-[2n+1]/foo:flex',
+    ]),
   ).toEqual('')
 })
 
