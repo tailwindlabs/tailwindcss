@@ -3447,6 +3447,7 @@ export function createUtilities(theme: Theme) {
     })
 
     functionalUtility('backdrop-hue-rotate', {
+      supportsNegative: true,
       themeKeys: ['--backdrop-hue-rotate', '--hue-rotate'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null

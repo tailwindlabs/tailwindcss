@@ -12196,6 +12196,8 @@ test('backdrop-filter', () => {
         'backdrop-grayscale-[--value]',
         'backdrop-hue-rotate-15',
         'backdrop-hue-rotate-[45deg]',
+        '-backdrop-hue-rotate-15',
+        '-backdrop-hue-rotate-[45deg]',
         'backdrop-invert',
         'backdrop-invert-0',
         'backdrop-invert-[--value]',
@@ -12272,6 +12274,18 @@ test('backdrop-filter', () => {
 
     .backdrop-grayscale-\\[--value\\] {
       --tw-backdrop-grayscale: grayscale(var(--value));
+      -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+      backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    .-backdrop-hue-rotate-15 {
+      --tw-backdrop-hue-rotate: hue-rotate(calc(15deg * -1));
+      -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+      backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    .-backdrop-hue-rotate-\\[45deg\\] {
+      --tw-backdrop-hue-rotate: hue-rotate(calc(45deg * -1));
       -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
       backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
     }
@@ -12459,8 +12473,6 @@ test('backdrop-filter', () => {
       '-backdrop-grayscale-0',
       '-backdrop-grayscale-[--value]',
       'backdrop-grayscale-unknown',
-      '-backdrop-hue-rotate-15',
-      '-backdrop-hue-rotate-[45deg]',
       'backdrop-hue-rotate-unknown',
       '-backdrop-invert',
       '-backdrop-invert-0',
