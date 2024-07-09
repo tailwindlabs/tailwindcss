@@ -33,7 +33,7 @@ export function compile(
 
   // Find all `@theme` declarations
   let theme = new Theme()
-  let pluginPaths: string[] = []
+  let plugins: Plugin[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
 
@@ -42,7 +42,7 @@ export function compile(
 
     // Collect paths from `@plugin` at-rules
     if (node.selector.startsWith('@plugin ')) {
-      pluginPaths.push(node.selector.slice(9, -1))
+      plugins.push(loadPlugin(node.selector.slice(9, -1)))
       replaceWith([])
       return
     }
@@ -144,7 +144,6 @@ export function compile(
     firstThemeRule.nodes = nodes
   }
 
-  let plugins = pluginPaths.map(loadPlugin)
   let designSystem = buildDesignSystem(theme, plugins)
 
   let tailwindUtilitiesNode: Rule | null = null
