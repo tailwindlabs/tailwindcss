@@ -2791,6 +2791,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('mix-blend-plus-darker', [['mix-blend-mode', 'plus-darker']])
   staticUtility('mix-blend-plus-lighter', [['mix-blend-mode', 'plus-lighter']])
 
+  staticUtility('fill-none', [['fill', 'none']])
   utilities.functional('fill', (candidate) => {
     if (candidate.negative || !candidate.value) return
 

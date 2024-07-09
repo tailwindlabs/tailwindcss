@@ -809,6 +809,7 @@ exports[`getClassList 1`] = `
   "end-full",
   "fill-current",
   "fill-inherit",
+  "fill-none",
   "fill-transparent",
   "fixed",
   "flex-auto",
