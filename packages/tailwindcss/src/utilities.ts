@@ -140,7 +140,7 @@ function withAlpha(value: string, alpha: string): string {
   // If the alpha value is a percentage, we can pass it directly to
   // `color-mix()`. In any other case, e.g.: `var(…)`, `round(…)`, … we need to
   // make sure it's a percentage.
-  if (alpha[alpha.length - 1] !== '%') {
+  else if (alpha[alpha.length - 1] !== '%') {
     alpha = `calc(${alpha} * 100%)`
   }
 
