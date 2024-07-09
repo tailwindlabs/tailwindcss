@@ -373,7 +373,11 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   let kind = designSystem.utilities.kind(root)
 
   if (kind === 'static') {
+    // Static utilities do not have a value
     if (value !== null) return null
+
+    // Static utilities do not have a modifier
+    if (modifierSegment !== null) return null
 
     return {
       kind: 'static',
