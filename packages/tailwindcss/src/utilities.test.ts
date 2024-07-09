@@ -4619,8 +4619,8 @@ test('select', () => {
 })
 
 test('resize', () => {
-  expect(run(['resize-none', 'resize-both', 'resize-x', 'resize-y'])).toMatchInlineSnapshot(`
-    ".resize-both {
+  expect(run(['resize-none', 'resize', 'resize-x', 'resize-y'])).toMatchInlineSnapshot(`
+    ".resize {
       resize: both;
     }
 
@@ -4639,11 +4639,11 @@ test('resize', () => {
   expect(
     run([
       '-resize-none',
-      '-resize-both',
+      '-resize',
       '-resize-x',
       '-resize-y',
       'resize-none/foo',
-      'resize-both/foo',
+      'resize/foo',
       'resize-x/foo',
       'resize-y/foo',
     ]),

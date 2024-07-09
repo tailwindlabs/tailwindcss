@@ -1347,7 +1347,7 @@ exports[`getClassList 1`] = `
   "py-3",
   "py-4",
   "relative",
-  "resize-both",
+  "resize",
   "resize-none",
   "resize-x",
   "resize-y",

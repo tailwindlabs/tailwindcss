@@ -1708,9 +1708,9 @@ export function createUtilities(theme: Theme) {
    * @css `resize`
    */
   staticUtility('resize-none', [['resize', 'none']])
-  staticUtility('resize-both', [['resize', 'both']])
   staticUtility('resize-x', [['resize', 'horizontal']])
   staticUtility('resize-y', [['resize', 'vertical']])
+  staticUtility('resize', [['resize', 'both']])
 
   /**
    * @css `scroll-snap-type`
