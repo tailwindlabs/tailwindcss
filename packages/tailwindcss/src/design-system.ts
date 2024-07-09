@@ -83,7 +83,7 @@ export function buildDesignSystem(theme: Theme, plugins: Plugin[] = []): DesignS
 
   for (let plugin of plugins) {
     plugin({
-      addVariant: (name: any, selectors: string | string[]) => {
+      addVariant: (name: string, selectors: string | string[]) => {
         variants.static(name, (r) => {
           r.nodes = ([] as string[]).concat(selectors).map((selector) => rule(selector, r.nodes))
         })
