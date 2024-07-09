@@ -365,6 +365,13 @@
   --width-7xl: 80rem;
   --width-prose: 65ch;
 
+  /* Max widths */
+  --max-width-screen-sm: 40rem;
+  --max-width-screen-md: 48rem;
+  --max-width-screen-lg: 64rem;
+  --max-width-screen-xl: 80rem;
+  --max-width-screen-2xl: 96rem;
+
   /* Fonts */
   --font-family-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
