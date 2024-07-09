@@ -297,6 +297,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --drop-shadow-lg: 0 10px 8px #0000000a, 0 4px 3px #0000001a;
     --drop-shadow-xl: 0 20px 13px #00000008, 0 8px 5px #00000014;
     --drop-shadow-2xl: 0 25px 25px #00000026;
+    --drop-shadow-none: 0 0 #0000;
     --spacing-px: 1px;
     --spacing-0: 0px;
     --spacing-0_5: .125rem;
