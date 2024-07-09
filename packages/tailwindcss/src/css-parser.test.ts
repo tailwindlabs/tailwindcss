@@ -633,6 +633,14 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([{ kind: 'rule', selector: '@charset "UTF-8"', nodes: [] }])
     })
 
+    it('should parse an at-rule without a block or semicolon', () => {
+      expect(
+        parse(`
+          @tailwind utilities
+        `),
+      ).toEqual([{ kind: 'rule', selector: '@tailwind utilities', nodes: [] }])
+    })
+
     it("should parse an at-rule without a block or semicolon when it's the last rule in a block", () => {
       expect(
         parse(`
