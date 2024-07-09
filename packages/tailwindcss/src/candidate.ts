@@ -258,7 +258,14 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // ^^^^^^^^^^    -> Base without modifier
   //            ^^ -> Modifier segment
   // ```
-  let [baseWithoutModifier, modifierSegment = null] = segment(base, '/')
+  let [baseWithoutModifier, modifierSegment = null, additionalModifier] = segment(base, '/')
+
+  // If there's more than one modifier, the utility is invalid.
+  //
+  // E.g.:
+  //
+  // - `bg-red-500/50/50`
+  if (additionalModifier) return null
 
   // Arbitrary properties
   if (baseWithoutModifier[0] === '[') {
