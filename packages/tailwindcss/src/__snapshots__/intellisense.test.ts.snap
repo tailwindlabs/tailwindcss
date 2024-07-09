@@ -349,6 +349,7 @@ exports[`getClassList 1`] = `
   "-z-50",
   "@container-normal",
   "absolute",
+  "accent-auto",
   "accent-current",
   "accent-inherit",
   "accent-transparent",

@@ -2080,6 +2080,7 @@ export function createUtilities(theme: Theme) {
       ]),
   ])
 
+  staticUtility('accent-auto', [['accent-color', 'auto']])
   colorUtility('accent', {
     themeKeys: ['--accent-color', '--color'],
     handle: (value) => [decl('accent-color', value)],
