@@ -11881,6 +11881,8 @@ test('filter', () => {
         'grayscale-[--value]',
         'hue-rotate-15',
         'hue-rotate-[45deg]',
+        '-hue-rotate-15',
+        '-hue-rotate-[45deg]',
         'invert',
         'invert-0',
         'invert-[--value]',
@@ -11959,6 +11961,16 @@ test('filter', () => {
 
     .grayscale-\\[--value\\] {
       --tw-grayscale: grayscale(var(--value));
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .-hue-rotate-15 {
+      --tw-hue-rotate: hue-rotate(calc(15deg * -1));
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .-hue-rotate-\\[45deg\\] {
+      --tw-hue-rotate: hue-rotate(calc(45deg * -1));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
@@ -12112,8 +12124,6 @@ test('filter', () => {
       '-grayscale-0',
       '-grayscale-[--value]',
       'grayscale-unknown',
-      '-hue-rotate-15',
-      '-hue-rotate-[45deg]',
       'hue-rotate-unknown',
       '-invert',
       '-invert-0',

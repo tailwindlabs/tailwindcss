@@ -3433,6 +3433,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     functionalUtility('hue-rotate', {
+      supportsNegative: true,
       themeKeys: ['--hue-rotate'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
