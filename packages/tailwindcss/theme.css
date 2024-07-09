@@ -269,6 +269,7 @@
   --animate-bounce: bounce 1s infinite;
 
   /* Blurs */
+  --blur-0: 0;
   --blur: 8px;
   --blur-sm: 4px;
   --blur-md: 12px;

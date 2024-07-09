@@ -264,6 +264,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     --animate-ping: ping 1s cubic-bezier(0, 0, .2, 1) infinite;
     --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
     --animate-bounce: bounce 1s infinite;
+    --blur-0: 0;
     --blur: 8px;
     --blur-sm: 4px;
     --blur-md: 12px;
