@@ -568,7 +568,11 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
     switch (designSystem.variants.kind(root)) {
       case 'static': {
+        // Static variants do not have a value
         if (value !== null) return null
+
+        // Static variants do not have a modifier
+        if (modifier !== null) return null
 
         return {
           kind: 'static',
