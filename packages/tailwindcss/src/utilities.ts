@@ -135,6 +135,8 @@ function withAlpha(value: string, alpha: string): string {
   let alphaAsNumber = Number(alpha)
   if (!Number.isNaN(alphaAsNumber)) {
     alpha = `${alphaAsNumber * 100}%`
+  } else if (alpha.startsWith('var')) {
+    alpha = `calc(${alpha} * 100%)`
   }
 
   return `color-mix(in srgb, ${value} ${alpha}, transparent)`
