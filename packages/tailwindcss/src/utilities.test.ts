@@ -17,7 +17,7 @@ test('sr-only', () => {
       overflow: hidden;
     }"
   `)
-  expect(run(['-sr-only', 'sr-only-[--value]'])).toEqual('')
+  expect(run(['-sr-only', 'sr-only-[--value]', 'sr-only/foo'])).toEqual('')
 })
 
 test('not-sr-only', () => {
@@ -33,7 +33,7 @@ test('not-sr-only', () => {
       overflow: visible;
     }"
   `)
-  expect(run(['-not-sr-only', 'not-sr-only-[--value]'])).toEqual('')
+  expect(run(['-not-sr-only', 'not-sr-only-[--value]', 'not-sr-only/foo'])).toEqual('')
 })
 
 test('pointer-events', () => {
@@ -46,9 +46,14 @@ test('pointer-events', () => {
       pointer-events: none;
     }"
   `)
-  expect(run(['-pointer-events-none', '-pointer-events-auto', 'pointer-events-[--value]'])).toEqual(
-    '',
-  )
+  expect(
+    run([
+      '-pointer-events-none',
+      '-pointer-events-auto',
+      'pointer-events-[--value]',
+      'pointer-events-none/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('visibility', () => {
@@ -65,7 +70,9 @@ test('visibility', () => {
       visibility: visible;
     }"
   `)
-  expect(run(['-visible', '-invisible', '-collapse'])).toEqual('')
+  expect(
+    run(['-visible', '-invisible', '-collapse', 'visible/foo', 'invisible/foo', 'collapse/foo']),
+  ).toEqual('')
 })
 
 test('position', () => {
@@ -90,7 +97,20 @@ test('position', () => {
       position: sticky;
     }"
   `)
-  expect(run(['-static', '-fixed', '-absolute', '-relative', '-sticky'])).toEqual('')
+  expect(
+    run([
+      '-static',
+      '-fixed',
+      '-absolute',
+      '-relative',
+      '-sticky',
+      'static/foo',
+      'fixed/foo',
+      'absolute/foo',
+      'relative/foo',
+      'sticky/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('inset', () => {
@@ -145,7 +165,18 @@ test('inset', () => {
       inset: 100%;
     }"
   `)
-  expect(run(['inset'])).toEqual('')
+  expect(
+    run([
+      'inset',
+      'inset-auto/foo',
+      '-inset-full/foo',
+      'inset-full/foo',
+      'inset-3/4/foo',
+      'inset-4/foo',
+      '-inset-4/foo',
+      'inset-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('inset-x', () => {
@@ -207,7 +238,18 @@ test('inset-x', () => {
       right: 100%;
     }"
   `)
-  expect(run(['inset-x'])).toEqual('')
+  expect(
+    run([
+      'inset-x',
+      'inset-x-auto/foo',
+      'inset-x-full/foo',
+      '-inset-x-full/foo',
+      'inset-x-3/4/foo',
+      'inset-x-4/foo',
+      '-inset-x-4/foo',
+      'inset-x-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('inset-y', () => {
@@ -269,7 +311,18 @@ test('inset-y', () => {
       bottom: 100%;
     }"
   `)
-  expect(run(['inset-y'])).toEqual('')
+  expect(
+    run([
+      'inset-y',
+      'inset-y-auto/foo',
+      'inset-y-full/foo',
+      '-inset-y-full/foo',
+      'inset-y-3/4/foo',
+      'inset-y-4/foo',
+      '-inset-y-4/foo',
+      'inset-y-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('start', () => {
@@ -324,7 +377,18 @@ test('start', () => {
       inset-inline-start: 100%;
     }"
   `)
-  expect(run(['start'])).toEqual('')
+  expect(
+    run([
+      'start',
+      'start-auto/foo',
+      '-start-full/foo',
+      'start-full/foo',
+      'start-3/4/foo',
+      'start-4/foo',
+      '-start-4/foo',
+      'start-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('end', () => {
@@ -371,7 +435,18 @@ test('end', () => {
       inset-inline-end: 100%;
     }"
   `)
-  expect(run(['end'])).toEqual('')
+  expect(
+    run([
+      'end',
+      'end-auto/foo',
+      '-end-full/foo',
+      'end-full/foo',
+      'end-3/4/foo',
+      'end-4/foo',
+      '-end-4/foo',
+      'end-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('top', () => {
@@ -419,7 +494,18 @@ test('top', () => {
       top: 100%;
     }"
   `)
-  expect(run(['top'])).toEqual('')
+  expect(
+    run([
+      'top',
+      'top-auto/foo',
+      '-top-full/foo',
+      'top-full/foo',
+      'top-3/4/foo',
+      'top-4/foo',
+      '-top-4/foo',
+      'top-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('right', () => {
@@ -474,7 +560,18 @@ test('right', () => {
       right: 100%;
     }"
   `)
-  expect(run(['right'])).toEqual('')
+  expect(
+    run([
+      'right',
+      'right-auto/foo',
+      '-right-full/foo',
+      'right-full/foo',
+      'right-3/4/foo',
+      'right-4/foo',
+      '-right-4/foo',
+      'right-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('bottom', () => {
@@ -529,7 +626,18 @@ test('bottom', () => {
       bottom: 100%;
     }"
   `)
-  expect(run(['bottom'])).toEqual('')
+  expect(
+    run([
+      'bottom',
+      'bottom-auto/foo',
+      '-bottom-full/foo',
+      'bottom-full/foo',
+      'bottom-3/4/foo',
+      'bottom-4/foo',
+      '-bottom-4/foo',
+      'bottom-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('left', () => {
@@ -576,7 +684,18 @@ test('left', () => {
       left: 100%;
     }"
   `)
-  expect(run(['left'])).toEqual('')
+  expect(
+    run([
+      'left',
+      'left-auto/foo',
+      '-left-full/foo',
+      'left-full/foo',
+      'left-3/4/foo',
+      'left-4/foo',
+      '-left-4/foo',
+      'left-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('isolation', () => {
@@ -589,7 +708,7 @@ test('isolation', () => {
       isolation: auto;
     }"
   `)
-  expect(run(['-isolate', '-isolation-auto'])).toEqual('')
+  expect(run(['-isolate', '-isolation-auto', 'isolate/foo', 'isolation-auto/foo'])).toEqual('')
 })
 
 test('z-index', () => {
@@ -614,7 +733,19 @@ test('z-index', () => {
       z-index: auto;
     }"
   `)
-  expect(run(['z', '-z-auto', 'z-unknown', 'z-123.5'])).toEqual('')
+  expect(
+    run([
+      'z',
+      '-z-auto',
+      'z-unknown',
+      'z-123.5',
+      'z-auto/foo',
+      'z-10/foo',
+      '-z-10/foo',
+      'z-[123]/foo',
+      '-z-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('order', () => {
@@ -658,7 +789,21 @@ test('order', () => {
     }"
   `)
   expect(
-    run(['order', '-order-first', '-order-last', '-order-none', 'order-unknown', 'order-123.5']),
+    run([
+      'order',
+      '-order-first',
+      '-order-last',
+      '-order-none',
+      'order-unknown',
+      'order-123.5',
+      'order-4/foo',
+      '-order-4/foo',
+      'order-[123]/foo',
+      '-order-[--value]/foo',
+      'order-first/foo',
+      'order-last/foo',
+      'order-none/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -697,7 +842,20 @@ test('col', () => {
       grid-column: 1 / -1;
     }"
   `)
-  expect(run(['col', 'col-span', '-col-span-4', 'col-span-unknown'])).toEqual('')
+  expect(
+    run([
+      'col',
+      'col-span',
+      '-col-span-4',
+      'col-span-unknown',
+      'col-auto/foo',
+      'col-span-4/foo',
+      'col-span-17/foo',
+      'col-span-full/foo',
+      'col-[span_123/span_123]/foo',
+      'col-span-[--my-variable]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('col-start', () => {
@@ -723,7 +881,17 @@ test('col-start', () => {
         grid-column-start: auto;
       }"
     `)
-  expect(run(['col-start', 'col-start-unknown'])).toEqual('')
+  expect(
+    run([
+      'col-start',
+      'col-start-unknown',
+      'col-start-auto/foo',
+      'col-start-4/foo',
+      'col-start-99/foo',
+      'col-start-[123]/foo',
+      '-col-start-4/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('col-end', () => {
@@ -749,7 +917,17 @@ test('col-end', () => {
         grid-column-end: auto;
       }"
     `)
-  expect(run(['col-end', 'col-end-unknown'])).toEqual('')
+  expect(
+    run([
+      'col-end',
+      'col-end-unknown',
+      'col-end-auto/foo',
+      'col-end-4/foo',
+      'col-end-99/foo',
+      'col-end-[123]/foo',
+      '-col-end-4/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('row', () => {
@@ -787,7 +965,20 @@ test('row', () => {
       grid-row: 1 / -1;
     }"
   `)
-  expect(run(['row', 'row-span', '-row-span-4', 'row-span-unknown'])).toEqual('')
+  expect(
+    run([
+      'row',
+      'row-span',
+      '-row-span-4',
+      'row-span-unknown',
+      'row-auto/foo',
+      'row-span-4/foo',
+      'row-span-17/foo',
+      'row-span-full/foo',
+      'row-[span_123/span_123]/foo',
+      'row-span-[--my-variable]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('row-start', () => {
@@ -813,7 +1004,17 @@ test('row-start', () => {
         grid-row-start: auto;
       }"
     `)
-  expect(run(['row-start', 'row-start-unknown'])).toEqual('')
+  expect(
+    run([
+      'row-start',
+      'row-start-unknown',
+      'row-start-auto/foo',
+      'row-start-4/foo',
+      'row-start-99/foo',
+      'row-start-[123]/foo',
+      '-row-start-4/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('row-end', () => {
@@ -839,7 +1040,17 @@ test('row-end', () => {
         grid-row-end: auto;
       }"
     `)
-  expect(run(['row-end', 'row-end-unknown'])).toEqual('')
+  expect(
+    run([
+      'row-end',
+      'row-end-unknown',
+      'row-end-auto/foo',
+      'row-end-4/foo',
+      'row-end-99/foo',
+      'row-end-[123]/foo',
+      '-row-end-4/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('float', () => {
@@ -866,7 +1077,19 @@ test('float', () => {
     }"
   `)
   expect(
-    run(['float', '-float-start', '-float-end', '-float-right', '-float-left', '-float-none']),
+    run([
+      'float',
+      '-float-start',
+      '-float-end',
+      '-float-right',
+      '-float-left',
+      '-float-none',
+      'float-start/foo',
+      'float-end/foo',
+      'float-right/foo',
+      'float-left/foo',
+      'float-none/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -906,6 +1129,12 @@ test('clear', () => {
       '-clear-left',
       '-clear-both',
       '-clear-none',
+      'clear-start/foo',
+      'clear-end/foo',
+      'clear-right/foo',
+      'clear-left/foo',
+      'clear-both/foo',
+      'clear-none/foo',
     ]),
   ).toEqual('')
 })
@@ -946,7 +1175,9 @@ test('margin', () => {
       margin: auto;
     }"
   `)
-  expect(run(['m'])).toEqual('')
+  expect(
+    run(['m', 'm-auto/foo', 'm-4/foo', 'm-[4px]/foo', '-m-4/foo', '-m-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin-x', () => {
@@ -990,7 +1221,9 @@ test('margin-x', () => {
       margin-right: auto;
     }"
   `)
-  expect(run(['mx'])).toEqual('')
+  expect(
+    run(['mx', 'mx-auto/foo', 'mx-4/foo', 'mx-[4px]/foo', '-mx-4/foo', '-mx-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin-y', () => {
@@ -1034,7 +1267,9 @@ test('margin-y', () => {
       margin-bottom: auto;
     }"
   `)
-  expect(run(['my'])).toEqual('')
+  expect(
+    run(['my', 'my-auto/foo', 'my-4/foo', 'my-[4px]/foo', '-my-4/foo', '-my-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin-top', () => {
@@ -1073,7 +1308,9 @@ test('margin-top', () => {
       margin-top: auto;
     }"
   `)
-  expect(run(['mt'])).toEqual('')
+  expect(
+    run(['mt', 'mt-auto/foo', 'mt-4/foo', 'mt-[4px]/foo', '-mt-4/foo', '-mt-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin-inline-start', () => {
@@ -1112,7 +1349,9 @@ test('margin-inline-start', () => {
       margin-inline-start: auto;
     }"
   `)
-  expect(run(['ms'])).toEqual('')
+  expect(
+    run(['ms', 'ms-auto/foo', 'ms-4/foo', 'ms-[4px]/foo', '-ms-4/foo', '-ms-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin-inline-end', () => {
@@ -1151,7 +1390,9 @@ test('margin-inline-end', () => {
       margin-inline-end: auto;
     }"
   `)
-  expect(run(['me'])).toEqual('')
+  expect(
+    run(['me', 'me-auto/foo', 'me-4/foo', 'me-[4px]/foo', '-me-4/foo', '-me-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin-right', () => {
@@ -1190,7 +1431,9 @@ test('margin-right', () => {
       margin-right: auto;
     }"
   `)
-  expect(run(['mr'])).toEqual('')
+  expect(
+    run(['mr', 'mr-auto/foo', 'mr-4/foo', 'mr-[4px]/foo', '-mr-4/foo', '-mr-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin-bottom', () => {
@@ -1229,7 +1472,9 @@ test('margin-bottom', () => {
       margin-bottom: auto;
     }"
   `)
-  expect(run(['mb'])).toEqual('')
+  expect(
+    run(['mb', 'mb-auto/foo', 'mb-4/foo', 'mb-[4px]/foo', '-mb-4/foo', '-mb-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin-left', () => {
@@ -1268,7 +1513,9 @@ test('margin-left', () => {
       margin-left: auto;
     }"
   `)
-  expect(run(['ml'])).toEqual('')
+  expect(
+    run(['ml', 'ml-auto/foo', 'ml-4/foo', 'ml-[4px]/foo', '-ml-4/foo', '-ml-[--value]/foo']),
+  ).toEqual('')
 })
 
 test('margin sort order', () => {
@@ -1325,7 +1572,20 @@ test('margin sort order', () => {
       margin-left: var(--spacing-4, 1rem);
     }"
   `)
-  expect(run(['m'])).toEqual('')
+  expect(
+    run([
+      'm',
+      'mb-4/foo',
+      'me-4/foo',
+      'mx-4/foo',
+      'ml-4/foo',
+      'ms-4/foo',
+      'm-4/foo',
+      'mr-4/foo',
+      'mt-4/foo',
+      'my-4/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('box-sizing', () => {
@@ -1338,7 +1598,9 @@ test('box-sizing', () => {
       box-sizing: content-box;
     }"
   `)
-  expect(run(['box', '-box-border', '-box-content'])).toEqual('')
+  expect(run(['box', '-box-border', '-box-content', 'box-border/foo', 'box-content/foo'])).toEqual(
+    '',
+  )
 })
 
 test('line-clamp', () => {
@@ -1380,6 +1642,10 @@ test('line-clamp', () => {
       '-line-clamp-none',
       'line-clamp-unknown',
       'line-clamp-123.5',
+      'line-clamp-4/foo',
+      'line-clamp-99/foo',
+      'line-clamp-[123]/foo',
+      'line-clamp-none/foo',
     ]),
   ).toEqual('')
 })
@@ -1517,6 +1783,27 @@ test('display', () => {
       '-contents',
       '-list-item',
       '-hidden',
+      'block/foo',
+      'inline-block/foo',
+      'inline/foo',
+      'flex/foo',
+      'inline-flex/foo',
+      'table/foo',
+      'inline-table/foo',
+      'table-caption/foo',
+      'table-cell/foo',
+      'table-column/foo',
+      'table-column-group/foo',
+      'table-footer-group/foo',
+      'table-header-group/foo',
+      'table-row-group/foo',
+      'table-row/foo',
+      'flow-root/foo',
+      'grid/foo',
+      'inline-grid/foo',
+      'contents/foo',
+      'list-item/foo',
+      'hidden/foo',
     ]),
   ).toEqual('')
 })
@@ -1536,7 +1823,16 @@ test('aspect-ratio', () => {
     }"
   `)
   expect(
-    run(['aspect', 'aspect-potato', '-aspect-video', '-aspect-[10/9]', 'aspect-foo/bar']),
+    run([
+      'aspect',
+      'aspect-potato',
+      '-aspect-video',
+      '-aspect-[10/9]',
+      'aspect-foo/bar',
+      'aspect-video/foo',
+      'aspect-[10/9]/foo',
+      'aspect-4/3/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -1605,7 +1901,22 @@ test('size', () => {
       height: min-content;
     }"
   `)
-  expect(run(['size', '-size-4', '-size-1/2', '-size-[4px]'])).toEqual('')
+  expect(
+    run([
+      'size',
+      '-size-4',
+      '-size-1/2',
+      '-size-[4px]',
+      'size-auto/foo',
+      'size-full/foo',
+      'size-min/foo',
+      'size-max/foo',
+      'size-fit/foo',
+      'size-4/foo',
+      'size-1/2/foo',
+      'size-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('width', () => {
@@ -1692,7 +2003,27 @@ test('width', () => {
       width: var(--width-xl, 36rem);
     }"
   `)
-  expect(run(['w', '-w-4', '-w-1/2', '-w-[4px]'])).toEqual('')
+  expect(
+    run([
+      'w',
+      '-w-4',
+      '-w-1/2',
+      '-w-[4px]',
+      'w-full/foo',
+      'w-auto/foo',
+      'w-screen/foo',
+      'w-svw/foo',
+      'w-lvw/foo',
+      'w-dvw/foo',
+      'w-min/foo',
+      'w-max/foo',
+      'w-fit/foo',
+      'w-4/foo',
+      'w-xl/foo',
+      'w-1/2/foo',
+      'w-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('min-width', () => {
@@ -1754,7 +2085,21 @@ test('min-width', () => {
       min-width: var(--width-xl, 36rem);
     }"
   `)
-  expect(run(['min-w', '-min-w-4', '-min-w-[4px]'])).toEqual('')
+  expect(
+    run([
+      'min-w',
+      '-min-w-4',
+      '-min-w-[4px]',
+      'min-w-auto/foo',
+      'min-w-full/foo',
+      'min-w-min/foo',
+      'min-w-max/foo',
+      'min-w-fit/foo',
+      'min-w-4/foo',
+      'min-w-xl/foo',
+      'min-w-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('max-width', () => {
@@ -1812,7 +2157,21 @@ test('max-width', () => {
       max-width: var(--width-xl, 36rem);
     }"
   `)
-  expect(run(['max-w', '-max-w-4', '-max-w-[4px]'])).toEqual('')
+  expect(
+    run([
+      'max-w',
+      '-max-w-4',
+      '-max-w-[4px]',
+      'max-w-none/foo',
+      'max-w-full/foo',
+      'max-w-max/foo',
+      'max-w-max/foo',
+      'max-w-fit/foo',
+      'max-w-4/foo',
+      'max-w-xl/foo',
+      'max-w-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('height', () => {
@@ -1892,7 +2251,26 @@ test('height', () => {
       height: 100svh;
     }"
   `)
-  expect(run(['h', '-h-4', '-h-1/2', '-h-[4px]'])).toEqual('')
+  expect(
+    run([
+      'h',
+      '-h-4',
+      '-h-1/2',
+      '-h-[4px]',
+      'h-full/foo',
+      'h-auto/foo',
+      'h-screen/foo',
+      'h-svh/foo',
+      'h-lvh/foo',
+      'h-dvh/foo',
+      'h-min/foo',
+      'h-max/foo',
+      'h-fit/foo',
+      'h-4/foo',
+      'h-1/2/foo',
+      'h-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('min-height', () => {
@@ -1967,7 +2345,24 @@ test('min-height', () => {
       min-height: 100svh;
     }"
   `)
-  expect(run(['min-h', '-min-h-4', '-min-h-[4px]'])).toEqual('')
+  expect(
+    run([
+      'min-h',
+      '-min-h-4',
+      '-min-h-[4px]',
+      'min-h-auto/foo',
+      'min-h-full/foo',
+      'min-h-screen/foo',
+      'min-h-svh/foo',
+      'min-h-lvh/foo',
+      'min-h-dvh/foo',
+      'min-h-min/foo',
+      'min-h-max/foo',
+      'min-h-fit/foo',
+      'min-h-4/foo',
+      'min-h-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('max-height', () => {
@@ -2042,7 +2437,24 @@ test('max-height', () => {
       max-height: 100svh;
     }"
   `)
-  expect(run(['max-h', '-max-h-4', '-max-h-[4px]'])).toEqual('')
+  expect(
+    run([
+      'max-h',
+      '-max-h-4',
+      '-max-h-[4px]',
+      'max-h-none/foo',
+      'max-h-full/foo',
+      'max-h-screen/foo',
+      'max-h-svh/foo',
+      'max-h-lvh/foo',
+      'max-h-dvh/foo',
+      'max-h-min/foo',
+      'max-h-max/foo',
+      'max-h-fit/foo',
+      'max-h-4/foo',
+      'max-h-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('flex', () => {
@@ -2078,7 +2490,21 @@ test('flex', () => {
     }"
   `)
   expect(
-    run(['-flex-1', '-flex-auto', '-flex-initial', '-flex-none', '-flex-[123]', 'flex-unknown']),
+    run([
+      '-flex-1',
+      '-flex-auto',
+      '-flex-initial',
+      '-flex-none',
+      '-flex-[123]',
+      'flex-unknown',
+      'flex-1/foo',
+      'flex-99/foo',
+      'flex-1/2/foo',
+      'flex-auto/foo',
+      'flex-initial/foo',
+      'flex-none/foo',
+      'flex-[123]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -2096,7 +2522,17 @@ test('flex-shrink', () => {
       flex-shrink: 123;
     }"
   `)
-  expect(run(['-shrink', '-shrink-0', '-shrink-[123]', 'shrink-unknown'])).toEqual('')
+  expect(
+    run([
+      '-shrink',
+      '-shrink-0',
+      '-shrink-[123]',
+      'shrink-unknown',
+      'shrink/foo',
+      'shrink-0/foo',
+      'shrink-[123]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('flex-grow', () => {
@@ -2113,7 +2549,17 @@ test('flex-grow', () => {
       flex-grow: 123;
     }"
   `)
-  expect(run(['-grow', '-grow-0', '-grow-[123]', 'grow-unknown'])).toEqual('')
+  expect(
+    run([
+      '-grow',
+      '-grow-0',
+      '-grow-[123]',
+      'grow-unknown',
+      'grow/foo',
+      'grow-0/foo',
+      'grow-[123]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('flex-basis', () => {
@@ -2152,7 +2598,18 @@ test('flex-basis', () => {
       flex-basis: var(--width-xl, 36rem);
     }"
   `)
-  expect(run(['basis', '-basis-full', '-basis-[123px]'])).toEqual('')
+  expect(
+    run([
+      'basis',
+      '-basis-full',
+      '-basis-[123px]',
+      'basis-auto/foo',
+      'basis-full/foo',
+      'basis-xl/foo',
+      'basis-11/12/foo',
+      'basis-[123px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('table-layout', () => {
@@ -2165,7 +2622,7 @@ test('table-layout', () => {
       table-layout: fixed;
     }"
   `)
-  expect(run(['-table-auto', '-table-fixed'])).toEqual('')
+  expect(run(['-table-auto', '-table-fixed', 'table-auto/foo', 'table-fixed/foo'])).toEqual('')
 })
 
 test('caption-side', () => {
@@ -2178,7 +2635,9 @@ test('caption-side', () => {
       caption-side: top;
     }"
   `)
-  expect(run(['-caption-top', '-caption-bottom'])).toEqual('')
+  expect(run(['-caption-top', '-caption-bottom', 'caption-top/foo', 'caption-bottom/foo'])).toEqual(
+    '',
+  )
 })
 
 test('border-collapse', () => {
@@ -2191,7 +2650,9 @@ test('border-collapse', () => {
       border-collapse: separate;
     }"
   `)
-  expect(run(['-border-collapse', '-border-separate'])).toEqual('')
+  expect(
+    run(['-border-collapse', '-border-separate', 'border-collapse/foo', 'border-separate/foo']),
+  ).toEqual('')
 })
 
 test('border-spacing', () => {
@@ -2243,7 +2704,15 @@ test('border-spacing', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['border-spacing', '-border-spacing-1', '-border-spacing-[123px]'])).toEqual('')
+  expect(
+    run([
+      'border-spacing',
+      '-border-spacing-1',
+      '-border-spacing-[123px]',
+      'border-spacing-1/foo',
+      'border-spacing-[123px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('border-spacing-x', () => {
@@ -2293,7 +2762,15 @@ test('border-spacing-x', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['border-spacing-x', '-border-spacing-x-1', '-border-spacing-x-[123px]'])).toEqual('')
+  expect(
+    run([
+      'border-spacing-x',
+      '-border-spacing-x-1',
+      '-border-spacing-x-[123px]',
+      'border-spacing-x-1/foo',
+      'border-spacing-x-[123px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('border-spacing-y', () => {
@@ -2343,7 +2820,15 @@ test('border-spacing-y', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['border-spacing-x', '-border-spacing-y-1', '-border-spacing-y-[123px]'])).toEqual('')
+  expect(
+    run([
+      'border-spacing-x',
+      '-border-spacing-y-1',
+      '-border-spacing-y-[123px]',
+      'border-spacing-y-1/foo',
+      'border-spacing-y-[123px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('origin', () => {
@@ -2406,7 +2891,23 @@ test('origin', () => {
       transform-origin: 100% 0;
     }"
   `)
-  expect(run(['-origin-center', '-origin-[--value]'])).toEqual('')
+  expect(
+    run([
+      '-origin-center',
+      '-origin-[--value]',
+      'origin-center/foo',
+      'origin-top/foo',
+      'origin-top-right/foo',
+      'origin-right/foo',
+      'origin-bottom-right/foo',
+      'origin-bottom/foo',
+      'origin-bottom-left/foo',
+      'origin-left/foo',
+      'origin-top-left/foo',
+      'origin-[50px_100px]/foo',
+      'origin-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('perspective-origin', () => {
@@ -2469,7 +2970,23 @@ test('perspective-origin', () => {
       perspective-origin: 100% 0;
     }"
   `)
-  expect(run(['-perspective-origin-center', '-perspective-origin-[--value]'])).toEqual('')
+  expect(
+    run([
+      '-perspective-origin-center',
+      '-perspective-origin-[--value]',
+      'perspective-origin-center/foo',
+      'perspective-origin-top/foo',
+      'perspective-origin-top-right/foo',
+      'perspective-origin-right/foo',
+      'perspective-origin-bottom-right/foo',
+      'perspective-origin-bottom/foo',
+      'perspective-origin-bottom-left/foo',
+      'perspective-origin-left/foo',
+      'perspective-origin-top-left/foo',
+      'perspective-origin-[50px_100px]/foo',
+      'perspective-origin-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('translate', () => {
@@ -2545,7 +3062,16 @@ test('translate', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['translate'])).toEqual('')
+  expect(
+    run([
+      'translate',
+      'translate-1/2/foo',
+      'translate-full/foo',
+      '-translate-full/foo',
+      'translate-[123px]/foo',
+      '-translate-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('translate-x', () => {
@@ -2599,7 +3125,15 @@ test('translate-x', () => {
         initial-value: 0;
       }"
     `)
-  expect(run(['translate-x'])).toEqual('')
+  expect(
+    run([
+      'translate-x',
+      'translate-x-full/foo',
+      '-translate-x-full/foo',
+      'translate-x-px/foo',
+      '-translate-x-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('translate-y', () => {
@@ -2653,7 +3187,15 @@ test('translate-y', () => {
         initial-value: 0;
       }"
     `)
-  expect(run(['translate-y'])).toEqual('')
+  expect(
+    run([
+      'translate-y',
+      'translate-y-full/foo',
+      '-translate-y-full/foo',
+      'translate-y-px/foo',
+      '-translate-y-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('translate-z', () => {
@@ -2696,9 +3238,16 @@ test('translate-z', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['translate-z', 'translate-z-full', '-translate-z-full', 'translate-z-1/2'])).toEqual(
-    '',
-  )
+  expect(
+    run([
+      'translate-z',
+      'translate-z-full',
+      '-translate-z-full',
+      'translate-z-1/2',
+      'translate-y-px/foo',
+      '-translate-z-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('translate-3d', () => {
@@ -2735,7 +3284,7 @@ test('translate-3d', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-translate-3d'])).toEqual('')
+  expect(run(['-translate-3d', 'translate-3d/foo'])).toEqual('')
 })
 
 test('rotate', () => {
@@ -2757,7 +3306,17 @@ test('rotate', () => {
       rotate: 123deg;
     }"
   `)
-  expect(run(['rotate', 'rotate-z', 'rotate-unknown'])).toEqual('')
+  expect(
+    run([
+      'rotate',
+      'rotate-z',
+      'rotate-unknown',
+      'rotate-45/foo',
+      '-rotate-45/foo',
+      'rotate-[123deg]/foo',
+      'rotate-[0.3_0.7_1_45deg]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('rotate-x', () => {
@@ -2819,7 +3378,16 @@ test('rotate-x', () => {
       initial-value: skewY(0);
     }"
   `)
-  expect(run(['rotate-x', '-rotate-x', 'rotate-x-potato'])).toEqual('')
+  expect(
+    run([
+      'rotate-x',
+      '-rotate-x',
+      'rotate-x-potato',
+      'rotate-x-45/foo',
+      '-rotate-x-45/foo',
+      'rotate-x-[123deg]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('rotate-y', () => {
@@ -2881,7 +3449,16 @@ test('rotate-y', () => {
       initial-value: skewY(0);
     }"
   `)
-  expect(run(['rotate-y', '-rotate-y', 'rotate-y-potato'])).toEqual('')
+  expect(
+    run([
+      'rotate-y',
+      '-rotate-y',
+      'rotate-y-potato',
+      'rotate-y-45/foo',
+      '-rotate-y-45/foo',
+      'rotate-y-[123deg]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('skew', () => {
@@ -2946,7 +3523,9 @@ test('skew', () => {
       initial-value: skewY(0);
     }"
   `)
-  expect(run(['skew', 'skew-unknown'])).toEqual('')
+  expect(run(['skew', 'skew-unknown', 'skew-6/foo', '-skew-6/foo', 'skew-[123deg]/foo'])).toEqual(
+    '',
+  )
 })
 
 test('skew-x', () => {
@@ -3008,7 +3587,9 @@ test('skew-x', () => {
       initial-value: skewY(0);
     }"
   `)
-  expect(run(['skew-x', 'skew-x-unknown'])).toEqual('')
+  expect(
+    run(['skew-x', 'skew-x-unknown', 'skew-x-6/foo', '-skew-x-6/foo', 'skew-x-[123deg]/foo']),
+  ).toEqual('')
 })
 
 test('skew-y', () => {
@@ -3070,7 +3651,9 @@ test('skew-y', () => {
       initial-value: skewY(0);
     }"
   `)
-  expect(run(['skew-y', 'skew-y-unknown'])).toEqual('')
+  expect(
+    run(['skew-y', 'skew-y-unknown', 'skew-y-6/foo', '-skew-y-6/foo', 'skew-y-[123deg]/foo']),
+  ).toEqual('')
 })
 
 test('scale', () => {
@@ -3125,7 +3708,16 @@ test('scale', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale', 'scale-unknown'])).toEqual('')
+  expect(
+    run([
+      'scale',
+      'scale-unknown',
+      'scale-50/foo',
+      '-scale-50/foo',
+      'scale-[2]/foo',
+      'scale-[2_1.5_3]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scale-3d', () => {
@@ -3162,7 +3754,7 @@ test('scale-3d', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['-scale-3d'])).toEqual('')
+  expect(run(['-scale-3d', 'scale-3d/foo'])).toEqual('')
 })
 
 test('scale-x', () => {
@@ -3251,7 +3843,17 @@ test('scale-x', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale-x', 'scale-x-unknown'])).toEqual('')
+  expect(
+    run([
+      'scale-x',
+      'scale-x-unknown',
+      'scale-200/foo',
+      'scale-x-400/foo',
+      'scale-x-50/foo',
+      '-scale-x-50/foo',
+      'scale-x-[2]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scale-y', () => {
@@ -3299,7 +3901,9 @@ test('scale-y', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale-y', 'scale-y-unknown'])).toEqual('')
+  expect(
+    run(['scale-y', 'scale-y-unknown', 'scale-y-50/foo', '-scale-y-50/foo', 'scale-y-[2]/foo']),
+  ).toEqual('')
 })
 
 test('scale-z', () => {
@@ -3347,7 +3951,7 @@ test('scale-z', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale-z'])).toEqual('')
+  expect(run(['scale-z', 'scale-z-50/foo', '-scale-z-50/foo', 'scale-z-[123deg]/foo'])).toEqual('')
 })
 
 test('transform', () => {
@@ -3471,7 +4075,28 @@ test('transform', () => {
         transform-box: view-box;
       }"
     `)
-  expect(run(['-transform', '-transform-cpu', '-transform-gpu', '-transform-none'])).toEqual('')
+  expect(
+    run([
+      '-transform',
+      '-transform-cpu',
+      '-transform-gpu',
+      '-transform-none',
+      'transform/foo',
+      'transform-cpu/foo',
+      'transform-gpu/foo',
+      'transform-none/foo',
+      'transform-[scaleZ(2)_rotateY(45deg)]/foo',
+      'transform-flat/foo',
+      'transform-3d/foo',
+      'transform-content/foo',
+      'transform-border/foo',
+      'transform-fill/foo',
+      'transform-stroke/foo',
+      'transform-view/foo',
+      'backface-visible/foo',
+      'backface-hidden/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('perspective', () => {
@@ -3508,7 +4133,18 @@ test('perspective', () => {
       perspective: var(--perspective-normal, 500px);
     }"
   `)
-  expect(run(['perspective', '-perspective', 'perspective-potato', 'perspective-123'])).toEqual('')
+  expect(
+    run([
+      'perspective',
+      '-perspective',
+      'perspective-potato',
+      'perspective-123',
+      'perspective-normal/foo',
+      'perspective-dramatic/foo',
+      'perspective-none/foo',
+      'perspective-[456px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('cursor', () => {
@@ -3759,6 +4395,44 @@ test('cursor', () => {
       '-cursor-zoom-out',
       '-cursor-[--value]',
       '-cursor-custom',
+      'cursor-auto/foo',
+      'cursor-default/foo',
+      'cursor-pointer/foo',
+      'cursor-wait/foo',
+      'cursor-text/foo',
+      'cursor-move/foo',
+      'cursor-help/foo',
+      'cursor-not-allowed/foo',
+      'cursor-none/foo',
+      'cursor-context-menu/foo',
+      'cursor-progress/foo',
+      'cursor-cell/foo',
+      'cursor-crosshair/foo',
+      'cursor-vertical-text/foo',
+      'cursor-alias/foo',
+      'cursor-copy/foo',
+      'cursor-no-drop/foo',
+      'cursor-grab/foo',
+      'cursor-grabbing/foo',
+      'cursor-all-scroll/foo',
+      'cursor-col-resize/foo',
+      'cursor-row-resize/foo',
+      'cursor-n-resize/foo',
+      'cursor-e-resize/foo',
+      'cursor-s-resize/foo',
+      'cursor-w-resize/foo',
+      'cursor-ne-resize/foo',
+      'cursor-nw-resize/foo',
+      'cursor-se-resize/foo',
+      'cursor-sw-resize/foo',
+      'cursor-ew-resize/foo',
+      'cursor-ns-resize/foo',
+      'cursor-nesw-resize/foo',
+      'cursor-nwse-resize/foo',
+      'cursor-zoom-in/foo',
+      'cursor-zoom-out/foo',
+      'cursor-[--value]/foo',
+      'cursor-custom/foo',
     ]),
   ).toEqual('')
 })
@@ -3777,7 +4451,16 @@ test('touch-action', () => {
       touch-action: none;
     }"
   `)
-  expect(run(['-touch-auto', '-touch-none', '-touch-manipulation'])).toEqual('')
+  expect(
+    run([
+      '-touch-auto',
+      '-touch-none',
+      '-touch-manipulation',
+      'touch-auto/foo',
+      'touch-none/foo',
+      'touch-manipulation/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('touch-pan', () => {
@@ -3854,6 +4537,12 @@ test('touch-pan', () => {
       '-touch-pan-y',
       '-touch-pan-up',
       '-touch-pan-down',
+      'touch-pan-x/foo',
+      'touch-pan-left/foo',
+      'touch-pan-right/foo',
+      'touch-pan-y/foo',
+      'touch-pan-up/foo',
+      'touch-pan-down/foo',
     ]),
   ).toEqual('')
 })
@@ -3890,7 +4579,7 @@ test('touch-pinch-zoom', () => {
       inherits: false
     }"
   `)
-  expect(run(['-touch-pinch-zoom'])).toEqual('')
+  expect(run(['-touch-pinch-zoom', 'touch-pinch-zoom/foo'])).toEqual('')
 })
 
 test('select', () => {
@@ -3915,7 +4604,18 @@ test('select', () => {
       user-select: text;
     }"
   `)
-  expect(run(['-select-none', '-select-text', '-select-all', '-select-auto'])).toEqual('')
+  expect(
+    run([
+      '-select-none',
+      '-select-text',
+      '-select-all',
+      '-select-auto',
+      'select-none/foo',
+      'select-text/foo',
+      'select-all/foo',
+      'select-auto/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('resize', () => {
@@ -3936,7 +4636,18 @@ test('resize', () => {
       resize: vertical;
     }"
   `)
-  expect(run(['-resize-none', '-resize-both', '-resize-x', '-resize-y'])).toEqual('')
+  expect(
+    run([
+      '-resize-none',
+      '-resize-both',
+      '-resize-x',
+      '-resize-y',
+      'resize-none/foo',
+      'resize-both/foo',
+      'resize-x/foo',
+      'resize-y/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-snap-type', () => {
@@ -3971,7 +4682,18 @@ test('scroll-snap-type', () => {
       initial-value: proximity;
     }"
   `)
-  expect(run(['-snap-none', '-snap-x', '-snap-y', '-snap-both'])).toEqual('')
+  expect(
+    run([
+      '-snap-none',
+      '-snap-x',
+      '-snap-y',
+      '-snap-both',
+      'snap-none/foo',
+      'snap-x/foo',
+      'snap-y/foo',
+      'snap-both/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('--tw-scroll-snap-strictness', () => {
@@ -3998,7 +4720,9 @@ test('--tw-scroll-snap-strictness', () => {
       initial-value: proximity;
     }"
   `)
-  expect(run(['-snap-mandatory', '-snap-proximity'])).toEqual('')
+  expect(
+    run(['-snap-mandatory', '-snap-proximity', 'snap-mandatory/foo', 'snap-proximity/foo']),
+  ).toEqual('')
 })
 
 test('scroll-snap-align', () => {
@@ -4019,7 +4743,18 @@ test('scroll-snap-align', () => {
       scroll-snap-align: start;
     }"
   `)
-  expect(run(['-snap-align-none', '-snap-start', '-snap-end', '-snap-center'])).toEqual('')
+  expect(
+    run([
+      '-snap-align-none',
+      '-snap-start',
+      '-snap-end',
+      '-snap-center',
+      'snap-align-none/foo',
+      'snap-start/foo',
+      'snap-end/foo',
+      'snap-center/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-snap-stop', () => {
@@ -4032,7 +4767,7 @@ test('scroll-snap-stop', () => {
       scroll-snap-stop: normal;
     }"
   `)
-  expect(run(['-snap-normal', '-snap-always'])).toEqual('')
+  expect(run(['-snap-normal', '-snap-always', 'snap-normal/foo', 'snap-always/foo'])).toEqual('')
 })
 
 test('scroll-m', () => {
@@ -4067,7 +4802,15 @@ test('scroll-m', () => {
       scroll-margin: 4px;
     }"
   `)
-  expect(run(['scroll-m'])).toEqual('')
+  expect(
+    run([
+      'scroll-m',
+      'scroll-m-4/foo',
+      'scroll-m-[4px]/foo',
+      '-scroll-m-4/foo',
+      '-scroll-m-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-mx', () => {
@@ -4106,7 +4849,15 @@ test('scroll-mx', () => {
       scroll-margin-right: 4px;
     }"
   `)
-  expect(run(['scroll-mx'])).toEqual('')
+  expect(
+    run([
+      'scroll-mx',
+      'scroll-mx-4/foo',
+      'scroll-mx-[4px]/foo',
+      '-scroll-mx-4/foo',
+      '-scroll-mx-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-my', () => {
@@ -4145,7 +4896,15 @@ test('scroll-my', () => {
       scroll-margin-bottom: 4px;
     }"
   `)
-  expect(run(['scroll-my'])).toEqual('')
+  expect(
+    run([
+      'scroll-my',
+      'scroll-my-4/foo',
+      'scroll-my-[4px]/foo',
+      '-scroll-my-4/foo',
+      '-scroll-my-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-ms', () => {
@@ -4180,7 +4939,15 @@ test('scroll-ms', () => {
       scroll-margin-inline-start: 4px;
     }"
   `)
-  expect(run(['scroll-ms'])).toEqual('')
+  expect(
+    run([
+      'scroll-ms',
+      'scroll-ms-4/foo',
+      'scroll-ms-[4px]/foo',
+      '-scroll-ms-4/foo',
+      '-scroll-ms-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-me', () => {
@@ -4215,7 +4982,15 @@ test('scroll-me', () => {
       scroll-margin-inline-end: 4px;
     }"
   `)
-  expect(run(['scroll-me'])).toEqual('')
+  expect(
+    run([
+      'scroll-me',
+      'scroll-me-4/foo',
+      'scroll-me-[4px]/foo',
+      '-scroll-me-4/foo',
+      '-scroll-me-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-mt', () => {
@@ -4250,7 +5025,15 @@ test('scroll-mt', () => {
       scroll-margin-top: 4px;
     }"
   `)
-  expect(run(['scroll-mt'])).toEqual('')
+  expect(
+    run([
+      'scroll-mt',
+      'scroll-mt-4/foo',
+      'scroll-mt-[4px]/foo',
+      '-scroll-mt-4/foo',
+      '-scroll-mt-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-mr', () => {
@@ -4285,7 +5068,15 @@ test('scroll-mr', () => {
       scroll-margin-right: 4px;
     }"
   `)
-  expect(run(['scroll-mr'])).toEqual('')
+  expect(
+    run([
+      'scroll-mr',
+      'scroll-mr-4/foo',
+      'scroll-mr-[4px]/foo',
+      '-scroll-mr-4/foo',
+      '-scroll-mr-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-mb', () => {
@@ -4320,7 +5111,15 @@ test('scroll-mb', () => {
       scroll-margin-bottom: 4px;
     }"
   `)
-  expect(run(['scroll-mb'])).toEqual('')
+  expect(
+    run([
+      'scroll-mb',
+      'scroll-mb-4/foo',
+      'scroll-mb-[4px]/foo',
+      '-scroll-mb-4/foo',
+      '-scroll-mb-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-ml', () => {
@@ -4355,7 +5154,15 @@ test('scroll-ml', () => {
       scroll-margin-left: 4px;
     }"
   `)
-  expect(run(['scroll-ml'])).toEqual('')
+  expect(
+    run([
+      'scroll-ml',
+      'scroll-ml-4/foo',
+      'scroll-ml-[4px]/foo',
+      '-scroll-ml-4/foo',
+      '-scroll-ml-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-p', () => {
@@ -4390,7 +5197,15 @@ test('scroll-p', () => {
       scroll-padding: 4px;
     }"
   `)
-  expect(run(['scroll-p'])).toEqual('')
+  expect(
+    run([
+      'scroll-p',
+      'scroll-p-4/foo',
+      'scroll-p-[4px]/foo',
+      '-scroll-p-4/foo',
+      '-scroll-p-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-px', () => {
@@ -4429,7 +5244,15 @@ test('scroll-px', () => {
       scroll-padding-right: 4px;
     }"
   `)
-  expect(run(['scroll-px'])).toEqual('')
+  expect(
+    run([
+      'scroll-px',
+      'scroll-px-4/foo',
+      'scroll-px-[4px]/foo',
+      '-scroll-px-4/foo',
+      '-scroll-px-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-py', () => {
@@ -4468,7 +5291,15 @@ test('scroll-py', () => {
       scroll-padding-bottom: 4px;
     }"
   `)
-  expect(run(['scroll-py'])).toEqual('')
+  expect(
+    run([
+      'scroll-py',
+      'scroll-py-4/foo',
+      'scroll-py-[4px]/foo',
+      '-scroll-py-4/foo',
+      '-scroll-py-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-ps', () => {
@@ -4503,7 +5334,15 @@ test('scroll-ps', () => {
       scroll-padding-inline-start: 4px;
     }"
   `)
-  expect(run(['scroll-ps'])).toEqual('')
+  expect(
+    run([
+      'scroll-ps',
+      'scroll-ps-4/foo',
+      'scroll-ps-[4px]/foo',
+      '-scroll-ps-4/foo',
+      '-scroll-ps-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-pe', () => {
@@ -4538,7 +5377,15 @@ test('scroll-pe', () => {
       scroll-padding-inline-end: 4px;
     }"
   `)
-  expect(run(['scroll-pe'])).toEqual('')
+  expect(
+    run([
+      'scroll-pe',
+      'scroll-pe-4/foo',
+      'scroll-pe-[4px]/foo',
+      '-scroll-pe-4/foo',
+      '-scroll-pe-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-pt', () => {
@@ -4573,7 +5420,15 @@ test('scroll-pt', () => {
       scroll-padding-top: 4px;
     }"
   `)
-  expect(run(['scroll-pt'])).toEqual('')
+  expect(
+    run([
+      'scroll-pt',
+      'scroll-pt-4/foo',
+      'scroll-pt-[4px]/foo',
+      '-scroll-pt-4/foo',
+      '-scroll-pt-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-pr', () => {
@@ -4608,7 +5463,15 @@ test('scroll-pr', () => {
       scroll-padding-right: 4px;
     }"
   `)
-  expect(run(['scroll-pr'])).toEqual('')
+  expect(
+    run([
+      'scroll-pr',
+      'scroll-pr-4/foo',
+      'scroll-pr-[4px]/foo',
+      '-scroll-pr-4/foo',
+      '-scroll-pr-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-pb', () => {
@@ -4643,7 +5506,15 @@ test('scroll-pb', () => {
       scroll-padding-bottom: 4px;
     }"
   `)
-  expect(run(['scroll-pb'])).toEqual('')
+  expect(
+    run([
+      'scroll-pb',
+      'scroll-pb-4/foo',
+      'scroll-pb-[4px]/foo',
+      '-scroll-pb-4/foo',
+      '-scroll-pb-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('scroll-pl', () => {
@@ -4678,7 +5549,15 @@ test('scroll-pl', () => {
       scroll-padding-left: 4px;
     }"
   `)
-  expect(run(['scroll-pl'])).toEqual('')
+  expect(
+    run([
+      'scroll-pl',
+      'scroll-pl-4/foo',
+      'scroll-pl-[4px]/foo',
+      '-scroll-pl-4/foo',
+      '-scroll-pl-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('list-style-position', () => {
@@ -4691,7 +5570,7 @@ test('list-style-position', () => {
       list-style-position: outside;
     }"
   `)
-  expect(run(['-list-inside', '-list-outside'])).toEqual('')
+  expect(run(['-list-inside', '-list-outside', 'list-inside/foo', 'list-outside/foo'])).toEqual('')
 })
 
 test('list', () => {
@@ -4712,7 +5591,18 @@ test('list', () => {
       list-style-type: none;
     }"
   `)
-  expect(run(['-list-none', '-list-disc', '-list-decimal', '-list-[--value]'])).toEqual('')
+  expect(
+    run([
+      '-list-none',
+      '-list-disc',
+      '-list-decimal',
+      '-list-[--value]',
+      'list-none/foo',
+      'list-disc/foo',
+      'list-decimal/foo',
+      'list-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('list-image', () => {
@@ -4725,7 +5615,15 @@ test('list-image', () => {
       list-style-image: none;
     }"
   `)
-  expect(run(['list-image', '-list-image-none', '-list-image-[--value]'])).toEqual('')
+  expect(
+    run([
+      'list-image',
+      '-list-image-none',
+      '-list-image-[--value]',
+      'list-image-none/foo',
+      'list-image-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('appearance', () => {
@@ -4738,7 +5636,15 @@ test('appearance', () => {
       appearance: none;
     }"
   `)
-  expect(run(['appearance', '-appearance-none', '-appearance-auto'])).toEqual('')
+  expect(
+    run([
+      'appearance',
+      '-appearance-none',
+      '-appearance-auto',
+      'appearance-none/foo',
+      'appearance-auto/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('columns', () => {
@@ -4796,7 +5702,20 @@ test('columns', () => {
     }"
   `)
   expect(
-    run(['columns', '-columns-4', '-columns-[123]', '-columns-[--value]', 'columns-unknown']),
+    run([
+      'columns',
+      '-columns-4',
+      '-columns-[123]',
+      '-columns-[--value]',
+      'columns-unknown',
+      'columns-auto/foo',
+      'columns-3xs/foo',
+      'columns-7xl/foo',
+      'columns-4/foo',
+      'columns-99/foo',
+      'columns-[123]/foo',
+      'columns-[--value]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -4856,6 +5775,14 @@ test('break-before', () => {
       '-break-before-left',
       '-break-before-right',
       '-break-before-column',
+      'break-before-auto/foo',
+      'break-before-avoid/foo',
+      'break-before-all/foo',
+      'break-before-avoid-page/foo',
+      'break-before-page/foo',
+      'break-before-left/foo',
+      'break-before-right/foo',
+      'break-before-column/foo',
     ]),
   ).toEqual('')
 })
@@ -4892,6 +5819,10 @@ test('break-inside', () => {
       '-break-inside-avoid',
       '-break-inside-avoid-page',
       '-break-inside-avoid-column',
+      'break-inside-auto/foo',
+      'break-inside-avoid/foo',
+      'break-inside-avoid-page/foo',
+      'break-inside-avoid-column/foo',
     ]),
   ).toEqual('')
 })
@@ -4952,6 +5883,14 @@ test('break-after', () => {
       '-break-after-left',
       '-break-after-right',
       '-break-after-column',
+      'break-after-auto/foo',
+      'break-after-avoid/foo',
+      'break-after-all/foo',
+      'break-after-avoid-page/foo',
+      'break-after-page/foo',
+      'break-after-left/foo',
+      'break-after-right/foo',
+      'break-after-column/foo',
     ]),
   ).toEqual('')
 })
@@ -4980,7 +5919,18 @@ test('auto-cols', () => {
       grid-auto-columns: min-content;
     }"
   `)
-  expect(run(['auto-cols', '-auto-cols-auto', '-auto-cols-[2fr]'])).toEqual('')
+  expect(
+    run([
+      'auto-cols',
+      '-auto-cols-auto',
+      '-auto-cols-[2fr]',
+      'auto-cols-auto/foo',
+      'auto-cols-min/foo',
+      'auto-cols-max/foo',
+      'auto-cols-fr/foo',
+      'auto-cols-[2fr]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('grid-flow', () => {
@@ -5021,6 +5971,11 @@ test('grid-flow', () => {
       '-grid-flow-dense',
       '-grid-flow-row-dense',
       '-grid-flow-col-dense',
+      'grid-flow-row/foo',
+      'grid-flow-col/foo',
+      'grid-flow-dense/foo',
+      'grid-flow-row-dense/foo',
+      'grid-flow-col-dense/foo',
     ]),
   ).toEqual('')
 })
@@ -5049,7 +6004,18 @@ test('auto-rows', () => {
       grid-auto-rows: min-content;
     }"
   `)
-  expect(run(['auto-rows', '-auto-rows-auto', '-auto-rows-[2fr]'])).toEqual('')
+  expect(
+    run([
+      'auto-rows',
+      '-auto-rows-auto',
+      '-auto-rows-[2fr]',
+      'auto-rows-auto/foo',
+      'auto-rows-min/foo',
+      'auto-rows-max/foo',
+      'auto-rows-fr/foo',
+      'auto-rows-[2fr]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('grid-cols', () => {
@@ -5084,6 +6050,11 @@ test('grid-cols', () => {
       '-grid-cols-12',
       '-grid-cols-[123]',
       'grid-cols-unknown',
+      'grid-cols-none/foo',
+      'grid-cols-subgrid/foo',
+      'grid-cols-12/foo',
+      'grid-cols-99/foo',
+      'grid-cols-[123]/foo',
     ]),
   ).toEqual('')
 })
@@ -5120,6 +6091,11 @@ test('grid-rows', () => {
       '-grid-rows-12',
       '-grid-rows-[123]',
       'grid-rows-unknown',
+      'grid-rows-none/foo',
+      'grid-rows-subgrid/foo',
+      'grid-rows-12/foo',
+      'grid-rows-99/foo',
+      'grid-rows-[123]/foo',
     ]),
   ).toEqual('')
 })
@@ -5143,7 +6119,18 @@ test('flex-direction', () => {
       flex-direction: row-reverse;
     }"
   `)
-  expect(run(['-flex-row', '-flex-row-reverse', '-flex-col', '-flex-col-reverse'])).toEqual('')
+  expect(
+    run([
+      '-flex-row',
+      '-flex-row-reverse',
+      '-flex-col',
+      '-flex-col-reverse',
+      'flex-row/foo',
+      'flex-row-reverse/foo',
+      'flex-col/foo',
+      'flex-col-reverse/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('flex-wrap', () => {
@@ -5160,7 +6147,16 @@ test('flex-wrap', () => {
       flex-wrap: wrap-reverse;
     }"
   `)
-  expect(run(['-flex-wrap', '-flex-wrap-reverse', '-flex-nowrap'])).toEqual('')
+  expect(
+    run([
+      '-flex-wrap',
+      '-flex-wrap-reverse',
+      '-flex-nowrap',
+      'flex-wrap/foo',
+      'flex-wrap-reverse/foo',
+      'flex-nowrap/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('place-content', () => {
@@ -5219,6 +6215,14 @@ test('place-content', () => {
       '-place-content-evenly',
       '-place-content-baseline',
       '-place-content-stretch',
+      'place-content-center/foo',
+      'place-content-start/foo',
+      'place-content-end/foo',
+      'place-content-between/foo',
+      'place-content-around/foo',
+      'place-content-evenly/foo',
+      'place-content-baseline/foo',
+      'place-content-stretch/foo',
     ]),
   ).toEqual('')
 })
@@ -5261,6 +6265,11 @@ test('place-items', () => {
       '-place-items-center',
       '-place-items-baseline',
       '-place-items-stretch',
+      'place-items-start/foo',
+      'place-items-end/foo',
+      'place-items-center/foo',
+      'place-items-baseline/foo',
+      'place-items-stretch/foo',
     ]),
   ).toEqual('')
 })
@@ -5327,6 +6336,15 @@ test('align-content', () => {
       '-content-evenly',
       '-content-baseline',
       '-content-stretch',
+      'content-normal/foo',
+      'content-center/foo',
+      'content-start/foo',
+      'content-end/foo',
+      'content-between/foo',
+      'content-around/foo',
+      'content-evenly/foo',
+      'content-baseline/foo',
+      'content-stretch/foo',
     ]),
   ).toEqual('')
 })
@@ -5362,6 +6380,11 @@ test('items', () => {
       '-items-center',
       '-items-baseline',
       '-items-stretch',
+      'items-start/foo',
+      'items-end/foo',
+      'items-center/foo',
+      'items-baseline/foo',
+      'items-stretch/foo',
     ]),
   ).toEqual('')
 })
@@ -5422,6 +6445,14 @@ test('justify', () => {
       '-justify-around',
       '-justify-evenly',
       '-justify-stretch',
+      'justify-normal/foo',
+      'justify-start/foo',
+      'justify-end/foo',
+      'justify-center/foo',
+      'justify-between/foo',
+      'justify-around/foo',
+      'justify-evenly/foo',
+      'justify-stretch/foo',
     ]),
   ).toEqual('')
 })
@@ -5458,6 +6489,10 @@ test('justify-items', () => {
       '-justify-items-end',
       '-justify-items-center',
       '-justify-items-stretch',
+      'justify-items-start/foo',
+      'justify-items-end/foo',
+      'justify-items-center/foo',
+      'justify-items-stretch/foo',
     ]),
   ).toEqual('')
 })
@@ -5486,7 +6521,7 @@ test('gap', () => {
       gap: 4px;
     }"
   `)
-  expect(run(['gap', '-gap-4', '-gap-[4px]'])).toEqual('')
+  expect(run(['gap', '-gap-4', '-gap-[4px]', 'gap-4/foo', 'gap-[4px]/foo'])).toEqual('')
 })
 
 test('gap-x', () => {
@@ -5513,7 +6548,7 @@ test('gap-x', () => {
       column-gap: 4px;
     }"
   `)
-  expect(run(['gap-x', '-gap-x-4', '-gap-x-[4px]'])).toEqual('')
+  expect(run(['gap-x', '-gap-x-4', '-gap-x-[4px]', 'gap-x-4/foo', 'gap-x-[4px]/foo'])).toEqual('')
 })
 
 test('gap-y', () => {
@@ -5540,7 +6575,7 @@ test('gap-y', () => {
       row-gap: 4px;
     }"
   `)
-  expect(run(['gap-y', '-gap-y-4', '-gap-y-[4px]'])).toEqual('')
+  expect(run(['gap-y', '-gap-y-4', '-gap-y-[4px]', 'gap-y-4/foo', 'gap-y-[4px]/foo'])).toEqual('')
 })
 
 test('space-x', () => {
@@ -5588,7 +6623,7 @@ test('space-x', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['space-x'])).toEqual('')
+  expect(run(['space-x', 'space-x-4/foo', 'space-x-[4px]/foo', '-space-x-4/foo'])).toEqual('')
 })
 
 test('space-y', () => {
@@ -5636,7 +6671,7 @@ test('space-y', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['space-y'])).toEqual('')
+  expect(run(['space-y', 'space-y-4/foo', 'space-y-[4px]/foo', '-space-y-4/foo'])).toEqual('')
 })
 
 test('space-x-reverse', () => {
@@ -5659,7 +6694,7 @@ test('space-x-reverse', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-space-x-reverse'])).toEqual('')
+  expect(run(['-space-x-reverse', 'space-x-reverse/foo'])).toEqual('')
 })
 
 test('space-y-reverse', () => {
@@ -5682,7 +6717,7 @@ test('space-y-reverse', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-space-y-reverse'])).toEqual('')
+  expect(run(['-space-y-reverse', 'space-y-reverse/foo'])).toEqual('')
 })
 
 test('divide-x', () => {
@@ -5739,7 +6774,18 @@ test('divide-x', () => {
       initial-value: solid;
     }"
   `)
-  expect(run(['-divide-x', '-divide-x-4', '-divide-x-123', 'divide-x-unknown'])).toEqual('')
+  expect(
+    run([
+      '-divide-x',
+      '-divide-x-4',
+      '-divide-x-123',
+      'divide-x-unknown',
+      'divide-x/foo',
+      'divide-x-4/foo',
+      'divide-x-123/foo',
+      'divide-x-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('divide-x with custom default border width', () => {
@@ -5785,6 +6831,7 @@ test('divide-x with custom default border width', () => {
       initial-value: solid;
     }"
   `)
+  expect(run(['divide-x/foo'])).toEqual('')
 })
 
 test('divide-y', () => {
@@ -5845,7 +6892,18 @@ test('divide-y', () => {
       initial-value: solid;
     }"
   `)
-  expect(run(['-divide-y', '-divide-y-4', '-divide-y-123', 'divide-y-unknown'])).toEqual('')
+  expect(
+    run([
+      '-divide-y',
+      '-divide-y-4',
+      '-divide-y-123',
+      'divide-y-unknown',
+      'divide-y/foo',
+      'divide-y-4/foo',
+      'divide-y-123/foo',
+      'divide-y-[4px]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('divide-y with custom default border width', () => {
@@ -5892,6 +6950,7 @@ test('divide-y with custom default border width', () => {
       initial-value: solid;
     }"
   `)
+  expect(run(['divide-y/foo'])).toEqual('')
 })
 
 test('divide-x-reverse', () => {
@@ -5914,7 +6973,7 @@ test('divide-x-reverse', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-divide-x-reverse'])).toEqual('')
+  expect(run(['-divide-x-reverse', 'divide-x-reverse/foo'])).toEqual('')
 })
 
 test('divide-y-reverse', () => {
@@ -5937,7 +6996,7 @@ test('divide-y-reverse', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-divide-y-reverse'])).toEqual('')
+  expect(run(['-divide-y-reverse', 'divide-y-reverse/foo'])).toEqual('')
 })
 
 test('divide-style', () => {
@@ -5976,6 +7035,11 @@ test('divide-style', () => {
       '-divide-dotted',
       '-divide-double',
       '-divide-none',
+      'divide-solid/foo',
+      'divide-dashed/foo',
+      'divide-dotted/foo',
+      'divide-double/foo',
+      'divide-none/foo',
     ]),
   ).toEqual('')
 })
@@ -6060,6 +7124,20 @@ test('accent', () => {
       '-accent-[#0088cc]/50',
       '-accent-[#0088cc]/[0.5]',
       '-accent-[#0088cc]/[50%]',
+      'accent-red-500/foo',
+      'accent-red-500/50/foo',
+      'accent-red-500/[0.5]/foo',
+      'accent-red-500/[50%]/foo',
+      'accent-current/foo',
+      'accent-current/50/foo',
+      'accent-current/[0.5]/foo',
+      'accent-current/[50%]/foo',
+      'accent-inherit/foo',
+      'accent-transparent/foo',
+      'accent-[#0088cc]/foo',
+      'accent-[#0088cc]/50/foo',
+      'accent-[#0088cc]/[0.5]/foo',
+      'accent-[#0088cc]/[50%]/foo',
     ]),
   ).toEqual('')
 })
@@ -6144,6 +7222,20 @@ test('caret', () => {
       '-caret-[#0088cc]/50',
       '-caret-[#0088cc]/[0.5]',
       '-caret-[#0088cc]/[50%]',
+      'caret-red-500/foo',
+      'caret-red-500/50/foo',
+      'caret-red-500/[0.5]/foo',
+      'caret-red-500/[50%]/foo',
+      'caret-current/foo',
+      'caret-current/50/foo',
+      'caret-current/[0.5]/foo',
+      'caret-current/[50%]/foo',
+      'caret-inherit/foo',
+      'caret-transparent/foo',
+      'caret-[#0088cc]/foo',
+      'caret-[#0088cc]/50/foo',
+      'caret-[#0088cc]/[0.5]/foo',
+      'caret-[#0088cc]/[50%]/foo',
     ]),
   ).toEqual('')
 })
@@ -6252,6 +7344,20 @@ test('divide-color', () => {
       '-divide-[#0088cc]/50',
       '-divide-[#0088cc]/[0.5]',
       '-divide-[#0088cc]/[50%]',
+      'divide-red-500/foo',
+      'divide-red-500/50/foo',
+      'divide-red-500/[0.5]/foo',
+      'divide-red-500/[50%]/foo',
+      'divide-current/foo',
+      'divide-current/50/foo',
+      'divide-current/[0.5]/foo',
+      'divide-current/[50%]/foo',
+      'divide-inherit/foo',
+      'divide-transparent/foo',
+      'divide-[#0088cc]/foo',
+      'divide-[#0088cc]/50/foo',
+      'divide-[#0088cc]/[0.5]/foo',
+      'divide-[#0088cc]/[50%]/foo',
     ]),
   ).toEqual('')
 })
@@ -6294,6 +7400,11 @@ test('place-self', () => {
       '-place-self-end',
       '-place-self-center',
       '-place-self-stretch',
+      'place-self-auto/foo',
+      'place-self-start/foo',
+      'place-self-end/foo',
+      'place-self-center/foo',
+      'place-self-stretch/foo',
     ]),
   ).toEqual('')
 })
@@ -6335,6 +7446,12 @@ test('self', () => {
       '-self-center',
       '-self-stretch',
       '-self-baseline',
+      'self-auto/foo',
+      'self-start/foo',
+      'self-end/foo',
+      'self-center/foo',
+      'self-stretch/foo',
+      'self-baseline/foo',
     ]),
   ).toEqual('')
 })
@@ -6379,6 +7496,12 @@ test('justify-self', () => {
       '-justify-self-center',
       '-justify-self-stretch',
       '-justify-self-baseline',
+      'justify-self-auto/foo',
+      'justify-self-start/foo',
+      'justify-self-end/foo',
+      'justify-self-center/foo',
+      'justify-self-stretch/foo',
+      'justify-self-baseline/foo',
     ]),
   ).toEqual('')
 })
@@ -6421,6 +7544,11 @@ test('overflow', () => {
       '-overflow-clip',
       '-overflow-visible',
       '-overflow-scroll',
+      'overflow-auto/foo',
+      'overflow-hidden/foo',
+      'overflow-clip/foo',
+      'overflow-visible/foo',
+      'overflow-scroll/foo',
     ]),
   ).toEqual('')
 })
@@ -6463,6 +7591,11 @@ test('overflow-x', () => {
       '-overflow-x-clip',
       '-overflow-x-visible',
       '-overflow-x-scroll',
+      'overflow-x-auto/foo',
+      'overflow-x-hidden/foo',
+      'overflow-x-clip/foo',
+      'overflow-x-visible/foo',
+      'overflow-x-scroll/foo',
     ]),
   ).toEqual('')
 })
@@ -6505,6 +7638,11 @@ test('overflow-y', () => {
       '-overflow-y-clip',
       '-overflow-y-visible',
       '-overflow-y-scroll',
+      'overflow-y-auto/foo',
+      'overflow-y-hidden/foo',
+      'overflow-y-clip/foo',
+      'overflow-y-visible/foo',
+      'overflow-y-scroll/foo',
     ]),
   ).toEqual('')
 })
@@ -6524,7 +7662,15 @@ test('overscroll', () => {
     }"
   `)
   expect(
-    run(['overscroll', '-overscroll-auto', '-overscroll-contain', '-overscroll-none']),
+    run([
+      'overscroll',
+      '-overscroll-auto',
+      '-overscroll-contain',
+      '-overscroll-none',
+      'overscroll-auto/foo',
+      'overscroll-contain/foo',
+      'overscroll-none/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -6544,7 +7690,15 @@ test('overscroll-x', () => {
     }"
   `)
   expect(
-    run(['overscroll-x', '-overscroll-x-auto', '-overscroll-x-contain', '-overscroll-x-none']),
+    run([
+      'overscroll-x',
+      '-overscroll-x-auto',
+      '-overscroll-x-contain',
+      '-overscroll-x-none',
+      'overscroll-x-auto/foo',
+      'overscroll-x-contain/foo',
+      'overscroll-x-none/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -6564,7 +7718,15 @@ test('overscroll-y', () => {
     }"
   `)
   expect(
-    run(['overscroll-y', '-overscroll-y-auto', '-overscroll-y-contain', '-overscroll-y-none']),
+    run([
+      'overscroll-y',
+      '-overscroll-y-auto',
+      '-overscroll-y-contain',
+      '-overscroll-y-none',
+      'overscroll-y-auto/foo',
+      'overscroll-y-contain/foo',
+      'overscroll-y-none/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -6578,7 +7740,9 @@ test('scroll-behavior', () => {
       scroll-behavior: smooth;
     }"
   `)
-  expect(run(['scroll', '-scroll-auto', '-scroll-smooth'])).toEqual('')
+  expect(
+    run(['scroll', '-scroll-auto', '-scroll-smooth', 'scroll-auto/foo', 'scroll-smooth/foo']),
+  ).toEqual('')
 })
 
 test('truncate', () => {
@@ -6589,7 +7753,7 @@ test('truncate', () => {
       overflow: hidden;
     }"
   `)
-  expect(run(['-truncate'])).toEqual('')
+  expect(run(['-truncate', 'truncate/foo'])).toEqual('')
 })
 
 test('text-overflow', () => {
@@ -6602,7 +7766,7 @@ test('text-overflow', () => {
       text-overflow: ellipsis;
     }"
   `)
-  expect(run(['-text-ellipsis', '-text-clip'])).toEqual('')
+  expect(run(['-text-ellipsis', '-text-clip', 'text-ellipsis/foo', 'text-clip/foo'])).toEqual('')
 })
 
 test('hyphens', () => {
@@ -6622,7 +7786,17 @@ test('hyphens', () => {
       hyphens: none;
     }"
   `)
-  expect(run(['hyphens', '-hyphens-none', '-hyphens-manual', '-hyphens-auto'])).toEqual('')
+  expect(
+    run([
+      'hyphens',
+      '-hyphens-none',
+      '-hyphens-manual',
+      '-hyphens-auto',
+      'hyphens-none/foo',
+      'hyphens-manual/foo',
+      'hyphens-auto/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('whitespace', () => {
@@ -6669,6 +7843,12 @@ test('whitespace', () => {
       '-whitespace-pre-line',
       '-whitespace-pre-wrap',
       '-whitespace-break-spaces',
+      'whitespace-normal/foo',
+      'whitespace-nowrap/foo',
+      'whitespace-pre/foo',
+      'whitespace-pre-line/foo',
+      'whitespace-pre-wrap/foo',
+      'whitespace-break-spaces/foo',
     ]),
   ).toEqual('')
 })
@@ -6691,7 +7871,18 @@ test('text-wrap', () => {
       text-wrap: wrap;
     }"
   `)
-  expect(run(['-text-wrap', '-text-nowrap', '-text-balance', '-text-pretty'])).toEqual('')
+  expect(
+    run([
+      '-text-wrap',
+      '-text-nowrap',
+      '-text-balance',
+      '-text-pretty',
+      'text-wrap/foo',
+      'text-nowrap/foo',
+      'text-balance/foo',
+      'text-pretty/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('overflow-wrap', () => {
@@ -6713,7 +7904,18 @@ test('overflow-wrap', () => {
       word-break: break-keep;
     }"
   `)
-  expect(run(['-break-normal', '-break-words', '-break-all', '-break-keep'])).toEqual('')
+  expect(
+    run([
+      '-break-normal',
+      '-break-words',
+      '-break-all',
+      '-break-keep',
+      'break-normal/foo',
+      'break-words/foo',
+      'break-all/foo',
+      'break-keep/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('rounded', () => {
@@ -6755,7 +7957,18 @@ test('rounded', () => {
     }"
   `)
   expect(
-    run(['-rounded', '-rounded-full', '-rounded-none', '-rounded-sm', '-rounded-[4px]']),
+    run([
+      '-rounded',
+      '-rounded-full',
+      '-rounded-none',
+      '-rounded-sm',
+      '-rounded-[4px]',
+      'rounded/foo',
+      'rounded-full/foo',
+      'rounded-none/foo',
+      'rounded-sm/foo',
+      'rounded-[4px]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -6807,7 +8020,18 @@ test('rounded-s', () => {
     }"
   `)
   expect(
-    run(['-rounded-s', '-rounded-s-full', '-rounded-s-none', '-rounded-s-sm', '-rounded-s-[4px]']),
+    run([
+      '-rounded-s',
+      '-rounded-s-full',
+      '-rounded-s-none',
+      '-rounded-s-sm',
+      '-rounded-s-[4px]',
+      'rounded-s/foo',
+      'rounded-s-full/foo',
+      'rounded-s-none/foo',
+      'rounded-s-sm/foo',
+      'rounded-s-[4px]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -6859,7 +8083,18 @@ test('rounded-e', () => {
     }"
   `)
   expect(
-    run(['-rounded-e', '-rounded-e-full', '-rounded-e-none', '-rounded-e-sm', '-rounded-e-[4px]']),
+    run([
+      '-rounded-e',
+      '-rounded-e-full',
+      '-rounded-e-none',
+      '-rounded-e-sm',
+      '-rounded-e-[4px]',
+      'rounded-e/foo',
+      'rounded-e-full/foo',
+      'rounded-e-none/foo',
+      'rounded-e-sm/foo',
+      'rounded-e-[4px]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -6911,7 +8146,18 @@ test('rounded-t', () => {
     }"
   `)
   expect(
-    run(['-rounded-t', '-rounded-t-full', '-rounded-t-none', '-rounded-t-sm', '-rounded-t-[4px]']),
+    run([
+      '-rounded-t',
+      '-rounded-t-full',
+      '-rounded-t-none',
+      '-rounded-t-sm',
+      '-rounded-t-[4px]',
+      'rounded-t/foo',
+      'rounded-t-full/foo',
+      'rounded-t-none/foo',
+      'rounded-t-sm/foo',
+      'rounded-t-[4px]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -6963,7 +8209,18 @@ test('rounded-r', () => {
     }"
   `)
   expect(
-    run(['-rounded-r', '-rounded-r-full', '-rounded-r-none', '-rounded-r-sm', '-rounded-r-[4px]']),
+    run([
+      '-rounded-r',
+      '-rounded-r-full',
+      '-rounded-r-none',
+      '-rounded-r-sm',
+      '-rounded-r-[4px]',
+      'rounded-r/foo',
+      'rounded-r-full/foo',
+      'rounded-r-none/foo',
+      'rounded-r-sm/foo',
+      'rounded-r-[4px]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -7015,7 +8272,18 @@ test('rounded-b', () => {
     }"
   `)
   expect(
-    run(['-rounded-b', '-rounded-b-full', '-rounded-b-none', '-rounded-b-sm', '-rounded-b-[4px]']),
+    run([
+      '-rounded-b',
+      '-rounded-b-full',
+      '-rounded-b-none',
+      '-rounded-b-sm',
+      '-rounded-b-[4px]',
+      'rounded-b/foo',
+      'rounded-b-full/foo',
+      'rounded-b-none/foo',
+      'rounded-b-sm/foo',
+      'rounded-b-[4px]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -7067,7 +8335,18 @@ test('rounded-l', () => {
     }"
   `)
   expect(
-    run(['-rounded-l', '-rounded-l-full', '-rounded-l-none', '-rounded-l-sm', '-rounded-l-[4px]']),
+    run([
+      '-rounded-l',
+      '-rounded-l-full',
+      '-rounded-l-none',
+      '-rounded-l-sm',
+      '-rounded-l-[4px]',
+      'rounded-l/foo',
+      'rounded-l-full/foo',
+      'rounded-l-none/foo',
+      'rounded-l-sm/foo',
+      'rounded-l-[4px]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -7120,6 +8399,11 @@ test('rounded-ss', () => {
       '-rounded-ss-none',
       '-rounded-ss-sm',
       '-rounded-ss-[4px]',
+      'rounded-ss/foo',
+      'rounded-ss-full/foo',
+      'rounded-ss-none/foo',
+      'rounded-ss-sm/foo',
+      'rounded-ss-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -7173,6 +8457,11 @@ test('rounded-se', () => {
       '-rounded-se-none',
       '-rounded-se-sm',
       '-rounded-se-[4px]',
+      'rounded-se/foo',
+      'rounded-se-full/foo',
+      'rounded-se-none/foo',
+      'rounded-se-sm/foo',
+      'rounded-se-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -7226,6 +8515,11 @@ test('rounded-ee', () => {
       '-rounded-ee-none',
       '-rounded-ee-sm',
       '-rounded-ee-[4px]',
+      'rounded-ee/foo',
+      'rounded-ee-full/foo',
+      'rounded-ee-none/foo',
+      'rounded-ee-sm/foo',
+      'rounded-ee-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -7279,6 +8573,11 @@ test('rounded-es', () => {
       '-rounded-es-none',
       '-rounded-es-sm',
       '-rounded-es-[4px]',
+      'rounded-es/foo',
+      'rounded-es-full/foo',
+      'rounded-es-none/foo',
+      'rounded-es-sm/foo',
+      'rounded-es-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -7332,6 +8631,11 @@ test('rounded-tl', () => {
       '-rounded-tl-none',
       '-rounded-tl-sm',
       '-rounded-tl-[4px]',
+      'rounded-tl/foo',
+      'rounded-tl-full/foo',
+      'rounded-tl-none/foo',
+      'rounded-tl-sm/foo',
+      'rounded-tl-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -7385,6 +8689,11 @@ test('rounded-tr', () => {
       '-rounded-tr-none',
       '-rounded-tr-sm',
       '-rounded-tr-[4px]',
+      'rounded-tr/foo',
+      'rounded-tr-full/foo',
+      'rounded-tr-none/foo',
+      'rounded-tr-sm/foo',
+      'rounded-tr-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -7438,6 +8747,11 @@ test('rounded-br', () => {
       '-rounded-br-none',
       '-rounded-br-sm',
       '-rounded-br-[4px]',
+      'rounded-br/foo',
+      'rounded-br-full/foo',
+      'rounded-br-none/foo',
+      'rounded-br-sm/foo',
+      'rounded-br-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -7491,6 +8805,11 @@ test('rounded-bl', () => {
       '-rounded-bl-none',
       '-rounded-bl-sm',
       '-rounded-bl-[4px]',
+      'rounded-bl/foo',
+      'rounded-bl-full/foo',
+      'rounded-bl-none/foo',
+      'rounded-bl-sm/foo',
+      'rounded-bl-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -7544,6 +8863,12 @@ test('border-style', () => {
       '-border-double',
       '-border-hidden',
       '-border-none',
+      'border-solid/foo',
+      'border-dashed/foo',
+      'border-dotted/foo',
+      'border-double/foo',
+      'border-hidden/foo',
+      'border-none/foo',
     ]),
   ).toEqual('')
 })
@@ -7614,6 +8939,21 @@ for (let prefix of prefixes) {
 
     // No border utilities can ever be negative
     expect(run(classes.map((cls) => `-${cls}`))).toEqual('')
+    expect(
+      run([
+        `${prefix}/foo`,
+        `${prefix}-0/foo`,
+        `${prefix}-2/foo`,
+        `${prefix}-4/foo`,
+        `${prefix}-123/foo`,
+        `${prefix}-[thin]/foo`,
+        `${prefix}-[medium]/foo`,
+        `${prefix}-[thick]/foo`,
+        `${prefix}-[12px]/foo`,
+        `${prefix}-[length:--my-width]/foo`,
+        `${prefix}-[line-width:--my-width]/foo`,
+      ]),
+    ).toEqual('')
   })
 }
 
@@ -7652,6 +8992,7 @@ test('border with custom default border width', () => {
       initial-value: solid;
     }"
   `)
+  expect(run(['-border', 'border/foo'])).toEqual('')
 })
 
 test('bg', () => {
@@ -8079,6 +9420,62 @@ test('bg', () => {
       '-bg-repeat-y',
       '-bg-round',
       '-bg-space',
+
+      'bg-none/foo',
+      'bg-gradient-to-t/foo',
+      'bg-gradient-to-tr/foo',
+      'bg-gradient-to-r/foo',
+      'bg-gradient-to-br/foo',
+      'bg-gradient-to-b/foo',
+      'bg-gradient-to-bl/foo',
+      'bg-gradient-to-l/foo',
+      'bg-gradient-to-tl/foo',
+      'bg-linear-to-t/foo',
+      'bg-linear-to-tr/foo',
+      'bg-linear-to-r/foo',
+      'bg-linear-to-br/foo',
+      'bg-linear-to-b/foo',
+      'bg-linear-to-bl/foo',
+      'bg-linear-to-l/foo',
+      'bg-linear-to-tl/foo',
+      'bg-[url(/image.png)]/foo',
+      'bg-[url:--my-url]/foo',
+      'bg-[linear-gradient(to_bottom,red,blue)]/foo',
+      'bg-[image:--my-gradient]/foo',
+      'bg-linear-[125deg]/foo',
+      'bg-linear-[1.3rad]/foo',
+      'bg-linear-[to_bottom]/foo',
+      '-bg-linear-[125deg]/foo',
+      '-bg-linear-[1.3rad]/foo',
+      'bg-auto/foo',
+      'bg-cover/foo',
+      'bg-contain/foo',
+      'bg-[cover]/foo',
+      'bg-[contain]/foo',
+      'bg-[size:120px_120px]/foo',
+      'bg-fixed/foo',
+      'bg-local/foo',
+      'bg-scroll/foo',
+      'bg-center/foo',
+      'bg-top/foo',
+      'bg-right-top/foo',
+      'bg-right-bottom/foo',
+      'bg-bottom/foo',
+      'bg-left-bottom/foo',
+      'bg-left/foo',
+      'bg-left-top/foo',
+      'bg-[50%]/foo',
+      'bg-[120px]/foo',
+      'bg-[120px_120px]/foo',
+      'bg-[length:120px_120px]/foo',
+      'bg-[position:120px_120px]/foo',
+      'bg-[size:120px_120px]/foo',
+      'bg-repeat/foo',
+      'bg-no-repeat/foo',
+      'bg-repeat-x/foo',
+      'bg-repeat-y/foo',
+      'bg-round/foo',
+      'bg-space/foo',
     ]),
   ).toEqual('')
 
@@ -8808,9 +10205,16 @@ test('box-decoration', () => {
       box-decoration-break: slice;
     }"
   `)
-  expect(run(['box', 'box-decoration', '-box-decoration-slice', '-box-decoration-clone'])).toEqual(
-    '',
-  )
+  expect(
+    run([
+      'box',
+      'box-decoration',
+      '-box-decoration-slice',
+      '-box-decoration-clone',
+      'box-decoration-slice/foo',
+      'box-decoration-clone/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('bg-clip', () => {
@@ -8833,7 +10237,17 @@ test('bg-clip', () => {
     }"
   `)
   expect(
-    run(['bg-clip', '-bg-clip-border', '-bg-clip-padding', '-bg-clip-content', '-bg-clip-text']),
+    run([
+      'bg-clip',
+      '-bg-clip-border',
+      '-bg-clip-padding',
+      '-bg-clip-content',
+      '-bg-clip-text',
+      'bg-clip-border/foo',
+      'bg-clip-padding/foo',
+      'bg-clip-content/foo',
+      'bg-clip-text/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -8853,7 +10267,15 @@ test('bg-origin', () => {
     }"
   `)
   expect(
-    run(['bg-origin', '-bg-origin-border', '-bg-origin-padding', '-bg-origin-content']),
+    run([
+      'bg-origin',
+      '-bg-origin-border',
+      '-bg-origin-padding',
+      '-bg-origin-content',
+      'bg-origin-border/foo',
+      'bg-origin-padding/foo',
+      'bg-origin-content/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -8961,6 +10383,22 @@ test('bg-blend', () => {
       '-bg-blend-saturation',
       '-bg-blend-color',
       '-bg-blend-luminosity',
+      'bg-blend-normal/foo',
+      'bg-blend-multiply/foo',
+      'bg-blend-screen/foo',
+      'bg-blend-overlay/foo',
+      'bg-blend-darken/foo',
+      'bg-blend-lighten/foo',
+      'bg-blend-color-dodge/foo',
+      'bg-blend-color-burn/foo',
+      'bg-blend-hard-light/foo',
+      'bg-blend-soft-light/foo',
+      'bg-blend-difference/foo',
+      'bg-blend-exclusion/foo',
+      'bg-blend-hue/foo',
+      'bg-blend-saturation/foo',
+      'bg-blend-color/foo',
+      'bg-blend-luminosity/foo',
     ]),
   ).toEqual('')
 })
@@ -9080,6 +10518,24 @@ test('mix-blend', () => {
       '-mix-blend-color',
       '-mix-blend-luminosity',
       '-mix-blend-plus-lighter',
+      'mix-blend-normal/foo',
+      'mix-blend-multiply/foo',
+      'mix-blend-screen/foo',
+      'mix-blend-overlay/foo',
+      'mix-blend-darken/foo',
+      'mix-blend-lighten/foo',
+      'mix-blend-color-dodge/foo',
+      'mix-blend-color-burn/foo',
+      'mix-blend-hard-light/foo',
+      'mix-blend-soft-light/foo',
+      'mix-blend-difference/foo',
+      'mix-blend-exclusion/foo',
+      'mix-blend-hue/foo',
+      'mix-blend-saturation/foo',
+      'mix-blend-color/foo',
+      'mix-blend-luminosity/foo',
+      'mix-blend-plus-darker/foo',
+      'mix-blend-plus-lighter/foo',
     ]),
   ).toEqual('')
 })
@@ -9424,6 +10880,22 @@ test('object', () => {
       // object-position
       '-object-[--value]',
       '-object-bottom',
+
+      'object-contain/foo',
+      'object-cover/foo',
+      'object-fill/foo',
+      'object-none/foo',
+      'object-scale-down/foo',
+      'object-[--value]/foo',
+      'object-bottom/foo',
+      'object-center/foo',
+      'object-left/foo',
+      'object-left-bottom/foo',
+      'object-left-top/foo',
+      'object-right/foo',
+      'object-right-bottom/foo',
+      'object-right-top/foo',
+      'object-top/foo',
     ]),
   ).toEqual('')
 })
@@ -9452,7 +10924,7 @@ test('p', () => {
       padding: 4px;
     }"
   `)
-  expect(run(['p', '-p-4', '-p-[4px]'])).toEqual('')
+  expect(run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'])).toEqual('')
 })
 
 test('px', () => {
@@ -9481,7 +10953,7 @@ test('px', () => {
       padding-right: 4px;
     }"
   `)
-  expect(run(['px', '-px-4', '-px-[4px]'])).toEqual('')
+  expect(run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
 })
 
 test('py', () => {
@@ -9510,7 +10982,7 @@ test('py', () => {
       padding-bottom: 4px;
     }"
   `)
-  expect(run(['py', '-py-4', '-py-[4px]'])).toEqual('')
+  expect(run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')
 })
 
 test('pt', () => {
@@ -9537,7 +11009,7 @@ test('pt', () => {
       padding-top: 4px;
     }"
   `)
-  expect(run(['pt', '-pt-4', '-pt-[4px]'])).toEqual('')
+  expect(run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'])).toEqual('')
 })
 
 test('ps', () => {
@@ -9564,7 +11036,7 @@ test('ps', () => {
       padding-inline-start: 4px;
     }"
   `)
-  expect(run(['ps', '-ps-4', '-ps-[4px]'])).toEqual('')
+  expect(run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'])).toEqual('')
 })
 
 test('pe', () => {
@@ -9591,7 +11063,7 @@ test('pe', () => {
       padding-inline-end: 4px;
     }"
   `)
-  expect(run(['pe', '-pe-4', '-pe-[4px]'])).toEqual('')
+  expect(run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
 })
 
 test('pr', () => {
@@ -9618,7 +11090,7 @@ test('pr', () => {
       padding-right: 4px;
     }"
   `)
-  expect(run(['pr', '-pr-4', '-pr-[4px]'])).toEqual('')
+  expect(run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'])).toEqual('')
 })
 
 test('pb', () => {
@@ -9645,7 +11117,7 @@ test('pb', () => {
       padding-bottom: 4px;
     }"
   `)
-  expect(run(['pb', '-pb-4', '-pb-[4px]'])).toEqual('')
+  expect(run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'])).toEqual('')
 })
 
 test('pl', () => {
@@ -9672,7 +11144,7 @@ test('pl', () => {
       padding-left: 4px;
     }"
   `)
-  expect(run(['pl', '-pl-4', '-pl-[4px]'])).toEqual('')
+  expect(run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
 })
 
 test('text-align', () => {
@@ -9703,7 +11175,20 @@ test('text-align', () => {
     }"
   `)
   expect(
-    run(['-text-left', '-text-center', '-text-right', '-text-justify', '-text-start', '-text-end']),
+    run([
+      '-text-left',
+      '-text-center',
+      '-text-right',
+      '-text-justify',
+      '-text-start',
+      '-text-end',
+      'text-left/foo',
+      'text-center/foo',
+      'text-right/foo',
+      'text-justify/foo',
+      'text-start/foo',
+      'text-end/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -9717,7 +11202,7 @@ test('indent', () => {
       text-indent: 4px;
     }"
   `)
-  expect(run(['indent'])).toEqual('')
+  expect(run(['indent', 'indent-[4px]/foo', '-indent-[4px]/foo'])).toEqual('')
 })
 
 test('align', () => {
@@ -9784,6 +11269,16 @@ test('align', () => {
       '-align-super',
 
       '-align-[--value]',
+
+      'align-baseline/foo',
+      'align-top/foo',
+      'align-middle/foo',
+      'align-bottom/foo',
+      'align-text-top/foo',
+      'align-text-bottom/foo',
+      'align-sub/foo',
+      'align-super/foo',
+      'align-[--value]/foo',
     ]),
   ).toEqual('')
 })
@@ -9858,6 +11353,16 @@ test('font', () => {
 
       // font-weight
       '-font-bold',
+
+      'font-sans/foo',
+      'font-["arial_rounded"]/foo',
+      'font-[ui-sans-serif]/foo',
+      'font-[--my-family]/foo',
+      'font-[family-name:--my-family]/foo',
+      'font-[generic-name:--my-family]/foo',
+      'font-bold/foo',
+      'font-[100]/foo',
+      'font-[number:--my-weight]/foo',
     ]),
   ).toEqual('')
 })
@@ -9880,7 +11385,18 @@ test('text-transform', () => {
       text-transform: uppercase;
     }"
   `)
-  expect(run(['-uppercase', '-lowercase', '-capitalize', '-normal-case'])).toEqual('')
+  expect(
+    run([
+      '-uppercase',
+      '-lowercase',
+      '-capitalize',
+      '-normal-case',
+      'uppercase/foo',
+      'lowercase/foo',
+      'capitalize/foo',
+      'normal-case/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('font-style', () => {
@@ -9893,7 +11409,7 @@ test('font-style', () => {
       font-style: normal;
     }"
   `)
-  expect(run(['-italic', '-not-italic'])).toEqual('')
+  expect(run(['-italic', '-not-italic', 'italic/foo', 'not-italic/foo'])).toEqual('')
 })
 
 test('font-stretch', () => {
@@ -9918,6 +11434,9 @@ test('font-stretch', () => {
       'font-stretch-50',
       'font-stretch-400%',
       'font-stretch-potato',
+      'font-stretch-ultra-expanded/foo',
+      'font-stretch-50%/foo',
+      'font-stretch-200%/foo',
     ]),
   ).toEqual('')
 })
@@ -9940,7 +11459,18 @@ test('text-decoration-line', () => {
       text-decoration-line: underline;
     }"
   `)
-  expect(run(['-underline', '-overline', '-line-through', '-no-underline'])).toEqual('')
+  expect(
+    run([
+      '-underline',
+      '-overline',
+      '-line-through',
+      '-no-underline',
+      'underline/foo',
+      'overline/foo',
+      'line-through/foo',
+      'no-underline/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('placeholder', () => {
@@ -10260,6 +11790,23 @@ test('decoration', () => {
       '-decoration-2',
       '-decoration-4',
       '-decoration-123',
+
+      'decoration-solid/foo',
+      'decoration-double/foo',
+      'decoration-dotted/foo',
+      'decoration-dashed/foo',
+      'decoration-wavy/foo',
+      'decoration-auto/foo',
+      'decoration-from-font/foo',
+      'decoration-0/foo',
+      'decoration-1/foo',
+      'decoration-2/foo',
+      'decoration-4/foo',
+      'decoration-123/foo',
+      'decoration-[12px]/foo',
+      'decoration-[50%]/foo',
+      'decoration-[length:--my-thickness]/foo',
+      'decoration-[percentage:--my-thickness]/foo',
     ]),
   ).toEqual('')
 })
@@ -10299,6 +11846,10 @@ test('animate', () => {
       '-animate-none',
       '-animate-[bounce_1s_infinite]',
       '-animate-not-found',
+      'animate-spin/foo',
+      'animate-none/foo',
+      'animate-[bounce_1s_infinite]/foo',
+      'animate-not-found/foo',
     ]),
   ).toEqual('')
 })
@@ -10579,6 +12130,33 @@ test('filter', () => {
       '-sepia-[50%]',
       '-sepia-[--value]',
       'sepia-unknown',
+      'filter/foo',
+      'filter-none/foo',
+      'filter-[--value]/foo',
+      'blur-xl/foo',
+      'blur-none/foo',
+      'blur-[4px]/foo',
+      'brightness-50/foo',
+      'brightness-[1.23]/foo',
+      'contrast-50/foo',
+      'contrast-[1.23]/foo',
+      'grayscale/foo',
+      'grayscale-0/foo',
+      'grayscale-[--value]/foo',
+      'hue-rotate-15/foo',
+      'hue-rotate-[45deg]/foo',
+      'invert/foo',
+      'invert-0/foo',
+      'invert-[--value]/foo',
+      'drop-shadow-xl/foo',
+      'drop-shadow-[0_0_red]/foo',
+      'saturate-0/foo',
+      'saturate-[1.75]/foo',
+      'saturate-[--value]/foo',
+      'sepia/foo',
+      'sepia-0/foo',
+      'sepia-[50%]/foo',
+      'sepia-[--value]/foo',
     ]),
   ).toEqual('')
 })
@@ -10890,6 +12468,34 @@ test('backdrop-filter', () => {
       '-backdrop-sepia-[50%]',
       '-backdrop-sepia-[--value]',
       'backdrop-sepia-unknown',
+      'backdrop-filter/foo',
+      'backdrop-filter-none/foo',
+      'backdrop-filter-[--value]/foo',
+      'backdrop-blur-none/foo',
+      'backdrop-blur-xl/foo',
+      'backdrop-blur-[4px]/foo',
+      'backdrop-brightness-50/foo',
+      'backdrop-brightness-[1.23]/foo',
+      'backdrop-contrast-50/foo',
+      'backdrop-contrast-[1.23]/foo',
+      'backdrop-grayscale/foo',
+      'backdrop-grayscale-0/foo',
+      'backdrop-grayscale-[--value]/foo',
+      'backdrop-hue-rotate-15/foo',
+      'backdrop-hue-rotate-[45deg]/foo',
+      'backdrop-invert/foo',
+      'backdrop-invert-0/foo',
+      'backdrop-invert-[--value]/foo',
+      'backdrop-opacity-50/foo',
+      'backdrop-opacity-71/foo',
+      'backdrop-opacity-[0.5]/foo',
+      'backdrop-saturate-0/foo',
+      'backdrop-saturate-[1.75]/foo',
+      'backdrop-saturate-[--value]/foo',
+      'backdrop-sepia/foo',
+      'backdrop-sepia-0/foo',
+      'backdrop-sepia-[50%]/foo',
+      'backdrop-sepia-[--value]/foo',
     ]),
   ).toEqual('')
 })
@@ -10995,6 +12601,14 @@ test('transition', () => {
       '-transition-all',
       '-transition-opacity',
       '-transition-[--value]',
+      'transition/foo',
+      'transition-none/foo',
+      'transition-all/foo',
+      'transition-transform/foo',
+      'transition-shadow/foo',
+      'transition-colors/foo',
+      'transition-opacity/foo',
+      'transition-[--value]/foo',
     ]),
   ).toEqual('')
 })
@@ -11013,7 +12627,17 @@ test('delay', () => {
       transition-delay: .3s;
     }"
   `)
-  expect(run(['delay', '-delay-200', '-delay-[300ms]', 'delay-unknown'])).toEqual('')
+  expect(
+    run([
+      'delay',
+      '-delay-200',
+      '-delay-[300ms]',
+      'delay-unknown',
+      'delay-123/foo',
+      'delay-200/foo',
+      'delay-[300ms]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('duration', () => {
@@ -11030,7 +12654,16 @@ test('duration', () => {
       transition-duration: .3s;
     }"
   `)
-  expect(run(['duration', '-duration-200', '-duration-[300ms]'])).toEqual('')
+  expect(
+    run([
+      'duration',
+      '-duration-200',
+      '-duration-[300ms]',
+      'duration-123/foo',
+      'duration-200/foo',
+      'duration-[300ms]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('ease', () => {
@@ -11063,7 +12696,16 @@ test('ease', () => {
       transition-timing-function: var(--transition-timing-function-out, cubic-bezier(0, 0, .2, 1));
     }"
   `)
-  expect(run(['-ease-in', '-ease-out', '-ease-[--value]'])).toEqual('')
+  expect(
+    run([
+      '-ease-in',
+      '-ease-out',
+      '-ease-[--value]',
+      'ease-in/foo',
+      'ease-out/foo',
+      'ease-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('will-change', () => {
@@ -11104,6 +12746,11 @@ test('will-change', () => {
       '-will-change-transform',
       '-will-change-scroll',
       '-will-change-[--value]',
+      'will-change-auto/foo',
+      'will-change-contents/foo',
+      'will-change-transform/foo',
+      'will-change-scroll/foo',
+      'will-change-[--value]/foo',
     ]),
   ).toEqual('')
 })
@@ -11194,6 +12841,19 @@ test('contain', () => {
       inherits: false
     }"
   `)
+  expect(
+    run([
+      'contain-none/foo',
+      'contain-content/foo',
+      'contain-strict/foo',
+      'contain-size/foo',
+      'contain-inline-size/foo',
+      'contain-layout/foo',
+      'contain-paint/foo',
+      'contain-style/foo',
+      'contain-[unset]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('content', () => {
@@ -11217,7 +12877,7 @@ test('content', () => {
       initial-value: "";
     }"
   `)
-  expect(run(['content', '-content-["hello_world"]'])).toEqual('')
+  expect(run(['content', '-content-["hello_world"]', 'content-["hello_world"]/foo'])).toEqual('')
 })
 
 test('forced-color-adjust', () => {
@@ -11237,6 +12897,8 @@ test('forced-color-adjust', () => {
       'forced-color-adjust',
       '-forced-color-adjust-none',
       '-forced-color-adjust-auto',
+      'forced-color-adjust-none/foo',
+      'forced-color-adjust-auto/foo',
     ]),
   ).toEqual('')
 })
@@ -11271,7 +12933,17 @@ test('leading', () => {
       line-height: var(--line-height-none, 1);
     }"
   `)
-  expect(run(['leading', '-leading-none', '-leading-6', '-leading-[--value]'])).toEqual('')
+  expect(
+    run([
+      'leading',
+      '-leading-none',
+      '-leading-6',
+      '-leading-[--value]',
+      'leading-none/foo',
+      'leading-6/foo',
+      'leading-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('tracking', () => {
@@ -11308,7 +12980,15 @@ test('tracking', () => {
       letter-spacing: var(--letter-spacing-wide, .025em);
     }"
   `)
-  expect(run(['tracking'])).toEqual('')
+  expect(
+    run([
+      'tracking',
+      'tracking-normal/foo',
+      'tracking-wide/foo',
+      'tracking-[--value]/foo',
+      '-tracking-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('font-smoothing', () => {
@@ -11323,7 +13003,9 @@ test('font-smoothing', () => {
       -moz-osx-font-smoothing: auto;
     }"
   `)
-  expect(run(['-antialiased', '-subpixel-antialiased'])).toEqual('')
+  expect(
+    run(['-antialiased', '-subpixel-antialiased', 'antialiased/foo', 'subpixel-antialiased/foo']),
+  ).toEqual('')
 })
 
 test('font-variant-numeric', () => {
@@ -11432,6 +13114,15 @@ test('font-variant-numeric', () => {
       '-tabular-nums',
       '-diagonal-fractions',
       '-stacked-fractions',
+      'normal-nums/foo',
+      'ordinal/foo',
+      'slashed-zero/foo',
+      'lining-nums/foo',
+      'oldstyle-nums/foo',
+      'proportional-nums/foo',
+      'tabular-nums/foo',
+      'diagonal-fractions/foo',
+      'stacked-fractions/foo',
     ]),
   ).toEqual('')
 })
@@ -11652,6 +13343,13 @@ test('outline', () => {
 
       // outline-width
       '-outline-0',
+
+      'outline/foo',
+      'outline-none/foo',
+      'outline-solid/foo',
+      'outline-dashed/foo',
+      'outline-dotted/foo',
+      'outline-double/foo',
     ]),
   ).toEqual('')
 })
@@ -11681,7 +13379,16 @@ test('outline-offset', () => {
       outline-offset: var(--value);
     }"
   `)
-  expect(run(['outline-offset', 'outline-offset-unknown'])).toEqual('')
+  expect(
+    run([
+      'outline-offset',
+      'outline-offset-unknown',
+      'outline-offset-4/foo',
+      '-outline-offset-4/foo',
+      'outline-offset-[--value]/foo',
+      '-outline-offset-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('opacity', () => {
@@ -11694,7 +13401,16 @@ test('opacity', () => {
       opacity: var(--value);
     }"
   `)
-  expect(run(['opacity', '-opacity-15', '-opacity-[--value]', 'opacity-unknown'])).toEqual('')
+  expect(
+    run([
+      'opacity',
+      '-opacity-15',
+      '-opacity-[--value]',
+      'opacity-unknown',
+      'opacity-15/foo',
+      'opacity-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('underline-offset', () => {
@@ -11744,9 +13460,20 @@ test('underline-offset', () => {
       text-underline-offset: auto;
     }"
   `)
-  expect(run(['underline-offset', '-underline-offset-auto', 'underline-offset-unknown'])).toEqual(
-    '',
-  )
+  expect(
+    run([
+      'underline-offset',
+      '-underline-offset-auto',
+      'underline-offset-unknown',
+      'underline-offset-auto/foo',
+      'underline-offset-4/foo',
+      '-underline-offset-4/foo',
+      'underline-offset-123/foo',
+      '-underline-offset-123/foo',
+      'underline-offset-[--value]/foo',
+      '-underline-offset-[--value]/foo',
+    ]),
+  ).toEqual('')
 })
 
 test('text', () => {
@@ -12719,6 +14446,14 @@ test('ring', () => {
       '-ring-1',
       '-ring-2',
       '-ring-4',
+
+      'ring/foo',
+      'ring-0/foo',
+      'ring-1/foo',
+      'ring-2/foo',
+      'ring-4/foo',
+      'ring-[12px]/foo',
+      'ring-[length:--my-width]/foo',
     ]),
   ).toEqual('')
 })
@@ -12967,6 +14702,14 @@ test('inset-ring', () => {
       '-inset-ring-1',
       '-inset-ring-2',
       '-inset-ring-4',
+
+      'inset-ring/foo',
+      'inset-ring-0/foo',
+      'inset-ring-1/foo',
+      'inset-ring-2/foo',
+      'inset-ring-4/foo',
+      'inset-ring-[12px]/foo',
+      'inset-ring-[length:--my-width]/foo',
     ]),
   ).toEqual('')
 })
@@ -13124,6 +14867,13 @@ test('ring-offset', () => {
       '-ring-offset-1',
       '-ring-offset-2',
       '-ring-offset-4',
+
+      'ring-offset-0/foo',
+      'ring-offset-1/foo',
+      'ring-offset-2/foo',
+      'ring-offset-4/foo',
+      'ring-offset-[12px]/foo',
+      'ring-offset-[length:--my-width]/foo',
     ]),
   ).toEqual('')
 })
