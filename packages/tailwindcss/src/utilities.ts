@@ -317,12 +317,15 @@ export function createUtilities(theme: Theme) {
       let value: string | null = null
 
       if (!candidate.value) {
+        if (candidate.modifier) return
+
         // If the candidate has no value segment (like `rounded`), use the
         // `defaultValue` (for candidates like `grow` that have no theme values)
         // or a bare theme value (like `--radius` for `rounded`). No utility
         // will ever support both of these.
         value = desc.defaultValue ?? theme.resolve(null, desc.themeKeys ?? [])
       } else if (candidate.value.kind === 'arbitrary') {
+        if (candidate.modifier) return
         value = candidate.value.value
       } else {
         value = theme.resolve(
@@ -333,6 +336,8 @@ export function createUtilities(theme: Theme) {
         // Automatically handle things like `w-1/2` without requiring `1/2` to
         // exist as a theme value.
         if (value === null && desc.supportsFractions && candidate.value.fraction) {
+          let [lhs, rhs] = segment(candidate.value.fraction, '/')
+          if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
           value = `calc(${candidate.value.fraction} * 100%)`
         }
 
@@ -340,6 +345,7 @@ export function createUtilities(theme: Theme) {
         // use the bare candidate value as the value.
         if (value === null && desc.handleBareValue) {
           value = desc.handleBareValue(candidate.value)
+          if (!value?.includes('/') && candidate.modifier) return
         }
       }
 
@@ -893,8 +899,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')
-      if (!Number.isInteger(Number(lhs))) return null
-      if (!Number.isInteger(Number(rhs))) return null
+      if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return null
       return fraction
     },
     handle: (value) => [decl('aspect-ratio', value)],
@@ -1058,18 +1063,23 @@ export function createUtilities(theme: Theme) {
     if (candidate.negative) return
 
     if (!candidate.value) {
+      if (candidate.modifier) return
       return [decl('display', 'flex')]
     }
 
     if (candidate.value.kind === 'arbitrary') {
+      if (candidate.modifier) return
       return [decl('flex', candidate.value.value)]
     }
 
     if (candidate.value.fraction) {
+      let [lhs, rhs] = segment(candidate.value.fraction, '/')
+      if (!Number.isInteger(Number(lhs)) || !Number.isInteger(Number(rhs))) return
       return [decl('flex', `calc(${candidate.value.fraction} * 100%)`)]
     }
 
     if (Number.isInteger(Number(candidate.value.value))) {
+      if (candidate.modifier) return
       return [decl('flex', candidate.value.value)]
     }
   })
@@ -1325,7 +1335,8 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('scale-none', [['scale', 'none']])
   utilities.functional('scale', (candidate) => {
-    if (!candidate.value) return
+    if (!candidate.value || candidate.modifier) return
+
     let value
     if (candidate.value.kind === 'arbitrary') {
       value = candidate.value.value
@@ -1402,7 +1413,8 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('rotate-none', [['rotate', 'none']])
   utilities.functional('rotate', (candidate) => {
-    if (!candidate.value) return
+    if (!candidate.value || candidate.modifier) return
+
     let value
     if (candidate.value.kind === 'arbitrary') {
       value = candidate.value.value
@@ -1556,7 +1568,7 @@ export function createUtilities(theme: Theme) {
      * @css `transform`
      */
     utilities.functional('transform', (candidate) => {
-      if (candidate.negative) return
+      if (candidate.negative || candidate.modifier) return
 
       let value: string | null = null
       if (!candidate.value) {
@@ -2238,6 +2250,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.negative) return
 
         if (!candidate.value) {
+          if (candidate.modifier) return
           let value = theme.get(['--default-border-width']) ?? '1px'
           let decls = desc.width(value)
           if (!decls) return
@@ -2252,6 +2265,7 @@ export function createUtilities(theme: Theme) {
           switch (type) {
             case 'line-width':
             case 'length': {
+              if (candidate.modifier) return
               let decls = desc.width(value)
               if (!decls) return
               return [borderProperties(), ...decls]
@@ -2275,6 +2289,7 @@ export function createUtilities(theme: Theme) {
 
         // `border-width` property
         {
+          if (candidate.modifier) return
           let value = theme.resolve(candidate.value.value, ['--border-width'])
           if (value) {
             let decls = desc.width(value)
@@ -2510,7 +2525,7 @@ export function createUtilities(theme: Theme) {
   }
 
   utilities.functional('bg-linear', (candidate) => {
-    if (!candidate.value) return
+    if (!candidate.value || candidate.modifier) return
 
     if (candidate.value.kind === 'arbitrary') {
       let value: string | null = candidate.value.value
@@ -2552,15 +2567,18 @@ export function createUtilities(theme: Theme) {
       switch (type) {
         case 'percentage':
         case 'position': {
+          if (candidate.modifier) return
           return [decl('background-position', value)]
         }
         case 'bg-size':
         case 'length':
         case 'size': {
+          if (candidate.modifier) return
           return [decl('background-size', value)]
         }
         case 'image':
         case 'url': {
+          if (candidate.modifier) return
           return [decl('background-image', value)]
         }
         default: {
@@ -2582,6 +2600,7 @@ export function createUtilities(theme: Theme) {
 
     // `background-image` property
     {
+      if (candidate.modifier) return
       let value = theme.resolve(candidate.value.value, ['--background-image'])
       if (value) {
         return [decl('background-image', value)]
@@ -2635,6 +2654,7 @@ export function createUtilities(theme: Theme) {
         switch (type) {
           case 'length':
           case 'percentage': {
+            if (candidate.modifier) return
             return desc.position(value)
           }
           default: {
@@ -2656,6 +2676,7 @@ export function createUtilities(theme: Theme) {
 
       // Known values: Positions
       {
+        if (candidate.modifier) return
         let value = theme.resolve(candidate.value.value, ['--gradient-color-stop-positions'])
         if (value) {
           return desc.position(value)
@@ -2808,6 +2829,7 @@ export function createUtilities(theme: Theme) {
         case 'number':
         case 'length':
         case 'percentage': {
+          if (candidate.modifier) return
           return [decl('stroke-width', value)]
         }
         default: {
@@ -2937,7 +2959,7 @@ export function createUtilities(theme: Theme) {
   })
 
   utilities.functional('font', (candidate) => {
-    if (candidate.negative || !candidate.value) return
+    if (candidate.negative || !candidate.value || candidate.modifier) return
 
     if (candidate.value.kind === 'arbitrary') {
       let value = candidate.value.value
@@ -3105,6 +3127,7 @@ export function createUtilities(theme: Theme) {
       switch (type) {
         case 'length':
         case 'percentage': {
+          if (candidate.modifier) return
           return [decl('text-decoration-thickness', value)]
         }
         default: {
@@ -3120,10 +3143,12 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.resolve(candidate.value.value, ['--text-decoration-thickness'])
       if (value) {
+        if (candidate.modifier) return
         return [decl('text-decoration-thickness', value)]
       }
 
       if (!Number.isNaN(Number(candidate.value.value))) {
+        if (candidate.modifier) return
         return [decl('text-decoration-thickness', `${candidate.value.value}px`)]
       }
     }
@@ -3210,7 +3235,7 @@ export function createUtilities(theme: Theme) {
     }
 
     utilities.functional('filter', (candidate) => {
-      if (candidate.negative) return
+      if (candidate.negative || candidate.modifier) return
 
       if (candidate.value === null) {
         return [filterProperties(), decl('filter', cssFilterValue)]
@@ -3227,7 +3252,7 @@ export function createUtilities(theme: Theme) {
     })
 
     utilities.functional('backdrop-filter', (candidate) => {
-      if (candidate.negative) return
+      if (candidate.negative || candidate.modifier) return
 
       if (candidate.value === null) {
         return [
@@ -3671,6 +3696,9 @@ export function createUtilities(theme: Theme) {
       // This utility doesn't support negative values.
       if (candidate.negative) return
 
+      // This utility doesn't support modifiers.
+      if (candidate.modifier) return
+
       // This utility doesn't support `DEFAULT` values.
       if (!candidate.value) return
 
@@ -3912,6 +3940,7 @@ export function createUtilities(theme: Theme) {
       if (candidate.negative) return
 
       if (candidate.value === null) {
+        if (candidate.modifier) return
         return [
           outlineProperties(),
           decl('outline-style', 'var(--tw-outline-style)'),
@@ -3929,6 +3958,7 @@ export function createUtilities(theme: Theme) {
           case 'length':
           case 'number':
           case 'percentage': {
+            if (candidate.modifier) return
             return [
               outlineProperties(),
               decl('outline-style', 'var(--tw-outline-style)'),
@@ -3954,6 +3984,7 @@ export function createUtilities(theme: Theme) {
 
       // `outline-width` property
       {
+        if (candidate.modifier) return
         let value = theme.resolve(candidate.value.value, ['--outline-width'])
         if (value) {
           return [
@@ -4205,6 +4236,7 @@ export function createUtilities(theme: Theme) {
 
       switch (candidate.value.value) {
         case 'none':
+          if (candidate.modifier) return
           return [
             boxShadowProperties(),
             decl('--tw-shadow', nullShadow),
@@ -4217,6 +4249,7 @@ export function createUtilities(theme: Theme) {
       {
         let value = theme.get([`--shadow-${candidate.value.value}`])
         if (value) {
+          if (candidate.modifier) return
           return [
             boxShadowProperties(),
             decl('--tw-shadow', value),
@@ -4302,6 +4335,7 @@ export function createUtilities(theme: Theme) {
 
       switch (candidate.value.value) {
         case 'none':
+          if (candidate.modifier) return
           return [
             boxShadowProperties(),
             decl('--tw-inset-shadow', nullShadow),
@@ -4315,6 +4349,7 @@ export function createUtilities(theme: Theme) {
         let value = theme.get([`--inset-shadow-${candidate.value.value}`])
 
         if (value) {
+          if (candidate.modifier) return
           return [
             boxShadowProperties(),
             decl('--tw-inset-shadow', value),
@@ -4364,6 +4399,7 @@ export function createUtilities(theme: Theme) {
       if (candidate.negative) return
 
       if (!candidate.value) {
+        if (candidate.modifier) return
         let value = theme.get(['--default-ring-width']) ?? '1px'
         return [
           boxShadowProperties(),
@@ -4378,6 +4414,7 @@ export function createUtilities(theme: Theme) {
 
         switch (type) {
           case 'length': {
+            if (candidate.modifier) return
             return [
               boxShadowProperties(),
               decl('--tw-ring-shadow', ringShadowValue(value)),
@@ -4403,6 +4440,7 @@ export function createUtilities(theme: Theme) {
 
       // Ring width
       {
+        if (candidate.modifier) return
         let value = theme.resolve(candidate.value.value, ['--ring-width'])
         if (value === null && !Number.isNaN(Number(candidate.value.value))) {
           value = `${candidate.value.value}px`
@@ -4438,6 +4476,7 @@ export function createUtilities(theme: Theme) {
       if (candidate.negative) return
 
       if (!candidate.value) {
+        if (candidate.modifier) return
         return [
           boxShadowProperties(),
           decl('--tw-inset-ring-shadow', insetRingShadowValue('1px')),
@@ -4451,6 +4490,7 @@ export function createUtilities(theme: Theme) {
 
         switch (type) {
           case 'length': {
+            if (candidate.modifier) return
             return [
               boxShadowProperties(),
               decl('--tw-inset-ring-shadow', insetRingShadowValue(value)),
@@ -4476,6 +4516,7 @@ export function createUtilities(theme: Theme) {
 
       // Ring width
       {
+        if (candidate.modifier) return
         let value = theme.resolve(candidate.value.value, ['--ring-width'])
         if (value === null && !Number.isNaN(Number(candidate.value.value))) {
           value = `${candidate.value.value}px`
@@ -4515,6 +4556,7 @@ export function createUtilities(theme: Theme) {
 
         switch (type) {
           case 'length': {
+            if (candidate.modifier) return
             return [
               decl('--tw-ring-offset-width', value),
               decl('--tw-ring-offset-shadow', ringOffsetShadowValue),
@@ -4533,11 +4575,13 @@ export function createUtilities(theme: Theme) {
       {
         let value = theme.resolve(candidate.value.value, ['--ring-offset-width'])
         if (value) {
+          if (candidate.modifier) return
           return [
             decl('--tw-ring-offset-width', value),
             decl('--tw-ring-offset-shadow', ringOffsetShadowValue),
           ]
         } else if (!Number.isNaN(Number(candidate.value.value))) {
+          if (candidate.modifier) return
           return [
             decl('--tw-ring-offset-width', `${candidate.value.value}px`),
             decl('--tw-ring-offset-shadow', ringOffsetShadowValue),

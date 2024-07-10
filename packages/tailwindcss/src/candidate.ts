@@ -258,7 +258,14 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // ^^^^^^^^^^    -> Base without modifier
   //            ^^ -> Modifier segment
   // ```
-  let [baseWithoutModifier, modifierSegment = null] = segment(base, '/')
+  let [baseWithoutModifier, modifierSegment = null, additionalModifier] = segment(base, '/')
+
+  // If there's more than one modifier, the utility is invalid.
+  //
+  // E.g.:
+  //
+  // - `bg-red-500/50/50`
+  if (additionalModifier) return null
 
   // Arbitrary properties
   if (baseWithoutModifier[0] === '[') {
@@ -373,7 +380,11 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   let kind = designSystem.utilities.kind(root)
 
   if (kind === 'static') {
+    // Static utilities do not have a value
     if (value !== null) return null
+
+    // Static utilities do not have a modifier
+    if (modifierSegment !== null) return null
 
     return {
       kind: 'static',
@@ -557,7 +568,11 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
     switch (designSystem.variants.kind(root)) {
       case 'static': {
+        // Static variants do not have a value
         if (value !== null) return null
+
+        // Static variants do not have a modifier
+        if (modifier !== null) return null
 
         return {
           kind: 'static',

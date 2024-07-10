@@ -178,7 +178,8 @@ export function createVariants(theme: Theme): Variants {
   variants.static('force', () => {}, { compounds: false })
   staticVariant('*', ['& > *'], { compounds: false })
 
-  variants.compound('not', (ruleNode) => {
+  variants.compound('not', (ruleNode, variant) => {
+    if (variant.modifier) return null
     ruleNode.selector = `&:not(${ruleNode.selector.replace('&', '*')})`
   })
 
@@ -336,7 +337,8 @@ export function createVariants(theme: Theme): Variants {
     staticVariant(key, [value])
   }
 
-  variants.compound('has', (ruleNode) => {
+  variants.compound('has', (ruleNode, variant) => {
+    if (variant.modifier) return null
     ruleNode.selector = `&:has(${ruleNode.selector.replace('&', '*')})`
   })
 
@@ -347,7 +349,8 @@ export function createVariants(theme: Theme): Variants {
   })
 
   variants.functional('aria', (ruleNode, variant) => {
-    if (variant.value === null) return null
+    if (!variant.value || variant.modifier) return null
+
     if (variant.value.kind === 'arbitrary') {
       ruleNode.nodes = [rule(`&[aria-${variant.value.value}]`, ruleNode.nodes)]
     } else {
@@ -368,13 +371,13 @@ export function createVariants(theme: Theme): Variants {
   ])
 
   variants.functional('data', (ruleNode, variant) => {
-    if (variant.value === null) return null
+    if (!variant.value || variant.modifier) return null
 
     ruleNode.nodes = [rule(`&[data-${variant.value.value}]`, ruleNode.nodes)]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
-    if (variant.value === null) return null
+    if (!variant.value || variant.modifier) return null
 
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
@@ -383,7 +386,7 @@ export function createVariants(theme: Theme): Variants {
   })
 
   variants.functional('nth-last', (ruleNode, variant) => {
-    if (variant.value === null) return null
+    if (!variant.value || variant.modifier) return null
 
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
@@ -392,7 +395,7 @@ export function createVariants(theme: Theme): Variants {
   })
 
   variants.functional('nth-of-type', (ruleNode, variant) => {
-    if (variant.value === null) return null
+    if (!variant.value || variant.modifier) return null
 
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
@@ -401,7 +404,7 @@ export function createVariants(theme: Theme): Variants {
   })
 
   variants.functional('nth-last-of-type', (ruleNode, variant) => {
-    if (variant.value === null) return null
+    if (!variant.value || variant.modifier) return null
 
     // Only numeric bare values are allowed
     if (variant.value.kind === 'named' && Number.isNaN(Number(variant.value.value))) return null
@@ -412,7 +415,7 @@ export function createVariants(theme: Theme): Variants {
   variants.functional(
     'supports',
     (ruleNode, variant) => {
-      if (variant.value === null) return null
+      if (!variant.value || variant.modifier) return null
 
       let value = variant.value.value
       if (value === null) return null
@@ -540,7 +543,7 @@ export function createVariants(theme: Theme): Variants {
           }
 
           case 'functional': {
-            if (variant.value === null) return null
+            if (!variant.value || variant.modifier) return null
 
             let value: string | null = null
 
@@ -567,6 +570,7 @@ export function createVariants(theme: Theme): Variants {
           variants.functional(
             'max',
             (ruleNode, variant) => {
+              if (variant.modifier) return null
               let value = resolvedBreakpoints.get(variant)
               if (value === null) return null
 
@@ -601,6 +605,7 @@ export function createVariants(theme: Theme): Variants {
           variants.functional(
             'min',
             (ruleNode, variant) => {
+              if (variant.modifier) return null
               let value = resolvedBreakpoints.get(variant)
               if (value === null) return null
 

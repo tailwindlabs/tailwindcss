@@ -445,6 +445,27 @@ it('should not parse a partial utility', () => {
   expect(run('bg-', { utilities })).toMatchInlineSnapshot(`null`)
 })
 
+it('should not parse static utilities with a modifier', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  expect(run('flex/foo', { utilities })).toMatchInlineSnapshot(`null`)
+})
+
+it('should not parse static utilities with multiple modifiers', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  expect(run('flex/foo/bar', { utilities })).toMatchInlineSnapshot(`null`)
+})
+
+it('should not parse functional utilities with multiple modifiers', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-red-1/2/3', { utilities })).toMatchInlineSnapshot(`null`)
+})
+
 it('should parse a utility with an arbitrary value', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
