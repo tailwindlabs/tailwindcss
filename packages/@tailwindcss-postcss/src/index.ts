@@ -1,10 +1,10 @@
 import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
 import { Features, transform } from 'lightningcss'
-import path from 'path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
 import { compile } from 'tailwindcss'
+import { loadPlugin } from 'tailwindcss/io'
 
 /**
  * A Map that can generate default values for keys that don't exist.
@@ -131,14 +131,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         }
 
         if (rebuildStrategy === 'full') {
-          let basePath = path.dirname(path.resolve(inputFile))
           let { build } = compile(root.toString(), {
-            loadPlugin: (pluginPath) => {
-              if (pluginPath[0] === '.') {
-                return require(path.resolve(basePath, pluginPath))
-              }
-              return require(pluginPath)
-            },
+            loadPlugin: loadPlugin(inputFile),
           })
           context.build = build
           css = build(hasTailwind ? candidates : [])

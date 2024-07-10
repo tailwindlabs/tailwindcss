@@ -7,6 +7,7 @@ import path from 'node:path'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
 import * as tailwindcss from 'tailwindcss'
+import { loadPlugin } from 'tailwindcss/io'
 import type { Arg, Result } from '../../utils/args'
 import {
   eprintln,
@@ -124,17 +125,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     }
   }
 
-  let basePath =
-    args['--input'] && args['--input'] !== '-' ? path.dirname(args['--input']) : process.cwd()
+  let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
 
   function compile(css: string) {
     return tailwindcss.compile(css, {
-      loadPlugin: (pluginPath) => {
-        if (pluginPath[0] === '.') {
-          return require(path.resolve(basePath, pluginPath))
-        }
-        return require(pluginPath)
-      },
+      loadPlugin: loadPlugin(inputFile),
     })
   }
 
