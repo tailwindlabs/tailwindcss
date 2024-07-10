@@ -1708,9 +1708,9 @@ export function createUtilities(theme: Theme) {
    * @css `resize`
    */
   staticUtility('resize-none', [['resize', 'none']])
-  staticUtility('resize-both', [['resize', 'both']])
   staticUtility('resize-x', [['resize', 'horizontal']])
   staticUtility('resize-y', [['resize', 'vertical']])
+  staticUtility('resize', [['resize', 'both']])
 
   /**
    * @css `scroll-snap-type`
@@ -2080,6 +2080,7 @@ export function createUtilities(theme: Theme) {
       ]),
   ])
 
+  staticUtility('accent-auto', [['accent-color', 'auto']])
   colorUtility('accent', {
     themeKeys: ['--accent-color', '--color'],
     handle: (value) => [decl('accent-color', value)],
@@ -2791,6 +2792,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('mix-blend-plus-darker', [['mix-blend-mode', 'plus-darker']])
   staticUtility('mix-blend-plus-lighter', [['mix-blend-mode', 'plus-lighter']])
 
+  staticUtility('fill-none', [['fill', 'none']])
   utilities.functional('fill', (candidate) => {
     if (candidate.negative || !candidate.value) return
 
@@ -3431,6 +3433,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     functionalUtility('hue-rotate', {
+      supportsNegative: true,
       themeKeys: ['--hue-rotate'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
@@ -3444,6 +3447,7 @@ export function createUtilities(theme: Theme) {
     })
 
     functionalUtility('backdrop-hue-rotate', {
+      supportsNegative: true,
       themeKeys: ['--backdrop-hue-rotate', '--hue-rotate'],
       handleBareValue: ({ value }) => {
         if (Number.isNaN(Number(value))) return null
