@@ -604,6 +604,27 @@ test('focus', () => {
   expect(run(['focus/foo:flex'])).toEqual('')
 })
 
+test('group-hover group-focus sorting', () => {
+  expect(run(['group-hover:flex', 'group-focus:flex'])).toMatchInlineSnapshot(`
+    ".group-hover\\:flex:is(:where(.group):hover *) {
+      display: flex;
+    }
+
+    .group-focus\\:flex:is(:where(.group):focus *) {
+      display: flex;
+    }"
+  `)
+  expect(run(['group-focus:flex', 'group-hover:flex'])).toMatchInlineSnapshot(`
+    ".group-hover\\:flex:is(:where(.group):hover *) {
+      display: flex;
+    }
+
+    .group-focus\\:flex:is(:where(.group):focus *) {
+      display: flex;
+    }"
+  `)
+})
+
 test('focus-visible', () => {
   expect(run(['focus-visible:flex', 'group-focus-visible:flex', 'peer-focus-visible:flex']))
     .toMatchInlineSnapshot(`
