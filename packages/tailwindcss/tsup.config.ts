@@ -7,5 +7,6 @@ export default defineConfig({
   dts: true,
   entry: {
     lib: 'src/index.ts',
+    io: 'src/io.ts',
   },
 })

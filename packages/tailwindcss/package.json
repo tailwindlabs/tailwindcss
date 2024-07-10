@@ -23,6 +23,11 @@
       "require": "./dist/lib.js",
       "import": "./src/index.ts"
     },
+    "./io": {
+      "types": "./src/io.ts",
+      "require": "./dist/io.js",
+      "import": "./src/io.ts"
+    },
     "./package.json": "./package.json",
     "./index.css": "./index.css",
     "./index": "./index.css",
@@ -42,6 +47,11 @@
         "style": "./index.css",
         "require": "./dist/lib.js",
         "import": "./dist/lib.mjs"
+      },
+      "./io": {
+        "types": "./dist/io.d.mts",
+        "require": "./dist/io.js",
+        "import": "./dist/io.mjs"
       },
       "./package.json": "./package.json",
       "./index.css": "./index.css",
