@@ -34,8 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
-    "vite": "^5.2.11",
-    "tailwindcss-test-utils": "workspace:^"
+    "vite": "^5.2.11"
   },
   "peerDependencies": {
     "vite": "^5.2.0"
