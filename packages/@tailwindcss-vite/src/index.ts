@@ -2,7 +2,6 @@ import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import { compile } from 'tailwindcss'
-import { loadPlugin } from 'tailwindcss/io'
 import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -74,8 +73,16 @@ export default function tailwindcss(): Plugin[] {
   }
 
   function generateCss(css: string, inputPath: string) {
+    let basePath = path.dirname(path.resolve(inputPath))
+
     return compile(css, {
-      loadPlugin: loadPlugin(inputPath),
+      loadPlugin: (pluginPath) => {
+        if (pluginPath[0] === '.') {
+          return require(path.resolve(basePath, pluginPath))
+        }
+
+        return require(pluginPath)
+      },
     }).build(Array.from(candidates))
   }
 
