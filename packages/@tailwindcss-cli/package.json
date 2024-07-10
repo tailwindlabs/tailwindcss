@@ -39,6 +39,7 @@
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/postcss-import": "^14.0.3"
+    "@types/postcss-import": "^14.0.3",
+    "tailwindcss-test-utils": "workspace:^"
   }
 }
