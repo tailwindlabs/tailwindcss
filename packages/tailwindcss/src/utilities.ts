@@ -137,6 +137,13 @@ function withAlpha(value: string, alpha: string): string {
     alpha = `${alphaAsNumber * 100}%`
   }
 
+  // If the alpha value is a percentage, we can pass it directly to
+  // `color-mix()`. In any other case, e.g.: `var(…)`, `round(…)`, … we need to
+  // make sure it's a percentage.
+  else if (alpha[alpha.length - 1] !== '%') {
+    alpha = `calc(${alpha} * 100%)`
+  }
+
   return `color-mix(in srgb, ${value} ${alpha}, transparent)`
 }
 

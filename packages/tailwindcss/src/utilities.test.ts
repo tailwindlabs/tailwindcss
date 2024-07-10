@@ -7673,6 +7673,7 @@ test('bg', () => {
         'bg-current/50',
         'bg-current/[0.5]',
         'bg-current/[50%]',
+        'bg-current/[--bg-opacity]',
         'bg-inherit',
         'bg-transparent',
         'bg-[#0088cc]',
@@ -7792,7 +7793,15 @@ test('bg', () => {
       background-color: currentColor;
     }
 
-    .bg-current\\/50, .bg-current\\/\\[0\\.5\\], .bg-current\\/\\[50\\%\\] {
+    .bg-current\\/50 {
+      background-color: color-mix(in srgb, currentColor 50%, transparent);
+    }
+
+    .bg-current\\/\\[--bg-opacity\\] {
+      background-color: color-mix(in srgb, currentColor calc(var(--bg-opacity) * 100%), transparent);
+    }
+
+    .bg-current\\/\\[0\\.5\\], .bg-current\\/\\[50\\%\\] {
       background-color: color-mix(in srgb, currentColor 50%, transparent);
     }
 
@@ -8091,11 +8100,11 @@ test('bg', () => {
     }
 
     .bg-current\\/custom {
-      background-color: color-mix(in srgb, currentColor var(--opacity-custom, var(--custom-opacity)), transparent);
+      background-color: color-mix(in srgb, currentColor calc(var(--opacity-custom, var(--custom-opacity)) * 100%), transparent);
     }
 
     .bg-current\\/half {
-      background-color: color-mix(in srgb, currentColor var(--opacity-half, .5), transparent);
+      background-color: color-mix(in srgb, currentColor calc(var(--opacity-half, .5) * 100%), transparent);
     }"
   `)
 })
