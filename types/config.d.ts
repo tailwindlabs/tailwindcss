@@ -14,12 +14,14 @@ interface RecursiveKeyValuePair<K extends keyof any = string, V = string> {
 export type ResolvableTo<T> = T | ((utils: PluginUtils) => T)
 type CSSRuleObject = RecursiveKeyValuePair<string, null | string | string[]>
 
+type ColorResolverWithOpacity = (arg: Partial<{ opacityVariable: string; opacityValue: number }>) => string
+
 interface PluginUtils {
   colors: DefaultColors
   theme(path: string, defaultValue?: unknown): any
   breakpoints<I = Record<string, unknown>, O = I>(arg: I): O
-  rgb(arg: string): (arg: Partial<{ opacityVariable: string; opacityValue: number }>) => string
-  hsl(arg: string): (arg: Partial<{ opacityVariable: string; opacityValue: number }>) => string
+  rgb(arg: string): ColorResolverWithOpacity
+  hsl(arg: string):ColorResolverWithOpacity
 }
 
 // Content related config
@@ -93,7 +95,7 @@ export interface ThemeConfig {
   data: ResolvableTo<Record<string, string>>
 
   // Reusable base configs
-  colors: ResolvableTo<RecursiveKeyValuePair>
+  colors: ResolvableTo<RecursiveKeyValuePair<string, string | ColorResolverWithOpacity>> 
   spacing: ResolvableTo<KeyValuePair>
 
   // Components
