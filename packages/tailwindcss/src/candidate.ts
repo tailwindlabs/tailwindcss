@@ -233,27 +233,36 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     parsedCandidateVariants.push(parsedVariant)
   }
 
-  let state = {
-    important: false,
-    negative: false,
-  }
+  let important = false
+  let negative = false
 
   // Candidates that end with an exclamation mark are the important version with
   // higher specificity of the non-important candidate, e.g. `mx-4!`.
   if (base[base.length - 1] === '!') {
-    state.important = true
+    important = true
     base = base.slice(0, -1)
   }
 
   // Legacy syntax with leading `!`, e.g. `!mx-4`.
   else if (base[0] === '!') {
-    state.important = true
+    important = true
     base = base.slice(1)
   }
 
+  // Figure out the new base and the modifier segment if present.
+  //
+  // E.g.:
+  //
+  // ```
+  // bg-red-500/50
+  // ^^^^^^^^^^    -> Base without modifier
+  //            ^^ -> Modifier segment
+  // ```
+  let [baseWithoutModifier, modifierSegment = null] = segment(base, '/')
+
   // Arbitrary properties
-  if (base[0] === '[') {
-    let [baseWithoutModifier, modifierSegment = null] = segment(base, '/')
+  if (baseWithoutModifier[0] === '[') {
+    // Arbitrary properties should end with a `]`.
     if (baseWithoutModifier[baseWithoutModifier.length - 1] !== ']') return null
 
     // The property part of the arbitrary property can only start with a-z
@@ -287,20 +296,57 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
       value,
       modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
       variants: parsedCandidateVariants,
-      important: state.important,
+      important,
     }
   }
 
   // Candidates that start with a dash are the negative versions of another
   // candidate, e.g. `-mx-4`.
-  if (base[0] === '-') {
-    state.negative = true
-    base = base.slice(1)
+  if (baseWithoutModifier[0] === '-') {
+    negative = true
+    baseWithoutModifier = baseWithoutModifier.slice(1)
   }
 
-  let [root, value] = findRoot(base, designSystem.utilities)
+  // The root of the utility, e.g.: `bg-red-500`
+  //                                 ^^
+  let root: string | null = null
 
-  let modifierSegment: string | null = null
+  // The value of the utility, e.g.: `bg-red-500`
+  //                                     ^^^^^^^
+  let value: string | null = null
+
+  // If the base of the utility ends with a `]`, then we know it's an arbitrary
+  // value. This also means that everything before the `[…]` part should be the
+  // root of the utility.
+  //
+  // E.g.:
+  //
+  // ```
+  // bg-[#0088cc]
+  // ^^           -> Root
+  //    ^^^^^^^^^ -> Arbitrary value
+  //
+  // bg-red-[#0088cc]
+  // ^^^^^^           -> Root
+  //        ^^^^^^^^^ -> Arbitrary value
+  // ```
+  if (baseWithoutModifier[baseWithoutModifier.length - 1] === ']') {
+    let idx = baseWithoutModifier.indexOf('-[')
+    if (idx === -1) return null
+
+    root = baseWithoutModifier.slice(0, idx)
+
+    // The root of the utility should exist as-is in the utilities map. If not,
+    // it's an invalid utility and we can skip continue parsing.
+    if (!designSystem.utilities.has(root)) return null
+
+    value = baseWithoutModifier.slice(idx + 1)
+  }
+
+  // Not an arbitrary value
+  else {
+    ;[root, value] = findRoot(baseWithoutModifier, designSystem.utilities)
+  }
 
   // If the root is null, but it contains a `/`, then it could be that we are
   // dealing with a functional utility that contains a modifier but doesn't
@@ -319,6 +365,11 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // If there's no root, the candidate isn't a valid class and can be discarded.
   if (root === null) return null
 
+  // If the leftover value is an empty string, it means that the value is an
+  // invalid named value, e.g.: `bg-`. This makes the candidate invalid and we
+  // can skip any further parsing.
+  if (value === '') return null
+
   let kind = designSystem.utilities.kind(root)
 
   if (kind === 'static') {
@@ -328,8 +379,8 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
       kind: 'static',
       root,
       variants: parsedCandidateVariants,
-      negative: state.negative,
-      important: state.important,
+      negative,
+      important,
     }
   }
 
@@ -339,25 +390,18 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     modifier: modifierSegment === null ? null : parseModifier(modifierSegment),
     value: null,
     variants: parsedCandidateVariants,
-    negative: state.negative,
-    important: state.important,
+    negative,
+    important,
   }
 
   if (value === null) return candidate
 
   {
-    // Extract a modifier if present, e.g. `text-xl/9` or `bg-red-500/[14%]`
-    let [valueWithoutModifier, modifierSegment = null] = segment(value, '/')
-
-    if (modifierSegment !== null) {
-      candidate.modifier = parseModifier(modifierSegment)
-    }
-
-    let startArbitraryIdx = valueWithoutModifier.indexOf('[')
+    let startArbitraryIdx = value.indexOf('[')
     let valueIsArbitrary = startArbitraryIdx !== -1
 
     if (valueIsArbitrary) {
-      let arbitraryValue = valueWithoutModifier.slice(startArbitraryIdx + 1, -1)
+      let arbitraryValue = value.slice(startArbitraryIdx + 1, -1)
 
       // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
       let typehint = ''
@@ -408,18 +452,11 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
       let fraction =
         modifierSegment === null || candidate.modifier?.kind === 'arbitrary'
           ? null
-          : value.slice(valueWithoutModifier.lastIndexOf('-') + 1)
-
-      // If the leftover value is an empty string, it means that the value is an
-      // invalid named value. This makes the candidate invalid and we can
-      // skip any further parsing.
-      if (valueWithoutModifier === '') {
-        return null
-      }
+          : `${value.slice(value.lastIndexOf('-') + 1)}/${modifierSegment}`
 
       candidate.value = {
         kind: 'named',
-        value: valueWithoutModifier,
+        value,
         fraction,
       }
     }

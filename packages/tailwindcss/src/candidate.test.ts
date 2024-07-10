@@ -436,6 +436,15 @@ it('should parse a utility with a modifier and a variant', () => {
   `)
 })
 
+it('should not parse a partial utility', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+
+  expect(run('flex-', { utilities })).toMatchInlineSnapshot(`null`)
+  expect(run('bg-', { utilities })).toMatchInlineSnapshot(`null`)
+})
+
 it('should parse a utility with an arbitrary value', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
@@ -639,6 +648,42 @@ it('should parse a utility with an explicit variable as the arbitrary value that
         "variants": [],
       }
     `)
+})
+
+it('should not parse invalid arbitrary values', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  for (let candidate of [
+    'bg-red-[#0088cc]',
+    'bg-red[#0088cc]',
+
+    'bg-red-[color:var(--value)]',
+    'bg-red[color:var(--value)]',
+
+    'bg-red-[#0088cc]/50',
+    'bg-red[#0088cc]/50',
+
+    'bg-red-[#0088cc]/[50%]',
+    'bg-red[#0088cc]/[50%]',
+
+    'bg-red-[#0088cc]!',
+    'bg-red[#0088cc]!',
+
+    'bg-red-[--value]',
+    'bg-red[--value]',
+
+    'bg-red-[--value]!',
+    'bg-red[--value]!',
+
+    'bg-red-[var(--value)]',
+    'bg-red[var(--value)]',
+
+    'bg-red-[var(--value)]!',
+    'bg-red[var(--value)]!',
+  ]) {
+    expect(run(candidate, { utilities })).toEqual(null)
+  }
 })
 
 it('should parse a utility with an implicit variable as the modifier', () => {
