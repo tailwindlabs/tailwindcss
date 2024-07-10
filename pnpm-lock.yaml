@@ -156,6 +156,9 @@ importers:
       postcss:
         specifier: 8.4.24
         version: 8.4.24
+      tailwindcss-test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
 
   packages/@tailwindcss-vite:
     dependencies:
@@ -187,9 +190,6 @@ importers:
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
-      tailwindcss-test-utils:
-        specifier: workspace:^
-        version: link:../test-utils
 
   packages/test-utils: {}
 

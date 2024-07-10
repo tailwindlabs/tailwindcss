@@ -75,7 +75,6 @@
   "devDependencies": {
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "^20.12.12",
-    "lightningcss": "^1.25.1",
-    "tailwindcss-test-utils": "workspace:^"
+    "lightningcss": "^1.25.1"
   }
 }
