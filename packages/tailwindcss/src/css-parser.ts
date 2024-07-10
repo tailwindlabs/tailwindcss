@@ -461,6 +461,13 @@ export function parse(input: string) {
     }
   }
 
+  // If we have a leftover `buffer` that happens to start with an `@` then it
+  // means that we have an at-rule that is not terminated with a semicolon at
+  // the end of the input.
+  if (buffer[0] === '@') {
+    ast.push(rule(buffer.trim(), []))
+  }
+
   // When we are done parsing then everything should be balanced. If we still
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
