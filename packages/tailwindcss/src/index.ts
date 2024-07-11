@@ -57,7 +57,7 @@ export function compile(
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
 
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
 
     // Collect paths from `@plugin` at-rules
@@ -69,6 +69,10 @@ export function compile(
 
     // Register custom variants from `@variant` at-rules
     if (node.selector.startsWith('@variant ')) {
+      if (parent !== null) {
+        throw new Error('`@variant` can not be nested.')
+      }
+
       // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
       if (node.nodes.length === 0) {
         let [name, selector] = segment(node.selector.slice(9), ' ')
