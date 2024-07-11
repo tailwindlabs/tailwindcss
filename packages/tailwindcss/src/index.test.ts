@@ -1181,6 +1181,88 @@ describe('plugins', () => {
       }"
     `)
   })
+
+  test('addVariant with object syntax and @slot', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('hocus', {
+              '&:hover': '@slot',
+              '&:focus': '@slot',
+            })
+          }
+        },
+      },
+    ).build(['hocus:underline', 'group-hocus:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('addVariant with object syntax, media, nesting and multiple @slot', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('hocus', {
+              '.hocus': {
+                '@media (hover: hover)': {
+                  '&:hover': '@slot',
+                },
+                '&:focus': '@slot',
+              },
+            })
+          }
+        },
+      },
+    ).build(['hocus:underline', 'group-hocus:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (hover: hover) {
+          .group-hocus\\:flex:is(.hocus *):hover {
+            display: flex;
+          }
+        }
+
+        .group-hocus\\:flex:is(.hocus *):focus {
+          display: flex;
+        }
+
+        @media (hover: hover) {
+          .hocus\\:underline .hocus:hover {
+            text-decoration-line: underline;
+          }
+        }
+
+        .hocus\\:underline .hocus:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
 })
 
 describe('custom variants via CSS `@variant` at-rules', () => {

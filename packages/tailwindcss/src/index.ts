@@ -1,12 +1,27 @@
 import { version } from '../package.json'
-import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
+import {
+  WalkAction,
+  comment,
+  decl,
+  objectToAst,
+  rule,
+  toCss,
+  walk,
+  type AstNode,
+  type CssTree,
+  type Rule,
+} from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
-type PluginAPI = { addVariant: (name: string, selector: string | string[]) => void }
+type PluginAPI = {
+  addVariant(name: string, selector: string): void
+  addVariant(name: string, selector: string[]): void
+  addVariant(name: string, tree: CssTree): void
+}
 type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
@@ -93,32 +108,7 @@ export function compile(
         let name = node.selector.slice(9).trim()
 
         customVariants.push((designSystem) => {
-          designSystem.variants.static(name, (r) => {
-            let body = structuredClone(node.nodes)
-
-            walk(body, (node, { replaceWith }) => {
-              // Inject existing nodes in `@slot`
-              if (node.kind === 'rule' && node.selector === '@slot') {
-                replaceWith(r.nodes)
-                return
-              }
-
-              // Wrap `@keyframes` and `@property` in `@at-root`
-              else if (
-                node.kind === 'rule' &&
-                node.selector[0] === '@' &&
-                (node.selector.startsWith('@keyframes ') || node.selector.startsWith('@property '))
-              ) {
-                Object.assign(node, {
-                  selector: '@at-root',
-                  nodes: [rule(node.selector, node.nodes)],
-                })
-                return WalkAction.Skip
-              }
-            })
-
-            r.nodes = body
-          })
+          designSystem.variants.fromAst(name, node.nodes)
         })
         replaceWith([])
         return
@@ -229,10 +219,25 @@ export function compile(
   }
 
   let api: PluginAPI = {
-    addVariant(name, selector) {
-      designSystem.variants.static(name, (r) => {
-        r.nodes = ([] as string[]).concat(selector).map((selector) => rule(selector, r.nodes))
-      })
+    addVariant(name, variant) {
+      // Single selector
+      if (typeof variant === 'string') {
+        designSystem.variants.static(name, (r) => {
+          r.nodes = [rule(variant, r.nodes)]
+        })
+      }
+
+      // Multiple parallel selectors
+      else if (Array.isArray(variant)) {
+        designSystem.variants.static(name, (r) => {
+          r.nodes = variant.map((selector) => rule(selector, r.nodes))
+        })
+      }
+
+      // CSS Tree
+      else if (typeof variant === 'object') {
+        designSystem.variants.fromAst(name, objectToAst(variant))
+      }
     },
   }
 

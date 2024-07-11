@@ -42,6 +42,26 @@ export function comment(value: string): Comment {
   }
 }
 
+export interface CssTree extends Record<string, string | CssTree> {}
+
+export function objectToAst(obj: CssTree): AstNode[] {
+  let ast: AstNode[] = []
+
+  for (let [name, value] of Object.entries(obj)) {
+    if (typeof value === 'string') {
+      if (value === '@slot') {
+        ast.push(rule(name, [rule('@slot', [])]))
+      } else {
+        ast.push(decl(name, value))
+      }
+    } else {
+      ast.push(rule(name, objectToAst(value)))
+    }
+  }
+
+  return ast
+}
+
 export enum WalkAction {
   /** Continue walking, which is the default */
   Continue,

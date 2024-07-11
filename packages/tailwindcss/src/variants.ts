@@ -1,4 +1,4 @@
-import { decl, rule, type Rule } from './ast'
+import { WalkAction, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Variant } from './candidate'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
@@ -39,6 +39,35 @@ export class Variants {
 
   static(name: string, applyFn: VariantFn<'static'>, { compounds }: { compounds?: boolean } = {}) {
     this.set(name, { kind: 'static', applyFn, compounds: compounds ?? true })
+  }
+
+  fromAst(name: string, ast: AstNode[]) {
+    this.static(name, (r) => {
+      let body = structuredClone(ast)
+
+      walk(body, (node, { replaceWith }) => {
+        // Inject existing nodes in `@slot`
+        if (node.kind === 'rule' && node.selector === '@slot') {
+          replaceWith(r.nodes)
+          return
+        }
+
+        // Wrap `@keyframes` and `@property` in `@at-root`
+        else if (
+          node.kind === 'rule' &&
+          node.selector[0] === '@' &&
+          (node.selector.startsWith('@keyframes ') || node.selector.startsWith('@property '))
+        ) {
+          Object.assign(node, {
+            selector: '@at-root',
+            nodes: [rule(node.selector, node.nodes)],
+          })
+          return WalkAction.Skip
+        }
+      })
+
+      r.nodes = body
+    })
   }
 
   functional(
