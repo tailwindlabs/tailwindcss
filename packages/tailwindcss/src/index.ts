@@ -2,8 +2,12 @@ import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
-import { buildDesignSystem, type Plugin } from './design-system'
+import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme } from './theme'
+import { segment } from './utils/segment'
+
+type PluginAPI = { addVariant: (name: string, selector: string | string[]) => void }
+type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
   loadPlugin?: (path: string) => Plugin
@@ -34,6 +38,7 @@ export function compile(
   // Find all `@theme` declarations
   let theme = new Theme()
   let plugins: Plugin[] = []
+  let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
 
@@ -45,6 +50,79 @@ export function compile(
       plugins.push(loadPlugin(node.selector.slice(9, -1)))
       replaceWith([])
       return
+    }
+
+    // Register custom variants from `@variant` at-rules
+    if (node.selector.startsWith('@variant ')) {
+      // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
+      if (node.nodes.length === 0) {
+        let [name, selector] = segment(node.selector.slice(9), ' ')
+
+        // Remove variants without selector and without a body, e.g.: `@variant foo {}`
+        if (!selector) {
+          replaceWith([])
+          return
+        }
+
+        let selectors = segment(selector.slice(1, -1), ',')
+        customVariants.push((designSystem) => {
+          designSystem.variants.static(name, (r) => {
+            r.nodes = selectors.map((selector) => rule(selector, r.nodes))
+          })
+        })
+        replaceWith([])
+        return
+      }
+
+      // Variants without a selector, but with a body:
+      //
+      // E.g.:
+      //
+      // ```css
+      // @variant hocus {
+      //   &:hover {
+      //     @slot;
+      //   }
+      //
+      //   &:focus {
+      //     @slot;
+      //   }
+      // }
+      // ```
+      else {
+        let name = node.selector.slice(9).trim()
+
+        customVariants.push((designSystem) => {
+          designSystem.variants.static(name, (r) => {
+            let body = structuredClone(node.nodes)
+
+            walk(body, (node, { replaceWith }) => {
+              // Inject existing nodes in `@slot`
+              if (node.kind === 'rule' && node.selector === '@slot') {
+                replaceWith(r.nodes)
+                return
+              }
+
+              // Wrap `@keyframes` and `@property` in `@at-root`
+              else if (
+                node.kind === 'rule' &&
+                node.selector[0] === '@' &&
+                (node.selector.startsWith('@keyframes ') || node.selector.startsWith('@property '))
+              ) {
+                Object.assign(node, {
+                  selector: '@at-root',
+                  nodes: [rule(node.selector, node.nodes)],
+                })
+                return WalkAction.Skip
+              }
+            })
+
+            r.nodes = body
+          })
+        })
+        replaceWith([])
+        return
+      }
     }
 
     // Drop instances of `@media reference`
@@ -144,7 +222,23 @@ export function compile(
     firstThemeRule.nodes = nodes
   }
 
-  let designSystem = buildDesignSystem(theme, plugins)
+  let designSystem = buildDesignSystem(theme)
+
+  for (let customVariant of customVariants) {
+    customVariant(designSystem)
+  }
+
+  let api: PluginAPI = {
+    addVariant(name, selector) {
+      designSystem.variants.static(name, (r) => {
+        r.nodes = ([] as string[]).concat(selector).map((selector) => rule(selector, r.nodes))
+      })
+    },
+  }
+
+  for (let plugin of plugins) {
+    plugin(api)
+  }
 
   let tailwindUtilitiesNode: Rule | null = null
 

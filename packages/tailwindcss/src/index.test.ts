@@ -1182,3 +1182,396 @@ describe('plugins', () => {
     `)
   })
 })
+
+describe('custom variants via CSS `@variant` at-rules', () => {
+  describe('simple one-liner based', () => {
+    test('selector', () => {
+      let compiled = compile(css`
+        @variant hocus (&:hover, &:focus);
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:flex'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+            display: flex;
+          }
+
+          .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('media query', () => {
+      let compiled = compile(css`
+        @variant any-hover (@media (any-hover: hover));
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['any-hover:hover:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (any-hover: hover) {
+            .any-hover\\:hover\\:underline:hover {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+  })
+
+  describe('body block based', () => {
+    test('selector and @slot', () => {
+      let compiled = compile(css`
+        @variant custom-hover {
+          &:hover {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-hover:underline', 'group-custom-hover:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-custom-hover\\:underline:is(:where(.group):hover *) {
+            text-decoration-line: underline;
+          }
+
+          .custom-hover\\:underline:hover {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('parallel selector and single @slot', () => {
+      let compiled = compile(css`
+        @variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-hocus\\:underline:is(:where(.group):hover, .group-hocus\\:underline:focus *) {
+            text-decoration-line: underline;
+          }
+
+          .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('parallel selector and multiple @slot', () => {
+      let compiled = compile(css`
+        @variant hocus {
+          &:hover {
+            @slot;
+          }
+
+          &:focus {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *) {
+            text-decoration-line: underline;
+          }
+
+          .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('selector, nesting and @slot', () => {
+      let compiled = compile(css`
+        @variant custom-hover {
+          &.custom-hover {
+            &:hover {
+              @slot;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-hover:underline', 'group-custom-hover:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-custom-hover\\:underline:is(:where(.group).custom-hover *):hover {
+            text-decoration-line: underline;
+          }
+
+          .custom-hover\\:underline.custom-hover:hover {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('parallel selector, nesting and single @slot', () => {
+      let compiled = compile(css`
+        @variant hocus {
+          &.hocus {
+            &:hover,
+            &:focus {
+              @slot;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-hocus\\:underline:is(:where(.group).hocus *):hover, .group-hocus\\:underline:is(:where(.group).hocus *):focus {
+            text-decoration-line: underline;
+          }
+
+          .hocus\\:underline.hocus:hover, .hocus\\:underline.hocus:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('parallel selector, nesting and multiple @slot', () => {
+      let compiled = compile(css`
+        @variant hocus {
+          .hocus {
+            &:hover {
+              @slot;
+            }
+
+            &:focus {
+              @slot;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-hocus\\:underline:is(.hocus *):hover, .group-hocus\\:underline:is(.hocus *):focus {
+            text-decoration-line: underline;
+          }
+
+          .hocus\\:underline .hocus:hover, .hocus\\:underline .hocus:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('media and @slot', () => {
+      let compiled = compile(css`
+        @variant custom-hover {
+          @media (any-hover: hover) {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-hover:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (any-hover: hover) {
+            .custom-hover\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+
+    test('parallel media and single @slot', () => {
+      let compiled = compile(css`
+        @variant print-desktop {
+          @media screen, print {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['print-desktop:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media screen, print {
+            .print-desktop\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+
+    test('parallel media and multiple @slot', () => {
+      let compiled = compile(css`
+        @variant desktop {
+          @media (any-hover: hover) {
+            @slot;
+          }
+
+          @media (pointer: fine) {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['desktop:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (any-hover: hover) {
+            .desktop\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+
+          @media (pointer: fine) {
+            .desktop\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+
+    test('media, nesting and @slot', () => {
+      let compiled = compile(css`
+        @variant custom-hover {
+          @media (any-hover: hover) {
+            &:hover {
+              @slot;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-hover:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (any-hover: hover) {
+            .custom-hover\\:underline:hover {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+
+    test('parallel media, nesting and single @slot', () => {
+      let compiled = compile(css`
+        @variant desktop {
+          @media screen, print {
+            &:hover,
+            &:focus {
+              @slot;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['desktop:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media screen, print {
+            .desktop\\:underline:hover, .desktop\\:underline:focus {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+
+    test('parallel media, nesting and multiple @slot', () => {
+      let compiled = compile(css`
+        @variant custom-variant {
+          @media print {
+            @media screen {
+              @slot;
+            }
+
+            @media all {
+              @slot;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-variant:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media print {
+            @media screen {
+              .custom-variant\\:underline {
+                text-decoration-line: underline;
+              }
+            }
+
+            @media all {
+              .custom-variant\\:underline {
+                text-decoration-line: underline;
+              }
+            }
+          }
+        }"
+      `)
+    })
+  })
+})
