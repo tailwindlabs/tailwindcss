@@ -18,9 +18,7 @@ import { Theme } from './theme'
 import { segment } from './utils/segment'
 
 type PluginAPI = {
-  addVariant(name: string, selector: string): void
-  addVariant(name: string, selector: string[]): void
-  addVariant(name: string, tree: CssTree): void
+  addVariant(name: string, variant: string | string[] | CssTree): void
 }
 type Plugin = (api: PluginAPI) => void
 
