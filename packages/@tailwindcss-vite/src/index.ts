@@ -72,12 +72,22 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
-  function generateCss(css: string) {
-    return compile(css).build(Array.from(candidates))
+  function generateCss(css: string, inputPath: string) {
+    let basePath = path.dirname(path.resolve(inputPath))
+
+    return compile(css, {
+      loadPlugin: (pluginPath) => {
+        if (pluginPath[0] === '.') {
+          return require(path.resolve(basePath, pluginPath))
+        }
+
+        return require(pluginPath)
+      },
+    }).build(Array.from(candidates))
   }
 
-  function generateOptimizedCss(css: string) {
-    return optimizeCss(generateCss(css), { minify })
+  function generateOptimizedCss(css: string, inputPath: string) {
+    return optimizeCss(generateCss(css, inputPath), { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -189,7 +199,7 @@ export default function tailwindcss(): Plugin[] {
           await server?.waitForRequestsIdle?.(id)
         }
 
-        let code = await transformWithPlugins(this, id, generateCss(src))
+        let code = await transformWithPlugins(this, id, generateCss(src, id))
         return { code }
       },
     },
@@ -213,7 +223,7 @@ export default function tailwindcss(): Plugin[] {
             continue
           }
 
-          let css = generateOptimizedCss(file.content)
+          let css = generateOptimizedCss(file.content, id)
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure

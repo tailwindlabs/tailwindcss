@@ -2,10 +2,21 @@ import { version } from '../package.json'
 import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
-import { buildDesignSystem } from './design-system'
+import { buildDesignSystem, type Plugin } from './design-system'
 import { Theme } from './theme'
 
-export function compile(css: string): {
+type CompileOptions = {
+  loadPlugin?: (path: string) => Plugin
+}
+
+function throwOnPlugin(): never {
+  throw new Error('No `loadPlugin` function provided to `compile`')
+}
+
+export function compile(
+  css: string,
+  { loadPlugin = throwOnPlugin }: CompileOptions = {},
+): {
   build(candidates: string[]): string
 } {
   let ast = CSS.parse(css)
@@ -22,11 +33,19 @@ export function compile(css: string): {
 
   // Find all `@theme` declarations
   let theme = new Theme()
+  let plugins: Plugin[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
 
   walk(ast, (node, { replaceWith }) => {
     if (node.kind !== 'rule') return
+
+    // Collect paths from `@plugin` at-rules
+    if (node.selector.startsWith('@plugin ')) {
+      plugins.push(loadPlugin(node.selector.slice(9, -1)))
+      replaceWith([])
+      return
+    }
 
     // Drop instances of `@media reference`
     //
@@ -125,7 +144,7 @@ export function compile(css: string): {
     firstThemeRule.nodes = nodes
   }
 
-  let designSystem = buildDesignSystem(theme)
+  let designSystem = buildDesignSystem(theme, plugins)
 
   let tailwindUtilitiesNode: Rule | null = null
 

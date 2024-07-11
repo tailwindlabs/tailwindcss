@@ -134,3 +134,65 @@ describe('processing without specifying a base path', () => {
     })
   })
 })
+
+describe('plugins', () => {
+  test('local CJS plugin', async () => {
+    let processor = postcss([
+      tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+    ])
+
+    let result = await processor.process(
+      css`
+        @import 'tailwindcss/utilities';
+        @plugin 'tailwindcss-test-utils';
+      `,
+      { from: INPUT_CSS_PATH },
+    )
+
+    expect(result.css.trim()).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }
+
+      @media (inverted-colors: inverted) {
+        .inverted\\:flex {
+          display: flex;
+        }
+      }
+
+      .hocus\\:underline:focus, .hocus\\:underline:hover {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
+  test('published CJS plugin', async () => {
+    let processor = postcss([
+      tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+    ])
+
+    let result = await processor.process(
+      css`
+        @import 'tailwindcss/utilities';
+        @plugin 'tailwindcss-test-utils';
+      `,
+      { from: INPUT_CSS_PATH },
+    )
+
+    expect(result.css.trim()).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }
+
+      @media (inverted-colors: inverted) {
+        .inverted\\:flex {
+          display: flex;
+        }
+      }
+
+      .hocus\\:underline:focus, .hocus\\:underline:hover {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+})

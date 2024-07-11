@@ -1,4 +1,4 @@
-import { toCss } from './ast'
+import { rule, toCss } from './ast'
 import { parseCandidate, parseVariant } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
@@ -7,6 +7,10 @@ import type { Theme } from './theme'
 import { Utilities, createUtilities } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { Variants, createVariants } from './variants'
+
+export type Plugin = (api: {
+  addVariant: (name: string, selector: string | string[]) => void
+}) => void
 
 export type DesignSystem = {
   theme: Theme
@@ -25,7 +29,7 @@ export type DesignSystem = {
   getUsedVariants(): ReturnType<typeof parseVariant>[]
 }
 
-export function buildDesignSystem(theme: Theme): DesignSystem {
+export function buildDesignSystem(theme: Theme, plugins: Plugin[] = []): DesignSystem {
   let utilities = createUtilities(theme)
   let variants = createVariants(theme)
 
@@ -75,6 +79,16 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     getUsedVariants() {
       return Array.from(parsedVariants.values())
     },
+  }
+
+  for (let plugin of plugins) {
+    plugin({
+      addVariant: (name: string, selectors: string | string[]) => {
+        variants.static(name, (r) => {
+          r.nodes = ([] as string[]).concat(selectors).map((selector) => rule(selector, r.nodes))
+        })
+      },
+    })
   }
 
   return designSystem

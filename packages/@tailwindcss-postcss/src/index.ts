@@ -1,6 +1,7 @@
 import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
 import { Features, transform } from 'lightningcss'
+import path from 'path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
 import { compile } from 'tailwindcss'
@@ -130,7 +131,16 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         }
 
         if (rebuildStrategy === 'full') {
-          let { build } = compile(root.toString())
+          let basePath = path.dirname(path.resolve(inputFile))
+          let { build } = compile(root.toString(), {
+            loadPlugin: (pluginPath) => {
+              if (pluginPath[0] === '.') {
+                return require(path.resolve(basePath, pluginPath))
+              }
+
+              return require(pluginPath)
+            },
+          })
           context.build = build
           css = build(hasTailwind ? candidates : [])
         } else if (rebuildStrategy === 'incremental') {

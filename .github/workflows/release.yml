@@ -15,7 +15,7 @@ permissions:
 env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 20
-  PNPM_VERSION: ^8.15.0
+  PNPM_VERSION: ^9.5.0
   OXIDE_LOCATION: ./crates/node
 
 jobs:
