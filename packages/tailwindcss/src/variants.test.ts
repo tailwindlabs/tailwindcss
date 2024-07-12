@@ -1508,6 +1508,89 @@ test('not', () => {
   expect(run(['not-[:checked]/foo:flex'])).toEqual('')
 })
 
+test('not with media queries', () => {
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --breakpoint-lg: 1024px;
+        }
+        @tailwind utilities;
+      `,
+      ['not-print:flex', 'not-dark:flex', 'not-lg:flex'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --breakpoint-lg: 1024px;
+    }
+
+    @media not (width >= 1024px) {
+      .not-lg\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not (prefers-color-scheme: dark) {
+      .not-dark\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not print {
+      .not-print\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+  expect(
+    run(['group-not-dark:flex', 'peer-not-dark:flex', 'not-print/foo:flex', 'not-dark/foo:flex']),
+  ).toEqual('')
+})
+
+test('not with support queries', () => {
+  expect(run(['not-supports-[display:grid]:flex'])).toMatchInlineSnapshot(`
+    "@supports not (display: grid) {
+      .not-supports-\\[display\\:grid\\]\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+  expect(
+    run([
+      'group-not-supports-[display:grid]:flex',
+      'peer-not-supports-[display:grid]:flex',
+      'not-supports-[display:grid]/foo:flex',
+    ]),
+  ).toEqual('')
+})
+
+test('not with container queries', () => {
+  expect(
+    compileCss(
+      css`
+        @theme {
+          --width-lg: 1024px;
+        }
+        @tailwind utilities;
+      `,
+      ['not-@lg:flex', 'not-@lg/foo:flex'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root {
+      --width-lg: 1024px;
+    }
+
+    @container not (width >= 1024px) {
+      .not-\\@lg\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+  expect(
+    run(['group-not-@lg:flex', 'peer-not-@lg:flex', 'not-@lg/foo:flex', '@lg/foo:flex']),
+  ).toEqual('')
+})
+
 test('has', () => {
   expect(
     run([
