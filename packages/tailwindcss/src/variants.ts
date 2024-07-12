@@ -209,7 +209,32 @@ export function createVariants(theme: Theme): Variants {
 
   variants.compound('not', (ruleNode, variant) => {
     if (variant.modifier) return null
-    ruleNode.selector = `&:not(${ruleNode.selector.replace('&', '*')})`
+
+    // At-rules
+    if (ruleNode.selector[0] === '@') {
+      // @media
+      if (ruleNode.selector.startsWith('@media ')) {
+        let queries = segment(ruleNode.selector.slice(7), ',')
+        ruleNode.selector = `@media ${queries.map((query) => `not ${query}`).join(',')}`
+      }
+
+      // @supports
+      else if (ruleNode.selector.startsWith('@supports ')) {
+        let queries = segment(ruleNode.selector.slice(10), ',')
+        ruleNode.selector = `@supports ${queries.map((query) => `not ${query}`).join(',')}`
+      }
+
+      // @container
+      else if (ruleNode.selector.startsWith('@container ')) {
+        let queries = segment(ruleNode.selector.slice(11), ',')
+        ruleNode.selector = `@container ${queries.map((query) => `not ${query}`).join(',')}`
+      }
+    }
+
+    // Selectors
+    else {
+      ruleNode.selector = `&:not(${ruleNode.selector.replace('&', '*')})`
+    }
   })
 
   variants.compound('group', (ruleNode, variant) => {

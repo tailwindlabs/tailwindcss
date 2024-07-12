@@ -611,14 +611,28 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
         let subVariant = designSystem.parseVariant(value)
         if (subVariant === null) return null
-        if (subVariant.compounds === false) return null
+
+        let compounds: boolean | null = null
+
+        // Special case: allow compounding in `not` because we can invert
+        // `@media` queries.
+        if (root === 'not' && subVariant.compounds === false) {
+          // However, we do not allow further compounding. E.g.:
+          // `group-not-print` is invalid.
+          compounds = false
+        }
+
+        // Discard the variant if it's not allowed to be compounded.
+        else if (subVariant.compounds === false) {
+          return null
+        }
 
         return {
           kind: 'compound',
           root,
           modifier: modifier === null ? null : { kind: 'named', value: modifier },
           variant: subVariant,
-          compounds: designSystem.variants.compounds(root),
+          compounds: compounds ?? designSystem.variants.compounds(root),
         }
       }
     }
