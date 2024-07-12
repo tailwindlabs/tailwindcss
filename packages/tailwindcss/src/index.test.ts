@@ -1737,4 +1737,40 @@ describe('@variant', () => {
       `)
     })
   })
+
+  test('combining multiple complex variants', () => {
+    let compiled = compile(css`
+      @variant one {
+        &.foo-1 {
+          &.bar-1 {
+            @slot;
+          }
+        }
+      }
+
+      @variant two {
+        &.foo-2 {
+          &.bar-2 {
+            @slot;
+          }
+        }
+      }
+
+      @layer utilities {
+        @tailwind utilities;
+      }
+    `).build(['group-one:two:underline', 'one:group-two:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .one\\:group-two\\:underline.foo-1.bar-1:is(:where(.group).foo-2 *):is(:where(.group).bar-2 *) {
+          text-decoration-line: underline;
+        }
+
+        .group-one\\:two\\:underline:is(:where(.group).foo-1 *):is(:where(.group).bar-1 *).foo-2.bar-2 {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
 })
