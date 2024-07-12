@@ -2753,6 +2753,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-blur': value.trim() === '' ? ' ' : `blur(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2768,6 +2769,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-brightness': `brightness(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2783,6 +2785,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-contrast': `contrast(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2798,6 +2801,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-grayscale': `grayscale(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2813,6 +2817,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-hue-rotate': `hue-rotate(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2828,6 +2833,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-invert': `invert(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2843,6 +2849,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-opacity': `opacity(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2858,6 +2865,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-saturate': `saturate(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2873,6 +2881,7 @@ export let corePlugins = {
           return {
             '--tw-backdrop-sepia': `sepia(${value})`,
             '@defaults backdrop-filter': {},
+            '-webkit-backdrop-filter': cssBackdropFilterValue,
             'backdrop-filter': cssBackdropFilterValue,
           }
         },
@@ -2896,9 +2905,13 @@ export let corePlugins = {
     addUtilities({
       '.backdrop-filter': {
         '@defaults backdrop-filter': {},
+        '-webkit-backdrop-filter': cssBackdropFilterValue,
         'backdrop-filter': cssBackdropFilterValue,
       },
-      '.backdrop-filter-none': { 'backdrop-filter': 'none' },
+      '.backdrop-filter-none': {
+        '-webkit-backdrop-filter': 'none',
+        'backdrop-filter': 'none',
+      },
     })
   },
 
