@@ -1759,7 +1759,12 @@ describe('@variant', () => {
       @layer utilities {
         @tailwind utilities;
       }
-    `).build(['group-one:two:underline', 'one:group-two:underline'])
+    `).build([
+      'group-one:two:underline',
+      'one:group-two:underline',
+      'peer-one:two:underline',
+      'one:peer-two:underline',
+    ])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1767,7 +1772,15 @@ describe('@variant', () => {
           text-decoration-line: underline;
         }
 
+        .one\\:peer-two\\:underline.foo-1.bar-1:is(:where(.peer).foo-2 ~ *):is(:where(.peer).bar-2 ~ *) {
+          text-decoration-line: underline;
+        }
+
         .group-one\\:two\\:underline:is(:where(.group).foo-1 *):is(:where(.group).bar-1 *).foo-2.bar-2 {
+          text-decoration-line: underline;
+        }
+
+        .peer-one\\:two\\:underline:is(:where(.peer).foo-1 ~ *):is(:where(.peer).bar-1 ~ *).foo-2.bar-2 {
           text-decoration-line: underline;
         }
       }"
