@@ -17,7 +17,7 @@ jobs:
     permissions:
       contents: write # for softprops/action-gh-release to create GitHub release
 
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 15
 
     strategy:
