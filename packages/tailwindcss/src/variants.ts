@@ -19,7 +19,7 @@ export class Variants {
       kind: Variant['kind']
       order: number
       applyFn: VariantFn<any>
-      compounds: boolean
+      compounds: boolean | string[]
     }
   >()
 
@@ -38,7 +38,11 @@ export class Variants {
    */
   private lastOrder = 0
 
-  static(name: string, applyFn: VariantFn<'static'>, { compounds }: { compounds?: boolean } = {}) {
+  static(
+    name: string,
+    applyFn: VariantFn<'static'>,
+    { compounds }: { compounds?: boolean | string[] } = {},
+  ) {
     this.set(name, { kind: 'static', applyFn, compounds: compounds ?? true })
   }
 
@@ -73,7 +77,7 @@ export class Variants {
   functional(
     name: string,
     applyFn: VariantFn<'functional'>,
-    { compounds }: { compounds?: boolean } = {},
+    { compounds }: { compounds?: boolean | string[] } = {},
   ) {
     this.set(name, { kind: 'functional', applyFn, compounds: compounds ?? true })
   }
@@ -81,7 +85,7 @@ export class Variants {
   compound(
     name: string,
     applyFn: VariantFn<'compound'>,
-    { compounds }: { compounds?: boolean } = {},
+    { compounds }: { compounds?: boolean | string[] } = {},
   ) {
     this.set(name, { kind: 'compound', applyFn, compounds: compounds ?? true })
   }
@@ -156,7 +160,7 @@ export class Variants {
 
   private set<T extends Variant['kind']>(
     name: string,
-    { kind, applyFn, compounds }: { kind: T; applyFn: VariantFn<T>; compounds: boolean },
+    { kind, applyFn, compounds }: { kind: T; applyFn: VariantFn<T>; compounds: boolean | string[] },
   ) {
     let existing = this.variants.get(name)
     if (existing) {
@@ -189,7 +193,7 @@ export function createVariants(theme: Theme): Variants {
   function staticVariant(
     name: string,
     selectors: string[],
-    { compounds }: { compounds?: boolean } = {},
+    { compounds }: { compounds?: boolean | string[] } = {},
   ) {
     variants.static(
       name,
@@ -533,16 +537,18 @@ export function createVariants(theme: Theme): Variants {
 
       ruleNode.nodes = [rule(`@supports ${value}`, ruleNode.nodes)]
     },
-    { compounds: false },
+    { compounds: ['not'] },
   )
 
   staticVariant('motion-safe', ['@media (prefers-reduced-motion: no-preference)'], {
-    compounds: false,
+    compounds: ['not'],
   })
-  staticVariant('motion-reduce', ['@media (prefers-reduced-motion: reduce)'], { compounds: false })
+  staticVariant('motion-reduce', ['@media (prefers-reduced-motion: reduce)'], {
+    compounds: ['not'],
+  })
 
-  staticVariant('contrast-more', ['@media (prefers-contrast: more)'], { compounds: false })
-  staticVariant('contrast-less', ['@media (prefers-contrast: less)'], { compounds: false })
+  staticVariant('contrast-more', ['@media (prefers-contrast: more)'], { compounds: ['not'] })
+  staticVariant('contrast-less', ['@media (prefers-contrast: less)'], { compounds: ['not'] })
 
   {
     // Helper to compare variants by their resolved values, this is used by the
@@ -654,7 +660,7 @@ export function createVariants(theme: Theme): Variants {
 
               ruleNode.nodes = [rule(`@media (width < ${value})`, ruleNode.nodes)]
             },
-            { compounds: false },
+            { compounds: ['not'] },
           )
         },
         (a, z) => compareBreakpoints(a, z, 'desc', resolvedBreakpoints),
@@ -676,7 +682,7 @@ export function createVariants(theme: Theme): Variants {
               (ruleNode) => {
                 ruleNode.nodes = [rule(`@media (width >= ${value})`, ruleNode.nodes)]
               },
-              { compounds: false },
+              { compounds: ['not'] },
             )
           }
 
@@ -689,7 +695,7 @@ export function createVariants(theme: Theme): Variants {
 
               ruleNode.nodes = [rule(`@media (width >= ${value})`, ruleNode.nodes)]
             },
-            { compounds: false },
+            { compounds: ['not'] },
           )
         },
         (a, z) => compareBreakpoints(a, z, 'asc', resolvedBreakpoints),
@@ -747,7 +753,7 @@ export function createVariants(theme: Theme): Variants {
                 ),
               ]
             },
-            { compounds: false },
+            { compounds: ['not'] },
           )
         },
         (a, z) => compareBreakpoints(a, z, 'desc', resolvedWidths),
@@ -775,7 +781,7 @@ export function createVariants(theme: Theme): Variants {
                 ),
               ]
             },
-            { compounds: false },
+            { compounds: ['not'] },
           )
           variants.functional(
             '@min',
@@ -792,7 +798,7 @@ export function createVariants(theme: Theme): Variants {
                 ),
               ]
             },
-            { compounds: false },
+            { compounds: ['not'] },
           )
         },
         (a, z) => compareBreakpoints(a, z, 'asc', resolvedWidths),
@@ -805,19 +811,19 @@ export function createVariants(theme: Theme): Variants {
     }
   }
 
-  staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: false })
-  staticVariant('landscape', ['@media (orientation: landscape)'], { compounds: false })
+  staticVariant('portrait', ['@media (orientation: portrait)'], { compounds: ['not'] })
+  staticVariant('landscape', ['@media (orientation: landscape)'], { compounds: ['not'] })
 
   staticVariant('ltr', ['&:where([dir="ltr"], [dir="ltr"] *)'])
   staticVariant('rtl', ['&:where([dir="rtl"], [dir="rtl"] *)'])
 
-  staticVariant('dark', ['@media (prefers-color-scheme: dark)'], { compounds: false })
+  staticVariant('dark', ['@media (prefers-color-scheme: dark)'], { compounds: ['not'] })
 
   staticVariant('starting', ['@starting-style'], { compounds: false })
 
-  staticVariant('print', ['@media print'], { compounds: false })
+  staticVariant('print', ['@media print'], { compounds: ['not'] })
 
-  staticVariant('forced-colors', ['@media (forced-colors: active)'], { compounds: false })
+  staticVariant('forced-colors', ['@media (forced-colors: active)'], { compounds: ['not'] })
 
   return variants
 }

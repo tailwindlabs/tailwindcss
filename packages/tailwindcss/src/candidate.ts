@@ -100,7 +100,7 @@ export type Variant =
       selector: string
 
       // If true, it can be applied as a child of a compound variant
-      compounds: boolean
+      compounds: boolean | string[]
     }
 
   /**
@@ -113,7 +113,7 @@ export type Variant =
       root: string
 
       // If true, it can be applied as a child of a compound variant
-      compounds: boolean
+      compounds: boolean | string[]
     }
 
   /**
@@ -135,7 +135,7 @@ export type Variant =
       modifier: ArbitraryModifier | NamedModifier | null
 
       // If true, it can be applied as a child of a compound variant
-      compounds: boolean
+      compounds: boolean | string[]
     }
 
   /**
@@ -154,7 +154,7 @@ export type Variant =
       variant: Variant
 
       // If true, it can be applied as a child of a compound variant
-      compounds: boolean
+      compounds: boolean | string[]
     }
 
 export type Candidate =
@@ -614,17 +614,22 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
         let compounds: boolean | null = null
 
-        // Special case: allow compounding in `not` because we can invert
-        // `@media` queries.
-        if (root === 'not' && subVariant.compounds === false) {
-          // However, we do not allow further compounding. E.g.:
-          // `group-not-print` is invalid.
-          compounds = false
+        // Discard the variant if it's not allowed to be compounded.
+        if (subVariant.compounds === false) {
+          return null
         }
 
-        // Discard the variant if it's not allowed to be compounded.
-        else if (subVariant.compounds === false) {
-          return null
+        // Special case: allow compounding in `not` because we can invert
+        // `@media` queries.
+        else if (Array.isArray(subVariant.compounds) && subVariant.compounds.includes('not')) {
+          // If the root variant is not allowed to be compounded, we discard it.
+          if (!subVariant.compounds.includes(root)) {
+            return null
+          }
+
+          // Further compounding is not allowed
+          // (e.g. `group-not-print` is invalid)
+          compounds = false
         }
 
         return {
@@ -632,7 +637,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
           root,
           modifier: modifier === null ? null : { kind: 'named', value: modifier },
           variant: subVariant,
-          compounds: compounds ?? designSystem.variants.compounds(root),
+          compounds: compounds ?? !!designSystem.variants.compounds(root),
         }
       }
     }
