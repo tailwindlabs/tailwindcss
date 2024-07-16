@@ -1310,6 +1310,23 @@ describe('custom variants via CSS `@variant` at-rules', () => {
     ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` cannot be nested.]`)
   })
 
+  test('@variant with no body must include a selector', () => {
+    expect(() =>
+      compileCss(css`
+        @variant hocus;
+      `),
+    ).toThrowErrorMatchingInlineSnapshot('[Error: `@variant hocus` has no selector or body.]')
+  })
+
+  test('@variant with selector must include a body', () => {
+    expect(() =>
+      compileCss(css`
+        @variant hocus {
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot('[Error: `@variant hocus` has no selector or body.]')
+  })
+
   describe('simple one-liner based', () => {
     test('selector', () => {
       let compiled = compile(css`

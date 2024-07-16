@@ -77,6 +77,11 @@ export function compile(
       // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
       if (node.nodes.length === 0) {
         let [name, selector] = segment(node.selector.slice(9), ' ')
+
+        if (!selector) {
+          throw new Error(`\`@variant ${name}\` has no selector or body.`)
+        }
+
         let selectors = segment(selector.slice(1, -1), ',')
 
         customVariants.push((designSystem) => {
