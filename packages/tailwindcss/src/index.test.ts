@@ -1299,8 +1299,8 @@ describe('plugins', () => {
   })
 })
 
-describe('custom variants via CSS `@variant` at-rules', () => {
-  test('@variant should be top-level and cannot be nested', () => {
+describe('@variant', () => {
+  test('@variant must be top-level and cannot be nested', () => {
     expect(() =>
       compileCss(css`
         .foo {
@@ -1327,8 +1327,8 @@ describe('custom variants via CSS `@variant` at-rules', () => {
     ).toThrowErrorMatchingInlineSnapshot('[Error: `@variant hocus` has no selector or body.]')
   })
 
-  describe('simple one-liner based', () => {
-    test('selector', () => {
+  describe('body-less syntax', () => {
+    test('selector variant', () => {
       let compiled = compile(css`
         @variant hocus (&:hover, &:focus);
 
@@ -1350,7 +1350,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('media query', () => {
+    test('at-rule variant', () => {
       let compiled = compile(css`
         @variant any-hover (@media (any-hover: hover));
 
@@ -1371,8 +1371,8 @@ describe('custom variants via CSS `@variant` at-rules', () => {
     })
   })
 
-  describe('body block based', () => {
-    test('selector and @slot', () => {
+  describe('body with @slot syntax', () => {
+    test('selector with @slot', () => {
       let compiled = compile(css`
         @variant custom-hover {
           &:hover {
@@ -1398,7 +1398,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('parallel selector and single @slot', () => {
+    test('grouped selectors with @slot', () => {
       let compiled = compile(css`
         @variant hocus {
           &:hover,
@@ -1425,7 +1425,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('parallel selector and multiple @slot', () => {
+    test('multiple selectors with @slot', () => {
       let compiled = compile(css`
         @variant hocus {
           &:hover {
@@ -1455,7 +1455,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('selector, nesting and @slot', () => {
+    test('nested selectors with @slot', () => {
       let compiled = compile(css`
         @variant custom-hover {
           &.custom-hover {
@@ -1483,7 +1483,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('parallel selector, nesting and single @slot', () => {
+    test('grouped nested selectors with @slot', () => {
       let compiled = compile(css`
         @variant hocus {
           &.hocus {
@@ -1544,7 +1544,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('media and @slot', () => {
+    test('at-rule with @slot', () => {
       let compiled = compile(css`
         @variant custom-hover {
           @media (any-hover: hover) {
@@ -1568,31 +1568,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('parallel media and single @slot', () => {
-      let compiled = compile(css`
-        @variant print-desktop {
-          @media screen, print {
-            @slot;
-          }
-        }
-
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `).build(['print-desktop:underline'])
-
-      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-        "@layer utilities {
-          @media screen, print {
-            .print-desktop\\:underline {
-              text-decoration-line: underline;
-            }
-          }
-        }"
-      `)
-    })
-
-    test('parallel media and multiple @slot', () => {
+    test('multiple at-rules with @slot', () => {
       let compiled = compile(css`
         @variant desktop {
           @media (any-hover: hover) {
@@ -1626,7 +1602,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('media, nesting and @slot', () => {
+    test('at-rule with nesting with @slot', () => {
       let compiled = compile(css`
         @variant custom-hover {
           @media (any-hover: hover) {
@@ -1652,7 +1628,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('parallel media, nesting and single @slot', () => {
+    test('at-rule with nested grouped selectors with @slot', () => {
       let compiled = compile(css`
         @variant desktop {
           @media screen, print {
@@ -1679,7 +1655,7 @@ describe('custom variants via CSS `@variant` at-rules', () => {
       `)
     })
 
-    test('parallel media, nesting and multiple @slot', () => {
+    test('nested at-rules with @slot', () => {
       let compiled = compile(css`
         @variant custom-variant {
           @media print {
@@ -1712,6 +1688,37 @@ describe('custom variants via CSS `@variant` at-rules', () => {
                 text-decoration-line: underline;
               }
             }
+          }
+        }"
+      `)
+    })
+
+    test('at-rule and selector with @slot', () => {
+      let compiled = compile(css`
+        @variant custom-dark {
+          @media (prefers-color-scheme: dark) {
+            @slot;
+          }
+          &:is(.dark *) {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-dark:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (prefers-color-scheme: dark) {
+            .custom-dark\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+
+          .custom-dark\\:underline:is(.dark *) {
+            text-decoration-line: underline;
           }
         }"
       `)
