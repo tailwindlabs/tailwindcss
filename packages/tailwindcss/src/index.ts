@@ -71,23 +71,20 @@ export function compile(
         throw new Error('`@variant` cannot be nested.')
       }
 
+      // Remove `@variant` at-rule so it's not included in the compiled CSS
+      replaceWith([])
+
       // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
       if (node.nodes.length === 0) {
         let [name, selector] = segment(node.selector.slice(9), ' ')
-
-        // Remove variants without selector and without a body, e.g.: `@variant foo {}`
-        if (!selector) {
-          replaceWith([])
-          return
-        }
-
         let selectors = segment(selector.slice(1, -1), ',')
+
         customVariants.push((designSystem) => {
           designSystem.variants.static(name, (r) => {
             r.nodes = selectors.map((selector) => rule(selector, r.nodes))
           })
         })
-        replaceWith([])
+
         return
       }
 
@@ -112,7 +109,7 @@ export function compile(
         customVariants.push((designSystem) => {
           designSystem.variants.fromAst(name, node.nodes)
         })
-        replaceWith([])
+
         return
       }
     }
