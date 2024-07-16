@@ -1301,6 +1301,47 @@ describe('plugins', () => {
       }"
     `)
   })
+
+  test('built-in variants can be overridden while keeping their order', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('dark', '&:is([data-theme=dark] *)')
+          }
+        },
+      },
+    ).build(
+      // Make sure the order does not change by including the variants
+      // immediately before and after `dark`
+      ['rtl:flex', 'dark:flex', 'starting:flex'],
+    )
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .rtl\\:flex:where([dir="rtl"], [dir="rtl"] *) {
+          display: flex;
+        }
+
+        .dark\\:flex:is([data-theme="dark"] *) {
+          display: flex;
+        }
+
+        @starting-style {
+          .starting\\:flex {
+            display: flex;
+          }
+        }
+      }"
+    `)
+  })
 })
 
 describe('@variant', () => {
@@ -1736,5 +1777,38 @@ describe('@variant', () => {
         }"
       `)
     })
+  })
+
+  test('built-in variants can be overridden while keeping their order', () => {
+    expect(
+      compileCss(
+        css`
+          @variant dark (&:is([data-theme='dark'] *));
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+
+        // Make sure the order does not change by including the variants
+        // immediately before and after `dark`
+        ['rtl:flex', 'dark:flex', 'starting:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .rtl\\:flex:where([dir="rtl"], [dir="rtl"] *) {
+          display: flex;
+        }
+
+        .dark\\:flex:is([data-theme="dark"] *) {
+          display: flex;
+        }
+
+        @starting-style {
+          .starting\\:flex {
+            display: flex;
+          }
+        }
+      }"
+    `)
   })
 })

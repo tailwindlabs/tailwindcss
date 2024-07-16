@@ -158,22 +158,18 @@ export class Variants {
     name: string,
     { kind, applyFn, compounds }: { kind: T; applyFn: VariantFn<T>; compounds: boolean },
   ) {
-    // In test mode, throw an error if we accidentally override another variant
-    // by mistake when implementing a new variant that shares the same root
-    // without realizing the definitions need to be merged.
-    if (process.env.NODE_ENV === 'test') {
-      if (this.variants.has(name)) {
-        throw new Error(`Duplicate variant prefix [${name}]`)
-      }
+    let existing = this.variants.get(name)
+    if (existing) {
+      Object.assign(existing, { kind, applyFn, compounds })
+    } else {
+      this.lastOrder = this.nextOrder()
+      this.variants.set(name, {
+        kind,
+        applyFn,
+        order: this.lastOrder,
+        compounds,
+      })
     }
-
-    this.lastOrder = this.nextOrder()
-    this.variants.set(name, {
-      kind,
-      applyFn,
-      order: this.lastOrder,
-      compounds,
-    })
   }
 
   private nextOrder() {
