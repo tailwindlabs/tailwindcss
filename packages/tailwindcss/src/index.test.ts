@@ -1300,14 +1300,14 @@ describe('plugins', () => {
 })
 
 describe('custom variants via CSS `@variant` at-rules', () => {
-  test('@variant should be top-level and can not be nested', () => {
+  test('@variant should be top-level and cannot be nested', () => {
     expect(() =>
       compileCss(css`
         .foo {
           @variant hocus (&:hover, &:focus);
         }
       `),
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` can not be nested.]`)
+    ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` cannot be nested.]`)
   })
 
   describe('simple one-liner based', () => {

@@ -68,7 +68,7 @@ export function compile(
     // Register custom variants from `@variant` at-rules
     if (node.selector.startsWith('@variant ')) {
       if (parent !== null) {
-        throw new Error('`@variant` can not be nested.')
+        throw new Error('`@variant` cannot be nested.')
       }
 
       // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
