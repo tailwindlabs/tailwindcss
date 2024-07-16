@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix detection of some utilities in Slim/Pug templates ([#14006](https://github.com/tailwindlabs/tailwindcss/pull/14006))
 
+### Changed
+
+- Loosen `:is()` wrapping rules when using an important selector ([#13900](https://github.com/tailwindlabs/tailwindcss/pull/13900))
+
 ## [3.4.5] - 2024-07-15
 
 ### Fixed
