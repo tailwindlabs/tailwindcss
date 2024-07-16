@@ -256,6 +256,13 @@ export function createVariants(theme: Theme): Variants {
     // need to replace it in the selector ourselves.
     ruleNode.selector = ruleNode.selector.replace('&', peerSelector)
 
+    // When the selector is a selector _list_ we need to wrap it in `:is`
+    // to make sure the matching behavior is consistent with the original
+    // variant / selector.
+    if (segment(ruleNode.selector, ',').length > 1) {
+      ruleNode.selector = `:is(${ruleNode.selector})`
+    }
+
     // Use `:where` to make sure the specificity of peer variants isn't higher
     // than the specificity of other variants.
     ruleNode.selector = `&:is(${ruleNode.selector} ~ *)`
