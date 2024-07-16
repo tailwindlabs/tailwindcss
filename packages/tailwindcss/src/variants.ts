@@ -46,10 +46,9 @@ export class Variants {
       let body = structuredClone(ast)
 
       walk(body, (node, { replaceWith }) => {
-        // Inject existing nodes in `@slot`
+        // Replace `@slot` with rule nodes
         if (node.kind === 'rule' && node.selector === '@slot') {
           replaceWith(r.nodes)
-          return
         }
 
         // Wrap `@keyframes` and `@property` in `@at-root`
