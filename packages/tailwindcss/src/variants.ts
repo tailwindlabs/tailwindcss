@@ -225,11 +225,9 @@ export function createVariants(theme: Theme): Variants {
     // need to replace it in the selector ourselves.
     ruleNode.selector = ruleNode.selector.replaceAll('&', groupSelector)
 
-    // This selector is wrapped in `:is` given that `ruleNode.selector` might be
-    // a selector list when compounding a variant the behavior needs to stay
-    // consistent with the original variant / selector.
-    // TODO: This should probably check for "are there any combinators" and not
-    // multiple selectors
+    // When the selector is a selector _list_ we need to wrap it in `:is`
+    // to make sure the matching behavior is consistent with the original
+    // variant / selector.
     if (segment(ruleNode.selector, ',').length > 1) {
       ruleNode.selector = `:is(${ruleNode.selector})`
     }
