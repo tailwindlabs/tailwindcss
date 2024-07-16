@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for basic `addVariant` plugins with new `@plugin` directive ([#13982](https://github.com/tailwindlabs/tailwindcss/pull/13982))
 - Add `@variant` at-rule for defining custom variants in CSS ([#13992](https://github.com/tailwindlabs/tailwindcss/pull/13992))
+- Allow variants to be overridden ([#14008](https://github.com/tailwindlabs/tailwindcss/pull/14008))
 
 ## [4.0.0-alpha.17] - 2024-07-04
 
