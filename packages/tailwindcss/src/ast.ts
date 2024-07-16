@@ -42,7 +42,7 @@ export function comment(value: string): Comment {
   }
 }
 
-export interface CssTree extends Record<string, string | CssTree> {}
+export type CssTree = { [key: string]: string | CssTree }
 
 export function objectToAst(obj: CssTree): AstNode[] {
   let ast: AstNode[] = []
