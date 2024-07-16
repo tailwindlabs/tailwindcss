@@ -2,6 +2,7 @@ import { WalkAction, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Variant } from './candidate'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
   rule: Rule,
@@ -227,9 +228,11 @@ export function createVariants(theme: Theme): Variants {
     // This selector is wrapped in `:is` given that `ruleNode.selector` might be
     // a selector list when compounding a variant the behavior needs to stay
     // consistent with the original variant / selector.
-    // TODO: Ideally this would only be done when there are combinators in the
-    // selector, but that's a bit more complex to implement.
-    ruleNode.selector = `:is(${ruleNode.selector})`
+    // TODO: This should probably check for "are there any combinators" and not
+    // multiple selectors
+    if (segment(ruleNode.selector, ',').length > 1) {
+      ruleNode.selector = `:is(${ruleNode.selector})`
+    }
 
     // Use `:where` to make sure the specificity of group variants isn't higher
     // than the specificity of other variants.
