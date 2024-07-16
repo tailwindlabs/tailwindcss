@@ -1219,7 +1219,7 @@ describe('plugins', () => {
     `)
   })
 
-  test.skip('addVariant with object syntax, media, nesting and multiple @slot', () => {
+  test('addVariant with object syntax, media, nesting and multiple @slot', () => {
     let compiled = compile(
       css`
         @plugin "my-plugin";
@@ -1578,7 +1578,7 @@ describe('@variant', () => {
       `)
     })
 
-    test.skip('selector nested under at-rule with @slot', () => {
+    test('selector nested under at-rule with @slot', () => {
       let compiled = compile(css`
         @variant hocus {
           @media (hover: hover) {
@@ -1595,8 +1595,10 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:underline:is():hover {
-            text-decoration-line: underline;
+          @media (hover: hover) {
+            .group-hocus\\:underline:is(:where(.group):hover *) {
+              text-decoration-line: underline;
+            }
           }
 
           @media (hover: hover) {
