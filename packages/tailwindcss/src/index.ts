@@ -1,9 +1,26 @@
 import { version } from '../package.json'
-import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
+import {
+  WalkAction,
+  comment,
+  decl,
+  objectToAst,
+  rule,
+  toCss,
+  walk,
+  type AstNode,
+  type CssInJs,
+  type Rule,
+} from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
-import { buildDesignSystem, type Plugin } from './design-system'
+import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme } from './theme'
+import { segment } from './utils/segment'
+
+type PluginAPI = {
+  addVariant(name: string, variant: string | string[] | CssInJs): void
+}
+type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
   loadPlugin?: (path: string) => Plugin
@@ -34,10 +51,11 @@ export function compile(
   // Find all `@theme` declarations
   let theme = new Theme()
   let plugins: Plugin[] = []
+  let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
 
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
 
     // Collect paths from `@plugin` at-rules
@@ -45,6 +63,62 @@ export function compile(
       plugins.push(loadPlugin(node.selector.slice(9, -1)))
       replaceWith([])
       return
+    }
+
+    // Register custom variants from `@variant` at-rules
+    if (node.selector.startsWith('@variant ')) {
+      if (parent !== null) {
+        throw new Error('`@variant` cannot be nested.')
+      }
+
+      // Remove `@variant` at-rule so it's not included in the compiled CSS
+      replaceWith([])
+
+      let [name, selector] = segment(node.selector.slice(9), ' ')
+
+      if (node.nodes.length > 0 && selector) {
+        throw new Error(`\`@variant ${name}\` cannot have both a selector and a body.`)
+      }
+
+      // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
+      if (node.nodes.length === 0) {
+        if (!selector) {
+          throw new Error(`\`@variant ${name}\` has no selector or body.`)
+        }
+
+        let selectors = segment(selector.slice(1, -1), ',')
+
+        customVariants.push((designSystem) => {
+          designSystem.variants.static(name, (r) => {
+            r.nodes = selectors.map((selector) => rule(selector, r.nodes))
+          })
+        })
+
+        return
+      }
+
+      // Variants without a selector, but with a body:
+      //
+      // E.g.:
+      //
+      // ```css
+      // @variant hocus {
+      //   &:hover {
+      //     @slot;
+      //   }
+      //
+      //   &:focus {
+      //     @slot;
+      //   }
+      // }
+      // ```
+      else {
+        customVariants.push((designSystem) => {
+          designSystem.variants.fromAst(name, node.nodes)
+        })
+
+        return
+      }
     }
 
     // Drop instances of `@media reference`
@@ -144,7 +218,38 @@ export function compile(
     firstThemeRule.nodes = nodes
   }
 
-  let designSystem = buildDesignSystem(theme, plugins)
+  let designSystem = buildDesignSystem(theme)
+
+  for (let customVariant of customVariants) {
+    customVariant(designSystem)
+  }
+
+  let api: PluginAPI = {
+    addVariant(name, variant) {
+      // Single selector
+      if (typeof variant === 'string') {
+        designSystem.variants.static(name, (r) => {
+          r.nodes = [rule(variant, r.nodes)]
+        })
+      }
+
+      // Multiple parallel selectors
+      else if (Array.isArray(variant)) {
+        designSystem.variants.static(name, (r) => {
+          r.nodes = variant.map((selector) => rule(selector, r.nodes))
+        })
+      }
+
+      // CSS-in-JS object
+      else if (typeof variant === 'object') {
+        designSystem.variants.fromAst(name, objectToAst(variant))
+      }
+    },
+  }
+
+  for (let plugin of plugins) {
+    plugin(api)
+  }
 
   let tailwindUtilitiesNode: Rule | null = null
 

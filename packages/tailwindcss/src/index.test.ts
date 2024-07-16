@@ -1141,10 +1141,14 @@ describe('plugins', () => {
           }
         },
       },
-    ).build(['hocus:underline'])
+    ).build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
+        .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+          display: flex;
+        }
+
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
@@ -1180,5 +1184,557 @@ describe('plugins', () => {
         }
       }"
     `)
+  })
+
+  test('addVariant with object syntax and @slot', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('hocus', {
+              '&:hover': '@slot',
+              '&:focus': '@slot',
+            })
+          }
+        },
+      },
+    ).build(['hocus:underline', 'group-hocus:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('addVariant with object syntax, media, nesting and multiple @slot', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('hocus', {
+              '@media (hover: hover)': {
+                '&:hover': '@slot',
+              },
+              '&:focus': '@slot',
+            })
+          }
+        },
+      },
+    ).build(['hocus:underline', 'group-hocus:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        @media (hover: hover) {
+          .group-hocus\\:flex:is(:where(.group):hover *) {
+            display: flex;
+          }
+        }
+
+        .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+
+        @media (hover: hover) {
+          .hocus\\:underline:hover {
+            text-decoration-line: underline;
+          }
+        }
+
+        .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('@slot is preserved when used as a custom property value', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('hocus', {
+              '&': {
+                '--custom-property': '@slot',
+                '&:hover': '@slot',
+                '&:focus': '@slot',
+              },
+            })
+          }
+        },
+      },
+    ).build(['hocus:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .hocus\\:underline {
+          --custom-property: @slot;
+        }
+
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+})
+
+describe('@variant', () => {
+  test('@variant must be top-level and cannot be nested', () => {
+    expect(() =>
+      compileCss(css`
+        .foo {
+          @variant hocus (&:hover, &:focus);
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` cannot be nested.]`)
+  })
+
+  test('@variant with no body must include a selector', () => {
+    expect(() =>
+      compileCss(css`
+        @variant hocus;
+      `),
+    ).toThrowErrorMatchingInlineSnapshot('[Error: `@variant hocus` has no selector or body.]')
+  })
+
+  test('@variant with selector must include a body', () => {
+    expect(() =>
+      compileCss(css`
+        @variant hocus {
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot('[Error: `@variant hocus` has no selector or body.]')
+  })
+
+  test('@variant cannot have both a selector and a body', () => {
+    expect(() =>
+      compileCss(css`
+        @variant hocus (&:hover, &:focus) {
+          &:is(.potato) {
+            @slot;
+          }
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@variant hocus\` cannot have both a selector and a body.]`,
+    )
+  })
+
+  describe('body-less syntax', () => {
+    test('selector variant', () => {
+      let compiled = compile(css`
+        @variant hocus (&:hover, &:focus);
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:flex'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+            display: flex;
+          }
+
+          .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('at-rule variant', () => {
+      let compiled = compile(css`
+        @variant any-hover (@media (any-hover: hover));
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['any-hover:hover:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (any-hover: hover) {
+            .any-hover\\:hover\\:underline:hover {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+  })
+
+  describe('body with @slot syntax', () => {
+    test('selector with @slot', () => {
+      let compiled = compile(css`
+        @variant selected {
+          &[data-selected] {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['selected:underline', 'group-selected:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-selected\\:underline:is(:where(.group)[data-selected] *) {
+            text-decoration-line: underline;
+          }
+
+          .selected\\:underline[data-selected] {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('grouped selectors with @slot', () => {
+      let compiled = compile(css`
+        @variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *) {
+            text-decoration-line: underline;
+          }
+
+          .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('multiple selectors with @slot', () => {
+      let compiled = compile(css`
+        @variant hocus {
+          &:hover {
+            @slot;
+          }
+
+          &:focus {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *) {
+            text-decoration-line: underline;
+          }
+
+          .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('nested selector with @slot', () => {
+      let compiled = compile(css`
+        @variant custom-before {
+          & {
+            --has-before: 1;
+            &::before {
+              @slot;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-before:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .custom-before\\:underline {
+            --has-before: 1;
+          }
+
+          .custom-before\\:underline:before {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('grouped nested selectors with @slot', () => {
+      let compiled = compile(css`
+        @variant custom-before {
+          & {
+            --has-before: 1;
+            &::before {
+              &:hover,
+              &:focus {
+                @slot;
+              }
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-before:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          .custom-before\\:underline {
+            --has-before: 1;
+          }
+
+          .custom-before\\:underline:before:hover, .custom-before\\:underline:before:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('nested multiple selectors with @slot', () => {
+      let compiled = compile(css`
+        @variant hocus {
+          &:hover {
+            @media (hover: hover) {
+              @slot;
+            }
+          }
+
+          &:focus {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (hover: hover) {
+            .group-hocus\\:underline:is(:where(.group):hover *) {
+              text-decoration-line: underline;
+            }
+          }
+
+          .group-hocus\\:underline:is(:where(.group):focus *) {
+            text-decoration-line: underline;
+          }
+
+          @media (hover: hover) {
+            .hocus\\:underline:hover {
+              text-decoration-line: underline;
+            }
+          }
+
+          .hocus\\:underline:focus {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
+
+    test('selector nested under at-rule with @slot', () => {
+      let compiled = compile(css`
+        @variant hocus {
+          @media (hover: hover) {
+            &:hover {
+              @slot;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['hocus:underline', 'group-hocus:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (hover: hover) {
+            .group-hocus\\:underline:is(:where(.group):hover *) {
+              text-decoration-line: underline;
+            }
+          }
+
+          @media (hover: hover) {
+            .hocus\\:underline:hover {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+
+    test('at-rule with @slot', () => {
+      let compiled = compile(css`
+        @variant any-hover {
+          @media (any-hover: hover) {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['any-hover:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (any-hover: hover) {
+            .any-hover\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+
+    test('multiple at-rules with @slot', () => {
+      let compiled = compile(css`
+        @variant desktop {
+          @media (any-hover: hover) {
+            @slot;
+          }
+
+          @media (pointer: fine) {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['desktop:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (any-hover: hover) {
+            .desktop\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+
+          @media (pointer: fine) {
+            .desktop\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }"
+      `)
+    })
+
+    test('nested at-rules with @slot', () => {
+      let compiled = compile(css`
+        @variant custom-variant {
+          @media (orientation: landscape) {
+            @media screen {
+              @slot;
+            }
+
+            @media print {
+              display: none;
+            }
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-variant:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (orientation: landscape) {
+            @media screen {
+              .custom-variant\\:underline {
+                text-decoration-line: underline;
+              }
+            }
+
+            @media print {
+              .custom-variant\\:underline {
+                display: none;
+              }
+            }
+          }
+        }"
+      `)
+    })
+
+    test('at-rule and selector with @slot', () => {
+      let compiled = compile(css`
+        @variant custom-dark {
+          @media (prefers-color-scheme: dark) {
+            @slot;
+          }
+          &:is(.dark *) {
+            @slot;
+          }
+        }
+
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `).build(['custom-dark:underline'])
+
+      expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        "@layer utilities {
+          @media (prefers-color-scheme: dark) {
+            .custom-dark\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+
+          .custom-dark\\:underline:is(.dark *) {
+            text-decoration-line: underline;
+          }
+        }"
+      `)
+    })
   })
 })

@@ -1,7 +1,8 @@
-import { decl, rule, type Rule } from './ast'
+import { WalkAction, decl, rule, walk, type AstNode, type Rule } from './ast'
 import { type Variant } from './candidate'
 import type { Theme } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { segment } from './utils/segment'
 
 type VariantFn<T extends Variant['kind']> = (
   rule: Rule,
@@ -39,6 +40,34 @@ export class Variants {
 
   static(name: string, applyFn: VariantFn<'static'>, { compounds }: { compounds?: boolean } = {}) {
     this.set(name, { kind: 'static', applyFn, compounds: compounds ?? true })
+  }
+
+  fromAst(name: string, ast: AstNode[]) {
+    this.static(name, (r) => {
+      let body = structuredClone(ast)
+
+      walk(body, (node, { replaceWith }) => {
+        // Replace `@slot` with rule nodes
+        if (node.kind === 'rule' && node.selector === '@slot') {
+          replaceWith(r.nodes)
+        }
+
+        // Wrap `@keyframes` and `@property` in `@at-root`
+        else if (
+          node.kind === 'rule' &&
+          node.selector[0] === '@' &&
+          (node.selector.startsWith('@keyframes ') || node.selector.startsWith('@property '))
+        ) {
+          Object.assign(node, {
+            selector: '@at-root',
+            nodes: [rule(node.selector, node.nodes)],
+          })
+          return WalkAction.Skip
+        }
+      })
+
+      r.nodes = body
+    })
   }
 
   functional(
@@ -190,15 +219,29 @@ export function createVariants(theme: Theme): Variants {
       ? `:where(.group\\/${variant.modifier.value})`
       : ':where(.group)'
 
-    // For most variants we rely entirely on CSS nesting to build-up the final
-    // selector, but there is no way to use CSS nesting to make `&` refer to
-    // just the `.group` class the way we'd need to for these variants, so we
-    // need to replace it in the selector ourselves.
-    ruleNode.selector = ruleNode.selector.replace('&', groupSelector)
+    walk([ruleNode], (node) => {
+      if (node.kind !== 'rule') return WalkAction.Continue
 
-    // Use `:where` to make sure the specificity of group variants isn't higher
-    // than the specificity of other variants.
-    ruleNode.selector = `&:is(${ruleNode.selector} *)`
+      // Skip past at-rules, and continue traversing the children of the at-rule
+      if (node.selector[0] === '@') return WalkAction.Continue
+
+      // For most variants we rely entirely on CSS nesting to build-up the final
+      // selector, but there is no way to use CSS nesting to make `&` refer to
+      // just the `.group` class the way we'd need to for these variants, so we
+      // need to replace it in the selector ourselves.
+      node.selector = node.selector.replaceAll('&', groupSelector)
+
+      // When the selector is a selector _list_ we need to wrap it in `:is`
+      // to make sure the matching behavior is consistent with the original
+      // variant / selector.
+      if (segment(node.selector, ',').length > 1) {
+        node.selector = `:is(${node.selector})`
+      }
+
+      // Use `:where` to make sure the specificity of group variants isn't higher
+      // than the specificity of other variants.
+      node.selector = `&:is(${node.selector} *)`
+    })
   })
 
   variants.suggest('group', () => {
@@ -214,15 +257,29 @@ export function createVariants(theme: Theme): Variants {
       ? `:where(.peer\\/${variant.modifier.value})`
       : ':where(.peer)'
 
-    // For most variants we rely entirely on CSS nesting to build-up the final
-    // selector, but there is no way to use CSS nesting to make `&` refer to
-    // just the `.peer` class the way we'd need to for these variants, so we
-    // need to replace it in the selector ourselves.
-    ruleNode.selector = ruleNode.selector.replace('&', peerSelector)
+    walk([ruleNode], (node) => {
+      if (node.kind !== 'rule') return WalkAction.Continue
 
-    // Use `:where` to make sure the specificity of peer variants isn't higher
-    // than the specificity of other variants.
-    ruleNode.selector = `&:is(${ruleNode.selector} ~ *)`
+      // Skip past at-rules, and continue traversing the children of the at-rule
+      if (node.selector[0] === '@') return WalkAction.Continue
+
+      // For most variants we rely entirely on CSS nesting to build-up the final
+      // selector, but there is no way to use CSS nesting to make `&` refer to
+      // just the `.group` class the way we'd need to for these variants, so we
+      // need to replace it in the selector ourselves.
+      node.selector = node.selector.replaceAll('&', peerSelector)
+
+      // When the selector is a selector _list_ we need to wrap it in `:is`
+      // to make sure the matching behavior is consistent with the original
+      // variant / selector.
+      if (segment(node.selector, ',').length > 1) {
+        node.selector = `:is(${node.selector})`
+      }
+
+      // Use `:where` to make sure the specificity of group variants isn't higher
+      // than the specificity of other variants.
+      node.selector = `&:is(${node.selector} ~ *)`
+    })
   })
 
   variants.suggest('peer', () => {

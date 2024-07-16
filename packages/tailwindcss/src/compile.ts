@@ -1,4 +1,4 @@
-import { rule, type AstNode, type Rule } from './ast'
+import { WalkAction, rule, walk, type AstNode, type Rule } from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
@@ -170,10 +170,25 @@ export function applyVariant(node: Rule, variant: Variant, variants: Variants): 
   let { applyFn } = variants.get(variant.root)!
 
   if (variant.kind === 'compound') {
-    let result = applyVariant(node, variant.variant, variants)
+    // Some variants traverse the AST to mutate the nodes. E.g.: `group-*` wants
+    // to prefix every selector of the variant it's compounding with `.group`.
+    //
+    // E.g.:
+    // ```
+    // group-hover:[&_p]:flex
+    // ```
+    //
+    // Should only prefix the `group-hover` part with `.group`, and not the `&_p` part.
+    //
+    // To solve this, we provide an isolated placeholder node to the variant.
+    // The variant can now apply its logic to the isolated node without
+    // affecting the original node.
+    let isolatedNode = rule('@slot', [])
+
+    let result = applyVariant(isolatedNode, variant.variant, variants)
     if (result === null) return null
 
-    for (let child of node.nodes) {
+    for (let child of isolatedNode.nodes) {
       // Only some variants wrap children in rules. For example, the `force`
       // variant is a noop on the AST. And the `has` variant modifies the
       // selector rather than the children.
@@ -185,6 +200,17 @@ export function applyVariant(node: Rule, variant: Variant, variants: Variants): 
 
       let result = applyFn(child as Rule, variant)
       if (result === null) return null
+    }
+
+    // Replace the placeholder node with the actual node
+    {
+      walk(isolatedNode.nodes, (child) => {
+        if (child.kind === 'rule' && child.nodes.length <= 0) {
+          child.nodes = node.nodes
+          return WalkAction.Skip
+        }
+      })
+      node.nodes = isolatedNode.nodes
     }
     return
   }
