@@ -1227,12 +1227,10 @@ describe('plugins', () => {
         loadPlugin: () => {
           return ({ addVariant }) => {
             addVariant('hocus', {
-              '.hocus': {
-                '@media (hover: hover)': {
-                  '&:hover': '@slot',
-                },
-                '&:focus': '@slot',
+              '@media (hover: hover)': {
+                '&:hover': '@slot',
               },
+              '&:focus': '@slot',
             })
           }
         },
@@ -1242,22 +1240,22 @@ describe('plugins', () => {
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         @media (hover: hover) {
-          .group-hocus\\:flex:is(.hocus *):hover {
+          .group-hocus\\:flex:is(:where(.group):hover *) {
             display: flex;
           }
         }
 
-        .group-hocus\\:flex:is(.hocus *):focus {
+        .group-hocus\\:flex:is(:where(.group):focus *) {
           display: flex;
         }
 
         @media (hover: hover) {
-          .hocus\\:underline .hocus:hover {
+          .hocus\\:underline:hover {
             text-decoration-line: underline;
           }
         }
 
-        .hocus\\:underline .hocus:focus {
+        .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
       }"
