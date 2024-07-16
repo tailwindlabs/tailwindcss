@@ -1141,10 +1141,14 @@ describe('plugins', () => {
           }
         },
       },
-    ).build(['hocus:underline'])
+    ).build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
+        .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+          display: flex;
+        }
+
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
@@ -1414,7 +1418,7 @@ describe('@variant', () => {
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
-          .group-hocus\\:underline:is(:where(.group):hover, .group-hocus\\:underline:focus *) {
+          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *) {
             text-decoration-line: underline;
           }
 

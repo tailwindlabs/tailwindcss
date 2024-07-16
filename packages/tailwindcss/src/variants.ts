@@ -222,7 +222,14 @@ export function createVariants(theme: Theme): Variants {
     // selector, but there is no way to use CSS nesting to make `&` refer to
     // just the `.group` class the way we'd need to for these variants, so we
     // need to replace it in the selector ourselves.
-    ruleNode.selector = ruleNode.selector.replace('&', groupSelector)
+    ruleNode.selector = ruleNode.selector.replaceAll('&', groupSelector)
+
+    // This selector is wrapped in `:is` given that `ruleNode.selector` might be
+    // a selector list when compounding a variant the behavior needs to stay
+    // consistent with the original variant / selector.
+    // TODO: Ideally this would only be done when there are combinators in the
+    // selector, but that's a bit more complex to implement.
+    ruleNode.selector = `:is(${ruleNode.selector})`
 
     // Use `:where` to make sure the specificity of group variants isn't higher
     // than the specificity of other variants.
