@@ -32,7 +32,7 @@ export function defaultExtractor(context) {
         // If the next segment is a number, discard both, for example seeing
         // `px-1` and `5` means the real candidate was `px-1.5` which is already
         // captured.
-        let next = parseInt(segments[idx + 1])
+        let next = Number(segments[idx + 1])
         if (isNaN(next)) {
           results.push(segment)
         } else {

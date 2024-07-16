@@ -476,6 +476,16 @@ test('classes in slim templates', async () => {
   expect(extractions).toContain('text-gray-500')
 })
 
+test('classes in slim templates starting with number', async () => {
+  const extractions = defaultExtractor(`
+    .bg-green-300.2xl:bg-red-300
+      '(Look mom, no closing tag!)
+  `)
+
+  expect(extractions).toContain('bg-green-300')
+  expect(extractions).toContain('2xl:bg-red-300')
+})
+
 test("classes with fractional numeric values don't also generate the whole number utility", async () => {
   const extractions = defaultExtractor(`
     <div class="px-1.5 py-2.75">Hello world!</div>
