@@ -74,10 +74,14 @@ export function compile(
       // Remove `@variant` at-rule so it's not included in the compiled CSS
       replaceWith([])
 
+      let [name, selector] = segment(node.selector.slice(9), ' ')
+
+      if (node.nodes.length > 0 && selector) {
+        throw new Error(`\`@variant ${name}\` cannot have both a selector and a body.`)
+      }
+
       // Variants with a selector, but without a body, e.g.: `@variant hocus (&:hover, &:focus);`
       if (node.nodes.length === 0) {
-        let [name, selector] = segment(node.selector.slice(9), ' ')
-
         if (!selector) {
           throw new Error(`\`@variant ${name}\` has no selector or body.`)
         }
@@ -109,8 +113,6 @@ export function compile(
       // }
       // ```
       else {
-        let name = node.selector.slice(9).trim()
-
         customVariants.push((designSystem) => {
           designSystem.variants.fromAst(name, node.nodes)
         })

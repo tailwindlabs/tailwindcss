@@ -1331,6 +1331,20 @@ describe('@variant', () => {
     ).toThrowErrorMatchingInlineSnapshot('[Error: `@variant hocus` has no selector or body.]')
   })
 
+  test('@variant cannot have both a selector and a body', () => {
+    expect(() =>
+      compileCss(css`
+        @variant hocus (&:hover, &:focus) {
+          &:is(.potato) {
+            @slot;
+          }
+        }
+      `),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@variant hocus\` cannot have both a selector and a body.]`,
+    )
+  })
+
   describe('body-less syntax', () => {
     test('selector variant', () => {
       let compiled = compile(css`
