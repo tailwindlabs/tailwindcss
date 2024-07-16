@@ -1261,6 +1261,42 @@ describe('plugins', () => {
       }"
     `)
   })
+
+  test('@slot is preserved when used as a custom property value', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addVariant }) => {
+            addVariant('hocus', {
+              '&': {
+                '--custom-property': '@slot',
+                '&:hover': '@slot',
+                '&:focus': '@slot',
+              },
+            })
+          }
+        },
+      },
+    ).build(['hocus:underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .hocus\\:underline {
+          --custom-property: @slot;
+        }
+
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
 })
 
 describe('custom variants via CSS `@variant` at-rules', () => {

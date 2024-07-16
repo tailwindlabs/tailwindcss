@@ -49,7 +49,7 @@ export function objectToAst(obj: CssTree): AstNode[] {
 
   for (let [name, value] of Object.entries(obj)) {
     if (typeof value === 'string') {
-      if (value === '@slot') {
+      if (!name.startsWith('--') && value === '@slot') {
         ast.push(rule(name, [rule('@slot', [])]))
       } else {
         ast.push(decl(name, value))
