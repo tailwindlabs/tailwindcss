@@ -42,9 +42,9 @@ export function comment(value: string): Comment {
   }
 }
 
-export type CssTree = { [key: string]: string | CssTree }
+export type CssInJs = { [key: string]: string | CssInJs }
 
-export function objectToAst(obj: CssTree): AstNode[] {
+export function objectToAst(obj: CssInJs): AstNode[] {
   let ast: AstNode[] = []
 
   for (let [name, value] of Object.entries(obj)) {

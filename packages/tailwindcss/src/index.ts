@@ -8,7 +8,7 @@ import {
   toCss,
   walk,
   type AstNode,
-  type CssTree,
+  type CssInJs,
   type Rule,
 } from './ast'
 import { compileCandidates } from './compile'
@@ -18,7 +18,7 @@ import { Theme } from './theme'
 import { segment } from './utils/segment'
 
 type PluginAPI = {
-  addVariant(name: string, variant: string | string[] | CssTree): void
+  addVariant(name: string, variant: string | string[] | CssInJs): void
 }
 type Plugin = (api: PluginAPI) => void
 
@@ -238,7 +238,7 @@ export function compile(
         })
       }
 
-      // CSS Tree
+      // CSS-in-JS object
       else if (typeof variant === 'object') {
         designSystem.variants.fromAst(name, objectToAst(variant))
       }
