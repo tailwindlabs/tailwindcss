@@ -725,6 +725,15 @@ test('group-[...]', () => {
       display: flex;
     }"
   `)
+
+  expect(
+    compileCss(
+      css`
+        @tailwind utilities;
+      `,
+      ['group-[@media_foo]:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('group-*', () => {
@@ -752,6 +761,16 @@ test('group-*', () => {
       display: flex;
     }"
   `)
+
+  expect(
+    compileCss(
+      css`
+        @variant custom-at-rule (@media foo);
+        @tailwind utilities;
+      `,
+      ['group-custom-at-rule:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('peer-[...]', () => {
@@ -784,6 +803,15 @@ test('peer-[...]', () => {
       display: flex;
     }"
   `)
+
+  expect(
+    compileCss(
+      css`
+        @tailwind utilities;
+      `,
+      ['peer-[@media_foo]:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('peer-*', () => {
@@ -811,6 +839,16 @@ test('peer-*', () => {
       display: flex;
     }"
   `)
+
+  expect(
+    compileCss(
+      css`
+        @variant custom-at-rule (@media foo);
+        @tailwind utilities;
+      `,
+      ['peer-custom-at-rule:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('ltr', () => {
@@ -1505,7 +1543,15 @@ test('not', () => {
     }"
   `)
 
-  expect(run(['not-[:checked]/foo:flex'])).toEqual('')
+  expect(
+    compileCss(
+      css`
+        @variant custom-at-rule (@media foo);
+        @tailwind utilities;
+      `,
+      ['not-[:checked]/foo:flex', 'not-[@media_print]:flex', 'not-custom-at-rule:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('has', () => {
@@ -1518,7 +1564,7 @@ test('has', () => {
       'group-has-checked:flex',
 
       'peer-has-[:checked]:flex',
-      'peer-has-[:checked]/parent-name:flex',
+      'peer-has-[:checked]/sibling-name:flex',
       'peer-has-checked:flex',
     ]),
   ).toMatchInlineSnapshot(`
@@ -1542,7 +1588,7 @@ test('has', () => {
       display: flex;
     }
 
-    .peer-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name):has(:checked) ~ *) {
+    .peer-has-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *) {
       display: flex;
     }
 
@@ -1550,7 +1596,16 @@ test('has', () => {
       display: flex;
     }"
   `)
-  expect(run(['has-[:checked]/foo:flex'])).toEqual('')
+
+  expect(
+    compileCss(
+      css`
+        @variant custom-at-rule (@media foo);
+        @tailwind utilities;
+      `,
+      ['has-[:checked]/foo:flex', 'has-[@media_print]:flex', 'has-custom-at-rule:flex'],
+    ),
+  ).toEqual('')
 })
 
 test('aria', () => {

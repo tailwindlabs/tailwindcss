@@ -205,7 +205,28 @@ export function createVariants(theme: Theme): Variants {
 
   variants.compound('not', (ruleNode, variant) => {
     if (variant.modifier) return null
-    ruleNode.selector = `&:not(${ruleNode.selector.replace('&', '*')})`
+
+    let didApply = false
+
+    walk([ruleNode], (node) => {
+      if (node.kind !== 'rule') return WalkAction.Continue
+
+      // Skip past at-rules, and continue traversing the children of the at-rule
+      if (node.selector[0] === '@') return WalkAction.Continue
+
+      // Replace `&` in target variant with `*`, so variants like `&:hover`
+      // become `&:not(*:hover)`. The `*` will often be optimized away.
+      node.selector = `&:not(${node.selector.replace('&', '*')})`
+
+      // Track that the variant was actually applied
+      didApply = true
+    })
+
+    // If the node wasn't modified, this variant is not compatible with
+    // `not-*` so discard the candidate.
+    if (!didApply) {
+      return null
+    }
   })
 
   variants.compound('group', (ruleNode, variant) => {
@@ -214,6 +235,8 @@ export function createVariants(theme: Theme): Variants {
     let groupSelector = variant.modifier
       ? `:where(.group\\/${variant.modifier.value})`
       : ':where(.group)'
+
+    let didApply = false
 
     walk([ruleNode], (node) => {
       if (node.kind !== 'rule') return WalkAction.Continue
@@ -234,10 +257,17 @@ export function createVariants(theme: Theme): Variants {
         node.selector = `:is(${node.selector})`
       }
 
-      // Use `:where` to make sure the specificity of group variants isn't higher
-      // than the specificity of other variants.
       node.selector = `&:is(${node.selector} *)`
+
+      // Track that the variant was actually applied
+      didApply = true
     })
+
+    // If the node wasn't modified, this variant is not compatible with
+    // `group-*` so discard the candidate.
+    if (!didApply) {
+      return null
+    }
   })
 
   variants.suggest('group', () => {
@@ -252,6 +282,8 @@ export function createVariants(theme: Theme): Variants {
     let peerSelector = variant.modifier
       ? `:where(.peer\\/${variant.modifier.value})`
       : ':where(.peer)'
+
+    let didApply = false
 
     walk([ruleNode], (node) => {
       if (node.kind !== 'rule') return WalkAction.Continue
@@ -272,10 +304,17 @@ export function createVariants(theme: Theme): Variants {
         node.selector = `:is(${node.selector})`
       }
 
-      // Use `:where` to make sure the specificity of group variants isn't higher
-      // than the specificity of other variants.
       node.selector = `&:is(${node.selector} ~ *)`
+
+      // Track that the variant was actually applied
+      didApply = true
     })
+
+    // If the node wasn't modified, this variant is not compatible with
+    // `peer-*` so discard the candidate.
+    if (!didApply) {
+      return null
+    }
   })
 
   variants.suggest('peer', () => {
@@ -392,7 +431,28 @@ export function createVariants(theme: Theme): Variants {
 
   variants.compound('has', (ruleNode, variant) => {
     if (variant.modifier) return null
-    ruleNode.selector = `&:has(${ruleNode.selector.replace('&', '*')})`
+
+    let didApply = false
+
+    walk([ruleNode], (node) => {
+      if (node.kind !== 'rule') return WalkAction.Continue
+
+      // Skip past at-rules, and continue traversing the children of the at-rule
+      if (node.selector[0] === '@') return WalkAction.Continue
+
+      // Replace `&` in target variant with `*`, so variants like `&:hover`
+      // become `&:has(*:hover)`. The `*` will often be optimized away.
+      node.selector = `&:has(${node.selector.replace('&', '*')})`
+
+      // Track that the variant was actually applied
+      didApply = true
+    })
+
+    // If the node wasn't modified, this variant is not compatible with
+    // `has-*` so discard the candidate.
+    if (!didApply) {
+      return null
+    }
   })
 
   variants.suggest('has', () => {
