@@ -1812,50 +1812,25 @@ describe('@variant', () => {
     `)
   })
 
-  test('combining multiple complex variants', () => {
-    let compiled = compile(css`
-      @variant one {
-        &.foo-1 {
-          &.bar-1 {
-            @slot;
+  test('at-rule-only variants cannot be used with compound variants', () => {
+    expect(
+      compileCss(
+        css`
+          @variant foo (@media foo);
+
+          @layer utilities {
+            @tailwind utilities;
           }
-        }
-      }
+        `,
 
-      @variant two {
-        &.foo-2 {
-          &.bar-2 {
-            @slot;
-          }
-        }
-      }
-
-      @layer utilities {
-        @tailwind utilities;
-      }
-    `).build([
-      'group-one:two:underline',
-      'one:group-two:underline',
-      'peer-one:two:underline',
-      'one:peer-two:underline',
-    ])
-
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+        ['foo:flex', 'group-foo:flex', 'peer-foo:flex', 'has-foo:flex', 'not-foo:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
       "@layer utilities {
-        .one\\:group-two\\:underline.foo-1.bar-1:is(:where(.group).foo-2 *):is(:where(.group).bar-2 *) {
-          text-decoration-line: underline;
-        }
-
-        .one\\:peer-two\\:underline.foo-1.bar-1:is(:where(.peer).foo-2 ~ *):is(:where(.peer).bar-2 ~ *) {
-          text-decoration-line: underline;
-        }
-
-        .group-one\\:two\\:underline:is(:where(.group).foo-1 *):is(:where(.group).bar-1 *).foo-2.bar-2 {
-          text-decoration-line: underline;
-        }
-
-        .peer-one\\:two\\:underline:is(:where(.peer).foo-1 ~ *):is(:where(.peer).bar-1 ~ *).foo-2.bar-2 {
-          text-decoration-line: underline;
+        @media foo {
+          .foo\\:flex {
+            display: flex;
+          }
         }
       }"
     `)

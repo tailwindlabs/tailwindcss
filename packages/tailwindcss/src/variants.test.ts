@@ -783,9 +783,16 @@ test('group-*', () => {
     compileCss(
       css`
         @variant custom-at-rule (@media foo);
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
-      ['group-custom-at-rule:flex'],
+      ['group-custom-at-rule:flex', 'group-nested-selectors:flex'],
     ),
   ).toEqual('')
 })
@@ -877,9 +884,16 @@ test('peer-*', () => {
     compileCss(
       css`
         @variant custom-at-rule (@media foo);
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
-      ['peer-custom-at-rule:flex'],
+      ['peer-custom-at-rule:flex', 'peer-nested-selectors:flex'],
     ),
   ).toEqual('')
 })
@@ -1616,9 +1630,21 @@ test('not', () => {
     compileCss(
       css`
         @variant custom-at-rule (@media foo);
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
-      ['not-[:checked]/foo:flex', 'not-[@media_print]:flex', 'not-custom-at-rule:flex'],
+      [
+        'not-[:checked]/foo:flex',
+        'not-[@media_print]:flex',
+        'not-custom-at-rule:flex',
+        'not-nested-selectors:flex',
+      ],
     ),
   ).toEqual('')
 })
@@ -1706,9 +1732,21 @@ test('has', () => {
     compileCss(
       css`
         @variant custom-at-rule (@media foo);
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
-      ['has-[:checked]/foo:flex', 'has-[@media_print]:flex', 'has-custom-at-rule:flex'],
+      [
+        'has-[:checked]/foo:flex',
+        'has-[@media_print]:flex',
+        'has-custom-at-rule:flex',
+        'has-nested-selectors:flex',
+      ],
     ),
   ).toEqual('')
 })

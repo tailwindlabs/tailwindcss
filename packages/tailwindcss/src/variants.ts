@@ -214,6 +214,18 @@ export function createVariants(theme: Theme): Variants {
       // Skip past at-rules, and continue traversing the children of the at-rule
       if (node.selector[0] === '@') return WalkAction.Continue
 
+      // Throw out any candidates with variants using nested selectors
+      if (didApply) {
+        walk([node], (childNode) => {
+          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+
+          didApply = false
+          return WalkAction.Stop
+        })
+
+        return didApply ? WalkAction.Skip : WalkAction.Stop
+      }
+
       // Replace `&` in target variant with `*`, so variants like `&:hover`
       // become `&:not(*:hover)`. The `*` will often be optimized away.
       node.selector = `&:not(${node.selector.replaceAll('&', '*')})`
@@ -243,6 +255,18 @@ export function createVariants(theme: Theme): Variants {
 
       // Skip past at-rules, and continue traversing the children of the at-rule
       if (node.selector[0] === '@') return WalkAction.Continue
+
+      // Throw out any candidates with variants using nested selectors
+      if (didApply) {
+        walk([node], (childNode) => {
+          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+
+          didApply = false
+          return WalkAction.Stop
+        })
+
+        return didApply ? WalkAction.Skip : WalkAction.Stop
+      }
 
       // For most variants we rely entirely on CSS nesting to build-up the final
       // selector, but there is no way to use CSS nesting to make `&` refer to
@@ -290,6 +314,18 @@ export function createVariants(theme: Theme): Variants {
 
       // Skip past at-rules, and continue traversing the children of the at-rule
       if (node.selector[0] === '@') return WalkAction.Continue
+
+      // Throw out any candidates with variants using nested selectors
+      if (didApply) {
+        walk([node], (childNode) => {
+          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+
+          didApply = false
+          return WalkAction.Stop
+        })
+
+        return didApply ? WalkAction.Skip : WalkAction.Stop
+      }
 
       // For most variants we rely entirely on CSS nesting to build-up the final
       // selector, but there is no way to use CSS nesting to make `&` refer to
@@ -439,6 +475,18 @@ export function createVariants(theme: Theme): Variants {
 
       // Skip past at-rules, and continue traversing the children of the at-rule
       if (node.selector[0] === '@') return WalkAction.Continue
+
+      // Throw out any candidates with variants using nested selectors
+      if (didApply) {
+        walk([node], (childNode) => {
+          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+
+          didApply = false
+          return WalkAction.Stop
+        })
+
+        return didApply ? WalkAction.Skip : WalkAction.Stop
+      }
 
       // Replace `&` in target variant with `*`, so variants like `&:hover`
       // become `&:has(*:hover)`. The `*` will often be optimized away.
