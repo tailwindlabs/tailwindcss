@@ -216,7 +216,7 @@ export function createVariants(theme: Theme): Variants {
 
       // Replace `&` in target variant with `*`, so variants like `&:hover`
       // become `&:not(*:hover)`. The `*` will often be optimized away.
-      node.selector = `&:not(${node.selector.replace('&', '*')})`
+      node.selector = `&:not(${node.selector.replaceAll('&', '*')})`
 
       // Track that the variant was actually applied
       didApply = true
@@ -442,7 +442,7 @@ export function createVariants(theme: Theme): Variants {
 
       // Replace `&` in target variant with `*`, so variants like `&:hover`
       // become `&:has(*:hover)`. The `*` will often be optimized away.
-      node.selector = `&:has(${node.selector.replace('&', '*')})`
+      node.selector = `&:has(${node.selector.replaceAll('&', '*')})`
 
       // Track that the variant was actually applied
       didApply = true

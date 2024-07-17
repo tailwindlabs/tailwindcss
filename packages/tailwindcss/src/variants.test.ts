@@ -738,12 +738,25 @@ test('group-[...]', () => {
 
 test('group-*', () => {
   expect(
-    run([
-      'group-hover:flex',
-      'group-focus:flex',
-      'group-hover:group-focus:flex',
-      'group-focus:group-hover:flex',
-    ]),
+    compileCss(
+      css`
+        @variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+        @tailwind utilities;
+      `,
+      [
+        'group-hover:flex',
+        'group-focus:flex',
+        'group-hocus:flex',
+
+        'group-hover:group-focus:flex',
+        'group-focus:group-hover:flex',
+      ],
+    ),
   ).toMatchInlineSnapshot(`
     ".group-hover\\:flex:is(:where(.group):hover *) {
       display: flex;
@@ -758,6 +771,10 @@ test('group-*', () => {
     }
 
     .group-hover\\:group-focus\\:flex:is(:where(.group):hover *):is(:where(.group):focus *) {
+      display: flex;
+    }
+
+    .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
       display: flex;
     }"
   `)
@@ -816,12 +833,24 @@ test('peer-[...]', () => {
 
 test('peer-*', () => {
   expect(
-    run([
-      'peer-hover:flex',
-      'peer-focus:flex',
-      'peer-hover:peer-focus:flex',
-      'peer-focus:peer-hover:flex',
-    ]),
+    compileCss(
+      css`
+        @variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+        @tailwind utilities;
+      `,
+      [
+        'peer-hover:flex',
+        'peer-focus:flex',
+        'peer-hocus:flex',
+        'peer-hover:peer-focus:flex',
+        'peer-focus:peer-hover:flex',
+      ],
+    ),
   ).toMatchInlineSnapshot(`
     ".peer-hover\\:flex:is(:where(.peer):hover ~ *) {
       display: flex;
@@ -836,6 +865,10 @@ test('peer-*', () => {
     }
 
     .peer-hover\\:peer-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer):focus ~ *) {
+      display: flex;
+    }
+
+    .peer-hocus\\:flex:is(:is(:where(.peer):hover, :where(.peer):focus) ~ *) {
       display: flex;
     }"
   `)
@@ -1502,23 +1535,51 @@ test('supports', () => {
 
 test('not', () => {
   expect(
-    run([
-      'not-[:checked]:flex',
+    compileCss(
+      css`
+        @variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+        @tailwind utilities;
+      `,
+      [
+        'not-[:checked]:flex',
+        'not-hocus:flex',
 
-      'group-not-[:checked]:flex',
-      'group-not-[:checked]/parent-name:flex',
-      'group-not-checked:flex',
+        'group-not-[:checked]:flex',
+        'group-not-[:checked]/parent-name:flex',
+        'group-not-checked:flex',
+        'group-not-hocus:flex',
+        'group-not-hocus/parent-name:flex',
 
-      'peer-not-[:checked]:flex',
-      'peer-not-[:checked]/parent-name:flex',
-      'peer-not-checked:flex',
-    ]),
+        'peer-not-[:checked]:flex',
+        'peer-not-[:checked]/sibling-name:flex',
+        'peer-not-checked:flex',
+        'peer-not-hocus:flex',
+        'peer-not-hocus/sibling-name:flex',
+      ],
+    ),
   ).toMatchInlineSnapshot(`
-    ".not-\\[\\:checked\\]\\:flex:not(:checked) {
+    ".not-hocus\\:flex:not(:hover, :focus) {
+      display: flex;
+    }
+
+    .not-\\[\\:checked\\]\\:flex:not(:checked) {
       display: flex;
     }
 
     .group-not-checked\\:flex:is(:where(.group):not(:checked) *) {
+      display: flex;
+    }
+
+    .group-not-hocus\\:flex:is(:where(.group):not(:hover, :focus) *) {
+      display: flex;
+    }
+
+    .group-not-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:hover, :focus) *) {
       display: flex;
     }
 
@@ -1534,11 +1595,19 @@ test('not', () => {
       display: flex;
     }
 
+    .peer-not-hocus\\:flex:is(:where(.peer):not(:hover, :focus) ~ *) {
+      display: flex;
+    }
+
+    .peer-not-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:hover, :focus) ~ *) {
+      display: flex;
+    }
+
     .peer-not-\\[\\:checked\\]\\:flex:is(:where(.peer):not(:checked) ~ *) {
       display: flex;
     }
 
-    .peer-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name):not(:checked) ~ *) {
+    .peer-not-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:checked) ~ *) {
       display: flex;
     }"
   `)
@@ -1556,19 +1625,43 @@ test('not', () => {
 
 test('has', () => {
   expect(
-    run([
-      'has-[:checked]:flex',
+    compileCss(
+      css`
+        @variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+        @tailwind utilities;
+      `,
+      [
+        'has-[:checked]:flex',
+        'has-hocus:flex',
 
-      'group-has-[:checked]:flex',
-      'group-has-[:checked]/parent-name:flex',
-      'group-has-checked:flex',
+        'group-has-[:checked]:flex',
+        'group-has-[:checked]/parent-name:flex',
+        'group-has-checked:flex',
+        'group-has-hocus:flex',
+        'group-has-hocus/parent-name:flex',
 
-      'peer-has-[:checked]:flex',
-      'peer-has-[:checked]/sibling-name:flex',
-      'peer-has-checked:flex',
-    ]),
+        'peer-has-[:checked]:flex',
+        'peer-has-[:checked]/sibling-name:flex',
+        'peer-has-checked:flex',
+        'peer-has-hocus:flex',
+        'peer-has-hocus/sibling-name:flex',
+      ],
+    ),
   ).toMatchInlineSnapshot(`
     ".group-has-checked\\:flex:is(:where(.group):has(:checked) *) {
+      display: flex;
+    }
+
+    .group-has-hocus\\:flex:is(:where(.group):has(:hover, :focus) *) {
+      display: flex;
+    }
+
+    .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:hover, :focus) *) {
       display: flex;
     }
 
@@ -1584,11 +1677,23 @@ test('has', () => {
       display: flex;
     }
 
+    .peer-has-hocus\\:flex:is(:where(.peer):has(:hover, :focus) ~ *) {
+      display: flex;
+    }
+
+    .peer-has-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:hover, :focus) ~ *) {
+      display: flex;
+    }
+
     .peer-has-\\[\\:checked\\]\\:flex:is(:where(.peer):has(:checked) ~ *) {
       display: flex;
     }
 
     .peer-has-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *) {
+      display: flex;
+    }
+
+    .has-hocus\\:flex:has(:hover, :focus) {
       display: flex;
     }
 
