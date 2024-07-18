@@ -154,7 +154,7 @@ function* buildRegExps(context) {
   }
 
   // 5. Inner matches
-  yield /[^<>"'`\s.(){}[\]#=%:$][^<>"'`\s(){}[\]#=%$]*[^<>"'`\s.(){}[\]#=%:$]/g
+  yield /[^<>"'`\s.(){}[\]#=%$][^<>"'`\s(){}[\]#=%$]*[^<>"'`\s.(){}[\]#=%:$]/g
 }
 
 // We want to capture any "special" characters
