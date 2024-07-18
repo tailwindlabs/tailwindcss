@@ -1350,12 +1350,12 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       'max-[12rem]:flex',
       'min-[calc(1000px+12em)]:flex',
       'max-[calc(1000px+12em)]:flex',
-      'min-[calc(50vh+12em)]:flex',
-      'max-[calc(50vh+12em)]:flex',
-      'min-[10vh]:flex',
-      'min-[12vh]:flex',
-      'max-[10vh]:flex',
-      'max-[12vh]:flex',
+      'min-[calc(50dvh+12em)]:flex',
+      'max-[calc(50dvh+12em)]:flex',
+      'min-[10dvh]:flex',
+      'min-[12dvh]:flex',
+      'max-[10dvh]:flex',
+      'max-[12dvh]:flex',
     ]),
   ).toMatchInlineSnapshot(`
     "@media (width < calc(1000px + 12em)) {
@@ -1364,8 +1364,8 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       }
     }
 
-    @media (width < calc(50vh + 12em)) {
-      .max-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
+    @media (width < calc(50dvh + 12em)) {
+      .max-\\[calc\\(50dvh\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
@@ -1406,14 +1406,14 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       }
     }
 
-    @media (width < 12vh) {
-      .max-\\[12vh\\]\\:flex {
+    @media (width < 12dvh) {
+      .max-\\[12dvh\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width < 10vh) {
-      .max-\\[10vh\\]\\:flex {
+    @media (width < 10dvh) {
+      .max-\\[10dvh\\]\\:flex {
         display: flex;
       }
     }
@@ -1424,8 +1424,8 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       }
     }
 
-    @media (width >= calc(50vh + 12em)) {
-      .min-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
+    @media (width >= calc(50dvh + 12em)) {
+      .min-\\[calc\\(50dvh\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
@@ -1466,14 +1466,14 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       }
     }
 
-    @media (width >= 10vh) {
-      .min-\\[10vh\\]\\:flex {
+    @media (width >= 10dvh) {
+      .min-\\[10dvh\\]\\:flex {
         display: flex;
       }
     }
 
-    @media (width >= 12vh) {
-      .min-\\[12vh\\]\\:flex {
+    @media (width >= 12dvh) {
+      .min-\\[12dvh\\]\\:flex {
         display: flex;
       }
     }"

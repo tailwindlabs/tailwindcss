@@ -2338,7 +2338,7 @@ test('min-height', () => {
     }
 
     .min-h-screen {
-      min-height: 100vh;
+      min-height: 100dvh;
     }
 
     .min-h-svh {
@@ -2430,7 +2430,7 @@ test('max-height', () => {
     }
 
     .max-h-screen {
-      max-height: 100vh;
+      max-height: 100dvh;
     }
 
     .max-h-svh {

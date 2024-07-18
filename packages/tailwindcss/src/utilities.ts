@@ -991,7 +991,7 @@ export function createUtilities(theme: Theme) {
   for (let [key, value] of [
     ['auto', 'auto'],
     ['full', '100%'],
-    ['screen', '100vh'],
+    ['screen', '100dvh'],
     ['svh', '100svh'],
     ['lvh', '100lvh'],
     ['dvh', '100dvh'],
@@ -1013,7 +1013,7 @@ export function createUtilities(theme: Theme) {
   for (let [key, value] of [
     ['auto', 'auto'],
     ['full', '100%'],
-    ['screen', '100vh'],
+    ['screen', '100dvh'],
     ['svh', '100svh'],
     ['lvh', '100lvh'],
     ['dvh', '100dvh'],
@@ -1034,7 +1034,7 @@ export function createUtilities(theme: Theme) {
   for (let [key, value] of [
     ['none', 'none'],
     ['full', '100%'],
-    ['screen', '100vh'],
+    ['screen', '100dvh'],
     ['svh', '100svh'],
     ['lvh', '100lvh'],
     ['dvh', '100dvh'],
