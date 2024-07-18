@@ -206,39 +206,43 @@ export function createVariants(theme: Theme): Variants {
   variants.compound('not', (ruleNode, variant) => {
     if (variant.modifier) return null
 
-    let didApply = false
+    let groups: string[] = []
 
-    walk([ruleNode], (node) => {
+    walk([ruleNode], (node, { ancestors }) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Skip past at-rules, and continue traversing the children of the at-rule
       if (node.selector[0] === '@') return WalkAction.Continue
 
-      // Throw out any candidates with variants using nested selectors
-      if (didApply) {
-        walk([node], (childNode) => {
-          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+      // 1. Walk the tree until we find `@slot`
+      if (node.nodes.length !== 0) return WalkAction.Continue
 
-          didApply = false
-          return WalkAction.Stop
-        })
+      let selectors = [`:not(${node.selector.replaceAll('&', '*')})`]
 
-        return didApply ? WalkAction.Skip : WalkAction.Stop
+      // 2. Collect the selectors of the parents
+      for (let ancestor of ancestors) {
+        if (ancestor.kind !== 'rule') continue
+
+        // Skip past at-rules, and continue traversing the children of the at-rule
+        if (ancestor.selector[0] === '@') continue
+
+        // Skip over the "root" node
+        if (ancestor.selector === '&') continue
+
+        selectors.push(`:not(${ancestor.selector.replaceAll('&', '*')})`)
       }
 
-      // Replace `&` in target variant with `*`, so variants like `&:hover`
-      // become `&:not(*:hover)`. The `*` will often be optimized away.
-      node.selector = `&:not(${node.selector.replaceAll('&', '*')})`
-
-      // Track that the variant was actually applied
-      didApply = true
+      groups.push(`:is(${selectors.join(', ')})`)
     })
 
-    // If the node wasn't modified, this variant is not compatible with
-    // `not-*` so discard the candidate.
-    if (!didApply) {
+    if (groups.length === 0) {
       return null
     }
+
+    console.log({ groups })
+
+    ruleNode.selector = '&' + groups.join('')
+    ruleNode.nodes = []
   })
 
   variants.compound('group', (ruleNode, variant) => {

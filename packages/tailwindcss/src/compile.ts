@@ -188,6 +188,14 @@ export function applyVariant(node: Rule, variant: Variant, variants: Variants): 
     let result = applyVariant(isolatedNode, variant.variant, variants)
     if (result === null) return null
 
+    // Wrap in a single `&` rule so :not(…) can have the entire list of
+    // selectors / nodes from the "root"
+    //
+    // TODO: Rework this because it's not a great solution
+    if (isolatedNode.nodes.length > 1) {
+      isolatedNode.nodes = [rule('&', isolatedNode.nodes)]
+    }
+
     for (let child of isolatedNode.nodes) {
       // Only some variants wrap children in rules. For example, the `force`
       // variant is a noop on the AST. And the `has` variant modifies the
@@ -217,6 +225,7 @@ export function applyVariant(node: Rule, variant: Variant, variants: Variants): 
 
   // All other variants
   let result = applyFn(node, variant)
+
   if (result === null) return null
 }
 

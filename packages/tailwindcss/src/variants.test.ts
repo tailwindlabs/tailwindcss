@@ -1557,6 +1557,13 @@ test('not', () => {
             @slot;
           }
         }
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
       [
@@ -1578,6 +1585,10 @@ test('not', () => {
     ),
   ).toMatchInlineSnapshot(`
     ".not-hocus\\:flex:not(:hover, :focus) {
+      display: flex;
+    }
+
+    .not-nested-selectors\:flex:not(:hover), .not-nested-selectors\:flex:not(:focus) {
       display: flex;
     }
 
@@ -2515,6 +2526,51 @@ test('variant order', () => {
       syntax: "*";
       inherits: false;
       initial-value: "";
+    }"
+  `)
+})
+
+test.only('not selector inversion creation thing', () => {
+  let input = css`
+    @variant omg {
+      &:hover {
+        &:focus {
+          &:active {
+            @slot;
+          }
+
+          &[data-whatever] {
+            @slot;
+          }
+        }
+
+        &[data-foo] {
+          @slot;
+        }
+      }
+
+      &:visited {
+        @slot;
+      }
+    }
+    @tailwind utilities;
+  `
+
+  expect(compileCss(input, ['omg:flex', 'not-omg:flex'])).toMatchInlineSnapshot(`
+    ".not-omg\\:flex:is(:not(:active), :not(:focus), :not(:hover)):is(:not([data-whatever]), :not(:focus), :not(:hover)):is(:not([data-foo]), :not(:hover)):not(:visited) {
+      display: flex;
+    }
+
+    .omg\\:flex:hover:focus:active, .omg\\:flex:hover:focus[data-whatever] {
+      display: flex;
+    }
+
+    .omg\\:flex:hover[data-foo] {
+      display: flex;
+    }
+
+    .omg\\:flex:visited {
+      display: flex;
     }"
   `)
 })
