@@ -208,7 +208,7 @@ export function createVariants(theme: Theme): Variants {
 
     let groups: string[] = []
 
-    walk([ruleNode], (node, { ancestors }) => {
+    walk([ruleNode], (node, { path }) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Skip past at-rules, and continue traversing the children of the at-rule
@@ -217,10 +217,10 @@ export function createVariants(theme: Theme): Variants {
       // 1. Walk the tree until we find `@slot`
       if (node.nodes.length !== 0) return WalkAction.Continue
 
-      let selectors = [`:not(${node.selector.replaceAll('&', '*')})`]
+      let selectors = []
 
       // 2. Collect the selectors of the parents
-      for (let ancestor of ancestors) {
+      for (let ancestor of path) {
         if (ancestor.kind !== 'rule') continue
 
         // Skip past at-rules, and continue traversing the children of the at-rule

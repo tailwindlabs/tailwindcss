@@ -79,19 +79,20 @@ export function walk(
     node: AstNode,
     utils: {
       parent: AstNode | null
-      ancestors: AstNode[]
+      path: AstNode[]
       replaceWith(newNode: AstNode | AstNode[]): void
     },
   ) => void | WalkAction,
   parent: AstNode | null = null,
-  ancestors: AstNode[] = [],
+  parentPath: AstNode[] = [],
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
+    let path = [node, ...parentPath]
     let status =
       visit(node, {
         parent,
-        ancestors,
+        path,
         replaceWith(newNode) {
           ast.splice(i, 1, ...(Array.isArray(newNode) ? newNode : [newNode]))
           // We want to visit the newly replaced node(s), which start at the
@@ -108,7 +109,7 @@ export function walk(
     if (status === WalkAction.Skip) continue
 
     if (node.kind === 'rule') {
-      walk(node.nodes, visit, node, [node, ...ancestors])
+      walk(node.nodes, visit, node, path)
     }
   }
 }
