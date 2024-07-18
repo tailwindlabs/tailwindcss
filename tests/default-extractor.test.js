@@ -486,6 +486,26 @@ test('classes in slim templates starting with number', async () => {
   expect(extractions).toContain('2xl:bg-red-300')
 })
 
+test('classes in slim templates with attributes added', () => {
+  let extractions = defaultExtractor(`
+    .ml-auto[
+      data-value='foo'
+    ]
+      Foo bar
+    .mr-auto[data-value='foo']
+      Foo bar
+    .mt-auto#omg
+      Foo bar
+    #omg.mb-auto
+      Foo bar
+  `)
+
+  expect(extractions).toContain(`ml-auto`)
+  expect(extractions).toContain(`mr-auto`)
+  expect(extractions).toContain(`mt-auto`)
+  expect(extractions).toContain(`mb-auto`)
+})
+
 test("classes with fractional numeric values don't also generate the whole number utility", async () => {
   const extractions = defaultExtractor(`
     <div class="px-1.5 py-2.75">Hello world!</div>

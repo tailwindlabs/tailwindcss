@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+- Fix class detection in Slim templates with attached attributes and ID ([#14019](https://github.com/tailwindlabs/tailwindcss/pull/14019))
 
 ## [3.4.6] - 2024-07-16
 
