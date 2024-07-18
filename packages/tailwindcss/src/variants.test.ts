@@ -1569,6 +1569,7 @@ test('not', () => {
       [
         'not-[:checked]:flex',
         'not-hocus:flex',
+        'not-nested-selectors:flex',
 
         'group-not-[:checked]:flex',
         'group-not-[:checked]/parent-name:flex',
@@ -1588,7 +1589,7 @@ test('not', () => {
       display: flex;
     }
 
-    .not-nested-selectors\:flex:not(:hover), .not-nested-selectors\:flex:not(:focus) {
+    .not-nested-selectors\\:flex:is(:not(:focus), :not(:hover)) {
       display: flex;
     }
 
@@ -1641,21 +1642,9 @@ test('not', () => {
     compileCss(
       css`
         @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
-          &:hover {
-            &:focus {
-              @slot;
-            }
-          }
-        }
         @tailwind utilities;
       `,
-      [
-        'not-[:checked]/foo:flex',
-        'not-[@media_print]:flex',
-        'not-custom-at-rule:flex',
-        'not-nested-selectors:flex',
-      ],
+      ['not-[:checked]/foo:flex', 'not-[@media_print]:flex', 'not-custom-at-rule:flex'],
     ),
   ).toEqual('')
 })
@@ -2530,7 +2519,7 @@ test('variant order', () => {
   `)
 })
 
-test.only('not selector inversion creation thing', () => {
+test('not selector inversion creation thing', () => {
   let input = css`
     @variant omg {
       &:hover {
