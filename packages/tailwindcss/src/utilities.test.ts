@@ -14981,4 +14981,36 @@ describe('custom utilities', () => {
       }"
     `)
   })
+
+  test('custom utilities are sorted by used properties', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility push-left {
+        right: 100%;
+      }
+    `).build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .top-\\[100px\\] {
+          top: 100px;
+        }
+
+        .push-left {
+          right: 100%;
+        }
+
+        .right-\\[100px\\] {
+          right: 100px;
+        }
+
+        .bottom-\\[100px\\] {
+          bottom: 100px;
+        }
+      }"
+    `)
+  })
 })
