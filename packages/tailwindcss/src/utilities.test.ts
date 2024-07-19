@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { compileCss, optimizeCss, run } from './test-utils/run'
 import { compile } from '.'
+import { compileCss, optimizeCss, run } from './test-utils/run'
 
 const css = String.raw
 
@@ -14977,6 +14977,114 @@ describe('custom utilities', () => {
             text-box-trim: both;
             text-box-edge: cap alphabetic;
           }
+        }
+      }"
+    `)
+  })
+
+  test('custom functional utility', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --width-2: 2rem;
+        --breakpoint-lg: 1024px;
+      }
+
+      @utility scrollbar-* {
+        scrollbar-width: value();
+      }
+    `).build(['scrollbar-[2rem]', 'lg:scrollbar-[2rem]'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+  })
+
+  test('custom functional utility with value() definition', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --spacing-0: 0rem;
+        --spacing-1: 0.25rem;
+      }
+
+      @utility scrollbar-* value(--spacing-*) {
+        scrollbar-width: value();
+      }
+    `).build(['scrollbar-0', 'lg:scrollbar-0', 'scrollbar-1', 'lg:scrollbar-1'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .scrollbar-0 {
+          scrollbar-width: var(--spacing-0, 0rem);
+        }
+
+        .scrollbar-1 {
+          scrollbar-width: var(--spacing-1, .25rem);
+        }
+      }"
+    `)
+  })
+
+  test('custom functional utility with modifiers', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --spacing-0: 0rem;
+        --spacing-1: 0.25rem;
+      }
+
+      @utility gridcol-* {
+        grid-column: value();
+        grid-column: value() / modifier();
+      }
+    `).build(['gridcol-1', 'gridcol-1/2', 'gridcol-1/-1', 'lg:gridcol-1/2', 'lg:gridcol-1/-1'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .gridcol-1 {
+          grid-column: 1;
+        }
+
+        .gridcol-1\\/-1 {
+          grid-column: 1 / -1;
+        }
+
+        .gridcol-1\\/2 {
+          grid-column: 1 / 2;
+        }
+      }"
+    `)
+  })
+
+  test('custom functional utility with modifier() definition', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --spacing-0: 0rem;
+        --spacing-1: 0.25rem;
+        --spacing-2: 0.5rem;
+      }
+
+      @utility splitgap-* value(--spacing-*) modifier(--spacing-*) {
+        gap: value() modifier();
+      }
+    `).build(['splitgap-1', 'lg:splitgap-1', 'splitgap-1/2', 'lg:splitgap-1/2'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .splitgap-1\\/2 {
+          gap: var(--spacing-1, .25rem) var(--spacing-2, .5rem);
         }
       }"
     `)
