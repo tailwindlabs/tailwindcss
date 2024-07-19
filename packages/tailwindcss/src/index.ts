@@ -103,6 +103,8 @@ export function compile(
             }
 
             value = value ?? candidate.value.value
+          } else {
+            value = candidate.value.value
           }
 
           if (!value) return

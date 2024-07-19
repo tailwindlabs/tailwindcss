@@ -14998,7 +14998,19 @@ describe('custom utilities', () => {
       }
     `).build(['scrollbar-[2rem]', 'lg:scrollbar-[2rem]'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .scrollbar-\\[2rem\\] {
+          scrollbar-width: 2rem;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:scrollbar-\\[2rem\\] {
+            scrollbar-width: 2rem;
+          }
+        }
+      }"
+    `)
   })
 
   test('custom functional utility with value() definition', () => {
