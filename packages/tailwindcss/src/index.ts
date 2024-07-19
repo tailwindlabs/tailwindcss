@@ -16,6 +16,7 @@ import * as CSS from './css-parser'
 import { parseUtilityDefinition } from './custom'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme, type ThemeKey } from './theme'
+import { withNegative } from './utilities'
 import { segment } from './utils/segment'
 
 type PluginAPI = {
@@ -91,7 +92,6 @@ export function compile(
         let modifierThemeKeys = defn.modifier?.themeKeys ?? []
 
         designSystem.utilities.functional(name, (candidate) => {
-          if (candidate.negative) return
           if (!candidate.value) return
 
           let value: string | null = null
@@ -116,6 +116,8 @@ export function compile(
 
             modifier = modifier ?? candidate.modifier.value
           }
+
+          value = withNegative(value, candidate)
 
           let ast = structuredClone(node.nodes)
 

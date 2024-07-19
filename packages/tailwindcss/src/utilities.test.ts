@@ -15102,6 +15102,55 @@ describe('custom utilities', () => {
     `)
   })
 
+  test('custom functional utilities support negative values', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --breakpoint-lg: 1024px;
+        --spacing-1: 0.25rem;
+      }
+
+      @utility mbs-* value(--spacing-*) {
+        margin-block-start: value();
+      }
+    `).build(['mbs-1', 'lg:mbs-1', '-mbs-1', 'lg:-mbs-1', 'mbs-[123px]', '-mbs-[123px]'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .-mbs-1 {
+          margin-block-start: calc(var(--spacing-1, .25rem) * -1);
+        }
+
+        .-mbs-\\[123px\\] {
+          margin-block-start: -123px;
+        }
+
+        .mbs-1 {
+          margin-block-start: var(--spacing-1, .25rem);
+        }
+
+        .mbs-\\[123px\\] {
+          margin-block-start: 123px;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:-mbs-1 {
+            margin-block-start: calc(var(--spacing-1, .25rem) * -1);
+          }
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:mbs-1 {
+            margin-block-start: var(--spacing-1, .25rem);
+          }
+        }
+      }"
+    `)
+  })
+
   test('custom utilities are sorted by used properties', () => {
     let compiled = compile(css`
       @layer utilities {
