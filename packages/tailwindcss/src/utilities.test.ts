@@ -1,5 +1,6 @@
-import { expect, test } from 'vitest'
-import { compileCss, run } from './test-utils/run'
+import { describe, expect, test } from 'vitest'
+import { compileCss, optimizeCss, run } from './test-utils/run'
+import { compile } from '.'
 
 const css = String.raw
 
@@ -14945,4 +14946,39 @@ test('@container', () => {
       '-@container-[size]/sidebar',
     ]),
   ).toEqual('')
+})
+
+describe('custom utilities', () => {
+  test('custom static utility', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --breakpoint-lg: 1024px;
+      }
+
+      @utility text-trim {
+        text-box-trim: both;
+        text-box-edge: cap alphabetic;
+      }
+    `).build(['text-trim', 'lg:text-trim'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .text-trim {
+          text-box-trim: both;
+          text-box-edge: cap alphabetic;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:text-trim {
+            text-box-trim: both;
+            text-box-edge: cap alphabetic;
+          }
+        }
+      }"
+    `)
+  })
 })

@@ -52,6 +52,7 @@ export function compile(
   let theme = new Theme()
   let plugins: Plugin[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
+  let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
 
@@ -61,6 +62,18 @@ export function compile(
     // Collect paths from `@plugin` at-rules
     if (node.selector.startsWith('@plugin ')) {
       plugins.push(loadPlugin(node.selector.slice(9, -1)))
+      replaceWith([])
+      return
+    }
+
+    // Collect custom `@utility` at-rules
+    if (node.selector.startsWith('@utility ')) {
+      customUtilities.push((designSystem) => {
+        designSystem.utilities.static(node.selector.slice(9), (candidate) => {
+          if (candidate.negative) return
+          return node.nodes
+        })
+      })
       replaceWith([])
       return
     }
@@ -222,6 +235,10 @@ export function compile(
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
+  }
+
+  for (let customUtility of customUtilities) {
+    customUtility(designSystem)
   }
 
   let api: PluginAPI = {
