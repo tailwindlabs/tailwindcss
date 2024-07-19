@@ -239,9 +239,7 @@ export function createVariants(theme: Theme): Variants {
       return null
     }
 
-    console.log({ groups })
-
-    ruleNode.selector = '&' + groups.join('')
+    ruleNode.selector = `&:is(${groups.join('')})`
     ruleNode.nodes = []
   })
 
@@ -252,50 +250,52 @@ export function createVariants(theme: Theme): Variants {
       ? `:where(.group\\/${variant.modifier.value})`
       : ':where(.group)'
 
-    let didApply = false
+    let groups: string[] = []
 
-    walk([ruleNode], (node) => {
+    walk([ruleNode], (node, { path }) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Skip past at-rules, and continue traversing the children of the at-rule
       if (node.selector[0] === '@') return WalkAction.Continue
 
-      // Throw out any candidates with variants using nested selectors
-      if (didApply) {
-        walk([node], (childNode) => {
-          if (childNode.kind !== 'rule' || childNode.selector[0] === '@') return WalkAction.Continue
+      // 1. Walk the tree until we find `@slot`
+      if (node.nodes.length !== 0) return WalkAction.Continue
 
-          didApply = false
-          return WalkAction.Stop
-        })
+      let selectors = []
 
-        return didApply ? WalkAction.Skip : WalkAction.Stop
+      // 2. Collect the selectors of the parents
+      for (let ancestor of path) {
+        if (ancestor.kind !== 'rule') continue
+
+        // Skip past at-rules, and continue traversing the children of the at-rule
+        if (ancestor.selector[0] === '@') continue
+
+        // Skip over the "root" node
+        if (ancestor.selector === '&') continue
+
+        // For most variants we rely entirely on CSS nesting to build-up the final
+        // selector, but there is no way to use CSS nesting to make `&` refer to
+        // just the `.group` class the way we'd need to for these variants, so we
+        // need to replace it in the selector ourselves.
+        let selector = ancestor.selector.replaceAll('&', '*')
+
+        // When the selector is a selector _list_ we need to wrap it in `:is`
+        // to make sure the matching behavior is consistent with the original
+        // variant / selector.
+        selectors.push(`:is(${selector})`)
       }
 
-      // For most variants we rely entirely on CSS nesting to build-up the final
-      // selector, but there is no way to use CSS nesting to make `&` refer to
-      // just the `.group` class the way we'd need to for these variants, so we
-      // need to replace it in the selector ourselves.
-      node.selector = node.selector.replaceAll('&', groupSelector)
+      if (selectors.length === 0) return
 
-      // When the selector is a selector _list_ we need to wrap it in `:is`
-      // to make sure the matching behavior is consistent with the original
-      // variant / selector.
-      if (segment(node.selector, ',').length > 1) {
-        node.selector = `:is(${node.selector})`
-      }
-
-      node.selector = `&:is(${node.selector} *)`
-
-      // Track that the variant was actually applied
-      didApply = true
+      groups.push(selectors.join(''))
     })
 
-    // If the node wasn't modified, this variant is not compatible with
-    // `group-*` so discard the candidate.
-    if (!didApply) {
+    if (groups.length === 0) {
       return null
     }
+
+    ruleNode.selector = `&:is(${groupSelector}:is(${groups.join(',')}) *)`
+    ruleNode.nodes = []
   })
 
   variants.suggest('group', () => {

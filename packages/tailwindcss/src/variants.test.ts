@@ -705,23 +705,23 @@ test('group-[...]', () => {
       'group-[&:hover]:group-[&_p]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".group-\\[\\&_p\\]\\:flex:is(:where(.group) p *) {
+    ".group-\\[\\&_p\\]\\:flex:is(:where(.group):is(* p) *) {
       display: flex;
     }
 
-    .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex:is(:where(.group):hover *):is(:where(.group) p *) {
+    .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex:is(:where(.group):hover *):is(:where(.group):is(* p) *) {
       display: flex;
     }
 
-    .group-\\[\\&_p\\]\\:hover\\:flex:is(:where(.group) p *):hover {
+    .group-\\[\\&_p\\]\\:hover\\:flex:is(:where(.group):is(* p) *):hover {
       display: flex;
     }
 
-    .hover\\:group-\\[\\&_p\\]\\:flex:hover:is(:where(.group) p *) {
+    .hover\\:group-\\[\\&_p\\]\\:flex:hover:is(:where(.group):is(* p) *) {
       display: flex;
     }
 
-    .hover\\:group-\\[\\&_p\\]\\:hover\\:flex:hover:is(:where(.group) p *):hover {
+    .hover\\:group-\\[\\&_p\\]\\:hover\\:flex:hover:is(:where(.group):is(* p) *):hover {
       display: flex;
     }"
   `)
@@ -746,6 +746,13 @@ test('group-*', () => {
             @slot;
           }
         }
+        @variant nested-selectors {
+          &:hover {
+            &:focus {
+              @slot;
+            }
+          }
+        }
         @tailwind utilities;
       `,
       [
@@ -755,6 +762,8 @@ test('group-*', () => {
 
         'group-hover:group-focus:flex',
         'group-focus:group-hover:flex',
+
+        'group-nested-selectors:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -774,7 +783,11 @@ test('group-*', () => {
       display: flex;
     }
 
-    .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+    .group-hocus\\:flex:is(:where(.group):is(:hover, :focus) *) {
+      display: flex;
+    }
+
+    .group-nested-selectors\\:flex:is(:where(.group):focus:hover *) {
       display: flex;
     }"
   `)
@@ -783,16 +796,9 @@ test('group-*', () => {
     compileCss(
       css`
         @variant custom-at-rule (@media foo);
-        @variant nested-selectors {
-          &:hover {
-            &:focus {
-              @slot;
-            }
-          }
-        }
         @tailwind utilities;
       `,
-      ['group-custom-at-rule:flex', 'group-nested-selectors:flex'],
+      ['group-custom-at-rule:flex'],
     ),
   ).toEqual('')
 })
