@@ -15013,4 +15013,24 @@ describe('custom utilities', () => {
       }"
     `)
   })
+
+  test('custom utilities support slashes', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility push-1/2 {
+        right: 50%;
+      }
+    `).build(['push-1/2'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .push-1\\/2 {
+          right: 50%;
+        }
+      }"
+    `)
+  })
 })

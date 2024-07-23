@@ -249,6 +249,20 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     base = base.slice(1)
   }
 
+  // Allow a static utility to be found directly even if it has `/`s in it
+  if (designSystem.utilities.has(base)) {
+    let kind = designSystem.utilities.kind(base)
+    if (kind === 'static') {
+      return {
+        kind: 'static',
+        root: base,
+        variants: parsedCandidateVariants,
+        negative,
+        important,
+      }
+    }
+  }
+
   // Figure out the new base and the modifier segment if present.
   //
   // E.g.:
