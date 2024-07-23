@@ -1,6 +1,7 @@
 import { decl, rule, type AstNode, type Rule } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { ColorThemeKey, Theme, ThemeKey } from './theme'
+import { DefaultMap } from './utils/default-map'
 import { inferDataType } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
@@ -28,17 +29,22 @@ type SuggestionDefinition =
 
 export class Utilities {
   private arbitraryFn!: CompileFn<'arbitrary'>
-  private staticUtilities = new Map<string, CompileFn<'static'>>()
-  private functionalUtilities = new Map<string, CompileFn<'functional'>>()
+  private utilities = new DefaultMap<
+    string,
+    {
+      kind: 'static' | 'functional'
+      compileFn: CompileFn<any>
+    }[]
+  >(() => [])
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
   static(name: string, compileFn: CompileFn<'static'>) {
-    this.staticUtilities.set(name, compileFn)
+    this.utilities.get(name).push({ kind: 'static', compileFn })
   }
 
   functional(name: string, compileFn: CompileFn<'functional'>) {
-    this.functionalUtilities.set(name, compileFn)
+    this.utilities.get(name).push({ kind: 'functional', compileFn })
   }
 
   arbitrary(compileFn: CompileFn<'arbitrary'>) {
@@ -46,21 +52,11 @@ export class Utilities {
   }
 
   has(name: string, kind: 'static' | 'functional') {
-    if (kind === 'static') {
-      return this.staticUtilities.has(name)
-    }
-
-    return this.functionalUtilities.has(name)
+    return this.utilities.has(name) && this.utilities.get(name).some((fn) => fn.kind === kind)
   }
 
-  get(name: string, kind: 'static'): CompileFn<'static'>
-  get(name: string, kind: 'functional'): CompileFn<'functional'>
-  get(name: string, kind: 'static' | 'functional') {
-    if (kind === 'static') {
-      return this.staticUtilities.get(name)
-    }
-
-    return this.functionalUtilities.get(name)
+  get(name: string) {
+    return this.utilities.has(name) ? this.utilities.get(name) : []
   }
 
   getCompletions(name: string): SuggestionGroup[] {
@@ -74,11 +70,7 @@ export class Utilities {
   }
 
   keys(kind: 'static' | 'functional') {
-    if (kind === 'static') {
-      return this.staticUtilities.keys()
-    }
-
-    return this.functionalUtilities.keys()
+    return Array.from(this.utilities.keys()).filter((key) => this.has(key, kind))
   }
 
   getArbitrary() {
@@ -156,7 +148,7 @@ function asColor(value: string, modifier: CandidateModifier | null, theme: Theme
 /**
  * Negate a numeric value — literals get simplified by Lightning CSS.
  */
-export function withNegative(
+function withNegative(
   value: string,
   candidate: Extract<Candidate, { kind: 'static' | 'functional' }>,
 ) {

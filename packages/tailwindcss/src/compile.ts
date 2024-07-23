@@ -121,12 +121,19 @@ export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem
     // operator because if the `candidate.root` didn't exist, `parseCandidate`
     // would have returned `null` and we would have returned early resulting
     // in not hitting this code path.
+    let fns = designSystem.utilities.get(candidate.root)
 
     // Build the node
-    let compiledNodes =
-      candidate.kind === 'static'
-        ? designSystem.utilities.get(candidate.root, 'static')!(candidate)
-        : designSystem.utilities.get(candidate.root, 'functional')!(candidate)
+    let compiledNodes: AstNode[] | undefined
+
+    for (let i = fns.length - 1; i >= 0; i--) {
+      let fn = fns[i]
+
+      if (candidate.kind !== fn.kind) continue
+
+      compiledNodes = fn.compileFn(candidate)
+      if (compiledNodes) break
+    }
 
     if (compiledNodes === undefined) return null
 

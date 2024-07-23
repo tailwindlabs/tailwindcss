@@ -249,9 +249,6 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     base = base.slice(1)
   }
 
-  // Allow a static utility to be found directly even if it has `/`s in it
-  // We explicitly exclude the arbitrary value syntax here
-
   // Candidates that start with a dash are the negative versions of another
   // candidate, e.g. `-mx-4`.
   if (base[0] === '-') {
@@ -259,6 +256,8 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     base = base.slice(1)
   }
 
+  // Allow a static utility to be found directly even if it has `/`s in it
+  // We explicitly exclude the arbitrary value syntax here
   if (designSystem.utilities.has(base, 'static') && !base.includes('[')) {
     return {
       kind: 'static',
@@ -327,13 +326,6 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     }
   }
 
-  // Candidates that start with a dash are the negative versions of another
-  // candidate, e.g. `-mx-4`.
-  if (baseWithoutModifier[0] === '-') {
-    negative = true
-    baseWithoutModifier = baseWithoutModifier.slice(1)
-  }
-
   // The root of the utility, e.g.: `bg-red-500`
   //                                 ^^
   let root: string | null = null
@@ -365,7 +357,7 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
 
     // The root of the utility should exist as-is in the utilities map. If not,
     // it's an invalid utility and we can skip continue parsing.
-    if (!designSystem.utilities.has(root)) return null
+    if (!designSystem.utilities.has(root, 'functional')) return null
 
     value = baseWithoutModifier.slice(idx + 1)
   }
@@ -377,22 +369,6 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     })
   }
 
-  // If the root is null, but it contains a `/`, then it could be that we are
-  // dealing with a functional utility that contains a modifier but doesn't
-  // contain a value.
-  //
-  // E.g.: `@container/parent`
-  if (root === null && base.includes('/')) {
-    let [rootWithoutModifier, rootModifierSegment = null] = segment(base, '/')
-
-    modifierSegment = rootModifierSegment
-
-    // Try to find the root and value, without the modifier present
-    ;[root, value] = findRoot(rootWithoutModifier, (root: string) => {
-      return designSystem.utilities.has(root, 'functional')
-    })
-  }
-
   // If there's no root, the candidate isn't a valid class and can be discarded.
   if (root === null) return null
 
@@ -400,21 +376,6 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // invalid named value, e.g.: `bg-`. This makes the candidate invalid and we
   // can skip any further parsing.
   if (value === '') return null
-
-  if (value === null && designSystem.utilities.has(root, 'static')) {
-    // Static utilities do not have a modifier
-    if (modifierSegment !== null) return null
-
-    return {
-      kind: 'static',
-      root,
-      variants: parsedCandidateVariants,
-      negative,
-      important,
-    }
-  }
-
-  if (!designSystem.utilities.has(root, 'functional')) return null
 
   let candidate: Candidate = {
     kind: 'functional',
