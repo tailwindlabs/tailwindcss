@@ -80,7 +80,7 @@ export function compile(
       }
 
       if (node.nodes.length === 0) {
-        throw new Error(`The utility [${name}] needs at least one property.`)
+        throw new Error(`\`@utility ${name}\` is empty. Utilities should include at least one property.`)
       }
 
       customUtilities.push((designSystem) => {
