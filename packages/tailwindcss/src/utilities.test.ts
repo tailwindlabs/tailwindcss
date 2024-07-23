@@ -15077,4 +15077,56 @@ describe('custom utilities', () => {
       }"
     `)
   })
+
+  test('can override the default value of a functional utility', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --radius-xl: 16px;
+      }
+
+      @utility rounded {
+        border-radius: 50rem;
+      }
+    `).build(['rounded', 'rounded-xl', 'rounded-[33px]'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .rounded {
+          border-radius: 50rem;
+        }
+
+        .rounded-\\[33px\\] {
+          border-radius: 33px;
+        }
+
+        .rounded-xl {
+          border-radius: var(--radius-xl, 16px);
+        }
+      }"
+    `)
+  })
+
+  test('can override the default value of a functional utility', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --spacing: 12px;
+      }
+    `).build(['left'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .left {
+          left: var(--spacing, 12px);
+        }
+      }"
+    `)
+  })
 })

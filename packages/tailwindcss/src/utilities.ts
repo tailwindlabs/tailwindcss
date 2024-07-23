@@ -5,8 +5,6 @@ import { inferDataType } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 
-const ARBITRARY_VARIANT = Symbol('ARBITRARY_VARIANT')
-
 type CompileFn<T extends Candidate['kind']> = (
   value: Extract<Candidate, { kind: T }>,
 ) => AstNode[] | undefined
@@ -29,38 +27,40 @@ type SuggestionDefinition =
     }
 
 export class Utilities {
-  private utilities = new Map<
-    string | symbol,
-    {
-      kind: Candidate['kind']
-      compileFn: CompileFn<any>
-    }
-  >()
+  private arbitraryFn!: CompileFn<'arbitrary'>
+  private staticUtilities = new Map<string, CompileFn<'static'>>()
+  private functionalUtilities = new Map<string, CompileFn<'functional'>>()
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
   static(name: string, compileFn: CompileFn<'static'>) {
-    this.set(name, { kind: 'static', compileFn: compileFn })
+    this.staticUtilities.set(name, compileFn)
   }
 
   functional(name: string, compileFn: CompileFn<'functional'>) {
-    this.set(name, { kind: 'functional', compileFn: compileFn })
+    this.functionalUtilities.set(name, compileFn)
   }
 
   arbitrary(compileFn: CompileFn<'arbitrary'>) {
-    this.set(ARBITRARY_VARIANT, { kind: 'arbitrary', compileFn: compileFn })
+    this.arbitraryFn = compileFn
   }
 
-  has(name: string) {
-    return this.utilities.has(name)
+  has(name: string, kind: 'static' | 'functional') {
+    if (kind === 'static') {
+      return this.staticUtilities.has(name)
+    }
+
+    return this.functionalUtilities.has(name)
   }
 
-  get(name: string | symbol) {
-    return this.utilities.get(name)
-  }
+  get(name: string, kind: 'static'): CompileFn<'static'>
+  get(name: string, kind: 'functional'): CompileFn<'functional'>
+  get(name: string, kind: 'static' | 'functional') {
+    if (kind === 'static') {
+      return this.staticUtilities.get(name)
+    }
 
-  kind(name: string) {
-    return this.utilities.get(name)!.kind
+    return this.functionalUtilities.get(name)
   }
 
   getCompletions(name: string): SuggestionGroup[] {
@@ -73,26 +73,16 @@ export class Utilities {
     this.completions.set(name, groups)
   }
 
-  keys() {
-    return this.utilities.keys()
-  }
+  keys(kind: 'static' | 'functional') {
+    if (kind === 'static') {
+      return this.staticUtilities.keys()
+    }
 
-  entries() {
-    return this.utilities.entries()
+    return this.functionalUtilities.keys()
   }
 
   getArbitrary() {
-    return this.get(ARBITRARY_VARIANT)!.compileFn
-  }
-
-  private set<T extends Candidate['kind']>(
-    name: string | symbol,
-    { kind, compileFn }: { kind: T; compileFn: CompileFn<T> },
-  ) {
-    this.utilities.set(name, {
-      kind,
-      compileFn: compileFn,
-    })
+    return this.arbitraryFn
   }
 }
 

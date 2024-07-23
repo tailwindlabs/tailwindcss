@@ -259,26 +259,13 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     base = base.slice(1)
   }
 
-  if (designSystem.utilities.has(base) && !base.includes('[')) {
-    let kind = designSystem.utilities.kind(base)
-    if (kind === 'static') {
-      return {
-        kind: 'static',
-        root: base,
-        variants: parsedCandidateVariants,
-        negative,
-        important,
-      }
-    } else if (kind === 'functional') {
-      return {
-        kind: 'functional',
-        root: base,
-        value: null,
-        modifier: null,
-        variants: parsedCandidateVariants,
-        negative,
-        important,
-      }
+  if (designSystem.utilities.has(base, 'static') && !base.includes('[')) {
+    return {
+      kind: 'static',
+      root: base,
+      variants: parsedCandidateVariants,
+      negative,
+      important,
     }
   }
 
@@ -385,7 +372,9 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
 
   // Not an arbitrary value
   else {
-    ;[root, value] = findRoot(baseWithoutModifier, designSystem.utilities)
+    ;[root, value] = findRoot(baseWithoutModifier, (root: string) => {
+      return designSystem.utilities.has(root, 'functional')
+    })
   }
 
   // If the root is null, but it contains a `/`, then it could be that we are
@@ -399,7 +388,9 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     modifierSegment = rootModifierSegment
 
     // Try to find the root and value, without the modifier present
-    ;[root, value] = findRoot(rootWithoutModifier, designSystem.utilities)
+    ;[root, value] = findRoot(rootWithoutModifier, (root: string) => {
+      return designSystem.utilities.has(root, 'functional')
+    })
   }
 
   // If there's no root, the candidate isn't a valid class and can be discarded.
@@ -410,12 +401,7 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // can skip any further parsing.
   if (value === '') return null
 
-  let kind = designSystem.utilities.kind(root)
-
-  if (kind === 'static') {
-    // Static utilities do not have a value
-    if (value !== null) return null
-
+  if (value === null && designSystem.utilities.has(root, 'static')) {
     // Static utilities do not have a modifier
     if (modifierSegment !== null) return null
 
@@ -427,6 +413,8 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
       important,
     }
   }
+
+  if (!designSystem.utilities.has(root, 'functional')) return null
 
   let candidate: Candidate = {
     kind: 'functional',
@@ -593,7 +581,9 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     // - `group-hover/foo/bar`
     if (additionalModifier) return null
 
-    let [root, value] = findRoot(variantWithoutModifier, designSystem.variants)
+    let [root, value] = findRoot(variantWithoutModifier, (root) => {
+      return designSystem.variants.has(root)
+    })
 
     // Variant is invalid, therefore the candidate is invalid and we can skip
     // continue parsing it.
@@ -660,12 +650,9 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
   return null
 }
 
-function findRoot(
-  input: string,
-  lookup: { has: (input: string) => boolean },
-): [string | null, string | null] {
+function findRoot(input: string, has: (input: string) => boolean): [string | null, string | null] {
   // If the lookup has an exact match, then that's the root.
-  if (lookup.has(input)) return [input, null]
+  if (has(input)) return [input, null]
 
   // Otherwise test every permutation of the input by iteratively removing
   // everything after the last dash.
@@ -673,7 +660,7 @@ function findRoot(
   if (idx === -1) {
     // Variants starting with `@` are special because they don't need a `-`
     // after the `@` (E.g.: `@-lg` should be written as `@lg`).
-    if (input[0] === '@' && lookup.has('@')) {
+    if (input[0] === '@' && has('@')) {
       return ['@', input.slice(1)]
     }
 
@@ -691,7 +678,7 @@ function findRoot(
   do {
     let maybeRoot = input.slice(0, idx)
 
-    if (lookup.has(maybeRoot)) {
+    if (has(maybeRoot)) {
       return [maybeRoot, input.slice(idx + 1)]
     }
 

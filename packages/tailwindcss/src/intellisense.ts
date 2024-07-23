@@ -11,18 +11,13 @@ export type ClassEntry = [string, ClassMetadata]
 export function getClassList(design: DesignSystem): ClassEntry[] {
   let list: [string, ClassMetadata][] = []
 
-  for (let [utility, fn] of design.utilities.entries()) {
-    if (typeof utility !== 'string') {
-      continue
-    }
+  // Static utilities only work as-is
+  for (let utility of design.utilities.keys('static')) {
+    list.push([utility, { modifiers: [] }])
+  }
 
-    // Static utilities only work as-is
-    if (fn.kind === 'static') {
-      list.push([utility, { modifiers: [] }])
-      continue
-    }
-
-    // Functional utilities have their own list of completions
+  // Functional utilities have their own list of completions
+  for (let utility of design.utilities.keys('functional')) {
     let completions = design.utilities.getCompletions(utility)
 
     for (let group of completions) {
