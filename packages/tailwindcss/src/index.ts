@@ -71,7 +71,7 @@ export function compile(
     if (node.selector.startsWith('@utility ')) {
       let name = node.selector.slice(9).trim()
 
-      if (!/^[a-z][a-zA-Z0-9\\/%._-]*$/.test(name)) {
+      if (!/^[a-z][a-zA-Z0-9/%._-]*$/.test(name)) {
         throw new Error(
           `The utility [${name}] has an invalid name. Only use alphanumeric characters.`,
         )

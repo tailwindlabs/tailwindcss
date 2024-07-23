@@ -15037,15 +15037,19 @@ describe('custom utilities', () => {
         @tailwind utilities;
       }
 
-      @utility rounded-xl {
-        border-radius: 200rem;
+      @utility text-sm {
+        font-size: var(--font-size-sm, 0.875rem);
+        line-height: var(--line-height-sm, 1.25rem);
+        text-rendering: optimizeLegibility;
       }
-    `).build(['rounded-xl'])
+    `).build(['text-sm'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .rounded-xl {
-          border-radius: 200rem;
+        .text-sm {
+          font-size: var(--font-size-sm, .875rem);
+          line-height: var(--line-height-sm, 1.25rem);
+          text-rendering: optimizelegibility;
         }
       }"
     `)
