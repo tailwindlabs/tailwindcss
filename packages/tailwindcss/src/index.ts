@@ -13,10 +13,8 @@ import {
 } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
-import { parseUtilityDefinition } from './custom'
 import { buildDesignSystem, type DesignSystem } from './design-system'
-import { Theme, type ThemeKey } from './theme'
-import { withNegative } from './utilities'
+import { Theme } from './theme'
 import { segment } from './utils/segment'
 
 type PluginAPI = {
@@ -70,75 +68,21 @@ export function compile(
 
     // Collect custom `@utility` at-rules
     if (node.selector.startsWith('@utility ')) {
+      let name = node.selector.slice(9).trim()
+
+      // We're explicitly throwing away the wildcard utility so the syntax may
+      // be used in future to define functional utilities.
+      if (name.endsWith('-*')) {
+        return
+      }
+
       customUtilities.push((designSystem) => {
-        let defn = parseUtilityDefinition(node.selector.slice(9))
-
-        if (defn === null) {
-          throw new Error(`Invalid custom utility definition: ${node.selector}`)
-        }
-
-        let name = defn.name
-
-        if (defn.kind === 'static') {
-          designSystem.utilities.static(name, (candidate) => {
-            if (candidate.negative) return
-            return node.nodes
-          })
-
-          return
-        }
-
-        let valueThemeKeys = defn.value?.themeKeys ?? []
-        let modifierThemeKeys = defn.modifier?.themeKeys ?? []
-
-        designSystem.utilities.functional(name, (candidate) => {
-          if (!candidate.value) return
-
-          let value: string | null = null
-          let modifier: string | null = null
-
-          if (candidate.value.kind === 'named') {
-            if (valueThemeKeys.length > 0) {
-              value = theme.resolve(candidate.value.value, valueThemeKeys as ThemeKey[])
-            }
-
-            value = value ?? candidate.value.value
-          } else {
-            value = candidate.value.value
-          }
-
-          if (!value) return
-
-          if (candidate.modifier?.kind === 'named') {
-            if (modifierThemeKeys.length > 0) {
-              modifier = theme.resolve(candidate.modifier.value, modifierThemeKeys as ThemeKey[])
-            }
-
-            modifier = modifier ?? candidate.modifier.value
-          }
-
-          value = withNegative(value, candidate)
-
-          let ast = structuredClone(node.nodes)
-
-          walk(ast, (node, { replaceWith }) => {
-            if (node.kind !== 'declaration') return
-
-            let hasModifier = node.value.includes('modifier()')
-            if (hasModifier && !modifier) {
-              // Remove the property if it uses modifier() but no modifier is provided
-              replaceWith([])
-              return
-            }
-
-            node.value = node.value
-              .replaceAll('value()', value)
-              .replaceAll('modifier()', modifier ?? '')
-          })
-
-          return ast
+        designSystem.utilities.static(name, (candidate) => {
+          if (candidate.negative) return
+          return node.nodes
         })
       })
+
       replaceWith([])
       return
     }
