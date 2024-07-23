@@ -1842,22 +1842,22 @@ test('data', () => {
       'data-disabled:flex',
       'data-[potato=salad]:flex',
       'data-[foo=1]:flex',
-      'data-[foo=bar baz]:flex',
-      "data-[foo$='bar' i]:flex",
+      'data-[foo=bar_baz]:flex',
+      "data-[foo$='bar'_i]:flex",
 
       'group-data-[disabled]:flex',
       'group-data-[disabled]/parent-name:flex',
       'group-data-[foo=1]:flex',
       'group-data-[foo=1]/parent-name:flex',
       'group-data-[foo=bar baz]/parent-name:flex',
-      "group-data-[foo$='bar' i]/parent-name:flex",
+      "group-data-[foo$='bar'_i]/parent-name:flex",
 
       'peer-data-[disabled]:flex',
       'peer-data-[disabled]/parent-name:flex',
       'peer-data-[foo=1]:flex',
       'peer-data-[foo=1]/parent-name:flex',
       'peer-data-[foo=bar baz]/parent-name:flex',
-      "peer-data-[foo$='bar' i]/parent-name:flex",
+      "peer-data-[foo$='bar'_i]/parent-name:flex",
     ]),
   ).toMatchInlineSnapshot(`
     ".group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *) {
@@ -1880,7 +1880,7 @@ test('data', () => {
       display: flex;
     }
 
-    .group-data-\\[foo\\$\\=\\'bar\\'\\ i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *) {
+    .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *) {
       display: flex;
     }
 
@@ -1904,7 +1904,7 @@ test('data', () => {
       display: flex;
     }
 
-    .peer-data-\\[foo\\$\\=\\'bar\\'\\ i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar" i] ~ *) {
+    .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar" i] ~ *) {
       display: flex;
     }
 
@@ -1920,11 +1920,11 @@ test('data', () => {
       display: flex;
     }
 
-    .data-\\[foo\\=bar\\ baz\\]\\:flex[data-foo="bar baz"] {
+    .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"] {
       display: flex;
     }
 
-    .data-\\[foo\\$\\=\\'bar\\'\\ i\\]\\:flex[data-foo$="bar" i] {
+    .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i] {
       display: flex;
     }"
   `)

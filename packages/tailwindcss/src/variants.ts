@@ -514,7 +514,7 @@ export function createVariants(theme: Theme): Variants {
 
     if (variant.value.kind === 'arbitrary') {
       ruleNode.nodes = [
-        rule(`&[aria-${normalizeAttributeSelectors(variant.value.value)}]`, ruleNode.nodes),
+        rule(`&[aria-${quoteAtteributeValue(variant.value.value)}]`, ruleNode.nodes),
       ]
     } else {
       ruleNode.nodes = [rule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
@@ -536,9 +536,7 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [
-      rule(`&[data-${normalizeAttributeSelectors(variant.value.value)}]`, ruleNode.nodes),
-    ]
+    ruleNode.nodes = [rule(`&[data-${quoteAtteributeValue(variant.value.value)}]`, ruleNode.nodes)]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -909,10 +907,10 @@ export function createVariants(theme: Theme): Variants {
   return variants
 }
 
-function normalizeAttributeSelectors(value: string) {
-  // Wrap values in attribute selectors with quotes
+function quoteAtteributeValue(value: string) {
   if (value.includes('=')) {
     value = value.replace(/(=.*)/g, (_fullMatch, match) => {
+      // If the value is already quoted, skip.
       if (match[1] === "'" || match[1] === '"') {
         return match
       }
