@@ -75,6 +75,7 @@ export function compile(
       // We're explicitly throwing away the wildcard utility so the syntax may
       // be used in future to define functional utilities.
       if (name.endsWith('-*')) {
+        replaceWith([])
         return
       }
 
