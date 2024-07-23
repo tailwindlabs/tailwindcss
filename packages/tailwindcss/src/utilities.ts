@@ -89,15 +89,6 @@ export class Utilities {
     name: string | symbol,
     { kind, compileFn }: { kind: T; compileFn: CompileFn<T> },
   ) {
-    // In test mode, throw an error if we accidentally override another utility
-    // by mistake when implementing a new utility that shares the same root
-    // without realizing the definitions need to be merged.
-    if (process.env.NODE_ENV === 'test') {
-      if (this.utilities.has(name)) {
-        throw new Error(`Duplicate utility prefix [${name.toString()}]`)
-      }
-    }
-
     this.utilities.set(name, {
       kind,
       compileFn: compileFn,

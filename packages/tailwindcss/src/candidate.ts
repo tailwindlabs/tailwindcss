@@ -269,6 +269,16 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
         negative,
         important,
       }
+    } else if (kind === 'functional') {
+      return {
+        kind: 'functional',
+        root: base,
+        value: null,
+        modifier: null,
+        variants: parsedCandidateVariants,
+        negative,
+        important,
+      }
     }
   }
 

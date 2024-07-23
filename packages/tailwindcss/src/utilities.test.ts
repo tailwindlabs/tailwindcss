@@ -15033,4 +15033,48 @@ describe('custom utilities', () => {
       }"
     `)
   })
+
+  test('can ovverride specific versions of a functional utility with a static utility', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility z-1/2 {
+        z-index: calc(infinity * 0.5);
+      }
+    `).build(['z-1/2'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .z-1\\/2 {
+          z-index: calc(infinity * .5);
+        }
+      }"
+    `)
+  })
+
+  test('duplicate registrations of a static utility work', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility rounded/foo {
+        border-radius: 50rem;
+      }
+
+      @utility rounded/foo {
+        border-radius: 30rem;
+      }
+    `).build(['rounded/foo'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .rounded\\/foo {
+          border-radius: 30rem;
+        }
+      }"
+    `)
+  })
 })

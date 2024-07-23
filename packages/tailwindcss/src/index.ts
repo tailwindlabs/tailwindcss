@@ -80,9 +80,25 @@ export function compile(
       }
 
       customUtilities.push((designSystem) => {
-        designSystem.utilities.static(name, (candidate) => {
-          if (candidate.negative) return
-          return node.nodes
+        if (!designSystem.utilities.has(name)) {
+          designSystem.utilities.static(name, (candidate) => {
+            if (candidate.negative) return
+            return node.nodes
+          })
+
+          return
+        }
+
+        let existing = designSystem.utilities.get(name)!
+
+        designSystem.utilities.functional(name, (candidate) => {
+          // rounded
+          if (!candidate.value && !candidate.negative) {
+            return node.nodes
+          }
+
+          // rounded-2xl
+          return existing.compileFn(candidate)
         })
       })
 
