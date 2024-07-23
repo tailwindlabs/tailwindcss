@@ -250,7 +250,16 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   }
 
   // Allow a static utility to be found directly even if it has `/`s in it
-  if (designSystem.utilities.has(base)) {
+  // We explicitly exclude the arbitrary value syntax here
+
+  // Candidates that start with a dash are the negative versions of another
+  // candidate, e.g. `-mx-4`.
+  if (base[0] === '-') {
+    negative = true
+    base = base.slice(1)
+  }
+
+  if (designSystem.utilities.has(base) && !base.includes('[')) {
     let kind = designSystem.utilities.kind(base)
     if (kind === 'static') {
       return {
