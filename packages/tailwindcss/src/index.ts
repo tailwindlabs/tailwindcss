@@ -75,7 +75,7 @@ export function compile(
 
       if (!IS_VALID_UTILITY_NAME.test(name)) {
         throw new Error(
-          `The utility [${name}] has an invalid name. Only use alphanumeric characters.`,
+          `\`@utility ${name}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
         )
       }
 
