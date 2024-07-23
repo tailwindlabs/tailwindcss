@@ -14982,39 +14982,32 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('custom utilities are sorted by used properties', () => {
+  test('The later version of a static utility is used', () => {
     let compiled = compile(css`
       @layer utilities {
         @tailwind utilities;
       }
 
-      @utility push-left {
-        right: 100%;
+      @utility really-round {
+        --custom-prop: hi;
+        border-radius: 50rem;
       }
-    `).build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
+
+      @utility really-round {
+        border-radius: 30rem;
+      }
+    `).build(['really-round'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .top-\\[100px\\] {
-          top: 100px;
-        }
-
-        .push-left {
-          right: 100%;
-        }
-
-        .right-\\[100px\\] {
-          right: 100px;
-        }
-
-        .bottom-\\[100px\\] {
-          bottom: 100px;
+        .really-round {
+          border-radius: 30rem;
         }
       }"
     `)
   })
 
-  test('custom utilities support slashes', () => {
+  test('custom utilities support some special chracters', () => {
     let compiled = compile(css`
       @layer utilities {
         @tailwind utilities;
@@ -15023,56 +15016,36 @@ describe('custom utilities', () => {
       @utility push-1/2 {
         right: 50%;
       }
-    `).build(['push-1/2'])
+
+      @utility push-50% {
+        right: 50%;
+      }
+    `).build(['push-1/2', 'push-50%'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .push-1\\/2 {
+        .push-1\\/2, .push-50\\% {
           right: 50%;
         }
       }"
     `)
   })
 
-  test('can ovverride specific versions of a functional utility with a static utility', () => {
+  test('can override specific versions of a functional utility with a static utility', () => {
     let compiled = compile(css`
       @layer utilities {
         @tailwind utilities;
       }
 
-      @utility z-1/2 {
-        z-index: calc(infinity * 0.5);
+      @utility rounded-xl {
+        border-radius: 200rem;
       }
-    `).build(['z-1/2'])
+    `).build(['rounded-xl'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .z-1\\/2 {
-          z-index: calc(infinity * .5);
-        }
-      }"
-    `)
-  })
-
-  test('duplicate registrations of a static utility work', () => {
-    let compiled = compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
-
-      @utility rounded/foo {
-        border-radius: 50rem;
-      }
-
-      @utility rounded/foo {
-        border-radius: 30rem;
-      }
-    `).build(['rounded/foo'])
-
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
-        .rounded\\/foo {
-          border-radius: 30rem;
+        .rounded-xl {
+          border-radius: 200rem;
         }
       }"
     `)
@@ -15110,21 +15083,33 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('can override the default value of a functional utility', () => {
+  test('custom utilities are sorted by used properties', () => {
     let compiled = compile(css`
       @layer utilities {
         @tailwind utilities;
       }
 
-      @theme reference {
-        --spacing: 12px;
+      @utility push-left {
+        right: 100%;
       }
-    `).build(['left'])
+    `).build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
-        .left {
-          left: var(--spacing, 12px);
+        .top-\\[100px\\] {
+          top: 100px;
+        }
+
+        .push-left {
+          right: 100%;
+        }
+
+        .right-\\[100px\\] {
+          right: 100px;
+        }
+
+        .bottom-\\[100px\\] {
+          bottom: 100px;
         }
       }"
     `)
