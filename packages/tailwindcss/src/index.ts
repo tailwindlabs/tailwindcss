@@ -286,7 +286,7 @@ export function compile(
       for (let node of ast) {
         if (node.kind !== 'rule') return err()
 
-        if (!/^\.[a-z0-9-]+$/.test(node.selector)) {
+        if (!/^\.[a-z][a-zA-Z0-9\\/%._-]*$/.test(node.selector)) {
           throw new Error(
             'Utility class names must be valid CSS class names. You must use CSS nesting to generate complex utility classes.',
           )
