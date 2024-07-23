@@ -19,7 +19,9 @@ import { segment } from './utils/segment'
 
 type PluginAPI = {
   addVariant(name: string, variant: string | string[] | CssInJs): void
+  addUtilities(utilities: CssInJs): void
 }
+
 type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
@@ -269,6 +271,33 @@ export function compile(
       // CSS-in-JS object
       else if (typeof variant === 'object') {
         designSystem.variants.fromAst(name, objectToAst(variant))
+      }
+    },
+
+    addUtilities(utilities: CssInJs) {
+      let err = () => {
+        throw new Error('`addUtilities` must be called with an object')
+      }
+
+      if (typeof utilities !== 'object') return err()
+
+      let ast = objectToAst(utilities)
+
+      for (let node of ast) {
+        if (node.kind !== 'rule') return err()
+
+        if (!/^\.[a-z0-9-]+$/.test(node.selector)) {
+          throw new Error(
+            'Utility class names must be valid CSS class names. You must use CSS nesting to generate complex utility classes.',
+          )
+        }
+
+        let name = node.selector.slice(1)
+
+        designSystem.utilities.static(name, (candidate) => {
+          if (candidate.negative) return
+          return structuredClone(node.nodes)
+        })
       }
     },
   }

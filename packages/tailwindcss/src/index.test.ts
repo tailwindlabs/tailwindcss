@@ -1342,6 +1342,75 @@ describe('plugins', () => {
       }"
     `)
   })
+
+  test('addUtilities ', () => {
+    let compiled = compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadPlugin: () => {
+          return ({ addUtilities }) => {
+            addUtilities({
+              '.stretchable': {
+                display: 'flex',
+              },
+
+              '.not-stretchable': {
+                display: 'block',
+              },
+            })
+          }
+        },
+      },
+    ).build(['stretchable', 'hover:stretchable', 'not-stretchable', 'hover:not-stretchable'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .not-stretchable {
+          display: block;
+        }
+
+        .stretchable {
+          display: flex;
+        }
+
+        .hover\\:not-stretchable:hover {
+          display: block;
+        }
+
+        .hover\\:stretchable:hover {
+          display: flex;
+        }
+      }"
+    `)
+  })
+
+  test('addUtilities only allows valid definitions ', () => {
+    let input = css`
+      @plugin "my-plugin";
+      @layer utilities {
+        @tailwind utilities;
+      }
+    `
+
+    expect(() =>
+      compile(input, {
+        loadPlugin: () => {
+          return ({ addUtilities }) => {
+            addUtilities({
+              '.gone > *': {
+                display: 'none',
+              },
+            })
+          }
+        },
+      }),
+    ).toThrowError(/must be valid CSS class names/)
+  })
 })
 
 describe('@variant', () => {
