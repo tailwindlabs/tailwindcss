@@ -2,116 +2,116 @@
 
 import { segment } from './utils/segment'
 
-export type UtilityDefinition = {
+const DOUBLE_QUOTE = 0x22
+const SINGLE_QUOTE = 0x27
+
+/**
+ * Represents a dynamic value used by a custom functional utility.
+ *
+ * It takes one or more values which can represent a theme value, a bare value, or an arbitrary value.
+ * They're looked at in order, and the first one that matches is used.
+ */
+export type FunctionalUtilityValueFn = {
+  kind: 'value' | 'modifier'
+  values: UtilityValue[]
+
+  /** The starting location of the value in a given string */
+  start: number
+
+  /** The ending location of the value in a given string */
+  end: number
+}
+
+/**
+ * This represents an individual value used by a custom utility.
+ */
+export type UtilityValue =
   /**
-   * static: @utility scale{ … }
-   *                       ^ (no `-*`)
-   * functional: @utility scale-* { … }
-   *                           ^^^
+   * An arbitrary value of a given type, inferred as a color in this case:
+   * border-[#f00]
+   *         ^^^^
    */
-  kind: 'static' | 'functional'
+  | { kind: 'arbitrary'; dataType: string }
 
   /**
-   * @utility scale { … }
-   *          ^^^^^
+   * A named, bare value where it's just a number:
+   * border-2
+   *        ^
    *
-   * @utility scale-* { … }
-   *          ^^^^^
+   * A named, bare value with a type (inferred as `percentage` in this case):
+   * via-33%
    */
-  name: string
+  | { kind: 'bare'; dataType: string }
 
   /**
-   * @utility scale-* value(--spacing-*) modifier(--spacing-*)
-   *                  ^^^^^^^^^^^^^^^^^^
+   * A named, theme value looking in `--color-*`:
+   * border-red-500
+   *        ^^^^^^^
    */
-  value: UtilityDetail | null
+  | { kind: 'theme'; themeKey: string }
 
-  /**
-   * @utility scale-* value(--spacing-*) modifier(--spacing-*)
-   *                                     ^^^^^^^^^^^^^^^^^^^^^
-   */
-  modifier: UtilityDetail | null
-}
+export function findValueFns(value: string) {
+  let tmp: FunctionalUtilityValueFn[] = []
 
-export type UtilityDetail = {
-  /**
-   * @utility scale-* value(--spacing-*) modifier(--spacing-*)
-   *                  ^^^^^              ^^^^^^^^
-   */
-  name: string
+  let start = 0
 
-  /**
-   * @utility scale-* value(--spacing-*) modifier(--spacing-*)
-   *                        ^^^^^^^^^             ^^^^^^^^^
-   */
-  themeKeys: string[]
-}
+  while (start < value.length) {
+    let fnStart = value.indexOf('value(', start)
 
-export function parseUtilityDefinition(descriptor: string): UtilityDefinition | null {
-  let parts = segment(descriptor, ' ')
+    // TODO: This is not correct because we could be looking at a "partial" value here
+    // It should be the next balanced paren
+    let fnEnd = value.indexOf(')', fnStart)
 
-  let name = parts[0]
-
-  let value: UtilityDetail | null = null
-  let modifier: UtilityDetail | null = null
-
-  if (name.endsWith('-*')) {
-    name = name.slice(0, -2)
-
-    for (let part of parts.slice(1)) {
-      let detail = parseUtilityDetail(part)
-      if (detail === null) return null
-
-      if (detail.name === 'value') {
-        value = detail
-      } else if (detail.name === 'modifier') {
-        modifier = detail
-      } else {
-        // Unknown thing maybe need good error message or something
-        return null
-      }
+    if (fnStart === -1 || fnEnd === -1) {
+      break
     }
 
-    return {
-      kind: 'functional',
-      name,
-      value,
-      modifier,
-    }
+    let slice = value.slice(fnStart + 6, fnEnd)
+    let values = segment(slice, ',')
+
+    tmp.push({
+      kind: 'value',
+      start: fnStart,
+      end: fnEnd,
+      values: values.map((value) => parseValue(value)),
+    })
+
+    start = fnEnd
   }
 
-  return {
-    kind: 'static',
-    name,
-    value,
-    modifier,
-  }
+  return tmp
 }
 
-function parseUtilityDetail(detail: string): UtilityDetail | null {
-  let argStart = detail.indexOf('(')
-  if (argStart === -1) return null
+function parseValue(value: string): UtilityValue {
+  // This is a bare value
+  if (value.startsWith('named:')) {
+    return { kind: 'bare', dataType: value.slice(6).trim() }
+  }
 
-  let argEnd = detail.indexOf(')')
-  if (argEnd === -1) return null
+  // Remove quotes if they're present
+  let charStart = value.charCodeAt(0)
+  let charEnd = value.charCodeAt(value.length - 1)
 
-  let name = detail.slice(0, argStart)
+  if (charStart === DOUBLE_QUOTE && charEnd === DOUBLE_QUOTE) {
+    value = value.slice(1, -1)
+  } else if (charStart == SINGLE_QUOTE && charEnd == SINGLE_QUOTE) {
+    value = value.slice(1, -1)
+  }
 
-  let args = segment(detail.slice(argStart + 1, argEnd), ',')
-  if (args.length === 0) return null
-
-  let themeKeys: string[] = []
-
-  for (let arg of args) {
-    if (arg.startsWith('--') && arg.endsWith('-*')) {
-      themeKeys.push(arg.slice(0, -2))
+  // This represents a theme key
+  if (value.startsWith('--')) {
+    // Remove trailing -* from the theme key if it's present
+    if (value.endsWith('-*')) {
+      value = value.slice(0, -2)
     }
+
+    return { kind: 'theme', themeKey: value }
   }
 
-  if (themeKeys.length === 0) return null
-
-  return {
-    name,
-    themeKeys,
+  // This is an arbitrary value of a given type
+  if (value === '') {
+    return { kind: 'arbitrary', dataType: '*' }
   }
+
+  return { kind: 'arbitrary', dataType: value }
 }
