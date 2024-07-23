@@ -256,8 +256,8 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     base = base.slice(1)
   }
 
-  // Allow a static utility to be found directly even if it has `/`s in it
-  // We explicitly exclude the arbitrary value syntax here
+  // Check for an exact match of a static utility first as long as it does not
+  // look like an arbitrary value.
   if (designSystem.utilities.has(base, 'static') && !base.includes('[')) {
     return {
       kind: 'static',
@@ -611,9 +611,12 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
   return null
 }
 
-function findRoot(input: string, has: (input: string) => boolean): [string | null, string | null] {
-  // If the lookup has an exact match, then that's the root.
-  if (has(input)) return [input, null]
+function findRoot(
+  input: string,
+  exists: (input: string) => boolean,
+): [string | null, string | null] {
+  // If there is an exact match, then that's the root.
+  if (exists(input)) return [input, null]
 
   // Otherwise test every permutation of the input by iteratively removing
   // everything after the last dash.
@@ -621,15 +624,14 @@ function findRoot(input: string, has: (input: string) => boolean): [string | nul
   if (idx === -1) {
     // Variants starting with `@` are special because they don't need a `-`
     // after the `@` (E.g.: `@-lg` should be written as `@lg`).
-    if (input[0] === '@' && has('@')) {
+    if (input[0] === '@' && exists('@')) {
       return ['@', input.slice(1)]
     }
 
     return [null, null]
   }
 
-  // Determine the root and value by testing permutations of the incoming input
-  // against the lookup table.
+  // Determine the root and value by testing permutations of the incoming input.
   //
   // In case of a candidate like `bg-red-500`, this looks like:
   //
@@ -639,7 +641,7 @@ function findRoot(input: string, has: (input: string) => boolean): [string | nul
   do {
     let maybeRoot = input.slice(0, idx)
 
-    if (has(maybeRoot)) {
+    if (exists(maybeRoot)) {
       return [maybeRoot, input.slice(idx + 1)]
     }
 
