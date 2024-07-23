@@ -15037,9 +15037,14 @@ describe('custom utilities', () => {
         @tailwind utilities;
       }
 
+      @theme reference {
+        --font-size-sm: 0.875rem;
+        --font-size-sm--line-height: 1.25rem;
+      }
+
       @utility text-sm {
         font-size: var(--font-size-sm, 0.875rem);
-        line-height: var(--line-height-sm, 1.25rem);
+        line-height: var(--font-size-sm--line-height, 1.25rem);
         text-rendering: optimizeLegibility;
       }
     `).build(['text-sm'])
@@ -15048,7 +15053,7 @@ describe('custom utilities', () => {
       "@layer utilities {
         .text-sm {
           font-size: var(--font-size-sm, .875rem);
-          line-height: var(--line-height-sm, 1.25rem);
+          line-height: var(--font-size-sm--line-height, 1.25rem);
           text-rendering: optimizelegibility;
         }
       }"
