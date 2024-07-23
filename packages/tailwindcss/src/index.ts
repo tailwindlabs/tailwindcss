@@ -86,7 +86,7 @@ export function compile(
       customUtilities.push((designSystem) => {
         designSystem.utilities.static(name, (candidate) => {
           if (candidate.negative) return
-          return node.nodes
+          return structuredClone(node.nodes)
         })
       })
 
