@@ -513,7 +513,9 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      ruleNode.nodes = [rule(`&[aria-${variant.value.value}]`, ruleNode.nodes)]
+      ruleNode.nodes = [
+        rule(`&[aria-${normalizeAttributeSelectors(variant.value.value)}]`, ruleNode.nodes),
+      ]
     } else {
       ruleNode.nodes = [rule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
     }
@@ -534,7 +536,11 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [rule(`&[data-${variant.value.value}]`, ruleNode.nodes)]
+    console.log(variant.value, ruleNode.nodes)
+
+    ruleNode.nodes = [
+      rule(`&[data-${normalizeAttributeSelectors(variant.value.value)}]`, ruleNode.nodes),
+    ]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -903,4 +909,17 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('forced-colors', ['@media (forced-colors: active)'], { compounds: false })
 
   return variants
+}
+
+function normalizeAttributeSelectors(value: string) {
+  // Wrap values in attribute selectors with quotes
+  if (value.includes('=')) {
+    value = value.replace(/(=.*)/g, (_fullMatch, match) => {
+      if (match[1] === "'" || match[1] === '"') {
+        return match
+      }
+      return `="${match.slice(1)}"`
+    })
+  }
+  return value
 }
