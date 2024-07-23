@@ -71,11 +71,14 @@ export function compile(
     if (node.selector.startsWith('@utility ')) {
       let name = node.selector.slice(9).trim()
 
-      // We're explicitly throwing away the wildcard utility so the syntax may
-      // be used in future to define functional utilities.
-      if (name.endsWith('-*')) {
-        replaceWith([])
-        return
+      if (!/^[a-z][a-zA-Z0-9\\/%._-]*$/.test(name)) {
+        throw new Error(
+          `The utility [${name}] has an invalid name. Only use alphanumeric characters.`,
+        )
+      }
+
+      if (node.nodes.length === 0) {
+        throw new Error(`The utility [${name}] needs at least one property.`)
       }
 
       customUtilities.push((designSystem) => {
