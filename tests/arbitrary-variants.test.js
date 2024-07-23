@@ -442,6 +442,32 @@ test('keeps escaped underscores with multiple arbitrary variants', () => {
   })
 })
 
+test('does not add quotes on arbitrary variants', () => {
+  let config = {
+    content: [
+      {
+        raw: '<div class="[&[data-foo=\'1\']+.bar]:underline"></div>',
+      },
+    ],
+    corePlugins: { preflight: false },
+  }
+
+  let input = css`
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(css`
+      ${defaults}
+      .\[\&\[data-foo\=\'1\'\]\+\.bar\]\:underline[data-foo='1']+.bar {
+        text-decoration-line: underline;
+      }
+    `)
+  })
+})
+
 test('keeps escaped underscores in arbitrary variants mixed with normal variants', () => {
   let config = {
     content: [
@@ -601,6 +627,7 @@ it('should support aria variants', () => {
           <div>
             <div class="aria-checked:underline"></div>
             <div class="aria-[sort=ascending]:underline"></div>
+            <div class="aria-[valuenow=1]:underline"></div>
             <div class="aria-[labelledby='a_b']:underline"></div>
             <div class="group-aria-checked:underline"></div>
             <div class="peer-aria-checked:underline"></div>
@@ -610,6 +637,8 @@ it('should support aria variants', () => {
             <div class="peer-aria-[sort=ascending]:underline"></div>
             <div class="group-aria-[labelledby='a_b']:underline"></div>
             <div class="peer-aria-[labelledby='a_b']:underline"></div>
+            <div class="group-aria-[valuenow=1]:underline"></div>
+            <div class="peer-aria-[valuenow=1]:underline"></div>
             <div class="group-aria-[sort=ascending]/foo:underline"></div>
             <div class="peer-aria-[sort=ascending]/foo:underline"></div>
           </div>
@@ -629,16 +658,19 @@ it('should support aria variants', () => {
       .aria-checked\:underline[aria-checked='true'],
       .aria-\[labelledby\=\'a_b\'\]\:underline[aria-labelledby='a b'],
       .aria-\[sort\=ascending\]\:underline[aria-sort='ascending'],
+      .aria-\[valuenow\=1\]\:underline[aria-valuenow='1'],
       .group\/foo[aria-checked='true'] .group-aria-checked\/foo\:underline,
       .group[aria-checked='true'] .group-aria-checked\:underline,
       .group[aria-labelledby='a b'] .group-aria-\[labelledby\=\'a_b\'\]\:underline,
       .group\/foo[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\/foo\:underline,
       .group[aria-sort='ascending'] .group-aria-\[sort\=ascending\]\:underline,
+      .group[aria-valuenow='1'] .group-aria-\[valuenow\=1\]\:underline,
       .peer\/foo[aria-checked='true'] ~ .peer-aria-checked\/foo\:underline,
       .peer[aria-checked='true'] ~ .peer-aria-checked\:underline,
       .peer[aria-labelledby='a b'] ~ .peer-aria-\[labelledby\=\'a_b\'\]\:underline,
       .peer\/foo[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\/foo\:underline,
-      .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline {
+      .peer[aria-sort='ascending'] ~ .peer-aria-\[sort\=ascending\]\:underline,
+      .peer[aria-valuenow='1'] ~ .peer-aria-\[valuenow\=1\]\:underline {
         text-decoration-line: underline;
       }
     `)
@@ -657,8 +689,10 @@ it('should support data variants', () => {
         raw: html`
           <div>
             <div class="data-checked:underline"></div>
-            <div class="data-[position=top]:underline"></div>
             <div class="data-[foo='bar_baz']:underline"></div>
+            <div class="data-[id='foo'_s]:underline"></div>
+            <div class="data-[id=0]:underline"></div>
+            <div class="data-[position=top]:underline"></div>
             <div class="group-data-checked:underline"></div>
             <div class="peer-data-checked:underline"></div>
             <div class="group-data-checked/foo:underline"></div>
@@ -667,6 +701,10 @@ it('should support data variants', () => {
             <div class="peer-data-[position=top]:underline"></div>
             <div class="group-data-[foo='bar_baz']:underline"></div>
             <div class="peer-data-[foo='bar_baz']:underline"></div>
+            <div class="group-data-[id='foo'_s]:underline"></div>
+            <div class="group-data-[id=0]:underline"></div>
+            <div class="peer-data-[id='foo'_s]:underline"></div>
+            <div class="peer-data-[id=0]:underline"></div>
             <div class="group-data-[position=top]/foo:underline"></div>
             <div class="peer-data-[position=top]/foo:underline"></div>
           </div>
@@ -685,15 +723,21 @@ it('should support data variants', () => {
       .underline,
       .data-checked\:underline[data-ui~='checked'],
       .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
+      .data-\[id\=\'foo\'_s\]\:underline[data-id='foo' s],
+      .data-\[id\=0\]\:underline[data-id='0'],
       .data-\[position\=top\]\:underline[data-position='top'],
       .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
       .group[data-ui~='checked'] .group-data-checked\:underline,
       .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,
+      .group[data-id='foo' s] .group-data-\[id\=\'foo\'_s\]\:underline,
+      .group[data-id='0'] .group-data-\[id\=0\]\:underline,
       .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline,
       .group[data-position='top'] .group-data-\[position\=top\]\:underline,
       .peer\/foo[data-ui~='checked'] ~ .peer-data-checked\/foo\:underline,
       .peer[data-ui~='checked'] ~ .peer-data-checked\:underline,
       .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=\'bar_baz\'\]\:underline,
+      .peer[data-id='foo' s] ~ .peer-data-\[id\=\'foo\'_s\]\:underline,
+      .peer[data-id='0'] ~ .peer-data-\[id\=0\]\:underline,
       .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline,
       .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
         text-decoration-line: underline;
@@ -799,6 +843,7 @@ test('has-* variants with arbitrary values', () => {
             <div class="has-[+_h2]:grid"></div>
             <div class="has-[>_h1_+_h2]:contents"></div>
             <div class="has-[h2]:has-[.banana]:hidden"></div>
+            <div class="has-[[data-foo='1']+div]:font-bold"></div>
           </div>
         `,
       },
@@ -835,6 +880,9 @@ test('has-* variants with arbitrary values', () => {
       }
       .has-\[h2\]\:has-\[\.banana\]\:hidden:has(.banana):has(h2) {
         display: none;
+      }
+      .has-\[\[data-foo\=\'1\'\]\+div\]\:font-bold:has([data-foo='1'] + div) {
+        font-weight: 700;
       }
     `)
   })

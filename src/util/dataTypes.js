@@ -81,6 +81,19 @@ export function normalize(value, context = null, isRoot = true) {
   return value
 }
 
+export function normalizeAttributeSelectors(value) {
+  // Wrap values in attribute selectors with quotes
+  if (value.includes('=')) {
+    value = value.replace(/(=.*)/g, (_fullMatch, match) => {
+      if (match[1] === "'" || match[1] === '"') {
+        return match
+      }
+      return `="${match.slice(1)}"`
+    })
+  }
+  return value
+}
+
 /**
  * Add spaces around operators inside math functions
  * like calc() that do not follow an operator, '(', or `,`.
