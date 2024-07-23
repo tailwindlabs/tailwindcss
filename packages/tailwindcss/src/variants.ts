@@ -536,8 +536,6 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    console.log(variant.value, ruleNode.nodes)
-
     ruleNode.nodes = [
       rule(`&[data-${normalizeAttributeSelectors(variant.value.value)}]`, ruleNode.nodes),
     ]
