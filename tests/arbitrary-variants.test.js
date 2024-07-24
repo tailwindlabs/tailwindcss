@@ -691,6 +691,7 @@ it('should support data variants', () => {
             <div class="data-checked:underline"></div>
             <div class="data-[foo='bar_baz']:underline"></div>
             <div class="data-[id$='foo'_s]:underline"></div>
+            <div class="data-[id$=foo_bar_s]:underline"></div>
             <div class="data-[id=0]:underline"></div>
             <div class="data-[position=top]:underline"></div>
             <div class="group-data-checked:underline"></div>
@@ -702,8 +703,10 @@ it('should support data variants', () => {
             <div class="group-data-[foo='bar_baz']:underline"></div>
             <div class="peer-data-[foo='bar_baz']:underline"></div>
             <div class="group-data-[id$='foo'_s]:underline"></div>
+            <div class="group-data-[id$=foo_bar_s]:underline"></div>
             <div class="group-data-[id=0]:underline"></div>
             <div class="peer-data-[id$='foo'_s]:underline"></div>
+            <div class="peer-data-[id$=foo_bar_s]:underline"></div>
             <div class="peer-data-[id=0]:underline"></div>
             <div class="group-data-[position=top]/foo:underline"></div>
             <div class="peer-data-[position=top]/foo:underline"></div>
@@ -724,12 +727,14 @@ it('should support data variants', () => {
       .data-checked\:underline[data-ui~='checked'],
       .data-\[foo\=\'bar_baz\'\]\:underline[data-foo='bar baz'],
       .data-\[id\$\=\'foo\'_s\]\:underline[data-id$='foo' s],
+      .data-\[id\$\=foo_bar_s\]\:underline[data-id$='foo bar' s],
       .data-\[id\=0\]\:underline[data-id='0'],
       .data-\[position\=top\]\:underline[data-position='top'],
       .group\/foo[data-ui~='checked'] .group-data-checked\/foo\:underline,
       .group[data-ui~='checked'] .group-data-checked\:underline,
       .group[data-foo='bar baz'] .group-data-\[foo\=\'bar_baz\'\]\:underline,
       .group[data-id$='foo' s] .group-data-\[id\$\=\'foo\'_s\]\:underline,
+      .group[data-id$='foo bar' s] .group-data-\[id\$\=foo_bar_s\]\:underline,
       .group[data-id='0'] .group-data-\[id\=0\]\:underline,
       .group\/foo[data-position='top'] .group-data-\[position\=top\]\/foo\:underline,
       .group[data-position='top'] .group-data-\[position\=top\]\:underline,
@@ -737,6 +742,7 @@ it('should support data variants', () => {
       .peer[data-ui~='checked'] ~ .peer-data-checked\:underline,
       .peer[data-foo='bar baz'] ~ .peer-data-\[foo\=\'bar_baz\'\]\:underline,
       .peer[data-id$='foo' s] ~ .peer-data-\[id\$\=\'foo\'_s\]\:underline,
+      .peer[data-id$='foo bar' s] ~ .peer-data-\[id\$\=foo_bar_s\]\:underline,
       .peer[data-id='0'] ~ .peer-data-\[id\=0\]\:underline,
       .peer\/foo[data-position='top'] ~ .peer-data-\[position\=top\]\/foo\:underline,
       .peer[data-position='top'] ~ .peer-data-\[position\=top\]\:underline {
