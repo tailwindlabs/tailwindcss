@@ -513,7 +513,7 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      ruleNode.nodes = [rule(`&[aria-${variant.value.value}]`, ruleNode.nodes)]
+      ruleNode.nodes = [rule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
     } else {
       ruleNode.nodes = [rule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
     }
@@ -534,7 +534,7 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [rule(`&[data-${variant.value.value}]`, ruleNode.nodes)]
+    ruleNode.nodes = [rule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes)]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -903,4 +903,32 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('forced-colors', ['@media (forced-colors: active)'], { compounds: false })
 
   return variants
+}
+
+function quoteAttributeValue(value: string) {
+  if (value.includes('=')) {
+    value = value.replace(/(=.*)/g, (_fullMatch, match) => {
+      // If the value is already quoted, skip.
+      if (match[1] === "'" || match[1] === '"') {
+        return match
+      }
+
+      // Handle regex flags on unescaped values
+      if (match.length > 2) {
+        let trailingCharacter = match[match.length - 1]
+        if (
+          match[match.length - 2] === ' ' &&
+          (trailingCharacter === 'i' ||
+            trailingCharacter === 'I' ||
+            trailingCharacter === 's' ||
+            trailingCharacter === 'S')
+        ) {
+          return `="${match.slice(1, -2)}" ${match[match.length - 1]}`
+        }
+      }
+
+      return `="${match.slice(1)}"`
+    })
+  }
+  return value
 }

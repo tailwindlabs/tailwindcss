@@ -1756,16 +1756,21 @@ test('aria', () => {
     run([
       'aria-checked:flex',
       'aria-[invalid=spelling]:flex',
+      'aria-[valuenow=1]:flex',
 
       'group-aria-[modal]:flex',
       'group-aria-checked:flex',
+      'group-aria-[valuenow=1]:flex',
       'group-aria-[modal]/parent-name:flex',
       'group-aria-checked/parent-name:flex',
+      'group-aria-[valuenow=1]/parent-name:flex',
 
       'peer-aria-[modal]:flex',
       'peer-aria-checked:flex',
+      'peer-aria-[valuenow=1]:flex',
       'peer-aria-[modal]/parent-name:flex',
       'peer-aria-checked/parent-name:flex',
+      'peer-aria-[valuenow=1]/parent-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
     ".group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *) {
@@ -1773,6 +1778,10 @@ test('aria', () => {
     }
 
     .group-aria-checked\\:flex:is(:where(.group)[aria-checked="true"] *) {
+      display: flex;
+    }
+
+    .group-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.group)[aria-valuenow="1"] *) {
       display: flex;
     }
 
@@ -1784,11 +1793,19 @@ test('aria', () => {
       display: flex;
     }
 
+    .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-valuenow="1"] *) {
+      display: flex;
+    }
+
     .peer-aria-\\[modal\\]\\:flex:is(:where(.peer)[aria-modal] ~ *) {
       display: flex;
     }
 
     .peer-aria-checked\\:flex:is(:where(.peer)[aria-checked="true"] ~ *) {
+      display: flex;
+    }
+
+    .peer-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.peer)[aria-valuenow="1"] ~ *) {
       display: flex;
     }
 
@@ -1800,11 +1817,19 @@ test('aria', () => {
       display: flex;
     }
 
+    .peer-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[aria-valuenow="1"] ~ *) {
+      display: flex;
+    }
+
     .aria-checked\\:flex[aria-checked="true"] {
       display: flex;
     }
 
     .aria-\\[invalid\\=spelling\\]\\:flex[aria-invalid="spelling"] {
+      display: flex;
+    }
+
+    .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
       display: flex;
     }"
   `)
@@ -1816,12 +1841,26 @@ test('data', () => {
     run([
       'data-disabled:flex',
       'data-[potato=salad]:flex',
+      'data-[foo=1]:flex',
+      'data-[foo=bar_baz]:flex',
+      "data-[foo$='bar'_i]:flex",
+      'data-[foo$=bar_baz_i]:flex',
 
       'group-data-[disabled]:flex',
       'group-data-[disabled]/parent-name:flex',
+      'group-data-[foo=1]:flex',
+      'group-data-[foo=1]/parent-name:flex',
+      'group-data-[foo=bar baz]/parent-name:flex',
+      "group-data-[foo$='bar'_i]/parent-name:flex",
+      'group-data-[foo$=bar_baz_i]/parent-name:flex',
 
       'peer-data-[disabled]:flex',
       'peer-data-[disabled]/parent-name:flex',
+      'peer-data-[foo=1]:flex',
+      'peer-data-[foo=1]/parent-name:flex',
+      'peer-data-[foo=bar baz]/parent-name:flex',
+      "peer-data-[foo$='bar'_i]/parent-name:flex",
+      'peer-data-[foo$=bar_baz_i]/parent-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
     ".group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *) {
@@ -1829,6 +1868,26 @@ test('data', () => {
     }
 
     .group-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-disabled] *) {
+      display: flex;
+    }
+
+    .group-data-\\[foo\\=1\\]\\:flex:is(:where(.group)[data-foo="1"] *) {
+      display: flex;
+    }
+
+    .group-data-\\[foo\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="1"] *) {
+      display: flex;
+    }
+
+    .group-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="bar baz"] *) {
+      display: flex;
+    }
+
+    .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *) {
+      display: flex;
+    }
+
+    .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *) {
       display: flex;
     }
 
@@ -1840,11 +1899,47 @@ test('data', () => {
       display: flex;
     }
 
+    .peer-data-\\[foo\\=1\\]\\:flex:is(:where(.peer)[data-foo="1"] ~ *) {
+      display: flex;
+    }
+
+    .peer-data-\\[foo\\=1\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo="1"] ~ *) {
+      display: flex;
+    }
+
+    .peer-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo="bar baz"] ~ *) {
+      display: flex;
+    }
+
+    .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar" i] ~ *) {
+      display: flex;
+    }
+
+    .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar baz" i] ~ *) {
+      display: flex;
+    }
+
     .data-disabled\\:flex[data-disabled] {
       display: flex;
     }
 
     .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
+      display: flex;
+    }
+
+    .data-\\[foo\\=1\\]\\:flex[data-foo="1"] {
+      display: flex;
+    }
+
+    .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"] {
+      display: flex;
+    }
+
+    .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i] {
+      display: flex;
+    }
+
+    .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i] {
       display: flex;
     }"
   `)
