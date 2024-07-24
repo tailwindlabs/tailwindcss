@@ -24,6 +24,7 @@ type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
   loadPlugin?: (path: string) => Plugin
+  loadStylesheet?: (base: string, path: string) => string
   onContentPath?: (path: string) => void
 }
 
@@ -35,13 +36,23 @@ function throwOnContentPath(): never {
   throw new Error('No `onContentPath` function provided to `compile`')
 }
 
+function throwOnLoadStylesheet(): never {
+  throw new Error('No `loadStylesheet` function provided to `compile`')
+}
+
 export function compile(
   css: string,
-  { loadPlugin = throwOnPlugin, onContentPath = throwOnContentPath }: CompileOptions = {},
+  {
+    loadPlugin = throwOnPlugin,
+    loadStylesheet = throwOnLoadStylesheet,
+    onContentPath = throwOnContentPath,
+  }: CompileOptions = {},
 ): {
   build(candidates: string[]): string
 } {
   let ast = CSS.parse(css)
+
+  let baseStack = ['/']
 
   if (process.env.NODE_ENV !== 'test') {
     ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
@@ -60,13 +71,29 @@ export function compile(
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
 
-  walk(ast, (node, { parent, replaceWith }) => {
+  walk(ast, (node, { parent, replaceWith, onExit }) => {
     if (node.kind !== 'rule') return
 
     // Collect paths from `@plugin` at-rules
     if (node.selector.startsWith('@plugin ')) {
       plugins.push(loadPlugin(node.selector.slice(9, -1)))
       replaceWith([])
+      return
+    }
+
+    // Resolve `@import` at-rules
+    if (node.selector.startsWith('@import ')) {
+      let path = node.selector.slice(9, -1)
+      console.log({ baseStack })
+      let stylesheet = loadStylesheet(baseStack[baseStack.length - 1], path)
+      baseStack.push(path)
+      if (stylesheet.length > 0) {
+        replaceWith(CSS.parse(stylesheet))
+        onExit(() => {
+          console.log('pop')
+          baseStack.pop()
+        })
+      }
       return
     }
 

@@ -80,12 +80,14 @@ export function walk(
     utils: {
       parent: AstNode | null
       replaceWith(newNode: AstNode | AstNode[]): void
+      onExit: (cb: () => void) => void
     },
   ) => void | WalkAction,
   parent: AstNode | null = null,
 ) {
   for (let i = 0; i < ast.length; i++) {
     let node = ast[i]
+    let exitCallbacks: (() => void)[] = []
     let status =
       visit(node, {
         parent,
@@ -96,16 +98,33 @@ export function walk(
           // will process this position (containing the replaced node) again.
           i--
         },
+        onExit(cb) {
+          exitCallbacks.push(cb)
+        },
       }) ?? WalkAction.Continue
 
     // Stop the walk entirely
-    if (status === WalkAction.Stop) return
+    if (status === WalkAction.Stop) {
+      for (let callback of exitCallbacks) {
+        callback()
+      }
+      return
+    }
 
     // Skip visiting the children of this node
-    if (status === WalkAction.Skip) continue
+    if (status === WalkAction.Skip) {
+      for (let callback of exitCallbacks) {
+        callback()
+      }
+      continue
+    }
 
     if (node.kind === 'rule') {
       walk(node.nodes, visit, node)
+    }
+
+    for (let callback of exitCallbacks) {
+      callback()
     }
   }
 }

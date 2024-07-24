@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import path from 'node:path'
+import { resolve } from 'node:path'
 import { describe, expect, it, test, vi } from 'vitest'
 import { compile } from '.'
 import { compileCss, optimizeCss, run } from './test-utils/run'
@@ -99,7 +99,7 @@ describe('compiling CSS', () => {
   })
 
   test('`@tailwind utilities` is replaced by utilities using the default theme', () => {
-    let defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
+    let defaultTheme = fs.readFileSync(resolve(__dirname, '..', 'theme.css'), 'utf-8')
 
     expect(
       compileCss(
@@ -1341,6 +1341,32 @@ describe('plugins', () => {
         }
       }"
     `)
+  })
+})
+
+describe('@import', () => {
+  test.only('calls the loadStylesheet function', () => {
+    let fs: { [path: string]: string } = {
+      '/index.css': css`
+        @import './foo/index.css';
+      `,
+      '/foo/index.css': css`
+        @import './bar/index.css';
+      `,
+      '/foo/bar/index.css': css`
+        @import 'tailwindcss/utilities';
+      `,
+    }
+
+    let compiled = compile(fs['/index.css'], {
+      loadPlugin: () => () => {},
+      loadStylesheet: (base, path) => {
+        console.log({ base, path })
+        return fs[resolve(base, path)]
+      },
+    }).build(['underline'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@import "./bar/index.css";"`)
   })
 })
 

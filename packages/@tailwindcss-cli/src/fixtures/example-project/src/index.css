@@ -1,2 +1,2 @@
 @import 'tailwindcss/utilities';
-@content '../other-project/src/**/*.js';
+@import '../../other-project/src/test.css'

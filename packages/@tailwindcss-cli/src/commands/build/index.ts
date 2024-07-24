@@ -261,18 +261,51 @@ function handleImports(
     return [input, [file]]
   }
 
-  return postcss()
-    .use(atImport())
-    .process(input, { from: file })
-    .then((result) => [
-      result.css,
+  return (
+    postcss()
+      .use(atImport())
+      .use({
+        postcssPlugin: 'tailwindcss-import-resolve',
+        AtRule: {
+          content: (atRule) => {
+            const quote = atRule.params[0]
+            atRule.params =
+              quote +
+              path.resolve(path.dirname(atRule.source?.input.file!), atRule.params.slice(1, -1)) +
+              quote
+            console.log(atRule)
+          },
+          plugin: (atRule) => {
+            const quote = atRule.params[0]
+            atRule.params =
+              quote +
+              path.resolve(path.dirname(atRule.source?.input.file!), atRule.params.slice(1, -1)) +
+              quote
+            console.log(atRule)
+          },
+        },
+      })
+      // .use((root, result): Promise<void> | void => {
+      //   root.walkAtRules('content', (atRule) => {
+      //     const quote = atRule.params[0]
+      //     atRule.params =
+      //       quote +
+      //       path.resolve(path.dirname(atRule.source?.input.file!), atRule.params.slice(1, -1)) +
+      //       quote
+      //     console.log({ atRule, input: atRule.source?.input.file })
+      //   })
+      // })
+      .process(input, { from: file })
+      .then((result) => [
+        result.css,
 
-      // Use `result.messages` to get the imported files. This also includes the
-      // current file itself.
-      [file].concat(
-        result.messages.filter((msg) => msg.type === 'dependency').map((msg) => msg.file),
-      ),
-    ])
+        // Use `result.messages` to get the imported files. This also includes the
+        // current file itself.
+        [file].concat(
+          result.messages.filter((msg) => msg.type === 'dependency').map((msg) => msg.file),
+        ),
+      ])
+  )
 }
 
 function optimizeCss(
