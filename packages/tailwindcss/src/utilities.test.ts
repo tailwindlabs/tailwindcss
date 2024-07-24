@@ -15123,4 +15123,30 @@ describe('custom utilities', () => {
       }"
     `)
   })
+
+  test('custom utilities must use a valid name definitions ', () => {
+    expect(() =>
+      compile(css`
+        @utility push-* {
+          right: 100%;
+        }
+      `),
+    ).toThrowError(/should be alphanumeric/)
+
+    expect(() =>
+      compile(css`
+        @utility ~push {
+          right: 100%;
+        }
+      `),
+    ).toThrowError(/should be alphanumeric/)
+
+    expect(() =>
+      compile(css`
+        @utility @push {
+          right: 100%;
+        }
+      `),
+    ).toThrowError(/should be alphanumeric/)
+  })
 })
