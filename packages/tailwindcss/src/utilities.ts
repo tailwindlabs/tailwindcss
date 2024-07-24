@@ -70,7 +70,18 @@ export class Utilities {
   }
 
   keys(kind: 'static' | 'functional') {
-    return Array.from(this.utilities.keys()).filter((key) => this.has(key, kind))
+    let keys: string[] = []
+
+    for (let [key, fns] of this.utilities.entries()) {
+      for (let fn of fns) {
+        if (fn.kind === kind) {
+          keys.push(key)
+          break
+        }
+      }
+    }
+
+    return keys
   }
 
   getArbitrary() {
