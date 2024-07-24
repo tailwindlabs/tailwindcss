@@ -15,12 +15,44 @@ import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme } from './theme'
+import { withNegative } from './utilities'
+import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
+const IS_VALID_UTILITY_SELECTOR = /^\.[a-z][a-zA-Z0-9/%._-]*$/
 
 type PluginAPI = {
   addVariant(name: string, variant: string | string[] | CssInJs): void
+  addUtilities(
+    utilities: Record<string, CssInJs>,
+    options?: Partial<{
+      // todo: maybe not necessary any more
+      // respectPrefix: boolean
+
+      // todo: needed??
+      respectImportant: boolean
+    }>,
+  ): void
+  matchUtilities(
+    utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
+    options?: Partial<{
+      type: string | string[]
+
+      // todo: maybe not necessary any more
+      // respectPrefix: boolean
+
+      // todo: needed??
+      respectImportant: boolean
+
+      supportsNegativeValues: boolean
+
+      values: Record<string, string>
+      modifiers: 'any' | Record<string, string>
+    }>,
+  ): void
+
+  theme(path: string, fallback?: any): any
 }
 
 type Plugin = (api: PluginAPI) => void
@@ -279,6 +311,128 @@ export function compile(
       else if (typeof variant === 'object') {
         designSystem.variants.fromAst(name, objectToAst(variant))
       }
+    },
+
+    addUtilities(utilities) {
+      for (let [name, css] of Object.entries(utilities)) {
+        if (!IS_VALID_UTILITY_SELECTOR.test(name)) {
+          throw new Error(
+            `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities are a single class that is alphanumeric and starts with a lowercase letter.`,
+          )
+        }
+
+        designSystem.utilities.static(name.slice(1), (candidate) => {
+          if (candidate.negative) return
+
+          return objectToAst(css)
+        })
+      }
+    },
+
+    matchUtilities(utilities, options) {
+      for (let [name, fn] of Object.entries(utilities)) {
+        if (!IS_VALID_UTILITY_NAME.test(name)) {
+          throw new Error(
+            `\`matchUtilities({ '${name}' : … })\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
+          )
+        }
+
+        designSystem.utilities.functional(name, (candidate) => {
+          if (!options?.supportsNegativeValues) {
+            if (candidate.negative) return
+          }
+
+          if (candidate.modifier && !options?.modifiers) return
+
+          let modifier: string | null = null
+
+          if (options?.modifiers === 'any') {
+            modifier = candidate.modifier?.value ?? null
+          } else if (options?.modifiers && candidate.modifier) {
+            if (candidate.modifier.kind === 'arbitrary') {
+              modifier = candidate.modifier.value
+            } else {
+              modifier = options.modifiers[candidate.modifier.value] ?? null
+              if (modifier === null) return
+            }
+          }
+
+          // TODO: DEFAULT ??
+          if (!candidate.value) {
+            let value = options?.values?.DEFAULT ?? null
+
+            if (!value) return
+
+            if (candidate.negative) {
+              value = withNegative(value, candidate)
+            }
+
+            return objectToAst(fn(value, { modifier }))
+          }
+
+          if (candidate.value.kind === 'arbitrary') {
+            let value = candidate.value.value
+            let types = options?.type
+              ? Array.isArray(options?.type)
+                ? options.type
+                : [options.type]
+              : []
+
+            if (types.length > 0) {
+              if (candidate.value.dataType) {
+                if (!types.includes(candidate.value.dataType) && !types.includes('any')) return
+              } else {
+                let dataType = inferDataType(value, types as any[])
+                if (!dataType) return
+              }
+            }
+
+            if (candidate.negative) {
+              value = withNegative(value, candidate)
+            }
+
+            return objectToAst(fn(value, { modifier }))
+          }
+
+          // Look up in values: {…}
+          let value = options?.values?.[candidate.value.value] ?? null
+          if (!value) return
+
+          if (candidate.negative) {
+            value = withNegative(value, candidate)
+          }
+
+          return objectToAst(fn(value, { modifier }))
+        })
+      }
+    },
+
+    theme(path: string, fallback?: any) {
+      path = path
+        // Replace dots with dashes
+        .replace(/\./g, '-')
+        // Replace camelCase with dashes
+        .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
+
+      // Prepend with `--` to match CSS variables
+      path = `--${path}`
+
+      let value =
+        theme.resolveValue(null, [path] as any) ?? theme.namespace(path as any) ?? fallback
+
+      console.log({
+        path,
+        value,
+        ns: theme.namespace(path as any),
+        tg: theme.get(path as any),
+        trv: theme.resolveValue(null, [path] as any),
+      })
+
+      if (value && typeof value === 'object' && value instanceof Map) {
+        return Object.fromEntries(value.entries())
+      }
+
+      return value
     },
   }
 

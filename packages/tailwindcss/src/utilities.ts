@@ -159,7 +159,7 @@ function asColor(value: string, modifier: CandidateModifier | null, theme: Theme
 /**
  * Negate a numeric value — literals get simplified by Lightning CSS.
  */
-function withNegative(
+export function withNegative(
   value: string,
   candidate: Extract<Candidate, { kind: 'static' | 'functional' }>,
 ) {
