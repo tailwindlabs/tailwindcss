@@ -912,6 +912,21 @@ function quoteAttributeValue(value: string) {
       if (match[1] === "'" || match[1] === '"') {
         return match
       }
+
+      // Handle regex flags on unescaped values
+      if (match.length > 2) {
+        let trailingCharacter = match[match.length - 1]
+        if (
+          match[match.length - 2] === ' ' &&
+          (trailingCharacter === 'i' ||
+            trailingCharacter === 'I' ||
+            trailingCharacter === 's' ||
+            trailingCharacter === 'S')
+        ) {
+          return `="${match.slice(1, -2)}" ${match[match.length - 1]}`
+        }
+      }
+
       return `="${match.slice(1)}"`
     })
   }

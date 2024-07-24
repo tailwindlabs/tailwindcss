@@ -1844,6 +1844,7 @@ test('data', () => {
       'data-[foo=1]:flex',
       'data-[foo=bar_baz]:flex',
       "data-[foo$='bar'_i]:flex",
+      'data-[foo$=bar_baz_i]:flex',
 
       'group-data-[disabled]:flex',
       'group-data-[disabled]/parent-name:flex',
@@ -1851,6 +1852,7 @@ test('data', () => {
       'group-data-[foo=1]/parent-name:flex',
       'group-data-[foo=bar baz]/parent-name:flex',
       "group-data-[foo$='bar'_i]/parent-name:flex",
+      'group-data-[foo$=bar_baz_i]/parent-name:flex',
 
       'peer-data-[disabled]:flex',
       'peer-data-[disabled]/parent-name:flex',
@@ -1858,6 +1860,7 @@ test('data', () => {
       'peer-data-[foo=1]/parent-name:flex',
       'peer-data-[foo=bar baz]/parent-name:flex',
       "peer-data-[foo$='bar'_i]/parent-name:flex",
+      'peer-data-[foo$=bar_baz_i]/parent-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
     ".group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *) {
@@ -1881,6 +1884,10 @@ test('data', () => {
     }
 
     .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *) {
+      display: flex;
+    }
+
+    .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *) {
       display: flex;
     }
 
@@ -1908,6 +1915,10 @@ test('data', () => {
       display: flex;
     }
 
+    .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.peer\\/parent-name)[data-foo$="bar baz" i] ~ *) {
+      display: flex;
+    }
+
     .data-disabled\\:flex[data-disabled] {
       display: flex;
     }
@@ -1925,6 +1936,10 @@ test('data', () => {
     }
 
     .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i] {
+      display: flex;
+    }
+
+    .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i] {
       display: flex;
     }"
   `)
