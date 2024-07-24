@@ -117,10 +117,6 @@ export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem
 
   // Handle named utilities
   else if (candidate.kind === 'static' || candidate.kind === 'functional') {
-    // Safety: At this point it is safe to use TypeScript's non-null assertion
-    // operator because if the `candidate.root` didn't exist, `parseCandidate`
-    // would have returned `null` and we would have returned early resulting
-    // in not hitting this code path.
     let fns = designSystem.utilities.get(candidate.root)
 
     // Build the node
