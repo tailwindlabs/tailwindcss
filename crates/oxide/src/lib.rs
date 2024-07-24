@@ -2,6 +2,7 @@ use crate::parser::Extractor;
 use bstr::ByteSlice;
 use cache::Cache;
 use fxhash::FxHashSet;
+use glob::fast_glob;
 use ignore::DirEntry;
 use ignore::WalkBuilder;
 use lazy_static::lazy_static;
@@ -41,6 +42,12 @@ pub struct ChangedContent {
 pub struct ScanOptions {
     pub base: String,
     pub globs: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct ScanGlobOptions {
+    pub base: String,
+    pub glob: String,
 }
 
 #[derive(Debug, Clone)]
@@ -97,6 +104,46 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
         candidates: cache.get_candidates(),
         files,
         globs,
+    }
+}
+
+pub fn scan_glob(opts: ScanGlobOptions) -> ScanResult {
+    init_tracing();
+
+    let root = Path::new(&opts.base);
+    let globs = vec![opts.glob];
+
+    let files: Vec<_> = match fast_glob(root, &globs) {
+        Ok(matches) => matches.filter_map(|x| x.canonicalize().ok()).collect(),
+        Err(err) => {
+            event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
+            vec![]
+        }
+    };
+
+    let mut cache = GLOBAL_CACHE.lock().unwrap();
+
+    let modified_files = cache.find_modified_files(&files);
+
+    let files = files.iter().map(|x| x.display().to_string()).collect();
+
+    if !modified_files.is_empty() {
+        let content: Vec<_> = modified_files
+            .into_iter()
+            .map(|file| ChangedContent {
+                file: Some(file.clone()),
+                content: None,
+            })
+            .collect();
+
+        let candidates = scan_files(content, IO::Parallel as u8 | Parsing::Parallel as u8);
+        cache.add_candidates(candidates);
+    }
+
+    ScanResult {
+        candidates: cache.get_candidates(),
+        files,
+        globs: vec![],
     }
 }
 

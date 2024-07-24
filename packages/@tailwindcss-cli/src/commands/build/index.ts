@@ -1,5 +1,5 @@
 import watcher from '@parcel/watcher'
-import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindcss/oxide'
+import { IO, Parsing, scanDir, scanFiles, scanGlob, type ChangedContent } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
@@ -136,6 +136,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         }
 
         return require(pluginPath)
+      },
+      onContentPath(glob) {
+        let result = scanGlob({ base: basePath, glob })
+        candidates = result.candidates
       },
     })
   }
