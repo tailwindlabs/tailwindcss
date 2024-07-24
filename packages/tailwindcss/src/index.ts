@@ -103,9 +103,23 @@ export function compile(
 
     // Collect paths from `@content` at-rules
     if (node.selector.startsWith('@content ')) {
-      // TODO: Validate that the content is wrapped in quotes
-      // TODO: Require @content to have no body
-      onContentPath(node.selector.slice(10, -1))
+      if (node.nodes.length > 0) {
+        throw new Error('`@content` cannot have a body.')
+      }
+
+      if (parent !== null) {
+        throw new Error('`@content` cannot be nested.')
+      }
+
+      let path = node.selector.slice(9)
+      if (
+        (path[0] === '"' && path[path.length - 1] !== '"') ||
+        (path[0] === "'" && path[path.length - 1] !== "'") ||
+        (path[0] !== "'" && path[0] !== '"')
+      ) {
+        throw new Error('`@content` paths must be quoted.')
+      }
+      onContentPath(path.slice(1, -1))
       replaceWith([])
       return
     }
