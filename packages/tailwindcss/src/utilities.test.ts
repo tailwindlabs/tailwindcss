@@ -1,5 +1,6 @@
-import { expect, test } from 'vitest'
-import { compileCss, run } from './test-utils/run'
+import { describe, expect, test } from 'vitest'
+import { compile } from '.'
+import { compileCss, optimizeCss, run } from './test-utils/run'
 
 const css = String.raw
 
@@ -14945,4 +14946,207 @@ test('@container', () => {
       '-@container-[size]/sidebar',
     ]),
   ).toEqual('')
+})
+
+describe('custom utilities', () => {
+  test('custom static utility', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --breakpoint-lg: 1024px;
+      }
+
+      @utility text-trim {
+        text-box-trim: both;
+        text-box-edge: cap alphabetic;
+      }
+    `).build(['text-trim', 'lg:text-trim'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .text-trim {
+          text-box-trim: both;
+          text-box-edge: cap alphabetic;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:text-trim {
+            text-box-trim: both;
+            text-box-edge: cap alphabetic;
+          }
+        }
+      }"
+    `)
+  })
+
+  test('The later version of a static utility is used', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility really-round {
+        --custom-prop: hi;
+        border-radius: 50rem;
+      }
+
+      @utility really-round {
+        border-radius: 30rem;
+      }
+    `).build(['really-round'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .really-round {
+          border-radius: 30rem;
+        }
+      }"
+    `)
+  })
+
+  test('custom utilities support some special chracters', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility push-1/2 {
+        right: 50%;
+      }
+
+      @utility push-50% {
+        right: 50%;
+      }
+    `).build(['push-1/2', 'push-50%'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .push-1\\/2, .push-50\\% {
+          right: 50%;
+        }
+      }"
+    `)
+  })
+
+  test('can override specific versions of a functional utility with a static utility', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --font-size-sm: 0.875rem;
+        --font-size-sm--line-height: 1.25rem;
+      }
+
+      @utility text-sm {
+        font-size: var(--font-size-sm, 0.875rem);
+        line-height: var(--font-size-sm--line-height, 1.25rem);
+        text-rendering: optimizeLegibility;
+      }
+    `).build(['text-sm'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .text-sm {
+          font-size: var(--font-size-sm, .875rem);
+          line-height: var(--font-size-sm--line-height, 1.25rem);
+          text-rendering: optimizelegibility;
+        }
+      }"
+    `)
+  })
+
+  test('can override the default value of a functional utility', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @theme reference {
+        --radius-xl: 16px;
+      }
+
+      @utility rounded {
+        border-radius: 50rem;
+      }
+    `).build(['rounded', 'rounded-xl', 'rounded-[33px]'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .rounded {
+          border-radius: 50rem;
+        }
+
+        .rounded-\\[33px\\] {
+          border-radius: 33px;
+        }
+
+        .rounded-xl {
+          border-radius: var(--radius-xl, 16px);
+        }
+      }"
+    `)
+  })
+
+  test('custom utilities are sorted by used properties', () => {
+    let compiled = compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility push-left {
+        right: 100%;
+      }
+    `).build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .top-\\[100px\\] {
+          top: 100px;
+        }
+
+        .push-left {
+          right: 100%;
+        }
+
+        .right-\\[100px\\] {
+          right: 100px;
+        }
+
+        .bottom-\\[100px\\] {
+          bottom: 100px;
+        }
+      }"
+    `)
+  })
+
+  test('custom utilities must use a valid name definitions ', () => {
+    expect(() =>
+      compile(css`
+        @utility push-* {
+          right: 100%;
+        }
+      `),
+    ).toThrowError(/should be alphanumeric/)
+
+    expect(() =>
+      compile(css`
+        @utility ~push {
+          right: 100%;
+        }
+      `),
+    ).toThrowError(/should be alphanumeric/)
+
+    expect(() =>
+      compile(css`
+        @utility @push {
+          right: 100%;
+        }
+      `),
+    ).toThrowError(/should be alphanumeric/)
+  })
 })

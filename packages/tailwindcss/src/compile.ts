@@ -117,14 +117,20 @@ export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem
 
   // Handle named utilities
   else if (candidate.kind === 'static' || candidate.kind === 'functional') {
-    // Safety: At this point it is safe to use TypeScript's non-null assertion
-    // operator because if the `candidate.root` didn't exist, `parseCandidate`
-    // would have returned `null` and we would have returned early resulting
-    // in not hitting this code path.
-    let { compileFn } = designSystem.utilities.get(candidate.root)!
+    let fns = designSystem.utilities.get(candidate.root)
 
     // Build the node
-    let compiledNodes = compileFn(candidate)
+    let compiledNodes: AstNode[] | undefined
+
+    for (let i = fns.length - 1; i >= 0; i--) {
+      let fn = fns[i]
+
+      if (candidate.kind !== fn.kind) continue
+
+      compiledNodes = fn.compileFn(candidate)
+      if (compiledNodes) break
+    }
+
     if (compiledNodes === undefined) return null
 
     nodes = compiledNodes

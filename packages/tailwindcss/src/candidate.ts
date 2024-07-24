@@ -249,6 +249,25 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     base = base.slice(1)
   }
 
+  // Candidates that start with a dash are the negative versions of another
+  // candidate, e.g. `-mx-4`.
+  if (base[0] === '-') {
+    negative = true
+    base = base.slice(1)
+  }
+
+  // Check for an exact match of a static utility first as long as it does not
+  // look like an arbitrary value.
+  if (designSystem.utilities.has(base, 'static') && !base.includes('[')) {
+    return {
+      kind: 'static',
+      root: base,
+      variants: parsedCandidateVariants,
+      negative,
+      important,
+    }
+  }
+
   // Figure out the new base and the modifier segment if present.
   //
   // E.g.:
@@ -307,13 +326,6 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
     }
   }
 
-  // Candidates that start with a dash are the negative versions of another
-  // candidate, e.g. `-mx-4`.
-  if (baseWithoutModifier[0] === '-') {
-    negative = true
-    baseWithoutModifier = baseWithoutModifier.slice(1)
-  }
-
   // The root of the utility, e.g.: `bg-red-500`
   //                                 ^^
   let root: string | null = null
@@ -345,28 +357,16 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
 
     // The root of the utility should exist as-is in the utilities map. If not,
     // it's an invalid utility and we can skip continue parsing.
-    if (!designSystem.utilities.has(root)) return null
+    if (!designSystem.utilities.has(root, 'functional')) return null
 
     value = baseWithoutModifier.slice(idx + 1)
   }
 
   // Not an arbitrary value
   else {
-    ;[root, value] = findRoot(baseWithoutModifier, designSystem.utilities)
-  }
-
-  // If the root is null, but it contains a `/`, then it could be that we are
-  // dealing with a functional utility that contains a modifier but doesn't
-  // contain a value.
-  //
-  // E.g.: `@container/parent`
-  if (root === null && base.includes('/')) {
-    let [rootWithoutModifier, rootModifierSegment = null] = segment(base, '/')
-
-    modifierSegment = rootModifierSegment
-
-    // Try to find the root and value, without the modifier present
-    ;[root, value] = findRoot(rootWithoutModifier, designSystem.utilities)
+    ;[root, value] = findRoot(baseWithoutModifier, (root: string) => {
+      return designSystem.utilities.has(root, 'functional')
+    })
   }
 
   // If there's no root, the candidate isn't a valid class and can be discarded.
@@ -376,24 +376,6 @@ export function parseCandidate(input: string, designSystem: DesignSystem): Candi
   // invalid named value, e.g.: `bg-`. This makes the candidate invalid and we
   // can skip any further parsing.
   if (value === '') return null
-
-  let kind = designSystem.utilities.kind(root)
-
-  if (kind === 'static') {
-    // Static utilities do not have a value
-    if (value !== null) return null
-
-    // Static utilities do not have a modifier
-    if (modifierSegment !== null) return null
-
-    return {
-      kind: 'static',
-      root,
-      variants: parsedCandidateVariants,
-      negative,
-      important,
-    }
-  }
 
   let candidate: Candidate = {
     kind: 'functional',
@@ -560,7 +542,9 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     // - `group-hover/foo/bar`
     if (additionalModifier) return null
 
-    let [root, value] = findRoot(variantWithoutModifier, designSystem.variants)
+    let [root, value] = findRoot(variantWithoutModifier, (root) => {
+      return designSystem.variants.has(root)
+    })
 
     // Variant is invalid, therefore the candidate is invalid and we can skip
     // continue parsing it.
@@ -629,10 +613,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
 function findRoot(
   input: string,
-  lookup: { has: (input: string) => boolean },
+  exists: (input: string) => boolean,
 ): [string | null, string | null] {
-  // If the lookup has an exact match, then that's the root.
-  if (lookup.has(input)) return [input, null]
+  // If there is an exact match, then that's the root.
+  if (exists(input)) return [input, null]
 
   // Otherwise test every permutation of the input by iteratively removing
   // everything after the last dash.
@@ -640,15 +624,14 @@ function findRoot(
   if (idx === -1) {
     // Variants starting with `@` are special because they don't need a `-`
     // after the `@` (E.g.: `@-lg` should be written as `@lg`).
-    if (input[0] === '@' && lookup.has('@')) {
+    if (input[0] === '@' && exists('@')) {
       return ['@', input.slice(1)]
     }
 
     return [null, null]
   }
 
-  // Determine the root and value by testing permutations of the incoming input
-  // against the lookup table.
+  // Determine the root and value by testing permutations of the incoming input.
   //
   // In case of a candidate like `bg-red-500`, this looks like:
   //
@@ -658,7 +641,7 @@ function findRoot(
   do {
     let maybeRoot = input.slice(0, idx)
 
-    if (lookup.has(maybeRoot)) {
+    if (exists(maybeRoot)) {
       return [maybeRoot, input.slice(idx + 1)]
     }
 

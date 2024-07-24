@@ -17,9 +17,12 @@ import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
+const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
+
 type PluginAPI = {
   addVariant(name: string, variant: string | string[] | CssInJs): void
 }
+
 type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
@@ -52,6 +55,7 @@ export function compile(
   let theme = new Theme()
   let plugins: Plugin[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
+  let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
 
@@ -61,6 +65,33 @@ export function compile(
     // Collect paths from `@plugin` at-rules
     if (node.selector.startsWith('@plugin ')) {
       plugins.push(loadPlugin(node.selector.slice(9, -1)))
+      replaceWith([])
+      return
+    }
+
+    // Collect custom `@utility` at-rules
+    if (node.selector.startsWith('@utility ')) {
+      let name = node.selector.slice(9).trim()
+
+      if (!IS_VALID_UTILITY_NAME.test(name)) {
+        throw new Error(
+          `\`@utility ${name}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
+        )
+      }
+
+      if (node.nodes.length === 0) {
+        throw new Error(
+          `\`@utility ${name}\` is empty. Utilities should include at least one property.`,
+        )
+      }
+
+      customUtilities.push((designSystem) => {
+        designSystem.utilities.static(name, (candidate) => {
+          if (candidate.negative) return
+          return structuredClone(node.nodes)
+        })
+      })
+
       replaceWith([])
       return
     }
@@ -222,6 +253,10 @@ export function compile(
 
   for (let customVariant of customVariants) {
     customVariant(designSystem)
+  }
+
+  for (let customUtility of customUtilities) {
+    customUtility(designSystem)
   }
 
   let api: PluginAPI = {

@@ -1,11 +1,10 @@
 import { decl, rule, type AstNode, type Rule } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { ColorThemeKey, Theme, ThemeKey } from './theme'
+import { DefaultMap } from './utils/default-map'
 import { inferDataType } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
-
-const ARBITRARY_VARIANT = Symbol('ARBITRARY_VARIANT')
 
 type CompileFn<T extends Candidate['kind']> = (
   value: Extract<Candidate, { kind: T }>,
@@ -29,38 +28,35 @@ type SuggestionDefinition =
     }
 
 export class Utilities {
-  private utilities = new Map<
-    string | symbol,
+  private arbitraryFn!: CompileFn<'arbitrary'>
+  private utilities = new DefaultMap<
+    string,
     {
-      kind: Candidate['kind']
+      kind: 'static' | 'functional'
       compileFn: CompileFn<any>
-    }
-  >()
+    }[]
+  >(() => [])
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
   static(name: string, compileFn: CompileFn<'static'>) {
-    this.set(name, { kind: 'static', compileFn: compileFn })
+    this.utilities.get(name).push({ kind: 'static', compileFn })
   }
 
   functional(name: string, compileFn: CompileFn<'functional'>) {
-    this.set(name, { kind: 'functional', compileFn: compileFn })
+    this.utilities.get(name).push({ kind: 'functional', compileFn })
   }
 
   arbitrary(compileFn: CompileFn<'arbitrary'>) {
-    this.set(ARBITRARY_VARIANT, { kind: 'arbitrary', compileFn: compileFn })
+    this.arbitraryFn = compileFn
   }
 
-  has(name: string) {
-    return this.utilities.has(name)
+  has(name: string, kind: 'static' | 'functional') {
+    return this.utilities.has(name) && this.utilities.get(name).some((fn) => fn.kind === kind)
   }
 
-  get(name: string | symbol) {
-    return this.utilities.get(name)
-  }
-
-  kind(name: string) {
-    return this.utilities.get(name)!.kind
+  get(name: string) {
+    return this.utilities.has(name) ? this.utilities.get(name) : []
   }
 
   getCompletions(name: string): SuggestionGroup[] {
@@ -73,35 +69,23 @@ export class Utilities {
     this.completions.set(name, groups)
   }
 
-  keys() {
-    return this.utilities.keys()
-  }
+  keys(kind: 'static' | 'functional') {
+    let keys: string[] = []
 
-  entries() {
-    return this.utilities.entries()
-  }
-
-  getArbitrary() {
-    return this.get(ARBITRARY_VARIANT)!.compileFn
-  }
-
-  private set<T extends Candidate['kind']>(
-    name: string | symbol,
-    { kind, compileFn }: { kind: T; compileFn: CompileFn<T> },
-  ) {
-    // In test mode, throw an error if we accidentally override another utility
-    // by mistake when implementing a new utility that shares the same root
-    // without realizing the definitions need to be merged.
-    if (process.env.NODE_ENV === 'test') {
-      if (this.utilities.has(name)) {
-        throw new Error(`Duplicate utility prefix [${name.toString()}]`)
+    for (let [key, fns] of this.utilities.entries()) {
+      for (let fn of fns) {
+        if (fn.kind === kind) {
+          keys.push(key)
+          break
+        }
       }
     }
 
-    this.utilities.set(name, {
-      kind,
-      compileFn: compileFn,
-    })
+    return keys
+  }
+
+  getArbitrary() {
+    return this.arbitraryFn
   }
 }
 
