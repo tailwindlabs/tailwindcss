@@ -27,15 +27,20 @@ type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
   loadPlugin?: (path: string) => Plugin
+  onContentPath?: (path: string) => void
 }
 
 function throwOnPlugin(): never {
   throw new Error('No `loadPlugin` function provided to `compile`')
 }
 
+function throwOnContentPath(): never {
+  throw new Error('No `onContentPath` function provided to `compile`')
+}
+
 export function compile(
   css: string,
-  { loadPlugin = throwOnPlugin }: CompileOptions = {},
+  { loadPlugin = throwOnPlugin, onContentPath = throwOnContentPath }: CompileOptions = {},
 ): {
   build(candidates: string[]): string
 } {
@@ -92,6 +97,15 @@ export function compile(
         })
       })
 
+      replaceWith([])
+      return
+    }
+
+    // Collect paths from `@content` at-rules
+    if (node.selector.startsWith('@content ')) {
+      // TODO: Validate that the content is wrapped in quotes
+      // TODO: Require @content to have no body
+      onContentPath(node.selector.slice(10, -1))
       replaceWith([])
       return
     }

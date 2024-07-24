@@ -1,4 +1,4 @@
-import { scanDir } from '@tailwindcss/oxide'
+import { scanDir, scanGlob } from '@tailwindcss/oxide'
 import fs from 'fs'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
@@ -104,11 +104,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
         let css = ''
 
-        // Look for candidates used to generate the CSS
-        let { candidates, files, globs } = scanDir({ base, globs: true })
-
-        // Add all found files as direct dependencies
-        for (let file of files) {
+        function addFileDependency(file: string) {
           result.messages.push({
             type: 'dependency',
             plugin: '@tailwindcss/postcss',
@@ -117,10 +113,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           })
         }
 
-        // Register dependencies so changes in `base` cause a rebuild while
-        // giving tools like Vite or Parcel a glob that can be used to limit
-        // the files that cause a rebuild to only those that match it.
-        for (let { base, glob } of globs) {
+        function addGlobDependency(base: string, glob: string) {
           result.messages.push({
             type: 'dir-dependency',
             plugin: '@tailwindcss/postcss',
@@ -128,6 +121,21 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             glob,
             parent: result.opts.from,
           })
+        }
+
+        // Look for candidates used to generate the CSS
+        let { candidates, files, globs } = scanDir({ base, globs: true })
+
+        // Add all found files as direct dependencies
+        for (let file of files) {
+          addFileDependency(file)
+        }
+
+        // Register dependencies so changes in `base` cause a rebuild while
+        // giving tools like Vite or Parcel a glob that can be used to limit
+        // the files that cause a rebuild to only those that match it.
+        for (let { base, glob } of globs) {
+          addGlobDependency(base, glob)
         }
 
         if (rebuildStrategy === 'full') {
@@ -139,6 +147,16 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               }
 
               return require(pluginPath)
+            },
+            onContentPath(glob) {
+              let result = scanGlob({ base, glob })
+
+              for (let file of result.files) {
+                addFileDependency(file)
+              }
+              addGlobDependency(base, glob)
+
+              candidates = result.candidates
             },
           })
           context.build = build
