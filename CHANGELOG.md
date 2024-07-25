@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.7] - 2024-07-25
+
 - Fix class detection in Slim templates with attached attributes and ID ([#14019](https://github.com/tailwindlabs/tailwindcss/pull/14019))
-- Attribute selectors in `data-*` and `aria-*` modifiers are now wrapped in quotation marks by default, allowing numbers and spaces in them ([#14037](https://github.com/tailwindlabs/tailwindcss/pull/14037))
+- Ensure attribute values in `data-*` and `aria-*` modifiers are always quoted in the generated CSS ([#14037](https://github.com/tailwindlabs/tailwindcss/pull/14037))
 
 ## [3.4.6] - 2024-07-16
 
@@ -2406,7 +2410,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.6...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.7...HEAD
+[3.4.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.6...v3.4.7
 [3.4.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.5...v3.4.6
 [3.4.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.4...v3.4.5
 [3.4.4]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.3...v3.4.4
