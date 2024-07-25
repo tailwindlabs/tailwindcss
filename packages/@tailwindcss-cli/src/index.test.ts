@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import * as build from './commands/build'
 
 beforeEach(async () => {
-  const { clearCache } = await import('@tailwindcss/oxide')
+  let { clearCache } = await import('@tailwindcss/oxide')
   clearCache()
 })
 
