@@ -45,8 +45,6 @@ pub struct ScanOptions {
   pub content_paths: Option<Vec<String>>,
   /// Whether to include globs in the output
   pub output_globs: Option<bool>,
-  /// Whether to include files in the output
-  pub output_files: Option<bool>,
 }
 
 #[napi]
@@ -60,7 +58,6 @@ pub fn scan_dir(args: ScanOptions) -> ScanResult {
     base: args.base,
     content_paths: args.content_paths.unwrap_or_default(),
     output_globs: args.output_globs.unwrap_or_default(),
-    output_files: args.output_globs.unwrap_or_default(),
   });
 
   ScanResult {

@@ -46,8 +46,6 @@ pub struct ScanOptions {
     pub content_paths: Vec<String>,
     /// Whether to include globs in the output
     pub output_globs: bool,
-    /// Whether to include files in the output
-    pub output_files: bool,
 }
 
 #[derive(Debug, Clone)]

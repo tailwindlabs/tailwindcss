@@ -41,7 +41,6 @@ mod scan_dir {
             base: base.clone(),
             content_paths: globs.iter().map(|x| x.to_string()).collect(),
             output_globs: true,
-            output_files: true,
         });
 
         let mut paths: Vec<_> = result
