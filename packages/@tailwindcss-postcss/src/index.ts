@@ -31,6 +31,10 @@ type PluginOptions = {
   // The base directory to scan for class candidates.
   base?: string
 
+  content?:
+    | 'auto' // enable auto content detection (+ manual `@content` is allowed)
+    | 'manual' // disabled auto content detection (keep `@content`)
+
   // Optimize and minify the output CSS.
   optimize?: boolean | { minify?: boolean }
 }
