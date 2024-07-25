@@ -79,7 +79,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 
   let start = process.hrtime.bigint()
-  let { candidates } = scanDir({ base })
 
   // Resolve the input
   let [input, cssImportPaths] = await handleImports(
@@ -129,7 +128,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let basePath = path.dirname(path.resolve(inputFile))
 
   function compile(css: string) {
-    return tailwindcss.compile(css, {
+    let globs: string[] = []
+
+    let { build } = tailwindcss.compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
           return require(path.resolve(basePath, pluginPath))
@@ -138,14 +139,20 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         return require(pluginPath)
       },
       onContentPath(glob) {
-        // let result = scanGlob({ base: basePath, glob })
-        // candidates = result.candidates
+        if (glob[0] !== '/') {
+          glob = path.join(basePath, glob)
+        }
+
+        globs.push(glob)
       },
     })
+
+    return { build, globs }
   }
 
   // Compile the input
-  let { build } = compile(input)
+  let { build, globs } = compile(input)
+  let { candidates } = scanDir({ base, contentPaths: globs })
 
   await write(build(candidates), args)
 
@@ -199,7 +206,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         // Scan the entire `base` directory for full rebuilds.
         if (rebuildStrategy === 'full') {
           // Re-scan the directory to get the new `candidates`.
-          candidates = scanDir({ base }).candidates
+          candidates = scanDir({ base, contentPaths: globs }).candidates
 
           // Collect the new `input` and `cssImportPaths`.
           ;[input, cssImportPaths] = await handleImports(

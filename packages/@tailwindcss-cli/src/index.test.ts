@@ -26,6 +26,22 @@ describe('cli', () => {
     expect(css.trim()).toMatchInlineSnapshot(`
       ".underline {
         text-decoration-line: underline;
+      }
+      .content-\\[\\'other-project\\'\\] {
+        --tw-content: 'other-project';
+        content: var(--tw-content);
+      }
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
       }"
     `)
   })
