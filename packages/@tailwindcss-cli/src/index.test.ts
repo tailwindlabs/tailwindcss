@@ -1,9 +1,14 @@
-import { describe, expect, test, vi } from 'vitest'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 import * as build from './commands/build'
+
+beforeEach(async () => {
+  const { clearCache } = await import('@tailwindcss/oxide')
+  clearCache()
+})
 
 describe('cli', () => {
   test('builds', async () => {
-    let stdoutWrite = vi.spyOn(process.stdout, 'write')
+    let stdoutWrite = vi.spyOn(process.stdout, 'write').mockImplementation(vi.fn())
 
     await build.handle({
       '--input': './src/index.css',
@@ -15,30 +20,12 @@ describe('cli', () => {
       _: [],
     })
 
-    let css = stdoutWrite.mock.calls[0][0]
+    let css = stdoutWrite.mock.calls[0][0] as string
 
-    expect(css).toMatchInlineSnapshot(`
+    expect(css.trim()).toMatchInlineSnapshot(`
       ".underline {
         text-decoration-line: underline;
-      }
-      .content-\\[\\'other-project\\'\\] {
-        --tw-content: 'other-project';
-        content: var(--tw-content);
-      }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
-      @property --tw-content {
-        syntax: "*";
-        inherits: false;
-        initial-value: "";
-      }
-
-      "
+      }"
     `)
   })
 })
