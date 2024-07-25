@@ -201,7 +201,7 @@ export function createVariants(theme: Theme): Variants {
   }
 
   variants.static('force', () => {}, { compounds: false })
-  staticVariant('*', ['& > *'], { compounds: false })
+  staticVariant('*', [':where(& > *)'], { compounds: false })
 
   variants.compound('not', (ruleNode, variant) => {
     if (variant.modifier) return null

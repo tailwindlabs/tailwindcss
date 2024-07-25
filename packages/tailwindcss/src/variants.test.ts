@@ -14,7 +14,7 @@ test('force', () => {
 
 test('*', () => {
   expect(run(['*:flex'])).toMatchInlineSnapshot(`
-    ".\\*\\:flex > * {
+    ":where(.\\*\\:flex > *) {
       display: flex;
     }"
   `)
