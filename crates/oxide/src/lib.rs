@@ -79,7 +79,20 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
     let root = Path::new(&opts.base);
 
-    let (files, dirs) = resolve_files(root);
+    let (mut files, dirs) = resolve_files(root);
+
+    // If we have additional content paths, then we have to resolve them as well.
+    if !opts.content_paths.is_empty() {
+        let resolved_files: Vec<_> = match fast_glob(root, &opts.content_paths) {
+            Ok(matches) => matches.filter_map(|x| x.canonicalize().ok()).collect(),
+            Err(err) => {
+                event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
+                vec![]
+            }
+        };
+
+        files.extend(resolved_files);
+    }
 
     let globs = if opts.output_globs {
         resolve_globs(root, dirs)

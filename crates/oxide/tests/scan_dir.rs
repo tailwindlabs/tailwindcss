@@ -6,7 +6,13 @@ mod scan_dir {
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
 
-    fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {
+    fn scan_with_globs(
+        paths_with_content: &[(&str, Option<&str>)],
+        globs: Vec<&str>,
+    ) -> (Vec<String>, Vec<String>) {
+        // Ensure that every test truly runs in isolation without any cache
+        clear_cache();
+
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
 
@@ -32,7 +38,7 @@ mod scan_dir {
         // Resolve all content paths for the (temporary) current working directory
         let result = scan_dir(ScanOptions {
             base: base.clone(),
-            content_paths: vec![],
+            content_paths: globs.iter().map(|x| x.to_string()).collect(),
             output_globs: true,
             output_files: true,
         });
@@ -60,6 +66,10 @@ mod scan_dir {
         paths.sort();
 
         (paths, result.candidates)
+    }
+
+    fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {
+        scan_with_globs(paths_with_content, vec![])
     }
 
     fn test(paths_with_content: &[(&str, Option<&str>)]) -> Vec<String> {
@@ -308,5 +318,36 @@ mod scan_dir {
             candidates,
             vec!["condition", "div", "font-bold", "md:flex", "px-4"]
         );
+    }
+
+    #[test]
+    fn it_should_scan_content_paths() {
+        let candidates = scan_with_globs(
+            &[
+                // We know that `.styl` extensions are ignored, so they are not covered by auto content
+                // detection.
+                ("foo.styl", Some("content-['foo.styl']")),
+            ],
+            vec!["*.styl"],
+        )
+        .1;
+
+        assert_eq!(candidates, vec!["content-['foo.styl']"]);
+    }
+
+    #[test]
+    fn it_should_scan_content_paths_even_when_they_are_git_ignored() {
+        let candidates = scan_with_globs(
+            &[
+                (".gitignore", Some("foo.styl")),
+                // We know that `.styl` extensions are ignored, so they are not covered by auto content
+                // detection.
+                ("foo.styl", Some("content-['foo.styl']")),
+            ],
+            vec!["*.styl"],
+        )
+        .1;
+
+        assert_eq!(candidates, vec!["content-['foo.styl']"]);
     }
 }
