@@ -8,6 +8,7 @@ beforeEach(async () => {
 
 describe('cli', () => {
   test('builds', async () => {
+    vi.spyOn(process.stderr, 'write').mockImplementation(vi.fn())
     let stdoutWrite = vi.spyOn(process.stdout, 'write').mockImplementation(vi.fn())
 
     await build.handle({
