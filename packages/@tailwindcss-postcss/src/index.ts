@@ -1,4 +1,4 @@
-import { scanDir, scanGlob } from '@tailwindcss/oxide'
+import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
@@ -104,39 +104,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
         let css = ''
 
-        function addFileDependency(file: string) {
-          result.messages.push({
-            type: 'dependency',
-            plugin: '@tailwindcss/postcss',
-            file,
-            parent: result.opts.from,
-          })
-        }
-
-        function addGlobDependency(base: string, glob: string) {
-          result.messages.push({
-            type: 'dir-dependency',
-            plugin: '@tailwindcss/postcss',
-            dir: base,
-            glob,
-            parent: result.opts.from,
-          })
-        }
-
-        // Look for candidates used to generate the CSS
-        let { candidates, files, globs } = scanDir({ base, outputGlobs: true })
-
-        // Add all found files as direct dependencies
-        for (let file of files) {
-          addFileDependency(file)
-        }
-
-        // Register dependencies so changes in `base` cause a rebuild while
-        // giving tools like Vite or Parcel a glob that can be used to limit
-        // the files that cause a rebuild to only those that match it.
-        for (let { base, glob } of globs) {
-          addGlobDependency(base, glob)
-        }
+        // Track all globs for explicit `@content` detection
+        let globs: string[] = []
 
         if (rebuildStrategy === 'full') {
           let basePath = path.dirname(path.resolve(inputFile))
@@ -149,20 +118,43 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               return require(pluginPath)
             },
             onContentPath(glob) {
-              let result = scanGlob({ base, glob })
-
-              for (let file of result.files) {
-                addFileDependency(file)
-              }
-              addGlobDependency(base, glob)
-
-              candidates = result.candidates
+              globs.push(glob)
             },
           })
           context.build = build
-          css = build(hasTailwind ? candidates : [])
+        }
+
+        // Look for candidates used to generate the CSS
+        let scanDirResult = scanDir({ base, contentPaths: globs, outputGlobs: true })
+
+        // Add all found files as direct dependencies
+        for (let file of scanDirResult.files) {
+          result.messages.push({
+            type: 'dependency',
+            plugin: '@tailwindcss/postcss',
+            file,
+            parent: result.opts.from,
+          })
+        }
+
+        // Register dependencies so changes in `base` cause a rebuild while
+        // giving tools like Vite or Parcel a glob that can be used to limit
+        // the files that cause a rebuild to only those that match it.
+        for (let { base, glob } of scanDirResult.globs) {
+          result.messages.push({
+            type: 'dir-dependency',
+            plugin: '@tailwindcss/postcss',
+            dir: base,
+            glob,
+            parent: result.opts.from,
+          })
+        }
+
+        // Rebuild the CSS
+        if (rebuildStrategy === 'full') {
+          css = context.build?.(hasTailwind ? scanDirResult.candidates : []) ?? ''
         } else if (rebuildStrategy === 'incremental') {
-          css = context.build!(candidates)
+          css = context.build!(scanDirResult.candidates)
         }
 
         // Replace CSS

@@ -51,12 +51,6 @@ pub struct ScanOptions {
 }
 
 #[derive(Debug, Clone)]
-pub struct ScanGlobOptions {
-    pub base: String,
-    pub glob: String,
-}
-
-#[derive(Debug, Clone)]
 pub struct ScanResult {
     pub candidates: Vec<String>,
     pub files: Vec<String>,
@@ -81,6 +75,12 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
     let (mut files, dirs) = resolve_files(root);
 
+    let mut globs = if opts.output_globs {
+        resolve_globs(root, dirs)
+    } else {
+        vec![]
+    };
+
     // If we have additional content paths, then we have to resolve them as well.
     if !opts.content_paths.is_empty() {
         let resolved_files: Vec<_> = match fast_glob(root, &opts.content_paths) {
@@ -92,13 +92,18 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
         };
 
         files.extend(resolved_files);
-    }
 
-    let globs = if opts.output_globs {
-        resolve_globs(root, dirs)
-    } else {
-        vec![]
-    };
+        let new_globs = opts
+            .content_paths
+            .iter()
+            .map(|x| GlobEntry {
+                base: root.display().to_string(),
+                glob: x.to_string(),
+            })
+            .collect::<Vec<_>>();
+
+        globs.extend(new_globs);
+    }
 
     let mut cache = GLOBAL_CACHE.lock().unwrap();
 
@@ -123,48 +128,6 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
         candidates: cache.get_candidates(),
         files,
         globs,
-    }
-}
-
-pub fn scan_glob(opts: ScanGlobOptions) -> ScanResult {
-    init_tracing();
-
-    let root = Path::new(&opts.base);
-    let globs = vec![opts.glob];
-
-    let files: Vec<_> = match fast_glob(root, &globs) {
-        Ok(matches) => matches.filter_map(|x| x.canonicalize().ok()).collect(),
-        Err(err) => {
-            event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
-            vec![]
-        }
-    };
-
-    dbg!(&files);
-
-    let mut cache = GLOBAL_CACHE.lock().unwrap();
-
-    let modified_files = cache.find_modified_files(&files);
-
-    let files = files.iter().map(|x| x.display().to_string()).collect();
-
-    if !modified_files.is_empty() {
-        let content: Vec<_> = modified_files
-            .into_iter()
-            .map(|file| ChangedContent {
-                file: Some(file.clone()),
-                content: None,
-            })
-            .collect();
-
-        let candidates = scan_files(content, IO::Parallel as u8 | Parsing::Parallel as u8);
-        cache.add_candidates(candidates);
-    }
-
-    ScanResult {
-        candidates: cache.get_candidates(),
-        files,
-        globs: vec![],
     }
 }
 

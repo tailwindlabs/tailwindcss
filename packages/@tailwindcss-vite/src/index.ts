@@ -1,4 +1,4 @@
-import { IO, Parsing, scanFiles, scanGlob } from '@tailwindcss/oxide'
+import { IO, Parsing, scanDir, scanFiles } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import { compile } from 'tailwindcss'
@@ -74,6 +74,7 @@ export default function tailwindcss(): Plugin[] {
 
   function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     let basePath = path.dirname(path.resolve(inputPath))
+    let globs: string[] = []
 
     let { build } = compile(css, {
       loadPlugin: (pluginPath) => {
@@ -84,17 +85,19 @@ export default function tailwindcss(): Plugin[] {
         return require(pluginPath)
       },
       onContentPath: (glob) => {
-        let result = scanGlob({ base: basePath, glob })
-
-        for (let candidate of result.candidates) {
-          candidates.add(candidate)
-        }
-
-        for (let file of result.files) {
-          addWatchFile(file)
-        }
+        globs.push(glob)
       },
     })
+
+    let result = scanDir({ base: basePath, contentPaths: globs })
+
+    for (let candidate of result.candidates) {
+      candidates.add(candidate)
+    }
+
+    for (let file of result.files) {
+      addWatchFile(file)
+    }
 
     return build(Array.from(candidates))
   }

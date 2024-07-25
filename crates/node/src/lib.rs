@@ -95,24 +95,3 @@ pub enum Parsing {
 pub fn scan_files(input: Vec<ChangedContent>, strategy: u8) -> Vec<String> {
   tailwindcss_oxide::scan_files(input.into_iter().map(Into::into).collect(), strategy)
 }
-
-#[derive(Debug, Clone)]
-#[napi(object)]
-pub struct ScanGlobOptions {
-  pub base: String,
-  pub glob: String,
-}
-
-#[napi]
-pub fn scan_glob(input: ScanGlobOptions) -> ScanResult {
-  let result = tailwindcss_oxide::scan_glob(tailwindcss_oxide::ScanGlobOptions {
-    base: input.base,
-    glob: input.glob,
-  });
-
-  ScanResult {
-    files: result.files,
-    candidates: result.candidates,
-    globs: vec![],
-  }
-}

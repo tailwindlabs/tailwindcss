@@ -197,7 +197,7 @@ describe('plugins', () => {
   })
 })
 
-describe.only('@content', () => {
+describe('@content', () => {
   test('scans custom @content files', async () => {
     let processor = postcss([
       tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
