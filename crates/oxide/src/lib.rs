@@ -40,8 +40,14 @@ pub struct ChangedContent {
 
 #[derive(Debug, Clone)]
 pub struct ScanOptions {
+    /// Base path to start scanning from
     pub base: String,
-    pub globs: bool,
+    /// Glob content paths
+    pub content_paths: Vec<String>,
+    /// Whether to include globs in the output
+    pub output_globs: bool,
+    /// Whether to include files in the output
+    pub output_files: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -75,7 +81,7 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
     let (files, dirs) = resolve_files(root);
 
-    let globs = if opts.globs {
+    let globs = if opts.output_globs {
         resolve_globs(root, dirs)
     } else {
         vec![]
@@ -120,6 +126,8 @@ pub fn scan_glob(opts: ScanGlobOptions) -> ScanResult {
             vec![]
         }
     };
+
+    dbg!(&files);
 
     let mut cache = GLOBAL_CACHE.lock().unwrap();
 

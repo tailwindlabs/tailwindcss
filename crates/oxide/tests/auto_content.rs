@@ -32,7 +32,9 @@ mod auto_content {
         // Resolve all content paths for the (temporary) current working directory
         let result = scan_dir(ScanOptions {
             base: base.clone(),
-            globs: true,
+            content_paths: vec![],
+            output_globs: true,
+            output_files: true,
         });
 
         let mut paths: Vec<_> = result

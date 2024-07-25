@@ -39,8 +39,14 @@ pub struct GlobEntry {
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ScanOptions {
+  /// Base path to start scanning from
   pub base: String,
-  pub globs: Option<bool>,
+  /// Glob content paths
+  pub content_paths: Option<Vec<String>>,
+  /// Whether to include globs in the output
+  pub output_globs: Option<bool>,
+  /// Whether to include files in the output
+  pub output_files: Option<bool>,
 }
 
 #[napi]
@@ -52,7 +58,9 @@ pub fn clear_cache() {
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
   let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
     base: args.base,
-    globs: args.globs.unwrap_or(false),
+    content_paths: args.content_paths.unwrap_or_default(),
+    output_globs: args.output_globs.unwrap_or_default(),
+    output_files: args.output_globs.unwrap_or_default(),
   });
 
   ScanResult {
