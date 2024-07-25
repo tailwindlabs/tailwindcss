@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod scan_dir {
+    use serial_test::serial;
     use std::fs;
     use std::process::Command;
 
@@ -77,6 +78,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_work_with_a_set_of_root_files() {
         let globs = test(&[
             ("index.html", None),
@@ -88,6 +90,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_work_with_a_set_of_root_files_and_ignore_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("b.html")),
@@ -100,6 +103,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_list_all_files_in_the_public_folder_explicitly() {
         let globs = test(&[
             ("index.html", None),
@@ -119,6 +123,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_list_nested_folders_explicitly_in_the_public_folder() {
         let globs = test(&[
             ("index.html", None),
@@ -148,6 +153,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_list_all_files_in_the_public_folder_explicitly_except_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("public/b.html\na.html")),
@@ -160,6 +166,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_use_a_glob_for_top_level_folders() {
         let globs = test(&[
             ("index.html", None),
@@ -177,6 +184,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_ignore_binary_files() {
         let globs = test(&[
             ("index.html", None),
@@ -188,6 +196,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_ignore_known_extensions() {
         let globs = test(&[
             ("index.html", None),
@@ -199,6 +208,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_ignore_known_files() {
         let globs = test(&[
             ("index.html", None),
@@ -209,6 +219,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_ignore_and_expand_nested_ignored_folders() {
         let globs = test(&[
             // Explicitly listed root files
@@ -295,6 +306,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_scan_for_utilities() {
         let mut ignores = String::new();
         ignores.push_str("# md:font-bold\n");
@@ -321,6 +333,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_scan_content_paths() {
         let candidates = scan_with_globs(
             &[
@@ -336,6 +349,7 @@ mod scan_dir {
     }
 
     #[test]
+    #[serial]
     fn it_should_scan_content_paths_even_when_they_are_git_ignored() {
         let candidates = scan_with_globs(
             &[
