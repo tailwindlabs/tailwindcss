@@ -63,6 +63,7 @@ exec('pnpm --silent --filter=!./playgrounds/* -r exec pwd', async (err, stdout) 
   // Track all the workspaces
   for (let path of paths) {
     let pkg = await fs.readFile(path, 'utf8').then(JSON.parse)
+    if (pkg.private) continue
     workspaces.set(pkg.name, { version: pkg.version ?? '', path })
   }
 
