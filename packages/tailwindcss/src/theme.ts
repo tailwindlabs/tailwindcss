@@ -247,6 +247,7 @@ export type ThemeKey =
   | '--translate'
   | '--width'
   | '--z-index'
+  | '--rounded'
 
 export type ColorThemeKey =
   | '--color'
