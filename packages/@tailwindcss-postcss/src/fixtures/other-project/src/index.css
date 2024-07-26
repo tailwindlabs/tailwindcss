@@ -1,0 +1,2 @@
+@content "./**/*.ts";
+@plugin "./plugin.js";
