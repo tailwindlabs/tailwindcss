@@ -11,11 +11,12 @@ import {
   type CssInJs,
   type Rule,
 } from './ast'
+import type { Candidate } from './candidate'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme } from './theme'
-import { withNegative } from './utilities'
+import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
@@ -330,6 +331,62 @@ export function compile(
     },
 
     matchUtilities(utilities, options) {
+      type Resolvable =
+        | Extract<Candidate, { kind: 'functional' }>['value']
+        | Extract<Candidate, { kind: 'functional' }>['modifier']
+
+      let invalid = Symbol('invalid')
+
+      let types = options?.type
+        ? Array.isArray(options?.type)
+          ? options.type
+          : [options.type]
+        : []
+
+      function resolve(
+        item: Resolvable,
+        list: 'any' | Record<string, any> | null,
+        resolveBare: ((value: string) => string | null) | null,
+      ) {
+        if (!item) {
+          if (list && typeof list === 'object' && list.DEFAULT) {
+            return list.DEFAULT
+          }
+
+          // Falsy values are invalid
+          return null
+        }
+
+        // Arbitrary values and modifiers are also used as-is
+        if (item.kind === 'arbitrary') return item.value
+
+        // In the case of modifiers: 'any' the value we're passed can be used as-is
+        if (list === 'any') return item.value
+
+        // There's no list of valid, named values so this is invalid
+        if (!list) return null
+
+        // If the value isn't in the list:
+        if (!(item.value in list)) {
+          // And bare "values" (modifiers?) are supported then try to use that
+          if (resolveBare) {
+            if (Number.isNaN(Number(item.value))) {
+              return invalid
+            }
+
+            return resolveBare(item.value) ?? invalid
+          }
+
+          // Otherwise it is invalid
+          return invalid
+        }
+
+        // Otherwise we'll return the value supplied by list
+        // - `options.values`
+        // - `options.modifiers`
+        return list[item.value]
+      }
+
       for (let [name, fn] of Object.entries(utilities)) {
         if (!IS_VALID_UTILITY_NAME.test(name)) {
           throw new Error(
@@ -338,65 +395,66 @@ export function compile(
         }
 
         designSystem.utilities.functional(name, (candidate) => {
-          if (!options?.supportsNegativeValues) {
-            if (candidate.negative) return
-          }
+          // Any negative candiate without support is invalid
+          if (!options?.supportsNegativeValues && candidate.negative) return
 
-          if (candidate.modifier && !options?.modifiers) return
+          // If this utility supports color values — try resolving as a color
+          let modifiers = options?.modifiers ?? null
 
-          let modifier: string | null = null
-
-          if (options?.modifiers === 'any') {
-            modifier = candidate.modifier?.value ?? null
-          } else if (options?.modifiers && candidate.modifier) {
-            if (candidate.modifier.kind === 'arbitrary') {
-              modifier = candidate.modifier.value
-            } else {
-              modifier = options.modifiers[candidate.modifier.value] ?? null
-              if (modifier === null) return
+          if (types.includes('color')) {
+            // Colors implicitly support modifiers when no modifiers are provided
+            // They're read from the opacity scale'
+            if (!modifiers) {
+              modifiers = Object.fromEntries(theme.namespace('--opacity').entries())
             }
           }
 
-          // TODO: DEFAULT ??
-          if (!candidate.value) {
-            let value = options?.values?.DEFAULT ?? null
+          if (candidate.modifier && !modifiers) return
 
-            if (!value) return
+          let modifier = resolve(candidate.modifier, modifiers, (value) => {
+            if (!types.includes('color')) return null
+            return `${value}%`
+          })
 
-            if (candidate.negative) {
-              value = withNegative(value, candidate)
-            }
+          if (modifier === invalid) return
 
-            return objectToAst(fn(value, { modifier }))
-          }
+          let value = resolve(
+            candidate.value,
+            {
+              inherit: 'inherit',
+              transparent: 'transparent',
+              current: 'currentColor',
+              ...(options?.values ?? null),
+            },
+            null,
+          )
 
-          if (candidate.value.kind === 'arbitrary') {
-            let value = candidate.value.value
-            let types = options?.type
-              ? Array.isArray(options?.type)
-                ? options.type
-                : [options.type]
-              : []
-
-            if (types.length > 0) {
-              if (candidate.value.dataType) {
-                if (!types.includes(candidate.value.dataType) && !types.includes('any')) return
-              } else {
-                let dataType = inferDataType(value, types as any[])
-                if (!dataType) return
-              }
-            }
-
-            if (candidate.negative) {
-              value = withNegative(value, candidate)
-            }
-
-            return objectToAst(fn(value, { modifier }))
-          }
-
-          // Look up in values: {…}
-          let value = options?.values?.[candidate.value.value] ?? null
           if (!value) return
+          if (value === invalid) return
+
+          if (types.includes('color') && modifier) {
+            value = withAlpha(value, modifier)
+          }
+
+          // Throw out any candidate whose value isn't not of a support type
+          if (candidate.value?.kind === 'arbitrary' && types.length > 0 && !types.includes('any')) {
+            // Bail when the candidate has an explicit data type but it's not in
+            // the list of supported types by this utility For example, given a
+            // `scrollbar` utility that is used to change its color:
+            // scrollbar-[length:var(--whatever)]
+            if (candidate.value.dataType && !types.includes(candidate.value.dataType)) {
+              return
+            }
+
+            // We also need to bail when the candidate does not have an explicit
+            // type and we're not able to infer it as one of the supported types.
+            if (
+              !candidate.value.dataType &&
+              !inferDataType(candidate.value.value, types as any[])
+            ) {
+              return
+            }
+          }
 
           if (candidate.negative) {
             value = withNegative(value, candidate)
@@ -419,14 +477,6 @@ export function compile(
 
       let value =
         theme.resolveValue(null, [path] as any) ?? theme.namespace(path as any) ?? fallback
-
-      console.log({
-        path,
-        value,
-        ns: theme.namespace(path as any),
-        tg: theme.get(path as any),
-        trv: theme.resolveValue(null, [path] as any),
-      })
 
       if (value && typeof value === 'object' && value instanceof Map) {
         return Object.fromEntries(value.entries())

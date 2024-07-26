@@ -110,7 +110,7 @@ function property(ident: string, initialValue?: string, syntax?: string) {
 /**
  * Apply opacity to a color using `color-mix`.
  */
-function withAlpha(value: string, alpha: string): string {
+export function withAlpha(value: string, alpha: string): string {
   if (alpha === null) return value
 
   // Convert numeric values (like `0.5`) to percentages (like `50%`) so they

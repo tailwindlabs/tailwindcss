@@ -15440,7 +15440,7 @@ describe('legacy: matchUtilities', () => {
     `)
   })
 
-  test('throws on custom static utilities with an invalid name', () => {
+  test('throws on custom utilities with an invalid name', () => {
     expect(() => {
       return compile(
         css`
@@ -15493,7 +15493,7 @@ describe('legacy: matchUtilities', () => {
                   },
                 },
                 {
-                  type: ['color'],
+                  type: ['color', 'any'],
                   values: {
                     black: 'black',
                   },
@@ -15528,6 +15528,7 @@ describe('legacy: matchUtilities', () => {
           'scrollbar-2',
           'scrollbar-[#fff]',
           'scrollbar-[2px]',
+          'scrollbar-[var(--my-color)]',
           'scrollbar-[color:var(--my-color)]',
           'scrollbar-[length:var(--my-width)]',
         ]),
@@ -15553,13 +15554,17 @@ describe('legacy: matchUtilities', () => {
         scrollbar-width: var(--my-width);
       }
 
+      .scrollbar-\\[var\\(--my-color\\)\\] {
+        scrollbar-color: var(--my-color);
+      }
+
       .scrollbar-black {
         scrollbar-color: black;
       }"
     `)
   })
 
-  test.skip('custom utility that reads from the theme', () => {
+  test('custom utility that reads from the theme', () => {
     function run(candidates: string[]) {
       return compile(
         css`
@@ -15593,18 +15598,150 @@ describe('legacy: matchUtilities', () => {
       ).build(candidates)
     }
 
-    expect(optimizeCss(run(['scrollbar-big'])).trim()).toMatchInlineSnapshot()
+    expect(optimizeCss(run(['scrollbar-big'])).trim()).toMatchInlineSnapshot(`
+      ".scrollbar-big {
+        --my-modifier: none;
+        border-block-width: 20px;
+      }"
+    `)
   })
 
-  test('custom utility that reads from the theme', () => {
+  test('functional utilities with type: color automatically support opacity', () => {
+    function run(candidates: string[]) {
+      return compile(
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+            --opacity-my-opacity: 0.5;
+          },
+        `,
+        {
+          loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  scrollbar: (value) => {
+                    return {
+                      'scrollbar-color': value,
+                    }
+                  },
+                },
+                {
+                  type: ['color', 'any'],
+                  values: {
+                    black: 'black',
+                  },
+                },
+              )
+            }
+          },
+        },
+      ).build(candidates)
+    }
+
+    expect(
+      optimizeCss(
+        run([
+          'scrollbar-current',
+          'scrollbar-current/45',
+          'scrollbar-black',
+          'scrollbar-black/my-opacity',
+          'scrollbar-black/33',
+          'scrollbar-black/[50%]',
+          'scrollbar-[var(--my-color)]/[25%]',
+        ]),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      ".scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
+        scrollbar-color: color-mix(in srgb, var(--my-color) 25%, transparent);
+      }
+
+      .scrollbar-black {
+        scrollbar-color: black;
+      }
+
+      .scrollbar-black\\/33 {
+        scrollbar-color: #00000054;
+      }
+
+      .scrollbar-black\\/\\[50\\%\\], .scrollbar-black\\/my-opacity {
+        scrollbar-color: #00000080;
+      }
+
+      .scrollbar-current {
+        scrollbar-color: currentColor;
+      }
+
+      .scrollbar-current\\/45 {
+        scrollbar-color: color-mix(in srgb, currentColor 45%, transparent);
+      }"
+    `)
+  })
+
+  test('functional utilities with type: color and explicit modifiers', () => {
+    function run(candidates: string[]) {
+      return compile(
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+            --opacity-my-opacity: 0.5;
+          },
+        `,
+        {
+          loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  scrollbar: (value, { modifier }) => {
+                    return {
+                      '--modifier': modifier ?? 'none',
+                      'scrollbar-width': value,
+                    }
+                  },
+                },
+                {
+                  type: ['any'],
+                  values: {},
+                  modifiers: {
+                    foo: 'foo',
+                  },
+                },
+              )
+            }
+          },
+        },
+      ).build(candidates)
+    }
+
+    expect(
+      optimizeCss(run(['scrollbar-[12px]', 'scrollbar-[12px]/foo', 'scrollbar-[12px]/bar'])).trim(),
+    ).toMatchInlineSnapshot(`
+      ".scrollbar-\\[12px\\] {
+        --modifier: none;
+        scrollbar-width: 12px;
+      }
+
+      .scrollbar-\\[12px\\]\\/foo {
+        --modifier: foo;
+        scrollbar-width: 12px;
+      }"
+    `)
+  })
+
+  test('reading from the theme', () => {
     expect.hasAssertions()
 
     compile(
       css`
         @plugin "my-plugin";
-
-        @tailwind utilities;
-
         @theme reference {
           --scrollbar-big: 20px;
           --scrollbar-big-properties: auto-hidden;
