@@ -6,12 +6,12 @@ import fixRelativePathsPlugin from '.'
 
 describe('fixRelativePathsPlugin', () => {
   test('rewrites @content and @plugin to be relative to the initial css file', async () => {
-    const CSS_PATH = `${__dirname}/fixtures/external-import/src/index.css`
-    const CSS = fs.readFileSync(CSS_PATH, 'utf-8')
+    let cssPath = `${__dirname}/fixtures/external-import/src/index.css`
+    let css = fs.readFileSync(cssPath, 'utf-8')
 
     let processor = postcss([atImport(), fixRelativePathsPlugin()])
 
-    let result = await processor.process(CSS, { from: CSS_PATH })
+    let result = await processor.process(css, { from: cssPath })
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
       "@content "../../example-project/src/**/*.ts";
@@ -21,12 +21,12 @@ describe('fixRelativePathsPlugin', () => {
   })
 
   test('does not rewrite non-relative paths', async () => {
-    const CSS_PATH = `${__dirname}/fixtures/external-import/src/invalid.css`
-    const CSS = fs.readFileSync(CSS_PATH, 'utf-8')
+    let cssPath = `${__dirname}/fixtures/external-import/src/invalid.css`
+    let css = fs.readFileSync(cssPath, 'utf-8')
 
     let processor = postcss([atImport(), fixRelativePathsPlugin()])
 
-    let result = await processor.process(CSS, { from: CSS_PATH })
+    let result = await processor.process(css, { from: cssPath })
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
       "@plugin "/absolute/paths";

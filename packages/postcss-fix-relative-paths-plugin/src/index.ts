@@ -12,19 +12,19 @@ export default function fixRelativePathsPlugin(): Plugin {
 }
 
 function fixRelativePath(atRule: AtRule, helpers: any) {
-  const rootPath = getRoot(atRule)?.source?.input.file
+  let rootPath = getRoot(atRule)?.source?.input.file
   if (!rootPath) {
     return
   }
 
-  const inputFilePath = atRule?.source?.input.file
+  let inputFilePath = atRule?.source?.input.file
   if (!inputFilePath) {
     return
   }
 
-  const value = atRule.params[0]
+  let value = atRule.params[0]
 
-  const quote =
+  let quote =
     value[0] === '"' && value[value.length - 1] === '"'
       ? '"'
       : value[0] === "'" && value[value.length - 1] === "'"
@@ -33,7 +33,7 @@ function fixRelativePath(atRule: AtRule, helpers: any) {
   if (!quote) {
     return
   }
-  const content = atRule.params.slice(1, -1)
+  let content = atRule.params.slice(1, -1)
 
   // We only want to rewrite relative paths.
   if (!content.startsWith('./') && !content.startsWith('../')) {
@@ -41,7 +41,7 @@ function fixRelativePath(atRule: AtRule, helpers: any) {
   }
 
   // TODO: handle escaped quotes?
-  const rulePath = path.join(path.dirname(inputFilePath), content)
+  let rulePath = path.join(path.dirname(inputFilePath), content)
 
   atRule.params = quote + path.relative(path.dirname(rootPath), rulePath) + quote
 }
