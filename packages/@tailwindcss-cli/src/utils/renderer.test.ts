@@ -1,24 +1,31 @@
 import path from 'path'
 import { describe, expect, it } from 'vitest'
 import { relative, wordWrap } from './renderer'
+import { normalizeWindowsSeperators } from './test-helpers'
 
 describe('relative', () => {
   it('should print an absolute path relative to the current working directory', () => {
-    expect(relative(path.resolve('index.css'))).toMatchInlineSnapshot(`"./index.css"`)
+    expect(normalizeWindowsSeperators(relative(path.resolve('index.css')))).toMatchInlineSnapshot(
+      `"./index.css"`,
+    )
   })
 
   it('should prefer the shortest value by default', () => {
     // Shortest between absolute and relative paths
-    expect(relative('index.css')).toMatchInlineSnapshot(`"index.css"`)
+    expect(normalizeWindowsSeperators(relative('index.css'))).toMatchInlineSnapshot(`"index.css"`)
   })
 
   it('should be possible to override the current working directory', () => {
-    expect(relative('../utils/index.css', '..')).toMatchInlineSnapshot(`"./utils/index.css"`)
+    expect(normalizeWindowsSeperators(relative('../utils/index.css', '..'))).toMatchInlineSnapshot(
+      `"./utils/index.css"`,
+    )
   })
 
   it('should be possible to always prefer the relative path', () => {
     expect(
-      relative('index.css', process.cwd(), { preferAbsoluteIfShorter: false }),
+      normalizeWindowsSeperators(
+        relative('index.css', process.cwd(), { preferAbsoluteIfShorter: false }),
+      ),
     ).toMatchInlineSnapshot(`"./index.css"`)
   })
 })
