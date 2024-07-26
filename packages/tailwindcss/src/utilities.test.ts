@@ -15264,7 +15264,13 @@ describe('legacy: matchUtilities', () => {
 
     expect(
       optimizeCss(
-        run(['border-block', 'border-block-2', 'border-block-[35px]', 'lg:border-block-2']),
+        run([
+          'border-block',
+          'border-block-2',
+          'border-block-[35px]',
+          'border-block-[var(--foo)]',
+          'lg:border-block-2',
+        ]),
       ).trim(),
     ).toMatchInlineSnapshot(`
       ".border-block {
@@ -15277,6 +15283,10 @@ describe('legacy: matchUtilities', () => {
 
       .border-block-\\[35px\\] {
         border-block-width: 35px;
+      }
+
+      .border-block-\\[var\\(--foo\\)\\] {
+        border-block-width: var(--foo);
       }
 
       @media (width >= 1024px) {
@@ -15743,20 +15753,48 @@ describe('legacy: matchUtilities', () => {
       css`
         @plugin "my-plugin";
         @theme reference {
+          --size-2_5: 2.5rem;
+
           --scrollbar-big: 20px;
           --scrollbar-big-properties: auto-hidden;
+
+          --scrollbar-color-light: white;
+          --scrollbar-color-dark: black;
         },
       `,
       {
         loadPlugin() {
           return ({ theme }) => {
+            expect(theme('size.2_5')).toEqual('2.5rem')
+
+            // Square bracket syntax
+            expect(theme('size[2.5]')).toEqual('2.5rem')
+
+            // Accessing w/ CSS property syntax
+            expect(theme('--scrollbar')).toEqual(null)
+            expect(theme('--scrollbar-*')).toEqual({
+              big: '20px',
+              'big-properties': 'auto-hidden',
+              'color-dark': 'black',
+              'color-light': 'white',
+            })
+            expect(theme('--scrollbar-big')).toEqual('20px')
+
+            // Accessing via legacy dot notation
             expect(theme('scrollbar')).toEqual({
               big: '20px',
               'big-properties': 'auto-hidden',
+              'color-dark': 'black',
+              'color-light': 'white',
             })
 
             expect(theme('scrollbar.big')).toEqual('20px')
             expect(theme('scrollbar.big.properties')).toEqual('auto-hidden')
+
+            expect(theme('scrollbar.color')).toEqual({
+              light: 'white',
+              dark: 'black',
+            })
           }
         },
       },
