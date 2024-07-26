@@ -1,5 +1,13 @@
 import watcher from '@parcel/watcher'
-import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindcss/oxide'
+import {
+  IO,
+  Parsing,
+  clearCache,
+  scanDir,
+  scanFiles,
+  type ChangedContent,
+  type GlobEntry,
+} from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
@@ -9,6 +17,7 @@ import postcss from 'postcss'
 import atImport from 'postcss-import'
 import * as tailwindcss from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
+import { disposables } from '../../utils/disposables'
 import {
   eprintln,
   formatDuration,
@@ -164,12 +173,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Watch for changes
   if (args['--watch']) {
-    await watcher.subscribe(base, async (err, events) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-
+    let cleanupWatchers = await createWatchers(scanDirResult.globs, async function handle(events) {
       try {
         // If the only change happened to the output file, then we don't want to
         // trigger a rebuild because that will result in an infinite loop.
@@ -206,6 +210,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         // Scan the entire `base` directory for full rebuilds.
         if (rebuildStrategy === 'full') {
+          // Clear all watchers
+          cleanupWatchers()
+
+          // Clear cached candidates
+          clearCache()
+
           // Collect the new `input` and `cssImportPaths`.
           ;[input, cssImportPaths] = await handleImports(
             args['--input']
@@ -219,8 +229,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           // Create a new compiler, given the new `input`
           compiler = compile(input)
 
-          // Re-scan the directory to get the new `candidates`.
+          // Re-scan the directory to get the new `candidates`
           scanDirResult = scanDir({ base, contentPaths: compiler.globs })
+
+          // Setup new watchers
+          cleanupWatchers = await createWatchers(scanDirResult.globs, handle)
 
           // Re-compile the CSS
           compiledCss = compiler.build(scanDirResult.candidates)
@@ -250,6 +263,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
+        cleanupWatchers()
         process.exit(0)
       })
     }
@@ -257,6 +271,31 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // Keep the process running
     process.stdin.resume()
   }
+}
+
+async function createWatchers(globs: GlobEntry[], handle: (events: watcher.Event[]) => void) {
+  let watchers = disposables()
+
+  // Setup a watcher for every glob based on the `base` directory.
+  for (let glob of globs) {
+    // Globs with `!` are negated and should not require a dedicated watcher.
+    if (glob.glob[0] === '!') continue
+
+    let { unsubscribe } = await watcher.subscribe(glob.base, async (err, events) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+
+      // TODO: Dedupe events
+      // TODO: Combine events from various watchers and flush them all at once
+      handle(events)
+    })
+
+    watchers.add(unsubscribe)
+  }
+
+  return () => watchers.dispose()
 }
 
 function handleImports(
