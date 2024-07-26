@@ -16,7 +16,7 @@ describe('fixRelativePathsPlugin', () => {
     expect(result.css.trim()).toMatchInlineSnapshot(`
       "@content "../../other-project/src/**/*.ts";
       @plugin "../../other-project/src/plugin.js";
-      @plugin "../../other-project/src/what\\"s-this.js""
+      @plugin "../../other-project/src/what\\"s-this.js";"
     `)
   })
 
@@ -32,7 +32,7 @@ describe('fixRelativePathsPlugin', () => {
       "@plugin "/absolute/paths";
       @plugin "C:\\Program Files\\HAL 9000";
       @plugin "\\\\Media\\Pictures\\Worth\\1000 words";
-      @plugin "some-node-dep""
+      @plugin "some-node-dep";"
     `)
   })
 })

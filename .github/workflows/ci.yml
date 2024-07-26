@@ -12,6 +12,7 @@ permissions:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         node-version: [20]
         runner: [ubuntu-latest, windows-latest]
