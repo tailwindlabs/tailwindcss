@@ -206,9 +206,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         // Scan the entire `base` directory for full rebuilds.
         if (rebuildStrategy === 'full') {
-          // Re-scan the directory to get the new `candidates`.
-          scanDirResult = scanDir({ base, contentPaths: compiler.globs })
-
           // Collect the new `input` and `cssImportPaths`.
           ;[input, cssImportPaths] = await handleImports(
             args['--input']
@@ -219,7 +216,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             args['--input'] ?? base,
           )
 
+          // Create a new compiler, given the new `input`
           compiler = compile(input)
+
+          // Re-scan the directory to get the new `candidates`.
+          scanDirResult = scanDir({ base, contentPaths: compiler.globs })
+
+          // Re-compile the CSS
           compiledCss = compiler.build(scanDirResult.candidates)
         }
 
