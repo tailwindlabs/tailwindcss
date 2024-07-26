@@ -152,10 +152,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 
   // Compile the input
-  let { build, globs } = compile(input)
-  let { candidates } = scanDir({ base, contentPaths: globs })
+  let compiler = compile(input)
+  let scanDirResult = scanDir({ base, contentPaths: compiler.globs })
 
-  await write(build(candidates), args)
+  await write(compiler.build(scanDirResult.candidates), args)
 
   let end = process.hrtime.bigint()
   eprintln(header())
@@ -207,7 +207,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         // Scan the entire `base` directory for full rebuilds.
         if (rebuildStrategy === 'full') {
           // Re-scan the directory to get the new `candidates`.
-          candidates = scanDir({ base, contentPaths: globs }).candidates
+          scanDirResult = scanDir({ base, contentPaths: compiler.globs })
 
           // Collect the new `input` and `cssImportPaths`.
           ;[input, cssImportPaths] = await handleImports(
@@ -219,15 +219,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             args['--input'] ?? base,
           )
 
-          build = compile(input).build
-          compiledCss = build(candidates)
+          compiler = compile(input)
+          compiledCss = compiler.build(scanDirResult.candidates)
         }
 
         // Scan changed files only for incremental rebuilds.
         else if (rebuildStrategy === 'incremental') {
           let newCandidates = scanFiles(changedFiles, IO.Sequential | Parsing.Sequential)
 
-          compiledCss = build(newCandidates)
+          compiledCss = compiler.build(newCandidates)
         }
 
         await write(compiledCss, args)
