@@ -235,6 +235,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         else if (rebuildStrategy === 'incremental') {
           let newCandidates = scanDirResult.scanFiles(changedFiles)
 
+          // No candidates found which means we don't need to rebuild. This can
+          // happen if a file is detected but doesn't match any of the globs.
+          if (newCandidates.length === 0) return
+
           compiledCss = compiler.build(newCandidates)
         }
 
