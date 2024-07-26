@@ -22,20 +22,26 @@ function fixRelativePath(atRule: AtRule, helpers: any) {
     return
   }
 
-  const content = atRule.params[0]
+  const value = atRule.params[0]
 
   const quote =
-    content[0] === '"' && content[content.length - 1] === '"'
+    value[0] === '"' && value[value.length - 1] === '"'
       ? '"'
-      : content[0] === "'" && content[content.length - 1] === "'"
+      : value[0] === "'" && value[value.length - 1] === "'"
         ? "'"
         : null
   if (!quote) {
     return
   }
+  const content = atRule.params.slice(1, -1)
+
+  // We only want to rewrite relative paths.
+  if (!content.startsWith('./') && !content.startsWith('../')) {
+    return
+  }
 
   // TODO: handle escaped quotes?
-  const rulePath = path.join(path.dirname(inputFilePath), atRule.params.slice(1, -1))
+  const rulePath = path.join(path.dirname(inputFilePath), content)
 
   atRule.params = quote + path.relative(path.dirname(rootPath), rulePath) + quote
 }

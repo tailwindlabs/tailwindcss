@@ -1,2 +1,3 @@
 @content "./**/*.ts";
 @plugin "./plugin.js";
+@plugin "./what\"s-this.js";
