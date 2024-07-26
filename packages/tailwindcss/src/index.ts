@@ -467,6 +467,8 @@ export function compile(
 
     theme(path: string, fallback?: any) {
       path = path
+        // Escape dots used inside square brackets
+        .replace(/\[(.*?)\]/g, (_, value) => `-${value.replace('.', '_')}`)
         // Replace dots with dashes
         .replace(/\./g, '-')
         // Replace camelCase with dashes
