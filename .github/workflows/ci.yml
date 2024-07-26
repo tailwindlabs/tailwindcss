@@ -11,12 +11,13 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
     strategy:
       matrix:
         node-version: [20]
+        runner: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v3
