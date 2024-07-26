@@ -1,5 +1,8 @@
 packages:
-  - 'crates/node'
-  - 'crates/node/npm/*'
+  # - 'crates/node'
+  # - 'crates/node/npm/*'
   - 'packages/*'
+  - '!packages/@tailwindcss-vite'
+  - '!packages/@tailwindcss-cli'
+  - '!packages/@tailwindcss-postcss'
   - 'playgrounds/*'

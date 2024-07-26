@@ -63,7 +63,7 @@
     "utilities.css"
   ],
   "devDependencies": {
-    "@tailwindcss/oxide": "workspace:^",
+    "@tailwindcss/oxide": "4.0.0-alpha.18",
     "@types/node": "^20.12.12",
     "lightningcss": "^1.25.1"
   }
