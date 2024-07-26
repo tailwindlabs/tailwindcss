@@ -466,6 +466,14 @@ export function compile(
     },
 
     theme(path: string, fallback?: any) {
+      if (path.startsWith('--')) {
+        if (path.endsWith('-*')) {
+          return Object.fromEntries(theme.namespace(path.slice(0, -2) as any).entries())
+        }
+
+        return theme.resolveValue(null, [path] as any) ?? fallback ?? null
+      }
+
       path = path
         // Escape dots used inside square brackets
         .replace(/\[(.*?)\]/g, (_, value) => `-${value.replace('.', '_')}`)
