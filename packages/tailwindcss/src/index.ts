@@ -14,6 +14,7 @@ import {
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
+import { buildPluginApi } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
@@ -21,6 +22,7 @@ const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 type PluginAPI = {
   addVariant(name: string, variant: string | string[] | CssInJs): void
+  theme(path: string, fallback?: any): any
 }
 
 type Plugin = (api: PluginAPI) => void
@@ -280,6 +282,8 @@ export function compile(
         designSystem.variants.fromAst(name, objectToAst(variant))
       }
     },
+
+    ...buildPluginApi(designSystem),
   }
 
   for (let plugin of plugins) {
