@@ -175,12 +175,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         let rebuildStrategy: 'incremental' | 'full' = 'incremental'
 
         for (let file of files) {
-          // Track new and updated files for incremental rebuilds.
-          changedFiles.push({
-            file,
-            extension: path.extname(file).slice(1),
-          } satisfies ChangedContent)
-
           // If one of the changed files is related to the input CSS files, then
           // we need to do a full rebuild because the theme might have changed.
           if (cssImportPaths.includes(file)) {
@@ -190,6 +184,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // need to do a full rebuild.
             break
           }
+
+          // Track new and updated files for incremental rebuilds.
+          changedFiles.push({
+            file,
+            extension: path.extname(file).slice(1),
+          } satisfies ChangedContent)
         }
 
         // Re-compile the input
