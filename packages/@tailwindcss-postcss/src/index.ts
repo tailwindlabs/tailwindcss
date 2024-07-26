@@ -5,6 +5,7 @@ import path from 'path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
 import { compile } from 'tailwindcss'
+import fixRelativePathsPlugin from '../../postcss-fix-relative-paths-plugin/src'
 
 /**
  * A Map that can generate default values for keys that don't exist.
@@ -53,6 +54,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
     plugins: [
       // We need to run `postcss-import` first to handle `@import` rules.
       postcssImport(),
+      fixRelativePathsPlugin(),
 
       (root, result) => {
         let inputFile = result.opts.from ?? ''

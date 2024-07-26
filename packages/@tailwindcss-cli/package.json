@@ -36,7 +36,8 @@
     "picocolors": "^1.0.1",
     "postcss": "8.4.24",
     "postcss-import": "^16.1.0",
-    "tailwindcss": "workspace:^"
+    "tailwindcss": "workspace:^",
+    "postcss-fix-relative-paths-plugin": "workspace:^"
   },
   "devDependencies": {
     "@types/postcss-import": "^14.0.3"

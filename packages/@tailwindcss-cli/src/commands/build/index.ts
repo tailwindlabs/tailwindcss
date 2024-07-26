@@ -5,6 +5,7 @@ import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import postcss from 'postcss'
+import fixRelativePathsPlugin from 'postcss-fix-relative-paths-plugin'
 import atImport from 'postcss-import'
 import * as tailwindcss from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
@@ -259,6 +260,7 @@ function handleImports(
 
   return postcss()
     .use(atImport())
+    .use(fixRelativePathsPlugin())
     .process(input, { from: file })
     .then((result) => [
       result.css,

@@ -121,6 +121,9 @@ importers:
       postcss:
         specifier: 8.4.24
         version: 8.4.24
+      postcss-fix-relative-paths-plugin:
+        specifier: workspace:^
+        version: link:../postcss-fix-relative-paths-plugin
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.24)
@@ -140,6 +143,9 @@ importers:
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
+      postcss-fix-relative-paths-plugin:
+        specifier: workspace:^
+        version: link:../postcss-fix-relative-paths-plugin
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.24)
