@@ -1,13 +1,5 @@
 import watcher from '@parcel/watcher'
-import {
-  IO,
-  Parsing,
-  clearCache,
-  scanDir,
-  scanFiles,
-  type ChangedContent,
-  type GlobEntry,
-} from '@tailwindcss/oxide'
+import { clearCache, scanDir, type ChangedContent, type GlobEntry } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
@@ -241,7 +233,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         // Scan changed files only for incremental rebuilds.
         else if (rebuildStrategy === 'incremental') {
-          let newCandidates = scanFiles(changedFiles, IO.Sequential | Parsing.Sequential)
+          let newCandidates = scanDirResult.scanFiles(changedFiles)
 
           compiledCss = compiler.build(newCandidates)
         }
