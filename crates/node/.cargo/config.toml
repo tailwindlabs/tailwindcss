@@ -1,5 +1,3 @@
-# [target.stable-aarch64-apple-darwin]
-# linker = "stable-aarch64-apple-darwin"
 [target.aarch64-unknown-linux-gnu]
 linker = "aarch64-linux-gnu-gcc"
 [target.aarch64-unknown-linux-musl]

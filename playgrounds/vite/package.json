@@ -9,7 +9,7 @@
     "preview": "bun --bun vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "4.0.0-alpha.18",
+    "@tailwindcss/vite": "workspace:^",
     "@vitejs/plugin-react": "^4.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
