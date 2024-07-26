@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
 import { describe, expect, test } from 'vitest'
-import { fixRelativePathsPlugin } from './fix-relative-paths-plugin'
+import fixRelativePathsPlugin from '.'
 
 describe('fixRelativePathsPlugin', () => {
   test('rewrites @content and @plugin to be relative to the initial css file', async () => {
@@ -14,9 +14,9 @@ describe('fixRelativePathsPlugin', () => {
     let result = await processor.process(CSS, { from: CSS_PATH })
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
-      "@content "../../other-project/src/**/*.ts";
-      @plugin "../../other-project/src/plugin.js";
-      @plugin "../../other-project/src/what\\"s-this.js";"
+      "@content "../../example-project/src/**/*.ts";
+      @plugin "../../example-project/src/plugin.js";
+      @plugin "../../example-project/src/what\\"s-this.js";"
     `)
   })
 

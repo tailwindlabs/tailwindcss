@@ -1,7 +1,7 @@
 import path from 'node:path'
 import type { AtRule, Container, Plugin } from 'postcss'
 
-export function fixRelativePathsPlugin(): Plugin {
+export default function fixRelativePathsPlugin(): Plugin {
   return {
     postcssPlugin: 'tailwindcss-postcss-import',
     AtRule: {

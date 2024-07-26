@@ -1,0 +1,28 @@
+{
+  "name": "postcss-fix-relative-paths-plugin",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup-node ./src/index.ts --format cjs,esm --dts --cjsInterop --splitting --minify --clean",
+    "dev": "pnpm run build -- --watch"
+  },
+  "files": [
+    "dist/"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/postcss-import": "^14.0.3",
+    "postcss": "8.4.24",
+    "postcss-import": "^16.1.0",
+    "tailwindcss-test-utils": "workspace:*"
+  }
+}

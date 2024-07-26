@@ -179,6 +179,24 @@ importers:
         specifier: ^5.2.11
         version: 5.2.11(@types/node@20.12.12)(lightningcss@1.25.1)
 
+  packages/postcss-fix-relative-paths-plugin:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.12.12
+      '@types/postcss-import':
+        specifier: ^14.0.3
+        version: 14.0.3
+      postcss:
+        specifier: 8.4.24
+        version: 8.4.24
+      postcss-import:
+        specifier: ^16.1.0
+        version: 16.1.0(postcss@8.4.24)
+      tailwindcss-test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
+
   packages/tailwindcss:
     devDependencies:
       '@tailwindcss/oxide':
