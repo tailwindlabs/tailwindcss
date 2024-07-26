@@ -165,27 +165,25 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Watch for changes
   if (args['--watch']) {
-    let cleanupWatchers = await createWatchers(scanDirResult.globs, async function handle(events) {
+    let cleanupWatchers = await createWatchers(scanDirResult.globs, async function handle(files) {
       try {
         // If the only change happened to the output file, then we don't want to
         // trigger a rebuild because that will result in an infinite loop.
-        if (events.length === 1 && events[0].path === args['--output']) return
+        if (files.length === 1 && files[0] === args['--output']) return
 
         let changedFiles: ChangedContent[] = []
         let rebuildStrategy: 'incremental' | 'full' = 'incremental'
 
-        for (let event of events) {
+        for (let file of files) {
           // Track new and updated files for incremental rebuilds.
-          if (event.type === 'create' || event.type === 'update') {
-            changedFiles.push({
-              file: event.path,
-              extension: path.extname(event.path).slice(1),
-            } satisfies ChangedContent)
-          }
+          changedFiles.push({
+            file,
+            extension: path.extname(file).slice(1),
+          } satisfies ChangedContent)
 
           // If one of the changed files is related to the input CSS files, then
           // we need to do a full rebuild because the theme might have changed.
-          if (cssImportPaths.includes(event.path)) {
+          if (cssImportPaths.includes(file)) {
             rebuildStrategy = 'full'
 
             // No need to check the rest of the events, because we already know we
@@ -269,8 +267,18 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 }
 
-async function createWatchers(globs: GlobEntry[], handle: (events: watcher.Event[]) => void) {
+async function createWatchers(globs: GlobEntry[], handle: (files: string[]) => void) {
   let watchers = disposables()
+  let files = new Set<string>()
+
+  let d = disposables()
+  function flush() {
+    d.dispose()
+    d.queueMicrotask(() => {
+      handle(Array.from(files))
+      files.clear()
+    })
+  }
 
   // Setup a watcher for every glob based on the `base` directory.
   for (let glob of globs) {
@@ -283,9 +291,12 @@ async function createWatchers(globs: GlobEntry[], handle: (events: watcher.Event
         return
       }
 
-      // TODO: Dedupe events
-      // TODO: Combine events from various watchers and flush them all at once
-      handle(events)
+      for (let event of events) {
+        if (event.type === 'delete') continue
+        files.add(event.path)
+      }
+
+      flush()
     })
 
     watchers.add(unsubscribe)
