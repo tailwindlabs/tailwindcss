@@ -20,7 +20,7 @@ describe('fixRelativePathsPlugin', () => {
     `)
   })
 
-  test('does not rewrite non-relative paths', async () => {
+  test('should not rewrite non-relative paths', async () => {
     let cssPath = `${__dirname}/fixtures/external-import/src/invalid.css`
     let css = fs.readFileSync(cssPath, 'utf-8')
 
@@ -33,6 +33,24 @@ describe('fixRelativePathsPlugin', () => {
       @plugin "C:\\Program Files\\HAL 9000";
       @plugin "\\\\Media\\Pictures\\Worth\\1000 words";
       @plugin "some-node-dep";"
+    `)
+  })
+
+  test('should return relative paths even if the file is resolved in the same basedir as the root stylesheet', async () => {
+    let cssPath = `${__dirname}/fixtures/external-import/src/plugins-in-root.css`
+    let css = fs.readFileSync(cssPath, 'utf-8')
+
+    let processor = postcss([atImport(), fixRelativePathsPlugin()])
+
+    let result = await processor.process(css, { from: cssPath })
+
+    expect(result.css.trim()).toMatchInlineSnapshot(`
+      "@plugin './plugin-in-sibling.ts';
+      @plugin '../plugin-in-sibling.ts';
+      @plugin 'plugin-in-sibling';
+      @plugin './plugin-in-root.ts';
+      @plugin '../plugin-in-root.ts';
+      @plugin 'plugin-in-root';"
     `)
   })
 })

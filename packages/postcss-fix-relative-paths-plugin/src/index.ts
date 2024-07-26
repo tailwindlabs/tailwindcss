@@ -40,10 +40,17 @@ function fixRelativePath(atRule: AtRule, helpers: any) {
     return
   }
 
-  // TODO: handle escaped quotes?
   let rulePath = path.join(path.dirname(inputFilePath), content)
+  let relative = path.relative(path.dirname(rootPath), rulePath)
 
-  atRule.params = quote + path.relative(path.dirname(rootPath), rulePath) + quote
+  // If the path points to a file in the same directory, `path.relative` will
+  // remove the leading `./` and we need to add it back in order to still
+  // consider the path relative
+  if (!relative.startsWith('.')) {
+    relative = '.' + path.sep + relative
+  }
+
+  atRule.params = quote + relative + quote
 }
 
 function getRoot(node: AtRule | Container | undefined): Container | undefined {
