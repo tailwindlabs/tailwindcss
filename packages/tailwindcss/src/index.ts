@@ -485,14 +485,29 @@ export function compile(
       // Prepend with `--` to match CSS variables
       path = `--${path}`
 
-      let value =
-        theme.resolveValue(null, [path] as any) ?? theme.namespace(path as any) ?? fallback
+      let map = theme.namespace(path as any)
 
-      if (value && typeof value === 'object' && value instanceof Map) {
-        return Object.fromEntries(value.entries())
+      // Does the requested value exist in the theme
+      if (map.has(null)) {
+        // Yes, and there are multiple values in the requested theme namespace
+        if (map.size > 1) {
+          return {
+            DEFAULT: map.get(null),
+            ...Object.fromEntries(Array.from(map.entries()).filter(([key]) => key !== null)),
+          }
+        }
+
+        // Nope, just the one
+        return map.get(null)
       }
 
-      return value
+      // There is at least one value in the requested theme namespace
+      // but no default value
+      if (map.size > 0) {
+        return Object.fromEntries(map.entries())
+      }
+
+      return fallback ?? null
     },
   }
 

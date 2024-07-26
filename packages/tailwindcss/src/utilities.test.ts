@@ -15765,11 +15765,6 @@ describe('legacy: matchUtilities', () => {
       {
         loadPlugin() {
           return ({ theme }) => {
-            expect(theme('size.2_5')).toEqual('2.5rem')
-
-            // Square bracket syntax
-            expect(theme('size[2.5]')).toEqual('2.5rem')
-
             // Accessing w/ CSS property syntax
             expect(theme('--scrollbar')).toEqual(null)
             expect(theme('--scrollbar-*')).toEqual({
@@ -15778,9 +15773,11 @@ describe('legacy: matchUtilities', () => {
               'color-dark': 'black',
               'color-light': 'white',
             })
+
             expect(theme('--scrollbar-big')).toEqual('20px')
 
             // Accessing via legacy dot notation
+            expect(theme('size.2_5')).toEqual('2.5rem')
             expect(theme('scrollbar')).toEqual({
               big: '20px',
               'big-properties': 'auto-hidden',
@@ -15788,13 +15785,22 @@ describe('legacy: matchUtilities', () => {
               'color-light': 'white',
             })
 
-            expect(theme('scrollbar.big')).toEqual('20px')
+            expect(theme('scrollbar.big')).toEqual({
+              DEFAULT: '20px',
+              properties: 'auto-hidden',
+            })
             expect(theme('scrollbar.big.properties')).toEqual('auto-hidden')
 
             expect(theme('scrollbar.color')).toEqual({
               light: 'white',
               dark: 'black',
             })
+
+            expect(theme('scrollbar.foo', 'nope')).toEqual('nope')
+            expect(theme('somekey', 'nope')).toEqual('nope')
+
+            // Square bracket syntax
+            expect(theme('size[2.5]')).toEqual('2.5rem')
           }
         },
       },
