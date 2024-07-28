@@ -83,3 +83,4 @@ jobs:
             standalone-cli/dist/tailwindcss-macos-x64
             standalone-cli/dist/tailwindcss-windows-x64.exe
             standalone-cli/dist/tailwindcss-windows-arm64.exe
+            standalone-cli/dist/sha256sums.txt
