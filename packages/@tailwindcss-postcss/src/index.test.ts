@@ -13,7 +13,7 @@ const INPUT_CSS_PATH = `${__dirname}/fixtures/example-project/input.css`
 const css = String.raw
 
 beforeEach(async () => {
-  const { clearCache } = await import('@tailwindcss/oxide')
+  let { clearCache } = await import('@tailwindcss/oxide')
   clearCache()
 })
 
@@ -224,5 +224,61 @@ describe('plugins', () => {
         text-decoration-line: underline;
       }"
     `)
+  })
+})
+
+describe('@content', () => {
+  test('scans custom @content files', async () => {
+    let processor = postcss([
+      tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+    ])
+
+    let result = await processor.process(
+      css`
+        @import 'tailwindcss/utilities';
+        @content '../other-project/src/**/*.js';
+      `,
+      { from: INPUT_CSS_PATH },
+    )
+
+    expect(result.css.trim()).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }
+
+      .content-\\[\\'other-project\\'\\] {
+        --tw-content: "other-project";
+        content: var(--tw-content);
+      }
+
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }"
+    `)
+
+    expect(result.messages).toContainEqual({
+      type: 'dependency',
+      file: expect.stringMatching(/other-project\/src\/index.js$/g),
+      parent: expect.any(String),
+      plugin: '@tailwindcss/postcss',
+    })
+
+    expect(result.messages).toContainEqual({
+      type: 'dir-dependency',
+      dir: expect.stringMatching(/other-project\/src/),
+      glob: '**/*.js',
+      parent: expect.any(String),
+      plugin: '@tailwindcss/postcss',
+    })
   })
 })
