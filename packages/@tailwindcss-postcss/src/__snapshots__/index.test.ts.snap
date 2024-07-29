@@ -566,10 +566,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     color: color-mix(in srgb, currentColor 50%, transparent);
   }
 
-  :disabled {
-    cursor: default;
-  }
-
   img, svg, video, canvas, audio, iframe, embed, object {
     vertical-align: middle;
     display: block;
