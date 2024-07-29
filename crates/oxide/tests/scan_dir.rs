@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod auto_content {
+mod scan_dir {
     use std::process::Command;
     use std::{fs, path};
 
