@@ -46,5 +46,6 @@
     "turbo": "^1.13.3",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
-  }
+  },
+  "packageManager": "pnpm@9.6.0"
 }
