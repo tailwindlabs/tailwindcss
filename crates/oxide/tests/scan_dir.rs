@@ -31,10 +31,7 @@ mod scan_dir {
         let base = format!("{}", dir.display());
 
         // Resolve all content paths for the (temporary) current working directory
-        let result = scan_dir(ScanOptions {
-            base: base.clone(),
-            globs: true,
-        });
+        let result = scan_dir(ScanOptions { base: base.clone() });
 
         let mut paths: Vec<_> = result
             .files

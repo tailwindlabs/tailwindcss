@@ -40,20 +40,16 @@ pub struct GlobEntry {
 #[napi(object)]
 pub struct ScanOptions {
   pub base: String,
-  pub globs: Option<bool>,
 }
 
 #[napi]
 pub fn clear_cache() {
-    tailwindcss_oxide::clear_cache();
+  tailwindcss_oxide::clear_cache();
 }
 
 #[napi]
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
-  let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
-    base: args.base,
-    globs: args.globs.unwrap_or(false),
-  });
+  let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions { base: args.base });
 
   ScanResult {
     files: result.files,

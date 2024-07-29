@@ -109,7 +109,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           let css = ''
 
           // Look for candidates used to generate the CSS
-          let { candidates, files, globs } = scanDir({ base, globs: true })
+          let { candidates, files, globs } = scanDir({ base })
 
           // Add all found files as direct dependencies
           for (let file of files) {
