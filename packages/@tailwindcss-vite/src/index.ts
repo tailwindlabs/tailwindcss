@@ -103,7 +103,7 @@ export default function tailwindcss(): Plugin[] {
 
     for (let plugin of cssPlugins) {
       if (!plugin.transform) continue
-      const transformHandler =
+      let transformHandler =
         'handler' in plugin.transform! ? plugin.transform.handler : plugin.transform!
 
       try {
@@ -162,11 +162,11 @@ export default function tailwindcss(): Plugin[] {
           // We expand string configs to their PostCSS config object similar to
           // how Vite does it.
           // See: https://github.com/vitejs/vite/blob/440783953a55c6c63cd09ec8d13728dc4693073d/packages/vite/src/node/plugins/css.ts#L1580
-          const searchPath = typeof postcssConfig === 'string' ? postcssConfig : config.root
+          let searchPath = typeof postcssConfig === 'string' ? postcssConfig : config.root
           let parsedConfig = await postcssrc({}, searchPath).catch((e: Error) => {
             if (!e.message.includes('No PostCSS Config found')) {
               if (e instanceof Error) {
-                const { name, message, stack } = e
+                let { name, message, stack } = e
                 e.name = 'Failed to load PostCSS config'
                 e.message = `Failed to load PostCSS config (searchPath: ${searchPath}): [${name}] ${message}\n${stack}`
                 e.stack = '' // add stack to message to retain stack
