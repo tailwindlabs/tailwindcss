@@ -8,7 +8,7 @@ export default function fixRelativePathsPlugin(): Plugin {
   // Retain a list of touched at-rules to avoid infinite loops
   let touched: WeakSet<AtRule> = new WeakSet()
 
-  function fixRelativePath(atRule: AtRule, helpers: any) {
+  function fixRelativePath(atRule: AtRule) {
     let rootPath = getRoot(atRule)?.source?.input.file
     if (!rootPath) {
       return

@@ -179,8 +179,6 @@ describe('plugins', () => {
       { from: `${__dirname}/fixtures/another-project/input.css` },
     )
 
-    // TODO: Figure out why `root.walkAtRules` prevents our path fix plugin
-    // from running.
     expect(result.css.trim()).toMatchInlineSnapshot(`
       ".underline {
         text-decoration-line: underline;

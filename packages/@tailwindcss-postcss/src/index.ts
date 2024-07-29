@@ -49,8 +49,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
     }
   })
 
-  let hasApply = false
-  let hasTailwind = false
+  let hasApply: boolean, hasTailwind: boolean
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
