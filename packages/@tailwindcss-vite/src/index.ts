@@ -1,6 +1,8 @@
 import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
+import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
+import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
 import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 
@@ -101,7 +103,7 @@ export default function tailwindcss(): Plugin[] {
 
     for (let plugin of cssPlugins) {
       if (!plugin.transform) continue
-      const transformHandler =
+      let transformHandler =
         'handler' in plugin.transform! ? plugin.transform.handler : plugin.transform!
 
       try {
@@ -150,6 +152,55 @@ export default function tailwindcss(): Plugin[] {
         cssPlugins = config.plugins.filter((plugin) => {
           return allowedPlugins.includes(plugin.name)
         })
+      },
+
+      // Append the postcss-fix-relative-paths plugin
+      async config(config) {
+        let postcssConfig = config.css?.postcss
+
+        if (typeof postcssConfig === 'string') {
+          // We expand string configs to their PostCSS config object similar to
+          // how Vite does it.
+          // See: https://github.com/vitejs/vite/blob/440783953a55c6c63cd09ec8d13728dc4693073d/packages/vite/src/node/plugins/css.ts#L1580
+          let searchPath = typeof postcssConfig === 'string' ? postcssConfig : config.root
+          let parsedConfig = await postcssrc({}, searchPath).catch((e: Error) => {
+            if (!e.message.includes('No PostCSS Config found')) {
+              if (e instanceof Error) {
+                let { name, message, stack } = e
+                e.name = 'Failed to load PostCSS config'
+                e.message = `Failed to load PostCSS config (searchPath: ${searchPath}): [${name}] ${message}\n${stack}`
+                e.stack = '' // add stack to message to retain stack
+                throw e
+              } else {
+                throw new Error(`Failed to load PostCSS config: ${e}`)
+              }
+            }
+            return null
+          })
+          if (parsedConfig !== null) {
+            postcssConfig = {
+              options: parsedConfig.options,
+              plugins: parsedConfig.plugins,
+            } as any
+          } else {
+            postcssConfig = {}
+          }
+          config.css = { postcss: postcssConfig }
+        }
+
+        // postcssConfig is no longer a string after the above. This test is to
+        // avoid TypeScript errors below.
+        if (typeof postcssConfig === 'string') {
+          return
+        }
+
+        if (!postcssConfig || !postcssConfig?.plugins) {
+          config.css = config.css || {}
+          config.css.postcss = postcssConfig || {}
+          config.css.postcss.plugins = [fixRelativePathsPlugin() as any]
+        } else {
+          postcssConfig.plugins.push(fixRelativePathsPlugin() as any)
+        }
       },
 
       // Scan index.html for candidates
