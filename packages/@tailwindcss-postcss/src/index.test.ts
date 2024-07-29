@@ -144,7 +144,7 @@ describe('plugins', () => {
     let result = await processor.process(
       css`
         @import 'tailwindcss/utilities';
-        @plugin 'tailwindcss-test-utils';
+        @plugin 'internal-example-plugin';
       `,
       { from: INPUT_CSS_PATH },
     )
@@ -174,7 +174,7 @@ describe('plugins', () => {
     let result = await processor.process(
       css`
         @import 'tailwindcss/utilities';
-        @plugin 'tailwindcss-test-utils';
+        @plugin 'internal-example-plugin';
       `,
       { from: INPUT_CSS_PATH },
     )

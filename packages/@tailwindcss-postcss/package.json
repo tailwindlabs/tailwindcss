@@ -39,6 +39,6 @@
     "@types/node": "^20.12.12",
     "@types/postcss-import": "^14.0.3",
     "postcss": "8.4.24",
-    "tailwindcss-test-utils": "workspace:*"
+    "internal-example-plugin": "workspace:*"
   }
 }

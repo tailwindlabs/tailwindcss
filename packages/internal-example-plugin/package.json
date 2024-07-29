@@ -1,5 +1,5 @@
 {
-  "name": "tailwindcss-test-utils",
+  "name": "internal-example-plugin",
   "version": "0.0.0",
   "private": true,
   "main": "index.js"
