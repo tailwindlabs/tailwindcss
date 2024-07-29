@@ -141,10 +141,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         return require(pluginPath)
       },
       onContentPath(glob) {
-        if (glob[0] !== '/') {
-          glob = path.join(basePath, glob)
-        }
-
         globs.push(glob)
       },
     })
