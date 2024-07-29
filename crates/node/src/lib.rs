@@ -22,11 +22,22 @@ impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
 }
 
 #[derive(Debug, Clone)]
-#[napi(object)]
+#[napi]
 pub struct ScanResult {
   pub globs: Vec<GlobEntry>,
   pub files: Vec<String>,
   pub candidates: Vec<String>,
+}
+
+#[napi]
+impl ScanResult {
+  #[napi]
+  pub fn scan_files(&self, input: Vec<ChangedContent>) -> Vec<String> {
+    tailwindcss_oxide::scan_files_with_globs(
+      input.into_iter().map(Into::into).collect(),
+      self.globs.clone().into_iter().map(Into::into).collect(),
+    )
+  }
 }
 
 #[derive(Debug, Clone)]
@@ -36,10 +47,22 @@ pub struct GlobEntry {
   pub glob: String,
 }
 
+impl From<GlobEntry> for tailwindcss_oxide::GlobEntry {
+  fn from(globs: GlobEntry) -> Self {
+    tailwindcss_oxide::GlobEntry {
+      base: globs.base,
+      glob: globs.glob,
+    }
+  }
+}
+
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ScanOptions {
+  /// Base path to start scanning from
   pub base: String,
+  /// Glob content paths
+  pub content_paths: Option<Vec<String>>,
 }
 
 #[napi]
@@ -49,7 +72,10 @@ pub fn clear_cache() {
 
 #[napi]
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
-  let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions { base: args.base });
+  let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
+    base: args.base,
+    content_paths: args.content_paths.unwrap_or_default(),
+  });
 
   ScanResult {
     files: result.files,

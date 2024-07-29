@@ -1,5 +1,8 @@
+use glob_match::glob_match;
 use std::iter;
 use std::path::{Path, PathBuf};
+
+use crate::GlobEntry;
 
 pub fn fast_glob(
     base_path: &Path,
@@ -40,7 +43,7 @@ pub fn fast_glob(
 /// tailwind --pwd ./project/pages --content "**/*.js"
 /// tailwind --pwd ./project/components --content "**/*.js"
 /// ```
-fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathBuf, Vec<String>)> {
+pub fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathBuf, Vec<String>)> {
     let mut optimized_patterns: Vec<(PathBuf, Vec<String>)> = vec![];
 
     for pattern in patterns {
@@ -50,6 +53,7 @@ fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathBuf, 
             pattern.remove(0);
         }
 
+        let is_absolute_pattern = pattern.starts_with('/');
         let mut folders = pattern.split('/').collect::<Vec<_>>();
 
         if folders.len() <= 1 {
@@ -60,7 +64,11 @@ fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathBuf, 
             // Safety: We know that the length is greater than 1, so we can safely unwrap.
             let file_pattern = folders.pop().unwrap();
             let all_folders = folders.clone();
-            let mut temp_paths = vec![base_path.to_path_buf()];
+            let mut temp_paths = if is_absolute_pattern {
+                vec![PathBuf::from("/")]
+            } else {
+                vec![base_path.to_path_buf()]
+            };
 
             let mut bail = false;
 
@@ -129,6 +137,14 @@ fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathBuf, 
     }
 
     optimized_patterns
+}
+
+pub fn path_matches_globs(path: &Path, globs: &[GlobEntry]) -> bool {
+    let path = format!("{}", path.display());
+
+    globs
+        .iter()
+        .any(|g| glob_match(&format!("{}/{}", g.base, g.glob), &path))
 }
 
 /// Given this input: a-{b,c}-d-{e,f}
