@@ -1,5 +1,5 @@
 {
-  "name": "postcss-fix-relative-paths-plugin",
+  "name": "internal-postcss-fix-relative-paths",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -22,7 +22,6 @@
     "@types/node": "^20.12.12",
     "@types/postcss-import": "^14.0.3",
     "postcss": "8.4.24",
-    "postcss-import": "^16.1.0",
-    "tailwindcss-test-utils": "workspace:*"
+    "postcss-import": "^16.1.0"
   }
 }

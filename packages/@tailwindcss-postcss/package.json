@@ -34,7 +34,7 @@
     "lightningcss": "^1.25.1",
     "postcss-import": "^16.1.0",
     "tailwindcss": "workspace:^",
-    "postcss-fix-relative-paths-plugin": "workspace:^"
+    "internal-postcss-fix-relative-paths": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",

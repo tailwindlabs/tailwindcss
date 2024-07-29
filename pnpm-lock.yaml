@@ -109,6 +109,9 @@ importers:
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
@@ -121,9 +124,6 @@ importers:
       postcss:
         specifier: 8.4.24
         version: 8.4.24
-      postcss-fix-relative-paths-plugin:
-        specifier: workspace:^
-        version: link:../postcss-fix-relative-paths-plugin
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.24)
@@ -140,12 +140,12 @@ importers:
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
-      postcss-fix-relative-paths-plugin:
-        specifier: workspace:^
-        version: link:../postcss-fix-relative-paths-plugin
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.24)
@@ -184,14 +184,14 @@ importers:
       '@types/node':
         specifier: ^20.12.12
         version: 20.12.12
-      postcss-fix-relative-paths-plugin:
+      internal-postcss-fix-relative-paths:
         specifier: workspace:^
-        version: link:../postcss-fix-relative-paths-plugin
+        version: link:../internal-postcss-fix-relative-paths
       vite:
         specifier: ^5.2.11
         version: 5.2.11(@types/node@20.12.12)(lightningcss@1.25.1)
 
-  packages/postcss-fix-relative-paths-plugin:
+  packages/internal-postcss-fix-relative-paths:
     devDependencies:
       '@types/node':
         specifier: ^20.12.12
@@ -205,9 +205,6 @@ importers:
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.24)
-      tailwindcss-test-utils:
-        specifier: workspace:*
-        version: link:../test-utils
 
   packages/tailwindcss:
     devDependencies:
@@ -1277,7 +1274,6 @@ packages:
 
   bun@1.1.10:
     resolution: {integrity: sha512-qOJXrQZSzJ5DbJMt47GZGWtUSmIkbwD7fPSN/XS/T46D4cTTnPK46QDHlyC8VD+Anvs6uKNwuwKIyB31kUdHmQ==}
-    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -4168,7 +4164,7 @@ snapshots:
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.57.0)
       eslint-plugin-react: 7.34.1(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
@@ -4192,7 +4188,7 @@ snapshots:
       enhanced-resolve: 5.16.1
       eslint: 8.57.0
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.5
       is-core-module: 2.13.1
@@ -4214,7 +4210,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
