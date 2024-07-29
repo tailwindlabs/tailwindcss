@@ -15277,4 +15277,36 @@ describe('theme function in plugins', () => {
       },
     })
   })
+
+  test('tuple upgrades', () => {
+    expect.hasAssertions()
+
+    let input = css`
+      @plugin "my-plugin";
+      @theme reference {
+        --font-size-sm: 0.875rem;
+        --font-size-sm--line-height: 1.25;
+        --font-size-sm--font-weight: bold;
+        --font-size-md: 1rem;
+      }
+    `
+
+    compile(input, {
+      loadPlugin() {
+        return ({ theme }) => {
+          expect(theme('fontSize')).toEqual({
+            sm: ['0.875rem', { lineHeight: '1.25', fontWeight: 'bold' }],
+            md: '1rem',
+          })
+
+          expect(theme('fontSize.sm')).toEqual([
+            '0.875rem',
+            { lineHeight: '1.25', fontWeight: 'bold' },
+          ])
+
+          expect(theme('fontSize.md')).toEqual('1rem')
+        }
+      },
+    })
+  })
 })

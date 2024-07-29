@@ -1,4 +1,5 @@
 import type { DesignSystem } from './design-system'
+import { DefaultMap } from './utils/default-map'
 
 export function buildPluginApi(designSystem: DesignSystem) {
   return {
@@ -41,14 +42,44 @@ export function buildPluginApi(designSystem: DesignSystem) {
       // Make sure the original path is included last because it should take precedence
       paths.push(original)
 
-      let map = new Map<string | null, string>()
+      type ThemeValue =
+        // A normal string value
+        | string
+
+        // A nested tuple with additional data
+        | [main: string, extra: Record<string, string>]
+
+      let map = new Map<string | null, ThemeValue>()
+      let nested = new DefaultMap<string | null, Map<string, string>>(() => new Map())
 
       for (let path of paths) {
         let ns = designSystem.theme.namespace(`--${path}` as any)
 
         for (let [key, value] of ns) {
-          map.set(key, value)
+          // Non-nested values can be set directly
+          if (!key || !key.includes('--')) {
+            map.set(key, value)
+            continue
+          }
+
+          // Nested values are stored separately
+          let nestedIndex = key.indexOf('--')
+
+          let mainKey = key.slice(0, nestedIndex)
+          let nestedKey = key.slice(nestedIndex + 2)
+
+          // Make `nestedKey` camel case:
+          nestedKey = nestedKey.replace(/-([a-z])/g, (_, a) => a.toUpperCase())
+
+          nested.get(mainKey === '' ? null : mainKey).set(nestedKey, value)
         }
+      }
+
+      for (let [key, extra] of nested) {
+        let value = map.get(key)
+        if (typeof value !== 'string') continue
+
+        map.set(key, [value, Object.fromEntries(extra)])
       }
 
       // Now we've got the "upgraded" list of theme values let's look for the requested value
@@ -70,7 +101,7 @@ export function buildPluginApi(designSystem: DesignSystem) {
       // There is at least one value in the requested theme namespace
       // but no default value
       if (map.size > 0) {
-        return Object.fromEntries(map.entries())
+        return Object.fromEntries(map)
       }
 
       return fallback ?? null
