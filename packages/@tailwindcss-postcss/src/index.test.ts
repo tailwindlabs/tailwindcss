@@ -166,9 +166,9 @@ describe('plugins', () => {
     `)
   })
 
-  test.todo('local CJS plugin from `@import`-ed file', async () => {
+  test('local CJS plugin from `@import`-ed file', async () => {
     let processor = postcss([
-      tailwindcss({ base: `${__dirname}/fixtures/another-project`, optimize: { minify: false } }),
+      tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
     ])
 
     let result = await processor.process(
@@ -188,7 +188,7 @@ describe('plugins', () => {
 
       @media (inverted-colors: inverted) {
         .inverted\\:flex {
-          // display: flex;
+          display: flex;
         }
       }
 
