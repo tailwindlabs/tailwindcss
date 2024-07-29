@@ -27,15 +27,20 @@ type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
   loadPlugin?: (path: string) => Plugin
+  onContentPath?: (path: string) => void
 }
 
 function throwOnPlugin(): never {
   throw new Error('No `loadPlugin` function provided to `compile`')
 }
 
+function throwOnContentPath(): never {
+  throw new Error('No `onContentPath` function provided to `compile`')
+}
+
 export function compile(
   css: string,
-  { loadPlugin = throwOnPlugin }: CompileOptions = {},
+  { loadPlugin = throwOnPlugin, onContentPath = throwOnContentPath }: CompileOptions = {},
 ): {
   build(candidates: string[]): string
 } {
@@ -92,6 +97,29 @@ export function compile(
         })
       })
 
+      replaceWith([])
+      return
+    }
+
+    // Collect paths from `@content` at-rules
+    if (node.selector.startsWith('@content ')) {
+      if (node.nodes.length > 0) {
+        throw new Error('`@content` cannot have a body.')
+      }
+
+      if (parent !== null) {
+        throw new Error('`@content` cannot be nested.')
+      }
+
+      let path = node.selector.slice(9)
+      if (
+        (path[0] === '"' && path[path.length - 1] !== '"') ||
+        (path[0] === "'" && path[path.length - 1] !== "'") ||
+        (path[0] !== "'" && path[0] !== '"')
+      ) {
+        throw new Error('`@content` paths must be quoted.')
+      }
+      onContentPath(path.slice(1, -1))
       replaceWith([])
       return
     }
