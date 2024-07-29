@@ -272,7 +272,7 @@ async function createWatchers(globs: GlobEntry[], handle: (files: string[]) => v
   let files = new Set<string>()
 
   let d = disposables()
-  function flush() {
+  function enqueueFlush() {
     d.dispose()
     d.queueMacrotask(() => {
       handle(Array.from(files))
@@ -296,7 +296,7 @@ async function createWatchers(globs: GlobEntry[], handle: (files: string[]) => v
         files.add(event.path)
       }
 
-      flush()
+      enqueueFlush()
     })
 
     watchers.add(unsubscribe)
