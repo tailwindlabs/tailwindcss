@@ -144,7 +144,7 @@ describe('plugins', () => {
     let result = await processor.process(
       css`
         @import 'tailwindcss/utilities';
-        @plugin 'tailwindcss-test-utils';
+        @plugin './plugin.js';
       `,
       { from: INPUT_CSS_PATH },
     )
@@ -157,6 +157,38 @@ describe('plugins', () => {
       @media (inverted-colors: inverted) {
         .inverted\\:flex {
           display: flex;
+        }
+      }
+
+      .hocus\\:underline:focus, .hocus\\:underline:hover {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
+  test.todo('local CJS plugin from `@import`-ed file', async () => {
+    let processor = postcss([
+      tailwindcss({ base: `${__dirname}/fixtures/another-project`, optimize: { minify: false } }),
+    ])
+
+    let result = await processor.process(
+      css`
+        @import 'tailwindcss/utilities';
+        @import '../example-project/src/relative-import.css';
+      `,
+      { from: `${__dirname}/fixtures/another-project/input.css` },
+    )
+
+    // TODO: Figure out why `root.walkAtRules` prevents our path fix plugin
+    // from running.
+    expect(result.css.trim()).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }
+
+      @media (inverted-colors: inverted) {
+        .inverted\\:flex {
+          // display: flex;
         }
       }
 
