@@ -314,7 +314,7 @@ function handleImports(
   // Relevant specification:
   //   - CSS Import Resolve: https://csstools.github.io/css-import-resolve/
 
-  if (!input.includes('@import')) {
+  if (!input.includes('@import') && !input.includes('@plugin') && !input.includes('@content')) {
     return [input, [file]]
   }
 
