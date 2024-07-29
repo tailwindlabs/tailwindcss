@@ -21,10 +21,37 @@ export function buildPluginApi(designSystem: DesignSystem) {
         // Replace camelCase with dashes
         .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
 
-      // Prepend with `--` to match CSS variables
-      original = `--${original}`
+      // Perform an "upgrade" on the path so that, for example, a request for
+      // accentColor merges values from --color-* and --accent-color-*
+      let paths: string[] = []
 
-      let map = designSystem.theme.namespace(original as any)
+      for (let prefix in themeUpgradeMap) {
+        if (!original.startsWith(prefix)) continue
+
+        // This makes sure that:
+        // `accent-color` is turned into `color`; AND
+        // `accent-color-foo` is turned into `color-foo`
+        let suffix = original.slice(prefix.length)
+
+        for (let upgrade of themeUpgradeMap[prefix]) {
+          paths.push(upgrade + suffix)
+        }
+      }
+
+      // Make sure the original path is included last because it should take precedence
+      paths.push(original)
+
+      let map = new Map<string | null, string>()
+
+      for (let path of paths) {
+        let ns = designSystem.theme.namespace(`--${path}` as any)
+
+        for (let [key, value] of ns) {
+          map.set(key, value)
+        }
+      }
+
+      // Now we've got the "upgraded" list of theme values let's look for the requested value
 
       // Does the requested value exist in the theme
       if (map.has(null)) {
@@ -51,3 +78,56 @@ export function buildPluginApi(designSystem: DesignSystem) {
   }
 }
 
+let themeUpgradeMap: Record<string, string[]> = {
+  'accent-color': ['color'],
+  'backdrop-blur': ['blur'],
+  'backdrop-brightness': ['brightness'],
+  'backdrop-contrast': ['contrast'],
+  'backdrop-grayscale': ['grayscale'],
+  'backdrop-hue-rotate': ['hue-rotate'],
+  'backdrop-invert': ['invert'],
+  'backdrop-opacity': ['opacity'],
+  'backdrop-saturate': ['saturate'],
+  'backdrop-sepia': ['sepia'],
+  'background-color': ['color'],
+  'background-opacity': ['opacity'],
+  'border-color': ['color'],
+  'border-opacity': ['opacity'],
+  'border-spacing': ['spacing'],
+  'box-shadow-color': ['color'],
+  'caret-color': ['color'],
+  colors: ['color'],
+  'divide-color': ['border-color', 'color'],
+  'divide-opacity': ['border-opacity', 'opacity'],
+  'divide-width': ['border-width'],
+  fill: ['color'],
+  'flex-basis': ['spacing'],
+  gap: ['spacing'],
+  'gradient-color-stops': ['color'],
+  height: ['spacing'],
+  inset: ['spacing'],
+  margin: ['spacing'],
+  'max-height': ['spacing'],
+  'max-width': ['spacing', 'breakpoint'],
+  'min-height': ['spacing'],
+  'min-width': ['spacing'],
+  'outline-color': ['color'],
+  padding: ['spacing'],
+  'placeholder-color': ['color'],
+  'placeholder-opacity': ['opacity'],
+  'ring-color': ['color'],
+  'ring-offset-color': ['color'],
+  'ring-opacity': ['opacity'],
+  screens: ['breakpoint'],
+  'scroll-margin': ['spacing'],
+  'scroll-padding': ['spacing'],
+  space: ['spacing'],
+  stroke: ['color'],
+  'text-color': ['color'],
+  'text-decoration-color': ['color'],
+  'text-indent': ['spacing'],
+  'text-opacity': ['opacity'],
+  translate: ['spacing'],
+  size: ['spacing'],
+  width: ['spacing'],
+}

@@ -15162,7 +15162,7 @@ describe('theme function in plugins', () => {
 
       --scrollbar-color-light: white;
       --scrollbar-color-dark: black;
-    },
+    }
   `
 
   test('CSS property notation', () => {
@@ -15231,6 +15231,48 @@ describe('theme function in plugins', () => {
             properties: 'auto-hidden',
           })
           expect(theme('scrollbar[big][properties]')).toEqual('auto-hidden')
+        }
+      },
+    })
+  })
+
+  test('path upgrades', () => {
+    expect.hasAssertions()
+
+    let input = css`
+      @plugin "my-plugin";
+      @theme reference {
+        --color-100: red;
+        --color-200: green;
+        --color-300: blue;
+        --accent-color-100: cyan;
+      }
+    `
+
+    compile(input, {
+      loadPlugin() {
+        return ({ theme }) => {
+          expect(theme('accentColor')).toEqual({
+            // Values from --color-* and --accent-color-* are merged into one object
+            // with the values from --accent-color-* taking precedence
+            100: 'cyan',
+            200: 'green',
+            300: 'blue',
+          })
+
+          // This one is defined on --accent-color-* so it is found directly
+          expect(theme('accentColor.100')).toEqual('cyan')
+
+          // This one is defined in --color-* so the value is taken from there
+          expect(theme('accentColor.200')).toEqual('green')
+
+          // The CSS property syntax is NOT upgraded
+          expect(theme('--accent-color-*')).toEqual({
+            100: 'cyan',
+          })
+
+          expect(theme('--accent-color-100')).toEqual('cyan')
+          expect(theme('--accent-color-200')).toEqual(null)
         }
       },
     })
