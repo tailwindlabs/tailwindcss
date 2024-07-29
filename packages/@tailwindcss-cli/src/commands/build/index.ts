@@ -1,5 +1,6 @@
 import watcher from '@parcel/watcher'
 import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindcss/oxide'
+import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
@@ -259,6 +260,7 @@ function handleImports(
 
   return postcss()
     .use(atImport())
+    .use(fixRelativePathsPlugin())
     .process(input, { from: file })
     .then((result) => [
       result.css,
