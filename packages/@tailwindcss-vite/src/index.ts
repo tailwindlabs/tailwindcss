@@ -1,6 +1,8 @@
 import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
+import fixRelativePathsPlugin from 'postcss-fix-relative-paths-plugin'
+import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
 import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
 
@@ -150,6 +152,50 @@ export default function tailwindcss(): Plugin[] {
         cssPlugins = config.plugins.filter((plugin) => {
           return allowedPlugins.includes(plugin.name)
         })
+      },
+
+      // Append the postcss-fix-relative-paths plugin
+      async config(config) {
+        let postcssConfig = config.css?.postcss
+
+        if (typeof postcssConfig === 'string') {
+          // Taken from https://github.com/vitejs/vite/blob/440783953a55c6c63cd09ec8d13728dc4693073d/packages/vite/src/node/plugins/css.ts#L1580
+          const searchPath = typeof postcssConfig === 'string' ? postcssConfig : config.root
+          let parsedConfig = await postcssrc({}, searchPath).catch((e) => {
+            if (!e.message.includes('No PostCSS Config found')) {
+              if (e instanceof Error) {
+                const { name, message, stack } = e
+                e.name = 'Failed to load PostCSS config'
+                e.message = `Failed to load PostCSS config (searchPath: ${searchPath}): [${name}] ${message}\n${stack}`
+                e.stack = '' // add stack to message to retain stack
+                throw e
+              } else {
+                throw new Error(`Failed to load PostCSS config: ${e}`)
+              }
+            }
+            return null
+          })
+          if (parsedConfig !== null) {
+            postcssConfig = {
+              options: parsedConfig.options,
+              plugins: parsedConfig.plugins,
+            } as any
+            config.css = { postcss: postcssConfig }
+          }
+        }
+
+        // @ts-ignore
+        if (!postcssConfig || !postcssConfig?.plugins) {
+          config.css = config.css || {}
+          config.css.postcss = postcssConfig || {}
+          // @ts-ignore
+          config.css.postcss.plugins = [fixRelativePathsPlugin() as any]
+        } else {
+          console.log('original', postcssConfig)
+          // @ts-ignore
+          postcssConfig.plugins.push(fixRelativePathsPlugin() as any)
+          console.log('after', postcssConfig)
+        }
       },
 
       // Scan index.html for candidates

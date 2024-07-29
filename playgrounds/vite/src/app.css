@@ -1,2 +1,2 @@
 @import 'tailwindcss';
-@plugin "./plugin.js";
+@import './foo/bar.css'
