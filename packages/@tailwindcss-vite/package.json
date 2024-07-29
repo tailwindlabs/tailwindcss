@@ -11,7 +11,7 @@
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
   "scripts": {
-    "build": "tsup-node ./src/index.ts --format esm --dts --minify --clean",
+    "build": "tsup-node",
     "dev": "pnpm run build -- --watch"
   },
   "files": [
@@ -30,11 +30,13 @@
   "dependencies": {
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "^1.25.1",
+    "postcss-load-config": "^6.0.1",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "internal-postcss-fix-relative-paths": "workspace:^"
   },
   "peerDependencies": {
     "vite": "^5.2.0"
