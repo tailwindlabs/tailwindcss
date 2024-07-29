@@ -15,7 +15,8 @@ mod auto_content {
 
         // Create the necessary files
         for (path, contents) in paths_with_content {
-            let path = dir.join(path);
+            // Ensure we use the right path seperator for the current platform
+            let path = dir.join(path.replace("/", path::MAIN_SEPARATOR.to_string().as_str()));
             let parent = path.parent().unwrap();
             if !parent.exists() {
                 fs::create_dir_all(parent).unwrap();
