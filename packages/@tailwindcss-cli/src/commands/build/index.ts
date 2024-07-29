@@ -264,13 +264,27 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 }
 
 async function createWatchers(globs: GlobEntry[], handle: (files: string[]) => void) {
+  // Track all Parcel watchers for each glob.
+  //
+  // When we encounter a change in a CSS file, we need to setup new watchers and
+  // we want to cleanup the old ones we captured here.
   let watchers = disposables()
+
+  // Track all files that were added or changed.
   let files = new Set<string>()
 
-  let d = disposables()
+  // Keep track of the debounce queue to avoid multiple rebuilds.
+  let debounceQueue = disposables()
+
+  // A changed file can be watched by multiple watchers, but we only want to
+  // handle the file once. We debounce the handle function with the collected
+  // files to handle them in a single batch and to avoid multiple rebuilds.
   function enqueueFlush() {
-    d.dispose()
-    d.queueMacrotask(() => {
+    // Dispose all existing macrotask.
+    debounceQueue.dispose()
+
+    // Setup a new macrotask to handle the files in batch.
+    debounceQueue.queueMacrotask(() => {
       handle(Array.from(files))
       files.clear()
     })
@@ -282,23 +296,36 @@ async function createWatchers(globs: GlobEntry[], handle: (files: string[]) => v
     if (glob.glob[0] === '!') continue
 
     let { unsubscribe } = await watcher.subscribe(glob.base, async (err, events) => {
+      // Whenever an error occurs we want to let the user know about it but we
+      // want to keep watching for changes.
       if (err) {
         console.error(err)
         return
       }
 
       for (let event of events) {
+        // We currently don't handle deleted files because it doesn't influence
+        // the CSS output. This is because we currently keep all scanned
+        // candidates in a cache for performance reasons.
         if (event.type === 'delete') continue
+
+        // Track the changed file.
         files.add(event.path)
       }
 
+      // Handle the tracked files at some point in the future.
       enqueueFlush()
     })
 
+    // Ensure we cleanup the watcher when we're done.
     watchers.add(unsubscribe)
   }
 
-  return () => watchers.dispose()
+  // Cleanup
+  return () => {
+    watchers.dispose()
+    debounceQueue.dispose()
+  }
 }
 
 function handleImports(
