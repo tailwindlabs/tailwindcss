@@ -109,6 +109,9 @@ importers:
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
@@ -137,6 +140,9 @@ importers:
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
@@ -168,6 +174,9 @@ importers:
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
+      postcss-load-config:
+        specifier: ^6.0.1
+        version: 6.0.1(postcss@8.4.38)(yaml@2.4.2)
       tailwindcss:
         specifier: workspace:^
         version: link:../tailwindcss
@@ -175,11 +184,29 @@ importers:
       '@types/node':
         specifier: ^20.12.12
         version: 20.12.12
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
       vite:
         specifier: ^5.2.11
         version: 5.2.11(@types/node@20.12.12)(lightningcss@1.25.1)
 
   packages/internal-example-plugin: {}
+
+  packages/internal-postcss-fix-relative-paths:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.12.12
+      '@types/postcss-import':
+        specifier: ^14.0.3
+        version: 14.0.3
+      postcss:
+        specifier: 8.4.24
+        version: 8.4.24
+      postcss-import:
+        specifier: ^16.1.0
+        version: 16.1.0(postcss@8.4.24)
 
   packages/tailwindcss:
     devDependencies:
@@ -2336,6 +2363,24 @@ packages:
       postcss:
         optional: true
       ts-node:
+        optional: true
+
+  postcss-load-config@6.0.1:
+    resolution: {integrity: sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      jiti: '>=1.21.0'
+      postcss: '>=8.0.9'
+      tsx: ^4.8.1
+      yaml: ^2.4.2
+    peerDependenciesMeta:
+      jiti:
+        optional: true
+      postcss:
+        optional: true
+      tsx:
+        optional: true
+      yaml:
         optional: true
 
   postcss-value-parser@4.2.0:
@@ -5033,6 +5078,13 @@ snapshots:
       yaml: 2.4.2
     optionalDependencies:
       postcss: 8.4.24
+
+  postcss-load-config@6.0.1(postcss@8.4.38)(yaml@2.4.2):
+    dependencies:
+      lilconfig: 3.1.1
+    optionalDependencies:
+      postcss: 8.4.38
+      yaml: 2.4.2
 
   postcss-value-parser@4.2.0: {}
 

@@ -1,0 +1,5 @@
+@import './plugins-in-sibling.css';
+
+@plugin './plugin-in-root.ts';
+@plugin '../plugin-in-root.ts';
+@plugin 'plugin-in-root';
