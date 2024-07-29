@@ -106,50 +106,50 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Do nothing if neither `@tailwind` nor `@apply` is used
           if (!hasTailwind && !hasApply) return
 
-          let css = ''
+        let css = ''
 
-          // Look for candidates used to generate the CSS
-          let { candidates, files, globs } = scanDir({ base })
+        // Look for candidates used to generate the CSS
+        let { candidates, files, globs } = scanDir({ base })
 
-          // Add all found files as direct dependencies
-          for (let file of files) {
-            result.messages.push({
-              type: 'dependency',
-              plugin: '@tailwindcss/postcss',
-              file,
-              parent: result.opts.from,
-            })
-          }
+        // Add all found files as direct dependencies
+        for (let file of files) {
+          result.messages.push({
+            type: 'dependency',
+            plugin: '@tailwindcss/postcss',
+            file,
+            parent: result.opts.from,
+          })
+        }
 
-          // Register dependencies so changes in `base` cause a rebuild while
-          // giving tools like Vite or Parcel a glob that can be used to limit
-          // the files that cause a rebuild to only those that match it.
-          for (let { base, glob } of globs) {
-            result.messages.push({
-              type: 'dir-dependency',
-              plugin: '@tailwindcss/postcss',
-              dir: base,
-              glob,
-              parent: result.opts.from,
-            })
-          }
+        // Register dependencies so changes in `base` cause a rebuild while
+        // giving tools like Vite or Parcel a glob that can be used to limit
+        // the files that cause a rebuild to only those that match it.
+        for (let { base, glob } of globs) {
+          result.messages.push({
+            type: 'dir-dependency',
+            plugin: '@tailwindcss/postcss',
+            dir: base,
+            glob,
+            parent: result.opts.from,
+          })
+        }
 
-          if (rebuildStrategy === 'full') {
-            let basePath = path.dirname(path.resolve(inputFile))
-            let { build } = compile(root.toString(), {
-              loadPlugin: (pluginPath) => {
-                if (pluginPath[0] === '.') {
-                  return require(path.resolve(basePath, pluginPath))
-                }
+        if (rebuildStrategy === 'full') {
+          let basePath = path.dirname(path.resolve(inputFile))
+          let { build } = compile(root.toString(), {
+            loadPlugin: (pluginPath) => {
+              if (pluginPath[0] === '.') {
+                return require(path.resolve(basePath, pluginPath))
+              }
 
-                return require(pluginPath)
-              },
-            })
-            context.build = build
-            css = build(hasTailwind ? candidates : [])
-          } else if (rebuildStrategy === 'incremental') {
-            css = context.build!(candidates)
-          }
+              return require(pluginPath)
+            },
+          })
+          context.build = build
+          css = build(hasTailwind ? candidates : [])
+        } else if (rebuildStrategy === 'incremental') {
+          css = context.build!(candidates)
+        }
 
           // Replace CSS
           if (css !== context.css && optimize) {
