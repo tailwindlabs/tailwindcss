@@ -1,4 +1,4 @@
-import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
+import { IO, Parsing, scanDir, scanFiles } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
@@ -74,10 +74,10 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
-  function generateCss(css: string, inputPath: string) {
+  function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     let basePath = path.dirname(path.resolve(inputPath))
 
-    return compile(css, {
+    let { build, globs } = compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
           return require(path.resolve(basePath, pluginPath))
@@ -85,11 +85,27 @@ export default function tailwindcss(): Plugin[] {
 
         return require(pluginPath)
       },
-    }).build(Array.from(candidates))
+    })
+
+    let result = scanDir({ base: basePath, contentPaths: globs })
+
+    for (let candidate of result.candidates) {
+      candidates.add(candidate)
+    }
+
+    for (let file of result.files) {
+      addWatchFile(file)
+    }
+
+    return build(Array.from(candidates))
   }
 
-  function generateOptimizedCss(css: string, inputPath: string) {
-    return optimizeCss(generateCss(css, inputPath), { minify })
+  function generateOptimizedCss(
+    css: string,
+    inputPath: string,
+    addWatchFile: (file: string) => void,
+  ) {
+    return optimizeCss(generateCss(css, inputPath, addWatchFile), { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -250,7 +266,11 @@ export default function tailwindcss(): Plugin[] {
           await server?.waitForRequestsIdle?.(id)
         }
 
-        let code = await transformWithPlugins(this, id, generateCss(src, id))
+        let code = await transformWithPlugins(
+          this,
+          id,
+          generateCss(src, id, (file) => this.addWatchFile(file)),
+        )
         return { code }
       },
     },
@@ -274,7 +294,7 @@ export default function tailwindcss(): Plugin[] {
             continue
           }
 
-          let css = generateOptimizedCss(file.content, id)
+          let css = generateOptimizedCss(file.content, id, (file) => this.addWatchFile(file))
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure
