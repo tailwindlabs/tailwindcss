@@ -93,8 +93,16 @@ export default function tailwindcss(): Plugin[] {
       candidates.add(candidate)
     }
 
+    // Watch individual files
     for (let file of result.files) {
       addWatchFile(file)
+    }
+
+    // Watch globs
+    for (let glob of result.globs) {
+      if (glob.glob[0] === '!') continue
+
+      addWatchFile(`${glob.base}/${glob.glob}`)
     }
 
     return build(Array.from(candidates))
