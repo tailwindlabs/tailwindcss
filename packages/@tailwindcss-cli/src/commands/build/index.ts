@@ -156,13 +156,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let compiler = compile(input)
   let scanDirResult = scanDir({ base, contentPaths: compiler.globs })
 
-  await write(compiler.build(scanDirResult.candidates), args)
-
-  let end = process.hrtime.bigint()
-  eprintln(header())
-  eprintln()
-  eprintln(`Done in ${formatDuration(end - start)}`)
-
   // Watch for changes
   if (args['--watch']) {
     let cleanupWatchers = await createWatchers(scanDirResult.globs, async function handle(files) {
@@ -265,6 +258,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // Keep the process running
     process.stdin.resume()
   }
+
+  await write(compiler.build(scanDirResult.candidates), args)
+
+  let end = process.hrtime.bigint()
+  eprintln(header())
+  eprintln()
+  eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
 async function createWatchers(globs: GlobEntry[], handle: (files: string[]) => void) {
