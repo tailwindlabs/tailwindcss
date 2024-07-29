@@ -135,7 +135,7 @@ pub fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathB
 }
 
 pub fn path_matches_globs(path: &Path, globs: &[GlobEntry]) -> bool {
-    let path = format!("{}", path.display());
+    let path = path.to_string_lossy();
 
     globs
         .iter()
