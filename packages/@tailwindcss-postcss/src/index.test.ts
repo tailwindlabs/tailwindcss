@@ -41,7 +41,7 @@ test("`@import 'tailwindcss'` is replaced with the generated CSS", async () => {
   })
   expect(result.messages).toContainEqual({
     type: 'dir-dependency',
-    dir: expect.stringMatching(/example-project\/src$/g),
+    dir: expect.stringMatching(/example-project[\/|\\]src$/g),
     glob: expect.stringMatching(/^\*\*\/\*/g),
     parent: expect.any(String),
     plugin: expect.any(String),

@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod auto_content {
-    use std::fs;
     use std::process::Command;
+    use std::{fs, path};
 
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
@@ -15,7 +15,8 @@ mod auto_content {
 
         // Create the necessary files
         for (path, contents) in paths_with_content {
-            let path = dir.join(path);
+            // Ensure we use the right path seperator for the current platform
+            let path = dir.join(path.replace("/", path::MAIN_SEPARATOR.to_string().as_str()));
             let parent = path.parent().unwrap();
             if !parent.exists() {
                 fs::create_dir_all(parent).unwrap();
@@ -38,18 +39,25 @@ mod auto_content {
         let mut paths: Vec<_> = result
             .files
             .into_iter()
-            .map(|x| x.replace(&format!("{}/", &base), ""))
+            .map(|x| x.replace(&format!("{}{}", &base, path::MAIN_SEPARATOR), ""))
             .collect();
 
         for glob in result.globs {
-            paths.push(format!("{}/{}", glob.base, glob.glob));
+            paths.push(format!(
+                "{}{}{}",
+                glob.base,
+                path::MAIN_SEPARATOR,
+                glob.glob
+            ));
         }
 
         paths = paths
             .into_iter()
             .map(|x| {
-                let parent_dir = format!("{}/", &base.to_string());
+                let parent_dir = format!("{}{}", &base.to_string(), path::MAIN_SEPARATOR);
                 x.replace(&parent_dir, "")
+                    // Normalize paths to use unix style separators
+                    .replace("\\", "/")
             })
             .collect();
 
