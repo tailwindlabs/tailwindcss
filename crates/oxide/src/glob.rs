@@ -53,7 +53,6 @@ pub fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathB
             pattern.remove(0);
         }
 
-        let is_absolute_pattern = pattern.starts_with('/');
         let mut folders = pattern.split('/').collect::<Vec<_>>();
 
         if folders.len() <= 1 {
@@ -64,11 +63,7 @@ pub fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathB
             // Safety: We know that the length is greater than 1, so we can safely unwrap.
             let file_pattern = folders.pop().unwrap();
             let all_folders = folders.clone();
-            let mut temp_paths = if is_absolute_pattern {
-                vec![PathBuf::from("/")]
-            } else {
-                vec![base_path.to_path_buf()]
-            };
+            let mut temp_paths = vec![base_path.to_path_buf()];
 
             let mut bail = false;
 
