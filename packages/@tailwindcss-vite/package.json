@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
-    "postcss-fix-relative-paths-plugin": "workspace:^",
+    "internal-postcss-fix-relative-paths": "workspace:^",
     "vite": "^5.2.11"
   },
   "peerDependencies": {

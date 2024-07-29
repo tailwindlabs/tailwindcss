@@ -1,7 +1,7 @@
 import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
+import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
-import fixRelativePathsPlugin from 'postcss-fix-relative-paths-plugin'
 import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
 import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'

@@ -37,7 +37,7 @@
     "postcss": "8.4.24",
     "postcss-import": "^16.1.0",
     "tailwindcss": "workspace:^",
-    "postcss-fix-relative-paths-plugin": "workspace:^"
+    "internal-postcss-fix-relative-paths": "workspace:^"
   },
   "devDependencies": {
     "@types/postcss-import": "^14.0.3"

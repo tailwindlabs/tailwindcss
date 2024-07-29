@@ -5,7 +5,7 @@ import path from 'path'
 import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
 import { compile } from 'tailwindcss'
-import fixRelativePathsPlugin from '../../postcss-fix-relative-paths-plugin/src'
+import fixRelativePathsPlugin from '../../internal-postcss-fix-relative-paths/src'
 
 /**
  * A Map that can generate default values for keys that don't exist.
