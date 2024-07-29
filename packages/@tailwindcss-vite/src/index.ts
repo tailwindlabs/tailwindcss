@@ -159,9 +159,11 @@ export default function tailwindcss(): Plugin[] {
         let postcssConfig = config.css?.postcss
 
         if (typeof postcssConfig === 'string') {
-          // Taken from https://github.com/vitejs/vite/blob/440783953a55c6c63cd09ec8d13728dc4693073d/packages/vite/src/node/plugins/css.ts#L1580
+          // We expand string configs to their PostCSS config object similar to
+          // how Vite does it.
+          // See: https://github.com/vitejs/vite/blob/440783953a55c6c63cd09ec8d13728dc4693073d/packages/vite/src/node/plugins/css.ts#L1580
           const searchPath = typeof postcssConfig === 'string' ? postcssConfig : config.root
-          let parsedConfig = await postcssrc({}, searchPath).catch((e) => {
+          let parsedConfig = await postcssrc({}, searchPath).catch((e: Error) => {
             if (!e.message.includes('No PostCSS Config found')) {
               if (e instanceof Error) {
                 const { name, message, stack } = e
@@ -180,21 +182,24 @@ export default function tailwindcss(): Plugin[] {
               options: parsedConfig.options,
               plugins: parsedConfig.plugins,
             } as any
-            config.css = { postcss: postcssConfig }
+          } else {
+            postcssConfig = {}
           }
+          config.css = { postcss: postcssConfig }
         }
 
-        // @ts-ignore
+        // postcssConfig is no longer a string after the above. This test is to
+        // avoid TypeScript errors below.
+        if (typeof postcssConfig === 'string') {
+          return
+        }
+
         if (!postcssConfig || !postcssConfig?.plugins) {
           config.css = config.css || {}
           config.css.postcss = postcssConfig || {}
-          // @ts-ignore
           config.css.postcss.plugins = [fixRelativePathsPlugin() as any]
         } else {
-          console.log('original', postcssConfig)
-          // @ts-ignore
           postcssConfig.plugins.push(fixRelativePathsPlugin() as any)
-          console.log('after', postcssConfig)
         }
       },
 
