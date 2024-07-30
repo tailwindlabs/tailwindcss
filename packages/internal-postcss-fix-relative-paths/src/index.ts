@@ -34,30 +34,31 @@ export default function fixRelativePathsPlugin(): Plugin {
     if (!quote) {
       return
     }
-    let content = atRule.params.slice(1, -1)
+    let glob = atRule.params.slice(1, -1)
 
     // We only want to rewrite relative paths.
-    if (!content.startsWith('./') && !content.startsWith('../')) {
+    if (!glob.startsWith('./') && !glob.startsWith('../')) {
       return
     }
 
-    let rulePath = path.posix.join(path.dirname(inputFilePath), content)
-    let relative = path.posix.relative(path.posix.dirname(rootPath), rulePath)
+    let absoluteGlob = path.posix.join(
+      // Convert Windows paths to posix glob separators
+      path.dirname(inputFilePath).replaceAll(path.win32.sep, path.posix.sep),
+      glob,
+    )
+    let absoluteRootPosixPath = path.posix.dirname(
+      // Convert Windows paths to posix glob separators
+      rootPath.replaceAll(path.win32.sep, path.posix.sep),
+    )
+
+    let relative = path.posix.relative(absoluteRootPosixPath, absoluteGlob)
 
     // TODO: If we fix paths like this, ensure we have tests that cover
     // POSIX style absolute globs on windows in the rust codebase
     console.log({
-      content,
-      inputFilePath,
-      rulePath,
-      rootPath,
+      absoluteGlob,
+      absoluteRootPosixPath,
       relative,
-      rulePathFixed: rulePath.replaceAll(path.win32.sep, path.posix.sep),
-      rootPathFixed: rootPath.replaceAll(path.win32.sep, path.posix.sep),
-      fixed: path.posix.relative(
-        path.posix.dirname(rulePath.replaceAll(path.win32.sep, path.posix.sep)),
-        rulePath.replaceAll(path.win32.sep, path.posix.sep),
-      ),
     })
 
     // If the path points to a file in the same directory, `path.relative` will
@@ -71,13 +72,6 @@ export default function fixRelativePathsPlugin(): Plugin {
     touched.add(atRule)
   }
 
-  function getRoot(node: AtRule | Container | undefined): Container | undefined {
-    if (node?.parent) {
-      return getRoot(node.parent as Container)
-    }
-    return node
-  }
-
   return {
     postcssPlugin: 'tailwindcss-postcss-fix-relative-paths',
     AtRule: {
@@ -85,4 +79,11 @@ export default function fixRelativePathsPlugin(): Plugin {
       plugin: fixRelativePath,
     },
   }
+}
+
+function getRoot(node: AtRule | Container | undefined): Container | undefined {
+  if (node?.parent) {
+    return getRoot(node.parent as Container)
+  }
+  return node
 }

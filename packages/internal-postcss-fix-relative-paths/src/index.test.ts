@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import path from 'node:path'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
 import { describe, expect, test } from 'vitest'
@@ -6,7 +7,7 @@ import fixRelativePathsPlugin from '.'
 
 describe('fixRelativePathsPlugin', () => {
   test('rewrites @content and @plugin to be relative to the initial css file', async () => {
-    let cssPath = `${__dirname}/fixtures/external-import/src/index.css`
+    let cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'index.css')
     let css = fs.readFileSync(cssPath, 'utf-8')
 
     let processor = postcss([atImport(), fixRelativePathsPlugin()])
@@ -21,7 +22,7 @@ describe('fixRelativePathsPlugin', () => {
   })
 
   test('should not rewrite non-relative paths', async () => {
-    let cssPath = `${__dirname}/fixtures/external-import/src/invalid.css`
+    let cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'invalid.css')
     let css = fs.readFileSync(cssPath, 'utf-8')
 
     let processor = postcss([atImport(), fixRelativePathsPlugin()])
@@ -37,7 +38,7 @@ describe('fixRelativePathsPlugin', () => {
   })
 
   test('should return relative paths even if the file is resolved in the same basedir as the root stylesheet', async () => {
-    let cssPath = `${__dirname}/fixtures/external-import/src/plugins-in-root.css`
+    let cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'plugins-in-root.css')
     let css = fs.readFileSync(cssPath, 'utf-8')
 
     let processor = postcss([atImport(), fixRelativePathsPlugin()])
