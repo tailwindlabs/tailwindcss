@@ -43,7 +43,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let cache = new DefaultMap(() => {
     return {
       mtimes: new Map<string, number>(),
-      build: null as null | ReturnType<typeof compile>['build'],
+      compiler: null as null | ReturnType<typeof compile>,
       css: '',
       optimizedCss: '',
     }
@@ -76,6 +76,23 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         OnceExit(root, { result }) {
           let inputFile = result.opts.from ?? ''
           let context = cache.get(inputFile)
+          let inputBasePath = path.dirname(path.resolve(inputFile))
+
+          function createCompiler() {
+            return compile(root.toString(), {
+              loadPlugin: (pluginPath) => {
+                if (pluginPath[0] === '.') {
+                  return require(path.resolve(inputBasePath, pluginPath))
+                }
+
+                return require(pluginPath)
+              },
+            })
+          }
+
+          // Setup the compiler if it doesn't exist yet. This way we can
+          // guarantee a `compile()` function is available.
+          context.compiler ??= createCompiler()
 
           let rebuildStrategy: 'full' | 'incremental' = 'incremental'
 
@@ -106,50 +123,46 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Do nothing if neither `@tailwind` nor `@apply` is used
           if (!hasTailwind && !hasApply) return
 
-        let css = ''
+          let css = ''
 
-        // Look for candidates used to generate the CSS
-        let { candidates, files, globs } = scanDir({ base })
-
-        // Add all found files as direct dependencies
-        for (let file of files) {
-          result.messages.push({
-            type: 'dependency',
-            plugin: '@tailwindcss/postcss',
-            file,
-            parent: result.opts.from,
+          // Look for candidates used to generate the CSS
+          let scanDirResult = scanDir({
+            base, // Root directory, mainly used for auto content detection
+            contentPaths: context.compiler.globs.map((glob) => ({
+              base: inputBasePath, // Globs are relative to the input.css file
+              glob,
+            })),
           })
-        }
 
-        // Register dependencies so changes in `base` cause a rebuild while
-        // giving tools like Vite or Parcel a glob that can be used to limit
-        // the files that cause a rebuild to only those that match it.
-        for (let { base, glob } of globs) {
-          result.messages.push({
-            type: 'dir-dependency',
-            plugin: '@tailwindcss/postcss',
-            dir: base,
-            glob,
-            parent: result.opts.from,
-          })
-        }
+          // Add all found files as direct dependencies
+          for (let file of scanDirResult.files) {
+            result.messages.push({
+              type: 'dependency',
+              plugin: '@tailwindcss/postcss',
+              file,
+              parent: result.opts.from,
+            })
+          }
 
-        if (rebuildStrategy === 'full') {
-          let basePath = path.dirname(path.resolve(inputFile))
-          let { build } = compile(root.toString(), {
-            loadPlugin: (pluginPath) => {
-              if (pluginPath[0] === '.') {
-                return require(path.resolve(basePath, pluginPath))
-              }
+          // Register dependencies so changes in `base` cause a rebuild while
+          // giving tools like Vite or Parcel a glob that can be used to limit
+          // the files that cause a rebuild to only those that match it.
+          for (let { base, glob } of scanDirResult.globs) {
+            result.messages.push({
+              type: 'dir-dependency',
+              plugin: '@tailwindcss/postcss',
+              dir: base,
+              glob,
+              parent: result.opts.from,
+            })
+          }
 
-              return require(pluginPath)
-            },
-          })
-          context.build = build
-          css = build(hasTailwind ? candidates : [])
-        } else if (rebuildStrategy === 'incremental') {
-          css = context.build!(candidates)
-        }
+          if (rebuildStrategy === 'full') {
+            context.compiler = createCompiler()
+            css = context.compiler.build(hasTailwind ? scanDirResult.candidates : [])
+          } else if (rebuildStrategy === 'incremental') {
+            css = context.compiler.build!(scanDirResult.candidates)
+          }
 
           // Replace CSS
           if (css !== context.css && optimize) {
