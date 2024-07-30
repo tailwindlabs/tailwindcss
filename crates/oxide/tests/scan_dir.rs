@@ -22,8 +22,8 @@ mod scan_dir {
 
         // Create the necessary files
         for (path, contents) in paths_with_content {
-            // Ensure we use the right path seperator for the current platform
-            let path = dir.join(path.replace("/", path::MAIN_SEPARATOR.to_string().as_str()));
+            // Ensure we use the right path separator for the current platform
+            let path = dir.join(path.replace('/', path::MAIN_SEPARATOR.to_string().as_str()));
             let parent = path.parent().unwrap();
             if !parent.exists() {
                 fs::create_dir_all(parent).unwrap();
@@ -64,7 +64,7 @@ mod scan_dir {
                 let parent_dir = format!("{}{}", &base.to_string(), path::MAIN_SEPARATOR);
                 x.replace(&parent_dir, "")
                     // Normalize paths to use unix style separators
-                    .replace("\\", "/")
+                    .replace('\\', "/")
             })
             .collect();
 
