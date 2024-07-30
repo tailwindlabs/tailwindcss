@@ -9,10 +9,12 @@
     "preview": "bun --bun vite preview"
   },
   "dependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tailwindcss/vite": "workspace:^",
     "@vitejs/plugin-react": "^4.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "svelte": "^4.2.18",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {

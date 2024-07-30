@@ -305,10 +305,16 @@ export function compile(
   if (css.includes('@apply')) {
     walk(ast, (node, { replaceWith }) => {
       if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@apply')) {
-        let candidates = node.selector
+        let candidates: any = node.selector
           .slice(7 /* Ignore `@apply ` when parsing the selector */)
           .trim()
-          .split(/\s+/g)
+
+        console.log({ candidates })
+        if (candidates[0] === "'" || candidates[0] === '"') {
+          candidates = candidates.slice(1, -1)
+        }
+
+        candidates = candidates.split(/\s+/g)
 
         // Replace the `@apply` rule with the actual utility classes
         {

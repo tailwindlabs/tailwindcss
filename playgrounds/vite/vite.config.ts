@@ -1,7 +1,12 @@
+import { svelte, vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    svelte({
+      preprocess: [vitePreprocess()],
+    }),
+    tailwindcss(),
+  ],
 })

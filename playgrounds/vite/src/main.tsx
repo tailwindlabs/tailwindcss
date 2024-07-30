@@ -1,9 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { App } from './app'
+import App from './App.svelte'
 
-ReactDOM.createRoot(document.getElementById('app')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+const app = new App({
+  target: document.getElementById('app'),
+})
+
+export default app

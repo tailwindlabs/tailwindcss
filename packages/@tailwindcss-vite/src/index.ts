@@ -77,6 +77,8 @@ export default function tailwindcss(): Plugin[] {
   function generateCss(css: string, inputPath: string) {
     let basePath = path.dirname(path.resolve(inputPath))
 
+    console.log({ css, inputPath })
+
     return compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
@@ -295,7 +297,14 @@ function getExtension(id: string) {
 
 function isTailwindCssFile(id: string, src: string) {
   if (id.includes('/.vite/')) return
-  return getExtension(id) === 'css' && src.includes('@tailwind')
+  const extension = getExtension(id)
+  const isTailwind =
+    (extension === 'css' && src.includes('@tailwind')) ||
+    (extension === 'svelte' && id.endsWith('&lang.css'))
+  if (isTailwind) {
+    console.log({ id, src, ext: getExtension(id) })
+  }
+  return isTailwind
 }
 
 function optimizeCss(
