@@ -41,13 +41,21 @@ export default function fixRelativePathsPlugin(): Plugin {
       return
     }
 
-    let rulePath = path.posix.join(path.posix.dirname(inputFilePath), content)
+    let rulePath = path.posix.join(path.dirname(inputFilePath), content)
     let relative = path.posix.relative(path.posix.dirname(rootPath), rulePath)
 
     console.log({
+      content,
+      inputFilePath,
       rulePath,
       rootPath,
       relative,
+      rulePathFixed: rulePath.replaceAll(path.win32.sep, path.posix.sep),
+      rootPathFixed: rootPath.replaceAll(path.win32.sep, path.posix.sep),
+      fixed: path.posix.relative(
+        path.posix.dirname(rulePath.replaceAll(path.win32.sep, path.posix.sep)),
+        rulePath.replaceAll(path.win32.sep, path.posix.sep),
+      ),
     })
 
     // If the path points to a file in the same directory, `path.relative` will
