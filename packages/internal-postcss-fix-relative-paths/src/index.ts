@@ -1,5 +1,6 @@
 import path from 'node:path'
 import type { AtRule, Plugin } from 'postcss'
+import { normalizePath } from './normalize-path'
 
 const SINGLE_QUOTE = "'"
 const DOUBLE_QUOTE = '"'
@@ -48,15 +49,8 @@ export default function fixRelativePathsPlugin(): Plugin {
       return
     }
 
-    let absoluteGlob = path.posix.join(
-      // Convert Windows paths to posix glob separators
-      path.dirname(inputFilePath).replaceAll(path.win32.sep, path.posix.sep),
-      glob,
-    )
-    let absoluteRootPosixPath = path.posix.dirname(
-      // Convert Windows paths to posix glob separators
-      rootPath.replaceAll(path.win32.sep, path.posix.sep),
-    )
+    let absoluteGlob = path.posix.join(normalizePath(path.dirname(inputFilePath)), glob)
+    let absoluteRootPosixPath = path.posix.dirname(normalizePath(rootPath))
 
     let relative = path.posix.relative(absoluteRootPosixPath, absoluteGlob)
 
