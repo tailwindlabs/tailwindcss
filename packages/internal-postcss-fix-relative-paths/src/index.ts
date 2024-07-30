@@ -1,5 +1,6 @@
 import path from 'node:path'
-import type { AtRule, Container, Plugin } from 'postcss'
+import type { AtRule, Plugin } from 'postcss'
+import { normalizePath } from './normalize-path'
 
 const SINGLE_QUOTE = "'"
 const DOUBLE_QUOTE = '"'
@@ -9,12 +10,12 @@ export default function fixRelativePathsPlugin(): Plugin {
   let touched: WeakSet<AtRule> = new WeakSet()
 
   function fixRelativePath(atRule: AtRule) {
-    let rootPath = getRoot(atRule)?.source?.input.file
+    let rootPath = atRule.root().source?.input.file
     if (!rootPath) {
       return
     }
 
-    let inputFilePath = atRule?.source?.input.file
+    let inputFilePath = atRule.source?.input.file
     if (!inputFilePath) {
       return
     }
@@ -34,15 +35,24 @@ export default function fixRelativePathsPlugin(): Plugin {
     if (!quote) {
       return
     }
-    let content = atRule.params.slice(1, -1)
+    let glob = atRule.params.slice(1, -1)
+
+    // Handle eventual negative rules. We only support one level of negation.
+    let negativePrefix = ''
+    if (glob.startsWith('!')) {
+      glob = glob.slice(1)
+      negativePrefix = '!'
+    }
 
     // We only want to rewrite relative paths.
-    if (!content.startsWith('./') && !content.startsWith('../')) {
+    if (!glob.startsWith('./') && !glob.startsWith('../')) {
       return
     }
 
-    let rulePath = path.posix.join(path.posix.dirname(inputFilePath), content)
-    let relative = path.posix.relative(path.posix.dirname(rootPath), rulePath)
+    let absoluteGlob = path.posix.join(normalizePath(path.dirname(inputFilePath)), glob)
+    let absoluteRootPosixPath = path.posix.dirname(normalizePath(rootPath))
+
+    let relative = path.posix.relative(absoluteRootPosixPath, absoluteGlob)
 
     // If the path points to a file in the same directory, `path.relative` will
     // remove the leading `./` and we need to add it back in order to still
@@ -51,15 +61,8 @@ export default function fixRelativePathsPlugin(): Plugin {
       relative = './' + relative
     }
 
-    atRule.params = quote + relative + quote
+    atRule.params = quote + negativePrefix + relative + quote
     touched.add(atRule)
-  }
-
-  function getRoot(node: AtRule | Container | undefined): Container | undefined {
-    if (node?.parent) {
-      return getRoot(node.parent as Container)
-    }
-    return node
   }
 
   return {
