@@ -130,9 +130,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let basePath = path.dirname(path.resolve(inputFile))
 
   function compile(css: string) {
-    let globs: string[] = []
-
-    let { build } = tailwindcss.compile(css, {
+    return tailwindcss.compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
           return require(path.resolve(basePath, pluginPath))
@@ -140,12 +138,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
         return require(pluginPath)
       },
-      onContentPath(glob) {
-        globs.push(glob)
-      },
     })
-
-    return { build, globs }
   }
 
   // Compile the input
