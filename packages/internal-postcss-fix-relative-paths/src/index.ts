@@ -36,6 +36,13 @@ export default function fixRelativePathsPlugin(): Plugin {
     }
     let glob = atRule.params.slice(1, -1)
 
+    // Handle eventual negative rules. We only support one level of negation.
+    let negativePrefix = ''
+    if (glob.startsWith('!')) {
+      glob = glob.slice(1)
+      negativePrefix = '!'
+    }
+
     // We only want to rewrite relative paths.
     if (!glob.startsWith('./') && !glob.startsWith('../')) {
       return
@@ -53,14 +60,6 @@ export default function fixRelativePathsPlugin(): Plugin {
 
     let relative = path.posix.relative(absoluteRootPosixPath, absoluteGlob)
 
-    // TODO: If we fix paths like this, ensure we have tests that cover
-    // POSIX style absolute globs on windows in the rust codebase
-    console.log({
-      absoluteGlob,
-      absoluteRootPosixPath,
-      relative,
-    })
-
     // If the path points to a file in the same directory, `path.relative` will
     // remove the leading `./` and we need to add it back in order to still
     // consider the path relative
@@ -68,7 +67,7 @@ export default function fixRelativePathsPlugin(): Plugin {
       relative = './' + relative
     }
 
-    atRule.params = quote + relative + quote
+    atRule.params = quote + negativePrefix + relative + quote
     touched.add(atRule)
   }
 

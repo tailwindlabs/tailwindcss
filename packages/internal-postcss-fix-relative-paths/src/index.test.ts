@@ -16,6 +16,7 @@ describe('fixRelativePathsPlugin', () => {
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
       "@content "../../example-project/src/**/*.ts";
+      @content "!../../example-project/src/**/*.ts";
       @plugin "../../example-project/src/plugin.js";
       @plugin "../../example-project/src/what\\"s-this.js";"
     `)
