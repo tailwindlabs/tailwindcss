@@ -27,21 +27,17 @@ type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
   loadPlugin?: (path: string) => Plugin
-  onContentPath?: (path: string) => void
 }
 
 function throwOnPlugin(): never {
   throw new Error('No `loadPlugin` function provided to `compile`')
 }
 
-function throwOnContentPath(): never {
-  throw new Error('No `onContentPath` function provided to `compile`')
-}
-
 export function compile(
   css: string,
-  { loadPlugin = throwOnPlugin, onContentPath = throwOnContentPath }: CompileOptions = {},
+  { loadPlugin = throwOnPlugin }: CompileOptions = {},
 ): {
+  globs: string[]
   build(candidates: string[]): string
 } {
   let ast = CSS.parse(css)
@@ -63,6 +59,7 @@ export function compile(
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
+  let globs: string[] = []
 
   walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
@@ -119,7 +116,7 @@ export function compile(
       ) {
         throw new Error('`@content` paths must be quoted.')
       }
-      onContentPath(path.slice(1, -1))
+      globs.push(path.slice(1, -1))
       replaceWith([])
       return
     }
@@ -375,6 +372,7 @@ export function compile(
   let previousAstNodeCount = 0
 
   return {
+    globs,
     build(newRawCandidates: string[]) {
       let didChange = false
 

@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { describe, expect, it, test, vi } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 import { compile } from '.'
 import { compileCss, optimizeCss, run } from './test-utils/run'
 
@@ -1346,35 +1346,20 @@ describe('plugins', () => {
 
 describe('@content', () => {
   test('emits @content files', () => {
-    const onContentPath = vi.fn()
-    compile(
-      css`
-        @content "./foo/bar/*.ts";
-      `,
-      {
-        loadPlugin: () => () => {},
-        onContentPath,
-      },
-    )
+    let { globs } = compile(css`
+      @content "./foo/bar/*.ts";
+    `)
 
-    expect(onContentPath).toHaveBeenCalledWith('./foo/bar/*.ts')
+    expect(globs).toEqual(['./foo/bar/*.ts'])
   })
 
   test('emits multiple @content files', () => {
-    const onContentPath = vi.fn()
-    compile(
-      css`
-        @content "./foo/**/*.ts";
-        @content "./php/secr3t/smarty.php";
-      `,
-      {
-        loadPlugin: () => () => {},
-        onContentPath,
-      },
-    )
+    let { globs } = compile(css`
+      @content "./foo/**/*.ts";
+      @content "./php/secr3t/smarty.php";
+    `)
 
-    expect(onContentPath).toHaveBeenNthCalledWith(1, './foo/**/*.ts')
-    expect(onContentPath).toHaveBeenNthCalledWith(2, './php/secr3t/smarty.php')
+    expect(globs).toEqual(['./foo/**/*.ts', './php/secr3t/smarty.php'])
   })
 })
 
