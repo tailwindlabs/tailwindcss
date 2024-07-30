@@ -1,5 +1,5 @@
 import path from 'node:path'
-import type { AtRule, Container, Plugin } from 'postcss'
+import type { AtRule, Plugin } from 'postcss'
 
 const SINGLE_QUOTE = "'"
 const DOUBLE_QUOTE = '"'
@@ -9,12 +9,12 @@ export default function fixRelativePathsPlugin(): Plugin {
   let touched: WeakSet<AtRule> = new WeakSet()
 
   function fixRelativePath(atRule: AtRule) {
-    let rootPath = getRoot(atRule)?.source?.input.file
+    let rootPath = atRule.root().source?.input.file
     if (!rootPath) {
       return
     }
 
-    let inputFilePath = atRule?.source?.input.file
+    let inputFilePath = atRule.source?.input.file
     if (!inputFilePath) {
       return
     }
@@ -78,11 +78,4 @@ export default function fixRelativePathsPlugin(): Plugin {
       plugin: fixRelativePath,
     },
   }
-}
-
-function getRoot(node: AtRule | Container | undefined): Container | undefined {
-  if (node?.parent) {
-    return getRoot(node.parent as Container)
-  }
-  return node
 }
