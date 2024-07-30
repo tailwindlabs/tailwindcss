@@ -75,19 +75,27 @@ export default function tailwindcss(): Plugin[] {
   }
 
   function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
-    let basePath = path.dirname(path.resolve(inputPath))
+    let inputBasePath = path.dirname(path.resolve(inputPath))
 
     let { build, globs } = compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return require(path.resolve(basePath, pluginPath))
+          return require(path.resolve(inputBasePath, pluginPath))
         }
 
         return require(pluginPath)
       },
     })
 
-    let result = scanDir({ base: basePath, contentPaths: globs })
+    let result = scanDir({
+      // TODO: This might not be necessary if we enable/disabled auto content
+      // detection
+      base: inputBasePath, // Root directory, mainly used for auto content detection
+      contentPaths: globs.map((glob) => ({
+        base: inputBasePath, // Globs are relative to the input.css file
+        glob,
+      })),
+    })
 
     for (let candidate of result.candidates) {
       candidates.add(candidate)
