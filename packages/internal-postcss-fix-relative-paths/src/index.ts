@@ -44,6 +44,12 @@ export default function fixRelativePathsPlugin(): Plugin {
     let rulePath = path.posix.join(path.posix.dirname(inputFilePath), content)
     let relative = path.posix.relative(path.posix.dirname(rootPath), rulePath)
 
+    console.log({
+      rulePath,
+      rootPath,
+      relative,
+    })
+
     // If the path points to a file in the same directory, `path.relative` will
     // remove the leading `./` and we need to add it back in order to still
     // consider the path relative
