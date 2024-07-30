@@ -126,14 +126,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 
   let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
-
-  let basePath = path.dirname(path.resolve(inputFile))
+  let inputFilePath = path.dirname(path.resolve(inputFile))
 
   function compile(css: string) {
     return tailwindcss.compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return require(path.resolve(basePath, pluginPath))
+          return require(path.resolve(inputFilePath, pluginPath))
         }
 
         return require(pluginPath)
@@ -143,7 +142,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Compile the input
   let compiler = compile(input)
-  let scanDirResult = scanDir({ base, contentPaths: compiler.globs })
+  let scanDirResult = scanDir({
+    base, // Root directory, mainly used for auto content detection
+    contentPaths: compiler.globs.map((glob) => ({
+      base: inputFilePath, // Globs are relative to the input.css file
+      glob,
+    })),
+  })
 
   // Watch for changes
   if (args['--watch']) {
@@ -202,7 +207,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           compiler = compile(input)
 
           // Re-scan the directory to get the new `candidates`
-          scanDirResult = scanDir({ base, contentPaths: compiler.globs })
+          scanDirResult = scanDir({
+            base, // Root directory, mainly used for auto content detection
+            contentPaths: compiler.globs.map((glob) => ({
+              base: inputFilePath, // Globs are relative to the input.css file
+              glob,
+            })),
+          })
 
           // Setup new watchers
           cleanupWatchers = await createWatchers(scanDirResult.globs, handle)
