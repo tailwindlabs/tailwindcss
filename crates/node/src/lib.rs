@@ -56,13 +56,22 @@ impl From<GlobEntry> for tailwindcss_oxide::GlobEntry {
   }
 }
 
+impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
+  fn from(globs: tailwindcss_oxide::GlobEntry) -> Self {
+    GlobEntry {
+      base: globs.base,
+      glob: globs.glob,
+    }
+  }
+}
+
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ScanOptions {
   /// Base path to start scanning from
   pub base: String,
   /// Glob content paths
-  pub content_paths: Option<Vec<String>>,
+  pub content_paths: Option<Vec<GlobEntry>>,
 }
 
 #[napi]
@@ -74,20 +83,18 @@ pub fn clear_cache() {
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
   let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
     base: args.base,
-    content_paths: args.content_paths.unwrap_or_default(),
+    content_paths: args
+      .content_paths
+      .unwrap_or_default()
+      .into_iter()
+      .map(Into::into)
+      .collect(),
   });
 
   ScanResult {
     files: result.files,
     candidates: result.candidates,
-    globs: result
-      .globs
-      .into_iter()
-      .map(|g| GlobEntry {
-        base: g.base,
-        glob: g.glob,
-      })
-      .collect(),
+    globs: result.globs.into_iter().map(Into::into).collect(),
   }
 }
 

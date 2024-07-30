@@ -45,7 +45,7 @@ pub struct ScanOptions {
     /// Base path to start scanning from
     pub base: String,
     /// Glob content paths
-    pub content_paths: Vec<String>,
+    pub content_paths: Vec<GlobEntry>,
 }
 
 #[derive(Debug, Clone)]
@@ -69,15 +69,15 @@ pub fn clear_cache() {
 pub fn scan_dir(opts: ScanOptions) -> ScanResult {
     init_tracing();
 
-    let root = Path::new(&opts.base);
+    let base = Path::new(&opts.base);
 
-    let (mut files, dirs) = resolve_files(root);
+    let (mut files, dirs) = resolve_files(base);
 
-    let mut globs = resolve_globs(root, dirs);
+    let mut globs = resolve_globs(base, dirs);
 
     // If we have additional content paths, then we have to resolve them as well.
     if !opts.content_paths.is_empty() {
-        let resolved_files: Vec<_> = match fast_glob(root, &opts.content_paths) {
+        let resolved_files: Vec<_> = match fast_glob(&opts.content_paths) {
             Ok(matches) => matches.filter_map(|x| x.canonicalize().ok()).collect(),
             Err(err) => {
                 event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
@@ -87,7 +87,7 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
         files.extend(resolved_files);
 
-        let optimized_incoming_globs = get_fast_patterns(root, &opts.content_paths)
+        let optimized_incoming_globs = get_fast_patterns(&opts.content_paths)
             .iter()
             .flat_map(|(root, globs)| {
                 globs.iter().filter_map(|glob| {
