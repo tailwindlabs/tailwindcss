@@ -126,13 +126,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 
   let inputFile = args['--input'] && args['--input'] !== '-' ? args['--input'] : process.cwd()
-  let inputFilePath = path.dirname(path.resolve(inputFile))
+  let inputBasePath = path.dirname(path.resolve(inputFile))
 
   function compile(css: string) {
     return tailwindcss.compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return require(path.resolve(inputFilePath, pluginPath))
+          return require(path.resolve(inputBasePath, pluginPath))
         }
 
         return require(pluginPath)
@@ -145,7 +145,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let scanDirResult = scanDir({
     base, // Root directory, mainly used for auto content detection
     contentPaths: compiler.globs.map((glob) => ({
-      base: inputFilePath, // Globs are relative to the input.css file
+      base: inputBasePath, // Globs are relative to the input.css file
       glob,
     })),
   })
@@ -210,7 +210,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           scanDirResult = scanDir({
             base, // Root directory, mainly used for auto content detection
             contentPaths: compiler.globs.map((glob) => ({
-              base: inputFilePath, // Globs are relative to the input.css file
+              base: inputBasePath, // Globs are relative to the input.css file
               glob,
             })),
           })
