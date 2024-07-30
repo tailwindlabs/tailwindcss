@@ -44,6 +44,8 @@ export default function fixRelativePathsPlugin(): Plugin {
     let rulePath = path.posix.join(path.dirname(inputFilePath), content)
     let relative = path.posix.relative(path.posix.dirname(rootPath), rulePath)
 
+    // TODO: If we fix paths like this, ensure we have tests that cover
+    // POSIX style absolute globs on windows in the rust codebase
     console.log({
       content,
       inputFilePath,
