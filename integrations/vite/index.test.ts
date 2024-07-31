@@ -26,7 +26,7 @@ function windowsify(content: string) {
 }
 
 function stripTailwindComment(content: string) {
-  return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
+  return content.replace(/\/\*! tailwindcss .*? \*\//g, '')
 }
 
 const css = dedent
@@ -64,7 +64,7 @@ function test(
           return Promise.all(
             files.map(async (file) => {
               let content = await fs.readFile(path.join(root, file), 'utf8')
-              return [file, content]
+              return [file, content.trim()]
             }),
           )
         },
