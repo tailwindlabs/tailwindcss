@@ -49,7 +49,7 @@ function test(
       if (filename.endsWith('package.json')) {
         content = content.replace(/"(.*?)": ?\"(@references)\"/g, (_, key, ref) => {
           let tarball = path.join(__dirname, '..', '..', 'dist', pkgToFilename(key))
-          return `"${key}": "file:${tarball}"`
+          return `"${key}": "file:${tarball.replace(/\\/g, '\\\\')}"`
         })
       }
 
