@@ -3,3 +3,4 @@ packages:
   - 'crates/node/npm/*'
   - 'packages/*'
   - 'playgrounds/*'
+  - 'integrations'

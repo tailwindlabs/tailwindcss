@@ -1,3 +1,4 @@
+import dedent from 'dedent'
 import fs from 'node:fs/promises'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
@@ -12,24 +13,6 @@ interface TestContext {
   root: string
 }
 
-function dedent(content: string) {
-  let minIndent = Infinity
-  let lines = content.trim().split('z§')
-  for (let [idx, line] of lines.entries()) {
-    if (line.trim() === '') continue
-    if (idx === 0 && !line.startsWith(' ')) continue
-
-    let indent = line.match(/^\s+/)?.[0].length ?? 0
-    if (indent < minIndent) minIndent = indent
-  }
-  return lines
-    .map((line, idx) => {
-      if (idx === 0 && !line.startsWith(' ')) return line
-      return line.slice(minIndent)
-    })
-    .join('\n')
-}
-
 function windowsify(content: string) {
   if (platform() === 'win32') {
     return content.replace(/\n/g, '\r\n')
@@ -37,10 +20,10 @@ function windowsify(content: string) {
   return content
 }
 
-const css = String.raw
-const html = String.raw
-const js = String.raw
-const json = String.raw
+const css = dedent
+const html = dedent
+const js = dedent
+const json = dedent
 
 function test(
   name: string,
@@ -54,7 +37,7 @@ function test(
       let full = path.join(root, filename)
       let dir = path.dirname(full)
       await fs.mkdir(dir, { recursive: true })
-      await fs.writeFile(full, windowsify(dedent(content)))
+      await fs.writeFile(full, windowsify(content))
     }
 
     function cleanup() {

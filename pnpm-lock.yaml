@@ -101,6 +101,12 @@ importers:
 
   crates/node/npm/win32-x64-msvc: {}
 
+  integrations:
+    devDependencies:
+      dedent:
+        specifier: 1.5.3
+        version: 1.5.3
+
   packages/@tailwindcss-cli:
     dependencies:
       '@parcel/watcher':
@@ -1350,6 +1356,14 @@ packages:
       supports-color: '*'
     peerDependenciesMeta:
       supports-color:
+        optional: true
+
+  dedent@1.5.3:
+    resolution: {integrity: sha512-NHQtfOOW68WD8lgypbLA5oT+Bt0xXJhiYvoR6SmmNXZfpzOGXwdKWmcwG8N7PwVVWV3eF/68nmD9BaJSsTBhyQ==}
+    peerDependencies:
+      babel-plugin-macros: ^3.1.0
+    peerDependenciesMeta:
+      babel-plugin-macros:
         optional: true
 
   deep-eql@4.1.3:
@@ -3884,6 +3898,8 @@ snapshots:
   debug@4.3.4:
     dependencies:
       ms: 2.1.2
+
+  dedent@1.5.3: {}
 
   deep-eql@4.1.3:
     dependencies:
