@@ -57,6 +57,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # TODO: Put this at the right place
+      - name: Integration Tests
+        run: pnpm run test:integrations
+
       - name: Build
         run: pnpm run build
 
@@ -67,9 +71,6 @@ jobs:
 
       - name: Test
         run: pnpm run test
-
-      - name: Integration Tests
-        run: pnpm run test:integrations
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps

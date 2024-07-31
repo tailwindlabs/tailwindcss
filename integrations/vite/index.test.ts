@@ -84,9 +84,6 @@ test(
           "name": "vite-example",
           "private": true,
           "type": "module",
-          "scripts": {
-            "build": "vite build ./src --outDir ../dist --config ./vite.config.ts --emptyOutDir"
-          },
           "dependencies": {
             "@tailwindcss/vite": "4.0.0-alpha.18",
             "tailwindcss": "4.0.0-alpha.18"
@@ -103,13 +100,19 @@ test(
         export default defineConfig({
           build: {
             cssMinify: false,
+            // Windows Vite builds don't work unless we manually rename the
+            // output HTML file.
+            rollupOptions: {
+              input: { main: 'index.html' },
+              output: { assetFileNames: 'assets/[name].[ext]' },
+            },
           },
           plugins: [tailwindcss()],
         })
       `,
-      'src/index.html': html`
+      'index.html': html`
         <head>
-          <link rel="stylesheet" href="./index.css" />
+          <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
           <div class="underline m-2">Hello, world!</div>
@@ -122,18 +125,21 @@ test(
     },
   },
   async ({ root, fs }) => {
-    execSync('pnpm run build', { cwd: root })
+    execSync('pnpm vite build', { cwd: root })
 
-    let [[_, content]] = await fs.glob('dist/**/*.css')
+    for (let [path, content] of await fs.glob('dist/**/*.css')) {
+      expect(path).toMatch(/\.css$/)
+      expect(stripTailwindComment(content)).toMatchInlineSnapshot(
+        `
+        ".m-2 {
+          margin: var(--spacing-2, .5rem);
+        }
 
-    expect(stripTailwindComment(content)).toMatchInlineSnapshot(`
-      ".m-2 {
-        margin: var(--spacing-2, .5rem);
-      }
-
-      .underline {
-        text-decoration-line: underline;
-      }"
-    `)
+        .underline {
+          text-decoration-line: underline;
+        }"
+      `,
+      )
+    }
   },
 )
