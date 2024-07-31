@@ -19,6 +19,14 @@
           "parser": "jsonc"
         }
       }
+    ],
+    "embeddedNoopComments": [
+      "css",
+      "html"
+    ],
+    "embeddedNoopTags": [
+      "css",
+      "html"
     ]
   },
   "scripts": {
