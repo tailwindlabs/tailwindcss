@@ -26,6 +26,7 @@
     "build": "turbo build --filter=!./playgrounds/*",
     "dev": "turbo dev --filter=!./playgrounds/*",
     "test": "cargo test && vitest run",
+    "test:integrations": "vitest --root=./integrations",
     "test:ui": "pnpm run --filter=tailwindcss test:ui",
     "tdd": "vitest",
     "bench": "vitest bench",
