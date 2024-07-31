@@ -1075,7 +1075,7 @@ describe('Parsing themes values from CSS', () => {
           @theme {
             --color-tomato: #e10c04;
           }
-          @media reference {
+          @media theme(reference) {
             @theme {
               --color-potato: #ac855b;
             }
@@ -1106,11 +1106,11 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`@media reference` can only contain `@theme` rules', () => {
+  test('`@media theme(…)` can only contain `@theme` rules', () => {
     expect(() =>
       compileCss(
         css`
-          @media reference {
+          @media theme(reference) {
             .not-a-theme-rule {
               color: cursed;
             }
@@ -1120,8 +1120,134 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-avocado'],
       ),
     ).toThrowErrorMatchingInlineSnapshot(
-      `[Error: Files imported with \`@import "…" reference\` must only contain \`@theme\` blocks.]`,
+      `[Error: Files imported with \`@import "…" theme(…)\` must only contain \`@theme\` blocks.]`,
     )
+  })
+
+  test('theme values added as `inline` are not wrapped in `var(…)` when used as utility values', () => {
+    expect(
+      compileCss(
+        css`
+          @theme inline {
+            --color-tomato: #e10c04;
+            --color-potato: #ac855b;
+            --color-primary: var(--primary);
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-tomato', 'bg-potato', 'bg-primary'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-potato {
+        background-color: #ac855b;
+      }
+
+      .bg-primary {
+        background-color: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements', () => {
+    expect(
+      compileCss(
+        css`
+          @media theme(inline) {
+            @theme {
+              --color-tomato: #e10c04;
+              --color-potato: #ac855b;
+              --color-primary: var(--primary);
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-tomato', 'bg-potato', 'bg-primary'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bg-potato {
+        background-color: #ac855b;
+      }
+
+      .bg-primary {
+        background-color: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('`inline` and `reference` can be used together', () => {
+    expect(
+      compileCss(
+        css`
+          @theme reference inline {
+            --color-tomato: #e10c04;
+            --color-potato: #ac855b;
+            --color-primary: var(--primary);
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-tomato', 'bg-potato', 'bg-primary'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bg-potato {
+        background-color: #ac855b;
+      }
+
+      .bg-primary {
+        background-color: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: #e10c04;
+      }"
+    `)
+  })
+
+  test('`inline` and `reference` can be used together in `media(…)`', () => {
+    expect(
+      compileCss(
+        css`
+          @media theme(reference inline) {
+            @theme {
+              --color-tomato: #e10c04;
+              --color-potato: #ac855b;
+              --color-primary: var(--primary);
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['bg-tomato', 'bg-potato', 'bg-primary'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bg-potato {
+        background-color: #ac855b;
+      }
+
+      .bg-primary {
+        background-color: var(--primary);
+      }
+
+      .bg-tomato {
+        background-color: #e10c04;
+      }"
+    `)
   })
 })
 

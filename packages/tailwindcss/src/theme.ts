@@ -1,9 +1,11 @@
 import { escape } from './utils/escape'
 
 export class Theme {
-  constructor(private values = new Map<string, { value: string; isReference: boolean }>()) {}
+  constructor(
+    private values = new Map<string, { value: string; isReference: boolean; isInline: boolean }>(),
+  ) {}
 
-  add(key: string, value: string, isReference = false): void {
+  add(key: string, value: string, { isReference = false, isInline = false } = {}): void {
     if (key.endsWith('-*')) {
       if (value !== 'initial') {
         throw new Error(`Invalid theme value \`${value}\` for namespace \`${key}\``)
@@ -18,7 +20,7 @@ export class Theme {
     if (value === 'initial') {
       this.values.delete(key)
     } else {
-      this.values.set(key, { value, isReference })
+      this.values.set(key, { value, isReference, isInline })
     }
   }
 
@@ -90,6 +92,12 @@ export class Theme {
     let themeKey = this.#resolveKey(candidateValue, themeKeys)
 
     if (!themeKey) return null
+
+    let value = this.values.get(themeKey)!
+
+    if (value.isInline) {
+      return value.value
+    }
 
     return this.#var(themeKey)
   }

@@ -152,28 +152,34 @@ export function compile(
       }
     }
 
-    // Drop instances of `@media reference`
+    // Drop instances of `@media theme(…)`
     //
-    // We support `@import "tailwindcss/theme" reference` as a way to import an external theme file
-    // as a reference, which becomes `@media reference { … }` when the `@import` is processed.
-    if (node.selector === '@media reference') {
+    // We support `@import "tailwindcss/theme" theme(reference)` as a way to
+    // import an external theme file as a reference, which becomes `@media
+    // theme(reference) { … }` when the `@import` is processed.
+    if (node.selector.startsWith('@media theme(')) {
+      let themeParams = node.selector.slice(13, -1)
+
       walk(node.nodes, (child) => {
         if (child.kind !== 'rule') {
           throw new Error(
-            'Files imported with `@import "…" reference` must only contain `@theme` blocks.',
+            'Files imported with `@import "…" theme(…)` must only contain `@theme` blocks.',
           )
         }
         if (child.selector === '@theme') {
-          child.selector = '@theme reference'
+          child.selector = '@theme ' + themeParams
           return WalkAction.Skip
         }
       })
       replaceWith(node.nodes)
     }
 
-    if (node.selector !== '@theme' && node.selector !== '@theme reference') return
+    if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
-    let isReference = node.selector === '@theme reference'
+    let [_, ...themeOptions] = segment(node.selector, ' ')
+
+    let isReference = themeOptions.includes('reference')
+    let isInline = themeOptions.includes('inline')
 
     // Record all custom properties in the `@theme` declaration
     walk(node.nodes, (child, { replaceWith }) => {
@@ -187,7 +193,7 @@ export function compile(
 
       if (child.kind === 'comment') return
       if (child.kind === 'declaration' && child.property.startsWith('--')) {
-        theme.add(child.property, child.value, isReference)
+        theme.add(child.property, child.value, { isReference, isInline })
         return
       }
 
@@ -395,15 +401,17 @@ export function __unstable__loadDesignSystem(css: string) {
 
   walk(ast, (node) => {
     if (node.kind !== 'rule') return
-    if (node.selector !== '@theme' && node.selector !== '@theme reference') return
-    let isReference = node.selector === '@theme reference'
+    if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
+    let [_, ...themeOptions] = segment(node.selector, ' ')
+    let isReference = themeOptions.includes('reference')
+    let isInline = themeOptions.includes('inline')
 
     // Record all custom properties in the `@theme` declaration
     walk([node], (node) => {
       if (node.kind !== 'declaration') return
       if (!node.property.startsWith('--')) return
 
-      theme.add(node.property, node.value, isReference)
+      theme.add(node.property, node.value, { isReference, isInline })
     })
   })
 
