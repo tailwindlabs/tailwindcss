@@ -10,8 +10,6 @@ let root = path.resolve(__dirname, '..')
 let command = platform() === 'win32' ? 'cd' : 'pwd'
 let rawPaths = execSync(`pnpm --silent --filter=!./playgrounds/* -r exec ${command}`).toString()
 
-console.log({ rawPaths })
-
 let paths = rawPaths
   .trim()
   .split(/\r?\n/)
@@ -32,7 +30,7 @@ await fs.rm(path.join(root, 'dist'), { recursive: true, force: true })
 Promise.all(
   [...workspaces.entries()].map(async ([name, { version, dir }]) => {
     function pack() {
-      return new Promise((resovle) => {
+      return new Promise((resolve) => {
         exec(
           `pnpm pack --pack-destination="${path.join(root, 'dist').replace(/\\/g, '\\\\')}"`,
           { cwd: dir },
@@ -41,23 +39,25 @@ Promise.all(
               console.error(err, stdout, stderr)
             }
 
-            resovle()
+            resolve(lastLine(stdout.trim()))
           },
         )
       })
     }
 
-    await pack()
+    let filename = await pack()
     // Remove version suffix
-    await fs.rename(
-      path.join(root, 'dist', pkgToFilename(name, version)),
-      path.join(root, 'dist', pkgToFilename(name)),
-    )
+    await fs.rename(path.join(root, 'dist', filename), path.join(root, 'dist', pkgToFilename(name)))
   }),
 ).then(() => {
   console.log('Done.')
 })
 
-function pkgToFilename(name, version) {
-  return `${name.replace('@', '').replace('/', '-')}${version ? `-${version}` : ''}.tgz`
+function pkgToFilename(name) {
+  return `${name.replace('@', '').replace('/', '-')}.tgz`
+}
+
+function lastLine(str) {
+  let lines = str.split(/\r?\n/)
+  return lines[lines.length - 1]
 }

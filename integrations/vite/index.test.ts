@@ -29,10 +29,10 @@ function stripTailwindComment(content: string) {
   return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
 }
 
-const css = dedent
-const html = dedent
-const ts = dedent
-const json = dedent
+let css = dedent
+let html = dedent
+let ts = dedent
+let json = dedent
 
 function test(
   name: string,
@@ -45,12 +45,30 @@ function test(
     for (let [filename, content] of Object.entries(config.fs)) {
       let full = path.join(root, filename)
 
-      // TODO: Automatically inject pnpm overwrites for peer dependencies
       if (filename.endsWith('package.json')) {
-        content = content.replace(/"(.*?)": ?\"(@references)\"/g, (_, key, ref) => {
-          let tarball = path.join(__dirname, '..', '..', 'dist', pkgToFilename(key))
-          return `"${key}": "file:${tarball.replace(/\\/g, '\\\\')}"`
+        function resolveVersion(dependency: string) {
+          let tarball = path.join(__dirname, '..', '..', 'dist', pkgToFilename(dependency))
+          return `file:${tarball}`
+        }
+
+        let json = JSON.parse(content)
+
+        // Resolve all worksplace:^ versions to local tarballs
+        ;['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
+          let desp = json[key] || {}
+          for (let dependecy in desp) {
+            if (desp[dependecy] === 'workspace:^') {
+              desp[dependecy] = resolveVersion(dependecy)
+            }
+          }
         })
+
+        // Inject transitive dependency overwrite
+        json.pnpm = json.pnpm || {}
+        json.pnpm.overrides = json.pnpm.overrides || {}
+        json.pnpm.overrides['@tailwindcss/oxide'] = resolveVersion('@tailwindcss/oxide')
+
+        content = JSON.stringify(json, null, 2)
       }
 
       let dir = path.dirname(full)
@@ -71,7 +89,7 @@ function test(
     }
     options.onTestFinished(cleanup)
 
-    const context = {
+    let context = {
       root,
       fs: {
         async glob(pattern: string) {
@@ -94,23 +112,6 @@ function pkgToFilename(name: string) {
   return `${name.replace('@', '').replace('/', '-')}.tgz`
 }
 
-/**
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- * Don't look up!
- */
-
 test(
   'builds with Vite',
   {
@@ -121,39 +122,33 @@ test(
           "private": true,
           "type": "module",
           "dependencies": {
-            "@tailwindcss/vite": "@references",
-            "tailwindcss": "@references"
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
           },
           "devDependencies": {
             "vite": "^5.3.5"
-          },
-          "pnpm": {
-            "overrides": {
-              "@tailwindcss/oxide": "@references"
-            }
           }
         }
       `,
       'vite.config.ts': ts`
-        import tailwindcss from '@tailwindcss/vite'
+        // import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
 
         export default defineConfig({
           build: {
-            cssMinify: false,
-            // Windows Vite builds don't work unless we manually rename the
-            // output HTML file.
-            rollupOptions: {
-              input: { main: 'index.html' },
-              output: { assetFileNames: 'assets/[name].[ext]' },
-            },
+            // cssMinify: false,
+            // // Windows Vite builds don't work unless we manually rename the
+            // // output HTML file.
+            // rollupOptions: {
+            //   input: { main: 'index.html' },
+            //   output: { assetFileNames: 'assets/[name].[ext]' },
+            // },
           },
-          plugins: [tailwindcss()],
+          // plugins: [tailwindcss()],
         })
       `,
       'index.html': html`
         <head>
-          <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
           <div class="underline m-2">Hello, world!</div>
@@ -166,7 +161,7 @@ test(
     },
   },
   async ({ root, fs }) => {
-    execSync('pnpm vite build', { cwd: root })
+    execSync('pnpm vite dev', { cwd: root })
 
     for (let [path, content] of await fs.glob('dist/**/*.css')) {
       expect(path).toMatch(/\.css$/)
