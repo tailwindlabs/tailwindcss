@@ -172,6 +172,7 @@ export function compile(
         }
       })
       replaceWith(node.nodes)
+      return WalkAction.Skip
     }
 
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return

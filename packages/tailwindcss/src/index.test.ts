@@ -1176,7 +1176,13 @@ describe('Parsing themes values from CSS', () => {
         ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
-      ".bg-potato {
+      ":root {
+        --color-tomato: #e10c04;
+        --color-potato: #ac855b;
+        --color-primary: var(--primary);
+      }
+
+      .bg-potato {
         background-color: #ac855b;
       }
 
