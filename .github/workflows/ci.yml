@@ -57,12 +57,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Build
+        run: pnpm run build
+
       # TODO: Put this at the right place
       - name: Integration Tests
         run: pnpm run test:integrations
-
-      - name: Build
-        run: pnpm run build
 
       - name: Lint
         run: pnpm run lint
