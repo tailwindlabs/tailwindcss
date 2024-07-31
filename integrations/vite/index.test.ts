@@ -94,6 +94,23 @@ function pkgToFilename(name: string) {
   return `${name.replace('@', '').replace('/', '-')}.tgz`
 }
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * Don't look up!
+ */
+
 test(
   'builds with Vite',
   {

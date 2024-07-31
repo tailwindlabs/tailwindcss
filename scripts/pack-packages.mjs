@@ -1,17 +1,21 @@
-import { execSync, exec, spawnSync } from 'node:child_process'
+import { exec, execSync } from 'node:child_process'
 import fs from 'node:fs/promises'
+import { platform } from 'node:os'
 import path, { dirname } from 'node:path'
 import url from 'node:url'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 let root = path.resolve(__dirname, '..')
 
-let rawPaths = execSync('pnpm --silent --filter=!./playgrounds/* -r exec pwd').toString()
+let command = platform() === 'win32' ? 'cd' : 'pwd'
+let rawPaths = execSync(`pnpm --silent --filter=!./playgrounds/* -r exec ${command}`).toString()
+
+console.log({ rawPaths })
 
 let paths = rawPaths
   .trim()
-  .split('\n')
-  .map((x) => path.resolve(x, 'package.json'))
+  .split(/\r?\n/)
+  .map((x) => path.join(x, 'package.json'))
 
 let workspaces = new Map()
 
@@ -30,10 +34,8 @@ Promise.all(
     function pack() {
       return new Promise((resovle) => {
         exec(
-          `pnpm pack --pack-destination='${path.join(root, 'dist')}'`,
-          {
-            cwd: dir,
-          },
+          `pnpm pack --pack-destination="${path.join(root, 'dist').replace(/\\/g, '\\\\')}"`,
+          { cwd: dir },
           (err, stdout, stderr) => {
             if (err) {
               console.error(err, stdout, stderr)
