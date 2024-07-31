@@ -26,7 +26,7 @@ function windowsify(content: string) {
 }
 
 function stripTailwindComment(content: string) {
-  return content.replace(/\/\*! tailwindcss .*? \*\//g, '')
+  return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
 }
 
 const css = dedent
@@ -44,12 +44,27 @@ function test(
 
     for (let [filename, content] of Object.entries(config.fs)) {
       let full = path.join(root, filename)
+
+      // TODO: Automatically inject pnpm overwrites for peer dependencies
+      if (filename.endsWith('package.json')) {
+        content = content.replace(/"(.*?)": ?\"(@references)\"/g, (_, key, ref) => {
+          let tarball = path.join(__dirname, '..', '..', 'dist', pkgToFilename(key))
+          return `"${key}": "file:${tarball}"`
+        })
+      }
+
       let dir = path.dirname(full)
       await fs.mkdir(dir, { recursive: true })
       await fs.writeFile(full, windowsify(content))
     }
 
-    execSync('pnpm install', { cwd: root })
+    try {
+      execSync('pnpm install', { cwd: root })
+    } catch (error: any) {
+      console.error(error.stdout.toString())
+      console.error(error.stderr.toString())
+      throw error
+    }
 
     function cleanup() {
       fs.rm(root, { recursive: true })
@@ -64,7 +79,7 @@ function test(
           return Promise.all(
             files.map(async (file) => {
               let content = await fs.readFile(path.join(root, file), 'utf8')
-              return [file, content.trim()]
+              return [file, content]
             }),
           )
         },
@@ -73,6 +88,10 @@ function test(
 
     await test(context)
   })
+}
+
+function pkgToFilename(name: string) {
+  return `${name.replace('@', '').replace('/', '-')}.tgz`
 }
 
 test(
@@ -85,11 +104,16 @@ test(
           "private": true,
           "type": "module",
           "dependencies": {
-            "@tailwindcss/vite": "4.0.0-alpha.18",
-            "tailwindcss": "4.0.0-alpha.18"
+            "@tailwindcss/vite": "@references",
+            "tailwindcss": "@references"
           },
           "devDependencies": {
             "vite": "^5.3.5"
+          },
+          "pnpm": {
+            "overrides": {
+              "@tailwindcss/oxide": "@references"
+            }
           }
         }
       `,
