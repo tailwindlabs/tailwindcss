@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "dedent": "1.5.3"
+    "dedent": "1.5.3",
+    "fast-glob": "^3.3.2"
   }
 }

@@ -1,8 +1,10 @@
 import dedent from 'dedent'
+import { execSync } from 'node:child_process'
 import fs from 'node:fs/promises'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
 import { test as defaultTest, expect } from 'vitest'
+import fastGlob from 'fast-glob'
 
 interface TestConfig {
   fs: {
@@ -11,6 +13,9 @@ interface TestConfig {
 }
 interface TestContext {
   root: string
+  fs: {
+    glob: (pattern: string) => Promise<[string, string][]>
+  }
 }
 
 function windowsify(content: string) {
@@ -20,9 +25,13 @@ function windowsify(content: string) {
   return content
 }
 
+function stripTailwindComment(content: string) {
+  return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
+}
+
 const css = dedent
 const html = dedent
-const js = dedent
+const ts = dedent
 const json = dedent
 
 function test(
@@ -30,7 +39,7 @@ function test(
   config: TestConfig,
   test: (context: TestContext) => Promise<void> | void,
 ) {
-  return defaultTest(name, async (options) => {
+  return defaultTest(name, { timeout: 30000 }, async (options) => {
     let root = await fs.mkdtemp(path.join(tmpdir(), 'tailwind-integrations'))
 
     for (let [filename, content] of Object.entries(config.fs)) {
@@ -40,52 +49,91 @@ function test(
       await fs.writeFile(full, windowsify(content))
     }
 
+    execSync('pnpm install', { cwd: root })
+
     function cleanup() {
       fs.rm(root, { recursive: true })
     }
     options.onTestFinished(cleanup)
 
-    const context = { root } satisfies TestContext
+    const context = {
+      root,
+      fs: {
+        async glob(pattern: string) {
+          let files = await fastGlob(pattern, { cwd: root })
+          return Promise.all(
+            files.map(async (file) => {
+              let content = await fs.readFile(path.join(root, file), 'utf8')
+              return [file, content]
+            }),
+          )
+        },
+      },
+    } satisfies TestContext
 
     await test(context)
   })
 }
 
 test(
-  'adding a glob outside of the content works',
+  'builds with Vite',
   {
     fs: {
-      'foo/index.html': html`
+      'package.json': json`
+        {
+          "name": "vite-example",
+          "private": true,
+          "type": "module",
+          "scripts": {
+            "build": "vite build ./src --outDir ../dist --config ./vite.config.ts --emptyOutDir"
+          },
+          "dependencies": {
+            "@tailwindcss/vite": "4.0.0-alpha.18",
+            "tailwindcss": "4.0.0-alpha.18"
+          },
+          "devDependencies": {
+            "vite": "^5.3.5"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: {
+            cssMinify: false,
+          },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'src/index.html': html`
+        <head>
+          <link rel="stylesheet" href="./index.css" />
+        </head>
         <body>
-          <div>Hello, world!</div>
+          <div class="underline m-2">Hello, world!</div>
         </body>
       `,
-      'foo/index.css': css`
-        div {
-          color: red;
-        }
+      'src/index.css': css`
+        @import 'tailwindcss/theme' reference;
+        @import 'tailwindcss/utilities';
       `,
     },
   },
-  async ({ root }) => {
-    console.log({ root })
-    let files = await fs.readdir(path.join(root, 'foo'))
-    for (let file of files) {
-      let content = await fs.readFile(path.join(root, 'foo', file), 'utf-8')
-      console.log({ file, content })
-    }
+  async ({ root, fs }) => {
+    execSync('pnpm run build', { cwd: root })
 
-    //   ...defaultViteSetup,
-    //   "index.html": html`
-    //     <div>
-    //   `,s
-    //   "index.css": css`
-    //   `
-    // }}, ({fs}) =>{
+    let [[_, content]] = await fs.glob('dist/**/*.css')
 
-    //   // run vite
-    //   fs.write()
-    //   // run vite
-    expect(1).toBe(1)
+    expect(stripTailwindComment(content)).toMatchInlineSnapshot(`
+      ".m-2 {
+        margin: var(--spacing-2, .5rem);
+      }
+
+      .underline {
+        text-decoration-line: underline;
+      }"
+    `)
   },
 )

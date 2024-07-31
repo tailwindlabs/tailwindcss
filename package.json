@@ -7,7 +7,8 @@
     "singleQuote": true,
     "printWidth": 100,
     "plugins": [
-      "prettier-plugin-organize-imports"
+      "prettier-plugin-organize-imports",
+      "prettier-plugin-embed"
     ],
     "overrides": [
       {
@@ -42,6 +43,7 @@
     "postcss": "8.4.24",
     "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
+    "prettier-plugin-embed": "^0.4.15",
     "prettier-plugin-organize-imports": "^3.2.4",
     "tsup": "^8.0.2",
     "turbo": "^1.13.3",
