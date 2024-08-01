@@ -59,6 +59,9 @@ jobs:
 
       - name: Build
         run: pnpm run build
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
       # TODO: Put this at the right place
       - name: Integration Tests
