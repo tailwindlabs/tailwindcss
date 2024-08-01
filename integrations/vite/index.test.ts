@@ -94,17 +94,42 @@ function test(
       throw error
     }
 
-    function cleanup() {
+    let disposables: (() => Promise<void>)[] = []
+
+    async function dispose() {
+      await Promise.all(disposables.map((dispose) => dispose()))
       fs.rm(root, { recursive: true })
     }
-    options.onTestFinished(cleanup)
+    options.onTestFinished(dispose)
 
     let context = {
       async exec(command: string) {
         return execSync(command, { cwd: root }).toString()
       },
       spawn(command: string) {
-        const abortController = new AbortController()
+        let abortController = new AbortController()
+
+        let resolveDisposal: (() => void) | undefined
+        let rejectDisposal: ((error: Error) => void) | undefined
+        let disposePromise = new Promise<void>((resolve, reject) => {
+          resolveDisposal = resolve
+          rejectDisposal = reject
+        })
+
+        let dispose = () => {
+          abortController.abort()
+          let timer = setTimeout(
+            () => rejectDisposal?.(new Error(`spawned proccess (${command}) did not exit in time`)),
+            1000,
+          )
+          disposePromise.finally(() => clearTimeout(timer))
+          return disposePromise
+        }
+        disposables.push(dispose)
+        function onExit() {
+          resolveDisposal?.()
+        }
+
         let child = spawn(command, {
           cwd: root,
           signal: abortController.signal,
@@ -113,32 +138,28 @@ function test(
             ...process.env,
           },
         })
+
         let stdout = '',
           stderr = ''
         child.stdout.on('data', (result) => {
-          console.log(result.toString())
           stdout += result.toString()
         })
         child.stderr.on('data', (result) => {
-          console.error(result.toString())
           stderr += result.toString()
         })
-        child.on('error', (err) => {
-          if (err.name !== 'AbortError') {
-            throw err
+        child.on('error', (error) => {
+          if (error.name !== 'AbortError') {
+            throw error
           }
         })
+        child.on('exit', onExit)
 
         options.onTestFailed(() => {
           console.log(stdout)
           console.error(stderr)
         })
-        options.onTestFinished(() => abortController.abort())
-        return {
-          dispose() {
-            abortController.abort()
-          },
-        }
+
+        return { dispose }
       },
       fs: {
         async glob(pattern: string) {
