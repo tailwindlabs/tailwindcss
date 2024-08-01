@@ -1,7 +1,7 @@
 import dedent from 'dedent'
 import { execSync } from 'node:child_process'
 import fs from 'node:fs/promises'
-import { platform, tmpdir } from 'node:os'
+import { platform, homedir, tmpdir } from 'node:os'
 import path from 'node:path'
 import { test as defaultTest, expect } from 'vitest'
 import fastGlob from 'fast-glob'
@@ -40,8 +40,14 @@ function test(
   test: (context: TestContext) => Promise<void> | void,
 ) {
   return defaultTest(name, { timeout: 30000 }, async (options) => {
-    let root = await fs.mkdtemp(path.join(tmpdir(), 'tailwind-integrations'))
-    root = path.relative(__dirname, root)
+    let root = await fs.mkdtemp(
+      // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder
+      // that apparently causes the vite builds to not work.
+      path.join(
+        process.env.CI && platform() === 'win32' ? homedir() : tmpdir(),
+        'tailwind-integrations',
+      ),
+    )
 
     for (let [filename, content] of Object.entries(config.fs)) {
       let full = path.join(root, filename)
@@ -119,9 +125,6 @@ test(
     fs: {
       'package.json': json`
         {
-          "name": "vite-example",
-          "private": true,
-          "type": "module",
           "dependencies": {
             "@tailwindcss/vite": "workspace:^",
             "tailwindcss": "workspace:^"
@@ -136,20 +139,13 @@ test(
         import { defineConfig } from 'vite'
 
         export default defineConfig({
-          build: {
-            cssMinify: false,
-            // // Windows Vite builds don't work unless we manually rename the
-            // // output HTML file.
-            // rollupOptions: {
-            //   input: { main: 'index.html' },
-            //   output: { assetFileNames: 'assets/[name].[ext]' },
-            // },
-          },
+          build: { cssMinify: false },
           plugins: [tailwindcss()],
         })
       `,
       'index.html': html`
         <head>
+          <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
           <div class="underline m-2">Hello, world!</div>
@@ -164,6 +160,7 @@ test(
   async ({ root, fs }) => {
     execSync('pnpm vite build', { cwd: root })
 
+    expect.assertions(2)
     for (let [path, content] of await fs.glob('dist/**/*.css')) {
       expect(path).toMatch(/\.css$/)
       expect(stripTailwindComment(content)).toMatchInlineSnapshot(
