@@ -177,10 +177,10 @@ export function compile(
 
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
-    let [_, ...themeOptions] = segment(node.selector, ' ')
+    let themeOptions = segment(node.selector, ' ')
 
-    let isReference = themeOptions.includes('reference')
-    let isInline = themeOptions.includes('inline')
+    let isReference = themeOptions.includes('reference', 1)
+    let isInline = themeOptions.includes('inline', 1)
 
     // Record all custom properties in the `@theme` declaration
     walk(node.nodes, (child, { replaceWith }) => {
@@ -403,9 +403,9 @@ export function __unstable__loadDesignSystem(css: string) {
   walk(ast, (node) => {
     if (node.kind !== 'rule') return
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
-    let [_, ...themeOptions] = segment(node.selector, ' ')
-    let isReference = themeOptions.includes('reference')
-    let isInline = themeOptions.includes('inline')
+    let themeOptions = segment(node.selector, ' ')
+    let isReference = themeOptions.includes('reference', 1)
+    let isInline = themeOptions.includes('inline', 1)
 
     // Record all custom properties in the `@theme` declaration
     walk([node], (node) => {
