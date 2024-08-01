@@ -195,6 +195,9 @@ export function test(
                 reject(new Error(`Failed to get a free port: address is ${address}`))
               } else {
                 disposables.push(async () => {
+                  // Wait for 10ms in case the process was just killed
+                  await new Promise((resolve) => setTimeout(resolve, 10))
+
                   // kill-port uses `lsof` on macOS which is expensive and can
                   // block for multiple seconds. In order to avoid that for a
                   // server that is no longer running, we check if the port is
@@ -275,9 +278,19 @@ export function stripTailwindComment(content: string) {
 
 function testIfPortTaken(port: number): Promise<boolean> {
   return new Promise((resolve) => {
-    let server = net.createServer()
-    server.listen(port, () => {
-      resolve(false)
+    let client = new net.Socket()
+    client.once('connect', () => {
+      resolve(true)
+      client.end()
     })
+    client.once('error', (error: any) => {
+      if (error.code !== 'ECONNREFUSED') {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+      client.end()
+    })
+    client.connect({ port: port, host: 'localhost' })
   })
 }

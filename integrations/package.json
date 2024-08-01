@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "@types/tcp-port-used": "^1.0.4",
     "dedent": "1.5.3",
     "fast-glob": "^3.3.2",
     "kill-port": "^2.0.1"
