@@ -7,8 +7,8 @@
     "singleQuote": true,
     "printWidth": 100,
     "plugins": [
-      "prettier-plugin-organize-imports",
-      "prettier-plugin-embed"
+      "prettier-plugin-embed",
+      "prettier-plugin-organize-imports"
     ],
     "overrides": [
       {

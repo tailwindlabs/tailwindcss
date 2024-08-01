@@ -1,197 +1,5 @@
-import dedent from 'dedent'
-import { execSync, spawn } from 'node:child_process'
-import fs from 'node:fs/promises'
-import { platform, homedir, tmpdir } from 'node:os'
-import path from 'node:path'
-import { test as defaultTest, expect } from 'vitest'
-import fastGlob from 'fast-glob'
-import net from 'node:net'
-
-interface TestConfig {
-  fs: {
-    [filePath: string]: string
-  }
-}
-interface TestContext {
-  exec: (command: string) => Promise<string>
-  spawn: (command: string) => { dispose: () => void }
-  fs: {
-    glob: (pattern: string) => Promise<[string, string][]>
-  }
-}
-
-function windowsify(content: string) {
-  if (platform() === 'win32') {
-    return content.replace(/\n/g, '\r\n')
-  }
-  return content
-}
-
-function stripTailwindComment(content: string) {
-  return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
-}
-
-let css = dedent
-let html = dedent
-let ts = dedent
-let json = dedent
-
-function test(
-  name: string,
-  config: TestConfig,
-  test: (context: TestContext) => Promise<void> | void,
-  { only = false } = {},
-) {
-  return (only ? defaultTest.only : defaultTest)(name, { timeout: 30000 }, async (options) => {
-    let root = await fs.mkdtemp(
-      // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder
-      // that apparently causes the vite builds to not work.
-      path.join(
-        process.env.CI && platform() === 'win32' ? homedir() : tmpdir(),
-        'tailwind-integrations',
-      ),
-    )
-
-    for (let [filename, content] of Object.entries(config.fs)) {
-      let full = path.join(root, filename)
-
-      if (filename.endsWith('package.json')) {
-        function resolveVersion(dependency: string) {
-          let tarball = path.join(__dirname, '..', '..', 'dist', pkgToFilename(dependency))
-          return `file:${tarball}`
-        }
-
-        let json = JSON.parse(content)
-
-        // Resolve all worksplace:^ versions to local tarballs
-        ;['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
-          let desp = json[key] || {}
-          for (let dependecy in desp) {
-            if (desp[dependecy] === 'workspace:^') {
-              desp[dependecy] = resolveVersion(dependecy)
-            }
-          }
-        })
-
-        // Inject transitive dependency overwrite
-        json.pnpm = json.pnpm || {}
-        json.pnpm.overrides = json.pnpm.overrides || {}
-        json.pnpm.overrides['@tailwindcss/oxide'] = resolveVersion('@tailwindcss/oxide')
-
-        content = JSON.stringify(json, null, 2)
-      }
-
-      let dir = path.dirname(full)
-      await fs.mkdir(dir, { recursive: true })
-      await fs.writeFile(full, windowsify(content))
-    }
-
-    try {
-      execSync('pnpm install', { cwd: root })
-    } catch (error: any) {
-      console.error(error.stdout.toString())
-      console.error(error.stderr.toString())
-      throw error
-    }
-
-    let disposables: (() => Promise<void>)[] = []
-
-    async function dispose() {
-      await Promise.all(disposables.map((dispose) => dispose()))
-      await fs.rm(root, { recursive: true, maxRetries: 3 })
-    }
-    options.onTestFinished(dispose)
-
-    let context = {
-      async exec(command: string) {
-        return execSync(command, { cwd: root }).toString()
-      },
-      spawn(command: string) {
-        let abortController = new AbortController()
-
-        let resolveDisposal: (() => void) | undefined
-        let rejectDisposal: ((error: Error) => void) | undefined
-        let disposePromise = new Promise<void>((resolve, reject) => {
-          resolveDisposal = resolve
-          rejectDisposal = reject
-        })
-
-        let dispose = () => {
-          abortController.abort()
-          let timer = setTimeout(
-            () => rejectDisposal?.(new Error(`spawned proccess (${command}) did not exit in time`)),
-            1000,
-          )
-          disposePromise.finally(() => clearTimeout(timer))
-          return disposePromise
-        }
-        disposables.push(dispose)
-        function onExit() {
-          console.log(`spawned proccess (${command}) exited`)
-          resolveDisposal?.()
-        }
-
-        let child = spawn(command, {
-          cwd: root,
-          signal: abortController.signal,
-          shell: true,
-          env: {
-            ...process.env,
-          },
-        })
-
-        let stdout = '',
-          stderr = ''
-        child.stdout.on('data', (result) => (stdout += result.toString()))
-        child.stderr.on('data', (result) => (stderr += result.toString()))
-        child.on('exit', onExit)
-        child.on('error', (error) => {
-          if (error.name !== 'AbortError') {
-            throw error
-          }
-        })
-
-        options.onTestFailed(() => {
-          console.log(stdout)
-          console.error(stderr)
-        })
-
-        return { dispose }
-      },
-      fs: {
-        async glob(pattern: string) {
-          let files = await fastGlob(pattern, { cwd: root })
-          return Promise.all(
-            files.map(async (file) => {
-              let content = await fs.readFile(path.join(root, file), 'utf8')
-              return [file, content]
-            }),
-          )
-        },
-      },
-    } satisfies TestContext
-
-    await test(context)
-  })
-}
-test.only = (
-  name: string,
-  config: TestConfig,
-  testCallback: (context: TestContext) => Promise<void> | void,
-) => {
-  return test(name, config, testCallback, { only: true })
-}
-
-async function getPortFree(): Promise<number> {
-  return new Promise((resolve) => {
-    let server = net.createServer()
-    server.listen(0, () => {
-      let address = server.address()
-      let port = address === null || typeof address === 'string' ? 5173 : address.port
-      server.close(() => resolve(port))
-    })
-  })
-}
+import { expect } from 'vitest'
+import { css, getFreePort, html, json, stripTailwindComment, test, ts } from '../utils'
 
 async function fetchCSS(pathname: string, port: number) {
   const start = Date.now()
@@ -213,16 +21,11 @@ async function fetchCSS(pathname: string, port: number) {
       if (response.status === 200) {
         return response.text()
       }
-      console.log(response.status)
     } catch (e) {
       error = e
     }
   }
   throw error
-}
-
-function pkgToFilename(name: string) {
-  return `${name.replace('@', '').replace('/', '-')}.tgz`
 }
 
 test(
@@ -312,7 +115,7 @@ test(
       `,
       'index.html': html`
         <head>
-          <link rel="stylesheet" href="./src/index.css" />
+          <link rel="stylesheet" href="./src/index.css">
         </head>
         <body>
           <div class="underline m-2">Hello, world!</div>
@@ -325,9 +128,7 @@ test(
     },
   },
   async ({ spawn }) => {
-    expect(1).toBe(1)
-    return
-    let port = await getPortFree()
+    let port = await getFreePort()
     spawn(`pnpm vite dev --port ${port}`)
 
     const css = await fetchCSS('/src/index.css', port)
