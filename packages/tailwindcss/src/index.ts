@@ -33,6 +33,21 @@ function throwOnPlugin(): never {
   throw new Error('No `loadPlugin` function provided to `compile`')
 }
 
+function parseThemeOptions(selector: string) {
+  let isReference = false
+  let isInline = false
+
+  for (let option of segment(selector.slice(6) /* '@theme'.length */, ' ')) {
+    if (option === 'reference') {
+      isReference = true
+    } else if (option === 'inline') {
+      isInline = true
+    }
+  }
+
+  return { isReference, isInline }
+}
+
 export function compile(
   css: string,
   { loadPlugin = throwOnPlugin }: CompileOptions = {},
@@ -177,10 +192,7 @@ export function compile(
 
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
 
-    let themeOptions = segment(node.selector, ' ')
-
-    let isReference = themeOptions.includes('reference', 1)
-    let isInline = themeOptions.includes('inline', 1)
+    let { isReference, isInline } = parseThemeOptions(node.selector)
 
     // Record all custom properties in the `@theme` declaration
     walk(node.nodes, (child, { replaceWith }) => {
@@ -403,9 +415,7 @@ export function __unstable__loadDesignSystem(css: string) {
   walk(ast, (node) => {
     if (node.kind !== 'rule') return
     if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
-    let themeOptions = segment(node.selector, ' ')
-    let isReference = themeOptions.includes('reference', 1)
-    let isInline = themeOptions.includes('inline', 1)
+    let { isReference, isInline } = parseThemeOptions(node.selector)
 
     // Record all custom properties in the `@theme` declaration
     walk([node], (node) => {
