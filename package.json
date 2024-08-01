@@ -50,7 +50,7 @@
     "autoprefixer": "^10.4.14",
     "browserslist": "^4.21.5",
     "concurrently": "^8.0.1",
-    "cssnano": "^6.0.0",
+    "cssnano": "^6.1.2",
     "esbuild": "^0.20.2",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
