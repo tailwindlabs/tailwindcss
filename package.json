@@ -7,7 +7,6 @@
     "singleQuote": true,
     "printWidth": 100,
     "plugins": [
-      "prettier-plugin-embed",
       "prettier-plugin-organize-imports"
     ],
     "overrides": [
@@ -18,15 +17,18 @@
         "options": {
           "parser": "jsonc"
         }
+      },
+      {
+        "files": [
+          "integrations/**/*.ts"
+        ],
+        "options": {
+          "plugins": [
+            "prettier-plugin-embed",
+            "prettier-plugin-organize-imports"
+          ]
+        }
       }
-    ],
-    "embeddedNoopComments": [
-      "css",
-      "html"
-    ],
-    "embeddedNoopTags": [
-      "css",
-      "html"
     ]
   },
   "scripts": {

@@ -43,7 +43,7 @@ test(
       `,
       'index.html': html`
         <head>
-          <link rel="stylesheet" href="./src/index.css">
+          <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
           <div class="underline m-2">Hello, world!</div>
@@ -103,7 +103,7 @@ test(
       `,
       'index.html': html`
         <head>
-          <link rel="stylesheet" href="./src/index.css">
+          <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
           <div class="underline">Hello, world!</div>
@@ -133,13 +133,13 @@ test(
     await write(
       'index.html',
       html`
-      <head>
-        <link rel="stylesheet" href="./src/index.css">
-      </head>
-      <body>
-        <div class="underline m-2">Hello, world!</div>
-      </body>
-    `,
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline m-2">Hello, world!</div>
+        </body>
+      `,
     )
     await process.onStdout((message) => message.includes('page reload'))
 
