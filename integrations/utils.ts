@@ -28,6 +28,8 @@ type TestCallback = (context: TestContext) => Promise<void> | void
 
 const REPO_ROOT = path.join(__dirname, '..')
 
+type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
+
 export function test(
   name: string,
   config: TestConfig,
@@ -113,10 +115,35 @@ export function test(
           resolveDisposal?.()
         }
 
-        let stdout = ''
-        let stderr = ''
-        child.stdout.on('data', (result) => (stdout += result.toString()))
-        child.stderr.on('data', (result) => (stderr += result.toString()))
+        let stdoutMessages: string[] = []
+        let stderrMessages: string[] = []
+
+        let stdoutActors: SpawnActor[] = []
+        let stderrActors: SpawnActor[] = []
+
+        function notifyNext(actors: SpawnActor[], messages: string[]) {
+          if (actors.length <= 0) return
+          let [next] = actors
+
+          for (let [idx, message] of messages.entries()) {
+            if (next.predicate(message)) {
+              messages.splice(0, idx + 1)
+              let actorIdx = actors.indexOf(next)
+              actors.splice(actorIdx, 1)
+              next.resolve()
+              break
+            }
+          }
+        }
+
+        child.stdout.on('data', (result) => {
+          stdoutMessages.push(result.toString())
+          notifyNext(stdoutActors, stdoutMessages)
+        })
+        child.stderr.on('data', (result) => {
+          stderrMessages.push(result.toString())
+          notifyNext(stderrActors, stderrMessages)
+        })
         child.on('exit', onExit)
         child.on('error', (error) => {
           if (error.name !== 'AbortError') {
@@ -125,11 +152,25 @@ export function test(
         })
 
         options.onTestFailed(() => {
-          console.log(stdout)
-          console.error(stderr)
+          stdoutMessages.map((message) => console.log(message))
+          stderrMessages.map((message) => console.error(message))
         })
 
-        return { dispose }
+        return {
+          dispose,
+          onStdout(predicate: (message: string) => boolean) {
+            return new Promise<void>((resolve) => {
+              stdoutActors.push({ predicate, resolve })
+              notifyNext(stdoutActors, stdoutMessages)
+            })
+          },
+          onStderr(predicate: (message: string) => boolean) {
+            return new Promise<void>((resolve) => {
+              stderrActors.push({ predicate, resolve })
+              notifyNext(stderrActors, stderrMessages)
+            })
+          },
+        }
       },
       fs: {
         async glob(pattern: string) {
