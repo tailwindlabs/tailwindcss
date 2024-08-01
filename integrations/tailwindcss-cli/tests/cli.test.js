@@ -96,6 +96,45 @@ describe('Build command', () => {
     expect(withoutMinify.length).toBeGreaterThan(withMinify.length)
   })
 
+  test('--minify does not break nested CSS', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await writeInputFile(
+      'input.css',
+      css`
+        .parent {
+          & .child {
+            color: red;
+          }
+          & .child {
+            &:not([href]) {
+              color: green;
+            }
+          }
+        }
+      `
+    )
+
+    await $(`${EXECUTABLE} --input ./src/input.css --output ./dist/main.css --minify`)
+    let withMinify = await readOutputFile('main.css')
+
+    // Verify that we got the expected output. Note: `.toIncludeCss` formats
+    // `actual` & `expected`
+    expect(withMinify).toIncludeCss(
+      css`
+        .parent {
+          & .child {
+            color: red;
+          }
+          & .child {
+            &:not([href]) {
+              color: green;
+            }
+          }
+        }
+      `
+    )
+  })
+
   test('--no-autoprefixer', async () => {
     await writeInputFile('index.html', html`<div class="select-none"></div>`)
 
