@@ -6,13 +6,14 @@ import fs from 'node:fs/promises'
 import net from 'node:net'
 import { homedir, platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import tcpPortUsed from 'tcp-port-used'
 import { test as defaultTest } from 'vitest'
 
 export let css = dedent
 export let html = dedent
 export let ts = dedent
 export let json = dedent
+
+const REPO_ROOT = path.join(__dirname, '..')
 
 interface SpawnedProcess {
   dispose: () => void
@@ -35,8 +36,6 @@ interface TestContext {
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
-
-const REPO_ROOT = path.join(__dirname, '..')
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
 
@@ -86,7 +85,6 @@ export function test(
     }
 
     let disposables: (() => Promise<void>)[] = []
-
     async function dispose() {
       await Promise.all(disposables.map((dispose) => dispose()))
       await fs.rm(root, { recursive: true, maxRetries: 3, force: true })
@@ -113,7 +111,7 @@ export function test(
           },
         })
 
-        let dispose = () => {
+        function dispose() {
           child.kill()
 
           let timer = setTimeout(
@@ -201,8 +199,9 @@ export function test(
                   // block for multiple seconds. In order to avoid that for a
                   // server that is no longer running, we check if the port is
                   // still in use first.
-                  const isRunning = await tcpPortUsed.check(port, '127.0.0.1')
-                  if (!isRunning) {
+                  let isPortTaken = await testIfPortTaken(port)
+                  console.log({ isPortTaken })
+                  if (!isPortTaken) {
                     return
                   }
 
@@ -272,4 +271,13 @@ function resolveVersion(dependency: string) {
 
 export function stripTailwindComment(content: string) {
   return content.replace(/\/\*! tailwindcss .*? \*\//g, '').trim()
+}
+
+function testIfPortTaken(port: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    let server = net.createServer()
+    server.listen(port, () => {
+      resolve(false)
+    })
+  })
 }

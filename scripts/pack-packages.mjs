@@ -61,7 +61,7 @@ function pkgToFilename(name) {
 }
 
 function lastLine(str) {
-  const index = str.lastIndexOf('\n')
+  let index = str.lastIndexOf('\n')
   if (index === -1) return str
   return str.slice(index + 1)
 }
