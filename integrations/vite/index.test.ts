@@ -40,8 +40,9 @@ function test(
   test: (context: TestContext) => Promise<void> | void,
 ) {
   return defaultTest(name, { timeout: 30000 }, async (options) => {
-    let root = await fs.mkdtemp(path.join(tmpdir(), 'tailwind-integrations'))
-    root = path.relative(__dirname, root)
+    let root = await fs.mkdtemp(
+      path.join(path.join(__dirname, '..', '..'), 'tailwind-integrations'),
+    )
 
     for (let [filename, content] of Object.entries(config.fs)) {
       let full = path.join(root, filename)
@@ -132,7 +133,7 @@ test(
         }
       `,
       'vite.config.ts': ts`
-        import tailwindcss from '@tailwindcss/vite'
+        // import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
 
         export default defineConfig({
@@ -145,7 +146,7 @@ test(
             //   output: { assetFileNames: 'assets/[name].[ext]' },
             // },
           },
-          plugins: [tailwindcss()],
+          // plugins: [tailwindcss()],
         })
       `,
       'index.html': html`
@@ -162,6 +163,8 @@ test(
     },
   },
   async ({ root, fs }) => {
+    console.log({ root })
+    console.log(execSync('dir', { cwd: root }))
     execSync('pnpm vite build', { cwd: root })
 
     for (let [path, content] of await fs.glob('dist/**/*.css')) {
