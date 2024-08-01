@@ -33,8 +33,8 @@
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^20.12.12",
-    "vite": "^5.2.11"
+    "@types/node": "catalog:",
+    "vite": "catalog:"
   },
   "peerDependencies": {
     "vite": "^5.2.0"
