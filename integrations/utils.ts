@@ -17,8 +17,8 @@ const REPO_ROOT = path.join(__dirname, '..')
 
 interface SpawnedProcess {
   dispose: () => void
-  onStdout: (predicate: (message: string) => boolean) => void
-  onStderr: (predicate: (message: string) => boolean) => void
+  onStdout: (predicate: (message: string) => boolean) => Promise<void>
+  onStderr: (predicate: (message: string) => boolean) => Promise<void>
 }
 
 interface TestConfig {
@@ -55,7 +55,7 @@ export function test(
       ),
     )
 
-    async function write(filename, content): Promise<void> {
+    async function write(filename: string, content: string): Promise<void> {
       let full = path.join(root, filename)
 
       if (filename.endsWith('package.json')) {
@@ -115,7 +115,7 @@ export function test(
           child.kill()
 
           let timer = setTimeout(
-            () => rejectDisposal?.(new Error(`spawned proccess (${command}) did not exit in time`)),
+            () => rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
             1000,
           )
           disposePromise.finally(() => clearTimeout(timer))
@@ -246,12 +246,12 @@ function pkgToFilename(name: string) {
 function overwriteVersionsInPackageJson(content: string): string {
   let json = JSON.parse(content)
 
-  // Resolve all worksplace:^ versions to local tarballs
+  // Resolve all workspace:^ versions to local tarballs
   ;['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
-    let desp = json[key] || {}
-    for (let dependecy in desp) {
-      if (desp[dependecy] === 'workspace:^') {
-        desp[dependecy] = resolveVersion(dependecy)
+    let dependencies = json[key] || {}
+    for (let dependency in dependencies) {
+      if (dependencies[dependency] === 'workspace:^') {
+        dependencies[dependency] = resolveVersion(dependency)
       }
     }
   })
