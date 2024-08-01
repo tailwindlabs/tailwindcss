@@ -41,6 +41,7 @@ function test(
 ) {
   return defaultTest(name, { timeout: 30000 }, async (options) => {
     let root = await fs.mkdtemp(path.join(tmpdir(), 'tailwind-integrations'))
+    root = path.relative(__dirname, root)
 
     for (let [filename, content] of Object.entries(config.fs)) {
       let full = path.join(root, filename)
