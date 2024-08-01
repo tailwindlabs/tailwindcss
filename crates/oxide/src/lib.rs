@@ -1,7 +1,10 @@
+use crate::glob::path_matches_globs;
 use crate::parser::Extractor;
 use bstr::ByteSlice;
 use cache::Cache;
 use fxhash::FxHashSet;
+use glob::fast_glob;
+use glob::get_fast_patterns;
 use ignore::DirEntry;
 use ignore::WalkBuilder;
 use lazy_static::lazy_static;
@@ -39,8 +42,10 @@ pub struct ChangedContent {
 
 #[derive(Debug, Clone)]
 pub struct ScanOptions {
+    /// Base path to start scanning from
     pub base: String,
-    pub globs: bool,
+    /// Glob content paths
+    pub content_paths: Vec<GlobEntry>,
 }
 
 #[derive(Debug, Clone)]
@@ -64,15 +69,49 @@ pub fn clear_cache() {
 pub fn scan_dir(opts: ScanOptions) -> ScanResult {
     init_tracing();
 
-    let root = Path::new(&opts.base);
+    let base = Path::new(&opts.base);
 
-    let (files, dirs) = resolve_files(root);
+    let (mut files, dirs) = resolve_files(base);
 
-    let globs = if opts.globs {
-        resolve_globs(root, dirs)
-    } else {
-        vec![]
-    };
+    let mut globs = resolve_globs(base, dirs);
+
+    // If we have additional content paths, then we have to resolve them as well.
+    if !opts.content_paths.is_empty() {
+        let resolved_files: Vec<_> = match fast_glob(&opts.content_paths) {
+            Ok(matches) => matches.filter_map(|x| x.canonicalize().ok()).collect(),
+            Err(err) => {
+                event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
+                vec![]
+            }
+        };
+
+        files.extend(resolved_files);
+
+        let optimized_incoming_globs = get_fast_patterns(&opts.content_paths)
+            .iter()
+            .flat_map(|(root, globs)| {
+                globs.iter().filter_map(|glob| {
+                    let root = match root.canonicalize() {
+                        Ok(root) => root,
+                        Err(err) => {
+                            event!(
+                                tracing::Level::ERROR,
+                                "Failed to canonicalize base path: {:?}",
+                                err
+                            );
+                            return None;
+                        }
+                    };
+
+                    let base = root.display().to_string();
+                    let glob = glob.to_string();
+                    Some(GlobEntry { base, glob })
+                })
+            })
+            .collect::<Vec<GlobEntry>>();
+
+        globs.extend(optimized_incoming_globs);
+    }
 
     let mut cache = GLOBAL_CACHE.lock().unwrap();
 
@@ -398,6 +437,26 @@ pub fn scan_files(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
         (IO::Parallel, Parsing::Sequential) => parse_all_blobs_sync(read_all_files(input)),
         (IO::Parallel, Parsing::Parallel) => parse_all_blobs(read_all_files(input)),
     }
+}
+
+#[tracing::instrument(skip(input, globs))]
+pub fn scan_files_with_globs(input: Vec<ChangedContent>, globs: Vec<GlobEntry>) -> Vec<String> {
+    parse_all_blobs_sync(read_all_files_sync(
+        input
+            .into_iter()
+            .flat_map(|c| {
+                // Verify that the file is actually allowed by the globs
+                if let Some(ref file) = c.file {
+                    if !path_matches_globs(file, &globs) {
+                        return None;
+                    }
+                }
+
+                // ChangedContent is allowed
+                Some(c)
+            })
+            .collect(),
+    ))
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
