@@ -1,3 +1,4 @@
+import kill from 'kill-port'
 import { expect } from 'vitest'
 import { css, getFreePort, html, json, stripTailwindComment, test, ts } from '../utils'
 
@@ -143,5 +144,7 @@ test(
       }"
     `,
     )
+
+    await kill(port)
   },
 )
