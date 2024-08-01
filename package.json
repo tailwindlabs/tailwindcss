@@ -37,7 +37,6 @@
   "devDependencies": {
     "@playwright/test": "^1.44.1",
     "@types/node": "^20.12.12",
-    "@vitest/coverage-v8": "^1.6.0",
     "postcss": "8.4.24",
     "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
@@ -45,7 +44,7 @@
     "tsup": "^8.0.2",
     "turbo": "^1.13.3",
     "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "vitest": "^2.0.5"
   },
   "packageManager": "pnpm@9.6.0"
 }
