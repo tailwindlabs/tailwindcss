@@ -2,34 +2,22 @@ import { expect } from 'vitest'
 import { css, html, json, stripTailwindComment, test, ts } from '../utils'
 
 async function fetchCSS(pathname: string, port: number) {
-  const start = Date.now()
-  let error
-  while (Date.now() - start < 5000) {
-    await new Promise((resolve) => setTimeout(resolve, 100))
-    try {
-      // We need to fetch the main index.html file to populate the list of
-      // candidates.
-      let body = await fetch(`http://localhost:${port}`)
-      // Make sure the main request is garbage collected.
-      body.blob()
+  // We need to fetch the main index.html file to populate the list of
+  // candidates.
+  let body = await fetch(`http://localhost:${port}`)
+  // Make sure the main request is garbage collected.
+  body.blob()
 
-      let response = await fetch(`http://localhost:${port}${pathname}`, {
-        headers: {
-          Accept: 'text/css',
-        },
-      })
-      if (response.status === 200) {
-        return response.text()
-      }
-    } catch (e) {
-      error = e
-    }
-  }
-  throw error
+  let response = await fetch(`http://localhost:${port}${pathname}`, {
+    headers: {
+      Accept: 'text/css',
+    },
+  })
+  return response.text()
 }
 
 test(
-  'builds with Vite',
+  'works with production builds',
   {
     fs: {
       'package.json': json`
@@ -89,7 +77,7 @@ test(
 )
 
 test(
-  'works with Vite in dev mode',
+  'works with dev builds and live reloads',
   {
     fs: {
       'package.json': json`
@@ -118,7 +106,7 @@ test(
           <link rel="stylesheet" href="./src/index.css">
         </head>
         <body>
-          <div class="underline m-2">Hello, world!</div>
+          <div class="underline">Hello, world!</div>
         </body>
       `,
       'src/index.css': css`
@@ -127,12 +115,35 @@ test(
       `,
     },
   },
-  async ({ spawn, getFreePort }) => {
+  async ({ spawn, getFreePort, fs: { write } }) => {
     let port = await getFreePort()
-    spawn(`pnpm vite dev --port ${port}`)
+    let process = await spawn(`pnpm vite dev --port ${port}`)
 
-    const css = await fetchCSS('/src/index.css', port)
+    await process.onStdout((message) => message.includes('ready in'))
 
+    let css = await fetchCSS('/src/index.css', port)
+    expect(stripTailwindComment(css)).toMatchInlineSnapshot(
+      `
+      ".underline {
+        text-decoration-line: underline;
+      }"
+    `,
+    )
+
+    await write(
+      'index.html',
+      html`
+      <head>
+        <link rel="stylesheet" href="./src/index.css">
+      </head>
+      <body>
+        <div class="underline m-2">Hello, world!</div>
+      </body>
+    `,
+    )
+    await process.onStdout((message) => message.includes('page reload'))
+
+    css = await fetchCSS('/src/index.css', port)
     expect(stripTailwindComment(css)).toMatchInlineSnapshot(
       `
       ".m-2 {

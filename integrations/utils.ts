@@ -6,6 +6,7 @@ import fs from 'node:fs/promises'
 import net from 'node:net'
 import { homedir, platform, tmpdir } from 'node:os'
 import path from 'node:path'
+import tcpPortUsed from 'tcp-port-used'
 import { test as defaultTest } from 'vitest'
 
 export let css = dedent
@@ -13,17 +14,24 @@ export let html = dedent
 export let ts = dedent
 export let json = dedent
 
+interface SpawnedProcess {
+  dispose: () => void
+  onStdout: (predicate: (message: string) => boolean) => void
+  onStderr: (predicate: (message: string) => boolean) => void
+}
+
 interface TestConfig {
   fs: {
     [filePath: string]: string
   }
 }
 interface TestContext {
-  exec: (command: string) => Promise<string>
-  spawn: (command: string) => { dispose: () => void }
+  exec(command: string): Promise<string>
+  spawn(command: string): Promise<SpawnedProcess>
   getFreePort(): Promise<number>
   fs: {
-    glob: (pattern: string) => Promise<[string, string][]>
+    write(filePath: string, content: string): Promise<void>
+    glob(pattern: string): Promise<[string, string][]>
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
@@ -48,7 +56,7 @@ export function test(
       ),
     )
 
-    for (let [filename, content] of Object.entries(config.fs)) {
+    async function write(filename, content): Promise<void> {
       let full = path.join(root, filename)
 
       if (filename.endsWith('package.json')) {
@@ -63,6 +71,10 @@ export function test(
       let dir = path.dirname(full)
       await fs.mkdir(dir, { recursive: true })
       await fs.writeFile(full, content)
+    }
+
+    for (let [filename, content] of Object.entries(config.fs)) {
+      await write(filename, content)
     }
 
     try {
@@ -85,7 +97,7 @@ export function test(
       async exec(command: string) {
         return execSync(command, { cwd: root }).toString()
       },
-      spawn(command: string) {
+      async spawn(command: string) {
         let resolveDisposal: (() => void) | undefined
         let rejectDisposal: ((error: Error) => void) | undefined
         let disposePromise = new Promise<void>((resolve, reject) => {
@@ -113,7 +125,6 @@ export function test(
         }
         disposables.push(dispose)
         function onExit() {
-          console.log(`spawned proccess (${command}) exited`)
           resolveDisposal?.()
         }
 
@@ -185,7 +196,18 @@ export function test(
               if (port === null) {
                 reject(new Error(`Failed to get a free port: address is ${address}`))
               } else {
-                disposables.push(() => killPort(port))
+                disposables.push(async () => {
+                  // kill-port uses `lsof` on macOS which is expensive and can
+                  // block for multiple seconds. In order to avoid that for a
+                  // server that is no longer running, we check if the port is
+                  // still in use first.
+                  const isRunning = await tcpPortUsed.check(port, '127.0.0.1')
+                  if (!isRunning) {
+                    return
+                  }
+
+                  await killPort(port)
+                })
                 resolve(port)
               }
             })
@@ -193,6 +215,7 @@ export function test(
         })
       },
       fs: {
+        write,
         async glob(pattern: string) {
           let files = await fastGlob(pattern, { cwd: root })
           return Promise.all(
