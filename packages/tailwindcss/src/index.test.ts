@@ -1344,6 +1344,25 @@ describe('plugins', () => {
   })
 })
 
+describe('@content', () => {
+  test('emits @content files', () => {
+    let { globs } = compile(css`
+      @content "./foo/bar/*.ts";
+    `)
+
+    expect(globs).toEqual(['./foo/bar/*.ts'])
+  })
+
+  test('emits multiple @content files', () => {
+    let { globs } = compile(css`
+      @content "./foo/**/*.ts";
+      @content "./php/secr3t/smarty.php";
+    `)
+
+    expect(globs).toEqual(['./foo/**/*.ts', './php/secr3t/smarty.php'])
+  })
+})
+
 describe('@variant', () => {
   test('@variant must be top-level and cannot be nested', () => {
     expect(() =>
