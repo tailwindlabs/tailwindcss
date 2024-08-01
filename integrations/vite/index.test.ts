@@ -58,11 +58,11 @@ test(
   async ({ fs, exec }) => {
     await exec('pnpm vite build')
 
-    expect.assertions(2)
-    for (let [path, content] of await fs.glob('dist/**/*.css')) {
-      expect(path).toMatch(/\.css$/)
-      expect(stripTailwindComment(content)).toMatchInlineSnapshot(
-        `
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [, content] = files[0]
+    expect(stripTailwindComment(content)).toMatchInlineSnapshot(
+      `
         ".m-2 {
           margin: var(--spacing-2, .5rem);
         }
@@ -71,8 +71,7 @@ test(
           text-decoration-line: underline;
         }"
       `,
-      )
-    }
+    )
   },
 )
 

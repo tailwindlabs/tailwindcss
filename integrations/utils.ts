@@ -203,7 +203,6 @@ export function test(
                   // server that is no longer running, we check if the port is
                   // still in use first.
                   let isPortTaken = await testIfPortTaken(port)
-                  console.log({ isPortTaken })
                   if (!isPortTaken) {
                     return
                   }
