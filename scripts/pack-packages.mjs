@@ -47,7 +47,10 @@ Promise.all(
 
     let filename = await pack()
     // Remove version suffix
-    await fs.rename(path.join(root, 'dist', filename), path.join(root, 'dist', pkgToFilename(name)))
+    await fs.rename(
+      path.join(root, 'dist', path.basename(filename)),
+      path.join(root, 'dist', pkgToFilename(name)),
+    )
   }),
 ).then(() => {
   console.log('Done.')
@@ -58,6 +61,7 @@ function pkgToFilename(name) {
 }
 
 function lastLine(str) {
-  let lines = str.split(/\r?\n/)
-  return lines[lines.length - 1]
+  const index = str.lastIndexOf('\n')
+  if (index === -1) return str
+  return str.slice(index + 1)
 }

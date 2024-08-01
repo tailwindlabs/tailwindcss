@@ -131,12 +131,12 @@ test(
         }
       `,
       'vite.config.ts': ts`
-        // import tailwindcss from '@tailwindcss/vite'
+        import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
 
         export default defineConfig({
           build: {
-            // cssMinify: false,
+            cssMinify: false,
             // // Windows Vite builds don't work unless we manually rename the
             // // output HTML file.
             // rollupOptions: {
@@ -144,7 +144,7 @@ test(
             //   output: { assetFileNames: 'assets/[name].[ext]' },
             // },
           },
-          // plugins: [tailwindcss()],
+          plugins: [tailwindcss()],
         })
       `,
       'index.html': html`
@@ -161,7 +161,7 @@ test(
     },
   },
   async ({ root, fs }) => {
-    execSync('pnpm vite dev', { cwd: root })
+    execSync('pnpm vite build', { cwd: root })
 
     for (let [path, content] of await fs.glob('dist/**/*.css')) {
       expect(path).toMatch(/\.css$/)
