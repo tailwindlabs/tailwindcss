@@ -52,6 +52,7 @@ export function compile(
   css: string,
   { loadPlugin = throwOnPlugin }: CompileOptions = {},
 ): {
+  globs: string[]
   build(candidates: string[]): string
 } {
   let ast = CSS.parse(css)
@@ -73,6 +74,7 @@ export function compile(
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
+  let globs: string[] = []
 
   walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
@@ -115,6 +117,29 @@ export function compile(
         })
       })
 
+      replaceWith([])
+      return
+    }
+
+    // Collect paths from `@content` at-rules
+    if (node.selector.startsWith('@content ')) {
+      if (node.nodes.length > 0) {
+        throw new Error('`@content` cannot have a body.')
+      }
+
+      if (parent !== null) {
+        throw new Error('`@content` cannot be nested.')
+      }
+
+      let path = node.selector.slice(9)
+      if (
+        (path[0] === '"' && path[path.length - 1] !== '"') ||
+        (path[0] === "'" && path[path.length - 1] !== "'") ||
+        (path[0] !== "'" && path[0] !== '"')
+      ) {
+        throw new Error('`@content` paths must be quoted.')
+      }
+      globs.push(path.slice(1, -1))
       replaceWith([])
       return
     }
@@ -374,6 +399,7 @@ export function compile(
   let previousAstNodeCount = 0
 
   return {
+    globs,
     build(newRawCandidates: string[]) {
       let didChange = false
 

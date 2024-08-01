@@ -1,12 +1,19 @@
 #[cfg(test)]
-mod auto_content {
+mod scan_dir {
+    use serial_test::serial;
     use std::process::Command;
     use std::{fs, path};
 
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
 
-    fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {
+    fn scan_with_globs(
+        paths_with_content: &[(&str, Option<&str>)],
+        globs: Vec<&str>,
+    ) -> (Vec<String>, Vec<String>) {
+        // Ensure that every test truly runs in isolation without any cache
+        clear_cache();
+
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
 
@@ -15,8 +22,8 @@ mod auto_content {
 
         // Create the necessary files
         for (path, contents) in paths_with_content {
-            // Ensure we use the right path seperator for the current platform
-            let path = dir.join(path.replace("/", path::MAIN_SEPARATOR.to_string().as_str()));
+            // Ensure we use the right path separator for the current platform
+            let path = dir.join(path.replace('/', path::MAIN_SEPARATOR.to_string().as_str()));
             let parent = path.parent().unwrap();
             if !parent.exists() {
                 fs::create_dir_all(parent).unwrap();
@@ -33,7 +40,13 @@ mod auto_content {
         // Resolve all content paths for the (temporary) current working directory
         let result = scan_dir(ScanOptions {
             base: base.clone(),
-            globs: true,
+            content_paths: globs
+                .iter()
+                .map(|x| GlobEntry {
+                    base: base.clone(),
+                    glob: x.to_string(),
+                })
+                .collect(),
         });
 
         let mut paths: Vec<_> = result
@@ -57,7 +70,7 @@ mod auto_content {
                 let parent_dir = format!("{}{}", &base.to_string(), path::MAIN_SEPARATOR);
                 x.replace(&parent_dir, "")
                     // Normalize paths to use unix style separators
-                    .replace("\\", "/")
+                    .replace('\\', "/")
             })
             .collect();
 
@@ -68,11 +81,16 @@ mod auto_content {
         (paths, result.candidates)
     }
 
+    fn scan(paths_with_content: &[(&str, Option<&str>)]) -> (Vec<String>, Vec<String>) {
+        scan_with_globs(paths_with_content, vec![])
+    }
+
     fn test(paths_with_content: &[(&str, Option<&str>)]) -> Vec<String> {
         scan(paths_with_content).0
     }
 
     #[test]
+    #[serial]
     fn it_should_work_with_a_set_of_root_files() {
         let globs = test(&[
             ("index.html", None),
@@ -84,6 +102,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_work_with_a_set_of_root_files_and_ignore_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("b.html")),
@@ -96,6 +115,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_list_all_files_in_the_public_folder_explicitly() {
         let globs = test(&[
             ("index.html", None),
@@ -115,6 +135,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_list_nested_folders_explicitly_in_the_public_folder() {
         let globs = test(&[
             ("index.html", None),
@@ -144,6 +165,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_list_all_files_in_the_public_folder_explicitly_except_ignored_files() {
         let globs = test(&[
             (".gitignore", Some("public/b.html\na.html")),
@@ -156,6 +178,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_use_a_glob_for_top_level_folders() {
         let globs = test(&[
             ("index.html", None),
@@ -173,6 +196,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_ignore_binary_files() {
         let globs = test(&[
             ("index.html", None),
@@ -184,6 +208,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_ignore_known_extensions() {
         let globs = test(&[
             ("index.html", None),
@@ -195,6 +220,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_ignore_known_files() {
         let globs = test(&[
             ("index.html", None),
@@ -205,6 +231,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_ignore_and_expand_nested_ignored_folders() {
         let globs = test(&[
             // Explicitly listed root files
@@ -291,6 +318,7 @@ mod auto_content {
     }
 
     #[test]
+    #[serial]
     fn it_should_scan_for_utilities() {
         let mut ignores = String::new();
         ignores.push_str("# md:font-bold\n");
@@ -314,5 +342,38 @@ mod auto_content {
             candidates,
             vec!["condition", "div", "font-bold", "md:flex", "px-4"]
         );
+    }
+
+    #[test]
+    #[serial]
+    fn it_should_scan_content_paths() {
+        let candidates = scan_with_globs(
+            &[
+                // We know that `.styl` extensions are ignored, so they are not covered by auto content
+                // detection.
+                ("foo.styl", Some("content-['foo.styl']")),
+            ],
+            vec!["*.styl"],
+        )
+        .1;
+
+        assert_eq!(candidates, vec!["content-['foo.styl']"]);
+    }
+
+    #[test]
+    #[serial]
+    fn it_should_scan_content_paths_even_when_they_are_git_ignored() {
+        let candidates = scan_with_globs(
+            &[
+                (".gitignore", Some("foo.styl")),
+                // We know that `.styl` extensions are ignored, so they are not covered by auto content
+                // detection.
+                ("foo.styl", Some("content-['foo.styl']")),
+            ],
+            vec!["*.styl"],
+        )
+        .1;
+
+        assert_eq!(candidates, vec!["content-['foo.styl']"]);
     }
 }

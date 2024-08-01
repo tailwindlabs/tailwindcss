@@ -7,7 +7,7 @@ const root = process.env.FOLDER || process.cwd()
 const css = String.raw
 
 bench('compile', async () => {
-  let { candidates } = scanDir({ base: root, globs: true })
+  let { candidates } = scanDir({ base: root })
 
   compile(css`
     @tailwind utilities;

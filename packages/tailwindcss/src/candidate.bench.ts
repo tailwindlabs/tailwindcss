@@ -8,7 +8,7 @@ import { Theme } from './theme'
 const root = process.env.FOLDER || process.cwd()
 
 // Auto content detection
-const result = scanDir({ base: root, globs: true })
+const result = scanDir({ base: root })
 
 const designSystem = buildDesignSystem(new Theme())
 

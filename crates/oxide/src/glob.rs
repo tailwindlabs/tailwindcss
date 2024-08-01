@@ -1,11 +1,13 @@
+use glob_match::glob_match;
 use std::iter;
 use std::path::{Path, PathBuf};
 
+use crate::GlobEntry;
+
 pub fn fast_glob(
-    base_path: &Path,
-    patterns: &Vec<String>,
+    patterns: &Vec<GlobEntry>,
 ) -> Result<impl iter::Iterator<Item = PathBuf>, std::io::Error> {
-    Ok(get_fast_patterns(base_path, patterns)
+    Ok(get_fast_patterns(patterns)
         .into_iter()
         .flat_map(|(base_path, patterns)| {
             globwalk::GlobWalkerBuilder::from_patterns(base_path, &patterns)
@@ -40,10 +42,13 @@ pub fn fast_glob(
 /// tailwind --pwd ./project/pages --content "**/*.js"
 /// tailwind --pwd ./project/components --content "**/*.js"
 /// ```
-fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathBuf, Vec<String>)> {
+pub fn get_fast_patterns(patterns: &Vec<GlobEntry>) -> Vec<(PathBuf, Vec<String>)> {
     let mut optimized_patterns: Vec<(PathBuf, Vec<String>)> = vec![];
 
     for pattern in patterns {
+        let base_path = PathBuf::from(&pattern.base);
+        let pattern = &pattern.glob;
+
         let is_negated = pattern.starts_with('!');
         let mut pattern = pattern.clone();
         if is_negated {
@@ -54,13 +59,13 @@ fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathBuf, 
 
         if folders.len() <= 1 {
             // No paths we can simplify, so let's use it as-is.
-            optimized_patterns.push((base_path.to_path_buf(), vec![pattern]));
+            optimized_patterns.push((base_path, vec![pattern]));
         } else {
             // We do have folders because `/` exists. Let's try to simplify the globs!
             // Safety: We know that the length is greater than 1, so we can safely unwrap.
             let file_pattern = folders.pop().unwrap();
             let all_folders = folders.clone();
-            let mut temp_paths = vec![base_path.to_path_buf()];
+            let mut temp_paths = vec![base_path];
 
             let mut bail = false;
 
@@ -129,6 +134,14 @@ fn get_fast_patterns(base_path: &Path, patterns: &Vec<String>) -> Vec<(PathBuf, 
     }
 
     optimized_patterns
+}
+
+pub fn path_matches_globs(path: &Path, globs: &[GlobEntry]) -> bool {
+    let path = path.to_string_lossy();
+
+    globs
+        .iter()
+        .any(|g| glob_match(&format!("{}/{}", g.base, g.glob), &path))
 }
 
 /// Given this input: a-{b,c}-d-{e,f}
@@ -228,11 +241,15 @@ fn expand_braces(input: &str) -> Vec<String> {
 #[cfg(test)]
 mod tests {
     use super::get_fast_patterns;
+    use crate::GlobEntry;
     use std::path::PathBuf;
 
     #[test]
     fn it_should_keep_globs_that_start_with_file_wildcards_as_is() {
-        let actual = get_fast_patterns(&PathBuf::from("/projects"), &vec!["*.html".to_string()]);
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "*.html".to_string(),
+        }]);
         let expected = vec![(PathBuf::from("/projects"), vec!["*.html".to_string()])];
 
         assert_eq!(actual, expected,);
@@ -240,7 +257,11 @@ mod tests {
 
     #[test]
     fn it_should_keep_globs_that_start_with_folder_wildcards_as_is() {
-        let actual = get_fast_patterns(&PathBuf::from("/projects"), &vec!["**/*.html".to_string()]);
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "**/*.html".to_string(),
+        }]);
+
         let expected = vec![(PathBuf::from("/projects"), vec!["**/*.html".to_string()])];
 
         assert_eq!(actual, expected,);
@@ -248,10 +269,10 @@ mod tests {
 
     #[test]
     fn it_should_move_the_starting_folder_to_the_path() {
-        let actual = get_fast_patterns(
-            &PathBuf::from("/projects"),
-            &vec!["example/*.html".to_string()],
-        );
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "example/*.html".to_string(),
+        }]);
         let expected = vec![(
             PathBuf::from("/projects/example"),
             vec!["*.html".to_string()],
@@ -262,10 +283,10 @@ mod tests {
 
     #[test]
     fn it_should_move_the_starting_folders_to_the_path() {
-        let actual = get_fast_patterns(
-            &PathBuf::from("/projects"),
-            &vec!["example/other/*.html".to_string()],
-        );
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "example/other/*.html".to_string(),
+        }]);
         let expected = vec![(
             PathBuf::from("/projects/example/other"),
             vec!["*.html".to_string()],
@@ -276,10 +297,11 @@ mod tests {
 
     #[test]
     fn it_should_branch_expandable_folders() {
-        let actual = get_fast_patterns(
-            &PathBuf::from("/projects"),
-            &vec!["{foo,bar}/*.html".to_string()],
-        );
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "{foo,bar}/*.html".to_string(),
+        }]);
+
         let expected = vec![
             (PathBuf::from("/projects/foo"), vec!["*.html".to_string()]),
             (PathBuf::from("/projects/bar"), vec!["*.html".to_string()]),
@@ -290,10 +312,10 @@ mod tests {
 
     #[test]
     fn it_should_expand_multiple_expansions_in_the_same_folder() {
-        let actual = get_fast_patterns(
-            &PathBuf::from("/projects"),
-            &vec!["a-{b,c}-d-{e,f}-g/*.html".to_string()],
-        );
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "a-{b,c}-d-{e,f}-g/*.html".to_string(),
+        }]);
         let expected = vec![
             (
                 PathBuf::from("/projects/a-b-d-e-g"),
@@ -318,10 +340,10 @@ mod tests {
 
     #[test]
     fn multiple_expansions_per_folder_starting_at_the_root() {
-        let actual = get_fast_patterns(
-            &PathBuf::from("/projects"),
-            &vec!["{a,b}-c-{d,e}-f/{b,c}-d-{e,f}-g/*.html".to_string()],
-        );
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "{a,b}-c-{d,e}-f/{b,c}-d-{e,f}-g/*.html".to_string(),
+        }]);
         let expected = vec![
             (
                 PathBuf::from("/projects/a-c-d-f/b-d-e-g"),
@@ -394,10 +416,11 @@ mod tests {
 
     #[test]
     fn it_should_stop_expanding_once_we_hit_a_wildcard() {
-        let actual = get_fast_patterns(
-            &PathBuf::from("/projects"),
-            &vec!["{foo,bar}/example/**/{baz,qux}/*.html".to_string()],
-        );
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "{foo,bar}/example/**/{baz,qux}/*.html".to_string(),
+        }]);
+
         let expected = vec![
             (
                 PathBuf::from("/projects/foo/example"),
@@ -414,10 +437,10 @@ mod tests {
 
     #[test]
     fn it_should_keep_the_negation_symbol_for_all_new_patterns() {
-        let actual = get_fast_patterns(
-            &PathBuf::from("/projects"),
-            &vec!["!{foo,bar}/*.html".to_string()],
-        );
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "!{foo,bar}/*.html".to_string(),
+        }]);
         let expected = vec![
             (PathBuf::from("/projects/foo"), vec!["!*.html".to_string()]),
             (PathBuf::from("/projects/bar"), vec!["!*.html".to_string()]),
@@ -428,10 +451,10 @@ mod tests {
 
     #[test]
     fn it_should_expand_a_complex_example() {
-        let actual = get_fast_patterns(
-            &PathBuf::from("/projects"),
-            &vec!["a/{b,c}/d/{e,f}/g/*.html".to_string()],
-        );
+        let actual = get_fast_patterns(&vec![GlobEntry {
+            base: "/projects".to_string(),
+            glob: "a/{b,c}/d/{e,f}/g/*.html".to_string(),
+        }]);
         let expected = vec![
             (
                 PathBuf::from("/projects/a/b/d/e/g"),
