@@ -1,5 +1,6 @@
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
+import killPort from 'kill-port'
 import { execSync, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import net from 'node:net'
@@ -20,6 +21,7 @@ interface TestConfig {
 interface TestContext {
   exec: (command: string) => Promise<string>
   spawn: (command: string) => { dispose: () => void }
+  getFreePort(): Promise<number>
   fs: {
     glob: (pattern: string) => Promise<[string, string][]>
   }
@@ -172,6 +174,24 @@ export function test(
           },
         }
       },
+      async getFreePort(): Promise<number> {
+        return new Promise((resolve, reject) => {
+          let server = net.createServer()
+          server.listen(0, () => {
+            let address = server.address()
+            let port = address === null || typeof address === 'string' ? null : address.port
+
+            server.close(() => {
+              if (port === null) {
+                reject(new Error(`Failed to get a free port: address is ${address}`))
+              } else {
+                disposables.push(() => killPort(port))
+                resolve(port)
+              }
+            })
+          })
+        })
+      },
       fs: {
         async glob(pattern: string) {
           let files = await fastGlob(pattern, { cwd: root })
@@ -190,24 +210,6 @@ export function test(
 }
 test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })
-}
-
-export async function getFreePort(): Promise<number> {
-  return new Promise((resolve, reject) => {
-    let server = net.createServer()
-    server.listen(0, () => {
-      let address = server.address()
-      let port = address === null || typeof address === 'string' ? null : address.port
-
-      server.close(() => {
-        if (port === null) {
-          reject(new Error(`Failed to get a free port: address is ${address}`))
-        } else {
-          resolve(port)
-        }
-      })
-    })
-  })
 }
 
 // Maps package names to their tarball filenames. See scripts/pack-packages.ts

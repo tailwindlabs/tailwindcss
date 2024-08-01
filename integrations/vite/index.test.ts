@@ -1,6 +1,5 @@
-import kill from 'kill-port'
 import { expect } from 'vitest'
-import { css, getFreePort, html, json, stripTailwindComment, test, ts } from '../utils'
+import { css, html, json, stripTailwindComment, test, ts } from '../utils'
 
 async function fetchCSS(pathname: string, port: number) {
   const start = Date.now()
@@ -128,7 +127,7 @@ test(
       `,
     },
   },
-  async ({ spawn }) => {
+  async ({ spawn, getFreePort }) => {
     let port = await getFreePort()
     spawn(`pnpm vite dev --port ${port}`)
 
@@ -144,7 +143,5 @@ test(
       }"
     `,
     )
-
-    await kill(port)
   },
 )
