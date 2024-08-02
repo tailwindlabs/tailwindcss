@@ -165,17 +165,16 @@ export function test(
           }
         }
 
+        let stdout = ''
+        let stderr = ''
+
         child.stdout.on('data', (result) => {
-          if (process.env.CI) {
-            console.log(result.toString())
-          }
+          stdout += result.toString()
           stdoutMessages.push(result.toString())
           notifyNext(stdoutActors, stdoutMessages)
         })
         child.stderr.on('data', (result) => {
-          if (process.env.CI) {
-            console.error(result.toString())
-          }
+          stderr += result.toString()
           stderrMessages.push(result.toString())
           notifyNext(stderrActors, stderrMessages)
         })
@@ -187,8 +186,8 @@ export function test(
         })
 
         options.onTestFailed(() => {
-          stdoutMessages.map((message) => console.log(message))
-          stderrMessages.map((message) => console.error(message))
+          console.log('stdout:', stdout)
+          console.log('stderr:', stderr)
         })
 
         return {
