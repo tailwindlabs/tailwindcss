@@ -94,7 +94,7 @@ test('@apply can be used without emitting the theme in the CSS file', async () =
   // `@apply` is used.
   let result = await processor.process(
     css`
-      @import 'tailwindcss/theme.css' reference;
+      @import 'tailwindcss/theme.css' theme(reference);
       .foo {
         @apply text-red-500;
       }
