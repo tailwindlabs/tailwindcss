@@ -17,7 +17,7 @@
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^20.12.12",
+    "@types/node": "catalog:",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "eslint": "^8.57.0",

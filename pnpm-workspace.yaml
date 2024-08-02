@@ -3,3 +3,7 @@ packages:
   - 'crates/node/npm/*'
   - 'packages/*'
   - 'playgrounds/*'
+
+catalog:
+  vite: ^5.2.11
+  '@types/node': ^20.12.12

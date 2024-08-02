@@ -80,6 +80,3 @@ jobs:
           name: playwright-report
           path: packages/tailwindcss/playwright-report/
           retention-days: 30
-
-      - name: Bench
-        run: pnpm run bench
