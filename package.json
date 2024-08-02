@@ -17,15 +17,27 @@
         "options": {
           "parser": "jsonc"
         }
+      },
+      {
+        "files": [
+          "integrations/**/*.ts"
+        ],
+        "options": {
+          "plugins": [
+            "prettier-plugin-embed",
+            "prettier-plugin-organize-imports"
+          ]
+        }
       }
     ]
   },
   "scripts": {
     "format": "prettier --write .",
     "lint": "prettier --check . && turbo lint",
-    "build": "turbo build --filter=!./playgrounds/*",
+    "build": "turbo build --filter=!./playgrounds/* && node ./scripts/pack-packages.mjs",
     "dev": "turbo dev --filter=!./playgrounds/*",
     "test": "cargo test && vitest run",
+    "test:integrations": "vitest --root=./integrations",
     "test:ui": "pnpm run --filter=tailwindcss test:ui",
     "tdd": "vitest",
     "bench": "vitest bench",
@@ -40,6 +52,7 @@
     "postcss": "8.4.24",
     "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
+    "prettier-plugin-embed": "^0.4.15",
     "prettier-plugin-organize-imports": "^3.2.4",
     "tsup": "^8.0.2",
     "turbo": "^1.13.3",
