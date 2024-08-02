@@ -336,8 +336,6 @@ export function compile(
         | Extract<Candidate, { kind: 'functional' }>['value']
         | Extract<Candidate, { kind: 'functional' }>['modifier']
 
-      let invalid = Symbol('invalid')
-
       let types = options?.type
         ? Array.isArray(options?.type)
           ? options.type
@@ -347,7 +345,7 @@ export function compile(
       function resolve(
         item: Resolvable,
         list: Record<string, any> | null,
-        resolveBare?: (value: string) => string | null | typeof invalid,
+        resolveBare?: (value: string) => string | null,
       ) {
         if (!item) {
           if (list && typeof list === 'object' && list.DEFAULT) {
@@ -368,11 +366,11 @@ export function compile(
         if (!(item.value in list)) {
           // And bare "values" (modifiers?) are supported then try to use that
           if (resolveBare) {
-            return resolveBare(item.value) ?? invalid
+            return resolveBare(item.value) ?? null
           }
 
           // Otherwise it is invalid
-          return invalid
+          return null
         }
 
         // Otherwise we'll return the value supplied by list
@@ -411,14 +409,13 @@ export function compile(
             (value) => {
               if (modifiers === 'any') return value
               if (!types.includes('color')) return null
-
-              if (Number.isNaN(Number(value))) return invalid
+              if (Number.isNaN(Number(value))) return null
 
               return `${value}%`
             },
           )
 
-          if (modifier === invalid) return
+          if (candidate.modifier && !modifier) return
 
           let value = resolve(candidate.value, {
             inherit: 'inherit',
@@ -428,7 +425,6 @@ export function compile(
           })
 
           if (!value) return
-          if (value === invalid) return
 
           if (types.includes('color') && modifier) {
             value = withAlpha(value, modifier)
