@@ -182,14 +182,15 @@ test(
       }"
     `)
 
-    await fs.write(
-      'project-a/src/index.js',
-      js`
-        const className = "[.changed_&]:content-['project-a/src/index.js']"
-        module.exports = { className }
-      `,
-    )
-    await process.onStderr((message) => message.includes('Done'))
+    await fs.waitForOutputFileChange('project-a/dist/out.css', async () => {
+      await fs.write(
+        'project-a/src/index.js',
+        js`
+          const className = "[.changed_&]:content-['project-a/src/index.js']"
+          module.exports = { className }
+        `,
+      )
+    })
 
     expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
       ".underline {
@@ -236,14 +237,15 @@ test(
       }"
     `)
 
-    await fs.write(
-      'project-b/src/index.js',
-      js`
-        const className = "[.changed_&]:content-['project-b/src/index.js']"
-        module.exports = { className }
-      `,
-    )
-    await process.onStderr((message) => message.includes('Done'))
+    await fs.waitForOutputFileChange('project-a/dist/out.css', async () => {
+      await fs.write(
+        'project-b/src/index.js',
+        js`
+          const className = "[.changed_&]:content-['project-b/src/index.js']"
+          module.exports = { className }
+        `,
+      )
+    })
 
     expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
       ".underline {

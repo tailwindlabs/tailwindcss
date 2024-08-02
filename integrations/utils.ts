@@ -1,3 +1,4 @@
+import watcher from '@parcel/watcher'
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
 import killPort from 'kill-port'
@@ -45,6 +46,7 @@ interface TestContext {
     write(filePath: string, content: string): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
+    waitForOutputFileChange(file: string, cb?: () => void | Promise<void>): Promise<void>
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
@@ -251,6 +253,22 @@ export function test(
               return [file, content]
             }),
           )
+        },
+        async waitForOutputFileChange(file: string, cb: () => void | Promise<void> = () => {}) {
+          let filePath = path.join(root, file)
+
+          return new Promise(async (resolve) => {
+            let { unsubscribe } = await watcher.subscribe(root, async (_err, events) => {
+              for (let event of events) {
+                if (event.path.endsWith(filePath)) {
+                  await unsubscribe()
+                  resolve()
+                }
+              }
+            })
+
+            await cb()
+          })
         },
       },
     } satisfies TestContext
