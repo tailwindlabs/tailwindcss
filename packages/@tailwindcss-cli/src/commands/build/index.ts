@@ -154,123 +154,112 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Watch for changes
   if (args['--watch']) {
-    let basePaths = [base].concat(
-      scanDirResult.globs.flatMap((globEntry) => {
-        if (globEntry.glob[0] === '!') return []
-        if (globEntry.base.startsWith(base)) return []
-        return globEntry.base
-      }),
-    )
-    let cleanupWatchers = await createWatchers(basePaths, async function handle(files) {
-      try {
-        // If the only change happened to the output file, then we don't want to
-        // trigger a rebuild because that will result in an infinite loop.
-        if (files.length === 1 && files[0] === args['--output']) return
+    let cleanupWatchers = await createWatchers(
+      watchDirectories(base, scanDirResult),
+      async function handle(files) {
+        try {
+          // If the only change happened to the output file, then we don't want to
+          // trigger a rebuild because that will result in an infinite loop.
+          if (files.length === 1 && files[0] === args['--output']) return
 
-        let changedFiles: ChangedContent[] = []
-        let rebuildStrategy: 'incremental' | 'full' = 'incremental'
+          let changedFiles: ChangedContent[] = []
+          let rebuildStrategy: 'incremental' | 'full' = 'incremental'
 
-        for (let file of files) {
-          // If one of the changed files is related to the input CSS files, then
-          // we need to do a full rebuild because the theme might have changed.
-          if (cssImportPaths.includes(file)) {
-            rebuildStrategy = 'full'
+          for (let file of files) {
+            // If one of the changed files is related to the input CSS files, then
+            // we need to do a full rebuild because the theme might have changed.
+            if (cssImportPaths.includes(file)) {
+              rebuildStrategy = 'full'
 
-            // No need to check the rest of the events, because we already know we
-            // need to do a full rebuild.
-            break
+              // No need to check the rest of the events, because we already know we
+              // need to do a full rebuild.
+              break
+            }
+
+            // Track new and updated files for incremental rebuilds.
+            changedFiles.push({
+              file,
+              extension: path.extname(file).slice(1),
+            } satisfies ChangedContent)
           }
 
-          // Track new and updated files for incremental rebuilds.
-          changedFiles.push({
-            file,
-            extension: path.extname(file).slice(1),
-          } satisfies ChangedContent)
+          // Re-compile the input
+          let start = process.hrtime.bigint()
+
+          // Track the compiled CSS
+          let compiledCss = ''
+
+          // Scan the entire `base` directory for full rebuilds.
+          if (rebuildStrategy === 'full') {
+            // Clear all watchers
+            cleanupWatchers()
+
+            // Clear cached candidates
+            clearCache()
+
+            // Collect the new `input` and `cssImportPaths`.
+            ;[input, cssImportPaths] = await handleImports(
+              args['--input']
+                ? await fs.readFile(args['--input'], 'utf-8')
+                : css`
+                    @import '${resolve('tailwindcss/index.css')}';
+                  `,
+              args['--input'] ?? base,
+            )
+
+            // Create a new compiler, given the new `input`
+            compiler = compile(input)
+
+            // Re-scan the directory to get the new `candidates`
+            scanDirResult = scanDir({
+              base, // Root directory, mainly used for auto content detection
+              contentPaths: compiler.globs.map((glob) => ({
+                base: inputBasePath, // Globs are relative to the input.css file
+                glob,
+              })),
+            })
+
+            // Setup new watchers
+            cleanupWatchers = await createWatchers(watchDirectories(base, scanDirResult), handle)
+
+            // Re-compile the CSS
+            compiledCss = compiler.build(scanDirResult.candidates)
+          }
+
+          // Scan changed files only for incremental rebuilds.
+          else if (rebuildStrategy === 'incremental') {
+            // TODO: use `scanDirResult.scanFiles(changedFiles)` for incremental
+            // rebuilds to prevent scanning the entire directory.
+
+            // Re-scan the directory to get the new `candidates`
+            scanDirResult = scanDir({
+              base, // Root directory, mainly used for auto content detection
+              contentPaths: compiler.globs.map((glob) => ({
+                base: inputBasePath, // Globs are relative to the input.css file
+                glob,
+              })),
+            })
+
+            // No candidates found which means we don't need to rebuild. This can
+            // happen if a file is detected but doesn't match any of the globs.
+            if (scanDirResult.candidates.length === 0) return
+
+            compiledCss = compiler.build(scanDirResult.candidates)
+          }
+
+          await write(compiledCss, args)
+
+          let end = process.hrtime.bigint()
+          eprintln(`Done in ${formatDuration(end - start)}`)
+        } catch (err) {
+          // Catch any errors and print them to stderr, but don't exit the process
+          // and keep watching.
+          if (err instanceof Error) {
+            eprintln(err.toString())
+          }
         }
-
-        // Re-compile the input
-        let start = process.hrtime.bigint()
-
-        // Track the compiled CSS
-        let compiledCss = ''
-
-        // Scan the entire `base` directory for full rebuilds.
-        if (rebuildStrategy === 'full') {
-          // Clear all watchers
-          cleanupWatchers()
-
-          // Clear cached candidates
-          clearCache()
-
-          // Collect the new `input` and `cssImportPaths`.
-          ;[input, cssImportPaths] = await handleImports(
-            args['--input']
-              ? await fs.readFile(args['--input'], 'utf-8')
-              : css`
-                  @import '${resolve('tailwindcss/index.css')}';
-                `,
-            args['--input'] ?? base,
-          )
-
-          // Create a new compiler, given the new `input`
-          compiler = compile(input)
-
-          // Re-scan the directory to get the new `candidates`
-          scanDirResult = scanDir({
-            base, // Root directory, mainly used for auto content detection
-            contentPaths: compiler.globs.map((glob) => ({
-              base: inputBasePath, // Globs are relative to the input.css file
-              glob,
-            })),
-          })
-
-          // Setup new watchers
-          let basePaths = [base].concat(
-            scanDirResult.globs.flatMap((globEntry) => {
-              if (globEntry.glob[0] === '!') return []
-              if (globEntry.base.startsWith(base)) return []
-              return globEntry.base
-            }),
-          )
-          cleanupWatchers = await createWatchers(basePaths, handle)
-
-          // Re-compile the CSS
-          compiledCss = compiler.build(scanDirResult.candidates)
-        }
-
-        // Scan changed files only for incremental rebuilds.
-        else if (rebuildStrategy === 'incremental') {
-          // TODO: use `scanDirResult.scanFiles(changedFiles)` for incremental
-          // rebuilds to prevent scanning the entire directory.
-
-          // Re-scan the directory to get the new `candidates`
-          scanDirResult = scanDir({
-            base, // Root directory, mainly used for auto content detection
-            contentPaths: compiler.globs.map((glob) => ({
-              base: inputBasePath, // Globs are relative to the input.css file
-              glob,
-            })),
-          })
-
-          // No candidates found which means we don't need to rebuild. This can
-          // happen if a file is detected but doesn't match any of the globs.
-          if (scanDirResult.candidates.length === 0) return
-
-          compiledCss = compiler.build(scanDirResult.candidates)
-        }
-
-        await write(compiledCss, args)
-
-        let end = process.hrtime.bigint()
-        eprintln(`Done in ${formatDuration(end - start)}`)
-      } catch (err) {
-        // Catch any errors and print them to stderr, but don't exit the process
-        // and keep watching.
-        if (err instanceof Error) {
-          eprintln(err.toString())
-        }
-      }
-    })
+      },
+    )
 
     // Abort the watcher if `stdin` is closed to avoid zombie processes. You can
     // disable this behavior with `--watch=always`.
@@ -291,6 +280,21 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   eprintln(header())
   eprintln()
   eprintln(`Done in ${formatDuration(end - start)}`)
+}
+
+function watchDirectories(base: string, scanDirResult: ReturnType<typeof scanDir>) {
+  return [base].concat(
+    scanDirResult.globs.flatMap((globEntry) => {
+      // We don't want a watcher for negated globs.
+      if (globEntry.glob[0] === '!') return []
+
+      // We don't want a watcher for nested directories, these will be covered
+      // by the `base` directory already.
+      if (globEntry.base.startsWith(base)) return []
+
+      return globEntry.base
+    }),
+  )
 }
 
 async function createWatchers(dirs: string[], handle: (files: string[]) => void) {
