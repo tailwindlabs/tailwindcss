@@ -32,16 +32,12 @@ function resolveCandidateValue(
   // Arbitrary values and modifiers are also used as-is
   if (value.kind === 'arbitrary') return value.value
 
-  // There's no list of valid, named values so this is invalid
-  if (!list) return null
-
-  // If the value isn't in the list then resolve it as a bare value (if possible)
-  if (!(value.value in list)) return resolveBare(value.value)
-
-  // Otherwise we'll return the value supplied by `list`
+  // Return the value supplied by `list` if it exists
   // - `options.values`
   // - `options.modifiers`
-  return list[value.value]
+  // Otherwise, try to resolve it as a bare value
+  // Finally, return `null` if no value was found
+  return list?.[value.value] ?? resolveBare(value.value) ?? null
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -132,7 +128,7 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
 
           if (candidate.modifier && !modifier) return
 
-          let value = resolve(candidate.value, {
+          let value = resolveCandidateValue(candidate.value, {
             inherit: 'inherit',
             transparent: 'transparent',
             current: 'currentColor',
