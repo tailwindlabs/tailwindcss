@@ -11,14 +11,23 @@ import { test as defaultTest } from 'vitest'
 export let css = dedent
 export let html = dedent
 export let ts = dedent
+export let js = dedent
 export let json = dedent
+export let yaml = dedent
 
 const REPO_ROOT = path.join(__dirname, '..')
+const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
+  name.replace('tailwindcss-', '@tailwindcss/').replace('.tgz', ''),
+)
 
 interface SpawnedProcess {
   dispose: () => void
   onStdout: (predicate: (message: string) => boolean) => Promise<void>
   onStderr: (predicate: (message: string) => boolean) => Promise<void>
+}
+
+interface ChildProcessOptions {
+  cwd?: string
 }
 
 interface TestConfig {
@@ -27,11 +36,13 @@ interface TestConfig {
   }
 }
 interface TestContext {
-  exec(command: string): Promise<string>
-  spawn(command: string): Promise<SpawnedProcess>
+  root: string
+  exec(command: string, options?: ChildProcessOptions): Promise<string>
+  spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
   getFreePort(): Promise<number>
   fs: {
     write(filePath: string, content: string): Promise<void>
+    read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
   }
 }
@@ -59,7 +70,7 @@ export function test(
       let full = path.join(root, filename)
 
       if (filename.endsWith('package.json')) {
-        content = overwriteVersionsInPackageJson(content)
+        content = await overwriteVersionsInPackageJson(content)
       }
 
       // Ensure that files written on Windows use \r\n line ending
@@ -92,10 +103,15 @@ export function test(
     options.onTestFinished(dispose)
 
     let context = {
-      async exec(command: string) {
-        return execSync(command, { cwd: root }).toString()
+      root,
+      async exec(command: string, childProcessOptions: ChildProcessOptions = {}) {
+        return execSync(command, {
+          cwd: root,
+          stdio: 'pipe',
+          ...childProcessOptions,
+        }).toString()
       },
-      async spawn(command: string) {
+      async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
         let resolveDisposal: (() => void) | undefined
         let rejectDisposal: ((error: Error) => void) | undefined
         let disposePromise = new Promise<void>((resolve, reject) => {
@@ -109,6 +125,7 @@ export function test(
           env: {
             ...process.env,
           },
+          ...childProcessOptions,
         })
 
         function dispose() {
@@ -217,6 +234,9 @@ export function test(
       },
       fs: {
         write,
+        async read(filePath: string) {
+          return await fs.readFile(path.join(root, filePath), 'utf8')
+        },
         async glob(pattern: string) {
           let files = await fastGlob(pattern, { cwd: root })
           return Promise.all(
@@ -242,18 +262,20 @@ function pkgToFilename(name: string) {
   return `${name.replace('@', '').replace('/', '-')}.tgz`
 }
 
-function overwriteVersionsInPackageJson(content: string): string {
+async function overwriteVersionsInPackageJson(content: string): Promise<string> {
   let json = JSON.parse(content)
 
   // Resolve all workspace:^ versions to local tarballs
-  ;['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
-    let dependencies = json[key] || {}
-    for (let dependency in dependencies) {
-      if (dependencies[dependency] === 'workspace:^') {
-        dependencies[dependency] = resolveVersion(dependency)
+  ;['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'].forEach(
+    (key) => {
+      let dependencies = json[key] || {}
+      for (let dependency in dependencies) {
+        if (dependencies[dependency] === 'workspace:^') {
+          dependencies[dependency] = resolveVersion(dependency)
+        }
       }
-    }
-  })
+    },
+  )
 
   // Inject transitive dependency overwrite. This is necessary because
   // @tailwindcss/vite internally depends on a specific version of
@@ -261,7 +283,9 @@ function overwriteVersionsInPackageJson(content: string): string {
   // version.
   json.pnpm ||= {}
   json.pnpm.overrides ||= {}
-  json.pnpm.overrides['@tailwindcss/oxide'] = resolveVersion('@tailwindcss/oxide')
+  for (let pkg of PUBLIC_PACKAGES) {
+    json.pnpm.overrides[pkg] = resolveVersion(pkg)
+  }
 
   return JSON.stringify(json, null, 2)
 }

@@ -36,10 +36,10 @@
     "picocolors": "^1.0.1",
     "postcss": "8.4.24",
     "postcss-import": "^16.1.0",
-    "tailwindcss": "workspace:^",
-    "internal-postcss-fix-relative-paths": "workspace:^"
+    "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/postcss-import": "^14.0.3"
+    "@types/postcss-import": "^14.0.3",
+    "internal-postcss-fix-relative-paths": "workspace:^"
   }
 }

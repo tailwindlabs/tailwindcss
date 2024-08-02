@@ -2,6 +2,7 @@ import watcher from '@parcel/watcher'
 import { clearCache, scanDir, type ChangedContent, type GlobEntry } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
+import { createRequire } from 'module'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -20,6 +21,7 @@ import {
 } from '../../utils/renderer'
 import { resolve } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
+const require = createRequire(import.meta.url)
 
 const css = String.raw
 
