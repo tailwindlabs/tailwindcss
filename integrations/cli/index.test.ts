@@ -1,18 +1,18 @@
 import path from 'node:path'
-import { describe, expect } from 'vitest'
-import { css, html, js, json, stripTailwindComment, test, txt, yaml } from '../utils'
+import { expect } from 'vitest'
+import { css, html, js, json, stripTailwindComment, test, yaml } from '../utils'
 
 test(
-  'works with production builds',
+  'production build',
   {
     fs: {
-      'package.json': json` {} `,
+      'package.json': json`{}`,
       'pnpm-workspace.yaml': yaml`
         #
         packages:
-          - a
+          - project-a
       `,
-      'a/package.json': json`
+      'project-a/package.json': json`
         {
           "dependencies": {
             "tailwindcss": "workspace:^",
@@ -20,27 +20,27 @@ test(
           }
         }
       `,
-      'a/index.html': html`
+      'project-a/index.html': html`
         <div
           class="underline 2xl:font-bold hocus:underline inverted:flex"
         ></div>
       `,
-      'a/plugin.js': js`
+      'project-a/plugin.js': js`
         module.exports = function ({ addVariant }) {
           addVariant('inverted', '@media (inverted-colors: inverted)')
           addVariant('hocus', ['&:focus', '&:hover'])
         }
       `,
-      'a/src/index.css': css`
+      'project-a/src/index.css': css`
         @import 'tailwindcss/utilities';
-        @content '../../b/src/**/*.js';
+        @content '../../project-b/src/**/*.js';
         @plugin '../plugin.js';
       `,
-      'a/src/index.js': js`
+      'project-a/src/index.js': js`
         const className = "content-['a/src/index.js']"
         module.exports = { className }
       `,
-      'b/src/index.js': js`
+      'project-b/src/index.js': js`
         const className = "content-['b/src/index.js']"
         module.exports = { className }
       `,
@@ -48,10 +48,10 @@ test(
   },
   async ({ root, fs, exec }) => {
     await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
-      cwd: path.join(root, 'a'),
+      cwd: path.join(root, 'project-a'),
     })
 
-    expect(stripTailwindComment(await fs.read('a/dist/out.css'))).toMatchInlineSnapshot(`
+    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
       ".underline {
         text-decoration-line: underline;
       }
@@ -92,59 +92,138 @@ test(
   },
 )
 
-describe('watch mode', () => {
-  test(
-    'updates the artifacts on changes',
-    {
-      fs: {
-        'package.json': json`
-          {
-            "dependencies": {
-              "tailwindcss": "workspace:^",
-              "@tailwindcss/cli": "workspace:^"
-            }
+test(
+  'watch mode',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
           }
-        `,
-        'index.html': html`
-          <div class="underline"></div>
-        `,
-        'src/index.html': html`
-          <div class="underline"></div>
-        `,
-        'src/index.css': css`
-          @import 'tailwindcss/theme' reference;
-          @import 'tailwindcss/utilities';
-        `,
-        '.gitignore': txt`
-         node_modules/
-       `,
-      },
-    },
-    async ({ fs, spawn }) => {
-      let process = await spawn(
-        'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
-      )
-      await process.onStderr((message) => message.includes('Done'))
-
-      expect(stripTailwindComment(await fs.read('dist/out.css'))).toMatchInlineSnapshot(`
-        ".underline {
-          text-decoration-line: underline;
-        }"
-      `)
-
-      await fs.write('index.html', html`
-        <div class="underline m-2"></div>
-      `)
-      await process.onStderr((message) => message.includes('Done'))
-
-      expect(stripTailwindComment(await fs.read('dist/out.css'))).toMatchInlineSnapshot(`
-        ".m-2 {
-          margin: var(--spacing-2, 0.5rem);
         }
-        .underline {
-          text-decoration-line: underline;
-        }"
-      `)
+      `,
+      'project-a/index.html': html`
+        <div
+          class="underline 2xl:font-bold hocus:underline inverted:flex"
+        ></div>
+      `,
+      'project-a/plugin.js': js`
+        module.exports = function ({ addVariant }) {
+          addVariant('inverted', '@media (inverted-colors: inverted)')
+          addVariant('hocus', ['&:focus', '&:hover'])
+        }
+      `,
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @content '../../project-b/src/**/*.js';
+        @plugin '../plugin.js';
+      `,
+      'project-a/src/index.js': js`
+        const className = "content-['a/src/index.js']"
+        module.exports = { className }
+      `,
+      'project-b/src/index.js': js`
+        const className = "content-['b/src/index.js']"
+        module.exports = { className }
+      `,
     },
-  )
-})
+  },
+  async ({ root, fs, spawn }) => {
+    let process = await spawn(
+      'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
+      { cwd: path.join(root, 'project-a') },
+    )
+    await process.onStderr((message) => message.includes('Done'))
+
+    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }
+      .content-\\[\\'a\\/src\\/index\\.js\\'\\] {
+        --tw-content: 'a/src/index.js';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'b\\/src\\/index\\.js\\'\\] {
+        --tw-content: 'b/src/index.js';
+        content: var(--tw-content);
+      }
+      .inverted\\:flex {
+        @media (inverted-colors: inverted) {
+          display: flex;
+        }
+      }
+      .hocus\\:underline {
+        &:focus {
+          text-decoration-line: underline;
+        }
+        &:hover {
+          text-decoration-line: underline;
+        }
+      }
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }"
+    `)
+
+    await fs.write('index.html', html`
+      <div class="underline m-2"></div>
+    `)
+    await process.onStderr((message) => message.includes('Done'))
+
+    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }
+      .content-\\[\\'a\\/src\\/index\\.js\\'\\] {
+        --tw-content: 'a/src/index.js';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'b\\/src\\/index\\.js\\'\\] {
+        --tw-content: 'b/src/index.js';
+        content: var(--tw-content);
+      }
+      .inverted\\:flex {
+        @media (inverted-colors: inverted) {
+          display: flex;
+        }
+      }
+      .hocus\\:underline {
+        &:focus {
+          text-decoration-line: underline;
+        }
+        &:hover {
+          text-decoration-line: underline;
+        }
+      }
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }"
+    `)
+  },
+)
