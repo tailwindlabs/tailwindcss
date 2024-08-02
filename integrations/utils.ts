@@ -46,7 +46,7 @@ interface TestContext {
     write(filePath: string, content: string): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
-    waitForOutputFileChange(file: string, cb?: () => void | Promise<void>): Promise<void>
+    waitForOutputFileChange<T>(file: string, cb?: () => T | Promise<T>): Promise<T>
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
@@ -254,20 +254,21 @@ export function test(
             }),
           )
         },
-        async waitForOutputFileChange(file: string, cb: () => void | Promise<void> = () => {}) {
+        async waitForOutputFileChange<T>(file: string, cb: () => T | Promise<T>) {
           let filePath = path.join(root, file)
+          let result: T
 
-          return new Promise(async (resolve) => {
+          return new Promise<T>(async (resolve) => {
             let { unsubscribe } = await watcher.subscribe(root, async (_err, events) => {
               for (let event of events) {
                 if (event.path.endsWith(filePath)) {
                   await unsubscribe()
-                  resolve()
+                  resolve(result)
                 }
               }
             })
 
-            await cb()
+            result = await cb()
           })
         },
       },
