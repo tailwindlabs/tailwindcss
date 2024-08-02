@@ -1,5 +1,5 @@
 import watcher from '@parcel/watcher'
-import { clearCache, scanDir, type ChangedContent, type GlobEntry } from '@tailwindcss/oxide'
+import { clearCache, scanDir, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import { createRequire } from 'module'
@@ -154,7 +154,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Watch for changes
   if (args['--watch']) {
-    let cleanupWatchers = await createWatchers(scanDirResult.globs, async function handle(files) {
+    let basePaths = [base].concat(
+      scanDirResult.globs.flatMap((globEntry) => {
+        if (globEntry.glob[0] === '!') return []
+        if (globEntry.base.startsWith(base)) return []
+        return globEntry.base
+      }),
+    )
+    let cleanupWatchers = await createWatchers(basePaths, async function handle(files) {
       try {
         // If the only change happened to the output file, then we don't want to
         // trigger a rebuild because that will result in an infinite loop.
@@ -218,7 +225,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           })
 
           // Setup new watchers
-          cleanupWatchers = await createWatchers(scanDirResult.globs, handle)
+          let basePaths = [base].concat(
+            scanDirResult.globs.flatMap((globEntry) => {
+              if (globEntry.glob[0] === '!') return []
+              if (globEntry.base.startsWith(base)) return []
+              return globEntry.base
+            }),
+          )
+          cleanupWatchers = await createWatchers(basePaths, handle)
 
           // Re-compile the CSS
           compiledCss = compiler.build(scanDirResult.candidates)
@@ -269,7 +283,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
-async function createWatchers(globs: GlobEntry[], handle: (files: string[]) => void) {
+async function createWatchers(dirs: string[], handle: (files: string[]) => void) {
   // Track all Parcel watchers for each glob.
   //
   // When we encounter a change in a CSS file, we need to setup new watchers and
@@ -296,12 +310,9 @@ async function createWatchers(globs: GlobEntry[], handle: (files: string[]) => v
     })
   }
 
-  // Setup a watcher for every glob based on the `base` directory.
-  for (let glob of globs) {
-    // Globs with `!` are negated and should not require a dedicated watcher.
-    if (glob.glob[0] === '!') continue
-
-    let { unsubscribe } = await watcher.subscribe(glob.base, async (err, events) => {
+  // Setup a watcher for every directory.
+  for (let dir of dirs) {
+    let { unsubscribe } = await watcher.subscribe(dir, async (err, events) => {
       // Whenever an error occurs we want to let the user know about it but we
       // want to keep watching for changes.
       if (err) {
