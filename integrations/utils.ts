@@ -156,7 +156,6 @@ export function test(
 
           for (let [idx, message] of messages.entries()) {
             if (next.predicate(message)) {
-              console.log('Found actor for message!', { message })
               messages.splice(0, idx + 1)
               let actorIdx = actors.indexOf(next)
               actors.splice(actorIdx, 1)
@@ -170,13 +169,11 @@ export function test(
         let stderr = ''
 
         child.stdout.on('data', (result) => {
-          console.log('on stdout.data', result.toString())
           stdout += result.toString()
           stdoutMessages.push(result.toString())
           notifyNext(stdoutActors, stdoutMessages)
         })
         child.stderr.on('data', (result) => {
-          console.log('on stderr.data', result.toString())
           stderr += result.toString()
           stderrMessages.push(result.toString())
           notifyNext(stderrActors, stderrMessages)
@@ -196,14 +193,12 @@ export function test(
         return {
           dispose,
           onStdout(predicate: (message: string) => boolean) {
-            console.log('call onStdout')
             return new Promise<void>((resolve) => {
               stdoutActors.push({ predicate, resolve })
               notifyNext(stdoutActors, stdoutMessages)
             })
           },
           onStderr(predicate: (message: string) => boolean) {
-            console.log('call onStderr')
             return new Promise<void>((resolve) => {
               stderrActors.push({ predicate, resolve })
               notifyNext(stderrActors, stderrMessages)
