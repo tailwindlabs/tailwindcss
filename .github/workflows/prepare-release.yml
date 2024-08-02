@@ -1,0 +1,22 @@
+name: Prepare Release
+
+on:
+  workflow_dispatch:
+
+env:
+  CI: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-12
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: [16]
+
+    steps:
+      - run: echo "stub"

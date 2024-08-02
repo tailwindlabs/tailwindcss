@@ -36,7 +36,7 @@
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^20.12.12",
+    "@types/node": "catalog:",
     "@types/postcss-import": "^14.0.3",
     "postcss": "8.4.24",
     "internal-example-plugin": "workspace:*"
