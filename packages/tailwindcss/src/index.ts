@@ -21,14 +21,10 @@ import { inferDataType } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
-const IS_VALID_UTILITY_SELECTOR = /^\.[a-z][a-zA-Z0-9/%._-]*$/
 
 type PluginAPI = {
   addVariant(name: string, variant: string | string[] | CssInJs): void
-  addUtilities(
-    utilities: Record<string, CssInJs>,
-    options?: {},
-  ): void
+  addUtilities(utilities: Record<string, CssInJs>, options?: {}): void
   matchUtilities(
     utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
     options?: Partial<{
@@ -321,7 +317,7 @@ export function compile(
 
     addUtilities(utilities) {
       for (let [name, css] of Object.entries(utilities)) {
-        if (!IS_VALID_UTILITY_SELECTOR.test(name)) {
+        if (name[0] !== '.' || !IS_VALID_UTILITY_NAME.test(name.slice(1))) {
           throw new Error(
             `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities are a single class that is alphanumeric and starts with a lowercase letter.`,
           )
