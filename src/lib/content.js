@@ -7,6 +7,8 @@ import fastGlob from 'fast-glob'
 import normalizePath from 'normalize-path'
 import { parseGlob } from '../util/parseGlob'
 import { env } from './sharedState'
+import log from '../util/log'
+import micromatch from 'micromatch'
 
 /** @typedef {import('../../types/config.js').RawFile} RawFile */
 /** @typedef {import('../../types/config.js').FilePath} FilePath */
@@ -181,6 +183,17 @@ export function resolvedChangedContent(context, candidateFiles, fileModifiedMap)
   return [changedContent, mTimesToCommit]
 }
 
+const LARGE_DIRECTORIES = [
+  'node_modules', // Node
+  'vendor', // PHP
+]
+
+// Ensures that `node_modules` has to match as-is, otherwise `mynode_modules`
+// would match as well, but that is not a known large directory.
+const LARGE_DIRECTORIES_REGEX = new RegExp(
+  `(${LARGE_DIRECTORIES.map((dir) => String.raw`\b${dir}\b`).join('|')})`
+)
+
 /**
  *
  * @param {ContentPath[]} candidateFiles
@@ -191,10 +204,37 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
   let paths = candidateFiles.map((contentPath) => contentPath.pattern)
   let mTimesToCommit = new Map()
 
+  // Detect whether a glob pattern might be too broad. This means that it:
+  // - Includes `**`
+  // - Does not include any of the known large directories (e.g.: node_modules)
+  let maybeBroadPattern = paths.some(
+    (path) => path.includes('**') && !LARGE_DIRECTORIES_REGEX.test(path)
+  )
+
+  // All globs that explicitly contain any of the known large directories (e.g.:
+  // node_modules)
+  let explicitGlobs = paths.filter((path) => LARGE_DIRECTORIES_REGEX.test(path))
+
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
   let files = fastGlob.sync(paths, { absolute: true })
   for (let file of files) {
+    if (
+      maybeBroadPattern &&
+      // When a broad pattern is used, we have to double check that the file was
+      // not explicitly included in the globs.
+      !micromatch.isMatch(file, explicitGlobs)
+    ) {
+      let largeDirectory = LARGE_DIRECTORIES.find((directory) => file.includes(directory))
+      if (largeDirectory) {
+        log.warn('broad-content-glob-pattern', [
+          `You are using a glob pattern that includes \`${largeDirectory}\` without explicitly specifying \`${largeDirectory}\` in the glob.`,
+          'This can lead to performance issues and is not recommended.',
+          'Please consider using a more specific pattern.',
+          'https://tailwindcss.com/docs/content-configuration#pattern-recommendations',
+        ])
+      }
+    }
     let prevModified = fileModifiedMap.get(file) || -Infinity
     let modified = fs.statSync(file).mtimeMs
 
