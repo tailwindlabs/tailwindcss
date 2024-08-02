@@ -137,11 +137,11 @@ test(
     },
   },
   async ({ root, fs, spawn }) => {
-    let process = await spawn(
-      'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
-      { cwd: path.join(root, 'project-a') },
-    )
-    await process.onStderr((message) => message.includes('Done'))
+    await fs.waitForOutputFileChange('project-a/dist/out.css', async () => {
+      return await spawn('pnpm tailwindcss --input src/index.css --output dist/out.css --watch', {
+        cwd: path.join(root, 'project-a'),
+      })
+    })
 
     expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
       ".underline {
