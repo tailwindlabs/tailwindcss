@@ -3,6 +3,7 @@ import { IO, Parsing, scanDir, scanFiles, type ChangedContent } from '@tailwindc
 import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
@@ -20,6 +21,7 @@ import { resolve } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
+const require = createRequire(import.meta.url)
 
 export function options() {
   return {
