@@ -130,9 +130,6 @@ importers:
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
-      internal-postcss-fix-relative-paths:
-        specifier: workspace:^
-        version: link:../internal-postcss-fix-relative-paths
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
@@ -155,15 +152,15 @@ importers:
       '@types/postcss-import':
         specifier: ^14.0.3
         version: 14.0.3
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
 
   packages/@tailwindcss-postcss:
     dependencies:
       '@tailwindcss/oxide':
         specifier: workspace:^
         version: link:../../crates/node
-      internal-postcss-fix-relative-paths:
-        specifier: workspace:^
-        version: link:../internal-postcss-fix-relative-paths
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
@@ -183,6 +180,9 @@ importers:
       internal-example-plugin:
         specifier: workspace:*
         version: link:../internal-example-plugin
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
       postcss:
         specifier: 8.4.24
         version: 8.4.24
