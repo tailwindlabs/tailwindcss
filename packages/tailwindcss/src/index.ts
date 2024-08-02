@@ -346,8 +346,8 @@ export function compile(
 
       function resolve(
         item: Resolvable,
-        list: 'any' | Record<string, any> | null,
-        resolveBare: ((value: string) => string | null) | null,
+        list: Record<string, any> | null,
+        resolveBare?: (value: string) => string | null | typeof invalid,
       ) {
         if (!item) {
           if (list && typeof list === 'object' && list.DEFAULT) {
@@ -361,9 +361,6 @@ export function compile(
         // Arbitrary values and modifiers are also used as-is
         if (item.kind === 'arbitrary') return item.value
 
-        // In the case of modifiers: 'any' the value we're passed can be used as-is
-        if (list === 'any') return item.value
-
         // There's no list of valid, named values so this is invalid
         if (!list) return null
 
@@ -371,10 +368,6 @@ export function compile(
         if (!(item.value in list)) {
           // And bare "values" (modifiers?) are supported then try to use that
           if (resolveBare) {
-            if (Number.isNaN(Number(item.value))) {
-              return invalid
-            }
-
             return resolveBare(item.value) ?? invalid
           }
 
@@ -412,23 +405,27 @@ export function compile(
 
           if (candidate.modifier && !modifiers) return
 
-          let modifier = resolve(candidate.modifier, modifiers, (value) => {
-            if (!types.includes('color')) return null
-            return `${value}%`
-          })
+          let modifier = resolve(
+            candidate.modifier,
+            modifiers === 'any' ? {} : modifiers,
+            (value) => {
+              if (modifiers === 'any') return value
+              if (!types.includes('color')) return null
+
+              if (Number.isNaN(Number(value))) return invalid
+
+              return `${value}%`
+            },
+          )
 
           if (modifier === invalid) return
 
-          let value = resolve(
-            candidate.value,
-            {
-              inherit: 'inherit',
-              transparent: 'transparent',
-              current: 'currentColor',
-              ...(options?.values ?? null),
-            },
-            null,
-          )
+          let value = resolve(candidate.value, {
+            inherit: 'inherit',
+            transparent: 'transparent',
+            current: 'currentColor',
+            ...(options?.values ?? null),
+          })
 
           if (!value) return
           if (value === invalid) return
