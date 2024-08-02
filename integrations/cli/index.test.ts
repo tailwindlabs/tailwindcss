@@ -124,7 +124,6 @@ describe('watch mode', () => {
       let process = await spawn(
         'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
       )
-
       await process.onStderr((message) => message.includes('Done'))
 
       expect(stripTailwindComment(await fs.read('dist/out.css'))).toMatchInlineSnapshot(`
@@ -136,9 +135,6 @@ describe('watch mode', () => {
       await fs.write('index.html', html`
         <div class="underline m-2"></div>
       `)
-
-      console.log('changed file')
-
       await process.onStderr((message) => message.includes('Done'))
 
       expect(stripTailwindComment(await fs.read('dist/out.css'))).toMatchInlineSnapshot(`
