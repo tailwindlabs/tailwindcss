@@ -279,5 +279,7 @@ test(
         initial-value: "";
       }"
     `)
+
+    console.log('End of test!')
   },
 )
