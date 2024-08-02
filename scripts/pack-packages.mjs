@@ -32,7 +32,6 @@ for (let file of await fs.readdir(tailwindcssOxideRoot)) {
     await fs.cp(
       path.join(tailwindcssOxideRoot, file),
       path.join(tailwindcssOxideRoot, 'npm', target, file),
-      { force: false },
     )
   }
 }

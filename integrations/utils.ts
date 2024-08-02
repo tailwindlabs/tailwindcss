@@ -14,6 +14,7 @@ export let ts = dedent
 export let js = dedent
 export let json = dedent
 export let yaml = dedent
+export let txt = dedent
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>

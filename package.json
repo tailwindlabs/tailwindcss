@@ -34,7 +34,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "prettier --check . && turbo lint",
-    "build": "turbo build --filter=!./playgrounds/* && node ./scripts/pack-packages.mjs",
+    "build": "turbo build --filter=!./playgrounds/* --force && node ./scripts/pack-packages.mjs",
     "dev": "turbo dev --filter=!./playgrounds/*",
     "test": "cargo test && vitest run",
     "test:integrations": "vitest --root=./integrations",

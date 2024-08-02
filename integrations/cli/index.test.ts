@@ -1,6 +1,6 @@
 import path from 'node:path'
-import { expect } from 'vitest'
-import { css, html, js, json, stripTailwindComment, test, yaml } from '../utils'
+import { describe, expect } from 'vitest'
+import { css, html, js, json, stripTailwindComment, test, txt, yaml } from '../utils'
 
 test(
   'works with production builds',
@@ -91,3 +91,64 @@ test(
     `)
   },
 )
+
+describe('watch mode', () => {
+  test(
+    'updates the artifacts on changes',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'index.html': html`
+          <div class="underline"></div>
+        `,
+        'src/index.html': html`
+          <div class="underline"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/theme' reference;
+          @import 'tailwindcss/utilities';
+        `,
+        '.gitignore': txt`
+         node_modules/
+       `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(
+        'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
+      )
+
+      await process.onStderr((message) => message.includes('Done'))
+
+      expect(stripTailwindComment(await fs.read('dist/out.css'))).toMatchInlineSnapshot(`
+        ".underline {
+          text-decoration-line: underline;
+        }"
+      `)
+
+      await fs.write('index.html', html`
+        <div class="underline m-2"></div>
+      `)
+
+      console.log('changed file')
+
+      await process.onStderr((message) => message.includes('Done'))
+
+      expect(stripTailwindComment(await fs.read('dist/out.css'))).toMatchInlineSnapshot(`
+        ".m-2 {
+          margin: var(--spacing-2, 0.5rem);
+        }
+        .underline {
+          text-decoration-line: underline;
+        }"
+      `)
+    },
+  )
+})
