@@ -114,7 +114,7 @@ test(
       `,
     },
   },
-  async ({ spawn, getFreePort, fs: { write } }) => {
+  async ({ spawn, getFreePort, fs }) => {
     let port = await getFreePort()
     let process = await spawn(`pnpm vite dev --port ${port}`)
 
@@ -129,7 +129,7 @@ test(
     `,
     )
 
-    await write(
+    await fs.write(
       'index.html',
       html`
         <head>
