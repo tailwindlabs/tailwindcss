@@ -182,54 +182,10 @@ test(
       }"
     `)
 
-    await fs.write('index.html', html`
-      <div class="underline m-2"></div>
-    `)
-    await process.onStderr((message) => message.includes('Done'))
-
-    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
-      ".underline {
-        text-decoration-line: underline;
-      }
-      .content-\\[\\'a\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'a/src/index.js';
-        content: var(--tw-content);
-      }
-      .content-\\[\\'b\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'b/src/index.js';
-        content: var(--tw-content);
-      }
-      .inverted\\:flex {
-        @media (inverted-colors: inverted) {
-          display: flex;
-        }
-      }
-      .hocus\\:underline {
-        &:focus {
-          text-decoration-line: underline;
-        }
-        &:hover {
-          text-decoration-line: underline;
-        }
-      }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
-      @property --tw-content {
-        syntax: "*";
-        inherits: false;
-        initial-value: "";
-      }"
-    `)
-
     await fs.write(
-      'project-b/src/index.js',
+      'project-a/src/index.js',
       js`
-        const className = "[.changed_&]:content-['b/src/index.js']"
+        const className = "[.changed_&]:content-['project-a/src/index.js']"
         module.exports = { className }
       `,
     )
@@ -260,9 +216,69 @@ test(
           text-decoration-line: underline;
         }
       }
-      .\\[\\.changed_\\&\\]\\:content-\\[\\'b\\/src\\/index\\.js\\'\\] {
+      .\\[\\.changed_\\&\\]\\:content-\\[\\'project-a\\/src\\/index\\.js\\'\\] {
         .changed & {
-          --tw-content: 'b/src/index.js';
+          --tw-content: 'project-a/src/index.js';
+          content: var(--tw-content);
+        }
+      }
+      @supports (-moz-orient: inline) {
+        @layer base {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }"
+    `)
+
+    await fs.write(
+      'project-b/src/index.js',
+      js`
+        const className = "[.changed_&]:content-['project-b/src/index.js']"
+        module.exports = { className }
+      `,
+    )
+    await process.onStderr((message) => message.includes('Done'))
+
+    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }
+      .content-\\[\\'a\\/src\\/index\\.js\\'\\] {
+        --tw-content: 'a/src/index.js';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'b\\/src\\/index\\.js\\'\\] {
+        --tw-content: 'b/src/index.js';
+        content: var(--tw-content);
+      }
+      .inverted\\:flex {
+        @media (inverted-colors: inverted) {
+          display: flex;
+        }
+      }
+      .hocus\\:underline {
+        &:focus {
+          text-decoration-line: underline;
+        }
+        &:hover {
+          text-decoration-line: underline;
+        }
+      }
+      .\\[\\.changed_\\&\\]\\:content-\\[\\'project-a\\/src\\/index\\.js\\'\\] {
+        .changed & {
+          --tw-content: 'project-a/src/index.js';
+          content: var(--tw-content);
+        }
+      }
+      .\\[\\.changed_\\&\\]\\:content-\\[\\'project-b\\/src\\/index\\.js\\'\\] {
+        .changed & {
+          --tw-content: 'project-b/src/index.js';
           content: var(--tw-content);
         }
       }
