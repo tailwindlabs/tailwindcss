@@ -4,10 +4,6 @@ import type { DesignSystem } from './design-system'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
 
-type Resolvable =
-  | Extract<Candidate, { kind: 'functional' }>['value']
-  | Extract<Candidate, { kind: 'functional' }>['modifier']
-
 export type PluginAPI = {
   addVariant(name: string, variant: string | string[] | CssInJs): void
   addUtilities(utilities: Record<string, CssInJs>, options?: {}): void
@@ -27,7 +23,7 @@ export type PluginAPI = {
 let NOOP = () => null
 
 function resolve(
-  item: Resolvable,
+  item: Extract<Candidate, { kind: 'functional' }>['value' | 'modifier'],
   list: Record<string, any> | null,
   resolveBare: (value: string) => string | null = NOOP,
 ) {
