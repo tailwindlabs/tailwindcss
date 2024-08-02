@@ -27,24 +27,12 @@ type PluginAPI = {
   addVariant(name: string, variant: string | string[] | CssInJs): void
   addUtilities(
     utilities: Record<string, CssInJs>,
-    options?: Partial<{
-      // todo: maybe not necessary any more
-      // respectPrefix: boolean
-
-      // todo: needed??
-      respectImportant: boolean
-    }>,
+    options?: {},
   ): void
   matchUtilities(
     utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
     options?: Partial<{
       type: string | string[]
-
-      // todo: maybe not necessary any more
-      // respectPrefix: boolean
-
-      // todo: needed??
-      respectImportant: boolean
 
       supportsNegativeValues: boolean
 
