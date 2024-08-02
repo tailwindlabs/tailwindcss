@@ -166,10 +166,16 @@ export function test(
         }
 
         child.stdout.on('data', (result) => {
+          if (process.env.CI) {
+            console.log(result.toString())
+          }
           stdoutMessages.push(result.toString())
           notifyNext(stdoutActors, stdoutMessages)
         })
         child.stderr.on('data', (result) => {
+          if (process.env.CI) {
+            console.error(result.toString())
+          }
           stderrMessages.push(result.toString())
           notifyNext(stderrActors, stderrMessages)
         })
