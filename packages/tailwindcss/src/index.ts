@@ -290,10 +290,10 @@ export function compile(
     customUtility(designSystem)
   }
 
-  let api = buildPluginApi(designSystem)
+  let pluginApi = buildPluginApi(designSystem)
 
   for (let plugin of plugins) {
-    plugin(api)
+    plugin(pluginApi)
   }
 
   let tailwindUtilitiesNode: Rule | null = null

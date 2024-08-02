@@ -46,9 +46,8 @@ function resolve(
   // There's no list of valid, named values so this is invalid
   if (!list) return null
 
-  // If the value isn't in the list:
+  // If the value isn't in the list then resolve it as a bare value (if possible)
   if (!(item.value in list)) {
-    // And bare "values" (modifiers?) are supported then try to use that
     return resolveBare(item.value)
   }
 
@@ -89,7 +88,7 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
       for (let [name, css] of Object.entries(utilities)) {
         if (name[0] !== '.' || !IS_VALID_UTILITY_NAME.test(name.slice(1))) {
           throw new Error(
-            `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities are a single class that is alphanumeric and starts with a lowercase letter.`,
+            `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
           )
         }
 
