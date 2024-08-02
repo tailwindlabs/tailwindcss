@@ -59,5 +59,11 @@
     "typescript": "^5.4.5",
     "vitest": "^2.0.5"
   },
-  "packageManager": "pnpm@9.6.0"
+  "packageManager": "pnpm@9.6.0",
+  "pnpm": {
+    "patchedDependencies": {
+      "@parcel/watcher@2.4.1": "patches/@parcel__watcher@2.4.1.patch",
+      "lightningcss@1.25.1": "patches/lightningcss@1.25.1.patch"
+    }
+  }
 }
