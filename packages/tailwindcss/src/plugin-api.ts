@@ -22,35 +22,26 @@ export type PluginAPI = {
 
 let NOOP = () => null
 
-function resolve(
-  item: Extract<Candidate, { kind: 'functional' }>['value' | 'modifier'],
+function resolveCandidateValue(
+  value: Extract<Candidate, { kind: 'functional' }>['value' | 'modifier'],
   list: Record<string, any> | null,
   resolveBare: (value: string) => string | null = NOOP,
 ) {
-  if (!item) {
-    if (list && typeof list === 'object' && list.DEFAULT) {
-      return list.DEFAULT
-    }
-
-    // Falsy values are invalid
-    return null
-  }
+  if (!value) return list?.DEFAULT ?? null
 
   // Arbitrary values and modifiers are also used as-is
-  if (item.kind === 'arbitrary') return item.value
+  if (value.kind === 'arbitrary') return value.value
 
   // There's no list of valid, named values so this is invalid
   if (!list) return null
 
   // If the value isn't in the list then resolve it as a bare value (if possible)
-  if (!(item.value in list)) {
-    return resolveBare(item.value)
-  }
+  if (!(value.value in list)) return resolveBare(value.value)
 
   // Otherwise we'll return the value supplied by `list`
   // - `options.values`
   // - `options.modifiers`
-  return list[item.value]
+  return list[value.value]
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -127,7 +118,7 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
 
           if (candidate.modifier && !modifiers) return
 
-          let modifier = resolve(
+          let modifier = resolveCandidateValue(
             candidate.modifier,
             modifiers === 'any' ? {} : modifiers,
             (value) => {
