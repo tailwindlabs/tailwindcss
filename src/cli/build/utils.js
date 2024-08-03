@@ -54,8 +54,12 @@ export async function readFileWithRetries(path, tries = 5) {
 export function drainStdin() {
   return new Promise((resolve, reject) => {
     let result = ''
-    process.stdin.on('data', (chunk) => {
-      result += chunk
+    process.stdin.on('readable', () => {
+      while (true) {
+        let chunk = process.stdin.read()
+        if (chunk === null) break
+        result += chunk
+      }
     })
     process.stdin.on('end', () => resolve(result))
     process.stdin.on('error', (err) => reject(err))
