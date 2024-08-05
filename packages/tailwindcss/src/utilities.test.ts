@@ -15418,14 +15418,7 @@ describe('legacy: matchUtilities', () => {
 
     expect(
       optimizeCss(
-        run([
-          'border-block',
-          'border-block-2',
-          'border-block/foo',
-          'border-block-2/foo',
-          'border-block/unknown',
-          'border-block-2/unknown',
-        ]),
+        run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
       ).trim(),
     ).toMatchInlineSnapshot(`
       ".border-block {
@@ -15448,35 +15441,8 @@ describe('legacy: matchUtilities', () => {
         border-block-width: 1px;
       }"
     `)
-  })
 
-  test('throws on custom utilities with an invalid name', () => {
-    expect(() => {
-      return compile(
-        css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
-
-        @theme reference {
-          --breakpoint-lg: 1024px;
-        },
-      `,
-        {
-          loadPlugin() {
-            return ({ matchUtilities }) => {
-              matchUtilities({
-                '.text-trim > *': () => ({
-                  'text-box-trim': 'both',
-                  'text-box-edge': 'cap alphabetic',
-                }),
-              })
-            }
-          },
-        },
-      )
-    }).toThrowError(/invalid utility name/)
+    expect(optimizeCss(run(['border-block/unknown', 'border-block-2/unknown'])).trim()).toEqual('')
   })
 
   test('custom functional utilities with different types', () => {
@@ -15535,11 +15501,15 @@ describe('legacy: matchUtilities', () => {
       optimizeCss(
         run([
           'scrollbar-black',
+          'scrollbar-black/50',
           'scrollbar-2',
           'scrollbar-[#fff]',
+          'scrollbar-[#fff]/50',
           'scrollbar-[2px]',
           'scrollbar-[var(--my-color)]',
+          'scrollbar-[var(--my-color)]/50',
           'scrollbar-[color:var(--my-color)]',
+          'scrollbar-[color:var(--my-color)]/50',
           'scrollbar-[length:var(--my-width)]',
         ]),
       ).trim(),
@@ -15552,12 +15522,20 @@ describe('legacy: matchUtilities', () => {
         scrollbar-color: #fff;
       }
 
+      .scrollbar-\\[\\#fff\\]\\/50 {
+        scrollbar-color: #ffffff80;
+      }
+
       .scrollbar-\\[2px\\] {
         scrollbar-width: 2px;
       }
 
       .scrollbar-\\[color\\:var\\(--my-color\\)\\] {
         scrollbar-color: var(--my-color);
+      }
+
+      .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+        scrollbar-color: color-mix(in srgb, var(--my-color) 50%, transparent);
       }
 
       .scrollbar-\\[length\\:var\\(--my-width\\)\\] {
@@ -15568,10 +15546,24 @@ describe('legacy: matchUtilities', () => {
         scrollbar-color: var(--my-color);
       }
 
+      .scrollbar-\\[var\\(--my-color\\)\\]\\/50 {
+        scrollbar-color: color-mix(in srgb, var(--my-color) 50%, transparent);
+      }
+
       .scrollbar-black {
         scrollbar-color: black;
+      }
+
+      .scrollbar-black\\/50 {
+        scrollbar-color: #00000080;
       }"
     `)
+
+    expect(
+      optimizeCss(
+        run(['scrollbar-2/50', 'scrollbar-[2px]/50', 'scrollbar-[length:var(--my-width)]/50']),
+      ).trim(),
+    ).toEqual('')
   })
 
   test('functional utilities with type: color automatically support opacity', () => {
@@ -15702,5 +15694,34 @@ describe('legacy: matchUtilities', () => {
         scrollbar-width: 12px;
       }"
     `)
+  })
+
+  test('throws on custom utilities with an invalid name', () => {
+    expect(() => {
+      return compile(
+        css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        },
+      `,
+        {
+          loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities({
+                '.text-trim > *': () => ({
+                  'text-box-trim': 'both',
+                  'text-box-edge': 'cap alphabetic',
+                }),
+              })
+            }
+          },
+        },
+      )
+    }).toThrowError(/invalid utility name/)
   })
 })

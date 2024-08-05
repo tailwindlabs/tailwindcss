@@ -24,36 +24,33 @@ const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 function resolveCandidateValue(
   value: Extract<Candidate, { kind: 'functional' }>['value'],
-  list: Record<string, string> | null,
+  list: Record<string, string>,
 ) {
-  if (!value) {
-    return list?.DEFAULT ?? null
-  } else if (value.kind === 'arbitrary') {
-    return value.value
-  } else {
-    return list?.[value.value] ?? null
-  }
+  if (!value) return list.DEFAULT ?? null
+
+  if (value.kind === 'arbitrary') return value.value
+
+  return list[value.value] ?? null
 }
 
 function resolveCandidateModifier(
-  modifier: Extract<Candidate, { kind: 'functional' }>['modifier'],
-  list: Record<string, string> | 'any' | null,
-  resolveBare: (value: string | null) => string | null,
+  modifier: NonNullable<Extract<Candidate, { kind: 'functional' }>['modifier']>,
+  list: Record<string, string> | 'any',
+  types: string[],
 ) {
-  if (list === 'any') {
-    return modifier
-      ? modifier.kind === 'arbitrary'
-        ? // In v3 an `any` modifier that is arbitrary is provided as the string with square brackets
-          `[${modifier.value}]`
-        : modifier.value
-      : null
+  // If bare modifiers are supported or the modifier is arbitrary, just return the value
+  if (list === 'any' || modifier.kind === 'arbitrary') return modifier.value
+
+  // If there's a match in the lookup list, use that
+  if (list[modifier.value]) return list[modifier.value]
+
+  // Color utilities implicitly support all numeric modifiers as opacity values (0-100) which are
+  // converted to percentages.
+  if (types.includes('color') && !Number.isNaN(Number(modifier.value))) {
+    return `${modifier.value}%`
   }
 
-  if (!modifier) return list?.DEFAULT ?? null
-
-  if (modifier.kind === 'arbitrary') return modifier.value
-
-  return list?.[modifier.value] ?? resolveBare(modifier.value) ?? null
+  return null
 }
 
 export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
@@ -102,12 +99,12 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
         ? Array.isArray(options?.type)
           ? options.type
           : [options.type]
-        : []
+        : ['any']
 
       for (let [name, fn] of Object.entries(utilities)) {
         if (!IS_VALID_UTILITY_NAME.test(name)) {
           throw new Error(
-            `\`matchUtilities({ '${name}' : … })\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
+            `\`matchUtilities({ '${name}' : … })\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter, eg. \`scrollbar\`.`,
           )
         }
 
@@ -115,9 +112,9 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
           // A negative utility was provided but is unsupported
           if (!options?.supportsNegativeValues && candidate.negative) return
 
-          let values = options?.values ?? null
-          let modifiers = options?.modifiers ?? null
           let isColor = types.includes('color')
+
+          let values = options?.values ?? {}
 
           if (isColor) {
             // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
@@ -128,9 +125,6 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
               current: 'currentColor',
               ...values,
             }
-
-            // Color utilities implicitly support opacity modifiers when no modifiers are provided
-            modifiers = modifiers ?? Object.fromEntries(theme.namespace('--opacity').entries())
           }
 
           let value = resolveCandidateValue(candidate.value, values)
@@ -139,17 +133,19 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
           // No value was provided and no default value exists
           if (!value) return
 
+          let modifiers = options?.modifiers ?? null
+
+          if (isColor) {
+            // Color utilities implicitly support opacity modifiers when no modifiers are provided
+            modifiers = modifiers ?? Object.fromEntries(theme.namespace('--opacity').entries())
+          }
+
           // A modifier was provided but this utility does not support them
           if (candidate.modifier && !modifiers) return
 
-          let modifier = resolveCandidateModifier(candidate.modifier, modifiers, (value) => {
-            if (!isColor) return null
-            if (Number.isNaN(Number(value))) return null
-
-            // Color utilities implicitly support all numeric modifiers
-            // as opacity values (0-100) which are converted to percentages
-            return `${value}%`
-          })
+          let modifier = candidate.modifier
+            ? resolveCandidateModifier(candidate.modifier, modifiers ?? {}, types)
+            : null
 
           // A modifier was provided but its invalid
           if (candidate.modifier && !modifier) return
