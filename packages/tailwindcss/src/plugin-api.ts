@@ -1,4 +1,5 @@
 import { objectToAst, rule, type CssInJs } from './ast'
+import type { Candidate } from './candidate'
 import type { DesignSystem } from './design-system'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
@@ -20,6 +21,48 @@ export type PluginAPI = {
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
+
+function resolveCandidateValue(
+  value: Extract<Candidate, { kind: 'functional' }>['value'],
+  list: Record<string, string> | null,
+) {
+  if (!value) {
+    return list?.DEFAULT ?? null
+  } else if (value.kind === 'arbitrary') {
+    return value.value
+  } else {
+    return list?.[value.value] ?? null
+  }
+}
+
+function resolveCandidateModifier(
+  modifier: Extract<Candidate, { kind: 'functional' }>['modifier'],
+  list: Record<string, string> | 'any' | null,
+  isColor: boolean,
+) {
+  if (list === 'any') {
+    return modifier
+      ? modifier.kind === 'arbitrary'
+        ? // In v3 an `any` modifier that is arbitrary is provided as the string with square brackets
+          `[${modifier.value}]`
+        : modifier.value
+      : null
+  }
+
+  if (!modifier) return list?.DEFAULT ?? null
+
+  if (modifier.kind === 'arbitrary') return modifier.value
+
+  let mod = list?.[modifier.value] ?? null
+  if (mod) return mod
+
+  if (!isColor) return null
+  if (Number.isNaN(Number(modifier.value))) return null
+
+  // Color utilities implicitly support all numeric modifiers
+  // as opacity values (0-100) which are converted to percentages
+  return `${modifier.value}%`
+}
 
 export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
   let theme = designSystem.theme
@@ -98,15 +141,7 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
             modifiers = modifiers ?? Object.fromEntries(theme.namespace('--opacity').entries())
           }
 
-          let value: string | null
-
-          if (!candidate.value) {
-            value = values?.DEFAULT ?? null
-          } else if (candidate.value.kind === 'arbitrary') {
-            value = candidate.value.value
-          } else {
-            value = values?.[candidate.value.value] ?? null
-          }
+          let value = resolveCandidateValue(candidate.value, values)
 
           // No valid value was provided; OR
           // No value was provided and no default value exists
@@ -115,27 +150,7 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
           // A modifier was provided but this utility does not support them
           if (candidate.modifier && !modifiers) return
 
-          let modifier: string | null
-
-          if (modifiers === 'any') {
-            modifier = candidate.modifier
-              ? candidate.modifier.kind === 'arbitrary'
-                ? // In v3 an `any` modifier that is arbitrary is provided as the string with square brackets
-                  `[${candidate.modifier.value}]`
-                : candidate.modifier.value
-              : null
-          } else if (!candidate.modifier) {
-            modifier = modifiers?.DEFAULT ?? null
-          } else if (candidate.modifier.kind === 'arbitrary') {
-            modifier = candidate.modifier.value
-          } else {
-            modifier = modifiers?.[candidate.modifier.value] ?? null
-
-            // which are converted to percentages for later use
-            if (!modifier && isColor && !Number.isNaN(Number(candidate.modifier.value))) {
-              modifier = `${candidate.modifier.value}%`
-            }
-          }
+          let modifier = resolveCandidateModifier(candidate.modifier, modifiers, isColor)
 
           // A modifier was provided but its invalid
           if (candidate.modifier && !modifier) return

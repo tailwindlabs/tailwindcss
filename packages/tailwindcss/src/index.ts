@@ -1,39 +1,13 @@
 import { version } from '../package.json'
-import {
-  WalkAction,
-  comment,
-  decl,
-  rule,
-  toCss,
-  walk,
-  type AstNode,
-  type CssInJs,
-  type Rule,
-} from './ast'
+import { WalkAction, comment, decl, rule, toCss, walk, type AstNode, type Rule } from './ast'
 import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
-import { buildPluginApi } from './plugin-api'
+import { buildPluginApi, type PluginAPI } from './plugin-api'
 import { Theme } from './theme'
 import { segment } from './utils/segment'
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
-
-type PluginAPI = {
-  addVariant(name: string, variant: string | string[] | CssInJs): void
-  addUtilities(utilities: Record<string, CssInJs>, options?: {}): void
-  matchUtilities(
-    utilities: Record<string, (value: string, extra: { modifier: string | null }) => CssInJs>,
-    options?: Partial<{
-      type: string | string[]
-
-      supportsNegativeValues: boolean
-
-      values: Record<string, string>
-      modifiers: 'any' | Record<string, string>
-    }>,
-  ): void
-}
 
 type Plugin = (api: PluginAPI) => void
 
