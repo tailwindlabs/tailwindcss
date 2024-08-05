@@ -96,10 +96,18 @@ export function test(
       }
 
       let disposables: (() => Promise<void>)[] = []
+
       async function dispose() {
         await Promise.all(disposables.map((dispose) => dispose()))
-        await fs.rm(root, { recursive: true, maxRetries: 3, force: true })
+        try {
+          await fs.rm(root, { recursive: true, maxRetries: 5, force: true })
+        } catch (err) {
+          if (!process.env.CI) {
+            throw err
+          }
+        }
       }
+
       options.onTestFinished(dispose)
 
       let context = {
