@@ -13,7 +13,7 @@ const INPUT_CSS_PATH = `${__dirname}/fixtures/example-project/input.css`
 const css = String.raw
 
 beforeEach(async () => {
-  const { clearCache } = await import('@tailwindcss/oxide')
+  let { clearCache } = await import('@tailwindcss/oxide')
   clearCache()
 })
 
