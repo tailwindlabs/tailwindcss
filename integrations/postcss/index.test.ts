@@ -123,9 +123,11 @@ test(
     },
   },
   async ({ root, fs, spawn }) => {
-    await spawn('pnpm postcss src/index.css --output dist/out.css --watch', {
-      cwd: path.join(root, 'project-a'),
-    })
+    let process = await spawn(
+      'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
+      { cwd: path.join(root, 'project-a') },
+    )
+    await process.onStderr((message) => message.includes('Finished'))
 
     await fs.expectFileToContain('project-a/dist/out.css', [
       candidate`underline`,
@@ -142,6 +144,7 @@ test(
         module.exports = { className }
       `,
     )
+
     await fs.expectFileToContain('project-a/dist/out.css', [
       candidate`[.changed_&]:content-['project-a/src/index.js']`,
     ])
@@ -153,6 +156,7 @@ test(
         module.exports = { className }
       `,
     )
+
     await fs.expectFileToContain('project-a/dist/out.css', [
       candidate`[.changed_&]:content-['project-b/src/index.js']`,
     ])
