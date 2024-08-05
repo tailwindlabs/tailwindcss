@@ -459,6 +459,7 @@ export function createVariants(theme: Theme): Variants {
     ['active', '&:active'],
     ['enabled', '&:enabled'],
     ['disabled', '&:disabled'],
+    ['inert', '&:where([inert], [inert] *)'],
   ]
 
   for (let [key, value] of pseudos) {

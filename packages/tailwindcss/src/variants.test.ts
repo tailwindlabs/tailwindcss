@@ -695,6 +695,23 @@ test('disabled', () => {
   expect(run(['disabled/foo:flex'])).toEqual('')
 })
 
+test('inert', () => {
+  expect(run(['inert:flex', 'group-inert:flex', 'peer-inert:flex'])).toMatchInlineSnapshot(`
+    ".group-inert\\:flex:is(:where(.group):where([inert], [inert] *) *) {
+      display: flex;
+    }
+
+    .peer-inert\\:flex:is(:where(.peer):where([inert], [inert] *) ~ *) {
+      display: flex;
+    }
+
+    .inert\\:flex:where([inert], [inert] *) {
+      display: flex;
+    }"
+  `)
+  expect(run(['inert/foo:flex'])).toEqual('')
+})
+
 test('group-[...]', () => {
   expect(
     run([
