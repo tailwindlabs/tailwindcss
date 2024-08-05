@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add support for `inline` option when defining `@theme` values ([#14095](https://github.com/tailwindlabs/tailwindcss/pull/14095))
+- Add `inert` variant ([#14129](https://github.com/tailwindlabs/tailwindcss/pull/14129))
 
 ## [4.0.0-alpha.18] - 2024-07-25
 
