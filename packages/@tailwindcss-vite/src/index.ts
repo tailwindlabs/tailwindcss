@@ -1,13 +1,14 @@
-import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
-import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
+import { IO, Parsing, scanDir, scanFiles } from '@tailwindcss/oxide'
+import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
-import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
+import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
+  let config: ResolvedConfig | null = null
   let candidates = new Set<string>()
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
@@ -74,22 +75,61 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
-  function generateCss(css: string, inputPath: string) {
-    let basePath = path.dirname(path.resolve(inputPath))
-
-    return compile(css, {
+  function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
+    let inputBasePath = path.dirname(path.resolve(inputPath))
+    let { build, globs } = compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return require(path.resolve(basePath, pluginPath))
+          return require(path.resolve(inputBasePath, pluginPath))
         }
 
         return require(pluginPath)
       },
-    }).build(Array.from(candidates))
+    })
+
+    let result = scanDir({
+      // TODO: This might not be necessary if we enable/disabled auto content
+      // detection
+      base: inputBasePath, // Root directory, mainly used for auto content detection
+      contentPaths: globs.map((glob) => ({
+        base: inputBasePath, // Globs are relative to the input.css file
+        glob,
+      })),
+    })
+
+    for (let candidate of result.candidates) {
+      candidates.add(candidate)
+    }
+
+    // Watch individual files
+    for (let file of result.files) {
+      addWatchFile(file)
+    }
+
+    // Watch globs
+    for (let glob of result.globs) {
+      if (glob.glob[0] === '!') continue
+
+      let relative = path.relative(config!.root, glob.base)
+      if (relative[0] !== '.') {
+        relative = './' + relative
+      }
+      // Ensure relative is a posix style path since we will merge it with
+      // the glob.
+      relative = normalizePath(relative)
+
+      addWatchFile(path.posix.join(relative, glob.glob))
+    }
+
+    return build(Array.from(candidates))
   }
 
-  function generateOptimizedCss(css: string, inputPath: string) {
-    return optimizeCss(generateCss(css, inputPath), { minify })
+  function generateOptimizedCss(
+    css: string,
+    inputPath: string,
+    addWatchFile: (file: string) => void,
+  ) {
+    return optimizeCss(generateCss(css, inputPath, addWatchFile), { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -135,7 +175,8 @@ export default function tailwindcss(): Plugin[] {
         server = _server
       },
 
-      async configResolved(config) {
+      async configResolved(_config) {
+        config = _config
         minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
@@ -250,7 +291,11 @@ export default function tailwindcss(): Plugin[] {
           await server?.waitForRequestsIdle?.(id)
         }
 
-        let code = await transformWithPlugins(this, id, generateCss(src, id))
+        let code = await transformWithPlugins(
+          this,
+          id,
+          generateCss(src, id, (file) => this.addWatchFile(file)),
+        )
         return { code }
       },
     },
@@ -274,7 +319,7 @@ export default function tailwindcss(): Plugin[] {
             continue
           }
 
-          let css = generateOptimizedCss(file.content, id)
+          let css = generateOptimizedCss(file.content, id, (file) => this.addWatchFile(file))
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure

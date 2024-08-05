@@ -1,5 +1,6 @@
+import path from 'node:path'
 import { expect } from 'vitest'
-import { css, html, json, stripTailwindComment, test, ts } from '../utils'
+import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
 
 async function fetchCSS(pathname: string, port: number) {
   // We need to fetch the main index.html file to populate the list of
@@ -17,10 +18,16 @@ async function fetchCSS(pathname: string, port: number) {
 }
 
 test(
-  'works with production builds',
+  'production build',
   {
     fs: {
-      'package.json': json`
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
         {
           "type": "module",
           "dependencies": {
@@ -32,7 +39,7 @@ test(
           }
         }
       `,
-      'vite.config.ts': ts`
+      'project-a/vite.config.ts': ts`
         import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
 
@@ -41,7 +48,7 @@ test(
           plugins: [tailwindcss()],
         })
       `,
-      'index.html': html`
+      'project-a/index.html': html`
         <head>
           <link rel="stylesheet" href="./src/index.css" />
         </head>
@@ -49,37 +56,43 @@ test(
           <div class="underline m-2">Hello, world!</div>
         </body>
       `,
-      'src/index.css': css`
-        @import 'tailwindcss/theme' reference;
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
+        @content '../../project-b/src/**/*.js';
+      `,
+      'project-b/src/index.js': js`
+        const className = "content-['project-b/src/index.js']"
+        module.exports = { className }
       `,
     },
   },
-  async ({ fs, exec }) => {
-    await exec('pnpm vite build')
+  async ({ root, fs, exec }) => {
+    await exec('pnpm vite build', { cwd: path.join(root, 'project-a') })
 
-    let files = await fs.glob('dist/**/*.css')
+    let files = await fs.glob('project-a/dist/**/*.css')
     expect(files).toHaveLength(1)
-    let [, content] = files[0]
-    expect(stripTailwindComment(content)).toMatchInlineSnapshot(
-      `
-        ".m-2 {
-          margin: var(--spacing-2, .5rem);
-        }
+    let [filename] = files[0]
 
-        .underline {
-          text-decoration-line: underline;
-        }"
-      `,
-    )
+    await fs.expectFileToContain(filename, [
+      candidate`underline`,
+      candidate`m-2`,
+      candidate`content-['project-b/src/index.js']`,
+    ])
   },
 )
 
 test(
-  'works with dev builds and live reloads',
+  'dev mode',
   {
     fs: {
-      'package.json': json`
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
         {
           "type": "module",
           "dependencies": {
@@ -91,7 +104,7 @@ test(
           }
         }
       `,
-      'vite.config.ts': ts`
+      'project-a/vite.config.ts': ts`
         import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
 
@@ -100,7 +113,7 @@ test(
           plugins: [tailwindcss()],
         })
       `,
-      'index.html': html`
+      'project-a/index.html': html`
         <head>
           <link rel="stylesheet" href="./src/index.css" />
         </head>
@@ -108,29 +121,30 @@ test(
           <div class="underline">Hello, world!</div>
         </body>
       `,
-      'src/index.css': css`
-        @import 'tailwindcss/theme' reference;
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
+        @content '../../project-b/src/**/*.js';
+      `,
+      'project-b/src/index.js': js`
+        const className = "content-['project-b/src/index.js']"
+        module.exports = { className }
       `,
     },
   },
-  async ({ spawn, getFreePort, fs }) => {
+  async ({ root, spawn, getFreePort, fs }) => {
     let port = await getFreePort()
-    let process = await spawn(`pnpm vite dev --port ${port}`)
+    let process = await spawn(`pnpm vite dev --port ${port}`, {
+      cwd: path.join(root, 'project-a'),
+    })
 
     await process.onStdout((message) => message.includes('ready in'))
 
     let css = await fetchCSS('/src/index.css', port)
-    expect(stripTailwindComment(css)).toMatchInlineSnapshot(
-      `
-      ".underline {
-        text-decoration-line: underline;
-      }"
-    `,
-    )
+    expect(css).toContain(candidate`underline`)
 
     await fs.write(
-      'index.html',
+      'project-a/index.html',
       html`
         <head>
           <link rel="stylesheet" href="./src/index.css" />
@@ -143,15 +157,18 @@ test(
     await process.onStdout((message) => message.includes('page reload'))
 
     css = await fetchCSS('/src/index.css', port)
-    expect(stripTailwindComment(css)).toMatchInlineSnapshot(
-      `
-      ".m-2 {
-        margin: var(--spacing-2, 0.5rem);
-      }
-      .underline {
-        text-decoration-line: underline;
-      }"
-    `,
+    expect(css).toContain(candidate`m-2`)
+
+    await fs.write(
+      'project-b/src/index.js',
+      js`
+        const className = "[.changed_&]:content-['project-b/src/index.js']"
+        module.exports = { className }
+      `,
     )
+    await process.onStdout((message) => message.includes('page reload'))
+
+    css = await fetchCSS('/src/index.css', port)
+    expect(css).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
   },
 )
