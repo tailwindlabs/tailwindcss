@@ -1,5 +1,4 @@
 import { objectToAst, rule, type CssInJs } from './ast'
-import type { Candidate } from './candidate'
 import type { DesignSystem } from './design-system'
 import { withAlpha, withNegative } from './utilities'
 import { inferDataType } from './utils/infer-data-type'
@@ -18,26 +17,6 @@ export type PluginAPI = {
       modifiers: 'any' | Record<string, string>
     }>,
   ): void
-}
-
-let NOOP = () => null
-
-function resolveCandidateValue(
-  value: Extract<Candidate, { kind: 'functional' }>['value' | 'modifier'],
-  list: Record<string, any> | null,
-  resolveBare: (value: string) => string | null = NOOP,
-) {
-  if (!value) return list?.DEFAULT ?? null
-
-  // Arbitrary values and modifiers are also used as-is
-  if (value.kind === 'arbitrary') return value.value
-
-  // Return the value supplied by `list` if it exists
-  // - `options.values`
-  // - `options.modifiers`
-  // Otherwise, try to resolve it as a bare value
-  // Finally, return `null` if no value was found
-  return list?.[value.value] ?? resolveBare(value.value) ?? null
 }
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -98,61 +77,87 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
         }
 
         designSystem.utilities.functional(name, (candidate) => {
-          // Any negative candiate without support is invalid
+          // A negative utility was provided but is unsupported
           if (!options?.supportsNegativeValues && candidate.negative) return
 
-          // If this utility supports color values — try resolving as a color
+          let values = options?.values ?? null
           let modifiers = options?.modifiers ?? null
+          let isColor = types.includes('color')
 
-          if (types.includes('color')) {
-            // Colors implicitly support modifiers when no modifiers are provided
-            // They're read from the opacity scale'
-            if (!modifiers) {
-              modifiers = Object.fromEntries(theme.namespace('--opacity').entries())
+          if (isColor) {
+            // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
+            // for backwards compatibility but still allow them to be overriden
+            values = {
+              inherit: 'inherit',
+              transparent: 'transparent',
+              current: 'currentColor',
+              ...values,
+            }
+
+            // Color utilities implicitly support opacity modifiers when no modifiers are provided
+            modifiers = modifiers ?? Object.fromEntries(theme.namespace('--opacity').entries())
+          }
+
+          let value: string | null
+
+          if (!candidate.value) {
+            value = values?.DEFAULT ?? null
+          } else if (candidate.value.kind === 'arbitrary') {
+            value = candidate.value.value
+          } else {
+            value = values?.[candidate.value.value] ?? null
+          }
+
+          // No valid value was provided; OR
+          // No value was provided and no default value exists
+          if (!value) return
+
+          // A modifier was provided but this utility does not support them
+          if (candidate.modifier && !modifiers) return
+
+          let modifier: string | null
+
+          if (modifiers === 'any') {
+            modifier = candidate.modifier
+              ? candidate.modifier.kind === 'arbitrary'
+                ? // In v3 an `any` modifier that is arbitrary is provided as the string with square brackets
+                  `[${candidate.modifier.value}]`
+                : candidate.modifier.value
+              : null
+          } else if (!candidate.modifier) {
+            modifier = modifiers?.DEFAULT ?? null
+          } else if (candidate.modifier.kind === 'arbitrary') {
+            modifier = candidate.modifier.value
+          } else {
+            modifier = modifiers?.[candidate.modifier.value] ?? null
+
+            // which are converted to percentages for later use
+            if (!modifier && isColor && !Number.isNaN(Number(candidate.modifier.value))) {
+              modifier = `${candidate.modifier.value}%`
             }
           }
 
-          if (candidate.modifier && !modifiers) return
-
-          let modifier = resolveCandidateValue(
-            candidate.modifier,
-            modifiers === 'any' ? {} : modifiers,
-            (value) => {
-              if (modifiers === 'any') return value
-              if (!types.includes('color')) return null
-              if (Number.isNaN(Number(value))) return null
-
-              return `${value}%`
-            },
-          )
-
+          // A modifier was provided but its invalid
           if (candidate.modifier && !modifier) return
 
-          let value = resolveCandidateValue(candidate.value, {
-            inherit: 'inherit',
-            transparent: 'transparent',
-            current: 'currentColor',
-            ...(options?.values ?? null),
-          })
-
-          if (!value) return
-
-          if (types.includes('color') && modifier) {
+          if (isColor && modifier) {
             value = withAlpha(value, modifier)
           }
 
-          // Throw out any candidate whose value isn't not of a support type
+          // Throw out any candidate whose value is not a supported type
           if (candidate.value?.kind === 'arbitrary' && types.length > 0 && !types.includes('any')) {
-            // Bail when the candidate has an explicit data type but it's not in
-            // the list of supported types by this utility For example, given a
-            // `scrollbar` utility that is used to change its color:
-            // scrollbar-[length:var(--whatever)]
+            // The candidate has an explicit data type but it's not in the list
+            // of supported types by this utility. For example, a `scrollbar`
+            // utility that is only used to change the scrollbar color but is
+            // used with a `length` value: `scrollbar-[length:var(--whatever)]`
             if (candidate.value.dataType && !types.includes(candidate.value.dataType)) {
               return
             }
 
-            // We also need to bail when the candidate does not have an explicit
-            // type and we're not able to infer it as one of the supported types.
+            // The candidate does not have an explicit data type and the value
+            // cannot be inferred as one of the supported types. For example, a
+            // `scrollbar` utility that is only used to change the scrollbar
+            // color but is used with a `length` value: `scrollbar-[33px]`
             if (
               !candidate.value.dataType &&
               !inferDataType(candidate.value.value, types as any[])
