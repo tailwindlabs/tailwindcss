@@ -10,8 +10,6 @@ use ignore::WalkBuilder;
 use lazy_static::lazy_static;
 use rayon::prelude::*;
 use std::cmp::Ordering;
-use std::iter;
-use std::path;
 use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Mutex;
@@ -80,7 +78,9 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
     // If we have additional content paths, then we have to resolve them as well.
     if !opts.content_paths.is_empty() {
         let resolved_files: Vec<_> = match fast_glob(&opts.content_paths) {
-            Ok(matches) => matches.filter_map(|x| path::absolute(x).ok()).collect(),
+            Ok(matches) => matches
+                .filter_map(|x| dunce::canonicalize(&x).ok())
+                .collect(),
             Err(err) => {
                 event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
                 vec![]
@@ -92,27 +92,23 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
         let optimized_incoming_globs = get_fast_patterns(&opts.content_paths)
             .iter()
             .flat_map(|(root, globs)| {
-                let root = match path::absolute(root) {
-                    Ok(root) => root,
-                    Err(err) => {
-                        event!(
-                            tracing::Level::ERROR,
-                            "Failed to canonicalize base path: {:?}",
-                            err
-                        );
+                globs.iter().filter_map(|glob| {
+                    let root = match dunce::canonicalize(root.clone()) {
+                        Ok(root) => root,
+                        Err(error) => {
+                            event!(
+                                tracing::Level::ERROR,
+                                "Failed to canonicalize base path {:?}",
+                                error
+                            );
+                            return None;
+                        }
+                    };
 
-                        return vec![];
-                    }
-                };
-
-                globs
-                    .iter()
-                    .map(|glob| {
-                        let base = root.clone().display().to_string();
-                        let glob = glob.to_string();
-                        GlobEntry { base, glob }
-                    })
-                    .collect()
+                    let base = root.display().to_string();
+                    let glob = glob.to_string();
+                    Some(GlobEntry { base, glob })
+                })
             })
             .collect::<Vec<GlobEntry>>();
 

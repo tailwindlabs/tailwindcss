@@ -17,6 +17,7 @@ ignore = "0.4.20"
 lazy_static = "1.4.0"
 glob-match = "0.2.1"
 serial_test = "3.1.1"
+dunce = "1.0.5"
 
 [dev-dependencies]
 tempfile = "3.5.0"
