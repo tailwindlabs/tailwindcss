@@ -165,17 +165,18 @@ export function test(
             }
           }
 
-          let stdout = ''
-          let stderr = ''
+          let combined: ['stdout' | 'stderr', string][] = []
 
           child.stdout.on('data', (result) => {
-            stdout += result.toString()
-            stdoutMessages.push(result.toString())
+            let content = result.toString()
+            combined.push(['stdout', content])
+            stdoutMessages.push(content)
             notifyNext(stdoutActors, stdoutMessages)
           })
           child.stderr.on('data', (result) => {
-            stderr += result.toString()
-            stderrMessages.push(result.toString())
+            let content = result.toString()
+            combined.push(['stderr', content])
+            stderrMessages.push(content)
             notifyNext(stderrActors, stderrMessages)
           })
           child.on('exit', onExit)
@@ -186,8 +187,13 @@ export function test(
           })
 
           options.onTestFailed(() => {
-            console.log('stdout:', stdout)
-            console.log('stderr:', stderr)
+            for (let [type, message] of combined) {
+              if (type === 'stdout') {
+                console.log(message)
+              } else {
+                console.error(message)
+              }
+            }
           })
 
           return {

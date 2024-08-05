@@ -78,7 +78,9 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
     // If we have additional content paths, then we have to resolve them as well.
     if !opts.content_paths.is_empty() {
         let resolved_files: Vec<_> = match fast_glob(&opts.content_paths) {
-            Ok(matches) => matches.filter_map(|x| x.canonicalize().ok()).collect(),
+            Ok(matches) => matches
+                .filter_map(|x| dunce::canonicalize(&x).ok())
+                .collect(),
             Err(err) => {
                 event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
                 vec![]
@@ -91,13 +93,13 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
             .iter()
             .flat_map(|(root, globs)| {
                 globs.iter().filter_map(|glob| {
-                    let root = match root.canonicalize() {
+                    let root = match dunce::canonicalize(root.clone()) {
                         Ok(root) => root,
-                        Err(err) => {
+                        Err(error) => {
                             event!(
                                 tracing::Level::ERROR,
-                                "Failed to canonicalize base path: {:?}",
-                                err
+                                "Failed to canonicalize base path {:?}",
+                                error
                             );
                             return None;
                         }

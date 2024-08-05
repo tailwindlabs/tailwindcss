@@ -5,6 +5,8 @@ import { normalizePath } from './normalize-path'
 const SINGLE_QUOTE = "'"
 const DOUBLE_QUOTE = '"'
 
+export { normalizePath }
+
 export default function fixRelativePathsPlugin(): Plugin {
   // Retain a list of touched at-rules to avoid infinite loops
   let touched: WeakSet<AtRule> = new WeakSet()
