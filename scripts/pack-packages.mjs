@@ -24,6 +24,18 @@ for (let path of paths) {
   workspaces.set(pkg.name, { version: pkg.version ?? '', dir: dirname(path) })
 }
 
+// Move napi artifacts into sub packages
+const tailwindcssOxideRoot = path.join(root, 'crates', 'node')
+for (let file of await fs.readdir(tailwindcssOxideRoot)) {
+  if (file.startsWith('tailwindcss-oxide.') && file.endsWith('.node')) {
+    let target = file.split('.')[1]
+    await fs.cp(
+      path.join(tailwindcssOxideRoot, file),
+      path.join(tailwindcssOxideRoot, 'npm', target, file),
+    )
+  }
+}
+
 // Clean dist folder
 await fs.rm(path.join(root, 'dist'), { recursive: true, force: true })
 
