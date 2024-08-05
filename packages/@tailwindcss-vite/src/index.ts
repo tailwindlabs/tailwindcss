@@ -77,7 +77,6 @@ export default function tailwindcss(): Plugin[] {
 
   function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     let inputBasePath = path.dirname(path.resolve(inputPath))
-
     let { build, globs } = compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
@@ -118,10 +117,6 @@ export default function tailwindcss(): Plugin[] {
       // Ensure relative is a posix style path since we will merge it with
       // the glob.
       relative = normalizePath(relative)
-
-      console.log({
-        glob: path.posix.join(relative, glob.glob),
-      })
 
       addWatchFile(path.posix.join(relative, glob.glob))
     }
