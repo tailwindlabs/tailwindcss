@@ -334,15 +334,23 @@ async function createWatchers(dirs: string[], handle: (files: string[]) => void)
         return
       }
 
-      for (let event of events) {
-        // We currently don't handle deleted files because it doesn't influence
-        // the CSS output. This is because we currently keep all scanned
-        // candidates in a cache for performance reasons.
-        if (event.type === 'delete') continue
+      await Promise.all(
+        events.map(async (event) => {
+          // We currently don't handle deleted files because it doesn't influence
+          // the CSS output. This is because we currently keep all scanned
+          // candidates in a cache for performance reasons.
+          if (event.type === 'delete') return
 
-        // Track the changed file.
-        files.add(event.path)
-      }
+          // Ignore directory changes. We only care about file changes
+          const stats = await fs.lstat(event.path)
+          if (stats.isDirectory()) {
+            return
+          }
+
+          // Track the changed file.
+          files.add(event.path)
+        }),
+      )
 
       // Handle the tracked files at some point in the future.
       enqueueFlush()

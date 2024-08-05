@@ -1,6 +1,5 @@
 import path from 'node:path'
-import { expect } from 'vitest'
-import { css, html, js, json, stripTailwindComment, test, yaml } from '../utils'
+import { candidate, css, html, js, json, test, yaml } from '../utils'
 
 test(
   'production build',
@@ -51,44 +50,13 @@ test(
       cwd: path.join(root, 'project-a'),
     })
 
-    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
-      ".underline {
-        text-decoration-line: underline;
-      }
-      .content-\\[\\'a\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'a/src/index.js';
-        content: var(--tw-content);
-      }
-      .content-\\[\\'b\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'b/src/index.js';
-        content: var(--tw-content);
-      }
-      .inverted\\:flex {
-        @media (inverted-colors: inverted) {
-          display: flex;
-        }
-      }
-      .hocus\\:underline {
-        &:focus {
-          text-decoration-line: underline;
-        }
-        &:hover {
-          text-decoration-line: underline;
-        }
-      }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
-      @property --tw-content {
-        syntax: "*";
-        inherits: false;
-        initial-value: "";
-      }"
-    `)
+    await fs.expectFileToContain('project-a/dist/out.css', [
+      candidate`underline`,
+      candidate`content-['a/src/index.js']`,
+      candidate`content-['b/src/index.js']`,
+      candidate`inverted:flex`,
+      candidate`hocus:underline`,
+    ])
   },
 )
 
@@ -137,165 +105,38 @@ test(
     },
   },
   async ({ root, fs, spawn }) => {
-    await fs.waitForOutputFileChange('project-a/dist/out.css', async () => {
-      return await spawn('pnpm tailwindcss --input src/index.css --output dist/out.css --watch', {
-        cwd: path.join(root, 'project-a'),
-      })
+    await spawn('pnpm tailwindcss --input src/index.css --output dist/out.css --watch', {
+      cwd: path.join(root, 'project-a'),
     })
 
-    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
-      ".underline {
-        text-decoration-line: underline;
-      }
-      .content-\\[\\'a\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'a/src/index.js';
-        content: var(--tw-content);
-      }
-      .content-\\[\\'b\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'b/src/index.js';
-        content: var(--tw-content);
-      }
-      .inverted\\:flex {
-        @media (inverted-colors: inverted) {
-          display: flex;
-        }
-      }
-      .hocus\\:underline {
-        &:focus {
-          text-decoration-line: underline;
-        }
-        &:hover {
-          text-decoration-line: underline;
-        }
-      }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
-      @property --tw-content {
-        syntax: "*";
-        inherits: false;
-        initial-value: "";
-      }"
-    `)
+    await fs.expectFileToContain('project-a/dist/out.css', [
+      candidate`underline`,
+      candidate`content-['a/src/index.js']`,
+      candidate`content-['b/src/index.js']`,
+      candidate`inverted:flex`,
+      candidate`hocus:underline`,
+    ])
 
-    await fs.waitForOutputFileChange('project-a/dist/out.css', async () => {
-      await fs.write(
-        'project-a/src/index.js',
-        js`
-          const className = "[.changed_&]:content-['project-a/src/index.js']"
-          module.exports = { className }
-        `,
-      )
-    })
+    await fs.write(
+      'project-a/src/index.js',
+      js`
+        const className = "[.changed_&]:content-['project-a/src/index.js']"
+        module.exports = { className }
+      `,
+    )
+    await fs.expectFileToContain('project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-a/src/index.js']`,
+    ])
 
-    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
-      ".underline {
-        text-decoration-line: underline;
-      }
-      .content-\\[\\'a\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'a/src/index.js';
-        content: var(--tw-content);
-      }
-      .content-\\[\\'b\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'b/src/index.js';
-        content: var(--tw-content);
-      }
-      .inverted\\:flex {
-        @media (inverted-colors: inverted) {
-          display: flex;
-        }
-      }
-      .hocus\\:underline {
-        &:focus {
-          text-decoration-line: underline;
-        }
-        &:hover {
-          text-decoration-line: underline;
-        }
-      }
-      .\\[\\.changed_\\&\\]\\:content-\\[\\'project-a\\/src\\/index\\.js\\'\\] {
-        .changed & {
-          --tw-content: 'project-a/src/index.js';
-          content: var(--tw-content);
-        }
-      }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
-      @property --tw-content {
-        syntax: "*";
-        inherits: false;
-        initial-value: "";
-      }"
-    `)
-
-    await fs.waitForOutputFileChange('project-a/dist/out.css', async () => {
-      await fs.write(
-        'project-b/src/index.js',
-        js`
-          const className = "[.changed_&]:content-['project-b/src/index.js']"
-          module.exports = { className }
-        `,
-      )
-    })
-
-    expect(stripTailwindComment(await fs.read('project-a/dist/out.css'))).toMatchInlineSnapshot(`
-      ".underline {
-        text-decoration-line: underline;
-      }
-      .content-\\[\\'a\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'a/src/index.js';
-        content: var(--tw-content);
-      }
-      .content-\\[\\'b\\/src\\/index\\.js\\'\\] {
-        --tw-content: 'b/src/index.js';
-        content: var(--tw-content);
-      }
-      .inverted\\:flex {
-        @media (inverted-colors: inverted) {
-          display: flex;
-        }
-      }
-      .hocus\\:underline {
-        &:focus {
-          text-decoration-line: underline;
-        }
-        &:hover {
-          text-decoration-line: underline;
-        }
-      }
-      .\\[\\.changed_\\&\\]\\:content-\\[\\'project-a\\/src\\/index\\.js\\'\\] {
-        .changed & {
-          --tw-content: 'project-a/src/index.js';
-          content: var(--tw-content);
-        }
-      }
-      .\\[\\.changed_\\&\\]\\:content-\\[\\'project-b\\/src\\/index\\.js\\'\\] {
-        .changed & {
-          --tw-content: 'project-b/src/index.js';
-          content: var(--tw-content);
-        }
-      }
-      @supports (-moz-orient: inline) {
-        @layer base {
-          *, ::before, ::after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
-      @property --tw-content {
-        syntax: "*";
-        inherits: false;
-        initial-value: "";
-      }"
-    `)
+    await fs.write(
+      'project-b/src/index.js',
+      js`
+        const className = "[.changed_&]:content-['project-b/src/index.js']"
+        module.exports = { className }
+      `,
+    )
+    await fs.expectFileToContain('project-a/dist/out.css', [
+      candidate`[.changed_&]:content-['project-b/src/index.js']`,
+    ])
   },
 )

@@ -1,4 +1,3 @@
-import watcher from '@parcel/watcher'
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
 import killPort from 'kill-port'
@@ -7,15 +6,7 @@ import fs from 'node:fs/promises'
 import net from 'node:net'
 import { homedir, platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { test as defaultTest } from 'vitest'
-
-export let css = dedent
-export let html = dedent
-export let ts = dedent
-export let js = dedent
-export let json = dedent
-export let yaml = dedent
-export let txt = dedent
+import { test as defaultTest, expect } from 'vitest'
 
 const REPO_ROOT = path.join(__dirname, '..')
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
@@ -46,12 +37,15 @@ interface TestContext {
     write(filePath: string, content: string): Promise<void>
     read(filePath: string): Promise<string>
     glob(pattern: string): Promise<[string, string][]>
-    waitForOutputFileChange<T>(file: string, cb?: () => T | Promise<T>): Promise<T>
+    expectFileToContain(filePath: string, contents: string | string[]): Promise<void>
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
+
+const TEST_TIMEOUT = 30000
+const ASSERTION_TIMEOUT = 5000
 
 export function test(
   name: string,
@@ -59,223 +53,219 @@ export function test(
   testCallback: TestCallback,
   { only = false } = {},
 ) {
-  return (only ? defaultTest.only : defaultTest)(name, { timeout: 30000 }, async (options) => {
-    let root = await fs.mkdtemp(
-      // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder
-      // that apparently causes the vite builds to not work.
-      path.join(
-        process.env.CI && platform() === 'win32' ? homedir() : tmpdir(),
-        'tailwind-integrations',
-      ),
-    )
+  return (only ? defaultTest.only : defaultTest)(
+    name,
+    { timeout: TEST_TIMEOUT },
+    async (options) => {
+      let root = await fs.mkdtemp(
+        // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder
+        // that apparently causes the vite builds to not work.
+        path.join(
+          process.env.CI && platform() === 'win32' ? homedir() : tmpdir(),
+          'tailwind-integrations',
+        ),
+      )
 
-    async function write(filename: string, content: string): Promise<void> {
-      let full = path.join(root, filename)
+      async function write(filename: string, content: string): Promise<void> {
+        let full = path.join(root, filename)
 
-      if (filename.endsWith('package.json')) {
-        content = await overwriteVersionsInPackageJson(content)
-      }
-
-      // Ensure that files written on Windows use \r\n line ending
-      if (platform() === 'win32') {
-        content = content.replace(/\n/g, '\r\n')
-      }
-
-      let dir = path.dirname(full)
-      await fs.mkdir(dir, { recursive: true })
-      await fs.writeFile(full, content)
-    }
-
-    for (let [filename, content] of Object.entries(config.fs)) {
-      await write(filename, content)
-    }
-
-    try {
-      execSync('pnpm install', { cwd: root })
-    } catch (error: any) {
-      console.error(error.stdout.toString())
-      console.error(error.stderr.toString())
-      throw error
-    }
-
-    let disposables: (() => Promise<void>)[] = []
-    async function dispose() {
-      await Promise.all(disposables.map((dispose) => dispose()))
-      await fs.rm(root, { recursive: true, maxRetries: 3, force: true })
-    }
-    options.onTestFinished(dispose)
-
-    let context = {
-      root,
-      async exec(command: string, childProcessOptions: ChildProcessOptions = {}) {
-        return execSync(command, {
-          cwd: root,
-          stdio: 'pipe',
-          ...childProcessOptions,
-        }).toString()
-      },
-      async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
-        let resolveDisposal: (() => void) | undefined
-        let rejectDisposal: ((error: Error) => void) | undefined
-        let disposePromise = new Promise<void>((resolve, reject) => {
-          resolveDisposal = resolve
-          rejectDisposal = reject
-        })
-
-        let child = spawn(command, {
-          cwd: root,
-          shell: true,
-          env: {
-            ...process.env,
-          },
-          ...childProcessOptions,
-        })
-
-        function dispose() {
-          child.kill()
-
-          let timer = setTimeout(
-            () => rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
-            1000,
-          )
-          disposePromise.finally(() => clearTimeout(timer))
-          return disposePromise
-        }
-        disposables.push(dispose)
-        function onExit() {
-          resolveDisposal?.()
+        if (filename.endsWith('package.json')) {
+          content = await overwriteVersionsInPackageJson(content)
         }
 
-        let stdoutMessages: string[] = []
-        let stderrMessages: string[] = []
+        // Ensure that files written on Windows use \r\n line ending
+        if (platform() === 'win32') {
+          content = content.replace(/\n/g, '\r\n')
+        }
 
-        let stdoutActors: SpawnActor[] = []
-        let stderrActors: SpawnActor[] = []
+        let dir = path.dirname(full)
+        await fs.mkdir(dir, { recursive: true })
+        await fs.writeFile(full, content)
+      }
 
-        function notifyNext(actors: SpawnActor[], messages: string[]) {
-          if (actors.length <= 0) return
-          let [next] = actors
+      for (let [filename, content] of Object.entries(config.fs)) {
+        await write(filename, content)
+      }
 
-          for (let [idx, message] of messages.entries()) {
-            if (next.predicate(message)) {
-              messages.splice(0, idx + 1)
-              let actorIdx = actors.indexOf(next)
-              actors.splice(actorIdx, 1)
-              next.resolve()
-              break
+      try {
+        execSync('pnpm install', { cwd: root })
+      } catch (error: any) {
+        console.error(error.stdout.toString())
+        console.error(error.stderr.toString())
+        throw error
+      }
+
+      let disposables: (() => Promise<void>)[] = []
+      async function dispose() {
+        await Promise.all(disposables.map((dispose) => dispose()))
+        await fs.rm(root, { recursive: true, maxRetries: 3, force: true })
+      }
+      options.onTestFinished(dispose)
+
+      let context = {
+        root,
+        async exec(command: string, childProcessOptions: ChildProcessOptions = {}) {
+          return execSync(command, {
+            cwd: root,
+            stdio: 'pipe',
+            ...childProcessOptions,
+          }).toString()
+        },
+        async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
+          let resolveDisposal: (() => void) | undefined
+          let rejectDisposal: ((error: Error) => void) | undefined
+          let disposePromise = new Promise<void>((resolve, reject) => {
+            resolveDisposal = resolve
+            rejectDisposal = reject
+          })
+
+          let child = spawn(command, {
+            cwd: root,
+            shell: true,
+            env: {
+              ...process.env,
+            },
+            ...childProcessOptions,
+          })
+
+          function dispose() {
+            child.kill()
+
+            let timer = setTimeout(
+              () =>
+                rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
+              ASSERTION_TIMEOUT,
+            )
+            disposePromise.finally(() => clearTimeout(timer))
+            return disposePromise
+          }
+          disposables.push(dispose)
+          function onExit() {
+            resolveDisposal?.()
+          }
+
+          let stdoutMessages: string[] = []
+          let stderrMessages: string[] = []
+
+          let stdoutActors: SpawnActor[] = []
+          let stderrActors: SpawnActor[] = []
+
+          function notifyNext(actors: SpawnActor[], messages: string[]) {
+            if (actors.length <= 0) return
+            let [next] = actors
+
+            for (let [idx, message] of messages.entries()) {
+              if (next.predicate(message)) {
+                messages.splice(0, idx + 1)
+                let actorIdx = actors.indexOf(next)
+                actors.splice(actorIdx, 1)
+                next.resolve()
+                break
+              }
             }
           }
-        }
 
-        let stdout = ''
-        let stderr = ''
+          let stdout = ''
+          let stderr = ''
 
-        child.stdout.on('data', (result) => {
-          stdout += result.toString()
-          stdoutMessages.push(result.toString())
-          notifyNext(stdoutActors, stdoutMessages)
-        })
-        child.stderr.on('data', (result) => {
-          stderr += result.toString()
-          stderrMessages.push(result.toString())
-          notifyNext(stderrActors, stderrMessages)
-        })
-        child.on('exit', onExit)
-        child.on('error', (error) => {
-          if (error.name !== 'AbortError') {
-            throw error
+          child.stdout.on('data', (result) => {
+            stdout += result.toString()
+            stdoutMessages.push(result.toString())
+            notifyNext(stdoutActors, stdoutMessages)
+          })
+          child.stderr.on('data', (result) => {
+            stderr += result.toString()
+            stderrMessages.push(result.toString())
+            notifyNext(stderrActors, stderrMessages)
+          })
+          child.on('exit', onExit)
+          child.on('error', (error) => {
+            if (error.name !== 'AbortError') {
+              throw error
+            }
+          })
+
+          options.onTestFailed(() => {
+            console.log('stdout:', stdout)
+            console.log('stderr:', stderr)
+          })
+
+          return {
+            dispose,
+            onStdout(predicate: (message: string) => boolean) {
+              return new Promise<void>((resolve) => {
+                stdoutActors.push({ predicate, resolve })
+                notifyNext(stdoutActors, stdoutMessages)
+              })
+            },
+            onStderr(predicate: (message: string) => boolean) {
+              return new Promise<void>((resolve) => {
+                stderrActors.push({ predicate, resolve })
+                notifyNext(stderrActors, stderrMessages)
+              })
+            },
           }
-        })
-
-        options.onTestFailed(() => {
-          console.log('stdout:', stdout)
-          console.log('stderr:', stderr)
-        })
-
-        return {
-          dispose,
-          onStdout(predicate: (message: string) => boolean) {
-            return new Promise<void>((resolve) => {
-              stdoutActors.push({ predicate, resolve })
-              notifyNext(stdoutActors, stdoutMessages)
-            })
-          },
-          onStderr(predicate: (message: string) => boolean) {
-            return new Promise<void>((resolve) => {
-              stderrActors.push({ predicate, resolve })
-              notifyNext(stderrActors, stderrMessages)
-            })
-          },
-        }
-      },
-      async getFreePort(): Promise<number> {
-        return new Promise((resolve, reject) => {
-          let server = net.createServer()
-          server.listen(0, () => {
-            let address = server.address()
-            let port = address === null || typeof address === 'string' ? null : address.port
-
-            server.close(() => {
-              if (port === null) {
-                reject(new Error(`Failed to get a free port: address is ${address}`))
-              } else {
-                disposables.push(async () => {
-                  // Wait for 10ms in case the process was just killed
-                  await new Promise((resolve) => setTimeout(resolve, 10))
-
-                  // kill-port uses `lsof` on macOS which is expensive and can
-                  // block for multiple seconds. In order to avoid that for a
-                  // server that is no longer running, we check if the port is
-                  // still in use first.
-                  let isPortTaken = await testIfPortTaken(port)
-                  if (!isPortTaken) {
-                    return
-                  }
-
-                  await killPort(port)
-                })
-                resolve(port)
-              }
-            })
-          })
-        })
-      },
-      fs: {
-        write,
-        async read(filePath: string) {
-          return await fs.readFile(path.join(root, filePath), 'utf8')
         },
-        async glob(pattern: string) {
-          let files = await fastGlob(pattern, { cwd: root })
-          return Promise.all(
-            files.map(async (file) => {
-              let content = await fs.readFile(path.join(root, file), 'utf8')
-              return [file, content]
-            }),
-          )
-        },
-        async waitForOutputFileChange<T>(file: string, cb: () => T | Promise<T>) {
-          let filePath = path.join(root, file)
-          let result: T
+        async getFreePort(): Promise<number> {
+          return new Promise((resolve, reject) => {
+            let server = net.createServer()
+            server.listen(0, () => {
+              let address = server.address()
+              let port = address === null || typeof address === 'string' ? null : address.port
 
-          return new Promise<T>(async (resolve) => {
-            let { unsubscribe } = await watcher.subscribe(root, async (_err, events) => {
-              for (let event of events) {
-                if (event.path.endsWith(filePath)) {
-                  await unsubscribe()
-                  resolve(result)
+              server.close(() => {
+                if (port === null) {
+                  reject(new Error(`Failed to get a free port: address is ${address}`))
+                } else {
+                  disposables.push(async () => {
+                    // Wait for 10ms in case the process was just killed
+                    await new Promise((resolve) => setTimeout(resolve, 10))
+
+                    // kill-port uses `lsof` on macOS which is expensive and can
+                    // block for multiple seconds. In order to avoid that for a
+                    // server that is no longer running, we check if the port is
+                    // still in use first.
+                    let isPortTaken = await testIfPortTaken(port)
+                    if (!isPortTaken) {
+                      return
+                    }
+
+                    await killPort(port)
+                  })
+                  resolve(port)
                 }
-              }
+              })
             })
-
-            result = await cb()
           })
         },
-      },
-    } satisfies TestContext
+        fs: {
+          write,
+          read(filePath: string) {
+            return fs.readFile(path.resolve(root, filePath), 'utf8')
+          },
+          async glob(pattern: string) {
+            let files = await fastGlob(pattern, { cwd: root })
+            return Promise.all(
+              files.map(async (file) => {
+                let content = await fs.readFile(path.join(root, file), 'utf8')
+                return [file, content]
+              }),
+            )
+          },
+          async expectFileToContain(filePath, contents) {
+            return retryUntil(async () => {
+              let fileContent = await this.read(filePath)
+              for (let content of contents) {
+                expect(fileContent).toContain(content)
+              }
+            })
+          },
+        },
+      } satisfies TestContext
 
-    await testCallback(context)
-  })
+      await testCallback(context)
+    },
+  )
 }
 test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })
@@ -341,4 +331,115 @@ function testIfPortTaken(port: number): Promise<boolean> {
     })
     client.connect({ port: port, host: 'localhost' })
   })
+}
+
+export let css = dedent
+export let html = dedent
+export let ts = dedent
+export let js = dedent
+export let json = dedent
+export let yaml = dedent
+export let txt = dedent
+
+export function candidate(strings: TemplateStringsArray, ...values: any[]) {
+  let output: string[] = []
+  for (let i = 0; i < strings.length; i++) {
+    output.push(strings[i])
+    if (i < values.length) {
+      output.push(values[i])
+    }
+  }
+
+  return `.${escape(output.join('').trim())}`
+}
+
+// https://drafts.csswg.org/cssom/#serialize-an-identifier
+export function escape(value: string) {
+  if (arguments.length == 0) {
+    throw new TypeError('`CSS.escape` requires an argument.')
+  }
+  var string = String(value)
+  var length = string.length
+  var index = -1
+  var codeUnit
+  var result = ''
+  var firstCodeUnit = string.charCodeAt(0)
+
+  if (
+    // If the character is the first character and is a `-` (U+002D), and
+    // there is no second character, […]
+    length == 1 &&
+    firstCodeUnit == 0x002d
+  ) {
+    return '\\' + string
+  }
+
+  while (++index < length) {
+    codeUnit = string.charCodeAt(index)
+    // Note: there’s no need to special-case astral symbols, surrogate
+    // pairs, or lone surrogates.
+
+    // If the character is NULL (U+0000), then the REPLACEMENT CHARACTER
+    // (U+FFFD).
+    if (codeUnit == 0x0000) {
+      result += '\uFFFD'
+      continue
+    }
+
+    if (
+      // If the character is in the range [\1-\1F] (U+0001 to U+001F) or is
+      // U+007F, […]
+      (codeUnit >= 0x0001 && codeUnit <= 0x001f) ||
+      codeUnit == 0x007f ||
+      // If the character is the first character and is in the range [0-9]
+      // (U+0030 to U+0039), […]
+      (index == 0 && codeUnit >= 0x0030 && codeUnit <= 0x0039) ||
+      // If the character is the second character and is in the range [0-9]
+      // (U+0030 to U+0039) and the first character is a `-` (U+002D), […]
+      (index == 1 && codeUnit >= 0x0030 && codeUnit <= 0x0039 && firstCodeUnit == 0x002d)
+    ) {
+      // https://drafts.csswg.org/cssom/#escape-a-character-as-code-point
+      result += '\\' + codeUnit.toString(16) + ' '
+      continue
+    }
+
+    // If the character is not handled by one of the above rules and is
+    // greater than or equal to U+0080, is `-` (U+002D) or `_` (U+005F), or
+    // is in one of the ranges [0-9] (U+0030 to U+0039), [A-Z] (U+0041 to
+    // U+005A), or [a-z] (U+0061 to U+007A), […]
+    if (
+      codeUnit >= 0x0080 ||
+      codeUnit == 0x002d ||
+      codeUnit == 0x005f ||
+      (codeUnit >= 0x0030 && codeUnit <= 0x0039) ||
+      (codeUnit >= 0x0041 && codeUnit <= 0x005a) ||
+      (codeUnit >= 0x0061 && codeUnit <= 0x007a)
+    ) {
+      // the character itself
+      result += string.charAt(index)
+      continue
+    }
+
+    // Otherwise, the escaped character.
+    // https://drafts.csswg.org/cssom/#escape-a-character
+    result += '\\' + string.charAt(index)
+  }
+  return result
+}
+
+async function retryUntil<T>(
+  fn: () => Promise<T>,
+  { timeout = ASSERTION_TIMEOUT, delay = 5 }: { timeout?: number; delay?: number } = {},
+) {
+  let end = Date.now() + timeout
+  let error: any
+  while (Date.now() < end) {
+    try {
+      return await fn()
+    } catch (err) {
+      error = err
+      await new Promise((resolve) => setTimeout(resolve, delay))
+    }
+  }
+  throw error
 }
