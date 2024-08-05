@@ -1,13 +1,14 @@
 import { IO, Parsing, scanDir, scanFiles } from '@tailwindcss/oxide'
-import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
+import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
-import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
+import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
+  let config: ResolvedConfig | null = null
   let candidates = new Set<string>()
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
@@ -110,7 +111,19 @@ export default function tailwindcss(): Plugin[] {
     for (let glob of result.globs) {
       if (glob.glob[0] === '!') continue
 
-      addWatchFile(`${glob.base}/${glob.glob}`)
+      let relative = path.relative(config!.root, glob.base)
+      if (relative[0] !== '.') {
+        relative = './' + relative
+      }
+      // Ensure relative is a posix style path since we will merge it with
+      // the glob.
+      relative = normalizePath(relative)
+
+      console.log({
+        glob: path.posix.join(relative, glob.glob),
+      })
+
+      addWatchFile(path.posix.join(relative, glob.glob))
     }
 
     return build(Array.from(candidates))
@@ -167,7 +180,8 @@ export default function tailwindcss(): Plugin[] {
         server = _server
       },
 
-      async configResolved(config) {
+      async configResolved(_config) {
+        config = _config
         minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
