@@ -36,11 +36,11 @@ test(
         @plugin '../plugin.js';
       `,
       'project-a/src/index.js': js`
-        const className = "content-['a/src/index.js']"
+        const className = "content-['project-a/src/index.js']"
         module.exports = { className }
       `,
       'project-b/src/index.js': js`
-        const className = "content-['b/src/index.js']"
+        const className = "content-['project-b/src/index.js']"
         module.exports = { className }
       `,
     },
@@ -52,8 +52,8 @@ test(
 
     await fs.expectFileToContain('project-a/dist/out.css', [
       candidate`underline`,
-      candidate`content-['a/src/index.js']`,
-      candidate`content-['b/src/index.js']`,
+      candidate`content-['project-a/src/index.js']`,
+      candidate`content-['project-b/src/index.js']`,
       candidate`inverted:flex`,
       candidate`hocus:underline`,
     ])
@@ -95,11 +95,11 @@ test(
         @plugin '../plugin.js';
       `,
       'project-a/src/index.js': js`
-        const className = "content-['a/src/index.js']"
+        const className = "content-['project-a/src/index.js']"
         module.exports = { className }
       `,
       'project-b/src/index.js': js`
-        const className = "content-['b/src/index.js']"
+        const className = "content-['project-b/src/index.js']"
         module.exports = { className }
       `,
     },
@@ -111,8 +111,8 @@ test(
 
     await fs.expectFileToContain('project-a/dist/out.css', [
       candidate`underline`,
-      candidate`content-['a/src/index.js']`,
-      candidate`content-['b/src/index.js']`,
+      candidate`content-['project-a/src/index.js']`,
+      candidate`content-['project-b/src/index.js']`,
       candidate`inverted:flex`,
       candidate`hocus:underline`,
     ])
