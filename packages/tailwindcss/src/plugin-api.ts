@@ -38,7 +38,7 @@ function resolveCandidateValue(
 function resolveCandidateModifier(
   modifier: Extract<Candidate, { kind: 'functional' }>['modifier'],
   list: Record<string, string> | 'any' | null,
-  isColor: boolean,
+  resolveBare: (value: string | null) => string | null,
 ) {
   if (list === 'any') {
     return modifier
@@ -53,15 +53,7 @@ function resolveCandidateModifier(
 
   if (modifier.kind === 'arbitrary') return modifier.value
 
-  let mod = list?.[modifier.value] ?? null
-  if (mod) return mod
-
-  if (!isColor) return null
-  if (Number.isNaN(Number(modifier.value))) return null
-
-  // Color utilities implicitly support all numeric modifiers
-  // as opacity values (0-100) which are converted to percentages
-  return `${modifier.value}%`
+  return list?.[modifier.value] ?? resolveBare(modifier.value) ?? null
 }
 
 export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
@@ -150,7 +142,14 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
           // A modifier was provided but this utility does not support them
           if (candidate.modifier && !modifiers) return
 
-          let modifier = resolveCandidateModifier(candidate.modifier, modifiers, isColor)
+          let modifier = resolveCandidateModifier(candidate.modifier, modifiers, (value) => {
+            if (!isColor) return null
+            if (Number.isNaN(Number(value))) return null
+
+            // Color utilities implicitly support all numeric modifiers
+            // as opacity values (0-100) which are converted to percentages
+            return `${value}%`
+          })
 
           // A modifier was provided but its invalid
           if (candidate.modifier && !modifier) return
