@@ -376,7 +376,7 @@ function handleImports(
   // Relevant specification:
   //   - CSS Import Resolve: https://csstools.github.io/css-import-resolve/
 
-  if (!input.includes('@import') && !input.includes('@plugin') && !input.includes('@content')) {
+  if (!input.includes('@import') && !input.includes('@plugin') && !input.includes('@source')) {
     return [input, [file]]
   }
 

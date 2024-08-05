@@ -70,7 +70,7 @@ export default function fixRelativePathsPlugin(): Plugin {
   return {
     postcssPlugin: 'tailwindcss-postcss-fix-relative-paths',
     AtRule: {
-      content: fixRelativePath,
+      source: fixRelativePath,
       plugin: fixRelativePath,
     },
   }

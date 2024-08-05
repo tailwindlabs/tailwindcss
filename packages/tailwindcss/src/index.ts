@@ -113,23 +113,23 @@ export function compile(
       return
     }
 
-    // Collect paths from `@content` at-rules
-    if (node.selector.startsWith('@content ')) {
+    // Collect paths from `@source` at-rules
+    if (node.selector.startsWith('@source ')) {
       if (node.nodes.length > 0) {
-        throw new Error('`@content` cannot have a body.')
+        throw new Error('`@source` cannot have a body.')
       }
 
       if (parent !== null) {
-        throw new Error('`@content` cannot be nested.')
+        throw new Error('`@source` cannot be nested.')
       }
 
-      let path = node.selector.slice(9)
+      let path = node.selector.slice(8)
       if (
         (path[0] === '"' && path[path.length - 1] !== '"') ||
         (path[0] === "'" && path[path.length - 1] !== "'") ||
         (path[0] !== "'" && path[0] !== '"')
       ) {
-        throw new Error('`@content` paths must be quoted.')
+        throw new Error('`@source` paths must be quoted.')
       }
       globs.push(path.slice(1, -1))
       replaceWith([])

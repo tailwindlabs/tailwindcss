@@ -41,7 +41,7 @@ test(
       `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/utilities';
-        @content '../../project-b/src/**/*.js';
+        @source '../../project-b/src/**/*.js';
         @plugin '../plugin.js';
       `,
       'project-a/src/index.js': js`
@@ -109,7 +109,7 @@ test(
       `,
       'project-a/src/index.css': css`
         @import 'tailwindcss/utilities';
-        @content '../../project-b/src/**/*.js';
+        @source '../../project-b/src/**/*.js';
         @plugin '../plugin.js';
       `,
       'project-a/src/index.js': js`
