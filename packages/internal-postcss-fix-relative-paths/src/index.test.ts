@@ -6,7 +6,7 @@ import { describe, expect, test } from 'vitest'
 import fixRelativePathsPlugin from '.'
 
 describe('fixRelativePathsPlugin', () => {
-  test('rewrites @content and @plugin to be relative to the initial css file', async () => {
+  test('rewrites @source and @plugin to be relative to the initial css file', async () => {
     let cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'index.css')
     let css = fs.readFileSync(cssPath, 'utf-8')
 
@@ -15,8 +15,8 @@ describe('fixRelativePathsPlugin', () => {
     let result = await processor.process(css, { from: cssPath })
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
-      "@content "../../example-project/src/**/*.ts";
-      @content "!../../example-project/src/**/*.ts";
+      "@source "../../example-project/src/**/*.ts";
+      @source "!../../example-project/src/**/*.ts";
       @plugin "../../example-project/src/plugin.js";
       @plugin "../../example-project/src/what\\"s-this.js";"
     `)

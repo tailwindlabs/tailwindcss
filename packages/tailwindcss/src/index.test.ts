@@ -1514,19 +1514,19 @@ describe('plugins', () => {
   })
 })
 
-describe('@content', () => {
-  test('emits @content files', () => {
+describe('@source', () => {
+  test('emits @source files', () => {
     let { globs } = compile(css`
-      @content "./foo/bar/*.ts";
+      @source "./foo/bar/*.ts";
     `)
 
     expect(globs).toEqual(['./foo/bar/*.ts'])
   })
 
-  test('emits multiple @content files', () => {
+  test('emits multiple @source files', () => {
     let { globs } = compile(css`
-      @content "./foo/**/*.ts";
-      @content "./php/secr3t/smarty.php";
+      @source "./foo/**/*.ts";
+      @source "./php/secr3t/smarty.php";
     `)
 
     expect(globs).toEqual(['./foo/**/*.ts', './php/secr3t/smarty.php'])

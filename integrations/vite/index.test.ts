@@ -59,7 +59,7 @@ test(
       'project-a/src/index.css': css`
         @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
-        @content '../../project-b/src/**/*.js';
+        @source '../../project-b/src/**/*.js';
       `,
       'project-b/src/index.js': js`
         const className = "content-['project-b/src/index.js']"
@@ -124,7 +124,7 @@ test(
       'project-a/src/index.css': css`
         @import 'tailwindcss/theme' theme(reference);
         @import 'tailwindcss/utilities';
-        @content '../../project-b/src/**/*.js';
+        @source '../../project-b/src/**/*.js';
       `,
       'project-b/src/index.js': js`
         const className = "content-['project-b/src/index.js']"
