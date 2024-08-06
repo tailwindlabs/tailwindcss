@@ -228,23 +228,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Scan changed files only for incremental rebuilds.
           else if (rebuildStrategy === 'incremental') {
-            // TODO: use `scanDirResult.scanFiles(changedFiles)` for incremental
-            // rebuilds to prevent scanning the entire directory.
-
-            // Re-scan the directory to get the new `candidates`
-            scanDirResult = scanDir({
-              base, // Root directory, mainly used for auto content detection
-              sources: compiler.globs.map((glob) => ({
-                base: inputBasePath, // Globs are relative to the input.css file
-                glob,
-              })),
-            })
+            let candidates = scanDirResult.scanFiles(changedFiles)
 
             // No candidates found which means we don't need to rebuild. This can
             // happen if a file is detected but doesn't match any of the globs.
-            if (scanDirResult.candidates.length === 0) return
+            if (candidates.length === 0) return
 
-            compiledCss = compiler.build(scanDirResult.candidates)
+            compiledCss = compiler.build(candidates)
           }
 
           await write(compiledCss, args)

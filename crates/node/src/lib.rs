@@ -24,6 +24,12 @@ impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
 #[derive(Debug, Clone)]
 #[napi]
 pub struct ScanResult {
+  // Private information necessary for incremental rebuilds. Note: these fields are not exposed
+  // to JS
+  base: String,
+  sources: Vec<GlobEntry>,
+
+  // Public API:
   pub globs: Vec<GlobEntry>,
   pub files: Vec<String>,
   pub candidates: Vec<String>,
@@ -32,11 +38,13 @@ pub struct ScanResult {
 #[napi]
 impl ScanResult {
   #[napi]
-  pub fn scan_files(&self, input: Vec<ChangedContent>) -> Vec<String> {
-    tailwindcss_oxide::scan_files_with_globs(
-      input.into_iter().map(Into::into).collect(),
-      self.globs.clone().into_iter().map(Into::into).collect(),
-    )
+  pub fn scan_files(&self, _input: Vec<ChangedContent>) -> Vec<String> {
+    let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
+      base: self.base.clone(),
+      sources: self.sources.clone().into_iter().map(Into::into).collect(),
+    });
+
+    result.candidates
   }
 }
 
@@ -82,9 +90,10 @@ pub fn clear_cache() {
 #[napi]
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
   let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
-    base: args.base,
+    base: args.base.clone(),
     sources: args
       .sources
+      .clone()
       .unwrap_or_default()
       .into_iter()
       .map(Into::into)
@@ -92,6 +101,11 @@ pub fn scan_dir(args: ScanOptions) -> ScanResult {
   });
 
   ScanResult {
+    // Private
+    base: args.base,
+    sources: args.sources.unwrap_or_default(),
+
+    // Public
     files: result.files,
     candidates: result.candidates,
     globs: result.globs.into_iter().map(Into::into).collect(),

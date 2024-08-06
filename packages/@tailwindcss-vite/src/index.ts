@@ -1,4 +1,4 @@
-import { IO, Parsing, scanDir, scanFiles } from '@tailwindcss/oxide'
+import { scanDir } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
@@ -10,6 +10,8 @@ export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
   let config: ResolvedConfig | null = null
   let candidates = new Set<string>()
+  let scanDirResult: ReturnType<typeof scanDir> | null = null
+
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
   let cssModules: Record<
@@ -59,11 +61,9 @@ export default function tailwindcss(): Plugin[] {
 
   function scan(src: string, extension: string) {
     let updated = false
+
     // Parse all candidates given the resolved files
-    for (let candidate of scanFiles(
-      [{ content: src, extension }],
-      IO.Sequential | Parsing.Sequential,
-    )) {
+    for (let candidate of scanDirResult?.scanFiles([{ content: src, extension }]) ?? []) {
       // On an initial or full build, updated becomes true immediately so we
       // won't be making extra checks.
       if (!updated) {
@@ -87,7 +87,7 @@ export default function tailwindcss(): Plugin[] {
       },
     })
 
-    let result = scanDir({
+    scanDirResult = scanDir({
       // TODO: This might not be necessary if we enable/disabled auto content
       // detection
       base: inputBasePath, // Root directory, mainly used for auto content detection
@@ -97,17 +97,17 @@ export default function tailwindcss(): Plugin[] {
       })),
     })
 
-    for (let candidate of result.candidates) {
+    for (let candidate of scanDirResult.candidates) {
       candidates.add(candidate)
     }
 
     // Watch individual files
-    for (let file of result.files) {
+    for (let file of scanDirResult.files) {
       addWatchFile(file)
     }
 
     // Watch globs
-    for (let glob of result.globs) {
+    for (let glob of scanDirResult.globs) {
       if (glob.glob[0] === '!') continue
 
       let relative = path.relative(config!.root, glob.base)
