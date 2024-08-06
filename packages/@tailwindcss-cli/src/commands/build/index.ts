@@ -2,7 +2,6 @@ import watcher from '@parcel/watcher'
 import { clearCache, scanDir, type ChangedContent } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { createRequire } from 'module'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -21,7 +20,6 @@ import {
 } from '../../utils/renderer'
 import { resolve } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
-const require = createRequire(import.meta.url)
 
 const css = String.raw
 
@@ -134,16 +132,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     return tailwindcss.compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return require(path.resolve(inputBasePath, pluginPath))
+          return import(path.resolve(inputBasePath, pluginPath)).then((module) => module.default)
         }
 
-        return require(pluginPath)
+        return import(pluginPath).then((module) => module.default)
       },
     })
   }
 
   // Compile the input
-  let compiler = compile(input)
+  let compiler = await compile(input)
   let scanDirResult = scanDir({
     base, // Root directory, mainly used for auto content detection
     sources: compiler.globs.map((pattern) => ({
@@ -208,7 +206,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             )
 
             // Create a new compiler, given the new `input`
-            compiler = compile(input)
+            compiler = await compile(input)
 
             // Re-scan the directory to get the new `candidates`
             scanDirResult = scanDir({

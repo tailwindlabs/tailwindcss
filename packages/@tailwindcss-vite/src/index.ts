@@ -81,15 +81,15 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
-  function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
+  async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     let inputBasePath = path.dirname(path.resolve(inputPath))
-    let { build, globs } = compile(css, {
+    let { build, globs } = await compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return require(path.resolve(inputBasePath, pluginPath))
+          return import(path.resolve(inputBasePath, pluginPath)).then((module) => module.default)
         }
 
-        return require(pluginPath)
+        return import(pluginPath).then((module) => module.default)
       },
     })
 
@@ -131,12 +131,12 @@ export default function tailwindcss(): Plugin[] {
     return build(Array.from(candidates))
   }
 
-  function generateOptimizedCss(
+  async function generateOptimizedCss(
     css: string,
     inputPath: string,
     addWatchFile: (file: string) => void,
   ) {
-    return optimizeCss(generateCss(css, inputPath, addWatchFile), { minify })
+    return optimizeCss(await generateCss(css, inputPath, addWatchFile), { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -301,7 +301,7 @@ export default function tailwindcss(): Plugin[] {
         let code = await transformWithPlugins(
           this,
           id,
-          generateCss(src, id, (file) => this.addWatchFile(file)),
+          await generateCss(src, id, (file) => this.addWatchFile(file)),
         )
         return { code }
       },
@@ -326,7 +326,7 @@ export default function tailwindcss(): Plugin[] {
             continue
           }
 
-          let css = generateOptimizedCss(file.content, id, (file) => this.addWatchFile(file))
+          let css = await generateOptimizedCss(file.content, id, (file) => this.addWatchFile(file))
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure

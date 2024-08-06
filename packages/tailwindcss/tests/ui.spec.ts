@@ -292,21 +292,23 @@ test('content-none persists when conditionally styling a pseudo-element', async 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
 const defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
 async function render(page: Page, content: string) {
+  let { build } = await compile(css`
+    @layer theme, base, components, utilities;
+    @layer theme {
+      ${defaultTheme}
+    }
+    @layer base {
+      ${preflight}
+    }
+    @layer utilities {
+      @tailwind utilities;
+    }
+  `)
+
   await page.setContent(content)
   await page.addStyleTag({
     content: optimizeCss(
-      compile(css`
-        @layer theme, base, components, utilities;
-        @layer theme {
-          ${defaultTheme}
-        }
-        @layer base {
-          ${preflight}
-        }
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `).build(scanFiles([{ content, extension: 'html' }], IO.Sequential | Parsing.Sequential)),
+      build(scanFiles([{ content, extension: 'html' }], IO.Sequential | Parsing.Sequential)),
     ),
   })
 
