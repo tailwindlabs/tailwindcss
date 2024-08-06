@@ -10,7 +10,7 @@ import postcss from 'postcss'
 import atImport from 'postcss-import'
 import * as tailwindcss from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
-import { disposables } from '../../utils/disposables'
+import { Disposables } from '../../utils/disposables'
 import {
   eprintln,
   formatDuration,
@@ -302,13 +302,13 @@ async function createWatchers(dirs: string[], handle: (files: string[]) => void)
   //
   // When we encounter a change in a CSS file, we need to setup new watchers and
   // we want to cleanup the old ones we captured here.
-  let watchers = disposables()
+  let watchers = new Disposables()
 
   // Track all files that were added or changed.
   let files = new Set<string>()
 
   // Keep track of the debounce queue to avoid multiple rebuilds.
-  let debounceQueue = disposables()
+  let debounceQueue = new Disposables()
 
   // A changed file can be watched by multiple watchers, but we only want to
   // handle the file once. We debounce the handle function with the collected

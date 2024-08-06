@@ -4,46 +4,42 @@
  *
  * The `dispose` method can be called to clean up all resources at once.
  */
-export function disposables() {
+export class Disposables {
   // Track all disposables
-  let _disposables = new Set<Function>([])
+  #disposables = new Set<Function>([])
 
-  let api = {
-    /**
-     * Enqueue a callback in the macrotasks queue.
-     */
-    queueMacrotask(cb: () => void) {
-      let timer = setTimeout(cb, 0)
+  /**
+   * Enqueue a callback in the macrotasks queue.
+   */
+  queueMacrotask(cb: () => void) {
+    let timer = setTimeout(cb, 0)
 
-      return api.add(() => {
-        clearTimeout(timer)
-      })
-    },
-
-    /**
-     * General purpose disposable function that can be cleaned up.
-     */
-    add(dispose: () => void) {
-      _disposables.add(dispose)
-
-      return () => {
-        _disposables.delete(dispose)
-
-        dispose()
-      }
-    },
-
-    /**
-     * Dispose all disposables at once.
-     */
-    dispose() {
-      for (let dispose of _disposables) {
-        dispose()
-      }
-
-      _disposables.clear()
-    },
+    return this.add(() => {
+      clearTimeout(timer)
+    })
   }
 
-  return api
+  /**
+   * General purpose disposable function that can be cleaned up.
+   */
+  add(dispose: () => void) {
+    this.#disposables.add(dispose)
+
+    return () => {
+      this.#disposables.delete(dispose)
+
+      dispose()
+    }
+  }
+
+  /**
+   * Dispose all disposables at once.
+   */
+  dispose() {
+    for (let dispose of this.#disposables) {
+      dispose()
+    }
+
+    this.#disposables.clear()
+  }
 }
