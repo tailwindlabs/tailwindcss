@@ -91,7 +91,7 @@ export default function tailwindcss(): Plugin[] {
       // TODO: This might not be necessary if we enable/disabled auto content
       // detection
       base: inputBasePath, // Root directory, mainly used for auto content detection
-      contentPaths: globs.map((glob) => ({
+      sources: globs.map((glob) => ({
         base: inputBasePath, // Globs are relative to the input.css file
         glob,
       })),

@@ -128,7 +128,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Look for candidates used to generate the CSS
           let scanDirResult = scanDir({
             base, // Root directory, mainly used for auto content detection
-            contentPaths: context.compiler.globs.map((glob) => ({
+            sources: context.compiler.globs.map((glob) => ({
               base: inputBasePath, // Globs are relative to the input.css file
               glob,
             })),

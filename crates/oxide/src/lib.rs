@@ -44,8 +44,8 @@ pub struct ChangedContent {
 pub struct ScanOptions {
     /// Base path to start scanning from
     pub base: String,
-    /// Glob content paths
-    pub content_paths: Vec<GlobEntry>,
+    /// Glob sources
+    pub sources: Vec<GlobEntry>,
 }
 
 #[derive(Debug, Clone)]
@@ -75,9 +75,9 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
     let mut globs = resolve_globs(base, dirs);
 
-    // If we have additional content paths, then we have to resolve them as well.
-    if !opts.content_paths.is_empty() {
-        let resolved_files: Vec<_> = match fast_glob(&opts.content_paths) {
+    // If we have additional sources, then we have to resolve them as well.
+    if !opts.sources.is_empty() {
+        let resolved_files: Vec<_> = match fast_glob(&opts.sources) {
             Ok(matches) => matches
                 .filter_map(|x| dunce::canonicalize(&x).ok())
                 .collect(),
@@ -89,7 +89,7 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
         files.extend(resolved_files);
 
-        let optimized_incoming_globs = get_fast_patterns(&opts.content_paths)
+        let optimized_incoming_globs = get_fast_patterns(&opts.sources)
             .iter()
             .flat_map(|(root, globs)| {
                 globs.iter().filter_map(|glob| {

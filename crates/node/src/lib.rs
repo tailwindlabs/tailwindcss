@@ -70,8 +70,8 @@ impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
 pub struct ScanOptions {
   /// Base path to start scanning from
   pub base: String,
-  /// Glob content paths
-  pub content_paths: Option<Vec<GlobEntry>>,
+  /// Glob sources
+  pub sources: Option<Vec<GlobEntry>>,
 }
 
 #[napi]
@@ -83,8 +83,8 @@ pub fn clear_cache() {
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
   let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
     base: args.base,
-    content_paths: args
-      .content_paths
+    sources: args
+      .sources
       .unwrap_or_default()
       .into_iter()
       .map(Into::into)

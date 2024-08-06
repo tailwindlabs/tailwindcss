@@ -146,7 +146,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let compiler = compile(input)
   let scanDirResult = scanDir({
     base, // Root directory, mainly used for auto content detection
-    contentPaths: compiler.globs.map((glob) => ({
+    sources: compiler.globs.map((glob) => ({
       base: inputBasePath, // Globs are relative to the input.css file
       glob,
     })),
@@ -213,7 +213,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Re-scan the directory to get the new `candidates`
             scanDirResult = scanDir({
               base, // Root directory, mainly used for auto content detection
-              contentPaths: compiler.globs.map((glob) => ({
+              sources: compiler.globs.map((glob) => ({
                 base: inputBasePath, // Globs are relative to the input.css file
                 glob,
               })),
@@ -234,7 +234,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Re-scan the directory to get the new `candidates`
             scanDirResult = scanDir({
               base, // Root directory, mainly used for auto content detection
-              contentPaths: compiler.globs.map((glob) => ({
+              sources: compiler.globs.map((glob) => ({
                 base: inputBasePath, // Globs are relative to the input.css file
                 glob,
               })),
