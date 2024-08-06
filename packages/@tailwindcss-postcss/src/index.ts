@@ -1,11 +1,11 @@
 import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
+import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcss, { AtRule, type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
 import { compile } from 'tailwindcss'
-import fixRelativePathsPlugin from '../../internal-postcss-fix-relative-paths/src'
 
 /**
  * A Map that can generate default values for keys that don't exist.
