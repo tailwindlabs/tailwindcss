@@ -15445,6 +15445,106 @@ describe('legacy: matchUtilities', () => {
     expect(optimizeCss(run(['border-block/unknown', 'border-block-2/unknown'])).trim()).toEqual('')
   })
 
+  // We're not married to this behavior — if there's a good reason to do this differently in the
+  // future don't be afraid to change what should happen in this scenario.
+  describe('plugins that handle a specific arbitrary value type prevent falling through to other plugins if the result is invalid for that plugin', () => {
+    test('implicit color modifier', () => {
+      function run(candidates: string[]) {
+        return compile(
+          css`
+            @tailwind utilities;
+            @plugin "my-plugin";
+          `,
+          {
+            loadPlugin() {
+              return ({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-color': value }),
+                  },
+                  { type: ['color', 'any'] },
+                )
+
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-width': value }),
+                  },
+                  { type: ['length'] },
+                )
+              }
+            },
+          },
+        ).build(candidates)
+      }
+
+      expect(optimizeCss(run(['scrollbar-[2px]/50'])).trim()).toEqual('')
+    })
+
+    test('no modifiers', () => {
+      function run(candidates: string[]) {
+        return compile(
+          css`
+            @tailwind utilities;
+            @plugin "my-plugin";
+          `,
+          {
+            loadPlugin() {
+              return ({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ '--scrollbar-angle': value }),
+                  },
+                  { type: ['angle', 'any'] },
+                )
+
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ '--scrollbar-width': value }),
+                  },
+                  { type: ['length'] },
+                )
+              }
+            },
+          },
+        ).build(candidates)
+      }
+
+      expect(optimizeCss(run(['scrollbar-[2px]/50'])).trim()).toEqual('')
+    })
+
+    test('invalid named modifier', () => {
+      function run(candidates: string[]) {
+        return compile(
+          css`
+            @tailwind utilities;
+            @plugin "my-plugin";
+          `,
+          {
+            loadPlugin() {
+              return ({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-color': value }),
+                  },
+                  { type: ['color', 'any'], modifiers: { foo: 'foo' } },
+                )
+
+                matchUtilities(
+                  {
+                    scrollbar: (value) => ({ 'scrollbar-width': value }),
+                  },
+                  { type: ['length'], modifiers: { bar: 'bar' } },
+                )
+              }
+            },
+          },
+        ).build(candidates)
+      }
+
+      expect(optimizeCss(run(['scrollbar-[2px]/foo'])).trim()).toEqual('')
+    })
+  })
+
   test('custom functional utilities with different types', () => {
     function run(candidates: string[]) {
       return compile(
@@ -15566,7 +15666,7 @@ describe('legacy: matchUtilities', () => {
     ).toEqual('')
   })
 
-  test('functional utilities with type: color automatically support opacity', () => {
+  test('functional utilities with `type: color` automatically support opacity', () => {
     function run(candidates: string[]) {
       return compile(
         css`
@@ -15638,6 +15738,44 @@ describe('legacy: matchUtilities', () => {
 
       .scrollbar-current\\/45 {
         scrollbar-color: color-mix(in srgb, currentColor 45%, transparent);
+      }"
+    `)
+  })
+
+  test.only('dsfsdfds functional utilities with `type: color` automatically support opacity', () => {
+    function run(candidates: string[]) {
+      return compile(
+        css`
+          @plugin "my-plugin";
+          @tailwind utilities;
+        `,
+        {
+          loadPlugin() {
+            return ({ matchUtilities }) => {
+              matchUtilities(
+                {
+                  scrollbar: (value) => {
+                    return {
+                      'scrollbar-color': value,
+                    }
+                  },
+                },
+                {
+                  type: ['color', 'any'],
+                  values: {
+                    black: 'black',
+                  },
+                },
+              )
+            }
+          },
+        },
+      ).build(candidates)
+    }
+
+    expect(optimizeCss(run(['scrollbar-black/33'])).trim()).toMatchInlineSnapshot(`
+      ".scrollbar-black\\/33 {
+        scrollbar-color: #00000054;
       }"
     `)
   })

@@ -6,9 +6,9 @@ import { inferDataType } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 
-type CompileFn<T extends Candidate['kind']> = (
+export type CompileFn<T extends Candidate['kind']> = (
   value: Extract<Candidate, { kind: T }>,
-) => AstNode[] | undefined
+) => AstNode[] | undefined | null
 
 interface SuggestionGroup {
   supportsNegative?: boolean
@@ -55,8 +55,24 @@ export class Utilities {
     return this.utilities.has(name) && this.utilities.get(name).some((fn) => fn.kind === kind)
   }
 
-  get(name: string) {
-    return this.utilities.has(name) ? this.utilities.get(name) : []
+  compile(candidate: Candidate) {
+    if (candidate.kind === 'arbitrary') {
+      return this.arbitraryFn(candidate)
+    }
+
+    let utilities = this.utilities.get(candidate.root) ?? []
+
+    for (let i = utilities.length - 1; i >= 0; i--) {
+      let utility = utilities[i]
+
+      if (candidate.kind !== utility.kind) continue
+
+      let compiledNodes = utility.compileFn(candidate)
+      if (compiledNodes === null) return null
+      if (compiledNodes) return compiledNodes
+    }
+
+    return null
   }
 
   getCompletions(name: string): SuggestionGroup[] {
@@ -82,10 +98,6 @@ export class Utilities {
     }
 
     return keys
-  }
-
-  getArbitrary() {
-    return this.arbitraryFn
   }
 }
 

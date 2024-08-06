@@ -102,39 +102,9 @@ export function compileAstNodes(rawCandidate: string, designSystem: DesignSystem
   let candidate = designSystem.parseCandidate(rawCandidate)
   if (candidate === null) return null
 
-  let nodes: AstNode[] = []
+  let nodes = designSystem.utilities.compile(candidate)
 
-  // Handle arbitrary properties
-  if (candidate.kind === 'arbitrary') {
-    let compileFn = designSystem.utilities.getArbitrary()
-
-    // Build the node
-    let compiledNodes = compileFn(candidate)
-    if (compiledNodes === undefined) return null
-
-    nodes = compiledNodes
-  }
-
-  // Handle named utilities
-  else if (candidate.kind === 'static' || candidate.kind === 'functional') {
-    let fns = designSystem.utilities.get(candidate.root)
-
-    // Build the node
-    let compiledNodes: AstNode[] | undefined
-
-    for (let i = fns.length - 1; i >= 0; i--) {
-      let fn = fns[i]
-
-      if (candidate.kind !== fn.kind) continue
-
-      compiledNodes = fn.compileFn(candidate)
-      if (compiledNodes) break
-    }
-
-    if (compiledNodes === undefined) return null
-
-    nodes = compiledNodes
-  }
+  if (!nodes) return null
 
   let propertySort = getPropertySort(nodes)
 

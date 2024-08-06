@@ -34,10 +34,12 @@ function resolveCandidateValue(
 }
 
 function resolveCandidateModifier(
-  modifier: NonNullable<Extract<Candidate, { kind: 'functional' }>['modifier']>,
-  list: Record<string, string> | 'any',
+  modifier: Extract<Candidate, { kind: 'functional' }>['modifier'],
+  list: Record<string, string> | 'any' | null,
   types: string[],
 ) {
+  if (!modifier || !list) return null
+
   // If bare modifiers are supported or the modifier is arbitrary, just return the value
   if (list === 'any' || modifier.kind === 'arbitrary') return modifier.value
 
@@ -112,48 +114,6 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
           // A negative utility was provided but is unsupported
           if (!options?.supportsNegativeValues && candidate.negative) return
 
-          let isColor = types.includes('color')
-
-          let values = options?.values ?? {}
-
-          if (isColor) {
-            // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
-            // for backwards compatibility but still allow them to be overriden
-            values = {
-              inherit: 'inherit',
-              transparent: 'transparent',
-              current: 'currentColor',
-              ...values,
-            }
-          }
-
-          let value = resolveCandidateValue(candidate.value, values)
-
-          // No valid value was provided; OR
-          // No value was provided and no default value exists
-          if (!value) return
-
-          let modifiers = options?.modifiers ?? null
-
-          if (isColor) {
-            // Color utilities implicitly support opacity modifiers when no modifiers are provided
-            modifiers = modifiers ?? Object.fromEntries(theme.namespace('--opacity').entries())
-          }
-
-          // A modifier was provided but this utility does not support them
-          if (candidate.modifier && !modifiers) return
-
-          let modifier = candidate.modifier
-            ? resolveCandidateModifier(candidate.modifier, modifiers ?? {}, types)
-            : null
-
-          // A modifier was provided but its invalid
-          if (candidate.modifier && !modifier) return
-
-          if (isColor && modifier) {
-            value = withAlpha(value, modifier)
-          }
-
           // Throw out any candidate whose value is not a supported type
           if (candidate.value?.kind === 'arbitrary' && types.length > 0 && !types.includes('any')) {
             // The candidate has an explicit data type but it's not in the list
@@ -174,6 +134,44 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
             ) {
               return
             }
+          }
+
+          let isColor = types.includes('color')
+
+          let values = options?.values ?? {}
+
+          if (isColor) {
+            // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
+            // for backwards compatibility but still allow them to be overriden
+            values = {
+              inherit: 'inherit',
+              transparent: 'transparent',
+              current: 'currentColor',
+              ...values,
+            }
+          }
+
+          let value = resolveCandidateValue(candidate.value, values)
+
+          if (!value) return
+
+          let modifiers = options?.modifiers ?? null
+
+          if (isColor) {
+            // Color utilities implicitly support opacity modifiers when no modifiers are provided
+            modifiers = modifiers ?? Object.fromEntries(theme.namespace('--opacity').entries())
+          }
+
+          let modifier = resolveCandidateModifier(candidate.modifier, modifiers, types)
+
+          // A modifier was provided but its invalid
+          if (candidate.modifier && !modifier) {
+            // For arbitrary values, return `null` to avoid falling through to the next utility
+            return candidate.value?.kind === 'arbitrary' ? null : undefined
+          }
+
+          if (isColor && modifier) {
+            value = withAlpha(value, modifier)
           }
 
           if (candidate.negative) {
