@@ -697,15 +697,15 @@ test('disabled', () => {
 
 test('inert', () => {
   expect(run(['inert:flex', 'group-inert:flex', 'peer-inert:flex'])).toMatchInlineSnapshot(`
-    ".group-inert\\:flex:is(:where(.group):where([inert], [inert] *) *) {
+    ".group-inert\\:flex:is(:where(.group):is([inert], [inert] *) *) {
       display: flex;
     }
 
-    .peer-inert\\:flex:is(:where(.peer):where([inert], [inert] *) ~ *) {
+    .peer-inert\\:flex:is(:where(.peer):is([inert], [inert] *) ~ *) {
       display: flex;
     }
 
-    .inert\\:flex:where([inert], [inert] *) {
+    .inert\\:flex:is([inert], [inert] *) {
       display: flex;
     }"
   `)

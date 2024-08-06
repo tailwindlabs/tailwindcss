@@ -465,7 +465,7 @@ export function createVariants(theme: Theme): Variants {
     staticVariant(key, [value])
   }
 
-  staticVariant('inert', ['&:where([inert], [inert] *)'])
+  staticVariant('inert', ['&:is([inert], [inert] *)'])
 
   variants.compound('has', (ruleNode, variant) => {
     if (variant.modifier) return null
