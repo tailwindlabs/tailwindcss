@@ -459,12 +459,13 @@ export function createVariants(theme: Theme): Variants {
     ['active', '&:active'],
     ['enabled', '&:enabled'],
     ['disabled', '&:disabled'],
-    ['inert', '&:where([inert], [inert] *)'],
   ]
 
   for (let [key, value] of pseudos) {
     staticVariant(key, [value])
   }
+
+  staticVariant('inert', ['&:where([inert], [inert] *)'])
 
   variants.compound('has', (ruleNode, variant) => {
     if (variant.modifier) return null
