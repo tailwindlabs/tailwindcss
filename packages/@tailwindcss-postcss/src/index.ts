@@ -91,7 +91,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           // Setup the compiler if it doesn't exist yet. This way we can
-          // guarantee a `compile()` function is available.
+          // guarantee a `build()` function is available.
           context.compiler ??= createCompiler()
 
           let rebuildStrategy: 'full' | 'incremental' = 'incremental'
