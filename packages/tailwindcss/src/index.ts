@@ -78,7 +78,15 @@ export function compile(
     if (node.kind !== 'rule') return
 
     // Collect paths from `@plugin` at-rules
-    if (node.selector.startsWith('@plugin ')) {
+    if (node.selector === '@plugin' || node.selector.startsWith('@plugin ')) {
+      if (node.nodes.length > 0) {
+        throw new Error('`@plugin` cannot have a body.')
+      }
+
+      if (parent !== null) {
+        throw new Error('`@plugin` cannot be nested.')
+      }
+
       plugins.push(loadPlugin(node.selector.slice(9, -1)))
       replaceWith([])
       return
