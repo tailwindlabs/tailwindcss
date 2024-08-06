@@ -44,7 +44,7 @@ mod scan_dir {
                 .iter()
                 .map(|x| GlobEntry {
                     base: base.clone(),
-                    glob: x.to_string(),
+                    pattern: x.to_string(),
                 })
                 .collect(),
         });
@@ -60,7 +60,7 @@ mod scan_dir {
                 "{}{}{}",
                 glob.base,
                 path::MAIN_SEPARATOR,
-                glob.glob
+                glob.pattern
             ));
         }
 

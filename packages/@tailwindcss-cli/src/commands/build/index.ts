@@ -146,9 +146,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let compiler = compile(input)
   let scanDirResult = scanDir({
     base, // Root directory, mainly used for auto content detection
-    sources: compiler.globs.map((glob) => ({
+    sources: compiler.globs.map((pattern) => ({
       base: inputBasePath, // Globs are relative to the input.css file
-      glob,
+      pattern,
     })),
   })
 
@@ -213,9 +213,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Re-scan the directory to get the new `candidates`
             scanDirResult = scanDir({
               base, // Root directory, mainly used for auto content detection
-              sources: compiler.globs.map((glob) => ({
+              sources: compiler.globs.map((pattern) => ({
                 base: inputBasePath, // Globs are relative to the input.css file
-                glob,
+                pattern,
               })),
             })
 
@@ -276,7 +276,7 @@ function watchDirectories(base: string, scanDirResult: ReturnType<typeof scanDir
   return [base].concat(
     scanDirResult.globs.flatMap((globEntry) => {
       // We don't want a watcher for negated globs.
-      if (globEntry.glob[0] === '!') return []
+      if (globEntry.pattern[0] === '!') return []
 
       // We don't want a watcher for nested directories, these will be covered
       // by the `base` directory already.

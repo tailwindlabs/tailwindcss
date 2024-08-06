@@ -57,7 +57,7 @@ pub struct ScanResult {
 #[derive(Debug, Clone)]
 pub struct GlobEntry {
     pub base: String,
-    pub glob: String,
+    pub pattern: String,
 }
 
 pub fn clear_cache() {
@@ -106,7 +106,10 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
                     let base = root.display().to_string();
                     let glob = glob.to_string();
-                    Some(GlobEntry { base, glob })
+                    Some(GlobEntry {
+                        base,
+                        pattern: glob,
+                    })
                 })
             })
             .collect::<Vec<GlobEntry>>();
@@ -299,12 +302,12 @@ fn resolve_globs(root: &Path, dirs: Vec<PathBuf>) -> Vec<GlobEntry> {
     // Build the globs for all globable directories.
     let shallow_globs = shallow_globable_directories.iter().map(|path| GlobEntry {
         base: path.display().to_string(),
-        glob: format!("*/*.{{{}}}", extension_list),
+        pattern: format!("*/*.{{{}}}", extension_list),
     });
 
     let deep_globs = deep_globable_directories.iter().map(|path| GlobEntry {
         base: path.display().to_string(),
-        glob: format!("**/*.{{{}}}", extension_list),
+        pattern: format!("**/*.{{{}}}", extension_list),
     });
 
     shallow_globs.chain(deep_globs).collect::<Vec<_>>()

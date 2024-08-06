@@ -91,9 +91,9 @@ export default function tailwindcss(): Plugin[] {
       // TODO: This might not be necessary if we enable/disabled auto content
       // detection.
       base: config!.root, // Root directory, mainly used for auto content detection
-      sources: globs.map((glob) => ({
+      sources: globs.map((pattern) => ({
         base: inputBasePath, // Globs are relative to the input.css file
-        glob,
+        pattern,
       })),
     })
 
@@ -108,7 +108,7 @@ export default function tailwindcss(): Plugin[] {
 
     // Watch globs
     for (let glob of scanDirResult.globs) {
-      if (glob.glob[0] === '!') continue
+      if (glob.pattern[0] === '!') continue
 
       let relative = path.relative(config!.root, glob.base)
       if (relative[0] !== '.') {
@@ -118,7 +118,7 @@ export default function tailwindcss(): Plugin[] {
       // the glob.
       relative = normalizePath(relative)
 
-      addWatchFile(path.posix.join(relative, glob.glob))
+      addWatchFile(path.posix.join(relative, glob.pattern))
     }
 
     return build(Array.from(candidates))

@@ -128,9 +128,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Look for candidates used to generate the CSS
           let scanDirResult = scanDir({
             base, // Root directory, mainly used for auto content detection
-            sources: context.compiler.globs.map((glob) => ({
+            sources: context.compiler.globs.map((pattern) => ({
               base: inputBasePath, // Globs are relative to the input.css file
-              glob,
+              pattern,
             })),
           })
 
@@ -147,12 +147,12 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Register dependencies so changes in `base` cause a rebuild while
           // giving tools like Vite or Parcel a glob that can be used to limit
           // the files that cause a rebuild to only those that match it.
-          for (let { base, glob } of scanDirResult.globs) {
+          for (let { base, pattern } of scanDirResult.globs) {
             result.messages.push({
               type: 'dir-dependency',
               plugin: '@tailwindcss/postcss',
               dir: base,
-              glob,
+              glob: pattern,
               parent: result.opts.from,
             })
           }

@@ -52,23 +52,23 @@ impl ScanResult {
 #[napi(object)]
 pub struct GlobEntry {
   pub base: String,
-  pub glob: String,
+  pub pattern: String,
 }
 
 impl From<GlobEntry> for tailwindcss_oxide::GlobEntry {
-  fn from(globs: GlobEntry) -> Self {
+  fn from(glob: GlobEntry) -> Self {
     tailwindcss_oxide::GlobEntry {
-      base: globs.base,
-      glob: globs.glob,
+      base: glob.base,
+      pattern: glob.pattern,
     }
   }
 }
 
 impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
-  fn from(globs: tailwindcss_oxide::GlobEntry) -> Self {
+  fn from(glob: tailwindcss_oxide::GlobEntry) -> Self {
     GlobEntry {
-      base: globs.base,
-      glob: globs.glob,
+      base: glob.base,
+      pattern: glob.pattern,
     }
   }
 }
