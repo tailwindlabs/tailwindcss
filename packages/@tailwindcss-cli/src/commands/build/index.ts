@@ -342,7 +342,7 @@ async function createWatchers(dirs: string[], handle: (files: string[]) => void)
           if (event.type === 'delete') return
 
           // Ignore directory changes. We only care about file changes
-          const stats = await fs.lstat(event.path)
+          let stats = await fs.lstat(event.path)
           if (stats.isDirectory()) {
             return
           }
