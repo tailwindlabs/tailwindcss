@@ -297,7 +297,7 @@ function watchDirectories(base: string, scanDirResult: ReturnType<typeof scanDir
   )
 }
 
-async function createWatchers(dirs: string[], handle: (files: string[]) => void) {
+async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   // Track all Parcel watchers for each glob.
   //
   // When we encounter a change in a CSS file, we need to setup new watchers and
@@ -313,13 +313,13 @@ async function createWatchers(dirs: string[], handle: (files: string[]) => void)
   // A changed file can be watched by multiple watchers, but we only want to
   // handle the file once. We debounce the handle function with the collected
   // files to handle them in a single batch and to avoid multiple rebuilds.
-  function enqueueFlush() {
+  function enqueueCallback() {
     // Dispose all existing macrotask.
     debounceQueue.dispose()
 
     // Setup a new macrotask to handle the files in batch.
     debounceQueue.queueMacrotask(() => {
-      handle(Array.from(files))
+      cb(Array.from(files))
       files.clear()
     })
   }
@@ -353,7 +353,7 @@ async function createWatchers(dirs: string[], handle: (files: string[]) => void)
       )
 
       // Handle the tracked files at some point in the future.
-      enqueueFlush()
+      enqueueCallback()
     })
 
     // Ensure we cleanup the watcher when we're done.
