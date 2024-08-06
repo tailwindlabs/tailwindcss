@@ -89,8 +89,8 @@ export default function tailwindcss(): Plugin[] {
 
     scanDirResult = scanDir({
       // TODO: This might not be necessary if we enable/disabled auto content
-      // detection
-      base: inputBasePath, // Root directory, mainly used for auto content detection
+      // detection.
+      base: config!.root, // Root directory, mainly used for auto content detection
       sources: globs.map((glob) => ({
         base: inputBasePath, // Globs are relative to the input.css file
         glob,
