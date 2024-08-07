@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.8] - 2024-08-07
+
 ### Fixed
 
 - Fix minification when using nested CSS ([#14105](https://github.com/tailwindlabs/tailwindcss/pull/14105))
@@ -2415,7 +2419,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.7...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.8...HEAD
+[3.4.8]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.7...v3.4.8
 [3.4.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.6...v3.4.7
 [3.4.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.5...v3.4.6
 [3.4.5]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.4...v3.4.5
