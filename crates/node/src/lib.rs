@@ -1,4 +1,3 @@
-use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
 use std::{collections::HashSet, path::PathBuf};
 
 #[macro_use]
@@ -47,7 +46,7 @@ impl ScanResult {
     let mut unique_candidates: HashSet<String> = HashSet::from_iter(result.candidates);
     let candidates_from_files: HashSet<String> = HashSet::from_iter(tailwindcss_oxide::scan_files(
       input.into_iter().map(Into::into).collect(),
-      IO::Parallel as u8 | Parsing::Parallel as u8,
+      tailwindcss_oxide::IO::Parallel as u8 | tailwindcss_oxide::Parsing::Parallel as u8,
     ));
 
     unique_candidates.extend(candidates_from_files);
@@ -121,23 +120,4 @@ pub fn scan_dir(args: ScanOptions) -> ScanResult {
     candidates: result.candidates,
     globs: result.globs.into_iter().map(Into::into).collect(),
   }
-}
-
-#[derive(Debug)]
-#[napi]
-pub enum IO {
-  Sequential = 0b0001,
-  Parallel = 0b0010,
-}
-
-#[derive(Debug)]
-#[napi]
-pub enum Parsing {
-  Sequential = 0b0100,
-  Parallel = 0b1000,
-}
-
-#[napi]
-pub fn scan_files(input: Vec<ChangedContent>, strategy: u8) -> Vec<String> {
-  tailwindcss_oxide::scan_files(input.into_iter().map(Into::into).collect(), strategy)
 }
