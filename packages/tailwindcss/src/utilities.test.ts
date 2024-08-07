@@ -6351,8 +6351,17 @@ test('align-content', () => {
 })
 
 test('items', () => {
-  expect(run(['items-start', 'items-end', 'items-center', 'items-baseline', 'items-stretch']))
-    .toMatchInlineSnapshot(`
+  expect(
+    run([
+      'items-start',
+      'items-end',
+      'items-center',
+      'items-baseline',
+      'items-first-baseline',
+      'items-last-baseline',
+      'items-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".items-baseline {
       align-items: baseline;
     }
@@ -6363,6 +6372,14 @@ test('items', () => {
 
     .items-end {
       align-items: flex-end;
+    }
+
+    .items-first-baseline {
+      align-items: baseline;
+    }
+
+    .items-last-baseline {
+      align-items: last baseline;
     }
 
     .items-start {
@@ -6380,6 +6397,8 @@ test('items', () => {
       '-items-end',
       '-items-center',
       '-items-baseline',
+      '-items-first-baseline',
+      '-items-last-baseline',
       '-items-stretch',
       'items-start/foo',
       'items-end/foo',
