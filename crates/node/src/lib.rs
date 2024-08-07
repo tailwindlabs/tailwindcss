@@ -1,4 +1,4 @@
-use std::{collections::HashSet, path::PathBuf};
+use std::collections::HashSet;
 
 #[macro_use]
 extern crate napi_derive;
@@ -14,7 +14,7 @@ pub struct ChangedContent {
 impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
   fn from(changed_content: ChangedContent) -> Self {
     tailwindcss_oxide::ChangedContent {
-      file: changed_content.file.map(PathBuf::from),
+      file: changed_content.file.map(Into::into),
       content: changed_content.content,
     }
   }
@@ -49,11 +49,7 @@ impl ScanResult {
     ));
 
     unique_candidates.extend(candidates_from_files);
-
-    unique_candidates
-      .into_iter()
-      .map(|x| x.to_string())
-      .collect()
+    unique_candidates.into_iter().map(Into::into).collect()
   }
 }
 
