@@ -46,7 +46,6 @@ impl ScanResult {
     let mut unique_candidates: HashSet<String> = HashSet::from_iter(result.candidates);
     let candidates_from_files: HashSet<String> = HashSet::from_iter(tailwindcss_oxide::scan_files(
       input.into_iter().map(Into::into).collect(),
-      tailwindcss_oxide::IO::Parallel as u8 | tailwindcss_oxide::Parsing::Parallel as u8,
     ));
 
     unique_candidates.extend(candidates_from_files);

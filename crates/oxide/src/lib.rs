@@ -138,7 +138,7 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
             })
             .collect();
 
-        let candidates = scan_files(content, IO::Parallel as u8 | Parsing::Parallel as u8);
+        let candidates = scan_files(content);
         cache.add_candidates(candidates);
     }
 
@@ -407,46 +407,9 @@ pub fn is_allowed_content_path(path: &Path) -> bool {
         .unwrap_or(false)
 }
 
-#[derive(Debug)]
-pub enum IO {
-    Sequential = 0b0001,
-    Parallel = 0b0010,
-}
-
-impl From<u8> for IO {
-    fn from(item: u8) -> Self {
-        match item & 0b0011 {
-            0b0001 => IO::Sequential,
-            0b0010 => IO::Parallel,
-            _ => unimplemented!("Unknown 'IO' strategy"),
-        }
-    }
-}
-
-#[derive(Debug)]
-pub enum Parsing {
-    Sequential = 0b0100,
-    Parallel = 0b1000,
-}
-
-impl From<u8> for Parsing {
-    fn from(item: u8) -> Self {
-        match item & 0b1100 {
-            0b0100 => Parsing::Sequential,
-            0b1000 => Parsing::Parallel,
-            _ => unimplemented!("Unknown 'Parsing' strategy"),
-        }
-    }
-}
-
-#[tracing::instrument(skip(input, options))]
-pub fn scan_files(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
-    match (IO::from(options), Parsing::from(options)) {
-        (IO::Sequential, Parsing::Sequential) => parse_all_blobs_sync(read_all_files_sync(input)),
-        (IO::Sequential, Parsing::Parallel) => parse_all_blobs(read_all_files_sync(input)),
-        (IO::Parallel, Parsing::Sequential) => parse_all_blobs_sync(read_all_files(input)),
-        (IO::Parallel, Parsing::Parallel) => parse_all_blobs(read_all_files(input)),
-    }
+#[tracing::instrument(skip(input))]
+pub fn scan_files(input: Vec<ChangedContent>) -> Vec<String> {
+    parse_all_blobs(read_all_files(input))
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
