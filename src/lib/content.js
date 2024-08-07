@@ -245,11 +245,9 @@ export function createBroadPatternCheck(paths) {
       warned = true
 
       log.warn('broad-content-glob-pattern', [
-        `Your \`content\` configuration uses a glob pattern that includes \`${largeDirectory}\` without explicitly specifying \`${largeDirectory}\` in the glob.`,
-        'This can lead to performance issues and is not recommended.',
-        `Glob: \`${relativeMatchingGlob}\``,
-        `File: \`${relativeFile}\``,
-        `Please consider using a more specific pattern or use \`${largeDirectory}\` explicitly.`,
+        `Your \`content\` configuration includes a pattern which looks like it's accidentally matching all of \`${largeDirectory}\` and can cause serious performance issues.`,
+        `Pattern: \`${relativeMatchingGlob}\``,
+        `See our documentation for recommendations:`,
         'https://tailwindcss.com/docs/content-configuration#pattern-recommendations',
       ])
     }
