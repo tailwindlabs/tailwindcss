@@ -15122,7 +15122,7 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('custom utilities support some special chracters', async () => {
+  test('custom utilities support some special characters', async () => {
     let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
