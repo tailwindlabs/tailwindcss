@@ -115,7 +115,7 @@ export async function compile(
           if (candidate.negative) return
           let ast = structuredClone(node.nodes)
 
-          apply(ast, designSystem)
+          substituteAtApply(ast, designSystem)
 
           return ast
         })
@@ -357,7 +357,7 @@ export async function compile(
 
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
-    apply(ast, designSystem)
+    substituteAtApply(ast, designSystem)
   }
 
   // Track all valid candidates, these are the incoming `rawCandidate` that
@@ -410,7 +410,7 @@ export async function compile(
   }
 }
 
-function apply(ast: AstNode[], designSystem: DesignSystem) {
+function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   walk(ast, (node, { replaceWith }) => {
     if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@apply')) {
       let candidates = node.selector
