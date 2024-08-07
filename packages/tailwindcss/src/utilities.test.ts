@@ -15277,12 +15277,28 @@ describe('custom utilities', () => {
             @apply flex flex-col underline;
           }
 
+          @utility bar {
+            @apply z-10;
+
+            .baz {
+              @apply z-20;
+            }
+          }
+
           @tailwind utilities;
         `,
-        ['foo', 'hover:foo'],
+        ['foo', 'hover:foo', 'bar'],
       ),
     ).toMatchInlineSnapshot(`
-      ".foo {
+      ".bar {
+        z-index: 10;
+      }
+
+      .bar .baz {
+        z-index: 20;
+      }
+
+      .foo {
         flex-direction: column;
         text-decoration-line: underline;
         display: flex;
