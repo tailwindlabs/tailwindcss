@@ -1,11 +1,11 @@
 import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
+import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcss, { AtRule, type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
 import { compile } from 'tailwindcss'
-import fixRelativePathsPlugin from '../../internal-postcss-fix-relative-paths/src'
 
 /**
  * A Map that can generate default values for keys that don't exist.
@@ -91,7 +91,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           // Setup the compiler if it doesn't exist yet. This way we can
-          // guarantee a `compile()` function is available.
+          // guarantee a `build()` function is available.
           context.compiler ??= createCompiler()
 
           let rebuildStrategy: 'full' | 'incremental' = 'incremental'
@@ -128,9 +128,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Look for candidates used to generate the CSS
           let scanDirResult = scanDir({
             base, // Root directory, mainly used for auto content detection
-            contentPaths: context.compiler.globs.map((glob) => ({
+            sources: context.compiler.globs.map((pattern) => ({
               base: inputBasePath, // Globs are relative to the input.css file
-              glob,
+              pattern,
             })),
           })
 
@@ -147,12 +147,12 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // Register dependencies so changes in `base` cause a rebuild while
           // giving tools like Vite or Parcel a glob that can be used to limit
           // the files that cause a rebuild to only those that match it.
-          for (let { base, glob } of scanDirResult.globs) {
+          for (let { base, pattern } of scanDirResult.globs) {
             result.messages.push({
               type: 'dir-dependency',
               plugin: '@tailwindcss/postcss',
               dir: base,
-              glob,
+              glob: pattern,
               parent: result.opts.from,
             })
           }

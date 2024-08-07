@@ -10,7 +10,7 @@ import postcss from 'postcss'
 import atImport from 'postcss-import'
 import * as tailwindcss from 'tailwindcss'
 import type { Arg, Result } from '../../utils/args'
-import { disposables } from '../../utils/disposables'
+import { Disposables } from '../../utils/disposables'
 import {
   eprintln,
   formatDuration,
@@ -146,9 +146,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let compiler = compile(input)
   let scanDirResult = scanDir({
     base, // Root directory, mainly used for auto content detection
-    contentPaths: compiler.globs.map((glob) => ({
+    sources: compiler.globs.map((pattern) => ({
       base: inputBasePath, // Globs are relative to the input.css file
-      glob,
+      pattern,
     })),
   })
 
@@ -213,9 +213,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Re-scan the directory to get the new `candidates`
             scanDirResult = scanDir({
               base, // Root directory, mainly used for auto content detection
-              contentPaths: compiler.globs.map((glob) => ({
+              sources: compiler.globs.map((pattern) => ({
                 base: inputBasePath, // Globs are relative to the input.css file
-                glob,
+                pattern,
               })),
             })
 
@@ -228,23 +228,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Scan changed files only for incremental rebuilds.
           else if (rebuildStrategy === 'incremental') {
-            // TODO: use `scanDirResult.scanFiles(changedFiles)` for incremental
-            // rebuilds to prevent scanning the entire directory.
-
-            // Re-scan the directory to get the new `candidates`
-            scanDirResult = scanDir({
-              base, // Root directory, mainly used for auto content detection
-              contentPaths: compiler.globs.map((glob) => ({
-                base: inputBasePath, // Globs are relative to the input.css file
-                glob,
-              })),
-            })
+            let candidates = scanDirResult.scanFiles(changedFiles)
 
             // No candidates found which means we don't need to rebuild. This can
             // happen if a file is detected but doesn't match any of the globs.
-            if (scanDirResult.candidates.length === 0) return
+            if (candidates.length === 0) return
 
-            compiledCss = compiler.build(scanDirResult.candidates)
+            compiledCss = compiler.build(candidates)
           }
 
           await write(compiledCss, args)
@@ -286,7 +276,7 @@ function watchDirectories(base: string, scanDirResult: ReturnType<typeof scanDir
   return [base].concat(
     scanDirResult.globs.flatMap((globEntry) => {
       // We don't want a watcher for negated globs.
-      if (globEntry.glob[0] === '!') return []
+      if (globEntry.pattern[0] === '!') return []
 
       // We don't want a watcher for nested directories, these will be covered
       // by the `base` directory already.
@@ -297,29 +287,29 @@ function watchDirectories(base: string, scanDirResult: ReturnType<typeof scanDir
   )
 }
 
-async function createWatchers(dirs: string[], handle: (files: string[]) => void) {
+async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   // Track all Parcel watchers for each glob.
   //
   // When we encounter a change in a CSS file, we need to setup new watchers and
   // we want to cleanup the old ones we captured here.
-  let watchers = disposables()
+  let watchers = new Disposables()
 
   // Track all files that were added or changed.
   let files = new Set<string>()
 
   // Keep track of the debounce queue to avoid multiple rebuilds.
-  let debounceQueue = disposables()
+  let debounceQueue = new Disposables()
 
   // A changed file can be watched by multiple watchers, but we only want to
   // handle the file once. We debounce the handle function with the collected
   // files to handle them in a single batch and to avoid multiple rebuilds.
-  function enqueueFlush() {
+  function enqueueCallback() {
     // Dispose all existing macrotask.
     debounceQueue.dispose()
 
     // Setup a new macrotask to handle the files in batch.
     debounceQueue.queueMacrotask(() => {
-      handle(Array.from(files))
+      cb(Array.from(files))
       files.clear()
     })
   }
@@ -342,7 +332,7 @@ async function createWatchers(dirs: string[], handle: (files: string[]) => void)
           if (event.type === 'delete') return
 
           // Ignore directory changes. We only care about file changes
-          const stats = await fs.lstat(event.path)
+          let stats = await fs.lstat(event.path)
           if (stats.isDirectory()) {
             return
           }
@@ -353,7 +343,7 @@ async function createWatchers(dirs: string[], handle: (files: string[]) => void)
       )
 
       // Handle the tracked files at some point in the future.
-      enqueueFlush()
+      enqueueCallback()
     })
 
     // Ensure we cleanup the watcher when we're done.
@@ -376,7 +366,7 @@ function handleImports(
   // Relevant specification:
   //   - CSS Import Resolve: https://csstools.github.io/css-import-resolve/
 
-  if (!input.includes('@import') && !input.includes('@plugin') && !input.includes('@source')) {
+  if (!input.includes('@import')) {
     return [input, [file]]
   }
 

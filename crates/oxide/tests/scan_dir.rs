@@ -39,12 +39,12 @@ mod scan_dir {
 
         // Resolve all content paths for the (temporary) current working directory
         let result = scan_dir(ScanOptions {
-            base: base.clone(),
-            content_paths: globs
+            base: Some(base.clone()),
+            sources: globs
                 .iter()
                 .map(|x| GlobEntry {
                     base: base.clone(),
-                    glob: x.to_string(),
+                    pattern: x.to_string(),
                 })
                 .collect(),
         });
@@ -60,7 +60,7 @@ mod scan_dir {
                 "{}{}{}",
                 glob.base,
                 path::MAIN_SEPARATOR,
-                glob.glob
+                glob.pattern
             ));
         }
 

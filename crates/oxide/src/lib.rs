@@ -1,4 +1,3 @@
-use crate::glob::path_matches_globs;
 use crate::parser::Extractor;
 use bstr::ByteSlice;
 use cache::Cache;
@@ -43,9 +42,9 @@ pub struct ChangedContent {
 #[derive(Debug, Clone)]
 pub struct ScanOptions {
     /// Base path to start scanning from
-    pub base: String,
-    /// Glob content paths
-    pub content_paths: Vec<GlobEntry>,
+    pub base: Option<String>,
+    /// Glob sources
+    pub sources: Vec<GlobEntry>,
 }
 
 #[derive(Debug, Clone)]
@@ -58,7 +57,7 @@ pub struct ScanResult {
 #[derive(Debug, Clone)]
 pub struct GlobEntry {
     pub base: String,
-    pub glob: String,
+    pub pattern: String,
 }
 
 pub fn clear_cache() {
@@ -69,15 +68,21 @@ pub fn clear_cache() {
 pub fn scan_dir(opts: ScanOptions) -> ScanResult {
     init_tracing();
 
-    let base = Path::new(&opts.base);
+    let (mut files, mut globs) = match opts.base {
+        Some(base) => {
+            // Only enable auto content detection when `base` is provided.
+            let base = Path::new(&base);
+            let (files, dirs) = resolve_files(base);
+            let globs = resolve_globs(base, dirs);
 
-    let (mut files, dirs) = resolve_files(base);
+            (files, globs)
+        }
+        None => (vec![], vec![]),
+    };
 
-    let mut globs = resolve_globs(base, dirs);
-
-    // If we have additional content paths, then we have to resolve them as well.
-    if !opts.content_paths.is_empty() {
-        let resolved_files: Vec<_> = match fast_glob(&opts.content_paths) {
+    // If we have additional sources, then we have to resolve them as well.
+    if !opts.sources.is_empty() {
+        let resolved_files: Vec<_> = match fast_glob(&opts.sources) {
             Ok(matches) => matches
                 .filter_map(|x| dunce::canonicalize(&x).ok())
                 .collect(),
@@ -89,7 +94,7 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
         files.extend(resolved_files);
 
-        let optimized_incoming_globs = get_fast_patterns(&opts.content_paths)
+        let optimized_incoming_globs = get_fast_patterns(&opts.sources)
             .iter()
             .flat_map(|(root, globs)| {
                 globs.iter().filter_map(|glob| {
@@ -107,7 +112,10 @@ pub fn scan_dir(opts: ScanOptions) -> ScanResult {
 
                     let base = root.display().to_string();
                     let glob = glob.to_string();
-                    Some(GlobEntry { base, glob })
+                    Some(GlobEntry {
+                        base,
+                        pattern: glob,
+                    })
                 })
             })
             .collect::<Vec<GlobEntry>>();
@@ -300,12 +308,12 @@ fn resolve_globs(root: &Path, dirs: Vec<PathBuf>) -> Vec<GlobEntry> {
     // Build the globs for all globable directories.
     let shallow_globs = shallow_globable_directories.iter().map(|path| GlobEntry {
         base: path.display().to_string(),
-        glob: format!("*/*.{{{}}}", extension_list),
+        pattern: format!("*/*.{{{}}}", extension_list),
     });
 
     let deep_globs = deep_globable_directories.iter().map(|path| GlobEntry {
         base: path.display().to_string(),
-        glob: format!("**/*.{{{}}}", extension_list),
+        pattern: format!("**/*.{{{}}}", extension_list),
     });
 
     shallow_globs.chain(deep_globs).collect::<Vec<_>>()
@@ -439,26 +447,6 @@ pub fn scan_files(input: Vec<ChangedContent>, options: u8) -> Vec<String> {
         (IO::Parallel, Parsing::Sequential) => parse_all_blobs_sync(read_all_files(input)),
         (IO::Parallel, Parsing::Parallel) => parse_all_blobs(read_all_files(input)),
     }
-}
-
-#[tracing::instrument(skip(input, globs))]
-pub fn scan_files_with_globs(input: Vec<ChangedContent>, globs: Vec<GlobEntry>) -> Vec<String> {
-    parse_all_blobs_sync(read_all_files_sync(
-        input
-            .into_iter()
-            .flat_map(|c| {
-                // Verify that the file is actually allowed by the globs
-                if let Some(ref file) = c.file {
-                    if !path_matches_globs(file, &globs) {
-                        return None;
-                    }
-                }
-
-                // ChangedContent is allowed
-                Some(c)
-            })
-            .collect(),
-    ))
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
