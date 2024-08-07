@@ -42,7 +42,7 @@ pub struct ChangedContent {
 #[derive(Debug, Clone)]
 pub struct ScanOptions {
     /// Base path to start scanning from
-    pub base: String,
+    pub base: Option<String>,
     /// Glob sources
     pub sources: Vec<GlobEntry>,
 }
@@ -68,11 +68,17 @@ pub fn clear_cache() {
 pub fn scan_dir(opts: ScanOptions) -> ScanResult {
     init_tracing();
 
-    let base = Path::new(&opts.base);
+    let (mut files, mut globs) = match opts.base {
+        Some(base) => {
+            // Only enable auto content detection when `base` is provided.
+            let base = Path::new(&base);
+            let (files, dirs) = resolve_files(base);
+            let globs = resolve_globs(base, dirs);
 
-    let (mut files, dirs) = resolve_files(base);
-
-    let mut globs = resolve_globs(base, dirs);
+            (files, globs)
+        }
+        None => (vec![], vec![]),
+    };
 
     // If we have additional sources, then we have to resolve them as well.
     if !opts.sources.is_empty() {

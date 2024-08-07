@@ -26,7 +26,7 @@ impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
 pub struct ScanResult {
   // Private information necessary for incremental rebuilds. Note: these fields are not exposed
   // to JS
-  base: String,
+  base: Option<String>,
   sources: Vec<GlobEntry>,
 
   // Public API:
@@ -77,7 +77,7 @@ impl From<tailwindcss_oxide::GlobEntry> for GlobEntry {
 #[napi(object)]
 pub struct ScanOptions {
   /// Base path to start scanning from
-  pub base: String,
+  pub base: Option<String>,
   /// Glob sources
   pub sources: Option<Vec<GlobEntry>>,
 }
