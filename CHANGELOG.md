@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for `inline` option when defining `@theme` values ([#14095](https://github.com/tailwindlabs/tailwindcss/pull/14095))
 - Add `inert` variant ([#14129](https://github.com/tailwindlabs/tailwindcss/pull/14129))
-- Add `@source` support ([#14078](https://github.com/tailwindlabs/tailwindcss/pull/14078), [14063](https://github.com/tailwindlabs/tailwindcss/pull/14063), [14085](https://github.com/tailwindlabs/tailwindcss/pull/14085), [14079](https://github.com/tailwindlabs/tailwindcss/pull/14079), [14067](https://github.com/tailwindlabs/tailwindcss/pull/14067), [14076](https://github.com/tailwindlabs/tailwindcss/pull/14076), [14080](https://github.com/tailwindlabs/tailwindcss/pull/14080), [14127](https://github.com/tailwindlabs/tailwindcss/pull/14127), [14135](https://github.com/tailwindlabs/tailwindcss/pull/14135))
+- Add support for explicitly registering content paths with new `@source` at-rule ([#14078](https://github.com/tailwindlabs/tailwindcss/pull/14078))
 
 ## [4.0.0-alpha.18] - 2024-07-25
 
