@@ -215,15 +215,25 @@ export function createBroadPatternCheck(paths) {
   // node_modules).
   let explicitGlobs = paths.filter((path) => LARGE_DIRECTORIES_REGEX.test(path))
 
+  // Keep track of whether we already warned about the broad pattern issue or
+  // not. The `log.warn` function already does something similar where we only
+  // output the log once. However, with this we can also skip the other checks
+  // when we already warned about the broad pattern.
+  let warned = false
+
   /**
    * @param {string} file
    */
   return (file) => {
+    if (warned) return
+
     // When a broad pattern is used, we have to double check that the file was
     // not explicitly included in the globs.
     if (!micromatch.isMatch(file, explicitGlobs)) {
       let largeDirectory = LARGE_DIRECTORIES.find((directory) => file.includes(directory))
       if (largeDirectory) {
+        warned = true
+
         log.warn('broad-content-glob-pattern', [
           `You are using a glob pattern that includes \`${largeDirectory}\` without explicitly specifying \`${largeDirectory}\` in the glob.`,
           'This can lead to performance issues and is not recommended.',
