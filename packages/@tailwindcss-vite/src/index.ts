@@ -77,8 +77,6 @@ export default function tailwindcss(): Plugin[] {
   function generateCss(css: string, inputPath: string) {
     let basePath = path.dirname(path.resolve(inputPath))
 
-    console.log({ css, inputPath })
-
     return compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
@@ -199,9 +197,10 @@ export default function tailwindcss(): Plugin[] {
         if (!postcssConfig || !postcssConfig?.plugins) {
           config.css = config.css || {}
           config.css.postcss = postcssConfig || {}
-          config.css.postcss.plugins = [fixRelativePathsPlugin() as any]
+          config.css.postcss.plugins = [fixRelativePathsPlugin() as any, fixSvelte() as any]
         } else {
           postcssConfig.plugins.push(fixRelativePathsPlugin() as any)
+          postcssConfig.plugins.push(fixSvelte() as any)
         }
       },
 
@@ -301,9 +300,6 @@ function isTailwindCssFile(id: string, src: string) {
   const isTailwind =
     (extension === 'css' && src.includes('@tailwind')) ||
     (extension === 'svelte' && id.endsWith('&lang.css'))
-  if (isTailwind) {
-    console.log({ id, src, ext: getExtension(id) })
-  }
   return isTailwind
 }
 
@@ -329,4 +325,19 @@ function optimizeCss(
     },
     errorRecovery: true,
   }).code.toString()
+}
+
+export function fixSvelte() {
+  return {
+    postcssPlugin: 'tailwindcss-postcss-fix-svelte',
+    OnceExit: (root: any) => {
+      const filename = root.source.input.file
+      if (!filename.endsWith('.svelte?svelte&type=style&lang.css')) {
+        return
+      }
+      const content = root.toString()
+      let compiled = compile(content.replace('@tailwind ', '@failwind '), {}).build([''])
+      root.replaceWith(compiled.replace('@failwind ', ' @tailwind '))
+    },
+  }
 }

@@ -309,7 +309,6 @@ export function compile(
           .slice(7 /* Ignore `@apply ` when parsing the selector */)
           .trim()
 
-        console.log({ candidates })
         if (candidates[0] === "'" || candidates[0] === '"') {
           candidates = candidates.slice(1, -1)
         }

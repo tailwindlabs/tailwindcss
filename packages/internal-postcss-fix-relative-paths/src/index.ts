@@ -67,29 +67,35 @@ export default function fixRelativePathsPlugin(): Plugin {
     AtRule: {
       content: fixRelativePath,
       plugin: fixRelativePath,
-      apply: function (atRule: AtRule, { postcss }: { postcss: any }) {
-        if (touched.has(atRule)) {
-          return
-        }
-        if (atRule.params[0] === "'") {
-          return
-        }
-        atRule.params = `'${atRule.params}'`
-        touched.add(atRule)
-        // Convert atRule to a comment
-        // atRule.replaceWith(
-        //   postcss.rule({
-        //     selector: '& .CUSTOM-foo-base476',
-        //     nodes: [],
-        //   }),
-        // )
-        // atRule.before(postcss.comment({ text: '! custom' + atRule.toString() }))
-        // if (atRule.name === 'apply') {
-        //   atRule.name = 'comment'
-        //   atRule.params = 'tailwindcss-apply'
-        //   return
-        // }
-      },
+      // theme:  function (atRule: AtRule, { postcss }: { postcss: any }) {
+      //     if (touched.has(atRule)) {
+      //     return
+      //   }
+      // }
+      // apply: function (atRule: AtRule, { postcss }: { postcss: any }) {
+      //   if (touched.has(atRule)) {
+      //     return
+      //   }
+      //   if(atRule.name)
+      //   if (atRule.params[0] === "'") {
+      //     return
+      //   }
+      //   atRule.params = `'${atRule.params}'`
+      //   touched.add(atRule)
+      //   // Convert atRule to a comment
+      //   // atRule.replaceWith(
+      //   //   postcss.rule({
+      //   //     selector: '& .CUSTOM-foo-base476',
+      //   //     nodes: [],
+      //   //   }),
+      //   // )
+      //   // atRule.before(postcss.comment({ text: '! custom' + atRule.toString() }))
+      //   // if (atRule.name === 'apply') {
+      //   //   atRule.name = 'comment'
+      //   //   atRule.params = 'tailwindcss-apply'
+      //   //   return
+      //   // }
+      // },
     },
   }
 }
