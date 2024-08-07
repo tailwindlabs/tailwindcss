@@ -26,7 +26,7 @@ pub struct ScanResult {
   // Private information necessary for incremental rebuilds. Note: these fields are not exposed
   // to JS
   base: Option<String>,
-  sources: Vec<GlobEntry>,
+  sources: Vec<tailwindcss_oxide::GlobEntry>,
 
   // Public API:
   pub globs: Vec<GlobEntry>,
@@ -40,7 +40,7 @@ impl ScanResult {
   pub fn scan_files(&self, input: Vec<ChangedContent>) -> Vec<String> {
     let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
       base: self.base.clone(),
-      sources: self.sources.clone().into_iter().map(Into::into).collect(),
+      sources: self.sources.clone(),
     });
 
     let mut unique_candidates: HashSet<String> = HashSet::from_iter(result.candidates);
@@ -94,21 +94,23 @@ pub fn clear_cache() {
 
 #[napi]
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
+  let sources = args
+    .sources
+    .clone()
+    .unwrap_or_default()
+    .into_iter()
+    .map(Into::into)
+    .collect::<Vec<_>>();
+
   let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
     base: args.base.clone(),
-    sources: args
-      .sources
-      .clone()
-      .unwrap_or_default()
-      .into_iter()
-      .map(Into::into)
-      .collect(),
+    sources: sources.clone(),
   });
 
   ScanResult {
     // Private
     base: args.base,
-    sources: args.sources.unwrap_or_default(),
+    sources,
 
     // Public
     files: result.files,
