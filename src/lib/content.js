@@ -7,6 +7,8 @@ import fastGlob from 'fast-glob'
 import normalizePath from 'normalize-path'
 import { parseGlob } from '../util/parseGlob'
 import { env } from './sharedState'
+import log from '../util/log'
+import micromatch from 'micromatch'
 
 /** @typedef {import('../../types/config.js').RawFile} RawFile */
 /** @typedef {import('../../types/config.js').FilePath} FilePath */
@@ -181,6 +183,74 @@ export function resolvedChangedContent(context, candidateFiles, fileModifiedMap)
   return [changedContent, mTimesToCommit]
 }
 
+const LARGE_DIRECTORIES = [
+  'node_modules', // Node
+  'vendor', // PHP
+]
+
+// Ensures that `node_modules` has to match as-is, otherwise `mynode_modules`
+// would match as well, but that is not a known large directory.
+const LARGE_DIRECTORIES_REGEX = new RegExp(
+  `(${LARGE_DIRECTORIES.map((dir) => String.raw`\b${dir}\b`).join('|')})`
+)
+
+/**
+ * @param {string[]} paths
+ */
+export function createBroadPatternCheck(paths) {
+  // Detect whether a glob pattern might be too broad. This means that it:
+  // - Includes `**`
+  // - Does not include any of the known large directories (e.g.: node_modules)
+  let maybeBroadPattern = paths.some(
+    (path) => path.includes('**') && !LARGE_DIRECTORIES_REGEX.test(path)
+  )
+
+  // Didn't detect any potentially broad patterns, so we can skip further
+  // checks.
+  if (!maybeBroadPattern) {
+    return () => {}
+  }
+
+  // All globs that explicitly contain any of the known large directories (e.g.:
+  // node_modules).
+  let explicitGlobs = paths.filter((path) => LARGE_DIRECTORIES_REGEX.test(path))
+
+  // Keep track of whether we already warned about the broad pattern issue or
+  // not. The `log.warn` function already does something similar where we only
+  // output the log once. However, with this we can also skip the other checks
+  // when we already warned about the broad pattern.
+  let warned = false
+
+  /**
+   * @param {string} file
+   */
+  return (file) => {
+    if (warned) return // Already warned about the broad pattern
+    if (micromatch.isMatch(file, explicitGlobs)) return // Explicitly included, so we can skip further checks
+
+    // When a broad pattern is used, we have to double check that the file was
+    // not explicitly included in the globs.
+    let matchingGlob = paths.find((path) => micromatch.isMatch(file, path))
+    if (!matchingGlob) return // This should never happen
+
+    // Create relative paths to make the output a bit more readable.
+    let relativeMatchingGlob = path.relative(process.cwd(), matchingGlob)
+    if (relativeMatchingGlob[0] !== '.') relativeMatchingGlob = `./${relativeMatchingGlob}`
+
+    let largeDirectory = LARGE_DIRECTORIES.find((directory) => file.includes(directory))
+    if (largeDirectory) {
+      warned = true
+
+      log.warn('broad-content-glob-pattern', [
+        `Your \`content\` configuration includes a pattern which looks like it's accidentally matching all of \`${largeDirectory}\` and can cause serious performance issues.`,
+        `Pattern: \`${relativeMatchingGlob}\``,
+        `See our documentation for recommendations:`,
+        'https://tailwindcss.com/docs/content-configuration#pattern-recommendations',
+      ])
+    }
+  }
+}
+
 /**
  *
  * @param {ContentPath[]} candidateFiles
@@ -191,10 +261,14 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
   let paths = candidateFiles.map((contentPath) => contentPath.pattern)
   let mTimesToCommit = new Map()
 
+  let checkBroadPattern = createBroadPatternCheck(paths)
+
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
   let files = fastGlob.sync(paths, { absolute: true })
   for (let file of files) {
+    checkBroadPattern(file)
+
     let prevModified = fileModifiedMap.get(file) || -Infinity
     let modified = fs.statSync(file).mtimeMs
 

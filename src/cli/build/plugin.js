@@ -12,7 +12,7 @@ import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport } from '.
 import { formatNodes, drainStdin, outputFile } from './utils'
 import { env } from '../../lib/sharedState'
 import resolveConfig from '../../../resolveConfig.js'
-import { parseCandidateFiles } from '../../lib/content.js'
+import { createBroadPatternCheck, parseCandidateFiles } from '../../lib/content.js'
 import { createWatcher } from './watching.js'
 import fastGlob from 'fast-glob'
 import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
@@ -184,7 +184,11 @@ let state = {
     // TODO: When we make the postcss plugin async-capable this can become async
     let files = fastGlob.sync(this.contentPatterns.all)
 
+    let checkBroadPattern = createBroadPatternCheck(this.contentPatterns.all)
+
     for (let file of files) {
+      checkBroadPattern(file)
+
       content.push({
         content: fs.readFileSync(path.resolve(file), 'utf8'),
         extension: path.extname(file).slice(1),
@@ -318,7 +322,7 @@ export async function createProcessor(args, cliConfigPath) {
       return fs.promises.readFile(path.resolve(input), 'utf8')
     }
 
-    // No input file provided, fallback to default atrules
+    // No input file provided, fallback to default at-rules
     return '@tailwind base; @tailwind components; @tailwind utilities'
   }
 
