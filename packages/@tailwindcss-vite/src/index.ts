@@ -11,6 +11,7 @@ export default function tailwindcss(): Plugin[] {
   let config: ResolvedConfig | null = null
   let candidates = new Set<string>()
   let scanDirResult: ReturnType<typeof scanDir> | null = null
+  let changedContent: { content: string; extension: string }[] = []
 
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
@@ -62,6 +63,11 @@ export default function tailwindcss(): Plugin[] {
   function scan(src: string, extension: string) {
     let updated = false
 
+    if (scanDirResult === null) {
+      changedContent.push({ content: src, extension })
+      return updated
+    }
+
     // Parse all candidates given the resolved files
     for (let candidate of scanDirResult?.scanFiles([{ content: src, extension }]) ?? []) {
       // On an initial or full build, updated becomes true immediately so we
@@ -93,6 +99,10 @@ export default function tailwindcss(): Plugin[] {
         pattern,
       })),
     })
+
+    if (changedContent.length > 0) {
+      scanDirResult.candidates = scanDirResult.scanFiles(changedContent.splice(0))
+    }
 
     for (let candidate of scanDirResult.candidates) {
       candidates.add(candidate)
