@@ -1,5 +1,6 @@
 let fs = require('fs')
 let path = require('path')
+let { stripVTControlCharacters } = require('util')
 let { cwd } = require('./cwd.js')
 let { writeConfigs, destroyConfigs } = require('./config.js')
 
@@ -212,7 +213,7 @@ it('warns when globs are too broad and match node_modules', async () => {
 
   // We didn't list `node_modules` in the glob explicitly, so we should see a
   // warning.
-  expect(result.stderr).toMatchInlineSnapshot(`
+  expect(stripVTControlCharacters(result.stderr)).toMatchInlineSnapshot(`
     "
     warn - You are using a glob pattern that includes \`node_modules\` without explicitly specifying \`node_modules\` in the glob.
     warn - This can lead to performance issues and is not recommended.
@@ -323,7 +324,7 @@ it('should not warn when globs are too broad if other glob match node_modules ex
 
   // The very-very-bad.html file is not covered by the explicit glob patterns,
   // so we should see a warning.
-  expect(result.stderr).toMatchInlineSnapshot(`
+  expect(stripVTControlCharacters(result.stderr)).toMatchInlineSnapshot(`
     "
     warn - You are using a glob pattern that includes \`node_modules\` without explicitly specifying \`node_modules\` in the glob.
     warn - This can lead to performance issues and is not recommended.
