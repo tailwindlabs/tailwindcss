@@ -14,7 +14,7 @@ If you open a pull request for a new feature, we're likely to close it not becau
 
 ## Coding standards
 
-Our code formatting rules are defined in [.eslintrc](https://github.com/tailwindcss/tailwindcss/blob/master/.eslintrc.json). You can check your code against these standards by running:
+Our code formatting rules are defined in [.eslintrc](https://github.com/tailwindcss/tailwindcss/blob/main/.eslintrc.json). You can check your code against these standards by running:
 
 ```sh
 npm run style

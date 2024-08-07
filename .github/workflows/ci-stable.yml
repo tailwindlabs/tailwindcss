@@ -8,9 +8,9 @@ name: CI — Stable
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master, 3.3, 3.4]
+    branches: [main, 3.3, 3.4]
 
 permissions:
   contents: read

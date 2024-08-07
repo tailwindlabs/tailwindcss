@@ -2,9 +2,9 @@ name: Integration Tests
 
 on:
   push:
-    branches: [master, 3.3, 3.4]
+    branches: [main, 3.3, 3.4]
   pull_request:
-    branches: [master, 3.3, 3.4]
+    branches: [main, 3.3, 3.4]
 
 permissions:
   contents: read
