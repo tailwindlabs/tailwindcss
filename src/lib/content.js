@@ -195,15 +195,9 @@ const LARGE_DIRECTORIES_REGEX = new RegExp(
 )
 
 /**
- *
- * @param {ContentPath[]} candidateFiles
- * @param {Map<string, number>} fileModifiedMap
- * @returns {[Set<string>, Map<string, number>]}
+ * @param {string[]} paths
  */
-function resolveChangedFiles(candidateFiles, fileModifiedMap) {
-  let paths = candidateFiles.map((contentPath) => contentPath.pattern)
-  let mTimesToCommit = new Map()
-
+export function createBroadPatternCheck(paths) {
   // Detect whether a glob pattern might be too broad. This means that it:
   // - Includes `**`
   // - Does not include any of the known large directories (e.g.: node_modules)
@@ -211,20 +205,23 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
     (path) => path.includes('**') && !LARGE_DIRECTORIES_REGEX.test(path)
   )
 
+  // Didn't detect any potentially broad patterns, so we can skip further
+  // checks.
+  if (!maybeBroadPattern) {
+    return () => {}
+  }
+
   // All globs that explicitly contain any of the known large directories (e.g.:
-  // node_modules)
+  // node_modules).
   let explicitGlobs = paths.filter((path) => LARGE_DIRECTORIES_REGEX.test(path))
 
-  let changedFiles = new Set()
-  env.DEBUG && console.time('Finding changed files')
-  let files = fastGlob.sync(paths, { absolute: true })
-  for (let file of files) {
-    if (
-      maybeBroadPattern &&
-      // When a broad pattern is used, we have to double check that the file was
-      // not explicitly included in the globs.
-      !micromatch.isMatch(file, explicitGlobs)
-    ) {
+  /**
+   * @param {string} file
+   */
+  return (file) => {
+    // When a broad pattern is used, we have to double check that the file was
+    // not explicitly included in the globs.
+    if (!micromatch.isMatch(file, explicitGlobs)) {
       let largeDirectory = LARGE_DIRECTORIES.find((directory) => file.includes(directory))
       if (largeDirectory) {
         log.warn('broad-content-glob-pattern', [
@@ -235,6 +232,27 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
         ])
       }
     }
+  }
+}
+
+/**
+ *
+ * @param {ContentPath[]} candidateFiles
+ * @param {Map<string, number>} fileModifiedMap
+ * @returns {[Set<string>, Map<string, number>]}
+ */
+function resolveChangedFiles(candidateFiles, fileModifiedMap) {
+  let paths = candidateFiles.map((contentPath) => contentPath.pattern)
+  let mTimesToCommit = new Map()
+
+  let checkBroadPattern = createBroadPatternCheck(paths)
+
+  let changedFiles = new Set()
+  env.DEBUG && console.time('Finding changed files')
+  let files = fastGlob.sync(paths, { absolute: true })
+  for (let file of files) {
+    checkBroadPattern(file)
+
     let prevModified = fileModifiedMap.get(file) || -Infinity
     let modified = fs.statSync(file).mtimeMs
 

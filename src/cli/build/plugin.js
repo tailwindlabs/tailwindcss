@@ -4,7 +4,6 @@ import path from 'path'
 import fs from 'fs'
 import postcssrc from 'postcss-load-config'
 import { lilconfig } from 'lilconfig'
-import micromatch from 'micromatch'
 import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import loadOptions from 'postcss-load-config/src/options' // Little bit scary, looking at private/internal API
 
@@ -13,24 +12,13 @@ import { loadAutoprefixer, loadCssNano, loadPostcss, loadPostcssImport } from '.
 import { formatNodes, drainStdin, outputFile } from './utils'
 import { env } from '../../lib/sharedState'
 import resolveConfig from '../../../resolveConfig.js'
-import { parseCandidateFiles } from '../../lib/content.js'
+import { createBroadPatternCheck, parseCandidateFiles } from '../../lib/content.js'
 import { createWatcher } from './watching.js'
 import fastGlob from 'fast-glob'
 import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
 import log from '../../util/log'
 import { loadConfig } from '../../lib/load-config'
 import getModuleDependencies from '../../lib/getModuleDependencies'
-
-const LARGE_DIRECTORIES = [
-  'node_modules', // Node
-  'vendor', // PHP
-]
-
-// Ensures that `node_modules` has to match as-is, otherwise `mynode_modules`
-// would match as well, but that is not a known large directory.
-const LARGE_DIRECTORIES_REGEX = new RegExp(
-  `(${LARGE_DIRECTORIES.map((dir) => String.raw`\b${dir}\b`).join('|')})`
-)
 
 /**
  *
@@ -196,36 +184,11 @@ let state = {
     // TODO: When we make the postcss plugin async-capable this can become async
     let files = fastGlob.sync(this.contentPatterns.all)
 
-    // Detect whether a glob pattern might be too broad. This means that it:
-    // - Includes `**`
-    // - Does not include any of the known large directories (e.g.: node_modules)
-    let maybeBroadPattern = this.contentPatterns.all.some(
-      (path) => path.includes('**') && !LARGE_DIRECTORIES_REGEX.test(path)
-    )
-
-    // All globs that explicitly contain any of the known large directories (e.g.:
-    // node_modules)
-    let explicitGlobs = this.contentPatterns.all.filter((path) =>
-      LARGE_DIRECTORIES_REGEX.test(path)
-    )
+    let checkBroadPattern = createBroadPatternCheck(this.contentPatterns.all)
 
     for (let file of files) {
-      if (
-        maybeBroadPattern &&
-        // When a broad pattern is used, we have to double check that the file was
-        // not explicitly included in the globs.
-        !micromatch.isMatch(file, explicitGlobs)
-      ) {
-        let largeDirectory = LARGE_DIRECTORIES.find((directory) => file.includes(directory))
-        if (largeDirectory) {
-          log.warn('broad-content-glob-pattern', [
-            `You are using a glob pattern that includes \`${largeDirectory}\` without explicitly specifying \`${largeDirectory}\` in the glob.`,
-            'This can lead to performance issues and is not recommended.',
-            'Please consider using a more specific pattern.',
-            'https://tailwindcss.com/docs/content-configuration#pattern-recommendations',
-          ])
-        }
-      }
+      checkBroadPattern(file)
+
       content.push({
         content: fs.readFileSync(path.resolve(file), 'utf8'),
         extension: path.extname(file).slice(1),
