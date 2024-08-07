@@ -96,7 +96,6 @@ pub fn clear_cache() {
 pub fn scan_dir(args: ScanOptions) -> ScanResult {
   let sources = args
     .sources
-    .clone()
     .unwrap_or_default()
     .into_iter()
     .map(Into::into)
