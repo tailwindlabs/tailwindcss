@@ -1258,6 +1258,44 @@ describe('Parsing themes values from CSS', () => {
 })
 
 describe('plugins', () => {
+  test('@plugin can not have a body.', () => {
+    expect(() =>
+      compile(
+        css`
+          @plugin {
+            color: red;
+          }
+        `,
+        {
+          loadPlugin: () => {
+            return ({ addVariant }) => {
+              addVariant('hocus', '&:hover, &:focus')
+            }
+          },
+        },
+      ).build(['hocus:underline']),
+    ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot have a body.]`)
+  })
+
+  test('@plugin cannot be nested.', () => {
+    expect(() =>
+      compile(
+        css`
+          div {
+            @plugin "my-plugin";
+          }
+        `,
+        {
+          loadPlugin: () => {
+            return ({ addVariant }) => {
+              addVariant('hocus', '&:hover, &:focus')
+            }
+          },
+        },
+      ).build(['hocus:underline']),
+    ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`)
+  })
+
   test('addVariant with string selector', () => {
     let compiled = compile(
       css`
