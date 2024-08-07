@@ -464,6 +464,42 @@ test('valid', () => {
   expect(run(['valid/foo:flex'])).toEqual('')
 })
 
+test('user-valid', () => {
+  expect(
+    run(['user-valid:flex', 'group-user-valid:flex', 'peer-user-valid:flex']),
+  ).toMatchInlineSnapshot(`
+    ".group-user-valid\\:flex:is(:where(.group):user-valid *) {
+      display: flex;
+    }
+
+    .peer-user-valid\\:flex:is(:where(.peer):user-valid ~ *) {
+      display: flex;
+    }
+
+    .user-valid\\:flex:user-valid {
+      display: flex;
+    }"
+  `)
+})
+
+test('user-invalid', () => {
+  expect(
+    run(['user-invalid:flex', 'group-user-invalid:flex', 'peer-user-invalid:flex']),
+  ).toMatchInlineSnapshot(`
+    ".group-user-invalid\\:flex:is(:where(.group):user-invalid *) {
+      display: flex;
+    }
+
+    .peer-user-invalid\\:flex:is(:where(.peer):user-invalid ~ *) {
+      display: flex;
+    }
+
+    .user-invalid\\:flex:user-invalid {
+      display: flex;
+    }"
+  `)
+})
+
 test('invalid', () => {
   expect(run(['invalid:flex', 'group-invalid:flex', 'peer-invalid:flex'])).toMatchInlineSnapshot(`
     ".group-invalid\\:flex:is(:where(.group):invalid *) {
