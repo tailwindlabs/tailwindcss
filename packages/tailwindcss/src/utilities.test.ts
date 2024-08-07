@@ -15311,4 +15311,23 @@ describe('custom utilities', () => {
       }"
     `)
   })
+
+  test('custom utilities with `@apply` causing circular dependencies should error', () => {
+    expect(() =>
+      compileCss(
+        css`
+          @utility foo {
+            @apply font-bold hover:bar;
+          }
+
+          @utility bar {
+            @apply dark:foo;
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo', 'bar'],
+      ),
+    ).toThrowError(/Maximum call stack/)
+  })
 })
