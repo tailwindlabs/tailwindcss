@@ -81,9 +81,15 @@ export function test(
       let context = {
         root,
         async exec(command: string, childProcessOptions: ChildProcessOptions = {}) {
+          let cwd = childProcessOptions.cwd ?? root
+          if (debug && cwd !== root) {
+            let relative = path.relative(root, cwd)
+            if (relative[0] !== '.') relative = `./${relative}`
+            console.log(`> cd ${relative}`)
+          }
           if (debug) console.log(`> ${command}`)
           return execSync(command, {
-            cwd: root,
+            cwd,
             stdio: 'pipe',
             ...childProcessOptions,
           }).toString()
