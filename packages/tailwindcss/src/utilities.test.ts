@@ -15312,6 +15312,37 @@ describe('custom utilities', () => {
     `)
   })
 
+  test('referencing custom utilities in custom utilities via `@apply` should work', () => {
+    expect(
+      compileCss(
+        css`
+          @utility foo {
+            @apply flex flex-col underline;
+          }
+
+          @utility bar {
+            @apply dark:foo font-bold;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bar'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bar {
+        font-weight: 700;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .bar {
+          flex-direction: column;
+          text-decoration-line: underline;
+          display: flex;
+        }
+      }"
+    `)
+  })
+
   test('custom utilities with `@apply` causing circular dependencies should error', () => {
     expect(() =>
       compileCss(
