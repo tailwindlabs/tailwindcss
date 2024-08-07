@@ -225,34 +225,33 @@ export function createBroadPatternCheck(paths) {
    * @param {string} file
    */
   return (file) => {
-    if (warned) return
+    if (warned) return // Already warned about the broad pattern
+    if (micromatch.isMatch(file, explicitGlobs)) return // Explicitly included, so we can skip further checks
 
     // When a broad pattern is used, we have to double check that the file was
     // not explicitly included in the globs.
-    if (!micromatch.isMatch(file, explicitGlobs)) {
-      let matchingGlob = paths.find((path) => micromatch.isMatch(file, path))
-      if (!matchingGlob) return // This should never happen
+    let matchingGlob = paths.find((path) => micromatch.isMatch(file, path))
+    if (!matchingGlob) return // This should never happen
 
-      // Create relative paths to make the output a bit more readable.
-      let relativeMatchingGlob = path.relative(process.cwd(), matchingGlob)
-      if (relativeMatchingGlob[0] !== '.') relativeMatchingGlob = `./${relativeMatchingGlob}`
+    // Create relative paths to make the output a bit more readable.
+    let relativeMatchingGlob = path.relative(process.cwd(), matchingGlob)
+    if (relativeMatchingGlob[0] !== '.') relativeMatchingGlob = `./${relativeMatchingGlob}`
 
-      let relativeFile = path.relative(process.cwd(), file)
-      if (relativeFile[0] !== '.') relativeFile = `./${relativeFile}`
+    let relativeFile = path.relative(process.cwd(), file)
+    if (relativeFile[0] !== '.') relativeFile = `./${relativeFile}`
 
-      let largeDirectory = LARGE_DIRECTORIES.find((directory) => file.includes(directory))
-      if (largeDirectory) {
-        warned = true
+    let largeDirectory = LARGE_DIRECTORIES.find((directory) => file.includes(directory))
+    if (largeDirectory) {
+      warned = true
 
-        log.warn('broad-content-glob-pattern', [
-          `Your \`content\` configuration uses a glob pattern that includes \`${largeDirectory}\` without explicitly specifying \`${largeDirectory}\` in the glob.`,
-          'This can lead to performance issues and is not recommended.',
-          `Glob: \`${relativeMatchingGlob}\``,
-          `File: \`${relativeFile}\``,
-          `Please consider using a more specific pattern or use \`${largeDirectory}\` explicitly.`,
-          'https://tailwindcss.com/docs/content-configuration#pattern-recommendations',
-        ])
-      }
+      log.warn('broad-content-glob-pattern', [
+        `Your \`content\` configuration uses a glob pattern that includes \`${largeDirectory}\` without explicitly specifying \`${largeDirectory}\` in the glob.`,
+        'This can lead to performance issues and is not recommended.',
+        `Glob: \`${relativeMatchingGlob}\``,
+        `File: \`${relativeFile}\``,
+        `Please consider using a more specific pattern or use \`${largeDirectory}\` explicitly.`,
+        'https://tailwindcss.com/docs/content-configuration#pattern-recommendations',
+      ])
     }
   }
 }
