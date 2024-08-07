@@ -215,9 +215,11 @@ it('warns when globs are too broad and match node_modules', async () => {
   // warning.
   expect(stripVTControlCharacters(result.stderr)).toMatchInlineSnapshot(`
     "
-    warn - You are using a glob pattern that includes \`node_modules\` without explicitly specifying \`node_modules\` in the glob.
+    warn - Your \`content\` configuration uses a glob pattern that includes \`node_modules\` without explicitly specifying \`node_modules\` in the glob.
     warn - This can lead to performance issues and is not recommended.
-    warn - Please consider using a more specific pattern.
+    warn - Glob: \`./**/*.html\`
+    warn - File: \`./node_modules/bad.html\`
+    warn - Please consider using a more specific pattern or use \`node_modules\` explicitly.
     warn - https://tailwindcss.com/docs/content-configuration#pattern-recommendations
     "
   `)
@@ -326,9 +328,11 @@ it('should not warn when globs are too broad if other glob match node_modules ex
   // so we should see a warning.
   expect(stripVTControlCharacters(result.stderr)).toMatchInlineSnapshot(`
     "
-    warn - You are using a glob pattern that includes \`node_modules\` without explicitly specifying \`node_modules\` in the glob.
+    warn - Your \`content\` configuration uses a glob pattern that includes \`node_modules\` without explicitly specifying \`node_modules\` in the glob.
     warn - This can lead to performance issues and is not recommended.
-    warn - Please consider using a more specific pattern.
+    warn - Glob: \`./**/*.html\`
+    warn - File: \`./node_modules/very-very-bad.html\`
+    warn - Please consider using a more specific pattern or use \`node_modules\` explicitly.
     warn - https://tailwindcss.com/docs/content-configuration#pattern-recommendations
     "
   `)
