@@ -1514,6 +1514,25 @@ describe('plugins', () => {
   })
 })
 
+describe('@source', () => {
+  test('emits @source files', () => {
+    let { globs } = compile(css`
+      @source "./foo/bar/*.ts";
+    `)
+
+    expect(globs).toEqual(['./foo/bar/*.ts'])
+  })
+
+  test('emits multiple @source files', () => {
+    let { globs } = compile(css`
+      @source "./foo/**/*.ts";
+      @source "./php/secr3t/smarty.php";
+    `)
+
+    expect(globs).toEqual(['./foo/**/*.ts', './php/secr3t/smarty.php'])
+  })
+})
+
 describe('@variant', () => {
   test('@variant must be top-level and cannot be nested', () => {
     expect(() =>

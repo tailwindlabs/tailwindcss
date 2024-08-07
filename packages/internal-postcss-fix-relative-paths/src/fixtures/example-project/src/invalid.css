@@ -1,0 +1,4 @@
+@plugin "/absolute/paths";
+@plugin "C:\Program Files\HAL 9000";
+@plugin "\\Media\Pictures\Worth\1000 words";
+@plugin "some-node-dep";

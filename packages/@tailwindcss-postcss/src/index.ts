@@ -1,8 +1,9 @@
 import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
+import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
-import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
+import postcss, { AtRule, type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
 import { compile } from 'tailwindcss'
 
@@ -42,120 +43,137 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let cache = new DefaultMap(() => {
     return {
       mtimes: new Map<string, number>(),
-      build: null as null | ReturnType<typeof compile>['build'],
+      compiler: null as null | ReturnType<typeof compile>,
       css: '',
       optimizedCss: '',
     }
   })
+
+  let hasApply: boolean, hasTailwind: boolean
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
     plugins: [
       // We need to run `postcss-import` first to handle `@import` rules.
       postcssImport(),
+      fixRelativePathsPlugin(),
 
-      (root, result) => {
-        let inputFile = result.opts.from ?? ''
-        let context = cache.get(inputFile)
-
-        let rebuildStrategy: 'full' | 'incremental' = 'incremental'
-
-        // Track file modification times to CSS files
-        {
-          let files = result.messages.flatMap((message) => {
-            if (message.type !== 'dependency') return []
-            return message.file
-          })
-          files.push(inputFile)
-          for (let file of files) {
-            let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
-            if (changedTime === null) {
-              if (file === inputFile) {
-                rebuildStrategy = 'full'
-              }
-              continue
-            }
-
-            let prevTime = context.mtimes.get(file)
-            if (prevTime === changedTime) continue
-
-            rebuildStrategy = 'full'
-            context.mtimes.set(file, changedTime)
-          }
-        }
-
-        let hasApply = false
-        let hasTailwind = false
-
-        root.walkAtRules((rule) => {
+      {
+        postcssPlugin: 'tailwindcss',
+        Once() {
+          // Reset some state between builds
+          hasApply = false
+          hasTailwind = false
+        },
+        AtRule(rule: AtRule) {
           if (rule.name === 'apply') {
             hasApply = true
           } else if (rule.name === 'tailwind') {
             hasApply = true
             hasTailwind = true
-            // If we've found `@tailwind` then we already
-            // know we have to run a "full" build
-            return false
           }
-        })
+        },
+        OnceExit(root, { result }) {
+          let inputFile = result.opts.from ?? ''
+          let context = cache.get(inputFile)
+          let inputBasePath = path.dirname(path.resolve(inputFile))
 
-        // Do nothing if neither `@tailwind` nor `@apply` is used
-        if (!hasTailwind && !hasApply) return
+          function createCompiler() {
+            return compile(root.toString(), {
+              loadPlugin: (pluginPath) => {
+                if (pluginPath[0] === '.') {
+                  return require(path.resolve(inputBasePath, pluginPath))
+                }
 
-        let css = ''
+                return require(pluginPath)
+              },
+            })
+          }
 
-        // Look for candidates used to generate the CSS
-        let { candidates, files, globs } = scanDir({ base, globs: true })
+          // Setup the compiler if it doesn't exist yet. This way we can
+          // guarantee a `build()` function is available.
+          context.compiler ??= createCompiler()
 
-        // Add all found files as direct dependencies
-        for (let file of files) {
-          result.messages.push({
-            type: 'dependency',
-            plugin: '@tailwindcss/postcss',
-            file,
-            parent: result.opts.from,
-          })
-        }
+          let rebuildStrategy: 'full' | 'incremental' = 'incremental'
 
-        // Register dependencies so changes in `base` cause a rebuild while
-        // giving tools like Vite or Parcel a glob that can be used to limit
-        // the files that cause a rebuild to only those that match it.
-        for (let { base, glob } of globs) {
-          result.messages.push({
-            type: 'dir-dependency',
-            plugin: '@tailwindcss/postcss',
-            dir: base,
-            glob,
-            parent: result.opts.from,
-          })
-        }
-
-        if (rebuildStrategy === 'full') {
-          let basePath = path.dirname(path.resolve(inputFile))
-          let { build } = compile(root.toString(), {
-            loadPlugin: (pluginPath) => {
-              if (pluginPath[0] === '.') {
-                return require(path.resolve(basePath, pluginPath))
+          // Track file modification times to CSS files
+          {
+            let files = result.messages.flatMap((message) => {
+              if (message.type !== 'dependency') return []
+              return message.file
+            })
+            files.push(inputFile)
+            for (let file of files) {
+              let changedTime = fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? null
+              if (changedTime === null) {
+                if (file === inputFile) {
+                  rebuildStrategy = 'full'
+                }
+                continue
               }
 
-              return require(pluginPath)
-            },
-          })
-          context.build = build
-          css = build(hasTailwind ? candidates : [])
-        } else if (rebuildStrategy === 'incremental') {
-          css = context.build!(candidates)
-        }
+              let prevTime = context.mtimes.get(file)
+              if (prevTime === changedTime) continue
 
-        // Replace CSS
-        if (css !== context.css && optimize) {
-          context.optimizedCss = optimizeCss(css, {
-            minify: typeof optimize === 'object' ? optimize.minify : true,
+              rebuildStrategy = 'full'
+              context.mtimes.set(file, changedTime)
+            }
+          }
+
+          // Do nothing if neither `@tailwind` nor `@apply` is used
+          if (!hasTailwind && !hasApply) return
+
+          let css = ''
+
+          // Look for candidates used to generate the CSS
+          let scanDirResult = scanDir({
+            base, // Root directory, mainly used for auto content detection
+            sources: context.compiler.globs.map((pattern) => ({
+              base: inputBasePath, // Globs are relative to the input.css file
+              pattern,
+            })),
           })
-        }
-        context.css = css
-        root.removeAll()
-        root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
+
+          // Add all found files as direct dependencies
+          for (let file of scanDirResult.files) {
+            result.messages.push({
+              type: 'dependency',
+              plugin: '@tailwindcss/postcss',
+              file,
+              parent: result.opts.from,
+            })
+          }
+
+          // Register dependencies so changes in `base` cause a rebuild while
+          // giving tools like Vite or Parcel a glob that can be used to limit
+          // the files that cause a rebuild to only those that match it.
+          for (let { base, pattern } of scanDirResult.globs) {
+            result.messages.push({
+              type: 'dir-dependency',
+              plugin: '@tailwindcss/postcss',
+              dir: base,
+              glob: pattern,
+              parent: result.opts.from,
+            })
+          }
+
+          if (rebuildStrategy === 'full') {
+            context.compiler = createCompiler()
+            css = context.compiler.build(hasTailwind ? scanDirResult.candidates : [])
+          } else if (rebuildStrategy === 'incremental') {
+            css = context.compiler.build!(scanDirResult.candidates)
+          }
+
+          // Replace CSS
+          if (css !== context.css && optimize) {
+            context.optimizedCss = optimizeCss(css, {
+              minify: typeof optimize === 'object' ? optimize.minify : true,
+            })
+          }
+          context.css = css
+          root.removeAll()
+          root.append(postcss.parse(optimize ? context.optimizedCss : context.css, result.opts))
+        },
       },
     ],
   }

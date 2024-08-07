@@ -1,12 +1,18 @@
-import { IO, Parsing, scanFiles } from '@tailwindcss/oxide'
+import { scanDir } from '@tailwindcss/oxide'
+import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
 import path from 'path'
+import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
-import type { Plugin, Rollup, Update, ViteDevServer } from 'vite'
+import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
+  let config: ResolvedConfig | null = null
   let candidates = new Set<string>()
+  let scanDirResult: ReturnType<typeof scanDir> | null = null
+  let changedContent: { content: string; extension: string }[] = []
+
   // In serve mode this is treated as a set — the content doesn't matter.
   // In build mode, we store file contents to use them in renderChunk.
   let cssModules: Record<
@@ -56,11 +62,14 @@ export default function tailwindcss(): Plugin[] {
 
   function scan(src: string, extension: string) {
     let updated = false
+
+    if (scanDirResult === null) {
+      changedContent.push({ content: src, extension })
+      return updated
+    }
+
     // Parse all candidates given the resolved files
-    for (let candidate of scanFiles(
-      [{ content: src, extension }],
-      IO.Sequential | Parsing.Sequential,
-    )) {
+    for (let candidate of scanDirResult?.scanFiles([{ content: src, extension }]) ?? []) {
       // On an initial or full build, updated becomes true immediately so we
       // won't be making extra checks.
       if (!updated) {
@@ -72,22 +81,62 @@ export default function tailwindcss(): Plugin[] {
     return updated
   }
 
-  function generateCss(css: string, inputPath: string) {
-    let basePath = path.dirname(path.resolve(inputPath))
-
-    return compile(css, {
+  function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
+    let inputBasePath = path.dirname(path.resolve(inputPath))
+    let { build, globs } = compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return require(path.resolve(basePath, pluginPath))
+          return require(path.resolve(inputBasePath, pluginPath))
         }
 
         return require(pluginPath)
       },
-    }).build(Array.from(candidates))
+    })
+
+    scanDirResult = scanDir({
+      sources: globs.map((pattern) => ({
+        base: inputBasePath, // Globs are relative to the input.css file
+        pattern,
+      })),
+    })
+
+    if (changedContent.length > 0) {
+      scanDirResult.candidates = scanDirResult.scanFiles(changedContent.splice(0))
+    }
+
+    for (let candidate of scanDirResult.candidates) {
+      candidates.add(candidate)
+    }
+
+    // Watch individual files
+    for (let file of scanDirResult.files) {
+      addWatchFile(file)
+    }
+
+    // Watch globs
+    for (let glob of scanDirResult.globs) {
+      if (glob.pattern[0] === '!') continue
+
+      let relative = path.relative(config!.root, glob.base)
+      if (relative[0] !== '.') {
+        relative = './' + relative
+      }
+      // Ensure relative is a posix style path since we will merge it with
+      // the glob.
+      relative = normalizePath(relative)
+
+      addWatchFile(path.posix.join(relative, glob.pattern))
+    }
+
+    return build(Array.from(candidates))
   }
 
-  function generateOptimizedCss(css: string, inputPath: string) {
-    return optimizeCss(generateCss(css, inputPath), { minify })
+  function generateOptimizedCss(
+    css: string,
+    inputPath: string,
+    addWatchFile: (file: string) => void,
+  ) {
+    return optimizeCss(generateCss(css, inputPath, addWatchFile), { minify })
   }
 
   // Manually run the transform functions of non-Tailwind plugins on the given CSS
@@ -101,7 +150,7 @@ export default function tailwindcss(): Plugin[] {
 
     for (let plugin of cssPlugins) {
       if (!plugin.transform) continue
-      const transformHandler =
+      let transformHandler =
         'handler' in plugin.transform! ? plugin.transform.handler : plugin.transform!
 
       try {
@@ -133,7 +182,8 @@ export default function tailwindcss(): Plugin[] {
         server = _server
       },
 
-      async configResolved(config) {
+      async configResolved(_config) {
+        config = _config
         minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
@@ -150,6 +200,55 @@ export default function tailwindcss(): Plugin[] {
         cssPlugins = config.plugins.filter((plugin) => {
           return allowedPlugins.includes(plugin.name)
         })
+      },
+
+      // Append the postcss-fix-relative-paths plugin
+      async config(config) {
+        let postcssConfig = config.css?.postcss
+
+        if (typeof postcssConfig === 'string') {
+          // We expand string configs to their PostCSS config object similar to
+          // how Vite does it.
+          // See: https://github.com/vitejs/vite/blob/440783953a55c6c63cd09ec8d13728dc4693073d/packages/vite/src/node/plugins/css.ts#L1580
+          let searchPath = typeof postcssConfig === 'string' ? postcssConfig : config.root
+          let parsedConfig = await postcssrc({}, searchPath).catch((e: Error) => {
+            if (!e.message.includes('No PostCSS Config found')) {
+              if (e instanceof Error) {
+                let { name, message, stack } = e
+                e.name = 'Failed to load PostCSS config'
+                e.message = `Failed to load PostCSS config (searchPath: ${searchPath}): [${name}] ${message}\n${stack}`
+                e.stack = '' // add stack to message to retain stack
+                throw e
+              } else {
+                throw new Error(`Failed to load PostCSS config: ${e}`)
+              }
+            }
+            return null
+          })
+          if (parsedConfig !== null) {
+            postcssConfig = {
+              options: parsedConfig.options,
+              plugins: parsedConfig.plugins,
+            } as any
+          } else {
+            postcssConfig = {}
+          }
+          config.css = { postcss: postcssConfig }
+        }
+
+        // postcssConfig is no longer a string after the above. This test is to
+        // avoid TypeScript errors below.
+        if (typeof postcssConfig === 'string') {
+          return
+        }
+
+        if (!postcssConfig || !postcssConfig?.plugins) {
+          config.css = config.css || {}
+          config.css.postcss = postcssConfig || {}
+          config.css.postcss.plugins = [fixRelativePathsPlugin() as any]
+        } else {
+          postcssConfig.plugins.push(fixRelativePathsPlugin() as any)
+        }
       },
 
       // Scan index.html for candidates
@@ -199,7 +298,11 @@ export default function tailwindcss(): Plugin[] {
           await server?.waitForRequestsIdle?.(id)
         }
 
-        let code = await transformWithPlugins(this, id, generateCss(src, id))
+        let code = await transformWithPlugins(
+          this,
+          id,
+          generateCss(src, id, (file) => this.addWatchFile(file)),
+        )
         return { code }
       },
     },
@@ -223,7 +326,7 @@ export default function tailwindcss(): Plugin[] {
             continue
           }
 
-          let css = generateOptimizedCss(file.content, id)
+          let css = generateOptimizedCss(file.content, id, (file) => this.addWatchFile(file))
 
           // These plugins have side effects which, during build, results in CSS
           // being written to the output dir. We need to run them here to ensure

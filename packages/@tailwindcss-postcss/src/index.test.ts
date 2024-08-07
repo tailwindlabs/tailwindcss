@@ -13,7 +13,7 @@ const INPUT_CSS_PATH = `${__dirname}/fixtures/example-project/input.css`
 const css = String.raw
 
 beforeEach(async () => {
-  const { clearCache } = await import('@tailwindcss/oxide')
+  let { clearCache } = await import('@tailwindcss/oxide')
   clearCache()
 })
 
@@ -144,9 +144,39 @@ describe('plugins', () => {
     let result = await processor.process(
       css`
         @import 'tailwindcss/utilities';
-        @plugin 'internal-example-plugin';
+        @plugin './plugin.js';
       `,
       { from: INPUT_CSS_PATH },
+    )
+
+    expect(result.css.trim()).toMatchInlineSnapshot(`
+      ".underline {
+        text-decoration-line: underline;
+      }
+
+      @media (inverted-colors: inverted) {
+        .inverted\\:flex {
+          display: flex;
+        }
+      }
+
+      .hocus\\:underline:focus, .hocus\\:underline:hover {
+        text-decoration-line: underline;
+      }"
+    `)
+  })
+
+  test('local CJS plugin from `@import`-ed file', async () => {
+    let processor = postcss([
+      tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+    ])
+
+    let result = await processor.process(
+      css`
+        @import 'tailwindcss/utilities';
+        @import '../example-project/src/relative-import.css';
+      `,
+      { from: `${__dirname}/fixtures/another-project/input.css` },
     )
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
