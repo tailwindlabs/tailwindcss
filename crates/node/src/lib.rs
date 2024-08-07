@@ -1,5 +1,5 @@
 use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
-use std::path::PathBuf;
+use std::{collections::HashSet, path::PathBuf};
 
 #[macro_use]
 extern crate napi_derive;
@@ -38,13 +38,24 @@ pub struct ScanResult {
 #[napi]
 impl ScanResult {
   #[napi]
-  pub fn scan_files(&self, _input: Vec<ChangedContent>) -> Vec<String> {
+  pub fn scan_files(&self, input: Vec<ChangedContent>) -> Vec<String> {
     let result = tailwindcss_oxide::scan_dir(tailwindcss_oxide::ScanOptions {
       base: self.base.clone(),
       sources: self.sources.clone().into_iter().map(Into::into).collect(),
     });
 
-    result.candidates
+    let mut unique_candidates: HashSet<String> = HashSet::from_iter(result.candidates);
+    let candidates_from_files: HashSet<String> = HashSet::from_iter(tailwindcss_oxide::scan_files(
+      input.into_iter().map(Into::into).collect(),
+      IO::Parallel as u8 | Parsing::Parallel as u8,
+    ));
+
+    unique_candidates.extend(candidates_from_files);
+
+    unique_candidates
+      .into_iter()
+      .map(|x| x.to_string())
+      .collect()
   }
 }
 
