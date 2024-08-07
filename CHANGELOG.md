@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Fix minification when using nested CSS ([#14105](https://github.com/tailwindlabs/tailwindcss/pull/14105))
+### Fixed
+
+- Warn when broad glob patterns are used in the content configuration ([#14140](https://github.com/tailwindlabs/tailwindcss/pull/14140))
 
 ## [3.4.7] - 2024-07-25
 
