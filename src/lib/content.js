@@ -237,9 +237,6 @@ export function createBroadPatternCheck(paths) {
     let relativeMatchingGlob = path.relative(process.cwd(), matchingGlob)
     if (relativeMatchingGlob[0] !== '.') relativeMatchingGlob = `./${relativeMatchingGlob}`
 
-    let relativeFile = path.relative(process.cwd(), file)
-    if (relativeFile[0] !== '.') relativeFile = `./${relativeFile}`
-
     let largeDirectory = LARGE_DIRECTORIES.find((directory) => file.includes(directory))
     if (largeDirectory) {
       warned = true
