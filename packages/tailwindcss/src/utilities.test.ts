@@ -15268,4 +15268,31 @@ describe('custom utilities', () => {
       `),
     ).rejects.toThrowError(/should be alphanumeric/)
   })
+
+  test('custom utilities work with `@apply`', () => {
+    expect(
+      compileCss(
+        css`
+          @utility foo {
+            @apply flex flex-col underline;
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo', 'hover:foo'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        flex-direction: column;
+        text-decoration-line: underline;
+        display: flex;
+      }
+
+      .hover\\:foo:hover {
+        flex-direction: column;
+        text-decoration-line: underline;
+        display: flex;
+      }"
+    `)
+  })
 })

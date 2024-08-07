@@ -113,7 +113,11 @@ export async function compile(
       customUtilities.push((designSystem) => {
         designSystem.utilities.static(name, (candidate) => {
           if (candidate.negative) return
-          return structuredClone(node.nodes)
+          let ast = structuredClone(node.nodes)
+
+          apply(ast, designSystem)
+
+          return ast
         })
       })
 
