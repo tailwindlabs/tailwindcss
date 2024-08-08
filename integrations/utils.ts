@@ -119,7 +119,6 @@ export function test(
           })
 
           function dispose() {
-            console.log('start cleanup', command)
             child.kill()
 
             let timer = setTimeout(
@@ -129,7 +128,6 @@ export function test(
             )
             disposePromise.finally(() => {
               clearTimeout(timer)
-              console.log('end cleanup', command)
             })
             return disposePromise
           }
@@ -223,7 +221,6 @@ export function test(
                   reject(new Error(`Failed to get a free port: address is ${address}`))
                 } else {
                   disposables.push(async () => {
-                    console.log('start cleanup port', port)
                     // Wait for 10ms in case the process was just killed
                     await new Promise((resolve) => setTimeout(resolve, 10))
 
@@ -233,12 +230,10 @@ export function test(
                     // still in use first.
                     let isPortTaken = await testIfPortTaken(port)
                     if (!isPortTaken) {
-                      console.log('end cleanup port (nothing to do)', port)
                       return
                     }
 
                     await killPort(port)
-                    console.log('end cleanup port', port)
                   })
                   resolve(port)
                 }
@@ -300,31 +295,12 @@ export function test(
       let disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
-        // Make sure the node process is not locked up
-        setInterval(() => {
-          console.log('tick')
-        }, 1000)
-
-        console.log('start dispose()', options.task.name, disposables.length)
-
         await Promise.all(disposables.map((dispose) => dispose()))
 
-        console.log('start fs.rm()', options.task.name, root)
-
-        // @ts-ignore
-        console.log('File handles openend by the process:', process._getActiveHandles().length)
-
-        try {
-          if (debug) return
-          await fs.rm(root, { recursive: true, maxRetries: 5, force: true })
-        } catch (err) {
-          console.error({ err })
-          if (!process.env.CI) {
-            throw err
-          }
+        // Skip removing the directory in CI beause it can stall on Windows
+        if (!process.env.CI && !debug) {
+          await fs.rm(root, { recursive: true, force: true })
         }
-
-        console.log('end dispose()', options.task.name)
       }
 
       options.onTestFinished(dispose)
