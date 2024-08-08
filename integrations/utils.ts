@@ -300,16 +300,25 @@ export function test(
       let disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
+        // Make sure the node process is not locked up
+        setInterval(() => {
+          console.log('tick')
+        }, 1000)
+
         console.log('start dispose()', options.task.name, disposables.length)
 
         await Promise.all(disposables.map((dispose) => dispose()))
 
-        console.log('start fs.rm()', options.task.name)
+        console.log('start fs.rm()', options.task.name, root)
+
+        // @ts-ignore
+        console.log('File handles openend by the process:', process._getActiveHandles().length)
 
         try {
           if (debug) return
           await fs.rm(root, { recursive: true, maxRetries: 5, force: true })
         } catch (err) {
+          console.error({ err })
           if (!process.env.CI) {
             throw err
           }
