@@ -76,10 +76,8 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         },
         async OnceExit(root, { result }) {
           let inputFile = result.opts.from ?? ''
-          console.log({ inputFile })
           let context = cache.get(inputFile)
           let inputBasePath = path.dirname(path.resolve(inputFile))
-          console.log({ inputBasePath })
 
           function createCompiler() {
             return compile(root.toString(), {
