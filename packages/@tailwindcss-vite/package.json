@@ -31,12 +31,13 @@
     "@tailwindcss/oxide": "workspace:^",
     "lightningcss": "^1.25.1",
     "postcss-load-config": "^6.0.1",
+    "svelte-preprocess": "^6.0.2",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "vite": "catalog:",
-    "internal-postcss-fix-relative-paths": "workspace:^"
+    "internal-postcss-fix-relative-paths": "workspace:^",
+    "vite": "catalog:"
   },
   "peerDependencies": {
     "vite": "^5.2.0"
