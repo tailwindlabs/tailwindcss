@@ -51,7 +51,7 @@ export class Utilities {
   }
 
   get(name: string) {
-    return this.utilities.get(name) ?? []
+    return this.utilities.has(name) ? this.utilities.get(name) : []
   }
 
   getCompletions(name: string): SuggestionGroup[] {
