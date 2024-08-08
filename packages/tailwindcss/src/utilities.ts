@@ -28,7 +28,6 @@ type SuggestionDefinition =
     }
 
 export class Utilities {
-  private arbitraryFn!: CompileFn<'arbitrary'>
   private utilities = new DefaultMap<
     string,
     {
@@ -47,32 +46,12 @@ export class Utilities {
     this.utilities.get(name).push({ kind: 'functional', compileFn })
   }
 
-  arbitrary(compileFn: CompileFn<'arbitrary'>) {
-    this.arbitraryFn = compileFn
-  }
-
   has(name: string, kind: 'static' | 'functional') {
     return this.utilities.has(name) && this.utilities.get(name).some((fn) => fn.kind === kind)
   }
 
-  compile(candidate: Candidate) {
-    if (candidate.kind === 'arbitrary') {
-      return this.arbitraryFn(candidate)
-    }
-
-    let utilities = this.utilities.get(candidate.root) ?? []
-
-    for (let i = utilities.length - 1; i >= 0; i--) {
-      let utility = utilities[i]
-
-      if (candidate.kind !== utility.kind) continue
-
-      let compiledNodes = utility.compileFn(candidate)
-      if (compiledNodes === null) return null
-      if (compiledNodes) return compiledNodes
-    }
-
-    return null
+  get(name: string) {
+    return this.utilities.get(name) ?? []
   }
 
   getCompletions(name: string): SuggestionGroup[] {
@@ -146,7 +125,11 @@ export function withAlpha(value: string, alpha: string): string {
 /**
  * Resolve a color value + optional opacity modifier to a final color.
  */
-function asColor(value: string, modifier: CandidateModifier | null, theme: Theme): string | null {
+export function asColor(
+  value: string,
+  modifier: CandidateModifier | null,
+  theme: Theme,
+): string | null {
   if (!modifier) return value
 
   if (modifier.kind === 'arbitrary') {
@@ -226,20 +209,6 @@ function resolveThemeColor<T extends ColorThemeKey>(
 
 export function createUtilities(theme: Theme) {
   let utilities = new Utilities()
-
-  utilities.arbitrary((candidate) => {
-    let value: string | null = candidate.value
-
-    // Assumption: If an arbitrary property has a modifier, then we assume it
-    // is an opacity modifier.
-    if (candidate.modifier) {
-      value = asColor(value, candidate.modifier, theme)
-    }
-
-    if (value === null) return
-
-    return [decl(candidate.property, value)]
-  })
 
   /**
    * Register list of suggestions for a class
