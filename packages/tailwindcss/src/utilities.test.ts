@@ -15742,44 +15742,6 @@ describe('legacy: matchUtilities', () => {
     `)
   })
 
-  test.only('dsfsdfds functional utilities with `type: color` automatically support opacity', () => {
-    function run(candidates: string[]) {
-      return compile(
-        css`
-          @plugin "my-plugin";
-          @tailwind utilities;
-        `,
-        {
-          loadPlugin() {
-            return ({ matchUtilities }) => {
-              matchUtilities(
-                {
-                  scrollbar: (value) => {
-                    return {
-                      'scrollbar-color': value,
-                    }
-                  },
-                },
-                {
-                  type: ['color', 'any'],
-                  values: {
-                    black: 'black',
-                  },
-                },
-              )
-            }
-          },
-        },
-      ).build(candidates)
-    }
-
-    expect(optimizeCss(run(['scrollbar-black/33'])).trim()).toMatchInlineSnapshot(`
-      ".scrollbar-black\\/33 {
-        scrollbar-color: #00000054;
-      }"
-    `)
-  })
-
   test('functional utilities with type: color and explicit modifiers', () => {
     function run(candidates: string[]) {
       return compile(
