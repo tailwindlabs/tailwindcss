@@ -300,9 +300,12 @@ export function test(
       let disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
-        console.log('start dispose()', options.task.name)
+        console.log('start dispose()', options.task.name, disposables.length)
 
         await Promise.all(disposables.map((dispose) => dispose()))
+
+        console.log('start fs.rm()', options.task.name)
+
         try {
           if (debug) return
           await fs.rm(root, { recursive: true, maxRetries: 5, force: true })
@@ -311,6 +314,7 @@ export function test(
             throw err
           }
         }
+
         console.log('end dispose()', options.task.name)
       }
 
