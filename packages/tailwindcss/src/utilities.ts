@@ -2916,6 +2916,7 @@ export function createUtilities(theme: Theme) {
     themeKeys: ['--padding', '--spacing'],
     handle: (value) => [decl('padding-left', value)],
   })
+  staticUtility('p-inherit', [['padding', 'inherit']])
 
   staticUtility('text-left', [['text-align', 'left']])
   staticUtility('text-center', [['text-align', 'center']])

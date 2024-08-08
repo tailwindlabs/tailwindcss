@@ -11251,6 +11251,24 @@ test('pl', async () => {
   expect(await run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
 })
 
+test('p-inherit', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['p-inherit'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ".p-inherit {
+      padding: inherit;
+    }"
+  `)
+})
+
 test('text-align', async () => {
   expect(
     await run(['text-left', 'text-center', 'text-right', 'text-justify', 'text-start', 'text-end']),

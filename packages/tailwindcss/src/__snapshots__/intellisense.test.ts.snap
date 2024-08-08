@@ -1288,6 +1288,7 @@ exports[`getClassList 1`] = `
   "pe-1",
   "pe-3",
   "pe-4",
+  "p-inherit"
   "perspective-dramatic",
   "perspective-none",
   "perspective-normal",
