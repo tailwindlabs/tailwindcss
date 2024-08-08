@@ -185,7 +185,6 @@ export function resolvedChangedContent(context, candidateFiles, fileModifiedMap)
 
 const LARGE_DIRECTORIES = [
   'node_modules', // Node
-  'vendor', // PHP
 ]
 
 // Ensures that `node_modules` has to match as-is, otherwise `mynode_modules`

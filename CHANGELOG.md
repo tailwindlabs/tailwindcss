@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- No longer warns when broad glob patterns are detecting `vendor` folders
 
 ## [3.4.8] - 2024-08-07
 
