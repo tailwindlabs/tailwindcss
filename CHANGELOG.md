@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.9] - 2024-08-08
+
 ### Fixed
 
 - No longer warns when broad glob patterns are detecting `vendor` folders
@@ -2421,7 +2425,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.8...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.9...HEAD
+[3.4.9]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.8...v3.4.9
 [3.4.8]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.7...v3.4.8
 [3.4.7]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.6...v3.4.7
 [3.4.6]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.5...v3.4.6
