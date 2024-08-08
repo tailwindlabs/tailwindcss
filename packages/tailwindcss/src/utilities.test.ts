@@ -11263,7 +11263,11 @@ test('p-inherit', async () => {
       ['p-inherit'],
     ),
   ).toMatchInlineSnapshot(`
-    ".p-inherit {
+    ":root {
+      --spacing-4: 1rem;
+    }
+
+    .p-inherit {
       padding: inherit;
     }"
   `)
