@@ -26,7 +26,7 @@ type PluginAPI = {
 type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
-  loadPlugin?: (path: string) => Plugin
+  loadPlugin?: (path: string) => Promise<Plugin>
 }
 
 function throwOnPlugin(): never {
@@ -48,13 +48,13 @@ function parseThemeOptions(selector: string) {
   return { isReference, isInline }
 }
 
-export function compile(
+export async function compile(
   css: string,
   { loadPlugin = throwOnPlugin }: CompileOptions = {},
-): {
+): Promise<{
   globs: string[]
   build(candidates: string[]): string
-} {
+}> {
   let ast = CSS.parse(css)
 
   if (process.env.NODE_ENV !== 'test') {
@@ -69,7 +69,7 @@ export function compile(
 
   // Find all `@theme` declarations
   let theme = new Theme()
-  let plugins: Plugin[] = []
+  let pluginLoaders: Promise<Plugin>[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
@@ -89,7 +89,7 @@ export function compile(
         throw new Error('`@plugin` cannot be nested.')
       }
 
-      plugins.push(loadPlugin(node.selector.slice(9, -1)))
+      pluginLoaders.push(loadPlugin(node.selector.slice(9, -1)))
       replaceWith([])
       return
     }
@@ -334,9 +334,7 @@ export function compile(
     },
   }
 
-  for (let plugin of plugins) {
-    plugin(api)
-  }
+  await Promise.all(pluginLoaders.map((loader) => loader.then((plugin) => plugin(api))))
 
   let tailwindUtilitiesNode: Rule | null = null
 

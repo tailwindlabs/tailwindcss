@@ -4,8 +4,8 @@ import { compileCss, optimizeCss, run } from './test-utils/run'
 
 const css = String.raw
 
-test('sr-only', () => {
-  expect(run(['sr-only'])).toMatchInlineSnapshot(`
+test('sr-only', async () => {
+  expect(await run(['sr-only'])).toMatchInlineSnapshot(`
     ".sr-only {
       clip: rect(0, 0, 0, 0);
       white-space: nowrap;
@@ -18,11 +18,11 @@ test('sr-only', () => {
       overflow: hidden;
     }"
   `)
-  expect(run(['-sr-only', 'sr-only-[--value]', 'sr-only/foo'])).toEqual('')
+  expect(await run(['-sr-only', 'sr-only-[--value]', 'sr-only/foo'])).toEqual('')
 })
 
-test('not-sr-only', () => {
-  expect(run(['not-sr-only'])).toMatchInlineSnapshot(`
+test('not-sr-only', async () => {
+  expect(await run(['not-sr-only'])).toMatchInlineSnapshot(`
     ".not-sr-only {
       clip: auto;
       white-space: normal;
@@ -34,11 +34,11 @@ test('not-sr-only', () => {
       overflow: visible;
     }"
   `)
-  expect(run(['-not-sr-only', 'not-sr-only-[--value]', 'not-sr-only/foo'])).toEqual('')
+  expect(await run(['-not-sr-only', 'not-sr-only-[--value]', 'not-sr-only/foo'])).toEqual('')
 })
 
-test('pointer-events', () => {
-  expect(run(['pointer-events-none', 'pointer-events-auto'])).toMatchInlineSnapshot(`
+test('pointer-events', async () => {
+  expect(await run(['pointer-events-none', 'pointer-events-auto'])).toMatchInlineSnapshot(`
     ".pointer-events-auto {
       pointer-events: auto;
     }
@@ -48,7 +48,7 @@ test('pointer-events', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-pointer-events-none',
       '-pointer-events-auto',
       'pointer-events-[--value]',
@@ -57,8 +57,8 @@ test('pointer-events', () => {
   ).toEqual('')
 })
 
-test('visibility', () => {
-  expect(run(['visible', 'invisible', 'collapse'])).toMatchInlineSnapshot(`
+test('visibility', async () => {
+  expect(await run(['visible', 'invisible', 'collapse'])).toMatchInlineSnapshot(`
     ".collapse {
       visibility: collapse;
     }
@@ -72,12 +72,19 @@ test('visibility', () => {
     }"
   `)
   expect(
-    run(['-visible', '-invisible', '-collapse', 'visible/foo', 'invisible/foo', 'collapse/foo']),
+    await run([
+      '-visible',
+      '-invisible',
+      '-collapse',
+      'visible/foo',
+      'invisible/foo',
+      'collapse/foo',
+    ]),
   ).toEqual('')
 })
 
-test('position', () => {
-  expect(run(['static', 'fixed', 'absolute', 'relative', 'sticky'])).toMatchInlineSnapshot(`
+test('position', async () => {
+  expect(await run(['static', 'fixed', 'absolute', 'relative', 'sticky'])).toMatchInlineSnapshot(`
     ".absolute {
       position: absolute;
     }
@@ -99,7 +106,7 @@ test('position', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-static',
       '-fixed',
       '-absolute',
@@ -114,9 +121,9 @@ test('position', () => {
   ).toEqual('')
 })
 
-test('inset', () => {
+test('inset', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -167,7 +174,7 @@ test('inset', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'inset',
       'inset-auto/foo',
       '-inset-full/foo',
@@ -180,9 +187,9 @@ test('inset', () => {
   ).toEqual('')
 })
 
-test('inset-x', () => {
+test('inset-x', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -240,7 +247,7 @@ test('inset-x', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'inset-x',
       'inset-x-auto/foo',
       'inset-x-full/foo',
@@ -253,9 +260,9 @@ test('inset-x', () => {
   ).toEqual('')
 })
 
-test('inset-y', () => {
+test('inset-y', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -313,7 +320,7 @@ test('inset-y', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'inset-y',
       'inset-y-auto/foo',
       'inset-y-full/foo',
@@ -326,9 +333,9 @@ test('inset-y', () => {
   ).toEqual('')
 })
 
-test('start', () => {
+test('start', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -379,7 +386,7 @@ test('start', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'start',
       'start-auto/foo',
       '-start-full/foo',
@@ -392,9 +399,9 @@ test('start', () => {
   ).toEqual('')
 })
 
-test('end', () => {
+test('end', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -437,7 +444,7 @@ test('end', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'end',
       'end-auto/foo',
       '-end-full/foo',
@@ -450,9 +457,9 @@ test('end', () => {
   ).toEqual('')
 })
 
-test('top', () => {
+test('top', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -496,7 +503,7 @@ test('top', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'top',
       'top-auto/foo',
       '-top-full/foo',
@@ -509,9 +516,9 @@ test('top', () => {
   ).toEqual('')
 })
 
-test('right', () => {
+test('right', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -562,7 +569,7 @@ test('right', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'right',
       'right-auto/foo',
       '-right-full/foo',
@@ -575,9 +582,9 @@ test('right', () => {
   ).toEqual('')
 })
 
-test('bottom', () => {
+test('bottom', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -628,7 +635,7 @@ test('bottom', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'bottom',
       'bottom-auto/foo',
       '-bottom-full/foo',
@@ -641,9 +648,9 @@ test('bottom', () => {
   ).toEqual('')
 })
 
-test('left', () => {
+test('left', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -686,7 +693,7 @@ test('left', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'left',
       'left-auto/foo',
       '-left-full/foo',
@@ -699,8 +706,8 @@ test('left', () => {
   ).toEqual('')
 })
 
-test('isolation', () => {
-  expect(run(['isolate', 'isolation-auto'])).toMatchInlineSnapshot(`
+test('isolation', async () => {
+  expect(await run(['isolate', 'isolation-auto'])).toMatchInlineSnapshot(`
     ".isolate {
       isolation: isolate;
     }
@@ -709,11 +716,13 @@ test('isolation', () => {
       isolation: auto;
     }"
   `)
-  expect(run(['-isolate', '-isolation-auto', 'isolate/foo', 'isolation-auto/foo'])).toEqual('')
+  expect(await run(['-isolate', '-isolation-auto', 'isolate/foo', 'isolation-auto/foo'])).toEqual(
+    '',
+  )
 })
 
-test('z-index', () => {
-  expect(run(['z-auto', 'z-10', '-z-10', 'z-[123]', '-z-[--value]'])).toMatchInlineSnapshot(`
+test('z-index', async () => {
+  expect(await run(['z-auto', 'z-10', '-z-10', 'z-[123]', '-z-[--value]'])).toMatchInlineSnapshot(`
     ".-z-10 {
       z-index: calc(10 * -1);
     }
@@ -735,7 +744,7 @@ test('z-index', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'z',
       '-z-auto',
       'z-unknown',
@@ -749,9 +758,9 @@ test('z-index', () => {
   ).toEqual('')
 })
 
-test('order', () => {
+test('order', async () => {
   expect(
-    run([
+    await run([
       'order-4',
       '-order-4',
       'order-[123]',
@@ -790,7 +799,7 @@ test('order', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'order',
       '-order-first',
       '-order-last',
@@ -808,9 +817,9 @@ test('order', () => {
   ).toEqual('')
 })
 
-test('col', () => {
+test('col', async () => {
   expect(
-    run([
+    await run([
       'col-auto',
       'col-span-4',
       'col-span-17',
@@ -844,7 +853,7 @@ test('col', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'col',
       'col-span',
       '-col-span-4',
@@ -859,9 +868,10 @@ test('col', () => {
   ).toEqual('')
 })
 
-test('col-start', () => {
-  expect(run(['col-start-auto', 'col-start-4', 'col-start-99', 'col-start-[123]', '-col-start-4']))
-    .toMatchInlineSnapshot(`
+test('col-start', async () => {
+  expect(
+    await run(['col-start-auto', 'col-start-4', 'col-start-99', 'col-start-[123]', '-col-start-4']),
+  ).toMatchInlineSnapshot(`
       ".-col-start-4 {
         grid-column-start: calc(4 * -1);
       }
@@ -883,7 +893,7 @@ test('col-start', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'col-start',
       'col-start-unknown',
       'col-start-auto/foo',
@@ -895,8 +905,8 @@ test('col-start', () => {
   ).toEqual('')
 })
 
-test('col-end', () => {
-  expect(run(['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4']))
+test('col-end', async () => {
+  expect(await run(['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4']))
     .toMatchInlineSnapshot(`
       ".-col-end-4 {
         grid-column-end: calc(4 * -1);
@@ -919,7 +929,7 @@ test('col-end', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'col-end',
       'col-end-unknown',
       'col-end-auto/foo',
@@ -931,9 +941,9 @@ test('col-end', () => {
   ).toEqual('')
 })
 
-test('row', () => {
+test('row', async () => {
   expect(
-    run([
+    await run([
       'row-auto',
       'row-span-4',
       'row-span-17',
@@ -967,7 +977,7 @@ test('row', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'row',
       'row-span',
       '-row-span-4',
@@ -982,9 +992,10 @@ test('row', () => {
   ).toEqual('')
 })
 
-test('row-start', () => {
-  expect(run(['row-start-auto', 'row-start-4', 'row-start-99', 'row-start-[123]', '-row-start-4']))
-    .toMatchInlineSnapshot(`
+test('row-start', async () => {
+  expect(
+    await run(['row-start-auto', 'row-start-4', 'row-start-99', 'row-start-[123]', '-row-start-4']),
+  ).toMatchInlineSnapshot(`
       ".-row-start-4 {
         grid-row-start: calc(4 * -1);
       }
@@ -1006,7 +1017,7 @@ test('row-start', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'row-start',
       'row-start-unknown',
       'row-start-auto/foo',
@@ -1018,8 +1029,8 @@ test('row-start', () => {
   ).toEqual('')
 })
 
-test('row-end', () => {
-  expect(run(['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4']))
+test('row-end', async () => {
+  expect(await run(['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4']))
     .toMatchInlineSnapshot(`
       ".-row-end-4 {
         grid-row-end: calc(4 * -1);
@@ -1042,7 +1053,7 @@ test('row-end', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'row-end',
       'row-end-unknown',
       'row-end-auto/foo',
@@ -1054,8 +1065,8 @@ test('row-end', () => {
   ).toEqual('')
 })
 
-test('float', () => {
-  expect(run(['float-start', 'float-end', 'float-right', 'float-left', 'float-none']))
+test('float', async () => {
+  expect(await run(['float-start', 'float-end', 'float-right', 'float-left', 'float-none']))
     .toMatchInlineSnapshot(`
     ".float-end {
       float: end;
@@ -1078,7 +1089,7 @@ test('float', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'float',
       '-float-start',
       '-float-end',
@@ -1094,9 +1105,17 @@ test('float', () => {
   ).toEqual('')
 })
 
-test('clear', () => {
-  expect(run(['clear-start', 'clear-end', 'clear-right', 'clear-left', 'clear-both', 'clear-none']))
-    .toMatchInlineSnapshot(`
+test('clear', async () => {
+  expect(
+    await run([
+      'clear-start',
+      'clear-end',
+      'clear-right',
+      'clear-left',
+      'clear-both',
+      'clear-none',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".clear-both {
       clear: both;
     }
@@ -1122,7 +1141,7 @@ test('clear', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'clear',
       '-clear-start',
       '-clear-end',
@@ -1140,9 +1159,9 @@ test('clear', () => {
   ).toEqual('')
 })
 
-test('margin', () => {
+test('margin', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1177,13 +1196,13 @@ test('margin', () => {
     }"
   `)
   expect(
-    run(['m', 'm-auto/foo', 'm-4/foo', 'm-[4px]/foo', '-m-4/foo', '-m-[--value]/foo']),
+    await run(['m', 'm-auto/foo', 'm-4/foo', 'm-[4px]/foo', '-m-4/foo', '-m-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin-x', () => {
+test('margin-x', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1223,13 +1242,13 @@ test('margin-x', () => {
     }"
   `)
   expect(
-    run(['mx', 'mx-auto/foo', 'mx-4/foo', 'mx-[4px]/foo', '-mx-4/foo', '-mx-[--value]/foo']),
+    await run(['mx', 'mx-auto/foo', 'mx-4/foo', 'mx-[4px]/foo', '-mx-4/foo', '-mx-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin-y', () => {
+test('margin-y', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1269,13 +1288,13 @@ test('margin-y', () => {
     }"
   `)
   expect(
-    run(['my', 'my-auto/foo', 'my-4/foo', 'my-[4px]/foo', '-my-4/foo', '-my-[--value]/foo']),
+    await run(['my', 'my-auto/foo', 'my-4/foo', 'my-[4px]/foo', '-my-4/foo', '-my-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin-top', () => {
+test('margin-top', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1310,13 +1329,13 @@ test('margin-top', () => {
     }"
   `)
   expect(
-    run(['mt', 'mt-auto/foo', 'mt-4/foo', 'mt-[4px]/foo', '-mt-4/foo', '-mt-[--value]/foo']),
+    await run(['mt', 'mt-auto/foo', 'mt-4/foo', 'mt-[4px]/foo', '-mt-4/foo', '-mt-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin-inline-start', () => {
+test('margin-inline-start', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1351,13 +1370,13 @@ test('margin-inline-start', () => {
     }"
   `)
   expect(
-    run(['ms', 'ms-auto/foo', 'ms-4/foo', 'ms-[4px]/foo', '-ms-4/foo', '-ms-[--value]/foo']),
+    await run(['ms', 'ms-auto/foo', 'ms-4/foo', 'ms-[4px]/foo', '-ms-4/foo', '-ms-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin-inline-end', () => {
+test('margin-inline-end', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1392,13 +1411,13 @@ test('margin-inline-end', () => {
     }"
   `)
   expect(
-    run(['me', 'me-auto/foo', 'me-4/foo', 'me-[4px]/foo', '-me-4/foo', '-me-[--value]/foo']),
+    await run(['me', 'me-auto/foo', 'me-4/foo', 'me-[4px]/foo', '-me-4/foo', '-me-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin-right', () => {
+test('margin-right', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1433,13 +1452,13 @@ test('margin-right', () => {
     }"
   `)
   expect(
-    run(['mr', 'mr-auto/foo', 'mr-4/foo', 'mr-[4px]/foo', '-mr-4/foo', '-mr-[--value]/foo']),
+    await run(['mr', 'mr-auto/foo', 'mr-4/foo', 'mr-[4px]/foo', '-mr-4/foo', '-mr-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin-bottom', () => {
+test('margin-bottom', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1474,13 +1493,13 @@ test('margin-bottom', () => {
     }"
   `)
   expect(
-    run(['mb', 'mb-auto/foo', 'mb-4/foo', 'mb-[4px]/foo', '-mb-4/foo', '-mb-[--value]/foo']),
+    await run(['mb', 'mb-auto/foo', 'mb-4/foo', 'mb-[4px]/foo', '-mb-4/foo', '-mb-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin-left', () => {
+test('margin-left', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1515,13 +1534,13 @@ test('margin-left', () => {
     }"
   `)
   expect(
-    run(['ml', 'ml-auto/foo', 'ml-4/foo', 'ml-[4px]/foo', '-ml-4/foo', '-ml-[--value]/foo']),
+    await run(['ml', 'ml-auto/foo', 'ml-4/foo', 'ml-[4px]/foo', '-ml-4/foo', '-ml-[--value]/foo']),
   ).toEqual('')
 })
 
-test('margin sort order', () => {
+test('margin sort order', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1574,7 +1593,7 @@ test('margin sort order', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'm',
       'mb-4/foo',
       'me-4/foo',
@@ -1589,8 +1608,8 @@ test('margin sort order', () => {
   ).toEqual('')
 })
 
-test('box-sizing', () => {
-  expect(run(['box-border', 'box-content'])).toMatchInlineSnapshot(`
+test('box-sizing', async () => {
+  expect(await run(['box-border', 'box-content'])).toMatchInlineSnapshot(`
     ".box-border {
       box-sizing: border-box;
     }
@@ -1599,13 +1618,13 @@ test('box-sizing', () => {
       box-sizing: content-box;
     }"
   `)
-  expect(run(['box', '-box-border', '-box-content', 'box-border/foo', 'box-content/foo'])).toEqual(
-    '',
-  )
+  expect(
+    await run(['box', '-box-border', '-box-content', 'box-border/foo', 'box-content/foo']),
+  ).toEqual('')
 })
 
-test('line-clamp', () => {
-  expect(run(['line-clamp-4', 'line-clamp-99', 'line-clamp-[123]', 'line-clamp-none']))
+test('line-clamp', async () => {
+  expect(await run(['line-clamp-4', 'line-clamp-99', 'line-clamp-[123]', 'line-clamp-none']))
     .toMatchInlineSnapshot(`
       ".line-clamp-4 {
         -webkit-line-clamp: 4;
@@ -1636,7 +1655,7 @@ test('line-clamp', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'line-clamp',
       '-line-clamp-4',
       '-line-clamp-[123]',
@@ -1651,9 +1670,9 @@ test('line-clamp', () => {
   ).toEqual('')
 })
 
-test('display', () => {
+test('display', async () => {
   expect(
-    run([
+    await run([
       'block',
       'inline-block',
       'inline',
@@ -1762,7 +1781,7 @@ test('display', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-block',
       '-inline-block',
       '-inline',
@@ -1809,8 +1828,8 @@ test('display', () => {
   ).toEqual('')
 })
 
-test('aspect-ratio', () => {
-  expect(run(['aspect-video', 'aspect-[10/9]', 'aspect-4/3'])).toMatchInlineSnapshot(`
+test('aspect-ratio', async () => {
+  expect(await run(['aspect-video', 'aspect-[10/9]', 'aspect-4/3'])).toMatchInlineSnapshot(`
     ".aspect-4\\/3 {
       aspect-ratio: 4 / 3;
     }
@@ -1824,7 +1843,7 @@ test('aspect-ratio', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'aspect',
       'aspect-potato',
       '-aspect-video',
@@ -1837,9 +1856,9 @@ test('aspect-ratio', () => {
   ).toEqual('')
 })
 
-test('size', () => {
+test('size', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -1903,7 +1922,7 @@ test('size', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'size',
       '-size-4',
       '-size-1/2',
@@ -1920,9 +1939,9 @@ test('size', () => {
   ).toEqual('')
 })
 
-test('width', () => {
+test('width', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -2005,7 +2024,7 @@ test('width', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'w',
       '-w-4',
       '-w-1/2',
@@ -2027,9 +2046,9 @@ test('width', () => {
   ).toEqual('')
 })
 
-test('min-width', () => {
+test('min-width', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -2087,7 +2106,7 @@ test('min-width', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'min-w',
       '-min-w-4',
       '-min-w-[4px]',
@@ -2103,9 +2122,9 @@ test('min-width', () => {
   ).toEqual('')
 })
 
-test('max-width', () => {
+test('max-width', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -2159,7 +2178,7 @@ test('max-width', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'max-w',
       '-max-w-4',
       '-max-w-[4px]',
@@ -2175,9 +2194,9 @@ test('max-width', () => {
   ).toEqual('')
 })
 
-test('height', () => {
+test('height', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -2253,7 +2272,7 @@ test('height', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'h',
       '-h-4',
       '-h-1/2',
@@ -2274,9 +2293,9 @@ test('height', () => {
   ).toEqual('')
 })
 
-test('min-height', () => {
+test('min-height', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -2347,7 +2366,7 @@ test('min-height', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'min-h',
       '-min-h-4',
       '-min-h-[4px]',
@@ -2366,9 +2385,9 @@ test('min-height', () => {
   ).toEqual('')
 })
 
-test('max-height', () => {
+test('max-height', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -2439,7 +2458,7 @@ test('max-height', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'max-h',
       '-max-h-4',
       '-max-h-[4px]',
@@ -2458,9 +2477,17 @@ test('max-height', () => {
   ).toEqual('')
 })
 
-test('flex', () => {
+test('flex', async () => {
   expect(
-    run(['flex-1', 'flex-99', 'flex-1/2', 'flex-auto', 'flex-initial', 'flex-none', 'flex-[123]']),
+    await run([
+      'flex-1',
+      'flex-99',
+      'flex-1/2',
+      'flex-auto',
+      'flex-initial',
+      'flex-none',
+      'flex-[123]',
+    ]),
   ).toMatchInlineSnapshot(`
     ".flex-1 {
       flex: 1;
@@ -2491,7 +2518,7 @@ test('flex', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-flex-1',
       '-flex-auto',
       '-flex-initial',
@@ -2509,8 +2536,8 @@ test('flex', () => {
   ).toEqual('')
 })
 
-test('flex-shrink', () => {
-  expect(run(['shrink', 'shrink-0', 'shrink-[123]'])).toMatchInlineSnapshot(`
+test('flex-shrink', async () => {
+  expect(await run(['shrink', 'shrink-0', 'shrink-[123]'])).toMatchInlineSnapshot(`
     ".shrink {
       flex-shrink: 1;
     }
@@ -2524,7 +2551,7 @@ test('flex-shrink', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-shrink',
       '-shrink-0',
       '-shrink-[123]',
@@ -2536,8 +2563,8 @@ test('flex-shrink', () => {
   ).toEqual('')
 })
 
-test('flex-grow', () => {
-  expect(run(['grow', 'grow-0', 'grow-[123]'])).toMatchInlineSnapshot(`
+test('flex-grow', async () => {
+  expect(await run(['grow', 'grow-0', 'grow-[123]'])).toMatchInlineSnapshot(`
     ".grow {
       flex-grow: 1;
     }
@@ -2551,7 +2578,7 @@ test('flex-grow', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-grow',
       '-grow-0',
       '-grow-[123]',
@@ -2563,9 +2590,9 @@ test('flex-grow', () => {
   ).toEqual('')
 })
 
-test('flex-basis', () => {
+test('flex-basis', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --width-xl: 36rem;
@@ -2600,7 +2627,7 @@ test('flex-basis', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'basis',
       '-basis-full',
       '-basis-[123px]',
@@ -2613,8 +2640,8 @@ test('flex-basis', () => {
   ).toEqual('')
 })
 
-test('table-layout', () => {
-  expect(run(['table-auto', 'table-fixed'])).toMatchInlineSnapshot(`
+test('table-layout', async () => {
+  expect(await run(['table-auto', 'table-fixed'])).toMatchInlineSnapshot(`
     ".table-auto {
       table-layout: auto;
     }
@@ -2623,11 +2650,13 @@ test('table-layout', () => {
       table-layout: fixed;
     }"
   `)
-  expect(run(['-table-auto', '-table-fixed', 'table-auto/foo', 'table-fixed/foo'])).toEqual('')
+  expect(await run(['-table-auto', '-table-fixed', 'table-auto/foo', 'table-fixed/foo'])).toEqual(
+    '',
+  )
 })
 
-test('caption-side', () => {
-  expect(run(['caption-top', 'caption-bottom'])).toMatchInlineSnapshot(`
+test('caption-side', async () => {
+  expect(await run(['caption-top', 'caption-bottom'])).toMatchInlineSnapshot(`
     ".caption-bottom {
       caption-side: bottom;
     }
@@ -2636,13 +2665,13 @@ test('caption-side', () => {
       caption-side: top;
     }"
   `)
-  expect(run(['-caption-top', '-caption-bottom', 'caption-top/foo', 'caption-bottom/foo'])).toEqual(
-    '',
-  )
+  expect(
+    await run(['-caption-top', '-caption-bottom', 'caption-top/foo', 'caption-bottom/foo']),
+  ).toEqual('')
 })
 
-test('border-collapse', () => {
-  expect(run(['border-collapse', 'border-separate'])).toMatchInlineSnapshot(`
+test('border-collapse', async () => {
+  expect(await run(['border-collapse', 'border-separate'])).toMatchInlineSnapshot(`
     ".border-collapse {
       border-collapse: collapse;
     }
@@ -2652,13 +2681,18 @@ test('border-collapse', () => {
     }"
   `)
   expect(
-    run(['-border-collapse', '-border-separate', 'border-collapse/foo', 'border-separate/foo']),
+    await run([
+      '-border-collapse',
+      '-border-separate',
+      'border-collapse/foo',
+      'border-separate/foo',
+    ]),
   ).toEqual('')
 })
 
-test('border-spacing', () => {
+test('border-spacing', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-1: 0.25rem;
@@ -2706,7 +2740,7 @@ test('border-spacing', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'border-spacing',
       '-border-spacing-1',
       '-border-spacing-[123px]',
@@ -2716,9 +2750,9 @@ test('border-spacing', () => {
   ).toEqual('')
 })
 
-test('border-spacing-x', () => {
+test('border-spacing-x', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-1: 0.25rem;
@@ -2764,7 +2798,7 @@ test('border-spacing-x', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'border-spacing-x',
       '-border-spacing-x-1',
       '-border-spacing-x-[123px]',
@@ -2774,9 +2808,9 @@ test('border-spacing-x', () => {
   ).toEqual('')
 })
 
-test('border-spacing-y', () => {
+test('border-spacing-y', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-1: 0.25rem;
@@ -2822,7 +2856,7 @@ test('border-spacing-y', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'border-spacing-x',
       '-border-spacing-y-1',
       '-border-spacing-y-[123px]',
@@ -2832,9 +2866,9 @@ test('border-spacing-y', () => {
   ).toEqual('')
 })
 
-test('origin', () => {
+test('origin', async () => {
   expect(
-    run([
+    await run([
       'origin-center',
       'origin-top',
       'origin-top-right',
@@ -2893,7 +2927,7 @@ test('origin', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-origin-center',
       '-origin-[--value]',
       'origin-center/foo',
@@ -2911,9 +2945,9 @@ test('origin', () => {
   ).toEqual('')
 })
 
-test('perspective-origin', () => {
+test('perspective-origin', async () => {
   expect(
-    run([
+    await run([
       'perspective-origin-center',
       'perspective-origin-top',
       'perspective-origin-top-right',
@@ -2972,7 +3006,7 @@ test('perspective-origin', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-perspective-origin-center',
       '-perspective-origin-[--value]',
       'perspective-origin-center/foo',
@@ -2990,9 +3024,9 @@ test('perspective-origin', () => {
   ).toEqual('')
 })
 
-test('translate', () => {
+test('translate', async () => {
   expect(
-    run([
+    await run([
       'translate-1/2',
       'translate-full',
       '-translate-full',
@@ -3064,7 +3098,7 @@ test('translate', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'translate',
       'translate-1/2/foo',
       'translate-full/foo',
@@ -3075,9 +3109,15 @@ test('translate', () => {
   ).toEqual('')
 })
 
-test('translate-x', () => {
-  expect(run(['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[--value]']))
-    .toMatchInlineSnapshot(`
+test('translate-x', async () => {
+  expect(
+    await run([
+      'translate-x-full',
+      '-translate-x-full',
+      'translate-x-px',
+      '-translate-x-[--value]',
+    ]),
+  ).toMatchInlineSnapshot(`
       ".-translate-x-\\[--value\\] {
         --tw-translate-x: calc(var(--value) * -1);
         translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -3127,7 +3167,7 @@ test('translate-x', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'translate-x',
       'translate-x-full/foo',
       '-translate-x-full/foo',
@@ -3137,9 +3177,15 @@ test('translate-x', () => {
   ).toEqual('')
 })
 
-test('translate-y', () => {
-  expect(run(['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[--value]']))
-    .toMatchInlineSnapshot(`
+test('translate-y', async () => {
+  expect(
+    await run([
+      'translate-y-full',
+      '-translate-y-full',
+      'translate-y-px',
+      '-translate-y-[--value]',
+    ]),
+  ).toMatchInlineSnapshot(`
       ".-translate-y-\\[--value\\] {
         --tw-translate-y: calc(var(--value) * -1);
         translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -3189,7 +3235,7 @@ test('translate-y', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'translate-y',
       'translate-y-full/foo',
       '-translate-y-full/foo',
@@ -3199,8 +3245,8 @@ test('translate-y', () => {
   ).toEqual('')
 })
 
-test('translate-z', () => {
-  expect(run(['translate-y-px', '-translate-z-[--value]'])).toMatchInlineSnapshot(`
+test('translate-z', async () => {
+  expect(await run(['translate-y-px', '-translate-z-[--value]'])).toMatchInlineSnapshot(`
     ".translate-y-px {
       --tw-translate-y: 1px;
       translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -3240,7 +3286,7 @@ test('translate-z', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'translate-z',
       'translate-z-full',
       '-translate-z-full',
@@ -3251,8 +3297,8 @@ test('translate-z', () => {
   ).toEqual('')
 })
 
-test('translate-3d', () => {
-  expect(run(['translate-3d'])).toMatchInlineSnapshot(`
+test('translate-3d', async () => {
+  expect(await run(['translate-3d'])).toMatchInlineSnapshot(`
     ".translate-3d {
       translate: var(--tw-translate-x) var(--tw-translate-y) var(--tw-translate-z);
     }
@@ -3285,11 +3331,11 @@ test('translate-3d', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-translate-3d', 'translate-3d/foo'])).toEqual('')
+  expect(await run(['-translate-3d', 'translate-3d/foo'])).toEqual('')
 })
 
-test('rotate', () => {
-  expect(run(['rotate-45', '-rotate-45', 'rotate-[123deg]', 'rotate-[0.3_0.7_1_45deg]']))
+test('rotate', async () => {
+  expect(await run(['rotate-45', '-rotate-45', 'rotate-[123deg]', 'rotate-[0.3_0.7_1_45deg]']))
     .toMatchInlineSnapshot(`
     ".-rotate-45 {
       rotate: -45deg;
@@ -3308,7 +3354,7 @@ test('rotate', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'rotate',
       'rotate-z',
       'rotate-unknown',
@@ -3320,8 +3366,8 @@ test('rotate', () => {
   ).toEqual('')
 })
 
-test('rotate-x', () => {
-  expect(run(['rotate-x-45', '-rotate-x-45', 'rotate-x-[123deg]'])).toMatchInlineSnapshot(`
+test('rotate-x', async () => {
+  expect(await run(['rotate-x-45', '-rotate-x-45', 'rotate-x-[123deg]'])).toMatchInlineSnapshot(`
     ".-rotate-x-45 {
       --tw-rotate-x: calc(rotateX(45deg) * -1);
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
@@ -3380,7 +3426,7 @@ test('rotate-x', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'rotate-x',
       '-rotate-x',
       'rotate-x-potato',
@@ -3391,8 +3437,8 @@ test('rotate-x', () => {
   ).toEqual('')
 })
 
-test('rotate-y', () => {
-  expect(run(['rotate-y-45', '-rotate-y-45', 'rotate-y-[123deg]'])).toMatchInlineSnapshot(`
+test('rotate-y', async () => {
+  expect(await run(['rotate-y-45', '-rotate-y-45', 'rotate-y-[123deg]'])).toMatchInlineSnapshot(`
     ".-rotate-y-45 {
       --tw-rotate-y: calc(rotateY(45deg) * -1);
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
@@ -3451,7 +3497,7 @@ test('rotate-y', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'rotate-y',
       '-rotate-y',
       'rotate-y-potato',
@@ -3462,8 +3508,8 @@ test('rotate-y', () => {
   ).toEqual('')
 })
 
-test('skew', () => {
-  expect(run(['skew-6', '-skew-6', 'skew-[123deg]'])).toMatchInlineSnapshot(`
+test('skew', async () => {
+  expect(await run(['skew-6', '-skew-6', 'skew-[123deg]'])).toMatchInlineSnapshot(`
     ".-skew-6 {
       --tw-skew-x: skewX(calc(6deg * -1));
       --tw-skew-y: skewY(calc(6deg * -1));
@@ -3524,13 +3570,13 @@ test('skew', () => {
       initial-value: skewY(0);
     }"
   `)
-  expect(run(['skew', 'skew-unknown', 'skew-6/foo', '-skew-6/foo', 'skew-[123deg]/foo'])).toEqual(
-    '',
-  )
+  expect(
+    await run(['skew', 'skew-unknown', 'skew-6/foo', '-skew-6/foo', 'skew-[123deg]/foo']),
+  ).toEqual('')
 })
 
-test('skew-x', () => {
-  expect(run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
+test('skew-x', async () => {
+  expect(await run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
     ".-skew-x-6 {
       --tw-skew-x: skewX(calc(6deg * -1));
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
@@ -3589,12 +3635,12 @@ test('skew-x', () => {
     }"
   `)
   expect(
-    run(['skew-x', 'skew-x-unknown', 'skew-x-6/foo', '-skew-x-6/foo', 'skew-x-[123deg]/foo']),
+    await run(['skew-x', 'skew-x-unknown', 'skew-x-6/foo', '-skew-x-6/foo', 'skew-x-[123deg]/foo']),
   ).toEqual('')
 })
 
-test('skew-y', () => {
-  expect(run(['skew-y-6', '-skew-y-6', 'skew-y-[123deg]'])).toMatchInlineSnapshot(`
+test('skew-y', async () => {
+  expect(await run(['skew-y-6', '-skew-y-6', 'skew-y-[123deg]'])).toMatchInlineSnapshot(`
     ".-skew-y-6 {
       --tw-skew-y: skewY(calc(6deg * -1));
       transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
@@ -3653,12 +3699,13 @@ test('skew-y', () => {
     }"
   `)
   expect(
-    run(['skew-y', 'skew-y-unknown', 'skew-y-6/foo', '-skew-y-6/foo', 'skew-y-[123deg]/foo']),
+    await run(['skew-y', 'skew-y-unknown', 'skew-y-6/foo', '-skew-y-6/foo', 'skew-y-[123deg]/foo']),
   ).toEqual('')
 })
 
-test('scale', () => {
-  expect(run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]'])).toMatchInlineSnapshot(`
+test('scale', async () => {
+  expect(await run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]']))
+    .toMatchInlineSnapshot(`
     ".-scale-50 {
       --tw-scale-x: calc(50% * -1);
       --tw-scale-y: calc(50% * -1);
@@ -3710,7 +3757,7 @@ test('scale', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scale',
       'scale-unknown',
       'scale-50/foo',
@@ -3721,8 +3768,8 @@ test('scale', () => {
   ).toEqual('')
 })
 
-test('scale-3d', () => {
-  expect(run(['scale-3d'])).toMatchInlineSnapshot(`
+test('scale-3d', async () => {
+  expect(await run(['scale-3d'])).toMatchInlineSnapshot(`
     ".scale-3d {
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
     }
@@ -3755,11 +3802,11 @@ test('scale-3d', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['-scale-3d', 'scale-3d/foo'])).toEqual('')
+  expect(await run(['-scale-3d', 'scale-3d/foo'])).toEqual('')
 })
 
-test('scale-x', () => {
-  expect(run(['scale-x-50', '-scale-x-50', 'scale-x-[2]'])).toMatchInlineSnapshot(`
+test('scale-x', async () => {
+  expect(await run(['scale-x-50', '-scale-x-50', 'scale-x-[2]'])).toMatchInlineSnapshot(`
     ".-scale-x-50 {
       --tw-scale-x: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y);
@@ -3803,7 +3850,7 @@ test('scale-x', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale-200', 'scale-x-400'])).toMatchInlineSnapshot(`
+  expect(await run(['scale-200', 'scale-x-400'])).toMatchInlineSnapshot(`
     ".scale-200 {
       --tw-scale-x: 200%;
       --tw-scale-y: 200%;
@@ -3845,7 +3892,7 @@ test('scale-x', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scale-x',
       'scale-x-unknown',
       'scale-200/foo',
@@ -3857,8 +3904,8 @@ test('scale-x', () => {
   ).toEqual('')
 })
 
-test('scale-y', () => {
-  expect(run(['scale-y-50', '-scale-y-50', 'scale-y-[2]'])).toMatchInlineSnapshot(`
+test('scale-y', async () => {
+  expect(await run(['scale-y-50', '-scale-y-50', 'scale-y-[2]'])).toMatchInlineSnapshot(`
     ".-scale-y-50 {
       --tw-scale-y: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y);
@@ -3903,12 +3950,18 @@ test('scale-y', () => {
     }"
   `)
   expect(
-    run(['scale-y', 'scale-y-unknown', 'scale-y-50/foo', '-scale-y-50/foo', 'scale-y-[2]/foo']),
+    await run([
+      'scale-y',
+      'scale-y-unknown',
+      'scale-y-50/foo',
+      '-scale-y-50/foo',
+      'scale-y-[2]/foo',
+    ]),
   ).toEqual('')
 })
 
-test('scale-z', () => {
-  expect(run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
+test('scale-z', async () => {
+  expect(await run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
     ".-scale-z-50 {
       --tw-scale-z: calc(50% * -1);
       scale: var(--tw-scale-x) var(--tw-scale-y) var(--tw-scale-z);
@@ -3952,12 +4005,14 @@ test('scale-z', () => {
       initial-value: 1;
     }"
   `)
-  expect(run(['scale-z', 'scale-z-50/foo', '-scale-z-50/foo', 'scale-z-[123deg]/foo'])).toEqual('')
+  expect(
+    await run(['scale-z', 'scale-z-50/foo', '-scale-z-50/foo', 'scale-z-[123deg]/foo']),
+  ).toEqual('')
 })
 
-test('transform', () => {
+test('transform', async () => {
   expect(
-    run([
+    await run([
       'transform',
       'transform-cpu',
       'transform-gpu',
@@ -4028,7 +4083,7 @@ test('transform', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'transform-flat',
       'transform-3d',
       'transform-content',
@@ -4077,7 +4132,7 @@ test('transform', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       '-transform',
       '-transform-cpu',
       '-transform-gpu',
@@ -4100,9 +4155,9 @@ test('transform', () => {
   ).toEqual('')
 })
 
-test('perspective', () => {
+test('perspective', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --perspective-dramatic: 100px;
@@ -4135,7 +4190,7 @@ test('perspective', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'perspective',
       '-perspective',
       'perspective-potato',
@@ -4148,9 +4203,9 @@ test('perspective', () => {
   ).toEqual('')
 })
 
-test('cursor', () => {
+test('cursor', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --cursor-custom: url(/my-cursor.png);
@@ -4356,7 +4411,7 @@ test('cursor', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'cursor',
       '-cursor-auto',
       '-cursor-default',
@@ -4438,8 +4493,8 @@ test('cursor', () => {
   ).toEqual('')
 })
 
-test('touch-action', () => {
-  expect(run(['touch-auto', 'touch-none', 'touch-manipulation'])).toMatchInlineSnapshot(`
+test('touch-action', async () => {
+  expect(await run(['touch-auto', 'touch-none', 'touch-manipulation'])).toMatchInlineSnapshot(`
     ".touch-auto {
       touch-action: auto;
     }
@@ -4453,7 +4508,7 @@ test('touch-action', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-touch-auto',
       '-touch-none',
       '-touch-manipulation',
@@ -4464,9 +4519,9 @@ test('touch-action', () => {
   ).toEqual('')
 })
 
-test('touch-pan', () => {
+test('touch-pan', async () => {
   expect(
-    run([
+    await run([
       'touch-pan-x',
       'touch-pan-left',
       'touch-pan-right',
@@ -4531,7 +4586,7 @@ test('touch-pan', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-touch-pan-x',
       '-touch-pan-left',
       '-touch-pan-right',
@@ -4548,8 +4603,8 @@ test('touch-pan', () => {
   ).toEqual('')
 })
 
-test('touch-pinch-zoom', () => {
-  expect(run(['touch-pinch-zoom'])).toMatchInlineSnapshot(`
+test('touch-pinch-zoom', async () => {
+  expect(await run(['touch-pinch-zoom'])).toMatchInlineSnapshot(`
     ".touch-pinch-zoom {
       --tw-pinch-zoom: pinch-zoom;
       touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
@@ -4580,11 +4635,12 @@ test('touch-pinch-zoom', () => {
       inherits: false
     }"
   `)
-  expect(run(['-touch-pinch-zoom', 'touch-pinch-zoom/foo'])).toEqual('')
+  expect(await run(['-touch-pinch-zoom', 'touch-pinch-zoom/foo'])).toEqual('')
 })
 
-test('select', () => {
-  expect(run(['select-none', 'select-text', 'select-all', 'select-auto'])).toMatchInlineSnapshot(`
+test('select', async () => {
+  expect(await run(['select-none', 'select-text', 'select-all', 'select-auto']))
+    .toMatchInlineSnapshot(`
     ".select-all {
       -webkit-user-select: all;
       user-select: all;
@@ -4606,7 +4662,7 @@ test('select', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-select-none',
       '-select-text',
       '-select-all',
@@ -4619,8 +4675,8 @@ test('select', () => {
   ).toEqual('')
 })
 
-test('resize', () => {
-  expect(run(['resize-none', 'resize', 'resize-x', 'resize-y'])).toMatchInlineSnapshot(`
+test('resize', async () => {
+  expect(await run(['resize-none', 'resize', 'resize-x', 'resize-y'])).toMatchInlineSnapshot(`
     ".resize {
       resize: both;
     }
@@ -4638,7 +4694,7 @@ test('resize', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-resize-none',
       '-resize',
       '-resize-x',
@@ -4651,8 +4707,8 @@ test('resize', () => {
   ).toEqual('')
 })
 
-test('scroll-snap-type', () => {
-  expect(run(['snap-none', 'snap-x', 'snap-y', 'snap-both'])).toMatchInlineSnapshot(`
+test('scroll-snap-type', async () => {
+  expect(await run(['snap-none', 'snap-x', 'snap-y', 'snap-both'])).toMatchInlineSnapshot(`
     ".snap-both {
       scroll-snap-type: both var(--tw-scroll-snap-strictness);
     }
@@ -4684,7 +4740,7 @@ test('scroll-snap-type', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-snap-none',
       '-snap-x',
       '-snap-y',
@@ -4697,8 +4753,8 @@ test('scroll-snap-type', () => {
   ).toEqual('')
 })
 
-test('--tw-scroll-snap-strictness', () => {
-  expect(run(['snap-mandatory', 'snap-proximity'])).toMatchInlineSnapshot(`
+test('--tw-scroll-snap-strictness', async () => {
+  expect(await run(['snap-mandatory', 'snap-proximity'])).toMatchInlineSnapshot(`
     ".snap-mandatory {
       --tw-scroll-snap-strictness: mandatory;
     }
@@ -4722,12 +4778,13 @@ test('--tw-scroll-snap-strictness', () => {
     }"
   `)
   expect(
-    run(['-snap-mandatory', '-snap-proximity', 'snap-mandatory/foo', 'snap-proximity/foo']),
+    await run(['-snap-mandatory', '-snap-proximity', 'snap-mandatory/foo', 'snap-proximity/foo']),
   ).toEqual('')
 })
 
-test('scroll-snap-align', () => {
-  expect(run(['snap-align-none', 'snap-start', 'snap-end', 'snap-center'])).toMatchInlineSnapshot(`
+test('scroll-snap-align', async () => {
+  expect(await run(['snap-align-none', 'snap-start', 'snap-end', 'snap-center']))
+    .toMatchInlineSnapshot(`
     ".snap-align-none {
       scroll-snap-align: none;
     }
@@ -4745,7 +4802,7 @@ test('scroll-snap-align', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-snap-align-none',
       '-snap-start',
       '-snap-end',
@@ -4758,8 +4815,8 @@ test('scroll-snap-align', () => {
   ).toEqual('')
 })
 
-test('scroll-snap-stop', () => {
-  expect(run(['snap-normal', 'snap-always'])).toMatchInlineSnapshot(`
+test('scroll-snap-stop', async () => {
+  expect(await run(['snap-normal', 'snap-always'])).toMatchInlineSnapshot(`
     ".snap-always {
       scroll-snap-stop: always;
     }
@@ -4768,12 +4825,14 @@ test('scroll-snap-stop', () => {
       scroll-snap-stop: normal;
     }"
   `)
-  expect(run(['-snap-normal', '-snap-always', 'snap-normal/foo', 'snap-always/foo'])).toEqual('')
+  expect(await run(['-snap-normal', '-snap-always', 'snap-normal/foo', 'snap-always/foo'])).toEqual(
+    '',
+  )
 })
 
-test('scroll-m', () => {
+test('scroll-m', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -4804,7 +4863,7 @@ test('scroll-m', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-m',
       'scroll-m-4/foo',
       'scroll-m-[4px]/foo',
@@ -4814,9 +4873,9 @@ test('scroll-m', () => {
   ).toEqual('')
 })
 
-test('scroll-mx', () => {
+test('scroll-mx', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -4851,7 +4910,7 @@ test('scroll-mx', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-mx',
       'scroll-mx-4/foo',
       'scroll-mx-[4px]/foo',
@@ -4861,9 +4920,9 @@ test('scroll-mx', () => {
   ).toEqual('')
 })
 
-test('scroll-my', () => {
+test('scroll-my', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -4898,7 +4957,7 @@ test('scroll-my', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-my',
       'scroll-my-4/foo',
       'scroll-my-[4px]/foo',
@@ -4908,9 +4967,9 @@ test('scroll-my', () => {
   ).toEqual('')
 })
 
-test('scroll-ms', () => {
+test('scroll-ms', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -4941,7 +5000,7 @@ test('scroll-ms', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-ms',
       'scroll-ms-4/foo',
       'scroll-ms-[4px]/foo',
@@ -4951,9 +5010,9 @@ test('scroll-ms', () => {
   ).toEqual('')
 })
 
-test('scroll-me', () => {
+test('scroll-me', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -4984,7 +5043,7 @@ test('scroll-me', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-me',
       'scroll-me-4/foo',
       'scroll-me-[4px]/foo',
@@ -4994,9 +5053,9 @@ test('scroll-me', () => {
   ).toEqual('')
 })
 
-test('scroll-mt', () => {
+test('scroll-mt', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5027,7 +5086,7 @@ test('scroll-mt', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-mt',
       'scroll-mt-4/foo',
       'scroll-mt-[4px]/foo',
@@ -5037,9 +5096,9 @@ test('scroll-mt', () => {
   ).toEqual('')
 })
 
-test('scroll-mr', () => {
+test('scroll-mr', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5070,7 +5129,7 @@ test('scroll-mr', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-mr',
       'scroll-mr-4/foo',
       'scroll-mr-[4px]/foo',
@@ -5080,9 +5139,9 @@ test('scroll-mr', () => {
   ).toEqual('')
 })
 
-test('scroll-mb', () => {
+test('scroll-mb', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5113,7 +5172,7 @@ test('scroll-mb', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-mb',
       'scroll-mb-4/foo',
       'scroll-mb-[4px]/foo',
@@ -5123,9 +5182,9 @@ test('scroll-mb', () => {
   ).toEqual('')
 })
 
-test('scroll-ml', () => {
+test('scroll-ml', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5156,7 +5215,7 @@ test('scroll-ml', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-ml',
       'scroll-ml-4/foo',
       'scroll-ml-[4px]/foo',
@@ -5166,9 +5225,9 @@ test('scroll-ml', () => {
   ).toEqual('')
 })
 
-test('scroll-p', () => {
+test('scroll-p', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5199,7 +5258,7 @@ test('scroll-p', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-p',
       'scroll-p-4/foo',
       'scroll-p-[4px]/foo',
@@ -5209,9 +5268,9 @@ test('scroll-p', () => {
   ).toEqual('')
 })
 
-test('scroll-px', () => {
+test('scroll-px', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5246,7 +5305,7 @@ test('scroll-px', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-px',
       'scroll-px-4/foo',
       'scroll-px-[4px]/foo',
@@ -5256,9 +5315,9 @@ test('scroll-px', () => {
   ).toEqual('')
 })
 
-test('scroll-py', () => {
+test('scroll-py', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5293,7 +5352,7 @@ test('scroll-py', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-py',
       'scroll-py-4/foo',
       'scroll-py-[4px]/foo',
@@ -5303,9 +5362,9 @@ test('scroll-py', () => {
   ).toEqual('')
 })
 
-test('scroll-ps', () => {
+test('scroll-ps', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5336,7 +5395,7 @@ test('scroll-ps', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-ps',
       'scroll-ps-4/foo',
       'scroll-ps-[4px]/foo',
@@ -5346,9 +5405,9 @@ test('scroll-ps', () => {
   ).toEqual('')
 })
 
-test('scroll-pe', () => {
+test('scroll-pe', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5379,7 +5438,7 @@ test('scroll-pe', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-pe',
       'scroll-pe-4/foo',
       'scroll-pe-[4px]/foo',
@@ -5389,9 +5448,9 @@ test('scroll-pe', () => {
   ).toEqual('')
 })
 
-test('scroll-pt', () => {
+test('scroll-pt', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5422,7 +5481,7 @@ test('scroll-pt', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-pt',
       'scroll-pt-4/foo',
       'scroll-pt-[4px]/foo',
@@ -5432,9 +5491,9 @@ test('scroll-pt', () => {
   ).toEqual('')
 })
 
-test('scroll-pr', () => {
+test('scroll-pr', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5465,7 +5524,7 @@ test('scroll-pr', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-pr',
       'scroll-pr-4/foo',
       'scroll-pr-[4px]/foo',
@@ -5475,9 +5534,9 @@ test('scroll-pr', () => {
   ).toEqual('')
 })
 
-test('scroll-pb', () => {
+test('scroll-pb', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5508,7 +5567,7 @@ test('scroll-pb', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-pb',
       'scroll-pb-4/foo',
       'scroll-pb-[4px]/foo',
@@ -5518,9 +5577,9 @@ test('scroll-pb', () => {
   ).toEqual('')
 })
 
-test('scroll-pl', () => {
+test('scroll-pl', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -5551,7 +5610,7 @@ test('scroll-pl', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'scroll-pl',
       'scroll-pl-4/foo',
       'scroll-pl-[4px]/foo',
@@ -5561,8 +5620,8 @@ test('scroll-pl', () => {
   ).toEqual('')
 })
 
-test('list-style-position', () => {
-  expect(run(['list-inside', 'list-outside'])).toMatchInlineSnapshot(`
+test('list-style-position', async () => {
+  expect(await run(['list-inside', 'list-outside'])).toMatchInlineSnapshot(`
     ".list-inside {
       list-style-position: inside;
     }
@@ -5571,11 +5630,14 @@ test('list-style-position', () => {
       list-style-position: outside;
     }"
   `)
-  expect(run(['-list-inside', '-list-outside', 'list-inside/foo', 'list-outside/foo'])).toEqual('')
+  expect(
+    await run(['-list-inside', '-list-outside', 'list-inside/foo', 'list-outside/foo']),
+  ).toEqual('')
 })
 
-test('list', () => {
-  expect(run(['list-none', 'list-disc', 'list-decimal', 'list-[--value]'])).toMatchInlineSnapshot(`
+test('list', async () => {
+  expect(await run(['list-none', 'list-disc', 'list-decimal', 'list-[--value]']))
+    .toMatchInlineSnapshot(`
     ".list-\\[--value\\] {
       list-style-type: var(--value);
     }
@@ -5593,7 +5655,7 @@ test('list', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-list-none',
       '-list-disc',
       '-list-decimal',
@@ -5606,8 +5668,8 @@ test('list', () => {
   ).toEqual('')
 })
 
-test('list-image', () => {
-  expect(run(['list-image-none', 'list-image-[--value]'])).toMatchInlineSnapshot(`
+test('list-image', async () => {
+  expect(await run(['list-image-none', 'list-image-[--value]'])).toMatchInlineSnapshot(`
     ".list-image-\\[--value\\] {
       list-style-image: var(--value);
     }
@@ -5617,7 +5679,7 @@ test('list-image', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'list-image',
       '-list-image-none',
       '-list-image-[--value]',
@@ -5627,8 +5689,8 @@ test('list-image', () => {
   ).toEqual('')
 })
 
-test('appearance', () => {
-  expect(run(['appearance-none', 'appearance-auto'])).toMatchInlineSnapshot(`
+test('appearance', async () => {
+  expect(await run(['appearance-none', 'appearance-auto'])).toMatchInlineSnapshot(`
     ".appearance-auto {
       appearance: auto;
     }
@@ -5638,7 +5700,7 @@ test('appearance', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'appearance',
       '-appearance-none',
       '-appearance-auto',
@@ -5648,9 +5710,9 @@ test('appearance', () => {
   ).toEqual('')
 })
 
-test('columns', () => {
+test('columns', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --width-3xs: 16rem;
@@ -5703,7 +5765,7 @@ test('columns', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'columns',
       '-columns-4',
       '-columns-[123]',
@@ -5720,9 +5782,9 @@ test('columns', () => {
   ).toEqual('')
 })
 
-test('break-before', () => {
+test('break-before', async () => {
   expect(
-    run([
+    await run([
       'break-before-auto',
       'break-before-avoid',
       'break-before-all',
@@ -5766,7 +5828,7 @@ test('break-before', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'break-before',
       '-break-before-auto',
       '-break-before-avoid',
@@ -5788,9 +5850,9 @@ test('break-before', () => {
   ).toEqual('')
 })
 
-test('break-inside', () => {
+test('break-inside', async () => {
   expect(
-    run([
+    await run([
       'break-inside-auto',
       'break-inside-avoid',
       'break-inside-avoid-page',
@@ -5814,7 +5876,7 @@ test('break-inside', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'break-inside',
       '-break-inside-auto',
       '-break-inside-avoid',
@@ -5828,9 +5890,9 @@ test('break-inside', () => {
   ).toEqual('')
 })
 
-test('break-after', () => {
+test('break-after', async () => {
   expect(
-    run([
+    await run([
       'break-after-auto',
       'break-after-avoid',
       'break-after-all',
@@ -5874,7 +5936,7 @@ test('break-after', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'break-after',
       '-break-after-auto',
       '-break-after-avoid',
@@ -5896,9 +5958,15 @@ test('break-after', () => {
   ).toEqual('')
 })
 
-test('auto-cols', () => {
+test('auto-cols', async () => {
   expect(
-    run(['auto-cols-auto', 'auto-cols-min', 'auto-cols-max', 'auto-cols-fr', 'auto-cols-[2fr]']),
+    await run([
+      'auto-cols-auto',
+      'auto-cols-min',
+      'auto-cols-max',
+      'auto-cols-fr',
+      'auto-cols-[2fr]',
+    ]),
   ).toMatchInlineSnapshot(`
     ".auto-cols-\\[2fr\\] {
       grid-auto-columns: 2fr;
@@ -5921,7 +5989,7 @@ test('auto-cols', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'auto-cols',
       '-auto-cols-auto',
       '-auto-cols-[2fr]',
@@ -5934,9 +6002,9 @@ test('auto-cols', () => {
   ).toEqual('')
 })
 
-test('grid-flow', () => {
+test('grid-flow', async () => {
   expect(
-    run([
+    await run([
       'grid-flow-row',
       'grid-flow-col',
       'grid-flow-dense',
@@ -5965,7 +6033,7 @@ test('grid-flow', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'grid-flow',
       '-grid-flow-row',
       '-grid-flow-col',
@@ -5981,9 +6049,15 @@ test('grid-flow', () => {
   ).toEqual('')
 })
 
-test('auto-rows', () => {
+test('auto-rows', async () => {
   expect(
-    run(['auto-rows-auto', 'auto-rows-min', 'auto-rows-max', 'auto-rows-fr', 'auto-rows-[2fr]']),
+    await run([
+      'auto-rows-auto',
+      'auto-rows-min',
+      'auto-rows-max',
+      'auto-rows-fr',
+      'auto-rows-[2fr]',
+    ]),
   ).toMatchInlineSnapshot(`
     ".auto-rows-\\[2fr\\] {
       grid-auto-rows: 2fr;
@@ -6006,7 +6080,7 @@ test('auto-rows', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'auto-rows',
       '-auto-rows-auto',
       '-auto-rows-[2fr]',
@@ -6019,9 +6093,15 @@ test('auto-rows', () => {
   ).toEqual('')
 })
 
-test('grid-cols', () => {
+test('grid-cols', async () => {
   expect(
-    run(['grid-cols-none', 'grid-cols-subgrid', 'grid-cols-12', 'grid-cols-99', 'grid-cols-[123]']),
+    await run([
+      'grid-cols-none',
+      'grid-cols-subgrid',
+      'grid-cols-12',
+      'grid-cols-99',
+      'grid-cols-[123]',
+    ]),
   ).toMatchInlineSnapshot(`
     ".grid-cols-12 {
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -6044,7 +6124,7 @@ test('grid-cols', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'grid-cols',
       '-grid-cols-none',
       '-grid-cols-subgrid',
@@ -6060,9 +6140,15 @@ test('grid-cols', () => {
   ).toEqual('')
 })
 
-test('grid-rows', () => {
+test('grid-rows', async () => {
   expect(
-    run(['grid-rows-none', 'grid-rows-subgrid', 'grid-rows-12', 'grid-rows-99', 'grid-rows-[123]']),
+    await run([
+      'grid-rows-none',
+      'grid-rows-subgrid',
+      'grid-rows-12',
+      'grid-rows-99',
+      'grid-rows-[123]',
+    ]),
   ).toMatchInlineSnapshot(`
     ".grid-rows-12 {
       grid-template-rows: repeat(12, minmax(0, 1fr));
@@ -6085,7 +6171,7 @@ test('grid-rows', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'grid-rows',
       '-grid-rows-none',
       '-grid-rows-subgrid',
@@ -6101,8 +6187,8 @@ test('grid-rows', () => {
   ).toEqual('')
 })
 
-test('flex-direction', () => {
-  expect(run(['flex-row', 'flex-row-reverse', 'flex-col', 'flex-col-reverse']))
+test('flex-direction', async () => {
+  expect(await run(['flex-row', 'flex-row-reverse', 'flex-col', 'flex-col-reverse']))
     .toMatchInlineSnapshot(`
     ".flex-col {
       flex-direction: column;
@@ -6121,7 +6207,7 @@ test('flex-direction', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-flex-row',
       '-flex-row-reverse',
       '-flex-col',
@@ -6134,8 +6220,8 @@ test('flex-direction', () => {
   ).toEqual('')
 })
 
-test('flex-wrap', () => {
-  expect(run(['flex-wrap', 'flex-wrap-reverse', 'flex-nowrap'])).toMatchInlineSnapshot(`
+test('flex-wrap', async () => {
+  expect(await run(['flex-wrap', 'flex-wrap-reverse', 'flex-nowrap'])).toMatchInlineSnapshot(`
     ".flex-nowrap {
       flex-wrap: nowrap;
     }
@@ -6149,7 +6235,7 @@ test('flex-wrap', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-flex-wrap',
       '-flex-wrap-reverse',
       '-flex-nowrap',
@@ -6160,9 +6246,9 @@ test('flex-wrap', () => {
   ).toEqual('')
 })
 
-test('place-content', () => {
+test('place-content', async () => {
   expect(
-    run([
+    await run([
       'place-content-center',
       'place-content-start',
       'place-content-end',
@@ -6206,7 +6292,7 @@ test('place-content', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'place-content',
       '-place-content-center',
       '-place-content-start',
@@ -6228,9 +6314,9 @@ test('place-content', () => {
   ).toEqual('')
 })
 
-test('place-items', () => {
+test('place-items', async () => {
   expect(
-    run([
+    await run([
       'place-items-start',
       'place-items-end',
       'place-items-center',
@@ -6259,7 +6345,7 @@ test('place-items', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'place-items',
       '-place-items-start',
       '-place-items-end',
@@ -6275,9 +6361,9 @@ test('place-items', () => {
   ).toEqual('')
 })
 
-test('align-content', () => {
+test('align-content', async () => {
   expect(
-    run([
+    await run([
       'content-normal',
       'content-center',
       'content-start',
@@ -6326,7 +6412,7 @@ test('align-content', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'content',
       '-content-normal',
       '-content-center',
@@ -6350,8 +6436,8 @@ test('align-content', () => {
   ).toEqual('')
 })
 
-test('items', () => {
-  expect(run(['items-start', 'items-end', 'items-center', 'items-baseline', 'items-stretch']))
+test('items', async () => {
+  expect(await run(['items-start', 'items-end', 'items-center', 'items-baseline', 'items-stretch']))
     .toMatchInlineSnapshot(`
     ".items-baseline {
       align-items: baseline;
@@ -6374,7 +6460,7 @@ test('items', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'items',
       '-items-start',
       '-items-end',
@@ -6390,9 +6476,9 @@ test('items', () => {
   ).toEqual('')
 })
 
-test('justify', () => {
+test('justify', async () => {
   expect(
-    run([
+    await run([
       'justify-normal',
       'justify-start',
       'justify-end',
@@ -6436,7 +6522,7 @@ test('justify', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'justify',
       '-justify-normal',
       '-justify-start',
@@ -6458,9 +6544,9 @@ test('justify', () => {
   ).toEqual('')
 })
 
-test('justify-items', () => {
+test('justify-items', async () => {
   expect(
-    run([
+    await run([
       'justify-items-start',
       'justify-items-end',
       'justify-items-center',
@@ -6484,7 +6570,7 @@ test('justify-items', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'justify-items',
       '-justify-items-start',
       '-justify-items-end',
@@ -6498,9 +6584,9 @@ test('justify-items', () => {
   ).toEqual('')
 })
 
-test('gap', () => {
+test('gap', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -6522,12 +6608,12 @@ test('gap', () => {
       gap: 4px;
     }"
   `)
-  expect(run(['gap', '-gap-4', '-gap-[4px]', 'gap-4/foo', 'gap-[4px]/foo'])).toEqual('')
+  expect(await run(['gap', '-gap-4', '-gap-[4px]', 'gap-4/foo', 'gap-[4px]/foo'])).toEqual('')
 })
 
-test('gap-x', () => {
+test('gap-x', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -6549,12 +6635,14 @@ test('gap-x', () => {
       column-gap: 4px;
     }"
   `)
-  expect(run(['gap-x', '-gap-x-4', '-gap-x-[4px]', 'gap-x-4/foo', 'gap-x-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['gap-x', '-gap-x-4', '-gap-x-[4px]', 'gap-x-4/foo', 'gap-x-[4px]/foo']),
+  ).toEqual('')
 })
 
-test('gap-y', () => {
+test('gap-y', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -6576,12 +6664,14 @@ test('gap-y', () => {
       row-gap: 4px;
     }"
   `)
-  expect(run(['gap-y', '-gap-y-4', '-gap-y-[4px]', 'gap-y-4/foo', 'gap-y-[4px]/foo'])).toEqual('')
+  expect(
+    await run(['gap-y', '-gap-y-4', '-gap-y-[4px]', 'gap-y-4/foo', 'gap-y-[4px]/foo']),
+  ).toEqual('')
 })
 
-test('space-x', () => {
+test('space-x', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -6624,12 +6714,12 @@ test('space-x', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['space-x', 'space-x-4/foo', 'space-x-[4px]/foo', '-space-x-4/foo'])).toEqual('')
+  expect(await run(['space-x', 'space-x-4/foo', 'space-x-[4px]/foo', '-space-x-4/foo'])).toEqual('')
 })
 
-test('space-y', () => {
+test('space-y', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -6672,11 +6762,11 @@ test('space-y', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['space-y', 'space-y-4/foo', 'space-y-[4px]/foo', '-space-y-4/foo'])).toEqual('')
+  expect(await run(['space-y', 'space-y-4/foo', 'space-y-[4px]/foo', '-space-y-4/foo'])).toEqual('')
 })
 
-test('space-x-reverse', () => {
-  expect(run(['space-x-reverse'])).toMatchInlineSnapshot(`
+test('space-x-reverse', async () => {
+  expect(await run(['space-x-reverse'])).toMatchInlineSnapshot(`
     ":where(.space-x-reverse > :not(:last-child)) {
       --tw-space-x-reverse: 1;
     }
@@ -6695,11 +6785,11 @@ test('space-x-reverse', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-space-x-reverse', 'space-x-reverse/foo'])).toEqual('')
+  expect(await run(['-space-x-reverse', 'space-x-reverse/foo'])).toEqual('')
 })
 
-test('space-y-reverse', () => {
-  expect(run(['space-y-reverse'])).toMatchInlineSnapshot(`
+test('space-y-reverse', async () => {
+  expect(await run(['space-y-reverse'])).toMatchInlineSnapshot(`
     ":where(.space-y-reverse > :not(:last-child)) {
       --tw-space-y-reverse: 1;
     }
@@ -6718,12 +6808,12 @@ test('space-y-reverse', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-space-y-reverse', 'space-y-reverse/foo'])).toEqual('')
+  expect(await run(['-space-y-reverse', 'space-y-reverse/foo'])).toEqual('')
 })
 
-test('divide-x', () => {
+test('divide-x', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @tailwind utilities;
       `,
@@ -6776,7 +6866,7 @@ test('divide-x', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-divide-x',
       '-divide-x-4',
       '-divide-x-123',
@@ -6789,9 +6879,9 @@ test('divide-x', () => {
   ).toEqual('')
 })
 
-test('divide-x with custom default border width', () => {
+test('divide-x with custom default border width', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --default-border-width: 2px;
@@ -6832,12 +6922,12 @@ test('divide-x with custom default border width', () => {
       initial-value: solid;
     }"
   `)
-  expect(run(['divide-x/foo'])).toEqual('')
+  expect(await run(['divide-x/foo'])).toEqual('')
 })
 
-test('divide-y', () => {
+test('divide-y', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @tailwind utilities;
       `,
@@ -6894,7 +6984,7 @@ test('divide-y', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-divide-y',
       '-divide-y-4',
       '-divide-y-123',
@@ -6907,9 +6997,9 @@ test('divide-y', () => {
   ).toEqual('')
 })
 
-test('divide-y with custom default border width', () => {
+test('divide-y with custom default border width', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --default-border-width: 2px;
@@ -6951,11 +7041,11 @@ test('divide-y with custom default border width', () => {
       initial-value: solid;
     }"
   `)
-  expect(run(['divide-y/foo'])).toEqual('')
+  expect(await run(['divide-y/foo'])).toEqual('')
 })
 
-test('divide-x-reverse', () => {
-  expect(run(['divide-x-reverse'])).toMatchInlineSnapshot(`
+test('divide-x-reverse', async () => {
+  expect(await run(['divide-x-reverse'])).toMatchInlineSnapshot(`
     ":where(.divide-x-reverse > :not(:last-child)) {
       --tw-divide-x-reverse: 1;
     }
@@ -6974,11 +7064,11 @@ test('divide-x-reverse', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-divide-x-reverse', 'divide-x-reverse/foo'])).toEqual('')
+  expect(await run(['-divide-x-reverse', 'divide-x-reverse/foo'])).toEqual('')
 })
 
-test('divide-y-reverse', () => {
-  expect(run(['divide-y-reverse'])).toMatchInlineSnapshot(`
+test('divide-y-reverse', async () => {
+  expect(await run(['divide-y-reverse'])).toMatchInlineSnapshot(`
     ":where(.divide-y-reverse > :not(:last-child)) {
       --tw-divide-y-reverse: 1;
     }
@@ -6997,12 +7087,13 @@ test('divide-y-reverse', () => {
       initial-value: 0;
     }"
   `)
-  expect(run(['-divide-y-reverse', 'divide-y-reverse/foo'])).toEqual('')
+  expect(await run(['-divide-y-reverse', 'divide-y-reverse/foo'])).toEqual('')
 })
 
-test('divide-style', () => {
-  expect(run(['divide-solid', 'divide-dashed', 'divide-dotted', 'divide-double', 'divide-none']))
-    .toMatchInlineSnapshot(`
+test('divide-style', async () => {
+  expect(
+    await run(['divide-solid', 'divide-dashed', 'divide-dotted', 'divide-double', 'divide-none']),
+  ).toMatchInlineSnapshot(`
       ":where(.divide-dashed > :not(:last-child)) {
         --tw-border-style: dashed;
         border-style: dashed;
@@ -7029,7 +7120,7 @@ test('divide-style', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'divide',
       '-divide-solid',
       '-divide-dashed',
@@ -7045,9 +7136,9 @@ test('divide-style', () => {
   ).toEqual('')
 })
 
-test('accent', () => {
+test('accent', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -7109,7 +7200,7 @@ test('accent', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'accent',
       '-accent-red-500',
       '-accent-red-500/50',
@@ -7143,9 +7234,9 @@ test('accent', () => {
   ).toEqual('')
 })
 
-test('caret', () => {
+test('caret', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -7207,7 +7298,7 @@ test('caret', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'caret',
       '-caret-red-500',
       '-caret-red-500/50',
@@ -7241,9 +7332,9 @@ test('caret', () => {
   ).toEqual('')
 })
 
-test('divide-color', () => {
+test('divide-color', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -7329,7 +7420,7 @@ test('divide-color', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'divide',
       '-divide-red-500',
       '-divide-red-500/50',
@@ -7363,9 +7454,9 @@ test('divide-color', () => {
   ).toEqual('')
 })
 
-test('place-self', () => {
+test('place-self', async () => {
   expect(
-    run([
+    await run([
       'place-self-auto',
       'place-self-start',
       'place-self-end',
@@ -7394,7 +7485,7 @@ test('place-self', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'place-self',
       '-place-self-auto',
       '-place-self-start',
@@ -7410,9 +7501,16 @@ test('place-self', () => {
   ).toEqual('')
 })
 
-test('self', () => {
+test('self', async () => {
   expect(
-    run(['self-auto', 'self-start', 'self-end', 'self-center', 'self-stretch', 'self-baseline']),
+    await run([
+      'self-auto',
+      'self-start',
+      'self-end',
+      'self-center',
+      'self-stretch',
+      'self-baseline',
+    ]),
   ).toMatchInlineSnapshot(`
     ".self-auto {
       align-self: auto;
@@ -7439,7 +7537,7 @@ test('self', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'self',
       '-self-auto',
       '-self-start',
@@ -7457,9 +7555,9 @@ test('self', () => {
   ).toEqual('')
 })
 
-test('justify-self', () => {
+test('justify-self', async () => {
   expect(
-    run([
+    await run([
       'justify-self-auto',
       'justify-self-start',
       'justify-self-end',
@@ -7489,7 +7587,7 @@ test('justify-self', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'justify-self',
       '-justify-self-auto',
       '-justify-self-start',
@@ -7507,9 +7605,9 @@ test('justify-self', () => {
   ).toEqual('')
 })
 
-test('overflow', () => {
+test('overflow', async () => {
   expect(
-    run([
+    await run([
       'overflow-auto',
       'overflow-hidden',
       'overflow-clip',
@@ -7538,7 +7636,7 @@ test('overflow', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'overflow',
       '-overflow-auto',
       '-overflow-hidden',
@@ -7554,9 +7652,9 @@ test('overflow', () => {
   ).toEqual('')
 })
 
-test('overflow-x', () => {
+test('overflow-x', async () => {
   expect(
-    run([
+    await run([
       'overflow-x-auto',
       'overflow-x-hidden',
       'overflow-x-clip',
@@ -7585,7 +7683,7 @@ test('overflow-x', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'overflow-x',
       '-overflow-x-auto',
       '-overflow-x-hidden',
@@ -7601,9 +7699,9 @@ test('overflow-x', () => {
   ).toEqual('')
 })
 
-test('overflow-y', () => {
+test('overflow-y', async () => {
   expect(
-    run([
+    await run([
       'overflow-y-auto',
       'overflow-y-hidden',
       'overflow-y-clip',
@@ -7632,7 +7730,7 @@ test('overflow-y', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'overflow-y',
       '-overflow-y-auto',
       '-overflow-y-hidden',
@@ -7648,8 +7746,9 @@ test('overflow-y', () => {
   ).toEqual('')
 })
 
-test('overscroll', () => {
-  expect(run(['overscroll-auto', 'overscroll-contain', 'overscroll-none'])).toMatchInlineSnapshot(`
+test('overscroll', async () => {
+  expect(await run(['overscroll-auto', 'overscroll-contain', 'overscroll-none']))
+    .toMatchInlineSnapshot(`
     ".overscroll-auto {
       overscroll-behavior: auto;
     }
@@ -7663,7 +7762,7 @@ test('overscroll', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'overscroll',
       '-overscroll-auto',
       '-overscroll-contain',
@@ -7675,8 +7774,8 @@ test('overscroll', () => {
   ).toEqual('')
 })
 
-test('overscroll-x', () => {
-  expect(run(['overscroll-x-auto', 'overscroll-x-contain', 'overscroll-x-none']))
+test('overscroll-x', async () => {
+  expect(await run(['overscroll-x-auto', 'overscroll-x-contain', 'overscroll-x-none']))
     .toMatchInlineSnapshot(`
     ".overscroll-x-auto {
       overscroll-behavior-x: auto;
@@ -7691,7 +7790,7 @@ test('overscroll-x', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'overscroll-x',
       '-overscroll-x-auto',
       '-overscroll-x-contain',
@@ -7703,8 +7802,8 @@ test('overscroll-x', () => {
   ).toEqual('')
 })
 
-test('overscroll-y', () => {
-  expect(run(['overscroll-y-auto', 'overscroll-y-contain', 'overscroll-y-none']))
+test('overscroll-y', async () => {
+  expect(await run(['overscroll-y-auto', 'overscroll-y-contain', 'overscroll-y-none']))
     .toMatchInlineSnapshot(`
     ".overscroll-y-auto {
       overscroll-behavior-y: auto;
@@ -7719,7 +7818,7 @@ test('overscroll-y', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'overscroll-y',
       '-overscroll-y-auto',
       '-overscroll-y-contain',
@@ -7731,8 +7830,8 @@ test('overscroll-y', () => {
   ).toEqual('')
 })
 
-test('scroll-behavior', () => {
-  expect(run(['scroll-auto', 'scroll-smooth'])).toMatchInlineSnapshot(`
+test('scroll-behavior', async () => {
+  expect(await run(['scroll-auto', 'scroll-smooth'])).toMatchInlineSnapshot(`
     ".scroll-auto {
       scroll-behavior: auto;
     }
@@ -7742,23 +7841,23 @@ test('scroll-behavior', () => {
     }"
   `)
   expect(
-    run(['scroll', '-scroll-auto', '-scroll-smooth', 'scroll-auto/foo', 'scroll-smooth/foo']),
+    await run(['scroll', '-scroll-auto', '-scroll-smooth', 'scroll-auto/foo', 'scroll-smooth/foo']),
   ).toEqual('')
 })
 
-test('truncate', () => {
-  expect(run(['truncate'])).toMatchInlineSnapshot(`
+test('truncate', async () => {
+  expect(await run(['truncate'])).toMatchInlineSnapshot(`
     ".truncate {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
     }"
   `)
-  expect(run(['-truncate', 'truncate/foo'])).toEqual('')
+  expect(await run(['-truncate', 'truncate/foo'])).toEqual('')
 })
 
-test('text-overflow', () => {
-  expect(run(['text-ellipsis', 'text-clip'])).toMatchInlineSnapshot(`
+test('text-overflow', async () => {
+  expect(await run(['text-ellipsis', 'text-clip'])).toMatchInlineSnapshot(`
     ".text-clip {
       text-overflow: clip;
     }
@@ -7767,11 +7866,13 @@ test('text-overflow', () => {
       text-overflow: ellipsis;
     }"
   `)
-  expect(run(['-text-ellipsis', '-text-clip', 'text-ellipsis/foo', 'text-clip/foo'])).toEqual('')
+  expect(await run(['-text-ellipsis', '-text-clip', 'text-ellipsis/foo', 'text-clip/foo'])).toEqual(
+    '',
+  )
 })
 
-test('hyphens', () => {
-  expect(run(['hyphens-none', 'hyphens-manual', 'hyphens-auto'])).toMatchInlineSnapshot(`
+test('hyphens', async () => {
+  expect(await run(['hyphens-none', 'hyphens-manual', 'hyphens-auto'])).toMatchInlineSnapshot(`
     ".hyphens-auto {
       -webkit-hyphens: auto;
       hyphens: auto;
@@ -7788,7 +7889,7 @@ test('hyphens', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'hyphens',
       '-hyphens-none',
       '-hyphens-manual',
@@ -7800,9 +7901,9 @@ test('hyphens', () => {
   ).toEqual('')
 })
 
-test('whitespace', () => {
+test('whitespace', async () => {
   expect(
-    run([
+    await run([
       'whitespace-normal',
       'whitespace-nowrap',
       'whitespace-pre',
@@ -7836,7 +7937,7 @@ test('whitespace', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'whitespace',
       '-whitespace-normal',
       '-whitespace-nowrap',
@@ -7854,8 +7955,9 @@ test('whitespace', () => {
   ).toEqual('')
 })
 
-test('text-wrap', () => {
-  expect(run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty'])).toMatchInlineSnapshot(`
+test('text-wrap', async () => {
+  expect(await run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty']))
+    .toMatchInlineSnapshot(`
     ".text-balance {
       text-wrap: balance;
     }
@@ -7873,7 +7975,7 @@ test('text-wrap', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-text-wrap',
       '-text-nowrap',
       '-text-balance',
@@ -7886,8 +7988,9 @@ test('text-wrap', () => {
   ).toEqual('')
 })
 
-test('overflow-wrap', () => {
-  expect(run(['break-normal', 'break-words', 'break-all', 'break-keep'])).toMatchInlineSnapshot(`
+test('overflow-wrap', async () => {
+  expect(await run(['break-normal', 'break-words', 'break-all', 'break-keep']))
+    .toMatchInlineSnapshot(`
     ".break-normal {
       overflow-wrap: normal;
       word-break: normal;
@@ -7906,7 +8009,7 @@ test('overflow-wrap', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-break-normal',
       '-break-words',
       '-break-all',
@@ -7919,9 +8022,9 @@ test('overflow-wrap', () => {
   ).toEqual('')
 })
 
-test('rounded', () => {
+test('rounded', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-sm: 0.125rem;
@@ -7958,7 +8061,7 @@ test('rounded', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded',
       '-rounded-full',
       '-rounded-none',
@@ -7973,9 +8076,9 @@ test('rounded', () => {
   ).toEqual('')
 })
 
-test('rounded-s', () => {
+test('rounded-s', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8021,7 +8124,7 @@ test('rounded-s', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-s',
       '-rounded-s-full',
       '-rounded-s-none',
@@ -8036,9 +8139,9 @@ test('rounded-s', () => {
   ).toEqual('')
 })
 
-test('rounded-e', () => {
+test('rounded-e', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8084,7 +8187,7 @@ test('rounded-e', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-e',
       '-rounded-e-full',
       '-rounded-e-none',
@@ -8099,9 +8202,9 @@ test('rounded-e', () => {
   ).toEqual('')
 })
 
-test('rounded-t', () => {
+test('rounded-t', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8147,7 +8250,7 @@ test('rounded-t', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-t',
       '-rounded-t-full',
       '-rounded-t-none',
@@ -8162,9 +8265,9 @@ test('rounded-t', () => {
   ).toEqual('')
 })
 
-test('rounded-r', () => {
+test('rounded-r', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8210,7 +8313,7 @@ test('rounded-r', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-r',
       '-rounded-r-full',
       '-rounded-r-none',
@@ -8225,9 +8328,9 @@ test('rounded-r', () => {
   ).toEqual('')
 })
 
-test('rounded-b', () => {
+test('rounded-b', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8273,7 +8376,7 @@ test('rounded-b', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-b',
       '-rounded-b-full',
       '-rounded-b-none',
@@ -8288,9 +8391,9 @@ test('rounded-b', () => {
   ).toEqual('')
 })
 
-test('rounded-l', () => {
+test('rounded-l', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8336,7 +8439,7 @@ test('rounded-l', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-l',
       '-rounded-l-full',
       '-rounded-l-none',
@@ -8351,9 +8454,9 @@ test('rounded-l', () => {
   ).toEqual('')
 })
 
-test('rounded-ss', () => {
+test('rounded-ss', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8394,7 +8497,7 @@ test('rounded-ss', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-ss',
       '-rounded-ss-full',
       '-rounded-ss-none',
@@ -8409,9 +8512,9 @@ test('rounded-ss', () => {
   ).toEqual('')
 })
 
-test('rounded-se', () => {
+test('rounded-se', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8452,7 +8555,7 @@ test('rounded-se', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-se',
       '-rounded-se-full',
       '-rounded-se-none',
@@ -8467,9 +8570,9 @@ test('rounded-se', () => {
   ).toEqual('')
 })
 
-test('rounded-ee', () => {
+test('rounded-ee', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8510,7 +8613,7 @@ test('rounded-ee', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-ee',
       '-rounded-ee-full',
       '-rounded-ee-none',
@@ -8525,9 +8628,9 @@ test('rounded-ee', () => {
   ).toEqual('')
 })
 
-test('rounded-es', () => {
+test('rounded-es', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8568,7 +8671,7 @@ test('rounded-es', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-es',
       '-rounded-es-full',
       '-rounded-es-none',
@@ -8583,9 +8686,9 @@ test('rounded-es', () => {
   ).toEqual('')
 })
 
-test('rounded-tl', () => {
+test('rounded-tl', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8626,7 +8729,7 @@ test('rounded-tl', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-tl',
       '-rounded-tl-full',
       '-rounded-tl-none',
@@ -8641,9 +8744,9 @@ test('rounded-tl', () => {
   ).toEqual('')
 })
 
-test('rounded-tr', () => {
+test('rounded-tr', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8684,7 +8787,7 @@ test('rounded-tr', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-tr',
       '-rounded-tr-full',
       '-rounded-tr-none',
@@ -8699,9 +8802,9 @@ test('rounded-tr', () => {
   ).toEqual('')
 })
 
-test('rounded-br', () => {
+test('rounded-br', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8742,7 +8845,7 @@ test('rounded-br', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-br',
       '-rounded-br-full',
       '-rounded-br-none',
@@ -8757,9 +8860,9 @@ test('rounded-br', () => {
   ).toEqual('')
 })
 
-test('rounded-bl', () => {
+test('rounded-bl', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --radius-none: 0px;
@@ -8800,7 +8903,7 @@ test('rounded-bl', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-rounded-bl',
       '-rounded-bl-full',
       '-rounded-bl-none',
@@ -8815,9 +8918,9 @@ test('rounded-bl', () => {
   ).toEqual('')
 })
 
-test('border-style', () => {
+test('border-style', async () => {
   expect(
-    run([
+    await run([
       'border-solid',
       'border-dashed',
       'border-dotted',
@@ -8857,7 +8960,7 @@ test('border-style', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-border-solid',
       '-border-dashed',
       '-border-dotted',
@@ -8889,7 +8992,7 @@ const prefixes = [
 ]
 
 for (let prefix of prefixes) {
-  test(`${prefix}-*`, () => {
+  test(`${prefix}-*`, async () => {
     let classes = []
 
     // Width
@@ -8924,7 +9027,7 @@ for (let prefix of prefixes) {
     classes.push(`${prefix}-[color:--my-color]/50`)
 
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --radius-none: 0px;
@@ -8939,9 +9042,9 @@ for (let prefix of prefixes) {
     ).toMatchSnapshot()
 
     // No border utilities can ever be negative
-    expect(run(classes.map((cls) => `-${cls}`))).toEqual('')
+    expect(await run(classes.map((cls) => `-${cls}`))).toEqual('')
     expect(
-      run([
+      await run([
         `${prefix}/foo`,
         `${prefix}-0/foo`,
         `${prefix}-2/foo`,
@@ -8958,9 +9061,9 @@ for (let prefix of prefixes) {
   })
 }
 
-test('border with custom default border width', () => {
+test('border with custom default border width', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --default-border-width: 2px;
@@ -8993,12 +9096,12 @@ test('border with custom default border width', () => {
       initial-value: solid;
     }"
   `)
-  expect(run(['-border', 'border/foo'])).toEqual('')
+  expect(await run(['-border', 'border/foo'])).toEqual('')
 })
 
-test('bg', () => {
+test('bg', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -9368,7 +9471,7 @@ test('bg', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'bg',
       'bg-unknown',
 
@@ -9481,7 +9584,7 @@ test('bg', () => {
   ).toEqual('')
 
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --opacity-half: 0.5;
@@ -9507,9 +9610,9 @@ test('bg', () => {
   `)
 })
 
-test('from', () => {
+test('from', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -9702,7 +9805,7 @@ test('from', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'from',
       'from-123',
       'from-unknown',
@@ -9732,9 +9835,9 @@ test('from', () => {
   ).toEqual('')
 })
 
-test('via', () => {
+test('via', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -9939,7 +10042,7 @@ test('via', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'via',
       'via-123',
       'via-unknown',
@@ -9969,9 +10072,9 @@ test('via', () => {
   ).toEqual('')
 })
 
-test('to', () => {
+test('to', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -10164,7 +10267,7 @@ test('to', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'to',
       'to-123',
       'to-unknown',
@@ -10194,8 +10297,8 @@ test('to', () => {
   ).toEqual('')
 })
 
-test('box-decoration', () => {
-  expect(run(['box-decoration-slice', 'box-decoration-clone'])).toMatchInlineSnapshot(`
+test('box-decoration', async () => {
+  expect(await run(['box-decoration-slice', 'box-decoration-clone'])).toMatchInlineSnapshot(`
     ".box-decoration-clone {
       -webkit-box-decoration-break: clone;
       box-decoration-break: clone;
@@ -10207,7 +10310,7 @@ test('box-decoration', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'box',
       'box-decoration',
       '-box-decoration-slice',
@@ -10218,8 +10321,8 @@ test('box-decoration', () => {
   ).toEqual('')
 })
 
-test('bg-clip', () => {
-  expect(run(['bg-clip-border', 'bg-clip-padding', 'bg-clip-content', 'bg-clip-text']))
+test('bg-clip', async () => {
+  expect(await run(['bg-clip-border', 'bg-clip-padding', 'bg-clip-content', 'bg-clip-text']))
     .toMatchInlineSnapshot(`
     ".bg-clip-border {
       background-clip: border-box;
@@ -10238,7 +10341,7 @@ test('bg-clip', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'bg-clip',
       '-bg-clip-border',
       '-bg-clip-padding',
@@ -10252,8 +10355,8 @@ test('bg-clip', () => {
   ).toEqual('')
 })
 
-test('bg-origin', () => {
-  expect(run(['bg-origin-border', 'bg-origin-padding', 'bg-origin-content']))
+test('bg-origin', async () => {
+  expect(await run(['bg-origin-border', 'bg-origin-padding', 'bg-origin-content']))
     .toMatchInlineSnapshot(`
     ".bg-origin-border {
       background-origin: border-box;
@@ -10268,7 +10371,7 @@ test('bg-origin', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'bg-origin',
       '-bg-origin-border',
       '-bg-origin-padding',
@@ -10280,9 +10383,9 @@ test('bg-origin', () => {
   ).toEqual('')
 })
 
-test('bg-blend', () => {
+test('bg-blend', async () => {
   expect(
-    run([
+    await run([
       'bg-blend-normal',
       'bg-blend-multiply',
       'bg-blend-screen',
@@ -10366,7 +10469,7 @@ test('bg-blend', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'bg-blend',
       '-bg-blend-normal',
       '-bg-blend-multiply',
@@ -10404,9 +10507,9 @@ test('bg-blend', () => {
   ).toEqual('')
 })
 
-test('mix-blend', () => {
+test('mix-blend', async () => {
   expect(
-    run([
+    await run([
       'mix-blend-normal',
       'mix-blend-multiply',
       'mix-blend-screen',
@@ -10500,7 +10603,7 @@ test('mix-blend', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'mix-blend',
       '-mix-blend-normal',
       '-mix-blend-multiply',
@@ -10541,9 +10644,9 @@ test('mix-blend', () => {
   ).toEqual('')
 })
 
-test('fill', () => {
+test('fill', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -10605,7 +10708,7 @@ test('fill', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'fill',
       'fill-unknown',
       '-fill-red-500',
@@ -10626,9 +10729,9 @@ test('fill', () => {
   ).toEqual('')
 })
 
-test('stroke', () => {
+test('stroke', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -10759,7 +10862,7 @@ test('stroke', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'stroke',
       'stroke-unknown',
 
@@ -10785,9 +10888,9 @@ test('stroke', () => {
   ).toEqual('')
 })
 
-test('object', () => {
+test('object', async () => {
   expect(
-    run([
+    await run([
       // object-fit
       'object-contain',
       'object-cover',
@@ -10869,7 +10972,7 @@ test('object', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'object',
       // object-fit
       '-object-contain',
@@ -10901,9 +11004,9 @@ test('object', () => {
   ).toEqual('')
 })
 
-test('p', () => {
+test('p', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -10925,12 +11028,12 @@ test('p', () => {
       padding: 4px;
     }"
   `)
-  expect(run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'])).toEqual('')
+  expect(await run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'])).toEqual('')
 })
 
-test('px', () => {
+test('px', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -10954,12 +11057,12 @@ test('px', () => {
       padding-right: 4px;
     }"
   `)
-  expect(run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
+  expect(await run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
 })
 
-test('py', () => {
+test('py', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -10983,12 +11086,12 @@ test('py', () => {
       padding-bottom: 4px;
     }"
   `)
-  expect(run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')
+  expect(await run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')
 })
 
-test('pt', () => {
+test('pt', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -11010,12 +11113,12 @@ test('pt', () => {
       padding-top: 4px;
     }"
   `)
-  expect(run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'])).toEqual('')
+  expect(await run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'])).toEqual('')
 })
 
-test('ps', () => {
+test('ps', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -11037,12 +11140,12 @@ test('ps', () => {
       padding-inline-start: 4px;
     }"
   `)
-  expect(run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'])).toEqual('')
+  expect(await run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'])).toEqual('')
 })
 
-test('pe', () => {
+test('pe', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -11064,12 +11167,12 @@ test('pe', () => {
       padding-inline-end: 4px;
     }"
   `)
-  expect(run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
+  expect(await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
 })
 
-test('pr', () => {
+test('pr', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -11091,12 +11194,12 @@ test('pr', () => {
       padding-right: 4px;
     }"
   `)
-  expect(run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'])).toEqual('')
+  expect(await run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'])).toEqual('')
 })
 
-test('pb', () => {
+test('pb', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -11118,12 +11221,12 @@ test('pb', () => {
       padding-bottom: 4px;
     }"
   `)
-  expect(run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'])).toEqual('')
+  expect(await run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'])).toEqual('')
 })
 
-test('pl', () => {
+test('pl', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --spacing-4: 1rem;
@@ -11145,12 +11248,13 @@ test('pl', () => {
       padding-left: 4px;
     }"
   `)
-  expect(run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
+  expect(await run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
 })
 
-test('text-align', () => {
-  expect(run(['text-left', 'text-center', 'text-right', 'text-justify', 'text-start', 'text-end']))
-    .toMatchInlineSnapshot(`
+test('text-align', async () => {
+  expect(
+    await run(['text-left', 'text-center', 'text-right', 'text-justify', 'text-start', 'text-end']),
+  ).toMatchInlineSnapshot(`
     ".text-center {
       text-align: center;
     }
@@ -11176,7 +11280,7 @@ test('text-align', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-text-left',
       '-text-center',
       '-text-right',
@@ -11193,8 +11297,8 @@ test('text-align', () => {
   ).toEqual('')
 })
 
-test('indent', () => {
-  expect(run(['indent-[4px]', '-indent-[4px]'])).toMatchInlineSnapshot(`
+test('indent', async () => {
+  expect(await run(['indent-[4px]', '-indent-[4px]'])).toMatchInlineSnapshot(`
     ".-indent-\\[4px\\] {
       text-indent: -4px;
     }
@@ -11203,12 +11307,12 @@ test('indent', () => {
       text-indent: 4px;
     }"
   `)
-  expect(run(['indent', 'indent-[4px]/foo', '-indent-[4px]/foo'])).toEqual('')
+  expect(await run(['indent', 'indent-[4px]/foo', '-indent-[4px]/foo'])).toEqual('')
 })
 
-test('align', () => {
+test('align', async () => {
   expect(
-    run([
+    await run([
       'align-baseline',
       'align-top',
       'align-middle',
@@ -11258,7 +11362,7 @@ test('align', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'align',
       '-align-baseline',
       '-align-top',
@@ -11284,9 +11388,9 @@ test('align', () => {
   ).toEqual('')
 })
 
-test('font', () => {
+test('font', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --font-family-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
@@ -11347,7 +11451,7 @@ test('font', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'font',
       // font-family
       '-font-sans',
@@ -11368,8 +11472,8 @@ test('font', () => {
   ).toEqual('')
 })
 
-test('text-transform', () => {
-  expect(run(['uppercase', 'lowercase', 'capitalize', 'normal-case'])).toMatchInlineSnapshot(`
+test('text-transform', async () => {
+  expect(await run(['uppercase', 'lowercase', 'capitalize', 'normal-case'])).toMatchInlineSnapshot(`
     ".capitalize {
       text-transform: capitalize;
     }
@@ -11387,7 +11491,7 @@ test('text-transform', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-uppercase',
       '-lowercase',
       '-capitalize',
@@ -11400,8 +11504,8 @@ test('text-transform', () => {
   ).toEqual('')
 })
 
-test('font-style', () => {
-  expect(run(['italic', 'not-italic'])).toMatchInlineSnapshot(`
+test('font-style', async () => {
+  expect(await run(['italic', 'not-italic'])).toMatchInlineSnapshot(`
     ".italic {
       font-style: italic;
     }
@@ -11410,11 +11514,11 @@ test('font-style', () => {
       font-style: normal;
     }"
   `)
-  expect(run(['-italic', '-not-italic', 'italic/foo', 'not-italic/foo'])).toEqual('')
+  expect(await run(['-italic', '-not-italic', 'italic/foo', 'not-italic/foo'])).toEqual('')
 })
 
-test('font-stretch', () => {
-  expect(run(['font-stretch-ultra-expanded', 'font-stretch-50%', 'font-stretch-200%']))
+test('font-stretch', async () => {
+  expect(await run(['font-stretch-ultra-expanded', 'font-stretch-50%', 'font-stretch-200%']))
     .toMatchInlineSnapshot(`
       ".font-stretch-50\\% {
         font-stretch: 50%;
@@ -11429,7 +11533,7 @@ test('font-stretch', () => {
       }"
     `)
   expect(
-    run([
+    await run([
       'font-stretch',
       'font-stretch-20%',
       'font-stretch-50',
@@ -11442,8 +11546,9 @@ test('font-stretch', () => {
   ).toEqual('')
 })
 
-test('text-decoration-line', () => {
-  expect(run(['underline', 'overline', 'line-through', 'no-underline'])).toMatchInlineSnapshot(`
+test('text-decoration-line', async () => {
+  expect(await run(['underline', 'overline', 'line-through', 'no-underline']))
+    .toMatchInlineSnapshot(`
     ".line-through {
       text-decoration-line: line-through;
     }
@@ -11461,7 +11566,7 @@ test('text-decoration-line', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-underline',
       '-overline',
       '-line-through',
@@ -11474,9 +11579,9 @@ test('text-decoration-line', () => {
   ).toEqual('')
 })
 
-test('placeholder', () => {
+test('placeholder', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -11562,7 +11667,7 @@ test('placeholder', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'placeholder',
       '-placeholder-red-500',
       '-placeholder-red-500/50',
@@ -11582,9 +11687,9 @@ test('placeholder', () => {
   ).toEqual('')
 })
 
-test('decoration', () => {
+test('decoration', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -11759,7 +11864,7 @@ test('decoration', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'decoration',
       // text-decoration-color
       '-decoration-red-500',
@@ -11812,9 +11917,9 @@ test('decoration', () => {
   ).toEqual('')
 })
 
-test('animate', () => {
+test('animate', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --animate-spin: spin 1s linear infinite;
@@ -11841,7 +11946,7 @@ test('animate', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'animate',
       '-animate-spin',
       '-animate-none',
@@ -11855,9 +11960,9 @@ test('animate', () => {
   ).toEqual('')
 })
 
-test('filter', () => {
+test('filter', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --blur-xl: 24px;
@@ -12109,7 +12214,7 @@ test('filter', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-filter',
       '-filter-none',
       '-filter-[--value]',
@@ -12172,9 +12277,9 @@ test('filter', () => {
   ).toEqual('')
 })
 
-test('backdrop-filter', () => {
+test('backdrop-filter', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --blur-xl: 24px;
@@ -12458,7 +12563,7 @@ test('backdrop-filter', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-backdrop-filter',
       '-backdrop-filter-none',
       '-backdrop-filter-[--value]',
@@ -12523,9 +12628,9 @@ test('backdrop-filter', () => {
   ).toEqual('')
 })
 
-test('transition', () => {
+test('transition', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --default-transition-timing-function: ease;
@@ -12603,7 +12708,7 @@ test('transition', () => {
   `)
 
   expect(
-    compileCss(
+    await compileCss(
       css`
         @tailwind utilities;
       `,
@@ -12618,7 +12723,7 @@ test('transition', () => {
   `)
 
   expect(
-    run([
+    await run([
       '-transition',
       '-transition-none',
       '-transition-all',
@@ -12636,8 +12741,8 @@ test('transition', () => {
   ).toEqual('')
 })
 
-test('delay', () => {
-  expect(run(['delay-123', 'delay-200', 'delay-[300ms]'])).toMatchInlineSnapshot(`
+test('delay', async () => {
+  expect(await run(['delay-123', 'delay-200', 'delay-[300ms]'])).toMatchInlineSnapshot(`
     ".delay-123 {
       transition-delay: .123s;
     }
@@ -12651,7 +12756,7 @@ test('delay', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'delay',
       '-delay-200',
       '-delay-[300ms]',
@@ -12663,8 +12768,8 @@ test('delay', () => {
   ).toEqual('')
 })
 
-test('duration', () => {
-  expect(run(['duration-123', 'duration-200', 'duration-[300ms]'])).toMatchInlineSnapshot(`
+test('duration', async () => {
+  expect(await run(['duration-123', 'duration-200', 'duration-[300ms]'])).toMatchInlineSnapshot(`
     ".duration-123 {
       transition-duration: .123s;
     }
@@ -12678,7 +12783,7 @@ test('duration', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'duration',
       '-duration-200',
       '-duration-[300ms]',
@@ -12689,9 +12794,9 @@ test('duration', () => {
   ).toEqual('')
 })
 
-test('ease', () => {
+test('ease', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --transition-timing-function-in: cubic-bezier(0.4, 0, 1, 1);
@@ -12720,7 +12825,7 @@ test('ease', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-ease-in',
       '-ease-out',
       '-ease-[--value]',
@@ -12731,9 +12836,9 @@ test('ease', () => {
   ).toEqual('')
 })
 
-test('will-change', () => {
+test('will-change', async () => {
   expect(
-    run([
+    await run([
       'will-change-auto',
       'will-change-contents',
       'will-change-transform',
@@ -12762,7 +12867,7 @@ test('will-change', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'will-change',
       '-will-change-auto',
       '-will-change-contents',
@@ -12778,9 +12883,9 @@ test('will-change', () => {
   ).toEqual('')
 })
 
-test('contain', () => {
+test('contain', async () => {
   expect(
-    run([
+    await run([
       'contain-none',
       'contain-content',
       'contain-strict',
@@ -12865,7 +12970,7 @@ test('contain', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'contain-none/foo',
       'contain-content/foo',
       'contain-strict/foo',
@@ -12879,8 +12984,8 @@ test('contain', () => {
   ).toEqual('')
 })
 
-test('content', () => {
-  expect(run(['content-["hello_world"]'])).toMatchInlineSnapshot(`
+test('content', async () => {
+  expect(await run(['content-["hello_world"]'])).toMatchInlineSnapshot(`
     ".content-\\[\\"hello_world\\"\\] {
       --tw-content: "hello world";
       content: var(--tw-content);
@@ -12900,11 +13005,14 @@ test('content', () => {
       initial-value: "";
     }"
   `)
-  expect(run(['content', '-content-["hello_world"]', 'content-["hello_world"]/foo'])).toEqual('')
+  expect(await run(['content', '-content-["hello_world"]', 'content-["hello_world"]/foo'])).toEqual(
+    '',
+  )
 })
 
-test('forced-color-adjust', () => {
-  expect(run(['forced-color-adjust-none', 'forced-color-adjust-auto'])).toMatchInlineSnapshot(`
+test('forced-color-adjust', async () => {
+  expect(await run(['forced-color-adjust-none', 'forced-color-adjust-auto']))
+    .toMatchInlineSnapshot(`
     ".forced-color-adjust-auto {
       forced-color-adjust: auto;
     }
@@ -12914,7 +13022,7 @@ test('forced-color-adjust', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'forced',
       'forced-color',
       'forced-color-adjust',
@@ -12926,9 +13034,9 @@ test('forced-color-adjust', () => {
   ).toEqual('')
 })
 
-test('leading', () => {
+test('leading', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --line-height-none: 1;
@@ -12957,7 +13065,7 @@ test('leading', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'leading',
       '-leading-none',
       '-leading-6',
@@ -12969,9 +13077,9 @@ test('leading', () => {
   ).toEqual('')
 })
 
-test('tracking', () => {
+test('tracking', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --letter-spacing-normal: 0em;
@@ -13004,7 +13112,7 @@ test('tracking', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'tracking',
       'tracking-normal/foo',
       'tracking-wide/foo',
@@ -13014,8 +13122,8 @@ test('tracking', () => {
   ).toEqual('')
 })
 
-test('font-smoothing', () => {
-  expect(run(['antialiased', 'subpixel-antialiased'])).toMatchInlineSnapshot(`
+test('font-smoothing', async () => {
+  expect(await run(['antialiased', 'subpixel-antialiased'])).toMatchInlineSnapshot(`
     ".antialiased {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -13027,13 +13135,18 @@ test('font-smoothing', () => {
     }"
   `)
   expect(
-    run(['-antialiased', '-subpixel-antialiased', 'antialiased/foo', 'subpixel-antialiased/foo']),
+    await run([
+      '-antialiased',
+      '-subpixel-antialiased',
+      'antialiased/foo',
+      'subpixel-antialiased/foo',
+    ]),
   ).toEqual('')
 })
 
-test('font-variant-numeric', () => {
+test('font-variant-numeric', async () => {
   expect(
-    run([
+    await run([
       'normal-nums',
       'ordinal',
       'slashed-zero',
@@ -13127,7 +13240,7 @@ test('font-variant-numeric', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-normal-nums',
       '-ordinal',
       '-slashed-zero',
@@ -13150,9 +13263,9 @@ test('font-variant-numeric', () => {
   ).toEqual('')
 })
 
-test('outline', () => {
+test('outline', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -13338,7 +13451,7 @@ test('outline', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-outline',
 
       // outline-style
@@ -13377,9 +13490,9 @@ test('outline', () => {
   ).toEqual('')
 })
 
-test('outline-offset', () => {
+test('outline-offset', async () => {
   expect(
-    run([
+    await run([
       'outline-offset-4',
       '-outline-offset-4',
       'outline-offset-[--value]',
@@ -13403,7 +13516,7 @@ test('outline-offset', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'outline-offset',
       'outline-offset-unknown',
       'outline-offset-4/foo',
@@ -13414,8 +13527,8 @@ test('outline-offset', () => {
   ).toEqual('')
 })
 
-test('opacity', () => {
-  expect(run(['opacity-15', 'opacity-[--value]'])).toMatchInlineSnapshot(`
+test('opacity', async () => {
+  expect(await run(['opacity-15', 'opacity-[--value]'])).toMatchInlineSnapshot(`
     ".opacity-15 {
       opacity: .15;
     }
@@ -13425,7 +13538,7 @@ test('opacity', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'opacity',
       '-opacity-15',
       '-opacity-[--value]',
@@ -13436,9 +13549,9 @@ test('opacity', () => {
   ).toEqual('')
 })
 
-test('underline-offset', () => {
+test('underline-offset', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
         }
@@ -13484,7 +13597,7 @@ test('underline-offset', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'underline-offset',
       '-underline-offset-auto',
       'underline-offset-unknown',
@@ -13499,9 +13612,9 @@ test('underline-offset', () => {
   ).toEqual('')
 })
 
-test('text', () => {
+test('text', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -13689,7 +13802,7 @@ test('text', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'text',
       // color
       '-text-red-500',
@@ -13715,9 +13828,9 @@ test('text', () => {
   ).toEqual('')
 })
 
-test('shadow', () => {
+test('shadow', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -13945,7 +14058,7 @@ test('shadow', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-shadow-xl',
       '-shadow-none',
       '-shadow-red-500',
@@ -13967,9 +14080,9 @@ test('shadow', () => {
   ).toEqual('')
 })
 
-test('inset-shadow', () => {
+test('inset-shadow', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -14197,7 +14310,7 @@ test('inset-shadow', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-inset-shadow-sm',
       '-inset-shadow-none',
       '-inset-shadow-red-500',
@@ -14219,9 +14332,9 @@ test('inset-shadow', () => {
   ).toEqual('')
 })
 
-test('ring', () => {
+test('ring', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -14445,7 +14558,7 @@ test('ring', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       // ring color
       '-ring-inset',
       '-ring-red-500',
@@ -14481,9 +14594,9 @@ test('ring', () => {
   ).toEqual('')
 })
 
-test('inset-ring', () => {
+test('inset-ring', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -14702,7 +14815,7 @@ test('inset-ring', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       // ring color
       '-inset-ring-red-500',
       '-inset-ring-red-500/50',
@@ -14737,9 +14850,9 @@ test('inset-ring', () => {
   ).toEqual('')
 })
 
-test('ring-offset', () => {
+test('ring-offset', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --color-red-500: #ef4444;
@@ -14866,7 +14979,7 @@ test('ring-offset', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'ring-offset',
       // ring color
       '-ring-offset-inset',
@@ -14901,9 +15014,9 @@ test('ring-offset', () => {
   ).toEqual('')
 })
 
-test('@container', () => {
+test('@container', async () => {
   expect(
-    run([
+    await run([
       '@container',
       '@container-normal',
       '@container/sidebar',
@@ -14937,7 +15050,7 @@ test('@container', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       '-@container',
       '-@container-normal',
       '-@container/sidebar',
@@ -14949,8 +15062,8 @@ test('@container', () => {
 })
 
 describe('custom utilities', () => {
-  test('custom static utility', () => {
-    let compiled = compile(css`
+  test('custom static utility', async () => {
+    let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -14963,7 +15076,8 @@ describe('custom utilities', () => {
         text-box-trim: both;
         text-box-edge: cap alphabetic;
       }
-    `).build(['text-trim', 'lg:text-trim'])
+    `)
+    let compiled = build(['text-trim', 'lg:text-trim'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -14982,8 +15096,8 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('The later version of a static utility is used', () => {
-    let compiled = compile(css`
+  test('The later version of a static utility is used', async () => {
+    let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -14996,7 +15110,8 @@ describe('custom utilities', () => {
       @utility really-round {
         border-radius: 30rem;
       }
-    `).build(['really-round'])
+    `)
+    let compiled = build(['really-round'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -15007,8 +15122,8 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('custom utilities support some special chracters', () => {
-    let compiled = compile(css`
+  test('custom utilities support some special chracters', async () => {
+    let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -15020,7 +15135,8 @@ describe('custom utilities', () => {
       @utility push-50% {
         right: 50%;
       }
-    `).build(['push-1/2', 'push-50%'])
+    `)
+    let compiled = build(['push-1/2', 'push-50%'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -15031,8 +15147,8 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('can override specific versions of a functional utility with a static utility', () => {
-    let compiled = compile(css`
+  test('can override specific versions of a functional utility with a static utility', async () => {
+    let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -15047,7 +15163,8 @@ describe('custom utilities', () => {
         line-height: var(--font-size-sm--line-height, 1.25rem);
         text-rendering: optimizeLegibility;
       }
-    `).build(['text-sm'])
+    `)
+    let compiled = build(['text-sm'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -15060,8 +15177,8 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('can override the default value of a functional utility', () => {
-    let compiled = compile(css`
+  test('can override the default value of a functional utility', async () => {
+    let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -15073,7 +15190,8 @@ describe('custom utilities', () => {
       @utility rounded {
         border-radius: 50rem;
       }
-    `).build(['rounded', 'rounded-xl', 'rounded-[33px]'])
+    `)
+    let compiled = build(['rounded', 'rounded-xl', 'rounded-[33px]'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -15092,8 +15210,8 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('custom utilities are sorted by used properties', () => {
-    let compiled = compile(css`
+  test('custom utilities are sorted by used properties', async () => {
+    let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -15101,7 +15219,8 @@ describe('custom utilities', () => {
       @utility push-left {
         right: 100%;
       }
-    `).build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
+    `)
+    let compiled = build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -15124,29 +15243,29 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('custom utilities must use a valid name definitions ', () => {
-    expect(() =>
+  test('custom utilities must use a valid name definitions', async () => {
+    await expect(() =>
       compile(css`
         @utility push-* {
           right: 100%;
         }
       `),
-    ).toThrowError(/should be alphanumeric/)
+    ).rejects.toThrowError(/should be alphanumeric/)
 
-    expect(() =>
+    await expect(() =>
       compile(css`
         @utility ~push {
           right: 100%;
         }
       `),
-    ).toThrowError(/should be alphanumeric/)
+    ).rejects.toThrowError(/should be alphanumeric/)
 
-    expect(() =>
+    await expect(() =>
       compile(css`
         @utility @push {
           right: 100%;
         }
       `),
-    ).toThrowError(/should be alphanumeric/)
+    ).rejects.toThrowError(/should be alphanumeric/)
   })
 })

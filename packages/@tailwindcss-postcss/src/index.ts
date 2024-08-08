@@ -2,6 +2,7 @@ import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
+import { pathToFileURL } from 'node:url'
 import path from 'path'
 import postcss, { AtRule, type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
@@ -43,7 +44,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let cache = new DefaultMap(() => {
     return {
       mtimes: new Map<string, number>(),
-      compiler: null as null | ReturnType<typeof compile>,
+      compiler: null as null | Awaited<ReturnType<typeof compile>>,
       css: '',
       optimizedCss: '',
     }
@@ -73,26 +74,30 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             hasTailwind = true
           }
         },
-        OnceExit(root, { result }) {
+        async OnceExit(root, { result }) {
           let inputFile = result.opts.from ?? ''
+          console.log({ inputFile })
           let context = cache.get(inputFile)
           let inputBasePath = path.dirname(path.resolve(inputFile))
+          console.log({ inputBasePath })
 
           function createCompiler() {
             return compile(root.toString(), {
-              loadPlugin: (pluginPath) => {
+              loadPlugin: async (pluginPath) => {
                 if (pluginPath[0] === '.') {
-                  return require(path.resolve(inputBasePath, pluginPath))
+                  return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).href).then(
+                    (m) => m.default ?? m,
+                  )
                 }
 
-                return require(pluginPath)
+                return import(pluginPath).then((m) => m.default ?? m)
               },
             })
           }
 
           // Setup the compiler if it doesn't exist yet. This way we can
           // guarantee a `build()` function is available.
-          context.compiler ??= createCompiler()
+          context.compiler ??= await createCompiler()
 
           let rebuildStrategy: 'full' | 'incremental' = 'incremental'
 
@@ -158,7 +163,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           if (rebuildStrategy === 'full') {
-            context.compiler = createCompiler()
+            context.compiler = await createCompiler()
             css = context.compiler.build(hasTailwind ? scanDirResult.candidates : [])
           } else if (rebuildStrategy === 'incremental') {
             css = context.compiler.build!(scanDirResult.candidates)
@@ -203,4 +208,5 @@ function optimizeCss(
   }).code.toString()
 }
 
-export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
+// This is used instead of `export default` to work around a bug in `postcss-load-config`
+module.exports = Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>

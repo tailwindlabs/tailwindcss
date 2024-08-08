@@ -126,7 +126,9 @@ export function test(
                 rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
               ASSERTION_TIMEOUT,
             )
-            disposePromise.finally(() => clearTimeout(timer))
+            disposePromise.finally(() => {
+              clearTimeout(timer)
+            })
             return disposePromise
           }
           disposables.push(dispose)
@@ -294,19 +296,16 @@ export function test(
 
       async function dispose() {
         await Promise.all(disposables.map((dispose) => dispose()))
-        try {
-          if (debug) return
-          await fs.rm(root, { recursive: true, maxRetries: 5, force: true })
-        } catch (err) {
-          if (!process.env.CI) {
-            throw err
-          }
+
+        // Skip removing the directory in CI beause it can stall on Windows
+        if (!process.env.CI && !debug) {
+          await fs.rm(root, { recursive: true, force: true })
         }
       }
 
       options.onTestFinished(dispose)
 
-      await testCallback(context)
+      return await testCallback(context)
     },
   )
 }

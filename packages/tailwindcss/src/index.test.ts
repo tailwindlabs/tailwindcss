@@ -7,9 +7,9 @@ import { compileCss, optimizeCss, run } from './test-utils/run'
 const css = String.raw
 
 describe('compiling CSS', () => {
-  test('`@tailwind utilities` is replaced with the generated utility classes', () => {
+  test('`@tailwind utilities` is replaced with the generated utility classes', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-black: #000;
@@ -52,8 +52,8 @@ describe('compiling CSS', () => {
     `)
   })
 
-  test('that only CSS variables are allowed', () => {
-    expect(() =>
+  test('that only CSS variables are allowed', () =>
+    expect(
       compileCss(
         css`
           @theme {
@@ -66,7 +66,7 @@ describe('compiling CSS', () => {
         `,
         ['bg-primary'],
       ),
-    ).toThrowErrorMatchingInlineSnapshot(`
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`
       [Error: \`@theme\` blocks must only contain custom properties or \`@keyframes\`.
 
         @theme {
@@ -75,12 +75,11 @@ describe('compiling CSS', () => {
       >   }
         }
         ]
-    `)
-  })
+    `))
 
-  test('`@tailwind utilities` is only processed once', () => {
+  test('`@tailwind utilities` is only processed once', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @tailwind utilities;
           @tailwind utilities;
@@ -98,11 +97,11 @@ describe('compiling CSS', () => {
     `)
   })
 
-  test('`@tailwind utilities` is replaced by utilities using the default theme', () => {
+  test('`@tailwind utilities` is replaced by utilities using the default theme', async () => {
     let defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
 
     expect(
-      compileCss(
+      await compileCss(
         css`
           ${defaultTheme}
           @tailwind utilities;
@@ -114,28 +113,28 @@ describe('compiling CSS', () => {
 })
 
 describe('arbitrary properties', () => {
-  it('should generate arbitrary properties', () => {
-    expect(run(['[color:red]'])).toMatchInlineSnapshot(`
+  it('should generate arbitrary properties', async () => {
+    expect(await run(['[color:red]'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\] {
         color: red;
       }"
     `)
   })
 
-  it('should generate arbitrary properties with modifiers', () => {
-    expect(run(['[color:red]/50'])).toMatchInlineSnapshot(`
+  it('should generate arbitrary properties with modifiers', async () => {
+    expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\/50 {
         color: #ff000080;
       }"
     `)
   })
 
-  it('should not generate arbitrary properties with invalid modifiers', () => {
-    expect(run(['[color:red]/not-a-percentage'])).toMatchInlineSnapshot(`""`)
+  it('should not generate arbitrary properties with invalid modifiers', async () => {
+    expect(await run(['[color:red]/not-a-percentage'])).toMatchInlineSnapshot(`""`)
   })
 
-  it('should generate arbitrary properties with variables and with modifiers', () => {
-    expect(run(['[color:var(--my-color)]/50'])).toMatchInlineSnapshot(`
+  it('should generate arbitrary properties with variables and with modifiers', async () => {
+    expect(await run(['[color:var(--my-color)]/50'])).toMatchInlineSnapshot(`
       ".\\[color\\:var\\(--my-color\\)\\]\\/50 {
         color: color-mix(in srgb, var(--my-color) 50%, transparent);
       }"
@@ -144,9 +143,9 @@ describe('arbitrary properties', () => {
 })
 
 describe('@apply', () => {
-  it('should replace @apply with the correct result', () => {
+  it('should replace @apply with the correct result', async () => {
     expect(
-      compileCss(css`
+      await compileCss(css`
         @theme {
           --color-red-200: #fecaca;
           --color-red-500: #ef4444;
@@ -248,9 +247,9 @@ describe('@apply', () => {
     `)
   })
 
-  it('should @apply in order the utilities would be sorted in if they were used in HTML', () => {
+  it('should @apply in order the utilities would be sorted in if they were used in HTML', async () => {
     expect(
-      compileCss(css`
+      await compileCss(css`
         @tailwind utilities;
 
         .foo {
@@ -285,7 +284,7 @@ describe('@apply', () => {
   })
 
   it('should error when using @apply with a utility that does not exist', () => {
-    expect(() =>
+    expect(
       compileCss(css`
         @tailwind utilities;
 
@@ -293,13 +292,13 @@ describe('@apply', () => {
           @apply bg-not-found;
         }
       `),
-    ).toThrowErrorMatchingInlineSnapshot(
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: Cannot apply unknown utility class: bg-not-found]`,
     )
   })
 
   it('should error when using @apply with a variant that does not exist', () => {
-    expect(() =>
+    expect(
       compileCss(css`
         @tailwind utilities;
 
@@ -307,14 +306,14 @@ describe('@apply', () => {
           @apply hocus:bg-red-500;
         }
       `),
-    ).toThrowErrorMatchingInlineSnapshot(
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: Cannot apply unknown utility class: hocus:bg-red-500]`,
     )
   })
 
-  it('should not error with trailing whitespace', () => {
+  it('should not error with trailing whitespace', async () => {
     expect(
-      compileCss(`
+      await compileCss(`
         @tailwind utilities;
 
         .foo {
@@ -330,16 +329,16 @@ describe('@apply', () => {
 })
 
 describe('arbitrary variants', () => {
-  it('should generate arbitrary variants', () => {
-    expect(run(['[&_p]:flex'])).toMatchInlineSnapshot(`
+  it('should generate arbitrary variants', async () => {
+    expect(await run(['[&_p]:flex'])).toMatchInlineSnapshot(`
       ".\\[\\&_p\\]\\:flex p {
         display: flex;
       }"
     `)
   })
 
-  it('should generate arbitrary at-rule variants', () => {
-    expect(run(['[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
+  it('should generate arbitrary at-rule variants', async () => {
+    expect(await run(['[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
       "@media (width >= 123px) {
         .\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex {
           display: flex;
@@ -350,24 +349,24 @@ describe('arbitrary variants', () => {
 })
 
 describe('variant stacking', () => {
-  it('should stack simple variants', () => {
-    expect(run(['focus:hover:flex'])).toMatchInlineSnapshot(`
+  it('should stack simple variants', async () => {
+    expect(await run(['focus:hover:flex'])).toMatchInlineSnapshot(`
       ".focus\\:hover\\:flex:focus:hover {
         display: flex;
       }"
     `)
   })
 
-  it('should stack arbitrary variants and simple variants', () => {
-    expect(run(['[&_p]:hover:flex'])).toMatchInlineSnapshot(`
+  it('should stack arbitrary variants and simple variants', async () => {
+    expect(await run(['[&_p]:hover:flex'])).toMatchInlineSnapshot(`
       ".\\[\\&_p\\]\\:hover\\:flex p:hover {
         display: flex;
       }"
     `)
   })
 
-  it('should stack multiple arbitrary variants', () => {
-    expect(run(['[&_p]:[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
+  it('should stack multiple arbitrary variants', async () => {
+    expect(await run(['[&_p]:[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
       "@media (width >= 123px) {
         .\\[\\&_p\\]\\:\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex p {
           display: flex;
@@ -376,8 +375,8 @@ describe('variant stacking', () => {
     `)
   })
 
-  it('pseudo element variants are re-ordered', () => {
-    expect(run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
+  it('pseudo element variants are re-ordered', async () => {
+    expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
       ".before\\:hover\\:flex:before {
         content: var(--tw-content);
       }
@@ -409,25 +408,25 @@ describe('variant stacking', () => {
 })
 
 describe('important', () => {
-  it('should generate an important utility', () => {
-    expect(run(['underline!'])).toMatchInlineSnapshot(`
+  it('should generate an important utility', async () => {
+    expect(await run(['underline!'])).toMatchInlineSnapshot(`
       ".underline\\! {
         text-decoration-line: underline !important;
       }"
     `)
   })
 
-  it('should generate an important utility with legacy syntax', () => {
-    expect(run(['!underline'])).toMatchInlineSnapshot(`
+  it('should generate an important utility with legacy syntax', async () => {
+    expect(await run(['!underline'])).toMatchInlineSnapshot(`
       ".\\!underline {
         text-decoration-line: underline !important;
       }"
     `)
   })
 
-  it('should not mark declarations inside of @keyframes as important', () => {
+  it('should not mark declarations inside of @keyframes as important', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --animate-spin: spin 1s linear infinite;
@@ -459,8 +458,8 @@ describe('important', () => {
     `)
   })
 
-  it('should generate an important arbitrary property utility', () => {
-    expect(run(['[color:red]!'])).toMatchInlineSnapshot(`
+  it('should generate an important arbitrary property utility', async () => {
+    expect(await run(['[color:red]!'])).toMatchInlineSnapshot(`
       ".\\[color\\:red\\]\\! {
         color: red !important;
       }"
@@ -469,9 +468,9 @@ describe('important', () => {
 })
 
 describe('sorting', () => {
-  it('should sort utilities based on their property order', () => {
+  it('should sort utilities based on their property order', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --spacing-1: 0.25rem;
@@ -508,8 +507,8 @@ describe('sorting', () => {
     `)
   })
 
-  it('should sort based on amount of properties', () => {
-    expect(run(['text-clip', 'truncate', 'overflow-scroll'])).toMatchInlineSnapshot(`
+  it('should sort based on amount of properties', async () => {
+    expect(await run(['text-clip', 'truncate', 'overflow-scroll'])).toMatchInlineSnapshot(`
       ".truncate {
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -531,9 +530,9 @@ describe('sorting', () => {
    * polyfill for gap. This means that they should be sorted near gap, not
    * margin.
    */
-  it('should sort utilities with a custom internal --tw-sort correctly', () => {
+  it('should sort utilities with a custom internal --tw-sort correctly', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --spacing-0: 0px;
@@ -581,9 +580,9 @@ describe('sorting', () => {
     `)
   })
 
-  it('should move variants to the end while sorting', () => {
+  it('should move variants to the end while sorting', async () => {
     expect(
-      run(
+      await run(
         ['pointer-events-none', 'flex', 'hover:flex', 'focus:pointer-events-none'].sort(
           () => Math.random() - 0.5,
         ),
@@ -622,9 +621,9 @@ describe('sorting', () => {
    * (stacked variants) should be before `disabled` because all used variants
    * are defined before the `disabled` variant.
    */
-  it('should sort variants and stacked variants by variant position', () => {
+  it('should sort variants and stacked variants by variant position', async () => {
     expect(
-      run(
+      await run(
         ['flex', 'hover:flex', 'focus:flex', 'disabled:flex', 'hover:focus:flex'].sort(
           () => Math.random() - 0.5,
         ),
@@ -654,9 +653,9 @@ describe('sorting', () => {
 
   // TODO: Extend this test with user-defined variants to ensure they are sorted
   // correctly.
-  it('should order group-* and peer-* variants based on the sort order of the group and peer variant but also based on the variant they are wrapping', () => {
+  it('should order group-* and peer-* variants based on the sort order of the group and peer variant but also based on the variant they are wrapping', async () => {
     expect(
-      run(
+      await run(
         [
           'hover:flex',
 
@@ -734,9 +733,9 @@ describe('sorting', () => {
 
 // Parsing theme values from CSS
 describe('Parsing themes values from CSS', () => {
-  test('Can read values from `@theme`', () => {
+  test('Can read values from `@theme`', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-red-500: #f00;
@@ -756,9 +755,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('Later values from `@theme` override earlier ones', () => {
+  test('Later values from `@theme` override earlier ones', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-red-500: #f00;
@@ -779,9 +778,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('Multiple `@theme` blocks are merged', () => {
+  test('Multiple `@theme` blocks are merged', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-red-500: #f00;
@@ -809,9 +808,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`@theme` values with escaped forward slashes map to unescaped slashes in candidate values', () => {
+  test('`@theme` values with escaped forward slashes map to unescaped slashes in candidate values', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             /* Cursed but we want this to work */
@@ -838,9 +837,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`@keyframes` in `@theme` are hoisted', () => {
+  test('`@keyframes` in `@theme` are hoisted', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-red: red;
@@ -881,9 +880,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`@theme` values can be unset', () => {
+  test('`@theme` values can be unset', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-red: #f00;
@@ -918,9 +917,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('all `@theme` values can be unset at once', () => {
+  test('all `@theme` values can be unset at once', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-red: #f00;
@@ -949,9 +948,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('unused keyframes are removed when an animation is unset', () => {
+  test('unused keyframes are removed when an animation is unset', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --animate-foo: foo 1s infinite;
@@ -993,9 +992,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('theme values added as reference are not included in the output as variables', () => {
+  test('theme values added as reference are not included in the output as variables', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-tomato: #e10c04;
@@ -1022,9 +1021,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('theme values added as reference that override existing theme value suppress the output of the original theme value as a variable', () => {
+  test('theme values added as reference that override existing theme value suppress the output of the original theme value as a variable', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-potato: #ac855b;
@@ -1043,9 +1042,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('overriding a reference theme value with a non-reference theme value includes it in the output as a variable', () => {
+  test('overriding a reference theme value with a non-reference theme value includes it in the output as a variable', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme reference {
             --color-potato: #ac855b;
@@ -1068,9 +1067,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('wrapping `@theme` with `@media reference` behaves like `@theme reference` to support `@import` statements', () => {
+  test('wrapping `@theme` with `@media reference` behaves like `@theme reference` to support `@import` statements', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme {
             --color-tomato: #e10c04;
@@ -1106,8 +1105,8 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`@media theme(…)` can only contain `@theme` rules', () => {
-    expect(() =>
+  test('`@media theme(…)` can only contain `@theme` rules', () =>
+    expect(
       compileCss(
         css`
           @media theme(reference) {
@@ -1119,14 +1118,13 @@ describe('Parsing themes values from CSS', () => {
         `,
         ['bg-tomato', 'bg-potato', 'bg-avocado'],
       ),
-    ).toThrowErrorMatchingInlineSnapshot(
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: Files imported with \`@import "…" theme(…)\` must only contain \`@theme\` blocks.]`,
-    )
-  })
+    ))
 
-  test('theme values added as `inline` are not wrapped in `var(…)` when used as utility values', () => {
+  test('theme values added as `inline` are not wrapped in `var(…)` when used as utility values', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme inline {
             --color-tomato: #e10c04;
@@ -1159,9 +1157,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements', () => {
+  test('wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @media theme(inline) {
             @theme {
@@ -1196,9 +1194,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`inline` and `reference` can be used together', () => {
+  test('`inline` and `reference` can be used together', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @theme reference inline {
             --color-tomato: #e10c04;
@@ -1225,9 +1223,9 @@ describe('Parsing themes values from CSS', () => {
     `)
   })
 
-  test('`inline` and `reference` can be used together in `media(…)`', () => {
+  test('`inline` and `reference` can be used together in `media(…)`', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @media theme(reference inline) {
             @theme {
@@ -1258,8 +1256,8 @@ describe('Parsing themes values from CSS', () => {
 })
 
 describe('plugins', () => {
-  test('@plugin can not have a body.', () => {
-    expect(() =>
+  test('@plugin can not have a body.', async () =>
+    expect(
       compile(
         css`
           @plugin {
@@ -1267,18 +1265,17 @@ describe('plugins', () => {
           }
         `,
         {
-          loadPlugin: () => {
+          loadPlugin: async () => {
             return ({ addVariant }) => {
               addVariant('hocus', '&:hover, &:focus')
             }
           },
         },
-      ).build(['hocus:underline']),
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot have a body.]`)
-  })
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot have a body.]`))
 
-  test('@plugin cannot be nested.', () => {
-    expect(() =>
+  test('@plugin cannot be nested.', () =>
+    expect(
       compile(
         css`
           div {
@@ -1286,18 +1283,17 @@ describe('plugins', () => {
           }
         `,
         {
-          loadPlugin: () => {
+          loadPlugin: async () => {
             return ({ addVariant }) => {
               addVariant('hocus', '&:hover, &:focus')
             }
           },
         },
-      ).build(['hocus:underline']),
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`)
-  })
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`))
 
-  test('addVariant with string selector', () => {
-    let compiled = compile(
+  test('addVariant with string selector', async () => {
+    let { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1305,13 +1301,14 @@ describe('plugins', () => {
         }
       `,
       {
-        loadPlugin: () => {
+        loadPlugin: async () => {
           return ({ addVariant }) => {
             addVariant('hocus', '&:hover, &:focus')
           }
         },
       },
-    ).build(['hocus:underline', 'group-hocus:flex'])
+    )
+    let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1326,8 +1323,8 @@ describe('plugins', () => {
     `)
   })
 
-  test('addVariant with array of selectors', () => {
-    let compiled = compile(
+  test('addVariant with array of selectors', async () => {
+    let { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1335,13 +1332,15 @@ describe('plugins', () => {
         }
       `,
       {
-        loadPlugin: () => {
+        loadPlugin: async () => {
           return ({ addVariant }) => {
             addVariant('hocus', ['&:hover', '&:focus'])
           }
         },
       },
-    ).build(['hocus:underline', 'group-hocus:flex'])
+    )
+
+    let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1356,8 +1355,8 @@ describe('plugins', () => {
     `)
   })
 
-  test('addVariant with object syntax and @slot', () => {
-    let compiled = compile(
+  test('addVariant with object syntax and @slot', async () => {
+    let { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1365,7 +1364,7 @@ describe('plugins', () => {
         }
       `,
       {
-        loadPlugin: () => {
+        loadPlugin: async () => {
           return ({ addVariant }) => {
             addVariant('hocus', {
               '&:hover': '@slot',
@@ -1374,7 +1373,8 @@ describe('plugins', () => {
           }
         },
       },
-    ).build(['hocus:underline', 'group-hocus:flex'])
+    )
+    let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1389,8 +1389,8 @@ describe('plugins', () => {
     `)
   })
 
-  test('addVariant with object syntax, media, nesting and multiple @slot', () => {
-    let compiled = compile(
+  test('addVariant with object syntax, media, nesting and multiple @slot', async () => {
+    let { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1398,7 +1398,7 @@ describe('plugins', () => {
         }
       `,
       {
-        loadPlugin: () => {
+        loadPlugin: async () => {
           return ({ addVariant }) => {
             addVariant('hocus', {
               '@media (hover: hover)': {
@@ -1409,7 +1409,8 @@ describe('plugins', () => {
           }
         },
       },
-    ).build(['hocus:underline', 'group-hocus:flex'])
+    )
+    let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1436,8 +1437,8 @@ describe('plugins', () => {
     `)
   })
 
-  test('@slot is preserved when used as a custom property value', () => {
-    let compiled = compile(
+  test('@slot is preserved when used as a custom property value', async () => {
+    let { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1445,7 +1446,7 @@ describe('plugins', () => {
         }
       `,
       {
-        loadPlugin: () => {
+        loadPlugin: async () => {
           return ({ addVariant }) => {
             addVariant('hocus', {
               '&': {
@@ -1457,7 +1458,8 @@ describe('plugins', () => {
           }
         },
       },
-    ).build(['hocus:underline'])
+    )
+    let compiled = build(['hocus:underline'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1472,8 +1474,8 @@ describe('plugins', () => {
     `)
   })
 
-  test('built-in variants can be overridden while keeping their order', () => {
-    let compiled = compile(
+  test('built-in variants can be overridden while keeping their order', async () => {
+    let { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1482,13 +1484,14 @@ describe('plugins', () => {
       `,
 
       {
-        loadPlugin: () => {
+        loadPlugin: async () => {
           return ({ addVariant }) => {
             addVariant('dark', '&:is([data-theme=dark] *)')
           }
         },
       },
-    ).build(
+    )
+    let compiled = build(
       // Make sure the order does not change by including the variants
       // immediately before and after `dark`
       ['rtl:flex', 'dark:flex', 'starting:flex'],
@@ -1515,16 +1518,16 @@ describe('plugins', () => {
 })
 
 describe('@source', () => {
-  test('emits @source files', () => {
-    let { globs } = compile(css`
+  test('emits @source files', async () => {
+    let { globs } = await compile(css`
       @source "./foo/bar/*.ts";
     `)
 
     expect(globs).toEqual(['./foo/bar/*.ts'])
   })
 
-  test('emits multiple @source files', () => {
-    let { globs } = compile(css`
+  test('emits multiple @source files', async () => {
+    let { globs } = await compile(css`
       @source "./foo/**/*.ts";
       @source "./php/secr3t/smarty.php";
     `)
@@ -1534,35 +1537,36 @@ describe('@source', () => {
 })
 
 describe('@variant', () => {
-  test('@variant must be top-level and cannot be nested', () => {
-    expect(() =>
+  test('@variant must be top-level and cannot be nested', () =>
+    expect(
       compileCss(css`
         .foo {
           @variant hocus (&:hover, &:focus);
         }
       `),
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` cannot be nested.]`)
-  })
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@variant\` cannot be nested.]`))
 
-  test('@variant with no body must include a selector', () => {
-    expect(() =>
+  test('@variant with no body must include a selector', () =>
+    expect(
       compileCss(css`
         @variant hocus;
       `),
-    ).toThrowErrorMatchingInlineSnapshot('[Error: `@variant hocus` has no selector or body.]')
-  })
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      '[Error: `@variant hocus` has no selector or body.]',
+    ))
 
-  test('@variant with selector must include a body', () => {
-    expect(() =>
+  test('@variant with selector must include a body', () =>
+    expect(
       compileCss(css`
         @variant hocus {
         }
       `),
-    ).toThrowErrorMatchingInlineSnapshot('[Error: `@variant hocus` has no selector or body.]')
-  })
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      '[Error: `@variant hocus` has no selector or body.]',
+    ))
 
-  test('@variant cannot have both a selector and a body', () => {
-    expect(() =>
+  test('@variant cannot have both a selector and a body', () =>
+    expect(
       compileCss(css`
         @variant hocus (&:hover, &:focus) {
           &:is(.potato) {
@@ -1570,20 +1574,20 @@ describe('@variant', () => {
           }
         }
       `),
-    ).toThrowErrorMatchingInlineSnapshot(
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: \`@variant hocus\` cannot have both a selector and a body.]`,
-    )
-  })
+    ))
 
   describe('body-less syntax', () => {
-    test('selector variant', () => {
-      let compiled = compile(css`
+    test('selector variant', async () => {
+      let { build } = await compile(css`
         @variant hocus (&:hover, &:focus);
 
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['hocus:underline', 'group-hocus:flex'])
+      `)
+      let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1598,14 +1602,15 @@ describe('@variant', () => {
       `)
     })
 
-    test('at-rule variant', () => {
-      let compiled = compile(css`
+    test('at-rule variant', async () => {
+      let { build } = await compile(css`
         @variant any-hover (@media (any-hover: hover));
 
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['any-hover:hover:underline'])
+      `)
+      let compiled = build(['any-hover:hover:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1620,8 +1625,8 @@ describe('@variant', () => {
   })
 
   describe('body with @slot syntax', () => {
-    test('selector with @slot', () => {
-      let compiled = compile(css`
+    test('selector with @slot', async () => {
+      let { build } = await compile(css`
         @variant selected {
           &[data-selected] {
             @slot;
@@ -1631,7 +1636,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['selected:underline', 'group-selected:underline'])
+      `)
+      let compiled = build(['selected:underline', 'group-selected:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1646,8 +1652,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('grouped selectors with @slot', () => {
-      let compiled = compile(css`
+    test('grouped selectors with @slot', async () => {
+      let { build } = await compile(css`
         @variant hocus {
           &:hover,
           &:focus {
@@ -1658,7 +1664,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['hocus:underline', 'group-hocus:underline'])
+      `)
+      let compiled = build(['hocus:underline', 'group-hocus:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1673,8 +1680,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('multiple selectors with @slot', () => {
-      let compiled = compile(css`
+    test('multiple selectors with @slot', async () => {
+      let { build } = await compile(css`
         @variant hocus {
           &:hover {
             @slot;
@@ -1688,7 +1695,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['hocus:underline', 'group-hocus:underline'])
+      `)
+      let compiled = build(['hocus:underline', 'group-hocus:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1703,8 +1711,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('nested selector with @slot', () => {
-      let compiled = compile(css`
+    test('nested selector with @slot', async () => {
+      let { build } = await compile(css`
         @variant custom-before {
           & {
             --has-before: 1;
@@ -1717,7 +1725,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['custom-before:underline'])
+      `)
+      let compiled = build(['custom-before:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1732,8 +1741,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('grouped nested selectors with @slot', () => {
-      let compiled = compile(css`
+    test('grouped nested selectors with @slot', async () => {
+      let { build } = await compile(css`
         @variant custom-before {
           & {
             --has-before: 1;
@@ -1749,7 +1758,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['custom-before:underline'])
+      `)
+      let compiled = build(['custom-before:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1764,8 +1774,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('nested multiple selectors with @slot', () => {
-      let compiled = compile(css`
+    test('nested multiple selectors with @slot', async () => {
+      let { build } = await compile(css`
         @variant hocus {
           &:hover {
             @media (hover: hover) {
@@ -1781,7 +1791,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['hocus:underline', 'group-hocus:underline'])
+      `)
+      let compiled = build(['hocus:underline', 'group-hocus:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1808,8 +1819,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('selector nested under at-rule with @slot', () => {
-      let compiled = compile(css`
+    test('selector nested under at-rule with @slot', async () => {
+      let { build } = await compile(css`
         @variant hocus {
           @media (hover: hover) {
             &:hover {
@@ -1821,7 +1832,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['hocus:underline', 'group-hocus:underline'])
+      `)
+      let compiled = build(['hocus:underline', 'group-hocus:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1840,8 +1852,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('at-rule with @slot', () => {
-      let compiled = compile(css`
+    test('at-rule with @slot', async () => {
+      let { build } = await compile(css`
         @variant any-hover {
           @media (any-hover: hover) {
             @slot;
@@ -1851,7 +1863,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['any-hover:underline'])
+      `)
+      let compiled = build(['any-hover:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1864,8 +1877,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('multiple at-rules with @slot', () => {
-      let compiled = compile(css`
+    test('multiple at-rules with @slot', async () => {
+      let { build } = await compile(css`
         @variant desktop {
           @media (any-hover: hover) {
             @slot;
@@ -1879,7 +1892,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['desktop:underline'])
+      `)
+      let compiled = build(['desktop:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1898,8 +1912,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('nested at-rules with @slot', () => {
-      let compiled = compile(css`
+    test('nested at-rules with @slot', async () => {
+      let { build } = await compile(css`
         @variant custom-variant {
           @media (orientation: landscape) {
             @media screen {
@@ -1915,7 +1929,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['custom-variant:underline'])
+      `)
+      let compiled = build(['custom-variant:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1936,8 +1951,8 @@ describe('@variant', () => {
       `)
     })
 
-    test('at-rule and selector with @slot', () => {
-      let compiled = compile(css`
+    test('at-rule and selector with @slot', async () => {
+      let { build } = await compile(css`
         @variant custom-dark {
           @media (prefers-color-scheme: dark) {
             @slot;
@@ -1950,7 +1965,8 @@ describe('@variant', () => {
         @layer utilities {
           @tailwind utilities;
         }
-      `).build(['custom-dark:underline'])
+      `)
+      let compiled = build(['custom-dark:underline'])
 
       expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
         "@layer utilities {
@@ -1968,9 +1984,9 @@ describe('@variant', () => {
     })
   })
 
-  test('built-in variants can be overridden while keeping their order', () => {
+  test('built-in variants can be overridden while keeping their order', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @variant dark (&:is([data-theme='dark'] *));
           @layer utilities {
@@ -2001,9 +2017,9 @@ describe('@variant', () => {
     `)
   })
 
-  test('at-rule-only variants cannot be used with compound variants', () => {
+  test('at-rule-only variants cannot be used with compound variants', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @variant foo (@media foo);
 
