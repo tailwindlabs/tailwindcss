@@ -1,11 +1,13 @@
 import { scanDir } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
+import { fileURLToPath } from 'node:url'
 import path from 'path'
 import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
-import { pathToFileURL } from 'url'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
@@ -85,14 +87,12 @@ export default function tailwindcss(): Plugin[] {
   async function generateCss(css: string, inputPath: string, addWatchFile: (file: string) => void) {
     let inputBasePath = path.dirname(path.resolve(inputPath))
     let { build, globs } = await compile(css, {
-      loadPlugin: (pluginPath) => {
+      loadPlugin: async (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).toString()).then(
-            (module) => module.default,
-          )
+          return require(path.resolve(inputBasePath, pluginPath))
         }
 
-        return import(pathToFileURL(pluginPath).toString()).then((module) => module.default)
+        return require(pluginPath)
       },
     })
 

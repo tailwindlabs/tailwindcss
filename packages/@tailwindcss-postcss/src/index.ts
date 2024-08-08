@@ -2,7 +2,6 @@ import { scanDir } from '@tailwindcss/oxide'
 import fs from 'fs'
 import fixRelativePathsPlugin from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { pathToFileURL } from 'node:url'
 import path from 'path'
 import postcss, { AtRule, type AcceptedPlugin, type PluginCreator } from 'postcss'
 import postcssImport from 'postcss-import'
@@ -76,19 +75,19 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
         },
         async OnceExit(root, { result }) {
           let inputFile = result.opts.from ?? ''
+          console.log({ inputFile })
           let context = cache.get(inputFile)
           let inputBasePath = path.dirname(path.resolve(inputFile))
+          console.log({ inputBasePath })
 
           function createCompiler() {
             return compile(root.toString(), {
-              loadPlugin: (pluginPath) => {
+              loadPlugin: async (pluginPath) => {
                 if (pluginPath[0] === '.') {
-                  return import(
-                    pathToFileURL(path.resolve(inputBasePath, pluginPath)).toString()
-                  ).then((module) => module.default)
+                  return require(path.resolve(inputBasePath, pluginPath))
                 }
 
-                return import(pathToFileURL(pluginPath).toString()).then((module) => module.default)
+                return require(pluginPath)
               },
             })
           }

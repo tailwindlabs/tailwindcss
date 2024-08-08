@@ -5,7 +5,7 @@ import { Features, transform } from 'lightningcss'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { pathToFileURL } from 'node:url'
+import { fileURLToPath } from 'node:url'
 import postcss from 'postcss'
 import atImport from 'postcss-import'
 import * as tailwindcss from 'tailwindcss'
@@ -21,6 +21,8 @@ import {
 } from '../../utils/renderer'
 import { resolve } from '../../utils/resolve'
 import { drainStdin, outputFile } from './utils'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const css = String.raw
 
@@ -131,14 +133,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   function compile(css: string) {
     return tailwindcss.compile(css, {
-      loadPlugin: (pluginPath) => {
+      loadPlugin: async (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).toString()).then(
-            (module) => module.default,
-          )
+          return require(path.resolve(inputBasePath, pluginPath))
         }
 
-        return import(pathToFileURL(pluginPath).toString()).then((module) => module.default)
+        return require(pluginPath)
       },
     })
   }
