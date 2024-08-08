@@ -15269,9 +15269,9 @@ describe('custom utilities', () => {
     ).rejects.toThrowError(/should be alphanumeric/)
   })
 
-  test('custom utilities work with `@apply`', () => {
+  test('custom utilities work with `@apply`', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @utility foo {
             @apply flex flex-col underline;
@@ -15312,9 +15312,9 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('referencing custom utilities in custom utilities via `@apply` should work', () => {
+  test('referencing custom utilities in custom utilities via `@apply` should work', async () => {
     expect(
-      compileCss(
+      await compileCss(
         css`
           @utility foo {
             @apply flex flex-col underline;
@@ -15343,8 +15343,8 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('custom utilities with `@apply` causing circular dependencies should error', () => {
-    expect(() =>
+  test('custom utilities with `@apply` causing circular dependencies should error', async () => {
+    await expect(
       compileCss(
         css`
           @utility foo {
@@ -15359,7 +15359,7 @@ describe('custom utilities', () => {
         `,
         ['foo', 'bar'],
       ),
-    ).toThrowErrorMatchingInlineSnapshot(
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`,
     )
   })

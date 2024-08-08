@@ -327,9 +327,9 @@ describe('@apply', () => {
     `)
   })
 
-  it('should be possible to apply a custom utility', () => {
+  it('should be possible to apply a custom utility', async () => {
     expect(
-      compileCss(css`
+      await compileCss(css`
         @utility bar {
           &:before {
             content: 'bar';
