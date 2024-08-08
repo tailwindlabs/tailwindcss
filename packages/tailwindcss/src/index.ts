@@ -342,8 +342,8 @@ export async function compile(
 
   let tailwindUtilitiesNode: Rule | null = null
 
-  // Find `@tailwind utilities` and replace it with the actual generated utility
-  // class CSS.
+  // Find `@tailwind utilities` so that we can later replace it with the actual
+  // generated utility class CSS.
   walk(ast, (node) => {
     if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
       tailwindUtilitiesNode = node
