@@ -136,24 +136,29 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
           {
             let modifiers = options?.modifiers ?? null
 
-            if (isColor) {
-              // Color utilities implicitly support opacity modifiers when no modifiers are provided
-              modifiers = modifiers ?? Object.fromEntries(theme.namespace('--opacity').entries())
+            // Candidate doesn't even have a modifier
+            if (!candidate.modifier) {
+              modifier = null
             }
 
-            if (!candidate.modifier || !modifiers) {
-              modifier = null
-            } else if (modifiers === 'any' || candidate.modifier.kind === 'arbitrary') {
-              // If bare modifiers are supported or the modifier is arbitrary, just use the value
+            // If bare modifiers are supported or the modifier is arbitrary, just use the value
+            else if (modifiers === 'any' || candidate.modifier.kind === 'arbitrary') {
               modifier = candidate.modifier.value
-            } else if (modifiers[candidate.modifier.value]) {
-              // If there's a match in the lookup list, use that
+            }
+
+            // If there's a match in the lookup list, use that
+            else if (modifiers?.[candidate.modifier.value]) {
               modifier = modifiers[candidate.modifier.value]
-            } else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
-              // Color utilities implicitly support all numeric modifiers as opacity values (0-100) which are
-              // converted to percentages.
+            }
+
+            // Color utilities implicitly support all numeric modifiers as opacity values (0-100) which are
+            // converted to percentages.
+            else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
               modifier = `${candidate.modifier.value}%`
-            } else {
+            }
+
+            // The modifier value couldn't be resolved
+            else {
               modifier = null
             }
           }

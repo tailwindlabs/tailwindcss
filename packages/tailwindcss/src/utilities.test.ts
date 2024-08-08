@@ -15676,7 +15676,6 @@ describe('legacy: matchUtilities', () => {
 
           @theme reference {
             --breakpoint-lg: 1024px;
-            --opacity-my-opacity: 0.5;
           },
         `,
         {
@@ -15709,7 +15708,6 @@ describe('legacy: matchUtilities', () => {
           'scrollbar-current',
           'scrollbar-current/45',
           'scrollbar-black',
-          'scrollbar-black/my-opacity',
           'scrollbar-black/33',
           'scrollbar-black/[50%]',
           'scrollbar-[var(--my-color)]/[25%]',
@@ -15728,7 +15726,7 @@ describe('legacy: matchUtilities', () => {
         scrollbar-color: #00000054;
       }
 
-      .scrollbar-black\\/\\[50\\%\\], .scrollbar-black\\/my-opacity {
+      .scrollbar-black\\/\\[50\\%\\] {
         scrollbar-color: #00000080;
       }
 
