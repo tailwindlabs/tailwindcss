@@ -35,16 +35,16 @@ const table = [
   // ['dark a underline', 'a dark underline'],
 ] as const
 
-test.each(table)('sorts classes: "%s" -> "%s"', (input, expected) => {
-  expect(sortClasses(input, loadDesign())).toEqual(expected)
+test.each(table)('sorts classes: "%s" -> "%s"', async (input, expected) => {
+  expect(sortClasses(input, await loadDesign())).toEqual(expected)
 })
 
-test.skip('group, peer, and dark have their own order', () => {
+test.skip('group, peer, and dark have their own order', async () => {
   let input = shuffle(['group', 'peer', 'dark']).join(' ')
-  expect(sortClasses(input, loadDesign())).toEqual('dark group peer')
+  expect(sortClasses(input, await loadDesign())).toEqual('dark group peer')
 })
 
-test('can sort classes deterministically across multiple class lists', () => {
+test('can sort classes deterministically across multiple class lists', async () => {
   let classes = [
     [
       'a-class px-3 p-1 b-class py-3 bg-red-500 bg-blue-500',
@@ -57,32 +57,32 @@ test('can sort classes deterministically across multiple class lists', () => {
   ]
 
   // Shared design
-  let design = loadDesign()
+  let design = await loadDesign()
   for (const [input, output] of classes) {
     expect(sortClasses(input, design)).toEqual(output)
   }
 
   // Fresh design
   for (const [input, output] of classes) {
-    expect(sortClasses(input, loadDesign())).toEqual(output)
+    expect(sortClasses(input, await loadDesign())).toEqual(output)
   }
 })
 
-test('sorts arbitrary values across one or more class lists consistently', () => {
+test('sorts arbitrary values across one or more class lists consistently', async () => {
   let classes = [
     ['[--fg:#fff]', '[--fg:#fff]'],
     ['[--bg:#111] [--bg_hover:#000] [--fg:#fff]', '[--bg:#111] [--bg_hover:#000] [--fg:#fff]'],
   ]
 
   // Shared design
-  let design = loadDesign()
+  let design = await loadDesign()
   for (const [input, output] of classes) {
     expect(sortClasses(input, design)).toEqual(output)
   }
 
   // Fresh design
   for (const [input, output] of classes) {
-    expect(sortClasses(input, loadDesign())).toEqual(output)
+    expect(sortClasses(input, await loadDesign())).toEqual(output)
   }
 })
 
