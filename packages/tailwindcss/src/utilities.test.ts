@@ -15271,8 +15271,8 @@ describe('custom utilities', () => {
 })
 
 describe('legacy: addUtilities', () => {
-  test('custom static utility', () => {
-    let compiled = compile(
+  test('custom static utility', async () => {
+    let compiled = await compile(
       css`
       @plugin "my-plugin";
       @layer utilities {
@@ -15284,7 +15284,7 @@ describe('legacy: addUtilities', () => {
       },
     `,
       {
-        loadPlugin() {
+        async loadPlugin() {
           return ({ addUtilities }) => {
             addUtilities({
               '.text-trim': {
@@ -15295,9 +15295,10 @@ describe('legacy: addUtilities', () => {
           }
         },
       },
-    ).build(['text-trim', 'lg:text-trim'])
+    )
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled.build(['text-trim', 'lg:text-trim'])).trim())
+      .toMatchInlineSnapshot(`
       "@layer utilities {
         .text-trim {
           text-box-trim: both;
@@ -15314,8 +15315,8 @@ describe('legacy: addUtilities', () => {
     `)
   })
 
-  test('throws on custom static utilities with an invalid name', () => {
-    expect(() => {
+  test('throws on custom static utilities with an invalid name', async () => {
+    await expect(() => {
       return compile(
         css`
         @plugin "my-plugin";
@@ -15328,7 +15329,7 @@ describe('legacy: addUtilities', () => {
         },
       `,
         {
-          loadPlugin() {
+          async loadPlugin() {
             return ({ addUtilities }) => {
               addUtilities({
                 '.text-trim > *': {
@@ -15340,14 +15341,14 @@ describe('legacy: addUtilities', () => {
           },
         },
       )
-    }).toThrowError(/invalid utility selector/)
+    }).rejects.toThrowError(/invalid utility selector/)
   })
 })
 
 describe('legacy: matchUtilities', () => {
-  test('custom functional utility', () => {
-    function run(candidates: string[]) {
-      return compile(
+  test('custom functional utility', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -15358,7 +15359,7 @@ describe('legacy: matchUtilities', () => {
           },
         `,
         {
-          loadPlugin() {
+          async loadPlugin() {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
@@ -15374,12 +15375,14 @@ describe('legacy: matchUtilities', () => {
             }
           },
         },
-      ).build(candidates)
+      )
+
+      return compiled.build(candidates)
     }
 
     expect(
       optimizeCss(
-        run([
+        await run([
           'border-block',
           'border-block-2',
           'border-block-[35px]',
@@ -15413,7 +15416,7 @@ describe('legacy: matchUtilities', () => {
 
     expect(
       optimizeCss(
-        run([
+        await run([
           '-border-block',
           '-border-block-2',
           'lg:-border-block-2',
@@ -15424,9 +15427,9 @@ describe('legacy: matchUtilities', () => {
     ).toEqual('')
   })
 
-  test('custom functional utility with any modifier', () => {
-    function run(candidates: string[]) {
-      return compile(
+  test('custom functional utility with any modifier', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -15437,7 +15440,7 @@ describe('legacy: matchUtilities', () => {
           },
         `,
         {
-          loadPlugin() {
+          async loadPlugin() {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
@@ -15458,12 +15461,14 @@ describe('legacy: matchUtilities', () => {
             }
           },
         },
-      ).build(candidates)
+      )
+
+      return compiled.build(candidates)
     }
 
     expect(
       optimizeCss(
-        run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
+        await run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
       ).trim(),
     ).toMatchInlineSnapshot(`
       ".border-block {
@@ -15488,9 +15493,9 @@ describe('legacy: matchUtilities', () => {
     `)
   })
 
-  test('custom functional utility with known modifier', () => {
-    function run(candidates: string[]) {
-      return compile(
+  test('custom functional utility with known modifier', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -15501,7 +15506,7 @@ describe('legacy: matchUtilities', () => {
           },
         `,
         {
-          loadPlugin() {
+          async loadPlugin() {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
@@ -15524,12 +15529,14 @@ describe('legacy: matchUtilities', () => {
             }
           },
         },
-      ).build(candidates)
+      )
+
+      return compiled.build(candidates)
     }
 
     expect(
       optimizeCss(
-        run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
+        await run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
       ).trim(),
     ).toMatchInlineSnapshot(`
       ".border-block {
@@ -15553,21 +15560,23 @@ describe('legacy: matchUtilities', () => {
       }"
     `)
 
-    expect(optimizeCss(run(['border-block/unknown', 'border-block-2/unknown'])).trim()).toEqual('')
+    expect(
+      optimizeCss(await run(['border-block/unknown', 'border-block-2/unknown'])).trim(),
+    ).toEqual('')
   })
 
   // We're not married to this behavior — if there's a good reason to do this differently in the
   // future don't be afraid to change what should happen in this scenario.
   describe('plugins that handle a specific arbitrary value type prevent falling through to other plugins if the result is invalid for that plugin', () => {
-    test('implicit color modifier', () => {
-      function run(candidates: string[]) {
-        return compile(
+    test('implicit color modifier', async () => {
+      async function run(candidates: string[]) {
+        let compiled = await compile(
           css`
             @tailwind utilities;
             @plugin "my-plugin";
           `,
           {
-            loadPlugin() {
+            async loadPlugin() {
               return ({ matchUtilities }) => {
                 matchUtilities(
                   {
@@ -15585,21 +15594,23 @@ describe('legacy: matchUtilities', () => {
               }
             },
           },
-        ).build(candidates)
+        )
+
+        return compiled.build(candidates)
       }
 
-      expect(optimizeCss(run(['scrollbar-[2px]/50'])).trim()).toEqual('')
+      expect(optimizeCss(await run(['scrollbar-[2px]/50'])).trim()).toEqual('')
     })
 
-    test('no modifiers', () => {
-      function run(candidates: string[]) {
-        return compile(
+    test('no modifiers', async () => {
+      async function run(candidates: string[]) {
+        let compiled = await compile(
           css`
             @tailwind utilities;
             @plugin "my-plugin";
           `,
           {
-            loadPlugin() {
+            async loadPlugin() {
               return ({ matchUtilities }) => {
                 matchUtilities(
                   {
@@ -15617,21 +15628,23 @@ describe('legacy: matchUtilities', () => {
               }
             },
           },
-        ).build(candidates)
+        )
+
+        return compiled.build(candidates)
       }
 
-      expect(optimizeCss(run(['scrollbar-[2px]/50'])).trim()).toEqual('')
+      expect(optimizeCss(await run(['scrollbar-[2px]/50'])).trim()).toEqual('')
     })
 
-    test('invalid named modifier', () => {
-      function run(candidates: string[]) {
-        return compile(
+    test('invalid named modifier', async () => {
+      async function run(candidates: string[]) {
+        let compiled = await compile(
           css`
             @tailwind utilities;
             @plugin "my-plugin";
           `,
           {
-            loadPlugin() {
+            async loadPlugin() {
               return ({ matchUtilities }) => {
                 matchUtilities(
                   {
@@ -15649,16 +15662,18 @@ describe('legacy: matchUtilities', () => {
               }
             },
           },
-        ).build(candidates)
+        )
+
+        return compiled.build(candidates)
       }
 
-      expect(optimizeCss(run(['scrollbar-[2px]/foo'])).trim()).toEqual('')
+      expect(optimizeCss(await run(['scrollbar-[2px]/foo'])).trim()).toEqual('')
     })
   })
 
-  test('custom functional utilities with different types', () => {
-    function run(candidates: string[]) {
-      return compile(
+  test('custom functional utilities with different types', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -15669,7 +15684,7 @@ describe('legacy: matchUtilities', () => {
           },
         `,
         {
-          loadPlugin() {
+          async loadPlugin() {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
@@ -15697,12 +15712,14 @@ describe('legacy: matchUtilities', () => {
             }
           },
         },
-      ).build(candidates)
+      )
+
+      return compiled.build(candidates)
     }
 
     expect(
       optimizeCss(
-        run([
+        await run([
           'scrollbar-black',
           'scrollbar-black/50',
           'scrollbar-2',
@@ -15764,14 +15781,18 @@ describe('legacy: matchUtilities', () => {
 
     expect(
       optimizeCss(
-        run(['scrollbar-2/50', 'scrollbar-[2px]/50', 'scrollbar-[length:var(--my-width)]/50']),
+        await run([
+          'scrollbar-2/50',
+          'scrollbar-[2px]/50',
+          'scrollbar-[length:var(--my-width)]/50',
+        ]),
       ).trim(),
     ).toEqual('')
   })
 
-  test('functional utilities with `type: color` automatically support opacity', () => {
-    function run(candidates: string[]) {
-      return compile(
+  test('functional utilities with `type: color` automatically support opacity', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -15782,7 +15803,7 @@ describe('legacy: matchUtilities', () => {
           },
         `,
         {
-          loadPlugin() {
+          async loadPlugin() {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
@@ -15798,12 +15819,14 @@ describe('legacy: matchUtilities', () => {
             }
           },
         },
-      ).build(candidates)
+      )
+
+      return compiled.build(candidates)
     }
 
     expect(
       optimizeCss(
-        run([
+        await run([
           'scrollbar-current',
           'scrollbar-current/45',
           'scrollbar-black',
@@ -15839,9 +15862,9 @@ describe('legacy: matchUtilities', () => {
     `)
   })
 
-  test('functional utilities with type: color and explicit modifiers', () => {
-    function run(candidates: string[]) {
-      return compile(
+  test('functional utilities with type: color and explicit modifiers', async () => {
+    async function run(candidates: string[]) {
+      let compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -15853,7 +15876,7 @@ describe('legacy: matchUtilities', () => {
           },
         `,
         {
-          loadPlugin() {
+          async loadPlugin() {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
@@ -15873,11 +15896,15 @@ describe('legacy: matchUtilities', () => {
             }
           },
         },
-      ).build(candidates)
+      )
+
+      return compiled.build(candidates)
     }
 
     expect(
-      optimizeCss(run(['scrollbar-[12px]', 'scrollbar-[12px]/foo', 'scrollbar-[12px]/bar'])).trim(),
+      optimizeCss(
+        await run(['scrollbar-[12px]', 'scrollbar-[12px]/foo', 'scrollbar-[12px]/bar']),
+      ).trim(),
     ).toMatchInlineSnapshot(`
       ".scrollbar-\\[12px\\] {
         --modifier: none;
@@ -15891,8 +15918,8 @@ describe('legacy: matchUtilities', () => {
     `)
   })
 
-  test('throws on custom utilities with an invalid name', () => {
-    expect(() => {
+  test('throws on custom utilities with an invalid name', async () => {
+    await expect(() => {
       return compile(
         css`
         @plugin "my-plugin";
@@ -15905,7 +15932,7 @@ describe('legacy: matchUtilities', () => {
         },
       `,
         {
-          loadPlugin() {
+          async loadPlugin() {
             return ({ matchUtilities }) => {
               matchUtilities({
                 '.text-trim > *': () => ({
@@ -15917,6 +15944,6 @@ describe('legacy: matchUtilities', () => {
           },
         },
       )
-    }).toThrowError(/invalid utility name/)
+    }).rejects.toThrowError(/invalid utility name/)
   })
 })
