@@ -152,6 +152,9 @@ importers:
       '@types/postcss-import':
         specifier: ^14.0.3
         version: 14.0.3
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
 
   packages/@tailwindcss-postcss:
     dependencies:
@@ -177,6 +180,9 @@ importers:
       internal-example-plugin:
         specifier: workspace:*
         version: link:../internal-example-plugin
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
       postcss:
         specifier: 8.4.24
         version: 8.4.24
@@ -189,6 +195,9 @@ importers:
       lightningcss:
         specifier: ^1.25.1
         version: 1.25.1
+      postcss-load-config:
+        specifier: ^6.0.1
+        version: 6.0.1(postcss@8.4.40)
       tailwindcss:
         specifier: workspace:^
         version: link:../tailwindcss
@@ -196,11 +205,29 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 20.14.13
+      internal-postcss-fix-relative-paths:
+        specifier: workspace:^
+        version: link:../internal-postcss-fix-relative-paths
       vite:
         specifier: 'catalog:'
         version: 5.3.5(@types/node@20.14.13)(lightningcss@1.25.1)
 
   packages/internal-example-plugin: {}
+
+  packages/internal-postcss-fix-relative-paths:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.14.13
+      '@types/postcss-import':
+        specifier: ^14.0.3
+        version: 14.0.3
+      postcss:
+        specifier: 8.4.24
+        version: 8.4.24
+      postcss-import:
+        specifier: ^16.1.0
+        version: 16.1.0(postcss@8.4.24)
 
   packages/tailwindcss:
     devDependencies:
@@ -4947,6 +4974,12 @@ snapshots:
       lilconfig: 3.1.2
     optionalDependencies:
       postcss: 8.4.24
+
+  postcss-load-config@6.0.1(postcss@8.4.40):
+    dependencies:
+      lilconfig: 3.1.2
+    optionalDependencies:
+      postcss: 8.4.40
 
   postcss-value-parser@4.2.0: {}
 

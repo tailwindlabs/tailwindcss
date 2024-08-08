@@ -12,7 +12,7 @@
   "homepage": "https://tailwindcss.com",
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsup-node ./src/index.ts --format esm --minify --clean",
+    "build": "tsup-node",
     "dev": "pnpm run build -- --watch"
   },
   "bin": {
@@ -39,6 +39,7 @@
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/postcss-import": "^14.0.3"
+    "@types/postcss-import": "^14.0.3",
+    "internal-postcss-fix-relative-paths": "workspace:^"
   }
 }

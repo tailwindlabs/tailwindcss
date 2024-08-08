@@ -2,6 +2,8 @@ use crate::parser::Extractor;
 use bstr::ByteSlice;
 use cache::Cache;
 use fxhash::FxHashSet;
+use glob::fast_glob;
+use glob::get_fast_patterns;
 use ignore::DirEntry;
 use ignore::WalkBuilder;
 use lazy_static::lazy_static;
@@ -39,8 +41,10 @@ pub struct ChangedContent {
 
 #[derive(Debug, Clone)]
 pub struct ScanOptions {
-    pub base: String,
-    pub globs: bool,
+    /// Base path to start scanning from
+    pub base: Option<String>,
+    /// Glob sources
+    pub sources: Vec<GlobEntry>,
 }
 
 #[derive(Debug, Clone)]
@@ -53,7 +57,7 @@ pub struct ScanResult {
 #[derive(Debug, Clone)]
 pub struct GlobEntry {
     pub base: String,
-    pub glob: String,
+    pub pattern: String,
 }
 
 pub fn clear_cache() {
@@ -64,15 +68,60 @@ pub fn clear_cache() {
 pub fn scan_dir(opts: ScanOptions) -> ScanResult {
     init_tracing();
 
-    let root = Path::new(&opts.base);
+    let (mut files, mut globs) = match opts.base {
+        Some(base) => {
+            // Only enable auto content detection when `base` is provided.
+            let base = Path::new(&base);
+            let (files, dirs) = resolve_files(base);
+            let globs = resolve_globs(base, dirs);
 
-    let (files, dirs) = resolve_files(root);
-
-    let globs = if opts.globs {
-        resolve_globs(root, dirs)
-    } else {
-        vec![]
+            (files, globs)
+        }
+        None => (vec![], vec![]),
     };
+
+    // If we have additional sources, then we have to resolve them as well.
+    if !opts.sources.is_empty() {
+        let resolved_files: Vec<_> = match fast_glob(&opts.sources) {
+            Ok(matches) => matches
+                .filter_map(|x| dunce::canonicalize(&x).ok())
+                .collect(),
+            Err(err) => {
+                event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
+                vec![]
+            }
+        };
+
+        files.extend(resolved_files);
+
+        let optimized_incoming_globs = get_fast_patterns(&opts.sources)
+            .iter()
+            .flat_map(|(root, globs)| {
+                globs.iter().filter_map(|glob| {
+                    let root = match dunce::canonicalize(root.clone()) {
+                        Ok(root) => root,
+                        Err(error) => {
+                            event!(
+                                tracing::Level::ERROR,
+                                "Failed to canonicalize base path {:?}",
+                                error
+                            );
+                            return None;
+                        }
+                    };
+
+                    let base = root.display().to_string();
+                    let glob = glob.to_string();
+                    Some(GlobEntry {
+                        base,
+                        pattern: glob,
+                    })
+                })
+            })
+            .collect::<Vec<GlobEntry>>();
+
+        globs.extend(optimized_incoming_globs);
+    }
 
     let mut cache = GLOBAL_CACHE.lock().unwrap();
 
@@ -259,12 +308,12 @@ fn resolve_globs(root: &Path, dirs: Vec<PathBuf>) -> Vec<GlobEntry> {
     // Build the globs for all globable directories.
     let shallow_globs = shallow_globable_directories.iter().map(|path| GlobEntry {
         base: path.display().to_string(),
-        glob: format!("*/*.{{{}}}", extension_list),
+        pattern: format!("*/*.{{{}}}", extension_list),
     });
 
     let deep_globs = deep_globable_directories.iter().map(|path| GlobEntry {
         base: path.display().to_string(),
-        glob: format!("**/*.{{{}}}", extension_list),
+        pattern: format!("**/*.{{{}}}", extension_list),
     });
 
     shallow_globs.chain(deep_globs).collect::<Vec<_>>()

@@ -3,89 +3,89 @@ import { compileCss, run } from './test-utils/run'
 
 const css = String.raw
 
-test('force', () => {
-  expect(run(['force:flex'])).toMatchInlineSnapshot(`
+test('force', async () => {
+  expect(await run(['force:flex'])).toMatchInlineSnapshot(`
     ".force\\:flex {
       display: flex;
     }"
   `)
-  expect(run(['force/foo:flex'])).toEqual('')
+  expect(await run(['force/foo:flex'])).toEqual('')
 })
 
-test('*', () => {
-  expect(run(['*:flex'])).toMatchInlineSnapshot(`
+test('*', async () => {
+  expect(await run(['*:flex'])).toMatchInlineSnapshot(`
     ":where(.\\*\\:flex > *) {
       display: flex;
     }"
   `)
-  expect(run(['*/foo:flex'])).toEqual('')
+  expect(await run(['*/foo:flex'])).toEqual('')
 })
 
-test('first-letter', () => {
-  expect(run(['first-letter:flex'])).toMatchInlineSnapshot(`
+test('first-letter', async () => {
+  expect(await run(['first-letter:flex'])).toMatchInlineSnapshot(`
     ".first-letter\\:flex:first-letter {
       display: flex;
     }"
   `)
-  expect(run(['first-letter/foo:flex'])).toEqual('')
+  expect(await run(['first-letter/foo:flex'])).toEqual('')
 })
 
-test('first-line', () => {
-  expect(run(['first-line:flex'])).toMatchInlineSnapshot(`
+test('first-line', async () => {
+  expect(await run(['first-line:flex'])).toMatchInlineSnapshot(`
     ".first-line\\:flex:first-line {
       display: flex;
     }"
   `)
-  expect(run(['first-line/foo:flex'])).toEqual('')
+  expect(await run(['first-line/foo:flex'])).toEqual('')
 })
 
-test('marker', () => {
-  expect(run(['marker:flex'])).toMatchInlineSnapshot(`
+test('marker', async () => {
+  expect(await run(['marker:flex'])).toMatchInlineSnapshot(`
     ".marker\\:flex ::marker, .marker\\:flex::marker {
       display: flex;
     }"
   `)
-  expect(run(['marker/foo:flex'])).toEqual('')
+  expect(await run(['marker/foo:flex'])).toEqual('')
 })
 
-test('selection', () => {
-  expect(run(['selection:flex'])).toMatchInlineSnapshot(`
+test('selection', async () => {
+  expect(await run(['selection:flex'])).toMatchInlineSnapshot(`
     ".selection\\:flex ::selection, .selection\\:flex::selection {
       display: flex;
     }"
   `)
-  expect(run(['selection/foo:flex'])).toEqual('')
+  expect(await run(['selection/foo:flex'])).toEqual('')
 })
 
-test('file', () => {
-  expect(run(['file:flex'])).toMatchInlineSnapshot(`
+test('file', async () => {
+  expect(await run(['file:flex'])).toMatchInlineSnapshot(`
     ".file\\:flex::file-selector-button {
       display: flex;
     }"
   `)
-  expect(run(['file/foo:flex'])).toEqual('')
+  expect(await run(['file/foo:flex'])).toEqual('')
 })
 
-test('placeholder', () => {
-  expect(run(['placeholder:flex'])).toMatchInlineSnapshot(`
+test('placeholder', async () => {
+  expect(await run(['placeholder:flex'])).toMatchInlineSnapshot(`
     ".placeholder\\:flex::placeholder {
       display: flex;
     }"
   `)
-  expect(run(['placeholder/foo:flex'])).toEqual('')
+  expect(await run(['placeholder/foo:flex'])).toEqual('')
 })
 
-test('backdrop', () => {
-  expect(run(['backdrop:flex'])).toMatchInlineSnapshot(`
+test('backdrop', async () => {
+  expect(await run(['backdrop:flex'])).toMatchInlineSnapshot(`
     ".backdrop\\:flex::backdrop {
       display: flex;
     }"
   `)
-  expect(run(['backdrop/foo:flex'])).toEqual('')
+  expect(await run(['backdrop/foo:flex'])).toEqual('')
 })
 
-test('before', () => {
-  expect(run(['before:flex'])).toMatchInlineSnapshot(`
+test('before', async () => {
+  expect(await run(['before:flex'])).toMatchInlineSnapshot(`
     ".before\\:flex:before {
       content: var(--tw-content);
       display: flex;
@@ -105,11 +105,11 @@ test('before', () => {
       initial-value: "";
     }"
   `)
-  expect(run(['before/foo:flex'])).toEqual('')
+  expect(await run(['before/foo:flex'])).toEqual('')
 })
 
-test('after', () => {
-  expect(run(['after:flex'])).toMatchInlineSnapshot(`
+test('after', async () => {
+  expect(await run(['after:flex'])).toMatchInlineSnapshot(`
     ".after\\:flex:after {
       content: var(--tw-content);
       display: flex;
@@ -129,11 +129,11 @@ test('after', () => {
       initial-value: "";
     }"
   `)
-  expect(run(['after/foo:flex'])).toEqual('')
+  expect(await run(['after/foo:flex'])).toEqual('')
 })
 
-test('first', () => {
-  expect(run(['first:flex', 'group-first:flex', 'peer-first:flex'])).toMatchInlineSnapshot(`
+test('first', async () => {
+  expect(await run(['first:flex', 'group-first:flex', 'peer-first:flex'])).toMatchInlineSnapshot(`
     ".group-first\\:flex:is(:where(.group):first-child *) {
       display: flex;
     }
@@ -146,11 +146,11 @@ test('first', () => {
       display: flex;
     }"
   `)
-  expect(run(['first/foo:flex'])).toEqual('')
+  expect(await run(['first/foo:flex'])).toEqual('')
 })
 
-test('last', () => {
-  expect(run(['last:flex', 'group-last:flex', 'peer-last:flex'])).toMatchInlineSnapshot(`
+test('last', async () => {
+  expect(await run(['last:flex', 'group-last:flex', 'peer-last:flex'])).toMatchInlineSnapshot(`
     ".group-last\\:flex:is(:where(.group):last-child *) {
       display: flex;
     }
@@ -163,11 +163,11 @@ test('last', () => {
       display: flex;
     }"
   `)
-  expect(run(['last/foo:flex'])).toEqual('')
+  expect(await run(['last/foo:flex'])).toEqual('')
 })
 
-test('only', () => {
-  expect(run(['only:flex', 'group-only:flex', 'peer-only:flex'])).toMatchInlineSnapshot(`
+test('only', async () => {
+  expect(await run(['only:flex', 'group-only:flex', 'peer-only:flex'])).toMatchInlineSnapshot(`
     ".group-only\\:flex:is(:where(.group):only-child *) {
       display: flex;
     }
@@ -180,11 +180,11 @@ test('only', () => {
       display: flex;
     }"
   `)
-  expect(run(['only/foo:flex'])).toEqual('')
+  expect(await run(['only/foo:flex'])).toEqual('')
 })
 
-test('odd', () => {
-  expect(run(['odd:flex', 'group-odd:flex', 'peer-odd:flex'])).toMatchInlineSnapshot(`
+test('odd', async () => {
+  expect(await run(['odd:flex', 'group-odd:flex', 'peer-odd:flex'])).toMatchInlineSnapshot(`
     ".group-odd\\:flex:is(:where(.group):nth-child(odd) *) {
       display: flex;
     }
@@ -197,11 +197,11 @@ test('odd', () => {
       display: flex;
     }"
   `)
-  expect(run(['odd/foo:flex'])).toEqual('')
+  expect(await run(['odd/foo:flex'])).toEqual('')
 })
 
-test('even', () => {
-  expect(run(['even:flex', 'group-even:flex', 'peer-even:flex'])).toMatchInlineSnapshot(`
+test('even', async () => {
+  expect(await run(['even:flex', 'group-even:flex', 'peer-even:flex'])).toMatchInlineSnapshot(`
     ".group-even\\:flex:is(:where(.group):nth-child(2n) *) {
       display: flex;
     }
@@ -214,11 +214,11 @@ test('even', () => {
       display: flex;
     }"
   `)
-  expect(run(['even/foo:flex'])).toEqual('')
+  expect(await run(['even/foo:flex'])).toEqual('')
 })
 
-test('first-of-type', () => {
-  expect(run(['first-of-type:flex', 'group-first-of-type:flex', 'peer-first-of-type:flex']))
+test('first-of-type', async () => {
+  expect(await run(['first-of-type:flex', 'group-first-of-type:flex', 'peer-first-of-type:flex']))
     .toMatchInlineSnapshot(`
       ".group-first-of-type\\:flex:is(:where(.group):first-of-type *) {
         display: flex;
@@ -232,11 +232,11 @@ test('first-of-type', () => {
         display: flex;
       }"
     `)
-  expect(run(['first-of-type/foo:flex'])).toEqual('')
+  expect(await run(['first-of-type/foo:flex'])).toEqual('')
 })
 
-test('last-of-type', () => {
-  expect(run(['last-of-type:flex', 'group-last-of-type:flex', 'peer-last-of-type:flex']))
+test('last-of-type', async () => {
+  expect(await run(['last-of-type:flex', 'group-last-of-type:flex', 'peer-last-of-type:flex']))
     .toMatchInlineSnapshot(`
       ".group-last-of-type\\:flex:is(:where(.group):last-of-type *) {
         display: flex;
@@ -250,11 +250,11 @@ test('last-of-type', () => {
         display: flex;
       }"
     `)
-  expect(run(['last-of-type/foo:flex'])).toEqual('')
+  expect(await run(['last-of-type/foo:flex'])).toEqual('')
 })
 
-test('only-of-type', () => {
-  expect(run(['only-of-type:flex', 'group-only-of-type:flex', 'peer-only-of-type:flex']))
+test('only-of-type', async () => {
+  expect(await run(['only-of-type:flex', 'group-only-of-type:flex', 'peer-only-of-type:flex']))
     .toMatchInlineSnapshot(`
       ".group-only-of-type\\:flex:is(:where(.group):only-of-type *) {
         display: flex;
@@ -268,11 +268,12 @@ test('only-of-type', () => {
         display: flex;
       }"
     `)
-  expect(run(['only-of-type/foo:flex'])).toEqual('')
+  expect(await run(['only-of-type/foo:flex'])).toEqual('')
 })
 
-test('visited', () => {
-  expect(run(['visited:flex', 'group-visited:flex', 'peer-visited:flex'])).toMatchInlineSnapshot(`
+test('visited', async () => {
+  expect(await run(['visited:flex', 'group-visited:flex', 'peer-visited:flex']))
+    .toMatchInlineSnapshot(`
     ".group-visited\\:flex:is(:where(.group):visited *) {
       display: flex;
     }
@@ -285,11 +286,12 @@ test('visited', () => {
       display: flex;
     }"
   `)
-  expect(run(['visited/foo:flex'])).toEqual('')
+  expect(await run(['visited/foo:flex'])).toEqual('')
 })
 
-test('target', () => {
-  expect(run(['target:flex', 'group-target:flex', 'peer-target:flex'])).toMatchInlineSnapshot(`
+test('target', async () => {
+  expect(await run(['target:flex', 'group-target:flex', 'peer-target:flex']))
+    .toMatchInlineSnapshot(`
     ".group-target\\:flex:is(:where(.group):target *) {
       display: flex;
     }
@@ -302,11 +304,11 @@ test('target', () => {
       display: flex;
     }"
   `)
-  expect(run(['target/foo:flex'])).toEqual('')
+  expect(await run(['target/foo:flex'])).toEqual('')
 })
 
-test('open', () => {
-  expect(run(['open:flex', 'group-open:flex', 'peer-open:flex'])).toMatchInlineSnapshot(`
+test('open', async () => {
+  expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex'])).toMatchInlineSnapshot(`
     ".group-open\\:flex:is(:where(.group):is([open], :popover-open) *) {
       display: flex;
     }
@@ -319,11 +321,12 @@ test('open', () => {
       display: flex;
     }"
   `)
-  expect(run(['open/foo:flex'])).toEqual('')
+  expect(await run(['open/foo:flex'])).toEqual('')
 })
 
-test('default', () => {
-  expect(run(['default:flex', 'group-default:flex', 'peer-default:flex'])).toMatchInlineSnapshot(`
+test('default', async () => {
+  expect(await run(['default:flex', 'group-default:flex', 'peer-default:flex']))
+    .toMatchInlineSnapshot(`
     ".group-default\\:flex:is(:where(.group):default *) {
       display: flex;
     }
@@ -336,11 +339,12 @@ test('default', () => {
       display: flex;
     }"
   `)
-  expect(run(['default/foo:flex'])).toEqual('')
+  expect(await run(['default/foo:flex'])).toEqual('')
 })
 
-test('checked', () => {
-  expect(run(['checked:flex', 'group-checked:flex', 'peer-checked:flex'])).toMatchInlineSnapshot(`
+test('checked', async () => {
+  expect(await run(['checked:flex', 'group-checked:flex', 'peer-checked:flex']))
+    .toMatchInlineSnapshot(`
     ".group-checked\\:flex:is(:where(.group):checked *) {
       display: flex;
     }
@@ -353,11 +357,11 @@ test('checked', () => {
       display: flex;
     }"
   `)
-  expect(run(['checked/foo:flex'])).toEqual('')
+  expect(await run(['checked/foo:flex'])).toEqual('')
 })
 
-test('indeterminate', () => {
-  expect(run(['indeterminate:flex', 'group-indeterminate:flex', 'peer-indeterminate:flex']))
+test('indeterminate', async () => {
+  expect(await run(['indeterminate:flex', 'group-indeterminate:flex', 'peer-indeterminate:flex']))
     .toMatchInlineSnapshot(`
       ".group-indeterminate\\:flex:is(:where(.group):indeterminate *) {
         display: flex;
@@ -371,12 +375,16 @@ test('indeterminate', () => {
         display: flex;
       }"
     `)
-  expect(run(['indeterminate/foo:flex'])).toEqual('')
+  expect(await run(['indeterminate/foo:flex'])).toEqual('')
 })
 
-test('placeholder-shown', () => {
+test('placeholder-shown', async () => {
   expect(
-    run(['placeholder-shown:flex', 'group-placeholder-shown:flex', 'peer-placeholder-shown:flex']),
+    await run([
+      'placeholder-shown:flex',
+      'group-placeholder-shown:flex',
+      'peer-placeholder-shown:flex',
+    ]),
   ).toMatchInlineSnapshot(`
     ".group-placeholder-shown\\:flex:is(:where(.group):placeholder-shown *) {
       display: flex;
@@ -390,11 +398,11 @@ test('placeholder-shown', () => {
       display: flex;
     }"
   `)
-  expect(run(['placeholder-shown/foo:flex'])).toEqual('')
+  expect(await run(['placeholder-shown/foo:flex'])).toEqual('')
 })
 
-test('autofill', () => {
-  expect(run(['autofill:flex', 'group-autofill:flex', 'peer-autofill:flex']))
+test('autofill', async () => {
+  expect(await run(['autofill:flex', 'group-autofill:flex', 'peer-autofill:flex']))
     .toMatchInlineSnapshot(`
       ".group-autofill\\:flex:is(:where(.group):autofill *) {
         display: flex;
@@ -408,11 +416,11 @@ test('autofill', () => {
         display: flex;
       }"
     `)
-  expect(run(['autofill/foo:flex'])).toEqual('')
+  expect(await run(['autofill/foo:flex'])).toEqual('')
 })
 
-test('optional', () => {
-  expect(run(['optional:flex', 'group-optional:flex', 'peer-optional:flex']))
+test('optional', async () => {
+  expect(await run(['optional:flex', 'group-optional:flex', 'peer-optional:flex']))
     .toMatchInlineSnapshot(`
       ".group-optional\\:flex:is(:where(.group):optional *) {
         display: flex;
@@ -426,11 +434,11 @@ test('optional', () => {
         display: flex;
       }"
     `)
-  expect(run(['optional/foo:flex'])).toEqual('')
+  expect(await run(['optional/foo:flex'])).toEqual('')
 })
 
-test('required', () => {
-  expect(run(['required:flex', 'group-required:flex', 'peer-required:flex']))
+test('required', async () => {
+  expect(await run(['required:flex', 'group-required:flex', 'peer-required:flex']))
     .toMatchInlineSnapshot(`
       ".group-required\\:flex:is(:where(.group):required *) {
         display: flex;
@@ -444,11 +452,11 @@ test('required', () => {
         display: flex;
       }"
     `)
-  expect(run(['required/foo:flex'])).toEqual('')
+  expect(await run(['required/foo:flex'])).toEqual('')
 })
 
-test('valid', () => {
-  expect(run(['valid:flex', 'group-valid:flex', 'peer-valid:flex'])).toMatchInlineSnapshot(`
+test('valid', async () => {
+  expect(await run(['valid:flex', 'group-valid:flex', 'peer-valid:flex'])).toMatchInlineSnapshot(`
     ".group-valid\\:flex:is(:where(.group):valid *) {
       display: flex;
     }
@@ -461,11 +469,12 @@ test('valid', () => {
       display: flex;
     }"
   `)
-  expect(run(['valid/foo:flex'])).toEqual('')
+  expect(await run(['valid/foo:flex'])).toEqual('')
 })
 
-test('invalid', () => {
-  expect(run(['invalid:flex', 'group-invalid:flex', 'peer-invalid:flex'])).toMatchInlineSnapshot(`
+test('invalid', async () => {
+  expect(await run(['invalid:flex', 'group-invalid:flex', 'peer-invalid:flex']))
+    .toMatchInlineSnapshot(`
     ".group-invalid\\:flex:is(:where(.group):invalid *) {
       display: flex;
     }
@@ -478,11 +487,11 @@ test('invalid', () => {
       display: flex;
     }"
   `)
-  expect(run(['invalid/foo:flex'])).toEqual('')
+  expect(await run(['invalid/foo:flex'])).toEqual('')
 })
 
-test('in-range', () => {
-  expect(run(['in-range:flex', 'group-in-range:flex', 'peer-in-range:flex']))
+test('in-range', async () => {
+  expect(await run(['in-range:flex', 'group-in-range:flex', 'peer-in-range:flex']))
     .toMatchInlineSnapshot(`
       ".group-in-range\\:flex:is(:where(.group):in-range *) {
         display: flex;
@@ -496,11 +505,11 @@ test('in-range', () => {
         display: flex;
       }"
     `)
-  expect(run(['in-range/foo:flex'])).toEqual('')
+  expect(await run(['in-range/foo:flex'])).toEqual('')
 })
 
-test('out-of-range', () => {
-  expect(run(['out-of-range:flex', 'group-out-of-range:flex', 'peer-out-of-range:flex']))
+test('out-of-range', async () => {
+  expect(await run(['out-of-range:flex', 'group-out-of-range:flex', 'peer-out-of-range:flex']))
     .toMatchInlineSnapshot(`
       ".group-out-of-range\\:flex:is(:where(.group):out-of-range *) {
         display: flex;
@@ -514,11 +523,11 @@ test('out-of-range', () => {
         display: flex;
       }"
     `)
-  expect(run(['out-of-range/foo:flex'])).toEqual('')
+  expect(await run(['out-of-range/foo:flex'])).toEqual('')
 })
 
-test('read-only', () => {
-  expect(run(['read-only:flex', 'group-read-only:flex', 'peer-read-only:flex']))
+test('read-only', async () => {
+  expect(await run(['read-only:flex', 'group-read-only:flex', 'peer-read-only:flex']))
     .toMatchInlineSnapshot(`
       ".group-read-only\\:flex:is(:where(.group):read-only *) {
         display: flex;
@@ -532,11 +541,11 @@ test('read-only', () => {
         display: flex;
       }"
     `)
-  expect(run(['read-only/foo:flex'])).toEqual('')
+  expect(await run(['read-only/foo:flex'])).toEqual('')
 })
 
-test('empty', () => {
-  expect(run(['empty:flex', 'group-empty:flex', 'peer-empty:flex'])).toMatchInlineSnapshot(`
+test('empty', async () => {
+  expect(await run(['empty:flex', 'group-empty:flex', 'peer-empty:flex'])).toMatchInlineSnapshot(`
     ".group-empty\\:flex:is(:where(.group):empty *) {
       display: flex;
     }
@@ -549,11 +558,11 @@ test('empty', () => {
       display: flex;
     }"
   `)
-  expect(run(['empty/foo:flex'])).toEqual('')
+  expect(await run(['empty/foo:flex'])).toEqual('')
 })
 
-test('focus-within', () => {
-  expect(run(['focus-within:flex', 'group-focus-within:flex', 'peer-focus-within:flex']))
+test('focus-within', async () => {
+  expect(await run(['focus-within:flex', 'group-focus-within:flex', 'peer-focus-within:flex']))
     .toMatchInlineSnapshot(`
       ".group-focus-within\\:flex:is(:where(.group):focus-within *) {
         display: flex;
@@ -567,11 +576,11 @@ test('focus-within', () => {
         display: flex;
       }"
     `)
-  expect(run(['focus-within/foo:flex'])).toEqual('')
+  expect(await run(['focus-within/foo:flex'])).toEqual('')
 })
 
-test('hover', () => {
-  expect(run(['hover:flex', 'group-hover:flex', 'peer-hover:flex'])).toMatchInlineSnapshot(`
+test('hover', async () => {
+  expect(await run(['hover:flex', 'group-hover:flex', 'peer-hover:flex'])).toMatchInlineSnapshot(`
     ".group-hover\\:flex:is(:where(.group):hover *) {
       display: flex;
     }
@@ -584,11 +593,11 @@ test('hover', () => {
       display: flex;
     }"
   `)
-  expect(run(['hover/foo:flex'])).toEqual('')
+  expect(await run(['hover/foo:flex'])).toEqual('')
 })
 
-test('focus', () => {
-  expect(run(['focus:flex', 'group-focus:flex', 'peer-focus:flex'])).toMatchInlineSnapshot(`
+test('focus', async () => {
+  expect(await run(['focus:flex', 'group-focus:flex', 'peer-focus:flex'])).toMatchInlineSnapshot(`
     ".group-focus\\:flex:is(:where(.group):focus *) {
       display: flex;
     }
@@ -601,11 +610,11 @@ test('focus', () => {
       display: flex;
     }"
   `)
-  expect(run(['focus/foo:flex'])).toEqual('')
+  expect(await run(['focus/foo:flex'])).toEqual('')
 })
 
-test('group-hover group-focus sorting', () => {
-  expect(run(['group-hover:flex', 'group-focus:flex'])).toMatchInlineSnapshot(`
+test('group-hover group-focus sorting', async () => {
+  expect(await run(['group-hover:flex', 'group-focus:flex'])).toMatchInlineSnapshot(`
     ".group-hover\\:flex:is(:where(.group):hover *) {
       display: flex;
     }
@@ -614,7 +623,7 @@ test('group-hover group-focus sorting', () => {
       display: flex;
     }"
   `)
-  expect(run(['group-focus:flex', 'group-hover:flex'])).toMatchInlineSnapshot(`
+  expect(await run(['group-focus:flex', 'group-hover:flex'])).toMatchInlineSnapshot(`
     ".group-hover\\:flex:is(:where(.group):hover *) {
       display: flex;
     }
@@ -625,8 +634,8 @@ test('group-hover group-focus sorting', () => {
   `)
 })
 
-test('focus-visible', () => {
-  expect(run(['focus-visible:flex', 'group-focus-visible:flex', 'peer-focus-visible:flex']))
+test('focus-visible', async () => {
+  expect(await run(['focus-visible:flex', 'group-focus-visible:flex', 'peer-focus-visible:flex']))
     .toMatchInlineSnapshot(`
       ".group-focus-visible\\:flex:is(:where(.group):focus-visible *) {
         display: flex;
@@ -640,11 +649,12 @@ test('focus-visible', () => {
         display: flex;
       }"
     `)
-  expect(run(['focus-visible/foo:flex'])).toEqual('')
+  expect(await run(['focus-visible/foo:flex'])).toEqual('')
 })
 
-test('active', () => {
-  expect(run(['active:flex', 'group-active:flex', 'peer-active:flex'])).toMatchInlineSnapshot(`
+test('active', async () => {
+  expect(await run(['active:flex', 'group-active:flex', 'peer-active:flex']))
+    .toMatchInlineSnapshot(`
     ".group-active\\:flex:is(:where(.group):active *) {
       display: flex;
     }
@@ -657,11 +667,12 @@ test('active', () => {
       display: flex;
     }"
   `)
-  expect(run(['active/foo:flex'])).toEqual('')
+  expect(await run(['active/foo:flex'])).toEqual('')
 })
 
-test('enabled', () => {
-  expect(run(['enabled:flex', 'group-enabled:flex', 'peer-enabled:flex'])).toMatchInlineSnapshot(`
+test('enabled', async () => {
+  expect(await run(['enabled:flex', 'group-enabled:flex', 'peer-enabled:flex']))
+    .toMatchInlineSnapshot(`
     ".group-enabled\\:flex:is(:where(.group):enabled *) {
       display: flex;
     }
@@ -674,11 +685,11 @@ test('enabled', () => {
       display: flex;
     }"
   `)
-  expect(run(['enabled/foo:flex'])).toEqual('')
+  expect(await run(['enabled/foo:flex'])).toEqual('')
 })
 
-test('disabled', () => {
-  expect(run(['disabled:flex', 'group-disabled:flex', 'peer-disabled:flex']))
+test('disabled', async () => {
+  expect(await run(['disabled:flex', 'group-disabled:flex', 'peer-disabled:flex']))
     .toMatchInlineSnapshot(`
       ".group-disabled\\:flex:is(:where(.group):disabled *) {
         display: flex;
@@ -692,12 +703,29 @@ test('disabled', () => {
         display: flex;
       }"
     `)
-  expect(run(['disabled/foo:flex'])).toEqual('')
+  expect(await run(['disabled/foo:flex'])).toEqual('')
 })
 
-test('group-[...]', () => {
+test('inert', async () => {
+  expect(await run(['inert:flex', 'group-inert:flex', 'peer-inert:flex'])).toMatchInlineSnapshot(`
+    ".group-inert\\:flex:is(:where(.group):is([inert], [inert] *) *) {
+      display: flex;
+    }
+
+    .peer-inert\\:flex:is(:where(.peer):is([inert], [inert] *) ~ *) {
+      display: flex;
+    }
+
+    .inert\\:flex:is([inert], [inert] *) {
+      display: flex;
+    }"
+  `)
+  expect(await run(['inert/foo:flex'])).toEqual('')
+})
+
+test('group-[...]', async () => {
   expect(
-    run([
+    await run([
       'group-[&_p]:flex',
       'group-[&_p]:hover:flex',
       'hover:group-[&_p]:flex',
@@ -727,7 +755,7 @@ test('group-[...]', () => {
   `)
 
   expect(
-    compileCss(
+    await compileCss(
       css`
         @tailwind utilities;
       `,
@@ -736,9 +764,9 @@ test('group-[...]', () => {
   ).toEqual('')
 })
 
-test('group-*', () => {
+test('group-*', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @variant hocus {
           &:hover,
@@ -780,7 +808,7 @@ test('group-*', () => {
   `)
 
   expect(
-    compileCss(
+    await compileCss(
       css`
         @variant custom-at-rule (@media foo);
         @variant nested-selectors {
@@ -797,9 +825,9 @@ test('group-*', () => {
   ).toEqual('')
 })
 
-test('peer-[...]', () => {
+test('peer-[...]', async () => {
   expect(
-    run([
+    await run([
       'peer-[&_p]:flex',
       'peer-[&_p]:hover:flex',
       'hover:peer-[&_p]:flex',
@@ -829,7 +857,7 @@ test('peer-[...]', () => {
   `)
 
   expect(
-    compileCss(
+    await compileCss(
       css`
         @tailwind utilities;
       `,
@@ -838,9 +866,9 @@ test('peer-[...]', () => {
   ).toEqual('')
 })
 
-test('peer-*', () => {
+test('peer-*', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @variant hocus {
           &:hover,
@@ -881,7 +909,7 @@ test('peer-*', () => {
   `)
 
   expect(
-    compileCss(
+    await compileCss(
       css`
         @variant custom-at-rule (@media foo);
         @variant nested-selectors {
@@ -898,82 +926,82 @@ test('peer-*', () => {
   ).toEqual('')
 })
 
-test('ltr', () => {
-  expect(run(['ltr:flex'])).toMatchInlineSnapshot(`
+test('ltr', async () => {
+  expect(await run(['ltr:flex'])).toMatchInlineSnapshot(`
     ".ltr\\:flex:where([dir="ltr"], [dir="ltr"] *) {
       display: flex;
     }"
   `)
-  expect(run(['ltr/foo:flex'])).toEqual('')
+  expect(await run(['ltr/foo:flex'])).toEqual('')
 })
 
-test('rtl', () => {
-  expect(run(['rtl:flex'])).toMatchInlineSnapshot(`
+test('rtl', async () => {
+  expect(await run(['rtl:flex'])).toMatchInlineSnapshot(`
     ".rtl\\:flex:where([dir="rtl"], [dir="rtl"] *) {
       display: flex;
     }"
   `)
-  expect(run(['rtl/foo:flex'])).toEqual('')
+  expect(await run(['rtl/foo:flex'])).toEqual('')
 })
 
-test('motion-safe', () => {
-  expect(run(['motion-safe:flex'])).toMatchInlineSnapshot(`
+test('motion-safe', async () => {
+  expect(await run(['motion-safe:flex'])).toMatchInlineSnapshot(`
     "@media (prefers-reduced-motion: no-preference) {
       .motion-safe\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['motion-safe/foo:flex'])).toEqual('')
+  expect(await run(['motion-safe/foo:flex'])).toEqual('')
 })
 
-test('motion-reduce', () => {
-  expect(run(['motion-reduce:flex'])).toMatchInlineSnapshot(`
+test('motion-reduce', async () => {
+  expect(await run(['motion-reduce:flex'])).toMatchInlineSnapshot(`
     "@media (prefers-reduced-motion: reduce) {
       .motion-reduce\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['motion-reduce/foo:flex'])).toEqual('')
+  expect(await run(['motion-reduce/foo:flex'])).toEqual('')
 })
 
-test('dark', () => {
-  expect(run(['dark:flex'])).toMatchInlineSnapshot(`
+test('dark', async () => {
+  expect(await run(['dark:flex'])).toMatchInlineSnapshot(`
     "@media (prefers-color-scheme: dark) {
       .dark\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['dark/foo:flex'])).toEqual('')
+  expect(await run(['dark/foo:flex'])).toEqual('')
 })
 
-test('starting', () => {
-  expect(run(['starting:opacity-0'])).toMatchInlineSnapshot(`
+test('starting', async () => {
+  expect(await run(['starting:opacity-0'])).toMatchInlineSnapshot(`
     "@starting-style {
       .starting\\:opacity-0 {
         opacity: 0;
       }
     }"
   `)
-  expect(run(['starting/foo:flex'])).toEqual('')
+  expect(await run(['starting/foo:flex'])).toEqual('')
 })
 
-test('print', () => {
-  expect(run(['print:flex'])).toMatchInlineSnapshot(`
+test('print', async () => {
+  expect(await run(['print:flex'])).toMatchInlineSnapshot(`
     "@media print {
       .print\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['print/foo:flex'])).toEqual('')
+  expect(await run(['print/foo:flex'])).toEqual('')
 })
 
-test('default breakpoints', () => {
+test('default breakpoints', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           /* Breakpoints */
@@ -1027,7 +1055,7 @@ test('default breakpoints', () => {
     }"
   `)
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme reference {
           /* Breakpoints */
@@ -1044,9 +1072,9 @@ test('default breakpoints', () => {
   ).toEqual('')
 })
 
-test('custom breakpoint', () => {
+test('custom breakpoint', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --breakpoint-10xl: 5000px;
@@ -1068,9 +1096,9 @@ test('custom breakpoint', () => {
   `)
 })
 
-test('max-*', () => {
+test('max-*', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -1108,7 +1136,7 @@ test('max-*', () => {
     }"
   `)
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme reference {
           /* Explicitly ordered in a strange way */
@@ -1123,9 +1151,9 @@ test('max-*', () => {
   ).toEqual('')
 })
 
-test('min-*', () => {
+test('min-*', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -1163,7 +1191,7 @@ test('min-*', () => {
     }"
   `)
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme reference {
           /* Explicitly ordered in a strange way */
@@ -1178,9 +1206,9 @@ test('min-*', () => {
   ).toEqual('')
 })
 
-test('sorting stacked min-* and max-* variants', () => {
+test('sorting stacked min-* and max-* variants', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -1229,9 +1257,9 @@ test('sorting stacked min-* and max-* variants', () => {
   `)
 })
 
-test('min, max and unprefixed breakpoints', () => {
+test('min, max and unprefixed breakpoints', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -1333,9 +1361,9 @@ test('min, max and unprefixed breakpoints', () => {
   `)
 })
 
-test('sorting `min` and `max` should sort by unit, then by value, then alphabetically', () => {
+test('sorting `min` and `max` should sort by unit, then by value, then alphabetically', async () => {
   expect(
-    run([
+    await run([
       'min-[10px]:flex',
       'min-[12px]:flex',
       'min-[10em]:flex',
@@ -1480,9 +1508,9 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
   `)
 })
 
-test('supports', () => {
+test('supports', async () => {
   expect(
-    run([
+    await run([
       'supports-gap:grid',
       'supports-[display:grid]:flex',
       'supports-[selector(A_>_B)]:flex',
@@ -1535,7 +1563,7 @@ test('supports', () => {
     }"
   `)
   expect(
-    run([
+    await run([
       'supports-gap/foo:grid',
       'supports-[display:grid]/foo:flex',
       'supports-[selector(A_>_B)]/foo:flex',
@@ -1547,9 +1575,9 @@ test('supports', () => {
   ).toEqual('')
 })
 
-test('not', () => {
+test('not', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @variant hocus {
           &:hover,
@@ -1627,7 +1655,7 @@ test('not', () => {
   `)
 
   expect(
-    compileCss(
+    await compileCss(
       css`
         @variant custom-at-rule (@media foo);
         @variant nested-selectors {
@@ -1649,9 +1677,9 @@ test('not', () => {
   ).toEqual('')
 })
 
-test('has', () => {
+test('has', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @variant hocus {
           &:hover,
@@ -1729,7 +1757,7 @@ test('has', () => {
   `)
 
   expect(
-    compileCss(
+    await compileCss(
       css`
         @variant custom-at-rule (@media foo);
         @variant nested-selectors {
@@ -1751,9 +1779,9 @@ test('has', () => {
   ).toEqual('')
 })
 
-test('aria', () => {
+test('aria', async () => {
   expect(
-    run([
+    await run([
       'aria-checked:flex',
       'aria-[invalid=spelling]:flex',
       'aria-[valuenow=1]:flex',
@@ -1833,12 +1861,12 @@ test('aria', () => {
       display: flex;
     }"
   `)
-  expect(run(['aria-checked/foo:flex', 'aria-[invalid=spelling]/foo:flex'])).toEqual('')
+  expect(await run(['aria-checked/foo:flex', 'aria-[invalid=spelling]/foo:flex'])).toEqual('')
 })
 
-test('data', () => {
+test('data', async () => {
   expect(
-    run([
+    await run([
       'data-disabled:flex',
       'data-[potato=salad]:flex',
       'data-[foo=1]:flex',
@@ -1943,67 +1971,67 @@ test('data', () => {
       display: flex;
     }"
   `)
-  expect(run(['data-disabled/foo:flex', 'data-[potato=salad]/foo:flex'])).toEqual('')
+  expect(await run(['data-disabled/foo:flex', 'data-[potato=salad]/foo:flex'])).toEqual('')
 })
 
-test('portrait', () => {
-  expect(run(['portrait:flex'])).toMatchInlineSnapshot(`
+test('portrait', async () => {
+  expect(await run(['portrait:flex'])).toMatchInlineSnapshot(`
     "@media (orientation: portrait) {
       .portrait\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['portrait/foo:flex'])).toEqual('')
+  expect(await run(['portrait/foo:flex'])).toEqual('')
 })
 
-test('landscape', () => {
-  expect(run(['landscape:flex'])).toMatchInlineSnapshot(`
+test('landscape', async () => {
+  expect(await run(['landscape:flex'])).toMatchInlineSnapshot(`
     "@media (orientation: landscape) {
       .landscape\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['landscape/foo:flex'])).toEqual('')
+  expect(await run(['landscape/foo:flex'])).toEqual('')
 })
 
-test('contrast-more', () => {
-  expect(run(['contrast-more:flex'])).toMatchInlineSnapshot(`
+test('contrast-more', async () => {
+  expect(await run(['contrast-more:flex'])).toMatchInlineSnapshot(`
     "@media (prefers-contrast: more) {
       .contrast-more\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['contrast-more/foo:flex'])).toEqual('')
+  expect(await run(['contrast-more/foo:flex'])).toEqual('')
 })
 
-test('contrast-less', () => {
-  expect(run(['contrast-less:flex'])).toMatchInlineSnapshot(`
+test('contrast-less', async () => {
+  expect(await run(['contrast-less:flex'])).toMatchInlineSnapshot(`
     "@media (prefers-contrast: less) {
       .contrast-less\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['contrast-less/foo:flex'])).toEqual('')
+  expect(await run(['contrast-less/foo:flex'])).toEqual('')
 })
 
-test('forced-colors', () => {
-  expect(run(['forced-colors:flex'])).toMatchInlineSnapshot(`
+test('forced-colors', async () => {
+  expect(await run(['forced-colors:flex'])).toMatchInlineSnapshot(`
     "@media (forced-colors: active) {
       .forced-colors\\:flex {
         display: flex;
       }
     }"
   `)
-  expect(run(['forced-colors/foo:flex'])).toEqual('')
+  expect(await run(['forced-colors/foo:flex'])).toEqual('')
 })
 
-test('nth', () => {
+test('nth', async () => {
   expect(
-    run([
+    await run([
       'nth-3:flex',
       'nth-[2n+1]:flex',
       'nth-[2n+1_of_.foo]:flex',
@@ -2058,10 +2086,15 @@ test('nth', () => {
   `)
 
   expect(
-    run(['nth-foo:flex', 'nth-of-type-foo:flex', 'nth-last-foo:flex', 'nth-last-of-type-foo:flex']),
+    await run([
+      'nth-foo:flex',
+      'nth-of-type-foo:flex',
+      'nth-last-foo:flex',
+      'nth-last-of-type-foo:flex',
+    ]),
   ).toEqual('')
   expect(
-    run([
+    await run([
       'nth-3/foo:flex',
       'nth-[2n+1]/foo:flex',
       'nth-[2n+1_of_.foo]/foo:flex',
@@ -2076,9 +2109,9 @@ test('nth', () => {
   ).toEqual('')
 })
 
-test('container queries', () => {
+test('container queries', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --width-lg: 1024px;
@@ -2181,9 +2214,9 @@ test('container queries', () => {
   `)
 })
 
-test('variant order', () => {
+test('variant order', async () => {
   expect(
-    compileCss(
+    await compileCss(
       css`
         @theme {
           --breakpoint-sm: 640px;

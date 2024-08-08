@@ -12,7 +12,7 @@ const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 type Plugin = (api: PluginAPI) => void
 
 type CompileOptions = {
-  loadPlugin?: (path: string) => Plugin
+  loadPlugin?: (path: string) => Promise<Plugin>
 }
 
 function throwOnPlugin(): never {
@@ -34,12 +34,13 @@ function parseThemeOptions(selector: string) {
   return { isReference, isInline }
 }
 
-export function compile(
+export async function compile(
   css: string,
   { loadPlugin = throwOnPlugin }: CompileOptions = {},
-): {
+): Promise<{
+  globs: string[]
   build(candidates: string[]): string
-} {
+}> {
   let ast = CSS.parse(css)
 
   if (process.env.NODE_ENV !== 'test') {
@@ -54,18 +55,27 @@ export function compile(
 
   // Find all `@theme` declarations
   let theme = new Theme()
-  let plugins: Plugin[] = []
+  let pluginLoaders: Promise<Plugin>[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
+  let globs: string[] = []
 
   walk(ast, (node, { parent, replaceWith }) => {
     if (node.kind !== 'rule') return
 
     // Collect paths from `@plugin` at-rules
-    if (node.selector.startsWith('@plugin ')) {
-      plugins.push(loadPlugin(node.selector.slice(9, -1)))
+    if (node.selector === '@plugin' || node.selector.startsWith('@plugin ')) {
+      if (node.nodes.length > 0) {
+        throw new Error('`@plugin` cannot have a body.')
+      }
+
+      if (parent !== null) {
+        throw new Error('`@plugin` cannot be nested.')
+      }
+
+      pluginLoaders.push(loadPlugin(node.selector.slice(9, -1)))
       replaceWith([])
       return
     }
@@ -93,6 +103,29 @@ export function compile(
         })
       })
 
+      replaceWith([])
+      return
+    }
+
+    // Collect paths from `@source` at-rules
+    if (node.selector.startsWith('@source ')) {
+      if (node.nodes.length > 0) {
+        throw new Error('`@source` cannot have a body.')
+      }
+
+      if (parent !== null) {
+        throw new Error('`@source` cannot be nested.')
+      }
+
+      let path = node.selector.slice(8)
+      if (
+        (path[0] === '"' && path[path.length - 1] !== '"') ||
+        (path[0] === "'" && path[path.length - 1] !== "'") ||
+        (path[0] !== "'" && path[0] !== '"')
+      ) {
+        throw new Error('`@source` paths must be quoted.')
+      }
+      globs.push(path.slice(1, -1))
       replaceWith([])
       return
     }
@@ -266,9 +299,7 @@ export function compile(
 
   let pluginApi = buildPluginApi(designSystem)
 
-  for (let plugin of plugins) {
-    plugin(pluginApi)
-  }
+  await Promise.all(pluginLoaders.map((loader) => loader.then((plugin) => plugin(pluginApi))))
 
   let tailwindUtilitiesNode: Rule | null = null
 
@@ -331,6 +362,7 @@ export function compile(
   let previousAstNodeCount = 0
 
   return {
+    globs,
     build(newRawCandidates: string[]) {
       let didChange = false
 
