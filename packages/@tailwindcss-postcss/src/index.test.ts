@@ -1,6 +1,7 @@
 import { unlink, writeFile } from 'node:fs/promises'
 import postcss from 'postcss'
 import { afterEach, beforeEach, describe, expect, test } from 'vitest'
+// @ts-ignore
 import tailwindcss from './index'
 
 // We give this file path to PostCSS for processing.
