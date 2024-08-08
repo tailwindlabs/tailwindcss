@@ -86,11 +86,11 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               loadPlugin: async (pluginPath) => {
                 if (pluginPath[0] === '.') {
                   return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).href).then(
-                    (m) => m.default,
+                    (m) => m.default ?? m,
                   )
                 }
 
-                return require(pluginPath)
+                return import(pluginPath).then((m) => m.default ?? m)
               },
             })
           }

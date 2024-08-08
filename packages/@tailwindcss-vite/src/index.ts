@@ -89,10 +89,10 @@ export default function tailwindcss(): Plugin[] {
     let { build, globs } = await compile(css, {
       loadPlugin: async (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return require(path.resolve(inputBasePath, pluginPath))
+          return import(path.resolve(inputBasePath, pluginPath)).then((m) => m.default ?? m)
         }
 
-        return require(pluginPath)
+        return import(pluginPath).then((m) => m.default ?? m)
       },
     })
 

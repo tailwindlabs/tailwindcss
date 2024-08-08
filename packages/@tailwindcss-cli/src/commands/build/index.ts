@@ -138,7 +138,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           )
         }
 
-        return require(pluginPath)
+        return import(pluginPath).then((m) => m.default ?? m)
       },
     })
   }
