@@ -15359,6 +15359,8 @@ describe('custom utilities', () => {
         `,
         ['foo', 'bar'],
       ),
-    ).toThrowError(/Maximum call stack/)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`,
+    )
   })
 })

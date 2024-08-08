@@ -111,11 +111,26 @@ export async function compile(
       }
 
       customUtilities.push((designSystem) => {
+        // Track if the utility has been seen before to prevent circular
+        // dependencies. If there is a circular dependency, it means that we
+        // will apply the utility to itself, which is not allowed.
+        let seen = false
+
         designSystem.utilities.static(name, (candidate) => {
           if (candidate.negative) return
           let ast = structuredClone(node.nodes)
 
+          if (seen) {
+            throw new Error(
+              `You cannot \`@apply\` the \`${name}\` utility here because it creates a circular dependency.`,
+            )
+          }
+
+          seen = true
+
           substituteAtApply(ast, designSystem)
+
+          seen = false
 
           return ast
         })
