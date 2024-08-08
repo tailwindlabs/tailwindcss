@@ -208,4 +208,5 @@ function optimizeCss(
   }).code.toString()
 }
 
-export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
+// This is used instead of `export default` to work around a bug in `postcss-load-config`
+module.exports = Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
