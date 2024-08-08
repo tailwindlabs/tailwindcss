@@ -110,6 +110,19 @@ export async function compile(
         )
       }
 
+      // Figure out if a custom utility uses `@apply` so that we can substitute
+      // it later.
+      let usesAtApply = false
+      walk(node.nodes, (child) => {
+        if (child.kind !== 'rule') return
+        if (child.selector[0] !== '@') return
+        if (!child.selector.startsWith('@apply ')) return
+
+        usesAtApply = true
+
+        return WalkAction.Stop
+      })
+
       customUtilities.push((designSystem) => {
         // Track if the utility has been seen before to prevent circular
         // dependencies. If there is a circular dependency, it means that we
@@ -120,17 +133,17 @@ export async function compile(
           if (candidate.negative) return
           let ast = structuredClone(node.nodes)
 
-          if (seen) {
-            throw new Error(
-              `You cannot \`@apply\` the \`${name}\` utility here because it creates a circular dependency.`,
-            )
+          if (usesAtApply) {
+            if (seen) {
+              throw new Error(
+                `You cannot \`@apply\` the \`${name}\` utility here because it creates a circular dependency.`,
+              )
+            }
+
+            seen = true
+            substituteAtApply(ast, designSystem)
+            seen = false
           }
-
-          seen = true
-
-          substituteAtApply(ast, designSystem)
-
-          seen = false
 
           return ast
         })
