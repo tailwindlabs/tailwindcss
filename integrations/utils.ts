@@ -41,6 +41,10 @@ interface TestContext {
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
+interface TestFlags {
+  only?: boolean
+  debug?: boolean
+}
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
 
@@ -51,70 +55,41 @@ export function test(
   name: string,
   config: TestConfig,
   testCallback: TestCallback,
-  { only = false } = {},
+  { only = false, debug = false }: TestFlags = {},
 ) {
   return (only ? defaultTest.only : defaultTest)(
     name,
     { timeout: TEST_TIMEOUT },
     async (options) => {
-      let root = await fs.mkdtemp(
-        // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder
-        // that apparently causes the vite builds to not work.
-        path.join(
-          process.env.CI && platform() === 'win32' ? homedir() : tmpdir(),
-          'tailwind-integrations',
-        ),
-      )
+      let rootDir = debug
+        ? path.join(REPO_ROOT, '.debug')
+        : // On Windows CI, tmpdir returns a path containing a weird RUNNER~1
+          // folder  that apparently causes the vite builds to not work.
+          process.env.CI && platform() === 'win32'
+          ? homedir()
+          : tmpdir()
+      await fs.mkdir(rootDir, { recursive: true })
 
-      async function write(filename: string, content: string): Promise<void> {
-        let full = path.join(root, filename)
+      let root = await fs.mkdtemp(path.join(rootDir, 'tailwind-integrations'))
 
-        if (filename.endsWith('package.json')) {
-          content = await overwriteVersionsInPackageJson(content)
-        }
-
-        // Ensure that files written on Windows use \r\n line ending
-        if (platform() === 'win32') {
-          content = content.replace(/\n/g, '\r\n')
-        }
-
-        let dir = path.dirname(full)
-        await fs.mkdir(dir, { recursive: true })
-        await fs.writeFile(full, content)
+      if (debug) {
+        console.log('Running test in debug mode. File system will be written to:')
+        console.log(root)
+        console.log()
       }
-
-      for (let [filename, content] of Object.entries(config.fs)) {
-        await write(filename, content)
-      }
-
-      try {
-        execSync('pnpm install', { cwd: root })
-      } catch (error: any) {
-        console.error(error.stdout.toString())
-        console.error(error.stderr.toString())
-        throw error
-      }
-
-      let disposables: (() => Promise<void>)[] = []
-
-      async function dispose() {
-        await Promise.all(disposables.map((dispose) => dispose()))
-        try {
-          await fs.rm(root, { recursive: true, maxRetries: 5, force: true })
-        } catch (err) {
-          if (!process.env.CI) {
-            throw err
-          }
-        }
-      }
-
-      options.onTestFinished(dispose)
 
       let context = {
         root,
         async exec(command: string, childProcessOptions: ChildProcessOptions = {}) {
+          let cwd = childProcessOptions.cwd ?? root
+          if (debug && cwd !== root) {
+            let relative = path.relative(root, cwd)
+            if (relative[0] !== '.') relative = `./${relative}`
+            console.log(`> cd ${relative}`)
+          }
+          if (debug) console.log(`> ${command}`)
           return execSync(command, {
-            cwd: root,
+            cwd,
             stdio: 'pipe',
             ...childProcessOptions,
           }).toString()
@@ -127,8 +102,15 @@ export function test(
             rejectDisposal = reject
           })
 
+          let cwd = childProcessOptions.cwd ?? root
+          if (debug && cwd !== root) {
+            let relative = path.relative(root, cwd)
+            if (relative[0] !== '.') relative = `./${relative}`
+            console.log(`> cd ${relative}`)
+          }
+          if (debug) console.log(`>& ${command}`)
           let child = spawn(command, {
-            cwd: root,
+            cwd,
             shell: true,
             env: {
               ...process.env,
@@ -177,12 +159,14 @@ export function test(
 
           child.stdout.on('data', (result) => {
             let content = result.toString()
+            if (debug) console.log(content)
             combined.push(['stdout', content])
             stdoutMessages.push(content)
             notifyNext(stdoutActors, stdoutMessages)
           })
           child.stderr.on('data', (result) => {
             let content = result.toString()
+            if (debug) console.error(content)
             combined.push(['stderr', content])
             stderrMessages.push(content)
             notifyNext(stderrActors, stderrMessages)
@@ -195,6 +179,9 @@ export function test(
           })
 
           options.onTestFailed(() => {
+            // In debug mode, messages are logged to the console immediatly
+            if (debug) return
+
             for (let [type, message] of combined) {
               if (type === 'stdout') {
                 console.log(message)
@@ -253,7 +240,22 @@ export function test(
           })
         },
         fs: {
-          write,
+          async write(filename: string, content: string): Promise<void> {
+            let full = path.join(root, filename)
+
+            if (filename.endsWith('package.json')) {
+              content = await overwriteVersionsInPackageJson(content)
+            }
+
+            // Ensure that files written on Windows use \r\n line ending
+            if (platform() === 'win32') {
+              content = content.replace(/\n/g, '\r\n')
+            }
+
+            let dir = path.dirname(full)
+            await fs.mkdir(dir, { recursive: true })
+            await fs.writeFile(full, content)
+          },
           read(filePath: string) {
             return fs.readFile(path.resolve(root, filePath), 'utf8')
           },
@@ -277,12 +279,42 @@ export function test(
         },
       } satisfies TestContext
 
+      for (let [filename, content] of Object.entries(config.fs)) {
+        await context.fs.write(filename, content)
+      }
+
+      try {
+        context.exec('pnpm install')
+      } catch (error: any) {
+        console.error(error)
+        throw error
+      }
+
+      let disposables: (() => Promise<void>)[] = []
+
+      async function dispose() {
+        await Promise.all(disposables.map((dispose) => dispose()))
+        try {
+          if (debug) return
+          await fs.rm(root, { recursive: true, maxRetries: 5, force: true })
+        } catch (err) {
+          if (!process.env.CI) {
+            throw err
+          }
+        }
+      }
+
+      options.onTestFinished(dispose)
+
       await testCallback(context)
     },
   )
 }
 test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { only: true })
+}
+test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
+  return test(name, config, testCallback, { only: true, debug: true })
 }
 
 // Maps package names to their tarball filenames. See scripts/pack-packages.ts
