@@ -412,38 +412,39 @@ export async function compile(
 
 function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   walk(ast, (node, { replaceWith }) => {
-    if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@apply')) {
-      let candidates = node.selector
-        .slice(7 /* Ignore `@apply ` when parsing the selector */)
-        .trim()
-        .split(/\s+/g)
+    if (node.kind !== 'rule') return
+    if (!(node.selector[0] === '@' && node.selector.startsWith('@apply '))) return
 
-      // Replace the `@apply` rule with the actual utility classes
-      {
-        // Parse the candidates to an AST that we can replace the `@apply` rule
-        // with.
-        let candidateAst = compileCandidates(candidates, designSystem, {
-          onInvalidCandidate: (candidate) => {
-            throw new Error(`Cannot apply unknown utility class: ${candidate}`)
-          },
-        }).astNodes
+    let candidates = node.selector
+      .slice(7 /* Ignore `@apply ` when parsing the selector */)
+      .trim()
+      .split(/\s+/g)
 
-        // Collect the nodes to insert in place of the `@apply` rule. When a
-        // rule was used, we want to insert its children instead of the rule
-        // because we don't want the wrapping selector.
-        let newNodes: AstNode[] = []
-        for (let candidateNode of candidateAst) {
-          if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
-            for (let child of candidateNode.nodes) {
-              newNodes.push(child)
-            }
-          } else {
-            newNodes.push(candidateNode)
+    // Replace the `@apply` rule with the actual utility classes
+    {
+      // Parse the candidates to an AST that we can replace the `@apply` rule
+      // with.
+      let candidateAst = compileCandidates(candidates, designSystem, {
+        onInvalidCandidate: (candidate) => {
+          throw new Error(`Cannot apply unknown utility class: ${candidate}`)
+        },
+      }).astNodes
+
+      // Collect the nodes to insert in place of the `@apply` rule. When a rule
+      // was used, we want to insert its children instead of the rule because we
+      // don't want the wrapping selector.
+      let newNodes: AstNode[] = []
+      for (let candidateNode of candidateAst) {
+        if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
+          for (let child of candidateNode.nodes) {
+            newNodes.push(child)
           }
+        } else {
+          newNodes.push(candidateNode)
         }
-
-        replaceWith(newNodes)
       }
+
+      replaceWith(newNodes)
     }
   })
 }
