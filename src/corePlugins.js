@@ -409,8 +409,8 @@ export let variantPlugins = {
     matchVariant(
       'supports',
       (value = '') => {
-        let check = normalize(value)
-        let isRaw = /^\w*\s*\(/.test(check)
+        let check = value.startsWith('--') ? value : normalize(value)
+        let isRaw = /^[\w-]*\s*\(/.test(check)
 
         // Chrome has a bug where `(condition1)or(condition2)` is not valid
         // But `(condition1) or (condition2)` is supported.
