@@ -102,9 +102,15 @@ export function test(
             rejectDisposal = reject
           })
 
+          let cwd = childProcessOptions.cwd ?? root
+          if (debug && cwd !== root) {
+            let relative = path.relative(root, cwd)
+            if (relative[0] !== '.') relative = `./${relative}`
+            console.log(`> cd ${relative}`)
+          }
           if (debug) console.log(`>& ${command}`)
           let child = spawn(command, {
-            cwd: root,
+            cwd,
             shell: true,
             env: {
               ...process.env,
