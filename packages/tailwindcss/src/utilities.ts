@@ -6,7 +6,7 @@ import { inferDataType } from './utils/infer-data-type'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 
-export type CompileFn<T extends Candidate['kind']> = (
+type CompileFn<T extends Candidate['kind']> = (
   value: Extract<Candidate, { kind: T }>,
 ) => AstNode[] | undefined | null
 
