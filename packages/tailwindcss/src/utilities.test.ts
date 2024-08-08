@@ -15243,11 +15243,7 @@ describe('legacy: matchUtilities', () => {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
-                  'border-block': (value) => {
-                    return {
-                      'border-block-width': value,
-                    }
-                  },
+                  'border-block': (value) => ({ 'border-block-width': value }),
                 },
                 {
                   values: {
@@ -15326,12 +15322,10 @@ describe('legacy: matchUtilities', () => {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
-                  'border-block': (value, { modifier }) => {
-                    return {
-                      '--my-modifier': modifier ?? 'none',
-                      'border-block-width': value,
-                    }
-                  },
+                  'border-block': (value, { modifier }) => ({
+                    '--my-modifier': modifier ?? 'none',
+                    'border-block-width': value,
+                  }),
                 },
                 {
                   values: {
@@ -15392,12 +15386,10 @@ describe('legacy: matchUtilities', () => {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
-                  'border-block': (value, { modifier }) => {
-                    return {
-                      '--my-modifier': modifier ?? 'none',
-                      'border-block-width': value,
-                    }
-                  },
+                  'border-block': (value, { modifier }) => ({
+                    '--my-modifier': modifier ?? 'none',
+                    'border-block-width': value,
+                  }),
                 },
                 {
                   values: {
@@ -15562,11 +15554,7 @@ describe('legacy: matchUtilities', () => {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
-                  scrollbar: (value) => {
-                    return {
-                      'scrollbar-color': value,
-                    }
-                  },
+                  scrollbar: (value) => ({ 'scrollbar-color': value }),
                 },
                 {
                   type: ['color', 'any'],
@@ -15578,11 +15566,7 @@ describe('legacy: matchUtilities', () => {
 
               matchUtilities(
                 {
-                  scrollbar: (value) => {
-                    return {
-                      'scrollbar-width': value,
-                    }
-                  },
+                  scrollbar: (value) => ({ 'scrollbar-width': value }),
                 },
                 {
                   type: ['length'],
@@ -15683,11 +15667,7 @@ describe('legacy: matchUtilities', () => {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
-                  scrollbar: (value) => {
-                    return {
-                      'scrollbar-color': value,
-                    }
-                  },
+                  scrollbar: (value) => ({ 'scrollbar-color': value }),
                 },
                 {
                   type: ['color', 'any'],
@@ -15758,12 +15738,10 @@ describe('legacy: matchUtilities', () => {
             return ({ matchUtilities }) => {
               matchUtilities(
                 {
-                  scrollbar: (value, { modifier }) => {
-                    return {
-                      '--modifier': modifier ?? 'none',
-                      'scrollbar-width': value,
-                    }
-                  },
+                  scrollbar: (value, { modifier }) => ({
+                    '--modifier': modifier ?? 'none',
+                    'scrollbar-width': value,
+                  }),
                 },
                 {
                   type: ['any'],
