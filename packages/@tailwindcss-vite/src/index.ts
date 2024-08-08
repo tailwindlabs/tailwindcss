@@ -4,6 +4,7 @@ import { Features, transform } from 'lightningcss'
 import path from 'path'
 import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
+import { pathToFileURL } from 'url'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
 
 export default function tailwindcss(): Plugin[] {
@@ -86,10 +87,12 @@ export default function tailwindcss(): Plugin[] {
     let { build, globs } = await compile(css, {
       loadPlugin: (pluginPath) => {
         if (pluginPath[0] === '.') {
-          return import(path.resolve(inputBasePath, pluginPath)).then((module) => module.default)
+          return import(pathToFileURL(path.resolve(inputBasePath, pluginPath)).toString()).then(
+            (module) => module.default,
+          )
         }
 
-        return import(pluginPath).then((module) => module.default)
+        return import(pathToFileURL(pluginPath).toString()).then((module) => module.default)
       },
     })
 

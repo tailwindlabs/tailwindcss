@@ -119,6 +119,7 @@ export function test(
           })
 
           function dispose() {
+            console.log('start cleanup', command)
             child.kill()
 
             let timer = setTimeout(
@@ -126,7 +127,10 @@ export function test(
                 rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
               ASSERTION_TIMEOUT,
             )
-            disposePromise.finally(() => clearTimeout(timer))
+            disposePromise.finally(() => {
+              clearTimeout(timer)
+              console.log('end cleanup', command)
+            })
             return disposePromise
           }
           disposables.push(dispose)
@@ -219,6 +223,7 @@ export function test(
                   reject(new Error(`Failed to get a free port: address is ${address}`))
                 } else {
                   disposables.push(async () => {
+                    console.log('start cleanup port', port)
                     // Wait for 10ms in case the process was just killed
                     await new Promise((resolve) => setTimeout(resolve, 10))
 
@@ -228,10 +233,12 @@ export function test(
                     // still in use first.
                     let isPortTaken = await testIfPortTaken(port)
                     if (!isPortTaken) {
+                      console.log('end cleanup port (nothing to do)', port)
                       return
                     }
 
                     await killPort(port)
+                    console.log('end cleanup port', port)
                   })
                   resolve(port)
                 }
@@ -293,6 +300,8 @@ export function test(
       let disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
+        console.log('start dispose()', options.task.name)
+
         await Promise.all(disposables.map((dispose) => dispose()))
         try {
           if (debug) return
@@ -302,11 +311,12 @@ export function test(
             throw err
           }
         }
+        console.log('end dispose()', options.task.name)
       }
 
       options.onTestFinished(dispose)
 
-      await testCallback(context)
+      return await testCallback(context)
     },
   )
 }
