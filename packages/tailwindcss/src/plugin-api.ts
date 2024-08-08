@@ -136,29 +136,15 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
           {
             let modifiers = options?.modifiers ?? null
 
-            // Candidate doesn't even have a modifier
             if (!candidate.modifier) {
               modifier = null
-            }
-
-            // If bare modifiers are supported or the modifier is arbitrary, just use the value
-            else if (modifiers === 'any' || candidate.modifier.kind === 'arbitrary') {
+            } else if (modifiers === 'any' || candidate.modifier.kind === 'arbitrary') {
               modifier = candidate.modifier.value
-            }
-
-            // If there's a match in the lookup list, use that
-            else if (modifiers?.[candidate.modifier.value]) {
+            } else if (modifiers?.[candidate.modifier.value]) {
               modifier = modifiers[candidate.modifier.value]
-            }
-
-            // Color utilities implicitly support all numeric modifiers as opacity values (0-100) which are
-            // converted to percentages.
-            else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
+            } else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
               modifier = `${candidate.modifier.value}%`
-            }
-
-            // The modifier value couldn't be resolved
-            else {
+            } else {
               modifier = null
             }
           }
