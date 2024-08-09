@@ -20,7 +20,6 @@ export type PluginAPI = {
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
-
   return {
     addVariant(name, variant) {
       // Single selector

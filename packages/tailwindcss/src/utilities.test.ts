@@ -15274,15 +15274,15 @@ describe('legacy: addUtilities', () => {
   test('custom static utility', async () => {
     let compiled = await compile(
       css`
-      @plugin "my-plugin";
-      @layer utilities {
-        @tailwind utilities;
-      }
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
 
-      @theme reference {
-        --breakpoint-lg: 1024px;
-      }
-    `,
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        }
+      `,
       {
         async loadPlugin() {
           return ({ addUtilities }) => {
@@ -15319,15 +15319,15 @@ describe('legacy: addUtilities', () => {
     await expect(() => {
       return compile(
         css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-        @theme reference {
-          --breakpoint-lg: 1024px;
-        }
-      `,
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
         {
           async loadPlugin() {
             return ({ addUtilities }) => {
@@ -15922,15 +15922,15 @@ describe('legacy: matchUtilities', () => {
     await expect(() => {
       return compile(
         css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-        @theme reference {
-          --breakpoint-lg: 1024px;
-        }
-      `,
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
         {
           async loadPlugin() {
             return ({ matchUtilities }) => {
