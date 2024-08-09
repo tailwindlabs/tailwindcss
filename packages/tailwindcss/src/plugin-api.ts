@@ -1,3 +1,4 @@
+import { substituteAtApply } from './apply'
 import { objectToAst, rule, type CssInJs } from './ast'
 import type { DesignSystem } from './design-system'
 import { withAlpha, withNegative } from './utilities'
@@ -53,7 +54,9 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
         designSystem.utilities.static(name.slice(1), (candidate) => {
           if (candidate.negative) return
 
-          return objectToAst(css)
+          let ast = objectToAst(css)
+          substituteAtApply(ast, designSystem)
+          return ast
         })
       }
     },
@@ -161,7 +164,9 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
             value = withNegative(value, candidate)
           }
 
-          return objectToAst(fn(value, { modifier }))
+          let ast = objectToAst(fn(value, { modifier }))
+          substituteAtApply(ast, designSystem)
+          return ast
         })
       }
     },

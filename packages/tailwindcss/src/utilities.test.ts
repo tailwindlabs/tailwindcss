@@ -15441,6 +15441,58 @@ describe('legacy: addUtilities', () => {
     `)
   })
 
+  test('custom static utilities support `@apply`', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }) => {
+            addUtilities({
+              '.foo': {
+                '@apply flex dark:underline': {},
+              },
+            })
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['foo', 'lg:foo'])).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo {
+          display: flex;
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .foo {
+            text-decoration-line: underline;
+          }
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:foo {
+            display: flex;
+          }
+
+          @media (prefers-color-scheme: dark) {
+            .lg\\:foo {
+              text-decoration-line: underline;
+            }
+          }
+        }
+      }"
+    `)
+  })
+
   test('throws on custom static utilities with an invalid name', async () => {
     await expect(() => {
       return compile(
@@ -16057,6 +16109,70 @@ describe('legacy: matchUtilities', () => {
       .scrollbar-\\[12px\\]\\/foo {
         --modifier: foo;
         scrollbar-width: 12px;
+      }"
+    `)
+  })
+
+  test('functional utilities support `@apply`', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+
+        @theme reference {
+          --breakpoint-lg: 1024px;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ matchUtilities }) => {
+            matchUtilities(
+              {
+                foo: (value) => ({
+                  '--foo': value,
+                  [`@apply flex`]: {},
+                }),
+              },
+              {
+                values: {
+                  bar: 'bar',
+                },
+              },
+            )
+          }
+        },
+      },
+    )
+
+    expect(
+      optimizeCss(compiled.build(['foo-bar', 'lg:foo-bar', 'foo-[12px]', 'lg:foo-[12px]'])).trim(),
+    ).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo-\\[12px\\] {
+          --foo: 12px;
+          display: flex;
+        }
+
+        .foo-bar {
+          --foo: bar;
+          display: flex;
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:foo-\\[12px\\] {
+            --foo: 12px;
+            display: flex;
+          }
+        }
+
+        @media (width >= 1024px) {
+          .lg\\:foo-bar {
+            --foo: bar;
+            display: flex;
+          }
+        }
       }"
     `)
   })
