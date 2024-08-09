@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "workspace:^",
-    "@vitejs/plugin-react": "^4.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwindcss": "workspace:^"
@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "bun": "^1.1.10",
+    "bun": "^1.1.22",
     "vite": "catalog:",
     "vite-plugin-handlebars": "^2.0.0"
   }

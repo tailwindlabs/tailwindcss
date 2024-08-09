@@ -47,16 +47,16 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.44.1",
+    "@playwright/test": "^1.46.0",
     "@types/node": "catalog:",
-    "postcss": "8.4.24",
+    "postcss": "8.4.41",
     "postcss-import": "^16.1.0",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.3",
     "prettier-plugin-embed": "^0.4.15",
-    "prettier-plugin-organize-imports": "^3.2.4",
-    "tsup": "^8.0.2",
-    "turbo": "^1.13.3",
-    "typescript": "^5.4.5",
+    "prettier-plugin-organize-imports": "^4.0.0",
+    "tsup": "^8.2.4",
+    "turbo": "^1.13.4",
+    "typescript": "^5.5.4",
     "vitest": "^2.0.5"
   },
   "packageManager": "pnpm@9.6.0"

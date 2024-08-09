@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/postcss-import": "^14.0.3",
-    "postcss": "8.4.24",
+    "postcss": "^8.4.41",
     "internal-example-plugin": "workspace:*",
     "internal-postcss-fix-relative-paths": "workspace:^"
   }

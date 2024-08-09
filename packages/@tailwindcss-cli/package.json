@@ -34,7 +34,7 @@
     "lightningcss": "catalog:",
     "mri": "^1.2.0",
     "picocolors": "^1.0.1",
-    "postcss": "8.4.24",
+    "postcss": "^8.4.41",
     "postcss-import": "^16.1.0",
     "tailwindcss": "workspace:^"
   },
