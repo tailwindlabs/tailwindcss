@@ -15171,7 +15171,7 @@ describe('custom utilities', () => {
         .text-sm {
           font-size: var(--font-size-sm, .875rem);
           line-height: var(--font-size-sm--line-height, 1.25rem);
-          text-rendering: optimizelegibility;
+          text-rendering: optimizeLegibility;
         }
       }"
     `)
