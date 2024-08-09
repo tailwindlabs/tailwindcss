@@ -1,13 +1,10 @@
 import { scanDir } from '@tailwindcss/oxide'
 import fixRelativePathsPlugin, { normalizePath } from 'internal-postcss-fix-relative-paths'
 import { Features, transform } from 'lightningcss'
-import { fileURLToPath } from 'node:url'
 import path from 'path'
 import postcssrc from 'postcss-load-config'
 import { compile } from 'tailwindcss'
 import type { Plugin, ResolvedConfig, Rollup, Update, ViteDevServer } from 'vite'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default function tailwindcss(): Plugin[] {
   let server: ViteDevServer | null = null
@@ -349,8 +346,9 @@ function getExtension(id: string) {
 }
 
 function isTailwindCssFile(id: string, src: string) {
-  if (id.includes('/.vite/')) return
-  return getExtension(id) === 'css' && src.includes('@tailwind')
+  const extension = getExtension(id)
+  const isCssFile = extension === 'css' || (extension === 'vue' && id.includes('&lang.css'))
+  return isCssFile && src.includes('@tailwind')
 }
 
 function optimizeCss(
