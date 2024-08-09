@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "tasks": {
     "@tailwindcss/oxide#build": {
       "dependsOn": ["^build"],
       "outputs": ["./index.d.ts", "./index.js", "./*.node"],
