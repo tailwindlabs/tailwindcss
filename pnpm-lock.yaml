@@ -24,7 +24,7 @@ importers:
         specifier: ^1.44.1
         version: 1.45.3
       '@types/node':
-        specifier: ^20.12.12
+        specifier: 'catalog:'
         version: 20.14.13
       postcss:
         specifier: 8.4.24
@@ -220,7 +220,7 @@ importers:
   packages/internal-postcss-fix-relative-paths:
     devDependencies:
       '@types/node':
-        specifier: ^20.12.12
+        specifier: 'catalog:'
         version: 20.14.13
       '@types/postcss-import':
         specifier: ^14.0.3
