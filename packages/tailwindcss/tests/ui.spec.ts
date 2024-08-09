@@ -14,7 +14,7 @@ test('touch action', async ({ page }) => {
     html`<div id="x" class="touch-pan-x touch-pan-y hover:touch-pinch-zoom">Hello world</div>`,
   )
 
-  expect(await getPropertyValue('#x', 'touch-action')).toEqual('pan-x pan-y')
+  await expect.poll(() => getPropertyValue('#x', 'touch-action')).toEqual('pan-x pan-y')
 
   await page.locator('#x').hover()
 
@@ -53,7 +53,7 @@ for (let [classes, expected] of [
       html`<div id="x" class="bg-gradient-to-r ${classes}">Hello world</div>`,
     )
 
-    expect(await getPropertyValue('#x', 'background-image')).toEqual(expected)
+    await expect.poll(() => getPropertyValue('#x', 'background-image')).toEqual(expected)
   })
 }
 
@@ -67,15 +67,17 @@ test('background gradient, going from 2 to 3', async ({ page }) => {
     `,
   )
 
-  expect(await getPropertyValue('#x', 'background-image')).toEqual(
-    'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
-  )
+  await expect
+    .poll(() => getPropertyValue('#x', 'background-image'))
+    .toEqual('linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)')
 
   await page.locator('#x').hover()
 
-  expect(await getPropertyValue('#x', 'background-image')).toEqual(
-    'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
-  )
+  await expect
+    .poll(() => getPropertyValue('#x', 'background-image'))
+    .toEqual(
+      'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
+    )
 })
 
 test('background gradient, going from 3 to 2', async ({ page }) => {
@@ -88,15 +90,17 @@ test('background gradient, going from 3 to 2', async ({ page }) => {
     `,
   )
 
-  expect(await getPropertyValue('#x', 'background-image')).toEqual(
-    'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
-  )
+  await expect
+    .poll(() => getPropertyValue('#x', 'background-image'))
+    .toEqual(
+      'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
+    )
 
   await page.locator('#x').hover()
 
-  expect(await getPropertyValue('#x', 'background-image')).toEqual(
-    'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)',
-  )
+  await expect
+    .poll(() => getPropertyValue('#x', 'background-image'))
+    .toEqual('linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)')
 })
 
 test("::backdrop can receive a border with just the 'border' utility", async ({ page }) => {
@@ -109,7 +113,9 @@ test("::backdrop can receive a border with just the 'border' utility", async ({ 
     ;(document.getElementById('x') as HTMLDialogElement)!.showModal()
   })
 
-  expect(await getPropertyValue(['#x', '::backdrop'], 'border')).toEqual('1px solid rgb(0, 0, 0)')
+  await expect
+    .poll(() => getPropertyValue(['#x', '::backdrop'], 'border'))
+    .toEqual('1px solid rgb(0, 0, 0)')
 })
 
 test("::first-letter can receive a border with just the 'border' utility", async ({ page }) => {
@@ -118,9 +124,9 @@ test("::first-letter can receive a border with just the 'border' utility", async
     html`<div id="x" class="first-letter:border first-letter:border-black">Hello world</div>`,
   )
 
-  expect(await getPropertyValue(['#x', '::first-letter'], 'border')).toEqual(
-    '1px solid rgb(0, 0, 0)',
-  )
+  await expect
+    .poll(() => getPropertyValue(['#x', '::first-letter'], 'border'))
+    .toEqual('1px solid rgb(0, 0, 0)')
 })
 
 // `getComputedStyle` doesn't work in Chrome/Safari on `::file-selector-button`
@@ -135,9 +141,9 @@ test.skip("::file-selector-button can receive a border with just the 'border' ut
     html`<input id="x" type="file" class="file:border file:border-black" />`,
   )
 
-  expect(await getPropertyValue(['#x', '::file-selector-button'], 'border')).toEqual(
-    '1px solid rgb(0, 0, 0)',
-  )
+  await expect
+    .poll(() => getPropertyValue(['#x', '::file-selector-button'], 'border'))
+    .toEqual('1px solid rgb(0, 0, 0)')
 })
 
 test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) => {
@@ -149,15 +155,17 @@ test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) =>
     ></div>`,
   )
 
-  expect(await getPropertyValue('#x', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 255, 0, 0.5) 0px 2px 4px 0px inset', // inset-shadow
-      'rgba(0, 0, 255, 0.5) 0px 0px 0px 1px inset', // inset-ring
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px', // ring-offset (disabled)
-      'rgba(255, 255, 255, 0.5) 0px 0px 0px 1px', // ring
-      'rgba(255, 0, 0, 0.5) 0px 1px 3px 0px, rgba(255, 0, 0, 0.5) 0px 1px 2px -1px', // shadow
-    ].join(', '),
-  )
+  await expect
+    .poll(() => getPropertyValue('#x', 'box-shadow'))
+    .toEqual(
+      [
+        'rgba(0, 255, 0, 0.5) 0px 2px 4px 0px inset', // inset-shadow
+        'rgba(0, 0, 255, 0.5) 0px 0px 0px 1px inset', // inset-ring
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px', // ring-offset (disabled)
+        'rgba(255, 255, 255, 0.5) 0px 0px 0px 1px', // ring
+        'rgba(255, 0, 0, 0.5) 0px 1px 3px 0px, rgba(255, 0, 0, 0.5) 0px 1px 2px -1px', // shadow
+      ].join(', '),
+    )
 })
 
 test('shadow colors', async ({ page }) => {
@@ -170,33 +178,39 @@ test('shadow colors', async ({ page }) => {
     `,
   )
 
-  expect(await getPropertyValue('#x', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(239, 68, 68) 0px 1px 3px 0px, rgb(239, 68, 68) 0px 1px 2px -1px',
-    ].join(', '),
-  )
-  expect(await getPropertyValue('#y', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(239, 68, 68) 0px 20px 25px -5px, rgb(239, 68, 68) 0px 8px 10px -6px',
-    ].join(', '),
-  )
-  expect(await getPropertyValue('#z', 'box-shadow')).toEqual(
-    [
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
-      'rgb(239, 68, 68) 0px 2px 4px 0px',
-    ].join(', '),
-  )
+  await expect
+    .poll(() => getPropertyValue('#x', 'box-shadow'))
+    .toEqual(
+      [
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgb(239, 68, 68) 0px 1px 3px 0px, rgb(239, 68, 68) 0px 1px 2px -1px',
+      ].join(', '),
+    )
+  await expect
+    .poll(() => getPropertyValue('#y', 'box-shadow'))
+    .toEqual(
+      [
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgb(239, 68, 68) 0px 20px 25px -5px, rgb(239, 68, 68) 0px 8px 10px -6px',
+      ].join(', '),
+    )
+  await expect
+    .poll(() => getPropertyValue('#z', 'box-shadow'))
+    .toEqual(
+      [
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgba(0, 0, 0, 0) 0px 0px 0px 0px',
+        'rgb(239, 68, 68) 0px 2px 4px 0px',
+      ].join(', '),
+    )
 })
 
 test('outline style is optional', async ({ page }) => {
@@ -205,7 +219,7 @@ test('outline style is optional', async ({ page }) => {
     html`<div id="x" class="outline-2 outline-white"></div>`,
   )
 
-  expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) solid 2px')
+  await expect.poll(() => getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) solid 2px')
 })
 
 test('outline style is preserved when changing outline width', async ({ page }) => {
@@ -216,11 +230,15 @@ test('outline style is preserved when changing outline width', async ({ page }) 
     </div>`,
   )
 
-  expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) dotted 2px')
+  await expect
+    .poll(() => getPropertyValue('#x', 'outline'))
+    .toEqual('rgb(255, 255, 255) dotted 2px')
 
   await page.locator('#x').hover()
 
-  expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) dotted 4px')
+  await expect
+    .poll(() => getPropertyValue('#x', 'outline'))
+    .toEqual('rgb(255, 255, 255) dotted 4px')
 })
 
 test('borders can be added without a border-style utility', async ({ page }) => {
@@ -229,7 +247,7 @@ test('borders can be added without a border-style utility', async ({ page }) => 
     html`<div id="x" class="text-black border-2"></div>`,
   )
 
-  expect(await getPropertyValue('#x', 'border')).toEqual('2px solid rgb(0, 0, 0)')
+  await expect.poll(() => getPropertyValue('#x', 'border')).toEqual('2px solid rgb(0, 0, 0)')
 })
 
 test('borders can be added to a single side without a border-style utility', async ({ page }) => {
@@ -239,11 +257,11 @@ test('borders can be added to a single side without a border-style utility', asy
       Hello world
     </div>`,
   )
-  expect(await getPropertyValue('#x', 'border-right')).toEqual('2px dashed rgb(0, 0, 0)')
+  await expect.poll(() => getPropertyValue('#x', 'border-right')).toEqual('2px dashed rgb(0, 0, 0)')
 
   await page.locator('#x').hover()
 
-  expect(await getPropertyValue('#x', 'border-right')).toEqual('4px dashed rgb(0, 0, 0)')
+  await expect.poll(() => getPropertyValue('#x', 'border-right')).toEqual('4px dashed rgb(0, 0, 0)')
 })
 
 test('dividers can be added without setting border-style', async ({ page }) => {
@@ -254,11 +272,15 @@ test('dividers can be added without setting border-style', async ({ page }) => {
       <div>Second</div>
     </div>`,
   )
-  expect(await getPropertyValue('#b', 'border-bottom')).toEqual('2px dashed rgb(0, 0, 0)')
+  await expect
+    .poll(() => getPropertyValue('#b', 'border-bottom'))
+    .toEqual('2px dashed rgb(0, 0, 0)')
 
   await page.locator('#a').hover()
 
-  expect(await getPropertyValue('#b', 'border-bottom')).toEqual('4px dashed rgb(0, 0, 0)')
+  await expect
+    .poll(() => getPropertyValue('#b', 'border-bottom'))
+    .toEqual('4px dashed rgb(0, 0, 0)')
 })
 
 test('scale can be a number or percentage', async ({ page }) => {
@@ -266,11 +288,11 @@ test('scale can be a number or percentage', async ({ page }) => {
     page,
     html`<div id="x" class="scale-[50%] hover:scale-[1.5]">Hello world</div>`,
   )
-  expect(await getPropertyValue('#x', 'scale')).toEqual('0.5')
+  await expect.poll(() => getPropertyValue('#x', 'scale')).toEqual('0.5')
 
   await page.locator('#x').hover()
 
-  expect(await getPropertyValue('#x', 'scale')).toEqual('1.5')
+  await expect.poll(() => getPropertyValue('#x', 'scale')).toEqual('1.5')
 })
 
 // https://github.com/tailwindlabs/tailwindcss/issues/13185
@@ -280,11 +302,11 @@ test('content-none persists when conditionally styling a pseudo-element', async 
     html`<div id="x" class="after:content-none after:hover:underline">Hello world</div>`,
   )
 
-  expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
+  await expect.poll(() => getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 
   await page.locator('#x').hover()
 
-  expect(await getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
+  await expect.poll(() => getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 })
 
 // ---
