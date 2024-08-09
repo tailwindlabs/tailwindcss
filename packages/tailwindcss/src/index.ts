@@ -35,24 +35,8 @@ function parseThemeOptions(selector: string) {
   return { isReference, isInline }
 }
 
-export async function compile(
-  css: string,
-  { loadPlugin = throwOnPlugin }: CompileOptions = {},
-): Promise<{
-  globs: string[]
-  build(candidates: string[]): string
-}> {
+async function parseCss(css: string, { loadPlugin = throwOnPlugin }: CompileOptions = {}) {
   let ast = CSS.parse(css)
-
-  if (process.env.NODE_ENV !== 'test') {
-    ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
-  }
-
-  // Track all invalid candidates
-  let invalidCandidates = new Set<string>()
-  function onInvalidCandidate(candidate: string) {
-    invalidCandidates.add(candidate)
-  }
 
   // Find all `@theme` declarations
   let theme = new Theme()
@@ -301,21 +285,6 @@ export async function compile(
 
   await Promise.all(pluginLoaders.map((loader) => loader.then((plugin) => plugin(pluginApi))))
 
-  let tailwindUtilitiesNode: Rule | null = null
-
-  // Find `@tailwind utilities` so that we can later replace it with the actual
-  // generated utility class CSS.
-  walk(ast, (node) => {
-    if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
-      tailwindUtilitiesNode = node
-
-      // Stop walking after finding `@tailwind utilities` to avoid walking all
-      // of the generated CSS. This means `@tailwind utilities` can only appear
-      // once per file but that's the intended usage at this point in time.
-      return WalkAction.Stop
-    }
-  })
-
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
     substituteAtApply(ast, designSystem)
@@ -334,6 +303,47 @@ export async function compile(
     // into nested trees.
     return WalkAction.Skip
   })
+
+  return {
+    designSystem,
+    ast,
+    globs,
+  }
+}
+
+export async function compile(
+  css: string,
+  opts: CompileOptions = {},
+): Promise<{
+  globs: string[]
+  build(candidates: string[]): string
+}> {
+  let { designSystem, ast, globs } = await parseCss(css, opts)
+
+  let tailwindUtilitiesNode: Rule | null = null
+
+  // Find `@tailwind utilities` so that we can later replace it with the actual
+  // generated utility class CSS.
+  walk(ast, (node) => {
+    if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
+      tailwindUtilitiesNode = node
+
+      // Stop walking after finding `@tailwind utilities` to avoid walking all
+      // of the generated CSS. This means `@tailwind utilities` can only appear
+      // once per file but that's the intended usage at this point in time.
+      return WalkAction.Stop
+    }
+  })
+
+  if (process.env.NODE_ENV !== 'test') {
+    ast.unshift(comment(`! tailwindcss v${version} | MIT License | https://tailwindcss.com `))
+  }
+
+  // Track all invalid candidates
+  let invalidCandidates = new Set<string>()
+  function onInvalidCandidate(candidate: string) {
+    invalidCandidates.add(candidate)
+  }
 
   // Track all valid candidates, these are the incoming `rawCandidate` that
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
@@ -385,24 +395,7 @@ export async function compile(
   }
 }
 
-export function __unstable__loadDesignSystem(css: string) {
-  // Find all `@theme` declarations
-  let theme = new Theme()
-  let ast = CSS.parse(css)
-
-  walk(ast, (node) => {
-    if (node.kind !== 'rule') return
-    if (node.selector !== '@theme' && !node.selector.startsWith('@theme ')) return
-    let { isReference, isInline } = parseThemeOptions(node.selector)
-
-    // Record all custom properties in the `@theme` declaration
-    walk([node], (node) => {
-      if (node.kind !== 'declaration') return
-      if (!node.property.startsWith('--')) return
-
-      theme.add(node.property, node.value, { isReference, isInline })
-    })
-  })
-
-  return buildDesignSystem(theme)
+export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
+  let result = await parseCss(css, opts)
+  return result.designSystem
 }
