@@ -6,5 +6,6 @@ packages:
   - 'integrations'
 
 catalog:
-  vite: ^5.2.11
   '@types/node': ^20.12.12
+  lightningcss: ^1.25.1
+  vite: ^5.2.11

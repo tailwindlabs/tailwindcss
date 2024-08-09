@@ -9,6 +9,9 @@ catalogs:
     '@types/node':
       specifier: ^20.12.12
       version: 20.14.13
+    lightningcss:
+      specifier: ^1.25.1
+      version: 1.25.1
     vite:
       specifier: ^5.2.11
       version: 5.3.5
@@ -131,7 +134,7 @@ importers:
         specifier: workspace:^
         version: link:../../crates/node
       lightningcss:
-        specifier: ^1.25.1
+        specifier: 'catalog:'
         version: 1.25.1
       mri:
         specifier: ^1.2.0
@@ -162,7 +165,7 @@ importers:
         specifier: workspace:^
         version: link:../../crates/node
       lightningcss:
-        specifier: ^1.25.1
+        specifier: 'catalog:'
         version: 1.25.1
       postcss-import:
         specifier: ^16.1.0
@@ -193,7 +196,7 @@ importers:
         specifier: workspace:^
         version: link:../../crates/node
       lightningcss:
-        specifier: ^1.25.1
+        specifier: 'catalog:'
         version: 1.25.1
       postcss-load-config:
         specifier: ^6.0.1
@@ -238,7 +241,7 @@ importers:
         specifier: 'catalog:'
         version: 20.14.13
       lightningcss:
-        specifier: ^1.25.1
+        specifier: 'catalog:'
         version: 1.25.1
 
   playgrounds/nextjs:
