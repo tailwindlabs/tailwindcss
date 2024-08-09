@@ -15,6 +15,7 @@ import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme } from './theme'
+import { escape } from './utils/escape'
 import { segment } from './utils/segment'
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -117,7 +118,6 @@ export async function compile(
         })
       })
 
-      replaceWith([])
       return
     }
 
@@ -338,8 +338,8 @@ export async function compile(
 
   let tailwindUtilitiesNode: Rule | null = null
 
-  // Find `@tailwind utilities` and replace it with the actual generated utility
-  // class CSS.
+  // Find `@tailwind utilities` so that we can later replace it with the actual
+  // generated utility class CSS.
   walk(ast, (node) => {
     if (node.kind === 'rule' && node.selector === '@tailwind utilities') {
       tailwindUtilitiesNode = node
@@ -353,41 +353,22 @@ export async function compile(
 
   // Replace `@apply` rules with the actual utility classes.
   if (css.includes('@apply')) {
-    walk(ast, (node, { replaceWith }) => {
-      if (node.kind === 'rule' && node.selector[0] === '@' && node.selector.startsWith('@apply')) {
-        let candidates = node.selector
-          .slice(7 /* Ignore `@apply ` when parsing the selector */)
-          .trim()
-          .split(/\s+/g)
-
-        // Replace the `@apply` rule with the actual utility classes
-        {
-          // Parse the candidates to an AST that we can replace the `@apply` rule with.
-          let candidateAst = compileCandidates(candidates, designSystem, {
-            onInvalidCandidate: (candidate) => {
-              throw new Error(`Cannot apply unknown utility class: ${candidate}`)
-            },
-          }).astNodes
-
-          // Collect the nodes to insert in place of the `@apply` rule. When a
-          // rule was used, we want to insert its children instead of the rule
-          // because we don't want the wrapping selector.
-          let newNodes: AstNode[] = []
-          for (let candidateNode of candidateAst) {
-            if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
-              for (let child of candidateNode.nodes) {
-                newNodes.push(child)
-              }
-            } else {
-              newNodes.push(candidateNode)
-            }
-          }
-
-          replaceWith(newNodes)
-        }
-      }
-    })
+    substituteAtApply(ast, designSystem)
   }
+
+  // Remove `@utility`, we couldn't replace it before yet because we had to
+  // handle the nested `@apply` at-rules first.
+  walk(ast, (node, { replaceWith }) => {
+    if (node.kind !== 'rule') return
+
+    if (node.selector[0] === '@' && node.selector.startsWith('@utility ')) {
+      replaceWith([])
+    }
+
+    // The `@utility` has to be top-level, therefore we don't have to traverse
+    // into nested trees.
+    return WalkAction.Skip
+  })
 
   // Track all valid candidates, these are the incoming `rawCandidate` that
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
@@ -437,6 +418,72 @@ export async function compile(
       return compiledCss
     },
   }
+}
+
+function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
+  walk(ast, (node, { replaceWith }) => {
+    if (node.kind !== 'rule') return
+    if (!(node.selector[0] === '@' && node.selector.startsWith('@apply '))) return
+
+    let candidates = node.selector
+      .slice(7 /* Ignore `@apply ` when parsing the selector */)
+      .trim()
+      .split(/\s+/g)
+
+    // Replace the `@apply` rule with the actual utility classes
+    {
+      // Parse the candidates to an AST that we can replace the `@apply` rule
+      // with.
+      let candidateAst = compileCandidates(candidates, designSystem, {
+        onInvalidCandidate: (candidate) => {
+          throw new Error(`Cannot apply unknown utility class: ${candidate}`)
+        },
+      }).astNodes
+
+      // Collect the nodes to insert in place of the `@apply` rule. When a rule
+      // was used, we want to insert its children instead of the rule because we
+      // don't want the wrapping selector.
+      let newNodes: AstNode[] = []
+      for (let candidateNode of candidateAst) {
+        if (candidateNode.kind === 'rule' && candidateNode.selector[0] !== '@') {
+          for (let child of candidateNode.nodes) {
+            newNodes.push(child)
+          }
+        } else {
+          newNodes.push(candidateNode)
+        }
+      }
+
+      // Verify that we don't have any circular dependencies by verifying that
+      // the current node does not appear in the new nodes.
+      walk(newNodes, (child) => {
+        if (child !== node) return
+
+        // At this point we already know that we have a circular dependency.
+        //
+        // Figure out which candidate caused the circular dependency. This will
+        // help to create a useful error message for the end user.
+        for (let candidate of candidates) {
+          let selector = `.${escape(candidate)}`
+
+          for (let rule of candidateAst) {
+            if (rule.kind !== 'rule') continue
+            if (rule.selector !== selector) continue
+
+            walk(rule.nodes, (child) => {
+              if (child !== node) return
+
+              throw new Error(
+                `You cannot \`@apply\` the \`${candidate}\` utility here because it creates a circular dependency.`,
+              )
+            })
+          }
+        }
+      })
+
+      replaceWith(newNodes)
+    }
+  })
 }
 
 export function __unstable__loadDesignSystem(css: string) {

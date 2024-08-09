@@ -15122,7 +15122,7 @@ describe('custom utilities', () => {
     `)
   })
 
-  test('custom utilities support some special chracters', async () => {
+  test('custom utilities support some special characters', async () => {
     let { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
@@ -15267,5 +15267,131 @@ describe('custom utilities', () => {
         }
       `),
     ).rejects.toThrowError(/should be alphanumeric/)
+  })
+
+  test('custom utilities work with `@apply`', async () => {
+    expect(
+      await compileCss(
+        css`
+          @utility foo {
+            @apply flex flex-col underline;
+          }
+
+          @utility bar {
+            @apply z-10;
+
+            .baz {
+              @apply z-20;
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo', 'hover:foo', 'bar'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bar {
+        z-index: 10;
+      }
+
+      .bar .baz {
+        z-index: 20;
+      }
+
+      .foo {
+        flex-direction: column;
+        text-decoration-line: underline;
+        display: flex;
+      }
+
+      .hover\\:foo:hover {
+        flex-direction: column;
+        text-decoration-line: underline;
+        display: flex;
+      }"
+    `)
+  })
+
+  test('referencing custom utilities in custom utilities via `@apply` should work', async () => {
+    expect(
+      await compileCss(
+        css`
+          @utility foo {
+            @apply flex flex-col underline;
+          }
+
+          @utility bar {
+            @apply dark:foo font-bold;
+          }
+
+          @tailwind utilities;
+        `,
+        ['bar'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".bar {
+        font-weight: 700;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .bar {
+          flex-direction: column;
+          text-decoration-line: underline;
+          display: flex;
+        }
+      }"
+    `)
+  })
+
+  test('custom utilities with `@apply` causing circular dependencies should error', async () => {
+    await expect(() =>
+      compileCss(
+        css`
+          @utility foo {
+            @apply font-bold hover:bar;
+          }
+
+          @utility bar {
+            @apply flex dark:foo;
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo', 'bar'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`dark:foo\` utility here because it creates a circular dependency.]`,
+    )
+  })
+
+  test('custom utilities with `@apply` causing circular dependencies should error (deeply nesting)', async () => {
+    await expect(() =>
+      compileCss(
+        css`
+          @utility foo {
+            .bar {
+              .baz {
+                .qux {
+                  @apply font-bold hover:bar;
+                }
+              }
+            }
+          }
+
+          @utility bar {
+            .baz {
+              .qux {
+                @apply flex dark:foo;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo', 'bar'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`dark:foo\` utility here because it creates a circular dependency.]`,
+    )
   })
 })
