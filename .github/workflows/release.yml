@@ -1,6 +1,9 @@
 name: Release
 
 on:
+  push:
+    branches: [master, next]
+  pull_request:
   workflow_dispatch:
     inputs:
       release_channel:
@@ -135,11 +138,11 @@ jobs:
         if: ${{ matrix.strip }}
         run: ${{ matrix.strip }} ${{ env.OXIDE_LOCATION }}/*.node
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: bindings-${{ matrix.target }}
-          path: ${{ env.OXIDE_LOCATION }}/*.node
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: bindings-${{ matrix.target }}
+      #     path: ${{ env.OXIDE_LOCATION }}/*.node
 
   release:
     runs-on: ubuntu-latest
@@ -221,7 +224,7 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Publish
-        run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Publish
+      #   run: pnpm --recursive publish --tag ${{ inputs.release_channel }} --no-git-checks
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
