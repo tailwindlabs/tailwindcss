@@ -15363,4 +15363,35 @@ describe('custom utilities', () => {
       `[Error: You cannot \`@apply\` the \`dark:foo\` utility here because it creates a circular dependency.]`,
     )
   })
+
+  test('custom utilities with `@apply` causing circular dependencies should error (deeply nesting)', async () => {
+    await expect(() =>
+      compileCss(
+        css`
+          @utility foo {
+            .bar {
+              .baz {
+                .qux {
+                  @apply font-bold hover:bar;
+                }
+              }
+            }
+          }
+
+          @utility bar {
+            .baz {
+              .qux {
+                @apply flex dark:foo;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo', 'bar'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`dark:foo\` utility here because it creates a circular dependency.]`,
+    )
+  })
 })
