@@ -73,7 +73,6 @@ export async function compile(
   let pluginLoaders: Promise<Plugin>[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
-  let customUtilitiesWithAtApply: AstNode[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
   let globs: string[] = []
@@ -112,18 +111,6 @@ export async function compile(
         )
       }
 
-      // Figure out if the custom utility uses `@apply` so that we can
-      // substitute it later.
-      walk(node.nodes, (child) => {
-        if (child.kind !== 'rule') return
-        if (child.selector[0] !== '@') return
-        if (!child.selector.startsWith('@apply ')) return
-
-        customUtilitiesWithAtApply.push(node)
-
-        return WalkAction.Stop
-      })
-
       customUtilities.push((designSystem) => {
         designSystem.utilities.static(name, (candidate) => {
           if (candidate.negative) return
@@ -131,7 +118,6 @@ export async function compile(
         })
       })
 
-      replaceWith([])
       return
     }
 
@@ -366,15 +352,23 @@ export async function compile(
   })
 
   // Replace `@apply` rules with the actual utility classes.
-  {
-    if (css.includes('@apply')) {
-      substituteAtApply(ast, designSystem)
+  if (css.includes('@apply')) {
+    substituteAtApply(ast, designSystem)
+  }
+
+  // Remove `@utility`, we couldn't replace it before yet because we had to
+  // handle the nested `@apply` at-rules first.
+  walk(ast, (node, { replaceWith }) => {
+    if (node.kind !== 'rule') return
+
+    if (node.selector[0] === '@' && node.selector.startsWith('@utility ')) {
+      replaceWith([])
     }
 
-    if (customUtilitiesWithAtApply.length > 0) {
-      substituteAtApply(customUtilitiesWithAtApply.splice(0), designSystem)
-    }
-  }
+    // The `@utility` has to be top-level, therefore we don't have to traverse
+    // into nested trees.
+    return WalkAction.Skip
+  })
 
   // Track all valid candidates, these are the incoming `rawCandidate` that
   // resulted in a generated AST Node. All the other `rawCandidates` are invalid
