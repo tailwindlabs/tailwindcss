@@ -463,30 +463,22 @@ function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
         //
         // Figure out which candidate caused the circular dependency. This will
         // help to create a useful error message for the end user.
-        let candidate = candidates.find((candidate) => {
+        for (let candidate of candidates) {
           let selector = `.${escape(candidate)}`
-          let found = false
 
           for (let rule of candidateAst) {
             if (rule.kind !== 'rule') continue
             if (rule.selector !== selector) continue
 
             walk(rule.nodes, (child) => {
-              if (child === node) {
-                found = true
-                return WalkAction.Stop
-              }
+              if (child !== node) return
+
+              throw new Error(
+                `You cannot \`@apply\` the \`${candidate}\` utility here because it creates a circular dependency.`,
+              )
             })
-
-            if (found) return found
           }
-
-          return found
-        })
-
-        throw new Error(
-          `You cannot \`@apply\` the \`${candidate}\` utility here because it creates a circular dependency.`,
-        )
+        }
       })
 
       replaceWith(newNodes)
