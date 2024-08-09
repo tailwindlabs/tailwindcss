@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@tailwindcss/oxide": "workspace:^",
-    "lightningcss": "^1.25.1",
+    "lightningcss": "catalog:",
     "postcss-load-config": "^6.0.1",
     "tailwindcss": "workspace:^"
   },

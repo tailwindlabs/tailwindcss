@@ -326,6 +326,39 @@ describe('@apply', () => {
       }"
     `)
   })
+
+  it('should be possible to apply a custom utility', async () => {
+    expect(
+      await compileCss(css`
+        @utility bar {
+          &:before {
+            content: 'bar';
+          }
+        }
+
+        .foo {
+          /* Baz is defined after this rule, but should work */
+          @apply bar baz;
+        }
+
+        @utility baz {
+          &:after {
+            content: 'baz';
+          }
+        }
+
+        @tailwind utilities;
+      `),
+    ).toMatchInlineSnapshot(`
+      ".foo:before {
+        content: "bar";
+      }
+
+      .foo:after {
+        content: "baz";
+      }"
+    `)
+  })
 })
 
 describe('arbitrary variants', () => {
