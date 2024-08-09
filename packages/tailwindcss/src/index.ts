@@ -15,6 +15,7 @@ import { compileCandidates } from './compile'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
 import { Theme } from './theme'
+import { escape } from './utils/escape'
 import { segment } from './utils/segment'
 
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
@@ -72,6 +73,7 @@ export async function compile(
   let pluginLoaders: Promise<Plugin>[] = []
   let customVariants: ((designSystem: DesignSystem) => void)[] = []
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
+  let customUtilitiesWithAtApply: AstNode[] = []
   let firstThemeRule: Rule | null = null
   let keyframesRules: Rule[] = []
   let globs: string[] = []
@@ -110,42 +112,22 @@ export async function compile(
         )
       }
 
-      // Figure out if a custom utility uses `@apply` so that we can substitute
-      // it later.
-      let usesAtApply = false
+      // Figure out if the custom utility uses `@apply` so that we can
+      // substitute it later.
       walk(node.nodes, (child) => {
         if (child.kind !== 'rule') return
         if (child.selector[0] !== '@') return
         if (!child.selector.startsWith('@apply ')) return
 
-        usesAtApply = true
+        customUtilitiesWithAtApply.push(node)
 
         return WalkAction.Stop
       })
 
       customUtilities.push((designSystem) => {
-        // Track if the utility has been seen before to prevent circular
-        // dependencies. If there is a circular dependency, it means that we
-        // will apply the utility to itself, which is not allowed.
-        let inProgress = false
-
         designSystem.utilities.static(name, (candidate) => {
           if (candidate.negative) return
-          let ast = structuredClone(node.nodes)
-
-          if (usesAtApply) {
-            if (inProgress) {
-              throw new Error(
-                `You cannot \`@apply\` the \`${name}\` utility here because it creates a circular dependency.`,
-              )
-            }
-
-            inProgress = true
-            substituteAtApply(ast, designSystem)
-            inProgress = false
-          }
-
-          return ast
+          return structuredClone(node.nodes)
         })
       })
 
@@ -384,8 +366,14 @@ export async function compile(
   })
 
   // Replace `@apply` rules with the actual utility classes.
-  if (css.includes('@apply')) {
-    substituteAtApply(ast, designSystem)
+  {
+    if (css.includes('@apply')) {
+      substituteAtApply(ast, designSystem)
+    }
+
+    if (customUtilitiesWithAtApply.length > 0) {
+      substituteAtApply(customUtilitiesWithAtApply.splice(0), designSystem)
+    }
   }
 
   // Track all valid candidates, these are the incoming `rawCandidate` that
@@ -471,6 +459,41 @@ function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           newNodes.push(candidateNode)
         }
       }
+
+      // Verify that we don't have any circular dependencies by verifying that
+      // the current node does not appear in the new nodes.
+      walk(newNodes, (child) => {
+        if (child !== node) return
+
+        // At this point we already know that we have a circular dependency.
+        //
+        // Figure out which candidate caused the circular dependency. This will
+        // help to create a useful error message for the end user.
+        let candidate = candidates.find((candidate) => {
+          let selector = `.${escape(candidate)}`
+          let found = false
+
+          for (let rule of candidateAst) {
+            if (rule.kind !== 'rule') continue
+            if (rule.selector !== selector) continue
+
+            walk(rule.nodes, (child) => {
+              if (child === node) {
+                found = true
+                return WalkAction.Stop
+              }
+            })
+
+            if (found) return found
+          }
+
+          return found
+        })
+
+        throw new Error(
+          `You cannot \`@apply\` the \`${candidate}\` utility here because it creates a circular dependency.`,
+        )
+      })
 
       replaceWith(newNodes)
     }

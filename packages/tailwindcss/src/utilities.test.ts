@@ -15344,7 +15344,7 @@ describe('custom utilities', () => {
   })
 
   test('custom utilities with `@apply` causing circular dependencies should error', async () => {
-    await expect(
+    await expect(() =>
       compileCss(
         css`
           @utility foo {
@@ -15352,7 +15352,7 @@ describe('custom utilities', () => {
           }
 
           @utility bar {
-            @apply dark:foo;
+            @apply flex dark:foo;
           }
 
           @tailwind utilities;
@@ -15360,7 +15360,7 @@ describe('custom utilities', () => {
         ['foo', 'bar'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: You cannot \`@apply\` the \`foo\` utility here because it creates a circular dependency.]`,
+      `[Error: You cannot \`@apply\` the \`dark:foo\` utility here because it creates a circular dependency.]`,
     )
   })
 })
