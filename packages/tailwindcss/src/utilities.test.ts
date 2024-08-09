@@ -15281,7 +15281,7 @@ describe('legacy: addUtilities', () => {
 
       @theme reference {
         --breakpoint-lg: 1024px;
-      },
+      }
     `,
       {
         async loadPlugin() {
@@ -15326,7 +15326,7 @@ describe('legacy: addUtilities', () => {
 
         @theme reference {
           --breakpoint-lg: 1024px;
-        },
+        }
       `,
         {
           async loadPlugin() {
@@ -15356,7 +15356,7 @@ describe('legacy: matchUtilities', () => {
 
           @theme reference {
             --breakpoint-lg: 1024px;
-          },
+          }
         `,
         {
           async loadPlugin() {
@@ -15437,7 +15437,7 @@ describe('legacy: matchUtilities', () => {
 
           @theme reference {
             --breakpoint-lg: 1024px;
-          },
+          }
         `,
         {
           async loadPlugin() {
@@ -15503,7 +15503,7 @@ describe('legacy: matchUtilities', () => {
 
           @theme reference {
             --breakpoint-lg: 1024px;
-          },
+          }
         `,
         {
           async loadPlugin() {
@@ -15681,7 +15681,7 @@ describe('legacy: matchUtilities', () => {
 
           @theme reference {
             --breakpoint-lg: 1024px;
-          },
+          }
         `,
         {
           async loadPlugin() {
@@ -15800,7 +15800,7 @@ describe('legacy: matchUtilities', () => {
 
           @theme reference {
             --breakpoint-lg: 1024px;
-          },
+          }
         `,
         {
           async loadPlugin() {
@@ -15873,7 +15873,7 @@ describe('legacy: matchUtilities', () => {
           @theme reference {
             --breakpoint-lg: 1024px;
             --opacity-my-opacity: 0.5;
-          },
+          }
         `,
         {
           async loadPlugin() {
@@ -15929,7 +15929,7 @@ describe('legacy: matchUtilities', () => {
 
         @theme reference {
           --breakpoint-lg: 1024px;
-        },
+        }
       `,
         {
           async loadPlugin() {

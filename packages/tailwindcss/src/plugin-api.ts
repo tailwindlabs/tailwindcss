@@ -20,7 +20,6 @@ export type PluginAPI = {
 const IS_VALID_UTILITY_NAME = /^[a-z][a-zA-Z0-9/%._-]*$/
 
 export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
-  let theme = designSystem.theme
 
   return {
     addVariant(name, variant) {
@@ -110,7 +109,7 @@ export function buildPluginApi(designSystem: DesignSystem): PluginAPI {
 
             if (isColor) {
               // Color utilities implicitly support `inherit`, `transparent`, and `currentColor`
-              // for backwards compatibility but still allow them to be overriden
+              // for backwards compatibility but still allow them to be overridden
               values = {
                 inherit: 'inherit',
                 transparent: 'transparent',
