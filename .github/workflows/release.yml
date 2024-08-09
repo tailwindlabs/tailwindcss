@@ -114,10 +114,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup cross compile toolchain
-        if: ${{ matrix.setup }}
-        run: ${{ matrix.setup }}
-
       - name: Install Rust (Stable)
         if: ${{ matrix.download }}
         run: |
