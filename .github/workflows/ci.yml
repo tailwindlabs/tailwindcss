@@ -62,7 +62,7 @@ jobs:
 
       - name: Lint
         run: pnpm run lint
-        # Only lint on linux to avoind \r\n line ending errors
+        # Only lint on linux to avoid \r\n line ending errors
         if: matrix.runner == 'ubuntu-latest'
 
       - name: Test
