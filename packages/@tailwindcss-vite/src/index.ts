@@ -346,8 +346,8 @@ function getExtension(id: string) {
 }
 
 function isTailwindCssFile(id: string, src: string) {
-  const extension = getExtension(id)
-  const isCssFile = extension === 'css' || (extension === 'vue' && id.includes('&lang.css'))
+  let extension = getExtension(id)
+  let isCssFile = extension === 'css' || (extension === 'vue' && id.includes('&lang.css'))
   return isCssFile && src.includes('@tailwind')
 }
 

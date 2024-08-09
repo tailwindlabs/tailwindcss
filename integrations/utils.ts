@@ -289,8 +289,8 @@ export function test(
         // In debug mode, the directory is going to be inside the pnpm workspace
         // of the tailwindcss package. This means that `pnpm install` will run
         // pnpm install on the workspace instead (expect if the root dir defines
-        // a seperate workspace). We work around this by using the
-        // --ignore-workspace flag.
+        // a separate workspace). We work around this by using the
+        // `--ignore-workspace` flag.
         let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
         context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
       } catch (error: any) {
