@@ -15599,10 +15599,27 @@ describe('legacy: matchUtilities', () => {
         return compiled.build(candidates)
       }
 
+      expect(
+        optimizeCss(
+          await run(['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50']),
+        ).trim(),
+      ).toMatchInlineSnapshot(`
+        ".scrollbar-\\[\\#08c\\] {
+          scrollbar-color: #08c;
+        }
+
+        .scrollbar-\\[\\#08c\\]\\/50 {
+          scrollbar-color: #0088cc80;
+        }
+
+        .scrollbar-\\[2px\\] {
+          scrollbar-width: 2px;
+        }"
+      `)
       expect(optimizeCss(await run(['scrollbar-[2px]/50'])).trim()).toEqual('')
     })
 
-    test('no modifiers', async () => {
+    test('no modifiers are supported by the plugins', async () => {
       async function run(candidates: string[]) {
         let compiled = await compile(
           css`
