@@ -16,15 +16,15 @@ test('touch action', async ({ page }) => {
 
   await expect.poll(() => getPropertyValue('#x', 'touch-action')).toEqual('pan-x pan-y')
 
-  await page.locator('#x').hover()
-
-  expect([
+  expect
+    .poll(async () => {
+      await page.locator('#x').hover()
+      return getPropertyValue('#x', 'touch-action')
+    })
     // `manipulation` is an alias for `pan-x pan-y pinch-zoom` and some engines
     // compute the combination of those three values to `manipulation` even when
     // explicitly set as three values.
-    'manipulation',
-    'pan-x pan-y pinch-zoom',
-  ]).toContain(await getPropertyValue('#x', 'touch-action'))
+    .toMatch(/manipulation|pan-x pan-y pinch-zoom/)
 })
 
 for (let [classes, expected] of [
@@ -71,10 +71,11 @@ test('background gradient, going from 2 to 3', async ({ page }) => {
     .poll(() => getPropertyValue('#x', 'background-image'))
     .toEqual('linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(59, 130, 246) 100%)')
 
-  await page.locator('#x').hover()
-
   await expect
-    .poll(() => getPropertyValue('#x', 'background-image'))
+    .poll(async () => {
+      await page.locator('#x').hover()
+      return getPropertyValue('#x', 'background-image')
+    })
     .toEqual(
       'linear-gradient(to right, rgb(239, 68, 68) 0%, rgb(34, 197, 94) 50%, rgb(59, 130, 246) 100%)',
     )
@@ -234,10 +235,11 @@ test('outline style is preserved when changing outline width', async ({ page }) 
     .poll(() => getPropertyValue('#x', 'outline'))
     .toEqual('rgb(255, 255, 255) dotted 2px')
 
-  await page.locator('#x').hover()
-
   await expect
-    .poll(() => getPropertyValue('#x', 'outline'))
+    .poll(async () => {
+      await page.locator('#x').hover()
+      return getPropertyValue('#x', 'outline')
+    })
     .toEqual('rgb(255, 255, 255) dotted 4px')
 })
 
@@ -259,9 +261,12 @@ test('borders can be added to a single side without a border-style utility', asy
   )
   await expect.poll(() => getPropertyValue('#x', 'border-right')).toEqual('2px dashed rgb(0, 0, 0)')
 
-  await page.locator('#x').hover()
-
-  await expect.poll(() => getPropertyValue('#x', 'border-right')).toEqual('4px dashed rgb(0, 0, 0)')
+  await expect
+    .poll(async () => {
+      await page.locator('#x').hover()
+      return getPropertyValue('#x', 'border-right')
+    })
+    .toEqual('4px dashed rgb(0, 0, 0)')
 })
 
 test('dividers can be added without setting border-style', async ({ page }) => {
@@ -276,10 +281,11 @@ test('dividers can be added without setting border-style', async ({ page }) => {
     .poll(() => getPropertyValue('#b', 'border-bottom'))
     .toEqual('2px dashed rgb(0, 0, 0)')
 
-  await page.locator('#a').hover()
-
   await expect
-    .poll(() => getPropertyValue('#b', 'border-bottom'))
+    .poll(async () => {
+      await page.locator('#a').hover()
+      return getPropertyValue('#b', 'border-bottom')
+    })
     .toEqual('4px dashed rgb(0, 0, 0)')
 })
 
@@ -290,9 +296,12 @@ test('scale can be a number or percentage', async ({ page }) => {
   )
   await expect.poll(() => getPropertyValue('#x', 'scale')).toEqual('0.5')
 
-  await page.locator('#x').hover()
-
-  await expect.poll(() => getPropertyValue('#x', 'scale')).toEqual('1.5')
+  await expect
+    .poll(async () => {
+      await page.locator('#x').hover()
+      return getPropertyValue('#x', 'scale')
+    })
+    .toEqual('1.5')
 })
 
 // https://github.com/tailwindlabs/tailwindcss/issues/13185
@@ -304,9 +313,12 @@ test('content-none persists when conditionally styling a pseudo-element', async 
 
   await expect.poll(() => getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
 
-  await page.locator('#x').hover()
-
-  await expect.poll(() => getPropertyValue(['#x', '::after'], 'content')).toEqual('none')
+  await expect
+    .poll(async () => {
+      await page.locator('#x').hover()
+      return getPropertyValue(['#x', '::after'], 'content')
+    })
+    .toEqual('none')
 })
 
 // ---
