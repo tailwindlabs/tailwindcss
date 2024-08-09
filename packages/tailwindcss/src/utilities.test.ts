@@ -15441,6 +15441,40 @@ describe('legacy: addUtilities', () => {
     `)
   })
 
+  test('camel case properties are converted to kebab-case', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        async loadPlugin() {
+          return ({ addUtilities }) => {
+            addUtilities({
+              '.text-trim': {
+                WebkitAppearance: 'none',
+                textBoxTrim: 'both',
+                textBoxEdge: 'cap alphabetic',
+              },
+            })
+          }
+        },
+      },
+    )
+
+    expect(optimizeCss(compiled.build(['text-trim'])).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .text-trim {
+          -webkit-appearance: none;
+          text-box-trim: both;
+          text-box-edge: cap alphabetic;
+        }
+      }"
+    `)
+  })
+
   test('custom static utilities support `@apply`', async () => {
     let compiled = await compile(
       css`
